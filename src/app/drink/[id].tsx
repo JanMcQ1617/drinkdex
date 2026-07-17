@@ -324,7 +324,7 @@ export default function DrinkDetailScreen() {
         <View style={styles.statRow}>
           <StatCard label="ABV" value={drink.abv} />
           <StatCard label="Origin" value={drink.origin} />
-          <StatCard label="Glassware" value={drink.glassware ?? '—'} />
+          <StatCard label="Glass" value={drink.glassware ?? '—'} />
         </View>
 
         {unlocked ? (
