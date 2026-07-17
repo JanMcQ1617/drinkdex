@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 
 import { CATEGORY_META, RARITY_META, colors, fonts } from '@/constants/theme';
 import type { DrinkCategory, Rarity } from '@/types';
@@ -32,6 +32,38 @@ export function SectionLabel({ children, style }: { children: React.ReactNode; s
     <View style={style}>
       <Text style={styles.sectionLabel}>{children}</Text>
     </View>
+  );
+}
+
+/** Primary gold CTA button — single shared spec for all gold call-to-actions. */
+export function GoldButton({
+  label,
+  onPress,
+  disabled,
+  accessibilityLabel,
+  style,
+}: {
+  label: string;
+  onPress: () => void;
+  disabled?: boolean;
+  accessibilityLabel?: string;
+  style?: ViewStyle;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel ?? label}
+      style={({ pressed }) => [
+        styles.goldButton,
+        style,
+        pressed && styles.goldButtonPressed,
+        disabled && styles.goldButtonDisabled,
+      ]}
+    >
+      <Text style={styles.goldButtonText}>{label}</Text>
+    </Pressable>
   );
 }
 
@@ -85,6 +117,22 @@ const styles = StyleSheet.create({
     letterSpacing: 1.4,
     textTransform: 'uppercase',
     color: colors.textFaint,
+  },
+  goldButton: {
+    backgroundColor: colors.gold,
+    borderRadius: 14,
+    minHeight: 52,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  goldButtonPressed: { opacity: 0.72 },
+  goldButtonDisabled: { opacity: 0.4 },
+  goldButtonText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 15,
+    color: colors.bg,
   },
   barTrack: {
     width: '100%',

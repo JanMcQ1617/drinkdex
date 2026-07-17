@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -26,10 +25,11 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CategoryPill, RarityBadge, SectionLabel } from '@/components/ui';
+import { CategoryPill, GoldButton, RarityBadge, SectionLabel } from '@/components/ui';
 import { CATEGORY_META, colors, drinkGlyph, fonts } from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useCollection } from '@/store/collection';
+import { confirmDestructive, showNotice } from '@/utils/alerts';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -45,37 +45,16 @@ function formatLogDate(iso: string): string {
 }
 
 /** Copy a picked photo into app document storage so it survives cache cleanup. */
-function persistPhoto(drinkId: string, sourceUri: string): string {
+async function persistPhoto(drinkId: string, sourceUri: string): Promise<string> {
   if (Platform.OS === 'web') return sourceUri;
   try {
     const dir = new Directory(Paths.document, 'unlocks');
     dir.create({ intermediates: true, idempotent: true });
     const dest = new File(dir, `${drinkId}-${Date.now()}.jpg`);
-    new File(sourceUri).copy(dest);
+    await new File(sourceUri).copy(dest);
     return dest.uri;
   } catch {
     return sourceUri;
-  }
-}
-
-/** Cross-platform info alert (Alert.alert is a no-op on react-native-web). */
-function showNotice(title: string, message: string) {
-  if (Platform.OS === 'web') {
-    window.alert(`${title}\n\n${message}`);
-  } else {
-    Alert.alert(title, message);
-  }
-}
-
-/** Cross-platform destructive confirm. */
-function confirmDestructive(title: string, message: string, actionLabel: string, onConfirm: () => void) {
-  if (Platform.OS === 'web') {
-    if (window.confirm(`${title}\n\n${message}`)) onConfirm();
-  } else {
-    Alert.alert(title, message, [
-      { text: 'Cancel', style: 'cancel' },
-      { text: actionLabel, style: 'destructive', onPress: onConfirm },
-    ]);
   }
 }
 
@@ -160,16 +139,19 @@ export default function DrinkDetailScreen() {
   }));
 
   const triggerCelebration = useCallback(() => {
+    if (celebrating) return;
     setCelebrating(true);
-    celebScale.value = 0.8;
-    celebOpacity.value = 0;
-    celebOpacity.value = withSequence(
-      withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) }),
-      withDelay(720, withTiming(0, { duration: 420, easing: Easing.in(Easing.quad) }))
+    celebScale.set(0.8);
+    celebOpacity.set(0);
+    celebOpacity.set(
+      withSequence(
+        withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) }),
+        withDelay(720, withTiming(0, { duration: 420, easing: Easing.in(Easing.quad) }))
+      )
     );
-    celebScale.value = withTiming(1, { duration: 480, easing: Easing.out(Easing.back(1.7)) });
+    celebScale.set(withTiming(1, { duration: 480, easing: Easing.out(Easing.back(1.7)) }));
     setTimeout(() => setCelebrating(false), 1450);
-  }, [celebOpacity, celebScale]);
+  }, [celebrating, celebOpacity, celebScale]);
 
   const openPicker = useCallback((mode: PickerMode) => {
     setPickerMode(mode);
@@ -231,11 +213,11 @@ export default function DrinkDetailScreen() {
     }
   }, [handleAsset, pickFromLibrary]);
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirm = useCallback(async () => {
     if (!drink || !pickedUri || busy) return;
     setBusy(true);
     try {
-      const uri = persistPhoto(drink.id, pickedUri);
+      const uri = await persistPhoto(drink.id, pickedUri);
       if (pickerMode === 'update') {
         updatePhoto(drink.id, uri);
         closeModal();
@@ -289,7 +271,7 @@ export default function DrinkDetailScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.content,
-          { paddingTop: insets.top + 8, paddingBottom: Math.max(insets.bottom, 28) + 48 },
+          { paddingTop: insets.top + 12, paddingBottom: Math.max(insets.bottom, 28) + 48 },
         ]}
         showsVerticalScrollIndicator={false}
       >
@@ -303,11 +285,11 @@ export default function DrinkDetailScreen() {
           {'  ·  '}
           {drink.subcategory.toUpperCase()}
         </Text>
-        <Text style={styles.name}>{drink.name}</Text>
+        <Text style={[styles.name, !unlocked && { color: colors.textMuted }]}>{drink.name}</Text>
 
         {/* Hero */}
         {unlocked && record?.photoUri ? (
-          <View style={[styles.heroWrap, { borderColor: meta.color + '4D' }]}>
+          <View style={[styles.heroWrap, { borderColor: meta.color + '55' }]}>
             <Image
               source={{ uri: record.photoUri }}
               style={styles.heroImage}
@@ -350,8 +332,8 @@ export default function DrinkDetailScreen() {
             {/* Tasting notes */}
             <SectionLabel style={styles.section}>Tasting notes</SectionLabel>
             <View style={styles.chipRow}>
-              {drink.tastingNotes.map((n) => (
-                <View key={n} style={styles.chip}>
+              {drink.tastingNotes.map((n, i) => (
+                <View key={`${i}-${n}`} style={styles.chip}>
                   <Text style={styles.chipText}>{n}</Text>
                 </View>
               ))}
@@ -364,7 +346,7 @@ export default function DrinkDetailScreen() {
                 <View style={styles.buildCard}>
                   {drink.ingredients.map((ing, i) => (
                     <View
-                      key={ing}
+                      key={`${i}-${ing}`}
                       style={[styles.ingredientRow, i > 0 && styles.ingredientRowDivider]}
                     >
                       <View style={[styles.ingredientDot, { backgroundColor: meta.color }]} />
@@ -381,7 +363,7 @@ export default function DrinkDetailScreen() {
 
             {/* Fun fact */}
             <SectionLabel style={styles.section}>Bar trivia</SectionLabel>
-            <View style={styles.triviaCard}>
+            <View style={[styles.triviaCard, { borderLeftColor: meta.color }]}>
               <Text style={styles.triviaText}>{drink.funFact}</Text>
             </View>
 
@@ -409,13 +391,12 @@ export default function DrinkDetailScreen() {
                 Log this drink to reveal its tasting notes, lore, and bar trivia.
               </Text>
             </View>
-            <PressableScale
+            <GoldButton
+              label="Log this drink"
               onPress={() => openPicker('unlock')}
-              style={styles.ctaButton}
               accessibilityLabel={`Log ${drink.name}`}
-            >
-              <Text style={styles.ctaButtonText}>Log this drink</Text>
-            </PressableScale>
+              style={styles.ctaSpacing}
+            />
           </>
         )}
       </ScrollView>
@@ -463,16 +444,13 @@ export default function DrinkDetailScreen() {
                       accessibilityLabel="Optional note about where you found this drink"
                     />
                   ) : null}
-                  <PressableScale
+                  <GoldButton
+                    label={pickerMode === 'update' ? 'Save photo' : 'Unlock entry'}
                     onPress={handleConfirm}
                     disabled={busy}
-                    style={styles.ctaButton}
                     accessibilityLabel={pickerMode === 'update' ? 'Save new photo' : 'Unlock entry'}
-                  >
-                    <Text style={styles.ctaButtonText}>
-                      {pickerMode === 'update' ? 'Save photo' : 'Unlock entry'}
-                    </Text>
-                  </PressableScale>
+                    style={styles.ctaSpacing}
+                  />
                   <PressableScale
                     onPress={() => setPickedUri(null)}
                     style={styles.retakeButton}
@@ -595,7 +573,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: 'rgba(244, 237, 227, 0.14)',
+    borderColor: colors.text + '24',
   },
   datePillText: {
     fontFamily: fonts.bodyMedium,
@@ -636,7 +614,7 @@ const styles = StyleSheet.create({
   },
   glyphLocked: {
     fontSize: 72,
-    opacity: 0.14,
+    opacity: 0.16,
   },
   lockedCaption: {
     fontFamily: fonts.bodyMedium,
@@ -680,8 +658,8 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 10,
-    letterSpacing: 1.2,
+    fontSize: 11,
+    letterSpacing: 1.4,
     textTransform: 'uppercase',
     color: colors.textFaint,
   },
@@ -694,7 +672,7 @@ const styles = StyleSheet.create({
 
   // Sections
   section: {
-    marginTop: 26,
+    marginTop: 28,
     marginBottom: 10,
   },
   chipRow: {
@@ -752,10 +730,9 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   triviaCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.card,
     borderLeftWidth: 3,
-    borderLeftColor: colors.gold,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
   },
   triviaText: {
@@ -783,19 +760,8 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
   },
-  ctaButton: {
-    backgroundColor: colors.gold,
-    borderRadius: 14,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+  ctaSpacing: {
     marginTop: 14,
-    minHeight: 52,
-  },
-  ctaButtonText: {
-    fontFamily: fonts.displayBold,
-    fontSize: 17,
-    color: '#1A1408',
   },
 
   // Footer actions (unlocked)

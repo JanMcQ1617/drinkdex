@@ -4,6 +4,17 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import type { UnlockRecord } from '@/types';
 
+/**
+ * `expo export` static rendering runs this module in Node, where AsyncStorage's
+ * web backend (window.localStorage) is unavailable. Fall back to a no-op store
+ * there; native and browser environments both define `window`.
+ */
+const noopStorage = {
+  getItem: async () => null,
+  setItem: async () => {},
+  removeItem: async () => {},
+};
+
 interface CollectionState {
   /** drinkId -> unlock record */
   unlocks: Record<string, UnlockRecord>;
@@ -43,7 +54,9 @@ export const useCollection = create<CollectionState>()(
     }),
     {
       name: 'drinkdex-collection',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() =>
+        typeof window === 'undefined' ? noopStorage : AsyncStorage
+      ),
       partialize: (s) => ({ unlocks: s.unlocks }),
       onRehydrateStorage: () => () => {
         useCollection.setState({ hydrated: true });

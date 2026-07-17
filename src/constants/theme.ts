@@ -44,7 +44,7 @@ export const RARITY_META: Record<Rarity, { label: string; color: string; weight:
   common: { label: 'Common', color: '#9AA3AE', weight: 0 },
   uncommon: { label: 'Uncommon', color: '#57C785', weight: 1 },
   rare: { label: 'Rare', color: '#5B8DD9', weight: 2 },
-  legendary: { label: 'Legendary', color: '#D4AF37', weight: 3 },
+  legendary: { label: 'Legendary', color: colors.gold, weight: 3 },
 };
 
 /** Best-effort emoji glyph for a drink, based on its glassware + category. */

@@ -2,9 +2,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
 import {
-  Alert,
   FlatList,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -14,7 +12,7 @@ import {
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { ProgressBar, RarityBadge, SectionLabel } from '@/components/ui';
+import { GoldButton, ProgressBar, RarityBadge, SectionLabel } from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
@@ -27,6 +25,7 @@ import {
 import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatDexNumber, TOTAL } from '@/data';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
+import { confirmDestructive } from '@/utils/alerts';
 
 /* ------------------------------------------------------------------ */
 /* Derivations                                                         */
@@ -130,12 +129,18 @@ function RegionRow({ category, unlocked }: { category: DrinkCategory; unlocked: 
   );
 }
 
-function RecentCard({ entry, onPress }: { entry: UnlockedEntry; onPress: () => void }) {
+const RecentCard = React.memo(function RecentCard({
+  entry,
+  onPress,
+}: {
+  entry: UnlockedEntry;
+  onPress: (id: string) => void;
+}) {
   const { drink, record } = entry;
   const accent = CATEGORY_META[drink.category].color;
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => onPress(drink.id)}
       accessibilityRole="button"
       accessibilityLabel={`Open ${drink.name}`}
       style={({ pressed }) => [styles.recentItem, pressed && styles.pressed]}
@@ -157,7 +162,7 @@ function RecentCard({ entry, onPress }: { entry: UnlockedEntry; onPress: () => v
       </Text>
     </Pressable>
   );
-}
+});
 
 /* ------------------------------------------------------------------ */
 /* Screen                                                              */
@@ -182,19 +187,18 @@ export default function StatsScreen() {
     [router]
   );
 
+  const renderRecent = useCallback(
+    ({ item }: { item: UnlockedEntry }) => <RecentCard entry={item} onPress={openDrink} />,
+    [openDrink]
+  );
+
   const confirmReset = useCallback(() => {
-    const message = 'This relocks every entry and deletes your photos from the index.';
-    if (Platform.OS === 'web') {
-      const webConfirm = (globalThis as { confirm?: (text?: string) => boolean }).confirm;
-      if (webConfirm && webConfirm(`Reset collection? ${message}`)) {
-        resetAll();
-      }
-    } else {
-      Alert.alert('Reset collection?', message, [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Reset', style: 'destructive', onPress: () => resetAll() },
-      ]);
-    }
+    confirmDestructive(
+      'Reset collection?',
+      'This relocks every entry and deletes your photos from the index.',
+      'Reset',
+      resetAll
+    );
   }, [resetAll]);
 
   return (
@@ -226,14 +230,11 @@ export default function StatsScreen() {
           <View style={[styles.card, styles.emptyCard]}>
             <Text style={styles.emptyTitle}>Your shelf is empty.</Text>
             <Text style={styles.emptyBody}>Find a drink, snap it, log it.</Text>
-            <Pressable
+            <GoldButton
+              label="Open the Dex"
               onPress={() => router.push('/')}
-              accessibilityRole="button"
-              accessibilityLabel="Open the Dex"
-              style={({ pressed }) => [styles.emptyBtn, pressed && styles.pressed]}
-            >
-              <Text style={styles.emptyBtnText}>Open the Dex</Text>
-            </Pressable>
+              style={styles.emptyBtnSpacing}
+            />
           </View>
         </Animated.View>
       )}
@@ -323,9 +324,7 @@ export default function StatsScreen() {
             horizontal
             data={recent}
             keyExtractor={(item) => item.record.drinkId}
-            renderItem={({ item }) => (
-              <RecentCard entry={item} onPress={() => openDrink(item.drink.id)} />
-            )}
+            renderItem={renderRecent}
             showsHorizontalScrollIndicator={false}
             style={styles.recentList}
             contentContainerStyle={styles.recentListContent}
@@ -403,8 +402,8 @@ const styles = StyleSheet.create({
   },
   heroOverline: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 10,
-    letterSpacing: 1.6,
+    fontSize: 11,
+    letterSpacing: 1.4,
     textTransform: 'uppercase',
     color: colors.textFaint,
     marginBottom: 4,
@@ -459,20 +458,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 6,
   },
-  emptyBtn: {
+  emptyBtnSpacing: {
     marginTop: 16,
-    minHeight: 44,
-    paddingHorizontal: 24,
-    borderRadius: 999,
-    backgroundColor: colors.gold,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emptyBtnText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: colors.bg,
   },
 
   /* Regions */
@@ -612,8 +599,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   recentName: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 12,
+    fontFamily: fonts.display,
+    fontSize: 13,
     lineHeight: 16,
     color: colors.text,
     marginTop: 8,

@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
 import { colors, fonts } from '@/constants/theme';
+import { useCollection } from '@/store/collection';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,13 +51,16 @@ export default function RootLayout() {
     Inter_700Bold,
   });
 
+  const hydrated = useCollection((s) => s.hydrated);
+  const ready = (fontsLoaded || fontError != null) && hydrated;
+
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if (ready) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [ready]);
 
-  if (!fontsLoaded && !fontError) {
+  if (!ready) {
     return null;
   }
 
