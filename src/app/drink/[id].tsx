@@ -29,6 +29,7 @@ import { CategoryPill, GoldButton, RarityBadge, SectionLabel } from '@/component
 import { CATEGORY_META, colors, drinkGlyph, fonts } from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useCollection } from '@/store/collection';
+import { usePosts } from '@/store/posts';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
 // ---------------------------------------------------------------------------
@@ -121,6 +122,8 @@ export default function DrinkDetailScreen() {
   const unlock = useCollection((s) => s.unlock);
   const updatePhoto = useCollection((s) => s.updatePhoto);
   const relock = useCollection((s) => s.relock);
+  const addPost = usePosts((s) => s.addPost);
+  const removePostsForDrink = usePosts((s) => s.removePostsForDrink);
 
   // Modal / picker state
   const [modalVisible, setModalVisible] = useState(false);
@@ -224,6 +227,7 @@ export default function DrinkDetailScreen() {
       } else {
         const trimmed = note.trim();
         unlock(drink.id, uri, trimmed.length > 0 ? trimmed : undefined);
+        addPost(drink.id, uri, trimmed.length > 0 ? trimmed : undefined);
         if (Platform.OS !== 'web') {
           Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
         }
@@ -233,7 +237,7 @@ export default function DrinkDetailScreen() {
     } finally {
       setBusy(false);
     }
-  }, [busy, closeModal, drink, note, pickedUri, pickerMode, triggerCelebration, unlock, updatePhoto]);
+  }, [addPost, busy, closeModal, drink, note, pickedUri, pickerMode, triggerCelebration, unlock, updatePhoto]);
 
   const handleRemove = useCallback(() => {
     if (!drink) return;
@@ -243,10 +247,11 @@ export default function DrinkDetailScreen() {
       'Remove',
       () => {
         relock(drink.id);
+        removePostsForDrink(drink.id);
         router.back();
       }
     );
-  }, [drink, relock, router]);
+  }, [drink, relock, removePostsForDrink, router]);
 
   // ---- Unknown entry ------------------------------------------------------
   if (!drink) {
@@ -354,6 +359,72 @@ export default function DrinkDetailScreen() {
                     </View>
                   ))}
                 </View>
+              </>
+            ) : null}
+
+            {/* Make it at home — cocktails */}
+            {drink.recipe ? (
+              <>
+                <SectionLabel style={styles.section}>Make it at home</SectionLabel>
+                <View style={styles.buildCard}>
+                  {drink.recipe.method ? (
+                    <View style={styles.methodRow}>
+                      <Text style={[styles.methodText, { color: meta.color }]}>
+                        {drink.recipe.method.toUpperCase()}
+                      </Text>
+                      {drink.recipe.garnish ? (
+                        <Text style={styles.garnishText} numberOfLines={1}>
+                          Garnish: {drink.recipe.garnish}
+                        </Text>
+                      ) : null}
+                    </View>
+                  ) : null}
+                  {drink.recipe.ingredients.map((ing, i) => (
+                    <View
+                      key={`${i}-${ing.item}`}
+                      style={[styles.ingredientRow, (i > 0 || drink.recipe?.method) && styles.ingredientRowDivider]}
+                    >
+                      <Text style={[styles.amountText, { color: meta.color }]}>{ing.amount}</Text>
+                      <Text style={styles.ingredientText}>{ing.item}</Text>
+                    </View>
+                  ))}
+                </View>
+                <View style={styles.stepsWrap}>
+                  {drink.recipe.steps.map((step, i) => (
+                    <View key={`step-${i}`} style={styles.stepRow}>
+                      <View style={[styles.stepNum, { borderColor: meta.color + '66' }]}>
+                        <Text style={[styles.stepNumText, { color: meta.color }]}>{i + 1}</Text>
+                      </View>
+                      <Text style={styles.stepText}>{step}</Text>
+                    </View>
+                  ))}
+                </View>
+              </>
+            ) : null}
+
+            {/* Serve it right — beers, wines, spirits */}
+            {drink.serve ? (
+              <>
+                <SectionLabel style={styles.section}>Serve it right</SectionLabel>
+                <View style={styles.statRow}>
+                  <StatCard label="Temp" value={drink.serve.temp} />
+                  <StatCard label="Glass" value={drink.serve.glass} />
+                </View>
+                <View style={[styles.serveCard, { borderLeftColor: meta.color }]}>
+                  <Text style={styles.serveText}>{drink.serve.how}</Text>
+                </View>
+                {drink.serve.pair && drink.serve.pair.length > 0 ? (
+                  <View style={styles.pairWrap}>
+                    <Text style={styles.pairLabel}>Pairs with</Text>
+                    <View style={styles.chipRow}>
+                      {drink.serve.pair.map((p, i) => (
+                        <View key={`${i}-${p}`} style={styles.chip}>
+                          <Text style={styles.chipText}>{p}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </View>
+                ) : null}
               </>
             ) : null}
 
@@ -728,6 +799,87 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 23,
     color: colors.text,
+  },
+
+  // Make it at home
+  methodRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+    paddingVertical: 11,
+  },
+  methodText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 11,
+    letterSpacing: 1.4,
+  },
+  garnishText: {
+    fontFamily: fonts.body,
+    fontSize: 12,
+    color: colors.textMuted,
+    flexShrink: 1,
+  },
+  amountText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 13,
+    minWidth: 92,
+    fontVariant: ['tabular-nums'],
+  },
+  stepsWrap: {
+    marginTop: 12,
+    gap: 10,
+  },
+  stepRow: {
+    flexDirection: 'row',
+    gap: 12,
+    alignItems: 'flex-start',
+  },
+  stepNum: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
+  stepNumText: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 12,
+  },
+  stepText: {
+    flex: 1,
+    fontFamily: fonts.body,
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.text,
+  },
+
+  // Serve it right
+  serveCard: {
+    backgroundColor: colors.card,
+    borderLeftWidth: 3,
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 10,
+  },
+  serveText: {
+    fontFamily: fonts.body,
+    fontSize: 14,
+    lineHeight: 21,
+    color: colors.text,
+  },
+  pairWrap: {
+    marginTop: 12,
+    gap: 8,
+  },
+  pairLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 11,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+    color: colors.textFaint,
   },
   triviaCard: {
     backgroundColor: colors.card,

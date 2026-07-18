@@ -28,15 +28,29 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Dex',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🍸" focused={focused} />,
+          title: 'Home',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="🥂" focused={focused} />,
         }}
       />
       <Tabs.Screen
-        name="stats"
+        name="bars"
         options={{
-          title: 'Collection',
-          tabBarIcon: ({ focused }) => <TabIcon emoji="🏆" focused={focused} />,
+          title: 'Bars',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="📍" focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="🪪" focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name="dex"
+        options={{
+          title: 'Dex',
+          tabBarIcon: ({ focused }) => <TabIcon emoji="🍸" focused={focused} />,
         }}
       />
     </Tabs>

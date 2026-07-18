@@ -1,14 +1,7 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo } from 'react';
-import {
-  FlatList,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -24,6 +17,7 @@ import {
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatDexNumber, TOTAL } from '@/data';
 import { useCollection } from '@/store/collection';
+import { timeAgo, usePosts, type UserPost } from '@/store/posts';
 import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 import { confirmDestructive } from '@/utils/alerts';
 
@@ -34,14 +28,6 @@ import { confirmDestructive } from '@/utils/alerts';
 interface UnlockedEntry {
   drink: Drink;
   record: UnlockRecord;
-}
-
-interface CollectionStats {
-  unlockedCount: number;
-  byCategory: Record<DrinkCategory, number>;
-  byRarity: Record<Rarity, number>;
-  prize: UnlockedEntry | null;
-  recent: UnlockedEntry[];
 }
 
 function rankTitle(unlocked: number, total: number): string {
@@ -55,7 +41,7 @@ function rankTitle(unlocked: number, total: number): string {
   return 'First Sips';
 }
 
-function deriveStats(unlocks: Record<string, UnlockRecord>): CollectionStats {
+function deriveStats(unlocks: Record<string, UnlockRecord>) {
   const byCategory: Record<DrinkCategory, number> = { cocktail: 0, beer: 0, wine: 0, spirit: 0 };
   const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
 
@@ -81,12 +67,7 @@ function deriveStats(unlocks: Record<string, UnlockRecord>): CollectionStats {
     }
   }
 
-  const recent = entries
-    .slice()
-    .sort((a, b) => Date.parse(b.record.date) - Date.parse(a.record.date))
-    .slice(0, 8);
-
-  return { unlockedCount: entries.length, byCategory, byRarity, prize, recent };
+  return { unlockedCount: entries.length, byCategory, byRarity, prize };
 }
 
 /* ------------------------------------------------------------------ */
@@ -100,6 +81,37 @@ function GlyphPanel({ drink, size, radius }: { drink: Drink; size: number; radiu
     </View>
   );
 }
+
+const MyPostCard = React.memo(function MyPostCard({
+  post,
+  onPress,
+}: {
+  post: UserPost;
+  onPress: (drinkId: string) => void;
+}) {
+  const drink = DRINKS_BY_ID[post.drinkId];
+  if (!drink) return null;
+  return (
+    <Pressable
+      onPress={() => onPress(drink.id)}
+      accessibilityRole="button"
+      accessibilityLabel={`Open your post about ${drink.name}`}
+      style={({ pressed }) => [styles.myPost, pressed && styles.pressed]}
+    >
+      <View style={[styles.myPostThumb, { borderColor: CATEGORY_META[drink.category].color + '55' }]}>
+        {post.photoUri ? (
+          <Image source={{ uri: post.photoUri }} style={styles.myPostImage} contentFit="cover" transition={150} />
+        ) : (
+          <GlyphPanel drink={drink} size={104} radius={13} />
+        )}
+      </View>
+      <Text style={styles.myPostName} numberOfLines={1}>
+        {drink.name}
+      </Text>
+      <Text style={styles.myPostTime}>{timeAgo(post.createdAt)} ago</Text>
+    </Pressable>
+  );
+});
 
 function RegionRow({ category, unlocked }: { category: DrinkCategory; unlocked: number }) {
   const meta = CATEGORY_META[category];
@@ -129,53 +141,20 @@ function RegionRow({ category, unlocked }: { category: DrinkCategory; unlocked: 
   );
 }
 
-const RecentCard = React.memo(function RecentCard({
-  entry,
-  onPress,
-}: {
-  entry: UnlockedEntry;
-  onPress: (id: string) => void;
-}) {
-  const { drink, record } = entry;
-  const accent = CATEGORY_META[drink.category].color;
-  return (
-    <Pressable
-      onPress={() => onPress(drink.id)}
-      accessibilityRole="button"
-      accessibilityLabel={`Open ${drink.name}`}
-      style={({ pressed }) => [styles.recentItem, pressed && styles.pressed]}
-    >
-      <View style={[styles.recentThumbWrap, { borderColor: accent + '55' }]}>
-        {record.photoUri ? (
-          <Image
-            source={{ uri: record.photoUri }}
-            style={styles.recentImage}
-            contentFit="cover"
-            transition={150}
-          />
-        ) : (
-          <GlyphPanel drink={drink} size={94} radius={13} />
-        )}
-      </View>
-      <Text style={styles.recentName} numberOfLines={2}>
-        {drink.name}
-      </Text>
-    </Pressable>
-  );
-});
-
 /* ------------------------------------------------------------------ */
 /* Screen                                                              */
 /* ------------------------------------------------------------------ */
 
-export default function StatsScreen() {
+export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const unlocks = useCollection((s) => s.unlocks);
   const resetAll = useCollection((s) => s.resetAll);
+  const userPosts = usePosts((s) => s.userPosts);
+  const clearAllPosts = usePosts((s) => s.clearAllPosts);
 
   const stats = useMemo(() => deriveStats(unlocks), [unlocks]);
-  const { unlockedCount, byCategory, byRarity, prize, recent } = stats;
+  const { unlockedCount, byCategory, byRarity, prize } = stats;
 
   const rank = rankTitle(unlockedCount, TOTAL);
   const pctLabel = TOTAL > 0 ? Math.floor((unlockedCount / TOTAL) * 100) : 0;
@@ -187,19 +166,22 @@ export default function StatsScreen() {
     [router]
   );
 
-  const renderRecent = useCallback(
-    ({ item }: { item: UnlockedEntry }) => <RecentCard entry={item} onPress={openDrink} />,
+  const renderMyPost = useCallback(
+    ({ item }: { item: UserPost }) => <MyPostCard post={item} onPress={openDrink} />,
     [openDrink]
   );
 
   const confirmReset = useCallback(() => {
     confirmDestructive(
       'Reset collection?',
-      'This relocks every entry and deletes your photos from the index.',
+      'This relocks every entry, deletes your photos, and clears your posts.',
       'Reset',
-      resetAll
+      () => {
+        resetAll();
+        clearAllPosts();
+      }
     );
-  }, [resetAll]);
+  }, [clearAllPosts, resetAll]);
 
   return (
     <ScrollView
@@ -207,9 +189,20 @@ export default function StatsScreen() {
       contentContainerStyle={[styles.content, { paddingTop: insets.top + 12 }]}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={styles.header}>Collection</Text>
+      {/* ---- Identity ---- */}
+      <View style={styles.identityRow}>
+        <View style={styles.bigAvatar}>
+          <Text style={styles.bigAvatarEmoji}>⭐</Text>
+        </View>
+        <View style={styles.identityText}>
+          <Text style={styles.header}>Your card</Text>
+          <Text style={styles.identitySub}>
+            {userPosts.length} {userPosts.length === 1 ? 'post' : 'posts'} · {unlockedCount} logged
+          </Text>
+        </View>
+      </View>
 
-      {/* ---- Hero ---- */}
+      {/* ---- Rank hero ---- */}
       <Animated.View entering={FadeInDown.duration(420)}>
         <View style={[styles.card, styles.heroCard]}>
           <Text style={styles.heroOverline}>Rank</Text>
@@ -224,20 +217,33 @@ export default function StatsScreen() {
         </View>
       </Animated.View>
 
-      {/* ---- Empty state ---- */}
-      {unlockedCount === 0 && (
-        <Animated.View entering={FadeInDown.delay(60).duration(400)}>
+      {/* ---- My posts ---- */}
+      <Animated.View entering={FadeInDown.delay(60).duration(400)}>
+        <SectionLabel style={styles.sectionLabel}>My posts</SectionLabel>
+        {userPosts.length > 0 ? (
+          <FlatList
+            horizontal
+            data={userPosts}
+            keyExtractor={(item) => item.id}
+            renderItem={renderMyPost}
+            showsHorizontalScrollIndicator={false}
+            style={styles.myPostList}
+            contentContainerStyle={styles.myPostListContent}
+          />
+        ) : (
           <View style={[styles.card, styles.emptyCard]}>
-            <Text style={styles.emptyTitle}>Your shelf is empty.</Text>
-            <Text style={styles.emptyBody}>Find a drink, snap it, log it.</Text>
+            <Text style={styles.emptyTitle}>No posts yet.</Text>
+            <Text style={styles.emptyBody}>
+              Log a drink in the Dex — every unlock becomes a post on the feed.
+            </Text>
             <GoldButton
               label="Open the Dex"
-              onPress={() => router.push('/')}
+              onPress={() => router.push('/dex')}
               style={styles.emptyBtnSpacing}
             />
           </View>
-        </Animated.View>
-      )}
+        )}
+      </Animated.View>
 
       {/* ---- Regions ---- */}
       <Animated.View entering={FadeInDown.delay(90).duration(400)}>
@@ -316,22 +322,6 @@ export default function StatsScreen() {
         </Animated.View>
       )}
 
-      {/* ---- Recent pours ---- */}
-      {recent.length > 0 && (
-        <Animated.View entering={FadeInDown.delay(240).duration(400)}>
-          <SectionLabel style={styles.sectionLabel}>Recent pours</SectionLabel>
-          <FlatList
-            horizontal
-            data={recent}
-            keyExtractor={(item) => item.record.drinkId}
-            renderItem={renderRecent}
-            showsHorizontalScrollIndicator={false}
-            style={styles.recentList}
-            contentContainerStyle={styles.recentListContent}
-          />
-        </Animated.View>
-      )}
-
       {/* ---- Footer ---- */}
       <View style={styles.footer}>
         <Pressable
@@ -342,7 +332,7 @@ export default function StatsScreen() {
         >
           <Text style={styles.resetText}>Reset collection</Text>
         </Pressable>
-        <Text style={styles.version}>DrinkDex v1.0 · codename build</Text>
+        <Text style={styles.version}>Clink v2.0 · drink it, clink it</Text>
       </View>
     </ScrollView>
   );
@@ -363,9 +353,8 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: fonts.displayBold,
-    fontSize: 28,
+    fontSize: 26,
     color: colors.text,
-    marginBottom: 16,
   },
   card: {
     backgroundColor: colors.card,
@@ -393,6 +382,35 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
     fontVariant: ['tabular-nums'],
+  },
+
+  /* Identity */
+  identityRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    marginBottom: 16,
+  },
+  bigAvatar: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 2,
+    borderColor: colors.gold + '66',
+    backgroundColor: colors.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigAvatarEmoji: {
+    fontSize: 24,
+  },
+  identityText: {
+    gap: 2,
+  },
+  identitySub: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: 13,
+    color: colors.textMuted,
   },
 
   /* Hero */
@@ -438,9 +456,45 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
 
+  /* My posts */
+  myPostList: {
+    marginHorizontal: -20,
+  },
+  myPostListContent: {
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  myPost: {
+    width: 104,
+  },
+  myPostThumb: {
+    width: 104,
+    height: 104,
+    borderRadius: 14,
+    borderWidth: 1,
+    overflow: 'hidden',
+    backgroundColor: colors.surface,
+  },
+  myPostImage: {
+    width: '100%',
+    height: '100%',
+  },
+  myPostName: {
+    fontFamily: fonts.display,
+    fontSize: 13,
+    lineHeight: 16,
+    color: colors.text,
+    marginTop: 8,
+  },
+  myPostTime: {
+    fontFamily: fonts.body,
+    fontSize: 11,
+    color: colors.textFaint,
+    marginTop: 2,
+  },
+
   /* Empty state */
   emptyCard: {
-    marginTop: 16,
     padding: 20,
     alignItems: 'center',
   },
@@ -573,37 +627,6 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     color: colors.textFaint,
     marginLeft: 2,
-  },
-
-  /* Recent pours */
-  recentList: {
-    marginHorizontal: -20,
-  },
-  recentListContent: {
-    paddingHorizontal: 20,
-    gap: 12,
-  },
-  recentItem: {
-    width: 96,
-  },
-  recentThumbWrap: {
-    width: 96,
-    height: 96,
-    borderRadius: 14,
-    borderWidth: 1,
-    overflow: 'hidden',
-    backgroundColor: colors.surface,
-  },
-  recentImage: {
-    width: '100%',
-    height: '100%',
-  },
-  recentName: {
-    fontFamily: fonts.display,
-    fontSize: 13,
-    lineHeight: 16,
-    color: colors.text,
-    marginTop: 8,
   },
 
   /* Footer */

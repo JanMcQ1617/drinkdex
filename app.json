@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "DrinkDex",
+    "name": "Clink",
     "slug": "drinkdex",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
     "userInterfaceStyle": "dark",
-    "backgroundColor": "#0E0B08",
+    "backgroundColor": "#301B26",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "bundleIdentifier": "com.janmcqueeny.drinkdex"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#0E0B08",
+          "backgroundColor": "#301B26",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
