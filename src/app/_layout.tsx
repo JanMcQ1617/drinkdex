@@ -16,13 +16,15 @@ import {
 } from '@expo-google-fonts/inter';
 import { SpaceMono_400Regular } from '@expo-google-fonts/space-mono';
 import { useFonts } from 'expo-font';
-import { DarkTheme, Stack, ThemeProvider } from 'expo-router';
+import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
 import { ClinkIntro } from '@/components/ClinkIntro';
+import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { colors, fonts } from '@/constants/theme';
+import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 
 SplashScreen.preventAutoHideAsync();
@@ -30,23 +32,23 @@ SplashScreen.preventAutoHideAsync();
 /** Play the intro once per cold start (survives fast-refresh remounts). */
 let introPlayed = false;
 
-const DexTheme = {
-  ...DarkTheme,
+const ClinkTheme = {
+  ...DefaultTheme,
   colors: {
-    ...DarkTheme.colors,
+    ...DefaultTheme.colors,
     background: colors.bg,
     card: colors.surface,
     text: colors.text,
     border: colors.cardBorder,
-    primary: colors.gold,
+    primary: colors.wine,
     notification: colors.danger,
   },
   fonts: {
-    ...DarkTheme.fonts,
-    regular: { ...DarkTheme.fonts.regular, fontFamily: fonts.body },
-    medium: { ...DarkTheme.fonts.medium, fontFamily: fonts.bodyMedium },
-    bold: { ...DarkTheme.fonts.bold, fontFamily: fonts.bodySemiBold },
-    heavy: { ...DarkTheme.fonts.heavy, fontFamily: fonts.bodyBold },
+    ...DefaultTheme.fonts,
+    regular: { ...DefaultTheme.fonts.regular, fontFamily: fonts.body },
+    medium: { ...DefaultTheme.fonts.medium, fontFamily: fonts.bodyMedium },
+    bold: { ...DefaultTheme.fonts.bold, fontFamily: fonts.bodySemiBold },
+    heavy: { ...DefaultTheme.fonts.heavy, fontFamily: fonts.bodyBold },
   },
 };
 
@@ -70,6 +72,11 @@ export default function RootLayout() {
 
   const [showIntro, setShowIntro] = useState(!introPlayed);
 
+  // Restores the persisted Supabase session and keeps it refreshed. The
+  // returned unsubscribe tears down the auth listener.
+  const initAuth = useAuth((s) => s.init);
+  useEffect(() => initAuth(), [initAuth]);
+
   useEffect(() => {
     if (ready) {
       SplashScreen.hideAsync();
@@ -81,8 +88,9 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={DexTheme}>
-      <StatusBar style="light" />
+    <ThemeProvider value={ClinkTheme}>
+      {/* Dark glyphs — the app is light-first now. */}
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -91,6 +99,8 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="drink/[id]" />
       </Stack>
+      {/* Redeems invite deep links; renders nothing. */}
+      <InviteLinkHandler />
       {showIntro && (
         <ClinkIntro
           onDone={() => {

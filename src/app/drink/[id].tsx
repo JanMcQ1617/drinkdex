@@ -1,5 +1,4 @@
 import { Directory, File, Paths } from 'expo-file-system';
-import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -25,16 +24,30 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CategoryPill, GoldButton, RarityBadge, SectionLabel } from '@/components/ui';
-import { CATEGORY_META, colors, drinkGlyph, fonts } from '@/constants/theme';
+import { DrinkArt } from '@/components/artwork';
+import { Icon } from '@/components/icons';
+import {
+  Button,
+  Card,
+  CategoryPill,
+  Divider,
+  EmptyState,
+  haptic,
+  PressableScale,
+  RarityBadge,
+  SectionLabel,
+} from '@/components/ui';
+import { colors, elevation, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
+import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
-import { usePosts } from '@/store/posts';
+import { useSocial } from '@/store/social';
+import type { Composition, Recipe, ServeGuide } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+/* ==================================================================== */
+/* Helpers                                                              */
+/* ==================================================================== */
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -52,6 +65,8 @@ async function persistPhoto(drinkId: string, sourceUri: string): Promise<string>
     const dir = new Directory(Paths.document, 'unlocks');
     dir.create({ intermediates: true, idempotent: true });
     const dest = new File(dir, `${drinkId}-${Date.now()}.jpg`);
+    // Must be awaited — an un-awaited copy let the store persist a URI
+    // pointing at a file that had not finished writing.
     await new File(sourceUri).copy(dest);
     return dest.uri;
   } catch {
@@ -64,9 +79,9 @@ const PICKER_OPTIONS: ImagePicker.ImagePickerOptions = {
   quality: 0.7,
 };
 
-// ---------------------------------------------------------------------------
-// Small in-file components
-// ---------------------------------------------------------------------------
+/* ==================================================================== */
+/* Small in-file components                                             */
+/* ==================================================================== */
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
@@ -79,35 +94,123 @@ function StatCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-function PressableScale({
-  onPress,
-  style,
-  children,
-  accessibilityLabel,
-  disabled,
-}: {
-  onPress: () => void;
-  style?: object | object[];
-  children: React.ReactNode;
-  accessibilityLabel?: string;
-  disabled?: boolean;
-}) {
+function Chip({ label }: { label: string }) {
   return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => [style, pressed && { opacity: 0.72 }, disabled && { opacity: 0.4 }]}
-    >
-      {children}
-    </Pressable>
+    <View style={styles.chip}>
+      <Text style={styles.chipText}>{label}</Text>
+    </View>
   );
 }
 
-// ---------------------------------------------------------------------------
-// Screen
-// ---------------------------------------------------------------------------
+/**
+ * Cocktails — the make-at-home build.
+ *
+ * Amounts are set in mono and right-aligned so the numerals stack into a
+ * column the eye can scan, the way a printed spec sheet reads.
+ */
+function RecipePanel({ recipe }: { recipe: Recipe }) {
+  return (
+    <>
+      <SectionLabel style={styles.section}>How it&apos;s made</SectionLabel>
+
+      <Card style={styles.listCard}>
+        {recipe.ingredients.map((ing, i) => (
+          <View key={`${i}-${ing.item}`}>
+            {i > 0 ? <Divider /> : null}
+            <View style={styles.ingredientRow}>
+              <Text style={styles.ingredientItem}>{ing.item}</Text>
+              <Text style={styles.ingredientAmount}>{ing.amount}</Text>
+            </View>
+          </View>
+        ))}
+      </Card>
+
+      <View style={styles.steps}>
+        {recipe.steps.map((step, i) => (
+          <View key={`step-${i}`} style={styles.stepRow}>
+            <View style={styles.stepNum}>
+              <Text style={styles.stepNumText}>{i + 1}</Text>
+            </View>
+            <Text style={styles.stepText}>{step}</Text>
+          </View>
+        ))}
+      </View>
+
+      {recipe.method || recipe.garnish ? (
+        <View style={styles.chipRow}>
+          {recipe.method ? <Chip label={`Method — ${recipe.method}`} /> : null}
+          {recipe.garnish ? <Chip label={`Garnish — ${recipe.garnish}`} /> : null}
+        </View>
+      ) : null}
+    </>
+  );
+}
+
+/**
+ * Beers, wines, and spirits — what the drink is made of.
+ *
+ * Deliberately not framed as a recipe: nobody builds these at the bar, so a
+ * step list would be a lie. Labels come from the data because they change by
+ * category (Malt/Hops/Yeast, Grapes/Region/Aging, Base/Distillation, Rice).
+ */
+function CompositionPanel({ composition }: { composition: Composition }) {
+  return (
+    <>
+      <SectionLabel style={styles.section}>What&apos;s in it</SectionLabel>
+
+      <Text style={styles.lead}>{composition.summary}</Text>
+
+      <Card style={styles.listCard}>
+        {composition.components.map((component, i) => (
+          <View key={`${i}-${component.label}`}>
+            {i > 0 ? <Divider /> : null}
+            <View style={styles.componentRow}>
+              <Text style={styles.componentLabel}>{component.label}</Text>
+              <Text style={styles.componentDetail}>{component.detail}</Text>
+            </View>
+          </View>
+        ))}
+      </Card>
+
+      <View style={styles.noteCard}>
+        <Text style={styles.noteCardText}>{composition.process}</Text>
+      </View>
+    </>
+  );
+}
+
+/** How to serve it at home — complements, never replaces, the composition. */
+function ServePanel({ serve }: { serve: ServeGuide }) {
+  return (
+    <>
+      <SectionLabel style={styles.section}>Serve it right</SectionLabel>
+
+      <View style={styles.statRow}>
+        <StatCard label="Temp" value={serve.temp} />
+        <StatCard label="Glass" value={serve.glass} />
+      </View>
+
+      <View style={styles.serveCard}>
+        <Text style={styles.bodyText}>{serve.how}</Text>
+      </View>
+
+      {serve.pair && serve.pair.length > 0 ? (
+        <View style={styles.pairWrap}>
+          <Text style={styles.miniLabel}>Pairs with</Text>
+          <View style={styles.chipRow}>
+            {serve.pair.map((p, i) => (
+              <Chip key={`${i}-${p}`} label={p} />
+            ))}
+          </View>
+        </View>
+      ) : null}
+    </>
+  );
+}
+
+/* ==================================================================== */
+/* Screen                                                               */
+/* ==================================================================== */
 
 type PickerMode = 'unlock' | 'update';
 
@@ -122,8 +225,9 @@ export default function DrinkDetailScreen() {
   const unlock = useCollection((s) => s.unlock);
   const updatePhoto = useCollection((s) => s.updatePhoto);
   const relock = useCollection((s) => s.relock);
-  const addPost = usePosts((s) => s.addPost);
-  const removePostsForDrink = usePosts((s) => s.removePostsForDrink);
+  const myId = useAuth((s) => s.session?.user.id);
+  const addPost = useSocial((s) => s.addPost);
+  const removePostsForDrink = useSocial((s) => s.removePostsForDrink);
 
   // Modal / picker state
   const [modalVisible, setModalVisible] = useState(false);
@@ -182,7 +286,7 @@ export default function DrinkDetailScreen() {
         if (!perm.granted) {
           showNotice(
             'Photo access needed',
-            'DrinkDex needs photo library access to log proof. You can enable it in Settings.'
+            'Clink needs photo library access to log proof. You can enable it in Settings.'
           );
           return;
         }
@@ -205,7 +309,7 @@ export default function DrinkDetailScreen() {
       if (!perm.granted) {
         showNotice(
           'Camera access needed',
-          'DrinkDex needs camera access to snap proof. You can enable it in Settings.'
+          'Clink needs camera access to snap proof. You can enable it in Settings.'
         );
         return;
       }
@@ -227,17 +331,34 @@ export default function DrinkDetailScreen() {
       } else {
         const trimmed = note.trim();
         unlock(drink.id, uri, trimmed.length > 0 ? trimmed : undefined);
-        addPost(drink.id, uri, trimmed.length > 0 ? trimmed : undefined);
-        if (Platform.OS !== 'web') {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+        /*
+         * Only the sharing half needs an account — the collection is local
+         * and must never be gated. Not awaited: uploading the photo can take
+         * seconds, and the unlock has already earned its celebration.
+         */
+        if (myId) {
+          void addPost(myId, drink.id, trimmed.length > 0 ? trimmed : 'Logged a new entry.', uri);
         }
+        haptic.success();
         closeModal();
         triggerCelebration();
       }
     } finally {
       setBusy(false);
     }
-  }, [addPost, busy, closeModal, drink, note, pickedUri, pickerMode, triggerCelebration, unlock, updatePhoto]);
+  }, [
+    addPost,
+    busy,
+    closeModal,
+    drink,
+    myId,
+    note,
+    pickedUri,
+    pickerMode,
+    triggerCelebration,
+    unlock,
+    updatePhoto,
+  ]);
 
   const handleRemove = useCallback(() => {
     if (!drink) return;
@@ -247,28 +368,26 @@ export default function DrinkDetailScreen() {
       'Remove',
       () => {
         relock(drink.id);
-        removePostsForDrink(drink.id);
+        if (myId) void removePostsForDrink(myId, drink.id);
         router.back();
       }
     );
-  }, [drink, relock, removePostsForDrink, router]);
+  }, [drink, myId, relock, removePostsForDrink, router]);
 
-  // ---- Unknown entry ------------------------------------------------------
+  /* ---- Unknown entry --------------------------------------------- */
   if (!drink) {
     return (
       <View style={[styles.screen, styles.centered, { paddingTop: insets.top }]}>
-        <Text style={styles.unknownGlyph}>?</Text>
-        <Text style={styles.unknownTitle}>Unknown entry</Text>
-        <Text style={styles.unknownBody}>This drink is not in the Dex.</Text>
-        <PressableScale onPress={() => router.back()} style={styles.unknownBack} accessibilityLabel="Go back">
-          <Text style={styles.unknownBackText}>Back to the Dex</Text>
-        </PressableScale>
+        <EmptyState
+          icon="search"
+          title="Unknown entry"
+          body="This drink is not in the Dex."
+          action={{ label: 'Back to the Dex', onPress: () => router.back() }}
+        />
       </View>
     );
   }
 
-  const meta = CATEGORY_META[drink.category];
-  const glyph = drinkGlyph(drink);
   const unlocked = Boolean(record);
 
   return (
@@ -276,200 +395,150 @@ export default function DrinkDetailScreen() {
       <ScrollView
         contentContainerStyle={[
           styles.content,
-          { paddingTop: insets.top + 12, paddingBottom: Math.max(insets.bottom, 28) + 48 },
+          { paddingTop: insets.top + space.md, paddingBottom: Math.max(insets.bottom, space.xl) + 48 },
         ]}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <PressableScale onPress={() => router.back()} style={styles.backButton} accessibilityLabel="Go back">
-          <Text style={styles.backChevron}>‹</Text>
+        <PressableScale
+          onPress={() => router.back()}
+          style={styles.backButton}
+          accessibilityRole="button"
+          accessibilityLabel="Go back">
+          <Icon name="chevronLeft" size={22} color={colors.text} />
         </PressableScale>
 
         <Text style={styles.dexLine}>
-          {formatDexNumber(drink.dexNumber)}
+          <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
           {'  ·  '}
           {drink.subcategory.toUpperCase()}
         </Text>
-        <Text style={[styles.name, !unlocked && { color: colors.textMuted }]}>{drink.name}</Text>
+        <Text style={styles.name}>{drink.name}</Text>
 
-        {/* Hero */}
-        {unlocked && record?.photoUri ? (
-          <View style={[styles.heroWrap, { borderColor: meta.color + '55' }]}>
-            <Image
-              source={{ uri: record.photoUri }}
-              style={styles.heroImage}
-              contentFit="cover"
-              transition={220}
-              accessibilityLabel={`Your photo of ${drink.name}`}
-            />
-            <View style={styles.datePill}>
-              <Text style={styles.datePillText}>Logged {formatLogDate(record.date)}</Text>
-            </View>
-          </View>
-        ) : unlocked ? (
-          <View style={[styles.glyphPanel, { borderColor: meta.color + '55' }]}>
-            <Text style={styles.glyphUnlocked}>{glyph}</Text>
-            <Text style={styles.glyphCaption}>Logged {record ? formatLogDate(record.date) : ''}</Text>
-          </View>
-        ) : (
-          <View style={styles.lockedPanel}>
-            <Text style={styles.glyphLocked}>{glyph}</Text>
-            <Text style={styles.lockedCaption}>Not yet logged</Text>
-          </View>
-        )}
+        {/*
+          Always full color here, even before logging: you're on this
+          screen to make the drink, and the color tells you what you're
+          aiming for. The dashed frame and caption still mark it unlogged.
+          The Dex grid keeps its silhouettes — that's the collection board.
+        */}
+        <View
+          style={[styles.hero, unlocked ? styles.heroUnlocked : styles.heroLocked]}
+          accessible
+          accessibilityLabel={
+            unlocked
+              ? `Illustration of ${drink.name}`
+              : `Illustration of ${drink.name}, not yet logged`
+          }>
+          <DrinkArt drink={drink} size={150} />
+          {unlocked ? null : <Text style={styles.heroCaption}>Not yet logged</Text>}
+        </View>
 
         {/* Meta row */}
         <View style={styles.metaRow}>
           <CategoryPill category={drink.category} />
           <RarityBadge rarity={drink.rarity} />
         </View>
-        {unlocked && record?.note ? <Text style={styles.noteText}>“{record.note}”</Text> : null}
 
-        {/* Stat cards */}
+        {/* Basic facts — visible whether or not the entry is logged */}
         <View style={styles.statRow}>
           <StatCard label="ABV" value={drink.abv} />
           <StatCard label="Origin" value={drink.origin} />
           <StatCard label="Glass" value={drink.glassware ?? '—'} />
         </View>
 
-        {unlocked ? (
+        {/*
+          Everything below is visible whether or not the entry is logged.
+          The point of the app is to send you off to make and try a drink,
+          which the recipe can't do from behind a lock. Logging is the
+          record that you did it, not the key to finding out how.
+        */}
+
+        {/* Your proof photo — the one thing logging actually reveals */}
+        {unlocked && record?.photoUri ? (
           <>
-            {/* Tasting notes */}
-            <SectionLabel style={styles.section}>Tasting notes</SectionLabel>
-            <View style={styles.chipRow}>
-              {drink.tastingNotes.map((n, i) => (
-                <View key={`${i}-${n}`} style={styles.chip}>
-                  <Text style={styles.chipText}>{n}</Text>
-                </View>
-              ))}
+            <SectionLabel style={styles.section}>Your pour</SectionLabel>
+            <View style={styles.photoFrame}>
+              <Image
+                source={{ uri: record.photoUri }}
+                style={styles.photo}
+                contentFit="cover"
+                transition={220}
+                accessibilityLabel={`Your photo of ${drink.name}`}
+              />
             </View>
-
-            {/* Ingredients */}
-            {drink.ingredients && drink.ingredients.length > 0 ? (
-              <>
-                <SectionLabel style={styles.section}>The build</SectionLabel>
-                <View style={styles.buildCard}>
-                  {drink.ingredients.map((ing, i) => (
-                    <View
-                      key={`${i}-${ing}`}
-                      style={[styles.ingredientRow, i > 0 && styles.ingredientRowDivider]}
-                    >
-                      <View style={[styles.ingredientDot, { backgroundColor: meta.color }]} />
-                      <Text style={styles.ingredientText}>{ing}</Text>
-                    </View>
-                  ))}
-                </View>
-              </>
-            ) : null}
-
-            {/* Make it at home — cocktails */}
-            {drink.recipe ? (
-              <>
-                <SectionLabel style={styles.section}>Make it at home</SectionLabel>
-                <View style={styles.buildCard}>
-                  {drink.recipe.method ? (
-                    <View style={styles.methodRow}>
-                      <Text style={[styles.methodText, { color: meta.color }]}>
-                        {drink.recipe.method.toUpperCase()}
-                      </Text>
-                      {drink.recipe.garnish ? (
-                        <Text style={styles.garnishText} numberOfLines={1}>
-                          Garnish: {drink.recipe.garnish}
-                        </Text>
-                      ) : null}
-                    </View>
-                  ) : null}
-                  {drink.recipe.ingredients.map((ing, i) => (
-                    <View
-                      key={`${i}-${ing.item}`}
-                      style={[styles.ingredientRow, (i > 0 || drink.recipe?.method) && styles.ingredientRowDivider]}
-                    >
-                      <Text style={[styles.amountText, { color: meta.color }]}>{ing.amount}</Text>
-                      <Text style={styles.ingredientText}>{ing.item}</Text>
-                    </View>
-                  ))}
-                </View>
-                <View style={styles.stepsWrap}>
-                  {drink.recipe.steps.map((step, i) => (
-                    <View key={`step-${i}`} style={styles.stepRow}>
-                      <View style={[styles.stepNum, { borderColor: meta.color + '66' }]}>
-                        <Text style={[styles.stepNumText, { color: meta.color }]}>{i + 1}</Text>
-                      </View>
-                      <Text style={styles.stepText}>{step}</Text>
-                    </View>
-                  ))}
-                </View>
-              </>
-            ) : null}
-
-            {/* Serve it right — beers, wines, spirits */}
-            {drink.serve ? (
-              <>
-                <SectionLabel style={styles.section}>Serve it right</SectionLabel>
-                <View style={styles.statRow}>
-                  <StatCard label="Temp" value={drink.serve.temp} />
-                  <StatCard label="Glass" value={drink.serve.glass} />
-                </View>
-                <View style={[styles.serveCard, { borderLeftColor: meta.color }]}>
-                  <Text style={styles.serveText}>{drink.serve.how}</Text>
-                </View>
-                {drink.serve.pair && drink.serve.pair.length > 0 ? (
-                  <View style={styles.pairWrap}>
-                    <Text style={styles.pairLabel}>Pairs with</Text>
-                    <View style={styles.chipRow}>
-                      {drink.serve.pair.map((p, i) => (
-                        <View key={`${i}-${p}`} style={styles.chip}>
-                          <Text style={styles.chipText}>{p}</Text>
-                        </View>
-                      ))}
-                    </View>
-                  </View>
-                ) : null}
-              </>
-            ) : null}
-
-            {/* Description */}
-            <SectionLabel style={styles.section}>Field notes</SectionLabel>
-            <Text style={styles.description}>{drink.description}</Text>
-
-            {/* Fun fact */}
-            <SectionLabel style={styles.section}>Bar trivia</SectionLabel>
-            <View style={[styles.triviaCard, { borderLeftColor: meta.color }]}>
-              <Text style={styles.triviaText}>{drink.funFact}</Text>
-            </View>
-
-            {/* Footer actions */}
-            <PressableScale
-              onPress={() => openPicker('update')}
-              style={styles.secondaryButton}
-              accessibilityLabel="Update photo"
-            >
-              <Text style={styles.secondaryButtonText}>Update photo</Text>
-            </PressableScale>
-            <PressableScale
-              onPress={handleRemove}
-              style={styles.dangerButton}
-              accessibilityLabel={`Remove ${drink.name} from collection`}
-            >
-              <Text style={styles.dangerButtonText}>Remove from collection</Text>
-            </PressableScale>
+            <Text style={styles.photoMeta}>Logged {record ? formatLogDate(record.date) : ''}</Text>
+            {record?.note ? <Text style={styles.quote}>“{record.note}”</Text> : null}
           </>
-        ) : (
-          <>
-            {/* Locked teaser */}
-            <View style={styles.teaserCard}>
-              <Text style={styles.teaserText}>
-                Log this drink to reveal its tasting notes, lore, and bar trivia.
-              </Text>
+        ) : null}
+
+        {/* Not logged yet — an invitation, sitting above the how-to */}
+        {!unlocked ? (
+          <Card style={styles.lockedCard}>
+            <View style={styles.lockedIcon}>
+              <Icon name="lock" size={22} color={colors.wine} />
             </View>
-            <GoldButton
+            <Text style={styles.lockedTitle}>Not in your collection yet</Text>
+            <Text style={styles.lockedBody}>
+              Everything you need to make it is right below. Snap a photo when you do and it joins
+              your Dex.
+            </Text>
+            <Button
               label="Log this drink"
+              icon="camera"
+              block
               onPress={() => openPicker('unlock')}
               accessibilityLabel={`Log ${drink.name}`}
-              style={styles.ctaSpacing}
+              style={styles.lockedCta}
+            />
+          </Card>
+        ) : null}
+
+        {/* Tasting notes */}
+        <SectionLabel style={styles.section}>Tasting notes</SectionLabel>
+        <View style={styles.chipRow}>
+          {drink.tastingNotes.map((n, i) => (
+            <Chip key={`${i}-${n}`} label={n} />
+          ))}
+        </View>
+
+        {/* How it's made — a recipe for cocktails, a composition for the rest */}
+        {drink.recipe ? <RecipePanel recipe={drink.recipe} /> : null}
+        {!drink.recipe && drink.composition ? (
+          <CompositionPanel composition={drink.composition} />
+        ) : null}
+
+        {drink.serve ? <ServePanel serve={drink.serve} /> : null}
+
+        {/* Lore */}
+        <SectionLabel style={styles.section}>Field notes</SectionLabel>
+        <Text style={styles.bodyText}>{drink.description}</Text>
+
+        <SectionLabel style={styles.section}>Bar trivia</SectionLabel>
+        <View style={styles.noteCard}>
+          <Text style={styles.noteCardText}>{drink.funFact}</Text>
+        </View>
+
+        {/* Footer actions — only meaningful once it's in your collection */}
+        {unlocked ? (
+          <>
+            <Button
+              label="Update photo"
+              variant="secondary"
+              icon="camera"
+              block
+              onPress={() => openPicker('update')}
+              accessibilityLabel={`Update your photo of ${drink.name}`}
+              style={styles.footerButton}
+            />
+            <Button
+              label="Remove from collection"
+              variant="ghost"
+              block
+              onPress={handleRemove}
+              accessibilityLabel={`Remove ${drink.name} from collection`}
+              style={styles.removeButton}
             />
           </>
-        )}
+        ) : null}
       </ScrollView>
 
       {/* Unlock / update-photo modal */}
@@ -484,9 +553,8 @@ export default function DrinkDetailScreen() {
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             pointerEvents="box-none"
-            style={styles.sheetPositioner}
-          >
-            <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, 16) + 8 }]}>
+            style={styles.sheetPositioner}>
+            <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, space.lg) + space.sm }]}>
               <View style={styles.sheetHandle} />
               <Text style={styles.sheetTitle}>
                 {pickerMode === 'update' ? 'Update photo' : `Log ${drink.name}`}
@@ -515,37 +583,38 @@ export default function DrinkDetailScreen() {
                       accessibilityLabel="Optional note about where you found this drink"
                     />
                   ) : null}
-                  <GoldButton
+                  <Button
                     label={pickerMode === 'update' ? 'Save photo' : 'Unlock entry'}
+                    block
                     onPress={handleConfirm}
                     disabled={busy}
                     accessibilityLabel={pickerMode === 'update' ? 'Save new photo' : 'Unlock entry'}
-                    style={styles.ctaSpacing}
+                    style={styles.sheetCta}
                   />
-                  <PressableScale
+                  <Button
+                    label="Retake"
+                    variant="ghost"
+                    block
                     onPress={() => setPickedUri(null)}
-                    style={styles.retakeButton}
                     accessibilityLabel="Choose a different photo"
-                  >
-                    <Text style={styles.retakeText}>Retake</Text>
-                  </PressableScale>
+                  />
                 </>
               ) : (
                 <>
                   <PressableScale
                     onPress={pickFromCamera}
                     style={styles.optionRow}
-                    accessibilityLabel="Take a photo with the camera"
-                  >
-                    <Text style={styles.optionEmoji}>📷</Text>
+                    accessibilityRole="button"
+                    accessibilityLabel="Take a photo with the camera">
+                    <Icon name="camera" size={20} color={colors.wine} />
                     <Text style={styles.optionText}>Take photo</Text>
                   </PressableScale>
                   <PressableScale
                     onPress={pickFromLibrary}
                     style={styles.optionRow}
-                    accessibilityLabel="Choose a photo from your library"
-                  >
-                    <Text style={styles.optionEmoji}>🖼</Text>
+                    accessibilityRole="button"
+                    accessibilityLabel="Choose a photo from your library">
+                    <Icon name="grid" size={20} color={colors.wine} />
                     <Text style={styles.optionText}>Choose from library</Text>
                   </PressableScale>
                 </>
@@ -558,9 +627,9 @@ export default function DrinkDetailScreen() {
       {/* Celebration overlay */}
       {celebrating ? (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
-          <Animated.View style={[styles.celebration, { backgroundColor: colors.overlay }, celebStyle]}>
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: meta.color + '2E' }]} />
-            <Text style={[styles.celebrationTitle, { color: meta.color }]}>UNLOCKED</Text>
+          <Animated.View style={[styles.celebration, celebStyle]}>
+            <Icon name="sparkle" size={40} color={colors.gold} filled />
+            <Text style={styles.celebrationTitle}>UNLOCKED</Text>
             <Text style={styles.celebrationName}>{drink.name}</Text>
           </Animated.View>
         </View>
@@ -569,9 +638,9 @@ export default function DrinkDetailScreen() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Styles
-// ---------------------------------------------------------------------------
+/* ==================================================================== */
+/* Styles                                                               */
+/* ==================================================================== */
 
 const styles = StyleSheet.create({
   screen: {
@@ -579,153 +648,92 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
   centered: {
-    alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
   },
   content: {
-    padding: 20,
+    paddingHorizontal: space.xl,
   },
 
-  // Header
+  /* Header */
   backButton: {
     width: 44,
     height: 44,
-    borderRadius: 22,
+    borderRadius: radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    marginBottom: 14,
-  },
-  backChevron: {
-    color: colors.text,
-    fontSize: 28,
-    lineHeight: 32,
-    marginTop: -3,
-    fontFamily: fonts.body,
+    marginBottom: space.lg,
   },
   dexLine: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
+    fontSize: typeScale.micro.fontSize,
     letterSpacing: 1.4,
     color: colors.textFaint,
-    marginBottom: 6,
+    marginBottom: space.xs,
+  },
+  dexNumber: {
+    fontFamily: fonts.mono,
+    color: colors.goldInk,
   },
   name: {
-    fontFamily: fonts.displayBold,
-    fontSize: 30,
-    lineHeight: 36,
+    fontFamily: fonts.display,
+    fontSize: typeScale.headline.fontSize,
+    lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
-    marginBottom: 16,
+    marginBottom: space.lg,
   },
 
-  // Hero
-  heroWrap: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 1,
-    marginBottom: 14,
-    backgroundColor: colors.surface,
-  },
-  heroImage: {
-    width: '100%',
-    height: '100%',
-  },
-  datePill: {
-    position: 'absolute',
-    left: 12,
-    bottom: 12,
-    backgroundColor: colors.overlay,
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderWidth: 1,
-    borderColor: colors.text + '24',
-  },
-  datePillText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 12,
-    color: colors.text,
-  },
-  glyphPanel: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: 20,
-    borderWidth: 1,
-    backgroundColor: colors.surface,
+  /* Hero */
+  hero: {
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
-    marginBottom: 14,
-  },
-  glyphUnlocked: {
-    fontSize: 72,
-  },
-  glyphCaption: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-  lockedPanel: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: 20,
+    gap: space.sm,
+    paddingVertical: space.xl,
+    borderRadius: radius.xl,
     borderWidth: 1,
-    borderStyle: 'dashed',
+    backgroundColor: colors.surface,
+    marginBottom: space.lg,
+  },
+  heroUnlocked: {
     borderColor: colors.cardBorderLit,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    marginBottom: 14,
+    ...elevation.card,
   },
-  glyphLocked: {
-    fontSize: 72,
-    opacity: 0.16,
+  heroLocked: {
+    borderColor: colors.cardBorder,
+    borderStyle: 'dashed',
   },
-  lockedCaption: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 12,
-    letterSpacing: 0.6,
-    color: colors.textFaint,
+  heroCaption: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.micro.fontSize,
+    letterSpacing: 1.1,
     textTransform: 'uppercase',
+    color: colors.textFaint,
   },
 
-  // Meta
+  /* Meta */
   metaRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 6,
-  },
-  noteText: {
-    fontFamily: fonts.body,
-    fontStyle: 'italic',
-    fontSize: 13,
-    lineHeight: 19,
-    color: colors.textMuted,
-    marginBottom: 6,
+    gap: space.sm,
   },
 
-  // Stats
+  /* Stats */
   statRow: {
     flexDirection: 'row',
-    gap: 10,
-    marginTop: 10,
+    gap: space.sm,
+    marginTop: space.md,
   },
   statCard: {
     flex: 1,
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    borderRadius: 16,
-    paddingVertical: 14,
-    paddingHorizontal: 12,
-    gap: 5,
+    borderRadius: radius.lg,
+    paddingVertical: space.md,
+    paddingHorizontal: space.md,
+    gap: space.xs,
   },
   statLabel: {
     fontFamily: fonts.bodySemiBold,
@@ -736,217 +744,235 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    lineHeight: 19,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
     color: colors.text,
   },
 
-  // Sections
+  /* Sections */
   section: {
-    marginTop: 28,
-    marginBottom: 10,
+    marginTop: space.xxl,
+    marginBottom: space.md,
   },
-  chipRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  chip: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-  },
-  chipText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 13,
-    color: colors.textMuted,
-  },
-  buildCard: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-  },
-  ingredientRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingVertical: 11,
-  },
-  ingredientRowDivider: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.cardBorder,
-  },
-  ingredientDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-  },
-  ingredientText: {
-    flex: 1,
+  lead: {
     fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: typeScale.bodyLg.fontSize,
+    lineHeight: typeScale.bodyLg.lineHeight,
+    color: colors.text,
+    marginBottom: space.lg,
+  },
+  bodyText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.body.fontSize,
+    lineHeight: typeScale.body.lineHeight,
     color: colors.text,
   },
-  description: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    lineHeight: 23,
-    color: colors.text,
-  },
-
-  // Make it at home
-  methodRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 10,
-    paddingVertical: 11,
-  },
-  methodText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 11,
-    letterSpacing: 1.4,
-  },
-  garnishText: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.textMuted,
-    flexShrink: 1,
-  },
-  amountText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 13,
-    minWidth: 92,
-    fontVariant: ['tabular-nums'],
-  },
-  stepsWrap: {
-    marginTop: 12,
-    gap: 10,
-  },
-  stepRow: {
-    flexDirection: 'row',
-    gap: 12,
-    alignItems: 'flex-start',
-  },
-  stepNum: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 1,
-  },
-  stepNumText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-  },
-  stepText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 21,
-    color: colors.text,
-  },
-
-  // Serve it right
-  serveCard: {
-    backgroundColor: colors.card,
-    borderLeftWidth: 3,
-    borderRadius: 16,
-    padding: 16,
-    marginTop: 10,
-  },
-  serveText: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 21,
-    color: colors.text,
-  },
-  pairWrap: {
-    marginTop: 12,
-    gap: 8,
-  },
-  pairLabel: {
+  miniLabel: {
     fontFamily: fonts.bodySemiBold,
     fontSize: 11,
     letterSpacing: 1.4,
     textTransform: 'uppercase',
     color: colors.textFaint,
   },
-  triviaCard: {
-    backgroundColor: colors.card,
-    borderLeftWidth: 3,
-    borderRadius: 16,
-    padding: 16,
+
+  /* Chips */
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.sm,
   },
-  triviaText: {
+  chip: {
+    backgroundColor: colors.cardAlt,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: radius.pill,
+    paddingHorizontal: space.md,
+    paddingVertical: 7,
+  },
+  chipText: {
     fontFamily: fonts.body,
-    fontStyle: 'italic',
-    fontSize: 14,
-    lineHeight: 21,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
   },
 
-  // Locked teaser + CTA
-  teaserCard: {
+  /* Recipe + composition rows */
+  listCard: {
+    paddingHorizontal: space.lg,
+  },
+  ingredientRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: space.md,
+    paddingVertical: space.md,
+  },
+  ingredientItem: {
+    flex: 1,
+    fontFamily: fonts.body,
+    fontSize: typeScale.body.fontSize,
+    lineHeight: typeScale.body.lineHeight,
+    color: colors.text,
+  },
+  ingredientAmount: {
+    maxWidth: '42%',
+    textAlign: 'right',
+    fontFamily: fonts.mono,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.body.lineHeight,
+    color: colors.goldInk,
+    fontVariant: ['tabular-nums'],
+  },
+  steps: {
+    marginTop: space.lg,
+    gap: space.md,
+  },
+  stepRow: {
+    flexDirection: 'row',
+    gap: space.md,
+    alignItems: 'flex-start',
+  },
+  stepNum: {
+    width: 26,
+    height: 26,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.cardBorderLit,
+    backgroundColor: colors.goldWash,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepNumText: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.micro.fontSize,
+    color: colors.goldInk,
+  },
+  stepText: {
+    flex: 1,
+    fontFamily: fonts.body,
+    fontSize: typeScale.body.fontSize,
+    lineHeight: typeScale.body.lineHeight,
+    color: colors.text,
+  },
+  componentRow: {
+    paddingVertical: space.md,
+    gap: space.xs,
+  },
+  componentLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 11,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+    color: colors.goldInk,
+  },
+  componentDetail: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.body.fontSize,
+    lineHeight: typeScale.body.lineHeight,
+    color: colors.text,
+  },
+
+  /* Serve */
+  serveCard: {
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    borderRadius: 16,
-    padding: 18,
-    marginTop: 24,
+    borderRadius: radius.lg,
+    padding: space.lg,
+    marginTop: space.md,
   },
-  teaserText: {
+  pairWrap: {
+    marginTop: space.lg,
+    gap: space.sm,
+  },
+
+  /* Pull-quote style note card — process, trivia */
+  noteCard: {
+    backgroundColor: colors.wineWash,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.wine,
+    borderRadius: radius.md,
+    padding: space.lg,
+    marginTop: space.md,
+  },
+  noteCardText: {
     fontFamily: fonts.body,
-    fontStyle: 'italic',
-    fontSize: 14,
+    fontSize: typeScale.caption.fontSize,
     lineHeight: 21,
+    color: colors.textMuted,
+  },
+
+  /* Proof photo */
+  photoFrame: {
+    width: '100%',
+    aspectRatio: 4 / 3,
+    borderRadius: radius.xl,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.cardBorderLit,
+    backgroundColor: colors.surface,
+  },
+  photo: {
+    width: '100%',
+    height: '100%',
+  },
+  photoMeta: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.micro.fontSize,
+    letterSpacing: 0.4,
+    color: colors.textFaint,
+    marginTop: space.sm,
+  },
+  quote: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    fontStyle: 'italic',
+    color: colors.textMuted,
+    marginTop: space.xs,
+  },
+
+  /* Locked */
+  lockedCard: {
+    alignItems: 'center',
+    padding: space.xl,
+    marginTop: space.xl,
+  },
+  lockedIcon: {
+    width: 52,
+    height: 52,
+    borderRadius: radius.pill,
+    backgroundColor: colors.wineWash,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: space.md,
+  },
+  lockedTitle: {
+    fontFamily: fonts.display,
+    fontSize: typeScale.title.fontSize,
+    lineHeight: typeScale.title.lineHeight,
+    color: colors.text,
+    marginBottom: space.sm,
+  },
+  lockedBody: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.body.fontSize,
+    lineHeight: typeScale.body.lineHeight,
     color: colors.textMuted,
     textAlign: 'center',
   },
-  ctaSpacing: {
-    marginTop: 14,
+  lockedCta: {
+    marginTop: space.xl,
   },
 
-  // Footer actions (unlocked)
-  secondaryButton: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorderLit,
-    borderRadius: 14,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 28,
-    minHeight: 48,
-    justifyContent: 'center',
+  /* Footer actions */
+  footerButton: {
+    marginTop: space.xxl,
   },
-  secondaryButtonText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
-    color: colors.text,
-  },
-  dangerButton: {
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 6,
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  dangerButtonText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    color: colors.danger,
+  removeButton: {
+    marginTop: space.xs,
   },
 
-  // Modal sheet
+  /* Modal sheet */
   modalOverlay: {
     flex: 1,
     backgroundColor: colors.overlay,
@@ -957,91 +983,81 @@ const styles = StyleSheet.create({
   },
   sheet: {
     backgroundColor: colors.surface,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: radius.xl,
+    borderTopRightRadius: radius.xl,
     borderWidth: 1,
-    borderColor: colors.cardBorderLit,
-    padding: 20,
-    paddingTop: 12,
+    borderColor: colors.cardBorder,
+    padding: space.xl,
+    paddingTop: space.md,
+    ...elevation.sheet,
   },
   sheetHandle: {
     alignSelf: 'center',
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: colors.cardBorderLit,
-    marginBottom: 16,
+    backgroundColor: colors.borderStrong,
+    marginBottom: space.lg,
   },
   sheetTitle: {
-    fontFamily: fonts.displayBold,
-    fontSize: 22,
-    lineHeight: 27,
+    fontFamily: fonts.display,
+    fontSize: typeScale.title.fontSize,
+    lineHeight: typeScale.title.lineHeight,
     color: colors.text,
-    marginBottom: 6,
+    marginBottom: space.xs,
   },
   sheetSubtitle: {
     fontFamily: fonts.body,
-    fontSize: 13,
-    lineHeight: 19,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
-    marginBottom: 18,
+    marginBottom: space.lg,
+  },
+  sheetCta: {
+    marginTop: space.md,
+    marginBottom: space.xs,
   },
   optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: space.md,
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    marginBottom: 10,
+    borderRadius: radius.md,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.lg,
+    marginBottom: space.sm,
     minHeight: 52,
-  },
-  optionEmoji: {
-    fontSize: 18,
   },
   optionText: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
+    fontSize: typeScale.body.fontSize,
     color: colors.text,
   },
   previewImage: {
     width: '100%',
     aspectRatio: 3 / 2,
-    borderRadius: 14,
+    borderRadius: radius.md,
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    marginBottom: 12,
+    marginBottom: space.md,
   },
   noteInput: {
     backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
+    borderRadius: radius.md,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
     fontFamily: fonts.body,
-    fontSize: 14,
+    fontSize: typeScale.body.fontSize,
     color: colors.text,
-    minHeight: 46,
-  },
-  retakeButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    marginTop: 4,
-    minHeight: 44,
-  },
-  retakeText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    color: colors.textMuted,
+    minHeight: 48,
   },
 
-  // Celebration
+  /* Celebration */
   celebration: {
     position: 'absolute',
     top: 0,
@@ -1050,52 +1066,18 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: space.sm,
+    backgroundColor: colors.overlay,
   },
   celebrationTitle: {
-    fontFamily: fonts.displayBlack,
-    fontSize: 40,
+    fontFamily: fonts.display,
+    fontSize: typeScale.display.fontSize,
     letterSpacing: 4,
+    color: colors.gold,
   },
   celebrationName: {
-    fontFamily: fonts.display,
-    fontSize: 20,
-    color: colors.text,
-  },
-
-  // Unknown entry
-  unknownGlyph: {
-    fontFamily: fonts.displayBlack,
-    fontSize: 64,
-    color: colors.textFaint,
-    marginBottom: 8,
-  },
-  unknownTitle: {
-    fontFamily: fonts.displayBold,
-    fontSize: 24,
-    color: colors.text,
-    marginBottom: 6,
-  },
-  unknownBody: {
     fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.textMuted,
-    marginBottom: 24,
-  },
-  unknownBack: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorderLit,
-    borderRadius: 14,
-    paddingHorizontal: 22,
-    paddingVertical: 14,
-    minHeight: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  unknownBackText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
-    color: colors.text,
+    fontSize: typeScale.bodyLg.fontSize,
+    color: colors.textOnWine,
   },
 });

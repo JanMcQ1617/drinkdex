@@ -1,126 +1,187 @@
-import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { RarityBadge } from '@/components/ui';
-import { CATEGORY_META, colors, drinkGlyph, fonts } from '@/constants/theme';
-import { DRINKS_BY_ID, formatDexNumber } from '@/data';
-import { buildFeed, timeAgo, usePosts } from '@/store/posts';
-import type { Post } from '@/types';
+import { AuthGate } from '@/components/AuthGate';
+import { Icon } from '@/components/icons';
+import { PostCard } from '@/components/PostCard';
+import { Avatar, EmptyState, PressableScale } from '@/components/ui';
+import { colors, fonts, motion, radius, space, type as typeScale } from '@/constants/theme';
+import { useAuth } from '@/store/auth';
+import { useSocial } from '@/store/social';
+import type { Post, UserProfile } from '@/types';
 
 /* ------------------------------------------------------------------ */
-/* Post card                                                           */
+/* Friends row                                                         */
 /* ------------------------------------------------------------------ */
 
-const PostCard = React.memo(function PostCard({
-  post,
-  onOpenDrink,
+function PersonBubble({
+  name,
+  accent,
+  label,
+  onPress,
+  accessibilityLabel,
+  badge,
 }: {
-  post: Post;
-  onOpenDrink: (id: string) => void;
+  name: string;
+  accent: string;
+  label: string;
+  onPress: () => void;
+  accessibilityLabel: string;
+  badge?: boolean;
 }) {
-  const liked = usePosts((s) => Boolean(s.liked[post.id]));
-  const toggleLike = usePosts((s) => s.toggleLike);
-  const drink = DRINKS_BY_ID[post.drinkId];
-  if (!drink) return null;
-
-  const meta = CATEGORY_META[drink.category];
-  const likeCount = post.likes + (liked ? 1 : 0);
-
   return (
-    <View style={[styles.card, post.mine && styles.cardMine]}>
-      {/* Author row */}
-      <View style={styles.authorRow}>
-        <View style={[styles.avatar, { borderColor: post.accent + '66' }]}>
-          <Text style={styles.avatarEmoji}>{post.avatar}</Text>
-        </View>
-        <View style={styles.authorMeta}>
-          <Text style={[styles.author, post.mine && { color: colors.gold }]}>{post.author}</Text>
-          <Text style={styles.time}>{timeAgo(post.createdAt)} ago</Text>
-        </View>
-        <RarityBadge rarity={drink.rarity} compact />
+    <PressableScale
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      style={styles.bubble}>
+      <View>
+        <Avatar name={name} accent={accent} size={66} ring />
+        {badge ? (
+          <View style={styles.bubbleBadge}>
+            <Icon name="plus" size={13} color={colors.textOnWine} />
+          </View>
+        ) : null}
       </View>
-
-      {/* Photo or glyph panel */}
-      {post.photoUri ? (
-        <Image
-          source={{ uri: post.photoUri }}
-          style={styles.photo}
-          contentFit="cover"
-          transition={180}
-          accessibilityLabel={`${post.author}'s photo of ${drink.name}`}
-        />
-      ) : (
-        <View style={[styles.glyphPanel, { backgroundColor: meta.color + '14' }]}>
-          <Text style={styles.glyph}>{drinkGlyph(drink)}</Text>
-        </View>
-      )}
-
-      {/* Drink reference chip */}
-      <Pressable
-        onPress={() => onOpenDrink(drink.id)}
-        accessibilityRole="button"
-        accessibilityLabel={`Open ${drink.name} in the Dex`}
-        style={({ pressed }) => [styles.drinkChip, { borderColor: meta.color + '55' }, pressed && styles.pressed]}
-      >
-        <Text style={styles.drinkChipEmoji}>{meta.emoji}</Text>
-        <Text style={[styles.drinkChipName, { color: meta.color }]} numberOfLines={1}>
-          {drink.name}
-        </Text>
-        <Text style={styles.drinkChipDex}>{formatDexNumber(drink.dexNumber)}</Text>
-      </Pressable>
-
-      {/* Caption */}
-      <Text style={styles.caption}>{post.caption}</Text>
-
-      {/* Like row */}
-      <View style={styles.likeRow}>
-        <Pressable
-          onPress={() => toggleLike(post.id)}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityState={{ selected: liked }}
-          accessibilityLabel={liked ? 'Unlike' : 'Like'}
-          style={({ pressed }) => [styles.likeBtn, pressed && styles.pressed]}
-        >
-          <Text style={[styles.likeHeart, liked && styles.likeHeartOn]}>{liked ? '♥' : '♡'}</Text>
-          <Text style={[styles.likeCount, liked && styles.likeCountOn]}>{likeCount}</Text>
-        </Pressable>
-      </View>
-    </View>
+      <Text style={styles.bubbleLabel} numberOfLines={1}>
+        {label}
+      </Text>
+    </PressableScale>
   );
-});
+}
+
+function FriendsRow({
+  me,
+  followed,
+  onOpenPerson,
+  onLog,
+}: {
+  me: { name: string; accent: string };
+  followed: UserProfile[];
+  onOpenPerson: (id: string) => void;
+  onLog: () => void;
+}) {
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={styles.bubbleRow}
+      contentContainerStyle={styles.bubbleRowContent}>
+      <PersonBubble
+        name={me.name}
+        accent={me.accent}
+        label="Your pour"
+        badge
+        onPress={onLog}
+        accessibilityLabel="Log a new entry in the Dex"
+      />
+      {followed.map((p) => (
+        <PersonBubble
+          key={p.id}
+          name={p.displayName}
+          accent={p.accent}
+          label={p.username}
+          onPress={() => onOpenPerson(p.id)}
+          accessibilityLabel={`Open ${p.displayName}'s profile`}
+        />
+      ))}
+    </ScrollView>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Screen                                                              */
 /* ------------------------------------------------------------------ */
 
 export default function HomeScreen() {
+  return (
+    <AuthGate>
+      <HomeFeed />
+    </AuthGate>
+  );
+}
+
+function HomeFeed() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const userPosts = usePosts((s) => s.userPosts);
+  const reduced = useReducedMotion();
 
-  const feed = useMemo(() => buildFeed(userPosts), [userPosts]);
+  const myId = useAuth((s) => s.session?.user.id);
+  const profile = useAuth((s) => s.profile);
+
+  const feed = useSocial((s) => s.feed);
+  const profiles = useSocial((s) => s.profiles);
+  const following = useSocial((s) => s.following);
+  const loadingFeed = useSocial((s) => s.loadingFeed);
+  const load = useSocial((s) => s.load);
+  const refreshFeed = useSocial((s) => s.refreshFeed);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Re-runs when the signed-in user changes, so switching accounts doesn't
+  // leave the previous person's feed on screen. `load` handles its own errors.
+  useEffect(() => {
+    if (myId) void load(myId);
+  }, [myId, load]);
+
+  const onRefresh = useCallback(() => {
+    if (!myId) return;
+    setRefreshing(true);
+    void refreshFeed(myId).finally(() => setRefreshing(false));
+  }, [myId, refreshFeed]);
 
   const openDrink = useCallback(
-    (id: string) => {
-      router.push({ pathname: '/drink/[id]', params: { id } });
-    },
-    [router]
+    (id: string) => router.push({ pathname: '/drink/[id]', params: { id } }),
+    [router],
+  );
+
+  const openDex = useCallback(() => router.push('/dex'), [router]);
+
+  const openProfile = useCallback(() => router.push('/profile'), [router]);
+
+  const openPerson = useCallback(
+    (id: string) => router.push({ pathname: '/profile', params: { user: id } }),
+    [router],
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Post }) => <PostCard post={item} onOpenDrink={openDrink} />,
-    [openDrink]
+    ({ item, index }: { item: Post; index: number }) => (
+      <Animated.View
+        entering={
+          reduced
+            ? undefined
+            : // Capped: past the first screenful the delay only feels like lag.
+              FadeInDown.duration(motion.base).delay(Math.min(index, 4) * motion.stagger)
+        }>
+        <PostCard
+          post={item}
+          author={profiles[item.authorId]}
+          onOpenDrink={openDrink}
+          onOpenAuthor={openPerson}
+        />
+      </Animated.View>
+    ),
+    [openDrink, openPerson, profiles, reduced],
   );
 
+  // Follow order, minus anyone whose profile hasn't been fetched yet.
+  const followed = following.flatMap((id) => profiles[id] ?? []);
+
   const header = (
-    <View style={styles.headerWrap}>
-      <Text style={styles.wordmark}>Clink</Text>
-      <Text style={styles.tagline}>Drink it. Clink it.</Text>
-      <Text style={styles.subtitle}>The pour report — what everyone&apos;s logging.</Text>
+    <View>
+      <View style={styles.masthead}>
+        <Text style={styles.wordmark}>Clink</Text>
+        <Text style={styles.subtitle}>Pours from the accounts you follow.</Text>
+      </View>
+      <FriendsRow
+        me={{ name: profile?.display_name ?? 'You', accent: profile?.accent ?? colors.wine }}
+        followed={followed}
+        onOpenPerson={openPerson}
+        onLog={openDex}
+      />
     </View>
   );
 
@@ -130,169 +191,79 @@ export default function HomeScreen() {
       renderItem={renderItem}
       keyExtractor={(post) => post.id}
       style={styles.screen}
-      contentContainerStyle={[styles.listContent, { paddingTop: insets.top + 12 }]}
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + space.md }]}
       ListHeaderComponent={header}
+      ListEmptyComponent={
+        loadingFeed ? (
+          <View style={styles.loading}>
+            <ActivityIndicator color={colors.wine} />
+          </View>
+        ) : (
+          <EmptyState
+            icon="users"
+            title="Nothing poured yet"
+            body="Follow a few collectors from the Accounts list on your profile — their pours land here. Yours will too, once you log an entry."
+            action={{ label: 'Find people', onPress: openProfile }}
+          />
+        )
+      }
+      refreshing={refreshing}
+      onRefresh={onRefresh}
       showsVerticalScrollIndicator={false}
     />
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Styles                                                              */
-/* ------------------------------------------------------------------ */
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.bg,
-  },
-  listContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-    gap: 14,
-  },
-  pressed: {
-    opacity: 0.72,
-  },
+  screen: { flex: 1, backgroundColor: colors.bg },
+  content: { paddingBottom: space.xxxl, gap: space.lg },
+  loading: { paddingVertical: space.xxxl, alignItems: 'center' },
 
-  /* Header */
-  headerWrap: {
-    marginBottom: 6,
-  },
+  /* Masthead */
+  masthead: { paddingHorizontal: space.xl },
   wordmark: {
-    fontFamily: 'GowunBatang_700Bold',
-    fontSize: 34,
+    fontFamily: fonts.display,
+    fontSize: typeScale.headline.fontSize,
+    lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
-  },
-  tagline: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 13,
-    color: colors.gold,
-    marginTop: 2,
   },
   subtitle: {
     fontFamily: fonts.body,
-    fontSize: 13,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
-    marginTop: 6,
+    marginTop: space.xs,
   },
 
-  /* Card */
-  card: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: 18,
-    padding: 14,
-    gap: 12,
+  /* Friends */
+  bubbleRow: { marginTop: space.lg },
+  bubbleRowContent: {
+    paddingHorizontal: space.xl,
+    gap: space.lg,
+    paddingBottom: space.xs,
   },
-  cardMine: {
-    borderColor: colors.goldDim,
-  },
-  authorRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  avatar: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    borderWidth: 1.5,
-    backgroundColor: colors.surface,
+  bubble: { width: 70, alignItems: 'center', gap: space.sm },
+  bubbleBadge: {
+    position: 'absolute',
+    right: -2,
+    bottom: -2,
+    width: 24,
+    height: 24,
+    borderRadius: radius.pill,
+    backgroundColor: colors.wine,
+    borderWidth: 2,
+    borderColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarEmoji: {
-    fontSize: 17,
-  },
-  authorMeta: {
-    flex: 1,
-    gap: 1,
-  },
-  author: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    color: colors.text,
-  },
-  time: {
+  bubbleLabel: {
     fontFamily: fonts.body,
-    fontSize: 11,
-    color: colors.textFaint,
-  },
-  photo: {
-    width: '100%',
-    aspectRatio: 4 / 3,
-    borderRadius: 13,
-    backgroundColor: colors.surface,
-  },
-  glyphPanel: {
-    width: '100%',
-    aspectRatio: 2.4,
-    borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  glyph: {
-    fontSize: 52,
-  },
-  drinkChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 7,
-    alignSelf: 'flex-start',
-    maxWidth: '100%',
-    paddingHorizontal: 11,
-    paddingVertical: 6,
-    borderRadius: 999,
-    borderWidth: 1,
-    backgroundColor: colors.surface,
-  },
-  drinkChipEmoji: {
-    fontSize: 12,
-  },
-  drinkChipName: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 13,
-    flexShrink: 1,
-  },
-  drinkChipDex: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 11,
-    color: colors.textFaint,
-    fontVariant: ['tabular-nums'],
-  },
-  caption: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    color: colors.text,
-  },
-  likeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  likeBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    minHeight: 32,
-    paddingRight: 12,
-  },
-  likeHeart: {
-    fontSize: 18,
+    fontSize: typeScale.micro.fontSize,
+    lineHeight: typeScale.micro.lineHeight,
     color: colors.textMuted,
-  },
-  likeHeartOn: {
-    color: colors.danger,
-  },
-  likeCount: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 13,
-    color: colors.textMuted,
-    fontVariant: ['tabular-nums'],
-  },
-  likeCountOn: {
-    color: colors.text,
+    maxWidth: 70,
+    textAlign: 'center',
   },
 });

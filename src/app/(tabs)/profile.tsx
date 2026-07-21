@@ -1,24 +1,54 @@
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo } from 'react';
-import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+  type ViewStyle,
+} from 'react-native';
+import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { GoldButton, ProgressBar, RarityBadge, SectionLabel } from '@/components/ui';
+import { AuthGate } from '@/components/AuthGate';
+import { DrinkArt } from '@/components/artwork';
+import { FindFriends } from '@/components/FindFriends';
+import { Icon, type IconName } from '@/components/icons';
+import { PostCard, timeAgo, useSignedPhoto } from '@/components/PostCard';
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  EmptyState,
+  haptic,
+  PressableScale,
+  ProgressBar,
+  RarityBadge,
+  SectionLabel,
+} from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
+  colors,
+  fonts,
+  motion,
+  radius,
   RARITY_META,
   RARITY_ORDER,
-  colors,
-  drinkGlyph,
-  fonts,
+  space,
+  type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatDexNumber, TOTAL } from '@/data';
+import { fetchPostsByAuthor, fetchProfiles, toProfile } from '@/lib/social';
+import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
-import { timeAgo, usePosts, type UserPost } from '@/store/posts';
-import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
+import { useSocial } from '@/store/social';
+import type { Drink, DrinkCategory, Post, Rarity, UnlockRecord, UserProfile } from '@/types';
 import { confirmDestructive } from '@/utils/alerts';
 
 /* ------------------------------------------------------------------ */
@@ -30,15 +60,24 @@ interface UnlockedEntry {
   record: UnlockRecord;
 }
 
+/** The rank ladder, ascending. Also drives the milestones list. */
+const MILESTONES: { pct: number; title: string }[] = [
+  { pct: 0, title: 'First Sips' },
+  { pct: 10, title: 'Barfly in Training' },
+  { pct: 25, title: 'The Regular' },
+  { pct: 50, title: 'Connoisseur' },
+  { pct: 75, title: 'Master of the Index' },
+  { pct: 100, title: 'Living Legend' },
+];
+
 function rankTitle(unlocked: number, total: number): string {
   if (unlocked === 0) return 'Empty Shelf';
   const pct = total > 0 ? (unlocked / total) * 100 : 0;
-  if (pct >= 100) return 'Living Legend';
-  if (pct >= 75) return 'Master of the Index';
-  if (pct >= 50) return 'Connoisseur';
-  if (pct >= 25) return 'The Regular';
-  if (pct >= 10) return 'Barfly in Training';
-  return 'First Sips';
+  let title = MILESTONES[0]!.title;
+  for (const m of MILESTONES) {
+    if (pct >= m.pct) title = m.title;
+  }
+  return title;
 }
 
 function deriveStats(unlocks: Record<string, UnlockRecord>) {
@@ -70,256 +109,515 @@ function deriveStats(unlocks: Record<string, UnlockRecord>) {
   return { unlockedCount: entries.length, byCategory, byRarity, prize };
 }
 
+/**
+ * Stats for a peer, derived from their PUBLIC POSTS only.
+ *
+ * A peer's real collection lives on their device and never reaches the
+ * server, so this is the honest substitute: the category and rarity spread
+ * of the pours they've actually shared. `counted` skips posts whose drink
+ * isn't in this build, so the bars sum to the drinks we can classify.
+ */
+function derivePostStats(posts: Post[]) {
+  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, beer: 0, wine: 0, spirit: 0 };
+  const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
+
+  let counted = 0;
+  for (const post of posts) {
+    const drink = DRINKS_BY_ID[post.drinkId];
+    if (!drink) continue;
+    counted += 1;
+    byCategory[drink.category] += 1;
+    byRarity[drink.rarity] += 1;
+  }
+
+  return { counted, byCategory, byRarity };
+}
+
 /* ------------------------------------------------------------------ */
-/* Subcomponents                                                       */
+/* Shared pieces                                                       */
 /* ------------------------------------------------------------------ */
 
-function GlyphPanel({ drink, size, radius }: { drink: Drink; size: number; radius: number }) {
+/**
+ * One person's posts, held locally.
+ *
+ * Not in the social store: that store owns the feed, and a profile is a
+ * different slice of the same table that shouldn't evict it.
+ */
+const NO_POSTS: Post[] = [];
+
+function usePostsByAuthor(
+  authorId: string | undefined,
+  myId: string | undefined,
+  /** Change this to refetch without blanking what's already on screen. */
+  reloadKey = '',
+): Post[] {
+  // Tagged with whose posts these are, so switching author reads as empty
+  // without a synchronous reset that would cascade renders.
+  const who = `${authorId ?? ''}|${myId ?? ''}`;
+  const [loaded, setLoaded] = useState<{ who: string; posts: Post[] } | null>(null);
+
+  useEffect(() => {
+    if (!authorId || !myId) return;
+    let alive = true;
+    fetchPostsByAuthor(authorId, myId)
+      .then((rows) => {
+        if (alive) setLoaded({ who, posts: rows });
+      })
+      .catch(() => {
+        // The grid stays empty rather than taking the screen down with it.
+        if (alive) setLoaded({ who, posts: NO_POSTS });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [authorId, myId, who, reloadKey]);
+
+  return loaded?.who === who ? loaded.posts : NO_POSTS;
+}
+
+function Identity({
+  profile,
+  trailing,
+}: {
+  profile: UserProfile;
+  trailing?: React.ReactNode;
+}) {
   return (
-    <View style={[styles.glyphPanel, { width: size, height: size, borderRadius: radius }]}>
-      <Text style={{ fontSize: size * 0.42 }}>{drinkGlyph(drink)}</Text>
+    <View style={styles.identity}>
+      <Avatar name={profile.displayName} accent={profile.accent} size={84} ring />
+      <View style={styles.identityText}>
+        <Text style={styles.identityName} numberOfLines={1}>
+          {profile.displayName}
+        </Text>
+        <Text style={styles.identityHandle} numberOfLines={1}>
+          @{profile.username}
+        </Text>
+        {profile.bio ? <Text style={styles.identityBio}>{profile.bio}</Text> : null}
+        {trailing}
+      </View>
     </View>
   );
 }
 
-const MyPostCard = React.memo(function MyPostCard({
+function Stat({ value, label }: { value: number; label: string }) {
+  return (
+    <View style={styles.stat} accessibilityLabel={`${value} ${label}`}>
+      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </View>
+  );
+}
+
+/** One of your logged pours, as a square grid tile. */
+function PostTile({
   post,
+  size,
   onPress,
 }: {
-  post: UserPost;
+  post: Post;
+  size: number;
   onPress: (drinkId: string) => void;
 }) {
+  const photoUrl = useSignedPhoto(post.photoPath);
   const drink = DRINKS_BY_ID[post.drinkId];
   if (!drink) return null;
+
   return (
     <Pressable
       onPress={() => onPress(drink.id)}
       accessibilityRole="button"
-      accessibilityLabel={`Open your post about ${drink.name}`}
-      style={({ pressed }) => [styles.myPost, pressed && styles.pressed]}
-    >
-      <View style={[styles.myPostThumb, { borderColor: CATEGORY_META[drink.category].color + '55' }]}>
-        {post.photoUri ? (
-          <Image source={{ uri: post.photoUri }} style={styles.myPostImage} contentFit="cover" transition={150} />
-        ) : (
-          <GlyphPanel drink={drink} size={104} radius={13} />
-        )}
-      </View>
-      <Text style={styles.myPostName} numberOfLines={1}>
-        {drink.name}
-      </Text>
-      <Text style={styles.myPostTime}>{timeAgo(post.createdAt)} ago</Text>
+      accessibilityLabel={`${drink.name}, logged ${timeAgo(post.createdAt)} ago`}
+      style={({ pressed }) => [
+        styles.tile,
+        { width: size, height: size, backgroundColor: CATEGORY_META[drink.category].wash },
+        pressed && styles.pressed,
+      ]}>
+      {photoUrl ? (
+        <Image
+          source={{ uri: photoUrl }}
+          style={styles.tileImage}
+          contentFit="cover"
+          transition={150}
+        />
+      ) : (
+        <DrinkArt drink={drink} size={size * 0.6} flat />
+      )}
     </Pressable>
   );
-});
+}
 
-function RegionRow({ category, unlocked }: { category: DrinkCategory; unlocked: number }) {
-  const meta = CATEGORY_META[category];
-  const total = COUNT_BY_CATEGORY[category];
-  const complete = total > 0 && unlocked >= total;
+function FollowRow({
+  person,
+  following,
+  onToggle,
+}: {
+  person: UserProfile;
+  following: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <View
-      style={[styles.card, styles.regionCard, complete && { borderColor: colors.gold + '55' }]}
-      accessibilityLabel={`${meta.plural}: ${unlocked} of ${total} logged${complete ? ', complete' : ''}`}
-    >
-      <View style={styles.regionTop}>
-        <Text style={styles.regionEmoji}>{meta.emoji}</Text>
-        <Text style={styles.regionName} numberOfLines={1}>
-          {meta.plural}
+    <View style={styles.followRow}>
+      <Avatar name={person.displayName} accent={person.accent} size={44} />
+      <View style={styles.followText}>
+        <Text style={styles.followName} numberOfLines={1}>
+          {person.displayName}
         </Text>
-        {complete && (
-          <View style={styles.completeTag}>
-            <Text style={styles.completeTagText}>★ Complete</Text>
-          </View>
-        )}
-        <Text style={styles.countText}>
-          {unlocked} / {total}
+        <Text style={styles.followHandle} numberOfLines={1}>
+          @{person.username}
         </Text>
       </View>
-      <ProgressBar value={unlocked} max={total} color={meta.color} height={5} />
+      <Button
+        label={following ? 'Following' : 'Follow'}
+        variant={following ? 'secondary' : 'primary'}
+        icon={following ? 'check' : undefined}
+        onPress={() => {
+          onToggle();
+          haptic.select();
+        }}
+        accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${person.displayName}`}
+        style={styles.followButton}
+      />
+    </View>
+  );
+}
+
+/**
+ * Top-level screen navigation. Your profile uses all three; a peer's uses
+ * only 'posts' and 'stats' — you can't manage someone else's follows.
+ */
+type Segment = 'posts' | 'stats' | 'friends';
+
+interface SegmentItem {
+  key: Segment;
+  icon: IconName;
+  label: string;
+  /** Spoken by the tab; whose profile this is changes the wording. */
+  a11yLabel: string;
+  /** Only icons with a solid variant should fill when active. */
+  fillActive?: boolean;
+}
+
+/** The screen's tab strip. Same pill visual whether it holds two items or three. */
+function SegmentBar({
+  items,
+  value,
+  onChange,
+  style,
+}: {
+  items: SegmentItem[];
+  value: Segment;
+  onChange: (key: Segment) => void;
+  style?: ViewStyle;
+}) {
+  return (
+    <View style={[styles.segments, style]}>
+      {items.map((item) => {
+        const active = value === item.key;
+        return (
+          <Pressable
+            key={item.key}
+            onPress={() => {
+              onChange(item.key);
+              haptic.select();
+            }}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={item.a11yLabel}
+            style={[styles.segment, active && styles.segmentActive]}>
+            <Icon
+              name={item.icon}
+              size={17}
+              color={active ? colors.wine : colors.textFaint}
+              filled={active && !!item.fillActive}
+            />
+            <Text style={[styles.segmentLabel, active && styles.segmentLabelActive]}>
+              {item.label}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Screen                                                              */
+/* Your profile                                                        */
 /* ------------------------------------------------------------------ */
 
-export default function ProfileScreen() {
+const OWN_SEGMENTS: SegmentItem[] = [
+  { key: 'posts', icon: 'grid', label: 'Posts', a11yLabel: 'Your posts', fillActive: true },
+  { key: 'stats', icon: 'trophy', label: 'Stats', a11yLabel: 'Your stats', fillActive: true },
+  { key: 'friends', icon: 'users', label: 'Accounts', a11yLabel: 'Accounts' },
+];
+
+function OwnProfile() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const reduced = useReducedMotion();
+  const { width } = useWindowDimensions();
+
+  const myId = useAuth((s) => s.session?.user.id);
+  const profile = useAuth((s) => s.profile);
+  const signOut = useAuth((s) => s.signOut);
+
   const unlocks = useCollection((s) => s.unlocks);
   const resetAll = useCollection((s) => s.resetAll);
-  const userPosts = usePosts((s) => s.userPosts);
-  const clearAllPosts = usePosts((s) => s.clearAllPosts);
 
-  const stats = useMemo(() => deriveStats(unlocks), [unlocks]);
-  const { unlockedCount, byCategory, byRarity, prize } = stats;
+  const people = useSocial((s) => s.people);
+  const following = useSocial((s) => s.following);
+  const loadingPeople = useSocial((s) => s.loadingPeople);
+  const loadPeople = useSocial((s) => s.loadPeople);
+  const toggleFollow = useSocial((s) => s.toggleFollow);
+  const resetSocial = useSocial((s) => s.reset);
 
-  const rank = rankTitle(unlockedCount, TOTAL);
-  const pctLabel = TOTAL > 0 ? Math.floor((unlockedCount / TOTAL) * 100) : 0;
+  const [segment, setSegment] = useState<Segment>('posts');
+
+  /*
+   * The feed is the app's live view of the posts table — logging a drink
+   * pushes one into it. This grid is fetched separately, so treat a change
+   * in feed size as the signal that it has fallen a post behind.
+   */
+  const feedSize = useSocial((s) => s.feed.length);
+  const myPosts = usePostsByAuthor(myId, myId, String(feedSize));
+
+  // The accounts list is a second query; don't pay for it until it's asked for.
+  useEffect(() => {
+    if (segment === 'friends' && myId) void loadPeople(myId);
+  }, [segment, myId, loadPeople]);
+
+  const { unlockedCount, byCategory, byRarity, prize } = useMemo(
+    () => deriveStats(unlocks),
+    [unlocks],
+  );
+
+  const me = profile ? toProfile(profile) : null;
+  const pct = TOTAL > 0 ? Math.floor((unlockedCount / TOTAL) * 100) : 0;
+  const tile = (width - space.xl * 2 - space.xs * 2) / 3;
 
   const openDrink = useCallback(
-    (id: string) => {
-      router.push({ pathname: '/drink/[id]', params: { id } });
-    },
-    [router]
+    (id: string) => router.push({ pathname: '/drink/[id]', params: { id } }),
+    [router],
   );
 
-  const renderMyPost = useCallback(
-    ({ item }: { item: UserPost }) => <MyPostCard post={item} onPress={openDrink} />,
-    [openDrink]
-  );
+  const openDex = useCallback(() => router.push('/dex'), [router]);
 
   const confirmReset = useCallback(() => {
+    // Only the local collection: posts already shared stay on the server.
     confirmDestructive(
       'Reset collection?',
-      'This relocks every entry, deletes your photos, and clears your posts.',
+      'This relocks every entry and deletes the photos saved on this device.',
       'Reset',
-      () => {
-        resetAll();
-        clearAllPosts();
-      }
+      resetAll,
     );
-  }, [clearAllPosts, resetAll]);
+  }, [resetAll]);
+
+  const handleSignOut = useCallback(() => {
+    void signOut().finally(resetSocial);
+  }, [resetSocial, signOut]);
+
+  const enter = (delay: number) =>
+    reduced ? undefined : FadeInDown.duration(motion.base).delay(delay);
 
   return (
     <ScrollView
       style={styles.screen}
-      contentContainerStyle={[styles.content, { paddingTop: insets.top + 12 }]}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* ---- Identity ---- */}
-      <View style={styles.identityRow}>
-        <View style={styles.bigAvatar}>
-          <Text style={styles.bigAvatarEmoji}>⭐</Text>
-        </View>
-        <View style={styles.identityText}>
-          <Text style={styles.header}>Your card</Text>
-          <Text style={styles.identitySub}>
-            {userPosts.length} {userPosts.length === 1 ? 'post' : 'posts'} · {unlockedCount} logged
-          </Text>
-        </View>
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + space.md }]}
+      showsVerticalScrollIndicator={false}>
+      {me ? <Identity profile={me} /> : null}
+
+      <View style={styles.statRow}>
+        <Stat value={unlockedCount} label="Entries" />
+        <Stat value={myPosts.length} label="Posts" />
+        <Stat value={following.length} label="Following" />
       </View>
 
-      {/* ---- Rank hero ---- */}
-      <Animated.View entering={FadeInDown.duration(420)}>
-        <View style={[styles.card, styles.heroCard]}>
-          <Text style={styles.heroOverline}>Rank</Text>
-          <Text style={styles.rankTitle}>{rank}</Text>
-          <View style={styles.heroCountRow}>
-            <Text style={styles.heroCount}>{unlockedCount}</Text>
-            <Text style={styles.heroTotal}>/ {TOTAL} logged</Text>
-            <View style={styles.flexSpacer} />
-            <Text style={styles.heroPct}>{pctLabel}%</Text>
-          </View>
-          <ProgressBar value={unlockedCount} max={TOTAL} color={colors.gold} height={8} />
-        </View>
-      </Animated.View>
+      {/* ---- Segments ---- */}
+      <SegmentBar items={OWN_SEGMENTS} value={segment} onChange={setSegment} />
 
-      {/* ---- My posts ---- */}
-      <Animated.View entering={FadeInDown.delay(60).duration(400)}>
-        <SectionLabel style={styles.sectionLabel}>My posts</SectionLabel>
-        {userPosts.length > 0 ? (
-          <FlatList
-            horizontal
-            data={userPosts}
-            keyExtractor={(item) => item.id}
-            renderItem={renderMyPost}
-            showsHorizontalScrollIndicator={false}
-            style={styles.myPostList}
-            contentContainerStyle={styles.myPostListContent}
-          />
+      {segment === 'posts' &&
+        (myPosts.length > 0 ? (
+          <View style={styles.grid}>
+            {myPosts.map((post) => (
+              <PostTile key={post.id} post={post} size={tile} onPress={openDrink} />
+            ))}
+          </View>
         ) : (
-          <View style={[styles.card, styles.emptyCard]}>
-            <Text style={styles.emptyTitle}>No posts yet.</Text>
-            <Text style={styles.emptyBody}>
-              Log a drink in the Dex — every unlock becomes a post on the feed.
-            </Text>
-            <GoldButton
-              label="Open the Dex"
-              onPress={() => router.push('/dex')}
-              style={styles.emptyBtnSpacing}
-            />
-          </View>
-        )}
-      </Animated.View>
-
-      {/* ---- Regions ---- */}
-      <Animated.View entering={FadeInDown.delay(90).duration(400)}>
-        <SectionLabel style={styles.sectionLabel}>Regions</SectionLabel>
-        {CATEGORY_ORDER.map((category) => (
-          <RegionRow key={category} category={category} unlocked={byCategory[category]} />
+          <EmptyState
+            icon="camera"
+            title="No posts yet"
+            body="Every entry you log in the Dex becomes a post here."
+            action={{ label: 'Open the Dex', onPress: openDex }}
+          />
         ))}
-      </Animated.View>
 
-      {/* ---- Rarity ---- */}
-      <Animated.View entering={FadeInDown.delay(140).duration(400)}>
-        <SectionLabel style={styles.sectionLabel}>Rarity</SectionLabel>
-        <View style={[styles.card, styles.rarityCard]}>
-          {RARITY_ORDER.map((rarity) => {
-            const count = byRarity[rarity];
-            const lit = rarity === 'legendary' && count > 0;
-            return (
-              <View
-                key={rarity}
-                style={[styles.rarityRow, lit && styles.rarityRowLit]}
-                accessibilityLabel={`${RARITY_META[rarity].label}: ${count} of ${COUNT_BY_RARITY[rarity]} logged`}
-              >
-                <RarityBadge rarity={rarity} />
-                <Text style={styles.countText}>
-                  {count} / {COUNT_BY_RARITY[rarity]}
-                </Text>
+      {/*
+       * These blocks used to sit always-on above the strip; they now live
+       * behind the Stats tab so Posts shows only posts. Same local
+       * `useCollection` source, so every block is otherwise unchanged.
+       */}
+      {segment === 'stats' && (
+        <>
+          {/* ---- Collection ---- */}
+          <Animated.View entering={enter(0)}>
+            <SectionLabel style={styles.sectionLabel}>Collection</SectionLabel>
+            <Card style={styles.block}>
+              <Text style={styles.rank}>{rankTitle(unlockedCount, TOTAL)}</Text>
+              <View style={styles.rankCountRow}>
+                <Text style={styles.rankCount}>{unlockedCount}</Text>
+                <Text style={styles.rankTotal}>of {TOTAL} logged</Text>
+                <Text style={styles.rankPct}>{pct}%</Text>
               </View>
-            );
-          })}
-        </View>
-      </Animated.View>
+              <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
 
-      {/* ---- Prize catch ---- */}
-      {prize && (
-        <Animated.View entering={FadeInDown.delay(190).duration(400)}>
-          <SectionLabel style={styles.sectionLabel}>Prize catch</SectionLabel>
-          <Pressable
-            onPress={() => openDrink(prize.drink.id)}
-            accessibilityRole="button"
-            accessibilityLabel={`Open ${prize.drink.name}, your rarest catch`}
-            style={({ pressed }) => [
-              styles.card,
-              styles.prizeCard,
-              { borderColor: CATEGORY_META[prize.drink.category].color + '3A' },
-              pressed && styles.pressed,
-            ]}
-          >
-            <View style={styles.prizeThumbWrap}>
-              {prize.record.photoUri ? (
-                <Image
-                  source={{ uri: prize.record.photoUri }}
-                  style={styles.prizeImage}
-                  contentFit="cover"
-                  transition={150}
+              <Divider style={styles.blockDivider} />
+
+              {CATEGORY_ORDER.map((category) => {
+                const meta = CATEGORY_META[category];
+                const total = COUNT_BY_CATEGORY[category];
+                const count = byCategory[category];
+                return (
+                  <View
+                    key={category}
+                    style={styles.categoryRow}
+                    accessibilityLabel={`${meta.plural}: ${count} of ${total} logged`}>
+                    <View style={styles.categoryHead}>
+                      <View style={[styles.categoryDot, { backgroundColor: meta.color }]} />
+                      <Text style={styles.categoryName}>{meta.plural}</Text>
+                      <Text style={styles.categoryCount}>
+                        {count}/{total}
+                      </Text>
+                    </View>
+                    <ProgressBar value={count} max={total} color={meta.color} height={5} />
+                  </View>
+                );
+              })}
+            </Card>
+          </Animated.View>
+
+          {/* ---- Rarity ---- */}
+          <Animated.View entering={enter(motion.stagger)}>
+            <SectionLabel style={styles.sectionLabel}>Rarity</SectionLabel>
+            <Card style={styles.blockTight}>
+              {RARITY_ORDER.map((rarity) => (
+                <View
+                  key={rarity}
+                  style={styles.rarityRow}
+                  accessibilityLabel={`${RARITY_META[rarity].label}: ${byRarity[rarity]} of ${COUNT_BY_RARITY[rarity]} logged`}>
+                  <RarityBadge rarity={rarity} />
+                  <Text style={styles.rarityCount}>
+                    {byRarity[rarity]}/{COUNT_BY_RARITY[rarity]}
+                  </Text>
+                </View>
+              ))}
+            </Card>
+          </Animated.View>
+
+          {/* ---- Milestones ---- */}
+          <Animated.View entering={enter(motion.stagger * 2)}>
+            <SectionLabel style={styles.sectionLabel}>Milestones</SectionLabel>
+            <Card style={styles.blockTight}>
+              {MILESTONES.map((m) => {
+                const reached = unlockedCount > 0 && pct >= m.pct;
+                return (
+                  <View
+                    key={m.title}
+                    style={styles.milestoneRow}
+                    accessibilityLabel={`${m.title}, ${m.pct} percent, ${reached ? 'reached' : 'not reached'}`}>
+                    <View
+                      style={[
+                        styles.milestoneMark,
+                        reached && {
+                          backgroundColor: colors.wineWash,
+                          borderColor: colors.wineSoft,
+                        },
+                      ]}>
+                      <Icon
+                        name={reached ? 'check' : 'lock'}
+                        size={13}
+                        color={reached ? colors.wine : colors.textFaint}
+                      />
+                    </View>
+                    <Text style={[styles.milestoneName, !reached && styles.milestoneNameDim]}>
+                      {m.title}
+                    </Text>
+                    <Text style={styles.milestonePct}>{m.pct}%</Text>
+                  </View>
+                );
+              })}
+            </Card>
+          </Animated.View>
+
+          {/* ---- Rarest entry ---- */}
+          {prize ? (
+            <Animated.View entering={enter(motion.stagger * 3)}>
+              <SectionLabel style={styles.sectionLabel}>Rarest entry</SectionLabel>
+              <PressableScale
+                onPress={() => openDrink(prize.drink.id)}
+                accessibilityRole="button"
+                accessibilityLabel={`Open ${prize.drink.name}, your rarest entry`}
+                style={styles.prize}>
+                <View
+                  style={[
+                    styles.prizeThumb,
+                    { backgroundColor: CATEGORY_META[prize.drink.category].wash },
+                  ]}>
+                  {prize.record.photoUri ? (
+                    <Image
+                      source={{ uri: prize.record.photoUri }}
+                      style={styles.prizeImage}
+                      contentFit="cover"
+                      transition={150}
+                    />
+                  ) : (
+                    <DrinkArt drink={prize.drink} size={40} flat />
+                  )}
+                </View>
+                <View style={styles.prizeBody}>
+                  <View style={styles.prizeNameRow}>
+                    <Text style={styles.prizeName} numberOfLines={1}>
+                      {prize.drink.name}
+                    </Text>
+                    <Text style={styles.prizeDex}>{formatDexNumber(prize.drink.dexNumber)}</Text>
+                  </View>
+                  <RarityBadge rarity={prize.drink.rarity} />
+                </View>
+                <Icon name="chevronRight" size={18} color={colors.textFaint} />
+              </PressableScale>
+            </Animated.View>
+          ) : null}
+        </>
+      )}
+
+      {segment === 'friends' && (
+        <>
+          {/* Invite, username search, and contact matching. */}
+          <FindFriends />
+
+          {/* Browse everyone else on Clink. */}
+          <SectionLabel style={styles.sectionLabel}>Everyone on Clink</SectionLabel>
+          {loadingPeople && people.length === 0 ? (
+            <View style={styles.loading}>
+              <ActivityIndicator color={colors.wine} />
+            </View>
+          ) : people.length > 0 ? (
+            <Card style={styles.blockTight}>
+              {people.map((p) => (
+                <FollowRow
+                  key={p.id}
+                  person={p}
+                  following={following.includes(p.id)}
+                  onToggle={() => {
+                    if (myId) void toggleFollow(myId, p.id);
+                  }}
                 />
-              ) : (
-                <GlyphPanel drink={prize.drink} size={56} radius={12} />
-              )}
-            </View>
-            <View style={styles.prizeBody}>
-              <View style={styles.prizeNameRow}>
-                <Text style={styles.prizeName} numberOfLines={1}>
-                  {prize.drink.name}
-                </Text>
-                <Text style={styles.prizeDex}>{formatDexNumber(prize.drink.dexNumber)}</Text>
-              </View>
-              <View style={styles.prizeMetaRow}>
-                <Text style={styles.prizeSub} numberOfLines={1}>
-                  {prize.drink.subcategory}
-                </Text>
-                <RarityBadge rarity={prize.drink.rarity} />
-              </View>
-            </View>
-            <Text style={styles.chevron}>›</Text>
-          </Pressable>
-        </Animated.View>
+              ))}
+            </Card>
+          ) : (
+            <Text style={styles.mutedLine}>
+              You’re early — invite a friend above and they’ll show up here.
+            </Text>
+          )}
+        </>
       )}
 
       {/* ---- Footer ---- */}
@@ -328,328 +626,520 @@ export default function ProfileScreen() {
           onPress={confirmReset}
           accessibilityRole="button"
           accessibilityLabel="Reset collection"
-          style={({ pressed }) => [styles.resetBtn, pressed && styles.pressed]}
-        >
-          <Text style={styles.resetText}>Reset collection</Text>
+          style={({ pressed }) => [styles.resetButton, pressed && styles.pressed]}>
+          <Text style={styles.resetLabel}>Reset collection</Text>
         </Pressable>
-        <Text style={styles.version}>Clink v2.0 · drink it, clink it</Text>
+        <Button
+          label="Sign out"
+          variant="danger"
+          onPress={handleSignOut}
+          style={styles.signOutButton}
+        />
       </View>
     </ScrollView>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Styles                                                              */
+/* Someone else's profile                                              */
+/* ------------------------------------------------------------------ */
+
+// No 'friends' tab: you can only manage your own follows, not a peer's.
+const PEER_SEGMENTS: SegmentItem[] = [
+  { key: 'posts', icon: 'grid', label: 'Posts', a11yLabel: 'Their posts', fillActive: true },
+  { key: 'stats', icon: 'trophy', label: 'Stats', a11yLabel: 'Their stats', fillActive: true },
+];
+
+function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) {
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
+
+  const myId = useAuth((s) => s.session?.user.id);
+  const cached = useSocial((s) => s.profiles[id]);
+  const following = useSocial((s) => s.following.includes(id));
+  const toggleFollow = useSocial((s) => s.toggleFollow);
+
+  const [segment, setSegment] = useState<Segment>('posts');
+  const posts = usePostsByAuthor(id, myId);
+
+  // Their real collection never leaves their device, so break down public posts.
+  const { counted, byCategory, byRarity } = useMemo(() => derivePostStats(posts), [posts]);
+
+  /*
+   * The lookup is normally already warm — you get here from the feed or the
+   * accounts list. A cold deep link into this route is the exception, so
+   * fetch the one row rather than show a nameless card.
+   */
+  const [fetched, setFetched] = useState<UserProfile | null>(null);
+  useEffect(() => {
+    if (cached) return;
+    let alive = true;
+    fetchProfiles([id])
+      .then((map) => {
+        if (alive) setFetched(map[id] ?? null);
+      })
+      .catch(() => {
+        if (alive) setFetched(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [cached, id]);
+
+  const person = cached ?? fetched;
+
+  const openDrink = useCallback(
+    (drinkId: string) => router.push({ pathname: '/drink/[id]', params: { id: drinkId } }),
+    [router],
+  );
+
+  if (!person) {
+    return (
+      <View style={[styles.screen, styles.centered, { paddingTop: insets.top }]}>
+        <EmptyState
+          icon="users"
+          title="Profile unavailable"
+          body="This account could not be loaded."
+          action={{ label: 'Back', onPress: onBack }}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[styles.peerContent, { paddingTop: insets.top + space.md }]}
+      showsVerticalScrollIndicator={false}>
+      <View style={styles.peerHeader}>
+        <Pressable
+          onPress={onBack}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel="Back to your profile"
+          style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
+          <Icon name="chevronLeft" size={22} color={colors.text} />
+        </Pressable>
+      </View>
+
+      <View style={styles.peerIdentity}>
+        <Identity
+          profile={person}
+          trailing={
+            <Button
+              label={following ? 'Following' : 'Follow'}
+              variant={following ? 'secondary' : 'primary'}
+              icon={following ? 'check' : undefined}
+              onPress={() => {
+                if (myId) void toggleFollow(myId, id);
+                haptic.select();
+              }}
+              accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${person.displayName}`}
+              style={styles.peerFollowButton}
+            />
+          }
+        />
+      </View>
+
+      <View style={styles.peerBody}>
+        <SegmentBar
+          items={PEER_SEGMENTS}
+          value={segment}
+          onChange={setSegment}
+          style={styles.peerSegmentBar}
+        />
+      </View>
+
+      {segment === 'posts' ? (
+        posts.length > 0 ? (
+          posts.map((post) => (
+            <PostCard key={post.id} post={post} author={person} onOpenDrink={openDrink} />
+          ))
+        ) : (
+          <EmptyState
+            icon="grid"
+            title="No posts"
+            body={`${person.displayName} hasn't shared an entry yet.`}
+          />
+        )
+      ) : posts.length > 0 ? (
+        <View style={styles.peerBody}>
+          {/* ---- Shared ---- */}
+          <SectionLabel style={styles.sectionLabel}>Shared</SectionLabel>
+          <Card style={styles.block}>
+            <Text style={styles.rank}>
+              {posts.length} {posts.length === 1 ? 'pour' : 'pours'} shared
+            </Text>
+            {/* Honest framing: this is their public feed, not their real Dex. */}
+            <Text style={styles.peerNote}>{"Based on what they've shared"}</Text>
+
+            <Divider style={styles.blockDivider} />
+
+            {CATEGORY_ORDER.map((category) => {
+              const meta = CATEGORY_META[category];
+              const count = byCategory[category];
+              return (
+                <View
+                  key={category}
+                  style={styles.categoryRow}
+                  accessibilityLabel={`${meta.plural}: ${count} shared`}>
+                  <View style={styles.categoryHead}>
+                    <View style={[styles.categoryDot, { backgroundColor: meta.color }]} />
+                    <Text style={styles.categoryName}>{meta.plural}</Text>
+                    <Text style={styles.categoryCount}>{count}</Text>
+                  </View>
+                  {/* Bars read as share-of-pours, so the max is their post total. */}
+                  <ProgressBar value={count} max={counted} color={meta.color} height={5} />
+                </View>
+              );
+            })}
+          </Card>
+
+          {/* ---- Rarity ---- */}
+          <SectionLabel style={styles.sectionLabel}>Rarity</SectionLabel>
+          <Card style={styles.blockTight}>
+            {RARITY_ORDER.map((rarity) => (
+              <View
+                key={rarity}
+                style={styles.rarityRow}
+                accessibilityLabel={`${RARITY_META[rarity].label}: ${byRarity[rarity]} shared`}>
+                <RarityBadge rarity={rarity} />
+                <Text style={styles.rarityCount}>{byRarity[rarity]}</Text>
+              </View>
+            ))}
+          </Card>
+        </View>
+      ) : (
+        <EmptyState
+          icon="trophy"
+          title="No stats yet"
+          body={`${person.displayName} hasn't shared an entry yet.`}
+        />
+      )}
+    </ScrollView>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Screen                                                              */
+/* ------------------------------------------------------------------ */
+
+export default function ProfileScreen() {
+  const { user } = useLocalSearchParams<{ user?: string }>();
+  const navigation = useNavigation<{ setParams: (params: { user?: string }) => void }>();
+  const myId = useAuth((s) => s.session?.user.id);
+
+  const clearPeer = useCallback(() => navigation.setParams({ user: undefined }), [navigation]);
+
+  /*
+   * The feed opens a peer by pushing this tab with a `user` param. A tab press
+   * merges params rather than clearing them, so dropping it on blur is what
+   * keeps the Profile tab landing on your own card next time.
+   */
+  useFocusEffect(useCallback(() => clearPeer, [clearPeer]));
+
+  const peerId = user && user !== myId ? user : null;
+
+  return (
+    <AuthGate>
+      {peerId ? <PeerProfile id={peerId} onBack={clearPeer} /> : <OwnProfile />}
+    </AuthGate>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.bg,
+  screen: { flex: 1, backgroundColor: colors.bg },
+  centered: { justifyContent: 'center' },
+  content: { paddingHorizontal: space.xl, paddingBottom: space.xxxl },
+  peerContent: { paddingBottom: space.xxxl },
+  pressed: { opacity: 0.72 },
+  loading: { paddingVertical: space.xxxl, alignItems: 'center' },
+  sectionLabel: { marginTop: space.xl, marginBottom: space.md },
+  mutedLine: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: 19,
+    color: colors.textFaint,
+    paddingHorizontal: space.xs,
   },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  header: {
-    fontFamily: fonts.displayBold,
-    fontSize: 26,
-    color: colors.text,
-  },
-  card: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: 16,
-  },
-  sectionLabel: {
-    marginTop: 28,
-    marginBottom: 10,
-  },
-  flexSpacer: {
-    flex: 1,
-  },
-  pressed: {
-    opacity: 0.72,
-  },
-  glyphPanel: {
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  countText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 13,
-    color: colors.textMuted,
-    fontVariant: ['tabular-nums'],
-  },
+  block: { padding: space.lg },
+  blockTight: { paddingHorizontal: space.lg, paddingVertical: space.xs },
 
   /* Identity */
-  identityRow: {
+  identity: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-    marginBottom: 16,
+    gap: space.lg,
   },
-  bigAvatar: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    borderWidth: 2,
-    borderColor: colors.gold + '66',
-    backgroundColor: colors.card,
-    alignItems: 'center',
-    justifyContent: 'center',
+  identityText: { flex: 1, gap: 2 },
+  identityName: {
+    fontFamily: fonts.display,
+    fontSize: typeScale.title.fontSize,
+    lineHeight: typeScale.title.lineHeight,
+    color: colors.text,
   },
-  bigAvatarEmoji: {
-    fontSize: 24,
+  identityHandle: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textFaint,
   },
-  identityText: {
-    gap: 2,
-  },
-  identitySub: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 13,
+  identityBio: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
+    marginTop: space.xs,
   },
 
-  /* Hero */
-  heroCard: {
-    borderColor: colors.cardBorderLit,
-    padding: 20,
+  /* Stats */
+  statRow: {
+    flexDirection: 'row',
+    marginTop: space.xl,
+    paddingVertical: space.lg,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: colors.cardBorder,
   },
-  heroOverline: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 11,
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
+  stat: { flex: 1, alignItems: 'center', gap: 2 },
+  statValue: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.title.fontSize,
+    color: colors.text,
+  },
+  statLabel: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.micro.fontSize,
+    letterSpacing: 0.4,
     color: colors.textFaint,
-    marginBottom: 4,
   },
-  rankTitle: {
-    fontFamily: fonts.displayBold,
-    fontSize: 22,
-    color: colors.gold,
+
+  /* Collection */
+  rank: {
+    fontFamily: fonts.display,
+    fontSize: typeScale.bodyLg.fontSize,
+    lineHeight: typeScale.bodyLg.lineHeight,
+    color: colors.wine,
   },
-  heroCountRow: {
+  rankCountRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    marginTop: 10,
-    marginBottom: 14,
+    gap: space.sm,
+    marginTop: space.sm,
+    marginBottom: space.md,
   },
-  heroCount: {
-    fontFamily: fonts.displayBlack,
-    fontSize: 56,
-    lineHeight: 60,
+  rankCount: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.headline.fontSize,
     color: colors.text,
   },
-  heroTotal: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.textMuted,
-    marginLeft: 8,
-  },
-  heroPct: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
-    color: colors.textMuted,
-    fontVariant: ['tabular-nums'],
-  },
-
-  /* My posts */
-  myPostList: {
-    marginHorizontal: -20,
-  },
-  myPostListContent: {
-    paddingHorizontal: 20,
-    gap: 12,
-  },
-  myPost: {
-    width: 104,
-  },
-  myPostThumb: {
-    width: 104,
-    height: 104,
-    borderRadius: 14,
-    borderWidth: 1,
-    overflow: 'hidden',
-    backgroundColor: colors.surface,
-  },
-  myPostImage: {
-    width: '100%',
-    height: '100%',
-  },
-  myPostName: {
-    fontFamily: fonts.display,
-    fontSize: 13,
-    lineHeight: 16,
-    color: colors.text,
-    marginTop: 8,
-  },
-  myPostTime: {
+  rankTotal: {
+    flex: 1,
     fontFamily: fonts.body,
-    fontSize: 11,
-    color: colors.textFaint,
-    marginTop: 2,
-  },
-
-  /* Empty state */
-  emptyCard: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  emptyTitle: {
-    fontFamily: fonts.display,
-    fontSize: 18,
-    color: colors.text,
-    textAlign: 'center',
-  },
-  emptyBody: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
-    textAlign: 'center',
-    marginTop: 6,
   },
-  emptyBtnSpacing: {
-    marginTop: 16,
+  rankPct: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textMuted,
   },
-
-  /* Regions */
-  regionCard: {
-    padding: 14,
-    marginBottom: 10,
-  },
-  regionTop: {
+  blockDivider: { marginVertical: space.lg },
+  categoryRow: { marginBottom: space.md },
+  categoryHead: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    gap: space.sm,
+    marginBottom: space.sm,
   },
-  regionEmoji: {
-    fontSize: 22,
-    width: 32,
-  },
-  regionName: {
-    fontFamily: fonts.display,
-    fontSize: 16,
-    color: colors.text,
+  categoryDot: { width: 8, height: 8, borderRadius: 4 },
+  categoryName: {
     flex: 1,
-    marginRight: 8,
-  },
-  completeTag: {
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.gold + '40',
-    backgroundColor: colors.gold + '1A',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginRight: 10,
-  },
-  completeTagText: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 9,
-    letterSpacing: 0.6,
-    color: colors.gold,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.text,
+  },
+  categoryCount: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.micro.fontSize,
+    color: colors.textMuted,
   },
 
   /* Rarity */
-  rarityCard: {
-    padding: 6,
-  },
   rarityRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 11,
-  },
-  rarityRowLit: {
-    backgroundColor: colors.gold + '14',
-  },
-
-  /* Prize catch */
-  prizeCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 14,
-  },
-  prizeThumbWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: colors.surface,
-  },
-  prizeImage: {
-    width: 56,
-    height: 56,
-    borderRadius: 12,
-  },
-  prizeBody: {
-    flex: 1,
-    marginLeft: 14,
-    marginRight: 8,
-  },
-  prizeNameRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  prizeName: {
-    fontFamily: fonts.display,
-    fontSize: 16,
-    color: colors.text,
-    flex: 1,
-    marginRight: 8,
-  },
-  prizeDex: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 11,
-    color: colors.textFaint,
-    fontVariant: ['tabular-nums'],
-  },
-  prizeMetaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 6,
-  },
-  prizeSub: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.textMuted,
-    flexShrink: 1,
-  },
-  chevron: {
-    fontFamily: fonts.body,
-    fontSize: 24,
-    lineHeight: 26,
-    color: colors.textFaint,
-    marginLeft: 2,
-  },
-
-  /* Footer */
-  footer: {
-    marginTop: 36,
-    alignItems: 'center',
-  },
-  resetBtn: {
     minHeight: 44,
-    minWidth: 44,
-    paddingHorizontal: 20,
+  },
+  rarityCount: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textMuted,
+  },
+
+  /* Milestones */
+  milestoneRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    minHeight: 44,
+  },
+  milestoneMark: {
+    width: 24,
+    height: 24,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    backgroundColor: colors.bgSunk,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  resetText: {
+  milestoneName: {
+    flex: 1,
     fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    color: colors.danger,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.text,
   },
-  version: {
-    fontFamily: fonts.body,
-    fontSize: 11,
+  milestoneNameDim: { fontFamily: fonts.body, color: colors.textFaint },
+  milestonePct: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.micro.fontSize,
     color: colors.textFaint,
-    marginTop: 10,
+  },
+
+  /* Rarest entry */
+  prize: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    padding: space.md,
+    backgroundColor: colors.surface,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.cardBorderLit,
+  },
+  prizeThumb: {
+    width: 56,
+    height: 56,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  prizeImage: { width: '100%', height: '100%' },
+  prizeBody: { flex: 1, gap: space.sm },
+  prizeNameRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.sm },
+  prizeName: {
+    flex: 1,
+    fontFamily: fonts.display,
+    fontSize: typeScale.body.fontSize,
+    color: colors.text,
+  },
+  prizeDex: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.micro.fontSize,
+    color: colors.textFaint,
+  },
+
+  /* Segments */
+  segments: {
+    flexDirection: 'row',
+    gap: space.xs,
+    marginTop: space.xxl,
+    padding: space.xs,
+    backgroundColor: colors.bgSunk,
+    borderRadius: radius.pill,
+  },
+  segment: {
+    flex: 1,
+    minHeight: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: space.sm,
+    borderRadius: radius.pill,
+  },
+  segmentActive: { backgroundColor: colors.surface },
+  segmentLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textFaint,
+  },
+  segmentLabelActive: { color: colors.wine },
+
+  /* Posts grid */
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: space.xs,
+    marginTop: space.lg,
+  },
+  tile: {
+    borderRadius: radius.md,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tileImage: { width: '100%', height: '100%' },
+
+  /* Accounts */
+  followRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    paddingVertical: space.md,
+  },
+  followText: { flex: 1, gap: 1 },
+  followName: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.caption.fontSize + 1,
+    color: colors.text,
+  },
+  followHandle: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.micro.fontSize,
+    color: colors.textFaint,
+  },
+  followButton: { paddingHorizontal: space.lg },
+
+  /* Peer */
+  peerHeader: { paddingHorizontal: space.lg, paddingBottom: space.sm },
+  backButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -space.md,
+  },
+  peerIdentity: { paddingHorizontal: space.xl, paddingBottom: space.xl },
+  peerFollowButton: { marginTop: space.md, alignSelf: 'flex-start' },
+  // Peer posts are full-bleed cards; the strip and stats need the page gutter.
+  peerBody: { paddingHorizontal: space.xl },
+  // Identity already leaves space below it, so trim the strip's own top margin.
+  peerSegmentBar: { marginTop: space.sm },
+  peerNote: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    color: colors.textMuted,
+    marginTop: space.xs,
+  },
+
+  /* Footer */
+  footer: { marginTop: space.xxl, alignItems: 'center', gap: space.md },
+  signOutButton: { minWidth: 180 },
+  resetButton: {
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: space.xl,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  resetLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.caption.fontSize + 1,
+    color: colors.danger,
   },
 });

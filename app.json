@@ -6,8 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
-    "userInterfaceStyle": "dark",
-    "backgroundColor": "#301B26",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F7EEDF",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex"
     },
@@ -32,6 +32,13 @@
           "backgroundColor": "#301B26",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
+        }
+      ],
+      "expo-sharing",
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "Clink matches your contacts against people already on Clink so you can follow friends you already know. Your contacts are never uploaded — only one-way hashes are compared."
         }
       ]
     ],

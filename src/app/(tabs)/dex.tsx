@@ -1,21 +1,44 @@
-import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   FlatList,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { CATEGORY_META, CATEGORY_ORDER, RARITY_META, colors, drinkGlyph, fonts } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, DRINKS, DRINKS_BY_ID, formatDexNumber, TOTAL } from '@/data';
-import { useCollection } from '@/store/collection';
+import { DrinkArt } from '@/components/artwork';
+import { Icon } from '@/components/icons';
+import { Divider, EmptyState, haptic, PressableScale, ProgressBar } from '@/components/ui';
+import {
+  CATEGORY_META,
+  CATEGORY_ORDER,
+  colors,
+  elevation,
+  fonts,
+  radius,
+  RARITY_META,
+  space,
+  type as typeScale,
+} from '@/constants/theme';
+import { COUNT_BY_CATEGORY, DRINKS, formatDexNumber, TOTAL } from '@/data';
+import { useCollection, useIsUnlocked } from '@/store/collection';
 import type { Drink, DrinkCategory } from '@/types';
+
+/* ------------------------------------------------------------------ */
+/* Grid geometry                                                       */
+/* ------------------------------------------------------------------ */
+
+const COLUMNS = 3;
+const GRID_PAD = space.lg;
+const GRID_GAP = space.sm;
+
+/** DrinkArt's viewBox is 100×112, so height follows width by this factor. */
+const ART_ASPECT = 112 / 100;
 
 /* ------------------------------------------------------------------ */
 /* Filters                                                             */
@@ -24,103 +47,104 @@ import type { Drink, DrinkCategory } from '@/types';
 type RegionFilter = DrinkCategory | 'all';
 type StatusFilter = 'all' | 'unlocked' | 'locked';
 
-const STATUS_OPTIONS: { key: StatusFilter; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'unlocked', label: 'Unlocked' },
-  { key: 'locked', label: 'Locked' },
+const STATUS_OPTIONS: { key: StatusFilter; label: string; a11y: string }[] = [
+  { key: 'all', label: 'All', a11y: 'Show every entry' },
+  { key: 'unlocked', label: 'Collected', a11y: 'Show only entries you have collected' },
+  { key: 'locked', label: 'Not yet', a11y: 'Show only entries you have not collected' },
 ];
 
 /* ------------------------------------------------------------------ */
 /* Subcomponents                                                       */
 /* ------------------------------------------------------------------ */
 
-function RegionChip({
+function FilterChip({
   label,
-  count,
+  detail,
   selected,
   accent,
-  emoji,
+  wash,
+  dot,
+  accessibilityLabel,
   onPress,
 }: {
   label: string;
-  count: string;
+  detail?: string;
   selected: boolean;
+  /** Text and border once selected. Defaults to wine ink. */
   accent?: string;
-  emoji?: string;
+  /** Fill once selected. Defaults to the wine wash. */
+  wash?: string;
+  /** Category swatch — carries the color the old chips got from an emoji. */
+  dot?: string;
+  accessibilityLabel: string;
   onPress: () => void;
 }) {
+  const fg = selected ? (accent ?? colors.wine) : colors.textMuted;
+
   return (
-    <Pressable
+    <PressableScale
       onPress={onPress}
-      hitSlop={{ top: 4, bottom: 4 }}
+      // PressableScale's own tap tick would stack with the selection tick below.
+      noHaptic
+      hitSlop={{ top: space.xs, bottom: space.xs }}
       accessibilityRole="button"
       accessibilityState={{ selected }}
-      accessibilityLabel={`${label} region, ${count} logged`}
-      style={({ pressed }) => [
-        styles.chip,
-        selected &&
-          (accent
-            ? { borderColor: accent, backgroundColor: accent + '1F' }
-            : styles.chipSelectedNeutral),
-        pressed && styles.pressed,
-      ]}
-    >
-      {emoji ? <Text style={styles.chipEmoji}>{emoji}</Text> : null}
-      <Text style={[styles.chipLabel, selected && styles.chipLabelSelected]}>{label}</Text>
-      <Text style={styles.chipCount}>{count}</Text>
-    </Pressable>
+      accessibilityLabel={accessibilityLabel}
+      style={[styles.chip, selected && { backgroundColor: wash ?? colors.wineWash, borderColor: fg }]}>
+      {dot ? <View style={[styles.chipDot, { backgroundColor: dot }]} /> : null}
+      <Text style={[styles.chipLabel, { color: fg }]}>{label}</Text>
+      {detail ? <Text style={styles.chipDetail}>{detail}</Text> : null}
+    </PressableScale>
   );
 }
 
 interface DrinkCardProps {
   drink: Drink;
+  /** Width of the artwork in points — derived from the live column width. */
+  artSize: number;
   onPress: (id: string) => void;
 }
 
-const DrinkCard = React.memo(function DrinkCard({ drink, onPress }: DrinkCardProps) {
-  // Fine-grained subscription: this card only re-renders when its own record changes.
-  const record = useCollection((s) => s.unlocks[drink.id]);
-  const isUnlocked = Boolean(record);
-  const photoUri = record?.photoUri ?? null;
+const DrinkCard = React.memo(function DrinkCard({ drink, artSize, onPress }: DrinkCardProps) {
+  // Per-card subscription: collecting one drink must not re-render the other 459.
+  const unlocked = useIsUnlocked(drink.id);
   const accent = CATEGORY_META[drink.category].color;
+
   return (
-    <Pressable
+    <PressableScale
       onPress={() => onPress(drink.id)}
       accessibilityRole="button"
       accessibilityLabel={`${drink.name}, ${formatDexNumber(drink.dexNumber)}, ${
-        isUnlocked ? 'logged' : 'not logged yet'
+        unlocked ? 'collected' : 'not collected yet'
       }`}
-      style={({ pressed }) => [
+      style={[
         styles.card,
-        isUnlocked ? [styles.cardUnlocked, { borderColor: accent }] : styles.cardLocked,
-        pressed && styles.pressed,
-      ]}
-    >
-      {isUnlocked && photoUri ? (
-        <Image source={{ uri: photoUri }} style={styles.cardPhoto} contentFit="cover" transition={150} />
-      ) : (
-        <View style={styles.cardGlyphZone}>
-          <Text style={[styles.cardGlyph, !isUnlocked && styles.cardGlyphLocked]}>
-            {drinkGlyph(drink)}
-          </Text>
-        </View>
-      )}
-      <View style={styles.cardFooter}>
-        <Text style={[styles.cardDex, isUnlocked && styles.cardDexUnlocked]}>
-          {formatDexNumber(drink.dexNumber)}
-        </Text>
-        <Text numberOfLines={2} style={[styles.cardName, isUnlocked && styles.cardNameUnlocked]}>
+        unlocked ? styles.cardUnlocked : styles.cardLocked,
+        unlocked && { borderColor: accent + '55' },
+        unlocked && elevation.card,
+      ]}>
+      <View style={[styles.artZone, { height: Math.round(artSize * ART_ASPECT) }]}>
+        <DrinkArt drink={drink} size={artSize} locked={!unlocked} flat />
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
+        <Text numberOfLines={2} style={[styles.name, !unlocked && styles.nameLocked]}>
           {drink.name}
         </Text>
       </View>
-      <View
-        style={[
-          styles.rarityDot,
-          { backgroundColor: RARITY_META[drink.rarity].color },
-          !isUnlocked && styles.rarityDotLocked,
-        ]}
-      />
-    </Pressable>
+
+      {/* Corner slot — rarity once collected, a lock until then. */}
+      <View style={styles.cornerSlot} pointerEvents="none">
+        {unlocked ? (
+          <View style={[styles.rarityDot, { backgroundColor: RARITY_META[drink.rarity].color }]} />
+        ) : (
+          <View style={styles.lockBadge}>
+            <Icon name="lock" size={11} color={colors.textFaint} filled />
+          </View>
+        )}
+      </View>
+    </PressableScale>
   );
 });
 
@@ -131,26 +155,30 @@ const DrinkCard = React.memo(function DrinkCard({ drink, onPress }: DrinkCardPro
 export default function DexScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const unlocks = useCollection((s) => s.unlocks);
+  const { width } = useWindowDimensions();
+
+  /*
+   * Membership size, not the map itself. Subscribing to `unlocks` here would
+   * re-render the screen every time a photo is swapped on an entry already
+   * collected; the count moves only when something is added or removed, which
+   * is the only change the grid's filtering and progress care about.
+   */
+  const collected = useCollection((s) => Object.keys(s.unlocks).length);
 
   const [region, setRegion] = useState<RegionFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
 
-  const counts = useMemo(() => {
-    const byCategory: Record<DrinkCategory, number> = { cocktail: 0, beer: 0, wine: 0, spirit: 0 };
-    let total = 0;
-    for (const id of Object.keys(unlocks)) {
-      const drink = DRINKS_BY_ID[id];
-      if (!drink) continue; // orphaned record — skip defensively
-      byCategory[drink.category] += 1;
-      total += 1;
-    }
-    return { byCategory, total };
-  }, [unlocks]);
+  const artSize = useMemo(() => {
+    const column = (width - GRID_PAD * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS;
+    return Math.round(column * 0.66);
+  }, [width]);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
+    // Read-not-subscribe: `collected` above is what invalidates this memo.
+    const unlocks = useCollection.getState().unlocks;
+
     return DRINKS.filter((drink) => {
       if (region !== 'all' && drink.category !== region) return false;
       if (status !== 'all') {
@@ -166,55 +194,86 @@ export default function DexScreen() {
       }
       return true;
     });
-  }, [query, region, status, unlocks]);
+    // `collected` looks unused — it is the invalidation key for the getState() read above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collected, query, region, status]);
 
   const openDrink = useCallback(
     (id: string) => {
       router.push({ pathname: '/drink/[id]', params: { id } });
     },
-    [router]
+    [router],
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Drink }) => <DrinkCard drink={item} onPress={openDrink} />,
-    [openDrink]
+    ({ item }: { item: Drink }) => (
+      <DrinkCard drink={item} artSize={artSize} onPress={openDrink} />
+    ),
+    [artSize, openDrink],
   );
+
+  const selectRegion = useCallback((next: RegionFilter) => {
+    haptic.select();
+    setRegion(next);
+  }, []);
+
+  const selectStatus = useCallback((next: StatusFilter) => {
+    haptic.select();
+    setStatus(next);
+  }, []);
+
+  const resetFilters = useCallback(() => {
+    haptic.select();
+    setRegion('all');
+    setStatus('all');
+    setQuery('');
+  }, []);
+
+  const filtered = region !== 'all' || status !== 'all' || query.length > 0;
 
   const header = (
     <View>
-      {/* Wordmark + counter */}
-      <View style={styles.titleRow}>
-        <Text style={styles.wordmark}>The Dex</Text>
-        <Text style={styles.counter}>
-          <Text style={styles.counterNum}>{counts.total}</Text> / {TOTAL}
-        </Text>
+      <Text style={styles.title}>The Dex</Text>
+      <Text style={styles.subtitle}>Every pour you have met, kept in one place.</Text>
+
+      <View style={styles.progressBlock}>
+        <View style={styles.progressRow}>
+          <Text style={styles.progressCount}>
+            {collected} of {TOTAL}
+          </Text>
+          <Text style={styles.progressLabel}>collected</Text>
+        </View>
+        <ProgressBar value={collected} max={TOTAL} />
       </View>
 
-      {/* Region chips */}
+      {/* Region */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         style={styles.chipScroll}
-        contentContainerStyle={styles.chipScrollContent}
-      >
-        <RegionChip
+        contentContainerStyle={styles.chipScrollContent}>
+        <FilterChip
           label="All"
-          count={`${counts.total} / ${TOTAL}`}
+          detail={String(TOTAL)}
           selected={region === 'all'}
-          onPress={() => setRegion('all')}
+          accessibilityLabel={`All regions, ${TOTAL} entries`}
+          onPress={() => selectRegion('all')}
         />
         {CATEGORY_ORDER.map((category) => {
           const meta = CATEGORY_META[category];
+          const total = COUNT_BY_CATEGORY[category];
           return (
-            <RegionChip
+            <FilterChip
               key={category}
               label={meta.plural}
-              emoji={meta.emoji}
-              count={`${counts.byCategory[category]} / ${COUNT_BY_CATEGORY[category]}`}
+              detail={String(total)}
               selected={region === category}
               accent={meta.color}
-              onPress={() => setRegion(category)}
+              wash={meta.wash}
+              dot={meta.color}
+              accessibilityLabel={`${meta.plural}, ${total} entries`}
+              onPress={() => selectRegion(category)}
             />
           );
         })}
@@ -222,10 +281,13 @@ export default function DexScreen() {
 
       {/* Search */}
       <View style={styles.searchWrap}>
+        <View style={styles.searchIcon}>
+          <Icon name="search" size={17} color={colors.textFaint} />
+        </View>
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Search the index…"
+          placeholder="Search the index"
           placeholderTextColor={colors.textFaint}
           autoCorrect={false}
           autoCapitalize="none"
@@ -233,43 +295,31 @@ export default function DexScreen() {
           style={styles.searchInput}
           accessibilityLabel="Search drinks by name or style"
         />
-        {query.length > 0 && (
-          <Pressable
+        {query.length > 0 ? (
+          <PressableScale
             onPress={() => setQuery('')}
             accessibilityRole="button"
             accessibilityLabel="Clear search"
-            style={({ pressed }) => [styles.clearBtn, pressed && styles.pressed]}
-          >
-            <Text style={styles.clearText}>✕</Text>
-          </Pressable>
-        )}
+            style={styles.clearBtn}>
+            <Icon name="close" size={16} color={colors.textMuted} />
+          </PressableScale>
+        ) : null}
       </View>
 
-      {/* Status filter */}
-      <View style={styles.segmentRow}>
-        {STATUS_OPTIONS.map((option) => {
-          const selected = status === option.key;
-          return (
-            <Pressable
-              key={option.key}
-              onPress={() => setStatus(option.key)}
-              hitSlop={{ top: 6, bottom: 6 }}
-              accessibilityRole="button"
-              accessibilityState={{ selected }}
-              accessibilityLabel={`Show ${option.label.toLowerCase()} entries`}
-              style={({ pressed }) => [
-                styles.segment,
-                selected && styles.segmentSelected,
-                pressed && styles.pressed,
-              ]}
-            >
-              <Text style={[styles.segmentText, selected && styles.segmentTextSelected]}>
-                {option.label}
-              </Text>
-            </Pressable>
-          );
-        })}
+      {/* Status */}
+      <View style={styles.statusRow}>
+        {STATUS_OPTIONS.map((option) => (
+          <FilterChip
+            key={option.key}
+            label={option.label}
+            selected={status === option.key}
+            accessibilityLabel={option.a11y}
+            onPress={() => selectStatus(option.key)}
+          />
+        ))}
       </View>
+
+      <Divider style={styles.headerRule} />
     </View>
   );
 
@@ -278,19 +328,28 @@ export default function DexScreen() {
       data={rows}
       renderItem={renderItem}
       keyExtractor={(drink) => drink.id}
-      numColumns={3}
+      numColumns={COLUMNS}
       style={styles.screen}
       columnWrapperStyle={styles.gridRow}
-      contentContainerStyle={[styles.listContent, { paddingTop: insets.top + 12 }]}
+      contentContainerStyle={[styles.listContent, { paddingTop: insets.top + space.md }]}
       ListHeaderComponent={header}
       ListEmptyComponent={
-        <View style={styles.emptyWrap}>
-          <Text style={styles.emptyTitle}>Nothing on the shelf</Text>
-          <Text style={styles.emptyBody}>Try a different search or region.</Text>
-        </View>
+        <EmptyState
+          icon="search"
+          title="Nothing on this shelf"
+          body="No entry matches that combination yet. Widen the search and the board fills back in."
+          action={filtered ? { label: 'Clear filters', onPress: resetFilters } : undefined}
+        />
       }
+      /* 460 rows of SVG artwork — keep the mounted window tight. */
+      initialNumToRender={18}
+      maxToRenderPerBatch={12}
+      updateCellsBatchingPeriod={50}
+      windowSize={7}
+      removeClippedSubviews
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
     />
   );
 }
@@ -305,101 +364,108 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
   listContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-    gap: 10,
+    paddingHorizontal: GRID_PAD,
+    paddingBottom: space.xxxl,
+    gap: GRID_GAP,
   },
   gridRow: {
-    gap: 10,
-  },
-  pressed: {
-    opacity: 0.72,
+    gap: GRID_GAP,
   },
 
   /* Header */
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'space-between',
-    marginBottom: 14,
-  },
-  wordmark: {
-    fontFamily: fonts.displayBold,
-    fontSize: 28,
-    color: colors.gold,
-  },
-  counter: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 14,
-    color: colors.textMuted,
-    fontVariant: ['tabular-nums'],
-  },
-  counterNum: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 15,
+  title: {
+    fontFamily: fonts.display,
+    fontSize: typeScale.headline.fontSize,
+    lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
   },
+  subtitle: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.body.fontSize,
+    lineHeight: typeScale.body.lineHeight,
+    color: colors.textMuted,
+    marginTop: space.xs,
+  },
+  progressBlock: {
+    marginTop: space.lg,
+    gap: space.sm,
+  },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: space.xs,
+  },
+  progressCount: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.body.fontSize,
+    color: colors.text,
+    fontVariant: ['tabular-nums'],
+  },
+  progressLabel: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    letterSpacing: typeScale.caption.letterSpacing,
+    color: colors.textFaint,
+  },
 
-  /* Region chips */
+  /* Chips */
   chipScroll: {
-    marginHorizontal: -20,
-    marginBottom: 12,
+    // Bleeds past the list padding so the row can scroll edge to edge.
+    marginHorizontal: -GRID_PAD,
+    marginTop: space.lg,
   },
   chipScrollContent: {
-    paddingHorizontal: 20,
-    gap: 8,
+    paddingHorizontal: GRID_PAD,
+    gap: space.sm,
   },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    minHeight: 38,
-    paddingHorizontal: 13,
-    paddingVertical: 8,
-    borderRadius: 999,
+    minHeight: 40,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: colors.cardBorder,
     backgroundColor: colors.surface,
   },
-  chipEmoji: {
-    fontSize: 13,
+  chipDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
   },
   chipLabel: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: 13,
-    color: colors.textMuted,
+    fontSize: typeScale.caption.fontSize,
   },
-  chipLabelSelected: {
-    color: colors.text,
-  },
-  chipCount: {
-    fontFamily: fonts.bodyMedium,
+  chipDetail: {
+    fontFamily: fonts.mono,
     fontSize: 10,
     color: colors.textFaint,
     fontVariant: ['tabular-nums'],
-  },
-  chipSelectedNeutral: {
-    borderColor: colors.cardBorderLit,
-    backgroundColor: colors.card,
   },
 
   /* Search */
   searchWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.card,
+    minHeight: 48,
+    marginTop: space.md,
+    borderRadius: radius.md,
     borderWidth: 1,
     borderColor: colors.cardBorder,
-    borderRadius: 12,
-    marginBottom: 10,
-    minHeight: 46,
+    backgroundColor: colors.surface,
+  },
+  searchIcon: {
+    paddingLeft: space.md,
+    paddingRight: space.sm,
   },
   searchInput: {
     flex: 1,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
+    alignSelf: 'stretch',
+    paddingRight: space.sm,
     fontFamily: fonts.body,
-    fontSize: 14,
+    fontSize: typeScale.body.fontSize,
     color: colors.text,
   },
   clearBtn: {
@@ -408,130 +474,77 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  clearText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    color: colors.textFaint,
-  },
-
-  /* Status segments */
-  segmentRow: {
+  statusRow: {
     flexDirection: 'row',
-    gap: 8,
-    marginBottom: 4,
+    gap: space.sm,
+    marginTop: space.md,
   },
-  segment: {
-    minHeight: 34,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentSelected: {
-    backgroundColor: colors.card,
-    borderColor: colors.cardBorderLit,
-  },
-  segmentText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 13,
-    color: colors.textMuted,
-  },
-  segmentTextSelected: {
-    fontFamily: fonts.bodySemiBold,
-    color: colors.text,
+  headerRule: {
+    marginTop: space.xl,
+    marginBottom: space.xs,
   },
 
   /* Grid cards */
   card: {
     flex: 1,
-    maxWidth: '32%',
-    aspectRatio: 0.82,
-    borderRadius: 16,
-    overflow: 'hidden',
-  },
-  cardLocked: {
-    backgroundColor: colors.surface,
+    aspectRatio: 0.78,
+    paddingTop: space.sm,
+    borderRadius: radius.lg,
     borderWidth: 1,
-    borderColor: colors.cardBorder,
+    overflow: 'hidden',
   },
   cardUnlocked: {
     backgroundColor: colors.card,
-    borderWidth: 1.5,
+    borderColor: colors.cardBorder,
   },
-  cardPhoto: {
-    width: '100%',
-    height: '58%',
-    backgroundColor: colors.surface,
+  cardLocked: {
+    // Sits back into the page rather than lifting off it.
+    backgroundColor: colors.cardAlt,
+    borderColor: colors.cardBorder,
   },
-  cardGlyphZone: {
-    height: '58%',
+  artZone: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cardGlyph: {
-    fontSize: 34,
-  },
-  cardGlyphLocked: {
-    opacity: 0.16,
-  },
-  cardFooter: {
+  footer: {
     flex: 1,
-    paddingHorizontal: 9,
-    paddingTop: 6,
-    gap: 2,
+    paddingHorizontal: space.sm,
+    paddingTop: space.xs,
+    gap: 1,
   },
-  cardDex: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 10,
+  dexNumber: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
     letterSpacing: 0.4,
     color: colors.textFaint,
     fontVariant: ['tabular-nums'],
   },
-  cardDexUnlocked: {
-    color: colors.textMuted,
-  },
-  cardName: {
+  name: {
     fontFamily: fonts.display,
-    fontSize: 13,
-    lineHeight: 16,
-    color: colors.textMuted,
-  },
-  cardNameUnlocked: {
+    fontSize: 12,
+    lineHeight: 15,
     color: colors.text,
   },
-  rarityDot: {
+  nameLocked: {
+    // Readable, but clearly not yours yet.
+    color: colors.textFaint,
+  },
+  cornerSlot: {
     position: 'absolute',
-    top: 8,
-    right: 8,
+    top: space.sm,
+    right: space.sm,
+  },
+  rarityDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
   },
-  rarityDotLocked: {
-    opacity: 0.4,
-  },
-
-  /* Empty state */
-  emptyWrap: {
+  lockBadge: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
     alignItems: 'center',
-    paddingVertical: 48,
-    paddingHorizontal: 20,
-  },
-  emptyTitle: {
-    fontFamily: fonts.display,
-    fontSize: 18,
-    color: colors.text,
-    textAlign: 'center',
-  },
-  emptyBody: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    color: colors.textMuted,
-    textAlign: 'center',
-    marginTop: 6,
+    justifyContent: 'center',
+    backgroundColor: colors.bgSunk,
   },
 });
