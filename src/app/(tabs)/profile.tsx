@@ -343,6 +343,9 @@ function OwnProfile() {
 
   const myId = useAuth((s) => s.session?.user.id);
   const profile = useAuth((s) => s.profile);
+  const profileLoading = useAuth((s) => s.profileLoading);
+  const profileError = useAuth((s) => s.profileError);
+  const refreshProfile = useAuth((s) => s.refreshProfile);
   const signOut = useAuth((s) => s.signOut);
 
   const unlocks = useCollection((s) => s.unlocks);
@@ -407,7 +410,34 @@ function OwnProfile() {
         },
       ]}
       showsVerticalScrollIndicator={false}>
-      {me ? <Identity profile={me} /> : null}
+      {/*
+        * A signed-in user with no profile row used to render nothing at all,
+        * which looked exactly like a screen that had failed to load. Each of
+        * the three states now says which one it is.
+        */}
+      {me ? (
+        <Identity profile={me} />
+      ) : profileLoading ? (
+        <View style={styles.identityFallback}>
+          <ActivityIndicator color={colors.patina} />
+        </View>
+      ) : (
+        <View style={styles.identityFallback}>
+          <Text style={styles.mutedLine}>
+            {profileError ?? 'Your profile card could not be loaded.'}
+          </Text>
+          <PressableScale
+            onPress={() => {
+              haptic.tap();
+              void refreshProfile();
+            }}
+            accessibilityRole="button"
+            accessibilityLabel="Retry loading your profile"
+            style={styles.identityRetry}>
+            <Text style={styles.identityRetryLabel}>Retry</Text>
+          </PressableScale>
+        </View>
+      )}
 
       <View style={styles.statRow}>
         <Stat value={unlockedCount} label="Entries" />
@@ -708,6 +738,24 @@ const styles = StyleSheet.create({
   peerContent: { paddingBottom: space.xxxl },
   pressed: { opacity: 0.72 },
   loading: { paddingVertical: space.xxxl, alignItems: 'center' },
+  identityFallback: {
+    paddingVertical: space.xl,
+    alignItems: 'center',
+    gap: space.md,
+  },
+  identityRetry: {
+    paddingHorizontal: space.lg,
+    paddingVertical: space.sm,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.patinaSoft,
+    backgroundColor: colors.patinaWash,
+  },
+  identityRetryLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.patina,
+  },
   sectionLabel: { marginTop: space.xl, marginBottom: space.md },
   mutedLine: {
     fontFamily: fonts.body,

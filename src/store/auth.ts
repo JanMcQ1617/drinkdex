@@ -11,6 +11,15 @@ interface AuthState {
   profile: ProfileRow | null;
   /** False until the persisted session has been restored from storage. */
   ready: boolean;
+  /** True while the profile row is in flight, so the screen can say so. */
+  profileLoading: boolean;
+  /**
+   * Set when the profile row could not be fetched. Distinct from `error`,
+   * which belongs to the sign-in form — this one is shown on the profile
+   * screen with a retry, because a signed-in user with no profile row is
+   * otherwise indistinguishable from a blank screen.
+   */
+  profileError: string | null;
   busy: boolean;
   error: string | null;
   /** Non-failure feedback, e.g. "confirm your email before signing in". */
@@ -71,6 +80,8 @@ export const useAuth = create<AuthState>()((set, get) => ({
   session: null,
   profile: null,
   ready: false,
+  profileLoading: false,
+  profileError: null,
   busy: false,
   error: null,
   notice: null,
@@ -80,10 +91,19 @@ export const useAuth = create<AuthState>()((set, get) => ({
    * token refreshes and sign-outs. Returns an unsubscribe function.
    */
   init: () => {
-    supabase.auth.getSession().then(({ data }) => {
-      set({ session: data.session, ready: true });
-      if (data.session) void get().refreshProfile();
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        set({ session: data.session, ready: true });
+        if (data.session) void get().refreshProfile();
+      })
+      /*
+       * `ready` gates every AuthGate in the app, so a rejection here used to
+       * hang Home, Stats and Profile on a spinner forever. Failing open to the
+       * sign-in form is the honest fallback: if the persisted session cannot
+       * be read, we genuinely do not know that anyone is signed in.
+       */
+      .catch(() => set({ ready: true }));
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       set({ session, ready: true });
@@ -146,15 +166,49 @@ export const useAuth = create<AuthState>()((set, get) => ({
     set({ busy: false, session: null, profile: null });
   },
 
+  /**
+   * Fetches the signed-in user's profile row.
+   *
+   * Right after signup the row may not exist yet — it is written by the
+   * on_auth_user_created trigger, which can land after the session does — so a
+   * miss is retried on a short backoff rather than waiting for the next auth
+   * event, which might be hours away. Anything still failing after that is
+   * surfaced on the screen with a retry; swallowing it is what left the
+   * profile permanently headless with no spinner and no explanation.
+   */
   refreshProfile: async () => {
     const uid = get().session?.user.id;
     if (!uid) return;
 
-    const { data, error } = await supabase.from('profiles').select('*').eq('id', uid).single();
+    set({ profileLoading: true, profileError: null });
 
-    // A missing row right after signup means the trigger hasn't committed
-    // yet; the next auth event will retry.
-    if (!error && data) set({ profile: data });
+    const DELAYS_MS = [0, 400, 1200];
+    for (let attempt = 0; attempt < DELAYS_MS.length; attempt++) {
+      if (DELAYS_MS[attempt]) await new Promise((r) => setTimeout(r, DELAYS_MS[attempt]));
+
+      // The session can end mid-retry; a signed-out user has no profile to load.
+      if (get().session?.user.id !== uid) {
+        set({ profileLoading: false });
+        return;
+      }
+
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', uid).single();
+
+      if (data) {
+        set({ profile: data, profileLoading: false, profileError: null });
+        return;
+      }
+
+      // Last attempt: report it instead of leaving the screen blank.
+      if (attempt === DELAYS_MS.length - 1) {
+        set({
+          profileLoading: false,
+          profileError: error
+            ? humanize(error.message)
+            : 'Could not load your profile. Pull to retry.',
+        });
+      }
+    }
   },
 
   clearError: () => set({ error: null, notice: null }),

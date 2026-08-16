@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,8 +11,11 @@ import {
 } from 'react-native';
 import Animated, {
   Extrapolation,
+  FadeIn,
+  FadeOut,
   interpolate,
   interpolateColor,
+  runOnJS,
   type SharedValue,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -147,6 +151,14 @@ const MASTHEAD_FADE_FROM = 44;
 const MASTHEAD_FADE_TO = 96;
 
 /**
+ * Scroll depth at which the back-to-top button appears.
+ *
+ * Set past MASTHEAD_FADE_TO: until the compact bar has fully taken over, the
+ * big title is still on screen and there is nothing to go back to.
+ */
+const SCROLL_TOP_SHOW_AT = 320;
+
+/**
  * The compact bar that replaces the scrolled-away title.
  *
  * Glass rather than a solid fill so the grid stays visible sliding under it,
@@ -181,9 +193,13 @@ function Masthead({
   });
 
   return (
-    <Animated.View
-      style={[styles.masthead, { paddingTop: topInset }, barStyle]}
-      pointerEvents="none">
+    /*
+     * No paddingTop here — the inner row owns it (see `mastheadGlass`), so the
+     * glass can run up under the status bar. Setting it in both places padded
+     * the inset twice, which pushed the bar a full status-bar height down the
+     * screen and left it sitting on top of the grid instead of over it.
+     */
+    <Animated.View style={[styles.masthead, barStyle]} pointerEvents="none">
       <GlassSurface cornerRadius={0} strong flat style={styles.mastheadGlass}>
         <View style={[styles.mastheadRow, { paddingTop: topInset }]}>
           <Text style={styles.mastheadTitle}>The Dex</Text>
@@ -272,10 +288,34 @@ export default function DexScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collected, query, region, status]);
 
+  const listRef = useRef<FlatList<Drink>>(null);
+  const reduced = useReducedMotion();
+
   const scrollY = useSharedValue(0);
+
+  /*
+   * The scroll-to-top button mounts on a state flag rather than on an animated
+   * opacity, so a hidden button cannot swallow taps over the grid. The flag is
+   * only written when the threshold is actually crossed — writing it every
+   * frame would re-render a 460-cell list on every pixel of scroll.
+   */
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const pastThreshold = useSharedValue(false);
+
   const onScroll = useAnimatedScrollHandler((e) => {
     scrollY.set(e.contentOffset.y);
+
+    const past = e.contentOffset.y > SCROLL_TOP_SHOW_AT;
+    if (past !== pastThreshold.value) {
+      pastThreshold.set(past);
+      runOnJS(setShowScrollTop)(past);
+    }
   });
+
+  const scrollToTop = useCallback(() => {
+    haptic.tap();
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+  }, []);
 
   const openDrink = useCallback(
     (id: string) => {
@@ -440,9 +480,32 @@ export default function DexScreen() {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        ref={listRef}
       />
 
       <Masthead scrollY={scrollY} collected={collected} topInset={insets.top} />
+
+      {showScrollTop ? (
+        <Animated.View
+          entering={reduced ? undefined : FadeIn.duration(motion.fast)}
+          exiting={reduced ? undefined : FadeOut.duration(motion.exit)}
+          style={[
+            styles.scrollTop,
+            { bottom: insets.bottom + TAB_BAR_CLEARANCE + space.md },
+          ]}>
+          <PressableScale
+            onPress={scrollToTop}
+            accessibilityRole="button"
+            accessibilityLabel="Back to top">
+            <GlassSurface cornerRadius={radius.pill} strong style={styles.scrollTopGlass}>
+              {/* No chevronUp in the set — the down chevron, turned over. */}
+              <View style={styles.scrollTopIcon}>
+                <Icon name="chevronDown" size={18} color={colors.patina} />
+              </View>
+            </GlassSurface>
+          </PressableScale>
+        </Animated.View>
+      ) : null}
     </View>
   );
 }
@@ -471,6 +534,20 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+  },
+  /* Deliberately small: an assist, not a control the grid has to work around. */
+  scrollTop: {
+    position: 'absolute',
+    right: GRID_PAD,
+  },
+  scrollTopGlass: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scrollTopIcon: {
+    transform: [{ rotate: '180deg' }],
   },
   mastheadGlass: {
     // paddingTop is applied to the inner row instead, so the glass itself
