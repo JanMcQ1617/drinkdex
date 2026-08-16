@@ -122,7 +122,7 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
             <Text style={styles.rankTotal}>of {TOTAL} logged</Text>
             <Text style={styles.rankPct}>{pct}%</Text>
           </View>
-          <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
+          <ProgressBar value={unlockedCount} max={TOTAL} color={colors.patina} />
 
           <Divider style={styles.blockDivider} />
 
@@ -182,14 +182,14 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
                   style={[
                     styles.milestoneMark,
                     reached && {
-                      backgroundColor: colors.wineWash,
-                      borderColor: colors.wineSoft,
+                      backgroundColor: colors.patinaWash,
+                      borderColor: colors.patinaSoft,
                     },
                   ]}>
                   <Icon
                     name={reached ? 'check' : 'lock'}
                     size={13}
-                    color={reached ? colors.wine : colors.textFaint}
+                    color={reached ? colors.patina : colors.textFaint}
                   />
                 </View>
                 <Text style={[styles.milestoneName, !reached && styles.milestoneNameDim]}>
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.display,
     fontSize: typeScale.bodyLg.fontSize,
     lineHeight: typeScale.bodyLg.lineHeight,
-    color: colors.wine,
+    color: colors.patina,
   },
   rankCountRow: {
     flexDirection: 'row',

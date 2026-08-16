@@ -535,7 +535,7 @@ const styles = StyleSheet.create({
   progressCount: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.body.fontSize,
-    color: colors.text,
+    color: colors.patina,
     fontVariant: ['tabular-nums'],
   },
   progressLabel: {

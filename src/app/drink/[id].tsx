@@ -1254,7 +1254,7 @@ const styles = StyleSheet.create({
   },
   celebRingThin: {
     borderWidth: 1,
-    borderColor: colors.sageLit,
+    borderColor: colors.patinaLit,
   },
   celebrationTitle: {
     fontFamily: fonts.display,

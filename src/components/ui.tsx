@@ -301,7 +301,12 @@ export function Divider({ style }: { style?: ViewStyle }) {
 export function ProgressBar({
   value,
   max,
-  color = colors.wine,
+  /**
+   * Patina by default: a progress bar in this app always measures collection,
+   * which is patina's job. Callers pass a category color only for the
+   * per-category breakdown, where the bar identifies a category, not progress.
+   */
+  color = colors.patina,
   height = 8,
 }: {
   value: number;

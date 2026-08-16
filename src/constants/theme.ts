@@ -6,42 +6,61 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /* Three colors, each with a job:                                       */
 /*   PORCELAIN #F1F0EA — the page. A cool, quiet off-white.             */
 /*   WINE      #633444 — structure. Primary actions, ink, headers.      */
-/*   SAGE      #3E5F4C — the third color. Everything affirmative:       */
+/*   PATINA    #1E6355 — the third color. Everything affirmative:       */
 /*                       collected, saved, success, uncommon.           */
 /* Gold is no longer an accent — it is demoted to LEGENDARY ONLY, so it */
 /* means something when it finally shows up.                            */
 /*                                                                      */
 /* Changed 2026-08-13 from "Daylight Speakeasy" (cream #F7EEDF + wine + */
 /* decorative gold). The cream read warm and the app read two-color;    */
-/* porcelain cools the base so wine reads like a jewel, and sage gives  */
-/* the system a real third voice.                                       */
+/* porcelain cools the base so wine reads like a jewel, and the third   */
+/* color gives the system a real third voice.                           */
 /*                                                                      */
-/* ONE GREEN RULE: sage is the only green in the app. `success` and the */
-/* `uncommon` rarity both point at this ramp on purpose — three separate*/
-/* greens (brand / success / uncommon) is indistinguishable at chip size*/
+/* Changed 2026-08-16: the third color moved from sage #3E5F4C to       */
+/* verdigris patina #1E6355. Sage sat at 145° with very little chroma — */
+/* a muted gray-green that read as a neutral next to wine rather than   */
+/* as a voice. Patina is 168° at roughly double the saturation, so it   */
+/* holds its own against wine while keeping the same calm, affirmative  */
+/* job. It is also the last open hue: wine/cocktail/wine-category own   */
+/* the red-magenta arc, spirit owns purple, rare owns blue, gold and    */
+/* beer own amber-brown.                                                */
+/*                                                                      */
+/* ONE PATINA RULE: patina is the only green-teal in the app. `success` */
+/* and the `uncommon` rarity both point at this ramp on purpose — three */
+/* separate greens (brand / success / uncommon) is indistinguishable at */
+/* chip size.                                                           */
 /*                                                                      */
 /* Text/background pairs are verified by scripts/check-contrast.mjs —   */
 /* ≥4.5:1 for body, ≥3:1 for large text and UI glyphs.                  */
 /* ==================================================================== */
 
 export const colors = {
-  /* Surfaces — cool porcelain, layered light */
-  bg: '#F1F0EA',
-  bgSunk: '#E7E5DC',
-  surface: '#FBFBF8',
-  card: '#FBFBF8',
-  cardAlt: '#F6F5F0',
-  cardBorder: '#DEDCD2',
+  /*
+   * Surfaces — smooth white, layered light.
+   *
+   * Changed 2026-08-16 from porcelain (#F1F0EA). Porcelain carried a
+   * yellow-green cast that read as cream on an OLED phone; the page is now a
+   * near-neutral white with only a 2-point blue drop, which is enough to keep
+   * it from feeling clinical without tipping warm. Cards go PURE white so they
+   * still lift off the page now that the page itself is nearly white — the
+   * card/page step is carried by the border and shadow, not by tint.
+   */
+  bg: '#F8F8F6',
+  bgSunk: '#EFEEEA',
+  surface: '#FFFFFF',
+  card: '#FFFFFF',
+  cardAlt: '#F8F8F6',
+  cardBorder: '#E4E3DD',
   /** the "lit" border — legendary/selected only, so it stays gold */
   cardBorderLit: '#C4A96E',
-  borderStrong: '#C8C5B8',
+  borderStrong: '#CFCEC6',
 
   /* Ink — wine-black, never neutral gray */
   text: '#2B1820',
   textMuted: '#63434D',
   textFaint: '#836169',
   textOnWine: '#F4F3EE',
-  textOnSage: '#F4F3EE',
+  textOnPatina: '#F4F3EE',
   textOnGold: '#2B1820',
 
   /* Wine — the brand's structural color */
@@ -51,17 +70,17 @@ export const colors = {
   wineWash: '#F2E7EA',
 
   /*
-   * Sage — the third color. Carries every affirmative state: an entry
+   * Patina — the third color. Carries every affirmative state: an entry
    * you own, a drink you saved, a success toast, the uncommon tier.
-   * Text-safe at 6.2:1 on porcelain, so unlike gold it needs no
+   * Text-safe at 6.3:1 on porcelain, so unlike gold it needs no
    * decorative/glyph/ink split.
    */
-  sage: '#3E5F4C',
-  sageDeep: '#2A4235',
-  sageSoft: '#6E8C79',
-  /** sage for type on DARK fields (the intro's wine-black) — 7.25:1 there */
-  sageLit: '#8FB39B',
-  sageWash: '#E4EBE5',
+  patina: '#1E6355',
+  patinaDeep: '#123E35',
+  patinaSoft: '#5E9084',
+  /** patina for type on DARK fields (the intro's wine-black) — 7.9:1 there */
+  patinaLit: '#7FBFAE',
+  patinaWash: '#E1EDE9',
 
   /*
    * Gold — LEGENDARY ONLY as of 2026-08-13. Not a general accent.
@@ -77,11 +96,11 @@ export const colors = {
   goldWash: '#F6EED6',
   amber: '#FFAD5F',
 
-  /* Semantic — success is sage (see ONE GREEN RULE above) */
+  /* Semantic — success is patina (see ONE PATINA RULE above) */
   danger: '#A83224',
   dangerWash: '#F8E6E2',
-  success: '#3E5F4C',
-  successWash: '#E4EBE5',
+  success: '#1E6355',
+  successWash: '#E1EDE9',
 
   /* Scrims — strong enough to isolate foreground (40–60%) */
   overlay: 'rgba(31, 17, 22, 0.52)',
@@ -101,9 +120,9 @@ export const colors = {
    * a wall of black would swamp the porcelain identity. This is the deepest
    * recess that still leaves the page feeling light.
    */
-  slot: '#D9D5C9',
-  slotDeep: '#CFCABC',
-  slotBorder: '#C4BFB0',
+  slot: '#E5E4DF',
+  slotDeep: '#DBDAD4',
+  slotBorder: '#CDCCC5',
 
   /* Emboss — the hairline pair that fakes a stamped plate. */
   embossLight: 'rgba(255, 255, 255, 0.72)',
@@ -161,26 +180,26 @@ export const radius = {
 } as const;
 
 /**
- * Sage-tinted shadows. These were warm brown (#5A3A28) for the cream base;
+ * Patina-tinted shadows. These were warm brown (#5A3A28) for the cream base;
  * on porcelain a warm shadow reads as a smudge, so they cool with the page.
  */
 export const elevation = {
   card: {
-    shadowColor: '#3A4740',
+    shadowColor: '#334B48',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
   },
   raised: {
-    shadowColor: '#3A4740',
+    shadowColor: '#334B48',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 16,
     elevation: 6,
   },
   sheet: {
-    shadowColor: '#26302B',
+    shadowColor: '#22322F',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.14,
     shadowRadius: 24,
@@ -201,12 +220,14 @@ export const elevation = {
 /* ==================================================================== */
 
 export const glass = {
-  /** Body fill of a frosted surface on the porcelain page. */
-  fill: 'rgba(251, 251, 248, 0.82)',
+  /** Body fill of a frosted surface on the white page. */
+  fill: 'rgba(255, 255, 255, 0.82)',
   /** Heavier fill for surfaces that sit over photography or artwork. */
-  fillStrong: 'rgba(251, 251, 248, 0.93)',
+  fillStrong: 'rgba(255, 255, 255, 0.93)',
   /** Wine-tinted glass — the active/selected material. */
   fillWine: 'rgba(99, 52, 68, 0.14)',
+  /** Patina-tinted glass — collection surfaces (progress, stats, collected). */
+  fillPatina: 'rgba(30, 99, 85, 0.13)',
   /** Top rim: the lit edge. */
   rimTop: 'rgba(255, 255, 255, 0.92)',
   /** Perimeter rim: everything that isn't the lit edge. */
@@ -215,7 +236,7 @@ export const glass = {
   sheenFrom: 'rgba(255, 255, 255, 0.62)',
   sheenTo: 'rgba(255, 255, 255, 0)',
   /** Tint fed to the native Liquid Glass view so it keeps our warmth. */
-  nativeTint: 'rgba(251, 251, 248, 0.30)',
+  nativeTint: 'rgba(255, 255, 255, 0.30)',
 } as const;
 
 /** Micro-interactions 150–300ms; springs over cubic curves. */
@@ -343,10 +364,10 @@ export const RARITY_META: Record<
   },
   uncommon: {
     label: 'Uncommon',
-    color: colors.sage,
-    wash: colors.sageWash,
+    color: colors.patina,
+    wash: colors.patinaWash,
     weight: 1,
-    edge: colors.sageSoft,
+    edge: colors.patinaSoft,
     edgeWidth: 1.5,
   },
   rare: {

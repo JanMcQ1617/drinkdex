@@ -63,7 +63,7 @@ function GlassSvg({ mirrored }: { mirrored?: boolean }) {
       {/* the liquid's inner light, in the brand's third colour */}
       <Path
         d={mirrored ? 'M78 24 C78 44 68 54 58 57' : 'M22 24 C22 44 32 54 42 57'}
-        stroke={colors.sageLit}
+        stroke={colors.patinaLit}
         strokeWidth={4}
         strokeOpacity={0.6}
         strokeLinecap="round"
@@ -329,7 +329,7 @@ export function ClinkIntro({ onDone }: { onDone: () => void }) {
           pointerEvents="none"
           style={[
             styles.ring,
-            { left: cx - 90, top: clinkCY - 90, borderColor: colors.sageLit },
+            { left: cx - 90, top: clinkCY - 90, borderColor: colors.patinaLit },
             ring1Style,
           ]}
         />
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     fontSize: 21,
     letterSpacing: 0.4,
-    color: colors.sageLit,
+    color: colors.patinaLit,
   },
   chipWrap: {
     position: 'absolute',
@@ -467,13 +467,13 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: colors.sageLit,
+    backgroundColor: colors.patinaLit,
   },
   chipText: {
     fontFamily: fonts.mono,
     fontSize: 12.5,
     letterSpacing: 1,
-    color: colors.sageLit,
+    color: colors.patinaLit,
   },
   disc: {
     position: 'absolute',
