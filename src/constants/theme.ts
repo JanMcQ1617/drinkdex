@@ -1,59 +1,87 @@
 import type { Drink, DrinkCategory, Rarity } from '@/types';
 
 /* ==================================================================== */
-/* Palette — "Daylight Speakeasy"                                       */
+/* Palette — "Porcelain Speakeasy"                                      */
 /*                                                                      */
-/* Light, warm, built from the Clink brand anchors: cream #F7EEDF, wine */
-/* #2B1820–#633444, gold. Cream is the page; near-white cards lift off  */
-/* it. Wine is the ink, gold is the accent.                             */
+/* Three colors, each with a job:                                       */
+/*   PORCELAIN #F1F0EA — the page. A cool, quiet off-white.             */
+/*   WINE      #633444 — structure. Primary actions, ink, headers.      */
+/*   SAGE      #3E5F4C — the third color. Everything affirmative:       */
+/*                       collected, saved, success, uncommon.           */
+/* Gold is no longer an accent — it is demoted to LEGENDARY ONLY, so it */
+/* means something when it finally shows up.                            */
+/*                                                                      */
+/* Changed 2026-08-13 from "Daylight Speakeasy" (cream #F7EEDF + wine + */
+/* decorative gold). The cream read warm and the app read two-color;    */
+/* porcelain cools the base so wine reads like a jewel, and sage gives  */
+/* the system a real third voice.                                       */
+/*                                                                      */
+/* ONE GREEN RULE: sage is the only green in the app. `success` and the */
+/* `uncommon` rarity both point at this ramp on purpose — three separate*/
+/* greens (brand / success / uncommon) is indistinguishable at chip size*/
 /*                                                                      */
 /* Text/background pairs are verified by scripts/check-contrast.mjs —   */
 /* ≥4.5:1 for body, ≥3:1 for large text and UI glyphs.                  */
 /* ==================================================================== */
 
 export const colors = {
-  /* Surfaces — warm, layered light */
-  bg: '#F7EEDF',
-  bgSunk: '#EFE3D0',
-  surface: '#FFFCF6',
-  card: '#FFFCF6',
-  cardAlt: '#FBF4E9',
-  cardBorder: '#E7D9C3',
-  cardBorderLit: '#C9A972',
-  borderStrong: '#D5C0A2',
+  /* Surfaces — cool porcelain, layered light */
+  bg: '#F1F0EA',
+  bgSunk: '#E7E5DC',
+  surface: '#FBFBF8',
+  card: '#FBFBF8',
+  cardAlt: '#F6F5F0',
+  cardBorder: '#DEDCD2',
+  /** the "lit" border — legendary/selected only, so it stays gold */
+  cardBorderLit: '#C4A96E',
+  borderStrong: '#C8C5B8',
 
   /* Ink — wine-black, never neutral gray */
   text: '#2B1820',
   textMuted: '#63434D',
   textFaint: '#836169',
-  textOnWine: '#F9F1E4',
+  textOnWine: '#F4F3EE',
+  textOnSage: '#F4F3EE',
   textOnGold: '#2B1820',
 
   /* Wine — the brand's structural color */
   wine: '#633444',
   wineDeep: '#2B1820',
   wineSoft: '#8E5E70',
-  wineWash: '#F4E6E9',
+  wineWash: '#F2E7EA',
 
   /*
-   * Gold — three values, because bright gold on cream is only 2.1:1.
-   *   gold      DECORATIVE ONLY. Fills, rings, dividers, legendary shimmer.
+   * Sage — the third color. Carries every affirmative state: an entry
+   * you own, a drink you saved, a success toast, the uncommon tier.
+   * Text-safe at 6.2:1 on porcelain, so unlike gold it needs no
+   * decorative/glyph/ink split.
+   */
+  sage: '#3E5F4C',
+  sageDeep: '#2A4235',
+  sageSoft: '#6E8C79',
+  /** sage for type on DARK fields (the intro's wine-black) — 7.25:1 there */
+  sageLit: '#8FB39B',
+  sageWash: '#E4EBE5',
+
+  /*
+   * Gold — LEGENDARY ONLY as of 2026-08-13. Not a general accent.
+   *   gold      DECORATIVE. Rings, dividers, legendary shimmer.
    *             Must never be the sole carrier of meaning.
-   *   goldGlyph Icons and strokes that convey meaning. 3.38:1 on cream.
-   *   goldInk   Text. 5.46:1 on cream.
+   *   goldGlyph Icons and strokes that convey meaning. 3.2:1 on porcelain.
+   *   goldInk   Text. 5.3:1 on porcelain.
    */
   gold: '#C9A227',
   goldGlyph: '#A07C1A',
   goldInk: '#7D5A15',
   goldDim: '#A88326',
-  goldWash: '#FAEFD2',
+  goldWash: '#F6EED6',
   amber: '#FFAD5F',
 
-  /* Semantic */
+  /* Semantic — success is sage (see ONE GREEN RULE above) */
   danger: '#A83224',
-  dangerWash: '#FBE7E3',
-  success: '#356B4D',
-  successWash: '#E4F1E9',
+  dangerWash: '#F8E6E2',
+  success: '#3E5F4C',
+  successWash: '#E4EBE5',
 
   /* Scrims — strong enough to isolate foreground (40–60%) */
   overlay: 'rgba(31, 17, 22, 0.52)',
@@ -62,6 +90,24 @@ export const colors = {
   /* Locked-artwork blackout */
   lockInk: '#241017',
   lockInkSoft: '#3A1F28',
+
+  /*
+   * The empty slot — a collected entry's absence.
+   *
+   * The Dex grid is a display case, so an uncollected entry is a RECESS, not
+   * a paler card. These sit a real step below the page (bg #F1F0EA) so an
+   * unlocked card lifting off them reads as a lit object in a velvet tray.
+   * Deliberately not lockInk-dark: with 460 entries and a handful collected,
+   * a wall of black would swamp the porcelain identity. This is the deepest
+   * recess that still leaves the page feeling light.
+   */
+  slot: '#D9D5C9',
+  slotDeep: '#CFCABC',
+  slotBorder: '#C4BFB0',
+
+  /* Emboss — the hairline pair that fakes a stamped plate. */
+  embossLight: 'rgba(255, 255, 255, 0.72)',
+  embossShadow: 'rgba(43, 24, 32, 0.14)',
 } as const;
 
 /* ==================================================================== */
@@ -114,29 +160,62 @@ export const radius = {
   pill: 999,
 } as const;
 
-/** Warm-tinted shadows — neutral black reads as dirt on cream. */
+/**
+ * Sage-tinted shadows. These were warm brown (#5A3A28) for the cream base;
+ * on porcelain a warm shadow reads as a smudge, so they cool with the page.
+ */
 export const elevation = {
   card: {
-    shadowColor: '#5A3A28',
+    shadowColor: '#3A4740',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
   },
   raised: {
-    shadowColor: '#5A3A28',
+    shadowColor: '#3A4740',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 16,
     elevation: 6,
   },
   sheet: {
-    shadowColor: '#3A2418',
+    shadowColor: '#26302B',
     shadowOffset: { width: 0, height: -4 },
     shadowOpacity: 0.14,
     shadowRadius: 24,
     elevation: 12,
   },
+} as const;
+
+/* ==================================================================== */
+/* Glass                                                                */
+/*                                                                      */
+/* iOS 26 renders these surfaces with real Liquid Glass (expo-glass-    */
+/* effect). Everywhere else `components/glass.tsx` fakes it with the    */
+/* values below: a translucent porcelain fill, a specular sheen down    */
+/* the top third, and a hairline rim that is brighter on top than on    */
+/* the bottom — which is what actually sells "lit from above".          */
+/*                                                                      */
+/* Deliberately NOT hex: alpha is the whole point of the material.      */
+/* ==================================================================== */
+
+export const glass = {
+  /** Body fill of a frosted surface on the porcelain page. */
+  fill: 'rgba(251, 251, 248, 0.82)',
+  /** Heavier fill for surfaces that sit over photography or artwork. */
+  fillStrong: 'rgba(251, 251, 248, 0.93)',
+  /** Wine-tinted glass — the active/selected material. */
+  fillWine: 'rgba(99, 52, 68, 0.14)',
+  /** Top rim: the lit edge. */
+  rimTop: 'rgba(255, 255, 255, 0.92)',
+  /** Perimeter rim: everything that isn't the lit edge. */
+  rim: 'rgba(43, 24, 32, 0.10)',
+  /** Specular sheen stops, top → bottom of the highlight band. */
+  sheenFrom: 'rgba(255, 255, 255, 0.62)',
+  sheenTo: 'rgba(255, 255, 255, 0)',
+  /** Tint fed to the native Liquid Glass view so it keeps our warmth. */
+  nativeTint: 'rgba(251, 251, 248, 0.30)',
 } as const;
 
 /** Micro-interactions 150–300ms; springs over cubic curves. */
@@ -167,6 +246,14 @@ export const CATEGORY_META: Record<
     color: string;
     /** Chip and badge fill. */
     wash: string;
+    /**
+     * Card field, top → bottom. A collectible card needs a ground that is
+     * lighter at the top than the bottom, so the artwork appears lit from
+     * above rather than pasted onto a flat swatch. `fieldTo` is the existing
+     * `wash`, so a card and its category chip stay visibly related.
+     */
+    fieldFrom: string;
+    fieldTo: string;
     emoji: string;
     blurb: string;
   }
@@ -176,6 +263,8 @@ export const CATEGORY_META: Record<
     plural: 'Cocktails',
     color: '#A83A29',
     wash: '#FBE6E0',
+    fieldFrom: '#FEF7F5',
+    fieldTo: '#FBE6E0',
     emoji: '🍸',
     blurb: 'Mixed & stirred',
   },
@@ -184,6 +273,8 @@ export const CATEGORY_META: Record<
     plural: 'Beers',
     color: '#8A5F10',
     wash: '#FAEFD2',
+    fieldFrom: '#FEFAEF',
+    fieldTo: '#FAEFD2',
     emoji: '🍺',
     blurb: 'Brewed & poured',
   },
@@ -192,6 +283,8 @@ export const CATEGORY_META: Record<
     plural: 'Wines',
     color: '#7A3A52',
     wash: '#F6E4EA',
+    fieldFrom: '#FDF6F8',
+    fieldTo: '#F6E4EA',
     emoji: '🍷',
     blurb: 'Pressed & aged',
   },
@@ -200,6 +293,8 @@ export const CATEGORY_META: Record<
     plural: 'Spirits',
     color: '#54438A',
     wash: '#EBE7F5',
+    fieldFrom: '#F9F7FD',
+    fieldTo: '#EBE7F5',
     emoji: '🥃',
     blurb: 'Distilled & bold',
   },
@@ -211,14 +306,65 @@ export const CATEGORY_META: Record<
 
 export const RARITY_ORDER: Rarity[] = ['common', 'uncommon', 'rare', 'legendary'];
 
+/**
+ * The tiers climb gray → sage → blue → gold. `uncommon` uses the brand sage
+ * rather than its own green (ONE GREEN RULE, see the palette header).
+ *
+ * `edge` and `edgeWidth` are the CARD treatment, not the badge. A collected
+ * entry is framed in its tier, and the frame gets both more saturated and
+ * physically thicker as the tier climbs — so rarity is legible in peripheral
+ * vision while scrolling a 460-card grid, at thumbnail size, and without
+ * relying on color alone (which excludes the ~8% of men with a CVD).
+ *
+ * `color` stays the text/badge value and remains contrast-audited; `edge` is
+ * decorative and is NEVER the sole carrier of meaning — the badge label and
+ * the corner dot both still say the tier in words and shape.
+ */
 export const RARITY_META: Record<
   Rarity,
-  { label: string; color: string; wash: string; weight: number }
+  {
+    label: string;
+    color: string;
+    wash: string;
+    weight: number;
+    /** Card frame color. Decorative. */
+    edge: string;
+    /** Card frame thickness in points. Climbs with the tier. */
+    edgeWidth: number;
+  }
 > = {
-  common: { label: 'Common', color: '#6E635C', wash: '#F0EAE1', weight: 0 },
-  uncommon: { label: 'Uncommon', color: '#356B4D', wash: '#E4F1E9', weight: 1 },
-  rare: { label: 'Rare', color: '#345F96', wash: '#E3ECF7', weight: 2 },
-  legendary: { label: 'Legendary', color: colors.goldInk, wash: colors.goldWash, weight: 3 },
+  common: {
+    label: 'Common',
+    color: '#67655C',
+    wash: '#E9E8E1',
+    weight: 0,
+    edge: colors.cardBorder,
+    edgeWidth: 1,
+  },
+  uncommon: {
+    label: 'Uncommon',
+    color: colors.sage,
+    wash: colors.sageWash,
+    weight: 1,
+    edge: colors.sageSoft,
+    edgeWidth: 1.5,
+  },
+  rare: {
+    label: 'Rare',
+    color: '#345F96',
+    wash: '#E3ECF7',
+    weight: 2,
+    edge: '#8FAAD0',
+    edgeWidth: 2,
+  },
+  legendary: {
+    label: 'Legendary',
+    color: colors.goldInk,
+    wash: colors.goldWash,
+    weight: 3,
+    edge: colors.gold,
+    edgeWidth: 2.5,
+  },
 };
 
 /* ==================================================================== */

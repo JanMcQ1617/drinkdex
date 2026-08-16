@@ -23,23 +23,32 @@ const ratio = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 
+// Mirror of src/constants/theme.ts — change there, change here.
 const C = {
-  bg: '#F7EEDF',
-  bgSunk: '#EFE3D0',
-  surface: '#FFFCF6',
-  cardAlt: '#FBF4E9',
+  bg: '#F1F0EA',
+  bgSunk: '#E7E5DC',
+  surface: '#FBFBF8',
+  cardAlt: '#F6F5F0',
   text: '#2B1820',
   textMuted: '#63434D',
   textFaint: '#836169',
-  textOnWine: '#F9F1E4',
+  textOnWine: '#F4F3EE',
+  textOnSage: '#F4F3EE',
   textOnGold: '#2B1820',
   wine: '#633444',
+  sage: '#3E5F4C',
+  sageLit: '#8FB39B',
+  sageWash: '#E4EBE5',
+  wineDeep: '#2B1820',
   goldInk: '#7D5A15',
   goldGlyph: '#A07C1A',
   gold: '#C9A227',
   danger: '#A83224',
-  success: '#356B4D',
+  success: '#3E5F4C',
   lockInk: '#241017',
+  // The empty-slot recess in the Dex grid.
+  slot: '#D9D5C9',
+  slotDeep: '#CFCABC',
 };
 
 // [foreground, background, minimum, label]
@@ -63,6 +72,16 @@ const PAIRS = [
   [C.goldGlyph, C.bg, 3.0, 'gold UI glyph on page'],
   [C.goldGlyph, C.surface, 3.0, 'gold UI glyph on card'],
   [C.textOnWine, C.lockInk, 4.5, 'text on locked artwork'],
+  // Sage — the third color. Text-safe everywhere, plus its own button.
+  [C.sage, C.bg, 4.5, 'sage text on page'],
+  [C.sage, C.surface, 4.5, 'sage text on card'],
+  [C.sage, C.bgSunk, 4.5, 'sage text on sunk well'],
+  [C.sage, C.sageWash, 4.5, 'sage text on its own wash'],
+  [C.textOnSage, C.sage, 4.5, 'text on sage button'],
+  // Intro: type on the wine-black field.
+  [C.sageLit, C.wineDeep, 4.5, 'intro tagline (sageLit) on wine-black'],
+  [C.bg, C.wineDeep, 4.5, 'intro wordmark (porcelain) on wine-black'],
+  [C.gold, C.wineDeep, 4.5, 'intro spark (gold) on wine-black'],
   // Category colors must be readable as chip/label text.
   ['#A83A29', C.bg, 4.5, 'cocktail label on page'],
   ['#8A5F10', C.bg, 4.5, 'beer label on page'],
@@ -72,11 +91,24 @@ const PAIRS = [
   ['#8A5F10', '#FAEFD2', 4.5, 'beer label on its wash'],
   ['#7A3A52', '#F6E4EA', 4.5, 'wine label on its wash'],
   ['#54438A', '#EBE7F5', 4.5, 'spirit label on its wash'],
-  // Rarity colors.
-  ['#6E635C', C.bg, 4.5, 'common label on page'],
-  ['#356B4D', C.bg, 4.5, 'uncommon label on page'],
+  // Rarity colors. `uncommon` is the brand sage (ONE GREEN RULE).
+  ['#67655C', C.bg, 4.5, 'common label on page'],
+  [C.sage, C.bg, 4.5, 'uncommon label on page'],
   ['#345F96', C.bg, 4.5, 'rare label on page'],
-  [C.goldInk, '#FAEFD2', 4.5, 'legendary label on its wash'],
+  ['#67655C', '#E9E8E1', 4.5, 'common label on its wash'],
+  [C.goldInk, '#F6EED6', 4.5, 'legendary label on its wash'],
+  // Dex grid — the empty slot. Its nameplate and number plate sit on
+  // slotDeep, which is the darkest surface any body text lands on.
+  [C.textMuted, C.slot, 4.5, 'entry name on empty slot'],
+  [C.textMuted, C.slotDeep, 4.5, 'entry name on slot nameplate'],
+  [C.textFaint, C.slotDeep, 3.0, 'dex number on slot plate (secondary)'],
+  [C.text, C.slot, 4.5, 'body text on empty slot'],
+  // Collected cards: the name sits on a near-opaque porcelain plate over
+  // the category field, so the field's darkest stop is the real backdrop.
+  [C.text, '#FBE6E0', 4.5, 'card name over cocktail field'],
+  [C.text, '#FAEFD2', 4.5, 'card name over beer field'],
+  [C.text, '#F6E4EA', 4.5, 'card name over wine field'],
+  [C.text, '#EBE7F5', 4.5, 'card name over spirit field'],
 ];
 
 let failed = 0;

@@ -16,15 +16,23 @@ import {
 } from 'react-native';
 import Animated, {
   Easing,
+  FadeInDown,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
+  ZoomIn,
   withDelay,
   withSequence,
+  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+
 import { DrinkArt } from '@/components/artwork';
+import { FoilSweep } from '@/components/DexCard';
+import { GlassCircle } from '@/components/glass';
 import { Icon } from '@/components/icons';
 import {
   Button,
@@ -37,7 +45,17 @@ import {
   RarityBadge,
   SectionLabel,
 } from '@/components/ui';
-import { colors, elevation, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import {
+  CATEGORY_META,
+  colors,
+  elevation,
+  fonts,
+  motion,
+  radius,
+  RARITY_META,
+  space,
+  type as typeScale,
+} from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
@@ -78,6 +96,16 @@ const PICKER_OPTIONS: ImagePicker.ImagePickerOptions = {
   mediaTypes: ['images'],
   quality: 0.7,
 };
+
+/**
+ * Width the legendary foil sweep travels across on the hero.
+ *
+ * A fixed value rather than a measured one: the hero is a full-bleed block
+ * between the screen's 24pt gutters, so on every phone in circulation it is
+ * comfortably under this. Overshooting only means the sweep clears the card
+ * with room to spare, which is the harmless direction to be wrong in.
+ */
+const HERO_FOIL_WIDTH = 420;
 
 /* ==================================================================== */
 /* Small in-file components                                             */
@@ -236,29 +264,101 @@ export default function DrinkDetailScreen() {
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
 
-  // Celebration overlay
+  /*
+   * Celebration overlay — the biggest moment in the app: an entry earned.
+   *
+   * Two gold rings push out from the centre, deliberately echoing the clink
+   * rings in the launch intro. Same motif at the two moments that matter
+   * means the app has a signature rather than a pile of effects.
+   *
+   * The scrim now fades on its OWN value. It used to sit inside the scaling
+   * group, so the dimming zoomed along with the card — which read as the
+   * whole world lurching rather than a card arriving over a settled page.
+   *
+   * Gold is legendary-only everywhere else in the app; this is the one other
+   * place it appears, which is exactly why it still means something here.
+   */
   const [celebrating, setCelebrating] = useState(false);
-  const celebScale = useSharedValue(0.8);
+  const celebScrim = useSharedValue(0);
+  const celebScale = useSharedValue(0.82);
   const celebOpacity = useSharedValue(0);
+  const celebRot = useSharedValue(-3);
+  const celebRing1 = useSharedValue(0);
+  const celebRing2 = useSharedValue(0);
+  const celebTitle = useSharedValue(0);
+  const celebName = useSharedValue(0);
+
+  const scrimStyle = useAnimatedStyle(() => ({ opacity: celebScrim.value }));
   const celebStyle = useAnimatedStyle(() => ({
     opacity: celebOpacity.value,
-    transform: [{ scale: celebScale.value }],
+    transform: [{ scale: celebScale.value }, { rotate: `${celebRot.value}deg` }],
+  }));
+  const ring1Style = useAnimatedStyle(() => ({
+    opacity: 0.7 * (1 - celebRing1.value) * celebScrim.value,
+    transform: [{ scale: 0.3 + 1.5 * celebRing1.value }],
+  }));
+  const ring2Style = useAnimatedStyle(() => ({
+    opacity: 0.5 * (1 - celebRing2.value) * celebScrim.value,
+    transform: [{ scale: 0.3 + 1.5 * celebRing2.value }],
+  }));
+  const titleStyle = useAnimatedStyle(() => ({
+    opacity: celebTitle.value,
+    transform: [{ translateY: (1 - celebTitle.value) * 12 }],
+  }));
+  const nameStyle = useAnimatedStyle(() => ({
+    opacity: celebName.value,
+    transform: [{ translateY: (1 - celebName.value) * 12 }],
   }));
 
   const triggerCelebration = useCallback(() => {
     if (celebrating) return;
     setCelebrating(true);
-    celebScale.set(0.8);
+
+    // Reset first, then ONE `.set()` per value carrying the whole timeline —
+    // a second `.set()` in the same tick cancels the first outright.
+    celebScrim.set(0);
+    celebScale.set(0.82);
     celebOpacity.set(0);
-    celebOpacity.set(
+    celebRot.set(-3);
+    celebRing1.set(0);
+    celebRing2.set(0);
+    celebTitle.set(0);
+    celebName.set(0);
+
+    celebScrim.set(
       withSequence(
-        withTiming(1, { duration: 260, easing: Easing.out(Easing.quad) }),
-        withDelay(720, withTiming(0, { duration: 420, easing: Easing.in(Easing.quad) }))
+        withTiming(1, { duration: 200, easing: Easing.out(Easing.quad) }),
+        withDelay(1050, withTiming(0, { duration: 400, easing: Easing.in(Easing.quad) }))
       )
     );
-    celebScale.set(withTiming(1, { duration: 480, easing: Easing.out(Easing.back(1.7)) }));
-    setTimeout(() => setCelebrating(false), 1450);
-  }, [celebrating, celebOpacity, celebScale]);
+    celebOpacity.set(
+      withDelay(
+        80,
+        withSequence(
+          withTiming(1, { duration: 220, easing: Easing.out(Easing.quad) }),
+          withDelay(950, withTiming(0, { duration: 380, easing: Easing.in(Easing.quad) }))
+        )
+      )
+    );
+    celebScale.set(withDelay(80, withSpring(1, { damping: 13, stiffness: 200, mass: 0.9 })));
+    celebRot.set(withDelay(80, withSpring(0, { damping: 15, stiffness: 170 })));
+    celebRing1.set(withDelay(60, withTiming(1, { duration: 760, easing: Easing.out(Easing.quad) })));
+    celebRing2.set(withDelay(200, withTiming(1, { duration: 860, easing: Easing.out(Easing.quad) })));
+    celebTitle.set(withDelay(240, withTiming(1, { duration: 300, easing: Easing.out(Easing.quad) })));
+    celebName.set(withDelay(380, withTiming(1, { duration: 300, easing: Easing.out(Easing.quad) })));
+
+    setTimeout(() => setCelebrating(false), 1750);
+  }, [
+    celebrating,
+    celebOpacity,
+    celebScale,
+    celebScrim,
+    celebRot,
+    celebRing1,
+    celebRing2,
+    celebTitle,
+    celebName,
+  ]);
 
   const openPicker = useCallback((mode: PickerMode) => {
     setPickerMode(mode);
@@ -374,6 +474,16 @@ export default function DrinkDetailScreen() {
     );
   }, [drink, myId, relock, removePostsForDrink, router]);
 
+  /*
+   * Entrance choreography. The page arrives in reading order — number, name,
+   * artwork, tags, facts — but the artwork gets a spring rather than a fade,
+   * because it is the subject of the screen and should land with weight while
+   * the labels merely settle around it.
+   */
+  const reduced = useReducedMotion();
+  const enter = (delay: number) =>
+    reduced ? undefined : FadeInDown.duration(motion.base).delay(delay);
+
   /* ---- Unknown entry --------------------------------------------- */
   if (!drink) {
     return (
@@ -389,6 +499,10 @@ export default function DrinkDetailScreen() {
   }
 
   const unlocked = Boolean(record);
+  const rarityMeta = RARITY_META[drink.rarity];
+  const categoryMeta = CATEGORY_META[drink.category];
+  // Unique per entry+state: SVG <Defs> ids share one namespace on web.
+  const heroFieldId = `heroField-${drink.id}-${unlocked ? 'c' : 'e'}`;
 
   return (
     <View style={styles.screen}>
@@ -404,15 +518,24 @@ export default function DrinkDetailScreen() {
           style={styles.backButton}
           accessibilityRole="button"
           accessibilityLabel="Go back">
-          <Icon name="chevronLeft" size={22} color={colors.text} />
+          {/*
+           * Same material as the tab bar. It was a flat outlined circle,
+           * which read as a different design language from the bar the
+           * user just came from — one app should be made of one substance.
+           */}
+          <GlassCircle size={44}>
+            <Icon name="chevronLeft" size={22} color={colors.text} />
+          </GlassCircle>
         </PressableScale>
 
-        <Text style={styles.dexLine}>
-          <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
-          {'  ·  '}
-          {drink.subcategory.toUpperCase()}
-        </Text>
-        <Text style={styles.name}>{drink.name}</Text>
+        <Animated.View entering={enter(0)}>
+          <Text style={styles.dexLine}>
+            <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
+            {'  ·  '}
+            {drink.subcategory.toUpperCase()}
+          </Text>
+          <Text style={styles.name}>{drink.name}</Text>
+        </Animated.View>
 
         {/*
           Always full color here, even before logging: you're on this
@@ -420,30 +543,62 @@ export default function DrinkDetailScreen() {
           aiming for. The dashed frame and caption still mark it unlogged.
           The Dex grid keeps its silhouettes — that's the collection board.
         */}
-        <View
-          style={[styles.hero, unlocked ? styles.heroUnlocked : styles.heroLocked]}
+        <Animated.View
+          entering={
+            reduced
+              ? undefined
+              : ZoomIn.springify().damping(16).stiffness(180).mass(0.9).delay(70)
+          }
+          /*
+           * Same card language as the Dex grid: category field, framed in the
+           * entry's rarity tier. A collected legendary gets the foil sweep it
+           * has in the grid — the payoff should be BIGGER on the screen you
+           * open to look at the thing, not smaller.
+           */
+          style={[
+            styles.hero,
+            unlocked && styles.heroUnlocked,
+            unlocked && { borderColor: rarityMeta.edge, borderWidth: rarityMeta.edgeWidth },
+            !unlocked && styles.heroLocked,
+          ]}
           accessible
           accessibilityLabel={
             unlocked
-              ? `Illustration of ${drink.name}`
+              ? `Illustration of ${drink.name}, ${rarityMeta.label}`
               : `Illustration of ${drink.name}, not yet logged`
           }>
+          {unlocked ? (
+            <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
+              <Defs>
+                <LinearGradient id={heroFieldId} x1="0" y1="0" x2="0" y2="1">
+                  <Stop offset="0" stopColor={categoryMeta.fieldFrom} />
+                  <Stop offset="1" stopColor={categoryMeta.fieldTo} />
+                </LinearGradient>
+              </Defs>
+              <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${heroFieldId})`} />
+            </Svg>
+          ) : null}
+
+          {unlocked && drink.rarity === 'legendary' && !reduced ? (
+            <FoilSweep width={HERO_FOIL_WIDTH} />
+          ) : null}
+
           <DrinkArt drink={drink} size={150} />
           {unlocked ? null : <Text style={styles.heroCaption}>Not yet logged</Text>}
-        </View>
+        </Animated.View>
 
         {/* Meta row */}
-        <View style={styles.metaRow}>
+        <Animated.View entering={enter(140)} style={styles.metaRow}>
           <CategoryPill category={drink.category} />
           <RarityBadge rarity={drink.rarity} />
-        </View>
+        </Animated.View>
 
         {/* Basic facts — visible whether or not the entry is logged */}
-        <View style={styles.statRow}>
+        <Animated.View entering={enter(200)} style={styles.statRow}>
           <StatCard label="ABV" value={drink.abv} />
           <StatCard label="Origin" value={drink.origin} />
           <StatCard label="Glass" value={drink.glassware ?? '—'} />
-        </View>
+        </Animated.View>
 
         {/*
           Everything below is visible whether or not the entry is logged.
@@ -627,11 +782,18 @@ export default function DrinkDetailScreen() {
       {/* Celebration overlay */}
       {celebrating ? (
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
-          <Animated.View style={[styles.celebration, celebStyle]}>
-            <Icon name="sparkle" size={40} color={colors.gold} filled />
-            <Text style={styles.celebrationTitle}>UNLOCKED</Text>
-            <Text style={styles.celebrationName}>{drink.name}</Text>
-          </Animated.View>
+          <Animated.View style={[styles.celebScrim, scrimStyle]} />
+          <View style={styles.celebration}>
+            <Animated.View style={[styles.celebRing, ring1Style]} />
+            <Animated.View style={[styles.celebRing, styles.celebRingThin, ring2Style]} />
+            <Animated.View style={[styles.celebCard, celebStyle]}>
+              <Icon name="sparkle" size={40} color={colors.gold} filled />
+              <Animated.Text style={[styles.celebrationTitle, titleStyle]}>UNLOCKED</Animated.Text>
+              <Animated.Text style={[styles.celebrationName, nameStyle]}>
+                {drink.name}
+              </Animated.Text>
+            </Animated.View>
+          </View>
         </View>
       ) : null}
     </View>
@@ -695,9 +857,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: colors.surface,
     marginBottom: space.lg,
+    // Clips the category field and the legendary foil to the rounded corners.
+    overflow: 'hidden',
   },
   heroUnlocked: {
-    borderColor: colors.cardBorderLit,
+    // borderColor/Width come from the entry's rarity tier at the call site.
     ...elevation.card,
   },
   heroLocked: {
@@ -1058,6 +1222,14 @@ const styles = StyleSheet.create({
   },
 
   /* Celebration */
+  celebScrim: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.overlay,
+  },
   celebration: {
     position: 'absolute',
     top: 0,
@@ -1066,8 +1238,23 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  celebCard: {
+    alignItems: 'center',
     gap: space.sm,
-    backgroundColor: colors.overlay,
+  },
+  // Eco de los anillos del intro: mismo motivo en los dos momentos que importan.
+  celebRing: {
+    position: 'absolute',
+    width: 220,
+    height: 220,
+    borderRadius: 110,
+    borderWidth: 2,
+    borderColor: colors.gold,
+  },
+  celebRingThin: {
+    borderWidth: 1,
+    borderColor: colors.sageLit,
   },
   celebrationTitle: {
     fontFamily: fonts.display,

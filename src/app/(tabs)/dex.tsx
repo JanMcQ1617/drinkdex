@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,23 +8,36 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import Animated, {
+  Extrapolation,
+  interpolate,
+  interpolateColor,
+  type SharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useDerivedValue,
+  useReducedMotion,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DrinkArt } from '@/components/artwork';
+import { DexCard } from '@/components/DexCard';
+import { GlassSurface } from '@/components/glass';
+import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { Divider, EmptyState, haptic, PressableScale, ProgressBar } from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
   colors,
-  elevation,
   fonts,
+  motion,
   radius,
-  RARITY_META,
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, DRINKS, formatDexNumber, TOTAL } from '@/data';
+import { COUNT_BY_CATEGORY, DRINKS, TOTAL } from '@/data';
 import { useCollection, useIsUnlocked } from '@/store/collection';
 import type { Drink, DrinkCategory } from '@/types';
 
@@ -36,9 +48,6 @@ import type { Drink, DrinkCategory } from '@/types';
 const COLUMNS = 3;
 const GRID_PAD = space.lg;
 const GRID_GAP = space.sm;
-
-/** DrinkArt's viewBox is 100×112, so height follows width by this factor. */
-const ART_ASPECT = 112 / 100;
 
 /* ------------------------------------------------------------------ */
 /* Filters                                                             */
@@ -80,6 +89,27 @@ function FilterChip({
   onPress: () => void;
 }) {
   const fg = selected ? (accent ?? colors.wine) : colors.textMuted;
+  const activeFg = accent ?? colors.wine;
+  const reduced = useReducedMotion();
+
+  /*
+   * The selected wash grows in behind the label and the border warms toward
+   * the category colour on the same spring, so the chip reads as one thing
+   * changing state rather than two properties flipping at different moments.
+   * Border colour needs interpolateColor — a plain style swap would snap
+   * while the fill was still animating, which looks like a bug.
+   */
+  const p = useDerivedValue(() =>
+    reduced ? (selected ? 1 : 0) : withSpring(selected ? 1 : 0, motion.spring),
+  );
+
+  const washStyle = useAnimatedStyle(() => ({
+    opacity: p.value,
+    transform: [{ scale: 0.9 + 0.1 * p.value }],
+  }));
+  const borderStyle = useAnimatedStyle(() => ({
+    borderColor: interpolateColor(p.value, [0, 1], [colors.cardBorder, activeFg]),
+  }));
 
   return (
     <PressableScale
@@ -90,7 +120,12 @@ function FilterChip({
       accessibilityRole="button"
       accessibilityState={{ selected }}
       accessibilityLabel={accessibilityLabel}
-      style={[styles.chip, selected && { backgroundColor: wash ?? colors.wineWash, borderColor: fg }]}>
+      style={styles.chip}>
+      <Animated.View style={[styles.chipBorder, borderStyle]} pointerEvents="none" />
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.chipWash, { backgroundColor: wash ?? colors.wineWash }, washStyle]}
+      />
       {dot ? <View style={[styles.chipDot, { backgroundColor: dot }]} /> : null}
       <Text style={[styles.chipLabel, { color: fg }]}>{label}</Text>
       {detail ? <Text style={styles.chipDetail}>{detail}</Text> : null}
@@ -98,54 +133,93 @@ function FilterChip({
   );
 }
 
-interface DrinkCardProps {
-  drink: Drink;
-  /** Width of the artwork in points — derived from the live column width. */
-  artSize: number;
-  onPress: (id: string) => void;
-}
+/* ------------------------------------------------------------------ */
+/* Collapsing masthead                                                 */
+/* ------------------------------------------------------------------ */
 
-const DrinkCard = React.memo(function DrinkCard({ drink, artSize, onPress }: DrinkCardProps) {
-  // Per-card subscription: collecting one drink must not re-render the other 459.
-  const unlocked = useIsUnlocked(drink.id);
-  const accent = CATEGORY_META[drink.category].color;
+/**
+ * Scroll distance over which the compact bar takes over from the big title.
+ *
+ * Starts below the title's own height so the two never read as duplicated —
+ * the bar only appears once "The Dex" has genuinely left the screen.
+ */
+const MASTHEAD_FADE_FROM = 44;
+const MASTHEAD_FADE_TO = 96;
+
+/**
+ * The compact bar that replaces the scrolled-away title.
+ *
+ * Glass rather than a solid fill so the grid stays visible sliding under it,
+ * which is what tells you the page is still moving. The progress hairline
+ * along the bottom edge doubles as the bar's separator — one element doing
+ * two jobs instead of a rule plus a meter.
+ */
+function Masthead({
+  scrollY,
+  collected,
+  topInset,
+}: {
+  scrollY: SharedValue<number>;
+  collected: number;
+  topInset: number;
+}) {
+  const pct = TOTAL > 0 ? Math.min(100, (collected / TOTAL) * 100) : 0;
+
+  const barStyle = useAnimatedStyle(() => {
+    const p = interpolate(
+      scrollY.value,
+      [MASTHEAD_FADE_FROM, MASTHEAD_FADE_TO],
+      [0, 1],
+      Extrapolation.CLAMP,
+    );
+    return {
+      opacity: p,
+      // Slides down into place rather than appearing — a bar that pops in
+      // at full opacity reads as a layout jump.
+      transform: [{ translateY: (1 - p) * -8 }],
+    };
+  });
 
   return (
-    <PressableScale
-      onPress={() => onPress(drink.id)}
-      accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, ${formatDexNumber(drink.dexNumber)}, ${
-        unlocked ? 'collected' : 'not collected yet'
-      }`}
-      style={[
-        styles.card,
-        unlocked ? styles.cardUnlocked : styles.cardLocked,
-        unlocked && { borderColor: accent + '55' },
-        unlocked && elevation.card,
-      ]}>
-      <View style={[styles.artZone, { height: Math.round(artSize * ART_ASPECT) }]}>
-        <DrinkArt drink={drink} size={artSize} locked={!unlocked} flat />
-      </View>
-
-      <View style={styles.footer}>
-        <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
-        <Text numberOfLines={2} style={[styles.name, !unlocked && styles.nameLocked]}>
-          {drink.name}
-        </Text>
-      </View>
-
-      {/* Corner slot — rarity once collected, a lock until then. */}
-      <View style={styles.cornerSlot} pointerEvents="none">
-        {unlocked ? (
-          <View style={[styles.rarityDot, { backgroundColor: RARITY_META[drink.rarity].color }]} />
-        ) : (
-          <View style={styles.lockBadge}>
-            <Icon name="lock" size={11} color={colors.textFaint} filled />
-          </View>
-        )}
-      </View>
-    </PressableScale>
+    <Animated.View
+      style={[styles.masthead, { paddingTop: topInset }, barStyle]}
+      pointerEvents="none">
+      <GlassSurface cornerRadius={0} strong flat style={styles.mastheadGlass}>
+        <View style={[styles.mastheadRow, { paddingTop: topInset }]}>
+          <Text style={styles.mastheadTitle}>The Dex</Text>
+          <Text style={styles.mastheadCount}>
+            {collected}
+            <Text style={styles.mastheadTotal}> / {TOTAL}</Text>
+          </Text>
+        </View>
+        {/* Progress doubles as the bar's bottom rule. */}
+        <View style={styles.mastheadTrack}>
+          <View style={[styles.mastheadFill, { width: `${pct}%` }]} />
+        </View>
+      </GlassSurface>
+    </Animated.View>
   );
+}
+
+/**
+ * Grid cell.
+ *
+ * A thin wrapper over `DexCard` that owns the per-card store subscription —
+ * collecting one drink must not re-render the other 459. Keeping the
+ * subscription here leaves DexCard a pure presentational component, so the
+ * detail screen and any future surface can render the same card.
+ */
+const GridCell = React.memo(function GridCell({
+  drink,
+  artSize,
+  onPress,
+}: {
+  drink: Drink;
+  artSize: number;
+  onPress: (id: string) => void;
+}) {
+  const unlocked = useIsUnlocked(drink.id);
+  return <DexCard drink={drink} artSize={artSize} collected={unlocked} onPress={onPress} />;
 });
 
 /* ------------------------------------------------------------------ */
@@ -198,6 +272,11 @@ export default function DexScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collected, query, region, status]);
 
+  const scrollY = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler((e) => {
+    scrollY.set(e.contentOffset.y);
+  });
+
   const openDrink = useCallback(
     (id: string) => {
       router.push({ pathname: '/drink/[id]', params: { id } });
@@ -207,7 +286,7 @@ export default function DexScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: Drink }) => (
-      <DrinkCard drink={item} artSize={artSize} onPress={openDrink} />
+      <GridCell drink={item} artSize={artSize} onPress={openDrink} />
     ),
     [artSize, openDrink],
   );
@@ -324,33 +403,47 @@ export default function DexScreen() {
   );
 
   return (
-    <FlatList
-      data={rows}
-      renderItem={renderItem}
-      keyExtractor={(drink) => drink.id}
-      numColumns={COLUMNS}
-      style={styles.screen}
-      columnWrapperStyle={styles.gridRow}
-      contentContainerStyle={[styles.listContent, { paddingTop: insets.top + space.md }]}
-      ListHeaderComponent={header}
-      ListEmptyComponent={
-        <EmptyState
-          icon="search"
-          title="Nothing on this shelf"
-          body="No entry matches that combination yet. Widen the search and the board fills back in."
-          action={filtered ? { label: 'Clear filters', onPress: resetFilters } : undefined}
-        />
-      }
-      /* 460 rows of SVG artwork — keep the mounted window tight. */
-      initialNumToRender={18}
-      maxToRenderPerBatch={12}
-      updateCellsBatchingPeriod={50}
-      windowSize={7}
-      removeClippedSubviews
-      showsVerticalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-      keyboardDismissMode="on-drag"
-    />
+    <View style={styles.screen}>
+      <Animated.FlatList
+        data={rows}
+        renderItem={renderItem}
+        keyExtractor={(drink) => drink.id}
+        numColumns={COLUMNS}
+        style={styles.screen}
+        columnWrapperStyle={styles.gridRow}
+        contentContainerStyle={[
+          styles.listContent,
+          {
+            paddingTop: insets.top + space.md,
+            // Clears the floating tab bar — the grid's last row would
+            // otherwise sit under frosted glass.
+            paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+          },
+        ]}
+        ListHeaderComponent={header}
+        ListEmptyComponent={
+          <EmptyState
+            icon="search"
+            title="Nothing on this shelf"
+            body="No entry matches that combination yet. Widen the search and the board fills back in."
+            action={filtered ? { label: 'Clear filters', onPress: resetFilters } : undefined}
+          />
+        }
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        /* 460 rows of SVG artwork — keep the mounted window tight. */
+        initialNumToRender={18}
+        maxToRenderPerBatch={12}
+        updateCellsBatchingPeriod={50}
+        windowSize={7}
+        removeClippedSubviews
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+      />
+
+      <Masthead scrollY={scrollY} collected={collected} topInset={insets.top} />
+    </View>
   );
 }
 
@@ -370,6 +463,50 @@ const styles = StyleSheet.create({
   },
   gridRow: {
     gap: GRID_GAP,
+  },
+
+  /* Collapsing masthead */
+  masthead: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  mastheadGlass: {
+    // paddingTop is applied to the inner row instead, so the glass itself
+    // extends under the status bar rather than starting below it.
+    paddingTop: 0,
+  },
+  mastheadRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: GRID_PAD,
+    paddingBottom: space.sm,
+    minHeight: 44,
+  },
+  mastheadTitle: {
+    fontFamily: fonts.display,
+    fontSize: typeScale.title.fontSize,
+    lineHeight: typeScale.title.lineHeight,
+    color: colors.text,
+  },
+  mastheadCount: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.text,
+    fontVariant: ['tabular-nums'],
+  },
+  mastheadTotal: {
+    color: colors.textFaint,
+  },
+  mastheadTrack: {
+    height: 2,
+    backgroundColor: colors.bgSunk,
+  },
+  mastheadFill: {
+    height: 2,
+    backgroundColor: colors.wine,
   },
 
   /* Header */
@@ -425,9 +562,25 @@ const styles = StyleSheet.create({
     minHeight: 40,
     paddingHorizontal: space.md,
     borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
     backgroundColor: colors.surface,
+  },
+  // Borde y relleno viven en capas propias para poder animarlos por separado.
+  chipBorder: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+  },
+  chipWash: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: radius.pill,
   },
   chipDot: {
     width: 7,
@@ -484,67 +637,5 @@ const styles = StyleSheet.create({
     marginBottom: space.xs,
   },
 
-  /* Grid cards */
-  card: {
-    flex: 1,
-    aspectRatio: 0.78,
-    paddingTop: space.sm,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    overflow: 'hidden',
-  },
-  cardUnlocked: {
-    backgroundColor: colors.card,
-    borderColor: colors.cardBorder,
-  },
-  cardLocked: {
-    // Sits back into the page rather than lifting off it.
-    backgroundColor: colors.cardAlt,
-    borderColor: colors.cardBorder,
-  },
-  artZone: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  footer: {
-    flex: 1,
-    paddingHorizontal: space.sm,
-    paddingTop: space.xs,
-    gap: 1,
-  },
-  dexNumber: {
-    fontFamily: fonts.mono,
-    fontSize: 9,
-    letterSpacing: 0.4,
-    color: colors.textFaint,
-    fontVariant: ['tabular-nums'],
-  },
-  name: {
-    fontFamily: fonts.display,
-    fontSize: 12,
-    lineHeight: 15,
-    color: colors.text,
-  },
-  nameLocked: {
-    // Readable, but clearly not yours yet.
-    color: colors.textFaint,
-  },
-  cornerSlot: {
-    position: 'absolute',
-    top: space.sm,
-    right: space.sm,
-  },
-  rarityDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-  },
-  lockBadge: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.bgSunk,
-  },
+  /* Grid cards live in components/DexCard.tsx. */
 });
