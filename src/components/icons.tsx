@@ -21,6 +21,7 @@ const STROKE = 1.75;
 export type IconName =
   | 'home'
   | 'dex'
+  | 'stats'
   | 'profile'
   | 'search'
   | 'close'
@@ -77,6 +78,15 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     <>
       <Circle cx={12} cy={8.2} r={3.7} />
       <Path d="M4.9 20.4a7.3 7.3 0 0 1 14.2 0" />
+    </>
+  ),
+  // Ascending bar chart — collection progress at a glance.
+  stats: (
+    <>
+      <Path d="M5.2 20.2V13.6" />
+      <Path d="M12 20.2V8.4" />
+      <Path d="M18.8 20.2V4.6" />
+      <Path d="M3 20.2h18" />
     </>
   ),
   search: (
@@ -209,6 +219,14 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
       <Path d="M12 13.6c-4.2 0-7.6 2.9-7.6 6.5a.9.9 0 0 0 .9.9h13.4a.9.9 0 0 0 .9-.9c0-3.6-3.4-6.5-7.6-6.5z" />
     </>
   ),
+  stats: (
+    <>
+      <Path d="M3.9 12.4h2.6a1.1 1.1 0 0 1 1.1 1.1v5.6H2.8v-5.6a1.1 1.1 0 0 1 1.1-1.1z" />
+      <Path d="M10.7 7.2h2.6a1.1 1.1 0 0 1 1.1 1.1v10.8H9.6V8.3a1.1 1.1 0 0 1 1.1-1.1z" />
+      <Path d="M17.5 3.4h2.6a1.1 1.1 0 0 1 1.1 1.1v14.6h-4.8V4.5a1.1 1.1 0 0 1 1.1-1.1z" />
+      <Path d="M2.6 19.8h18.8a.9.9 0 0 1 0 1.8H2.6a.9.9 0 0 1 0-1.8z" />
+    </>
+  ),
   heart: (
     <Path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z" />
   ),
@@ -288,7 +306,7 @@ export const Icon = React.memo(function Icon({
   );
 });
 
-export type TabName = 'home' | 'dex' | 'profile';
+export type TabName = 'home' | 'dex' | 'stats' | 'profile';
 
 /**
  * Bottom-nav icon. Outline at rest, solid when active — the iOS

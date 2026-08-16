@@ -11,12 +11,20 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+  useReducedMotion,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { deriveStats } from '@/components/CollectionStats';
 import { DrinkArt } from '@/components/artwork';
 import { FindFriends } from '@/components/FindFriends';
+import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon, type IconName } from '@/components/icons';
 import { PostCard, timeAgo, useSignedPhoto } from '@/components/PostCard';
 import {
@@ -24,9 +32,9 @@ import {
   Button,
   Card,
   Divider,
+  PressableScale,
   EmptyState,
   haptic,
-  PressableScale,
   ProgressBar,
   RarityBadge,
   SectionLabel,
@@ -36,78 +44,24 @@ import {
   CATEGORY_ORDER,
   colors,
   fonts,
-  motion,
   radius,
   RARITY_META,
+  motion,
   RARITY_ORDER,
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatDexNumber, TOTAL } from '@/data';
+import { DRINKS_BY_ID } from '@/data';
 import { fetchPostsByAuthor, fetchProfiles, toProfile } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
-import type { Drink, DrinkCategory, Post, Rarity, UnlockRecord, UserProfile } from '@/types';
+import type { DrinkCategory, Post, Rarity, UserProfile } from '@/types';
 import { confirmDestructive } from '@/utils/alerts';
 
 /* ------------------------------------------------------------------ */
 /* Derivations                                                         */
 /* ------------------------------------------------------------------ */
-
-interface UnlockedEntry {
-  drink: Drink;
-  record: UnlockRecord;
-}
-
-/** The rank ladder, ascending. Also drives the milestones list. */
-const MILESTONES: { pct: number; title: string }[] = [
-  { pct: 0, title: 'First Sips' },
-  { pct: 10, title: 'Barfly in Training' },
-  { pct: 25, title: 'The Regular' },
-  { pct: 50, title: 'Connoisseur' },
-  { pct: 75, title: 'Master of the Index' },
-  { pct: 100, title: 'Living Legend' },
-];
-
-function rankTitle(unlocked: number, total: number): string {
-  if (unlocked === 0) return 'Empty Shelf';
-  const pct = total > 0 ? (unlocked / total) * 100 : 0;
-  let title = MILESTONES[0]!.title;
-  for (const m of MILESTONES) {
-    if (pct >= m.pct) title = m.title;
-  }
-  return title;
-}
-
-function deriveStats(unlocks: Record<string, UnlockRecord>) {
-  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, beer: 0, wine: 0, spirit: 0 };
-  const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
-
-  const entries: UnlockedEntry[] = [];
-  for (const record of Object.values(unlocks)) {
-    const drink = DRINKS_BY_ID[record.drinkId];
-    if (!drink) continue; // orphaned record — skip defensively
-    entries.push({ drink, record });
-    byCategory[drink.category] += 1;
-    byRarity[drink.rarity] += 1;
-  }
-
-  let prize: UnlockedEntry | null = null;
-  for (const entry of entries) {
-    if (!prize) {
-      prize = entry;
-      continue;
-    }
-    const w = RARITY_META[entry.drink.rarity].weight;
-    const pw = RARITY_META[prize.drink.rarity].weight;
-    if (w > pw || (w === pw && Date.parse(entry.record.date) > Date.parse(prize.record.date))) {
-      prize = entry;
-    }
-  }
-
-  return { unlockedCount: entries.length, byCategory, byRarity, prize };
-}
 
 /**
  * Stats for a peer, derived from their PUBLIC POSTS only.
@@ -223,14 +177,13 @@ function PostTile({
   if (!drink) return null;
 
   return (
-    <Pressable
+    <PressableScale
       onPress={() => onPress(drink.id)}
       accessibilityRole="button"
       accessibilityLabel={`${drink.name}, logged ${timeAgo(post.createdAt)} ago`}
-      style={({ pressed }) => [
+      style={[
         styles.tile,
         { width: size, height: size, backgroundColor: CATEGORY_META[drink.category].wash },
-        pressed && styles.pressed,
       ]}>
       {photoUrl ? (
         <Image
@@ -242,7 +195,7 @@ function PostTile({
       ) : (
         <DrinkArt drink={drink} size={size * 0.6} flat />
       )}
-    </Pressable>
+    </PressableScale>
   );
 }
 
@@ -285,6 +238,7 @@ function FollowRow({
  * Top-level screen navigation. Your profile uses all three; a peer's uses
  * only 'posts' and 'stats' — you can't manage someone else's follows.
  */
+// 'stats' is peer-only now — your own stats moved to the Stats tab.
 type Segment = 'posts' | 'stats' | 'friends';
 
 interface SegmentItem {
@@ -298,6 +252,17 @@ interface SegmentItem {
 }
 
 /** The screen's tab strip. Same pill visual whether it holds two items or three. */
+/**
+ * Segmented control with a thumb that SLIDES between options.
+ *
+ * The white pill used to be a background swapped onto whichever segment was
+ * active — two things blinking rather than one thing moving. A travelling
+ * thumb is what makes a segmented control feel like a physical switch, and it
+ * matches the tab pill in the Hornofino app so both houses move alike.
+ *
+ * No press-scale here on purpose: the segments are wide, and the thumb
+ * arriving is already the feedback. Scaling them too would be noise.
+ */
 function SegmentBar({
   items,
   value,
@@ -309,8 +274,30 @@ function SegmentBar({
   onChange: (key: Segment) => void;
   style?: ViewStyle;
 }) {
+  const reduced = useReducedMotion();
+  const [barW, setBarW] = React.useState(0);
+  const index = Math.max(0, items.findIndex((i) => i.key === value));
+
+  const PAD = space.xs;
+  const GAP = space.xs;
+  const segW = barW > 0 ? (barW - PAD * 2 - GAP * (items.length - 1)) / items.length : 0;
+
+  const x = useDerivedValue(() => {
+    const target = index * (segW + GAP);
+    return reduced ? withTiming(target, { duration: motion.fast }) : withSpring(target, motion.spring);
+  });
+  const thumbStyle = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
+
   return (
-    <View style={[styles.segments, style]}>
+    <View
+      style={[styles.segments, style]}
+      onLayout={(e) => setBarW(Math.round(e.nativeEvent.layout.width))}>
+      {segW > 0 ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.segmentThumb, { width: segW, left: PAD }, thumbStyle]}
+        />
+      ) : null}
       {items.map((item) => {
         const active = value === item.key;
         return (
@@ -323,7 +310,7 @@ function SegmentBar({
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}
             accessibilityLabel={item.a11yLabel}
-            style={[styles.segment, active && styles.segmentActive]}>
+            style={styles.segment}>
             <Icon
               name={item.icon}
               size={17}
@@ -346,14 +333,12 @@ function SegmentBar({
 
 const OWN_SEGMENTS: SegmentItem[] = [
   { key: 'posts', icon: 'grid', label: 'Posts', a11yLabel: 'Your posts', fillActive: true },
-  { key: 'stats', icon: 'trophy', label: 'Stats', a11yLabel: 'Your stats', fillActive: true },
   { key: 'friends', icon: 'users', label: 'Accounts', a11yLabel: 'Accounts' },
 ];
 
 function OwnProfile() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const reduced = useReducedMotion();
   const { width } = useWindowDimensions();
 
   const myId = useAuth((s) => s.session?.user.id);
@@ -385,13 +370,9 @@ function OwnProfile() {
     if (segment === 'friends' && myId) void loadPeople(myId);
   }, [segment, myId, loadPeople]);
 
-  const { unlockedCount, byCategory, byRarity, prize } = useMemo(
-    () => deriveStats(unlocks),
-    [unlocks],
-  );
+  const { unlockedCount } = useMemo(() => deriveStats(unlocks), [unlocks]);
 
   const me = profile ? toProfile(profile) : null;
-  const pct = TOTAL > 0 ? Math.floor((unlockedCount / TOTAL) * 100) : 0;
   const tile = (width - space.xl * 2 - space.xs * 2) / 3;
 
   const openDrink = useCallback(
@@ -415,13 +396,16 @@ function OwnProfile() {
     void signOut().finally(resetSocial);
   }, [resetSocial, signOut]);
 
-  const enter = (delay: number) =>
-    reduced ? undefined : FadeInDown.duration(motion.base).delay(delay);
-
   return (
     <ScrollView
       style={styles.screen}
-      contentContainerStyle={[styles.content, { paddingTop: insets.top + space.md }]}
+      contentContainerStyle={[
+        styles.content,
+        {
+          paddingTop: insets.top + space.md,
+          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+        },
+      ]}
       showsVerticalScrollIndicator={false}>
       {me ? <Identity profile={me} /> : null}
 
@@ -449,144 +433,6 @@ function OwnProfile() {
             action={{ label: 'Open the Dex', onPress: openDex }}
           />
         ))}
-
-      {/*
-       * These blocks used to sit always-on above the strip; they now live
-       * behind the Stats tab so Posts shows only posts. Same local
-       * `useCollection` source, so every block is otherwise unchanged.
-       */}
-      {segment === 'stats' && (
-        <>
-          {/* ---- Collection ---- */}
-          <Animated.View entering={enter(0)}>
-            <SectionLabel style={styles.sectionLabel}>Collection</SectionLabel>
-            <Card style={styles.block}>
-              <Text style={styles.rank}>{rankTitle(unlockedCount, TOTAL)}</Text>
-              <View style={styles.rankCountRow}>
-                <Text style={styles.rankCount}>{unlockedCount}</Text>
-                <Text style={styles.rankTotal}>of {TOTAL} logged</Text>
-                <Text style={styles.rankPct}>{pct}%</Text>
-              </View>
-              <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
-
-              <Divider style={styles.blockDivider} />
-
-              {CATEGORY_ORDER.map((category) => {
-                const meta = CATEGORY_META[category];
-                const total = COUNT_BY_CATEGORY[category];
-                const count = byCategory[category];
-                return (
-                  <View
-                    key={category}
-                    style={styles.categoryRow}
-                    accessibilityLabel={`${meta.plural}: ${count} of ${total} logged`}>
-                    <View style={styles.categoryHead}>
-                      <View style={[styles.categoryDot, { backgroundColor: meta.color }]} />
-                      <Text style={styles.categoryName}>{meta.plural}</Text>
-                      <Text style={styles.categoryCount}>
-                        {count}/{total}
-                      </Text>
-                    </View>
-                    <ProgressBar value={count} max={total} color={meta.color} height={5} />
-                  </View>
-                );
-              })}
-            </Card>
-          </Animated.View>
-
-          {/* ---- Rarity ---- */}
-          <Animated.View entering={enter(motion.stagger)}>
-            <SectionLabel style={styles.sectionLabel}>Rarity</SectionLabel>
-            <Card style={styles.blockTight}>
-              {RARITY_ORDER.map((rarity) => (
-                <View
-                  key={rarity}
-                  style={styles.rarityRow}
-                  accessibilityLabel={`${RARITY_META[rarity].label}: ${byRarity[rarity]} of ${COUNT_BY_RARITY[rarity]} logged`}>
-                  <RarityBadge rarity={rarity} />
-                  <Text style={styles.rarityCount}>
-                    {byRarity[rarity]}/{COUNT_BY_RARITY[rarity]}
-                  </Text>
-                </View>
-              ))}
-            </Card>
-          </Animated.View>
-
-          {/* ---- Milestones ---- */}
-          <Animated.View entering={enter(motion.stagger * 2)}>
-            <SectionLabel style={styles.sectionLabel}>Milestones</SectionLabel>
-            <Card style={styles.blockTight}>
-              {MILESTONES.map((m) => {
-                const reached = unlockedCount > 0 && pct >= m.pct;
-                return (
-                  <View
-                    key={m.title}
-                    style={styles.milestoneRow}
-                    accessibilityLabel={`${m.title}, ${m.pct} percent, ${reached ? 'reached' : 'not reached'}`}>
-                    <View
-                      style={[
-                        styles.milestoneMark,
-                        reached && {
-                          backgroundColor: colors.wineWash,
-                          borderColor: colors.wineSoft,
-                        },
-                      ]}>
-                      <Icon
-                        name={reached ? 'check' : 'lock'}
-                        size={13}
-                        color={reached ? colors.wine : colors.textFaint}
-                      />
-                    </View>
-                    <Text style={[styles.milestoneName, !reached && styles.milestoneNameDim]}>
-                      {m.title}
-                    </Text>
-                    <Text style={styles.milestonePct}>{m.pct}%</Text>
-                  </View>
-                );
-              })}
-            </Card>
-          </Animated.View>
-
-          {/* ---- Rarest entry ---- */}
-          {prize ? (
-            <Animated.View entering={enter(motion.stagger * 3)}>
-              <SectionLabel style={styles.sectionLabel}>Rarest entry</SectionLabel>
-              <PressableScale
-                onPress={() => openDrink(prize.drink.id)}
-                accessibilityRole="button"
-                accessibilityLabel={`Open ${prize.drink.name}, your rarest entry`}
-                style={styles.prize}>
-                <View
-                  style={[
-                    styles.prizeThumb,
-                    { backgroundColor: CATEGORY_META[prize.drink.category].wash },
-                  ]}>
-                  {prize.record.photoUri ? (
-                    <Image
-                      source={{ uri: prize.record.photoUri }}
-                      style={styles.prizeImage}
-                      contentFit="cover"
-                      transition={150}
-                    />
-                  ) : (
-                    <DrinkArt drink={prize.drink} size={40} flat />
-                  )}
-                </View>
-                <View style={styles.prizeBody}>
-                  <View style={styles.prizeNameRow}>
-                    <Text style={styles.prizeName} numberOfLines={1}>
-                      {prize.drink.name}
-                    </Text>
-                    <Text style={styles.prizeDex}>{formatDexNumber(prize.drink.dexNumber)}</Text>
-                  </View>
-                  <RarityBadge rarity={prize.drink.rarity} />
-                </View>
-                <Icon name="chevronRight" size={18} color={colors.textFaint} />
-              </PressableScale>
-            </Animated.View>
-          ) : null}
-        </>
-      )}
 
       {segment === 'friends' && (
         <>
@@ -709,7 +555,13 @@ function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) {
   return (
     <ScrollView
       style={styles.screen}
-      contentContainerStyle={[styles.peerContent, { paddingTop: insets.top + space.md }]}
+      contentContainerStyle={[
+        styles.peerContent,
+        {
+          paddingTop: insets.top + space.md,
+          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+        },
+      ]}
       showsVerticalScrollIndicator={false}>
       <View style={styles.peerHeader}>
         <Pressable
@@ -1061,7 +913,15 @@ const styles = StyleSheet.create({
     gap: space.sm,
     borderRadius: radius.pill,
   },
-  segmentActive: { backgroundColor: colors.surface },
+  // El pulgar es una capa propia para poder deslizarlo; el segmento activo ya
+  // no lleva fondo.
+  segmentThumb: {
+    position: 'absolute',
+    top: space.xs,
+    bottom: space.xs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surface,
+  },
   segmentLabel: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.caption.fontSize,

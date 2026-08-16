@@ -1,6 +1,15 @@
 import { Image } from 'expo-image';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Platform, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { DrinkArt } from '@/components/artwork';
 import { Icon, type IconName } from '@/components/icons';
@@ -67,6 +76,18 @@ export function useSignedPhoto(path: string | null | undefined): string | null {
 /** 32pt box + slop clears the 44pt target without inflating the row. */
 const SLOP = { top: 10, bottom: 10, left: 8, right: 8 };
 
+/**
+ * Action icon that POPS when it becomes selected.
+ *
+ * Liking is the most repeated gesture in the whole app, so it is worth a real
+ * moment: a fast squash, then a spring overshoot past full size, then settle.
+ * Turning a like OFF gets a smaller, quieter dip — undoing something should
+ * not feel as good as doing it.
+ *
+ * Driven by the VALUE changing, never by mount. The feed is a virtualised
+ * list, so a mount-triggered animation would set off a wave of popping hearts
+ * every time a card scrolled back into view.
+ */
 function IconButton({
   name,
   label,
@@ -82,6 +103,30 @@ function IconButton({
   filled?: boolean;
   selected?: boolean;
 }) {
+  const reduced = useReducedMotion();
+  const scale = useSharedValue(1);
+  const prev = useRef(selected);
+
+  useEffect(() => {
+    if (selected === prev.current) return;
+    const turnedOn = !!selected && prev.current !== undefined;
+    prev.current = selected;
+    if (reduced) return;
+    scale.set(
+      turnedOn
+        ? withSequence(
+            withTiming(0.8, { duration: 90, easing: Easing.in(Easing.quad) }),
+            withSpring(1, { damping: 8, stiffness: 420, mass: 0.7 }),
+          )
+        : withSequence(
+            withTiming(0.9, { duration: 90 }),
+            withSpring(1, { damping: 14, stiffness: 300 }),
+          ),
+    );
+  }, [selected, reduced, scale]);
+
+  const animated = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+
   return (
     <Pressable
       onPress={onPress}
@@ -90,7 +135,9 @@ function IconButton({
       accessibilityLabel={label}
       accessibilityState={selected === undefined ? undefined : { selected }}
       style={({ pressed }) => [styles.iconBtn, pressed && styles.pressed]}>
-      <Icon name={name} size={23} color={color} filled={filled} />
+      <Animated.View style={animated}>
+        <Icon name={name} size={23} color={color} filled={filled} />
+      </Animated.View>
     </Pressable>
   );
 }

@@ -95,9 +95,26 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: colors.bg },
+          /*
+           * The native iOS push — the outgoing screen parallax-slides at a
+           * third of the incoming screen's speed under a dimming layer.
+           * Reimplementing that in JS is a classic way to make an app feel
+           * off; react-native-screens hands us the real one.
+           */
+          animation: 'slide_from_right',
+          gestureEnabled: true,
         }}>
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="drink/[id]" />
+        <Stack.Screen
+          name="drink/[id]"
+          options={{
+            // Full-width back swipe, not just the 20pt edge. A drink card
+            // is a browse-and-dismiss surface with nothing horizontally
+            // scrollable in it, so there is no gesture to steal.
+            gestureDirection: 'horizontal',
+            fullScreenGestureEnabled: true,
+          }}
+        />
       </Stack>
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />

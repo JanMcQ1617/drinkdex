@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F7EEDF",
+    "backgroundColor": "#F1F0EA",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex"
     },
@@ -21,7 +21,7 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [

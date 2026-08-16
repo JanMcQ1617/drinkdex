@@ -1,4 +1,4 @@
-import type { Session } from '@supabase/supabase-js';
+import type { AuthError, Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
 import { SIGNUP_ACCENTS } from '@/constants/theme';
@@ -35,6 +35,36 @@ function humanize(message: string): string {
   if (m.includes('email')) return 'That email address does not look right.';
   if (m.includes('network') || m.includes('fetch')) return 'Cannot reach Clink. Check your connection.';
   return message;
+}
+
+/**
+ * Sign-up errors need their own translation because a taken username
+ * arrives as an opaque 500 rather than anything readable.
+ *
+ * The profile row is written by the on_auth_user_created trigger, and
+ * `profiles.username` is `unique not null`. A taken name makes that
+ * insert raise a unique violation *inside* the trigger, and GoTrue
+ * reports any trigger failure as an unexpected server error.
+ *
+ * Match on `status`, never on `message`. The wire body is a perfectly
+ * clear Postgres 23505 on `profiles_username_key`, but supabase-js
+ * never parses it: it raises AuthRetryableFetchError, whose message is
+ * "{}" under Node and a stringified Response on React Native. Reading
+ * the message is what put a raw JSON blob on the signup screen.
+ *
+ * That trigger insert has exactly one unique constraint it can violate,
+ * so a 500 here means the name is spoken for. An unreachable server
+ * fails as a fetch error and a busy one answers 502/503, so neither
+ * lands in this branch.
+ */
+function humanizeSignUp(error: AuthError): string {
+  // Checked first: a duplicate email is a clean, readable 400.
+  if (error.message.toLowerCase().includes('already registered'))
+    return 'That email already has an account. Try signing in.';
+
+  if (error.status === 500) return 'That username is taken. Pick another one.';
+
+  return humanize(error.message);
 }
 
 export const useAuth = create<AuthState>()((set, get) => ({
@@ -83,7 +113,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
     });
 
     if (error) {
-      set({ busy: false, error: humanize(error.message) });
+      set({ busy: false, error: humanizeSignUp(error) });
       return;
     }
 

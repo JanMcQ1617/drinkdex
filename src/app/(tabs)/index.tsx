@@ -5,6 +5,7 @@ import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { PostCard } from '@/components/PostCard';
 import { Avatar, EmptyState, PressableScale } from '@/components/ui';
@@ -191,7 +192,15 @@ function HomeFeed() {
       renderItem={renderItem}
       keyExtractor={(post) => post.id}
       style={styles.screen}
-      contentContainerStyle={[styles.content, { paddingTop: insets.top + space.md }]}
+      contentContainerStyle={[
+        styles.content,
+        {
+          paddingTop: insets.top + space.md,
+          // The tab bar floats over the feed now, so the last post has to
+          // clear it rather than stop where the old opaque bar began.
+          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+        },
+      ]}
       ListHeaderComponent={header}
       ListEmptyComponent={
         loadingFeed ? (
