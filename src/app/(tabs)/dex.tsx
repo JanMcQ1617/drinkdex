@@ -17,6 +17,7 @@ import Animated, {
   interpolateColor,
   runOnJS,
   type SharedValue,
+  useAnimatedReaction,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
@@ -157,6 +158,9 @@ const MASTHEAD_FADE_TO = 96;
  * big title is still on screen and there is nothing to go back to.
  */
 const SCROLL_TOP_SHOW_AT = 320;
+
+/** Button and its container share this, so the touch target cannot drift. */
+const SCROLL_TOP_SIZE = 40;
 
 /**
  * The compact bar that replaces the scrolled-away title.
@@ -306,22 +310,32 @@ export default function DexScreen() {
 
   /*
    * The scroll-to-top button mounts on a state flag rather than on an animated
-   * opacity, so a hidden button cannot swallow taps over the grid. The flag is
-   * only written when the threshold is actually crossed — writing it every
-   * frame would re-render a 460-cell list on every pixel of scroll.
+   * opacity, so a hidden button cannot swallow taps over the grid.
+   *
+   * Derived by reaction rather than written from the scroll handler. The
+   * handler version only wrote the flag when a scroll event actually CROSSED
+   * the threshold, which left every path that arrives past it without crossing
+   * it — a remount at a restored offset, a preserved tab position, Fast
+   * Refresh at depth — showing no button no matter how far you scrolled. It
+   * also meant two sources of truth that could desync, which is exactly what
+   * Fast Refresh did: it preserves shared values but resets React state.
+   *
+   * useAnimatedReaction runs on first evaluation too (prev is null), so the
+   * flag seeds itself from wherever the list actually is. Still only writes on
+   * change — writing every frame would re-render 460 cells on every pixel.
    */
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const pastThreshold = useSharedValue(false);
 
   const onScroll = useAnimatedScrollHandler((e) => {
     scrollY.set(e.contentOffset.y);
-
-    const past = e.contentOffset.y > SCROLL_TOP_SHOW_AT;
-    if (past !== pastThreshold.value) {
-      pastThreshold.set(past);
-      runOnJS(setShowScrollTop)(past);
-    }
   });
+
+  useAnimatedReaction(
+    () => scrollY.value > SCROLL_TOP_SHOW_AT,
+    (past, prev) => {
+      if (past !== prev) runOnJS(setShowScrollTop)(past);
+    },
+  );
 
   const scrollToTop = useCallback(() => {
     haptic.tap();
@@ -506,6 +520,8 @@ export default function DexScreen() {
           ]}>
           <PressableScale
             onPress={scrollToTop}
+            // 40pt is under the 44pt minimum, so the slop makes up the rest.
+            hitSlop={space.sm}
             accessibilityRole="button"
             accessibilityLabel="Back to top">
             <GlassSurface cornerRadius={radius.pill} strong style={styles.scrollTopGlass}>
@@ -546,14 +562,27 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
-  /* Deliberately small: an assist, not a control the grid has to work around. */
+  /*
+   * Deliberately small: an assist, not a control the grid has to work around.
+   *
+   * The size is declared HERE as well as on the glass. This container is
+   * absolutely positioned with only `right`/`bottom`, so without explicit
+   * dimensions it is content-sized — and a content-sized absolute box that is
+   * also running an entering animation can hit-test as empty, which sent the
+   * tap through to the card underneath and opened a drink instead of
+   * scrolling. zIndex makes "above the grid" explicit rather than relying on
+   * sibling paint order.
+   */
   scrollTop: {
     position: 'absolute',
     right: GRID_PAD,
+    width: SCROLL_TOP_SIZE,
+    height: SCROLL_TOP_SIZE,
+    zIndex: 2,
   },
   scrollTopGlass: {
-    width: 40,
-    height: 40,
+    width: SCROLL_TOP_SIZE,
+    height: SCROLL_TOP_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
   },
