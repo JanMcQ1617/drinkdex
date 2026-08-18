@@ -172,9 +172,14 @@ create policy likes_delete_own on public.likes
 -- --------------------------------------------------------------------
 -- Storage — proof photos
 --
--- Private bucket. Reads go through signed URLs rather than public
--- links, so a photo can't be scraped by guessing a path.
--- Objects are namespaced by user id: pours/<uid>/<file>.
+-- Private bucket, so there are no public links and the app reads through
+-- signed URLs. Note what pours_read actually grants, though: ANY signed-in
+-- user may select any object in the bucket, so photos are enumerable, not
+-- merely unguessable. That matches posts_read (every post is visible to
+-- every account) and is intended for a social feed — but it means there is
+-- no private-account concept, and self-registration is open. Writes are the
+-- real boundary: objects are namespaced pours/<uid>/<file> and insert and
+-- delete are pinned to the owning uid.
 -- --------------------------------------------------------------------
 
 insert into storage.buckets (id, name, public)
