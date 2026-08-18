@@ -97,7 +97,15 @@ export function GlassSurface({
       <GlassView
         glassEffectStyle="regular"
         isInteractive={interactive}
-        tintColor={tone === 'wine' ? glass.fillWine : glass.nativeTint}
+        // `strong` has to be expressed as tint opacity here — see
+        // glass.nativeTintStrong. A wine tone carries its own weight already.
+        tintColor={
+          tone === 'wine'
+            ? glass.fillWine
+            : strong
+              ? glass.nativeTintStrong
+              : glass.nativeTint
+        }
         // Our palette is light-first and does not follow the system
         // appearance; 'auto' would darken the material in dark mode and
         // strand the wine ink on top of it.

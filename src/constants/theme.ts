@@ -245,6 +245,15 @@ export const glass = {
   sheenTo: 'rgba(255, 255, 255, 0)',
   /** Tint fed to the native Liquid Glass view so it keeps our warmth. */
   nativeTint: 'rgba(255, 255, 255, 0.30)',
+  /**
+   * `strong` for the native branch. GlassView exposes only glassEffectStyle
+   * and tintColor, so there is no heavier material to ask for — tint opacity
+   * is the only lever, and without this `strong` reached nothing but the
+   * fallback's fillStrong and was silently dropped on every iOS 26 device.
+   * The 0.30 -> 0.48 step mirrors the fallback's 0.82 -> 0.93 in feel: more
+   * body, still unmistakably a material rather than a panel.
+   */
+  nativeTintStrong: 'rgba(255, 255, 255, 0.48)',
 } as const;
 
 /** Micro-interactions 150–300ms; springs over cubic curves. */
