@@ -103,6 +103,24 @@ export function GlassSurface({
         // strand the wine ink on top of it.
         colorScheme="light"
         style={[{ borderRadius: cornerRadius, overflow: 'hidden' }, lift, style]}>
+        {/*
+          * Native Liquid Glass draws NO border of its own — the hairline and
+          * lit edge below belong to the fallback branch only. On the old
+          * porcelain page the material had enough tint difference to find its
+          * own edge; against the white page it resolves to near-white and the
+          * surface loses its silhouette. This is that branch's only contour.
+          */}
+        <View
+          pointerEvents="none"
+          style={[
+            StyleSheet.absoluteFill,
+            {
+              borderRadius: cornerRadius,
+              borderWidth: StyleSheet.hairlineWidth,
+              borderColor: glass.rimContour,
+            },
+          ]}
+        />
         {children}
       </GlassView>
     );

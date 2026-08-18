@@ -232,6 +232,14 @@ export const glass = {
   rimTop: 'rgba(255, 255, 255, 0.92)',
   /** Perimeter rim: everything that isn't the lit edge. */
   rim: 'rgba(43, 24, 32, 0.10)',
+  /**
+   * Contour for the NATIVE Liquid Glass branch, which draws no border of its
+   * own. On the old porcelain page the material had enough tint difference to
+   * find its own edge; against the white page it resolves to near-white and
+   * the surface loses its silhouette entirely. Stronger than `rim` because it
+   * is the only edge that branch gets.
+   */
+  rimContour: 'rgba(43, 24, 32, 0.16)',
   /** Specular sheen stops, top → bottom of the highlight band. */
   sheenFrom: 'rgba(255, 255, 255, 0.62)',
   sheenTo: 'rgba(255, 255, 255, 0)',
