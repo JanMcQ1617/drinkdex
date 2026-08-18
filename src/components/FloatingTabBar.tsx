@@ -47,6 +47,31 @@ const BAR_PAD = 6;
 /** How far the pill stretches at full travel. 18% reads; 30% is a cartoon. */
 const STRETCH = 0.18;
 
+/**
+ * The pill's own spring — faster than `motion.spring`.
+ *
+ * The shared token moves eight other things (sheets, press scale, the card
+ * pop), and only the pill needed to be quicker, so raising it there would
+ * have sped up the whole app.
+ *
+ * This changes speed, not character. Natural frequency goes up and the
+ * damping ratio is held, so the overshoot is identical and simply arrives
+ * sooner:
+ *
+ *   motion.spring   wn = sqrt(220/0.9) = 15.6 rad/s   z = 18/(2*sqrt(198)) = 0.64
+ *   PILL_SPRING     wn = sqrt(640/0.9) = 26.7 rad/s   z = 31/(2*sqrt(576)) = 0.65
+ *
+ * ~1.7x faster; settling drops from ~0.40s to ~0.23s. Tuning either number
+ * alone would change how it feels rather than just how fast: stiffness on
+ * its own reads twitchy, damping on its own reads dull.
+ *
+ * The stretch is unaffected — it derives from lag normalised to item width,
+ * and lag is 1 at the moment of the tap whatever the spring does.
+ *
+ * Mirrors Hornofino's 25a744b, where the value was confirmed on device.
+ */
+const PILL_SPRING = { damping: 31, stiffness: 640, mass: 0.9 } as const;
+
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 /*
@@ -94,8 +119,11 @@ function TabItem({
     if (reduced) return { transform: [{ scale: 1 }, { translateY: 0 }] };
     return {
       transform: [
-        { scale: withSpring(focused ? 1.07 : 1, motion.spring) },
-        { translateY: withSpring(focused ? -1.5 : 0, motion.spring) },
+        // Same spring as the pill, not the shared token: the icon and the
+        // pill are one gesture. A pill arriving 1.7x ahead of the icon it
+        // carries splits the selection into two visible beats.
+        { scale: withSpring(focused ? 1.07 : 1, PILL_SPRING) },
+        { translateY: withSpring(focused ? -1.5 : 0, PILL_SPRING) },
       ],
     };
   });
@@ -126,7 +154,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
   const x = useDerivedValue(() =>
     reduced
       ? withTiming(targetX, { duration: motion.fast })
-      : withSpring(targetX, motion.spring),
+      : withSpring(targetX, PILL_SPRING),
   );
 
   /*
