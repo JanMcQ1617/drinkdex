@@ -5,17 +5,26 @@ nobody else's app looks like this. They are loaded by `require()` in
 `src/app/_layout.tsx` and named in `src/constants/theme.ts`.
 
 Read the typography block at the top of `src/constants/theme.ts` first: it has
-the role assignments, the size floor on Basteleur, and the no-`fontWeight` rule.
+the role assignments, the 12px stencil warning, and the no-`fontWeight` rule.
 
 | File | Role | Source | License |
 |---|---|---|---|
-| `Basteleur-Bold.ttf` | display | [Keussel / Velvetyne](https://gitlab.com/velvetyne/basteleur) | OFL 1.1 |
+| `BespokeStencil-Bold.ttf` | display | [Fontshare](https://www.fontshare.com/fonts/bespoke-stencil) | ITF Free Font License |
+| `Boska-Medium.ttf` | accent (ledes) | [Barbara Bigosinska / Fontshare](https://www.fontshare.com/fonts/boska) | ITF Free Font License |
 | `Switzer-{Regular,Medium,Semibold,Bold}.ttf` | body | [Fontshare](https://www.fontshare.com/fonts/switzer) | ITF Free Font License |
 | `Sligoil-Micro.ttf` | data / numerals | [Ariel Martín Pérez / Velvetyne](https://gitlab.com/velvetyne/sligoil) | OFL 1.1 |
 
-All three are free to embed in a shipped app. The OFL requires the license text
-to travel with the fonts, which is why `LICENSE-*.txt` sit in this folder — do
-not delete them.
+All are free to embed in a shipped app. `LICENSE-Fontshare.txt` covers the three
+Fontshare families; `LICENSE-Sligoil.txt` is the OFL, which *requires* its text
+to travel with the font — do not delete either.
+
+## Watch the 12px nameplate
+
+`DexCard`'s name style sets `display` at 12px and only shows it on **collected**
+cards, so it stays invisible until you own something and then becomes the
+densest surface in the app. Stencil breaks are the first thing to go at small
+optical sizes. If it reads as mush on device, point that one style at
+`bodySemiBold` rather than shrinking the display role to suit one label.
 
 ## Adding a weight
 

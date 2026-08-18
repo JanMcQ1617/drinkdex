@@ -919,7 +919,9 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
   lead: {
-    fontFamily: fonts.body,
+    // The accent role: Boska, not body copy. This is the one sentence on the
+    // screen that should sound different from the spec table under it.
+    fontFamily: fonts.accent,
     fontSize: typeScale.bodyLg.fontSize,
     lineHeight: typeScale.bodyLg.lineHeight,
     color: colors.text,

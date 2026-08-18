@@ -130,39 +130,40 @@ export const colors = {
 } as const;
 
 /* ==================================================================== */
-/* Typography — "Apothecary"                                            */
-/* Basteleur (display) / Switzer (body) / Sligoil (numerals)            */
+/* Typography — "Speakeasy"                                             */
+/* Bespoke Stencil (display) / Boska (accent) / Switzer (body) /        */
+/* Sligoil (numerals)                                                   */
 /*                                                                      */
-/* Changed 2026-08-18 from Gowun Batang / Hanken Grotesk / Space Mono.  */
-/* Three reasons, in order of how much they cost us:                    */
+/* Changed 2026-08-18 from "Apothecary" (Basteleur display). Same four  */
+/* roles, same body and data faces — only the voice at the top changed. */
 /*                                                                      */
-/* 1. GowunBatang_700Bold.ttf was 8.2 MB — a Korean face carrying full  */
-/*    Hangul coverage, used to set English drink names. It was 84% of   */
-/*    the app's font payload and we render none of those glyphs. The    */
-/*    whole family set is now 528 KB across 6 files, down from 9.77 MB  */
-/*    across 11.                                                        */
-/* 2. Every face here does exactly one job, and each has a reason to be */
-/*    in a drinks app rather than being a competent default:            */
-/*      Basteleur (Keussel, Velvetyne, OFL) was drawn with the Tarot de */
-/*        Marseille in mind — a deck of collectible numbered cards, the */
-/*        same thing the Dex is. Medieval blackletter crossed with      */
-/*        Cooper Black. DISPLAY ONLY: it thickens and closes up under   */
-/*        20px, so never point body or label styles at it.              */
-/*      Switzer (Fontshare) is the quiet one. Body's job is to          */
-/*        disappear; personality lives in display and data.             */
-/*      Sligoil (Ariel Martín Pérez, Velvetyne, OFL) came from signage  */
-/*        on Irish whiskey distilleries and MIT Space Cadet keyboards,  */
-/*        and its numerals carry every ABV, vintage and entry number.   */
-/* 3. bodySemiBold now resolves to a REAL semibold. It previously       */
-/*    pointed at Hanken's 700, because only 400/700 were loaded — the   */
-/*    key was lying about its weight at ~30 call sites.                 */
+/* Stencil letterforms carry one idea: THIS WAS STAMPED ONTO A CRATE.   */
+/* For an app named after the sound of glass, that reads as shipping    */
+/* manifests and contraband rather than as a novelty. Bespoke Stencil   */
+/* (Fontshare) is the rare stencil with five real weights that stays    */
+/* legible small, which matters — see the 12px warning below.           */
 /*                                                                      */
-/* displayBold/displayBlack are gone: Basteleur ships one bold weight,  */
-/* and nothing referenced those keys. Basteleur Moonlight (the light    */
-/* accent weight) is deliberately NOT loaded — there is no display-     */
-/* sized slot for it yet, and an unused face is exactly the mistake     */
-/* that cost us 8 MB above. If a lede ever earns it, it is at           */
-/* gitlab.com/velvetyne/basteleur — but it needs 20px+, same as Bold.   */
+/* Boska (Barbara Bigosinska, Fontshare) is the new accent role, and    */
+/* the thing Apothecary could not have. Basteleur had no weight that    */
+/* survived paragraph sizes, so the accent slot went unfilled and the   */
+/* one sentence that matters was set in body copy like everything else. */
+/* Boska is a high-contrast old-style serif that reads happily at 18px, */
+/* so `accent` now carries ledes and tasting notes — a genuinely        */
+/* different voice under a hard industrial headline.                    */
+/*                                                                      */
+/* Unchanged from Apothecary, and unchanged for good reasons:           */
+/*   Switzer (Fontshare) is the quiet one. Body's job is to disappear;  */
+/*     personality lives in display and data.                           */
+/*   Sligoil (Ariel Martín Pérez, Velvetyne, OFL) came from signage on  */
+/*     Irish whiskey distilleries and MIT Space Cadet keyboards, and    */
+/*     carries every ABV, vintage and entry number.                     */
+/*                                                                      */
+/* THE 12px PROBLEM: DexCard's nameplate sets `display` at 12px, and it */
+/* only shows on COLLECTED cards — so it is invisible until you own     */
+/* something, then it is the densest surface in the app at 460 tiles.   */
+/* Stencil breaks are the first thing to go at small optical sizes. If  */
+/* it reads as mush on device, point that one style at `bodySemiBold`   */
+/* rather than shrinking the whole display role to suit one label.      */
 /*                                                                      */
 /* NO FONT-WEIGHT RULE: this codebase sets no `fontWeight` anywhere and */
 /* must not start. React Native would synthesize a fake bold instead of */
@@ -170,7 +171,9 @@ export const colors = {
 /* ==================================================================== */
 
 export const fonts = {
-  display: 'Basteleur-Bold',
+  display: 'BespokeStencil-Bold',
+  /** Ledes and tasting notes — the one sentence that should not be body copy. */
+  accent: 'Boska-Medium',
   body: 'Switzer-Regular',
   bodyMedium: 'Switzer-Medium',
   bodySemiBold: 'Switzer-Semibold',

@@ -46,7 +46,8 @@ export default function RootLayout() {
    * theme.ts for what that cost.
    */
   const [fontsLoaded, fontError] = useFonts({
-    'Basteleur-Bold': require('../../assets/fonts/Basteleur-Bold.ttf'),
+    'BespokeStencil-Bold': require('../../assets/fonts/BespokeStencil-Bold.ttf'),
+    'Boska-Medium': require('../../assets/fonts/Boska-Medium.ttf'),
     'Switzer-Regular': require('../../assets/fonts/Switzer-Regular.ttf'),
     'Switzer-Medium': require('../../assets/fonts/Switzer-Medium.ttf'),
     'Switzer-Semibold': require('../../assets/fonts/Switzer-Semibold.ttf'),
