@@ -130,55 +130,19 @@ export const colors = {
 } as const;
 
 /* ==================================================================== */
-/* Typography — "Speakeasy"                                             */
-/* Bespoke Stencil (display) / Boska (accent) / Switzer (body) /        */
-/* Sligoil (numerals)                                                   */
-/*                                                                      */
-/* Changed 2026-08-18 from "Apothecary" (Basteleur display). Same four  */
-/* roles, same body and data faces — only the voice at the top changed. */
-/*                                                                      */
-/* Stencil letterforms carry one idea: THIS WAS STAMPED ONTO A CRATE.   */
-/* For an app named after the sound of glass, that reads as shipping    */
-/* manifests and contraband rather than as a novelty. Bespoke Stencil   */
-/* (Fontshare) is the rare stencil with five real weights that stays    */
-/* legible small, which matters — see the 12px warning below.           */
-/*                                                                      */
-/* Boska (Barbara Bigosinska, Fontshare) is the new accent role, and    */
-/* the thing Apothecary could not have. Basteleur had no weight that    */
-/* survived paragraph sizes, so the accent slot went unfilled and the   */
-/* one sentence that matters was set in body copy like everything else. */
-/* Boska is a high-contrast old-style serif that reads happily at 18px, */
-/* so `accent` now carries ledes and tasting notes — a genuinely        */
-/* different voice under a hard industrial headline.                    */
-/*                                                                      */
-/* Unchanged from Apothecary, and unchanged for good reasons:           */
-/*   Switzer (Fontshare) is the quiet one. Body's job is to disappear;  */
-/*     personality lives in display and data.                           */
-/*   Sligoil (Ariel Martín Pérez, Velvetyne, OFL) came from signage on  */
-/*     Irish whiskey distilleries and MIT Space Cadet keyboards, and    */
-/*     carries every ABV, vintage and entry number.                     */
-/*                                                                      */
-/* THE 12px PROBLEM: DexCard's nameplate sets `display` at 12px, and it */
-/* only shows on COLLECTED cards — so it is invisible until you own     */
-/* something, then it is the densest surface in the app at 460 tiles.   */
-/* Stencil breaks are the first thing to go at small optical sizes. If  */
-/* it reads as mush on device, point that one style at `bodySemiBold`   */
-/* rather than shrinking the whole display role to suit one label.      */
-/*                                                                      */
-/* NO FONT-WEIGHT RULE: this codebase sets no `fontWeight` anywhere and */
-/* must not start. React Native would synthesize a fake bold instead of */
-/* using the real cut. Pick the family key that names the weight.       */
+/* Typography — Clink identity                                          */
+/* Gowun Batang (display) / Hanken Grotesk (body) / Space Mono (numerals)*/
 /* ==================================================================== */
 
 export const fonts = {
-  display: 'BespokeStencil-Bold',
-  /** Ledes and tasting notes — the one sentence that should not be body copy. */
-  accent: 'Boska-Medium',
-  body: 'Switzer-Regular',
-  bodyMedium: 'Switzer-Medium',
-  bodySemiBold: 'Switzer-Semibold',
-  bodyBold: 'Switzer-Bold',
-  mono: 'Sligoil-Micro',
+  display: 'GowunBatang_700Bold',
+  displayBold: 'GowunBatang_700Bold',
+  displayBlack: 'GowunBatang_700Bold',
+  body: 'HankenGrotesk_400Regular',
+  bodyMedium: 'HankenGrotesk_400Regular',
+  bodySemiBold: 'HankenGrotesk_700Bold',
+  bodyBold: 'HankenGrotesk_700Bold',
+  mono: 'SpaceMono_400Regular',
 } as const;
 
 /** Type scale. Body is 16 so iOS never auto-zooms inputs. */

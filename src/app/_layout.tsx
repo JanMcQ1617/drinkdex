@@ -1,3 +1,20 @@
+import {
+  Fraunces_600SemiBold,
+  Fraunces_700Bold,
+  Fraunces_900Black,
+} from '@expo-google-fonts/fraunces';
+import { GowunBatang_700Bold } from '@expo-google-fonts/gowun-batang';
+import {
+  HankenGrotesk_400Regular,
+  HankenGrotesk_700Bold,
+} from '@expo-google-fonts/hanken-grotesk';
+import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+} from '@expo-google-fonts/inter';
+import { SpaceMono_400Regular } from '@expo-google-fonts/space-mono';
 import { useFonts } from 'expo-font';
 import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -36,23 +53,18 @@ const ClinkTheme = {
 };
 
 export default function RootLayout() {
-  /*
-   * Self-hosted: none of these are on @expo-google-fonts. The keys MUST stay
-   * byte-identical to the values in `fonts` (src/constants/theme.ts) — a typo
-   * fails silently to the system face instead of throwing.
-   *
-   * Load only what theme.ts names. This list previously carried Fraunces (3
-   * weights) and Inter (4) that nothing referenced; see the typography note in
-   * theme.ts for what that cost.
-   */
   const [fontsLoaded, fontError] = useFonts({
-    'BespokeStencil-Bold': require('../../assets/fonts/BespokeStencil-Bold.ttf'),
-    'Boska-Medium': require('../../assets/fonts/Boska-Medium.ttf'),
-    'Switzer-Regular': require('../../assets/fonts/Switzer-Regular.ttf'),
-    'Switzer-Medium': require('../../assets/fonts/Switzer-Medium.ttf'),
-    'Switzer-Semibold': require('../../assets/fonts/Switzer-Semibold.ttf'),
-    'Switzer-Bold': require('../../assets/fonts/Switzer-Bold.ttf'),
-    'Sligoil-Micro': require('../../assets/fonts/Sligoil-Micro.ttf'),
+    Fraunces_600SemiBold,
+    Fraunces_700Bold,
+    Fraunces_900Black,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    GowunBatang_700Bold,
+    HankenGrotesk_400Regular,
+    HankenGrotesk_700Bold,
+    SpaceMono_400Regular,
   });
 
   const hydrated = useCollection((s) => s.hydrated);
