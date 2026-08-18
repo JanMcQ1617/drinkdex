@@ -299,6 +299,28 @@ export const motion = {
   /** Per-item list stagger. */
   stagger: 36,
   spring: { damping: 18, stiffness: 220, mass: 0.9 },
+  /**
+   * How a SELECTION answers — the tab pill and the filter chips.
+   *
+   * Faster than `spring`, which stays where it is because it drives eight
+   * other things (sheets, press scale, the profile meter). Selection is the
+   * one interaction that felt sluggish, so it gets its own value rather than
+   * the whole app getting quicker.
+   *
+   * Speed, not character: natural frequency up, damping ratio held, so the
+   * overshoot is identical and simply arrives sooner.
+   *
+   *   spring      wn = sqrt(220/0.9) = 15.6 rad/s   z = 18/(2*sqrt(198)) = 0.64
+   *   selection   wn = sqrt(640/0.9) = 26.7 rad/s   z = 31/(2*sqrt(576)) = 0.65
+   *
+   * ~1.7x faster; settling ~0.40s -> ~0.23s. Confirmed on device.
+   *
+   * A token and not a local const because two unrelated components need the
+   * same number: the tab bar at the bottom of the Dex and the filter chips at
+   * the top of it. They are one tap apart, and a user who taps a filter and
+   * then a tab must not see the same gesture answered at two speeds.
+   */
+  selection: { damping: 31, stiffness: 640, mass: 0.9 },
   pressScale: 0.965,
 } as const;
 

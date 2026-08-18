@@ -105,7 +105,11 @@ function FilterChip({
    * while the fill was still animating, which looks like a bug.
    */
   const p = useDerivedValue(() =>
-    reduced ? (selected ? 1 : 0) : withSpring(selected ? 1 : 0, motion.spring),
+    // motion.selection, not motion.spring: these chips and the tab pill are
+    // both selection affordances on this same screen, one tap apart. On the
+    // general spring they settled in ~0.40s against the pill's ~0.23s, so the
+    // same gesture got two different answers depending on where you tapped.
+    reduced ? (selected ? 1 : 0) : withSpring(selected ? 1 : 0, motion.selection),
   );
 
   const washStyle = useAnimatedStyle(() => ({
