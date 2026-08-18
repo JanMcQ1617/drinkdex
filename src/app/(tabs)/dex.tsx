@@ -177,6 +177,12 @@ function Masthead({
 }) {
   const pct = TOTAL > 0 ? Math.min(100, (collected / TOTAL) * 100) : 0;
 
+  /*
+   * Measured height. The bar hides by sliding fully above the top edge,
+   * so it has to know how tall it is; 120 is a first-frame stand-in only.
+   */
+  const height = useSharedValue(0);
+
   const barStyle = useAnimatedStyle(() => {
     const p = interpolate(
       scrollY.value,
@@ -184,12 +190,14 @@ function Masthead({
       [0, 1],
       Extrapolation.CLAMP,
     );
-    return {
-      opacity: p,
-      // Slides down into place rather than appearing — a bar that pops in
-      // at full opacity reads as a layout jump.
-      transform: [{ translateY: (1 - p) * -8 }],
-    };
+    /*
+     * Slides rather than fades, and the distinction is not cosmetic:
+     * UIKit drops a UIVisualEffectView's material entirely when any
+     * ancestor has alpha < 1. Animating opacity here left the bar with no
+     * glass at all — bare text over the scrolling grid, only the progress
+     * hairline still drawn. Translating keeps the layer fully opaque.
+     */
+    return { transform: [{ translateY: -(1 - p) * (height.value || 120) }] };
   });
 
   return (
@@ -199,7 +207,10 @@ function Masthead({
      * the inset twice, which pushed the bar a full status-bar height down the
      * screen and left it sitting on top of the grid instead of over it.
      */
-    <Animated.View style={[styles.masthead, barStyle]} pointerEvents="none">
+    <Animated.View
+      style={[styles.masthead, barStyle]}
+      pointerEvents="none"
+      onLayout={(e) => height.set(e.nativeEvent.layout.height)}>
       <GlassSurface cornerRadius={0} strong flat style={styles.mastheadGlass}>
         <View style={[styles.mastheadRow, { paddingTop: topInset }]}>
           <Text style={styles.mastheadTitle}>The Dex</Text>
