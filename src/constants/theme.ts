@@ -132,12 +132,18 @@ export const colors = {
 /* ==================================================================== */
 /* Typography — Clink identity                                          */
 /* Gowun Batang (display) / Hanken Grotesk (body) / Space Mono (numerals)*/
+/*                                                                      */
+/* The display face is a LATIN-ONLY SUBSET, self-hosted from            */
+/* assets/fonts/. Upstream GowunBatang_700Bold.ttf is 8.2 MB of mostly  */
+/* Hangul that this app never renders — 84% of the font payload. The    */
+/* subset is 73 KB and looks identical. See assets/fonts/README.md      */
+/* before changing it, and do not re-add @expo-google-fonts/gowun-batang.*/
 /* ==================================================================== */
 
 export const fonts = {
-  display: 'GowunBatang_700Bold',
-  displayBold: 'GowunBatang_700Bold',
-  displayBlack: 'GowunBatang_700Bold',
+  display: 'GowunBatangLatin-Bold',
+  displayBold: 'GowunBatangLatin-Bold',
+  displayBlack: 'GowunBatangLatin-Bold',
   body: 'HankenGrotesk_400Regular',
   bodyMedium: 'HankenGrotesk_400Regular',
   bodySemiBold: 'HankenGrotesk_700Bold',

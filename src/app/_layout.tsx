@@ -1,20 +1,3 @@
-import {
-  Fraunces_600SemiBold,
-  Fraunces_700Bold,
-  Fraunces_900Black,
-} from '@expo-google-fonts/fraunces';
-import { GowunBatang_700Bold } from '@expo-google-fonts/gowun-batang';
-import {
-  HankenGrotesk_400Regular,
-  HankenGrotesk_700Bold,
-} from '@expo-google-fonts/hanken-grotesk';
-import {
-  Inter_400Regular,
-  Inter_500Medium,
-  Inter_600SemiBold,
-  Inter_700Bold,
-} from '@expo-google-fonts/inter';
-import { SpaceMono_400Regular } from '@expo-google-fonts/space-mono';
 import { useFonts } from 'expo-font';
 import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -54,17 +37,12 @@ const ClinkTheme = {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    Fraunces_600SemiBold,
-    Fraunces_700Bold,
-    Fraunces_900Black,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-    GowunBatang_700Bold,
-    HankenGrotesk_400Regular,
-    HankenGrotesk_700Bold,
-    SpaceMono_400Regular,
+    // Latin-only subset — see assets/fonts/README.md. The key must match
+    // `fonts.display` in theme.ts byte-for-byte or it silently falls back.
+    'GowunBatangLatin-Bold': require('../../assets/fonts/GowunBatangLatin-Bold.ttf'),
+    HankenGrotesk_400Regular: require('../../assets/fonts/HankenGrotesk_400Regular.ttf'),
+    HankenGrotesk_700Bold: require('../../assets/fonts/HankenGrotesk_700Bold.ttf'),
+    SpaceMono_400Regular: require('../../assets/fonts/SpaceMono_400Regular.ttf'),
   });
 
   const hydrated = useCollection((s) => s.hydrated);
