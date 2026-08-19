@@ -16,6 +16,7 @@ import { Icon, type IconName } from '@/components/icons';
 import { Avatar, CategoryPill, haptic, RarityBadge } from '@/components/ui';
 import { CATEGORY_META, colors, fonts, space, type as typeScale } from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
+import { blockUser, REPORT_REASONS, reportPost } from '@/lib/moderation';
 import { signedPhotoUrl } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
@@ -155,6 +156,13 @@ export interface PostCardProps {
   onOpenAuthor?: (authorId: string) => void;
   /** Overrides `post.photoPath` — only needed when the caller resolved it elsewhere. */
   photoPath?: string | null;
+  /**
+   * Called after a successful block, so the list can drop this author's cards
+   * without waiting for a refetch. RLS already hides them from the NEXT query;
+   * this only closes the gap until then, which would otherwise leave the
+   * blocked person on screen and the block looking like it failed.
+   */
+  onBlocked?: (authorId: string) => void;
 }
 
 export const PostCard = React.memo(function PostCard({
@@ -163,6 +171,7 @@ export const PostCard = React.memo(function PostCard({
   onOpenDrink,
   onOpenAuthor,
   photoPath,
+  onBlocked,
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
@@ -210,6 +219,55 @@ export const PostCard = React.memo(function PostCard({
     });
   }, [who.displayName, drink]);
 
+  /*
+   * Reason first, then file. A free-text-only report is unactionable at
+   * review time, and a one-tap "report" with no reason is the shape that
+   * gets abused as a downvote button.
+   */
+  const openReport = useCallback(() => {
+    if (!myId) return;
+    Alert.alert(
+      'Report this post',
+      'What is wrong with it? Reports are reviewed privately; the poster is not told who reported them.',
+      [
+        ...REPORT_REASONS.map((r) => ({
+          text: r.label,
+          onPress: () => {
+            void reportPost(myId, post.id, r.key)
+              .then(() =>
+                Alert.alert('Thanks', 'This post has been reported. You can also block this person from the post menu.'),
+              )
+              .catch(() => Alert.alert('Could not report', 'Check your connection and try again.'));
+          },
+        })),
+        { text: 'Cancel', style: 'cancel' as const },
+      ],
+    );
+  }, [myId, post.id]);
+
+  const confirmBlock = useCallback(() => {
+    if (!myId) return;
+    Alert.alert(
+      `Block @${who.username}?`,
+      'You will not see their posts and they will not see yours. Any follow between you is removed. You can undo this from their profile.',
+      [
+        { text: 'Cancel', style: 'cancel' as const },
+        {
+          text: 'Block',
+          style: 'destructive' as const,
+          onPress: () => {
+            void blockUser(myId, who.id)
+              .then(() => {
+                haptic.select();
+                onBlocked?.(who.id);
+              })
+              .catch(() => Alert.alert('Could not block', 'Check your connection and try again.'));
+          },
+        },
+      ],
+    );
+  }, [myId, who.id, who.username, onBlocked]);
+
   const openMenu = useCallback(() => {
     if (!drink) return;
     // Alert.alert is a no-op on web; go straight to the primary action there.
@@ -217,12 +275,25 @@ export const PostCard = React.memo(function PostCard({
       onOpenDrink(drink.id);
       return;
     }
+    /*
+     * Moderation actions are offered only on OTHER people's posts. Offering
+     * to report or block yourself is nonsense, and the server would reject
+     * the block anyway (no_self_block).
+     */
+    const mine = who.id === myId;
+
     Alert.alert(drink.name, undefined, [
       { text: 'Open in the Dex', onPress: () => onOpenDrink(drink.id) },
       { text: 'Share', onPress: share },
-      { text: 'Cancel', style: 'cancel' },
+      ...(mine
+        ? []
+        : [
+            { text: 'Report post', style: 'destructive' as const, onPress: openReport },
+            { text: `Block @${who.username}`, style: 'destructive' as const, onPress: confirmBlock },
+          ]),
+      { text: 'Cancel', style: 'cancel' as const },
     ]);
-  }, [drink, onOpenDrink, share]);
+  }, [drink, onOpenDrink, share, who.id, who.username, myId, openReport, confirmBlock]);
 
   if (!drink) return null;
 

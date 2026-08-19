@@ -35,6 +35,26 @@ export type PostRow = {
   created_at: string;
 };
 
+export type BlockRow = {
+  blocker_id: string;
+  blocked_id: string;
+  created_at: string;
+};
+
+/**
+ * A report names EITHER a post or a person, never both — the
+ * report_has_one_subject check in migration 006 enforces it server-side.
+ */
+export type ReportRow = {
+  id: string;
+  reporter_id: string;
+  reported_post_id: string | null;
+  reported_user_id: string | null;
+  reason: string;
+  note: string | null;
+  created_at: string;
+};
+
 export type FollowRow = {
   follower_id: string;
   following_id: string;
@@ -74,6 +94,29 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      blocks: {
+        Row: BlockRow;
+        Insert: Omit<BlockRow, 'created_at'> & { created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      reports: {
+        Row: ReportRow;
+        /*
+         * Both subject columns are optional on insert, not just nullable:
+         * a report names EITHER a post or a person, so requiring the caller
+         * to pass the other as an explicit null is noise. The
+         * report_has_one_subject check enforces that exactly one arrives.
+         */
+        Insert: Omit<ReportRow, 'id' | 'created_at' | 'reported_post_id' | 'reported_user_id'> & {
+          id?: string;
+          created_at?: string;
+          reported_post_id?: string | null;
+          reported_user_id?: string | null;
+        };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -84,6 +127,11 @@ export type Database = {
       delete_own_account: {
         Args: Record<never, never>;
         Returns: undefined;
+      };
+      /** True if either party has blocked the other. See migration 006. */
+      blocked_with: {
+        Args: { other: string };
+        Returns: boolean;
       };
       accept_invite: {
         Args: { inviter: string };
