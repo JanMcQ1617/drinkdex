@@ -29,6 +29,8 @@ interface AuthState {
   signUp: (email: string, password: string, username: string, displayName: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  /** Irreversible. Removes the auth user, every row that cascades from it, and the photos storage does not cascade. */
+  deleteAccount: () => Promise<boolean>;
   refreshProfile: () => Promise<void>;
   clearError: () => void;
 }
@@ -164,6 +166,33 @@ export const useAuth = create<AuthState>()((set, get) => ({
     set({ busy: true });
     await supabase.auth.signOut();
     set({ busy: false, session: null, profile: null });
+  },
+
+  /**
+   * Deletes the signed-in account. Returns true on success.
+   *
+   * The server does the work in public.delete_own_account(), which takes
+   * no arguments on purpose — it reads auth.uid() itself, so this call
+   * cannot be aimed at anyone else's account. See migration 005.
+   *
+   * Signs out afterwards regardless: once the auth row is gone the local
+   * session is a token for a user that no longer exists, and leaving it
+   * in place would leave the app in a signed-in state with every query
+   * failing.
+   */
+  deleteAccount: async () => {
+    set({ busy: true, error: null });
+
+    const { error } = await supabase.rpc('delete_own_account');
+
+    if (error) {
+      set({ busy: false, error: humanize(error.message) });
+      return false;
+    }
+
+    await supabase.auth.signOut();
+    set({ busy: false, session: null, profile: null, profileError: null });
+    return true;
   },
 
   /**

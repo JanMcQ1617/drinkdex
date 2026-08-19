@@ -77,6 +77,14 @@ export type Database = {
     };
     Views: Record<never, never>;
     Functions: {
+      /**
+       * Takes no arguments on purpose: it reads auth.uid() server-side, so it
+       * cannot be aimed at another account. See migration 005.
+       */
+      delete_own_account: {
+        Args: Record<never, never>;
+        Returns: undefined;
+      };
       accept_invite: {
         Args: { inviter: string };
         Returns: undefined;

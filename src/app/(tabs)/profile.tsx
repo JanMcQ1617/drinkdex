@@ -347,6 +347,7 @@ function OwnProfile() {
   const profileError = useAuth((s) => s.profileError);
   const refreshProfile = useAuth((s) => s.refreshProfile);
   const signOut = useAuth((s) => s.signOut);
+  const deleteAccount = useAuth((s) => s.deleteAccount);
 
   const unlocks = useCollection((s) => s.unlocks);
   const resetAll = useCollection((s) => s.resetAll);
@@ -398,6 +399,30 @@ function OwnProfile() {
   const handleSignOut = useCallback(() => {
     void signOut().finally(resetSocial);
   }, [resetSocial, signOut]);
+
+  /*
+   * Deleting the account is the one action here that reaches the server and
+   * cannot be undone, so the copy enumerates what goes rather than saying
+   * "this cannot be undone" and leaving the user to guess the blast radius.
+   *
+   * Local state is cleared only on success. Clearing first would strand
+   * someone whose delete failed with an emptied device and a live account.
+   */
+  const confirmDeleteAccount = useCallback(() => {
+    confirmDestructive(
+      'Delete your account?',
+      'This permanently deletes your profile, every post and photo you have shared, and who you follow. It cannot be undone, and your username becomes available to someone else.',
+      'Delete account',
+      () => {
+        void deleteAccount().then((ok) => {
+          if (ok) {
+            resetSocial();
+            resetAll();
+          }
+        });
+      },
+    );
+  }, [deleteAccount, resetAll, resetSocial]);
 
   return (
     <ScrollView
@@ -511,6 +536,20 @@ function OwnProfile() {
           onPress={handleSignOut}
           style={styles.signOutButton}
         />
+
+        {/*
+          * Below sign-out and quieter than it on purpose. It has to be
+          * FINDABLE — Apple requires deletion to be reachable in-app, and a
+          * buried one is a rejection — but it should never be the thing a
+          * thumb reaches for when it meant to sign out.
+          */}
+        <Pressable
+          onPress={confirmDeleteAccount}
+          accessibilityRole="button"
+          accessibilityLabel="Delete account permanently"
+          style={({ pressed }) => [styles.deleteAccountButton, pressed && styles.pressed]}>
+          <Text style={styles.deleteAccountLabel}>Delete account</Text>
+        </Pressable>
       </View>
     </ScrollView>
   );
@@ -1038,6 +1077,18 @@ const styles = StyleSheet.create({
   /* Footer */
   footer: { marginTop: space.xxl, alignItems: 'center', gap: space.md },
   signOutButton: { minWidth: 180 },
+  deleteAccountButton: {
+    marginTop: space.xl,
+    paddingVertical: space.sm,
+    paddingHorizontal: space.lg,
+  },
+  deleteAccountLabel: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    letterSpacing: typeScale.caption.letterSpacing,
+    color: colors.danger,
+    textDecorationLine: 'underline',
+  },
   resetButton: {
     minHeight: 44,
     minWidth: 44,
