@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!--
+    TestFlight and the App Store are the same upload; "app-store-connect"
+    is the method for both. A build only reaches TestFlight because that
+    is where App Store Connect puts it before you submit for sale.
+  -->
+  <key>method</key>
+  <string>app-store-connect</string>
+
+  <key>teamID</key>
+  <string>W4X2M7ZC79</string>
+
+  <!--
+    Let Xcode fetch the distribution certificate and provisioning profile.
+    The development profile used for devicectl installs is NOT valid for
+    upload, so this has to mint a distribution one on first archive.
+  -->
+  <key>signingStyle</key>
+  <string>automatic</string>
+
+  <!--
+    Symbols go up so TestFlight crash reports are readable. Without this a
+    crash from a tester is an address, not a stack trace, which defeats the
+    point of testing with other people.
+  -->
+  <key>uploadSymbols</key>
+  <true/>
+
+  <!--
+    Off deliberately. Bitcode is deprecated and rejected by App Store
+    Connect on current toolchains.
+  -->
+  <key>manageAppVersionAndBuildNumber</key>
+  <false/>
+</dict>
+</plist>

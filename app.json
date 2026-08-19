@@ -7,9 +7,13 @@
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F1F0EA",
+    "backgroundColor": "#F8F8F6",
     "ios": {
-      "bundleIdentifier": "com.janmcqueeny.drinkdex"
+      "bundleIdentifier": "com.janmcqueeny.drinkdex",
+      "buildNumber": "1",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
