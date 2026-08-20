@@ -252,6 +252,7 @@ export default function DrinkDetailScreen() {
   const record = useCollection((s) => (drink ? s.unlocks[drink.id] : undefined));
   const unlock = useCollection((s) => s.unlock);
   const updatePhoto = useCollection((s) => s.updatePhoto);
+  const replacePhotoForDrink = useSocial((s) => s.replacePhotoForDrink);
   const relock = useCollection((s) => s.relock);
   const myId = useAuth((s) => s.session?.user.id);
   const addPost = useSocial((s) => s.addPost);
@@ -427,6 +428,14 @@ export default function DrinkDetailScreen() {
       const uri = await persistPhoto(drink.id, pickedUri);
       if (pickerMode === 'update') {
         updatePhoto(drink.id, uri);
+        /*
+         * The post has to follow the collection. Replacing a photo used to be
+         * purely local, so the shared post kept showing the picture the user
+         * had just replaced and the old file stayed in the bucket. Awaited,
+         * unlike the unlock path: the user is watching this specific change
+         * rather than being celebrated for a new entry.
+         */
+        if (myId) await replacePhotoForDrink(myId, drink.id, uri);
         closeModal();
       } else {
         const trimmed = note.trim();
@@ -455,6 +464,7 @@ export default function DrinkDetailScreen() {
     note,
     pickedUri,
     pickerMode,
+    replacePhotoForDrink,
     triggerCelebration,
     unlock,
     updatePhoto,

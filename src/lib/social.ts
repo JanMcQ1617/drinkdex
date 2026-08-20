@@ -249,13 +249,94 @@ export async function createPost(
   if (error) throw error;
 }
 
+/**
+ * Deletes an object from the pours bucket, tolerating failure.
+ *
+ * Storage has NO foreign key to posts — objects are tied to a user only by
+ * the path convention `<uid>/<file>` — so nothing is removed on our behalf
+ * when a post row goes. Every path that drops a post has to drop its photo
+ * explicitly or the file is orphaned in the bucket forever.
+ *
+ * Failure is swallowed on purpose: an orphaned object is a storage cost, but
+ * a throw here would abort the row delete and leave the user unable to remove
+ * an entry at all. The row is the thing the user can see.
+ */
+async function removeStoredPhoto(path: string | null | undefined): Promise<void> {
+  if (!path) return;
+  try {
+    await supabase.storage.from('pours').remove([path]);
+  } catch {
+    // Orphaned object; the row delete matters more.
+  }
+}
+
 export async function deletePostsForDrink(myId: string, drinkId: string): Promise<void> {
+  /*
+   * Read the paths BEFORE deleting the rows. Afterwards there is no record of
+   * which objects belonged to those posts, and the photos become unreachable
+   * garbage — the same trap migration 005 was written to avoid for account
+   * deletion, which this path never handled.
+   */
+  const { data: doomed, error: readError } = await supabase
+    .from('posts')
+    .select('photo_path')
+    .eq('author_id', myId)
+    .eq('drink_id', drinkId);
+  if (readError) throw readError;
+
   const { error } = await supabase
     .from('posts')
     .delete()
     .eq('author_id', myId)
     .eq('drink_id', drinkId);
   if (error) throw error;
+
+  await Promise.all((doomed ?? []).map((row) => removeStoredPhoto(row.photo_path)));
+}
+
+/**
+ * Points every post for this drink at a NEW photo, and deletes the old files.
+ *
+ * Changing the photo on a collected entry used to be purely local: the store
+ * swapped `unlocks[drinkId].photoUri` and nothing reached the server, so the
+ * post kept showing the replaced image and the old object stayed in the
+ * bucket. Both are fixed here.
+ *
+ * Returns false if the upload failed, so the caller can leave the local record
+ * alone rather than showing a photo the server does not have.
+ */
+export async function replacePostPhotoForDrink(
+  myId: string,
+  drinkId: string,
+  localPhotoUri: string,
+): Promise<boolean> {
+  const newPath = await uploadPhoto(myId, localPhotoUri);
+  if (!newPath) return false;
+
+  const { data: previous, error: readError } = await supabase
+    .from('posts')
+    .select('photo_path')
+    .eq('author_id', myId)
+    .eq('drink_id', drinkId);
+  if (readError) throw readError;
+
+  const { error } = await supabase
+    .from('posts')
+    .update({ photo_path: newPath })
+    .eq('author_id', myId)
+    .eq('drink_id', drinkId);
+  if (error) throw error;
+
+  // Only after the rows point at the new file — deleting first would leave a
+  // window where the post references an object that is already gone.
+  await Promise.all(
+    (previous ?? [])
+      .map((row) => row.photo_path)
+      .filter((path) => path && path !== newPath)
+      .map((path) => removeStoredPhoto(path)),
+  );
+
+  return true;
 }
 
 export async function likePost(myId: string, postId: string): Promise<void> {

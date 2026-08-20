@@ -3,6 +3,8 @@ import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from '
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -424,6 +426,28 @@ function OwnProfile() {
     );
   }, [deleteAccount, resetAll, resetSocial]);
 
+  /*
+   * Everything destructive now lives behind one control instead of sitting in
+   * the footer where a scroll could reach them. Ordered least to most severe,
+   * so the tap that ends your account is never the one nearest your thumb.
+   *
+   * Account deletion stays reachable in two taps — Apple requires it to be
+   * findable in-app, and a buried one is its own rejection.
+   */
+  const openSettings = useCallback(() => {
+    haptic.tap();
+    if (Platform.OS === 'web') {
+      confirmReset();
+      return;
+    }
+    Alert.alert('Settings', undefined, [
+      { text: 'Reset collection', style: 'destructive', onPress: confirmReset },
+      { text: 'Sign out', style: 'destructive', onPress: handleSignOut },
+      { text: 'Delete account', style: 'destructive', onPress: confirmDeleteAccount },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  }, [confirmDeleteAccount, confirmReset, handleSignOut]);
+
   return (
     <ScrollView
       style={styles.screen}
@@ -435,6 +459,18 @@ function OwnProfile() {
         },
       ]}
       showsVerticalScrollIndicator={false}>
+      <View style={styles.topBar}>
+        <PressableScale
+          onPress={openSettings}
+          noHaptic
+          hitSlop={space.md}
+          accessibilityRole="button"
+          accessibilityLabel="Settings"
+          style={styles.settingsButton}>
+          <Icon name="settings" size={20} color={colors.textMuted} />
+        </PressableScale>
+      </View>
+
       {/*
         * A signed-in user with no profile row used to render nothing at all,
         * which looked exactly like a screen that had failed to load. Each of
@@ -521,36 +557,7 @@ function OwnProfile() {
         </>
       )}
 
-      {/* ---- Footer ---- */}
-      <View style={styles.footer}>
-        <Pressable
-          onPress={confirmReset}
-          accessibilityRole="button"
-          accessibilityLabel="Reset collection"
-          style={({ pressed }) => [styles.resetButton, pressed && styles.pressed]}>
-          <Text style={styles.resetLabel}>Reset collection</Text>
-        </Pressable>
-        <Button
-          label="Sign out"
-          variant="danger"
-          onPress={handleSignOut}
-          style={styles.signOutButton}
-        />
-
-        {/*
-          * Below sign-out and quieter than it on purpose. It has to be
-          * FINDABLE — Apple requires deletion to be reachable in-app, and a
-          * buried one is a rejection — but it should never be the thing a
-          * thumb reaches for when it meant to sign out.
-          */}
-        <Pressable
-          onPress={confirmDeleteAccount}
-          accessibilityRole="button"
-          accessibilityLabel="Delete account permanently"
-          style={({ pressed }) => [styles.deleteAccountButton, pressed && styles.pressed]}>
-          <Text style={styles.deleteAccountLabel}>Delete account</Text>
-        </Pressable>
-      </View>
+      {/* Footer actions moved into the settings menu in the top bar. */}
     </ScrollView>
   );
 }
@@ -777,6 +784,14 @@ const styles = StyleSheet.create({
   peerContent: { paddingBottom: space.xxxl },
   pressed: { opacity: 0.72 },
   loading: { paddingVertical: space.xxxl, alignItems: 'center' },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: space.sm,
+  },
+  settingsButton: {
+    padding: space.xs,
+  },
   identityFallback: {
     paddingVertical: space.xl,
     alignItems: 'center',

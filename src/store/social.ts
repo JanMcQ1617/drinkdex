@@ -23,6 +23,8 @@ interface SocialState {
   toggleLike: (myId: string, postId: string) => Promise<void>;
   addPost: (myId: string, drinkId: string, caption: string, photoUri: string | null) => Promise<void>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
+  /** Swaps the photo on every post for this drink. False if the upload failed. */
+  replacePhotoForDrink: (myId: string, drinkId: string, localUri: string) => Promise<boolean>;
   /** Redeem an invite into a mutual follow, then resync the graph. */
   acceptInvite: (myId: string, inviterId: string) => Promise<boolean>;
   reset: () => void;
@@ -142,6 +144,20 @@ export const useSocial = create<SocialState>()((set, get) => ({
       set({ feed: get().feed.filter((p) => !(p.mine && p.drinkId === drinkId)) });
     } catch (e) {
       set({ error: (e as Error).message });
+    }
+  },
+
+  replacePhotoForDrink: async (myId, drinkId, localUri) => {
+    try {
+      const ok = await api.replacePostPhotoForDrink(myId, drinkId, localUri);
+      // Refetch rather than patching in place: the feed holds photo PATHS and
+      // the cards resolve them to signed URLs, so a stale path would render
+      // the replaced image until the next natural refresh.
+      if (ok) await get().refreshFeed(myId);
+      return ok;
+    } catch (e) {
+      set({ error: (e as Error).message });
+      return false;
     }
   },
 
