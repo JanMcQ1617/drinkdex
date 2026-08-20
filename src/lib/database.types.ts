@@ -55,6 +55,15 @@ export type ReportRow = {
   created_at: string;
 };
 
+export type PostPhotoRow = {
+  id: string;
+  post_id: string;
+  path: string;
+  /** When the picture was taken. Orders the carousel, newest first. */
+  taken_at: string;
+  created_at: string;
+};
+
 export type FollowRow = {
   follower_id: string;
   following_id: string;
@@ -78,7 +87,17 @@ export type Database = {
       };
       posts: {
         Row: PostRow;
-        Insert: Omit<PostRow, 'id' | 'created_at'> & { id?: string; created_at?: string };
+        /*
+         * photo_path is optional on insert: it is a denormalised preview
+         * maintained by the sync_post_preview trigger (migration 007), not
+         * something a caller supplies. Writing it by hand would be
+         * overwritten by the next photo anyway.
+         */
+        Insert: Omit<PostRow, 'id' | 'created_at' | 'photo_path'> & {
+          id?: string;
+          created_at?: string;
+          photo_path?: string | null;
+        };
         Update: Partial<Omit<PostRow, 'id' | 'author_id'>>;
         Relationships: [];
       };
@@ -91,6 +110,16 @@ export type Database = {
       likes: {
         Row: LikeRow;
         Insert: Omit<LikeRow, 'created_at'> & { created_at?: string };
+        Update: never;
+        Relationships: [];
+      };
+      post_photos: {
+        Row: PostPhotoRow;
+        Insert: Omit<PostPhotoRow, 'id' | 'taken_at' | 'created_at'> & {
+          id?: string;
+          taken_at?: string;
+          created_at?: string;
+        };
         Update: never;
         Relationships: [];
       };

@@ -40,6 +40,33 @@ interface PostQueryRow {
   photo_path: string | null;
   created_at: string;
   likes?: unknown;
+  /*
+   * `unknown` for the same reason as `likes`: database.types.ts is
+   * hand-written and does not declare the posts -> post_photos relation, so
+   * supabase-js types an embedded select as SelectQueryError. Narrowed by
+   * photoList() below rather than trusted.
+   */
+  post_photos?: unknown;
+}
+
+/**
+ * Photo paths for a post, NEWEST FIRST.
+ *
+ * Sorted here rather than trusted from the query: PostgREST gives no order
+ * guarantee on an embedded resource, and the carousel's whole contract is
+ * that the most recent picture comes first. Shape-checked because the
+ * embed is typed `unknown`.
+ */
+function photoList(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter(
+      (r): r is { path: string; taken_at: string } =>
+        typeof r === 'object' && r !== null && typeof (r as { path?: unknown }).path === 'string',
+    )
+    .slice()
+    .sort((a, b) => (a.taken_at < b.taken_at ? 1 : -1))
+    .map((r) => r.path);
 }
 
 function toPost(row: PostQueryRow, myId: string, myLikes: Set<string>): Post {
@@ -50,6 +77,12 @@ function toPost(row: PostQueryRow, myId: string, myLikes: Set<string>): Post {
     caption: row.caption,
     photoUri: null, // resolved lazily via signedPhotoUrl
     photoPath: row.photo_path,
+    /*
+     * Sorted here rather than trusted from the query: PostgREST gives no
+     * order guarantee on an embedded resource, and the carousel's whole
+     * contract is that the newest picture comes first.
+     */
+    photoPaths: photoList(row.post_photos),
     createdAt: row.created_at,
     likes: likeCount(row.likes),
     likedByMe: myLikes.has(row.id),
@@ -58,7 +91,8 @@ function toPost(row: PostQueryRow, myId: string, myLikes: Set<string>): Post {
   };
 }
 
-const POST_SELECT = 'id, author_id, drink_id, caption, photo_path, created_at, likes(count)';
+const POST_SELECT =
+  'id, author_id, drink_id, caption, photo_path, created_at, likes(count), post_photos(path, taken_at)';
 
 /*
  * Explicit columns, never '*'. Migration 002 revokes the column privilege
@@ -234,19 +268,87 @@ export async function signedPhotoUrl(path: string | null): Promise<string | null
 /* Writes                                                               */
 /* ==================================================================== */
 
+/**
+ * Records a pour: creates the post for this drink if it is the first one,
+ * then attaches the photo to it.
+ *
+ * A drink is ONE post per person (posts_one_per_drink, migration 007).
+ * Logging the same drink again used to insert a second row, so a profile
+ * filled with duplicates of one entry — it now adds a photo to the post that
+ * already exists, and the trigger promotes the newest to the preview.
+ */
 export async function createPost(
   myId: string,
   drinkId: string,
   caption: string,
   localPhotoUri: string | null,
 ): Promise<void> {
-  const photoPath = localPhotoUri ? await uploadPhoto(myId, localPhotoUri) : null;
-
-  const { error } = await supabase
+  /*
+   * onConflict rather than a select-then-insert: two logs racing from the
+   * same account would both see "no post" and the second insert would fail
+   * on the unique constraint. The caption is NOT overwritten — the first one
+   * describes the first time they had it, which is what the post is dated.
+   */
+  const { data: post, error } = await supabase
     .from('posts')
-    .insert({ author_id: myId, drink_id: drinkId, caption, photo_path: photoPath });
+    .upsert(
+      { author_id: myId, drink_id: drinkId, caption },
+      { onConflict: 'author_id,drink_id', ignoreDuplicates: false },
+    )
+    .select('id')
+    .single();
 
   if (error) throw error;
+  if (!localPhotoUri || !post) return;
+
+  const path = await uploadPhoto(myId, localPhotoUri);
+  if (!path) return;
+
+  // The trigger repoints posts.photo_path at the newest photo.
+  const { error: photoError } = await supabase
+    .from('post_photos')
+    .insert({ post_id: post.id, path });
+  if (photoError) throw photoError;
+}
+
+/**
+ * Adds another photo to the post for this drink, newest first.
+ *
+ * Replaces the old behaviour, which swapped the single photo and deleted the
+ * previous file. Several pictures of one drink taken weeks apart are the
+ * same entry photographed twice, not a reason to throw the first away.
+ *
+ * Returns false if the upload failed, so the caller can leave the local
+ * record alone rather than showing a photo the server does not have.
+ */
+export async function addPhotoForDrink(
+  myId: string,
+  drinkId: string,
+  localPhotoUri: string,
+): Promise<boolean> {
+  const { data: post, error } = await supabase
+    .from('posts')
+    .select('id')
+    .eq('author_id', myId)
+    .eq('drink_id', drinkId)
+    .maybeSingle();
+  if (error) throw error;
+
+  // No post yet — the entry was collected before sharing existed, or offline.
+  if (!post) {
+    await createPost(myId, drinkId, 'Logged a new entry.', localPhotoUri);
+    return true;
+  }
+
+  const path = await uploadPhoto(myId, localPhotoUri);
+  if (!path) return false;
+
+  const { error: photoError } = await supabase
+    .from('post_photos')
+    .insert({ post_id: post.id, path });
+  if (photoError) throw photoError;
+
+  return true;
 }
 
 /**
@@ -279,10 +381,20 @@ export async function deletePostsForDrink(myId: string, drinkId: string): Promis
    */
   const { data: doomed, error: readError } = await supabase
     .from('posts')
-    .select('photo_path')
+    .select('id, photo_path')
     .eq('author_id', myId)
     .eq('drink_id', drinkId);
   if (readError) throw readError;
+
+  /*
+   * post_photos cascades from posts, so the ROWS take care of themselves —
+   * but the storage objects they point at do not, and there are now several
+   * per post rather than one. Collect them while the rows still exist.
+   */
+  const ids = (doomed ?? []).map((row) => row.id);
+  const { data: extra } = ids.length
+    ? await supabase.from('post_photos').select('path').in('post_id', ids)
+    : { data: [] as { path: string }[] };
 
   const { error } = await supabase
     .from('posts')
@@ -291,7 +403,11 @@ export async function deletePostsForDrink(myId: string, drinkId: string): Promis
     .eq('drink_id', drinkId);
   if (error) throw error;
 
-  await Promise.all((doomed ?? []).map((row) => removeStoredPhoto(row.photo_path)));
+  const paths = new Set<string>([
+    ...(doomed ?? []).map((row) => row.photo_path).filter(Boolean as unknown as (v: string | null) => v is string),
+    ...(extra ?? []).map((row) => row.path),
+  ]);
+  await Promise.all([...paths].map((path) => removeStoredPhoto(path)));
 }
 
 /**

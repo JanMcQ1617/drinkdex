@@ -97,6 +97,13 @@ export interface Post {
   photoUri: string | null;
   /** Storage object key in the private `pours` bucket; read via a signed URL. */
   photoPath?: string | null;
+  /**
+   * Every photo on this post, NEWEST FIRST. `photoPath` is the first of
+   * these — kept as its own field because the feed, the profile grid and the
+   * tiles all read it, so the denormalised preview meant none of them had to
+   * change when posts gained multiple photos.
+   */
+  photoPaths?: string[];
   createdAt: string;
   likes: number;
   likedByMe?: boolean;

@@ -196,7 +196,20 @@ export const PostCard = React.memo(function PostCard({
     if (myId) void toggleLike(myId, post.id);
   }, [liked, likeKey, myId, post.id, toggleLike]);
 
-  const photoUrl = useSignedPhoto(photoPath ?? post.photoPath) ?? post.photoUri;
+  /*
+   * A post can now carry several photos of the same drink, newest first
+   * (migration 007). `index` is which one is on screen; it resets when the
+   * post's photo set changes so a card recycled by the virtualised list
+   * cannot open on someone else's third picture.
+   */
+  const gallery = post.photoPaths?.length ? post.photoPaths : [];
+  const [index, setIndex] = useState(0);
+  const galleryKey = gallery.join('|');
+  useEffect(() => setIndex(0), [galleryKey]);
+
+  const current = gallery[index] ?? photoPath ?? post.photoPath;
+  const photoUrl = useSignedPhoto(current) ?? post.photoUri;
+  const hasGallery = gallery.length > 1;
 
   const drink = DRINKS_BY_ID[post.drinkId];
   // A post can outrun its author's profile row; render it rather than crash.
@@ -330,13 +343,41 @@ export const PostCard = React.memo(function PostCard({
         accessibilityLabel={`Open ${drink.name}, ${formatDexNumber(drink.dexNumber)}, in the Dex`}
         style={({ pressed }) => [styles.body, pressed && styles.pressed]}>
         {photoUrl ? (
-          <Image
-            source={{ uri: photoUrl }}
-            style={styles.photo}
-            contentFit="cover"
-            transition={180}
-            accessibilityLabel={`Photo of ${drink.name}`}
-          />
+          <View>
+            <Image
+              source={{ uri: photoUrl }}
+              style={styles.photo}
+              contentFit="cover"
+              transition={180}
+              accessibilityLabel={
+                hasGallery
+                  ? `Photo ${index + 1} of ${gallery.length} of ${drink.name}`
+                  : `Photo of ${drink.name}`
+              }
+            />
+            {hasGallery ? (
+              /*
+               * Tap-to-advance rather than a swipe: this card already sits in
+               * a vertically scrolling feed, and a horizontal pan inside it
+               * fights the list for the gesture on every drag that is not
+               * perfectly sideways.
+               */
+              <Pressable
+                onPress={() => {
+                  haptic.select();
+                  setIndex((i) => (i + 1) % gallery.length);
+                }}
+                accessibilityRole="button"
+                accessibilityLabel={`Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`}
+                style={styles.galleryTapTarget}>
+                <View style={styles.galleryCount}>
+                  <Text style={styles.galleryCountLabel}>
+                    {index + 1}/{gallery.length}
+                  </Text>
+                </View>
+              </Pressable>
+            ) : null}
+          </View>
         ) : (
           <View style={[styles.artPanel, { backgroundColor: category.wash }]}>
             {/* Sized to fill the 4:3 panel — 110 left it adrift in the wash. */}
@@ -447,6 +488,30 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 4 / 3,
     backgroundColor: colors.bgSunk,
+  },
+  /* Covers the photo, so a tap anywhere on it advances. */
+  galleryTapTarget: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+    padding: space.sm,
+  },
+  galleryCount: {
+    paddingHorizontal: space.sm,
+    paddingVertical: 2,
+    borderRadius: 999,
+    backgroundColor: colors.scrim,
+  },
+  galleryCountLabel: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.micro.fontSize,
+    letterSpacing: typeScale.micro.letterSpacing,
+    color: colors.textOnWine,
+    fontVariant: ['tabular-nums'],
   },
   artPanel: {
     width: '100%',
