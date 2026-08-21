@@ -65,19 +65,34 @@ const ALIASES = {
   'dry martini': 'martini',
   'panky hanky': 'hanky-panky', // the prompt reversed the words
   'lemon drop martini': 'lemon-drop', // #105, the martini — not the #86 shot
+
+  // Two dex entries are both named "Lemon Drop": #86 the shot and #105 the
+  // martini. #105 only ever arrives via the "lemon drop martini" wording
+  // above, so a bare "lemon drop" is the shot. Without this the bare form
+  // resolves by name-map insertion order, which is not a decision.
+  'lemon drop': 'lemon-drop-shot',
 };
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
-/** Strip the boilerplate prompt prefix and the trailing glassware clause. */
-function drinkFromPrompt(folder) {
+/**
+ * Candidate drink names parsed out of a prompt folder, best guess first.
+ *
+ * Two candidates, not one: trailing "cocktail"/"shot" is usually prompt
+ * filler ("a_negroni_cocktail") but sometimes part of the name itself
+ * ("Champagne Cocktail", "Green Tea Shot", "Jell-O Shot"). Trying the
+ * untrimmed form first lets those match and costs nothing when it is filler.
+ */
+function drinkNamesFromPrompt(folder) {
   let s = folder.replace(/^ultra_realistic_4k_photograph_of_(an?_)?/, '');
   // Prompts run on past the drink: "..._in_a_rocks_glass._amber_pour". Cut at
   // the sentence break first — a few prompts (pickleback) have no glass clause.
   s = s.split('.')[0];
   s = s.split(/_in_an?_/)[0];
-  s = s.replace(/_(cocktail|shot)$/, '').replace(/_$/, '');
-  return norm(s.replace(/_/g, ' '));
+  s = s.replace(/_$/, '');
+  const full = norm(s.replace(/_/g, ' '));
+  const trimmed = norm(s.replace(/_(cocktail|shot)$/, '').replace(/_/g, ' '));
+  return full === trimmed ? [full] : [full, trimmed];
 }
 
 const drinks = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/drinks.json'), 'utf8'));
@@ -124,13 +139,16 @@ const perDrink = new Map();
 const orphans = new Map();
 
 for (const c of candidates) {
-  const key = drinkFromPrompt(c.folder);
-  let drink = byName.get(key) ?? byId.get(ALIASES[key]);
-  if (!drink) {
-    const exact = drinks.filter((d) => norm(d.name) === key);
-    if (exact.length === 1) drink = exact[0];
+  const keys = drinkNamesFromPrompt(c.folder);
+  let drink = null;
+  for (const key of keys) {
+    // Aliases outrank the name map: they exist to settle cases the raw name
+    // gets wrong, such as the two entries both called "Lemon Drop".
+    drink = byId.get(ALIASES[key]) ?? byName.get(key) ?? null;
+    if (drink) break;
   }
   if (!drink) {
+    const key = keys[keys.length - 1];
     orphans.set(key, (orphans.get(key) ?? 0) + 1);
     continue;
   }
