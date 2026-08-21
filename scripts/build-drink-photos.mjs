@@ -27,9 +27,18 @@ const arg = (flag, fallback) => {
  * prompt folders inside batch folders, the Downloads set puts them at the top
  * level. Either way the leaf holding `screen.png` is the prompt folder.
  */
+const DOWNLOADS = path.join(process.env.HOME, 'Downloads');
 const SOURCES = [
   path.join(process.env.HOME, 'Desktop', 'DRINKDEX IMAGES'),
-  path.join(process.env.HOME, 'Downloads', 'stitch_minimalist_beverage_renderings'),
+  // Every generator export, however many batches deep. macOS names repeat
+  // downloads "… 2", "… 3", so globbing the prefix beats listing paths that
+  // go stale the moment another batch arrives.
+  ...(fs.existsSync(DOWNLOADS) ? fs.readdirSync(DOWNLOADS) : [])
+    .filter((d) => d.startsWith('stitch_minimalist_beverage_renderings'))
+    .map((d) => path.join(DOWNLOADS, d))
+    // The downloaded .zip sits next to the folder it expanded to.
+    .filter((d) => fs.statSync(d).isDirectory())
+    .sort(),
 ];
 
 const srcArg = arg('--src', null);
