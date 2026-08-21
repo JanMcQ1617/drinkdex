@@ -20,7 +20,20 @@ const arg = (flag, fallback) => {
   return i === -1 ? fallback : process.argv[i + 1];
 };
 
-const SRC = arg('--src', path.join(process.env.HOME, 'Desktop', 'DRINKDEX IMAGES'));
+/**
+ * Where the generated photographs live. Later sources are newer batches.
+ *
+ * Two folder shapes are in play and both are supported: the Desktop set nests
+ * prompt folders inside batch folders, the Downloads set puts them at the top
+ * level. Either way the leaf holding `screen.png` is the prompt folder.
+ */
+const SOURCES = [
+  path.join(process.env.HOME, 'Desktop', 'DRINKDEX IMAGES'),
+  path.join(process.env.HOME, 'Downloads', 'stitch_minimalist_beverage_renderings'),
+];
+
+const srcArg = arg('--src', null);
+const sources = srcArg ? srcArg.split(',') : SOURCES;
 const SIZE = Number(arg('--size', 512));
 const QUALITY = Number(arg('--quality', 82));
 const OUT_DIR = path.join(ROOT, 'assets', 'drinks');
@@ -34,6 +47,15 @@ const OVERRIDES = {
   // Largest take has a hand holding the glass; every other photo is still-life.
   // The other alternate has a flaming peel, which a Cosmopolitan does not take.
   cosmopolitan: '136-1..',
+
+  // Regenerated 2026-08-21 to fix the original take, which is still on disk and
+  // would otherwise win on file size. Seven and Seven had no whiskey colour at
+  // all, Final Ward came out amber instead of Chartreuse-yellow, Sazerac had a
+  // hand expressing the peel, Porto Flip was shot on a dark bar.
+  'seven-and-seven': 'stitch_minimalist_beverage_renderings',
+  'final-ward': 'stitch_minimalist_beverage_renderings',
+  sazerac: 'stitch_minimalist_beverage_renderings',
+  'porto-flip': 'stitch_minimalist_beverage_renderings',
 };
 
 /** Prompt wording → dex id, for the cases parsing alone can't resolve. */
@@ -62,22 +84,38 @@ const drinks = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/drinks.json'
 const byName = new Map(drinks.map((d) => [norm(d.name), d]));
 const byId = new Map(drinks.map((d) => [d.id, d]));
 
-if (!fs.existsSync(SRC)) {
-  console.error(`Source folder not found: ${SRC}`);
+const missingSources = sources.filter((d) => !fs.existsSync(d));
+if (missingSources.length === sources.length) {
+  console.error(`No source folder found. Looked in:\n  ${sources.join('\n  ')}`);
   process.exit(1);
 }
+for (const d of missingSources) console.warn(`  ! source folder missing, skipping: ${d}`);
 
 /* ---- Collect every candidate image ---- */
 const candidates = [];
-for (const batch of fs.readdirSync(SRC)) {
-  const batchDir = path.join(SRC, batch);
-  if (!fs.statSync(batchDir).isDirectory()) continue;
-  for (const folder of fs.readdirSync(batchDir)) {
-    const dir = path.join(batchDir, folder);
+
+/** Record one prompt folder, if it actually holds a screen.png. */
+function take(dir, folder, batch) {
+  const png = path.join(dir, 'screen.png');
+  if (!fs.existsSync(png)) return false;
+  candidates.push({ batch, folder, png, bytes: fs.statSync(png).size });
+  return true;
+}
+
+for (const source of sources) {
+  if (!fs.existsSync(source)) continue;
+  const sourceName = path.basename(source);
+  for (const entry of fs.readdirSync(source)) {
+    const dir = path.join(source, entry);
     if (!fs.statSync(dir).isDirectory()) continue;
-    const png = path.join(dir, 'screen.png');
-    if (!fs.existsSync(png)) continue;
-    candidates.push({ batch, folder, png, bytes: fs.statSync(png).size });
+    // Flat layout: this IS a prompt folder, so the source name is the batch.
+    if (take(dir, entry, sourceName)) continue;
+    // Nested layout: this is a batch folder holding prompt folders.
+    for (const folder of fs.readdirSync(dir)) {
+      const inner = path.join(dir, folder);
+      if (!fs.statSync(inner).isDirectory()) continue;
+      take(inner, folder, entry);
+    }
   }
 }
 
