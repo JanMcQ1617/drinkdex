@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
@@ -24,6 +25,7 @@ import {
   space,
 } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
+import { drinkPhoto } from '@/data/drinkPhotos';
 import type { Drink } from '@/types';
 
 /* ==================================================================== */
@@ -40,10 +42,26 @@ import type { Drink } from '@/types';
 /*                                                                      */
 /* The old grid separated these by 2% luminance (#FBFBF8 vs #F6F5F0),    */
 /* which is why the board never produced any desire to fill it.          */
+/*                                                                      */
+/* Where a photograph exists it becomes the COLLECTED face, bled to the  */
+/* card edges. Locked cells keep the vector silhouette either way: a     */
+/* photo cannot be reduced to black ink at runtime, and the blackout is  */
+/* the whole reveal. Coverage is partial, so a collected entry without   */
+/* a photo still renders the vector art it always did.                   */
 /* ==================================================================== */
 
 /** DrinkArt's viewBox is 100×112, so height follows width by this factor. */
 const ART_ASPECT = 112 / 100;
+
+/**
+ * Height the nameplate reserves at the foot of the card.
+ *
+ * The photo stops here rather than running under the plate: cover-cropping a
+ * square source into the full 0.72 card would push the vessel's base behind
+ * the nameplate. Ending at the plate leaves the container near-square, so the
+ * crop takes a few points off the sides and the whole drink stays visible.
+ */
+const NAMEPLATE_MIN = 38;
 
 /**
  * The foil sweep on a collected legendary.
@@ -104,6 +122,8 @@ export const DexCard = React.memo(function DexCard({
   const rarity = RARITY_META[drink.rarity];
   const reduced = useReducedMotion();
 
+  // Only a collected card shows its photograph — see the note above.
+  const photo = collected ? drinkPhoto(drink.id) : undefined;
   const legendary = collected && drink.rarity === 'legendary';
   // The field is ~1.9× the art box; enough for the sweep to clear the card.
   const cardWidth = Math.round(artSize / 0.66);
@@ -148,6 +168,24 @@ export const DexCard = React.memo(function DexCard({
         <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${fieldId})`} />
       </Svg>
 
+      {/* ---- Photograph ---- */}
+      {/*
+        Sits over the field gradient, which stays underneath as the ground
+        while the image decodes. The dex plate and nameplate both use
+        `glass.fillStrong`, the token specced for surfaces over photography,
+        so they stay legible without a scrim.
+      */}
+      {photo ? (
+        <Image
+          source={photo}
+          style={styles.photo}
+          contentFit="cover"
+          transition={140}
+          accessible={false}
+          cachePolicy="memory-disk"
+        />
+      ) : null}
+
       {/* The lit lip along the top edge — what makes a recess read as cut in. */}
       {collected ? null : <View pointerEvents="none" style={styles.wellLip} />}
 
@@ -177,9 +215,11 @@ export const DexCard = React.memo(function DexCard({
       </View>
 
       {/* ---- Artwork ---- */}
-      <View style={[styles.artZone, { height: Math.round(artSize * ART_ASPECT) }]}>
-        <DrinkArt drink={drink} size={artSize} locked={!collected} flat />
-      </View>
+      {photo ? null : (
+        <View style={[styles.artZone, { height: Math.round(artSize * ART_ASPECT) }]}>
+          <DrinkArt drink={drink} size={artSize} locked={!collected} flat />
+        </View>
+      )}
 
       {/* ---- Nameplate ---- */}
       <View style={[styles.nameplate, collected ? styles.nameplateLit : styles.nameplateSunk]}>
@@ -217,6 +257,15 @@ const styles = StyleSheet.create({
     right: 0,
     height: 1,
     backgroundColor: colors.embossShadow,
+  },
+
+  /* Photograph */
+  photo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: NAMEPLATE_MIN,
   },
 
   /* Foil */
@@ -287,7 +336,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    minHeight: 38,
+    minHeight: NAMEPLATE_MIN,
     justifyContent: 'center',
     paddingHorizontal: space.sm,
     paddingVertical: space.xs,
