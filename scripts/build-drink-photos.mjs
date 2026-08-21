@@ -27,19 +27,16 @@ const arg = (flag, fallback) => {
  * prompt folders inside batch folders, the Downloads set puts them at the top
  * level. Either way the leaf holding `screen.png` is the prompt folder.
  */
-const DOWNLOADS = path.join(process.env.HOME, 'Downloads');
-const SOURCES = [
-  path.join(process.env.HOME, 'Desktop', 'DRINKDEX IMAGES'),
-  // Every generator export, however many batches deep. macOS names repeat
-  // downloads "… 2", "… 3", so globbing the prefix beats listing paths that
-  // go stale the moment another batch arrives.
-  ...(fs.existsSync(DOWNLOADS) ? fs.readdirSync(DOWNLOADS) : [])
-    .filter((d) => d.startsWith('stitch_minimalist_beverage_renderings'))
-    .map((d) => path.join(DOWNLOADS, d))
-    // The downloaded .zip sits next to the folder it expanded to.
-    .filter((d) => fs.statSync(d).isDirectory())
-    .sort(),
-];
+/**
+ * The photograph masters: one 1024px PNG per dex entry, named by its id.
+ *
+ * Previously this read the generator's raw exports — prompt folders scattered
+ * across the Desktop and several Downloads batches, carrying every duplicate
+ * take. Those were consolidated to one master per drink, so the prompt-name
+ * parsing below now only matters if a fresh generator export is added back as
+ * an extra source.
+ */
+const SOURCES = [path.join(process.env.HOME, 'Desktop', 'CLINK DEX PHOTOS')];
 
 const srcArg = arg('--src', null);
 const sources = srcArg ? srcArg.split(',') : SOURCES;
@@ -53,26 +50,12 @@ const MAP_FILE = path.join(ROOT, 'src', 'data', 'drinkPhotos.ts');
  * the ones where that picked a bad frame — value is the batch folder to prefer.
  */
 const OVERRIDES = {
-  // Largest take has a hand holding the glass; every other photo is still-life.
-  // The other alternate has a flaming peel, which a Cosmopolitan does not take.
-  cosmopolitan: '136-1..',
-
-  // Regenerated 2026-08-21 to fix the original take, which is still on disk and
-  // would otherwise win on file size. Seven and Seven had no whiskey colour at
-  // all, Final Ward came out amber instead of Chartreuse-yellow, Sazerac had a
-  // hand expressing the peel, Porto Flip was shot on a dark bar.
-  'seven-and-seven': 'stitch_minimalist_beverage_renderings',
-  'final-ward': 'stitch_minimalist_beverage_renderings',
-  sazerac: 'stitch_minimalist_beverage_renderings',
-  'porto-flip': 'stitch_minimalist_beverage_renderings',
-
-  // Re-rendered after review and dropped in as id-named files. Both had a
-  // usable but weaker take in an earlier batch: Vegas Bomb showed no shot
-  // glass submerged in the pint, and the Lemon Drop shot was served in a
-  // squat tumbler. An override whose batch holds no image warns and falls
-  // back, so these are harmless until the files land.
-  'vegas-bomb': 'stitch_minimalist_beverage_renderings',
-  'lemon-drop-shot': 'stitch_minimalist_beverage_renderings',
+  // Empty by design. Each drink now has exactly one master in CLINK DEX
+  // PHOTOS, so there is no competing take to choose between — the entries
+  // that used to live here (a Cosmopolitan with a hand in frame, four
+  // regenerated frames, two re-renders) were resolved by consolidating the
+  // winning file. Repopulate only if a raw generator export with duplicate
+  // takes is added back as a second source.
 };
 
 /** Prompt wording → dex id, for the cases parsing alone can't resolve. */
@@ -175,8 +158,10 @@ const orphans = new Map();
 
 for (const c of candidates) {
   if (c.byId) {
+    // Same shape as the parsed path below: downstream sorting and the
+    // manifest both read `.drink` off the pick.
     if (!perDrink.has(c.byId)) perDrink.set(c.byId, []);
-    perDrink.get(c.byId).push(c);
+    perDrink.get(c.byId).push({ ...c, drink: byId.get(c.byId) });
     continue;
   }
   const keys = drinkNamesFromPrompt(c.folder);
@@ -257,6 +242,32 @@ export const PHOTO_COUNT = ${picks.length};
 `,
   'utf8',
 );
+
+/* ---- Optional manifest: which source file won for each drink ---- */
+const manifestPath = arg('--manifest', null);
+if (manifestPath) {
+  const orphanPicks = new Map();
+  for (const c of candidates) {
+    if (c.byId) continue;
+    const keys = drinkNamesFromPrompt(c.folder);
+    if (keys.some((k) => byId.get(ALIASES[k]) ?? byName.get(k))) continue;
+    const key = keys[keys.length - 1];
+    const best = orphanPicks.get(key);
+    if (!best || c.bytes > best.bytes) orphanPicks.set(key, c);
+  }
+  fs.writeFileSync(
+    manifestPath,
+    JSON.stringify(
+      {
+        picks: picks.map((p) => ({ id: p.id, dexNumber: p.drink.dexNumber, name: p.drink.name, source: p.png })),
+        notInDex: [...orphanPicks.entries()].map(([key, c]) => ({ key, source: c.png })),
+      },
+      null,
+      2,
+    ),
+  );
+  console.log(`manifest written    ${manifestPath}`);
+}
 
 /* ---- Report ---- */
 const mb = (n) => `${(n / 1024 / 1024).toFixed(1)} MB`;
