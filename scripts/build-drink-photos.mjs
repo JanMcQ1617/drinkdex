@@ -65,6 +65,14 @@ const OVERRIDES = {
   'final-ward': 'stitch_minimalist_beverage_renderings',
   sazerac: 'stitch_minimalist_beverage_renderings',
   'porto-flip': 'stitch_minimalist_beverage_renderings',
+
+  // Re-rendered after review and dropped in as id-named files. Both had a
+  // usable but weaker take in an earlier batch: Vegas Bomb showed no shot
+  // glass submerged in the pint, and the Lemon Drop shot was served in a
+  // squat tumbler. An override whose batch holds no image warns and falls
+  // back, so these are harmless until the files land.
+  'vegas-bomb': 'stitch_minimalist_beverage_renderings',
+  'lemon-drop-shot': 'stitch_minimalist_beverage_renderings',
 };
 
 /** Prompt wording → dex id, for the cases parsing alone can't resolve. */
@@ -126,12 +134,30 @@ function take(dir, folder, batch) {
   return true;
 }
 
+/**
+ * A loose image file named for a dex id, e.g. `black-russian.png`.
+ *
+ * The generator normally hands over prompt folders, but an image that arrives
+ * some other way (saved out of a chat, a one-off re-render) has no prompt to
+ * parse. Naming the file after the id says directly what it is, and lands it
+ * in a real source folder so a rebuild keeps it — dropping it straight into
+ * assets/drinks would be erased, since the build clears that directory.
+ */
+const BY_ID_EXT = new Set(['.png', '.jpg', '.jpeg', '.webp']);
+
 for (const source of sources) {
   if (!fs.existsSync(source)) continue;
   const sourceName = path.basename(source);
   for (const entry of fs.readdirSync(source)) {
     const dir = path.join(source, entry);
-    if (!fs.statSync(dir).isDirectory()) continue;
+    if (!fs.statSync(dir).isDirectory()) {
+      const ext = path.extname(entry).toLowerCase();
+      const id = path.basename(entry, path.extname(entry));
+      if (BY_ID_EXT.has(ext) && byId.has(id)) {
+        candidates.push({ batch: sourceName, folder: entry, png: dir, bytes: fs.statSync(dir).size, byId: id });
+      }
+      continue;
+    }
     // Flat layout: this IS a prompt folder, so the source name is the batch.
     if (take(dir, entry, sourceName)) continue;
     // Nested layout: this is a batch folder holding prompt folders.
@@ -148,6 +174,11 @@ const perDrink = new Map();
 const orphans = new Map();
 
 for (const c of candidates) {
+  if (c.byId) {
+    if (!perDrink.has(c.byId)) perDrink.set(c.byId, []);
+    perDrink.get(c.byId).push(c);
+    continue;
+  }
   const keys = drinkNamesFromPrompt(c.folder);
   let drink = null;
   for (const key of keys) {
