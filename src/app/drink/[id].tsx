@@ -31,6 +31,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { DrinkArt } from '@/components/artwork';
+import { drinkPhoto } from '@/data/drinkPhotos';
 import { FoilSweep } from '@/components/DexCard';
 import { GlassCircle } from '@/components/glass';
 import { Icon } from '@/components/icons';
@@ -514,6 +515,8 @@ export default function DrinkDetailScreen() {
   const categoryMeta = CATEGORY_META[drink.category];
   // Unique per entry+state: SVG <Defs> ids share one namespace on web.
   const heroFieldId = `heroField-${drink.id}-${unlocked ? 'c' : 'e'}`;
+  // Your own pour outranks the stock photograph once you have logged one.
+  const heroPhoto = unlocked && record?.photoUri ? { uri: record.photoUri } : drinkPhoto(drink.id);
 
   return (
     <View style={styles.screen}>
@@ -568,6 +571,9 @@ export default function DrinkDetailScreen() {
            */
           style={[
             styles.hero,
+            // A photograph defines the hero's height itself, so the padding
+            // that framed the 150pt vector would only band the image.
+            heroPhoto ? styles.heroPhotoMode : null,
             unlocked && styles.heroUnlocked,
             unlocked && { borderColor: rarityMeta.edge, borderWidth: rarityMeta.edgeWidth },
             !unlocked && styles.heroLocked,
@@ -594,7 +600,26 @@ export default function DrinkDetailScreen() {
             <FoilSweep width={HERO_FOIL_WIDTH} />
           ) : null}
 
-          <DrinkArt drink={drink} size={150} />
+          {/*
+            The hero follows the same precedence as the Dex card: the pour you
+            logged, else the stock photograph, else the vector art. It is NOT
+            dimmed while locked, unlike the grid — the grid is the collection
+            board, where withholding creates the pull, but this is the screen
+            you open to decide whether to make the drink. Hiding what it looks
+            like here would work against the recipe sitting directly below it.
+          */}
+          {heroPhoto ? (
+            <Image
+              source={heroPhoto}
+              style={styles.heroPhoto}
+              contentFit="cover"
+              transition={160}
+              accessible={false}
+              cachePolicy="memory-disk"
+            />
+          ) : (
+            <DrinkArt drink={drink} size={150} />
+          )}
           {unlocked ? null : <Text style={styles.heroCaption}>Not yet logged</Text>}
         </Animated.View>
 
@@ -878,6 +903,20 @@ const styles = StyleSheet.create({
   heroLocked: {
     borderColor: colors.cardBorder,
     borderStyle: 'dashed',
+  },
+  heroPhotoMode: {
+    paddingVertical: 0,
+    gap: 0,
+    paddingBottom: space.sm,
+  },
+  heroPhoto: {
+    /*
+     * Square, matching the source, so nothing is cropped — and it is a real
+     * laid-out child rather than an absolute fill, because the hero has no
+     * height of its own once the vector artwork stops providing it.
+     */
+    width: '100%',
+    aspectRatio: 1,
   },
   heroCaption: {
     fontFamily: fonts.bodySemiBold,

@@ -43,7 +43,7 @@ import {
   type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, TOTAL } from '@/data';
-import { useCollection, useIsUnlocked } from '@/store/collection';
+import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory } from '@/types';
 
 /* ------------------------------------------------------------------ */
@@ -253,8 +253,19 @@ const GridCell = React.memo(function GridCell({
   artSize: number;
   onPress: (id: string) => void;
 }) {
-  const unlocked = useIsUnlocked(drink.id);
-  return <DexCard drink={drink} artSize={artSize} collected={unlocked} onPress={onPress} />;
+  // The whole record, not just the boolean: the card shows the user's own
+  // pour photo once one exists. Still a single-entry subscription, so
+  // collecting one drink does not re-render the other 459.
+  const record = useCollection((s) => s.unlocks[drink.id]);
+  return (
+    <DexCard
+      drink={drink}
+      artSize={artSize}
+      collected={Boolean(record)}
+      userPhotoUri={record?.photoUri}
+      onPress={onPress}
+    />
+  );
 });
 
 /* ------------------------------------------------------------------ */

@@ -43,11 +43,17 @@ import type { Drink } from '@/types';
 /* The old grid separated these by 2% luminance (#FBFBF8 vs #F6F5F0),    */
 /* which is why the board never produced any desire to fill it.          */
 /*                                                                      */
-/* Where a photograph exists it becomes the COLLECTED face, bled to the  */
-/* card edges. Locked cells keep the vector silhouette either way: a     */
-/* photo cannot be reduced to black ink at runtime, and the blackout is  */
-/* the whole reveal. Coverage is partial, so a collected entry without   */
-/* a photo still renders the vector art it always did.                   */
+/* Where a photograph exists it is the card face in BOTH states. Locked  */
+/* dims it behind a scrim rather than hiding it: the drink is legible    */
+/* enough to want, which a black silhouette never managed, and unlocking */
+/* lifts the shadow instead of swapping the subject.                     */
+/*                                                                      */
+/* Once you log a pour, YOUR photo takes over as the face — the card     */
+/* becomes a record of the one you actually drank. The stock photograph  */
+/* is the placeholder standing in until then.                            */
+/*                                                                      */
+/* Entries with no photograph at all (every beer, wine and spirit) keep  */
+/* the vector artwork and its black-ink locked state.                    */
 /* ==================================================================== */
 
 /** DrinkArt's viewBox is 100×112, so height follows width by this factor. */
@@ -109,6 +115,8 @@ export interface DexCardProps {
   /** Width of the artwork in points — derived from the live column width. */
   artSize: number;
   collected: boolean;
+  /** The user's own pour photo, once they have logged one. */
+  userPhotoUri?: string | null;
   onPress: (id: string) => void;
 }
 
@@ -116,14 +124,23 @@ export const DexCard = React.memo(function DexCard({
   drink,
   artSize,
   collected,
+  userPhotoUri,
   onPress,
 }: DexCardProps) {
   const category = CATEGORY_META[drink.category];
   const rarity = RARITY_META[drink.rarity];
   const reduced = useReducedMotion();
 
-  // Only a collected card shows its photograph — see the note above.
-  const photo = collected ? drinkPhoto(drink.id) : undefined;
+  /*
+   * Face precedence: the pour you logged, else the stock photograph, else
+   * the vector art. `userPhotoUri` is null when a logged photo went missing,
+   * so fall through to the stock image rather than showing an empty card.
+   */
+  const stock = drinkPhoto(drink.id);
+  const mine = collected && userPhotoUri ? userPhotoUri : null;
+  const photo = mine ? { uri: mine } : stock;
+  // Dim the stock photo until it is collected. A logged pour is never dimmed.
+  const shadowed = Boolean(photo) && !collected;
   const legendary = collected && drink.rarity === 'legendary';
   // The field is ~1.9× the art box; enough for the sweep to clear the card.
   const cardWidth = Math.round(artSize / 0.66);
@@ -176,14 +193,17 @@ export const DexCard = React.memo(function DexCard({
         so they stay legible without a scrim.
       */}
       {photo ? (
-        <Image
-          source={photo}
-          style={styles.photo}
-          contentFit="cover"
-          transition={140}
-          accessible={false}
-          cachePolicy="memory-disk"
-        />
+        <>
+          <Image
+            source={photo}
+            style={styles.photo}
+            contentFit="cover"
+            transition={140}
+            accessible={false}
+            cachePolicy="memory-disk"
+          />
+          {shadowed ? <View pointerEvents="none" style={[styles.photo, styles.photoScrim]} /> : null}
+        </>
       ) : null}
 
       {/* The lit lip along the top edge — what makes a recess read as cut in. */}
@@ -260,6 +280,15 @@ const styles = StyleSheet.create({
   },
 
   /* Photograph */
+  photoScrim: {
+    /*
+     * Tuned against the darkest photographs in the set (Black Russian,
+     * Kalimotxo). Lighter and a collected card stops feeling like a reveal;
+     * heavier and the pale studio grounds all flatten to one grey.
+     */
+    backgroundColor: colors.lockInk,
+    opacity: 0.82,
+  },
   photo: {
     position: 'absolute',
     top: 0,
