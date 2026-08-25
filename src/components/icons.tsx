@@ -21,6 +21,7 @@ const STROKE = 1.75;
 export type IconName =
   | 'home'
   | 'dex'
+  | 'atlas'
   | 'stats'
   | 'profile'
   | 'search'
@@ -74,6 +75,13 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
       <Path d="M3.9 5.4h16.2l-8.1 8.3z" />
       <Path d="M12 13.7v5.5" />
       <Path d="M8.3 19.6h7.4" />
+    </>
+  ),
+  atlas: (
+    <>
+      <Circle cx={12} cy={12} r={8.7} />
+      <Path d="M3.3 12h17.4" />
+      <Path d="M12 3.3c2.2 2.4 3.4 5.4 3.4 8.7s-1.2 6.3-3.4 8.7c-2.2-2.4-3.4-5.4-3.4-8.7S9.8 5.7 12 3.3Z" />
     </>
   ),
   profile: (
@@ -233,6 +241,13 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
       <Path d="M11.1 14.6h1.8v4.3h2.8a.9.9 0 0 1 0 1.8H8.3a.9.9 0 0 1 0-1.8h2.8z" />
     </>
   ),
+  atlas: (
+    <Path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M12 2.9a9.1 9.1 0 1 0 0 18.2 9.1 9.1 0 0 0 0-18.2ZM2.9 11.2h18.2v1.6H2.9zM11.2 2.9h1.6v18.2h-1.6z"
+    />
+  ),
   profile: (
     <>
       <Circle cx={12} cy={8} r={4.2} />
@@ -326,7 +341,7 @@ export const Icon = React.memo(function Icon({
   );
 });
 
-export type TabName = 'home' | 'dex' | 'stats' | 'profile';
+export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile';
 
 /**
  * Bottom-nav icon. Outline at rest, solid when active — the iOS

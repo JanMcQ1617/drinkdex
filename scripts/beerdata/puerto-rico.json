@@ -1,0 +1,304 @@
+[
+  {
+    "brewery": "Compañía Cervecera de Puerto Rico",
+    "city": "Mayagüez",
+    "founded": 1937,
+    "note": "Founded by the Valdés Cobián brothers; the island's dominant brewer and the maker of Medalla.",
+    "beers": [
+      {
+        "name": "Medalla Light",
+        "style": "American Light Lager",
+        "abv": "4.2%",
+        "note": "Introduced 1980 — the first light beer brewed in Puerto Rico, and the island's beer."
+      },
+      {
+        "name": "Magna",
+        "style": "American Lager",
+        "abv": "5.0%",
+        "note": "The full-strength premium lager of the same house."
+      },
+      {
+        "name": "India",
+        "style": "American Lager",
+        "abv": "4.6%",
+        "note": "Launched October 1938 as the company's first product; discontinued, revived in limited editions."
+      },
+      {
+        "name": "Silver Key",
+        "style": "American Lager",
+        "abv": "5.0%"
+      },
+      {
+        "name": "Del Oeste",
+        "style": "American Lager",
+        "abv": "4.5%",
+        "note": "Named for the west of the island, where the brewery stands."
+      },
+      {
+        "name": "Malta India",
+        "style": "Non-Alcoholic Lager",
+        "abv": "0.0%",
+        "note": "The malta — sweet, unfermented and a Puerto Rican staple in its own right."
+      }
+    ],
+    "country": "Puerto Rico"
+  },
+  {
+    "brewery": "Ocean Lab Brewing Co.",
+    "city": "Carolina",
+    "founded": 2015,
+    "note": "Award-winning craft brewery on the Isla Verde coast, brewing explicitly for the beach.",
+    "beers": [
+      {
+        "name": "Ocean IPA",
+        "style": "American IPA",
+        "abv": "7.1%",
+        "note": "The flagship — a West Coast mindset with bright citrus and firm bitterness."
+      },
+      {
+        "name": "Ocean West Coast IPA",
+        "style": "West Coast IPA",
+        "abv": "6.5%",
+        "note": "Tank release dry-hopped with Simcoe, Citra and Nelson Sauvin."
+      },
+      {
+        "name": "HopDiver",
+        "style": "Double IPA",
+        "abv": "8.5%"
+      },
+      {
+        "name": "Blonde Ale",
+        "style": "Blonde Ale"
+      },
+      {
+        "name": "American Wheat",
+        "style": "American Wheat Beer"
+      },
+      {
+        "name": "Pale Ale",
+        "style": "American Pale Ale"
+      },
+      {
+        "name": "Sunset Amber",
+        "style": "American Amber Ale"
+      },
+      {
+        "name": "SJU",
+        "style": "American Lager",
+        "note": "Named for the San Juan airport code."
+      },
+      {
+        "name": "MayaWest",
+        "style": "American Lager",
+        "abv": "5.0%"
+      },
+      {
+        "name": "Stout",
+        "style": "Irish Dry Stout"
+      },
+      {
+        "name": "Ocean Baraka",
+        "style": "American Pale Ale"
+      },
+      {
+        "name": "BOB",
+        "style": "Kettle Sour",
+        "note": "One of the fruit series."
+      },
+      {
+        "name": "Ruby",
+        "style": "Kettle Sour",
+        "note": "Fruit series."
+      },
+      {
+        "name": "Blue",
+        "style": "Kettle Sour",
+        "note": "Fruit series."
+      },
+      {
+        "name": "Mambo",
+        "style": "Kettle Sour",
+        "note": "Fruit series."
+      },
+      {
+        "name": "Condado West Coast Pilsner",
+        "style": "German Pilsner"
+      },
+      {
+        "name": "Berliner Weisse",
+        "style": "Berliner Weisse"
+      },
+      {
+        "name": "Discovery Pilsner",
+        "style": "German Pilsner"
+      },
+      {
+        "name": "Discovery Saison",
+        "style": "Saison"
+      },
+      {
+        "name": "Dragon Roll",
+        "style": "American IPA"
+      },
+      {
+        "name": "Deep Trip",
+        "style": "Double IPA"
+      },
+      {
+        "name": "Sun Bay Lager",
+        "style": "American Lager"
+      },
+      {
+        "name": "Viva La Chela",
+        "style": "Mexican Lager"
+      },
+      {
+        "name": "Oktoberfest Märzen",
+        "style": "Märzen"
+      }
+    ],
+    "country": "Puerto Rico"
+  },
+  {
+    "brewery": "Old Harbor Brewery",
+    "city": "Carolina",
+    "founded": 1996,
+    "note": "Puerto Rico's first craft brewery, founded in Old San Juan and now a brewery-taproom-restaurant in Carolina.",
+    "beers": [
+      {
+        "name": "Coquí Helles",
+        "style": "Munich Helles",
+        "note": "Named for the island's tree frog."
+      },
+      {
+        "name": "Santo Viejo Pilsner",
+        "style": "German Pilsner"
+      },
+      {
+        "name": "Taína Blonde Ale",
+        "style": "Blonde Ale",
+        "note": "Named for the Taíno, the island's indigenous people."
+      },
+      {
+        "name": "Yunque IPA",
+        "style": "American IPA",
+        "note": "Named for El Yunque, the rainforest."
+      },
+      {
+        "name": "Hoppy Tides IPA",
+        "style": "American IPA"
+      },
+      {
+        "name": "Light Ale",
+        "style": "Blonde Ale"
+      },
+      {
+        "name": "Tropical Tides",
+        "style": "American Pale Ale"
+      },
+      {
+        "name": "Melón",
+        "style": "American Wheat Beer",
+        "note": "Watermelon ale."
+      },
+      {
+        "name": "Kofresí Stout",
+        "style": "Irish Dry Stout",
+        "note": "Seasonal; named for the Puerto Rican pirate Roberto Cofresí."
+      },
+      {
+        "name": "La China Witbier",
+        "style": "Witbier",
+        "note": "Seasonal orange Belgian ale — 'china' is Puerto Rican Spanish for orange."
+      },
+      {
+        "name": "Oktoberfest Märzen",
+        "style": "Märzen",
+        "note": "Seasonal."
+      }
+    ],
+    "country": "Puerto Rico"
+  },
+  {
+    "brewery": "Boquerón Brewing Co.",
+    "city": "Cabo Rojo",
+    "founded": 2011,
+    "note": "Founded by Juan Carlos Torres Monllor as the island's first nano-brewery.",
+    "beers": [
+      {
+        "name": "Crash Boat IPA",
+        "style": "American IPA",
+        "abv": "6–7%",
+        "note": "Named for the Aguadilla beach."
+      },
+      {
+        "name": "Boquerón Lager",
+        "style": "American Lager"
+      },
+      {
+        "name": "Boquerón Blonde Ale",
+        "style": "Blonde Ale",
+        "abv": "5–6%"
+      },
+      {
+        "name": "Boquerón Pale Ale",
+        "style": "American Pale Ale",
+        "abv": "5–6%"
+      },
+      {
+        "name": "El Sato Pale Ale",
+        "style": "American Pale Ale"
+      },
+      {
+        "name": "Caja de Muerto",
+        "style": "American Wheat Beer",
+        "note": "Summer ale, named for the island off Ponce."
+      },
+      {
+        "name": "Gas Chambers",
+        "style": "Double IPA",
+        "note": "Seasonal; named for the Aguadilla surf break."
+      },
+      {
+        "name": "Porta Coeli Amber",
+        "style": "American Amber Ale",
+        "note": "Named for the San Germán church."
+      },
+      {
+        "name": "Coffee Porter",
+        "style": "American Porter",
+        "note": "Seasonal."
+      },
+      {
+        "name": "Marzen",
+        "style": "Märzen",
+        "note": "Seasonal."
+      },
+      {
+        "name": "Imperial Pale Ale",
+        "style": "Double IPA",
+        "note": "Seasonal."
+      }
+    ],
+    "country": "Puerto Rico"
+  },
+  {
+    "brewery": "Rincón Beer Company",
+    "city": "Rincón",
+    "founded": 2015,
+    "note": "Microbrewery and taproom in downtown Rincón, releasing a new house beer most Fridays.",
+    "beers": [
+      {
+        "name": "Overhead IPA",
+        "style": "American IPA",
+        "note": "Citra, Dorado and Amarillo hops over 2-row and Munich malt."
+      },
+      {
+        "name": "Sandy Blonde",
+        "style": "Blonde Ale",
+        "note": "Munich and Vienna malts — crisper than a typical blonde."
+      }
+    ],
+    "country": "Puerto Rico"
+  }
+]

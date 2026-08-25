@@ -166,6 +166,59 @@ export interface WineAtlas {
 }
 
 /* ------------------------------------------------------------------ */
+/* The brand layer                                                     */
+/*                                                                     */
+/* A `Drink` with category 'beer' is a STYLE — "American IPA", "Gose".  */
+/* Nobody orders a style, though; they order Ocean IPA. These types are */
+/* the other axis: real products, made by a real brewery, standing in a */
+/* real country.                                                       */
+/*                                                                     */
+/* A brand deliberately carries almost no tasting content. `styleRef`   */
+/* points at the `Drink.id` of its style, and that entry already has    */
+/* the serve guide, glassware and composition written — so a brand      */
+/* inherits its depth instead of duplicating it thinly.                 */
+/* ------------------------------------------------------------------ */
+
+export interface BeerBrand {
+  id: string;
+  /** Full product name, including the brewery: "Sierra Nevada Torpedo". */
+  name: string;
+  /** The name with the brewery stripped — "Torpedo" — for use under a
+   *  brewery heading, where repeating the house name is noise. */
+  shortName: string;
+  /** As written in the source survey: "west coast IPA", "trappist quad". */
+  style: string | null;
+  /** `Drink.id` of the matching Dex style, or null when nothing matches. */
+  styleRef: string | null;
+  abv?: string | null;
+  note?: string | null;
+}
+
+export interface Brewery {
+  id: string;
+  name: string;
+  city: string | null;
+  founded?: number | null;
+  note?: string | null;
+  beers: BeerBrand[];
+  /**
+   * True when we know the brewery is real but have not yet researched what
+   * it makes. The app says so plainly rather than inventing product names.
+   */
+  needsLineup?: boolean;
+  /** Lineup verified against the brewery's own listing. */
+  researched?: boolean;
+}
+
+export interface BeerCountry {
+  country: string;
+  /** ISO-ish two-letter code, also used as the card chip. */
+  code: string;
+  region: string;
+  breweries: Brewery[];
+}
+
+/* ------------------------------------------------------------------ */
 /* Social                                                              */
 /*                                                                     */
 /* Shaped to mirror the eventual Supabase schema one-to-one — profiles, */

@@ -6,7 +6,12 @@ import { TabIcon } from '@/components/icons';
 import { colors, motion } from '@/constants/theme';
 
 /**
- * Four top-level destinations, Profile last.
+ * Five top-level destinations, Profile last.
+ *
+ * Beers sits between Dex and Stats because it is the other half of the
+ * catalogue: the Dex holds beer STYLES, this holds the real brands that
+ * pour them, keyed by country. The bar sizes itself from
+ * `state.routes.length`, so adding a fifth simply narrows every item.
  *
  * The bar itself is ours (components/FloatingTabBar.tsx) — frosted glass
  * floating clear of the bottom edge, with a pill that springs between
@@ -56,6 +61,14 @@ export default function TabLayout() {
           title: 'Dex',
           tabBarAccessibilityLabel: 'Dex, your collection',
           tabBarIcon: ({ focused }) => <TabIcon name="dex" focused={focused} />,
+        }}
+      />
+      <Tabs.Screen
+        name="beers"
+        options={{
+          title: 'Beers',
+          tabBarAccessibilityLabel: 'Beers of the world',
+          tabBarIcon: ({ focused }) => <TabIcon name="atlas" focused={focused} />,
         }}
       />
       <Tabs.Screen
