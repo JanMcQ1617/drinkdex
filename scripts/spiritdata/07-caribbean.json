@@ -1,0 +1,1320 @@
+[
+ {
+  "id": "ron-ligero",
+  "name": "Ron Ligero",
+  "subcategory": "Rum",
+  "description": "The Cuban style, codified in the 1860s when Facundo Bacardí filtered and aged his rum into something light enough for a mixed drink. Every clean, dry white rum in the world descends from that decision.",
+  "abv": "38–40%",
+  "origin": "Cuba",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "light molasses",
+   "vanilla",
+   "almond",
+   "dry finish"
+  ],
+  "glassware": "Highball or coupe",
+  "funFact": "Cuban law requires even white rum to be aged and then filtered back to clarity, so the colourless bottle in front of you has still spent time in oak.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball or chilled coupe",
+   "how": "This is a mixing rum by design. A daiquiri with lime and sugar, or a mojito, is what it was built for. Neat, the aged expressions are dry and elegant, but the white is not meant to be sipped.",
+   "pair": [
+    "ceviche",
+    "croquetas",
+    "roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented, column-distilled, aged and charcoal-filtered.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cuban sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still, to a light spirit"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum three years even for white, then filtered clear"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "Filtering after ageing removes the colour but leaves the softness, which is the whole trick of the Cuban style."
+  }
+ },
+ {
+  "id": "rhum-barbancourt",
+  "name": "Rhum Barbancourt",
+  "subcategory": "Rum",
+  "description": "Haitian rum made from fresh cane juice and distilled twice in the Charentais method its founder brought from Cognac in 1862. It sits between agricole and Caribbean rum and belongs entirely to neither.",
+  "abv": "40–43%",
+  "origin": "Haiti",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cane juice",
+   "dried fruit",
+   "cocoa",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass or snifter",
+  "funFact": "Dupré Barbancourt was a Frenchman from the Charente who applied cognac's double pot distillation to Haitian cane, a method the distillery still uses.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over a single cube for the aged expressions, which have real cocoa and dried fruit depth. The younger bottling makes an exceptional daiquiri, since the cane juice base brings grass the molasses rums lack.",
+   "pair": [
+    "griot",
+    "dark chocolate",
+    "grilled plantain"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice fermented and double pot-distilled, then oak-aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh-pressed Haitian sugarcane juice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Charentais double distillation in copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Limousin oak, four to fifteen years"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Double pot distillation is a cognac technique, and it gives a rounder spirit than the single-column agricole method."
+  }
+ },
+ {
+  "id": "mamajuana",
+  "name": "Mamajuana",
+  "subcategory": "World Spirit",
+  "description": "A Dominican bottle packed with tree bark, roots and herbs, filled with rum, red wine and honey, and left to steep. Taíno in origin, spiked with European ingredients after contact, and credited locally with curing everything.",
+  "abv": "15–30%",
+  "origin": "Dominican Republic",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "tree bark",
+   "honey",
+   "red wine",
+   "warm spice"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "The Taíno originally drank the herb infusion as a tea; rum and wine were added after the Spanish arrived, and the bottle has been refillable ever since.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in a small glass, and the bottle keeps going: when it empties you top it up with more rum and let it steep again. The first fill is the harshest, and it improves for years afterwards.",
+   "pair": [
+    "sancocho",
+    "roast pork",
+    "fresh coconut"
+   ]
+  },
+  "composition": {
+   "summary": "Bark, roots and herbs steeped in rum, red wine and honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Dominican rum, with red wine and honey"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Bejuco bark, anise, star anise, agave, cinnamon and a dozen more"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused only; the bottle is refilled repeatedly"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–30%"
+    }
+   ],
+   "process": "The dry bark is cured first with rum that is then discarded, since the first extraction is bitter and harsh."
+  }
+ },
+ {
+  "id": "barbados-rum",
+  "name": "Barbados Rum",
+  "subcategory": "Rum",
+  "description": "Pot and column stills blended together to a balance nobody else quite matches, from the island that has the strongest claim to inventing rum in the 1650s. Elegant where Jamaica is loud.",
+  "abv": "40–43%",
+  "origin": "Barbados",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "banana",
+   "toffee",
+   "coconut",
+   "light oak"
+  ],
+  "glassware": "Rocks glass or snifter",
+  "funFact": "Mount Gay holds a deed from 1703, which makes it the oldest rum brand still in production anywhere in the world.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass with one large cube",
+   "how": "Neat or over a single cube for the aged bottlings. The balance of pot and column makes it the most versatile rum on the shelf: good enough to sip, characterful enough to hold up in a Daiquiri or a Rum Old Fashioned.",
+   "pair": [
+    "flying fish",
+    "macaroni pie",
+    "grilled pineapple"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented and distilled in both pot and column stills, then blended.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Barbadian sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot and twin-column, blended together"
+    },
+    {
+     "label": "Aging",
+     "detail": "Tropical ageing in ex-bourbon oak, two years and up"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Blending the two still types is the house method, and the ratio is what defines each distillery's style."
+  }
+ },
+ {
+  "id": "trinidad-rum",
+  "name": "Trinidad Rum",
+  "subcategory": "Rum",
+  "description": "Light, dry column-still rum, cleaner and less sweet than most of the Caribbean, and shaped by a distillery better known for its bitters. Trinidad rum is the quiet workhorse of the region.",
+  "abv": "40–43%",
+  "origin": "Trinidad and Tobago",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dried apricot",
+   "toffee",
+   "almond",
+   "light oak"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Angostura's distillery produces both the island's rum and the bitters, though the bitters recipe uses no Angostura bark and never has.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over ice. The dryness makes it a good rum for anyone who finds Caribbean rum too sweet, and it holds its shape in a Rum Punch better than richer styles do.",
+   "pair": [
+    "doubles",
+    "curry crab",
+    "grilled corn"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented and column-distilled to a light spirit, then aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Multi-column continuous still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon oak, tropically aged"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Distilling to a high strength strips out congeners, which is where the dryness comes from."
+  }
+ },
+ {
+  "id": "angostura-bitters",
+  "name": "Angostura Aromatic Bitters",
+  "subcategory": "Amaro",
+  "description": "Invented in Venezuela in 1824 by a German army surgeon treating stomach complaints, made in Trinidad since 1875, and present behind essentially every bar on earth. The oversized label was a printing error nobody ever corrected.",
+  "abv": "44.7%",
+  "origin": "Trinidad and Tobago",
+  "rarity": "common",
+  "tastingNotes": [
+   "gentian",
+   "clove",
+   "cinnamon",
+   "bitter bark"
+  ],
+  "glassware": "Dasher bottle",
+  "funFact": "The label is famously too big for the bottle because two brothers each did half the job without checking with the other, and the family decided it had become recognisable.",
+  "serve": {
+   "temp": "n/a — used in dashes",
+   "glass": "Used as a seasoning, not poured",
+   "how": "A few dashes into an Old Fashioned, a Manhattan or a Pisco Sour, where it works the way salt works in cooking. Also dashed into soda water for an upset stomach, which was its original purpose."
+  },
+  "composition": {
+   "summary": "A concentrated botanical tincture on a high-strength spirit base.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "High-strength neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Gentian and a secret blend; despite the name, no angostura bark"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended to a concentrate"
+    },
+    {
+     "label": "Strength",
+     "detail": "44.7%"
+    }
+   ],
+   "process": "Only a handful of people know the recipe, and the company keeps them from travelling together."
+  }
+ },
+ {
+  "id": "shrubb",
+  "name": "Shrubb",
+  "subcategory": "Liqueur",
+  "description": "Rhum steeped with dried bitter orange peel and spice, made in Martinique and Guadeloupe for Christmas and now sold year-round. Drier and more bitter than any orange liqueur, because the rum underneath is agricole.",
+  "abv": "18–40%",
+  "origin": "Martinique and Guadeloupe",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter orange",
+   "cane",
+   "clove",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Traditionally the orange peel was dried on rooftops through the year specifically so there would be enough for the Christmas batch.",
+  "serve": {
+   "temp": "cold or room temp",
+   "glass": "Rocks glass",
+   "how": "Neat at Christmas, or over ice. It also works in place of curaçao in a Mai Tai, where the agricole base adds a grassy edge that the standard build lacks entirely.",
+   "pair": [
+    "Christmas ham",
+    "boudin créole",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Rhum agricole macerated with bitter orange peel, spice and cane syrup.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rhum agricole, white or aged"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Sun-dried bitter orange peel, vanilla, clove, cinnamon"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then sweetened with cane syrup"
+    },
+    {
+     "label": "Strength",
+     "detail": "18–40%"
+    }
+   ],
+   "process": "Sun-drying the peel concentrates the oil and adds a bitterness fresh peel does not have."
+  }
+ },
+ {
+  "id": "black-seal-rum",
+  "name": "Black Seal Rum",
+  "subcategory": "Rum",
+  "description": "Bermuda's black rum, blended on the island since 1806 and once sold from the barrel into whatever bottle a customer brought, sealed with black wax. Without it a Dark 'n Stormy is just ginger beer.",
+  "abv": "40–47%",
+  "origin": "Bermuda",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "molasses",
+   "burnt caramel",
+   "butterscotch",
+   "vanilla"
+  ],
+  "glassware": "Highball",
+  "funFact": "Gosling's holds a trademark on the Dark 'n Stormy, making it one of very few cocktails that legally requires a specific brand.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "Poured over ginger beer and ice, floated rather than stirred so it sits in a dark layer on top. That is the Dark 'n Stormy, and it is the reason the bottle exists. Neat it is heavy and very sweet.",
+   "pair": [
+    "fish chowder",
+    "ginger cake",
+    "grilled shrimp"
+   ]
+  },
+  "composition": {
+   "summary": "Caribbean rums blended in Bermuda to a dark house style.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses rums sourced across the Caribbean"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled elsewhere, blended and aged in Bermuda"
+    },
+    {
+     "label": "Aging",
+     "detail": "Aged in charred American oak before blending"
+    },
+    {
+     "label": "Strength",
+     "detail": "40% standard, 47% for the overproof"
+    }
+   ],
+   "process": "Bermuda grows no cane; the island's contribution is the blend, which has stayed in one family for seven generations."
+  }
+ },
+ {
+  "id": "rivers-royale",
+  "name": "Rivers Royale",
+  "subcategory": "Rum",
+  "description": "Grenadian cane juice rum at 69 to 75%, made at a distillery that still runs its cane crusher off a water wheel installed in 1785. Raw, hot and utterly uncompromising, and the island drinks it neat.",
+  "abv": "69–75%",
+  "origin": "Grenada",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raw cane",
+   "grass",
+   "olive brine",
+   "fierce heat"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "River Antoine has been running since 1785 and is widely considered the oldest functioning water-propelled distillery in the Caribbean.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in tiny measures, which is how Grenadians take it, or cut heavily with water or coconut water. At 75% it cannot legally be carried on an aircraft, so it is genuinely a drink you have to go there for.",
+   "pair": [
+    "oil down",
+    "nutmeg jam",
+    "grilled fish"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice fermented wild and pot-distilled, unaged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh cane juice from the estate's own fields"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Wood-fired copper pot stills; cane crushed by water wheel"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "69–75%"
+    }
+   ],
+   "process": "Wild fermentation in open stone tanks gives the funk, and the wood fire gives the rest."
+  }
+ },
+ {
+  "id": "nutmeg-liqueur",
+  "name": "Nutmeg Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Made from the spice on Grenada's national flag, using both the nutmeg and the red mace that wraps it. The island produces a substantial share of the world's supply and puts it into everything, including this.",
+  "abv": "20–30%",
+  "origin": "Grenada",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "nutmeg",
+   "mace",
+   "brown sugar",
+   "warm spice"
+  ],
+  "glassware": "Small cordial glass",
+  "funFact": "Grenada is the only country whose flag features a food crop, and Hurricane Ivan destroyed around ninety per cent of its nutmeg trees in 2004.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Small cordial glass",
+   "how": "Neat after dinner, or over ice cream. It also does good work in a rum punch, where a spoonful adds the spice note that grated nutmeg gives on top of the drink.",
+   "pair": [
+    "ice cream",
+    "rum cake",
+    "spiced fruit"
+   ]
+  },
+  "composition": {
+   "summary": "Nutmeg and mace steeped in rum or neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grenadian rum or neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Nutmeg and its outer mace, plus cane sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–30%"
+    }
+   ],
+   "process": "Mace carries a lighter, more floral note than the nut, and using both gives the liqueur its range."
+  }
+ },
+ {
+  "id": "saint-lucian-rum",
+  "name": "Saint Lucian Rum",
+  "subcategory": "Rum",
+  "description": "One distillery on the island runs a Coffey still, two pot stills and a John Dore, which gives it more stylistic range than most whole countries manage. The results run from light and clean to thick and estery.",
+  "abv": "40–43%",
+  "origin": "Saint Lucia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "tropical fruit",
+   "toffee",
+   "cocoa",
+   "light smoke"
+  ],
+  "glassware": "Rocks glass or snifter",
+  "funFact": "Saint Lucia Distillers operates four different still types on one site, which is unusual anywhere and rare in the Caribbean.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat for the aged expressions, which carry real depth. The pot-still-heavy bottlings hold up in a Mai Tai or a Rum Old Fashioned; the lighter ones make excellent daiquiris.",
+   "pair": [
+    "green fig and saltfish",
+    "grilled snapper",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses and cane juice distilled across four still types, then blended.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses, with some cane juice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Coffey still, two pot stills and a John Dore"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon, port and sherry casks, tropically aged"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Having four stills means the blender is building from components rather than adjusting one spirit."
+  }
+ },
+ {
+  "id": "english-harbour-rum",
+  "name": "English Harbour Rum",
+  "subcategory": "Rum",
+  "description": "Antiguan column-still rum, aged beside the old Royal Navy dockyard the brand is named for. Lighter and drier than its neighbours, and the extra-aged releases are among the Caribbean's most underrated bottles.",
+  "abv": "40–46%",
+  "origin": "Antigua and Barbuda",
+  "rarity": "rare",
+  "tastingNotes": [
+   "vanilla",
+   "dried banana",
+   "oak",
+   "light spice"
+  ],
+  "glassware": "Rocks glass or snifter",
+  "funFact": "English Harbour was Nelson's Caribbean base, and the dockyard is now a UNESCO World Heritage site.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Snifter or rocks glass",
+   "how": "Neat for anything aged five years and up. The younger expressions mix cleanly with ginger or lime. Tropical ageing means a ten-year-old here has done the work of a much older continental spirit.",
+   "pair": [
+    "ducana",
+    "saltfish",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented and column-distilled, then tropically aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon oak in tropical conditions, five to twenty-five years"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "Tropical ageing loses far more to evaporation each year, which is why old Caribbean rum is scarce and expensive."
+  }
+ },
+ {
+  "id": "cachaca-envelhecida",
+  "name": "Cachaça Envelhecida",
+  "subcategory": "Cane Spirit",
+  "description": "Aged cachaça, and the reason to take the category seriously. Brazilian producers use native hardwoods — amburana, jequitibá, bálsamo — that give flavours no oak barrel in the world can produce.",
+  "abv": "38–48%",
+  "origin": "Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cinnamon",
+   "vanilla",
+   "tonka",
+   "fresh cane"
+  ],
+  "glassware": "Copita or rocks glass",
+  "funFact": "Amburana wood gives a pronounced cinnamon and tonka bean note, which is why aged cachaça often tastes spiced without anything having been added.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Copita or small rocks glass",
+   "how": "Neat in a small glass, the way you would drink an aged rum. Using a good envelhecida in a caipirinha is not a crime, but the wood notes fight the lime, so the unaged version is better there.",
+   "pair": [
+    "feijoada",
+    "pão de queijo",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice distilled and aged in Brazilian hardwood casks.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh-pressed sugarcane juice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot or column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "At least one year in casks of amburana, jequitibá, bálsamo, ipê or oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–48%"
+    }
+   ],
+   "process": "Brazilian law recognises around thirty native woods for ageing, each with its own flavour signature."
+  }
+ },
+ {
+  "id": "tiquira",
+  "name": "Tiquira",
+  "subcategory": "World Spirit",
+  "description": "Cassava spirit from Maranhão in Brazil's north, made by fermenting the same root that has to be processed carefully to remove its natural cyanide. Sometimes tinted purple by steeping it over a local leaf.",
+  "abv": "36–54%",
+  "origin": "Maranhão, Brazil",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cassava starch",
+   "earth",
+   "light sweetness",
+   "herb"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Indigenous communities in the region were fermenting cassava long before the Portuguese arrived with distilling equipment.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small shot glass",
+   "how": "Neat and cold in a small glass. It is a regional spirit, rarely found outside Maranhão, and served with the same directness as any village distillate. The purple version is coloured, not flavoured.",
+   "pair": [
+    "arroz de cuxá",
+    "fried fish",
+    "farofa"
+   ]
+  },
+  "composition": {
+   "summary": "Cassava root cooked, fermented and distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cassava (manioc) root"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot still, after the starch is converted"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "36–54%"
+    }
+   ],
+   "process": "The root must be cooked thoroughly first, both to convert starch and to drive off its natural toxins."
+  }
+ },
+ {
+  "id": "licor-de-jenipapo",
+  "name": "Licor de Jenipapo",
+  "subcategory": "Liqueur",
+  "description": "Genipap liqueur from Brazil's northeast, made from a fruit whose unripe juice stains skin blue-black and was used by indigenous peoples as body paint. Ripe, it makes something dark, sweet and faintly medicinal.",
+  "abv": "18–25%",
+  "origin": "Northeast Brazil",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dried fig",
+   "molasses",
+   "earth",
+   "warm spice"
+  ],
+  "glassware": "Small cordial glass",
+  "funFact": "Jenipapo juice produces a deep blue-black dye on skin that takes over a week to wear off, which is why it was used for ceremonial painting.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small cordial glass",
+   "how": "Cold and neat after a meal. It is thick and sweet, so a small pour is enough. Northeastern Brazilians treat it as a digestive and it appears at festas alongside the local cachaça.",
+   "pair": [
+    "queijo coalho",
+    "rapadura",
+    "tapioca"
+   ]
+  },
+  "composition": {
+   "summary": "Ripe genipap fruit macerated in cachaça and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cachaça or neutral cane spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Ripe Genipa americana fruit, sugar, sometimes clove"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for weeks, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "18–25%"
+    }
+   ],
+   "process": "Only fully ripe fruit is used; unripe jenipapo is astringent and stains everything it touches."
+  }
+ },
+ {
+  "id": "enguindado",
+  "name": "Enguindado",
+  "subcategory": "Liqueur",
+  "description": "Chilean aguardiente steeped with sour cherries, drunk during the September independence celebrations and rarely at any other time. Sweet, red and considerably stronger than the fruit suggests.",
+  "abv": "20–30%",
+  "origin": "Chile",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "sour cherry",
+   "almond",
+   "sugar",
+   "spirit warmth"
+  ],
+  "glassware": "Small glass",
+  "funFact": "It appears almost exclusively around the Fiestas Patrias in September, alongside the terremoto and chicha that dominate the same week.",
+  "serve": {
+   "temp": "cold or room temp",
+   "glass": "Small glass or tumbler",
+   "how": "Cold, in a small glass, with the steeped cherries at the bottom. Chileans drink it at fondas during the September holidays, and the cherries are eaten afterwards.",
+   "pair": [
+    "empanadas",
+    "anticuchos",
+    "sopaipillas"
+   ]
+  },
+  "composition": {
+   "summary": "Sour cherries macerated in aguardiente with sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Chilean aguardiente or pisco"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Guindas, the local sour cherry, plus sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for several weeks"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–30%"
+    }
+   ],
+   "process": "The cherries keep infusing in the bottle, so a jar opened late in the season is sweeter and deeper."
+  }
+ },
+ {
+  "id": "singani",
+  "name": "Singani",
+  "subcategory": "Brandy",
+  "description": "Bolivia's national spirit: Muscat of Alexandria grown above 1,600 metres and distilled to a clear, intensely floral brandy. The altitude stresses the vines, which concentrates the aromatics, and the result tastes like almost nothing else.",
+  "abv": "40%",
+  "origin": "Bolivia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "white flower",
+   "muscat grape",
+   "peach",
+   "citrus blossom"
+  ],
+  "glassware": "Wine glass or copita",
+  "funFact": "The director Steven Soderbergh discovered it filming in Bolivia and spent years importing it into the United States, where it initially had no legal category to sit in.",
+  "serve": {
+   "temp": "cool",
+   "glass": "White wine glass or copita",
+   "how": "Chilled and neat, or in a chuflay: singani with ginger ale and lime over ice, which is the Bolivian standard. The floral aroma is the point, so a wine glass serves it better than a shot glass.",
+   "pair": [
+    "salteñas",
+    "grilled beef",
+    "fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude Muscat of Alexandria fermented and distilled to clear spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Muscat of Alexandria grown above 1,600 metres"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single distillation, no water added afterwards"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; rested in steel or glass"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Bolivian law fixes the minimum altitude, since the vines' response to thin air is what makes the spirit."
+  }
+ },
+ {
+  "id": "viche",
+  "name": "Viche",
+  "subcategory": "Cane Spirit",
+  "description": "Artisanal cane spirit from Colombia's Pacific coast, made by Afro-Colombian communities in stills built from whatever is available. Recognised as national cultural patrimony in 2021 after generations of being treated as contraband.",
+  "abv": "30–50%",
+  "origin": "Pacific coast, Colombia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green cane",
+   "grass",
+   "herb",
+   "earth"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Viche is the base for a whole family of preparations — arrechón, tomaseca, curao — each traditionally credited with a specific medicinal or restorative purpose.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in a small glass, or in one of its infused forms. Arrechón, blended with milk, honey and herbs, is the best-known preparation and considerably easier going than the raw spirit.",
+   "pair": [
+    "encocado",
+    "fried fish",
+    "coconut rice"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice fermented and distilled in artisanal stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh-pressed Pacific coast sugarcane"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Handmade copper or improvised stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually none; infused versions are common"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–50%"
+    }
+   ],
+   "process": "The 2021 law recognising viche was written to protect it as ancestral knowledge, not just as a product."
+  }
+ },
+ {
+  "id": "chirrinchi",
+  "name": "Chirrinchi",
+  "subcategory": "Cane Spirit",
+  "description": "The Wayúu people's spirit, distilled in the desert of La Guajira on the Colombian and Venezuelan border. Made from panela and used ceremonially as much as socially, in a region where little else grows.",
+  "abv": "40–60%",
+  "origin": "La Guajira, Colombia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raw cane",
+   "panela",
+   "smoke",
+   "earth"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Chirrinchi is used in Wayúu funerary and negotiation rituals, where offering it carries obligations beyond simple hospitality.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in small measures. It is a ceremonial and social spirit within Wayúu communities rather than a bar product, and the commercial bottlings that exist are recent.",
+   "pair": [
+    "friche",
+    "goat",
+    "arepas"
+   ]
+  },
+  "composition": {
+   "summary": "Panela fermented and distilled in the Guajira desert.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Panela, unrefined cane sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small copper or improvised stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–60%"
+    }
+   ],
+   "process": "Water is scarce in La Guajira, which shapes both the fermentation and the scale of production."
+  }
+ },
+ {
+  "id": "cocuy",
+  "name": "Cocuy",
+  "subcategory": "Agave",
+  "description": "Venezuela's agave spirit, made from Agave cocui in Falcón and Lara, and the only agave distillate outside Mexico with a protected denomination. Roasted in earth pits like mezcal, and tasting broadly similar.",
+  "abv": "40–50%",
+  "origin": "Falcón and Lara, Venezuela",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "roasted agave",
+   "smoke",
+   "mineral",
+   "dried herb"
+  ],
+  "glassware": "Copita or small tumbler",
+  "funFact": "Cocuy was made illegally for most of the twentieth century and only received Venezuelan denomination of origin protection in 2001.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Copita or veladora",
+   "how": "Neat and unchilled in a small wide glass, sipped rather than shot, exactly as you would treat mezcal. The wild-harvested versions carry more mineral and less sweetness.",
+   "pair": [
+    "arepas",
+    "grilled goat",
+    "fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Agave cocui hearts roasted, fermented and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave cocui, largely wild-harvested"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pit-roasted, crushed, then small pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "The plant takes eight to ten years to mature, and overharvesting has been a genuine conservation concern."
+  }
+ },
+ {
+  "id": "pajaro-azul",
+  "name": "Pájaro Azul",
+  "subcategory": "Cane Spirit",
+  "description": "Aguardiente from Ecuador's Bolívar province, infused with herbs and reputedly a few less orthodox ingredients depending on who is making it. Blue bird, in translation, and the name is a warning as much as a brand.",
+  "abv": "40–60%",
+  "origin": "Bolívar, Ecuador",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cane",
+   "herb",
+   "anise",
+   "heat"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Guaranda's version is the most famous, and the recipe reportedly varies from producer to producer in ways nobody documents.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in small measures, usually at carnival in Guaranda where it is the drink of the festival. It is strong and rough by design, and pacing matters more than technique.",
+   "pair": [
+    "hornado",
+    "llapingachos",
+    "fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cane aguardiente infused with herbs and other additions.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane aguardiente"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Local herbs, anise, and unlisted regional additions"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled, then infused"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–60%"
+    }
+   ],
+   "process": "Recipes are held locally and vary enough that no two producers make quite the same thing."
+  }
+ },
+ {
+  "id": "grapa-argentina",
+  "name": "Grapa Argentina",
+  "subcategory": "Pomace Brandy",
+  "description": "Pomace brandy brought to Argentina by Italian immigrants and made ever since in Mendoza and the wine provinces. Rougher and more rustic than Italian grappa, and drunk in cafés rather than after dinner.",
+  "abv": "40–45%",
+  "origin": "Argentina",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grape skin",
+   "pepper",
+   "dried fruit",
+   "heat"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Italian migration to Argentina was heavy enough that grappa, pizza and a distinct dialect all arrived together and stayed.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat at room temperature, often with coffee. Argentine cafés serve it as a mid-morning fortifier as readily as an after-dinner drink, which is an Italian habit that crossed the Atlantic intact.",
+   "pair": [
+    "espresso",
+    "salami",
+    "provoleta"
+   ]
+  },
+  "composition": {
+   "summary": "Grape pomace from Argentine wine fermented and distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Pomace from Malbec, Torrontés and other Argentine grapes"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged; some oak-rested"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Mendoza's scale means the pomace supply is enormous, and much of it is distilled rather than composted."
+  }
+ },
+ {
+  "id": "cana",
+  "name": "Caña",
+  "subcategory": "Cane Spirit",
+  "description": "Argentine sugarcane spirit, frequently infused with herbs, of which Caña Legui is the name that survives. Once the working drink of the countryside, and still sold with a heavy dose of gaucho nostalgia.",
+  "abv": "35–45%",
+  "origin": "Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cane sugar",
+   "herb",
+   "vanilla",
+   "light spice"
+  ],
+  "glassware": "Small tumbler or shot glass",
+  "funFact": "Caña Legui's advertising has leaned on rural and gaucho imagery for so long that the bottle is a period piece in its own right.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small tumbler",
+   "how": "Neat, or with a splash of soda. In the countryside it is drunk straight and cold in winter. The herbal versions are sweeter and read closer to a light liqueur than a cane spirit.",
+   "pair": [
+    "asado",
+    "chorizo",
+    "provoleta"
+   ]
+  },
+  "composition": {
+   "summary": "Sugarcane spirit, often infused with herbs and lightly sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane from northern Argentina"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Herbs and botanicals in the traditional styles"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–45%"
+    }
+   ],
+   "process": "Tucumán and Salta grow the cane, and the spirit was historically a northern rather than a pampas product."
+  }
+ },
+ {
+  "id": "hesperidina",
+  "name": "Hesperidina",
+  "subcategory": "Amaro",
+  "description": "A bitter orange-peel aperitif invented in Buenos Aires in 1864 and patented so early that Argentina created a trademark law partly to protect it. Sweeter and gentler than an Italian bitter, and unmistakably Argentine.",
+  "abv": "21%",
+  "origin": "Buenos Aires, Argentina",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bitter orange",
+   "caramel",
+   "citrus peel",
+   "light herb"
+  ],
+  "glassware": "Rocks glass or highball",
+  "funFact": "Melville Sewell Bagley registered it in 1876 as Argentina's first trademark, having built anticipation by chalking the single word Hesperidina on walls across the city before launch.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Highball or rocks glass",
+   "how": "Over ice with soda and an orange slice, which is the standard Buenos Aires aperitif serve. It also works in place of sweet vermouth in a spritz, being lower in alcohol and higher in orange.",
+   "pair": [
+    "empanadas",
+    "olives",
+    "cured ham"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter orange peel macerated in spirit, sweetened and rested.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Bitter orange peel, herbs and spices"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "21%"
+    }
+   ],
+   "process": "The wall-chalking campaign that launched it is credited as one of the first modern teaser advertisements anywhere."
+  }
+ },
+ {
+  "id": "grappamiel",
+  "name": "Grappamiel",
+  "subcategory": "Liqueur",
+  "description": "Uruguayan grappa cut with honey, which turns a rough pomace spirit into something warming and easy. Drunk through the winter and sold in every Uruguayan supermarket alongside the yerba mate.",
+  "abv": "25–30%",
+  "origin": "Uruguay",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "grape skin",
+   "caramel",
+   "light spice"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Uruguay's Italian-descended population is proportionally even larger than Argentina's, which is why grappa took root there so completely.",
+  "serve": {
+   "temp": "room temp or warmed",
+   "glass": "Small tumbler",
+   "how": "Neat at room temperature, or warmed slightly in winter. Uruguayans drink it against the cold coming off the Río de la Plata, and it does the job. Also good poured into coffee.",
+   "pair": [
+    "dulce de leche",
+    "alfajores",
+    "strong coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Grape pomace spirit blended with honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Uruguayan grappa from wine pomace"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Honey, sometimes with spice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended after distillation"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–30%"
+    }
+   ],
+   "process": "The honey rounds off the pomace spirit's edges without disguising it entirely."
+  }
+ },
+ {
+  "id": "cana-paraguaya",
+  "name": "Caña Paraguaya",
+  "subcategory": "Cane Spirit",
+  "description": "Paraguay's national spirit, distilled from sugarcane grown across the country and drunk in enormous quantity. Often aged in native woods, which gives it colour and a distinctly local spice.",
+  "abv": "38–45%",
+  "origin": "Paraguay",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cane",
+   "vanilla",
+   "native wood",
+   "light smoke"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Paraguayans mix it with coconut water and lemon to make caribe, a drink that is close to a national institution during Carnival.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small tumbler or highball",
+   "how": "Cold and neat, or mixed into caribe with coconut water and lime. Aged versions in native hardwood are worth drinking on their own and are increasingly bottled for export.",
+   "pair": [
+    "chipa",
+    "asado",
+    "mandioca"
+   ]
+  },
+  "composition": {
+   "summary": "Paraguayan sugarcane fermented and distilled, sometimes wood-aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Paraguayan sugarcane"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often in native hardwood casks"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–45%"
+    }
+   ],
+   "process": "Paraguay grows a great deal of organic cane, much of which goes into caña rather than sugar."
+  }
+ },
+ {
+  "id": "borgoe",
+  "name": "Borgoe",
+  "subcategory": "Rum",
+  "description": "Surinamese rum, made in the only Dutch-speaking country in South America from cane grown along the coastal plain. Light, clean and almost entirely unknown outside the Netherlands and the Guianas.",
+  "abv": "37.5–40%",
+  "origin": "Suriname",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "light molasses",
+   "vanilla",
+   "caramel",
+   "coconut"
+  ],
+  "glassware": "Rocks glass or highball",
+  "funFact": "Suriname's distillery draws on a sugar industry that dates to Dutch plantation agriculture in the seventeenth century.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "Over ice with cola or soda, which is how it is drunk in Paramaribo and Amsterdam alike. The aged expressions take a single cube neat and carry more vanilla than the age statement suggests.",
+   "pair": [
+    "roti",
+    "pom",
+    "grilled fish"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented and column-distilled, then oak-aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Surinamese sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak, from one to eight years"
+    },
+    {
+     "label": "Strength",
+     "detail": "37.5–40%"
+    }
+   ],
+   "process": "Most of the output goes to the Netherlands, where the Surinamese diaspora keeps the brand alive."
+  }
+ }
+]

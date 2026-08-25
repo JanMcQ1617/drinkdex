@@ -5,7 +5,7 @@ import type { Drink } from '../../types';
 /* ==================================================================== */
 /* Liquid color                                                         */
 /*                                                                      */
-/* Derived, not authored — 460 hand-picked colors would drift.           */
+/* Derived, not authored — 719 hand-picked colors would drift.           */
 /* Cocktails and spirits match on name + subcategory + tasting notes, so */
 /* "Espresso Martini" reads coffee-dark and "Aviation" reads violet.     */
 /* Beer and wine match on style only; see the note above BEER_NAME_RULES.*/
@@ -132,6 +132,24 @@ const SPIRIT_RULES: [RegExp, string][] = [
   [b('campari|aperol|bitter rosso'), LIQUID.orange],
   [b('chambord|cassis|framboise|raspberry|sloe|hibiscus'), LIQUID.pink],
   [b('limoncello|limoncino'), LIQUID.straw],
+  /* Oak-aged members of categories that otherwise read clear. */
+  [b('envelhecida|linie|starka'), LIQUID.amber],
+  [b('pineau|floc de|korenwijn'), LIQUID.gold],
+
+  /*
+   * Clear-by-default categories.
+   *
+   * Deliberately above the brandy rule: 'Fruit Brandy' and 'Pomace Brandy'
+   * both contain `brandy`, but rakija, palinka, orujo and marc are
+   * water-clear. Matching brandy first painted every one of them amber.
+   */
+  [
+    b(
+      'fruit brandy|pomace brandy|palm spirit|rice spirit|grain spirit|cane spirit|genever|singani|eau-de-vie|witblits|mampoer',
+    ),
+    LIQUID.clear,
+  ],
+
   [
     b(
       'whisk|bourbon|rye|scotch|islay|speyside|highland|cognac|armagnac|brandy|calvados|dark rum|aged rum|rhum vieux|extra a[ñn]ejo|solera|a[ñn]ejo|reposado',

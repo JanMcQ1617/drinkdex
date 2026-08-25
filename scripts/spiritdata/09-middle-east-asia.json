@@ -1,0 +1,1663 @@
+[
+ {
+  "id": "israeli-single-malt",
+  "name": "Israeli Single Malt",
+  "subcategory": "World Whisky",
+  "description": "Whisky matured in Tel Aviv's heat and humidity, where a cask loses far more each year than in Scotland and the spirit comes of age in a fraction of the time. Milk & Honey opened the category in 2012.",
+  "abv": "46%",
+  "origin": "Israel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried fruit",
+   "honey",
+   "spice",
+   "toasted oak"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Some casks mature in warehouses near the Dead Sea, the lowest point on land, where the air pressure and heat push maturation faster still.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn or copita",
+   "how": "Neat, with a few drops of water. Rapid tropical maturation means young whisky here carries heavy wood, so water helps pull the spirit back out from under it.",
+   "pair": [
+    "dates",
+    "halva",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Malted barley distilled and matured in Israel's Mediterranean climate.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills, twice"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon, sherry, wine and pomegranate casks; three years and up"
+    },
+    {
+     "label": "Strength",
+     "detail": "Typically 46%, non-chill-filtered"
+    }
+   ],
+   "process": "Annual evaporation runs several times the Scottish rate, which concentrates the spirit fast."
+  }
+ },
+ {
+  "id": "sabra",
+  "name": "Sabra",
+  "subcategory": "Liqueur",
+  "description": "Israeli chocolate and Jaffa orange liqueur, launched in the 1960s in a bottle modelled on an ancient Phoenician oil flask. Sweet, dark, and named after the prickly pear as a nickname for native-born Israelis.",
+  "abv": "26–30%",
+  "origin": "Israel",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dark chocolate",
+   "bitter orange",
+   "vanilla",
+   "cocoa"
+  ],
+  "glassware": "Small cordial glass",
+  "funFact": "The bottle shape was based on a two-thousand-year-old Phoenician vessel, and the design was commissioned specifically to look archaeological.",
+  "serve": {
+   "temp": "cold or room temp",
+   "glass": "Small cordial glass",
+   "how": "Neat after dinner, or over ice. It also works poured over ice cream and stirred into coffee. Very sweet, so a small measure is enough.",
+   "pair": [
+    "orange cake",
+    "dark chocolate",
+    "strong coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit flavoured with chocolate and Jaffa orange.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Cocoa and Jaffa bitter orange"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "26–30%"
+    }
+   ],
+   "process": "Jaffa oranges were Israel's signature export crop, which is what tied the liqueur to national identity."
+  }
+ },
+ {
+  "id": "aragh-sagi",
+  "name": "Aragh Sagi",
+  "subcategory": "World Spirit",
+  "description": "Iranian raisin spirit, distilled illicitly since the 1979 revolution made alcohol illegal. The name translates as dog sweat, which is either self-deprecating humour or an accurate description depending on the batch.",
+  "abv": "40–70%",
+  "origin": "Iran",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raisin",
+   "earth",
+   "harsh heat",
+   "faint sweetness"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Iran has one of the world's oldest winemaking traditions, with evidence of grape fermentation in the Zagros mountains going back seven thousand years.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small glass",
+   "how": "Neat in small measures, and privately. Quality ranges from carefully double-distilled to genuinely dangerous, and methanol poisoning from bad batches is a recurring problem in Iran.",
+   "pair": [
+    "kabab",
+    "fresh herbs",
+    "salted nuts"
+   ]
+  },
+  "composition": {
+   "summary": "Raisins fermented and distilled in home stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Raisins, sometimes dates or grapes"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Homemade stills, single or double distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–70%, unmeasured"
+    }
+   ],
+   "process": "Raisins are legal to buy in quantity, which is precisely why they became the base."
+  }
+ },
+ {
+  "id": "indian-molasses-whisky",
+  "name": "Indian Molasses Whisky",
+  "subcategory": "World Whisky",
+  "description": "The overwhelming majority of what India calls whisky is distilled from molasses rather than grain, which means most of the world's best-selling whisky brands are not whisky under European law at all.",
+  "abv": "42.8%",
+  "origin": "India",
+  "rarity": "common",
+  "tastingNotes": [
+   "molasses",
+   "caramel",
+   "vanilla",
+   "light spice"
+  ],
+  "glassware": "Rocks glass or highball",
+  "funFact": "Several Indian brands sell more cases annually than the entire Scotch whisky industry, purely on the strength of the domestic market.",
+  "serve": {
+   "temp": "cold, with water or soda",
+   "glass": "Highball or rocks glass",
+   "how": "With soda and ice, which is how India drinks it, or with water. It is sweeter and lighter than grain whisky and is built for long mixing rather than neat contemplation.",
+   "pair": [
+    "tandoori chicken",
+    "spiced nuts",
+    "kebabs"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses spirit blended with a small proportion of malt whisky.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane molasses, usually with some malt whisky blended in"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often minimal; tropical maturation is fast"
+    },
+    {
+     "label": "Strength",
+     "detail": "Typically 42.8%"
+    }
+   ],
+   "process": "India taxes and defines whisky domestically, which is why molasses-based spirit can carry the name there."
+  }
+ },
+ {
+  "id": "coconut-feni",
+  "name": "Coconut Feni",
+  "subcategory": "Palm Spirit",
+  "description": "The other Goan feni, distilled from coconut palm toddy rather than cashew apples. Older than the cashew version, since cashews only arrived with the Portuguese, and now much the rarer of the two.",
+  "abv": "40–45%",
+  "origin": "Goa, India",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "coconut sap",
+   "funk",
+   "earth",
+   "faint sweetness"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Toddy tappers climb the palms twice daily and are a vanishing profession in Goa, which is the main reason coconut feni is disappearing.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small glass",
+   "how": "Neat in a small glass, or with lime soda, which is the standard Goan serve. It is funkier and more savoury than cashew feni, and it takes acid well.",
+   "pair": [
+    "Goan fish curry",
+    "prawn balchão",
+    "poi bread"
+   ]
+  },
+  "composition": {
+   "summary": "Coconut palm sap fermented and pot-distilled in stages.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Toddy tapped from coconut palm flower stalks"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Traditional pot distillation, typically three runs"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged; some rest in earthenware"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "The sap ferments within hours of tapping, so distillation happens the same day."
+  }
+ },
+ {
+  "id": "mahua",
+  "name": "Mahua",
+  "subcategory": "World Spirit",
+  "description": "Distilled from the flowers of the mahua tree, which fall in spring and are gathered by Adivasi communities across central India. Long dismissed as country liquor, it was reclassified as heritage liquor in 2021.",
+  "abv": "25–45%",
+  "origin": "Central India",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dried flower",
+   "honey",
+   "earth",
+   "overripe fruit"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Mahua flowers are also eaten and used as a sweetener, and the tree is treated as sacred in several Adivasi traditions.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small glass",
+   "how": "Neat in a small glass. The flavour is floral and strange, closer to a fortified honey than to anything grain-based. The new commercial bottlings are considerably cleaner than the village versions.",
+   "pair": [
+    "grilled meat",
+    "spiced lentils",
+    "flatbread"
+   ]
+  },
+  "composition": {
+   "summary": "Dried mahua flowers fermented and distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Flowers of Madhuca longifolia, gathered as they fall"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Traditional clay or pot stills; modern producers use copper"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–45%"
+    }
+   ],
+   "process": "The flowers are naturally high in sugar and need no addition to ferment."
+  }
+ },
+ {
+  "id": "indian-rum",
+  "name": "Indian Rum",
+  "subcategory": "Rum",
+  "description": "Dark, sweet and heavily molasses-driven, of which Old Monk is the icon: a vatted seven-year rum that built a cult following without ever advertising. India drinks an enormous amount of it.",
+  "abv": "42.8%",
+  "origin": "India",
+  "rarity": "common",
+  "tastingNotes": [
+   "vanilla",
+   "molasses",
+   "caramel",
+   "warm spice"
+  ],
+  "glassware": "Rocks glass or highball",
+  "funFact": "Old Monk was famously never advertised, relying entirely on word of mouth, and for decades it was among the best-selling dark rums in the world.",
+  "serve": {
+   "temp": "room temp or with ice",
+   "glass": "Rocks glass or highball",
+   "how": "Neat, over ice, or with cola. Indian winters call for it hot with water and honey. It is sweet and vanilla-forward, so it does not need much help.",
+   "pair": [
+    "kebabs",
+    "chocolate cake",
+    "spiced nuts"
+   ]
+  },
+  "composition": {
+   "summary": "Sugarcane molasses fermented, distilled and aged in the Indian climate.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Indian sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak, tropically matured; Old Monk is vatted at seven years"
+    },
+    {
+     "label": "Strength",
+     "detail": "42.8%"
+    }
+   ],
+   "process": "India grows more sugarcane than almost anywhere, so molasses has always been the obvious base."
+  }
+ },
+ {
+  "id": "tharra",
+  "name": "Tharra",
+  "subcategory": "Cane Spirit",
+  "description": "Sugarcane moonshine from the northern Indian plains, distilled from fermented cane juice or jaggery in village stills. Illegal, widespread, and the subject of periodic poisoning tragedies when batches are adulterated.",
+  "abv": "40–60%",
+  "origin": "North India",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raw cane",
+   "jaggery",
+   "earth",
+   "harsh heat"
+  ],
+  "glassware": "Small glass or cup",
+  "funFact": "Mass poisonings from methanol-adulterated country liquor remain a recurring public health emergency across northern India.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small glass",
+   "how": "Neat, in small measures, and only from a source you trust absolutely. This is one of the entries on this list where the safety caveat is not a formality.",
+   "pair": [
+    "street food",
+    "grilled meat",
+    "raw onion"
+   ]
+  },
+  "composition": {
+   "summary": "Cane juice or jaggery fermented and distilled in improvised stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane juice or jaggery"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Village pot stills, single distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–60%, unmeasured"
+    }
+   ],
+   "process": "Adulteration with industrial methanol to boost strength is the cause of most tharra fatalities."
+  }
+ },
+ {
+  "id": "indian-gin",
+  "name": "Indian Gin",
+  "subcategory": "Gin",
+  "description": "A genuinely new category: gins built on Indian botanicals — Goan coriander, Himalayan juniper, gondhoraj lime, black pepper from Kerala. India had no craft gin at all before 2017 and now exports it.",
+  "abv": "42.8–46%",
+  "origin": "India",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "gondhoraj lime",
+   "coriander",
+   "black pepper",
+   "juniper"
+  ],
+  "glassware": "Copa glass",
+  "funFact": "India grows a large share of the world's spices, so the botanical supply chain that most gin producers import from was already domestic.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Large copa with ice",
+   "how": "With a light tonic and a wedge of lime or a few crushed pink peppercorns. The spice-forward botanicals are strong enough that a heavily flavoured tonic will bury them.",
+   "pair": [
+    "papdi chaat",
+    "grilled prawns",
+    "spiced nuts"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit redistilled with Indian and Himalayan botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Himalayan juniper, gondhoraj lime, coriander, pepper, fennel, cardamom"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot still, often with vapour infusion"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    }
+   ],
+   "process": "Sourcing juniper from the Himalayas rather than Europe is what several producers use to define the category."
+  }
+ },
+ {
+  "id": "ceylon-arrack",
+  "name": "Ceylon Arrack",
+  "subcategory": "Palm Spirit",
+  "description": "Sri Lanka's national spirit, distilled from the fermented sap of coconut flowers and rested in halmilla wood. Light, faintly funky and closer to a soft rum than to anything else, and quite unlike Batavia arrack.",
+  "abv": "33–40%",
+  "origin": "Sri Lanka",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coconut sap",
+   "dried fruit",
+   "light funk",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass or highball",
+  "funFact": "Toddy tappers move between palm crowns on ropes strung fifteen metres above the ground rather than climbing down between trees.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "With ginger beer and lime, which is the Sri Lankan standard, or over ice with soda. The premium aged bottlings are worth drinking neat, where the halmilla wood shows as a soft spice.",
+   "pair": [
+    "hoppers",
+    "fish curry",
+    "devilled prawns"
+   ]
+  },
+  "composition": {
+   "summary": "Coconut flower sap fermented and distilled, then aged in halmilla casks.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Toddy from coconut palm flower stalks"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Halmilla wood vats, six months to fifteen years"
+    },
+    {
+     "label": "Strength",
+     "detail": "33–40%"
+    }
+   ],
+   "process": "The sap must be distilled within a day of tapping, since it ferments almost immediately in the heat."
+  }
+ },
+ {
+  "id": "kasippu",
+  "name": "Kasippu",
+  "subcategory": "Cane Spirit",
+  "description": "Sri Lanka's illicit moonshine, distilled from sugar, cane or fermented fruit in the countryside, and by some estimates outselling every licensed spirit on the island combined.",
+  "abv": "40–60%",
+  "origin": "Sri Lanka",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raw sugar",
+   "earth",
+   "harsh",
+   "faint fruit"
+  ],
+  "glassware": "Small glass or plastic cup",
+  "funFact": "Estimates of unlicensed alcohol in Sri Lanka regularly put it at over half of all consumption, most of it kasippu.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small glass",
+   "how": "Neat, in small measures, from a source you know. It is produced entirely outside regulation and is frequently adulterated, which makes it a genuine risk rather than a novelty.",
+   "pair": [
+    "street food",
+    "dried fish",
+    "chilli"
+   ]
+  },
+  "composition": {
+   "summary": "Sugar, cane or fruit fermented and distilled in hidden stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugar, cane juice or fermented fruit"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Improvised stills, usually single distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–60%, unmeasured"
+    }
+   ],
+   "process": "Production is deliberately mobile, since the stills have to be moved to avoid enforcement."
+  }
+ },
+ {
+  "id": "raksi",
+  "name": "Raksi",
+  "subcategory": "Rice Spirit",
+  "description": "Nepali millet or rice spirit, distilled at home in stacked clay or metal pots and served warm in the hills. Cloudy, sour and warming, and offered at every festival and family occasion.",
+  "abv": "20–50%",
+  "origin": "Nepal",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "fermented rice",
+   "sour grain",
+   "earth",
+   "warmth"
+  ],
+  "glassware": "Small metal cup or glass",
+  "funFact": "The traditional still is a stack of pots with a cold-water bowl on top, and the condensate is caught in a vessel suspended inside.",
+  "serve": {
+   "temp": "warm",
+   "glass": "Small metal cup",
+   "how": "Served warm, often with a piece of fried egg or meat floated on top at festivals. Strength varies wildly between households, so the first cup is a reasonable guide to pacing.",
+   "pair": [
+    "sukuti",
+    "momo",
+    "gundruk"
+   ]
+  },
+  "composition": {
+   "summary": "Millet or rice fermented with a starter cake and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Millet, rice or maize"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Marcha, a wild-yeast starter cake"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Stacked pot still over an open fire"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–50%"
+    }
+   ],
+   "process": "Marcha carries both the yeast and the moulds that convert the grain's starch to sugar."
+  }
+ },
+ {
+  "id": "aila",
+  "name": "Aila",
+  "subcategory": "Rice Spirit",
+  "description": "The Newar community's rice spirit, distilled in Kathmandu valley courtyards and central to Newari feasts. Traditionally poured from a clay jug into a leaf cup, and drunk as part of ritual as much as celebration.",
+  "abv": "25–50%",
+  "origin": "Kathmandu Valley, Nepal",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "rice",
+   "sour mash",
+   "earth",
+   "light sweetness"
+  ],
+  "glassware": "Clay cup or small glass",
+  "funFact": "At certain Newari festivals aila is poured directly into the mouth from a clay jug held above the head, without touching the lips.",
+  "serve": {
+   "temp": "room temp or warm",
+   "glass": "Small clay cup",
+   "how": "Room temperature or gently warmed, as part of a Newari feast rather than on its own. The first distillate, called thaha, is the strongest and is kept for elders and guests.",
+   "pair": [
+    "chatamari",
+    "bara",
+    "buffalo dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Rice fermented with a yeast starter and distilled in traditional stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rice, sometimes with millet"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Manapu, a Newari yeast starter"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Stacked clay or copper pot still"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–50%"
+    }
+   ],
+   "process": "Successive fractions are collected separately, and the first is prized well above the rest."
+  }
+ },
+ {
+  "id": "ara",
+  "name": "Ara",
+  "subcategory": "Rice Spirit",
+  "description": "Bhutan's home-distilled spirit, made from rice, maize, millet or wheat and served hot with butter and a scrambled egg dropped in. That version, called hoentay ara, is a genuine winter staple.",
+  "abv": "20–40%",
+  "origin": "Bhutan",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "rice",
+   "butter",
+   "grain",
+   "warm earth"
+  ],
+  "glassware": "Small bowl or cup",
+  "funFact": "Commercial production and sale is restricted in Bhutan, so nearly all ara is made at home for family and guests.",
+  "serve": {
+   "temp": "hot",
+   "glass": "Small bowl or wooden cup",
+   "how": "Heated with butter and a beaten egg stirred through, which sounds alarming and is genuinely good at altitude in winter. Also drunk cold and plain, though far less often.",
+   "pair": [
+    "ema datshi",
+    "dried yak",
+    "red rice"
+   ]
+  },
+  "composition": {
+   "summary": "Grain fermented with a local starter and distilled at home.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rice, maize, millet or wheat"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Phab, a Bhutanese yeast starter"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Simple pot still over a stove"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–40%"
+    }
+   ],
+   "process": "Butter and egg are added at serving rather than in production, and the fat carries the warmth."
+  }
+ },
+ {
+  "id": "murree",
+  "name": "Murree",
+  "subcategory": "World Whisky",
+  "description": "Pakistan's only legal distillery, founded in 1860 to supply the British garrison and still operating in an Islamic republic where most citizens cannot legally buy its products.",
+  "abv": "40–43%",
+  "origin": "Rawalpindi, Pakistan",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "malt",
+   "dried fruit",
+   "vanilla",
+   "light spice"
+  ],
+  "glassware": "Glencairn or rocks glass",
+  "funFact": "Murree cannot export easily and cannot sell to Muslim Pakistanis, so it operates in one of the strangest commercial positions of any distillery on earth.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn or tumbler",
+   "how": "Neat or with a splash of water. The older single malts are genuinely accomplished and comparable to mid-range Scotch, which surprises almost everyone who tries one.",
+   "pair": [
+    "seekh kebab",
+    "dried fruit",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Malted barley distilled and matured in Pakistan.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley, some locally grown"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon and sherry oak, eight to twenty-one years"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "The brewery and distillery survived partition, prohibition and nationalisation by continuing to operate under licence."
+  }
+ },
+ {
+  "id": "bangla-mod",
+  "name": "Bangla Mod",
+  "subcategory": "World Spirit",
+  "description": "Bangladesh's licensed country liquor, distilled from molasses or rice and sold through a small number of permitted outlets. Cheap, strong, and a rare legal product in a country with very tight alcohol laws.",
+  "abv": "20–40%",
+  "origin": "Bangladesh",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "molasses",
+   "rice",
+   "earth",
+   "raw spirit"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Bangladesh requires a permit to buy alcohol legally, and country liquor shops operate under a licensing system inherited from colonial administration.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small glass",
+   "how": "Neat, in small measures. It is a functional spirit rather than a refined one, and the licensed version is considerably safer than the unlicensed alternatives circulating alongside it.",
+   "pair": [
+    "fried fish",
+    "dal",
+    "rice"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses or rice fermented and distilled under licence.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane molasses or rice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column or pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–40%"
+    }
+   ],
+   "process": "The licensed trade exists partly to displace the far more dangerous informal one."
+  }
+ },
+ {
+  "id": "uzbek-konyak",
+  "name": "Uzbek Konyak",
+  "subcategory": "Brandy",
+  "description": "Central Asian brandy made in the Soviet style from grapes grown in the Ferghana valley and around Samarkand. Sweeter and softer than French brandy, and a legacy of Soviet-era winemaking on the Silk Road.",
+  "abv": "40–42%",
+  "origin": "Uzbekistan",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raisin",
+   "caramel",
+   "walnut",
+   "vanilla"
+  ],
+  "glassware": "Snifter",
+  "funFact": "The Soviet Union built a substantial brandy industry across Central Asia and the Caucasus, and konyak remains the standard local word for it.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Snifter or tumbler",
+   "how": "Neat at room temperature, usually with a meal rather than after it, as is the custom across the former Soviet republics. Frequently accompanied by more toasts than is strictly advisable.",
+   "pair": [
+    "plov",
+    "dried fruit",
+    "walnuts"
+   ]
+  },
+  "composition": {
+   "summary": "Uzbek wine distilled and aged in oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grapes from the Ferghana valley and Samarkand region"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak, three to twenty years"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–42%"
+    }
+   ],
+   "process": "Hot continental summers give very ripe grapes, which is why the resulting brandy runs sweet."
+  }
+ },
+ {
+  "id": "sauce-aroma-baijiu",
+  "name": "Sauce-Aroma Baijiu",
+  "subcategory": "Baijiu",
+  "description": "The jiangxiang style, from Guizhou, and the most expensive baijiu made. Fermented and distilled seven times over a year, it tastes of soy sauce, mushroom and dried meat rather than anything a Western palate calls a spirit.",
+  "abv": "53%",
+  "origin": "Guizhou, China",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "soy sauce",
+   "dried mushroom",
+   "umami",
+   "toasted grain"
+  ],
+  "glassware": "Small tasting cup",
+  "funFact": "The production cycle runs a full year with nine steamings, eight fermentations and seven distillations, and the spirit is then aged for at least three more.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small ceramic or glass cup",
+   "how": "Room temperature in a very small cup, with food, and shared. Chinese banquet custom is to toast rather than sip. The umami depth needs food alongside it; drunk alone it can be overwhelming.",
+   "pair": [
+    "braised pork",
+    "spicy Sichuan dishes",
+    "preserved vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Sorghum solid-state fermented with wheat qu in stone pits, distilled seven times.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Red sorghum and wheat qu starter"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Seven distillations across a year-long cycle"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum three years in earthenware jars, then blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "Typically 53%"
+    }
+   ],
+   "process": "53% is considered the point where water and ethanol molecules bind most tightly, and the style is bottled there deliberately."
+  }
+ },
+ {
+  "id": "strong-aroma-baijiu",
+  "name": "Strong-Aroma Baijiu",
+  "subcategory": "Baijiu",
+  "description": "The nongxiang style from Sichuan, fermented in mud pits that have been in continuous use for centuries and are treated as the distillery's most valuable asset. Pungent, fruity and enormously popular.",
+  "abv": "38–60%",
+  "origin": "Sichuan, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "overripe fruit",
+   "anise",
+   "earth"
+  ],
+  "glassware": "Small tasting cup",
+  "funFact": "Luzhou Laojiao's oldest fermentation pits date from 1573 and have been running without interruption since, with the microbial culture in the mud considered irreplaceable.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small ceramic cup",
+   "how": "Room temperature, in small cups, with food. The fruit-and-funk profile is intense on its own but cuts through rich, oily Sichuan food remarkably well. Toast rather than sip.",
+   "pair": [
+    "mapo tofu",
+    "twice-cooked pork",
+    "cold noodles"
+   ]
+  },
+  "composition": {
+   "summary": "Sorghum fermented in aged mud pits, distilled and blended.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sorghum, often with rice, wheat, corn and glutinous rice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Solid-state distillation in steamer stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Earthenware jars"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–60%"
+    }
+   ],
+   "process": "The older the mud pit, the more complex the microbial population, and the higher the value of the spirit."
+  }
+ },
+ {
+  "id": "light-aroma-baijiu",
+  "name": "Light-Aroma Baijiu",
+  "subcategory": "Baijiu",
+  "description": "The qingxiang style from Shanxi, fermented in stone jars rather than earth pits, which keeps it clean and floral. The most approachable baijiu for anyone new to the category, and the historical ancestor of Korean soju.",
+  "abv": "40–55%",
+  "origin": "Shanxi, China",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "green apple",
+   "aniseed",
+   "floral",
+   "clean grain"
+  ],
+  "glassware": "Small tasting cup",
+  "funFact": "Fenjiu from Xinghua village is documented as far back as the Northern and Southern dynasties, making it one of the oldest named spirits in China.",
+  "serve": {
+   "temp": "room temp or lightly chilled",
+   "glass": "Small ceramic cup",
+   "how": "Room temperature in small cups with food, or lightly chilled if it is your first baijiu. Its cleaner profile also makes it the style most usable in cocktails, where it behaves a little like a funky gin.",
+   "pair": [
+    "dumplings",
+    "cold vegetable dishes",
+    "vinegared noodles"
+   ]
+  },
+  "composition": {
+   "summary": "Sorghum fermented in stone jars with barley and pea qu.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sorghum, with a barley and pea qu starter"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Solid-state, two fermentations"
+    },
+    {
+     "label": "Aging",
+     "detail": "Earthenware, typically shorter than other styles"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–55%"
+    }
+   ],
+   "process": "Stone jars keep the ferment isolated from soil microbes, which is why the style stays clean."
+  }
+ },
+ {
+  "id": "rice-aroma-baijiu",
+  "name": "Rice-Aroma Baijiu",
+  "subcategory": "Baijiu",
+  "description": "The mixiang style from Guangxi and southern China, distilled from rice rather than sorghum. The lightest and most delicate of the four classic aromas, and the closest baijiu gets to a soft, sweet spirit.",
+  "abv": "30–57%",
+  "origin": "Guangxi, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "steamed rice",
+   "honey",
+   "floral",
+   "light sweetness"
+  ],
+  "glassware": "Small tasting cup",
+  "funFact": "Sanhua jiu from Guilin is the best-known example and is traditionally aged in caves cut into the karst hills around the city.",
+  "serve": {
+   "temp": "room temp or chilled",
+   "glass": "Small ceramic cup",
+   "how": "Room temperature or lightly chilled, in small cups. It is gentle enough to drink without food, which is unusual for baijiu, and it works well alongside lighter southern Chinese cooking.",
+   "pair": [
+    "steamed fish",
+    "rice noodles",
+    "light stir-fries"
+   ]
+  },
+  "composition": {
+   "summary": "Rice fermented with a small qu starter and distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rice, sometimes glutinous"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Semi-solid-state fermentation, then distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "Earthenware jars, sometimes in karst caves"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–57%"
+    }
+   ],
+   "process": "A smaller qu starter than the northern styles means less funk and more of the rice."
+  }
+ },
+ {
+  "id": "erguotou",
+  "name": "Erguotou",
+  "subcategory": "Baijiu",
+  "description": "Beijing's everyday baijiu, cheap, clean and sold in a small green bottle that costs less than a bowl of noodles. The name means second pot head, referring to the middle fraction of the distillation that goes into it.",
+  "abv": "42–56%",
+  "origin": "Beijing, China",
+  "rarity": "common",
+  "tastingNotes": [
+   "clean grain",
+   "aniseed",
+   "white pepper",
+   "light funk"
+  ],
+  "glassware": "Small cup or straight from the bottle",
+  "funFact": "The little green bottle of Red Star erguotou is such a Beijing fixture that it has become a design shorthand for the city itself.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small cup",
+   "how": "Room temperature, in small cups, with street food. It is a working drink and treated as one; nobody in Beijing contemplates their erguotou. It also mixes surprisingly well with sour or citrus flavours.",
+   "pair": [
+    "jianbing",
+    "lamb skewers",
+    "pickled vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Sorghum fermented and distilled, with only the middle cut kept.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sorghum"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Solid-state distillation, middle fraction only"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimal"
+    },
+    {
+     "label": "Strength",
+     "detail": "42–56%"
+    }
+   ],
+   "process": "Discarding the head and tail of the run is exactly what the name describes, and why it is cleaner than its price suggests."
+  }
+ },
+ {
+  "id": "mei-kuei-lu-chiew",
+  "name": "Mei Kuei Lu Chiew",
+  "subcategory": "Baijiu",
+  "description": "Baijiu infused with rose petals and rock sugar, used at least as often in Chinese kitchens as in glasses. It flavours char siu and roast meats, and quietly does the work in a great many restaurant dishes.",
+  "abv": "54%",
+  "origin": "China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rose petal",
+   "sorghum",
+   "rock sugar",
+   "perfume"
+  ],
+  "glassware": "Small cup",
+  "funFact": "It is a standard ingredient in Cantonese roast meat marinades, where the rose note is barely detectable in the finished dish but its absence is.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small cup",
+   "how": "Neat in a small cup, though most bottles go into cooking. In the glass it is intensely floral and strong; a very small measure is enough. It also makes an interesting cocktail modifier.",
+   "pair": [
+    "char siu",
+    "roast duck",
+    "five-spice dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Sorghum baijiu infused with rose petals and rock sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Light-aroma sorghum baijiu"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Dried rose petals and rock sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused after distillation"
+    },
+    {
+     "label": "Strength",
+     "detail": "Around 54%"
+    }
+   ],
+   "process": "The high strength is what makes it useful in cooking, since it carries flavour into fat and burns off cleanly."
+  }
+ },
+ {
+  "id": "yaojiu",
+  "name": "Yaojiu",
+  "subcategory": "Herbal Liqueur",
+  "description": "Chinese medicinal liquor, made by steeping herbs, roots, ginseng, deer antler or whole snakes in baijiu. Prescribed rather than ordered, and drunk in small measures for specific complaints.",
+  "abv": "35–55%",
+  "origin": "China",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "ginseng",
+   "bitter root",
+   "earth",
+   "warm spice"
+  ],
+  "glassware": "Small cup",
+  "funFact": "Snake wine, in which a whole venomous snake is submerged in spirit, relies on the alcohol denaturing the venom, which it does.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Very small cup",
+   "how": "A small measure, taken deliberately rather than socially. Traditional Chinese medicine assigns different preparations to different conditions, and it is drunk in that spirit rather than for pleasure."
+  },
+  "composition": {
+   "summary": "Baijiu steeped with medicinal herbs, roots or animal ingredients.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Baijiu, usually high strength"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Ginseng, goji, deer antler, snake, wolfberry, dozens of herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, often for months or years"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–55%"
+    }
+   ],
+   "process": "High-strength spirit is used because it extracts compounds that water cannot."
+  }
+ },
+ {
+  "id": "kaoliang",
+  "name": "Kaoliang",
+  "subcategory": "Baijiu",
+  "description": "Sorghum spirit from Kinmen, a Taiwanese island a few kilometres off the Chinese mainland, distilled in tunnels dug during the artillery bombardments of the 1950s. Bottled at 58% and drunk with real ceremony.",
+  "abv": "38–63%",
+  "origin": "Kinmen, Taiwan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sorghum",
+   "white pepper",
+   "aniseed",
+   "mineral"
+  ],
+  "glassware": "Small cup",
+  "funFact": "The distillery was founded in 1952 to give the garrison something to make from local sorghum, and it became Kinmen's principal industry.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small ceramic cup",
+   "how": "Room temperature in small cups, with food, and with toasts. At 58% it is not a sipping spirit; Taiwanese custom is to drain the cup on a toast and refill.",
+   "pair": [
+    "oyster omelette",
+    "braised pork",
+    "salted peanuts"
+   ]
+  },
+  "composition": {
+   "summary": "Sorghum fermented with wheat qu and solid-state distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sorghum grown on Kinmen"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Solid-state fermentation and distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "Stored in granite tunnels cut into the island"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–63%, with 58% the signature"
+    }
+   ],
+   "process": "The granite tunnels hold a stable cool temperature year-round, which is why they are still used."
+  }
+ },
+ {
+  "id": "imo-shochu",
+  "name": "Imo Shochu",
+  "subcategory": "Shochu",
+  "description": "Sweet potato shochu from Kagoshima, earthy and unmistakable, with a heavy aroma that divides opinion even within Japan. Single-distilled at low pressure to keep the character rather than strip it.",
+  "abv": "25%",
+  "origin": "Kagoshima, Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sweet potato",
+   "earth",
+   "roasted root",
+   "light sweetness"
+  ],
+  "glassware": "Tumbler or ceramic cup",
+  "funFact": "Kagoshima's volcanic soil is poor for rice but ideal for sweet potato, which is why the region distils rather than brews.",
+  "serve": {
+   "temp": "warm or on the rocks",
+   "glass": "Tumbler, or a ceramic kurojoka for warming",
+   "how": "Oyuwari — cut with hot water, hot water poured first — opens the aroma and is the traditional Kagoshima serve. On the rocks in summer. Never chilled to the point of numbness; the earthiness is the point.",
+   "pair": [
+    "grilled fish",
+    "tonkotsu",
+    "pickled vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Sweet potato fermented with rice koji and single-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Kogane sengan and other Kagoshima sweet potatoes"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Rice or barley koji, black or white"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single distillation, atmospheric or vacuum"
+    },
+    {
+     "label": "Strength",
+     "detail": "Usually 25%, sometimes 20%"
+    }
+   ],
+   "process": "Black koji, revived from Okinawan awamori production, gives a richer and sweeter result than white."
+  }
+ },
+ {
+  "id": "mugi-shochu",
+  "name": "Mugi Shochu",
+  "subcategory": "Shochu",
+  "description": "Barley shochu, most of it from Oita, and the gentlest of the styles. Clean and lightly nutty, and the usual recommendation for anyone meeting shochu for the first time.",
+  "abv": "25%",
+  "origin": "Oita, Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "toasted barley",
+   "nut",
+   "light grain",
+   "clean finish"
+  ],
+  "glassware": "Tumbler or wine glass",
+  "funFact": "Iki island in Nagasaki holds a geographical indication for barley shochu and claims to have originated the style in the sixteenth century.",
+  "serve": {
+   "temp": "on the rocks or with cold water",
+   "glass": "Tumbler",
+   "how": "On the rocks, or mizuwari with cold water at about one to one. Barrel-aged versions drink comfortably neat and are often mistaken for a light whisky in a blind pour.",
+   "pair": [
+    "yakitori",
+    "tempura",
+    "edamame"
+   ]
+  },
+  "composition": {
+   "summary": "Barley fermented with barley koji and single-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Barley"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Barley or rice koji"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single distillation, often under vacuum for a lighter result"
+    },
+    {
+     "label": "Strength",
+     "detail": "Usually 25%"
+    }
+   ],
+   "process": "Vacuum distillation lowers the boiling point and produces a markedly cleaner, fruitier spirit."
+  }
+ },
+ {
+  "id": "kome-shochu",
+  "name": "Kome Shochu",
+  "subcategory": "Shochu",
+  "description": "Rice shochu, the closest the category comes to sake in flavour, and concentrated in Kumamoto's Hitoyoshi basin where it holds a geographical indication. Soft, floral and quietly excellent.",
+  "abv": "25%",
+  "origin": "Kumamoto, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "steamed rice",
+   "white flower",
+   "melon",
+   "soft grain"
+  ],
+  "glassware": "Wine glass or ceramic cup",
+  "funFact": "Kuma shochu from the Hitoyoshi basin is one of only a handful of Japanese spirits with a protected geographical indication.",
+  "serve": {
+   "temp": "room temp, warm or on the rocks",
+   "glass": "Wine glass, or warmed in a choku",
+   "how": "Warmed gently in winter, on the rocks in summer, or neat at room temperature. Kuma shochu is traditionally pre-mixed with water and warmed in a ceramic flask overnight before serving.",
+   "pair": [
+    "sashimi",
+    "grilled chicken",
+    "rice dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Rice fermented with rice koji and single-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rice"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Rice koji"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single distillation, atmospheric or vacuum"
+    },
+    {
+     "label": "Strength",
+     "detail": "Usually 25%"
+    }
+   ],
+   "process": "Both the base and the koji are rice, which is why it sits so close to sake on the palate."
+  }
+ },
+ {
+  "id": "kokuto-shochu",
+  "name": "Kokuto Shochu",
+  "subcategory": "Shochu",
+  "description": "Brown sugar shochu, made only on the Amami islands between Kyushu and Okinawa, where a post-war tax arrangement granted the exclusive right to produce it. Nowhere else in Japan may legally make it.",
+  "abv": "25–30%",
+  "origin": "Amami Islands, Japan",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "brown sugar",
+   "molasses",
+   "tropical fruit",
+   "light rum"
+  ],
+  "glassware": "Tumbler or ceramic cup",
+  "funFact": "Amami's exclusive right dates from the islands' return to Japan in 1953, when the arrangement was made to protect the local sugar economy.",
+  "serve": {
+   "temp": "on the rocks or with water",
+   "glass": "Tumbler",
+   "how": "On the rocks, or with cold water. Despite the base it is not sweet, since the sugar ferments out entirely. It sits somewhere between a light rum and a shochu, which is exactly what it is.",
+   "pair": [
+    "pork belly",
+    "grilled fish",
+    "tropical fruit"
+   ]
+  },
+  "composition": {
+   "summary": "Brown sugar fermented with rice koji and single-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Amami kokuto, unrefined brown sugar"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Rice koji, which is legally required"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single distillation"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–30%"
+    }
+   ],
+   "process": "The rice koji requirement is what keeps it classified as shochu rather than as rum."
+  }
+ },
+ {
+  "id": "japanese-gin",
+  "name": "Japanese Gin",
+  "subcategory": "Gin",
+  "description": "Gin built on Japanese botanicals — yuzu, sansho pepper, sencha, hinoki cypress, shiso — and distilled with the precision the country brings to everything else. A category that did not meaningfully exist before 2016.",
+  "abv": "43–47%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yuzu",
+   "sansho pepper",
+   "green tea",
+   "cypress"
+  ],
+  "glassware": "Copa or highball",
+  "funFact": "Ki No Bi separates its botanicals into six groups and distils each separately before blending, which is closer to perfumery than to conventional gin-making.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Highball with plenty of ice",
+   "how": "A Japanese-style highball with soda and a twist of yuzu or lemon, built in a tall glass with hard clear ice. Tonic works but is heavy-handed against sencha and sansho, which are easily lost.",
+   "pair": [
+    "sashimi",
+    "tempura",
+    "yakitori"
+   ]
+  },
+  "composition": {
+   "summary": "Rice or grain spirit redistilled with Japanese botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rice spirit or neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, yuzu, sansho, sencha, gyokuro, hinoki, shiso, ginger"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Often distilled in separate botanical groups, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    }
+   ],
+   "process": "A rice spirit base is softer and slightly sweeter than grain, which suits the delicate botanicals."
+  }
+ },
+ {
+  "id": "andong-soju",
+  "name": "Andong Soju",
+  "subcategory": "Rice Spirit",
+  "description": "Traditional distilled soju from Andong, made from rice and nuruk at around 45%, and a completely different drink from the diluted green-bottle soju that dominates Korean sales. Designated an intangible cultural property.",
+  "abv": "35–45%",
+  "origin": "Andong, South Korea",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "steamed rice",
+   "nutty grain",
+   "light floral",
+   "clean heat"
+  ],
+  "glassware": "Small ceramic cup",
+  "funFact": "Distilled soju arrived in Korea with the Mongol invasions of the thirteenth century, and Andong was one of the garrison towns where the technique took root.",
+  "serve": {
+   "temp": "room temp or lightly chilled",
+   "glass": "Small ceramic cup",
+   "how": "Room temperature in a small cup, poured for others rather than yourself, which is fixed Korean etiquette. It is strong and clean, and deserves to be sipped rather than shot.",
+   "pair": [
+    "jjimdak",
+    "grilled beef",
+    "kimchi"
+   ]
+  },
+  "composition": {
+   "summary": "Rice fermented with nuruk and distilled in a traditional soju gori.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rice"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Nuruk, a Korean wild-culture starter"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single distillation in an earthenware soju gori"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–45%"
+    }
+   ],
+   "process": "Nuruk carries a wilder mix of moulds and yeasts than Japanese koji, which gives a more rustic result."
+  }
+ },
+ {
+  "id": "insamju",
+  "name": "Insamju",
+  "subcategory": "Herbal Liqueur",
+  "description": "Korean ginseng liquor, with whole roots visible in the bottle, made by steeping ginseng in distilled soju. Taken as a tonic as much as a drink, and given as a gift at least as often as it is opened.",
+  "abv": "30–40%",
+  "origin": "South Korea",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "ginseng",
+   "earth",
+   "bitter root",
+   "light sweetness"
+  ],
+  "glassware": "Small cup",
+  "funFact": "Korean red ginseng is graded and priced by shape as well as age, and roots resembling a human figure command a substantial premium.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small ceramic cup",
+   "how": "A small measure, room temperature, usually with a meal. Koreans treat it as restorative rather than recreational, and it appears at gatherings for older relatives more than young ones.",
+   "pair": [
+    "samgyetang",
+    "grilled meat",
+    "namul"
+   ]
+  },
+  "composition": {
+   "summary": "Distilled soju steeped with whole ginseng root.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Distilled soju"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Korean ginseng, often with jujube and honey"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for months"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–40%"
+    }
+   ],
+   "process": "Six-year-old red ginseng is the prized grade, and it keeps infusing in the bottle."
+  }
+ },
+ {
+  "id": "korean-whisky",
+  "name": "Korean Whisky",
+  "subcategory": "World Whisky",
+  "description": "Korea released its first domestic single malt in 2023, matured through summers that swing far hotter and winters far colder than Scotland's. The extreme range pushes the spirit through wood at speed.",
+  "abv": "46–56%",
+  "origin": "South Korea",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "honey",
+   "orchard fruit",
+   "toasted oak",
+   "spice"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Ki One, from a distillery outside Namyangju, released Korea's first single malt after fewer than three years of maturation, which the climate made possible.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with a drop of water. These are young whiskies matured fast, so the wood arrives early and water helps separate it from the spirit. Cask-strength releases benefit most.",
+   "pair": [
+    "grilled pork belly",
+    "dark chocolate",
+    "dried persimmon"
+   ]
+  },
+  "composition": {
+   "summary": "Malted barley distilled and matured in Korea's continental climate.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley, largely imported"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon and sherry casks, three years and up"
+    },
+    {
+     "label": "Strength",
+     "detail": "46–56%"
+    }
+   ],
+   "process": "Summers above 35°C and winters below freezing drive the spirit in and out of the wood each year."
+  }
+ },
+ {
+  "id": "arkhi",
+  "name": "Arkhi",
+  "subcategory": "World Spirit",
+  "description": "Mongolian spirit distilled from fermented mare's or cow's milk, made on the steppe in a wooden column set over the stove. Cloudy, sour and low in strength, and utterly unlike anything else distilled anywhere.",
+  "abv": "10–20%",
+  "origin": "Mongolia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "sour milk",
+   "yoghurt",
+   "grain",
+   "faint sweetness"
+  ],
+  "glassware": "Small bowl or cup",
+  "funFact": "It is distilled from airag, fermented mare's milk, and the distilling apparatus sits directly on the family stove inside the ger.",
+  "serve": {
+   "temp": "warm",
+   "glass": "Small bowl or cup",
+   "how": "Served warm in a small bowl, offered with the right hand, and accepted with both. Refusing outright is impolite; touching it to your lips and returning it is not. Strength is low, so several rounds are normal.",
+   "pair": [
+    "dried curd",
+    "boiled mutton",
+    "buuz"
+   ]
+  },
+  "composition": {
+   "summary": "Fermented milk distilled in a stovetop wooden column.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Airag, fermented mare's milk, or cow's milk"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Wooden column still set over the ger stove"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; drunk fresh"
+    },
+    {
+     "label": "Strength",
+     "detail": "10–20%, redistilled versions higher"
+    }
+   ],
+   "process": "Milk sugar is what ferments here rather than starch or fruit sugar, which is why nothing else tastes like it."
+  }
+ }
+]

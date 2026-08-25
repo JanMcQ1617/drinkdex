@@ -62,6 +62,9 @@ import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
+import { ATLAS_COUNTRIES, ATLAS_GRAPES, ATLAS_WINES } from '@/data/wineAtlas';
+import { atlasLinkFor } from '@/data/wineAtlasLinks';
+import { BRANDS_BY_STYLE } from '@/data/breweries';
 import type { Composition, Recipe, ServeGuide } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
@@ -243,6 +246,113 @@ function ServePanel({ serve }: { serve: ServeGuide }) {
 /* ==================================================================== */
 
 type PickerMode = 'unlock' | 'update';
+
+/**
+ * Where this wine sits on the map.
+ *
+ * The Dex is 460 authored cards; the atlas behind it holds every named
+ * wine and grape variety. A varietal card ("Nebbiolo") points at the
+ * grape, a place card ("Barolo") at the appellations themselves. Cards
+ * with nothing to point at — sake, vermouth — say so instead of linking
+ * to something adjacent.
+ */
+function AtlasPanel({ drinkId }: { drinkId: string }) {
+  const router = useRouter();
+  const link = atlasLinkFor(drinkId);
+  if (!link) return null;
+
+  if (link.absent) {
+    return (
+      <>
+        <SectionLabel style={styles.section}>On the map</SectionLabel>
+        <Text style={styles.bodyText}>{link.absent}</Text>
+      </>
+    );
+  }
+
+  const grape = link.grape != null ? ATLAS_GRAPES[link.grape] : null;
+  const count = grape ? grape.wines.length : link.wines.length;
+  if (!count) return null;
+
+  const countries = grape
+    ? grape.countries.map((c) => ATLAS_COUNTRIES[c].name)
+    : [...new Set(link.wines.map((w) => ATLAS_COUNTRIES[ATLAS_WINES[w].c].name))];
+
+  return (
+    <>
+      <SectionLabel style={styles.section}>On the map</SectionLabel>
+      <Text style={styles.lead}>
+        {grape
+          ? `${grape.name} makes ${count} named ${count === 1 ? 'wine' : 'wines'} in the atlas`
+          : `${count} matching ${count === 1 ? 'appellation' : 'appellations'} in the atlas`}
+        {countries.length ? `, across ${countries.length} ` : ''}
+        {countries.length ? (countries.length === 1 ? 'country' : 'countries') : ''}.
+      </Text>
+      {grape?.synonyms.length ? (
+        <Text style={styles.bodyText}>Also called {grape.synonyms.join(', ')}.</Text>
+      ) : null}
+      <PressableScale
+        onPress={() =>
+          router.push(
+            grape
+              ? { pathname: '/wine-atlas', params: { grape: String(link.grape) } }
+              : { pathname: '/wine-atlas', params: { q: ATLAS_WINES[link.wines[0]].n } }
+          )
+        }
+        accessibilityRole="button"
+        accessibilityLabel="Open this in the wine atlas"
+        style={styles.atlasLink}>
+        <Text style={styles.atlasLinkText}>Open in the Wine Atlas</Text>
+        <Icon name="chevronRight" size={16} color={colors.wine} />
+      </PressableScale>
+    </>
+  );
+}
+
+/**
+ * Who actually brews this.
+ *
+ * A style card describes a category; this names the beers in it that you can
+ * put in a basket. It reads from the brand layer, so the list grows whenever
+ * a country's lineups get researched — nothing here is authored per-card.
+ *
+ * Styles nothing maps to render nothing, rather than an empty heading.
+ */
+function BreweriesPanel({ drinkId }: { drinkId: string }) {
+  const router = useRouter();
+  const brands = BRANDS_BY_STYLE[drinkId];
+  if (!brands?.length) return null;
+
+  const countries = new Set(brands.map((b) => b.country));
+  /* Verified lineups first — those are the ones checked against a brewery's
+   * own listing — then alphabetical, so the sample is stable between renders. */
+  const sample = [...brands]
+    .sort((a, b) => Number(Boolean(b.note)) - Number(Boolean(a.note)) || a.name.localeCompare(b.name))
+    .slice(0, 8);
+
+  return (
+    <>
+      <SectionLabel style={styles.section}>Where to find it</SectionLabel>
+      <Text style={styles.bodyText}>
+        {brands.length} {brands.length === 1 ? 'beer' : 'beers'} in the atlas pour this style,
+        across {countries.size} {countries.size === 1 ? 'country' : 'countries'}.
+      </Text>
+      <View style={styles.chipRow}>
+        {sample.map((b) => (
+          <Chip key={b.id} label={`${b.name} · ${b.code}`} />
+        ))}
+      </View>
+      <PressableScale
+        onPress={() => router.push({ pathname: '/beers', params: { style: drinkId } })}
+        accessibilityRole="button"
+        accessibilityLabel="Open this in Beers of the World"
+        style={styles.atlasLink}>
+        <Text style={styles.atlasLinkText}>Open in Beers of the World</Text>
+        <Icon name="chevronRight" size={16} color={colors.wine} />
+      </PressableScale>
+    </>
+  );
+}
 
 export default function DrinkDetailScreen() {
   const router = useRouter();
@@ -700,6 +810,9 @@ export default function DrinkDetailScreen() {
 
         {drink.serve ? <ServePanel serve={drink.serve} /> : null}
 
+        {drink.category === 'wine' ? <AtlasPanel drinkId={drink.id} /> : null}
+        {drink.category === 'beer' ? <BreweriesPanel drinkId={drink.id} /> : null}
+
         {/* Lore */}
         <SectionLabel style={styles.section}>Field notes</SectionLabel>
         <Text style={styles.bodyText}>{drink.description}</Text>
@@ -1091,6 +1204,23 @@ const styles = StyleSheet.create({
     fontSize: typeScale.body.fontSize,
     lineHeight: typeScale.body.lineHeight,
     color: colors.text,
+  },
+
+  /* Atlas */
+  atlasLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: space.md,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
+    borderRadius: radius.md,
+    backgroundColor: colors.wineWash,
+  },
+  atlasLinkText: {
+    fontFamily: fonts.bodySemiBold,
+    ...typeScale.caption,
+    color: colors.wine,
   },
 
   /* Serve */

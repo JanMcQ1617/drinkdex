@@ -1,0 +1,1559 @@
+country|region|wine|tier|style|grapes
+France|Bordeaux|Bordeaux Rouge|AOC|Red|Merlot; Cabernet Sauvignon; Cabernet Franc
+France|Bordeaux|Bordeaux Blanc|AOC|White|Sauvignon Blanc; Sémillon; Muscadelle
+France|Bordeaux|Bordeaux Supérieur|AOC|Red|Merlot; Cabernet Sauvignon
+France|Bordeaux|Bordeaux Clairet|AOC|Rosé|Merlot; Cabernet Franc
+France|Bordeaux|Bordeaux Rosé|AOC|Rosé|Merlot; Cabernet Sauvignon
+France|Bordeaux|Crémant de Bordeaux|AOC|Sparkling|Sémillon; Cabernet Franc
+France|Bordeaux (Left Bank)|Médoc|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Haut-Médoc|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Saint-Estèphe|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Pauillac|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Saint-Julien|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Margaux|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Listrac-Médoc|AOC|Red|Merlot; Cabernet Sauvignon
+France|Bordeaux (Left Bank)|Moulis-en-Médoc|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Graves|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Graves Blanc|AOC|White|Sauvignon Blanc; Sémillon
+France|Bordeaux (Left Bank)|Graves Supérieures|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Bordeaux (Left Bank)|Pessac-Léognan|AOC|Red|Cabernet Sauvignon; Merlot
+France|Bordeaux (Left Bank)|Pessac-Léognan Blanc|AOC|White|Sauvignon Blanc; Sémillon
+France|Bordeaux (Left Bank)|Sauternes|AOC|Sweet White|Sémillon; Sauvignon Blanc; Muscadelle
+France|Bordeaux (Left Bank)|Barsac|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Bordeaux (Left Bank)|Cérons|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Bordeaux (Right Bank)|Saint-Émilion|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Saint-Émilion Grand Cru|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Pomerol|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Lalande-de-Pomerol|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Fronsac|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Canon-Fronsac|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Montagne-Saint-Émilion|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Lussac-Saint-Émilion|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Puisseguin-Saint-Émilion|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Saint-Georges-Saint-Émilion|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Côtes de Bourg|AOC|Red|Merlot; Malbec
+France|Bordeaux (Right Bank)|Blaye-Côtes de Bordeaux|AOC|Red|Merlot; Cabernet Sauvignon
+France|Bordeaux (Right Bank)|Castillon-Côtes de Bordeaux|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Francs-Côtes de Bordeaux|AOC|Red|Merlot; Cabernet Franc
+France|Bordeaux (Right Bank)|Cadillac-Côtes de Bordeaux|AOC|Red|Merlot; Cabernet Sauvignon
+France|Bordeaux (Entre-Deux-Mers)|Entre-Deux-Mers|AOC|White|Sauvignon Blanc; Sémillon
+France|Bordeaux (Entre-Deux-Mers)|Cadillac|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Bordeaux (Entre-Deux-Mers)|Loupiac|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Bordeaux (Entre-Deux-Mers)|Sainte-Croix-du-Mont|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Bordeaux (Entre-Deux-Mers)|Sainte-Foy-Côtes de Bordeaux|AOC|Red|Merlot; Cabernet Sauvignon
+France|Bordeaux (Entre-Deux-Mers)|Graves de Vayres|AOC|Red|Merlot; Cabernet Franc
+France|Burgundy (Chablis)|Petit Chablis|AOC|White|Chardonnay
+France|Burgundy (Chablis)|Chablis|AOC|White|Chardonnay
+France|Burgundy (Chablis)|Chablis Premier Cru|AOC Premier Cru|White|Chardonnay
+France|Burgundy (Chablis)|Chablis Grand Cru|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Chablis)|Irancy|AOC|Red|Pinot Noir; César
+France|Burgundy (Chablis)|Saint-Bris|AOC|White|Sauvignon Blanc
+France|Burgundy (Côte de Nuits)|Marsannay|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Fixin|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Gevrey-Chambertin|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Chambertin-Clos de Bèze|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Charmes-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Mazis-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Griotte-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Latricières-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Ruchottes-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Chapelle-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Mazoyères-Chambertin|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Morey-Saint-Denis|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Clos de la Roche|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Clos Saint-Denis|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Clos de Tart|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Clos des Lambrays|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Bonnes-Mares|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Chambolle-Musigny|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Musigny|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Vougeot|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Clos de Vougeot|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Vosne-Romanée|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Romanée-Conti|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|La Tâche|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Richebourg|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Romanée-Saint-Vivant|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|La Romanée|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|La Grande Rue|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Échézeaux|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Grands Échézeaux|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Nuits-Saint-Georges|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Côte de Nuits-Villages|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Nuits)|Hautes-Côtes de Nuits|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Ladoix|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Aloxe-Corton|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Corton|AOC Grand Cru|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Corton-Charlemagne|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Pernand-Vergelesses|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Savigny-lès-Beaune|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Chorey-lès-Beaune|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Beaune|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Pommard|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Volnay|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Monthélie|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Auxey-Duresses|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Saint-Romain|AOC|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Meursault|AOC|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Puligny-Montrachet|AOC|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Chassagne-Montrachet|AOC|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Montrachet|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Chevalier-Montrachet|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Bâtard-Montrachet|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Bienvenues-Bâtard-Montrachet|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Criots-Bâtard-Montrachet|AOC Grand Cru|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Saint-Aubin|AOC|White|Chardonnay
+France|Burgundy (Côte de Beaune)|Santenay|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Maranges|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Blagny|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Côte de Beaune-Villages|AOC|Red|Pinot Noir
+France|Burgundy (Côte de Beaune)|Hautes-Côtes de Beaune|AOC|Red|Pinot Noir
+France|Burgundy (Côte Chalonnaise)|Bouzeron|AOC|White|Aligoté
+France|Burgundy (Côte Chalonnaise)|Rully|AOC|White|Chardonnay
+France|Burgundy (Côte Chalonnaise)|Mercurey|AOC|Red|Pinot Noir
+France|Burgundy (Côte Chalonnaise)|Givry|AOC|Red|Pinot Noir
+France|Burgundy (Côte Chalonnaise)|Montagny|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Mâcon|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Mâcon-Villages|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Pouilly-Fuissé|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Pouilly-Loché|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Pouilly-Vinzelles|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Saint-Véran|AOC|White|Chardonnay
+France|Burgundy (Mâconnais)|Viré-Clessé|AOC|White|Chardonnay
+France|Burgundy|Bourgogne|AOC|Red|Pinot Noir
+France|Burgundy|Bourgogne Blanc|AOC|White|Chardonnay
+France|Burgundy|Bourgogne Aligoté|AOC|White|Aligoté
+France|Burgundy|Bourgogne Passe-Tout-Grains|AOC|Red|Gamay; Pinot Noir
+France|Burgundy|Coteaux Bourguignons|AOC|Red|Gamay; Pinot Noir
+France|Burgundy|Crémant de Bourgogne|AOC|Sparkling|Chardonnay; Pinot Noir
+France|Beaujolais|Beaujolais|AOC|Red|Gamay
+France|Beaujolais|Beaujolais Nouveau|AOC|Red|Gamay
+France|Beaujolais|Beaujolais-Villages|AOC|Red|Gamay
+France|Beaujolais|Brouilly|AOC Cru|Red|Gamay
+France|Beaujolais|Côte de Brouilly|AOC Cru|Red|Gamay
+France|Beaujolais|Chénas|AOC Cru|Red|Gamay
+France|Beaujolais|Chiroubles|AOC Cru|Red|Gamay
+France|Beaujolais|Fleurie|AOC Cru|Red|Gamay
+France|Beaujolais|Juliénas|AOC Cru|Red|Gamay
+France|Beaujolais|Morgon|AOC Cru|Red|Gamay
+France|Beaujolais|Moulin-à-Vent|AOC Cru|Red|Gamay
+France|Beaujolais|Régnié|AOC Cru|Red|Gamay
+France|Beaujolais|Saint-Amour|AOC Cru|Red|Gamay
+France|Champagne|Champagne|AOC|Sparkling|Chardonnay; Pinot Noir; Meunier
+France|Champagne|Champagne Blanc de Blancs|AOC|Sparkling|Chardonnay
+France|Champagne|Champagne Blanc de Noirs|AOC|Sparkling|Pinot Noir; Meunier
+France|Champagne|Champagne Rosé|AOC|Sparkling Rosé|Pinot Noir; Chardonnay
+France|Champagne|Coteaux Champenois|AOC|Red|Pinot Noir
+France|Champagne|Rosé des Riceys|AOC|Rosé|Pinot Noir
+France|Loire (Pays Nantais)|Muscadet|AOC|White|Melon de Bourgogne
+France|Loire (Pays Nantais)|Muscadet Sèvre et Maine|AOC|White|Melon de Bourgogne
+France|Loire (Pays Nantais)|Muscadet Côtes de Grandlieu|AOC|White|Melon de Bourgogne
+France|Loire (Pays Nantais)|Muscadet Coteaux de la Loire|AOC|White|Melon de Bourgogne
+France|Loire (Pays Nantais)|Gros Plant du Pays Nantais|AOC|White|Folle Blanche
+France|Loire (Pays Nantais)|Fiefs Vendéens|AOC|Red|Pinot Noir; Cabernet Franc
+France|Loire (Anjou-Saumur)|Anjou|AOC|Red|Cabernet Franc
+France|Loire (Anjou-Saumur)|Anjou Blanc|AOC|White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Anjou-Villages|AOC|Red|Cabernet Franc
+France|Loire (Anjou-Saumur)|Anjou-Villages Brissac|AOC|Red|Cabernet Franc
+France|Loire (Anjou-Saumur)|Rosé d'Anjou|AOC|Rosé|Grolleau; Gamay
+France|Loire (Anjou-Saumur)|Cabernet d'Anjou|AOC|Rosé|Cabernet Franc; Cabernet Sauvignon
+France|Loire (Anjou-Saumur)|Rosé de Loire|AOC|Rosé|Cabernet Franc; Grolleau
+France|Loire (Anjou-Saumur)|Savennières|AOC|White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Savennières Roche aux Moines|AOC|White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Coulée de Serrant|AOC|White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Coteaux du Layon|AOC|Sweet White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Chaume|AOC Premier Cru|Sweet White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Quarts de Chaume|AOC Grand Cru|Sweet White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Bonnezeaux|AOC|Sweet White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Coteaux de l'Aubance|AOC|Sweet White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Coteaux de Saumur|AOC|Sweet White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Saumur|AOC|Red|Cabernet Franc
+France|Loire (Anjou-Saumur)|Saumur Blanc|AOC|White|Chenin Blanc
+France|Loire (Anjou-Saumur)|Saumur-Champigny|AOC|Red|Cabernet Franc
+France|Loire (Anjou-Saumur)|Saumur Brut|AOC|Sparkling|Chenin Blanc
+France|Loire (Anjou-Saumur)|Crémant de Loire|AOC|Sparkling|Chenin Blanc; Cabernet Franc
+France|Loire (Touraine)|Chinon|AOC|Red|Cabernet Franc
+France|Loire (Touraine)|Bourgueil|AOC|Red|Cabernet Franc
+France|Loire (Touraine)|Saint-Nicolas-de-Bourgueil|AOC|Red|Cabernet Franc
+France|Loire (Touraine)|Vouvray|AOC|White|Chenin Blanc
+France|Loire (Touraine)|Montlouis-sur-Loire|AOC|White|Chenin Blanc
+France|Loire (Touraine)|Touraine|AOC|White|Sauvignon Blanc
+France|Loire (Touraine)|Touraine-Amboise|AOC|Red|Côt; Cabernet Franc
+France|Loire (Touraine)|Touraine-Azay-le-Rideau|AOC|White|Chenin Blanc
+France|Loire (Touraine)|Touraine-Mesland|AOC|Red|Gamay; Côt
+France|Loire (Touraine)|Touraine-Chenonceaux|AOC|White|Sauvignon Blanc
+France|Loire (Touraine)|Touraine-Oisly|AOC|White|Sauvignon Blanc
+France|Loire (Touraine)|Cheverny|AOC|White|Sauvignon Blanc; Chardonnay
+France|Loire (Touraine)|Cour-Cheverny|AOC|White|Romorantin
+France|Loire (Touraine)|Valençay|AOC|White|Sauvignon Blanc
+France|Loire (Touraine)|Jasnières|AOC|White|Chenin Blanc
+France|Loire (Touraine)|Coteaux du Loir|AOC|Red|Pineau d'Aunis
+France|Loire (Touraine)|Coteaux du Vendômois|AOC|Rosé|Pineau d'Aunis
+France|Loire (Central)|Sancerre|AOC|White|Sauvignon Blanc
+France|Loire (Central)|Sancerre Rouge|AOC|Red|Pinot Noir
+France|Loire (Central)|Pouilly-Fumé|AOC|White|Sauvignon Blanc
+France|Loire (Central)|Pouilly-sur-Loire|AOC|White|Chasselas
+France|Loire (Central)|Menetou-Salon|AOC|White|Sauvignon Blanc
+France|Loire (Central)|Quincy|AOC|White|Sauvignon Blanc
+France|Loire (Central)|Reuilly|AOC|White|Sauvignon Blanc
+France|Loire (Central)|Coteaux du Giennois|AOC|White|Sauvignon Blanc
+France|Loire (Central)|Châteaumeillant|AOC|Red|Gamay; Pinot Noir
+France|Loire (Auvergne)|Saint-Pourçain|AOC|Red|Gamay; Pinot Noir
+France|Loire (Auvergne)|Côtes d'Auvergne|AOC|Red|Gamay; Pinot Noir
+France|Loire (Auvergne)|Côte Roannaise|AOC|Red|Gamay
+France|Loire (Auvergne)|Côtes du Forez|AOC|Red|Gamay
+France|Rhône (Northern)|Côte-Rôtie|AOC|Red|Syrah; Viognier
+France|Rhône (Northern)|Condrieu|AOC|White|Viognier
+France|Rhône (Northern)|Château-Grillet|AOC|White|Viognier
+France|Rhône (Northern)|Saint-Joseph|AOC|Red|Syrah
+France|Rhône (Northern)|Hermitage|AOC|Red|Syrah
+France|Rhône (Northern)|Hermitage Blanc|AOC|White|Marsanne; Roussanne
+France|Rhône (Northern)|Vin de Paille de l'Hermitage|AOC|Sweet White|Marsanne; Roussanne
+France|Rhône (Northern)|Crozes-Hermitage|AOC|Red|Syrah
+France|Rhône (Northern)|Cornas|AOC|Red|Syrah
+France|Rhône (Northern)|Saint-Péray|AOC|White|Marsanne; Roussanne
+France|Rhône (Northern)|Clairette de Die|AOC|Sparkling|Muscat Blanc; Clairette
+France|Rhône (Northern)|Crémant de Die|AOC|Sparkling|Clairette
+France|Rhône (Northern)|Châtillon-en-Diois|AOC|Red|Gamay
+France|Rhône (Southern)|Châteauneuf-du-Pape|AOC|Red|Grenache; Syrah; Mourvèdre
+France|Rhône (Southern)|Châteauneuf-du-Pape Blanc|AOC|White|Grenache Blanc; Roussanne
+France|Rhône (Southern)|Gigondas|AOC|Red|Grenache; Syrah; Mourvèdre
+France|Rhône (Southern)|Vacqueyras|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Vinsobres|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Rasteau|AOC|Red|Grenache
+France|Rhône (Southern)|Rasteau Vin Doux Naturel|AOC|Fortified|Grenache
+France|Rhône (Southern)|Cairanne|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Beaumes-de-Venise|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Muscat de Beaumes-de-Venise|AOC|Fortified|Muscat Blanc à Petits Grains
+France|Rhône (Southern)|Lirac|AOC|Red|Grenache; Syrah; Mourvèdre
+France|Rhône (Southern)|Tavel|AOC|Rosé|Grenache; Cinsault
+France|Rhône (Southern)|Côtes du Rhône|AOC|Red|Grenache; Syrah; Carignan
+France|Rhône (Southern)|Côtes du Rhône Villages|AOC|Red|Grenache; Syrah; Mourvèdre
+France|Rhône (Southern)|Costières de Nîmes|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Ventoux|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Luberon|AOC|Rosé|Grenache; Syrah
+France|Rhône (Southern)|Grignan-les-Adhémar|AOC|Red|Grenache; Syrah
+France|Rhône (Southern)|Duché d'Uzès|AOC|Red|Syrah; Grenache
+France|Rhône (Southern)|Clairette de Bellegarde|AOC|White|Clairette
+France|Provence|Côtes de Provence|AOC|Rosé|Grenache; Cinsault; Syrah
+France|Provence|Côtes de Provence Sainte-Victoire|AOC|Rosé|Grenache; Syrah
+France|Provence|Côtes de Provence La Londe|AOC|Rosé|Grenache; Cinsault
+France|Provence|Côtes de Provence Fréjus|AOC|Rosé|Grenache; Tibouren
+France|Provence|Côtes de Provence Pierrefeu|AOC|Rosé|Grenache; Cinsault
+France|Provence|Côtes de Provence Notre-Dame des Anges|AOC|Rosé|Grenache; Cinsault
+France|Provence|Bandol|AOC|Red|Mourvèdre; Grenache
+France|Provence|Cassis|AOC|White|Marsanne; Clairette
+France|Provence|Bellet|AOC|White|Rolle; Braquet
+France|Provence|Palette|AOC|Red|Mourvèdre; Grenache
+France|Provence|Coteaux d'Aix-en-Provence|AOC|Rosé|Grenache; Syrah; Cinsault
+France|Provence|Coteaux Varois en Provence|AOC|Rosé|Grenache; Syrah
+France|Provence|Les Baux-de-Provence|AOC|Red|Grenache; Syrah; Mourvèdre
+France|Provence|Pierrevert|AOC|Rosé|Grenache; Syrah
+France|Languedoc|Languedoc|AOC|Red|Grenache; Syrah; Mourvèdre
+France|Languedoc|Corbières|AOC|Red|Carignan; Grenache; Syrah
+France|Languedoc|Corbières-Boutenac|AOC|Red|Carignan; Mourvèdre
+France|Languedoc|Minervois|AOC|Red|Syrah; Grenache; Carignan
+France|Languedoc|Minervois La Livinière|AOC|Red|Syrah; Grenache; Mourvèdre
+France|Languedoc|Fitou|AOC|Red|Carignan; Grenache; Mourvèdre
+France|Languedoc|Faugères|AOC|Red|Syrah; Grenache; Mourvèdre
+France|Languedoc|Saint-Chinian|AOC|Red|Syrah; Grenache; Mourvèdre
+France|Languedoc|Pic Saint-Loup|AOC|Red|Syrah; Grenache; Mourvèdre
+France|Languedoc|La Clape|AOC|Red|Syrah; Grenache; Mourvèdre
+France|Languedoc|Terrasses du Larzac|AOC|Red|Syrah; Grenache; Cinsault
+France|Languedoc|Picpoul de Pinet|AOC|White|Piquepoul Blanc
+France|Languedoc|Limoux|AOC|White|Chardonnay; Chenin Blanc; Mauzac
+France|Languedoc|Blanquette de Limoux|AOC|Sparkling|Mauzac
+France|Languedoc|Blanquette Méthode Ancestrale|AOC|Sparkling|Mauzac
+France|Languedoc|Crémant de Limoux|AOC|Sparkling|Chardonnay; Chenin Blanc
+France|Languedoc|Cabardès|AOC|Red|Syrah; Merlot; Cabernet Sauvignon
+France|Languedoc|Malepère|AOC|Red|Merlot; Cabernet Franc
+France|Languedoc|Clairette du Languedoc|AOC|White|Clairette
+France|Languedoc|Grés de Montpellier|AOC|Red|Syrah; Grenache; Mourvèdre
+France|Languedoc|Saint-Georges-d'Orques|AOC|Red|Syrah; Grenache
+France|Languedoc|Cabrières|AOC|Rosé|Cinsault; Syrah
+France|Languedoc|Muscat de Frontignan|AOC|Fortified|Muscat Blanc à Petits Grains
+France|Languedoc|Muscat de Lunel|AOC|Fortified|Muscat Blanc à Petits Grains
+France|Languedoc|Muscat de Mireval|AOC|Fortified|Muscat Blanc à Petits Grains
+France|Languedoc|Muscat de Saint-Jean-de-Minervois|AOC|Fortified|Muscat Blanc à Petits Grains
+France|Roussillon|Côtes du Roussillon|AOC|Red|Grenache; Syrah; Carignan
+France|Roussillon|Côtes du Roussillon Villages|AOC|Red|Grenache; Carignan; Syrah
+France|Roussillon|Collioure|AOC|Red|Grenache; Mourvèdre; Syrah
+France|Roussillon|Banyuls|AOC|Fortified|Grenache
+France|Roussillon|Banyuls Grand Cru|AOC Grand Cru|Fortified|Grenache
+France|Roussillon|Maury|AOC|Fortified|Grenache
+France|Roussillon|Rivesaltes|AOC|Fortified|Grenache; Macabeu
+France|Roussillon|Muscat de Rivesaltes|AOC|Fortified|Muscat of Alexandria; Muscat Blanc
+France|Southwest France|Cahors|AOC|Red|Malbec
+France|Southwest France|Madiran|AOC|Red|Tannat
+France|Southwest France|Pacherenc du Vic-Bilh|AOC|Sweet White|Petit Manseng; Gros Manseng
+France|Southwest France|Jurançon|AOC|Sweet White|Petit Manseng; Gros Manseng
+France|Southwest France|Jurançon Sec|AOC|White|Gros Manseng
+France|Southwest France|Irouléguy|AOC|Red|Tannat; Cabernet Franc
+France|Southwest France|Béarn|AOC|Red|Tannat; Cabernet Franc
+France|Southwest France|Gaillac|AOC|Red|Duras; Braucol; Syrah
+France|Southwest France|Fronton|AOC|Red|Négrette
+France|Southwest France|Bergerac|AOC|Red|Merlot; Cabernet Sauvignon
+France|Southwest France|Côtes de Bergerac|AOC|Red|Merlot; Cabernet Franc
+France|Southwest France|Monbazillac|AOC|Sweet White|Sémillon; Sauvignon Blanc; Muscadelle
+France|Southwest France|Saussignac|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Southwest France|Rosette|AOC|Sweet White|Sémillon; Sauvignon Blanc
+France|Southwest France|Pécharmant|AOC|Red|Merlot; Cabernet Sauvignon
+France|Southwest France|Montravel|AOC|White|Sémillon; Sauvignon Blanc
+France|Southwest France|Haut-Montravel|AOC|Sweet White|Sémillon; Muscadelle
+France|Southwest France|Côtes de Montravel|AOC|Sweet White|Sémillon
+France|Southwest France|Buzet|AOC|Red|Merlot; Cabernet Sauvignon
+France|Southwest France|Marcillac|AOC|Red|Fer Servadou
+France|Southwest France|Côtes de Duras|AOC|White|Sauvignon Blanc
+France|Southwest France|Côtes du Marmandais|AOC|Red|Merlot; Abouriou
+France|Southwest France|Saint-Mont|AOC|Red|Tannat; Fer Servadou
+France|Southwest France|Tursan|AOC|White|Baroque
+France|Southwest France|Brulhois|AOC|Red|Tannat; Merlot
+France|Southwest France|Estaing|AOC|Red|Fer Servadou; Gamay
+France|Southwest France|Entraygues-Le Fel|AOC|White|Chenin Blanc
+France|Southwest France|Floc de Gascogne|AOC|Fortified|Colombard; Ugni Blanc
+France|Southwest France|Pineau des Charentes|AOC|Fortified|Ugni Blanc; Colombard
+France|Alsace|Alsace|AOC|White|Riesling; Gewurztraminer; Pinot Gris
+France|Alsace|Alsace Grand Cru|AOC Grand Cru|White|Riesling; Gewurztraminer; Pinot Gris; Muscat
+France|Alsace|Alsace Vendanges Tardives|AOC|Sweet White|Riesling; Gewurztraminer; Pinot Gris
+France|Alsace|Alsace Sélection de Grains Nobles|AOC|Sweet White|Riesling; Gewurztraminer; Pinot Gris
+France|Alsace|Crémant d'Alsace|AOC|Sparkling|Pinot Blanc; Auxerrois; Chardonnay
+France|Alsace|Edelzwicker|AOC|White|Field blend
+France|Alsace|Gentil|AOC|White|Riesling; Gewurztraminer; Pinot Gris; Muscat
+France|Alsace|Pinot Noir d'Alsace|AOC|Red|Pinot Noir
+France|Jura|Arbois|AOC|Red|Poulsard; Trousseau; Pinot Noir
+France|Jura|Arbois Pupillin|AOC|Red|Poulsard
+France|Jura|Côtes du Jura|AOC|White|Savagnin; Chardonnay
+France|Jura|Château-Chalon|AOC|Vin Jaune|Savagnin
+France|Jura|L'Étoile|AOC|White|Chardonnay; Savagnin
+France|Jura|Vin Jaune|AOC|Vin Jaune|Savagnin
+France|Jura|Vin de Paille du Jura|AOC|Sweet White|Savagnin; Chardonnay; Poulsard
+France|Jura|Macvin du Jura|AOC|Fortified|Chardonnay; Savagnin
+France|Jura|Crémant du Jura|AOC|Sparkling|Chardonnay; Pinot Noir
+France|Savoie & Bugey|Vin de Savoie|AOC|White|Jacquère; Altesse
+France|Savoie & Bugey|Roussette de Savoie|AOC|White|Altesse
+France|Savoie & Bugey|Seyssel|AOC|White|Altesse; Molette
+France|Savoie & Bugey|Crépy|AOC|White|Chasselas
+France|Savoie & Bugey|Chignin-Bergeron|AOC|White|Roussanne
+France|Savoie & Bugey|Mondeuse de Savoie|AOC|Red|Mondeuse Noire
+France|Savoie & Bugey|Bugey|AOC|White|Chardonnay; Altesse
+France|Savoie & Bugey|Bugey-Cerdon|AOC|Sparkling Rosé|Gamay; Poulsard
+France|Corsica|Patrimonio|AOC|Red|Nielluccio
+France|Corsica|Ajaccio|AOC|Red|Sciaccarello
+France|Corsica|Vin de Corse|AOC|Red|Nielluccio; Sciaccarello; Grenache
+France|Corsica|Vin de Corse Figari|AOC|Red|Nielluccio; Sciaccarello
+France|Corsica|Vin de Corse Porto-Vecchio|AOC|White|Vermentinu
+France|Corsica|Vin de Corse Sartène|AOC|Red|Sciaccarello; Nielluccio
+France|Corsica|Vin de Corse Calvi|AOC|Rosé|Nielluccio; Grenache
+France|Corsica|Muscat du Cap Corse|AOC|Fortified|Muscat Blanc à Petits Grains
+France|Lorraine|Côtes de Toul|AOC|Rosé|Gamay; Pinot Noir
+France|Lorraine|Moselle|AOC|White|Auxerrois; Pinot Gris
+France|National|Vin de France|VDF|Various|Various
+France|National|IGP Pays d'Oc|IGP|Red|Merlot; Syrah; Cabernet Sauvignon
+France|National|IGP Val de Loire|IGP|White|Sauvignon Blanc; Chardonnay
+France|National|IGP Méditerranée|IGP|Rosé|Grenache; Cinsault
+France|National|IGP Côtes de Gascogne|IGP|White|Colombard; Ugni Blanc
+France|National|IGP Île de Beauté|IGP|Red|Nielluccio; Syrah
+Italy|Piedmont|Barolo|DOCG|Red|Nebbiolo
+Italy|Piedmont|Barbaresco|DOCG|Red|Nebbiolo
+Italy|Piedmont|Roero|DOCG|Red|Nebbiolo
+Italy|Piedmont|Roero Arneis|DOCG|White|Arneis
+Italy|Piedmont|Barbera d'Asti|DOCG|Red|Barbera
+Italy|Piedmont|Nizza|DOCG|Red|Barbera
+Italy|Piedmont|Barbera del Monferrato Superiore|DOCG|Red|Barbera
+Italy|Piedmont|Barbera d'Alba|DOC|Red|Barbera
+Italy|Piedmont|Dolcetto d'Alba|DOC|Red|Dolcetto
+Italy|Piedmont|Dogliani|DOCG|Red|Dolcetto
+Italy|Piedmont|Dolcetto di Diano d'Alba|DOCG|Red|Dolcetto
+Italy|Piedmont|Dolcetto di Ovada Superiore|DOCG|Red|Dolcetto
+Italy|Piedmont|Gattinara|DOCG|Red|Nebbiolo
+Italy|Piedmont|Ghemme|DOCG|Red|Nebbiolo
+Italy|Piedmont|Lessona|DOC|Red|Nebbiolo
+Italy|Piedmont|Bramaterra|DOC|Red|Nebbiolo; Croatina
+Italy|Piedmont|Boca|DOC|Red|Nebbiolo; Vespolina
+Italy|Piedmont|Carema|DOC|Red|Nebbiolo
+Italy|Piedmont|Gavi|DOCG|White|Cortese
+Italy|Piedmont|Erbaluce di Caluso|DOCG|White|Erbaluce
+Italy|Piedmont|Caluso Passito|DOCG|Sweet White|Erbaluce
+Italy|Piedmont|Ruchè di Castagnole Monferrato|DOCG|Red|Ruchè
+Italy|Piedmont|Brachetto d'Acqui|DOCG|Sparkling Red|Brachetto
+Italy|Piedmont|Asti Spumante|DOCG|Sparkling|Moscato Bianco
+Italy|Piedmont|Moscato d'Asti|DOCG|Sparkling|Moscato Bianco
+Italy|Piedmont|Alta Langa|DOCG|Sparkling|Pinot Nero; Chardonnay
+Italy|Piedmont|Grignolino d'Asti|DOC|Red|Grignolino
+Italy|Piedmont|Grignolino del Monferrato Casalese|DOC|Red|Grignolino
+Italy|Piedmont|Freisa d'Asti|DOC|Red|Freisa
+Italy|Piedmont|Freisa di Chieri|DOC|Red|Freisa
+Italy|Piedmont|Langhe Nebbiolo|DOC|Red|Nebbiolo
+Italy|Piedmont|Nebbiolo d'Alba|DOC|Red|Nebbiolo
+Italy|Piedmont|Monferrato|DOC|Red|Barbera; Nebbiolo
+Italy|Piedmont|Colli Tortonesi Timorasso|DOC|White|Timorasso
+Italy|Piedmont|Verduno Pelaverga|DOC|Red|Pelaverga Piccolo
+Italy|Piedmont|Cortese dell'Alto Monferrato|DOC|White|Cortese
+Italy|Piedmont|Loazzolo|DOC|Sweet White|Moscato Bianco
+Italy|Piedmont|Valli Ossolane|DOC|Red|Nebbiolo
+Italy|Valle d'Aosta|Valle d'Aosta|DOC|Red|Petit Rouge; Fumin; Nebbiolo
+Italy|Valle d'Aosta|Blanc de Morgex et de La Salle|DOC|White|Prié Blanc
+Italy|Valle d'Aosta|Torrette|DOC|Red|Petit Rouge
+Italy|Valle d'Aosta|Chambave Muscat|DOC|White|Moscato Bianco
+Italy|Valle d'Aosta|Donnas|DOC|Red|Nebbiolo
+Italy|Lombardy|Franciacorta|DOCG|Sparkling|Chardonnay; Pinot Nero
+Italy|Lombardy|Franciacorta Satèn|DOCG|Sparkling|Chardonnay
+Italy|Lombardy|Valtellina Superiore|DOCG|Red|Chiavennasca
+Italy|Lombardy|Sforzato di Valtellina|DOCG|Red|Chiavennasca
+Italy|Lombardy|Rosso di Valtellina|DOC|Red|Chiavennasca
+Italy|Lombardy|Oltrepò Pavese Metodo Classico|DOCG|Sparkling|Pinot Nero
+Italy|Lombardy|Oltrepò Pavese|DOC|Red|Croatina; Barbera; Pinot Nero
+Italy|Lombardy|Bonarda dell'Oltrepò Pavese|DOC|Red|Croatina
+Italy|Lombardy|Moscato di Scanzo|DOCG|Sweet Red|Moscato di Scanzo
+Italy|Lombardy|Lugana|DOC|White|Turbiana
+Italy|Lombardy|Curtefranca|DOC|Red|Cabernet Sauvignon; Merlot
+Italy|Lombardy|Valcalepio|DOC|Red|Merlot; Cabernet Sauvignon
+Italy|Lombardy|Garda|DOC|White|Garganega; Chardonnay
+Italy|Lombardy|San Colombano al Lambro|DOC|Red|Croatina; Barbera
+Italy|Veneto|Amarone della Valpolicella|DOCG|Red|Corvina; Rondinella; Molinara
+Italy|Veneto|Recioto della Valpolicella|DOCG|Sweet Red|Corvina; Rondinella
+Italy|Veneto|Valpolicella|DOC|Red|Corvina; Rondinella; Molinara
+Italy|Veneto|Valpolicella Ripasso|DOC|Red|Corvina; Rondinella
+Italy|Veneto|Valpolicella Classico|DOC|Red|Corvina; Rondinella
+Italy|Veneto|Bardolino|DOC|Red|Corvina; Rondinella
+Italy|Veneto|Bardolino Superiore|DOCG|Red|Corvina; Rondinella
+Italy|Veneto|Bardolino Chiaretto|DOC|Rosé|Corvina; Rondinella
+Italy|Veneto|Soave|DOC|White|Garganega; Trebbiano di Soave
+Italy|Veneto|Soave Classico|DOC|White|Garganega
+Italy|Veneto|Soave Superiore|DOCG|White|Garganega
+Italy|Veneto|Recioto di Soave|DOCG|Sweet White|Garganega
+Italy|Veneto|Prosecco|DOC|Sparkling|Glera
+Italy|Veneto|Conegliano Valdobbiadene Prosecco Superiore|DOCG|Sparkling|Glera
+Italy|Veneto|Valdobbiadene Superiore di Cartizze|DOCG|Sparkling|Glera
+Italy|Veneto|Asolo Prosecco|DOCG|Sparkling|Glera
+Italy|Veneto|Colli Asolani|DOC|Red|Merlot; Cabernet Sauvignon
+Italy|Veneto|Bianco di Custoza|DOC|White|Garganega; Trebbiano
+Italy|Veneto|Gambellara|DOC|White|Garganega
+Italy|Veneto|Recioto di Gambellara|DOCG|Sweet White|Garganega
+Italy|Veneto|Colli Euganei|DOC|Red|Merlot; Cabernet Sauvignon
+Italy|Veneto|Colli Euganei Fior d'Arancio|DOCG|Sweet White|Moscato Giallo
+Italy|Veneto|Breganze|DOC|Red|Merlot; Cabernet Sauvignon
+Italy|Veneto|Torcolato di Breganze|DOC|Sweet White|Vespaiola
+Italy|Veneto|Lessini Durello|DOC|Sparkling|Durella
+Italy|Veneto|Piave|DOC|Red|Raboso; Merlot
+Italy|Veneto|Piave Malanotte|DOCG|Red|Raboso Piave
+Italy|Veneto|Bagnoli Friularo|DOCG|Red|Raboso Piave
+Italy|Veneto|Arcole|DOC|White|Garganega; Pinot Grigio
+Italy|Veneto|Montello Rosso|DOCG|Red|Cabernet Sauvignon; Merlot
+Italy|Trentino-Alto Adige|Alto Adige (Südtirol)|DOC|White|Pinot Grigio; Gewürztraminer; Sauvignon
+Italy|Trentino-Alto Adige|Alto Adige Terlano|DOC|White|Pinot Bianco; Chardonnay
+Italy|Trentino-Alto Adige|Alto Adige Valle Isarco|DOC|White|Sylvaner; Kerner; Riesling
+Italy|Trentino-Alto Adige|Santa Maddalena|DOC|Red|Schiava; Lagrein
+Italy|Trentino-Alto Adige|Lago di Caldaro (Kalterersee)|DOC|Red|Schiava
+Italy|Trentino-Alto Adige|Alto Adige Lagrein|DOC|Red|Lagrein
+Italy|Trentino-Alto Adige|Trentino|DOC|White|Chardonnay; Pinot Grigio
+Italy|Trentino-Alto Adige|Trento|DOC|Sparkling|Chardonnay; Pinot Nero
+Italy|Trentino-Alto Adige|Teroldego Rotaliano|DOC|Red|Teroldego
+Italy|Trentino-Alto Adige|Trentino Marzemino|DOC|Red|Marzemino
+Italy|Trentino-Alto Adige|Vino Santo Trentino|DOC|Sweet White|Nosiola
+Italy|Trentino-Alto Adige|Casteller|DOC|Red|Schiava; Merlot
+Italy|Friuli-Venezia Giulia|Collio Goriziano|DOC|White|Friulano; Ribolla Gialla; Sauvignon
+Italy|Friuli-Venezia Giulia|Friuli Colli Orientali|DOC|White|Friulano; Ribolla Gialla
+Italy|Friuli-Venezia Giulia|Ramandolo|DOCG|Sweet White|Verduzzo Friulano
+Italy|Friuli-Venezia Giulia|Colli Orientali del Friuli Picolit|DOCG|Sweet White|Picolit
+Italy|Friuli-Venezia Giulia|Rosazzo|DOCG|White|Friulano; Ribolla Gialla
+Italy|Friuli-Venezia Giulia|Friuli Isonzo|DOC|White|Friulano; Pinot Grigio
+Italy|Friuli-Venezia Giulia|Friuli Grave|DOC|White|Pinot Grigio; Friulano
+Italy|Friuli-Venezia Giulia|Carso|DOC|Red|Terrano; Refosco
+Italy|Friuli-Venezia Giulia|Carso Vitovska|DOC|Orange|Vitovska
+Italy|Friuli-Venezia Giulia|Friuli Aquileia|DOC|White|Friulano; Pinot Grigio
+Italy|Friuli-Venezia Giulia|Friuli Annia|DOC|White|Friulano; Chardonnay
+Italy|Friuli-Venezia Giulia|Friuli Latisana|DOC|White|Pinot Grigio; Friulano
+Italy|Friuli-Venezia Giulia|Lison|DOCG|White|Friulano
+Italy|Friuli-Venezia Giulia|Refosco dal Peduncolo Rosso|DOC|Red|Refosco dal Peduncolo Rosso
+Italy|Friuli-Venezia Giulia|Schioppettino di Prepotto|DOC|Red|Schioppettino
+Italy|Emilia-Romagna|Lambrusco di Sorbara|DOC|Sparkling Red|Lambrusco di Sorbara
+Italy|Emilia-Romagna|Lambrusco Grasparossa di Castelvetro|DOC|Sparkling Red|Lambrusco Grasparossa
+Italy|Emilia-Romagna|Lambrusco Salamino di Santa Croce|DOC|Sparkling Red|Lambrusco Salamino
+Italy|Emilia-Romagna|Lambrusco Reggiano|DOC|Sparkling Red|Lambrusco Marani; Lambrusco Salamino
+Italy|Emilia-Romagna|Lambrusco Mantovano|DOC|Sparkling Red|Lambrusco Viadanese
+Italy|Emilia-Romagna|Romagna Sangiovese|DOC|Red|Sangiovese
+Italy|Emilia-Romagna|Romagna Albana|DOCG|White|Albana
+Italy|Emilia-Romagna|Colli Bolognesi Pignoletto|DOCG|White|Grechetto Gentile
+Italy|Emilia-Romagna|Gutturnio|DOC|Red|Barbera; Croatina
+Italy|Emilia-Romagna|Colli Piacentini|DOC|White|Malvasia; Ortrugo
+Italy|Emilia-Romagna|Ortrugo dei Colli Piacentini|DOC|White|Ortrugo
+Italy|Emilia-Romagna|Romagna Pagadebit|DOC|White|Bombino Bianco
+Italy|Emilia-Romagna|Romagna Cagnina|DOC|Sweet Red|Terrano
+Italy|Tuscany|Chianti|DOCG|Red|Sangiovese
+Italy|Tuscany|Chianti Classico|DOCG|Red|Sangiovese
+Italy|Tuscany|Chianti Classico Gran Selezione|DOCG|Red|Sangiovese
+Italy|Tuscany|Chianti Rufina|DOCG|Red|Sangiovese
+Italy|Tuscany|Chianti Colli Senesi|DOCG|Red|Sangiovese
+Italy|Tuscany|Brunello di Montalcino|DOCG|Red|Sangiovese Grosso
+Italy|Tuscany|Rosso di Montalcino|DOC|Red|Sangiovese
+Italy|Tuscany|Moscadello di Montalcino|DOC|Sweet White|Moscato Bianco
+Italy|Tuscany|Vino Nobile di Montepulciano|DOCG|Red|Prugnolo Gentile
+Italy|Tuscany|Rosso di Montepulciano|DOC|Red|Sangiovese
+Italy|Tuscany|Vernaccia di San Gimignano|DOCG|White|Vernaccia di San Gimignano
+Italy|Tuscany|Carmignano|DOCG|Red|Sangiovese; Cabernet Sauvignon
+Italy|Tuscany|Barco Reale di Carmignano|DOC|Red|Sangiovese; Cabernet Sauvignon
+Italy|Tuscany|Bolgheri|DOC|Red|Cabernet Sauvignon; Merlot; Cabernet Franc
+Italy|Tuscany|Bolgheri Sassicaia|DOC|Red|Cabernet Sauvignon; Cabernet Franc
+Italy|Tuscany|Maremma Toscana|DOC|Red|Sangiovese; Cabernet Sauvignon; Merlot
+Italy|Tuscany|Morellino di Scansano|DOCG|Red|Sangiovese
+Italy|Tuscany|Montecucco Sangiovese|DOCG|Red|Sangiovese
+Italy|Tuscany|Suvereto|DOCG|Red|Cabernet Sauvignon; Merlot
+Italy|Tuscany|Val di Cornia Rosso|DOCG|Red|Sangiovese; Cabernet Sauvignon
+Italy|Tuscany|Elba Aleatico Passito|DOCG|Sweet Red|Aleatico
+Italy|Tuscany|Vin Santo del Chianti|DOC|Sweet White|Trebbiano; Malvasia
+Italy|Tuscany|Vin Santo del Chianti Classico|DOC|Sweet White|Trebbiano; Malvasia
+Italy|Tuscany|Vin Santo di Montepulciano|DOC|Sweet White|Trebbiano; Malvasia
+Italy|Tuscany|Occhio di Pernice|DOC|Sweet Red|Sangiovese
+Italy|Tuscany|Cortona|DOC|Red|Syrah
+Italy|Tuscany|Montescudaio|DOC|Red|Sangiovese
+Italy|Tuscany|Pomino|DOC|White|Chardonnay; Pinot Bianco
+Italy|Tuscany|Terre di Pisa|DOC|Red|Sangiovese
+Italy|Tuscany|Orcia|DOC|Red|Sangiovese
+Italy|Tuscany|Toscana (Super Tuscan)|IGT|Red|Cabernet Sauvignon; Merlot; Sangiovese
+Italy|Marche|Verdicchio dei Castelli di Jesi|DOC|White|Verdicchio
+Italy|Marche|Castelli di Jesi Verdicchio Riserva|DOCG|White|Verdicchio
+Italy|Marche|Verdicchio di Matelica|DOC|White|Verdicchio
+Italy|Marche|Verdicchio di Matelica Riserva|DOCG|White|Verdicchio
+Italy|Marche|Conero Riserva|DOCG|Red|Montepulciano
+Italy|Marche|Rosso Conero|DOC|Red|Montepulciano
+Italy|Marche|Rosso Piceno|DOC|Red|Montepulciano; Sangiovese
+Italy|Marche|Offida Pecorino|DOCG|White|Pecorino
+Italy|Marche|Offida Passerina|DOCG|White|Passerina
+Italy|Marche|Vernaccia di Serrapetrona|DOCG|Sparkling Red|Vernaccia Nera
+Italy|Marche|Lacrima di Morro d'Alba|DOC|Red|Lacrima
+Italy|Marche|Bianchello del Metauro|DOC|White|Biancame
+Italy|Umbria|Montefalco Sagrantino|DOCG|Red|Sagrantino
+Italy|Umbria|Montefalco Rosso|DOC|Red|Sangiovese; Sagrantino
+Italy|Umbria|Torgiano Rosso Riserva|DOCG|Red|Sangiovese
+Italy|Umbria|Torgiano|DOC|Red|Sangiovese
+Italy|Umbria|Orvieto|DOC|White|Grechetto; Trebbiano
+Italy|Umbria|Orvieto Classico|DOC|White|Grechetto; Procanico
+Italy|Umbria|Trebbiano Spoletino|DOC|White|Trebbiano Spoletino
+Italy|Umbria|Colli Martani|DOC|White|Grechetto
+Italy|Lazio|Frascati|DOC|White|Malvasia; Trebbiano
+Italy|Lazio|Frascati Superiore|DOCG|White|Malvasia del Lazio
+Italy|Lazio|Cannellino di Frascati|DOCG|Sweet White|Malvasia
+Italy|Lazio|Cesanese del Piglio|DOCG|Red|Cesanese
+Italy|Lazio|Est! Est!! Est!!! di Montefiascone|DOC|White|Trebbiano; Malvasia
+Italy|Lazio|Marino|DOC|White|Malvasia; Trebbiano
+Italy|Lazio|Aleatico di Gradoli|DOC|Sweet Red|Aleatico
+Italy|Lazio|Cori|DOC|Red|Nero Buono; Montepulciano
+Italy|Abruzzo|Montepulciano d'Abruzzo|DOC|Red|Montepulciano
+Italy|Abruzzo|Montepulciano d'Abruzzo Colline Teramane|DOCG|Red|Montepulciano
+Italy|Abruzzo|Trebbiano d'Abruzzo|DOC|White|Trebbiano Abruzzese
+Italy|Abruzzo|Cerasuolo d'Abruzzo|DOC|Rosé|Montepulciano
+Italy|Abruzzo|Abruzzo Pecorino|DOC|White|Pecorino
+Italy|Abruzzo|Villamagna|DOC|Red|Montepulciano
+Italy|Molise|Biferno|DOC|Red|Montepulciano; Aglianico
+Italy|Molise|Tintilia del Molise|DOC|Red|Tintilia
+Italy|Campania|Taurasi|DOCG|Red|Aglianico
+Italy|Campania|Fiano di Avellino|DOCG|White|Fiano
+Italy|Campania|Greco di Tufo|DOCG|White|Greco
+Italy|Campania|Aglianico del Taburno|DOCG|Red|Aglianico
+Italy|Campania|Falanghina del Sannio|DOC|White|Falanghina
+Italy|Campania|Lacryma Christi del Vesuvio|DOC|Red|Piedirosso; Aglianico
+Italy|Campania|Costa d'Amalfi|DOC|White|Falanghina; Biancolella
+Italy|Campania|Ischia|DOC|White|Biancolella; Forastera
+Italy|Campania|Capri|DOC|White|Falanghina; Greco
+Italy|Campania|Falerno del Massico|DOC|Red|Aglianico; Piedirosso
+Italy|Campania|Cilento|DOC|Red|Aglianico
+Italy|Campania|Asprinio di Aversa|DOC|White|Asprinio
+Italy|Campania|Penisola Sorrentina|DOC|Red|Piedirosso
+Italy|Basilicata|Aglianico del Vulture|DOC|Red|Aglianico
+Italy|Basilicata|Aglianico del Vulture Superiore|DOCG|Red|Aglianico
+Italy|Basilicata|Matera|DOC|Red|Primitivo; Sangiovese
+Italy|Puglia|Primitivo di Manduria|DOC|Red|Primitivo
+Italy|Puglia|Primitivo di Manduria Dolce Naturale|DOCG|Sweet Red|Primitivo
+Italy|Puglia|Castel del Monte Nero di Troia Riserva|DOCG|Red|Nero di Troia
+Italy|Puglia|Castel del Monte Bombino Nero|DOCG|Rosé|Bombino Nero
+Italy|Puglia|Castel del Monte|DOC|Red|Nero di Troia; Aglianico
+Italy|Puglia|Salice Salentino|DOC|Red|Negroamaro
+Italy|Puglia|Copertino|DOC|Red|Negroamaro
+Italy|Puglia|Brindisi|DOC|Red|Negroamaro
+Italy|Puglia|Squinzano|DOC|Red|Negroamaro
+Italy|Puglia|Gioia del Colle|DOC|Red|Primitivo
+Italy|Puglia|Locorotondo|DOC|White|Verdeca; Bianco d'Alessano
+Italy|Puglia|Martina Franca|DOC|White|Verdeca
+Italy|Puglia|Negroamaro di Terra d'Otranto|DOC|Red|Negroamaro
+Italy|Puglia|Alezio|DOC|Rosé|Negroamaro
+Italy|Puglia|Nardò|DOC|Red|Negroamaro; Malvasia Nera
+Italy|Puglia|Salento|IGT|Red|Primitivo; Negroamaro
+Italy|Calabria|Cirò|DOC|Red|Gaglioppo
+Italy|Calabria|Greco di Bianco|DOC|Sweet White|Greco Bianco
+Italy|Calabria|Savuto|DOC|Red|Gaglioppo; Magliocco
+Italy|Calabria|Melissa|DOC|Red|Gaglioppo
+Italy|Calabria|Terre di Cosenza|DOC|Red|Magliocco
+Italy|Calabria|Lamezia|DOC|Red|Gaglioppo; Nerello
+Italy|Sicily|Etna Rosso|DOC|Red|Nerello Mascalese; Nerello Cappuccio
+Italy|Sicily|Etna Bianco|DOC|White|Carricante; Catarratto
+Italy|Sicily|Etna Rosato|DOC|Rosé|Nerello Mascalese
+Italy|Sicily|Cerasuolo di Vittoria|DOCG|Red|Nero d'Avola; Frappato
+Italy|Sicily|Sicilia|DOC|Red|Nero d'Avola
+Italy|Sicily|Marsala|DOC|Fortified|Grillo; Catarratto; Inzolia
+Italy|Sicily|Passito di Pantelleria|DOC|Sweet White|Zibibbo
+Italy|Sicily|Moscato di Pantelleria|DOC|Sweet White|Zibibbo
+Italy|Sicily|Malvasia delle Lipari|DOC|Sweet White|Malvasia di Lipari
+Italy|Sicily|Faro|DOC|Red|Nerello Mascalese; Nocera
+Italy|Sicily|Vittoria|DOC|Red|Frappato; Nero d'Avola
+Italy|Sicily|Noto|DOC|Red|Nero d'Avola
+Italy|Sicily|Menfi|DOC|White|Inzolia; Chardonnay
+Italy|Sicily|Alcamo|DOC|White|Catarratto
+Italy|Sicily|Contea di Sclafani|DOC|Red|Nero d'Avola; Perricone
+Italy|Sicily|Contessa Entellina|DOC|White|Ansonica; Chardonnay
+Italy|Sicily|Eloro|DOC|Red|Nero d'Avola; Frappato
+Italy|Sardinia|Vermentino di Gallura|DOCG|White|Vermentino
+Italy|Sardinia|Vermentino di Sardegna|DOC|White|Vermentino
+Italy|Sardinia|Cannonau di Sardegna|DOC|Red|Cannonau
+Italy|Sardinia|Carignano del Sulcis|DOC|Red|Carignano
+Italy|Sardinia|Vernaccia di Oristano|DOC|Fortified|Vernaccia di Oristano
+Italy|Sardinia|Monica di Sardegna|DOC|Red|Monica
+Italy|Sardinia|Malvasia di Bosa|DOC|Fortified|Malvasia di Sardegna
+Italy|Sardinia|Nuragus di Cagliari|DOC|White|Nuragus
+Italy|Sardinia|Nasco di Cagliari|DOC|Sweet White|Nasco
+Italy|Sardinia|Moscato di Sardegna|DOC|Sweet White|Moscato Bianco
+Italy|Sardinia|Girò di Cagliari|DOC|Sweet Red|Girò
+Italy|Sardinia|Mandrolisai|DOC|Red|Bovale; Cannonau; Monica
+Italy|Liguria|Cinque Terre|DOC|White|Bosco; Albarola; Vermentino
+Italy|Liguria|Cinque Terre Sciacchetrà|DOC|Sweet White|Bosco; Albarola
+Italy|Liguria|Rossese di Dolceacqua|DOC|Red|Rossese
+Italy|Liguria|Riviera Ligure di Ponente|DOC|White|Pigato; Vermentino
+Italy|Liguria|Colli di Luni|DOC|White|Vermentino
+Italy|Liguria|Golfo del Tigullio|DOC|White|Vermentino; Bianchetta
+Spain|Rioja|Rioja|DOCa|Red|Tempranillo; Garnacha; Graciano; Mazuelo
+Spain|Rioja|Rioja Alta|DOCa|Red|Tempranillo; Graciano
+Spain|Rioja|Rioja Alavesa|DOCa|Red|Tempranillo
+Spain|Rioja|Rioja Oriental|DOCa|Red|Garnacha; Tempranillo
+Spain|Rioja|Rioja Blanco|DOCa|White|Viura; Malvasía; Garnacha Blanca
+Spain|Rioja|Rioja Gran Reserva|DOCa|Red|Tempranillo; Graciano
+Spain|Castilla y León|Ribera del Duero|DO|Red|Tinto Fino
+Spain|Castilla y León|Rueda|DO|White|Verdejo; Sauvignon Blanc
+Spain|Castilla y León|Toro|DO|Red|Tinta de Toro
+Spain|Castilla y León|Bierzo|DO|Red|Mencía
+Spain|Castilla y León|Cigales|DO|Rosé|Tempranillo; Garnacha
+Spain|Castilla y León|Arlanza|DO|Red|Tempranillo
+Spain|Castilla y León|Arribes|DO|Red|Juan García
+Spain|Castilla y León|Tierra de León|DO|Red|Prieto Picudo
+Spain|Castilla y León|Sierra de Salamanca|DO|Red|Rufete
+Spain|Castilla y León|Valles de Benavente|VC|Red|Prieto Picudo
+Spain|Galicia|Rías Baixas|DO|White|Albariño
+Spain|Galicia|Ribeiro|DO|White|Treixadura; Godello
+Spain|Galicia|Ribeira Sacra|DO|Red|Mencía
+Spain|Galicia|Valdeorras|DO|White|Godello
+Spain|Galicia|Monterrei|DO|White|Godello; Treixadura
+Spain|Catalonia|Priorat|DOQ|Red|Garnacha; Cariñena
+Spain|Catalonia|Montsant|DO|Red|Garnacha; Cariñena
+Spain|Catalonia|Penedès|DO|White|Xarel·lo; Macabeo; Parellada
+Spain|Catalonia|Cava|DO|Sparkling|Macabeo; Xarel·lo; Parellada
+Spain|Catalonia|Corpinnat|Private mark|Sparkling|Xarel·lo; Macabeo
+Spain|Catalonia|Clàssic Penedès|DO|Sparkling|Xarel·lo; Macabeo
+Spain|Catalonia|Conca de Barberà|DO|Red|Trepat
+Spain|Catalonia|Costers del Segre|DO|Red|Tempranillo; Cabernet Sauvignon
+Spain|Catalonia|Terra Alta|DO|White|Garnacha Blanca
+Spain|Catalonia|Empordà|DO|Red|Garnacha; Cariñena
+Spain|Catalonia|Alella|DO|White|Pansa Blanca
+Spain|Catalonia|Pla de Bages|DO|Red|Picapoll; Cabernet Sauvignon
+Spain|Catalonia|Tarragona|DO|White|Macabeo; Xarel·lo
+Spain|Catalonia|Catalunya|DO|Red|Various
+Spain|Navarra & Aragón|Navarra|DO|Rosé|Garnacha; Tempranillo
+Spain|Navarra & Aragón|Somontano|DO|Red|Moristel; Tempranillo; Cabernet Sauvignon
+Spain|Navarra & Aragón|Cariñena|DO|Red|Garnacha; Cariñena
+Spain|Navarra & Aragón|Calatayud|DO|Red|Garnacha
+Spain|Navarra & Aragón|Campo de Borja|DO|Red|Garnacha
+Spain|Navarra & Aragón|Aragón|VT|Red|Garnacha
+Spain|Basque Country|Getariako Txakolina|DO|White|Hondarrabi Zuri
+Spain|Basque Country|Bizkaiko Txakolina|DO|White|Hondarrabi Zuri
+Spain|Basque Country|Arabako Txakolina|DO|White|Hondarrabi Zuri
+Spain|Levante|Utiel-Requena|DO|Red|Bobal
+Spain|Levante|Valencia|DO|White|Merseguera; Moscatel
+Spain|Levante|Alicante|DO|Red|Monastrell
+Spain|Levante|Fondillón|DO|Fortified|Monastrell
+Spain|Levante|Yecla|DO|Red|Monastrell
+Spain|Levante|Jumilla|DO|Red|Monastrell
+Spain|Levante|Bullas|DO|Red|Monastrell
+Spain|Levante|Almansa|DO|Red|Garnacha Tintorera
+Spain|Castilla-La Mancha|La Mancha|DO|Red|Cencibel; Airén
+Spain|Castilla-La Mancha|Valdepeñas|DO|Red|Tempranillo
+Spain|Castilla-La Mancha|Manchuela|DO|Red|Bobal
+Spain|Castilla-La Mancha|Méntrida|DO|Red|Garnacha
+Spain|Castilla-La Mancha|Uclés|DO|Red|Tempranillo
+Spain|Castilla-La Mancha|Ribera del Júcar|DO|Red|Cencibel; Bobal
+Spain|Castilla-La Mancha|Mondéjar|DO|Red|Tempranillo
+Spain|Castilla-La Mancha|Dominio de Valdepusa|DO de Pago|Red|Syrah; Petit Verdot
+Spain|Castilla-La Mancha|Finca Élez|DO de Pago|Red|Tempranillo; Cabernet Sauvignon
+Spain|Castilla-La Mancha|Dehesa del Carrizal|DO de Pago|Red|Cabernet Sauvignon; Syrah
+Spain|Castilla-La Mancha|Pago Guijoso|DO de Pago|Red|Cabernet Sauvignon
+Spain|Extremadura|Ribera del Guadiana|DO|Red|Tempranillo; Garnacha
+Spain|Madrid|Vinos de Madrid|DO|Red|Garnacha; Tempranillo
+Spain|Andalusia|Jerez-Xérès-Sherry|DO|Fortified|Palomino; Pedro Ximénez; Moscatel
+Spain|Andalusia|Fino|DO|Fortified|Palomino
+Spain|Andalusia|Manzanilla de Sanlúcar|DO|Fortified|Palomino
+Spain|Andalusia|Amontillado|DO|Fortified|Palomino
+Spain|Andalusia|Oloroso|DO|Fortified|Palomino
+Spain|Andalusia|Palo Cortado|DO|Fortified|Palomino
+Spain|Andalusia|Pedro Ximénez Sherry|DO|Fortified|Pedro Ximénez
+Spain|Andalusia|Cream Sherry|DO|Fortified|Palomino; Pedro Ximénez
+Spain|Andalusia|Moscatel de Chipiona|DO|Fortified|Moscatel
+Spain|Andalusia|Montilla-Moriles|DO|Fortified|Pedro Ximénez
+Spain|Andalusia|Málaga|DO|Fortified|Pedro Ximénez; Moscatel
+Spain|Andalusia|Sierras de Málaga|DO|Red|Romé; Syrah
+Spain|Andalusia|Condado de Huelva|DO|White|Zalema
+Spain|Andalusia|Lebrija|DO|Fortified|Palomino; Moscatel
+Spain|Canary Islands|Lanzarote|DO|White|Malvasía Volcánica
+Spain|Canary Islands|Tacoronte-Acentejo|DO|Red|Listán Negro
+Spain|Canary Islands|Ycoden-Daute-Isora|DO|White|Listán Blanco
+Spain|Canary Islands|Valle de la Orotava|DO|Red|Listán Negro
+Spain|Canary Islands|Abona|DO|White|Listán Blanco
+Spain|Canary Islands|Valle de Güímar|DO|White|Listán Blanco
+Spain|Canary Islands|La Palma|DO|White|Listán Blanco; Negramoll
+Spain|Canary Islands|El Hierro|DO|White|Vijariego
+Spain|Canary Islands|La Gomera|DO|White|Forastera Gomera
+Spain|Canary Islands|Gran Canaria|DO|Red|Listán Negro
+Spain|Balearic Islands|Binissalem|DO|Red|Manto Negro
+Spain|Balearic Islands|Pla i Llevant|DO|Red|Callet; Manto Negro
+Spain|Balearic Islands|Vi de la Terra Mallorca|VT|Red|Callet; Fogoneu
+Spain|Cantabria & Asturias|Cangas|VC|Red|Albarín Negro; Verdejo Negro
+Spain|Cantabria & Asturias|Costa de Cantabria|VT|White|Albariño
+Portugal|Douro|Douro|DOC|Red|Touriga Nacional; Touriga Franca; Tinta Roriz
+Portugal|Douro|Douro Branco|DOC|White|Rabigato; Viosinho; Gouveio
+Portugal|Douro|Porto Ruby|DOC|Fortified|Touriga Nacional; Touriga Franca
+Portugal|Douro|Porto Tawny|DOC|Fortified|Touriga Franca; Tinta Roriz
+Portugal|Douro|Porto Vintage|DOC|Fortified|Touriga Nacional; Touriga Franca
+Portugal|Douro|Porto Late Bottled Vintage|DOC|Fortified|Touriga Franca; Tinta Barroca
+Portugal|Douro|Porto Colheita|DOC|Fortified|Touriga Franca; Tinta Roriz
+Portugal|Douro|Porto Branco|DOC|Fortified|Malvasia Fina; Gouveio
+Portugal|Douro|Porto Rosé|DOC|Fortified|Touriga Nacional
+Portugal|Douro|Porto Crusted|DOC|Fortified|Touriga Franca; Tinta Barroca
+Portugal|Douro|Porto Garrafeira|DOC|Fortified|Touriga Franca
+Portugal|Douro|Moscatel do Douro|DOC|Fortified|Moscatel Galego
+Portugal|Vinho Verde|Vinho Verde|DOC|White|Loureiro; Alvarinho; Trajadura
+Portugal|Vinho Verde|Vinho Verde Alvarinho (Monção e Melgaço)|DOC|White|Alvarinho
+Portugal|Vinho Verde|Vinho Verde Loureiro (Lima)|DOC|White|Loureiro
+Portugal|Vinho Verde|Vinho Verde Tinto|DOC|Red|Vinhão
+Portugal|Vinho Verde|Vinho Verde Espumante|DOC|Sparkling|Loureiro; Alvarinho
+Portugal|Dão|Dão|DOC|Red|Touriga Nacional; Jaen; Alfrocheiro
+Portugal|Dão|Dão Branco|DOC|White|Encruzado
+Portugal|Bairrada|Bairrada|DOC|Red|Baga
+Portugal|Bairrada|Bairrada Espumante|DOC|Sparkling|Baga; Maria Gomes
+Portugal|Alentejo|Alentejo|DOC|Red|Aragonez; Trincadeira; Alicante Bouschet
+Portugal|Alentejo|Alentejo Branco|DOC|White|Antão Vaz; Arinto; Roupeiro
+Portugal|Alentejo|Vinho de Talha|DOC|Red|Aragonez; Trincadeira
+Portugal|Alentejo|Borba|DOC|Red|Aragonez; Trincadeira
+Portugal|Alentejo|Reguengos|DOC|Red|Trincadeira; Aragonez
+Portugal|Alentejo|Redondo|DOC|Red|Aragonez; Trincadeira
+Portugal|Alentejo|Vidigueira|DOC|White|Antão Vaz
+Portugal|Alentejo|Portalegre|DOC|Red|Trincadeira; Grand Noir
+Portugal|Lisboa|Bucelas|DOC|White|Arinto
+Portugal|Lisboa|Colares|DOC|Red|Ramisco
+Portugal|Lisboa|Carcavelos|DOC|Fortified|Galego Dourado; Arinto
+Portugal|Lisboa|Óbidos|DOC|White|Arinto; Fernão Pires
+Portugal|Lisboa|Alenquer|DOC|Red|Castelão; Touriga Nacional
+Portugal|Lisboa|Arruda|DOC|Red|Castelão
+Portugal|Lisboa|Torres Vedras|DOC|Red|Castelão; Tinta Miúda
+Portugal|Lisboa|Lourinhã|DOC|White|Malvasia Rei
+Portugal|Lisboa|Encostas d'Aire|DOC|Red|Castelão; Trincadeira
+Portugal|Setúbal|Moscatel de Setúbal|DOC|Fortified|Moscatel de Setúbal
+Portugal|Setúbal|Moscatel Roxo|DOC|Fortified|Moscatel Roxo
+Portugal|Setúbal|Palmela|DOC|Red|Castelão
+Portugal|Setúbal|Península de Setúbal|VR|Red|Castelão; Syrah
+Portugal|Tejo|Tejo|DOC|Red|Castelão; Trincadeira; Touriga Nacional
+Portugal|Beiras|Beira Interior|DOC|Red|Touriga Nacional; Rufete
+Portugal|Beiras|Távora-Varosa|DOC|Sparkling|Chardonnay; Malvasia Fina
+Portugal|Beiras|Lafões|DOC|White|Arinto; Cerceal
+Portugal|Trás-os-Montes|Trás-os-Montes|DOC|Red|Tinta Roriz; Trincadeira
+Portugal|Trás-os-Montes|Chaves|DOC|Red|Tinta Roriz
+Portugal|Trás-os-Montes|Valpaços|DOC|Red|Tinta Roriz; Touriga Franca
+Portugal|Madeira|Madeira Sercial|DOC|Fortified|Sercial
+Portugal|Madeira|Madeira Verdelho|DOC|Fortified|Verdelho
+Portugal|Madeira|Madeira Bual|DOC|Fortified|Boal
+Portugal|Madeira|Madeira Malmsey|DOC|Fortified|Malvasia
+Portugal|Madeira|Madeira Terrantez|DOC|Fortified|Terrantez
+Portugal|Madeira|Madeira Rainwater|DOC|Fortified|Tinta Negra
+Portugal|Madeira|Madeira Tinta Negra|DOC|Fortified|Tinta Negra
+Portugal|Azores|Pico|DOC|White|Verdelho; Arinto dos Açores
+Portugal|Azores|Biscoitos|DOC|Fortified|Verdelho
+Portugal|Azores|Graciosa|DOC|White|Verdelho; Arinto
+Portugal|Algarve|Lagos|DOC|Red|Negra Mole; Castelão
+Portugal|Algarve|Portimão|DOC|Red|Negra Mole
+Portugal|Algarve|Lagoa|DOC|Red|Negra Mole
+Portugal|Algarve|Tavira|DOC|Red|Negra Mole; Castelão
+Germany|Mosel|Mosel|Anbaugebiet|White|Riesling; Müller-Thurgau; Elbling
+Germany|Mosel|Saar|Bereich|White|Riesling
+Germany|Mosel|Ruwer|Bereich|White|Riesling
+Germany|Mosel|Bernkasteler Doctor|Einzellage|White|Riesling
+Germany|Mosel|Wehlener Sonnenuhr|Einzellage|White|Riesling
+Germany|Mosel|Scharzhofberger|Einzellage|White|Riesling
+Germany|Mosel|Erdener Prälat|Einzellage|White|Riesling
+Germany|Mosel|Ürziger Würzgarten|Einzellage|White|Riesling
+Germany|Mosel|Piesporter Goldtröpfchen|Einzellage|White|Riesling
+Germany|Mosel|Brauneberger Juffer-Sonnenuhr|Einzellage|White|Riesling
+Germany|Rheingau|Rheingau|Anbaugebiet|White|Riesling; Spätburgunder
+Germany|Rheingau|Schloss Johannisberg|Einzellage|White|Riesling
+Germany|Rheingau|Rüdesheimer Berg Schlossberg|Einzellage|White|Riesling
+Germany|Rheingau|Erbacher Marcobrunn|Einzellage|White|Riesling
+Germany|Rheingau|Steinberg|Einzellage|White|Riesling
+Germany|Rheingau|Assmannshäuser Höllenberg|Einzellage|Red|Spätburgunder
+Germany|Rheinhessen|Rheinhessen|Anbaugebiet|White|Riesling; Silvaner; Müller-Thurgau
+Germany|Rheinhessen|Roter Hang (Nierstein)|Bereich|White|Riesling
+Germany|Rheinhessen|Niersteiner Pettenthal|Einzellage|White|Riesling
+Germany|Rheinhessen|Liebfraumilch|Region-wide style|Sweet White|Müller-Thurgau; Riesling
+Germany|Pfalz|Pfalz|Anbaugebiet|White|Riesling; Spätburgunder
+Germany|Pfalz|Forster Kirchenstück|Einzellage|White|Riesling
+Germany|Pfalz|Forster Jesuitengarten|Einzellage|White|Riesling
+Germany|Pfalz|Deidesheimer Hohenmorgen|Einzellage|White|Riesling
+Germany|Nahe|Nahe|Anbaugebiet|White|Riesling
+Germany|Nahe|Niederhäuser Hermannshöhle|Einzellage|White|Riesling
+Germany|Nahe|Schlossböckelheimer Kupfergrube|Einzellage|White|Riesling
+Germany|Ahr|Ahr|Anbaugebiet|Red|Spätburgunder; Frühburgunder
+Germany|Baden|Baden|Anbaugebiet|Red|Spätburgunder; Grauburgunder
+Germany|Baden|Kaiserstuhl|Bereich|Red|Spätburgunder
+Germany|Baden|Ortenau|Bereich|White|Klingelberger
+Germany|Baden|Tuniberg|Bereich|White|Grauburgunder
+Germany|Franken|Franken|Anbaugebiet|White|Silvaner; Müller-Thurgau
+Germany|Franken|Würzburger Stein|Einzellage|White|Silvaner; Riesling
+Germany|Franken|Escherndorfer Lump|Einzellage|White|Silvaner
+Germany|Württemberg|Württemberg|Anbaugebiet|Red|Trollinger; Lemberger; Schwarzriesling
+Germany|Mittelrhein|Mittelrhein|Anbaugebiet|White|Riesling
+Germany|Hessische Bergstraße|Hessische Bergstraße|Anbaugebiet|White|Riesling
+Germany|Saale-Unstrut|Saale-Unstrut|Anbaugebiet|White|Müller-Thurgau; Weissburgunder
+Germany|Sachsen|Sachsen|Anbaugebiet|White|Müller-Thurgau; Riesling
+Germany|National|Kabinett|Prädikat|White|Riesling
+Germany|National|Spätlese|Prädikat|White|Riesling
+Germany|National|Auslese|Prädikat|Sweet White|Riesling
+Germany|National|Beerenauslese|Prädikat|Sweet White|Riesling
+Germany|National|Trockenbeerenauslese|Prädikat|Sweet White|Riesling
+Germany|National|Eiswein|Prädikat|Sweet White|Riesling
+Germany|National|Grosses Gewächs (VDP.GG)|VDP classification|White|Riesling
+Germany|National|VDP.Erste Lage|VDP classification|White|Riesling
+Germany|National|Sekt|Quality sparkling|Sparkling|Riesling; Weissburgunder; Spätburgunder
+Germany|National|Winzersekt|Quality sparkling|Sparkling|Riesling
+Germany|National|Deutscher Sekt b.A.|Quality sparkling|Sparkling|Riesling; Weissburgunder
+Germany|National|Federweisser|Seasonal|White|Various
+Austria|Wachau|Wachau|DAC|White|Grüner Veltliner; Riesling
+Austria|Wachau|Steinfeder|Vinea Wachau|White|Grüner Veltliner
+Austria|Wachau|Federspiel|Vinea Wachau|White|Grüner Veltliner; Riesling
+Austria|Wachau|Smaragd|Vinea Wachau|White|Grüner Veltliner; Riesling
+Austria|Niederösterreich|Kremstal|DAC|White|Grüner Veltliner; Riesling
+Austria|Niederösterreich|Kamptal|DAC|White|Grüner Veltliner; Riesling
+Austria|Niederösterreich|Traisental|DAC|White|Grüner Veltliner
+Austria|Niederösterreich|Wagram|DAC|White|Grüner Veltliner; Roter Veltliner
+Austria|Niederösterreich|Weinviertel|DAC|White|Grüner Veltliner
+Austria|Niederösterreich|Carnuntum|DAC|Red|Zweigelt; Blaufränkisch
+Austria|Niederösterreich|Thermenregion|DAC|White|Zierfandler; Rotgipfler
+Austria|Burgenland|Leithaberg|DAC|Red|Blaufränkisch
+Austria|Burgenland|Neusiedlersee|DAC|Red|Zweigelt
+Austria|Burgenland|Ruster Ausbruch|DAC|Sweet White|Furmint; Welschriesling
+Austria|Burgenland|Mittelburgenland|DAC|Red|Blaufränkisch
+Austria|Burgenland|Eisenberg|DAC|Red|Blaufränkisch
+Austria|Burgenland|Rosalia|DAC|Red|Blaufränkisch; Zweigelt
+Austria|Burgenland|Beerenauslese Burgenland|Prädikat|Sweet White|Welschriesling; Chardonnay
+Austria|Burgenland|Trockenbeerenauslese Burgenland|Prädikat|Sweet White|Welschriesling
+Austria|Steiermark|Südsteiermark|DAC|White|Sauvignon Blanc; Morillon
+Austria|Steiermark|Vulkanland Steiermark|DAC|White|Traminer; Welschriesling
+Austria|Steiermark|Weststeiermark|DAC|Rosé|Blauer Wildbacher
+Austria|Steiermark|Schilcher|DAC|Rosé|Blauer Wildbacher
+Austria|Wien|Wiener Gemischter Satz|DAC|White|Field blend
+Austria|National|Sekt Austria|PDO|Sparkling|Grüner Veltliner; Welschriesling
+Austria|National|Strohwein / Schilfwein|Prädikat|Sweet White|Various
+Austria|National|Sturm|Seasonal|White|Various
+Switzerland|Valais|Fendant|AOC|White|Chasselas
+Switzerland|Valais|Dôle|AOC|Red|Pinot Noir; Gamay
+Switzerland|Valais|Cornalin du Valais|AOC|Red|Cornalin
+Switzerland|Valais|Humagne Rouge|AOC|Red|Humagne Rouge
+Switzerland|Valais|Petite Arvine|AOC|White|Petite Arvine
+Switzerland|Valais|Amigne de Vétroz|AOC|White|Amigne
+Switzerland|Valais|Heida (Païen)|AOC|White|Savagnin Blanc
+Switzerland|Valais|Johannisberg du Valais|AOC|White|Silvaner
+Switzerland|Vaud|Lavaux|AOC|White|Chasselas
+Switzerland|Vaud|Dézaley|Grand Cru|White|Chasselas
+Switzerland|Vaud|Calamin|Grand Cru|White|Chasselas
+Switzerland|Vaud|Chablais|AOC|White|Chasselas
+Switzerland|Vaud|La Côte|AOC|White|Chasselas
+Switzerland|Geneva|Genève|AOC|White|Chasselas; Gamaret
+Switzerland|Neuchâtel|Neuchâtel|AOC|White|Chasselas
+Switzerland|Neuchâtel|Oeil-de-Perdrix|AOC|Rosé|Pinot Noir
+Switzerland|Ticino|Ticino Merlot|DOC|Red|Merlot
+Switzerland|Graubünden|Bündner Herrschaft|AOC|Red|Blauburgunder
+Switzerland|Zurich & Schaffhausen|Schaffhausen|AOC|Red|Blauburgunder
+Luxembourg|Moselle|Moselle Luxembourgeoise|AOP|White|Rivaner; Auxerrois; Riesling
+Luxembourg|Moselle|Crémant de Luxembourg|AOP|Sparkling|Rivaner; Pinot Blanc
+Luxembourg|Moselle|Elbling|AOP|White|Elbling
+Hungary|Tokaj|Tokaji Aszú|PDO|Sweet White|Furmint; Hárslevelű; Sárga Muskotály
+Hungary|Tokaj|Tokaji Eszencia|PDO|Sweet White|Furmint
+Hungary|Tokaj|Tokaji Szamorodni|PDO|Sweet White|Furmint; Hárslevelű
+Hungary|Tokaj|Tokaji Fordítás|PDO|Sweet White|Furmint
+Hungary|Tokaj|Tokaji Máslás|PDO|Sweet White|Furmint
+Hungary|Tokaj|Tokaji Furmint (dry)|PDO|White|Furmint
+Hungary|Eger|Egri Bikavér|PDO|Red|Kékfrankos; Kadarka
+Hungary|Eger|Egri Csillag|PDO|White|Field blend
+Hungary|Villány|Villány|PDO|Red|Cabernet Franc; Kékfrankos
+Hungary|Villány|Villányi Franc|PDO|Red|Cabernet Franc
+Hungary|Szekszárd|Szekszárdi Bikavér|PDO|Red|Kékfrankos; Kadarka
+Hungary|Somló|Somló|PDO|White|Juhfark; Furmint
+Hungary|Balaton|Badacsony|PDO|White|Kéknyelű; Olaszrizling
+Hungary|Balaton|Balatonfüred-Csopak|PDO|White|Olaszrizling
+Hungary|Balaton|Balaton-felvidék|PDO|White|Olaszrizling; Szürkebarát
+Hungary|Mátra|Mátra|PDO|White|Olaszrizling; Muscat
+Hungary|Etyek-Buda|Etyek-Buda|PDO|Sparkling|Chardonnay; Pinot Noir
+Hungary|Sopron|Sopron|PDO|Red|Kékfrankos
+Hungary|Eger|Debrői Hárslevelű|PDO|White|Hárslevelű
+Hungary|Kunság|Kunság|PDO|White|Ezerjó; Cserszegi Fűszeres
+Greece|Macedonia|Naoussa|PDO|Red|Xinomavro
+Greece|Macedonia|Amyndeon|PDO|Red|Xinomavro
+Greece|Macedonia|Goumenissa|PDO|Red|Xinomavro; Negoska
+Greece|Macedonia|Slopes of Meliton|PDO|White|Athiri; Assyrtiko; Roditis
+Greece|Thessaly|Rapsani|PDO|Red|Xinomavro; Krassato; Stavroto
+Greece|Thessaly|Anchialos|PDO|White|Roditis; Savatiano
+Greece|Thessaly|Messenikola|PDO|Red|Mavro Messenikola
+Greece|Epirus|Zitsa|PDO|Sparkling|Debina
+Greece|Peloponnese|Nemea|PDO|Red|Agiorgitiko
+Greece|Peloponnese|Mantinia|PDO|White|Moschofilero
+Greece|Peloponnese|Patras|PDO|White|Roditis
+Greece|Peloponnese|Mavrodaphne of Patras|PDO|Fortified|Mavrodaphne
+Greece|Peloponnese|Muscat of Patras|PDO|Fortified|Muscat Blanc
+Greece|Peloponnese|Muscat of Rio Patras|PDO|Fortified|Muscat Blanc
+Greece|Peloponnese|Monemvasia-Malvasia|PDO|Sweet White|Monemvasia; Assyrtiko
+Greece|Cyclades|Santorini|PDO|White|Assyrtiko
+Greece|Cyclades|Vinsanto (Santorini)|PDO|Sweet White|Assyrtiko; Aidani
+Greece|Cyclades|Paros|PDO|Red|Mandilaria; Monemvasia
+Greece|Aegean Islands|Muscat of Samos|PDO|Fortified|Muscat Blanc
+Greece|Aegean Islands|Muscat of Lemnos|PDO|Fortified|Muscat of Alexandria
+Greece|Aegean Islands|Lemnos|PDO|White|Muscat of Alexandria
+Greece|Aegean Islands|Rhodes|PDO|White|Athiri
+Greece|Aegean Islands|Muscat of Rhodes|PDO|Fortified|Muscat Blanc
+Greece|Ionian Islands|Robola of Cephalonia|PDO|White|Robola
+Greece|Ionian Islands|Mavrodaphne of Cephalonia|PDO|Fortified|Mavrodaphne
+Greece|Crete|Peza|PDO|Red|Kotsifali; Mandilaria
+Greece|Crete|Archanes|PDO|Red|Kotsifali; Mandilaria
+Greece|Crete|Dafnes|PDO|Red|Liatiko
+Greece|Crete|Sitia|PDO|Red|Liatiko; Mandilaria
+Greece|Crete|Malvasia of Candia|PDO|Sweet White|Assyrtiko; Athiri; Vidiano
+Greece|Crete|Malvasia of Sitia|PDO|Sweet White|Assyrtiko; Thrapsathiri
+Greece|Attica|Retsina|Traditional appellation|White|Savatiano
+Greece|Attica|Attiki|PGI|White|Savatiano; Assyrtiko
+Greece|Central Greece|Sterea Ellada|PGI|Red|Agiorgitiko; Syrah
+Romania|Moldovan Hills|Cotnari|DOC|Sweet White|Grasă de Cotnari; Tămâioasă Românească
+Romania|Moldovan Hills|Odobești|DOC|White|Fetească Albă; Riesling Italian
+Romania|Moldovan Hills|Panciu|DOC|Sparkling|Fetească Regală
+Romania|Moldovan Hills|Cotești|DOC|Red|Fetească Neagră; Merlot
+Romania|Moldovan Hills|Nicorești|DOC|Red|Băbească Neagră
+Romania|Moldovan Hills|Iași|DOC|White|Fetească Albă
+Romania|Muntenia|Dealu Mare|DOC|Red|Fetească Neagră; Cabernet Sauvignon
+Romania|Muntenia|Pietroasa|DOC|Sweet White|Tămâioasă Românească
+Romania|Muntenia|Ștefănești|DOC|White|Fetească Regală
+Romania|Oltenia|Drăgășani|DOC|White|Crâmpoșie Selecționată
+Romania|Oltenia|Sâmburești|DOC|Red|Cabernet Sauvignon
+Romania|Oltenia|Segarcea|DOC|Red|Fetească Neagră; Merlot
+Romania|Dobrogea|Murfatlar|DOC|Sweet White|Chardonnay; Pinot Gris
+Romania|Dobrogea|Babadag|DOC|Red|Merlot; Cabernet Sauvignon
+Romania|Transylvania|Târnave|DOC|White|Fetească Albă; Traminer
+Romania|Transylvania|Jidvei|DOC|White|Fetească Regală
+Romania|Transylvania|Alba Iulia|DOC|White|Fetească Albă
+Romania|Banat & Crișana|Recaș|DOC|Red|Fetească Neagră; Cabernet Sauvignon
+Romania|Banat & Crișana|Miniș|DOC|Red|Cadarcă; Cabernet Sauvignon
+Romania|Muntenia|Busuioacă de Bohotin|DOC|Sweet Rosé|Busuioacă de Bohotin
+Bulgaria|Thracian Valley|Thracian Lowlands|PDO|Red|Mavrud; Merlot; Cabernet Sauvignon
+Bulgaria|Thracian Valley|Mavrud of Asenovgrad|PDO|Red|Mavrud
+Bulgaria|Struma Valley|Melnik|PDO|Red|Shiroka Melnishka Loza
+Bulgaria|Struma Valley|Early Melnik (Ranna Melnishka)|PDO|Red|Early Melnik
+Bulgaria|Danubian Plain|Danubian Plain|PDO|Red|Gamza; Cabernet Sauvignon
+Bulgaria|Danubian Plain|Suhindol|PDO|Red|Gamza
+Bulgaria|Black Sea|Black Sea Coast|PDO|White|Dimyat; Chardonnay
+Bulgaria|Black Sea|Misket of Varna|PDO|White|Red Misket
+Bulgaria|National|Rubin|Grape wine|Red|Rubin
+Bulgaria|National|Pamid|Grape wine|Red|Pamid
+Moldova|Codru|Codru|PGI|White|Fetească Albă; Chardonnay
+Moldova|Ștefan Vodă|Ștefan Vodă|PGI|Red|Rara Neagră; Cabernet Sauvignon
+Moldova|Ștefan Vodă|Negru de Purcari|Brand-appellation|Red|Cabernet Sauvignon; Rara Neagră; Saperavi
+Moldova|Valul lui Traian|Valul lui Traian|PGI|Red|Merlot; Cabernet Sauvignon
+Moldova|Divin|Divin|PGI|Fortified|Ugni Blanc
+Moldova|National|Rara Neagră|Grape wine|Red|Rara Neagră
+Moldova|National|Fetească Neagră (Moldova)|Grape wine|Red|Fetească Neagră
+Georgia|Kakheti|Tsinandali|PDO|White|Rkatsiteli; Mtsvane
+Georgia|Kakheti|Mukuzani|PDO|Red|Saperavi
+Georgia|Kakheti|Kindzmarauli|PDO|Sweet Red|Saperavi
+Georgia|Kakheti|Akhasheni|PDO|Sweet Red|Saperavi
+Georgia|Kakheti|Napareuli|PDO|Red|Saperavi
+Georgia|Kakheti|Gurjaani|PDO|White|Rkatsiteli; Mtsvane
+Georgia|Kakheti|Vazisubani|PDO|White|Rkatsiteli; Mtsvane
+Georgia|Kakheti|Manavi|PDO|White|Mtsvane Kakhuri
+Georgia|Kakheti|Teliani|PDO|Red|Cabernet Sauvignon
+Georgia|Kakheti|Kardenakhi|PDO|Fortified|Rkatsiteli
+Georgia|Kakheti|Kakheti Qvevri Amber|Traditional method|Orange|Rkatsiteli; Kisi
+Georgia|Racha-Lechkhumi|Khvanchkara|PDO|Sweet Red|Aleksandrouli; Mujuretuli
+Georgia|Racha-Lechkhumi|Tvishi|PDO|Sweet White|Tsolikouri
+Georgia|Imereti|Sviri|PDO|White|Tsitska; Tsolikouri; Krakhuna
+Georgia|Kartli|Ateni|PDO|White|Chinuri; Goruli Mtsvane
+Georgia|Kartli|Kartli Sparkling|Regional style|Sparkling|Chinuri; Goruli Mtsvane
+Armenia|Vayots Dzor|Areni|Regional|Red|Areni Noir
+Armenia|Armavir|Armavir|Regional|White|Voskehat
+Armenia|Aragatsotn|Aragatsotn|Regional|Red|Areni; Kakhet
+Armenia|Tavush|Ijevan|Regional|Red|Haghtanak
+Azerbaijan|Ganja-Qazakh|Ganja|Regional|Red|Madrasa; Bayanshira
+Azerbaijan|Shamakhi|Shamakhi|Regional|Red|Madrasa
+Croatia|Dalmatia|Dingač|PDO|Red|Plavac Mali
+Croatia|Dalmatia|Postup|PDO|Red|Plavac Mali
+Croatia|Dalmatia|Pelješac|PDO|Red|Plavac Mali
+Croatia|Dalmatia|Pošip Čara-Smokvica|PDO|White|Pošip
+Croatia|Dalmatia|Grk Lumbarda|PDO|White|Grk
+Croatia|Dalmatia|Babić Primošten|PDO|Red|Babić
+Croatia|Dalmatia|Vugava Vis|PDO|White|Vugava
+Croatia|Dalmatia|Bogdanuša Hvar|PDO|White|Bogdanuša
+Croatia|Dalmatia|Prošek|Traditional|Sweet White|Bogdanuša; Maraština
+Croatia|Istria & Kvarner|Malvazija Istarska|PDO|White|Malvazija Istarska
+Croatia|Istria & Kvarner|Teran (Istria)|PDO|Red|Refošk
+Croatia|Istria & Kvarner|Žlahtina Vrbnik|PDO|White|Žlahtina
+Croatia|Slavonia & Danube|Kutjevo Graševina|PDO|White|Graševina
+Croatia|Slavonia & Danube|Ilok Traminac|PDO|White|Traminac
+Croatia|Uplands|Plešivica Sparkling|PDO|Sparkling|Chardonnay; Pinot Noir
+Slovenia|Primorska|Goriška Brda|PDO|White|Rebula; Chardonnay
+Slovenia|Primorska|Vipavska Dolina|PDO|White|Zelen; Pinela; Rebula
+Slovenia|Primorska|Kras Teran|PDO|Red|Refošk
+Slovenia|Primorska|Slovenska Istra|PDO|White|Malvazija
+Slovenia|Podravje|Štajerska Slovenija|PDO|White|Laški Rizling; Šipon
+Slovenia|Podravje|Ljutomer-Ormož|PDO|White|Laški Rizling; Šipon
+Slovenia|Podravje|Prekmurje|PDO|White|Laški Rizling
+Slovenia|Posavje|Cviček|PDO|Rosé|Žametovka; Modra Frankinja
+Slovenia|Posavje|Bizeljsko-Sremič|PDO|White|Laški Rizling
+Serbia|Vojvodina|Fruška Gora|PDO|White|Italian Riesling; Traminer
+Serbia|Vojvodina|Bermet|Traditional|Fortified|Aromatized blend
+Serbia|Vojvodina|Subotica-Horgoš|PDO|White|Kevedinka
+Serbia|Central Serbia|Šumadija|PDO|Red|Prokupac; Cabernet Sauvignon
+Serbia|Central Serbia|Župa|PDO|Rosé|Prokupac
+Serbia|Eastern Serbia|Negotinska Krajina|PDO|Red|Prokupac; Cabernet Sauvignon
+Serbia|Southern Serbia|Vranje|PDO|Red|Vranac; Prokupac
+North Macedonia|Povardarie|Tikveš|PDO|Red|Vranec
+North Macedonia|Povardarie|Vranec|Grape wine|Red|Vranec
+North Macedonia|Povardarie|Stanušina|Grape wine|Rosé|Stanušina
+North Macedonia|Povardarie|Temjanika|Grape wine|White|Temjanika
+Montenegro|Podgorica Basin|Vranac Crmnica|PDO|Red|Vranac
+Montenegro|Podgorica Basin|Krstač|PDO|White|Krstač
+Bosnia and Herzegovina|Herzegovina|Žilavka Mostar|PDO|White|Žilavka
+Bosnia and Herzegovina|Herzegovina|Blatina|PDO|Red|Blatina
+Albania|Berat & Korçë|Kallmet|Regional|Red|Kallmet
+Albania|Shkodër|Shesh i Zi|Regional|Red|Shesh i Zi
+Albania|Tirana|Shesh i Bardhë|Regional|White|Shesh i Bardhë
+Kosovo|Rahovec|Rahovec|Regional|Red|Vranac; Merlot
+Czechia|Moravia|Znojmo|PDO|White|Veltlínské Zelené; Ryzlink Rýnský
+Czechia|Moravia|Mikulov|PDO|White|Ryzlink Vlašský; Pálava
+Czechia|Moravia|Velké Pavlovice|PDO|Red|Frankovka; Svatovavřinecké
+Czechia|Moravia|Slovácko|PDO|White|Müller-Thurgau; Ryzlink
+Czechia|Bohemia|Mělník|PDO|Red|Svatovavřinecké; Rulandské Modré
+Czechia|Bohemia|Litoměřice|PDO|White|Müller-Thurgau
+Czechia|National|Svatomartinské|Seasonal|Red|Svatovavřinecké; Modrý Portugal
+Czechia|Moravia|Slámové Víno|Prädikat-style|Sweet White|Various
+Slovakia|Tokaj (Slovak)|Tokajské Víno|PDO|Sweet White|Furmint; Lipovina
+Slovakia|Malokarpatská|Small Carpathians|PDO|White|Grüner Veltliner; Riesling
+Slovakia|Nitrianska|Nitra|PDO|White|Devín; Welschriesling
+Slovakia|Južnoslovenská|Southern Slovakia|PDO|Red|Blaufränkisch; Alibernet
+Slovakia|National|Devín|Grape wine|White|Devín
+Poland|Lubuskie|Zielona Góra|PGI|White|Solaris; Riesling
+Poland|Małopolska|Małopolski Przełom Wisły|PGI|White|Solaris; Seyval Blanc
+Poland|Podkarpackie|Podkarpacie|PGI|White|Johanniter; Hibernal
+Ukraine|Odesa|Odesa|PGI|Sparkling|Chardonnay; Aligoté
+Ukraine|Crimea|Massandra|Historic estate|Fortified|Muscat; Kokur
+Ukraine|Zakarpattia|Zakarpattia|PGI|White|Traminer; Rhine Riesling
+Ukraine|Bessarabia|Bessarabia|PGI|Red|Cabernet Sauvignon; Saperavi
+Russia|Krasnodar|Kuban|PGI|Red|Cabernet Sauvignon; Krasnostop Zolotovsky
+Russia|Krasnodar|Abrau-Dyurso|Historic estate|Sparkling|Chardonnay; Pinot Noir
+Russia|Crimea|Crimea|PGI|Fortified|Muscat; Kokur
+Russia|Rostov|Tsimlyansk|PGI|Sparkling Red|Tsimlyansky Cherny
+Russia|Dagestan|Dagestan|PGI|Fortified|Rkatsiteli; Muscat
+United Kingdom|Southeast England|Sussex|PDO|Sparkling|Chardonnay; Pinot Noir; Meunier
+United Kingdom|Southeast England|Kent|Regional|Sparkling|Chardonnay; Pinot Noir
+United Kingdom|Southeast England|Hampshire|Regional|Sparkling|Chardonnay; Pinot Noir
+United Kingdom|East England|Essex|Regional|White|Chardonnay; Bacchus
+United Kingdom|Southwest England|Cornwall|Regional|Sparkling|Seyval Blanc; Chardonnay
+United Kingdom|National|English Sparkling Wine|PDO|Sparkling|Chardonnay; Pinot Noir; Meunier
+United Kingdom|National|English Bacchus|PDO|White|Bacchus
+United Kingdom|Wales|Welsh Wine|PDO|White|Solaris; Bacchus
+Belgium|Flanders|Hageland|PDO|White|Müller-Thurgau; Pinot Gris
+Belgium|Flanders|Haspengouw|PDO|White|Chardonnay; Pinot Gris
+Belgium|Flanders|Heuvelland|PDO|White|Müller-Thurgau
+Belgium|Wallonia|Côtes de Sambre et Meuse|PDO|White|Chardonnay; Pinot Gris
+Belgium|Wallonia|Crémant de Wallonie|PDO|Sparkling|Chardonnay; Pinot Noir
+Netherlands|Limburg|Limburg|PGI|White|Auxerrois; Riesling
+Netherlands|Gelderland|Betuwe|PGI|White|Solaris; Johanniter
+Denmark|Zealand|Danish Wine|PGI|White|Solaris; Rondo
+Sweden|Skåne|Skåne|Regional|White|Solaris; Rondo
+Norway|Vestfold|Norwegian Wine|Regional|White|Solaris
+Ireland|Cork|Irish Wine|Regional|White|Rondo; Solaris
+Cyprus|Limassol|Commandaria|PDO|Sweet White|Xynisteri; Mavro
+Cyprus|Limassol|Krasochoria Lemesou|PDO|Red|Mavro; Maratheftiko
+Cyprus|Limassol|Pitsilia|PDO|White|Xynisteri
+Cyprus|Paphos|Vouni Panagias-Ampelitis|PDO|Red|Maratheftiko
+Cyprus|Paphos|Laona Akamas|PDO|White|Xynisteri
+Cyprus|National|Xynisteri|Grape wine|White|Xynisteri
+Malta|Malta|Malta DOK|PDO|Red|Ġellewża; Syrah
+Malta|Gozo|Gozo DOK|PDO|White|Girgentina; Chardonnay
+Turkey|Thrace|Thrace (Trakya)|Regional|Red|Papazkarası; Cabernet Sauvignon
+Turkey|Aegean|Aegean (Ege)|Regional|White|Sultaniye; Bornova Misketi
+Turkey|Central Anatolia|Cappadocia|Regional|White|Emir
+Turkey|Central Anatolia|Kalecik|Regional|Red|Kalecik Karası
+Turkey|Eastern Anatolia|Elazığ|Regional|Red|Öküzgözü; Boğazkere
+Turkey|Southeastern Anatolia|Diyarbakır|Regional|Red|Boğazkere
+Turkey|Black Sea|Tokat|Regional|White|Narince
+Lebanon|Bekaa Valley|Bekaa Valley|Regional|Red|Cinsault; Cabernet Sauvignon; Carignan
+Lebanon|Bekaa Valley|Kefraya|Regional|Red|Syrah; Cabernet Sauvignon
+Lebanon|Batroun|Batroun|Regional|White|Obeidi; Chardonnay
+Lebanon|Jezzine|Jezzine|Regional|Red|Syrah; Cinsault
+Israel|Galilee|Upper Galilee|Regional|Red|Cabernet Sauvignon; Syrah
+Israel|Galilee|Golan Heights|Regional|Red|Cabernet Sauvignon; Merlot
+Israel|Judean Hills|Judean Hills|Regional|Red|Cabernet Sauvignon; Syrah
+Israel|Shomron|Shomron|Regional|Red|Cabernet Sauvignon; Carignan
+Israel|Samson|Samson|Regional|White|Chardonnay; Sauvignon Blanc
+Israel|Negev|Negev|Regional|Red|Cabernet Sauvignon; Petit Verdot
+Palestine|Bethlehem|Cremisan Valley|Regional|White|Dabouki; Jandali; Hamdani
+Jordan|Amman|Mount Nebo|Regional|Red|Cabernet Sauvignon; Merlot
+Syria|Homs|Bargylus (Latakia Hills)|Regional|Red|Cabernet Sauvignon; Merlot
+United States|California (Napa)|Napa Valley|AVA|Red|Cabernet Sauvignon; Merlot
+United States|California (Napa)|Oakville|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Rutherford|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Stags Leap District|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Howell Mountain|AVA|Red|Cabernet Sauvignon; Zinfandel
+United States|California (Napa)|Spring Mountain District|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Diamond Mountain District|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Mount Veeder|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Atlas Peak|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Yountville|AVA|Red|Cabernet Sauvignon; Merlot
+United States|California (Napa)|St. Helena|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Calistoga|AVA|Red|Cabernet Sauvignon; Petite Sirah
+United States|California (Napa)|Coombsville|AVA|Red|Cabernet Sauvignon
+United States|California (Napa)|Los Carneros|AVA|White|Chardonnay; Pinot Noir
+United States|California (Napa)|Oak Knoll District|AVA|White|Chardonnay; Cabernet Sauvignon
+United States|California (Napa)|Chiles Valley|AVA|Red|Zinfandel; Cabernet Sauvignon
+United States|California (Napa)|Wild Horse Valley|AVA|White|Chardonnay; Pinot Noir
+United States|California (Sonoma)|Sonoma County|AVA|Red|Pinot Noir; Cabernet Sauvignon; Zinfandel
+United States|California (Sonoma)|Russian River Valley|AVA|Red|Pinot Noir; Chardonnay
+United States|California (Sonoma)|Green Valley of Russian River Valley|AVA|White|Chardonnay; Pinot Noir
+United States|California (Sonoma)|Sonoma Coast|AVA|Red|Pinot Noir; Chardonnay
+United States|California (Sonoma)|Fort Ross-Seaview|AVA|Red|Pinot Noir
+United States|California (Sonoma)|Petaluma Gap|AVA|Red|Pinot Noir; Syrah
+United States|California (Sonoma)|Alexander Valley|AVA|Red|Cabernet Sauvignon
+United States|California (Sonoma)|Dry Creek Valley|AVA|Red|Zinfandel
+United States|California (Sonoma)|Knights Valley|AVA|Red|Cabernet Sauvignon
+United States|California (Sonoma)|Chalk Hill|AVA|White|Chardonnay; Sauvignon Blanc
+United States|California (Sonoma)|Bennett Valley|AVA|Red|Merlot; Syrah
+United States|California (Sonoma)|Sonoma Valley|AVA|Red|Cabernet Sauvignon; Zinfandel
+United States|California (Sonoma)|Moon Mountain District|AVA|Red|Cabernet Sauvignon
+United States|California (Sonoma)|Rockpile|AVA|Red|Zinfandel
+United States|California (Sonoma)|Sonoma Mountain|AVA|Red|Cabernet Sauvignon
+United States|California (Mendocino)|Anderson Valley|AVA|Red|Pinot Noir; Chardonnay
+United States|California (Mendocino)|Mendocino Ridge|AVA|Red|Zinfandel; Pinot Noir
+United States|California (Mendocino)|Redwood Valley|AVA|Red|Zinfandel; Cabernet Sauvignon
+United States|California (Mendocino)|Potter Valley|AVA|White|Riesling; Sauvignon Blanc
+United States|California (Mendocino)|Yorkville Highlands|AVA|Red|Pinot Noir; Cabernet Sauvignon
+United States|California (Lake)|Red Hills Lake County|AVA|Red|Cabernet Sauvignon
+United States|California (Lake)|Clear Lake|AVA|Red|Cabernet Sauvignon; Sauvignon Blanc
+United States|California (Sierra Foothills)|Sierra Foothills|AVA|Red|Zinfandel; Barbera
+United States|California (Sierra Foothills)|Amador County|AVA|Red|Zinfandel
+United States|California (Sierra Foothills)|Shenandoah Valley of California|AVA|Red|Zinfandel
+United States|California (Sierra Foothills)|Fiddletown|AVA|Red|Zinfandel
+United States|California (Sierra Foothills)|El Dorado|AVA|Red|Zinfandel; Syrah
+United States|California (Central Valley)|Lodi|AVA|Red|Zinfandel; Cabernet Sauvignon
+United States|California (Central Valley)|Clarksburg|AVA|White|Chenin Blanc
+United States|California (Central Valley)|Dunnigan Hills|AVA|Red|Syrah; Cabernet Sauvignon
+United States|California (Bay Area)|Livermore Valley|AVA|White|Sauvignon Blanc; Chardonnay
+United States|California (Bay Area)|Santa Cruz Mountains|AVA|Red|Pinot Noir; Cabernet Sauvignon
+United States|California (Central Coast)|Monterey|AVA|White|Chardonnay; Pinot Noir
+United States|California (Central Coast)|Santa Lucia Highlands|AVA|Red|Pinot Noir; Syrah
+United States|California (Central Coast)|Arroyo Seco|AVA|White|Chardonnay; Riesling
+United States|California (Central Coast)|Chalone|AVA|White|Chardonnay; Pinot Noir
+United States|California (Central Coast)|Carmel Valley|AVA|Red|Cabernet Sauvignon
+United States|California (Central Coast)|San Benito|AVA|Red|Pinot Noir; Grenache
+United States|California (Central Coast)|Paso Robles|AVA|Red|Cabernet Sauvignon; Zinfandel; Syrah
+United States|California (Central Coast)|Willow Creek District|AVA|Red|Syrah; Grenache
+United States|California (Central Coast)|Adelaida District|AVA|Red|Cabernet Sauvignon; Syrah
+United States|California (Central Coast)|Templeton Gap District|AVA|Red|Syrah; Pinot Noir
+United States|California (Central Coast)|Edna Valley|AVA|White|Chardonnay; Pinot Noir
+United States|California (Central Coast)|Arroyo Grande Valley|AVA|Red|Pinot Noir; Chardonnay
+United States|California (Central Coast)|Santa Maria Valley|AVA|Red|Pinot Noir; Chardonnay
+United States|California (Central Coast)|Sta. Rita Hills|AVA|Red|Pinot Noir; Chardonnay
+United States|California (Central Coast)|Ballard Canyon|AVA|Red|Syrah
+United States|California (Central Coast)|Happy Canyon of Santa Barbara|AVA|Red|Cabernet Sauvignon; Sauvignon Blanc
+United States|California (Central Coast)|Los Olivos District|AVA|Red|Syrah; Grenache
+United States|California (Central Coast)|Santa Ynez Valley|AVA|Red|Syrah; Pinot Noir
+United States|California (Southern)|Malibu Coast|AVA|Red|Cabernet Sauvignon; Syrah
+United States|California (Southern)|Temecula Valley|AVA|Red|Syrah; Cabernet Sauvignon
+United States|California (Southern)|Ramona Valley|AVA|Red|Syrah; Grenache
+United States|California|White Zinfandel|Varietal style|Rosé|Zinfandel
+United States|California|Meritage|Trademark blend|Red|Cabernet Sauvignon; Merlot; Cabernet Franc
+United States|California|California Sparkling Wine|Regional style|Sparkling|Chardonnay; Pinot Noir
+United States|Oregon|Willamette Valley|AVA|Red|Pinot Noir; Chardonnay
+United States|Oregon|Dundee Hills|AVA|Red|Pinot Noir
+United States|Oregon|Eola-Amity Hills|AVA|Red|Pinot Noir
+United States|Oregon|Yamhill-Carlton|AVA|Red|Pinot Noir
+United States|Oregon|Ribbon Ridge|AVA|Red|Pinot Noir
+United States|Oregon|Chehalem Mountains|AVA|Red|Pinot Noir
+United States|Oregon|McMinnville|AVA|Red|Pinot Noir
+United States|Oregon|Van Duzer Corridor|AVA|Red|Pinot Noir
+United States|Oregon|Laurelwood District|AVA|Red|Pinot Noir
+United States|Oregon|Tualatin Hills|AVA|Red|Pinot Noir
+United States|Oregon|Lower Long Tom|AVA|Red|Pinot Noir
+United States|Oregon|Mount Pisgah Polk County|AVA|Red|Pinot Noir
+United States|Oregon|Umpqua Valley|AVA|Red|Tempranillo; Pinot Noir
+United States|Oregon|Elkton Oregon|AVA|White|Pinot Gris; Riesling
+United States|Oregon|Rogue Valley|AVA|Red|Syrah; Cabernet Sauvignon
+United States|Oregon|Applegate Valley|AVA|Red|Syrah; Tempranillo
+United States|Oregon|Columbia Gorge|AVA|White|Riesling; Pinot Gris
+United States|Oregon|The Rocks District of Milton-Freewater|AVA|Red|Syrah
+United States|Washington|Columbia Valley|AVA|Red|Cabernet Sauvignon; Merlot; Syrah
+United States|Washington|Yakima Valley|AVA|Red|Merlot; Syrah
+United States|Washington|Red Mountain|AVA|Red|Cabernet Sauvignon
+United States|Washington|Walla Walla Valley|AVA|Red|Cabernet Sauvignon; Syrah
+United States|Washington|Horse Heaven Hills|AVA|Red|Cabernet Sauvignon; Merlot
+United States|Washington|Wahluke Slope|AVA|Red|Syrah; Merlot
+United States|Washington|Rattlesnake Hills|AVA|Red|Cabernet Sauvignon
+United States|Washington|Snipes Mountain|AVA|Red|Cabernet Sauvignon
+United States|Washington|Lake Chelan|AVA|White|Riesling; Chardonnay
+United States|Washington|Ancient Lakes of Columbia Valley|AVA|White|Riesling; Chardonnay
+United States|Washington|Naches Heights|AVA|White|Riesling; Pinot Gris
+United States|Washington|Royal Slope|AVA|Red|Cabernet Sauvignon
+United States|Washington|Candy Mountain|AVA|Red|Cabernet Sauvignon
+United States|Washington|White Bluffs|AVA|Red|Merlot; Cabernet Sauvignon
+United States|Washington|Puget Sound|AVA|White|Madeleine Angevine; Siegerrebe
+United States|New York|Finger Lakes|AVA|White|Riesling
+United States|New York|Seneca Lake|AVA|White|Riesling
+United States|New York|Cayuga Lake|AVA|White|Riesling; Cabernet Franc
+United States|New York|Long Island|AVA|Red|Merlot; Cabernet Franc
+United States|New York|North Fork of Long Island|AVA|Red|Merlot
+United States|New York|The Hamptons Long Island|AVA|White|Chardonnay
+United States|New York|Hudson River Region|AVA|White|Seyval Blanc; Cabernet Franc
+United States|New York|Niagara Escarpment|AVA|White|Riesling
+United States|New York|Lake Erie (NY)|AVA|Red|Concord
+United States|Virginia|Monticello|AVA|Red|Cabernet Franc; Petit Verdot
+United States|Virginia|Middleburg Virginia|AVA|Red|Cabernet Franc; Merlot
+United States|Virginia|Shenandoah Valley (VA)|AVA|White|Viognier; Chardonnay
+United States|Texas|Texas High Plains|AVA|Red|Tempranillo; Cabernet Sauvignon
+United States|Texas|Texas Hill Country|AVA|Red|Tempranillo; Mourvèdre
+United States|Texas|Bell Mountain|AVA|Red|Cabernet Sauvignon
+United States|Texas|Escondido Valley|AVA|Red|Cabernet Sauvignon
+United States|Michigan|Leelanau Peninsula|AVA|White|Riesling; Pinot Grigio
+United States|Michigan|Old Mission Peninsula|AVA|White|Riesling; Chardonnay
+United States|Michigan|Lake Michigan Shore|AVA|White|Riesling; Cabernet Franc
+United States|Idaho|Snake River Valley|AVA|Red|Syrah; Cabernet Sauvignon
+United States|Idaho|Lewis-Clark Valley|AVA|Red|Syrah; Merlot
+United States|Idaho|Eagle Foothills|AVA|Red|Syrah; Viognier
+United States|Missouri|Augusta|AVA|Red|Norton
+United States|Missouri|Hermann|AVA|Red|Norton; Chambourcin
+United States|Missouri|Ozark Highlands|AVA|Red|Norton; Vignoles
+United States|Arizona|Sonoita|AVA|Red|Syrah; Grenache
+United States|Arizona|Willcox|AVA|Red|Syrah; Malvasia
+United States|Arizona|Verde Valley|AVA|Red|Syrah; Grenache
+United States|New Mexico|Mesilla Valley|AVA|White|Chardonnay; Riesling
+United States|New Mexico|Middle Rio Grande Valley|AVA|Sparkling|Chardonnay; Pinot Noir
+United States|Colorado|Grand Valley|AVA|Red|Cabernet Franc; Merlot
+United States|Colorado|West Elks|AVA|White|Riesling; Gewürztraminer
+United States|Pennsylvania|Lehigh Valley|AVA|White|Chardonnay; Grüner Veltliner
+United States|Ohio|Grand River Valley|AVA|White|Riesling; Chardonnay
+United States|North Carolina|Yadkin Valley|AVA|Red|Cabernet Franc; Merlot
+United States|North Carolina|Swan Creek|AVA|Red|Cabernet Franc
+United States|Georgia (US)|Dahlonega Plateau|AVA|Red|Cabernet Franc; Chambourcin
+United States|Maryland|Catoctin|AVA|Red|Cabernet Sauvignon; Chambourcin
+United States|New Jersey|Outer Coastal Plain|AVA|Red|Cabernet Franc; Chambourcin
+United States|Hawaii|Ulupalakua|Regional|Red|Syrah; Malbec
+Canada|Ontario|Niagara Peninsula|VQA|White|Riesling; Chardonnay; Cabernet Franc
+Canada|Ontario|Beamsville Bench|VQA|White|Riesling; Chardonnay
+Canada|Ontario|Twenty Mile Bench|VQA|White|Riesling; Chardonnay
+Canada|Ontario|Creek Shores|VQA|White|Chardonnay
+Canada|Ontario|Four Mile Creek|VQA|Red|Cabernet Franc; Merlot
+Canada|Ontario|Lincoln Lakeshore|VQA|White|Riesling
+Canada|Ontario|Niagara Lakeshore|VQA|Red|Cabernet Franc
+Canada|Ontario|Niagara River|VQA|Red|Cabernet Franc
+Canada|Ontario|Short Hills Bench|VQA|Red|Pinot Noir
+Canada|Ontario|St. David's Bench|VQA|Red|Cabernet Franc; Merlot
+Canada|Ontario|Vinemount Ridge|VQA|Red|Cabernet Franc
+Canada|Ontario|Prince Edward County|VQA|Red|Pinot Noir; Chardonnay
+Canada|Ontario|Lake Erie North Shore|VQA|Red|Cabernet Franc; Merlot
+Canada|Ontario|Icewine (Ontario)|VQA|Sweet White|Vidal; Riesling
+Canada|British Columbia|Okanagan Valley|BC GI|Red|Merlot; Pinot Noir; Cabernet Sauvignon
+Canada|British Columbia|Golden Mile Bench|BC GI|Red|Merlot; Cabernet Franc
+Canada|British Columbia|Naramata Bench|BC GI|White|Riesling; Pinot Gris
+Canada|British Columbia|Okanagan Falls|BC GI|Red|Pinot Noir; Riesling
+Canada|British Columbia|Skaha Bench|BC GI|Red|Syrah; Pinot Gris
+Canada|British Columbia|Black Sage Bench|BC GI|Red|Cabernet Sauvignon; Syrah
+Canada|British Columbia|Osoyoos|BC GI|Red|Cabernet Sauvignon; Merlot
+Canada|British Columbia|Similkameen Valley|BC GI|Red|Merlot; Syrah
+Canada|British Columbia|Fraser Valley|BC GI|White|Pinot Gris; Bacchus
+Canada|British Columbia|Vancouver Island|BC GI|White|Ortega; Pinot Gris
+Canada|British Columbia|Gulf Islands|BC GI|White|Pinot Gris; Ortega
+Canada|Nova Scotia|Annapolis Valley|Regional|White|L'Acadie Blanc; Seyval Blanc
+Canada|Nova Scotia|Tidal Bay|Appellation|White|L'Acadie Blanc; Seyval Blanc; Vidal
+Canada|Quebec|Brome-Missisquoi|IGP|White|Vidal; Frontenac
+Canada|Quebec|Vin de Glace du Québec|IGP|Sweet White|Vidal
+Mexico|Baja California|Valle de Guadalupe|Regional|Red|Nebbiolo; Cabernet Sauvignon; Tempranillo
+Mexico|Baja California|Valle de Santo Tomás|Regional|Red|Cabernet Sauvignon; Merlot
+Mexico|Baja California|Valle de San Vicente|Regional|Red|Cabernet Sauvignon
+Mexico|Baja California|Valle de Ojos Negros|Regional|White|Chardonnay; Chenin Blanc
+Mexico|Baja California|Valle de Calafia|Regional|Red|Nebbiolo; Syrah
+Mexico|Coahuila|Parras de la Fuente|Regional|Red|Cabernet Sauvignon; Shiraz
+Mexico|Querétaro|Querétaro|Regional|Sparkling|Chardonnay; Pinot Noir
+Mexico|Aguascalientes|Aguascalientes|Regional|Red|Cabernet Sauvignon
+Mexico|Zacatecas|Valle de las Arcinas|Regional|Red|Cabernet Sauvignon; Malbec
+Argentina|Mendoza|Mendoza|GI|Red|Malbec; Cabernet Sauvignon; Bonarda
+Argentina|Mendoza|Luján de Cuyo|GI|Red|Malbec
+Argentina|Mendoza|Maipú|GI|Red|Malbec; Cabernet Sauvignon
+Argentina|Mendoza|Valle de Uco|GI|Red|Malbec; Cabernet Franc
+Argentina|Mendoza|Tupungato|GI|White|Chardonnay; Malbec
+Argentina|Mendoza|Gualtallary|GI|Red|Malbec; Cabernet Franc
+Argentina|Mendoza|Paraje Altamira|GI|Red|Malbec
+Argentina|Mendoza|San Pablo|GI|Red|Pinot Noir; Chardonnay
+Argentina|Mendoza|Vista Flores|GI|Red|Malbec
+Argentina|Mendoza|Agrelo|GI|Red|Malbec; Cabernet Sauvignon
+Argentina|Mendoza|Las Compuertas|GI|Red|Malbec
+Argentina|Mendoza|Perdriel|GI|Red|Malbec
+Argentina|Mendoza|San Carlos|GI|Red|Malbec; Semillón
+Argentina|Mendoza|Santa Rosa|GI|Red|Bonarda; Malbec
+Argentina|Salta|Cafayate|GI|White|Torrontés
+Argentina|Salta|Valles Calchaquíes|GI|Red|Malbec; Tannat
+Argentina|Salta|Molinos|GI|Red|Malbec
+Argentina|San Juan|Valle de Tulum|GI|Red|Syrah; Bonarda
+Argentina|San Juan|Valle de Pedernal|GI|Red|Malbec; Cabernet Sauvignon
+Argentina|San Juan|Valle de Zonda|GI|Red|Syrah; Malbec
+Argentina|La Rioja (Arg)|Valle de Famatina|GI|White|Torrontés Riojano
+Argentina|Patagonia|Río Negro|GI|Red|Pinot Noir; Malbec
+Argentina|Patagonia|Neuquén|GI|Red|Malbec; Pinot Noir
+Argentina|Patagonia|Chubut|GI|Red|Pinot Noir; Chardonnay
+Argentina|Catamarca|Catamarca|GI|White|Torrontés
+Argentina|National|Torrontés|Grape wine|White|Torrontés Riojano
+Argentina|National|Bonarda Argentina|Grape wine|Red|Bonarda Argentina
+Chile|Coquimbo|Elqui Valley|DO|Red|Syrah; Carmenère
+Chile|Coquimbo|Limarí Valley|DO|White|Chardonnay; Syrah
+Chile|Coquimbo|Choapa Valley|DO|Red|Syrah; Cabernet Sauvignon
+Chile|Aconcagua|Aconcagua Valley|DO|Red|Cabernet Sauvignon; Syrah
+Chile|Aconcagua|Casablanca Valley|DO|White|Sauvignon Blanc; Chardonnay
+Chile|Aconcagua|San Antonio Valley|DO|White|Sauvignon Blanc; Pinot Noir
+Chile|Aconcagua|Leyda Valley|DO|Red|Pinot Noir; Sauvignon Blanc
+Chile|Central Valley|Maipo Valley|DO|Red|Cabernet Sauvignon
+Chile|Central Valley|Alto Maipo|DO|Red|Cabernet Sauvignon
+Chile|Central Valley|Puente Alto|DO|Red|Cabernet Sauvignon
+Chile|Central Valley|Rapel Valley|DO|Red|Cabernet Sauvignon; Carmenère
+Chile|Central Valley|Cachapoal Valley|DO|Red|Carmenère; Cabernet Sauvignon
+Chile|Central Valley|Peumo|DO|Red|Carmenère
+Chile|Central Valley|Colchagua Valley|DO|Red|Carmenère; Cabernet Sauvignon
+Chile|Central Valley|Apalta|DO|Red|Carmenère; Syrah
+Chile|Central Valley|Curicó Valley|DO|Red|Cabernet Sauvignon; Sauvignon Blanc
+Chile|Central Valley|Maule Valley|DO|Red|Carignan; Cabernet Sauvignon
+Chile|Central Valley|Cauquenes|DO|Red|Carignan; País
+Chile|Southern Chile|Itata Valley|DO|Red|País; Cinsault
+Chile|Southern Chile|Bío Bío Valley|DO|White|Riesling; Pinot Noir
+Chile|Southern Chile|Malleco Valley|DO|White|Chardonnay; Pinot Noir
+Chile|Austral|Osorno|DO|Red|Pinot Noir; Chardonnay
+Chile|National|Carmenère|Grape wine|Red|Carmenère
+Chile|National|País|Grape wine|Red|País
+Chile|National|Pipeño|Traditional style|Red|País; Cinsault
+Uruguay|Canelones|Canelones|Regional|Red|Tannat
+Uruguay|Montevideo|Montevideo|Regional|Red|Tannat; Merlot
+Uruguay|Maldonado|Maldonado|Regional|Red|Tannat; Albariño
+Uruguay|Colonia|Colonia|Regional|Red|Tannat; Merlot
+Uruguay|Rivera|Rivera|Regional|Red|Tannat; Cabernet Franc
+Uruguay|San José|San José|Regional|White|Albariño
+Uruguay|National|Tannat|Grape wine|Red|Tannat
+Brazil|Rio Grande do Sul|Serra Gaúcha|Regional|Sparkling|Chardonnay; Pinot Noir; Moscato
+Brazil|Rio Grande do Sul|Vale dos Vinhedos|DO|Red|Merlot; Cabernet Sauvignon
+Brazil|Rio Grande do Sul|Pinto Bandeira|IP|Sparkling|Chardonnay; Pinot Noir
+Brazil|Rio Grande do Sul|Altos de Pinto Bandeira|DO|Sparkling|Chardonnay; Pinot Noir
+Brazil|Rio Grande do Sul|Campanha Gaúcha|IP|Red|Cabernet Sauvignon; Tannat
+Brazil|Rio Grande do Sul|Serra do Sudeste|Regional|Red|Pinot Noir; Cabernet Franc
+Brazil|Rio Grande do Sul|Monte Belo|IP|Red|Merlot; Cabernet Sauvignon
+Brazil|Bahia & Pernambuco|Vale do São Francisco|Regional|Red|Syrah; Cabernet Sauvignon
+Brazil|Santa Catarina|Planalto Catarinense|Regional|Red|Sauvignon Blanc; Merlot
+Peru|Ica|Ica Valley|Regional|Red|Malbec; Tannat; Quebranta
+Peru|Moquegua|Moquegua|Regional|Red|Quebranta; Italia
+Peru|Tacna|Tacna|Regional|Red|Cabernet Sauvignon
+Bolivia|Tarija|Valle Central de Tarija|Regional|Red|Tannat; Cabernet Sauvignon
+Bolivia|Chuquisaca|Valle de Cinti|Regional|Red|Vischoqueña; Negra Criolla
+Colombia|Boyacá|Villa de Leyva|Regional|White|Riesling; Sauvignon Blanc
+Colombia|Valle del Cauca|Valle del Cauca|Regional|Red|Cabernet Sauvignon
+Venezuela|Lara|Carora|Regional|Red|Tempranillo; Syrah
+Ecuador|Chota Valley|Chota Valley|Regional|Red|Cabernet Sauvignon; Syrah
+Paraguay|Guairá|Guairá|Regional|Red|Tannat; Cabernet Sauvignon
+Australia|South Australia|Barossa Valley|GI|Red|Shiraz; Grenache
+Australia|South Australia|Eden Valley|GI|White|Riesling; Shiraz
+Australia|South Australia|Clare Valley|GI|White|Riesling; Shiraz
+Australia|South Australia|McLaren Vale|GI|Red|Shiraz; Grenache
+Australia|South Australia|Adelaide Hills|GI|White|Sauvignon Blanc; Chardonnay
+Australia|South Australia|Coonawarra|GI|Red|Cabernet Sauvignon
+Australia|South Australia|Padthaway|GI|White|Chardonnay; Shiraz
+Australia|South Australia|Wrattonbully|GI|Red|Cabernet Sauvignon
+Australia|South Australia|Langhorne Creek|GI|Red|Cabernet Sauvignon; Shiraz
+Australia|South Australia|Riverland|GI|Red|Shiraz; Chardonnay
+Australia|South Australia|Kangaroo Island|GI|Red|Cabernet Sauvignon
+Australia|South Australia|Southern Fleurieu|GI|Red|Shiraz
+Australia|South Australia|Mount Benson|GI|Red|Shiraz; Cabernet Sauvignon
+Australia|South Australia|Robe|GI|Red|Cabernet Sauvignon
+Australia|South Australia|Adelaide Plains|GI|Red|Shiraz
+Australia|New South Wales|Hunter Valley|GI|White|Semillon; Shiraz
+Australia|New South Wales|Mudgee|GI|Red|Shiraz; Cabernet Sauvignon
+Australia|New South Wales|Orange|GI|White|Chardonnay; Sauvignon Blanc
+Australia|New South Wales|Cowra|GI|White|Chardonnay
+Australia|New South Wales|Hilltops|GI|Red|Shiraz; Cabernet Sauvignon
+Australia|New South Wales|Canberra District|GI|Red|Shiraz; Riesling
+Australia|New South Wales|Riverina|GI|Sweet White|Semillon
+Australia|New South Wales|Tumbarumba|GI|Sparkling|Chardonnay; Pinot Noir
+Australia|New South Wales|Shoalhaven Coast|GI|White|Chambourcin; Verdelho
+Australia|New South Wales|New England Australia|GI|Red|Shiraz
+Australia|Victoria|Yarra Valley|GI|Red|Pinot Noir; Chardonnay
+Australia|Victoria|Mornington Peninsula|GI|Red|Pinot Noir; Chardonnay
+Australia|Victoria|Geelong|GI|Red|Pinot Noir; Shiraz
+Australia|Victoria|Bellarine Peninsula|GI|Red|Pinot Noir
+Australia|Victoria|Macedon Ranges|GI|Sparkling|Chardonnay; Pinot Noir
+Australia|Victoria|Sunbury|GI|Red|Shiraz
+Australia|Victoria|Heathcote|GI|Red|Shiraz
+Australia|Victoria|Goulburn Valley|GI|Red|Shiraz; Marsanne
+Australia|Victoria|Nagambie Lakes|GI|White|Marsanne; Shiraz
+Australia|Victoria|Rutherglen|GI|Fortified|Muscat à Petits Grains Rouge
+Australia|Victoria|Rutherglen Muscat|GI|Fortified|Muscat à Petits Grains Rouge
+Australia|Victoria|Rutherglen Topaque|GI|Fortified|Muscadelle
+Australia|Victoria|Glenrowan|GI|Fortified|Muscat; Shiraz
+Australia|Victoria|Beechworth|GI|White|Chardonnay; Shiraz
+Australia|Victoria|Alpine Valleys|GI|Red|Sangiovese; Merlot
+Australia|Victoria|King Valley|GI|Sparkling|Glera; Sangiovese
+Australia|Victoria|Grampians|GI|Red|Shiraz
+Australia|Victoria|Pyrenees (Victoria)|GI|Red|Shiraz; Cabernet Sauvignon
+Australia|Victoria|Henty|GI|White|Riesling; Chardonnay
+Australia|Victoria|Gippsland|GI|Red|Pinot Noir; Chardonnay
+Australia|Victoria|Strathbogie Ranges|GI|White|Chardonnay; Riesling
+Australia|Western Australia|Margaret River|GI|Red|Cabernet Sauvignon; Chardonnay
+Australia|Western Australia|Great Southern|GI|White|Riesling; Shiraz
+Australia|Western Australia|Frankland River|GI|Red|Shiraz; Cabernet Sauvignon
+Australia|Western Australia|Mount Barker|GI|White|Riesling; Shiraz
+Australia|Western Australia|Porongurup|GI|White|Riesling
+Australia|Western Australia|Denmark (WA)|GI|Red|Pinot Noir; Chardonnay
+Australia|Western Australia|Albany|GI|Red|Pinot Noir; Shiraz
+Australia|Western Australia|Swan District|GI|White|Chenin Blanc; Verdelho
+Australia|Western Australia|Swan Valley|GI|Fortified|Verdelho; Grenache
+Australia|Western Australia|Geographe|GI|Red|Shiraz; Cabernet Sauvignon
+Australia|Western Australia|Pemberton|GI|Red|Pinot Noir; Chardonnay
+Australia|Western Australia|Manjimup|GI|Red|Cabernet Sauvignon; Merlot
+Australia|Tasmania|Tasmania|GI|Sparkling|Chardonnay; Pinot Noir
+Australia|Tasmania|Tamar Valley|Regional|White|Chardonnay; Pinot Noir
+Australia|Tasmania|Coal River Valley|Regional|White|Riesling; Pinot Noir
+Australia|Tasmania|Pipers River|Regional|Sparkling|Chardonnay; Pinot Noir
+Australia|Tasmania|East Coast Tasmania|Regional|Red|Pinot Noir
+Australia|Tasmania|Derwent Valley|Regional|White|Riesling; Pinot Noir
+Australia|Tasmania|Huon Valley|Regional|Red|Pinot Noir
+Australia|Queensland|Granite Belt|GI|Red|Shiraz; Verdelho
+Australia|Queensland|South Burnett|GI|White|Chardonnay; Verdelho
+Australia|National|Sparkling Shiraz|Traditional style|Sparkling Red|Shiraz
+Australia|National|Australian Tawny|Fortified style|Fortified|Grenache; Shiraz
+New Zealand|Marlborough|Marlborough|GI|White|Sauvignon Blanc; Pinot Noir
+New Zealand|Marlborough|Wairau Valley|GI|White|Sauvignon Blanc
+New Zealand|Marlborough|Awatere Valley|GI|White|Sauvignon Blanc; Riesling
+New Zealand|Marlborough|Southern Valleys|Regional|Red|Pinot Noir
+New Zealand|Central Otago|Central Otago|GI|Red|Pinot Noir
+New Zealand|Central Otago|Bannockburn|GI|Red|Pinot Noir
+New Zealand|Central Otago|Gibbston|GI|Red|Pinot Noir
+New Zealand|Central Otago|Bendigo|GI|Red|Pinot Noir
+New Zealand|Central Otago|Cromwell Basin|GI|Red|Pinot Noir
+New Zealand|Central Otago|Wanaka|GI|Red|Pinot Noir
+New Zealand|Central Otago|Alexandra|GI|Red|Pinot Noir; Riesling
+New Zealand|Hawke's Bay|Hawke's Bay|GI|Red|Merlot; Syrah; Chardonnay
+New Zealand|Hawke's Bay|Gimblett Gravels|GI|Red|Syrah; Merlot; Cabernet Sauvignon
+New Zealand|Hawke's Bay|Bridge Pa Triangle|GI|Red|Syrah; Merlot
+New Zealand|Wairarapa|Martinborough|GI|Red|Pinot Noir
+New Zealand|Wairarapa|Gladstone|GI|Red|Pinot Noir; Sauvignon Blanc
+New Zealand|Nelson|Nelson|GI|White|Sauvignon Blanc; Chardonnay
+New Zealand|Canterbury|North Canterbury|GI|Red|Pinot Noir; Riesling
+New Zealand|Canterbury|Waipara Valley|GI|White|Riesling; Pinot Noir
+New Zealand|Canterbury|Canterbury Plains|GI|White|Chardonnay; Riesling
+New Zealand|Waitaki|Waitaki Valley|GI|Red|Pinot Noir
+New Zealand|Gisborne|Gisborne|GI|White|Chardonnay; Gewürztraminer
+New Zealand|Auckland|Waiheke Island|GI|Red|Cabernet Sauvignon; Syrah
+New Zealand|Auckland|Kumeu|GI|White|Chardonnay
+New Zealand|Auckland|Matakana|GI|Red|Syrah; Merlot
+New Zealand|Northland|Northland|GI|Red|Syrah; Chardonnay
+South Africa|Coastal Region|Stellenbosch|WO|Red|Cabernet Sauvignon; Pinotage; Chenin Blanc
+South Africa|Coastal Region|Paarl|WO|Red|Shiraz; Cabernet Sauvignon
+South Africa|Coastal Region|Franschhoek Valley|WO|White|Semillon; Cabernet Sauvignon
+South Africa|Coastal Region|Constantia|WO|White|Sauvignon Blanc
+South Africa|Coastal Region|Vin de Constance|Historic style|Sweet White|Muscat de Frontignan
+South Africa|Coastal Region|Swartland|WO|Red|Syrah; Chenin Blanc
+South Africa|Coastal Region|Darling|WO|White|Sauvignon Blanc
+South Africa|Coastal Region|Durbanville|WO|White|Sauvignon Blanc; Merlot
+South Africa|Coastal Region|Tulbagh|WO|Sparkling|Chardonnay; Pinot Noir
+South Africa|Coastal Region|Wellington|WO|Red|Shiraz; Cabernet Sauvignon
+South Africa|Coastal Region|Simonsberg-Stellenbosch|WO|Red|Cabernet Sauvignon
+South Africa|Coastal Region|Banghoek|WO|Red|Cabernet Sauvignon
+South Africa|Cape South Coast|Elgin|WO|White|Sauvignon Blanc; Chardonnay
+South Africa|Cape South Coast|Walker Bay|WO|Red|Pinot Noir; Chardonnay
+South Africa|Cape South Coast|Hemel-en-Aarde Valley|WO|Red|Pinot Noir; Chardonnay
+South Africa|Cape South Coast|Upper Hemel-en-Aarde Valley|WO|Red|Pinot Noir
+South Africa|Cape South Coast|Hemel-en-Aarde Ridge|WO|Red|Pinot Noir
+South Africa|Cape South Coast|Cape Agulhas|WO|White|Sauvignon Blanc
+South Africa|Cape South Coast|Elim|WO|White|Sauvignon Blanc; Syrah
+South Africa|Cape South Coast|Bot River|WO|Red|Syrah; Chenin Blanc
+South Africa|Cape South Coast|Overberg|WO|White|Sauvignon Blanc
+South Africa|Breede River Valley|Robertson|WO|White|Chardonnay; Sauvignon Blanc
+South Africa|Breede River Valley|Worcester|WO|White|Chenin Blanc; Colombard
+South Africa|Breede River Valley|Breedekloof|WO|White|Chenin Blanc
+South Africa|Klein Karoo|Calitzdorp|WO|Fortified|Touriga Nacional; Tinta Barocca
+South Africa|Klein Karoo|Klein Karoo|WO|Fortified|Muscat; Touriga Nacional
+South Africa|Olifants River|Olifants River|WO|White|Chenin Blanc; Colombard
+South Africa|Olifants River|Citrusdal Mountain|WO|Red|Syrah; Chenin Blanc
+South Africa|Cederberg|Cederberg|WO|White|Sauvignon Blanc; Chenin Blanc
+South Africa|Northern Cape|Douglas|WO|White|Colombard
+South Africa|National|Pinotage|Grape wine|Red|Pinotage
+South Africa|National|Cape Blend|Style|Red|Pinotage; Cabernet Sauvignon; Merlot
+South Africa|National|Methode Cap Classique|Style|Sparkling|Chardonnay; Pinot Noir
+South Africa|National|Cape Vintage (Cape Port)|Style|Fortified|Touriga Nacional; Tinta Barocca
+Morocco|Meknès|Guerrouane|AOG|Red|Carignan; Cinsault; Grenache
+Morocco|Meknès|Beni M'Tir|AOG|Red|Cabernet Sauvignon; Syrah
+Morocco|Meknès|Coteaux de l'Atlas|AOC|Red|Syrah; Cabernet Sauvignon
+Morocco|Fès|Zerhoune|AOG|Red|Carignan; Cinsault
+Morocco|Oriental|Berkane|AOG|Red|Carignan; Alicante Bouschet
+Morocco|Casablanca|Gris de Boulaouane|AOG|Rosé|Cinsault; Grenache
+Algeria|Mascara|Coteaux de Mascara|AOG|Red|Carignan; Cinsault
+Algeria|Médéa|Coteaux du Zaccar|AOG|Red|Carignan; Cinsault
+Algeria|Tlemcen|Coteaux de Tlemcen|AOG|Red|Carignan; Grenache
+Algeria|Aïn Témouchent|Aïn Bessem-Bouira|AOG|Red|Carignan; Cinsault
+Tunisia|Nabeul|Mornag|AOC|Red|Carignan; Syrah
+Tunisia|Nabeul|Grombalia|AOC|Red|Carignan; Cinsault
+Tunisia|Nabeul|Muscat de Kelibia|AOC|White|Muscat of Alexandria
+Tunisia|Bizerte|Sidi Salem|AOC|Red|Carignan; Cabernet Sauvignon
+Egypt|Nile Delta|Gianaclis (Abu Hummus)|Regional|White|Bannati; Chardonnay
+Egypt|Alexandria|Alexandria|Regional|Red|Grenache; Bobal
+Ethiopia|Rift Valley|Ziway|Regional|Red|Syrah; Cabernet Sauvignon
+Kenya|Rift Valley|Naivasha|Regional|Red|Shiraz; Sauvignon Blanc
+Tanzania|Dodoma|Dodoma|Regional|Red|Makutupora; Chenin Blanc
+Zimbabwe|Mashonaland|Odzi Valley|Regional|Red|Cabernet Sauvignon; Pinotage
+Namibia|Erongo|Omaruru|Regional|Red|Colombard; Ruby Cabernet
+Madagascar|Fianarantsoa|Betsileo|Regional|Rosé|Villard; Couderc
+China|Ningxia|Helan Mountain East|Regional|Red|Cabernet Sauvignon; Marselan
+China|Shandong|Yantai-Penglai|Regional|Red|Cabernet Gernischt; Chardonnay
+China|Hebei|Huailai|Regional|Red|Cabernet Sauvignon; Longyan
+China|Hebei|Changli|Regional|Red|Cabernet Sauvignon
+China|Xinjiang|Turpan Basin|Regional|Sweet White|Muscat; Cabernet Sauvignon
+China|Xinjiang|Manas|Regional|Red|Cabernet Sauvignon; Merlot
+China|Shanxi|Shanxi|Regional|Red|Cabernet Sauvignon; Aglianico
+China|Yunnan|Shangri-La (Deqin)|Regional|Red|Cabernet Sauvignon; Cabernet Franc
+China|National|Marselan (China)|Grape wine|Red|Marselan
+Japan|Yamanashi|Yamanashi|GI|White|Koshu
+Japan|Yamanashi|Katsunuma|Regional|White|Koshu
+Japan|Nagano|Nagano|GI|Red|Merlot; Chardonnay
+Japan|Hokkaido|Hokkaido|GI|White|Kerner; Pinot Noir
+Japan|Yamagata|Yamagata|GI|Red|Merlot; Delaware
+Japan|Iwate|Iwate|Regional|White|Riesling Lion; Kerner
+Japan|Osaka|Osaka|GI|Red|Delaware; Merlot
+Japan|National|Muscat Bailey A|Grape wine|Red|Muscat Bailey A
+India|Maharashtra|Nashik|Regional|Red|Cabernet Sauvignon; Shiraz; Chenin Blanc
+India|Maharashtra|Akluj|Regional|Red|Cabernet Sauvignon; Shiraz
+India|Karnataka|Nandi Hills|Regional|Red|Shiraz; Viognier
+India|Karnataka|Krishna Valley|Regional|Red|Cabernet Sauvignon
+Thailand|Khao Yai|Khao Yai|Regional|Red|Shiraz; Chenin Blanc
+Thailand|Hua Hin|Hua Hin Hills|Regional|Red|Shiraz; Muscat
+Thailand|Chao Phraya|Chao Phraya Delta|Regional|White|Malaga Blanc
+Vietnam|Ninh Thuận|Ninh Thuận|Regional|Red|Cardinal
+Vietnam|Lâm Đồng|Đà Lạt|Regional|Red|Cardinal; Cabernet Sauvignon
+Myanmar|Shan State|Aythaya (Taunggyi)|Regional|Red|Shiraz; Sauvignon Blanc
+Myanmar|Shan State|Inle Lake|Regional|Red|Shiraz; Chenin Blanc
+Indonesia|Bali|North Bali (Singaraja)|Regional|Rosé|Alphonse Lavallée; Belgia
+South Korea|Chungcheongbuk|Yeongdong|Regional|Red|Campbell Early
+South Korea|Gyeongsangbuk|Gyeongsan|Regional|Red|Campbell Early; MBA
+Taiwan|Changhua|Erlin|Regional|Red|Black Queen; Golden Muscat
+Kazakhstan|Almaty|Assa Valley|Regional|Red|Saperavi; Cabernet Sauvignon
+Uzbekistan|Samarkand|Samarkand|Regional|Sweet White|Bayan Shirey; Muscat
+Kyrgyzstan|Chüy|Chüy Valley|Regional|Red|Saperavi
+Tajikistan|Sughd|Sughd|Regional|Sweet White|Muscat; Rkatsiteli
+Turkmenistan|Ahal|Ahal|Regional|Fortified|Terbash; Rkatsiteli

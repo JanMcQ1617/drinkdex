@@ -1,0 +1,1271 @@
+[
+ {
+  "id": "zubrowka",
+  "name": "Żubrówka",
+  "subcategory": "Vodka",
+  "description": "Rye vodka flavoured with bison grass cut by hand in the Białowieża forest, with a single blade laid in every bottle. Pale green, faintly of vanilla and new-mown hay, and nothing like a neutral vodka.",
+  "abv": "37.5–40%",
+  "origin": "Poland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "fresh hay",
+   "vanilla",
+   "almond",
+   "light herb"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "The grass contains coumarin, which is restricted in the United States, so the American version is reformulated to taste similar without it.",
+  "serve": {
+   "temp": "ice cold",
+   "glass": "Small shot glass, or highball for the long serve",
+   "how": "Freezer cold and neat is traditional. The better-known serve is the szarlotka: Żubrówka with cloudy apple juice over ice, which tastes uncannily like apple pie and is the reason most people meet it.",
+   "pair": [
+    "apple pie",
+    "smoked cheese",
+    "pickled cucumber"
+   ]
+  },
+  "composition": {
+   "summary": "Rye vodka infused with a tincture of bison grass.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rye, distilled to neutral"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Hierochloe odorata, bison grass from the Białowieża forest"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column-distilled, then infused"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    }
+   ],
+   "process": "The grass is the same one European bison graze on, which is where the name comes from."
+  }
+ },
+ {
+  "id": "starka",
+  "name": "Starka",
+  "subcategory": "Vodka",
+  "description": "Rye spirit aged in oak, sometimes for decades, which puts it in the strange position of being a vodka that behaves like whisky. Old Polish and Lithuanian families buried casks at a child's birth to open at their wedding.",
+  "abv": "40–50%",
+  "origin": "Poland and Lithuania",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dried apple",
+   "oak",
+   "vanilla",
+   "tobacco"
+  ],
+  "glassware": "Tumbler or copita",
+  "funFact": "Traditional recipes called for lime and apple leaves to be sealed into the cask alongside the spirit before it was buried.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Tumbler or copita",
+   "how": "Treat it as you would an aged spirit rather than a vodka: neat, at room temperature, no ice. Older bottlings carry real tannin and reward the same patience you would give a brandy.",
+   "pair": [
+    "smoked meats",
+    "dark rye",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Rye distillate aged in oak, occasionally for many years.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rye, distilled below neutrality"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column, deliberately leaving grain character"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak casks, from a few years to fifty"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "Because it is aged, the EU spent years arguing about whether it can legally be sold as vodka at all."
+  }
+ },
+ {
+  "id": "krupnik",
+  "name": "Krupnik",
+  "subcategory": "Liqueur",
+  "description": "Spiced honey liqueur from Poland and Lithuania, served hot in winter and cold in summer, and made at home as often as bought. Monastery kitchens have been producing versions of it since the sixteenth century.",
+  "abv": "35–50%",
+  "origin": "Poland and Lithuania",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "clove",
+   "cinnamon",
+   "vanilla"
+  ],
+  "glassware": "Warmed glass or cordial glass",
+  "funFact": "Lithuanian krupnikas can run to 50% and is traditionally set alight briefly before serving, which burns off nothing but looks convincing.",
+  "serve": {
+   "temp": "hot in winter, cold in summer",
+   "glass": "Warmed glass mug or small cordial glass",
+   "how": "Heat it gently with a strip of lemon peel and drink it hot when the weather turns; anything above a simmer will drive off the alcohol. In summer it is served cold and neat in small glasses.",
+   "pair": [
+    "gingerbread",
+    "poppyseed cake",
+    "strong tea"
+   ]
+  },
+  "composition": {
+   "summary": "Grain spirit blended with honey, spices and citrus.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain spirit or vodka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Honey, clove, cinnamon, nutmeg, vanilla, citrus peel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Warmed and blended, not distilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–50%"
+    }
+   ],
+   "process": "The honey is heated with the spices before the spirit goes in, which is what marries them."
+  }
+ },
+ {
+  "id": "nalewka",
+  "name": "Nalewka",
+  "subcategory": "Fruit Brandy",
+  "description": "Not one spirit but a whole Polish tradition: fruit, nuts or herbs steeped in spirit at home, sweetened, and left for months or years. Every family has recipes, and most of them are better than anything commercial.",
+  "abv": "30–45%",
+  "origin": "Poland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "macerated fruit",
+   "sugar",
+   "spice",
+   "spirit warmth"
+  ],
+  "glassware": "Small cordial glass",
+  "funFact": "Nalewki were served in Polish manor houses as a mark of hospitality, and old recipes specify ageing times of up to ten years before a bottle was considered ready.",
+  "serve": {
+   "temp": "cool or room temp",
+   "glass": "Small cordial glass",
+   "how": "Neat in a small glass after a meal, at cellar temperature. Cherry (wiśniówka) and quince are the classics. Cold dulls the fruit, so avoid the freezer no matter what the bottle looks like.",
+   "pair": [
+    "cheesecake",
+    "poppyseed roll",
+    "cured meats"
+   ]
+  },
+  "composition": {
+   "summary": "Fruit or herbs macerated in spirit, sweetened and long-rested.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rectified spirit or vodka, often cut with fruit juice"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Cherry, quince, sloe, walnut, rose petal, honey"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated only"
+    },
+    {
+     "label": "Aging",
+     "detail": "Months to years in glass"
+    }
+   ],
+   "process": "Time is the active ingredient; a young nalewka tastes raw and a ten-year-old one tastes like liqueur."
+  }
+ },
+ {
+  "id": "spirytus-rektyfikowany",
+  "name": "Spirytus Rektyfikowany",
+  "subcategory": "Grain Spirit",
+  "description": "Rectified spirit at 96%, sold in Polish shops as an ingredient rather than a drink. It goes into nalewki, preserves and medicine cabinets. Drinking it neat is possible, inadvisable, and occasionally fatal.",
+  "abv": "95–96%",
+  "origin": "Poland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pure ethanol",
+   "faint grain",
+   "heat",
+   "nothing else"
+  ],
+  "glassware": "Tumbler, always diluted",
+  "funFact": "At 96% it is close to the azeotropic limit of distillation, the point beyond which ethanol and water cannot be separated by distilling alone.",
+  "serve": {
+   "temp": "n/a — dilute before use",
+   "glass": "Used as an ingredient, not poured neat",
+   "how": "This is a base, not a drink. Dilute it or steep fruit and herbs in it to make nalewka, or cut it with water to vodka strength. Neat consumption risks serious injury to the throat and stomach."
+  },
+  "composition": {
+   "summary": "Grain or potato spirit rectified to the practical limit of distillation.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain or potato"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Multiple rectification columns"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "95–96%, the azeotrope of ethanol and water"
+    }
+   ],
+   "process": "Going above 96% requires chemical drying rather than distillation, which is why the number stops there."
+  }
+ },
+ {
+  "id": "becherovka",
+  "name": "Becherovka",
+  "subcategory": "Amaro",
+  "description": "Karlovy Vary's herbal bitter, cinnamon-forward and sweeter than most, invented as a stomach remedy in 1807 and never quite shaking the reputation. Locals call it the thirteenth spring, after the town's twelve mineral springs.",
+  "abv": "38%",
+  "origin": "Karlovy Vary, Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinnamon",
+   "clove",
+   "ginger",
+   "bitter orange"
+  ],
+  "glassware": "Small tumbler or shot glass",
+  "funFact": "Only two people at a time know the full recipe, and they are the only ones permitted to enter the room where the botanicals are weighed.",
+  "serve": {
+   "temp": "chilled, 5°C",
+   "glass": "Small tumbler",
+   "how": "Cold and neat is the Czech way. The other national serve is the beton: Becherovka lengthened with tonic and a slice of lemon, which turns the cinnamon into something surprisingly refreshing.",
+   "pair": [
+    "roast pork",
+    "apple strudel",
+    "dark bread"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit steeped with around twenty botanicals and spring water.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit and Karlovy Vary spring water"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Roughly 20 herbs and spices, cinnamon and clove dominant"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated in linen sacks, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Around two months in oak vats"
+    }
+   ],
+   "process": "The local thermal spring water is claimed to be essential, which is convenient for a company that cannot move."
+  }
+ },
+ {
+  "id": "fernet-stock",
+  "name": "Fernet Stock",
+  "subcategory": "Amaro",
+  "description": "The Czech reading of Italian fernet: fourteen herbs, drier and less aggressively medicinal than Fernet-Branca, and drunk in far greater quantity per head. There is a citrus version that Czechs drink mixed with tonic.",
+  "abv": "38–40%",
+  "origin": "Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter herb",
+   "saffron",
+   "mint",
+   "liquorice"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "Trieste-born Lionello Stock built the brand in the Adriatic, but it became so thoroughly Czech that most drinkers assume it always was.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Shot glass or small tumbler",
+   "how": "Cold and neat after a meal. The citrus expression mixed with tonic makes a bavorák, a standard Czech pub order that is far easier going than the original.",
+   "pair": [
+    "goulash",
+    "roast duck",
+    "dark lager"
+   ]
+  },
+  "composition": {
+   "summary": "Fourteen herbs macerated in spirit, sweetened and rested.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "14 herbs including saffron, gentian, mint and rhubarb"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested in oak"
+    }
+   ],
+   "process": "Less sugar and more mint than the Italian original, which is why it reads as cleaner rather than sweeter."
+  }
+ },
+ {
+  "id": "tuzemak",
+  "name": "Tuzemák",
+  "subcategory": "Rum",
+  "description": "Sugar-beet spirit flavoured to taste like rum, invented because the Habsburg empire had beets and no cane. EU rules forced it to drop the word rum from the label in 2004; Czechs ignored the change entirely.",
+  "abv": "37.5–40%",
+  "origin": "Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "caramel",
+   "vanilla",
+   "rum essence",
+   "spice"
+  ],
+  "glassware": "Shot glass or in tea",
+  "funFact": "The name means domestic, chosen when the label could no longer say tuzemský rum, which is what everybody still calls it.",
+  "serve": {
+   "temp": "room temp, or hot in a drink",
+   "glass": "Shot glass or glass mug",
+   "how": "Mostly it goes into grog: tuzemák, hot water, sugar and lemon, which is the standard Czech cure for a winter cold. Neat it is sweet and simple, and it is the backbone of a great deal of Czech baking.",
+   "pair": [
+    "Christmas baking",
+    "black tea",
+    "gingerbread"
+   ]
+  },
+  "composition": {
+   "summary": "Sugar-beet spirit flavoured with rum essence and caramel.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugar beet, not cane"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Rum ether, caramel, vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column-distilled, then flavoured"
+    },
+    {
+     "label": "Strength",
+     "detail": "37.5–40%"
+    }
+   ],
+   "process": "It is an imitation by design and has been made openly as one for over a century."
+  }
+ },
+ {
+  "id": "hruskovice",
+  "name": "Hruškovice",
+  "subcategory": "Fruit Brandy",
+  "description": "Czech and Slovak pear brandy, usually from Williams pears, clear and unaged. The good ones smell so strongly of fresh pear that people assume something has been added, and nothing has.",
+  "abv": "40–45%",
+  "origin": "Czechia and Slovakia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ripe pear",
+   "white flower",
+   "honey",
+   "light spice"
+  ],
+  "glassware": "Small tulip glass",
+  "funFact": "Some producers grow the pear inside the bottle by fixing it over young fruit on the branch, then filling around it at harvest.",
+  "serve": {
+   "temp": "cool, 12°C",
+   "glass": "Small tulip",
+   "how": "Cool rather than iced, in a small pour after a heavy meal. Over-chilling closes down the pear aroma completely, which is the only reason to be drinking it.",
+   "pair": [
+    "roast pork",
+    "dumplings",
+    "pear tart"
+   ]
+  },
+  "composition": {
+   "summary": "Williams pears fermented whole and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Williams or local pear varieties"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot still, tight cut"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested in glass, not wood"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Pears ferment slowly and unevenly, so the mash is watched more carefully than plum or apple."
+  }
+ },
+ {
+  "id": "merunkovice",
+  "name": "Meruňkovice",
+  "subcategory": "Fruit Brandy",
+  "description": "Moravian apricot brandy, the Czech cousin of Austria's Marillenbrand and Hungary's barackpálinka. South Moravia's orchards give a slightly rounder, jammier spirit than the Wachau does.",
+  "abv": "40–50%",
+  "origin": "Moravia, Czechia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "marzipan",
+   "honey",
+   "stone"
+  ],
+  "glassware": "Small tulip glass",
+  "funFact": "Home distilling is legal in Czechia through licensed communal stills, so most villages have one that runs flat out every autumn.",
+  "serve": {
+   "temp": "cool, 12–14°C",
+   "glass": "Small tulip",
+   "how": "Cellar temperature, neat, in a small glass. Czechs drink it before the meal as often as after, and a good one is generous enough on the nose that you can smell it across a table.",
+   "pair": [
+    "apricot dumplings",
+    "smoked pork",
+    "poppyseed cake"
+   ]
+  },
+  "composition": {
+   "summary": "Apricots fermented whole and distilled twice in copper.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "South Moravian apricots"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Double pot distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested in glass or steel"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "A proportion of stones is often fermented with the fruit to deepen the almond note."
+  }
+ },
+ {
+  "id": "czech-absinth",
+  "name": "Czech Absinth",
+  "subcategory": "Anise Spirit",
+  "description": "Wormwood-forward and usually made without anise, so it does not louche when water is added. Purists refuse to accept it as absinthe at all, and the missing e on the label is where that argument starts.",
+  "abv": "55–70%",
+  "origin": "Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "wormwood",
+   "bitter herb",
+   "alcohol heat",
+   "mint"
+  ],
+  "glassware": "Absinthe glass",
+  "funFact": "The burning sugar cube ritual that tourists associate with absinthe was invented in 1990s Prague and has nothing to do with the French tradition.",
+  "serve": {
+   "temp": "room temp, diluted",
+   "glass": "Absinthe glass or tumbler",
+   "how": "Dilute three or four parts iced water to one of spirit, poured slowly. Skip the flaming sugar cube, which scorches the herbs and is pure theatre. Without anise it will stay clear rather than turning milky.",
+   "pair": [
+    "dark chocolate",
+    "strong coffee",
+    "nothing sweet"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit macerated or distilled with wormwood, little or no anise.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Grande wormwood, sometimes mint and lemon balm; anise usually absent"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Often macerated and coloured rather than distilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "55–70%"
+    }
+   ],
+   "process": "No anise means no louche, which is the clearest way to tell the Czech style from the French."
+  }
+ },
+ {
+  "id": "borovicka",
+  "name": "Borovička",
+  "subcategory": "Gin",
+  "description": "Slovak juniper spirit, drier and rougher-edged than gin because the berries are fermented or distilled directly rather than steeped into finished alcohol. Sharp, resinous and completely unsweetened.",
+  "abv": "40–45%",
+  "origin": "Slovakia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "pine",
+   "pepper",
+   "resin"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "Slovak, Czech and Hungarian producers all claim versions of it, and the Slovak one holds an EU geographical indication.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small shot glass",
+   "how": "Cold and neat, in one measure, with a beer alongside. It is a mountain and pub spirit rather than a sipping one, and Slovaks will tell you it is good for a cold, which it is not.",
+   "pair": [
+    "smoked sausage",
+    "sheep cheese",
+    "dark bread"
+   ]
+  },
+  "composition": {
+   "summary": "Juniper berries distilled with or fermented into grain spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper berries, sometimes alone"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Berries distilled directly rather than macerated"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Distilling the berries rather than steeping them gives a greener, harsher juniper than any gin."
+  }
+ },
+ {
+  "id": "demanovka",
+  "name": "Demänovka",
+  "subcategory": "Herbal Liqueur",
+  "description": "A herbal liqueur from the Low Tatras built on honey and mountain plants, made in bitter and sweet versions. Named after the Demänovská valley, and about as Slovak as a bottle can get.",
+  "abv": "33–38%",
+  "origin": "Liptov, Slovakia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "alpine herb",
+   "citrus",
+   "mild bitter"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The recipe uses fourteen herbs gathered in the Low Tatras and has been made in Liptovský Mikuláš since the 1950s.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small tumbler",
+   "how": "Cold and neat after eating. The sweet version is the easier introduction; the bitter one is closer to an amaro and works over ice with tonic if you want it longer.",
+   "pair": [
+    "bryndzové halušky",
+    "smoked cheese",
+    "roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "Fourteen Tatra herbs macerated in spirit with honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "14 herbs from the Low Tatras"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended with honey"
+    },
+    {
+     "label": "Strength",
+     "detail": "33–38%"
+    }
+   ],
+   "process": "Honey rather than sugar syrup gives it the weight that separates it from a plain herbal bitter."
+  }
+ },
+ {
+  "id": "torkolypalinka",
+  "name": "Törkölypálinka",
+  "subcategory": "Pomace Brandy",
+  "description": "The pomace version of pálinka, distilled from what is left after the wine press rather than from whole fruit. Grippier and more rustic than fruit pálinka, and protected under the same Hungarian rules.",
+  "abv": "40–50%",
+  "origin": "Hungary",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grape skin",
+   "pepper",
+   "dried fruit",
+   "earth"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Hungarian law protects pálinka so tightly that adding sugar, colouring or flavouring disqualifies a spirit from using the name at all.",
+  "serve": {
+   "temp": "cool, 14–16°C",
+   "glass": "Small tulip",
+   "how": "Slightly cooler than room temperature and never iced; Hungarians are emphatic that freezing pálinka is an insult to it. Small pours, after a meal, and give the glass a swirl first.",
+   "pair": [
+    "goulash",
+    "sausage",
+    "sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Grape pomace fermented and double-distilled in Hungary.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grape skins, pips and stems from Hungarian wine regions"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Double pot distillation"
+    },
+    {
+     "label": "Aging",
+     "detail": "Optional; wood-aged versions exist"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "Everything must be grown, fermented, distilled and bottled in Hungary for the name to apply."
+  }
+ },
+ {
+  "id": "unicum",
+  "name": "Unicum",
+  "subcategory": "Amaro",
+  "description": "Hungary's national bitter: forty herbs macerated and aged in oak beneath Budapest, in a round bottle with a red cross. Blacker and more medicinal than Jägermeister, and considerably less forgiving.",
+  "abv": "40%",
+  "origin": "Budapest, Hungary",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter root",
+   "dried orange",
+   "clove",
+   "earth"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The Zwack family smuggled the recipe out during the communist years and sold a deliberately falsified version behind the Iron Curtain until they could return in 1989.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small tumbler or shot glass",
+   "how": "Cold and neat, before or after a heavy meal. Unicum Szilva, the plum-aged version, is markedly sweeter and the better place to start if bitterness is not your thing.",
+   "pair": [
+    "goulash",
+    "fried dough",
+    "strong coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Over forty herbs macerated and distilled, then aged in oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "More than 40 herbs and spices"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Part macerated, part distilled, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Six months in oak casks in cellars under Budapest"
+    }
+   ],
+   "process": "The cellar ageing is genuine and the casks are large, so the wood rounds rather than flavours."
+  }
+ },
+ {
+  "id": "zganje",
+  "name": "Žganje",
+  "subcategory": "Fruit Brandy",
+  "description": "Slovenia's household fruit brandy, made from whatever the orchard gives up: plum, pear, apple, quince. Every farm has a version and no two are alike, which is the appeal and the risk.",
+  "abv": "40–50%",
+  "origin": "Slovenia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orchard fruit",
+   "stone",
+   "hay",
+   "spirit warmth"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Slovenia permits households to distil their own fruit for personal use, so a great deal of the country's žganje never reaches a shop.",
+  "serve": {
+   "temp": "cool or room temp",
+   "glass": "Small shot glass",
+   "how": "Poured at the start of a visit rather than the end, which is the Slovenian custom. Room temperature, small measures, and refusing the second one takes more skill than accepting it.",
+   "pair": [
+    "cured pork",
+    "hard cheese",
+    "dark bread"
+   ]
+  },
+  "composition": {
+   "summary": "Farm fruit fermented and pot-distilled, usually unaged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Plum, pear, apple or quince"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small copper pot still, often shared between neighbours"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually none; some rest in oak or ash"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "Quality swings enormously with the maker, since almost all of it is produced outside any commercial standard."
+  }
+ },
+ {
+  "id": "brinjevec",
+  "name": "Brinjevec",
+  "subcategory": "Gin",
+  "description": "Slovenian juniper brandy in which the berries are fermented and distilled rather than infused, producing something far closer to a fruit brandy than to gin. Fierce, resinous, and traditionally taken as medicine.",
+  "abv": "40–45%",
+  "origin": "Slovenia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "juniper",
+   "pine resin",
+   "pepper",
+   "earth"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "It takes an enormous quantity of juniper berries to produce a single litre, which is why genuine brinjevec is scarce and frequently faked with flavoured spirit.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat at room temperature, in small measures. Slovenians reach for it when someone has an upset stomach, and it has a long folk reputation as a remedy that the taste does nothing to undermine.",
+   "pair": [
+    "cured meats",
+    "game",
+    "rye bread"
+   ]
+  },
+  "composition": {
+   "summary": "Juniper berries fermented and distilled as the sole base.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Juniper berries, fermented"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot still; the berries are the fermentable, not a flavouring"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Because the berry itself is fermented, this is technically a fruit brandy rather than a juniper-flavoured spirit."
+  }
+ },
+ {
+  "id": "pelinkovec",
+  "name": "Pelinkovec",
+  "subcategory": "Amaro",
+  "description": "Wormwood bitter from Slovenia and Croatia, very dark, barely sweetened and considerably more austere than the Italian amari. The name comes from pelin, the local word for wormwood.",
+  "abv": "30–35%",
+  "origin": "Slovenia and Croatia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "wormwood",
+   "bitter orange",
+   "liquorice",
+   "dark herb"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "In the former Yugoslavia it was drunk with tonic and a slice of lemon, a serve that has outlived the country it came from.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small tumbler",
+   "how": "Cold and neat, or long with tonic and lemon, which cuts the bitterness enough to make it an aperitif. It is drier than Jägermeister and should not be treated as a substitute.",
+   "pair": [
+    "grilled meat",
+    "olives",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Wormwood and herbs macerated in spirit with minimal sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Wormwood, gentian, bitter orange, liquorice root"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–35%"
+    }
+   ],
+   "process": "Restraint with sugar is what keeps it on the bitter side of a liqueur."
+  }
+ },
+ {
+  "id": "samogon",
+  "name": "Samogon",
+  "subcategory": "Grain Spirit",
+  "description": "Russian and Ukrainian home distillate, made from grain, beet, potato or fruit depending on what is cheap. Legal to make for personal use, illegal to sell, and produced in quantities nobody can measure.",
+  "abv": "40–70%",
+  "origin": "Russia and Ukraine",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raw grain",
+   "bread",
+   "heat",
+   "varies wildly"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "The word means self-distilled, and Soviet anti-alcohol campaigns in the 1980s drove production up rather than down.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Shot glass",
+   "how": "Cold, neat, with food on the table, which is not optional in the culture it comes from. Quality varies from carefully double-distilled and charcoal-filtered to genuinely dangerous, so provenance matters more than usual.",
+   "pair": [
+    "salo",
+    "pickled cucumber",
+    "black bread"
+   ]
+  },
+  "composition": {
+   "summary": "Home-fermented mash distilled in small improvised stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain, sugar beet, potato or fruit"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small pot stills, often homemade; quality depends on the cut"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rarely aged; sometimes infused afterwards"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–70%"
+    }
+   ],
+   "process": "A careful maker discards the heads and tails; a careless one does not, which is where the danger lies."
+  }
+ },
+ {
+  "id": "nastoyka",
+  "name": "Nastoyka",
+  "subcategory": "Liqueur",
+  "description": "The Russian tradition of infusing spirit with fruit, roots or spice. Pertsovka takes pepper and honey, khrenovukha takes horseradish, and there are versions built on everything from cranberry to birch bud.",
+  "abv": "30–45%",
+  "origin": "Russia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "depends on infusion",
+   "honey",
+   "pepper",
+   "berry"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "Khrenovukha, the horseradish version, is credited to Peter the Great, who is supposed to have decreed that vodka be infused with it as a matter of policy.",
+  "serve": {
+   "temp": "ice cold",
+   "glass": "Small shot glass",
+   "how": "Freezer cold, neat, and with food. Pepper and horseradish versions are drunk with fatty or salted dishes; the sweet berry ones come out after the meal instead.",
+   "pair": [
+    "salo",
+    "smoked fish",
+    "pickles"
+   ]
+  },
+  "composition": {
+   "summary": "Vodka infused with fruit, roots or spice, sometimes sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Vodka or rectified spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Pepper, honey, horseradish, cranberry, birch, herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused only"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–45%"
+    }
+   ],
+   "process": "A nastoyka is infused and dry; a nalivka is the sweeter, fruitier relative."
+  }
+ },
+ {
+  "id": "horilka",
+  "name": "Horilka",
+  "subcategory": "Vodka",
+  "description": "Ukrainian vodka, usually from wheat or rye, and a separate national tradition rather than a translation of the Russian word. The pepper-and-honey version is the one that travels.",
+  "abv": "38–40%",
+  "origin": "Ukraine",
+  "rarity": "common",
+  "tastingNotes": [
+   "clean grain",
+   "white pepper",
+   "faint sweetness",
+   "rye"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "The name comes from the verb to burn, the same root as the English brandy by way of burnt wine.",
+  "serve": {
+   "temp": "ice cold",
+   "glass": "Small shot glass",
+   "how": "From the freezer, neat, and always with something to eat. Ukrainians pair it with salo, cured pork fat on black bread, and the combination is far better calibrated than it sounds.",
+   "pair": [
+    "salo",
+    "black bread",
+    "pickled vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Wheat or rye distilled to neutrality and cut with water.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Wheat or rye"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column-distilled, charcoal-filtered"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "Filtration is where most producers claim their difference, since the base spirit is close to neutral."
+  }
+ },
+ {
+  "id": "pertsivka",
+  "name": "Pertsivka",
+  "subcategory": "Liqueur",
+  "description": "Horilka infused with honey and chilli, amber-coloured and warming in the literal sense. Ukraine drinks it against cold weather, and it does the job better than most things sold for the purpose.",
+  "abv": "38–40%",
+  "origin": "Ukraine",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "chilli heat",
+   "pepper",
+   "light spice"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "Bottles frequently include whole chillies and peppercorns, which keep infusing and make the last measure noticeably hotter than the first.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small shot glass",
+   "how": "Cold and neat, with rich or fatty food. The honey softens the front and the chilli arrives afterwards, so drink it in one measure rather than sipping and waiting.",
+   "pair": [
+    "salo",
+    "borscht",
+    "smoked meats"
+   ]
+  },
+  "composition": {
+   "summary": "Grain spirit infused with honey, chilli and peppercorns.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Wheat or rye horilka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Honey, red chilli, black peppercorn, sometimes allspice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused, not redistilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "Honey goes in first to round the spirit, then the chilli, which continues to extract in the bottle."
+  }
+ },
+ {
+  "id": "krambambulya",
+  "name": "Krambambulya",
+  "subcategory": "Herbal Liqueur",
+  "description": "A Belarusian spiced honey liqueur revived from a seventeenth-century recipe, dark and heavily spiced, and drunk hot in a country that has serious winters. The name is borrowed from an old German drinking song.",
+  "abv": "30–40%",
+  "origin": "Belarus",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "honey",
+   "clove",
+   "cinnamon",
+   "nutmeg"
+  ],
+  "glassware": "Warmed glass",
+  "funFact": "The original Krambambuli was a Danzig cherry liqueur; Belarus took the name, dropped the cherries, and built something else around honey and spice.",
+  "serve": {
+   "temp": "hot or room temp",
+   "glass": "Warmed glass mug",
+   "how": "Warmed gently with the spices left in, which is how it is drunk through a Belarusian winter. At room temperature it works as a digestive, and the spicing is heavy enough that a small pour is plenty.",
+   "pair": [
+    "draniki",
+    "dark rye",
+    "roast meat"
+   ]
+  },
+  "composition": {
+   "summary": "Vodka or spirit blended with honey and a heavy spice load.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain spirit or vodka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Honey, clove, cinnamon, nutmeg, black pepper, galangal"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended, sometimes gently heated"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–40%"
+    }
+   ],
+   "process": "Recipes vary widely because it was a household drink long before anyone bottled it commercially."
+  }
+ },
+ {
+  "id": "riga-black-balsam",
+  "name": "Riga Black Balsam",
+  "subcategory": "Amaro",
+  "description": "Twenty-four botanicals at 45%, sold in an opaque black ceramic bottle since 1752 and tasting like tar, liquorice and bitter root. Latvia's most recognisable export and an acquired taste even there.",
+  "abv": "45%",
+  "origin": "Riga, Latvia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "liquorice",
+   "tar",
+   "bitter root",
+   "dark berry"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The ceramic bottle is not decorative: it blocks light and holds temperature, which is how the recipe was shipped across the Baltic in the eighteenth century.",
+  "serve": {
+   "temp": "cold, or hot in a drink",
+   "glass": "Small tumbler or coffee cup",
+   "how": "Neat and cold takes some commitment. Latvians more often stir it into hot tea or black coffee, or mix it with blackcurrant juice, which tames the tar without losing the herbs.",
+   "pair": [
+    "black coffee",
+    "rye bread",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "24 plants, roots and berries macerated in spirit with honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "24 including valerian, birch bud, linden blossom, bilberry, ginger"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated in oak barrels, then blended with honey"
+    },
+    {
+     "label": "Strength",
+     "detail": "45%"
+    }
+   ],
+   "process": "It was formulated as a medicine, and Catherine the Great is said to have credited it with curing her illness in Riga."
+  }
+ },
+ {
+  "id": "trejos-devynerios",
+  "name": "Trejos Devynerios",
+  "subcategory": "Amaro",
+  "description": "Three nines, in translation: twenty-seven herbs, roots and spices in a Lithuanian bitter that began life as a pharmacy preparation. Dry, resinous, and not remotely designed to be pleasant.",
+  "abv": "38%",
+  "origin": "Lithuania",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bitter root",
+   "juniper",
+   "clove",
+   "dry herb"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "It was sold in Soviet pharmacies as a herbal tincture, which meant it could be bought when alcohol itself was rationed.",
+  "serve": {
+   "temp": "cool",
+   "glass": "Small shot glass",
+   "how": "Neat, in a small measure, after eating. Lithuanians also add it to tea with honey when something is going around. It is a bitter in the older medicinal sense rather than a modern amaro.",
+   "pair": [
+    "smoked meats",
+    "dark rye",
+    "honey"
+   ]
+  },
+  "composition": {
+   "summary": "27 herbs and roots macerated in spirit, barely sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "27 herbs, roots, seeds and barks"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "38%"
+    }
+   ],
+   "process": "The number in the name refers to the count of botanicals, three times nine, which had folk-medicinal significance."
+  }
+ },
+ {
+  "id": "vana-tallinn",
+  "name": "Vana Tallinn",
+  "subcategory": "Liqueur",
+  "description": "Estonia's rum-based liqueur, flavoured with citrus oil, vanilla and cinnamon, and sold in enough gift boxes to fund a small country. Sweet, warming, and genuinely good in coffee.",
+  "abv": "40–50%",
+  "origin": "Estonia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "cinnamon",
+   "citrus oil",
+   "rum"
+  ],
+  "glassware": "Small glass or coffee cup",
+  "funFact": "Created in 1960, it became the standard souvenir of Soviet-era Tallinn and remains the drink most visitors leave the city carrying.",
+  "serve": {
+   "temp": "room temp, or in coffee",
+   "glass": "Small cordial glass or coffee cup",
+   "how": "Neat after dinner, or stirred into black coffee with a little cream floated on top, which is the local habit. The cream version, Vana Tallinn Cream, is a different and much sweeter product.",
+   "pair": [
+    "black coffee",
+    "marzipan",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Rum blended with citrus oils, vanilla and spice.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Jamaican and Cuban rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Citrus oil, vanilla, cinnamon"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended, not redistilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%, 45% and 50% expressions"
+    }
+   ],
+   "process": "A higher-strength version exists at 50%, which carries the spice considerably better than the standard bottling."
+  }
+ }
+]

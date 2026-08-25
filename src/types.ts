@@ -69,6 +69,103 @@ export interface Drink {
 }
 
 /* ------------------------------------------------------------------ */
+/* Wine atlas                                                          */
+/*                                                                     */
+/* Reference, not collection. The Dex is 460 authored cards you go out  */
+/* and collect; the atlas is the map behind them — every named wine and */
+/* every grape variety, so a wine card has somewhere to point.          */
+/* Nothing here carries a dexNumber.                                    */
+/* ------------------------------------------------------------------ */
+
+export type WineStyle =
+  | 'Red'
+  | 'White'
+  | 'Rosé'
+  | 'Sparkling'
+  | 'Sparkling Red'
+  | 'Sparkling Rosé'
+  | 'Sweet White'
+  | 'Sweet Red'
+  | 'Sweet Rosé'
+  | 'Fortified'
+  | 'Orange'
+  | 'Vin Jaune'
+  | 'Various';
+
+export type GrapeColor = 'Red' | 'White' | 'Pink';
+
+/**
+ * A named wine: an appellation, a protected denomination (AOC, DOCG, DO,
+ * AVA, GI, WO, PDO) or a classic style. Not a producer's label — those
+ * number in the millions and cannot be enumerated.
+ *
+ * Keys are short because this ships 1,558 of them in the bundle.
+ */
+export interface AtlasWine {
+  /** Name. */
+  n: string;
+  /** Index into WineAtlas.countries. */
+  c: number;
+  /** Region. */
+  r: string;
+  /** Classification tier, as that country records it. */
+  t: string;
+  /** Style. */
+  s: WineStyle;
+  /** Indices into WineAtlas.grapes. */
+  g: number[];
+}
+
+export interface AtlasCountry {
+  name: string;
+  /** One line of orientation. */
+  note: string;
+  /** How many atlas wines it holds. */
+  wines: number;
+}
+
+export interface AtlasGrape {
+  name: string;
+  color: GrapeColor;
+  /** Where the variety is from, not where it is grown. */
+  origin: string;
+  /** Regional names folded into this entry — Shiraz under Syrah. */
+  synonyms: string[];
+  note: string;
+  /** Indices into WineAtlas.wines. */
+  wines: number[];
+  /** Indices into WineAtlas.countries. */
+  countries: number[];
+}
+
+/** What a wine Dex card points at in the atlas. */
+export interface AtlasLink {
+  /** Indices into WineAtlas.wines. */
+  wines: number[];
+  /** Index into WineAtlas.grapes, for cards that are a variety. */
+  grape: number | null;
+  /** Why this card has nothing to link to — sake, vermouth. */
+  absent?: string;
+}
+
+export interface WineAtlas {
+  version: number;
+  generated: string;
+  note: string;
+  counts: {
+    wines: number;
+    countries: number;
+    regions: number;
+    grapes: number;
+    /** Canonical varieties plus every synonym. */
+    grapeNames: number;
+  };
+  countries: AtlasCountry[];
+  grapes: AtlasGrape[];
+  wines: AtlasWine[];
+}
+
+/* ------------------------------------------------------------------ */
 /* Social                                                              */
 /*                                                                     */
 /* Shaped to mirror the eventual Supabase schema one-to-one — profiles, */
