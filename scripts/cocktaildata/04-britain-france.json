@@ -1,0 +1,1397 @@
+[
+ {
+  "id": "absinthe-drip",
+  "name": "Absinthe Drip",
+  "subcategory": "Regional",
+  "description": "Absinthe, a slotted spoon, a sugar cube and iced water dripped over it until the glass clouds green-white. The ritual is most of the drink.",
+  "abv": "18–22%",
+  "origin": "France and Switzerland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "wormwood",
+   "fennel",
+   "sugar"
+  ],
+  "glassware": "Absinthe glass with a slotted spoon",
+  "ingredients": [
+   "Absinthe",
+   "Sugar cube",
+   "Iced water"
+  ],
+  "funFact": "The louche — the cloud that forms as water hits — happens because the anise oils are soluble in alcohol but not water; if your absinthe does not louche, it is coloured spirit, not absinthe.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Absinthe",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar cube",
+     "amount": "1"
+    },
+    {
+     "item": "Iced water",
+     "amount": "3–5 oz / 90–150 ml"
+    }
+   ],
+   "steps": [
+    "Pour the absinthe into an absinthe glass or a small tumbler.",
+    "Rest a slotted spoon across the rim and set the sugar cube on it.",
+    "Drip iced water very slowly over the sugar cube so it dissolves into the absinthe.",
+    "Keep dripping until the drink turns opaque — roughly three to five parts water to one of absinthe.",
+    "Stir once and drink at room temperature."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "blue-lagoon",
+  "name": "Blue Lagoon",
+  "subcategory": "Highball",
+  "description": "Vodka, blue curaçao and lemonade — electric blue, faintly ridiculous, and genuinely refreshing if you make it with real lemon.",
+  "abv": "12–14%",
+  "origin": "Paris, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "orange",
+   "lemon",
+   "citrus",
+   "sugar"
+  ],
+  "glassware": "Highball or hurricane glass",
+  "ingredients": [
+   "Vodka",
+   "Blue curaçao",
+   "Lemonade"
+  ],
+  "funFact": "Created at Harry's New York Bar in Paris in the 1960s — the same bar credited with the Bloody Mary, the Sidecar and the French 75, and responsible for a suspicious share of the twentieth century's drinking.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Blue curaçao",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemonade or lemon soda",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the vodka, blue curaçao and lemon juice.",
+    "Top with lemonade and stir once.",
+    "Garnish with a lemon wheel and a cherry."
+   ],
+   "garnish": "Lemon wheel and cherry",
+   "method": "built"
+  }
+ },
+ {
+  "id": "champs-elysees",
+  "name": "Champs-Élysées",
+  "subcategory": "Sour",
+  "description": "Cognac, Chartreuse and lemon — a Sidecar that went to the monastery and came back with opinions about herbs.",
+  "abv": "22–24%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "herbal",
+   "lemon",
+   "honey"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Cognac",
+   "Green Chartreuse",
+   "Lemon juice",
+   "Sugar syrup",
+   "Angostura bitters"
+  ],
+  "funFact": "It appears in Harry Craddock's 1930 Savoy Cocktail Book, and is one of the few classics where green Chartreuse plays a supporting role rather than dominating everything it touches.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Express a lemon twist over the surface and discard it."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "communard",
+  "name": "Communard",
+  "subcategory": "Spritz",
+  "description": "The Kir's red half-brother: red Burgundy with cassis, named for the Paris Commune and considerably more serious about itself.",
+  "abv": "11–13%",
+  "origin": "Burgundy, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "red wine",
+   "cherry"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "Red Burgundy",
+   "Crème de cassis"
+  ],
+  "funFact": "Also called a Cardinal, for the colour of a cardinal's robes — the two names carry opposite politics for exactly the same drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Light red wine (Burgundy or Beaujolais)",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Crème de cassis",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the crème de cassis into a wine glass.",
+    "Add the cold red wine.",
+    "Stir gently and serve.",
+    "Keep the wine light — a heavy red buries the cassis."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "kir",
+  "name": "Kir",
+  "subcategory": "Spritz",
+  "description": "White Burgundy with a measure of blackcurrant liqueur. Invented to make thin wine drinkable and now ordered on its own merits.",
+  "abv": "10–12%",
+  "origin": "Dijon, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackcurrant",
+   "white wine",
+   "berry"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "Aligoté white wine",
+   "Crème de cassis"
+  ],
+  "funFact": "Named for Canon Félix Kir, mayor of Dijon after the war, who served it at official receptions to promote two local products at once — the sharp Aligoté grape and Dijon's cassis.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine (Aligoté)",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Crème de cassis",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the crème de cassis into the bottom of a wine glass.",
+    "Top with cold dry white wine.",
+    "Stir once, gently, to combine.",
+    "Serve without ice or garnish."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "mauresque",
+  "name": "Mauresque",
+  "subcategory": "Regional",
+  "description": "Pastis softened with orgeat until it turns milky and almond-sweet. The gentlest member of the Marseille colour family.",
+  "abv": "8–10%",
+  "origin": "Provence, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "almond",
+   "orange blossom"
+  ],
+  "glassware": "Tall tumbler",
+  "ingredients": [
+   "Pastis",
+   "Orgeat",
+   "Water"
+  ],
+  "funFact": "The name means 'Moorish', a nod to the almond-and-orange-flower orgeat that came into Provence through North African and Spanish trade.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pastis",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orgeat",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, optional"
+    }
+   ],
+   "steps": [
+    "Pour the pastis and orgeat into a tumbler.",
+    "Top slowly with cold water until the drink turns opaque and pale.",
+    "Stir once to combine.",
+    "Add ice last if you want it colder."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "monaco",
+  "name": "Monaco",
+  "subcategory": "Party",
+  "description": "Lager, lemonade and grenadine — pink, low-proof and what half of France orders on a café terrace in July.",
+  "abv": "3–4%",
+  "origin": "France",
+  "rarity": "common",
+  "tastingNotes": [
+   "grenadine",
+   "lemon",
+   "malt"
+  ],
+  "glassware": "Pint or half-pint glass",
+  "ingredients": [
+   "Lager",
+   "Lemonade",
+   "Grenadine"
+  ],
+  "funFact": "It sits in a French family of low-proof beer mixes: the Panaché is beer and lemonade, the Tango uses grenadine with more beer, and the Monaco is the one with all three.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lager",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lemonade (limonade)",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the grenadine into the bottom of the glass.",
+    "Add the lemonade.",
+    "Top slowly with the lager, tilting the glass to control the head.",
+    "Stir once, very gently, to bring the pink through."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "monkey-gland",
+  "name": "Monkey Gland",
+  "subcategory": "Sour",
+  "description": "Gin, orange juice, grenadine and absinthe, named after a genuinely alarming 1920s medical procedure.",
+  "abv": "20–22%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "anise",
+   "pomegranate",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Orange juice",
+   "Grenadine",
+   "Absinthe"
+  ],
+  "funFact": "It is named for Serge Voronoff, a surgeon who grafted monkey testicle tissue onto human patients as a rejuvenation treatment; Harry MacElhone named the drink while the story was still in the papers.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "perroquet",
+  "name": "Perroquet",
+  "subcategory": "Regional",
+  "description": "Pastis turned green with mint syrup — the 'parrot', one of a whole southern French family named for their colours.",
+  "abv": "8–10%",
+  "origin": "Marseille, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "mint",
+   "sugar"
+  ],
+  "glassware": "Tall tumbler",
+  "ingredients": [
+   "Pastis",
+   "Mint syrup",
+   "Water"
+  ],
+  "funFact": "The southern French colour code is fixed: mint makes a Perroquet, grenadine a Tomate, orgeat a Mauresque, and lemon syrup a Canari — order by colour and every bar from Nice to Sète understands you.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pastis",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Mint syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, optional"
+    }
+   ],
+   "steps": [
+    "Pour the pastis and mint syrup into a tall tumbler.",
+    "Add cold water slowly and watch the drink go cloudy and green.",
+    "Stir once.",
+    "Add ice only after the water — ice first will make the pastis seize."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "picon-biere",
+  "name": "Picon Bière",
+  "subcategory": "Regional",
+  "description": "A shot of bitter orange Picon in the bottom of a beer glass. Eastern France's default order, and an acquired taste worth acquiring.",
+  "abv": "6–8%",
+  "origin": "Alsace and Lorraine, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter orange",
+   "gentian",
+   "malt",
+   "caramel"
+  ],
+  "glassware": "Beer glass",
+  "ingredients": [
+   "Amer Picon",
+   "Lager"
+  ],
+  "funFact": "Amer Picon was created in Algeria in 1837 as a quinine tonic for French soldiers; its modern formulation is much weaker than the original, which is why old cocktail books calling for Picon rarely taste right today.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Amer Picon (or an orange amaro)",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lager or blonde beer",
+     "amount": "10 oz / 300 ml, to top"
+    }
+   ],
+   "steps": [
+    "Pour the Picon into the bottom of a beer glass.",
+    "Fill slowly with cold lager, letting the beer mix it as it goes.",
+    "Do not stir — the pour does the work.",
+    "Serve with no garnish."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "rose",
+  "name": "Rose",
+  "subcategory": "Spirit-Forward",
+  "description": "Dry vermouth, kirsch and a whisper of raspberry, stirred pale pink. The Paris cocktail the Prohibition Americans took home with them.",
+  "abv": "20–22%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "raspberry",
+   "vermouth",
+   "almond"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Dry vermouth",
+   "Kirsch",
+   "Raspberry syrup"
+  ],
+  "funFact": "Created around 1920 by Johnny Mitta at the Chatham Hotel bar in Paris, and one of the most-ordered cocktails in the city between the wars before it vanished almost entirely.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Kirsch",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Raspberry syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine the vermouth, kirsch and raspberry syrup in a mixing glass with ice.",
+    "Stir for 25 seconds until well chilled.",
+    "Strain into a chilled coupe.",
+    "Garnish with a cherry."
+   ],
+   "garnish": "Cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "tomate",
+  "name": "Tomate",
+  "subcategory": "Regional",
+  "description": "Pastis stained red with grenadine. No tomato involved — the name is purely about what it looks like in the glass.",
+  "abv": "8–10%",
+  "origin": "Provence, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "pomegranate",
+   "sugar"
+  ],
+  "glassware": "Tall tumbler",
+  "ingredients": [
+   "Pastis",
+   "Grenadine",
+   "Water"
+  ],
+  "funFact": "In Provençal bars the pastis, the syrup and a jug of cold water arrive separately, and diluting it yourself is part of the ritual — roughly five parts water to one of pastis.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pastis",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, optional"
+    }
+   ],
+   "steps": [
+    "Pour the pastis and grenadine into a tumbler.",
+    "Add cold water slowly until the drink louches to a cloudy pink-red.",
+    "Stir once.",
+    "Serve with a jug of extra water on the side."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "hot-whiskey",
+  "name": "Hot Whiskey",
+  "subcategory": "Hot",
+  "description": "Irish whiskey, boiling water, sugar, a lemon studded with cloves. Prescribed for colds, drunk for weather, effective for both.",
+  "abv": "12–14%",
+  "origin": "Ireland",
+  "rarity": "common",
+  "tastingNotes": [
+   "clove",
+   "lemon",
+   "honey",
+   "malt"
+  ],
+  "glassware": "Heatproof glass with a handle",
+  "ingredients": [
+   "Irish whiskey",
+   "Boiling water",
+   "Sugar",
+   "Lemon",
+   "Cloves"
+  ],
+  "funFact": "Irish pubs serve it in a glass with a metal spoon left in — not for stirring, but to conduct heat away from the glass so it does not crack when the boiling water hits.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Boiling water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Lemon slice",
+     "amount": "1, thick"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "4"
+    }
+   ],
+   "steps": [
+    "Stud the lemon slice with the cloves and drop it into a heatproof glass.",
+    "Add the sugar and the whiskey.",
+    "Put a metal spoon in the glass, then pour in the boiling water.",
+    "Stir until the sugar dissolves and leave for a minute before drinking."
+   ],
+   "garnish": "The clove-studded lemon slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "irish-flag",
+  "name": "Irish Flag",
+  "subcategory": "Shot",
+  "description": "Green, white and orange, layered in that order: crème de menthe, Irish cream, orange liqueur. Structurally demanding, spiritually simple.",
+  "abv": "22–24%",
+  "origin": "Ireland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mint",
+   "cream",
+   "orange"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Green crème de menthe",
+   "Irish cream",
+   "Grand Marnier"
+  ],
+  "funFact": "The layering only holds if you pour in descending sugar density — and the Irish cream will curdle if it touches anything acidic, which is why the orange liqueur goes on top and never underneath.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Green crème de menthe",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Irish cream liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grand Marnier",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the crème de menthe into the bottom of a shot glass.",
+    "Float the Irish cream over the back of a barspoon held against the glass.",
+    "Float the Grand Marnier the same way to finish the flag.",
+    "Serve immediately and drink in one."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "angel-face",
+  "name": "Angel Face",
+  "subcategory": "Spirit-Forward",
+  "description": "Equal parts gin, apricot brandy and calvados. Three spirits, no citrus, and a name that undersells it considerably.",
+  "abv": "28–30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "apple",
+   "juniper",
+   "stone fruit"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Apricot brandy",
+   "Calvados"
+  ],
+  "funFact": "It appears in the 1930 Savoy Cocktail Book with no story attached — one of many equal-parts drinks from that era that survive on balance alone.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all three spirits to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an apple slice or a lemon twist."
+   ],
+   "garnish": "Apple slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "atholl-brose",
+  "name": "Atholl Brose",
+  "subcategory": "Creamy & Dessert",
+  "description": "Oatmeal steeped in water, strained, then stirred with honey, cream and whisky. A Highland recipe old enough to have won a battle.",
+  "abv": "16–18%",
+  "origin": "Perthshire, Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "oat",
+   "honey",
+   "cream",
+   "malt"
+  ],
+  "glassware": "Small tumbler or quaich",
+  "ingredients": [
+   "Scotch whisky",
+   "Oatmeal",
+   "Honey",
+   "Cream"
+  ],
+  "funFact": "Legend holds that the Earl of Atholl put down a Highland rebellion in 1475 by filling his enemy's well with the mixture and capturing him while he was drinking it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Scotch whisky",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Pinhead oatmeal",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Heather honey",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Double cream",
+     "amount": "0.5 cup, lightly whipped"
+    }
+   ],
+   "steps": [
+    "Soak the oatmeal in the water for at least six hours, then strain through muslin, pressing to extract the creamy liquid.",
+    "Discard the oats and stir the honey into the oat liquid until dissolved.",
+    "Whisk in the whisky.",
+    "Fold in the lightly whipped cream just before serving.",
+    "Serve chilled in small glasses; it keeps a couple of days in the fridge."
+   ],
+   "garnish": "A dusting of toasted oatmeal",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "black-velvet",
+  "name": "Black Velvet",
+  "subcategory": "Sparkling",
+  "description": "Stout and champagne, poured half and half so the black sits under the gold. Invented for a funeral and never quite shook the mood.",
+  "abv": "10–12%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "roasted malt",
+   "brioche",
+   "coffee"
+  ],
+  "glassware": "Tall flute or pilsner glass",
+  "ingredients": [
+   "Irish stout",
+   "Champagne"
+  ],
+  "funFact": "Created at Brooks's Club in London in 1861 after Prince Albert's death, when the steward decided even the champagne should be in mourning.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish stout, chilled",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Champagne or dry sparkling wine, chilled",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Chill both the stout and the champagne well.",
+    "Pour the stout into a tall glass and let the head settle.",
+    "Pour the champagne slowly over the back of a spoon to layer it on top.",
+    "Serve immediately, while the two are still separate."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "bucks-fizz",
+  "name": "Buck's Fizz",
+  "subcategory": "Sparkling",
+  "description": "Two parts champagne to one part orange juice — the older, stronger, more London answer to the Mimosa, and the two have been arguing ever since.",
+  "abv": "8–10%",
+  "origin": "London, England",
+  "rarity": "common",
+  "tastingNotes": [
+   "orange",
+   "brioche",
+   "citrus"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Champagne",
+   "Orange juice"
+  ],
+  "funFact": "Created at the Buck's Club in Mayfair in 1921 by barman Malachy McGarry, three years before the Mimosa appeared at the Ritz Paris — the difference is the ratio, and Londoners will tell you so.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Champagne or dry sparkling wine, chilled",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Fresh orange juice, chilled",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 dash, optional"
+    }
+   ],
+   "steps": [
+    "Chill both the champagne and the orange juice thoroughly.",
+    "Pour the orange juice into a flute first.",
+    "Top slowly with champagne, tilting the glass to preserve the bubbles.",
+    "Do not stir — the pour mixes it."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "john-collins",
+  "name": "John Collins",
+  "subcategory": "Highball",
+  "description": "The Tom Collins made with whiskey instead of gin — lemon, sugar, soda, tall and cold. The original of the family, depending who you ask.",
+  "abv": "12–14%",
+  "origin": "London, England",
+  "rarity": "common",
+  "tastingNotes": [
+   "lemon",
+   "grain",
+   "soda",
+   "sugar"
+  ],
+  "glassware": "Collins glass",
+  "ingredients": [
+   "Bourbon or rye whiskey",
+   "Lemon juice",
+   "Sugar syrup",
+   "Soda water"
+  ],
+  "funFact": "John Collins was the head waiter at Limmer's Hotel in London in the early 1800s; the gin version took his colleague's name, and the two have been confused with each other ever since.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon or rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Shake the whiskey, lemon juice and sugar syrup with ice.",
+    "Strain into a Collins glass filled with fresh ice.",
+    "Top with cold soda water.",
+    "Stir once and garnish with a lemon wheel and a cherry."
+   ],
+   "garnish": "Lemon wheel and cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "paradise",
+  "name": "Paradise",
+  "subcategory": "Sour",
+  "description": "Gin, apricot brandy and orange juice. Simple, apricot-forward and one of the few Savoy-era drinks that needs no adjustment at all.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "apricot",
+   "orange",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Apricot brandy",
+   "Orange juice"
+  ],
+  "funFact": "Apricot brandy in these recipes means an apricot liqueur, not a distilled eau-de-vie — a distinction that ruins the drink for anyone who buys the wrong bottle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "pink-gin",
+  "name": "Pink Gin",
+  "subcategory": "Spirit-Forward",
+  "description": "Navy strength gin stained pink with Angostura and nothing else. Two ingredients, no ice, no apology.",
+  "abv": "35–38%",
+  "origin": "Royal Navy, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "baking spice",
+   "clove"
+  ],
+  "glassware": "Small chilled coupe",
+  "ingredients": [
+   "Plymouth or Navy gin",
+   "Angostura bitters"
+  ],
+  "funFact": "Angostura was issued to Royal Navy officers as a stomach remedy; mixing it into the gin ration was the medicinal excuse that turned into an institution, and Plymouth Gin still trades on the association.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Plymouth or Navy-strength gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Dash the Angostura into a chilled coupe and roll it around to coat the inside.",
+    "Discard any excess bitters, or leave them in for a stronger version.",
+    "Stir the gin over ice for 20 seconds, or serve it neat and cold from the freezer.",
+    "Strain into the coated coupe and serve without garnish."
+   ],
+   "garnish": "None",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "russian-spring-punch",
+  "name": "Russian Spring Punch",
+  "subcategory": "Sparkling",
+  "description": "Dick Bradsell's long, fizzing sour: vodka, crème de cassis, lemon and champagne over crushed ice. Modern London's house punch.",
+  "abv": "12–14%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "lemon",
+   "brioche",
+   "berry"
+  ],
+  "glassware": "Highball or sling glass",
+  "ingredients": [
+   "Vodka",
+   "Crème de cassis",
+   "Lemon juice",
+   "Sugar syrup",
+   "Champagne"
+  ],
+  "funFact": "Bradsell — who also gave the world the Espresso Martini and the Bramble — created it in the 1980s at the Soho Brasserie, and it remains the drink London bartenders make when they want to show off without saying so.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Crème de cassis",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Champagne",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake the vodka, cassis, lemon juice and sugar syrup with ice.",
+    "Strain into a tall glass packed with crushed ice.",
+    "Top with champagne and stir gently once.",
+    "Add more crushed ice to cap the glass and garnish with berries and a lemon slice."
+   ],
+   "garnish": "Fresh berries and a lemon slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "snakebite",
+  "name": "Snakebite",
+  "subcategory": "Party",
+  "description": "Lager and cider, half and half, with a shot of blackcurrant if you want it purple. The most-refused drink in British pubs.",
+  "abv": "5–6%",
+  "origin": "England",
+  "rarity": "common",
+  "tastingNotes": [
+   "apple",
+   "malt",
+   "blackcurrant"
+  ],
+  "glassware": "Pint glass",
+  "ingredients": [
+   "Lager",
+   "Cider",
+   "Blackcurrant cordial"
+  ],
+  "funFact": "Many British pubs refuse to serve it, citing an urban myth about the mix being unusually intoxicating — the real reason is that it is cheap, strong and popular with students.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lager",
+     "amount": "half pint / 285 ml"
+    },
+    {
+     "item": "Dry cider",
+     "amount": "half pint / 285 ml"
+    },
+    {
+     "item": "Blackcurrant cordial",
+     "amount": "1 dash, for a 'Snakebite and Black'"
+    }
+   ],
+   "steps": [
+    "Pour the cider into a pint glass first.",
+    "Add the lager slowly at an angle to keep the foam down.",
+    "Add a dash of blackcurrant cordial if making a Snakebite and Black.",
+    "Do not stir."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "snowball",
+  "name": "Snowball",
+  "subcategory": "Retro",
+  "description": "Advocaat and lemonade with a squeeze of lime — a yellow, foamy relic of the British Christmas drinks trolley that refuses to die.",
+  "abv": "8–10%",
+  "origin": "England",
+  "rarity": "common",
+  "tastingNotes": [
+   "egg",
+   "vanilla",
+   "lemon",
+   "lime"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Advocaat",
+   "Lemonade",
+   "Lime cordial"
+  ],
+  "funFact": "Advocaat is Dutch, but the Snowball is entirely British — a 1960s Christmas fixture that has been ironically revived so many times it is now simply back.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Advocaat",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime cordial",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemonade (British-style)",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the advocaat and lime cordial.",
+    "Top with lemonade and stir briskly until the drink foams pale yellow.",
+    "Garnish with a maraschino cherry and, if you are committing to it, a slice of orange."
+   ],
+   "garnish": "Maraschino cherry",
+   "method": "built"
+  }
+ },
+ {
+  "id": "treacle",
+  "name": "Treacle",
+  "subcategory": "Spirit-Forward",
+  "description": "An Old Fashioned with a float of apple juice on top. Bradsell again, and one of the few modern riffs the classicists never argued with.",
+  "abv": "28–30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "molasses",
+   "apple",
+   "oak",
+   "bitters"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Dark rum",
+   "Sugar syrup",
+   "Angostura bitters",
+   "Apple juice"
+  ],
+  "funFact": "Bradsell built it at the Player in Soho as a rum Old Fashioned, then floated cloudy apple juice over the top — the apple reads as freshness on the nose and disappears entirely by the second sip.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark Jamaican rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Cloudy apple juice",
+     "amount": "0.5 oz / 15 ml, to float"
+    },
+    {
+     "item": "Ice",
+     "amount": "one large cube"
+    }
+   ],
+   "steps": [
+    "Stir the rum, sugar syrup and bitters over ice until chilled and lightly diluted.",
+    "Strain over one large ice cube in a rocks glass.",
+    "Float the apple juice gently over the top so it sits as a distinct layer.",
+    "Express an orange twist over the surface and drop it in."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "whisky-mac",
+  "name": "Whisky Mac",
+  "subcategory": "Spirit-Forward",
+  "description": "Scotch and green ginger wine, in equal measure, no ice. The drink Scotland reaches for when the weather turns properly hostile.",
+  "abv": "30–32%",
+  "origin": "Scotland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "malt",
+   "warmth"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Scotch whisky",
+   "Green ginger wine"
+  ],
+  "funFact": "Named for Colonel Hector Macdonald, and traditionally made with Stone's Ginger Wine — a British fortified ginger wine that has been made since 1740 and exists almost solely for this purpose.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Green ginger wine",
+     "amount": "1.5 oz / 45 ml"
+    }
+   ],
+   "steps": [
+    "Pour the Scotch and the ginger wine into a small tumbler.",
+    "Stir briefly to combine.",
+    "Serve at room temperature — ice is considered a mistake.",
+    "Drink beside something warm."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "white-lady",
+  "name": "White Lady",
+  "subcategory": "Sour",
+  "description": "Gin, triple sec and lemon, shaken with egg white to a dense pale foam. The Sidecar's gin cousin, and quietly one of the best.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "orange",
+   "juniper",
+   "foam"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Triple sec",
+   "Lemon juice",
+   "Egg white"
+  ],
+  "funFact": "Harry MacElhone first made it with crème de menthe in 1919, then rebuilt it with gin at Harry's New York Bar in Paris in 1929 — the second version is the one that survived.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml, optional"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all the ingredients without ice for 15 seconds to build the foam.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Let the foam settle before garnishing with a lemon twist."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "wibble",
+  "name": "Wibble",
+  "subcategory": "Sour",
+  "description": "Gin, sloe gin, grapefruit and lemon — pink, brambly and named for what it does to your legs, not your speech.",
+  "abv": "18–20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sloe",
+   "grapefruit",
+   "juniper",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sloe gin",
+   "Grapefruit juice",
+   "Lemon juice",
+   "Crème de mûre"
+  ],
+  "funFact": "Dick Bradsell created it at The Player and said the name came from the fact that 'it makes you wibble, not wobble' — sloe gin was deeply unfashionable at the time and the drink helped rescue it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "London dry gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sloe gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Pink grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Crème de mûre",
+     "amount": "1 barspoon"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lemon twist."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ }
+]

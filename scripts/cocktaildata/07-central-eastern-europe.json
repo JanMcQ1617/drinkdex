@@ -1,0 +1,738 @@
+[
+ {
+  "id": "krambambula",
+  "name": "Krambambula",
+  "subcategory": "Hot",
+  "description": "Vodka and honey mulled with cinnamon, clove and nutmeg — a Belarusian recipe rescued from the eighteenth century and now a national symbol.",
+  "abv": "20–24%",
+  "origin": "Belarus",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "nutmeg",
+   "clove",
+   "cinnamon"
+  ],
+  "glassware": "Small mug",
+  "ingredients": [
+   "Vodka",
+   "Honey",
+   "Cinnamon",
+   "Cloves",
+   "Nutmeg",
+   "Black pepper"
+  ],
+  "funFact": "Krambambula was originally a Danzig cherry liqueur, but the Belarusian version — honey, spice and spirit, served hot — became a marker of national identity during the cultural revivals of the 1990s.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "8"
+    },
+    {
+     "item": "Nutmeg, grated",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Black peppercorns",
+     "amount": "5"
+    }
+   ],
+   "steps": [
+    "Simmer the water, honey and all the spices together for 10 minutes.",
+    "Take the pan off the heat and let it cool for a few minutes.",
+    "Stir in the vodka off the heat.",
+    "Strain and serve hot in small mugs, or bottle it and reheat as needed."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "bevanda",
+  "name": "Bevanda",
+  "subcategory": "Regional",
+  "description": "Red wine cut with still water — the Dalmatian working drink, and a habit inherited more or less directly from the Romans.",
+  "abv": "7–9%",
+  "origin": "Dalmatia, Croatia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "red wine",
+   "water",
+   "stone fruit"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "Red wine",
+   "Still water"
+  ],
+  "funFact": "Diluting wine with water was standard practice in the classical Mediterranean, where drinking it neat was considered barbaric; the Dalmatian coast simply never stopped.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dalmatian red wine (Plavac Mali)",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Still water",
+     "amount": "2–4 oz / 60–120 ml, to taste"
+    }
+   ],
+   "steps": [
+    "Pour the red wine into a plain tumbler.",
+    "Add still water to taste — roughly half and half for a working bevanda.",
+    "Stir once.",
+    "Serve at cellar temperature, with food."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "gemist",
+  "name": "Gemišt",
+  "subcategory": "Spritz",
+  "description": "White wine and sparkling mineral water. Croatia's default afternoon drink, and the reason Croatian mineral water brands are household names.",
+  "abv": "6–8%",
+  "origin": "Zagreb, Croatia",
+  "rarity": "common",
+  "tastingNotes": [
+   "white wine",
+   "mineral",
+   "citrus"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "Dry white wine",
+   "Sparkling mineral water"
+  ],
+  "funFact": "The ratio is regional and argued about — inland Croatia leans to half and half, while the coast pours a heavier wine measure and calls the weaker version an insult.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry Croatian white wine (Graševina)",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Sparkling mineral water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "optional"
+    }
+   ],
+   "steps": [
+    "Chill the wine and the mineral water.",
+    "Pour the wine into a tumbler.",
+    "Top with the sparkling mineral water.",
+    "Serve immediately; ice is a coastal habit and inland Croatia disapproves."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "beton",
+  "name": "Beton",
+  "subcategory": "Highball",
+  "description": "Becherovka and tonic — the Czech Republic's national mixed drink, named by acronym and tasting of cinnamon and gentian.",
+  "abv": "8–10%",
+  "origin": "Karlovy Vary, Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinnamon",
+   "quinine",
+   "clove",
+   "citrus"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Becherovka",
+   "Tonic water",
+   "Lemon"
+  ],
+  "funFact": "The name is an acronym of BEcherovka and TONic, and also happens to be the Czech word for concrete — a coincidence the marketing has always enjoyed.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Becherovka",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Tonic water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the Becherovka and the lemon juice.",
+    "Top with cold tonic water.",
+    "Stir once and garnish with a lemon wedge."
+   ],
+   "garnish": "Lemon wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "rakomelo",
+  "name": "Rakomelo",
+  "subcategory": "Hot",
+  "description": "Cretan raki warmed with honey, cinnamon and clove. Served in winter, and pressed on you whether or not you asked.",
+  "abv": "20–24%",
+  "origin": "Crete, Greece",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "cinnamon",
+   "grape",
+   "clove"
+  ],
+  "glassware": "Small heatproof glass",
+  "ingredients": [
+   "Tsikoudia (raki)",
+   "Honey",
+   "Cinnamon",
+   "Cloves"
+  ],
+  "funFact": "In Crete, raki arrives free at the end of a meal whether you ordered it or not; rakomelo is the winter version, and refusing it is harder than it sounds.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Tsikoudia or raki",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "3"
+    }
+   ],
+   "steps": [
+    "Warm the raki gently in a small pan with the cinnamon and cloves.",
+    "Stir in the honey until it fully dissolves.",
+    "Do not let it boil — you want it hot, not evaporating.",
+    "Strain into small heatproof glasses and serve at once."
+   ],
+   "garnish": "A cinnamon stick",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "froccs",
+  "name": "Fröccs",
+  "subcategory": "Spritz",
+  "description": "Wine and soda, with an entire naming system attached: the ratio decides what you call it, and Hungarians know every name.",
+  "abv": "6–9%",
+  "origin": "Hungary",
+  "rarity": "common",
+  "tastingNotes": [
+   "white wine",
+   "mineral",
+   "citrus"
+  ],
+  "glassware": "Tumbler or wine glass",
+  "ingredients": [
+   "Dry white wine",
+   "Sparkling mineral water"
+  ],
+  "funFact": "The vocabulary is exact: kisfröccs is 1 wine to 1 soda, nagyfröccs 2 to 1, hosszúlépés 1 to 2, and a házmester is 3 wine to 2 soda. There are at least a dozen more.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry Hungarian white wine",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Sparkling mineral water, cold",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "optional — traditionally omitted"
+    }
+   ],
+   "steps": [
+    "Chill both the wine and the soda water thoroughly.",
+    "Pour the wine into a tumbler.",
+    "Add the soda water, adjusting the ratio to the fröccs you want.",
+    "Serve immediately, traditionally without ice."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "puszta-cocktail",
+  "name": "Puszta Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Apricot brandy, Unicum and dry vermouth — bitter, stone-fruit and herbal, named for the Hungarian plain.",
+  "abv": "26–28%",
+  "origin": "Hungary",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "bitter herbs",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Barack pálinka",
+   "Unicum",
+   "Dry vermouth"
+  ],
+  "funFact": "Unicum has been made by the Zwack family since 1790 from over forty herbs, and the family smuggled the recipe out of Hungary during the communist period, brewing a placebo version at home in the meantime.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Apricot brandy or barack pálinka",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Unicum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all three in a mixing glass with ice.",
+    "Stir for 25 seconds until well chilled.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "mad-dog",
+  "name": "Mad Dog",
+  "subcategory": "Shot",
+  "description": "Vodka, raspberry syrup and Tabasco layered into one shot. Sweet, then red, then suddenly very hot. Polish student legend.",
+  "abv": "30–35%",
+  "origin": "Poland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "raspberry",
+   "chilli",
+   "grain"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Vodka",
+   "Raspberry syrup",
+   "Tabasco"
+  ],
+  "funFact": "'Wściekły pies' is a staple of Polish student bars, where the layering matters: the syrup sinks, the Tabasco floats, and the burn arrives a beat after the sweetness.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Raspberry syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Tabasco",
+     "amount": "3 dashes"
+    }
+   ],
+   "steps": [
+    "Pour the raspberry syrup into the bottom of a shot glass.",
+    "Layer the vodka carefully over it with a barspoon.",
+    "Dash the Tabasco on top so it sits on the surface.",
+    "Drink in one — sipping it is a mistake people only make once."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "tatanka",
+  "name": "Tatanka",
+  "subcategory": "Highball",
+  "description": "Bison grass vodka and cloudy apple juice. Tastes like apple pie and freshly cut hay, which is a stranger compliment than it sounds.",
+  "abv": "12–14%",
+  "origin": "Poland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bison grass",
+   "apple",
+   "hay",
+   "vanilla"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Żubrówka",
+   "Cloudy apple juice"
+  ],
+  "funFact": "Also called a Szarlotka, after the Polish apple cake. Żubrówka is flavoured with a blade of bison grass from the Białowieża Forest, and each bottle traditionally contains one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Żubrówka bison grass vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cloudy apple juice, chilled",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Cinnamon",
+     "amount": "a pinch, optional"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the Żubrówka.",
+    "Top with cold cloudy apple juice.",
+    "Stir once and garnish with an apple slice and a light dusting of cinnamon."
+   ],
+   "garnish": "Apple slice and cinnamon",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tuica-fiarta",
+  "name": "Țuică Fiartă",
+  "subcategory": "Hot",
+  "description": "Plum brandy heated with sugar and peppercorns until it steams. Romanian winter, taken standing outside in it.",
+  "abv": "20–25%",
+  "origin": "Romania",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "plum",
+   "black pepper",
+   "caramel"
+  ],
+  "glassware": "Small heatproof glass",
+  "ingredients": [
+   "Țuică",
+   "Sugar",
+   "Black peppercorns"
+  ],
+  "funFact": "The sugar is caramelised in the pan before the țuică goes in, which is what gives it the amber colour; the peppercorns are traditional and genuinely change the finish.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Țuică (plum brandy)",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Black peppercorns",
+     "amount": "6"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1, optional"
+    }
+   ],
+   "steps": [
+    "Melt the sugar in a small pan over low heat until it just caramelises.",
+    "Add the peppercorns and cinnamon and stir for a few seconds.",
+    "Pour in the țuică carefully — it will spit — and warm it through without boiling.",
+    "Serve hot in small heatproof glasses."
+   ],
+   "garnish": "None",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "sbiten",
+  "name": "Sbiten",
+  "subcategory": "Hot",
+  "description": "Honey, spices and herbs simmered together and spiked — Russia's hot drink of choice for four centuries before tea arrived and took over.",
+  "abv": "6–8%",
+  "origin": "Russia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "ginger",
+   "clove",
+   "mint"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Honey",
+   "Spices",
+   "Wine or vodka",
+   "Water"
+  ],
+  "funFact": "Sbiten was street food in imperial Russia, sold from insulated copper samovar-like urns carried on the back; it was displaced almost entirely by tea in the nineteenth century.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Water",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Fresh ginger, sliced",
+     "amount": "2-inch piece"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Dried mint",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Red wine or vodka",
+     "amount": "250 ml, optional"
+    }
+   ],
+   "steps": [
+    "Bring the water and honey to a simmer, skimming any foam that rises.",
+    "Add the ginger, cinnamon, cloves and mint and simmer for 15 minutes.",
+    "Strain out the solids.",
+    "Stir in the wine or vodka off the heat if you want it alcoholic.",
+    "Serve very hot in mugs."
+   ],
+   "garnish": "A cinnamon stick",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "yorsh",
+  "name": "Yorsh",
+  "subcategory": "Party",
+  "description": "Vodka poured into beer. Named after a spiny river fish, and about as gentle as one.",
+  "abv": "8–10%",
+  "origin": "Russia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "malt",
+   "grain",
+   "bitter"
+  ],
+  "glassware": "Beer mug",
+  "ingredients": [
+   "Beer",
+   "Vodka"
+  ],
+  "funFact": "The name comes from the ruffe, a small bristly fish — Russian drinkers use it as a warning label, since the mix is notorious for arriving all at once.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lager",
+     "amount": "10 oz / 300 ml"
+    },
+    {
+     "item": "Vodka",
+     "amount": "1.5 oz / 45 ml"
+    }
+   ],
+   "steps": [
+    "Pour the beer into a mug, leaving room at the top.",
+    "Add the vodka directly to the beer.",
+    "Stir once, or drop the shot glass in whole for the theatrical version.",
+    "Drink promptly."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "bambus",
+  "name": "Bambus",
+  "subcategory": "Highball",
+  "description": "Red wine and cola, half and half, over ice. Beloved across the Balkans and defended fiercely by everyone who drinks it.",
+  "abv": "6–8%",
+  "origin": "Serbia",
+  "rarity": "common",
+  "tastingNotes": [
+   "red wine",
+   "cola",
+   "caramel"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Red wine",
+   "Cola"
+  ],
+  "funFact": "The Balkan bambus predates Spain's kalimotxo in local memory by decades, and the two regions have never agreed on who got there first.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry red wine",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the red wine.",
+    "Top with cold cola.",
+    "Stir once and add a lemon slice if you want it sharper."
+   ],
+   "garnish": "Lemon slice, optional",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tatratea-hot",
+  "name": "Tatratea Hot",
+  "subcategory": "Hot",
+  "description": "Slovakia's herbal tea liqueur, served hot with honey and lemon. Comes in strengths from 22% to 72%, colour-coded by how serious you are.",
+  "abv": "22–26%",
+  "origin": "High Tatras, Slovakia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black tea",
+   "honey",
+   "herbs",
+   "citrus"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Tatratea",
+   "Hot water",
+   "Honey",
+   "Lemon"
+  ],
+  "funFact": "The bottles are numbered by ABV — 32, 42, 52, 62, 72 — and the 72% 'Outlaw' edition exists mostly so that people can say they have had it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Tatratea (52% or lower)",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Hot water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Lemon slice",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Put the honey and lemon slice in a warmed glass mug.",
+    "Add the hot water and stir until the honey dissolves.",
+    "Pour in the Tatratea and stir once.",
+    "Serve hot, with the lemon left in."
+   ],
+   "garnish": "Lemon slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "horilka-z-pertsem",
+  "name": "Horilka z Pertsem",
+  "subcategory": "Shot",
+  "description": "Ukrainian vodka steeped with chilli and honey. Sweet at the front, hot at the back, drunk cold with something salted.",
+  "abv": "38–40%",
+  "origin": "Ukraine",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "chilli",
+   "honey",
+   "grain"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Horilka",
+   "Chilli peppers",
+   "Honey",
+   "Peppercorns"
+  ],
+  "funFact": "It is traditionally taken with salo — cured pork fat — on dark bread, a pairing that sounds unlikely and works because the fat blunts the burn.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Horilka or vodka",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Dried red chillies",
+     "amount": "2"
+    },
+    {
+     "item": "Honey",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Black peppercorns",
+     "amount": "10"
+    }
+   ],
+   "steps": [
+    "Put the chillies and peppercorns into a bottle of horilka.",
+    "Add the honey and shake until it dissolves.",
+    "Leave to infuse for three to seven days, tasting as you go — chillies work fast.",
+    "Strain out the solids once it is hot enough for you.",
+    "Serve ice cold in shot glasses."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ }
+]

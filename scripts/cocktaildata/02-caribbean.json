@@ -1,0 +1,1373 @@
+[
+ {
+  "id": "aruba-ariba",
+  "name": "Aruba Ariba",
+  "subcategory": "Tiki & Tropical",
+  "description": "Aruba's signature pour: vodka, rum, crème de banana and the island's own Coecoei liqueur, layered orange and red over crushed ice.",
+  "abv": "16–18%",
+  "origin": "Oranjestad, Aruba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "banana",
+   "orange",
+   "cranberry",
+   "rum"
+  ],
+  "glassware": "Hurricane glass",
+  "ingredients": [
+   "Vodka",
+   "Rum",
+   "Crème de banana",
+   "Coecoei",
+   "Orange juice",
+   "Pineapple juice"
+  ],
+  "funFact": "Coecoei is made on Aruba from the fermented sap of the agave-like kukwisa plant, and it is what makes an authentic Aruba Ariba impossible to reproduce properly off the island.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Crème de banana",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Coecoei liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cranberry juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake the vodka, rum, crème de banana and the juices with ice.",
+    "Pour into a hurricane glass filled with crushed ice.",
+    "Float the Coecoei over the top so it streaks red through the orange.",
+    "Garnish with an orange slice and a cherry."
+   ],
+   "garnish": "Orange slice and cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "goombay-smash",
+  "name": "Goombay Smash",
+  "subcategory": "Tiki & Tropical",
+  "description": "The Abacos' most guarded secret: coconut rum, dark rum, pineapple and apricot, in a recipe the original bar has never fully written down.",
+  "abv": "16–18%",
+  "origin": "Green Turtle Cay, Bahamas",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coconut",
+   "pineapple",
+   "apricot",
+   "dark rum"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Coconut rum",
+   "Dark rum",
+   "Pineapple juice",
+   "Apricot brandy",
+   "Lemon"
+  ],
+  "funFact": "Miss Emily's Blue Bee Bar on Green Turtle Cay invented it in the 1960s and has kept the exact proportions in the family ever since; every other version in the Bahamas is a reconstruction.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Coconut rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Dark Bahamian rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add the coconut rum, apricot brandy, pineapple juice and lemon juice to a shaker with ice.",
+    "Shake for 10 seconds and strain into an ice-filled highball glass.",
+    "Float the dark rum over the top.",
+    "Garnish with a pineapple wedge and a cherry."
+   ],
+   "garnish": "Pineapple wedge and cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "sky-juice",
+  "name": "Sky Juice",
+  "subcategory": "Regional",
+  "description": "Gin and coconut water with sweetened condensed milk and nutmeg — Bahamian breakfast, sold from roadside stalls before the sun is fully up.",
+  "abv": "12–14%",
+  "origin": "Nassau, Bahamas",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coconut",
+   "condensed milk",
+   "juniper",
+   "nutmeg"
+  ],
+  "glassware": "Cup or jar",
+  "ingredients": [
+   "Gin",
+   "Coconut water",
+   "Sweetened condensed milk",
+   "Nutmeg"
+  ],
+  "funFact": "Also called 'gully wash', it is traditional at Junkanoo — the Bahamian street parade that runs through the small hours of Boxing Day and New Year's Day.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh coconut water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coconut meat, grated",
+     "amount": "1 tbsp, optional"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Whisk the condensed milk into the coconut water until fully dissolved.",
+    "Add the gin and stir.",
+    "Pour over ice into a cup or jar.",
+    "Grate fresh nutmeg generously over the top."
+   ],
+   "garnish": "Freshly grated nutmeg",
+   "method": "built"
+  }
+ },
+ {
+  "id": "yellow-bird",
+  "name": "Yellow Bird",
+  "subcategory": "Tiki & Tropical",
+  "description": "Rum, Galliano and banana liqueur over citrus — sunshine yellow, named for the calypso standard that plays on loop across the islands.",
+  "abv": "18–20%",
+  "origin": "Caribbean",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "banana",
+   "vanilla",
+   "lime",
+   "orange"
+  ],
+  "glassware": "Coupe or highball glass",
+  "ingredients": [
+   "White rum",
+   "Galliano",
+   "Banana liqueur",
+   "Lime juice",
+   "Orange juice"
+  ],
+  "funFact": "The song 'Yellow Bird' is an adaptation of an 1880s Haitian melody; the cocktail borrowed the name in the 1960s when Galliano was on every back bar in the Caribbean.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Galliano",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Banana liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake for about 12 seconds.",
+    "Strain into a chilled coupe, or over fresh ice in a highball.",
+    "Garnish with an orange wheel."
+   ],
+   "garnish": "Orange wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bajan-rum-punch",
+  "name": "Bajan Rum Punch",
+  "subcategory": "Punch & Cobbler",
+  "description": "The rhyme, sung the Barbadian way: sour, sweet, strong, weak, with Angostura across the top and nutmeg over that.",
+  "abv": "14–16%",
+  "origin": "Barbados",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "sugar",
+   "aged rum",
+   "nutmeg"
+  ],
+  "glassware": "Rocks or highball glass",
+  "ingredients": [
+   "Barbadian rum",
+   "Lime juice",
+   "Sugar syrup",
+   "Water",
+   "Angostura bitters"
+  ],
+  "funFact": "Barbados claims the rhyme as its own national verse, and adds a fifth line most islands leave off: 'a dash of bitters and a sprinkle of spice'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Barbadian aged rum",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "6 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine the lime juice, sugar syrup, rum and water in a jug in that order.",
+    "Stir well and chill thoroughly — punch should never be shaken to order.",
+    "Pour over ice into rocks glasses.",
+    "Dash Angostura generously over each glass.",
+    "Grate nutmeg over the top."
+   ],
+   "garnish": "Angostura and freshly grated nutmeg",
+   "method": "built"
+  }
+ },
+ {
+  "id": "corn-n-oil",
+  "name": "Corn 'n' Oil",
+  "subcategory": "Spirit-Forward",
+  "description": "Barbadian and barely diluted: dark rum, falernum and lime, stirred until it looks like crude oil in the glass. Clove, almond and molasses.",
+  "abv": "24–26%",
+  "origin": "Barbados",
+  "rarity": "rare",
+  "tastingNotes": [
+   "falernum",
+   "molasses",
+   "clove",
+   "lime"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Blackstrap rum",
+   "Falernum",
+   "Lime juice",
+   "Angostura bitters"
+  ],
+  "funFact": "Falernum is a Barbadian invention — a low-proof syrup-liqueur of lime, clove, almond and ginger — and this is the drink it exists for. The name describes the drink's dark, slick appearance.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blackstrap or dark Barbadian rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Falernum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Fill a rocks glass with crushed ice.",
+    "Add the falernum and lime juice.",
+    "Pour the rum over the top and stir briefly with a swizzle stick.",
+    "Dash the Angostura across the surface.",
+    "Garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "swizzled"
+  }
+ },
+ {
+  "id": "rum-swizzle",
+  "name": "Rum Swizzle",
+  "subcategory": "Tiki & Tropical",
+  "description": "Bermuda's national drink and the reason swizzle sticks exist: black rum, falernum and juices churned over crushed ice until the glass frosts.",
+  "abv": "14–16%",
+  "origin": "Hamilton, Bermuda",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dark rum",
+   "pineapple",
+   "orange",
+   "falernum"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Black rum",
+   "Gold rum",
+   "Pineapple juice",
+   "Orange juice",
+   "Falernum",
+   "Angostura bitters"
+  ],
+  "funFact": "The Swizzle Inn near the airport has been serving it since 1932 under the slogan 'Swizzle Inn, Swagger Out'; the swizzle stick itself comes from the forked branch of the Caribbean Quararibea tree.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Black rum (Gosling's)",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Gold rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Falernum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass or a small pitcher with crushed ice.",
+    "Add all the ingredients.",
+    "Spin a swizzle stick between your palms until the outside of the glass frosts over.",
+    "Top with more crushed ice to refill the glass.",
+    "Garnish with an orange slice and a cherry."
+   ],
+   "garnish": "Orange slice and maraschino cherry",
+   "method": "swizzled"
+  }
+ },
+ {
+  "id": "canchanchara",
+  "name": "Canchánchara",
+  "subcategory": "Sour",
+  "description": "The oldest Cuban drink of them all: raw cane spirit, honey and lime, served in a clay cup. Rougher than the Daiquiri and considerably older.",
+  "abv": "18–20%",
+  "origin": "Trinidad, Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "raw cane"
+  ],
+  "glassware": "Small clay cup",
+  "ingredients": [
+   "Aguardiente de caña",
+   "Honey",
+   "Lime juice",
+   "Water"
+  ],
+  "funFact": "Cuban independence fighters, the mambises, drank it in the 1860s as a field ration and a cold remedy; the bar La Canchánchara in Trinidad still serves it in the traditional earthenware cups.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aguardiente de caña or white rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cracked"
+    }
+   ],
+   "steps": [
+    "Stir the honey and cold water together in the bottom of a clay cup until the honey loosens.",
+    "Add the lime juice and stir again.",
+    "Pour in the cane spirit and add cracked ice.",
+    "Stir until the outside of the cup is cold, and serve with the spoon still in it."
+   ],
+   "garnish": "Lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "el-presidente",
+  "name": "El Presidente",
+  "subcategory": "Spirit-Forward",
+  "description": "Havana's aristocrat: aged rum stirred with blanc vermouth, curaçao and a whisper of grenadine. Silk where the Daiquiri is citrus.",
+  "abv": "22–24%",
+  "origin": "Havana, Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dry rum",
+   "orange",
+   "vermouth",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Aged white rum",
+   "Blanc vermouth",
+   "Orange curaçao",
+   "Grenadine"
+  ],
+  "funFact": "Named for Cuban president Gerardo Machado and the drink of choice for the American upper class who fled Prohibition to Havana — Basil Woon called it 'the aristocrat of cocktails' in 1928.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aged white rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Blanc vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 barspoon"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until well chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface and drop it in."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "havana-special",
+  "name": "Havana Special",
+  "subcategory": "Sour",
+  "description": "A Daiquiri that took a detour through the pineapple fields: rum, pineapple juice and maraschino, shaken to a pale gold froth.",
+  "abv": "16–18%",
+  "origin": "Havana, Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "cherry",
+   "lime",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Pineapple juice",
+   "Maraschino liqueur",
+   "Lime juice"
+  ],
+  "funFact": "Recorded in Havana's Sloppy Joe's bar menu in the 1930s — a bar so central to American drinking tourism that its cocktail list was sold as a souvenir booklet.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a pineapple leaf or a cherry."
+   ],
+   "garnish": "Pineapple leaf",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mary-pickford",
+  "name": "Mary Pickford",
+  "subcategory": "Sour",
+  "description": "Pink, pineapple-bright and named for a silent film star: white rum, pineapple, maraschino and grenadine, invented while Hollywood was drinking out its Prohibition exile.",
+  "abv": "16–18%",
+  "origin": "Havana, Cuba",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "cherry",
+   "pomegranate",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Pineapple juice",
+   "Maraschino liqueur",
+   "Grenadine"
+  ],
+  "funFact": "Created at the Hotel Sevilla-Biltmore in Havana in the 1920s for Mary Pickford, who was in Cuba filming with Douglas Fairbanks and Charlie Chaplin.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds — fresh pineapple juice needs the aeration.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a maraschino cherry."
+   ],
+   "garnish": "Maraschino cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mulata",
+  "name": "Mulata",
+  "subcategory": "Sour",
+  "description": "A Daiquiri built on aged rum and crème de cacao — chocolate and lime, which should not work and completely does.",
+  "abv": "20–22%",
+  "origin": "Havana, Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cacao",
+   "lime",
+   "oak",
+   "cane"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Aged rum",
+   "Crème de cacao",
+   "Lime juice"
+  ],
+  "funFact": "Created at Havana's Floridita, the same bar that made the Daiquiri famous; 'mulata' refers to the drink's brown-gold colour once the cacao and aged rum combine.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aged rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dark crème de cacao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 barspoon"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a blender with a scoop of crushed ice, or shake hard with cubed ice.",
+    "Blend or shake until frosty.",
+    "Pour into a chilled coupe.",
+    "Grate a little dark chocolate over the top."
+   ],
+   "garnish": "Grated dark chocolate",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "saoco",
+  "name": "Saoco",
+  "subcategory": "Highball",
+  "description": "Rum and coconut water, straight from the nut. The Piña Colada's lean, unsweetened ancestor — and far better on a genuinely hot day.",
+  "abv": "12–14%",
+  "origin": "Eastern Cuba",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coconut",
+   "cane",
+   "lime"
+  ],
+  "glassware": "Green coconut or highball glass",
+  "ingredients": [
+   "White rum",
+   "Coconut water",
+   "Lime"
+  ],
+  "funFact": "Traditionally the top is macheted off a green coconut, rum is poured straight in, and the whole thing is drunk from the shell — the coconut meat is scooped out afterwards.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh coconut water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "If using a coconut, cut a wide opening in the top and pour off a little water to make room.",
+    "Add the rum and lime juice directly to the coconut or to an ice-filled highball glass.",
+    "Top with coconut water.",
+    "Stir once and drink through a straw."
+   ],
+   "garnish": "A lime wedge, or nothing at all",
+   "method": "built"
+  }
+ },
+ {
+  "id": "santo-libre",
+  "name": "Santo Libre",
+  "subcategory": "Highball",
+  "description": "The Cuba Libre's lighter neighbour: white rum, lime and lemon-lime soda instead of cola. Crisper, and easier in the afternoon.",
+  "abv": "10–12%",
+  "origin": "Dominican Republic",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "cane",
+   "citrus soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "White rum",
+   "Lemon-lime soda",
+   "Lime juice"
+  ],
+  "funFact": "Named in deliberate contrast to the Cuba Libre — the Dominican version swaps the cola for Sprite or 7-Up, which locals argue lets the rum actually taste like rum.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dominican white rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon-lime soda",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the rum and lime juice.",
+    "Top with cold lemon-lime soda.",
+    "Stir once gently and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "kremas",
+  "name": "Kremas",
+  "subcategory": "Creamy & Dessert",
+  "description": "Haiti's Christmas in a bottle: rhum, coconut cream, condensed milk, lime zest and spice, thick enough to coat the glass.",
+  "abv": "12–15%",
+  "origin": "Haiti",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coconut",
+   "condensed milk",
+   "nutmeg",
+   "star anise"
+  ],
+  "glassware": "Small tumbler, chilled",
+  "ingredients": [
+   "Haitian rhum",
+   "Coconut cream",
+   "Condensed milk",
+   "Evaporated milk",
+   "Nutmeg"
+  ],
+  "funFact": "Also spelled cremas or kremasi, it is the drink of Haitian holidays and diaspora gatherings — and every family insists their version is the correct one, usually over the amount of star anise.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Haitian rhum (Barbancourt)",
+     "amount": "1.5 cups"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1 can / 400 ml"
+    },
+    {
+     "item": "Evaporated milk",
+     "amount": "1 can / 350 ml"
+    },
+    {
+     "item": "Cream of coconut",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Lime zest",
+     "amount": "from 1 lime"
+    },
+    {
+     "item": "Nutmeg, star anise, cinnamon",
+     "amount": "to taste"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "1 tsp"
+    }
+   ],
+   "steps": [
+    "Warm the coconut cream gently with the spices and lime zest, then cool completely.",
+    "Blend the spiced coconut cream with the condensed milk, evaporated milk and vanilla until smooth.",
+    "Stir in the rhum — never blend it in hot, or the texture breaks.",
+    "Strain into bottles and refrigerate for at least 24 hours before drinking.",
+    "Serve very cold in small glasses; it keeps for weeks."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "bob-marley",
+  "name": "Bob Marley",
+  "subcategory": "Shot",
+  "description": "Red, gold and green in a shot glass — grenadine, banana liqueur and melon, layered so the flag holds. More about the pour than the palate.",
+  "abv": "20–22%",
+  "origin": "Jamaica",
+  "rarity": "common",
+  "tastingNotes": [
+   "grenadine",
+   "banana",
+   "melon"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Grenadine",
+   "Banana liqueur",
+   "Melon liqueur"
+  ],
+  "funFact": "The layers work because of sugar density: grenadine is heaviest and sinks, melon liqueur is lightest and floats — pour in the wrong order and you get a muddy brown shot.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Banana liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Melon liqueur",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the grenadine into the bottom of a shot glass.",
+    "Float the banana liqueur over the back of a barspoon so it settles on top of the grenadine.",
+    "Float the melon liqueur the same way to make the top layer.",
+    "Serve immediately without stirring."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "dirty-banana",
+  "name": "Dirty Banana",
+  "subcategory": "Frozen",
+  "description": "A frozen banana milkshake that went to Negril and came back with rum and coffee liqueur. Resort poolside, distilled.",
+  "abv": "10–12%",
+  "origin": "Negril, Jamaica",
+  "rarity": "common",
+  "tastingNotes": [
+   "banana",
+   "coffee",
+   "cream",
+   "rum"
+  ],
+  "glassware": "Hurricane glass",
+  "ingredients": [
+   "White rum",
+   "Coffee liqueur",
+   "Banana",
+   "Cream",
+   "Banana liqueur"
+  ],
+  "funFact": "It is the default poolside order across Jamaica's north coast, and the reason most Jamaican hotel bars keep a dedicated blender running from mid-morning.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coffee liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Banana liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ripe banana",
+     "amount": "1"
+    },
+    {
+     "item": "Milk or cream",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Put the banana, milk, rum, coffee liqueur and banana liqueur into a blender.",
+    "Add the ice and blend until completely smooth.",
+    "Pour into a hurricane glass.",
+    "Garnish with a banana slice and a dusting of grated chocolate."
+   ],
+   "garnish": "Banana slice and grated chocolate",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "planters-punch",
+  "name": "Planter's Punch",
+  "subcategory": "Punch & Cobbler",
+  "description": "One of sour, two of sweet, three of strong, four of weak — the rhyme that built Caribbean punch, poured long over crushed ice with nutmeg on top.",
+  "abv": "16–18%",
+  "origin": "Jamaica",
+  "rarity": "common",
+  "tastingNotes": [
+   "dark rum",
+   "lime",
+   "sugar",
+   "nutmeg"
+  ],
+  "glassware": "Highball or hurricane glass",
+  "ingredients": [
+   "Jamaican rum",
+   "Lime juice",
+   "Sugar syrup",
+   "Water",
+   "Angostura bitters"
+  ],
+  "funFact": "The rhyme predates the cocktail glass: 'one of sour, two of sweet, three of strong, four of weak' appears in Caribbean sources from the 1800s and still governs rum punch across the islands.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jamaican dark rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Water or juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Combine the rum, lime juice, sugar syrup and water in a shaker with ice.",
+    "Shake briefly, about 8 seconds.",
+    "Pour unstrained into a tall glass and top with more crushed ice.",
+    "Dash the Angostura over the top so it bleeds down through the ice.",
+    "Grate fresh nutmeg over the surface."
+   ],
+   "garnish": "Freshly grated nutmeg and an orange slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "ting-with-a-sting",
+  "name": "Ting with a Sting",
+  "subcategory": "Highball",
+  "description": "Jamaica's whole cocktail culture in two words: Ting grapefruit soda, white overproof rum, ice. The sting is not a metaphor.",
+  "abv": "10–12%",
+  "origin": "Jamaica",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "bitter",
+   "overproof rum"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Jamaican overproof rum",
+   "Ting grapefruit soda",
+   "Lime"
+  ],
+  "funFact": "Ting has been bottled in Jamaica since 1976 and is deliberately bitter; the 'sting' is traditionally Wray & Nephew White Overproof, which runs at 63% ABV.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jamaican overproof white rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Ting grapefruit soda",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the overproof rum and the lime juice.",
+    "Top with cold Ting.",
+    "Stir once and garnish with a grapefruit or lime wedge."
+   ],
+   "garnish": "Grapefruit wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "planteur",
+  "name": "Planteur",
+  "subcategory": "Punch & Cobbler",
+  "description": "The French Antilles' planter's punch: rhum agricole with mango, guava and passionfruit, softer and more perfumed than its English-speaking cousin.",
+  "abv": "12–14%",
+  "origin": "Martinique and Guadeloupe",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mango",
+   "passionfruit",
+   "guava",
+   "grassy rum"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Rhum agricole",
+   "Mango juice",
+   "Guava juice",
+   "Passionfruit juice",
+   "Cane syrup"
+  ],
+  "funFact": "Rhum agricole is distilled from fresh cane juice rather than molasses, which is why a Planteur tastes grassy and vegetal where a Jamaican punch tastes of treacle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rhum agricole blanc",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Mango juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Guava juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Passionfruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cane syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a shaker with ice.",
+    "Shake for 10 seconds.",
+    "Pour into an ice-filled highball glass.",
+    "Grate nutmeg over the top and garnish with a lime wheel."
+   ],
+   "garnish": "Grated nutmeg and lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bili",
+  "name": "Bilí",
+  "subcategory": "Regional",
+  "description": "Vieques in a bottle: pitorro steeped for months with quenepas, cinnamon and sugar until the moonshine turns sweet, fruity and deceptively smooth.",
+  "abv": "30–35%",
+  "origin": "Vieques, Puerto Rico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "quenepa",
+   "cinnamon",
+   "cane",
+   "honey"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Pitorro",
+   "Quenepas",
+   "Cinnamon",
+   "Sugar",
+   "Vanilla"
+  ],
+  "funFact": "Bilí is a Vieques speciality made with quenepas (Spanish limes) and is traditionally buried or hidden to age — families open bottles at Christmas that were sealed the previous summer.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pitorro or overproof white rum",
+     "amount": "750 ml"
+    },
+    {
+     "item": "Quenepas, peeled",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Vanilla bean",
+     "amount": "1, split"
+    }
+   ],
+   "steps": [
+    "Put the peeled quenepas, cinnamon, sugar and vanilla into a large sealable jar.",
+    "Cover with the pitorro and seal tightly.",
+    "Store somewhere dark and cool for at least two months, turning the jar occasionally.",
+    "Strain into bottles, leaving the fruit behind.",
+    "Serve chilled in small measures."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "chichaito",
+  "name": "Chichaíto",
+  "subcategory": "Shot",
+  "description": "Two ingredients, no mercy: pitorro and anisette, shaken with ice and served cold enough to hide how strong it is.",
+  "abv": "35–40%",
+  "origin": "Puerto Rico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "cane",
+   "liquorice"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Pitorro",
+   "Anisette"
+  ],
+  "funFact": "A staple of Puerto Rican Christmas parrandas, where it is carried house to house in a bottle kept in the freezer — the sugar content stops it from freezing solid.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pitorro or white rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Anisette",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine the pitorro and anisette in a shaker with plenty of ice.",
+    "Shake hard for 10 seconds to chill and slightly dilute.",
+    "Strain into chilled shot glasses.",
+    "Serve immediately, ice cold."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "coco-loco",
+  "name": "Coco Loco",
+  "subcategory": "Tiki & Tropical",
+  "description": "Served in the coconut it was made from: rum, coconut cream and whatever tropical juice is closest to hand, blended into holiday shorthand.",
+  "abv": "14–16%",
+  "origin": "San Juan, Puerto Rico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coconut",
+   "pineapple",
+   "rum",
+   "vanilla"
+  ],
+  "glassware": "Whole young coconut",
+  "ingredients": [
+   "White rum",
+   "Coconut cream",
+   "Pineapple juice",
+   "Lime"
+  ],
+  "funFact": "The 'loco' is usually the pour — beach vendors from Luquillo to Loíza free-pour three spirits into the same coconut and stop when it looks about right.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Gold rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Coconut cream",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup, crushed"
+    }
+   ],
+   "steps": [
+    "Cut the top off a young coconut and pour the water into a blender.",
+    "Add the rums, coconut cream, pineapple juice, lime and crushed ice.",
+    "Blend until smooth and slushy.",
+    "Pour back into the coconut shell and serve with a straw."
+   ],
+   "garnish": "Pineapple wedge and a paper umbrella",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "sorrel",
+  "name": "Sorrel",
+  "subcategory": "Punch & Cobbler",
+  "description": "Christmas red: hibiscus calyces steeped with clove, ginger and orange peel, sweetened and cut with rum. Tart, spiced and unmistakably festive.",
+  "abv": "10–12%",
+  "origin": "Trinidad and Tobago",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "hibiscus",
+   "clove",
+   "ginger",
+   "rum"
+  ],
+  "glassware": "Wine glass or tumbler",
+  "ingredients": [
+   "Dried sorrel (hibiscus)",
+   "Dark rum",
+   "Ginger",
+   "Clove",
+   "Sugar"
+  ],
+  "funFact": "The sorrel plant is a hibiscus relative that fruits right at Christmas across the Caribbean, which is precisely why the drink became a December tradition from Trinidad to Jamaica.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dried sorrel calyces",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Boiling water",
+     "amount": "2 litres"
+    },
+    {
+     "item": "Fresh ginger, sliced",
+     "amount": "2-inch piece"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "10"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "from 1 orange"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1.5 cups"
+    },
+    {
+     "item": "Dark rum",
+     "amount": "1 cup, or to taste"
+    }
+   ],
+   "steps": [
+    "Put the sorrel, ginger, cloves and orange peel in a large heatproof jug.",
+    "Pour over the boiling water, cover, and leave to steep for at least 12 hours.",
+    "Strain out the solids and stir in the sugar until dissolved.",
+    "Add the rum to taste and refrigerate.",
+    "Serve very cold over ice."
+   ],
+   "garnish": "Orange peel",
+   "method": "infused"
+  }
+ }
+]

@@ -1,0 +1,1390 @@
+[
+ {
+  "id": "clarito",
+  "name": "Clarito",
+  "subcategory": "Spirit-Forward",
+  "description": "The Argentine Martini: gin and dry vermouth, stirred hard, served brutally cold with a lemon twist. Older than most people assume.",
+  "abv": "28–30%",
+  "origin": "Buenos Aires, Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "dry vermouth",
+   "lemon"
+  ],
+  "glassware": "Chilled coupe",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Lemon twist"
+  ],
+  "funFact": "Buenos Aires had a serious cocktail culture by the 1920s, and the Clarito — 'the clear little one' — was its house drink, poured in the grand cafés of Avenida de Mayo.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "London dry gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Chill a coupe thoroughly in the freezer.",
+    "Stir the gin, vermouth and bitters over plenty of ice for 30 seconds.",
+    "Strain into the frozen coupe.",
+    "Express a wide lemon twist over the surface and rest it on the rim."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "gancia-batido",
+  "name": "Gancia Batido",
+  "subcategory": "Sour",
+  "description": "Gancia, lemon and sugar shaken to a foam — the Argentine aperitivo that college towns adopted and never gave back.",
+  "abv": "10–12%",
+  "origin": "Argentina",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter orange",
+   "lemon",
+   "herbs"
+  ],
+  "glassware": "Rocks glass or tumbler",
+  "ingredients": [
+   "Gancia Americano",
+   "Lemon juice",
+   "Sugar",
+   "Soda water"
+  ],
+  "funFact": "Gancia is an Italian bitter aperitif that found a second life in Argentina; batido versions are so entrenched that the brand is now more associated with Rosario than with Piedmont.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gancia Americano",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Soda water",
+     "amount": "splash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add the Gancia, lemon juice and sugar to a shaker with ice.",
+    "Shake hard for 15 seconds until foamy.",
+    "Pour unstrained into a rocks glass.",
+    "Top with a splash of soda and a lemon wheel."
+   ],
+   "garnish": "Lemon wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "chuflay",
+  "name": "Chuflay",
+  "subcategory": "Highball",
+  "description": "Singani and ginger ale with a squeeze of lime — Bolivia's national highball, invented by homesick railway engineers.",
+  "abv": "12–14%",
+  "origin": "La Paz, Bolivia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "grape",
+   "lime"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Singani",
+   "Ginger ale",
+   "Lime"
+  ],
+  "funFact": "The name is said to come from British railway workers asking for a 'short fly' — a quick drink — which Bolivian ears rendered as 'chuflay'. Singani is Bolivia's protected grape brandy.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Singani",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ginger ale",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the singani and lime juice.",
+    "Top with cold ginger ale.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "yunguenito",
+  "name": "Yungueñito",
+  "subcategory": "Sour",
+  "description": "Singani shaken with fresh orange juice — the Yungas valleys in a glass, where Bolivia's oranges and its grape brandy come from the same slopes.",
+  "abv": "16–18%",
+  "origin": "Yungas, Bolivia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "grape",
+   "citrus"
+  ],
+  "glassware": "Coupe or rocks glass",
+  "ingredients": [
+   "Singani",
+   "Orange juice",
+   "Sugar"
+  ],
+  "funFact": "Named for Los Yungas, the humid valleys northeast of La Paz; the full-size version, the Yungueño, is served in a jug for the table.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Singani",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh orange juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add the singani, orange juice and syrup to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Strain into a chilled coupe or over fresh ice in a rocks glass.",
+    "Garnish with an orange wheel."
+   ],
+   "garnish": "Orange wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "batida-de-coco",
+  "name": "Batida de Coco",
+  "subcategory": "Creamy & Dessert",
+  "description": "Cachaça blended with coconut milk and condensed milk until it drinks like a cold dessert. Brazil's beach cocktail when the Caipirinha feels too sharp.",
+  "abv": "12–14%",
+  "origin": "Rio de Janeiro, Brazil",
+  "rarity": "common",
+  "tastingNotes": [
+   "coconut",
+   "condensed milk",
+   "cane",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass or tumbler",
+  "ingredients": [
+   "Cachaça",
+   "Coconut milk",
+   "Condensed milk",
+   "Ice"
+  ],
+  "funFact": "'Batida' simply means 'beaten' or 'shaken' — the family covers dozens of fruit versions (maracujá, morango, amendoim), of which coconut is the one that travelled.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cachaça",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Coconut milk",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Add the cachaça, coconut milk and condensed milk to a blender.",
+    "Add the ice and blend until smooth and frothy.",
+    "Pour into a chilled rocks glass.",
+    "Grate a little fresh coconut or dust cinnamon over the top."
+   ],
+   "garnish": "Grated coconut",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "caipiroska",
+  "name": "Caipiroska",
+  "subcategory": "Sour",
+  "description": "The Caipirinha with vodka instead of cachaça — cleaner, less funky, and the version most of the world actually orders.",
+  "abv": "16–18%",
+  "origin": "Brazil",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "sugar",
+   "neutral"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Vodka",
+   "Lime",
+   "Sugar",
+   "Ice"
+  ],
+  "funFact": "Brazilian bars will make it without comment but consider it a compromise; the same swap with white rum is a Caipirissima, and with sake a Sakerinha.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime, cut into wedges",
+     "amount": "1 whole"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed or crushed"
+    }
+   ],
+   "steps": [
+    "Put the lime wedges and sugar in the bottom of a sturdy rocks glass.",
+    "Muddle firmly until the sugar dissolves into the lime juice and oil.",
+    "Fill the glass with ice.",
+    "Pour over the vodka and stir hard from the bottom up.",
+    "Serve with the spent lime wedges still in the glass."
+   ],
+   "garnish": "The muddled lime itself",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "capeta",
+  "name": "Capeta",
+  "subcategory": "Creamy & Dessert",
+  "description": "'Little devil': cachaça, guaraná powder, condensed milk and cinnamon — a Brazilian student drink built to keep you upright until sunrise.",
+  "abv": "14–16%",
+  "origin": "Northeast Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "guaraná",
+   "condensed milk",
+   "cinnamon",
+   "cane"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Cachaça",
+   "Guaraná powder",
+   "Condensed milk",
+   "Cinnamon",
+   "Honey"
+  ],
+  "funFact": "Guaraná seed carries roughly twice the caffeine of coffee by weight, which is exactly the point — the Capeta is northeastern Brazil's original energy cocktail, decades before Red Bull.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cachaça",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Guaraná powder",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ground cinnamon",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a blender with the ice.",
+    "Blend on high until completely smooth.",
+    "Pour into a rocks glass.",
+    "Dust with extra cinnamon and serve cold."
+   ],
+   "garnish": "Ground cinnamon",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "leite-de-onca",
+  "name": "Leite de Onça",
+  "subcategory": "Creamy & Dessert",
+  "description": "'Jaguar's milk': cachaça, condensed milk, cocoa and crème de cacao, shaken cold. Minas Gerais' answer to a nightcap.",
+  "abv": "14–16%",
+  "origin": "Minas Gerais, Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cocoa",
+   "condensed milk",
+   "cane",
+   "vanilla"
+  ],
+  "glassware": "Small tumbler, chilled",
+  "ingredients": [
+   "Cachaça",
+   "Condensed milk",
+   "Cocoa powder",
+   "Crème de cacao",
+   "Milk"
+  ],
+  "funFact": "A Festa Junina staple in Minas Gerais alongside quentão, and one of the few Brazilian drinks that is genuinely better made the night before and left in the fridge.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cachaça",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Crème de cacao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cocoa powder",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Whisk the cocoa powder into a little of the warm milk to make a smooth paste, then cool.",
+    "Add the paste, remaining milk, condensed milk, crème de cacao and cachaça to a shaker with ice.",
+    "Shake hard for 15 seconds.",
+    "Double-strain into a chilled tumbler.",
+    "Dust with cocoa powder or cinnamon."
+   ],
+   "garnish": "Dusted cocoa",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "quentao",
+  "name": "Quentão",
+  "subcategory": "Hot",
+  "description": "Festa Junina in a mug: cachaça simmered with ginger, cinnamon and citrus peel until the whole street smells like winter, in the middle of a Brazilian June.",
+  "abv": "10–12%",
+  "origin": "Minas Gerais, Brazil",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "cinnamon",
+   "orange",
+   "cane"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Cachaça",
+   "Ginger",
+   "Cinnamon",
+   "Orange peel",
+   "Sugar",
+   "Clove"
+  ],
+  "funFact": "Quentão means 'big hot one' and belongs to Festa Junina, the June harvest festivals — held in the Brazilian winter, which is why a country famous for cold drinks has a national mulled one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cachaça",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Fresh ginger, sliced",
+     "amount": "3-inch piece"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "3"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "8"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "from 2 oranges"
+    },
+    {
+     "item": "Water",
+     "amount": "500 ml"
+    }
+   ],
+   "steps": [
+    "Melt the sugar in a heavy pan over medium heat until it just turns amber.",
+    "Add the ginger, cinnamon, cloves and orange peel and stir for a minute.",
+    "Pour in the water and simmer for 10 minutes to build the infusion.",
+    "Add the cachaça and heat gently — do not let it boil hard or you lose the alcohol.",
+    "Strain into mugs and serve steaming."
+   ],
+   "garnish": "A cinnamon stick and a strip of orange peel",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "rabo-de-galo",
+  "name": "Rabo-de-Galo",
+  "subcategory": "Spirit-Forward",
+  "description": "'Rooster's tail': cachaça and red vermouth, stirred and served short. Brazil's Manhattan, drunk standing up at a botequim counter.",
+  "abv": "24–26%",
+  "origin": "Brazil",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cane",
+   "vermouth",
+   "bitter herbs"
+  ],
+  "glassware": "Rocks glass or small tumbler",
+  "ingredients": [
+   "Cachaça",
+   "Red vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "The name is a literal translation of 'cocktail'; the traditional street version is a rough 50/50 of cachaça and Cynar, while the bar version leans on aged cachaça and good vermouth.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aged cachaça",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet red vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine the cachaça, vermouth and bitters in a mixing glass with ice.",
+    "Stir for 20 seconds until chilled.",
+    "Strain into a small tumbler, over one large ice cube or straight up.",
+    "Express an orange twist over the top."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "borgona",
+  "name": "Borgoña",
+  "subcategory": "Punch & Cobbler",
+  "description": "Red wine and macerated strawberries, chilled and eaten as much as drunk. Chile's Fiestas Patrias in a jug.",
+  "abv": "10–12%",
+  "origin": "Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "strawberry",
+   "red wine",
+   "sugar"
+  ],
+  "glassware": "Wine glass or tumbler",
+  "ingredients": [
+   "Red wine",
+   "Strawberries",
+   "Sugar"
+  ],
+  "funFact": "Served at every September 18 fonda alongside its white-wine cousin, the chicha-based Clery; the strawberries at the bottom of the jug are the prize and go to whoever is quickest.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Chilean red wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Strawberries, hulled and quartered",
+     "amount": "500 g"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Ice",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Toss the strawberries with the sugar in a large jug and leave for an hour to macerate.",
+    "Pour over the red wine and stir.",
+    "Refrigerate for at least two hours — overnight is better.",
+    "Serve cold over ice, spooning strawberries into each glass."
+   ],
+   "garnish": "The macerated strawberries",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "cola-de-mono",
+  "name": "Cola de Mono",
+  "subcategory": "Creamy & Dessert",
+  "description": "'Monkey's tail': coffee, milk, cloves and aguardiente, chilled and bottled for Christmas. Chile's answer to eggnog, and considerably more drinkable.",
+  "abv": "8–10%",
+  "origin": "Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coffee",
+   "clove",
+   "milk",
+   "cane"
+  ],
+  "glassware": "Small glass, chilled",
+  "ingredients": [
+   "Aguardiente",
+   "Milk",
+   "Coffee",
+   "Sugar",
+   "Cloves",
+   "Vanilla"
+  ],
+  "funFact": "Chilean families bottle it in reused wine bottles in early December and keep it in the fridge until Christmas Eve; the name's origin is disputed, with the best story involving President Pedro Montt and a borrowed pistol.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aguardiente or pisco",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Instant coffee",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "1 tsp"
+    }
+   ],
+   "steps": [
+    "Warm the milk with the sugar, cloves and cinnamon until the sugar dissolves; do not boil.",
+    "Stir in the instant coffee and vanilla, then remove from the heat.",
+    "Cool completely and strain out the spices.",
+    "Stir in the aguardiente, bottle, and refrigerate for at least a day.",
+    "Serve very cold in small glasses."
+   ],
+   "garnish": "A dusting of cinnamon",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "piscola",
+  "name": "Piscola",
+  "subcategory": "Highball",
+  "description": "Pisco and cola, no ceremony. Chile's default drink at every party, poured with a heavy hand and measured by nobody.",
+  "abv": "12–14%",
+  "origin": "Chile",
+  "rarity": "common",
+  "tastingNotes": [
+   "cola",
+   "grape",
+   "caramel"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Chilean pisco",
+   "Cola",
+   "Ice"
+  ],
+  "funFact": "Chile consumes so much of it that pisco producers bottle expressly for the mix; there is an annual National Piscola Day, and the drink is often blamed for Chile's reputation as South America's heaviest spirit drinkers.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Chilean pisco",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the pisco.",
+    "Top with cold cola.",
+    "Stir once. Add a lime wedge only if you must — most Chileans do not."
+   ],
+   "garnish": "None, traditionally",
+   "method": "built"
+  }
+ },
+ {
+  "id": "serena-libre",
+  "name": "Serena Libre",
+  "subcategory": "Highball",
+  "description": "Pisco with papaya juice and a squeeze of lime — the northern Chilean coast's alternative to the Piscola, built on the fruit that grows there.",
+  "abv": "12–14%",
+  "origin": "La Serena, Chile",
+  "rarity": "rare",
+  "tastingNotes": [
+   "papaya",
+   "grape",
+   "lime"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Chilean pisco",
+   "Papaya juice",
+   "Lime juice",
+   "Soda water"
+  ],
+  "funFact": "The papaya of La Serena is a small, aromatic variety grown in the Elqui Valley — the same valley that produces most of Chile's pisco, which is why the pairing is local rather than clever.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Chilean pisco",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Papaya juice or nectar",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the pisco, papaya juice and lime juice.",
+    "Stir well to combine.",
+    "Top with a splash of soda and garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "guaro-sour-colombiano",
+  "name": "Guaro Sour Colombiano",
+  "subcategory": "Sour",
+  "description": "Aguardiente antioqueño — anise-forward and unapologetic — shaken with lime and sugar into something that tames it, slightly.",
+  "abv": "16–18%",
+  "origin": "Antioquia, Colombia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "lime",
+   "sugar"
+  ],
+  "glassware": "Coupe or rocks glass",
+  "ingredients": [
+   "Aguardiente antioqueño",
+   "Lime juice",
+   "Simple syrup",
+   "Egg white"
+  ],
+  "funFact": "Colombian aguardiente is flavoured with anise, which makes it a completely different animal from Costa Rican guaro; the sin azúcar version now outsells the sweetened original.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aguardiente antioqueño",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the aguardiente, lime, syrup and egg white without ice for 15 seconds.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lime twist across the foam."
+   ],
+   "garnish": "Lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "refajo",
+  "name": "Refajo",
+  "subcategory": "Regional",
+  "description": "Beer and Colombiana cream soda, poured half and half. Sweet, fizzy, faintly ridiculous, and served at every Colombian family lunch.",
+  "abv": "4–6%",
+  "origin": "Bogotá, Colombia",
+  "rarity": "common",
+  "tastingNotes": [
+   "cream soda",
+   "malt",
+   "caramel"
+  ],
+  "glassware": "Tall glass or pitcher",
+  "ingredients": [
+   "Lager",
+   "Colombiana soda"
+  ],
+  "funFact": "Colombiana is a red 'kola champagne' soda bottled since 1904; the mix has been formalised into a canned product, but Colombians still insist the fresh pour is better.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Colombian lager (Poker or Águila)",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Colombiana soda",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "optional"
+    },
+    {
+     "item": "Aguardiente",
+     "amount": "1 oz / 30 ml, optional"
+    }
+   ],
+   "steps": [
+    "Chill both the beer and the soda thoroughly.",
+    "Pour equal parts into a tall glass, soda first to control the foam.",
+    "Stir once, very gently.",
+    "For a 'refajo con aguardiente', add a shot of aguardiente before topping up."
+   ],
+   "garnish": "A lime wedge, occasionally",
+   "method": "built"
+  }
+ },
+ {
+  "id": "canelazo",
+  "name": "Canelazo",
+  "subcategory": "Hot",
+  "description": "Andean altitude medicine: cinnamon and naranjilla simmered with sugar, spiked with aguardiente and drunk hot at ten thousand feet.",
+  "abv": "12–14%",
+  "origin": "Quito, Ecuador",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinnamon",
+   "naranjilla",
+   "cane",
+   "sugar"
+  ],
+  "glassware": "Mug or small clay cup",
+  "ingredients": [
+   "Aguardiente",
+   "Cinnamon",
+   "Naranjilla juice",
+   "Panela"
+  ],
+  "funFact": "Naranjilla — lulo in Colombia — is a small orange Andean fruit that tastes like rhubarb crossed with citrus, and it is what separates a real canelazo from hot cinnamon water with booze in it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aguardiente",
+     "amount": "1.5 oz / 45 ml per mug"
+    },
+    {
+     "item": "Water",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "4"
+    },
+    {
+     "item": "Panela or brown sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Naranjilla (lulo) pulp",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 tbsp"
+    }
+   ],
+   "steps": [
+    "Simmer the water with the cinnamon sticks and panela for 15 minutes.",
+    "Add the naranjilla pulp and lime juice and simmer for another 5 minutes.",
+    "Strain into mugs.",
+    "Add the aguardiente to each mug off the heat.",
+    "Serve immediately with a cinnamon stick."
+   ],
+   "garnish": "A cinnamon stick",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "cana-con-ruda",
+  "name": "Caña con Ruda",
+  "subcategory": "Regional",
+  "description": "Cane spirit steeped with rue, drunk in one shot on the first of August. Bitter, herbal and, by tradition, obligatory.",
+  "abv": "35–40%",
+  "origin": "Paraguay",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rue",
+   "bitter herb",
+   "cane"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Caña (sugarcane spirit)",
+   "Rue (ruda)",
+   "Honey"
+  ],
+  "funFact": "Guaraní tradition holds that a shot of caña con ruda on an empty stomach on August 1 wards off the illnesses of the coming winter; the custom is shared with Argentina and Uruguay.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Caña or white cane spirit",
+     "amount": "750 ml"
+    },
+    {
+     "item": "Fresh rue (ruda macho)",
+     "amount": "1 large sprig"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 tbsp, optional"
+    }
+   ],
+   "steps": [
+    "Wash and dry the rue sprig thoroughly.",
+    "Push it into the bottle of caña and seal.",
+    "Leave to macerate for at least a week — traditionally from the previous winter.",
+    "On the morning of August 1, pour a single shot and drink it on an empty stomach.",
+    "Do not drink more than three: the tradition is specific about this."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "clerico",
+  "name": "Clericó",
+  "subcategory": "Punch & Cobbler",
+  "description": "White wine and chopped summer fruit, chilled hard. Sangria's lighter South American cousin, and Christmas dinner across the Southern Cone.",
+  "abv": "8–10%",
+  "origin": "Paraguay",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "peach",
+   "white wine",
+   "citrus",
+   "sugar"
+  ],
+  "glassware": "Wine glass or tumbler",
+  "ingredients": [
+   "White wine",
+   "Mixed fruit",
+   "Sugar",
+   "Soda water"
+  ],
+  "funFact": "Because Christmas falls in high summer in Paraguay, the festive drink is served ice cold with fruit — the name traces back to the English 'claret cup' by way of Spanish.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Mixed fruit (peach, apple, orange, grape), diced",
+     "amount": "4 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Soda water",
+     "amount": "250 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Toss the diced fruit with the sugar and leave for an hour.",
+    "Pour over the white wine and refrigerate for at least four hours.",
+    "Top with soda water just before serving.",
+    "Serve very cold, spooning plenty of fruit into each glass."
+   ],
+   "garnish": "The macerated fruit",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "algarrobina",
+  "name": "Algarrobina",
+  "subcategory": "Creamy & Dessert",
+  "description": "Pisco with carob syrup, condensed milk and egg — dark, sweet and faintly smoky, Peru's dessert cocktail and reputed aphrodisiac.",
+  "abv": "12–14%",
+  "origin": "Northern Peru",
+  "rarity": "rare",
+  "tastingNotes": [
+   "carob",
+   "condensed milk",
+   "cinnamon",
+   "grape"
+  ],
+  "glassware": "Coupe or wine glass",
+  "ingredients": [
+   "Pisco",
+   "Algarrobina syrup",
+   "Condensed milk",
+   "Egg yolk",
+   "Cinnamon"
+  ],
+  "funFact": "Algarrobina is boiled down from the pods of the Peruvian carob tree that grows in the northern deserts; Peruvians credit it, without much evidence and with great confidence, with restorative powers.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pisco",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Algarrobina syrup",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Egg yolk",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Add the pisco, algarrobina, condensed milk and egg yolk to a blender.",
+    "Add the ice and blend until thick and uniform.",
+    "Pour into a chilled coupe.",
+    "Drizzle a little extra algarrobina over the surface and dust with cinnamon."
+   ],
+   "garnish": "Algarrobina drizzle and cinnamon",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "capitan",
+  "name": "Capitán",
+  "subcategory": "Spirit-Forward",
+  "description": "The Peruvian Manhattan: pisco and red vermouth, stirred cold. Sipped in the highlands where the nights get serious.",
+  "abv": "24–26%",
+  "origin": "Southern Peru",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grape",
+   "vermouth",
+   "herbs"
+  ],
+  "glassware": "Coupe or small tumbler",
+  "ingredients": [
+   "Pisco",
+   "Sweet red vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "It belongs to Puno and the Peruvian Andes, where army officers — the 'capitanes' of the name — are credited with the habit of cutting pisco with vermouth against the cold.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pisco",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet red vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Add the pisco, vermouth and bitters to a mixing glass with ice.",
+    "Stir for 20 to 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a maraschino cherry or a lemon twist."
+   ],
+   "garnish": "Maraschino cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "chilcano",
+  "name": "Chilcano",
+  "subcategory": "Highball",
+  "description": "Peru's everyday pisco drink: pisco, ginger ale, lime and bitters over ice. Lighter than a Pisco Sour and far easier to make ten of.",
+  "abv": "12–14%",
+  "origin": "Lima, Peru",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "grape",
+   "lime",
+   "bitters"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Pisco",
+   "Ginger ale",
+   "Lime juice",
+   "Angostura bitters"
+  ],
+  "funFact": "Peru holds a national Semana del Chilcano every January; the drink descends from the 'chilcano de pescado', a fish broth once drunk as a hangover cure in the port of Chilca.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Peruvian pisco (quebranta)",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ginger ale",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the pisco and lime juice.",
+    "Top with cold ginger ale.",
+    "Dash the Angostura over the surface.",
+    "Stir once gently and garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "machu-picchu",
+  "name": "Machu Picchu",
+  "subcategory": "Party",
+  "description": "Green, yellow and red in one tall glass, layered to look like the mountain at sunrise. A tourist drink Cusco has fully embraced.",
+  "abv": "14–16%",
+  "origin": "Cusco, Peru",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mint",
+   "orange",
+   "grenadine",
+   "grape"
+  ],
+  "glassware": "Hurricane or highball glass",
+  "ingredients": [
+   "Pisco",
+   "Crème de menthe",
+   "Orange juice",
+   "Grenadine"
+  ],
+  "funFact": "It exists almost entirely for the photograph — but Cusco's bars have made it well enough for long enough that it has become a genuine local order.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pisco",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Green crème de menthe",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Pour the grenadine into the bottom of a tall glass.",
+    "Fill the glass carefully with crushed ice to hold the layers apart.",
+    "Shake the pisco with the orange juice and pour slowly over the ice.",
+    "Float the crème de menthe on top over the back of a spoon.",
+    "Serve with a straw and let the drinker mix it themselves."
+   ],
+   "garnish": "Orange slice and a cherry",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "medio-y-medio",
+  "name": "Medio y Medio",
+  "subcategory": "Sparkling",
+  "description": "Half sparkling wine, half sweet white — Uruguay's national aperitif, poured at the Mercado del Puerto beside a plate of grilled meat.",
+  "abv": "10–12%",
+  "origin": "Montevideo, Uruguay",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "white grape",
+   "honey",
+   "citrus"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "Sparkling wine",
+   "Sweet white wine"
+  ],
+  "funFact": "The Roldós stall in Montevideo's Mercado del Puerto has been mixing it since 1886 and bottles its own; the ratio is exactly what the name says, and nobody there will negotiate.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry sparkling wine, chilled",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Sweet white wine, chilled",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Chill both wines thoroughly.",
+    "Pour the sweet white wine into a wine glass first.",
+    "Top with the sparkling wine, poured slowly down the side to preserve the bubbles.",
+    "Serve immediately, without ice."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "guarapita",
+  "name": "Guarapita",
+  "subcategory": "Punch & Cobbler",
+  "description": "Rum or aguardiente loaded with passionfruit and sugar, mixed in a jug and served from a plastic bottle at the beach. Deceptively fruity.",
+  "abv": "14–16%",
+  "origin": "Venezuela",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "passionfruit",
+   "sugar",
+   "rum"
+  ],
+  "glassware": "Plastic cup or tumbler",
+  "ingredients": [
+   "Rum",
+   "Passionfruit juice",
+   "Orange juice",
+   "Sugar"
+  ],
+  "funFact": "Guarapita is Venezuelan beach and street-party currency, usually sold in recycled water bottles — the fruit hides the proof so effectively that it is known as 'the liar'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum or aguardiente",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Passionfruit juice",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Ice",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Stir the sugar into the passionfruit and orange juice until fully dissolved.",
+    "Add the rum and mix well.",
+    "Chill for at least two hours.",
+    "Serve very cold over ice, and warn people."
+   ],
+   "garnish": "A slice of orange",
+   "method": "built"
+  }
+ },
+ {
+  "id": "ponche-crema",
+  "name": "Ponche Crema",
+  "subcategory": "Creamy & Dessert",
+  "description": "Venezuela's Christmas cream: eggs, milk, sugar and rum cooked into a custard-thick liqueur that coats the glass and the season.",
+  "abv": "12–14%",
+  "origin": "Venezuela",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "egg",
+   "vanilla",
+   "nutmeg",
+   "rum"
+  ],
+  "glassware": "Small glass, chilled",
+  "ingredients": [
+   "Rum",
+   "Egg yolks",
+   "Condensed milk",
+   "Vanilla",
+   "Nutmeg"
+  ],
+  "funFact": "Eliodoro González P. commercialised it in 1900 and the brand still dominates December in Venezuela, but home-made versions with a heavier rum hand remain the point of pride.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Egg yolks",
+     "amount": "6"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1 can / 400 ml"
+    },
+    {
+     "item": "Evaporated milk",
+     "amount": "1 can / 350 ml"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "freshly grated, to taste"
+    }
+   ],
+   "steps": [
+    "Whisk the egg yolks with the condensed milk over a very low heat until slightly thickened; do not let it scramble.",
+    "Remove from the heat and whisk in the evaporated milk and vanilla.",
+    "Cool completely to room temperature.",
+    "Stir in the rum, then bottle and refrigerate overnight.",
+    "Serve chilled with nutmeg grated over the top."
+   ],
+   "garnish": "Freshly grated nutmeg",
+   "method": "infused"
+  }
+ }
+]

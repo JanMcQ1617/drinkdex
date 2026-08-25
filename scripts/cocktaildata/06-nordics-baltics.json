@@ -1,0 +1,548 @@
+[
+ {
+  "id": "s-nderjysk-kaffepunch",
+  "name": "Sønderjysk Kaffepunch",
+  "subcategory": "Hot",
+  "description": "The Danish version of the coin test, with schnapps instead of moonshine — and a firm local rule about how many you are allowed.",
+  "abv": "18–22%",
+  "origin": "Southern Jutland, Denmark",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coffee",
+   "caraway",
+   "sugar"
+  ],
+  "glassware": "Coffee cup",
+  "ingredients": [
+   "Aquavit or schnapps",
+   "Coffee",
+   "Sugar"
+  ],
+  "funFact": "Southern Jutland tradition says you drink an odd number and never stop at one — the old joke is that stopping at two leaves you 'walking in circles', so you continue to three.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Hot black coffee",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Danish aquavit or clear schnapps",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sugar cubes",
+     "amount": "2"
+    },
+    {
+     "item": "A coin",
+     "amount": "1, clean"
+    }
+   ],
+   "steps": [
+    "Put the sugar cubes and a clean coin in the bottom of a coffee cup.",
+    "Pour in hot coffee until the coin is just hidden.",
+    "Top up with aquavit until the coin reappears.",
+    "Stir once and drink hot, while the sugar is still dissolving."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "millimallikas",
+  "name": "Millimallikas",
+  "subcategory": "Shot",
+  "description": "'Jellyfish': a layered shot of sambuca and Irish cream that curdles into tendrils, finished with a dash of something bitter. Looks alive, briefly.",
+  "abv": "25–30%",
+  "origin": "Estonia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "cream",
+   "bitter"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Sambuca",
+   "Irish cream",
+   "Bitters"
+  ],
+  "funFact": "The curdling is the point: the acid and alcohol in the sambuca destabilise the cream's proteins, and the strands that form are what give the shot its name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sambuca",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Irish cream liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura or Vana Tallinn",
+     "amount": "2 dashes"
+    }
+   ],
+   "steps": [
+    "Pour the sambuca into a shot glass.",
+    "Drop the Irish cream into the centre slowly so it sinks and spreads into tendrils.",
+    "Add two dashes of bitters over the top.",
+    "Serve immediately — it only looks right for about a minute."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "vana-tallinn-coffee",
+  "name": "Vana Tallinn Coffee",
+  "subcategory": "Hot",
+  "description": "Estonia's rum liqueur stirred into hot coffee with cream on top — citrus, vanilla and cinnamon against a Baltic winter.",
+  "abv": "10–12%",
+  "origin": "Tallinn, Estonia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "citrus peel",
+   "coffee",
+   "cinnamon"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Vana Tallinn",
+   "Coffee",
+   "Cream"
+  ],
+  "funFact": "Vana Tallinn has been made since 1960 to a recipe the distillery still does not publish; Estonians add it to coffee, to hot chocolate, and — controversially — to milk.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vana Tallinn liqueur",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Hot black coffee",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lightly whipped cream",
+     "amount": "to float"
+    }
+   ],
+   "steps": [
+    "Pour the Vana Tallinn into a warmed glass mug.",
+    "Add the hot coffee and stir once.",
+    "Float lightly whipped cream over the back of a spoon.",
+    "Do not stir the cream in — drink the coffee through it."
+   ],
+   "garnish": "Floated cream and a dusting of cinnamon",
+   "method": "built"
+  }
+ },
+ {
+  "id": "lonkero",
+  "name": "Lonkero",
+  "subcategory": "Highball",
+  "description": "Gin and grapefruit soda, invented by the state for the Helsinki Olympics and never given up since. Finland's national long drink.",
+  "abv": "5–6%",
+  "origin": "Helsinki, Finland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "juniper",
+   "citrus"
+  ],
+  "glassware": "Tall glass or straight from the can",
+  "ingredients": [
+   "Gin",
+   "Grapefruit soda"
+  ],
+  "funFact": "Alko, Finland's alcohol monopoly, created it in 1952 to serve the flood of visitors to the Helsinki Olympics quickly; 'lonkero' means tentacle, from the original nickname 'octopus drink'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Grapefruit soda",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Grapefruit wedge",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the gin.",
+    "Top with cold grapefruit soda.",
+    "Stir once and garnish with a grapefruit wedge."
+   ],
+   "garnish": "Grapefruit wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "salmiakki-shot",
+  "name": "Salmiakki Shot",
+  "subcategory": "Shot",
+  "description": "Salty liquorice dissolved into vodka until it turns tar-black. Finland's most divisive export, and it divides on the first sip.",
+  "abv": "20–25%",
+  "origin": "Finland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "salty liquorice",
+   "ammonia",
+   "anise"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Vodka",
+   "Salmiakki (salty liquorice)",
+   "Sugar"
+  ],
+  "funFact": "Salmiakki is flavoured with ammonium chloride, which is why it tastes faintly of ammonia to anyone who did not grow up in the Nordics — Finns consider this a feature.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Koskenkorva or vodka",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Salmiakki sweets, hard",
+     "amount": "150 g"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tbsp, optional"
+    }
+   ],
+   "steps": [
+    "Crush the salmiakki sweets roughly and put them in a sealable jar.",
+    "Pour over the vodka and seal.",
+    "Shake daily for three to five days until the sweets have fully dissolved and the liquid is black.",
+    "Strain if any grit remains, then keep in the freezer.",
+    "Serve ice cold in shot glasses."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "brennivin-og-appelsin",
+  "name": "Brennivín og Appelsín",
+  "subcategory": "Highball",
+  "description": "Iceland's caraway schnapps lengthened with local orange soda — the mid-winter compromise for people who do not want it neat.",
+  "abv": "12–14%",
+  "origin": "Iceland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "caraway",
+   "orange",
+   "grain"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Brennivín",
+   "Icelandic orange soda"
+  ],
+  "funFact": "Brennivín is nicknamed 'svarti dauði' — black death — for its black label, a hangover from the temperance era when Iceland required spirits to be sold in deliberately unappealing packaging.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brennivín",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange soda (Appelsín)",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the very cold Brennivín.",
+    "Top with orange soda.",
+    "Stir once and serve with an orange wedge."
+   ],
+   "garnish": "Orange wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "black-balsam-and-blackcurrant",
+  "name": "Black Balsam and Blackcurrant",
+  "subcategory": "Hot",
+  "description": "Riga's tar-black herbal bitters stirred into hot blackcurrant juice. Medicinal, warming, and the standard Latvian answer to a cold.",
+  "abv": "12–15%",
+  "origin": "Riga, Latvia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter herbs",
+   "blackcurrant",
+   "wormwood",
+   "honey"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Riga Black Balsam",
+   "Blackcurrant juice"
+  ],
+  "funFact": "Riga Black Balsam has been made since 1752 from 24 botanicals and is bottled in ceramic; Catherine the Great is said to have recovered from an illness in Riga after drinking it, which the distillery has never stopped mentioning.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Riga Black Balsam",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Blackcurrant juice, hot",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 tsp, optional"
+    }
+   ],
+   "steps": [
+    "Heat the blackcurrant juice until steaming but not boiling.",
+    "Pour into a glass mug and stir in the honey if using.",
+    "Add the Black Balsam and stir once.",
+    "Serve hot with a lemon slice."
+   ],
+   "garnish": "Lemon slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "riga-black-magic",
+  "name": "Riga Black Magic",
+  "subcategory": "Modern Classic",
+  "description": "Black Balsam shaken with citrus and apple juice — the modern Riga bar's way of making 24 botanicals approachable.",
+  "abv": "18–20%",
+  "origin": "Riga, Latvia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter herbs",
+   "apple",
+   "lemon",
+   "spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Riga Black Balsam",
+   "Apple juice",
+   "Lemon juice",
+   "Sugar syrup"
+  ],
+  "funFact": "Latvia's bar scene spent the 2010s reverse-engineering Black Balsam into something that did not taste like medicine, and apple juice turned out to be the ingredient that finally rounded it off.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Riga Black Balsam",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cloudy apple juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a thin apple slice."
+   ],
+   "garnish": "Apple slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "karsk",
+  "name": "Karsk",
+  "subcategory": "Regional",
+  "description": "Coffee and moonshine, measured by a coin: drop it in the cup, add coffee until it vanishes, add spirit until you see it again.",
+  "abv": "20–25%",
+  "origin": "Trøndelag, Norway",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coffee",
+   "grain spirit",
+   "bitter"
+  ],
+  "glassware": "Coffee cup",
+  "ingredients": [
+   "Moonshine or vodka",
+   "Weak coffee",
+   "Sugar"
+  ],
+  "funFact": "The coin trick is a genuine Trøndelag tradition, and the coffee is deliberately brewed weak so that the coin disappears early and the spirit measure ends up generous.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Weak black coffee",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Moonshine or high-proof vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp, optional"
+    },
+    {
+     "item": "A coin",
+     "amount": "1, clean"
+    }
+   ],
+   "steps": [
+    "Drop a clean coin into the bottom of a coffee cup.",
+    "Pour in weak coffee until the coin just disappears from view.",
+    "Add the spirit slowly until the coin becomes visible again.",
+    "Stir in sugar if you take it, and drink hot."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "glogg",
+  "name": "Glögg",
+  "subcategory": "Hot",
+  "description": "Nordic mulled wine with raisins and blanched almonds waiting at the bottom of the cup — you drink it, then eat it with a spoon.",
+  "abv": "10–14%",
+  "origin": "Sweden",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cardamom",
+   "raisin",
+   "almond",
+   "clove"
+  ],
+  "glassware": "Small mug or glass with a handle",
+  "ingredients": [
+   "Red wine",
+   "Aquavit or vodka",
+   "Cardamom",
+   "Raisins",
+   "Almonds",
+   "Sugar"
+  ],
+  "funFact": "Cardamom is the marker that separates Nordic glögg from German Glühwein, and the spoon is not optional — the raisins and almonds are considered part of the serving.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry red wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Aquavit or vodka",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Cardamom pods, crushed",
+     "amount": "10"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "8"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "from 1 orange"
+    },
+    {
+     "item": "Raisins",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Blanched almonds, slivered",
+     "amount": "0.5 cup"
+    }
+   ],
+   "steps": [
+    "Warm the wine with the sugar, spices and orange peel to about 70°C and hold for 30 minutes; do not boil.",
+    "Strain out the whole spices.",
+    "Put a spoonful of raisins and almonds into the bottom of each mug.",
+    "Add the aquavit to the pot off the heat, then ladle over the raisins and almonds.",
+    "Serve hot with a small spoon."
+   ],
+   "garnish": "Raisins and slivered almonds in the cup",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "grogg",
+  "name": "Grogg",
+  "subcategory": "Highball",
+  "description": "Swedish shorthand for spirit plus mixer, poured strong: whisky or vodka with soda or cola, and no further ceremony.",
+  "abv": "10–12%",
+  "origin": "Sweden",
+  "rarity": "common",
+  "tastingNotes": [
+   "grain",
+   "citrus",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Whisky or vodka",
+   "Soda water or cola",
+   "Ice"
+  ],
+  "funFact": "The Swedish 'grogg' descends from British naval grog — watered rum named after Admiral Vernon's grogram coat — but travelled north and lost the rum along the way.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Whisky or vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Soda water or cola",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the spirit.",
+    "Top with cold soda water or cola.",
+    "Stir once and serve, with a lemon wedge if using soda."
+   ],
+   "garnish": "Lemon wedge, optional",
+   "method": "built"
+  }
+ }
+]

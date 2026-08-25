@@ -1,0 +1,1398 @@
+[
+ {
+  "id": "jagertee",
+  "name": "Jagertee",
+  "subcategory": "Hot",
+  "description": "Black tea and overproof rum with spice and citrus, served scalding in Alpine huts. Designed for people who have just come down a mountain.",
+  "abv": "14–16%",
+  "origin": "Tyrol, Austria",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black tea",
+   "rum",
+   "orange",
+   "clove"
+  ],
+  "glassware": "Glass mug with a handle",
+  "ingredients": [
+   "Inländerrum",
+   "Black tea",
+   "Orange",
+   "Cinnamon",
+   "Sugar"
+  ],
+  "funFact": "Austrian law reserves the name 'Jagertee' for versions made with Inländerrum, an 80-proof Austrian rum; anywhere else in the EU it has to be sold as 'Jagatee' or 'hunter's tea'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Strong black tea, hot",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Inländerrum or overproof dark rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange slice",
+     "amount": "1"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "3"
+    },
+    {
+     "item": "Brown sugar or honey",
+     "amount": "2 tsp"
+    }
+   ],
+   "steps": [
+    "Brew the black tea strong and keep it hot.",
+    "Warm the orange slice, cinnamon and cloves in the mug with the sugar.",
+    "Pour over the hot tea and stir until the sugar dissolves.",
+    "Add the rum last, off the heat.",
+    "Serve very hot with the spices left in."
+   ],
+   "garnish": "Orange slice and a cinnamon stick",
+   "method": "built"
+  }
+ },
+ {
+  "id": "wei-er-spritzer",
+  "name": "Weißer Spritzer",
+  "subcategory": "Spritz",
+  "description": "White wine and sparkling water, half and half. Vienna's most-poured drink, and proof that the simplest spritz is still a spritz.",
+  "abv": "6–7%",
+  "origin": "Vienna, Austria",
+  "rarity": "common",
+  "tastingNotes": [
+   "white wine",
+   "mineral",
+   "citrus"
+  ],
+  "glassware": "Wine glass or Viertel glass",
+  "ingredients": [
+   "Dry white wine",
+   "Sparkling mineral water"
+  ],
+  "funFact": "Order a 'G'spritzter' anywhere in Austria and this is what arrives; a 'Sommerspritzer' has more water, a 'Winterspritzer' more wine, and the vocabulary is taken seriously.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry Austrian white wine (Grüner Veltliner)",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Sparkling mineral water, chilled",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Chill both the wine and the mineral water.",
+    "Pour the wine into a wine glass.",
+    "Top with the sparkling water.",
+    "Do not add ice — Austrians consider it dilution twice over."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "half-en-half",
+  "name": "Half en Half",
+  "subcategory": "Sparkling",
+  "description": "Half still white wine, half Belgian sparkling, poured cold. Brussels' aperitif, and older than most of the city's cocktail bars.",
+  "abv": "11–13%",
+  "origin": "Brussels, Belgium",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white wine",
+   "sparkling",
+   "citrus"
+  ],
+  "glassware": "Wine glass or flute",
+  "ingredients": [
+   "Dry white wine",
+   "Sparkling wine"
+  ],
+  "funFact": "It is the house pour at Brussels' oldest wine bars around the Grand-Place, where the sparkling half is traditionally a Belgian méthode traditionnelle rather than champagne.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine, chilled",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Sparkling wine, chilled",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Chill both wines well.",
+    "Pour the still white wine into a wine glass.",
+    "Top with the sparkling wine, poured slowly down the side.",
+    "Serve immediately without ice or garnish."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "maitrank",
+  "name": "Maitrank",
+  "subcategory": "Spritz",
+  "description": "White wine steeped with sweet woodruff, sugar and cognac, drunk in May with a strawberry in the glass. Arlon's own, and legally protected.",
+  "abv": "10–12%",
+  "origin": "Arlon, Belgium",
+  "rarity": "rare",
+  "tastingNotes": [
+   "woodruff",
+   "white wine",
+   "orange",
+   "strawberry"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "White wine",
+   "Sweet woodruff",
+   "Cognac",
+   "Sugar",
+   "Orange"
+  ],
+  "funFact": "Arlon holds a Maitrank festival every May and the recipe carries a protected designation; woodruff must be picked before it flowers, or it turns bitter and mildly toxic.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Fresh sweet woodruff",
+     "amount": "a small bunch, wilted"
+    },
+    {
+     "item": "Sugar",
+     "amount": "100 g"
+    },
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange slices",
+     "amount": "2"
+    },
+    {
+     "item": "Strawberries",
+     "amount": "to garnish"
+    }
+   ],
+   "steps": [
+    "Wilt the woodruff for a few hours so its aroma develops, but do not let it flower.",
+    "Steep it in the white wine with the sugar and orange slices for about 24 hours in the fridge.",
+    "Strain out the herb and orange.",
+    "Stir in the cognac and chill thoroughly.",
+    "Serve in wine glasses with a strawberry in each."
+   ],
+   "garnish": "A fresh strawberry",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "berliner-weisse-mit-schuss",
+  "name": "Berliner Weisse mit Schuss",
+  "subcategory": "Regional",
+  "description": "Berlin's sour wheat beer sweetened with raspberry or woodruff syrup, served bright red or alarming green in a wide bowl glass.",
+  "abv": "3–4%",
+  "origin": "Berlin, Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sour wheat",
+   "raspberry",
+   "woodruff",
+   "lactic"
+  ],
+  "glassware": "Wide bowl glass",
+  "ingredients": [
+   "Berliner Weisse",
+   "Raspberry syrup",
+   "Woodruff syrup"
+  ],
+  "funFact": "Napoleon's troops reportedly called it 'the champagne of the north'; the syrups were added in the twentieth century because the unadulterated beer was too sour for modern palates.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Berliner Weisse",
+     "amount": "10 oz / 300 ml"
+    },
+    {
+     "item": "Raspberry (Himbeer) or woodruff (Waldmeister) syrup",
+     "amount": "0.75 oz / 22 ml"
+    }
+   ],
+   "steps": [
+    "Pour the syrup into the bottom of a wide bowl-shaped glass.",
+    "Pour the cold Berliner Weisse over it slowly — the beer foams aggressively.",
+    "Let the head settle, then top up.",
+    "Serve with a short fat straw, which is traditional and genuinely useful."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "feuerzangenbowle",
+  "name": "Feuerzangenbowle",
+  "subcategory": "Hot",
+  "description": "A rum-soaked sugarloaf set on fire above a bowl of mulled wine, dripping caramel into it as it burns. German Christmas at its most theatrical.",
+  "abv": "12–14%",
+  "origin": "Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mulled wine",
+   "burnt sugar",
+   "rum",
+   "clove"
+  ],
+  "glassware": "Punch bowl and mugs",
+  "ingredients": [
+   "Red wine",
+   "Overproof rum",
+   "Sugarloaf",
+   "Orange",
+   "Cinnamon",
+   "Clove"
+  ],
+  "funFact": "The 1944 film 'Die Feuerzangenbowle' made it a national ritual; German students still hold screenings where the audience makes the drink along with the film.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry red wine",
+     "amount": "1.5 litres"
+    },
+    {
+     "item": "Orange, sliced",
+     "amount": "1"
+    },
+    {
+     "item": "Lemon, sliced",
+     "amount": "1"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "3"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "8"
+    },
+    {
+     "item": "Star anise",
+     "amount": "2"
+    },
+    {
+     "item": "Zuckerhut (sugarloaf)",
+     "amount": "1"
+    },
+    {
+     "item": "Overproof rum (54%+)",
+     "amount": "200 ml"
+    }
+   ],
+   "steps": [
+    "Heat the wine with the citrus slices and spices in a wide bowl — hot but never boiling.",
+    "Set the metal Feuerzange tongs across the bowl and place the sugarloaf on them.",
+    "Soak the sugarloaf with overproof rum and set it alight.",
+    "Keep ladling more rum over the loaf as it burns and drips caramelised sugar into the wine.",
+    "When the sugar has gone, stir the bowl and ladle into mugs."
+   ],
+   "garnish": "An orange slice and a cinnamon stick",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "gluhwein",
+  "name": "Glühwein",
+  "subcategory": "Hot",
+  "description": "Red wine heated with cinnamon, clove and citrus. The smell of every Christmas market between Cologne and Vienna.",
+  "abv": "8–10%",
+  "origin": "Germany",
+  "rarity": "common",
+  "tastingNotes": [
+   "cinnamon",
+   "orange",
+   "clove",
+   "red wine"
+  ],
+  "glassware": "Ceramic mug",
+  "ingredients": [
+   "Red wine",
+   "Cinnamon",
+   "Cloves",
+   "Orange",
+   "Sugar"
+  ],
+  "funFact": "German law regulates it: Glühwein must be made from wine, cannot be watered down, and must not fall below 7% ABV — a rare case of a mulled drink with a legal definition.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry red wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Orange, sliced",
+     "amount": "1"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Star anise",
+     "amount": "1"
+    },
+    {
+     "item": "Sugar",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Rum or brandy",
+     "amount": "1 oz / 30 ml per mug, optional 'mit Schuss'"
+    }
+   ],
+   "steps": [
+    "Put the wine, orange slices, spices and sugar in a pan.",
+    "Heat gently to about 70°C — steaming but never simmering, or the alcohol goes.",
+    "Hold at that temperature for 20 minutes to let the spices infuse.",
+    "Strain into mugs, adding a shot of rum to each for 'mit Schuss'.",
+    "Serve hot with a cinnamon stick."
+   ],
+   "garnish": "Orange slice and a cinnamon stick",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "kalte-ente",
+  "name": "Kalte Ente",
+  "subcategory": "Punch & Cobbler",
+  "description": "'Cold duck': white wine and sparkling wine over a spiral of lemon peel, chilled hard. A German garden-party punch that Americans misheard into their own version.",
+  "abv": "9–11%",
+  "origin": "Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "white wine",
+   "sparkling"
+  ],
+  "glassware": "Punch bowl and wine glasses",
+  "ingredients": [
+   "White wine",
+   "Sparkling wine",
+   "Lemon",
+   "Sugar"
+  ],
+  "funFact": "The name is probably a corruption of 'kalte Ende' — the cold end of the evening, when leftover wines were combined. American 'Cold Duck' took the name and made it a sweet red sparkling instead.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Sparkling wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Lemons",
+     "amount": "2, peeled in one long spiral"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "a large block"
+    }
+   ],
+   "steps": [
+    "Peel the lemons in one continuous spiral and hang the peel in a punch bowl.",
+    "Add the sugar and the juice of one lemon and stir.",
+    "Pour in the still white wine and chill for at least two hours.",
+    "Add the sparkling wine and a block of ice just before serving.",
+    "Ladle into wine glasses."
+   ],
+   "garnish": "The lemon spiral",
+   "method": "built"
+  }
+ },
+ {
+  "id": "lumumba",
+  "name": "Lumumba",
+  "subcategory": "Hot",
+  "description": "Hot chocolate with a shot of brandy or dark rum and a cap of whipped cream. Northern European winter, no further explanation offered.",
+  "abv": "10–12%",
+  "origin": "Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "chocolate",
+   "brandy",
+   "cream"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Hot chocolate",
+   "Brandy",
+   "Whipped cream"
+  ],
+  "funFact": "Named — with no clear justification and a fair amount of later discomfort — after Congolese independence leader Patrice Lumumba, sometime after 1961. It is often now simply called a 'Tote Tante' in the north.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Hot chocolate, made with whole milk",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Brandy or dark rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Whipped cream",
+     "amount": "to top"
+    },
+    {
+     "item": "Cocoa powder",
+     "amount": "to dust"
+    }
+   ],
+   "steps": [
+    "Make a rich hot chocolate with whole milk and good dark chocolate.",
+    "Pour into a warmed mug, leaving room at the top.",
+    "Stir in the brandy or rum.",
+    "Cap with whipped cream and dust with cocoa or grated chocolate."
+   ],
+   "garnish": "Whipped cream and grated chocolate",
+   "method": "built"
+  }
+ },
+ {
+  "id": "barbajada",
+  "name": "Barbajada",
+  "subcategory": "Hot",
+  "description": "Milan's forgotten winter drink: hot chocolate, coffee and whipped cream beaten together until foamy, with a shot of liqueur if the weather warrants.",
+  "abv": "6–8%",
+  "origin": "Milan, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "chocolate",
+   "coffee",
+   "cream"
+  ],
+  "glassware": "Mug or tall glass",
+  "ingredients": [
+   "Hot chocolate",
+   "Espresso",
+   "Whipped cream",
+   "Liqueur"
+  ],
+  "funFact": "Named for Domenico Barbaja, a nineteenth-century Milanese waiter who became one of Europe's most powerful opera impresarios — he invented the drink before he discovered Rossini.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Strong hot chocolate",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Hot espresso",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whipped cream",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Brandy or coffee liqueur",
+     "amount": "0.5 oz / 15 ml, optional"
+    }
+   ],
+   "steps": [
+    "Make a thick hot chocolate and keep it hot.",
+    "Combine it with the hot espresso in a jug.",
+    "Whisk in the whipped cream vigorously until the whole thing is foamy.",
+    "Add the liqueur if using, pour into a warmed mug and dust with cocoa."
+   ],
+   "garnish": "Dusted cocoa",
+   "method": "built"
+  }
+ },
+ {
+  "id": "barracuda",
+  "name": "Barracuda",
+  "subcategory": "Sparkling",
+  "description": "Gold rum, Galliano and pineapple, topped with prosecco. Tropical and Italian at once, and an official IBA drink since 2011.",
+  "abv": "14–16%",
+  "origin": "Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "vanilla",
+   "lime",
+   "prosecco"
+  ],
+  "glassware": "Hurricane or large wine glass",
+  "ingredients": [
+   "Gold rum",
+   "Galliano",
+   "Pineapple juice",
+   "Lime juice",
+   "Prosecco"
+  ],
+  "funFact": "It is one of the newer additions to the IBA list, and one of the only official cocktails that combines a tiki structure with an Italian sparkling wine top.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gold rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Galliano",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Prosecco",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the rum, Galliano, pineapple juice and lime juice with ice.",
+    "Strain into a large glass over fresh ice.",
+    "Top with cold prosecco.",
+    "Garnish with a pineapple wedge and a lime wheel."
+   ],
+   "garnish": "Pineapple wedge and lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bicicletta",
+  "name": "Bicicletta",
+  "subcategory": "Spritz",
+  "description": "Campari, white wine and soda — the low-proof afternoon drink named for how its drinkers wobbled home.",
+  "abv": "8–10%",
+  "origin": "Lombardy, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter orange",
+   "white wine",
+   "citrus"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "Campari",
+   "Dry white wine",
+   "Soda water"
+  ],
+  "funFact": "Northern Italian lore says it is named for the elderly regulars who cycled home from the bar afterwards, taking a somewhat scenic route.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Campari",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry white wine",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a wine glass with ice.",
+    "Add the Campari and the white wine.",
+    "Top with a splash of soda.",
+    "Stir gently and garnish with an orange or lemon slice."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "caffe-corretto",
+  "name": "Caffè Corretto",
+  "subcategory": "Regional",
+  "description": "An espresso 'corrected' with a shot of grappa or sambuca. Ordered at the bar, drunk standing, over in ninety seconds.",
+  "abv": "15–18%",
+  "origin": "Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "espresso",
+   "grape",
+   "anise"
+  ],
+  "glassware": "Espresso cup",
+  "ingredients": [
+   "Espresso",
+   "Grappa or sambuca"
+  ],
+  "funFact": "In some northern Italian bars you can order it 'separato' — the spirit arrives in its own glass so you can decide how much correction the coffee actually needs.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Freshly pulled espresso",
+     "amount": "1 shot / 30 ml"
+    },
+    {
+     "item": "Grappa, sambuca or brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "to taste"
+    }
+   ],
+   "steps": [
+    "Pull a fresh espresso into a warmed cup.",
+    "Add sugar if you take it, and stir.",
+    "Pour the grappa straight into the coffee.",
+    "Drink standing at the bar, immediately."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "milano-torino",
+  "name": "Milano-Torino",
+  "subcategory": "Spritz",
+  "description": "Campari and red vermouth, equal parts, over ice. The two-ingredient ancestor of the Americano and the Negroni both.",
+  "abv": "16–18%",
+  "origin": "Milan, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "bitter orange",
+   "wormwood",
+   "herbs",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Campari",
+   "Sweet red vermouth"
+  ],
+  "funFact": "The name is geographic: Campari from Milan, Vermouth di Torino from Turin. Add soda and it becomes an Americano; add gin instead and you have a Negroni.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Campari",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet red vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a rocks glass with ice.",
+    "Add the Campari and the vermouth.",
+    "Stir for 15 seconds to chill and lightly dilute.",
+    "Garnish with an orange slice."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "rossini",
+  "name": "Rossini",
+  "subcategory": "Sparkling",
+  "description": "Prosecco over fresh strawberry purée — the Bellini's red sibling from the same bar, named for the same kind of artist.",
+  "abv": "9–11%",
+  "origin": "Venice, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "prosecco",
+   "berry"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Prosecco",
+   "Strawberry purée"
+  ],
+  "funFact": "Harry's Bar in Venice named a whole family after Venetian painters and composers: peach makes a Bellini, strawberry a Rossini, pomegranate a Tintoretto, and mandarin a Puccini.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh strawberry purée",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Prosecco, well chilled",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 barspoon, if the strawberries are tart"
+    }
+   ],
+   "steps": [
+    "Blend fresh strawberries and pass through a fine sieve to make a smooth purée.",
+    "Chill the purée thoroughly — a warm purée will kill the bubbles.",
+    "Pour the purée into a chilled flute.",
+    "Top slowly with prosecco, stirring gently with a barspoon as you pour."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "ve-n-to",
+  "name": "Ve.n.to",
+  "subcategory": "Sour",
+  "description": "Grappa shaken with chamomile-infused honey and lemon. Italy's own entry into the modern IBA canon, built to make grappa approachable.",
+  "abv": "18–20%",
+  "origin": "Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "chamomile",
+   "honey",
+   "lemon",
+   "grape"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Grappa",
+   "Chamomile-infused honey",
+   "Lemon juice",
+   "Apple juice"
+  ],
+  "funFact": "The name plays on 'vento' — wind — and on the initials of the Veneto region; it was added to the IBA list in 2011 as a deliberate showcase for grappa, which had almost no cocktail presence.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Grappa",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Chamomile-infused honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cloudy apple juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Infuse honey syrup with chamomile flowers by steeping them in warm syrup for 20 minutes, then strain.",
+    "Add the grappa, chamomile honey, lemon juice and apple juice to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a chamomile flower or a lemon twist."
+   ],
+   "garnish": "Chamomile flower",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "kopstootje",
+  "name": "Kopstootje",
+  "subcategory": "Party",
+  "description": "'Little head-butt': a tulip glass of jenever filled to the brim and a beer beside it. First sip taken bent over, hands behind your back.",
+  "abv": "12–15%",
+  "origin": "Amsterdam, Netherlands",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "malt",
+   "juniper",
+   "grain"
+  ],
+  "glassware": "Tulip glass and a beer glass",
+  "ingredients": [
+   "Jenever",
+   "Pilsner"
+  ],
+  "funFact": "The jenever is poured to a convex meniscus, so the only way to take the first sip without spilling is to lean down to the glass — hands behind the back is the traditional form.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jonge or oude jenever, chilled",
+     "amount": "1 tulip glass / 50 ml"
+    },
+    {
+     "item": "Dutch pilsner",
+     "amount": "1 glass / 250 ml"
+    }
+   ],
+   "steps": [
+    "Chill the jenever thoroughly and fill the tulip glass right to the brim.",
+    "Pour a cold pilsner alongside it.",
+    "Bend down to the jenever glass, hands behind your back, and take the first sip without lifting it.",
+    "Then pick up the glass, finish the jenever, and chase it with the beer."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "nikita",
+  "name": "Nikita",
+  "subcategory": "Frozen",
+  "description": "Beer, pineapple, white wine and vanilla ice cream, blended. It should be a disaster. Madeira has been proving otherwise since the eighties.",
+  "abv": "6–8%",
+  "origin": "Madeira, Portugal",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "vanilla",
+   "malt",
+   "cream"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Lager",
+   "White wine",
+   "Pineapple",
+   "Vanilla ice cream"
+  ],
+  "funFact": "Named after the Elton John song 'Nikita', which was in the charts when a Câmara de Lobos bar owner first blended it in the mid-1980s.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lager",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Dry white wine",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh pineapple, chopped",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Vanilla ice cream",
+     "amount": "2 scoops"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp, optional"
+    }
+   ],
+   "steps": [
+    "Put the pineapple, ice cream and white wine into a blender.",
+    "Add the beer last, to control the foam.",
+    "Blend briefly — just enough to combine, or it will overflow.",
+    "Pour into a tall glass and serve with a spoon and a straw."
+   ],
+   "garnish": "A pineapple wedge",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "poncha",
+  "name": "Poncha",
+  "subcategory": "Sour",
+  "description": "Madeiran cane spirit muddled with honey and lemon using a wooden 'caralhinho'. Sweet, sharp and much stronger than it lets on.",
+  "abv": "18–20%",
+  "origin": "Madeira, Portugal",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "lemon",
+   "cane",
+   "orange"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Aguardente de cana",
+   "Honey",
+   "Lemon juice",
+   "Orange juice"
+  ],
+  "funFact": "The stirring tool — a ridged wooden stick called a caralhinho — is specific to Madeira, and the fishermen's original version was drunk as a cold remedy before going out in the morning.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aguardente de cana",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Fresh lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Fresh orange juice",
+     "amount": "0.5 oz / 15 ml, for 'poncha regional'"
+    }
+   ],
+   "steps": [
+    "Put the honey and lemon juice into a small tumbler or a jug.",
+    "Work them together with a wooden stick or muddler until the honey fully dissolves.",
+    "Add the aguardente and the orange juice if using.",
+    "Stir vigorously until frothy and serve at room temperature, without ice."
+   ],
+   "garnish": "A lemon peel",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "porto-tonico",
+  "name": "Porto Tónico",
+  "subcategory": "Spritz",
+  "description": "White port and tonic over ice with mint. Portugal's answer to the Gin and Tonic, and arguably the better summer drink.",
+  "abv": "9–11%",
+  "origin": "Porto, Portugal",
+  "rarity": "common",
+  "tastingNotes": [
+   "white port",
+   "quinine",
+   "mint",
+   "citrus"
+  ],
+  "glassware": "Wine glass or copa",
+  "ingredients": [
+   "White port",
+   "Tonic water",
+   "Mint",
+   "Orange"
+  ],
+  "funFact": "Port houses pushed it hard in the 2010s to sell white port, which had been the least-loved category in the Douro — it worked so well it is now the default aperitif in Porto.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white port",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Tonic water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Mint sprig",
+     "amount": "1"
+    },
+    {
+     "item": "Orange slice",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Fill a large wine glass with ice.",
+    "Pour in the chilled white port.",
+    "Top with cold tonic water.",
+    "Stir once gently and garnish with a mint sprig and an orange slice."
+   ],
+   "garnish": "Mint sprig and orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "agua-de-valencia",
+  "name": "Agua de Valencia",
+  "subcategory": "Sparkling",
+  "description": "Cava, orange juice, gin and vodka in a jug. Tastes like a Mimosa, behaves like something else entirely.",
+  "abv": "12–14%",
+  "origin": "Valencia, Spain",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "cava",
+   "juniper",
+   "citrus"
+  ],
+  "glassware": "Wide jug and wine glasses",
+  "ingredients": [
+   "Cava",
+   "Orange juice",
+   "Gin",
+   "Vodka",
+   "Sugar"
+  ],
+  "funFact": "Invented at Café Madrid in Valencia in 1959, when a group of Basque regulars kept ordering 'Agua de Bilbao' — the house sparkling wine — and the barman offered them a Valencian alternative made with local oranges.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cava, chilled",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Fresh orange juice",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Vodka",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Stir the sugar into the orange juice in a large jug until dissolved.",
+    "Add the gin and vodka and stir again.",
+    "Top with cold cava and stir once, gently.",
+    "Serve immediately in wine glasses over a little ice.",
+    "Make it in front of people — half the drink is the theatre of the jug."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "leche-de-pantera",
+  "name": "Leche de Pantera",
+  "subcategory": "Creamy & Dessert",
+  "description": "'Panther's milk': gin or rum, condensed milk and cinnamon, shaken cold. Spanish Legion issue, now a Madrid dive-bar staple.",
+  "abv": "14–16%",
+  "origin": "Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "condensed milk",
+   "cinnamon",
+   "juniper",
+   "vanilla"
+  ],
+  "glassware": "Small tumbler, chilled",
+  "ingredients": [
+   "Gin",
+   "Condensed milk",
+   "Milk",
+   "Cinnamon"
+  ],
+  "funFact": "The recipe is traditionally attributed to the Spanish Legion, whose founder Millán-Astray is said to have served it to recruits — the modern Madrid version usually swaps the original brandy for gin.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ground cinnamon",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add the gin, condensed milk, milk and cinnamon to a shaker with ice.",
+    "Shake hard for 15 seconds until thick and cold.",
+    "Strain into a chilled tumbler.",
+    "Dust with more cinnamon and serve very cold."
+   ],
+   "garnish": "Ground cinnamon",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "queimada",
+  "name": "Queimada",
+  "subcategory": "Hot",
+  "description": "Orujo set alight in a clay bowl with sugar, coffee beans and lemon peel while somebody reads a spell over it. Galicia does not do this ironically.",
+  "abv": "20–25%",
+  "origin": "Galicia, Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "burnt sugar",
+   "coffee",
+   "lemon",
+   "grape"
+  ],
+  "glassware": "Clay bowl and cups",
+  "ingredients": [
+   "Orujo",
+   "Sugar",
+   "Coffee beans",
+   "Lemon peel"
+  ],
+  "funFact": "The conxuro — the incantation read while it burns — invokes the meigas, Galician witches, and asks them to leave. The ritual is old-looking but was largely written in the 1950s.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Orujo (Galician grape marc spirit)",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Sugar",
+     "amount": "150 g"
+    },
+    {
+     "item": "Coffee beans",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Lemon peel",
+     "amount": "from 1 lemon"
+    },
+    {
+     "item": "Apple slices",
+     "amount": "a few, optional"
+    }
+   ],
+   "steps": [
+    "Pour the orujo into a wide clay bowl and add most of the sugar, the coffee beans and the lemon peel.",
+    "Put a ladleful of orujo and the remaining sugar into a separate ladle and set it alight.",
+    "Lower the burning ladle into the bowl to ignite the whole surface.",
+    "Stir with the ladle, lifting burning liquid and pouring it back, for several minutes until the flame turns low and blue.",
+    "Cover to extinguish, then serve hot in small clay cups."
+   ],
+   "garnish": "None",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "rebujito",
+  "name": "Rebujito",
+  "subcategory": "Highball",
+  "description": "Manzanilla sherry lengthened with lemon-lime soda over crushed ice — the drink that keeps Seville upright through a week of Feria.",
+  "abv": "6–8%",
+  "origin": "Andalusia, Spain",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "saline",
+   "lemon-lime",
+   "almond",
+   "citrus"
+  ],
+  "glassware": "Tall glass or plastic cup",
+  "ingredients": [
+   "Manzanilla or fino sherry",
+   "Lemon-lime soda",
+   "Mint"
+  ],
+  "funFact": "It is drunk by the jug at the Feria de Abril in Seville and the Feria del Caballo in Jerez, where the sherry comes from — and where sherry purists have made their peace with it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Manzanilla or fino sherry, chilled",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lemon-lime soda",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed, to fill"
+    },
+    {
+     "item": "Mint sprig",
+     "amount": "1, optional"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with crushed ice.",
+    "Pour in the cold manzanilla.",
+    "Top with lemon-lime soda.",
+    "Stir once and add a mint sprig if you like.",
+    "Drink fast — it dies as the ice melts."
+   ],
+   "garnish": "Mint sprig",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sol-y-sombra",
+  "name": "Sol y Sombra",
+  "subcategory": "Spirit-Forward",
+  "description": "'Sun and shade': brandy and anís in equal parts, no ice. A Spanish breakfast that predates any conversation about moderation.",
+  "abv": "38–40%",
+  "origin": "Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "grape",
+   "caramel"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Spanish brandy",
+   "Anís"
+  ],
+  "funFact": "The name comes from the bullring, where seats are priced by whether they sit in sun or shade; the drink mixes the dark brandy and the clear anís the same way.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Spanish brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Anís (sweet or dry)",
+     "amount": "1 oz / 30 ml"
+    }
+   ],
+   "steps": [
+    "Pour the brandy and the anís into a small tumbler.",
+    "Stir once to combine.",
+    "Serve at room temperature, without ice.",
+    "Traditionally taken standing at the bar, with coffee."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "vermut",
+  "name": "Vermut",
+  "subcategory": "Spritz",
+  "description": "Red vermouth on ice with a splash of soda, an olive and a slice of orange. Sunday noon in Barcelona has a drink and this is it.",
+  "abv": "15–17%",
+  "origin": "Barcelona, Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "bitter herbs",
+   "orange",
+   "wormwood",
+   "olive"
+  ],
+  "glassware": "Tumbler or short wine glass",
+  "ingredients": [
+   "Red vermouth",
+   "Soda water",
+   "Orange",
+   "Olive"
+  ],
+  "funFact": "'Fer el vermut' — to do the vermouth — is a whole social occasion in Catalonia, held late on Sunday morning, and the best bars still draw their vermouth from the barrel.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Spanish red vermouth",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    },
+    {
+     "item": "Orange slice",
+     "amount": "1"
+    },
+    {
+     "item": "Green olive",
+     "amount": "1, on a stick"
+    }
+   ],
+   "steps": [
+    "Fill a tumbler with ice.",
+    "Pour in the cold red vermouth.",
+    "Add a short splash of soda.",
+    "Stir once and garnish with an orange slice and a skewered olive.",
+    "Serve with crisps and tinned seafood, if you are doing it properly."
+   ],
+   "garnish": "Orange slice and a green olive",
+   "method": "built"
+  }
+ },
+ {
+  "id": "kafi-fertig",
+  "name": "Kafi Fertig",
+  "subcategory": "Hot",
+  "description": "Coffee with schnapps, served in a stemmed glass so you can see the colour. Swiss farmhouse fuel with a colour code all its own.",
+  "abv": "12–14%",
+  "origin": "Central Switzerland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coffee",
+   "kirsch",
+   "sugar"
+  ],
+  "glassware": "Small stemmed glass",
+  "ingredients": [
+   "Coffee",
+   "Schnapps or kirsch",
+   "Sugar"
+  ],
+  "funFact": "In parts of central Switzerland the strength is judged by colour: it should be dark enough that a coin dropped in the glass disappears, and no darker.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Hot strong coffee",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Kirsch or fruit schnapps",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tsp"
+    }
+   ],
+   "steps": [
+    "Put the sugar in a small stemmed glass.",
+    "Pour in the hot coffee and stir until dissolved.",
+    "Add the schnapps and stir once more.",
+    "Serve hot, in the glass, never in a cup."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ }
+]

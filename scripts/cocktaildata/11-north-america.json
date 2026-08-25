@@ -1,0 +1,1918 @@
+[
+ {
+  "id": "maple-old-fashioned",
+  "name": "Maple Old Fashioned",
+  "subcategory": "Spirit-Forward",
+  "description": "An Old Fashioned sweetened with maple syrup instead of sugar. Quebec's obvious move, and it works better than obvious usually does.",
+  "abv": "28–30%",
+  "origin": "Quebec, Canada",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "maple",
+   "oak",
+   "orange",
+   "rye"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Canadian rye whisky",
+   "Maple syrup",
+   "Angostura bitters"
+  ],
+  "funFact": "Quebec produces roughly seventy percent of the world's maple syrup and keeps a strategic reserve of it — a genuine stockpile, held in a warehouse, against bad harvest years.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Canadian rye whisky",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dark maple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "one large cube"
+    }
+   ],
+   "steps": [
+    "Stir the maple syrup and both bitters together in a mixing glass.",
+    "Add the rye and plenty of ice.",
+    "Stir for 25 seconds until chilled and lightly diluted.",
+    "Strain over one large ice cube in a rocks glass.",
+    "Express an orange twist over the top and drop it in."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "toronto",
+  "name": "Toronto",
+  "subcategory": "Spirit-Forward",
+  "description": "Canadian rye stirred with Fernet-Branca, sugar and bitters. Bitter, minty and bracing — an Old Fashioned with a mean streak.",
+  "abv": "28–30%",
+  "origin": "Toronto, Canada",
+  "rarity": "rare",
+  "tastingNotes": [
+   "fernet",
+   "rye",
+   "menthol",
+   "bitter"
+  ],
+  "glassware": "Coupe or rocks glass",
+  "ingredients": [
+   "Canadian rye whisky",
+   "Fernet-Branca",
+   "Simple syrup",
+   "Angostura bitters"
+  ],
+  "funFact": "It appears in Robert Vermeire's 1922 'Cocktails: How to Mix Them' with the note that it is favoured 'by the people of Toronto' — one of the earliest cocktails ever named for a Canadian city.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Canadian rye whisky",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fernet-Branca",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all the ingredients in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe, or over a large cube in a rocks glass.",
+    "Express an orange twist over the surface and drop it in."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "alaska",
+  "name": "Alaska",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and yellow Chartreuse, stirred cold. Two ingredients, and the Chartreuse does exactly as much work as you would expect.",
+  "abv": "30–32%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "honey",
+   "herbal",
+   "saffron"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Yellow Chartreuse",
+   "Orange bitters"
+  ],
+  "funFact": "The Savoy Cocktail Book insists that 'so far as can be ascertained this delectable potion is NOT the staple diet of the Esquimaux' — which is roughly all anyone knows about the name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "London dry gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Yellow Chartreuse",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine the gin, Chartreuse and bitters in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface and drop it in."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "between-the-sheets",
+  "name": "Between the Sheets",
+  "subcategory": "Sour",
+  "description": "A Sidecar with rum added — cognac, rum, triple sec and lemon. Prohibition-era, and it does not pretend to be gentle.",
+  "abv": "24–26%",
+  "origin": "United States",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "lemon",
+   "cognac",
+   "cane"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Cognac",
+   "White rum",
+   "Triple sec",
+   "Lemon juice"
+  ],
+  "funFact": "The name is usually credited to Harry MacElhone at Harry's New York Bar in Paris, though the drink appears in American sources around the same time — it is a Sidecar with the volume turned up.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Express a lemon twist over the top and discard."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bijou",
+  "name": "Bijou",
+  "subcategory": "Spirit-Forward",
+  "description": "'Jewel': gin, green Chartreuse and sweet vermouth — diamond, emerald and ruby, in equal parts, as the name intends.",
+  "abv": "26–28%",
+  "origin": "United States",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "herbal",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Green Chartreuse",
+   "Sweet vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Harry Johnson's 1900 recipe explains the name directly: the gin is the diamond, the Chartreuse the emerald and the vermouth the ruby — three jewels in one glass.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine everything in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a cherry and a lemon twist."
+   ],
+   "garnish": "Cherry and lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "blue-blazer",
+  "name": "Blue Blazer",
+  "subcategory": "Hot",
+  "description": "Burning whisky poured between two mugs in a long arc of fire. Jerry Thomas's showpiece, and still the most dangerous thing on any menu.",
+  "abv": "20–22%",
+  "origin": "San Francisco, USA",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "smoke",
+   "honey",
+   "lemon",
+   "malt"
+  ],
+  "glassware": "Two silver-plated mugs",
+  "ingredients": [
+   "Scotch whisky",
+   "Boiling water",
+   "Sugar"
+  ],
+  "funFact": "Thomas performed it at the El Dorado in gold-rush San Francisco with silver mugs he had made specially; he advised practising with cold water first, which remains excellent advice.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cask-strength Scotch whisky",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Boiling water",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sugar or honey syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Two heatproof metal mugs with handles",
+     "amount": "1 pair"
+    }
+   ],
+   "steps": [
+    "Warm both metal mugs. Put the whisky in one and the boiling water in the other.",
+    "Clear the area of anything flammable, then set the whisky alight.",
+    "Pour the burning whisky into the second mug, then back again, in a long steady stream — four or five passes.",
+    "Cover to extinguish the flame, stir in the sugar, and pour into a heatproof glass.",
+    "Garnish with a lemon twist. Practise with cold water before you ever light it."
+   ],
+   "garnish": "Lemon twist",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "boilermaker",
+  "name": "Boilermaker",
+  "subcategory": "Party",
+  "description": "A shot of whiskey and a beer. Drop the shot in, or drink them side by side — the argument is older than most bars.",
+  "abv": "8–10%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "malt",
+   "grain",
+   "oak"
+  ],
+  "glassware": "Beer glass and a shot glass",
+  "ingredients": [
+   "Whiskey",
+   "Beer"
+  ],
+  "funFact": "The name comes from the industrial workers who drank them after shifts; purists insist the shot is drunk beside the beer, not dropped into it — dropping it makes a Depth Charge.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Beer",
+     "amount": "12 oz / 355 ml"
+    }
+   ],
+   "steps": [
+    "Pour the beer into a glass and let the head settle.",
+    "Pour the whiskey into a separate shot glass.",
+    "Either drink the shot and chase it with the beer, or drop the shot glass in whole.",
+    "Do not overthink it."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "bronx",
+  "name": "Bronx",
+  "subcategory": "Sour",
+  "description": "Gin, both vermouths and orange juice — a Perfect Martini with juice in it. Once the third most-ordered cocktail in America.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange juice"
+  ],
+  "funFact": "Created at the Waldorf-Astoria around 1906 and named after the Bronx Zoo; barman Johnnie Solon said he was inspired by the strange animals people claimed to see after drinking.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "brooklyn",
+  "name": "Brooklyn",
+  "subcategory": "Spirit-Forward",
+  "description": "The Manhattan's overlooked sibling: rye, dry vermouth, maraschino and Amer Picon. Drier, more bitter, and far harder to find.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "cherry",
+   "bitter orange",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Dry vermouth",
+   "Maraschino liqueur",
+   "Amer Picon"
+  ],
+  "funFact": "It languished for a century largely because Amer Picon was reformulated and became unavailable in the US — the modern revival relies on substitutes like Amaro CioCiaro or Bigallet China-China.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Amer Picon or Amaro CioCiaro",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all the ingredients in a mixing glass with ice.",
+    "Stir for 25 seconds until well chilled.",
+    "Strain into a chilled coupe.",
+    "Garnish with a brandied cherry."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "cable-car",
+  "name": "Cable Car",
+  "subcategory": "Sour",
+  "description": "A spiced-rum Sidecar with a cinnamon-sugar rim, invented at the top of a San Francisco hotel and served by the thousand.",
+  "abv": "18–20%",
+  "origin": "San Francisco, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinnamon",
+   "orange",
+   "lemon",
+   "spiced rum"
+  ],
+  "glassware": "Coupe with a cinnamon-sugar rim",
+  "ingredients": [
+   "Spiced rum",
+   "Orange curaçao",
+   "Lemon juice",
+   "Cinnamon sugar"
+  ],
+  "funFact": "Tony Abou-Ganim built it in 1996 for the Starlight Room on the 21st floor of the Sir Francis Drake Hotel, and it became one of the few 1990s hotel-bar drinks to survive the cocktail revival with its reputation intact.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Spiced rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Cinnamon sugar",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rim a coupe with lemon and cinnamon sugar, then chill it.",
+    "Shake the rum, curaçao, lemon juice and syrup hard with ice.",
+    "Double-strain into the rimmed coupe.",
+    "Garnish with an orange twist."
+   ],
+   "garnish": "Orange twist on a cinnamon-sugar rim",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "casino",
+  "name": "Casino",
+  "subcategory": "Sour",
+  "description": "Old Tom gin, maraschino, orange bitters and lemon. Sharp, floral and considerably drier than the ingredient list suggests.",
+  "abv": "24–26%",
+  "origin": "United States",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "juniper",
+   "lemon",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Old Tom gin",
+   "Maraschino liqueur",
+   "Orange bitters",
+   "Lemon juice"
+  ],
+  "funFact": "Maraschino is distilled from whole Marasca cherries — stones, stems and all — which is why it tastes nutty and dry rather than like the syrup in a jar of cocktail cherries.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Old Tom or London dry gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a maraschino cherry and a lemon twist."
+   ],
+   "garnish": "Maraschino cherry and lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "eggnog",
+  "name": "Eggnog",
+  "subcategory": "Creamy & Dessert",
+  "description": "Eggs, cream, sugar and spirit, whisked thick and dusted with nutmeg. Every American December, and better if you make it months early.",
+  "abv": "12–15%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "egg",
+   "nutmeg",
+   "cream",
+   "bourbon"
+  ],
+  "glassware": "Punch cup or small glass",
+  "ingredients": [
+   "Bourbon",
+   "Dark rum",
+   "Eggs",
+   "Cream",
+   "Milk",
+   "Nutmeg"
+  ],
+  "funFact": "Aged eggnog is a real practice — the alcohol sterilises the mixture, and batches left in the fridge for a year develop a smooth, almost cheese-like complexity. Food scientists have tested this and it holds up.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Egg yolks",
+     "amount": "6"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "250 ml"
+    },
+    {
+     "item": "Bourbon",
+     "amount": "150 ml"
+    },
+    {
+     "item": "Dark rum",
+     "amount": "75 ml"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "freshly grated"
+    }
+   ],
+   "steps": [
+    "Whisk the egg yolks with the sugar until pale and thick.",
+    "Slowly whisk in the milk and cream.",
+    "Whisk in the bourbon and rum — add the spirit gradually or the eggs will seize.",
+    "Refrigerate for at least a day; a month is better, a year is better still.",
+    "Serve cold in small cups with plenty of grated nutmeg."
+   ],
+   "garnish": "Freshly grated nutmeg",
+   "method": "built"
+  }
+ },
+ {
+  "id": "french-connection",
+  "name": "French Connection",
+  "subcategory": "Spirit-Forward",
+  "description": "Cognac and amaretto, equal parts, over ice. Two ingredients, no dilution to speak of, and a name borrowed from a car chase.",
+  "abv": "32–34%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "almond",
+   "cognac",
+   "marzipan",
+   "oak"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Cognac",
+   "Amaretto"
+  ],
+  "funFact": "Named after the 1971 film; it belongs to a family of two-ingredient duos — Godfather with Scotch, Godmother with vodka, French Connection with cognac — that were the whole of 1970s bartending in some hotels.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Amaretto",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "one large cube"
+    }
+   ],
+   "steps": [
+    "Put a large ice cube in a rocks glass.",
+    "Pour over the cognac and the amaretto.",
+    "Stir gently for 10 seconds.",
+    "Serve with no garnish — or a lemon twist if the amaretto is very sweet."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "godfather",
+  "name": "Godfather",
+  "subcategory": "Spirit-Forward",
+  "description": "Scotch and amaretto over a big cube. The smoke and the marzipan should fight, and instead they get on.",
+  "abv": "32–34%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "almond",
+   "smoke",
+   "malt",
+   "marzipan"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Amaretto"
+  ],
+  "funFact": "Legend attaches it to Marlon Brando and the 1972 film, which is almost certainly marketing — but Disaronno has never had any reason to correct the record.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Amaretto",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "one large cube"
+    }
+   ],
+   "steps": [
+    "Put a large ice cube in a rocks glass.",
+    "Add the Scotch and the amaretto.",
+    "Stir gently for 10 seconds to chill without over-diluting.",
+    "Serve with an orange twist if you want to lift it."
+   ],
+   "garnish": "Orange twist, optional",
+   "method": "built"
+  }
+ },
+ {
+  "id": "golden-dream",
+  "name": "Golden Dream",
+  "subcategory": "Creamy & Dessert",
+  "description": "Galliano, triple sec, orange juice and cream, shaken to a pale gold froth. Unapologetically of its decade.",
+  "abv": "14–16%",
+  "origin": "Miami, Florida, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "orange",
+   "cream",
+   "anise"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Galliano",
+   "Triple sec",
+   "Orange juice",
+   "Cream"
+  ],
+  "funFact": "Galliano's tall bottle was designed to stand out on a back bar and is named after an Italian hero of the Abyssinian war; the 1970s put it in almost everything, including this.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Galliano",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Single cream",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all four ingredients to a shaker with ice.",
+    "Shake hard for 15 seconds — the cream needs the work.",
+    "Double-strain into a chilled coupe.",
+    "Serve without garnish, or dust with nutmeg."
+   ],
+   "garnish": "Grated nutmeg, optional",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "greenpoint",
+  "name": "Greenpoint",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, yellow Chartreuse and sweet vermouth — the Brooklyn neighbourhood series' best entry, and the one that stuck.",
+  "abv": "28–30%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "herbal",
+   "honey",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Yellow Chartreuse",
+   "Sweet vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "Milk & Honey's bartenders named a series of drinks after Brooklyn neighbourhoods — Red Hook, Greenpoint, Bensonhurst, Carroll Gardens — all built as Manhattan variations, all riffing on the near-lost Brooklyn cocktail.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Yellow Chartreuse",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all the ingredients in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "horses-neck",
+  "name": "Horse's Neck",
+  "subcategory": "Highball",
+  "description": "Bourbon and ginger ale with a lemon peel spiralled around the inside of the glass. The peel is the whole point of the name.",
+  "abv": "10–12%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "ginger",
+   "lemon",
+   "bourbon",
+   "bitters"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Bourbon",
+   "Ginger ale",
+   "Angostura bitters",
+   "Lemon peel"
+  ],
+  "funFact": "It began in the 1890s as an alcohol-free drink — just ginger ale and the lemon spiral. The bourbon was added later, and the version with it was for a while distinguished as a 'Horse's Neck with a kick'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ginger ale",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Lemon",
+     "amount": "1, peeled in one long spiral"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Peel a lemon in one continuous spiral and hang it inside a highball glass with one end over the rim.",
+    "Fill the glass carefully with ice, holding the spiral in place against the side.",
+    "Add the bourbon and the bitters.",
+    "Top with cold ginger ale and stir once."
+   ],
+   "garnish": "The lemon spiral",
+   "method": "built"
+  }
+ },
+ {
+  "id": "hot-buttered-rum",
+  "name": "Hot Buttered Rum",
+  "subcategory": "Hot",
+  "description": "Dark rum, spiced butter batter and boiling water. Colonial American, and the butter is not a novelty — it is the whole texture.",
+  "abv": "12–14%",
+  "origin": "New England, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "butter",
+   "brown sugar",
+   "nutmeg",
+   "molasses"
+  ],
+  "glassware": "Heatproof mug",
+  "ingredients": [
+   "Dark rum",
+   "Butter",
+   "Brown sugar",
+   "Spices",
+   "Hot water"
+  ],
+  "funFact": "Colonial New England imported molasses from the Caribbean to distil its own rum, which is why a butter-and-spice rum drink became a northeastern winter tradition rather than a tropical one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Unsalted butter, softened",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Ground cinnamon, nutmeg and clove",
+     "amount": "a pinch each"
+    },
+    {
+     "item": "Boiling water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "a drop"
+    }
+   ],
+   "steps": [
+    "Cream the softened butter with the brown sugar, spices and vanilla to make a batter.",
+    "Put a heaped spoonful of the batter in a warmed heatproof mug.",
+    "Add the rum and stir until the batter starts to melt.",
+    "Top with boiling water and stir until fully combined and glossy.",
+    "Grate nutmeg over the top."
+   ],
+   "garnish": "Freshly grated nutmeg and a cinnamon stick",
+   "method": "built"
+  }
+ },
+ {
+  "id": "illegal",
+  "name": "Illegal",
+  "subcategory": "Sour",
+  "description": "Mezcal and rum with lime, falernum and agave — smoke and clove in a sour that hits harder than it reads.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "smoke",
+   "clove",
+   "lime",
+   "cane"
+  ],
+  "glassware": "Coupe or rocks glass",
+  "ingredients": [
+   "Mezcal",
+   "White rum",
+   "Lime juice",
+   "Falernum",
+   "Agave syrup"
+  ],
+  "funFact": "It joined the IBA list in the 2020 revision, one of the first official cocktails built on mezcal — a category that barely existed outside Mexico twenty years earlier.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mezcal",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Falernum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Agave syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe, or serve over a large cube.",
+    "Garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "jasmine",
+  "name": "Jasmine",
+  "subcategory": "Sour",
+  "description": "Gin, Campari, Cointreau and lemon — a bitter, grapefruit-pink sour that tastes far more complicated than its four ingredients.",
+  "abv": "20–22%",
+  "origin": "Berkeley, California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "bitter orange",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Campari",
+   "Cointreau",
+   "Lemon juice"
+  ],
+  "funFact": "Paul Harrington created it at a Berkeley bar in the 1990s and named it after a regular; there is no grapefruit in it, which is the drink's best trick.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lemon twist."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "lava-flow",
+  "name": "Lava Flow",
+  "subcategory": "Frozen",
+  "description": "A frozen Piña Colada poured over blended strawberry so the red bleeds up through the white. Hawaii's most photographed drink.",
+  "abv": "10–12%",
+  "origin": "Hawaii, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "coconut",
+   "pineapple",
+   "banana"
+  ],
+  "glassware": "Hurricane glass",
+  "ingredients": [
+   "White rum",
+   "Coconut rum",
+   "Coconut cream",
+   "Pineapple juice",
+   "Strawberries",
+   "Banana"
+  ],
+  "funFact": "The strawberry goes in the glass first and the colada is poured down the middle — the eruption effect only works if you pour into the centre, not down the side.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coconut rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coconut cream",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Banana",
+     "amount": "0.5"
+    },
+    {
+     "item": "Frozen strawberries",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Blend the strawberries with a splash of the pineapple juice until smooth, then pour into the bottom of a hurricane glass.",
+    "Rinse the blender and add the rums, coconut cream, remaining pineapple juice, banana and ice.",
+    "Blend until thick and smooth.",
+    "Pour slowly into the centre of the glass so the strawberry rises up the sides.",
+    "Garnish with a pineapple wedge and a cherry."
+   ],
+   "garnish": "Pineapple wedge and cherry",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "little-italy",
+  "name": "Little Italy",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan with Cynar in place of some of the vermouth. Artichoke bitterness against rye, which sounds wrong and lands beautifully.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "artichoke",
+   "rye",
+   "vermouth",
+   "bitter"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Sweet vermouth",
+   "Cynar"
+  ],
+  "funFact": "Audrey Saunders created it at Pegu Club, and it did more than almost any other drink to make Cynar — a bitter liqueur made from artichokes — a standard American back-bar bottle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cynar",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine the rye, vermouth and Cynar in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with brandied cherries."
+   ],
+   "garnish": "Brandied cherries",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "pisco-punch",
+  "name": "Pisco Punch",
+  "subcategory": "Punch & Cobbler",
+  "description": "Pisco, pineapple gum syrup and lemon — the drink that made gold-rush San Francisco famous, with a recipe its inventor took to the grave.",
+  "abv": "16–18%",
+  "origin": "San Francisco, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "grape",
+   "lemon",
+   "gum arabic"
+  ],
+  "glassware": "Punch cup or coupe",
+  "ingredients": [
+   "Pisco",
+   "Pineapple gum syrup",
+   "Lemon juice",
+   "Water"
+  ],
+  "funFact": "Duncan Nicol served it at the Bank Exchange saloon and refused to give up the recipe; when Prohibition closed the bar in 1920 the original formula was genuinely lost, and every modern version is a reconstruction.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pisco",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Pineapple gum syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the pisco, pineapple gum syrup, lemon juice and water with ice.",
+    "Strain into a chilled punch cup or coupe.",
+    "Garnish with a chunk of fresh pineapple.",
+    "Make a second one — the original was famous for tasting far weaker than it was."
+   ],
+   "garnish": "A chunk of fresh pineapple",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "remember-the-maine",
+  "name": "Remember the Maine",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, sweet vermouth, cherry brandy and absinthe. Charles H. Baker recorded it in Havana during a revolution and told you to stir it clockwise.",
+  "abv": "26–28%",
+  "origin": "United States",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "cherry",
+   "anise",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Sweet vermouth",
+   "Cherry Heering",
+   "Absinthe"
+  ],
+  "funFact": "Baker's original note instructs the reader to 'stir this one with a long spoon; and mind you, always in a clockwise direction' — the kind of instruction that tells you more about Baker than the drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cherry Heering",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp, to rinse"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Rinse a chilled coupe with absinthe and discard the excess.",
+    "Stir the rye, vermouth and Cherry Heering over ice for 25 seconds.",
+    "Strain into the absinthe-rinsed coupe.",
+    "Garnish with a brandied cherry."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "revolver",
+  "name": "Revolver",
+  "subcategory": "Spirit-Forward",
+  "description": "Bourbon, coffee liqueur and orange bitters with a flamed orange peel. A Manhattan that drinks its coffee black.",
+  "abv": "28–30%",
+  "origin": "San Francisco, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coffee",
+   "bourbon",
+   "orange",
+   "oak"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Bourbon",
+   "Coffee liqueur",
+   "Orange bitters"
+  ],
+  "funFact": "Jon Santer created it at Bruno's in San Francisco in the early 2000s; the flamed orange peel is not decoration — the caramelised oils are what tie the coffee to the bourbon.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Coffee liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "1 wide strip"
+    }
+   ],
+   "steps": [
+    "Stir the bourbon, coffee liqueur and bitters over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Hold a wide strip of orange peel over the glass, warm it briefly with a flame, then squeeze it through the flame to flare the oils.",
+    "Drop the peel into the drink."
+   ],
+   "garnish": "Flamed orange peel",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "rob-roy",
+  "name": "Rob Roy",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan built on Scotch. The smoke changes everything, and the drink has been quietly better than its reputation for 130 years.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "malt",
+   "vermouth",
+   "cherry",
+   "smoke"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Sweet vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "Created at the Waldorf Hotel in 1894 and named after an operetta about the Scottish outlaw Rob Roy MacGregor that had just opened a few blocks away.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine the Scotch, vermouth and bitters in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a cherry, or a lemon twist for a drier read."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "salty-dog",
+  "name": "Salty Dog",
+  "subcategory": "Highball",
+  "description": "A Greyhound with a salted rim. The salt does not make it salty — it makes the grapefruit taste less bitter, which is the whole trick.",
+  "abv": "12–14%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "grapefruit",
+   "salt",
+   "juniper"
+  ],
+  "glassware": "Highball glass, salted rim",
+  "ingredients": [
+   "Gin or vodka",
+   "Grapefruit juice",
+   "Salt rim"
+  ],
+  "funFact": "Salt suppresses the bitterness receptors on the tongue, which is why a salted rim makes grapefruit juice read as sweeter — the same principle behind salting a Margarita.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin or vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh grapefruit juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Salt",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Rim a highball glass with a grapefruit wedge and coarse salt.",
+    "Fill the glass with ice.",
+    "Pour in the spirit.",
+    "Top with fresh grapefruit juice and stir once.",
+    "Garnish with a grapefruit wedge."
+   ],
+   "garnish": "Grapefruit wedge on a salted rim",
+   "method": "built"
+  }
+ },
+ {
+  "id": "siesta",
+  "name": "Siesta",
+  "subcategory": "Sour",
+  "description": "A Hemingway Daiquiri rebuilt on tequila, with Campari instead of maraschino. Grapefruit, lime and bitterness in balance.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "bitter orange",
+   "agave",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Campari",
+   "Grapefruit juice",
+   "Lime juice",
+   "Simple syrup"
+  ],
+  "funFact": "Katie Stipe created it at Flatiron Lounge in 2006, and it became one of the first modern cocktails to convince American bartenders that Campari belonged with tequila.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a grapefruit twist."
+   ],
+   "garnish": "Grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "southside",
+  "name": "Southside",
+  "subcategory": "Sour",
+  "description": "Gin, lime, sugar and mint, shaken hard. A Mojito without the soda, or a Daiquiri with mint — either way it disappears fast.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mint",
+   "lime",
+   "juniper",
+   "sugar"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lime juice",
+   "Simple syrup",
+   "Mint"
+  ],
+  "funFact": "Two stories compete: that it comes from Chicago's South Side during Prohibition, where rough gin needed mint to hide it, and that it comes from the 21 Club in New York. The New York version has better records.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "8"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Put the mint leaves in the shaker and add the lime juice and syrup.",
+    "Press the mint gently with a muddler — bruise it, do not tear it.",
+    "Add the gin and ice, then shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Float a fresh mint leaf on top."
+   ],
+   "garnish": "A single mint leaf",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "stinger",
+  "name": "Stinger",
+  "subcategory": "Spirit-Forward",
+  "description": "Cognac and white crème de menthe, shaken hard. A nightcap so clean it was once considered acceptable at any hour.",
+  "abv": "30–32%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mint",
+   "cognac",
+   "menthol"
+  ],
+  "glassware": "Coupe or rocks glass",
+  "ingredients": [
+   "Cognac",
+   "White crème de menthe"
+  ],
+  "funFact": "It was the drink of the American upper class in the early twentieth century — Reginald Vanderbilt is credited with popularising it, and it appears in enough novels to count as a character trait.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "White crème de menthe",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add the cognac and crème de menthe to a shaker with ice.",
+    "Shake hard for 12 seconds — the Stinger is traditionally shaken, not stirred.",
+    "Strain into a chilled coupe, or over crushed ice in a rocks glass.",
+    "Garnish with a mint sprig if serving over ice."
+   ],
+   "garnish": "Mint sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "stone-fence",
+  "name": "Stone Fence",
+  "subcategory": "Highball",
+  "description": "Rum or whiskey topped with hard cider. Ethan Allen's men reportedly drank it before taking Fort Ticonderoga, which explains a great deal.",
+  "abv": "12–14%",
+  "origin": "New England, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "oak",
+   "cider",
+   "spice"
+  ],
+  "glassware": "Tall glass or tankard",
+  "ingredients": [
+   "Dark rum or rye whiskey",
+   "Hard cider",
+   "Angostura bitters"
+  ],
+  "funFact": "It is one of the oldest recorded American mixed drinks, predating the word 'cocktail' — colonial New England had cider and rum in abundance and very little else to mix.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum or rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Hard cider",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the rum or whiskey and the bitters.",
+    "Top with cold hard cider.",
+    "Stir once and garnish with an apple slice."
+   ],
+   "garnish": "Apple slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tom-and-jerry",
+  "name": "Tom and Jerry",
+  "subcategory": "Hot",
+  "description": "A hot eggnog batter spiked with rum and brandy, topped with boiling milk. American Christmas before eggnog took over the marketing.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "egg",
+   "nutmeg",
+   "vanilla",
+   "brandy"
+  ],
+  "glassware": "Tom and Jerry mug",
+  "ingredients": [
+   "Rum",
+   "Brandy",
+   "Eggs",
+   "Sugar",
+   "Hot milk",
+   "Nutmeg"
+  ],
+  "funFact": "Jerry Thomas claimed to have invented it, which is doubtful — but he popularised it so thoroughly that dedicated Tom and Jerry mug sets were sold across America for a century.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Eggs, separated",
+     "amount": "6"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Dark rum",
+     "amount": "1 oz / 30 ml per serve"
+    },
+    {
+     "item": "Brandy",
+     "amount": "1 oz / 30 ml per serve"
+    },
+    {
+     "item": "Hot milk",
+     "amount": "4 oz / 120 ml per serve"
+    },
+    {
+     "item": "Ground allspice, cinnamon and cloves",
+     "amount": "0.5 tsp total"
+    }
+   ],
+   "steps": [
+    "Beat the egg whites to stiff peaks, then beat the yolks separately with the sugar and spices.",
+    "Fold the yolk mixture into the whites to make a thick batter — this keeps for days in the fridge.",
+    "Put two heaped tablespoons of batter in a warmed mug.",
+    "Add the rum and brandy and stir to loosen.",
+    "Top with hot milk, stir until foamy, and grate nutmeg over the top."
+   ],
+   "garnish": "Freshly grated nutmeg",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tuxedo",
+  "name": "Tuxedo",
+  "subcategory": "Spirit-Forward",
+  "description": "A Martini with maraschino and absinthe. Dry, faintly nutty and named for the New York enclave that also named the dinner jacket.",
+  "abv": "26–28%",
+  "origin": "Tuxedo Park, New York, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "cherry",
+   "anise",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Old Tom gin",
+   "Dry vermouth",
+   "Maraschino liqueur",
+   "Absinthe",
+   "Orange bitters"
+  ],
+  "funFact": "The Tuxedo Club in Tuxedo Park gave its name to both the jacket and the drink; the cocktail is essentially a Martinez cousin that never became as famous as either.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Old Tom or London dry gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all the ingredients in a mixing glass with ice.",
+    "Stir for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a cherry and a lemon twist."
+   ],
+   "garnish": "Cherry and lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "twelve-mile-limit",
+  "name": "Twelve Mile Limit",
+  "subcategory": "Sour",
+  "description": "Rum, rye, brandy, lemon and grenadine — three spirits in one glass, named for the line where Prohibition stopped applying.",
+  "abv": "22–24%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pomegranate",
+   "lemon",
+   "rum",
+   "rye"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Rye whiskey",
+   "Brandy",
+   "Lemon juice",
+   "Grenadine"
+  ],
+  "funFact": "The twelve-mile limit was the boundary of US jurisdiction after 1924 — beyond it sat 'Rum Row', a floating line of ships selling legally to anyone who sailed out far enough.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Rye whiskey",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lemon twist."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "widows-kiss",
+  "name": "Widow's Kiss",
+  "subcategory": "Spirit-Forward",
+  "description": "Calvados, Bénédictine and yellow Chartreuse with Angostura. Autumnal, herbal and considerably heavier than its delicate name suggests.",
+  "abv": "30–32%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "herbal",
+   "honey",
+   "baking spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Calvados",
+   "Bénédictine",
+   "Yellow Chartreuse",
+   "Angostura bitters"
+  ],
+  "funFact": "It first appears in George Kappeler's 1895 'Modern American Drinks', from the Holland House Hotel in New York — a rare nineteenth-century cocktail with no base spirit dilution at all.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Calvados",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Yellow Chartreuse",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all the ingredients in a mixing glass with ice.",
+    "Stir for 25 to 30 seconds — this one needs the dilution.",
+    "Strain into a chilled coupe.",
+    "Garnish with a cherry or an apple slice."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ }
+]

@@ -1,0 +1,735 @@
+[
+ {
+  "id": "tej",
+  "name": "Tej",
+  "subcategory": "Regional",
+  "description": "Honey wine fermented with gesho twigs, cloudy gold and served in a round-bottomed flask you cannot put down. Ethiopia's national drink.",
+  "abv": "6–11%",
+  "origin": "Ethiopia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "bitter herb",
+   "yeast"
+  ],
+  "glassware": "Berele flask",
+  "ingredients": [
+   "Honey",
+   "Water",
+   "Gesho (buckthorn)"
+  ],
+  "funFact": "Gesho — a native buckthorn — plays the role hops play in beer, adding bitterness and stopping the honey from tasting cloying. The berele flask has a round bottom precisely so you have to keep holding it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Honey",
+     "amount": "1 kg"
+    },
+    {
+     "item": "Water",
+     "amount": "3 litres"
+    },
+    {
+     "item": "Dried gesho twigs",
+     "amount": "50 g"
+    }
+   ],
+   "steps": [
+    "Dissolve the honey in warm water in a large fermentation vessel.",
+    "Add the gesho twigs and cover loosely with cloth.",
+    "Leave at room temperature for a week, stirring daily, until it ferments actively.",
+    "Strain out the gesho and let it settle for another one to two weeks.",
+    "Serve cool in a berele flask, cloudy and unfiltered."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "arak-grapefruit",
+  "name": "Arak Grapefruit",
+  "subcategory": "Highball",
+  "description": "Arak and fresh grapefruit juice over crushed ice — the drink Tel Aviv's Carmel Market bars pour faster than anything else.",
+  "abv": "12–14%",
+  "origin": "Tel Aviv, Israel",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "grapefruit",
+   "bitter"
+  ],
+  "glassware": "Tumbler or jam jar",
+  "ingredients": [
+   "Arak",
+   "Grapefruit juice",
+   "Mint"
+  ],
+  "funFact": "It became the signature of Tel Aviv's market bars in the 2000s, poured into whatever glassware was to hand — the jam jar service was originally not a style choice.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Arak",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh grapefruit juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed, to fill"
+    },
+    {
+     "item": "Mint sprig",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Fill a tumbler with crushed ice.",
+    "Pour in the arak — it will turn cloudy as it hits the ice.",
+    "Top with fresh grapefruit juice.",
+    "Stir once and slap a mint sprig between your palms before dropping it in."
+   ],
+   "garnish": "Mint sprig",
+   "method": "built"
+  }
+ },
+ {
+  "id": "kumys",
+  "name": "Kumys",
+  "subcategory": "Regional",
+  "description": "Fermented mare's milk, faintly fizzy and sharply sour. The steppe's oldest drink, and still poured for guests before anything else.",
+  "abv": "1–3%",
+  "origin": "Kazakhstan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour milk",
+   "yeast",
+   "tang"
+  ],
+  "glassware": "Wooden bowl or ceramic cup",
+  "ingredients": [
+   "Mare's milk",
+   "Kumys starter culture"
+  ],
+  "funFact": "Herodotus described the Scythians making it 2,500 years ago; the fermentation is both alcoholic and lactic, which is why it fizzes and sours at the same time.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh mare's milk",
+     "amount": "2 litres"
+    },
+    {
+     "item": "Kumys starter (or previous batch)",
+     "amount": "1 cup"
+    },
+    {
+     "item": "A leather or wooden churn",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Warm the fresh mare's milk to about 25°C.",
+    "Stir in the starter culture from a previous batch.",
+    "Churn or agitate the mixture repeatedly over one to two days — traditionally thousands of strokes.",
+    "Ferment until it turns sharp, slightly fizzy and faintly alcoholic.",
+    "Serve cool in wide bowls, offering the first cup to the guest."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "dawa",
+  "name": "Dawa",
+  "subcategory": "Sour",
+  "description": "'Medicine' in Swahili: vodka, honey and lime crushed together with a honey-coated wooden stick you keep stirring as you drink.",
+  "abv": "20–22%",
+  "origin": "Nairobi, Kenya",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "grain"
+  ],
+  "glassware": "Rocks glass with a dawa stick",
+  "ingredients": [
+   "Vodka",
+   "Honey",
+   "Lime",
+   "Crushed ice"
+  ],
+  "funFact": "The dawa stick is dipped in honey and left in the glass — the drinker controls the sweetness by how much they stir it, which makes every Dawa slightly different by the last sip.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime, quartered",
+     "amount": "1 whole"
+    },
+    {
+     "item": "Honey",
+     "amount": "1 tbsp, plus more for the stick"
+    },
+    {
+     "item": "Crushed ice",
+     "amount": "to fill"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp"
+    }
+   ],
+   "steps": [
+    "Muddle the lime quarters with the sugar in a rocks glass.",
+    "Fill the glass with crushed ice.",
+    "Pour over the vodka.",
+    "Dip a wooden stick in honey and stand it in the glass.",
+    "Serve with the stick still in — the drinker stirs the honey in to taste."
+   ],
+   "garnish": "A honey-dipped wooden dawa stick",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "arak-lemonade",
+  "name": "Arak Lemonade",
+  "subcategory": "Highball",
+  "description": "Levantine arak lengthened with lemonade and mint — the anise softened into something you can drink through a Beirut summer.",
+  "abv": "12–14%",
+  "origin": "Lebanon",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "lemon",
+   "mint"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Arak",
+   "Lemonade",
+   "Mint",
+   "Lemon"
+  ],
+  "funFact": "Lebanese arak is distilled three times and aged in clay amphorae, and the mountain villages that make it argue about grape variety the way Burgundy argues about vineyards.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Arak",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Fresh lemonade",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "6"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Gently press the mint leaves in the bottom of a tall glass — bruise, do not shred.",
+    "Add the arak and lemon juice.",
+    "Fill with ice and top with cold lemonade.",
+    "Stir once and garnish with a mint sprig and a lemon wheel."
+   ],
+   "garnish": "Mint sprig and lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chapman",
+  "name": "Chapman",
+  "subcategory": "Regional",
+  "description": "Fanta, Sprite, blackcurrant and Angostura over cucumber and citrus. Usually alcohol-free, frequently not, and on every Nigerian party menu.",
+  "abv": "0–8%",
+  "origin": "Lagos, Nigeria",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "citrus",
+   "cucumber",
+   "bitters"
+  ],
+  "glassware": "Tall glass or pitcher",
+  "ingredients": [
+   "Fanta",
+   "Sprite",
+   "Blackcurrant cordial",
+   "Angostura bitters",
+   "Cucumber"
+  ],
+  "funFact": "It is said to have been created at the Ikoyi Club in Lagos for a British member named Chapman; Nigerians now treat it as entirely their own, and the cucumber is non-negotiable.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fanta orange",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Sprite",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Blackcurrant cordial (Ribena)",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Cucumber slices",
+     "amount": "3"
+    },
+    {
+     "item": "Lemon and orange slices",
+     "amount": "1 each"
+    },
+    {
+     "item": "Ice",
+     "amount": "to fill"
+    },
+    {
+     "item": "Vodka or gin",
+     "amount": "1.5 oz / 45 ml, optional"
+    }
+   ],
+   "steps": [
+    "Put the cucumber, lemon and orange slices in a tall glass and fill with ice.",
+    "Pour in the blackcurrant cordial and the bitters.",
+    "Add the Fanta and Sprite in equal measure.",
+    "Stir gently to combine and bring the colour through.",
+    "Add a shot of vodka or gin if making the adult version."
+   ],
+   "garnish": "Cucumber, lemon and orange slices",
+   "method": "built"
+  }
+ },
+ {
+  "id": "palm-wine",
+  "name": "Palm Wine",
+  "subcategory": "Regional",
+  "description": "Sap tapped straight from the palm, fermenting as you carry it. Sweet in the morning, sour and sharp by evening — the clock is part of the drink.",
+  "abv": "2–5%",
+  "origin": "West Africa",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yeast",
+   "sour",
+   "coconut",
+   "tang"
+  ],
+  "glassware": "Calabash or plain tumbler",
+  "ingredients": [
+   "Fresh palm sap"
+  ],
+  "funFact": "Fermentation begins within hours of tapping, with no yeast added — the wild yeasts are already on the tree. A morning tapping is mild and sweet; the same container by nightfall is sour and considerably stronger.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Freshly tapped palm sap",
+     "amount": "as available"
+    },
+    {
+     "item": "A clean gourd or container",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Tap the sap from the palm into a clean container — traditionally at dawn.",
+    "Leave it to ferment naturally; wild yeasts start work within a couple of hours.",
+    "Taste as it goes: sweet and lightly fizzy early, dry and sour by the end of the day.",
+    "Strain through cloth to remove debris.",
+    "Serve at ambient temperature, the same day it was tapped."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "dom-pedro",
+  "name": "Dom Pedro",
+  "subcategory": "Creamy & Dessert",
+  "description": "Vanilla ice cream blended with whisky or Amarula until it pours. On every South African dessert menu, and ordered by adults without embarrassment.",
+  "abv": "8–10%",
+  "origin": "South Africa",
+  "rarity": "common",
+  "tastingNotes": [
+   "vanilla",
+   "cream",
+   "whisky",
+   "caramel"
+  ],
+  "glassware": "Wine glass or tumbler",
+  "ingredients": [
+   "Vanilla ice cream",
+   "Whisky or Amarula",
+   "Cream"
+  ],
+  "funFact": "It appears on South African menus far more often than it does anywhere else on earth, and ordering one 'with Kahlúa' rather than whisky is a legitimate regional variation.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Good vanilla ice cream",
+     "amount": "3 large scoops"
+    },
+    {
+     "item": "Whisky, Amarula or Kahlúa",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Fresh cream",
+     "amount": "1 oz / 30 ml"
+    }
+   ],
+   "steps": [
+    "Let the ice cream soften for a few minutes so it blends smoothly.",
+    "Put the ice cream, spirit and cream in a blender.",
+    "Blend briefly — you want it thick and pourable, not liquid.",
+    "Pour into a wine glass and dust with grated chocolate or nutmeg.",
+    "Serve with both a spoon and a straw."
+   ],
+   "garnish": "Grated chocolate",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "klippies-en-coke",
+  "name": "Klippies en Coke",
+  "subcategory": "Highball",
+  "description": "Klipdrift brandy and Coke, poured heavy. South Africa drinks more brandy-and-cola per head than almost anywhere, and this is why.",
+  "abv": "10–12%",
+  "origin": "South Africa",
+  "rarity": "common",
+  "tastingNotes": [
+   "brandy",
+   "cola",
+   "caramel"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Klipdrift brandy",
+   "Cola"
+  ],
+  "funFact": "South African brandy is legally required to be pot-still aged at least three years for the premium grades — a rigour largely wasted on a drink that is then filled to the top with cola.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Klipdrift or South African brandy",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the brandy.",
+    "Top with cold cola.",
+    "Stir once and add a lemon wedge if you like."
+   ],
+   "garnish": "Lemon wedge, optional",
+   "method": "built"
+  }
+ },
+ {
+  "id": "rock-shandy",
+  "name": "Rock Shandy",
+  "subcategory": "Party",
+  "description": "Soda water, lemonade and a hard shake of Angostura, over ice. Essentially alcohol-free, and the default order at any Southern African clubhouse.",
+  "abv": "0–1%",
+  "origin": "Southern Africa",
+  "rarity": "common",
+  "tastingNotes": [
+   "lemon",
+   "bitters",
+   "citrus",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Soda water",
+   "Lemonade",
+   "Angostura bitters",
+   "Lemon"
+  ],
+  "funFact": "The bitters are the only alcohol in it, in quantities small enough that it is served to children — and it is the drink that keeps Angostura relevant in a region that otherwise barely mixes cocktails.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Soda water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lemonade",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "6 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Lemon wedge",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in equal parts soda water and lemonade.",
+    "Dash the Angostura generously over the top until the drink turns pink.",
+    "Stir once and squeeze in a lemon wedge."
+   ],
+   "garnish": "Lemon wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "springbokkie",
+  "name": "Springbokkie",
+  "subcategory": "Shot",
+  "description": "Green over cream, in the colours of the national rugby jersey: crème de menthe under a float of Amarula. Poured in vast quantities on match day.",
+  "abv": "20–22%",
+  "origin": "South Africa",
+  "rarity": "common",
+  "tastingNotes": [
+   "mint",
+   "cream",
+   "caramel"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Crème de menthe",
+   "Amarula cream liqueur"
+  ],
+  "funFact": "Amarula is made from the fruit of the marula tree, which elephants are famously — and mostly apocryphally — said to get drunk on after eating the fallen fruit.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Green crème de menthe",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Amarula cream liqueur",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the crème de menthe into a shot glass.",
+    "Float the Amarula over the back of a barspoon so it sits in a clean layer.",
+    "Serve immediately, before the layers start to bleed.",
+    "Drink in one."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "konyagi-and-tonic",
+  "name": "Konyagi and Tonic",
+  "subcategory": "Highball",
+  "description": "Tanzania's own clear spirit with tonic and lime — light, faintly sweet, and poured on every Dar es Salaam terrace at sunset.",
+  "abv": "10–12%",
+  "origin": "Tanzania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "quinine",
+   "cane",
+   "lime"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Konyagi",
+   "Tonic water",
+   "Lime"
+  ],
+  "funFact": "Konyagi occupies an odd legal space — it is bottled at 35% and labelled as a spirit rather than a gin, though it drinks like a light, sweetened one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Konyagi",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Tonic water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the Konyagi and lime juice.",
+    "Top with cold tonic water.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "boukha-and-orange",
+  "name": "Boukha and Orange",
+  "subcategory": "Highball",
+  "description": "Tunisian fig brandy over ice with fresh orange juice — dry, faintly floral, and the standard way to serve boukha long.",
+  "abv": "12–14%",
+  "origin": "Tunisia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "fig",
+   "orange",
+   "dry fruit"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Boukha",
+   "Orange juice"
+  ],
+  "funFact": "Boukha has been distilled from Mediterranean figs in Tunisia since the nineteenth century; unlike most fruit brandies it carries no added sugar, which is why it drinks surprisingly dry.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Boukha",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Fresh orange juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the boukha.",
+    "Top with fresh orange juice.",
+    "Stir once and garnish with an orange slice."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "aslan-sutu",
+  "name": "Aslan Sütü",
+  "subcategory": "Regional",
+  "description": "'Lion's milk': rakı and cold water in equal parts, which turns it milky white. Sipped slowly over a long table of meze, never rushed.",
+  "abv": "20–24%",
+  "origin": "Turkey",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "water",
+   "liquorice"
+  ],
+  "glassware": "Tall narrow rakı glass",
+  "ingredients": [
+   "Rakı",
+   "Cold water",
+   "Ice"
+  ],
+  "funFact": "The order matters: rakı first, then water, then ice — adding ice before water shocks the anise oils and leaves the drink cloudy in the wrong way. Turks call the milky effect the louche, and drinking it fast is considered poor form.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rakı",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ice cubes",
+     "amount": "2, added last"
+    }
+   ],
+   "steps": [
+    "Pour the rakı into a tall narrow glass, filling it about a third.",
+    "Add cold water in roughly equal measure and watch it turn opaque white.",
+    "Only now drop in one or two ice cubes.",
+    "Sip slowly alongside white cheese, melon and meze — rakı is a meal-length drink."
+   ],
+   "garnish": "None — the meze is the garnish",
+   "method": "built"
+  }
+ },
+ {
+  "id": "waragi-and-tonic",
+  "name": "Waragi and Tonic",
+  "subcategory": "Highball",
+  "description": "Uganda's juniper-flavoured banana spirit, lengthened with tonic and lime. Sharper and drier than the gin it is usually compared to.",
+  "abv": "12–14%",
+  "origin": "Uganda",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "banana",
+   "quinine",
+   "lime"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Waragi",
+   "Tonic water",
+   "Lime"
+  ],
+  "funFact": "The name comes from 'war gin', from the colonial era; commercial Uganda Waragi is distilled from bananas or cassava and then flavoured with juniper, which makes it gin-adjacent rather than gin.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Uganda Waragi",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Tonic water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the waragi and lime juice.",
+    "Top with cold tonic water.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ }
+]

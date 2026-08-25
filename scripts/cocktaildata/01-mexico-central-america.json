@@ -1,0 +1,945 @@
+[
+ {
+  "id": "panty-ripper",
+  "name": "Panty Ripper",
+  "subcategory": "Tiki & Tropical",
+  "description": "Belize's unofficial national drink, with the least diplomatic name in the Caribbean: coconut rum and pineapple juice, over ice, on a beach.",
+  "abv": "10–12%",
+  "origin": "Belize",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coconut",
+   "pineapple",
+   "vanilla"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Coconut rum",
+   "Pineapple juice",
+   "Lime"
+  ],
+  "funFact": "Every bar from Caye Caulker to San Ignacio serves it, and every bartender tells a different story about the name — none of which they will repeat in front of your parents.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Coconut rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Pour in the coconut rum and the lime juice.",
+    "Top with cold pineapple juice.",
+    "Stir briefly to combine and garnish with a pineapple wedge."
+   ],
+   "garnish": "Pineapple wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chiliguaro",
+  "name": "Chiliguaro",
+  "subcategory": "Shot",
+  "description": "A Costa Rican shot that behaves like a tiny Bloody Mary: guaro, tomato, lime and enough Salsa Lizano heat to wake the table up.",
+  "abv": "16–18%",
+  "origin": "San José, Costa Rica",
+  "rarity": "rare",
+  "tastingNotes": [
+   "tomato",
+   "chilli",
+   "lime",
+   "cane"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Guaro",
+   "Tomato juice",
+   "Lime juice",
+   "Hot sauce",
+   "Salsa Lizano"
+  ],
+  "funFact": "Salsa Lizano — a tangy Costa Rican condiment closer to brown sauce than hot sauce — is the ingredient that separates a real chiliguaro from a small Bloody Mary.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Guaro (Cacique)",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Tomato juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Salsa Lizano",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Hot sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Salt and pepper",
+     "amount": "a pinch each"
+    }
+   ],
+   "steps": [
+    "Combine everything in a shaker with ice.",
+    "Shake briefly, about 8 seconds — you want it cold, not diluted.",
+    "Strain into chilled shot glasses.",
+    "Serve immediately with lime wedges on the side."
+   ],
+   "garnish": "Lime wedge",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "guaro-sour",
+  "name": "Guaro Sour",
+  "subcategory": "Sour",
+  "description": "Costa Rica's national spirit taken the simplest possible way: guaro, lime, sugar, ice. Clean, sharp and dangerously easy in the heat.",
+  "abv": "14–16%",
+  "origin": "Costa Rica",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cane",
+   "lime",
+   "sugar"
+  ],
+  "glassware": "Rocks glass, salted rim",
+  "ingredients": [
+   "Guaro",
+   "Lime juice",
+   "Simple syrup",
+   "Salt rim"
+  ],
+  "funFact": "Guaro — Cacique is the state-blessed brand — is a sugarcane spirit so central to Costa Rican life that its production was a government monopoly for most of the twentieth century.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Guaro (Cacique)",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Salt",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rim a rocks glass with lime and salt.",
+    "Shake the guaro, lime juice and simple syrup hard with ice.",
+    "Strain into the rimmed glass over fresh ice.",
+    "Garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel on a salted rim",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "ponche-de-frutas",
+  "name": "Ponche de Frutas",
+  "subcategory": "Hot",
+  "description": "Christmas in a mug across Guatemala: tropical fruit simmered with cinnamon and panela, spiked with rum at the last minute.",
+  "abv": "8–10%",
+  "origin": "Guatemala",
+  "rarity": "rare",
+  "tastingNotes": [
+   "stewed fruit",
+   "cinnamon",
+   "panela",
+   "rum"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Rum",
+   "Pineapple",
+   "Papaya",
+   "Raisins",
+   "Panela",
+   "Cinnamon"
+  ],
+  "funFact": "The fruit is meant to be eaten, not strained out — a Guatemalan ponche is served with a spoon, and the pieces at the bottom of the mug have been quietly soaking in rum all evening.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum",
+     "amount": "1.5 oz / 45 ml per mug"
+    },
+    {
+     "item": "Pineapple, diced",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Papaya, diced",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Raisins",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Panela or brown sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "3"
+    },
+    {
+     "item": "Water",
+     "amount": "2 litres"
+    }
+   ],
+   "steps": [
+    "Bring the water, panela and cinnamon sticks to a simmer in a large pot.",
+    "Add the diced fruit and raisins and simmer gently for about 40 minutes, until the fruit is soft and the liquid is amber.",
+    "Ladle the hot punch and a generous spoonful of fruit into each mug.",
+    "Add the rum to each mug individually, off the heat, so the alcohol survives.",
+    "Serve hot with a spoon."
+   ],
+   "garnish": "A cinnamon stick and the stewed fruit",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "guifiti",
+  "name": "Guifiti",
+  "subcategory": "Regional",
+  "description": "Garífuna herbal medicine that became a shot: raw rum steeped for weeks with roots, bark and spices until it turns dark, bitter and faintly medicinal.",
+  "abv": "35–40%",
+  "origin": "Garífuna coast, Honduras",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter herbs",
+   "clove",
+   "root",
+   "cane"
+  ],
+  "glassware": "Small tumbler or shot glass",
+  "ingredients": [
+   "White rum",
+   "Assorted roots and barks",
+   "Cinnamon",
+   "Clove",
+   "Honey"
+  ],
+  "funFact": "Guifiti recipes are family property along the Honduran and Belizean Garífuna coast, traditionally prescribed for everything from stomach trouble to low spirits — the recipe is often only shared with an heir.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Overproof white rum",
+     "amount": "750 ml bottle"
+    },
+    {
+     "item": "Mixed roots, barks and herbs",
+     "amount": "1 cup, dried"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Honey",
+     "amount": "2 tbsp"
+    }
+   ],
+   "steps": [
+    "Pack the roots, barks, cinnamon and cloves into a clean glass jar.",
+    "Cover completely with the overproof rum and seal.",
+    "Leave in a dark place for at least three weeks, shaking the jar every few days.",
+    "Strain out the solids, stir in the honey until dissolved, and rebottle.",
+    "Serve in small measures at room temperature."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "cazuela",
+  "name": "Cazuela",
+  "subcategory": "Punch & Cobbler",
+  "description": "A clay bowl the size of your head, packed with citrus, tequila and grapefruit soda, drunk through straws by everyone at the table. Sonora's answer to the punch bowl.",
+  "abv": "8–10%",
+  "origin": "Sonora, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "orange",
+   "agave",
+   "lime"
+  ],
+  "glassware": "Glazed clay cazuela bowl",
+  "ingredients": [
+   "Tequila",
+   "Grapefruit soda",
+   "Orange",
+   "Lime",
+   "Grapefruit",
+   "Chilli salt"
+  ],
+  "funFact": "The bowl is the point: cazuelas are served in unglazed or glazed earthenware that keeps the drink cold, and in Hermosillo the bar brings it with the fruit still floating and scissors to cut more.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Grapefruit soda",
+     "amount": "12 oz / 360 ml"
+    },
+    {
+     "item": "Orange",
+     "amount": "1, cut into wedges"
+    },
+    {
+     "item": "Lime",
+     "amount": "2, cut into wedges"
+    },
+    {
+     "item": "Grapefruit",
+     "amount": "0.5, cut into wedges"
+    },
+    {
+     "item": "Chilli salt",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "to fill"
+    }
+   ],
+   "steps": [
+    "Rim a large clay cazuela with lime and chilli salt.",
+    "Squeeze the orange, lime and grapefruit wedges into the bowl and drop the spent wedges in.",
+    "Fill with ice and pour over the tequila.",
+    "Top with grapefruit soda and stir once with a long spoon.",
+    "Serve in the middle of the table with straws for everyone."
+   ],
+   "garnish": "The squeezed fruit wedges, left floating",
+   "method": "built"
+  }
+ },
+ {
+  "id": "charro-negro",
+  "name": "Charro Negro",
+  "subcategory": "Highball",
+  "description": "The Cuba Libre's tequila-drinking cousin: blanco, cola, lime, salt on the rim if you're doing it properly. Jalisco's default order when the Paloma feels like too much work.",
+  "abv": "10–12%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "cola",
+   "agave",
+   "lime",
+   "caramel"
+  ],
+  "glassware": "Highball glass, salted rim",
+  "ingredients": [
+   "Blanco tequila",
+   "Cola",
+   "Lime juice",
+   "Salt rim"
+  ],
+  "funFact": "Named for the charro — the Mexican horseman — and 'negro' for the cola; in Jalisco cantinas it is often built straight into the bottle-sized 'vitrolero' glass and shared.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Salt",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Run a lime wedge around the rim of a highball glass and roll it in salt.",
+    "Fill the glass with ice cubes.",
+    "Add the tequila and lime juice.",
+    "Top with cold cola and stir once, gently, to combine.",
+    "Garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge on a salted rim",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chelada",
+  "name": "Chelada",
+  "subcategory": "Brunch",
+  "description": "Beer, lime, salt, ice. That's it — no tomato, no sauces, no debate. The Michelada stripped back to the two things that actually matter on a hot afternoon.",
+  "abv": "4–5%",
+  "origin": "Northern Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "malt",
+   "salt"
+  ],
+  "glassware": "Chilled salt-rimmed schooner",
+  "ingredients": [
+   "Mexican lager",
+   "Lime juice",
+   "Salt rim",
+   "Ice"
+  ],
+  "funFact": "Mexicans distinguish sharply between chelada (lime and salt only) and michelada (with tomato juice and sauces); ordering the wrong one in Monterrey will get you corrected, politely.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mexican lager, very cold",
+     "amount": "1 bottle / 355 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Salt",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "to fill"
+    }
+   ],
+   "steps": [
+    "Rim a chilled schooner or pint glass with lime and salt.",
+    "Fill the glass with ice cubes.",
+    "Add the lime juice.",
+    "Pour the cold lager down the side of the glass to keep the head under control.",
+    "Garnish with a lime wedge and top up from the bottle as you drink."
+   ],
+   "garnish": "Lime wedge on a salted rim",
+   "method": "built"
+  }
+ },
+ {
+  "id": "la-bandera",
+  "name": "La Bandera",
+  "subcategory": "Regional",
+  "description": "Not one glass but three: lime, tequila, sangrita — green, white, red, the flag on the bar top. Sip across them in any order and argue about it afterwards.",
+  "abv": "40% (tequila pour)",
+  "origin": "Mexico City, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "lime",
+   "tomato",
+   "chilli"
+  ],
+  "glassware": "Three caballito shot glasses",
+  "ingredients": [
+   "Blanco tequila",
+   "Lime juice",
+   "Sangrita"
+  ],
+  "funFact": "The order is a national argument: most drinkers go lime, tequila, sangrita, but purists insist sangrita comes last only to cleanse, never to chase — the tequila is meant to be sipped, not shot.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco or reposado tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Fresh lime juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sangrita",
+     "amount": "1.5 oz / 45 ml"
+    }
+   ],
+   "steps": [
+    "Pour the lime juice into the first caballito, the tequila into the second, and the sangrita into the third.",
+    "Line the three glasses up left to right so they read green, white, red.",
+    "Serve at cool room temperature — never over ice, and never mixed.",
+    "Sip the tequila slowly, alternating with small sips of lime and sangrita."
+   ],
+   "garnish": "None — the three colours are the garnish",
+   "method": "built"
+  }
+ },
+ {
+  "id": "mexican-firing-squad",
+  "name": "Mexican Firing Squad",
+  "subcategory": "Sour",
+  "description": "A 1930s Mexico City sour that Charles H. Baker wrote down and the world then forgot for seventy years: tequila, lime, grenadine, a hard lash of Angostura.",
+  "abv": "18–20%",
+  "origin": "Mexico City, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "agave",
+   "pomegranate",
+   "lime",
+   "baking spice"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Lime juice",
+   "Grenadine",
+   "Angostura bitters"
+  ],
+  "funFact": "Baker recorded it at La Cucaracha bar in 1937 in his 'Gentleman's Companion', calling it a drink of 'considerable authority' — one of the earliest tequila cocktails documented in English.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "splash, optional"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add the tequila, lime juice, grenadine and bitters to a shaker with ice.",
+    "Shake hard for about 12 seconds until well chilled.",
+    "Strain into a rocks glass over fresh ice.",
+    "Add a small splash of soda if you want it longer.",
+    "Garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mezcalita",
+  "name": "Mezcalita",
+  "subcategory": "Sour",
+  "description": "The Margarita rebuilt on mezcal, which changes everything: the smoke arrives first, the lime cuts through it, and the agave finishes earthy rather than bright.",
+  "abv": "20–22%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "smoke",
+   "lime",
+   "agave",
+   "chilli"
+  ],
+  "glassware": "Rocks glass with worm-salt rim",
+  "ingredients": [
+   "Mezcal",
+   "Lime juice",
+   "Agave syrup",
+   "Orange liqueur",
+   "Sal de gusano"
+  ],
+  "funFact": "The rim is the tell: real Oaxacan service uses sal de gusano — salt ground with toasted agave worm and chilli — which tastes far better than its description suggests.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mezcal espadín",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Agave syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sal de gusano or chilli salt",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rim a rocks glass with lime and sal de gusano, then set it aside.",
+    "Shake the mezcal, lime juice, agave syrup and orange liqueur hard with ice.",
+    "Strain into the rimmed glass over a large ice cube.",
+    "Garnish with a lime wheel and, if you have one, a dried chilli."
+   ],
+   "garnish": "Lime wheel and dried chilli",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "sangrita",
+  "name": "Sangrita",
+  "subcategory": "Regional",
+  "description": "Tequila's sparring partner: citrus, chilli and pomegranate in a shot glass of its own. Not a mixer — a counterweight, sipped between sips.",
+  "abv": "0% (chaser)",
+  "origin": "Jalisco, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "chilli",
+   "pomegranate",
+   "lime"
+  ],
+  "glassware": "Caballito shot glass",
+  "ingredients": [
+   "Orange juice",
+   "Lime juice",
+   "Pomegranate",
+   "Chilli",
+   "Salt"
+  ],
+  "funFact": "The original Jalisco recipe contains no tomato at all — that was a later Mexico City and American addition. Traditional sangrita gets its red from pomegranate and chilli, not from a can.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh orange juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Fresh lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Pomegranate molasses or grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Chilli powder or hot sauce",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Salt",
+     "amount": "a pinch"
+    }
+   ],
+   "steps": [
+    "Combine the orange juice, lime juice and pomegranate molasses in a jug.",
+    "Add the chilli powder and salt and whisk until dissolved.",
+    "Chill for at least an hour so the heat settles into the citrus.",
+    "Pour into caballito glasses and serve alongside a matching pour of good tequila."
+   ],
+   "garnish": "None — it is the garnish for the tequila",
+   "method": "built"
+  }
+ },
+ {
+  "id": "submarino",
+  "name": "Submarino",
+  "subcategory": "Party",
+  "description": "A shot of tequila dropped, glass and all, into a beer. It sinks, it fizzes, it disappears — and then so does your evening.",
+  "abv": "6–8%",
+  "origin": "Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "malt",
+   "agave",
+   "bitter"
+  ],
+  "glassware": "Beer stein with a caballito inside",
+  "ingredients": [
+   "Mexican lager",
+   "Tequila"
+  ],
+  "funFact": "The same trick appears worldwide — Boilermaker in the US, U-Boot in Germany, Jägerbomb everywhere — but the Mexican version insists the submarine be tequila and the ocean be a light lager.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mexican lager",
+     "amount": "12 oz / 355 ml"
+    },
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    }
+   ],
+   "steps": [
+    "Pour the beer into a large stein, leaving room at the top.",
+    "Fill a caballito shot glass with tequila.",
+    "Lower the shot glass carefully into the beer so it sinks upright.",
+    "Drink immediately, before the tequila fully diffuses."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "torito",
+  "name": "Torito",
+  "subcategory": "Creamy & Dessert",
+  "description": "Veracruz in a bottle: cane liquor whipped with condensed milk and fruit — peanut, guanabana, mango — until it drinks like a boozy milkshake with a suntan.",
+  "abv": "12–14%",
+  "origin": "Veracruz, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "condensed milk",
+   "peanut",
+   "cane",
+   "vanilla"
+  ],
+  "glassware": "Chilled tumbler or plastic cup",
+  "ingredients": [
+   "Aguardiente de caña",
+   "Condensed milk",
+   "Evaporated milk",
+   "Peanut or fruit purée"
+  ],
+  "funFact": "Toritos are sold from coolers along the Veracruz malecón in a dozen flavours; the peanut ('de cacahuate') version is the benchmark, and every vendor claims their abuela's ratio.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aguardiente de caña or white rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Condensed milk",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Evaporated milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Peanut butter or fruit purée",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup, cubed"
+    }
+   ],
+   "steps": [
+    "Add the milks and the peanut butter or fruit purée to a blender.",
+    "Pour in the cane spirit and add the ice.",
+    "Blend on high for about 30 seconds until completely smooth and frothy.",
+    "Pour into a chilled tumbler and serve immediately, before it separates.",
+    "Dust the top with ground cinnamon or crushed peanut."
+   ],
+   "garnish": "Ground cinnamon or crushed peanut",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "vampiro",
+  "name": "Vampiro",
+  "subcategory": "Highball",
+  "description": "Tequila, grapefruit soda and sangrita in one blood-red glass. Sweet, salty, citric and quietly spicy — the Paloma after it learned to bite.",
+  "abv": "9–11%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "tomato",
+   "chilli",
+   "salt"
+  ],
+  "glassware": "Highball or clay cantarito",
+  "ingredients": [
+   "Blanco tequila",
+   "Grapefruit soda",
+   "Sangrita",
+   "Lime juice",
+   "Chilli salt rim"
+  ],
+  "funFact": "The name means 'vampire' — for the colour, not the bite. It is the house drink of the bars around Tlaquepaque, where sangrita is made fresh daily and never contains tomato juice from a can.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sangrita",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grapefruit soda",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Chilli salt (Tajín)",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Rim a highball glass with lime and chilli salt, then fill it with ice.",
+    "Pour in the tequila, sangrita and lime juice.",
+    "Top with grapefruit soda.",
+    "Stir gently from the bottom once to marble the colours without fully mixing them.",
+    "Garnish with a lime wheel and an extra dusting of chilli salt."
+   ],
+   "garnish": "Lime wheel and chilli salt",
+   "method": "built"
+  }
+ },
+ {
+  "id": "macua",
+  "name": "Macuá",
+  "subcategory": "Sour",
+  "description": "Nicaragua's official national cocktail, decided by public contest: white rum, guava, lemon and orange, tropical without tipping into syrup.",
+  "abv": "12–14%",
+  "origin": "Granada, Nicaragua",
+  "rarity": "rare",
+  "tastingNotes": [
+   "guava",
+   "orange",
+   "lemon",
+   "cane"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "White rum",
+   "Guava juice",
+   "Orange juice",
+   "Lemon juice",
+   "Sugar"
+  ],
+  "funFact": "In 2006 Nicaragua's tourism board ran a nationwide competition to name a national drink; the winner was submitted by a paediatrician from Granada, and the Macuá is named after a local bird.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Guava juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all the ingredients to a shaker with ice.",
+    "Shake for about 12 seconds until the outside of the tin frosts.",
+    "Strain into a highball glass over fresh ice.",
+    "Garnish with an orange slice and a cherry."
+   ],
+   "garnish": "Orange slice and maraschino cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "seco-con-leche",
+  "name": "Seco con Leche",
+  "subcategory": "Creamy & Dessert",
+  "description": "Panama's national spirit cut with milk over ice — sounds wrong, drinks like a cold, boozy horchata with a sugarcane backbone.",
+  "abv": "12–14%",
+  "origin": "Herrera, Panama",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cane",
+   "milk",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Seco Herrerano",
+   "Milk",
+   "Ice"
+  ],
+  "funFact": "Seco Herrerano is triple-distilled from sugarcane and is Panama's national spirit; the milk serve — 'seco con leche' — is standard at interior festivals, especially during Carnaval.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Seco Herrerano",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a rocks glass with ice.",
+    "Pour in the seco.",
+    "Top with cold whole milk.",
+    "Stir gently until the glass frosts, and serve straight away."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ }
+]

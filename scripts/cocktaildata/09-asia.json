@@ -1,0 +1,1041 @@
+[
+ {
+  "id": "guihua-jiu",
+  "name": "Guihua Jiu",
+  "subcategory": "Regional",
+  "description": "Osmanthus blossom steeped in rice wine — intensely floral, apricot-scented, and traditionally opened at the Mid-Autumn Festival.",
+  "abv": "15–18%",
+  "origin": "Guilin, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "osmanthus",
+   "apricot",
+   "honey",
+   "rice"
+  ],
+  "glassware": "Small cup",
+  "ingredients": [
+   "Rice wine",
+   "Osmanthus blossoms",
+   "Rock sugar"
+  ],
+  "funFact": "Guilin is named for its osmanthus forests — 'gui' is the flower, 'lin' the forest — and the wine is drunk at the Mid-Autumn Festival when the trees are in bloom.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rice wine or baijiu",
+     "amount": "750 ml"
+    },
+    {
+     "item": "Dried osmanthus blossoms",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Rock sugar",
+     "amount": "100 g"
+    }
+   ],
+   "steps": [
+    "Rinse the dried osmanthus blossoms briefly and let them dry.",
+    "Layer them with rock sugar in a clean glass jar.",
+    "Pour over the rice wine and seal.",
+    "Store somewhere dark for at least one month, longer for a stronger infusion.",
+    "Strain and serve in small cups, lightly chilled or at room temperature."
+   ],
+   "garnish": "A few floating blossoms",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "warm-huangjiu",
+  "name": "Warm Huangjiu",
+  "subcategory": "Hot",
+  "description": "Shaoxing rice wine warmed with ginger and dried plum. Nutty, savoury and closer to a dry sherry than to anything in the wine aisle.",
+  "abv": "14–18%",
+  "origin": "Shaoxing, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "nutty",
+   "ginger",
+   "umami",
+   "dried plum"
+  ],
+  "glassware": "Small ceramic cup and warming pot",
+  "ingredients": [
+   "Huangjiu (Shaoxing wine)",
+   "Ginger",
+   "Dried plum",
+   "Rock sugar"
+  ],
+  "funFact": "Huangjiu has been brewed in Shaoxing for over two thousand years, and warming it is not just for comfort — heat volatilises the harsher notes and brings the amino-acid savouriness forward.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shaoxing huangjiu",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Fresh ginger, sliced",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Dried sour plum",
+     "amount": "1"
+    },
+    {
+     "item": "Rock sugar",
+     "amount": "1 small piece, optional"
+    }
+   ],
+   "steps": [
+    "Pour the huangjiu into a small ceramic warming pot.",
+    "Add the ginger slices, dried plum and rock sugar.",
+    "Stand the pot in a bowl of hot water — never over direct heat — until it reaches about 40°C.",
+    "Pour into small cups and drink while warm, alongside food."
+   ],
+   "garnish": "A slice of ginger",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "old-monk-and-cola",
+  "name": "Old Monk and Cola",
+  "subcategory": "Highball",
+  "description": "India's dark vanilla-heavy rum with cola and lime. Sold on nostalgia and almost no advertising, and ordered in every Indian bar regardless.",
+  "abv": "12–14%",
+  "origin": "India",
+  "rarity": "common",
+  "tastingNotes": [
+   "vanilla",
+   "cola",
+   "molasses",
+   "lime"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Old Monk rum",
+   "Cola",
+   "Lime"
+  ],
+  "funFact": "Old Monk has barely advertised since it launched in 1954 and still sells on word of mouth alone — for decades it was among the largest-selling dark rums in the world.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Old Monk dark rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the rum and the lime juice.",
+    "Top with cold cola.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "urrak-with-limca",
+  "name": "Urrak with Limca",
+  "subcategory": "Highball",
+  "description": "The first distillation of cashew feni, cut with lemon soda, salt and a green chilli. Goa's summer drink, available for about three months a year.",
+  "abv": "10–12%",
+  "origin": "Goa, India",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cashew",
+   "lemon",
+   "chilli",
+   "salt"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Urrak",
+   "Limca or lemon soda",
+   "Salt",
+   "Green chilli"
+  ],
+  "funFact": "Urrak only exists during the cashew season from March to May — it is feni stopped after the first distillation, and it cannot be stored, so Goans drink the whole supply in a single summer.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Urrak",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Limca or lemon soda",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Salt",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Green chilli",
+     "amount": "1, slit"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice and add the pinch of salt.",
+    "Pour in the urrak and the lime juice.",
+    "Top with cold Limca.",
+    "Drop in a slit green chilli and stir once.",
+    "Drink cold, in the shade."
+   ],
+   "garnish": "A slit green chilli",
+   "method": "built"
+  }
+ },
+ {
+  "id": "arak-madu",
+  "name": "Arak Madu",
+  "subcategory": "Sour",
+  "description": "Balinese palm arak with honey and lime, over ice. Simple, floral and everywhere on the island once the sun goes down.",
+  "abv": "16–18%",
+  "origin": "Bali, Indonesia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "palm",
+   "funky"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "Balinese arak",
+   "Honey",
+   "Lime juice"
+  ],
+  "funFact": "Balinese arak is distilled from palm sap or rice and is used in Hindu ceremony as well as at the beach bar — the ritual pouring of arak onto the ground precedes many temple offerings.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Balinese arak",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Fresh lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Loosen the honey with a splash of warm water so it will mix.",
+    "Shake the arak, honey syrup and lime juice hard with ice.",
+    "Strain into a tumbler over fresh ice.",
+    "Garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bamboo",
+  "name": "Bamboo",
+  "subcategory": "Spirit-Forward",
+  "description": "Dry sherry and dry vermouth, stirred cold with bitters. Low-proof, saline and quietly elegant — and one of the first great cocktails invented in Asia.",
+  "abv": "15–17%",
+  "origin": "Yokohama, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "saline",
+   "almond",
+   "vermouth",
+   "citrus"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Fino sherry",
+   "Dry vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Created by Louis Eppinger at the Grand Hotel in Yokohama in the 1890s — decades before Japan's cocktail culture became famous, and still the best argument for sherry in a mixing glass.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fino or manzanilla sherry",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine the sherry, vermouth and both bitters in a mixing glass with ice.",
+    "Stir for 25 seconds — this drink is low-proof, so watch the dilution.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface and drop it in."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "lemon-sour",
+  "name": "Lemon Sour",
+  "subcategory": "Highball",
+  "description": "Shochu, soda and a whole lemon's worth of juice. Japan's izakaya default — and in Tokyo you often squeeze it yourself, at the table.",
+  "abv": "6–8%",
+  "origin": "Tokyo, Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "lemon",
+   "soda",
+   "clean grain"
+  ],
+  "glassware": "Tall glass or frozen jug",
+  "ingredients": [
+   "Shochu",
+   "Soda water",
+   "Lemon"
+  ],
+  "funFact": "Some Tokyo izakayas serve a 'denki bran' style tabletop version with a frozen lemon half and a hand press, and others install taps that dispense the shochu-soda base directly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shochu",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml, optional"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice — the colder the better.",
+    "Add the shochu and the fresh lemon juice.",
+    "Top with well-chilled soda water.",
+    "Stir once, vertically, to preserve the carbonation.",
+    "Garnish with a lemon wheel or a squeezed half."
+   ],
+   "garnish": "Lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "million-dollar",
+  "name": "Million Dollar",
+  "subcategory": "Sour",
+  "description": "Gin, vermouth, pineapple and egg white shaken to a thick foam. Eppinger's other Yokohama invention, and the one Somerset Maugham wrote about.",
+  "abv": "16–18%",
+  "origin": "Yokohama, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "juniper",
+   "foam",
+   "grenadine"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sweet vermouth",
+   "Pineapple juice",
+   "Egg white",
+   "Grenadine"
+  ],
+  "funFact": "Maugham name-checked it in his Malayan stories, and the Raffles Hotel in Singapore served it long enough that both cities now claim it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all the ingredients without ice for 15 seconds to build the foam.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Grate a little nutmeg over the foam."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "umeshu-soda",
+  "name": "Umeshu Soda",
+  "subcategory": "Spritz",
+  "description": "Japanese plum liqueur lengthened with soda over ice. Sweet-tart, almond-scented, and the easiest drink in any Japanese fridge.",
+  "abv": "5–7%",
+  "origin": "Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "ume plum",
+   "almond",
+   "sugar",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Umeshu",
+   "Soda water"
+  ],
+  "funFact": "Umeshu is made by steeping unripe ume — closer to an apricot than a plum — in shochu with rock sugar; families still make it each June and the stone gives it a faint marzipan note.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Umeshu",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Preserved ume",
+     "amount": "1, optional"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the umeshu.",
+    "Top with cold soda water.",
+    "Stir once gently and drop in a preserved ume if you have one."
+   ],
+   "garnish": "A preserved ume plum",
+   "method": "built"
+  }
+ },
+ {
+  "id": "airag",
+  "name": "Airag",
+  "subcategory": "Regional",
+  "description": "Fermented mare's milk, sour and lightly effervescent. The drink of the steppe, offered to every guest who enters a ger.",
+  "abv": "1–3%",
+  "origin": "Mongolia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour milk",
+   "yeast",
+   "tang"
+  ],
+  "glassware": "Wide bowl",
+  "ingredients": [
+   "Mare's milk",
+   "Starter culture"
+  ],
+  "funFact": "Refusing the bowl outright is a serious discourtesy in Mongolia; the accepted compromise is to touch it to your lips and return it, which satisfies the custom.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh mare's milk",
+     "amount": "several litres"
+    },
+    {
+     "item": "Airag from a previous batch",
+     "amount": "1 cup"
+    },
+    {
+     "item": "A leather khokhuur bag or wooden churn",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Pour the fresh mare's milk into the khokhuur with a cup of the previous batch as starter.",
+    "Churn it repeatedly throughout the day — traditionally a thousand strokes or more.",
+    "Let it ferment for one to three days, continuing to churn.",
+    "Taste until it is sour, faintly fizzy and lightly alcoholic.",
+    "Serve cool in a wide bowl, offered with the right hand."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "tongba",
+  "name": "Tongba",
+  "subcategory": "Hot",
+  "description": "Fermented millet in a wooden pot, topped with hot water and sipped through a bamboo straw. Refill the water and keep going until it stops tasting of anything.",
+  "abv": "5–8%",
+  "origin": "Eastern Nepal",
+  "rarity": "rare",
+  "tastingNotes": [
+   "millet",
+   "sour",
+   "warm",
+   "yeast"
+  ],
+  "glassware": "Wooden tongba pot with a bamboo straw",
+  "ingredients": [
+   "Fermented millet",
+   "Hot water"
+  ],
+  "funFact": "It belongs to the Limbu people of eastern Nepal, and the etiquette is specific: you top up the same millet with hot water several times, and it is impolite to stop after one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fermented whole millet",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Hot water",
+     "amount": "as needed"
+    },
+    {
+     "item": "A wooden tongba pot and bamboo straw (pipsing)",
+     "amount": "1 set"
+    }
+   ],
+   "steps": [
+    "Pack the fermented millet into the wooden tongba pot.",
+    "Pour in hot — not boiling — water to cover.",
+    "Let it steep for about five minutes.",
+    "Sip through the perforated bamboo straw, which filters out the grain.",
+    "Top up with more hot water two or three times as you drink."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "gin-pom",
+  "name": "Gin Pom",
+  "subcategory": "Highball",
+  "description": "Ginebra San Miguel with powdered pomelo juice and ice. Cheap, sharp and the most-drunk gin serve in the world's biggest gin market.",
+  "abv": "10–12%",
+  "origin": "Philippines",
+  "rarity": "common",
+  "tastingNotes": [
+   "pomelo",
+   "juniper",
+   "citrus",
+   "sugar"
+  ],
+  "glassware": "Tall glass or shared pitcher",
+  "ingredients": [
+   "Ginebra San Miguel",
+   "Powdered pomelo drink mix",
+   "Water",
+   "Ice"
+  ],
+  "funFact": "The Philippines drinks more gin than any other country on earth, almost all of it Ginebra San Miguel — and most of that is mixed with a sachet of powdered juice costing a few pesos.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ginebra San Miguel gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Powdered pomelo (pomelo grapefruit) drink mix",
+     "amount": "1 sachet"
+    },
+    {
+     "item": "Cold water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "to fill"
+    }
+   ],
+   "steps": [
+    "Dissolve the powdered drink mix in the cold water in a pitcher.",
+    "Add the gin and stir well.",
+    "Pour over ice into tall glasses.",
+    "Serve with a calamansi wedge if you have one."
+   ],
+   "garnish": "Calamansi wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "weng-weng",
+  "name": "Weng Weng",
+  "subcategory": "Party",
+  "description": "Every white spirit on the shelf plus whisky, orange juice and grenadine. Named for the noise your head makes afterwards.",
+  "abv": "18–20%",
+  "origin": "Boracay, Philippines",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "grenadine",
+   "mixed spirit"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Gin",
+   "Vodka",
+   "Rum",
+   "Tequila",
+   "Whisky",
+   "Orange juice",
+   "Grenadine"
+  ],
+  "funFact": "'Weng weng' is Filipino for dizzy or spinning; the drink is a Boracay beach-bar institution, and most bars cap the order at two per person.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Vodka",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Tequila",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Whisky",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add all five spirits.",
+    "Top with orange juice and stir.",
+    "Pour the grenadine down the inside of the glass so it sinks to the bottom.",
+    "Garnish with an orange slice and a cherry."
+   ],
+   "garnish": "Orange slice and cherry",
+   "method": "built"
+  }
+ },
+ {
+  "id": "makgeolli",
+  "name": "Makgeolli",
+  "subcategory": "Regional",
+  "description": "Unfiltered rice brew, milky and lightly fizzing, poured from the bottle into a shallow bowl. Korea's oldest drink and its most farmhouse.",
+  "abv": "6–8%",
+  "origin": "South Korea",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rice",
+   "yoghurt tang",
+   "sweet",
+   "yeast"
+  ],
+  "glassware": "Shallow ceramic bowl",
+  "ingredients": [
+   "Rice",
+   "Nuruk (fermentation starter)",
+   "Water"
+  ],
+  "funFact": "Nuruk — a wild-yeast and mould starter cake — does the work that malting does for beer, breaking down the rice starch; makgeolli is traditionally drunk after farm work, and increasingly after rain, by tradition.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Short-grain rice",
+     "amount": "1 kg, steamed"
+    },
+    {
+     "item": "Nuruk",
+     "amount": "200 g"
+    },
+    {
+     "item": "Water",
+     "amount": "2 litres"
+    },
+    {
+     "item": "A large fermentation crock",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Steam the rice and cool it to room temperature.",
+    "Mix the rice with the crumbled nuruk and the water in a clean crock.",
+    "Cover with cloth and ferment at room temperature for about a week, stirring daily.",
+    "Strain through cloth, pressing lightly — makgeolli is meant to stay cloudy.",
+    "Refrigerate, and shake the bottle before pouring into shallow bowls."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "somaek",
+  "name": "Somaek",
+  "subcategory": "Party",
+  "description": "Soju dropped into beer, in a ratio people argue about seriously. Korea's most-poured mixed drink, and the engine of the company dinner.",
+  "abv": "8–10%",
+  "origin": "South Korea",
+  "rarity": "common",
+  "tastingNotes": [
+   "malt",
+   "clean grain",
+   "sweet"
+  ],
+  "glassware": "Beer glass and a soju shot glass",
+  "ingredients": [
+   "Soju",
+   "Lager"
+  ],
+  "funFact": "The golden ratio is contested — three parts beer to one soju is the common baseline, and there are Korean drinking games devoted entirely to pouring it correctly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Soju",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Korean lager",
+     "amount": "6 oz / 180 ml"
+    }
+   ],
+   "steps": [
+    "Pour the beer into a glass, leaving room at the top.",
+    "Add the soju — either poured in or dropped in the shot glass whole.",
+    "Cover the top with your palm and tap the glass once on the table to mix it.",
+    "Drink promptly, while it is still fizzing."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "yogurt-soju",
+  "name": "Yogurt Soju",
+  "subcategory": "Party",
+  "description": "Soju, Yakult and lemon-lime soda. Tastes like a children's drink, disappears like one, and is not one.",
+  "abv": "8–10%",
+  "origin": "Seoul, South Korea",
+  "rarity": "common",
+  "tastingNotes": [
+   "yoghurt",
+   "citrus",
+   "sweet"
+  ],
+  "glassware": "Tall glass or pitcher",
+  "ingredients": [
+   "Soju",
+   "Yakult",
+   "Lemon-lime soda"
+  ],
+  "funFact": "Yakult has been sold in Korea since 1971 and is delivered door to door by the 'Yakult ajumma'; the cocktail is the reason Korean convenience stores stock it next to the soju.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Soju",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Yakult",
+     "amount": "2 small bottles / 130 ml"
+    },
+    {
+     "item": "Lemon-lime soda",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the soju and the Yakult.",
+    "Top with lemon-lime soda.",
+    "Stir once and serve immediately — it separates if it sits."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "arrack-and-ginger-beer",
+  "name": "Arrack and Ginger Beer",
+  "subcategory": "Highball",
+  "description": "Ceylon coconut arrack with ginger beer and lime — the island's standing highball, and better than it has any right to be.",
+  "abv": "12–14%",
+  "origin": "Sri Lanka",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coconut",
+   "ginger",
+   "lime",
+   "spice"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Ceylon arrack",
+   "Ginger beer",
+   "Lime"
+  ],
+  "funFact": "Ceylon arrack is distilled from fermented coconut flower sap, tapped by climbers who move between palm crowns on ropes — a job with its own hereditary caste of specialists.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ceylon arrack",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ginger beer",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the arrack and lime juice.",
+    "Top with cold ginger beer.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "boba-cocktail",
+  "name": "Boba Cocktail",
+  "subcategory": "Modern Classic",
+  "description": "Milk tea, rum and tapioca pearls in a shaker. Taipei's bars took the island's most famous export and put a wide straw in it.",
+  "abv": "10–12%",
+  "origin": "Taipei, Taiwan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black tea",
+   "milk",
+   "brown sugar",
+   "rum"
+  ],
+  "glassware": "Tall glass with a wide straw",
+  "ingredients": [
+   "Aged rum",
+   "Black tea",
+   "Milk",
+   "Brown sugar syrup",
+   "Tapioca pearls"
+  ],
+  "funFact": "Bubble tea was invented in Taichung in the 1980s; Taipei's cocktail bars started spiking it in the 2010s, and the brown-sugar version is now a fixture across East Asian bar menus.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aged rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Strong brewed black tea, cooled",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Whole milk or oat milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Brown sugar syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cooked tapioca pearls",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Cook the tapioca pearls and toss them in a little brown sugar syrup while still warm.",
+    "Spoon the pearls into the bottom of a tall glass.",
+    "Shake the rum, cooled tea, milk and remaining syrup hard with ice.",
+    "Strain over the pearls and add fresh ice.",
+    "Serve with a wide boba straw."
+   ],
+   "garnish": "Brown sugar syrup streaked down the glass",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "thai-bucket",
+  "name": "Thai Bucket",
+  "subcategory": "Party",
+  "description": "Thai rum, Red Bull and cola in a child's sand bucket with several straws. Structurally a punch, spiritually a warning.",
+  "abv": "14–16%",
+  "origin": "Ko Pha-ngan, Thailand",
+  "rarity": "common",
+  "tastingNotes": [
+   "cola",
+   "cane",
+   "caffeine",
+   "sweet"
+  ],
+  "glassware": "Small plastic bucket with straws",
+  "ingredients": [
+   "Sangsom Thai rum",
+   "Thai Red Bull",
+   "Cola"
+  ],
+  "funFact": "Thai Red Bull — Krating Daeng — is uncarbonated, sweeter and more heavily caffeinated than the export version, which is a meaningful part of why the buckets have the reputation they do.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sangsom Thai rum",
+     "amount": "1 half-bottle / 175 ml"
+    },
+    {
+     "item": "Thai Red Bull (Krating Daeng)",
+     "amount": "1 small bottle / 150 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "to fill the bucket"
+    }
+   ],
+   "steps": [
+    "Fill a small plastic bucket with ice.",
+    "Pour in the half-bottle of Sangsom.",
+    "Add the bottle of Thai Red Bull.",
+    "Top with cola and stir with a straw.",
+    "Share it — the bucket is designed for four straws, not one."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "ruou-ran",
+  "name": "Rượu Rắn",
+  "subcategory": "Regional",
+  "description": "Rice wine with a snake in the bottle. Sold as a tonic, drunk as a dare, and genuinely traditional across northern Vietnam.",
+  "abv": "30–40%",
+  "origin": "Vietnam",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rice spirit",
+   "herbal",
+   "savoury"
+  ],
+  "glassware": "Small cup",
+  "ingredients": [
+   "Rice wine",
+   "Snake",
+   "Medicinal herbs"
+  ],
+  "funFact": "The ethanol denatures the venom, which is why the practice is not as dangerous as it looks — though the bottles are still confiscated at most international borders.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vietnamese rice wine",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Prepared snake",
+     "amount": "1, cleaned"
+    },
+    {
+     "item": "Medicinal herbs and roots",
+     "amount": "as available"
+    },
+    {
+     "item": "Ginseng",
+     "amount": "1 root, optional"
+    }
+   ],
+   "steps": [
+    "Clean and prepare the snake thoroughly — this step is traditionally done by a specialist.",
+    "Place it in a large sealed glass jar with the herbs and ginseng.",
+    "Cover completely with rice wine and seal airtight.",
+    "Leave to infuse for several months to a year.",
+    "Serve in very small cups, at room temperature."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ }
+]
