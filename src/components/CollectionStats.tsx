@@ -122,7 +122,7 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
             <Text style={styles.rankTotal}>of {TOTAL} logged</Text>
             <Text style={styles.rankPct}>{pct}%</Text>
           </View>
-          <ProgressBar value={unlockedCount} max={TOTAL} color={colors.patina} />
+          <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
 
           <Divider style={styles.blockDivider} />
 
@@ -182,14 +182,14 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
                   style={[
                     styles.milestoneMark,
                     reached && {
-                      backgroundColor: colors.patinaWash,
-                      borderColor: colors.patinaSoft,
+                      backgroundColor: colors.wineWash,
+                      borderColor: colors.wineSoft,
                     },
                   ]}>
                   <Icon
                     name={reached ? 'check' : 'lock'}
                     size={13}
-                    color={reached ? colors.patina : colors.textFaint}
+                    color={reached ? colors.wine : colors.textFaint}
                   />
                 </View>
                 <Text style={[styles.milestoneName, !reached && styles.milestoneNameDim]}>
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.display,
     fontSize: typeScale.bodyLg.fontSize,
     lineHeight: typeScale.bodyLg.lineHeight,
-    color: colors.patina,
+    color: colors.wine,
   },
   rankCountRow: {
     flexDirection: 'row',
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
   rankCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.headline.fontSize,
     color: colors.text,
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   rankPct: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   categoryCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textMuted,
   },
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   rarityCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
   },
   milestoneNameDim: { fontFamily: fonts.body, color: colors.textFaint },
   milestonePct: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textFaint,
   },
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   prizeDex: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textFaint,
   },

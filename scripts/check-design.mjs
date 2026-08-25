@@ -21,7 +21,7 @@ const ALLOW = {
   'constants/theme.ts': 'defines the palette itself; drinkGlyph is deprecated',
   'components/artwork/liquid.ts': 'defines the LIQUID pour palette',
   'components/artwork/index.tsx': 'defines garnish tints (olive, cherry, citrus)',
-  'components/ClinkIntro.tsx': 'exact port of the brand intro timeline',
+  'components/SipplyIntro.tsx': 'exact port of the brand intro timeline',
 };
 
 const EMOJI = /\p{Extended_Pictographic}/u;

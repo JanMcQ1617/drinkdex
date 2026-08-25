@@ -37,10 +37,10 @@ function Garnish({ kind, x, y, tint }: { kind: GarnishKind; x: number; y: number
     case 'wheel':
       return (
         <G>
-          <Circle cx={x} cy={y} r={7} fill={tint} stroke={colors.wineDeep} strokeWidth={1.4} />
+          <Circle cx={x} cy={y} r={7} fill={tint} stroke={colors.text} strokeWidth={1.4} />
           <Path
             d={`M${x - 7} ${y} H${x + 7} M${x} ${y - 7} V${y + 7}`}
-            stroke={colors.wineDeep}
+            stroke={colors.text}
             strokeWidth={0.9}
             opacity={0.55}
           />
@@ -51,7 +51,7 @@ function Garnish({ kind, x, y, tint }: { kind: GarnishKind; x: number; y: number
         <Path
           d={`M${x - 7} ${y + 5} A8 8 0 0 1 ${x + 7} ${y + 5} Z`}
           fill={tint}
-          stroke={colors.wineDeep}
+          stroke={colors.text}
           strokeWidth={1.4}
           strokeLinejoin="round"
         />
@@ -61,11 +61,11 @@ function Garnish({ kind, x, y, tint }: { kind: GarnishKind; x: number; y: number
         <G>
           <Path
             d={`M${x} ${y - 9} V${y + 2}`}
-            stroke={colors.wineDeep}
+            stroke={colors.text}
             strokeWidth={1.2}
             strokeLinecap="round"
           />
-          <Circle cx={x} cy={y + 5} r={5} fill="#8FA83E" stroke={colors.wineDeep} strokeWidth={1.3} />
+          <Circle cx={x} cy={y + 5} r={5} fill="#8FA83E" stroke={colors.text} strokeWidth={1.3} />
           <Circle cx={x} cy={y + 5} r={1.8} fill="#C4453A" />
         </G>
       );
@@ -79,7 +79,7 @@ function Garnish({ kind, x, y, tint }: { kind: GarnishKind; x: number; y: number
             fill="none"
             strokeLinecap="round"
           />
-          <Circle cx={x} cy={y + 5} r={5} fill="#B02A3A" stroke={colors.wineDeep} strokeWidth={1.3} />
+          <Circle cx={x} cy={y + 5} r={5} fill="#B02A3A" stroke={colors.text} strokeWidth={1.3} />
         </G>
       );
     case 'sprig':
@@ -132,7 +132,7 @@ export const DrinkArt = React.memo(function DrinkArt({
   const gradId = `g-${shape}-${locked ? 'l' : 'u'}`;
 
   const pour = locked ? colors.lockInkSoft : liquidColor(drink);
-  const glassStroke = locked ? colors.lockInk : 'rgba(43, 24, 32, 0.55)';
+  const glassStroke = locked ? colors.lockInk : 'rgba(43, 35, 34, 0.55)';
   const foamFill = locked ? '#4A2C36' : '#FBF3E4';
   const garnish = locked ? null : resolveGarnish(drink);
   const showFoam = def.foam && takesFoam(shape, drink.category);
@@ -147,7 +147,7 @@ export const DrinkArt = React.memo(function DrinkArt({
         </LinearGradient>
       </Defs>
 
-      {!flat && <Circle cx={50} cy={103} r={20} fill={colors.wineDeep} opacity={0.06} />}
+      {!flat && <Circle cx={50} cy={103} r={20} fill={colors.text} opacity={0.06} />}
 
       <Path d={def.liquid} fill={`url(#${gradId})`} />
       {showFoam && <Path d={def.foam} fill={foamFill} opacity={locked ? 1 : 0.96} />}

@@ -1,5 +1,5 @@
 /**
- * WCAG contrast audit for the Clink palette.
+ * WCAG contrast audit for the Sipply palette.
  *
  * Run: node scripts/check-contrast.mjs
  * Exits non-zero if any declared pair fails its target ratio.
@@ -25,30 +25,34 @@ const ratio = (a, b) => {
 
 // Mirror of src/constants/theme.ts — change there, change here.
 const C = {
-  bg: '#F8F8F6',
-  bgSunk: '#EFEEEA',
-  surface: '#FFFFFF',
-  cardAlt: '#F8F8F6',
-  text: '#2B1820',
-  textMuted: '#63434D',
-  textFaint: '#836169',
-  textOnWine: '#F4F3EE',
-  textOnPatina: '#F4F3EE',
-  textOnGold: '#2B1820',
-  wine: '#633444',
-  patina: '#1E6355',
-  patinaLit: '#7FBFAE',
-  patinaWash: '#E1EDE9',
-  wineDeep: '#2B1820',
-  goldInk: '#7D5A15',
-  goldGlyph: '#A07C1A',
-  gold: '#C9A227',
+  bg: '#FFFDF9',
+  bgSunk: '#E9E5DF',
+  surface: '#FFFDF9',
+  cardAlt: '#E9E5DF',
+  text: '#2B2322',
+  textMuted: '#6A6058',
+  textFaint: '#9A8F85',
+  textOnWine: '#E9E5DF',
+  textOnEspresso: '#E9E5DF',
+  textOnGilt: '#2B2322',
+  wine: '#5B0F1A',
+  wineDeep: '#3E0A12',
+  merlot: '#7E2330',
+  wineSoft: '#A85A63',
+  wineWash: '#F5E7E7',
+  taupe: '#CBBBA5',
+  taupeInk: '#736247',
+  taupeWash: '#F2ECE1',
+  gilt: '#B08A3E',
+  giltGlyph: '#A8823A',
+  giltInk: '#7D5F1C',
+  giltWash: '#F6EEDC',
   danger: '#A83224',
-  success: '#1E6355',
-  lockInk: '#241017',
+  success: '#5B0F1A',
+  lockInk: '#2B2322',
   // The empty-slot recess in the Dex grid.
-  slot: '#E5E4DF',
-  slotDeep: '#DBDAD4',
+  slot: '#E3DDD3',
+  slotDeep: '#D8D1C5',
 };
 
 // [foreground, background, minimum, label]
@@ -59,62 +63,68 @@ const PAIRS = [
   [C.text, C.bgSunk, 4.5, 'body text on sunk well'],
   [C.textMuted, C.bg, 4.5, 'muted text on page'],
   [C.textMuted, C.surface, 4.5, 'muted text on card'],
+  [C.textMuted, C.bgSunk, 4.5, 'muted text on sunk well'],
   [C.textFaint, C.bg, 3.0, 'faint text on page (large/secondary)'],
   [C.textFaint, C.surface, 3.0, 'faint text on card (large/secondary)'],
   [C.wine, C.bg, 4.5, 'wine text on page'],
   [C.wine, C.surface, 4.5, 'wine text on card'],
-  [C.goldInk, C.bg, 4.5, 'gold text on page'],
-  [C.goldInk, C.surface, 4.5, 'gold text on card'],
+  [C.wine, C.bgSunk, 4.5, 'wine text on sunk well'],
+  [C.wine, C.wineWash, 4.5, 'wine text on its own wash'],
+  [C.merlot, C.bg, 4.5, 'merlot text on page'],
+  [C.giltInk, C.bg, 4.5, 'gilt text on page'],
+  [C.giltInk, C.surface, 4.5, 'gilt text on card'],
   [C.danger, C.bg, 4.5, 'danger text on page'],
   [C.success, C.bg, 4.5, 'success text on page'],
   [C.textOnWine, C.wine, 4.5, 'text on wine button'],
-  [C.textOnGold, C.gold, 4.5, 'text on gold button'],
-  [C.goldGlyph, C.bg, 3.0, 'gold UI glyph on page'],
-  [C.goldGlyph, C.surface, 3.0, 'gold UI glyph on card'],
+  [C.textOnGilt, C.gilt, 4.5, 'text on gilt button'],
+  [C.giltGlyph, C.bg, 3.0, 'gilt UI glyph on page'],
+  [C.giltGlyph, C.surface, 3.0, 'gilt UI glyph on card'],
   [C.textOnWine, C.lockInk, 4.5, 'text on locked artwork'],
-  // Patina — the third color. Text-safe everywhere, plus its own button.
-  [C.patina, C.bg, 4.5, 'patina text on page'],
-  [C.patina, C.surface, 4.5, 'patina text on card'],
-  [C.patina, C.bgSunk, 4.5, 'patina text on sunk well'],
-  [C.patina, C.patinaWash, 4.5, 'patina text on its own wash'],
-  [C.textOnPatina, C.patina, 4.5, 'text on patina button'],
-  // Patina also carries the Dex progress count, which sits on the page.
-  [C.patina, C.slot, 4.5, 'patina on the empty-slot recess'],
-  // Intro: type on the wine-black field.
-  [C.patinaLit, C.wineDeep, 4.5, 'intro tagline (patinaLit) on wine-black'],
-  [C.bg, C.wineDeep, 4.5, 'intro wordmark (white) on wine-black'],
-  [C.gold, C.wineDeep, 4.5, 'intro spark (gold) on wine-black'],
+  // Taupe. Decorative on light grounds (1.85:1 on page — deliberately
+  // untested as type there); readable only on wine and espresso, which is
+  // exactly where the brand sheet sets the letterspaced tagline.
+  [C.taupe, C.wine, 4.5, 'tagline (taupe) on wine'],
+  [C.taupe, C.lockInk, 4.5, 'tagline (taupe) on espresso'],
+  [C.taupeInk, C.bg, 4.5, 'taupe label on page'],
+  [C.taupeInk, C.taupeWash, 4.5, 'taupe label on its own wash'],
+  // Intro: type on the wine ground of the pour.
+  [C.textOnWine, C.wine, 4.5, 'intro wordmark (bone) on wine'],
+  [C.textOnWine, C.wineDeep, 4.5, 'intro wordmark (bone) on wine-deep'],
   // Category colors must be readable as chip/label text.
-  ['#A83A29', C.bg, 4.5, 'cocktail label on page'],
+  ['#7E2330', C.bg, 4.5, 'cocktail label on page'],
   ['#8A5F10', C.bg, 4.5, 'beer label on page'],
-  ['#7A3A52', C.bg, 4.5, 'wine label on page'],
-  ['#54438A', C.bg, 4.5, 'spirit label on page'],
-  ['#A83A29', '#FBE6E0', 4.5, 'cocktail label on its wash'],
-  ['#8A5F10', '#FAEFD2', 4.5, 'beer label on its wash'],
-  ['#7A3A52', '#F6E4EA', 4.5, 'wine label on its wash'],
-  ['#54438A', '#EBE7F5', 4.5, 'spirit label on its wash'],
-  // Rarity colors. `uncommon` is the brand patina (ONE PATINA RULE).
-  ['#67655C', C.bg, 4.5, 'common label on page'],
-  [C.patina, C.bg, 4.5, 'uncommon label on page'],
-  ['#345F96', C.bg, 4.5, 'rare label on page'],
-  ['#67655C', '#E9E8E1', 4.5, 'common label on its wash'],
-  [C.goldInk, '#F6EED6', 4.5, 'legendary label on its wash'],
+  ['#5E2545', C.bg, 4.5, 'wine label on page'],
+  ['#3A2E2C', C.bg, 4.5, 'spirit label on page'],
+  ['#7E2330', '#F5E6E5', 4.5, 'cocktail label on its wash'],
+  ['#8A5F10', '#F6EDDC', 4.5, 'beer label on its wash'],
+  ['#5E2545', '#F1E6EC', 4.5, 'wine label on its wash'],
+  ['#3A2E2C', '#ECE7E3', 4.5, 'spirit label on its wash'],
+  // Rarity is the frame material: hairline -> taupe -> wine -> gilt.
+  [C.textMuted, C.bg, 4.5, 'common label on page'],
+  [C.taupeInk, C.bg, 4.5, 'uncommon label on page'],
+  [C.wine, C.bg, 4.5, 'rare label on page'],
+  [C.giltInk, C.bg, 4.5, 'legendary label on page'],
+  [C.textMuted, '#EFE9E0', 4.5, 'common label on its wash'],
+  [C.taupeInk, C.taupeWash, 4.5, 'uncommon label on its wash'],
+  [C.wine, C.wineWash, 4.5, 'rare label on its wash'],
+  [C.giltInk, C.giltWash, 4.5, 'legendary label on its wash'],
   // Dex grid — the empty slot. Its nameplate and number plate sit on
   // slotDeep, which is the darkest surface any body text lands on.
   [C.textMuted, C.slot, 4.5, 'entry name on empty slot'],
-  [C.textMuted, C.slotDeep, 4.5, 'entry name on slot nameplate'],
-  [C.textFaint, C.slotDeep, 3.0, 'dex number on slot plate (secondary)'],
+  [C.textMuted, C.cardAlt, 4.5, 'entry name on the bone nameplate'],
+  [C.textMuted, C.cardAlt, 3.0, 'dex number on the bone plate (secondary)'],
   [C.text, C.slot, 4.5, 'body text on empty slot'],
-  // Collected cards: the name sits on a near-opaque porcelain plate over
+  [C.wine, C.slot, 4.5, 'progress count on the empty-slot recess'],
+  // Collected cards: the name sits on a near-opaque off-white plate over
   // the category field, so the field's darkest stop is the real backdrop.
-  [C.text, '#FBE6E0', 4.5, 'card name over cocktail field'],
-  [C.text, '#FAEFD2', 4.5, 'card name over beer field'],
-  [C.text, '#F6E4EA', 4.5, 'card name over wine field'],
-  [C.text, '#EBE7F5', 4.5, 'card name over spirit field'],
+  [C.text, '#F5E6E5', 4.5, 'card name over cocktail field'],
+  [C.text, '#F6EDDC', 4.5, 'card name over beer field'],
+  [C.text, '#F1E6EC', 4.5, 'card name over wine field'],
+  [C.text, '#ECE7E3', 4.5, 'card name over spirit field'],
 ];
 
 let failed = 0;
-console.log('\n  Clink palette — WCAG contrast audit\n');
+console.log('\n  Sipply palette — WCAG contrast audit\n');
 for (const [fg, bg, min, label] of PAIRS) {
   const r = ratio(fg, bg);
   const ok = r >= min;

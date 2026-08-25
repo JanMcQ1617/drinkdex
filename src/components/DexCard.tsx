@@ -222,7 +222,7 @@ export const DexCard = React.memo(function DexCard({
       <View style={styles.marker} pointerEvents="none">
         {collected ? (
           legendary ? (
-            <Icon name="sparkle" size={13} color={colors.goldGlyph} filled />
+            <Icon name="sparkle" size={13} color={colors.giltGlyph} filled />
           ) : (
             // `color`, not `edge`: the pip CONVEYS the tier, so it takes the
             // contrast-audited value. `edge` is decorative and too pale here
@@ -230,7 +230,7 @@ export const DexCard = React.memo(function DexCard({
             <View style={[styles.rarityPip, { backgroundColor: rarity.color }]} />
           )
         ) : (
-          <Icon name="lock" size={11} color={colors.textFaint} filled />
+          <Icon name="lock" size={11} color={colors.textMuted} filled />
         )}
       </View>
 
@@ -321,18 +321,30 @@ const styles = StyleSheet.create({
     borderColor: colors.embossLight,
   },
   plateSunk: {
-    backgroundColor: colors.slotDeep,
+    /*
+     * A bone plaque, not the recess floor. The Sipply muted ink clears
+     * 4.5:1 on bone (4.88) but only reaches 4.04 on `slotDeep`, so the
+     * plate is the lighter object sitting IN the well rather than a
+     * darker patch of it — which is also how a real engraved plate reads.
+     */
+    backgroundColor: colors.cardAlt,
     borderColor: colors.slotBorder,
   },
   plateText: {
-    fontFamily: fonts.mono,
+    /*
+     * The catalogue number is now the brand's letterspaced label — Inter
+     * Medium, tracked out, tabular so the digits hold a column down the
+     * grid. 2pt at 9px is the label style pulled in slightly so six
+     * characters still fit the plate.
+     */
+    fontFamily: fonts.label,
     fontSize: 9,
-    letterSpacing: 0.3,
+    letterSpacing: 2,
     color: colors.textMuted,
     fontVariant: ['tabular-nums'],
   },
   plateTextSunk: {
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
 
   /* Marker */
@@ -376,11 +388,11 @@ const styles = StyleSheet.create({
     borderTopColor: colors.embossLight,
   },
   nameplateSunk: {
-    backgroundColor: colors.slotDeep,
+    backgroundColor: colors.cardAlt,
     borderTopColor: colors.slotBorder,
   },
   name: {
-    fontFamily: fonts.display,
+    fontFamily: fonts.displayBold,
     fontSize: 12,
     lineHeight: 15,
     color: colors.text,

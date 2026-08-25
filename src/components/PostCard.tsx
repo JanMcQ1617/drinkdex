@@ -14,7 +14,7 @@ import Animated, {
 import { DrinkArt } from '@/components/artwork';
 import { Icon, type IconName } from '@/components/icons';
 import { Avatar, CategoryPill, haptic, RarityBadge } from '@/components/ui';
-import { CATEGORY_META, colors, fonts, space, type as typeScale } from '@/constants/theme';
+import { CATEGORY_META, colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { blockUser, REPORT_REASONS, reportPost } from '@/lib/moderation';
 import { signedPhotoUrl } from '@/lib/social';
@@ -343,7 +343,7 @@ export const PostCard = React.memo(function PostCard({
         accessibilityLabel={`Open ${drink.name}, ${formatDexNumber(drink.dexNumber)}, in the Dex`}
         style={({ pressed }) => [styles.body, pressed && styles.pressed]}>
         {photoUrl ? (
-          <View>
+          <View style={styles.photoFrame}>
             <Image
               source={{ uri: photoUrl }}
               style={styles.photo}
@@ -380,8 +380,8 @@ export const PostCard = React.memo(function PostCard({
           </View>
         ) : (
           <View style={[styles.artPanel, { backgroundColor: category.wash }]}>
-            {/* Sized to fill the 4:3 panel — 110 left it adrift in the wash. */}
-            <DrinkArt drink={drink} size={190} />
+            {/* Sized to fill the portrait panel — 190 left it adrift in it. */}
+            <DrinkArt drink={drink} size={260} />
           </View>
         )}
 
@@ -425,7 +425,7 @@ export const PostCard = React.memo(function PostCard({
           }}
           filled={saved}
           selected={saved}
-          color={saved ? colors.goldInk : colors.text}
+          color={saved ? colors.giltInk : colors.text}
         />
       </View>
 
@@ -445,10 +445,14 @@ export const PostCard = React.memo(function PostCard({
 
 const styles = StyleSheet.create({
   card: {
+    /*
+     * No card chrome. The handoff's feed is posts sitting straight on the
+     * page — an image with a 16pt radius, its author above it and its
+     * caption below — so the hairline top/bottom rules are gone. They were
+     * the last of the borrowed Instagram frame: with them the photo read
+     * as an inset panel, without them it reads as the object itself.
+     */
     backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.cardBorder,
     paddingVertical: space.md,
   },
   pressed: { opacity: 0.72 },
@@ -484,9 +488,20 @@ const styles = StyleSheet.create({
 
   /* Body */
   body: { gap: space.md },
+  /*
+   * The frame carries the inset and the radius so the gallery tap target,
+   * which fills it, lands exactly on the photograph and not on the page
+   * beside it.
+   */
+  photoFrame: {
+    marginHorizontal: space.lg,
+    borderRadius: radius.lg,
+    overflow: 'hidden',
+  },
   photo: {
     width: '100%',
-    aspectRatio: 4 / 3,
+    /* The handoff's feed crop: portrait, a little taller than 3:4. */
+    aspectRatio: 1 / 1.3,
     backgroundColor: colors.bgSunk,
   },
   /* Covers the photo, so a tap anywhere on it advances. */
@@ -514,8 +529,10 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   artPanel: {
-    width: '100%',
-    aspectRatio: 4 / 3,
+    marginHorizontal: space.lg,
+    aspectRatio: 1 / 1.3,
+    borderRadius: radius.lg,
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -530,15 +547,16 @@ const styles = StyleSheet.create({
   },
   drinkName: {
     flex: 1,
-    fontFamily: fonts.display,
+    fontFamily: fonts.displayBold,
     fontSize: typeScale.bodyLg.fontSize,
     lineHeight: typeScale.bodyLg.lineHeight,
     color: colors.text,
   },
   dexNumber: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.label,
     fontSize: typeScale.micro.fontSize,
-    color: colors.textFaint,
+    letterSpacing: 1.8,
+    color: colors.taupeInk,
   },
   badgeRow: {
     flexDirection: 'row',
@@ -568,7 +586,7 @@ const styles = StyleSheet.create({
     height: 32,
   },
   commentCountText: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textMuted,
   },
@@ -578,7 +596,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.lg,
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.caption.fontSize,
-    color: colors.text,
+    /* The handoff sets the like count in wine — the only coloured figure
+       on the post, which is what makes it read as the live one. */
+    color: colors.wine,
   },
   caption: {
     paddingHorizontal: space.lg,

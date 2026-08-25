@@ -15,7 +15,7 @@ export const ME: UserProfile = {
   id: ME_ID,
   username: 'you',
   displayName: 'You',
-  accent: colors.goldInk,
+  accent: colors.giltInk,
   bio: 'Collecting one pour at a time.',
   joinedAt: '2026-07-16T00:00:00Z',
 };

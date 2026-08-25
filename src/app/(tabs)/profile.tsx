@@ -480,7 +480,7 @@ function OwnProfile() {
         <Identity profile={me} />
       ) : profileLoading ? (
         <View style={styles.identityFallback}>
-          <ActivityIndicator color={colors.patina} />
+          <ActivityIndicator color={colors.wine} />
         </View>
       ) : (
         <View style={styles.identityFallback}>
@@ -802,13 +802,13 @@ const styles = StyleSheet.create({
     paddingVertical: space.sm,
     borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: colors.patinaSoft,
-    backgroundColor: colors.patinaWash,
+    borderColor: colors.wineSoft,
+    backgroundColor: colors.wineWash,
   },
   identityRetryLabel: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.caption.fontSize,
-    color: colors.patina,
+    color: colors.wine,
   },
   sectionLabel: { marginTop: space.xl, marginBottom: space.md },
   mutedLine: {
@@ -858,7 +858,7 @@ const styles = StyleSheet.create({
   },
   stat: { flex: 1, alignItems: 'center', gap: 2 },
   statValue: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.title.fontSize,
     color: colors.text,
   },
@@ -884,7 +884,7 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
   rankCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.headline.fontSize,
     color: colors.text,
   },
@@ -895,7 +895,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   rankPct: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
@@ -915,7 +915,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   categoryCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textMuted,
   },
@@ -928,7 +928,7 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
   rarityCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
@@ -958,7 +958,7 @@ const styles = StyleSheet.create({
   },
   milestoneNameDim: { fontFamily: fonts.body, color: colors.textFaint },
   milestonePct: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textFaint,
   },
@@ -992,7 +992,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   prizeDex: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
     color: colors.textFaint,
   },

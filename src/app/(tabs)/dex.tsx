@@ -542,7 +542,7 @@ export default function DexScreen() {
             <GlassSurface cornerRadius={radius.pill} strong style={styles.scrollTopGlass}>
               {/* No chevronUp in the set — the down chevron, turned over. */}
               <View style={styles.scrollTopIcon}>
-                <Icon name="chevronDown" size={18} color={colors.patina} />
+                <Icon name="chevronDown" size={18} color={colors.wine} />
               </View>
             </GlassSurface>
           </PressableScale>
@@ -624,7 +624,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   mastheadCount: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     color: colors.text,
     fontVariant: ['tabular-nums'],
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
   progressCount: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.body.fontSize,
-    color: colors.patina,
+    color: colors.wine,
     fontVariant: ['tabular-nums'],
   },
   progressLabel: {
@@ -724,7 +724,7 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
   },
   chipDetail: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: 10,
     color: colors.textFaint,
     fontVariant: ['tabular-nums'],

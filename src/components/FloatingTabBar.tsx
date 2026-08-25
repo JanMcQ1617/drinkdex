@@ -158,7 +158,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
     <View
       pointerEvents="box-none"
       style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) + 2 }]}>
-      <GlassSurface cornerRadius={radius.xl} style={styles.bar}>
+      <GlassSurface cornerRadius={radius.tab} style={styles.bar}>
         <View style={styles.row} onLayout={(e) => setBarW(Math.round(e.nativeEvent.layout.width))}>
           {itemW > 0 ? (
             <Animated.View
@@ -219,7 +219,15 @@ const styles = StyleSheet.create({
     right: 0,
   },
   bar: {
-    marginHorizontal: 14,
+    /*
+     * The Sipply handoff specifies this bar outright: a 64pt pill inset
+     * 16 from each edge, off-white at 92% over a 10px blur, hairline
+     * border, `0 12px 30px rgba(43,35,34,.14)`. The material and the
+     * shadow live in `glass.fill` and `elevation.raised`; the geometry is
+     * here.
+     */
+    marginHorizontal: 16,
+    minHeight: 64,
   },
   row: {
     flexDirection: 'row',
@@ -242,8 +250,9 @@ const styles = StyleSheet.create({
     gap: space.xs - 1,
   },
   label: {
-    fontFamily: fonts.bodySemiBold,
+    /* The brand's letterspaced label, at tab scale. */
+    fontFamily: fonts.label,
     fontSize: 9,
-    letterSpacing: 0.8,
+    letterSpacing: 1.6,
   },
 });

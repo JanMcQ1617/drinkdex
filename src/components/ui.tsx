@@ -24,6 +24,7 @@ import {
   elevation,
   fonts,
   motion,
+  label as labelType,
   radius,
   RARITY_META,
   space,
@@ -131,9 +132,16 @@ export interface ButtonProps {
   accessibilityHint?: string;
 }
 
+/*
+ * The Sipply handoff draws two buttons and they are the primary/secondary
+ * pair: a filled wine pill with bone type, and an outlined pill that
+ * borrows its border from the ground it sits on. `secondary` takes taupe
+ * — the brand's border colour — rather than the legendary metal it used
+ * to, which now means one thing only.
+ */
 const BUTTON_SKIN: Record<ButtonVariant, { bg: string; fg: string; border: string }> = {
   primary: { bg: colors.wine, fg: colors.textOnWine, border: colors.wine },
-  secondary: { bg: colors.surface, fg: colors.wine, border: colors.cardBorderLit },
+  secondary: { bg: colors.surface, fg: colors.wine, border: colors.taupe },
   ghost: { bg: 'transparent', fg: colors.textMuted, border: 'transparent' },
   danger: { bg: colors.dangerWash, fg: colors.danger, border: colors.danger + '66' },
 };
@@ -208,10 +216,16 @@ export function CategoryPill({ category }: { category: DrinkCategory }) {
 /* ==================================================================== */
 
 /**
- * Initials on a tinted disc.
+ * Initials on a wine disc.
+ *
+ * The handoff draws every avatar the same way — a solid wine circle with a
+ * Playfair initial in bone — so the disc no longer takes the user's accent
+ * as a wash. The accent survives as the RING, which keeps per-user colour
+ * without asking bone type to stay readable on six different fills: brass
+ * would have landed at 4.49:1, just under the bar this app holds.
  *
  * Deliberately not emoji: emoji render in the system font, so their weight
- * and color can't be controlled by design tokens, and at avatar size they
+ * and colour can't be controlled by design tokens, and at avatar size they
  * read as placeholder art.
  */
 export function Avatar({
@@ -250,11 +264,11 @@ export function Avatar({
             width: inner,
             height: inner,
             borderRadius: inner / 2,
-            backgroundColor: accent + '2E',
-            borderColor: accent + '66',
+            backgroundColor: colors.wine,
+            borderColor: colors.wine,
           },
         ]}>
-        <Text style={[styles.avatarText, { fontSize: inner * 0.38, color: accent }]}>
+        <Text style={[styles.avatarText, { fontSize: inner * 0.42, color: colors.textOnWine }]}>
           {initials || '?'}
         </Text>
       </View>
@@ -306,7 +320,7 @@ export function ProgressBar({
    * which is patina's job. Callers pass a category color only for the
    * per-category breakdown, where the bar identifies a category, not progress.
    */
-  color = colors.patina,
+  color = colors.wine,
   height = 8,
 }: {
   value: number;
@@ -371,21 +385,21 @@ export function EmptyState({
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 48,
+    /* 52pt tall, pill — the handoff's button, verbatim. */
+    minHeight: 52,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: space.sm,
     paddingHorizontal: space.xl,
     borderRadius: radius.pill,
-    borderWidth: 1,
+    borderWidth: 1.5,
   },
   buttonBlock: { alignSelf: 'stretch' },
   buttonDisabled: { opacity: 0.42 },
   buttonLabel: {
     fontFamily: fonts.bodySemiBold,
     fontSize: 16,
-    letterSpacing: 0.2,
   },
 
   badge: {
@@ -400,9 +414,9 @@ const styles = StyleSheet.create({
   },
   dot: { width: 6, height: 6, borderRadius: 3 },
   badgeText: {
-    fontFamily: fonts.bodySemiBold,
+    fontFamily: fonts.label,
     fontSize: 11,
-    letterSpacing: 0.5,
+    letterSpacing: 1.2,
     textTransform: 'uppercase',
   },
 
@@ -412,14 +426,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: { fontFamily: fonts.bodySemiBold, letterSpacing: 0.3 },
+  avatarText: { fontFamily: fonts.displayBold },
 
   sectionLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 12,
-    letterSpacing: 1.1,
+    /*
+     * The brand's letterspaced sub-label: Inter Medium, uppercase, tracked
+     * to 0.3em, in taupe. `taupeInk` rather than `taupe` because this one
+     * lands on the light page, where raw taupe is 1.85:1 and decorative.
+     */
+    fontFamily: fonts.label,
+    fontSize: labelType.ui.fontSize,
+    lineHeight: labelType.ui.lineHeight,
+    letterSpacing: labelType.ui.letterSpacing,
     textTransform: 'uppercase',
-    color: colors.textFaint,
+    color: colors.taupeInk,
   },
 
   card: {

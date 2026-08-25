@@ -823,7 +823,7 @@ export default function DrinkDetailScreen() {
             <Animated.View style={[styles.celebRing, ring1Style]} />
             <Animated.View style={[styles.celebRing, styles.celebRingThin, ring2Style]} />
             <Animated.View style={[styles.celebCard, celebStyle]}>
-              <Icon name="sparkle" size={40} color={colors.gold} filled />
+              <Icon name="sparkle" size={40} color={colors.gilt} filled />
               <Animated.Text style={[styles.celebrationTitle, titleStyle]}>UNLOCKED</Animated.Text>
               <Animated.Text style={[styles.celebrationName, nameStyle]}>
                 {drink.name}
@@ -872,8 +872,8 @@ const styles = StyleSheet.create({
     marginBottom: space.xs,
   },
   dexNumber: {
-    fontFamily: fonts.mono,
-    color: colors.goldInk,
+    fontFamily: fonts.numeral,
+    color: colors.giltInk,
   },
   name: {
     fontFamily: fonts.display,
@@ -1030,10 +1030,10 @@ const styles = StyleSheet.create({
   ingredientAmount: {
     maxWidth: '42%',
     textAlign: 'right',
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     lineHeight: typeScale.body.lineHeight,
-    color: colors.goldInk,
+    color: colors.giltInk,
     fontVariant: ['tabular-nums'],
   },
   steps: {
@@ -1051,14 +1051,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: colors.cardBorderLit,
-    backgroundColor: colors.goldWash,
+    backgroundColor: colors.giltWash,
     alignItems: 'center',
     justifyContent: 'center',
   },
   stepNumText: {
-    fontFamily: fonts.mono,
+    fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
-    color: colors.goldInk,
+    color: colors.giltInk,
   },
   stepText: {
     flex: 1,
@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     letterSpacing: 1.4,
     textTransform: 'uppercase',
-    color: colors.goldInk,
+    color: colors.giltInk,
   },
   componentDetail: {
     fontFamily: fonts.body,
@@ -1300,17 +1300,17 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 110,
     borderWidth: 2,
-    borderColor: colors.gold,
+    borderColor: colors.gilt,
   },
   celebRingThin: {
     borderWidth: 1,
-    borderColor: colors.patinaLit,
+    borderColor: colors.taupe,
   },
   celebrationTitle: {
     fontFamily: fonts.display,
     fontSize: typeScale.display.fontSize,
     letterSpacing: 4,
-    color: colors.gold,
+    color: colors.gilt,
   },
   celebrationName: {
     fontFamily: fonts.body,

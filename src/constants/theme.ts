@@ -1,154 +1,169 @@
 import type { Drink, DrinkCategory, Rarity } from '@/types';
 
 /* ==================================================================== */
-/* Palette — "Porcelain Speakeasy"                                      */
+/* Palette — "Sipply"                                                   */
 /*                                                                      */
-/* Three colors, each with a job:                                       */
-/*   PORCELAIN #F1F0EA — the page. A cool, quiet off-white.             */
-/*   WINE      #633444 — structure. Primary actions, ink, headers.      */
-/*   PATINA    #1E6355 — the third color. Everything affirmative:       */
-/*                       collected, saved, success, uncommon.           */
-/* Gold is no longer an accent — it is demoted to LEGENDARY ONLY, so it */
-/* means something when it finally shows up.                            */
+/* Adopted 2026-08-25 from the Sipply brand handoff. It replaces         */
+/* "Porcelain Speakeasy" (white page + wine + verdigris patina + gold).  */
+/* The handoff ships eight values and names each one's job:              */
 /*                                                                      */
-/* Changed 2026-08-13 from "Daylight Speakeasy" (cream #F7EEDF + wine + */
-/* decorative gold). The cream read warm and the app read two-color;    */
-/* porcelain cools the base so wine reads like a jewel, and the third   */
-/* color gives the system a real third voice.                           */
+/*   WINE     #5B0F1A — primary brand, buttons, active states           */
+/*   MERLOT   #7E2330 — gradients, secondary accents                    */
+/*   BONE     #E9E5DF — light ground, and text ON wine                  */
+/*   TAUPE    #CBBBA5 — borders, muted accents, letterspaced labels     */
+/*   ESPRESSO #2B2322 — dark ground, primary text                       */
+/*   OFF-WHITE#FFFDF9 — the app screen background                       */
+/*   HAIRLINE #EFE9E0 — dividers                                        */
+/*   MUTED    #9A8F85 — secondary text                                  */
 /*                                                                      */
-/* Changed 2026-08-16: the third color moved from sage #3E5F4C to       */
-/* verdigris patina #1E6355. Sage sat at 145° with very little chroma — */
-/* a muted gray-green that read as a neutral next to wine rather than   */
-/* as a voice. Patina is 168° at roughly double the saturation, so it   */
-/* holds its own against wine while keeping the same calm, affirmative  */
-/* job. It is also the last open hue: wine/cocktail/wine-category own   */
-/* the red-magenta arc, spirit owns purple, rare owns blue, gold and    */
-/* beer own amber-brown.                                                */
+/* WHAT CHANGED IN THE APP, AND WHY                                     */
 /*                                                                      */
-/* ONE PATINA RULE: patina is the only green-teal in the app. `success` */
-/* and the `uncommon` rarity both point at this ramp on purpose — three */
-/* separate greens (brand / success / uncommon) is indistinguishable at */
-/* chip size.                                                           */
+/* 1. Green is gone. The old ONE PATINA RULE reserved a single verdigris */
+/*    for everything affirmative (collected / saved / success /          */
+/*    uncommon). Sipply has no green, and its own answer is that the     */
+/*    active state IS the brand: the handoff's "Saved to My Drinks"      */
+/*    button is wine. So affirmative = wine, and `patina*` is gone       */
+/*    rather than renamed — a token named after verdigris pointing at    */
+/*    oxblood is the kind of trap this repo keeps removing.              */
 /*                                                                      */
-/* Text/background pairs are verified by scripts/check-contrast.mjs —   */
-/* ≥4.5:1 for body, ≥3:1 for large text and UI glyphs.                  */
+/* 2. Gold became GILT. Legendary still needs a metal that nothing else  */
+/*    may use, but #C9A227 was mixed for a cool white page and glares    */
+/*    on off-white. Gilt is the same idea re-cut warm for this ground.   */
+/*                                                                      */
+/* 3. Two inks, not one. The handoff sets 12–13px secondary text in      */
+/*    MUTED #9A8F85, which is 3.11:1 on off-white — fine for WCAG large  */
+/*    text, short of the 4.5:1 this app has always held itself to for    */
+/*    body copy. Rather than lower the bar or abandon the colour, the    */
+/*    warm gray is split in two: `textFaint` IS #9A8F85 and keeps the    */
+/*    3:1 large/secondary job it already had here, and `textMuted` is    */
+/*    the same hue walked down to 6.03:1 for anything body-sized.        */
+/*                                                                      */
+/* Every pair below is verified by scripts/check-contrast.mjs —          */
+/* ≥4.5:1 for body, ≥3:1 for large text and UI glyphs.                   */
 /* ==================================================================== */
 
 export const colors = {
   /*
-   * Surfaces — smooth white, layered light.
-   *
-   * Changed 2026-08-16 from porcelain (#F1F0EA). Porcelain carried a
-   * yellow-green cast that read as cream on an OLED phone; the page is now a
-   * near-neutral white with only a 2-point blue drop, which is enough to keep
-   * it from feeling clinical without tipping warm. Cards go PURE white so they
-   * still lift off the page now that the page itself is nearly white — the
-   * card/page step is carried by the border and shadow, not by tint.
+   * Surfaces. The handoff separates the screen (off-white) from the brand
+   * ground (bone), so the app reads as linen laid on a darker bar top.
+   * Cards are the SAME off-white as the page and are lifted by the
+   * hairline and shadow instead of by tint — which is exactly how the
+   * handoff builds its floating tab bar.
    */
-  bg: '#F8F8F6',
-  bgSunk: '#EFEEEA',
-  surface: '#FFFFFF',
-  card: '#FFFFFF',
-  cardAlt: '#F8F8F6',
-  cardBorder: '#E4E3DD',
-  /** the "lit" border — legendary/selected only, so it stays gold */
-  cardBorderLit: '#C4A96E',
-  borderStrong: '#CFCEC6',
+  bg: '#FFFDF9',
+  bgSunk: '#E9E5DF',
+  surface: '#FFFDF9',
+  card: '#FFFDF9',
+  cardAlt: '#E9E5DF',
+  cardBorder: '#EFE9E0',
+  /** the "lit" border — legendary/selected only, so it stays metal */
+  cardBorderLit: '#B08A3E',
+  borderStrong: '#CBBBA5',
 
-  /* Ink — wine-black, never neutral gray */
-  text: '#2B1820',
-  textMuted: '#63434D',
-  textFaint: '#836169',
-  textOnWine: '#F4F3EE',
-  textOnPatina: '#F4F3EE',
-  textOnGold: '#2B1820',
+  /* Ink — espresso, never neutral gray */
+  text: '#2B2322',
+  /** Body-sized secondary. The handoff's #9A8F85 walked to 6.03:1. */
+  textMuted: '#6A6058',
+  /** The handoff's MUTED, unchanged. Large/secondary only — 3.11:1. */
+  textFaint: '#9A8F85',
+  textOnWine: '#E9E5DF',
+  textOnEspresso: '#E9E5DF',
+  textOnGilt: '#2B2322',
 
-  /* Wine — the brand's structural color */
-  wine: '#633444',
-  wineDeep: '#2B1820',
-  wineSoft: '#8E5E70',
-  wineWash: '#F2E7EA',
+  /* Wine — the brand's structural colour, and every affirmative state */
+  wine: '#5B0F1A',
+  wineDeep: '#3E0A12',
+  /** MERLOT. Gradients and secondary accents. */
+  merlot: '#7E2330',
+  /** Derived: a merlot tint for strokes and edges. Never type. */
+  wineSoft: '#A85A63',
+  wineWash: '#F5E7E7',
 
   /*
-   * Patina — the third color. Carries every affirmative state: an entry
-   * you own, a drink you saved, a success toast, the uncommon tier.
-   * Text-safe at 6.3:1 on porcelain, so unlike gold it needs no
-   * decorative/glyph/ink split.
+   * Taupe. Borders, muted accents, and the letterspaced sub-labels the
+   * brand sheet sets under every wordmark. 1.85:1 on off-white, so it is
+   * DECORATIVE on light grounds and type only on wine (7.32:1) or
+   * espresso (8.19:1). `taupeInk` is the readable cut for light grounds.
    */
-  patina: '#1E6355',
-  patinaDeep: '#123E35',
-  patinaSoft: '#5E9084',
-  /** patina for type on DARK fields (the intro's wine-black) — 7.9:1 there */
-  patinaLit: '#7FBFAE',
-  patinaWash: '#E1EDE9',
+  taupe: '#CBBBA5',
+  taupeInk: '#736247',
+  taupeWash: '#F2ECE1',
 
   /*
-   * Gold — LEGENDARY ONLY as of 2026-08-13. Not a general accent.
-   *   gold      DECORATIVE. Rings, dividers, legendary shimmer.
+   * Gilt — LEGENDARY ONLY, inherited from the old gold rule.
+   *   gilt      DECORATIVE. Card edges, rules, the legendary shimmer.
    *             Must never be the sole carrier of meaning.
-   *   goldGlyph Icons and strokes that convey meaning. 3.2:1 on porcelain.
-   *   goldInk   Text. 5.3:1 on porcelain.
+   *   giltGlyph Icons and strokes that convey meaning. 3.5:1 on off-white.
+   *   giltInk   Text. 5.9:1 on off-white.
    */
-  gold: '#C9A227',
-  goldGlyph: '#A07C1A',
-  goldInk: '#7D5A15',
-  goldDim: '#A88326',
-  goldWash: '#F6EED6',
-  amber: '#FFAD5F',
+  gilt: '#B08A3E',
+  giltGlyph: '#A8823A',
+  giltInk: '#7D5F1C',
+  giltDim: '#8E6F2C',
+  giltWash: '#F6EEDC',
+  amber: '#D9A25C',
 
-  /* Semantic — success is patina (see ONE PATINA RULE above) */
+  /* Semantic — success is wine (see 1. in the header) */
   danger: '#A83224',
   dangerWash: '#F8E6E2',
-  success: '#1E6355',
-  successWash: '#E1EDE9',
+  success: '#5B0F1A',
+  successWash: '#F5E7E7',
 
-  /* Scrims — strong enough to isolate foreground (40–60%) */
-  overlay: 'rgba(31, 17, 22, 0.52)',
-  scrim: 'rgba(31, 17, 22, 0.44)',
+  /* Scrims — the handoff's own value for the detail back button */
+  overlay: 'rgba(43, 35, 34, 0.52)',
+  scrim: 'rgba(43, 35, 34, 0.45)',
 
   /* Locked-artwork blackout */
-  lockInk: '#241017',
-  lockInkSoft: '#3A1F28',
+  lockInk: '#2B2322',
+  lockInkSoft: '#4A3B38',
 
   /*
    * The empty slot — a collected entry's absence.
    *
-   * The Dex grid is a display case, so an uncollected entry is a RECESS, not
-   * a paler card. These sit a real step below the page (bg #F1F0EA) so an
-   * unlocked card lifting off them reads as a lit object in a velvet tray.
-   * Deliberately not lockInk-dark: with 460 entries and a handful collected,
-   * a wall of black would swamp the porcelain identity. This is the deepest
-   * recess that still leaves the page feeling light.
+   * The Dex grid is a display case, so an uncollected entry is a RECESS,
+   * not a paler card. On the old white page these were a cool gray; here
+   * they are bone walked one and two steps darker, so a collected card in
+   * page off-white lifts out of a linen tray. Deliberately not
+   * espresso-dark: with 460 entries and a handful collected, a wall of
+   * near-black would swamp the light identity.
    */
-  slot: '#E5E4DF',
-  slotDeep: '#DBDAD4',
-  slotBorder: '#CDCCC5',
+  slot: '#E3DDD3',
+  slotDeep: '#D8D1C5',
+  slotBorder: '#CBBBA5',
 
   /* Emboss — the hairline pair that fakes a stamped plate. */
-  embossLight: 'rgba(255, 255, 255, 0.72)',
-  embossShadow: 'rgba(43, 24, 32, 0.14)',
+  embossLight: 'rgba(255, 253, 249, 0.72)',
+  embossShadow: 'rgba(43, 35, 34, 0.14)',
 } as const;
 
 /* ==================================================================== */
-/* Typography — Clink identity                                          */
-/* Gowun Batang (display) / Hanken Grotesk (body) / Space Mono (numerals)*/
+/* Typography — Sipply identity                                         */
+/* Playfair Display (display) / Inter (everything else)                  */
 /*                                                                      */
-/* The display face is a LATIN-ONLY SUBSET, self-hosted from            */
-/* assets/fonts/. Upstream GowunBatang_700Bold.ttf is 8.2 MB of mostly  */
-/* Hangul that this app never renders — 84% of the font payload. The    */
-/* subset is 73 KB and looks identical. See assets/fonts/README.md      */
-/* before changing it, and do not re-add @expo-google-fonts/gowun-batang.*/
+/* The handoff names exactly two families and three Inter weights, so    */
+/* the third family is gone: Space Mono no longer sets the dex numbers.  */
+/* They are now Inter Medium tracked out and uppercased — the handoff's  */
+/* own "letterspaced label" style, which is what a catalogue number      */
+/* wanted to be all along. `type.tabular` carries the numeric alignment  */
+/* the mono was really there for.                                       */
+/*                                                                      */
+/* Both families are LATIN-ONLY SUBSETS, self-hosted from assets/fonts/. */
+/* See assets/fonts/README.md before changing them, and do not reach for */
+/* @expo-google-fonts.                                                   */
 /* ==================================================================== */
 
 export const fonts = {
-  display: 'GowunBatangLatin-Bold',
-  displayBold: 'GowunBatangLatin-Bold',
-  displayBlack: 'GowunBatangLatin-Bold',
-  body: 'HankenGrotesk_400Regular',
-  bodyMedium: 'HankenGrotesk_400Regular',
-  bodySemiBold: 'HankenGrotesk_700Bold',
-  bodyBold: 'HankenGrotesk_700Bold',
-  mono: 'SpaceMono_400Regular',
+  display: 'PlayfairDisplayLatin_600SemiBold',
+  displayBold: 'PlayfairDisplayLatin_700Bold',
+  displayBlack: 'PlayfairDisplayLatin_700Bold',
+  body: 'InterLatin_400Regular',
+  bodyMedium: 'InterLatin_500Medium',
+  bodySemiBold: 'InterLatin_600SemiBold',
+  bodyBold: 'InterLatin_600SemiBold',
+  /** Letterspaced sub-labels, and the dex numbers. */
+  label: 'InterLatin_500Medium',
+  /** Figures. Inter, with `type.tabular` for column alignment. */
+  numeral: 'InterLatin_500Medium',
 } as const;
 
 /** Type scale. Body is 16 so iOS never auto-zooms inputs. */
@@ -161,6 +176,23 @@ export const type = {
   headline: { fontSize: 28, lineHeight: 34 },
   display: { fontSize: 36, lineHeight: 42 },
 } as const;
+
+/**
+ * The brand's letterspaced label, at the two tracking values the sheet
+ * uses: 0.3em for UI sub-labels, 0.5em for the tagline lockup. RN takes
+ * letterSpacing in points, so these are pre-multiplied — keep them in
+ * step with `fontSize` if you change one.
+ *
+ * Always uppercase, always `fonts.label`, taupe on dark grounds and
+ * `taupeInk` on light ones.
+ */
+export const label = {
+  ui: { fontSize: 11, lineHeight: 14, letterSpacing: 3.3 },
+  tagline: { fontSize: 12, lineHeight: 16, letterSpacing: 6 },
+} as const;
+
+/** Figures that must line up in a column (stats, dex numbers, counts). */
+export const tabular = { fontVariant: ['tabular-nums'] as const };
 
 /* ==================================================================== */
 /* Spacing, radius, elevation, motion                                   */
@@ -177,91 +209,106 @@ export const space = {
   xxxl: 48,
 } as const;
 
+/**
+ * Radii are the handoff's, verbatim: grid thumbs 10, cards and feed
+ * photos 16, brand panels 24, the floating tab bar 32, buttons a pill at
+ * 26 on a 52pt height.
+ */
 export const radius = {
-  sm: 8,
+  sm: 10,
   md: 12,
   lg: 16,
-  xl: 22,
+  xl: 24,
+  tab: 32,
   pill: 999,
 } as const;
 
 /**
- * Patina-tinted shadows. These were warm brown (#5A3A28) for the cream base;
- * on porcelain a warm shadow reads as a smudge, so they cool with the page.
+ * Espresso-tinted shadows. These were cool green (#334B48) for the white
+ * page; on a warm off-white a cool shadow reads as a smudge. `raised` and
+ * `brand` are the two shadows the handoff specifies outright — the tab
+ * bar's `0 12px 30px rgba(43,35,34,.14)` and the app icon's
+ * `0 18px 40px rgba(91,15,26,.3)`.
  */
 export const elevation = {
   card: {
-    shadowColor: '#334B48',
+    shadowColor: '#2B2322',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 2,
   },
   raised: {
-    shadowColor: '#334B48',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    elevation: 6,
+    shadowColor: '#2B2322',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.14,
+    shadowRadius: 30,
+    elevation: 8,
   },
   sheet: {
-    shadowColor: '#22322F',
+    shadowColor: '#2B2322',
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.14,
+    shadowOpacity: 0.16,
     shadowRadius: 24,
     elevation: 12,
+  },
+  /** Wine objects that sit above the page: the app icon, the FAB. */
+  brand: {
+    shadowColor: '#5B0F1A',
+    shadowOffset: { width: 0, height: 18 },
+    shadowOpacity: 0.3,
+    shadowRadius: 40,
+    elevation: 14,
   },
 } as const;
 
 /* ==================================================================== */
 /* Glass                                                                */
 /*                                                                      */
-/* iOS 26 renders these surfaces with real Liquid Glass (expo-glass-    */
-/* effect). Everywhere else `components/glass.tsx` fakes it with the    */
-/* values below: a translucent porcelain fill, a specular sheen down    */
-/* the top third, and a hairline rim that is brighter on top than on    */
-/* the bottom — which is what actually sells "lit from above".          */
+/* iOS 26 renders these surfaces with real Liquid Glass (expo-glass-     */
+/* effect). Everywhere else `components/glass.tsx` fakes it with the     */
+/* values below: a translucent off-white fill, a specular sheen down the */
+/* top third, and a hairline rim that is brighter on top than on the     */
+/* bottom — which is what actually sells "lit from above".               */
 /*                                                                      */
-/* Deliberately NOT hex: alpha is the whole point of the material.      */
+/* `fill` is the handoff's tab-bar material exactly: off-white at 92%    */
+/* over a 10px blur.                                                     */
+/*                                                                      */
+/* Deliberately NOT hex: alpha is the whole point of the material.       */
 /* ==================================================================== */
 
 export const glass = {
-  /** Body fill of a frosted surface on the white page. */
-  fill: 'rgba(255, 255, 255, 0.82)',
+  /** Body fill of a frosted surface on the off-white page. */
+  fill: 'rgba(255, 253, 249, 0.92)',
   /** Heavier fill for surfaces that sit over photography or artwork. */
-  fillStrong: 'rgba(255, 255, 255, 0.93)',
+  fillStrong: 'rgba(255, 253, 249, 0.96)',
   /** Wine-tinted glass — the active/selected material. */
-  fillWine: 'rgba(99, 52, 68, 0.14)',
-  /** Patina-tinted glass — collection surfaces (progress, stats, collected). */
-  fillPatina: 'rgba(30, 99, 85, 0.13)',
+  fillWine: 'rgba(91, 15, 26, 0.12)',
+  /** Bone-tinted glass — collection surfaces (progress, stats, collected). */
+  fillBone: 'rgba(233, 229, 223, 0.86)',
   /** Top rim: the lit edge. */
-  rimTop: 'rgba(255, 255, 255, 0.92)',
+  rimTop: 'rgba(255, 253, 249, 0.94)',
   /** Perimeter rim: everything that isn't the lit edge. */
-  rim: 'rgba(43, 24, 32, 0.10)',
+  rim: 'rgba(43, 35, 34, 0.10)',
   /**
-   * Contour for the NATIVE Liquid Glass branch, which draws no border of its
-   * own. On the old porcelain page the material had enough tint difference to
-   * find its own edge; against the white page it resolves to near-white and
-   * the surface loses its silhouette entirely. Stronger than `rim` because it
-   * is the only edge that branch gets.
+   * Contour for the NATIVE Liquid Glass branch, which draws no border of
+   * its own and otherwise resolves to near-page and loses its silhouette.
+   * Stronger than `rim` because it is the only edge that branch gets.
    */
-  rimContour: 'rgba(43, 24, 32, 0.16)',
+  rimContour: 'rgba(43, 35, 34, 0.16)',
   /** Specular sheen stops, top → bottom of the highlight band. */
-  sheenFrom: 'rgba(255, 255, 255, 0.62)',
-  sheenTo: 'rgba(255, 255, 255, 0)',
+  sheenFrom: 'rgba(255, 253, 249, 0.62)',
+  sheenTo: 'rgba(255, 253, 249, 0)',
   /** Tint fed to the native Liquid Glass view so it keeps our warmth. */
-  nativeTint: 'rgba(255, 255, 255, 0.30)',
+  nativeTint: 'rgba(255, 253, 249, 0.30)',
   /**
-   * `strong` for the native branch. GlassView exposes only glassEffectStyle
-   * and tintColor, so there is no heavier material to ask for — tint opacity
-   * is the only lever, and without this `strong` reached nothing but the
-   * fallback's fillStrong and was silently dropped on every iOS 26 device.
-   * The 0.30 -> 0.48 step mirrors the fallback's 0.82 -> 0.93 in feel: more
-   * body, still unmistakably a material rather than a panel.
+   * `strong` for the native branch. GlassView exposes only
+   * glassEffectStyle and tintColor, so tint opacity is the only lever;
+   * without this, `strong` reached nothing but the fallback and was
+   * silently dropped on every iOS 26 device.
    */
-  nativeTintStrong: 'rgba(255, 255, 255, 0.48)',
+  nativeTintStrong: 'rgba(255, 253, 249, 0.48)',
 } as const;
-
 /** Micro-interactions 150–300ms; springs over cubic curves. */
 export const motion = {
   fast: 150,
@@ -299,6 +346,14 @@ export const motion = {
 
 /* ==================================================================== */
 /* Categories                                                           */
+/*                                                                      */
+/* Four hues, and the Sipply palette supplies two. So the categories     */
+/* are read as the MATERIALS of the bar rather than as arbitrary tints:  */
+/* merlot for what is mixed, plum for what is pressed, brass for what is */
+/* brewed, espresso for what is distilled. At chip size that is red /    */
+/* purple / amber / near-black, which survives both a 5pt dot and the    */
+/* ~8% of men with a colour vision deficiency — and every chip carries   */
+/* its label anyway, so the dot is reinforcement, never the message.     */
 /* ==================================================================== */
 
 export const CATEGORY_ORDER: DrinkCategory[] = ['cocktail', 'beer', 'wine', 'spirit'];
@@ -308,15 +363,15 @@ export const CATEGORY_META: Record<
   {
     label: string;
     plural: string;
-    /** Text/stroke-safe on cream. */
+    /** Text/stroke-safe on off-white. */
     color: string;
     /** Chip and badge fill. */
     wash: string;
     /**
      * Card field, top → bottom. A collectible card needs a ground that is
      * lighter at the top than the bottom, so the artwork appears lit from
-     * above rather than pasted onto a flat swatch. `fieldTo` is the existing
-     * `wash`, so a card and its category chip stay visibly related.
+     * above rather than pasted onto a flat swatch. `fieldTo` is the
+     * existing `wash`, so a card and its category chip stay related.
      */
     fieldFrom: string;
     fieldTo: string;
@@ -327,10 +382,10 @@ export const CATEGORY_META: Record<
   cocktail: {
     label: 'Cocktail',
     plural: 'Cocktails',
-    color: '#A83A29',
-    wash: '#FBE6E0',
-    fieldFrom: '#FEF7F5',
-    fieldTo: '#FBE6E0',
+    color: '#7E2330',
+    wash: '#F5E6E5',
+    fieldFrom: '#FFFAF8',
+    fieldTo: '#F5E6E5',
     emoji: '🍸',
     blurb: 'Mixed & stirred',
   },
@@ -338,29 +393,29 @@ export const CATEGORY_META: Record<
     label: 'Beer',
     plural: 'Beers',
     color: '#8A5F10',
-    wash: '#FAEFD2',
-    fieldFrom: '#FEFAEF',
-    fieldTo: '#FAEFD2',
+    wash: '#F6EDDC',
+    fieldFrom: '#FFFBF2',
+    fieldTo: '#F6EDDC',
     emoji: '🍺',
     blurb: 'Brewed & poured',
   },
   wine: {
     label: 'Wine',
     plural: 'Wines',
-    color: '#7A3A52',
-    wash: '#F6E4EA',
-    fieldFrom: '#FDF6F8',
-    fieldTo: '#F6E4EA',
+    color: '#5E2545',
+    wash: '#F1E6EC',
+    fieldFrom: '#FEF9FB',
+    fieldTo: '#F1E6EC',
     emoji: '🍷',
     blurb: 'Pressed & aged',
   },
   spirit: {
     label: 'Spirit',
     plural: 'Spirits',
-    color: '#54438A',
-    wash: '#EBE7F5',
-    fieldFrom: '#F9F7FD',
-    fieldTo: '#EBE7F5',
+    color: '#3A2E2C',
+    wash: '#ECE7E3',
+    fieldFrom: '#FBF9F7',
+    fieldTo: '#ECE7E3',
     emoji: '🥃',
     blurb: 'Distilled & bold',
   },
@@ -373,18 +428,20 @@ export const CATEGORY_META: Record<
 export const RARITY_ORDER: Rarity[] = ['common', 'uncommon', 'rare', 'legendary'];
 
 /**
- * The tiers climb gray → sage → blue → gold. `uncommon` uses the brand sage
- * rather than its own green (ONE GREEN RULE, see the palette header).
+ * Rarity is the FRAME, not a hue: hairline → taupe → wine → gilt, which
+ * reads as paper, then linen, then the brand, then metal. Categories own
+ * the hue axis (see above); rarity owns the material axis, so a rare
+ * cocktail is never asking one colour to say two things.
  *
- * `edge` and `edgeWidth` are the CARD treatment, not the badge. A collected
- * entry is framed in its tier, and the frame gets both more saturated and
- * physically thicker as the tier climbs — so rarity is legible in peripheral
- * vision while scrolling a 460-card grid, at thumbnail size, and without
- * relying on color alone (which excludes the ~8% of men with a CVD).
+ * `edge` and `edgeWidth` are the CARD treatment, not the badge. A
+ * collected entry is framed in its tier, and the frame gets both more
+ * saturated and physically thicker as the tier climbs — so rarity is
+ * legible in peripheral vision while scrolling a 460-card grid, at
+ * thumbnail size, and without relying on colour alone.
  *
- * `color` stays the text/badge value and remains contrast-audited; `edge` is
- * decorative and is NEVER the sole carrier of meaning — the badge label and
- * the corner dot both still say the tier in words and shape.
+ * `color` stays the text/badge value and remains contrast-audited; `edge`
+ * is decorative and is NEVER the sole carrier of meaning — the badge
+ * label and the corner dot both still say the tier in words and shape.
  */
 export const RARITY_META: Record<
   Rarity,
@@ -393,7 +450,7 @@ export const RARITY_META: Record<
     color: string;
     wash: string;
     weight: number;
-    /** Card frame color. Decorative. */
+    /** Card frame colour. Decorative. */
     edge: string;
     /** Card frame thickness in points. Climbs with the tier. */
     edgeWidth: number;
@@ -401,34 +458,34 @@ export const RARITY_META: Record<
 > = {
   common: {
     label: 'Common',
-    color: '#67655C',
-    wash: '#E9E8E1',
+    color: colors.textMuted,
+    wash: colors.cardBorder,
     weight: 0,
     edge: colors.cardBorder,
     edgeWidth: 1,
   },
   uncommon: {
     label: 'Uncommon',
-    color: colors.patina,
-    wash: colors.patinaWash,
+    color: colors.taupeInk,
+    wash: colors.taupeWash,
     weight: 1,
-    edge: colors.patinaSoft,
+    edge: colors.taupe,
     edgeWidth: 1.5,
   },
   rare: {
     label: 'Rare',
-    color: '#345F96',
-    wash: '#E3ECF7',
+    color: colors.wine,
+    wash: colors.wineWash,
     weight: 2,
-    edge: '#8FAAD0',
+    edge: colors.wineSoft,
     edgeWidth: 2,
   },
   legendary: {
     label: 'Legendary',
-    color: colors.goldInk,
-    wash: colors.goldWash,
+    color: colors.giltInk,
+    wash: colors.giltWash,
     weight: 3,
-    edge: colors.gold,
+    edge: colors.gilt,
     edgeWidth: 2.5,
   },
 };
@@ -467,13 +524,13 @@ export function drinkGlyph(drink: Pick<Drink, 'category' | 'glassware' | 'subcat
  * Accents assigned to new accounts at signup.
  *
  * Drawn from the category and rarity palettes rather than authored
- * separately, so avatar tints always belong to the same color system.
+ * separately, so avatar tints always belong to the same colour system.
  */
 export const SIGNUP_ACCENTS: readonly string[] = [
   CATEGORY_META.cocktail.color,
   CATEGORY_META.beer.color,
   CATEGORY_META.wine.color,
   CATEGORY_META.spirit.color,
-  RARITY_META.uncommon.color,
-  RARITY_META.rare.color,
+  colors.wine,
+  colors.taupeInk,
 ];

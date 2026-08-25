@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
-import { ClinkIntro } from '@/components/ClinkIntro';
+import { SipplyIntro } from '@/components/SipplyIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { colors, fonts } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
@@ -37,12 +37,13 @@ const ClinkTheme = {
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    // Latin-only subset — see assets/fonts/README.md. The key must match
-    // `fonts.display` in theme.ts byte-for-byte or it silently falls back.
-    'GowunBatangLatin-Bold': require('../../assets/fonts/GowunBatangLatin-Bold.ttf'),
-    HankenGrotesk_400Regular: require('../../assets/fonts/HankenGrotesk_400Regular.ttf'),
-    HankenGrotesk_700Bold: require('../../assets/fonts/HankenGrotesk_700Bold.ttf'),
-    SpaceMono_400Regular: require('../../assets/fonts/SpaceMono_400Regular.ttf'),
+    // Latin-only subsets — see assets/fonts/README.md. Each key must match
+    // its `fonts.*` value in theme.ts byte-for-byte or it silently falls back.
+    PlayfairDisplayLatin_600SemiBold: require('../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf'),
+    PlayfairDisplayLatin_700Bold: require('../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf'),
+    InterLatin_400Regular: require('../../assets/fonts/InterLatin_400Regular.ttf'),
+    InterLatin_500Medium: require('../../assets/fonts/InterLatin_500Medium.ttf'),
+    InterLatin_600SemiBold: require('../../assets/fonts/InterLatin_600SemiBold.ttf'),
   });
 
   const hydrated = useCollection((s) => s.hydrated);
@@ -97,7 +98,7 @@ export default function RootLayout() {
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
       {showIntro && (
-        <ClinkIntro
+        <SipplyIntro
           onDone={() => {
             introPlayed = true;
             setShowIntro(false);
