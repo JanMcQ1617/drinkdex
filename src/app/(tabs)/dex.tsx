@@ -306,10 +306,14 @@ export default function DexScreen() {
         const has = Boolean(unlocks[drink.id]);
         if (status === 'unlocked' ? !has : has) return false;
       }
+      // Origin is searchable so the dex can be browsed by country — "peru",
+      // "jalisco" and "iceland" all resolve, which is the only way the
+      // world-spanning half of the index is discoverable.
       if (
         q.length > 0 &&
         !drink.name.toLowerCase().includes(q) &&
-        !drink.subcategory.toLowerCase().includes(q)
+        !drink.subcategory.toLowerCase().includes(q) &&
+        !drink.origin.toLowerCase().includes(q)
       ) {
         return false;
       }
