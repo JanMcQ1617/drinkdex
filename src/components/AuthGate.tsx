@@ -260,9 +260,9 @@ const styles = StyleSheet.create({
 
   field: { gap: 6 },
   fieldLabel: {
-    fontFamily: fonts.bodySemiBold,
+    fontFamily: fonts.label,
     fontSize: 12,
-    letterSpacing: 0.8,
+    letterSpacing: 2.6,
     textTransform: 'uppercase',
     color: colors.textMuted,
   },

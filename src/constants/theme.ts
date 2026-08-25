@@ -1,3 +1,5 @@
+import type { TextStyle } from 'react-native';
+
 import type { Drink, DrinkCategory, Rarity } from '@/types';
 
 /* ==================================================================== */
@@ -144,7 +146,7 @@ export const colors = {
 /* the third family is gone: Space Mono no longer sets the dex numbers.  */
 /* They are now Inter Medium tracked out and uppercased — the handoff's  */
 /* own "letterspaced label" style, which is what a catalogue number      */
-/* wanted to be all along. `type.tabular` carries the numeric alignment  */
+/* wanted to be all along. The `tabular` style carries the numeric        */
 /* the mono was really there for.                                       */
 /*                                                                      */
 /* Both families are LATIN-ONLY SUBSETS, self-hosted from assets/fonts/. */
@@ -162,7 +164,7 @@ export const fonts = {
   bodyBold: 'InterLatin_600SemiBold',
   /** Letterspaced sub-labels, and the dex numbers. */
   label: 'InterLatin_500Medium',
-  /** Figures. Inter, with `type.tabular` for column alignment. */
+  /** Figures. Inter, with the `tabular` style for column alignment. */
   numeral: 'InterLatin_500Medium',
 } as const;
 
@@ -191,8 +193,14 @@ export const label = {
   tagline: { fontSize: 12, lineHeight: 16, letterSpacing: 6 },
 } as const;
 
-/** Figures that must line up in a column (stats, dex numbers, counts). */
-export const tabular = { fontVariant: ['tabular-nums'] as const };
+/**
+ * Figures that must line up in a column — stats, dex numbers, counts.
+ *
+ * Inter's tabular set is what replaced Space Mono here: the mono was only
+ * ever in the app to stop digits from shifting width, and a `fontVariant`
+ * does that without a third family.
+ */
+export const tabular: TextStyle = { fontVariant: ['tabular-nums'] };
 
 /* ==================================================================== */
 /* Spacing, radius, elevation, motion                                   */

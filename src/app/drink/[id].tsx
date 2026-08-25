@@ -56,6 +56,7 @@ import {
   RARITY_META,
   space,
   type as typeScale,
+  tabular,
 } from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useAuth } from '@/store/auth';
@@ -957,11 +958,11 @@ const styles = StyleSheet.create({
     gap: space.xs,
   },
   statLabel: {
-    fontFamily: fonts.bodySemiBold,
+    fontFamily: fonts.label,
     fontSize: 11,
-    letterSpacing: 1.4,
+    letterSpacing: 2.6,
     textTransform: 'uppercase',
-    color: colors.textFaint,
+    color: colors.taupeInk,
   },
   statValue: {
     fontFamily: fonts.bodySemiBold,
@@ -989,11 +990,11 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   miniLabel: {
-    fontFamily: fonts.bodySemiBold,
+    fontFamily: fonts.label,
     fontSize: 11,
-    letterSpacing: 1.4,
+    letterSpacing: 2.6,
     textTransform: 'uppercase',
-    color: colors.textFaint,
+    color: colors.taupeInk,
   },
 
   /* Chips */
@@ -1041,7 +1042,7 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
     lineHeight: typeScale.body.lineHeight,
     color: colors.giltInk,
-    fontVariant: ['tabular-nums'],
+    ...tabular,
   },
   steps: {
     marginTop: space.lg,
@@ -1079,9 +1080,9 @@ const styles = StyleSheet.create({
     gap: space.xs,
   },
   componentLabel: {
-    fontFamily: fonts.bodySemiBold,
+    fontFamily: fonts.label,
     fontSize: 11,
-    letterSpacing: 1.4,
+    letterSpacing: 2.6,
     textTransform: 'uppercase',
     color: colors.giltInk,
   },

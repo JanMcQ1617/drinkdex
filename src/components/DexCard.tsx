@@ -23,6 +23,7 @@ import {
   radius,
   RARITY_META,
   space,
+  tabular,
 } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
@@ -344,7 +345,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     letterSpacing: 2,
     color: colors.textMuted,
-    fontVariant: ['tabular-nums'],
+    ...tabular,
   },
   plateTextSunk: {
     color: colors.textMuted,

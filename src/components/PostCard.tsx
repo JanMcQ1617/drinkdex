@@ -14,7 +14,15 @@ import Animated, {
 import { DrinkArt } from '@/components/artwork';
 import { Icon, type IconName } from '@/components/icons';
 import { Avatar, CategoryPill, haptic, RarityBadge } from '@/components/ui';
-import { CATEGORY_META, colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import {
+  CATEGORY_META,
+  colors,
+  fonts,
+  radius,
+  space,
+  tabular,
+  type as typeScale,
+} from '@/constants/theme';
 import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { blockUser, REPORT_REASONS, reportPost } from '@/lib/moderation';
 import { signedPhotoUrl } from '@/lib/social';
@@ -526,7 +534,7 @@ const styles = StyleSheet.create({
     fontSize: typeScale.micro.fontSize,
     letterSpacing: typeScale.micro.letterSpacing,
     color: colors.textOnWine,
-    fontVariant: ['tabular-nums'],
+    ...tabular,
   },
   artPanel: {
     marginHorizontal: space.lg,

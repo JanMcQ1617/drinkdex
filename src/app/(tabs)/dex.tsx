@@ -41,6 +41,7 @@ import {
   radius,
   space,
   type as typeScale,
+  tabular,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, TOTAL } from '@/data';
 import { useCollection } from '@/store/collection';
@@ -627,7 +628,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
     color: colors.text,
-    fontVariant: ['tabular-nums'],
+    ...tabular,
   },
   mastheadTotal: {
     color: colors.textFaint,
@@ -668,7 +669,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.body.fontSize,
     color: colors.wine,
-    fontVariant: ['tabular-nums'],
+    ...tabular,
   },
   progressLabel: {
     fontFamily: fonts.body,
@@ -727,7 +728,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.numeral,
     fontSize: 10,
     color: colors.textFaint,
-    fontVariant: ['tabular-nums'],
+    ...tabular,
   },
 
   /* Search */

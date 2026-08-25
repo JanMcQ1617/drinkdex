@@ -987,7 +987,7 @@ const styles = StyleSheet.create({
   prizeNameRow: { flexDirection: 'row', alignItems: 'baseline', gap: space.sm },
   prizeName: {
     flex: 1,
-    fontFamily: fonts.display,
+    fontFamily: fonts.displayBold,
     fontSize: typeScale.body.fontSize,
     color: colors.text,
   },
