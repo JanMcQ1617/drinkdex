@@ -530,8 +530,8 @@ function OwnProfile() {
           {/* Invite, username search, and contact matching. */}
           <FindFriends />
 
-          {/* Browse everyone else on Clink. */}
-          <SectionLabel style={styles.sectionLabel}>Everyone on Clink</SectionLabel>
+          {/* Browse everyone else on Sipply. */}
+          <SectionLabel style={styles.sectionLabel}>Everyone on Sipply</SectionLabel>
           {loadingPeople && people.length === 0 ? (
             <View style={styles.loading}>
               <ActivityIndicator color={colors.wine} />

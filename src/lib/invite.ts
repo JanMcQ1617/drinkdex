@@ -5,7 +5,7 @@ import * as Linking from 'expo-linking';
 /* Invite links                                                         */
 /*                                                                      */
 /* An invite is a deep link carrying the inviter's user id. Opening it   */
-/* on a device with Clink installed makes the two accounts mutual        */
+/* on a device with Sipply installed makes the two accounts mutual        */
 /* follows (see accept_invite in migration 002). If the recipient isn't  */
 /* signed in yet, the inviter id is parked in storage and applied the    */
 /* moment they finish signing up.                                        */
@@ -26,7 +26,7 @@ export function buildInviteUrl(userId: string): string {
 
 /** The message that wraps the link when shared. */
 export function buildInviteMessage(displayName: string, url: string): string {
-  return `${displayName} is on Clink — the pocket bar you build one drink at a time. Tap to add me:\n${url}`;
+  return `${displayName} is on Sipply — the pocket bar you build one drink at a time. Tap to add me:\n${url}`;
 }
 
 /**

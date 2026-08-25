@@ -7,8 +7,8 @@ import { colors } from '@/constants/theme';
 /* Icon system                                                          */
 /*                                                                      */
 /* Hand-drawn on a 24×24 grid. One visual language throughout:          */
-/*   • 1.75 stroke, round caps and joins (echoes Gowun Batang's soft    */
-/*     serifs — a hairline or a miter join would fight the type)        */
+/*   • 1.75 stroke, round caps and joins (echoes Playfair Display's     */
+/*     bracketed serifs — a hairline or a miter join would fight it)    */
 /*   • outline for resting state, filled for active state               */
 /*   • geometry sits on half-pixel centers so strokes stay crisp        */
 /*                                                                      */
@@ -24,6 +24,8 @@ export type IconName =
   | 'stats'
   | 'profile'
   | 'search'
+  | 'eye'
+  | 'eyeOff'
   | 'close'
   | 'chevronLeft'
   | 'chevronRight'
@@ -93,6 +95,24 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     <>
       <Circle cx={10.8} cy={10.8} r={6.4} />
       <Path d="M15.5 15.5 20.4 20.4" />
+    </>
+  ),
+  /*
+   * Reveal / hide, for password fields. The set had no eye, so those
+   * fields borrowed the magnifier and the close cross — which told the
+   * user the button would search, and then that it would dismiss.
+   */
+  eye: (
+    <>
+      <Path d="M2.6 12C5.4 7.6 8.6 5.4 12 5.4c3.4 0 6.6 2.2 9.4 6.6-2.8 4.4-6 6.6-9.4 6.6-3.4 0-6.6-2.2-9.4-6.6Z" />
+      <Circle cx={12} cy={12} r={3.1} />
+    </>
+  ),
+  eyeOff: (
+    <>
+      <Path d="M2.6 12C5.4 7.6 8.6 5.4 12 5.4c3.4 0 6.6 2.2 9.4 6.6-2.8 4.4-6 6.6-9.4 6.6-3.4 0-6.6-2.2-9.4-6.6Z" />
+      <Circle cx={12} cy={12} r={3.1} />
+      <Path d="M4.6 4.6 19.4 19.4" />
     </>
   ),
   close: (

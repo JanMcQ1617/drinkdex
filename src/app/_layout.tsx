@@ -15,7 +15,7 @@ SplashScreen.preventAutoHideAsync();
 /** Play the intro once per cold start (survives fast-refresh remounts). */
 let introPlayed = false;
 
-const ClinkTheme = {
+const SipplyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -67,7 +67,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={ClinkTheme}>
+    <ThemeProvider value={SipplyTheme}>
       {/* Dark glyphs — the app is light-first now. */}
       <StatusBar style="dark" />
       <Stack

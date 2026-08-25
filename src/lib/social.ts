@@ -514,7 +514,7 @@ export async function setPhoneHash(myId: string, phoneHash: string | null): Prom
 
 /**
  * Given hashes of the numbers in the user's address book, returns the
- * Clink accounts that opted in with a matching hash.
+ * Sipply accounts that opted in with a matching hash.
  *
  * Chunked because the hash set can be large and PostgREST caps URL length
  * on the array argument.

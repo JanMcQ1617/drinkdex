@@ -56,7 +56,7 @@ for (const file of walk(ROOT)) {
   });
 }
 
-console.log('\n  Clink design-system guard\n');
+console.log('\n  Sipply design-system guard\n');
 
 if (violations.length === 0) {
   console.log('  No emoji-as-UI or hardcoded hex outside the allowlist.\n');

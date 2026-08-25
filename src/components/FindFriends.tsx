@@ -248,7 +248,7 @@ export function FindFriends() {
           <Text style={styles.cardTitle}>People from your contacts</Text>
         </View>
         <Text style={styles.cardBody}>
-          Clink checks your contacts against people already here. Numbers never leave your phone —
+          Sipply checks your contacts against people already here. Numbers never leave your phone —
           only scrambled one-way hashes are compared.
         </Text>
 
@@ -273,7 +273,7 @@ export function FindFriends() {
         {contactsState === 'denied' ? (
           <View style={styles.deniedBox}>
             <Text style={styles.cardBody}>
-              Contacts access is off. Turn it on for Clink in Settings, then try again.
+              Contacts access is off. Turn it on for Sipply in Settings, then try again.
             </Text>
             <Button
               label="Open Settings"
@@ -299,7 +299,7 @@ export function FindFriends() {
             </>
           ) : (
             <Text style={styles.hint}>
-              None of your {scanned} contacts are on Clink yet. Invite them above.
+              None of your {scanned} contacts are on Sipply yet. Invite them above.
             </Text>
           )
         ) : null}

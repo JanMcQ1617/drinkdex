@@ -226,7 +226,7 @@ export const PostCard = React.memo(function PostCard({
     Share.share({
       message: `${who.displayName} logged ${drink.name} ${formatDexNumber(
         drink.dexNumber,
-      )} on Clink.`,
+      )} on Sipply.`,
     }).catch(() => {
       /* dismissed, or unsupported off-device */
     });
@@ -380,8 +380,8 @@ export const PostCard = React.memo(function PostCard({
           </View>
         ) : (
           <View style={[styles.artPanel, { backgroundColor: category.wash }]}>
-            {/* Sized to fill the portrait panel — 190 left it adrift in it. */}
-            <DrinkArt drink={drink} size={260} />
+            {/* Sized to fill the panel — 190 left it adrift in the wash. */}
+            <DrinkArt drink={drink} size={220} />
           </View>
         )}
 
@@ -530,7 +530,14 @@ const styles = StyleSheet.create({
   },
   artPanel: {
     marginHorizontal: space.lg,
-    aspectRatio: 1 / 1.3,
+    /*
+     * NOT the photo's 1/1.3. That crop is specified for photography, where
+     * the subject fills the frame; a single piece of vector glassware in a
+     * panel that tall floats in a field of wash with nothing around it.
+     * This is DrinkArt's own 100×112 viewBox, so the panel is the shape of
+     * the thing inside it.
+     */
+    aspectRatio: 100 / 112,
     borderRadius: radius.lg,
     overflow: 'hidden',
     alignItems: 'center',

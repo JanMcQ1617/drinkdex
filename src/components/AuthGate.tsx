@@ -72,7 +72,7 @@ function Field({
             accessibilityRole="button"
             accessibilityLabel={reveal ? 'Hide password' : 'Show password'}
             style={styles.reveal}>
-            <Icon name={reveal ? 'close' : 'search'} size={18} color={colors.textFaint} />
+            <Icon name={reveal ? 'eyeOff' : 'eye'} size={18} color={colors.textMuted} />
           </PressableScale>
         ) : null}
       </View>
@@ -142,7 +142,7 @@ function AuthForm() {
           { paddingTop: insets.top + space.xxxl, paddingBottom: insets.bottom + space.xxl },
         ]}
         keyboardShouldPersistTaps="handled">
-        <Text style={styles.wordmark}>Clink</Text>
+        <Text style={styles.wordmark}>Sipply</Text>
         <Text style={styles.tagline}>
           {signup
             ? 'Make an account to share your pours and follow other collectors.'
@@ -234,10 +234,17 @@ const styles = StyleSheet.create({
   scroll: { paddingHorizontal: space.xl, flexGrow: 1 },
 
   wordmark: {
-    fontFamily: fonts.display,
+    /*
+     * Wine, not ink. The handoff's own splash sets the wordmark in bone on
+     * a wine ground — that beat is the launch intro, which pours wine over
+     * the whole screen. By the time the gate is reached the app is on its
+     * light page, so the wordmark keeps the brand colour and the page
+     * keeps the material every other screen is made of.
+     */
+    fontFamily: fonts.displayBold,
     fontSize: typeScale.display.fontSize,
     lineHeight: typeScale.display.lineHeight,
-    color: colors.text,
+    color: colors.wine,
   },
   tagline: {
     fontFamily: fonts.body,

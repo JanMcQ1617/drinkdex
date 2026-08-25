@@ -388,7 +388,7 @@ export default function DrinkDetailScreen() {
         if (!perm.granted) {
           showNotice(
             'Photo access needed',
-            'Clink needs photo library access to log proof. You can enable it in Settings.'
+            'Sipply needs photo library access to log proof. You can enable it in Settings.'
           );
           return;
         }
@@ -411,7 +411,7 @@ export default function DrinkDetailScreen() {
       if (!perm.granted) {
         showNotice(
           'Camera access needed',
-          'Clink needs camera access to snap proof. You can enable it in Settings.'
+          'Sipply needs camera access to snap proof. You can enable it in Settings.'
         );
         return;
       }
@@ -865,18 +865,24 @@ const styles = StyleSheet.create({
     marginBottom: space.lg,
   },
   dexLine: {
-    fontFamily: fonts.bodySemiBold,
+    /* The brand's letterspaced sub-label, above the name. */
+    fontFamily: fonts.label,
     fontSize: typeScale.micro.fontSize,
-    letterSpacing: 1.4,
-    color: colors.textFaint,
+    letterSpacing: 2.6,
+    color: colors.taupeInk,
     marginBottom: space.xs,
   },
   dexNumber: {
-    fontFamily: fonts.numeral,
-    color: colors.giltInk,
+    /*
+     * Wine, not gilt. Gilt means legendary and nothing else now, and a
+     * catalogue number printed in the legendary metal on every entry was
+     * spending the one colour the rarity ladder tops out at.
+     */
+    color: colors.wine,
   },
   name: {
-    fontFamily: fonts.display,
+    /* Drink names are the handoff's Playfair 700 at 28. */
+    fontFamily: fonts.displayBold,
     fontSize: typeScale.headline.fontSize,
     lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
@@ -889,7 +895,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: space.sm,
     paddingVertical: space.xl,
-    borderRadius: radius.xl,
+    /* Photographs carry the handoff's 16pt radius wherever they appear. */
+    borderRadius: radius.lg,
     borderWidth: 1,
     backgroundColor: colors.surface,
     marginBottom: space.lg,
@@ -919,11 +926,11 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
   },
   heroCaption: {
-    fontFamily: fonts.bodySemiBold,
+    fontFamily: fonts.label,
     fontSize: typeScale.micro.fontSize,
-    letterSpacing: 1.1,
+    letterSpacing: 2.6,
     textTransform: 'uppercase',
-    color: colors.textFaint,
+    color: colors.taupeInk,
   },
 
   /* Meta */

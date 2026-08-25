@@ -174,7 +174,7 @@ function HomeFeed() {
   const header = (
     <View>
       <View style={styles.masthead}>
-        <Text style={styles.wordmark}>Clink</Text>
+        <Text style={styles.wordmark}>Sipply</Text>
         <Text style={styles.subtitle}>Pours from the accounts you follow.</Text>
       </View>
       <FriendsRow
@@ -231,12 +231,17 @@ const styles = StyleSheet.create({
   loading: { paddingVertical: space.xxxl, alignItems: 'center' },
 
   /* Masthead */
-  masthead: { paddingHorizontal: space.xl },
+  /*
+   * The handoff's feed header: the wordmark centred over the page in
+   * Playfair 700, in wine, at 26. It is the only place in the app the
+   * brand name is set, so it is set as the brand sets it.
+   */
+  masthead: { paddingHorizontal: space.xl, alignItems: 'center' },
   wordmark: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
+    fontFamily: fonts.displayBold,
+    fontSize: 26,
+    lineHeight: 32,
+    color: colors.wine,
   },
   subtitle: {
     fontFamily: fonts.body,
@@ -244,6 +249,7 @@ const styles = StyleSheet.create({
     lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
     marginTop: space.xs,
+    textAlign: 'center',
   },
 
   /* Friends */

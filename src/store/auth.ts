@@ -44,7 +44,7 @@ function humanize(message: string): string {
     return 'That username is taken. Pick another.';
   if (m.includes('password')) return 'Password must be at least 6 characters.';
   if (m.includes('email')) return 'That email address does not look right.';
-  if (m.includes('network') || m.includes('fetch')) return 'Cannot reach Clink. Check your connection.';
+  if (m.includes('network') || m.includes('fetch')) return 'Cannot reach Sipply. Check your connection.';
   return message;
 }
 

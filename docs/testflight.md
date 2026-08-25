@@ -6,7 +6,7 @@ Paste these into App Store Connect. Written to be pasted, not edited.
 
 ## Beta App Description
 
-Clink is a field guide to drinks. Every cocktail, beer, wine and spirit you
+Sipply is a field guide to drinks. Every cocktail, beer, wine and spirit you
 try is an entry to collect — 460 of them, with the real recipe, the
 glassware, and where it comes from. Log what you're drinking, keep a photo,
 and see what the people you follow have been having.
@@ -15,7 +15,7 @@ and see what the people you follow have been having.
 
 ## What to Test
 
-Thanks for trying Clink. It's early, so tell me what's broken or confusing —
+Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
 
 Worth poking at:
@@ -56,7 +56,7 @@ mcqueeny1617@gmail.com
 **Sign-in required?** Yes. Reviewers can create an account with any email;
 there is no invite code or gate.
 
-**User-generated content.** Clink has posts, photos and usernames from
+**User-generated content.** Sipply has posts, photos and usernames from
 other users. Reporting and blocking are both available from the "..." menu
 on any post that isn't yours: report offers a reason, block is immediate
 and symmetric, and removes any follow between the two accounts.

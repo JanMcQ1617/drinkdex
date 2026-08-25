@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Clink",
+    "name": "Sipply",
     "slug": "drinkdex",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F8F8F6",
+    "backgroundColor": "#FFFDF9",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
       "buildNumber": "1",
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#5B0F1A",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -33,16 +33,16 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#301B26",
+          "backgroundColor": "#E9E5DF",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 160
         }
       ],
       "expo-sharing",
       [
         "expo-contacts",
         {
-          "contactsPermission": "Clink matches your contacts against people already on Clink so you can follow friends you already know. Your contacts are never uploaded — only one-way hashes are compared."
+          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Your contacts are never uploaded — only one-way hashes are compared."
         }
       ]
     ],

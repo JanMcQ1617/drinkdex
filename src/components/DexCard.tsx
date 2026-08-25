@@ -282,12 +282,15 @@ const styles = StyleSheet.create({
   /* Photograph */
   photoScrim: {
     /*
-     * Tuned against the darkest photographs in the set (Black Russian,
-     * Kalimotxo). Lighter and a collected card stops feeling like a reveal;
-     * heavier and the pale studio grounds all flatten to one grey.
+     * Re-tuned for espresso. The 0.82 this carried was mixed against the
+     * old wine-black ink; espresso is a heavier, browner pigment and at
+     * the same opacity it closed over the darkest photographs entirely —
+     * an Espresso Martini behind it was a black rectangle, which is the
+     * silhouette this scrim exists to avoid. 0.72 keeps the drink legible
+     * enough to want and still reads unmistakably as not-yours.
      */
     backgroundColor: colors.lockInk,
-    opacity: 0.82,
+    opacity: 0.72,
   },
   photo: {
     position: 'absolute',
