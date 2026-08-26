@@ -67,8 +67,19 @@ case "$MODE" in
     # A killed build leaves a hollow bundle rather than no bundle at all.
     [ -s "$APP/Sipply" ] || { echo "No binary in $APP — build did not finish." >&2; exit 1; }
 
+    # Match the UDID by SHAPE, never by field position. devicectl's columns
+    # are whitespace-separated but two of them hold variable-length names:
+    # the device name ("MC iPhone") and the model ("iPhone 17 Pro Max"). With
+    # $(NF-3) this returned "17" — the number out of the model name — and
+    # devicectl failed with 'device was not found (Name: 17)'. The build had
+    # succeeded; only the install died, which makes it look like a build bug.
     DEV="$(xcrun devicectl list devices 2>/dev/null \
-           | awk '/available \(paired\)/ {print $(NF-3); exit}')"
+           | awk '/available \(paired\)/ {
+                    for (i = 1; i <= NF; i++)
+                      if ($i ~ /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/) {
+                        print $i; exit
+                      }
+                  }')"
     [ -n "$DEV" ] || { echo "No paired device. Plug the phone in and unlock it." >&2; exit 1; }
 
     echo "==> Installing to $DEV"
