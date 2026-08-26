@@ -223,13 +223,26 @@ const CATEGORY_FALLBACK: Record<DrinkCategory, GlassShape> = {
  * Falls back to the category's signature glass when the glassware string
  * is missing or unrecognized, so every drink always renders something.
  */
+/*
+ * Vessels that belong to a mixed drink. A beer described as being served in
+ * a "Tall slim glass" is a happoshu in a beer glass, not a highball — but the
+ * generic /tall/ pattern fires first and draws it as one. Rather than making
+ * the pattern list longer and more brittle, refuse the shapes that cannot
+ * apply to the category and let the category fallback take over.
+ */
+const COCKTAIL_ONLY: ReadonlySet<GlassShape> = new Set<GlassShape>([
+  'highball', 'martini', 'coupe', 'margarita', 'tiki', 'hurricane', 'julepCup', 'shot',
+]);
+
 export function resolveShape(
   drink: Pick<Drink, 'category' | 'glassware' | 'subcategory'>,
 ): GlassShape {
   const g = (drink.glassware ?? '').toLowerCase();
   if (g) {
     for (const [re, shape] of PATTERNS) {
-      if (re.test(g)) return shape;
+      if (!re.test(g)) continue;
+      if (drink.category === 'beer' && COCKTAIL_ONLY.has(shape)) break;
+      return shape;
     }
   }
   return CATEGORY_FALLBACK[drink.category];

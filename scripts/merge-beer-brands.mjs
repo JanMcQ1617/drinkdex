@@ -242,7 +242,13 @@ const cards = brands.map((b) => {
     id: `${b.id}-br`,
     name: uniqueName(b),
     category: 'beer',
-    subcategory: style ? style.name : 'Uncatalogued',
+    /* The FAMILY, not the style name. Every authored card across all four
+     * categories puts a family here ("Pale Lager", "IPA"), and the artwork
+     * layer resolves beer liquid colour from it — BEER_BY_SUBCATEGORY. Using
+     * the style name instead left all 3,109 brand cards unmapped and falling
+     * back to a default colour. The specific style is not lost: it opens the
+     * card's description and is one tap away through the Atlas. */
+    subcategory: style ? style.subcategory : 'Uncatalogued',
     description: describe(b, style),
     abv: b.abv ?? style?.abv ?? 'Not published',
     origin: originOf(b),
