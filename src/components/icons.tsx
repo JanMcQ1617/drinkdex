@@ -46,7 +46,8 @@ export type IconName =
   | 'flame'
   | 'grid'
   | 'settings'
-  | 'comment';
+  | 'comment'
+  | 'instagram';
 
 export interface IconProps {
   name: IconName;
@@ -149,6 +150,19 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
   ),
   comment: (
     <Path d="M20.4 12.6a7.4 7.4 0 0 1-8 7.4 8.5 8.5 0 0 1-3-.6L4.2 20.4l1.1-4.9a7.4 7.4 0 0 1-.7-3.2 7.4 7.4 0 0 1 8-7.4 7.5 7.5 0 0 1 7.8 7.4z" />
+  ),
+  /*
+   * Instagram's mark redrawn on our own grid rather than dropped in as the
+   * brand asset: at 1.75 stroke beside the other glyphs it reads as part of
+   * the set, and Meta's guidelines forbid restyling the official logo. It
+   * labels a Sipply feature, so it should look like Sipply.
+   */
+  instagram: (
+    <>
+      <Path d="M7.6 3.9h8.8a3.7 3.7 0 0 1 3.7 3.7v8.8a3.7 3.7 0 0 1-3.7 3.7H7.6a3.7 3.7 0 0 1-3.7-3.7V7.6a3.7 3.7 0 0 1 3.7-3.7Z" />
+      <Circle cx={12} cy={12} r={3.6} />
+      <Path d="M16.9 7.15h.01" />
+    </>
   ),
   plus: (
     <>

@@ -2,6 +2,14 @@ import type { AuthError, Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
 import { SIGNUP_ACCENTS } from '@/constants/theme';
+import {
+  clearPendingHandle,
+  getPendingHandle,
+  hashHandle,
+  rememberHandle,
+  setPendingHandle,
+} from '@/lib/instagram';
+import { setInstagramHash } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
 
@@ -26,7 +34,19 @@ interface AuthState {
   notice: string | null;
 
   init: () => () => void;
-  signUp: (email: string, password: string, username: string, displayName: string) => Promise<void>;
+  /**
+   * `instagram` is optional and never blocks the account: it only decides
+   * whether friends importing their Instagram list can find this person.
+   * Stored as a hash, and not until the profile row exists — see
+   * setPendingHandle in src/lib/instagram.ts for why it takes a detour.
+   */
+  signUp: (
+    email: string,
+    password: string,
+    username: string,
+    displayName: string,
+    instagram?: string,
+  ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   /** Irreversible. Removes the auth user, every row that cascades from it, and the photos storage does not cascade. */
@@ -78,6 +98,48 @@ function humanizeSignUp(error: AuthError): string {
   return humanize(error.message);
 }
 
+/**
+ * Writes the handle given at signup, once there is a profile row to write it
+ * to. No-ops when nothing is parked, which is every launch after the first.
+ *
+ * The email check is the guard against a signup that was started but never
+ * confirmed: without it, a handle parked on this device would attach itself
+ * to whichever account signs in next, which on a shared phone is someone
+ * else's. A mismatch discards the handle rather than holding it — the user
+ * can add it in one field on the Accounts screen, and silently carrying a
+ * stale claim around is worse than losing it.
+ *
+ * Failures are swallowed on purpose. This is an optional discoverability
+ * setting running behind a profile fetch; an error here must not surface as
+ * "could not load your profile", and the same field on the Accounts screen
+ * is the retry.
+ */
+async function drainPendingHandle(uid: string, email: string | null): Promise<void> {
+  try {
+    const pending = await getPendingHandle();
+    if (!pending) return;
+
+    if (!email || email.trim().toLowerCase() !== pending.email) {
+      await clearPendingHandle();
+      return;
+    }
+
+    const hash = await hashHandle(pending.handle);
+    if (!hash) {
+      await clearPendingHandle();
+      return;
+    }
+
+    await setInstagramHash(uid, hash);
+    // Remembered locally too, so Accounts shows it as set rather than
+    // asking for it again — the hash on the server cannot be read back.
+    await rememberHandle(pending.handle);
+    await clearPendingHandle();
+  } catch {
+    /* Left parked; the next profile load retries it. */
+  }
+}
+
 export const useAuth = create<AuthState>()((set, get) => ({
   session: null,
   profile: null,
@@ -116,9 +178,18 @@ export const useAuth = create<AuthState>()((set, get) => ({
     return () => sub.subscription.unsubscribe();
   },
 
-  signUp: async (email, password, username, displayName) => {
+  signUp: async (email, password, username, displayName, instagram) => {
     set({ busy: true, error: null, notice: null });
     const accent = SIGNUP_ACCENTS[Math.floor(Math.random() * SIGNUP_ACCENTS.length)]!;
+
+    /*
+     * Parked before the request, not after: on a project that requires email
+     * confirmation this call returns without a session, and the handle would
+     * otherwise be gone by the time the user comes back to sign in.
+     * Cleared again below if the signup itself fails.
+     */
+    if (instagram?.trim()) await setPendingHandle(instagram, email);
+    else await clearPendingHandle();
 
     // The profile row is created by the on_auth_user_created trigger,
     // which reads these values out of user_metadata.
@@ -135,6 +206,9 @@ export const useAuth = create<AuthState>()((set, get) => ({
     });
 
     if (error) {
+      // Nothing was created, so nothing should be waiting to attach itself
+      // to the next account that signs in on this device.
+      await clearPendingHandle();
       set({ busy: false, error: humanizeSignUp(error) });
       return;
     }
@@ -225,6 +299,9 @@ export const useAuth = create<AuthState>()((set, get) => ({
 
       if (data) {
         set({ profile: data, profileLoading: false, profileError: null });
+        // Safe to write only now: the row the update targets is confirmed
+        // to exist, which is the whole reason this is not done in signUp.
+        void drainPendingHandle(uid, get().session?.user.email ?? null);
         return;
       }
 

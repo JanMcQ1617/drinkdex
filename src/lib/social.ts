@@ -549,3 +549,85 @@ export async function matchContacts(hashes: string[]): Promise<UserProfile[]> {
   }
   return out;
 }
+
+/**
+ * Makes this account findable by Instagram handle, or clears it.
+ *
+ * Same contract as setPhoneHash: only the salted hash of the normalized
+ * handle is stored, never the handle. Pass null to opt back out.
+ */
+export async function setInstagramHash(myId: string, handleHash: string | null): Promise<void> {
+  const { error } = await supabase
+    .from('profiles')
+    .update({ instagram_hash: handleHash })
+    .eq('id', myId);
+  if (error) throw error;
+}
+
+/**
+ * Given hashes of the handles in the user's Instagram export, returns the
+ * Sipply accounts that opted in with a matching hash.
+ *
+ * Keyed by hash rather than returning bare profiles: the caller holds the
+ * hash → handle map locally, so it can label a row "@sarah.g" without the
+ * server ever having seen the handle. Chunked for the same reason
+ * matchContacts is — PostgREST caps the URL length of an array argument.
+ */
+export async function matchInstagram(
+  hashes: string[],
+): Promise<{ profile: UserProfile; hash: string }[]> {
+  const unique = [...new Set(hashes)].filter(Boolean);
+  if (unique.length === 0) return [];
+
+  const CHUNK = 300;
+  const out: { profile: UserProfile; hash: string }[] = [];
+  const seen = new Set<string>();
+
+  for (let i = 0; i < unique.length; i += CHUNK) {
+    const { data, error } = await supabase.rpc('match_instagram', {
+      hashes: unique.slice(i, i + CHUNK),
+    });
+    if (error) throw error;
+    for (const row of (data ?? []) as (MatchRow & { matched_hash: string })[]) {
+      if (seen.has(row.id)) continue;
+      seen.add(row.id);
+      out.push({
+        hash: row.matched_hash,
+        profile: toProfile({
+          id: row.id,
+          username: row.username,
+          display_name: row.display_name,
+          accent: row.accent,
+          bio: row.bio,
+          created_at: row.created_at,
+        }),
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Follows a whole list in one request. Returns how many edges were NEW.
+ *
+ * The reason the import is worth having: matching 40 friends and then
+ * making the user tap Follow 40 times is the problem, not the solution.
+ * Chunked at the server's own cap so a large list degrades into a few
+ * requests instead of being silently truncated.
+ */
+export async function followMany(targetIds: string[]): Promise<number> {
+  const unique = [...new Set(targetIds)].filter(Boolean);
+  if (unique.length === 0) return 0;
+
+  const CHUNK = 500;
+  let added = 0;
+
+  for (let i = 0; i < unique.length; i += CHUNK) {
+    const { data, error } = await supabase.rpc('follow_many', {
+      targets: unique.slice(i, i + CHUNK),
+    });
+    if (error) throw error;
+    added += typeof data === 'number' ? data : 0;
+  }
+  return added;
+}

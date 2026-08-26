@@ -24,6 +24,13 @@ export type ProfileRow = {
    * back on a read — it's here only so `update({ phone_hash })` typechecks.
    */
   phone_hash?: string | null;
+  /**
+   * Salted hash of the normalized Instagram handle, for the connections
+   * import. Write-only from the client for the same reason as phone_hash:
+   * migration 008 revokes the SELECT column privilege, so it never comes
+   * back on a read and only match_instagram can see it.
+   */
+  instagram_hash?: string | null;
 };
 
 export type PostRow = {
@@ -176,6 +183,28 @@ export type Database = {
           bio: string | null;
           created_at: string;
         }[];
+      };
+      /**
+       * Echoes matched_hash back so the caller can label a row with the
+       * handle it came from — the plaintext never leaves the device, so
+       * only the device can read that mapping. See migration 008.
+       */
+      match_instagram: {
+        Args: { hashes: string[] };
+        Returns: {
+          id: string;
+          username: string;
+          display_name: string;
+          accent: string;
+          bio: string | null;
+          created_at: string;
+          matched_hash: string;
+        }[];
+      };
+      /** Batch follow. Returns the number of NEW edges. See migration 008. */
+      follow_many: {
+        Args: { targets: string[] };
+        Returns: number;
       };
     };
     Enums: Record<never, never>;

@@ -11,71 +11,38 @@ import {
 } from 'react-native';
 
 import { Icon } from '@/components/icons';
-import { Avatar, Button, Card, haptic } from '@/components/ui';
+import { InstagramImport } from '@/components/InstagramImport';
+import { MatchResults, type MatchEntry } from '@/components/PeopleList';
+import { Button, Card, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { hashPhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
 import { buildInviteMessage, buildInviteUrl } from '@/lib/invite';
 import { matchContacts, searchPeople, setPhoneHash } from '@/lib/social';
 import { useAuth } from '@/store/auth';
-import { useSocial } from '@/store/social';
 import type { UserProfile } from '@/types';
 
 const DISCOVERABLE_KEY = 'clink-discoverable';
-
-/* ------------------------------------------------------------------ */
-/* Person row                                                          */
-/* ------------------------------------------------------------------ */
-
-function PersonRow({
-  person,
-  following,
-  onToggle,
-}: {
-  person: UserProfile;
-  following: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <View style={styles.row}>
-      <Avatar name={person.displayName} accent={person.accent} size={44} />
-      <View style={styles.rowText}>
-        <Text style={styles.rowName} numberOfLines={1}>
-          {person.displayName}
-        </Text>
-        <Text style={styles.rowHandle} numberOfLines={1}>
-          @{person.username}
-        </Text>
-      </View>
-      <Button
-        label={following ? 'Following' : 'Follow'}
-        variant={following ? 'secondary' : 'primary'}
-        onPress={onToggle}
-        accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${person.displayName}`}
-        style={styles.rowBtn}
-      />
-    </View>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* FindFriends                                                         */
 /* ------------------------------------------------------------------ */
 
 /**
- * The discovery surface: invite a friend, search by @username, or match
- * your phone contacts. Rendered inside the profile's Accounts segment.
+ * The discovery surface: invite a friend, import your Instagram
+ * connections, search by @username, or match your phone contacts.
+ * Rendered inside the profile's Accounts segment.
  *
- * Meta's APIs can't return an Instagram/Facebook follower list to anyone,
- * so "connect and import my followers" isn't built — these three are how
- * friend-finding actually works.
+ * Every list ends in <MatchResults>, which leads with "Follow all" —
+ * finding forty people is worthless if acting on them is forty taps.
+ *
+ * There is no "Log in with Instagram" button because no such thing can
+ * exist for this: Meta returns follower COUNTS to third-party apps and
+ * never lists, and the only API that covered personal accounts was shut
+ * off in December 2024. See src/lib/instagram.ts.
  */
 export function FindFriends() {
   const myId = useAuth((s) => s.session?.user.id);
   const profile = useAuth((s) => s.profile);
-  const following = useSocial((s) => s.following);
-  const toggleFollow = useSocial((s) => s.toggleFollow);
-
-  const followingSet = new Set(following);
 
   /* ---- invite ---- */
   const invite = useCallback(async () => {
@@ -191,6 +158,9 @@ export function FindFriends() {
 
   if (!myId) return null;
 
+  const searchEntries: MatchEntry[] = results.map((p) => ({ profile: p }));
+  const contactEntries: MatchEntry[] = matches.map((p) => ({ profile: p }));
+
   return (
     <View style={styles.wrap}>
       {/* Invite */}
@@ -205,41 +175,8 @@ export function FindFriends() {
         <Button label="Share invite link" icon="share" block onPress={invite} style={styles.cardCta} />
       </Card>
 
-      {/* Search */}
-      <Card style={styles.card}>
-        <View style={styles.cardHead}>
-          <Icon name="search" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle}>Find by username</Text>
-        </View>
-        <View style={styles.searchWrap}>
-          <Icon name="search" size={18} color={colors.textFaint} />
-          <TextInput
-            value={term}
-            onChangeText={setTerm}
-            placeholder="Search @username or name"
-            placeholderTextColor={colors.textFaint}
-            autoCapitalize="none"
-            autoCorrect={false}
-            style={styles.searchInput}
-            accessibilityLabel="Search for people by username"
-          />
-          {showSearch && searching ? (
-            <ActivityIndicator size="small" color={colors.wineSoft} />
-          ) : null}
-        </View>
-        {showSearch &&
-          results.map((p) => (
-            <PersonRow
-              key={p.id}
-              person={p}
-              following={followingSet.has(p.id)}
-              onToggle={() => toggleFollow(myId, p.id)}
-            />
-          ))}
-        {showSearch && !searching && results.length === 0 ? (
-          <Text style={styles.hint}>No one by that name yet.</Text>
-        ) : null}
-      </Card>
+      {/* Instagram */}
+      <InstagramImport />
 
       {/* Contacts */}
       <Card style={styles.card}>
@@ -286,22 +223,40 @@ export function FindFriends() {
         ) : null}
 
         {contactsState === 'done' ? (
-          matches.length > 0 ? (
-            <>
-              {matches.map((p) => (
-                <PersonRow
-                  key={p.id}
-                  person={p}
-                  following={followingSet.has(p.id)}
-                  onToggle={() => toggleFollow(myId, p.id)}
-                />
-              ))}
-            </>
-          ) : (
-            <Text style={styles.hint}>
-              None of your {scanned} contacts are on Sipply yet. Invite them above.
-            </Text>
-          )
+          <MatchResults
+            entries={contactEntries}
+            emptyText={`None of your ${scanned} contacts are on Sipply yet. Invite them above.`}
+          />
+        ) : null}
+      </Card>
+
+      {/* Search */}
+      <Card style={styles.card}>
+        <View style={styles.cardHead}>
+          <Icon name="search" size={18} color={colors.wine} />
+          <Text style={styles.cardTitle}>Find by username</Text>
+        </View>
+        <View style={styles.searchWrap}>
+          <Icon name="search" size={18} color={colors.textFaint} />
+          <TextInput
+            value={term}
+            onChangeText={setTerm}
+            placeholder="Search @username or name"
+            placeholderTextColor={colors.textFaint}
+            autoCapitalize="none"
+            autoCorrect={false}
+            style={styles.searchInput}
+            accessibilityLabel="Search for people by username"
+          />
+          {showSearch && searching ? (
+            <ActivityIndicator size="small" color={colors.wineSoft} />
+          ) : null}
+        </View>
+        {showSearch ? (
+          <MatchResults
+            entries={searchEntries}
+            emptyText={searching ? undefined : 'No one by that name yet.'}
+          />
         ) : null}
       </Card>
 
@@ -394,27 +349,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     color: colors.text,
   },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    paddingTop: space.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.cardBorder,
-  },
-  rowText: { flex: 1 },
-  rowName: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
-  rowHandle: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textFaint,
-  },
-  rowBtn: { paddingHorizontal: space.lg, minHeight: 40 },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   deniedBox: { gap: space.sm },
