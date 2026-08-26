@@ -359497,5 +359497,1960 @@
    "process": "A regional wine, made in Manicaland and bottled to the local rules for red wine."
   },
   "dexNumber": 7296
+ },
+ {
+  "id": "brown-derby",
+  "name": "Brown Derby",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Bourbon, grapefruit and honey — three ingredients from a Hollywood hat-shaped restaurant, and one of the cleanest sours ever written.",
+  "abv": "18–20%",
+  "origin": "Hollywood, California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "honey",
+   "bourbon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Bourbon",
+   "Grapefruit juice",
+   "Honey syrup"
+  ],
+  "funFact": "Named for the Brown Derby restaurant on Wilshire Boulevard, which was built in the shape of a hat; the drink itself was reportedly first mixed at the Vendôme Club nearby.",
+  "dexNumber": 7297,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Loosen honey with an equal part of warm water to make a pourable syrup.",
+    "Shake the bourbon, grapefruit juice and honey syrup hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a grapefruit twist."
+   ],
+   "garnish": "Grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "blinker",
+  "name": "Blinker",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Rye, grapefruit and raspberry syrup. A Prohibition-era oddity that only works once you replace the grenadine most books wrongly call for.",
+  "abv": "18–20%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "raspberry",
+   "rye"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Grapefruit juice",
+   "Raspberry syrup"
+  ],
+  "funFact": "The original 1934 recipe calls for grenadine, but modern bartenders almost universally swap in raspberry syrup — the drink is markedly better for it, and the substitution has effectively become the recipe.",
+  "dexNumber": 7298,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Raspberry syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a grapefruit twist.",
+    "Serve immediately."
+   ],
+   "garnish": "Grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "camerons-kick",
+  "name": "Cameron's Kick",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Scotch and Irish whiskey together, with lemon and orgeat. Two whiskies that should not share a glass, and somehow do.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "almond",
+   "lemon",
+   "smoke"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Irish whiskey",
+   "Lemon juice",
+   "Orgeat"
+  ],
+  "funFact": "It appears in Harry MacElhone's 1922 book, and its trick is that orgeat's almond richness bridges the gap between smoky Scotch and soft Irish whiskey — neither works alone in this shape.",
+  "dexNumber": 7299,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Irish whiskey",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orgeat",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Express a lemon twist over the surface and discard it.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "chancellor",
+  "name": "Chancellor",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Scotch, tawny port and dry vermouth. Nutty, dried-fruited and considerably older-tasting than its ingredients suggest.",
+  "abv": "26–28%",
+  "origin": "Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "dried fruit",
+   "nut",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Tawny port",
+   "Dry vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "Port and Scotch is an unfashionable pairing that the sherry-cask whisky trade quietly proves every day: oxidative fortified wine and malt have been sharing a barrel for two centuries.",
+  "dexNumber": 7300,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Tawny port",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the top and drop it in.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "algonquin",
+  "name": "Algonquin",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, dry vermouth and pineapple juice — named for the hotel whose Round Table drank through the 1920s.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "rye",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Dry vermouth",
+   "Pineapple juice"
+  ],
+  "funFact": "The Algonquin Hotel's Round Table met daily for a decade and produced more quotable insults than cocktails; the drink named for it is gentler than its namesakes were.",
+  "dexNumber": 7301,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice — fresh pineapple juice needs aeration.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a pineapple leaf, or nothing at all.",
+    "Serve immediately."
+   ],
+   "garnish": "Pineapple leaf",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "monte-carlo-cocktail",
+  "name": "Monte Carlo Cocktail",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan with Bénédictine in place of the vermouth. Honeyed herbs against rye, and shorter than either parent.",
+  "abv": "30–32%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "honeyed herbs",
+   "spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Bénédictine",
+   "Angostura bitters"
+  ],
+  "funFact": "Bénédictine's recipe is held by three people at a time at Fécamp in Normandy, and its 27 herbs and spices make it one of the few liqueurs that can replace vermouth without unbalancing a drink.",
+  "dexNumber": 7302,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "preakness",
+  "name": "Preakness",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan with Bénédictine added rather than substituted, named for the second leg of the Triple Crown.",
+  "abv": "28–30%",
+  "origin": "Baltimore, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "vermouth",
+   "honeyed herbs",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Sweet vermouth",
+   "Bénédictine",
+   "Angostura bitters"
+  ],
+  "funFact": "The Preakness Stakes has been run at Pimlico since 1873, and the winning horse is traditionally draped in black-eyed Susans — which are not in season and are usually painted daisies.",
+  "dexNumber": 7303,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the top and drop it in.",
+    "Serve cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "palmetto",
+  "name": "Palmetto",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan built on aged rum instead of whiskey. Older than the Cuba Libre and considerably more serious.",
+  "abv": "24–26%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "aged rum",
+   "vermouth",
+   "molasses",
+   "spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Aged rum",
+   "Sweet vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "It appears in bar books from the 1890s onward, from the era when rum and whiskey were treated as interchangeable bases rather than as separate worlds.",
+  "dexNumber": 7304,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aged rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a brandied cherry.",
+    "Serve very cold."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "pegu-club",
+  "name": "Pegu Club",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, orange curaçao and lime with two bitters — the house drink of a British officers' club in colonial Burma.",
+  "abv": "22–24%",
+  "origin": "Yangon, Myanmar",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "lime",
+   "juniper",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Orange curaçao",
+   "Lime juice",
+   "Angostura bitters",
+   "Orange bitters"
+  ],
+  "funFact": "The Pegu Club in Rangoon was a British colonial institution; the drink outlived the club entirely and later gave its name to Audrey Saunders' influential New York bar.",
+  "dexNumber": 7305,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lime twist.",
+    "Serve immediately."
+   ],
+   "garnish": "Lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "saratoga",
+  "name": "Saratoga",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Equal parts rye, cognac and sweet vermouth. Jerry Thomas printed it in 1887 and nobody has improved on the ratio since.",
+  "abv": "28–30%",
+  "origin": "New York, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "cognac",
+   "vermouth",
+   "spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Cognac",
+   "Sweet vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "Saratoga Springs was America's first great resort town, and its racetrack and mineral springs put its name on drinks, chips and a whole style of trunk.",
+  "dexNumber": 7306,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a cherry or a lemon twist.",
+    "Serve cold."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "journalist",
+  "name": "Journalist",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin with both vermouths, curaçao, lemon and bitters — six ingredients, and a Savoy recipe that rewards precision.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "orange",
+   "vermouth",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange curaçao",
+   "Lemon juice"
+  ],
+  "funFact": "The Savoy Cocktail Book is full of six-ingredient gin drinks in tiny measures; most collapse under modern pours, and the Journalist is one of the few that holds together.",
+  "dexNumber": 7307,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for 25 seconds — the citrus is a seasoning here, not a sour base.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "twentieth-century",
+  "name": "Twentieth Century",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, Lillet, lemon and crème de cacao. Chocolate and citrus in the same glass, named for a luxury train.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cacao",
+   "lemon",
+   "juniper",
+   "quinine"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lillet Blanc",
+   "Lemon juice",
+   "White crème de cacao"
+  ],
+  "funFact": "Named for the 20th Century Limited, the express that ran New York to Chicago overnight and gave us the phrase 'red carpet treatment' — the carpet was literal.",
+  "dexNumber": 7308,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lillet Blanc",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "White crème de cacao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Express a lemon twist over the top and discard it.",
+    "Serve very cold — this one falls apart warm."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "corpse-reviver-no-1",
+  "name": "Corpse Reviver No. 1",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Cognac, calvados and sweet vermouth — the forgotten sibling, all brown spirit where the famous one is all citrus.",
+  "abv": "30–32%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "cognac",
+   "vermouth",
+   "oak"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Cognac",
+   "Calvados",
+   "Sweet vermouth"
+  ],
+  "funFact": "The Savoy notes that No. 1 is 'to be taken before 11am, or whenever steam and energy are needed' — a prescription it declines to explain further.",
+  "dexNumber": 7309,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with an apple slice or a lemon twist.",
+    "Serve cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "satans-whiskers",
+  "name": "Satan's Whiskers",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, both vermouths, orange juice, curaçao and orange bitters. 'Straight' uses Grand Marnier, 'curled' uses curaçao.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "juniper",
+   "vermouth",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange juice",
+   "Orange curaçao"
+  ],
+  "funFact": "The Savoy lists both versions side by side — straight with Grand Marnier, curled with orange curaçao — and declines to say which is better, which has kept the argument alive for ninety years.",
+  "dexNumber": 7310,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist.",
+    "Serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "maidens-prayer",
+  "name": "Maiden's Prayer",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, Cointreau and equal lemon and orange juice. A White Lady that let some orange in.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Cointreau",
+   "Lemon juice",
+   "Orange juice"
+  ],
+  "funFact": "It belongs to a whole family of interwar gin-and-orange-liqueur sours whose names — Maiden's Prayer, Maiden's Blush, Leap Year — say more about the era than the drinks do.",
+  "dexNumber": 7311,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "leap-year",
+  "name": "Leap Year",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, sweet vermouth, Grand Marnier and lemon — created at the Savoy for the leap-year party of 29 February 1928.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "juniper",
+   "vermouth",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sweet vermouth",
+   "Grand Marnier",
+   "Lemon juice"
+  ],
+  "funFact": "Harry Craddock created it for the Savoy's leap-year celebration in 1928, and the book claims it 'is responsible for more proposals than any other cocktail ever mixed'.",
+  "dexNumber": 7312,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grand Marnier",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface and drop it in.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "lucien-gaudin",
+  "name": "Lucien Gaudin",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, Campari, dry vermouth and Cointreau — a Negroni that swapped half its sweetness for orange and got sharper.",
+  "abv": "24–26%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter orange",
+   "juniper",
+   "dry vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Campari",
+   "Dry vermouth",
+   "Cointreau"
+  ],
+  "funFact": "Named for the French fencer who took two golds at the 1928 Olympics — one of very few cocktails named after an Olympic athlete rather than a bar or a film.",
+  "dexNumber": 7313,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "millionaire",
+  "name": "Millionaire",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Rye, orange curaçao, grenadine and egg white — a foamy pink sour with far more backbone than its colour suggests.",
+  "abv": "20–22%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "orange",
+   "pomegranate",
+   "foam"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Orange curaçao",
+   "Grenadine",
+   "Egg white"
+  ],
+  "funFact": "At least four unrelated drinks have carried the name Millionaire across the last century, which is what happens when a name sounds better than it describes.",
+  "dexNumber": 7314,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Grate a little nutmeg over the foam."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "ampersand",
+  "name": "Ampersand",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Old Tom gin, cognac, sweet vermouth and curaçao in equal parts. A Martinez that took brandy along.",
+  "abv": "28–30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "cognac",
+   "orange",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Old Tom gin",
+   "Cognac",
+   "Sweet vermouth",
+   "Orange curaçao"
+  ],
+  "funFact": "Equal-parts drinks were the default before jiggers were common — four ingredients in the same measure is a recipe you can pour accurately in a dark bar.",
+  "dexNumber": 7315,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Old Tom gin",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the top.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "colonial",
+  "name": "Colonial",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, grapefruit and maraschino — a pre-Prohibition sour built on grapefruit before grapefruit was a bar staple.",
+  "abv": "22–24%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "cherry",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Grapefruit juice",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Grapefruit was a novelty crop in America until the 1900s; its arrival in bar books marks the point at which Florida citrus started shipping north by rail.",
+  "dexNumber": 7316,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a maraschino cherry.",
+    "Serve cold."
+   ],
+   "garnish": "Maraschino cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "nuclear-daiquiri",
+  "name": "Nuclear Daiquiri",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Overproof Jamaican rum, green Chartreuse, falernum and lime. A Daiquiri with the safety catch removed.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "overproof rum",
+   "herbal",
+   "clove",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Overproof Jamaican rum",
+   "Green Chartreuse",
+   "Falernum",
+   "Lime juice"
+  ],
+  "funFact": "Gregor de Gruyther created it at LAB in London in the mid-2000s; Wray & Nephew at 63% and Chartreuse at 55% in the same short glass is the reason for the name.",
+  "dexNumber": 7317,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Wray & Nephew overproof rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Falernum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lime wheel.",
+    "Serve one, and think carefully about a second."
+   ],
+   "garnish": "Lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "vieux-mot",
+  "name": "Vieux Mot",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, elderflower, lemon and sugar — the Last Word's floral cousin, and the drink that put St-Germain on every back bar.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "elderflower",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "St-Germain elderflower liqueur",
+   "Lemon juice",
+   "Simple syrup"
+  ],
+  "funFact": "Don Lee created it at PDT in 2007, the year St-Germain launched; the name puns on the Last Word, since 'vieux mot' is French for old word.",
+  "dexNumber": 7318,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "St-Germain",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lemon twist.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "the-business",
+  "name": "The Business",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, honey and lime. Three ingredients, no garnish, nothing to hide behind.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Honey syrup",
+   "Lime juice"
+  ],
+  "funFact": "It is a Bee's Knees with lime in place of lemon, and the swap matters more than it should — lime's sharper acidity keeps the honey from turning the drink syrupy.",
+  "dexNumber": 7319,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Loosen honey with warm water at three parts honey to one of water.",
+    "Shake the gin, honey syrup and lime juice hard with ice.",
+    "Double-strain into a chilled coupe.",
+    "Serve without garnish."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "weeski",
+  "name": "Weeski",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Irish whiskey, Lillet Blanc and Cointreau with orange bitters. Light, aromatic and unusually easy for a stirred drink.",
+  "abv": "22–24%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "quinine",
+   "honeyed malt"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Lillet Blanc",
+   "Cointreau",
+   "Orange bitters"
+  ],
+  "funFact": "Created at Milk & Honey in New York; the name is a phonetic joke on 'whiskey' delivered in the accent the drink is built around.",
+  "dexNumber": 7320,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lillet Blanc",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface and drop it in.",
+    "Serve very cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "ford-cocktail",
+  "name": "Ford Cocktail",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Old Tom gin, dry vermouth and Bénédictine with orange bitters — a pre-Prohibition stirred drink that reads modern.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "honeyed herbs",
+   "orange",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Old Tom gin",
+   "Dry vermouth",
+   "Bénédictine",
+   "Orange bitters"
+  ],
+  "funFact": "It appears in Hugo Ensslin's 1916 book, named for a bartender rather than the carmaker — the two were contemporaries and the confusion is permanent.",
+  "dexNumber": 7321,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Old Tom gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the top and drop it in.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "bywater",
+  "name": "Bywater",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, Averna, green Chartreuse and falernum — a modern New Orleans drink with a Vieux Carré's density and none of its vermouth.",
+  "abv": "26–28%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "bitter herbs",
+   "clove",
+   "amaro"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Amaro Averna",
+   "Green Chartreuse",
+   "Falernum"
+  ],
+  "funFact": "Chris Hannah created it at Arnaud's French 75 Bar and named it for the New Orleans neighbourhood downriver of the Marigny.",
+  "dexNumber": 7322,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Amaro Averna",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Falernum",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface.",
+    "Serve cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "elder-fashion",
+  "name": "Elder Fashion",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "An Old Fashioned with elderflower liqueur where the sugar goes, built on gin rather than whiskey.",
+  "abv": "24–26%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "elderflower",
+   "juniper",
+   "orange",
+   "bitters"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "St-Germain elderflower liqueur",
+   "Orange bitters"
+  ],
+  "funFact": "It belongs to a wave of drinks from around 2007 that treated St-Germain as a sweetener rather than a flavour, which is the only way it works in a spirit-forward build.",
+  "dexNumber": 7323,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "St-Germain",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "one large cube"
+    }
+   ],
+   "steps": [
+    "Stir the gin, St-Germain and bitters over ice for 25 seconds.",
+    "Strain over one large cube in a rocks glass.",
+    "Express a grapefruit twist over the surface and drop it in.",
+    "Serve immediately."
+   ],
+   "garnish": "Grapefruit twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "silver-monk",
+  "name": "Silver Monk",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Tequila, green Chartreuse, cucumber, mint and lime — herbal, cooling and considerably more complex than a Margarita.",
+  "abv": "20–22%",
+  "origin": "San Francisco, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cucumber",
+   "mint",
+   "herbal",
+   "agave"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Blanco tequila",
+   "Green Chartreuse",
+   "Cucumber",
+   "Mint",
+   "Lime juice"
+  ],
+  "funFact": "Created at Bourbon & Branch in San Francisco; cucumber and Chartreuse is an unlikely pairing that works because both are green in completely different registers.",
+  "dexNumber": 7324,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cucumber",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "6"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Muddle the cucumber slices gently in the shaker.",
+    "Add the mint and press once — do not shred it.",
+    "Add the tequila, Chartreuse, lime and syrup with ice, then shake hard.",
+    "Double-strain into a chilled coupe.",
+    "Float a cucumber slice and a mint leaf."
+   ],
+   "garnish": "Cucumber slice and mint",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "vaina",
+  "name": "Vaina",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Port or pisco shaken with egg yolk, cocoa and sugar — a Chilean dessert drink poured at every Fiestas Patrias.",
+  "abv": "14–16%",
+  "origin": "Chile",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cocoa",
+   "egg",
+   "port",
+   "cinnamon"
+  ],
+  "glassware": "Small wine glass",
+  "ingredients": [
+   "Port wine",
+   "Pisco",
+   "Egg yolk",
+   "Cocoa powder",
+   "Sugar"
+  ],
+  "funFact": "The name means 'sheath' or, colloquially, a nuisance — Chileans have several competing explanations and none of them are flattering to the drink.",
+  "dexNumber": 7325,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Port wine",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Pisco",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg yolk",
+     "amount": "1"
+    },
+    {
+     "item": "Cocoa powder",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Whisk the cocoa powder and sugar into the port until fully dissolved.",
+    "Add the pisco and egg yolk to a shaker with the port mixture.",
+    "Dry-shake without ice for 15 seconds, then add ice and shake hard again.",
+    "Double-strain into a small wine glass.",
+    "Dust with cinnamon and serve cold."
+   ],
+   "garnish": "Ground cinnamon",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "sucumbe",
+  "name": "Sucumbé",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Hot milk whipped with egg, singani and cinnamon — Bolivian Christmas Eve, drunk at midnight after mass.",
+  "abv": "10–12%",
+  "origin": "Santa Cruz, Bolivia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "egg",
+   "cinnamon",
+   "milk",
+   "grape"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Singani",
+   "Milk",
+   "Egg",
+   "Cinnamon",
+   "Sugar"
+  ],
+  "funFact": "In Santa Cruz it is served in the small hours of 25 December, and families judge it on how much foam sits on top — under-whipped sucumbé is considered a failure of effort.",
+  "dexNumber": 7326,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Singani",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Egg",
+     "amount": "1"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Vanilla",
+     "amount": "a drop"
+    }
+   ],
+   "steps": [
+    "Heat the milk with the cinnamon stick and sugar until steaming, not boiling.",
+    "Beat the egg hard in a separate bowl until pale and frothy.",
+    "Pour the hot milk slowly onto the egg while whisking constantly, or it scrambles.",
+    "Stir in the singani off the heat.",
+    "Pour into mugs with the foam on top and dust with cinnamon."
+   ],
+   "garnish": "Cinnamon and foam",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "crema-de-vie",
+  "name": "Crema de Vie",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Cuba's Christmas cream: rum, egg yolk and condensed milk cooked into something thicker and sweeter than eggnog.",
+  "abv": "14–16%",
+  "origin": "Havana, Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "egg",
+   "condensed milk",
+   "vanilla",
+   "rum"
+  ],
+  "glassware": "Small glass",
+  "ingredients": [
+   "White rum",
+   "Egg yolks",
+   "Condensed milk",
+   "Vanilla",
+   "Lime zest"
+  ],
+  "funFact": "Cuban households make it in December and keep it refrigerated for weeks; the alcohol and sugar together do the preserving, which is why the recipe survived decades of scarce ingredients.",
+  "dexNumber": 7327,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Egg yolks",
+     "amount": "6"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1 can / 400 ml"
+    },
+    {
+     "item": "Evaporated milk",
+     "amount": "1 can / 350 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Vanilla",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Lime zest",
+     "amount": "from 1 lime"
+    }
+   ],
+   "steps": [
+    "Blend the egg yolks with both milks until completely smooth.",
+    "Warm gently over low heat, stirring, until slightly thickened — do not boil.",
+    "Cool completely to room temperature.",
+    "Stir in the rum, vanilla and lime zest.",
+    "Bottle and refrigerate at least overnight; serve cold in small glasses."
+   ],
+   "garnish": "None",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "guavaberry-colada",
+  "name": "Guavaberry Colada",
+  "category": "cocktail",
+  "subcategory": "Tiki & Tropical",
+  "description": "The island's guavaberry liqueur blended with coconut and pineapple — a Piña Colada with a wild-berry backbone.",
+  "abv": "12–14%",
+  "origin": "Sint Maarten",
+  "rarity": "rare",
+  "tastingNotes": [
+   "guavaberry",
+   "coconut",
+   "pineapple",
+   "spice"
+  ],
+  "glassware": "Hurricane glass",
+  "ingredients": [
+   "Guavaberry liqueur",
+   "White rum",
+   "Coconut cream",
+   "Pineapple juice"
+  ],
+  "funFact": "Guavaberries are not guavas — they are a small wild fruit that ripens once a year, and islanders pick them for a folk liqueur celebrated in Sint Maarten's unofficial anthem.",
+  "dexNumber": 7328,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Guavaberry liqueur",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coconut cream",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a blender with the ice.",
+    "Blend until smooth and thick.",
+    "Pour into a hurricane glass.",
+    "Garnish with a pineapple wedge and, if you can get them, a few guavaberries."
+   ],
+   "garnish": "Pineapple wedge",
+   "method": "blended"
+  }
+ },
+ {
+  "id": "clericot",
+  "name": "Clericot",
+  "category": "cocktail",
+  "subcategory": "Punch & Cobbler",
+  "description": "Red or white wine loaded with chopped summer fruit and served by the jug — Mexico's answer to sangria, lighter and fruitier.",
+  "abv": "8–10%",
+  "origin": "Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "apple",
+   "citrus",
+   "red wine",
+   "sugar"
+  ],
+  "glassware": "Wine glass or jug",
+  "ingredients": [
+   "Red or white wine",
+   "Mixed fruit",
+   "Sugar",
+   "Soda water"
+  ],
+  "funFact": "Clericot descends from the English claret cup by way of Spain, and the same drink surfaces as clericó in Paraguay and Argentina with the fruit changed to whatever is in season.",
+  "dexNumber": 7329,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Red or white wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Apple, orange, strawberry and grape, diced",
+     "amount": "4 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Orange liqueur",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "250 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Toss the diced fruit with the sugar and let it sit for an hour.",
+    "Pour over the wine and orange liqueur, then refrigerate for at least four hours.",
+    "Top with soda water just before serving.",
+    "Serve very cold over ice, spooning plenty of fruit into each glass."
+   ],
+   "garnish": "The macerated fruit",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "te-con-te",
+  "name": "Té con Té",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Black tea with singani, lemon and sugar, served scalding at altitude. La Paz's answer to a cold night at 3,600 metres.",
+  "abv": "12–14%",
+  "origin": "La Paz, Bolivia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black tea",
+   "lemon",
+   "grape",
+   "sugar"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Singani",
+   "Black tea",
+   "Lemon",
+   "Sugar"
+  ],
+  "funFact": "The name literally means 'tea with tea', which is the joke — the second 'té' stands in for the singani nobody wanted to name out loud.",
+  "dexNumber": 7330,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Singani",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Strong black tea, hot",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Lemon slice",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Brew the black tea strong and keep it hot.",
+    "Put the sugar and lemon juice in a warmed glass mug and stir to dissolve.",
+    "Add the hot tea and stir again.",
+    "Pour in the singani last, off the heat.",
+    "Garnish with a lemon slice and drink hot."
+   ],
+   "garnish": "Lemon slice",
+   "method": "built"
+  }
  }
 ]
