@@ -46,9 +46,32 @@ atlas.wines.forEach((w) => {
   foldedWineName.get(k).push(w.n);
 });
 
-/** Exact first, folded second. Returns [] when nothing matches. */
+/**
+ * Exact, then folded, then the same two again with a trailing qualifier
+ * removed. Returns [] when nothing matches.
+ *
+ * The Dex disambiguates card names that would otherwise read identically in
+ * a list by appending the region — "Faro (Sicily)", "Mělník (Bohemia)". The
+ * atlas name is the join key and never carries that suffix, so it is
+ * stripped before the fallback lookups. Stripping is from the FIRST " (" so
+ * a nested qualifier like "El Dorado (California (Sierra Foothills))"
+ * reduces to "El Dorado" rather than to something malformed.
+ *
+ * An AMBIGUOUS folded match returns nothing rather than guessing. Melnik and
+ * Mělník fold together, and picking either would be a valid reference to the
+ * wrong wine — the failure this whole resolver exists to prevent. Ambiguity
+ * must be settled by an explicit override, not by ordering.
+ */
 function resolveWine(name) {
-  return exactWineName.get(name) ?? foldedWineName.get(fold(name)) ?? [];
+  const exact = exactWineName.get(name);
+  if (exact) return exact;
+
+  const folded = foldedWineName.get(fold(name));
+  if (folded?.length === 1) return folded;
+  if (folded?.length > 1) return [];
+
+  const base = name.replace(/\s*\(.*$/, '').trim();
+  return base && base !== name ? resolveWine(base) : [];
 }
 
 /** Same rule for grapes. */
@@ -105,16 +128,6 @@ const WINES = {
               'Lambrusco Salamino di Santa Croce', 'Lambrusco Reggiano', 'Lambrusco Mantovano'],
   'pet-nat': ['Blanquette Méthode Ancestrale', 'Bugey-Cerdon'],
   txakoli: ['Getariako Txakolina', 'Bizkaiko Txakolina', 'Arabako Txakolina'],
-
-  /*
-   * Two atlas wines whose names are distinct strings but identical once
-   * accents are folded: Bulgaria's Melnik and Bohemia's Mělník. Atlas names
-   * stay unique, so the links themselves are fine — but two Dex cards
-   * reading the same in a list is a defect, so the Czech card displays as
-   * "Mělník (Czechia)" and needs to be pointed back at the atlas name.
-   * The only such collision in 2,315 wines.
-   */
-  'melnik-czechia': ['Mělník'],
 };
 
 /** Card id -> atlas grape name, where the card is a variety. */
