@@ -99,7 +99,16 @@ const POST_SELECT =
  * on profiles.phone_hash, so a `select *` would fail with "permission
  * denied for column phone_hash". Only the match_contacts RPC reads it.
  */
-const PROFILE_COLS = 'id, username, display_name, accent, bio, created_at';
+/**
+ * The columns a normal client may read from profiles.
+ *
+ * Exported because it is now a privilege boundary, not a style choice:
+ * migration 008 revokes table-level SELECT and grants these columns back
+ * one by one, so anything selecting a column outside this list — including
+ * `select *` — fails with "permission denied for table profiles". Adding a
+ * column to profiles means granting it in a migration before reading it.
+ */
+export const PROFILE_COLS = 'id, username, display_name, accent, bio, created_at';
 
 /* ==================================================================== */
 /* People and follows                                                   */

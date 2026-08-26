@@ -42,10 +42,45 @@
 alter table public.profiles add column if not exists instagram_hash text;
 create index if not exists profiles_instagram_hash_idx on public.profiles (instagram_hash);
 
--- Column-level lockdown, identical in spirit to phone_hash: RLS cannot
--- restrict a single column, so we drop the column privilege outright and
--- let only the SECURITY DEFINER matcher below read it. This is why the app
--- selects explicit column lists and never '*'.
+-- --------------------------------------------------------------------
+-- 1b. The column lockdown, done properly — and fixing 002 while we are here
+--
+-- Migration 002 wrote `revoke select (phone_hash) ... from anon,
+-- authenticated` and every comment since has claimed the column was
+-- unreadable. It never was. Supabase grants table-level SELECT on public
+-- tables to anon and authenticated by default, and in Postgres a
+-- table-level grant implies every column: REVOKE SELECT (col) cannot
+-- subtract from it. The statement succeeds, prints REVOKE, and changes
+-- nothing.
+--
+-- Proof from our own code rather than theory: store/auth.ts ran
+-- `select('*')` on profiles at every launch, and the app works. Had 002's
+-- revoke taken effect, that call would have failed for every user on every
+-- start with "permission denied for column phone_hash".
+--
+-- So phone_hash has been readable by any signed-in client since 002, and
+-- instagram_hash would have inherited exactly the same hole. The pattern
+-- that actually works is the inverse: drop the table-level privilege and
+-- grant the safe columns back one at a time.
+--
+-- Consequence to know about: `select *` on profiles now genuinely fails,
+-- and any column added later is unreadable until a migration grants it.
+-- That is the point — a new secret column is private by default instead of
+-- being published by the next `select *`. The client-side list is
+-- PROFILE_COLS in src/lib/social.ts and must be kept in step with this.
+-- --------------------------------------------------------------------
+
+revoke select on public.profiles from anon, authenticated;
+
+grant select (id, username, display_name, accent, bio, created_at)
+  on public.profiles to anon, authenticated;
+
+-- UPDATE is deliberately left alone. Opting in and out of discovery writes
+-- these columns from the client (setPhoneHash / setInstagramHash), and
+-- profiles_update_own already pins that to your own row.
+
+-- Retained so a re-run is a no-op rather than an error, and as a marker of
+-- what the old approach was. It is a no-op either way now.
 revoke select (instagram_hash) on public.profiles from anon, authenticated;
 
 -- --------------------------------------------------------------------

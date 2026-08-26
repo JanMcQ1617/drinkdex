@@ -9,7 +9,7 @@ import {
   rememberHandle,
   setPendingHandle,
 } from '@/lib/instagram';
-import { setInstagramHash } from '@/lib/social';
+import { PROFILE_COLS, setInstagramHash } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
 
@@ -295,7 +295,18 @@ export const useAuth = create<AuthState>()((set, get) => ({
         return;
       }
 
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', uid).single();
+      /*
+       * Explicit columns, never '*'. Migration 008 revokes table-level
+       * SELECT on profiles, so `select *` now fails outright rather than
+       * quietly returning the hash columns. This call ran on every launch,
+       * which is how we know 002's original column-level revoke never took
+       * effect: had it worked, this would have been failing for everyone.
+       */
+      const { data, error } = await supabase
+        .from('profiles')
+        .select(PROFILE_COLS)
+        .eq('id', uid)
+        .single();
 
       if (data) {
         set({ profile: data, profileLoading: false, profileError: null });
