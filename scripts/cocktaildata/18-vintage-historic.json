@@ -1,0 +1,1764 @@
+[
+ {
+  "id": "blue-moon-cocktail",
+  "name": "Blue Moon Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, dry vermouth and crème de violette — pale lilac, floral and the reason violette came back into production.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "violet",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Crème de violette",
+   "Lemon juice"
+  ],
+  "funFact": "Crème de violette vanished from the American market for most of the twentieth century, and the drinks that needed it — Blue Moon, Aviation — were unmakeable until it returned in 2007.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Crème de violette",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface and drop it in.",
+    "Serve very cold — the floral note fades as it warms."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "bronx-terrace",
+  "name": "Bronx Terrace",
+  "subcategory": "Sour",
+  "description": "The Bronx with the orange juice swapped for lime and the sweet vermouth dropped. Drier, sharper and largely forgotten.",
+  "abv": "22–24%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lime",
+   "juniper",
+   "dry vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Lime juice"
+  ],
+  "funFact": "It appears in the Savoy directly after the Bronx itself, which is how the book handles variations — no cross-reference, just the next entry along.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lime twist or a cherry.",
+    "Serve cold."
+   ],
+   "garnish": "Lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "clover-leaf",
+  "name": "Clover Leaf",
+  "subcategory": "Sour",
+  "description": "The Clover Club with a mint leaf on the foam. One garnish separates the two, and the mint changes the whole nose.",
+  "abv": "18–20%",
+  "origin": "Philadelphia, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raspberry",
+   "mint",
+   "foam",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Raspberry syrup",
+   "Lemon juice",
+   "Egg white",
+   "Mint"
+  ],
+  "funFact": "The only difference from a Clover Club is the mint leaf floated on the foam — an unusually small distinction to earn a separate name, and both appear in the same books.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Raspberry syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Float a single mint leaf on the foam."
+   ],
+   "garnish": "A single mint leaf",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "dempsey",
+  "name": "Dempsey",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and calvados with grenadine and absinthe — named for the heavyweight champion, and it hits about as hard.",
+  "abv": "28–30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "juniper",
+   "anise",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Calvados",
+   "Grenadine",
+   "Absinthe"
+  ],
+  "funFact": "Jack Dempsey held the world heavyweight title from 1919 to 1926, exactly the window in which London bartenders were naming drinks after American celebrities.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the top.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "knickerbocker",
+  "name": "Knickerbocker",
+  "subcategory": "Sour",
+  "description": "Rum, raspberry, curaçao and lime over crushed ice — a mid-nineteenth-century drink that predates most of the canon.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raspberry",
+   "orange",
+   "lime",
+   "rum"
+  ],
+  "glassware": "Goblet or rocks glass",
+  "ingredients": [
+   "Aged rum",
+   "Raspberry syrup",
+   "Orange curaçao",
+   "Lime juice"
+  ],
+  "funFact": "Jerry Thomas printed it in 1862, which makes it older than the Manhattan, the Martini and almost everything else still ordered by name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Aged rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Raspberry syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 10 seconds.",
+    "Strain over crushed ice in a goblet.",
+    "Garnish with berries and a slice of orange.",
+    "Serve with a straw."
+   ],
+   "garnish": "Berries and orange slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "merry-widow",
+  "name": "Merry Widow",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and dry vermouth in equal parts with Bénédictine, absinthe and bitters. Low-proof by Savoy standards and unusually aromatic.",
+  "abv": "18–20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "honeyed herbs",
+   "vermouth",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Bénédictine",
+   "Absinthe",
+   "Peychaud's bitters"
+  ],
+  "funFact": "At least six unrelated drinks carry the name Merry Widow, after the operetta that was the biggest theatrical hit of the 1900s — bartenders named drinks after whatever was selling tickets.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Peychaud's bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface.",
+    "Serve cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "old-etonian",
+  "name": "Old Etonian",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, Lillet, orange bitters and crème de noyaux — almond and quinine, and about as English as a drink name gets.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "almond",
+   "quinine",
+   "orange",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lillet Blanc",
+   "Crème de noyaux",
+   "Orange bitters"
+  ],
+  "funFact": "Crème de noyaux is made from apricot and peach kernels rather than almonds, which is why it tastes of marzipan without containing any.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lillet Blanc",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Crème de noyaux",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the top and discard it.",
+    "Serve very cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "opera",
+  "name": "Opera",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, Dubonnet and maraschino with orange bitters. Bittersweet, cherry-scented and considerably drier than Dubonnet suggests.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "quinine",
+   "orange",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dubonnet Rouge",
+   "Maraschino liqueur",
+   "Orange bitters"
+  ],
+  "funFact": "Dubonnet was created in 1846 to make quinine palatable to French Foreign Legionnaires in North Africa — the same problem that produced tonic water.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dubonnet Rouge",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "orange-blossom",
+  "name": "Orange Blossom",
+  "subcategory": "Sour",
+  "description": "Gin and orange juice, sweetened. A Prohibition drink whose whole job was hiding what the gin tasted like.",
+  "abv": "18–20%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "juniper",
+   "sugar"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Orange juice",
+   "Simple syrup"
+  ],
+  "funFact": "Bathtub gin was frequently undrinkable, and the Orange Blossom exists as a solution to that problem — which is why it fell out of favour the moment good gin was legal again.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist.",
+    "Serve very cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "poets-dream",
+  "name": "Poet's Dream",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, dry vermouth and Bénédictine with a lemon twist. Three ingredients, and the Bénédictine does all the talking.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honeyed herbs",
+   "juniper",
+   "vermouth",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Bénédictine"
+  ],
+  "funFact": "Bénédictine's label carries the letters D.O.M. — Deo Optimo Maximo, 'to God, most good, most great' — a monastic dedication that survived the liqueur going fully commercial in 1863.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the top and drop it in.",
+    "Serve cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "red-snapper",
+  "name": "Red Snapper",
+  "subcategory": "Brunch",
+  "description": "The Bloody Mary's gin original. Fernand Petiot rebuilt it with gin at the St. Regis, and the name was a euphemism.",
+  "abv": "10–12%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "tomato",
+   "juniper",
+   "horseradish",
+   "spice"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Tomato juice",
+   "Lemon juice",
+   "Worcestershire sauce",
+   "Horseradish"
+  ],
+  "funFact": "Petiot brought the drink from Harry's Bar in Paris to the St. Regis in New York, where management thought 'Bloody Mary' too coarse for the King Cole Bar — so it became the Red Snapper.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Tomato juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Worcestershire sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Hot sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Horseradish",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Salt, pepper and celery salt",
+     "amount": "a pinch each"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine everything in a shaker with ice.",
+    "Roll the drink between two tins rather than shaking, so it does not froth.",
+    "Strain into a highball glass over fresh ice.",
+    "Garnish with a celery stalk and a lemon wedge.",
+    "Season further at the table."
+   ],
+   "garnish": "Celery stalk and lemon wedge",
+   "method": "thrown"
+  }
+ },
+ {
+  "id": "royal-bermuda-yacht-club",
+  "name": "Royal Bermuda Yacht Club",
+  "subcategory": "Sour",
+  "description": "Rum, lime, falernum and curaçao — the club's own drink, and a sharper alternative to its Rum Swizzle.",
+  "abv": "20–22%",
+  "origin": "Hamilton, Bermuda",
+  "rarity": "rare",
+  "tastingNotes": [
+   "falernum",
+   "lime",
+   "orange",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Barbadian rum",
+   "Lime juice",
+   "Falernum",
+   "Orange curaçao"
+  ],
+  "funFact": "The Royal Bermuda Yacht Club received its royal warrant in 1845 from Prince Albert, and the drink named for it appears in Trader Vic's book a century later.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Barbadian aged rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Falernum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lime wheel.",
+    "Serve immediately."
+   ],
+   "garnish": "Lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "seventh-heaven",
+  "name": "Seventh Heaven",
+  "subcategory": "Sour",
+  "description": "Gin, maraschino and grapefruit with a mint sprig. Bright, cherry-scented and one of the Savoy's better short sours.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "cherry",
+   "mint",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Maraschino liqueur",
+   "Grapefruit juice",
+   "Mint"
+  ],
+  "funFact": "The Savoy Cocktail Book contains roughly 750 recipes, most of them gin, and the ones that survived are almost all the ones with fresh citrus in them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    },
+    {
+     "item": "Mint sprig",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Shake the gin, maraschino and grapefruit juice hard with ice.",
+    "Double-strain into a chilled coupe.",
+    "Slap a mint sprig between your palms and float it on top.",
+    "Serve very cold."
+   ],
+   "garnish": "Mint sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "tipperary",
+  "name": "Tipperary",
+  "subcategory": "Spirit-Forward",
+  "description": "Irish whiskey, sweet vermouth and green Chartreuse in equal parts. Herbal, sweet and much heavier than the name suggests.",
+  "abv": "26–28%",
+  "origin": "Ireland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "herbal",
+   "vermouth",
+   "honeyed malt"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Sweet vermouth",
+   "Green Chartreuse"
+  ],
+  "funFact": "Named for the marching song rather than the county; 'It's a Long Way to Tipperary' was written in 1912 and became the defining British song of the First World War.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface.",
+    "Modern versions cut the Chartreuse back; the equal-parts original is the historic one."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "waldorf",
+  "name": "Waldorf",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan rinsed with absinthe. The hotel that gave us the Bronx and the Rob Roy produced this too.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "anise",
+   "vermouth",
+   "spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Sweet vermouth",
+   "Absinthe",
+   "Angostura bitters"
+  ],
+  "funFact": "The original Waldorf-Astoria stood where the Empire State Building now is; its bar produced a remarkable share of the American canon before it was demolished in 1929.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp, to rinse"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Rinse a chilled coupe with absinthe and discard the excess.",
+    "Stir the rye, vermouth and bitters over ice for 25 seconds.",
+    "Strain into the rinsed coupe.",
+    "Garnish with a brandied cherry."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "yale",
+  "name": "Yale",
+  "subcategory": "Spirit-Forward",
+  "description": "A Martini turned blue with a dash of crème de violette, and stiffened with orange bitters.",
+  "abv": "28–30%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "violet",
+   "juniper",
+   "orange",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Crème de violette",
+   "Orange bitters"
+  ],
+  "funFact": "American universities each acquired a cocktail in the early 1900s — Yale, Princeton, Harvard — in a fashion that says more about who was drinking in hotel bars than about the colleges.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Crème de violette",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 30 seconds.",
+    "Strain into a thoroughly chilled coupe.",
+    "Express a lemon twist over the surface and discard it.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "fallen-angel",
+  "name": "Fallen Angel",
+  "subcategory": "Sour",
+  "description": "Gin, lime and crème de menthe with bitters. Mint and juniper together, which sounds wrong and drinks clean.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mint",
+   "lime",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lime juice",
+   "White crème de menthe",
+   "Angostura bitters"
+  ],
+  "funFact": "White crème de menthe is the same liqueur as the green one without the colouring, which is why a Fallen Angel looks like a Gimlet and tastes nothing like one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "White crème de menthe",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a mint leaf.",
+    "Serve very cold."
+   ],
+   "garnish": "A mint leaf",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "napoleon",
+  "name": "Napoleon",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin with three dashes each of Dubonnet, curaçao and Fernet. Almost neat gin, seasoned rather than mixed.",
+  "abv": "30–32%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "bitter herbs",
+   "orange",
+   "quinine"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dubonnet",
+   "Orange curaçao",
+   "Fernet-Branca"
+  ],
+  "funFact": "Fernet in dashes rather than measures is a nineteenth-century habit that modern bartenders rediscovered — a quarter-teaspoon changes a drink that an ounce would destroy.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Dubonnet",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Fernet-Branca",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 30 seconds.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface and discard it.",
+    "Serve extremely cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "wassail",
+  "name": "Wassail",
+  "subcategory": "Punch & Cobbler",
+  "description": "Hot spiced ale with roasted apples bobbing in it, carried house to house at midwinter. Older than the word cocktail by centuries.",
+  "abv": "6–8%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "baked apple",
+   "nutmeg",
+   "ale",
+   "ginger"
+  ],
+  "glassware": "Large bowl and cups",
+  "ingredients": [
+   "Ale",
+   "Sherry",
+   "Roasted apples",
+   "Nutmeg",
+   "Ginger",
+   "Sugar"
+  ],
+  "funFact": "'Wassail' comes from the Old Norse ves heill, 'be in good health', and in cider counties the bowl is still carried into the orchards in January to toast the trees themselves.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brown ale",
+     "amount": "2 litres"
+    },
+    {
+     "item": "Dry sherry",
+     "amount": "250 ml"
+    },
+    {
+     "item": "Small apples",
+     "amount": "6, cored"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Ground ginger, nutmeg and cinnamon",
+     "amount": "1 tsp each"
+    },
+    {
+     "item": "Cloves",
+     "amount": "6"
+    }
+   ],
+   "steps": [
+    "Core the apples, fill them with brown sugar and roast at 180°C until soft and foaming, about 40 minutes.",
+    "Warm the ale and sherry with the spices and remaining sugar — steaming, never boiling.",
+    "Float the roasted apples in the bowl; the pulp bursting into the ale is where 'lamb's wool' gets its name.",
+    "Ladle into cups, making sure everyone gets some apple.",
+    "Serve hot, and pass the bowl rather than pouring individual drinks."
+   ],
+   "garnish": "Roasted apple and grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "smoking-bishop",
+  "name": "Smoking Bishop",
+  "subcategory": "Hot",
+  "description": "Port and roasted oranges mulled together — the drink Scrooge promises Bob Cratchit on the last page of A Christmas Carol.",
+  "abv": "8–10%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "roasted orange",
+   "port",
+   "clove",
+   "spice"
+  ],
+  "glassware": "Mug or punch cup",
+  "ingredients": [
+   "Ruby port",
+   "Red wine",
+   "Seville oranges",
+   "Cloves",
+   "Sugar"
+  ],
+  "funFact": "Dickens gave it the last line of dialogue in A Christmas Carol — 'a bowl of Smoking Bishop' — and the drink was already old enough by 1843 that he needed no footnote.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Seville oranges (or regular oranges)",
+     "amount": "5"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "5 per orange"
+    },
+    {
+     "item": "Ruby port",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Dry red wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Cinnamon, mace and allspice",
+     "amount": "a pinch each"
+    }
+   ],
+   "steps": [
+    "Stud each orange with five cloves and roast at 180°C until browned, about an hour.",
+    "Quarter the roasted oranges and steep them in the red wine with the sugar and spices overnight.",
+    "Strain, pressing the fruit, then add the port.",
+    "Heat gently to steaming — never boil, or the port turns harsh.",
+    "Ladle into mugs and serve hot."
+   ],
+   "garnish": "A clove-studded orange slice",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "lambs-wool",
+  "name": "Lamb's Wool",
+  "subcategory": "Hot",
+  "description": "Hot ale poured over roasted apple pulp until it froths white — the froth is the wool, and the drink is medieval.",
+  "abv": "5–7%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "baked apple",
+   "ale",
+   "nutmeg",
+   "sugar"
+  ],
+  "glassware": "Tankard or mug",
+  "ingredients": [
+   "Ale",
+   "Roasted apples",
+   "Sugar",
+   "Nutmeg",
+   "Ginger"
+  ],
+  "funFact": "The name describes the appearance: burst roasted apple whipped into hot ale forms a woolly white foam, and the drink belongs to Twelfth Night rather than Christmas.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brown ale",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Cooking apples",
+     "amount": "4"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Grated nutmeg",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Ground ginger",
+     "amount": "0.5 tsp"
+    }
+   ],
+   "steps": [
+    "Roast the apples whole at 180°C until they split and collapse, about 45 minutes.",
+    "Scoop out the pulp and beat it smooth with the sugar and spices.",
+    "Warm the ale to steaming, then whisk it into the apple pulp a little at a time.",
+    "Keep whisking until the surface turns white and woolly.",
+    "Serve hot in tankards."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "syllabub",
+  "name": "Syllabub",
+  "subcategory": "Creamy & Dessert",
+  "description": "Cream whipped with sweet wine, sugar and lemon until it holds its shape. Tudor England's dessert, eaten with a spoon.",
+  "abv": "8–10%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cream",
+   "lemon",
+   "sweet wine",
+   "nutmeg"
+  ],
+  "glassware": "Small glass or posset pot",
+  "ingredients": [
+   "Cream",
+   "Sweet white wine",
+   "Sherry",
+   "Lemon",
+   "Sugar"
+  ],
+  "funFact": "The earliest version was made by milking a cow directly into a bowl of spiced wine, so the froth formed on impact — a technique that limits where you can make it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Double cream",
+     "amount": "300 ml"
+    },
+    {
+     "item": "Sweet white wine",
+     "amount": "100 ml"
+    },
+    {
+     "item": "Dry sherry",
+     "amount": "50 ml"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "75 g"
+    },
+    {
+     "item": "Lemon",
+     "amount": "1, zest and juice"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "to grate"
+    }
+   ],
+   "steps": [
+    "Steep the lemon zest and juice in the wine and sherry with the sugar for several hours.",
+    "Strain out the zest and stir until the sugar has fully dissolved.",
+    "Pour the cream in slowly while whisking, until it holds soft peaks.",
+    "Spoon into small glasses and chill for at least two hours.",
+    "Grate nutmeg over just before serving, with a spoon."
+   ],
+   "garnish": "Freshly grated nutmeg and lemon zest",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "negus",
+  "name": "Negus",
+  "subcategory": "Hot",
+  "description": "Port with hot water, lemon, sugar and nutmeg. Served to children at Victorian parties, which says something about the era.",
+  "abv": "8–10%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "port",
+   "lemon",
+   "nutmeg",
+   "sugar"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Port wine",
+   "Hot water",
+   "Lemon",
+   "Sugar",
+   "Nutmeg"
+  ],
+  "funFact": "Named for Colonel Francis Negus, who reportedly diluted the port at a heated gathering to calm the argument down; Dickens has it served at children's parties in more than one novel.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ruby port",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Hot water",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Lemon",
+     "amount": "1, zest and juice"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "to grate"
+    }
+   ],
+   "steps": [
+    "Rub the sugar over the lemon zest to draw out the oil, then put both in a warmed jug.",
+    "Add the lemon juice and the port.",
+    "Pour in hot but not boiling water and stir until the sugar dissolves.",
+    "Ladle into warmed glasses.",
+    "Grate nutmeg over each serving."
+   ],
+   "garnish": "Freshly grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "posset",
+  "name": "Posset",
+  "subcategory": "Hot",
+  "description": "Hot milk curdled deliberately with ale or wine, spiced and sweetened. Medicinal, medieval, and eaten as much as drunk.",
+  "abv": "6–8%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "curdled milk",
+   "nutmeg",
+   "ale",
+   "spice"
+  ],
+  "glassware": "Posset pot or mug",
+  "ingredients": [
+   "Milk",
+   "Ale or sweet wine",
+   "Sugar",
+   "Nutmeg",
+   "Cinnamon"
+  ],
+  "funFact": "Posset pots had a spout so the drinker could take the liquid from beneath while the curds sat on top; the modern lemon posset dessert kept the name and dropped the alcohol entirely.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Whole milk",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Ale or sweet white wine",
+     "amount": "250 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Grated nutmeg",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Egg yolks",
+     "amount": "2, optional"
+    }
+   ],
+   "steps": [
+    "Warm the milk with the cinnamon and nutmeg until steaming; do not boil.",
+    "Warm the ale or wine separately with the sugar.",
+    "Pour the hot ale into the hot milk — it will curdle immediately, which is correct.",
+    "Let it stand a minute so the curd rises and the liquid settles below.",
+    "Serve hot, with a spoon."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "brandy-sour",
+  "name": "Brandy Sour",
+  "subcategory": "Sour",
+  "description": "Cyprus's national cocktail: local brandy, lemon squash, bitters and soda. Invented, by tradition, to disguise a king's drinking.",
+  "abv": "12–14%",
+  "origin": "Limassol, Cyprus",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "brandy",
+   "bitters",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Cypriot brandy",
+   "Lemon squash",
+   "Angostura bitters",
+   "Soda water"
+  ],
+  "funFact": "The story holds that it was created in the 1930s for King Farouk of Egypt, so a visiting Muslim monarch could be served something that looked like iced tea.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cypriot brandy",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon squash or cordial",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the brandy and lemon squash.",
+    "Dash the Angostura generously over the top.",
+    "Top with soda water and stir once.",
+    "Garnish with a lemon slice."
+   ],
+   "garnish": "Lemon slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "kinnie-and-gin",
+  "name": "Kinnie and Gin",
+  "subcategory": "Highball",
+  "description": "Malta's bitter-orange soda lengthening a measure of gin — wormwood and bitter orange over juniper.",
+  "abv": "10–12%",
+  "origin": "Malta",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter orange",
+   "wormwood",
+   "juniper",
+   "herbs"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Gin",
+   "Kinnie",
+   "Orange"
+  ],
+  "funFact": "Kinnie has been bottled in Malta since 1952 from bitter oranges and a mix of aromatic herbs including wormwood, and Maltese abroad have it shipped to them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Kinnie",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Orange slice",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour in the gin.",
+    "Top with cold Kinnie.",
+    "Stir once and garnish with an orange slice."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "rum-and-raspberry",
+  "name": "Rum and Raspberry",
+  "subcategory": "Highball",
+  "description": "White rum with raspberry cordial and soda — 'R&R' across southern Africa, and a staple of Mozambican beach bars.",
+  "abv": "10–12%",
+  "origin": "Southern Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raspberry",
+   "cane",
+   "soda",
+   "lime"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "White rum",
+   "Raspberry cordial",
+   "Soda water",
+   "Lime"
+  ],
+  "funFact": "Ordered simply as 'R and R' from Maputo to Johannesburg, it is one of very few mixed drinks with genuine regional currency across southern Africa.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Raspberry cordial",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the rum, raspberry cordial and lime juice.",
+    "Top with cold soda water.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "fort-point",
+  "name": "Fort Point",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, Punt e Mes, Bénédictine and maraschino — a Manhattan with the bitterness turned up and the sweetness pulled back.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "bitter vermouth",
+   "honeyed herbs",
+   "cherry"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Punt e Mes",
+   "Bénédictine",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Sam Ross created it at Milk & Honey; Punt e Mes is a vermouth with an extra measure of bitterness stirred in, and its name means 'point and a half' from an old Turin trading term.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Punt e Mes",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "1 barspoon"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface and drop it in.",
+    "Serve cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "kentucky-maid",
+  "name": "Kentucky Maid",
+  "subcategory": "Julep & Cobbler",
+  "description": "Bourbon with muddled cucumber and mint over lime. A Southside that went south, and better in summer than either parent.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cucumber",
+   "mint",
+   "lime",
+   "bourbon"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Bourbon",
+   "Cucumber",
+   "Mint",
+   "Lime juice",
+   "Simple syrup"
+  ],
+  "funFact": "Sam Ross built it at Milk & Honey as a bourbon answer to the gin Southside; cucumber and bourbon is an unlikely pairing that the mint holds together.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cucumber",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "6"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Muddle two cucumber slices with the syrup in the shaker.",
+    "Add the mint and press once, gently.",
+    "Add the bourbon, lime juice and ice, then shake hard for 10 seconds.",
+    "Double-strain over crushed ice in a rocks glass.",
+    "Garnish with a cucumber slice and a mint sprig."
+   ],
+   "garnish": "Cucumber slice and mint",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "death-flip",
+  "name": "Death Flip",
+  "subcategory": "Creamy & Dessert",
+  "description": "Tequila, yellow Chartreuse, Jägermeister and a whole egg. It should be undrinkable. It is one of the best modern cocktails made.",
+  "abv": "22–24%",
+  "origin": "Melbourne, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "herbal",
+   "egg",
+   "agave",
+   "spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Blanco tequila",
+   "Yellow Chartreuse",
+   "Jägermeister",
+   "Whole egg"
+  ],
+  "funFact": "Chris Hysted created it at Black Pearl in Melbourne around 2010; the combination reads as a dare on paper and converts almost everyone who is talked into ordering one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Yellow Chartreuse",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Jägermeister",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Whole egg",
+     "amount": "1"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 20 seconds to build the texture.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Grate nutmeg over the foam.",
+    "Serve immediately."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "gordons-breakfast",
+  "name": "Gordon's Breakfast",
+  "subcategory": "Brunch",
+  "description": "Gin with lime, Worcestershire, Tabasco and muddled cucumber. A savoury gin sour that behaves like a Bloody Mary without the tomato.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cucumber",
+   "lime",
+   "pepper",
+   "juniper"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Lime juice",
+   "Worcestershire sauce",
+   "Tabasco",
+   "Cucumber"
+  ],
+  "funFact": "Sam Ross named it for Gordon's gin and for the fact that it is, structurally, a breakfast drink — savoury, saline and built to be drunk before noon.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Worcestershire sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Tabasco",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Cucumber",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Salt and pepper",
+     "amount": "a pinch each"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Muddle the cucumber slices in the bottom of the shaker.",
+    "Add the gin, lime, syrup, Worcestershire, Tabasco and seasoning.",
+    "Add ice and shake hard for 12 seconds.",
+    "Double-strain over fresh ice in a rocks glass.",
+    "Garnish with a cucumber slice and a crack of black pepper."
+   ],
+   "garnish": "Cucumber slice and black pepper",
+   "method": "shaken"
+  }
+ }
+]
