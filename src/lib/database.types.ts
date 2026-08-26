@@ -18,12 +18,21 @@ export type ProfileRow = {
   accent: string;
   bio: string | null;
   created_at: string;
-  /**
-   * Salted phone hash for contact matching. Write-only from the client:
-   * migration 002 revokes the SELECT column privilege, so this never comes
-   * back on a read — it's here only so `update({ phone_hash })` typechecks.
-   */
-  phone_hash?: string | null;
+};
+
+/**
+ * Discovery hashes, in their own table since migration 008.
+ *
+ * Declared for documentation only — no client role holds any grant on
+ * profile_secrets, so this is never selected, inserted or updated from the
+ * app. It is reached exclusively through set_phone_hash /
+ * set_instagram_hash and the two matchers, all SECURITY DEFINER.
+ */
+export type ProfileSecretRow = {
+  user_id: string;
+  phone_hash: string | null;
+  instagram_hash: string | null;
+  updated_at: string;
 };
 
 export type PostRow = {
@@ -176,6 +185,40 @@ export type Database = {
           bio: string | null;
           created_at: string;
         }[];
+      };
+      /**
+       * Echoes matched_hash back so the caller can label a row with the
+       * handle it came from — the plaintext never leaves the device, so
+       * only the device can read that mapping. See migration 008.
+       */
+      match_instagram: {
+        Args: { hashes: string[] };
+        Returns: {
+          id: string;
+          username: string;
+          display_name: string;
+          accent: string;
+          bio: string | null;
+          created_at: string;
+          matched_hash: string;
+        }[];
+      };
+      /** Batch follow. Returns the number of NEW edges. See migration 008. */
+      follow_many: {
+        Args: { targets: string[] };
+        Returns: number;
+      };
+      /**
+       * Both setters take only the hash and read auth.uid() server-side, so
+       * neither can be aimed at another account. Null clears. Migration 008.
+       */
+      set_phone_hash: {
+        Args: { hash: string | null };
+        Returns: undefined;
+      };
+      set_instagram_hash: {
+        Args: { hash: string | null };
+        Returns: undefined;
       };
     };
     Enums: Record<never, never>;

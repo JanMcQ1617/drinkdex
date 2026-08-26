@@ -11,9 +11,11 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { Button, PressableScale, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { normalizeHandle } from '@/lib/instagram';
 import { useAuth } from '@/store/auth';
 
 /* ==================================================================== */
@@ -30,6 +32,11 @@ interface FieldProps {
   textContentType?: React.ComponentProps<typeof TextInput>['textContentType'];
   inputMode?: React.ComponentProps<typeof TextInput>['inputMode'];
   hint?: string;
+  /** Fixed leading character, e.g. the '@' on a handle. Not part of the value. */
+  prefix?: string;
+  /** Colours the hint as a problem. The submit button is disabled either
+   *  way, so without this the reason reads as ordinary help text. */
+  hintIsError?: boolean;
 }
 
 function Field({
@@ -42,6 +49,8 @@ function Field({
   textContentType,
   inputMode,
   hint,
+  prefix,
+  hintIsError,
 }: FieldProps) {
   const [reveal, setReveal] = useState(false);
 
@@ -50,6 +59,7 @@ function Field({
       {/* A visible label, not a placeholder-only field. */}
       <Text style={styles.fieldLabel}>{label}</Text>
       <View style={styles.inputWrap}>
+        {prefix ? <Text style={styles.prefix}>{prefix}</Text> : null}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -61,7 +71,7 @@ function Field({
           autoComplete={autoComplete}
           textContentType={textContentType}
           inputMode={inputMode}
-          style={styles.input}
+          style={[styles.input, prefix ? styles.inputWithPrefix : null]}
           accessibilityLabel={label}
         />
         {secure ? (
@@ -76,7 +86,13 @@ function Field({
           </PressableScale>
         ) : null}
       </View>
-      {hint ? <Text style={styles.fieldHint}>{hint}</Text> : null}
+      {hint ? (
+        <Text
+          style={[styles.fieldHint, hintIsError && styles.fieldHintError]}
+          accessibilityLiveRegion={hintIsError ? 'polite' : 'none'}>
+          {hint}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -115,20 +131,30 @@ function AuthForm() {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [instagram, setInstagram] = useState('');
 
   useEffect(() => {
     clearError();
   }, [mode, clearError]);
 
   const signup = mode === 'up';
+
+  /*
+   * Optional, but not ignorable: a typo is blocked rather than accepted and
+   * quietly dropped, because a handle that never matches anyone looks
+   * identical to a feature that does not work.
+   */
+  const instagramTyped = instagram.trim().length > 0;
+  const instagramOk = !instagramTyped || normalizeHandle(instagram) !== null;
+
   const canSubmit =
     email.includes('@') &&
     password.length >= 6 &&
-    (!signup || (username.trim().length >= 3 && displayName.trim().length > 0));
+    (!signup || (username.trim().length >= 3 && displayName.trim().length > 0 && instagramOk));
 
   const submit = () => {
     haptic.tap();
-    if (signup) void signUp(email, password, username, displayName);
+    if (signup) void signUp(email, password, username, displayName, instagram);
     else void signIn(email, password);
   };
 
@@ -139,7 +165,17 @@ function AuthForm() {
       <ScrollView
         contentContainerStyle={[
           styles.scroll,
-          { paddingTop: insets.top + space.xxxl, paddingBottom: insets.bottom + space.xxl },
+          {
+            paddingTop: insets.top + space.xxxl,
+            /*
+             * TAB_BAR_CLEARANCE, not a bare inset: the tab bar floats OVER
+             * this screen, so 32pt of padding left the "Already have an
+             * account?" link stranded underneath it with nothing left to
+             * scroll — verified on an iPhone 17 once the Instagram field
+             * made the form a row taller. Same clearance every tab screen uses.
+             */
+            paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+          },
         ]}
         keyboardShouldPersistTaps="handled">
         <Text style={styles.wordmark}>Sipply</Text>
@@ -190,6 +226,26 @@ function AuthForm() {
             autoComplete={signup ? 'password-new' : 'password'}
             textContentType={signup ? 'newPassword' : 'password'}
           />
+
+          {signup ? (
+            <Field
+              label="Instagram (optional)"
+              value={instagram}
+              onChangeText={setInstagram}
+              placeholder="yourusername"
+              prefix="@"
+              /* Not autoComplete="username": this sits inside a create-account
+                 form, and offering saved logins here muddles the password
+                 manager's prompt for the account actually being made. */
+              autoComplete="off"
+              hintIsError={instagramTyped && !instagramOk}
+              hint={
+                instagramTyped && !instagramOk
+                  ? 'That does not look like an Instagram username.'
+                  : 'Lets friends who import their Instagram list find you. Stored as a one-way hash, never the username.'
+              }
+            />
+          ) : null}
 
           {error ? (
             <View style={styles.errorBox} accessibilityLiveRegion="polite">
@@ -267,6 +323,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   inputWrap: { justifyContent: 'center' },
+  inputWithPrefix: { paddingLeft: space.lg + 16 },
   input: {
     minHeight: 50,
     backgroundColor: colors.surface,
@@ -281,11 +338,24 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   reveal: { position: 'absolute', right: space.md, padding: 6 },
+  /*
+   * Drawn over the field rather than inside the value: an '@' the user can
+   * delete or double up on is a handle that never matches anybody.
+   */
+  prefix: {
+    position: 'absolute',
+    left: space.lg,
+    zIndex: 1,
+    fontSize: 16,
+    fontFamily: fonts.body,
+    color: colors.textFaint,
+  },
   fieldHint: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
     color: colors.textFaint,
   },
+  fieldHintError: { color: colors.danger },
 
   errorBox: {
     flexDirection: 'row',

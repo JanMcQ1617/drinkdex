@@ -20,6 +20,12 @@ interface SocialState {
   refreshFeed: (myId: string) => Promise<void>;
   loadPeople: (myId: string) => Promise<void>;
   toggleFollow: (myId: string, targetId: string) => Promise<void>;
+  /**
+   * Follows a whole matched list at once. Resolves to the number of NEW
+   * follows so the caller can report "Followed 12" rather than the size of
+   * the list, most of which may already be followed.
+   */
+  followMany: (myId: string, targetIds: string[]) => Promise<number>;
   toggleLike: (myId: string, postId: string) => Promise<void>;
   addPost: (myId: string, drinkId: string, caption: string, photoUri: string | null) => Promise<void>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
@@ -101,6 +107,29 @@ export const useSocial = create<SocialState>()((set, get) => ({
         following: wasFollowing ? [...get().following, targetId] : get().following.filter((id) => id !== targetId),
         error: (e as Error).message,
       });
+    }
+  },
+
+  /**
+   * Optimistic like toggleFollow, but the rollback is a resync rather than
+   * an inverse: a batch can partly succeed (blocked or deleted accounts are
+   * skipped server-side), so the local list must come from the server
+   * afterwards instead of being guessed from what we sent.
+   */
+  followMany: async (myId, targetIds) => {
+    const before = get().following;
+    const merged = [...new Set([...before, ...targetIds])];
+    set({ following: merged });
+
+    try {
+      const added = await api.followMany(targetIds);
+      const following = await api.fetchFollowing(myId);
+      set({ following });
+      await get().refreshFeed(myId);
+      return added;
+    } catch (e) {
+      set({ following: before, error: (e as Error).message });
+      return 0;
     }
   },
 

@@ -1,6 +1,6 @@
 # Sipply — Privacy Policy
 
-**Last updated: 19 August 2026**
+**Last updated: 25 August 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -37,8 +37,23 @@ one-way salted hashes, and only those hashes are sent for comparison.
 **Your contacts are never uploaded.** The hash cannot be reversed into a
 phone number, and it is never readable by other users.
 
+**Instagram matching (only if you use it).** Sipply has no connection to
+Instagram and cannot read anything from your account — no Meta API gives an
+app your follower or following list. If you want to find friends that way,
+you download your own list from Instagram and open the file in Sipply. The
+file is read **on your device**; the usernames in it are converted to
+one-way salted hashes, and only those hashes are sent for comparison.
+**Your Instagram list is never uploaded**, and Sipply never learns which
+Instagram account belongs to which Sipply account. Your own handle, if you
+choose to add one so friends can find you, is stored the same way — as a
+one-way hash, never the handle, and never readable by other users. Both are
+removed when you delete your account, and you can clear either one at any
+time from Profile → Accounts.
+
 **On your device.** Your collection progress and the photos you take are
 also stored locally on your phone so the app works without a connection.
+The Instagram list you import is cached here too, so re-checking it does not
+need another download. Clearing it is a single tap in Profile → Accounts.
 
 ## What Sipply does not do
 
