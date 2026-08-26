@@ -296,11 +296,11 @@ export const useAuth = create<AuthState>()((set, get) => ({
       }
 
       /*
-       * Explicit columns, never '*'. Migration 008 revokes table-level
-       * SELECT on profiles, so `select *` now fails outright rather than
-       * quietly returning the hash columns. This call ran on every launch,
-       * which is how we know 002's original column-level revoke never took
-       * effect: had it worked, this would have been failing for everyone.
+       * Explicit columns rather than '*'. Not required any more — migration
+       * 008 moved the discovery hashes out of profiles — but this call ran
+       * `select('*')` on every launch, and that is precisely how we learned
+       * 002's column revoke never bit: had it worked, this would have been
+       * failing for every user since 002 shipped.
        */
       const { data, error } = await supabase
         .from('profiles')

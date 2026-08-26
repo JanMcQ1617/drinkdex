@@ -100,13 +100,13 @@ const POST_SELECT =
  * denied for column phone_hash". Only the match_contacts RPC reads it.
  */
 /**
- * The columns a normal client may read from profiles.
+ * The columns a normal client reads from profiles.
  *
- * Exported because it is now a privilege boundary, not a style choice:
- * migration 008 revokes table-level SELECT and grants these columns back
- * one by one, so anything selecting a column outside this list — including
- * `select *` — fails with "permission denied for table profiles". Adding a
- * column to profiles means granting it in a migration before reading it.
+ * No longer a privilege boundary — migration 008 moved the discovery
+ * hashes out to profile_secrets, so profiles holds nothing private and
+ * `select *` would be harmless. Kept explicit anyway: it is the list the
+ * UserProfile mapper expects, and naming columns keeps a future private
+ * column from being published by an existing query.
  */
 export const PROFILE_COLS = 'id, username, display_name, accent, bio, created_at';
 
@@ -515,9 +515,15 @@ export async function acceptInvite(inviterId: string): Promise<void> {
  *
  * Stores only the salted hash — never the number. Pass null to opt back
  * out (e.g. from a settings toggle).
+ *
+ * Goes through an RPC because the hash lives in profile_secrets, which has
+ * no grants for any client role at all (migration 008). The user id
+ * argument is kept for call-site symmetry but deliberately unused: the
+ * function reads auth.uid() server-side, so this cannot be aimed at
+ * anyone else's row.
  */
-export async function setPhoneHash(myId: string, phoneHash: string | null): Promise<void> {
-  const { error } = await supabase.from('profiles').update({ phone_hash: phoneHash }).eq('id', myId);
+export async function setPhoneHash(_myId: string, phoneHash: string | null): Promise<void> {
+  const { error } = await supabase.rpc('set_phone_hash', { hash: phoneHash });
   if (error) throw error;
 }
 
@@ -562,14 +568,15 @@ export async function matchContacts(hashes: string[]): Promise<UserProfile[]> {
 /**
  * Makes this account findable by Instagram handle, or clears it.
  *
- * Same contract as setPhoneHash: only the salted hash of the normalized
- * handle is stored, never the handle. Pass null to opt back out.
+ * Same contract as setPhoneHash, including the ignored id argument: only
+ * the salted hash of the normalized handle is stored, never the handle,
+ * and the server decides whose row it lands on. Pass null to opt back out.
  */
-export async function setInstagramHash(myId: string, handleHash: string | null): Promise<void> {
-  const { error } = await supabase
-    .from('profiles')
-    .update({ instagram_hash: handleHash })
-    .eq('id', myId);
+export async function setInstagramHash(
+  _myId: string,
+  handleHash: string | null,
+): Promise<void> {
+  const { error } = await supabase.rpc('set_instagram_hash', { hash: handleHash });
   if (error) throw error;
 }
 
