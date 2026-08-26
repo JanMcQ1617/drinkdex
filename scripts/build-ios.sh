@@ -76,11 +76,19 @@ case "$MODE" in
     #
     # devicectl reports TWO installable states and the pattern must accept
     # both: "available (paired)" when the phone is idle, and "connected"
-    # when it is actively tunnelled — which is precisely the state it is in
-    # straight after a build, so matching only the first meant the install
-    # failed exactly when you wanted it. "unavailable" must NOT match, which
-    # is why the first alternative keeps "(paired)" rather than testing for
-    # "available" alone; "disconnected" is excluded by the word boundary.
+    # when it is actively tunnelled. Matching only the first would fail to
+    # resolve a phone that is awake and attached.
+    #
+    # This is a LATENT bug, fixed before it bit anyone. It is not the cause
+    # of any install failure seen so far: the "Name: 17" failure was the
+    # field-position parse fixed in 890eec6, and the DDI mount failure after
+    # that was kAMDMobileImageMounterDeviceLocked — a genuinely locked phone,
+    # correctly reported. If an install fails here, read the actual error
+    # before suspecting this awk.
+    #
+    # "unavailable" must NOT match, which is why the first alternative keeps
+    # "(paired)" rather than testing for "available" alone; "disconnected" is
+    # excluded by the leading word boundary.
     DEV="$(xcrun devicectl list devices 2>/dev/null \
            | awk '/available \(paired\)|(^| )connected( |$)/ {
                     for (i = 1; i <= NF; i++)
