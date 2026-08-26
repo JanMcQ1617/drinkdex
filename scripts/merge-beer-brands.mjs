@@ -101,8 +101,28 @@ function uniqueName(b) {
 /** Strip the trailing prose some notes carry after an em dash. */
 const cleanNote = (n) => (n ? n.replace(/\s*—\s*/g, ' — ').trim() : null);
 
+/*
+ * The atlas names countries the way a country list should ("United States",
+ * "Türkiye"); the Dex's authored entries settled on a different convention
+ * for the origin field, and four categories plus every source file already
+ * use it. Generated cards must follow the Dex, not the atlas, or 515 beers
+ * split the USA into two buckets in every country grouping — which is the
+ * exact split the cocktail session had just normalised away.
+ *
+ * Only genuine divergences belong here. Czechia is deliberately absent: the
+ * Dex majority already writes "Czechia" (8) over "Czech Republic" (2).
+ */
+const ORIGIN_ALIASES = {
+  'United States': 'USA',
+  'Türkiye': 'Turkey',
+  'Antigua & Barbuda': 'Antigua and Barbuda',
+  'Bosnia & Herzegovina': 'Bosnia and Herzegovina',
+  'Trinidad & Tobago': 'Trinidad and Tobago',
+};
+
 function originOf(b) {
-  return b.city ? `${b.city}, ${b.country}` : b.country;
+  const country = ORIGIN_ALIASES[b.country] ?? b.country;
+  return b.city ? `${b.city}, ${country}` : country;
 }
 
 /**
