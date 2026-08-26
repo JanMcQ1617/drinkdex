@@ -25,6 +25,7 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { validate, merge, assertShapePreserved, reportAndGate } from './lib/dex-merge.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 const DRINKS = new URL('src/data/drinks.json', ROOT);
@@ -133,47 +134,26 @@ for (const b of brands) {
   });
 }
 
-/* Cross-category collision guard — see merge-beer-brands.mjs for why the
- * obvious filter is silently destructive. */
-const priorById = new Map(drinks.map((d) => [d.id, d]));
-for (const c of cards) {
-  const prior = priorById.get(c.id);
-  if (prior && prior.category !== 'spirit') {
-    errors.push(`${c.id}: would overwrite ${prior.category} "${prior.name}"`);
-  }
-}
+/* ---- validate, merge, gate — all shared (scripts/lib/dex-merge.mjs) ---- */
 
-if (errors.length) {
-  console.error(`\n${errors.length} problem(s) — nothing written:\n`);
-  for (const e of errors.slice(0, 40)) console.error('  ' + e);
-  if (errors.length > 40) console.error(`  …and ${errors.length - 40} more`);
+const report = validate({ drinks, incoming: cards, category: 'spirit', owner: 'merge-spirit-brands.mjs' });
+reportAndGate(report);
+
+const { out, added, fresh, refreshed } = merge({ drinks, incoming: cards });
+
+const problems = assertShapePreserved({ before: drinks, after: out, category: 'spirit' });
+if (problems.length) {
+  console.error(`\nmerge-spirit-brands.mjs: the merge changed rows it does not own — nothing written:\n`);
+  for (const p of problems.slice(0, 20)) console.error('  ' + p);
   process.exit(1);
 }
 
-const generatedIds = new Set(cards.map((c) => c.id));
-const kept = drinks.filter((d) => !generatedIds.has(d.id));
-const existingDex = new Map(drinks.map((d) => [d.id, d.dexNumber]));
-let next = Math.max(0, ...drinks.map((d) => d.dexNumber)) + 1;
-const added = cards.map((c) => ({ ...c, dexNumber: existingDex.get(c.id) ?? next++ }));
-const out = [...kept, ...added].sort((a, b) => a.dexNumber - b.dexNumber);
-
-const before = drinks.reduce((a, d) => ((a[d.category] = (a[d.category] ?? 0) + 1), a), {});
-const after = out.reduce((a, d) => ((a[d.category] = (a[d.category] ?? 0) + 1), a), {});
-for (const cat of ['cocktail', 'beer', 'wine']) {
-  if ((before[cat] ?? 0) !== (after[cat] ?? 0)) {
-    console.error(`FATAL: ${cat} went ${before[cat]} -> ${after[cat]}`);
-    process.exit(1);
-  }
-}
-
-const fresh = added.filter((c) => !existingDex.has(c.id)).length;
 if (dry) {
-  console.log(`dry run — would write ${out.length} entries (${fresh} new, ${added.length - fresh} refreshed)`);
+  console.log(`dry run — would write ${out.length} entries (${fresh} new, ${refreshed} refreshed)`);
 } else {
   writeFileSync(DRINKS, JSON.stringify(out, null, 1) + '\n');
-  console.log(`wrote ${out.length} entries — ${fresh} new spirit cards, ${added.length - fresh} refreshed`);
+  console.log(`wrote ${out.length} entries — ${fresh} new, ${refreshed} refreshed`);
 }
-console.log(`  categories held: cocktail ${after.cocktail}, beer ${after.beer}, wine ${after.wine}`);
 console.log(`  skipped (already authored): ${skippedAuthored}`);
 console.log(`  spirit brand cards: ${cards.length} from ${files.length} source files`);
 console.log(`  dex ${Math.min(...added.map((a) => a.dexNumber))}–${Math.max(...added.map((a) => a.dexNumber))}`);

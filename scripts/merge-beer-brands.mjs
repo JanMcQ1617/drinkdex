@@ -26,6 +26,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { validate, merge, assertShapePreserved, reportAndGate } from './lib/dex-merge.mjs';
 
 const ROOT = new URL('../', import.meta.url);
 const DRINKS = new URL('src/data/drinks.json', ROOT);
@@ -261,84 +262,26 @@ const cards = brands.map((b) => {
   };
 });
 
-/* ------------------------------------------------------------------ */
-/* Validate before writing — same gates merge-beers.mjs applies        */
-/* ------------------------------------------------------------------ */
+/* ---- validate, merge, gate — all shared (scripts/lib/dex-merge.mjs) ---- */
 
-const errors = [];
-const seenId = new Set();
-const seenName = new Set();
-for (const c of cards) {
-  if (seenId.has(c.id)) errors.push(`duplicate generated id ${c.id}`);
-  seenId.add(c.id);
-  const nk = fold(c.name);
-  if (seenName.has(nk)) errors.push(`duplicate generated name "${c.name}"`);
-  seenName.add(nk);
-  if (RESERVED.has(c.name.toLowerCase())) errors.push(`"${c.name}" is a bare style string`);
-  for (const f of ['id', 'name', 'subcategory', 'description', 'abv', 'origin', 'rarity',
-    'tastingNotes', 'glassware', 'funFact', 'serve', 'composition']) {
-    if (c[f] == null) errors.push(`${c.id}: missing ${f}`);
-  }
-  if (!c.serve?.how || !c.composition?.components?.length) errors.push(`${c.id}: hollow serve/composition`);
-}
+const report = validate({ drinks, incoming: cards, category: 'beer', owner: 'merge-beer-brands.mjs' });
+reportAndGate(report);
 
-if (errors.length) {
-  console.error(`\n${errors.length} problem(s) — nothing written:\n`);
-  for (const e of errors.slice(0, 30)) console.error('  ' + e);
+const { out, added, fresh, refreshed } = merge({ drinks, incoming: cards });
+
+const problems = assertShapePreserved({ before: drinks, after: out, category: 'beer' });
+if (problems.length) {
+  console.error(`\nmerge-beer-brands.mjs: the merge changed rows it does not own — nothing written:\n`);
+  for (const p of problems.slice(0, 20)) console.error('  ' + p);
   process.exit(1);
 }
 
-/*
- * Cross-category collision guard.
- *
- * The obvious filter — drop every incoming id from `drinks` and re-add — is
- * silently destructive: if a generated id matches an existing COCKTAIL, that
- * cocktail is dropped and replaced by a beer. No error, no missing row, just
- * one category quietly one lighter. That exact bug converted a Pink Gin
- * cocktail into a spirit elsewhere in this repo today.
- *
- * The `-br` suffix makes a collision unlikely; unlikely is not checked. So
- * check it, and only ever replace a row that is already a beer of ours.
- */
-const priorById = new Map(drinks.map((d) => [d.id, d]));
-const collisions = cards
-  .map((c) => [c, priorById.get(c.id)])
-  .filter(([, prior]) => prior && prior.category !== 'beer');
-if (collisions.length) {
-  console.error(`\n${collisions.length} id collision(s) with another category — nothing written:\n`);
-  for (const [c, prior] of collisions.slice(0, 20)) {
-    console.error(`  ${c.id}: would overwrite ${prior.category} "${prior.name}"`);
-  }
-  process.exit(1);
-}
-
-const generatedIds = new Set(cards.map((c) => c.id));
-const kept = drinks.filter((d) => !generatedIds.has(d.id));
-const existingDex = new Map(drinks.map((d) => [d.id, d.dexNumber]));
-let next = Math.max(0, ...drinks.map((d) => d.dexNumber)) + 1;
-
-const added = cards.map((c) => ({ ...c, dexNumber: existingDex.get(c.id) ?? next++ }));
-const out = [...kept, ...added].sort((a, b) => a.dexNumber - b.dexNumber);
-
-const fresh = added.filter((c) => !existingDex.has(c.id)).length;
 if (dry) {
-  console.log(`dry run — would write ${out.length} entries (${fresh} new, ${added.length - fresh} refreshed)`);
+  console.log(`dry run — would write ${out.length} entries (${fresh} new, ${refreshed} refreshed)`);
 } else {
   writeFileSync(DRINKS, JSON.stringify(out, null, 1) + '\n');
-  console.log(`wrote ${out.length} entries — ${fresh} new brand cards, ${added.length - fresh} refreshed`);
+  console.log(`wrote ${out.length} entries — ${fresh} new, ${refreshed} refreshed`);
 }
-
-/* Belt and braces: prove no other category lost an entry. */
-const before = drinks.reduce((a, d) => ((a[d.category] = (a[d.category] ?? 0) + 1), a), {});
-const after = out.reduce((a, d) => ((a[d.category] = (a[d.category] ?? 0) + 1), a), {});
-for (const cat of ['cocktail', 'wine', 'spirit']) {
-  if ((before[cat] ?? 0) !== (after[cat] ?? 0)) {
-    console.error(`FATAL: ${cat} went ${before[cat]} -> ${after[cat]}`);
-    process.exit(1);
-  }
-}
-console.log(`  categories held: cocktail ${after.cocktail}, wine ${after.wine}, spirit ${after.spirit}`);
-
 const withStyle = cards.filter((c) => c.subcategory !== 'Uncatalogued').length;
 console.log(`  brand cards: ${cards.length}  (${withStyle} inherit a style, ${cards.length - withStyle} undocumented)`);
 console.log(`  dex numbers: ${Math.min(...added.map((a) => a.dexNumber))}–${Math.max(...added.map((a) => a.dexNumber))}`);
