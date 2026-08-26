@@ -167,6 +167,17 @@ const STYLE_ALIASES = [
   ['malt liquor', 'malt-liquor'],
   // Sorghum/opaque beers have no Dex style — leave them unlinked rather
   // than pointing at 'specialty', which is a subcategory and not an id.
+  /* Late, generic fallbacks. They sit here deliberately: every specific
+   * rule above must get first refusal, or bare 'amber' would swallow
+   * 'amber lager' and bare 'dunkel' would swallow 'dunkelweizen'.
+   * Left OUT on purpose, because no honest target exists: 'fruit',
+   * 'dark', 'session', 'barrel-aged', 'honey' — and the brewery
+   * descriptors ('franconia', 'paris craft'), which are a gap in this
+   * file's own style tagging rather than a missing Dex entry. */
+  ['strong dark', 'belgian-quadrupel'],
+  ['dunkel', 'munich-dunkel'],
+  ['weizen', 'hefeweizen'],
+  ['amber', 'american-amber-ale'],
   ['porter', 'english-porter'],
   ['stout', 'irish-dry-stout'],
   ['ale', 'blonde-ale'],
