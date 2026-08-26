@@ -1,0 +1,1129 @@
+[
+ {
+  "id": "navy-rum",
+  "name": "Navy Rum",
+  "subcategory": "Rum",
+  "description": "The Royal Navy's daily rum ration, blended dark and bottled at 54.5% — the strength at which spilled spirit still lets gunpowder ignite. The tot was abolished on 31 July 1970, remembered as Black Tot Day.",
+  "abv": "54.5–57%",
+  "origin": "United Kingdom and Caribbean",
+  "rarity": "rare",
+  "tastingNotes": [
+   "molasses",
+   "tar",
+   "dried fruit",
+   "tobacco"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Proof was originally tested by soaking gunpowder in the rum and lighting it — if it burned, the spirit was above proof and the purser had not watered it.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over a single cube. It is the correct rum for a Grog — rum, water, lime and sugar — which the Navy introduced in 1740 specifically to stop sailors hoarding their ration and drinking it all at once.",
+   "pair": [
+    "salt beef",
+    "hard cheese",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "A blend of heavy pot-still rums from across the Caribbean, bottled at overproof strength.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses rums from Guyana, Trinidad, Barbados and Jamaica"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot still-heavy blends for weight"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak, blended for consistency rather than age"
+    },
+    {
+     "label": "Strength",
+     "detail": "54.5% — 100 degrees British proof"
+    }
+   ],
+   "process": "The blend was specified by the Admiralty, which is why it is a style rather than a place."
+  }
+ },
+ {
+  "id": "solera-rum",
+  "name": "Solera Rum",
+  "subcategory": "Rum",
+  "description": "Aged by the fractional system borrowed from sherry, where casks are partly emptied and topped from younger ones so no vintage stands alone. Rich and sweet, and a source of endless argument about age statements.",
+  "abv": "40%",
+  "origin": "Latin America",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "butterscotch",
+   "dried fruit",
+   "vanilla",
+   "brown sugar"
+  ],
+  "glassware": "Snifter or rocks glass",
+  "funFact": "A solera number usually refers to the oldest drop in the system, not the youngest, which is why a 23 on the label means something quite different from a Scotch age statement.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Snifter or rocks glass with one cube",
+   "how": "Neat or over one large cube. These are sweet, often with added sugar, so treat them as dessert spirits rather than mixing rums. An orange twist lifts the butterscotch.",
+   "pair": [
+    "dark chocolate",
+    "flan",
+    "coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses rum matured through a fractional blending system.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses or cane honey"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Usually column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Solera criaderas, casks partially emptied and refilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Because casks are never fully emptied, the system contains a trace of every year it has run."
+  }
+ },
+ {
+  "id": "rhum-vieux-agricole",
+  "name": "Rhum Vieux Agricole",
+  "subcategory": "Rum",
+  "description": "Cane-juice rum aged at least three years in small oak, the top tier of the Martinique AOC. Keeps the grassy vegetal signature of agricole underneath genuine cask depth — a combination nothing else offers.",
+  "abv": "42–45%",
+  "origin": "Martinique",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sugarcane",
+   "dried banana",
+   "oak spice",
+   "cocoa"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "The Martinique AOC regulates cane variety, harvest timing, fermentation length and still design, making it easily the strictest rum appellation in the world.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Tulip glass",
+   "how": "Neat, in a tulip, no ice — this is the rum that most rewards being treated like a cognac. The grassiness that survives ageing is the point, and dilution buries it.",
+   "pair": [
+    "dark chocolate",
+    "grilled pineapple",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice distilled in a creole column and aged three years or more.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh-pressed cane juice, vesou"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Single creole column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum three years in oak under 650 litres"
+    },
+    {
+     "label": "Strength",
+     "detail": "42–45%"
+    }
+   ],
+   "process": "Small casks and tropical heat mean a three-year vieux carries more wood than a decade-old continental spirit."
+  }
+ },
+ {
+  "id": "rhum-blanc-agricole",
+  "name": "Rhum Blanc Agricole",
+  "subcategory": "Rum",
+  "description": "Unaged cane-juice rum, rested a few months in steel and bottled at 50% or more. Intensely grassy, olive-brined and vegetal — the purest expression of what fresh cane actually tastes like.",
+  "abv": "50–55%",
+  "origin": "Martinique and Guadeloupe",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "fresh cane",
+   "cut grass",
+   "olive brine",
+   "white pepper"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "AOC rules require it to rest at least three months before bottling, purely to let the harshest volatiles blow off.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "In a Ti' Punch: a spoon of cane syrup, a disc of lime peel squeezed and dropped in, then the rhum, no ice. That is the drink the category exists for, and locals mix it themselves at the table.",
+   "pair": [
+    "accras",
+    "grilled fish",
+    "boudin créole"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice fermented briefly and column-distilled, unaged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh cane juice from AOC-designated varieties"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Creole column still, off at 65–75%"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum three months in inert vessels"
+    },
+    {
+     "label": "Strength",
+     "detail": "50–55%"
+    }
+   ],
+   "process": "Short fermentation, often under 48 hours, is what preserves the grassy character."
+  }
+ },
+ {
+  "id": "rhum-eleve-sous-bois",
+  "name": "Rhum Élevé Sous Bois",
+  "subcategory": "Rum",
+  "description": "The middle grade of agricole: at least a year in wood but not the three required for vieux. Straw-gold, lightly oaked, and the everyday sipping rhum of the French islands.",
+  "abv": "40–50%",
+  "origin": "Martinique and Guadeloupe",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cane",
+   "light oak",
+   "vanilla",
+   "banana"
+  ],
+  "glassware": "Tumbler",
+  "funFact": "Also sold as rhum paille — straw rum — for its colour, which sits between the white and the vieux in every sense.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Tumbler",
+   "how": "Neat or over ice. It makes a rounder Ti' Punch than the white, and it is the grade islanders reach for when the white is too fierce and the vieux too precious.",
+   "pair": [
+    "grilled chicken",
+    "plantain",
+    "fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cane-juice rum aged between one and three years in oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh cane juice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Creole column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "12 to 35 months in oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "The category exists because three years of tropical ageing loses a great deal to evaporation."
+  }
+ },
+ {
+  "id": "cachaca-de-alambique",
+  "name": "Cachaça de Alambique",
+  "subcategory": "Cane Spirit",
+  "description": "Pot-distilled artisanal cachaça, as opposed to the industrial column-distilled kind that fills most caipirinhas. Made in small batches on farms, and a completely different drink from the mass-market version.",
+  "abv": "38–48%",
+  "origin": "Minas Gerais, Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "fresh cane",
+   "grass",
+   "banana",
+   "earth"
+  ],
+  "glassware": "Small tumbler or tulip",
+  "funFact": "Minas Gerais alone has thousands of registered alambique producers, most of them family operations distilling from their own cane.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat in a small glass, which is how it is drunk in Minas. Using a good alambique cachaça in a caipirinha is not wrong, but the lime will flatten nuances you have paid for.",
+   "pair": [
+    "feijoada",
+    "pão de queijo",
+    "grilled meats"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice fermented with wild yeast and pot-distilled in small batches.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh-pressed cane juice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot still, heads and tails discarded by hand"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often rested in native Brazilian woods"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–48%"
+    }
+   ],
+   "process": "The cut is made by the distiller's judgement rather than automatically, which is the whole difference in quality."
+  }
+ },
+ {
+  "id": "ron-anejo",
+  "name": "Ron Añejo",
+  "subcategory": "Rum",
+  "description": "The Spanish-Caribbean aged style: column-distilled, oak-matured for several years, and finished light and smooth rather than heavy. The house style across Cuba, the Dominican Republic and Venezuela.",
+  "abv": "38–40%",
+  "origin": "Spanish Caribbean",
+  "rarity": "common",
+  "tastingNotes": [
+   "vanilla",
+   "caramel",
+   "light oak",
+   "dried banana"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Tropical ageing loses up to eight per cent a year to evaporation, against around two per cent in Scotland — which is why old Caribbean rum is scarce.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over one large cube. The Spanish style is built for easy drinking rather than for standing up to mixers, so a Cuba Libre made with it tastes noticeably better than one made with a heavier rum.",
+   "pair": [
+    "cigars",
+    "dark chocolate",
+    "roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses rum column-distilled to a light spirit and oak-aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Multi-column continuous still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon oak, typically 2–7 years, tropical"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "Light distillation plus charcoal filtration is the Cuban template that the whole Spanish style follows."
+  }
+ },
+ {
+  "id": "jamaican-wedderburn",
+  "name": "Wedderburn Rum",
+  "subcategory": "Rum",
+  "description": "The heaviest classical Jamaican mark, made with long fermentation and dunder to build enormous ester levels. Overwhelmingly fruity and funky, and used in tiny proportions to flavour blends.",
+  "abv": "50–85%",
+  "origin": "Jamaica",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "overripe banana",
+   "pineapple",
+   "varnish",
+   "tropical funk"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Jamaican rum is classified by ester count in grams per hectolitre of pure alcohol; Wedderburn sits high, and Continental Flavoured higher still, up to a legal ceiling of 1,600.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "A very small pour neat if you want to understand it, but its real job is blending — a teaspoon transforms a whole tiki drink. Treat it as a flavouring agent with alcohol attached.",
+   "pair": [
+    "jerk pork",
+    "tropical fruit",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented long with dunder and muck, then pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses, dunder pit acids, cane vinegar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Double retort pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often unaged for blending; aged versions exist"
+    },
+    {
+     "label": "Strength",
+     "detail": "50–85%"
+    }
+   ],
+   "process": "Dunder — the acidic residue from the previous distillation — is recycled to drive ester formation."
+  }
+ },
+ {
+  "id": "jamaican-plummer",
+  "name": "Plummer Rum",
+  "subcategory": "Rum",
+  "description": "The medium-ester Jamaican mark, sitting between light Common Clean and heavy Wedderburn. Fruity and characterful without being overwhelming, and the backbone of many classic Jamaican blends.",
+  "abv": "40–60%",
+  "origin": "Jamaica",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "banana",
+   "apricot",
+   "oak",
+   "light funk"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "The mark names — Plummer, Wedderburn, Common Clean — come from nineteenth-century estates and have outlived most of the plantations themselves.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over ice; it is drinkable in a way the high-ester marks are not. In a Mai Tai or a Planter's Punch it gives Jamaican character without dominating the glass.",
+   "pair": [
+    "jerk chicken",
+    "grilled pineapple",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses fermented at medium length and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Molasses with some dunder"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Double retort pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon oak, tropical"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–60%"
+    }
+   ],
+   "process": "Ester level is controlled by fermentation length and the amount of dunder returned to the wash."
+  }
+ },
+ {
+  "id": "blackstrap-rum",
+  "name": "Blackstrap Rum",
+  "subcategory": "Rum",
+  "description": "Made from the final, most exhausted grade of molasses — nearly black, bitter and mineral. Heavier and less sweet than dark rum, and the defining ingredient in a Corn 'n' Oil.",
+  "abv": "40–43%",
+  "origin": "Caribbean and USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black treacle",
+   "liquorice",
+   "salt",
+   "burnt sugar"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Blackstrap is the third boiling of sugarcane syrup, so depleted of sugar that it is more often sold as animal feed than as food.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "In a Corn 'n' Oil with falernum and lime, which is Barbados' own drink and the best use of it. A float on a tiki build adds depth and colour. Neat it is challenging and genuinely bitter.",
+   "pair": [
+    "gingerbread",
+    "dark chocolate",
+    "spiced pork"
+   ]
+  },
+  "composition": {
+   "summary": "Final-grade blackstrap molasses fermented and distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Blackstrap molasses, the last boiling"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column"
+    },
+    {
+     "label": "Aging",
+     "detail": "Some oak; colour is mostly from the base"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Very little residual sugar means the flavour is mineral and bitter rather than sweet."
+  }
+ },
+ {
+  "id": "panamanian-rum",
+  "name": "Panamanian Rum",
+  "subcategory": "Rum",
+  "description": "Light column-still rum aged in the tropics, shaped heavily by Cuban master distillers who settled in Panama. Smooth, vanilla-forward and often finished in wine or sherry casks.",
+  "abv": "40%",
+  "origin": "Panama",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "toffee",
+   "coconut",
+   "light oak"
+  ],
+  "glassware": "Rocks glass or snifter",
+  "funFact": "Don Pancho Fernández, who shaped much of Panama's modern rum, trained in Cuba and ran the state rum industry there before emigrating.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Snifter or rocks glass",
+   "how": "Neat or over one cube. Panamanian rum is soft enough to sip young, and the sherry- and port-finished expressions are worth seeking out for anyone who finds Spanish-style rum too plain.",
+   "pair": [
+    "dark chocolate",
+    "flan",
+    "coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses column-distilled and tropically aged in Panama.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Panamanian sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Multi-column continuous still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon, with sherry and wine finishes common"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Cuban technical lineage is why it tastes closer to Havana than to its Central American neighbours."
+  }
+ },
+ {
+  "id": "venezuelan-rum",
+  "name": "Venezuelan Rum",
+  "subcategory": "Rum",
+  "description": "Protected by a national denomination of origin requiring at least two years in oak, which is stricter than most rum-producing countries manage. Rich, round and often criticised for added sugar.",
+  "abv": "40%",
+  "origin": "Venezuela",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "toffee",
+   "dried fruit",
+   "vanilla",
+   "orange peel"
+  ],
+  "glassware": "Snifter",
+  "funFact": "The Ron de Venezuela DO sets a two-year minimum for everything, including the white rums, which most producing nations do not require at all.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Snifter or rocks glass",
+   "how": "Neat or over a large cube. Many bottlings carry significant added sugar, which makes them dessert spirits — worth knowing before judging one against a dry agricole.",
+   "pair": [
+    "dark chocolate",
+    "dulce de leche",
+    "coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses rum distilled and aged at least two years under national DO rules.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Venezuelan sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot and column blends"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum two years, ex-bourbon and ex-whisky oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Blending pot and column is common here, which gives more body than the pure Spanish style."
+  }
+ },
+ {
+  "id": "nicaraguan-rum",
+  "name": "Nicaraguan Rum",
+  "subcategory": "Rum",
+  "description": "Aged in the shadow of the San Cristóbal volcano, using water filtered through volcanic rock. Light and clean in the Spanish style, with slow-fermented molasses giving more fruit than most.",
+  "abv": "40%",
+  "origin": "Nicaragua",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "banana",
+   "toffee",
+   "light oak"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Flor de Caña's distillery sits at the foot of an active volcano and the company plants a tree for every barrel it fills.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over ice. The older expressions carry no added sugar, which makes them drier than their Venezuelan and Guatemalan neighbours and better suited to sipping.",
+   "pair": [
+    "grilled meat",
+    "dark chocolate",
+    "coffee"
+   ]
+  },
+  "composition": {
+   "summary": "Slow-fermented molasses column-distilled and tropically aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Nicaraguan sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon oak; no sugar added to the aged range"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Fermentation runs longer than the regional norm, which builds fruit esters before distillation."
+  }
+ },
+ {
+  "id": "dominican-rum",
+  "name": "Dominican Rum",
+  "subcategory": "Rum",
+  "description": "One of the three Caribbean rum traditions with protected status, alongside Cuba and Jamaica. Dry and light in the Spanish manner, with a national DO covering everything made on the island.",
+  "abv": "38–40%",
+  "origin": "Dominican Republic",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "dried fruit",
+   "light oak",
+   "molasses"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "The DO requires a minimum of one year in oak for anything called Dominican rum, white expressions included.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat, over ice, or in a Santo Libre with lime and lemon-lime soda, which is what Dominicans actually drink. The aged expressions sip well without being sweetened into submission.",
+   "pair": [
+    "sancocho",
+    "roast pork",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Molasses rum column-distilled and aged under the national DO.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Dominican sugarcane molasses"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum one year; premium expressions far longer"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "The island's rum tradition dates to the earliest sugar plantations in the Americas."
+  }
+ },
+ {
+  "id": "canazo",
+  "name": "Cañazo",
+  "subcategory": "Cane Spirit",
+  "description": "Peru's artisanal cane spirit, distilled in the Andean valleys and the highland cousin of coastal pisco. Long dismissed as a peasant drink and now being bottled seriously for the first time.",
+  "abv": "40–45%",
+  "origin": "Peru",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green cane",
+   "grass",
+   "earth",
+   "white pepper"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Cane grows in the warm Andean valleys at altitudes where grapes will not, which is why Peru has two entirely separate distilling traditions.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat, or with lime and sugar in the highland manner. It has the grassy character of an agricole rum with a mineral edge from altitude, and works well anywhere you would use white rum.",
+   "pair": [
+    "anticuchos",
+    "grilled corn",
+    "fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Andean cane juice fermented and pot-distilled at altitude.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh cane juice from Andean valleys"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Distilling at altitude lowers the boiling point, which producers say gives a lighter spirit."
+  }
+ },
+ {
+  "id": "marie-galante-rhum",
+  "name": "Rhum de Marie-Galante",
+  "subcategory": "Rum",
+  "description": "From a small round island off Guadeloupe with three working distilleries and a tradition of bottling at 59%. Fiercely aromatic cane-juice rum, and the strongest agricole regularly made.",
+  "abv": "50–59%",
+  "origin": "Marie-Galante, Guadeloupe",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cane",
+   "olive brine",
+   "banana",
+   "white pepper"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The island's habit of bottling at 59% rather than the usual 50% is purely local custom, and islanders consider anything weaker to be watered.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "In a Ti' Punch, made with a light hand — at 59% the usual measure is too much. Locals drink it that way and adjust the cane syrup upward rather than the rum down.",
+   "pair": [
+    "grilled fish",
+    "accras",
+    "boudin"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cane juice fermented and column-distilled, bottled overproof.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fresh cane juice grown on the island"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Creole column still"
+    },
+    {
+     "label": "Aging",
+     "detail": "White, élevé sous bois and vieux all produced"
+    },
+    {
+     "label": "Strength",
+     "detail": "50–59%"
+    }
+   ],
+   "process": "Three distilleries on one small island, each with a distinctly different house style."
+  }
+ },
+ {
+  "id": "mezcal-espadin",
+  "name": "Mezcal Espadín",
+  "subcategory": "Agave",
+  "description": "Made from Agave angustifolia, the cultivated workhorse behind around ninety per cent of all mezcal. Matures in six to eight years, which is fast for agave, and is the baseline against which every wild varietal is judged.",
+  "abv": "45–48%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "roasted agave",
+   "smoke",
+   "green pepper",
+   "citrus"
+  ],
+  "glassware": "Copita or veladora",
+  "funFact": "Espadín is the same species as the blue Weber used for tequila is closely related to, and it is the only agave farmed at real scale for mezcal.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora or copita",
+   "how": "Neat, room temperature, in a wide shallow glass, sipped rather than shot. Orange slices with sal de gusano are the traditional accompaniment in Oaxaca. Never chill it.",
+   "pair": [
+    "tlayudas",
+    "grasshoppers",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Cultivated Espadín agave pit-roasted, crushed and twice pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave angustifolia (Espadín), 6–8 years to maturity"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pit-roasted, tahona-crushed, copper or clay pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually joven, unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "45–48%"
+    }
+   ],
+   "process": "Earth-pit roasting over hot stones is where all the smoke comes from — nothing is added."
+  }
+ },
+ {
+  "id": "mezcal-tepeztate",
+  "name": "Mezcal Tepeztate",
+  "subcategory": "Agave",
+  "description": "From a wild agave that grows sideways out of cliff faces and takes up to twenty-five years to mature. Herbaceous, vegetal and unlike anything else — one of the most distinctive spirits made anywhere.",
+  "abv": "45–50%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green pepper",
+   "herb",
+   "celery",
+   "wet earth"
+  ],
+  "glassware": "Copita or veladora",
+  "funFact": "Tepeztate can take a quarter of a century to flower, which means a bottle drunk today comes from a plant that started growing before the mezcal boom existed.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora",
+   "how": "Neat and unhurried, in small sips. The vegetal, almost savoury profile confounds people expecting smoke and sweetness. It is a spirit to sit with rather than to introduce anyone to the category with.",
+   "pair": [
+    "grilled vegetables",
+    "fresh cheese",
+    "citrus"
+   ]
+  },
+  "composition": {
+   "summary": "Wild Tepeztate agave pit-roasted and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave marmorata, wild-harvested"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pit-roasted, crushed, small pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "45–50%"
+    }
+   ],
+   "process": "Maturation times this long make sustainable harvesting a genuine and unresolved problem."
+  }
+ },
+ {
+  "id": "mezcal-madrecuixe",
+  "name": "Mezcal Madrecuixe",
+  "subcategory": "Agave",
+  "description": "A wild agave with a long narrow trunk rather than a round heart, giving a mineral, almost saline mezcal. Twelve to fifteen years to maturity and harvested from the hillsides rather than farmed.",
+  "abv": "46–50%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "mineral",
+   "saline",
+   "green herb",
+   "smoke"
+  ],
+  "glassware": "Veladora",
+  "funFact": "Madrecuixe is one of several karwinskii agaves whose long trunks look more like small trees than the rosette shape most people picture.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora",
+   "how": "Neat, small sips, at room temperature. The mineral quality is the signature and comes through most clearly on an empty palate — taste it before richer mezcals, not after.",
+   "pair": [
+    "grilled fish",
+    "sea salt",
+    "citrus"
+   ]
+  },
+  "composition": {
+   "summary": "Wild Madrecuixe agave roasted and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave karwinskii (Madrecuixe), wild"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pit-roasted, crushed, copper pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "46–50%"
+    }
+   ],
+   "process": "The trunk holds less sugar than a round piña, so yields are low and prices high."
+  }
+ },
+ {
+  "id": "mezcal-arroqueno",
+  "name": "Mezcal Arroqueño",
+  "subcategory": "Agave",
+  "description": "A huge wild agave, sometimes over two metres across, taking fifteen to twenty-five years to mature. Sweet, earthy and full-bodied, with a richness the smaller agaves cannot reach.",
+  "abv": "46–50%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dark chocolate",
+   "earth",
+   "roasted agave",
+   "tropical fruit"
+  ],
+  "glassware": "Veladora",
+  "funFact": "Arroqueño is an ancestor of Espadín and one of the largest agaves used for mezcal, with single plants weighing hundreds of kilos.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora",
+   "how": "Neat and slowly. Its size means one plant yields a lot of spirit, but the decades to maturity keep it rare. Richer and sweeter than the karwinskii agaves, so serve it later in a tasting.",
+   "pair": [
+    "mole negro",
+    "dark chocolate",
+    "roasted nuts"
+   ]
+  },
+  "composition": {
+   "summary": "Wild Arroqueño agave roasted, crushed and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave americana var. oaxacensis, wild"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pit-roasted, tahona-crushed, pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "46–50%"
+    }
+   ],
+   "process": "As a genetic parent of Espadín it shows the sweetness that cultivation selected for."
+  }
+ },
+ {
+  "id": "mezcal-cuishe",
+  "name": "Mezcal Cuishe",
+  "subcategory": "Agave",
+  "description": "Another long-trunked karwinskii agave, giving a mezcal that is dry, herbal and faintly medicinal. Around twelve years to maturity and almost entirely wild-harvested.",
+  "abv": "46–49%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dry herb",
+   "mineral",
+   "white pepper",
+   "light smoke"
+  ],
+  "glassware": "Veladora",
+  "funFact": "The karwinskii family — cuishe, madrecuixe, barril, tobasiche — are all closely related and locals distinguish them by trunk length and where on the hillside they grow.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora",
+   "how": "Neat, small pours. Drier and more austere than Espadín, and it makes an excellent bridge between the cultivated and wild styles for someone working through a flight.",
+   "pair": [
+    "grilled vegetables",
+    "queso fresco",
+    "lime"
+   ]
+  },
+  "composition": {
+   "summary": "Wild Cuishe agave pit-roasted and pot-distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave karwinskii (Cuishe), wild-harvested"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pit-roasted, crushed, copper pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "46–49%"
+    }
+   ],
+   "process": "Producers often distil the different karwinskii varieties separately purely to show the differences."
+  }
+ },
+ {
+  "id": "mezcal-ensamble",
+  "name": "Mezcal Ensamble",
+  "subcategory": "Agave",
+  "description": "Made by roasting and fermenting several agave varieties together, rather than blending finished spirits. A deliberate composition, and often how a producer uses a small wild harvest that could not fill a batch alone.",
+  "abv": "45–50%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "layered agave",
+   "smoke",
+   "tropical fruit",
+   "mineral"
+  ],
+  "glassware": "Veladora",
+  "funFact": "An ensamble differs from a blend: the agaves are combined before roasting, so they ferment and distil as one rather than being married afterwards.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora",
+   "how": "Neat, at room temperature. Ensambles are often more complex than any single varietal in them, and they are usually the best value in a producer's range because wild agave goes further.",
+   "pair": [
+    "mole",
+    "grilled meats",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Several agave species roasted, fermented and distilled together.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Two or more agave species, typically Espadín plus wild varieties"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Combined before roasting, then distilled as one batch"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "45–50%"
+    }
+   ],
+   "process": "Combining before roasting rather than after distilling is what makes it an ensamble and not a blend."
+  }
+ },
+ {
+  "id": "destilado-de-agave",
+  "name": "Destilado de Agave",
+  "subcategory": "Agave",
+  "description": "Agave spirit made outside the mezcal denomination — from the wrong state, the wrong paperwork or an unapproved method. Often identical in quality and sometimes better, but legally forbidden the name.",
+  "abv": "45–52%",
+  "origin": "Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "roasted agave",
+   "smoke",
+   "earth",
+   "varies widely"
+  ],
+  "glassware": "Veladora",
+  "funFact": "Several Mexican states with centuries of agave distilling — including Jalisco outside the tequila zone — fall outside the mezcal DO entirely, so their spirits cannot be called mezcal.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Veladora",
+   "how": "Neat, as you would any mezcal. The label tells you about regulation rather than quality, and some of the most interesting agave spirits in Mexico sit in this category by geography alone.",
+   "pair": [
+    "mole",
+    "grilled meats",
+    "citrus"
+   ]
+  },
+  "composition": {
+   "summary": "Agave roasted, fermented and distilled outside the DO's boundaries.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Any agave species, cultivated or wild"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Traditional pit-roast and pot still, usually"
+    },
+    {
+     "label": "Aging",
+     "detail": "Typically unaged"
+    },
+    {
+     "label": "Strength",
+     "detail": "45–52%"
+    }
+   ],
+   "process": "The category exists because denominations of origin draw lines on maps, not around traditions."
+  }
+ }
+]

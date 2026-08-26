@@ -31,8 +31,16 @@ const incoming = files.flatMap((f) => JSON.parse(readFileSync(new URL(f, SOURCE)
 
 const incomingIds = new Set(incoming.map((d) => d.id));
 
-/* Everything that was already here, minus any previous run of this import. */
-const kept = drinks.filter((d) => !incomingIds.has(d.id));
+/*
+ * Everything already here, minus any previous run of THIS import.
+ *
+ * The category guard matters: an incoming id may only displace an entry that
+ * is itself a spirit. Without it, a spirit sharing an id with a cocktail
+ * silently converted that cocktail into a spirit — which is exactly what
+ * `pink-gin` did on the first run of this batch.
+ */
+const kept = drinks.filter((d) => !(incomingIds.has(d.id) && d.category === 'spirit'));
+const priorById = new Map(drinks.map((d) => [d.id, d]));
 const nameIndex = new Map(kept.map((d) => [fold(d.name), d.name]));
 const idIndex = new Set(kept.map((d) => d.id));
 
@@ -60,7 +68,11 @@ for (const s of incoming) {
 
   if (seenId.has(s.id)) errors.push(`${where}: duplicate id within import`);
   seenId.add(s.id);
-  if (idIndex.has(s.id)) errors.push(`${where}: id collides with an existing entry`);
+  const prior = priorById.get(s.id);
+  if (prior && prior.category !== 'spirit') {
+    errors.push(`${where}: id collides with existing ${prior.category} ${prior.name}`);
+  }
+  if (idIndex.has(s.id)) errors.push(`${where}: id collides with a non-spirit entry`);
 
   const nk = fold(s.name);
   if (seenName.has(nk)) errors.push(`${where}: duplicate name within import ("${seenName.get(nk)}")`);

@@ -1,0 +1,1031 @@
+[
+ {
+  "id": "french-whisky",
+  "name": "French Whisky",
+  "subcategory": "World Whisky",
+  "description": "France drinks more whisky per head than almost anywhere and started making its own seriously in the 1980s. Brittany leads, often using buckwheat or local barley and finishing in wine casks the country has in abundance.",
+  "abv": "40–46%",
+  "origin": "France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orchard fruit",
+   "wine cask",
+   "honey",
+   "light cereal"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "France consumes more Scotch per capita than Scotland does, which is a large part of why French distillers eventually decided to compete.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn or tulip",
+   "how": "Neat with a drop of water. Sauternes, Banyuls and Bordeaux cask finishes are the French signature, so expect more wine influence and less sherry than a Scotch drinker is used to.",
+   "pair": [
+    "comté",
+    "dark chocolate",
+    "walnuts"
+   ]
+  },
+  "composition": {
+   "summary": "Barley or buckwheat distilled and matured in France, often in wine casks.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley, or buckwheat in Breton whiskies"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot stills, some using cognac-style alembics"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-wine casks — Sauternes, Banyuls, Bordeaux — as often as ex-bourbon"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "Buckwheat, blé noir, is a Breton speciality and gives a distinctly nutty, spicy whisky."
+  }
+ },
+ {
+  "id": "swedish-whisky",
+  "name": "Swedish Whisky",
+  "subcategory": "World Whisky",
+  "description": "Sweden built a whisky industry from nothing in the late 1990s, using Swedish barley, juniper-smoked malt and small casks stored in disused mines. Distinctive rather than imitative.",
+  "abv": "40–46.1%",
+  "origin": "Sweden",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper smoke",
+   "vanilla",
+   "red berry",
+   "cereal"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Some Swedish malt is smoked over juniper twigs rather than peat, which gives a resinous smoke quite unlike Islay's.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with a few drops of water. The juniper-smoked expressions are the ones worth seeking out — they taste like nothing in Scotland and reward being tried beside an Islay for contrast.",
+   "pair": [
+    "smoked salmon",
+    "hard cheese",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Swedish barley, sometimes juniper-smoked, matured in small casks.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Swedish malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Small casks, some warehoused underground in old mines"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46.1%"
+    }
+   ],
+   "process": "Wide seasonal temperature swings drive spirit in and out of the wood faster than in Scotland."
+  }
+ },
+ {
+  "id": "danish-whisky",
+  "name": "Danish Whisky",
+  "subcategory": "World Whisky",
+  "description": "Denmark's whisky is built on floor-malted Danish barley, sometimes smoked with heather and seaweed rather than peat. A young industry that leaned into local agriculture from the start.",
+  "abv": "40–47%",
+  "origin": "Denmark",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "heather smoke",
+   "barley",
+   "honey",
+   "sea air"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Several Danish distilleries floor-malt their own barley, a labour-intensive practice most Scottish distilleries abandoned decades ago.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat, with water to open it. The smoked expressions use heather and local peat, which reads as sweeter and more herbal than Islay smoke.",
+   "pair": [
+    "smoked fish",
+    "rye bread",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Danish floor-malted barley distilled and matured in Denmark.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Danish barley, often floor-malted on site"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon and ex-sherry, plus local oak experiments"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–47%"
+    }
+   ],
+   "process": "Heather and seaweed smoking is a deliberate attempt to make a smoke that is not Scottish."
+  }
+ },
+ {
+  "id": "dutch-whisky",
+  "name": "Dutch Whisky",
+  "subcategory": "World Whisky",
+  "description": "The Netherlands has distilled grain for four centuries as jenever, so whisky was a short step. Dutch single malts lean rich and sherried, made by distillers with deep column and pot experience.",
+  "abv": "40–46%",
+  "origin": "Netherlands",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "dried fruit",
+   "sherry",
+   "malt",
+   "nutmeg"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Zuidam, one of the best-known producers, mills its grain using restored Dutch windmills.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with a drop of water. Dutch malts tend heavily toward sherry-cask maturation, so expect dried fruit and spice rather than the vanilla of ex-bourbon.",
+   "pair": [
+    "aged gouda",
+    "dried fruit",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Dutch barley and rye distilled in pot stills and sherry-matured.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley, sometimes rye"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills, slow runs"
+    },
+    {
+     "label": "Aging",
+     "detail": "Predominantly ex-sherry casks"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "Centuries of jenever malt-wine production gave Dutch distillers a head start on grain handling."
+  }
+ },
+ {
+  "id": "german-whisky",
+  "name": "German Whisky",
+  "subcategory": "World Whisky",
+  "description": "Germany has more whisky distilleries than Ireland, most of them tiny operations attached to existing fruit-brandy or beer businesses. Wheat and spelt appear alongside barley, and the results vary wildly.",
+  "abv": "40–46%",
+  "origin": "Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "wheat",
+   "honey",
+   "orchard fruit",
+   "light oak"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Germany's distilling licences were historically tied to fruit brandy, so many whisky makers came to it with pot-still expertise but no malt tradition at all.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with water. Expect greater variation than from any established whisky nation — some are excellent, some are fruit distillers experimenting. Spelt and wheat expressions are the most distinctive.",
+   "pair": [
+    "smoked ham",
+    "rye bread",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Barley, wheat or spelt distilled in small German pot stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley, wheat, spelt or rye"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small pot stills, often fruit-brandy equipment"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-wine and ex-beer casks alongside standard oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "Beer-cask and Riesling-cask finishes are a genuinely German contribution to the category."
+  }
+ },
+ {
+  "id": "austrian-whisky",
+  "name": "Austrian Whisky",
+  "subcategory": "World Whisky",
+  "description": "Austria distils whisky from rye as readily as barley, and often from spelt — a grain barely used anywhere else for the purpose. Waldviertel in the north is the centre.",
+  "abv": "41–46%",
+  "origin": "Austria",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "rye spice",
+   "spelt",
+   "dark bread",
+   "honey"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Austria only legalised whisky production in 1995; before that, distilling grain rather than fruit was effectively barred.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with a drop of water. The rye and spelt expressions taste distinctly of dark bread, which is the signature and worth approaching on its own terms rather than as a Scotch substitute.",
+   "pair": [
+    "dark rye bread",
+    "smoked pork",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Rye, spelt or barley distilled and matured in Austrian oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rye, spelt, barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often local Manhartsberg oak rather than American or French"
+    },
+    {
+     "label": "Strength",
+     "detail": "41–46%"
+    }
+   ],
+   "process": "Native Austrian oak is more aromatic than American white oak and marks the spirit heavily."
+  }
+ },
+ {
+  "id": "swiss-whisky",
+  "name": "Swiss Whisky",
+  "subcategory": "World Whisky",
+  "description": "Illegal in Switzerland until 1999, because grain was reserved for food. The industry that followed is small, expensive and fond of finishing in casks from the country's own wine regions.",
+  "abv": "40–46%",
+  "origin": "Switzerland",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "orchard fruit",
+   "wine cask",
+   "honey",
+   "alpine herb"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "A Swiss law dating from the 1930s forbade distilling bread grains, and it was only repealed in 1999 — which is why Swiss whisky has no history before that date.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with water. Beer-cask and wine-cask finishes dominate, and some producers use casks from Swiss vineyards you cannot buy wine from outside the country.",
+   "pair": [
+    "alpine cheese",
+    "dried meat",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Swiss barley distilled and matured in local wine and beer casks.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Swiss malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot stills, some using fruit-brandy equipment"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-wine, ex-beer and standard oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "A twelve-year-old Swiss whisky is by definition made after 1999, so the category has a hard start date."
+  }
+ },
+ {
+  "id": "czech-whisky",
+  "name": "Czech Whisky",
+  "subcategory": "World Whisky",
+  "description": "Czechia has distilled single malt since the 1980s, quietly and mostly for the domestic market. Made in a country with world-class barley and brewing, which shows in the wash.",
+  "abv": "40–43%",
+  "origin": "Czechia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "malt",
+   "honey",
+   "light smoke",
+   "cereal"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Hammer Head whisky was distilled in 1989, forgotten in a communist-era warehouse, and rediscovered and bottled two decades later as an accidental vintage single malt.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with water. Czech barley is the same crop that supplies the country's brewing industry, and the malt-forward character reflects it.",
+   "pair": [
+    "roast pork",
+    "dark bread",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Czech malted barley distilled and matured domestically.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Moravian malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Czech oak as well as ex-bourbon"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Local oak is used more than imported, which gives a drier, more tannic profile."
+  }
+ },
+ {
+  "id": "finnish-whisky",
+  "name": "Finnish Whisky",
+  "subcategory": "World Whisky",
+  "description": "Finland distils whisky from rye and barley, sometimes smoked with local peat from bogs that are among the youngest in Europe. Cold maturation makes for slow, gentle development.",
+  "abv": "40–47.5%",
+  "origin": "Finland",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "rye",
+   "cereal",
+   "light peat",
+   "honey"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Finnish rye whisky uses the same grain that makes the country's dense sour rye bread, and the resemblance in the glass is not subtle.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with water. The 100% rye expressions are the distinctive ones — spicier and breadier than any Scotch, and closer in spirit to American rye than to malt.",
+   "pair": [
+    "rye bread",
+    "smoked fish",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Finnish rye or barley distilled and matured in the far north.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Finnish rye and malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon, ex-sherry and Finnish oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–47.5%"
+    }
+   ],
+   "process": "Cold cellars slow maturation, so Finnish whisky ages more like Scotch than like Tasmanian."
+  }
+ },
+ {
+  "id": "icelandic-whisky",
+  "name": "Icelandic Whisky",
+  "subcategory": "World Whisky",
+  "description": "Made from Icelandic barley — a crop that only became viable as the climate warmed — and smoked with sheep dung rather than peat, because Iceland has almost no trees and never has.",
+  "abv": "40–47%",
+  "origin": "Iceland",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "barley",
+   "sheep-dung smoke",
+   "heather",
+   "mineral"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Smoking with dried sheep dung is a genuine Icelandic food tradition, used for centuries on lamb and fish because firewood was unavailable.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with a drop of water. The smoked expression is the point — it is nothing like peat, closer to a barnyard sweetness, and divides opinion sharply.",
+   "pair": [
+    "smoked lamb",
+    "dried fish",
+    "rye bread"
+   ]
+  },
+  "composition": {
+   "summary": "Icelandic barley distilled and matured on the island.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Icelandic-grown barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon and new oak; rapid due to temperature swings"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–47%"
+    }
+   ],
+   "process": "Barley barely ripens at this latitude, which is why the crop is recent and the whisky newer still."
+  }
+ },
+ {
+  "id": "south-african-whisky",
+  "name": "South African Whisky",
+  "subcategory": "World Whisky",
+  "description": "Made at the southern tip of Africa since the 1970s, with grain and malt distilled on one site. The climate matures spirit fast, and the results have taken world awards more than once.",
+  "abv": "43%",
+  "origin": "South Africa",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "vanilla",
+   "tropical fruit",
+   "toasted oak",
+   "honey"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "The James Sedgwick distillery in Wellington has been operating since 1886, though it only turned to whisky nearly a century later.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with water. Warm maturation pushes fast, so a ten-year-old carries more wood than the age suggests. Also excellent in a highball with soda, which is how much of it is drunk locally.",
+   "pair": [
+    "biltong",
+    "dark chocolate",
+    "aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Malted barley and maize distilled and matured in the Western Cape.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley plus maize for the grain component"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot and column on one site"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon oak, warm-climate maturation"
+    },
+    {
+     "label": "Strength",
+     "detail": "Typically 43%"
+    }
+   ],
+   "process": "Having grain and malt distillation in one place is unusual and lets the blender work from components rather than trade."
+  }
+ },
+ {
+  "id": "mexican-whisky",
+  "name": "Mexican Whisky",
+  "subcategory": "World Whisky",
+  "description": "Made from native Oaxacan corn landraces — the ancestors of every corn whiskey elsewhere — grown by smallholders and distilled in the mountains. A whisky category that could only exist in Mexico.",
+  "abv": "45–50%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "corn",
+   "masa",
+   "honey",
+   "toasted grain"
+  ],
+  "glassware": "Glencairn or copita",
+  "funFact": "The corn varieties used — Olotillo, Bolita, Yellow — are heirloom landraces that would be commercially useless as feed crops and are grown specifically for this.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Copita or Glencairn",
+   "how": "Neat, in a small glass. It tastes distinctly of masa and toasted corn in a way American corn whiskey does not, and it rewards being approached as its own thing rather than as bourbon.",
+   "pair": [
+    "mole",
+    "tlayudas",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Heirloom Oaxacan corn fermented and distilled in the Sierra Norte.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Native Oaxacan corn landraces"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small copper stills, mezcal-style equipment"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-whiskey and new oak, typically short"
+    },
+    {
+     "label": "Strength",
+     "detail": "45–50%"
+    }
+   ],
+   "process": "Single-landrace bottlings exist, which makes it possible to taste one corn variety against another."
+  }
+ },
+ {
+  "id": "chinese-whisky",
+  "name": "Chinese Whisky",
+  "subcategory": "World Whisky",
+  "description": "China began building serious malt distilleries in the late 2010s, at scale and with foreign expertise, in a country whose spirits market is the largest on earth. The first releases arrived in the 2020s.",
+  "abv": "43–48%",
+  "origin": "China",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "orchard fruit",
+   "honey",
+   "toasted oak",
+   "light spice"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Some Chinese distilleries mature stock at high altitude in Yunnan and Sichuan, where the thin air and temperature swings accelerate cask interaction.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with water. The category is young enough that most releases are under five years old, so expect wood-forward spirit and judge it on texture rather than age.",
+   "pair": [
+    "Sichuan pepper dishes",
+    "roast duck",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Malted barley distilled and matured in China.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Imported and domestic malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills, largely Scottish-built"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon, ex-sherry, and casks from Chinese baijiu and wine production"
+    },
+    {
+     "label": "Strength",
+     "detail": "43–48%"
+    }
+   ],
+   "process": "Ageing in ex-baijiu vessels is a genuinely novel finish that no other country can attempt."
+  }
+ },
+ {
+  "id": "peated-single-malt",
+  "name": "Peated Single Malt",
+  "subcategory": "Scotch",
+  "description": "Malt dried over burning peat, so the smoke's phenols bind to the grain and survive fermentation, distillation and years in wood. Measured in parts per million, and the single most divisive variable in whisky.",
+  "abv": "40–58%",
+  "origin": "Scotland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "peat smoke",
+   "iodine",
+   "brine",
+   "tar"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Phenol levels are measured in the malt, not the bottle — much is lost in production, so a 50ppm malt might yield a whisky at half that.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat, then a few drops of water, which genuinely opens peated whisky more than any other style. Do not over-dilute heavily peated spirit; the smoke collapses before the malt emerges.",
+   "pair": [
+    "oysters",
+    "blue cheese",
+    "smoked meats"
+   ]
+  },
+  "composition": {
+   "summary": "Barley malt kilned over peat smoke, then distilled and matured.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley dried over peat fire"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills, twice"
+    },
+    {
+     "label": "Aging",
+     "detail": "Minimum three years; peat softens with time in cask"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–58%"
+    }
+   ],
+   "process": "Peat from different regions smells different — Islay's is maritime and iodine-heavy, Highland peat is drier and more heathery."
+  }
+ },
+ {
+  "id": "sherry-cask-single-malt",
+  "name": "Sherry Cask Single Malt",
+  "subcategory": "Scotch",
+  "description": "Matured in casks that previously held sherry, which supplies dried fruit, spice and colour no ex-bourbon barrel can. The casks are now made and seasoned specifically for whisky, since sherry itself sells too slowly.",
+  "abv": "40–57%",
+  "origin": "Scotland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dried fig",
+   "raisin",
+   "clove",
+   "dark chocolate"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Almost no genuine sherry-transport casks remain; distillers now pay Spanish bodegas to season new oak with sherry for a few years purely to make whisky casks.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat, with water added sparingly. Sherry casks carry a lot of tannin, so heavy dilution turns them drying rather than sweeter. Oloroso gives nuts and spice; PX gives raisin and syrup.",
+   "pair": [
+    "dark chocolate",
+    "dried fruit",
+    "aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Malt whisky matured in ex-sherry European or American oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-oloroso, ex-Pedro Ximénez or ex-fino casks"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–57%"
+    }
+   ],
+   "process": "European oak gives more tannin and spice; American oak seasoned with sherry is softer and sweeter."
+  }
+ },
+ {
+  "id": "japanese-blended-whisky",
+  "name": "Japanese Blended Whisky",
+  "subcategory": "World Whisky",
+  "description": "The dominant Japanese style, built from malt and grain whiskies made in-house because Japanese distillers historically did not trade stock with each other. That isolation forced enormous variety within single companies.",
+  "abv": "40–43%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "pear",
+   "light oak",
+   "gentle smoke"
+  ],
+  "glassware": "Highball glass",
+  "funFact": "Because Japanese distillers do not swap casks the way Scottish ones do, a single site may run several still shapes and yeast strains to generate the components a blend needs.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Tall highball with clear ice",
+   "how": "The Japanese highball: one part whisky, three or four parts cold soda, over hard clear ice, stirred once. It is not a downgrade from neat service — the style is built for it, and most Japanese blends taste better this way.",
+   "pair": [
+    "yakitori",
+    "tempura",
+    "karaage"
+   ]
+  },
+  "composition": {
+   "summary": "In-house malt and grain whiskies blended to a house style.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley plus corn or wheat grain whisky"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot stills of varied shape, plus continuous column"
+    },
+    {
+     "label": "Aging",
+     "detail": "Ex-bourbon, ex-sherry and Japanese mizunara oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Mizunara oak is porous and difficult to work, and gives the sandalwood and incense note the category is known for."
+  }
+ },
+ {
+  "id": "mizunara-whisky",
+  "name": "Mizunara Cask Whisky",
+  "subcategory": "World Whisky",
+  "description": "Matured in Japanese oak, a species so porous and knotted that coopers reject most of it and casks leak. What survives gives sandalwood, coconut and temple incense found nowhere else.",
+  "abv": "43–48%",
+  "origin": "Japan",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "sandalwood",
+   "incense",
+   "coconut",
+   "honey"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Mizunara trees need around two hundred years before they are large enough to make casks from, and the wood's high moisture content makes leaking casks routine.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat, with the smallest amount of water. The incense note takes years to emerge and is fragile — this is a whisky to sit with rather than to mix, and the price reflects the cooperage failure rate.",
+   "pair": [
+    "dark chocolate",
+    "dried persimmon",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Whisky matured in casks of Quercus crispula, Japanese oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills"
+    },
+    {
+     "label": "Aging",
+     "detail": "Mizunara oak, usually as a finish after ex-bourbon"
+    },
+    {
+     "label": "Strength",
+     "detail": "43–48%"
+    }
+   ],
+   "process": "Japanese distillers turned to mizunara during the war when imported oak was unobtainable, and kept it."
+  }
+ },
+ {
+  "id": "rye-malt-whiskey",
+  "name": "Rye Malt Whiskey",
+  "subcategory": "American Whiskey",
+  "description": "Made from malted rye rather than raw rye, which is technically difficult — malted rye foams violently in the mash and gums up equipment. The result is spicier and more aromatic than standard rye.",
+  "abv": "45–50%",
+  "origin": "USA",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "rye spice",
+   "dark bread",
+   "dill",
+   "mint"
+  ],
+  "glassware": "Glencairn or rocks glass",
+  "funFact": "Malted rye is so prone to foaming that distillers describe mashing it as trying to boil a pan of soap.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Glencairn neat, rocks in a drink",
+   "how": "Neat to appreciate what malting does, or in a Manhattan where the extra aromatics stand up to sweet vermouth better than standard rye. Cask-strength bottlings take water well.",
+   "pair": [
+    "smoked meats",
+    "rye bread",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Malted rye mashed, fermented and aged in new charred oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "At least 51% malted rye"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot or column"
+    },
+    {
+     "label": "Aging",
+     "detail": "New charred oak, as for all straight American whiskey"
+    },
+    {
+     "label": "Strength",
+     "detail": "45–50%"
+    }
+   ],
+   "process": "Malting develops enzymes and sugars that raw rye lacks, which is where the extra aromatic depth comes from."
+  }
+ },
+ {
+  "id": "american-light-whiskey",
+  "name": "American Light Whiskey",
+  "subcategory": "American Whiskey",
+  "description": "A category created by US regulators in 1968: distilled above 160 proof and aged in used or uncharred oak. It was meant to compete with vodka and Scotch, flopped commercially, and has become a curiosity.",
+  "abv": "40–50%",
+  "origin": "USA",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "vanilla",
+   "light grain",
+   "banana",
+   "soft oak"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "It was invented specifically to answer 1960s American drinkers turning away from bourbon toward lighter spirits, and by the time the stock had aged the fashion had moved on again.",
+  "serve": {
+   "temp": "over ice",
+   "glass": "Rocks glass",
+   "how": "Over ice or in a highball. Distilling to high proof strips congeners, so it is deliberately gentler than bourbon. Very old stock from the original 1970s production occasionally surfaces and is worth trying.",
+   "pair": [
+    "light snacks",
+    "soda",
+    "citrus"
+   ]
+  },
+  "composition": {
+   "summary": "Grain distilled above 160 proof and aged in used or uncharred oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Corn-heavy mash, usually"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Above 160 US proof — higher than bourbon's legal ceiling"
+    },
+    {
+     "label": "Aging",
+     "detail": "Used or uncharred new oak"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "The high distillation proof is the whole definition, and it is what makes it not bourbon."
+  }
+ },
+ {
+  "id": "grain-whisky",
+  "name": "Grain Whisky",
+  "subcategory": "Scotch",
+  "description": "Made from wheat or maize in continuous column stills rather than pot stills, and long treated as the anonymous filler in blends. Single grain bottlings have shown it can be a fine spirit on its own.",
+  "abv": "40–46%",
+  "origin": "Scotland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "vanilla",
+   "coconut",
+   "toffee",
+   "light cereal"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Grain whisky makes up the large majority of every blended Scotch by volume, which means most Scotch ever drunk has been mostly this.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Glencairn or rocks glass",
+   "how": "Neat for old single grains, which develop a striking coconut-and-vanilla character after twenty years. Younger stock is light enough to work well over ice or in a highball.",
+   "pair": [
+    "vanilla desserts",
+    "light cheese",
+    "shortbread"
+   ]
+  },
+  "composition": {
+   "summary": "Wheat or maize distilled in a continuous Coffey still and oak-matured.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Wheat or maize with a small malted barley portion"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Continuous column, to a high strength"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually ex-bourbon; rewards very long maturation"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "High distillation strength leaves a light spirit, which is why grain whisky needs decades to become interesting."
+  }
+ },
+ {
+  "id": "triple-distilled-malt",
+  "name": "Triple Distilled Malt",
+  "subcategory": "Scotch",
+  "description": "Run through the stills three times rather than twice, which raises the strength and strips heavier compounds. The Lowland tradition in Scotland and the standard in much of Ireland.",
+  "abv": "40–46%",
+  "origin": "Scotland and Ireland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "light citrus",
+   "grass",
+   "cereal",
+   "soft floral"
+  ],
+  "glassware": "Glencairn",
+  "funFact": "Auchentoshan triple distils every drop, coming off the third still at around 81% — one of the highest new-make strengths in Scotch whisky.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Glencairn",
+   "how": "Neat with very little water, since the spirit is already light. It suits a whisky drinker who finds peat and sherry overwhelming, and it makes an unusually clean base for a whisky sour.",
+   "pair": [
+    "smoked salmon",
+    "goat cheese",
+    "lemon tart"
+   ]
+  },
+  "composition": {
+   "summary": "Malted barley distilled three times in copper pot stills.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Malted barley"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Three passes, reaching a higher final strength"
+    },
+    {
+     "label": "Aging",
+     "detail": "Predominantly ex-bourbon"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–46%"
+    }
+   ],
+   "process": "Each pass removes heavier congeners, so the trade is elegance for body."
+  }
+ }
+]
