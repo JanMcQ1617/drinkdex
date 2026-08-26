@@ -1,0 +1,1619 @@
+[
+ {
+  "id": "creme-de-cacao",
+  "name": "Crème de Cacao",
+  "subcategory": "Liqueur",
+  "description": "Cacao bean and vanilla liqueur, made clear (white) or caramel-coloured (dark) from the same base. The crème refers to sugar content, not dairy — there is no cream in it at all.",
+  "abv": "20–25%",
+  "origin": "France",
+  "rarity": "common",
+  "tastingNotes": [
+   "cocoa",
+   "vanilla",
+   "toasted nut",
+   "sugar"
+  ],
+  "glassware": "Coupe",
+  "funFact": "EU rules require a crème liqueur to carry at least 250 grams of sugar per litre, which is where the name comes from — the texture, not the ingredient.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe",
+   "how": "Rarely drunk neat. White goes into a Grasshopper and an Alexander; dark into a Brandy Alexander or a Twentieth Century. Keep the white version when you need chocolate flavour without muddying the colour of a drink.",
+   "pair": [
+    "vanilla ice cream",
+    "fresh berries",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Cacao beans and vanilla infused into neutral spirit and heavily sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Roasted cacao beans, vanilla pod"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused or distilled, then sweetened; dark is caramel-coloured"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–25%"
+    }
+   ],
+   "process": "Distilling rather than infusing gives the white version, since the colour stays behind in the beans."
+  }
+ },
+ {
+  "id": "creme-de-banane",
+  "name": "Crème de Banane",
+  "subcategory": "Liqueur",
+  "description": "Banana liqueur, bright yellow and frankly artificial-tasting in its cheap forms, genuinely good in its better ones. A tiki staple and the making of a Banana Daiquiri.",
+  "abv": "17–25%",
+  "origin": "France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ripe banana",
+   "vanilla",
+   "sugar",
+   "light spice"
+  ],
+  "glassware": "Coupe or highball",
+  "funFact": "Isoamyl acetate, the compound that reads as banana, is also produced naturally by fermenting yeast — which is why some Jamaican rums taste of banana with no banana involved.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Coupe or highball",
+   "how": "In a Banana Daiquiri with rum and lime, or a bar spoon in a tiki build where it bridges rum and citrus. Neat it is very sweet; the better bottlings made from real fruit are worth seeking out.",
+   "pair": [
+    "dark chocolate",
+    "vanilla ice cream",
+    "grilled pineapple"
+   ]
+  },
+  "composition": {
+   "summary": "Banana infused into neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Banana, natural or compounded, plus vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "17–25%"
+    }
+   ],
+   "process": "Real-fruit versions are darker and less neon than the compounded ones, and taste noticeably less like confectionery."
+  }
+ },
+ {
+  "id": "creme-de-mure",
+  "name": "Crème de Mûre",
+  "subcategory": "Liqueur",
+  "description": "Blackberry liqueur, deep purple and tart under the sweetness. Without it there is no Bramble, which is the only cocktail invented in 1980s London that anyone still orders.",
+  "abv": "15–20%",
+  "origin": "France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry",
+   "bramble",
+   "tart fruit",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Dick Bradsell built the Bramble at Fred's Club in Soho, drizzling the mûre over crushed ice so it bleeds down through the drink.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass over crushed ice",
+   "how": "Drizzled over a gin sour on crushed ice to make a Bramble — pour it last and do not stir, the bleed is the point. It also lifts a Kir if you want something darker than cassis.",
+   "pair": [
+    "dark chocolate",
+    "fresh berries",
+    "lemon tart"
+   ]
+  },
+  "composition": {
+   "summary": "Blackberries macerated in neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Blackberries, sometimes with raspberry"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, pressed and sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–20%"
+    }
+   ],
+   "process": "Like cassis, it is a maceration rather than a distillate, so the fruit character stays raw and bright."
+  }
+ },
+ {
+  "id": "creme-de-noyaux",
+  "name": "Crème de Noyaux",
+  "subcategory": "Liqueur",
+  "description": "Made from apricot and cherry stones rather than nuts, which gives an almond flavour from a fruit source. Pink, old-fashioned, and the ingredient that makes a Pink Squirrel pink.",
+  "abv": "20–25%",
+  "origin": "France",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bitter almond",
+   "stone fruit",
+   "marzipan",
+   "cherry"
+  ],
+  "glassware": "Coupe",
+  "funFact": "The almond note comes from benzaldehyde in the kernels — the same compound that makes marzipan taste of almond, present here without a single almond involved.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe",
+   "how": "A cocktail ingredient rather than a sipper. It is the almond note in a Pink Squirrel and an Old Etonian, and it substitutes for orgeat in drinks where you want alcohol rather than syrup.",
+   "pair": [
+    "marzipan",
+    "cherry desserts",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Apricot and cherry kernels macerated in spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Apricot and cherry stones, cracked"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then sweetened and coloured"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–25%"
+    }
+   ],
+   "process": "Kernels contain amygdalin, which is why the quantity used is carefully controlled."
+  }
+ },
+ {
+  "id": "melon-liqueur",
+  "name": "Melon Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Bright green muskmelon liqueur, invented in Japan in 1978 and responsible for an entire decade of drinks. Sweet, unmistakable, and rehabilitated in recent years by bartenders who stopped being embarrassed by it.",
+  "abv": "20–21%",
+  "origin": "Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "muskmelon",
+   "honeydew",
+   "sugar",
+   "light citrus"
+  ],
+  "glassware": "Highball or coupe",
+  "funFact": "Suntory launched it in 1978 and the colour comes entirely from added dye — the melon infusion itself is pale gold.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "With soda and lime over ice, which is far better than its reputation. In cocktails it makes a Midori Sour or a Japanese Slipper. Cut it with acid; the sugar needs something to push against.",
+   "pair": [
+    "fresh melon",
+    "prosciutto",
+    "lime desserts"
+   ]
+  },
+  "composition": {
+   "summary": "Muskmelon infused into neutral spirit, sweetened and coloured.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Yubari and muskmelon"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and sweetened; colour added"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–21%"
+    }
+   ],
+   "process": "Two melon varieties are used, one for aroma and one for body."
+  }
+ },
+ {
+  "id": "black-raspberry-liqueur",
+  "name": "Black Raspberry Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Black raspberries, blackberries, vanilla and honey infused into cognac, from the Loire. Sold in a round bottle bound like a medieval orb, and rather better than the packaging suggests.",
+  "abv": "16.5%",
+  "origin": "Loire Valley, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black raspberry",
+   "vanilla",
+   "honey",
+   "cognac"
+  ],
+  "glassware": "Coupe or flute",
+  "funFact": "The recipe is said to descend from a raspberry liqueur served to Louis XIV when he visited the Loire in the seventeenth century.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Flute or coupe",
+   "how": "Topped with champagne as a Kir Royale variant, or in a French Martini with vodka and pineapple. Neat over ice it is heavy going — it wants dilution and acid.",
+   "pair": [
+    "dark chocolate",
+    "fresh raspberries",
+    "almond cake"
+   ]
+  },
+  "composition": {
+   "summary": "Berries infused into cognac with vanilla and honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cognac"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Black raspberry, blackberry, Madagascar vanilla, honey"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused over weeks, then blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "16.5%"
+    }
+   ],
+   "process": "A cognac base rather than neutral spirit is what gives it weight behind the fruit."
+  }
+ },
+ {
+  "id": "coconut-rum-liqueur",
+  "name": "Coconut Rum Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Caribbean rum flavoured with coconut and cut to around 21%. Dismissed for decades as a holiday drink, and quietly indispensable in any tiki bar that wants coconut without opening a fresh nut.",
+  "abv": "18–21%",
+  "origin": "Barbados",
+  "rarity": "common",
+  "tastingNotes": [
+   "coconut",
+   "vanilla",
+   "light rum",
+   "sugar"
+  ],
+  "glassware": "Highball",
+  "funFact": "It was created in 1978 specifically to make Piña Coladas easier to serve at bar speed, which is exactly what it still does.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "With pineapple juice, or long with soda and lime. In a Piña Colada it replaces both the rum and the cream of coconut in a hurry. Keep it cold; warm it turns cloying fast.",
+   "pair": [
+    "grilled pineapple",
+    "jerk chicken",
+    "lime desserts"
+   ]
+  },
+  "composition": {
+   "summary": "Caribbean rum blended with coconut extract and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Barbadian rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Coconut, vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended after distillation"
+    },
+    {
+     "label": "Strength",
+     "detail": "18–21%"
+    }
+   ],
+   "process": "The rum base is real and aged, which is why it mixes better than a neutral coconut liqueur would."
+  }
+ },
+ {
+  "id": "anisette",
+  "name": "Anisette",
+  "subcategory": "Anise Spirit",
+  "description": "The sweetest of the anise family, made from green anise seed and heavily sugared. Softer than pastis and lower in strength than ouzo, and a Mediterranean breakfast habit for older generations.",
+  "abv": "25–30%",
+  "origin": "France and Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green anise",
+   "sugar",
+   "liquorice",
+   "light floral"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Marie Brizard began making it in Bordeaux in 1755 from a recipe she was reportedly given by a West Indian sailor she had nursed through illness.",
+  "serve": {
+   "temp": "cold, with water",
+   "glass": "Small glass or tumbler",
+   "how": "With cold water, which turns it milky, or over ice. In Italy and Spain it also goes into coffee. It is sweeter than pastis, so use less of it and more water than instinct suggests.",
+   "pair": [
+    "almond biscuits",
+    "espresso",
+    "fresh figs"
+   ]
+  },
+  "composition": {
+   "summary": "Green anise seed distilled into neutral spirit and heavily sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Green anise seed, sometimes coriander and fennel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled with the seed, then sugared"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–30%"
+    }
+   ],
+   "process": "The higher sugar is what separates it from pastis and ouzo more than the botanicals do."
+  }
+ },
+ {
+  "id": "chinchon",
+  "name": "Chinchón",
+  "subcategory": "Anise Spirit",
+  "description": "Spain's protected anise spirit, from the town of Chinchón south of Madrid, made in dry, sweet and extra-strength versions. Distilled from anise grown locally rather than flavoured after the fact.",
+  "abv": "35–74%",
+  "origin": "Chinchón, Spain",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green anise",
+   "fennel",
+   "liquorice",
+   "clean spirit"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The seco especial is bottled at 74%, which makes it one of the strongest commercially available anise spirits anywhere.",
+  "serve": {
+   "temp": "cold or with water",
+   "glass": "Small tumbler",
+   "how": "Dry over ice as an aperitif, sweet after a meal, and the 74% version with considerable respect and a great deal of water. Spaniards also add it to coffee as a carajillo.",
+   "pair": [
+    "churros",
+    "espresso",
+    "almonds"
+   ]
+  },
+  "composition": {
+   "summary": "Locally grown anise distilled in copper alembics.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Anise grown around Chinchón"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper alembic, distilled with the seed"
+    },
+    {
+     "label": "Strength",
+     "detail": "35% to 74% depending on style"
+    }
+   ],
+   "process": "Distilling with the seed rather than adding oil afterwards is what earns it protected status."
+  }
+ },
+ {
+  "id": "herbsaint",
+  "name": "Herbsaint",
+  "subcategory": "Anise Spirit",
+  "description": "New Orleans' anise spirit, created in 1934 as a legal substitute for absinthe when the real thing was still banned. It is what a Sazerac is rinsed with in its home city.",
+  "abv": "46%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "fennel",
+   "light wormwood",
+   "citrus"
+  ],
+  "glassware": "Rinse, or small tumbler",
+  "funFact": "The name is a contraction of herbe sainte, the Creole French name for wormwood — a fairly transparent nod to what it was standing in for.",
+  "serve": {
+   "temp": "cold, with water",
+   "glass": "Used as a rinse; or a tumbler with water",
+   "how": "Rinse a chilled glass and discard the excess, then build a Sazerac in it. Neat it takes water like pastis and louches the same way. The Original formula is drier and closer to the pre-war recipe.",
+   "pair": [
+    "oysters",
+    "gumbo",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Anise and fennel distilled into neutral spirit, wormwood-free at first.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Star anise, fennel, herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled with the botanicals"
+    },
+    {
+     "label": "Strength",
+     "detail": "46%"
+    }
+   ],
+   "process": "It was built to satisfy absinthe drinkers under a legal regime that banned the original, and it never lost that job."
+  }
+ },
+ {
+  "id": "kummel",
+  "name": "Kümmel",
+  "subcategory": "Herbal Liqueur",
+  "description": "Caraway, cumin and fennel in a clear, sweet liqueur with roots in sixteenth-century Holland and a devoted afterlife in Scottish golf clubhouses, where it is drunk against the shakes.",
+  "abv": "35–40%",
+  "origin": "Netherlands and Latvia",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "caraway",
+   "cumin",
+   "fennel",
+   "sugar"
+  ],
+  "glassware": "Small glass",
+  "funFact": "It is known in British golfing circles as the putting mixture, on the widely held theory that it steadies the hands.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small glass, chilled",
+   "how": "Straight from the freezer in a small glass, or over ice. It also works in a Silver Bullet with gin and lemon. The caraway is assertive, so it divides a room much as aquavit does.",
+   "pair": [
+    "smoked salmon",
+    "rye bread",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Caraway and cumin distilled into neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Caraway seed, cumin, fennel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled with the seed, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–40%"
+    }
+   ],
+   "process": "It shares its botanical backbone with aquavit; the difference is the sugar."
+  }
+ },
+ {
+  "id": "cinnamon-schnapps",
+  "name": "Cinnamon Schnapps",
+  "subcategory": "Liqueur",
+  "description": "Neutral spirit heavily flavoured with cinnamon, sometimes carrying flakes of gold leaf. Bracing, sweet and hot, and the single most-ordered shot in a great many bars.",
+  "abv": "33–43.5%",
+  "origin": "Switzerland and USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "cassia cinnamon",
+   "sugar",
+   "heat",
+   "light vanilla"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "The gold-flake versions descend from Danziger Goldwasser, a sixteenth-century tradition of suspending edible gold in liqueur as a supposed medicine.",
+  "serve": {
+   "temp": "ice cold",
+   "glass": "Chilled shot glass",
+   "how": "Straight from the freezer, in one. Cold is essential — warm, the sugar dominates and the cinnamon turns medicinal. It also does real work in hot cider or a mulled drink.",
+   "pair": [
+    "hot cider",
+    "apple desserts",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit flavoured with cinnamon and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Cassia cinnamon oil and extract"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended, not redistilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "33–43.5%"
+    }
+   ],
+   "process": "Cassia rather than true Ceylon cinnamon gives the sharper, hotter note the category is built on."
+  }
+ },
+ {
+  "id": "parfait-amour",
+  "name": "Parfait Amour",
+  "subcategory": "Liqueur",
+  "description": "A violet-purple liqueur of citrus, rose petals, vanilla and almond, made since the eighteenth century and once sold as a love potion. More perfume than drink, and used accordingly.",
+  "abv": "24–30%",
+  "origin": "France and Netherlands",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "violet",
+   "rose",
+   "orange peel",
+   "vanilla"
+  ],
+  "glassware": "Coupe",
+  "funFact": "It was marketed in the 1700s as an aphrodisiac, which is where the name — perfect love — comes from.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe",
+   "how": "A cocktail ingredient rather than a sipper. A bar spoon adds colour and floral lift to a gin sour; more than that and the drink tastes of soap. Sits close to crème de violette but with citrus behind it.",
+   "pair": [
+    "floral desserts",
+    "lemon tart",
+    "fresh berries"
+   ]
+  },
+  "composition": {
+   "summary": "Citrus peel, rose and violet infused into spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit or brandy"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Curaçao orange peel, rose petals, violet, vanilla, almond"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and sweetened; colour added"
+    },
+    {
+     "label": "Strength",
+     "detail": "24–30%"
+    }
+   ],
+   "process": "It is essentially a curaçao with flowers, which is why the citrus is still detectable under the perfume."
+  }
+ },
+ {
+  "id": "pistachio-liqueur",
+  "name": "Pistachio Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Sicilian pistachios, mostly from Bronte on the slopes of Etna, blended into a cream or clear liqueur. Intensely nutty, and a relatively modern addition to the Italian liqueur canon.",
+  "abv": "17–20%",
+  "origin": "Sicily, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "roasted pistachio",
+   "cream",
+   "vanilla",
+   "marzipan"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Bronte pistachios grow in volcanic soil on Etna, are harvested only every other year, and cost several times the price of ordinary pistachios.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Straight from the fridge in a small glass after dinner, or poured over gelato. The cream versions separate if frozen, so chill rather than freeze.",
+   "pair": [
+    "gelato",
+    "cannoli",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Roasted pistachios infused into spirit, often with cream.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Bronte pistachios, sugar, sometimes cream and vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "17–20%"
+    }
+   ],
+   "process": "Roasting the nuts before maceration is what pushes it from green and raw to rounded."
+  }
+ },
+ {
+  "id": "nocello",
+  "name": "Nocello",
+  "subcategory": "Liqueur",
+  "description": "A walnut and hazelnut liqueur from Emilia-Romagna, lighter and less syrupy than nocino, which is made from green walnuts. This one uses ripe nuts, so it reads as toasted rather than bitter.",
+  "abv": "24%",
+  "origin": "Emilia-Romagna, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "walnut",
+   "hazelnut",
+   "caramel",
+   "vanilla"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Its cousin nocino is made from green walnuts picked at midsummer, husks and all, which is why nocino is bitter and this is not.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Small glass",
+   "how": "Neat after dinner, over ice, or poured onto vanilla gelato. It also works in coffee and stands in well for Frangelico when you want walnut rather than pure hazelnut.",
+   "pair": [
+    "gelato",
+    "aged parmesan",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Ripe walnuts and hazelnuts infused into neutral spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Ripe walnuts and hazelnuts"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "24%"
+    }
+   ],
+   "process": "Ripe nuts rather than green ones is the entire distinction from nocino."
+  }
+ },
+ {
+  "id": "solerno",
+  "name": "Blood Orange Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Made from Sicilian blood oranges grown on Etna's slopes, with the fruit's characteristic raspberry note intact. Deeper and less bitter than a curaçao, and a genuinely different thing from triple sec.",
+  "abv": "40%",
+  "origin": "Sicily, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blood orange",
+   "red berry",
+   "citrus oil",
+   "light bitterness"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Blood oranges get their colour from anthocyanins that only develop when nights are cold, which is why Etna's altitude matters to the crop.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass or coupe",
+   "how": "Over ice with soda, or in place of triple sec in a Margarita or Sidecar where it brings berry as well as citrus. At 40% it has enough backbone to be sipped neat over a cube.",
+   "pair": [
+    "dark chocolate",
+    "almond cake",
+    "fennel salad"
+   ]
+  },
+  "composition": {
+   "summary": "Blood orange peel and juice distilled and blended into neutral spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Sanguinello and Tarocco blood oranges, plus lemon"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Peel distilled, juice blended in afterwards"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Higher strength than most orange liqueurs, which is why it holds up in a stirred drink."
+  }
+ },
+ {
+  "id": "bergamot-liqueur",
+  "name": "Bergamot Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Made from the Calabrian bergamot, a citrus grown almost nowhere else and best known for flavouring Earl Grey tea. Floral, bitter and unmistakably perfumed.",
+  "abv": "25–30%",
+  "origin": "Calabria, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bergamot",
+   "Earl Grey",
+   "floral",
+   "bitter peel"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Around 80% of the world's bergamot comes from a narrow coastal strip of Calabria, and the fruit is grown almost entirely for its oil rather than to eat.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Cold and neat after dinner, or a bar spoon in a gin sour where it does what a tea infusion would without the tannin. It is bitter enough to work as an aperitif over ice with soda.",
+   "pair": [
+    "Earl Grey",
+    "lemon tart",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Bergamot peel infused into neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Calabrian bergamot peel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated or distilled, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–30%"
+    }
+   ],
+   "process": "The fruit is too sour and bitter to eat, so essentially the entire crop goes to oil and liqueur."
+  }
+ },
+ {
+  "id": "ratafia-catalana",
+  "name": "Ratafia Catalana",
+  "subcategory": "Herbal Liqueur",
+  "description": "A Catalan liqueur of green walnuts and dozens of herbs, macerated in the sun through summer and traditionally started on the feast of Saint John. Made at home across Catalonia to family recipes.",
+  "abv": "26%",
+  "origin": "Catalonia, Spain",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green walnut",
+   "cinnamon",
+   "herb",
+   "dried fruit"
+  ],
+  "glassware": "Small glass",
+  "funFact": "The jars are traditionally left outdoors for the whole of summer, so the maceration is driven by sunlight rather than heat from a still.",
+  "serve": {
+   "temp": "cool or room temp",
+   "glass": "Small glass",
+   "how": "Neat after a meal, at cellar temperature. Catalans serve it with dessert and at village festivals. Sweet and heavily spiced, so a small pour goes far.",
+   "pair": [
+    "crema catalana",
+    "almond turrón",
+    "dried figs"
+   ]
+  },
+  "composition": {
+   "summary": "Green walnuts and herbs sun-macerated in spirit with sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit or aguardiente"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Green walnuts, cinnamon, nutmeg, lemon peel, dozens of herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Sun-macerated over months"
+    },
+    {
+     "label": "Strength",
+     "detail": "Around 26%"
+    }
+   ],
+   "process": "Nou de Sant Joan — walnuts picked around 24 June, while the shell is still soft enough to cut."
+  }
+ },
+ {
+  "id": "palo-de-mallorca",
+  "name": "Palo de Mallorca",
+  "subcategory": "Amaro",
+  "description": "A Mallorcan bitter of gentian root and cinchona bark, dark as treacle and originally sold as an anti-malarial when the island's wetlands still carried the disease.",
+  "abv": "25–36%",
+  "origin": "Mallorca, Spain",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "gentian",
+   "burnt sugar",
+   "cinchona",
+   "caramel"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "It was drunk to ward off malaria in the Mallorcan marshlands, and survived the disease's eradication purely because islanders had grown to like it.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Rocks glass",
+   "how": "Over ice with soda and a slice of lemon, which is the standard island serve. Neat it is thick and very sweet. Locals also drink it with orange juice.",
+   "pair": [
+    "sobrassada",
+    "ensaïmada",
+    "almonds"
+   ]
+  },
+  "composition": {
+   "summary": "Gentian and cinchona infused in spirit with caramelised sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Gentian root, cinchona bark, burnt sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–36%"
+    }
+   ],
+   "process": "The burnt sugar gives both the colour and most of the body."
+  }
+ },
+ {
+  "id": "guavaberry",
+  "name": "Guavaberry Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Sint Maarten's national liqueur, made from wild guavaberries that ripen only briefly in the island's hills — a fruit unrelated to guava despite the name. Rum-based, spiced, and a Christmas tradition.",
+  "abv": "20–30%",
+  "origin": "Sint Maarten",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "guavaberry",
+   "rum",
+   "cinnamon",
+   "dried fruit"
+  ],
+  "glassware": "Small glass",
+  "funFact": "There is a traditional Christmas carol on the island whose entire subject is going house to house asking for a taste of the family's guavaberry.",
+  "serve": {
+   "temp": "cool or over ice",
+   "glass": "Small glass",
+   "how": "Neat in a small glass, or over ice. Islanders drink it at Christmas and mix it with rum punch. The wild fruit is picked from hillside trees rather than farmed, so supply is genuinely limited.",
+   "pair": [
+    "fruit cake",
+    "spiced ham",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Wild guavaberries steeped in aged rum with spice and sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Aged Caribbean rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Wild guavaberry (Myrciaria floribunda), cinnamon, clove"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for months"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–30%"
+    }
+   ],
+   "process": "The berry has nothing to do with guava; it is a myrtle relative that fruits for a few weeks a year."
+  }
+ },
+ {
+  "id": "sorrel-liqueur",
+  "name": "Sorrel Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Made from hibiscus calyces — sorrel in Caribbean usage — steeped with rum, ginger and clove. Deep crimson, tart and spiced, and inseparable from Christmas across the West Indies.",
+  "abv": "18–25%",
+  "origin": "Caribbean",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "hibiscus",
+   "ginger",
+   "clove",
+   "tart red fruit"
+  ],
+  "glassware": "Small glass or rocks glass",
+  "funFact": "The plant is Hibiscus sabdariffa, the same species that makes agua de Jamaica in Mexico and karkade in Egypt — three continents, one calyx.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass over ice",
+   "how": "Cold over ice, or topped with sparkling wine. It is tart enough not to need much cutting. Caribbean households make it fresh each December and the bought version is a year-round stand-in.",
+   "pair": [
+    "black cake",
+    "jerk pork",
+    "ginger desserts"
+   ]
+  },
+  "composition": {
+   "summary": "Hibiscus calyces steeped with rum, ginger and spice.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Caribbean rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Dried hibiscus calyces, ginger, clove, cinnamon, orange peel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "18–25%"
+    }
+   ],
+   "process": "It is the calyx that is used, not the flower — the fleshy cup left after the bloom drops."
+  }
+ },
+ {
+  "id": "ponche-kuba",
+  "name": "Ponche Kuba",
+  "subcategory": "Liqueur",
+  "description": "A Caribbean cream liqueur of rum, condensed milk, egg and spice, from Curaçao and hugely popular across Venezuela and the Dutch islands. Thicker and more cinnamon-driven than Irish cream.",
+  "abv": "14–17%",
+  "origin": "Curaçao",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "condensed milk",
+   "cinnamon",
+   "nutmeg",
+   "rum"
+  ],
+  "glassware": "Small glass, chilled",
+  "funFact": "It is a Christmas fixture across the southern Caribbean, where it competes directly with Venezuela's ponche crema for the same place on the table.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Cold from the fridge, neat, in a small glass. Shake before pouring. It also goes into coffee, and over ice cream. Refrigerate once opened and finish it reasonably quickly.",
+   "pair": [
+    "black cake",
+    "coffee",
+    "spiced pastries"
+   ]
+  },
+  "composition": {
+   "summary": "Rum blended with condensed milk, egg and spice.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Caribbean rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Condensed milk, egg, cinnamon, nutmeg, vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended, not distilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "14–17%"
+    }
+   ],
+   "process": "Condensed milk rather than fresh cream is what makes it shelf-stable in the tropics."
+  }
+ },
+ {
+  "id": "licor-de-cafe",
+  "name": "Licor de Café",
+  "subcategory": "Liqueur",
+  "description": "Costa Rican coffee liqueur, built on cane spirit and Tarrazú beans, drier and more roast-forward than the Mexican coffee liqueurs that dominate the shelf.",
+  "abv": "20–26%",
+  "origin": "Costa Rica",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "roasted coffee",
+   "cane",
+   "dark chocolate",
+   "light sweetness"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Tarrazú beans grow between 1,200 and 1,900 metres, and the altitude is what gives the acidity that survives into the liqueur.",
+  "serve": {
+   "temp": "cold or over ice",
+   "glass": "Rocks glass",
+   "how": "Over ice, or with milk. It is less sweet than Kahlúa, which makes it the better choice in an Espresso Martini where you want coffee rather than sugar. Costa Ricans also add it to hot coffee.",
+   "pair": [
+    "dark chocolate",
+    "tres leches",
+    "vanilla ice cream"
+   ]
+  },
+  "composition": {
+   "summary": "Costa Rican coffee extracted into cane spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sugarcane spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Tarrazú arabica coffee, vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Coffee extracted and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–26%"
+    }
+   ],
+   "process": "Less sugar than the Mexican style is the whole difference, and it shows in cocktails."
+  }
+ },
+ {
+  "id": "yuzushu",
+  "name": "Yuzushu",
+  "subcategory": "Liqueur",
+  "description": "Japanese yuzu steeped in shochu or sake, cloudy with pulp and intensely aromatic. Yuzu is barely edible as a fruit — almost all peel and pip — which is exactly why it works as a liqueur.",
+  "abv": "7–12%",
+  "origin": "Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "yuzu",
+   "grapefruit",
+   "mandarin",
+   "floral peel"
+  ],
+  "glassware": "Tumbler over ice",
+  "funFact": "Yuzu trees can take a decade to fruit, and the fruit is so pithy that a kilo yields very little juice — which is why it is priced like a spice.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Tumbler over ice",
+   "how": "Over ice, or with soda in a highball. Shake the bottle first; the pulp settles and it is most of the flavour. Low in alcohol, so it drinks like a long aperitif rather than a digestive.",
+   "pair": [
+    "sashimi",
+    "tempura",
+    "yuzu sorbet"
+   ]
+  },
+  "composition": {
+   "summary": "Yuzu fruit and peel steeped in shochu or sake and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Shochu, sake or neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Whole yuzu, peel included"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then sweetened; usually unfiltered"
+    },
+    {
+     "label": "Strength",
+     "detail": "7–12%"
+    }
+   ],
+   "process": "The peel carries the aroma, so the fruit goes in whole rather than juiced."
+  }
+ },
+ {
+  "id": "maesilju",
+  "name": "Maesil-ju",
+  "subcategory": "Liqueur",
+  "description": "Korean green plum liqueur, made by steeping unripe maesil plums in soju with sugar. Sweeter and rounder than Japanese umeshu, made from the same fruit and a different tradition.",
+  "abv": "14–25%",
+  "origin": "South Korea",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green plum",
+   "almond",
+   "honey",
+   "tart fruit"
+  ],
+  "glassware": "Small glass or tumbler",
+  "funFact": "Maesil and ume are the same fruit, Prunus mume, which is neither plum nor apricot but sits somewhere between the two.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small glass or over ice",
+   "how": "Cold and neat, or over ice, after a meal. Koreans also drink it with soda. It is sweeter than umeshu, so it works better as a dessert pour than an aperitif.",
+   "pair": [
+    "grilled pork belly",
+    "kimchi",
+    "light desserts"
+   ]
+  },
+  "composition": {
+   "summary": "Unripe maesil plums steeped in soju with sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Soju or neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Green maesil plums, rock sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for months"
+    },
+    {
+     "label": "Strength",
+     "detail": "14–25%"
+    }
+   ],
+   "process": "The fruit must be unripe; ripe maesil ferments rather than infusing cleanly."
+  }
+ },
+ {
+  "id": "lychee-liqueur",
+  "name": "Lychee Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Lychee infused into neutral spirit, floral and perfumed to the point of tasting artificial even when it is not. Responsible for the entire 2000s vogue for the Lychee Martini.",
+  "abv": "15–24%",
+  "origin": "France and China",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lychee",
+   "rose",
+   "white grape",
+   "sugar"
+  ],
+  "glassware": "Coupe",
+  "funFact": "Lychee's characteristic aroma comes partly from rose oxide, the same compound that makes roses and some Gewürztraminer wines smell as they do.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe",
+   "how": "In a Lychee Martini with vodka, or topped with sparkling wine. It needs acid — a squeeze of lime keeps it from reading as syrup. Neat it is very sweet.",
+   "pair": [
+    "fresh lychee",
+    "light desserts",
+    "spicy Thai food"
+   ]
+  },
+  "composition": {
+   "summary": "Lychee fruit infused into neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Lychee fruit"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–24%"
+    }
+   ],
+   "process": "The floral note is fragile and the better producers avoid heat entirely in production."
+  }
+ },
+ {
+  "id": "ginger-liqueur",
+  "name": "Ginger Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Fresh ginger macerated into a spirit base, often with cognac or eau-de-vie behind it. Hot, sweet and considerably more useful behind a bar than its shelf presence suggests.",
+  "abv": "20–40%",
+  "origin": "France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "fresh ginger",
+   "citrus",
+   "honey",
+   "warm heat"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Gingerol, the compound responsible for the burn, converts to the milder zingerone when heated — which is why cooked ginger is sweeter than raw.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass or highball",
+   "how": "Over ice with soda and lime, or as a modifier in a whisky sour where it does the work of both sweetener and spice. It also improves a Moscow Mule considerably.",
+   "pair": [
+    "spicy food",
+    "dark chocolate",
+    "poached pear"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh ginger macerated into a brandy or neutral spirit base.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cognac, eau-de-vie or neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Fresh ginger root, citrus, sometimes vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then blended and sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–40%"
+    }
+   ],
+   "process": "Cold maceration preserves the raw burn that heat would soften."
+  }
+ },
+ {
+  "id": "apricot-brandy-liqueur",
+  "name": "Apricot Brandy Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Not a brandy at all in most bottles but an apricot liqueur, which causes endless confusion with classic cocktail recipes. Sweet, stone-fruited, and essential to a great many pre-war drinks.",
+  "abv": "20–30%",
+  "origin": "Europe",
+  "rarity": "common",
+  "tastingNotes": [
+   "dried apricot",
+   "stone fruit",
+   "almond",
+   "honey"
+  ],
+  "glassware": "Coupe",
+  "funFact": "Old cocktail books calling for apricot brandy almost always mean the liqueur, not a true fruit distillate — substituting a dry eau-de-vie wrecks the drink.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe",
+   "how": "A cocktail ingredient. It is in a Pendennis Club, a Charlie Chaplin and countless tiki builds. If a vintage recipe calls for apricot brandy, reach for this rather than a Marillenbrand.",
+   "pair": [
+    "almond cake",
+    "stone fruit tart",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Apricots and kernels infused into brandy or neutral spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Brandy or neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Apricot flesh and kernels"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–30%"
+    }
+   ],
+   "process": "Kernels supply the almond note; flesh alone tastes flat and jammy."
+  }
+ },
+ {
+  "id": "sea-buckthorn-liqueur",
+  "name": "Sea Buckthorn Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Made from a fiercely tart orange berry that grows on coastal dunes across northern Europe and central Asia. Sharp, oily and high in vitamin C, with a flavour somewhere between passionfruit and pine.",
+  "abv": "18–25%",
+  "origin": "Nordic and Baltic Europe",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "tart citrus",
+   "passionfruit",
+   "pine",
+   "apricot"
+  ],
+  "glassware": "Small chilled glass",
+  "funFact": "The berries cling so tightly that traditional harvesting involves freezing whole branches and shaking the fruit off.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Cold and neat, or topped with sparkling wine where the acidity does real work. It is tart enough to function as the citrus element in a cocktail rather than only the sweet one.",
+   "pair": [
+    "oily fish",
+    "cheesecake",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Sea buckthorn berries macerated in spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Hippophae rhamnoides berries"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and pressed, then sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "18–25%"
+    }
+   ],
+   "process": "The berries carry oil as well as juice, which gives an unusual weight on the palate."
+  }
+ },
+ {
+  "id": "lingonberry-liqueur",
+  "name": "Lingonberry Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Nordic lingonberries steeped in grain spirit — tart, faintly bitter and less sweet than most berry liqueurs. The berry is a Scandinavian staple that grows wild in forest floor across the north.",
+  "abv": "20–25%",
+  "origin": "Sweden and Finland",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "lingonberry",
+   "cranberry",
+   "tart fruit",
+   "light bitterness"
+  ],
+  "glassware": "Small chilled glass",
+  "funFact": "Lingonberries keep almost indefinitely without preservation because they are naturally high in benzoic acid.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Cold and neat after a meal, or over ice with soda. The tartness makes it useful in cocktails wherever you would otherwise reach for cranberry, with far more depth.",
+   "pair": [
+    "game",
+    "meatballs",
+    "cheesecake"
+   ]
+  },
+  "composition": {
+   "summary": "Wild lingonberries macerated in grain spirit and lightly sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Wild-picked lingonberries"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, pressed, sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "20–25%"
+    }
+   ],
+   "process": "Less sugar than most berry liqueurs, which is what keeps the tartness in front."
+  }
+ },
+ {
+  "id": "rum-cream",
+  "name": "Rum Cream",
+  "subcategory": "Liqueur",
+  "description": "Jamaican rum blended with dairy cream and spice, the Caribbean's answer to Irish cream. Richer and more molasses-driven, and considerably better over ice than its supermarket placement suggests.",
+  "abv": "15–17%",
+  "origin": "Jamaica",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cream",
+   "molasses",
+   "nutmeg",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "It emerged in the 1970s as Caribbean distillers watched Irish cream take off and reasoned that aged rum would work at least as well as whiskey.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Rocks glass",
+   "how": "Over ice, or in coffee. Shake before pouring. Jamaican rum cream carries more spice than the Irish style, so it works in a Mudslide or over ice cream without needing extra nutmeg.",
+   "pair": [
+    "coffee",
+    "black cake",
+    "vanilla ice cream"
+   ]
+  },
+  "composition": {
+   "summary": "Aged Jamaican rum emulsified with dairy cream and spice.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Aged Jamaican rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Dairy cream, nutmeg, vanilla, sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended and homogenised"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–17%"
+    }
+   ],
+   "process": "The rum's ester content is what keeps the fruit note detectable through the dairy."
+  }
+ },
+ {
+  "id": "dulce-de-leche-liqueur",
+  "name": "Dulce de Leche Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Argentina's caramelised milk turned into a cream liqueur, thick and sweet enough to be a dessert on its own. A relatively modern product built on the country's most beloved ingredient.",
+  "abv": "15–20%",
+  "origin": "Argentina",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "caramel",
+   "condensed milk",
+   "vanilla",
+   "toffee"
+  ],
+  "glassware": "Small glass, chilled",
+  "funFact": "Argentina and Uruguay have argued for decades over which country invented dulce de leche, and neither has conceded an inch.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Cold, neat, in a small glass, or poured over ice cream. It is extremely sweet, so treat it as dessert. It also goes into coffee, which cuts it usefully.",
+   "pair": [
+    "alfajores",
+    "vanilla ice cream",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Dulce de leche blended with spirit and cream.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit or brandy"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Dulce de leche, cream, vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended and homogenised"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–20%"
+    }
+   ],
+   "process": "Real dulce de leche rather than caramel syrup is what separates the good bottles from the rest."
+  }
+ },
+ {
+  "id": "crema-de-orujo",
+  "name": "Crema de Orujo",
+  "subcategory": "Liqueur",
+  "description": "Galician pomace spirit blended with cream, coffee and sugar into a pale, sweet liqueur that has quietly become the region's most popular after-dinner drink — outselling the clear orujo it comes from.",
+  "abv": "15–20%",
+  "origin": "Galicia, Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cream",
+   "coffee",
+   "pomace",
+   "vanilla"
+  ],
+  "glassware": "Small glass, chilled",
+  "funFact": "Galician restaurants routinely bring a bottle to the table unasked at the end of a meal, alongside the clear orujo and the herbal one.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Small chilled glass",
+   "how": "Straight from the freezer or the fridge, neat, in a small glass. Cold is essential — warm it separates on the palate and the pomace shows through the cream unpleasantly.",
+   "pair": [
+    "tarta de Santiago",
+    "coffee",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Orujo blended with dairy cream, coffee and sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Galician orujo"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Cream, coffee, sugar, sometimes vanilla"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Blended after distillation"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–20%"
+    }
+   ],
+   "process": "The pomace base gives a rougher edge than the Irish cream style, which Galicians consider the point."
+  }
+ }
+]

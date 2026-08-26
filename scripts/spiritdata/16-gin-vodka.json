@@ -1,0 +1,1080 @@
+[
+ {
+  "id": "flavoured-pink-gin",
+  "name": "Flavoured Pink Gin",
+  "subcategory": "Gin",
+  "description": "Gin sweetened and coloured with red fruit — strawberry, raspberry, rhubarb — which took over British gin shelves in the late 2010s. Legally often not gin at all but a gin-based spirit drink, because of the sugar.",
+  "abv": "37.5–40%",
+  "origin": "United Kingdom",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "raspberry",
+   "sugar",
+   "soft juniper"
+  ],
+  "glassware": "Coupe or copa",
+  "funFact": "EU rules cap sweetening in anything sold as gin, so most pink gins are legally classed as gin-based spirit drinks rather than gin.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe for the classic, copa for the modern",
+   "how": "With tonic and ice, or with sparkling wine. It is sweet enough that a dry tonic and a wedge of lemon rather than more fruit keeps it in balance. Not to be confused with the naval Pink Gin, which is a cocktail of gin and Angostura and tastes nothing like this.",
+   "pair": [
+    "oysters",
+    "smoked salmon",
+    "salted almonds"
+   ]
+  },
+  "composition": {
+   "summary": "Gin sweetened and flavoured with red fruit after distillation.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "London Dry or contemporary gin"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Strawberry, raspberry, redcurrant or rhubarb, plus sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Fruit infused after distillation, not redistilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "37.5–40%"
+    }
+   ],
+   "process": "Sugar above 0.1g per litre disqualifies it from the plain gin designation in the EU."
+  }
+ },
+ {
+  "id": "old-tom-style-cream-gin",
+  "name": "Cream Gin",
+  "subcategory": "Gin",
+  "description": "A Victorian curiosity revived by modern bartenders: gin redistilled with dairy cream, which leaves the texture and the sweetness behind but not the fat. Silky, faintly lactic, and entirely clear.",
+  "abv": "40–43%",
+  "origin": "United Kingdom",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "juniper",
+   "cream",
+   "vanilla",
+   "soft citrus"
+  ],
+  "glassware": "Coupe",
+  "funFact": "Nineteenth-century gin palaces sold it from casks, and the recipe was reconstructed in the 2000s from a Victorian bartending manual.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled coupe",
+   "how": "In a Martini variant or a Ramos-style fizz, where the texture does work no other gin can. It is clear in the glass, so the mouthfeel takes people by surprise.",
+   "pair": [
+    "oysters",
+    "smoked fish",
+    "shortbread"
+   ]
+  },
+  "composition": {
+   "summary": "Gin redistilled with dairy cream so texture carries but fat does not.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Juniper-forward gin"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Fresh dairy cream, redistilled"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Cream added to the still and the spirit redistilled off it"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43%"
+    }
+   ],
+   "process": "Distilling off the cream captures lactones and sugars while leaving fat and solids in the pot."
+  }
+ },
+ {
+  "id": "gin-de-mahon",
+  "name": "Gin de Mahón",
+  "subcategory": "Gin",
+  "description": "Menorca's protected gin, distilled in wood-fired copper stills from wine alcohol rather than grain — a legacy of the British occupation of the island in the eighteenth century.",
+  "abv": "38–43%",
+  "origin": "Menorca, Spain",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "juniper",
+   "wine spirit",
+   "pine",
+   "light citrus"
+  ],
+  "glassware": "Highball or ceramic mug",
+  "funFact": "The British held Menorca for most of the 1700s and the Royal Navy's demand for gin outlived the occupation by three centuries.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "As a pomada — gin with cloudy lemonade over ice, which is the island's summer drink and served by the jug at the Sant Joan festival. Neat it is softer and rounder than a grain-based gin.",
+   "pair": [
+    "Mahón cheese",
+    "grilled fish",
+    "olives"
+   ]
+  },
+  "composition": {
+   "summary": "Wine alcohol redistilled with juniper over a wood fire.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Distilled wine alcohol, not grain"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper dominant, with a short supporting list"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot stills over wood fires"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested in oak vats"
+    }
+   ],
+   "process": "A wine base gives a rounder, slightly fruitier body than neutral grain spirit."
+  }
+ },
+ {
+  "id": "jonge-jenever",
+  "name": "Jonge Jenever",
+  "subcategory": "Genever",
+  "description": "The young style, capped at 15% malt wine, developed in the 1950s when grain was scarce and drinkers wanted something lighter. Closer to a soft vodka with a whisper of juniper than to gin.",
+  "abv": "35–40%",
+  "origin": "Netherlands",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "light grain",
+   "faint juniper",
+   "clean",
+   "soft sweetness"
+  ],
+  "glassware": "Tulip jenever glass",
+  "funFact": "Young and old here refer to the recipe rather than to ageing — a jonge jenever can be older in cask than an oude one.",
+  "serve": {
+   "temp": "freezer cold",
+   "glass": "Small tulip, filled to the brim",
+   "how": "From the freezer, poured until it domes over the rim, first sip taken with hands behind the back. A blonde lager alongside makes it a kopstootje — a headbutt.",
+   "pair": [
+    "bitterballen",
+    "raw herring",
+    "aged gouda"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral grain spirit with a small proportion of malt wine and juniper.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit, max 15% malt wine"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, used sparingly"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column-distilled base, botanicals redistilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–40%"
+    }
+   ],
+   "process": "Wartime grain shortages drove the style, and Dutch taste never went back."
+  }
+ },
+ {
+  "id": "oude-jenever",
+  "name": "Oude Jenever",
+  "subcategory": "Genever",
+  "description": "The old style, requiring at least 15% malt wine and often carrying far more. Maltier, rounder and closer to what gin tasted like in the seventeenth century before the English stripped the grain out of it.",
+  "abv": "35–40%",
+  "origin": "Netherlands and Belgium",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "bread",
+   "juniper",
+   "nutmeg"
+  ],
+  "glassware": "Tulip jenever glass",
+  "funFact": "English soldiers fighting in the Low Countries brought the habit home, and the phrase Dutch courage dates from those campaigns.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small tulip, brimmed",
+   "how": "Cold and neat, or in a Holland Gin cocktail from a pre-Prohibition book — those recipes were written for this, not for London Dry, and taste entirely different when made correctly.",
+   "pair": [
+    "aged gouda",
+    "smoked eel",
+    "bitterballen"
+   ]
+  },
+  "composition": {
+   "summary": "Malt wine and neutral spirit blended with juniper, often cask-rested.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "At least 15% malt wine from rye, corn and malted barley"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, sometimes with caraway and aniseed"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Pot-distilled malt wine plus redistilled botanicals"
+    },
+    {
+     "label": "Aging",
+     "detail": "Frequently oak-rested"
+    }
+   ],
+   "process": "The malt wine is the flavour; juniper is seasoning rather than the point."
+  }
+ },
+ {
+  "id": "mediterranean-gin",
+  "name": "Mediterranean Gin",
+  "subcategory": "Gin",
+  "description": "A Spanish-led style built on olive, rosemary, thyme and citrus rather than a juniper spine, and served in enormous balloon glasses packed with ice. It changed how the whole world serves gin and tonic.",
+  "abv": "40–47%",
+  "origin": "Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "arbequina olive",
+   "rosemary",
+   "thyme",
+   "citrus"
+  ],
+  "glassware": "Copa de balón",
+  "funFact": "The oversized copa de balón came from Basque chefs, who reasoned that a wider bowl and more ice kept the drink colder and released more aroma.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Copa de balón, filled with ice",
+   "how": "Fill the glass with ice, add gin, then tonic poured down a bar spoon. Garnish to match the botanicals — rosemary, a strip of grapefruit, a green olive. Not lime, which fights the herbs.",
+   "pair": [
+    "jamón ibérico",
+    "olives",
+    "grilled prawns"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit redistilled with Mediterranean botanicals and softer juniper.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Arbequina olive, rosemary, thyme, basil, citrus peel, juniper"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot still, often with separate botanical distillates blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    }
+   ],
+   "process": "Pulling juniper back to make room for herbs is what defines the style and irritates traditionalists."
+  }
+ },
+ {
+  "id": "german-gin",
+  "name": "German Gin",
+  "subcategory": "Gin",
+  "description": "Germany's gin scene grew out of its fruit-brandy tradition, so the base spirit is often grape or fruit rather than grain. Black Forest botanicals — spruce, lavender, angelica — dominate.",
+  "abv": "43–47%",
+  "origin": "Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "spruce",
+   "lavender",
+   "juniper",
+   "orchard fruit"
+  ],
+  "glassware": "Copa glass",
+  "funFact": "Monkey 47 takes its name from 47 botanicals and 47% ABV, and was inspired by a Black Forest recipe left by a British RAF officer after the war.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Copa with ice",
+   "how": "With a light tonic and a garnish that echoes the forest — a spruce tip, a slice of apple, or lingonberries. Heavy Mediterranean tonics bury the delicate lavender and spruce entirely.",
+   "pair": [
+    "smoked trout",
+    "Black Forest ham",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Grain or fruit spirit redistilled with Black Forest botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain, or a molasses and fruit blend"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, spruce, lavender, lingonberry, angelica, bramble leaf"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small copper pot stills, often fruit-brandy equipment"
+    },
+    {
+     "label": "Aging",
+     "detail": "Some rested in earthenware"
+    }
+   ],
+   "process": "A fruit-distilling heritage means German gin makers think about maceration times differently than grain distillers."
+  }
+ },
+ {
+  "id": "french-gin",
+  "name": "French Gin",
+  "subcategory": "Gin",
+  "description": "Frequently built on a grape base rather than grain, which gives a softer, rounder body. Distillers borrow from perfumery and from wine, using floral botanicals and sometimes finishing in wine casks.",
+  "abv": "40–44%",
+  "origin": "France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white flower",
+   "grape",
+   "juniper",
+   "citrus blossom"
+  ],
+  "glassware": "Copa or wine glass",
+  "funFact": "Grape-based gin is legal and increasingly common — the EU sets no restriction on the source of the neutral alcohol, only on the juniper.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Copa or large wine glass",
+   "how": "With a neutral tonic and a strip of lemon or a sprig of thyme. The grape base makes it unusually good in a Martini, where its softness reads as texture rather than weakness.",
+   "pair": [
+    "oysters",
+    "goat cheese",
+    "olives"
+   ]
+  },
+  "composition": {
+   "summary": "Grape or grain spirit redistilled with floral botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grape spirit, often from Cognac or the Loire"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, rose, iris root, citrus blossom, cubeb"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper alembic, sometimes vapour infusion"
+    },
+    {
+     "label": "Aging",
+     "detail": "Occasionally wine-cask finished"
+    }
+   ],
+   "process": "Grape spirit carries more body than grain, so French gin often needs less sweetening to taste round."
+  }
+ },
+ {
+  "id": "nordic-gin",
+  "name": "Nordic Gin",
+  "subcategory": "Gin",
+  "description": "Built on foraged Scandinavian botanicals — dill, caraway, lingonberry, sea buckthorn, birch — and sometimes on aquavit's spice palette. Clean, herbal and unmistakably northern.",
+  "abv": "40–46%",
+  "origin": "Nordic countries",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dill",
+   "caraway",
+   "lingonberry",
+   "juniper"
+  ],
+  "glassware": "Copa glass",
+  "funFact": "Juniper grows wild across all of Scandinavia and has flavoured Nordic food and drink for centuries, long before anyone there made gin.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Copa with plenty of ice",
+   "how": "With a dry tonic and a sprig of dill or a few lingonberries. The caraway note means it also works in a Martini for anyone who likes aquavit — it sits halfway between the two categories.",
+   "pair": [
+    "gravlax",
+    "pickled herring",
+    "rye bread"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit redistilled with foraged Nordic botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, dill, caraway, lingonberry, sea buckthorn, birch, meadowsweet"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot still, often with vapour baskets"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    }
+   ],
+   "process": "Wild-foraged botanicals mean batches shift with the season, which producers treat as a feature."
+  }
+ },
+ {
+  "id": "mexican-gin",
+  "name": "Mexican Gin",
+  "subcategory": "Gin",
+  "description": "Gin distilled with Mexican botanicals — damiana, cempasúchil marigold, avocado leaf, guava — and often on a base of agave or cane spirit rather than grain. A young category with a distinct accent.",
+  "abv": "43–45%",
+  "origin": "Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "marigold",
+   "damiana",
+   "guava",
+   "juniper"
+  ],
+  "glassware": "Copa glass",
+  "funFact": "Cempasúchil, the marigold used on Day of the Dead altars, appears in several Mexican gins and gives a distinctly resinous, floral note.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Copa with ice",
+   "how": "With tonic and a slice of grapefruit or a sprig of epazote. The agave-based versions carry a vegetal edge that makes them excellent in a Negroni against a bitter amaro.",
+   "pair": [
+    "ceviche",
+    "guacamole",
+    "grilled fish"
+   ]
+  },
+  "composition": {
+   "summary": "Agave, cane or grain spirit redistilled with Mexican botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Agave, cane or neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, damiana, cempasúchil, avocado leaf, guava, lime"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper pot still"
+    },
+    {
+     "label": "Aging",
+     "detail": "Unaged"
+    }
+   ],
+   "process": "An agave base is what marks the most distinctive Mexican gins out from imports."
+  }
+ },
+ {
+  "id": "bathtub-gin",
+  "name": "Bathtub Gin",
+  "subcategory": "Gin",
+  "description": "Compound gin — botanicals steeped in finished spirit rather than redistilled — which is how gin was made illicitly during Prohibition and legitimately for centuries before. Cloudier, softer and fuller than a distilled gin.",
+  "abv": "40–43.3%",
+  "origin": "United Kingdom and USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "orange peel",
+   "cinnamon",
+   "cardamom"
+  ],
+  "glassware": "Copa or rocks glass",
+  "funFact": "The name comes from the story that Prohibition-era producers topped their bottles with water from a bathtub tap, being too tall to fit under a sink.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Copa with ice",
+   "how": "With tonic and orange rather than lime — the cold-compounding leaves a rounder, spicier gin that suits a warmer garnish. It also makes an unusually rich Negroni.",
+   "pair": [
+    "charcuterie",
+    "olives",
+    "spiced nuts"
+   ]
+  },
+  "composition": {
+   "summary": "Botanicals steeped directly in finished spirit and filtered, not redistilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Juniper, orange peel, coriander, cassia, cardamom, clove"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Cold compounding — infusion only"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–43.3%"
+    }
+   ],
+   "process": "Infusing rather than redistilling carries colour and oils that a still would leave behind."
+  }
+ },
+ {
+  "id": "damson-gin",
+  "name": "Damson Gin",
+  "subcategory": "Gin",
+  "description": "Damsons steeped in gin with sugar, the darker and tarter cousin of sloe gin. An English hedgerow tradition made at home each autumn and drunk the following winter.",
+  "abv": "26–30%",
+  "origin": "United Kingdom",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "damson",
+   "almond",
+   "tart plum",
+   "sugar"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Damsons were once grown in vast numbers in Westmorland for dyeing cloth as much as for eating, and the surviving orchards now supply gin makers.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small glass",
+   "how": "Neat after dinner, or topped with sparkling wine. Tarter than sloe gin and less almond-driven, and it makes an excellent substitute in a Sloe Gin Fizz for anyone who finds sloe too sweet.",
+   "pair": [
+    "Christmas cake",
+    "dark chocolate",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Damsons steeped in gin with sugar for several months.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "London Dry gin"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Damsons, sugar; stones often left in"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, not redistilled"
+    },
+    {
+     "label": "Strength",
+     "detail": "26–30%"
+    }
+   ],
+   "process": "Stones left in the steep supply the almond note, exactly as in sloe gin."
+  }
+ },
+ {
+  "id": "rye-vodka",
+  "name": "Rye Vodka",
+  "subcategory": "Vodka",
+  "description": "The Polish classic, distilled from rye and left with more character than the wheat and potato styles. Peppery, faintly spicy and sweeter on the finish than most drinkers expect vodka to be.",
+  "abv": "40%",
+  "origin": "Poland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "white pepper",
+   "rye bread",
+   "light spice",
+   "clean sweetness"
+  ],
+  "glassware": "Small chilled glass",
+  "funFact": "Rye was the grain of choice across Poland long before wheat, because it tolerates the poor sandy soils that wheat will not grow in.",
+  "serve": {
+   "temp": "cold, not frozen",
+   "glass": "Small stemmed glass",
+   "how": "Cold rather than frozen — freezer temperatures mute exactly the peppery character that makes rye vodka worth choosing. With food, in small measures, alongside herring or salo.",
+   "pair": [
+    "pickled herring",
+    "salo",
+    "rye bread"
+   ]
+  },
+  "composition": {
+   "summary": "Rye fermented and rectified, then cut with water.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Polish rye"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column rectification, though not to full neutrality in good examples"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Stopping rectification slightly short is what leaves the grain character in the glass."
+  }
+ },
+ {
+  "id": "wheat-vodka",
+  "name": "Wheat Vodka",
+  "subcategory": "Vodka",
+  "description": "The lightest and sweetest of the grain vodkas, and the base for most premium Western brands. Soft, faintly aniseed and easy — which is exactly why it dominates the market.",
+  "abv": "40%",
+  "origin": "Russia, Poland and France",
+  "rarity": "common",
+  "tastingNotes": [
+   "soft grain",
+   "anise",
+   "citrus",
+   "light sweetness"
+  ],
+  "glassware": "Chilled glass or Martini glass",
+  "funFact": "Wheat's high starch and low protein make it the most efficient grain for producing neutral spirit, which is as much of the reason for its dominance as taste.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Chilled shot glass, or Martini glass",
+   "how": "From the freezer, neat, or as the base of a Martini where its softness lets vermouth show. It is the least assertive vodka style, which makes it the safest in any mixed drink.",
+   "pair": [
+    "caviar",
+    "smoked salmon",
+    "blini"
+   ]
+  },
+  "composition": {
+   "summary": "Winter wheat fermented and heavily rectified.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Winter wheat"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Multiple column rectification"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Charcoal filtration after distillation removes what little congener content survives."
+  }
+ },
+ {
+  "id": "grape-vodka",
+  "name": "Grape Vodka",
+  "subcategory": "Vodka",
+  "description": "Distilled from wine grapes rather than grain, which produces a vodka with noticeable floral and stone-fruit character. Naturally gluten-free, and a French speciality built on the country's wine surplus.",
+  "abv": "40%",
+  "origin": "France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white grape",
+   "stone fruit",
+   "floral",
+   "silky"
+  ],
+  "glassware": "Chilled glass",
+  "funFact": "France produces more wine than it drinks, and distilling the surplus is a centuries-old solution that vodka gave a new market to.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled glass or coupe",
+   "how": "Cold and neat, or in a Martini where the fruit character is a genuine asset. It is silkier than grain vodka and worth trying beside one to see how much the base material survives rectification.",
+   "pair": [
+    "oysters",
+    "goat cheese",
+    "fresh fruit"
+   ]
+  },
+  "composition": {
+   "summary": "Wine grapes fermented and rectified into neutral spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Wine grapes, often Ugni Blanc or Colombard"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column rectification"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Even at high rectification a trace of the grape's terpenes carries into the finished spirit."
+  }
+ },
+ {
+  "id": "whey-vodka",
+  "name": "Whey Vodka",
+  "subcategory": "Vodka",
+  "description": "Distilled from the whey left over from cheesemaking, fermenting its lactose into alcohol. A genuinely circular use of a waste stream, and produced seriously in New Zealand and Ireland.",
+  "abv": "40%",
+  "origin": "New Zealand and Ireland",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cream",
+   "soft sweetness",
+   "light mineral",
+   "clean"
+  ],
+  "glassware": "Chilled glass",
+  "funFact": "Cheese whey was for decades a disposal problem for dairies; fermenting its lactose turned a pollutant into a premium spirit.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled glass",
+   "how": "Cold and neat, or in a Martini. It carries a faint creaminess that survives rectification, which makes it noticeably rounder than grain vodka in a stirred drink.",
+   "pair": [
+    "oysters",
+    "soft cheese",
+    "smoked fish"
+   ]
+  },
+  "composition": {
+   "summary": "Cheese whey fermented on its lactose and rectified.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Whey from cheddar or similar cheesemaking"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column rectification"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Lactose needs specific yeast strains to ferment, which is the technical hurdle the category had to clear."
+  }
+ },
+ {
+  "id": "khrenovukha",
+  "name": "Khrenovukha",
+  "subcategory": "Vodka",
+  "description": "Vodka infused with horseradish, honey and sometimes lemon, and one of Russia's most enduring household infusions. Sharp, hot and genuinely sinus-clearing, drunk with heavy food in winter.",
+  "abv": "38–40%",
+  "origin": "Russia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "horseradish",
+   "honey",
+   "mustard heat",
+   "lemon"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Peter the Great is credited with decreeing that vodka be infused with horseradish, though the story is repeated far more often than it is sourced.",
+  "serve": {
+   "temp": "freezer cold",
+   "glass": "Small shot glass",
+   "how": "Straight from the freezer, in one, with fatty food. The cold blunts the horseradish just enough to make it possible; at room temperature it is close to unpleasant.",
+   "pair": [
+    "salo",
+    "pelmeni",
+    "pickled vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Vodka infused with fresh horseradish root and honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain vodka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Fresh horseradish root, honey, sometimes lemon and mustard seed"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused for days, then strained"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "Steeping time is critical — left too long the horseradish turns bitter and overwhelming."
+  }
+ },
+ {
+  "id": "wisniowka",
+  "name": "Wiśniówka",
+  "subcategory": "Liqueur",
+  "description": "Polish cherry-infused vodka, made at home each summer by steeping sour cherries with sugar. Deep red, sweet-tart, and one of the most widely made nalewki in the country.",
+  "abv": "25–40%",
+  "origin": "Poland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sour cherry",
+   "almond",
+   "sugar",
+   "spirit warmth"
+  ],
+  "glassware": "Small cordial glass",
+  "funFact": "The steeped cherries are eaten afterwards and are, by that point, considerably more alcoholic than the drink itself.",
+  "serve": {
+   "temp": "cool or room temp",
+   "glass": "Small cordial glass",
+   "how": "At cellar temperature after a meal, with a couple of the steeped cherries in the glass. Polish households open the summer's batch at Christmas, which is when it is at its best.",
+   "pair": [
+    "cheesecake",
+    "poppyseed cake",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Sour cherries macerated in vodka with sugar for months.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Rye or wheat vodka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Sour cherries, sugar; some stones left in"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated only"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–40%"
+    }
+   ],
+   "process": "Cracked stones supply the almond note that separates a good wiśniówka from cherry syrup."
+  }
+ },
+ {
+  "id": "citron-vodka",
+  "name": "Citron Vodka",
+  "subcategory": "Vodka",
+  "description": "Lemon-flavoured vodka, launched in 1988 and responsible almost single-handedly for the Cosmopolitan and the Lemon Drop. The flavoured-vodka boom of the 1990s started here.",
+  "abv": "37.5–40%",
+  "origin": "Sweden",
+  "rarity": "common",
+  "tastingNotes": [
+   "lemon peel",
+   "lime",
+   "light sweetness",
+   "clean grain"
+  ],
+  "glassware": "Martini glass",
+  "funFact": "Absolut Citron's launch is generally credited with kicking off the flavoured vodka category, which grew to hundreds of variants within a decade.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Chilled Martini glass",
+   "how": "In a Cosmopolitan or a Lemon Drop, both of which were built around it. Neat from the freezer it is sharper and cleaner than the sugary flavoured vodkas that followed it.",
+   "pair": [
+    "ceviche",
+    "lemon tart",
+    "smoked salmon"
+   ]
+  },
+  "composition": {
+   "summary": "Grain vodka flavoured with citrus peel distillate.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Winter wheat vodka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Lemon and lime peel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Citrus distillate blended in after rectification"
+    },
+    {
+     "label": "Strength",
+     "detail": "37.5–40%"
+    }
+   ],
+   "process": "Better versions use a peel distillate rather than an essence, and the difference is obvious neat."
+  }
+ },
+ {
+  "id": "swedish-vodka",
+  "name": "Swedish Vodka",
+  "subcategory": "Vodka",
+  "description": "Made from winter wheat grown on the plains around Åhus and distilled continuously rather than in batches. Soft, faintly grainy and the template most premium Western vodka followed.",
+  "abv": "40%",
+  "origin": "Åhus, Sweden",
+  "rarity": "common",
+  "tastingNotes": [
+   "soft wheat",
+   "light anise",
+   "white pepper",
+   "clean"
+  ],
+  "glassware": "Chilled glass",
+  "funFact": "Absolut is distilled entirely in one small Swedish town, using wheat grown within a short radius and water from a local well — a level of concentration unusual at that scale.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Chilled shot glass or Martini glass",
+   "how": "Freezer cold and neat with food, in the Swedish snaps tradition, or as a clean Martini base. Its softness makes it forgiving in almost any mixed drink.",
+   "pair": [
+    "gravlax",
+    "pickled herring",
+    "crayfish"
+   ]
+  },
+  "composition": {
+   "summary": "Winter wheat continuously distilled and cut with local water.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Åhus winter wheat"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Continuous rectification"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Continuous rather than batch distillation is what gives the consistency the brand was built on."
+  }
+ },
+ {
+  "id": "birch-vodka",
+  "name": "Birch Sap Vodka",
+  "subcategory": "Vodka",
+  "description": "Made using birch sap, tapped from trees for a few weeks each spring as the ground thaws. Faintly sweet and mineral, and a Baltic and Nordic tradition older than vodka itself.",
+  "abv": "38–40%",
+  "origin": "Baltic states and Nordic Europe",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "birch sap",
+   "light mineral",
+   "soft sweetness",
+   "green wood"
+  ],
+  "glassware": "Small chilled glass",
+  "funFact": "Birch sap runs for only two or three weeks a year, and a mature tree yields just a few litres a day before the leaves open and the flow stops.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small chilled glass",
+   "how": "Cold and neat in a small glass. The sap character is delicate, so it is wasted in a mixed drink — this is one to taste beside a plain grain vodka to see what the sap actually does.",
+   "pair": [
+    "smoked fish",
+    "rye bread",
+    "pickled vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Grain spirit cut or fermented with spring-tapped birch sap.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grain spirit, with birch sap in place of water or in the ferment"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column rectification"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "38–40%"
+    }
+   ],
+   "process": "The harvest window is fixed by the thaw, so annual production is capped by nature rather than demand."
+  }
+ },
+ {
+  "id": "quinoa-vodka",
+  "name": "Quinoa Vodka",
+  "subcategory": "Vodka",
+  "description": "Distilled from Andean quinoa, a seed rather than a grain, giving a naturally gluten-free spirit with a distinctly nutty character. A modern South American answer to the premium vodka market.",
+  "abv": "40%",
+  "origin": "Bolivia and Peru",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "toasted nut",
+   "cereal",
+   "light spice",
+   "earth"
+  ],
+  "glassware": "Chilled glass",
+  "funFact": "Quinoa must be washed thoroughly before use because its natural saponin coating is bitter and soapy — a step that matters as much for distilling as for cooking.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Chilled glass",
+   "how": "Cold and neat, or in a Martini where the nuttiness gives more to work with than grain vodka does. It also stands up well in a savoury cocktail.",
+   "pair": [
+    "ceviche",
+    "roasted nuts",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Andean quinoa fermented and rectified into vodka.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Royal quinoa from the Bolivian altiplano"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Column rectification"
+    },
+    {
+     "label": "Aging",
+     "detail": "None"
+    },
+    {
+     "label": "Strength",
+     "detail": "40%"
+    }
+   ],
+   "process": "Saponins must be washed off before fermentation or they carry a bitterness right through the process."
+  }
+ }
+]
