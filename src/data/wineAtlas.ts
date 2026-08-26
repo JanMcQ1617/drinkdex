@@ -28,6 +28,40 @@ export const ATLAS_GRAPES: AtlasGrape[] = ATLAS.grapes;
 export const ATLAS_COUNTS = ATLAS.counts;
 
 export const countryNameOf = (w: AtlasWine): string => ATLAS_COUNTRIES[w.c].name;
+
+/**
+ * Name -> position, built once.
+ *
+ * Links are stored by name so they survive the atlas being re-sorted; this
+ * is where a name becomes something you can index with. Wine names are
+ * unique across the whole atlas, which build-wine-atlas-links.mjs asserts
+ * at generation time rather than trusting.
+ */
+const WINE_BY_NAME = new Map<string, number>(ATLAS_WINES.map((w, i) => [w.n, i]));
+const GRAPE_BY_NAME = new Map<string, number>(ATLAS_GRAPES.map((g, i) => [g.name, i]));
+
+/** Resolve atlas wine names to entries, dropping any that no longer exist. */
+export function winesByName(names: string[]): AtlasWine[] {
+  const out: AtlasWine[] = [];
+  for (const n of names) {
+    const i = WINE_BY_NAME.get(n);
+    if (i !== undefined) out.push(ATLAS_WINES[i]);
+  }
+  return out;
+}
+
+export function grapeByName(name: string | null): AtlasGrape | null {
+  if (!name) return null;
+  const i = GRAPE_BY_NAME.get(name);
+  return i === undefined ? null : ATLAS_GRAPES[i];
+}
+
+/** Index of a grape by name, for the atlas screen's grape filter. */
+export function grapeIndexByName(name: string | null): number | null {
+  if (!name) return null;
+  const i = GRAPE_BY_NAME.get(name);
+  return i === undefined ? null : i;
+}
 export const grapeNamesOf = (w: AtlasWine): string[] => w.g.map((i) => ATLAS_GRAPES[i].name);
 
 /**

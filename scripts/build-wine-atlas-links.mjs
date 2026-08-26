@@ -5,6 +5,13 @@
  * Run AFTER build-wine-atlas.mjs (it reads the generated atlas).
  * Run: node scripts/build-wine-atlas-links.mjs
  *
+ * Links store the wine's NAME, never its position in the atlas array.
+ * Positions move: adding one row to winedata/wines.psv re-sorts the array,
+ * and every index at or after the insertion silently retargets — the
+ * Sauternes card renders Saint-Julien with no error anywhere. Names are
+ * globally unique across all 1,558 wines, so they are a stable key, and a
+ * name that stops resolving fails loudly through `problems` below.
+ *
  * Most cards match by name on their own. The overrides below cover the rest:
  * a card that is a family of appellations rather than one ("Crémant",
  * "Madeira"), a card whose atlas name differs ("Ruby Port" is filed as
@@ -22,16 +29,28 @@ const drinks = JSON.parse(readFileSync(join(ROOT, 'src/data/drinks.json'), 'utf8
 const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
 const byWineName = new Map();
-atlas.wines.forEach((w, i) => {
+atlas.wines.forEach((w) => {
   const k = fold(w.n);
   if (!byWineName.has(k)) byWineName.set(k, []);
-  byWineName.get(k).push(i);
+  byWineName.get(k).push(w.n);
 });
+
+/* A name key is only as good as its uniqueness. Check, don't assume. */
+{
+  const counts = new Map();
+  for (const w of atlas.wines) counts.set(w.n, (counts.get(w.n) ?? 0) + 1);
+  const clashes = [...counts].filter(([, n]) => n > 1).map(([n]) => n);
+  if (clashes.length) {
+    console.error('Atlas wine names are no longer unique; name-keyed links are unsafe:');
+    for (const c of clashes) console.error('  ' + c);
+    process.exit(1);
+  }
+}
 const byGrapeName = new Map();
-atlas.grapes.forEach((g, i) => {
+atlas.grapes.forEach((g) => {
   for (const n of [g.name, ...g.synonyms]) {
     const k = fold(n);
-    if (!byGrapeName.has(k)) byGrapeName.set(k, i);
+    if (!byGrapeName.has(k)) byGrapeName.set(k, g.name);
   }
 });
 
@@ -109,7 +128,7 @@ for (const d of drinks.filter((x) => x.category === 'wine')) {
     else problems.push(`${d.id} (${d.name}): unmatched and no override`);
   }
 
-  wines = [...new Set(wines)].sort((a, b) => a - b);
+  wines = [...new Set(wines)].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
   links[d.id] = { wines, grape: grape ?? null };
 }
 
