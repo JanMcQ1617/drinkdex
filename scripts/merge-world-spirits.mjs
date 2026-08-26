@@ -42,7 +42,6 @@ const incomingIds = new Set(incoming.map((d) => d.id));
 const kept = drinks.filter((d) => !(incomingIds.has(d.id) && d.category === 'spirit'));
 const priorById = new Map(drinks.map((d) => [d.id, d]));
 const nameIndex = new Map(kept.map((d) => [fold(d.name), d.name]));
-const idIndex = new Set(kept.map((d) => d.id));
 
 const REQUIRED = ['id', 'name', 'subcategory', 'description', 'abv', 'origin', 'rarity',
   'tastingNotes', 'glassware', 'funFact', 'serve', 'composition'];
@@ -72,7 +71,6 @@ for (const s of incoming) {
   if (prior && prior.category !== 'spirit') {
     errors.push(`${where}: id collides with existing ${prior.category} ${prior.name}`);
   }
-  if (idIndex.has(s.id)) errors.push(`${where}: id collides with a non-spirit entry`);
 
   const nk = fold(s.name);
   if (seenName.has(nk)) errors.push(`${where}: duplicate name within import ("${seenName.get(nk)}")`);
