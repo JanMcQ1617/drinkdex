@@ -1,0 +1,345 @@
+[
+ {
+  "id": "umqombothi",
+  "name": "Umqombothi",
+  "subcategory": "Specialty",
+  "description": "Sorghum and maize beer, thick and porridge-like, brewed at home for ceremonies. Drunk from a shared clay pot passed clockwise.",
+  "abv": "2–4%",
+  "origin": "South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "sorghum",
+   "yoghurt",
+   "earthy"
+  ],
+  "glassware": "Clay pot (ukhamba), shared",
+  "funFact": "Umqombothi is central to Xhosa and Zulu ceremony — brewing it is how ancestors are honoured at weddings and funerals, so the beer is a ritual object as much as a drink.",
+  "serve": {
+   "temp": "Ambient temperature",
+   "glass": "Clay pot (ukhamba), shared",
+   "how": "Serve at room temperature from a communal clay pot, never chilled and never individually glassed. Stir before serving, since the solids settle fast and the texture is part of it — this is a beer you can almost eat. Protocol matters: the pot is passed in one direction and the brewer or elder drinks first.",
+   "pair": [
+    "Grilled meat",
+    "Maize porridge",
+    "Samp and beans"
+   ]
+  },
+  "composition": {
+   "summary": "A thick, sour sorghum-and-maize beer fermented with wild lactic cultures.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Sorghum malt with unmalted maize meal."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast alongside lactic bacteria, giving a yoghurt-like sourness."
+    },
+    {
+     "label": "Other",
+     "detail": "The beer is served unfiltered, with the grain solids still suspended."
+    }
+   ],
+   "process": "Maize meal and sorghum malt are cooked, soured overnight, boiled and then fermented for a day or two before being drunk immediately, still actively fermenting."
+  }
+ },
+ {
+  "id": "tella",
+  "name": "Tella",
+  "subcategory": "Specialty",
+  "description": "Ethiopia's home-brewed beer, made with gesho instead of hops and often flavoured by the smoked gourd it ferments in. Smoky, sour and served in a flask.",
+  "abv": "2–5%",
+  "origin": "Ethiopia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "smoke",
+   "sour",
+   "bitter herb",
+   "grain"
+  ],
+  "glassware": "Berele flask or tumbler",
+  "funFact": "Gesho — the same buckthorn that bitters tej honey wine — stands in for hops, and the fermenting vessel is often smoked with olive wood, which is where the beer's signature smokiness comes from.",
+  "serve": {
+   "temp": "Ambient to cellar cool",
+   "glass": "Berele flask or tumbler",
+   "how": "Serve cool or at ambient temperature in a flask or plain glass, cloudy and unfiltered. Expect smoke on the nose before anything else, then a dry, grainy sourness. It is a house beer rather than a bar beer, so treat variation between batches as the point rather than a fault.",
+   "pair": [
+    "Injera and wat",
+    "Grilled meat",
+    "Roasted barley"
+   ]
+  },
+  "composition": {
+   "summary": "A smoky, gesho-bittered grain beer fermented in a smoke-cured vessel.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley, often with teff, sorghum or maize."
+    },
+    {
+     "label": "Hops",
+     "detail": "None — gesho, a native buckthorn, provides the bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild fermentation from the vessel and the environment."
+    },
+    {
+     "label": "Other",
+     "detail": "The clay or gourd vessel, cured with olive-wood smoke."
+    }
+   ],
+   "process": "Roasted grain and gesho are fermented together in a smoke-cured vessel for several days to a week, then served unfiltered."
+  }
+ },
+ {
+  "id": "bouza",
+  "name": "Bouza",
+  "subcategory": "Specialty",
+  "description": "A thick, living grain beer with a claim to being among the oldest continuously made brews on earth — closer to the beer of the pharaohs than anything with hops in it.",
+  "abv": "3–5%",
+  "origin": "Egypt and Sudan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour dough",
+   "wheat",
+   "yeasty",
+   "earthy"
+  ],
+  "glassware": "Tumbler or bowl",
+  "funFact": "Bouza is made by fermenting partly baked bread loaves, a method archaeologists recognise from ancient Egyptian brewing scenes — the bread is the mash, not an ingredient added to it.",
+  "serve": {
+   "temp": "Ambient to lightly chilled",
+   "glass": "Tumbler or bowl",
+   "how": "Serve at ambient temperature in a plain vessel — it is thick, opaque and still actively fermenting, so a sealed bottle is a bad idea. Stir before pouring since it separates fast. Expect something between beer and liquid bread, sour and yeasty rather than crisp.",
+   "pair": [
+    "Flatbread",
+    "Grilled lamb",
+    "Salted cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A live, unfiltered wheat beer fermented from partially baked bread loaves.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Coarsely ground wheat, part of it malted, part baked into loaves."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild and carried-over yeast, left active in the finished beer."
+    },
+    {
+     "label": "Other",
+     "detail": "The bread loaves themselves, which supply both starch and fermentation."
+    }
+   ],
+   "process": "Loaves of lightly baked wheat bread are crumbled into water with malted wheat and fermented for a day or two, then drunk while still cloudy and active."
+  }
+ },
+ {
+  "id": "chibuku",
+  "name": "Chibuku",
+  "subcategory": "Specialty",
+  "description": "Opaque sorghum beer sold in a waxed carton you shake before opening. Still fermenting on the shelf, sour and porridge-thick — 'shake shake' is its actual nickname.",
+  "abv": "3–4%",
+  "origin": "Zimbabwe and Zambia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "sorghum",
+   "porridge",
+   "yeasty"
+  ],
+  "glassware": "The carton itself, shaken",
+  "funFact": "The carton is deliberately unsealed so the still-active fermentation can vent — a sealed container would burst, which is why Chibuku is one of the few commercial beers that cannot be bottled.",
+  "serve": {
+   "temp": "Ambient to lightly chilled",
+   "glass": "The carton itself, shaken",
+   "how": "Shake the carton hard before opening to resuspend the solids, then drink straight from it — that is the intended vessel and pouring into a glass gains nothing. Expect it thick, sour and actively fizzing. Its shelf life is measured in days, and it keeps getting sourer and stronger the whole time.",
+   "pair": [
+    "Grilled meat",
+    "Sadza",
+    "Salted groundnuts"
+   ]
+  },
+  "composition": {
+   "summary": "A commercially produced opaque sorghum beer sold while still actively fermenting.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Sorghum malt with maize meal."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild and pitched yeast alongside lactic bacteria."
+    },
+    {
+     "label": "Other",
+     "detail": "Sold unfiltered and unpasteurised, still fermenting in the carton."
+    }
+   ],
+   "process": "Maize and sorghum are soured, cooked and briefly fermented, then packaged live and distributed within days."
+  }
+ },
+ {
+  "id": "dolo",
+  "name": "Dolo",
+  "subcategory": "Specialty",
+  "description": "West African sorghum beer brewed and sold by women in open-air cabarets, ladled warm from a clay pot and drunk the day it is ready.",
+  "abv": "2–4%",
+  "origin": "Burkina Faso and the Sahel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "sorghum",
+   "smoke",
+   "earthy"
+  ],
+  "glassware": "Calabash bowl",
+  "funFact": "Dolo brewing is almost exclusively women's work across Burkina Faso and Mali, and the cabarets where it is sold function as the village's social and economic centre as much as a bar.",
+  "serve": {
+   "temp": "Warm to ambient",
+   "glass": "Calabash bowl",
+   "how": "Serve warm or at ambient temperature in a calabash, ladled from the communal pot. It is cloudy and lightly sour, with smoke from the wood-fired brewing. Drink it the day it is made — by the second day it has soured well past pleasant, which is why brewing happens on a fixed weekly rhythm.",
+   "pair": [
+    "Grilled meat",
+    "Millet porridge",
+    "Fried plantain"
+   ]
+  },
+  "composition": {
+   "summary": "A wild-fermented sorghum beer brewed over wood fire and sold the same day.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Germinated and sun-dried sorghum."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast, often carried over in the unwashed brewing pot."
+    },
+    {
+     "label": "Other",
+     "detail": "Wood smoke from the open fire used to boil the wort."
+    }
+   ],
+   "process": "Sorghum is germinated, dried, milled and boiled over wood fire, then fermented overnight with wild organisms and sold immediately."
+  }
+ },
+ {
+  "id": "mbege",
+  "name": "Mbege",
+  "subcategory": "Specialty",
+  "description": "Chagga banana beer from the slopes of Kilimanjaro: ripe bananas fermented with malted finger millet, thick, sour and central to every ceremony.",
+  "abv": "3–5%",
+  "origin": "Kilimanjaro, Tanzania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "banana",
+   "sour",
+   "millet",
+   "earthy"
+  ],
+  "glassware": "Gourd or plastic mug",
+  "funFact": "Among the Chagga, mbege is required at weddings, funerals and dispute settlements — it functions as a social contract as much as a drink, and brewing takes several days of coordinated work.",
+  "serve": {
+   "temp": "Ambient temperature",
+   "glass": "Gourd or plastic mug",
+   "how": "Serve at ambient temperature from a shared vessel, stirred first since it separates. Expect a thick, cloudy, distinctly sour drink with strong banana character and grit from the millet. It is drunk in company and in quantity; a small tasting pour misses the point of a beer built for ceremony.",
+   "pair": [
+    "Roast goat",
+    "Boiled bananas",
+    "Grilled maize"
+   ]
+  },
+  "composition": {
+   "summary": "A banana beer fermented with malted finger millet as the saccharifying agent.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Malted finger millet, which converts the banana sugars."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast and lactic bacteria from the fruit and the vessel."
+    },
+    {
+     "label": "Other",
+     "detail": "Ripe bananas, boiled down over days as the fermentable base."
+    }
+   ],
+   "process": "Bananas are ripened, boiled and combined with malted millet flour, then fermented in covered gourds for two to four days."
+  }
+ },
+ {
+  "id": "muratina",
+  "name": "Muratina",
+  "subcategory": "Specialty",
+  "description": "Kikuyu honey beer fermented with the dried fruit of the sausage tree, which carries the yeast. Sweet, sour and reserved for elders and ceremony.",
+  "abv": "3–5%",
+  "origin": "Central Kenya",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "sour",
+   "wood",
+   "tannin"
+  ],
+  "glassware": "Gourd or horn",
+  "funFact": "The muratina fruit is not an ingredient for flavour but a yeast vector — dried and soaked pieces carry the fermenting culture, and a good piece is reused across many brews.",
+  "serve": {
+   "temp": "Ambient temperature",
+   "glass": "Gourd or horn",
+   "how": "Serve at ambient temperature in a gourd or horn, poured from the communal container. It is honey-sweet at the front and sour behind, with a faint woody tannin from the fruit. Traditionally it was restricted to elders and ceremonial occasions rather than drunk casually, and it is still treated with some of that formality.",
+   "pair": [
+    "Roast goat",
+    "Githeri",
+    "Roasted maize"
+   ]
+  },
+  "composition": {
+   "summary": "A honey and sugarcane ferment inoculated by dried sausage-tree fruit.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "None — honey and sugarcane juice provide the fermentables."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast carried on dried muratina (sausage tree) fruit."
+    },
+    {
+     "label": "Other",
+     "detail": "The muratina fruit itself, reused between batches as a starter."
+    }
+   ],
+   "process": "Honey and cane juice are diluted and inoculated with soaked muratina fruit, then fermented for two to four days before being served."
+  }
+ }
+]

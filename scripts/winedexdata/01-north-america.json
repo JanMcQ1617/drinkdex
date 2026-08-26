@@ -1,0 +1,492 @@
+[
+ {
+  "id": "napa-valley",
+  "name": "Napa Valley",
+  "subcategory": "Regional Red",
+  "description": "California's benchmark Cabernet: cassis, cedar and polished tannin from a valley thirty miles long that changed how the world priced New World wine.",
+  "abv": "13.5–15.5%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cassis",
+   "cedar",
+   "vanilla",
+   "graphite"
+  ],
+  "glassware": "Large Bordeaux glass",
+  "funFact": "At the 1976 Judgement of Paris a Napa Cabernet beat first-growth Bordeaux in a blind tasting judged entirely by French experts, and the French press spent years insisting it did not count.",
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Large Bordeaux glass",
+   "how": "Decant a young bottle for an hour — Napa Cabernet is built with tannin that needs air before the cassis and cedar separate from the oak. Serve slightly below room temperature in a large-bowled glass. With age the graphite and tobacco notes come forward and the oak recedes, so an older bottle needs less decanting, not more.",
+   "pair": [
+    "Ribeye",
+    "Rack of lamb",
+    "Aged hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Sauvignon from a warm, well-drained valley, aged in new French oak.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, often with Merlot, Cabernet Franc and Petit Verdot."
+    },
+    {
+     "label": "Region",
+     "detail": "The Napa Valley floor and its benchland, with mountain sub-appellations above."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fully destemmed, long maceration for colour and tannin extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "18–24 months in French oak, a significant proportion new."
+    }
+   ],
+   "process": "Warm-climate ripening gives high sugar and full phenolics, extracted through a long maceration and softened by extended barrel ageing."
+  }
+ },
+ {
+  "id": "sonoma-coast",
+  "name": "Sonoma Coast",
+  "subcategory": "White",
+  "description": "Chardonnay grown where the fog rolls in: tighter, saltier and more mineral than the Napa style, with the oak dialled back.",
+  "abv": "13–14%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "green apple",
+   "lemon curd",
+   "saline",
+   "toasted nut"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Sonoma Coast appellation reaches close enough to the Pacific that fog caps ripening daily, which is why its Chardonnay keeps acidity that inland California loses.",
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not cold — under about 48°F the saline and mineral notes flatten into simple citrus. Use a standard white glass rather than a large bowl. If the wine seems tight on opening, give it twenty minutes in the glass; coastal Chardonnay often needs a little air to move from lemon to something rounder.",
+   "pair": [
+    "Dungeness crab",
+    "Roast chicken",
+    "Goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate coastal Chardonnay with restrained oak and firm natural acidity.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay."
+    },
+    {
+     "label": "Region",
+     "detail": "The fog-influenced western reaches of Sonoma County, close to the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster pressed, barrel-fermented, often with partial malolactic conversion."
+    },
+    {
+     "label": "Aging",
+     "detail": "9–16 months in French oak, usually with a low proportion of new barrels."
+    }
+   ],
+   "process": "Cool coastal ripening preserves acidity, and barrel fermentation with lees stirring builds texture without heavy oak flavour."
+  }
+ },
+ {
+  "id": "willamette-valley",
+  "name": "Willamette Valley",
+  "subcategory": "Regional Red",
+  "description": "America's answer to Burgundy, and the closest it gets: red cherry, forest floor and fine-boned acidity from a cool, rainy valley south of Portland.",
+  "abv": "12.5–14%",
+  "origin": "Oregon, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "red cherry",
+   "forest floor",
+   "rose",
+   "earth"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Burgundy's Domaine Drouhin bought land here in 1987 — an unusually direct endorsement, since the family had spent centuries insisting Pinot Noir belonged only in Burgundy.",
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve cooler than most reds, around cellar temperature — warm Pinot Noir loses its lift and tastes flabby. Use a wide Burgundy bowl to gather the aromatics, which are the point of the grape. Decanting is rarely needed; if anything, pour and wait rather than aerate aggressively.",
+   "pair": [
+    "Salmon",
+    "Duck breast",
+    "Mushroom risotto"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate Pinot Noir from Oregon's marine-influenced valley floor and hillsides.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "The Willamette Valley and its hillside sub-appellations, on volcanic and sedimentary soils."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation, gentle extraction to avoid hard tannin."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–18 months in French oak, mostly used barrels."
+    }
+   ],
+   "process": "Cool ripening and gentle extraction preserve aromatics and acidity, with restrained oak keeping the fruit and earth in front."
+  }
+ },
+ {
+  "id": "columbia-valley",
+  "name": "Columbia Valley",
+  "subcategory": "Regional Red",
+  "description": "High desert Syrah and Cabernet grown on irrigated basalt: dark, savoury and structured, with a smoked-meat edge California rarely finds.",
+  "abv": "13.5–15%",
+  "origin": "Washington, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry",
+   "smoked meat",
+   "black pepper",
+   "basalt"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Eastern Washington is a desert — under ten inches of rain a year — so almost every vine is irrigated, giving growers unusually precise control over ripening.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for half an hour to let the savoury and peppery notes emerge from behind the fruit. Serve slightly cool in a large glass. The savoury character builds with a few years in bottle, so a five-year-old bottle usually shows better balance than a one-year-old one.",
+   "pair": [
+    "Grilled lamb",
+    "Barbecue brisket",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Desert-grown Syrah and Bordeaux varieties on basalt soils under irrigation.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Cabernet Sauvignon and Merlot."
+    },
+    {
+     "label": "Region",
+     "detail": "The vast Columbia Valley of eastern Washington and its sub-appellations."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed or partially whole-cluster, fermented warm for structure."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–20 months in French and American oak."
+    }
+   ],
+   "process": "Wide day-night temperature swings hold acidity while the desert heat ripens tannin, producing dark, savoury and firmly structured wines."
+  }
+ },
+ {
+  "id": "finger-lakes",
+  "name": "Finger Lakes",
+  "subcategory": "White",
+  "description": "Riesling from glacial lakes in upstate New York — bracing, lime-driven and often off-dry, with the lakes themselves keeping the vines alive through winter.",
+  "abv": "10.5–12.5%",
+  "origin": "New York, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "slate",
+   "honeysuckle"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The lakes are deep enough not to freeze, and the stored heat they release keeps vineyards on their slopes from being killed by winters that would destroy vines a mile inland.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled but let it warm slightly in the glass; a cold Finger Lakes Riesling shows only acid, and the lime and honeysuckle arrive a few degrees later. Check whether the bottle is dry or off-dry before pairing, since both styles are common and the sweetness changes the food match entirely.",
+   "pair": [
+    "Thai curry",
+    "Smoked trout",
+    "Pork with apple"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate Riesling grown on glacial slopes moderated by deep lakes.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling, with some Cabernet Franc and Grüner Veltliner alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The steep slopes above Seneca, Cayuga and Keuka lakes in upstate New York."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool, slow stainless-steel fermentation, often stopped to leave residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or no oak; brief lees contact in tank."
+    }
+   ],
+   "process": "Slow cool fermentation in stainless preserves the aromatic lime and floral character, with fermentation sometimes arrested to balance high acidity with residual sugar."
+  }
+ },
+ {
+  "id": "paso-robles",
+  "name": "Paso Robles",
+  "subcategory": "Regional Red",
+  "description": "Big, sun-driven Rhône blends and Zinfandel from a region with a fifty-degree daily temperature swing — generous fruit held up by surprising freshness.",
+  "abv": "14–15.5%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry jam",
+   "liquorice",
+   "black pepper",
+   "vanilla"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Paso Robles has one of the widest diurnal temperature ranges of any wine region in California, sometimes swinging fifty degrees Fahrenheit in a day, which is what keeps its high-alcohol reds from tasting flat.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve a couple of degrees below room temperature — at 68°F and above the alcohol dominates everything. A large glass helps the alcohol blow off. Decant young bottles briefly; these are generous, forward wines that show well early and do not demand long ageing.",
+   "pair": [
+    "Barbecue ribs",
+    "Burgers",
+    "Aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-climate Rhône varieties and Zinfandel with a wide diurnal swing preserving acidity.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Grenache, Mourvèdre and Zinfandel."
+    },
+    {
+     "label": "Region",
+     "detail": "The inland hills of San Luis Obispo County, well east of the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with generous extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French and American oak."
+    }
+   ],
+   "process": "Hot days ripen fruit fully while cold nights retain acidity, and warm fermentation extracts the plush tannin the style is known for."
+  }
+ },
+ {
+  "id": "sta-rita-hills",
+  "name": "Sta. Rita Hills",
+  "subcategory": "Regional Red",
+  "description": "A narrow corridor of transverse valleys funnelling Pacific fog inland, producing Pinot Noir with cranberry sharpness and a distinctly savoury edge.",
+  "abv": "12.5–14%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cranberry",
+   "blood orange",
+   "sage",
+   "earth"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "The Santa Ynez Valley runs east-west rather than north-south — one of very few transverse ranges in North America — which channels cold ocean air directly into the vineyards.",
+  "serve": {
+   "temp": "55-58°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve cool in a wide bowl. This is a leaner, more savoury Pinot than Oregon or Sonoma gives, so resist warming it to bring out sweetness that was never there. Give it fifteen minutes open; the sage and blood-orange notes need a little air but the wine tires if decanted hard.",
+   "pair": [
+    "Grilled salmon",
+    "Duck",
+    "Mushroom tart"
+   ]
+  },
+  "composition": {
+   "summary": "Fog-cooled Pinot Noir from an unusual east-west valley on marine sediment.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir, with some Chardonnay and Syrah."
+    },
+    {
+     "label": "Region",
+     "detail": "The Sta. Rita Hills of Santa Barbara County, open to Pacific fog."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster inclusion common, with cool, slow fermentation."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–16 months in French oak, largely used."
+    }
+   ],
+   "process": "Persistent marine fog extends the growing season, and whole-cluster fermentation adds the savoury, spiced character that distinguishes the appellation."
+  }
+ },
+ {
+  "id": "niagara-peninsula",
+  "name": "Niagara Peninsula",
+  "subcategory": "Dessert",
+  "description": "The world's largest icewine region: grapes left to freeze solid on the vine into January, then pressed while frozen for a few drops of concentrated nectar.",
+  "abv": "9–12%",
+  "origin": "Ontario, Canada",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lychee",
+   "apricot",
+   "honey",
+   "candied citrus"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Canadian law requires the grapes to be naturally frozen on the vine at −8°C or colder before picking, and the harvest often happens at night in January because the temperature has to hold through the pressing.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Pour small — two ounces is a full serving of something this concentrated — and serve well chilled so the acidity stays sharp against the sugar. Let it warm a couple of degrees in the glass and the lychee and apricot open up. It keeps for days after opening, unlike most wines, because the sugar preserves it.",
+   "pair": [
+    "Blue cheese",
+    "Fruit tart",
+    "Foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Icewine pressed from grapes frozen naturally on the vine in midwinter.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Vidal Blanc and Riesling, sometimes Cabernet Franc."
+    },
+    {
+     "label": "Region",
+     "detail": "The Niagara Peninsula between Lake Ontario and the escarpment."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes pressed while frozen so water stays behind as ice and only concentrated juice runs."
+    },
+    {
+     "label": "Aging",
+     "detail": "Fermented slowly and bottled young to preserve freshness; oak is rare."
+    }
+   ],
+   "process": "Frozen grapes are pressed at sub-zero temperatures, giving tiny yields of intensely sugary juice that ferments slowly to a low alcohol and high residual sugar."
+  }
+ },
+ {
+  "id": "okanagan-valley",
+  "name": "Okanagan Valley",
+  "subcategory": "White",
+  "description": "A desert valley in British Columbia at the same latitude as Champagne, with long summer days producing aromatic whites of unusual intensity.",
+  "abv": "12–13.5%",
+  "origin": "British Columbia, Canada",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pear",
+   "white flower",
+   "lime",
+   "stone"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Okanagan sits far enough north that midsummer days run over sixteen hours, which compensates for the short season and gives the aromatics time to build.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. These are aromatic wines, so avoid over-chilling, which locks the florals away. The valley makes everything from bone-dry Riesling to fuller Pinot Gris, so check the style before pairing — the range under one appellation name is unusually wide.",
+   "pair": [
+    "Grilled trout",
+    "Pork tenderloin",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Aromatic northern whites from a semi-desert valley with very long summer days.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Gris, Riesling, Gewürztraminer and Chardonnay."
+    },
+    {
+     "label": "Region",
+     "detail": "The Okanagan Valley of interior British Columbia, a semi-arid rain-shadow region."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation to protect aromatics."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked, with brief lees ageing."
+    }
+   ],
+   "process": "Long northern daylight builds aromatic compounds while cool nights hold acidity, and stainless fermentation keeps both intact."
+  }
+ },
+ {
+  "id": "valle-de-guadalupe",
+  "name": "Valle de Guadalupe",
+  "subcategory": "Regional Red",
+  "description": "Mexico's wine country, an hour from the US border: Mediterranean heat, saline coastal air and blends that follow no appellation rulebook at all.",
+  "abv": "13.5–15%",
+  "origin": "Baja California, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black plum",
+   "dried herb",
+   "saline",
+   "leather"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Baja producers blend freely across Bordeaux, Rhône and Spanish varieties in the same bottle, because Mexico has no appellation law dictating what may go together — a freedom European producers do not have.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Expect a savoury, sometimes saline character from the coastal influence that sets these apart from Californian wines an hour north. Decant young bottles briefly; the herbal and leather notes emerge with air, and many of these wines are made in tiny quantities with little filtration.",
+   "pair": [
+    "Carne asada",
+    "Grilled octopus",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-climate blended reds grown near the Pacific under a saline maritime influence.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Nebbiolo, Tempranillo, Cabernet Sauvignon, Grenache and Syrah, freely blended."
+    },
+    {
+     "label": "Region",
+     "detail": "The Valle de Guadalupe in Baja California, some fifteen miles inland from the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation, often with minimal intervention and native yeast."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in a mix of French and American oak."
+    }
+   ],
+   "process": "Mediterranean heat tempered by cool Pacific air ripens the fruit fully while the saline maritime influence gives the finished wines a savoury edge."
+  }
+ }
+]

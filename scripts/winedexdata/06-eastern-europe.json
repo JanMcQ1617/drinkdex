@@ -1,0 +1,443 @@
+[
+ {
+  "id": "egri-bikaver",
+  "name": "Egri Bikavér",
+  "subcategory": "Regional Red",
+  "description": "'Bull's Blood of Eger': a spicy Hungarian red blend legally required to be a blend, wrapped in a siege legend nobody can verify.",
+  "abv": "13–14%",
+  "origin": "Eger, Hungary",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sour cherry",
+   "paprika spice",
+   "tobacco",
+   "plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The legend says defenders of Eger castle in 1552 drank red wine that stained their beards, convincing the Ottoman besiegers they were drinking bull's blood — the name only appears in records three centuries later.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass; the blend's acidity and spice sharpen unpleasantly when warm. Decant a young bottle for half an hour. Modern Bikavér is far better made than its twentieth-century reputation, so judge a current bottle on its own terms rather than on the export wine of the 1980s.",
+   "pair": [
+    "Goulash",
+    "Paprika chicken",
+    "Grilled sausage"
+   ]
+  },
+  "composition": {
+   "summary": "A legally mandated blend of Kékfrankos with other varieties from the Eger region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Kékfrankos as the backbone, blended with Kadarka, Merlot, Cabernet Franc and others."
+    },
+    {
+     "label": "Region",
+     "detail": "Eger in northern Hungary, on volcanic rhyolite tuff soils."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Varieties fermented separately, then blended before ageing."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, traditionally Hungarian."
+    }
+   ],
+   "process": "Cool northern Hungarian sites on volcanic tuff give high-acid, spicy fruit, and the regulated multi-variety blend builds complexity no single grape supplies."
+  }
+ },
+ {
+  "id": "villany",
+  "name": "Villány",
+  "subcategory": "Regional Red",
+  "description": "Hungary's warmest red region, hard against the Croatian border: ripe, structured Cabernet Franc that many argue outperforms the Loire's.",
+  "abv": "13.5–14.5%",
+  "origin": "Baranya, Hungary",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "graphite",
+   "bay leaf",
+   "dark chocolate"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Villány growers pushed for Cabernet Franc to be recognised as their flagship under the local 'Villányi Franc' designation, an unusual case of a region staking its identity on a grape the world associates with somewhere else.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour — these are structured wines with real tannin. Serve cool in a large glass. Cabernet Franc here is riper and denser than the Loire style, with the herbal note folded into dark fruit rather than sitting on top of it.",
+   "pair": [
+    "Roast beef",
+    "Venison",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-site Cabernet Franc and Bordeaux varieties on limestone in southern Hungary.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Franc, with Merlot, Cabernet Sauvignon and Portugieser."
+    },
+    {
+     "label": "Region",
+     "detail": "Villány in southern Hungary, warm and sheltered on limestone slopes."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak, a portion new."
+    }
+   ],
+   "process": "A warm southern climate on limestone ripens Cabernet Franc fully, and extended maceration with oak gives the density and structure the region is known for."
+  }
+ },
+ {
+  "id": "goriska-brda",
+  "name": "Goriška Brda",
+  "subcategory": "White",
+  "description": "The Slovenian half of Collio, split from Italy by a border drawn through the vineyards: textured whites, some of them skin-fermented in the region's amber tradition.",
+  "abv": "12.5–13.5%",
+  "origin": "Primorska, Slovenia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "yellow apple",
+   "almond",
+   "beeswax",
+   "dried herb"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The 1947 border cut the Collio hills in two, leaving identical soils and grapes on either side — the Italian side became famous first, and the Slovenian side spent decades being sold as bulk wine into it.",
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not cold — these are textured whites and over-chilling hides the almond and beeswax. Use a standard white glass, or a larger one for skin-contact bottles. If the wine is amber rather than pale, treat it more like a light red: cooler than room temperature, but with air.",
+   "pair": [
+    "Prosciutto",
+    "Risotto",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Textured Friulian-style whites, some skin-fermented, on marl and sandstone hills.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Rebula (Ribolla Gialla), Friulano, Chardonnay and Pinot Grigio."
+    },
+    {
+     "label": "Region",
+     "detail": "Goriška Brda in western Slovenia, continuous with Italy's Collio."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Ranges from cool stainless fermentation to extended skin contact."
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral oak or large casks; skin-contact wines often see long élevage."
+    }
+   ],
+   "process": "Marl and sandstone hills with a Mediterranean-Alpine climate give ripe but firm whites, made either fresh in stainless or with extended skin contact in the regional amber style."
+  }
+ },
+ {
+  "id": "dingac",
+  "name": "Dingač",
+  "subcategory": "Regional Red",
+  "description": "Croatia's first protected appellation: Plavac Mali from a near-vertical south-facing slope above the Adriatic, powerful and sun-baked.",
+  "abv": "14–15.5%",
+  "origin": "Pelješac, Croatia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried fig",
+   "black cherry",
+   "carob",
+   "sea salt"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Dingač slope was so inaccessible that grapes were carried out by donkey until a tunnel was blasted through the hillside in 1973 — and Plavac Mali was later shown by DNA testing to be a descendant of Zinfandel's ancestor.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass and decant young bottles for an hour. These are high-alcohol, sun-concentrated wines with drying tannin, so they need food with fat. The vineyard gets sunlight three times — direct, reflected off the sea, and radiated from the rock — which is why the wines are as powerful as they are.",
+   "pair": [
+    "Lamb peka",
+    "Grilled red meat",
+    "Aged sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Powerful Plavac Mali from a steep, sun-reflecting coastal slope.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Plavac Mali."
+    },
+    {
+     "label": "Region",
+     "detail": "The Dingač slope on the Pelješac peninsula, facing south over the Adriatic."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with substantial extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak, often large neutral casks."
+    }
+   ],
+   "process": "Triple sun exposure on a steep coastal slope drives sugar very high, producing powerful wines whose tannin is softened by extended cask ageing."
+  }
+ },
+ {
+  "id": "fruska-gora",
+  "name": "Fruška Gora",
+  "subcategory": "White",
+  "description": "Vineyards on a lone mountain rising from the Pannonian plain, worked since Roman times and now making crisp whites and the local Bermet aromatised wine.",
+  "abv": "11.5–13%",
+  "origin": "Vojvodina, Serbia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "linden",
+   "citrus",
+   "herb"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Bermet, a spiced aromatised wine from these slopes, was reportedly on the Titanic's wine list — a claim Serbian producers repeat often and which nobody has firmly disproved.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. The dry whites are light and high-acid and want drinking young. If you meet Bermet instead, treat it like a vermouth — it is fortified and heavily spiced, served in small measures cool, and is a completely different proposition from the table wine.",
+   "pair": [
+    "River fish",
+    "Fresh cheese",
+    "Charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Crisp continental whites from a solitary mountain on the Pannonian plain.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Welschriesling, Riesling Italico, Sauvignon Blanc and Traminac."
+    },
+    {
+     "label": "Region",
+     "detail": "Fruška Gora in Vojvodina, an isolated ridge above the Danube plain."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; bottled young."
+    }
+   ],
+   "process": "A continental climate moderated by the Danube gives high-acid aromatic whites, fermented cold and bottled young to keep their freshness."
+  }
+ },
+ {
+  "id": "dealu-mare",
+  "name": "Dealu Mare",
+  "subcategory": "Regional Red",
+  "description": "'The Big Hill' on the Carpathian foothills: Romania's serious red district, where the indigenous Fetească Neagră gives dark plum and dried herb.",
+  "abv": "13.5–14.5%",
+  "origin": "Muntenia, Romania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black plum",
+   "dried herb",
+   "pepper",
+   "cocoa"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Romania has one of the largest vineyard areas in Europe, well ahead of countries with far bigger reputations — most of its production has simply never been exported.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young bottles briefly. Fetească Neagră sits somewhere between Merlot and Syrah in weight, with a distinctive dried-herb note. The region also makes convincing Cabernet and Merlot, so check which grape you have before pairing.",
+   "pair": [
+    "Grilled pork",
+    "Sarmale",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Indigenous and international reds on south-facing Carpathian foothills.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Fetească Neagră, with Cabernet Sauvignon, Merlot and Băbească Neagră."
+    },
+    {
+     "label": "Region",
+     "detail": "Dealu Mare on the southern slopes of the Carpathian foothills."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, often Romanian."
+    }
+   ],
+   "process": "South-facing foothill slopes with a warm continental climate ripen both native and international varieties, with oak ageing rounding the naturally firm tannin."
+  }
+ },
+ {
+  "id": "cotnari",
+  "name": "Cotnari",
+  "subcategory": "Dessert",
+  "description": "Romania's historic sweet wine from the Grasă grape, once ranked beside Tokaji in European courts and made from nobly rotted grapes in Moldavia.",
+  "abv": "11–13%",
+  "origin": "Moldavia, Romania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "quince",
+   "honey",
+   "acacia",
+   "dried apricot"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Cotnari was served at European courts in the fifteenth century and was said to be a favourite of Stephen the Great of Moldavia; it declined under communism and is only now being rebuilt as a fine wine.",
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Serve chilled in a small glass, in modest measures. Unlike many dessert wines it is not fortified, so it is lighter in alcohol than its sweetness suggests. Aged bottles develop a deep amber colour and a nutty, oxidative note that is characteristic rather than faulty.",
+   "pair": [
+    "Blue cheese",
+    "Apple strudel",
+    "Foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Botrytis-affected sweet wine from indigenous Moldavian varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grasă de Cotnari, with Tămâioasă Românească, Frâncușă and Fetească Albă."
+    },
+    {
+     "label": "Region",
+     "detail": "Cotnari in Romanian Moldavia, where autumn mists encourage noble rot."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Late harvest with noble rot, fermented slowly and stopped with residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Several years in oak or bottle before release."
+    }
+   ],
+   "process": "Autumn humidity encourages botrytis, concentrating sugar and acid, and slow fermentation leaves substantial residual sugar without fortification."
+  }
+ },
+ {
+  "id": "thracian-lowlands",
+  "name": "Thracian Lowlands",
+  "subcategory": "Regional Red",
+  "description": "Bulgaria's warm southern plain, home to the indigenous Mavrud — dense, tannic and spicy, from a country that once exported vast volumes of Cabernet.",
+  "abv": "13–14%",
+  "origin": "Thrace, Bulgaria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackberry",
+   "clove",
+   "tobacco",
+   "dark plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "In the 1980s Bulgaria was among the world's largest wine exporters, shipping enormous volumes of inexpensive Cabernet; the industry collapsed after 1990 and is now rebuilding around native grapes instead.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young Mavrud for an hour — it is a genuinely tannic grape and needs the air. Serve cool in a large glass. Mavrud ages well and the tannin resolves into something silkier after five to eight years, so a young bottle is not showing you the finished wine.",
+   "pair": [
+    "Grilled lamb",
+    "Stuffed peppers",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Indigenous Mavrud and Bordeaux varieties from Bulgaria's warm southern plain.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mavrud, Rubin and Cabernet Sauvignon."
+    },
+    {
+     "label": "Region",
+     "detail": "The Thracian Lowlands of southern Bulgaria, warm and continental."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with long maceration for colour and tannin."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak."
+    }
+   ],
+   "process": "A warm continental plain ripens the late-maturing Mavrud fully, and long maceration extracts the dense tannin that extended oak ageing then softens."
+  }
+ },
+ {
+  "id": "negru-de-purcari",
+  "name": "Negru de Purcari",
+  "subcategory": "Regional Red",
+  "description": "Moldova's most famous red blend, made at Purcari since 1827 and reputedly supplied to both the Russian imperial court and the British monarchy.",
+  "abv": "13.5–14.5%",
+  "origin": "Ștefan Vodă, Moldova",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "leather",
+   "dark chocolate",
+   "spice"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Moldova has one of the highest vineyard-to-land ratios in the world and holds the Mileștii Mici cellars — over 120 miles of underground galleries, recognised as the largest wine cellar on earth.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour. Serve cool in a large glass. The blend leans on the indigenous Rară Neagră alongside Cabernet and Saperavi, which gives it a spicier, more leathery profile than a straight Bordeaux blend — pair it with richer, spiced food accordingly.",
+   "pair": [
+    "Roast lamb",
+    "Beef stew",
+    "Smoked cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A historic Moldovan red blend of indigenous and international varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Saperavi and the indigenous Rară Neagră."
+    },
+    {
+     "label": "Region",
+     "detail": "Purcari in south-eastern Moldova, near the Dniester and the Black Sea."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Varieties fermented separately and blended, with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak."
+    }
+   ],
+   "process": "A continental climate tempered by the Black Sea ripens the blend evenly, and long maceration with oak ageing builds the leathery, spiced structure it is known for."
+  }
+ }
+]

@@ -1,0 +1,100 @@
+[
+ {
+  "id": "australian-sparkling-ale",
+  "name": "Australian Sparkling Ale",
+  "subcategory": "Pale Ale",
+  "description": "Bottle-conditioned, cloudy when roused, and unchanged since the nineteenth century. Australia's one genuinely native beer style, and it predates the country's federation.",
+  "abv": "5.5–5.8%",
+  "origin": "Adelaide, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pear",
+   "green apple",
+   "bready yeast",
+   "peppery hops"
+  ],
+  "glassware": "Pint glass",
+  "funFact": "Coopers has bottle-conditioned it continuously since 1862, and the correct service is to roll the bottle gently before pouring so the yeast sediment goes into the glass rather than staying behind.",
+  "serve": {
+   "temp": "45-50°F, lightly chilled",
+   "glass": "Pint glass",
+   "how": "Roll the bottle on its side — never shake it — to lift the yeast off the bottom, then pour the whole thing in one go so the sediment carries through. Expect a cloudy, lively pour with a persistent head. Serve it cool rather than cold; the pear and apple esters that define the style disappear at lager temperatures.",
+   "pair": [
+    "Fish and chips",
+    "Meat pie",
+    "Sharp cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "A bottle-conditioned pale ale with a distinctive fruity house yeast character.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale malt, kept simple so the yeast leads."
+    },
+    {
+     "label": "Hops",
+     "detail": "Pride of Ringwood, an Australian hop with a firm, resinous bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A century-old house ale strain giving pear and apple esters."
+    },
+    {
+     "label": "Other",
+     "detail": "Live yeast left in the bottle for secondary conditioning."
+    }
+   ],
+   "process": "Warm-fermented with a heritage house strain, then bottled with live yeast to condition naturally rather than being filtered and force-carbonated."
+  }
+ },
+ {
+  "id": "new-zealand-pilsner",
+  "name": "New Zealand Pilsner",
+  "subcategory": "Pale Lager",
+  "description": "A pilsner rebuilt on New Zealand hops: gooseberry, lime leaf and passionfruit over a clean lager base. Tastes tropical without a drop of fruit in it.",
+  "abv": "5–5.8%",
+  "origin": "Nelson, New Zealand",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "gooseberry",
+   "lime",
+   "passionfruit",
+   "crisp malt"
+  ],
+  "glassware": "Pilsner glass or tulip",
+  "funFact": "Nelson Sauvin is named for its resemblance to Sauvignon Blanc, and it is the hop that made this style possible — New Zealand's hop varieties are bred in isolation, giving aromas found nowhere in the European stock.",
+  "serve": {
+   "temp": "42-46°F, chilled",
+   "glass": "Pilsner glass or tulip",
+   "how": "Serve chilled but not ice-cold, in a glass with some taper to gather the aroma — the hop character is the whole point and a straight tumbler throws it away. Pour to a firm head. Drink it fresh; New Zealand hop aromatics fade faster than European ones, and a year-old bottle is a different and lesser beer.",
+   "pair": [
+    "Green-lipped mussels",
+    "Grilled white fish",
+    "Goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A clean lager base carrying intensely aromatic New Zealand hop varieties.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale pilsner malt, deliberately neutral."
+    },
+    {
+     "label": "Hops",
+     "detail": "Nelson Sauvin, Motueka and Riwaka, late and generous."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast fermented cold for a clean backdrop."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — the hops carry the entire identity."
+    }
+   ],
+   "process": "Cold lager fermentation with heavy late and whirlpool hopping, lagered briefly so the aromatics survive."
+  }
+ }
+]

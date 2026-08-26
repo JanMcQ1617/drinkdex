@@ -49311,5 +49311,4798 @@
    "garnish": "None",
    "method": "infused"
   }
+ },
+ {
+  "id": "sahti",
+  "name": "Sahti",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Finland's living-fossil farmhouse ale: rye and juniper, strained through a hollowed spruce trough, never boiled and never hopped much. Banana, juniper and bread.",
+  "abv": "7–9%",
+  "origin": "Häme, Finland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "banana",
+   "juniper",
+   "rye bread",
+   "clove"
+  ],
+  "glassware": "Ceramic mug or handled tankard",
+  "funFact": "Sahti is unboiled and unfiltered, so it stays cloudy and perishable — it is one of the very few beer styles the EU has granted protected traditional status, and it barely travels.",
+  "dexNumber": 943,
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug or handled tankard",
+   "how": "Pour gently into a mug and expect almost no head — sahti is nearly still, and a big foam would mean something went wrong. Serve it cool rather than cold so the banana esters and juniper resin come forward together; ice-cold sahti tastes like flat bread. Drink it fresh, within days if you can, because there is no boil and no real hop cover to protect it.",
+   "pair": [
+    "Salted fish",
+    "Rye bread and butter",
+    "Smoked ham"
+   ]
+  },
+  "composition": {
+   "summary": "An unboiled rye-and-barley farmhouse ale flavoured and filtered by juniper.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a large proportion of rye, sometimes oats."
+    },
+    {
+     "label": "Hops",
+     "detail": "Almost none — juniper branches do the preserving and seasoning instead."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Traditionally baker's yeast, fermented warm, which is where the banana comes from."
+    },
+    {
+     "label": "Other",
+     "detail": "Fresh juniper twigs and berries, used both as flavour and as the filter bed."
+    }
+   ],
+   "process": "The mash is lautered through juniper branches laid in a hollowed log trough, then fermented warm with baker's yeast and drunk young without boiling."
+  }
+ },
+ {
+  "id": "gotlandsdricka",
+  "name": "Gotlandsdricka",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Sahti's Swedish cousin from the island of Gotland: smoked malt, juniper and a farmhouse yeast character, brewed at home for centuries and almost nowhere else.",
+  "abv": "5–8%",
+  "origin": "Gotland, Sweden",
+  "rarity": "rare",
+  "tastingNotes": [
+   "smoke",
+   "juniper",
+   "honey",
+   "rye"
+  ],
+  "glassware": "Ceramic mug",
+  "funFact": "Gotland farmers brewed it for holidays and haymaking under a customary right that survived Sweden's alcohol monopoly; the recipes stayed inside families rather than breweries.",
+  "dexNumber": 944,
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug",
+   "how": "Serve it cool and still, in a mug rather than a glass, and expect a hazy amber pour with very little foam. Let it sit a minute so the smoke settles behind the juniper instead of dominating it. Like sahti it is meant to be drunk young and local, so treat a bottle as perishable rather than something to age.",
+   "pair": [
+    "Smoked lamb",
+    "Hard cheese",
+    "Rye crispbread"
+   ]
+  },
+  "composition": {
+   "summary": "A smoked, juniper-infused farmhouse ale from Gotland, fermented warm with a farmhouse yeast.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Home-smoked barley malt, often with rye and a little honey."
+    },
+    {
+     "label": "Hops",
+     "detail": "Sparing — juniper carries most of the seasoning."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Farmhouse or baker's yeast worked warm, giving spice and stone fruit."
+    },
+    {
+     "label": "Other",
+     "detail": "Juniper branches for both flavour and lautering."
+    }
+   ],
+   "process": "Malt is dried over an open wood fire, mashed and strained through juniper, then fermented warm and served within weeks."
+  }
+ },
+ {
+  "id": "malt-l",
+  "name": "Maltøl",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Norwegian farmhouse ale fermented with kveik — a hardy house yeast pitched blisteringly hot that finishes clean in two days and tastes of orange and stone fruit.",
+  "abv": "6–9%",
+  "origin": "Western Norway",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange peel",
+   "apricot",
+   "juniper",
+   "caramel"
+  ],
+  "glassware": "Wooden bowl or tankard",
+  "funFact": "Kveik yeast was kept alive on dried wooden rings passed down through Norwegian farm families for generations; when brewers rediscovered it in the 2010s it changed brewing worldwide, because it ferments cleanly at 35–40°C.",
+  "dexNumber": 945,
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Wooden bowl or tankard",
+   "how": "Pour into a wide vessel and give it a moment — the aroma is the point, and kveik throws citrus and stone fruit that a narrow glass hides. Serve cool rather than cold, since the warmth of the ferment leaves a rounded malt body that goes flat and thin under refrigeration. Traditionally it is passed around a shared bowl rather than poured into individual glasses.",
+   "pair": [
+    "Cured mutton",
+    "Brown cheese",
+    "Flatbread"
+   ]
+  },
+  "composition": {
+   "summary": "A strong, juniper-tinged farmhouse ale fermented very warm with heritage kveik yeast.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale barley malt, often with a caramelised or long-boiled wort for colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Minimal, with juniper infusion standing in for much of the character."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Kveik — a heritage farmhouse culture pitched at 35–40°C that finishes in days."
+    },
+    {
+     "label": "Other",
+     "detail": "Juniper infusion water used for mashing and sparging."
+    }
+   ],
+   "process": "Mashed with juniper infusion, sometimes with a long caramelising boil, then fermented hot with kveik and drunk fresh."
+  }
+ },
+ {
+  "id": "koduolu",
+  "name": "Koduõlu",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Estonian island home-brew: unboiled, juniper-strained and fermented warm, closer to liquid rye bread than to anything on a modern taplist.",
+  "abv": "5–7%",
+  "origin": "Saaremaa, Estonia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye bread",
+   "juniper",
+   "banana",
+   "earthy"
+  ],
+  "glassware": "Ceramic mug",
+  "funFact": "On Saaremaa and Hiiumaa, koduõlu was brewed for weddings and midsummer by designated village brewers, and the tradition survived the Soviet period largely because it was never commercial.",
+  "dexNumber": 946,
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug",
+   "how": "Serve cool and flat in a mug — carbonation is minimal and a head is not expected. Give it a few minutes out of the cold so the bready malt and juniper open up; too cold and all you get is sourness. It is brewed to be drunk within days of being made, so freshness matters more than any serving detail.",
+   "pair": [
+    "Black bread",
+    "Salted pork",
+    "Smoked fish"
+   ]
+  },
+  "composition": {
+   "summary": "An unboiled Estonian farmhouse ale strained through juniper and fermented warm.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with rye, often home-malted."
+    },
+    {
+     "label": "Hops",
+     "detail": "Very low, sometimes none at all."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Farmhouse or baker's yeast, warm-fermented for banana and spice."
+    },
+    {
+     "label": "Other",
+     "detail": "Juniper branches in the lauter and juniper water in the mash."
+    }
+   ],
+   "process": "Mashed, strained through juniper without boiling, fermented warm for a couple of days and served young."
+  }
+ },
+ {
+  "id": "kaimiskas",
+  "name": "Kaimiškas",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Lithuania's village farmhouse beer: unfiltered, raw, and fermented with a house yeast that leaves it honeyed and faintly tart. The northern Biržai region is its heartland.",
+  "abv": "5–7%",
+  "origin": "Biržai, Lithuania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "hay",
+   "bread crust",
+   "tart"
+  ],
+  "glassware": "Ceramic mug or straight glass",
+  "funFact": "Lithuanian farmhouse brewing survived unbroken through the twentieth century, which makes it one of the few living raw-ale traditions in Europe; Biržai alone has a cluster of legally operating village breweries.",
+  "dexNumber": 947,
+  "serve": {
+   "temp": "48-54°F, cellar cool",
+   "glass": "Ceramic mug or straight glass",
+   "how": "Pour into a plain glass and expect haze and a soft, low carbonation. Serve cool but not cold so the honeyed malt and the faint lactic edge stay in balance. These beers are raw — never boiled — so drink them fresh and do not expect the shelf stability of a modern lager.",
+   "pair": [
+    "Smoked pork",
+    "Rye bread",
+    "Curd cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A raw, unboiled Lithuanian village ale fermented with a local farmhouse yeast.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale barley malt, often with a portion of unmalted grain."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low, boiled separately as a tea and added rather than boiled in the wort."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Regional farmhouse strains that finish honeyed and lightly tart."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing beyond the grain — this is a deliberately plain beer."
+    }
+   ],
+   "process": "The wort is not boiled; hops are added as a separate infusion, and fermentation runs warm with a house culture before the beer is served young."
+  }
+ },
+ {
+  "id": "keptinis",
+  "name": "Keptinis",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Lithuanian baked beer: the mash is shaped into loaves, baked in a bread oven until dark, then brewed. Tastes of crust, caramel and smoke without any smoked malt.",
+  "abv": "5–7%",
+  "origin": "Lithuania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bread crust",
+   "caramel",
+   "toffee",
+   "roast"
+  ],
+  "glassware": "Ceramic mug",
+  "funFact": "The baking step replaces a kiln — the mash literally goes into the oven as loaves before being returned to water, which is why keptinis tastes roasted despite using pale malt.",
+  "dexNumber": 948,
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug",
+   "how": "Serve cool in a mug so the bread-crust aroma comes off the surface. Expect a dark, hazy beer with modest carbonation and a long toasty finish. It rewards slow drinking at cellar temperature; cold suppresses exactly the baked-crust character that makes it worth brewing this way.",
+   "pair": [
+    "Roast pork",
+    "Dark rye bread",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A farmhouse ale whose mash is baked into loaves before brewing, giving deep crust flavour.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale barley malt, transformed by baking rather than by kilning."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low, added as an infusion in the farmhouse manner."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lithuanian farmhouse yeast, warm-fermented."
+    },
+    {
+     "label": "Other",
+     "detail": "The oven itself — the baking step is the defining ingredient."
+    }
+   ],
+   "process": "The mash is formed into loaves and baked until dark, then broken back into hot water, lautered, and fermented warm without a conventional boil."
+  }
+ },
+ {
+  "id": "czech-amber-lager",
+  "name": "Czech Amber Lager",
+  "category": "beer",
+  "subcategory": "Amber & Dark Lager",
+  "description": "Polotmavé — the 'half-dark' lager sitting between Czech pale and Czech dark. Caramel and Saaz hops, decoction-rich, and almost unknown outside Bohemia.",
+  "abv": "4.5–5.8%",
+  "origin": "Bohemia, Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "caramel",
+   "toasted bread",
+   "spicy hops",
+   "soft water"
+  ],
+  "glassware": "Czech mug or pilsner glass",
+  "funFact": "Czech beer law grades lagers by original gravity rather than colour or strength, and polotmavé is a recognised category in its own right — a distinction most brewing countries never made.",
+  "dexNumber": 949,
+  "serve": {
+   "temp": "45-48°F, lightly chilled",
+   "glass": "Czech mug or pilsner glass",
+   "how": "Pour hard down the middle to raise a thick, creamy head — Czech service treats foam as part of the drink, not a byproduct. Serve a touch warmer than a mass-market lager so the caramel malt and the peppery Saaz character both register. If you can get it on a side-pull tap, order it with a dense wet foam cap and drink through it.",
+   "pair": [
+    "Roast duck",
+    "Dumplings and gravy",
+    "Aged Gouda"
+   ]
+  },
+  "composition": {
+   "summary": "A decoction-mashed amber lager balancing caramel malt against Czech Saaz hops.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Bohemian floor-malted barley with caramel and Munich malts."
+    },
+    {
+     "label": "Hops",
+     "detail": "Saaz, in generous late additions for spice rather than bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Czech lager yeast, fermented cold and lagered for weeks."
+    },
+    {
+     "label": "Other",
+     "detail": "Extremely soft Bohemian water, which is why the bitterness lands round."
+    }
+   ],
+   "process": "Double or triple decoction mashing builds the malt depth, followed by cold fermentation and a long cold lagering."
+  }
+ },
+ {
+  "id": "kvass",
+  "name": "Kvass",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Fermented rye bread, barely alcoholic, sold from street tankers all summer. Sour, sweet and bready — a soft drink by law and a beer by method.",
+  "abv": "0.5–1.5%",
+  "origin": "Russia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rye bread",
+   "sour",
+   "raisin",
+   "malt"
+  ],
+  "glassware": "Tall glass or plastic cup",
+  "funFact": "Kvass is classified as a soft drink across most of Eastern Europe because it usually finishes under 1.2% ABV, which is how it stayed legal and ubiquitous through every temperance campaign.",
+  "dexNumber": 950,
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Tall glass or plastic cup",
+   "how": "Serve very cold in a tall glass, straight from the fridge or the tanker. Expect a hazy brown pour with a fine, short-lived foam and a distinctly sour-sweet bread aroma. Drink it fast on a hot day — it is a thirst-quencher rather than a sipper, and it flattens quickly once poured.",
+   "pair": [
+    "Cold beetroot soup",
+    "Salted cucumber",
+    "Black bread"
+   ]
+  },
+  "composition": {
+   "summary": "A low-alcohol lactic ferment of rye bread and water, sweetened and drunk young.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Rye bread or rye malt, often toasted dark before steeping."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A mixed yeast and lactic culture that leaves it sour and barely alcoholic."
+    },
+    {
+     "label": "Other",
+     "detail": "Sugar or raisins to feed the ferment and round the finish."
+    }
+   ],
+   "process": "Toasted rye bread is steeped, sweetened and fermented briefly with a mixed culture, then chilled and drunk within days."
+  }
+ },
+ {
+  "id": "belgian-amber-ale",
+  "name": "Belgian Amber Ale",
+  "category": "beer",
+  "subcategory": "Amber & Red Ale",
+  "description": "Antwerp's house beer: copper-coloured, lightly fruity and built for the second and third glass. Ordered by the glass shape rather than the name.",
+  "abv": "5–5.5%",
+  "origin": "Antwerp, Belgium",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "toasted malt",
+   "orange peel",
+   "soft bitterness",
+   "biscuit"
+  ],
+  "glassware": "Stemmed bolleke glass",
+  "funFact": "In Antwerp you order it by asking for a 'bolleke' — the round stemmed glass — rather than by the brewery's name, which is one of the few places a glass has become the name of the drink.",
+  "dexNumber": 951,
+  "serve": {
+   "temp": "45-48°F, lightly chilled",
+   "glass": "Stemmed bolleke glass",
+   "how": "Serve in a round stemmed glass, filled to leave a proper two fingers of foam, and drink it cool rather than cold. The malt is the point: toasted and biscuity with just enough hop to keep it moving. It is a session beer by Belgian standards, so pour it with the expectation of ordering another rather than contemplating one.",
+   "pair": [
+    "Steak frites",
+    "Mussels",
+    "Aged Gouda"
+   ]
+  },
+  "composition": {
+   "summary": "A copper Belgian ale balancing toasted malt against a restrained ale-yeast fruitiness.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale and Vienna malts with a touch of caramel for copper colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Continental hops at modest, balancing levels."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A Belgian ale strain kept deliberately restrained — fruit, not spice."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — this is a plain beer by Belgian standards."
+    }
+   ],
+   "process": "Warm-fermented with a house Belgian strain and conditioned cool so the malt stays forward."
+  }
+ },
+ {
+  "id": "bokbier",
+  "name": "Bokbier",
+  "category": "beer",
+  "subcategory": "Bock",
+  "description": "The Dutch autumn bock: dark, malty and released each October, when the whole country's breweries put one out at once.",
+  "abv": "6.5–7.5%",
+  "origin": "Netherlands",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "caramel",
+   "raisin",
+   "toast",
+   "dark bread"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Dutch bokbier is a seasonal event rather than a year-round style — the Bokbierfestival in Amsterdam exists to taste the year's releases side by side, and most disappear by December.",
+  "dexNumber": 952,
+  "serve": {
+   "temp": "48-54°F, cellar cool",
+   "glass": "Tulip glass",
+   "how": "Serve cool rather than cold, in a tulip that holds the malt aroma. Pour to a modest head and give it a few minutes; the raisin and toast notes need a little warmth to separate from the alcohol. It is an autumn beer by design and pairs with the heavier food of that season rather than anything light.",
+   "pair": [
+    "Stamppot",
+    "Aged cheese",
+    "Roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "A dark, malt-forward seasonal lager brewed to a bock strength.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Munich and caramel malts over a pale base for depth and colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low, present only to keep the malt from cloying."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast, cold-fermented and lagered."
+    },
+    {
+     "label": "Other",
+     "detail": "Seasonal release — traditionally brewed for autumn only."
+    }
+   ],
+   "process": "Cold-fermented on a heavy Munich-and-caramel grist, then lagered for weeks before an autumn release."
+  }
+ },
+ {
+  "id": "biere-bretonne",
+  "name": "Bière Bretonne",
+  "category": "beer",
+  "subcategory": "Farmhouse Ale",
+  "description": "Brittany's revived brewing tradition: often buckwheat-inflected, sometimes seaweed-salted, and always defined against the cider the region is better known for.",
+  "abv": "5–6.5%",
+  "origin": "Brittany, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "buckwheat",
+   "toast",
+   "faint salinity",
+   "herbal"
+  ],
+  "glassware": "Chalice or tumbler",
+  "funFact": "Breton brewing was effectively extinct by the 1970s and was rebuilt from scratch in the 1980s as part of the wider Breton cultural revival — the beers carry Breton-language names as a deliberate political statement.",
+  "dexNumber": 953,
+  "serve": {
+   "temp": "48-52°F, cellar cool",
+   "glass": "Chalice or tumbler",
+   "how": "Serve cool in a wide glass so the buckwheat and toasted character can open. Expect an amber to dark pour with a soft, bready body rather than a crisp one. It suits the region's food directly — buckwheat galettes and shellfish — and drinks better alongside a meal than on its own.",
+   "pair": [
+    "Buckwheat galettes",
+    "Oysters",
+    "Salted butter caramel"
+   ]
+  },
+  "composition": {
+   "summary": "A revived regional French ale often built on buckwheat alongside barley malt.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a proportion of buckwheat, the regional grain."
+    },
+    {
+     "label": "Hops",
+     "detail": "Continental, moderate and herbal rather than citric."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Ale yeast fermented warm for a soft, bready profile."
+    },
+    {
+     "label": "Other",
+     "detail": "Occasionally seaweed or salt, reflecting the coastal setting."
+    }
+   ],
+   "process": "Warm ale fermentation on a mixed barley-and-buckwheat grist, conditioned briefly and sold regionally."
+  }
+ },
+ {
+  "id": "bia-hoi",
+  "name": "Bia Hơi",
+  "category": "beer",
+  "subcategory": "Pale Lager",
+  "description": "Vietnam's fresh draught: brewed daily, delivered in kegs by moped, drunk on a plastic stool by the afternoon. Unpasteurised, barely carbonated, cheap as water.",
+  "abv": "3–4%",
+  "origin": "Hanoi, Vietnam",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "light malt",
+   "faint rice",
+   "crisp",
+   "grassy"
+  ],
+  "glassware": "Straight glass with ice",
+  "funFact": "Bia hơi has no shelf life at all — it is brewed, delivered and drunk within about 24 hours, which is why it exists only in Vietnam and why every street corner has its own supplier.",
+  "dexNumber": 954,
+  "serve": {
+   "temp": "Cold, over ice",
+   "glass": "Straight glass with ice",
+   "how": "Serve it very cold, and do not be alarmed when ice goes in the glass — that is the local custom and the beer is brewed light enough to take it. Pour into a plain glass with no expectation of head. Drink it the day it was made; there is no pasteurisation, no filtration and no attempt at stability, which is exactly the trade-off that makes it taste fresh.",
+   "pair": [
+    "Nem chua",
+    "Grilled pork skewers",
+    "Peanuts"
+   ]
+  },
+  "composition": {
+   "summary": "An unpasteurised, low-strength draught lager brewed for immediate consumption.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt cut generously with rice for lightness."
+    },
+    {
+     "label": "Hops",
+     "detail": "Minimal — just enough to keep it from tasting flabby."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A fast lager strain, fermented and shipped within days."
+    },
+    {
+     "label": "Other",
+     "detail": "No pasteurisation and no filtration, which is the defining choice."
+    }
+   ],
+   "process": "Fermented quickly, kegged unpasteurised and delivered the same day to be drunk before it can stale."
+  }
+ },
+ {
+  "id": "happoshu",
+  "name": "Happoshu",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Japan's tax-engineered beer: deliberately brewed below the malt threshold that triggers the higher beer duty. A category invented by accountants and perfected by brewers.",
+  "abv": "4–5.5%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "light malt",
+   "crisp",
+   "faint sweetness"
+  ],
+  "glassware": "Tall slim glass",
+  "funFact": "Japanese liquor tax scales with malt content, so brewers reformulated below 67% malt to sell cheaper — the government kept lowering the bracket, and brewers kept reformulating, producing a genuine arms race in beer law.",
+  "dexNumber": 955,
+  "serve": {
+   "temp": "38-42°F, well chilled",
+   "glass": "Tall slim glass",
+   "how": "Serve very cold in a tall, narrow glass to hold what head there is. Pour with a bit of height to build foam, because the reduced malt gives a thinner body that benefits from the texture. It is engineered for refreshment rather than complexity, so drink it cold and fast alongside food rather than contemplating it.",
+   "pair": [
+    "Karaage",
+    "Edamame",
+    "Yakitori"
+   ]
+  },
+  "composition": {
+   "summary": "A low-malt beer-like beverage formulated to sit under Japan's malt-based tax threshold.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Under the legal malt threshold, supplemented with barley, corn or pea protein."
+    },
+    {
+     "label": "Hops",
+     "detail": "Light, clean and restrained."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Standard Japanese lager yeast, fermented cold."
+    },
+    {
+     "label": "Other",
+     "detail": "Adjuncts chosen as much for tax law as for flavour."
+    }
+   ],
+   "process": "Brewed as a lager but with the malt bill kept deliberately below the taxable percentage, then fermented cold and filtered bright."
+  }
+ },
+ {
+  "id": "filipino-pale-pilsen",
+  "name": "Filipino Pale Pilsen",
+  "category": "beer",
+  "subcategory": "Pale Lager",
+  "description": "A deep-golden, all-malt pilsen with more bitterness than most tropical lagers dare — the Philippines' national beer since 1890 and still poured in stubby brown bottles.",
+  "abv": "5%",
+  "origin": "Manila, Philippines",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "toasted grain",
+   "firm bitterness",
+   "bread",
+   "dry"
+  ],
+  "glassware": "Stubby bottle or small glass",
+  "funFact": "San Miguel began brewing it in 1890 under a royal grant from Spain, making it the first brewery in Southeast Asia — the Philippine company later ended up owning the Spanish brand that named it.",
+  "dexNumber": 956,
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Stubby bottle or small glass",
+   "how": "Serve cold from the bottle into a small glass, refilling often so it never warms — the Filipino habit of sharing one bottle around a table of small glasses exists for exactly that reason. Expect a firmer, drier bitterness than a typical tropical lager. It stands up to fried and vinegary food better than lighter lagers do.",
+   "pair": [
+    "Lechon",
+    "Sisig",
+    "Fried fish with vinegar"
+   ]
+  },
+  "composition": {
+   "summary": "An all-malt pale lager with assertive hopping, brewed in the Philippines since 1890.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "All barley malt, with no rice or corn adjunct."
+    },
+    {
+     "label": "Hops",
+     "detail": "Noble-style hopping at a level that reads genuinely bitter."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast fermented cool and conditioned."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — the absence of adjunct is the point of the style."
+    }
+   ],
+   "process": "A conventional cold lager fermentation, distinguished by an all-malt grist and a bitterness level unusual for the tropics."
+  }
+ },
+ {
+  "id": "lion-stout",
+  "name": "Lion Stout",
+  "category": "beer",
+  "subcategory": "Stout",
+  "description": "A full-strength tropical stout brewed at altitude in Sri Lanka and once dispensed from wooden casks in Kandy. Coffee, liquorice and dark fruit at eight percent.",
+  "abv": "8–8.8%",
+  "origin": "Biyagama, Sri Lanka",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coffee",
+   "liquorice",
+   "dark chocolate",
+   "raisin"
+  ],
+  "glassware": "Snifter or half-pint",
+  "funFact": "Sri Lanka's stout tradition is a colonial inheritance that outlived its origin — Lion Stout was long served hand-pumped from wooden casks in hill-country pubs, a serving method Britain itself had largely abandoned.",
+  "dexNumber": 957,
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Snifter or half-pint",
+   "how": "Serve cool rather than cold — at fridge temperature the coffee and dark fruit shut down completely. Pour into a snifter or a half-pint and give it ten minutes to open. At eight percent it is a sipping beer despite the tropical climate it was brewed for, and it takes sweet and spiced food better than it takes anything delicate.",
+   "pair": [
+    "Dark chocolate",
+    "Sri Lankan curry",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A strong tropical stout built on roasted barley and dark crystal malt.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale malt with roasted barley, chocolate and crystal malts."
+    },
+    {
+     "label": "Hops",
+     "detail": "Enough to balance a heavy dark grist, no more."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Ale yeast fermented warm in a tropical climate."
+    },
+    {
+     "label": "Other",
+     "detail": "Historically wooden cask conditioning, now largely bottled."
+    }
+   ],
+   "process": "Warm ale fermentation on a heavily roasted grist, conditioned to soften the roast into coffee and dried fruit."
+  }
+ },
+ {
+  "id": "indian-strong-beer",
+  "name": "Indian Strong Beer",
+  "category": "beer",
+  "subcategory": "Pale Lager",
+  "description": "India's dominant beer category: a high-strength lager built for maximum effect per rupee, sold in 650ml bottles and drunk very cold.",
+  "abv": "7–8%",
+  "origin": "India",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sweet malt",
+   "alcohol warmth",
+   "grain",
+   "faint hop"
+  ],
+  "glassware": "Tall glass, well chilled",
+  "funFact": "Strong beer accounts for the large majority of Indian beer sales — state excise structures and pricing make a 7–8% bottle better value than a 5% one, which is why the mild lagers barely sell.",
+  "dexNumber": 958,
+  "serve": {
+   "temp": "36-40°F, very cold",
+   "glass": "Tall glass, well chilled",
+   "how": "Serve extremely cold in a tall glass — this is a style that is helped rather than harmed by low temperature, since chilling mutes the alcohol and the sweetness. Pour into a chilled glass and refill from the large bottle as you go. Drink it with heavily spiced food, where its residual sweetness works as a counterweight to chilli heat.",
+   "pair": [
+    "Tandoori chicken",
+    "Chilli paneer",
+    "Spiced fried snacks"
+   ]
+  },
+  "composition": {
+   "summary": "A high-gravity pale lager brewed for strength, with adjuncts keeping the body drinkable.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a large adjunct fraction of rice or maize."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low — bitterness is not the selling point."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast pushed to a high final alcohol."
+    },
+    {
+     "label": "Other",
+     "detail": "Adjuncts that raise strength without adding heaviness."
+    }
+   ],
+   "process": "A high-gravity cold fermentation with substantial adjunct, filtered bright and bottled at strength."
+  }
+ },
+ {
+  "id": "chang",
+  "name": "Chang",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Himalayan grain beer of millet, barley or rice, fermented in a tub and drunk warm at altitude. Sour, cloudy and served with a wooden ladle.",
+  "abv": "3–6%",
+  "origin": "Himalayan Nepal and Tibet",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "millet",
+   "yeasty",
+   "warm grain"
+  ],
+  "glassware": "Wooden or brass vessel",
+  "funFact": "At Himalayan altitude chang is drunk warm rather than cold, and often topped repeatedly with hot water from the same grain — the same practice as Nepali tongba, of which chang is the wider family.",
+  "dexNumber": 959,
+  "serve": {
+   "temp": "Warm, roughly 105°F",
+   "glass": "Wooden or brass vessel",
+   "how": "Serve warm rather than chilled — this is a cold-climate beer and refrigeration makes no sense at four thousand metres. Ladle it cloudy from the vessel, sediment and all. Expect a sour, bready ferment rather than anything crisp, and treat it as food as much as drink; it is calorie-dense by design.",
+   "pair": [
+    "Momos",
+    "Dried yak cheese",
+    "Tsampa"
+   ]
+  },
+  "composition": {
+   "summary": "A warm-served Himalayan grain beer fermented with a wild starter cake.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Millet, barley or rice, cooked rather than malted in the European sense."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A dried starter cake carrying both yeast and mould cultures."
+    },
+    {
+     "label": "Other",
+     "detail": "Hot water added repeatedly to the same grain bed."
+    }
+   ],
+   "process": "Cooked grain is inoculated with a starter cake, fermented for several days in a covered tub, then served warm and cloudy."
+  }
+ },
+ {
+  "id": "chinese-rice-lager",
+  "name": "Chinese Rice Lager",
+  "category": "beer",
+  "subcategory": "Pale Lager",
+  "description": "The best-selling beer style on earth by volume, and almost nobody outside China thinks about it: pale, light-bodied, rice-heavy and brewed for drinking with food.",
+  "abv": "3.6–4.5%",
+  "origin": "China",
+  "rarity": "common",
+  "tastingNotes": [
+   "light grain",
+   "faint rice sweetness",
+   "crisp",
+   "low bitterness"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Snow, brewed in China, sells more volume than any other beer brand in the world — largely unknown outside the country because virtually all of it is drunk domestically.",
+  "dexNumber": 960,
+  "serve": {
+   "temp": "38-42°F, well chilled",
+   "glass": "Small glass",
+   "how": "Serve cold in a small glass and refill often — Chinese table service pours small measures for repeated toasts rather than a single large glass. Expect very light body, low bitterness and a clean finish. It is engineered to sit under strongly flavoured food rather than compete with it, which is exactly what it does well.",
+   "pair": [
+    "Sichuan hotpot",
+    "Dumplings",
+    "Salt-and-pepper squid"
+   ]
+  },
+  "composition": {
+   "summary": "A very light pale lager built on a large proportion of rice adjunct.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a substantial rice fraction for lightness."
+    },
+    {
+     "label": "Hops",
+     "detail": "Very low — bitterness is minimised deliberately."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean lager yeast, cold-fermented and filtered bright."
+    },
+    {
+     "label": "Other",
+     "detail": "Rice, which thins the body and lightens the colour."
+    }
+   ],
+   "process": "Cold fermentation on a rice-heavy grist, filtered bright and pasteurised for a light, neutral beer."
+  }
+ },
+ {
+  "id": "umqombothi",
+  "name": "Umqombothi",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Sorghum and maize beer, thick and porridge-like, brewed at home for ceremonies. Drunk from a shared clay pot passed clockwise.",
+  "abv": "2–4%",
+  "origin": "South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "sorghum",
+   "yoghurt",
+   "earthy"
+  ],
+  "glassware": "Clay pot (ukhamba), shared",
+  "funFact": "Umqombothi is central to Xhosa and Zulu ceremony — brewing it is how ancestors are honoured at weddings and funerals, so the beer is a ritual object as much as a drink.",
+  "dexNumber": 961,
+  "serve": {
+   "temp": "Ambient temperature",
+   "glass": "Clay pot (ukhamba), shared",
+   "how": "Serve at room temperature from a communal clay pot, never chilled and never individually glassed. Stir before serving, since the solids settle fast and the texture is part of it — this is a beer you can almost eat. Protocol matters: the pot is passed in one direction and the brewer or elder drinks first.",
+   "pair": [
+    "Grilled meat",
+    "Maize porridge",
+    "Samp and beans"
+   ]
+  },
+  "composition": {
+   "summary": "A thick, sour sorghum-and-maize beer fermented with wild lactic cultures.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Sorghum malt with unmalted maize meal."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast alongside lactic bacteria, giving a yoghurt-like sourness."
+    },
+    {
+     "label": "Other",
+     "detail": "The beer is served unfiltered, with the grain solids still suspended."
+    }
+   ],
+   "process": "Maize meal and sorghum malt are cooked, soured overnight, boiled and then fermented for a day or two before being drunk immediately, still actively fermenting."
+  }
+ },
+ {
+  "id": "tella",
+  "name": "Tella",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Ethiopia's home-brewed beer, made with gesho instead of hops and often flavoured by the smoked gourd it ferments in. Smoky, sour and served in a flask.",
+  "abv": "2–5%",
+  "origin": "Ethiopia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "smoke",
+   "sour",
+   "bitter herb",
+   "grain"
+  ],
+  "glassware": "Berele flask or tumbler",
+  "funFact": "Gesho — the same buckthorn that bitters tej honey wine — stands in for hops, and the fermenting vessel is often smoked with olive wood, which is where the beer's signature smokiness comes from.",
+  "dexNumber": 962,
+  "serve": {
+   "temp": "Ambient to cellar cool",
+   "glass": "Berele flask or tumbler",
+   "how": "Serve cool or at ambient temperature in a flask or plain glass, cloudy and unfiltered. Expect smoke on the nose before anything else, then a dry, grainy sourness. It is a house beer rather than a bar beer, so treat variation between batches as the point rather than a fault.",
+   "pair": [
+    "Injera and wat",
+    "Grilled meat",
+    "Roasted barley"
+   ]
+  },
+  "composition": {
+   "summary": "A smoky, gesho-bittered grain beer fermented in a smoke-cured vessel.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley, often with teff, sorghum or maize."
+    },
+    {
+     "label": "Hops",
+     "detail": "None — gesho, a native buckthorn, provides the bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild fermentation from the vessel and the environment."
+    },
+    {
+     "label": "Other",
+     "detail": "The clay or gourd vessel, cured with olive-wood smoke."
+    }
+   ],
+   "process": "Roasted grain and gesho are fermented together in a smoke-cured vessel for several days to a week, then served unfiltered."
+  }
+ },
+ {
+  "id": "bouza",
+  "name": "Bouza",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "A thick, living grain beer with a claim to being among the oldest continuously made brews on earth — closer to the beer of the pharaohs than anything with hops in it.",
+  "abv": "3–5%",
+  "origin": "Egypt and Sudan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour dough",
+   "wheat",
+   "yeasty",
+   "earthy"
+  ],
+  "glassware": "Tumbler or bowl",
+  "funFact": "Bouza is made by fermenting partly baked bread loaves, a method archaeologists recognise from ancient Egyptian brewing scenes — the bread is the mash, not an ingredient added to it.",
+  "dexNumber": 963,
+  "serve": {
+   "temp": "Ambient to lightly chilled",
+   "glass": "Tumbler or bowl",
+   "how": "Serve at ambient temperature in a plain vessel — it is thick, opaque and still actively fermenting, so a sealed bottle is a bad idea. Stir before pouring since it separates fast. Expect something between beer and liquid bread, sour and yeasty rather than crisp.",
+   "pair": [
+    "Flatbread",
+    "Grilled lamb",
+    "Salted cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A live, unfiltered wheat beer fermented from partially baked bread loaves.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Coarsely ground wheat, part of it malted, part baked into loaves."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild and carried-over yeast, left active in the finished beer."
+    },
+    {
+     "label": "Other",
+     "detail": "The bread loaves themselves, which supply both starch and fermentation."
+    }
+   ],
+   "process": "Loaves of lightly baked wheat bread are crumbled into water with malted wheat and fermented for a day or two, then drunk while still cloudy and active."
+  }
+ },
+ {
+  "id": "chibuku",
+  "name": "Chibuku",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Opaque sorghum beer sold in a waxed carton you shake before opening. Still fermenting on the shelf, sour and porridge-thick — 'shake shake' is its actual nickname.",
+  "abv": "3–4%",
+  "origin": "Zimbabwe and Zambia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "sorghum",
+   "porridge",
+   "yeasty"
+  ],
+  "glassware": "The carton itself, shaken",
+  "funFact": "The carton is deliberately unsealed so the still-active fermentation can vent — a sealed container would burst, which is why Chibuku is one of the few commercial beers that cannot be bottled.",
+  "dexNumber": 964,
+  "serve": {
+   "temp": "Ambient to lightly chilled",
+   "glass": "The carton itself, shaken",
+   "how": "Shake the carton hard before opening to resuspend the solids, then drink straight from it — that is the intended vessel and pouring into a glass gains nothing. Expect it thick, sour and actively fizzing. Its shelf life is measured in days, and it keeps getting sourer and stronger the whole time.",
+   "pair": [
+    "Grilled meat",
+    "Sadza",
+    "Salted groundnuts"
+   ]
+  },
+  "composition": {
+   "summary": "A commercially produced opaque sorghum beer sold while still actively fermenting.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Sorghum malt with maize meal."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild and pitched yeast alongside lactic bacteria."
+    },
+    {
+     "label": "Other",
+     "detail": "Sold unfiltered and unpasteurised, still fermenting in the carton."
+    }
+   ],
+   "process": "Maize and sorghum are soured, cooked and briefly fermented, then packaged live and distributed within days."
+  }
+ },
+ {
+  "id": "dolo",
+  "name": "Dolo",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "West African sorghum beer brewed and sold by women in open-air cabarets, ladled warm from a clay pot and drunk the day it is ready.",
+  "abv": "2–4%",
+  "origin": "Burkina Faso and the Sahel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "sorghum",
+   "smoke",
+   "earthy"
+  ],
+  "glassware": "Calabash bowl",
+  "funFact": "Dolo brewing is almost exclusively women's work across Burkina Faso and Mali, and the cabarets where it is sold function as the village's social and economic centre as much as a bar.",
+  "dexNumber": 965,
+  "serve": {
+   "temp": "Warm to ambient",
+   "glass": "Calabash bowl",
+   "how": "Serve warm or at ambient temperature in a calabash, ladled from the communal pot. It is cloudy and lightly sour, with smoke from the wood-fired brewing. Drink it the day it is made — by the second day it has soured well past pleasant, which is why brewing happens on a fixed weekly rhythm.",
+   "pair": [
+    "Grilled meat",
+    "Millet porridge",
+    "Fried plantain"
+   ]
+  },
+  "composition": {
+   "summary": "A wild-fermented sorghum beer brewed over wood fire and sold the same day.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Germinated and sun-dried sorghum."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast, often carried over in the unwashed brewing pot."
+    },
+    {
+     "label": "Other",
+     "detail": "Wood smoke from the open fire used to boil the wort."
+    }
+   ],
+   "process": "Sorghum is germinated, dried, milled and boiled over wood fire, then fermented overnight with wild organisms and sold immediately."
+  }
+ },
+ {
+  "id": "mbege",
+  "name": "Mbege",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Chagga banana beer from the slopes of Kilimanjaro: ripe bananas fermented with malted finger millet, thick, sour and central to every ceremony.",
+  "abv": "3–5%",
+  "origin": "Kilimanjaro, Tanzania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "banana",
+   "sour",
+   "millet",
+   "earthy"
+  ],
+  "glassware": "Gourd or plastic mug",
+  "funFact": "Among the Chagga, mbege is required at weddings, funerals and dispute settlements — it functions as a social contract as much as a drink, and brewing takes several days of coordinated work.",
+  "dexNumber": 966,
+  "serve": {
+   "temp": "Ambient temperature",
+   "glass": "Gourd or plastic mug",
+   "how": "Serve at ambient temperature from a shared vessel, stirred first since it separates. Expect a thick, cloudy, distinctly sour drink with strong banana character and grit from the millet. It is drunk in company and in quantity; a small tasting pour misses the point of a beer built for ceremony.",
+   "pair": [
+    "Roast goat",
+    "Boiled bananas",
+    "Grilled maize"
+   ]
+  },
+  "composition": {
+   "summary": "A banana beer fermented with malted finger millet as the saccharifying agent.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Malted finger millet, which converts the banana sugars."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast and lactic bacteria from the fruit and the vessel."
+    },
+    {
+     "label": "Other",
+     "detail": "Ripe bananas, boiled down over days as the fermentable base."
+    }
+   ],
+   "process": "Bananas are ripened, boiled and combined with malted millet flour, then fermented in covered gourds for two to four days."
+  }
+ },
+ {
+  "id": "muratina",
+  "name": "Muratina",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Kikuyu honey beer fermented with the dried fruit of the sausage tree, which carries the yeast. Sweet, sour and reserved for elders and ceremony.",
+  "abv": "3–5%",
+  "origin": "Central Kenya",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "sour",
+   "wood",
+   "tannin"
+  ],
+  "glassware": "Gourd or horn",
+  "funFact": "The muratina fruit is not an ingredient for flavour but a yeast vector — dried and soaked pieces carry the fermenting culture, and a good piece is reused across many brews.",
+  "dexNumber": 967,
+  "serve": {
+   "temp": "Ambient temperature",
+   "glass": "Gourd or horn",
+   "how": "Serve at ambient temperature in a gourd or horn, poured from the communal container. It is honey-sweet at the front and sour behind, with a faint woody tannin from the fruit. Traditionally it was restricted to elders and ceremonial occasions rather than drunk casually, and it is still treated with some of that formality.",
+   "pair": [
+    "Roast goat",
+    "Githeri",
+    "Roasted maize"
+   ]
+  },
+  "composition": {
+   "summary": "A honey and sugarcane ferment inoculated by dried sausage-tree fruit.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "None — honey and sugarcane juice provide the fermentables."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast carried on dried muratina (sausage tree) fruit."
+    },
+    {
+     "label": "Other",
+     "detail": "The muratina fruit itself, reused between batches as a starter."
+    }
+   ],
+   "process": "Honey and cane juice are diluted and inoculated with soaked muratina fruit, then fermented for two to four days before being served."
+  }
+ },
+ {
+  "id": "chicha-de-jora",
+  "name": "Chicha de Jora",
+  "category": "beer",
+  "subcategory": "Specialty",
+  "description": "Andean maize beer, brewed since before the Inca and still sold from doorways flying a red flag. Sour, cloudy and served by the litre in a gourd.",
+  "abv": "1–3%",
+  "origin": "Andean Peru",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour maize",
+   "earthy",
+   "tart",
+   "corn"
+  ],
+  "glassware": "Gourd or plastic tumbler",
+  "funFact": "A red flag or plastic bag on a pole outside a house means fresh chicha is for sale inside — a signalling system that predates any licensing regime and still works.",
+  "dexNumber": 968,
+  "serve": {
+   "temp": "Ambient to lightly chilled",
+   "glass": "Gourd or plastic tumbler",
+   "how": "Serve at ambient temperature in a wide vessel, not a beer glass — chicha is meant to be drunk in quantity and shared. Expect it thick, cloudy and distinctly sour, with sediment that you drink rather than avoid. Custom in much of the Andes is to tip the first splash on the ground for the earth before drinking.",
+   "pair": [
+    "Grilled meat",
+    "Boiled potatoes",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A maize beer made from germinated and dried corn, fermented with wild organisms.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Jora — maize germinated and sun-dried, the Andean equivalent of malting."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast and lactic bacteria from the environment and the fermenting vessel."
+    },
+    {
+     "label": "Other",
+     "detail": "Sometimes quinoa, barley or fruit, depending on the valley."
+    }
+   ],
+   "process": "Jora maize is boiled into a mash, strained, and left to ferment in clay vessels with ambient organisms for a few days before being sold immediately."
+  }
+ },
+ {
+  "id": "blumenau-lager",
+  "name": "Blumenau Lager",
+  "category": "beer",
+  "subcategory": "Amber & Dark Lager",
+  "description": "German brewing transplanted to subtropical Brazil in the 1850s and never diluted — Blumenau still holds the largest Oktoberfest outside Germany.",
+  "abv": "4.8–5.5%",
+  "origin": "Blumenau, Santa Catarina, Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bread crust",
+   "caramel",
+   "noble hops",
+   "clean"
+  ],
+  "glassware": "Mug or pilsner glass",
+  "funFact": "Blumenau was founded by German settlers in 1850 and its Oktoberfest draws hundreds of thousands; the local breweries kept brewing to German styles through a century in which the rest of Brazil went to light adjunct lager.",
+  "dexNumber": 969,
+  "serve": {
+   "temp": "42-46°F, chilled",
+   "glass": "Mug or pilsner glass",
+   "how": "Serve chilled but not frozen — Brazilian service tends toward near-freezing, which flattens exactly the malt character that distinguishes this beer from the national lagers. Pour to a firm head in a mug. It is built to German proportions, so treat it as a malt-forward lager and pair it accordingly.",
+   "pair": [
+    "Sausage and sauerkraut",
+    "Roast pork",
+    "Pretzels"
+   ]
+  },
+  "composition": {
+   "summary": "A German-style lager brewed in southern Brazil to nineteenth-century settler recipes.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Munich and Vienna malts over pilsner base, in the German manner."
+    },
+    {
+     "label": "Hops",
+     "detail": "Noble German varieties, balanced against the malt."
+    },
+    {
+     "label": "Yeast",
+     "detail": "German lager yeast, cold-fermented and lagered."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — adherence to Reinheitsgebot practice is the point."
+    }
+   ],
+   "process": "Conventional German cold fermentation and lagering, maintained continuously in Santa Catarina since the 1850s."
+  }
+ },
+ {
+  "id": "australian-sparkling-ale",
+  "name": "Australian Sparkling Ale",
+  "category": "beer",
+  "subcategory": "Pale Ale",
+  "description": "Bottle-conditioned, cloudy when roused, and unchanged since the nineteenth century. Australia's one genuinely native beer style, and it predates the country's federation.",
+  "abv": "5.5–5.8%",
+  "origin": "Adelaide, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pear",
+   "green apple",
+   "bready yeast",
+   "peppery hops"
+  ],
+  "glassware": "Pint glass",
+  "funFact": "Coopers has bottle-conditioned it continuously since 1862, and the correct service is to roll the bottle gently before pouring so the yeast sediment goes into the glass rather than staying behind.",
+  "dexNumber": 970,
+  "serve": {
+   "temp": "45-50°F, lightly chilled",
+   "glass": "Pint glass",
+   "how": "Roll the bottle on its side — never shake it — to lift the yeast off the bottom, then pour the whole thing in one go so the sediment carries through. Expect a cloudy, lively pour with a persistent head. Serve it cool rather than cold; the pear and apple esters that define the style disappear at lager temperatures.",
+   "pair": [
+    "Fish and chips",
+    "Meat pie",
+    "Sharp cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "A bottle-conditioned pale ale with a distinctive fruity house yeast character.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale malt, kept simple so the yeast leads."
+    },
+    {
+     "label": "Hops",
+     "detail": "Pride of Ringwood, an Australian hop with a firm, resinous bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A century-old house ale strain giving pear and apple esters."
+    },
+    {
+     "label": "Other",
+     "detail": "Live yeast left in the bottle for secondary conditioning."
+    }
+   ],
+   "process": "Warm-fermented with a heritage house strain, then bottled with live yeast to condition naturally rather than being filtered and force-carbonated."
+  }
+ },
+ {
+  "id": "new-zealand-pilsner",
+  "name": "New Zealand Pilsner",
+  "category": "beer",
+  "subcategory": "Pale Lager",
+  "description": "A pilsner rebuilt on New Zealand hops: gooseberry, lime leaf and passionfruit over a clean lager base. Tastes tropical without a drop of fruit in it.",
+  "abv": "5–5.8%",
+  "origin": "Nelson, New Zealand",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "gooseberry",
+   "lime",
+   "passionfruit",
+   "crisp malt"
+  ],
+  "glassware": "Pilsner glass or tulip",
+  "funFact": "Nelson Sauvin is named for its resemblance to Sauvignon Blanc, and it is the hop that made this style possible — New Zealand's hop varieties are bred in isolation, giving aromas found nowhere in the European stock.",
+  "dexNumber": 971,
+  "serve": {
+   "temp": "42-46°F, chilled",
+   "glass": "Pilsner glass or tulip",
+   "how": "Serve chilled but not ice-cold, in a glass with some taper to gather the aroma — the hop character is the whole point and a straight tumbler throws it away. Pour to a firm head. Drink it fresh; New Zealand hop aromatics fade faster than European ones, and a year-old bottle is a different and lesser beer.",
+   "pair": [
+    "Green-lipped mussels",
+    "Grilled white fish",
+    "Goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A clean lager base carrying intensely aromatic New Zealand hop varieties.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale pilsner malt, deliberately neutral."
+    },
+    {
+     "label": "Hops",
+     "detail": "Nelson Sauvin, Motueka and Riwaka, late and generous."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast fermented cold for a clean backdrop."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — the hops carry the entire identity."
+    }
+   ],
+   "process": "Cold lager fermentation with heavy late and whirlpool hopping, lagered briefly so the aromatics survive."
+  }
+ },
+ {
+  "id": "napa-valley",
+  "name": "Napa Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "California's benchmark Cabernet: cassis, cedar and polished tannin from a valley thirty miles long that changed how the world priced New World wine.",
+  "abv": "13.5–15.5%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cassis",
+   "cedar",
+   "vanilla",
+   "graphite"
+  ],
+  "glassware": "Large Bordeaux glass",
+  "funFact": "At the 1976 Judgement of Paris a Napa Cabernet beat first-growth Bordeaux in a blind tasting judged entirely by French experts, and the French press spent years insisting it did not count.",
+  "dexNumber": 972,
+  "serve": {
+   "temp": "60-65°F, cool room temperature",
+   "glass": "Large Bordeaux glass",
+   "how": "Decant a young bottle for an hour — Napa Cabernet is built with tannin that needs air before the cassis and cedar separate from the oak. Serve slightly below room temperature in a large-bowled glass. With age the graphite and tobacco notes come forward and the oak recedes, so an older bottle needs less decanting, not more.",
+   "pair": [
+    "Ribeye",
+    "Rack of lamb",
+    "Aged hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Sauvignon from a warm, well-drained valley, aged in new French oak.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, often with Merlot, Cabernet Franc and Petit Verdot."
+    },
+    {
+     "label": "Region",
+     "detail": "The Napa Valley floor and its benchland, with mountain sub-appellations above."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fully destemmed, long maceration for colour and tannin extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "18–24 months in French oak, a significant proportion new."
+    }
+   ],
+   "process": "Warm-climate ripening gives high sugar and full phenolics, extracted through a long maceration and softened by extended barrel ageing."
+  }
+ },
+ {
+  "id": "sonoma-coast",
+  "name": "Sonoma Coast",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Chardonnay grown where the fog rolls in: tighter, saltier and more mineral than the Napa style, with the oak dialled back.",
+  "abv": "13–14%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "green apple",
+   "lemon curd",
+   "saline",
+   "toasted nut"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Sonoma Coast appellation reaches close enough to the Pacific that fog caps ripening daily, which is why its Chardonnay keeps acidity that inland California loses.",
+  "dexNumber": 973,
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not cold — under about 48°F the saline and mineral notes flatten into simple citrus. Use a standard white glass rather than a large bowl. If the wine seems tight on opening, give it twenty minutes in the glass; coastal Chardonnay often needs a little air to move from lemon to something rounder.",
+   "pair": [
+    "Dungeness crab",
+    "Roast chicken",
+    "Goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate coastal Chardonnay with restrained oak and firm natural acidity.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay."
+    },
+    {
+     "label": "Region",
+     "detail": "The fog-influenced western reaches of Sonoma County, close to the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster pressed, barrel-fermented, often with partial malolactic conversion."
+    },
+    {
+     "label": "Aging",
+     "detail": "9–16 months in French oak, usually with a low proportion of new barrels."
+    }
+   ],
+   "process": "Cool coastal ripening preserves acidity, and barrel fermentation with lees stirring builds texture without heavy oak flavour."
+  }
+ },
+ {
+  "id": "willamette-valley",
+  "name": "Willamette Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "America's answer to Burgundy, and the closest it gets: red cherry, forest floor and fine-boned acidity from a cool, rainy valley south of Portland.",
+  "abv": "12.5–14%",
+  "origin": "Oregon, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "red cherry",
+   "forest floor",
+   "rose",
+   "earth"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Burgundy's Domaine Drouhin bought land here in 1987 — an unusually direct endorsement, since the family had spent centuries insisting Pinot Noir belonged only in Burgundy.",
+  "dexNumber": 974,
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve cooler than most reds, around cellar temperature — warm Pinot Noir loses its lift and tastes flabby. Use a wide Burgundy bowl to gather the aromatics, which are the point of the grape. Decanting is rarely needed; if anything, pour and wait rather than aerate aggressively.",
+   "pair": [
+    "Salmon",
+    "Duck breast",
+    "Mushroom risotto"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate Pinot Noir from Oregon's marine-influenced valley floor and hillsides.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "The Willamette Valley and its hillside sub-appellations, on volcanic and sedimentary soils."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation, gentle extraction to avoid hard tannin."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–18 months in French oak, mostly used barrels."
+    }
+   ],
+   "process": "Cool ripening and gentle extraction preserve aromatics and acidity, with restrained oak keeping the fruit and earth in front."
+  }
+ },
+ {
+  "id": "columbia-valley",
+  "name": "Columbia Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "High desert Syrah and Cabernet grown on irrigated basalt: dark, savoury and structured, with a smoked-meat edge California rarely finds.",
+  "abv": "13.5–15%",
+  "origin": "Washington, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry",
+   "smoked meat",
+   "black pepper",
+   "basalt"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Eastern Washington is a desert — under ten inches of rain a year — so almost every vine is irrigated, giving growers unusually precise control over ripening.",
+  "dexNumber": 975,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for half an hour to let the savoury and peppery notes emerge from behind the fruit. Serve slightly cool in a large glass. The savoury character builds with a few years in bottle, so a five-year-old bottle usually shows better balance than a one-year-old one.",
+   "pair": [
+    "Grilled lamb",
+    "Barbecue brisket",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Desert-grown Syrah and Bordeaux varieties on basalt soils under irrigation.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Cabernet Sauvignon and Merlot."
+    },
+    {
+     "label": "Region",
+     "detail": "The vast Columbia Valley of eastern Washington and its sub-appellations."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed or partially whole-cluster, fermented warm for structure."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–20 months in French and American oak."
+    }
+   ],
+   "process": "Wide day-night temperature swings hold acidity while the desert heat ripens tannin, producing dark, savoury and firmly structured wines."
+  }
+ },
+ {
+  "id": "finger-lakes",
+  "name": "Finger Lakes",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Riesling from glacial lakes in upstate New York — bracing, lime-driven and often off-dry, with the lakes themselves keeping the vines alive through winter.",
+  "abv": "10.5–12.5%",
+  "origin": "New York, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "slate",
+   "honeysuckle"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The lakes are deep enough not to freeze, and the stored heat they release keeps vineyards on their slopes from being killed by winters that would destroy vines a mile inland.",
+  "dexNumber": 976,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled but let it warm slightly in the glass; a cold Finger Lakes Riesling shows only acid, and the lime and honeysuckle arrive a few degrees later. Check whether the bottle is dry or off-dry before pairing, since both styles are common and the sweetness changes the food match entirely.",
+   "pair": [
+    "Thai curry",
+    "Smoked trout",
+    "Pork with apple"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate Riesling grown on glacial slopes moderated by deep lakes.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling, with some Cabernet Franc and Grüner Veltliner alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The steep slopes above Seneca, Cayuga and Keuka lakes in upstate New York."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool, slow stainless-steel fermentation, often stopped to leave residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or no oak; brief lees contact in tank."
+    }
+   ],
+   "process": "Slow cool fermentation in stainless preserves the aromatic lime and floral character, with fermentation sometimes arrested to balance high acidity with residual sugar."
+  }
+ },
+ {
+  "id": "paso-robles",
+  "name": "Paso Robles",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Big, sun-driven Rhône blends and Zinfandel from a region with a fifty-degree daily temperature swing — generous fruit held up by surprising freshness.",
+  "abv": "14–15.5%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry jam",
+   "liquorice",
+   "black pepper",
+   "vanilla"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Paso Robles has one of the widest diurnal temperature ranges of any wine region in California, sometimes swinging fifty degrees Fahrenheit in a day, which is what keeps its high-alcohol reds from tasting flat.",
+  "dexNumber": 977,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve a couple of degrees below room temperature — at 68°F and above the alcohol dominates everything. A large glass helps the alcohol blow off. Decant young bottles briefly; these are generous, forward wines that show well early and do not demand long ageing.",
+   "pair": [
+    "Barbecue ribs",
+    "Burgers",
+    "Aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-climate Rhône varieties and Zinfandel with a wide diurnal swing preserving acidity.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Grenache, Mourvèdre and Zinfandel."
+    },
+    {
+     "label": "Region",
+     "detail": "The inland hills of San Luis Obispo County, well east of the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with generous extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French and American oak."
+    }
+   ],
+   "process": "Hot days ripen fruit fully while cold nights retain acidity, and warm fermentation extracts the plush tannin the style is known for."
+  }
+ },
+ {
+  "id": "sta-rita-hills",
+  "name": "Sta. Rita Hills",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A narrow corridor of transverse valleys funnelling Pacific fog inland, producing Pinot Noir with cranberry sharpness and a distinctly savoury edge.",
+  "abv": "12.5–14%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cranberry",
+   "blood orange",
+   "sage",
+   "earth"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "The Santa Ynez Valley runs east-west rather than north-south — one of very few transverse ranges in North America — which channels cold ocean air directly into the vineyards.",
+  "dexNumber": 978,
+  "serve": {
+   "temp": "55-58°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve cool in a wide bowl. This is a leaner, more savoury Pinot than Oregon or Sonoma gives, so resist warming it to bring out sweetness that was never there. Give it fifteen minutes open; the sage and blood-orange notes need a little air but the wine tires if decanted hard.",
+   "pair": [
+    "Grilled salmon",
+    "Duck",
+    "Mushroom tart"
+   ]
+  },
+  "composition": {
+   "summary": "Fog-cooled Pinot Noir from an unusual east-west valley on marine sediment.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir, with some Chardonnay and Syrah."
+    },
+    {
+     "label": "Region",
+     "detail": "The Sta. Rita Hills of Santa Barbara County, open to Pacific fog."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster inclusion common, with cool, slow fermentation."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–16 months in French oak, largely used."
+    }
+   ],
+   "process": "Persistent marine fog extends the growing season, and whole-cluster fermentation adds the savoury, spiced character that distinguishes the appellation."
+  }
+ },
+ {
+  "id": "niagara-peninsula",
+  "name": "Niagara Peninsula",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "The world's largest icewine region: grapes left to freeze solid on the vine into January, then pressed while frozen for a few drops of concentrated nectar.",
+  "abv": "9–12%",
+  "origin": "Ontario, Canada",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lychee",
+   "apricot",
+   "honey",
+   "candied citrus"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Canadian law requires the grapes to be naturally frozen on the vine at −8°C or colder before picking, and the harvest often happens at night in January because the temperature has to hold through the pressing.",
+  "dexNumber": 979,
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Pour small — two ounces is a full serving of something this concentrated — and serve well chilled so the acidity stays sharp against the sugar. Let it warm a couple of degrees in the glass and the lychee and apricot open up. It keeps for days after opening, unlike most wines, because the sugar preserves it.",
+   "pair": [
+    "Blue cheese",
+    "Fruit tart",
+    "Foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Icewine pressed from grapes frozen naturally on the vine in midwinter.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Vidal Blanc and Riesling, sometimes Cabernet Franc."
+    },
+    {
+     "label": "Region",
+     "detail": "The Niagara Peninsula between Lake Ontario and the escarpment."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes pressed while frozen so water stays behind as ice and only concentrated juice runs."
+    },
+    {
+     "label": "Aging",
+     "detail": "Fermented slowly and bottled young to preserve freshness; oak is rare."
+    }
+   ],
+   "process": "Frozen grapes are pressed at sub-zero temperatures, giving tiny yields of intensely sugary juice that ferments slowly to a low alcohol and high residual sugar."
+  }
+ },
+ {
+  "id": "okanagan-valley",
+  "name": "Okanagan Valley",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "A desert valley in British Columbia at the same latitude as Champagne, with long summer days producing aromatic whites of unusual intensity.",
+  "abv": "12–13.5%",
+  "origin": "British Columbia, Canada",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pear",
+   "white flower",
+   "lime",
+   "stone"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Okanagan sits far enough north that midsummer days run over sixteen hours, which compensates for the short season and gives the aromatics time to build.",
+  "dexNumber": 980,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. These are aromatic wines, so avoid over-chilling, which locks the florals away. The valley makes everything from bone-dry Riesling to fuller Pinot Gris, so check the style before pairing — the range under one appellation name is unusually wide.",
+   "pair": [
+    "Grilled trout",
+    "Pork tenderloin",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Aromatic northern whites from a semi-desert valley with very long summer days.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Gris, Riesling, Gewürztraminer and Chardonnay."
+    },
+    {
+     "label": "Region",
+     "detail": "The Okanagan Valley of interior British Columbia, a semi-arid rain-shadow region."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation to protect aromatics."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked, with brief lees ageing."
+    }
+   ],
+   "process": "Long northern daylight builds aromatic compounds while cool nights hold acidity, and stainless fermentation keeps both intact."
+  }
+ },
+ {
+  "id": "valle-de-guadalupe",
+  "name": "Valle de Guadalupe",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Mexico's wine country, an hour from the US border: Mediterranean heat, saline coastal air and blends that follow no appellation rulebook at all.",
+  "abv": "13.5–15%",
+  "origin": "Baja California, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black plum",
+   "dried herb",
+   "saline",
+   "leather"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Baja producers blend freely across Bordeaux, Rhône and Spanish varieties in the same bottle, because Mexico has no appellation law dictating what may go together — a freedom European producers do not have.",
+  "dexNumber": 981,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Expect a savoury, sometimes saline character from the coastal influence that sets these apart from Californian wines an hour north. Decant young bottles briefly; the herbal and leather notes emerge with air, and many of these wines are made in tiny quantities with little filtration.",
+   "pair": [
+    "Carne asada",
+    "Grilled octopus",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-climate blended reds grown near the Pacific under a saline maritime influence.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Nebbiolo, Tempranillo, Cabernet Sauvignon, Grenache and Syrah, freely blended."
+    },
+    {
+     "label": "Region",
+     "detail": "The Valle de Guadalupe in Baja California, some fifteen miles inland from the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation, often with minimal intervention and native yeast."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in a mix of French and American oak."
+    }
+   ],
+   "process": "Mediterranean heat tempered by cool Pacific air ripens the fruit fully while the saline maritime influence gives the finished wines a savoury edge."
+  }
+ },
+ {
+  "id": "mendoza",
+  "name": "Mendoza",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "High-altitude Malbec at the foot of the Andes: violet, black plum and velvet tannin, grown where the vines sit up to a mile above sea level.",
+  "abv": "13.5–15%",
+  "origin": "Mendoza, Argentina",
+  "rarity": "common",
+  "tastingNotes": [
+   "violet",
+   "black plum",
+   "cocoa",
+   "vanilla"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Malbec is originally a Bordeaux grape that nearly disappeared in France after frost in 1956; Argentina had already made it the national grape, and it now grows more Malbec than the rest of the world combined.",
+  "dexNumber": 982,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly below room temperature in a large glass. Altitude gives these wines both intense colour and a fine, powdery tannin that shows best with a little air, so decant young bottles for thirty minutes. The floral violet note is the marker of good Mendoza Malbec and fades if the wine is served too warm.",
+   "pair": [
+    "Grilled steak",
+    "Empanadas",
+    "Chimichurri lamb"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude Malbec grown on alluvial soils in the Andean rain shadow.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Malbec, with Cabernet Sauvignon and Bonarda alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Mendoza province at 800–1,500 metres in the Andean foothills."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented warm, with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, often partly new."
+    }
+   ],
+   "process": "Intense high-altitude sunlight thickens skins and builds colour and tannin, while cold nights preserve the acidity and floral aromatics."
+  }
+ },
+ {
+  "id": "valle-de-uco",
+  "name": "Valle de Uco",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Mendoza's coldest, highest sub-region, climbing past 1,500 metres. Tighter, more mineral and more structured than the valley floor below.",
+  "abv": "13.5–15%",
+  "origin": "Mendoza, Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blueberry",
+   "violet",
+   "crushed stone",
+   "herb"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Parts of the Uco Valley sit above 1,500 metres, high enough that hail nets are standard equipment and the growing season runs weeks behind vineyards an hour away.",
+  "dexNumber": 983,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant for an hour — Uco Malbec is markedly more structured than lower-altitude Mendoza and needs air to unwind. Serve cool in a large glass. The wines reward keeping; a bottle at five to eight years shows the stony, herbal character that altitude gives and that young bottles hide behind fruit.",
+   "pair": [
+    "Roast lamb",
+    "Grilled beef ribs",
+    "Hard sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Very high-altitude Malbec on stony alluvial soils, cooler and firmer than valley-floor Mendoza.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Malbec, with Cabernet Franc and Chardonnay planted alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Uco Valley, at 1,000–1,700 metres in the Mendoza pre-cordillera."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Careful, cooler fermentation with restrained extraction to protect freshness."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, often with a portion of concrete or amphora."
+    }
+   ],
+   "process": "Extreme altitude slows ripening and preserves acidity, producing tighter, stonier wines that need more bottle age than warmer Mendoza sites."
+  }
+ },
+ {
+  "id": "cafayate",
+  "name": "Cafayate",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Torrontés grown at nearly two thousand metres in the Calchaquí valleys — intensely floral on the nose and, unexpectedly, bone dry on the palate.",
+  "abv": "13–14%",
+  "origin": "Salta, Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rose petal",
+   "jasmine",
+   "white peach",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Some Cafayate vineyards sit above 2,000 metres, among the highest commercial vineyards on earth, where ultraviolet intensity is strong enough to thicken grape skins measurably.",
+  "dexNumber": 984,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled — the aromatics are so forward that a warm glass tips into perfume. The classic surprise is the gap between nose and palate: it smells sweet and finishes dry, so pair it as a dry white rather than an aromatic off-dry one. Drink young; Torrontés loses its florals within a couple of years.",
+   "pair": [
+    "Ceviche",
+    "Empanadas",
+    "Spiced chicken"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude aromatic Torrontés fermented dry in stainless steel.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Torrontés Riojano."
+    },
+    {
+     "label": "Region",
+     "detail": "The Calchaquí Valleys around Cafayate in Salta, at 1,700–2,000 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless-steel fermentation to preserve the floral aromatics."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young for freshness."
+    }
+   ],
+   "process": "Extreme altitude and intense ultraviolet light build powerful floral aromatics, which cold stainless fermentation captures before bottling the wine dry and young."
+  }
+ },
+ {
+  "id": "colchagua-valley",
+  "name": "Colchagua Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Chile's warm heartland for Carmenère and Cabernet: ripe, dark and softly herbal, with the green-pepper note that gives the grape away.",
+  "abv": "13.5–14.5%",
+  "origin": "Colchagua, Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black cherry",
+   "green peppercorn",
+   "cocoa",
+   "tobacco"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Carmenère was believed extinct after phylloxera until 1994, when a French researcher realised Chile's 'Merlot' had been Carmenère all along — the country had been growing a lost Bordeaux grape for a century without knowing.",
+  "dexNumber": 985,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass, and decant a young bottle for half an hour. The signature green-peppercorn note is a varietal marker rather than a fault, but it becomes vegetal if the wine is served too cold, so avoid over-chilling. It softens considerably with a few years in bottle.",
+   "pair": [
+    "Grilled beef",
+    "Pastel de choclo",
+    "Roast pepper dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-climate Carmenère and Cabernet Sauvignon on alluvial valley soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Carmenère and Cabernet Sauvignon, with Syrah alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Colchagua Valley in Chile's Rapel region, warmed and sheltered from the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with extended maceration for colour and body."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French and American oak."
+    }
+   ],
+   "process": "A warm, dry growing season ripens Carmenère fully — essential, since underripe fruit turns aggressively green — and extended maceration builds the dark, soft-tannined style."
+  }
+ },
+ {
+  "id": "maipo-valley",
+  "name": "Maipo Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Chile's oldest fine-wine valley, on Santiago's doorstep: Cabernet with a distinctive minty, dusty edge that locals attribute to the Andes above it.",
+  "abv": "13.5–14.5%",
+  "origin": "Maipo, Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "mint",
+   "dust",
+   "cedar"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The minty-eucalyptus note in Maipo Cabernet is so consistent that it functions as a regional signature, and it appears in wines from vineyards with no eucalyptus trees anywhere near them.",
+  "dexNumber": 986,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour. Serve cool in a large glass so the mint and cedar sit alongside the cassis rather than dominating. Alto Maipo wines from higher up the Andean slope are firmer and repay a decade in bottle; valley-floor wines drink well much sooner.",
+   "pair": [
+    "Roast lamb",
+    "Grilled steak",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Andean-influenced Cabernet Sauvignon from Chile's most established fine-wine valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, with Merlot and Carmenère."
+    },
+    {
+     "label": "Region",
+     "detail": "The Maipo Valley south of Santiago, rising into the Andean foothills at Alto Maipo."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with long maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French oak, a portion new."
+    }
+   ],
+   "process": "Warm days and cold Andean nights build ripe blackcurrant fruit over firm acidity, with long maceration and oak ageing giving the cedar and structure."
+  }
+ },
+ {
+  "id": "casablanca-valley",
+  "name": "Casablanca Valley",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Chile's cool coastal valley, planted only since the 1980s: crisp Sauvignon Blanc with grapefruit bite and a distinctly saline finish.",
+  "abv": "12.5–13.5%",
+  "origin": "Casablanca, Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "lime zest",
+   "saline",
+   "green herb"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Casablanca was considered too cold to ripen grapes until the 1980s, when growers proved otherwise; it is now the reference point for Chilean white wine and barely thirty years old as a region.",
+  "dexNumber": 987,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. The salinity that marks coastal Chilean Sauvignon shows best cold, and the grapefruit sharpens rather than softens as the wine warms. Drink young — these are made for freshness and lose their edge after two or three years.",
+   "pair": [
+    "Oysters",
+    "Ceviche",
+    "Goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool coastal Sauvignon Blanc and Chardonnay under strong Pacific influence.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc and Chardonnay, with some Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "The Casablanca Valley between Santiago and the Pacific, cooled by coastal fog."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless-steel fermentation, protecting aromatics from oxygen."
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or no oak; brief lees contact for texture."
+    }
+   ],
+   "process": "Morning fog and cold Pacific air slow ripening dramatically, holding acidity while the aromatic compounds develop, and stainless fermentation preserves both."
+  }
+ },
+ {
+  "id": "itata-valley",
+  "name": "Itata Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Chile's oldest vineyards and its newest fashion: ungrafted País and Cinsault, dry-farmed on granite by smallholders, made without makeup.",
+  "abv": "12–13.5%",
+  "origin": "Itata, Chile",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "wild herb",
+   "granite",
+   "cranberry"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "País arrived with Spanish missionaries in the sixteenth century and was Chile's dominant grape until the 1990s, when it was dismissed as peasant wine — the same old bush vines are now the country's most sought-after fruit.",
+  "dexNumber": 988,
+  "serve": {
+   "temp": "55-58°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve cool, closer to cellar temperature than room temperature — these are light, high-acid reds that turn thin and sour if served warm. Use a wide glass. Many are made with minimal sulphur and little filtration, so expect some sediment and treat an open bottle as a two-day proposition.",
+   "pair": [
+    "Charcuterie",
+    "Roast chicken",
+    "Tomato dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Light, dry-farmed reds from old ungrafted País and Cinsault bush vines on granite.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "País and Cinsault, some over a century old and ungrafted."
+    },
+    {
+     "label": "Region",
+     "detail": "The Itata Valley in southern Chile, on decomposed granite, farmed without irrigation."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster and semi-carbonic fermentation with native yeast."
+    },
+    {
+     "label": "Aging",
+     "detail": "Old barrels, concrete or tank; little or no new oak."
+    }
+   ],
+   "process": "Ancient dry-farmed bush vines on granite give low yields of high-acid fruit, fermented with native yeast and minimal intervention to make deliberately light, fresh reds."
+  }
+ },
+ {
+  "id": "serra-gaucha",
+  "name": "Serra Gaúcha",
+  "category": "wine",
+  "subcategory": "Sparkling",
+  "description": "Brazil's sparkling heartland, settled by Italian immigrants: traditional-method fizz with tropical fruit brightness and unusually high natural acidity.",
+  "abv": "11.5–12.5%",
+  "origin": "Rio Grande do Sul, Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "white peach",
+   "brioche",
+   "citrus"
+  ],
+  "glassware": "Flute or tulip",
+  "funFact": "Brazilian sparkling wine has quietly won a string of international blind tastings, helped by a humid climate that keeps acidity high — the same humidity that makes still red wine difficult there.",
+  "dexNumber": 989,
+  "serve": {
+   "temp": "43-47°F, well chilled",
+   "glass": "Flute or tulip",
+   "how": "Serve well chilled in a tulip rather than a narrow flute, which traps the brioche aroma. Pour at an angle to preserve the mousse. These are made in the traditional method with real lees ageing, so treat them as you would Cava or Crémant rather than as a simple party fizz.",
+   "pair": [
+    "Fried snacks",
+    "Sushi",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Traditional-method sparkling wine from a humid subtropical highland region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay, Pinot Noir and Riesling Itálico."
+    },
+    {
+     "label": "Region",
+     "detail": "The Serra Gaúcha highlands of Rio Grande do Sul, settled by Italian immigrants from the 1870s."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional method — secondary fermentation in bottle."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months on lees before disgorgement."
+    }
+   ],
+   "process": "High humidity and cool highland nights keep acidity unusually high, which suits secondary bottle fermentation and gives the wines their tension."
+  }
+ },
+ {
+  "id": "barossa-valley",
+  "name": "Barossa Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Shiraz from vines older than most wine countries' industries: dense, sweet-fruited and chocolatey, from ungrafted bush vines planted in the 1840s.",
+  "abv": "14–15.5%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry",
+   "dark chocolate",
+   "clove",
+   "vanilla"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Australia never suffered phylloxera in South Australia, so the Barossa holds some of the oldest continuously producing vines on earth — several plantings date to the 1840s and are still cropped.",
+  "dexNumber": 990,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve a few degrees below room temperature; at 68°F and above the alcohol and sweetness take over completely. Decant young bottles for an hour. The old-vine wines carry their weight better than the alcohol suggests, so judge them on texture rather than on the number on the label.",
+   "pair": [
+    "Barbecued beef",
+    "Lamb shanks",
+    "Aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Old-vine Shiraz from a warm, dry valley on ungrafted, dry-farmed bush vines.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Shiraz, with Grenache and Mataro alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Barossa Valley in South Australia, warm and largely dry-farmed."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with generous extraction; some open-fermenter work."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in American and French oak."
+    }
+   ],
+   "process": "Hot, dry ripening on very old low-yielding vines concentrates the fruit, and extended oak ageing rounds the tannin into the region's signature plushness."
+  }
+ },
+ {
+  "id": "hunter-valley",
+  "name": "Hunter Valley",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "The world's most unlikely great white: Semillon picked early at ten percent alcohol, unoaked and searingly tart young, which transforms into toast and honey after a decade.",
+  "abv": "10–11.5%",
+  "origin": "New South Wales, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "grass",
+   "toast",
+   "beeswax"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Hunter Semillon is bottled young at around 10.5% with no oak at all, yet develops toasty, honeyed complexity over ten to twenty years — one of the few wines that gains oak-like character without ever seeing a barrel.",
+  "dexNumber": 991,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "A young bottle is austere and lemony and genuinely hard work — the style is designed for age, so if you have one under five years old, consider keeping it. An aged bottle should be served slightly warmer, around 52°F, so the toast and beeswax come through. Neither version needs decanting.",
+   "pair": [
+    "Oysters",
+    "Steamed fish",
+    "Chicken salad"
+   ]
+  },
+  "composition": {
+   "summary": "Early-picked, unoaked Semillon built for long bottle development.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Semillon."
+    },
+    {
+     "label": "Region",
+     "detail": "The Lower Hunter Valley of New South Wales, humid and subtropical."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Picked early at low sugar, cool stainless fermentation, bottled young."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak whatsoever; all complexity develops in bottle."
+    }
+   ],
+   "process": "Early picking retains very high acidity at low alcohol, and long reductive bottle ageing converts the primary citrus into toast and honey without any barrel contact."
+  }
+ },
+ {
+  "id": "coonawarra",
+  "name": "Coonawarra",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A nine-mile strip of red terra rossa soil over limestone, producing Cabernet with mint, cassis and a firm line of acidity found nowhere else in Australia.",
+  "abv": "13.5–14.5%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cassis",
+   "mint",
+   "cedar",
+   "bay leaf"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The famous terra rossa strip is barely nine miles long and one mile wide, and boundary disputes over which vineyards fall inside it have gone through Australian courts.",
+  "dexNumber": 992,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant a young bottle for an hour to soften the firm tannin structure. Serve cool in a large glass. The eucalypt-mint note is a regional marker rather than a flaw; it integrates with age, and these wines hold well for fifteen years or more thanks to their acidity.",
+   "pair": [
+    "Roast lamb",
+    "Beef fillet",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Sauvignon on a narrow band of terra rossa soil over limestone.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, with some Shiraz and Merlot."
+    },
+    {
+     "label": "Region",
+     "detail": "The terra rossa strip of Coonawarra in South Australia's cool Limestone Coast."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented with moderate extraction to keep the structure fine."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "Cool ripening on free-draining terra rossa over limestone gives cassis fruit with firm acidity and fine tannin, structured for long ageing."
+  }
+ },
+ {
+  "id": "margaret-river",
+  "name": "Margaret River",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Maritime Western Australia making Bordeaux blends of unusual polish, alongside some of the country's finest Chardonnay — a region only planted since 1967.",
+  "abv": "13.5–14.5%",
+  "origin": "Western Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "graphite",
+   "bay",
+   "cedar"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Margaret River was planted on the strength of a 1965 agronomy paper arguing its climate matched Bordeaux — one of the few wine regions founded on a scientific prediction rather than tradition.",
+  "dexNumber": 993,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young reds for around forty minutes. These are structured but not heavy; the maritime climate gives a freshness that separates them from warmer Australian regions. The Chardonnay from here deserves the same care and should be served at white-wine temperature.",
+   "pair": [
+    "Rack of lamb",
+    "Beef",
+    "Semi-hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Maritime Bordeaux blends and Chardonnay from a peninsula between two oceans.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon and Merlot, with Chardonnay and Sauvignon-Semillon for whites."
+    },
+    {
+     "label": "Region",
+     "detail": "The Margaret River peninsula in Western Australia, surrounded by ocean on three sides."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Careful extraction, with barrel fermentation for the whites."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "A strongly maritime climate with almost no extreme heat gives even ripening and natural freshness, producing wines with structure but without the weight of inland Australia."
+  }
+ },
+ {
+  "id": "yarra-valley",
+  "name": "Yarra Valley",
+  "category": "wine",
+  "subcategory": "Sparkling",
+  "description": "Cool-climate Victoria, close enough to Melbourne to be its wine country: fine traditional-method sparkling and delicate Pinot Noir and Chardonnay.",
+  "abv": "12–12.5%",
+  "origin": "Victoria, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "green apple",
+   "citrus",
+   "brioche",
+   "almond"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Moët & Chandon established Domaine Chandon here in 1986, choosing the Yarra over every other Australian region for sparkling wine on the basis of its cool nights and long, slow ripening.",
+  "dexNumber": 994,
+  "serve": {
+   "temp": "43-47°F, well chilled",
+   "glass": "Tulip glass",
+   "how": "Serve well chilled in a tulip rather than a flute so the brioche and almond notes have room. Pour gently at an angle. These are made in the traditional method with genuine lees ageing, so give them the attention you would give Champagne rather than treating them as a cheap alternative.",
+   "pair": [
+    "Oysters",
+    "Fried chicken",
+    "Soft cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate traditional-method sparkling wine from Victoria's Yarra Valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay and Pinot Noir, with some Pinot Meunier."
+    },
+    {
+     "label": "Region",
+     "detail": "The Yarra Valley east of Melbourne, cool and often cloudy."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional method with secondary fermentation in bottle."
+    },
+    {
+     "label": "Aging",
+     "detail": "18–36 months on lees before disgorgement."
+    }
+   ],
+   "process": "Cool ripening keeps acidity high and sugar low at harvest, which is exactly the base wine that traditional-method secondary fermentation requires."
+  }
+ },
+ {
+  "id": "clare-valley",
+  "name": "Clare Valley",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Australia's Riesling heartland: bone dry, lime-drenched and steely, sealed under screwcap since 2000 when the region switched almost overnight.",
+  "abv": "11.5–12.5%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "slate",
+   "white flower"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Clare Valley producers collectively moved to screwcap in 2000 to stop cork taint ruining their Riesling — a coordinated regional decision that pushed the whole Australian industry to follow.",
+  "dexNumber": 995,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. Young Clare Riesling is austere and citric; with five to ten years it develops a toasty, kerosene-like complexity that is prized rather than faulty. Do not decant. Screwcap closures mean these age slowly and reliably, so cellaring is genuinely rewarding.",
+   "pair": [
+    "Fish and chips",
+    "Thai salad",
+    "Fresh goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Bone-dry, high-acid Riesling from a warm region with very cold nights.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Clare Valley in South Australia, elevated with cold night-time temperatures."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless-steel fermentation, fermented fully dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young under screwcap."
+    }
+   ],
+   "process": "Warm days with sharply cold nights hold acidity while ripening the fruit, and a fully dry stainless fermentation leaves the lime and mineral character exposed."
+  }
+ },
+ {
+  "id": "mclaren-vale",
+  "name": "McLaren Vale",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Maritime Shiraz and Grenache south of Adelaide: darker and more savoury than the Barossa, with a growing body of dry-grown old-vine Grenache.",
+  "abv": "14–15%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dark plum",
+   "olive",
+   "sage",
+   "milk chocolate"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "McLaren Vale sits close enough to the Gulf St Vincent for afternoon sea breezes to drop vineyard temperatures sharply, which is why its Shiraz reads savoury where the Barossa's reads sweet.",
+  "dexNumber": 996,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass. Decant young Shiraz for half an hour; the old-vine Grenache generally needs less and can be served slightly cooler still. The savoury, olive-and-herb character is the regional signature and is easily lost if the wine is served warm.",
+   "pair": [
+    "Grilled lamb",
+    "Moussaka",
+    "Charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Maritime-cooled Shiraz and old-vine Grenache on varied ancient soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Shiraz and Grenache, with Mataro and Cabernet Sauvignon."
+    },
+    {
+     "label": "Region",
+     "detail": "McLaren Vale south of Adelaide, cooled by gulf breezes."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation, increasingly with whole bunches for the Grenache."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, often seasoned rather than new."
+    }
+   ],
+   "process": "Sea breezes moderate an otherwise warm climate, preserving acidity and giving savoury notes that distinguish it from inland South Australian reds."
+  }
+ },
+ {
+  "id": "rutherglen",
+  "name": "Rutherglen",
+  "category": "wine",
+  "subcategory": "Fortified Wine",
+  "description": "Fortified Muscat aged for decades in hot tin sheds until it turns to treacle, raisin and burnt orange. Some blends contain wine over a century old.",
+  "abv": "17–18%",
+  "origin": "Victoria, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raisin",
+   "toffee",
+   "burnt orange",
+   "walnut"
+  ],
+  "glassware": "Small fortified wine glass",
+  "funFact": "The classification runs Rutherglen, Classic, Grand and Rare, with average blend ages rising to twenty years and beyond — and the solera-style blends often include material from the nineteenth century.",
+  "dexNumber": 997,
+  "serve": {
+   "temp": "57-64°F, lightly cool",
+   "glass": "Small fortified wine glass",
+   "how": "Serve in small measures, barely cool or at room temperature — chilling mutes the whole point. It is intensely sweet and viscous, so an ounce or two is plenty. An open bottle keeps for months rather than days thanks to the fortification and oxidative ageing, so there is no rush to finish it.",
+   "pair": [
+    "Sticky date pudding",
+    "Blue cheese",
+    "Dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Fortified Muscat aged oxidatively in hot conditions for years to decades.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat à Petits Grains Rouges, known locally as Brown Muscat."
+    },
+    {
+     "label": "Region",
+     "detail": "Rutherglen in north-east Victoria, hot and continental."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes left to raisin on the vine, then fortified with grape spirit mid-fermentation."
+    },
+    {
+     "label": "Aging",
+     "detail": "Years to decades in old oak in hot sheds, blended solera-style."
+    }
+   ],
+   "process": "Fermentation is arrested by fortification to retain enormous sugar, and deliberate hot oxidative ageing concentrates the wine into its treacle-and-raisin character."
+  }
+ },
+ {
+  "id": "marlborough",
+  "name": "Marlborough",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "The Sauvignon Blanc that rewrote the grape's reputation: passionfruit, cut grass and grapefruit at a pitch no other region reaches.",
+  "abv": "12.5–13.5%",
+  "origin": "South Island, New Zealand",
+  "rarity": "common",
+  "tastingNotes": [
+   "passionfruit",
+   "cut grass",
+   "grapefruit",
+   "gooseberry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The first Marlborough Sauvignon Blanc was made in 1979, and within twenty years the style was so dominant that it changed what consumers worldwide expected the grape to taste like.",
+  "dexNumber": 998,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass — over-chilling flattens the aromatics that are the entire proposition. Drink it young; the pyrazine and thiol compounds responsible for the passionfruit and grass fade within two or three years. No decanting, and no need for a large bowl.",
+   "pair": [
+    "Goat cheese",
+    "Green salad",
+    "Steamed mussels"
+   ]
+  },
+  "composition": {
+   "summary": "Intensely aromatic Sauvignon Blanc from a sunny, cool valley on free-draining gravels.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc."
+    },
+    {
+     "label": "Region",
+     "detail": "The Wairau and Awatere valleys of Marlborough, sunny with very cool nights."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation under reductive conditions to protect thiols."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young."
+    }
+   ],
+   "process": "High sunshine with cold nights builds aromatic precursors while holding acidity, and reductive cool fermentation preserves the thiol compounds that give the passionfruit character."
+  }
+ },
+ {
+  "id": "central-otago",
+  "name": "Central Otago",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "The world's southernmost wine region: Pinot Noir grown in a continental mountain basin, dark-fruited and thyme-scented with real structure.",
+  "abv": "13–14%",
+  "origin": "South Island, New Zealand",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dark cherry",
+   "thyme",
+   "violet",
+   "spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Central Otago is the only genuinely continental wine climate in New Zealand — everywhere else is maritime — which is why its Pinot Noir is darker and firmer than the country's other examples.",
+  "dexNumber": 999,
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide Burgundy bowl. These are more structured than most New World Pinot and benefit from thirty minutes open, though not from aggressive decanting. The wild thyme note is a regional marker and shows best when the wine is not over-warmed.",
+   "pair": [
+    "Duck",
+    "Venison",
+    "Mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Continental-climate Pinot Noir from steep schist slopes in a mountain basin.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "Central Otago in the South Island interior, at 45 degrees south."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation, moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–18 months in French oak, a small proportion new."
+    }
+   ],
+   "process": "A dry continental climate with intense sunlight and cold nights ripens Pinot Noir fully while retaining acidity, giving darker fruit and firmer tannin than maritime sites."
+  }
+ },
+ {
+  "id": "hawkes-bay",
+  "name": "Hawke's Bay",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "New Zealand's warmest major region and its answer to Bordeaux: Merlot and Cabernet blends grown on the old riverbed gravels of the Gimblett district.",
+  "abv": "13–14%",
+  "origin": "North Island, New Zealand",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "cedar",
+   "tobacco",
+   "red plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Gimblett Gravels sub-region is defined by an old riverbed exposed when the Ngaruroro River shifted course in an 1867 flood — the appellation boundary follows the gravel exactly.",
+  "dexNumber": 1000,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young bottles briefly. These are medium-bodied rather than heavy, so avoid treating them like a warm-climate Cabernet. The Syrah from the same gravels is peppery and floral and deserves slightly cooler service still.",
+   "pair": [
+    "Roast beef",
+    "Lamb",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Bordeaux varieties and Syrah on free-draining river gravels in New Zealand's warmest region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Merlot, Cabernet Sauvignon, Cabernet Franc and Syrah."
+    },
+    {
+     "label": "Region",
+     "detail": "Hawke's Bay on the North Island's east coast, including the Gimblett Gravels."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "Heat-retaining river gravels raise vineyard temperatures enough to ripen Bordeaux varieties in a cool maritime country, giving medium-bodied and cedary wines."
+  }
+ },
+ {
+  "id": "martinborough",
+  "name": "Martinborough",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A tiny North Island region on a windswept gravel terrace, making Pinot Noir of unusual savoury intensity from very low-yielding vines.",
+  "abv": "13–14%",
+  "origin": "North Island, New Zealand",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "dried herb",
+   "leather",
+   "spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Martinborough's persistent wind is a viticultural asset rather than a hazard — it thickens grape skins and cuts yields sharply, which concentrates the resulting wines.",
+  "dexNumber": 1001,
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide bowl. These are savoury, structured Pinots rather than fruit-forward ones, and they show best with twenty minutes of air. They also age well for a New World Pinot, so a bottle with five years on it is often more expressive than a current release.",
+   "pair": [
+    "Duck",
+    "Roast pork",
+    "Mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Low-yielding, savoury Pinot Noir from a wind-exposed gravel terrace.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "Martinborough in the Wairarapa, on a free-draining alluvial terrace."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster inclusion common, with careful extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, mostly used."
+    }
+   ],
+   "process": "Constant wind and free-draining gravel reduce yields dramatically, concentrating flavour, while whole-cluster fermentation adds the savoury spice the region is known for."
+  }
+ },
+ {
+  "id": "stellenbosch",
+  "name": "Stellenbosch",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "South Africa's classic red district: Cabernet and Bordeaux blends on granite and shale slopes, with a savoury, faintly smoky character all their own.",
+  "abv": "13.5–14.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "tobacco",
+   "graphite",
+   "dark chocolate"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Stellenbosch has been growing wine since the 1690s, making it one of the oldest wine regions outside Europe — its university runs one of the southern hemisphere's leading oenology faculties.",
+  "dexNumber": 1002,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for around an hour; Stellenbosch Cabernet has firm tannin that needs air. Serve cool in a large glass. The slightly smoky, savoury edge is a regional signature rather than oak, and it becomes more pronounced with bottle age rather than less.",
+   "pair": [
+    "Braai beef",
+    "Lamb",
+    "Aged Gouda"
+   ]
+  },
+  "composition": {
+   "summary": "Bordeaux varieties on granite and shale mountain slopes in the Western Cape.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Merlot, Cabernet Franc and Syrah."
+    },
+    {
+     "label": "Region",
+     "detail": "Stellenbosch, on the slopes of the Simonsberg and Helderberg mountains."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French oak, a portion new."
+    }
+   ],
+   "process": "Mountain slopes and cooling False Bay air give a long ripening season, and extended maceration with oak ageing builds the firm, savoury structure."
+  }
+ },
+ {
+  "id": "swartland",
+  "name": "Swartland",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "The hot, dry-farmed region that led South Africa's new wave: old-vine Syrah and Chenin made with minimal intervention and a deliberate rejection of polish.",
+  "abv": "13–14.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red plum",
+   "fynbos",
+   "white pepper",
+   "dried herb"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Swartland Independent Producers wrote their own charter in 2010 — dry-farmed fruit, no additions beyond sulphur, no new oak barriques — imposing rules on themselves that no appellation law required.",
+  "dexNumber": 1003,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cooler than a typical warm-climate red; these are made for freshness rather than weight, and heat flattens the herbal fynbos character. Many are unfined and unfiltered, so expect sediment and stand the bottle upright beforehand. A short decant helps, a long one does not.",
+   "pair": [
+    "Grilled lamb",
+    "Roast vegetables",
+    "Charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Dry-farmed old-vine Syrah and Chenin Blanc made with minimal intervention.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Grenache, Cinsault and Chenin Blanc, much of it from old bush vines."
+    },
+    {
+     "label": "Region",
+     "detail": "The Swartland north of Cape Town, hot, dry and largely unirrigated."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-bunch fermentation with native yeast, minimal additions."
+    },
+    {
+     "label": "Aging",
+     "detail": "Old oak, concrete or foudre; new barriques are avoided by convention."
+    }
+   ],
+   "process": "Dry-farmed old bush vines give low yields, and native-yeast whole-bunch fermentation with neutral vessels keeps the emphasis on site rather than winemaking."
+  }
+ },
+ {
+  "id": "hemel-en-aarde-valley",
+  "name": "Hemel-en-Aarde Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "'Heaven and Earth' — a cool valley opening to the Atlantic near Hermanus, making the Cape's most convincing Pinot Noir on clay-rich shale.",
+  "abv": "13–13.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "forest floor",
+   "rose",
+   "clay"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "The valley lies close enough to Walker Bay that the cold Benguela current cools it directly, giving a growing season several degrees below anywhere else in the Cape's red-wine districts.",
+  "dexNumber": 1004,
+  "serve": {
+   "temp": "55-58°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide bowl and give it twenty minutes rather than a hard decant. These are structured, earthy Pinots rather than fruity ones. The clay-rich soils give a density unusual in New World Pinot, so do not be surprised by more grip than the colour suggests.",
+   "pair": [
+    "Duck",
+    "Salmon",
+    "Mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Cool maritime Pinot Noir and Chardonnay on clay-rich shale soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir and Chardonnay."
+    },
+    {
+     "label": "Region",
+     "detail": "The Hemel-en-Aarde valley behind Hermanus, cooled by the Atlantic."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation with gentle extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–16 months in French oak, mostly used."
+    }
+   ],
+   "process": "Cold Atlantic air extends ripening in a country otherwise too hot for Pinot Noir, and clay-rich shale gives the wines structure and density."
+  }
+ },
+ {
+  "id": "constantia",
+  "name": "Constantia",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "The Cape's oldest wine estate district, and the source of a sweet Muscat that eighteenth-century Europe ranked among the world's greatest wines.",
+  "abv": "13–15%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange peel",
+   "honey",
+   "apricot",
+   "spice"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Napoleon reportedly had Constantia shipped to Saint Helena during his exile, and the wine appears by name in Austen, Dickens and Baudelaire — a level of literary fame no other South African wine has matched.",
+  "dexNumber": 1005,
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Serve chilled but not cold in a small glass, poured in modest measures. It is sweet but carries enough acidity to avoid cloying, so it works with savoury rich food as well as dessert. The modern revival wines are made from the same Muscat de Frontignan the historic bottlings used.",
+   "pair": [
+    "Blue cheese",
+    "Apricot tart",
+    "Foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Sweet Muscat from vine-dried grapes, reviving an eighteenth-century Cape tradition.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat de Frontignan."
+    },
+    {
+     "label": "Region",
+     "detail": "Constantia on the Cape Peninsula, cooled by two oceans."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes left to shrivel on the vine, then fermented slowly and stopped with residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Several years in oak before release."
+    }
+   ],
+   "process": "Late-harvested and vine-dried Muscat concentrates sugar naturally, and slow fermentation leaves substantial residual sugar balanced by the region's cool-climate acidity."
+  }
+ },
+ {
+  "id": "wachau",
+  "name": "Wachau",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Grüner Veltliner and Riesling from vertiginous terraces above the Danube, with a white-pepper bite that is the grape's signature and the region's calling card.",
+  "abv": "12–14%",
+  "origin": "Lower Austria, Austria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white pepper",
+   "green apple",
+   "citrus",
+   "wet stone"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Wachau grades its wines by ripeness under its own private system — Steinfeder, Federspiel, Smaragd — named after a grass, a falconry technique and a lizard that suns itself on the terraces.",
+  "dexNumber": 1006,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not cold; the white-pepper note that defines Grüner disappears below about 46°F. Use a standard white glass rather than a large bowl. Smaragd wines are the ripest and fullest and can take a slightly warmer service and even a short decant; Federspiel should be poured and drunk.",
+   "pair": [
+    "Wiener schnitzel",
+    "Asparagus",
+    "Freshwater fish"
+   ]
+  },
+  "composition": {
+   "summary": "Terraced Danube whites from primary rock, graded by a local ripeness system.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner and Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Wachau gorge along the Danube, on steep terraced gneiss and loess."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fully dry, with minimal handling."
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or no oak; large neutral casks where used."
+    }
+   ],
+   "process": "Steep primary-rock terraces and a sharp day-night temperature swing give concentrated but high-acid fruit, fermented dry in neutral vessels to keep the site in front."
+  }
+ },
+ {
+  "id": "kamptal",
+  "name": "Kamptal",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Wachau's neighbour on deep loess: rounder, fruitier Grüner Veltliner that gives up its pepper more easily and costs considerably less.",
+  "abv": "12–13.5%",
+  "origin": "Lower Austria, Austria",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yellow apple",
+   "white pepper",
+   "lentil",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Heiligenstein vineyard above Langenlois sits on a desert sandstone formation some 250 million years old — geologically unrelated to anything around it, and reserved almost entirely for Riesling.",
+  "dexNumber": 1007,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. Kamptal Grüner is more approachable young than Wachau and rarely needs air. The Riesling from Heiligenstein is a different proposition — firmer, more mineral, and worth a few years in bottle before opening.",
+   "pair": [
+    "Roast chicken",
+    "Pork schnitzel",
+    "Green vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Loess-grown Grüner Veltliner with riper fruit and softer acidity than the Wachau.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner and Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Kamp valley north of the Danube, on deep loess with rocky outcrops."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; large neutral casks for the top wines."
+    }
+   ],
+   "process": "Deep loess soils retain water and give riper, rounder fruit than the Wachau's rock terraces, producing a fuller and more immediately approachable style."
+  }
+ },
+ {
+  "id": "mittelburgenland",
+  "name": "Mittelburgenland",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Austria's red heartland, nicknamed Blaufränkischland: dark cherry, black pepper and firm acidity from a grape most of the world has never tasted.",
+  "abv": "13–14%",
+  "origin": "Burgenland, Austria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour cherry",
+   "black pepper",
+   "blackberry",
+   "mineral"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Blaufränkisch is the same grape as Hungary's Kékfrankos and Germany's Lemberger, and DNA testing showed it to be a parent of both Zweigelt and Gamay — a far more important vine than its obscurity suggests.",
+  "dexNumber": 1008,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve cooler than a typical red, around 60°F — Blaufränkisch has high acidity and it turns sharp if served warm, but sullen if served cold. Decant young bottles briefly. The peppery, sour-cherry profile suits food with fat and salt rather than delicate dishes.",
+   "pair": [
+    "Goulash",
+    "Roast duck",
+    "Cured sausage"
+   ]
+  },
+  "composition": {
+   "summary": "Blaufränkisch on heavy clay and slate, giving dark fruit with firm natural acidity.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Blaufränkisch."
+    },
+    {
+     "label": "Region",
+     "detail": "Mittelburgenland in eastern Austria, sheltered and warm with heavy soils."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented warm for colour, with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, increasingly large neutral casks rather than barriques."
+    }
+   ],
+   "process": "Warm, sheltered sites ripen a naturally high-acid grape fully, and restrained oak keeps the peppery fruit and mineral edge in front."
+  }
+ },
+ {
+  "id": "mosel",
+  "name": "Mosel",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Riesling from the steepest vineyards in the world, on blue slate above a river that loops back on itself — feather-light, piercingly acidic, often barely alcoholic.",
+  "abv": "7.5–11%",
+  "origin": "Mosel, Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "slate",
+   "white peach"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Calmont vineyard reaches a gradient of about 65 degrees, making it the steepest working vineyard on earth — every vine is tended by hand, sometimes with ropes.",
+  "dexNumber": 1009,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled but not ice-cold. Check the label for sweetness level: Kabinett, Spätlese and Auslese climb in ripeness and residual sugar, and the food match changes completely between them. These age remarkably — a twenty-year-old Mosel Kabinett is often more interesting than a young one.",
+   "pair": [
+    "Thai curry",
+    "Smoked trout",
+    "Pork belly"
+   ]
+  },
+  "composition": {
+   "summary": "Low-alcohol slate-grown Riesling with very high acidity and often residual sugar.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Mosel valley's steep blue and grey slate slopes above the river."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Slow, cool fermentation, frequently arrested to leave residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral vessels — stainless or old Fuder casks; no new oak."
+    }
+   ],
+   "process": "Slate retains heat in a marginal northern climate, ripening Riesling slowly, and fermentation is often stopped early to balance the fierce natural acidity with sugar."
+  }
+ },
+ {
+  "id": "rheingau",
+  "name": "Rheingau",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "The Riesling that taught Germany to make dry wine: fuller and firmer than the Mosel, from south-facing slopes on a rare east-west stretch of the Rhine.",
+  "abv": "11.5–13%",
+  "origin": "Hesse, Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "ripe apple",
+   "peach",
+   "beeswax",
+   "smoke"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Schloss Johannisberg is credited with discovering noble rot in 1775, when a courier carrying permission to harvest arrived late and the mouldy grapes turned out to make extraordinary wine.",
+  "dexNumber": 1010,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. Rheingau Riesling is typically drier and weightier than Mosel and can take a slightly warmer service. Give a young dry bottle fifteen minutes; the smoky, waxy character that distinguishes the region needs a little air and a few years in bottle to appear.",
+   "pair": [
+    "Roast pork",
+    "River fish",
+    "Mature cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Fuller-bodied, mostly dry Riesling from south-facing slopes on slate and quartzite.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Rheingau, where the Rhine turns east-west and the slopes face due south."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool fermentation, mostly to full dryness in the modern style."
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless or large neutral casks; some top wines see old oak."
+    }
+   ],
+   "process": "An unusual due-south exposure gives greater ripeness than other German regions, supporting fully dry fermentation without losing the acidity Riesling depends on."
+  }
+ },
+ {
+  "id": "pfalz",
+  "name": "Pfalz",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Germany's warmest, sunniest wine region, where almonds and figs grow between the vines and the Riesling is generous rather than austere.",
+  "abv": "12–13.5%",
+  "origin": "Rhineland-Palatinate, Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ripe peach",
+   "apricot",
+   "herb",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Pfalz sits in the rain shadow of the Haardt mountains and is warm enough for figs, lemons and almonds to grow outdoors — the tourist road through it is called the German Wine Route.",
+  "dexNumber": 1011,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. These are riper and rounder than northern German Rieslings, so they carry a little more warmth in service without falling apart. The region also makes serious Spätburgunder, which should be treated as a cool-climate Pinot Noir rather than a German curiosity.",
+   "pair": [
+    "Roast chicken",
+    "Pork with apple",
+    "Soft cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Ripe, generous Riesling and Pinot varieties from Germany's warmest region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling, with Spätburgunder, Weissburgunder and Grauburgunder."
+    },
+    {
+     "label": "Region",
+     "detail": "The Pfalz, sheltered by the Haardt mountains on sandstone and limestone."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool fermentation, largely dry in the modern style."
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless for the aromatic whites, old oak for the Pinots."
+    }
+   ],
+   "process": "A warm rain-shadow climate ripens fruit more fully than northern Germany, giving broader, riper wines that are usually fermented dry."
+  }
+ },
+ {
+  "id": "baden",
+  "name": "Baden",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Germany's southernmost region and its Pinot Noir stronghold — Spätburgunder from volcanic soil, savoury and structured rather than sweet.",
+  "abv": "12.5–13.5%",
+  "origin": "Baden-Württemberg, Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "smoke",
+   "forest floor",
+   "spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "The Kaiserstuhl is an extinct volcano rising abruptly from the Rhine plain, and its volcanic soils are warm enough that Baden is the only German region classified in the EU's warmest viticultural zone.",
+  "dexNumber": 1012,
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide bowl. German Spätburgunder is leaner and smokier than Burgundy and suffers badly from over-warming. Give it twenty minutes rather than a decant. Bottles from the Kaiserstuhl in particular repay five to ten years in the cellar.",
+   "pair": [
+    "Duck",
+    "Mushroom dishes",
+    "Roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "Volcanic-soil Spätburgunder with savoury, smoky character and firm structure.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Spätburgunder (Pinot Noir), with Grauburgunder and Weissburgunder."
+    },
+    {
+     "label": "Region",
+     "detail": "Baden along the Rhine, including the volcanic Kaiserstuhl."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation with restrained extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, mostly used barrels."
+    }
+   ],
+   "process": "Volcanic soils and Germany's warmest climate ripen Pinot Noir properly, and restrained winemaking keeps the smoky, savoury character that distinguishes it from Burgundy."
+  }
+ },
+ {
+  "id": "cornalin-du-valais",
+  "name": "Cornalin du Valais",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "A nearly extinct Alpine red rescued in the 1970s: dark, wild-berried and firmly tannic, grown on terraces in Switzerland's driest canton.",
+  "abv": "12.5–13.5%",
+  "origin": "Valais, Switzerland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "wild berry",
+   "violet",
+   "iron"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Cornalin was down to a handful of hectares before Swiss growers deliberately revived it; Switzerland exports barely one percent of its wine, so almost none of it is ever tasted abroad.",
+  "dexNumber": 1013,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. It has firm tannin and bright acidity, so a short decant helps a young bottle. This is a wine you will almost certainly have to drink in Switzerland — the country consumes essentially its entire production, which is why so few people outside it have met the grape.",
+   "pair": [
+    "Raclette",
+    "Dried alpine beef",
+    "Game"
+   ]
+  },
+  "composition": {
+   "summary": "A rare indigenous Alpine red grown on steep terraces in a dry mountain valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cornalin, an indigenous Valais variety."
+    },
+    {
+     "label": "Region",
+     "detail": "The Valais in the Rhône valley, the driest and sunniest part of Switzerland."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm to manage the firm tannin."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, largely neutral."
+    }
+   ],
+   "process": "A dry, sunny Alpine climate with cold nights ripens a naturally tannic late variety, and neutral oak ageing softens the structure without masking the wild-berry fruit."
+  }
+ },
+ {
+  "id": "znojmo",
+  "name": "Znojmo",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Moravian whites from the Austrian border: crisp, aromatic Grüner Veltliner and Riesling from a country almost nobody associates with wine.",
+  "abv": "11.5–13%",
+  "origin": "South Moravia, Czechia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "white pepper",
+   "elderflower",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Moravia produces the large majority of Czech wine and sits directly across the border from Austria's Weinviertel, sharing its soils and grapes — the frontier is political rather than viticultural.",
+  "dexNumber": 1014,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. These are light, high-acid, aromatic whites meant for drinking young rather than keeping. Look out for the Czech habit of serving very young wine as burčák in autumn — partly fermented, cloudy and sweet, and a different drink entirely.",
+   "pair": [
+    "Freshwater fish",
+    "Roast chicken",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Light, aromatic Central European whites from South Moravia's limestone and loess.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner, Riesling, Welschriesling and Pálava."
+    },
+    {
+     "label": "Region",
+     "detail": "The Znojmo district of South Moravia, on the Austrian border."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; bottled young."
+    }
+   ],
+   "process": "A cool continental climate on loess and limestone yields high-acid aromatic whites, fermented cold in stainless to keep them fresh and floral."
+  }
+ },
+ {
+  "id": "egri-bikaver",
+  "name": "Egri Bikavér",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "'Bull's Blood of Eger': a spicy Hungarian red blend legally required to be a blend, wrapped in a siege legend nobody can verify.",
+  "abv": "13–14%",
+  "origin": "Eger, Hungary",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sour cherry",
+   "paprika spice",
+   "tobacco",
+   "plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The legend says defenders of Eger castle in 1552 drank red wine that stained their beards, convincing the Ottoman besiegers they were drinking bull's blood — the name only appears in records three centuries later.",
+  "dexNumber": 1015,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass; the blend's acidity and spice sharpen unpleasantly when warm. Decant a young bottle for half an hour. Modern Bikavér is far better made than its twentieth-century reputation, so judge a current bottle on its own terms rather than on the export wine of the 1980s.",
+   "pair": [
+    "Goulash",
+    "Paprika chicken",
+    "Grilled sausage"
+   ]
+  },
+  "composition": {
+   "summary": "A legally mandated blend of Kékfrankos with other varieties from the Eger region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Kékfrankos as the backbone, blended with Kadarka, Merlot, Cabernet Franc and others."
+    },
+    {
+     "label": "Region",
+     "detail": "Eger in northern Hungary, on volcanic rhyolite tuff soils."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Varieties fermented separately, then blended before ageing."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, traditionally Hungarian."
+    }
+   ],
+   "process": "Cool northern Hungarian sites on volcanic tuff give high-acid, spicy fruit, and the regulated multi-variety blend builds complexity no single grape supplies."
+  }
+ },
+ {
+  "id": "villany",
+  "name": "Villány",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Hungary's warmest red region, hard against the Croatian border: ripe, structured Cabernet Franc that many argue outperforms the Loire's.",
+  "abv": "13.5–14.5%",
+  "origin": "Baranya, Hungary",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "graphite",
+   "bay leaf",
+   "dark chocolate"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Villány growers pushed for Cabernet Franc to be recognised as their flagship under the local 'Villányi Franc' designation, an unusual case of a region staking its identity on a grape the world associates with somewhere else.",
+  "dexNumber": 1016,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour — these are structured wines with real tannin. Serve cool in a large glass. Cabernet Franc here is riper and denser than the Loire style, with the herbal note folded into dark fruit rather than sitting on top of it.",
+   "pair": [
+    "Roast beef",
+    "Venison",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-site Cabernet Franc and Bordeaux varieties on limestone in southern Hungary.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Franc, with Merlot, Cabernet Sauvignon and Portugieser."
+    },
+    {
+     "label": "Region",
+     "detail": "Villány in southern Hungary, warm and sheltered on limestone slopes."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak, a portion new."
+    }
+   ],
+   "process": "A warm southern climate on limestone ripens Cabernet Franc fully, and extended maceration with oak gives the density and structure the region is known for."
+  }
+ },
+ {
+  "id": "goriska-brda",
+  "name": "Goriška Brda",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "The Slovenian half of Collio, split from Italy by a border drawn through the vineyards: textured whites, some of them skin-fermented in the region's amber tradition.",
+  "abv": "12.5–13.5%",
+  "origin": "Primorska, Slovenia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "yellow apple",
+   "almond",
+   "beeswax",
+   "dried herb"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The 1947 border cut the Collio hills in two, leaving identical soils and grapes on either side — the Italian side became famous first, and the Slovenian side spent decades being sold as bulk wine into it.",
+  "dexNumber": 1017,
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not cold — these are textured whites and over-chilling hides the almond and beeswax. Use a standard white glass, or a larger one for skin-contact bottles. If the wine is amber rather than pale, treat it more like a light red: cooler than room temperature, but with air.",
+   "pair": [
+    "Prosciutto",
+    "Risotto",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Textured Friulian-style whites, some skin-fermented, on marl and sandstone hills.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Rebula (Ribolla Gialla), Friulano, Chardonnay and Pinot Grigio."
+    },
+    {
+     "label": "Region",
+     "detail": "Goriška Brda in western Slovenia, continuous with Italy's Collio."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Ranges from cool stainless fermentation to extended skin contact."
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral oak or large casks; skin-contact wines often see long élevage."
+    }
+   ],
+   "process": "Marl and sandstone hills with a Mediterranean-Alpine climate give ripe but firm whites, made either fresh in stainless or with extended skin contact in the regional amber style."
+  }
+ },
+ {
+  "id": "dingac",
+  "name": "Dingač",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Croatia's first protected appellation: Plavac Mali from a near-vertical south-facing slope above the Adriatic, powerful and sun-baked.",
+  "abv": "14–15.5%",
+  "origin": "Pelješac, Croatia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried fig",
+   "black cherry",
+   "carob",
+   "sea salt"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Dingač slope was so inaccessible that grapes were carried out by donkey until a tunnel was blasted through the hillside in 1973 — and Plavac Mali was later shown by DNA testing to be a descendant of Zinfandel's ancestor.",
+  "dexNumber": 1018,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass and decant young bottles for an hour. These are high-alcohol, sun-concentrated wines with drying tannin, so they need food with fat. The vineyard gets sunlight three times — direct, reflected off the sea, and radiated from the rock — which is why the wines are as powerful as they are.",
+   "pair": [
+    "Lamb peka",
+    "Grilled red meat",
+    "Aged sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Powerful Plavac Mali from a steep, sun-reflecting coastal slope.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Plavac Mali."
+    },
+    {
+     "label": "Region",
+     "detail": "The Dingač slope on the Pelješac peninsula, facing south over the Adriatic."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with substantial extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak, often large neutral casks."
+    }
+   ],
+   "process": "Triple sun exposure on a steep coastal slope drives sugar very high, producing powerful wines whose tannin is softened by extended cask ageing."
+  }
+ },
+ {
+  "id": "fruska-gora",
+  "name": "Fruška Gora",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Vineyards on a lone mountain rising from the Pannonian plain, worked since Roman times and now making crisp whites and the local Bermet aromatised wine.",
+  "abv": "11.5–13%",
+  "origin": "Vojvodina, Serbia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "linden",
+   "citrus",
+   "herb"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Bermet, a spiced aromatised wine from these slopes, was reportedly on the Titanic's wine list — a claim Serbian producers repeat often and which nobody has firmly disproved.",
+  "dexNumber": 1019,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. The dry whites are light and high-acid and want drinking young. If you meet Bermet instead, treat it like a vermouth — it is fortified and heavily spiced, served in small measures cool, and is a completely different proposition from the table wine.",
+   "pair": [
+    "River fish",
+    "Fresh cheese",
+    "Charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Crisp continental whites from a solitary mountain on the Pannonian plain.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Welschriesling, Riesling Italico, Sauvignon Blanc and Traminac."
+    },
+    {
+     "label": "Region",
+     "detail": "Fruška Gora in Vojvodina, an isolated ridge above the Danube plain."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; bottled young."
+    }
+   ],
+   "process": "A continental climate moderated by the Danube gives high-acid aromatic whites, fermented cold and bottled young to keep their freshness."
+  }
+ },
+ {
+  "id": "dealu-mare",
+  "name": "Dealu Mare",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "'The Big Hill' on the Carpathian foothills: Romania's serious red district, where the indigenous Fetească Neagră gives dark plum and dried herb.",
+  "abv": "13.5–14.5%",
+  "origin": "Muntenia, Romania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black plum",
+   "dried herb",
+   "pepper",
+   "cocoa"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Romania has one of the largest vineyard areas in Europe, well ahead of countries with far bigger reputations — most of its production has simply never been exported.",
+  "dexNumber": 1020,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young bottles briefly. Fetească Neagră sits somewhere between Merlot and Syrah in weight, with a distinctive dried-herb note. The region also makes convincing Cabernet and Merlot, so check which grape you have before pairing.",
+   "pair": [
+    "Grilled pork",
+    "Sarmale",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Indigenous and international reds on south-facing Carpathian foothills.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Fetească Neagră, with Cabernet Sauvignon, Merlot and Băbească Neagră."
+    },
+    {
+     "label": "Region",
+     "detail": "Dealu Mare on the southern slopes of the Carpathian foothills."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, often Romanian."
+    }
+   ],
+   "process": "South-facing foothill slopes with a warm continental climate ripen both native and international varieties, with oak ageing rounding the naturally firm tannin."
+  }
+ },
+ {
+  "id": "cotnari",
+  "name": "Cotnari",
+  "category": "wine",
+  "subcategory": "Dessert",
+  "description": "Romania's historic sweet wine from the Grasă grape, once ranked beside Tokaji in European courts and made from nobly rotted grapes in Moldavia.",
+  "abv": "11–13%",
+  "origin": "Moldavia, Romania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "quince",
+   "honey",
+   "acacia",
+   "dried apricot"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Cotnari was served at European courts in the fifteenth century and was said to be a favourite of Stephen the Great of Moldavia; it declined under communism and is only now being rebuilt as a fine wine.",
+  "dexNumber": 1021,
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Serve chilled in a small glass, in modest measures. Unlike many dessert wines it is not fortified, so it is lighter in alcohol than its sweetness suggests. Aged bottles develop a deep amber colour and a nutty, oxidative note that is characteristic rather than faulty.",
+   "pair": [
+    "Blue cheese",
+    "Apple strudel",
+    "Foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Botrytis-affected sweet wine from indigenous Moldavian varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grasă de Cotnari, with Tămâioasă Românească, Frâncușă and Fetească Albă."
+    },
+    {
+     "label": "Region",
+     "detail": "Cotnari in Romanian Moldavia, where autumn mists encourage noble rot."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Late harvest with noble rot, fermented slowly and stopped with residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Several years in oak or bottle before release."
+    }
+   ],
+   "process": "Autumn humidity encourages botrytis, concentrating sugar and acid, and slow fermentation leaves substantial residual sugar without fortification."
+  }
+ },
+ {
+  "id": "thracian-lowlands",
+  "name": "Thracian Lowlands",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Bulgaria's warm southern plain, home to the indigenous Mavrud — dense, tannic and spicy, from a country that once exported vast volumes of Cabernet.",
+  "abv": "13–14%",
+  "origin": "Thrace, Bulgaria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackberry",
+   "clove",
+   "tobacco",
+   "dark plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "In the 1980s Bulgaria was among the world's largest wine exporters, shipping enormous volumes of inexpensive Cabernet; the industry collapsed after 1990 and is now rebuilding around native grapes instead.",
+  "dexNumber": 1022,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young Mavrud for an hour — it is a genuinely tannic grape and needs the air. Serve cool in a large glass. Mavrud ages well and the tannin resolves into something silkier after five to eight years, so a young bottle is not showing you the finished wine.",
+   "pair": [
+    "Grilled lamb",
+    "Stuffed peppers",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Indigenous Mavrud and Bordeaux varieties from Bulgaria's warm southern plain.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mavrud, Rubin and Cabernet Sauvignon."
+    },
+    {
+     "label": "Region",
+     "detail": "The Thracian Lowlands of southern Bulgaria, warm and continental."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with long maceration for colour and tannin."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak."
+    }
+   ],
+   "process": "A warm continental plain ripens the late-maturing Mavrud fully, and long maceration extracts the dense tannin that extended oak ageing then softens."
+  }
+ },
+ {
+  "id": "negru-de-purcari",
+  "name": "Negru de Purcari",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Moldova's most famous red blend, made at Purcari since 1827 and reputedly supplied to both the Russian imperial court and the British monarchy.",
+  "abv": "13.5–14.5%",
+  "origin": "Ștefan Vodă, Moldova",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "leather",
+   "dark chocolate",
+   "spice"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Moldova has one of the highest vineyard-to-land ratios in the world and holds the Mileștii Mici cellars — over 120 miles of underground galleries, recognised as the largest wine cellar on earth.",
+  "dexNumber": 1023,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour. Serve cool in a large glass. The blend leans on the indigenous Rară Neagră alongside Cabernet and Saperavi, which gives it a spicier, more leathery profile than a straight Bordeaux blend — pair it with richer, spiced food accordingly.",
+   "pair": [
+    "Roast lamb",
+    "Beef stew",
+    "Smoked cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A historic Moldovan red blend of indigenous and international varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Saperavi and the indigenous Rară Neagră."
+    },
+    {
+     "label": "Region",
+     "detail": "Purcari in south-eastern Moldova, near the Dniester and the Black Sea."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Varieties fermented separately and blended, with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak."
+    }
+   ],
+   "process": "A continental climate tempered by the Black Sea ripens the blend evenly, and long maceration with oak ageing builds the leathery, spiced structure it is known for."
+  }
+ },
+ {
+  "id": "kakheti-qvevri-amber",
+  "name": "Kakheti Qvevri Amber",
+  "category": "wine",
+  "subcategory": "Skin-Contact",
+  "description": "Wine made the way it was eight thousand years ago: white grapes fermented on skins in clay qvevri buried to the neck in the earth, emerging amber and tannic.",
+  "abv": "12–13.5%",
+  "origin": "Kakheti, Georgia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried apricot",
+   "walnut",
+   "tea tannin",
+   "orange peel"
+  ],
+  "glassware": "Tulip or small wine glass",
+  "funFact": "Georgia has archaeological evidence of winemaking from around 6000 BC — the oldest yet found — and the qvevri method is on UNESCO's list of intangible cultural heritage.",
+  "dexNumber": 1024,
+  "serve": {
+   "temp": "54-58°F, cool",
+   "glass": "Tulip or small wine glass",
+   "how": "Serve cool but not cold, closer to a light red than a white — chilling shuts down the tannin and the wine tastes merely sour. Use a tulip rather than a large bowl. Expect grip and a tea-like tannin from the skin and stem contact; this is a food wine and works poorly on its own.",
+   "pair": [
+    "Khinkali",
+    "Walnut sauces",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "White grapes fermented and aged on skins in buried clay qvevri vessels.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Rkatsiteli and Mtsvane."
+    },
+    {
+     "label": "Region",
+     "detail": "Kakheti in eastern Georgia, the country's principal wine region."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented on skins, stems and pips in qvevri buried underground."
+    },
+    {
+     "label": "Aging",
+     "detail": "Up to six months on skins in the qvevri, then further ageing."
+    }
+   ],
+   "process": "Whole crushed grapes ferment with skins and stems in earth-buried clay vessels, where stable ground temperature drives a slow fermentation and long maceration."
+  }
+ },
+ {
+  "id": "areni",
+  "name": "Areni",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "High-altitude Armenian red from the Areni grape, grown near a cave that held a 6,100-year-old winery — the oldest ever excavated.",
+  "abv": "13–14%",
+  "origin": "Vayots Dzor, Armenia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "pomegranate",
+   "dried herb",
+   "stone"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Areni-1 cave in the same valley contained a wine press, fermentation vats and grape seeds dated to around 4100 BC — the oldest known winemaking facility anywhere in the world.",
+  "dexNumber": 1025,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Areni is naturally light in colour and high in acid — closer to Pinot Noir in weight than to a Georgian red — so do not judge it by depth of colour. A short decant helps young bottles; a long one strips them.",
+   "pair": [
+    "Grilled lamb",
+    "Dolma",
+    "Sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude indigenous Armenian red on volcanic soils at 1,400 metres and above.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Areni Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "The Vayots Dzor province of southern Armenia, at high altitude on volcanic soil."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented moderately warm; some producers use karas clay vessels."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak or neutral clay."
+    }
+   ],
+   "process": "Extreme altitude with intense sun and cold nights ripens the fruit while holding acidity, giving pale but structured reds with a distinctly stony character."
+  }
+ },
+ {
+  "id": "nemea",
+  "name": "Nemea",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Agiorgitiko from the Peloponnese, grown where Heracles killed the Nemean lion: soft, dark-fruited and velvety, Greece's most approachable serious red.",
+  "abv": "13–14%",
+  "origin": "Peloponnese, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "plum",
+   "sweet spice",
+   "soft tannin"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Agiorgitiko means 'St George's grape', and Nemea's wine is nicknamed the Blood of Heracles after the lion he strangled in the same valley — Greek wine names tend to come with mythology attached.",
+  "dexNumber": 1026,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Agiorgitiko has naturally low acidity and soft tannin, so over-warming makes it flabby — keep it below room temperature. High-altitude Nemea bottlings are firmer and repay a short decant; valley-floor wines are best drunk young and simply.",
+   "pair": [
+    "Lamb kleftiko",
+    "Moussaka",
+    "Grilled sausage"
+   ]
+  },
+  "composition": {
+   "summary": "Soft, dark-fruited Agiorgitiko from a high valley in the Peloponnese.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Agiorgitiko."
+    },
+    {
+     "label": "Region",
+     "detail": "The Nemea appellation in the northern Peloponnese, from valley floor to 900 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French and American oak."
+    }
+   ],
+   "process": "A wide altitude range within one appellation gives everything from soft valley wines to structured mountain bottlings, with oak ageing rounding the naturally supple tannin."
+  }
+ },
+ {
+  "id": "naoussa",
+  "name": "Naoussa",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Xinomavro from northern Greece — pale, savagely tannic and high in acid, with tomato and olive notes that make comparisons to Barolo inevitable.",
+  "abv": "13–14%",
+  "origin": "Macedonia, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried tomato",
+   "olive",
+   "sour cherry",
+   "dried herb"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Xinomavro means 'acid black', and its combination of pale colour with ferocious tannin and high acidity leads almost every taster to reach for the Nebbiolo comparison eventually.",
+  "dexNumber": 1027,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for at least an hour — young Xinomavro is genuinely austere and needs the air. Serve cool in a large glass. Do not judge it by colour; it is pale to the point of looking weak while being one of the most tannic wines in Europe. Ten years in bottle transforms it.",
+   "pair": [
+    "Slow-roast lamb",
+    "Tomato-braised beef",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-acid, high-tannin Xinomavro from the slopes of Mount Vermio.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Xinomavro."
+    },
+    {
+     "label": "Region",
+     "detail": "The Naoussa appellation on the eastern slopes of Mount Vermio in Greek Macedonia."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak, traditionally large neutral casks."
+    }
+   ],
+   "process": "A cool continental site holds acidity extremely high while long maceration extracts formidable tannin, producing wines built almost entirely for long ageing."
+  }
+ },
+ {
+  "id": "santorini",
+  "name": "Santorini",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Assyrtiko from volcanic ash, on vines trained into ground-level baskets to survive the wind. Searing acidity, salt and smoke, with almost no rain all year.",
+  "abv": "13–14%",
+  "origin": "Cyclades, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "sea salt",
+   "smoke",
+   "flint"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Santorini's vines are woven into low basket shapes called kouloura that shelter the fruit inside from wind and sun, and because the island never had phylloxera, many root systems are centuries old.",
+  "dexNumber": 1028,
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not ice-cold; the salinity and smoke need a few degrees to show. Use a standard white glass. Santorini Assyrtiko has unusually high alcohol for a wine this acidic, so it stands up to rich seafood far better than its citrus profile suggests. It also ages well for a decade.",
+   "pair": [
+    "Grilled octopus",
+    "Fava",
+    "Salted fish"
+   ]
+  },
+  "composition": {
+   "summary": "Volcanic, high-acid Assyrtiko from ancient basket-trained vines on a windswept island.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Assyrtiko, with Athiri and Aidani."
+    },
+    {
+     "label": "Region",
+     "detail": "Santorini in the Cyclades, on volcanic ash and pumice with almost no rainfall."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented bone dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unoaked; some producers use old barrels or extended lees ageing."
+    }
+   ],
+   "process": "Vines survive on sea mist rather than rain, and volcanic soils with extreme sun give wines of high alcohol and ferocious acidity at the same time."
+  }
+ },
+ {
+  "id": "bekaa-valley",
+  "name": "Bekaa Valley",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Rhône and Bordeaux varieties grown at a thousand metres in a high valley between two mountain ranges, in a wine culture older than most of Europe's.",
+  "abv": "13.5–14.5%",
+  "origin": "Bekaa, Lebanon",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "dried fig",
+   "cedar",
+   "warm spice"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Château Musar continued making wine through most of the Lebanese civil war, moving grapes across active front lines to reach the winery — production was missed in only two vintages, 1976 and 1984.",
+  "dexNumber": 1029,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour. Serve cool in a large glass. Traditional Bekaa reds are made in an oxidative, long-aged style that can read as unusual if you expect modern fruit — that character is deliberate. Older bottles often show better than young ones and are worth seeking.",
+   "pair": [
+    "Lamb kebab",
+    "Aubergine dishes",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude Mediterranean reds blending Rhône and Bordeaux varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cinsault, Carignan, Cabernet Sauvignon, Syrah and Grenache."
+    },
+    {
+     "label": "Region",
+     "detail": "The Bekaa Valley at around 1,000 metres, between the Lebanon and Anti-Lebanon ranges."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation, in the traditional houses with long maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–36 months in oak, with extended bottle age before release."
+    }
+   ],
+   "process": "High altitude keeps acidity intact under intense Mediterranean sun, and long oak and bottle ageing produce the savoury, dried-fruit style the valley is known for."
+  }
+ },
+ {
+  "id": "upper-galilee",
+  "name": "Upper Galilee",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Israel's premium red district on the volcanic slopes below Mount Hermon — cool nights, high elevation, and Bordeaux varieties with a Mediterranean herbal edge.",
+  "abv": "13.5–14.5%",
+  "origin": "Galilee, Israel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "mint",
+   "dried herb",
+   "cedar"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Israeli winemaking was effectively restarted in the 1880s with Rothschild backing and French rootstock, then transformed again in the 1980s when growers moved into the cool high Galilee.",
+  "dexNumber": 1030,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young bottles for around forty minutes. The herbal, minty edge is a regional signature from the altitude and the scrubland around the vineyards. Check whether a bottle is kosher and mevushal — flash-pasteurised wines are made differently and taste it.",
+   "pair": [
+    "Grilled lamb",
+    "Beef",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool, high-elevation Bordeaux varieties on volcanic and limestone soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Merlot, Syrah and Cabernet Franc."
+    },
+    {
+     "label": "Region",
+     "detail": "The Upper Galilee and Golan slopes, at 400–1,200 metres below Mount Hermon."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with controlled extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French oak."
+    }
+   ],
+   "process": "Altitude and cold nights slow ripening in a hot country, retaining acidity, while volcanic soils and Mediterranean scrub give the wines their herbal signature."
+  }
+ },
+ {
+  "id": "judean-hills",
+  "name": "Judean Hills",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Terraced limestone hills outside Jerusalem, replanted on terraces that have held vines on and off since antiquity — leaner and stonier than the Galilee.",
+  "abv": "13.5–14.5%",
+  "origin": "Judean Hills, Israel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "stone",
+   "sage",
+   "graphite"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Ancient winepresses cut directly into the limestone bedrock are scattered across these hills, and some modern vineyards are planted on terraces built two thousand years ago.",
+  "dexNumber": 1031,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass. These are generally leaner and more mineral than Galilee wines, so avoid over-extracting them with a long decant — twenty to thirty minutes is enough. The stony, herbal profile suits simply grilled food better than heavily sauced dishes.",
+   "pair": [
+    "Grilled meats",
+    "Roast vegetables",
+    "Sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Limestone-terraced Mediterranean reds in the hills around Jerusalem.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Syrah, Merlot and increasingly Mediterranean varieties."
+    },
+    {
+     "label": "Region",
+     "detail": "The Judean Hills west of Jerusalem, on terraced limestone at 400–900 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented with moderate extraction to preserve freshness."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "Free-draining limestone and hillside elevation restrict vigour and hold acidity, producing wines that are stonier and more restrained than Israel's warmer districts."
+  }
+ },
+ {
+  "id": "cappadocia",
+  "name": "Cappadocia",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "Indigenous Anatolian varieties grown on volcanic tuff at 1,200 metres, in a region where wine has been made continuously for thousands of years.",
+  "abv": "13–14%",
+  "origin": "Central Anatolia, Turkey",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour cherry",
+   "pomegranate",
+   "spice",
+   "volcanic dust"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Turkey has one of the largest vineyard areas on earth but turns only a small fraction of it into wine — most of the crop goes to table grapes and raisins, a legacy of the country's drinking laws.",
+  "dexNumber": 1032,
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Native varieties like Kalecik Karası are light and aromatic and behave more like Pinot Noir than like a Mediterranean red, so do not over-warm or over-decant them. Öküzgözü and Boğazkere blends are firmer and take a longer decant.",
+   "pair": [
+    "Grilled lamb",
+    "Stuffed vine leaves",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude indigenous Anatolian reds on volcanic tuff soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Kalecik Karası, Öküzgözü, Boğazkere and Emir for whites."
+    },
+    {
+     "label": "Region",
+     "detail": "Cappadocia in central Anatolia, at around 1,000–1,300 metres on volcanic tuff."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented at moderate temperature to preserve aromatics."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, often neutral."
+    }
+   ],
+   "process": "High-altitude continental conditions with hot days and cold nights ripen native varieties while retaining the bright acidity that defines the regional style."
+  }
+ },
+ {
+  "id": "guerrouane",
+  "name": "Guerrouane",
+  "category": "wine",
+  "subcategory": "Rosé",
+  "description": "Morocco's best-known appellation, on the plateau below the Atlas mountains — pale, dry gris rosé built to be drunk very cold with spiced food.",
+  "abv": "12.5–13.5%",
+  "origin": "Meknès, Morocco",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red berry",
+   "citrus peel",
+   "white pepper",
+   "dry finish"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Morocco was once among France's largest wine suppliers, and its vineyards were largely uprooted after independence; the surviving appellations around Meknès still work to a French AOC-style system.",
+  "dexNumber": 1033,
+  "serve": {
+   "temp": "45-48°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve very cold in a white wine glass rather than a large bowl. Moroccan gris is paler and drier than Provence rosé and made specifically to cut through spiced food, so pair it with tagine or grilled meat rather than treating it as an aperitif. Drink the current vintage only.",
+   "pair": [
+    "Lamb tagine",
+    "Grilled merguez",
+    "Couscous"
+   ]
+  },
+  "composition": {
+   "summary": "Pale dry gris rosé from Rhône varieties on a high plateau below the Atlas.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cinsault, Grenache and Carignan."
+    },
+    {
+     "label": "Region",
+     "detail": "The Guerrouane appellation near Meknès, on a plateau at around 600 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Direct pressing for very pale colour, cool stainless fermentation."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young for immediate drinking."
+    }
+   ],
+   "process": "Altitude moderates a hot climate enough to retain acidity, and direct pressing with cool fermentation gives a very pale, dry and deliberately refreshing style."
+  }
+ },
+ {
+  "id": "helan-mountain-east",
+  "name": "Helan Mountain East",
+  "category": "wine",
+  "subcategory": "Regional Red",
+  "description": "China's most credible fine-wine region, on the desert flank of the Helan mountains, where vines are buried under earth every winter to survive the cold.",
+  "abv": "13.5–14.5%",
+  "origin": "Ningxia, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "dried herb",
+   "cedar",
+   "dark plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Ningxia growers bury their vines under soil each autumn and unearth them each spring, because winter temperatures would otherwise kill them — an enormous annual labour cost that no other serious wine region carries.",
+  "dexNumber": 1034,
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for around an hour. Serve cool in a large glass. Ningxia Cabernet tends toward firm tannin and pronounced oak in its ambitious bottlings, so give it air. The region is young enough that vintage-to-vintage variation is still wide; recent vintages are markedly better than early ones.",
+   "pair": [
+    "Roast lamb",
+    "Beef",
+    "Peking duck"
+   ]
+  },
+  "composition": {
+   "summary": "Desert-grown Bordeaux varieties on gravelly alluvial soils under irrigation.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Merlot and Cabernet Gernischt."
+    },
+    {
+     "label": "Region",
+     "detail": "The eastern foothills of the Helan Mountains in Ningxia, on the edge of the Gobi."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French and American oak, often substantially new."
+    }
+   ],
+   "process": "An arid, high-altitude desert climate with irrigation gives precise ripening control, though vines must be buried each winter to survive temperatures that would otherwise kill them."
+  }
+ },
+ {
+  "id": "nashik",
+  "name": "Nashik",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "India's wine capital, on a plateau above Mumbai, where the vines are pruned twice a year and the harvest happens in February.",
+  "abv": "11.5–13%",
+  "origin": "Maharashtra, India",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "lime",
+   "white flower",
+   "tropical hint"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "In India's tropical climate vines never go dormant, so growers prune twice annually — once to grow foliage and once to set fruit — and harvest in late winter rather than autumn.",
+  "dexNumber": 1035,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. Nashik whites are made for freshness and for Indian food, so drink them young and cold. Sauvignon Blanc and Chenin are the strengths; the sparkling wines from the same region are also worth attention and should be served colder still.",
+   "pair": [
+    "Fish curry",
+    "Tandoori prawns",
+    "Spiced vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Tropical-plateau whites harvested in winter under a double-pruning regime.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc, Chenin Blanc and Viognier."
+    },
+    {
+     "label": "Region",
+     "detail": "The Nashik plateau in Maharashtra, at 600–900 metres above sea level."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation under temperature control."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; bottled young."
+    }
+   ],
+   "process": "Altitude tempers a tropical climate, and a double-pruning cycle produces a February harvest, with cold stainless fermentation preserving the aromatics for early drinking."
+  }
+ },
+ {
+  "id": "yamanashi",
+  "name": "Yamanashi",
+  "category": "wine",
+  "subcategory": "White",
+  "description": "Koshu — a pink-skinned grape grown in Japan for over a thousand years — made into a delicate, low-alcohol white built expressly to sit beside raw fish.",
+  "abv": "11–12.5%",
+  "origin": "Yamanashi, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white peach",
+   "yuzu",
+   "faint grip",
+   "mineral"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Koshu carries genes from wild Chinese vine species and reached Japan along the Silk Road; DNA work confirmed it is a genuine Vitis vinifera hybrid rather than a European import.",
+  "dexNumber": 1036,
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. Koshu is deliberately delicate — low in alcohol, subtle in aroma, with a faint phenolic grip from its pink skins — so it is easily overwhelmed. Pair it with sashimi or lightly dressed fish rather than anything rich, which is exactly what it was revived to do.",
+   "pair": [
+    "Sashimi",
+    "Tempura",
+    "Steamed fish"
+   ]
+  },
+  "composition": {
+   "summary": "A delicate, low-alcohol white from the indigenous pink-skinned Koshu grape.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Koshu."
+    },
+    {
+     "label": "Region",
+     "detail": "The Kofu basin in Yamanashi prefecture, ringed by mountains west of Tokyo."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Gentle pressing with cool stainless fermentation; some sur lie versions."
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unoaked; occasional lees ageing for texture."
+    }
+   ],
+   "process": "A humid climate and a thick-skinned pink grape give low sugar and subtle aromatics, handled gently and fermented cold to preserve the wine's deliberate delicacy."
+  }
  }
 ]
