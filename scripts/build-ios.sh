@@ -73,14 +73,27 @@ case "$MODE" in
     # $(NF-3) this returned "17" — the number out of the model name — and
     # devicectl failed with 'device was not found (Name: 17)'. The build had
     # succeeded; only the install died, which makes it look like a build bug.
+    #
+    # devicectl reports TWO installable states and the pattern must accept
+    # both: "available (paired)" when the phone is idle, and "connected"
+    # when it is actively tunnelled — which is precisely the state it is in
+    # straight after a build, so matching only the first meant the install
+    # failed exactly when you wanted it. "unavailable" must NOT match, which
+    # is why the first alternative keeps "(paired)" rather than testing for
+    # "available" alone; "disconnected" is excluded by the word boundary.
     DEV="$(xcrun devicectl list devices 2>/dev/null \
-           | awk '/available \(paired\)/ {
+           | awk '/available \(paired\)|(^| )connected( |$)/ {
                     for (i = 1; i <= NF; i++)
                       if ($i ~ /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/) {
                         print $i; exit
                       }
                   }')"
-    [ -n "$DEV" ] || { echo "No paired device. Plug the phone in and unlock it." >&2; exit 1; }
+    [ -n "$DEV" ] || {
+      echo "No installable device. Plug the phone in, unlock it, trust this Mac." >&2
+      echo "What devicectl can see:" >&2
+      xcrun devicectl list devices >&2 2>/dev/null
+      exit 1
+    }
 
     echo "==> Installing to $DEV"
     # `install`, not `launch`: devicectl installs onto a locked phone, which
