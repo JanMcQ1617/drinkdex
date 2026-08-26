@@ -1,0 +1,1874 @@
+[
+ {
+  "id": "harvard",
+  "name": "Harvard",
+  "subcategory": "Spirit-Forward",
+  "description": "Brandy, sweet vermouth and bitters with a splash of soda — a Manhattan built on cognac, and the oldest of the college cocktails.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "vermouth",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Brandy",
+   "Sweet vermouth",
+   "Angostura bitters",
+   "Soda water"
+  ],
+  "funFact": "Brandy was America's default spirit until phylloxera destroyed the French vineyards in the 1870s and whiskey took its place — most brandy cocktails date from before that shift.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "duplex",
+  "name": "Duplex",
+  "subcategory": "Spirit-Forward",
+  "description": "Both vermouths in equal measure with orange bitters. No base spirit at all, and a staple order before Prohibition.",
+  "abv": "16–18%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "vermouth",
+   "wormwood",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Vermouth-only cocktails filled American afternoon drinking until Prohibition killed the habit; the category had to be rediscovered from books eighty years later.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "vermouth-cocktail",
+  "name": "Vermouth Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Sweet vermouth with bitters and a cherry, stirred cold. The simplest drink in the nineteenth-century canon.",
+  "abv": "16–18%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "wormwood",
+   "bitters",
+   "cherry"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Sweet vermouth",
+   "Angostura bitters",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Jerry Thomas lists it in 1862 with no base spirit — proof that a cocktail was originally defined by structure, spirit plus sugar plus bitters, rather than by strength.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sweet vermouth",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "1 barspoon"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "absinthe-frappe",
+  "name": "Absinthe Frappé",
+  "subcategory": "Sour",
+  "description": "Absinthe, anisette and mint shaken over crushed ice until the glass frosts white. New Orleans in the heat.",
+  "abv": "20–22%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "mint",
+   "wormwood"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Absinthe",
+   "Anisette",
+   "Mint",
+   "Soda water"
+  ],
+  "funFact": "The Old Absinthe House on Bourbon Street has served it since the 1870s, and a song was written about it in 1904 — decades before absinthe was banned in America.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Absinthe",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Anisette",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "6"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Press the mint gently with the syrup in a shaker.",
+    "Add the absinthe, anisette and crushed ice and shake hard until the tin frosts.",
+    "Pour unstrained into a rocks glass.",
+    "Top with a splash of soda and crown with mint."
+   ],
+   "garnish": "A mint sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "absinthe-suissesse",
+  "name": "Absinthe Suissesse",
+  "subcategory": "Creamy & Dessert",
+  "description": "Absinthe with orgeat, cream and egg white, blended pale green. A New Orleans breakfast drink, and served as one.",
+  "abv": "16–18%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "almond",
+   "cream",
+   "mint"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Absinthe",
+   "Orgeat",
+   "Cream",
+   "Egg white",
+   "Crème de menthe"
+  ],
+  "funFact": "It is served in the French Quarter as a morning drink, and Brennan's has poured it at breakfast for decades alongside eggs and turtle soup.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Absinthe",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orgeat",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "White crème de menthe",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Cream",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup, crushed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a blender with crushed ice.",
+    "Blend until pale green, smooth and frothy.",
+    "Pour into a chilled coupe.",
+    "Garnish with a mint sprig and serve immediately."
+   ],
+   "garnish": "A mint sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "roffignac",
+  "name": "Roffignac",
+  "subcategory": "Highball",
+  "description": "Cognac with raspberry shrub and soda over ice — named for a New Orleans mayor of the 1820s.",
+  "abv": "14–16%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raspberry",
+   "cognac",
+   "vinegar tang",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Cognac",
+   "Raspberry shrub",
+   "Soda water"
+  ],
+  "funFact": "Count Louis Philippe de Roffignac was mayor of New Orleans from 1820 to 1828 and is credited with the city's first street lighting and paved roads.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Raspberry shrub",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the cognac and raspberry shrub and stir.",
+    "Top with cold soda water.",
+    "Express a lemon twist over the surface and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "alabazam",
+  "name": "Alabazam",
+  "subcategory": "Sour",
+  "description": "Cognac, curaçao, lemon and a heavy hand of Angostura. Named by a Victorian barman for no reason anyone recorded.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "orange",
+   "lemon",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Cognac",
+   "Orange curaçao",
+   "Lemon juice",
+   "Angostura bitters"
+  ],
+  "funFact": "The bitters measure is unusually large for the era — a full two teaspoons where most recipes call for dashes, which is what gives the drink its name-worthy kick.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "fanciulli",
+  "name": "Fanciulli",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan with Fernet-Branca in place of the bitters. Minty, medicinal and considerably more assertive.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "fernet",
+   "rye",
+   "menthol",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Sweet vermouth",
+   "Fernet-Branca"
+  ],
+  "funFact": "Fernet-Branca has been made in Milan since 1845 and contains around 27 botanicals; its recipe is held by the Branca family and has never been published.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Fernet-Branca",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "star-cocktail",
+  "name": "Star Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Applejack and sweet vermouth with bitters — the apple-brandy Manhattan, and older than most whiskey ones.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "vermouth",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Applejack",
+   "Sweet vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "Applejack was made in colonial America by freezing cider and removing the ice — a method called jacking, which is where the spirit gets its name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Applejack",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "bombay-cocktail",
+  "name": "Bombay Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Brandy, both vermouths, curaçao and absinthe. Five ingredients, all of them aromatic, and no citrus anywhere.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "orange",
+   "anise",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Brandy",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange curaçao",
+   "Absinthe"
+  ],
+  "funFact": "It has nothing to do with Bombay — interwar bar books attached imperial place names to drinks with no connection to them, which is most of the Savoy's geography.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brandy",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "metropole",
+  "name": "Metropole",
+  "subcategory": "Spirit-Forward",
+  "description": "Brandy and dry vermouth with Peychaud's and orange bitters. The Metropolitan's drier twin, from the hotel of the same name.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "anise bitters",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Brandy",
+   "Dry vermouth",
+   "Peychaud's bitters",
+   "Orange bitters"
+  ],
+  "funFact": "The Hotel Metropole stood on Broadway and was notorious enough that gambler Herman Rosenthal was shot outside it in 1912, in a case that brought down a police lieutenant.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Peychaud's bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "metropolitan",
+  "name": "Metropolitan",
+  "subcategory": "Spirit-Forward",
+  "description": "Brandy and sweet vermouth with bitters and a little sugar. The sweeter half of a Victorian pair.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "vermouth",
+   "sugar",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Brandy",
+   "Sweet vermouth",
+   "Angostura bitters",
+   "Sugar"
+  ],
+  "funFact": "Not to be confused with the 1990s vodka-and-cranberry Metropolitan, which shares the name and nothing else — the collision is a century apart.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "third-rail",
+  "name": "Third Rail",
+  "subcategory": "Spirit-Forward",
+  "description": "Rum, brandy and applejack in equal measure with an absinthe rinse. Named for the electrified rail, and appropriately.",
+  "abv": "30–32%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "cognac",
+   "rum",
+   "anise"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Brandy",
+   "Applejack",
+   "Absinthe"
+  ],
+  "funFact": "Three base spirits at equal measure with no dilution beyond stirring — this is among the strongest drinks in the classic canon by design rather than accident.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Applejack",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp, to rinse"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rinse a chilled coupe with absinthe and discard the excess.",
+    "Stir the rum, brandy and applejack over ice for 25 seconds.",
+    "Strain into the rinsed coupe.",
+    "Express a lemon twist over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "honeymoon",
+  "name": "Honeymoon",
+  "subcategory": "Sour",
+  "description": "Calvados, Bénédictine, curaçao and lemon — from a Berkshires restaurant, and one of the better applejack sours.",
+  "abv": "22–24%",
+  "origin": "Massachusetts, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "honeyed herbs",
+   "orange",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Calvados",
+   "Bénédictine",
+   "Orange curaçao",
+   "Lemon juice"
+  ],
+  "funFact": "It comes from the Hotel Wentworth's Honeymoon Cocktail via a 1930s Massachusetts restaurant, and is sometimes printed as the Farmer's Daughter.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Calvados",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bosom-caresser",
+  "name": "Bosom Caresser",
+  "subcategory": "Creamy & Dessert",
+  "description": "Brandy, curaçao and grenadine shaken with a whole egg yolk. Rich, orange-red and named with Victorian directness.",
+  "abv": "18–20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "orange",
+   "egg",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Brandy",
+   "Orange curaçao",
+   "Grenadine",
+   "Egg yolk"
+  ],
+  "funFact": "Nineteenth-century drink names were startlingly frank — the Bosom Caresser sits in the same books as the Corpse Reviver and the Maiden's Blush.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brandy",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Egg yolk",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 20 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Grate nutmeg over the surface."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "deauville",
+  "name": "Deauville",
+  "subcategory": "Sour",
+  "description": "Calvados and cognac with Cointreau and lemon — a Sidecar split between grape and apple brandy.",
+  "abv": "24–26%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "cognac",
+   "orange",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Calvados",
+   "Cognac",
+   "Cointreau",
+   "Lemon juice"
+  ],
+  "funFact": "Deauville on the Normandy coast was the fashionable summer resort of interwar Paris, close enough to the calvados orchards to explain the recipe.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Calvados",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "depth-bomb",
+  "name": "Depth Bomb",
+  "subcategory": "Sour",
+  "description": "Calvados and cognac with lemon and grenadine — a First World War name for a drink of apple and grape.",
+  "abv": "26–28%",
+  "origin": "France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "cognac",
+   "pomegranate",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Calvados",
+   "Cognac",
+   "Lemon juice",
+   "Grenadine"
+  ],
+  "funFact": "Depth charges were new technology in 1916, and the drink joined a wave of cocktails named after weapons that also gave us the Whizz Bang and the French 75.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Calvados",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "chicago-cocktail",
+  "name": "Chicago Cocktail",
+  "subcategory": "Sparkling",
+  "description": "Brandy and curaçao with bitters, topped with champagne in a sugar-rimmed glass.",
+  "abv": "22–24%",
+  "origin": "Chicago, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "orange",
+   "brioche",
+   "sugar"
+  ],
+  "glassware": "Coupe with a sugared rim",
+  "ingredients": [
+   "Brandy",
+   "Orange curaçao",
+   "Angostura bitters",
+   "Champagne"
+  ],
+  "funFact": "The sugared rim is the tell of a whole family of nineteenth-century 'crusta'-influenced drinks, of which the Brandy Crusta is the best-known survivor.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brandy",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Champagne",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rim a chilled coupe with lemon and caster sugar.",
+    "Shake the brandy, curaçao and bitters with ice.",
+    "Strain into the rimmed coupe.",
+    "Top slowly with champagne and serve."
+   ],
+   "garnish": "A sugared rim and a lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "brandy-champarelle",
+  "name": "Brandy Champarelle",
+  "subcategory": "Creamy & Dessert",
+  "description": "Curaçao, yellow Chartreuse, anisette and brandy, layered in that order. A New Orleans pousse-café.",
+  "abv": "26–28%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "herbal",
+   "anise",
+   "cognac"
+  ],
+  "glassware": "Pony or sherry glass",
+  "ingredients": [
+   "Orange curaçao",
+   "Yellow Chartreuse",
+   "Anisette",
+   "Brandy"
+  ],
+  "funFact": "Layering works on sugar density: the sweetest liqueur goes first and the driest spirit last, which is why the brandy floats on top rather than sinking.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Yellow Chartreuse",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Anisette",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the curaçao into a pony glass.",
+    "Float the yellow Chartreuse over the back of a barspoon.",
+    "Float the anisette the same way, then the brandy last.",
+    "Serve immediately without stirring."
+   ],
+   "garnish": "None — the layers are the presentation",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "silver-fizz",
+  "name": "Silver Fizz",
+  "subcategory": "Fizz",
+  "description": "A Gin Fizz with egg white shaken through it. The silver is the foam, and it is the whole difference.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "juniper",
+   "foam",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Simple syrup",
+   "Egg white",
+   "Soda water"
+  ],
+  "funFact": "The fizz family is graded by egg: silver takes the white, golden the yolk, and royal the whole egg — three named drinks from one recipe.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything except the soda without ice for 15 seconds.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Strain into a chilled glass with no ice.",
+    "Top slowly with soda water to lift the foam and serve at once."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "golden-fizz",
+  "name": "Golden Fizz",
+  "subcategory": "Fizz",
+  "description": "A Gin Fizz built on the yolk instead of the white — richer, rounder and pale gold rather than white.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "egg yolk",
+   "juniper",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Simple syrup",
+   "Egg yolk",
+   "Soda water"
+  ],
+  "funFact": "The yolk emulsifies rather than foams, so a Golden Fizz has body where a Silver Fizz has head — the same trick that separates a flip from a sour.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg yolk",
+     "amount": "1"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything except the soda without ice for 15 seconds.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Strain into a chilled glass with no ice.",
+    "Top slowly with soda water to lift the foam and serve at once."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "royal-fizz",
+  "name": "Royal Fizz",
+  "subcategory": "Fizz",
+  "description": "The whole egg, white and yolk together. Foam and body at once, and the richest member of the family.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "egg",
+   "juniper",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Simple syrup",
+   "Whole egg",
+   "Soda water"
+  ],
+  "funFact": "A whole egg needs a longer dry shake than either half alone — twenty seconds minimum, or the white and yolk never properly combine.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Whole egg",
+     "amount": "1"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything except the soda without ice for 15 seconds.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Strain into a chilled glass with no ice.",
+    "Top slowly with soda water to lift the foam and serve at once."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "diamond-fizz",
+  "name": "Diamond Fizz",
+  "subcategory": "Fizz",
+  "description": "A Gin Fizz topped with champagne instead of soda. Also sold as a French 75 with the ratio moved.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "brioche",
+   "juniper"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Simple syrup",
+   "Champagne"
+  ],
+  "funFact": "The line between a Diamond Fizz and a French 75 is almost entirely a matter of which book you are reading and how much gin is in it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Champagne",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the gin, lemon juice and syrup hard with ice.",
+    "Strain into a chilled highball glass with no ice.",
+    "Top slowly with champagne.",
+    "Express a lemon twist over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "gin-daisy",
+  "name": "Gin Daisy",
+  "subcategory": "Sour",
+  "description": "Gin, lemon and grenadine over crushed ice with a splash of soda. The daisy is the template the Margarita descends from.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "pomegranate",
+   "juniper",
+   "soda"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Grenadine",
+   "Soda water"
+  ],
+  "funFact": "Margarita is Spanish for daisy, and a Margarita is structurally a tequila daisy — spirit, citrus and a sweetener, served the same way.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake the gin, lemon juice and grenadine hard with ice.",
+    "Strain over crushed ice in a rocks glass.",
+    "Top with a splash of soda water.",
+    "Garnish with a lemon wheel and a mint sprig."
+   ],
+   "garnish": "A lemon wheel and mint",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "brandy-daisy",
+  "name": "Brandy Daisy",
+  "subcategory": "Sour",
+  "description": "The daisy built on cognac, with yellow Chartreuse standing in for part of the sweetener.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "lemon",
+   "herbal",
+   "soda"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Brandy",
+   "Lemon juice",
+   "Yellow Chartreuse",
+   "Grenadine",
+   "Soda water"
+  ],
+  "funFact": "Nineteenth-century books print the daisy separately for every base spirit — gin, brandy, whiskey, rum — as four entries rather than one recipe with a note.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Yellow Chartreuse",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake the cognac, lemon juice, Chartreuse and grenadine with ice.",
+    "Strain over crushed ice in a rocks glass.",
+    "Top with a splash of soda.",
+    "Garnish with a lemon wheel."
+   ],
+   "garnish": "A lemon wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whiskey-daisy",
+  "name": "Whiskey Daisy",
+  "subcategory": "Sour",
+  "description": "Rye, lemon and grenadine over crushed ice. The American branch of the daisy family.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "lemon",
+   "pomegranate"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Lemon juice",
+   "Grenadine",
+   "Soda water"
+  ],
+  "funFact": "The daisy, the fix, the fizz and the cobbler are all the same idea at different dilutions — the nineteenth century organised drinks by structure rather than by base.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake the rye, lemon juice and grenadine hard with ice.",
+    "Strain over crushed ice in a rocks glass.",
+    "Top with a splash of soda water.",
+    "Garnish with a lemon wheel and seasonal berries."
+   ],
+   "garnish": "A lemon wheel and berries",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "gin-fix",
+  "name": "Gin Fix",
+  "subcategory": "Sour",
+  "description": "Gin, lemon, sugar and a little water over crushed ice, fruit piled on top. A sour served long and cold.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "juniper",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "A fix differs from a sour only in being built over crushed ice in the glass rather than shaken and strained — the fruit garnish is doing the work of the presentation.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Cold water",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Dissolve the sugar in the lemon juice and water in the glass.",
+    "Add the gin and stir once.",
+    "Fill with crushed ice and churn with a barspoon until frosted.",
+    "Cap with more crushed ice and pile fruit on top."
+   ],
+   "garnish": "Seasonal fruit piled on the ice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whiskey-fix",
+  "name": "Whiskey Fix",
+  "subcategory": "Sour",
+  "description": "Bourbon over crushed ice with lemon and sugar, fruit heaped over. The fix, in its most-ordered form.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bourbon",
+   "lemon",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Bourbon",
+   "Lemon juice",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "Crushed ice was a luxury before mechanical refrigeration — a fix or a julep was a display of a bar's ice supply as much as its bartending.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Cold water",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Dissolve the sugar in the lemon juice and water in the glass.",
+    "Add the bourbon and stir.",
+    "Fill with crushed ice and churn until the glass frosts.",
+    "Top with more ice and heap fruit over it."
+   ],
+   "garnish": "Seasonal fruit and a lemon wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whiskey-cobbler",
+  "name": "Whiskey Cobbler",
+  "subcategory": "Julep & Cobbler",
+  "description": "Bourbon over crushed ice with sugar and fruit, churned until frosted. The cobbler that made the straw famous.",
+  "abv": "16–18%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bourbon",
+   "orange",
+   "berry",
+   "sugar"
+  ],
+  "glassware": "Goblet",
+  "ingredients": [
+   "Bourbon",
+   "Sugar",
+   "Orange",
+   "Seasonal berries"
+  ],
+  "funFact": "The Sherry Cobbler popularised the drinking straw in the 1840s — before it, straws were literal rye stalks, and the cobbler is what made them a bar fixture.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Orange slices",
+     "amount": "2"
+    },
+    {
+     "item": "Seasonal berries",
+     "amount": "a handful"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Muddle the orange slices with the sugar in a goblet.",
+    "Add the bourbon and fill with crushed ice.",
+    "Churn with a barspoon until the glass frosts.",
+    "Cap with more ice, heap the berries on top and add a straw."
+   ],
+   "garnish": "Orange slices, berries and a mint sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "brandy-cobbler",
+  "name": "Brandy Cobbler",
+  "subcategory": "Julep & Cobbler",
+  "description": "Cognac, sugar and orange over crushed ice — the cobbler with brandy in place of sherry or whiskey.",
+  "abv": "16–18%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "orange",
+   "sugar",
+   "berry"
+  ],
+  "glassware": "Goblet",
+  "ingredients": [
+   "Brandy",
+   "Sugar",
+   "Orange",
+   "Seasonal fruit"
+  ],
+  "funFact": "Cobblers were among the first American drinks to reach Europe; Dickens wrote about encountering one on his 1842 American tour and being impressed by the straw.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Orange slices",
+     "amount": "2"
+    },
+    {
+     "item": "Seasonal fruit",
+     "amount": "a handful"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Muddle the orange with the sugar in a goblet.",
+    "Add the cognac and fill with crushed ice.",
+    "Churn until the outside of the glass frosts.",
+    "Top with more ice and pile fruit over it."
+   ],
+   "garnish": "Orange slices and seasonal fruit",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whiskey-rickey",
+  "name": "Whiskey Rickey",
+  "subcategory": "Highball",
+  "description": "Bourbon, lime and soda with no sugar at all. The rickey's defining feature is what it leaves out.",
+  "abv": "12–14%",
+  "origin": "Washington, D.C., USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "bourbon",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Bourbon",
+   "Lime juice",
+   "Soda water"
+  ],
+  "funFact": "The rickey was created for lobbyist Joe Rickey in Washington in the 1880s with whiskey; the gin version came later and took the name with it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Squeeze half a lime in and drop the spent shell into the glass.",
+    "Add the bourbon and top with cold soda water.",
+    "Stir once and serve with no sugar — that is the point of a rickey."
+   ],
+   "garnish": "The spent lime shell",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "pierre-collins",
+  "name": "Pierre Collins",
+  "subcategory": "Highball",
+  "description": "The Collins built on cognac. Same lemon, sugar and soda; a rounder, fruitier result.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "lemon",
+   "soda",
+   "sugar"
+  ],
+  "glassware": "Collins glass",
+  "ingredients": [
+   "Cognac",
+   "Lemon juice",
+   "Simple syrup",
+   "Soda water"
+  ],
+  "funFact": "The Collins family names by base spirit — Tom for Old Tom gin, John for whiskey, Pierre for cognac, Pedro for rum, Mike for Irish whiskey.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the cognac, lemon juice and syrup with ice.",
+    "Strain into a Collins glass filled with fresh ice.",
+    "Top with cold soda water.",
+    "Garnish with a lemon wheel and a cherry."
+   ],
+   "garnish": "A lemon wheel and a cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "pedro-collins",
+  "name": "Pedro Collins",
+  "subcategory": "Highball",
+  "description": "The rum Collins. Lighter than the whiskey version and sharper than the gin one.",
+  "abv": "12–14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rum",
+   "lemon",
+   "soda",
+   "sugar"
+  ],
+  "glassware": "Collins glass",
+  "ingredients": [
+   "White rum",
+   "Lemon juice",
+   "Simple syrup",
+   "Soda water"
+  ],
+  "funFact": "Collins glasses are named after the drink rather than the other way round — the tall, narrow shape exists to keep a long soda drink carbonated.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the rum, lemon juice and syrup with ice.",
+    "Strain into a Collins glass filled with fresh ice.",
+    "Top with cold soda water.",
+    "Garnish with a lemon wheel and a cherry."
+   ],
+   "garnish": "A lemon wheel and a cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bamboo-royale",
+  "name": "Bamboo Royale",
+  "subcategory": "Sparkling",
+  "description": "The Bamboo lengthened with champagne — sherry and vermouth under bubbles, and lower proof than almost anything.",
+  "abv": "12–14%",
+  "origin": "Yokohama, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "saline",
+   "almond",
+   "brioche",
+   "vermouth"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Fino sherry",
+   "Dry vermouth",
+   "Champagne",
+   "Orange bitters"
+  ],
+  "funFact": "The Bamboo was created at Yokohama's Grand Hotel in the 1890s; adding champagne follows the French 'Royale' convention applied to a Japanese-invented drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fino sherry",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Champagne",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the sherry, vermouth and bitters over ice for 20 seconds.",
+    "Strain into a chilled flute.",
+    "Top slowly with champagne.",
+    "Express a lemon twist over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ }
+]
