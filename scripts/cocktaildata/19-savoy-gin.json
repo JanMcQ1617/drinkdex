@@ -1,0 +1,2130 @@
+[
+ {
+  "id": "bermuda-rose",
+  "name": "Bermuda Rose",
+  "subcategory": "Sour",
+  "description": "Gin with apricot brandy and grenadine, sharpened with lemon. Pink, stone-fruited and entirely of its decade.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "pomegranate",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Apricot brandy",
+   "Grenadine",
+   "Lemon juice"
+  ],
+  "funFact": "Apricot brandy in interwar bar books means an apricot liqueur, not a distilled eau-de-vie — buying the wrong bottle turns half the Savoy unmakeable.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "blackthorn",
+  "name": "Blackthorn",
+  "subcategory": "Spirit-Forward",
+  "description": "Irish whiskey, dry vermouth and absinthe with Angostura. Softer than a Sazerac and sharper than a Manhattan.",
+  "abv": "24–26%",
+  "origin": "Ireland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "honeyed malt",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Dry vermouth",
+   "Absinthe",
+   "Angostura bitters"
+  ],
+  "funFact": "A second, unrelated Blackthorn made with sloe gin exists in the same books — the name attaches to the blackthorn shrub, which gives both sloes and shillelaghs.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "charlie-chaplin",
+  "name": "Charlie Chaplin",
+  "subcategory": "Sour",
+  "description": "Equal parts sloe gin, apricot brandy and lime. Invented at the Waldorf while Chaplin was the most famous man alive.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sloe",
+   "apricot",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Sloe gin",
+   "Apricot brandy",
+   "Lime juice"
+  ],
+  "funFact": "The Waldorf-Astoria named it during Chaplin's peak, when he was arguably the most recognisable person on earth — an equal-parts drink for a man who needed no introduction.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sloe gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "claridge",
+  "name": "Claridge",
+  "subcategory": "Sour",
+  "description": "Gin and dry vermouth cut with apricot and triple sec — a Martini that let the fruit in.",
+  "abv": "22–24%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "orange",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Apricot brandy",
+   "Triple sec"
+  ],
+  "funFact": "Named for the Hôtel Claridge on the Champs-Élysées rather than the London hotel, which spells its name with an apostrophe and served different drinks entirely.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "cornell",
+  "name": "Cornell",
+  "subcategory": "Sour",
+  "description": "Gin, maraschino and egg white shaken to a pale foam — the quietest of the American college cocktails.",
+  "abv": "26–28%",
+  "origin": "New York, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "juniper",
+   "foam"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Maraschino liqueur",
+   "Egg white",
+   "Lemon juice"
+  ],
+  "funFact": "Cornell, Yale, Princeton and Harvard all acquired cocktails in the 1900s; the drinks have nothing in common beyond the hotel bars that named them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Let the foam settle before serving."
+   ],
+   "garnish": "None",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "deep-sea",
+  "name": "Deep Sea",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and dry vermouth with absinthe and orange bitters. A Martini pulled toward anise and further out to sea.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "juniper",
+   "orange",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Absinthe",
+   "Orange bitters"
+  ],
+  "funFact": "Absinthe in dashes rather than measures is the interwar house style: enough to perfume a drink, never enough to lead it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "delmonico",
+  "name": "Delmonico",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, brandy and both vermouths with orange bitters — named for the restaurant that invented American fine dining.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "juniper",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Brandy",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Delmonico's opened in 1837 and is credited with the first à la carte menu in America, along with eggs Benedict and lobster Newberg.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "dubonnet-cocktail",
+  "name": "Dubonnet Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and Dubonnet, two to one, with a lemon twist. The Queen's drink, reportedly taken daily before lunch.",
+  "abv": "18–20%",
+  "origin": "Paris, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "quinine",
+   "juniper",
+   "red fruit"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dubonnet Rouge"
+  ],
+  "funFact": "Queen Elizabeth II's preference for gin and Dubonnet was well enough known that a 1950s note in her own hand requesting one was later sold at auction.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dubonnet Rouge",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "emerald",
+  "name": "Emerald",
+  "subcategory": "Spirit-Forward",
+  "description": "A Manhattan made with Irish whiskey. Lighter, grassier and unaccountably rare on menus.",
+  "abv": "26–28%",
+  "origin": "Ireland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honeyed malt",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Sweet vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Irish whiskey outsold Scotch worldwide before Prohibition and the Irish War of Independence between them destroyed its export trade; the category took eighty years to recover.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "fine-and-dandy",
+  "name": "Fine and Dandy",
+  "subcategory": "Sour",
+  "description": "Gin, triple sec and lemon with a dash of Angostura — a White Lady with bitters and no egg.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "lemon",
+   "juniper",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Triple sec",
+   "Lemon juice",
+   "Angostura bitters"
+  ],
+  "funFact": "The gin sour with orange liqueur is the single most repeated shape in the Savoy, appearing under at least a dozen names with only the garnish or a dash separating them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Maraschino cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "flying-dutchman",
+  "name": "Flying Dutchman",
+  "subcategory": "Sour",
+  "description": "Gin with a dash of triple sec, stirred hard and served cold. Barely a cocktail, and better for it.",
+  "abv": "28–30%",
+  "origin": "Netherlands",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Triple sec"
+  ],
+  "funFact": "Named for the ghost ship of North Sea legend, a story Dutch and English sailors traded for centuries before Wagner set it to music.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "golden-dawn",
+  "name": "Golden Dawn",
+  "subcategory": "Sour",
+  "description": "Gin, calvados, apricot and orange, with grenadine dropped through so it bleeds a sunrise up the glass.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "apple",
+   "orange",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Calvados",
+   "Apricot brandy",
+   "Orange juice",
+   "Grenadine"
+  ],
+  "funFact": "It won a London hotel competition in 1930, and the grenadine sunrise it is named for predates the Tequila Sunrise by four decades.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the gin, calvados, apricot brandy and orange juice hard with ice.",
+    "Double-strain into a chilled coupe.",
+    "Drop a dash of grenadine through the centre and let it settle.",
+    "Do not stir — the sunrise is the drink."
+   ],
+   "garnish": "A grenadine sunrise through the glass",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "green-dragon",
+  "name": "Green Dragon",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, kümmel, green crème de menthe and lemon with peach bitters. Caraway and mint, which is stranger than it sounds.",
+  "abv": "28–30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "caraway",
+   "mint",
+   "juniper",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Kümmel",
+   "Green crème de menthe",
+   "Lemon juice"
+  ],
+  "funFact": "Kümmel is a caraway and fennel liqueur that survives in Britain almost entirely because golf clubs kept ordering it as a cure for the shakes on the first tee.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Kümmel",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Green crème de menthe",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Mint leaf",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "hula-hula",
+  "name": "Hula-Hula",
+  "subcategory": "Sour",
+  "description": "Gin, orange juice and a dash of curaçao. A Bronx without the vermouth, named a decade before tiki existed.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Orange juice",
+   "Orange curaçao"
+  ],
+  "funFact": "It predates the American tiki craze by twenty years; the interwar fashion for Polynesian names ran well ahead of any Polynesian drinks.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "jockey-club",
+  "name": "Jockey Club",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, crème de noyaux, lemon and two bitters. Almond and juniper in a short, dry glass.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "almond",
+   "juniper",
+   "lemon",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Crème de noyaux",
+   "Lemon juice",
+   "Angostura bitters",
+   "Orange bitters"
+  ],
+  "funFact": "Almond notes in cocktails come from three unrelated places — noyaux from stone fruit kernels, orgeat from real almonds, and amaretto from either.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Crème de noyaux",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "judge-jr",
+  "name": "Judge Jr.",
+  "subcategory": "Sour",
+  "description": "Gin, rum, lemon and grenadine. A Prohibition drink named for a humour magazine that ran cocktail recipes illegally.",
+  "abv": "22–24%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "pomegranate",
+   "juniper",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "White rum",
+   "Lemon juice",
+   "Grenadine"
+  ],
+  "funFact": "Judge magazine printed cocktail recipes throughout Prohibition, when publishing them was legally dubious and commercially irresistible.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "leave-it-to-me",
+  "name": "Leave It To Me",
+  "subcategory": "Sour",
+  "description": "Gin, apricot, lemon and grenadine. One of several Savoy drinks whose name is a complete sentence.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "lemon",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Apricot brandy",
+   "Lemon juice",
+   "Grenadine"
+  ],
+  "funFact": "The Savoy is full of imperative titles — Leave It To Me, Between the Sheets, Hanky Panky — which reads as a house voice rather than coincidence.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "lone-tree",
+  "name": "Lone Tree",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin with both vermouths and orange bitters — a Perfect Martini under a different name.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Half the interwar canon is a Martini with the vermouth ratio moved and a new name attached; the Lone Tree is the perfect split.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "moulin-rouge",
+  "name": "Moulin Rouge",
+  "subcategory": "Sour",
+  "description": "Sloe gin, apricot and Angostura, shaken cold. Deep red and named for the windmill on Boulevard de Clichy.",
+  "abv": "22–24%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sloe",
+   "apricot",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Sloe gin",
+   "Apricot brandy",
+   "Angostura bitters"
+  ],
+  "funFact": "The Moulin Rouge opened in 1889 and its windmill has burned down and been rebuilt more than once; the sails still turn over Pigalle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sloe gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "obituary",
+  "name": "Obituary",
+  "subcategory": "Spirit-Forward",
+  "description": "A Martini with absinthe in place of most of the vermouth. Lafitte's Blacksmith Shop has poured it for decades.",
+  "abv": "30–32%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Absinthe"
+  ],
+  "funFact": "Lafitte's Blacksmith Shop on Bourbon Street claims to be among the oldest structures used as a bar in the United States, built in the 1720s and still lit largely by candle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "palm-beach",
+  "name": "Palm Beach",
+  "subcategory": "Sour",
+  "description": "Gin, sweet vermouth and grapefruit. Three ingredients, bitter and dry, and it drinks like Florida in February.",
+  "abv": "22–24%",
+  "origin": "Florida, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sweet vermouth",
+   "Grapefruit juice"
+  ],
+  "funFact": "Grapefruit was still a novelty when this was written — Florida's groves only reached the northern market once refrigerated rail cars made the trip viable.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "pall-mall",
+  "name": "Pall Mall",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, both vermouths, white crème de menthe and orange bitters. Mint through a Perfect Martini.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mint",
+   "juniper",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "White crème de menthe"
+  ],
+  "funFact": "Pall Mall is named for pall-mall, a croquet-like game played on the street in the seventeenth century before it became London's clubland.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "White crème de menthe",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Mint leaf",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "park-avenue",
+  "name": "Park Avenue",
+  "subcategory": "Sour",
+  "description": "Gin, sweet vermouth, pineapple and a dash of curaçao. Softer and more tropical than its address suggests.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "juniper",
+   "vermouth",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sweet vermouth",
+   "Pineapple juice",
+   "Orange curaçao"
+  ],
+  "funFact": "Tinned pineapple juice reached British bars in the 1920s and appears all over the Savoy — one of the first industrially processed ingredients the cocktail canon absorbed.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Pineapple leaf",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "perfect-lady",
+  "name": "Perfect Lady",
+  "subcategory": "Sour",
+  "description": "Gin, peach brandy, lemon and egg white — a competition winner from 1936 and a White Lady with stone fruit.",
+  "abv": "20–22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "peach",
+   "lemon",
+   "foam",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Peach brandy",
+   "Lemon juice",
+   "Egg white"
+  ],
+  "funFact": "It won the 1936 British Empire Cocktail Competition, an annual contest that shaped London drinking more than any single bar did.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Peach brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard again for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Serve once the foam has set."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "princes-smile",
+  "name": "Prince's Smile",
+  "subcategory": "Sour",
+  "description": "Gin, calvados and apricot with lemon. Apple and stone fruit over juniper, and drier than the fruit list suggests.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "apricot",
+   "juniper",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Calvados",
+   "Apricot brandy",
+   "Lemon juice"
+  ],
+  "funFact": "Calvados appears throughout the interwar books because Normandy apple brandy was cheap and plentiful in London; it went scarce after the war and the drinks went with it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Apple slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "princeton",
+  "name": "Princeton",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and port, layered rather than mixed, with orange bitters. The port sits underneath and stays there.",
+  "abv": "28–30%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "port",
+   "juniper",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Ruby port",
+   "Orange bitters"
+  ],
+  "funFact": "The original instruction is to pour the port carefully so it settles below the gin — a layered Martini, and one of very few stirred drinks meant to be served unmixed.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ruby port",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the gin and orange bitters over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Pour the port slowly down the side so it settles beneath the gin.",
+    "Serve without stirring; the layers are the point."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "racquet-club",
+  "name": "Racquet Club",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and dry vermouth with orange bitters — a club Martini, and the bitters are not optional.",
+  "abv": "26–28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "orange",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Orange bitters"
+  ],
+  "funFact": "Orange bitters were standard in Martinis until the 1940s and then vanished for fifty years; nearly every pre-war Martini variant assumes them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "rolls-royce",
+  "name": "Rolls-Royce",
+  "subcategory": "Sour",
+  "description": "Gin, both vermouths and a dash of Bénédictine. Smooth, herbal and named to sell itself.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honeyed herbs",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Bénédictine"
+  ],
+  "funFact": "Naming a cocktail after a luxury marque was standard interwar practice — the Rolls-Royce, the Hispano-Suiza and the Bentley all have drinks.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "royal-smile",
+  "name": "Royal Smile",
+  "subcategory": "Sour",
+  "description": "Gin, calvados, grenadine and lemon. Pink, appley and one of the better Savoy fruit sours.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "pomegranate",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Calvados",
+   "Grenadine",
+   "Lemon juice"
+  ],
+  "funFact": "Real grenadine is pomegranate, not cherry — the artificially flavoured red syrup that replaced it in the 1950s is responsible for a generation dismissing these drinks.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "silver-bullet",
+  "name": "Silver Bullet",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, kümmel and lemon, stirred cold. Caraway against juniper, and much drier than it reads.",
+  "abv": "28–30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "caraway",
+   "juniper",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Kümmel",
+   "Lemon juice"
+  ],
+  "funFact": "Kümmel has been made in the Low Countries since the sixteenth century, and the same caraway-and-fennel formula turns up in Scandinavian aquavit under a different name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Kümmel",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "straits-sling",
+  "name": "Straits Sling",
+  "subcategory": "Tiki & Tropical",
+  "description": "The Singapore Sling's older, drier ancestor: gin, Bénédictine, cherry brandy, lemon and soda.",
+  "abv": "18–20%",
+  "origin": "Singapore",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "honeyed herbs",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Bénédictine",
+   "Cherry brandy",
+   "Lemon juice",
+   "Soda water"
+  ],
+  "funFact": "Printed in the 1920s as the Straits Sling, it is markedly less sweet than the pineapple-heavy Singapore Sling that Raffles serves today.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cherry brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake everything except the soda hard with ice.",
+    "Strain into a highball glass over fresh ice.",
+    "Top with cold soda water.",
+    "Stir once and garnish."
+   ],
+   "garnish": "Lemon wheel and cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "sunshine-cocktail",
+  "name": "Sunshine Cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, sweet vermouth and a dash of grenadine, strained cold. Pink, short and sweeter than a Martini by a hair.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "vermouth",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sweet vermouth",
+   "Grenadine"
+  ],
+  "funFact": "There are at least three unrelated Sunshine Cocktails in print between 1900 and 1940, which is roughly the base rate for optimistic cocktail names.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "tango-cocktail",
+  "name": "Tango Cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, both vermouths, curaçao and orange juice. Six things in a small glass, and it holds together.",
+  "abv": "22–24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Orange curaçao",
+   "Orange juice"
+  ],
+  "funFact": "The tango reached London around 1913 and caused enough moral panic that some hotels banned it — the cocktail arrived with the dance.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "ulanda",
+  "name": "Ulanda",
+  "subcategory": "Sour",
+  "description": "Gin, triple sec and a dash of absinthe. Two parts gin to one of orange, and the absinthe does the rest.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "anise",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Triple sec",
+   "Absinthe"
+  ],
+  "funFact": "Nobody has established what Ulanda refers to — it is one of a handful of Savoy names with no traceable origin at all.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "union-jack",
+  "name": "Union Jack",
+  "subcategory": "Sour",
+  "description": "Gin and sloe gin with a dash of grenadine — red and blue in one glass, which is the whole joke.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sloe",
+   "juniper",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Sloe gin",
+   "Grenadine"
+  ],
+  "funFact": "Sloe gin is made by steeping blackthorn sloes in gin and sugar, traditionally after the first frost splits their skins.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sloe gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "wembley",
+  "name": "Wembley",
+  "subcategory": "Sour",
+  "description": "Gin, dry vermouth and apricot with a dash of calvados. Named for the 1924 British Empire Exhibition.",
+  "abv": "24–26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "apple",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Apricot brandy",
+   "Calvados"
+  ],
+  "funFact": "The British Empire Exhibition at Wembley drew 27 million visitors across 1924 and 1925, and left behind the stadium and a handful of cocktails.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "white-rose",
+  "name": "White Rose",
+  "subcategory": "Sour",
+  "description": "Gin, maraschino, orange and lemon with egg white. A Clover Club that swapped raspberry for citrus.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "orange",
+   "lemon",
+   "foam"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Maraschino liqueur",
+   "Orange juice",
+   "Lemon juice",
+   "Egg white"
+  ],
+  "funFact": "Egg white in a sour is doing structural work rather than adding flavour — it emulsifies the citrus oils and holds the aromatics at the surface.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Serve once the foam has settled."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whizz-bang",
+  "name": "Whizz Bang",
+  "subcategory": "Sour",
+  "description": "Scotch, dry vermouth, absinthe and grenadine with orange bitters. Named for a First World War shell.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "anise",
+   "vermouth",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Dry vermouth",
+   "Absinthe",
+   "Grenadine",
+   "Orange bitters"
+  ],
+  "funFact": "A whizz-bang was a German field shell whose shriek arrived barely before the explosion; soldiers' slang moved straight onto interwar drinks lists.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "yellow-daisy",
+  "name": "Yellow Daisy",
+  "subcategory": "Sour",
+  "description": "Gin, dry vermouth and Grand Marnier in equal-ish measure. Orange-heavy, aromatic and easy to like.",
+  "abv": "26–28%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Grand Marnier"
+  ],
+  "funFact": "The daisy family — spirit, citrus liqueur and lemon over ice — is one of the oldest cocktail templates, and the Margarita is a tequila daisy by another name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grand Marnier",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "zaza",
+  "name": "Zaza",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and Dubonnet with orange bitters — the Dubonnet Cocktail under a stage name, from a 1898 French play.",
+  "abv": "20–22%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "quinine",
+   "juniper",
+   "orange"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dubonnet Rouge",
+   "Orange bitters"
+  ],
+  "funFact": "Zaza was a hit French play of 1898 about a music-hall singer, adapted into three separate Hollywood films; the drink outlived all of them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dubonnet Rouge",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine all ingredients in a mixing glass with ice.",
+    "Stir for about 25 seconds until chilled and properly diluted.",
+    "Strain into a chilled coupe.",
+    "Express the garnish over the surface and serve."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ }
+]
