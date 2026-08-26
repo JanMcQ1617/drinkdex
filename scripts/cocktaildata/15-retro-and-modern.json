@@ -1,0 +1,1462 @@
+[
+ {
+  "id": "gin-alexander",
+  "name": "Gin Alexander",
+  "subcategory": "Creamy & Dessert",
+  "description": "The original Alexander, made with gin rather than brandy — juniper against chocolate and cream, and stranger than the version that replaced it.",
+  "abv": "18–20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cacao",
+   "cream",
+   "juniper",
+   "nutmeg"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Crème de cacao",
+   "Cream"
+  ],
+  "funFact": "The gin version came first and the brandy version took the name; most bars now serve a Brandy Alexander if you order an Alexander, which reverses the history exactly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White crème de cacao",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all three hard with ice for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Grate fresh nutmeg over the surface.",
+    "Serve immediately, before it separates."
+   ],
+   "garnish": "Freshly grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "golden-cadillac",
+  "name": "Golden Cadillac",
+  "subcategory": "Creamy & Dessert",
+  "description": "Galliano, white crème de cacao and cream — pale gold, vanilla-scented, and named for a car parked outside the bar that invented it.",
+  "abv": "14–16%",
+  "origin": "Palo Alto, California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "vanilla",
+   "cacao",
+   "cream",
+   "anise"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Galliano",
+   "White crème de cacao",
+   "Cream"
+  ],
+  "funFact": "Poor Red's Bar-B-Q in California claims it, named for a customer's gold Cadillac; the same bar's Golden Cadillac sales once made it one of the largest single accounts for Galliano in America.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Galliano",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "White crème de cacao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Serve without garnish, or with a light dusting of nutmeg.",
+    "Drink while cold and still emulsified."
+   ],
+   "garnish": "Grated nutmeg, optional",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "pink-squirrel",
+  "name": "Pink Squirrel",
+  "subcategory": "Creamy & Dessert",
+  "description": "Crème de noyaux, white crème de cacao and cream. Pale pink, almond-scented, and a Wisconsin supper-club fixture.",
+  "abv": "12–14%",
+  "origin": "Milwaukee, Wisconsin, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "almond",
+   "cacao",
+   "cream"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Crème de noyaux",
+   "White crème de cacao",
+   "Cream"
+  ],
+  "funFact": "Crème de noyaux is made from apricot and peach kernels rather than almonds, and the Pink Squirrel is essentially the only drink keeping the category commercially alive.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Crème de noyaux",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White crème de cacao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Serve immediately.",
+    "In Wisconsin it is often blended with ice cream instead of shaken."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "pink-lady",
+  "name": "Pink Lady",
+  "subcategory": "Sour",
+  "description": "Gin, applejack, lemon and grenadine shaken with egg white. Dismissed for decades as a ladies' drink, and considerably tougher than that suggests.",
+  "abv": "20–22%",
+  "origin": "United States",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "apple",
+   "pomegranate",
+   "lemon",
+   "foam"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Applejack",
+   "Lemon juice",
+   "Grenadine",
+   "Egg white"
+  ],
+  "funFact": "Its reputation as a soft drink is entirely a marketing artefact of the 1950s — the original is gin and applejack with a whole egg white, which is not a gentle formula.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Applejack",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a cherry."
+   ],
+   "garnish": "Maraschino cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "colorado-bulldog",
+  "name": "Colorado Bulldog",
+  "subcategory": "Creamy & Dessert",
+  "description": "A White Russian topped with cola. The cream and the cola should fight; somehow they broker a truce.",
+  "abv": "12–14%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "coffee",
+   "cream",
+   "cola",
+   "vanilla"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Vodka",
+   "Coffee liqueur",
+   "Cream",
+   "Cola"
+  ],
+  "funFact": "Adding cola to a cream drink risks curdling if the cola goes in first — pour it last and gently, and the fat stays suspended.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coffee liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cream or milk",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cola",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the vodka, coffee liqueur and cream.",
+    "Stir gently to combine.",
+    "Top slowly with cola, poured down the side of the glass.",
+    "Do not stir again."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "godmother",
+  "name": "Godmother",
+  "subcategory": "Spirit-Forward",
+  "description": "Vodka and amaretto over a large cube. The Godfather's cleaner sibling, with the Scotch swapped out.",
+  "abv": "30–32%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "almond",
+   "marzipan",
+   "clean grain"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Vodka",
+   "Amaretto"
+  ],
+  "funFact": "The 1970s duo format — one spirit, one liqueur, one big cube — produced the Godfather, Godmother, French Connection and Rusty Nail, and all four are still on menus.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Amaretto",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "one large cube"
+    }
+   ],
+   "steps": [
+    "Put a large ice cube in a rocks glass.",
+    "Add the vodka and amaretto.",
+    "Stir gently for 10 seconds.",
+    "Serve with no garnish, or a lemon twist if it reads too sweet."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "toasted-almond",
+  "name": "Toasted Almond",
+  "subcategory": "Creamy & Dessert",
+  "description": "Amaretto, coffee liqueur and cream. A dessert drink that tastes exactly like its name and makes no apology for it.",
+  "abv": "12–14%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "almond",
+   "coffee",
+   "cream"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Amaretto",
+   "Coffee liqueur",
+   "Cream"
+  ],
+  "funFact": "Add vodka and it becomes a Roasted Toasted Almond; the 1970s cream-drink family expanded by adding a spirit and lengthening the name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Amaretto",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Coffee liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cream or milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 12 seconds.",
+    "Strain over fresh ice in a rocks glass.",
+    "Dust with grated nutmeg.",
+    "Serve cold."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "freddy-fudpucker",
+  "name": "Freddy Fudpucker",
+  "subcategory": "Highball",
+  "description": "A Harvey Wallbanger built on tequila instead of vodka — orange juice with a Galliano float, and a name from the same school.",
+  "abv": "12–14%",
+  "origin": "United States",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "vanilla",
+   "agave"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Tequila",
+   "Orange juice",
+   "Galliano"
+  ],
+  "funFact": "It is a straight substitution on the Wallbanger, and both drinks exist mainly because Galliano's importer spent the 1970s pushing bars to float it on things.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Galliano",
+     "amount": "0.5 oz / 15 ml, to float"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the tequila and top with orange juice.",
+    "Stir once to combine.",
+    "Float the Galliano over the back of a spoon.",
+    "Garnish with an orange slice."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "bay-breeze",
+  "name": "Bay Breeze",
+  "subcategory": "Highball",
+  "description": "Vodka, cranberry and pineapple. The Sea Breeze with pineapple in place of the grapefruit, and gentler for it.",
+  "abv": "10–12%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "cranberry",
+   "pineapple",
+   "clean grain"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Vodka",
+   "Cranberry juice",
+   "Pineapple juice"
+  ],
+  "funFact": "The whole breeze family is vodka plus cranberry plus one other juice — grapefruit makes a Sea Breeze, pineapple a Bay Breeze, and orange a Madras.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cranberry juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the vodka and cranberry juice.",
+    "Top with pineapple juice.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "madras",
+  "name": "Madras",
+  "subcategory": "Highball",
+  "description": "Vodka, cranberry and orange juice over ice. Named for the fabric, not the city, and the least demanding drink in any bar.",
+  "abv": "10–12%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "cranberry",
+   "orange",
+   "clean grain"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Vodka",
+   "Cranberry juice",
+   "Orange juice"
+  ],
+  "funFact": "The name comes from madras plaid, whose overlapping red and orange stripes the layered juices were thought to resemble before they are stirred together.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cranberry juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the vodka and cranberry juice.",
+    "Float the orange juice on top without stirring.",
+    "Serve with a straw and let the drinker mix it."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "angels-tip",
+  "name": "Angel's Tip",
+  "subcategory": "Creamy & Dessert",
+  "description": "Crème de cacao under a float of cream, with a cherry suspended from a pick across the rim. A pousse-café for people in a hurry.",
+  "abv": "16–18%",
+  "origin": "United States",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cacao",
+   "cream",
+   "cherry"
+  ],
+  "glassware": "Pony or shot glass",
+  "ingredients": [
+   "Dark crème de cacao",
+   "Cream",
+   "Maraschino cherry"
+  ],
+  "funFact": "It belongs to the pousse-café tradition of layered after-dinner drinks, a genre that largely died because it takes a steady hand and nobody has time.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark crème de cacao",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino cherry",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Pour the crème de cacao into a pony glass.",
+    "Float the cream carefully over the back of a barspoon.",
+    "Spear a cherry on a cocktail pick and rest it across the rim.",
+    "Serve immediately without stirring."
+   ],
+   "garnish": "Suspended cherry",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "velvet-hammer",
+  "name": "Velvet Hammer",
+  "subcategory": "Creamy & Dessert",
+  "description": "Triple sec, crème de cacao and cream — a smoother, orange-scented cousin of the Alexander family.",
+  "abv": "16–18%",
+  "origin": "United States",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "cacao",
+   "cream"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Triple sec",
+   "White crème de cacao",
+   "Cream"
+  ],
+  "funFact": "Recipes differ wildly — some versions use vodka, some Tia Maria, some Cointreau — which is common for drinks that spread through hotel bars rather than books.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Triple sec",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White crème de cacao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Serve immediately.",
+    "Dust with cocoa if you like."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bitter-giuseppe",
+  "name": "Bitter Giuseppe",
+  "subcategory": "Spirit-Forward",
+  "description": "Cynar, sweet vermouth, lemon and orange bitters. Almost entirely bitter, served on the rocks, and a genuine test of your palate.",
+  "abv": "16–18%",
+  "origin": "Chicago, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "artichoke",
+   "bitter herbs",
+   "lemon",
+   "orange"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Cynar",
+   "Sweet vermouth",
+   "Lemon juice",
+   "Orange bitters"
+  ],
+  "funFact": "Stephen Cole created it at The Violet Hour in Chicago, and it is one of very few cocktails where the amaro is the base spirit rather than the modifier.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cynar",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "6 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 20 seconds.",
+    "Strain over fresh ice in a rocks glass.",
+    "Garnish with a lemon twist.",
+    "Serve as a digestif rather than an aperitif."
+   ],
+   "garnish": "Lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "art-of-choke",
+  "name": "Art of Choke",
+  "subcategory": "Spirit-Forward",
+  "description": "Cynar and rum with green Chartreuse, lime and mint, stirred over crushed ice. Bitter, herbal and unlike anything else.",
+  "abv": "22–24%",
+  "origin": "Chicago, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "artichoke",
+   "mint",
+   "herbal",
+   "lime"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Cynar",
+   "White rum",
+   "Green Chartreuse",
+   "Lime juice",
+   "Mint"
+  ],
+  "funFact": "Kyle Davidson created it at The Violet Hour; the name is a pun on artichoke, which is what Cynar is made from, and on the difficulty of getting people to order it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cynar",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "6"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Press the mint gently in the bottom of a mixing glass.",
+    "Add the remaining ingredients and stir over ice for 20 seconds.",
+    "Strain over crushed ice in a rocks glass.",
+    "Garnish with a mint sprig.",
+    "Serve with a short straw."
+   ],
+   "garnish": "Mint sprig",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "enzoni",
+  "name": "Enzoni",
+  "subcategory": "Sour",
+  "description": "A Negroni crossed with a gin sour, built on muddled grapes. Bitter, fresh and unexpectedly bright.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grape",
+   "bitter orange",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Campari",
+   "Lemon juice",
+   "Green grapes"
+  ],
+  "funFact": "Created at Milk & Honey, the name splices Enzo — the grapes — with Negroni, and it converted a lot of drinkers who thought they disliked Campari.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Green grapes",
+     "amount": "5"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Muddle the grapes with the simple syrup in a shaker.",
+    "Add the gin, Campari, lemon juice and ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain over fresh ice in a rocks glass.",
+    "Garnish with a grape on a pick."
+   ],
+   "garnish": "A grape on a pick",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "fitzgerald",
+  "name": "Fitzgerald",
+  "subcategory": "Sour",
+  "description": "A gin sour with Angostura through it. Dale DeGroff's demonstration that two dashes of bitters can rebuild a whole drink.",
+  "abv": "22–24%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "lemon",
+   "baking spice"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Simple syrup",
+   "Angostura bitters"
+  ],
+  "funFact": "DeGroff created it at the Rainbow Room, and it is often used to teach the point that bitters are a structural ingredient rather than a decoration.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lemon wheel.",
+    "Serve immediately."
+   ],
+   "garnish": "Lemon wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "water-lily",
+  "name": "Water Lily",
+  "subcategory": "Sour",
+  "description": "Gin, crème de violette, orange liqueur and lemon — pale purple, floral and citric all at once.",
+  "abv": "20–22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "violet",
+   "orange",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Crème de violette",
+   "Orange liqueur",
+   "Lemon juice"
+  ],
+  "funFact": "Richard Boccato created it at Little Branch; crème de violette had been unavailable in America for decades and returned in 2007, immediately producing a wave of purple drinks.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Crème de violette",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange liqueur",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all four in equal measure with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with an orange twist.",
+    "Serve very cold."
+   ],
+   "garnish": "Orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "left-hand",
+  "name": "Left Hand",
+  "subcategory": "Spirit-Forward",
+  "description": "A Boulevardier with chocolate bitters — a small addition that turns the whole drink darker and rounder.",
+  "abv": "28–30%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bourbon",
+   "bitter orange",
+   "cacao",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Bourbon",
+   "Campari",
+   "Sweet vermouth",
+   "Chocolate bitters"
+  ],
+  "funFact": "Sam Ross created it at Milk & Honey; the chocolate bitters are the only difference from a Boulevardier, and they change it more than the volume suggests they should.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Chocolate bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Stir all ingredients over ice for 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Garnish with a brandied cherry.",
+    "Serve cold."
+   ],
+   "garnish": "Brandied cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "conference",
+  "name": "Conference",
+  "subcategory": "Spirit-Forward",
+  "description": "Four brown spirits stirred together — bourbon, rye, cognac and calvados — with no citrus and nowhere to hide.",
+  "abv": "32–34%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "oak",
+   "apple",
+   "rye spice",
+   "cognac"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Bourbon",
+   "Rye whiskey",
+   "Cognac",
+   "Calvados",
+   "Angostura bitters"
+  ],
+  "funFact": "Named because the four spirits are 'in conference', it comes from Death & Co and is one of the stiffest modern classics in circulation.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Rye whiskey",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Calvados",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, for stirring"
+    }
+   ],
+   "steps": [
+    "Combine all four spirits and the bitters in a mixing glass with ice.",
+    "Stir for 30 seconds — this needs the dilution.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the top and discard it."
+   ],
+   "garnish": "Orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "bitter-mai-tai",
+  "name": "Bitter Mai Tai",
+  "subcategory": "Tiki",
+  "description": "A Mai Tai with Campari standing in for half the rum. Bitter, nutty and the drink that made bitter tiki a category.",
+  "abv": "20–22%",
+  "origin": "San Francisco, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter orange",
+   "almond",
+   "lime",
+   "rum"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Campari",
+   "Jamaican rum",
+   "Orgeat",
+   "Lime juice",
+   "Dry curaçao"
+  ],
+  "funFact": "Jeremy Oertel created it at Dutch Kills, and it works because orgeat's almond richness is one of very few things that can stand up to Campari without being erased.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Campari",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Jamaican rum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orgeat",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Dry curaçao",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 10 seconds.",
+    "Strain over crushed ice in a rocks glass.",
+    "Garnish with a mint sprig and a spent lime shell.",
+    "Serve with a straw."
+   ],
+   "garnish": "Mint sprig and lime shell",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "cynar-julep",
+  "name": "Cynar Julep",
+  "subcategory": "Julep & Cobbler",
+  "description": "Cynar with mint and crushed ice in place of bourbon. A julep at half the strength and twice the bitterness.",
+  "abv": "14–16%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "artichoke",
+   "mint",
+   "bitter herbs"
+  ],
+  "glassware": "Julep tin",
+  "ingredients": [
+   "Cynar",
+   "Mint",
+   "Simple syrup",
+   "Soda water"
+  ],
+  "funFact": "Amaro juleps became a small genre in the 2010s precisely because the format — crushed ice, mint, a straw — makes a bitter liqueur approachable in a way that neat serving does not.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cynar",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "10"
+    },
+    {
+     "item": "Soda water",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Press the mint gently with the syrup in a julep tin.",
+    "Add the Cynar and fill the tin with crushed ice.",
+    "Swizzle until the outside of the tin frosts.",
+    "Top with more crushed ice and a splash of soda.",
+    "Garnish with a generous mint bouquet."
+   ],
+   "garnish": "Mint bouquet",
+   "method": "swizzled"
+  }
+ },
+ {
+  "id": "ginger-rogers",
+  "name": "Ginger Rogers",
+  "subcategory": "Highball",
+  "description": "Gin, mint, lime and ginger ale — a long, fresh highball named for the dancer, and much older than most people assume.",
+  "abv": "14–16%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "mint",
+   "lime",
+   "juniper"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Mint",
+   "Lime juice",
+   "Ginger ale"
+  ],
+  "funFact": "A brandy version of the name predates the gin one by decades, which is why bar books from different eras disagree entirely about what a Ginger Rogers contains.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "8"
+    },
+    {
+     "item": "Ginger ale",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Press the mint gently in a shaker with the syrup.",
+    "Add the gin, lime juice and ice, then shake hard.",
+    "Double-strain into a highball glass filled with fresh ice.",
+    "Top with ginger ale.",
+    "Garnish with a mint sprig and a lime wheel."
+   ],
+   "garnish": "Mint sprig and lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "morgenthaler-amaretto-sour",
+  "name": "Morgenthaler Amaretto Sour",
+  "subcategory": "Sour",
+  "description": "The Amaretto Sour rebuilt with cask-strength bourbon and egg white — the drink that rescued a punchline.",
+  "abv": "18–20%",
+  "origin": "Portland, Oregon, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "almond",
+   "bourbon",
+   "lemon",
+   "foam"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Amaretto",
+   "Cask-strength bourbon",
+   "Lemon juice",
+   "Egg white"
+  ],
+  "funFact": "Jeffrey Morgenthaler published it in 2012 with the argument that the Amaretto Sour was not a bad drink but a badly made one; the bourbon supplies the backbone amaretto lacks.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Amaretto",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cask-strength bourbon",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Egg white",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake all ingredients without ice for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Strain over fresh ice in a rocks glass.",
+    "Garnish with lemon peel and brandied cherries."
+   ],
+   "garnish": "Lemon peel and brandied cherries",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whiskey-peach-smash",
+  "name": "Whiskey Peach Smash",
+  "subcategory": "Julep & Cobbler",
+  "description": "Bourbon muddled with fresh peach, lemon and mint over crushed ice — a summer smash that only works in season.",
+  "abv": "18–20%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "peach",
+   "mint",
+   "lemon",
+   "bourbon"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Bourbon",
+   "Fresh peach",
+   "Lemon juice",
+   "Mint",
+   "Simple syrup"
+  ],
+  "funFact": "The smash is the most seasonal cocktail format there is — the fruit has to be ripe, which is why it appears on menus for about eight weeks a year and then vanishes.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bourbon",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh peach, sliced",
+     "amount": "3 wedges"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "8"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Muddle the peach wedges with the syrup and lemon juice.",
+    "Add the mint and press gently.",
+    "Add the bourbon and ice, then shake hard for 10 seconds.",
+    "Double-strain over crushed ice in a rocks glass.",
+    "Garnish with a peach slice and mint."
+   ],
+   "garnish": "Peach slice and mint",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "tantris-sidecar",
+  "name": "Tantris Sidecar",
+  "subcategory": "Sour",
+  "description": "A Sidecar with green Chartreuse and apricot added — richer, herbal and considerably more complex than the original.",
+  "abv": "24–26%",
+  "origin": "Munich, Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "herbal",
+   "cognac",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Cognac",
+   "Green Chartreuse",
+   "Apricot brandy",
+   "Lemon juice"
+  ],
+  "funFact": "Created at the Tantris restaurant in Munich, it is one of very few modern classics to come out of Germany and enter the international repertoire.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a lemon twist.",
+    "Serve very cold."
+   ],
+   "garnish": "Lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mezcal-mule",
+  "name": "Mezcal Mule",
+  "subcategory": "Highball",
+  "description": "A Moscow Mule with mezcal — smoke against ginger, which turns out to be one of the easier substitutions in the book.",
+  "abv": "12–14%",
+  "origin": "United States",
+  "rarity": "common",
+  "tastingNotes": [
+   "smoke",
+   "ginger",
+   "lime",
+   "agave"
+  ],
+  "glassware": "Copper mug",
+  "ingredients": [
+   "Mezcal",
+   "Ginger beer",
+   "Lime juice"
+  ],
+  "funFact": "The mule format survives almost any base spirit, which is why every distillery markets one — but ginger's heat and mezcal's smoke genuinely complement each other rather than merely coexisting.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mezcal espadín",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ginger beer",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a copper mug with ice.",
+    "Add the mezcal and lime juice.",
+    "Top with cold ginger beer.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "bee-sting",
+  "name": "Bee Sting",
+  "subcategory": "Sour",
+  "description": "A Bee's Knees with chilli — honey, lemon and gin with a hot edge that arrives a beat after the sweetness.",
+  "abv": "20–22%",
+  "origin": "United States",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "chilli",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Honey syrup",
+   "Lemon juice",
+   "Chilli"
+  ],
+  "funFact": "Chilli and honey work together because capsaicin is fat- and sugar-soluble — the honey carries the heat and then blunts it, which is why the burn builds and fades rather than lingering.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Fresh red chilli",
+     "amount": "2 thin slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Muddle one chilli slice gently in the shaker.",
+    "Add the gin, honey syrup, lemon juice and ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Float a thin chilli slice as garnish."
+   ],
+   "garnish": "A thin chilli slice",
+   "method": "shaken"
+  }
+ }
+]
