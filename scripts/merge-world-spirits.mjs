@@ -78,6 +78,31 @@ for (const s of incoming) {
   if (nameIndex.has(nk)) errors.push(`${where}: name collides with existing "${nameIndex.get(nk)}"`);
 }
 
+/*
+ * Country-label convention.
+ *
+ * The split-USA bug has now arrived three times, each via a NEW generator:
+ * the original hand-authored drift, then the beer brand cards, then the wine
+ * Dex cards. Cleaning up after the fact has not held, because the next
+ * generator does not know the convention exists. So assert it here.
+ *
+ * Hard error for rows this script owns; a warning for the rest of the file,
+ * since another generator's rows are not ours to refuse.
+ */
+const LABEL_ALIASES = {
+  'United States': 'USA',
+  'Türkiye': 'Turkey',
+  'Czech Republic': 'Czechia',
+};
+const lastSegment = (o) => o.split(',').pop().trim();
+
+for (const s of incoming) {
+  const seg = lastSegment(s.origin);
+  if (LABEL_ALIASES[seg]) {
+    errors.push(`${s.id}: origin ends "${seg}" — the Dex convention is "${LABEL_ALIASES[seg]}"`);
+  }
+}
+
 if (errors.length) {
   console.error(`\n${errors.length} problem(s) — nothing written:\n`);
   for (const e of errors.slice(0, 40)) console.error('  ' + e);
@@ -111,6 +136,15 @@ const added = incoming.map((s) => ({
 }));
 
 const out = [...kept, ...added].sort((a, b) => a.dexNumber - b.dexNumber);
+
+const foreign = {};
+for (const d of out) {
+  const seg = lastSegment(d.origin);
+  if (LABEL_ALIASES[seg]) foreign[seg] = (foreign[seg] ?? 0) + 1;
+}
+for (const [seg, n] of Object.entries(foreign)) {
+  console.warn(`  warning: ${n} entries from other generators end "${seg}"; convention is "${LABEL_ALIASES[seg]}"`);
+}
 
 if (dry) {
   console.log(`dry run — would write ${out.length} entries (${added.length} new)`);
