@@ -2049,7 +2049,7 @@
       "name": "De Koninck",
       "shortName": "De Koninck",
       "style": "antwerp amber",
-      "styleRef": null
+      "styleRef": "belgian-amber-ale"
      }
     ],
     "needsLineup": false
@@ -2424,7 +2424,7 @@
       "name": "Palm",
       "shortName": "Palm",
       "style": "amber",
-      "styleRef": null
+      "styleRef": "belgian-amber-ale"
      }
     ],
     "needsLineup": false
@@ -2966,7 +2966,7 @@
       "name": "Chibuku Botswana",
       "shortName": "Chibuku Botswana",
       "style": "sorghum beer",
-      "styleRef": null
+      "styleRef": "chibuku"
      }
     ],
     "needsLineup": false
@@ -3107,7 +3107,7 @@
       "name": "Eisenbahn",
       "shortName": "Eisenbahn",
       "style": "german-style, Blumenau",
-      "styleRef": null
+      "styleRef": "blumenau-lager"
      }
     ],
     "needsLineup": false
@@ -6827,7 +6827,7 @@
       "name": "Tella",
       "shortName": "Tella",
       "style": "traditional home-brewed grain beer",
-      "styleRef": null
+      "styleRef": "tella"
      }
     ],
     "needsLineup": false
@@ -6923,7 +6923,7 @@
       "name": "Hollolan Hirvi",
       "shortName": "Hollolan Hirvi",
       "style": "sahti",
-      "styleRef": null
+      "styleRef": "sahti"
      }
     ],
     "needsLineup": false
@@ -6983,7 +6983,7 @@
       "name": "Lammin Sahti",
       "shortName": "Lammin Sahti",
       "style": "sahti",
-      "styleRef": null
+      "styleRef": "sahti"
      }
     ],
     "needsLineup": false
@@ -7028,7 +7028,7 @@
       "name": "Sahti",
       "shortName": "Sahti",
       "style": "traditional juniper farmhouse ale",
-      "styleRef": "saison"
+      "styleRef": "sahti"
      }
     ],
     "needsLineup": false
@@ -7218,7 +7218,7 @@
       "name": "Britt",
       "shortName": "Britt",
       "style": "breton",
-      "styleRef": null
+      "styleRef": "biere-bretonne"
      }
     ],
     "needsLineup": false
@@ -7278,7 +7278,7 @@
       "name": "Coreff",
       "shortName": "Coreff",
       "style": "breton ale",
-      "styleRef": "blonde-ale"
+      "styleRef": "biere-bretonne"
      }
     ],
     "needsLineup": false
@@ -7428,7 +7428,7 @@
       "name": "Lancelot",
       "shortName": "Lancelot",
       "style": "breton",
-      "styleRef": null
+      "styleRef": "biere-bretonne"
      }
     ],
     "needsLineup": false
@@ -7458,7 +7458,7 @@
       "name": "Mor Braz",
       "shortName": "Mor Braz",
       "style": "breton, seawater",
-      "styleRef": null
+      "styleRef": "biere-bretonne"
      }
     ],
     "needsLineup": false
@@ -11731,7 +11731,7 @@
       "name": "Jovarų Alus",
       "shortName": "Jovarų Alus",
       "style": "keptinis farmhouse — baked-mash ale",
-      "styleRef": "saison"
+      "styleRef": "keptinis"
      }
     ],
     "needsLineup": false
@@ -12012,7 +12012,7 @@
       "name": "Chibuku Malawi",
       "shortName": "Chibuku Malawi",
       "style": "sorghum beer",
-      "styleRef": null
+      "styleRef": "chibuku"
      }
     ],
     "needsLineup": false
@@ -17427,7 +17427,7 @@
       "name": "Umqombothi",
       "shortName": "Umqombothi",
       "style": "traditional sorghum beer",
-      "styleRef": null
+      "styleRef": "umqombothi"
      }
     ],
     "needsLineup": false
@@ -23601,7 +23601,7 @@
       "name": "Bia Hơi",
       "shortName": "Bia Hơi",
       "style": "fresh unpasteurised draft — a Hanoi institution",
-      "styleRef": null
+      "styleRef": "bia-hoi"
      }
     ],
     "needsLineup": false
@@ -23762,7 +23762,7 @@
       "name": "Chibuku",
       "shortName": "Chibuku",
       "style": "opaque sorghum beer",
-      "styleRef": null
+      "styleRef": "chibuku"
      }
     ],
     "needsLineup": false
@@ -23829,7 +23829,7 @@
       "name": "Chibuku Shake Shake",
       "shortName": "Chibuku Shake Shake",
       "style": "traditional opaque sorghum beer",
-      "styleRef": null
+      "styleRef": "chibuku"
      }
     ],
     "needsLineup": false

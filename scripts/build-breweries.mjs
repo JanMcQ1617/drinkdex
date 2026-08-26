@@ -194,6 +194,46 @@ function resolveStyle(text) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Explicit repoints                                                    */
+/*                                                                      */
+/* Keyed by the generated brand id, NOT by a substring of the style     */
+/* text. These brands describe themselves in prose ("traditional        */
+/* juniper farmhouse ale") rather than by style name, so neither exact  */
+/* matching nor the alias table can reach them — and two were actively  */
+/* WRONG, caught by the alias table's `farmhouse` rule sending Finland's */
+/* sahti and Lithuania's keptinis to Saison.                            */
+/*                                                                      */
+/* Deliberately an id map. A substring rule here would be the same trap */
+/* documented above: "tella" matches inside Stella Artois.              */
+/* ------------------------------------------------------------------ */
+
+const STYLE_OVERRIDES = {
+  // Was `saison` via the "farmhouse" alias — a real style, the wrong one.
+  'sahti-fi': 'sahti',
+  'jovaru-alus-lt': 'keptinis',
+
+  // Opaque sorghum beer, sold still-fermenting in a waxed carton.
+  'chibuku-botswana-bw': 'chibuku',
+  'chibuku-shake-shake-zw': 'chibuku',
+  'chibuku-malawi-mw': 'chibuku',
+
+  // Brittany's revived tradition — buckwheat, and in Mor Braz's case seawater.
+  'coreff-fr': 'biere-bretonne',
+  'britt-fr': 'biere-bretonne',
+  'lancelot-fr': 'biere-bretonne',
+  'mor-braz-fr': 'biere-bretonne',
+
+  // German brewing transplanted to subtropical Santa Catarina in the 1850s.
+  'eisenbahn-br': 'blumenau-lager',
+
+  // Spéciale Belge, 5–5.5%: Antwerp's house beer. NOT Kwak, which is an
+  // 8.4% strong amber — a plausible link that would misdescribe the beer,
+  // so it stays unresolved rather than pointing somewhere tidy and wrong.
+  'de-koninck-be': 'belgian-amber-ale',
+  'palm-be': 'belgian-amber-ale',
+};
+
+/* ------------------------------------------------------------------ */
 /* Brewery attribution                                                  */
 /*                                                                      */
 /* An atlas row is either a product ("Sierra Nevada Torpedo") or a bare */
@@ -303,12 +343,13 @@ function build() {
       // under "Sierra Nevada" rather than repeating it.
       const short = owner && b.name.length > owner.length ? b.name.slice(owner.length).trim() : b.name;
 
+      const beerId = slug(`${b.name}-${b.code}`);
       brewery.beers.push({
-        id: slug(`${b.name}-${b.code}`),
+        id: beerId,
         name: b.name,
         shortName: short || b.name,
         style: b.note || null,
-        styleRef: resolveStyle(b.note) ?? resolveStyle(b.name),
+        styleRef: STYLE_OVERRIDES[beerId] ?? resolveStyle(b.note) ?? resolveStyle(b.name),
       });
     }
   }
