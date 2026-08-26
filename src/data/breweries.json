@@ -3844,7 +3844,7 @@
       "name": "Kwak",
       "shortName": "Kwak",
       "style": "amber",
-      "styleRef": "american-amber-ale"
+      "styleRef": null
      },
      {
       "id": "kwak-tripel-be",
@@ -3967,21 +3967,21 @@
     "needsLineup": false
    },
    {
-    "id": "saison-be",
-    "name": "Saison",
+    "id": "saison-dupont-be",
+    "name": "Saison Dupont",
     "city": null,
     "beers": [
      {
       "id": "saison-dupont-be",
       "name": "Saison Dupont",
-      "shortName": "Dupont",
+      "shortName": "Saison Dupont",
       "style": "saison — the reference",
       "styleRef": "saison"
      },
      {
       "id": "saison-dupont-cuvee-dry-hopping-be",
       "name": "Saison Dupont Cuvée Dry Hopping",
-      "shortName": "Dupont Cuvée Dry Hopping",
+      "shortName": "Cuvée Dry Hopping",
       "style": "saison",
       "styleRef": "saison"
      }
@@ -8885,21 +8885,21 @@
   "region": "Africa",
   "breweries": [
    {
-    "id": "bock-ci",
-    "name": "Bock",
+    "id": "bock-solibra-ci",
+    "name": "Bock Solibra",
     "city": null,
     "beers": [
      {
       "id": "bock-solibra-ci",
       "name": "Bock Solibra",
-      "shortName": "Solibra",
+      "shortName": "Bock Solibra",
       "style": "lager",
       "styleRef": "american-lager"
      },
      {
       "id": "bock-solibra-extra-ci",
       "name": "Bock Solibra Extra",
-      "shortName": "Solibra Extra",
+      "shortName": "Extra",
       "style": "lager",
       "styleRef": "american-lager"
      }
@@ -13068,35 +13068,6 @@
     "needsLineup": false
    },
    {
-    "id": "zoigl-de",
-    "name": "Zoigl",
-    "city": null,
-    "beers": [
-     {
-      "id": "zoigl-falkenberg-de",
-      "name": "Zoigl Falkenberg",
-      "shortName": "Falkenberg",
-      "style": "zoigl communal brewing",
-      "styleRef": "zoigl"
-     },
-     {
-      "id": "zoigl-neuhaus-de",
-      "name": "Zoigl Neuhaus",
-      "shortName": "Neuhaus",
-      "style": "zoigl",
-      "styleRef": "zoigl"
-     },
-     {
-      "id": "zoigl-windischeschenbach-de",
-      "name": "Zoigl Windischeschenbach",
-      "shortName": "Windischeschenbach",
-      "style": "zoigl",
-      "styleRef": "zoigl"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "augustiner-de",
     "name": "Augustiner",
     "city": null,
@@ -14910,6 +14881,51 @@
       "shortName": "Wicküler",
       "style": "pils",
       "styleRef": "german-pilsner"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "zoigl-falkenberg-de",
+    "name": "Zoigl Falkenberg",
+    "city": null,
+    "beers": [
+     {
+      "id": "zoigl-falkenberg-de",
+      "name": "Zoigl Falkenberg",
+      "shortName": "Zoigl Falkenberg",
+      "style": "zoigl communal brewing",
+      "styleRef": "zoigl"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "zoigl-neuhaus-de",
+    "name": "Zoigl Neuhaus",
+    "city": null,
+    "beers": [
+     {
+      "id": "zoigl-neuhaus-de",
+      "name": "Zoigl Neuhaus",
+      "shortName": "Zoigl Neuhaus",
+      "style": "zoigl",
+      "styleRef": "zoigl"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "zoigl-windischeschenbach-de",
+    "name": "Zoigl Windischeschenbach",
+    "city": null,
+    "beers": [
+     {
+      "id": "zoigl-windischeschenbach-de",
+      "name": "Zoigl Windischeschenbach",
+      "shortName": "Zoigl Windischeschenbach",
+      "style": "zoigl",
+      "styleRef": "zoigl"
      }
     ],
     "needsLineup": false

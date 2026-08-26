@@ -184,9 +184,17 @@ const STYLE_ALIASES = [
 ];
 
 /** Dex style name (lowercased) -> Drink.id, e.g. "american porter" -> american-porter. */
+/*
+ * AUTHORED style cards only. drinks.json also contains one generated card per
+ * brand (id suffixed `-br`, written by scripts/merge-beer-brands.mjs), and
+ * those must be excluded or the pipeline eats its own tail: every brand name
+ * becomes a "style" name, `resolveStyle(b.name)` matches the brand's OWN card,
+ * and each beer ends up declaring itself its own style. That reads as a
+ * flattering 100% linkage and is worth nothing.
+ */
 const DEX_STYLES = new Map(
   JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'drinks.json'), 'utf8'))
-    .filter((d) => d.category === 'beer')
+    .filter((d) => d.category === 'beer' && !d.id.endsWith('-br'))
     .map((d) => [d.name.toLowerCase(), d.id])
 );
 
@@ -242,6 +250,12 @@ const STYLE_OVERRIDES = {
   // so it stays unresolved rather than pointing somewhere tidy and wrong.
   'de-koninck-be': 'belgian-amber-ale',
   'palm-be': 'belgian-amber-ale',
+
+  /* Explicitly NO link. Kwak is an 8.4% Belgian strong amber; the generic
+   * `amber` fallback would file it as a 4.5% American Amber Ale, and Belgian
+   * Amber Ale is 5–5.5% Spéciale Belge. Both are real styles and both are the
+   * wrong beer, so it stays unresolved on purpose. */
+  'kwak-be': null,
 };
 
 /* ------------------------------------------------------------------ */
@@ -338,6 +352,11 @@ function build() {
         for (let n = Math.min(3, words.length - 1); n >= 1 && !owner; n--) {
           const cand = words.slice(0, n).join(' ');
           if (STOP.has(cand.toLowerCase().split(' ')[0])) continue;
+          /* A brewery is never named after a style. Without this, "Saison Dupont"
+           * and its cuvée invent a brewery called "Saison", and the three Zoigl
+           * towns invent one called "Zoigl" — which is a communal brewing
+           * tradition, not a company. */
+          if (DEX_STYLES.has(cand.toLowerCase())) continue;
           const siblings = productRows.filter((p) => p.name.startsWith(cand + ' '));
           if (siblings.length >= 2) owner = cand;
         }
@@ -360,7 +379,9 @@ function build() {
         name: b.name,
         shortName: short || b.name,
         style: b.note || null,
-        styleRef: STYLE_OVERRIDES[beerId] ?? resolveStyle(b.note) ?? resolveStyle(b.name),
+        styleRef: beerId in STYLE_OVERRIDES
+          ? STYLE_OVERRIDES[beerId]
+          : resolveStyle(b.note) ?? resolveStyle(b.name),
       });
     }
   }
