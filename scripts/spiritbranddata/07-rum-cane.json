@@ -1,0 +1,392 @@
+[
+ {
+  "n": "Bacardí Carta Blanca",
+  "s": "White Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Bacardí Carta Oro",
+  "s": "Gold Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Bacardí 8",
+  "s": "Gold Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Havana Club 3 Años",
+  "s": "White Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Havana Club 7 Años",
+  "s": "Gold Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Havana Club Selección de Maestros",
+  "s": "Gold Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Santiago de Cuba 11",
+  "s": "Gold Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Appleton Estate Signature",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Appleton Estate 12",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Appleton Estate 21",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Wray & Nephew Overproof",
+  "s": "Overproof Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Smith & Cross",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Hampden Estate 8",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Worthy Park 109",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Coruba",
+  "s": "Dark Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Myers's Original Dark",
+  "s": "Dark Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Mount Gay Eclipse",
+  "s": "Barbados Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Mount Gay XO",
+  "s": "Barbados Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Doorly's 12",
+  "s": "Barbados Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Foursquare Doorly's XO",
+  "s": "Barbados Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "The Real McCoy 5",
+  "s": "Barbados Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Plantation Xaymaca",
+  "s": "Jamaican Pot Still Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "El Dorado 12",
+  "s": "Demerara Rum",
+  "c": "Guyana"
+ },
+ {
+  "n": "El Dorado 15",
+  "s": "Demerara Rum",
+  "c": "Guyana"
+ },
+ {
+  "n": "El Dorado 21",
+  "s": "Demerara Rum",
+  "c": "Guyana"
+ },
+ {
+  "n": "Lemon Hart 151",
+  "s": "Demerara Rum",
+  "c": "Guyana"
+ },
+ {
+  "n": "Angostura 1919",
+  "s": "Trinidad Rum",
+  "c": "Trinidad and Tobago"
+ },
+ {
+  "n": "Angostura 7",
+  "s": "Trinidad Rum",
+  "c": "Trinidad and Tobago"
+ },
+ {
+  "n": "Ron Zacapa 23",
+  "s": "Guatemalan Rum",
+  "c": "Guatemala"
+ },
+ {
+  "n": "Ron Zacapa XO",
+  "s": "Guatemalan Rum",
+  "c": "Guatemala"
+ },
+ {
+  "n": "Botran Reserva",
+  "s": "Guatemalan Rum",
+  "c": "Guatemala"
+ },
+ {
+  "n": "Flor de Caña 12",
+  "s": "Gold Rum",
+  "c": "Nicaragua"
+ },
+ {
+  "n": "Flor de Caña 18",
+  "s": "Gold Rum",
+  "c": "Nicaragua"
+ },
+ {
+  "n": "Ron Barceló Imperial",
+  "s": "Gold Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Brugal 1888",
+  "s": "Gold Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Matusalem Gran Reserva 15",
+  "s": "Gold Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Don Q Cristal",
+  "s": "White Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Don Q Añejo",
+  "s": "Gold Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Ron del Barrilito 3 Star",
+  "s": "Gold Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Palo Viejo",
+  "s": "White Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Rhum Clément VSOP",
+  "s": "Rhum Agricole",
+  "c": "Martinique"
+ },
+ {
+  "n": "Rhum JM VO",
+  "s": "Rhum Agricole",
+  "c": "Martinique"
+ },
+ {
+  "n": "Neisson Blanc",
+  "s": "Rhum Agricole",
+  "c": "Martinique"
+ },
+ {
+  "n": "Rhum Damoiseau",
+  "s": "Rhum Agricole",
+  "c": "Guadeloupe"
+ },
+ {
+  "n": "Rhum Barbancourt 5 Star",
+  "s": "Rhum Barbancourt",
+  "c": "Haiti"
+ },
+ {
+  "n": "Clairin Sajous",
+  "s": "Clairin",
+  "c": "Haiti"
+ },
+ {
+  "n": "Clairin Communal",
+  "s": "Clairin",
+  "c": "Haiti"
+ },
+ {
+  "n": "Chairman's Reserve",
+  "s": "Saint Lucian Rum",
+  "c": "Saint Lucia"
+ },
+ {
+  "n": "Admiral Rodney",
+  "s": "Saint Lucian Rum",
+  "c": "Saint Lucia"
+ },
+ {
+  "n": "Goslings Black Seal",
+  "s": "Black Seal Rum",
+  "c": "Bermuda"
+ },
+ {
+  "n": "Rivers Royale Grenadian",
+  "s": "Rivers Royale",
+  "c": "Grenada"
+ },
+ {
+  "n": "Cruzan Single Barrel",
+  "s": "Gold Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Pusser's Gunpowder Proof",
+  "s": "Overproof Rum",
+  "c": "British Virgin Islands"
+ },
+ {
+  "n": "Captain Morgan Spiced",
+  "s": "Spiced Rum",
+  "c": "Jamaica"
+ },
+ {
+  "n": "Kraken Black Spiced",
+  "s": "Spiced Rum",
+  "c": "Trinidad and Tobago"
+ },
+ {
+  "n": "Sailor Jerry",
+  "s": "Spiced Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Malibu",
+  "s": "Spiced Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Stroh 80",
+  "s": "Stroh",
+  "c": "Austria"
+ },
+ {
+  "n": "Tuzemák",
+  "s": "Tuzemák",
+  "c": "Czechia"
+ },
+ {
+  "n": "Ron Miel Guanche",
+  "s": "Ron Miel",
+  "c": "Spain"
+ },
+ {
+  "n": "Screech",
+  "s": "Screech",
+  "c": "Canada"
+ },
+ {
+  "n": "Ypióca Ouro",
+  "s": "Cachaça",
+  "c": "Brazil"
+ },
+ {
+  "n": "Leblon",
+  "s": "Cachaça",
+  "c": "Brazil"
+ },
+ {
+  "n": "Sagatiba",
+  "s": "Cachaça",
+  "c": "Brazil"
+ },
+ {
+  "n": "Novo Fogo Silver",
+  "s": "Cachaça",
+  "c": "Brazil"
+ },
+ {
+  "n": "Avuá Amburana",
+  "s": "Cachaça Envelhecida",
+  "c": "Brazil"
+ },
+ {
+  "n": "Pitú",
+  "s": "Cachaça",
+  "c": "Brazil"
+ },
+ {
+  "n": "Seco Herrerano",
+  "s": "Seco Herrerano",
+  "c": "Panama"
+ },
+ {
+  "n": "Ron Abuelo 12",
+  "s": "Gold Rum",
+  "c": "Panama"
+ },
+ {
+  "n": "Guaro Cacique",
+  "s": "Guaro",
+  "c": "Costa Rica"
+ },
+ {
+  "n": "Quetzalteca",
+  "s": "Quetzalteca",
+  "c": "Guatemala"
+ },
+ {
+  "n": "Konyagi",
+  "s": "Konyagi",
+  "c": "Tanzania"
+ },
+ {
+  "n": "Kenya Cane",
+  "s": "Kenya Cane",
+  "c": "Kenya"
+ },
+ {
+  "n": "Grogue de Santo Antão",
+  "s": "Grogue",
+  "c": "Cape Verde"
+ },
+ {
+  "n": "Toaka Gasy",
+  "s": "Toaka Gasy",
+  "c": "Madagascar"
+ },
+ {
+  "n": "Batavia Arrack van Oosten",
+  "s": "Batavia Arrack",
+  "c": "Indonesia"
+ },
+ {
+  "n": "Charanda Uruapan",
+  "s": "Charanda",
+  "c": "Mexico"
+ },
+ {
+  "n": "Pitorro Casero",
+  "s": "Pitorro",
+  "c": "Puerto Rico"
+ }
+]

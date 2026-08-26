@@ -1,0 +1,340 @@
+[
+ {
+  "n": "Linie Aquavit",
+  "s": "Linie Aquavit",
+  "c": "Norway"
+ },
+ {
+  "n": "Aalborg Taffel Akvavit",
+  "s": "Taffel Akvavit",
+  "c": "Denmark"
+ },
+ {
+  "n": "O.P. Anderson",
+  "s": "Dill Aquavit",
+  "c": "Sweden"
+ },
+ {
+  "n": "Brennivín",
+  "s": "Brennivín",
+  "c": "Iceland"
+ },
+ {
+  "n": "Moutai",
+  "s": "Sauce-Aroma Baijiu",
+  "c": "China",
+  "note": "China's most famous baijiu"
+ },
+ {
+  "n": "Wuliangye",
+  "s": "Strong-Aroma Baijiu",
+  "c": "China"
+ },
+ {
+  "n": "Luzhou Laojiao",
+  "s": "Strong-Aroma Baijiu",
+  "c": "China"
+ },
+ {
+  "n": "Fenjiu",
+  "s": "Light-Aroma Baijiu",
+  "c": "China"
+ },
+ {
+  "n": "Erguotou Red Star",
+  "s": "Erguotou",
+  "c": "China"
+ },
+ {
+  "n": "Mei Kuei Lu Chiew",
+  "s": "Mei Kuei Lu Chiew",
+  "c": "China"
+ },
+ {
+  "n": "Kinmen Kaoliang",
+  "s": "Kaoliang",
+  "c": "Taiwan"
+ },
+ {
+  "n": "Xifeng",
+  "s": "Feng-Aroma Baijiu",
+  "c": "China"
+ },
+ {
+  "n": "Jinmailang Sesame",
+  "s": "Sesame-Aroma Baijiu",
+  "c": "China"
+ },
+ {
+  "n": "Iichiko",
+  "s": "Mugi Shochu",
+  "c": "Japan"
+ },
+ {
+  "n": "Kurokirishima",
+  "s": "Imo Shochu",
+  "c": "Japan"
+ },
+ {
+  "n": "Satsuma Shiranami",
+  "s": "Imo Shochu",
+  "c": "Japan"
+ },
+ {
+  "n": "Takara Jun",
+  "s": "Kome Shochu",
+  "c": "Japan"
+ },
+ {
+  "n": "Lento Kokuto",
+  "s": "Kokuto Shochu",
+  "c": "Japan"
+ },
+ {
+  "n": "Zuisen Awamori",
+  "s": "Awamori Kusu",
+  "c": "Japan"
+ },
+ {
+  "n": "Jinro Chamisul",
+  "s": "Andong Soju",
+  "c": "South Korea",
+  "note": "The world's best-selling spirit by volume"
+ },
+ {
+  "n": "Chum Churum",
+  "s": "Andong Soju",
+  "c": "South Korea"
+ },
+ {
+  "n": "Andong Soju",
+  "s": "Andong Soju",
+  "c": "South Korea"
+ },
+ {
+  "n": "Lao Khao",
+  "s": "Lao Khao",
+  "c": "Thailand"
+ },
+ {
+  "n": "Sato",
+  "s": "Sato",
+  "c": "Thailand"
+ },
+ {
+  "n": "Rượu Đế",
+  "s": "Rượu Đế",
+  "c": "Vietnam"
+ },
+ {
+  "n": "Lao-Lao",
+  "s": "Lao-Lao",
+  "c": "Laos"
+ },
+ {
+  "n": "Sraa Sar",
+  "s": "Sraa Sar",
+  "c": "Cambodia"
+ },
+ {
+  "n": "Raksi",
+  "s": "Raksi",
+  "c": "Nepal"
+ },
+ {
+  "n": "Aila",
+  "s": "Aila",
+  "c": "Nepal"
+ },
+ {
+  "n": "Ara",
+  "s": "Ara",
+  "c": "Bhutan"
+ },
+ {
+  "n": "Tharra",
+  "s": "Tharra",
+  "c": "India"
+ },
+ {
+  "n": "Areke",
+  "s": "Areke",
+  "c": "Ethiopia"
+ },
+ {
+  "n": "Chang'aa",
+  "s": "Chang'aa",
+  "c": "Kenya"
+ },
+ {
+  "n": "Gongo",
+  "s": "Gongo",
+  "c": "Tanzania"
+ },
+ {
+  "n": "Lotoko",
+  "s": "Lotoko",
+  "c": "DR Congo"
+ },
+ {
+  "n": "Kachasu",
+  "s": "Kachasu",
+  "c": "Malawi"
+ },
+ {
+  "n": "Spirytus Rektyfikowany",
+  "s": "Spirytus Rektyfikowany",
+  "c": "Poland",
+  "note": "96% ABV"
+ },
+ {
+  "n": "Korn Berentzen",
+  "s": "Korn",
+  "c": "Germany"
+ },
+ {
+  "n": "Brännvin Skåne",
+  "s": "Brännvin",
+  "c": "Sweden"
+ },
+ {
+  "n": "Samogon",
+  "s": "Samogon",
+  "c": "Russia"
+ },
+ {
+  "n": "Palm Wine Ogogoro",
+  "s": "Ogogoro",
+  "c": "Nigeria"
+ },
+ {
+  "n": "Sopi",
+  "s": "Sopi",
+  "c": "Timor-Leste"
+ },
+ {
+  "n": "Toddy Arrack",
+  "s": "Ceylon Arrack",
+  "c": "Sri Lanka"
+ },
+ {
+  "n": "Lambanog",
+  "s": "Lambanog",
+  "c": "Philippines"
+ },
+ {
+  "n": "Damiana",
+  "s": "Damiana",
+  "c": "Mexico"
+ },
+ {
+  "n": "Thibarine",
+  "s": "Thibarine",
+  "c": "Tunisia"
+ },
+ {
+  "n": "Yaojiu",
+  "s": "Yaojiu",
+  "c": "China"
+ },
+ {
+  "n": "Krambambulya",
+  "s": "Krambambulya",
+  "c": "Belarus"
+ },
+ {
+  "n": "Khrenovukha",
+  "s": "Khrenovukha",
+  "c": "Russia"
+ },
+ {
+  "n": "Birch Sap Vodka",
+  "s": "Birch Sap Vodka",
+  "c": "Belarus"
+ },
+ {
+  "n": "Viche del Pacífico",
+  "s": "Viche",
+  "c": "Colombia"
+ },
+ {
+  "n": "Chirrinchi Wayuu",
+  "s": "Chirrinchi",
+  "c": "Colombia"
+ },
+ {
+  "n": "Pájaro Azul",
+  "s": "Pájaro Azul",
+  "c": "Ecuador"
+ },
+ {
+  "n": "Caña Paraguaya",
+  "s": "Caña Paraguaya",
+  "c": "Paraguay"
+ },
+ {
+  "n": "Cususa",
+  "s": "Cususa",
+  "c": "Honduras"
+ },
+ {
+  "n": "Caporroto",
+  "s": "Caporroto",
+  "c": "Venezuela"
+ },
+ {
+  "n": "Grapa Argentina",
+  "s": "Grapa Argentina",
+  "c": "Argentina"
+ },
+ {
+  "n": "Lozovača",
+  "s": "Lozovača",
+  "c": "Serbia"
+ },
+ {
+  "n": "Loza",
+  "s": "Loza",
+  "c": "North Macedonia"
+ },
+ {
+  "n": "Törkölypálinka",
+  "s": "Törkölypálinka",
+  "c": "Hungary"
+ },
+ {
+  "n": "Aguardente Bagaceira",
+  "s": "Aguardente Bagaceira",
+  "c": "Portugal"
+ },
+ {
+  "n": "Aguardente Vínica",
+  "s": "Aguardente Vínica",
+  "c": "Portugal"
+ },
+ {
+  "n": "Brinjevec",
+  "s": "Brinjevec",
+  "c": "Slovenia"
+ },
+ {
+  "n": "Biska",
+  "s": "Biska",
+  "c": "Croatia"
+ },
+ {
+  "n": "Ron Ligero Havana",
+  "s": "Ron Ligero",
+  "c": "Cuba"
+ },
+ {
+  "n": "Aguardente de Cana",
+  "s": "Aguardente de Cana",
+  "c": "Portugal"
+ },
+ {
+  "n": "Belizean One Barrel",
+  "s": "Belizean Rum",
+  "c": "Belize"
+ }
+]

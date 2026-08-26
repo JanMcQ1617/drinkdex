@@ -1,0 +1,575 @@
+[
+ {
+  "n": "Macallan 12 Sherry Oak",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland",
+  "note": "Speyside; matured in seasoned Oloroso casks"
+ },
+ {
+  "n": "Macallan 18 Sherry Oak",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenfiddich 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland",
+  "note": "The world's best-selling single malt"
+ },
+ {
+  "n": "Glenfiddich 15 Solera",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenfiddich 18",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenlivet 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenlivet 18",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenlivet Nàdurra",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Balvenie DoubleWood 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Balvenie Caribbean Cask 14",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Balvenie PortWood 21",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Aberlour 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Aberlour A'bunadh",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland",
+  "note": "Cask strength, no age statement"
+ },
+ {
+  "n": "Glenfarclas 15",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenfarclas 105",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "GlenDronach 12",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "GlenDronach 18 Allardice",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Cragganmore 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Mortlach 16",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Benriach The Twelve",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glen Grant 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Longmorn 16",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Craigellachie 13",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Speyburn 10",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Tamdhu 12",
+  "s": "Sherry Cask Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenrothes 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Strathisla 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Knockando 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Linkwood 12",
+  "s": "Speyside Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "BenRiach Smoky Ten",
+  "s": "Peated Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ardbeg 10",
+  "s": "Islay Single Malt",
+  "c": "Scotland",
+  "note": "Heavily peated Islay"
+ },
+ {
+  "n": "Ardbeg Uigeadail",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ardbeg Corryvreckan",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Lagavulin 16",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Lagavulin 8",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Laphroaig 10",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Laphroaig Quarter Cask",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Laphroaig Lore",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Bowmore 12",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Bowmore 15 Darkest",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Bruichladdich Classic Laddie",
+  "s": "Islay Single Malt",
+  "c": "Scotland",
+  "note": "Unpeated Islay"
+ },
+ {
+  "n": "Port Charlotte 10",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Octomore",
+  "s": "Peated Single Malt",
+  "c": "Scotland",
+  "note": "Among the most heavily peated whiskies made"
+ },
+ {
+  "n": "Caol Ila 12",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Bunnahabhain 12",
+  "s": "Islay Single Malt",
+  "c": "Scotland",
+  "note": "Largely unpeated"
+ },
+ {
+  "n": "Kilchoman Machir Bay",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ardnahoe",
+  "s": "Islay Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Talisker 10",
+  "s": "Island Single Malt",
+  "c": "Scotland",
+  "note": "Isle of Skye"
+ },
+ {
+  "n": "Talisker Storm",
+  "s": "Island Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Highland Park 12",
+  "s": "Island Single Malt",
+  "c": "Scotland",
+  "note": "Orkney"
+ },
+ {
+  "n": "Highland Park 18",
+  "s": "Island Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Scapa Skiren",
+  "s": "Island Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Jura 10",
+  "s": "Island Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Arran 10",
+  "s": "Island Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Tobermory 12",
+  "s": "Island Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ledaig 10",
+  "s": "Island Single Malt",
+  "c": "Scotland",
+  "note": "Peated Tobermory"
+ },
+ {
+  "n": "Glenmorangie Original 10",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenmorangie Lasanta",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenmorangie Quinta Ruban",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenmorangie Signet",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Dalmore 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Dalmore 15",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Oban 14",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Dalwhinnie 15",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenmorangie 18",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Old Pulteney 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Clynelish 14",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "GlenAllachie 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Deanston 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Edradour 10",
+  "s": "Highland Single Malt",
+  "c": "Scotland",
+  "note": "One of Scotland's smallest distilleries"
+ },
+ {
+  "n": "Glengoyne 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Tomatin 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Balblair 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ben Nevis 10",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Royal Lochnagar 12",
+  "s": "Highland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Auchentoshan 12",
+  "s": "Lowland Single Malt",
+  "c": "Scotland",
+  "note": "Triple distilled"
+ },
+ {
+  "n": "Auchentoshan Three Wood",
+  "s": "Lowland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Glenkinchie 12",
+  "s": "Lowland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Bladnoch Vinaya",
+  "s": "Lowland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ailsa Bay",
+  "s": "Lowland Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Springbank 10",
+  "s": "Campbeltown Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Springbank 15",
+  "s": "Campbeltown Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Longrow Peated",
+  "s": "Campbeltown Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Hazelburn 10",
+  "s": "Campbeltown Single Malt",
+  "c": "Scotland",
+  "note": "Triple distilled Springbank"
+ },
+ {
+  "n": "Glen Scotia Double Cask",
+  "s": "Campbeltown Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Kilkerran 12",
+  "s": "Campbeltown Single Malt",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker Black Label",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker Blue Label",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker Red Label",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker Green Label",
+  "s": "Blended Malt Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker Gold Label Reserve",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Chivas Regal 12",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Chivas Regal 18",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ballantine's Finest",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Ballantine's 17",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Dewar's White Label",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Dewar's 12",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Famous Grouse",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Grant's Triple Wood",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Cutty Sark",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "J&B Rare",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Teacher's Highland Cream",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "White Horse",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Whyte & Mackay",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Bell's Original",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Monkey Shoulder",
+  "s": "Blended Malt Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Compass Box Peat Monster",
+  "s": "Blended Malt Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Compass Box Spice Tree",
+  "s": "Blended Malt Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Sheep Dip",
+  "s": "Blended Malt Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Haig Club",
+  "s": "Single Grain Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Cameron Brig",
+  "s": "Single Grain Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Girvan Patent Still",
+  "s": "Single Grain Scotch",
+  "c": "Scotland"
+ }
+]
