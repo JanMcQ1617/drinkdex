@@ -30,9 +30,13 @@ const incoming = files.flatMap((f) => JSON.parse(readFileSync(new URL(f, SOURCE)
 const incomingIds = new Set(incoming.map((d) => d.id));
 
 /* Read-and-merge, never rebuild: four sessions write this file. */
-const kept = drinks.filter((d) => !incomingIds.has(d.id));
+/* Only drop a PRIOR entry when the incoming record replaces it in the SAME
+ * category. Filtering on id alone silently converted a spirit/beer/wine
+ * into a beer when ids collided across categories, and the collision
+ * check below could never fire because it read from this filtered array. */
+const kept = drinks.filter((d) => !(incomingIds.has(d.id) && d.category === 'beer'));
+const priorById = new Map(drinks.map((d) => [d.id, d]));
 const nameIndex = new Map(kept.map((d) => [fold(d.name), d.name]));
-const idIndex = new Set(kept.map((d) => d.id));
 
 const REQUIRED = ['id', 'name', 'subcategory', 'description', 'abv', 'origin', 'rarity',
   'tastingNotes', 'glassware', 'funFact', 'serve', 'composition'];
@@ -83,7 +87,10 @@ for (const b of incoming) {
 
   if (seenId.has(b.id)) errors.push(`${where}: duplicate id within import`);
   seenId.add(b.id);
-  if (idIndex.has(b.id)) errors.push(`${where}: id collides with an existing entry`);
+  const prior = priorById.get(b.id);
+  if (prior && prior.category !== 'beer') {
+    errors.push(`${where}: id collides with existing ${prior.category} "${prior.name}"`);
+  }
 
   const nk = fold(b.name);
   if (seenName.has(nk)) errors.push(`${where}: duplicate name within import ("${seenName.get(nk)}")`);
@@ -119,6 +126,20 @@ const added = incoming.map((b) => ({
 }));
 
 const out = [...kept, ...added].sort((a, b) => a.dexNumber - b.dexNumber);
+
+/* Shape check before writing. The collision guard above should make this
+ * unreachable, but both silent-corruption bugs found in this repo were
+ * invisible to an exit code and obvious in a count diff — so the diff is
+ * done here rather than left to whoever remembers to look. */
+const priorCat = new Map(drinks.map((d) => [d.id, d.category]));
+const reclassified = out.filter((d) => priorCat.has(d.id) && priorCat.get(d.id) !== d.category);
+const dropped = drinks.filter((d) => !new Set(out.map((o) => o.id)).has(d.id));
+if (reclassified.length || dropped.length) {
+  console.error('\nABORT — the merge would change the shape of drinks.json:');
+  for (const d of reclassified) console.error(`  ${d.id}: ${priorCat.get(d.id)} -> ${d.category}`);
+  for (const d of dropped) console.error(`  ${d.id}: dropped entirely`);
+  process.exit(1);
+}
 
 if (dry) {
   const fresh = added.filter((d) => !existingDex.has(d.id)).length;
