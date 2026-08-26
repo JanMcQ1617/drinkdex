@@ -173,6 +173,22 @@ const AUTHORED_WINES = new Set(
   drinks.filter((d) => d.category === 'wine' && !d.id.endsWith('-wn')).map((d) => fold(d.name))
 );
 
+/**
+ * The Dex `origin` field follows its own country convention, which is not the
+ * atlas's. "United States" is right for a country LIST — it is what the Wine
+ * Atlas screen renders — and wrong for an origin STRING, where every one of
+ * the Dex's other 867 US entries writes "USA".
+ *
+ * Applied to prose fields ONLY. The card `id` is built from country.name and
+ * must not move: 242 ids would change from -unitedstates-wn to -usa-wn,
+ * breaking every collection record and every atlas link that references them.
+ */
+const DEX_COUNTRY = {
+  'United States': 'USA',
+  'Czech Republic': 'Czechia',
+};
+const dexCountry = (name) => DEX_COUNTRY[name] ?? name;
+
 function uniqueName(w, country) {
   /* A qualifier that repeats the name adds nothing: "Mendoza (Mendoza)". */
   const candidates = [
@@ -226,9 +242,9 @@ const cards = atlas.wines.filter((w) => !AUTHORED_WINES.has(fold(w.n))).map((w) 
     subcategory: st.sub,
     description:
       `${w.t === 'Regional' || w.t === 'Grape wine' ? 'A' : `A ${w.t}`} ${w.s.toLowerCase()} wine from ` +
-      `${w.r}, ${country.name}. ${grapeClause}`,
+      `${w.r}, ${dexCountry(country.name)}. ${grapeClause}`,
     abv: st.abv,
-    origin: `${w.r}, ${country.name}`,
+    origin: `${w.r}, ${dexCountry(country.name)}`,
     rarity: rarityOf(w),
     tastingNotes: st.notes,
     glassware: st.glass,
@@ -238,7 +254,7 @@ const cards = atlas.wines.filter((w) => !AUTHORED_WINES.has(fold(w.n))).map((w) 
       summary: `${w.s} wine from ${w.r}${w.t === 'Regional' ? '' : `, ${w.t}`}.`,
       components: [
         { label: 'Grapes', detail: varNames.length ? varNames.join(', ') : 'Not recorded in the atlas.' },
-        { label: 'Region', detail: `${w.r}, ${country.name}` },
+        { label: 'Region', detail: `${w.r}, ${dexCountry(country.name)}` },
         { label: 'Vinification', detail: st.vinif },
       ],
       process: `${w.t === 'Regional' || w.t === 'Grape wine' ? 'A regional wine' : `Protected as ${w.t}`}, made in ${w.r} and bottled to the local rules for ${w.s.toLowerCase()} wine.`,

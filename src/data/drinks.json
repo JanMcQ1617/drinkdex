@@ -285812,9 +285812,9 @@
   "name": "Sonoita",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Arizona, United States. Made from Syrah, Grenache.",
+  "description": "A AVA red wine from Arizona, USA. Made from Syrah, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "Arizona, United States",
+  "origin": "Arizona, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -285843,7 +285843,7 @@
     },
     {
      "label": "Region",
-     "detail": "Arizona, United States"
+     "detail": "Arizona, USA"
     },
     {
      "label": "Vinification",
@@ -285859,9 +285859,9 @@
   "name": "Verde Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Arizona, United States. Made from Syrah, Grenache.",
+  "description": "A AVA red wine from Arizona, USA. Made from Syrah, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "Arizona, United States",
+  "origin": "Arizona, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -285890,7 +285890,7 @@
     },
     {
      "label": "Region",
-     "detail": "Arizona, United States"
+     "detail": "Arizona, USA"
     },
     {
      "label": "Vinification",
@@ -285906,9 +285906,9 @@
   "name": "Willcox",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Arizona, United States. Made from Syrah, Malvasia.",
+  "description": "A AVA red wine from Arizona, USA. Made from Syrah, Malvasia.",
   "abv": "12.5–14.5%",
-  "origin": "Arizona, United States",
+  "origin": "Arizona, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -285937,7 +285937,7 @@
     },
     {
      "label": "Region",
-     "detail": "Arizona, United States"
+     "detail": "Arizona, USA"
     },
     {
      "label": "Vinification",
@@ -285953,9 +285953,9 @@
   "name": "California Sparkling Wine",
   "category": "wine",
   "subcategory": "Sparkling",
-  "description": "A Regional style sparkling wine from California, United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A Regional style sparkling wine from California, USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–12.5%",
-  "origin": "California, United States",
+  "origin": "California, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "green apple",
@@ -285984,7 +285984,7 @@
     },
     {
      "label": "Region",
-     "detail": "California, United States"
+     "detail": "California, USA"
     },
     {
      "label": "Vinification",
@@ -286000,9 +286000,9 @@
   "name": "Meritage",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A Trademark blend red wine from California, United States. Made from Cabernet Sauvignon, Merlot, Cabernet Franc.",
+  "description": "A Trademark blend red wine from California, USA. Made from Cabernet Sauvignon, Merlot, Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "California, United States",
+  "origin": "California, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286031,7 +286031,7 @@
     },
     {
      "label": "Region",
-     "detail": "California, United States"
+     "detail": "California, USA"
     },
     {
      "label": "Vinification",
@@ -286047,9 +286047,9 @@
   "name": "Livermore Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Bay Area), United States. Made from Sauvignon Blanc, Chardonnay.",
+  "description": "A AVA white wine from California (Bay Area), USA. Made from Sauvignon Blanc, Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "California (Bay Area), United States",
+  "origin": "California (Bay Area), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -286078,7 +286078,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Bay Area), United States"
+     "detail": "California (Bay Area), USA"
     },
     {
      "label": "Vinification",
@@ -286094,9 +286094,9 @@
   "name": "Santa Cruz Mountains",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Bay Area), United States. Made from Pinot Noir, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Bay Area), USA. Made from Pinot Noir, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Bay Area), United States",
+  "origin": "California (Bay Area), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286125,7 +286125,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Bay Area), United States"
+     "detail": "California (Bay Area), USA"
     },
     {
      "label": "Vinification",
@@ -286141,9 +286141,9 @@
   "name": "Adelaida District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon, Syrah.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286172,7 +286172,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286188,9 +286188,9 @@
   "name": "Arroyo Grande Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286219,7 +286219,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286235,9 +286235,9 @@
   "name": "Arroyo Seco",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Coast), United States. Made from Chardonnay, Riesling.",
+  "description": "A AVA white wine from California (Central Coast), USA. Made from Chardonnay, Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -286266,7 +286266,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286282,9 +286282,9 @@
   "name": "Ballard Canyon",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Syrah.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286313,7 +286313,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286329,9 +286329,9 @@
   "name": "Carmel Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286360,7 +286360,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286376,9 +286376,9 @@
   "name": "Chalone",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Coast), United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA white wine from California (Central Coast), USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -286407,7 +286407,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286423,9 +286423,9 @@
   "name": "Edna Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Coast), United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA white wine from California (Central Coast), USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -286454,7 +286454,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286470,9 +286470,9 @@
   "name": "Happy Canyon of Santa Barbara",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon, Sauvignon Blanc.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon, Sauvignon Blanc.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286501,7 +286501,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286517,9 +286517,9 @@
   "name": "Los Olivos District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Syrah, Grenache.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Syrah, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286548,7 +286548,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286564,9 +286564,9 @@
   "name": "Monterey",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Coast), United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA white wine from California (Central Coast), USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -286595,7 +286595,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286611,9 +286611,9 @@
   "name": "San Benito",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir, Grenache.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286642,7 +286642,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286658,9 +286658,9 @@
   "name": "Santa Lucia Highlands",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir, Syrah.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286689,7 +286689,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286705,9 +286705,9 @@
   "name": "Santa Maria Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286736,7 +286736,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286752,9 +286752,9 @@
   "name": "Santa Ynez Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Syrah, Pinot Noir.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Syrah, Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286783,7 +286783,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286799,9 +286799,9 @@
   "name": "Templeton Gap District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Syrah, Pinot Noir.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Syrah, Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286830,7 +286830,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286846,9 +286846,9 @@
   "name": "Willow Creek District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Syrah, Grenache.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Syrah, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286877,7 +286877,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -286893,9 +286893,9 @@
   "name": "Clarksburg",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Valley), United States. Made from Chenin Blanc.",
+  "description": "A AVA white wine from California (Central Valley), USA. Made from Chenin Blanc.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -286924,7 +286924,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -286940,9 +286940,9 @@
   "name": "Dunnigan Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Syrah, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Syrah, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -286971,7 +286971,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -286987,9 +286987,9 @@
   "name": "Lodi",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287018,7 +287018,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -287034,9 +287034,9 @@
   "name": "Clear Lake",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Lake), United States. Made from Cabernet Sauvignon, Sauvignon Blanc.",
+  "description": "A AVA red wine from California (Lake), USA. Made from Cabernet Sauvignon, Sauvignon Blanc.",
   "abv": "12.5–14.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287065,7 +287065,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -287081,9 +287081,9 @@
   "name": "Red Hills Lake County",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Lake), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Lake), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287112,7 +287112,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -287128,9 +287128,9 @@
   "name": "Anderson Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287159,7 +287159,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -287175,9 +287175,9 @@
   "name": "Mendocino Ridge",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Zinfandel, Pinot Noir.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Zinfandel, Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287206,7 +287206,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -287222,9 +287222,9 @@
   "name": "Potter Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Mendocino), United States. Made from Riesling, Sauvignon Blanc.",
+  "description": "A AVA white wine from California (Mendocino), USA. Made from Riesling, Sauvignon Blanc.",
   "abv": "11.5–13.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -287253,7 +287253,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -287269,9 +287269,9 @@
   "name": "Redwood Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Zinfandel, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Zinfandel, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287300,7 +287300,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -287316,9 +287316,9 @@
   "name": "Yorkville Highlands",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Pinot Noir, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Pinot Noir, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287347,7 +287347,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -287363,9 +287363,9 @@
   "name": "Atlas Peak",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287394,7 +287394,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287410,9 +287410,9 @@
   "name": "Calistoga",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon, Petite Sirah.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon, Petite Sirah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287441,7 +287441,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287457,9 +287457,9 @@
   "name": "Chiles Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Zinfandel, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Zinfandel, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287488,7 +287488,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287504,9 +287504,9 @@
   "name": "Coombsville",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287535,7 +287535,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287551,9 +287551,9 @@
   "name": "Diamond Mountain District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287582,7 +287582,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287598,9 +287598,9 @@
   "name": "Howell Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon, Zinfandel.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon, Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287629,7 +287629,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287645,9 +287645,9 @@
   "name": "Los Carneros",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Napa), United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA white wine from California (Napa), USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–13.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -287676,7 +287676,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287692,9 +287692,9 @@
   "name": "Mount Veeder",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287723,7 +287723,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287739,9 +287739,9 @@
   "name": "Oak Knoll District",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Napa), United States. Made from Chardonnay, Cabernet Sauvignon.",
+  "description": "A AVA white wine from California (Napa), USA. Made from Chardonnay, Cabernet Sauvignon.",
   "abv": "11.5–13.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -287770,7 +287770,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287786,9 +287786,9 @@
   "name": "Oakville",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287817,7 +287817,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287833,9 +287833,9 @@
   "name": "Rutherford",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287864,7 +287864,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287880,9 +287880,9 @@
   "name": "Spring Mountain District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287911,7 +287911,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287927,9 +287927,9 @@
   "name": "St. Helena",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -287958,7 +287958,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -287974,9 +287974,9 @@
   "name": "Stags Leap District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288005,7 +288005,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -288021,9 +288021,9 @@
   "name": "Wild Horse Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Napa), United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA white wine from California (Napa), USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–13.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -288052,7 +288052,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -288068,9 +288068,9 @@
   "name": "Yountville",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon, Merlot.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288099,7 +288099,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -288115,9 +288115,9 @@
   "name": "Amador County",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288146,7 +288146,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -288162,9 +288162,9 @@
   "name": "El Dorado (California (Sierra Foothills))",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Zinfandel, Syrah.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Zinfandel, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288193,7 +288193,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -288209,9 +288209,9 @@
   "name": "Fiddletown",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288240,7 +288240,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -288256,9 +288256,9 @@
   "name": "Shenandoah Valley of California",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288287,7 +288287,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -288303,9 +288303,9 @@
   "name": "Sierra Foothills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Zinfandel, Barbera.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Zinfandel, Barbera.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288334,7 +288334,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -288350,9 +288350,9 @@
   "name": "Alexander Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288381,7 +288381,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288397,9 +288397,9 @@
   "name": "Bennett Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Merlot, Syrah.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Merlot, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288428,7 +288428,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288444,9 +288444,9 @@
   "name": "Chalk Hill",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Sonoma), United States. Made from Chardonnay, Sauvignon Blanc.",
+  "description": "A AVA white wine from California (Sonoma), USA. Made from Chardonnay, Sauvignon Blanc.",
   "abv": "11.5–13.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -288475,7 +288475,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288491,9 +288491,9 @@
   "name": "Dry Creek Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288522,7 +288522,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288538,9 +288538,9 @@
   "name": "Fort Ross-Seaview",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288569,7 +288569,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288585,9 +288585,9 @@
   "name": "Green Valley of Russian River Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Sonoma), United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA white wine from California (Sonoma), USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–13.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -288616,7 +288616,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288632,9 +288632,9 @@
   "name": "Knights Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288663,7 +288663,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288679,9 +288679,9 @@
   "name": "Moon Mountain District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288710,7 +288710,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288726,9 +288726,9 @@
   "name": "Petaluma Gap",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Pinot Noir, Syrah.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Pinot Noir, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288757,7 +288757,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288773,9 +288773,9 @@
   "name": "Rockpile",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288804,7 +288804,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288820,9 +288820,9 @@
   "name": "Russian River Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288851,7 +288851,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288867,9 +288867,9 @@
   "name": "Sonoma County",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Pinot Noir, Cabernet Sauvignon, Zinfandel.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Pinot Noir, Cabernet Sauvignon, Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288898,7 +288898,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288914,9 +288914,9 @@
   "name": "Sonoma Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288945,7 +288945,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -288961,9 +288961,9 @@
   "name": "Sonoma Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon, Zinfandel.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon, Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -288992,7 +288992,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -289008,9 +289008,9 @@
   "name": "Malibu Coast",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Cabernet Sauvignon, Syrah.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Cabernet Sauvignon, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289039,7 +289039,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -289055,9 +289055,9 @@
   "name": "Ramona Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Syrah, Grenache.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Syrah, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289086,7 +289086,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -289102,9 +289102,9 @@
   "name": "Temecula Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Syrah, Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Syrah, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289133,7 +289133,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -289149,9 +289149,9 @@
   "name": "Grand Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Colorado, United States. Made from Cabernet Franc, Merlot.",
+  "description": "A AVA red wine from Colorado, USA. Made from Cabernet Franc, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "Colorado, United States",
+  "origin": "Colorado, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289180,7 +289180,7 @@
     },
     {
      "label": "Region",
-     "detail": "Colorado, United States"
+     "detail": "Colorado, USA"
     },
     {
      "label": "Vinification",
@@ -289196,9 +289196,9 @@
   "name": "West Elks",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Colorado, United States. Made from Riesling, Gewurztraminer.",
+  "description": "A AVA white wine from Colorado, USA. Made from Riesling, Gewurztraminer.",
   "abv": "11.5–13.5%",
-  "origin": "Colorado, United States",
+  "origin": "Colorado, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -289227,7 +289227,7 @@
     },
     {
      "label": "Region",
-     "detail": "Colorado, United States"
+     "detail": "Colorado, USA"
     },
     {
      "label": "Vinification",
@@ -289243,9 +289243,9 @@
   "name": "Dahlonega Plateau",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Georgia (US), United States. Made from Cabernet Franc, Chambourcin.",
+  "description": "A AVA red wine from Georgia (US), USA. Made from Cabernet Franc, Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Georgia (US), United States",
+  "origin": "Georgia (US), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289274,7 +289274,7 @@
     },
     {
      "label": "Region",
-     "detail": "Georgia (US), United States"
+     "detail": "Georgia (US), USA"
     },
     {
      "label": "Vinification",
@@ -289290,9 +289290,9 @@
   "name": "Ulupalakua",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A red wine from Hawaii, United States. Made from Syrah, Malbec.",
+  "description": "A red wine from Hawaii, USA. Made from Syrah, Malbec.",
   "abv": "12.5–14.5%",
-  "origin": "Hawaii, United States",
+  "origin": "Hawaii, USA",
   "rarity": "common",
   "tastingNotes": [
    "red fruit",
@@ -289321,7 +289321,7 @@
     },
     {
      "label": "Region",
-     "detail": "Hawaii, United States"
+     "detail": "Hawaii, USA"
     },
     {
      "label": "Vinification",
@@ -289337,9 +289337,9 @@
   "name": "Eagle Foothills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Idaho, United States. Made from Syrah, Viognier.",
+  "description": "A AVA red wine from Idaho, USA. Made from Syrah, Viognier.",
   "abv": "12.5–14.5%",
-  "origin": "Idaho, United States",
+  "origin": "Idaho, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289368,7 +289368,7 @@
     },
     {
      "label": "Region",
-     "detail": "Idaho, United States"
+     "detail": "Idaho, USA"
     },
     {
      "label": "Vinification",
@@ -289384,9 +289384,9 @@
   "name": "Lewis-Clark Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Idaho, United States. Made from Syrah, Merlot.",
+  "description": "A AVA red wine from Idaho, USA. Made from Syrah, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "Idaho, United States",
+  "origin": "Idaho, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289415,7 +289415,7 @@
     },
     {
      "label": "Region",
-     "detail": "Idaho, United States"
+     "detail": "Idaho, USA"
     },
     {
      "label": "Vinification",
@@ -289431,9 +289431,9 @@
   "name": "Snake River Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Idaho, United States. Made from Syrah, Cabernet Sauvignon.",
+  "description": "A AVA red wine from Idaho, USA. Made from Syrah, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Idaho, United States",
+  "origin": "Idaho, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289462,7 +289462,7 @@
     },
     {
      "label": "Region",
-     "detail": "Idaho, United States"
+     "detail": "Idaho, USA"
     },
     {
      "label": "Vinification",
@@ -289478,9 +289478,9 @@
   "name": "Catoctin",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Maryland, United States. Made from Cabernet Sauvignon, Chambourcin.",
+  "description": "A AVA red wine from Maryland, USA. Made from Cabernet Sauvignon, Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Maryland, United States",
+  "origin": "Maryland, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289509,7 +289509,7 @@
     },
     {
      "label": "Region",
-     "detail": "Maryland, United States"
+     "detail": "Maryland, USA"
     },
     {
      "label": "Vinification",
@@ -289525,9 +289525,9 @@
   "name": "Lake Michigan Shore",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Michigan, United States. Made from Riesling, Cabernet Franc.",
+  "description": "A AVA white wine from Michigan, USA. Made from Riesling, Cabernet Franc.",
   "abv": "11.5–13.5%",
-  "origin": "Michigan, United States",
+  "origin": "Michigan, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -289556,7 +289556,7 @@
     },
     {
      "label": "Region",
-     "detail": "Michigan, United States"
+     "detail": "Michigan, USA"
     },
     {
      "label": "Vinification",
@@ -289572,9 +289572,9 @@
   "name": "Leelanau Peninsula",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Michigan, United States. Made from Riesling, Pinot Gris.",
+  "description": "A AVA white wine from Michigan, USA. Made from Riesling, Pinot Gris.",
   "abv": "11.5–13.5%",
-  "origin": "Michigan, United States",
+  "origin": "Michigan, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -289603,7 +289603,7 @@
     },
     {
      "label": "Region",
-     "detail": "Michigan, United States"
+     "detail": "Michigan, USA"
     },
     {
      "label": "Vinification",
@@ -289619,9 +289619,9 @@
   "name": "Old Mission Peninsula",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Michigan, United States. Made from Riesling, Chardonnay.",
+  "description": "A AVA white wine from Michigan, USA. Made from Riesling, Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Michigan, United States",
+  "origin": "Michigan, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -289650,7 +289650,7 @@
     },
     {
      "label": "Region",
-     "detail": "Michigan, United States"
+     "detail": "Michigan, USA"
     },
     {
      "label": "Vinification",
@@ -289666,9 +289666,9 @@
   "name": "Augusta",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Missouri, United States. Made from Norton.",
+  "description": "A AVA red wine from Missouri, USA. Made from Norton.",
   "abv": "12.5–14.5%",
-  "origin": "Missouri, United States",
+  "origin": "Missouri, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289697,7 +289697,7 @@
     },
     {
      "label": "Region",
-     "detail": "Missouri, United States"
+     "detail": "Missouri, USA"
     },
     {
      "label": "Vinification",
@@ -289713,9 +289713,9 @@
   "name": "Hermann",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Missouri, United States. Made from Norton, Chambourcin.",
+  "description": "A AVA red wine from Missouri, USA. Made from Norton, Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Missouri, United States",
+  "origin": "Missouri, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289744,7 +289744,7 @@
     },
     {
      "label": "Region",
-     "detail": "Missouri, United States"
+     "detail": "Missouri, USA"
     },
     {
      "label": "Vinification",
@@ -289760,9 +289760,9 @@
   "name": "Ozark Highlands",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Missouri, United States. Made from Norton, Vignoles.",
+  "description": "A AVA red wine from Missouri, USA. Made from Norton, Vignoles.",
   "abv": "12.5–14.5%",
-  "origin": "Missouri, United States",
+  "origin": "Missouri, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289791,7 +289791,7 @@
     },
     {
      "label": "Region",
-     "detail": "Missouri, United States"
+     "detail": "Missouri, USA"
     },
     {
      "label": "Vinification",
@@ -289807,9 +289807,9 @@
   "name": "Outer Coastal Plain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New Jersey, United States. Made from Cabernet Franc, Chambourcin.",
+  "description": "A AVA red wine from New Jersey, USA. Made from Cabernet Franc, Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "New Jersey, United States",
+  "origin": "New Jersey, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -289838,7 +289838,7 @@
     },
     {
      "label": "Region",
-     "detail": "New Jersey, United States"
+     "detail": "New Jersey, USA"
     },
     {
      "label": "Vinification",
@@ -289854,9 +289854,9 @@
   "name": "Mesilla Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from New Mexico, United States. Made from Chardonnay, Riesling.",
+  "description": "A AVA white wine from New Mexico, USA. Made from Chardonnay, Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "New Mexico, United States",
+  "origin": "New Mexico, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -289885,7 +289885,7 @@
     },
     {
      "label": "Region",
-     "detail": "New Mexico, United States"
+     "detail": "New Mexico, USA"
     },
     {
      "label": "Vinification",
@@ -289901,9 +289901,9 @@
   "name": "Middle Rio Grande Valley",
   "category": "wine",
   "subcategory": "Sparkling",
-  "description": "A AVA sparkling wine from New Mexico, United States. Made from Chardonnay, Pinot Noir.",
+  "description": "A AVA sparkling wine from New Mexico, USA. Made from Chardonnay, Pinot Noir.",
   "abv": "11.5–12.5%",
-  "origin": "New Mexico, United States",
+  "origin": "New Mexico, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "green apple",
@@ -289932,7 +289932,7 @@
     },
     {
      "label": "Region",
-     "detail": "New Mexico, United States"
+     "detail": "New Mexico, USA"
     },
     {
      "label": "Vinification",
@@ -289948,9 +289948,9 @@
   "name": "Cayuga Lake",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from New York, United States. Made from Riesling, Cabernet Franc.",
+  "description": "A AVA white wine from New York, USA. Made from Riesling, Cabernet Franc.",
   "abv": "11.5–13.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -289979,7 +289979,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -289995,9 +289995,9 @@
   "name": "Hudson River Region",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from New York, United States. Made from Seyval Blanc, Cabernet Franc.",
+  "description": "A AVA white wine from New York, USA. Made from Seyval Blanc, Cabernet Franc.",
   "abv": "11.5–13.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290026,7 +290026,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290042,9 +290042,9 @@
   "name": "Lake Erie (NY)",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New York, United States. Made from Concord.",
+  "description": "A AVA red wine from New York, USA. Made from Concord.",
   "abv": "12.5–14.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290073,7 +290073,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290089,9 +290089,9 @@
   "name": "Long Island",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New York, United States. Made from Merlot, Cabernet Franc.",
+  "description": "A AVA red wine from New York, USA. Made from Merlot, Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290120,7 +290120,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290136,9 +290136,9 @@
   "name": "Niagara Escarpment",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from New York, United States. Made from Riesling.",
+  "description": "A AVA white wine from New York, USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290167,7 +290167,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290183,9 +290183,9 @@
   "name": "North Fork of Long Island",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New York, United States. Made from Merlot.",
+  "description": "A AVA red wine from New York, USA. Made from Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290214,7 +290214,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290230,9 +290230,9 @@
   "name": "Seneca Lake",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from New York, United States. Made from Riesling.",
+  "description": "A AVA white wine from New York, USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290261,7 +290261,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290277,9 +290277,9 @@
   "name": "The Hamptons Long Island",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from New York, United States. Made from Chardonnay.",
+  "description": "A AVA white wine from New York, USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290308,7 +290308,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -290324,9 +290324,9 @@
   "name": "Swan Creek",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from North Carolina, United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from North Carolina, USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "North Carolina, United States",
+  "origin": "North Carolina, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290355,7 +290355,7 @@
     },
     {
      "label": "Region",
-     "detail": "North Carolina, United States"
+     "detail": "North Carolina, USA"
     },
     {
      "label": "Vinification",
@@ -290371,9 +290371,9 @@
   "name": "Yadkin Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from North Carolina, United States. Made from Cabernet Franc, Merlot.",
+  "description": "A AVA red wine from North Carolina, USA. Made from Cabernet Franc, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "North Carolina, United States",
+  "origin": "North Carolina, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290402,7 +290402,7 @@
     },
     {
      "label": "Region",
-     "detail": "North Carolina, United States"
+     "detail": "North Carolina, USA"
     },
     {
      "label": "Vinification",
@@ -290418,9 +290418,9 @@
   "name": "Grand River Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Ohio, United States. Made from Riesling, Chardonnay.",
+  "description": "A AVA white wine from Ohio, USA. Made from Riesling, Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Ohio, United States",
+  "origin": "Ohio, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290449,7 +290449,7 @@
     },
     {
      "label": "Region",
-     "detail": "Ohio, United States"
+     "detail": "Ohio, USA"
     },
     {
      "label": "Vinification",
@@ -290465,9 +290465,9 @@
   "name": "Applegate Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Syrah, Tempranillo.",
+  "description": "A AVA red wine from Oregon, USA. Made from Syrah, Tempranillo.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290496,7 +290496,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290512,9 +290512,9 @@
   "name": "Chehalem Mountains",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290543,7 +290543,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290559,9 +290559,9 @@
   "name": "Columbia Gorge",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Oregon, United States. Made from Riesling, Pinot Gris.",
+  "description": "A AVA white wine from Oregon, USA. Made from Riesling, Pinot Gris.",
   "abv": "11.5–13.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290590,7 +290590,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290606,9 +290606,9 @@
   "name": "Dundee Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290637,7 +290637,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290653,9 +290653,9 @@
   "name": "Elkton Oregon",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Oregon, United States. Made from Pinot Gris, Riesling.",
+  "description": "A AVA white wine from Oregon, USA. Made from Pinot Gris, Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -290684,7 +290684,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290700,9 +290700,9 @@
   "name": "Eola-Amity Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290731,7 +290731,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290747,9 +290747,9 @@
   "name": "Laurelwood District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290778,7 +290778,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290794,9 +290794,9 @@
   "name": "Lower Long Tom",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290825,7 +290825,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290841,9 +290841,9 @@
   "name": "McMinnville",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290872,7 +290872,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290888,9 +290888,9 @@
   "name": "Mount Pisgah Polk County",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290919,7 +290919,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290935,9 +290935,9 @@
   "name": "Ribbon Ridge",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -290966,7 +290966,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -290982,9 +290982,9 @@
   "name": "Rogue Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Syrah, Cabernet Sauvignon.",
+  "description": "A AVA red wine from Oregon, USA. Made from Syrah, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291013,7 +291013,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -291029,9 +291029,9 @@
   "name": "The Rocks District of Milton-Freewater",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Syrah.",
+  "description": "A AVA red wine from Oregon, USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291060,7 +291060,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -291076,9 +291076,9 @@
   "name": "Tualatin Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291107,7 +291107,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -291123,9 +291123,9 @@
   "name": "Umpqua Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Tempranillo, Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Tempranillo, Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291154,7 +291154,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -291170,9 +291170,9 @@
   "name": "Van Duzer Corridor",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291201,7 +291201,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -291217,9 +291217,9 @@
   "name": "Yamhill-Carlton",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291248,7 +291248,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -291264,9 +291264,9 @@
   "name": "Lehigh Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Pennsylvania, United States. Made from Chardonnay, Grüner Veltliner.",
+  "description": "A AVA white wine from Pennsylvania, USA. Made from Chardonnay, Grüner Veltliner.",
   "abv": "11.5–13.5%",
-  "origin": "Pennsylvania, United States",
+  "origin": "Pennsylvania, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -291295,7 +291295,7 @@
     },
     {
      "label": "Region",
-     "detail": "Pennsylvania, United States"
+     "detail": "Pennsylvania, USA"
     },
     {
      "label": "Vinification",
@@ -291311,9 +291311,9 @@
   "name": "Bell Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Texas, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291342,7 +291342,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -291358,9 +291358,9 @@
   "name": "Escondido Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Texas, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291389,7 +291389,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -291405,9 +291405,9 @@
   "name": "Texas High Plains",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Tempranillo, Cabernet Sauvignon.",
+  "description": "A AVA red wine from Texas, USA. Made from Tempranillo, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291436,7 +291436,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -291452,9 +291452,9 @@
   "name": "Texas Hill Country",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Tempranillo, Mourvèdre.",
+  "description": "A AVA red wine from Texas, USA. Made from Tempranillo, Mourvèdre.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291483,7 +291483,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -291499,9 +291499,9 @@
   "name": "Middleburg Virginia",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Virginia, United States. Made from Cabernet Franc, Merlot.",
+  "description": "A AVA red wine from Virginia, USA. Made from Cabernet Franc, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "Virginia, United States",
+  "origin": "Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291530,7 +291530,7 @@
     },
     {
      "label": "Region",
-     "detail": "Virginia, United States"
+     "detail": "Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -291546,9 +291546,9 @@
   "name": "Monticello",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Virginia, United States. Made from Cabernet Franc, Petit Verdot.",
+  "description": "A AVA red wine from Virginia, USA. Made from Cabernet Franc, Petit Verdot.",
   "abv": "12.5–14.5%",
-  "origin": "Virginia, United States",
+  "origin": "Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291577,7 +291577,7 @@
     },
     {
      "label": "Region",
-     "detail": "Virginia, United States"
+     "detail": "Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -291593,9 +291593,9 @@
   "name": "Shenandoah Valley (VA)",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Virginia, United States. Made from Viognier, Chardonnay.",
+  "description": "A AVA white wine from Virginia, USA. Made from Viognier, Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Virginia, United States",
+  "origin": "Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -291624,7 +291624,7 @@
     },
     {
      "label": "Region",
-     "detail": "Virginia, United States"
+     "detail": "Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -291640,9 +291640,9 @@
   "name": "Ancient Lakes of Columbia Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Washington, United States. Made from Riesling, Chardonnay.",
+  "description": "A AVA white wine from Washington, USA. Made from Riesling, Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -291671,7 +291671,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291687,9 +291687,9 @@
   "name": "Candy Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291718,7 +291718,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291734,9 +291734,9 @@
   "name": "Horse Heaven Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon, Merlot.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291765,7 +291765,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291781,9 +291781,9 @@
   "name": "Lake Chelan",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Washington, United States. Made from Riesling, Chardonnay.",
+  "description": "A AVA white wine from Washington, USA. Made from Riesling, Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -291812,7 +291812,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291828,9 +291828,9 @@
   "name": "Naches Heights",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Washington, United States. Made from Riesling, Pinot Gris.",
+  "description": "A AVA white wine from Washington, USA. Made from Riesling, Pinot Gris.",
   "abv": "11.5–13.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -291859,7 +291859,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291875,9 +291875,9 @@
   "name": "Puget Sound",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Washington, United States. Made from Madeleine Angevine, Siegerrebe.",
+  "description": "A AVA white wine from Washington, USA. Made from Madeleine Angevine, Siegerrebe.",
   "abv": "11.5–13.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -291906,7 +291906,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291922,9 +291922,9 @@
   "name": "Rattlesnake Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -291953,7 +291953,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -291969,9 +291969,9 @@
   "name": "Red Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292000,7 +292000,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -292016,9 +292016,9 @@
   "name": "Royal Slope",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292047,7 +292047,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -292063,9 +292063,9 @@
   "name": "Snipes Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292094,7 +292094,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -292110,9 +292110,9 @@
   "name": "Wahluke Slope",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Syrah, Merlot.",
+  "description": "A AVA red wine from Washington, USA. Made from Syrah, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292141,7 +292141,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -292157,9 +292157,9 @@
   "name": "Walla Walla Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon, Syrah.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292188,7 +292188,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -292204,9 +292204,9 @@
   "name": "White Bluffs",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Merlot, Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Merlot, Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292235,7 +292235,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -292251,9 +292251,9 @@
   "name": "Yakima Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Merlot, Syrah.",
+  "description": "A AVA red wine from Washington, USA. Made from Merlot, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -292282,7 +292282,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -354239,9 +354239,9 @@
   "name": "Willcox Bench",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Arizona, United States. Made from Syrah.",
+  "description": "A AVA red wine from Arizona, USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Arizona, United States",
+  "origin": "Arizona, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354270,7 +354270,7 @@
     },
     {
      "label": "Region",
-     "detail": "Arizona, United States"
+     "detail": "Arizona, USA"
     },
     {
      "label": "Vinification",
@@ -354286,9 +354286,9 @@
   "name": "Altus",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Arkansas, United States. Made from Cynthiana.",
+  "description": "A AVA red wine from Arkansas, USA. Made from Cynthiana.",
   "abv": "12.5–14.5%",
-  "origin": "Arkansas, United States",
+  "origin": "Arkansas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354317,7 +354317,7 @@
     },
     {
      "label": "Region",
-     "detail": "Arkansas, United States"
+     "detail": "Arkansas, USA"
     },
     {
      "label": "Vinification",
@@ -354333,9 +354333,9 @@
   "name": "Arkansas Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Arkansas, United States. Made from Cynthiana.",
+  "description": "A AVA red wine from Arkansas, USA. Made from Cynthiana.",
   "abv": "12.5–14.5%",
-  "origin": "Arkansas, United States",
+  "origin": "Arkansas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354364,7 +354364,7 @@
     },
     {
      "label": "Region",
-     "detail": "Arkansas, United States"
+     "detail": "Arkansas, USA"
     },
     {
      "label": "Vinification",
@@ -354380,9 +354380,9 @@
   "name": "Ben Lomond Mountain",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Bay Area), United States. Made from Chardonnay.",
+  "description": "A AVA white wine from California (Bay Area), USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "California (Bay Area), United States",
+  "origin": "California (Bay Area), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -354411,7 +354411,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Bay Area), United States"
+     "detail": "California (Bay Area), USA"
     },
     {
      "label": "Vinification",
@@ -354427,9 +354427,9 @@
   "name": "Pacheco Pass",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Bay Area), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Bay Area), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Bay Area), United States",
+  "origin": "California (Bay Area), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354458,7 +354458,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Bay Area), United States"
+     "detail": "California (Bay Area), USA"
     },
     {
      "label": "Vinification",
@@ -354474,9 +354474,9 @@
   "name": "San Francisco Bay",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Bay Area), United States. Made from Cabernet Sauvignon, Merlot.",
+  "description": "A AVA red wine from California (Bay Area), USA. Made from Cabernet Sauvignon, Merlot.",
   "abv": "12.5–14.5%",
-  "origin": "California (Bay Area), United States",
+  "origin": "California (Bay Area), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354505,7 +354505,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Bay Area), United States"
+     "detail": "California (Bay Area), USA"
     },
     {
      "label": "Vinification",
@@ -354521,9 +354521,9 @@
   "name": "Cienega Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354552,7 +354552,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354568,9 +354568,9 @@
   "name": "Creston District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354599,7 +354599,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354615,9 +354615,9 @@
   "name": "El Pomar District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354646,7 +354646,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354662,9 +354662,9 @@
   "name": "Gabilan Mountains",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354693,7 +354693,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354709,9 +354709,9 @@
   "name": "Geneseo District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354740,7 +354740,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354756,9 +354756,9 @@
   "name": "Hames Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354787,7 +354787,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354803,9 +354803,9 @@
   "name": "Lime Kiln Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Pfeffer.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Pfeffer.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354834,7 +354834,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354850,9 +354850,9 @@
   "name": "Mount Harlan",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354881,7 +354881,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354897,9 +354897,9 @@
   "name": "Paicines",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354928,7 +354928,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354944,9 +354944,9 @@
   "name": "Paso Robles Estrella District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -354975,7 +354975,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -354991,9 +354991,9 @@
   "name": "Paso Robles Highlands District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355022,7 +355022,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355038,9 +355038,9 @@
   "name": "San Antonio Valley (California)",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Syrah.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355069,7 +355069,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355085,9 +355085,9 @@
   "name": "San Bernabe",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Coast), United States. Made from Chardonnay.",
+  "description": "A AVA white wine from California (Central Coast), USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -355116,7 +355116,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355132,9 +355132,9 @@
   "name": "San Juan Creek",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355163,7 +355163,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355179,9 +355179,9 @@
   "name": "San Lucas",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355210,7 +355210,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355226,9 +355226,9 @@
   "name": "San Miguel District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355257,7 +355257,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355273,9 +355273,9 @@
   "name": "Santa Margarita Ranch",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355304,7 +355304,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355320,9 +355320,9 @@
   "name": "SLO Coast",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355351,7 +355351,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355367,9 +355367,9 @@
   "name": "York Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Coast), United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from California (Central Coast), USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Coast), United States",
+  "origin": "California (Central Coast), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355398,7 +355398,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Coast), United States"
+     "detail": "California (Central Coast), USA"
     },
     {
      "label": "Vinification",
@@ -355414,9 +355414,9 @@
   "name": "Alta Mesa",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355445,7 +355445,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355461,9 +355461,9 @@
   "name": "Borden Ranch",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355492,7 +355492,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355508,9 +355508,9 @@
   "name": "Clements Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355539,7 +355539,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355555,9 +355555,9 @@
   "name": "Cosumnes River",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Valley), United States. Made from Chardonnay.",
+  "description": "A AVA white wine from California (Central Valley), USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -355586,7 +355586,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355602,9 +355602,9 @@
   "name": "Diablo Grande",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Syrah.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355633,7 +355633,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355649,9 +355649,9 @@
   "name": "Jahant",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Valley), United States. Made from Albariño.",
+  "description": "A AVA white wine from California (Central Valley), USA. Made from Albariño.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -355680,7 +355680,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355696,9 +355696,9 @@
   "name": "Madera",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355727,7 +355727,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355743,9 +355743,9 @@
   "name": "Merritt Island",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Valley), United States. Made from Chenin Blanc.",
+  "description": "A AVA white wine from California (Central Valley), USA. Made from Chenin Blanc.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -355774,7 +355774,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355790,9 +355790,9 @@
   "name": "Mokelumne River",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355821,7 +355821,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355837,9 +355837,9 @@
   "name": "River Junction",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Central Valley), United States. Made from Chardonnay.",
+  "description": "A AVA white wine from California (Central Valley), USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -355868,7 +355868,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355884,9 +355884,9 @@
   "name": "Salado Creek",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355915,7 +355915,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355931,9 +355931,9 @@
   "name": "Sloughhouse",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -355962,7 +355962,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -355978,9 +355978,9 @@
   "name": "Tracy Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Central Valley), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Central Valley), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Central Valley), United States",
+  "origin": "California (Central Valley), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356009,7 +356009,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Central Valley), United States"
+     "detail": "California (Central Valley), USA"
     },
     {
      "label": "Vinification",
@@ -356025,9 +356025,9 @@
   "name": "Benmore Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Lake), United States. Made from Chardonnay.",
+  "description": "A AVA white wine from California (Lake), USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -356056,7 +356056,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -356072,9 +356072,9 @@
   "name": "Big Valley District",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Lake), United States. Made from Sauvignon Blanc.",
+  "description": "A AVA white wine from California (Lake), USA. Made from Sauvignon Blanc.",
   "abv": "11.5–13.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -356103,7 +356103,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -356119,9 +356119,9 @@
   "name": "Guenoc Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Lake), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Lake), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356150,7 +356150,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -356166,9 +356166,9 @@
   "name": "High Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Lake), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Lake), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356197,7 +356197,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -356213,9 +356213,9 @@
   "name": "Kelsey Bench",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Lake), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Lake), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Lake), United States",
+  "origin": "California (Lake), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356244,7 +356244,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Lake), United States"
+     "detail": "California (Lake), USA"
     },
     {
      "label": "Vinification",
@@ -356260,9 +356260,9 @@
   "name": "Cole Ranch",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from California (Mendocino), United States. Made from Riesling.",
+  "description": "A AVA white wine from California (Mendocino), USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -356291,7 +356291,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -356307,9 +356307,9 @@
   "name": "Covelo",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356338,7 +356338,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -356354,9 +356354,9 @@
   "name": "Eagle Peak Mendocino County",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356385,7 +356385,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -356401,9 +356401,9 @@
   "name": "McDowell Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Syrah, Grenache.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Syrah, Grenache.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356432,7 +356432,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -356448,9 +356448,9 @@
   "name": "Pine Mountain",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Mendocino), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Mendocino), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Mendocino), United States",
+  "origin": "California (Mendocino), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356479,7 +356479,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Mendocino), United States"
+     "detail": "California (Mendocino), USA"
     },
     {
      "label": "Vinification",
@@ -356495,9 +356495,9 @@
   "name": "Mount Veeder District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Napa), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Napa), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Napa), United States",
+  "origin": "California (Napa), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356526,7 +356526,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Napa), United States"
+     "detail": "California (Napa), USA"
     },
     {
      "label": "Vinification",
@@ -356542,9 +356542,9 @@
   "name": "California Shenandoah Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Zinfandel.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Zinfandel.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356573,7 +356573,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -356589,9 +356589,9 @@
   "name": "North Yuba",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sierra Foothills), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Sierra Foothills), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sierra Foothills), United States",
+  "origin": "California (Sierra Foothills), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356620,7 +356620,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sierra Foothills), United States"
+     "detail": "California (Sierra Foothills), USA"
     },
     {
      "label": "Vinification",
@@ -356636,9 +356636,9 @@
   "name": "Northern Sonoma",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon, Chardonnay.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356667,7 +356667,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -356683,9 +356683,9 @@
   "name": "Pine Mountain-Cloverdale Peak",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356714,7 +356714,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -356730,9 +356730,9 @@
   "name": "West Sonoma Coast",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Sonoma), United States. Made from Pinot Noir, Chardonnay.",
+  "description": "A AVA red wine from California (Sonoma), USA. Made from Pinot Noir, Chardonnay.",
   "abv": "12.5–14.5%",
-  "origin": "California (Sonoma), United States",
+  "origin": "California (Sonoma), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356761,7 +356761,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Sonoma), United States"
+     "detail": "California (Sonoma), USA"
     },
     {
      "label": "Vinification",
@@ -356777,9 +356777,9 @@
   "name": "Antelope Valley of the California High Desert",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Syrah.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356808,7 +356808,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -356824,9 +356824,9 @@
   "name": "Malibu-Newton Canyon",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356855,7 +356855,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -356871,9 +356871,9 @@
   "name": "Saddle Rock-Malibu",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356902,7 +356902,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -356918,9 +356918,9 @@
   "name": "San Pasqual Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356949,7 +356949,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -356965,9 +356965,9 @@
   "name": "Sierra Pelona Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from California (Southern), United States. Made from Syrah.",
+  "description": "A AVA red wine from California (Southern), USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "California (Southern), United States",
+  "origin": "California (Southern), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -356996,7 +356996,7 @@
     },
     {
      "label": "Region",
-     "detail": "California (Southern), United States"
+     "detail": "California (Southern), USA"
     },
     {
      "label": "Vinification",
@@ -357012,9 +357012,9 @@
   "name": "Grand Valley Colorado",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Colorado, United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from Colorado, USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "Colorado, United States",
+  "origin": "Colorado, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357043,7 +357043,7 @@
     },
     {
      "label": "Region",
-     "detail": "Colorado, United States"
+     "detail": "Colorado, USA"
     },
     {
      "label": "Vinification",
@@ -357059,9 +357059,9 @@
   "name": "Southeastern New England",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Connecticut, United States. Made from Chardonnay.",
+  "description": "A AVA white wine from Connecticut, USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Connecticut, United States",
+  "origin": "Connecticut, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -357090,7 +357090,7 @@
     },
     {
      "label": "Region",
-     "detail": "Connecticut, United States"
+     "detail": "Connecticut, USA"
     },
     {
      "label": "Vinification",
@@ -357106,9 +357106,9 @@
   "name": "Western Connecticut Highlands",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Connecticut, United States. Made from Seyval Blanc.",
+  "description": "A AVA white wine from Connecticut, USA. Made from Seyval Blanc.",
   "abv": "11.5–13.5%",
-  "origin": "Connecticut, United States",
+  "origin": "Connecticut, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -357137,7 +357137,7 @@
     },
     {
      "label": "Region",
-     "detail": "Connecticut, United States"
+     "detail": "Connecticut, USA"
     },
     {
      "label": "Vinification",
@@ -357153,9 +357153,9 @@
   "name": "Upper Hiwassee",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Georgia (US), United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from Georgia (US), USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "Georgia (US), United States",
+  "origin": "Georgia (US), USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357184,7 +357184,7 @@
     },
     {
      "label": "Region",
-     "detail": "Georgia (US), United States"
+     "detail": "Georgia (US), USA"
     },
     {
      "label": "Vinification",
@@ -357200,9 +357200,9 @@
   "name": "Snake River Valley Sunnyslope District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Idaho, United States. Made from Syrah.",
+  "description": "A AVA red wine from Idaho, USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Idaho, United States",
+  "origin": "Idaho, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357231,7 +357231,7 @@
     },
     {
      "label": "Region",
-     "detail": "Idaho, United States"
+     "detail": "Idaho, USA"
     },
     {
      "label": "Vinification",
@@ -357247,9 +357247,9 @@
   "name": "Shawnee Hills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Illinois, United States. Made from Chambourcin, Norton.",
+  "description": "A AVA red wine from Illinois, USA. Made from Chambourcin, Norton.",
   "abv": "12.5–14.5%",
-  "origin": "Illinois, United States",
+  "origin": "Illinois, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357278,7 +357278,7 @@
     },
     {
      "label": "Region",
-     "detail": "Illinois, United States"
+     "detail": "Illinois, USA"
     },
     {
      "label": "Vinification",
@@ -357294,9 +357294,9 @@
   "name": "Indiana Uplands",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Indiana, United States. Made from Chambourcin, Traminette.",
+  "description": "A AVA red wine from Indiana, USA. Made from Chambourcin, Traminette.",
   "abv": "12.5–14.5%",
-  "origin": "Indiana, United States",
+  "origin": "Indiana, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357325,7 +357325,7 @@
     },
     {
      "label": "Region",
-     "detail": "Indiana, United States"
+     "detail": "Indiana, USA"
     },
     {
      "label": "Vinification",
@@ -357341,9 +357341,9 @@
   "name": "Upper Mississippi River Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Iowa, United States. Made from Marquette, Frontenac.",
+  "description": "A AVA red wine from Iowa, USA. Made from Marquette, Frontenac.",
   "abv": "12.5–14.5%",
-  "origin": "Iowa, United States",
+  "origin": "Iowa, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357372,7 +357372,7 @@
     },
     {
      "label": "Region",
-     "detail": "Iowa, United States"
+     "detail": "Iowa, USA"
     },
     {
      "label": "Vinification",
@@ -357388,9 +357388,9 @@
   "name": "Linganore",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Maryland, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from Maryland, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Maryland, United States",
+  "origin": "Maryland, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357419,7 +357419,7 @@
     },
     {
      "label": "Region",
-     "detail": "Maryland, United States"
+     "detail": "Maryland, USA"
     },
     {
      "label": "Vinification",
@@ -357435,9 +357435,9 @@
   "name": "Martha's Vineyard",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Massachusetts, United States. Made from Chardonnay.",
+  "description": "A AVA white wine from Massachusetts, USA. Made from Chardonnay.",
   "abv": "11.5–13.5%",
-  "origin": "Massachusetts, United States",
+  "origin": "Massachusetts, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -357466,7 +357466,7 @@
     },
     {
      "label": "Region",
-     "detail": "Massachusetts, United States"
+     "detail": "Massachusetts, USA"
     },
     {
      "label": "Vinification",
@@ -357482,9 +357482,9 @@
   "name": "Fennville",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Michigan, United States. Made from Riesling.",
+  "description": "A AVA white wine from Michigan, USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "Michigan, United States",
+  "origin": "Michigan, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -357513,7 +357513,7 @@
     },
     {
      "label": "Region",
-     "detail": "Michigan, United States"
+     "detail": "Michigan, USA"
     },
     {
      "label": "Vinification",
@@ -357529,9 +357529,9 @@
   "name": "Tip of the Mitt",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Michigan, United States. Made from Riesling, Marquette.",
+  "description": "A AVA white wine from Michigan, USA. Made from Riesling, Marquette.",
   "abv": "11.5–13.5%",
-  "origin": "Michigan, United States",
+  "origin": "Michigan, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -357560,7 +357560,7 @@
     },
     {
      "label": "Region",
-     "detail": "Michigan, United States"
+     "detail": "Michigan, USA"
     },
     {
      "label": "Vinification",
@@ -357576,9 +357576,9 @@
   "name": "Alexandria Lakes",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Minnesota, United States. Made from Frontenac.",
+  "description": "A AVA red wine from Minnesota, USA. Made from Frontenac.",
   "abv": "12.5–14.5%",
-  "origin": "Minnesota, United States",
+  "origin": "Minnesota, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357607,7 +357607,7 @@
     },
     {
      "label": "Region",
-     "detail": "Minnesota, United States"
+     "detail": "Minnesota, USA"
     },
     {
      "label": "Vinification",
@@ -357623,9 +357623,9 @@
   "name": "Loess Hills District",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Missouri, United States. Made from Norton.",
+  "description": "A AVA red wine from Missouri, USA. Made from Norton.",
   "abv": "12.5–14.5%",
-  "origin": "Missouri, United States",
+  "origin": "Missouri, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357654,7 +357654,7 @@
     },
     {
      "label": "Region",
-     "detail": "Missouri, United States"
+     "detail": "Missouri, USA"
     },
     {
      "label": "Vinification",
@@ -357670,9 +357670,9 @@
   "name": "Nevada (United States)",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A red wine from Nevada, United States. Made from Cabernet Sauvignon.",
+  "description": "A red wine from Nevada, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Nevada, United States",
+  "origin": "Nevada, USA",
   "rarity": "common",
   "tastingNotes": [
    "red fruit",
@@ -357701,7 +357701,7 @@
     },
     {
      "label": "Region",
-     "detail": "Nevada, United States"
+     "detail": "Nevada, USA"
     },
     {
      "label": "Vinification",
@@ -357717,9 +357717,9 @@
   "name": "Cape May Peninsula",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New Jersey, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from New Jersey, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "New Jersey, United States",
+  "origin": "New Jersey, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357748,7 +357748,7 @@
     },
     {
      "label": "Region",
-     "detail": "New Jersey, United States"
+     "detail": "New Jersey, USA"
     },
     {
      "label": "Vinification",
@@ -357764,9 +357764,9 @@
   "name": "Central Delaware Valley (NJ)",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New Jersey, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from New Jersey, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "New Jersey, United States",
+  "origin": "New Jersey, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357795,7 +357795,7 @@
     },
     {
      "label": "Region",
-     "detail": "New Jersey, United States"
+     "detail": "New Jersey, USA"
     },
     {
      "label": "Vinification",
@@ -357811,9 +357811,9 @@
   "name": "Mimbres Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New Mexico, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from New Mexico, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "New Mexico, United States",
+  "origin": "New Mexico, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357842,7 +357842,7 @@
     },
     {
      "label": "Region",
-     "detail": "New Mexico, United States"
+     "detail": "New Mexico, USA"
     },
     {
      "label": "Vinification",
@@ -357858,9 +357858,9 @@
   "name": "Champlain Valley of New York",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New York, United States. Made from Marquette.",
+  "description": "A AVA red wine from New York, USA. Made from Marquette.",
   "abv": "12.5–14.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357889,7 +357889,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -357905,9 +357905,9 @@
   "name": "Upper Hudson",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from New York, United States. Made from Marquette, Frontenac.",
+  "description": "A AVA red wine from New York, USA. Made from Marquette, Frontenac.",
   "abv": "12.5–14.5%",
-  "origin": "New York, United States",
+  "origin": "New York, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357936,7 +357936,7 @@
     },
     {
      "label": "Region",
-     "detail": "New York, United States"
+     "detail": "New York, USA"
     },
     {
      "label": "Vinification",
@@ -357952,9 +357952,9 @@
   "name": "Haw River Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from North Carolina, United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from North Carolina, USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "North Carolina, United States",
+  "origin": "North Carolina, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -357983,7 +357983,7 @@
     },
     {
      "label": "Region",
-     "detail": "North Carolina, United States"
+     "detail": "North Carolina, USA"
     },
     {
      "label": "Vinification",
@@ -357999,9 +357999,9 @@
   "name": "Upper Hiwassee Highlands",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from North Carolina, United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from North Carolina, USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "North Carolina, United States",
+  "origin": "North Carolina, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358030,7 +358030,7 @@
     },
     {
      "label": "Region",
-     "detail": "North Carolina, United States"
+     "detail": "North Carolina, USA"
     },
     {
      "label": "Vinification",
@@ -358046,9 +358046,9 @@
   "name": "Isle St. George",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Ohio, United States. Made from Catawba.",
+  "description": "A AVA white wine from Ohio, USA. Made from Catawba.",
   "abv": "11.5–13.5%",
-  "origin": "Ohio, United States",
+  "origin": "Ohio, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -358077,7 +358077,7 @@
     },
     {
      "label": "Region",
-     "detail": "Ohio, United States"
+     "detail": "Ohio, USA"
     },
     {
      "label": "Vinification",
@@ -358093,9 +358093,9 @@
   "name": "Kanawha River Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Ohio, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from Ohio, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Ohio, United States",
+  "origin": "Ohio, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358124,7 +358124,7 @@
     },
     {
      "label": "Region",
-     "detail": "Ohio, United States"
+     "detail": "Ohio, USA"
     },
     {
      "label": "Vinification",
@@ -358140,9 +358140,9 @@
   "name": "Ohio River Valley",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Ohio, United States. Made from Catawba, Vidal.",
+  "description": "A AVA white wine from Ohio, USA. Made from Catawba, Vidal.",
   "abv": "11.5–13.5%",
-  "origin": "Ohio, United States",
+  "origin": "Ohio, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -358171,7 +358171,7 @@
     },
     {
      "label": "Region",
-     "detail": "Ohio, United States"
+     "detail": "Ohio, USA"
     },
     {
      "label": "Vinification",
@@ -358187,9 +358187,9 @@
   "name": "Mount Pisgah",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358218,7 +358218,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -358234,9 +358234,9 @@
   "name": "Red Hill Douglas County",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358265,7 +358265,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -358281,9 +358281,9 @@
   "name": "Rocks District of Milton-Freewater",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Syrah.",
+  "description": "A AVA red wine from Oregon, USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358312,7 +358312,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -358328,9 +358328,9 @@
   "name": "Southern Oregon",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Tempranillo, Syrah.",
+  "description": "A AVA red wine from Oregon, USA. Made from Tempranillo, Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358359,7 +358359,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -358375,9 +358375,9 @@
   "name": "Willamette Valley Foothills",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Oregon, United States. Made from Pinot Noir.",
+  "description": "A AVA red wine from Oregon, USA. Made from Pinot Noir.",
   "abv": "12.5–14.5%",
-  "origin": "Oregon, United States",
+  "origin": "Oregon, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358406,7 +358406,7 @@
     },
     {
      "label": "Region",
-     "detail": "Oregon, United States"
+     "detail": "Oregon, USA"
     },
     {
      "label": "Vinification",
@@ -358422,9 +358422,9 @@
   "name": "Central Delaware Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Pennsylvania, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from Pennsylvania, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Pennsylvania, United States",
+  "origin": "Pennsylvania, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358453,7 +358453,7 @@
     },
     {
      "label": "Region",
-     "detail": "Pennsylvania, United States"
+     "detail": "Pennsylvania, USA"
     },
     {
      "label": "Vinification",
@@ -358469,9 +358469,9 @@
   "name": "Cumberland Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Pennsylvania, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from Pennsylvania, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "Pennsylvania, United States",
+  "origin": "Pennsylvania, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358500,7 +358500,7 @@
     },
     {
      "label": "Region",
-     "detail": "Pennsylvania, United States"
+     "detail": "Pennsylvania, USA"
     },
     {
      "label": "Vinification",
@@ -358516,9 +358516,9 @@
   "name": "Fredericksburg in the Texas Hill Country",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Tempranillo.",
+  "description": "A AVA red wine from Texas, USA. Made from Tempranillo.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358547,7 +358547,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -358563,9 +358563,9 @@
   "name": "Mesilla Valley (TX)",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Texas, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358594,7 +358594,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -358610,9 +358610,9 @@
   "name": "Texoma",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Texas, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Texas, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Texas, United States",
+  "origin": "Texas, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358641,7 +358641,7 @@
     },
     {
      "label": "Region",
-     "detail": "Texas, United States"
+     "detail": "Texas, USA"
     },
     {
      "label": "Vinification",
@@ -358657,9 +358657,9 @@
   "name": "North Fork of Roanoke",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Virginia, United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from Virginia, USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "Virginia, United States",
+  "origin": "Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358688,7 +358688,7 @@
     },
     {
      "label": "Region",
-     "detail": "Virginia, United States"
+     "detail": "Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -358704,9 +358704,9 @@
   "name": "Rocky Knob",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Virginia, United States. Made from Riesling.",
+  "description": "A AVA white wine from Virginia, USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "Virginia, United States",
+  "origin": "Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -358735,7 +358735,7 @@
     },
     {
      "label": "Region",
-     "detail": "Virginia, United States"
+     "detail": "Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -358751,9 +358751,9 @@
   "name": "Virginia Peninsula",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Virginia, United States. Made from Cabernet Franc.",
+  "description": "A AVA red wine from Virginia, USA. Made from Cabernet Franc.",
   "abv": "12.5–14.5%",
-  "origin": "Virginia, United States",
+  "origin": "Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358782,7 +358782,7 @@
     },
     {
      "label": "Region",
-     "detail": "Virginia, United States"
+     "detail": "Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -358798,9 +358798,9 @@
   "name": "Burn of Columbia Valley",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Syrah.",
+  "description": "A AVA red wine from Washington, USA. Made from Syrah.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358829,7 +358829,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -358845,9 +358845,9 @@
   "name": "Columbia Gorge (WA)",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Washington, United States. Made from Riesling.",
+  "description": "A AVA white wine from Washington, USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -358876,7 +358876,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -358892,9 +358892,9 @@
   "name": "Goose Gap",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -358923,7 +358923,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -358939,9 +358939,9 @@
   "name": "Rocky Reach",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Washington, United States. Made from Riesling.",
+  "description": "A AVA white wine from Washington, USA. Made from Riesling.",
   "abv": "11.5–13.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -358970,7 +358970,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -358986,9 +358986,9 @@
   "name": "Yakima Valley Upland",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from Washington, United States. Made from Cabernet Sauvignon.",
+  "description": "A AVA red wine from Washington, USA. Made from Cabernet Sauvignon.",
   "abv": "12.5–14.5%",
-  "origin": "Washington, United States",
+  "origin": "Washington, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -359017,7 +359017,7 @@
     },
     {
      "label": "Region",
-     "detail": "Washington, United States"
+     "detail": "Washington, USA"
     },
     {
      "label": "Vinification",
@@ -359033,9 +359033,9 @@
   "name": "Shawnee Hills (WV)",
   "category": "wine",
   "subcategory": "Regional Red",
-  "description": "A AVA red wine from West Virginia, United States. Made from Chambourcin.",
+  "description": "A AVA red wine from West Virginia, USA. Made from Chambourcin.",
   "abv": "12.5–14.5%",
-  "origin": "West Virginia, United States",
+  "origin": "West Virginia, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "red fruit",
@@ -359064,7 +359064,7 @@
     },
     {
      "label": "Region",
-     "detail": "West Virginia, United States"
+     "detail": "West Virginia, USA"
     },
     {
      "label": "Vinification",
@@ -359080,9 +359080,9 @@
   "name": "Wisconsin Ledge",
   "category": "wine",
   "subcategory": "White",
-  "description": "A AVA white wine from Wisconsin, United States. Made from Frontenac Gris.",
+  "description": "A AVA white wine from Wisconsin, USA. Made from Frontenac Gris.",
   "abv": "11.5–13.5%",
-  "origin": "Wisconsin, United States",
+  "origin": "Wisconsin, USA",
   "rarity": "uncommon",
   "tastingNotes": [
    "citrus",
@@ -359111,7 +359111,7 @@
     },
     {
      "label": "Region",
-     "detail": "Wisconsin, United States"
+     "detail": "Wisconsin, USA"
     },
     {
      "label": "Vinification",
