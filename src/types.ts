@@ -138,12 +138,19 @@ export interface AtlasGrape {
   countries: number[];
 }
 
-/** What a wine Dex card points at in the atlas. */
+/**
+ * What a wine Dex card points at in the atlas.
+ *
+ * Keyed by NAME rather than array position. Positions move — adding one row
+ * to winedata/wines.psv re-sorts the atlas and every later index retargets
+ * silently. Wine names are globally unique, so they survive inserts,
+ * deletes and re-sorts alike.
+ */
 export interface AtlasLink {
-  /** Indices into WineAtlas.wines. */
-  wines: number[];
-  /** Index into WineAtlas.grapes, for cards that are a variety. */
-  grape: number | null;
+  /** Atlas wine names. */
+  wines: string[];
+  /** Atlas grape name, for cards that are a variety. */
+  grape: string | null;
   /** Why this card has nothing to link to — sake, vermouth. */
   absent?: string;
 }

@@ -5,6 +5,13 @@
  * Run AFTER build-wine-atlas.mjs (it reads the generated atlas).
  * Run: node scripts/build-wine-atlas-links.mjs
  *
+ * Links store the wine's NAME, never its position in the atlas array.
+ * Positions move: adding one row to winedata/wines.psv re-sorts the array,
+ * and every index at or after the insertion silently retargets — the
+ * Sauternes card renders Saint-Julien with no error anywhere. Names are
+ * globally unique across all 1,558 wines, so they are a stable key, and a
+ * name that stops resolving fails loudly through `problems` below.
+ *
  * Most cards match by name on their own. The overrides below cover the rest:
  * a card that is a family of appellations rather than one ("Crémant",
  * "Madeira"), a card whose atlas name differs ("Ruby Port" is filed as
@@ -21,17 +28,54 @@ const drinks = JSON.parse(readFileSync(join(ROOT, 'src/data/drinks.json'), 'utf8
 
 const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
-const byWineName = new Map();
-atlas.wines.forEach((w, i) => {
+/**
+ * Two lookups, and the order matters.
+ *
+ * Folding is what lets a card named "Cotes de Provence" find "Côtes de
+ * Provence", so it has to exist. But folding is not injective: Bulgaria's
+ * Melnik and Bohemia's Mělník fold to the same key, so a folded lookup
+ * returns BOTH and would link a Czech card to a Bulgarian wine — a valid
+ * reference, resolving cleanly, and wrong. Exact match is tried first and
+ * folding is only the fallback.
+ */
+const exactWineName = new Map(atlas.wines.map((w) => [w.n, [w.n]]));
+const foldedWineName = new Map();
+atlas.wines.forEach((w) => {
   const k = fold(w.n);
-  if (!byWineName.has(k)) byWineName.set(k, []);
-  byWineName.get(k).push(i);
+  if (!foldedWineName.has(k)) foldedWineName.set(k, []);
+  foldedWineName.get(k).push(w.n);
 });
+
+/** Exact first, folded second. Returns [] when nothing matches. */
+function resolveWine(name) {
+  return exactWineName.get(name) ?? foldedWineName.get(fold(name)) ?? [];
+}
+
+/** Same rule for grapes. */
+const exactGrapeName = new Map();
+atlas.grapes.forEach((g) => {
+  for (const n of [g.name, ...g.synonyms]) if (!exactGrapeName.has(n)) exactGrapeName.set(n, g.name);
+});
+function resolveGrape(name) {
+  return exactGrapeName.get(name) ?? byGrapeName.get(fold(name));
+}
+
+/* A name key is only as good as its uniqueness. Check, don't assume. */
+{
+  const counts = new Map();
+  for (const w of atlas.wines) counts.set(w.n, (counts.get(w.n) ?? 0) + 1);
+  const clashes = [...counts].filter(([, n]) => n > 1).map(([n]) => n);
+  if (clashes.length) {
+    console.error('Atlas wine names are no longer unique; name-keyed links are unsafe:');
+    for (const c of clashes) console.error('  ' + c);
+    process.exit(1);
+  }
+}
 const byGrapeName = new Map();
-atlas.grapes.forEach((g, i) => {
+atlas.grapes.forEach((g) => {
   for (const n of [g.name, ...g.synonyms]) {
     const k = fold(n);
-    if (!byGrapeName.has(k)) byGrapeName.set(k, i);
+    if (!byGrapeName.has(k)) byGrapeName.set(k, g.name);
   }
 });
 
@@ -61,6 +105,16 @@ const WINES = {
               'Lambrusco Salamino di Santa Croce', 'Lambrusco Reggiano', 'Lambrusco Mantovano'],
   'pet-nat': ['Blanquette Méthode Ancestrale', 'Bugey-Cerdon'],
   txakoli: ['Getariako Txakolina', 'Bizkaiko Txakolina', 'Arabako Txakolina'],
+
+  /*
+   * Two atlas wines whose names are distinct strings but identical once
+   * accents are folded: Bulgaria's Melnik and Bohemia's Mělník. Atlas names
+   * stay unique, so the links themselves are fine — but two Dex cards
+   * reading the same in a list is a defect, so the Czech card displays as
+   * "Mělník (Czechia)" and needs to be pointed back at the atlas name.
+   * The only such collision in 2,315 wines.
+   */
+  'melnik-czechia': ['Mělník'],
 };
 
 /** Card id -> atlas grape name, where the card is a variety. */
@@ -95,21 +149,23 @@ for (const d of drinks.filter((x) => x.category === 'wine')) {
 
   if (WINES[d.id]) {
     for (const name of WINES[d.id]) {
-      const hit = byWineName.get(fold(name));
-      if (hit) wines.push(...hit);
+      wines.push(...resolveWine(name));
     }
     if (!wines.length) problems.push(`${d.id}: no override name resolved`);
   } else if (GRAPES[d.id]) {
-    grape = byGrapeName.get(fold(GRAPES[d.id]));
+    grape = resolveGrape(GRAPES[d.id]);
     if (grape === undefined) problems.push(`${d.id}: grape override "${GRAPES[d.id]}" not found`);
   } else {
-    const k = fold(d.name);
-    if (byWineName.has(k)) wines = [...byWineName.get(k)];
-    else if (byGrapeName.has(k)) grape = byGrapeName.get(k);
-    else problems.push(`${d.id} (${d.name}): unmatched and no override`);
+    const hit = resolveWine(d.name);
+    if (hit.length) wines = [...hit];
+    else {
+      const g = resolveGrape(d.name);
+      if (g !== undefined) grape = g;
+      else problems.push(`${d.id} (${d.name}): unmatched and no override`);
+    }
   }
 
-  wines = [...new Set(wines)].sort((a, b) => a - b);
+  wines = [...new Set(wines)].sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }));
   links[d.id] = { wines, grape: grape ?? null };
 }
 

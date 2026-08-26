@@ -81,6 +81,9 @@ const BEER_NAME_RULES: [RegExp, string][] = [
 ];
 
 export const BEER_BY_SUBCATEGORY: Record<string, string> = {
+  /* Brand cards whose style could not be resolved. Real beers, unknown
+   * style — a mid-amber is the least-wrong pour for an unknown one. */
+  Uncatalogued: 'amber',
   'Pale Lager': LIQUID.paleStraw,
   'Hybrid Ale': LIQUID.paleStraw,
   'Wheat Beer': LIQUID.straw,

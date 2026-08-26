@@ -62,7 +62,12 @@ import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
-import { ATLAS_COUNTRIES, ATLAS_GRAPES, ATLAS_WINES } from '@/data/wineAtlas';
+import {
+  ATLAS_COUNTRIES,
+  grapeByName,
+  grapeIndexByName,
+  winesByName,
+} from '@/data/wineAtlas';
 import { atlasLinkFor } from '@/data/wineAtlasLinks';
 import { BRANDS_BY_STYLE } from '@/data/breweries';
 import type { Composition, Recipe, ServeGuide } from '@/types';
@@ -270,13 +275,16 @@ function AtlasPanel({ drinkId }: { drinkId: string }) {
     );
   }
 
-  const grape = link.grape != null ? ATLAS_GRAPES[link.grape] : null;
-  const count = grape ? grape.wines.length : link.wines.length;
+  /* Links carry names; resolve them here. A name that no longer exists is
+     dropped rather than rendering someone else's wine. */
+  const grape = grapeByName(link.grape);
+  const wines = winesByName(link.wines);
+  const count = grape ? grape.wines.length : wines.length;
   if (!count) return null;
 
   const countries = grape
     ? grape.countries.map((c) => ATLAS_COUNTRIES[c].name)
-    : [...new Set(link.wines.map((w) => ATLAS_COUNTRIES[ATLAS_WINES[w].c].name))];
+    : [...new Set(wines.map((w) => ATLAS_COUNTRIES[w.c].name))];
 
   return (
     <>
@@ -295,8 +303,8 @@ function AtlasPanel({ drinkId }: { drinkId: string }) {
         onPress={() =>
           router.push(
             grape
-              ? { pathname: '/wine-atlas', params: { grape: String(link.grape) } }
-              : { pathname: '/wine-atlas', params: { q: ATLAS_WINES[link.wines[0]].n } }
+              ? { pathname: '/wine-atlas', params: { grape: String(grapeIndexByName(link.grape)) } }
+              : { pathname: '/wine-atlas', params: { q: wines[0].n } }
           )
         }
         accessibilityRole="button"

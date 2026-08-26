@@ -1,0 +1,100 @@
+[
+ {
+  "id": "kakheti-qvevri-amber",
+  "name": "Kakheti Qvevri Amber",
+  "subcategory": "Skin-Contact",
+  "description": "Wine made the way it was eight thousand years ago: white grapes fermented on skins in clay qvevri buried to the neck in the earth, emerging amber and tannic.",
+  "abv": "12–13.5%",
+  "origin": "Kakheti, Georgia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried apricot",
+   "walnut",
+   "tea tannin",
+   "orange peel"
+  ],
+  "glassware": "Tulip or small wine glass",
+  "funFact": "Georgia has archaeological evidence of winemaking from around 6000 BC — the oldest yet found — and the qvevri method is on UNESCO's list of intangible cultural heritage.",
+  "serve": {
+   "temp": "54-58°F, cool",
+   "glass": "Tulip or small wine glass",
+   "how": "Serve cool but not cold, closer to a light red than a white — chilling shuts down the tannin and the wine tastes merely sour. Use a tulip rather than a large bowl. Expect grip and a tea-like tannin from the skin and stem contact; this is a food wine and works poorly on its own.",
+   "pair": [
+    "Khinkali",
+    "Walnut sauces",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "White grapes fermented and aged on skins in buried clay qvevri vessels.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Rkatsiteli and Mtsvane."
+    },
+    {
+     "label": "Region",
+     "detail": "Kakheti in eastern Georgia, the country's principal wine region."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented on skins, stems and pips in qvevri buried underground."
+    },
+    {
+     "label": "Aging",
+     "detail": "Up to six months on skins in the qvevri, then further ageing."
+    }
+   ],
+   "process": "Whole crushed grapes ferment with skins and stems in earth-buried clay vessels, where stable ground temperature drives a slow fermentation and long maceration."
+  }
+ },
+ {
+  "id": "areni",
+  "name": "Areni",
+  "subcategory": "Regional Red",
+  "description": "High-altitude Armenian red from the Areni grape, grown near a cave that held a 6,100-year-old winery — the oldest ever excavated.",
+  "abv": "13–14%",
+  "origin": "Vayots Dzor, Armenia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "pomegranate",
+   "dried herb",
+   "stone"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Areni-1 cave in the same valley contained a wine press, fermentation vats and grape seeds dated to around 4100 BC — the oldest known winemaking facility anywhere in the world.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Areni is naturally light in colour and high in acid — closer to Pinot Noir in weight than to a Georgian red — so do not judge it by depth of colour. A short decant helps young bottles; a long one strips them.",
+   "pair": [
+    "Grilled lamb",
+    "Dolma",
+    "Sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude indigenous Armenian red on volcanic soils at 1,400 metres and above.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Areni Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "The Vayots Dzor province of southern Armenia, at high altitude on volcanic soil."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented moderately warm; some producers use karas clay vessels."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak or neutral clay."
+    }
+   ],
+   "process": "Extreme altitude with intense sun and cold nights ripens the fruit while holding acidity, giving pale but structured reds with a distinctly stony character."
+  }
+ }
+]

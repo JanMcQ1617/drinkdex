@@ -1,0 +1,1114 @@
+[
+ {
+  "id": "slippery-nipple",
+  "name": "Slippery Nipple",
+  "subcategory": "Shot",
+  "description": "Sambuca under Irish cream, layered so the two stay separate until you drink them. Named with the subtlety of its era.",
+  "abv": "22–24%",
+  "origin": "United Kingdom",
+  "rarity": "common",
+  "tastingNotes": [
+   "anise",
+   "cream",
+   "vanilla"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Sambuca",
+   "Irish cream",
+   "Grenadine"
+  ],
+  "funFact": "The layers hold because Irish cream is less dense than sambuca; add the grenadine last and it sinks through both to sit at the bottom as a red dot.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sambuca",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Irish cream liqueur",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "2 drops"
+    }
+   ],
+   "steps": [
+    "Pour the sambuca into a shot glass.",
+    "Float the Irish cream over the back of a barspoon so it sits cleanly on top.",
+    "Drop two drops of grenadine through the centre — they should sink.",
+    "Serve immediately, before the layers bleed."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "duck-fart",
+  "name": "Duck Fart",
+  "subcategory": "Shot",
+  "description": "Kahlúa, Irish cream and whisky in three layers. Alaska's contribution to the shooter canon, and the name is not explained.",
+  "abv": "22–24%",
+  "origin": "Anchorage, Alaska, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coffee",
+   "cream",
+   "whisky"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Kahlúa",
+   "Irish cream",
+   "Canadian whisky"
+  ],
+  "funFact": "It was invented at the Peanut Farm bar in Anchorage in the 1980s, and Alaskans defend both the drink and its name with more energy than either strictly warrants.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Kahlúa",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Irish cream liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Canadian whisky",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the Kahlúa into the bottom of a shot glass.",
+    "Float the Irish cream over a barspoon to make the middle layer.",
+    "Float the whisky on top the same way.",
+    "Serve immediately and drink in one."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "alabama-slammer",
+  "name": "Alabama Slammer",
+  "subcategory": "Shot",
+  "description": "Southern Comfort, amaretto and sloe gin with orange juice — a shot in some bars, a tall drink in others, sweet in both.",
+  "abv": "18–20%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "amaretto",
+   "orange",
+   "sloe berry",
+   "peach"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Southern Comfort",
+   "Amaretto",
+   "Sloe gin",
+   "Orange juice"
+  ],
+  "funFact": "It spread through American college bars in the 1970s and is usually associated with the University of Alabama, though no one has ever produced evidence for that.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Southern Comfort",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Amaretto",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Sloe gin",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients briefly with ice.",
+    "Strain into a shot glass, or into a tall glass over ice for the long version.",
+    "Add a squeeze of lemon if serving long.",
+    "Serve cold."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "red-headed-slut",
+  "name": "Red Headed Slut",
+  "subcategory": "Shot",
+  "description": "Jägermeister, peach schnapps and cranberry — herbal and fruity at once, and far more drinkable than its reputation.",
+  "abv": "16–18%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "peach",
+   "cranberry",
+   "herbal",
+   "anise"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Jägermeister",
+   "Peach schnapps",
+   "Cranberry juice"
+  ],
+  "funFact": "Jägermeister contains 56 botanicals and was formulated in 1934 as a digestif for hunters; its American career as a party shot would have baffled its inventor.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jägermeister",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Peach schnapps",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cranberry juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 8 seconds.",
+    "Strain into a shot glass or a small rocks glass.",
+    "Serve cold, immediately.",
+    "For a longer version, pour over ice and top with more cranberry."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "woo-woo",
+  "name": "Woo Woo",
+  "subcategory": "Shot",
+  "description": "Vodka, peach schnapps and cranberry. A Sex on the Beach with the orange juice removed, and better for it.",
+  "abv": "14–16%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "peach",
+   "cranberry",
+   "clean grain"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Vodka",
+   "Peach schnapps",
+   "Cranberry juice"
+  ],
+  "funFact": "It belongs to a whole 1980s family built on peach schnapps, which the American market had barely heard of before 1985 and then could not get enough of.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Peach schnapps",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cranberry juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 8 seconds.",
+    "Strain into a shot glass, or over ice in a highball for a long version.",
+    "Garnish with a lime wedge if serving long.",
+    "Serve cold."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "purple-hooter",
+  "name": "Purple Hooter",
+  "subcategory": "Shot",
+  "description": "Vodka, raspberry liqueur and lime — bright purple, sharp and gone in one.",
+  "abv": "16–18%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "raspberry",
+   "lime",
+   "clean grain"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Vodka",
+   "Chambord",
+   "Lime juice"
+  ],
+  "funFact": "Chambord is made in the Loire from black raspberries and honey to a recipe claiming descent from a seventeenth-century royal liqueur — a grand pedigree for a bar shot.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Chambord or raspberry liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 8 seconds.",
+    "Double-strain into a chilled shot glass.",
+    "Serve immediately.",
+    "A lime wedge on the side is optional."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "surfer-on-acid",
+  "name": "Surfer on Acid",
+  "subcategory": "Shot",
+  "description": "Jägermeister, coconut rum and pineapple. Sounds alarming and tastes, unexpectedly, like a tropical dessert.",
+  "abv": "18–20%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "coconut",
+   "pineapple",
+   "herbal"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Jägermeister",
+   "Coconut rum",
+   "Pineapple juice"
+  ],
+  "funFact": "The coconut and pineapple mask Jägermeister's bitterness almost completely, which is why people who insist they hate Jäger reliably finish this one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jägermeister",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Coconut rum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 8 seconds.",
+    "Strain into a shot glass or small rocks glass.",
+    "Serve cold.",
+    "Scale it up over ice for a longer drink."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "scooby-snack",
+  "name": "Scooby Snack",
+  "subcategory": "Shot",
+  "description": "Melon liqueur, coconut rum, pineapple and cream, shaken to a pale green froth. A dessert disguised as a shot.",
+  "abv": "14–16%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "melon",
+   "coconut",
+   "cream",
+   "pineapple"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Melon liqueur",
+   "Coconut rum",
+   "Pineapple juice",
+   "Cream"
+  ],
+  "funFact": "Midori was launched in the US in 1978 at Studio 54, and the whole family of green shots that followed exists because of that one marketing party.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Melon liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Coconut rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cream",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 10 seconds.",
+    "Double-strain into a shot glass.",
+    "It should be pale green and foamy on top.",
+    "Serve immediately."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "liquid-marijuana",
+  "name": "Liquid Marijuana",
+  "subcategory": "Shot",
+  "description": "Blue curaçao and melon liqueur with coconut rum and pineapple, turning an improbable green. Named for the colour, nothing else.",
+  "abv": "16–18%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "melon",
+   "coconut",
+   "pineapple",
+   "citrus"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Blue curaçao",
+   "Melon liqueur",
+   "Coconut rum",
+   "Pineapple juice"
+  ],
+  "funFact": "Blue curaçao plus yellow pineapple juice makes green — the same colour trick behind half the novelty drinks invented between 1975 and 1995.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blue curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Melon liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Coconut rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Spiced rum",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet and sour mix",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients with ice for 8 seconds.",
+    "Strain into a shot glass or over ice in a rocks glass.",
+    "The colour should be a clear green.",
+    "Serve immediately."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "three-wise-men",
+  "name": "Three Wise Men",
+  "subcategory": "Shot",
+  "description": "Jack Daniel's, Jim Beam and Johnnie Walker in equal measure, neat. No mixer, no ceremony, no mercy.",
+  "abv": "40%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "oak",
+   "grain",
+   "smoke"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Jack Daniel's",
+   "Jim Beam",
+   "Johnnie Walker"
+  ],
+  "funFact": "Variations swap in Jose Cuervo to make the Four Horsemen, or add Jägermeister for the Five Wise Men — the joke scales in exactly one direction.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jack Daniel's",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Jim Beam bourbon",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Johnnie Walker Scotch",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour all three whiskies into a shot glass.",
+    "Do not stir, chill or dilute — the point is that it is undignified.",
+    "Serve at room temperature.",
+    "Drink in one."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "prairie-fire",
+  "name": "Prairie Fire",
+  "subcategory": "Shot",
+  "description": "Tequila and Tabasco. Two ingredients, one of which is hot sauce, and no attempt at balance.",
+  "abv": "35–38%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "chilli",
+   "agave",
+   "heat"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Tequila",
+   "Tabasco"
+  ],
+  "funFact": "It belongs to the dare category of shots rather than the drinking category, and the capsaicin genuinely does mask the tequila — which is the only reason it works at all.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Tabasco",
+     "amount": "4–6 dashes"
+    }
+   ],
+   "steps": [
+    "Pour the tequila into a shot glass.",
+    "Add the Tabasco directly on top.",
+    "Do not stir.",
+    "Drink in one, and have something cold ready."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "cement-mixer",
+  "name": "Cement Mixer",
+  "subcategory": "Shot",
+  "description": "Irish cream held in the mouth, then lime juice added. It curdles on your tongue. That is the entire drink.",
+  "abv": "17–20%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cream",
+   "lime",
+   "curdle"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Irish cream",
+   "Lime juice"
+  ],
+  "funFact": "The curdling is real chemistry: lime juice drops the pH below the point where casein proteins stay suspended, and they clump instantly — the same reaction that makes cheese.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish cream liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Fresh lime juice",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the Irish cream into a shot glass and the lime juice into a second.",
+    "Take the Irish cream into your mouth but do not swallow.",
+    "Add the lime juice and hold both for a few seconds.",
+    "Swallow, and accept the consequences."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chartreuse-bomb",
+  "name": "Chartreuse Bomb",
+  "subcategory": "Shot",
+  "description": "A shot of green Chartreuse dropped into a glass of cider or beer. Bartender currency, and traded as such.",
+  "abv": "20–22%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "herbal",
+   "apple",
+   "honey"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Green Chartreuse",
+   "Dry cider"
+  ],
+  "funFact": "Green Chartreuse is still made by Carthusian monks to a recipe held by two of them at a time; supply shortages since 2021 have made bartenders noticeably less willing to bomb it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Green Chartreuse",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Dry cider or lager",
+     "amount": "6 oz / 180 ml"
+    }
+   ],
+   "steps": [
+    "Pour the cider into a small glass, leaving room.",
+    "Fill a shot glass with green Chartreuse.",
+    "Drop the shot glass into the cider.",
+    "Drink immediately, before it dilutes."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "lemon-drop-martini",
+  "name": "Lemon Drop Martini",
+  "subcategory": "Sour",
+  "description": "The Lemon Drop scaled up into a coupe with a sugared rim — sharper and more grown-up than the shot it came from.",
+  "abv": "20–22%",
+  "origin": "San Francisco, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "lemon",
+   "sugar",
+   "clean grain"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Vodka",
+   "Triple sec",
+   "Lemon juice",
+   "Sugar rim"
+  ],
+  "funFact": "Norman Jay Hobday created the original at Henry Africa's in San Francisco in the 1970s, a bar widely credited with inventing the fern-bar format.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "for the rim"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rim a chilled coupe with lemon and caster sugar.",
+    "Shake the vodka, triple sec, lemon juice and syrup hard with ice.",
+    "Double-strain into the rimmed coupe.",
+    "Garnish with a lemon twist."
+   ],
+   "garnish": "Lemon twist on a sugared rim",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "blue-kamikaze",
+  "name": "Blue Kamikaze",
+  "subcategory": "Shot",
+  "description": "A Kamikaze with blue curaçao standing in for the triple sec. Same drink, different colour, considerably more popular.",
+  "abv": "22–24%",
+  "origin": "USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "orange",
+   "lime",
+   "clean grain"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Vodka",
+   "Blue curaçao",
+   "Lime juice"
+  ],
+  "funFact": "Blue curaçao and triple sec are the same liqueur with food colouring added, which means the Blue Kamikaze is chemically a Kamikaze that photographs better.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Blue curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake all ingredients hard with ice for 8 seconds.",
+    "Double-strain into a chilled shot glass.",
+    "Serve immediately.",
+    "Scale up into a coupe for a full-size version."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "tokyo-tea",
+  "name": "Tokyo Tea",
+  "subcategory": "Party",
+  "description": "A Long Island Iced Tea with melon liqueur in place of the cola. Green, enormous and exactly as strong as its parent.",
+  "abv": "20–22%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "melon",
+   "citrus",
+   "mixed spirit"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Vodka",
+   "Gin",
+   "White rum",
+   "Tequila",
+   "Triple sec",
+   "Melon liqueur"
+  ],
+  "funFact": "The Long Island family is defined by five white spirits plus a modifier: cola makes the original, cranberry the Long Beach, blue curaçao the Blue Motorcycle, and melon this one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Blanco tequila",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Melon liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon-lime soda",
+     "amount": "to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add all the spirits, the melon liqueur and the lemon juice.",
+    "Top with lemon-lime soda.",
+    "Stir once from the bottom.",
+    "Garnish with a lemon wheel and a cherry."
+   ],
+   "garnish": "Lemon wheel and cherry",
+   "method": "built"
+  }
+ },
+ {
+  "id": "long-beach-iced-tea",
+  "name": "Long Beach Iced Tea",
+  "subcategory": "Party",
+  "description": "The Long Island with cranberry instead of cola. Pink rather than brown, and it fools people just as effectively.",
+  "abv": "20–22%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cranberry",
+   "citrus",
+   "mixed spirit"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Vodka",
+   "Gin",
+   "White rum",
+   "Tequila",
+   "Triple sec",
+   "Cranberry juice"
+  ],
+  "funFact": "The whole Long Island format exists to look like iced tea, which is why the original uses cola — the cranberry version abandons the disguise entirely and keeps the strength.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Blanco tequila",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cranberry juice",
+     "amount": "to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the five spirits and the lemon juice.",
+    "Top with cranberry juice.",
+    "Stir once from the bottom up.",
+    "Garnish with a lemon wedge."
+   ],
+   "garnish": "Lemon wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "adios-motherfucker",
+  "name": "Adios Motherfucker",
+  "subcategory": "Party",
+  "description": "The Long Island turned blue: five spirits, blue curaçao and lemonade. Also sold politely as an AMF.",
+  "abv": "20–22%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "citrus",
+   "mixed spirit"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Vodka",
+   "Gin",
+   "White rum",
+   "Tequila",
+   "Blue curaçao",
+   "Lemonade"
+  ],
+  "funFact": "Most bars list it as 'AMF' on the menu to avoid printing the full name, which has done nothing at all to stop customers ordering it by the full name.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Blanco tequila",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Blue curaçao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet and sour mix",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon-lime soda",
+     "amount": "to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the four spirits, blue curaçao and sour mix.",
+    "Top with lemon-lime soda.",
+    "Stir once to bring the colour through.",
+    "Garnish with a lemon wheel."
+   ],
+   "garnish": "Lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "irish-car-bomb",
+  "name": "Irish Car Bomb",
+  "subcategory": "Party",
+  "description": "Irish cream and whiskey dropped into stout. Drink it fast — the cream curdles within seconds, and the name is genuinely unwelcome in Ireland.",
+  "abv": "8–10%",
+  "origin": "Norwich, Connecticut, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "stout",
+   "cream",
+   "whiskey"
+  ],
+  "glassware": "Pint glass and shot glass",
+  "ingredients": [
+   "Irish stout",
+   "Irish whiskey",
+   "Irish cream"
+  ],
+  "funFact": "The name references the Troubles and is considered offensive across Ireland; many bars now list it as an Irish Slammer, and asking for it by the original name in Dublin will not go well.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish stout",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Irish whiskey",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Irish cream liqueur",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the stout into a pint glass and let the head settle.",
+    "Layer the Irish cream and whiskey in a shot glass.",
+    "Drop the shot into the stout.",
+    "Drink immediately — the cream curdles in about ten seconds."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "boilermakers-daughter",
+  "name": "Boilermaker's Daughter",
+  "subcategory": "Party",
+  "description": "A half of bitter with a shot of whisky poured in rather than beside — the gentler British reading of the boilermaker.",
+  "abv": "8–10%",
+  "origin": "United Kingdom",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "grain",
+   "bitter"
+  ],
+  "glassware": "Half-pint glass",
+  "ingredients": [
+   "Bitter ale",
+   "Scotch whisky"
+  ],
+  "funFact": "British pubs traditionally poured the whisky into the beer rather than serving them separately, which is the opposite of the American convention and produces a noticeably different drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bitter or mild ale",
+     "amount": "half pint / 285 ml"
+    },
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1 oz / 30 ml"
+    }
+   ],
+   "steps": [
+    "Pour the ale into a half-pint glass.",
+    "Add the whisky directly to the beer.",
+    "Stir once, gently.",
+    "Drink at cellar temperature."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sake-bomb",
+  "name": "Sake Bomb",
+  "subcategory": "Party",
+  "description": "A cup of sake balanced on chopsticks over a beer, knocked in by pounding the table. Loud, communal and not remotely traditional.",
+  "abv": "8–10%",
+  "origin": "Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "rice",
+   "malt",
+   "clean"
+  ],
+  "glassware": "Pint glass and sake cup",
+  "ingredients": [
+   "Sake",
+   "Lager"
+  ],
+  "funFact": "Despite the presentation it is an American invention, not a Japanese one — sake and beer are rarely combined in Japan, and the table-pounding would be startling in Tokyo.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sake",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Japanese lager",
+     "amount": "8 oz / 240 ml"
+    }
+   ],
+   "steps": [
+    "Pour the beer into a pint glass, leaving room at the top.",
+    "Rest two chopsticks across the rim, parallel.",
+    "Balance a cup of sake on the chopsticks.",
+    "Pound the table until the sake falls in, then drink immediately."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "flaming-sambuca",
+  "name": "Flaming Sambuca",
+  "subcategory": "Shot",
+  "description": "Sambuca set alight with three coffee beans floating in it — one each for health, happiness and prosperity.",
+  "abv": "38–40%",
+  "origin": "Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "anise",
+   "coffee",
+   "caramel"
+  ],
+  "glassware": "Shot glass",
+  "ingredients": [
+   "Sambuca",
+   "Coffee beans"
+  ],
+  "funFact": "The three beans are called 'con la mosca' — with the fly — and the number matters: an even number is considered unlucky across much of Italy.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sambuca",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Whole coffee beans",
+     "amount": "3"
+    }
+   ],
+   "steps": [
+    "Pour the sambuca into a heatproof glass and drop in three coffee beans.",
+    "Light the surface carefully and let it burn for a few seconds to toast the beans.",
+    "Extinguish by covering the glass — never blow on it.",
+    "Let the glass cool before touching it, then drink and chew the beans."
+   ],
+   "garnish": "Three coffee beans",
+   "method": "built"
+  }
+ }
+]

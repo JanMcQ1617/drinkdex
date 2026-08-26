@@ -463,8 +463,16 @@ const styles = StyleSheet.create({
   },
   segTextOn: { color: colors.textOnWine },
 
-  filterRow: { flexGrow: 0, marginTop: space.md },
-  filterContent: { paddingHorizontal: space.lg, gap: space.xs },
+  /*
+   * Explicit height, not just flexGrow: 0.
+   *
+   * A horizontal FlatList in a flex column has no intrinsic height, so when
+   * the results list below it is long the chips get squeezed and render
+   * sliced in half. The height is the chip's own box: 12pt line + 6pt
+   * padding top and bottom + hairline borders, rounded up.
+   */
+  filterRow: { flexGrow: 0, flexShrink: 0, height: 34, marginTop: space.md },
+  filterContent: { paddingHorizontal: space.lg, gap: space.xs, alignItems: 'center' },
   chip: {
     paddingHorizontal: space.md,
     paddingVertical: space.xs + 2,

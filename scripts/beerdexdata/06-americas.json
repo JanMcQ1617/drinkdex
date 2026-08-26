@@ -1,0 +1,100 @@
+[
+ {
+  "id": "chicha-de-jora",
+  "name": "Chicha de Jora",
+  "subcategory": "Specialty",
+  "description": "Andean maize beer, brewed since before the Inca and still sold from doorways flying a red flag. Sour, cloudy and served by the litre in a gourd.",
+  "abv": "1–3%",
+  "origin": "Andean Peru",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour maize",
+   "earthy",
+   "tart",
+   "corn"
+  ],
+  "glassware": "Gourd or plastic tumbler",
+  "funFact": "A red flag or plastic bag on a pole outside a house means fresh chicha is for sale inside — a signalling system that predates any licensing regime and still works.",
+  "serve": {
+   "temp": "Ambient to lightly chilled",
+   "glass": "Gourd or plastic tumbler",
+   "how": "Serve at ambient temperature in a wide vessel, not a beer glass — chicha is meant to be drunk in quantity and shared. Expect it thick, cloudy and distinctly sour, with sediment that you drink rather than avoid. Custom in much of the Andes is to tip the first splash on the ground for the earth before drinking.",
+   "pair": [
+    "Grilled meat",
+    "Boiled potatoes",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A maize beer made from germinated and dried corn, fermented with wild organisms.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Jora — maize germinated and sun-dried, the Andean equivalent of malting."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Wild yeast and lactic bacteria from the environment and the fermenting vessel."
+    },
+    {
+     "label": "Other",
+     "detail": "Sometimes quinoa, barley or fruit, depending on the valley."
+    }
+   ],
+   "process": "Jora maize is boiled into a mash, strained, and left to ferment in clay vessels with ambient organisms for a few days before being sold immediately."
+  }
+ },
+ {
+  "id": "blumenau-lager",
+  "name": "Blumenau Lager",
+  "subcategory": "Amber & Dark Lager",
+  "description": "German brewing transplanted to subtropical Brazil in the 1850s and never diluted — Blumenau still holds the largest Oktoberfest outside Germany.",
+  "abv": "4.8–5.5%",
+  "origin": "Blumenau, Santa Catarina, Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bread crust",
+   "caramel",
+   "noble hops",
+   "clean"
+  ],
+  "glassware": "Mug or pilsner glass",
+  "funFact": "Blumenau was founded by German settlers in 1850 and its Oktoberfest draws hundreds of thousands; the local breweries kept brewing to German styles through a century in which the rest of Brazil went to light adjunct lager.",
+  "serve": {
+   "temp": "42-46°F, chilled",
+   "glass": "Mug or pilsner glass",
+   "how": "Serve chilled but not frozen — Brazilian service tends toward near-freezing, which flattens exactly the malt character that distinguishes this beer from the national lagers. Pour to a firm head in a mug. It is built to German proportions, so treat it as a malt-forward lager and pair it accordingly.",
+   "pair": [
+    "Sausage and sauerkraut",
+    "Roast pork",
+    "Pretzels"
+   ]
+  },
+  "composition": {
+   "summary": "A German-style lager brewed in southern Brazil to nineteenth-century settler recipes.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Munich and Vienna malts over pilsner base, in the German manner."
+    },
+    {
+     "label": "Hops",
+     "detail": "Noble German varieties, balanced against the malt."
+    },
+    {
+     "label": "Yeast",
+     "detail": "German lager yeast, cold-fermented and lagered."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — adherence to Reinheitsgebot practice is the point."
+    }
+   ],
+   "process": "Conventional German cold fermentation and lagering, maintained continuously in Santa Catarina since the 1850s."
+  }
+ }
+]

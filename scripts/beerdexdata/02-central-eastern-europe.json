@@ -1,0 +1,100 @@
+[
+ {
+  "id": "czech-amber-lager",
+  "name": "Czech Amber Lager",
+  "subcategory": "Amber & Dark Lager",
+  "description": "Polotmavé — the 'half-dark' lager sitting between Czech pale and Czech dark. Caramel and Saaz hops, decoction-rich, and almost unknown outside Bohemia.",
+  "abv": "4.5–5.8%",
+  "origin": "Bohemia, Czechia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "caramel",
+   "toasted bread",
+   "spicy hops",
+   "soft water"
+  ],
+  "glassware": "Czech mug or pilsner glass",
+  "funFact": "Czech beer law grades lagers by original gravity rather than colour or strength, and polotmavé is a recognised category in its own right — a distinction most brewing countries never made.",
+  "serve": {
+   "temp": "45-48°F, lightly chilled",
+   "glass": "Czech mug or pilsner glass",
+   "how": "Pour hard down the middle to raise a thick, creamy head — Czech service treats foam as part of the drink, not a byproduct. Serve a touch warmer than a mass-market lager so the caramel malt and the peppery Saaz character both register. If you can get it on a side-pull tap, order it with a dense wet foam cap and drink through it.",
+   "pair": [
+    "Roast duck",
+    "Dumplings and gravy",
+    "Aged Gouda"
+   ]
+  },
+  "composition": {
+   "summary": "A decoction-mashed amber lager balancing caramel malt against Czech Saaz hops.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Bohemian floor-malted barley with caramel and Munich malts."
+    },
+    {
+     "label": "Hops",
+     "detail": "Saaz, in generous late additions for spice rather than bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Czech lager yeast, fermented cold and lagered for weeks."
+    },
+    {
+     "label": "Other",
+     "detail": "Extremely soft Bohemian water, which is why the bitterness lands round."
+    }
+   ],
+   "process": "Double or triple decoction mashing builds the malt depth, followed by cold fermentation and a long cold lagering."
+  }
+ },
+ {
+  "id": "kvass",
+  "name": "Kvass",
+  "subcategory": "Specialty",
+  "description": "Fermented rye bread, barely alcoholic, sold from street tankers all summer. Sour, sweet and bready — a soft drink by law and a beer by method.",
+  "abv": "0.5–1.5%",
+  "origin": "Russia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rye bread",
+   "sour",
+   "raisin",
+   "malt"
+  ],
+  "glassware": "Tall glass or plastic cup",
+  "funFact": "Kvass is classified as a soft drink across most of Eastern Europe because it usually finishes under 1.2% ABV, which is how it stayed legal and ubiquitous through every temperance campaign.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Tall glass or plastic cup",
+   "how": "Serve very cold in a tall glass, straight from the fridge or the tanker. Expect a hazy brown pour with a fine, short-lived foam and a distinctly sour-sweet bread aroma. Drink it fast on a hot day — it is a thirst-quencher rather than a sipper, and it flattens quickly once poured.",
+   "pair": [
+    "Cold beetroot soup",
+    "Salted cucumber",
+    "Black bread"
+   ]
+  },
+  "composition": {
+   "summary": "A low-alcohol lactic ferment of rye bread and water, sweetened and drunk young.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Rye bread or rye malt, often toasted dark before steeping."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A mixed yeast and lactic culture that leaves it sour and barely alcoholic."
+    },
+    {
+     "label": "Other",
+     "detail": "Sugar or raisins to feed the ferment and round the finish."
+    }
+   ],
+   "process": "Toasted rye bread is steeped, sweetened and fermented briefly with a mixed culture, then chilled and drunk within days."
+  }
+ }
+]

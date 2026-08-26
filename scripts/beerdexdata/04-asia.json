@@ -1,0 +1,344 @@
+[
+ {
+  "id": "bia-hoi",
+  "name": "Bia Hơi",
+  "subcategory": "Pale Lager",
+  "description": "Vietnam's fresh draught: brewed daily, delivered in kegs by moped, drunk on a plastic stool by the afternoon. Unpasteurised, barely carbonated, cheap as water.",
+  "abv": "3–4%",
+  "origin": "Hanoi, Vietnam",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "light malt",
+   "faint rice",
+   "crisp",
+   "grassy"
+  ],
+  "glassware": "Straight glass with ice",
+  "funFact": "Bia hơi has no shelf life at all — it is brewed, delivered and drunk within about 24 hours, which is why it exists only in Vietnam and why every street corner has its own supplier.",
+  "serve": {
+   "temp": "Cold, over ice",
+   "glass": "Straight glass with ice",
+   "how": "Serve it very cold, and do not be alarmed when ice goes in the glass — that is the local custom and the beer is brewed light enough to take it. Pour into a plain glass with no expectation of head. Drink it the day it was made; there is no pasteurisation, no filtration and no attempt at stability, which is exactly the trade-off that makes it taste fresh.",
+   "pair": [
+    "Nem chua",
+    "Grilled pork skewers",
+    "Peanuts"
+   ]
+  },
+  "composition": {
+   "summary": "An unpasteurised, low-strength draught lager brewed for immediate consumption.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt cut generously with rice for lightness."
+    },
+    {
+     "label": "Hops",
+     "detail": "Minimal — just enough to keep it from tasting flabby."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A fast lager strain, fermented and shipped within days."
+    },
+    {
+     "label": "Other",
+     "detail": "No pasteurisation and no filtration, which is the defining choice."
+    }
+   ],
+   "process": "Fermented quickly, kegged unpasteurised and delivered the same day to be drunk before it can stale."
+  }
+ },
+ {
+  "id": "happoshu",
+  "name": "Happoshu",
+  "subcategory": "Specialty",
+  "description": "Japan's tax-engineered beer: deliberately brewed below the malt threshold that triggers the higher beer duty. A category invented by accountants and perfected by brewers.",
+  "abv": "4–5.5%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "light malt",
+   "crisp",
+   "faint sweetness"
+  ],
+  "glassware": "Tall slim glass",
+  "funFact": "Japanese liquor tax scales with malt content, so brewers reformulated below 67% malt to sell cheaper — the government kept lowering the bracket, and brewers kept reformulating, producing a genuine arms race in beer law.",
+  "serve": {
+   "temp": "38-42°F, well chilled",
+   "glass": "Tall slim glass",
+   "how": "Serve very cold in a tall, narrow glass to hold what head there is. Pour with a bit of height to build foam, because the reduced malt gives a thinner body that benefits from the texture. It is engineered for refreshment rather than complexity, so drink it cold and fast alongside food rather than contemplating it.",
+   "pair": [
+    "Karaage",
+    "Edamame",
+    "Yakitori"
+   ]
+  },
+  "composition": {
+   "summary": "A low-malt beer-like beverage formulated to sit under Japan's malt-based tax threshold.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Under the legal malt threshold, supplemented with barley, corn or pea protein."
+    },
+    {
+     "label": "Hops",
+     "detail": "Light, clean and restrained."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Standard Japanese lager yeast, fermented cold."
+    },
+    {
+     "label": "Other",
+     "detail": "Adjuncts chosen as much for tax law as for flavour."
+    }
+   ],
+   "process": "Brewed as a lager but with the malt bill kept deliberately below the taxable percentage, then fermented cold and filtered bright."
+  }
+ },
+ {
+  "id": "filipino-pale-pilsen",
+  "name": "Filipino Pale Pilsen",
+  "subcategory": "Pale Lager",
+  "description": "A deep-golden, all-malt pilsen with more bitterness than most tropical lagers dare — the Philippines' national beer since 1890 and still poured in stubby brown bottles.",
+  "abv": "5%",
+  "origin": "Manila, Philippines",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "toasted grain",
+   "firm bitterness",
+   "bread",
+   "dry"
+  ],
+  "glassware": "Stubby bottle or small glass",
+  "funFact": "San Miguel began brewing it in 1890 under a royal grant from Spain, making it the first brewery in Southeast Asia — the Philippine company later ended up owning the Spanish brand that named it.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Stubby bottle or small glass",
+   "how": "Serve cold from the bottle into a small glass, refilling often so it never warms — the Filipino habit of sharing one bottle around a table of small glasses exists for exactly that reason. Expect a firmer, drier bitterness than a typical tropical lager. It stands up to fried and vinegary food better than lighter lagers do.",
+   "pair": [
+    "Lechon",
+    "Sisig",
+    "Fried fish with vinegar"
+   ]
+  },
+  "composition": {
+   "summary": "An all-malt pale lager with assertive hopping, brewed in the Philippines since 1890.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "All barley malt, with no rice or corn adjunct."
+    },
+    {
+     "label": "Hops",
+     "detail": "Noble-style hopping at a level that reads genuinely bitter."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast fermented cool and conditioned."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — the absence of adjunct is the point of the style."
+    }
+   ],
+   "process": "A conventional cold lager fermentation, distinguished by an all-malt grist and a bitterness level unusual for the tropics."
+  }
+ },
+ {
+  "id": "lion-stout",
+  "name": "Lion Stout",
+  "subcategory": "Stout",
+  "description": "A full-strength tropical stout brewed at altitude in Sri Lanka and once dispensed from wooden casks in Kandy. Coffee, liquorice and dark fruit at eight percent.",
+  "abv": "8–8.8%",
+  "origin": "Biyagama, Sri Lanka",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coffee",
+   "liquorice",
+   "dark chocolate",
+   "raisin"
+  ],
+  "glassware": "Snifter or half-pint",
+  "funFact": "Sri Lanka's stout tradition is a colonial inheritance that outlived its origin — Lion Stout was long served hand-pumped from wooden casks in hill-country pubs, a serving method Britain itself had largely abandoned.",
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Snifter or half-pint",
+   "how": "Serve cool rather than cold — at fridge temperature the coffee and dark fruit shut down completely. Pour into a snifter or a half-pint and give it ten minutes to open. At eight percent it is a sipping beer despite the tropical climate it was brewed for, and it takes sweet and spiced food better than it takes anything delicate.",
+   "pair": [
+    "Dark chocolate",
+    "Sri Lankan curry",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A strong tropical stout built on roasted barley and dark crystal malt.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale malt with roasted barley, chocolate and crystal malts."
+    },
+    {
+     "label": "Hops",
+     "detail": "Enough to balance a heavy dark grist, no more."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Ale yeast fermented warm in a tropical climate."
+    },
+    {
+     "label": "Other",
+     "detail": "Historically wooden cask conditioning, now largely bottled."
+    }
+   ],
+   "process": "Warm ale fermentation on a heavily roasted grist, conditioned to soften the roast into coffee and dried fruit."
+  }
+ },
+ {
+  "id": "indian-strong-beer",
+  "name": "Indian Strong Beer",
+  "subcategory": "Pale Lager",
+  "description": "India's dominant beer category: a high-strength lager built for maximum effect per rupee, sold in 650ml bottles and drunk very cold.",
+  "abv": "7–8%",
+  "origin": "India",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sweet malt",
+   "alcohol warmth",
+   "grain",
+   "faint hop"
+  ],
+  "glassware": "Tall glass, well chilled",
+  "funFact": "Strong beer accounts for the large majority of Indian beer sales — state excise structures and pricing make a 7–8% bottle better value than a 5% one, which is why the mild lagers barely sell.",
+  "serve": {
+   "temp": "36-40°F, very cold",
+   "glass": "Tall glass, well chilled",
+   "how": "Serve extremely cold in a tall glass — this is a style that is helped rather than harmed by low temperature, since chilling mutes the alcohol and the sweetness. Pour into a chilled glass and refill from the large bottle as you go. Drink it with heavily spiced food, where its residual sweetness works as a counterweight to chilli heat.",
+   "pair": [
+    "Tandoori chicken",
+    "Chilli paneer",
+    "Spiced fried snacks"
+   ]
+  },
+  "composition": {
+   "summary": "A high-gravity pale lager brewed for strength, with adjuncts keeping the body drinkable.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a large adjunct fraction of rice or maize."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low — bitterness is not the selling point."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast pushed to a high final alcohol."
+    },
+    {
+     "label": "Other",
+     "detail": "Adjuncts that raise strength without adding heaviness."
+    }
+   ],
+   "process": "A high-gravity cold fermentation with substantial adjunct, filtered bright and bottled at strength."
+  }
+ },
+ {
+  "id": "chang",
+  "name": "Chang",
+  "subcategory": "Specialty",
+  "description": "Himalayan grain beer of millet, barley or rice, fermented in a tub and drunk warm at altitude. Sour, cloudy and served with a wooden ladle.",
+  "abv": "3–6%",
+  "origin": "Himalayan Nepal and Tibet",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour",
+   "millet",
+   "yeasty",
+   "warm grain"
+  ],
+  "glassware": "Wooden or brass vessel",
+  "funFact": "At Himalayan altitude chang is drunk warm rather than cold, and often topped repeatedly with hot water from the same grain — the same practice as Nepali tongba, of which chang is the wider family.",
+  "serve": {
+   "temp": "Warm, roughly 105°F",
+   "glass": "Wooden or brass vessel",
+   "how": "Serve warm rather than chilled — this is a cold-climate beer and refrigeration makes no sense at four thousand metres. Ladle it cloudy from the vessel, sediment and all. Expect a sour, bready ferment rather than anything crisp, and treat it as food as much as drink; it is calorie-dense by design.",
+   "pair": [
+    "Momos",
+    "Dried yak cheese",
+    "Tsampa"
+   ]
+  },
+  "composition": {
+   "summary": "A warm-served Himalayan grain beer fermented with a wild starter cake.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Millet, barley or rice, cooked rather than malted in the European sense."
+    },
+    {
+     "label": "Hops",
+     "detail": "None."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A dried starter cake carrying both yeast and mould cultures."
+    },
+    {
+     "label": "Other",
+     "detail": "Hot water added repeatedly to the same grain bed."
+    }
+   ],
+   "process": "Cooked grain is inoculated with a starter cake, fermented for several days in a covered tub, then served warm and cloudy."
+  }
+ },
+ {
+  "id": "chinese-rice-lager",
+  "name": "Chinese Rice Lager",
+  "subcategory": "Pale Lager",
+  "description": "The best-selling beer style on earth by volume, and almost nobody outside China thinks about it: pale, light-bodied, rice-heavy and brewed for drinking with food.",
+  "abv": "3.6–4.5%",
+  "origin": "China",
+  "rarity": "common",
+  "tastingNotes": [
+   "light grain",
+   "faint rice sweetness",
+   "crisp",
+   "low bitterness"
+  ],
+  "glassware": "Small glass",
+  "funFact": "Snow, brewed in China, sells more volume than any other beer brand in the world — largely unknown outside the country because virtually all of it is drunk domestically.",
+  "serve": {
+   "temp": "38-42°F, well chilled",
+   "glass": "Small glass",
+   "how": "Serve cold in a small glass and refill often — Chinese table service pours small measures for repeated toasts rather than a single large glass. Expect very light body, low bitterness and a clean finish. It is engineered to sit under strongly flavoured food rather than compete with it, which is exactly what it does well.",
+   "pair": [
+    "Sichuan hotpot",
+    "Dumplings",
+    "Salt-and-pepper squid"
+   ]
+  },
+  "composition": {
+   "summary": "A very light pale lager built on a large proportion of rice adjunct.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a substantial rice fraction for lightness."
+    },
+    {
+     "label": "Hops",
+     "detail": "Very low — bitterness is minimised deliberately."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean lager yeast, cold-fermented and filtered bright."
+    },
+    {
+     "label": "Other",
+     "detail": "Rice, which thins the body and lightens the colour."
+    }
+   ],
+   "process": "Cold fermentation on a rice-heavy grist, filtered bright and pasteurised for a light, neutral beer."
+  }
+ }
+]

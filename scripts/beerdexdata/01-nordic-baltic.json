@@ -1,0 +1,296 @@
+[
+ {
+  "id": "sahti",
+  "name": "Sahti",
+  "subcategory": "Farmhouse Ale",
+  "description": "Finland's living-fossil farmhouse ale: rye and juniper, strained through a hollowed spruce trough, never boiled and never hopped much. Banana, juniper and bread.",
+  "abv": "7–9%",
+  "origin": "Häme, Finland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "banana",
+   "juniper",
+   "rye bread",
+   "clove"
+  ],
+  "glassware": "Ceramic mug or handled tankard",
+  "funFact": "Sahti is unboiled and unfiltered, so it stays cloudy and perishable — it is one of the very few beer styles the EU has granted protected traditional status, and it barely travels.",
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug or handled tankard",
+   "how": "Pour gently into a mug and expect almost no head — sahti is nearly still, and a big foam would mean something went wrong. Serve it cool rather than cold so the banana esters and juniper resin come forward together; ice-cold sahti tastes like flat bread. Drink it fresh, within days if you can, because there is no boil and no real hop cover to protect it.",
+   "pair": [
+    "Salted fish",
+    "Rye bread and butter",
+    "Smoked ham"
+   ]
+  },
+  "composition": {
+   "summary": "An unboiled rye-and-barley farmhouse ale flavoured and filtered by juniper.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a large proportion of rye, sometimes oats."
+    },
+    {
+     "label": "Hops",
+     "detail": "Almost none — juniper branches do the preserving and seasoning instead."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Traditionally baker's yeast, fermented warm, which is where the banana comes from."
+    },
+    {
+     "label": "Other",
+     "detail": "Fresh juniper twigs and berries, used both as flavour and as the filter bed."
+    }
+   ],
+   "process": "The mash is lautered through juniper branches laid in a hollowed log trough, then fermented warm with baker's yeast and drunk young without boiling."
+  }
+ },
+ {
+  "id": "gotlandsdricka",
+  "name": "Gotlandsdricka",
+  "subcategory": "Farmhouse Ale",
+  "description": "Sahti's Swedish cousin from the island of Gotland: smoked malt, juniper and a farmhouse yeast character, brewed at home for centuries and almost nowhere else.",
+  "abv": "5–8%",
+  "origin": "Gotland, Sweden",
+  "rarity": "rare",
+  "tastingNotes": [
+   "smoke",
+   "juniper",
+   "honey",
+   "rye"
+  ],
+  "glassware": "Ceramic mug",
+  "funFact": "Gotland farmers brewed it for holidays and haymaking under a customary right that survived Sweden's alcohol monopoly; the recipes stayed inside families rather than breweries.",
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug",
+   "how": "Serve it cool and still, in a mug rather than a glass, and expect a hazy amber pour with very little foam. Let it sit a minute so the smoke settles behind the juniper instead of dominating it. Like sahti it is meant to be drunk young and local, so treat a bottle as perishable rather than something to age.",
+   "pair": [
+    "Smoked lamb",
+    "Hard cheese",
+    "Rye crispbread"
+   ]
+  },
+  "composition": {
+   "summary": "A smoked, juniper-infused farmhouse ale from Gotland, fermented warm with a farmhouse yeast.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Home-smoked barley malt, often with rye and a little honey."
+    },
+    {
+     "label": "Hops",
+     "detail": "Sparing — juniper carries most of the seasoning."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Farmhouse or baker's yeast worked warm, giving spice and stone fruit."
+    },
+    {
+     "label": "Other",
+     "detail": "Juniper branches for both flavour and lautering."
+    }
+   ],
+   "process": "Malt is dried over an open wood fire, mashed and strained through juniper, then fermented warm and served within weeks."
+  }
+ },
+ {
+  "id": "maltol",
+  "name": "Maltøl",
+  "subcategory": "Farmhouse Ale",
+  "description": "Norwegian farmhouse ale fermented with kveik — a hardy house yeast pitched blisteringly hot that finishes clean in two days and tastes of orange and stone fruit.",
+  "abv": "6–9%",
+  "origin": "Western Norway",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange peel",
+   "apricot",
+   "juniper",
+   "caramel"
+  ],
+  "glassware": "Wooden bowl or tankard",
+  "funFact": "Kveik yeast was kept alive on dried wooden rings passed down through Norwegian farm families for generations; when brewers rediscovered it in the 2010s it changed brewing worldwide, because it ferments cleanly at 35–40°C.",
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Wooden bowl or tankard",
+   "how": "Pour into a wide vessel and give it a moment — the aroma is the point, and kveik throws citrus and stone fruit that a narrow glass hides. Serve cool rather than cold, since the warmth of the ferment leaves a rounded malt body that goes flat and thin under refrigeration. Traditionally it is passed around a shared bowl rather than poured into individual glasses.",
+   "pair": [
+    "Cured mutton",
+    "Brown cheese",
+    "Flatbread"
+   ]
+  },
+  "composition": {
+   "summary": "A strong, juniper-tinged farmhouse ale fermented very warm with heritage kveik yeast.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale barley malt, often with a caramelised or long-boiled wort for colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Minimal, with juniper infusion standing in for much of the character."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Kveik — a heritage farmhouse culture pitched at 35–40°C that finishes in days."
+    },
+    {
+     "label": "Other",
+     "detail": "Juniper infusion water used for mashing and sparging."
+    }
+   ],
+   "process": "Mashed with juniper infusion, sometimes with a long caramelising boil, then fermented hot with kveik and drunk fresh."
+  }
+ },
+ {
+  "id": "koduolu",
+  "name": "Koduõlu",
+  "subcategory": "Farmhouse Ale",
+  "description": "Estonian island home-brew: unboiled, juniper-strained and fermented warm, closer to liquid rye bread than to anything on a modern taplist.",
+  "abv": "5–7%",
+  "origin": "Saaremaa, Estonia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye bread",
+   "juniper",
+   "banana",
+   "earthy"
+  ],
+  "glassware": "Ceramic mug",
+  "funFact": "On Saaremaa and Hiiumaa, koduõlu was brewed for weddings and midsummer by designated village brewers, and the tradition survived the Soviet period largely because it was never commercial.",
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug",
+   "how": "Serve cool and flat in a mug — carbonation is minimal and a head is not expected. Give it a few minutes out of the cold so the bready malt and juniper open up; too cold and all you get is sourness. It is brewed to be drunk within days of being made, so freshness matters more than any serving detail.",
+   "pair": [
+    "Black bread",
+    "Salted pork",
+    "Smoked fish"
+   ]
+  },
+  "composition": {
+   "summary": "An unboiled Estonian farmhouse ale strained through juniper and fermented warm.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with rye, often home-malted."
+    },
+    {
+     "label": "Hops",
+     "detail": "Very low, sometimes none at all."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Farmhouse or baker's yeast, warm-fermented for banana and spice."
+    },
+    {
+     "label": "Other",
+     "detail": "Juniper branches in the lauter and juniper water in the mash."
+    }
+   ],
+   "process": "Mashed, strained through juniper without boiling, fermented warm for a couple of days and served young."
+  }
+ },
+ {
+  "id": "kaimiskas",
+  "name": "Kaimiškas",
+  "subcategory": "Farmhouse Ale",
+  "description": "Lithuania's village farmhouse beer: unfiltered, raw, and fermented with a house yeast that leaves it honeyed and faintly tart. The northern Biržai region is its heartland.",
+  "abv": "5–7%",
+  "origin": "Biržai, Lithuania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "hay",
+   "bread crust",
+   "tart"
+  ],
+  "glassware": "Ceramic mug or straight glass",
+  "funFact": "Lithuanian farmhouse brewing survived unbroken through the twentieth century, which makes it one of the few living raw-ale traditions in Europe; Biržai alone has a cluster of legally operating village breweries.",
+  "serve": {
+   "temp": "48-54°F, cellar cool",
+   "glass": "Ceramic mug or straight glass",
+   "how": "Pour into a plain glass and expect haze and a soft, low carbonation. Serve cool but not cold so the honeyed malt and the faint lactic edge stay in balance. These beers are raw — never boiled — so drink them fresh and do not expect the shelf stability of a modern lager.",
+   "pair": [
+    "Smoked pork",
+    "Rye bread",
+    "Curd cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A raw, unboiled Lithuanian village ale fermented with a local farmhouse yeast.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale barley malt, often with a portion of unmalted grain."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low, boiled separately as a tea and added rather than boiled in the wort."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Regional farmhouse strains that finish honeyed and lightly tart."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing beyond the grain — this is a deliberately plain beer."
+    }
+   ],
+   "process": "The wort is not boiled; hops are added as a separate infusion, and fermentation runs warm with a house culture before the beer is served young."
+  }
+ },
+ {
+  "id": "keptinis",
+  "name": "Keptinis",
+  "subcategory": "Farmhouse Ale",
+  "description": "Lithuanian baked beer: the mash is shaped into loaves, baked in a bread oven until dark, then brewed. Tastes of crust, caramel and smoke without any smoked malt.",
+  "abv": "5–7%",
+  "origin": "Lithuania",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bread crust",
+   "caramel",
+   "toffee",
+   "roast"
+  ],
+  "glassware": "Ceramic mug",
+  "funFact": "The baking step replaces a kiln — the mash literally goes into the oven as loaves before being returned to water, which is why keptinis tastes roasted despite using pale malt.",
+  "serve": {
+   "temp": "50-55°F, cellar cool",
+   "glass": "Ceramic mug",
+   "how": "Serve cool in a mug so the bread-crust aroma comes off the surface. Expect a dark, hazy beer with modest carbonation and a long toasty finish. It rewards slow drinking at cellar temperature; cold suppresses exactly the baked-crust character that makes it worth brewing this way.",
+   "pair": [
+    "Roast pork",
+    "Dark rye bread",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A farmhouse ale whose mash is baked into loaves before brewing, giving deep crust flavour.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale barley malt, transformed by baking rather than by kilning."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low, added as an infusion in the farmhouse manner."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lithuanian farmhouse yeast, warm-fermented."
+    },
+    {
+     "label": "Other",
+     "detail": "The oven itself — the baking step is the defining ingredient."
+    }
+   ],
+   "process": "The mash is formed into loaves and baked until dark, then broken back into hot water, lautered, and fermented warm without a conventional boil."
+  }
+ }
+]

@@ -1,0 +1,1762 @@
+[
+ {
+  "id": "averna",
+  "name": "Averna",
+  "subcategory": "Amaro",
+  "description": "Sicily's best-known amaro, made in Caltanissetta to a recipe a Benedictine abbey gave the Averna family in 1868. Softer and more caramelised than the northern amari, with orange peel and liquorice doing most of the work.",
+  "abv": "29%",
+  "origin": "Caltanissetta, Sicily",
+  "rarity": "common",
+  "tastingNotes": [
+   "burnt orange",
+   "liquorice",
+   "caramel",
+   "juniper"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "The monks of the Abbazia di Santo Spirito handed the recipe to Salvatore Averna as thanks for his patronage, and the abbey still appears on the label.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat after dinner, or over a large cube with an orange twist. It is sweet enough to take ice without collapsing, and it is the friendliest entry point into Italian amari for anyone who finds Fernet punishing.",
+   "pair": [
+    "dark chocolate",
+    "espresso",
+    "almond biscotti"
+   ]
+  },
+  "composition": {
+   "summary": "Neutral spirit infused with herbs, roots and citrus peel, then sweetened with caramel.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Bitter orange, lemon peel, liquorice root, juniper, rosemary, myrtle"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and infused, never redistilled"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested before bottling; caramel added for colour and body"
+    }
+   ],
+   "process": "The sugar load is high by amaro standards, which is exactly why it reads as dessert rather than medicine."
+  }
+ },
+ {
+  "id": "amaro-montenegro",
+  "name": "Amaro Montenegro",
+  "subcategory": "Amaro",
+  "description": "Forty botanicals from Bologna, built around orange and vanilla rather than bitter root. Named for a Montenegrin princess who married into the Italian royal family, and the least aggressive amaro on most back bars.",
+  "abv": "23%",
+  "origin": "Bologna, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "orange blossom",
+   "vanilla",
+   "rose",
+   "coriander"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "The blend is built from six separate infusions kept apart until the final marriage, and one botanical is known internally only as the secret ingredient.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Rocks glass",
+   "how": "Over a large cube with an orange wedge, which is how Bologna drinks it. It also does well long with tonic. Low enough in bitterness to work before dinner as easily as after.",
+   "pair": [
+    "prosciutto",
+    "aged parmesan",
+    "orange cake"
+   ]
+  },
+  "composition": {
+   "summary": "Forty botanicals in six separate infusions, blended and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Sweet and bitter orange, coriander, marjoram, nutmeg, vanilla, artemisia"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Botanicals infused separately, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested six months before bottling"
+    }
+   ],
+   "process": "Keeping the infusions apart until the end lets the blender adjust the balance year to year."
+  }
+ },
+ {
+  "id": "ramazzotti",
+  "name": "Ramazzotti",
+  "subcategory": "Amaro",
+  "description": "Milan's amaro since 1815, invented by a herbalist who sold it beside the opera house as a coffee substitute. Thirty-three botanicals, with orange and star anise loudest, and the bitterness pitched squarely in the middle.",
+  "abv": "30%",
+  "origin": "Milan, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "star anise",
+   "bitter orange",
+   "cardamom",
+   "liquorice"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Ausano Ramazzotti opened a bar next to Milan's opera house specifically so audiences could drink it in the intervals.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass or highball",
+   "how": "Neat after eating, or with soda and a lemon twist as a lighter aperitif. The anise makes it a natural substitute for sweet vermouth in a Boulevardier if you want the drink drier and more herbal.",
+   "pair": [
+    "risotto alla milanese",
+    "dark chocolate",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Thirty-three botanicals infused in neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Bitter orange, star anise, cardamom, myrrh, gentian, liquorice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused, blended, sweetened"
+    },
+    {
+     "label": "Aging",
+     "detail": "Short rest before bottling"
+    }
+   ],
+   "process": "Star anise rather than wormwood is what keeps it sweet-spiced instead of medicinal."
+  }
+ },
+ {
+  "id": "braulio",
+  "name": "Braulio",
+  "subcategory": "Amaro",
+  "description": "An alpine amaro from Bormio in the Valtellina, made with mountain botanicals and aged in Slavonian oak. Pine, mint and gentian rather than citrus — it tastes like the altitude it comes from.",
+  "abv": "21%",
+  "origin": "Bormio, Lombardy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pine",
+   "mint",
+   "gentian",
+   "bitter root"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Created in 1875 by a pharmacist in a village at 1,200 metres, and still aged in the same cellars beneath the original shop.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small tumbler",
+   "how": "Straight from the fridge in a small glass after a heavy alpine meal. Locals also pour it over ice with a twist of lemon in summer. The Riserva, aged longer in oak, is worth the premium and drinks almost like a herbal whisky.",
+   "pair": [
+    "pizzoccheri",
+    "bresaola",
+    "alpine cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Alpine herbs macerated in spirit and matured in Slavonian oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit and mountain water"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Gentian, wormwood, yarrow, juniper, mountain pine"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Roughly two years in Slavonian oak barrels"
+    }
+   ],
+   "process": "Oak ageing is unusual for an amaro at this strength and is what rounds off the pine."
+  }
+ },
+ {
+  "id": "amaro-nonino",
+  "name": "Amaro Nonino Quintessentia",
+  "subcategory": "Amaro",
+  "description": "Friuli's amaro, built on aged grappa rather than neutral spirit, which puts it in a class of its own. Lighter, brighter and more expensive than its peers, and the reason a Paper Plane tastes the way it does.",
+  "abv": "35%",
+  "origin": "Friuli, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried apricot",
+   "orange peel",
+   "caramel",
+   "grappa warmth"
+  ],
+  "glassware": "Tulip or rocks glass",
+  "funFact": "The Nonino family began distilling single-varietal grappa in 1973, a move that dragged the whole grappa category upmarket almost single-handedly.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Tulip glass",
+   "how": "Neat at room temperature so the grappa base shows. In cocktails it is the modifier in a Paper Plane, split evenly with bourbon, Aperol and lemon. Do not bury it under ice; the barrel character disappears.",
+   "pair": [
+    "dried fruit",
+    "hard cheese",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Herbs and citrus infused into barrel-aged grappa.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "ÙE grape distillate and aged grappa"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Bitter orange, gentian, rhubarb, quassia, liquorice"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused into aged spirit, then blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "The grappa base is barrel-aged before infusion"
+    }
+   ],
+   "process": "Using aged grappa rather than neutral alcohol is the whole point and the whole cost."
+  }
+ },
+ {
+  "id": "meletti",
+  "name": "Meletti",
+  "subcategory": "Amaro",
+  "description": "A Marche amaro with saffron and violet in the blend, noticeably sweeter and more floral than its neighbours, in a bottle with a bulbous glass stopper that turns up in every Italian grandmother's cabinet.",
+  "abv": "32%",
+  "origin": "Ascoli Piceno, Marche",
+  "rarity": "rare",
+  "tastingNotes": [
+   "saffron",
+   "violet",
+   "caramel",
+   "gentian"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Silvio Meletti built the recipe in the 1870s and the company also makes an anisette so well regarded that locals drink it in coffee as anisetta.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat after dinner or over ice with an orange slice. It is sweet, so it works better as a dessert amaro than an aperitif, and it makes an excellent float on a coffee.",
+   "pair": [
+    "espresso",
+    "almond cake",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Herbs, saffron and citrus infused and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Saffron, violet, gentian, anise, citrus peel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested before bottling"
+    }
+   ],
+   "process": "Saffron is expensive enough that its presence sets the price of the bottle."
+  }
+ },
+ {
+  "id": "sfumato-rabarbaro",
+  "name": "Sfumato Rabarbaro",
+  "subcategory": "Amaro",
+  "description": "Chinese rhubarb root smoked over open fire, then infused into an alpine amaro. Tastes of tar, campfire and bitter earth — the most divisive bottle in most bar backbars, and indispensable once you like it.",
+  "abv": "20%",
+  "origin": "Trentino, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "woodsmoke",
+   "rhubarb root",
+   "tar",
+   "bitter earth"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The rhubarb is grown in China, dried, then smoked in the Italian Alps — a supply chain that predates the amaro itself by centuries via the Silk Road.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small tumbler",
+   "how": "Cold and neat in a small pour, or a bar spoon in a Manhattan or Negroni where it adds smoke without peat. A little goes a very long way; treat it as a seasoning as much as a drink.",
+   "pair": [
+    "smoked meats",
+    "dark chocolate",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Smoked rhubarb root and alpine botanicals infused in spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Fire-smoked Chinese rhubarb root, alpine herbs, gentian"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then blended and lightly sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "20%, low for the intensity"
+    }
+   ],
+   "process": "Smoking the root over open flame is the single step that makes it unlike any other amaro."
+  }
+ },
+ {
+  "id": "cardamaro",
+  "name": "Cardamaro",
+  "subcategory": "Amaro",
+  "description": "A Piedmontese amaro built on wine rather than spirit, flavoured with cardoon and blessed thistle and aged in oak. At 17% it is barely stronger than vermouth, and it drinks like an autumnal sherry with a bitter edge.",
+  "abv": "17%",
+  "origin": "Piedmont, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cardoon",
+   "toffee",
+   "dried fig",
+   "light bitterness"
+  ],
+  "glassware": "Wine glass",
+  "funFact": "Cardoon is a thistle relative of the artichoke, which puts Cardamaro in the same botanical family as Cynar despite tasting nothing like it.",
+  "serve": {
+   "temp": "lightly chilled",
+   "glass": "Small wine glass",
+   "how": "Chilled and neat as an aperitif, or over ice with soda. Because the base is wine it works beautifully in place of sweet vermouth in low-alcohol cocktails, and it should be refrigerated once open.",
+   "pair": [
+    "salumi",
+    "hazelnuts",
+    "aged Castelmagno"
+   ]
+  },
+  "composition": {
+   "summary": "Moscato wine infused with cardoon and thistle, then oak-aged.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Moscato wine, lightly fortified"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Cardoon, blessed thistle, other herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused into wine, not distilled"
+    },
+    {
+     "label": "Aging",
+     "detail": "Around six months in oak"
+    }
+   ],
+   "process": "A wine base means it oxidises like wine — keep it cold and finish it within a month or two."
+  }
+ },
+ {
+  "id": "amaro-lucano",
+  "name": "Amaro Lucano",
+  "subcategory": "Amaro",
+  "description": "Made in Basilicata since 1894 by a pastry chef who blended thirty herbs in the back of his shop. Balanced and mid-weight, and for decades the house amaro of the Italian royal family.",
+  "abv": "28%",
+  "origin": "Basilicata, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter orange",
+   "wormwood",
+   "angelica",
+   "caramel"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Pasquale Vena was a confectioner, not a distiller, which is often cited as the reason the sugar balance is so precise.",
+  "serve": {
+   "temp": "cold or room temp",
+   "glass": "Rocks glass",
+   "how": "Neat after dinner or over ice. It sits between Averna's sweetness and Ramazzotti's spice, which makes it the safest pour when you do not know your guest's taste in amari.",
+   "pair": [
+    "dark chocolate",
+    "dried figs",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "About thirty botanicals infused in neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Bitter orange, wormwood, angelica, elder, gentian"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested before bottling"
+    }
+   ],
+   "process": "The recipe has stayed inside the Vena family for four generations."
+  }
+ },
+ {
+  "id": "amaro-del-capo",
+  "name": "Amaro del Capo",
+  "subcategory": "Amaro",
+  "description": "Calabria's amaro, made with twenty-nine local herbs and drunk straight from the freezer. Sweeter and more citrus-driven than the northern styles, and enormously popular across southern Italy.",
+  "abv": "35%",
+  "origin": "Calabria, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "liquorice",
+   "bitter orange",
+   "mint",
+   "aniseed"
+  ],
+  "glassware": "Frozen shot glass",
+  "funFact": "There is a chilli version, made with Calabrian peperoncino, which is exactly as aggressive as that sounds.",
+  "serve": {
+   "temp": "−20°C, straight from the freezer",
+   "glass": "Small frozen glass",
+   "how": "The bottle lives in the freezer and the glass should too. It pours thick and cold, which mutes the sugar and lets the liquorice and mint through. Calabrians consider room-temperature service a mistake.",
+   "pair": [
+    "spicy nduja",
+    "citrus desserts",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Twenty-nine Calabrian botanicals infused in spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Liquorice, bitter orange, mandarin, mint, juniper, chamomile"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "35%"
+    }
+   ],
+   "process": "Freezer service is not a garnish of a tradition — the viscosity at −20°C is part of the intended texture."
+  }
+ },
+ {
+  "id": "zucca-rabarbaro",
+  "name": "Zucca Rabarbaro",
+  "subcategory": "Amaro",
+  "description": "A Milanese rhubarb amaro from 1845, dark and gently smoky, and the original aperitivo of the Galleria Vittorio Emanuele. Drier than most amari and closer to a bitter than a digestive.",
+  "abv": "16%",
+  "origin": "Milan, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "rhubarb root",
+   "cola",
+   "light smoke",
+   "bitter orange"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Zucca held a royal warrant from the House of Savoy and its bar in the Galleria was the fashionable place to be seen in nineteenth-century Milan.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Rocks glass or highball",
+   "how": "Over ice with soda and a lemon twist as an aperitif, which is how Milan drank it for a century. Neat it is dry and faintly smoky; it also improves a Negroni if you swap it for part of the Campari.",
+   "pair": [
+    "olives",
+    "salted almonds",
+    "cured meats"
+   ]
+  },
+  "composition": {
+   "summary": "Chinese rhubarb root and cardamom infused in spirit and lightly sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Chinese rhubarb root, cardamom, bitter orange"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "16%, low even for an aperitivo"
+    }
+   ],
+   "process": "Rhubarb root gives the earthy, faintly smoky note that the whole rabarbaro category is built on."
+  }
+ },
+ {
+  "id": "china-martini",
+  "name": "China Martini",
+  "subcategory": "Amaro",
+  "description": "A cinchona-bark amaro from Turin, pronounced kee-na and named for the quinine tree rather than the country. Bitter, cocoa-toned, and the ancestor of most quinine liqueurs on the shelf.",
+  "abv": "31%",
+  "origin": "Turin, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cinchona",
+   "cocoa",
+   "orange peel",
+   "bitter bark"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Cinchona bark was the original source of quinine, which is why so many nineteenth-century bitters were marketed openly as anti-malarial tonics.",
+  "serve": {
+   "temp": "room temp, or hot",
+   "glass": "Small tumbler or coffee cup",
+   "how": "Neat after dinner, or the Piedmontese winter serve: warmed with a strip of lemon peel. It also works stirred into coffee, where the cocoa note in the bark meets the roast.",
+   "pair": [
+    "dark chocolate",
+    "hazelnuts",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Cinchona bark and botanicals infused in spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Cinchona calisaya bark, bitter orange, spices"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused, then sweetened and rested"
+    },
+    {
+     "label": "Strength",
+     "detail": "31%"
+    }
+   ],
+   "process": "Calisaya bark is the same species that flavours tonic water, at far higher concentration."
+  }
+ },
+ {
+  "id": "cocchi-americano",
+  "name": "Cocchi Americano",
+  "subcategory": "Amaro",
+  "description": "A quinine-flavoured aromatised wine from Piedmont, bitter-sweet and citrus-driven. It is the closest thing available to Kina Lillet, which means it is what a Vesper is supposed to be made with.",
+  "abv": "16.5%",
+  "origin": "Asti, Piedmont",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinchona",
+   "orange peel",
+   "gentian",
+   "white grape"
+  ],
+  "glassware": "Wine glass",
+  "funFact": "Lillet reformulated in 1986 and dropped most of its quinine, which is why bartenders reaching for a period-correct Vesper use this instead.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small wine glass over ice",
+   "how": "Cold with ice and a slice of orange as an aperitif. In cocktails it is the third of a Vesper, the Lillet stand-in in a Corpse Reviver No. 2, and the white half of a White Negroni. Refrigerate after opening.",
+   "pair": [
+    "olives",
+    "salted almonds",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Moscato d'Asti wine aromatised with cinchona and botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Moscato d'Asti wine"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Cinchona bark, gentian, bitter orange peel"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused into wine and lightly fortified"
+    },
+    {
+     "label": "Strength",
+     "detail": "16.5%"
+    }
+   ],
+   "process": "Because it is wine-based it oxidises; a bottle left warm for a month is a different drink."
+  }
+ },
+ {
+  "id": "bonal",
+  "name": "Bonal Gentiane-Quina",
+  "subcategory": "Amaro",
+  "description": "A Savoyard aperitif of gentian, cinchona and alpine herbs on a mistelle base, made since 1865 and advertised as the opener of the appetite. Deep, wine-dark and more bitter than it looks.",
+  "abv": "16%",
+  "origin": "Savoie, France",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "gentian",
+   "quinine",
+   "dried cherry",
+   "cocoa"
+  ],
+  "glassware": "Wine glass",
+  "funFact": "It was created by a monk at the Grande Chartreuse and marketed with the slogan ouvre l'appétit — which is why French bars still pour it before a meal rather than after.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small wine glass",
+   "how": "Cold and neat, or over ice with a lemon twist. It substitutes well for sweet vermouth in a Manhattan or Boulevardier, bringing gentian bitterness where vermouth brings sweetness.",
+   "pair": [
+    "charcuterie",
+    "Beaufort cheese",
+    "walnuts"
+   ]
+  },
+  "composition": {
+   "summary": "Mistelle base infused with gentian root and cinchona bark.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Mistelle — grape must stopped with spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Gentian root, cinchona bark, alpine herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated into the mistelle, then aged"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak casks before bottling"
+    }
+   ],
+   "process": "Both signature botanicals are roots and barks rather than leaves, which is why the bitterness is so deep and slow."
+  }
+ },
+ {
+  "id": "byrrh",
+  "name": "Byrrh",
+  "subcategory": "Amaro",
+  "description": "A French quinquina from Roussillon, sold from 1866 as a health tonic through pharmacies because a medicinal label attracted less tax than an alcoholic one. Red wine, mistelle and cinchona, aged in enormous oak vats.",
+  "abv": "18%",
+  "origin": "Thuir, Roussillon",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "red fruit",
+   "cocoa",
+   "quinine",
+   "coffee"
+  ],
+  "glassware": "Wine glass",
+  "funFact": "The Thuir cellars hold the largest oak vat in the world, at over a million litres, built in 1950 and still in use.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small wine glass over ice",
+   "how": "Cold with ice and an orange slice, as a French café aperitif. It swaps neatly for sweet vermouth in a Manhattan and makes an excellent low-strength highball with soda.",
+   "pair": [
+    "olives",
+    "pâté",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Red wine and mistelle aromatised with cinchona and aged in oak.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Red wine from Roussillon plus mistelle"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Cinchona bark, coffee, cocoa, bitter orange"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, blended, fortified"
+    },
+    {
+     "label": "Aging",
+     "detail": "Up to three years in oak foudres"
+    }
+   ],
+   "process": "Selling it through pharmacies as a tonic was a deliberate tax strategy, and it worked for decades."
+  }
+ },
+ {
+  "id": "dubonnet",
+  "name": "Dubonnet",
+  "subcategory": "Amaro",
+  "description": "Created in 1846 to persuade French Foreign Legionnaires in North Africa to take their quinine, by burying the bitterness in sweet fortified wine. It worked, and it outlived the empire that commissioned it.",
+  "abv": "14.8%",
+  "origin": "France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "cocoa",
+   "quinine",
+   "orange peel"
+  ],
+  "glassware": "Wine glass",
+  "funFact": "Queen Elizabeth II reportedly drank it with gin and a slice of lemon before lunch, a combination the household referred to simply as the usual.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Wine glass or rocks glass",
+   "how": "Cold with ice and lemon, or the royal serve: two parts Dubonnet to one part gin over ice. It is sweet and low in strength, so it suits an afternoon better than an evening.",
+   "pair": [
+    "cucumber sandwiches",
+    "olives",
+    "pâté"
+   ]
+  },
+  "composition": {
+   "summary": "Fortified wine aromatised with cinchona, herbs and spices.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Fortified wine"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Cinchona bark, blackcurrant, cocoa, herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused into wine and fortified"
+    },
+    {
+     "label": "Strength",
+     "detail": "14.8%"
+    }
+   ],
+   "process": "Sweetening quinine into palatability was a genuine public-health problem in the 1840s, and this was the commercial answer."
+  }
+ },
+ {
+  "id": "amer-picon",
+  "name": "Amer Picon",
+  "subcategory": "Amaro",
+  "description": "A bitter orange aperitif invented by a French soldier in Algeria in 1837, again as a quinine delivery system. Reformulated and weakened over the years, and the ghost that haunts a Picon Bière or a Brooklyn cocktail.",
+  "abv": "18%",
+  "origin": "France",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bitter orange",
+   "gentian",
+   "cinchona",
+   "caramel"
+  ],
+  "glassware": "Highball or rocks glass",
+  "funFact": "Gaétan Picon dropped it from 39% to 21% and later 18%, which is why old cocktail recipes calling for it never quite work with a modern bottle.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball",
+   "how": "The French serve is Picon Bière — a measure in the bottom of a glass of blonde beer, which sounds wrong and is excellent. In cocktails it belongs in a Brooklyn and a Liberal, though modern bottlings need a heavier hand than the original recipes assumed.",
+   "pair": [
+    "blonde beer",
+    "olives",
+    "charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter orange, gentian and cinchona infused and sweetened with caramel.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit and water"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Dried bitter orange peel, gentian root, cinchona bark"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Oranges macerated and distilled, then blended with the root infusions"
+    },
+    {
+     "label": "Strength",
+     "detail": "18%, down from an original 39%"
+    }
+   ],
+   "process": "It is not officially exported to many markets, which is why bar substitutes for it are a whole cottage industry."
+  }
+ },
+ {
+  "id": "salers",
+  "name": "Salers",
+  "subcategory": "Amaro",
+  "description": "A gentian aperitif from the Auvergne, made since 1885 from wild roots dug on volcanic uplands. Paler, drier and more austere than Suze, and the one gentian purists tend to reach for.",
+  "abv": "16%",
+  "origin": "Auvergne, France",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "gentian",
+   "hay",
+   "citrus",
+   "earth"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "The roots are harvested by hand with a two-pronged fork called a fourche du diable, from plants that have grown for at least twenty years.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass",
+   "how": "Over ice with a splash of soda or tonic, which is the Auvergne café serve. It is drier than Suze and less sweet than Aveze, so it is the best of the three in a White Negroni.",
+   "pair": [
+    "Cantal cheese",
+    "cured ham",
+    "walnuts"
+   ]
+  },
+  "composition": {
+   "summary": "Wild gentian root macerated and distilled, then lightly sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Gentiana lutea root, wild-harvested in the Massif Central"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Part macerated, part distilled"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rested in vats before bottling"
+    }
+   ],
+   "process": "Twenty years of root growth per harvest is why gentian aperitifs have never been cheap."
+  }
+ },
+ {
+  "id": "aveze",
+  "name": "Avèze",
+  "subcategory": "Amaro",
+  "description": "The third of the French gentian aperitifs, from the Cantal, sweeter and rounder than Salers and less citrus-forward than Suze. Made from roots dug in the volcanic pastures of the Massif Central.",
+  "abv": "15%",
+  "origin": "Cantal, France",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "gentian",
+   "honey",
+   "earth",
+   "soft citrus"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "All three major gentian aperitifs come from within a hundred kilometres of each other, because that is where the wild plant grows densely enough to harvest.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass",
+   "how": "Over ice with tonic or soda, or with cassis as an Auvergnat kir. Its extra sweetness makes it the gentler introduction to gentian for anyone who has bounced off Suze.",
+   "pair": [
+    "Bleu d'Auvergne",
+    "charcuterie",
+    "rye bread"
+   ]
+  },
+  "composition": {
+   "summary": "Gentian root macerated in spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Wild yellow gentian root from the Cantal"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, blended, sweetened"
+    },
+    {
+     "label": "Strength",
+     "detail": "15%"
+    }
+   ],
+   "process": "More sugar and less citrus than Suze, which is the whole difference between the two."
+  }
+ },
+ {
+  "id": "peychauds-bitters",
+  "name": "Peychaud's Bitters",
+  "subcategory": "Amaro",
+  "description": "Created by a Creole apothecary in 1830s New Orleans, lighter and more floral than Angostura, with anise and cherry where Angostura has clove. Without it a Sazerac is not a Sazerac.",
+  "abv": "35%",
+  "origin": "New Orleans, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "anise",
+   "cherry",
+   "floral",
+   "gentian"
+  ],
+  "glassware": "Dasher bottle",
+  "funFact": "Antoine Amédée Peychaud served his tonic in a double-ended egg cup called a coquetier, which is one of the more plausible origin stories for the word cocktail.",
+  "serve": {
+   "temp": "n/a — used in dashes",
+   "glass": "Used as a seasoning, not poured",
+   "how": "Three or four dashes in a Sazerac, alongside rye and absinthe. It is softer than Angostura and not a like-for-like substitute — using one where the recipe wants the other changes the drink noticeably.",
+   "pair": [
+    "not applicable"
+   ]
+  },
+  "composition": {
+   "summary": "A concentrated botanical tincture, anise-forward, on a high-proof base.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "High-strength neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Anise, gentian, cherry notes; the full recipe is unpublished"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated to a concentrate"
+    },
+    {
+     "label": "Strength",
+     "detail": "35%"
+    }
+   ],
+   "process": "The bright red colour is added and has no bearing on the flavour."
+  }
+ },
+ {
+  "id": "orange-bitters",
+  "name": "Orange Bitters",
+  "subcategory": "Amaro",
+  "description": "Dried bitter orange peel, cardamom and caraway in a concentrated tincture. It vanished almost entirely after Prohibition and came back only in the 2000s, which is why a century of Martini recipes read strangely without it.",
+  "abv": "28–43%",
+  "origin": "England and USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "dried orange peel",
+   "cardamom",
+   "caraway",
+   "gentian"
+  ],
+  "glassware": "Dasher bottle",
+  "funFact": "Pre-Prohibition Martini recipes almost universally called for orange bitters; the drink we now think of as classic is a version that lost an ingredient by accident.",
+  "serve": {
+   "temp": "n/a — used in dashes",
+   "glass": "Used as a seasoning",
+   "how": "A dash or two in a Martini, a Manhattan or an Old Fashioned. It lifts and defines rather than adding obvious flavour — the effect is much more noticeable by its absence when you go back.",
+   "pair": [
+    "not applicable"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter orange peel and spice macerated to a concentrate.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "High-strength neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Seville orange peel, cardamom, caraway, coriander, gentian"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, then strained and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "28–43% depending on maker"
+    }
+   ],
+   "process": "Seville peel dried hard carries far more bitter oil than fresh sweet orange."
+  }
+ },
+ {
+  "id": "malort",
+  "name": "Malört",
+  "subcategory": "Amaro",
+  "description": "A wormwood liqueur brought to Chicago by a Swedish immigrant, and the city's initiation ritual. Relentlessly, uncompromisingly bitter, with a finish that people describe using words like grapefruit rind and burnt plastic.",
+  "abv": "35%",
+  "origin": "Chicago, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "wormwood",
+   "grapefruit pith",
+   "bitter herb",
+   "long harsh finish"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "Carl Jeppson sold it through Prohibition as a medicinal tonic, reportedly because agents who tasted it accepted immediately that nobody would drink it for pleasure.",
+  "serve": {
+   "temp": "room temp or chilled",
+   "glass": "Shot glass",
+   "how": "One shot, and the tradition is to watch the face of whoever is drinking it for the first time. Chicagoans chase it with cheap lager. Bartenders have found genuine uses for a small amount in cocktails, where the bitterness cuts sweetness sharply.",
+   "pair": [
+    "cheap lager",
+    "anything salty",
+    "regret"
+   ]
+  },
+  "composition": {
+   "summary": "Wormwood macerated in neutral spirit, barely sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Wormwood, the dominant and near-only flavour"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, minimal sweetening"
+    },
+    {
+     "label": "Strength",
+     "detail": "35%"
+    }
+   ],
+   "process": "It belongs to the Swedish besk tradition, of which it is the most aggressive surviving example."
+  }
+ },
+ {
+  "id": "fernet",
+  "name": "Fernet",
+  "subcategory": "Amaro",
+  "description": "Not one brand but the bitterest class of amaro: myrrh, saffron, gentian and menthol, minimally sweetened. A category invented in 1840s Milan as a stomach remedy and adopted wholesale by Argentina and San Francisco.",
+  "abv": "39–45%",
+  "origin": "Milan, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "menthol",
+   "myrrh",
+   "saffron",
+   "bitter root"
+  ],
+  "glassware": "Shot glass or rocks glass",
+  "funFact": "San Francisco drinks a wildly disproportionate share of the world's fernet, a habit usually traced to the city's Italian community and its bartending scene.",
+  "serve": {
+   "temp": "room temp or cold",
+   "glass": "Small tumbler",
+   "how": "Neat after a heavy meal, which is the intended use. Argentina drinks it long with cola in roughly a one-to-three ratio. Bartenders take it as a shot with ginger beer alongside, a pairing known as a handshake.",
+   "pair": [
+    "rich food",
+    "espresso",
+    "cola"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter herbs and roots macerated in spirit with almost no sugar.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Myrrh, saffron, gentian, rhubarb, chamomile, peppermint"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, blended, minimally sweetened"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often oak-rested for a year or more"
+    }
+   ],
+   "process": "The low sugar is what defines the class — a sweeter version stops being a fernet."
+  }
+ },
+ {
+  "id": "kuemmerling",
+  "name": "Kümmerling",
+  "subcategory": "Amaro",
+  "description": "A German herbal bitter sold almost exclusively in small single-serve bottles, like Underberg but sweeter and more anise-driven. A fixture of German festivals and petrol-station counters alike.",
+  "abv": "35%",
+  "origin": "Bodenheim, Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "liquorice",
+   "bitter herb",
+   "menthol"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Hugo Kümmerling launched it in 1938 and the small-bottle format was chosen so it could be sold as a single measure rather than by the bottle.",
+  "serve": {
+   "temp": "chilled",
+   "glass": "Small shot glass",
+   "how": "Cold, in one go, after eating. It is sweeter and less punishing than Underberg, which is why it has a following among people who find that one too austere.",
+   "pair": [
+    "sausage",
+    "roast pork",
+    "dark bread"
+   ]
+  },
+  "composition": {
+   "summary": "Herbs and spices macerated in neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Anise, liquorice, gentian and a mix of herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "35%"
+    }
+   ],
+   "process": "The single-serve format is the product design, exactly as with Underberg."
+  }
+ },
+ {
+  "id": "killepitsch",
+  "name": "Killepitsch",
+  "subcategory": "Amaro",
+  "description": "A Düsseldorf herbal liqueur of ninety-eight herbs, berries and fruits, made to a recipe devised in an air-raid shelter during the war. Deep red, sweet, and drunk in Altstadt bars by the thousand.",
+  "abv": "42%",
+  "origin": "Düsseldorf, Germany",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "red berry",
+   "herb",
+   "clove",
+   "warm spice"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "The name comes from Rhineland dialect roughly meaning to knock back and gasp, and the recipe was written down by two friends sheltering from bombing in 1944.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Small shot glass",
+   "how": "Cold and neat, in one, alongside a glass of Altbier — the standard Düsseldorf order. Sweeter and fruitier than Jägermeister, and considerably stronger at 42%.",
+   "pair": [
+    "Altbier",
+    "Rheinischer Sauerbraten",
+    "dark bread"
+   ]
+  },
+  "composition": {
+   "summary": "Ninety-eight herbs, fruits and berries macerated and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "98 herbs, berries and fruits"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for weeks, then blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "42%"
+    }
+   ],
+   "process": "Fruit and berry content is what separates it from the root-driven German bitters."
+  }
+ },
+ {
+  "id": "blutwurz",
+  "name": "Blutwurz",
+  "subcategory": "Amaro",
+  "description": "A Bavarian Forest liqueur made from tormentil root, which stains the liquid blood red and gives it a dry, tannic bitterness. Sold in the region as a digestive and a folk remedy in equal measure.",
+  "abv": "50%",
+  "origin": "Bavarian Forest, Germany",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "tannin",
+   "earth",
+   "bitter root",
+   "dried fruit"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Tormentil root was used against dysentery for centuries, which is where both the medicinal reputation and the astringency come from.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in a small glass after a heavy meal. At 50% it demands slow drinking. In the Bavarian Forest it is offered to guests almost automatically and refusing takes some doing.",
+   "pair": [
+    "smoked pork",
+    "dark bread",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Tormentil root macerated in high-strength spirit with herbs.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit at high strength"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Tormentil (Potentilla erecta) root, plus herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated; colour comes from the root"
+    },
+    {
+     "label": "Strength",
+     "detail": "Around 50%"
+    }
+   ],
+   "process": "The tannin content is high enough that it dries the mouth like strong tea."
+  }
+ },
+ {
+  "id": "genziana",
+  "name": "Genziana",
+  "subcategory": "Amaro",
+  "description": "An Abruzzese liqueur made by steeping gentian root in wine or spirit, produced at farmhouse scale across the Apennines. Rougher and more rustic than the French gentian aperitifs, and usually homemade.",
+  "abv": "16–35%",
+  "origin": "Abruzzo, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "gentian",
+   "earth",
+   "hay",
+   "bitter root"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Gentian harvesting is regulated across the Apennines, and in some Italian regions digging wild roots requires a permit.",
+  "serve": {
+   "temp": "cool",
+   "glass": "Small tumbler",
+   "how": "Cool and neat after a meal, in the small pours Abruzzese households offer. Wine-based versions are lower in strength and closer to a bitter vermouth; spirit-based ones are sharper.",
+   "pair": [
+    "arrosticini",
+    "pecorino",
+    "dark bread"
+   ]
+  },
+  "composition": {
+   "summary": "Gentian root macerated in wine or neutral spirit and lightly sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "White wine or neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Wild gentian root from the Apennines"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated for weeks"
+    },
+    {
+     "label": "Strength",
+     "detail": "16–35% depending on base"
+    }
+   ],
+   "process": "Almost all of it is made domestically, so no two bottles from different families match."
+  }
+ },
+ {
+  "id": "fernet-vallet",
+  "name": "Fernet Vallet",
+  "subcategory": "Amaro",
+  "description": "A Mexican fernet made to a recipe a French distiller brought to Veracruz in the 1880s. Sweeter and more cinnamon-driven than the Italian style, and long a fixture of cantinas in the south.",
+  "abv": "45%",
+  "origin": "Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cinnamon",
+   "menthol",
+   "bitter root",
+   "caramel"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Henri Vallet emigrated from France, set up in Veracruz, and built a fernet that Mexico kept making long after the Italian originals had come to dominate elsewhere.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat after a meal, or with cola in the Argentine manner. Its extra sweetness and cinnamon make it an easier fernet than Branca, and it works well in a Toronto or a Hanky Panky.",
+   "pair": [
+    "mole",
+    "dark chocolate",
+    "café de olla"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter herbs and spice macerated in spirit, sweeter than the Italian style.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Myrrh, cinnamon, cardamom, gentian, mint"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "45%"
+    }
+   ],
+   "process": "Higher strength and a heavier hand with cinnamon are the two things that mark it out from Milanese fernet."
+  }
+ },
+ {
+  "id": "amaro-sibilla",
+  "name": "Amaro Sibilla",
+  "subcategory": "Amaro",
+  "description": "An intensely bitter amaro from the Sibillini mountains of the Marche, made with honey and mountain herbs to a nineteenth-century recipe. Dark, resinous and closer to a medicine than a digestive.",
+  "abv": "34%",
+  "origin": "Marche, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "honey",
+   "bitter root",
+   "resin",
+   "liquorice"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The Sibillini mountains are named for a mythical sibyl said to have lived in a cave there, and the amaro's label leans on the legend heavily.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat in a small pour after a heavy meal. The honey rounds the front but the finish is long and genuinely bitter, so it rewards slow sipping rather than a shot.",
+   "pair": [
+    "aged pecorino",
+    "dark chocolate",
+    "walnuts"
+   ]
+  },
+  "composition": {
+   "summary": "Mountain herbs and honey macerated in spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Gentian, rhubarb, mountain herbs, honey"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended with honey"
+    },
+    {
+     "label": "Strength",
+     "detail": "34%"
+    }
+   ],
+   "process": "Honey rather than sugar syrup gives a weight the sweeter commercial amari cannot match."
+  }
+ },
+ {
+  "id": "select-aperitivo",
+  "name": "Select Aperitivo",
+  "subcategory": "Amaro",
+  "description": "Venice's answer to Campari, made since 1920 with thirty botanicals and rhubarb root. It is what a spritz is made with in Venice, and Venetians will correct you firmly if you reach for Aperol instead.",
+  "abv": "17.5%",
+  "origin": "Venice, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rhubarb",
+   "bitter orange",
+   "juniper",
+   "light spice"
+  ],
+  "glassware": "Wine glass",
+  "funFact": "The Venetian spritz predates Aperol's dominance entirely, and Select was created specifically for it in the year the drink took hold in the city.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Large wine glass",
+   "how": "Three parts prosecco, two parts Select, a splash of soda, over ice, with a green olive rather than an orange slice — that olive is the Venetian marker. More bitter than an Aperol spritz and considerably better.",
+   "pair": [
+    "cicchetti",
+    "olives",
+    "fried seafood"
+   ]
+  },
+  "composition": {
+   "summary": "Thirty botanicals infused in neutral spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Rhubarb root, juniper, bitter orange and 27 others"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Part distilled, part infused, then blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "17.5%"
+    }
+   ],
+   "process": "Rhubarb root is the backbone, which is why it lands drier than Aperol despite similar sweetness."
+  }
+ },
+ {
+  "id": "cappelletti-aperitivo",
+  "name": "Cappelletti Aperitivo",
+  "subcategory": "Amaro",
+  "description": "A wine-based red aperitivo from Trentino, coloured with cochineal as Campari once was. Lower in alcohol and gentler than its Milanese rival, with more fruit and less quinine snap.",
+  "abv": "17%",
+  "origin": "Trentino, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bitter orange",
+   "red fruit",
+   "gentian",
+   "light spice"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "It is still coloured with carmine from cochineal insects, a practice Campari abandoned in 2006 and which makes this bottle unsuitable for vegans.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Rocks glass or wine glass",
+   "how": "Over ice with soda, or as the red third of a Negroni where its lower strength makes a gentler drink. Because the base is wine, refrigerate it once opened and finish it within a month.",
+   "pair": [
+    "speck",
+    "olives",
+    "hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Wine base infused with bitter herbs and citrus.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Wine, lightly fortified"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Bitter orange, gentian, herbs; cochineal for colour"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused into wine"
+    },
+    {
+     "label": "Strength",
+     "detail": "17%"
+    }
+   ],
+   "process": "A wine base rather than neutral spirit is what keeps it soft where Campari is sharp."
+  }
+ },
+ {
+  "id": "petrus-boonekamp",
+  "name": "Petrus Boonekamp",
+  "subcategory": "Amaro",
+  "description": "A Dutch-origin bitter now made in Italy, dry and root-driven with almost no sweetness. Boonekamp is a whole nineteenth-century category of stomach bitters, of which this is the surviving standard-bearer.",
+  "abv": "44.5%",
+  "origin": "Netherlands and Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "gentian",
+   "angelica",
+   "dry root",
+   "menthol"
+  ],
+  "glassware": "Small shot glass",
+  "funFact": "Petrus Boonekamp created the style in Leiden in 1777; it became generic enough that a dozen distillers sold their own boonekamp through the 1800s.",
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small shot glass",
+   "how": "Neat in a small measure after eating. It is drier than almost anything else in this category — there is essentially no sugar to hide behind, which makes it closer to Underberg than to Jägermeister.",
+   "pair": [
+    "heavy roast meals",
+    "aged cheese",
+    "rye bread"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter roots and herbs macerated in high-strength spirit, barely sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Gentian, angelica, myrrh, bitter orange"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "44.5%"
+    }
+   ],
+   "process": "The near-total absence of sugar is the defining feature of the boonekamp style."
+  }
+ },
+ {
+  "id": "amaro-ciociaro",
+  "name": "Amaro Ciociaro",
+  "subcategory": "Amaro",
+  "description": "A Lazio amaro built heavily on bitter orange, softer and more approachable than most, and frequently used as a stand-in for Amer Picon in cocktails that can no longer get the original.",
+  "abv": "30%",
+  "origin": "Lazio, Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "bitter orange",
+   "caramel",
+   "gentian",
+   "clove"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "American bartenders adopted it as the closest available substitute for Amer Picon after the French original was reformulated and largely withdrawn from export.",
+  "serve": {
+   "temp": "room temp or over ice",
+   "glass": "Rocks glass",
+   "how": "Neat or over ice after dinner. In cocktails it does duty in a Brooklyn or a Liberal, where the orange-and-gentian profile fills the gap Picon left.",
+   "pair": [
+    "orange desserts",
+    "dark chocolate",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Bitter orange and herbs infused in spirit and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Bitter orange peel, gentian, clove, cinchona"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "30%"
+    }
+   ],
+   "process": "The orange dominance is why it substitutes for Picon better than any other amaro."
+  }
+ },
+ {
+  "id": "ferro-china",
+  "name": "Ferro China",
+  "subcategory": "Amaro",
+  "description": "A nineteenth-century Italian tonic of cinchona bark and iron salts, sold in pharmacies as a treatment for anaemia and now surviving as a bitter digestive. It genuinely tastes faintly of iron.",
+  "abv": "21%",
+  "origin": "Italy",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "cinchona",
+   "iron",
+   "cocoa",
+   "caramel"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "It was prescribed to children as a strengthening tonic well into the twentieth century, in doses that would raise eyebrows now.",
+  "serve": {
+   "temp": "room temp, or warmed",
+   "glass": "Small tumbler",
+   "how": "Neat after dinner, or the traditional winter serve of warming it with a strip of lemon peel. Italians of a certain generation also stir it into coffee or milk.",
+   "pair": [
+    "dark chocolate",
+    "espresso",
+    "biscotti"
+   ]
+  },
+  "composition": {
+   "summary": "Cinchona bark infused with iron salts and sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit and water"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Cinchona bark, iron citrate, cocoa, spices"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused and blended"
+    },
+    {
+     "label": "Strength",
+     "detail": "21%"
+    }
+   ],
+   "process": "The iron is not a flavouring accident; it was the active ingredient the whole product was sold on."
+  }
+ },
+ {
+  "id": "amaro-nardini",
+  "name": "Amaro Nardini",
+  "subcategory": "Amaro",
+  "description": "Made by Italy's oldest distillery, in Bassano del Grappa since 1779, on a grappa base rather than neutral spirit. Mint-forward and unusually clean, with the grappa giving it a sharpness other amari lack.",
+  "abv": "31%",
+  "origin": "Bassano del Grappa, Veneto",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "mint",
+   "gentian",
+   "peppermint",
+   "grappa"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "Nardini has been distilling on the Ponte Vecchio in Bassano since 1779, which makes it the oldest continuously operating distillery in Italy.",
+  "serve": {
+   "temp": "cold or room temp",
+   "glass": "Small tumbler",
+   "how": "Neat after dinner, or the Veneto habit of mixing it half and half with soda as a mezzo e mezzo. The mint is pronounced enough that it reads almost like a digestif and a palate cleanser at once.",
+   "pair": [
+    "rich pasta",
+    "dark chocolate",
+    "espresso"
+   ]
+  },
+  "composition": {
+   "summary": "Herbs and mint infused into a grappa base.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Grappa"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Peppermint, gentian, bitter orange, herbs"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Infused into distilled grappa"
+    },
+    {
+     "label": "Strength",
+     "detail": "31%"
+    }
+   ],
+   "process": "A grappa base rather than neutral spirit gives a grip that a neutral base cannot."
+  }
+ },
+ {
+  "id": "rabarbaro",
+  "name": "Rabarbaro",
+  "subcategory": "Amaro",
+  "description": "The rhubarb-root class of Italian amaro, distinct enough to be its own category. Chinese rhubarb root gives a dry, earthy, faintly smoky bitterness that no other botanical produces.",
+  "abv": "16–20%",
+  "origin": "Northern Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rhubarb root",
+   "earth",
+   "cola",
+   "light smoke"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "The rhubarb in question is not the garden vegetable but Rheum palmatum, imported dried from China along trade routes that predate the amari themselves.",
+  "serve": {
+   "temp": "cold, over ice",
+   "glass": "Rocks glass",
+   "how": "Over ice with soda as an aperitif, or neat after a meal. The class sits drier than the citrus amari and is the natural bridge for someone moving from Campari toward Fernet.",
+   "pair": [
+    "cured meats",
+    "aged cheese",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Dried Chinese rhubarb root infused in spirit with supporting botanicals.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Rheum palmatum root, cardamom, bitter orange"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Macerated, sometimes with smoked root"
+    },
+    {
+     "label": "Strength",
+     "detail": "16–20%"
+    }
+   ],
+   "process": "Smoking the root, as Sfumato does, is a variation within the class rather than the norm."
+  }
+ }
+]

@@ -167,15 +167,34 @@ const STYLE_ALIASES = [
   ['malt liquor', 'malt-liquor'],
   // Sorghum/opaque beers have no Dex style — leave them unlinked rather
   // than pointing at 'specialty', which is a subcategory and not an id.
+  /* Late, generic fallbacks. They sit here deliberately: every specific
+   * rule above must get first refusal, or bare 'amber' would swallow
+   * 'amber lager' and bare 'dunkel' would swallow 'dunkelweizen'.
+   * Left OUT on purpose, because no honest target exists: 'fruit',
+   * 'dark', 'session', 'barrel-aged', 'honey' — and the brewery
+   * descriptors ('franconia', 'paris craft'), which are a gap in this
+   * file's own style tagging rather than a missing Dex entry. */
+  ['strong dark', 'belgian-quadrupel'],
+  ['dunkel', 'munich-dunkel'],
+  ['weizen', 'hefeweizen'],
+  ['amber', 'american-amber-ale'],
   ['porter', 'english-porter'],
   ['stout', 'irish-dry-stout'],
   ['ale', 'blonde-ale'],
 ];
 
 /** Dex style name (lowercased) -> Drink.id, e.g. "american porter" -> american-porter. */
+/*
+ * AUTHORED style cards only. drinks.json also contains one generated card per
+ * brand (id suffixed `-br`, written by scripts/merge-beer-brands.mjs), and
+ * those must be excluded or the pipeline eats its own tail: every brand name
+ * becomes a "style" name, `resolveStyle(b.name)` matches the brand's OWN card,
+ * and each beer ends up declaring itself its own style. That reads as a
+ * flattering 100% linkage and is worth nothing.
+ */
 const DEX_STYLES = new Map(
   JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'drinks.json'), 'utf8'))
-    .filter((d) => d.category === 'beer')
+    .filter((d) => d.category === 'beer' && !d.id.endsWith('-br'))
     .map((d) => [d.name.toLowerCase(), d.id])
 );
 
@@ -192,6 +211,52 @@ function resolveStyle(text) {
   for (const [needle, id] of STYLE_ALIASES) if (t.includes(needle)) return id;
   return null;
 }
+
+/* ------------------------------------------------------------------ */
+/* Explicit repoints                                                    */
+/*                                                                      */
+/* Keyed by the generated brand id, NOT by a substring of the style     */
+/* text. These brands describe themselves in prose ("traditional        */
+/* juniper farmhouse ale") rather than by style name, so neither exact  */
+/* matching nor the alias table can reach them — and two were actively  */
+/* WRONG, caught by the alias table's `farmhouse` rule sending Finland's */
+/* sahti and Lithuania's keptinis to Saison.                            */
+/*                                                                      */
+/* Deliberately an id map. A substring rule here would be the same trap */
+/* documented above: "tella" matches inside Stella Artois.              */
+/* ------------------------------------------------------------------ */
+
+const STYLE_OVERRIDES = {
+  // Was `saison` via the "farmhouse" alias — a real style, the wrong one.
+  'sahti-fi': 'sahti',
+  'jovaru-alus-lt': 'keptinis',
+
+  // Opaque sorghum beer, sold still-fermenting in a waxed carton.
+  'chibuku-botswana-bw': 'chibuku',
+  'chibuku-shake-shake-zw': 'chibuku',
+  'chibuku-malawi-mw': 'chibuku',
+
+  // Brittany's revived tradition — buckwheat, and in Mor Braz's case seawater.
+  'coreff-fr': 'biere-bretonne',
+  'britt-fr': 'biere-bretonne',
+  'lancelot-fr': 'biere-bretonne',
+  'mor-braz-fr': 'biere-bretonne',
+
+  // German brewing transplanted to subtropical Santa Catarina in the 1850s.
+  'eisenbahn-br': 'blumenau-lager',
+
+  // Spéciale Belge, 5–5.5%: Antwerp's house beer. NOT Kwak, which is an
+  // 8.4% strong amber — a plausible link that would misdescribe the beer,
+  // so it stays unresolved rather than pointing somewhere tidy and wrong.
+  'de-koninck-be': 'belgian-amber-ale',
+  'palm-be': 'belgian-amber-ale',
+
+  /* Explicitly NO link. Kwak is an 8.4% Belgian strong amber; the generic
+   * `amber` fallback would file it as a 4.5% American Amber Ale, and Belgian
+   * Amber Ale is 5–5.5% Spéciale Belge. Both are real styles and both are the
+   * wrong beer, so it stays unresolved on purpose. */
+  'kwak-be': null,
+};
 
 /* ------------------------------------------------------------------ */
 /* Brewery attribution                                                  */
@@ -287,6 +352,11 @@ function build() {
         for (let n = Math.min(3, words.length - 1); n >= 1 && !owner; n--) {
           const cand = words.slice(0, n).join(' ');
           if (STOP.has(cand.toLowerCase().split(' ')[0])) continue;
+          /* A brewery is never named after a style. Without this, "Saison Dupont"
+           * and its cuvée invent a brewery called "Saison", and the three Zoigl
+           * towns invent one called "Zoigl" — which is a communal brewing
+           * tradition, not a company. */
+          if (DEX_STYLES.has(cand.toLowerCase())) continue;
           const siblings = productRows.filter((p) => p.name.startsWith(cand + ' '));
           if (siblings.length >= 2) owner = cand;
         }
@@ -303,12 +373,15 @@ function build() {
       // under "Sierra Nevada" rather than repeating it.
       const short = owner && b.name.length > owner.length ? b.name.slice(owner.length).trim() : b.name;
 
+      const beerId = slug(`${b.name}-${b.code}`);
       brewery.beers.push({
-        id: slug(`${b.name}-${b.code}`),
+        id: beerId,
         name: b.name,
         shortName: short || b.name,
         style: b.note || null,
-        styleRef: resolveStyle(b.note) ?? resolveStyle(b.name),
+        styleRef: beerId in STYLE_OVERRIDES
+          ? STYLE_OVERRIDES[beerId]
+          : resolveStyle(b.note) ?? resolveStyle(b.name),
       });
     }
   }

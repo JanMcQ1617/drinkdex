@@ -1,0 +1,149 @@
+[
+ {
+  "id": "belgian-amber-ale",
+  "name": "Belgian Amber Ale",
+  "subcategory": "Amber & Red Ale",
+  "description": "Antwerp's house beer: copper-coloured, lightly fruity and built for the second and third glass. Ordered by the glass shape rather than the name.",
+  "abv": "5–5.5%",
+  "origin": "Antwerp, Belgium",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "toasted malt",
+   "orange peel",
+   "soft bitterness",
+   "biscuit"
+  ],
+  "glassware": "Stemmed bolleke glass",
+  "funFact": "In Antwerp you order it by asking for a 'bolleke' — the round stemmed glass — rather than by the brewery's name, which is one of the few places a glass has become the name of the drink.",
+  "serve": {
+   "temp": "45-48°F, lightly chilled",
+   "glass": "Stemmed bolleke glass",
+   "how": "Serve in a round stemmed glass, filled to leave a proper two fingers of foam, and drink it cool rather than cold. The malt is the point: toasted and biscuity with just enough hop to keep it moving. It is a session beer by Belgian standards, so pour it with the expectation of ordering another rather than contemplating one.",
+   "pair": [
+    "Steak frites",
+    "Mussels",
+    "Aged Gouda"
+   ]
+  },
+  "composition": {
+   "summary": "A copper Belgian ale balancing toasted malt against a restrained ale-yeast fruitiness.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale and Vienna malts with a touch of caramel for copper colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Continental hops at modest, balancing levels."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A Belgian ale strain kept deliberately restrained — fruit, not spice."
+    },
+    {
+     "label": "Other",
+     "detail": "Nothing — this is a plain beer by Belgian standards."
+    }
+   ],
+   "process": "Warm-fermented with a house Belgian strain and conditioned cool so the malt stays forward."
+  }
+ },
+ {
+  "id": "bokbier",
+  "name": "Bokbier",
+  "subcategory": "Bock",
+  "description": "The Dutch autumn bock: dark, malty and released each October, when the whole country's breweries put one out at once.",
+  "abv": "6.5–7.5%",
+  "origin": "Netherlands",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "caramel",
+   "raisin",
+   "toast",
+   "dark bread"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Dutch bokbier is a seasonal event rather than a year-round style — the Bokbierfestival in Amsterdam exists to taste the year's releases side by side, and most disappear by December.",
+  "serve": {
+   "temp": "48-54°F, cellar cool",
+   "glass": "Tulip glass",
+   "how": "Serve cool rather than cold, in a tulip that holds the malt aroma. Pour to a modest head and give it a few minutes; the raisin and toast notes need a little warmth to separate from the alcohol. It is an autumn beer by design and pairs with the heavier food of that season rather than anything light.",
+   "pair": [
+    "Stamppot",
+    "Aged cheese",
+    "Roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "A dark, malt-forward seasonal lager brewed to a bock strength.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Munich and caramel malts over a pale base for depth and colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low, present only to keep the malt from cloying."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Lager yeast, cold-fermented and lagered."
+    },
+    {
+     "label": "Other",
+     "detail": "Seasonal release — traditionally brewed for autumn only."
+    }
+   ],
+   "process": "Cold-fermented on a heavy Munich-and-caramel grist, then lagered for weeks before an autumn release."
+  }
+ },
+ {
+  "id": "biere-bretonne",
+  "name": "Bière Bretonne",
+  "subcategory": "Farmhouse Ale",
+  "description": "Brittany's revived brewing tradition: often buckwheat-inflected, sometimes seaweed-salted, and always defined against the cider the region is better known for.",
+  "abv": "5–6.5%",
+  "origin": "Brittany, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "buckwheat",
+   "toast",
+   "faint salinity",
+   "herbal"
+  ],
+  "glassware": "Chalice or tumbler",
+  "funFact": "Breton brewing was effectively extinct by the 1970s and was rebuilt from scratch in the 1980s as part of the wider Breton cultural revival — the beers carry Breton-language names as a deliberate political statement.",
+  "serve": {
+   "temp": "48-52°F, cellar cool",
+   "glass": "Chalice or tumbler",
+   "how": "Serve cool in a wide glass so the buckwheat and toasted character can open. Expect an amber to dark pour with a soft, bready body rather than a crisp one. It suits the region's food directly — buckwheat galettes and shellfish — and drinks better alongside a meal than on its own.",
+   "pair": [
+    "Buckwheat galettes",
+    "Oysters",
+    "Salted butter caramel"
+   ]
+  },
+  "composition": {
+   "summary": "A revived regional French ale often built on buckwheat alongside barley malt.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt with a proportion of buckwheat, the regional grain."
+    },
+    {
+     "label": "Hops",
+     "detail": "Continental, moderate and herbal rather than citric."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Ale yeast fermented warm for a soft, bready profile."
+    },
+    {
+     "label": "Other",
+     "detail": "Occasionally seaweed or salt, reflecting the coastal setting."
+    }
+   ],
+   "process": "Warm ale fermentation on a mixed barley-and-buckwheat grist, conditioned briefly and sold regionally."
+  }
+ }
+]

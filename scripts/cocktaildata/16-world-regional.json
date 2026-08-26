@@ -1,0 +1,1949 @@
+[
+ {
+  "id": "japanese-highball",
+  "name": "Japanese Highball",
+  "subcategory": "Highball",
+  "description": "Whisky and soda, built with a precision bordering on ceremony: frozen glass, hard ice, thirteen stirs. Japan turned the simplest drink into a discipline.",
+  "abv": "7–9%",
+  "origin": "Tokyo, Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "malt",
+   "soda",
+   "citrus oil"
+  ],
+  "glassware": "Tall frozen glass",
+  "ingredients": [
+   "Japanese whisky",
+   "Soda water",
+   "Ice"
+  ],
+  "funFact": "Suntory's 1950s highball campaign was a deliberate rescue of a collapsing whisky market, and it worked so completely that the highball is now the default way Japan drinks whisky.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Japanese whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Chilled soda water",
+     "amount": "4.5 oz / 135 ml"
+    },
+    {
+     "item": "Hard clear ice",
+     "amount": "to fill"
+    },
+    {
+     "item": "Lemon peel",
+     "amount": "1 strip"
+    }
+   ],
+   "steps": [
+    "Freeze the glass and fill it to the top with hard, clear ice.",
+    "Pour the whisky over the ice and stir exactly thirteen times to chill it without melting the ice.",
+    "Add more ice if the level has dropped, then pour the chilled soda down the side in one steady motion.",
+    "Stir once, vertically, lifting the bar spoon straight out to keep the carbonation.",
+    "Express a lemon peel over the surface and serve immediately."
+   ],
+   "garnish": "Lemon peel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "mizuwari",
+  "name": "Mizuwari",
+  "subcategory": "Highball",
+  "description": "Whisky and still water, one to two and a half, stirred over ice. The most-drunk whisky serve in Japan and the hardest to make well.",
+  "abv": "10–12%",
+  "origin": "Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "malt",
+   "water",
+   "soft grain"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Japanese whisky",
+   "Still water",
+   "Ice"
+  ],
+  "funFact": "Japan's soft, low-mineral water is part of the point — mizuwari made with hard water tastes noticeably different, which is why the ratio travels badly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Japanese whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Still mineral water",
+     "amount": "3.5 oz / 105 ml"
+    },
+    {
+     "item": "Hard clear ice",
+     "amount": "to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass to the top with hard ice and let it chill the glass.",
+    "Pour in the whisky and stir thirteen and a half times, in the traditional count.",
+    "Top up the ice, then add the still water.",
+    "Stir three and a half times only — any more and the drink goes flat and watery.",
+    "Serve with food rather than on its own."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "oyuwari",
+  "name": "Oyuwari",
+  "subcategory": "Hot",
+  "description": "Shochu cut with hot water, poured water-first so the two mix by convection alone. Kyushu's winter default.",
+  "abv": "10–12%",
+  "origin": "Kyushu, Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "barley",
+   "sweet potato",
+   "warm grain"
+  ],
+  "glassware": "Ceramic cup",
+  "ingredients": [
+   "Shochu",
+   "Hot water"
+  ],
+  "funFact": "The order is not superstition: pouring hot water first and shochu second lets the density difference mix the drink without stirring, which keeps the aroma intact.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shochu (barley or sweet potato)",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Hot water at about 80°C",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Warm a ceramic cup with a little hot water and discard it.",
+    "Pour the hot water into the cup FIRST, filling it about three-fifths.",
+    "Add the shochu on top and do not stir — the convection mixes it.",
+    "Rest for thirty seconds so the temperature settles to about 45°C.",
+    "Drink while hot, alongside food."
+   ],
+   "garnish": "A slice of pickled plum, optional",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chuhai",
+  "name": "Chuhai",
+  "subcategory": "Highball",
+  "description": "Shochu and carbonated water with a fruit flavour — sold canned in a hundred varieties and poured fresh in every izakaya.",
+  "abv": "5–7%",
+  "origin": "Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "citrus",
+   "clean grain",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Shochu",
+   "Soda water",
+   "Fruit syrup or fresh fruit"
+  ],
+  "funFact": "The name shortens 'shochu highball'. Canned chuhai is a vast category in Japan, with strong versions at 9% sold in the same fridge as the 3% ones and colour-coded accordingly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shochu",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Fresh fruit or syrup (peach, grape, ume)",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the shochu and the fruit syrup or muddled fresh fruit.",
+    "Top with well-chilled soda water.",
+    "Stir once, vertically, to preserve the fizz.",
+    "Garnish with a slice of the fruit used."
+   ],
+   "garnish": "A slice of the matching fruit",
+   "method": "built"
+  }
+ },
+ {
+  "id": "denki-bran",
+  "name": "Denki Bran",
+  "subcategory": "Spirit-Forward",
+  "description": "'Electric Brandy' — a brandy, gin, wine and herb blend served at the same Tokyo bar since 1882, when electricity itself was the novelty.",
+  "abv": "30–40%",
+  "origin": "Asakusa, Tokyo, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "brandy",
+   "herbal",
+   "caramel",
+   "spice"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Denki Bran",
+   "Beer chaser"
+  ],
+  "funFact": "Kamiya Bar in Asakusa has served it since 1882 and named it for electricity because anything modern and slightly shocking was 'denki' at the time; the recipe is still secret.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Denki Bran",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Draught lager",
+     "amount": "as a chaser"
+    }
+   ],
+   "steps": [
+    "Pour the Denki Bran into a small tumbler — no ice, no dilution.",
+    "Serve a small glass of cold draught beer alongside.",
+    "Sip the Denki Bran, then chase with the beer.",
+    "Do not mix the two; the pairing is the tradition."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "hoppy",
+  "name": "Hoppy",
+  "subcategory": "Party",
+  "description": "Shochu topped with Hoppy, a near beer-flavoured mixer from 1948. Order 'naka' for more shochu and 'soto' for more Hoppy.",
+  "abv": "5–7%",
+  "origin": "Tokyo, Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "malt",
+   "clean grain",
+   "bitter hop"
+  ],
+  "glassware": "Chilled mug",
+  "ingredients": [
+   "Shochu",
+   "Hoppy beverage"
+  ],
+  "funFact": "Hoppy was launched in 1948 when real beer was unaffordable, as a way to make cheap shochu taste like beer; postwar nostalgia has kept it on Tokyo izakaya menus ever since.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shochu, frozen",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Hoppy beverage, chilled",
+     "amount": "6 oz / 180 ml"
+    }
+   ],
+   "steps": [
+    "Chill the mug and the Hoppy thoroughly; keep the shochu in the freezer.",
+    "Pour the frozen shochu into the mug — this is the 'naka'.",
+    "Add the cold Hoppy in one pour from a height to build a head.",
+    "Do not stir; the pour mixes it.",
+    "Order another 'naka' when the shochu runs out before the Hoppy does."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "yuzu-sour",
+  "name": "Yuzu Sour",
+  "subcategory": "Sour",
+  "description": "Shochu or vodka with yuzu juice and soda — sharper and more floral than lemon, and unmistakably Japanese.",
+  "abv": "10–12%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yuzu",
+   "floral citrus",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Shochu",
+   "Yuzu juice",
+   "Soda water",
+   "Honey"
+  ],
+  "funFact": "Yuzu is too sour and too seedy to eat, so it is grown almost entirely for its juice and peel — a citrus cultivated purely as a flavouring.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shochu or vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Yuzu juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the shochu, yuzu juice and honey syrup and stir to combine.",
+    "Top with chilled soda water.",
+    "Stir once vertically.",
+    "Garnish with a strip of yuzu peel."
+   ],
+   "garnish": "Yuzu peel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "calpis-sour",
+  "name": "Calpis Sour",
+  "subcategory": "Highball",
+  "description": "Shochu with Calpis, the cloudy fermented-milk cordial that has been Japan's comfort drink since 1919. Tastes like a yoghurt lemonade.",
+  "abv": "6–8%",
+  "origin": "Japan",
+  "rarity": "common",
+  "tastingNotes": [
+   "yoghurt",
+   "citrus",
+   "sweet milk"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Shochu",
+   "Calpis concentrate",
+   "Soda water"
+  ],
+  "funFact": "Calpis was created in 1919 by a Japanese businessman who had encountered fermented mare's milk in Inner Mongolia; the name blends 'calcium' with the Sanskrit 'sarpis'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Shochu",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Calpis concentrate",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the shochu and Calpis concentrate and stir until fully combined.",
+    "Top with chilled soda water.",
+    "Stir once, gently — Calpis foams easily.",
+    "Serve with no garnish."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sakerinha",
+  "name": "Sakerinha",
+  "subcategory": "Sour",
+  "description": "A Caipirinha built on sake — the drink of Brazil's Japanese community, and of Japan's Brazilian one.",
+  "abv": "12–14%",
+  "origin": "Japan and Brazil",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rice",
+   "lime",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Sake",
+   "Lime",
+   "Caster sugar"
+  ],
+  "funFact": "Brazil has the largest Japanese population outside Japan, and hundreds of thousands of Brazilian-Japanese later moved back to Japan — the drink travelled in both directions with them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sake",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Lime, cut into wedges",
+     "amount": "1 whole"
+    },
+    {
+     "item": "Caster sugar",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed or crushed"
+    }
+   ],
+   "steps": [
+    "Muddle the lime wedges with the sugar in a sturdy rocks glass.",
+    "Fill the glass with ice.",
+    "Pour over the sake.",
+    "Stir hard from the bottom up until the glass frosts.",
+    "Serve with the spent lime still in the glass."
+   ],
+   "garnish": "The muddled lime",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "gunner",
+  "name": "Gunner",
+  "subcategory": "Highball",
+  "description": "Ginger beer and ginger ale over lime and Angostura, with an optional shot of gin. The Hong Kong club drink, and the city's answer to the Rock Shandy.",
+  "abv": "0–8%",
+  "origin": "Hong Kong",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "lime",
+   "bitters"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Ginger beer",
+   "Ginger ale",
+   "Lime juice",
+   "Angostura bitters",
+   "Gin"
+  ],
+  "funFact": "It is the standard order at Hong Kong's colonial-era clubs and rugby sevens, served alcohol-free by default with the gin added only if you ask for it 'with a kick'.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ginger beer",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Ginger ale",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml, optional"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the lime juice and the Angostura, then the gin if you are using it.",
+    "Pour in equal measures of ginger beer and ginger ale.",
+    "Stir once to bring the bitters through.",
+    "Garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "baijiu-sour",
+  "name": "Baijiu Sour",
+  "subcategory": "Sour",
+  "description": "Baijiu shaken with citrus, honey and egg white — Shanghai's project to make the world's best-selling spirit approachable to outsiders.",
+  "abv": "18–20%",
+  "origin": "Shanghai, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sorghum",
+   "tropical funk",
+   "lemon",
+   "honey"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Baijiu",
+   "Lemon juice",
+   "Honey syrup",
+   "Egg white"
+  ],
+  "funFact": "Baijiu outsells whisky, vodka and rum combined by volume, yet almost none of it leaves China — Shanghai's bar scene spent the 2010s working out how to mix it for people who did not grow up with it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Light-aroma baijiu",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the baijiu, lemon juice, honey syrup and egg white for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Dash the bitters across the foam and draw a pattern through them.",
+    "Serve immediately."
+   ],
+   "garnish": "Bitters across the foam",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "cynar-spritz",
+  "name": "Cynar Spritz",
+  "subcategory": "Spritz",
+  "description": "The spritz for people who find Aperol too sweet: artichoke amaro, prosecco and soda, darker and considerably more bitter.",
+  "abv": "7–9%",
+  "origin": "Veneto, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "artichoke",
+   "bitter herbs",
+   "prosecco"
+  ],
+  "glassware": "Large wine glass",
+  "ingredients": [
+   "Cynar",
+   "Prosecco",
+   "Soda water"
+  ],
+  "funFact": "Cynar is made from thirteen botanicals including artichoke leaves, and in the Veneto it is drunk as a spritz far more often than it is drunk neat.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cynar",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Prosecco",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Orange slice",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Fill a large wine glass with ice.",
+    "Pour in the Cynar, then the prosecco.",
+    "Top with a splash of soda water.",
+    "Stir once, gently, to combine without killing the bubbles.",
+    "Garnish with an orange slice and an olive if you are in the Veneto."
+   ],
+   "garnish": "Orange slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "select-spritz",
+  "name": "Select Spritz",
+  "subcategory": "Spritz",
+  "description": "Venice's own spritz, made with Select rather than Aperol — deeper red, more bitter, and the local order since 1920.",
+  "abv": "7–9%",
+  "origin": "Venice, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rhubarb",
+   "bitter orange",
+   "juniper",
+   "prosecco"
+  ],
+  "glassware": "Large wine glass",
+  "ingredients": [
+   "Select Aperitivo",
+   "Prosecco",
+   "Soda water"
+  ],
+  "funFact": "Select was created in Venice in 1920 and remains the city's default spritz base; ordering an Aperol spritz in a Venetian bacaro marks you out immediately as being from elsewhere.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Select Aperitivo",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Prosecco",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Green olive",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Fill a large wine glass with ice.",
+    "Add the Select and then the prosecco.",
+    "Top with a splash of soda.",
+    "Stir once gently.",
+    "Garnish with a green olive — not an orange slice, which is the Padova style."
+   ],
+   "garnish": "A green olive",
+   "method": "built"
+  }
+ },
+ {
+  "id": "puccini",
+  "name": "Puccini",
+  "subcategory": "Sparkling",
+  "description": "Prosecco over fresh mandarin juice — the winter member of Harry's Bar's painter-and-composer family.",
+  "abv": "9–11%",
+  "origin": "Venice, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mandarin",
+   "prosecco",
+   "citrus blossom"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Prosecco",
+   "Fresh mandarin juice"
+  ],
+  "funFact": "Harry's Bar named its sparkling drinks after Venetian artists and composers, and made each with whatever fruit was in season — the Puccini belongs to mandarin season in midwinter.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh mandarin juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Prosecco, well chilled",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Squeeze fresh mandarins and strain the juice; chill it thoroughly.",
+    "Pour the cold juice into a chilled flute.",
+    "Top slowly with prosecco, stirring gently with a bar spoon as you pour.",
+    "Serve immediately, with no garnish."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tintoretto",
+  "name": "Tintoretto",
+  "subcategory": "Sparkling",
+  "description": "Pomegranate and prosecco — the deepest red of the Harry's Bar family, named for the painter who filled the Scuola di San Rocco.",
+  "abv": "9–11%",
+  "origin": "Venice, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pomegranate",
+   "prosecco",
+   "tart red fruit"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Prosecco",
+   "Pomegranate juice"
+  ],
+  "funFact": "Tintoretto spent over twenty years decorating the Scuola Grande di San Rocco, often working for nothing to keep rivals out — a level of commitment the drink does not attempt to match.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh pomegranate juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Prosecco, well chilled",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Juice fresh pomegranate and strain out the solids.",
+    "Chill the juice thoroughly before use.",
+    "Pour the juice into a chilled flute.",
+    "Top slowly with prosecco and stir once with a bar spoon.",
+    "Garnish with a few pomegranate seeds."
+   ],
+   "garnish": "Pomegranate seeds",
+   "method": "built"
+  }
+ },
+ {
+  "id": "carajillo-43",
+  "name": "Carajillo 43",
+  "subcategory": "Regional",
+  "description": "Licor 43 shaken over espresso until it foams — Mexico's after-dinner drink, and ordered in vast quantities across the country.",
+  "abv": "14–16%",
+  "origin": "Mexico City, Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "vanilla",
+   "espresso",
+   "citrus",
+   "caramel"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Licor 43",
+   "Espresso",
+   "Ice"
+  ],
+  "funFact": "Spain's carajillo is coffee with brandy or rum; Mexico rebuilt it around Licor 43 and shakes it cold, which is now so dominant that the Spanish original is barely known there.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Licor 43",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Fresh hot espresso",
+     "amount": "1 shot / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, plus one large cube to serve"
+    }
+   ],
+   "steps": [
+    "Pull a fresh espresso and let it cool for a few seconds.",
+    "Add the Licor 43 and espresso to a shaker with ice.",
+    "Shake hard for 10 seconds until a thick crema forms.",
+    "Strain over one large ice cube in a rocks glass.",
+    "Serve immediately, while the foam holds."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mastiha-spritz",
+  "name": "Mastiha Spritz",
+  "subcategory": "Spritz",
+  "description": "Chios mastiha with soda and citrus — resinous, pine-fresh and made from the tears of a tree that grows nowhere else on earth.",
+  "abv": "8–10%",
+  "origin": "Chios, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pine resin",
+   "lemon",
+   "herbal",
+   "soda"
+  ],
+  "glassware": "Large wine glass",
+  "ingredients": [
+   "Mastiha liqueur",
+   "Soda water",
+   "Lemon juice",
+   "Prosecco"
+  ],
+  "funFact": "Mastic resin is harvested only in southern Chios — attempts to grow the trees productively elsewhere have consistently failed — and the villages that farm it are collectively called the Mastichochoria.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mastiha liqueur",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Prosecco",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a large wine glass with ice.",
+    "Add the mastiha and the lemon juice.",
+    "Pour in the prosecco, then top with soda water.",
+    "Stir once gently.",
+    "Garnish with a lemon twist and a sprig of thyme."
+   ],
+   "garnish": "Lemon twist and thyme",
+   "method": "built"
+  }
+ },
+ {
+  "id": "herrengedeck",
+  "name": "Herrengedeck",
+  "subcategory": "Party",
+  "description": "A beer with a glass of sparkling wine beside it — 'the gentlemen's set menu', and a genuine Berlin tradition rather than a joke.",
+  "abv": "8–10%",
+  "origin": "Berlin, Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "malt",
+   "brioche",
+   "citrus"
+  ],
+  "glassware": "Beer glass and a sekt flute",
+  "ingredients": [
+   "Pilsner",
+   "Sekt"
+  ],
+  "funFact": "In the West it means beer and sekt; in the former East it usually meant beer and a shot of clear spirit, and Berliners will still tell you which version their side of the city drank.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "German pilsner",
+     "amount": "10 oz / 300 ml"
+    },
+    {
+     "item": "Sekt, chilled",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Pour the pilsner into a beer glass and let the head settle.",
+    "Pour the chilled sekt into a separate small flute.",
+    "Serve the two side by side, not mixed.",
+    "Alternate between them — the sekt resets the palate between mouthfuls of beer."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "cubanito",
+  "name": "Cubanito",
+  "subcategory": "Brunch",
+  "description": "Havana's Bloody Mary: rum instead of vodka, with lime, Worcestershire and a heavy hand of hot sauce.",
+  "abv": "10–12%",
+  "origin": "Havana, Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "tomato",
+   "lime",
+   "cane",
+   "chilli"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "White rum",
+   "Tomato juice",
+   "Lime juice",
+   "Worcestershire sauce",
+   "Hot sauce"
+  ],
+  "funFact": "Cuba's answer to the Bloody Mary predates most of the vodka versions, for the simple reason that Havana had excellent rum and almost no vodka.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Tomato juice",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Worcestershire sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Hot sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Salt and pepper",
+     "amount": "a pinch each"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the rum, lime juice, Worcestershire and hot sauce.",
+    "Top with tomato juice and season with salt and pepper.",
+    "Roll the drink between two tins rather than shaking, to mix without frothing.",
+    "Garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "thrown"
+  }
+ },
+ {
+  "id": "grzaniec",
+  "name": "Grzaniec",
+  "subcategory": "Hot",
+  "description": "Mulled beer or wine with honey, cloves and ginger — Polish winter, served in mountain shelters and Christmas markets alike.",
+  "abv": "8–10%",
+  "origin": "Poland",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "clove",
+   "ginger",
+   "malt"
+  ],
+  "glassware": "Heatproof mug",
+  "ingredients": [
+   "Dark beer or red wine",
+   "Honey",
+   "Cloves",
+   "Ginger",
+   "Cinnamon"
+  ],
+  "funFact": "The beer version — grzane piwo — is the older of the two, and mulling beer was standard across northern Europe long before mulled wine became the Christmas default.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark beer or red wine",
+     "amount": "12 oz / 355 ml"
+    },
+    {
+     "item": "Honey",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Whole cloves",
+     "amount": "4"
+    },
+    {
+     "item": "Fresh ginger, sliced",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "1 strip"
+    }
+   ],
+   "steps": [
+    "Warm the beer or wine gently with the spices and orange peel — never boil it.",
+    "Hold at about 70°C for ten minutes so the spices infuse.",
+    "Stir in the honey until fully dissolved.",
+    "Strain into a heatproof mug.",
+    "Serve hot with a cinnamon stick."
+   ],
+   "garnish": "Cinnamon stick and orange peel",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "almdudler-spritzer",
+  "name": "Almdudler Spritzer",
+  "subcategory": "Party",
+  "description": "White wine with Almdudler, the Alpine herb soda that Austria treats as a national institution.",
+  "abv": "5–7%",
+  "origin": "Austria",
+  "rarity": "common",
+  "tastingNotes": [
+   "alpine herbs",
+   "white wine",
+   "citrus"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Dry white wine",
+   "Almdudler"
+  ],
+  "funFact": "Almdudler has been made since 1957 from 32 Alpine herbs and is so entrenched that Austrians describe it as the country's second national drink after beer.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Almdudler, chilled",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "optional"
+    }
+   ],
+   "steps": [
+    "Chill both the wine and the Almdudler well.",
+    "Pour the wine into a tall glass.",
+    "Top with the Almdudler.",
+    "Stir once, gently, and serve without ice in the Austrian manner."
+   ],
+   "garnish": "A slice of lemon, optional",
+   "method": "built"
+  }
+ },
+ {
+  "id": "dutch-mule",
+  "name": "Dutch Mule",
+  "subcategory": "Highball",
+  "description": "Jenever with ginger beer and lime — the mule format handed to the malty grandfather of gin, which changes it entirely.",
+  "abv": "12–14%",
+  "origin": "Netherlands",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "juniper",
+   "ginger",
+   "lime"
+  ],
+  "glassware": "Copper mug",
+  "ingredients": [
+   "Jonge jenever",
+   "Ginger beer",
+   "Lime juice"
+  ],
+  "funFact": "Jenever is distilled from malt wine and tastes closer to a light whisky than to London dry gin, which is why it holds up against ginger where gin can disappear.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jonge jenever",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ginger beer",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a copper mug or highball with ice.",
+    "Add the jenever and lime juice.",
+    "Top with cold ginger beer.",
+    "Stir once and garnish with a lime wedge."
+   ],
+   "garnish": "Lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "irish-mule",
+  "name": "Irish Mule",
+  "subcategory": "Highball",
+  "description": "Irish whiskey with ginger beer and lime. The mule's gentlest branch, and the one that goes down fastest.",
+  "abv": "12–14%",
+  "origin": "Ireland",
+  "rarity": "common",
+  "tastingNotes": [
+   "ginger",
+   "lime",
+   "honeyed malt"
+  ],
+  "glassware": "Copper mug",
+  "ingredients": [
+   "Irish whiskey",
+   "Ginger beer",
+   "Lime juice"
+  ],
+  "funFact": "Irish whiskey's triple distillation leaves it lighter and smoother than Scotch or bourbon, which is exactly why it disappears into ginger beer so easily.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ginger beer",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a copper mug with ice.",
+    "Add the Irish whiskey and lime juice.",
+    "Top with cold ginger beer.",
+    "Stir once and garnish with a lime wedge and a mint sprig."
+   ],
+   "garnish": "Lime wedge and mint",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sima",
+  "name": "Sima",
+  "subcategory": "Regional",
+  "description": "Finnish spring mead: lemon, sugar and yeast fermented for a couple of days and bottled with raisins that float when it is ready.",
+  "abv": "1–2%",
+  "origin": "Finland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "honey",
+   "yeast",
+   "sweet"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Water",
+   "Lemon",
+   "Brown sugar",
+   "Yeast",
+   "Raisins"
+  ],
+  "funFact": "The raisins are a timer: a few are dropped into each bottle, and when they rise to the surface the fermentation has produced enough carbonation to drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Water",
+     "amount": "4 litres"
+    },
+    {
+     "item": "Lemons",
+     "amount": "2, sliced"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "White sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Fresh yeast",
+     "amount": "a quarter teaspoon"
+    },
+    {
+     "item": "Raisins",
+     "amount": "a few per bottle"
+    }
+   ],
+   "steps": [
+    "Boil the water with both sugars and the lemon slices, then cool to lukewarm.",
+    "Stir in the yeast and leave covered at room temperature overnight.",
+    "Bottle, adding a teaspoon of sugar and a few raisins to each bottle.",
+    "Leave at room temperature until the raisins float, usually two to three days.",
+    "Refrigerate and drink within a week, at Vappu if you are doing it properly."
+   ],
+   "garnish": "The floating raisins and a lemon slice",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "medovukha",
+  "name": "Medovukha",
+  "subcategory": "Regional",
+  "description": "Honey fermented with water and spices — an East Slavic drink older than distillation, lighter and quicker than true mead.",
+  "abv": "5–10%",
+  "origin": "Ukraine and Russia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "spice",
+   "yeast",
+   "floral"
+  ],
+  "glassware": "Ceramic mug",
+  "ingredients": [
+   "Honey",
+   "Water",
+   "Yeast",
+   "Spices"
+  ],
+  "funFact": "Traditional medovukha was fermented for decades; the boiled quick version was developed in the fifteenth century because nobody wanted to wait twenty years for a drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Honey",
+     "amount": "300 g"
+    },
+    {
+     "item": "Water",
+     "amount": "1 litre"
+    },
+    {
+     "item": "Yeast",
+     "amount": "a quarter teaspoon"
+    },
+    {
+     "item": "Hops",
+     "amount": "1 tsp, optional"
+    },
+    {
+     "item": "Cinnamon and cloves",
+     "amount": "a pinch each"
+    }
+   ],
+   "steps": [
+    "Boil the water and honey together, skimming the foam that rises.",
+    "Add the spices and hops, simmer briefly, then cool to lukewarm.",
+    "Pitch the yeast and ferment in a covered vessel for about a week.",
+    "Strain and bottle, then refrigerate for several days to carbonate lightly.",
+    "Serve cool in ceramic mugs."
+   ],
+   "garnish": "None",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "uvita",
+  "name": "Uvita",
+  "subcategory": "Regional",
+  "description": "Sweet red wine with grape must and spices, warmed and drunk at winter festivals along the Uruguayan coast.",
+  "abv": "12–14%",
+  "origin": "Uruguay",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red grape",
+   "cinnamon",
+   "sugar",
+   "warmth"
+  ],
+  "glassware": "Small glass or mug",
+  "ingredients": [
+   "Sweet red wine",
+   "Grape must",
+   "Cinnamon",
+   "Sugar",
+   "Orange peel"
+  ],
+  "funFact": "Uruguay drinks more wine per head than any other country in the Americas, most of it Tannat, and its winter street festivals run on warmed sweet wine rather than beer.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sweet red wine",
+     "amount": "500 ml"
+    },
+    {
+     "item": "Grape must or grape juice",
+     "amount": "250 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "1 strip"
+    },
+    {
+     "item": "Cloves",
+     "amount": "4"
+    }
+   ],
+   "steps": [
+    "Combine the wine, must, sugar and spices in a pan.",
+    "Warm gently to about 65°C without boiling.",
+    "Hold for fifteen minutes so the spices infuse.",
+    "Strain into small glasses.",
+    "Serve warm, with the orange peel."
+   ],
+   "garnish": "Orange peel",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "islenskur-kaffi",
+  "name": "Íslenskur Kaffi",
+  "subcategory": "Hot",
+  "description": "Strong coffee with brennivín and cream — the Icelandic answer to Irish coffee, with caraway in place of the sweetness.",
+  "abv": "12–14%",
+  "origin": "Iceland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "caraway",
+   "coffee",
+   "cream"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Brennivín",
+   "Hot coffee",
+   "Cream",
+   "Sugar"
+  ],
+  "funFact": "Iceland drinks more coffee per head than almost anywhere on earth, and brennivín's caraway edge makes for a markedly drier coffee drink than the Irish version.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brennivín",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Hot strong coffee",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Lightly whipped cream",
+     "amount": "to float"
+    }
+   ],
+   "steps": [
+    "Warm a glass mug and add the sugar.",
+    "Pour in the hot coffee and stir until the sugar dissolves.",
+    "Add the brennivín and stir once.",
+    "Float lightly whipped cream over the back of a spoon.",
+    "Drink through the cream without stirring."
+   ],
+   "garnish": "Floated cream",
+   "method": "built"
+  }
+ },
+ {
+  "id": "ca-phe-trung-rum",
+  "name": "Cà Phê Trứng Rum",
+  "subcategory": "Creamy & Dessert",
+  "description": "Hanoi egg coffee with rum stirred through — egg yolk whipped with condensed milk into a meringue that sits on the coffee like a custard.",
+  "abv": "8–10%",
+  "origin": "Hanoi, Vietnam",
+  "rarity": "rare",
+  "tastingNotes": [
+   "egg custard",
+   "coffee",
+   "condensed milk",
+   "rum"
+  ],
+  "glassware": "Small glass in a bowl of hot water",
+  "ingredients": [
+   "Vietnamese coffee",
+   "Egg yolk",
+   "Condensed milk",
+   "Dark rum"
+  ],
+  "funFact": "Egg coffee was invented in 1946 when a milk shortage in Hanoi led a Metropole bartender to whip egg yolk as a substitute; the café his family still runs serves it in glasses set in hot water.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Strong Vietnamese coffee",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Egg yolk",
+     "amount": "1"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Dark rum",
+     "amount": "0.75 oz / 22 ml"
+    }
+   ],
+   "steps": [
+    "Brew strong Vietnamese coffee with a phin filter and keep it hot.",
+    "Whisk the egg yolk with the condensed milk until pale, thick and roughly tripled in volume.",
+    "Stir the rum into the hot coffee in a small glass.",
+    "Spoon the egg foam over the top so it floats as a distinct layer.",
+    "Stand the glass in a bowl of hot water and serve with a small spoon."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "nam-manao-soda",
+  "name": "Nam Manao Soda",
+  "subcategory": "Highball",
+  "description": "Thai rum with fresh lime soda and a pinch of salt — the format street vendors have sold for decades, given a measure of Sangsom.",
+  "abv": "10–12%",
+  "origin": "Thailand",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lime",
+   "salt",
+   "cane",
+   "soda"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Thai rum",
+   "Lime juice",
+   "Soda water",
+   "Sugar syrup",
+   "Salt"
+  ],
+  "funFact": "The salt is not optional in Thai citrus drinks — it suppresses bitterness and lifts sweetness, which is why nam manao tastes rounder than a plain lime soda.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sangsom or Thai rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Fresh lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Salt",
+     "amount": "a small pinch"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Stir the lime juice, sugar syrup and salt together until the salt dissolves.",
+    "Fill a tall glass with ice and add the rum.",
+    "Pour in the lime mixture.",
+    "Top with cold soda water and stir once.",
+    "Garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "palm-wine-punch",
+  "name": "Palm Wine Punch",
+  "subcategory": "Punch & Cobbler",
+  "description": "Fresh palm wine lengthened with citrus, ginger and a little gin — the village drink dressed for a Lagos party.",
+  "abv": "6–8%",
+  "origin": "Lagos, Nigeria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "palm",
+   "ginger",
+   "citrus",
+   "sour"
+  ],
+  "glassware": "Calabash or punch glass",
+  "ingredients": [
+   "Palm wine",
+   "Gin",
+   "Ginger",
+   "Lime juice",
+   "Honey"
+  ],
+  "funFact": "Palm wine ferments so fast that it changes character between morning and evening, which is why punches built on it are mixed to order rather than made ahead.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fresh palm wine",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Fresh ginger juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the ginger juice, lime juice and honey syrup together in a jug.",
+    "Add the gin and stir again.",
+    "Pour in the fresh palm wine last and stir gently once.",
+    "Serve over ice, immediately — it keeps fermenting in the glass.",
+    "Garnish with a lime wheel."
+   ],
+   "garnish": "Lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tej-spritz",
+  "name": "Tej Spritz",
+  "subcategory": "Spritz",
+  "description": "Ethiopian honey wine lengthened with soda and citrus — the berele flask reimagined for a rooftop bar.",
+  "abv": "7–9%",
+  "origin": "Addis Ababa, Ethiopia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "gesho bitterness",
+   "lemon",
+   "soda"
+  ],
+  "glassware": "Large wine glass",
+  "ingredients": [
+   "Tej",
+   "Soda water",
+   "Lemon juice",
+   "Honey"
+  ],
+  "funFact": "Gesho, the buckthorn that bitters tej, plays the same role hops play in beer — which is why tej takes to a spritz format better than most honey wines would.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Tej",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Fill a large wine glass with ice.",
+    "Add the tej, lemon juice and honey syrup.",
+    "Top with soda water.",
+    "Stir once gently to combine.",
+    "Garnish with a lemon wheel."
+   ],
+   "garnish": "Lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "ceylon-arrack-sour",
+  "name": "Ceylon Arrack Sour",
+  "subcategory": "Sour",
+  "description": "Coconut arrack shaken with lime, jaggery and egg white — the island's spirit given the sour treatment.",
+  "abv": "18–20%",
+  "origin": "Colombo, Sri Lanka",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coconut",
+   "jaggery",
+   "lime",
+   "foam"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Ceylon arrack",
+   "Lime juice",
+   "Jaggery syrup",
+   "Egg white"
+  ],
+  "funFact": "Jaggery — unrefined palm sugar — is the traditional sweetener here rather than cane sugar, and it gives the drink a smoky, caramel depth that simple syrup cannot.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ceylon arrack",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Jaggery syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the arrack, lime juice, jaggery syrup and egg white for 15 seconds.",
+    "Add ice and shake hard for another 15 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Dash the bitters over the foam.",
+    "Serve immediately."
+   ],
+   "garnish": "Bitters across the foam",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "chacha-sour",
+  "name": "Chacha Sour",
+  "subcategory": "Sour",
+  "description": "Georgian grape marc spirit with lemon, honey and tarragon — the Caucasus answer to a pisco sour.",
+  "abv": "20–22%",
+  "origin": "Tbilisi, Georgia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grape marc",
+   "tarragon",
+   "honey",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Chacha",
+   "Lemon juice",
+   "Honey syrup",
+   "Tarragon"
+  ],
+  "funFact": "Tarragon is a defining Georgian flavour, most famously in the bright green tarkhuna soda, and it turns up in the country's modern bar scene as readily as mint does elsewhere.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Chacha",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Fresh tarragon",
+     "amount": "4 sprigs"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Press two tarragon sprigs gently in the shaker with the honey syrup.",
+    "Add the chacha, lemon juice and ice.",
+    "Shake hard for 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish with a fresh tarragon sprig."
+   ],
+   "garnish": "Tarragon sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "moroccan-mint-cooler",
+  "name": "Moroccan Mint Cooler",
+  "subcategory": "Highball",
+  "description": "Strong green tea with spearmint, sugar and a measure of fig brandy, served long over ice for the heat of the afternoon.",
+  "abv": "10–12%",
+  "origin": "Marrakech, Morocco",
+  "rarity": "rare",
+  "tastingNotes": [
+   "spearmint",
+   "green tea",
+   "fig",
+   "sugar"
+  ],
+  "glassware": "Tall glass or tea glass",
+  "ingredients": [
+   "Boukha",
+   "Green tea",
+   "Spearmint",
+   "Sugar",
+   "Lemon"
+  ],
+  "funFact": "Moroccan mint tea is poured from a height to aerate it and build a foam head, a technique the cold version keeps purely because the tea tastes flat without it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Boukha or fig brandy",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Strong green tea, cooled",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Fresh spearmint",
+     "amount": "a large handful"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    }
+   ],
+   "steps": [
+    "Brew strong green tea with a generous handful of spearmint and cool it completely.",
+    "Fill a tall glass with ice.",
+    "Add the fig brandy, sugar syrup and lemon juice.",
+    "Top with the cold mint tea, pouring from a height to aerate it.",
+    "Garnish with a large mint sprig."
+   ],
+   "garnish": "A large mint sprig",
+   "method": "built"
+  }
+ },
+ {
+  "id": "masala-chai-toddy",
+  "name": "Masala Chai Toddy",
+  "subcategory": "Hot",
+  "description": "Spiced milk tea with dark rum stirred in — the roadside chai format given a winter measure.",
+  "abv": "10–12%",
+  "origin": "India",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cardamom",
+   "ginger",
+   "black tea",
+   "molasses"
+  ],
+  "glassware": "Glass tumbler or mug",
+  "ingredients": [
+   "Dark rum",
+   "Black tea",
+   "Milk",
+   "Cardamom",
+   "Ginger"
+  ],
+  "funFact": "Indian chai is boiled rather than steeped — tea, milk, sugar and spice all go into the pan together, which is why it tastes nothing like tea with milk added afterwards.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Strong black tea leaves",
+     "amount": "2 tsp"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Water",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Green cardamom pods, crushed",
+     "amount": "4"
+    },
+    {
+     "item": "Fresh ginger, grated",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tsp"
+    }
+   ],
+   "steps": [
+    "Boil the water with the ginger, cardamom and sugar for two minutes.",
+    "Add the tea leaves and boil for another minute.",
+    "Pour in the milk and bring back to a boil, then simmer briefly.",
+    "Strain into a glass and stir in the rum off the heat.",
+    "Serve very hot."
+   ],
+   "garnish": "A dusting of cardamom",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "caju-amigo",
+  "name": "Caju Amigo",
+  "subcategory": "Shot",
+  "description": "Cachaça and cashew fruit juice — a two-ingredient northeastern staple made from the fruit the cashew nut hangs beneath.",
+  "abv": "20–22%",
+  "origin": "Northeast Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cashew apple",
+   "cane",
+   "astringent",
+   "tropical"
+  ],
+  "glassware": "Small glass",
+  "ingredients": [
+   "Cachaça",
+   "Cashew fruit juice"
+  ],
+  "funFact": "The cashew nut grows on the outside of the cashew apple, a soft astringent fruit that is too perishable to export — which is why almost nobody outside Brazil has tasted its juice.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cachaça",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Fresh cashew fruit juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, optional"
+    }
+   ],
+   "steps": [
+    "Combine the cachaça and cashew juice in a small glass.",
+    "Stir briefly to combine.",
+    "Serve at room temperature, or over a single ice cube if the day is hot.",
+    "Drink in one or two mouthfuls, as a between-meal pick-me-up."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "vermut-torrontes",
+  "name": "Vermut Torrontés",
+  "subcategory": "Spritz",
+  "description": "Argentine vermouth over ice with soda and an orange slice — the aperitivo hour that Italian immigrants brought and Argentina kept.",
+  "abv": "14–16%",
+  "origin": "Mendoza, Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "wormwood",
+   "orange",
+   "herbs",
+   "soda"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "Argentine vermouth",
+   "Soda water",
+   "Orange"
+  ],
+  "funFact": "Argentina's vermouth tradition arrived with mass Italian immigration and nearly disappeared in the twentieth century; a wave of small Mendoza producers rebuilt it from the 2010s onward.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Argentine red vermouth",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, to fill"
+    },
+    {
+     "item": "Orange slice",
+     "amount": "1"
+    },
+    {
+     "item": "Green olives",
+     "amount": "2"
+    }
+   ],
+   "steps": [
+    "Fill a tumbler with ice.",
+    "Pour in the cold vermouth.",
+    "Top with a splash of soda water.",
+    "Stir once and garnish with an orange slice and skewered olives.",
+    "Serve with something salty alongside."
+   ],
+   "garnish": "Orange slice and olives",
+   "method": "built"
+  }
+ }
+]
