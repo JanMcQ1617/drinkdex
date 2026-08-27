@@ -97,6 +97,31 @@ for (const c of source) {
   /* The inverse of the spirits check — a cocktail with a serve guide means a
    * record was authored against the wrong template. */
   if (c.serve || c.composition) errors.push(`${where}: cocktails must not carry serve/composition`);
+
+  /* Sipply is an alcohol app; 78 alcohol-free entries had to be pruned in
+   * 9fd91e9 because nothing rejected them on the way in.
+   *
+   * The obvious test — does the abv start with "0" — is wrong twice. It
+   * rejects a legitimate 0.5% and waves through "alcohol-free" and "<0.5%",
+   * neither of which begins with a zero. So parse the numbers and test a
+   * threshold instead.
+   *
+   * THE THRESHOLD IS 0.5%, DELIBERATELY: it is the line most jurisdictions
+   * draw. A range must clear it at its LOW end, so "0–8%" is rejected — a
+   * drink that can be poured at zero is one people order as a soft drink,
+   * which is what Chapman and Gunner both were.
+   *
+   * "Not published" is not caught here and must not be: 174 beer cards carry
+   * it, and it means the strength is undocumented rather than absent. A
+   * cocktail has no excuse for it, hence the separate required-abv check. */
+  const abv = String(c.abv ?? '');
+  const nums = (abv.match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
+  const alcoholFree =
+    /alcohol[- ]?free|non[- ]?alcoholic|alkoholfrei|no alcohol/i.test(abv) ||
+    /<\s*0/.test(abv) ||
+    (nums.length > 0 && Math.min(...nums) < 0.5);
+  if (alcoholFree) errors.push(`${where}: abv "${abv}" is alcohol-free — this app is alcohol only`);
+  else if (!nums.length) errors.push(`${where}: abv "${abv}" states no strength`);
 }
 
 /* ---- everything else is shared ---- */
