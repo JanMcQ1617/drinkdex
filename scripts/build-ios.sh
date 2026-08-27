@@ -5,6 +5,44 @@
 #   scripts/build-ios.sh device   # Release, signed, installed over devicectl
 #   scripts/build-ios.sh sim      # Release, unsigned, installed on a booted sim
 #
+# TAKE THE BUILD LOCK FIRST. Several sessions share this machine and one
+# Xcode build lock, which lives inside the shared node_modules and is not
+# isolated by git worktrees:
+#
+#     /tmp/drinkdex-build-lock.sh acquire "who you are"
+#     scripts/build-ios.sh device
+#     /tmp/drinkdex-build-lock.sh release
+#
+# The `pgrep` guard below is NOT a substitute. It is check-then-act: two
+# builds started within the same prebuild window both see a clear machine
+# and both proceed. Worse, it makes this script look like it already
+# handles coordination, so nobody looks for the lock — which is exactly how
+# two sessions each waited 26 minutes behind a third that had not taken it.
+#
+# The lock lives in /tmp because it is machine state, not repo state. It
+# does not survive a reboot; recreate it if it is missing.
+#
+# IF THE INSTALL FAILS, DO NOT REBUILD. The build and the install are
+# separate legs and they fail for unrelated reasons. A dropped tunnel looks
+# nothing like a bad build:
+#
+#     ** BUILD SUCCEEDED **
+#     ERROR: A connection to this device could not be established.
+#            CoreDeviceError 4000 / NWError 54 — connection reset by peer
+#
+# That is 35 minutes of good work sitting on disk behind a transient network
+# error, and this script exits without saying the .app is fine. Check the
+# artifact and rerun the install alone:
+#
+#     ls -l ios/build/Build/Products/Release-iphoneos/Sipply.app/Sipply
+#     xcrun devicectl device install app --device <UDID> <path>/Sipply.app
+#
+# The hollow-bundle check below already knows how to tell a real .app from a
+# stump — it just runs before the install rather than after it. Other install
+# failures worth recognising: kAMDMobileImageMounterDeviceLocked means unlock
+# the phone (iOS will not mount the developer disk image until the handset
+# has been unlocked once since boot), and that is a hardware state, not a bug.
+#
 # Four things this wrapper exists to remember, each of which cost a failed
 # build to learn:
 #

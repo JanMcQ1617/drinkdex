@@ -35,9 +35,19 @@ expect('missing serve.how', [mk({ id: 'p-6', name: 'Zz4', serve: {} })], 'beer',
 expect('non-cocktail with a recipe', [mk({ id: 'p-7', name: 'Zz5', recipe: { ingredients: [], steps: [] } })], 'beer', true);
 expect('missing required field', [mk({ id: 'p-8', name: 'Zz6', funFact: null })], 'beer', true);
 
+expect('abv 0.0%', [mk({ id: 'p-20', name: 'Zz20', abv: '0.0%' })], 'beer', true);
+expect('abv range starting at zero', [mk({ id: 'p-21', name: 'Zz21', abv: '0\u20138%' })], 'beer', true);
+expect('abv stated alcohol-free', [mk({ id: 'p-22', name: 'Zz22', abv: 'Alcohol-Free' })], 'beer', true);
+expect('abv strictly under the floor', [mk({ id: 'p-23', name: 'Zz23', abv: '<0.5%' })], 'beer', true);
+
 console.log('\n  clean input that must NOT fire:');
 expect('valid new card', [mk({ id: 'p-9', name: 'Zz7', origin: 'Hawaii, USA' })], 'beer', false);
 expect('replacing our own row', [mk({})], 'beer', false);
+expect('abv 0.5-1.5% (the Kvass string)', [mk({ id: 'p-24', name: 'Zz24', abv: '0.5\u20131.5%' })], 'beer', false);
+expect('abv undocumented, not absent', [mk({ id: 'p-25', name: 'Zz25', abv: 'Not published' })], 'beer', false);
+expect('abv varies by producer', [mk({ id: 'p-26', name: 'Zz26', abv: 'Varies by producer' })], 'beer', false);
+expect('abv with a small volume in it', [mk({ id: 'p-27', name: 'Zz27', abv: '5% (0.33 L)' })], 'beer', false);
+
 
 console.log('\n  merge behaviour:');
 const inc = [mk({ id: cocktail.id, name: 'Zz8' })];

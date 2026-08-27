@@ -625,62 +625,6 @@
   }
  },
  {
-  "id": "sangrita",
-  "name": "Sangrita",
-  "subcategory": "Regional",
-  "description": "Tequila's sparring partner: citrus, chilli and pomegranate in a shot glass of its own. Not a mixer — a counterweight, sipped between sips.",
-  "abv": "0% (chaser)",
-  "origin": "Jalisco, Mexico",
-  "rarity": "uncommon",
-  "tastingNotes": [
-   "orange",
-   "chilli",
-   "pomegranate",
-   "lime"
-  ],
-  "glassware": "Caballito shot glass",
-  "ingredients": [
-   "Orange juice",
-   "Lime juice",
-   "Pomegranate",
-   "Chilli",
-   "Salt"
-  ],
-  "funFact": "The original Jalisco recipe contains no tomato at all — that was a later Mexico City and American addition. Traditional sangrita gets its red from pomegranate and chilli, not from a can.",
-  "recipe": {
-   "ingredients": [
-    {
-     "item": "Fresh orange juice",
-     "amount": "4 oz / 120 ml"
-    },
-    {
-     "item": "Fresh lime juice",
-     "amount": "1 oz / 30 ml"
-    },
-    {
-     "item": "Pomegranate molasses or grenadine",
-     "amount": "0.5 oz / 15 ml"
-    },
-    {
-     "item": "Chilli powder or hot sauce",
-     "amount": "0.5 tsp"
-    },
-    {
-     "item": "Salt",
-     "amount": "a pinch"
-    }
-   ],
-   "steps": [
-    "Combine the orange juice, lime juice and pomegranate molasses in a jug.",
-    "Add the chilli powder and salt and whisk until dissolved.",
-    "Chill for at least an hour so the heat settles into the citrus.",
-    "Pour into caballito glasses and serve alongside a matching pour of good tequila."
-   ],
-   "garnish": "None — it is the garnish for the tequila",
-   "method": "built"
-  }
- },
- {
   "id": "submarino",
   "name": "Submarino",
   "subcategory": "Party",

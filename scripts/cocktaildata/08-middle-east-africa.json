@@ -249,75 +249,6 @@
   }
  },
  {
-  "id": "chapman",
-  "name": "Chapman",
-  "subcategory": "Regional",
-  "description": "Fanta, Sprite, blackcurrant and Angostura over cucumber and citrus. Usually alcohol-free, frequently not, and on every Nigerian party menu.",
-  "abv": "0–8%",
-  "origin": "Lagos, Nigeria",
-  "rarity": "uncommon",
-  "tastingNotes": [
-   "blackcurrant",
-   "citrus",
-   "cucumber",
-   "bitters"
-  ],
-  "glassware": "Tall glass or pitcher",
-  "ingredients": [
-   "Fanta",
-   "Sprite",
-   "Blackcurrant cordial",
-   "Angostura bitters",
-   "Cucumber"
-  ],
-  "funFact": "It is said to have been created at the Ikoyi Club in Lagos for a British member named Chapman; Nigerians now treat it as entirely their own, and the cucumber is non-negotiable.",
-  "recipe": {
-   "ingredients": [
-    {
-     "item": "Fanta orange",
-     "amount": "3 oz / 90 ml"
-    },
-    {
-     "item": "Sprite",
-     "amount": "3 oz / 90 ml"
-    },
-    {
-     "item": "Blackcurrant cordial (Ribena)",
-     "amount": "1 oz / 30 ml"
-    },
-    {
-     "item": "Angostura bitters",
-     "amount": "4 dashes"
-    },
-    {
-     "item": "Cucumber slices",
-     "amount": "3"
-    },
-    {
-     "item": "Lemon and orange slices",
-     "amount": "1 each"
-    },
-    {
-     "item": "Ice",
-     "amount": "to fill"
-    },
-    {
-     "item": "Vodka or gin",
-     "amount": "1.5 oz / 45 ml, optional"
-    }
-   ],
-   "steps": [
-    "Put the cucumber, lemon and orange slices in a tall glass and fill with ice.",
-    "Pour in the blackcurrant cordial and the bitters.",
-    "Add the Fanta and Sprite in equal measure.",
-    "Stir gently to combine and bring the colour through.",
-    "Add a shot of vodka or gin if making the adult version."
-   ],
-   "garnish": "Cucumber, lemon and orange slices",
-   "method": "built"
-  }
- },
- {
   "id": "palm-wine",
   "name": "Palm Wine",
   "subcategory": "Regional",
@@ -446,61 +377,6 @@
     "Stir once and add a lemon wedge if you like."
    ],
    "garnish": "Lemon wedge, optional",
-   "method": "built"
-  }
- },
- {
-  "id": "rock-shandy",
-  "name": "Rock Shandy",
-  "subcategory": "Party",
-  "description": "Soda water, lemonade and a hard shake of Angostura, over ice. Essentially alcohol-free, and the default order at any Southern African clubhouse.",
-  "abv": "0–1%",
-  "origin": "Southern Africa",
-  "rarity": "common",
-  "tastingNotes": [
-   "lemon",
-   "bitters",
-   "citrus",
-   "soda"
-  ],
-  "glassware": "Tall glass",
-  "ingredients": [
-   "Soda water",
-   "Lemonade",
-   "Angostura bitters",
-   "Lemon"
-  ],
-  "funFact": "The bitters are the only alcohol in it, in quantities small enough that it is served to children — and it is the drink that keeps Angostura relevant in a region that otherwise barely mixes cocktails.",
-  "recipe": {
-   "ingredients": [
-    {
-     "item": "Soda water",
-     "amount": "5 oz / 150 ml"
-    },
-    {
-     "item": "Lemonade",
-     "amount": "5 oz / 150 ml"
-    },
-    {
-     "item": "Angostura bitters",
-     "amount": "6 dashes"
-    },
-    {
-     "item": "Ice",
-     "amount": "cubed, to fill"
-    },
-    {
-     "item": "Lemon wedge",
-     "amount": "1"
-    }
-   ],
-   "steps": [
-    "Fill a tall glass with ice.",
-    "Pour in equal parts soda water and lemonade.",
-    "Dash the Angostura generously over the top until the drink turns pink.",
-    "Stir once and squeeze in a lemon wedge."
-   ],
-   "garnish": "Lemon wedge",
    "method": "built"
   }
  },

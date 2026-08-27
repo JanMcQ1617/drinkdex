@@ -424,66 +424,6 @@
   }
  },
  {
-  "id": "gunner",
-  "name": "Gunner",
-  "subcategory": "Highball",
-  "description": "Ginger beer and ginger ale over lime and Angostura, with an optional shot of gin. The Hong Kong club drink, and the city's answer to the Rock Shandy.",
-  "abv": "0–8%",
-  "origin": "Hong Kong",
-  "rarity": "uncommon",
-  "tastingNotes": [
-   "ginger",
-   "lime",
-   "bitters"
-  ],
-  "glassware": "Tall glass",
-  "ingredients": [
-   "Ginger beer",
-   "Ginger ale",
-   "Lime juice",
-   "Angostura bitters",
-   "Gin"
-  ],
-  "funFact": "It is the standard order at Hong Kong's colonial-era clubs and rugby sevens, served alcohol-free by default with the gin added only if you ask for it 'with a kick'.",
-  "recipe": {
-   "ingredients": [
-    {
-     "item": "Ginger beer",
-     "amount": "3 oz / 90 ml"
-    },
-    {
-     "item": "Ginger ale",
-     "amount": "3 oz / 90 ml"
-    },
-    {
-     "item": "Lime juice",
-     "amount": "0.5 oz / 15 ml"
-    },
-    {
-     "item": "Angostura bitters",
-     "amount": "4 dashes"
-    },
-    {
-     "item": "Gin",
-     "amount": "1.5 oz / 45 ml, optional"
-    },
-    {
-     "item": "Ice",
-     "amount": "cubed, to fill"
-    }
-   ],
-   "steps": [
-    "Fill a tall glass with ice.",
-    "Add the lime juice and the Angostura, then the gin if you are using it.",
-    "Pour in equal measures of ginger beer and ginger ale.",
-    "Stir once to bring the bitters through.",
-    "Garnish with a lime wedge."
-   ],
-   "garnish": "Lime wedge",
-   "method": "built"
-  }
- },
- {
   "id": "baijiu-sour",
   "name": "Baijiu Sour",
   "subcategory": "Sour",
