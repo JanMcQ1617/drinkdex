@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -15,13 +14,12 @@ import { InstagramImport } from '@/components/InstagramImport';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
 import { Button, Card, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
-import { hashPhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
+import { hashPhone, normalizePhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
+import { forgetRememberedPhone, getRememberedPhone, rememberPhone } from '@/lib/discovery';
 import { buildInviteMessage, buildInviteUrl } from '@/lib/invite';
 import { matchContacts, searchPeople, setPhoneHash } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import type { UserProfile } from '@/types';
-
-const DISCOVERABLE_KEY = 'clink-discoverable';
 
 /* ------------------------------------------------------------------ */
 /* FindFriends                                                         */
@@ -121,12 +119,18 @@ export function FindFriends() {
   }, [myId]);
 
   /* ---- discoverability ---- */
-  const [discoverable, setDiscoverable] = useState(false);
+  /*
+   * The saved number, not a boolean. Signup now collects this, so most
+   * accounts arrive already findable and this card's job is to SHOW that
+   * rather than ask again — which needs the value, and the server hash
+   * cannot be read back.
+   */
+  const [savedPhone, setSavedPhone] = useState<string | null>(null);
   const [phone, setPhone] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem(DISCOVERABLE_KEY).then((v) => setDiscoverable(v === '1'));
+    getRememberedPhone().then(setSavedPhone);
   }, []);
 
   const saveDiscoverable = useCallback(async () => {
@@ -139,8 +143,9 @@ export function FindFriends() {
         return;
       }
       await setPhoneHash(myId, h);
-      await AsyncStorage.setItem(DISCOVERABLE_KEY, '1');
-      setDiscoverable(true);
+      const normalized = normalizePhone(phone);
+      if (normalized) await rememberPhone(normalized);
+      setSavedPhone(normalized);
       setPhone('');
     } catch {
       /* surfaced by the store elsewhere */
@@ -152,8 +157,8 @@ export function FindFriends() {
   const stopDiscoverable = useCallback(async () => {
     if (!myId) return;
     await setPhoneHash(myId, null);
-    await AsyncStorage.setItem(DISCOVERABLE_KEY, '0');
-    setDiscoverable(false);
+    await forgetRememberedPhone();
+    setSavedPhone(null);
   }, [myId]);
 
   if (!myId) return null;
@@ -163,30 +168,16 @@ export function FindFriends() {
 
   return (
     <View style={styles.wrap}>
-      {/* Invite */}
-      <Card style={styles.card}>
-        <View style={styles.cardHead}>
-          <Icon name="share" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle}>Invite a friend</Text>
-        </View>
-        <Text style={styles.cardBody}>
-          Share your link. When they open it and sign up, you both follow each other automatically.
-        </Text>
-        <Button label="Share invite link" icon="share" block onPress={invite} style={styles.cardCta} />
-      </Card>
-
-      {/* Instagram */}
-      <InstagramImport />
-
       {/* Contacts */}
       <Card style={styles.card}>
         <View style={styles.cardHead}>
           <Icon name="users" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle}>People from your contacts</Text>
+          <Text style={styles.cardTitle}>Friends you already know</Text>
         </View>
         <Text style={styles.cardBody}>
-          Sipply checks your contacts against people already here. Numbers never leave your phone —
-          only scrambled one-way hashes are compared.
+          The fastest way to find people. Sipply checks your contacts against everyone here — no
+          setup on their side beyond having signed up. Numbers never leave your phone; only
+          scrambled one-way hashes are compared.
         </Text>
 
         {contactsState === 'idle' ? (
@@ -230,6 +221,69 @@ export function FindFriends() {
         ) : null}
       </Card>
 
+      {/* Discoverability */}
+      <Card style={styles.card}>
+        <View style={styles.cardHead}>
+          <Icon name="check" size={18} color={colors.wine} />
+          <Text style={styles.cardTitle}>Let friends find you</Text>
+        </View>
+        {savedPhone ? (
+          <>
+            <Text style={styles.cardBody}>
+              You’re findable by contacts. We stored a scrambled hash of your number, never the
+              number itself.
+            </Text>
+            <Button
+              label="Stop being findable"
+              variant="ghost"
+              block
+              onPress={stopDiscoverable}
+              style={styles.cardCta}
+            />
+          </>
+        ) : (
+          <>
+            <Text style={styles.cardBody}>
+              Add your number so friends who already have it find you here. This is normally set
+              when you sign up. Only a one-way hash is stored, never the number.
+            </Text>
+            <View style={styles.searchWrap}>
+              <Icon name="users" size={18} color={colors.textFaint} />
+              <TextInput
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="Your phone number"
+                placeholderTextColor={colors.textFaint}
+                inputMode="tel"
+                autoComplete="tel"
+                textContentType="telephoneNumber"
+                style={styles.searchInput}
+                accessibilityLabel="Your phone number, to be findable by contacts"
+              />
+            </View>
+            <Button
+              label={savingPhone ? 'Saving…' : 'Make me findable'}
+              variant="secondary"
+              block
+              disabled={savingPhone || phone.replace(/\D/g, '').length < 7}
+              onPress={saveDiscoverable}
+              style={styles.cardCta}
+            />
+          </>
+        )}
+      </Card>
+      {/* Invite */}
+      <Card style={styles.card}>
+        <View style={styles.cardHead}>
+          <Icon name="share" size={18} color={colors.wine} />
+          <Text style={styles.cardTitle}>Invite a friend</Text>
+        </View>
+        <Text style={styles.cardBody}>
+          Share your link. When they open it and sign up, you both follow each other automatically.
+        </Text>
+        <Button label="Share invite link" icon="share" block onPress={invite} style={styles.cardCta} />
+      </Card>
+
       {/* Search */}
       <Card style={styles.card}>
         <View style={styles.cardHead}>
@@ -260,56 +314,9 @@ export function FindFriends() {
         ) : null}
       </Card>
 
-      {/* Discoverability */}
-      <Card style={styles.card}>
-        <View style={styles.cardHead}>
-          <Icon name="check" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle}>Let friends find you</Text>
-        </View>
-        {discoverable ? (
-          <>
-            <Text style={styles.cardBody}>
-              You’re findable by contacts. We stored a scrambled hash of your number, never the
-              number itself.
-            </Text>
-            <Button
-              label="Stop being findable"
-              variant="ghost"
-              block
-              onPress={stopDiscoverable}
-              style={styles.cardCta}
-            />
-          </>
-        ) : (
-          <>
-            <Text style={styles.cardBody}>
-              Add your number so friends who have it can find you. Only a one-way hash is stored.
-            </Text>
-            <View style={styles.searchWrap}>
-              <Icon name="users" size={18} color={colors.textFaint} />
-              <TextInput
-                value={phone}
-                onChangeText={setPhone}
-                placeholder="Your phone number"
-                placeholderTextColor={colors.textFaint}
-                inputMode="tel"
-                autoComplete="tel"
-                textContentType="telephoneNumber"
-                style={styles.searchInput}
-                accessibilityLabel="Your phone number, to be findable by contacts"
-              />
-            </View>
-            <Button
-              label={savingPhone ? 'Saving…' : 'Make me findable'}
-              variant="secondary"
-              block
-              disabled={savingPhone || phone.replace(/\D/g, '').length < 7}
-              onPress={saveDiscoverable}
-              style={styles.cardCta}
-            />
-          </>
-        )}
-      </Card>
+      {/* Instagram */}
+      <InstagramImport />
+
     </View>
   );
 }

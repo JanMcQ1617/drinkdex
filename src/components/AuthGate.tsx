@@ -15,6 +15,7 @@ import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { Button, PressableScale, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { normalizePhone } from '@/lib/contacts';
 import { normalizeHandle } from '@/lib/instagram';
 import { useAuth } from '@/store/auth';
 
@@ -132,6 +133,7 @@ function AuthForm() {
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [instagram, setInstagram] = useState('');
+  const [phone, setPhone] = useState('');
 
   useEffect(() => {
     clearError();
@@ -147,14 +149,18 @@ function AuthForm() {
   const instagramTyped = instagram.trim().length > 0;
   const instagramOk = !instagramTyped || normalizeHandle(instagram) !== null;
 
+  const phoneTyped = phone.trim().length > 0;
+  const phoneOk = !phoneTyped || normalizePhone(phone) !== null;
+
   const canSubmit =
     email.includes('@') &&
     password.length >= 6 &&
-    (!signup || (username.trim().length >= 3 && displayName.trim().length > 0 && instagramOk));
+    (!signup ||
+      (username.trim().length >= 3 && displayName.trim().length > 0 && instagramOk && phoneOk));
 
   const submit = () => {
     haptic.tap();
-    if (signup) void signUp(email, password, username, displayName, instagram);
+    if (signup) void signUp(email, password, username, displayName, instagram, phone);
     else void signIn(email, password);
   };
 
@@ -226,6 +232,24 @@ function AuthForm() {
             autoComplete={signup ? 'password-new' : 'password'}
             textContentType={signup ? 'newPassword' : 'password'}
           />
+
+          {signup ? (
+            <Field
+              label="Phone (optional)"
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="(787) 555-0134"
+              inputMode="tel"
+              autoComplete="tel"
+              textContentType="telephoneNumber"
+              hintIsError={phoneTyped && !phoneOk}
+              hint={
+                phoneTyped && !phoneOk
+                  ? 'That does not look like a phone number.'
+                  : 'Lets friends who already have your number find you here. Stored as a one-way hash, never the number.'
+              }
+            />
+          ) : null}
 
           {signup ? (
             <Field

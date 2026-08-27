@@ -8,14 +8,16 @@ import { MatchResults, type MatchEntry } from '@/components/PeopleList';
 import { Button, Card, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import {
-  DYI_URL,
-  connectionsFromText,
   forgetRememberedHandle,
   getRememberedHandle,
+  rememberHandle,
+} from '@/lib/discovery';
+import {
+  DYI_URL,
+  connectionsFromText,
   hashHandle,
   normalizeHandle,
   pickExportFiles,
-  rememberHandle,
   sortByCloseness,
   type ImportedConnection,
 } from '@/lib/instagram';

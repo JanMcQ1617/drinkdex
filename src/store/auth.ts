@@ -2,14 +2,16 @@ import type { AuthError, Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
 import { SIGNUP_ACCENTS } from '@/constants/theme';
+import { hashPhone } from '@/lib/contacts';
 import {
-  clearPendingHandle,
-  getPendingHandle,
-  hashHandle,
+  clearPendingClaims,
+  getPendingClaims,
   rememberHandle,
-  setPendingHandle,
-} from '@/lib/instagram';
-import { PROFILE_COLS, setInstagramHash } from '@/lib/social';
+  rememberPhone,
+  setPendingClaims,
+} from '@/lib/discovery';
+import { hashHandle } from '@/lib/instagram';
+import { PROFILE_COLS, setInstagramHash, setPhoneHash } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
 
@@ -35,10 +37,17 @@ interface AuthState {
 
   init: () => () => void;
   /**
-   * `instagram` is optional and never blocks the account: it only decides
-   * whether friends importing their Instagram list can find this person.
-   * Stored as a hash, and not until the profile row exists — see
-   * setPendingHandle in src/lib/instagram.ts for why it takes a detour.
+   * `phone` and `instagram` are both optional and neither blocks the
+   * account — they only decide whether other people can find this one.
+   *
+   * Phone is the one that carries the feature. Contact matching needs
+   * only that two people are already in each other's address books;
+   * asking here is what removes the separate "make me findable" step that
+   * almost nobody would have taken. Instagram needs both parties to have
+   * typed a handle, so it stays a secondary path.
+   *
+   * Both are stored as hashes, and not until the profile row exists — see
+   * setPendingClaims in src/lib/discovery.ts for why they take a detour.
    */
   signUp: (
     email: string,
@@ -46,6 +55,7 @@ interface AuthState {
     username: string,
     displayName: string,
     instagram?: string,
+    phone?: string,
   ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -99,42 +109,54 @@ function humanizeSignUp(error: AuthError): string {
 }
 
 /**
- * Writes the handle given at signup, once there is a profile row to write it
- * to. No-ops when nothing is parked, which is every launch after the first.
+ * Writes the discovery hashes given at signup, once there is a profile row
+ * to hang them off. No-ops when nothing is parked, which is every launch
+ * after the first.
  *
- * The email check is the guard against a signup that was started but never
- * confirmed: without it, a handle parked on this device would attach itself
- * to whichever account signs in next, which on a shared phone is someone
- * else's. A mismatch discards the handle rather than holding it — the user
- * can add it in one field on the Accounts screen, and silently carrying a
- * stale claim around is worse than losing it.
+ * The email check guards a signup that was started but never confirmed:
+ * without it, claims parked on this device would attach themselves to
+ * whichever account signs in next, which on a shared phone is someone
+ * else's. A mismatch discards them rather than holding them — the same
+ * two fields exist on the Accounts screen, and silently carrying a stale
+ * claim around is worse than losing it.
  *
- * Failures are swallowed on purpose. This is an optional discoverability
- * setting running behind a profile fetch; an error here must not surface as
- * "could not load your profile", and the same field on the Accounts screen
- * is the retry.
+ * The two hashes are written independently on purpose. They go to separate
+ * columns through separate RPCs, and a user who gave a phone number but a
+ * malformed handle should still end up findable by phone.
+ *
+ * Failures are swallowed. This is optional discoverability running behind
+ * a profile fetch; an error here must not surface as "could not load your
+ * profile", and the Accounts screen is the retry.
  */
-async function drainPendingHandle(uid: string, email: string | null): Promise<void> {
+async function drainPendingClaims(uid: string, email: string | null): Promise<void> {
   try {
-    const pending = await getPendingHandle();
+    const pending = await getPendingClaims();
     if (!pending) return;
 
     if (!email || email.trim().toLowerCase() !== pending.email) {
-      await clearPendingHandle();
+      await clearPendingClaims();
       return;
     }
 
-    const hash = await hashHandle(pending.handle);
-    if (!hash) {
-      await clearPendingHandle();
-      return;
+    if (pending.phone) {
+      const hash = await hashPhone(pending.phone);
+      if (hash) {
+        await setPhoneHash(uid, hash);
+        // Remembered locally too: the server hash cannot be read back, so
+        // without this the Accounts screen would ask for it again.
+        await rememberPhone(pending.phone);
+      }
     }
 
-    await setInstagramHash(uid, hash);
-    // Remembered locally too, so Accounts shows it as set rather than
-    // asking for it again — the hash on the server cannot be read back.
-    await rememberHandle(pending.handle);
-    await clearPendingHandle();
+    if (pending.handle) {
+      const hash = await hashHandle(pending.handle);
+      if (hash) {
+        await setInstagramHash(uid, hash);
+        await rememberHandle(pending.handle);
+      }
+    }
+
+    await clearPendingClaims();
   } catch {
     /* Left parked; the next profile load retries it. */
   }
@@ -178,7 +200,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
     return () => sub.subscription.unsubscribe();
   },
 
-  signUp: async (email, password, username, displayName, instagram) => {
+  signUp: async (email, password, username, displayName, instagram, phone) => {
     set({ busy: true, error: null, notice: null });
     const accent = SIGNUP_ACCENTS[Math.floor(Math.random() * SIGNUP_ACCENTS.length)]!;
 
@@ -188,8 +210,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
      * otherwise be gone by the time the user comes back to sign in.
      * Cleared again below if the signup itself fails.
      */
-    if (instagram?.trim()) await setPendingHandle(instagram, email);
-    else await clearPendingHandle();
+    await setPendingClaims(email, { phone: phone?.trim(), handle: instagram?.trim() });
 
     // The profile row is created by the on_auth_user_created trigger,
     // which reads these values out of user_metadata.
@@ -208,7 +229,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
     if (error) {
       // Nothing was created, so nothing should be waiting to attach itself
       // to the next account that signs in on this device.
-      await clearPendingHandle();
+      await clearPendingClaims();
       set({ busy: false, error: humanizeSignUp(error) });
       return;
     }
@@ -312,7 +333,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
         set({ profile: data, profileLoading: false, profileError: null });
         // Safe to write only now: the row the update targets is confirmed
         // to exist, which is the whole reason this is not done in signUp.
-        void drainPendingHandle(uid, get().session?.user.email ?? null);
+        void drainPendingClaims(uid, get().session?.user.email ?? null);
         return;
       }
 
