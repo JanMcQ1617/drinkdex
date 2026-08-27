@@ -5,6 +5,23 @@
 #   scripts/build-ios.sh device   # Release, signed, installed over devicectl
 #   scripts/build-ios.sh sim      # Release, unsigned, installed on a booted sim
 #
+# TAKE THE BUILD LOCK FIRST. Several sessions share this machine and one
+# Xcode build lock, which lives inside the shared node_modules and is not
+# isolated by git worktrees:
+#
+#     /tmp/drinkdex-build-lock.sh acquire "who you are"
+#     scripts/build-ios.sh device
+#     /tmp/drinkdex-build-lock.sh release
+#
+# The `pgrep` guard below is NOT a substitute. It is check-then-act: two
+# builds started within the same prebuild window both see a clear machine
+# and both proceed. Worse, it makes this script look like it already
+# handles coordination, so nobody looks for the lock — which is exactly how
+# two sessions each waited 26 minutes behind a third that had not taken it.
+#
+# The lock lives in /tmp because it is machine state, not repo state. It
+# does not survive a reboot; recreate it if it is missing.
+#
 # Four things this wrapper exists to remember, each of which cost a failed
 # build to learn:
 #
