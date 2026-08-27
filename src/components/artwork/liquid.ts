@@ -140,6 +140,27 @@ const SPIRIT_RULES: [RegExp, string][] = [
   [b('pineau|floc de|korenwijn'), LIQUID.gold],
 
   /*
+   * Infusions whose own words point at the wrong colour. Two separate traps,
+   * both above the clear-by-default block because both would otherwise lose:
+   *
+   *   Yaa Dong lists "raw rice spirit" as a tasting note, so `rice spirit`
+   *   matched and painted a dark maceration clear — a spirit wearing the
+   *   colour of the bottle it was made from. That is the same mistake the
+   *   cocktail branch avoids by skipping SPIRIT_RULES entirely; spirits do
+   *   not skip them, so an infusion that names its base inherits its colour.
+   *
+   *   Chuchuhuasi is filed "Herbal Liqueur", and `herbal` is a NOTE_RULE that
+   *   paints green. That catches 26 of the 39 Herbal Liqueur entries,
+   *   Bénédictine and Danziger Goldwasser among them. Only these two are
+   *   corrected here — repainting the rest is a deliberate change to cards
+   *   this branch did not add.
+   */
+  [b('chuchuhuasi|yaa dong'), LIQUID.darkBrown],
+  /* Awamori steeped for months with honey and herbs pours gold, not the
+   * clear of the rice spirit underneath it. */
+  [b('habushu'), LIQUID.gold],
+
+  /*
    * Clear-by-default categories.
    *
    * Deliberately above the brandy rule: 'Fruit Brandy' and 'Pomace Brandy'

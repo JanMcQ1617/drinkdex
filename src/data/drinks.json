@@ -378553,5 +378553,361 @@
    "garnish": "An orange twist and an olive",
    "method": "stirred"
   }
+ },
+ {
+  "id": "habushu",
+  "name": "Habushu",
+  "category": "spirit",
+  "subcategory": "Rice Spirit",
+  "description": "Okinawan awamori with a habu pit viper coiled in the bottle, usually sweetened with honey and steeped with herbs. The snake is the point: it is left in the flask for months, and the spirit takes on a faintly savoury, medicinal weight the base rice spirit does not have on its own.",
+  "abv": "35–43%",
+  "origin": "Okinawa, Japan",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "honey",
+   "herbal bitterness",
+   "toasted rice",
+   "faint umami"
+  ],
+  "glassware": "Small ceramic cup",
+  "funFact": "Producers chill the snake until it is torpid, then lower it into the flask — where the alcohol fixes it mid-strike. The open jaws in a display bottle are set by the ethanol, not by taxidermy.",
+  "dexNumber": 7635,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small ceramic cup",
+   "how": "Poured neat at room temperature in very small measures, usually as a tonic at the end of a meal rather than a drink you sit with. Honey-sweetened bottlings are the gentler introduction.",
+   "pair": [
+    "goat sashimi",
+    "rafute pork belly",
+    "salted peanuts"
+   ]
+  },
+  "composition": {
+   "summary": "Long-grain rice awamori infused with a whole habu viper, honey and herbs.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Awamori distilled from Thai indica rice with black koji"
+    },
+    {
+     "label": "Infusion",
+     "detail": "One whole habu pit viper, steeped for months"
+    },
+    {
+     "label": "Sweetening",
+     "detail": "Honey and up to a dozen herbs in most commercial bottlings"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–43%"
+    }
+   ],
+   "process": "The viper is steeped whole rather than for flavour extraction alone — the practice is tonic and totemic as much as culinary, and Okinawan makers sell it on longevity rather than taste."
+  }
+ },
+ {
+  "id": "sodabi",
+  "name": "Sodabi",
+  "category": "spirit",
+  "subcategory": "Palm Spirit",
+  "description": "Benin's palm-wine distillate, made by fermenting the sap of the oil palm and running it through simple pot stills. It is the spirit poured on the ground in Vodun ceremony before anyone drinks, which makes it ritual equipment as much as a drink.",
+  "abv": "40–50%",
+  "origin": "Benin",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "fresh palm",
+   "smoke",
+   "overripe fruit",
+   "dry finish"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "It carries the name of Bonaventure Kpodji Sodabi, a Beninese soldier who learned distilling in France during the First World War and brought the method home around 1919.",
+  "dexNumber": 7636,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat and at room temperature, in small measures, and traditionally with a first splash poured to the ground for the ancestors before the glass reaches a mouth.",
+   "pair": [
+    "grilled goat",
+    "pepper sauce",
+    "fried plantain"
+   ]
+  },
+  "composition": {
+   "summary": "Fermented oil-palm sap, pot distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Sap tapped from the oil palm, fermented into palm wine"
+    },
+    {
+     "label": "Fermentation",
+     "detail": "Wild yeasts, one to three days in the heat"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Small pot stills, frequently improvised"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–50%"
+    }
+   ],
+   "process": "Sap ferments within hours of tapping, so distillation happens close to the tree. Strength varies widely between producers because almost none of it is standardised."
+  }
+ },
+ {
+  "id": "klekovaca",
+  "name": "Klekovača",
+  "category": "spirit",
+  "subcategory": "Fruit Brandy",
+  "description": "Plum rakija redistilled over juniper berries, the Balkan answer to the question of what happens when a fruit brandy meets a gin botanical. The juniper does not mask the plum so much as sit alongside it, resinous and cold.",
+  "abv": "40–45%",
+  "origin": "Balkans",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "stewed plum",
+   "pine resin",
+   "black pepper"
+  ],
+  "glassware": "Rakija glass",
+  "funFact": "The name comes from kleka, the local word for juniper — and it is shared with a mountain in western Bosnia, which is why bottles and maps sometimes confuse people.",
+  "dexNumber": 7637,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Rakija glass",
+   "how": "Room temperature or barely cool, never iced, in a small tulip glass before a meal. Chilling it hard flattens the juniper, which is the entire reason the drink exists.",
+   "pair": [
+    "smoked meat",
+    "kajmak",
+    "aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Šljivovica redistilled with juniper berries.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Plum rakija, usually from Požegača plums"
+    },
+    {
+     "label": "Botanical",
+     "detail": "Wild juniper berries, macerated then redistilled"
+    },
+    {
+     "label": "Aging",
+     "detail": "Often rested in glass demijohns rather than wood"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Redistilling rather than simply macerating keeps it clear and stops the juniper turning bitter, which is what separates it from the many home infusions that share the name."
+  }
+ },
+ {
+  "id": "chinguirito",
+  "name": "Chinguirito",
+  "category": "spirit",
+  "subcategory": "Cane Spirit",
+  "description": "Mexico's contraband cane spirit, distilled from raw sugarcane juice or piloncillo on the Veracruz coast. For most of its history it was defined less by how it was made than by the fact that making it was a crime.",
+  "abv": "40–45%",
+  "origin": "Veracruz, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green cane",
+   "grassy",
+   "molasses",
+   "white pepper"
+  ],
+  "glassware": "Small tumbler",
+  "funFact": "The Spanish Crown banned it in 1631 to protect brandy shipped from Spain, and the ban held for 165 years. When the Crown finally legalised it in 1796 it promptly taxed it to pay for coastal fortifications.",
+  "dexNumber": 7638,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small tumbler",
+   "how": "Neat in a small tumbler, or lengthened with lime and soda in the coastal style. The modern artisanal bottlings reward drinking it the way you would a rhum agricole blanc.",
+   "pair": [
+    "grilled fish",
+    "lime",
+    "tamales"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh sugarcane juice or piloncillo, fermented and pot distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Pressed cane juice, or piloncillo dissolved in water"
+    },
+    {
+     "label": "Fermentation",
+     "detail": "Open vats with wild yeast"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper or clay pot stills"
+    },
+    {
+     "label": "Strength",
+     "detail": "40–45%"
+    }
+   ],
+   "process": "Because it was illegal for so long the method was never standardised, and the surviving recipes are regional rather than national. Small Veracruz producers have revived it since the 2010s."
+  }
+ },
+ {
+  "id": "chuchuhuasi",
+  "name": "Chuchuhuasi",
+  "category": "spirit",
+  "subcategory": "Herbal Liqueur",
+  "description": "Amazonian bark macerated in cane aguardiente, usually cut with honey. It is sold by the jar in the markets of Iquitos and Pucallpa, closer to a household remedy than a bar bottle, and it tastes like one.",
+  "abv": "25–30%",
+  "origin": "Peru",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter bark",
+   "clove",
+   "honey",
+   "damp earth"
+  ],
+  "glassware": "Small glass",
+  "funFact": "The bark comes from Maytenus laevis, a rainforest tree whose name in Quechua means roughly trembling back — a reference to the rheumatism it was long steeped to treat.",
+  "dexNumber": 7639,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small glass",
+   "how": "A small measure at room temperature after eating, taken as a digestif. Market versions are steeped for weeks and vary enormously between sellers.",
+   "pair": [
+    "on its own",
+    "after a heavy meal"
+   ]
+  },
+  "composition": {
+   "summary": "Maytenus laevis bark steeped in cane aguardiente with honey.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cane aguardiente from the Peruvian Amazon"
+    },
+    {
+     "label": "Botanical",
+     "detail": "Chuchuhuasi bark, steeped for weeks to months"
+    },
+    {
+     "label": "Sweetening",
+     "detail": "Wild honey, sometimes with cinnamon or clove"
+    },
+    {
+     "label": "Strength",
+     "detail": "25–30%"
+    }
+   ],
+   "process": "Maceration rather than distillation, so nothing is stripped out — the tannin from the bark is what gives it the dry, drying grip on the finish."
+  }
+ },
+ {
+  "id": "yaa-dong",
+  "name": "Yaa Dong",
+  "category": "spirit",
+  "subcategory": "Herbal Liqueur",
+  "description": "Thailand's roadside macerations — roots, bark and herbs steeped in lao khao rice spirit and sold by the shot from big glass jars. There is no single recipe; every stall keeps its own, and the jar you are pointed at depends on what you say is wrong with you.",
+  "abv": "28–40%",
+  "origin": "Thailand",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter root",
+   "liquorice",
+   "warm spice",
+   "raw rice spirit"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "The name means roughly preserved medicine, and it is sold as one — stalls organise their jars by complaint rather than by flavour, which is why a chaser is usually handed over with the glass.",
+  "dexNumber": 7640,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Shot glass",
+   "how": "One small shot at room temperature, taken quickly, with a chaser of soda or a slice of fruit. It is a street-stall drink rather than a sipping spirit, and it is not built to be lingered over.",
+   "pair": [
+    "grilled pork skewers",
+    "som tam",
+    "sticky rice"
+   ]
+  },
+  "composition": {
+   "summary": "Roots, bark and herbs macerated in lao khao rice spirit.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Lao khao, unaged Thai rice spirit"
+    },
+    {
+     "label": "Botanicals",
+     "detail": "Dozens of roots, barks and dried herbs, varying by stall"
+    },
+    {
+     "label": "Sweetening",
+     "detail": "Palm sugar or honey in many recipes"
+    },
+    {
+     "label": "Strength",
+     "detail": "28–40%"
+    }
+   ],
+   "process": "Maceration for weeks in glass jars, topped up rather than emptied, so a long-running jar is never quite the same drink twice."
+  }
+ },
+ {
+  "id": "pox",
+  "name": "Pox",
+  "category": "spirit",
+  "subcategory": "Grain Spirit",
+  "description": "The Maya ceremonial spirit of the Chiapas highlands, distilled from maize, sugarcane and wheat bran. It is still poured in Tzotzil ritual, and the bottles that reach bars outside Mexico are a recent and slightly awkward second life for it.",
+  "abv": "36–40%",
+  "origin": "Chiapas, Mexico",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "sweet corn",
+   "cane sugar",
+   "bread dough",
+   "soft heat"
+  ],
+  "glassware": "Small clay cup",
+  "funFact": "Pox means medicine in Tzotzil, and it is pronounced posh. It is still used in ceremonies at the church of San Juan Chamula, where it sits alongside candles and copal rather than behind a bar.",
+  "dexNumber": 7641,
+  "serve": {
+   "temp": "room temp",
+   "glass": "Small clay cup",
+   "how": "Neat at room temperature in a small cup. It is softer and sweeter than mezcal and does not need the ceremony of salt or citrus that agave spirits attract.",
+   "pair": [
+    "mole",
+    "tamales",
+    "sweet corn"
+   ]
+  },
+  "composition": {
+   "summary": "Maize, sugarcane and wheat bran, fermented together and pot distilled.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Cracked maize with piloncillo or cane juice"
+    },
+    {
+     "label": "Adjunct",
+     "detail": "Wheat bran, which drives the bread-dough note"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Copper or clay pot stills in highland Chiapas"
+    },
+    {
+     "label": "Strength",
+     "detail": "36–40%"
+    }
+   ],
+   "process": "The maize is the ritual ingredient and the cane is the fermentable — which is why it reads sweet rather than starchy, and why it sits closer to a light rum than to a corn whiskey."
+  }
  }
 ]
