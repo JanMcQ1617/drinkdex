@@ -39,32 +39,62 @@ const drinks = JSON.parse(readFileSync(DRINKS, 'utf8'));
 /**
  * Alcohol-free by the ABV field.
  *
- * Every abv string in the file that denotes no meaningful alcohol begins with
- * a zero: "0%", "0.0%", "0–1%", "0.0–0.5%", "0–8%", "0% (chaser)" and
- * "0.5–1.5%". Nothing alcoholic does — the weakest real entries start "1", "2"
- * or "3" — so a leading-zero test is exact here rather than approximate.
- * It is asserted below rather than assumed.
+ * THIS USED TO BE A LEADING-ZERO TEST, and a comment here claimed that was
+ * "exact rather than approximate". It was not. A range's leading character
+ * describes its FLOOR and the question is about its CEILING: "0–8%" begins
+ * with a zero and tops out at eight. The test also rejected a legitimate
+ * "0.5%" and waved through "alcohol-free" and "<0.5%", neither of which
+ * begins with a zero.
+ *
+ * It is now the same rule merge-cocktails.mjs gates on, and it has to stay
+ * that way — when the prune and the gate disagreed, they disagreed about
+ * exactly one row (Kvass, 0.5–1.5%), which the prune removed and the gate
+ * would have admitted. Two rules for one question is how that happens.
+ *
+ * THE THRESHOLD IS 0.5%, the line most jurisdictions draw, and a range must
+ * clear it at its LOW end. "Not published" is deliberately NOT alcohol-free:
+ * 174 beer cards carry it and it means undocumented, not absent.
  */
-const isAlcoholFree = (d) => /^\s*0/.test(String(d.abv ?? ''));
+const FREE_MARKER = /alcohol[- ]?free|non[- ]?alcoholic|alkoholfrei|no alcohol/i;
+
+function isAlcoholFree(d) {
+  const abv = String(d.abv ?? '');
+  if (FREE_MARKER.test(abv) || /<\s*0/.test(abv)) return true;
+  const nums = (abv.match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
+  return nums.length > 0 && Math.min(...nums) < 0.5;
+}
 
 const doomed = drinks.filter(isAlcoholFree);
 const kept = drinks.filter((d) => !isAlcoholFree(d));
 
-/* Guard: prove the predicate did not catch anything with real alcohol in it,
- * and did not miss anything obviously alcohol-free. A card named "0.0" or
- * "Alkoholfrei" that somehow carries a non-zero abv would slip through, and
- * that is worth failing over rather than shipping. */
-/* "zero" is deliberately NOT in this pattern. Antarctica Sub Zero, Zero
- * Gravity Conehead and Zero Gravity Green State are ordinary beers at 4–7%,
- * and a check that flags them is a check nobody will keep running. The
- * markers below only appear on genuinely alcohol-free products. */
-const stragglers = kept.filter((d) =>
-  /(alcohol[- ]?free|non[- ]?alcoholic|alkoholfrei|\b0\.0\b)/i.test(String(d.name ?? ''))
+/* TWO guards, because the first version of this script only had one and I
+ * described it to two other sessions as having both.
+ *
+ * The under-prune guard looks at what was KEPT for anything that reads
+ * alcohol-free. The over-prune guard looks at what was DOOMED for anything
+ * that reads alcoholic. A prune that removes a real drink is the more
+ * expensive mistake of the two and it was the one running unchecked. */
+
+const keptButFree = kept.filter((d) =>
+  /* "zero" is deliberately NOT in this pattern. Antarctica Sub Zero, Zero
+   * Gravity Conehead and Zero Gravity Green State are ordinary beers at 4–7%,
+   * and a check that flags them is a check nobody will keep running. */
+  FREE_MARKER.test(String(d.name ?? ''))
 );
-if (stragglers.length) {
-  console.error('\nABORT — these look alcohol-free but carry a non-zero abv:\n');
-  for (const d of stragglers) console.error(`  ${d.id}  "${d.name}"  abv=${d.abv}`);
-  console.error('\nFix the abv or widen the predicate. Nothing written.');
+
+const doomedButStrong = doomed.filter((d) => {
+  const nums = (String(d.abv ?? '').match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
+  return nums.length > 0 && Math.min(...nums) >= 0.5;
+});
+
+if (keptButFree.length || doomedButStrong.length) {
+  console.error('\nABORT — nothing written:\n');
+  for (const d of keptButFree) {
+    console.error(`  KEPT but looks alcohol-free   ${d.id}  "${d.name}"  abv=${d.abv}`);
+  }
+  for (const d of doomedButStrong) {
+    console.error(`  DOOMED but reads alcoholic    ${d.id}  "${d.name}"  abv=${d.abv}`);
+  }
   process.exit(1);
 }
 
