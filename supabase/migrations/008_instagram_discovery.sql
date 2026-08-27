@@ -124,8 +124,16 @@ security definer
 set search_path = ''
 as $$
 begin
+  /*
+   * Raise, never return quietly. This was `return;`, and it cost an
+   * afternoon: with no caller identity the function did nothing, PostgREST
+   * still answered 200, supabase-js saw no error, and the app flipped its
+   * card to "Stop being findable" over a database that had never been
+   * touched. A write that reports success without writing is worse than
+   * one that fails.
+   */
   if auth.uid() is null then
-    return;
+    raise exception 'not signed in: set_phone_hash got no auth.uid()' using errcode = '28000';
   end if;
   insert into public.profile_secrets (user_id, phone_hash)
   values (auth.uid(), hash)
@@ -141,8 +149,9 @@ security definer
 set search_path = ''
 as $$
 begin
+  -- Raises rather than returning quietly, for the reason set out above.
   if auth.uid() is null then
-    return;
+    raise exception 'not signed in: set_instagram_hash got no auth.uid()' using errcode = '28000';
   end if;
   insert into public.profile_secrets (user_id, instagram_hash)
   values (auth.uid(), hash)
