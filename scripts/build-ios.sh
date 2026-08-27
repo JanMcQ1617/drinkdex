@@ -22,6 +22,27 @@
 # The lock lives in /tmp because it is machine state, not repo state. It
 # does not survive a reboot; recreate it if it is missing.
 #
+# IF THE INSTALL FAILS, DO NOT REBUILD. The build and the install are
+# separate legs and they fail for unrelated reasons. A dropped tunnel looks
+# nothing like a bad build:
+#
+#     ** BUILD SUCCEEDED **
+#     ERROR: A connection to this device could not be established.
+#            CoreDeviceError 4000 / NWError 54 — connection reset by peer
+#
+# That is 35 minutes of good work sitting on disk behind a transient network
+# error, and this script exits without saying the .app is fine. Check the
+# artifact and rerun the install alone:
+#
+#     ls -l ios/build/Build/Products/Release-iphoneos/Sipply.app/Sipply
+#     xcrun devicectl device install app --device <UDID> <path>/Sipply.app
+#
+# The hollow-bundle check below already knows how to tell a real .app from a
+# stump — it just runs before the install rather than after it. Other install
+# failures worth recognising: kAMDMobileImageMounterDeviceLocked means unlock
+# the phone (iOS will not mount the developer disk image until the handset
+# has been unlocked once since boot), and that is a hardware state, not a bug.
+#
 # Four things this wrapper exists to remember, each of which cost a failed
 # build to learn:
 #
