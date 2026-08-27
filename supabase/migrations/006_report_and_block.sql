@@ -159,3 +159,10 @@ create policy posts_read on public.posts
 drop policy if exists profiles_read on public.profiles;
 create policy profiles_read on public.profiles
   for select to authenticated using (not public.blocked_with(id));
+
+-- --------------------------------------------------------------------
+-- Record that this migration ran. Last statement in the file on purpose:
+-- a run that fails partway must not claim to have succeeded. See 009.
+-- --------------------------------------------------------------------
+insert into public.schema_migrations (version)
+values ('006_report_and_block') on conflict (version) do nothing;

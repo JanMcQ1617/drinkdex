@@ -153,3 +153,10 @@ create policy post_photos_delete_own on public.post_photos
   for delete to authenticated using (
     exists (select 1 from public.posts p where p.id = post_id and p.author_id = auth.uid())
   );
+
+-- --------------------------------------------------------------------
+-- Record that this migration ran. Last statement in the file on purpose:
+-- a run that fails partway must not claim to have succeeded. See 009.
+-- --------------------------------------------------------------------
+insert into public.schema_migrations (version)
+values ('007_post_photos') on conflict (version) do nothing;

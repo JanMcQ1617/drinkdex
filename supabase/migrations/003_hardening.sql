@@ -81,3 +81,10 @@ alter table public.profiles
 alter table public.profiles
   add constraint profiles_accent_hex
   check (accent ~ '^#[0-9A-Fa-f]{6}$') not valid;
+
+-- --------------------------------------------------------------------
+-- Record that this migration ran. Last statement in the file on purpose:
+-- a run that fails partway must not claim to have succeeded. See 009.
+-- --------------------------------------------------------------------
+insert into public.schema_migrations (version)
+values ('003_hardening') on conflict (version) do nothing;

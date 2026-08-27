@@ -95,3 +95,10 @@ $$;
 
 revoke all on function public.accept_invite(uuid) from public;
 grant execute on function public.accept_invite(uuid) to authenticated;
+
+-- --------------------------------------------------------------------
+-- Record that this migration ran. Last statement in the file on purpose:
+-- a run that fails partway must not claim to have succeeded. See 009.
+-- --------------------------------------------------------------------
+insert into public.schema_migrations (version)
+values ('002_social_graph') on conflict (version) do nothing;

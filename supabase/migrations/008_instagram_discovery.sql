@@ -295,3 +295,10 @@ grant execute on function public.follow_many(uuid[]) to authenticated;
 -- cascades from it, so the hashes go with it. Nothing to add — this note
 -- exists so the next person checks 005 rather than assuming.
 -- --------------------------------------------------------------------
+
+-- --------------------------------------------------------------------
+-- Record that this migration ran. Last statement in the file on purpose:
+-- a run that fails partway must not claim to have succeeded. See 009.
+-- --------------------------------------------------------------------
+insert into public.schema_migrations (version)
+values ('008_instagram_discovery') on conflict (version) do nothing;
