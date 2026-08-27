@@ -301,7 +301,8 @@
       "name": "Andes Negra",
       "shortName": "Negra",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "schwarzbier",
+      "factChecked": true
      }
     ],
     "needsLineup": false
@@ -938,7 +939,7 @@
       "name": "Balter XPA",
       "shortName": "XPA",
       "style": "extra pale ale",
-      "styleRef": "american-pale-ale"
+      "styleRef": "extra-pale-ale"
      },
      {
       "id": "balter-captain-sensible-au",
@@ -981,7 +982,9 @@
       "name": "Carlton Mid",
       "shortName": "Mid",
       "style": "mid-strength",
-      "styleRef": null
+      "styleRef": "american-lager",
+      "factChecked": true,
+      "abv": "3.0%"
      }
     ],
     "needsLineup": false
@@ -1003,7 +1006,9 @@
       "name": "Feral Karma Citra",
       "shortName": "Karma Citra",
       "style": "session",
-      "styleRef": null
+      "styleRef": "black-ipa",
+      "factChecked": true,
+      "abv": "5.8%"
      },
      {
       "id": "feral-watermelon-warhead-au",
@@ -1192,7 +1197,10 @@
       "name": "Boatrocker",
       "shortName": "Boatrocker",
       "style": "barrel-aged",
-      "styleRef": null
+      "styleRef": "barrel-aged-imperial-stout",
+      "factChecked": true,
+      "abv": "11.0%",
+      "flagship": "Ramjet, aged in Starward whisky barrels"
      },
      {
       "id": "boatrocker-ramjet-au",
@@ -1786,7 +1794,9 @@
       "name": "Newstead 3 Quarter Time",
       "shortName": "3 Quarter Time",
       "style": "session",
-      "styleRef": null
+      "styleRef": "session-ipa",
+      "factChecked": true,
+      "abv": "3.4%"
      }
     ],
     "needsLineup": false
@@ -1801,7 +1811,9 @@
       "name": "Philter XPA",
       "shortName": "XPA",
       "style": "XPA",
-      "styleRef": null
+      "styleRef": "extra-pale-ale",
+      "factChecked": true,
+      "abv": "4.2%"
      }
     ],
     "needsLineup": false
@@ -1951,7 +1963,10 @@
       "name": "Wildflower",
       "shortName": "Wildflower",
       "style": "spontaneous, sydney",
-      "styleRef": null
+      "styleRef": "american-wild-ale",
+      "factChecked": true,
+      "abv": "5.0%",
+      "flagship": "Gold, blended and barrel-aged on foraged native yeast"
      }
     ],
     "needsLineup": false
@@ -2106,7 +2121,9 @@
       "name": "Stiegl Paracelsus",
       "shortName": "Paracelsus",
       "style": "organic zwickl",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "5.2%"
      }
     ],
     "needsLineup": false
@@ -2362,7 +2379,10 @@
       "name": "Baumgartner",
       "shortName": "Baumgartner",
       "style": "upper austria",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "5.2%",
+      "flagship": "Baumgartner Zwickl, naturally cloudy"
      }
     ],
     "needsLineup": false
@@ -2392,7 +2412,10 @@
       "name": "Fohrenburger",
       "shortName": "Fohrenburger",
       "style": "vorarlberg",
-      "styleRef": null
+      "styleRef": "european-pale-lager",
+      "factChecked": true,
+      "abv": "5.5%",
+      "flagship": "Fohrenburger Jubilaeum"
      }
     ],
     "needsLineup": false
@@ -2407,7 +2430,10 @@
       "name": "Freistädter",
       "shortName": "Freistädter",
       "style": "upper austria",
-      "styleRef": null
+      "styleRef": "german-pilsner",
+      "factChecked": true,
+      "abv": "5.2%",
+      "flagship": "Ratsherrn Premium"
      }
     ],
     "needsLineup": false
@@ -2422,7 +2448,8 @@
       "name": "Gusswerk Bio Hanfbier",
       "shortName": "Bio Hanfbier",
       "style": "organic",
-      "styleRef": null
+      "styleRef": "herb-spice-beer",
+      "factChecked": true
      }
     ],
     "needsLineup": false
@@ -2482,7 +2509,10 @@
       "name": "Mohren",
       "shortName": "Mohren",
       "style": "vorarlberg",
-      "styleRef": null
+      "styleRef": "european-pale-lager",
+      "factChecked": true,
+      "abv": "5.6%",
+      "flagship": "Mohren Spezial, the classic Vorarlberg lager"
      }
     ],
     "needsLineup": false
@@ -2542,7 +2572,10 @@
       "name": "Schremser",
       "shortName": "Schremser",
       "style": "organic",
-      "styleRef": null
+      "styleRef": "marzen",
+      "factChecked": true,
+      "abv": "5.1%",
+      "flagship": "Schremser Maerzen"
      }
     ],
     "needsLineup": false
@@ -3059,7 +3092,9 @@
       "name": "Leffe Ruby",
       "shortName": "Ruby",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "5.0%"
      },
      {
       "id": "leffe-royale-be",
@@ -3254,7 +3289,9 @@
       "name": "Delirium Red",
       "shortName": "Red",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "8.0%"
      }
     ],
     "needsLineup": false
@@ -3341,7 +3378,9 @@
       "name": "Gulden Draak Brewmaster",
       "shortName": "Draak Brewmaster",
       "style": "barrel-aged",
-      "styleRef": null
+      "styleRef": "belgian-quadrupel",
+      "factChecked": true,
+      "abv": "10.5%"
      }
     ],
     "needsLineup": false
@@ -3363,7 +3402,9 @@
       "name": "Kasteel Rouge",
       "shortName": "Rouge",
       "style": "cherry",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "8.0%"
      },
      {
       "id": "kasteel-tripel-be",
@@ -3837,7 +3878,9 @@
       "name": "Kwak",
       "shortName": "Kwak",
       "style": "amber",
-      "styleRef": null
+      "styleRef": "belgian-strong-amber",
+      "factChecked": true,
+      "abv": "8.4%"
      },
      {
       "id": "kwak-tripel-be",
@@ -4138,7 +4181,9 @@
       "name": "Achouffe Cherry Chouffe",
       "shortName": "Achouffe Cherry Chouffe",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "8.0%"
      }
     ],
     "needsLineup": false
@@ -4213,7 +4258,9 @@
       "name": "Bosteels Deus",
       "shortName": "Bosteels Deus",
       "style": "brut des flandres",
-      "styleRef": null
+      "styleRef": "biere-de-champagne",
+      "factChecked": true,
+      "abv": "11.5%"
      }
     ],
     "needsLineup": false
@@ -4725,7 +4772,8 @@
       "name": "Belikin Sorrel",
       "shortName": "Sorrel",
       "style": "seasonal",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true
      },
      {
       "id": "belikin-verano-bz",
@@ -5166,7 +5214,9 @@
       "name": "Colorado Berthô",
       "shortName": "Berthô",
       "style": "honey",
-      "styleRef": null
+      "styleRef": "american-brown-ale",
+      "factChecked": true,
+      "abv": "8.0%"
      }
     ],
     "needsLineup": false
@@ -5487,7 +5537,9 @@
       "name": "Skol Beats",
       "shortName": "Beats",
       "style": "flavoured",
-      "styleRef": null
+      "styleRef": "malt-liquor",
+      "factChecked": true,
+      "abv": "7.9%"
      }
     ],
     "needsLineup": false
@@ -6396,7 +6448,9 @@
       "name": "St-Ambroise Framboise",
       "shortName": "Framboise",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "5.0%"
      },
      {
       "id": "st-ambroise-vintage-ale-ca",
@@ -6592,7 +6646,9 @@
       "name": "Amsterdam Framboise",
       "shortName": "Framboise",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "6.5%"
      }
     ],
     "needsLineup": false
@@ -7356,7 +7412,9 @@
       "name": "Propeller ESB",
       "shortName": "ESB",
       "style": "ESB",
-      "styleRef": null
+      "styleRef": "extra-special-bitter",
+      "factChecked": true,
+      "abv": "5.0%"
      }
     ],
     "needsLineup": false
@@ -7779,7 +7837,9 @@
       "name": "Escudo Negra",
       "shortName": "Negra",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "schwarzbier",
+      "factChecked": true,
+      "abv": "5.7%"
      }
     ],
     "needsLineup": false
@@ -8389,7 +8449,10 @@
       "name": "Apóstol",
       "shortName": "Apóstol",
       "style": "german-style",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "abv": "4.6%",
+      "flagship": "Apostol Lager, 21-day German-style golden lager"
      },
      {
       "id": "apostol-weizen-co",
@@ -9319,7 +9382,9 @@
       "name": "Primátor Polotmavý",
       "shortName": "Polotmavý",
       "style": "half-dark",
-      "styleRef": null
+      "styleRef": "czech-amber-lager",
+      "factChecked": true,
+      "abv": "5.5%"
      },
      {
       "id": "primator-weizenbier-cz",
@@ -9718,7 +9783,10 @@
       "name": "Novoměstský",
       "shortName": "Novoměstský",
       "style": "prague brewpub",
-      "styleRef": null
+      "styleRef": "czech-pilsner",
+      "factChecked": true,
+      "abv": "4.5%",
+      "flagship": "Novomestsky svetly lezak, 11deg unfiltered"
      }
     ],
     "needsLineup": false
@@ -9763,7 +9831,10 @@
       "name": "Pivovarský Dům",
       "shortName": "Pivovarský Dům",
       "style": "prague brewpub",
-      "styleRef": null
+      "styleRef": "czech-pilsner",
+      "factChecked": true,
+      "abv": "4.5%",
+      "flagship": "Stepan svetly lezak, 12deg unfiltered"
      }
     ],
     "needsLineup": false
@@ -9793,7 +9864,10 @@
       "name": "Purkmistr",
       "shortName": "Purkmistr",
       "style": "plzeň brewpub",
-      "styleRef": null
+      "styleRef": "czech-pilsner",
+      "factChecked": true,
+      "abv": "4.8%",
+      "flagship": "Purkmistr svetly lezak 12deg, Saaz hops"
      }
     ],
     "needsLineup": false
@@ -9883,7 +9957,9 @@
       "name": "Strahov Monastery",
       "shortName": "Strahov Monastery",
       "style": "prague brewpub",
-      "styleRef": null
+      "styleRef": "czech-amber-lager",
+      "factChecked": true,
+      "flagship": "Sv. Norbert amber, brewed on site and served nowhere else"
      }
     ],
     "needsLineup": false
@@ -10278,7 +10354,10 @@
       "name": "Thisted",
       "shortName": "Thisted",
       "style": "organic",
-      "styleRef": null
+      "styleRef": "baltic-porter",
+      "factChecked": true,
+      "abv": "7.9%",
+      "flagship": "Limfjords Porter, smoked malt and licorice"
      },
      {
       "id": "thisted-limfjords-porter-dk",
@@ -10427,7 +10506,10 @@
       "name": "Svaneke",
       "shortName": "Svaneke",
       "style": "bornholm",
-      "styleRef": null
+      "styleRef": "vienna-lager",
+      "factChecked": true,
+      "abv": "4.6%",
+      "flagship": "Svaneke Classic, Vienna-style since 2000"
      }
     ],
     "needsLineup": false
@@ -11819,7 +11901,9 @@
       "name": "1664 Rosé",
       "shortName": "Rosé",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "4.5%"
      }
     ],
     "needsLineup": false
@@ -11856,7 +11940,10 @@
       "name": "Brasserie du Mont Blanc",
       "shortName": "Brasserie du Mont Blanc",
       "style": "alpine",
-      "styleRef": null
+      "styleRef": "witbier",
+      "factChecked": true,
+      "abv": "4.7%",
+      "flagship": "La Blanche, coriander and lemon zest, glacier water"
      },
      {
       "id": "brasserie-du-mont-blanc-la-blanche-fr",
@@ -11988,7 +12075,9 @@
       "name": "Ninkasi",
       "shortName": "Ninkasi",
       "style": "lyon craft",
-      "styleRef": null
+      "styleRef": "blonde-ale",
+      "factChecked": true,
+      "flagship": "Ninkasi Blonde"
      },
      {
       "id": "ninkasi-blonde-fr",
@@ -12032,14 +12121,18 @@
       "name": "Pietra",
       "shortName": "Pietra",
       "style": "chestnut beer, Corsica",
-      "styleRef": null
+      "styleRef": "biere-corse",
+      "factChecked": true,
+      "abv": "6.0%"
      },
      {
       "id": "pietra-colomba-fr",
       "name": "Pietra Colomba",
       "shortName": "Colomba",
       "style": "corsican",
-      "styleRef": null
+      "styleRef": "witbier",
+      "factChecked": true,
+      "abv": "5.0%"
      }
     ],
     "needsLineup": false
@@ -12136,7 +12229,10 @@
       "name": "Brasserie de Bretagne",
       "shortName": "Brasserie de Bretagne",
       "style": "breton",
-      "styleRef": null
+      "styleRef": "blonde-ale",
+      "factChecked": true,
+      "abv": "5.0%",
+      "flagship": "Dremmwel Blonde, brewed with seven cereals"
      }
     ],
     "needsLineup": false
@@ -12181,7 +12277,9 @@
       "name": "Brasserie La Choulette Framboise",
       "shortName": "Brasserie La Choulette Framboise",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "6.0%"
      }
     ],
     "needsLineup": false
@@ -12196,7 +12294,9 @@
       "name": "Brasserie Lancelot Cervoise",
       "shortName": "Brasserie Lancelot Cervoise",
       "style": "gruit",
-      "styleRef": null
+      "styleRef": "gruit",
+      "factChecked": true,
+      "abv": "6.0%"
      }
     ],
     "needsLineup": false
@@ -12286,7 +12386,9 @@
       "name": "Desperados",
       "shortName": "Desperados",
       "style": "tequila-flavoured",
-      "styleRef": null
+      "styleRef": "herb-spice-beer",
+      "factChecked": true,
+      "abv": "5.9%"
      }
     ],
     "needsLineup": false
@@ -12391,7 +12493,9 @@
       "name": "La Cristal",
       "shortName": "La Cristal",
       "style": "lyon craft",
-      "styleRef": null
+      "styleRef": "american-ipa",
+      "factChecked": true,
+      "flagship": "La Cristal IPA, brewed with Savoy glacier water"
      }
     ],
     "needsLineup": false
@@ -12526,7 +12630,10 @@
       "name": "Uberach",
       "shortName": "Uberach",
       "style": "alsace craft",
-      "styleRef": null
+      "styleRef": "blonde-ale",
+      "factChecked": true,
+      "abv": "4.8%",
+      "flagship": "Uberach Biere Blonde, unfiltered and bottle-refermented"
      }
     ],
     "needsLineup": false
@@ -13459,7 +13566,9 @@
       "name": "Tegernseer Spezial",
       "shortName": "Spezial",
       "style": "export",
-      "styleRef": null
+      "styleRef": "dortmunder-export",
+      "factChecked": true,
+      "abv": "5.6%"
      }
     ],
     "needsLineup": false
@@ -13556,7 +13665,10 @@
       "name": "Andechser",
       "shortName": "Andechser",
       "style": "klosterbier",
-      "styleRef": null
+      "styleRef": "doppelbock",
+      "factChecked": true,
+      "abv": "7.1%",
+      "flagship": "Andechser Doppelbock Dunkel, 18.5deg Plato"
      }
     ],
     "needsLineup": false
@@ -13571,7 +13683,9 @@
       "name": "Apostelbräu",
       "shortName": "Apostelbräu",
       "style": "organic, bavaria",
-      "styleRef": null
+      "styleRef": "ancient-grain-beer",
+      "factChecked": true,
+      "flagship": "Original Dinkel-Bier, brewed from spelt since 1990"
      }
     ],
     "needsLineup": false
@@ -13676,7 +13790,10 @@
       "name": "Bergquell",
       "shortName": "Bergquell",
       "style": "zittau",
-      "styleRef": null
+      "styleRef": "german-pilsner",
+      "factChecked": true,
+      "abv": "4.9%",
+      "flagship": "Loebauer Bergquell Pilsner"
      }
     ],
     "needsLineup": false
@@ -13721,7 +13838,9 @@
       "name": "Braustelle",
       "shortName": "Braustelle",
       "style": "cologne craft",
-      "styleRef": null
+      "styleRef": "kolsch",
+      "factChecked": true,
+      "flagship": "Helios, unfiltered Koelsch in the Wiess style"
      }
     ],
     "needsLineup": false
@@ -13796,7 +13915,10 @@
       "name": "Distelhäuser",
       "shortName": "Distelhäuser",
       "style": "franconia",
-      "styleRef": null
+      "styleRef": "german-pilsner",
+      "factChecked": true,
+      "abv": "4.9%",
+      "flagship": "Distelhaeuser Premium Pils, Hallertauer Smaragd and Saphir"
      }
     ],
     "needsLineup": false
@@ -13826,7 +13948,10 @@
       "name": "Dortmunder Union",
       "shortName": "Dortmunder Union",
       "style": "export",
-      "styleRef": null
+      "styleRef": "dortmunder-export",
+      "factChecked": true,
+      "abv": "5.3%",
+      "flagship": "Dortmunder Union Export, the beer the style is named after"
      }
     ],
     "needsLineup": false
@@ -13841,7 +13966,10 @@
       "name": "Eichhorn",
       "shortName": "Eichhorn",
       "style": "forchheim",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "5.0%",
+      "flagship": "Eichhorn Kellerbier"
      }
     ],
     "needsLineup": false
@@ -14036,7 +14164,10 @@
       "name": "Greif",
       "shortName": "Greif",
       "style": "forchheim",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "4.9%",
+      "flagship": "Greif Kellerbier"
      }
     ],
     "needsLineup": false
@@ -14306,7 +14437,10 @@
       "name": "Landskron",
       "shortName": "Landskron",
       "style": "görlitz",
-      "styleRef": null
+      "styleRef": "german-pilsner",
+      "factChecked": true,
+      "abv": "4.8%",
+      "flagship": "Landskron Premium Pilsner, lagered in 12m vaulted cellars"
      }
     ],
     "needsLineup": false
@@ -14336,7 +14470,9 @@
       "name": "Meckatzer",
       "shortName": "Meckatzer",
       "style": "allgäu",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "flagship": "Meckatzer Weiss-Gold, the first registered Allgaeu beer brand"
      }
     ],
     "needsLineup": false
@@ -14366,7 +14502,10 @@
       "name": "Neder",
       "shortName": "Neder",
       "style": "forchheim",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "5.6%",
+      "flagship": "Neder Kellerbier, dark unfiltered Zwickel"
      }
     ],
     "needsLineup": false
@@ -14381,7 +14520,10 @@
       "name": "Neumarkter Lammsbräu",
       "shortName": "Neumarkter Lammsbräu",
       "style": "organic",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "abv": "4.7%",
+      "flagship": "Lammsbraeu Urstoff"
      }
     ],
     "needsLineup": false
@@ -14486,7 +14628,10 @@
       "name": "Riedenburger",
       "shortName": "Riedenburger",
       "style": "organic",
-      "styleRef": null
+      "styleRef": "ancient-grain-beer",
+      "factChecked": true,
+      "abv": "5.1%",
+      "flagship": "Historisches Emmerbier, brewed from emmer and einkorn"
      }
     ],
     "needsLineup": false
@@ -14501,7 +14646,10 @@
       "name": "Riegele",
       "shortName": "Riegele",
       "style": "augsburg",
-      "styleRef": null
+      "styleRef": "dortmunder-export",
+      "factChecked": true,
+      "abv": "5.2%",
+      "flagship": "Commerzienrat Riegele Privat, Beer of the Decade"
      }
     ],
     "needsLineup": false
@@ -14516,7 +14664,10 @@
       "name": "Rittmayer",
       "shortName": "Rittmayer",
       "style": "franconia",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "5.0%",
+      "flagship": "Hallerndorfer Kellerbier"
      }
     ],
     "needsLineup": false
@@ -14846,7 +14997,10 @@
       "name": "Zötler",
       "shortName": "Zötler",
       "style": "allgäu — oldest family brewery",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "abv": "4.9%",
+      "flagship": "Zoetler Gold"
      }
     ],
     "needsLineup": false
@@ -17362,7 +17516,10 @@
       "name": "Franciscan Well",
       "shortName": "Franciscan Well",
       "style": "cork craft",
-      "styleRef": null
+      "styleRef": "irish-red-ale",
+      "factChecked": true,
+      "abv": "4.3%",
+      "flagship": "Rebel Red, launched 1998"
      }
     ],
     "needsLineup": false
@@ -17671,7 +17828,9 @@
       "name": "Negev Passiflora",
       "shortName": "Passiflora",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "4.9%"
      }
     ],
     "needsLineup": false
@@ -17924,7 +18083,9 @@
       "name": "Extraomnes",
       "shortName": "Extraomnes",
       "style": "belgian-style",
-      "styleRef": null
+      "styleRef": "belgian-blonde-ale",
+      "factChecked": true,
+      "flagship": "Extraomnes Blond"
      },
      {
       "id": "extraomnes-zest-it",
@@ -18439,7 +18600,9 @@
       "name": "Red Stripe Sorrel",
       "shortName": "Stripe Sorrel",
       "style": "seasonal",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "3.6%"
      }
     ],
     "needsLineup": false
@@ -18541,7 +18704,9 @@
       "name": "Hitachino Nest Ginger Brew",
       "shortName": "Ginger Brew",
       "style": "spiced",
-      "styleRef": null
+      "styleRef": "herb-spice-beer",
+      "factChecked": true,
+      "abv": "7.0%"
      },
      {
       "id": "hitachino-nest-amber-ale-jp",
@@ -18577,7 +18742,9 @@
       "name": "Baird Country Girl Kabocha",
       "shortName": "Country Girl Kabocha",
       "style": "pumpkin",
-      "styleRef": null
+      "styleRef": "pumpkin-ale",
+      "factChecked": true,
+      "abv": "6.5%"
      },
      {
       "id": "baird-teikoku-ipa-jp",
@@ -18735,7 +18902,9 @@
       "name": "Minoh Momo",
       "shortName": "Momo",
       "style": "peach",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "5.0%"
      }
     ],
     "needsLineup": false
@@ -18852,7 +19021,10 @@
       "name": "Echigo",
       "shortName": "Echigo",
       "style": "craft — Japan's first microbrewery",
-      "styleRef": null
+      "styleRef": "japanese-rice-lager",
+      "factChecked": true,
+      "abv": "5.0%",
+      "flagship": "Koshihikari Echigo, brewed with Niigata Koshihikari rice"
      },
      {
       "id": "echigo-koshihikari-jp",
@@ -18962,7 +19134,9 @@
       "name": "Asahi Maruef",
       "shortName": "Maruef",
       "style": "unfiltered",
-      "styleRef": null
+      "styleRef": "japanese-rice-lager",
+      "factChecked": true,
+      "abv": "4.5%"
      }
     ],
     "needsLineup": false
@@ -19022,7 +19196,10 @@
       "name": "Kizakura",
       "shortName": "Kizakura",
       "style": "kyoto craft",
-      "styleRef": null
+      "styleRef": "altbier",
+      "factChecked": true,
+      "abv": "5.0%",
+      "flagship": "Kyoto Alt, Kyoto s first craft beer"
      }
     ],
     "needsLineup": false
@@ -20807,7 +20984,9 @@
       "name": "Tempus Reserva Especial",
       "shortName": "Reserva Especial",
       "style": "strong",
-      "styleRef": null
+      "styleRef": "scottish-ale",
+      "factChecked": true,
+      "abv": "6.1%"
      }
     ],
     "needsLineup": false
@@ -21177,7 +21356,9 @@
       "name": "Loba Negra",
       "shortName": "Negra",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "american-porter",
+      "factChecked": true,
+      "abv": "5.5%"
      }
     ],
     "needsLineup": false
@@ -22495,7 +22676,10 @@
       "name": "Lowlander",
       "shortName": "Lowlander",
       "style": "botanical",
-      "styleRef": null
+      "styleRef": "american-ipa",
+      "factChecked": true,
+      "abv": "6.0%",
+      "flagship": "Lowlander I.P.A., brewed with grapefruit and coriander seed"
      }
     ],
     "needsLineup": false
@@ -22860,7 +23044,9 @@
       "name": "Monteith's Black",
       "shortName": "Black",
       "style": "black beer",
-      "styleRef": null
+      "styleRef": "schwarzbier",
+      "factChecked": true,
+      "abv": "5.2%"
      },
      {
       "id": "monteith-s-golden-nz",
@@ -22882,7 +23068,9 @@
       "name": "Panhead Supercharger",
       "shortName": "Supercharger",
       "style": "APA",
-      "styleRef": null
+      "styleRef": "american-pale-ale",
+      "factChecked": true,
+      "abv": "5.7%"
      },
      {
       "id": "panhead-port-road-pilsner-nz",
@@ -22896,7 +23084,9 @@
       "name": "Panhead Quickchange",
       "shortName": "Quickchange",
       "style": "XPA",
-      "styleRef": null
+      "styleRef": "extra-pale-ale",
+      "factChecked": true,
+      "abv": "4.6%"
      }
     ],
     "needsLineup": false
@@ -23325,7 +23515,9 @@
       "name": "Waikato Draught",
       "shortName": "Waikato Draught",
       "style": "draught",
-      "styleRef": null
+      "styleRef": "english-bitter",
+      "factChecked": true,
+      "abv": "4.0%"
      }
     ],
     "needsLineup": false
@@ -23490,7 +23682,9 @@
       "name": "Goldberg Black",
       "shortName": "Black",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "munich-dunkel",
+      "factChecked": true,
+      "abv": "6.0%"
      }
     ],
     "needsLineup": false
@@ -23866,7 +24060,10 @@
       "name": "Haandbryggeriet",
       "shortName": "Haandbryggeriet",
       "style": "craft & kveik",
-      "styleRef": null
+      "styleRef": "maltol",
+      "factChecked": true,
+      "abv": "6.5%",
+      "flagship": "Norwegian Wood, open-fire kilned malt with juniper"
      },
      {
       "id": "haandbryggeriet-norwegian-wood-no",
@@ -24146,7 +24343,10 @@
       "name": "Sagene",
       "shortName": "Sagene",
       "style": "oslo craft",
-      "styleRef": null
+      "styleRef": "german-pilsner",
+      "factChecked": true,
+      "abv": "4.7%",
+      "flagship": "Sagene Pilsner"
      }
     ],
     "needsLineup": false
@@ -24764,7 +24964,9 @@
       "name": "San Miguel Flavored Apple",
       "shortName": "Flavored Apple",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "3.0%"
      }
     ],
     "needsLineup": false
@@ -25000,7 +25202,10 @@
       "name": "Pinta",
       "shortName": "Pinta",
       "style": "craft pioneer",
-      "styleRef": null
+      "styleRef": "american-ipa",
+      "factChecked": true,
+      "abv": "6.1%",
+      "flagship": "Atak Chmielu, brewed continuously since 2011"
      },
      {
       "id": "pinta-atak-chmielu-pl",
@@ -25072,14 +25277,18 @@
       "name": "Ciechan",
       "shortName": "Ciechan",
       "style": "unpasteurised",
-      "styleRef": null
+      "styleRef": "european-pale-lager",
+      "factChecked": true,
+      "flagship": "Ciechan Wyborne, the beer that started Poland s unpasteurised trend"
      },
      {
       "id": "ciechan-miodowe-pl",
       "name": "Ciechan Miodowe",
       "shortName": "Miodowe",
       "style": "honey",
-      "styleRef": null
+      "styleRef": "honey-beer",
+      "factChecked": true,
+      "abv": "4.7%"
      },
      {
       "id": "ciechan-pszeniczne-pl",
@@ -25247,7 +25456,8 @@
       "name": "Kormoran Warmińskie Miodowe",
       "shortName": "Warmińskie Miodowe",
       "style": "honey",
-      "styleRef": null
+      "styleRef": "honey-beer",
+      "factChecked": true
      },
      {
       "id": "kormoran-imperium-prunum-pl",
@@ -25313,7 +25523,9 @@
       "name": "Fortuna Czarne",
       "shortName": "Fortuna Czarne",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "schwarzbier",
+      "factChecked": true,
+      "abv": "5.8%"
      }
     ],
     "needsLineup": false
@@ -25903,7 +26115,9 @@
       "name": "Vadia Preta",
       "shortName": "Preta",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "schwarzbier",
+      "factChecked": true,
+      "abv": "4.9%"
      }
     ],
     "needsLineup": false
@@ -26778,7 +26992,9 @@
       "name": "Sibirskaya Korona Lime",
       "shortName": "Korona Lime",
       "style": "flavoured",
-      "styleRef": null
+      "styleRef": "radler",
+      "factChecked": true,
+      "abv": "4.7%"
      }
     ],
     "needsLineup": false
@@ -27420,7 +27636,9 @@
       "name": "LeVeL33",
       "shortName": "LeVeL33",
       "style": "craft — world's highest urban brewery",
-      "styleRef": null
+      "styleRef": "vienna-lager",
+      "factChecked": true,
+      "flagship": "33.1 Blond Lager, from an 1841 Vienna blond lager recipe"
      }
     ],
     "needsLineup": false
@@ -27907,7 +28125,9 @@
       "name": "Flying Fish Pressed Lemon",
       "shortName": "Fish Pressed Lemon",
       "style": "flavoured",
-      "styleRef": null
+      "styleRef": "radler",
+      "factChecked": true,
+      "abv": "4.5%"
      }
     ],
     "needsLineup": false
@@ -28612,7 +28832,9 @@
       "name": "Estrella Galicia 1906 Red Vintage",
       "shortName": "Galicia 1906 Red Vintage",
       "style": "strong",
-      "styleRef": null
+      "styleRef": "doppelbock",
+      "factChecked": true,
+      "abv": "8.0%"
      }
     ],
     "needsLineup": false
@@ -28846,7 +29068,9 @@
       "name": "Mahou Maestra",
       "shortName": "Maestra",
       "style": "doble lúpulo",
-      "styleRef": null
+      "styleRef": "doppelbock",
+      "factChecked": true,
+      "abv": "7.5%"
      }
     ],
     "needsLineup": false
@@ -29002,7 +29226,9 @@
       "name": "Guineu Riner",
       "shortName": "Riner",
       "style": "session",
-      "styleRef": null
+      "styleRef": "american-pale-ale",
+      "factChecked": true,
+      "abv": "2.5%"
      }
     ],
     "needsLineup": false
@@ -29285,7 +29511,10 @@
       "name": "Ceylon Beverage",
       "shortName": "Ceylon Beverage",
       "style": "brewery",
-      "styleRef": null
+      "styleRef": "european-pale-lager",
+      "factChecked": true,
+      "abv": "4.8%",
+      "flagship": "Lion Lager, the best-selling beer in Sri Lanka and the Maldives"
      }
     ],
     "needsLineup": false
@@ -29752,7 +29981,9 @@
       "name": "Appenzeller Hanfblüte",
       "shortName": "Hanfblüte",
       "style": "hemp beer",
-      "styleRef": null
+      "styleRef": "herb-spice-beer",
+      "factChecked": true,
+      "abv": "5.2%"
      }
     ],
     "needsLineup": false
@@ -29862,7 +30093,10 @@
       "name": "Rugenbräu",
       "shortName": "Rugenbräu",
       "style": "bernese oberland",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "abv": "4.8%",
+      "flagship": "Rugenbraeu Lager Hell"
      },
      {
       "id": "rugenbrau-lager-hell-ch",
@@ -30032,7 +30266,9 @@
       "name": "Müller Bräu",
       "shortName": "Müller Bräu",
       "style": "baden",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "flagship": "Mueller Braeu, the house Helles"
      }
     ],
     "needsLineup": false
@@ -30047,7 +30283,10 @@
       "name": "Schützengarten",
       "shortName": "Schützengarten",
       "style": "st. gallen — oldest Swiss brewery",
-      "styleRef": null
+      "styleRef": "munich-helles",
+      "factChecked": true,
+      "abv": "4.8%",
+      "flagship": "Schuetzengarten Lager Hell"
      }
     ],
     "needsLineup": false
@@ -30812,7 +31051,8 @@
       "name": "Carib Shandy",
       "shortName": "Shandy",
       "style": "shandy",
-      "styleRef": null
+      "styleRef": "radler",
+      "factChecked": true
      }
     ],
     "needsLineup": false
@@ -30988,7 +31228,9 @@
       "name": "Bomonti Filtresiz",
       "shortName": "Filtresiz",
       "style": "unfiltered",
-      "styleRef": null
+      "styleRef": "kellerbier",
+      "factChecked": true,
+      "abv": "4.8%"
      },
      {
       "id": "bomonti-siyah-tr",
@@ -31584,7 +31826,9 @@
       "name": "Samuel Smith's Organic Cherry",
       "shortName": "Organic Cherry",
       "style": "fruit",
-      "styleRef": null
+      "styleRef": "fruit-beer",
+      "factChecked": true,
+      "abv": "5.1%"
      },
      {
       "id": "samuel-smith-s-old-brewery-bitter-gb",
@@ -31952,21 +32196,27 @@
       "name": "Innis & Gunn",
       "shortName": "Gunn",
       "style": "barrel-aged",
-      "styleRef": null
+      "styleRef": "scottish-ale",
+      "factChecked": true,
+      "abv": "6.6%"
      },
      {
       "id": "innis-gunn-original-gb",
       "name": "Innis & Gunn Original",
       "shortName": "Gunn Original",
       "style": "barrel-aged",
-      "styleRef": null
+      "styleRef": "scottish-ale",
+      "factChecked": true,
+      "abv": "6.6%"
      },
      {
       "id": "innis-gunn-blood-red-sky-gb",
       "name": "Innis & Gunn Blood Red Sky",
       "shortName": "Gunn Blood Red Sky",
       "style": "barrel-aged",
-      "styleRef": null
+      "styleRef": "scottish-ale",
+      "factChecked": true,
+      "abv": "6.8%"
      }
     ],
     "needsLineup": false
@@ -32396,7 +32646,9 @@
       "name": "The Kernel Table Beer",
       "shortName": "Table Beer",
       "style": "session",
-      "styleRef": null
+      "styleRef": "table-beer",
+      "factChecked": true,
+      "abv": "3.2%"
      }
     ],
     "needsLineup": false
@@ -32820,7 +33072,10 @@
       "name": "Coach House",
       "shortName": "Coach House",
       "style": "brewery, cheshire",
-      "styleRef": null
+      "styleRef": "english-bitter",
+      "factChecked": true,
+      "abv": "3.7%",
+      "flagship": "Coachman s Best Bitter"
      }
     ],
     "needsLineup": false
@@ -32835,7 +33090,10 @@
       "name": "Conwy Brewery",
       "shortName": "Conwy Brewery",
       "style": "welsh craft",
-      "styleRef": null
+      "styleRef": "english-bitter",
+      "factChecked": true,
+      "abv": "4.3%",
+      "flagship": "Welsh Pride (Balchder Cymru), their best-selling bitter"
      }
     ],
     "needsLineup": false
@@ -33150,7 +33408,10 @@
       "name": "Northbound",
       "shortName": "Northbound",
       "style": "N. Irish craft",
-      "styleRef": null
+      "styleRef": "american-pale-ale",
+      "factChecked": true,
+      "abv": "4.5%",
+      "flagship": "26 Pale Ale, one of the two launch beers in 2015"
      }
     ],
     "needsLineup": false
@@ -33210,7 +33471,9 @@
       "name": "Palmers",
       "shortName": "Palmers",
       "style": "dorset",
-      "styleRef": null
+      "styleRef": "extra-special-bitter",
+      "factChecked": true,
+      "flagship": "Palmers 200, brewed for the brewery s bicentenary in 1994"
      }
     ],
     "needsLineup": false
@@ -33240,7 +33503,10 @@
       "name": "Purple Moose",
       "shortName": "Purple Moose",
       "style": "welsh craft",
-      "styleRef": null
+      "styleRef": "english-pale-ale",
+      "factChecked": true,
+      "abv": "3.6%",
+      "flagship": "Snowdonia Ale (Cwrw Eryri), pale and crystal malt"
      }
     ],
     "needsLineup": false
@@ -33315,7 +33581,9 @@
       "name": "Sarah Hughes Dark Ruby",
       "shortName": "Sarah Hughes Dark Ruby",
       "style": "strong mild",
-      "styleRef": null
+      "styleRef": "dark-mild",
+      "factChecked": true,
+      "abv": "6.0%"
      }
     ],
     "needsLineup": false
@@ -33330,7 +33598,9 @@
       "name": "Sheelin",
       "shortName": "Sheelin",
       "style": "N. Irish craft",
-      "styleRef": null
+      "styleRef": "blonde-ale",
+      "factChecked": true,
+      "flagship": "Sheelin Blonde Ale"
      }
     ],
     "needsLineup": false
@@ -33797,7 +34067,9 @@
       "name": "Russian River Beatification",
       "shortName": "Beatification",
       "style": "spontaneous",
-      "styleRef": null
+      "styleRef": "american-wild-ale",
+      "factChecked": true,
+      "abv": "5.5%"
      },
      {
       "id": "russian-river-sts-pils-us",
@@ -33811,7 +34083,9 @@
       "name": "Russian River Damnation",
       "shortName": "Damnation",
       "style": "belgian golden",
-      "styleRef": null
+      "styleRef": "belgian-golden-strong-ale",
+      "factChecked": true,
+      "abv": "7.5%"
      },
      {
       "id": "russian-river-redemption-us",
@@ -33982,7 +34256,9 @@
       "name": "Allagash Coolship",
       "shortName": "Coolship",
       "style": "spontaneous",
-      "styleRef": null
+      "styleRef": "gueuze",
+      "factChecked": true,
+      "abv": "6.4%"
      },
      {
       "id": "allagash-black-us",
@@ -35344,7 +35620,9 @@
       "name": "The Bruery Mischief",
       "shortName": "Mischief",
       "style": "belgian golden",
-      "styleRef": null
+      "styleRef": "belgian-golden-strong-ale",
+      "factChecked": true,
+      "abv": "8.5%"
      }
     ],
     "needsLineup": false
@@ -36606,7 +36884,9 @@
       "name": "Ninkasi Believer",
       "shortName": "Believer",
       "style": "double red",
-      "styleRef": null
+      "styleRef": "american-amber-ale",
+      "factChecked": true,
+      "abv": "6.9%"
      }
     ],
     "needsLineup": false
@@ -36892,7 +37172,9 @@
       "name": "Shipyard Pumpkinhead",
       "shortName": "Pumpkinhead",
       "style": "pumpkin",
-      "styleRef": null
+      "styleRef": "pumpkin-ale",
+      "factChecked": true,
+      "abv": "4.5%"
      }
     ],
     "needsLineup": false
@@ -37017,7 +37299,7 @@
       "name": "Southern Tier Pumking",
       "shortName": "Pumking",
       "style": "pumpkin ale",
-      "styleRef": "blonde-ale"
+      "styleRef": "pumpkin-ale"
      },
      {
       "id": "southern-tier-creme-brulee-us",
@@ -37325,7 +37607,9 @@
       "name": "Yards Brawler",
       "shortName": "Brawler",
       "style": "mild",
-      "styleRef": null
+      "styleRef": "dark-mild",
+      "factChecked": true,
+      "abv": "4.2%"
      },
      {
       "id": "yards-love-stout-us",
@@ -37789,7 +38073,10 @@
       "name": "Central Waters",
       "shortName": "Central Waters",
       "style": "barrel-aged, wisconsin",
-      "styleRef": null
+      "styleRef": "barrel-aged-imperial-stout",
+      "factChecked": true,
+      "abv": "10.5%",
+      "flagship": "Brewer s Reserve Bourbon Barrel Stout, a year in 12-year bourbon barrels"
      }
     ],
     "needsLineup": false
@@ -37864,7 +38151,10 @@
       "name": "De Garde",
       "shortName": "De Garde",
       "style": "spontaneous, oregon",
-      "styleRef": null
+      "styleRef": "berliner-weisse",
+      "factChecked": true,
+      "abv": "2.3%",
+      "flagship": "Bu Weisse, 15-20% of production by 2015"
      }
     ],
     "needsLineup": false
@@ -37879,7 +38169,9 @@
       "name": "Eagle Rock Solidarity",
       "shortName": "Eagle Rock Solidarity",
       "style": "mild",
-      "styleRef": null
+      "styleRef": "dark-mild",
+      "factChecked": true,
+      "abv": "3.8%"
      }
     ],
     "needsLineup": false
@@ -38674,7 +38966,9 @@
       "name": "Port Brewing Older Viscosity",
       "shortName": "Brewing Older Viscosity",
       "style": "barrel-aged",
-      "styleRef": null
+      "styleRef": "barrel-aged-imperial-stout",
+      "factChecked": true,
+      "abv": "12.0%"
      }
     ],
     "needsLineup": false
@@ -39781,7 +40075,9 @@
       "name": "Patricia Negra",
       "shortName": "Negra",
       "style": "dark",
-      "styleRef": null
+      "styleRef": "munich-dunkel",
+      "factChecked": true,
+      "abv": "5.1%"
      }
     ],
     "needsLineup": false
