@@ -105,6 +105,61 @@ export const COUNTRY_ALIASES = Object.freeze({
 export const dexCountry = (name) => COUNTRY_ALIASES[name] ?? name;
 
 /* ------------------------------------------------------------------ */
+/* Strength                                                            */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The floor an entry must clear to be a drink this app catalogues.
+ *
+ * 0.5% is where most jurisdictions draw "alcohol-free", so it is the line
+ * with an argument behind it rather than a preference.
+ */
+export const ABV_FLOOR = 0.5;
+
+/** States the strength is UNDOCUMENTED — which is not the same as absent. */
+const ABV_UNDOCUMENTED = /not published|varies/i;
+
+/** States the alcohol is ABSENT, in words rather than a number. */
+const ABV_ABSENT = /alcohol[-\s]?free|non[-\s]?alcoholic|de[-\s]?alcoholi[sz]/i;
+
+/**
+ * True only when the row can be PROVEN to sit below the floor.
+ *
+ * The asymmetry is deliberate. A false positive here deletes a real drink, so
+ * anything this cannot prove, it lets through.
+ *
+ * Be honest about what that buys: this is a backstop, not a net. It is SILENT
+ * on everything it cannot prove — "Varies by producer" sails through by
+ * design, and so would a 0% entry whose abv field was left blank. It stops the
+ * unarguable cases and nothing else. The 174 beer cards reading "Not
+ * published" depend on exactly that looseness, which is the trade, but do not
+ * mistake a passing merge for a checked one.
+ *
+ * Three things it must never confuse:
+ *
+ *  - "Not published" (174 beer cards) and "Varies by producer" (one wine card)
+ *    say the strength is unknown, not zero. A first cut that required a
+ *    parseable number would have condemned every one of them.
+ *
+ *  - The number taken is the FIRST in the string, because a range is written
+ *    low end first. "0-8%" is a drink you can pour at zero and is rejected;
+ *    "0.5-1.5%" clears. Taking the minimum of every number instead would read
+ *    the 0.33 in "5% (0.33 L)" as the strength and throw out a real beer.
+ *
+ *  - A leading "<" inverts the comparison: "<0.5%" is BELOW 0.5 and must be
+ *    rejected, where a bare "0.5%" clears.
+ */
+export function abvBelowFloor(abv) {
+  const s = String(abv ?? '');
+  if (ABV_UNDOCUMENTED.test(s)) return false;
+  if (ABV_ABSENT.test(s)) return true;
+  const m = s.match(/\d+(?:\.\d+)?/);
+  if (!m) return false;
+  const n = Number(m[0]);
+  return /^\s*[<\u2264]/.test(s) ? n <= ABV_FLOOR : n < ABV_FLOOR;
+}
+
+/* ------------------------------------------------------------------ */
 /* Checks                                                              */
 /* ------------------------------------------------------------------ */
 
@@ -186,6 +241,28 @@ export function validate({ drinks, incoming, category, owner }) {
       if (!c.serve?.how) errors.push(`${c.id}: missing serve.how`);
       if (!c.composition?.components?.length) errors.push(`${c.id}: missing composition.components`);
       if (c.recipe) errors.push(`${c.id}: only cocktails carry a recipe`);
+    }
+  }
+
+  /* 6. Alcohol-free rows.
+   *
+   * Sipply is an alcohol app. 78 alcohol-free entries reached the Dex before
+   * anyone checked, because every merge trusted its own source file and no
+   * layer asked the question. This is that layer.
+   *
+   * See abvBelowFloor: it rejects only what it can prove, so an undocumented
+   * strength survives and a stated absence does not. Whether a specific
+   * borderline drink belongs is an editorial call and stays one — this only
+   * stops the unarguable cases.
+   */
+  for (const c of incoming) {
+    if (abvBelowFloor(c.abv)) {
+      errors.push(`${c.id}: abv "${c.abv}" does not clear the ${ABV_FLOOR}% floor — this app catalogues alcohol`);
+    }
+  }
+  for (const d of drinks) {
+    if (!seenId.has(d.id) && abvBelowFloor(d.abv)) {
+      warnings.push(`${d.id}: abv "${d.abv}" does not clear the ${ABV_FLOOR}% floor`);
     }
   }
 
