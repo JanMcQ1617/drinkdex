@@ -128,6 +128,14 @@ export function FindFriends() {
   const [savedPhone, setSavedPhone] = useState<string | null>(null);
   const [phone, setPhone] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
+  /*
+   * Shown, not swallowed. This used to be an empty catch commented
+   * "surfaced by the store elsewhere", which was simply untrue —
+   * setPhoneHash is a direct call and nothing was surfacing it. A failed
+   * save left the card looking exactly like an untouched one, so the only
+   * way to discover it had not worked was to query the database by hand.
+   */
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   useEffect(() => {
     getRememberedPhone().then(setSavedPhone);
@@ -136,10 +144,11 @@ export function FindFriends() {
   const saveDiscoverable = useCallback(async () => {
     if (!myId) return;
     setSavingPhone(true);
+    setPhoneError(null);
     try {
       const h = await hashPhone(phone);
       if (!h) {
-        setSavingPhone(false);
+        setPhoneError('That number is too short to use — include the area code.');
         return;
       }
       await setPhoneHash(myId, h);
@@ -147,8 +156,8 @@ export function FindFriends() {
       if (normalized) await rememberPhone(normalized);
       setSavedPhone(normalized);
       setPhone('');
-    } catch {
-      /* surfaced by the store elsewhere */
+    } catch (e) {
+      setPhoneError((e as Error).message || 'Could not save. Check your connection and try again.');
     } finally {
       setSavingPhone(false);
     }
@@ -261,6 +270,7 @@ export function FindFriends() {
                 accessibilityLabel="Your phone number, to be findable by contacts"
               />
             </View>
+            {phoneError ? <Text style={styles.notice}>{phoneError}</Text> : null}
             <Button
               label={savingPhone ? 'Saving…' : 'Make me findable'}
               variant="secondary"
@@ -359,6 +369,17 @@ const styles = StyleSheet.create({
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   deniedBox: { gap: space.sm },
+  notice: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: 19,
+    color: colors.danger,
+    backgroundColor: colors.bg,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: radius.md,
+    padding: space.md,
+  },
   hint: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,

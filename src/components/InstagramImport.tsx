@@ -373,6 +373,8 @@ function FindableByHandle({ myId }: { myId: string }) {
   const [handle, setHandle] = useState('');
   const [saved, setSaved] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  /* Local to this card — the import card above has its own notice. */
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getRememberedHandle().then(setSaved);
@@ -382,6 +384,7 @@ function FindableByHandle({ myId }: { myId: string }) {
     const normalized = normalizeHandle(handle);
     if (!normalized) return;
     setBusy(true);
+    setError(null);
     try {
       const hash = await hashHandle(normalized);
       if (!hash) return;
@@ -389,8 +392,14 @@ function FindableByHandle({ myId }: { myId: string }) {
       await rememberHandle(normalized);
       setSaved(normalized);
       setHandle('');
-    } catch {
-      /* Surfaced by the store's error channel. */
+    } catch (e) {
+      /*
+       * Shown, not swallowed. This was an empty catch commented "surfaced
+       * by the store's error channel" — which was false, since
+       * setInstagramHash is a direct call. A failure looked identical to
+       * never having tapped the button.
+       */
+      setError((e as Error).message || 'Could not save. Check your connection and try again.');
     } finally {
       setBusy(false);
     }
@@ -450,6 +459,7 @@ function FindableByHandle({ myId }: { myId: string }) {
               accessibilityLabel="Your Instagram username"
             />
           </View>
+          {error ? <Text style={styles.notice}>{error}</Text> : null}
           <Button
             label={busy ? 'Saving…' : 'Make me findable'}
             variant="secondary"
