@@ -101,12 +101,6 @@ export default function RootLayout() {
           back gesture would fight it on every drag.
         */}
         <Stack.Screen name="wine-atlas/index" options={{ gestureDirection: 'horizontal' }} />
-        {/*
-          Beer atlas detail. Same contract as the wine atlas: reference,
-          not collection. Edge-swipe only, because the country list sits
-          under a horizontally scrolling filter row.
-        */}
-        <Stack.Screen name="beer-country/[code]" options={{ gestureDirection: 'horizontal' }} />
       </Stack>
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />

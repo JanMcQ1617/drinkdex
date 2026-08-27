@@ -69,7 +69,6 @@ import {
   winesByName,
 } from '@/data/wineAtlas';
 import { atlasLinkFor } from '@/data/wineAtlasLinks';
-import { BRANDS_BY_STYLE } from '@/data/breweries';
 import type { Composition, Recipe, ServeGuide } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
@@ -317,50 +316,6 @@ function AtlasPanel({ drinkId }: { drinkId: string }) {
   );
 }
 
-/**
- * Who actually brews this.
- *
- * A style card describes a category; this names the beers in it that you can
- * put in a basket. It reads from the brand layer, so the list grows whenever
- * a country's lineups get researched — nothing here is authored per-card.
- *
- * Styles nothing maps to render nothing, rather than an empty heading.
- */
-function BreweriesPanel({ drinkId }: { drinkId: string }) {
-  const router = useRouter();
-  const brands = BRANDS_BY_STYLE[drinkId];
-  if (!brands?.length) return null;
-
-  const countries = new Set(brands.map((b) => b.country));
-  /* Verified lineups first — those are the ones checked against a brewery's
-   * own listing — then alphabetical, so the sample is stable between renders. */
-  const sample = [...brands]
-    .sort((a, b) => Number(Boolean(b.note)) - Number(Boolean(a.note)) || a.name.localeCompare(b.name))
-    .slice(0, 8);
-
-  return (
-    <>
-      <SectionLabel style={styles.section}>Where to find it</SectionLabel>
-      <Text style={styles.bodyText}>
-        {brands.length} {brands.length === 1 ? 'beer' : 'beers'} in the atlas pour this style,
-        across {countries.size} {countries.size === 1 ? 'country' : 'countries'}.
-      </Text>
-      <View style={styles.chipRow}>
-        {sample.map((b) => (
-          <Chip key={b.id} label={`${b.name} · ${b.code}`} />
-        ))}
-      </View>
-      <PressableScale
-        onPress={() => router.push({ pathname: '/beers', params: { style: drinkId } })}
-        accessibilityRole="button"
-        accessibilityLabel="Open this in Beers of the World"
-        style={styles.atlasLink}>
-        <Text style={styles.atlasLinkText}>Open in Beers of the World</Text>
-        <Icon name="chevronRight" size={16} color={colors.wine} />
-      </PressableScale>
-    </>
-  );
-}
 
 export default function DrinkDetailScreen() {
   const router = useRouter();
@@ -819,7 +774,6 @@ export default function DrinkDetailScreen() {
         {drink.serve ? <ServePanel serve={drink.serve} /> : null}
 
         {drink.category === 'wine' ? <AtlasPanel drinkId={drink.id} /> : null}
-        {drink.category === 'beer' ? <BreweriesPanel drinkId={drink.id} /> : null}
 
         {/* Lore */}
         <SectionLabel style={styles.section}>Field notes</SectionLabel>
