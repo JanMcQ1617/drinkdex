@@ -69,6 +69,16 @@ const countryIndex = new Map(countryNames.map((n, i) => [n, i]));
 /* ---------------------------------------------------------------- */
 
 const unmapped = new Set();
+/**
+ * The grape text exactly as the source writes it, kept beside each wine.
+ *
+ * The atlas itself stores canonical grape indices — Listán Blanco resolves
+ * to Palomino — which is right for the grape list and wrong for a list
+ * organised by place: a Canary label says Listán Blanco. The by-country and
+ * A-Z lists print this raw text; only grape-varieties.md canonicalises.
+ */
+const rawGrapes = new WeakMap();
+
 const wines = wineRows.map(([country, region, wine, tier, style, grapes]) => {
   const gi = [];
   for (const raw of grapes.split(';')) {
@@ -82,7 +92,9 @@ const wines = wineRows.map(([country, region, wine, tier, style, grapes]) => {
     const idx = grapeIndex.get(canonical);
     if (!gi.includes(idx)) gi.push(idx);
   }
-  return { n: wine, c: countryIndex.get(country), r: region, t: tier, s: style, g: gi };
+  const rec = { n: wine, c: countryIndex.get(country), r: region, t: tier, s: style, g: gi };
+  rawGrapes.set(rec, grapes.split(';').map((x) => x.trim()).filter(Boolean).join(', '));
+  return rec;
 });
 
 if (unmapped.size) {
@@ -155,6 +167,8 @@ mkdirSync(DOCS, { recursive: true });
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const csvCell = (v) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
 const csvRow = (cells) => cells.map((c) => csvCell(String(c))).join(',');
+/* RFC 4180 line ending; Excel mis-parses accented UTF-8 rows without it. */
+const csvJoin = (rows) => '\ufeff' + rows.join('\r\n') + '\r\n';
 
 /* --- by country --- */
 {
@@ -183,7 +197,7 @@ const csvRow = (cells) => cells.map((c) => csvCell(String(c))).join(',');
     for (const [region, list] of regions) {
       lines.push(`### ${region}`, '');
       for (const w of list) {
-        const g = w.g.map((i) => grapeNames[i]).join(', ');
+        const g = rawGrapes.get(w) ?? '';
         lines.push(`- **${w.n}** — ${w.t} · ${w.s}${g ? ` · ${g}` : ''}`);
       }
       lines.push('');
@@ -194,9 +208,9 @@ const csvRow = (cells) => cells.map((c) => csvCell(String(c))).join(',');
 
   const csv = [csvRow(['Country', 'Region', 'Wine', 'Classification', 'Style', 'Grapes'])];
   for (const w of wines) {
-    csv.push(csvRow([countryNames[w.c], w.r, w.n, w.t, w.s, w.g.map((i) => grapeNames[i]).join('; ')]));
+    csv.push(csvRow([countryNames[w.c], w.r, w.n, w.t, w.s, (rawGrapes.get(w) ?? '').replace(/, /g, '; ')]));
   }
-  writeFileSync(join(DOCS, 'wines-by-country.csv'), '﻿' + csv.join('\n') + '\n');
+  writeFileSync(join(DOCS, 'wines-by-country.csv'), csvJoin(csv));
 }
 
 /* --- master A-Z --- */
@@ -214,10 +228,10 @@ const csvRow = (cells) => cells.map((c) => csvCell(String(c))).join(',');
     const L = fold(w.n)[0].toUpperCase();
     if (L !== letter) { letter = L; lines.push('', `## ${letter}`, ''); }
     lines.push(`${i + 1}. **${w.n}** — ${countryNames[w.c]} · ${w.r} · ${w.t} · ${w.s}`);
-    csv.push(csvRow([i + 1, w.n, countryNames[w.c], w.r, w.t, w.s, w.g.map((k) => grapeNames[k]).join('; ')]));
+    csv.push(csvRow([i + 1, w.n, countryNames[w.c], w.r, w.t, w.s, (rawGrapes.get(w) ?? '').replace(/, /g, '; ')]));
   });
   writeFileSync(join(DOCS, 'all-wines-master.md'), lines.join('\n') + '\n');
-  writeFileSync(join(DOCS, 'all-wines-master.csv'), '﻿' + csv.join('\n') + '\n');
+  writeFileSync(join(DOCS, 'all-wines-master.csv'), csvJoin(csv));
 }
 
 /* --- grape varieties --- */
@@ -245,7 +259,12 @@ const csvRow = (cells) => cells.map((c) => csvCell(String(c))).join(',');
   grapeNames.forEach((name, i) => {
     const m = grapeMeta.get(name);
     const wl = grapeWines[i];
-    const where = [...new Set(wl.map((k) => countryNames[wines[k].c]))];
+    const freq = new Map();
+    for (const k of wl) {
+      const c = countryNames[wines[k].c];
+      freq.set(c, (freq.get(c) ?? 0) + 1);
+    }
+    const where = [...freq.entries()].sort((a, b) => b[1] - a[1] || collate(a[0], b[0])).map(([c]) => c);
     const L = fold(name)[0].toUpperCase();
     if (L !== letter) { letter = L; lines.push('', `## ${letter}`, ''); }
     lines.push(`### ${name}`, '', `**${m.color}**${m.origin ? ` · origin ${m.origin}` : ''}`, '');
@@ -261,7 +280,7 @@ const csvRow = (cells) => cells.map((c) => csvCell(String(c))).join(',');
     csv.push(csvRow([i + 1, name, m.color, m.origin, m.synonyms.join('; '), wl.length, where.length, where.join('; '), m.note]));
   });
   writeFileSync(join(DOCS, 'grape-varieties.md'), lines.join('\n'));
-  writeFileSync(join(DOCS, 'grape-varieties.csv'), '﻿' + csv.join('\n') + '\n');
+  writeFileSync(join(DOCS, 'grape-varieties.csv'), csvJoin(csv));
 }
 
 console.log(`docs/wine/ — 6 list files regenerated alongside the atlas`);

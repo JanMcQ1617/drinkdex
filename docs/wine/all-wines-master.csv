@@ -1,6 +1,6 @@
 ﻿#,Wine,Country,Region,Classification,Style,Grapes
 1,Abadía Retuerta,Spain,Castilla y León,VP,Red,Tempranillo; Cabernet Sauvignon
-2,Abona,Spain,Canary Islands,DO,White,Palomino
+2,Abona,Spain,Canary Islands,DO,White,Listán Blanco
 3,Abrau-Dyurso,Russia,Krasnodar,Historic estate,Sparkling,Chardonnay; Pinot Noir
 4,Abruzzo Pecorino,Italy,Abruzzo,DOC,White,Pecorino
 5,Absheron,Azerbaijan,Absheron,Regional,Fortified,Bayanshira
@@ -8,9 +8,9 @@
 7,Achterhoek,Netherlands,Gelderland,PGI,White,Solaris
 8,Aconcagua Valley,Chile,Aconcagua,DO,Red,Cabernet Sauvignon; Syrah
 9,Adelaida District,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon; Syrah
-10,Adelaide,Australia,South Australia,GI,Red,Syrah
+10,Adelaide,Australia,South Australia,GI,Red,Shiraz
 11,Adelaide Hills,Australia,South Australia,GI,White,Sauvignon Blanc; Chardonnay
-12,Adelaide Plains,Australia,South Australia,GI,Red,Syrah
+12,Adelaide Plains,Australia,South Australia,GI,Red,Shiraz
 13,Adjara,Georgia,Adjara,Regional,Red,Chkhaveri
 14,Aegean (Ege),Turkey,Aegean,Regional,White,Sultaniye; Bornova Misketi
 15,Afames,Cyprus,Limassol,Regional,Red,Mavro
@@ -20,23 +20,23 @@
 19,Agrelo,Argentina,Mendoza,GI,Red,Malbec; Cabernet Sauvignon
 20,Aguascalientes,Mexico,Aguascalientes,Regional,Red,Cabernet Sauvignon
 21,Ahal,Turkmenistan,Ahal,Regional,Fortified,Terbash; Rkatsiteli
-22,Ahr,Germany,Ahr,Anbaugebiet,Red,Pinot Noir; Frühburgunder
+22,Ahr,Germany,Ahr,Anbaugebiet,Red,Spätburgunder; Frühburgunder
 23,Aigle,Switzerland,Vaud,AOC,White,Chasselas
 24,Aïn Bessem-Bouira,Algeria,Aïn Témouchent,AOG,Red,Carignan; Cinsault
 25,Aiud,Romania,Transylvania,DOC,White,Fetească Albă
 26,Ajaccio,France,Corsica,AOC,Red,Sciaccarello
 27,Akhasheni,Georgia,Kakheti,PDO,Sweet Red,Saperavi
-28,Akluj,India,Maharashtra,Regional,Red,Cabernet Sauvignon; Syrah
+28,Akluj,India,Maharashtra,Regional,Red,Cabernet Sauvignon; Shiraz
 29,Alba Iulia,Romania,Transylvania,DOC,White,Fetească Albă
-30,Albany,Australia,Western Australia,GI,Red,Pinot Noir; Syrah
+30,Albany,Australia,Western Australia,GI,Red,Pinot Noir; Shiraz
 31,Albugnano,Italy,Piedmont,DOC,Red,Nebbiolo
 32,Alcamo,Italy,Sicily,DOC,White,Catarratto
 33,Aleatico di Gradoli,Italy,Lazio,DOC,Sweet Red,Aleatico
 34,Aleatico di Puglia,Italy,Puglia,DOC,Sweet Red,Aleatico
 35,Aleatico di Terracina,Italy,Lazio,DOC,Sweet Red,Aleatico
-36,Alella,Spain,Catalonia,DO,White,Xarel·lo
+36,Alella,Spain,Catalonia,DO,White,Pansa Blanca
 37,Alenquer,Portugal,Lisboa,DOC,Red,Castelão; Touriga Nacional
-38,Alentejo,Portugal,Alentejo,DOC,Red,Tempranillo; Trincadeira; Alicante Bouschet
+38,Alentejo,Portugal,Alentejo,DOC,Red,Aragonez; Trincadeira; Alicante Bouschet
 39,Alentejo Branco,Portugal,Alentejo,DOC,White,Antão Vaz; Arinto; Roupeiro
 40,Alexander Valley,United States,California (Sonoma),AVA,Red,Cabernet Sauvignon
 41,Alexandra,New Zealand,Central Otago,GI,Red,Pinot Noir; Riesling
@@ -44,31 +44,31 @@
 43,Alexandria Lakes,United States,Minnesota,AVA,Red,Frontenac
 44,Alezio,Italy,Puglia,DOC,Rosé,Negroamaro
 45,Alghero,Italy,Sardinia,DOC,Red,Cabernet Sauvignon; Cagnulari
-46,Alicante,Spain,Levante,DO,Red,Mourvèdre
-47,Almansa,Spain,Levante,DO,Red,Alicante Bouschet
+46,Alicante,Spain,Levante,DO,Red,Monastrell
+47,Almansa,Spain,Levante,DO,Red,Garnacha Tintorera
 48,Aloxe-Corton,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
 49,Alpine Valleys,Australia,Victoria,GI,Red,Sangiovese; Merlot
 50,Alsace,France,Alsace,AOC,White,Riesling; Gewurztraminer; Pinot Gris
-51,Alsace Grand Cru,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer; Pinot Gris; Muscat Blanc à Petits Grains
+51,Alsace Grand Cru,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer; Pinot Gris; Muscat
 52,Alsace Sélection de Grains Nobles,France,Alsace,AOC,Sweet White,Riesling; Gewurztraminer; Pinot Gris
 53,Alsace Vendanges Tardives,France,Alsace,AOC,Sweet White,Riesling; Gewurztraminer; Pinot Gris
-54,Alta Langa,Italy,Piedmont,DOCG,Sparkling,Pinot Noir; Chardonnay
+54,Alta Langa,Italy,Piedmont,DOCG,Sparkling,Pinot Nero; Chardonnay
 55,Alta Mesa,United States,California (Central Valley),AVA,Red,Zinfandel
 56,Altenberg de Bergbieten,France,Alsace,AOC Grand Cru,White,Riesling
 57,Altenberg de Bergheim,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer
 58,Altenberg de Wolxheim,France,Alsace,AOC Grand Cru,White,Riesling
-59,Alto Adige (Südtirol),Italy,Trentino-Alto Adige,DOC,White,Pinot Gris; Gewurztraminer; Sauvignon Blanc
+59,Alto Adige (Südtirol),Italy,Trentino-Alto Adige,DOC,White,Pinot Grigio; Gewürztraminer; Sauvignon
 60,Alto Adige Lagrein,Italy,Trentino-Alto Adige,DOC,Red,Lagrein
 61,Alto Adige Meranese,Italy,Trentino-Alto Adige,DOC,Red,Schiava
 62,Alto Adige Santa Maddalena,Italy,Trentino-Alto Adige,DOC,Red,Schiava; Lagrein
-63,Alto Adige Terlano,Italy,Trentino-Alto Adige,DOC,White,Pinot Blanc; Chardonnay
+63,Alto Adige Terlano,Italy,Trentino-Alto Adige,DOC,White,Pinot Bianco; Chardonnay
 64,Alto Adige Valle Isarco,Italy,Trentino-Alto Adige,DOC,White,Sylvaner; Kerner; Riesling
 65,Alto Maipo,Chile,Central Valley,DO,Red,Cabernet Sauvignon
 66,Altos de Pinto Bandeira,Brazil,Rio Grande do Sul,DO,Sparkling,Chardonnay; Pinot Noir
 67,Altos Montes,Brazil,Rio Grande do Sul,IP,Red,Merlot
 68,Altus,United States,Arkansas,AVA,Red,Cynthiana
 69,Amador County,United States,California (Sierra Foothills),AVA,Red,Zinfandel
-70,Amaicha del Valle,Argentina,Tucumán,GI,White,Torrontés Riojano
+70,Amaicha del Valle,Argentina,Tucumán,GI,White,Torrontés
 71,Amarone della Valpolicella,Italy,Veneto,DOCG,Red,Corvina; Rondinella; Molinara
 72,Ambalavao,Madagascar,Fianarantsoa,Regional,White,Villard
 73,Ambelitis,Cyprus,Paphos,Regional,White,Xynisteri
@@ -95,8 +95,8 @@
 94,Aprilia,Italy,Lazio,DOC,Red,Merlot; Sangiovese
 95,Arabako Mahastiak,Spain,Basque Country,VT,Red,Tempranillo
 96,Arabako Txakolina,Spain,Basque Country,DO,White,Hondarrabi Zuri
-97,Aragatsotn,Armenia,Aragatsotn,Regional,Red,Areni Noir; Kakhet
-98,Aragón,Spain,Navarra & Aragón,VT,Red,Grenache
+97,Aragatsotn,Armenia,Aragatsotn,Regional,Red,Areni; Kakhet
+98,Aragón,Spain,Navarra & Aragón,VT,Red,Garnacha
 99,Ararat Valley,Armenia,Ararat,Regional,Red,Areni Noir
 100,Arbin,France,Savoie & Bugey,Cru,Red,Mondeuse Noire
 101,Arbois,France,Jura,AOC,Red,Poulsard; Trousseau; Pinot Noir
@@ -104,7 +104,7 @@
 103,Arborea,Italy,Sardinia,DOC,Red,Sangiovese
 104,Arcadia,Greece,Peloponnese,PGI,White,Moschofilero
 105,Archanes,Greece,Crete,PDO,Red,Kotsifali; Mandilaria
-106,Arcole,Italy,Veneto,DOC,White,Garganega; Pinot Gris
+106,Arcole,Italy,Veneto,DOC,White,Garganega; Pinot Grigio
 107,Areni,Armenia,Vayots Dzor,Regional,Red,Areni Noir
 108,Arínzano,Spain,Navarra & Aragón,DO de Pago,Red,Tempranillo
 109,Arkansas Mountain,United States,Arkansas,AVA,Red,Cynthiana
@@ -118,34 +118,34 @@
 117,Asprinio di Aversa,Italy,Campania,DOC,White,Asprinio
 118,Assa Valley,Kazakhstan,Almaty,Regional,Red,Saperavi; Cabernet Sauvignon
 119,Assisi,Italy,Umbria,DOC,Red,Sangiovese; Merlot
-120,Assmannshäuser Höllenberg,Germany,Rheingau,Einzellage,Red,Pinot Noir
-121,Asti Spumante,Italy,Piedmont,DOCG,Sparkling,Muscat Blanc à Petits Grains
+120,Assmannshäuser Höllenberg,Germany,Rheingau,Einzellage,Red,Spätburgunder
+121,Asti Spumante,Italy,Piedmont,DOCG,Sparkling,Moscato Bianco
 122,Atalanti Valley,Greece,Central Greece,PGI,Red,Syrah; Agiorgitiko
 123,Ateni,Georgia,Kartli,PDO,White,Chinuri; Goruli Mtsvane
 124,Atlas Peak,United States,California (Napa),AVA,Red,Cabernet Sauvignon
 125,Attiki,Greece,Attica,PGI,White,Savatiano; Assyrtiko
 126,Augusta,United States,Missouri,AVA,Red,Norton
 127,Auslese,Germany,National,Prädikat,Sweet White,Riesling
-128,Australian Tawny,Australia,National,Fortified style,Fortified,Grenache; Syrah
+128,Australian Tawny,Australia,National,Fortified style,Fortified,Grenache; Shiraz
 129,Auxey-Duresses,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
 130,Avize,France,Champagne,Grand Cru village,Sparkling,Chardonnay
 131,Awatere Valley,New Zealand,Marlborough,GI,White,Sauvignon Blanc; Riesling
 132,Aÿ,France,Champagne,Grand Cru village,Sparkling,Pinot Noir
 133,Ayler Kupp,Germany,Mosel,Einzellage,White,Riesling
-134,Aythaya (Taunggyi),Myanmar,Shan State,Regional,Red,Syrah; Sauvignon Blanc
+134,Aythaya (Taunggyi),Myanmar,Shan State,Regional,Red,Shiraz; Sauvignon Blanc
 135,Ayze,France,Savoie & Bugey,Cru,Sparkling,Gringet
 136,Babadag,Romania,Dobrogea,DOC,Red,Merlot; Cabernet Sauvignon
 137,Babić Primošten,Croatia,Dalmatia,PDO,Red,Babić
-138,Badacsony,Hungary,Balaton,PDO,White,Kéknyelű; Welschriesling
-139,Baden,Germany,Baden,Anbaugebiet,Red,Pinot Noir; Pinot Gris
+138,Badacsony,Hungary,Balaton,PDO,White,Kéknyelű; Olaszrizling
+139,Baden,Germany,Baden,Anbaugebiet,Red,Spätburgunder; Grauburgunder
 140,Badische Bergstraße,Germany,Baden,Bereich,White,Riesling
 141,Bagnoli Friularo,Italy,Veneto,DOCG,Red,Raboso Piave
 142,Bailén,Spain,Andalusia,VT,Red,Molinera
 143,Bairrada,Portugal,Bairrada,DOC,Red,Baga
-144,Bairrada Espumante,Portugal,Bairrada,DOC,Sparkling,Baga; Fernão Pires
-145,Balaton-felvidék,Hungary,Balaton,PDO,White,Welschriesling; Pinot Gris
+144,Bairrada Espumante,Portugal,Bairrada,DOC,Sparkling,Baga; Maria Gomes
+145,Balaton-felvidék,Hungary,Balaton,PDO,White,Olaszrizling; Szürkebarát
 146,Balatonboglár,Hungary,Balaton,PDO,Sparkling,Chardonnay
-147,Balatonfüred-Csopak,Hungary,Balaton,PDO,White,Welschriesling
+147,Balatonfüred-Csopak,Hungary,Balaton,PDO,White,Olaszrizling
 148,Ballard Canyon,United States,California (Central Coast),AVA,Red,Syrah
 149,Balzers,Liechtenstein,Unterland,Regional,White,Müller-Thurgau
 150,Banat,Serbia,Vojvodina,PDO,White,Kreaca
@@ -155,7 +155,7 @@
 154,Banu Mărăcine,Romania,Oltenia,DOC,Red,Cabernet Sauvignon
 155,Banyuls,France,Roussillon,AOC,Fortified,Grenache
 156,Banyuls Grand Cru,France,Roussillon,AOC Grand Cru,Fortified,Grenache
-157,Baranja,Croatia,Slavonia & Danube,PDO,White,Welschriesling
+157,Baranja,Croatia,Slavonia & Danube,PDO,White,Graševina
 158,Barbanza e Iria,Spain,Galicia,VT,White,Albariño
 159,Barbaresco,Italy,Piedmont,DOCG,Red,Nebbiolo
 160,Barbera d'Alba,Italy,Piedmont,DOC,Red,Barbera
@@ -169,8 +169,8 @@
 168,Bargylus (Latakia Hills),Syria,Homs,Regional,Red,Cabernet Sauvignon; Merlot
 169,Barletta,Italy,Puglia,DOC,Red,Nero di Troia
 170,Barolo,Italy,Piedmont,DOCG,Red,Nebbiolo
-171,Barossa,Australia,South Australia,GI,Red,Syrah; Grenache
-172,Barossa Valley,Australia,South Australia,GI,Red,Syrah; Grenache
+171,Barossa,Australia,South Australia,GI,Red,Shiraz; Grenache
+172,Barossa Valley,Australia,South Australia,GI,Red,Shiraz; Grenache
 173,Barrancas,Argentina,Mendoza,GI,Red,Bonarda Argentina
 174,Barrydale,South Africa,Klein Karoo,WO,Red,Syrah
 175,Barsac,France,Bordeaux (Left Bank),AOC,Sweet White,Sémillon; Sauvignon Blanc
@@ -185,7 +185,7 @@
 184,Beaumes-de-Venise,France,Rhône (Southern),AOC,Red,Grenache; Syrah
 185,Beaumont-sur-Vesle,France,Champagne,Grand Cru village,Sparkling,Pinot Noir
 186,Beaune,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
-187,Beechworth,Australia,Victoria,GI,White,Chardonnay; Syrah
+187,Beechworth,Australia,Victoria,GI,White,Chardonnay; Shiraz
 188,Beerenauslese,Germany,National,Prädikat,Sweet White,Riesling
 189,Beerenauslese Burgenland,Austria,Burgenland,Prädikat,Sweet White,Welschriesling; Chardonnay
 190,Beira Interior,Portugal,Beiras,DOC,Red,Touriga Nacional; Rufete
@@ -194,7 +194,7 @@
 193,Belgrade,Serbia,Central Serbia,PDO,White,Chardonnay
 194,Bell Mountain,United States,Texas,AVA,Red,Cabernet Sauvignon
 195,Bellarine Peninsula,Australia,Victoria,GI,Red,Pinot Noir
-196,Bellet,France,Provence,AOC,White,Vermentino; Braquet
+196,Bellet,France,Provence,AOC,White,Rolle; Braquet
 197,Ben Lomond Mountain,United States,California (Bay Area),AVA,White,Chardonnay
 198,Bendigo,New Zealand,Central Otago,GI,Red,Pinot Noir
 199,Beni M'Tir,Morocco,Meknès,AOG,Red,Cabernet Sauvignon; Syrah
@@ -203,7 +203,7 @@
 202,Bennett Valley,United States,California (Sonoma),AVA,Red,Merlot; Syrah
 203,Bergerac,France,Southwest France,AOC,Red,Merlot; Cabernet Sauvignon
 204,Berkane,Morocco,Oriental,AOG,Red,Carignan; Alicante Bouschet
-205,Bermet,Serbia,Vojvodina,Traditional,Fortified,
+205,Bermet,Serbia,Vojvodina,Traditional,Fortified,Aromatized blend
 206,Bernkastel,Germany,Mosel,Bereich,White,Riesling
 207,Bernkasteler Doctor,Germany,Mosel,Einzellage,White,Riesling
 208,Bessarabia,Ukraine,Bessarabia,PGI,Red,Cabernet Sauvignon; Saperavi
@@ -211,14 +211,14 @@
 210,Betsileo,Madagascar,Fianarantsoa,Regional,Rosé,Villard; Couderc
 211,Betuwe,Netherlands,Gelderland,PGI,White,Solaris; Johanniter
 212,Bianchello del Metauro,Italy,Marche,DOC,White,Biancame
-213,Bianco Capena,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
-214,Bianco di Custoza,Italy,Veneto,DOC,White,Garganega; Trebbiano Toscano
+213,Bianco Capena,Italy,Lazio,DOC,White,Malvasia; Trebbiano
+214,Bianco di Custoza,Italy,Veneto,DOC,White,Garganega; Trebbiano
 215,Bianco di Pitigliano,Italy,Tuscany,DOC,White,Trebbiano Toscano; Greco
 216,Bielersee,Switzerland,Three Lakes,AOC,White,Chasselas
 217,Bienvenues-Bâtard-Montrachet,France,Burgundy (Côte de Beaune),AOC Grand Cru,White,Chardonnay
 218,Bierzo,Spain,Castilla y León,DO,Red,Mencía
 219,Biferno,Italy,Molise,DOC,Red,Montepulciano; Aglianico
-220,Big Rivers,Australia,New South Wales,GI,Red,Syrah
+220,Big Rivers,Australia,New South Wales,GI,Red,Shiraz
 221,Big Valley District,United States,California (Lake),AVA,White,Sauvignon Blanc
 222,Bijapur,India,Karnataka,Regional,Red,Cabernet Sauvignon
 223,Bingen,Germany,Rheinhessen,Bereich,White,Riesling
@@ -226,7 +226,7 @@
 225,Bío Bío Valley,Chile,Southern Chile,DO,White,Riesling; Pinot Noir
 226,Biscoitos,Portugal,Azores,DOC,Fortified,Verdelho
 227,Bivongi,Italy,Calabria,DOC,Red,Gaglioppo; Greco Nero
-228,Bizeljsko-Sremič,Slovenia,Posavje,PDO,White,Welschriesling
+228,Bizeljsko-Sremič,Slovenia,Posavje,PDO,White,Laški Rizling
 229,Bizkaiko Txakolina,Spain,Basque Country,DO,White,Hondarrabi Zuri
 230,Black Sage Bench,Canada,British Columbia,BC GI,Red,Cabernet Sauvignon; Syrah
 231,Black Sea Coast,Bulgaria,Black Sea,PDO,White,Dimyat; Chardonnay
@@ -251,7 +251,7 @@
 250,Bonnes-Mares,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 251,Bonnezeaux,France,Loire (Anjou-Saumur),AOC,Sweet White,Chenin Blanc
 252,Bonnievale,South Africa,Breede River Valley,WO,White,Chardonnay
-253,Borba,Portugal,Alentejo,DOC,Red,Tempranillo; Trincadeira
+253,Borba,Portugal,Alentejo,DOC,Red,Aragonez; Trincadeira
 254,Bordeaux Blanc,France,Bordeaux,AOC,White,Sauvignon Blanc; Sémillon; Muscadelle
 255,Bordeaux Clairet,France,Bordeaux,AOC,Rosé,Merlot; Cabernet Franc
 256,Bordeaux Rosé,France,Bordeaux,AOC,Rosé,Merlot; Cabernet Sauvignon
@@ -273,20 +273,20 @@
 272,Brauneberger Juffer-Sonnenuhr,Germany,Mosel,Einzellage,White,Riesling
 273,Breedekloof,South Africa,Breede River Valley,WO,White,Chenin Blanc
 274,Breganze,Italy,Veneto,DOC,Red,Merlot; Cabernet Sauvignon
-275,Breisgau,Germany,Baden,Bereich,Red,Pinot Noir
+275,Breisgau,Germany,Baden,Bereich,Red,Spätburgunder
 276,Bridge Pa Triangle,New Zealand,Hawke's Bay,GI,Red,Syrah; Merlot
 277,Brindisi,Italy,Puglia,DOC,Red,Negroamaro
-278,Broke Fordwich,Australia,New South Wales,GI,White,Sémillon
+278,Broke Fordwich,Australia,New South Wales,GI,White,Semillon
 279,Brome-Missisquoi,Canada,Quebec,IGP,White,Vidal; Frontenac
 280,Brouilly,France,Beaujolais,AOC Cru,Red,Gamay
 281,Bruderthal,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer
 282,Brulhois,France,Southwest France,AOC,Red,Tannat; Merlot
-283,Brunello di Montalcino,Italy,Tuscany,DOCG,Red,Sangiovese
+283,Brunello di Montalcino,Italy,Tuscany,DOCG,Red,Sangiovese Grosso
 284,Bucelas,Portugal,Lisboa,DOC,White,Arinto
 285,Bugey,France,Savoie & Bugey,AOC,White,Chardonnay; Altesse
 286,Bugey-Cerdon,France,Savoie & Bugey,AOC,Sparkling Rosé,Gamay; Poulsard
-287,Bullas,Spain,Levante,DO,Red,Mourvèdre
-288,Bündner Herrschaft,Switzerland,Graubünden,AOC,Red,Pinot Noir
+287,Bullas,Spain,Levante,DO,Red,Monastrell
+288,Bündner Herrschaft,Switzerland,Graubünden,AOC,Red,Blauburgunder
 289,Burn of Columbia Valley,United States,Washington,AVA,Red,Syrah
 290,Busuioacă de Bohotin,Romania,Muntenia,DOC,Sweet Rosé,Busuioacă de Bohotin
 291,Butajira,Ethiopia,Rift Valley,Regional,White,Chenin Blanc
@@ -300,54 +300,54 @@
 299,Cachapoal Valley,Chile,Central Valley,DO,Red,Carmenère; Cabernet Sauvignon
 300,Cadillac,France,Bordeaux (Entre-Deux-Mers),AOC,Sweet White,Sémillon; Sauvignon Blanc
 301,Cadillac-Côtes de Bordeaux,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Sauvignon
-302,Cafayate,Argentina,Salta,GI,White,Torrontés Riojano
+302,Cafayate,Argentina,Salta,GI,White,Torrontés
 303,Cahors,France,Southwest France,AOC,Red,Malbec
 304,Cairanne,France,Rhône (Southern),AOC,Red,Grenache; Syrah
 305,Calamin,Switzerland,Vaud,Grand Cru,White,Chasselas
-306,Calatayud,Spain,Navarra & Aragón,DO,Red,Grenache
+306,Calatayud,Spain,Navarra & Aragón,DO,Red,Garnacha
 307,California Shenandoah Valley,United States,California (Sierra Foothills),AVA,Red,Zinfandel
 308,California Sparkling Wine,United States,California,Regional style,Sparkling,Chardonnay; Pinot Noir
 309,Calistoga,United States,California (Napa),AVA,Red,Cabernet Sauvignon; Petite Sirah
-310,Calitzdorp,South Africa,Klein Karoo,WO,Fortified,Touriga Nacional; Tinta Barroca
+310,Calitzdorp,South Africa,Klein Karoo,WO,Fortified,Touriga Nacional; Tinta Barocca
 311,Calosso,Italy,Piedmont,DOC,Red,Gamba Rossa
 312,Caluso Passito,Italy,Piedmont,DOCG,Sweet White,Erbaluce
 313,Calzadilla,Spain,Castilla-La Mancha,DO de Pago,Red,Syrah; Tempranillo
 314,Campanha Gaúcha,Brazil,Rio Grande do Sul,IP,Red,Cabernet Sauvignon; Tannat
 315,Campi Flegrei,Italy,Campania,DOC,Red,Piedirosso
 316,Campidano di Terralba,Italy,Sardinia,DOC,Red,Bovale
-317,Campo de Borja,Spain,Navarra & Aragón,DO,Red,Grenache
-318,Campo de Cartagena,Spain,Murcia,VT,Red,Mourvèdre
+317,Campo de Borja,Spain,Navarra & Aragón,DO,Red,Garnacha
+318,Campo de Cartagena,Spain,Murcia,VT,Red,Monastrell
 319,Campo de la Guardia,Spain,Castilla-La Mancha,DO de Pago,Red,Tempranillo
 320,Cañamero,Spain,Extremadura,VT,White,Alarije
 321,Canavese,Italy,Piedmont,DOC,Red,Nebbiolo; Barbera
-322,Canberra District,Australia,New South Wales,GI,Red,Syrah; Riesling
+322,Canberra District,Australia,New South Wales,GI,Red,Shiraz; Riesling
 323,Candia dei Colli Apuani,Italy,Tuscany,DOC,White,Vermentino; Albarola
 324,Candy Mountain,United States,Washington,AVA,Red,Cabernet Sauvignon
 325,Canelones,Uruguay,Canelones,Regional,Red,Tannat
 326,Cañete,Peru,Lima,Regional,Red,Quebranta
 327,Cangas,Spain,Cantabria & Asturias,VC,Red,Albarín Negro; Verdejo Negro
 328,Cannellino di Frascati,Italy,Lazio,DOCG,Sweet White,Malvasia
-329,Cannonau di Sardegna,Italy,Sardinia,DOC,Red,Grenache
+329,Cannonau di Sardegna,Italy,Sardinia,DOC,Red,Cannonau
 330,Canon-Fronsac,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
 331,Canterbury Plains,New Zealand,Canterbury,GI,White,Chardonnay; Riesling
 332,Capalbio,Italy,Tuscany,DOC,Red,Sangiovese; Cabernet Sauvignon
 333,Cape Agulhas,South Africa,Cape South Coast,WO,White,Sauvignon Blanc
 334,Cape Blend,South Africa,National,Style,Red,Pinotage; Cabernet Sauvignon; Merlot
 335,Cape May Peninsula,United States,New Jersey,AVA,Red,Chambourcin
-336,Cape Vintage (Cape Port),South Africa,National,Style,Fortified,Touriga Nacional; Tinta Barroca
+336,Cape Vintage (Cape Port),South Africa,National,Style,Fortified,Touriga Nacional; Tinta Barocca
 337,Cappadocia,Turkey,Central Anatolia,Regional,White,Emir
 338,Capri,Italy,Campania,DOC,White,Falanghina; Greco
 339,Capriano del Colle,Italy,Lombardy,DOC,Red,Marzemino; Merlot
 340,Carcavelos,Portugal,Lisboa,DOC,Fortified,Galego Dourado; Arinto
 341,Carema,Italy,Piedmont,DOC,Red,Nebbiolo
-342,Carignano del Sulcis,Italy,Sardinia,DOC,Red,Carignan
-343,Cariñena,Spain,Navarra & Aragón,DO,Red,Grenache; Carignan
+342,Carignano del Sulcis,Italy,Sardinia,DOC,Red,Carignano
+343,Cariñena,Spain,Navarra & Aragón,DO,Red,Garnacha; Cariñena
 344,Carmel Valley,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
 345,Carmenère,Chile,National,Grape wine,Red,Carmenère
 346,Carmignano,Italy,Tuscany,DOCG,Red,Sangiovese; Cabernet Sauvignon
 347,Carnuntum,Austria,Niederösterreich,DAC,Red,Zweigelt; Blaufränkisch
 348,Carora,Venezuela,Lara,Regional,Red,Tempranillo; Syrah
-349,Carso,Italy,Friuli-Venezia Giulia,DOC,Red,Terrano; Refosco dal Peduncolo Rosso
+349,Carso,Italy,Friuli-Venezia Giulia,DOC,Red,Terrano; Refosco
 350,Carso Vitovska,Italy,Friuli-Venezia Giulia,DOC,Orange,Vitovska
 351,Casa del Blanco,Spain,Castilla-La Mancha,DO de Pago,Red,Cabernet Sauvignon; Syrah
 352,Casablanca Valley,Chile,Aconcagua,DO,White,Sauvignon Blanc; Chardonnay
@@ -358,14 +358,14 @@
 357,Castel San Lorenzo,Italy,Campania,DOC,Red,Barbera; Sangiovese
 358,Casteller,Italy,Trentino-Alto Adige,DOC,Red,Schiava; Merlot
 359,Castelli di Jesi Verdicchio Riserva,Italy,Marche,DOCG,White,Verdicchio
-360,Castelli Romani,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+360,Castelli Romani,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 361,Castelo Rodrigo,Portugal,Beiras,DOC,Red,Touriga Nacional
 362,Castillon-Côtes de Bordeaux,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
-363,Catalunya,Spain,Catalonia,DO,Red,
-364,Catamarca,Argentina,Catamarca,GI,White,Torrontés Riojano
+363,Catalunya,Spain,Catalonia,DO,Red,Various
+364,Catamarca,Argentina,Catamarca,GI,White,Torrontés
 365,Catoctin,United States,Maryland,AVA,Red,Cabernet Sauvignon; Chambourcin
 366,Cauquenes,Chile,Central Valley,DO,Red,Carignan; País
-367,Cava,Spain,Catalonia,DO,Sparkling,Viura; Xarel·lo; Parellada
+367,Cava,Spain,Catalonia,DO,Sparkling,Macabeo; Xarel·lo; Parellada
 368,Cayuga Lake,United States,New York,AVA,White,Riesling; Cabernet Franc
 369,Cederberg,South Africa,Cederberg,WO,White,Sauvignon Blanc; Chenin Blanc
 370,Cellatica,Italy,Lombardy,DOC,Red,Marzemino; Barbera
@@ -374,10 +374,10 @@
 373,Central Hawke's Bay,New Zealand,Hawke's Bay,Regional,Red,Merlot
 374,Central Orange River,South Africa,Northern Cape,WO,White,Colombard
 375,Central Otago,New Zealand,Central Otago,GI,Red,Pinot Noir
-376,Central Ranges,Australia,New South Wales,GI,Red,Syrah
+376,Central Ranges,Australia,New South Wales,GI,Red,Shiraz
 377,Central Slovakia,Slovakia,Stredoslovenská,PDO,Red,Blaufränkisch
-378,Central Victoria,Australia,Victoria,GI,Red,Syrah
-379,Central Western Australia,Australia,Western Australia,GI,Red,Syrah
+378,Central Victoria,Australia,Victoria,GI,Red,Shiraz
+379,Central Western Australia,Australia,Western Australia,GI,Red,Shiraz
 380,Cerasuolo d'Abruzzo,Italy,Abruzzo,DOC,Rosé,Montepulciano
 381,Cerasuolo di Vittoria,Italy,Sicily,DOCG,Red,Nero d'Avola; Frappato
 382,Cérons,France,Bordeaux (Left Bank),AOC,Sweet White,Sémillon; Sauvignon Blanc
@@ -393,7 +393,7 @@
 392,Chacayes,Argentina,Mendoza,GI,Red,Malbec
 393,Chalk Hill,United States,California (Sonoma),AVA,White,Chardonnay; Sauvignon Blanc
 394,Chalone,United States,California (Central Coast),AVA,White,Chardonnay; Pinot Noir
-395,Chambave Muscat,Italy,Valle d'Aosta,DOC,White,Muscat Blanc à Petits Grains
+395,Chambave Muscat,Italy,Valle d'Aosta,DOC,White,Moscato Bianco
 396,Chambertin,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 397,Chambertin-Clos de Bèze,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 398,Chambolle-Musigny,France,Burgundy (Côte de Nuits),AOC,Red,Pinot Noir
@@ -416,7 +416,7 @@
 415,Châtillon-en-Diois,France,Rhône (Northern),AOC,Red,Gamay
 416,Chaume,France,Loire (Anjou-Saumur),AOC Premier Cru,Sweet White,Chenin Blanc
 417,Chautagne,France,Savoie & Bugey,Cru,Red,Gamay; Mondeuse Noire
-418,Chaves,Portugal,Trás-os-Montes,DOC,Red,Tempranillo
+418,Chaves,Portugal,Trás-os-Montes,DOC,Red,Tinta Roriz
 419,Chehalem Mountains,United States,Oregon,AVA,Red,Pinot Noir
 420,Chellah,Morocco,Rabat,AOG,Red,Carignan
 421,Chénas,France,Beaujolais,AOC Cru,Red,Gamay
@@ -444,7 +444,7 @@
 443,Chusclan,France,Rhône (Southern),AOC Villages,Rosé,Grenache; Syrah
 444,Chüy Valley,Kyrgyzstan,Chüy,Regional,Red,Saperavi
 445,Cienega Valley,United States,California (Central Coast),AVA,Red,Zinfandel
-446,Cigales,Spain,Castilla y León,DO,Rosé,Tempranillo; Grenache
+446,Cigales,Spain,Castilla y León,DO,Rosé,Tempranillo; Garnacha
 447,Cilento,Italy,Campania,DOC,Red,Aglianico
 448,Cinque Terre,Italy,Liguria,DOC,White,Bosco; Albarola; Vermentino
 449,Cinque Terre Sciacchetrà,Italy,Liguria,DOC,Sweet White,Bosco; Albarola
@@ -454,11 +454,11 @@
 453,Citrusdal Mountain,South Africa,Olifants River,WO,Red,Syrah; Chenin Blanc
 454,Ciumai,Moldova,Valul lui Traian,Regional,Sweet Red,Cabernet Sauvignon
 455,Clairette de Bellegarde,France,Rhône (Southern),AOC,White,Clairette
-456,Clairette de Die,France,Rhône (Northern),AOC,Sparkling,Muscat Blanc à Petits Grains; Clairette
+456,Clairette de Die,France,Rhône (Northern),AOC,Sparkling,Muscat Blanc; Clairette
 457,Clairette du Languedoc,France,Languedoc,AOC,White,Clairette
-458,Clare Valley,Australia,South Australia,GI,White,Riesling; Syrah
+458,Clare Valley,Australia,South Australia,GI,White,Riesling; Shiraz
 459,Clarksburg,United States,California (Central Valley),AVA,White,Chenin Blanc
-460,Clàssic Penedès,Spain,Catalonia,DO,Sparkling,Xarel·lo; Viura
+460,Clàssic Penedès,Spain,Catalonia,DO,Sparkling,Xarel·lo; Macabeo
 461,Clear Lake,United States,California (Lake),AVA,Red,Cabernet Sauvignon; Sauvignon Blanc
 462,Clements Hills,United States,California (Central Valley),AVA,Red,Zinfandel
 463,Clevedon,New Zealand,Auckland,Regional,Red,Merlot; Syrah
@@ -472,12 +472,12 @@
 471,Colares,Portugal,Lisboa,DOC,Red,Ramisco
 472,Colchagua Valley,Chile,Central Valley,DO,Red,Carmenère; Cabernet Sauvignon
 473,Cole Ranch,United States,California (Mendocino),AVA,White,Riesling
-474,Colli Albani,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+474,Colli Albani,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 475,Colli Altotiberini,Italy,Umbria,DOC,Red,Sangiovese; Merlot
 476,Colli Asolani,Italy,Veneto,DOC,Red,Merlot; Cabernet Sauvignon
 477,Colli Berici,Italy,Veneto,DOC,Red,Tai Rosso; Merlot
-478,Colli Bolognesi,Italy,Emilia-Romagna,DOC,White,Grechetto; Chardonnay
-479,Colli Bolognesi Pignoletto,Italy,Emilia-Romagna,DOCG,White,Grechetto
+478,Colli Bolognesi,Italy,Emilia-Romagna,DOC,White,Pignoletto; Chardonnay
+479,Colli Bolognesi Pignoletto,Italy,Emilia-Romagna,DOCG,White,Grechetto Gentile
 480,Colli d'Imola,Italy,Emilia-Romagna,DOC,Red,Sangiovese; Barbera
 481,Colli del Trasimeno,Italy,Umbria,DOC,Red,Gamay del Trasimeno
 482,Colli dell'Etruria Centrale,Italy,Tuscany,DOC,Red,Sangiovese
@@ -490,7 +490,7 @@
 489,Colli Etruschi Viterbesi,Italy,Lazio,DOC,Red,Sangiovese; Montepulciano
 490,Colli Euganei,Italy,Veneto,DOC,Red,Merlot; Cabernet Sauvignon
 491,Colli Euganei Fior d'Arancio,Italy,Veneto,DOCG,Sweet White,Moscato Giallo
-492,Colli Lanuvini,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+492,Colli Lanuvini,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 493,Colli Maceratesi,Italy,Marche,DOC,White,Maceratino
 494,Colli Martani,Italy,Umbria,DOC,White,Grechetto
 495,Colli Orientali del Friuli Picolit,Italy,Friuli-Venezia Giulia,DOCG,Sweet White,Picolit
@@ -501,10 +501,10 @@
 500,Colli Tortonesi,Italy,Piedmont,DOC,Red,Barbera; Croatina
 501,Colli Tortonesi Timorasso,Italy,Piedmont,DOC,White,Timorasso
 502,Collina Torinese,Italy,Piedmont,DOC,Red,Barbera; Freisa
-503,Colline Joniche Tarantine,Italy,Puglia,DOC,Red,Zinfandel
+503,Colline Joniche Tarantine,Italy,Puglia,DOC,Red,Primitivo
 504,Colline Lucchesi,Italy,Tuscany,DOC,Red,Sangiovese; Merlot
 505,Colline Novaresi,Italy,Piedmont,DOC,Red,Nebbiolo; Vespolina
-506,Collio Goriziano,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Ribolla Gialla; Sauvignon Blanc
+506,Collio Goriziano,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Ribolla Gialla; Sauvignon
 507,Collioure,France,Roussillon,AOC,Red,Grenache; Mourvèdre; Syrah
 508,Colomé,Argentina,Salta,GI,Red,Malbec
 509,Colonia,Uruguay,Colonia,Regional,Red,Tannat; Merlot
@@ -519,7 +519,7 @@
 518,Conero Riserva,Italy,Marche,DOCG,Red,Montepulciano
 519,Constantia,South Africa,Coastal Region,WO,White,Sauvignon Blanc
 520,Contea di Sclafani,Italy,Sicily,DOC,Red,Nero d'Avola; Perricone
-521,Contessa Entellina,Italy,Sicily,DOC,White,Inzolia; Chardonnay
+521,Contessa Entellina,Italy,Sicily,DOC,White,Ansonica; Chardonnay
 522,Controguerra,Italy,Abruzzo,DOC,Red,Montepulciano; Merlot
 523,Coombsville,United States,California (Napa),AVA,Red,Cabernet Sauvignon
 524,Coonawarra,Australia,South Australia,GI,Red,Cabernet Sauvignon
@@ -533,9 +533,9 @@
 532,Cornalin du Valais,Switzerland,Valais,AOC,Red,Cornalin
 533,Cornas,France,Rhône (Northern),AOC,Red,Syrah
 534,Cornwall,United Kingdom,Southwest England,Regional,Sparkling,Seyval Blanc; Chardonnay
-535,Corpinnat,Spain,Catalonia,Private mark,Sparkling,Xarel·lo; Viura
+535,Corpinnat,Spain,Catalonia,Private mark,Sparkling,Xarel·lo; Macabeo
 536,Cortese dell'Alto Monferrato,Italy,Piedmont,DOC,White,Cortese
-537,Corti Benedettine del Padovano,Italy,Veneto,DOC,Red,Merlot; Raboso Piave
+537,Corti Benedettine del Padovano,Italy,Veneto,DOC,Red,Merlot; Raboso
 538,Corton,France,Burgundy (Côte de Beaune),AOC Grand Cru,Red,Pinot Noir
 539,Corton-Charlemagne,France,Burgundy (Côte de Beaune),AOC Grand Cru,White,Chardonnay
 540,Cortona,Italy,Tuscany,DOC,Red,Syrah
@@ -589,7 +589,7 @@
 588,Côtes du Roussillon,France,Roussillon,AOC,Red,Grenache; Syrah; Carignan
 589,Côtes du Roussillon Villages,France,Roussillon,AOC,Red,Grenache; Carignan; Syrah
 590,Cotești,Romania,Moldovan Hills,DOC,Red,Fetească Neagră; Merlot
-591,Cotnari,Romania,Moldovan Hills,DOC,Sweet White,Grasă de Cotnari; Muscat Blanc à Petits Grains
+591,Cotnari,Romania,Moldovan Hills,DOC,Sweet White,Grasă de Cotnari; Tămâioasă Românească
 592,Coulée de Serrant,France,Loire (Anjou-Saumur),AOC,White,Chenin Blanc
 593,Cour-Cheverny,France,Loire (Touraine),AOC,White,Romorantin
 594,Cova da Beira,Portugal,Beiras,DOC,Red,Rufete; Touriga Nacional
@@ -605,46 +605,46 @@
 604,Crémant de Die,France,Rhône (Northern),AOC,Sparkling,Clairette
 605,Crémant de Limoux,France,Languedoc,AOC,Sparkling,Chardonnay; Chenin Blanc
 606,Crémant de Loire,France,Loire (Anjou-Saumur),AOC,Sparkling,Chenin Blanc; Cabernet Franc
-607,Crémant de Luxembourg,Luxembourg,Moselle,AOP,Sparkling,Müller-Thurgau; Pinot Blanc
+607,Crémant de Luxembourg,Luxembourg,Moselle,AOP,Sparkling,Rivaner; Pinot Blanc
 608,Crémant de Wallonie,Belgium,Wallonia,PDO,Sparkling,Chardonnay; Pinot Noir
 609,Crémant du Jura,France,Jura,AOC,Sparkling,Chardonnay; Pinot Noir
 610,Cremisan Valley,Palestine,Bethlehem,Regional,White,Dabouki; Jandali; Hamdani
 611,Crépy,France,Savoie & Bugey,AOC,White,Chasselas
 612,Creston District,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
 613,Cricova,Moldova,Codru,Regional,Sparkling,Chardonnay; Pinot Noir
-614,Crimea,Russia,Crimea,PGI,Fortified,Muscat Blanc à Petits Grains; Kokur
+614,Crimea,Russia,Crimea,PGI,Fortified,Muscat; Kokur
 615,Criots-Bâtard-Montrachet,France,Burgundy (Côte de Beaune),AOC Grand Cru,White,Chardonnay
 616,Cromwell Basin,New Zealand,Central Otago,GI,Red,Pinot Noir
 617,Crozes-Hermitage,France,Rhône (Northern),AOC,Red,Syrah
 618,Cruet,France,Savoie & Bugey,Cru,White,Jacquère
-619,Csongrád,Hungary,Duna,PDO,Red,Blaufränkisch
+619,Csongrád,Hungary,Duna,PDO,Red,Kékfrankos
 620,Cumberland Valley,United States,Pennsylvania,AVA,Red,Chambourcin
 621,Curicó Valley,Chile,Central Valley,DO,Red,Cabernet Sauvignon; Sauvignon Blanc
 622,Currency Creek,Australia,South Australia,GI,Red,Cabernet Sauvignon
 623,Curtefranca,Italy,Lombardy,DOC,Red,Cabernet Sauvignon; Merlot
-624,Cviček,Slovenia,Posavje,PDO,Rosé,Žametovka; Blaufränkisch
+624,Cviček,Slovenia,Posavje,PDO,Rosé,Žametovka; Modra Frankinja
 625,Đà Lạt,Vietnam,Lâm Đồng,Regional,Red,Cardinal; Cabernet Sauvignon
 626,Dafnes,Greece,Crete,PDO,Red,Liatiko
-627,Dagestan,Russia,Dagestan,PGI,Fortified,Rkatsiteli; Muscat Blanc à Petits Grains
+627,Dagestan,Russia,Dagestan,PGI,Fortified,Rkatsiteli; Muscat
 628,Dahlonega Plateau,United States,Georgia (US),AVA,Red,Cabernet Franc; Chambourcin
-629,Đakovo,Croatia,Slavonia & Danube,PDO,White,Welschriesling
+629,Đakovo,Croatia,Slavonia & Danube,PDO,White,Graševina
 630,Danish Wine,Denmark,Zealand,PGI,White,Solaris; Rondo
-631,Danubian Plain,Bulgaria,Danubian Plain,PDO,Red,Kadarka; Cabernet Sauvignon
-632,Dão,Portugal,Dão,DOC,Red,Touriga Nacional; Mencía; Alfrocheiro
+631,Danubian Plain,Bulgaria,Danubian Plain,PDO,Red,Gamza; Cabernet Sauvignon
+632,Dão,Portugal,Dão,DOC,Red,Touriga Nacional; Jaen; Alfrocheiro
 633,Dão Branco,Portugal,Dão,DOC,White,Encruzado
 634,Dão Serra da Estrela,Portugal,Dão,DOC,Red,Touriga Nacional
-635,Dão Silgueiros,Portugal,Dão,DOC,Red,Touriga Nacional; Mencía
+635,Dão Silgueiros,Portugal,Dão,DOC,Red,Touriga Nacional; Jaen
 636,Darling,South Africa,Coastal Region,WO,White,Sauvignon Blanc
 637,Dealu Mare,Romania,Muntenia,DOC,Red,Fetească Neagră; Cabernet Sauvignon
 638,Debrői Hárslevelű,Hungary,Eger,PDO,White,Hárslevelű
 639,Dehesa del Carrizal,Spain,Castilla-La Mancha,DO de Pago,Red,Cabernet Sauvignon; Syrah
 640,Deidesheimer Hohenmorgen,Germany,Pfalz,Einzellage,White,Riesling
 641,Delia Nivolelli,Italy,Sicily,DOC,Red,Nero d'Avola; Merlot
-642,Delle Venezie,Italy,Friuli-Venezia Giulia,DOC,White,Pinot Gris
+642,Delle Venezie,Italy,Friuli-Venezia Giulia,DOC,White,Pinot Grigio
 643,Denizli,Turkey,Aegean,Regional,Red,Çalkarası
 644,Denmark (WA),Australia,Western Australia,GI,Red,Pinot Noir; Chardonnay
 645,Derwent Valley,Australia,Tasmania,Regional,White,Riesling; Pinot Noir
-646,Deutscher Sekt b.A.,Germany,National,Quality sparkling,Sparkling,Riesling; Pinot Blanc
+646,Deutscher Sekt b.A.,Germany,National,Quality sparkling,Sparkling,Riesling; Weissburgunder
 647,Devín,Slovakia,National,Grape wine,White,Devín
 648,Devon,United Kingdom,Southwest England,Regional,White,Bacchus; Solaris
 649,Devon Valley,South Africa,Coastal Region,WO,Red,Cabernet Sauvignon
@@ -653,7 +653,7 @@
 652,Diamond Mountain District,United States,California (Napa),AVA,Red,Cabernet Sauvignon
 653,Dimi,Georgia,Imereti,PDO,White,Tsolikouri
 654,Dingač,Croatia,Dalmatia,PDO,Red,Plavac Mali
-655,Divin,Moldova,Divin,PGI,Fortified,Trebbiano Toscano
+655,Divin,Moldova,Divin,PGI,Fortified,Ugni Blanc
 656,Diyarbakır,Turkey,Southeastern Anatolia,Regional,Red,Boğazkere
 657,Dodoma,Tanzania,Dodoma,Regional,Red,Makutupora; Chenin Blanc
 658,Dogliani,Italy,Piedmont,DOCG,Red,Dolcetto
@@ -670,8 +670,8 @@
 669,Dorset,United Kingdom,Southwest England,Regional,Sparkling,Chardonnay; Pinot Noir
 670,Dorsheimer Goldloch,Germany,Nahe,Einzellage,White,Riesling
 671,Douglas,South Africa,Northern Cape,WO,White,Colombard
-672,Douro,Portugal,Douro,DOC,Red,Touriga Nacional; Touriga Franca; Tempranillo
-673,Douro Baixo Corgo,Portugal,Douro,DOC,Red,Touriga Franca; Tempranillo
+672,Douro,Portugal,Douro,DOC,Red,Touriga Nacional; Touriga Franca; Tinta Roriz
+673,Douro Baixo Corgo,Portugal,Douro,DOC,Red,Touriga Franca; Tinta Roriz
 674,Douro Branco,Portugal,Douro,DOC,White,Rabigato; Viosinho; Gouveio
 675,Douro Cima Corgo,Portugal,Douro,DOC,Red,Touriga Nacional; Touriga Franca
 676,Douro Superior,Portugal,Douro,DOC,Red,Touriga Nacional; Touriga Franca
@@ -687,14 +687,14 @@
 686,Eagle Peak Mendocino County,United States,California (Mendocino),AVA,Red,Zinfandel
 687,Early Melnik (Ranna Melnishka),Bulgaria,Struma Valley,PDO,Red,Early Melnik
 688,East Coast Tasmania,Australia,Tasmania,Regional,Red,Pinot Noir
-689,Eastern Plains Inland and North of Western Australia,Australia,Western Australia,GI,Red,Syrah
+689,Eastern Plains Inland and North of Western Australia,Australia,Western Australia,GI,Red,Shiraz
 690,Eastern Slovakia,Slovakia,Východoslovenská,PDO,White,Welschriesling
 691,Échézeaux,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
-692,Edelzwicker,France,Alsace,AOC,White,
-693,Eden Valley,Australia,South Australia,GI,White,Riesling; Syrah
+692,Edelzwicker,France,Alsace,AOC,White,Field blend
+693,Eden Valley,Australia,South Australia,GI,White,Riesling; Shiraz
 694,Edna Valley,United States,California (Central Coast),AVA,White,Chardonnay; Pinot Noir
-695,Egri Bikavér,Hungary,Eger,PDO,Red,Blaufränkisch; Kadarka
-696,Egri Csillag,Hungary,Eger,PDO,White,
+695,Egri Bikavér,Hungary,Eger,PDO,Red,Kékfrankos; Kadarka
+696,Egri Csillag,Hungary,Eger,PDO,White,Field blend
 697,Eichberg,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Pinot Gris
 698,Eisenberg,Austria,Burgenland,DAC,Red,Blaufränkisch
 699,Eiswein,Germany,National,Prädikat,Sweet White,Riesling
@@ -705,7 +705,7 @@
 704,El Pomar District,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
 705,El Terrerazo,Spain,Valencia,DO de Pago,Red,Bobal
 706,Elazığ,Turkey,Eastern Anatolia,Regional,Red,Öküzgözü; Boğazkere
-707,Elba,Italy,Tuscany,DOC,White,Inzolia; Trebbiano Toscano
+707,Elba,Italy,Tuscany,DOC,White,Ansonica; Trebbiano Toscano
 708,Elba Aleatico Passito,Italy,Tuscany,DOCG,Sweet Red,Aleatico
 709,Elbling,Luxembourg,Moselle,AOP,White,Elbling
 710,Elgin,South Africa,Cape South Coast,WO,White,Sauvignon Blanc; Chardonnay
@@ -713,7 +713,7 @@
 712,Elkton Oregon,United States,Oregon,AVA,White,Pinot Gris; Riesling
 713,Eloro,Italy,Sicily,DOC,Red,Nero d'Avola; Frappato
 714,Elqui Valley,Chile,Coquimbo,DO,Red,Syrah; Carmenère
-715,Empordà,Spain,Catalonia,DO,Red,Grenache; Carignan
+715,Empordà,Spain,Catalonia,DO,Red,Garnacha; Cariñena
 716,Encostas d'Aire,Portugal,Lisboa,DOC,Red,Castelão; Trincadeira
 717,Engelberg,France,Alsace,AOC Grand Cru,White,Riesling
 718,English Bacchus,United Kingdom,National,PDO,White,Bacchus
@@ -725,32 +725,32 @@
 724,Erbacher Marcobrunn,Germany,Rheingau,Einzellage,White,Riesling
 725,Erbaluce di Caluso,Italy,Piedmont,DOCG,White,Erbaluce
 726,Erdener Prälat,Germany,Mosel,Einzellage,White,Riesling
-727,Erdut,Croatia,Slavonia & Danube,PDO,White,Welschriesling
+727,Erdut,Croatia,Slavonia & Danube,PDO,White,Graševina
 728,Erice,Italy,Sicily,DOC,White,Catarratto; Grillo
 729,Erlin,Taiwan,Changhua,Regional,Red,Black Queen; Golden Muscat
 730,Ermitage du Valais,Switzerland,Valais,AOC,White,Marsanne
-731,Escherndorfer Lump,Germany,Franken,Einzellage,White,Sylvaner
+731,Escherndorfer Lump,Germany,Franken,Einzellage,White,Silvaner
 732,Escondido Valley,United States,Texas,AVA,Red,Cabernet Sauvignon
 733,Esino,Italy,Marche,DOC,White,Verdicchio
 734,Essex,United Kingdom,East England,Regional,White,Chardonnay; Bacchus
-735,Est! Est!! Est!!! di Montefiascone,Italy,Lazio,DOC,White,Trebbiano Toscano; Malvasia
+735,Est! Est!! Est!!! di Montefiascone,Italy,Lazio,DOC,White,Trebbiano; Malvasia
 736,Estaing,France,Southwest France,AOC,Red,Fer Servadou; Gamay
 737,Etna Bianco,Italy,Sicily,DOC,White,Carricante; Catarratto
 738,Etna Rosato,Italy,Sicily,DOC,Rosé,Nerello Mascalese
 739,Etna Rosso,Italy,Sicily,DOC,Red,Nerello Mascalese; Nerello Cappuccio
 740,Etyek-Buda,Hungary,Etyek-Buda,PDO,Sparkling,Chardonnay; Pinot Noir
 741,Evia,Greece,Central Greece,PGI,White,Savatiano
-742,Évora,Portugal,Alentejo,DOC,Red,Trincadeira; Tempranillo
+742,Évora,Portugal,Alentejo,DOC,Red,Trincadeira; Aragonez
 743,Falanghina del Sannio,Italy,Campania,DOC,White,Falanghina
 744,Falerio,Italy,Marche,DOC,White,Trebbiano Toscano; Passerina; Pecorino
 745,Falerno del Massico,Italy,Campania,DOC,Red,Aglianico; Piedirosso
-746,Far North,Australia,South Australia,GI,Red,Syrah
+746,Far North,Australia,South Australia,GI,Red,Shiraz
 747,Fara,Italy,Piedmont,DOC,Red,Nebbiolo; Vespolina
 748,Faro,Italy,Sicily,DOC,Red,Nerello Mascalese; Nocera
-749,Farroupilha,Brazil,Rio Grande do Sul,IP,Sweet White,Muscat Blanc à Petits Grains
+749,Farroupilha,Brazil,Rio Grande do Sul,IP,Sweet White,Moscato Bianco
 750,Faugères,France,Languedoc,AOC,Red,Syrah; Grenache; Mourvèdre
 751,Federspiel,Austria,Wachau,Vinea Wachau,White,Grüner Veltliner; Riesling
-752,Federweisser,Germany,National,Seasonal,White,
+752,Federweisser,Germany,National,Seasonal,White,Various
 753,Fendant,Switzerland,Valais,AOC,White,Chasselas
 754,Fennville,United States,Michigan,AVA,White,Riesling
 755,Fetească Neagră (Moldova),Moldova,National,Grape wine,Red,Fetească Neagră
@@ -763,47 +763,47 @@
 762,Fitou,France,Languedoc,AOC,Red,Carignan; Grenache; Mourvèdre
 763,Fixin,France,Burgundy (Côte de Nuits),AOC,Red,Pinot Noir
 764,Fleurie,France,Beaujolais,AOC Cru,Red,Gamay
-765,Floc de Gascogne,France,Southwest France,AOC,Fortified,Colombard; Trebbiano Toscano
-766,Florentino,Spain,Castilla-La Mancha,DO de Pago,Red,Grenache
+765,Floc de Gascogne,France,Southwest France,AOC,Fortified,Colombard; Ugni Blanc
+766,Florentino,Spain,Castilla-La Mancha,DO de Pago,Red,Garnacha
 767,Florida,Uruguay,Florida,Regional,Red,Tannat
 768,Florimont,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer
 769,Florina,Greece,Macedonia,PGI,Red,Xinomavro
-770,Fondillón,Spain,Levante,DO,Fortified,Mourvèdre
+770,Fondillón,Spain,Levante,DO,Fortified,Monastrell
 771,Forster Jesuitengarten,Germany,Pfalz,Einzellage,White,Riesling
 772,Forster Kirchenstück,Germany,Pfalz,Einzellage,White,Riesling
 773,Fort Ross-Seaview,United States,California (Sonoma),AVA,Red,Pinot Noir
 774,Four Mile Creek,Canada,Ontario,VQA,Red,Cabernet Franc; Merlot
-775,Franciacorta,Italy,Lombardy,DOCG,Sparkling,Chardonnay; Pinot Noir
+775,Franciacorta,Italy,Lombardy,DOCG,Sparkling,Chardonnay; Pinot Nero
 776,Franciacorta Satèn,Italy,Lombardy,DOCG,Sparkling,Chardonnay
 777,Francs-Côtes de Bordeaux,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
-778,Franken,Germany,Franken,Anbaugebiet,White,Sylvaner; Müller-Thurgau
-779,Frankland River,Australia,Western Australia,GI,Red,Syrah; Cabernet Sauvignon
+778,Franken,Germany,Franken,Anbaugebiet,White,Silvaner; Müller-Thurgau
+779,Frankland River,Australia,Western Australia,GI,Red,Shiraz; Cabernet Sauvignon
 780,Frankstein,France,Alsace,AOC Grand Cru,White,Riesling
-781,Franschhoek Valley,South Africa,Coastal Region,WO,White,Sémillon; Cabernet Sauvignon
-782,Frascati,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+781,Franschhoek Valley,South Africa,Coastal Region,WO,White,Semillon; Cabernet Sauvignon
+782,Frascati,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 783,Frascati Superiore,Italy,Lazio,DOCG,White,Malvasia del Lazio
 784,Frascati Superiore Riserva,Italy,Lazio,DOCG,White,Malvasia del Lazio
 785,Fraser Valley,Canada,British Columbia,BC GI,White,Pinot Gris; Bacchus
 786,Fredericksburg in the Texas Hill Country,United States,Texas,AVA,Red,Tempranillo
 787,Freisa d'Asti,Italy,Piedmont,DOC,Red,Freisa
 788,Freisa di Chieri,Italy,Piedmont,DOC,Red,Freisa
-789,Friuli,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Pinot Gris
+789,Friuli,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Pinot Grigio
 790,Friuli Annia,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Chardonnay
-791,Friuli Aquileia,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Pinot Gris
+791,Friuli Aquileia,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Pinot Grigio
 792,Friuli Colli Orientali,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Ribolla Gialla
-793,Friuli Grave,Italy,Friuli-Venezia Giulia,DOC,White,Pinot Gris; Friulano
-794,Friuli Isonzo,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Pinot Gris
-795,Friuli Latisana,Italy,Friuli-Venezia Giulia,DOC,White,Pinot Gris; Friulano
+793,Friuli Grave,Italy,Friuli-Venezia Giulia,DOC,White,Pinot Grigio; Friulano
+794,Friuli Isonzo,Italy,Friuli-Venezia Giulia,DOC,White,Friulano; Pinot Grigio
+795,Friuli Latisana,Italy,Friuli-Venezia Giulia,DOC,White,Pinot Grigio; Friulano
 796,Froehn,France,Alsace,AOC Grand Cru,White,Gewurztraminer
 797,Fronsac,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
 798,Fronton,France,Southwest France,AOC,Red,Négrette
-799,Fruška Gora,Serbia,Vojvodina,PDO,White,Welschriesling; Savagnin
+799,Fruška Gora,Serbia,Vojvodina,PDO,White,Italian Riesling; Traminer
 800,Furstentum,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Riesling
 801,Fyn,Denmark,Funen,PGI,White,Solaris
 802,Gabiano,Italy,Piedmont,DOC,Red,Barbera; Freisa
 803,Gabilan Mountains,United States,California (Central Coast),AVA,Red,Pinot Noir
 804,Gadagne,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
-805,Gaillac,France,Southwest France,AOC,Red,Duras; Fer Servadou; Syrah
+805,Gaillac,France,Southwest France,AOC,Red,Duras; Braucol; Syrah
 806,Galatina,Italy,Puglia,DOC,Red,Negroamaro
 807,Galluccio,Italy,Campania,DOC,Red,Aglianico
 808,Gambellara,Italy,Veneto,DOC,White,Garganega
@@ -812,15 +812,15 @@
 811,Gaspereau Valley,Canada,Nova Scotia,Regional,White,L'Acadie Blanc
 812,Gattinara,Italy,Piedmont,DOCG,Red,Nebbiolo
 813,Gavi,Italy,Piedmont,DOCG,White,Cortese
-814,Geelong,Australia,Victoria,GI,Red,Pinot Noir; Syrah
+814,Geelong,Australia,Victoria,GI,Red,Pinot Noir; Shiraz
 815,Geisberg,France,Alsace,AOC Grand Cru,White,Riesling
 816,Gelendzhik,Russia,Krasnodar,PGI,Red,Cabernet Sauvignon
 817,Genazzano,Italy,Lazio,DOC,Red,Cesanese; Sangiovese
 818,General Roca,Argentina,Patagonia,GI,Red,Malbec; Pinot Noir
 819,Geneseo District,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
 820,Genève,Switzerland,Geneva,AOC,White,Chasselas; Gamaret
-821,Gentil,France,Alsace,AOC,White,Riesling; Gewurztraminer; Pinot Gris; Muscat Blanc à Petits Grains
-822,Geographe,Australia,Western Australia,GI,Red,Syrah; Cabernet Sauvignon
+821,Gentil,France,Alsace,AOC,White,Riesling; Gewurztraminer; Pinot Gris; Muscat
+822,Geographe,Australia,Western Australia,GI,Red,Shiraz; Cabernet Sauvignon
 823,Getariako Txakolina,Spain,Basque Country,DO,White,Hondarrabi Zuri
 824,Gevrey-Chambertin,France,Burgundy (Côte de Nuits),AOC,Red,Pinot Noir
 825,Ghemme,Italy,Piedmont,DOCG,Red,Nebbiolo
@@ -828,45 +828,45 @@
 827,Gibbston,New Zealand,Central Otago,GI,Red,Pinot Noir
 828,Gigondas,France,Rhône (Southern),AOC,Red,Grenache; Syrah; Mourvèdre
 829,Gimblett Gravels,New Zealand,Hawke's Bay,GI,Red,Syrah; Merlot; Cabernet Sauvignon
-830,Gioia del Colle,Italy,Puglia,DOC,Red,Zinfandel
+830,Gioia del Colle,Italy,Puglia,DOC,Red,Primitivo
 831,Gippsland,Australia,Victoria,GI,Red,Pinot Noir; Chardonnay
 832,Girò di Cagliari,Italy,Sardinia,DOC,Sweet Red,Girò
-833,Gisborne,New Zealand,Gisborne,GI,White,Chardonnay; Gewurztraminer
+833,Gisborne,New Zealand,Gisborne,GI,White,Chardonnay; Gewürztraminer
 834,Givry,France,Burgundy (Côte Chalonnaise),AOC,Red,Pinot Noir
 835,Gladstone,New Zealand,Wairarapa,GI,Red,Pinot Noir; Sauvignon Blanc
-836,Glenrowan,Australia,Victoria,GI,Fortified,Muscat Blanc à Petits Grains; Syrah
+836,Glenrowan,Australia,Victoria,GI,Fortified,Muscat; Shiraz
 837,Gloeckelberg,France,Alsace,AOC Grand Cru,White,Pinot Gris; Gewurztraminer
 838,Golan Heights,Israel,Galilee,Regional,Red,Cabernet Sauvignon; Merlot
 839,Golden Mile Bench,Canada,British Columbia,BC GI,Red,Merlot; Cabernet Franc
 840,Goldert,France,Alsace,AOC Grand Cru,White,Muscat Blanc à Petits Grains; Gewurztraminer
 841,Golfo del Tigullio,Italy,Liguria,DOC,White,Vermentino; Bianchetta
 842,Goose Gap,United States,Washington,AVA,Red,Cabernet Sauvignon
-843,Goriška Brda,Slovenia,Primorska,PDO,White,Ribolla Gialla; Chardonnay
+843,Goriška Brda,Slovenia,Primorska,PDO,White,Rebula; Chardonnay
 844,Gotland,Sweden,Gotland,Regional,White,Solaris
 845,Goudini,South Africa,Breede River Valley,WO,White,Chenin Blanc
-846,Goulburn Valley,Australia,Victoria,GI,Red,Syrah; Marsanne
+846,Goulburn Valley,Australia,Victoria,GI,Red,Shiraz; Marsanne
 847,Goumenissa,Greece,Macedonia,PDO,Red,Xinomavro; Negoska
 848,Gozo DOK,Malta,Gozo,PDO,White,Girgentina; Chardonnay
 849,Graacher Himmelreich,Germany,Mosel,Einzellage,White,Riesling
 850,Graciosa,Portugal,Azores,DOC,White,Verdelho; Arinto
-851,Grampians,Australia,Victoria,GI,Red,Syrah
+851,Grampians,Australia,Victoria,GI,Red,Shiraz
 852,Gran Canaria,Spain,Canary Islands,DO,Red,Listán Negro
-853,Granada,Spain,Andalusia,DO,Red,Tempranillo; Grenache
+853,Granada,Spain,Andalusia,DO,Red,Tempranillo; Garnacha
 854,Grance Senesi,Italy,Tuscany,DOC,Red,Sangiovese
 855,Grand River Valley,United States,Ohio,AVA,White,Riesling; Chardonnay
 856,Grand Valley,United States,Colorado,AVA,Red,Cabernet Franc; Merlot
 857,Grand Valley Colorado,United States,Colorado,AVA,Red,Cabernet Franc
 858,Grands Échézeaux,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
-859,Granite Belt,Australia,Queensland,GI,Red,Syrah; Verdelho
+859,Granite Belt,Australia,Queensland,GI,Red,Shiraz; Verdelho
 860,Granja-Amareleja,Portugal,Alentejo,DOC,Red,Moreto; Trincadeira
 861,Graves,France,Bordeaux (Left Bank),AOC,Red,Cabernet Sauvignon; Merlot
 862,Graves Blanc,France,Bordeaux (Left Bank),AOC,White,Sauvignon Blanc; Sémillon
 863,Graves de Vayres,France,Bordeaux (Entre-Deux-Mers),AOC,Red,Merlot; Cabernet Franc
 864,Graves Supérieures,France,Bordeaux (Left Bank),AOC,Sweet White,Sémillon; Sauvignon Blanc
 865,Gravina,Italy,Puglia,DOC,White,Greco; Malvasia
-866,Great Southern,Australia,Western Australia,GI,White,Riesling; Syrah
-867,Greater Perth,Australia,Western Australia,GI,Red,Syrah
-868,Greco di Bianco,Italy,Calabria,DOC,Sweet White,Greco
+866,Great Southern,Australia,Western Australia,GI,White,Riesling; Shiraz
+867,Greater Perth,Australia,Western Australia,GI,Red,Shiraz
+868,Greco di Bianco,Italy,Calabria,DOC,Sweet White,Greco Bianco
 869,Greco di Tufo,Italy,Campania,DOCG,White,Greco
 870,Green Valley of Russian River Valley,United States,California (Sonoma),AVA,White,Chardonnay; Pinot Noir
 871,Grés de Montpellier,France,Languedoc,AOC,Red,Syrah; Grenache; Mourvèdre
@@ -888,13 +888,13 @@
 887,Guenoc Valley,United States,California (Lake),AVA,Red,Cabernet Sauvignon
 888,Guerrouane,Morocco,Meknès,AOG,Red,Carignan; Cinsault; Grenache
 889,Gulf Islands,Canada,British Columbia,BC GI,White,Pinot Gris; Ortega
-890,Gundagai,Australia,New South Wales,GI,Red,Syrah
+890,Gundagai,Australia,New South Wales,GI,Red,Shiraz
 891,Guria,Georgia,Guria,Regional,White,Chkhaveri
 892,Gurjaani,Georgia,Kakheti,PDO,White,Rkatsiteli; Mtsvane
 893,Gutturnio,Italy,Emilia-Romagna,DOC,Red,Barbera; Croatina
-894,Gyeongsan,South Korea,Gyeongsangbuk,Regional,Red,Campbell Early; Muscat Bailey A
+894,Gyeongsan,South Korea,Gyeongsangbuk,Regional,Red,Campbell Early; MBA
 895,Hageland,Belgium,Flanders,PDO,White,Müller-Thurgau; Pinot Gris
-896,Hajós-Baja,Hungary,Duna,PDO,Red,Blaufränkisch
+896,Hajós-Baja,Hungary,Duna,PDO,Red,Kékfrankos
 897,Hames Valley,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
 898,Hampshire,United Kingdom,Southeast England,Regional,Sparkling,Chardonnay; Pinot Noir
 899,Happy Canyon of Santa Barbara,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon; Sauvignon Blanc
@@ -908,9 +908,9 @@
 907,Hautes-Côtes de Nuits,France,Burgundy (Côte de Nuits),AOC,Red,Pinot Noir
 908,Haw River Valley,United States,North Carolina,AVA,Red,Cabernet Franc
 909,Hawke's Bay,New Zealand,Hawke's Bay,GI,Red,Merlot; Syrah; Chardonnay
-910,Heathcote,Australia,Victoria,GI,Red,Syrah
+910,Heathcote,Australia,Victoria,GI,Red,Shiraz
 911,Hebron Hills,Palestine,Hebron,Regional,Red,Baladi
-912,Heida (Païen),Switzerland,Valais,AOC,White,Savagnin
+912,Heida (Païen),Switzerland,Valais,AOC,White,Savagnin Blanc
 913,Helan Mountain East,China,Ningxia,Regional,Red,Cabernet Sauvignon; Marselan
 914,Hemel-en-Aarde Ridge,South Africa,Cape South Coast,WO,Red,Pinot Noir
 915,Hemel-en-Aarde Valley,South Africa,Cape South Coast,WO,Red,Pinot Noir; Chardonnay
@@ -925,26 +925,26 @@
 924,Heuvelland,Belgium,Flanders,PDO,White,Müller-Thurgau
 925,Hexi Corridor,China,Gansu,Regional,Red,Cabernet Sauvignon
 926,High Valley,United States,California (Lake),AVA,Red,Cabernet Sauvignon
-927,Hilltops,Australia,New South Wales,GI,Red,Syrah; Cabernet Sauvignon
+927,Hilltops,Australia,New South Wales,GI,Red,Shiraz; Cabernet Sauvignon
 928,Hochheimer Domdechaney,Germany,Rheingau,Einzellage,White,Riesling
 929,Hokkaido,Japan,Hokkaido,GI,White,Kerner; Pinot Noir
 930,Hombolo,Tanzania,Dodoma,Regional,White,Chenin Blanc
 931,Horse Heaven Hills,United States,Washington,AVA,Red,Cabernet Sauvignon; Merlot
 932,Houli,Taiwan,Taichung,Regional,White,Golden Muscat
 933,Howell Mountain,United States,California (Napa),AVA,Red,Cabernet Sauvignon; Zinfandel
-934,Hua Hin Hills,Thailand,Hua Hin,Regional,Red,Syrah; Muscat Blanc à Petits Grains
+934,Hua Hin Hills,Thailand,Hua Hin,Regional,Red,Shiraz; Muscat
 935,Huailai,China,Hebei,Regional,Red,Cabernet Sauvignon; Longyan
 936,Huanren,China,Liaoning,Regional,Sweet White,Vidal
 937,Hudson River Region,United States,New York,AVA,White,Seyval Blanc; Cabernet Franc
 938,Humagne Rouge,Switzerland,Valais,AOC,Red,Humagne Rouge
-939,Hunter Valley,Australia,New South Wales,GI,White,Sémillon; Syrah
+939,Hunter Valley,Australia,New South Wales,GI,White,Semillon; Shiraz
 940,Huon Valley,Australia,Tasmania,Regional,Red,Pinot Noir
 941,Huși,Romania,Moldovan Hills,DOC,White,Zghihară de Huși
 942,Iași,Romania,Moldovan Hills,DOC,White,Fetească Albă
 943,Ica Valley,Peru,Ica,Regional,Red,Malbec; Tannat; Quebranta
 944,Icewine (Ontario),Canada,Ontario,VQA,Sweet White,Vidal; Riesling
-945,IGP Côtes de Gascogne,France,National,IGP,White,Colombard; Trebbiano Toscano
-946,IGP Île de Beauté,France,National,IGP,Red,Sangiovese; Syrah
+945,IGP Côtes de Gascogne,France,National,IGP,White,Colombard; Ugni Blanc
+946,IGP Île de Beauté,France,National,IGP,Red,Nielluccio; Syrah
 947,IGP Méditerranée,France,National,IGP,Rosé,Grenache; Cinsault
 948,IGP Pays d'Oc,France,National,IGP,Red,Merlot; Syrah; Cabernet Sauvignon
 949,IGP Val de Loire,France,National,IGP,White,Sauvignon Blanc; Chardonnay
@@ -953,7 +953,7 @@
 952,Ilia,Greece,Peloponnese,PGI,White,Roditis
 953,Ilok Traminac,Croatia,Slavonia & Danube,PDO,White,Traminac
 954,Indiana Uplands,United States,Indiana,AVA,Red,Chambourcin; Traminette
-955,Inle Lake,Myanmar,Shan State,Regional,Red,Syrah; Chenin Blanc
+955,Inle Lake,Myanmar,Shan State,Regional,Red,Shiraz; Chenin Blanc
 956,Ioannina,Greece,Epirus,PGI,White,Debina
 957,Irancy,France,Burgundy (Chablis),AOC,Red,Pinot Noir; César
 958,Irish Wine,Ireland,Cork,Regional,White,Rondo; Solaris
@@ -966,23 +966,23 @@
 965,Iwate,Japan,Iwate,Regional,White,Riesling Lion; Kerner
 966,Jahant,United States,California (Central Valley),AVA,White,Albariño
 967,Jasnières,France,Loire (Touraine),AOC,White,Chenin Blanc
-968,Jerez-Xérès-Sherry,Spain,Andalusia,DO,Fortified,Palomino; Pedro Ximénez; Muscat of Alexandria
+968,Jerez-Xérès-Sherry,Spain,Andalusia,DO,Fortified,Palomino; Pedro Ximénez; Moscatel
 969,Jerusalem Mountains,Israel,Judean Hills,Regional,Red,Cabernet Sauvignon
 970,Jezzine,Lebanon,Jezzine,Regional,Red,Syrah; Cinsault
 971,Jidvei,Romania,Transylvania,DOC,White,Fetească Regală
 972,Johannisberg,Germany,Rheingau,Bereich,White,Riesling
-973,Johannisberg du Valais,Switzerland,Valais,AOC,White,Sylvaner
+973,Johannisberg du Valais,Switzerland,Valais,AOC,White,Silvaner
 974,Jongieux,France,Savoie & Bugey,Cru,White,Jacquère; Altesse
 975,Jonkershoek Valley,South Africa,Coastal Region,WO,Red,Cabernet Sauvignon
 976,Judean Hills,Israel,Judean Hills,Regional,Red,Cabernet Sauvignon; Syrah
 977,Juliénas,France,Beaujolais,AOC Cru,Red,Gamay
-978,Jumilla,Spain,Levante,DO,Red,Mourvèdre
+978,Jumilla,Spain,Levante,DO,Red,Monastrell
 979,Jurançon,France,Southwest France,AOC,Sweet White,Petit Manseng; Gros Manseng
 980,Jurançon Sec,France,Southwest France,AOC,White,Gros Manseng
 981,Jylland,Denmark,Jutland,PGI,White,Solaris; Rondo
 982,Kabinett,Germany,National,Prädikat,White,Riesling
 983,Kaefferkopf,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Riesling
-984,Kaiserstuhl,Germany,Baden,Bereich,Red,Pinot Noir
+984,Kaiserstuhl,Germany,Baden,Bereich,Red,Spätburgunder
 985,Kakheti Qvevri Amber,Georgia,Kakheti,Traditional method,Orange,Rkatsiteli; Kisi
 986,Kalecik,Turkey,Central Anatolia,Regional,Red,Kalecik Karası
 987,Kallmet,Albania,Berat & Korçë,Regional,Red,Kallmet
@@ -1004,7 +1004,7 @@
 1003,Kelsey Bench,United States,California (Lake),AVA,Red,Cabernet Sauvignon
 1004,Kent,United Kingdom,Southeast England,Regional,Sparkling,Chardonnay; Pinot Noir
 1005,Kessler,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Riesling
-1006,Khao Yai,Thailand,Khao Yai,Regional,Red,Syrah; Chenin Blanc
+1006,Khao Yai,Thailand,Khao Yai,Regional,Red,Shiraz; Chenin Blanc
 1007,Khatlon,Tajikistan,Khatlon,Regional,Sweet White,Muscat of Alexandria
 1008,Kherson,Ukraine,Kherson,Regional,White,Aligoté
 1009,Khvanchkara,Georgia,Racha-Lechkhumi,PDO,Sweet Red,Aleksandrouli; Mujuretuli
@@ -1014,13 +1014,13 @@
 1013,Kirchberg de Barr,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer
 1014,Kirchberg de Ribeauvillé,France,Alsace,AOC Grand Cru,White,Riesling
 1015,Kitterlé,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer
-1016,Klein Karoo,South Africa,Klein Karoo,WO,Fortified,Muscat Blanc à Petits Grains; Touriga Nacional
+1016,Klein Karoo,South Africa,Klein Karoo,WO,Fortified,Muscat; Touriga Nacional
 1017,Klosterneuburg,Austria,Niederösterreich,Regional,White,Grüner Veltliner
 1018,Knights Valley,United States,California (Sonoma),AVA,Red,Cabernet Sauvignon
 1019,Kootenays,Canada,British Columbia,BC GI,White,Ortega
-1020,Koper,Slovenia,Primorska,PDO,Red,Terrano
+1020,Koper,Slovenia,Primorska,PDO,Red,Refošk
 1021,Kotekhi,Georgia,Kakheti,PDO,Red,Saperavi
-1022,Kras Teran,Slovenia,Primorska,PDO,Red,Terrano
+1022,Kras Teran,Slovenia,Primorska,PDO,Red,Refošk
 1023,Krasochoria Lemesou,Cyprus,Limassol,PDO,Red,Mavro; Maratheftiko
 1024,Kremstal,Austria,Niederösterreich,DAC,White,Grüner Veltliner; Riesling
 1025,Kremstal Ried Gebling,Austria,Niederösterreich,Ried,White,Grüner Veltliner
@@ -1029,7 +1029,7 @@
 1028,Kuban,Russia,Krasnodar,PGI,Red,Cabernet Sauvignon; Krasnostop Zolotovsky
 1029,Kumeu,New Zealand,Auckland,GI,White,Chardonnay
 1030,Kunság,Hungary,Kunság,PDO,White,Ezerjó; Cserszegi Fűszeres
-1031,Kutjevo Graševina,Croatia,Slavonia & Danube,PDO,White,Welschriesling
+1031,Kutjevo Graševina,Croatia,Slavonia & Danube,PDO,White,Graševina
 1032,Kvareli,Georgia,Kakheti,PDO,Red,Saperavi
 1033,L'Étoile,France,Jura,AOC,White,Chardonnay; Savagnin
 1034,La Clape,France,Languedoc,AOC,Red,Syrah; Grenache; Mourvèdre
@@ -1037,8 +1037,8 @@
 1036,La Côte,Switzerland,Vaud,AOC,White,Chasselas
 1037,La Gomera,Spain,Canary Islands,DO,White,Forastera Gomera
 1038,La Grande Rue,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
-1039,La Mancha,Spain,Castilla-La Mancha,DO,Red,Tempranillo; Airén
-1040,La Palma,Spain,Canary Islands,DO,White,Palomino; Negramoll
+1039,La Mancha,Spain,Castilla-La Mancha,DO,Red,Cencibel; Airén
+1040,La Palma,Spain,Canary Islands,DO,White,Listán Blanco; Negramoll
 1041,La Romanée,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 1042,La Tâche,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 1043,Lacrima di Morro d'Alba,Italy,Marche,DOC,Red,Lacrima
@@ -1047,8 +1047,8 @@
 1046,Lafões,Portugal,Beiras,DOC,White,Arinto; Cerceal
 1047,Lago di Caldaro (Kalterersee),Italy,Trentino-Alto Adige,DOC,Red,Schiava
 1048,Lago di Corbara,Italy,Umbria,DOC,Red,Cabernet Sauvignon; Merlot
-1049,Lagoa,Portugal,Algarve,DOC,Red,Negramoll
-1050,Lagos,Portugal,Algarve,DOC,Red,Negramoll; Castelão
+1049,Lagoa,Portugal,Algarve,DOC,Red,Negra Mole
+1050,Lagos,Portugal,Algarve,DOC,Red,Negra Mole; Castelão
 1051,Lake Chelan,United States,Washington,AVA,White,Riesling; Chardonnay
 1052,Lake Erie (NY),United States,New York,AVA,Red,Concord
 1053,Lake Erie North Shore,Canada,Ontario,VQA,Red,Cabernet Franc; Merlot
@@ -1061,9 +1061,9 @@
 1060,Lambrusco Mantovano,Italy,Emilia-Romagna,DOC,Sparkling Red,Lambrusco Viadanese
 1061,Lambrusco Reggiano,Italy,Emilia-Romagna,DOC,Sparkling Red,Lambrusco Marani; Lambrusco Salamino
 1062,Lambrusco Salamino di Santa Croce,Italy,Emilia-Romagna,DOC,Sparkling Red,Lambrusco Salamino
-1063,Lamezia,Italy,Calabria,DOC,Red,Gaglioppo; Nerello Mascalese
+1063,Lamezia,Italy,Calabria,DOC,Red,Gaglioppo; Nerello
 1064,Langhe Nebbiolo,Italy,Piedmont,DOC,Red,Nebbiolo
-1065,Langhorne Creek,Australia,South Australia,GI,Red,Cabernet Sauvignon; Syrah
+1065,Langhorne Creek,Australia,South Australia,GI,Red,Cabernet Sauvignon; Shiraz
 1066,Languedoc,France,Languedoc,AOC,Red,Grenache; Syrah; Mourvèdre
 1067,Lanzarote,Spain,Canary Islands,DO,White,Malvasía Volcánica
 1068,Laona Akamas,Cyprus,Paphos,PDO,White,Xynisteri
@@ -1073,9 +1073,9 @@
 1072,Laurelwood District,United States,Oregon,AVA,Red,Pinot Noir
 1073,Lavaux,Switzerland,Vaud,AOC,White,Chasselas
 1074,Le Mesnil-sur-Oger,France,Champagne,Grand Cru village,Sparkling,Chardonnay
-1075,Lebrija,Spain,Andalusia,DO,Fortified,Palomino; Muscat of Alexandria
+1075,Lebrija,Spain,Andalusia,DO,Fortified,Palomino; Moscatel
 1076,Lechința,Romania,Transylvania,DOC,White,Fetească Albă
-1077,Leelanau Peninsula,United States,Michigan,AVA,White,Riesling; Pinot Gris
+1077,Leelanau Peninsula,United States,Michigan,AVA,White,Riesling; Pinot Grigio
 1078,Lefkada,Greece,Ionian Islands,PGI,Red,Vertzami
 1079,Lehigh Valley,United States,Pennsylvania,AVA,White,Chardonnay; Grüner Veltliner
 1080,Leithaberg,Austria,Burgenland,DAC,Red,Blaufränkisch
@@ -1103,8 +1103,8 @@
 1102,Litoměřice,Czechia,Bohemia,PDO,White,Müller-Thurgau
 1103,Livermore Valley,United States,California (Bay Area),AVA,White,Sauvignon Blanc; Chardonnay
 1104,Lizzano,Italy,Puglia,DOC,Red,Negroamaro
-1105,Ljutomer-Ormož,Slovenia,Podravje,PDO,White,Welschriesling; Furmint
-1106,Loazzolo,Italy,Piedmont,DOC,Sweet White,Muscat Blanc à Petits Grains
+1105,Ljutomer-Ormož,Slovenia,Podravje,PDO,White,Laški Rizling; Šipon
+1106,Loazzolo,Italy,Piedmont,DOC,Sweet White,Moscato Bianco
 1107,Locorotondo,Italy,Puglia,DOC,White,Verdeca; Bianco d'Alessano
 1108,Lodi,United States,California (Central Valley),AVA,Red,Zinfandel; Cabernet Sauvignon
 1109,Loess Hills District,United States,Missouri,AVA,Red,Norton
@@ -1119,7 +1119,7 @@
 1118,Louvois,France,Champagne,Grand Cru village,Sparkling,Pinot Noir
 1119,Lower Galilee,Israel,Galilee,Regional,Red,Cabernet Sauvignon; Merlot
 1120,Lower Long Tom,United States,Oregon,AVA,Red,Pinot Noir
-1121,Lower Murray,Australia,South Australia,GI,Red,Syrah
+1121,Lower Murray,Australia,South Australia,GI,Red,Shiraz
 1122,Lower Silesia,Poland,Dolnośląskie,PGI,White,Solaris; Riesling
 1123,Luberon,France,Rhône (Southern),AOC,Rosé,Grenache; Syrah
 1124,Lugana,Italy,Lombardy,DOC,White,Turbiana
@@ -1135,20 +1135,20 @@
 1134,Madaba,Jordan,Madaba,Regional,Red,Cabernet Sauvignon
 1135,Madeira Bual,Portugal,Madeira,DOC,Fortified,Boal
 1136,Madeira Malmsey,Portugal,Madeira,DOC,Fortified,Malvasia
-1137,Madeira Rainwater,Portugal,Madeira,DOC,Fortified,Negramoll
+1137,Madeira Rainwater,Portugal,Madeira,DOC,Fortified,Tinta Negra
 1138,Madeira Sercial,Portugal,Madeira,DOC,Fortified,Sercial
 1139,Madeira Terrantez,Portugal,Madeira,DOC,Fortified,Terrantez
-1140,Madeira Tinta Negra,Portugal,Madeira,DOC,Fortified,Negramoll
+1140,Madeira Tinta Negra,Portugal,Madeira,DOC,Fortified,Tinta Negra
 1141,Madeira Verdelho,Portugal,Madeira,DOC,Fortified,Verdelho
 1142,Madera,United States,California (Central Valley),AVA,Red,Zinfandel
 1143,Madiran,France,Southwest France,AOC,Red,Tannat
 1144,Mailly-Champagne,France,Champagne,Grand Cru village,Sparkling,Pinot Noir
-1145,Maindreieck,Germany,Franken,Bereich,White,Sylvaner
-1146,Mainviereck,Germany,Franken,Bereich,Red,Pinot Noir
+1145,Maindreieck,Germany,Franken,Bereich,White,Silvaner
+1146,Mainviereck,Germany,Franken,Bereich,Red,Spätburgunder
 1147,Maipo Valley,Chile,Central Valley,DO,Red,Cabernet Sauvignon
 1148,Maipú,Argentina,Mendoza,GI,Red,Malbec; Cabernet Sauvignon
 1149,Majes,Peru,Arequipa,Regional,Red,Cabernet Sauvignon
-1150,Málaga,Spain,Andalusia,DO,Fortified,Pedro Ximénez; Muscat of Alexandria
+1150,Málaga,Spain,Andalusia,DO,Fortified,Pedro Ximénez; Moscatel
 1151,Maldonado,Uruguay,Maldonado,Regional,Red,Tannat; Albariño
 1152,Malepère,France,Languedoc,AOC,Red,Merlot; Cabernet Franc
 1153,Malibu Coast,United States,California (Southern),AVA,Red,Cabernet Sauvignon; Syrah
@@ -1168,10 +1168,10 @@
 1167,Mambourg,France,Alsace,AOC Grand Cru,White,Gewurztraminer
 1168,Mamertino,Italy,Sicily,DOC,Red,Nero d'Avola; Nocera
 1169,Manas,China,Xinjiang,Regional,Red,Cabernet Sauvignon; Merlot
-1170,Manavi,Georgia,Kakheti,PDO,White,Mtsvane
+1170,Manavi,Georgia,Kakheti,PDO,White,Mtsvane Kakhuri
 1171,Manchuela,Spain,Castilla-La Mancha,DO,Red,Bobal
 1172,Mandelberg,France,Alsace,AOC Grand Cru,White,Riesling; Gewurztraminer
-1173,Mandrolisai,Italy,Sardinia,DOC,Red,Bovale; Grenache; Monica
+1173,Mandrolisai,Italy,Sardinia,DOC,Red,Bovale; Cannonau; Monica
 1174,Manisa,Turkey,Aegean,Regional,Red,Kalecik Karası; Syrah
 1175,Manjimup,Australia,Western Australia,GI,Red,Cabernet Sauvignon; Merlot
 1176,Mantinia,Greece,Peloponnese,PDO,White,Moschofilero
@@ -1183,10 +1183,10 @@
 1182,Maremma Toscana,Italy,Tuscany,DOC,Red,Sangiovese; Cabernet Sauvignon; Merlot
 1183,Margaret River,Australia,Western Australia,GI,Red,Cabernet Sauvignon; Chardonnay
 1184,Margaux,France,Bordeaux (Left Bank),AOC,Red,Cabernet Sauvignon; Merlot
-1185,Maribor,Slovenia,Podravje,PDO,White,Welschriesling
+1185,Maribor,Slovenia,Podravje,PDO,White,Laški Rizling
 1186,Marignan,France,Savoie & Bugey,Cru,White,Chasselas
 1187,Marin,France,Savoie & Bugey,Cru,White,Chasselas
-1188,Marino,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+1188,Marino,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 1189,Markgräflerland,Germany,Baden,Bereich,White,Gutedel
 1190,Marlborough,New Zealand,Marlborough,GI,White,Sauvignon Blanc; Pinot Noir
 1191,Marsala,Italy,Sicily,DOC,Fortified,Grillo; Catarratto; Inzolia
@@ -1196,12 +1196,12 @@
 1195,Martha's Vineyard,United States,Massachusetts,AVA,White,Chardonnay
 1196,Martina Franca,Italy,Puglia,DOC,White,Verdeca
 1197,Martinborough,New Zealand,Wairarapa,GI,Red,Pinot Noir
-1198,Massandra,Ukraine,Crimea,Historic estate,Fortified,Muscat Blanc à Petits Grains; Kokur
+1198,Massandra,Ukraine,Crimea,Historic estate,Fortified,Muscat; Kokur
 1199,Massif d'Uchaux,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
 1200,Matakana,New Zealand,Auckland,GI,Red,Syrah; Merlot
-1201,Matera,Italy,Basilicata,DOC,Red,Zinfandel; Sangiovese
+1201,Matera,Italy,Basilicata,DOC,Red,Primitivo; Sangiovese
 1202,Matino,Italy,Puglia,DOC,Red,Negroamaro
-1203,Mátra,Hungary,Mátra,PDO,White,Welschriesling; Muscat Blanc à Petits Grains
+1203,Mátra,Hungary,Mátra,PDO,White,Olaszrizling; Muscat
 1204,Maule Valley,Chile,Central Valley,DO,Red,Carignan; Cabernet Sauvignon
 1205,Maury,France,Roussillon,AOC,Fortified,Grenache
 1206,Mavrodaphne of Cephalonia,Greece,Ionian Islands,PDO,Fortified,Mavrodaphne
@@ -1211,20 +1211,20 @@
 1210,Mazis-Chambertin,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 1211,Mazoyères-Chambertin,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 1212,McDowell Valley,United States,California (Mendocino),AVA,Red,Syrah; Grenache
-1213,McLaren Vale,Australia,South Australia,GI,Red,Syrah; Grenache
+1213,McLaren Vale,Australia,South Australia,GI,Red,Shiraz; Grenache
 1214,McMinnville,United States,Oregon,AVA,Red,Pinot Noir
 1215,Médoc,France,Bordeaux (Left Bank),AOC,Red,Cabernet Sauvignon; Merlot
 1216,Melissa,Italy,Calabria,DOC,Red,Gaglioppo
 1217,Melnik,Bulgaria,Struma Valley,PDO,Red,Shiroka Melnishka Loza
-1218,Mělník,Czechia,Bohemia,PDO,Red,Svatovavřinecké; Pinot Noir
+1218,Mělník,Czechia,Bohemia,PDO,Red,Svatovavřinecké; Rulandské Modré
 1219,Mendocino Ridge,United States,California (Mendocino),AVA,Red,Zinfandel; Pinot Noir
-1220,Mendoza,Argentina,Mendoza,GI,Red,Malbec; Cabernet Sauvignon; Croatina
+1220,Mendoza,Argentina,Mendoza,GI,Red,Malbec; Cabernet Sauvignon; Bonarda
 1221,Menetou-Salon,France,Loire (Central),AOC,White,Sauvignon Blanc
 1222,Menfi,Italy,Sicily,DOC,White,Inzolia; Chardonnay
-1223,Méntrida,Spain,Castilla-La Mancha,DO,Red,Grenache
+1223,Méntrida,Spain,Castilla-La Mancha,DO,Red,Garnacha
 1224,Mercurey,France,Burgundy (Côte Chalonnaise),AOC,Red,Pinot Noir
 1225,Meritage,United States,California,Trademark blend,Red,Cabernet Sauvignon; Merlot; Cabernet Franc
-1226,Merlara,Italy,Veneto,DOC,Red,Merlot; Raboso Piave
+1226,Merlara,Italy,Veneto,DOC,Red,Merlot; Raboso
 1227,Merritt Island,United States,California (Central Valley),AVA,White,Chenin Blanc
 1228,Mesilla Valley,United States,New Mexico,AVA,White,Chardonnay; Riesling
 1229,Mesilla Valley (TX),United States,Texas,AVA,Red,Cabernet Sauvignon
@@ -1235,7 +1235,7 @@
 1234,Meursault,France,Burgundy (Côte de Beaune),AOC,White,Chardonnay
 1235,Middle Rio Grande Valley,United States,New Mexico,AVA,Sparkling,Chardonnay; Pinot Noir
 1236,Middleburg Virginia,United States,Virginia,AVA,Red,Cabernet Franc; Merlot
-1237,Mikulov,Czechia,Moravia,PDO,White,Welschriesling; Pálava
+1237,Mikulov,Czechia,Moravia,PDO,White,Ryzlink Vlašský; Pálava
 1238,Mikulov Pálava,Czechia,Moravia,PDO,White,Pálava
 1239,Milestii Mici,Moldova,Codru,Regional,Red,Cabernet Sauvignon
 1240,Mimbres Valley,United States,New Mexico,AVA,Red,Cabernet Sauvignon
@@ -1261,10 +1261,10 @@
 1260,Monreale,Italy,Sicily,DOC,Red,Nero d'Avola; Perricone
 1261,Montagne-Saint-Émilion,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
 1262,Montagny,France,Burgundy (Côte Chalonnaise),AOC,White,Chardonnay
-1263,Montagu,South Africa,Klein Karoo,WO,Fortified,Muscat Blanc à Petits Grains
+1263,Montagu,South Africa,Klein Karoo,WO,Fortified,Muscat
 1264,Monte Belo,Brazil,Rio Grande do Sul,IP,Red,Merlot; Cabernet Sauvignon
 1265,Montecarlo,Italy,Tuscany,DOC,White,Trebbiano Toscano; Sémillon
-1266,Montecompatri Colonna,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+1266,Montecompatri Colonna,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 1267,Montecucco Sangiovese,Italy,Tuscany,DOCG,Red,Sangiovese
 1268,Montefalco Rosso,Italy,Umbria,DOC,Red,Sangiovese; Sagrantino
 1269,Montefalco Sagrantino,Italy,Umbria,DOCG,Red,Sagrantino
@@ -1284,8 +1284,8 @@
 1283,Montrachet,France,Burgundy (Côte de Beaune),AOC Grand Cru,White,Chardonnay
 1284,Montravel,France,Southwest France,AOC,White,Sémillon; Sauvignon Blanc
 1285,Monts du Tessalah,Algeria,Tlemcen,AOG,Red,Carignan
-1286,Montsant,Spain,Catalonia,DO,Red,Grenache; Carignan
-1287,Montsant Falset,Spain,Catalonia,DO,Red,Grenache; Carignan
+1286,Montsant,Spain,Catalonia,DO,Red,Garnacha; Cariñena
+1287,Montsant Falset,Spain,Catalonia,DO,Red,Garnacha; Cariñena
 1288,Moon Mountain District,United States,California (Sonoma),AVA,Red,Cabernet Sauvignon
 1289,Moquegua,Peru,Moquegua,Regional,Red,Quebranta; Italia
 1290,Mór,Hungary,Észak-Dunántúl,PDO,White,Ezerjó
@@ -1294,24 +1294,24 @@
 1293,Morgon,France,Beaujolais,AOC Cru,Red,Gamay
 1294,Mornag,Tunisia,Nabeul,AOC,Red,Carignan; Syrah
 1295,Mornington Peninsula,Australia,Victoria,GI,Red,Pinot Noir; Chardonnay
-1296,Moscadello di Montalcino,Italy,Tuscany,DOC,Sweet White,Muscat Blanc à Petits Grains
-1297,Moscatel de Chipiona,Spain,Andalusia,DO,Fortified,Muscat of Alexandria
-1298,Moscatel de Setúbal,Portugal,Setúbal,DOC,Fortified,Muscat of Alexandria
-1299,Moscatel do Douro,Portugal,Douro,DOC,Fortified,Muscat Blanc à Petits Grains
+1296,Moscadello di Montalcino,Italy,Tuscany,DOC,Sweet White,Moscato Bianco
+1297,Moscatel de Chipiona,Spain,Andalusia,DO,Fortified,Moscatel
+1298,Moscatel de Setúbal,Portugal,Setúbal,DOC,Fortified,Moscatel de Setúbal
+1299,Moscatel do Douro,Portugal,Douro,DOC,Fortified,Moscatel Galego
 1300,Moscatel Roxo,Portugal,Setúbal,DOC,Fortified,Moscatel Roxo
-1301,Moscato d'Asti,Italy,Piedmont,DOCG,Sparkling,Muscat Blanc à Petits Grains
-1302,Moscato di Pantelleria,Italy,Sicily,DOC,Sweet White,Muscat of Alexandria
-1303,Moscato di Sardegna,Italy,Sardinia,DOC,Sweet White,Muscat Blanc à Petits Grains
+1301,Moscato d'Asti,Italy,Piedmont,DOCG,Sparkling,Moscato Bianco
+1302,Moscato di Pantelleria,Italy,Sicily,DOC,Sweet White,Zibibbo
+1303,Moscato di Sardegna,Italy,Sardinia,DOC,Sweet White,Moscato Bianco
 1304,Moscato di Scanzo,Italy,Lombardy,DOCG,Sweet Red,Moscato di Scanzo
-1305,Moscato di Sorso-Sennori,Italy,Sardinia,DOC,Sweet White,Muscat Blanc à Petits Grains
+1305,Moscato di Sorso-Sennori,Italy,Sardinia,DOC,Sweet White,Moscato Bianco
 1306,Mosel,Germany,Mosel,Anbaugebiet,White,Riesling; Müller-Thurgau; Elbling
 1307,Moselle,France,Lorraine,AOC,White,Auxerrois; Pinot Gris
-1308,Moselle Luxembourgeoise,Luxembourg,Moselle,AOP,White,Müller-Thurgau; Auxerrois; Riesling
+1308,Moselle Luxembourgeoise,Luxembourg,Moselle,AOP,White,Rivaner; Auxerrois; Riesling
 1309,Moseltor,Germany,Mosel,Bereich,White,Elbling
 1310,Moulin-à-Vent,France,Beaujolais,AOC Cru,Red,Gamay
 1311,Moulis-en-Médoc,France,Bordeaux (Left Bank),AOC,Red,Cabernet Sauvignon; Merlot
-1312,Mount Barker,Australia,Western Australia,GI,White,Riesling; Syrah
-1313,Mount Benson,Australia,South Australia,GI,Red,Syrah; Cabernet Sauvignon
+1312,Mount Barker,Australia,Western Australia,GI,White,Riesling; Shiraz
+1313,Mount Benson,Australia,South Australia,GI,Red,Shiraz; Cabernet Sauvignon
 1314,Mount Harlan,United States,California (Central Coast),AVA,Red,Pinot Noir; Chardonnay
 1315,Mount Lebanon,Lebanon,Mount Lebanon,Regional,Red,Syrah; Cabernet Sauvignon
 1316,Mount Lofty Ranges,Australia,South Australia,GI,White,Chardonnay
@@ -1322,12 +1322,12 @@
 1321,Mount Veeder District,United States,California (Napa),AVA,Red,Cabernet Sauvignon
 1322,Moura,Portugal,Alentejo,DOC,Red,Alfrocheiro; Trincadeira
 1323,Moutere Hills,New Zealand,Nelson,Regional,White,Chardonnay
-1324,Mudgee,Australia,New South Wales,GI,Red,Syrah; Cabernet Sauvignon
+1324,Mudgee,Australia,New South Wales,GI,Red,Shiraz; Cabernet Sauvignon
 1325,Muenchberg,France,Alsace,AOC Grand Cru,White,Riesling
 1326,Mukuzani,Georgia,Kakheti,PDO,Red,Saperavi
 1327,Murfatlar,Romania,Dobrogea,DOC,Sweet White,Chardonnay; Pinot Gris
-1328,Murray Darling,Australia,New South Wales,GI,Red,Syrah; Chardonnay
-1329,Murray Darling (Vic),Australia,Victoria,GI,Red,Syrah
+1328,Murray Darling,Australia,New South Wales,GI,Red,Shiraz; Chardonnay
+1329,Murray Darling (Vic),Australia,Victoria,GI,Red,Shiraz
 1330,Muscadet,France,Loire (Pays Nantais),AOC,White,Melon de Bourgogne
 1331,Muscadet Coteaux de la Loire,France,Loire (Pays Nantais),AOC,White,Melon de Bourgogne
 1332,Muscadet Côtes de Grandlieu,France,Loire (Pays Nantais),AOC,White,Melon de Bourgogne
@@ -1338,32 +1338,32 @@
 1337,Muscat de Kelibia,Tunisia,Nabeul,AOC,White,Muscat of Alexandria
 1338,Muscat de Lunel,France,Languedoc,AOC,Fortified,Muscat Blanc à Petits Grains
 1339,Muscat de Mireval,France,Languedoc,AOC,Fortified,Muscat Blanc à Petits Grains
-1340,Muscat de Rivesaltes,France,Roussillon,AOC,Fortified,Muscat of Alexandria; Muscat Blanc à Petits Grains
+1340,Muscat de Rivesaltes,France,Roussillon,AOC,Fortified,Muscat of Alexandria; Muscat Blanc
 1341,Muscat de Saint-Jean-de-Minervois,France,Languedoc,AOC,Fortified,Muscat Blanc à Petits Grains
 1342,Muscat du Cap Corse,France,Corsica,AOC,Fortified,Muscat Blanc à Petits Grains
 1343,Muscat of Lemnos,Greece,Aegean Islands,PDO,Fortified,Muscat of Alexandria
-1344,Muscat of Patras,Greece,Peloponnese,PDO,Fortified,Muscat Blanc à Petits Grains
-1345,Muscat of Rhodes,Greece,Aegean Islands,PDO,Fortified,Muscat Blanc à Petits Grains
-1346,Muscat of Rio Patras,Greece,Peloponnese,PDO,Fortified,Muscat Blanc à Petits Grains
-1347,Muscat of Samos,Greece,Aegean Islands,PDO,Fortified,Muscat Blanc à Petits Grains
+1344,Muscat of Patras,Greece,Peloponnese,PDO,Fortified,Muscat Blanc
+1345,Muscat of Rhodes,Greece,Aegean Islands,PDO,Fortified,Muscat Blanc
+1346,Muscat of Rio Patras,Greece,Peloponnese,PDO,Fortified,Muscat Blanc
+1347,Muscat of Samos,Greece,Aegean Islands,PDO,Fortified,Muscat Blanc
 1348,Musigny,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 1349,Mutare,Zimbabwe,Manicaland,Regional,Red,Pinotage
 1350,Naches Heights,United States,Washington,AVA,White,Riesling; Pinot Gris
-1351,Nagambie Lakes,Australia,Victoria,GI,White,Marsanne; Syrah
+1351,Nagambie Lakes,Australia,Victoria,GI,White,Marsanne; Shiraz
 1352,Nagano,Japan,Nagano,GI,Red,Merlot; Chardonnay
 1353,Nagy-Somló,Hungary,Balaton,PDO,White,Juhfark
 1354,Nahe,Germany,Nahe,Anbaugebiet,White,Riesling
 1355,Nahetal,Germany,Nahe,Bereich,White,Riesling
-1356,Naivasha,Kenya,Rift Valley,Regional,Red,Syrah; Sauvignon Blanc
-1357,Nandi Hills,India,Karnataka,Regional,Red,Syrah; Viognier
+1356,Naivasha,Kenya,Rift Valley,Regional,Red,Shiraz; Sauvignon Blanc
+1357,Nandi Hills,India,Karnataka,Regional,Red,Shiraz; Viognier
 1358,Naoussa,Greece,Macedonia,PDO,Red,Xinomavro
 1359,Napa Valley,United States,California (Napa),AVA,Red,Cabernet Sauvignon; Merlot
 1360,Napareuli,Georgia,Kakheti,PDO,Red,Saperavi
 1361,Naramata Bench,Canada,British Columbia,BC GI,White,Riesling; Pinot Gris
 1362,Nardò,Italy,Puglia,DOC,Red,Negroamaro; Malvasia Nera
 1363,Nasco di Cagliari,Italy,Sardinia,DOC,Sweet White,Nasco
-1364,Nashik,India,Maharashtra,Regional,Red,Cabernet Sauvignon; Syrah; Chenin Blanc
-1365,Navarra,Spain,Navarra & Aragón,DO,Rosé,Grenache; Tempranillo
+1364,Nashik,India,Maharashtra,Regional,Red,Cabernet Sauvignon; Shiraz; Chenin Blanc
+1365,Navarra,Spain,Navarra & Aragón,DO,Rosé,Garnacha; Tempranillo
 1366,Naxos,Greece,Cyclades,PGI,White,Assyrtiko
 1367,Nebbiolo d'Alba,Italy,Piedmont,DOC,Red,Nebbiolo
 1368,Negev,Israel,Negev,Regional,Red,Cabernet Sauvignon; Petit Verdot
@@ -1373,21 +1373,21 @@
 1372,Nelson,New Zealand,Nelson,GI,White,Sauvignon Blanc; Chardonnay
 1373,Nemea,Greece,Peloponnese,PDO,Red,Agiorgitiko
 1374,Neretva Valley,Croatia,Dalmatia,PDO,Red,Plavac Mali
-1375,Neszmély,Hungary,Észak-Dunántúl,PDO,White,Welschriesling
+1375,Neszmély,Hungary,Észak-Dunántúl,PDO,White,Olaszrizling
 1376,Nettuno,Italy,Lazio,DOC,Red,Sangiovese; Merlot
 1377,Neuchâtel,Switzerland,Neuchâtel,AOC,White,Chasselas
 1378,Neuquén,Argentina,Patagonia,GI,Red,Malbec; Pinot Noir
 1379,Neusiedlersee,Austria,Burgenland,DAC,Red,Zweigelt
 1380,Neusiedlersee-Hügelland,Austria,Burgenland,DAC,White,Welschriesling
 1381,Nevada,United States,Nevada,Regional,Red,Cabernet Sauvignon
-1382,New England Australia,Australia,New South Wales,GI,Red,Syrah
+1382,New England Australia,Australia,New South Wales,GI,Red,Shiraz
 1383,Niagara Escarpment,United States,New York,AVA,White,Riesling
 1384,Niagara Lakeshore,Canada,Ontario,VQA,Red,Cabernet Franc
 1385,Niagara Peninsula,Canada,Ontario,VQA,White,Riesling; Chardonnay; Cabernet Franc
 1386,Niagara River,Canada,Ontario,VQA,Red,Cabernet Franc
 1387,Nicorești,Romania,Moldovan Hills,DOC,Red,Băbească Neagră
 1388,Niederhäuser Hermannshöhle,Germany,Nahe,Einzellage,White,Riesling
-1389,Nierstein,Germany,Rheinhessen,Bereich,White,Riesling; Sylvaner
+1389,Nierstein,Germany,Rheinhessen,Bereich,White,Riesling; Silvaner
 1390,Niersteiner Pettenthal,Germany,Rheinhessen,Einzellage,White,Riesling
 1391,Nihon Alps Wine Valley,Japan,Nagano,Regional,White,Chardonnay
 1392,Niigata,Japan,Niigata,Regional,White,Albariño
@@ -1404,7 +1404,7 @@
 1403,Northland,New Zealand,Northland,GI,Red,Syrah; Chardonnay
 1404,Norwegian Wine,Norway,Vestfold,Regional,White,Solaris
 1405,Noto,Italy,Sicily,DOC,Red,Nero d'Avola
-1406,Novo Selo,Bulgaria,Danubian Plain,PDO,Red,Kadarka
+1406,Novo Selo,Bulgaria,Danubian Plain,PDO,Red,Gamza
 1407,Nuits-Saint-Georges,France,Burgundy (Côte de Nuits),AOC,Red,Pinot Noir
 1408,Nuragus di Cagliari,Italy,Sardinia,DOC,White,Nuragus
 1409,Nyons,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
@@ -1415,7 +1415,7 @@
 1414,Occhio di Pernice,Italy,Tuscany,DOC,Sweet Red,Sangiovese
 1415,Ockfener Bockstein,Germany,Mosel,Einzellage,White,Riesling
 1416,Odesa,Ukraine,Odesa,PGI,Sparkling,Chardonnay; Aligoté
-1417,Odobești,Romania,Moldovan Hills,DOC,White,Fetească Albă; Welschriesling
+1417,Odobești,Romania,Moldovan Hills,DOC,White,Fetească Albă; Riesling Italian
 1418,Odzi Valley,Zimbabwe,Mashonaland,Regional,Red,Cabernet Sauvignon; Pinotage
 1419,Oeil-de-Perdrix,Switzerland,Neuchâtel,AOC,Rosé,Pinot Noir
 1420,Offida Passerina,Italy,Marche,DOCG,White,Passerina
@@ -1429,18 +1429,18 @@
 1428,Olifants River,South Africa,Olifants River,WO,White,Chenin Blanc; Colombard
 1429,Ollwiller,France,Alsace,AOC Grand Cru,White,Riesling
 1430,Oloroso,Spain,Andalusia,DO,Fortified,Palomino
-1431,Oltrepò Pavese,Italy,Lombardy,DOC,Red,Croatina; Barbera; Pinot Noir
-1432,Oltrepò Pavese Metodo Classico,Italy,Lombardy,DOCG,Sparkling,Pinot Noir
+1431,Oltrepò Pavese,Italy,Lombardy,DOC,Red,Croatina; Barbera; Pinot Nero
+1432,Oltrepò Pavese Metodo Classico,Italy,Lombardy,DOCG,Sparkling,Pinot Nero
 1433,Omaruru,Namibia,Erongo,Regional,Red,Colombard; Ruby Cabernet
 1434,Orange,Australia,New South Wales,GI,White,Chardonnay; Sauvignon Blanc
 1435,Orcia,Italy,Tuscany,DOC,Red,Sangiovese
 1436,Ormond,New Zealand,Gisborne,Regional,White,Chardonnay
 1437,Orta Nova,Italy,Puglia,DOC,Red,Sangiovese; Nero di Troia
-1438,Ortenau,Germany,Baden,Bereich,White,Riesling
+1438,Ortenau,Germany,Baden,Bereich,White,Klingelberger
 1439,Ortona,Italy,Abruzzo,DOC,White,Trebbiano Abruzzese
 1440,Ortrugo dei Colli Piacentini,Italy,Emilia-Romagna,DOC,White,Ortrugo
-1441,Orvieto,Italy,Umbria,DOC,White,Grechetto; Trebbiano Toscano
-1442,Orvieto Classico,Italy,Umbria,DOC,White,Grechetto; Trebbiano Toscano
+1441,Orvieto,Italy,Umbria,DOC,White,Grechetto; Trebbiano
+1442,Orvieto Classico,Italy,Umbria,DOC,White,Grechetto; Procanico
 1443,Osaka,Japan,Osaka,GI,Red,Delaware; Merlot
 1444,Osorno,Chile,Austral,DO,Red,Pinot Noir; Chardonnay
 1445,Osoyoos,Canada,British Columbia,BC GI,Red,Cabernet Sauvignon; Merlot
@@ -1451,10 +1451,10 @@
 1450,Overberg,South Africa,Cape South Coast,WO,White,Sauvignon Blanc
 1451,Ozark Highlands,United States,Missouri,AVA,Red,Norton; Vignoles
 1452,Paardeberg,South Africa,Coastal Region,WO,Red,Syrah; Chenin Blanc
-1453,Paarl,South Africa,Coastal Region,WO,Red,Syrah; Cabernet Sauvignon
+1453,Paarl,South Africa,Coastal Region,WO,Red,Shiraz; Cabernet Sauvignon
 1454,Pacheco Pass,United States,California (Bay Area),AVA,Red,Cabernet Sauvignon
 1455,Pacherenc du Vic-Bilh,France,Southwest France,AOC,Sweet White,Petit Manseng; Gros Manseng
-1456,Padthaway,Australia,South Australia,GI,White,Chardonnay; Syrah
+1456,Padthaway,Australia,South Australia,GI,White,Chardonnay; Shiraz
 1457,Pago Guijoso,Spain,Castilla-La Mancha,DO de Pago,Red,Cabernet Sauvignon
 1458,Paicines,United States,California (Central Coast),AVA,Red,Pinot Noir
 1459,País,Chile,National,Grape wine,Red,País
@@ -1464,40 +1464,40 @@
 1463,Pamid,Bulgaria,National,Grape wine,Red,Pamid
 1464,Panciu,Romania,Moldovan Hills,DOC,Sparkling,Fetească Regală
 1465,Pangeon,Greece,Macedonia,PGI,Red,Limnio
-1466,Pannonhalma,Hungary,Észak-Dunántúl,PDO,White,Welschriesling; Riesling
+1466,Pannonhalma,Hungary,Észak-Dunántúl,PDO,White,Olaszrizling; Riesling
 1467,Panquehue,Chile,Aconcagua,DO,Red,Syrah
 1468,Papegaaiberg,South Africa,Coastal Region,WO,Red,Cabernet Sauvignon
 1469,Paraje Altamira,Argentina,Mendoza,GI,Red,Malbec
 1470,Paro Valley,Bhutan,Paro,Regional,Red,Cabernet Sauvignon
 1471,Paros,Greece,Cyclades,PDO,Red,Mandilaria; Monemvasia
-1472,Parras de la Fuente,Mexico,Coahuila,Regional,Red,Cabernet Sauvignon; Syrah
+1472,Parras de la Fuente,Mexico,Coahuila,Regional,Red,Cabernet Sauvignon; Shiraz
 1473,Parrina,Italy,Tuscany,DOC,Red,Sangiovese
 1474,Paso Robles,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon; Zinfandel; Syrah
 1475,Paso Robles Estrella District,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
 1476,Paso Robles Highlands District,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
-1477,Passito di Pantelleria,Italy,Sicily,DOC,Sweet White,Muscat of Alexandria
+1477,Passito di Pantelleria,Italy,Sicily,DOC,Sweet White,Zibibbo
 1478,Patras,Greece,Peloponnese,PDO,White,Roditis
-1479,Patrimonio,France,Corsica,AOC,Red,Sangiovese
+1479,Patrimonio,France,Corsica,AOC,Red,Nielluccio
 1480,Pauillac,France,Bordeaux (Left Bank),AOC,Red,Cabernet Sauvignon; Merlot
 1481,Payogasta,Argentina,Salta,GI,Red,Malbec
-1482,Pcinja,North Macedonia,Pcinja-Osogovo,PDO,Red,Vranac
+1482,Pcinja,North Macedonia,Pcinja-Osogovo,PDO,Red,Vranec
 1483,Pécharmant,France,Southwest France,AOC,Red,Merlot; Cabernet Sauvignon
 1484,Pécs,Hungary,Pannon,PDO,White,Cirfandli
 1485,Pedro Ximénez Sherry,Spain,Andalusia,DO,Fortified,Pedro Ximénez
-1486,Peel,Australia,Western Australia,GI,Red,Syrah
-1487,Pelagonija,North Macedonia,Pelagonija-Polog,PDO,Red,Vranac
+1486,Peel,Australia,Western Australia,GI,Red,Shiraz
+1487,Pelagonija,North Macedonia,Pelagonija-Polog,PDO,Red,Vranec
 1488,Pelješac,Croatia,Dalmatia,PDO,Red,Plavac Mali
 1489,Pemberton,Australia,Western Australia,GI,Red,Pinot Noir; Chardonnay
 1490,Pencahue,Chile,Central Valley,DO,Red,Cabernet Sauvignon
-1491,Penedès,Spain,Catalonia,DO,White,Xarel·lo; Viura; Parellada
+1491,Penedès,Spain,Catalonia,DO,White,Xarel·lo; Macabeo; Parellada
 1492,Península de Setúbal,Portugal,Setúbal,VR,Red,Castelão; Syrah
 1493,Penisola Sorrentina,Italy,Campania,DOC,Red,Piedirosso
 1494,Pentro di Isernia,Italy,Molise,DOC,Red,Montepulciano; Sangiovese
 1495,Peralillo,Chile,Central Valley,DO,Red,Carmenère
 1496,Perdriel,Argentina,Mendoza,GI,Red,Malbec
 1497,Pernand-Vergelesses,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
-1498,Perricoota,Australia,New South Wales,GI,Red,Syrah
-1499,Perth Hills,Australia,Western Australia,GI,Red,Syrah
+1498,Perricoota,Australia,New South Wales,GI,Red,Shiraz
+1499,Perth Hills,Australia,Western Australia,GI,Red,Shiraz
 1500,Pessac-Léognan,France,Bordeaux (Left Bank),AOC,Red,Cabernet Sauvignon; Merlot
 1501,Pessac-Léognan Blanc,France,Bordeaux (Left Bank),AOC,White,Sauvignon Blanc; Sémillon
 1502,Petaluma Gap,United States,California (Sonoma),AVA,Red,Pinot Noir; Syrah
@@ -1505,13 +1505,13 @@
 1504,Petite Arvine,Switzerland,Valais,AOC,White,Petite Arvine
 1505,Peumo,Chile,Central Valley,DO,Red,Carmenère
 1506,Peza,Greece,Crete,PDO,Red,Kotsifali; Mandilaria
-1507,Pfalz,Germany,Pfalz,Anbaugebiet,White,Riesling; Pinot Noir
+1507,Pfalz,Germany,Pfalz,Anbaugebiet,White,Riesling; Spätburgunder
 1508,Pfersigberg,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Riesling
 1509,Pfingstberg,France,Alsace,AOC Grand Cru,White,Riesling
 1510,Phan Rang,Vietnam,Ninh Thuận,Regional,Red,Cardinal
-1511,Phnom Banan,Cambodia,Battambang,Regional,Red,Syrah
-1512,Phu Rua,Thailand,Loei,Regional,Red,Syrah; Chenin Blanc
-1513,Piave,Italy,Veneto,DOC,Red,Raboso Piave; Merlot
+1511,Phnom Banan,Cambodia,Battambang,Regional,Red,Shiraz
+1512,Phu Rua,Thailand,Loei,Regional,Red,Shiraz; Chenin Blanc
+1513,Piave,Italy,Veneto,DOC,Red,Raboso; Merlot
 1514,Piave Malanotte,Italy,Veneto,DOCG,Red,Raboso Piave
 1515,Pic Saint-Loup,France,Languedoc,AOC,Red,Syrah; Grenache; Mourvèdre
 1516,Piccadilly Valley,Australia,South Australia,GI,Sparkling,Chardonnay; Pinot Noir
@@ -1521,11 +1521,11 @@
 1520,Piemonte,Italy,Piedmont,DOC,Red,Barbera; Nebbiolo
 1521,Pierrevert,France,Provence,AOC,Rosé,Grenache; Syrah
 1522,Piesporter Goldtröpfchen,Germany,Mosel,Einzellage,White,Riesling
-1523,Pietroasa,Romania,Muntenia,DOC,Sweet White,Muscat Blanc à Petits Grains
-1524,Pietroasele,Romania,Muntenia,DOC,Sweet White,Muscat Blanc à Petits Grains
+1523,Pietroasa,Romania,Muntenia,DOC,Sweet White,Tămâioasă Românească
+1524,Pietroasele,Romania,Muntenia,DOC,Sweet White,Tămâioasă Românească
 1525,Pine Mountain,United States,California (Mendocino),AVA,Red,Cabernet Sauvignon
 1526,Pine Mountain-Cloverdale Peak,United States,California (Sonoma),AVA,Red,Cabernet Sauvignon
-1527,Pineau des Charentes,France,Southwest France,AOC,Fortified,Trebbiano Toscano; Colombard
+1527,Pineau des Charentes,France,Southwest France,AOC,Fortified,Ugni Blanc; Colombard
 1528,Pinerolese,Italy,Piedmont,DOC,Red,Barbera; Bonarda Piemontese
 1529,Pinhel,Portugal,Beiras,DOC,White,Síria
 1530,Pinot Noir d'Alsace,France,Alsace,AOC,Red,Pinot Noir
@@ -1541,25 +1541,25 @@
 1540,Plešivica Sparkling,Croatia,Uplands,PDO,Sparkling,Chardonnay; Pinot Noir
 1541,Plettenberg Bay,South Africa,Cape South Coast,WO,Sparkling,Chardonnay; Pinot Noir
 1542,Podkarpacie,Poland,Podkarpackie,PGI,White,Johanniter; Hibernal
-1543,Podluží,Czechia,Moravia,Regional,Red,Blaufränkisch
+1543,Podluží,Czechia,Moravia,Regional,Red,Frankovka
 1544,Polkadraai Hills,South Africa,Coastal Region,WO,White,Chenin Blanc
 1545,Pomerol,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
-1546,Pomino,Italy,Tuscany,DOC,White,Chardonnay; Pinot Blanc
+1546,Pomino,Italy,Tuscany,DOC,White,Chardonnay; Pinot Bianco
 1547,Pommard,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
 1548,Pomorie,Bulgaria,Black Sea,PDO,White,Dimyat
 1549,Pornassio,Italy,Liguria,DOC,Red,Ormeasco
 1550,Porongurup,Australia,Western Australia,GI,White,Riesling
 1551,Port Phillip,Australia,Victoria,GI,Red,Pinot Noir
 1552,Portalegre,Portugal,Alentejo,DOC,Red,Trincadeira; Grand Noir
-1553,Portimão,Portugal,Algarve,DOC,Red,Negramoll
+1553,Portimão,Portugal,Algarve,DOC,Red,Negra Mole
 1554,Porto Branco,Portugal,Douro,DOC,Fortified,Malvasia Fina; Gouveio
-1555,Porto Colheita,Portugal,Douro,DOC,Fortified,Touriga Franca; Tempranillo
+1555,Porto Colheita,Portugal,Douro,DOC,Fortified,Touriga Franca; Tinta Roriz
 1556,Porto Crusted,Portugal,Douro,DOC,Fortified,Touriga Franca; Tinta Barroca
 1557,Porto Garrafeira,Portugal,Douro,DOC,Fortified,Touriga Franca
 1558,Porto Late Bottled Vintage,Portugal,Douro,DOC,Fortified,Touriga Franca; Tinta Barroca
 1559,Porto Rosé,Portugal,Douro,DOC,Fortified,Touriga Nacional
 1560,Porto Ruby,Portugal,Douro,DOC,Fortified,Touriga Nacional; Touriga Franca
-1561,Porto Tawny,Portugal,Douro,DOC,Fortified,Touriga Franca; Tempranillo
+1561,Porto Tawny,Portugal,Douro,DOC,Fortified,Touriga Franca; Tinta Roriz
 1562,Porto Vintage,Portugal,Douro,DOC,Fortified,Touriga Nacional; Touriga Franca
 1563,Pošip Čara-Smokvica,Croatia,Dalmatia,PDO,White,Pošip
 1564,Postup,Croatia,Dalmatia,PDO,Red,Plavac Mali
@@ -1571,12 +1571,12 @@
 1570,Pouilly-Vinzelles,France,Burgundy (Mâconnais),AOC,White,Chardonnay
 1571,Prado de Irache,Spain,Navarra & Aragón,DO de Pago,Red,Tempranillo
 1572,Praelatenberg,France,Alsace,AOC Grand Cru,White,Riesling
-1573,Prekmurje,Slovenia,Podravje,PDO,White,Welschriesling
-1574,Primitivo di Manduria,Italy,Puglia,DOC,Red,Zinfandel
-1575,Primitivo di Manduria Dolce Naturale,Italy,Puglia,DOCG,Sweet Red,Zinfandel
+1573,Prekmurje,Slovenia,Podravje,PDO,White,Laški Rizling
+1574,Primitivo di Manduria,Italy,Puglia,DOC,Red,Primitivo
+1575,Primitivo di Manduria Dolce Naturale,Italy,Puglia,DOCG,Sweet Red,Primitivo
 1576,Prince Edward County,Canada,Ontario,VQA,Red,Pinot Noir; Chardonnay
-1577,Priorat,Spain,Catalonia,DOQ,Red,Grenache; Carignan
-1578,Priorat Vi de Vila,Spain,Catalonia,DOQ,Red,Grenache; Carignan
+1577,Priorat,Spain,Catalonia,DOQ,Red,Garnacha; Cariñena
+1578,Priorat Vi de Vila,Spain,Catalonia,DOQ,Red,Garnacha; Cariñena
 1579,Progreso,Uruguay,Canelones,Regional,Red,Tannat
 1580,Prosecco,Italy,Veneto,DOC,Sparkling,Glera
 1581,Prošek,Croatia,Dalmatia,Traditional,Sweet White,Bogdanuša; Maraština
@@ -1587,7 +1587,7 @@
 1586,Puisseguin-Saint-Émilion,France,Bordeaux (Right Bank),AOC,Red,Merlot; Cabernet Franc
 1587,Puligny-Montrachet,France,Burgundy (Côte de Beaune),AOC,White,Chardonnay
 1588,Puyméras,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
-1589,Pyrenees (Victoria),Australia,Victoria,GI,Red,Syrah; Cabernet Sauvignon
+1589,Pyrenees (Victoria),Australia,Victoria,GI,Red,Shiraz; Cabernet Sauvignon
 1590,Qingdao,China,Shandong,Regional,White,Chardonnay
 1591,Qingtongxia,China,Ningxia,Regional,Red,Cabernet Sauvignon
 1592,Quarts de Chaume,France,Loire (Anjou-Saumur),AOC Grand Cru,Sweet White,Chenin Blanc
@@ -1612,48 +1612,48 @@
 1611,Red Hill Douglas County,United States,Oregon,AVA,Red,Pinot Noir
 1612,Red Hills Lake County,United States,California (Lake),AVA,Red,Cabernet Sauvignon
 1613,Red Mountain,United States,Washington,AVA,Red,Cabernet Sauvignon
-1614,Redondo,Portugal,Alentejo,DOC,Red,Tempranillo; Trincadeira
+1614,Redondo,Portugal,Alentejo,DOC,Red,Aragonez; Trincadeira
 1615,Redwood Valley,United States,California (Mendocino),AVA,Red,Zinfandel; Cabernet Sauvignon
 1616,Refosco dal Peduncolo Rosso,Italy,Friuli-Venezia Giulia,DOC,Red,Refosco dal Peduncolo Rosso
 1617,Régnié,France,Beaujolais,AOC Cru,Red,Gamay
-1618,Reguengos,Portugal,Alentejo,DOC,Red,Trincadeira; Tempranillo
-1619,Remstal-Stuttgart,Germany,Württemberg,Bereich,Red,Schiava
+1618,Reguengos,Portugal,Alentejo,DOC,Red,Trincadeira; Aragonez
+1619,Remstal-Stuttgart,Germany,Württemberg,Bereich,Red,Trollinger
 1620,Rengo,Chile,Central Valley,DO,Red,Cabernet Sauvignon
 1621,Reno,Italy,Emilia-Romagna,DOC,White,Montuni
 1622,Requínoa,Chile,Central Valley,DO,Red,Cabernet Sauvignon
 1623,Rethymno,Greece,Crete,PGI,White,Vilana
 1624,Retsina,Greece,Attica,Traditional appellation,White,Savatiano
 1625,Reuilly,France,Loire (Central),AOC,White,Sauvignon Blanc
-1626,Rheingau,Germany,Rheingau,Anbaugebiet,White,Riesling; Pinot Noir
-1627,Rheinhessen,Germany,Rheinhessen,Anbaugebiet,White,Riesling; Sylvaner; Müller-Thurgau
+1626,Rheingau,Germany,Rheingau,Anbaugebiet,White,Riesling; Spätburgunder
+1627,Rheinhessen,Germany,Rheinhessen,Anbaugebiet,White,Riesling; Silvaner; Müller-Thurgau
 1628,Rhodes,Greece,Aegean Islands,PDO,White,Athiri
 1629,Rías Baixas,Spain,Galicia,DO,White,Albariño
 1630,Ribbon Ridge,United States,Oregon,AVA,Red,Pinot Noir
 1631,Ribeira Sacra,Spain,Galicia,DO,Red,Mencía
 1632,Ribeiro,Spain,Galicia,DO,White,Treixadura; Godello
-1633,Ribera del Duero,Spain,Castilla y León,DO,Red,Tempranillo
-1634,Ribera del Guadiana,Spain,Extremadura,DO,Red,Tempranillo; Grenache
-1635,Ribera del Júcar,Spain,Castilla-La Mancha,DO,Red,Tempranillo; Bobal
+1633,Ribera del Duero,Spain,Castilla y León,DO,Red,Tinto Fino
+1634,Ribera del Guadiana,Spain,Extremadura,DO,Red,Tempranillo; Garnacha
+1635,Ribera del Júcar,Spain,Castilla-La Mancha,DO,Red,Cencibel; Bobal
 1636,Richebourg,France,Burgundy (Côte de Nuits),AOC Grand Cru,Red,Pinot Noir
 1637,Riebeekberg,South Africa,Coastal Region,WO,Red,Syrah
 1638,Riesi,Italy,Sicily,DOC,Red,Nero d'Avola
 1639,Río Hurtado,Chile,Coquimbo,DO,Red,Syrah
 1640,Río Negro,Argentina,Patagonia,GI,Red,Pinot Noir; Malbec
-1641,Rioja,Spain,Rioja,DOCa,Red,Tempranillo; Grenache; Graciano; Carignan
+1641,Rioja,Spain,Rioja,DOCa,Red,Tempranillo; Garnacha; Graciano; Mazuelo
 1642,Rioja Alavesa,Spain,Rioja,DOCa,Red,Tempranillo
 1643,Rioja Alta,Spain,Rioja,DOCa,Red,Tempranillo; Graciano
-1644,Rioja Blanco,Spain,Rioja,DOCa,White,Viura; Malvasia; Grenache Blanc
+1644,Rioja Blanco,Spain,Rioja,DOCa,White,Viura; Malvasía; Garnacha Blanca
 1645,Rioja Gran Reserva,Spain,Rioja,DOCa,Red,Tempranillo; Graciano
-1646,Rioja Oriental,Spain,Rioja,DOCa,Red,Grenache; Tempranillo
+1646,Rioja Oriental,Spain,Rioja,DOCa,Red,Garnacha; Tempranillo
 1647,Ripaille,France,Savoie & Bugey,Cru,White,Chasselas
 1648,River Junction,United States,California (Central Valley),AVA,White,Chardonnay
 1649,Rivera,Uruguay,Rivera,Regional,Red,Tannat; Cabernet Franc
-1650,Riverina,Australia,New South Wales,GI,Sweet White,Sémillon
-1651,Riverland,Australia,South Australia,GI,Red,Syrah; Chardonnay
-1652,Rivesaltes,France,Roussillon,AOC,Fortified,Grenache; Viura
-1653,Riviera del Brenta,Italy,Veneto,DOC,Red,Merlot; Refosco dal Peduncolo Rosso
+1650,Riverina,Australia,New South Wales,GI,Sweet White,Semillon
+1651,Riverland,Australia,South Australia,GI,Red,Shiraz; Chardonnay
+1652,Rivesaltes,France,Roussillon,AOC,Fortified,Grenache; Macabeu
+1653,Riviera del Brenta,Italy,Veneto,DOC,Red,Merlot; Refosco
 1654,Riviera del Garda Classico,Italy,Lombardy,DOC,Rosé,Groppello
-1655,Riviera Ligure di Ponente,Italy,Liguria,DOC,White,Vermentino
+1655,Riviera Ligure di Ponente,Italy,Liguria,DOC,White,Pigato; Vermentino
 1656,Roaix,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
 1657,Robe,Australia,South Australia,GI,Red,Cabernet Sauvignon
 1658,Robertson,South Africa,Breede River Valley,WO,White,Chardonnay; Sauvignon Blanc
@@ -1686,7 +1686,7 @@
 1685,Rosso di Cerignola,Italy,Puglia,DOC,Red,Nero di Troia; Negroamaro
 1686,Rosso di Montalcino,Italy,Tuscany,DOC,Red,Sangiovese
 1687,Rosso di Montepulciano,Italy,Tuscany,DOC,Red,Sangiovese
-1688,Rosso di Valtellina,Italy,Lombardy,DOC,Red,Nebbiolo
+1688,Rosso di Valtellina,Italy,Lombardy,DOC,Red,Chiavennasca
 1689,Rosso Orvietano,Italy,Umbria,DOC,Red,Sangiovese; Merlot
 1690,Rosso Piceno,Italy,Marche,DOC,Red,Montepulciano; Sangiovese
 1691,Roter Hang (Nierstein),Germany,Rheinhessen,Bereich,White,Riesling
@@ -1709,7 +1709,7 @@
 1708,Rutherglen Muscat,Australia,Victoria,GI,Fortified,Muscat à Petits Grains Rouge
 1709,Rutherglen Topaque,Australia,Victoria,GI,Fortified,Muscadelle
 1710,Ruwer,Germany,Mosel,Bereich,White,Riesling
-1711,Saale-Unstrut,Germany,Saale-Unstrut,Anbaugebiet,White,Müller-Thurgau; Pinot Blanc
+1711,Saale-Unstrut,Germany,Saale-Unstrut,Anbaugebiet,White,Müller-Thurgau; Weissburgunder
 1712,Saar,Germany,Mosel,Bereich,White,Riesling
 1713,Sablet,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
 1714,Sachsen,Germany,Sachsen,Anbaugebiet,White,Müller-Thurgau; Riesling
@@ -1749,10 +1749,10 @@
 1748,Sakar,Bulgaria,Thracian Valley,PDO,Red,Merlot; Mavrud
 1749,Salado Creek,United States,California (Central Valley),AVA,Red,Cabernet Sauvignon
 1750,Salaparuta,Italy,Sicily,DOC,Red,Nero d'Avola
-1751,Salento,Italy,Puglia,IGT,Red,Zinfandel; Negroamaro
+1751,Salento,Italy,Puglia,IGT,Red,Primitivo; Negroamaro
 1752,Salice Salentino,Italy,Puglia,DOC,Red,Negroamaro
 1753,Salto,Uruguay,Salto,Regional,Red,Tannat
-1754,Samarkand,Uzbekistan,Samarkand,Regional,Sweet White,Bayanshira; Muscat Blanc à Petits Grains
+1754,Samarkand,Uzbekistan,Samarkand,Regional,Sweet White,Bayan Shirey; Muscat
 1755,Sambuca di Sicilia,Italy,Sicily,DOC,Red,Nero d'Avola
 1756,Sâmburești,Romania,Oltenia,DOC,Red,Cabernet Sauvignon
 1757,Samegrelo,Georgia,Samegrelo,Regional,Red,Ojaleshi
@@ -1762,7 +1762,7 @@
 1761,San Antonio Valley (California),United States,California (Central Coast),AVA,Red,Syrah
 1762,San Benito,United States,California (Central Coast),AVA,Red,Pinot Noir; Grenache
 1763,San Bernabe,United States,California (Central Coast),AVA,White,Chardonnay
-1764,San Carlos,Argentina,Mendoza,GI,Red,Malbec; Sémillon
+1764,San Carlos,Argentina,Mendoza,GI,Red,Malbec; Semillón
 1765,San Clemente,Chile,Central Valley,DO,Red,Carignan
 1766,San Colombano al Lambro,Italy,Lombardy,DOC,Red,Croatina; Barbera
 1767,San Francisco Bay,United States,California (Bay Area),AVA,Red,Cabernet Sauvignon; Merlot
@@ -1777,7 +1777,7 @@
 1776,Sancerre,France,Loire (Central),AOC,White,Sauvignon Blanc
 1777,Sancerre Rouge,France,Loire (Central),AOC,Red,Pinot Noir
 1778,Sandomierz,Poland,Świętokrzyskie,PGI,White,Johanniter
-1779,Sangli,India,Maharashtra,Regional,Red,Syrah
+1779,Sangli,India,Maharashtra,Regional,Red,Shiraz
 1780,Sangue di Giuda,Italy,Lombardy,DOC,Sweet Red,Croatina; Barbera
 1781,Sannio,Italy,Campania,DOC,White,Falanghina; Greco
 1782,Sant'Anna di Isola Capo Rizzuto,Italy,Calabria,DOC,Red,Gaglioppo
@@ -1786,9 +1786,9 @@
 1785,Santa Lucia Highlands,United States,California (Central Coast),AVA,Red,Pinot Noir; Syrah
 1786,Santa Maddalena,Italy,Trentino-Alto Adige,DOC,Red,Schiava; Lagrein
 1787,Santa Margarita Ranch,United States,California (Central Coast),AVA,Red,Cabernet Sauvignon
-1788,Santa Margherita di Belice,Italy,Sicily,DOC,White,Inzolia; Catarratto
+1788,Santa Margherita di Belice,Italy,Sicily,DOC,White,Ansonica; Catarratto
 1789,Santa Maria Valley,United States,California (Central Coast),AVA,Red,Pinot Noir; Chardonnay
-1790,Santa Rosa,Argentina,Mendoza,GI,Red,Croatina; Malbec
+1790,Santa Rosa,Argentina,Mendoza,GI,Red,Bonarda; Malbec
 1791,Santa Ynez Valley,United States,California (Central Coast),AVA,Red,Syrah; Pinot Noir
 1792,Santenay,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
 1793,Santorini,Greece,Cyclades,PDO,White,Assyrtiko
@@ -1809,8 +1809,8 @@
 1808,Savennières Roche aux Moines,France,Loire (Anjou-Saumur),AOC,White,Chenin Blanc
 1809,Savigny-lès-Beaune,France,Burgundy (Côte de Beaune),AOC,Red,Pinot Noir
 1810,Savuto,Italy,Calabria,DOC,Red,Gaglioppo; Magliocco
-1811,Scavigna,Italy,Calabria,DOC,Red,Gaglioppo; Nerello Mascalese
-1812,Schaffhausen,Switzerland,Zurich & Schaffhausen,AOC,Red,Pinot Noir
+1811,Scavigna,Italy,Calabria,DOC,Red,Gaglioppo; Nerello
+1812,Schaffhausen,Switzerland,Zurich & Schaffhausen,AOC,Red,Blauburgunder
 1813,Scharzhofberger,Germany,Mosel,Einzellage,White,Riesling
 1814,Schilcher,Austria,Steiermark,DAC,Rosé,Blauer Wildbacher
 1815,Schioppettino di Prepotto,Italy,Friuli-Venezia Giulia,DOC,Red,Schioppettino
@@ -1818,20 +1818,20 @@
 1817,Schlossberg,France,Alsace,AOC Grand Cru,White,Riesling
 1818,Schlossböckelheimer Kupfergrube,Germany,Nahe,Einzellage,White,Riesling
 1819,Schoenenbourg,France,Alsace,AOC Grand Cru,White,Riesling
-1820,Sciacca,Italy,Sicily,DOC,White,Inzolia; Catarratto
+1820,Sciacca,Italy,Sicily,DOC,White,Ansonica; Catarratto
 1821,Segarcea,Romania,Oltenia,DOC,Red,Fetească Neagră; Merlot
 1822,Séguret,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
-1823,Sekt,Germany,National,Quality sparkling,Sparkling,Riesling; Pinot Blanc; Pinot Noir
+1823,Sekt,Germany,National,Quality sparkling,Sparkling,Riesling; Weissburgunder; Spätburgunder
 1824,Sekt Austria,Austria,National,PDO,Sparkling,Grüner Veltliner; Welschriesling
 1825,Seneca Lake,United States,New York,AVA,White,Riesling
 1826,Serra da Mantiqueira,Brazil,Minas Gerais,Regional,Red,Syrah
 1827,Serra do Sudeste,Brazil,Rio Grande do Sul,Regional,Red,Pinot Noir; Cabernet Franc
-1828,Serra Gaúcha,Brazil,Rio Grande do Sul,Regional,Sparkling,Chardonnay; Pinot Noir; Muscat Blanc à Petits Grains
+1828,Serra Gaúcha,Brazil,Rio Grande do Sul,Regional,Sparkling,Chardonnay; Pinot Noir; Moscato
 1829,Serrapetrona,Italy,Marche,DOC,Red,Vernaccia Nera
 1830,Serres,Greece,Macedonia,PGI,Red,Limnio
 1831,Sevastopol,Russia,Crimea,PGI,Sparkling,Chardonnay; Pinot Noir
 1832,Seyssel,France,Savoie & Bugey,AOC,White,Altesse; Molette
-1833,Sforzato di Valtellina,Italy,Lombardy,DOCG,Red,Nebbiolo
+1833,Sforzato di Valtellina,Italy,Lombardy,DOCG,Red,Chiavennasca
 1834,Shabo,Ukraine,Odesa,Regional,Red,Cabernet Sauvignon
 1835,Shamakhi,Azerbaijan,Shamakhi,Regional,Red,Madrasa
 1836,Shangri-La (Deqin),China,Yunnan,Regional,Red,Cabernet Sauvignon; Cabernet Franc
@@ -1849,7 +1849,7 @@
 1848,Šibenik,Croatia,Dalmatia,PDO,Red,Babić
 1849,Sicilia,Italy,Sicily,DOC,Red,Nero d'Avola
 1850,Sidi Salem,Tunisia,Bizerte,AOC,Red,Carignan; Cabernet Sauvignon
-1851,Sierra de Gredos,Spain,Castilla y León,Regional,Red,Grenache
+1851,Sierra de Gredos,Spain,Castilla y León,Regional,Red,Garnacha
 1852,Sierra de Salamanca,Spain,Castilla y León,DO,Red,Rufete
 1853,Sierra Foothills,United States,California (Sierra Foothills),AVA,Red,Zinfandel; Barbera
 1854,Sierra Norte de Sevilla,Spain,Andalusia,VT,Red,Tempranillo
@@ -1864,19 +1864,19 @@
 1863,Sizzano,Italy,Piedmont,DOC,Red,Nebbiolo; Vespolina
 1864,Skaha Bench,Canada,British Columbia,BC GI,Red,Syrah; Pinot Gris
 1865,Skåne,Sweden,Skåne,Regional,White,Solaris; Rondo
-1866,Slámové Víno,Czechia,Moravia,Prädikat-style,Sweet White,
+1866,Slámové Víno,Czechia,Moravia,Prädikat-style,Sweet White,Various
 1867,Slanghoek,South Africa,Breede River Valley,WO,White,Chenin Blanc
 1868,SLO Coast,United States,California (Central Coast),AVA,Red,Pinot Noir; Chardonnay
 1869,Slopes of Meliton,Greece,Macedonia,PDO,White,Athiri; Assyrtiko; Roditis
 1870,Sloughhouse,United States,California (Central Valley),AVA,Red,Zinfandel
 1871,Slovácko,Czechia,Moravia,PDO,White,Müller-Thurgau; Ryzlink
-1872,Slovenska Istra,Slovenia,Primorska,PDO,White,Malvasia
+1872,Slovenska Istra,Slovenia,Primorska,PDO,White,Malvazija
 1873,Small Carpathians,Slovakia,Malokarpatská,PDO,White,Grüner Veltliner; Riesling
 1874,Smaragd,Austria,Wachau,Vinea Wachau,White,Grüner Veltliner; Riesling
 1875,Snake River Valley,United States,Idaho,AVA,Red,Syrah; Cabernet Sauvignon
 1876,Snake River Valley Sunnyslope District,United States,Idaho,AVA,Red,Syrah
 1877,Snipes Mountain,United States,Washington,AVA,Red,Cabernet Sauvignon
-1878,Soave,Italy,Veneto,DOC,White,Garganega; Verdicchio
+1878,Soave,Italy,Veneto,DOC,White,Garganega; Trebbiano di Soave
 1879,Soave Classico,Italy,Veneto,DOC,White,Garganega
 1880,Soave Superiore,Italy,Veneto,DOCG,White,Garganega
 1881,Solopaca,Italy,Campania,DOC,Red,Sangiovese; Aglianico
@@ -1889,38 +1889,38 @@
 1888,Sonoma County,United States,California (Sonoma),AVA,Red,Pinot Noir; Cabernet Sauvignon; Zinfandel
 1889,Sonoma Mountain,United States,California (Sonoma),AVA,Red,Cabernet Sauvignon
 1890,Sonoma Valley,United States,California (Sonoma),AVA,Red,Cabernet Sauvignon; Zinfandel
-1891,Sopron,Hungary,Sopron,PDO,Red,Blaufränkisch
+1891,Sopron,Hungary,Sopron,PDO,Red,Kékfrankos
 1892,Sorachi,Japan,Hokkaido,Regional,White,Kerner
 1893,South Burnett,Australia,Queensland,GI,White,Chardonnay; Verdelho
 1894,South West Australia,Australia,Western Australia,GI,Red,Cabernet Sauvignon
 1895,Southeastern New England,United States,Connecticut,AVA,White,Chardonnay
-1896,Southern Fleurieu,Australia,South Australia,GI,Red,Syrah
-1897,Southern Flinders Ranges,Australia,South Australia,GI,Red,Syrah
+1896,Southern Fleurieu,Australia,South Australia,GI,Red,Shiraz
+1897,Southern Flinders Ranges,Australia,South Australia,GI,Red,Shiraz
 1898,Southern Highlands,Australia,New South Wales,GI,Sparkling,Chardonnay; Pinot Noir
-1899,Southern New South Wales,Australia,New South Wales,GI,Red,Syrah
+1899,Southern New South Wales,Australia,New South Wales,GI,Red,Shiraz
 1900,Southern Oregon,United States,Oregon,AVA,Red,Tempranillo; Syrah
 1901,Southern Slovakia,Slovakia,Južnoslovenská,PDO,Red,Blaufränkisch; Alibernet
 1902,Southern Valleys,New Zealand,Marlborough,Regional,Red,Pinot Noir
 1903,Sovana,Italy,Tuscany,DOC,Red,Sangiovese; Aleatico
-1904,Sparkling Shiraz,Australia,National,Traditional style,Sparkling Red,Syrah
+1904,Sparkling Shiraz,Australia,National,Traditional style,Sparkling Red,Shiraz
 1905,Spätlese,Germany,National,Prädikat,White,Riesling
 1906,Spiegel,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Pinot Gris
 1907,Spoleto,Italy,Umbria,DOC,White,Trebbiano Spoletino
 1908,Sporen,France,Alsace,AOC Grand Cru,White,Gewurztraminer; Pinot Gris
 1909,Spring Mountain District,United States,California (Napa),AVA,Red,Cabernet Sauvignon
 1910,Squinzano,Italy,Puglia,DOC,Red,Negroamaro
-1911,Srem,Serbia,Vojvodina,PDO,White,Welschriesling
+1911,Srem,Serbia,Vojvodina,PDO,White,Italian Riesling
 1912,St. David's Bench,Canada,Ontario,VQA,Red,Cabernet Franc; Merlot
 1913,St. Helena,United States,California (Napa),AVA,Red,Cabernet Sauvignon
 1914,Sta. Rita Hills,United States,California (Central Coast),AVA,Red,Pinot Noir; Chardonnay
 1915,Stags Leap District,United States,California (Napa),AVA,Red,Cabernet Sauvignon
-1916,Štajerska Slovenija,Slovenia,Podravje,PDO,White,Welschriesling; Furmint
+1916,Štajerska Slovenija,Slovenia,Podravje,PDO,White,Laški Rizling; Šipon
 1917,Stanford Foothills,South Africa,Cape South Coast,WO,Red,Pinot Noir
 1918,Stanušina,North Macedonia,Povardarie,Grape wine,Rosé,Stanušina
 1919,Stavropol,Russia,Stavropol,PGI,Red,Cabernet Sauvignon
 1920,Ștefan Vodă,Moldova,Ștefan Vodă,PGI,Red,Rara Neagră; Cabernet Sauvignon
 1921,Ștefănești,Romania,Muntenia,DOC,White,Fetească Regală
-1922,Steigerwald,Germany,Franken,Bereich,White,Sylvaner
+1922,Steigerwald,Germany,Franken,Bereich,White,Silvaner
 1923,Steinberg,Germany,Rheingau,Einzellage,White,Riesling
 1924,Steinert,France,Alsace,AOC Grand Cru,White,Pinot Gris; Gewurztraminer
 1925,Steinfeder,Austria,Wachau,Vinea Wachau,White,Grüner Veltliner
@@ -1930,19 +1930,19 @@
 1929,Stellenbosch Bottelary,South Africa,Coastal Region,WO,Red,Pinotage
 1930,Sterea Ellada,Greece,Central Greece,PGI,Red,Agiorgitiko; Syrah
 1931,Strathbogie Ranges,Australia,Victoria,GI,White,Chardonnay; Riesling
-1932,Strevi,Italy,Piedmont,DOC,Sweet White,Muscat Blanc à Petits Grains
-1933,Strohwein / Schilfwein,Austria,National,Prädikat,Sweet White,
-1934,Sturm,Austria,National,Seasonal,White,
+1932,Strevi,Italy,Piedmont,DOC,Sweet White,Moscato Bianco
+1933,Strohwein / Schilfwein,Austria,National,Prädikat,Sweet White,Various
+1934,Sturm,Austria,National,Seasonal,White,Various
 1935,Subotica-Horgoš,Serbia,Vojvodina,PDO,White,Kevedinka
-1936,Südliche Weinstraße,Germany,Pfalz,Bereich,White,Riesling; Pinot Blanc
-1937,Südsteiermark,Austria,Steiermark,DAC,White,Sauvignon Blanc; Chardonnay
+1936,Südliche Weinstraße,Germany,Pfalz,Bereich,White,Riesling; Weissburgunder
+1937,Südsteiermark,Austria,Steiermark,DAC,White,Sauvignon Blanc; Morillon
 1938,Suffolk,United Kingdom,East England,Regional,White,Bacchus
-1939,Sughd,Tajikistan,Sughd,Regional,Sweet White,Muscat Blanc à Petits Grains; Rkatsiteli
-1940,Suhindol,Bulgaria,Danubian Plain,PDO,Red,Kadarka
+1939,Sughd,Tajikistan,Sughd,Regional,Sweet White,Muscat; Rkatsiteli
+1940,Suhindol,Bulgaria,Danubian Plain,PDO,Red,Gamza
 1941,Sulechów,Poland,Lubuskie,PGI,White,Solaris
 1942,Suli Chërta,Italy,Piedmont,DOC,Red,Nebbiolo
 1943,Šumadija,Serbia,Central Serbia,PDO,Red,Prokupac; Cabernet Sauvignon
-1944,Sunbury,Australia,Victoria,GI,Red,Syrah
+1944,Sunbury,Australia,Victoria,GI,Red,Shiraz
 1945,Sunday's Glen,South Africa,Cape South Coast,WO,Red,Pinot Noir
 1946,Sungurlare,Bulgaria,Thracian Valley,PDO,White,Red Misket
 1947,Surrey,United Kingdom,Southeast England,Regional,Sparkling,Chardonnay; Pinot Noir
@@ -1950,46 +1950,46 @@
 1949,Sutherland-Karoo,South Africa,Northern Cape,WO,Red,Syrah
 1950,Suvereto,Italy,Tuscany,DOCG,Red,Cabernet Sauvignon; Merlot
 1951,Suze-la-Rousse,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
-1952,Svatomartinské,Czechia,National,Seasonal,Red,Svatovavřinecké; Blauer Portugieser
+1952,Svatomartinské,Czechia,National,Seasonal,Red,Svatovavřinecké; Modrý Portugal
 1953,Sviri,Georgia,Imereti,PDO,White,Tsitska; Tsolikouri; Krakhuna
 1954,Swan Creek,United States,North Carolina,AVA,Red,Cabernet Franc
 1955,Swan District,Australia,Western Australia,GI,White,Chenin Blanc; Verdelho
-1956,Swan Hill,Australia,New South Wales,GI,Red,Syrah
-1957,Swan Hill (Vic),Australia,Victoria,GI,Red,Syrah
+1956,Swan Hill,Australia,New South Wales,GI,Red,Shiraz
+1957,Swan Hill (Vic),Australia,Victoria,GI,Red,Shiraz
 1958,Swan Valley,Australia,Western Australia,GI,Fortified,Verdelho; Grenache
 1959,Swartland,South Africa,Coastal Region,WO,Red,Syrah; Chenin Blanc
 1960,Swellendam,South Africa,Cape South Coast,WO,White,Sauvignon Blanc
 1961,Syrah du Valais,Switzerland,Valais,AOC,Red,Syrah
 1962,Syros,Greece,Cyclades,PGI,White,Assyrtiko
-1963,Szekszárdi Bikavér,Hungary,Szekszárd,PDO,Red,Blaufränkisch; Kadarka
+1963,Szekszárdi Bikavér,Hungary,Szekszárd,PDO,Red,Kékfrankos; Kadarka
 1964,Taburno,Italy,Campania,DOC,White,Falanghina
 1965,Tacna,Peru,Tacna,Regional,Red,Cabernet Sauvignon
 1966,Tacoronte-Acentejo,Spain,Canary Islands,DO,Red,Listán Negro
 1967,Talca,Chile,Central Valley,DO,Red,Cabernet Sauvignon
 1968,Tamar Valley,Australia,Tasmania,Regional,White,Chardonnay; Pinot Noir
 1969,Tannat,Uruguay,National,Grape wine,Red,Tannat
-1970,Târnave,Romania,Transylvania,DOC,White,Fetească Albă; Savagnin
+1970,Târnave,Romania,Transylvania,DOC,White,Fetească Albă; Traminer
 1971,Tarquinia,Italy,Lazio,DOC,Red,Sangiovese; Montepulciano
-1972,Tarragona,Spain,Catalonia,DO,White,Viura; Xarel·lo
+1972,Tarragona,Spain,Catalonia,DO,White,Macabeo; Xarel·lo
 1973,Tashkent,Uzbekistan,Tashkent,Regional,Sweet White,Rkatsiteli
 1974,Tasmania,Australia,Tasmania,GI,Sparkling,Chardonnay; Pinot Noir
 1975,Taunggyi,Myanmar,Shan State,Regional,White,Sauvignon Blanc
 1976,Taurasi,Italy,Campania,DOCG,Red,Aglianico
 1977,Tavel,France,Rhône (Southern),AOC,Rosé,Grenache; Cinsault
-1978,Tavira,Portugal,Algarve,DOC,Red,Negramoll; Castelão
+1978,Tavira,Portugal,Algarve,DOC,Red,Negra Mole; Castelão
 1979,Tavoliere delle Puglie,Italy,Puglia,DOC,Red,Nero di Troia
 1980,Távora-Varosa,Portugal,Beiras,DOC,Sparkling,Chardonnay; Malvasia Fina
 1981,Tejo,Portugal,Tejo,DOC,Red,Castelão; Trincadeira; Touriga Nacional
 1982,Telemark,Norway,Telemark,Regional,White,Solaris
 1983,Teliani,Georgia,Kakheti,PDO,Red,Cabernet Sauvignon
 1984,Temecula Valley,United States,California (Southern),AVA,Red,Syrah; Cabernet Sauvignon
-1985,Temjanika,North Macedonia,Povardarie,Grape wine,White,Muscat Blanc à Petits Grains
+1985,Temjanika,North Macedonia,Povardarie,Grape wine,White,Temjanika
 1986,Templeton Gap District,United States,California (Central Coast),AVA,Red,Syrah; Pinot Noir
-1987,Teran (Istria),Croatia,Istria & Kvarner,PDO,Red,Terrano
+1987,Teran (Istria),Croatia,Istria & Kvarner,PDO,Red,Refošk
 1988,Terceira,Portugal,Azores,Regional,White,Verdelho
 1989,Teroldego Rotaliano,Italy,Trentino-Alto Adige,DOC,Red,Teroldego
-1990,Terra Alta,Spain,Catalonia,DO,White,Grenache Blanc
-1991,Terra d'Otranto,Italy,Puglia,DOC,Red,Negroamaro; Zinfandel
+1990,Terra Alta,Spain,Catalonia,DO,White,Garnacha Blanca
+1991,Terra d'Otranto,Italy,Puglia,DOC,Red,Negroamaro; Primitivo
 1992,Terrasses du Larzac,France,Languedoc,AOC,Red,Syrah; Grenache; Cinsault
 1993,Terratico di Bibbona,Italy,Tuscany,DOC,Red,Sangiovese; Merlot
 1994,Terre Alfieri,Italy,Piedmont,DOCG,White,Arneis
@@ -2015,12 +2015,12 @@
 2014,Ticino Merlot,Switzerland,Ticino,DOC,Red,Merlot
 2015,Tidal Bay,Canada,Nova Scotia,Appellation,White,L'Acadie Blanc; Seyval Blanc; Vidal
 2016,Tierra de León,Spain,Castilla y León,DO,Red,Prieto Picudo
-2017,Tikveš,North Macedonia,Povardarie,PDO,Red,Vranac
+2017,Tikveš,North Macedonia,Povardarie,PDO,Red,Vranec
 2018,Tinos,Greece,Cyclades,PGI,White,Assyrtiko; Malagousia
 2019,Tintilia del Molise,Italy,Molise,DOC,Red,Tintilia
 2020,Tip of the Mitt,United States,Michigan,AVA,White,Riesling; Marquette
 2021,Todi,Italy,Umbria,DOC,White,Grechetto
-2022,Tokaji Aszú,Hungary,Tokaj,PDO,Sweet White,Furmint; Hárslevelű; Muscat Blanc à Petits Grains
+2022,Tokaji Aszú,Hungary,Tokaj,PDO,Sweet White,Furmint; Hárslevelű; Sárga Muskotály
 2023,Tokaji Édes Szamorodni,Hungary,Tokaj,PDO,Sweet White,Furmint
 2024,Tokaji Eszencia,Hungary,Tokaj,PDO,Sweet White,Furmint
 2025,Tokaji Fordítás,Hungary,Tokaj,PDO,Sweet White,Furmint
@@ -2028,36 +2028,36 @@
 2027,Tokaji Késői Szüretelésű,Hungary,Tokaj,PDO,Sweet White,Furmint; Hárslevelű
 2028,Tokaji Máslás,Hungary,Tokaj,PDO,Sweet White,Furmint
 2029,Tokaji Szamorodni,Hungary,Tokaj,PDO,Sweet White,Furmint; Hárslevelű
-2030,Tokajské Víno,Slovakia,Tokaj (Slovak),PDO,Sweet White,Furmint; Hárslevelű
+2030,Tokajské Víno,Slovakia,Tokaj (Slovak),PDO,Sweet White,Furmint; Lipovina
 2031,Tokat,Turkey,Black Sea,Regional,White,Narince
 2032,Tolna,Hungary,Pannon,PDO,White,Chardonnay
 2033,Tonghua,China,Jilin,Regional,Sweet Red,Vitis amurensis
 2034,Torcolato di Breganze,Italy,Veneto,DOC,Sweet White,Vespaiola
 2035,Torgiano,Italy,Umbria,DOC,Red,Sangiovese
 2036,Torgiano Rosso Riserva,Italy,Umbria,DOCG,Red,Sangiovese
-2037,Toro,Spain,Castilla y León,DO,Red,Tempranillo
+2037,Toro,Spain,Castilla y León,DO,Red,Tinta de Toro
 2038,Toronto,Canada,Ontario,Regional,White,Riesling
 2039,Torres Vedras,Portugal,Lisboa,DOC,Red,Castelão; Tinta Miúda
 2040,Torrette,Italy,Valle d'Aosta,DOC,Red,Petit Rouge
 2041,Torrontés,Argentina,National,Grape wine,White,Torrontés Riojano
 2042,Toscana (Super Tuscan),Italy,Tuscany,IGT,Red,Cabernet Sauvignon; Merlot; Sangiovese
 2043,Touraine,France,Loire (Touraine),AOC,White,Sauvignon Blanc
-2044,Touraine-Amboise,France,Loire (Touraine),AOC,Red,Malbec; Cabernet Franc
+2044,Touraine-Amboise,France,Loire (Touraine),AOC,Red,Côt; Cabernet Franc
 2045,Touraine-Azay-le-Rideau,France,Loire (Touraine),AOC,White,Chenin Blanc
 2046,Touraine-Chenonceaux,France,Loire (Touraine),AOC,White,Sauvignon Blanc
-2047,Touraine-Mesland,France,Loire (Touraine),AOC,Red,Gamay; Malbec
+2047,Touraine-Mesland,France,Loire (Touraine),AOC,Red,Gamay; Côt
 2048,Touraine-Oisly,France,Loire (Touraine),AOC,White,Sauvignon Blanc
 2049,Tours-sur-Marne,France,Champagne,Grand Cru village,Sparkling,Pinot Noir
 2050,Tracy Hills,United States,California (Central Valley),AVA,Red,Cabernet Sauvignon
 2051,Traiguén,Chile,Southern Chile,DO,White,Chardonnay
 2052,Traisental,Austria,Niederösterreich,DAC,White,Grüner Veltliner
-2053,Trás-os-Montes,Portugal,Trás-os-Montes,DOC,Red,Tempranillo; Trincadeira
+2053,Trás-os-Montes,Portugal,Trás-os-Montes,DOC,Red,Tinta Roriz; Trincadeira
 2054,Trebbiano d'Abruzzo,Italy,Abruzzo,DOC,White,Trebbiano Abruzzese
 2055,Trebbiano Spoletino,Italy,Umbria,DOC,White,Trebbiano Spoletino
-2056,Trentino,Italy,Trentino-Alto Adige,DOC,White,Chardonnay; Pinot Gris
+2056,Trentino,Italy,Trentino-Alto Adige,DOC,White,Chardonnay; Pinot Grigio
 2057,Trentino Marzemino,Italy,Trentino-Alto Adige,DOC,Red,Marzemino
-2058,Trentino Superiore,Italy,Trentino-Alto Adige,DOC,White,Chardonnay; Pinot Blanc
-2059,Trento,Italy,Trentino-Alto Adige,DOC,Sparkling,Chardonnay; Pinot Noir
+2058,Trentino Superiore,Italy,Trentino-Alto Adige,DOC,White,Chardonnay; Pinot Bianco
+2059,Trento,Italy,Trentino-Alto Adige,DOC,Sparkling,Chardonnay; Pinot Nero
 2060,Tri Morave,Serbia,Central Serbia,PDO,Red,Prokupac
 2061,Trittenheimer Apotheke,Germany,Mosel,Einzellage,White,Riesling
 2062,Trockenbeerenauslese,Germany,National,Prädikat,Sweet White,Riesling
@@ -2067,10 +2067,10 @@
 2066,Tualatin Hills,United States,Oregon,AVA,Red,Pinot Noir
 2067,Tulbagh,South Africa,Coastal Region,WO,Sparkling,Chardonnay; Pinot Noir
 2068,Tumbarumba,Australia,New South Wales,GI,Sparkling,Chardonnay; Pinot Noir
-2069,Tuniberg,Germany,Baden,Bereich,White,Pinot Gris
+2069,Tuniberg,Germany,Baden,Bereich,White,Grauburgunder
 2070,Tupungato,Argentina,Mendoza,GI,White,Chardonnay; Malbec
 2071,Turgen,Kazakhstan,Almaty,Regional,Red,Saperavi
-2072,Turpan Basin,China,Xinjiang,Regional,Sweet White,Muscat Blanc à Petits Grains; Cabernet Sauvignon
+2072,Turpan Basin,China,Xinjiang,Regional,Sweet White,Muscat; Cabernet Sauvignon
 2073,Tursan,France,Southwest France,AOC,White,Baroque
 2074,Tvishi,Georgia,Racha-Lechkhumi,PDO,Sweet White,Tsolikouri
 2075,Twenty Mile Bench,Canada,Ontario,VQA,White,Riesling; Chardonnay
@@ -2086,19 +2086,19 @@
 2085,Upper Hiwassee,United States,Georgia (US),AVA,Red,Cabernet Franc
 2086,Upper Hiwassee Highlands,United States,North Carolina,AVA,Red,Cabernet Franc
 2087,Upper Hudson,United States,New York,AVA,Red,Marquette; Frontenac
-2088,Upper Hunter Valley,Australia,New South Wales,GI,White,Sémillon; Chardonnay
+2088,Upper Hunter Valley,Australia,New South Wales,GI,White,Semillon; Chardonnay
 2089,Upper Mississippi River Valley,United States,Iowa,AVA,Red,Marquette; Frontenac
 2090,Ürziger Würzgarten,Germany,Mosel,Einzellage,White,Riesling
 2091,Utiel-Requena,Spain,Levante,DO,Red,Bobal
 2092,Vacqueyras,France,Rhône (Southern),AOC,Red,Grenache; Syrah
-2093,Vaduz,Liechtenstein,Oberland,Regional,Red,Pinot Noir
+2093,Vaduz,Liechtenstein,Oberland,Regional,Red,Blauburgunder
 2094,Vaison-la-Romaine,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
 2095,Val d'Arbia,Italy,Tuscany,DOC,White,Trebbiano Toscano
 2096,Val di Cornia Rosso,Italy,Tuscany,DOCG,Red,Sangiovese; Cabernet Sauvignon
 2097,Val do Miño-Ourense,Spain,Galicia,VT,White,Treixadura
 2098,Val Polcevera,Italy,Liguria,DOC,White,Vermentino; Bianchetta
 2099,Valcalepio,Italy,Lombardy,DOC,Red,Merlot; Cabernet Sauvignon
-2100,Valdadige,Italy,Veneto,DOC,White,Pinot Gris; Chardonnay
+2100,Valdadige,Italy,Veneto,DOC,White,Pinot Grigio; Chardonnay
 2101,Valdadige Terradeiforti,Italy,Trentino-Alto Adige,DOC,Red,Enantio; Casetta
 2102,Valdarno di Sopra,Italy,Tuscany,DOC,Red,Sangiovese
 2103,Valdeorras,Spain,Galicia,DO,White,Godello
@@ -2107,15 +2107,15 @@
 2106,Vale do São Francisco,Brazil,Bahia & Pernambuco,Regional,Red,Syrah; Cabernet Sauvignon
 2107,Vale dos Vinhedos,Brazil,Rio Grande do Sul,DO,Red,Merlot; Cabernet Sauvignon
 2108,Valençay,France,Loire (Touraine),AOC,White,Sauvignon Blanc
-2109,Valencia,Spain,Levante,DO,White,Merseguera; Muscat of Alexandria
+2109,Valencia,Spain,Levante,DO,White,Merseguera; Moscatel
 2110,Vales da Uva Goethe,Brazil,Santa Catarina,IP,White,Goethe
 2111,Valle Central de Tarija,Bolivia,Tarija,Regional,Red,Tannat; Cabernet Sauvignon
 2112,Valle d'Aosta,Italy,Valle d'Aosta,DOC,Red,Petit Rouge; Fumin; Nebbiolo
 2113,Valle de Calafia,Mexico,Baja California,Regional,Red,Nebbiolo; Syrah
-2114,Valle de Cinti,Bolivia,Chuquisaca,Regional,Red,Vischoqueña; País
+2114,Valle de Cinti,Bolivia,Chuquisaca,Regional,Red,Vischoqueña; Negra Criolla
 2115,Valle de Famatina,Argentina,La Rioja (Arg),GI,White,Torrontés Riojano
 2116,Valle de Guadalupe,Mexico,Baja California,Regional,Red,Nebbiolo; Cabernet Sauvignon; Tempranillo
-2117,Valle de Güímar,Spain,Canary Islands,DO,White,Palomino
+2117,Valle de Güímar,Spain,Canary Islands,DO,White,Listán Blanco
 2118,Valle de la Concepción,Bolivia,Tarija,Regional,Red,Tannat
 2119,Valle de la Orotava,Spain,Canary Islands,DO,Red,Listán Negro
 2120,Valle de las Arcinas,Mexico,Zacatecas,Regional,Red,Cabernet Sauvignon; Malbec
@@ -2127,7 +2127,7 @@
 2126,Valle de Santo Tomás,Mexico,Baja California,Regional,Red,Cabernet Sauvignon; Merlot
 2127,Valle de Sorata,Bolivia,La Paz,Regional,Red,Cabernet Sauvignon
 2128,Valle de Tanamá,Mexico,Baja California,Regional,Red,Nebbiolo
-2129,Valle de Tulum,Argentina,San Juan,GI,Red,Syrah; Croatina
+2129,Valle de Tulum,Argentina,San Juan,GI,Red,Syrah; Bonarda
 2130,Valle de Uco,Argentina,Mendoza,GI,Red,Malbec; Cabernet Franc
 2131,Valle de Zonda,Argentina,San Juan,GI,Red,Syrah; Malbec
 2132,Valle del Cauca,Colombia,Valle del Cauca,Regional,Red,Cabernet Sauvignon
@@ -2135,20 +2135,20 @@
 2134,Valles Calchaquíes,Argentina,Salta,GI,Red,Malbec; Tannat
 2135,Valles de Benavente,Spain,Castilla y León,VC,Red,Prieto Picudo
 2136,Valli Ossolane,Italy,Piedmont,DOC,Red,Nebbiolo
-2137,Valpaços,Portugal,Trás-os-Montes,DOC,Red,Tempranillo; Touriga Franca
+2137,Valpaços,Portugal,Trás-os-Montes,DOC,Red,Tinta Roriz; Touriga Franca
 2138,Valpolicella,Italy,Veneto,DOC,Red,Corvina; Rondinella; Molinara
 2139,Valpolicella Classico,Italy,Veneto,DOC,Red,Corvina; Rondinella
 2140,Valpolicella Ripasso,Italy,Veneto,DOC,Red,Corvina; Rondinella
 2141,Valréas,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
 2142,Valsusa,Italy,Piedmont,DOC,Red,Avanà; Barbera
-2143,Valtellina Superiore,Italy,Lombardy,DOCG,Red,Nebbiolo
+2143,Valtellina Superiore,Italy,Lombardy,DOCG,Red,Chiavennasca
 2144,Valtiendas,Spain,Castilla y León,VC,Red,Tempranillo
 2145,Valul lui Traian,Moldova,Valul lui Traian,PGI,Red,Merlot; Cabernet Sauvignon
 2146,Van Duzer Corridor,United States,Oregon,AVA,Red,Pinot Noir
 2147,Vancouver Island,Canada,British Columbia,BC GI,White,Ortega; Pinot Gris
 2148,Vazisubani,Georgia,Kakheti,PDO,White,Rkatsiteli; Mtsvane
 2149,VDP.Erste Lage,Germany,National,VDP classification,White,Riesling
-2150,Velké Pavlovice,Czechia,Moravia,PDO,Red,Blaufränkisch; Svatovavřinecké
+2150,Velké Pavlovice,Czechia,Moravia,PDO,Red,Frankovka; Svatovavřinecké
 2151,Velletri,Italy,Lazio,DOC,Red,Sangiovese; Montepulciano
 2152,Ventoux,France,Rhône (Southern),AOC,Red,Grenache; Syrah
 2153,Verbicaro,Italy,Calabria,DOC,Red,Gaglioppo; Magliocco
@@ -2166,52 +2166,52 @@
 2165,Verzy,France,Champagne,Grand Cru village,Sparkling,Pinot Noir
 2166,Vesuvio,Italy,Campania,DOC,Red,Piedirosso; Sciascinoso
 2167,Vi de la Terra Mallorca,Spain,Balearic Islands,VT,Red,Callet; Fogoneu
-2168,Vicenza,Italy,Veneto,DOC,White,Garganega; Pinot Blanc
+2168,Vicenza,Italy,Veneto,DOC,White,Garganega; Pinot Bianco
 2169,Vidigueira,Portugal,Alentejo,DOC,White,Antão Vaz
 2170,Vientiane,Laos,Vientiane,Regional,Red,Cabernet Sauvignon
 2171,Vignanello,Italy,Lazio,DOC,Red,Sangiovese; Ciliegiolo
-2172,Vigneti della Serenissima,Italy,Veneto,DOC,Sparkling,Chardonnay; Pinot Noir
+2172,Vigneti della Serenissima,Italy,Veneto,DOC,Sparkling,Chardonnay; Pinot Nero
 2173,Villa Bastías,Argentina,Mendoza,GI,Red,Malbec
 2174,Villa de Leyva,Colombia,Boyacá,Regional,White,Riesling; Sauvignon Blanc
 2175,Villamagna,Italy,Abruzzo,DOC,Red,Montepulciano
-2176,Villány,Hungary,Villány,PDO,Red,Cabernet Franc; Blaufränkisch
+2176,Villány,Hungary,Villány,PDO,Red,Cabernet Franc; Kékfrankos
 2177,Villányi Franc,Hungary,Villány,PDO,Red,Cabernet Franc
 2178,Villette,Switzerland,Vaud,Grand Cru,White,Chasselas
-2179,Vin de Constance,South Africa,Coastal Region,Historic style,Sweet White,Muscat Blanc à Petits Grains
-2180,Vin de Corse,France,Corsica,AOC,Red,Sangiovese; Sciaccarello; Grenache
-2181,Vin de Corse Calvi,France,Corsica,AOC,Rosé,Sangiovese; Grenache
-2182,Vin de Corse Figari,France,Corsica,AOC,Red,Sangiovese; Sciaccarello
-2183,Vin de Corse Porto-Vecchio,France,Corsica,AOC,White,Vermentino
-2184,Vin de Corse Sartène,France,Corsica,AOC,Red,Sciaccarello; Sangiovese
-2185,Vin de France,France,National,VDF,Various,
+2179,Vin de Constance,South Africa,Coastal Region,Historic style,Sweet White,Muscat de Frontignan
+2180,Vin de Corse,France,Corsica,AOC,Red,Nielluccio; Sciaccarello; Grenache
+2181,Vin de Corse Calvi,France,Corsica,AOC,Rosé,Nielluccio; Grenache
+2182,Vin de Corse Figari,France,Corsica,AOC,Red,Nielluccio; Sciaccarello
+2183,Vin de Corse Porto-Vecchio,France,Corsica,AOC,White,Vermentinu
+2184,Vin de Corse Sartène,France,Corsica,AOC,Red,Sciaccarello; Nielluccio
+2185,Vin de France,France,National,VDF,Various,Various
 2186,Vin de Glace du Québec,Canada,Quebec,IGP,Sweet White,Vidal
 2187,Vin de Paille de l'Hermitage,France,Rhône (Northern),AOC,Sweet White,Marsanne; Roussanne
 2188,Vin de Paille du Jura,France,Jura,AOC,Sweet White,Savagnin; Chardonnay; Poulsard
 2189,Vin de Savoie,France,Savoie & Bugey,AOC,White,Jacquère; Altesse
 2190,Vin Jaune,France,Jura,AOC,Vin Jaune,Savagnin
-2191,Vin Santo del Chianti,Italy,Tuscany,DOC,Sweet White,Trebbiano Toscano; Malvasia
-2192,Vin Santo del Chianti Classico,Italy,Tuscany,DOC,Sweet White,Trebbiano Toscano; Malvasia
-2193,Vin Santo di Montepulciano,Italy,Tuscany,DOC,Sweet White,Trebbiano Toscano; Malvasia
+2191,Vin Santo del Chianti,Italy,Tuscany,DOC,Sweet White,Trebbiano; Malvasia
+2192,Vin Santo del Chianti Classico,Italy,Tuscany,DOC,Sweet White,Trebbiano; Malvasia
+2193,Vin Santo di Montepulciano,Italy,Tuscany,DOC,Sweet White,Trebbiano; Malvasia
 2194,Vinemount Ridge,Canada,Ontario,VQA,Red,Cabernet Franc
-2195,Vinho de Talha,Portugal,Alentejo,DOC,Red,Tempranillo; Trincadeira
-2196,Vinho Verde,Portugal,Vinho Verde,DOC,White,Loureiro; Albariño; Treixadura
-2197,Vinho Verde Alvarinho (Monção e Melgaço),Portugal,Vinho Verde,DOC,White,Albariño
+2195,Vinho de Talha,Portugal,Alentejo,DOC,Red,Aragonez; Trincadeira
+2196,Vinho Verde,Portugal,Vinho Verde,DOC,White,Loureiro; Alvarinho; Trajadura
+2197,Vinho Verde Alvarinho (Monção e Melgaço),Portugal,Vinho Verde,DOC,White,Alvarinho
 2198,Vinho Verde Amarante,Portugal,Vinho Verde,DOC,White,Avesso; Loureiro
-2199,Vinho Verde Ave,Portugal,Vinho Verde,DOC,White,Loureiro; Treixadura
+2199,Vinho Verde Ave,Portugal,Vinho Verde,DOC,White,Loureiro; Trajadura
 2200,Vinho Verde Baião,Portugal,Vinho Verde,DOC,White,Avesso
 2201,Vinho Verde Basto,Portugal,Vinho Verde,DOC,White,Azal
 2202,Vinho Verde Cávado,Portugal,Vinho Verde,DOC,White,Loureiro
-2203,Vinho Verde Espumante,Portugal,Vinho Verde,DOC,Sparkling,Loureiro; Albariño
+2203,Vinho Verde Espumante,Portugal,Vinho Verde,DOC,Sparkling,Loureiro; Alvarinho
 2204,Vinho Verde Loureiro (Lima),Portugal,Vinho Verde,DOC,White,Loureiro
 2205,Vinho Verde Paiva,Portugal,Vinho Verde,DOC,White,Avesso
 2206,Vinho Verde Sousa,Portugal,Vinho Verde,DOC,White,Azal; Avesso
 2207,Vinho Verde Tinto,Portugal,Vinho Verde,DOC,Red,Vinhão
-2208,Vino Nobile di Montepulciano,Italy,Tuscany,DOCG,Red,Sangiovese
+2208,Vino Nobile di Montepulciano,Italy,Tuscany,DOCG,Red,Prugnolo Gentile
 2209,Vino Santo Trentino,Italy,Trentino-Alto Adige,DOC,Sweet White,Nosiola
-2210,Vinos de Madrid,Spain,Madrid,DO,Red,Grenache; Tempranillo
+2210,Vinos de Madrid,Spain,Madrid,DO,Red,Garnacha; Tempranillo
 2211,Vinsanto (Santorini),Greece,Cyclades,PDO,Sweet White,Assyrtiko; Aidani
 2212,Vinsobres,France,Rhône (Southern),AOC,Red,Grenache; Syrah
-2213,Vipavska Dolina,Slovenia,Primorska,PDO,White,Zelen; Pinela; Ribolla Gialla
+2213,Vipavska Dolina,Slovenia,Primorska,PDO,White,Zelen; Pinela; Rebula
 2214,Viré-Clessé,France,Burgundy (Mâconnais),AOC,White,Chardonnay
 2215,Virginia Peninsula,United States,Virginia,AVA,Red,Cabernet Franc
 2216,Visan,France,Rhône (Southern),AOC Villages,Red,Grenache; Syrah
@@ -2226,10 +2226,10 @@
 2225,Vouni Panagias-Ampelitis,Cyprus,Paphos,PDO,Red,Maratheftiko
 2226,Vouvray,France,Loire (Touraine),AOC,White,Chenin Blanc
 2227,Vranac Crmnica,Montenegro,Podgorica Basin,PDO,Red,Vranac
-2228,Vranec,North Macedonia,Povardarie,Grape wine,Red,Vranac
+2228,Vranec,North Macedonia,Povardarie,Grape wine,Red,Vranec
 2229,Vranje,Serbia,Southern Serbia,PDO,Red,Vranac; Prokupac
 2230,Vugava Vis,Croatia,Dalmatia,PDO,White,Vugava
-2231,Vulkanland Steiermark,Austria,Steiermark,DAC,White,Savagnin; Welschriesling
+2231,Vulkanland Steiermark,Austria,Steiermark,DAC,White,Traminer; Welschriesling
 2232,Wachau,Austria,Wachau,DAC,White,Grüner Veltliner; Riesling
 2233,Wachau Ried Achleiten,Austria,Niederösterreich,Ried,White,Grüner Veltliner; Riesling
 2234,Wachau Ried Loibenberg,Austria,Niederösterreich,Ried,White,Grüner Veltliner
@@ -2247,18 +2247,18 @@
 2246,Wanaka,New Zealand,Central Otago,GI,Red,Pinot Noir
 2247,Wehlener Sonnenuhr,Germany,Mosel,Einzellage,White,Riesling
 2248,Weinviertel,Austria,Niederösterreich,DAC,White,Grüner Veltliner
-2249,Wellington,South Africa,Coastal Region,WO,Red,Syrah; Cabernet Sauvignon
+2249,Wellington,South Africa,Coastal Region,WO,Red,Shiraz; Cabernet Sauvignon
 2250,Welsh Wine,United Kingdom,Wales,PDO,White,Solaris; Bacchus
-2251,West Elks,United States,Colorado,AVA,White,Riesling; Gewurztraminer
+2251,West Elks,United States,Colorado,AVA,White,Riesling; Gewürztraminer
 2252,West Sonoma Coast,United States,California (Sonoma),AVA,Red,Pinot Noir; Chardonnay
 2253,Western Connecticut Highlands,United States,Connecticut,AVA,White,Seyval Blanc
-2254,Western Victoria,Australia,Victoria,GI,Red,Syrah
+2254,Western Victoria,Australia,Victoria,GI,Red,Shiraz
 2255,Weststeiermark,Austria,Steiermark,DAC,Rosé,Blauer Wildbacher
 2256,Wexford,Ireland,Wexford,Regional,White,Rondo; Solaris
 2257,White Bluffs,United States,Washington,AVA,Red,Merlot; Cabernet Sauvignon
 2258,White Zinfandel,United States,California,Varietal style,Rosé,Zinfandel
 2259,Wiebelsberg,France,Alsace,AOC Grand Cru,White,Riesling
-2260,Wiener Gemischter Satz,Austria,Wien,DAC,White,
+2260,Wiener Gemischter Satz,Austria,Wien,DAC,White,Field blend
 2261,Wild Horse Valley,United States,California (Napa),AVA,White,Chardonnay; Pinot Noir
 2262,Willamette Valley,United States,Oregon,AVA,Red,Pinot Noir; Chardonnay
 2263,Willamette Valley Foothills,United States,Oregon,AVA,Red,Pinot Noir
@@ -2272,9 +2272,9 @@
 2271,Wonnegau,Germany,Rheinhessen,Bereich,White,Riesling
 2272,Worcester,South Africa,Breede River Valley,WO,White,Chenin Blanc; Colombard
 2273,Wrattonbully,Australia,South Australia,GI,Red,Cabernet Sauvignon
-2274,Württemberg,Germany,Württemberg,Anbaugebiet,Red,Schiava; Blaufränkisch; Meunier
-2275,Württembergisch Unterland,Germany,Württemberg,Bereich,Red,Schiava; Blaufränkisch
-2276,Würzburger Stein,Germany,Franken,Einzellage,White,Sylvaner; Riesling
+2274,Württemberg,Germany,Württemberg,Anbaugebiet,Red,Trollinger; Lemberger; Schwarzriesling
+2275,Württembergisch Unterland,Germany,Württemberg,Bereich,Red,Trollinger; Lemberger
+2276,Würzburger Stein,Germany,Franken,Einzellage,White,Silvaner; Riesling
 2277,Xynisteri,Cyprus,National,Grape wine,White,Xynisteri
 2278,Yadkin Valley,United States,North Carolina,AVA,Red,Cabernet Franc; Merlot
 2279,Yakima Valley,United States,Washington,AVA,Red,Merlot; Syrah
@@ -2286,8 +2286,8 @@
 2285,Yanqi Basin,China,Xinjiang,Regional,Red,Cabernet Sauvignon
 2286,Yantai-Penglai,China,Shandong,Regional,Red,Cabernet Gernischt; Chardonnay
 2287,Yarra Valley,Australia,Victoria,GI,Red,Pinot Noir; Chardonnay
-2288,Ycoden-Daute-Isora,Spain,Canary Islands,DO,White,Palomino
-2289,Yecla,Spain,Levante,DO,Red,Mourvèdre
+2288,Ycoden-Daute-Isora,Spain,Canary Islands,DO,White,Listán Blanco
+2289,Yecla,Spain,Levante,DO,Red,Monastrell
 2290,Yeghegnadzor,Armenia,Vayots Dzor,Regional,Red,Areni Noir
 2291,Yeongdong,South Korea,Chungcheongbuk,Regional,Red,Campbell Early
 2292,Yoichi,Japan,Hokkaido,GI,Red,Pinot Noir
@@ -2296,12 +2296,12 @@
 2295,Yorkville Highlands,United States,California (Mendocino),AVA,Red,Pinot Noir; Cabernet Sauvignon
 2296,Yountville,United States,California (Napa),AVA,Red,Cabernet Sauvignon; Merlot
 2297,Yvorne,Switzerland,Vaud,AOC,White,Chasselas
-2298,Zagarolo,Italy,Lazio,DOC,White,Malvasia; Trebbiano Toscano
+2298,Zagarolo,Italy,Lazio,DOC,White,Malvasia; Trebbiano
 2299,Zagorje-Međimurje,Croatia,Uplands,PDO,White,Pušipel
 2300,Zahlé,Lebanon,Bekaa Valley,Regional,Red,Cinsault; Carignan
-2301,Zakarpattia,Ukraine,Zakarpattia,PGI,White,Savagnin; Riesling
+2301,Zakarpattia,Ukraine,Zakarpattia,PGI,White,Traminer; Rhine Riesling
 2302,Zakynthos,Greece,Ionian Islands,PGI,White,Robola
-2303,Zala,Hungary,Balaton,PDO,White,Welschriesling
+2303,Zala,Hungary,Balaton,PDO,White,Olaszrizling
 2304,Zeeland,Netherlands,Zeeland,PGI,White,Johanniter
 2305,Zeltinger Sonnenuhr,Germany,Mosel,Einzellage,White,Riesling
 2306,Zerhoune,Morocco,Fès,AOG,Red,Carignan; Cinsault
@@ -2311,6 +2311,6 @@
 2310,Zitsa,Greece,Epirus,PDO,Sparkling,Debina
 2311,Ziway,Ethiopia,Rift Valley,Regional,Red,Syrah; Cabernet Sauvignon
 2312,Žlahtina Vrbnik,Croatia,Istria & Kvarner,PDO,White,Žlahtina
-2313,Znojmo,Czechia,Moravia,PDO,White,Grüner Veltliner; Riesling
+2313,Znojmo,Czechia,Moravia,PDO,White,Veltlínské Zelené; Ryzlink Rýnský
 2314,Zotzenberg,France,Alsace,AOC Grand Cru,White,Sylvaner
 2315,Župa,Serbia,Central Serbia,PDO,Rosé,Prokupac

@@ -30,7 +30,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin Italy (Campania)
 
-- *Wines in atlas:* 14 across 2 countries — China, Italy
+- *Wines in atlas:* 14 across 2 countries — Italy, China
 - Late-ripening and structured; the "Barolo of the south".
 
 ### Agudelo
@@ -76,7 +76,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Spain (Galicia)
 
 - *Also called:* Alvarinho
-- *Wines in atlas:* 10 across 5 countries — Japan, Portugal, Spain, United States, Uruguay
+- *Wines in atlas:* 10 across 5 countries — Portugal, Spain, Uruguay, Japan, United States
 - The same grape as Portugal's Alvarinho, across the river.
 
 ### Albarola
@@ -240,7 +240,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin Germany
 
-- *Wines in atlas:* 6 across 2 countries — Canada, United Kingdom
+- *Wines in atlas:* 6 across 2 countries — United Kingdom, Canada
 - Silvaner x Riesling crossed with Müller-Thurgau; England's aromatic white.
 
 ### Baga
@@ -344,7 +344,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Austria
 
 - *Also called:* Lemberger, Kékfrankos, Frankovka, Modra Frankinja
-- *Wines in atlas:* 18 across 6 countries — Austria, Czechia, Germany, Hungary, Slovakia, Slovenia
+- *Wines in atlas:* 18 across 6 countries — Hungary, Austria, Czechia, Germany, Slovakia, Slovenia
 
 ### Boal
 
@@ -357,7 +357,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin Spain (Valencia)
 
-- *Wines in atlas:* 7 across 2 countries — Egypt, Spain
+- *Wines in atlas:* 7 across 2 countries — Spain, Egypt
 
 ### Boğazkere
 
@@ -451,7 +451,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin France (Bordeaux)
 
-- *Wines in atlas:* 69 across 9 countries — Argentina, Brazil, Canada, China, France, Hungary, Italy, United States +1 more
+- *Wines in atlas:* 69 across 9 countries — France, United States, Canada, Argentina, Hungary, Italy, Brazil, China +1 more
 - Parent of Cabernet Sauvignon, Merlot and Carmenère.
 
 ### Cabernet Gernischt
@@ -472,7 +472,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin France (Bordeaux)
 
-- *Wines in atlas:* 275 across 41 countries — Argentina, Australia, Bhutan, Bolivia, Brazil, Bulgaria, Canada, Chile +33 more
+- *Wines in atlas:* 275 across 41 countries — United States, Italy, France, Australia, Chile, China, South Africa, Spain +33 more
 - A chance Cabernet Franc x Sauvignon Blanc crossing; now the most planted wine grape on earth.
 
 ### Cadarcă
@@ -518,7 +518,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Spain (Aragón)
 
 - *Also called:* Cariñena, Mazuelo, Carignano, Samsó
-- *Wines in atlas:* 39 across 9 countries — Algeria, Chile, France, Israel, Italy, Lebanon, Morocco, Spain +1 more
+- *Wines in atlas:* 39 across 9 countries — France, Morocco, Spain, Algeria, Tunisia, Chile, Lebanon, Israel +1 more
 
 ### Carmenère
 
@@ -581,7 +581,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin France
 
-- *Wines in atlas:* 15 across 2 countries — Australia, United States
+- *Wines in atlas:* 15 across 2 countries — United States, Australia
 - Hybrid.
 
 ### Chardonnay
@@ -589,7 +589,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin France (Burgundy)
 
 - *Also called:* Morillon
-- *Wines in atlas:* 199 across 31 countries — Argentina, Australia, Austria, Belgium, Brazil, Bulgaria, Canada, Chile +23 more
+- *Wines in atlas:* 199 across 31 countries — France, United States, Australia, Italy, New Zealand, South Africa, United Kingdom, Canada +23 more
 - Neutral enough to transmit site and winemaking rather than itself.
 
 ### Chasselas
@@ -597,14 +597,14 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Switzerland
 
 - *Also called:* Fendant
-- *Wines in atlas:* 19 across 2 countries — France, Switzerland
+- *Wines in atlas:* 19 across 2 countries — Switzerland, France
 
 ### Chenin Blanc
 
 **White** · origin France (Loire)
 
 - *Also called:* Steen, Pineau de la Loire
-- *Wines in atlas:* 44 across 10 countries — Australia, Ethiopia, France, India, Mexico, Myanmar, South Africa, Tanzania +2 more
+- *Wines in atlas:* 44 across 10 countries — France, South Africa, Tanzania, Thailand, United States, Australia, Ethiopia, India +2 more
 - Makes bone-dry, sparkling and botrytis sweet wine from the same vineyard.
 
 ### Chinuri
@@ -630,7 +630,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin France (Languedoc)
 
-- *Wines in atlas:* 23 across 6 countries — Algeria, Chile, France, Lebanon, Morocco, Tunisia
+- *Wines in atlas:* 23 across 6 countries — France, Morocco, Algeria, Chile, Lebanon, Tunisia
 - A parent of Pinotage.
 
 ### Cirfandli
@@ -649,7 +649,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin France (SW)
 
-- *Wines in atlas:* 8 across 3 countries — France, Namibia, South Africa
+- *Wines in atlas:* 8 across 3 countries — South Africa, France, Namibia
 
 ### Concord
 
@@ -695,7 +695,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Italy (Lombardy)
 
 - *Also called:* Bonarda
-- *Wines in atlas:* 12 across 2 countries — Argentina, Italy
+- *Wines in atlas:* 12 across 2 countries — Italy, Argentina
 - Italy's Bonarda; unrelated to Argentina's.
 
 ### Cserszegi Fűszeres
@@ -837,13 +837,13 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin Romania
 
-- *Wines in atlas:* 7 across 2 countries — Moldova, Romania
+- *Wines in atlas:* 7 across 2 countries — Romania, Moldova
 
 ### Fetească Neagră
 
 **Red** · origin Romania
 
-- *Wines in atlas:* 5 across 2 countries — Moldova, Romania
+- *Wines in atlas:* 5 across 2 countries — Romania, Moldova
 
 ### Fetească Regală
 
@@ -918,7 +918,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin United States
 
-- *Wines in atlas:* 4 across 2 countries — Canada, United States
+- *Wines in atlas:* 4 across 2 countries — United States, Canada
 - Cold-hardy hybrid bred in Minnesota.
 
 ### Frontenac Gris
@@ -946,7 +946,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Hungary
 
 - *Also called:* Šipon, Moslavac
-- *Wines in atlas:* 14 across 4 countries — Austria, Hungary, Slovakia, Slovenia
+- *Wines in atlas:* 14 across 4 countries — Hungary, Austria, Slovenia, Slovakia
 - The Tokaji grape; botrytis-prone and fiercely acidic.
 
 
@@ -1028,7 +1028,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Italy (Veneto)
 
 - *Also called:* Prosecco
-- *Wines in atlas:* 5 across 2 countries — Australia, Italy
+- *Wines in atlas:* 5 across 2 countries — Italy, Australia
 - Renamed in 2009 so that Prosecco could become a protected place name.
 
 ### Godello
@@ -1107,14 +1107,14 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Spain (Aragón)
 
 - *Also called:* Garnacha, Cannonau
-- *Wines in atlas:* 111 across 9 countries — Algeria, Australia, Egypt, France, Italy, Morocco, South Africa, Spain +1 more
+- *Wines in atlas:* 111 across 9 countries — France, Spain, United States, Australia, Egypt, Italy, Morocco, Algeria +1 more
 
 ### Grenache Blanc
 
 **White** · origin Spain (Aragón)
 
 - *Also called:* Garnacha Blanca
-- *Wines in atlas:* 3 across 2 countries — France, Spain
+- *Wines in atlas:* 3 across 2 countries — Spain, France
 
 ### Grignolino
 
@@ -1165,7 +1165,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Austria
 
 - *Also called:* Veltlínské Zelené
-- *Wines in atlas:* 18 across 4 countries — Austria, Czechia, Slovakia, United States
+- *Wines in atlas:* 18 across 4 countries — Austria, Slovakia, Czechia, United States
 
 ### Gutedel
 
@@ -1319,7 +1319,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin Germany
 
-- *Wines in atlas:* 4 across 2 countries — Italy, Japan
+- *Wines in atlas:* 4 across 2 countries — Japan, Italy
 - Trollinger x Riesling.
 
 ### Kevedinka
@@ -1630,7 +1630,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin France (Rhône)
 
-- *Wines in atlas:* 7 across 3 countries — Australia, France, Switzerland
+- *Wines in atlas:* 7 across 3 countries — France, Australia, Switzerland
 
 ### Marselan
 
@@ -1695,7 +1695,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin France (Bordeaux)
 
-- *Wines in atlas:* 134 across 21 countries — Australia, Brazil, Bulgaria, Canada, China, France, Israel, Italy +13 more
+- *Wines in atlas:* 134 across 21 countries — France, Italy, United States, Canada, New Zealand, Romania, Brazil, Japan +13 more
 - The world's second-most planted red; early-ripening and supple.
 
 ### Merseguera
@@ -1709,7 +1709,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin France (Champagne)
 
 - *Also called:* Schwarzriesling, Pinot Meunier
-- *Wines in atlas:* 5 across 3 countries — France, Germany, United Kingdom
+- *Wines in atlas:* 5 across 3 countries — France, United Kingdom, Germany
 
 ### Molette
 
@@ -1829,14 +1829,14 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Switzerland
 
 - *Also called:* Rivaner
-- *Wines in atlas:* 14 across 5 countries — Belgium, Czechia, Germany, Liechtenstein, Luxembourg
+- *Wines in atlas:* 14 across 5 countries — Germany, Belgium, Czechia, Luxembourg, Liechtenstein
 - Riesling x Madeleine Royale, bred 1882.
 
 ### Muscadelle
 
 **White** · origin France (Bordeaux)
 
-- *Wines in atlas:* 5 across 2 countries — Australia, France
+- *Wines in atlas:* 5 across 2 countries — France, Australia
 
 ### Muscat à Petits Grains Rouge
 
@@ -1858,7 +1858,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Greece
 
 - *Also called:* Muscat Blanc, Moscato Bianco, Muscat, Moscato, Sárga Muskotály, Muscat de Frontignan, Moscatel Galego, Tămâioasă Românească, Temjanika
-- *Wines in atlas:* 44 across 16 countries — Australia, Brazil, China, France, Greece, Hungary, Italy, North Macedonia +8 more
+- *Wines in atlas:* 44 across 16 countries — France, Italy, Greece, Romania, South Africa, Brazil, Hungary, Russia +8 more
 - The oldest domesticated wine grape still in wide use.
 
 ### Muscat of Alexandria
@@ -1866,7 +1866,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Egypt
 
 - *Also called:* Zibibbo, Moscatel de Setúbal, Moscatel
-- *Wines in atlas:* 14 across 8 countries — France, Greece, Indonesia, Italy, Portugal, Spain, Tajikistan, Tunisia
+- *Wines in atlas:* 14 across 8 countries — Spain, Greece, Italy, France, Indonesia, Portugal, Tajikistan, Tunisia
 
 ### Muscat of Hamburg
 
@@ -2031,7 +2031,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Spain
 
 - *Also called:* Listán Prieto, Mission, Criolla Chica, Negra Criolla
-- *Wines in atlas:* 6 across 2 countries — Bolivia, Chile
+- *Wines in atlas:* 6 across 2 countries — Chile, Bolivia
 - The first vinifera grape planted in the Americas, in the 1500s.
 
 ### Pálava
@@ -2170,14 +2170,14 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin France (Alsace)
 
 - *Also called:* Weissburgunder, Pinot Bianco
-- *Wines in atlas:* 10 across 4 countries — France, Germany, Italy, Luxembourg
+- *Wines in atlas:* 10 across 4 countries — Germany, Italy, France, Luxembourg
 
 ### Pinot Gris
 
 **Pink** · origin France (Burgundy)
 
 - *Also called:* Pinot Grigio, Grauburgunder, Szürkebarát, Ruländer
-- *Wines in atlas:* 45 across 9 countries — Belgium, Canada, France, Germany, Hungary, Italy, Romania, Switzerland +1 more
+- *Wines in atlas:* 45 across 9 countries — France, Italy, Canada, United States, Belgium, Germany, Hungary, Romania +1 more
 - Pink-skinned mutation of Pinot Noir, vinified as white.
 
 ### Pinot Noir
@@ -2185,7 +2185,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin France (Burgundy)
 
 - *Also called:* Spätburgunder, Pinot Nero, Blauburgunder, Rulandské Modré
-- *Wines in atlas:* 232 across 22 countries — Argentina, Australia, Belgium, Brazil, Canada, Chile, Croatia, Czechia +14 more
+- *Wines in atlas:* 232 across 22 countries — France, United States, Australia, New Zealand, Germany, South Africa, Argentina, Italy +14 more
 - Thin-skinned and site-sensitive; the reason Burgundy is mapped vineyard by vineyard.
 
 ### Pinotage
@@ -2318,7 +2318,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Germany (Rhine)
 
 - *Also called:* Rhine Riesling, Ryzlink Rýnský, Klingelberger
-- *Wines in atlas:* 170 across 18 countries — Australia, Austria, Canada, Chile, Colombia, Czechia, France, Germany +10 more
+- *Wines in atlas:* 170 across 18 countries — Germany, France, United States, Australia, Canada, Austria, New Zealand, Poland +10 more
 - Holds acidity at any ripeness, which is why it ages for decades.
 
 ### Riesling Lion
@@ -2458,7 +2458,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Italy (Tuscany)
 
 - *Also called:* Sangiovese Grosso, Prugnolo Gentile, Brunello, Nielluccio
-- *Wines in atlas:* 71 across 4 countries — Australia, France, Italy, San Marino
+- *Wines in atlas:* 71 across 4 countries — Italy, France, Australia, San Marino
 - Italy's most planted grape; Corsica's Nielluccio is the same variety.
 
 ### Saperavi
@@ -2473,14 +2473,14 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin France (Loire)
 
 - *Also called:* Sauvignon
-- *Wines in atlas:* 71 across 14 countries — Australia, Austria, Brazil, Chile, Colombia, France, Israel, Italy +6 more
+- *Wines in atlas:* 71 across 14 countries — France, South Africa, New Zealand, United States, Chile, Australia, Austria, Italy +6 more
 
 ### Savagnin
 
 **White** · origin France (Jura)
 
 - *Also called:* Traminer, Heida, Païen, Savagnin Blanc
-- *Wines in atlas:* 11 across 6 countries — Austria, France, Romania, Serbia, Switzerland, Ukraine
+- *Wines in atlas:* 11 across 6 countries — France, Austria, Romania, Serbia, Switzerland, Ukraine
 - The Vin Jaune grape, and ancestor of Gewürztraminer.
 
 ### Savatiano
@@ -2495,7 +2495,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Italy (Alto Adige)
 
 - *Also called:* Trollinger, Vernatsch
-- *Wines in atlas:* 8 across 2 countries — Germany, Italy
+- *Wines in atlas:* 8 across 2 countries — Italy, Germany
 
 ### Schioppettino
 
@@ -2529,7 +2529,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin France (Bordeaux)
 
 - *Also called:* Semillon, Semillón
-- *Wines in atlas:* 25 across 5 countries — Argentina, Australia, France, Italy, South Africa
+- *Wines in atlas:* 25 across 5 countries — France, Australia, Argentina, Italy, South Africa
 - Botrytis-prone, which is exactly why Sauternes exists.
 
 ### Sercial
@@ -2544,7 +2544,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin France
 
 - *Also called:* Seyval
-- *Wines in atlas:* 6 across 4 countries — Canada, Poland, United Kingdom, United States
+- *Wines in atlas:* 6 across 4 countries — Canada, United States, Poland, United Kingdom
 - Hybrid.
 
 ### Shesh i Bardhë
@@ -2581,7 +2581,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin Germany
 
-- *Wines in atlas:* 19 across 8 countries — Belgium, Denmark, Ireland, Netherlands, Norway, Poland, Sweden, United Kingdom
+- *Wines in atlas:* 19 across 8 countries — Poland, Denmark, United Kingdom, Ireland, Netherlands, Norway, Sweden, Belgium
 - Hybrid bred for cold climates; the reason Scandinavia has vineyards.
 
 ### Spergola
@@ -2621,14 +2621,14 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Central Europe
 
 - *Also called:* Silvaner
-- *Wines in atlas:* 10 across 4 countries — France, Germany, Italy, Switzerland
+- *Wines in atlas:* 10 across 4 countries — Germany, France, Italy, Switzerland
 
 ### Syrah
 
 **Red** · origin France (Rhône)
 
 - *Also called:* Shiraz
-- *Wines in atlas:* 230 across 29 countries — Argentina, Australia, Brazil, Cambodia, Canada, Chile, Ecuador, Ethiopia +21 more
+- *Wines in atlas:* 230 across 29 countries — France, Australia, United States, South Africa, Chile, New Zealand, Spain, India +21 more
 - One grape, two names; the name signals intended style more than genetics.
 
 
@@ -2645,7 +2645,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin France (SW)
 
-- *Wines in atlas:* 22 across 7 countries — Argentina, Bolivia, Brazil, France, Paraguay, Peru, Uruguay
+- *Wines in atlas:* 22 across 7 countries — Uruguay, France, Bolivia, Argentina, Brazil, Paraguay, Peru
 - Uruguay's national grape, softer there than in its native Madiran.
 
 ### Tavkveri
@@ -2659,7 +2659,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Spain (Rioja)
 
 - *Also called:* Tinta Roriz, Aragonez, Tinto Fino, Cencibel, Tinta de Toro, Ull de Llebre
-- *Wines in atlas:* 53 across 5 countries — Mexico, Portugal, Spain, United States, Venezuela
+- *Wines in atlas:* 53 across 5 countries — Spain, Portugal, United States, Mexico, Venezuela
 - Spain's noble red, with a different name in nearly every region that grows it.
 
 ### Terbash
@@ -2679,7 +2679,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Italy (Friuli)
 
 - *Also called:* Refošk, Teran
-- *Wines in atlas:* 5 across 3 countries — Croatia, Italy, Slovenia
+- *Wines in atlas:* 5 across 3 countries — Italy, Slovenia, Croatia
 - Related to but distinct from Refosco dal Peduncolo Rosso.
 
 ### Terrantez
@@ -2746,7 +2746,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **Red** · origin Portugal (Douro)
 
-- *Wines in atlas:* 18 across 3 countries — Cape Verde, Portugal, South Africa
+- *Wines in atlas:* 18 across 3 countries — Portugal, South Africa, Cape Verde
 - Portugal's flagship red, for Port and increasingly for table wine.
 
 ### Traminac
@@ -2786,7 +2786,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Italy (Tuscany)
 
 - *Also called:* Trebbiano, Ugni Blanc, Procanico
-- *Wines in atlas:* 25 across 3 countries — France, Italy, Moldova
+- *Wines in atlas:* 25 across 3 countries — Italy, France, Moldova
 - The base of both Vin Santo and Cognac.
 
 ### Treixadura
@@ -2794,7 +2794,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Spain (Galicia)
 
 - *Also called:* Trajadura
-- *Wines in atlas:* 5 across 2 countries — Portugal, Spain
+- *Wines in atlas:* 5 across 2 countries — Spain, Portugal
 
 ### Trepat
 
@@ -2893,7 +2893,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Italy (Liguria)
 
 - *Also called:* Rolle, Vermentinu, Pigato, Favorita
-- *Wines in atlas:* 10 across 2 countries — France, Italy
+- *Wines in atlas:* 10 across 2 countries — Italy, France
 
 ### Vernaccia di Oristano
 
@@ -2982,7 +2982,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 
 **White** · origin France (Rhône)
 
-- *Wines in atlas:* 6 across 3 countries — France, India, United States
+- *Wines in atlas:* 6 across 3 countries — France, United States, India
 - Down to about 14 hectares worldwide in the 1960s.
 
 ### Viosinho
@@ -3015,7 +3015,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Spain (Rioja)
 
 - *Also called:* Macabeo, Macabeu
-- *Wines in atlas:* 7 across 2 countries — France, Spain
+- *Wines in atlas:* 7 across 2 countries — Spain, France
 
 ### Voskehat
 
@@ -3028,7 +3028,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Montenegro
 
 - *Also called:* Vranec
-- *Wines in atlas:* 7 across 4 countries — Kosovo, Montenegro, North Macedonia, Serbia
+- *Wines in atlas:* 7 across 4 countries — North Macedonia, Kosovo, Montenegro, Serbia
 
 ### Vugava
 
@@ -3044,7 +3044,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **White** · origin Central Europe
 
 - *Also called:* Olaszrizling, Laški Rizling, Graševina, Riesling Italian, Italian Riesling, Ryzlink Vlašský
-- *Wines in atlas:* 28 across 8 countries — Austria, Croatia, Czechia, Hungary, Romania, Serbia, Slovakia, Slovenia
+- *Wines in atlas:* 28 across 8 countries — Hungary, Austria, Slovenia, Croatia, Serbia, Slovakia, Czechia, Romania
 - No relation to Riesling despite the name.
 
 
@@ -3115,7 +3115,7 @@ Regional synonyms are merged: Syrah and Shiraz are one entry, as are Tempranillo
 **Red** · origin Croatia
 
 - *Also called:* Primitivo, Crljenak Kaštelanski, Tribidrag
-- *Wines in atlas:* 32 across 2 countries — Italy, United States
+- *Wines in atlas:* 32 across 2 countries — United States, Italy
 - Zinfandel, Primitivo and Croatia's Tribidrag are one grape, settled by DNA in 2001.
 
 ### Žlahtina

@@ -60,7 +60,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Catamarca
 
-- **Catamarca** — GI · White · Torrontés Riojano
+- **Catamarca** — GI · White · Torrontés
 
 ### Jujuy
 
@@ -84,13 +84,13 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Luján de Cuyo** — GI · Red · Malbec
 - **Lunlunta** — GI · Red · Malbec
 - **Maipú** — GI · Red · Malbec, Cabernet Sauvignon
-- **Mendoza** — GI · Red · Malbec, Cabernet Sauvignon, Croatina
+- **Mendoza** — GI · Red · Malbec, Cabernet Sauvignon, Bonarda
 - **Paraje Altamira** — GI · Red · Malbec
 - **Perdriel** — GI · Red · Malbec
 - **Russell** — GI · Red · Malbec
-- **San Carlos** — GI · Red · Malbec, Sémillon
+- **San Carlos** — GI · Red · Malbec, Semillón
 - **San Pablo** — GI · Red · Pinot Noir, Chardonnay
-- **Santa Rosa** — GI · Red · Croatina, Malbec
+- **Santa Rosa** — GI · Red · Bonarda, Malbec
 - **Tupungato** — GI · White · Chardonnay, Malbec
 - **Ugarteche** — GI · Red · Malbec
 - **Valle de Uco** — GI · Red · Malbec, Cabernet Franc
@@ -112,7 +112,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Salta
 
-- **Cafayate** — GI · White · Torrontés Riojano
+- **Cafayate** — GI · White · Torrontés
 - **Colomé** — GI · Red · Malbec
 - **Molinos** — GI · Red · Malbec
 - **Payogasta** — GI · Red · Malbec
@@ -121,12 +121,12 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### San Juan
 
 - **Valle de Pedernal** — GI · Red · Malbec, Cabernet Sauvignon
-- **Valle de Tulum** — GI · Red · Syrah, Croatina
+- **Valle de Tulum** — GI · Red · Syrah, Bonarda
 - **Valle de Zonda** — GI · Red · Syrah, Malbec
 
 ### Tucumán
 
-- **Amaicha del Valle** — GI · White · Torrontés Riojano
+- **Amaicha del Valle** — GI · White · Torrontés
 
 ---
 
@@ -138,7 +138,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Aragatsotn
 
-- **Aragatsotn** — Regional · Red · Areni Noir, Kakhet
+- **Aragatsotn** — Regional · Red · Areni, Kakhet
 
 ### Ararat
 
@@ -167,64 +167,64 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### National
 
-- **Australian Tawny** — Fortified style · Fortified · Grenache, Syrah
-- **Sparkling Shiraz** — Traditional style · Sparkling Red · Syrah
+- **Australian Tawny** — Fortified style · Fortified · Grenache, Shiraz
+- **Sparkling Shiraz** — Traditional style · Sparkling Red · Shiraz
 
 ### New South Wales
 
-- **Big Rivers** — GI · Red · Syrah
-- **Broke Fordwich** — GI · White · Sémillon
-- **Canberra District** — GI · Red · Syrah, Riesling
-- **Central Ranges** — GI · Red · Syrah
+- **Big Rivers** — GI · Red · Shiraz
+- **Broke Fordwich** — GI · White · Semillon
+- **Canberra District** — GI · Red · Shiraz, Riesling
+- **Central Ranges** — GI · Red · Shiraz
 - **Cowra** — GI · White · Chardonnay
-- **Gundagai** — GI · Red · Syrah
+- **Gundagai** — GI · Red · Shiraz
 - **Hastings River** — GI · Red · Chambourcin
-- **Hilltops** — GI · Red · Syrah, Cabernet Sauvignon
-- **Hunter Valley** — GI · White · Sémillon, Syrah
-- **Mudgee** — GI · Red · Syrah, Cabernet Sauvignon
-- **Murray Darling** — GI · Red · Syrah, Chardonnay
-- **New England Australia** — GI · Red · Syrah
+- **Hilltops** — GI · Red · Shiraz, Cabernet Sauvignon
+- **Hunter Valley** — GI · White · Semillon, Shiraz
+- **Mudgee** — GI · Red · Shiraz, Cabernet Sauvignon
+- **Murray Darling** — GI · Red · Shiraz, Chardonnay
+- **New England Australia** — GI · Red · Shiraz
 - **Orange** — GI · White · Chardonnay, Sauvignon Blanc
-- **Perricoota** — GI · Red · Syrah
-- **Riverina** — GI · Sweet White · Sémillon
+- **Perricoota** — GI · Red · Shiraz
+- **Riverina** — GI · Sweet White · Semillon
 - **Shoalhaven Coast** — GI · White · Chambourcin, Verdelho
 - **Southern Highlands** — GI · Sparkling · Chardonnay, Pinot Noir
-- **Southern New South Wales** — GI · Red · Syrah
-- **Swan Hill** — GI · Red · Syrah
+- **Southern New South Wales** — GI · Red · Shiraz
+- **Swan Hill** — GI · Red · Shiraz
 - **Tumbarumba** — GI · Sparkling · Chardonnay, Pinot Noir
-- **Upper Hunter Valley** — GI · White · Sémillon, Chardonnay
+- **Upper Hunter Valley** — GI · White · Semillon, Chardonnay
 
 ### Queensland
 
-- **Granite Belt** — GI · Red · Syrah, Verdelho
+- **Granite Belt** — GI · Red · Shiraz, Verdelho
 - **South Burnett** — GI · White · Chardonnay, Verdelho
 
 ### South Australia
 
-- **Adelaide** — GI · Red · Syrah
+- **Adelaide** — GI · Red · Shiraz
 - **Adelaide Hills** — GI · White · Sauvignon Blanc, Chardonnay
-- **Adelaide Plains** — GI · Red · Syrah
-- **Barossa** — GI · Red · Syrah, Grenache
-- **Barossa Valley** — GI · Red · Syrah, Grenache
-- **Clare Valley** — GI · White · Riesling, Syrah
+- **Adelaide Plains** — GI · Red · Shiraz
+- **Barossa** — GI · Red · Shiraz, Grenache
+- **Barossa Valley** — GI · Red · Shiraz, Grenache
+- **Clare Valley** — GI · White · Riesling, Shiraz
 - **Coonawarra** — GI · Red · Cabernet Sauvignon
 - **Currency Creek** — GI · Red · Cabernet Sauvignon
-- **Eden Valley** — GI · White · Riesling, Syrah
-- **Far North** — GI · Red · Syrah
+- **Eden Valley** — GI · White · Riesling, Shiraz
+- **Far North** — GI · Red · Shiraz
 - **Kangaroo Island** — GI · Red · Cabernet Sauvignon
-- **Langhorne Creek** — GI · Red · Cabernet Sauvignon, Syrah
+- **Langhorne Creek** — GI · Red · Cabernet Sauvignon, Shiraz
 - **Lenswood** — GI · Red · Pinot Noir, Sauvignon Blanc
 - **Limestone Coast** — GI · Red · Cabernet Sauvignon
-- **Lower Murray** — GI · Red · Syrah
-- **McLaren Vale** — GI · Red · Syrah, Grenache
-- **Mount Benson** — GI · Red · Syrah, Cabernet Sauvignon
+- **Lower Murray** — GI · Red · Shiraz
+- **McLaren Vale** — GI · Red · Shiraz, Grenache
+- **Mount Benson** — GI · Red · Shiraz, Cabernet Sauvignon
 - **Mount Lofty Ranges** — GI · White · Chardonnay
-- **Padthaway** — GI · White · Chardonnay, Syrah
+- **Padthaway** — GI · White · Chardonnay, Shiraz
 - **Piccadilly Valley** — GI · Sparkling · Chardonnay, Pinot Noir
-- **Riverland** — GI · Red · Syrah, Chardonnay
+- **Riverland** — GI · Red · Shiraz, Chardonnay
 - **Robe** — GI · Red · Cabernet Sauvignon
-- **Southern Fleurieu** — GI · Red · Syrah
-- **Southern Flinders Ranges** — GI · Red · Syrah
+- **Southern Fleurieu** — GI · Red · Shiraz
+- **Southern Flinders Ranges** — GI · Red · Shiraz
 - **Wrattonbully** — GI · Red · Cabernet Sauvignon
 
 ### Tasmania
@@ -240,51 +240,51 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Victoria
 
 - **Alpine Valleys** — GI · Red · Sangiovese, Merlot
-- **Beechworth** — GI · White · Chardonnay, Syrah
+- **Beechworth** — GI · White · Chardonnay, Shiraz
 - **Bellarine Peninsula** — GI · Red · Pinot Noir
-- **Central Victoria** — GI · Red · Syrah
-- **Geelong** — GI · Red · Pinot Noir, Syrah
+- **Central Victoria** — GI · Red · Shiraz
+- **Geelong** — GI · Red · Pinot Noir, Shiraz
 - **Gippsland** — GI · Red · Pinot Noir, Chardonnay
-- **Glenrowan** — GI · Fortified · Muscat Blanc à Petits Grains, Syrah
-- **Goulburn Valley** — GI · Red · Syrah, Marsanne
-- **Grampians** — GI · Red · Syrah
-- **Heathcote** — GI · Red · Syrah
+- **Glenrowan** — GI · Fortified · Muscat, Shiraz
+- **Goulburn Valley** — GI · Red · Shiraz, Marsanne
+- **Grampians** — GI · Red · Shiraz
+- **Heathcote** — GI · Red · Shiraz
 - **Henty** — GI · White · Riesling, Chardonnay
 - **King Valley** — GI · Sparkling · Glera, Sangiovese
 - **Macedon Ranges** — GI · Sparkling · Chardonnay, Pinot Noir
 - **Mornington Peninsula** — GI · Red · Pinot Noir, Chardonnay
-- **Murray Darling (Vic)** — GI · Red · Syrah
-- **Nagambie Lakes** — GI · White · Marsanne, Syrah
+- **Murray Darling (Vic)** — GI · Red · Shiraz
+- **Nagambie Lakes** — GI · White · Marsanne, Shiraz
 - **North East Victoria** — GI · Fortified · Muscat à Petits Grains Rouge
 - **Port Phillip** — GI · Red · Pinot Noir
-- **Pyrenees (Victoria)** — GI · Red · Syrah, Cabernet Sauvignon
+- **Pyrenees (Victoria)** — GI · Red · Shiraz, Cabernet Sauvignon
 - **Rutherglen** — GI · Fortified · Muscat à Petits Grains Rouge
 - **Rutherglen Muscat** — GI · Fortified · Muscat à Petits Grains Rouge
 - **Rutherglen Topaque** — GI · Fortified · Muscadelle
 - **Strathbogie Ranges** — GI · White · Chardonnay, Riesling
-- **Sunbury** — GI · Red · Syrah
-- **Swan Hill (Vic)** — GI · Red · Syrah
+- **Sunbury** — GI · Red · Shiraz
+- **Swan Hill (Vic)** — GI · Red · Shiraz
 - **Upper Goulburn** — GI · White · Riesling, Chardonnay
-- **Western Victoria** — GI · Red · Syrah
+- **Western Victoria** — GI · Red · Shiraz
 - **Yarra Valley** — GI · Red · Pinot Noir, Chardonnay
 
 ### Western Australia
 
-- **Albany** — GI · Red · Pinot Noir, Syrah
+- **Albany** — GI · Red · Pinot Noir, Shiraz
 - **Blackwood Valley** — GI · Red · Cabernet Sauvignon
-- **Central Western Australia** — GI · Red · Syrah
+- **Central Western Australia** — GI · Red · Shiraz
 - **Denmark (WA)** — GI · Red · Pinot Noir, Chardonnay
-- **Eastern Plains Inland and North of Western Australia** — GI · Red · Syrah
-- **Frankland River** — GI · Red · Syrah, Cabernet Sauvignon
-- **Geographe** — GI · Red · Syrah, Cabernet Sauvignon
-- **Great Southern** — GI · White · Riesling, Syrah
-- **Greater Perth** — GI · Red · Syrah
+- **Eastern Plains Inland and North of Western Australia** — GI · Red · Shiraz
+- **Frankland River** — GI · Red · Shiraz, Cabernet Sauvignon
+- **Geographe** — GI · Red · Shiraz, Cabernet Sauvignon
+- **Great Southern** — GI · White · Riesling, Shiraz
+- **Greater Perth** — GI · Red · Shiraz
 - **Manjimup** — GI · Red · Cabernet Sauvignon, Merlot
 - **Margaret River** — GI · Red · Cabernet Sauvignon, Chardonnay
-- **Mount Barker** — GI · White · Riesling, Syrah
-- **Peel** — GI · Red · Syrah
+- **Mount Barker** — GI · White · Riesling, Shiraz
+- **Peel** — GI · Red · Shiraz
 - **Pemberton** — GI · Red · Pinot Noir, Chardonnay
-- **Perth Hills** — GI · Red · Syrah
+- **Perth Hills** — GI · Red · Shiraz
 - **Porongurup** — GI · White · Riesling
 - **South West Australia** — GI · Red · Cabernet Sauvignon
 - **Swan District** — GI · White · Chenin Blanc, Verdelho
@@ -314,8 +314,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### National
 
 - **Sekt Austria** — PDO · Sparkling · Grüner Veltliner, Welschriesling
-- **Strohwein / Schilfwein** — Prädikat · Sweet White
-- **Sturm** — Seasonal · White
+- **Strohwein / Schilfwein** — Prädikat · Sweet White · Various
+- **Sturm** — Seasonal · White · Various
 
 ### Niederösterreich
 
@@ -336,8 +336,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Sausal** — Regional · White · Sauvignon Blanc
 - **Schilcher** — DAC · Rosé · Blauer Wildbacher
-- **Südsteiermark** — DAC · White · Sauvignon Blanc, Chardonnay
-- **Vulkanland Steiermark** — DAC · White · Savagnin, Welschriesling
+- **Südsteiermark** — DAC · White · Sauvignon Blanc, Morillon
+- **Vulkanland Steiermark** — DAC · White · Traminer, Welschriesling
 - **Weststeiermark** — DAC · Rosé · Blauer Wildbacher
 
 ### Wachau
@@ -349,7 +349,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Wien
 
-- **Wiener Gemischter Satz** — DAC · White
+- **Wiener Gemischter Satz** — DAC · White · Field blend
 
 ---
 
@@ -414,7 +414,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Chuquisaca
 
-- **Valle de Cinti** — Regional · Red · Vischoqueña, País
+- **Valle de Cinti** — Regional · Red · Vischoqueña, Negra Criolla
 
 ### La Paz
 
@@ -459,11 +459,11 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Altos de Pinto Bandeira** — DO · Sparkling · Chardonnay, Pinot Noir
 - **Altos Montes** — IP · Red · Merlot
 - **Campanha Gaúcha** — IP · Red · Cabernet Sauvignon, Tannat
-- **Farroupilha** — IP · Sweet White · Muscat Blanc à Petits Grains
+- **Farroupilha** — IP · Sweet White · Moscato Bianco
 - **Monte Belo** — IP · Red · Merlot, Cabernet Sauvignon
 - **Pinto Bandeira** — IP · Sparkling · Chardonnay, Pinot Noir
 - **Serra do Sudeste** — Regional · Red · Pinot Noir, Cabernet Franc
-- **Serra Gaúcha** — Regional · Sparkling · Chardonnay, Pinot Noir, Muscat Blanc à Petits Grains
+- **Serra Gaúcha** — Regional · Sparkling · Chardonnay, Pinot Noir, Moscato
 - **Vale dos Vinhedos** — DO · Red · Merlot, Cabernet Sauvignon
 
 ### Santa Catarina
@@ -491,10 +491,10 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Danubian Plain
 
-- **Danubian Plain** — PDO · Red · Kadarka, Cabernet Sauvignon
+- **Danubian Plain** — PDO · Red · Gamza, Cabernet Sauvignon
 - **Lyaskovets** — PDO · Sparkling · Chardonnay
-- **Novo Selo** — PDO · Red · Kadarka
-- **Suhindol** — PDO · Red · Kadarka
+- **Novo Selo** — PDO · Red · Gamza
+- **Suhindol** — PDO · Red · Gamza
 
 ### National
 
@@ -523,7 +523,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Battambang
 
-- **Phnom Banan** — Regional · Red · Syrah
+- **Phnom Banan** — Regional · Red · Shiraz
 
 ---
 
@@ -710,7 +710,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Xinjiang
 
 - **Manas** — Regional · Red · Cabernet Sauvignon, Merlot
-- **Turpan Basin** — Regional · Sweet White · Muscat Blanc à Petits Grains, Cabernet Sauvignon
+- **Turpan Basin** — Regional · Sweet White · Muscat, Cabernet Sauvignon
 - **Yanqi Basin** — Regional · Red · Cabernet Sauvignon
 
 ### Yunnan
@@ -759,16 +759,16 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Buzet (Istria)** — PDO · White · Malvazija Istarska
 - **Malvazija Istarska** — PDO · White · Malvazija Istarska
-- **Teran (Istria)** — PDO · Red · Terrano
+- **Teran (Istria)** — PDO · Red · Refošk
 - **Žlahtina Vrbnik** — PDO · White · Žlahtina
 
 ### Slavonia & Danube
 
-- **Baranja** — PDO · White · Welschriesling
-- **Đakovo** — PDO · White · Welschriesling
-- **Erdut** — PDO · White · Welschriesling
+- **Baranja** — PDO · White · Graševina
+- **Đakovo** — PDO · White · Graševina
+- **Erdut** — PDO · White · Graševina
 - **Ilok Traminac** — PDO · White · Traminac
-- **Kutjevo Graševina** — PDO · White · Welschriesling
+- **Kutjevo Graševina** — PDO · White · Graševina
 
 ### Uplands
 
@@ -811,21 +811,21 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Bohemia
 
 - **Litoměřice** — PDO · White · Müller-Thurgau
-- **Mělník** — PDO · Red · Svatovavřinecké, Pinot Noir
+- **Mělník** — PDO · Red · Svatovavřinecké, Rulandské Modré
 
 ### Moravia
 
-- **Mikulov** — PDO · White · Welschriesling, Pálava
+- **Mikulov** — PDO · White · Ryzlink Vlašský, Pálava
 - **Mikulov Pálava** — PDO · White · Pálava
-- **Podluží** — Regional · Red · Blaufränkisch
-- **Slámové Víno** — Prädikat-style · Sweet White
+- **Podluží** — Regional · Red · Frankovka
+- **Slámové Víno** — Prädikat-style · Sweet White · Various
 - **Slovácko** — PDO · White · Müller-Thurgau, Ryzlink
-- **Velké Pavlovice** — PDO · Red · Blaufränkisch, Svatovavřinecké
-- **Znojmo** — PDO · White · Grüner Veltliner, Riesling
+- **Velké Pavlovice** — PDO · Red · Frankovka, Svatovavřinecké
+- **Znojmo** — PDO · White · Veltlínské Zelené, Ryzlink Rýnský
 
 ### National
 
-- **Svatomartinské** — Seasonal · Red · Svatovavřinecké, Blauer Portugieser
+- **Svatomartinské** — Seasonal · Red · Svatovavřinecké, Modrý Portugal
 
 ---
 
@@ -900,7 +900,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Alsace
 
 - **Alsace** — AOC · White · Riesling, Gewurztraminer, Pinot Gris
-- **Alsace Grand Cru** — AOC Grand Cru · White · Riesling, Gewurztraminer, Pinot Gris, Muscat Blanc à Petits Grains
+- **Alsace Grand Cru** — AOC Grand Cru · White · Riesling, Gewurztraminer, Pinot Gris, Muscat
 - **Alsace Sélection de Grains Nobles** — AOC · Sweet White · Riesling, Gewurztraminer, Pinot Gris
 - **Alsace Vendanges Tardives** — AOC · Sweet White · Riesling, Gewurztraminer, Pinot Gris
 - **Altenberg de Bergbieten** — AOC Grand Cru · White · Riesling
@@ -909,7 +909,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Brand** — AOC Grand Cru · White · Riesling, Gewurztraminer
 - **Bruderthal** — AOC Grand Cru · White · Riesling, Gewurztraminer
 - **Crémant d'Alsace** — AOC · Sparkling · Pinot Blanc, Auxerrois, Chardonnay
-- **Edelzwicker** — AOC · White
+- **Edelzwicker** — AOC · White · Field blend
 - **Eichberg** — AOC Grand Cru · White · Gewurztraminer, Pinot Gris
 - **Engelberg** — AOC Grand Cru · White · Riesling
 - **Florimont** — AOC Grand Cru · White · Riesling, Gewurztraminer
@@ -917,7 +917,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Froehn** — AOC Grand Cru · White · Gewurztraminer
 - **Furstentum** — AOC Grand Cru · White · Gewurztraminer, Riesling
 - **Geisberg** — AOC Grand Cru · White · Riesling
-- **Gentil** — AOC · White · Riesling, Gewurztraminer, Pinot Gris, Muscat Blanc à Petits Grains
+- **Gentil** — AOC · White · Riesling, Gewurztraminer, Pinot Gris, Muscat
 - **Gloeckelberg** — AOC Grand Cru · White · Pinot Gris, Gewurztraminer
 - **Goldert** — AOC Grand Cru · White · Muscat Blanc à Petits Grains, Gewurztraminer
 - **Hatschbourg** — AOC Grand Cru · White · Gewurztraminer, Pinot Gris
@@ -1163,12 +1163,12 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Ajaccio** — AOC · Red · Sciaccarello
 - **Muscat du Cap Corse** — AOC · Fortified · Muscat Blanc à Petits Grains
-- **Patrimonio** — AOC · Red · Sangiovese
-- **Vin de Corse** — AOC · Red · Sangiovese, Sciaccarello, Grenache
-- **Vin de Corse Calvi** — AOC · Rosé · Sangiovese, Grenache
-- **Vin de Corse Figari** — AOC · Red · Sangiovese, Sciaccarello
-- **Vin de Corse Porto-Vecchio** — AOC · White · Vermentino
-- **Vin de Corse Sartène** — AOC · Red · Sciaccarello, Sangiovese
+- **Patrimonio** — AOC · Red · Nielluccio
+- **Vin de Corse** — AOC · Red · Nielluccio, Sciaccarello, Grenache
+- **Vin de Corse Calvi** — AOC · Rosé · Nielluccio, Grenache
+- **Vin de Corse Figari** — AOC · Red · Nielluccio, Sciaccarello
+- **Vin de Corse Porto-Vecchio** — AOC · White · Vermentinu
+- **Vin de Corse Sartène** — AOC · Red · Sciaccarello, Nielluccio
 
 ### Jura
 
@@ -1275,10 +1275,10 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Montlouis-sur-Loire** — AOC · White · Chenin Blanc
 - **Saint-Nicolas-de-Bourgueil** — AOC · Red · Cabernet Franc
 - **Touraine** — AOC · White · Sauvignon Blanc
-- **Touraine-Amboise** — AOC · Red · Malbec, Cabernet Franc
+- **Touraine-Amboise** — AOC · Red · Côt, Cabernet Franc
 - **Touraine-Azay-le-Rideau** — AOC · White · Chenin Blanc
 - **Touraine-Chenonceaux** — AOC · White · Sauvignon Blanc
-- **Touraine-Mesland** — AOC · Red · Gamay, Malbec
+- **Touraine-Mesland** — AOC · Red · Gamay, Côt
 - **Touraine-Oisly** — AOC · White · Sauvignon Blanc
 - **Valençay** — AOC · White · Sauvignon Blanc
 - **Vouvray** — AOC · White · Chenin Blanc
@@ -1290,17 +1290,17 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### National
 
-- **IGP Côtes de Gascogne** — IGP · White · Colombard, Trebbiano Toscano
-- **IGP Île de Beauté** — IGP · Red · Sangiovese, Syrah
+- **IGP Côtes de Gascogne** — IGP · White · Colombard, Ugni Blanc
+- **IGP Île de Beauté** — IGP · Red · Nielluccio, Syrah
 - **IGP Méditerranée** — IGP · Rosé · Grenache, Cinsault
 - **IGP Pays d'Oc** — IGP · Red · Merlot, Syrah, Cabernet Sauvignon
 - **IGP Val de Loire** — IGP · White · Sauvignon Blanc, Chardonnay
-- **Vin de France** — VDF · Various
+- **Vin de France** — VDF · Various · Various
 
 ### Provence
 
 - **Bandol** — AOC · Red · Mourvèdre, Grenache
-- **Bellet** — AOC · White · Vermentino, Braquet
+- **Bellet** — AOC · White · Rolle, Braquet
 - **Cassis** — AOC · White · Marsanne, Clairette
 - **Coteaux d'Aix-en-Provence** — AOC · Rosé · Grenache, Syrah, Cinsault
 - **Coteaux Varois en Provence** — AOC · Rosé · Grenache, Syrah
@@ -1318,7 +1318,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Château-Grillet** — AOC · White · Viognier
 - **Châtillon-en-Diois** — AOC · Red · Gamay
-- **Clairette de Die** — AOC · Sparkling · Muscat Blanc à Petits Grains, Clairette
+- **Clairette de Die** — AOC · Sparkling · Muscat Blanc, Clairette
 - **Condrieu** — AOC · White · Viognier
 - **Cornas** — AOC · Red · Syrah
 - **Côte-Rôtie** — AOC · Red · Syrah, Viognier
@@ -1382,8 +1382,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Côtes du Roussillon** — AOC · Red · Grenache, Syrah, Carignan
 - **Côtes du Roussillon Villages** — AOC · Red · Grenache, Carignan, Syrah
 - **Maury** — AOC · Fortified · Grenache
-- **Muscat de Rivesaltes** — AOC · Fortified · Muscat of Alexandria, Muscat Blanc à Petits Grains
-- **Rivesaltes** — AOC · Fortified · Grenache, Viura
+- **Muscat de Rivesaltes** — AOC · Fortified · Muscat of Alexandria, Muscat Blanc
+- **Rivesaltes** — AOC · Fortified · Grenache, Macabeu
 
 ### Savoie & Bugey
 
@@ -1423,9 +1423,9 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Côtes du Marmandais** — AOC · Red · Merlot, Abouriou
 - **Entraygues-Le Fel** — AOC · White · Chenin Blanc
 - **Estaing** — AOC · Red · Fer Servadou, Gamay
-- **Floc de Gascogne** — AOC · Fortified · Colombard, Trebbiano Toscano
+- **Floc de Gascogne** — AOC · Fortified · Colombard, Ugni Blanc
 - **Fronton** — AOC · Red · Négrette
-- **Gaillac** — AOC · Red · Duras, Fer Servadou, Syrah
+- **Gaillac** — AOC · Red · Duras, Braucol, Syrah
 - **Haut-Montravel** — AOC · Sweet White · Sémillon, Muscadelle
 - **Irouléguy** — AOC · Red · Tannat, Cabernet Franc
 - **Jurançon** — AOC · Sweet White · Petit Manseng, Gros Manseng
@@ -1436,7 +1436,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Montravel** — AOC · White · Sémillon, Sauvignon Blanc
 - **Pacherenc du Vic-Bilh** — AOC · Sweet White · Petit Manseng, Gros Manseng
 - **Pécharmant** — AOC · Red · Merlot, Cabernet Sauvignon
-- **Pineau des Charentes** — AOC · Fortified · Trebbiano Toscano, Colombard
+- **Pineau des Charentes** — AOC · Fortified · Ugni Blanc, Colombard
 - **Rosette** — AOC · Sweet White · Sémillon, Sauvignon Blanc
 - **Saint-Mont** — AOC · Red · Tannat, Fer Servadou
 - **Saussignac** — AOC · Sweet White · Sémillon, Sauvignon Blanc
@@ -1473,7 +1473,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Kindzmarauli** — PDO · Sweet Red · Saperavi
 - **Kotekhi** — PDO · Red · Saperavi
 - **Kvareli** — PDO · Red · Saperavi
-- **Manavi** — PDO · White · Mtsvane
+- **Manavi** — PDO · White · Mtsvane Kakhuri
 - **Mukuzani** — PDO · Red · Saperavi
 - **Napareuli** — PDO · Red · Saperavi
 - **Teliani** — PDO · Red · Cabernet Sauvignon
@@ -1506,27 +1506,27 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Ahr
 
-- **Ahr** — Anbaugebiet · Red · Pinot Noir, Frühburgunder
+- **Ahr** — Anbaugebiet · Red · Spätburgunder, Frühburgunder
 
 ### Baden
 
-- **Baden** — Anbaugebiet · Red · Pinot Noir, Pinot Gris
+- **Baden** — Anbaugebiet · Red · Spätburgunder, Grauburgunder
 - **Badische Bergstraße** — Bereich · White · Riesling
 - **Bodensee** — Bereich · White · Müller-Thurgau
-- **Breisgau** — Bereich · Red · Pinot Noir
-- **Kaiserstuhl** — Bereich · Red · Pinot Noir
+- **Breisgau** — Bereich · Red · Spätburgunder
+- **Kaiserstuhl** — Bereich · Red · Spätburgunder
 - **Markgräflerland** — Bereich · White · Gutedel
-- **Ortenau** — Bereich · White · Riesling
-- **Tuniberg** — Bereich · White · Pinot Gris
+- **Ortenau** — Bereich · White · Klingelberger
+- **Tuniberg** — Bereich · White · Grauburgunder
 
 ### Franken
 
-- **Escherndorfer Lump** — Einzellage · White · Sylvaner
-- **Franken** — Anbaugebiet · White · Sylvaner, Müller-Thurgau
-- **Maindreieck** — Bereich · White · Sylvaner
-- **Mainviereck** — Bereich · Red · Pinot Noir
-- **Steigerwald** — Bereich · White · Sylvaner
-- **Würzburger Stein** — Einzellage · White · Sylvaner, Riesling
+- **Escherndorfer Lump** — Einzellage · White · Silvaner
+- **Franken** — Anbaugebiet · White · Silvaner, Müller-Thurgau
+- **Maindreieck** — Bereich · White · Silvaner
+- **Mainviereck** — Bereich · Red · Spätburgunder
+- **Steigerwald** — Bereich · White · Silvaner
+- **Würzburger Stein** — Einzellage · White · Silvaner, Riesling
 
 ### Hessische Bergstraße
 
@@ -1570,12 +1570,12 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Auslese** — Prädikat · Sweet White · Riesling
 - **Beerenauslese** — Prädikat · Sweet White · Riesling
-- **Deutscher Sekt b.A.** — Quality sparkling · Sparkling · Riesling, Pinot Blanc
+- **Deutscher Sekt b.A.** — Quality sparkling · Sparkling · Riesling, Weissburgunder
 - **Eiswein** — Prädikat · Sweet White · Riesling
-- **Federweisser** — Seasonal · White
+- **Federweisser** — Seasonal · White · Various
 - **Grosses Gewächs (VDP.GG)** — VDP classification · White · Riesling
 - **Kabinett** — Prädikat · White · Riesling
-- **Sekt** — Quality sparkling · Sparkling · Riesling, Pinot Blanc, Pinot Noir
+- **Sekt** — Quality sparkling · Sparkling · Riesling, Weissburgunder, Spätburgunder
 - **Spätlese** — Prädikat · White · Riesling
 - **Trockenbeerenauslese** — Prädikat · Sweet White · Riesling
 - **VDP.Erste Lage** — VDP classification · White · Riesling
@@ -1587,18 +1587,18 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Forster Jesuitengarten** — Einzellage · White · Riesling
 - **Forster Kirchenstück** — Einzellage · White · Riesling
 - **Mittelhaardt-Deutsche Weinstraße** — Bereich · White · Riesling
-- **Pfalz** — Anbaugebiet · White · Riesling, Pinot Noir
-- **Südliche Weinstraße** — Bereich · White · Riesling, Pinot Blanc
+- **Pfalz** — Anbaugebiet · White · Riesling, Spätburgunder
+- **Südliche Weinstraße** — Bereich · White · Riesling, Weissburgunder
 - **Ungsteiner Herrenberg** — Einzellage · White · Riesling
 
 ### Rheingau
 
-- **Assmannshäuser Höllenberg** — Einzellage · Red · Pinot Noir
+- **Assmannshäuser Höllenberg** — Einzellage · Red · Spätburgunder
 - **Erbacher Marcobrunn** — Einzellage · White · Riesling
 - **Hochheimer Domdechaney** — Einzellage · White · Riesling
 - **Johannisberg** — Bereich · White · Riesling
 - **Kiedricher Gräfenberg** — Einzellage · White · Riesling
-- **Rheingau** — Anbaugebiet · White · Riesling, Pinot Noir
+- **Rheingau** — Anbaugebiet · White · Riesling, Spätburgunder
 - **Rüdesheimer Berg Schlossberg** — Einzellage · White · Riesling
 - **Schloss Johannisberg** — Einzellage · White · Riesling
 - **Steinberg** — Einzellage · White · Riesling
@@ -1607,15 +1607,15 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Bingen** — Bereich · White · Riesling
 - **Liebfraumilch** — Region-wide style · Sweet White · Müller-Thurgau, Riesling
-- **Nierstein** — Bereich · White · Riesling, Sylvaner
+- **Nierstein** — Bereich · White · Riesling, Silvaner
 - **Niersteiner Pettenthal** — Einzellage · White · Riesling
-- **Rheinhessen** — Anbaugebiet · White · Riesling, Sylvaner, Müller-Thurgau
+- **Rheinhessen** — Anbaugebiet · White · Riesling, Silvaner, Müller-Thurgau
 - **Roter Hang (Nierstein)** — Bereich · White · Riesling
 - **Wonnegau** — Bereich · White · Riesling
 
 ### Saale-Unstrut
 
-- **Saale-Unstrut** — Anbaugebiet · White · Müller-Thurgau, Pinot Blanc
+- **Saale-Unstrut** — Anbaugebiet · White · Müller-Thurgau, Weissburgunder
 
 ### Sachsen
 
@@ -1623,9 +1623,9 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Württemberg
 
-- **Remstal-Stuttgart** — Bereich · Red · Schiava
-- **Württemberg** — Anbaugebiet · Red · Schiava, Blaufränkisch, Meunier
-- **Württembergisch Unterland** — Bereich · Red · Schiava, Blaufränkisch
+- **Remstal-Stuttgart** — Bereich · Red · Trollinger
+- **Württemberg** — Anbaugebiet · Red · Trollinger, Lemberger, Schwarzriesling
+- **Württembergisch Unterland** — Bereich · Red · Trollinger, Lemberger
 
 ---
 
@@ -1641,8 +1641,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Ikaria** — PGI · Red · Fokiano
 - **Lemnos** — PDO · White · Muscat of Alexandria
 - **Muscat of Lemnos** — PDO · Fortified · Muscat of Alexandria
-- **Muscat of Rhodes** — PDO · Fortified · Muscat Blanc à Petits Grains
-- **Muscat of Samos** — PDO · Fortified · Muscat Blanc à Petits Grains
+- **Muscat of Rhodes** — PDO · Fortified · Muscat Blanc
+- **Muscat of Samos** — PDO · Fortified · Muscat Blanc
 - **Rhodes** — PDO · White · Athiri
 - **Thassos** — PGI · White · Assyrtiko
 
@@ -1714,8 +1714,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Mavrodaphne of Patras** — PDO · Fortified · Mavrodaphne
 - **Messinia** — PGI · White · Roditis
 - **Monemvasia-Malvasia** — PDO · Sweet White · Monemvasia, Assyrtiko
-- **Muscat of Patras** — PDO · Fortified · Muscat Blanc à Petits Grains
-- **Muscat of Rio Patras** — PDO · Fortified · Muscat Blanc à Petits Grains
+- **Muscat of Patras** — PDO · Fortified · Muscat Blanc
+- **Muscat of Rio Patras** — PDO · Fortified · Muscat Blanc
 - **Nemea** — PDO · Red · Agiorgitiko
 - **Patras** — PDO · White · Roditis
 
@@ -1736,29 +1736,29 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Balaton
 
-- **Badacsony** — PDO · White · Kéknyelű, Welschriesling
-- **Balaton-felvidék** — PDO · White · Welschriesling, Pinot Gris
+- **Badacsony** — PDO · White · Kéknyelű, Olaszrizling
+- **Balaton-felvidék** — PDO · White · Olaszrizling, Szürkebarát
 - **Balatonboglár** — PDO · Sparkling · Chardonnay
-- **Balatonfüred-Csopak** — PDO · White · Welschriesling
+- **Balatonfüred-Csopak** — PDO · White · Olaszrizling
 - **Nagy-Somló** — PDO · White · Juhfark
-- **Zala** — PDO · White · Welschriesling
+- **Zala** — PDO · White · Olaszrizling
 
 ### Duna
 
-- **Csongrád** — PDO · Red · Blaufränkisch
-- **Hajós-Baja** — PDO · Red · Blaufränkisch
+- **Csongrád** — PDO · Red · Kékfrankos
+- **Hajós-Baja** — PDO · Red · Kékfrankos
 
 ### Eger
 
 - **Debrői Hárslevelű** — PDO · White · Hárslevelű
-- **Egri Bikavér** — PDO · Red · Blaufränkisch, Kadarka
-- **Egri Csillag** — PDO · White
+- **Egri Bikavér** — PDO · Red · Kékfrankos, Kadarka
+- **Egri Csillag** — PDO · White · Field blend
 
 ### Észak-Dunántúl
 
 - **Mór** — PDO · White · Ezerjó
-- **Neszmély** — PDO · White · Welschriesling
-- **Pannonhalma** — PDO · White · Welschriesling, Riesling
+- **Neszmély** — PDO · White · Olaszrizling
+- **Pannonhalma** — PDO · White · Olaszrizling, Riesling
 
 ### Etyek-Buda
 
@@ -1770,7 +1770,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Mátra
 
-- **Mátra** — PDO · White · Welschriesling, Muscat Blanc à Petits Grains
+- **Mátra** — PDO · White · Olaszrizling, Muscat
 
 ### Pannon
 
@@ -1783,15 +1783,15 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Sopron
 
-- **Sopron** — PDO · Red · Blaufränkisch
+- **Sopron** — PDO · Red · Kékfrankos
 
 ### Szekszárd
 
-- **Szekszárdi Bikavér** — PDO · Red · Blaufränkisch, Kadarka
+- **Szekszárdi Bikavér** — PDO · Red · Kékfrankos, Kadarka
 
 ### Tokaj
 
-- **Tokaji Aszú** — PDO · Sweet White · Furmint, Hárslevelű, Muscat Blanc à Petits Grains
+- **Tokaji Aszú** — PDO · Sweet White · Furmint, Hárslevelű, Sárga Muskotály
 - **Tokaji Édes Szamorodni** — PDO · Sweet White · Furmint
 - **Tokaji Eszencia** — PDO · Sweet White · Furmint
 - **Tokaji Fordítás** — PDO · Sweet White · Furmint
@@ -1802,7 +1802,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Villány
 
-- **Villány** — PDO · Red · Cabernet Franc, Blaufränkisch
+- **Villány** — PDO · Red · Cabernet Franc, Kékfrankos
 - **Villányi Franc** — PDO · Red · Cabernet Franc
 
 ---
@@ -1817,14 +1817,14 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Bijapur** — Regional · Red · Cabernet Sauvignon
 - **Krishna Valley** — Regional · Red · Cabernet Sauvignon
-- **Nandi Hills** — Regional · Red · Syrah, Viognier
+- **Nandi Hills** — Regional · Red · Shiraz, Viognier
 
 ### Maharashtra
 
-- **Akluj** — Regional · Red · Cabernet Sauvignon, Syrah
-- **Nashik** — Regional · Red · Cabernet Sauvignon, Syrah, Chenin Blanc
+- **Akluj** — Regional · Red · Cabernet Sauvignon, Shiraz
+- **Nashik** — Regional · Red · Cabernet Sauvignon, Shiraz, Chenin Blanc
 - **Sahyadri Valley** — Regional · Red · Cabernet Sauvignon
-- **Sangli** — Regional · Red · Syrah
+- **Sangli** — Regional · Red · Shiraz
 
 ---
 
@@ -1911,19 +1911,19 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Aglianico del Vulture** — DOC · Red · Aglianico
 - **Aglianico del Vulture Superiore** — DOCG · Red · Aglianico
 - **Grottino di Roccanova** — DOC · Red · Sangiovese, Malvasia Nera
-- **Matera** — DOC · Red · Zinfandel, Sangiovese
+- **Matera** — DOC · Red · Primitivo, Sangiovese
 - **Terre dell'Alta Val d'Agri** — DOC · Red · Merlot, Cabernet Sauvignon
 
 ### Calabria
 
 - **Bivongi** — DOC · Red · Gaglioppo, Greco Nero
 - **Cirò** — DOC · Red · Gaglioppo
-- **Greco di Bianco** — DOC · Sweet White · Greco
-- **Lamezia** — DOC · Red · Gaglioppo, Nerello Mascalese
+- **Greco di Bianco** — DOC · Sweet White · Greco Bianco
+- **Lamezia** — DOC · Red · Gaglioppo, Nerello
 - **Melissa** — DOC · Red · Gaglioppo
 - **Sant'Anna di Isola Capo Rizzuto** — DOC · Red · Gaglioppo
 - **Savuto** — DOC · Red · Gaglioppo, Magliocco
-- **Scavigna** — DOC · Red · Gaglioppo, Nerello Mascalese
+- **Scavigna** — DOC · Red · Gaglioppo, Nerello
 - **Terre di Cosenza** — DOC · Red · Magliocco
 - **Verbicaro** — DOC · Red · Gaglioppo, Magliocco
 
@@ -1954,8 +1954,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Emilia-Romagna
 
-- **Colli Bolognesi** — DOC · White · Grechetto, Chardonnay
-- **Colli Bolognesi Pignoletto** — DOCG · White · Grechetto
+- **Colli Bolognesi** — DOC · White · Pignoletto, Chardonnay
+- **Colli Bolognesi Pignoletto** — DOCG · White · Grechetto Gentile
 - **Colli d'Imola** — DOC · Red · Sangiovese, Barbera
 - **Colli di Faenza** — DOC · Red · Sangiovese, Cabernet Sauvignon
 - **Colli di Parma** — DOC · White · Malvasia di Candia Aromatica
@@ -1980,18 +1980,18 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Friuli-Venezia Giulia
 
-- **Carso** — DOC · Red · Terrano, Refosco dal Peduncolo Rosso
+- **Carso** — DOC · Red · Terrano, Refosco
 - **Carso Vitovska** — DOC · Orange · Vitovska
 - **Colli Orientali del Friuli Picolit** — DOCG · Sweet White · Picolit
-- **Collio Goriziano** — DOC · White · Friulano, Ribolla Gialla, Sauvignon Blanc
-- **Delle Venezie** — DOC · White · Pinot Gris
-- **Friuli** — DOC · White · Friulano, Pinot Gris
+- **Collio Goriziano** — DOC · White · Friulano, Ribolla Gialla, Sauvignon
+- **Delle Venezie** — DOC · White · Pinot Grigio
+- **Friuli** — DOC · White · Friulano, Pinot Grigio
 - **Friuli Annia** — DOC · White · Friulano, Chardonnay
-- **Friuli Aquileia** — DOC · White · Friulano, Pinot Gris
+- **Friuli Aquileia** — DOC · White · Friulano, Pinot Grigio
 - **Friuli Colli Orientali** — DOC · White · Friulano, Ribolla Gialla
-- **Friuli Grave** — DOC · White · Pinot Gris, Friulano
-- **Friuli Isonzo** — DOC · White · Friulano, Pinot Gris
-- **Friuli Latisana** — DOC · White · Pinot Gris, Friulano
+- **Friuli Grave** — DOC · White · Pinot Grigio, Friulano
+- **Friuli Isonzo** — DOC · White · Friulano, Pinot Grigio
+- **Friuli Latisana** — DOC · White · Pinot Grigio, Friulano
 - **Lison** — DOCG · White · Friulano
 - **Ramandolo** — DOCG · Sweet White · Verduzzo Friulano
 - **Refosco dal Peduncolo Rosso** — DOC · Red · Refosco dal Peduncolo Rosso
@@ -2003,32 +2003,32 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Aleatico di Gradoli** — DOC · Sweet Red · Aleatico
 - **Aleatico di Terracina** — DOC · Sweet Red · Aleatico
 - **Aprilia** — DOC · Red · Merlot, Sangiovese
-- **Bianco Capena** — DOC · White · Malvasia, Trebbiano Toscano
+- **Bianco Capena** — DOC · White · Malvasia, Trebbiano
 - **Cannellino di Frascati** — DOCG · Sweet White · Malvasia
-- **Castelli Romani** — DOC · White · Malvasia, Trebbiano Toscano
+- **Castelli Romani** — DOC · White · Malvasia, Trebbiano
 - **Cerveteri** — DOC · Red · Sangiovese, Montepulciano
 - **Cesanese del Piglio** — DOCG · Red · Cesanese
 - **Cesanese di Affile** — DOC · Red · Cesanese
 - **Cesanese di Olevano Romano** — DOC · Red · Cesanese
 - **Circeo** — DOC · Red · Merlot, Sangiovese
-- **Colli Albani** — DOC · White · Malvasia, Trebbiano Toscano
+- **Colli Albani** — DOC · White · Malvasia, Trebbiano
 - **Colli della Sabina** — DOC · Red · Sangiovese, Montepulciano
 - **Colli Etruschi Viterbesi** — DOC · Red · Sangiovese, Montepulciano
-- **Colli Lanuvini** — DOC · White · Malvasia, Trebbiano Toscano
+- **Colli Lanuvini** — DOC · White · Malvasia, Trebbiano
 - **Cori** — DOC · Red · Nero Buono, Montepulciano
-- **Est! Est!! Est!!! di Montefiascone** — DOC · White · Trebbiano Toscano, Malvasia
-- **Frascati** — DOC · White · Malvasia, Trebbiano Toscano
+- **Est! Est!! Est!!! di Montefiascone** — DOC · White · Trebbiano, Malvasia
+- **Frascati** — DOC · White · Malvasia, Trebbiano
 - **Frascati Superiore** — DOCG · White · Malvasia del Lazio
 - **Frascati Superiore Riserva** — DOCG · White · Malvasia del Lazio
 - **Genazzano** — DOC · Red · Cesanese, Sangiovese
-- **Marino** — DOC · White · Malvasia, Trebbiano Toscano
-- **Montecompatri Colonna** — DOC · White · Malvasia, Trebbiano Toscano
+- **Marino** — DOC · White · Malvasia, Trebbiano
+- **Montecompatri Colonna** — DOC · White · Malvasia, Trebbiano
 - **Nettuno** — DOC · Red · Sangiovese, Merlot
 - **Roma** — DOC · Red · Montepulciano, Sangiovese
 - **Tarquinia** — DOC · Red · Sangiovese, Montepulciano
 - **Velletri** — DOC · Red · Sangiovese, Montepulciano
 - **Vignanello** — DOC · Red · Sangiovese, Ciliegiolo
-- **Zagarolo** — DOC · White · Malvasia, Trebbiano Toscano
+- **Zagarolo** — DOC · White · Malvasia, Trebbiano
 
 ### Liguria
 
@@ -2037,7 +2037,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Colli di Luni** — DOC · White · Vermentino
 - **Golfo del Tigullio** — DOC · White · Vermentino, Bianchetta
 - **Pornassio** — DOC · Red · Ormeasco
-- **Riviera Ligure di Ponente** — DOC · White · Vermentino
+- **Riviera Ligure di Ponente** — DOC · White · Pigato, Vermentino
 - **Rossese di Dolceacqua** — DOC · Red · Rossese
 - **Val Polcevera** — DOC · White · Vermentino, Bianchetta
 
@@ -2049,21 +2049,21 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Capriano del Colle** — DOC · Red · Marzemino, Merlot
 - **Cellatica** — DOC · Red · Marzemino, Barbera
 - **Curtefranca** — DOC · Red · Cabernet Sauvignon, Merlot
-- **Franciacorta** — DOCG · Sparkling · Chardonnay, Pinot Noir
+- **Franciacorta** — DOCG · Sparkling · Chardonnay, Pinot Nero
 - **Franciacorta Satèn** — DOCG · Sparkling · Chardonnay
 - **Garda** — DOC · White · Garganega, Chardonnay
 - **Lugana** — DOC · White · Turbiana
 - **Moscato di Scanzo** — DOCG · Sweet Red · Moscato di Scanzo
-- **Oltrepò Pavese** — DOC · Red · Croatina, Barbera, Pinot Noir
-- **Oltrepò Pavese Metodo Classico** — DOCG · Sparkling · Pinot Noir
+- **Oltrepò Pavese** — DOC · Red · Croatina, Barbera, Pinot Nero
+- **Oltrepò Pavese Metodo Classico** — DOCG · Sparkling · Pinot Nero
 - **Riviera del Garda Classico** — DOC · Rosé · Groppello
-- **Rosso di Valtellina** — DOC · Red · Nebbiolo
+- **Rosso di Valtellina** — DOC · Red · Chiavennasca
 - **San Colombano al Lambro** — DOC · Red · Croatina, Barbera
 - **Sangue di Giuda** — DOC · Sweet Red · Croatina, Barbera
-- **Sforzato di Valtellina** — DOCG · Red · Nebbiolo
+- **Sforzato di Valtellina** — DOCG · Red · Chiavennasca
 - **Terre del Colleoni** — DOC · Red · Cabernet Sauvignon, Merlot
 - **Valcalepio** — DOC · Red · Merlot, Cabernet Sauvignon
-- **Valtellina Superiore** — DOCG · Red · Nebbiolo
+- **Valtellina Superiore** — DOCG · Red · Chiavennasca
 
 ### Marche
 
@@ -2095,8 +2095,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Piedmont
 
 - **Albugnano** — DOC · Red · Nebbiolo
-- **Alta Langa** — DOCG · Sparkling · Pinot Noir, Chardonnay
-- **Asti Spumante** — DOCG · Sparkling · Muscat Blanc à Petits Grains
+- **Alta Langa** — DOCG · Sparkling · Pinot Nero, Chardonnay
+- **Asti Spumante** — DOCG · Sparkling · Moscato Bianco
 - **Barbaresco** — DOCG · Red · Nebbiolo
 - **Barbera d'Alba** — DOC · Red · Barbera
 - **Barbera d'Asti** — DOCG · Red · Barbera
@@ -2136,11 +2136,11 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Grignolino del Monferrato Casalese** — DOC · Red · Grignolino
 - **Langhe Nebbiolo** — DOC · Red · Nebbiolo
 - **Lessona** — DOC · Red · Nebbiolo
-- **Loazzolo** — DOC · Sweet White · Muscat Blanc à Petits Grains
+- **Loazzolo** — DOC · Sweet White · Moscato Bianco
 - **Malvasia di Casorzo** — DOC · Sweet Red · Malvasia di Casorzo
 - **Malvasia di Castelnuovo Don Bosco** — DOC · Sweet Red · Malvasia di Schierano
 - **Monferrato** — DOC · Red · Barbera, Nebbiolo
-- **Moscato d'Asti** — DOCG · Sparkling · Muscat Blanc à Petits Grains
+- **Moscato d'Asti** — DOCG · Sparkling · Moscato Bianco
 - **Nebbiolo d'Alba** — DOC · Red · Nebbiolo
 - **Nizza** — DOCG · Red · Barbera
 - **Piemonte** — DOC · Red · Barbera, Nebbiolo
@@ -2150,7 +2150,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Rubino di Cantavenna** — DOC · Red · Barbera, Grignolino
 - **Ruchè di Castagnole Monferrato** — DOCG · Red · Ruchè
 - **Sizzano** — DOC · Red · Nebbiolo, Vespolina
-- **Strevi** — DOC · Sweet White · Muscat Blanc à Petits Grains
+- **Strevi** — DOC · Sweet White · Moscato Bianco
 - **Suli Chërta** — DOC · Red · Nebbiolo
 - **Terre Alfieri** — DOCG · White · Arneis
 - **Valli Ossolane** — DOC · Red · Nebbiolo
@@ -2167,10 +2167,10 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Castel del Monte** — DOC · Red · Nero di Troia, Aglianico
 - **Castel del Monte Bombino Nero** — DOCG · Rosé · Bombino Nero
 - **Castel del Monte Nero di Troia Riserva** — DOCG · Red · Nero di Troia
-- **Colline Joniche Tarantine** — DOC · Red · Zinfandel
+- **Colline Joniche Tarantine** — DOC · Red · Primitivo
 - **Copertino** — DOC · Red · Negroamaro
 - **Galatina** — DOC · Red · Negroamaro
-- **Gioia del Colle** — DOC · Red · Zinfandel
+- **Gioia del Colle** — DOC · Red · Primitivo
 - **Gravina** — DOC · White · Greco, Malvasia
 - **Leverano** — DOC · Red · Negroamaro
 - **Lizzano** — DOC · Red · Negroamaro
@@ -2181,29 +2181,29 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Negroamaro di Terra d'Otranto** — DOC · Red · Negroamaro
 - **Orta Nova** — DOC · Red · Sangiovese, Nero di Troia
 - **Ostuni** — DOC · White · Impigno, Francavidda
-- **Primitivo di Manduria** — DOC · Red · Zinfandel
-- **Primitivo di Manduria Dolce Naturale** — DOCG · Sweet Red · Zinfandel
+- **Primitivo di Manduria** — DOC · Red · Primitivo
+- **Primitivo di Manduria Dolce Naturale** — DOCG · Sweet Red · Primitivo
 - **Rosso di Cerignola** — DOC · Red · Nero di Troia, Negroamaro
-- **Salento** — IGT · Red · Zinfandel, Negroamaro
+- **Salento** — IGT · Red · Primitivo, Negroamaro
 - **Salice Salentino** — DOC · Red · Negroamaro
 - **San Severo** — DOC · White · Bombino Bianco, Trebbiano Toscano
 - **Squinzano** — DOC · Red · Negroamaro
 - **Tavoliere delle Puglie** — DOC · Red · Nero di Troia
-- **Terra d'Otranto** — DOC · Red · Negroamaro, Zinfandel
+- **Terra d'Otranto** — DOC · Red · Negroamaro, Primitivo
 
 ### Sardinia
 
 - **Alghero** — DOC · Red · Cabernet Sauvignon, Cagnulari
 - **Arborea** — DOC · Red · Sangiovese
 - **Campidano di Terralba** — DOC · Red · Bovale
-- **Cannonau di Sardegna** — DOC · Red · Grenache
-- **Carignano del Sulcis** — DOC · Red · Carignan
+- **Cannonau di Sardegna** — DOC · Red · Cannonau
+- **Carignano del Sulcis** — DOC · Red · Carignano
 - **Girò di Cagliari** — DOC · Sweet Red · Girò
 - **Malvasia di Bosa** — DOC · Fortified · Malvasia di Sardegna
-- **Mandrolisai** — DOC · Red · Bovale, Grenache, Monica
+- **Mandrolisai** — DOC · Red · Bovale, Cannonau, Monica
 - **Monica di Sardegna** — DOC · Red · Monica
-- **Moscato di Sardegna** — DOC · Sweet White · Muscat Blanc à Petits Grains
-- **Moscato di Sorso-Sennori** — DOC · Sweet White · Muscat Blanc à Petits Grains
+- **Moscato di Sardegna** — DOC · Sweet White · Moscato Bianco
+- **Moscato di Sorso-Sennori** — DOC · Sweet White · Moscato Bianco
 - **Nasco di Cagliari** — DOC · Sweet White · Nasco
 - **Nuragus di Cagliari** — DOC · White · Nuragus
 - **Sardegna Semidano** — DOC · White · Semidano
@@ -2216,7 +2216,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Alcamo** — DOC · White · Catarratto
 - **Cerasuolo di Vittoria** — DOCG · Red · Nero d'Avola, Frappato
 - **Contea di Sclafani** — DOC · Red · Nero d'Avola, Perricone
-- **Contessa Entellina** — DOC · White · Inzolia, Chardonnay
+- **Contessa Entellina** — DOC · White · Ansonica, Chardonnay
 - **Delia Nivolelli** — DOC · Red · Nero d'Avola, Merlot
 - **Eloro** — DOC · Red · Nero d'Avola, Frappato
 - **Erice** — DOC · White · Catarratto, Grillo
@@ -2229,34 +2229,34 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Marsala** — DOC · Fortified · Grillo, Catarratto, Inzolia
 - **Menfi** — DOC · White · Inzolia, Chardonnay
 - **Monreale** — DOC · Red · Nero d'Avola, Perricone
-- **Moscato di Pantelleria** — DOC · Sweet White · Muscat of Alexandria
+- **Moscato di Pantelleria** — DOC · Sweet White · Zibibbo
 - **Noto** — DOC · Red · Nero d'Avola
-- **Passito di Pantelleria** — DOC · Sweet White · Muscat of Alexandria
+- **Passito di Pantelleria** — DOC · Sweet White · Zibibbo
 - **Riesi** — DOC · Red · Nero d'Avola
 - **Salaparuta** — DOC · Red · Nero d'Avola
 - **Sambuca di Sicilia** — DOC · Red · Nero d'Avola
-- **Santa Margherita di Belice** — DOC · White · Inzolia, Catarratto
-- **Sciacca** — DOC · White · Inzolia, Catarratto
+- **Santa Margherita di Belice** — DOC · White · Ansonica, Catarratto
+- **Sciacca** — DOC · White · Ansonica, Catarratto
 - **Sicilia** — DOC · Red · Nero d'Avola
 - **Siracusa** — DOC · Red · Nero d'Avola
 - **Vittoria** — DOC · Red · Frappato, Nero d'Avola
 
 ### Trentino-Alto Adige
 
-- **Alto Adige (Südtirol)** — DOC · White · Pinot Gris, Gewurztraminer, Sauvignon Blanc
+- **Alto Adige (Südtirol)** — DOC · White · Pinot Grigio, Gewürztraminer, Sauvignon
 - **Alto Adige Lagrein** — DOC · Red · Lagrein
 - **Alto Adige Meranese** — DOC · Red · Schiava
 - **Alto Adige Santa Maddalena** — DOC · Red · Schiava, Lagrein
-- **Alto Adige Terlano** — DOC · White · Pinot Blanc, Chardonnay
+- **Alto Adige Terlano** — DOC · White · Pinot Bianco, Chardonnay
 - **Alto Adige Valle Isarco** — DOC · White · Sylvaner, Kerner, Riesling
 - **Casteller** — DOC · Red · Schiava, Merlot
 - **Lago di Caldaro (Kalterersee)** — DOC · Red · Schiava
 - **Santa Maddalena** — DOC · Red · Schiava, Lagrein
 - **Teroldego Rotaliano** — DOC · Red · Teroldego
-- **Trentino** — DOC · White · Chardonnay, Pinot Gris
+- **Trentino** — DOC · White · Chardonnay, Pinot Grigio
 - **Trentino Marzemino** — DOC · Red · Marzemino
-- **Trentino Superiore** — DOC · White · Chardonnay, Pinot Blanc
-- **Trento** — DOC · Sparkling · Chardonnay, Pinot Noir
+- **Trentino Superiore** — DOC · White · Chardonnay, Pinot Bianco
+- **Trento** — DOC · Sparkling · Chardonnay, Pinot Nero
 - **Valdadige Terradeiforti** — DOC · Red · Enantio, Casetta
 - **Vino Santo Trentino** — DOC · Sweet White · Nosiola
 
@@ -2267,7 +2267,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Bolgheri** — DOC · Red · Cabernet Sauvignon, Merlot, Cabernet Franc
 - **Bolgheri Rosato** — DOC · Rosé · Cabernet Sauvignon, Merlot
 - **Bolgheri Sassicaia** — DOC · Red · Cabernet Sauvignon, Cabernet Franc
-- **Brunello di Montalcino** — DOCG · Red · Sangiovese
+- **Brunello di Montalcino** — DOCG · Red · Sangiovese Grosso
 - **Candia dei Colli Apuani** — DOC · White · Vermentino, Albarola
 - **Capalbio** — DOC · Red · Sangiovese, Cabernet Sauvignon
 - **Carmignano** — DOCG · Red · Sangiovese, Cabernet Sauvignon
@@ -2280,7 +2280,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Colline Lucchesi** — DOC · Red · Sangiovese, Merlot
 - **Cortona** — DOC · Red · Syrah
 - **Cortona Syrah** — DOC · Red · Syrah
-- **Elba** — DOC · White · Inzolia, Trebbiano Toscano
+- **Elba** — DOC · White · Ansonica, Trebbiano Toscano
 - **Elba Aleatico Passito** — DOCG · Sweet Red · Aleatico
 - **Grance Senesi** — DOC · Red · Sangiovese
 - **Maremma Toscana** — DOC · Red · Sangiovese, Cabernet Sauvignon, Merlot
@@ -2288,11 +2288,11 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Montecucco Sangiovese** — DOCG · Red · Sangiovese
 - **Montescudaio** — DOC · Red · Sangiovese
 - **Morellino di Scansano** — DOCG · Red · Sangiovese
-- **Moscadello di Montalcino** — DOC · Sweet White · Muscat Blanc à Petits Grains
+- **Moscadello di Montalcino** — DOC · Sweet White · Moscato Bianco
 - **Occhio di Pernice** — DOC · Sweet Red · Sangiovese
 - **Orcia** — DOC · Red · Sangiovese
 - **Parrina** — DOC · Red · Sangiovese
-- **Pomino** — DOC · White · Chardonnay, Pinot Blanc
+- **Pomino** — DOC · White · Chardonnay, Pinot Bianco
 - **Rosso di Montalcino** — DOC · Red · Sangiovese
 - **Rosso di Montepulciano** — DOC · Red · Sangiovese
 - **San Gimignano** — DOC · Red · Sangiovese
@@ -2306,10 +2306,10 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Val di Cornia Rosso** — DOCG · Red · Sangiovese, Cabernet Sauvignon
 - **Valdarno di Sopra** — DOC · Red · Sangiovese
 - **Vernaccia di San Gimignano** — DOCG · White · Vernaccia di San Gimignano
-- **Vin Santo del Chianti** — DOC · Sweet White · Trebbiano Toscano, Malvasia
-- **Vin Santo del Chianti Classico** — DOC · Sweet White · Trebbiano Toscano, Malvasia
-- **Vin Santo di Montepulciano** — DOC · Sweet White · Trebbiano Toscano, Malvasia
-- **Vino Nobile di Montepulciano** — DOCG · Red · Sangiovese
+- **Vin Santo del Chianti** — DOC · Sweet White · Trebbiano, Malvasia
+- **Vin Santo del Chianti Classico** — DOC · Sweet White · Trebbiano, Malvasia
+- **Vin Santo di Montepulciano** — DOC · Sweet White · Trebbiano, Malvasia
+- **Vino Nobile di Montepulciano** — DOCG · Red · Prugnolo Gentile
 
 ### Umbria
 
@@ -2321,8 +2321,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Lago di Corbara** — DOC · Red · Cabernet Sauvignon, Merlot
 - **Montefalco Rosso** — DOC · Red · Sangiovese, Sagrantino
 - **Montefalco Sagrantino** — DOCG · Red · Sagrantino
-- **Orvieto** — DOC · White · Grechetto, Trebbiano Toscano
-- **Orvieto Classico** — DOC · White · Grechetto, Trebbiano Toscano
+- **Orvieto** — DOC · White · Grechetto, Trebbiano
+- **Orvieto Classico** — DOC · White · Grechetto, Procanico
 - **Rosso Orvietano** — DOC · Red · Sangiovese, Merlot
 - **Spoleto** — DOC · White · Trebbiano Spoletino
 - **Todi** — DOC · White · Grechetto
@@ -2333,7 +2333,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Valle d'Aosta
 
 - **Blanc de Morgex et de La Salle** — DOC · White · Prié Blanc
-- **Chambave Muscat** — DOC · White · Muscat Blanc à Petits Grains
+- **Chambave Muscat** — DOC · White · Moscato Bianco
 - **Donnas** — DOC · Red · Nebbiolo
 - **Torrette** — DOC · Red · Petit Rouge
 - **Valle d'Aosta** — DOC · Red · Petit Rouge, Fumin, Nebbiolo
@@ -2341,43 +2341,43 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Veneto
 
 - **Amarone della Valpolicella** — DOCG · Red · Corvina, Rondinella, Molinara
-- **Arcole** — DOC · White · Garganega, Pinot Gris
+- **Arcole** — DOC · White · Garganega, Pinot Grigio
 - **Asolo Prosecco** — DOCG · Sparkling · Glera
 - **Bagnoli Friularo** — DOCG · Red · Raboso Piave
 - **Bardolino** — DOC · Red · Corvina, Rondinella
 - **Bardolino Chiaretto** — DOC · Rosé · Corvina, Rondinella
 - **Bardolino Superiore** — DOCG · Red · Corvina, Rondinella
-- **Bianco di Custoza** — DOC · White · Garganega, Trebbiano Toscano
+- **Bianco di Custoza** — DOC · White · Garganega, Trebbiano
 - **Breganze** — DOC · Red · Merlot, Cabernet Sauvignon
 - **Colli Asolani** — DOC · Red · Merlot, Cabernet Sauvignon
 - **Colli Berici** — DOC · Red · Tai Rosso, Merlot
 - **Colli Euganei** — DOC · Red · Merlot, Cabernet Sauvignon
 - **Colli Euganei Fior d'Arancio** — DOCG · Sweet White · Moscato Giallo
 - **Conegliano Valdobbiadene Prosecco Superiore** — DOCG · Sparkling · Glera
-- **Corti Benedettine del Padovano** — DOC · Red · Merlot, Raboso Piave
+- **Corti Benedettine del Padovano** — DOC · Red · Merlot, Raboso
 - **Gambellara** — DOC · White · Garganega
 - **Lessini Durello** — DOC · Sparkling · Durella
-- **Merlara** — DOC · Red · Merlot, Raboso Piave
+- **Merlara** — DOC · Red · Merlot, Raboso
 - **Montello Rosso** — DOCG · Red · Cabernet Sauvignon, Merlot
 - **Monti Lessini** — DOC · White · Durella, Garganega
-- **Piave** — DOC · Red · Raboso Piave, Merlot
+- **Piave** — DOC · Red · Raboso, Merlot
 - **Piave Malanotte** — DOCG · Red · Raboso Piave
 - **Prosecco** — DOC · Sparkling · Glera
 - **Recioto della Valpolicella** — DOCG · Sweet Red · Corvina, Rondinella
 - **Recioto di Gambellara** — DOCG · Sweet White · Garganega
 - **Recioto di Soave** — DOCG · Sweet White · Garganega
-- **Riviera del Brenta** — DOC · Red · Merlot, Refosco dal Peduncolo Rosso
-- **Soave** — DOC · White · Garganega, Verdicchio
+- **Riviera del Brenta** — DOC · Red · Merlot, Refosco
+- **Soave** — DOC · White · Garganega, Trebbiano di Soave
 - **Soave Classico** — DOC · White · Garganega
 - **Soave Superiore** — DOCG · White · Garganega
 - **Torcolato di Breganze** — DOC · Sweet White · Vespaiola
-- **Valdadige** — DOC · White · Pinot Gris, Chardonnay
+- **Valdadige** — DOC · White · Pinot Grigio, Chardonnay
 - **Valdobbiadene Superiore di Cartizze** — DOCG · Sparkling · Glera
 - **Valpolicella** — DOC · Red · Corvina, Rondinella, Molinara
 - **Valpolicella Classico** — DOC · Red · Corvina, Rondinella
 - **Valpolicella Ripasso** — DOC · Red · Corvina, Rondinella
-- **Vicenza** — DOC · White · Garganega, Pinot Blanc
-- **Vigneti della Serenissima** — DOC · Sparkling · Chardonnay, Pinot Noir
+- **Vicenza** — DOC · White · Garganega, Pinot Bianco
+- **Vigneti della Serenissima** — DOC · Sparkling · Chardonnay, Pinot Nero
 
 ---
 
@@ -2465,7 +2465,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Rift Valley
 
 - **Lake Naivasha** — Regional · White · Sauvignon Blanc
-- **Naivasha** — Regional · Red · Syrah, Sauvignon Blanc
+- **Naivasha** — Regional · Red · Shiraz, Sauvignon Blanc
 
 ---
 
@@ -2543,7 +2543,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Oberland
 
-- **Vaduz** — Regional · Red · Pinot Noir
+- **Vaduz** — Regional · Red · Blauburgunder
 
 ### Unterland
 
@@ -2559,9 +2559,9 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Moselle
 
-- **Crémant de Luxembourg** — AOP · Sparkling · Müller-Thurgau, Pinot Blanc
+- **Crémant de Luxembourg** — AOP · Sparkling · Rivaner, Pinot Blanc
 - **Elbling** — AOP · White · Elbling
-- **Moselle Luxembourgeoise** — AOP · White · Müller-Thurgau, Auxerrois, Riesling
+- **Moselle Luxembourgeoise** — AOP · White · Rivaner, Auxerrois, Riesling
 
 ---
 
@@ -2621,7 +2621,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Coahuila
 
-- **Parras de la Fuente** — Regional · Red · Cabernet Sauvignon, Syrah
+- **Parras de la Fuente** — Regional · Red · Cabernet Sauvignon, Shiraz
 
 ### Guanajuato
 
@@ -2659,7 +2659,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Divin
 
-- **Divin** — PGI · Fortified · Trebbiano Toscano
+- **Divin** — PGI · Fortified · Ugni Blanc
 
 ### National
 
@@ -2732,8 +2732,8 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Shan State
 
-- **Aythaya (Taunggyi)** — Regional · Red · Syrah, Sauvignon Blanc
-- **Inle Lake** — Regional · Red · Syrah, Chenin Blanc
+- **Aythaya (Taunggyi)** — Regional · Red · Shiraz, Sauvignon Blanc
+- **Inle Lake** — Regional · Red · Shiraz, Chenin Blanc
 - **Taunggyi** — Regional · White · Sauvignon Blanc
 
 ---
@@ -2820,7 +2820,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Gisborne
 
-- **Gisborne** — GI · White · Chardonnay, Gewurztraminer
+- **Gisborne** — GI · White · Chardonnay, Gewürztraminer
 - **Ormond** — Regional · White · Chardonnay
 
 ### Hawke's Bay
@@ -2868,18 +2868,18 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Pcinja-Osogovo
 
-- **Pcinja** — PDO · Red · Vranac
+- **Pcinja** — PDO · Red · Vranec
 
 ### Pelagonija-Polog
 
-- **Pelagonija** — PDO · Red · Vranac
+- **Pelagonija** — PDO · Red · Vranec
 
 ### Povardarie
 
 - **Stanušina** — Grape wine · Rosé · Stanušina
-- **Temjanika** — Grape wine · White · Muscat Blanc à Petits Grains
-- **Tikveš** — PDO · Red · Vranac
-- **Vranec** — Grape wine · Red · Vranac
+- **Temjanika** — Grape wine · White · Temjanika
+- **Tikveš** — PDO · Red · Vranec
+- **Vranec** — Grape wine · Red · Vranec
 
 ---
 
@@ -2992,24 +2992,24 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Alentejo
 
-- **Alentejo** — DOC · Red · Tempranillo, Trincadeira, Alicante Bouschet
+- **Alentejo** — DOC · Red · Aragonez, Trincadeira, Alicante Bouschet
 - **Alentejo Branco** — DOC · White · Antão Vaz, Arinto, Roupeiro
-- **Borba** — DOC · Red · Tempranillo, Trincadeira
-- **Évora** — DOC · Red · Trincadeira, Tempranillo
+- **Borba** — DOC · Red · Aragonez, Trincadeira
+- **Évora** — DOC · Red · Trincadeira, Aragonez
 - **Granja-Amareleja** — DOC · Red · Moreto, Trincadeira
 - **Moura** — DOC · Red · Alfrocheiro, Trincadeira
 - **Portalegre** — DOC · Red · Trincadeira, Grand Noir
-- **Redondo** — DOC · Red · Tempranillo, Trincadeira
-- **Reguengos** — DOC · Red · Trincadeira, Tempranillo
+- **Redondo** — DOC · Red · Aragonez, Trincadeira
+- **Reguengos** — DOC · Red · Trincadeira, Aragonez
 - **Vidigueira** — DOC · White · Antão Vaz
-- **Vinho de Talha** — DOC · Red · Tempranillo, Trincadeira
+- **Vinho de Talha** — DOC · Red · Aragonez, Trincadeira
 
 ### Algarve
 
-- **Lagoa** — DOC · Red · Negramoll
-- **Lagos** — DOC · Red · Negramoll, Castelão
-- **Portimão** — DOC · Red · Negramoll
-- **Tavira** — DOC · Red · Negramoll, Castelão
+- **Lagoa** — DOC · Red · Negra Mole
+- **Lagos** — DOC · Red · Negra Mole, Castelão
+- **Portimão** — DOC · Red · Negra Mole
+- **Tavira** — DOC · Red · Negra Mole, Castelão
 
 ### Azores
 
@@ -3021,7 +3021,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Bairrada
 
 - **Bairrada** — DOC · Red · Baga
-- **Bairrada Espumante** — DOC · Sparkling · Baga, Fernão Pires
+- **Bairrada Espumante** — DOC · Sparkling · Baga, Maria Gomes
 
 ### Beiras
 
@@ -3034,27 +3034,27 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Dão
 
-- **Dão** — DOC · Red · Touriga Nacional, Mencía, Alfrocheiro
+- **Dão** — DOC · Red · Touriga Nacional, Jaen, Alfrocheiro
 - **Dão Branco** — DOC · White · Encruzado
 - **Dão Serra da Estrela** — DOC · Red · Touriga Nacional
-- **Dão Silgueiros** — DOC · Red · Touriga Nacional, Mencía
+- **Dão Silgueiros** — DOC · Red · Touriga Nacional, Jaen
 
 ### Douro
 
-- **Douro** — DOC · Red · Touriga Nacional, Touriga Franca, Tempranillo
-- **Douro Baixo Corgo** — DOC · Red · Touriga Franca, Tempranillo
+- **Douro** — DOC · Red · Touriga Nacional, Touriga Franca, Tinta Roriz
+- **Douro Baixo Corgo** — DOC · Red · Touriga Franca, Tinta Roriz
 - **Douro Branco** — DOC · White · Rabigato, Viosinho, Gouveio
 - **Douro Cima Corgo** — DOC · Red · Touriga Nacional, Touriga Franca
 - **Douro Superior** — DOC · Red · Touriga Nacional, Touriga Franca
-- **Moscatel do Douro** — DOC · Fortified · Muscat Blanc à Petits Grains
+- **Moscatel do Douro** — DOC · Fortified · Moscatel Galego
 - **Porto Branco** — DOC · Fortified · Malvasia Fina, Gouveio
-- **Porto Colheita** — DOC · Fortified · Touriga Franca, Tempranillo
+- **Porto Colheita** — DOC · Fortified · Touriga Franca, Tinta Roriz
 - **Porto Crusted** — DOC · Fortified · Touriga Franca, Tinta Barroca
 - **Porto Garrafeira** — DOC · Fortified · Touriga Franca
 - **Porto Late Bottled Vintage** — DOC · Fortified · Touriga Franca, Tinta Barroca
 - **Porto Rosé** — DOC · Fortified · Touriga Nacional
 - **Porto Ruby** — DOC · Fortified · Touriga Nacional, Touriga Franca
-- **Porto Tawny** — DOC · Fortified · Touriga Franca, Tempranillo
+- **Porto Tawny** — DOC · Fortified · Touriga Franca, Tinta Roriz
 - **Porto Vintage** — DOC · Fortified · Touriga Nacional, Touriga Franca
 
 ### Lisboa
@@ -3073,15 +3073,15 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Madeira Bual** — DOC · Fortified · Boal
 - **Madeira Malmsey** — DOC · Fortified · Malvasia
-- **Madeira Rainwater** — DOC · Fortified · Negramoll
+- **Madeira Rainwater** — DOC · Fortified · Tinta Negra
 - **Madeira Sercial** — DOC · Fortified · Sercial
 - **Madeira Terrantez** — DOC · Fortified · Terrantez
-- **Madeira Tinta Negra** — DOC · Fortified · Negramoll
+- **Madeira Tinta Negra** — DOC · Fortified · Tinta Negra
 - **Madeira Verdelho** — DOC · Fortified · Verdelho
 
 ### Setúbal
 
-- **Moscatel de Setúbal** — DOC · Fortified · Muscat of Alexandria
+- **Moscatel de Setúbal** — DOC · Fortified · Moscatel de Setúbal
 - **Moscatel Roxo** — DOC · Fortified · Moscatel Roxo
 - **Palmela** — DOC · Red · Castelão
 - **Península de Setúbal** — VR · Red · Castelão, Syrah
@@ -3092,20 +3092,20 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Trás-os-Montes
 
-- **Chaves** — DOC · Red · Tempranillo
-- **Trás-os-Montes** — DOC · Red · Tempranillo, Trincadeira
-- **Valpaços** — DOC · Red · Tempranillo, Touriga Franca
+- **Chaves** — DOC · Red · Tinta Roriz
+- **Trás-os-Montes** — DOC · Red · Tinta Roriz, Trincadeira
+- **Valpaços** — DOC · Red · Tinta Roriz, Touriga Franca
 
 ### Vinho Verde
 
-- **Vinho Verde** — DOC · White · Loureiro, Albariño, Treixadura
-- **Vinho Verde Alvarinho (Monção e Melgaço)** — DOC · White · Albariño
+- **Vinho Verde** — DOC · White · Loureiro, Alvarinho, Trajadura
+- **Vinho Verde Alvarinho (Monção e Melgaço)** — DOC · White · Alvarinho
 - **Vinho Verde Amarante** — DOC · White · Avesso, Loureiro
-- **Vinho Verde Ave** — DOC · White · Loureiro, Treixadura
+- **Vinho Verde Ave** — DOC · White · Loureiro, Trajadura
 - **Vinho Verde Baião** — DOC · White · Avesso
 - **Vinho Verde Basto** — DOC · White · Azal
 - **Vinho Verde Cávado** — DOC · White · Loureiro
-- **Vinho Verde Espumante** — DOC · Sparkling · Loureiro, Albariño
+- **Vinho Verde Espumante** — DOC · Sparkling · Loureiro, Alvarinho
 - **Vinho Verde Loureiro (Lima)** — DOC · White · Loureiro
 - **Vinho Verde Paiva** — DOC · White · Avesso
 - **Vinho Verde Sousa** — DOC · White · Azal, Avesso
@@ -3134,19 +3134,19 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Bohotin** — DOC · Sweet Rosé · Busuioacă de Bohotin
 - **Cotești** — DOC · Red · Fetească Neagră, Merlot
-- **Cotnari** — DOC · Sweet White · Grasă de Cotnari, Muscat Blanc à Petits Grains
+- **Cotnari** — DOC · Sweet White · Grasă de Cotnari, Tămâioasă Românească
 - **Huși** — DOC · White · Zghihară de Huși
 - **Iași** — DOC · White · Fetească Albă
 - **Nicorești** — DOC · Red · Băbească Neagră
-- **Odobești** — DOC · White · Fetească Albă, Welschriesling
+- **Odobești** — DOC · White · Fetească Albă, Riesling Italian
 - **Panciu** — DOC · Sparkling · Fetească Regală
 
 ### Muntenia
 
 - **Busuioacă de Bohotin** — DOC · Sweet Rosé · Busuioacă de Bohotin
 - **Dealu Mare** — DOC · Red · Fetească Neagră, Cabernet Sauvignon
-- **Pietroasa** — DOC · Sweet White · Muscat Blanc à Petits Grains
-- **Pietroasele** — DOC · Sweet White · Muscat Blanc à Petits Grains
+- **Pietroasa** — DOC · Sweet White · Tămâioasă Românească
+- **Pietroasele** — DOC · Sweet White · Tămâioasă Românească
 - **Ștefănești** — DOC · White · Fetească Regală
 
 ### Oltenia
@@ -3163,7 +3163,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Alba Iulia** — DOC · White · Fetească Albă
 - **Jidvei** — DOC · White · Fetească Regală
 - **Lechința** — DOC · White · Fetească Albă
-- **Târnave** — DOC · White · Fetească Albă, Savagnin
+- **Târnave** — DOC · White · Fetească Albă, Traminer
 
 ---
 
@@ -3175,12 +3175,12 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Crimea
 
-- **Crimea** — PGI · Fortified · Muscat Blanc à Petits Grains, Kokur
+- **Crimea** — PGI · Fortified · Muscat, Kokur
 - **Sevastopol** — PGI · Sparkling · Chardonnay, Pinot Noir
 
 ### Dagestan
 
-- **Dagestan** — PGI · Fortified · Rkatsiteli, Muscat Blanc à Petits Grains
+- **Dagestan** — PGI · Fortified · Rkatsiteli, Muscat
 
 ### Krasnodar
 
@@ -3235,9 +3235,9 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 ### Vojvodina
 
 - **Banat** — PDO · White · Kreaca
-- **Bermet** — Traditional · Fortified
-- **Fruška Gora** — PDO · White · Welschriesling, Savagnin
-- **Srem** — PDO · White · Welschriesling
+- **Bermet** — Traditional · Fortified · Aromatized blend
+- **Fruška Gora** — PDO · White · Italian Riesling, Traminer
+- **Srem** — PDO · White · Italian Riesling
 - **Subotica-Horgoš** — PDO · White · Kevedinka
 
 ---
@@ -3271,7 +3271,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Tokaj (Slovak)
 
-- **Tokajské Víno** — PDO · Sweet White · Furmint, Hárslevelű
+- **Tokajské Víno** — PDO · Sweet White · Furmint, Lipovina
 
 ### Východoslovenská
 
@@ -3287,26 +3287,26 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Podravje
 
-- **Ljutomer-Ormož** — PDO · White · Welschriesling, Furmint
-- **Maribor** — PDO · White · Welschriesling
-- **Prekmurje** — PDO · White · Welschriesling
+- **Ljutomer-Ormož** — PDO · White · Laški Rizling, Šipon
+- **Maribor** — PDO · White · Laški Rizling
+- **Prekmurje** — PDO · White · Laški Rizling
 - **Radgona-Kapela** — PDO · Sparkling · Chardonnay
-- **Štajerska Slovenija** — PDO · White · Welschriesling, Furmint
+- **Štajerska Slovenija** — PDO · White · Laški Rizling, Šipon
 
 ### Posavje
 
 - **Bela Krajina** — PDO · Sweet White · Rumeni Muškat
-- **Bizeljsko-Sremič** — PDO · White · Welschriesling
-- **Cviček** — PDO · Rosé · Žametovka, Blaufränkisch
+- **Bizeljsko-Sremič** — PDO · White · Laški Rizling
+- **Cviček** — PDO · Rosé · Žametovka, Modra Frankinja
 - **Dolenjska** — PDO · Rosé · Žametovka
 
 ### Primorska
 
-- **Goriška Brda** — PDO · White · Ribolla Gialla, Chardonnay
-- **Koper** — PDO · Red · Terrano
-- **Kras Teran** — PDO · Red · Terrano
-- **Slovenska Istra** — PDO · White · Malvasia
-- **Vipavska Dolina** — PDO · White · Zelen, Pinela, Ribolla Gialla
+- **Goriška Brda** — PDO · White · Rebula, Chardonnay
+- **Koper** — PDO · Red · Refošk
+- **Kras Teran** — PDO · Red · Refošk
+- **Slovenska Istra** — PDO · White · Malvazija
+- **Vipavska Dolina** — PDO · White · Zelen, Pinela, Rebula
 
 ---
 
@@ -3352,12 +3352,12 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Darling** — WO · White · Sauvignon Blanc
 - **Devon Valley** — WO · Red · Cabernet Sauvignon
 - **Durbanville** — WO · White · Sauvignon Blanc, Merlot
-- **Franschhoek Valley** — WO · White · Sémillon, Cabernet Sauvignon
+- **Franschhoek Valley** — WO · White · Semillon, Cabernet Sauvignon
 - **Jonkershoek Valley** — WO · Red · Cabernet Sauvignon
 - **Lutzville Valley** — WO · White · Chenin Blanc
 - **Malmesbury** — WO · Red · Syrah
 - **Paardeberg** — WO · Red · Syrah, Chenin Blanc
-- **Paarl** — WO · Red · Syrah, Cabernet Sauvignon
+- **Paarl** — WO · Red · Shiraz, Cabernet Sauvignon
 - **Papegaaiberg** — WO · Red · Cabernet Sauvignon
 - **Piekenierskloof** — WO · Red · Grenache
 - **Polkadraai Hills** — WO · White · Chenin Blanc
@@ -3367,21 +3367,21 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Stellenbosch Bottelary** — WO · Red · Pinotage
 - **Swartland** — WO · Red · Syrah, Chenin Blanc
 - **Tulbagh** — WO · Sparkling · Chardonnay, Pinot Noir
-- **Vin de Constance** — Historic style · Sweet White · Muscat Blanc à Petits Grains
+- **Vin de Constance** — Historic style · Sweet White · Muscat de Frontignan
 - **Voor Paardeberg** — WO · Red · Syrah
-- **Wellington** — WO · Red · Syrah, Cabernet Sauvignon
+- **Wellington** — WO · Red · Shiraz, Cabernet Sauvignon
 
 ### Klein Karoo
 
 - **Barrydale** — WO · Red · Syrah
-- **Calitzdorp** — WO · Fortified · Touriga Nacional, Tinta Barroca
-- **Klein Karoo** — WO · Fortified · Muscat Blanc à Petits Grains, Touriga Nacional
-- **Montagu** — WO · Fortified · Muscat Blanc à Petits Grains
+- **Calitzdorp** — WO · Fortified · Touriga Nacional, Tinta Barocca
+- **Klein Karoo** — WO · Fortified · Muscat, Touriga Nacional
+- **Montagu** — WO · Fortified · Muscat
 
 ### National
 
 - **Cape Blend** — Style · Red · Pinotage, Cabernet Sauvignon, Merlot
-- **Cape Vintage (Cape Port)** — Style · Fortified · Touriga Nacional, Tinta Barroca
+- **Cape Vintage (Cape Port)** — Style · Fortified · Touriga Nacional, Tinta Barocca
 - **Methode Cap Classique** — Style · Sparkling · Chardonnay, Pinot Noir
 - **Pinotage** — Grape wine · Red · Pinotage
 
@@ -3414,7 +3414,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Gyeongsangbuk
 
-- **Gyeongsan** — Regional · Red · Campbell Early, Muscat Bailey A
+- **Gyeongsan** — Regional · Red · Campbell Early, MBA
 
 ---
 
@@ -3431,13 +3431,13 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Condado de Huelva** — DO · White · Zalema
 - **Cream Sherry** — DO · Fortified · Palomino, Pedro Ximénez
 - **Fino** — DO · Fortified · Palomino
-- **Granada** — DO · Red · Tempranillo, Grenache
-- **Jerez-Xérès-Sherry** — DO · Fortified · Palomino, Pedro Ximénez, Muscat of Alexandria
-- **Lebrija** — DO · Fortified · Palomino, Muscat of Alexandria
-- **Málaga** — DO · Fortified · Pedro Ximénez, Muscat of Alexandria
+- **Granada** — DO · Red · Tempranillo, Garnacha
+- **Jerez-Xérès-Sherry** — DO · Fortified · Palomino, Pedro Ximénez, Moscatel
+- **Lebrija** — DO · Fortified · Palomino, Moscatel
+- **Málaga** — DO · Fortified · Pedro Ximénez, Moscatel
 - **Manzanilla de Sanlúcar** — DO · Fortified · Palomino
 - **Montilla-Moriles** — DO · Fortified · Pedro Ximénez
-- **Moscatel de Chipiona** — DO · Fortified · Muscat of Alexandria
+- **Moscatel de Chipiona** — DO · Fortified · Moscatel
 - **Oloroso** — DO · Fortified · Palomino
 - **Palo Cortado** — DO · Fortified · Palomino
 - **Pedro Ximénez Sherry** — DO · Fortified · Pedro Ximénez
@@ -3459,16 +3459,16 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Canary Islands
 
-- **Abona** — DO · White · Palomino
+- **Abona** — DO · White · Listán Blanco
 - **El Hierro** — DO · White · Vijariego
 - **Gran Canaria** — DO · Red · Listán Negro
 - **La Gomera** — DO · White · Forastera Gomera
-- **La Palma** — DO · White · Palomino, Negramoll
+- **La Palma** — DO · White · Listán Blanco, Negramoll
 - **Lanzarote** — DO · White · Malvasía Volcánica
 - **Tacoronte-Acentejo** — DO · Red · Listán Negro
-- **Valle de Güímar** — DO · White · Palomino
+- **Valle de Güímar** — DO · White · Listán Blanco
 - **Valle de la Orotava** — DO · Red · Listán Negro
-- **Ycoden-Daute-Isora** — DO · White · Palomino
+- **Ycoden-Daute-Isora** — DO · White · Listán Blanco
 
 ### Cantabria & Asturias
 
@@ -3481,13 +3481,13 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Arlanza** — DO · Red · Tempranillo
 - **Arribes** — DO · Red · Juan García
 - **Bierzo** — DO · Red · Mencía
-- **Cigales** — DO · Rosé · Tempranillo, Grenache
-- **Ribera del Duero** — DO · Red · Tempranillo
+- **Cigales** — DO · Rosé · Tempranillo, Garnacha
+- **Ribera del Duero** — DO · Red · Tinto Fino
 - **Rueda** — DO · White · Verdejo, Sauvignon Blanc
-- **Sierra de Gredos** — Regional · Red · Grenache
+- **Sierra de Gredos** — Regional · Red · Garnacha
 - **Sierra de Salamanca** — DO · Red · Rufete
 - **Tierra de León** — DO · Red · Prieto Picudo
-- **Toro** — DO · Red · Tempranillo
+- **Toro** — DO · Red · Tinta de Toro
 - **Valles de Benavente** — VC · Red · Prieto Picudo
 - **Valtiendas** — VC · Red · Tempranillo
 
@@ -3499,40 +3499,40 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Dehesa del Carrizal** — DO de Pago · Red · Cabernet Sauvignon, Syrah
 - **Dominio de Valdepusa** — DO de Pago · Red · Syrah, Petit Verdot
 - **Finca Élez** — DO de Pago · Red · Tempranillo, Cabernet Sauvignon
-- **Florentino** — DO de Pago · Red · Grenache
-- **La Mancha** — DO · Red · Tempranillo, Airén
+- **Florentino** — DO de Pago · Red · Garnacha
+- **La Mancha** — DO · Red · Cencibel, Airén
 - **Manchuela** — DO · Red · Bobal
-- **Méntrida** — DO · Red · Grenache
+- **Méntrida** — DO · Red · Garnacha
 - **Mondéjar** — DO · Red · Tempranillo
 - **Pago Guijoso** — DO de Pago · Red · Cabernet Sauvignon
-- **Ribera del Júcar** — DO · Red · Tempranillo, Bobal
+- **Ribera del Júcar** — DO · Red · Cencibel, Bobal
 - **Uclés** — DO · Red · Tempranillo
 - **Valdepeñas** — DO · Red · Tempranillo
 - **Vallegarcía** — DO de Pago · Red · Cabernet Sauvignon, Syrah
 
 ### Catalonia
 
-- **Alella** — DO · White · Xarel·lo
-- **Catalunya** — DO · Red
-- **Cava** — DO · Sparkling · Viura, Xarel·lo, Parellada
-- **Clàssic Penedès** — DO · Sparkling · Xarel·lo, Viura
+- **Alella** — DO · White · Pansa Blanca
+- **Catalunya** — DO · Red · Various
+- **Cava** — DO · Sparkling · Macabeo, Xarel·lo, Parellada
+- **Clàssic Penedès** — DO · Sparkling · Xarel·lo, Macabeo
 - **Conca de Barberà** — DO · Red · Trepat
-- **Corpinnat** — Private mark · Sparkling · Xarel·lo, Viura
+- **Corpinnat** — Private mark · Sparkling · Xarel·lo, Macabeo
 - **Costers del Segre** — DO · Red · Tempranillo, Cabernet Sauvignon
-- **Empordà** — DO · Red · Grenache, Carignan
-- **Montsant** — DO · Red · Grenache, Carignan
-- **Montsant Falset** — DO · Red · Grenache, Carignan
-- **Penedès** — DO · White · Xarel·lo, Viura, Parellada
+- **Empordà** — DO · Red · Garnacha, Cariñena
+- **Montsant** — DO · Red · Garnacha, Cariñena
+- **Montsant Falset** — DO · Red · Garnacha, Cariñena
+- **Penedès** — DO · White · Xarel·lo, Macabeo, Parellada
 - **Pla de Bages** — DO · Red · Picapoll, Cabernet Sauvignon
-- **Priorat** — DOQ · Red · Grenache, Carignan
-- **Priorat Vi de Vila** — DOQ · Red · Grenache, Carignan
-- **Tarragona** — DO · White · Viura, Xarel·lo
-- **Terra Alta** — DO · White · Grenache Blanc
+- **Priorat** — DOQ · Red · Garnacha, Cariñena
+- **Priorat Vi de Vila** — DOQ · Red · Garnacha, Cariñena
+- **Tarragona** — DO · White · Macabeo, Xarel·lo
+- **Terra Alta** — DO · White · Garnacha Blanca
 
 ### Extremadura
 
 - **Cañamero** — VT · White · Alarije
-- **Ribera del Guadiana** — DO · Red · Tempranillo, Grenache
+- **Ribera del Guadiana** — DO · Red · Tempranillo, Garnacha
 
 ### Galicia
 
@@ -3547,44 +3547,44 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Levante
 
-- **Alicante** — DO · Red · Mourvèdre
-- **Almansa** — DO · Red · Alicante Bouschet
-- **Bullas** — DO · Red · Mourvèdre
-- **Fondillón** — DO · Fortified · Mourvèdre
-- **Jumilla** — DO · Red · Mourvèdre
+- **Alicante** — DO · Red · Monastrell
+- **Almansa** — DO · Red · Garnacha Tintorera
+- **Bullas** — DO · Red · Monastrell
+- **Fondillón** — DO · Fortified · Monastrell
+- **Jumilla** — DO · Red · Monastrell
 - **Utiel-Requena** — DO · Red · Bobal
-- **Valencia** — DO · White · Merseguera, Muscat of Alexandria
-- **Yecla** — DO · Red · Mourvèdre
+- **Valencia** — DO · White · Merseguera, Moscatel
+- **Yecla** — DO · Red · Monastrell
 
 ### Madrid
 
-- **Vinos de Madrid** — DO · Red · Grenache, Tempranillo
+- **Vinos de Madrid** — DO · Red · Garnacha, Tempranillo
 
 ### Murcia
 
-- **Campo de Cartagena** — VT · Red · Mourvèdre
+- **Campo de Cartagena** — VT · Red · Monastrell
 
 ### Navarra & Aragón
 
-- **Aragón** — VT · Red · Grenache
+- **Aragón** — VT · Red · Garnacha
 - **Arínzano** — DO de Pago · Red · Tempranillo
 - **Bolandin** — DO de Pago · Red · Tempranillo, Merlot
-- **Calatayud** — DO · Red · Grenache
-- **Campo de Borja** — DO · Red · Grenache
-- **Cariñena** — DO · Red · Grenache, Carignan
-- **Navarra** — DO · Rosé · Grenache, Tempranillo
+- **Calatayud** — DO · Red · Garnacha
+- **Campo de Borja** — DO · Red · Garnacha
+- **Cariñena** — DO · Red · Garnacha, Cariñena
+- **Navarra** — DO · Rosé · Garnacha, Tempranillo
 - **Otazu** — DO de Pago · Red · Cabernet Sauvignon, Tempranillo
 - **Prado de Irache** — DO de Pago · Red · Tempranillo
 - **Somontano** — DO · Red · Moristel, Tempranillo, Cabernet Sauvignon
 
 ### Rioja
 
-- **Rioja** — DOCa · Red · Tempranillo, Grenache, Graciano, Carignan
+- **Rioja** — DOCa · Red · Tempranillo, Garnacha, Graciano, Mazuelo
 - **Rioja Alavesa** — DOCa · Red · Tempranillo
 - **Rioja Alta** — DOCa · Red · Tempranillo, Graciano
-- **Rioja Blanco** — DOCa · White · Viura, Malvasia, Grenache Blanc
+- **Rioja Blanco** — DOCa · White · Viura, Malvasía, Garnacha Blanca
 - **Rioja Gran Reserva** — DOCa · Red · Tempranillo, Graciano
-- **Rioja Oriental** — DOCa · Red · Grenache, Tempranillo
+- **Rioja Oriental** — DOCa · Red · Garnacha, Tempranillo
 
 ### Valencia
 
@@ -3622,7 +3622,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Graubünden
 
-- **Bündner Herrschaft** — AOC · Red · Pinot Noir
+- **Bündner Herrschaft** — AOC · Red · Blauburgunder
 
 ### Neuchâtel
 
@@ -3645,9 +3645,9 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 - **Dôle** — AOC · Red · Pinot Noir, Gamay
 - **Ermitage du Valais** — AOC · White · Marsanne
 - **Fendant** — AOC · White · Chasselas
-- **Heida (Païen)** — AOC · White · Savagnin
+- **Heida (Païen)** — AOC · White · Savagnin Blanc
 - **Humagne Rouge** — AOC · Red · Humagne Rouge
-- **Johannisberg du Valais** — AOC · White · Sylvaner
+- **Johannisberg du Valais** — AOC · White · Silvaner
 - **Malvoisie du Valais** — AOC · Sweet White · Pinot Gris
 - **Petite Arvine** — AOC · White · Petite Arvine
 - **Syrah du Valais** — AOC · Red · Syrah
@@ -3667,7 +3667,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Zurich & Schaffhausen
 
-- **Schaffhausen** — AOC · Red · Pinot Noir
+- **Schaffhausen** — AOC · Red · Blauburgunder
 
 ---
 
@@ -3711,7 +3711,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Sughd
 
-- **Sughd** — Regional · Sweet White · Muscat Blanc à Petits Grains, Rkatsiteli
+- **Sughd** — Regional · Sweet White · Muscat, Rkatsiteli
 
 ---
 
@@ -3740,15 +3740,15 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Hua Hin
 
-- **Hua Hin Hills** — Regional · Red · Syrah, Muscat Blanc à Petits Grains
+- **Hua Hin Hills** — Regional · Red · Shiraz, Muscat
 
 ### Khao Yai
 
-- **Khao Yai** — Regional · Red · Syrah, Chenin Blanc
+- **Khao Yai** — Regional · Red · Shiraz, Chenin Blanc
 
 ### Loei
 
-- **Phu Rua** — Regional · Red · Syrah, Chenin Blanc
+- **Phu Rua** — Regional · Red · Shiraz, Chenin Blanc
 
 ---
 
@@ -3833,7 +3833,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Crimea
 
-- **Massandra** — Historic estate · Fortified · Muscat Blanc à Petits Grains, Kokur
+- **Massandra** — Historic estate · Fortified · Muscat, Kokur
 
 ### Kherson
 
@@ -3846,7 +3846,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Zakarpattia
 
-- **Zakarpattia** — PGI · White · Savagnin, Riesling
+- **Zakarpattia** — PGI · White · Traminer, Rhine Riesling
 
 ---
 
@@ -4067,7 +4067,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Grand Valley** — AVA · Red · Cabernet Franc, Merlot
 - **Grand Valley Colorado** — AVA · Red · Cabernet Franc
-- **West Elks** — AVA · White · Riesling, Gewurztraminer
+- **West Elks** — AVA · White · Riesling, Gewürztraminer
 
 ### Connecticut
 
@@ -4115,7 +4115,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 - **Fennville** — AVA · White · Riesling
 - **Lake Michigan Shore** — AVA · White · Riesling, Cabernet Franc
-- **Leelanau Peninsula** — AVA · White · Riesling, Pinot Gris
+- **Leelanau Peninsula** — AVA · White · Riesling, Pinot Grigio
 - **Old Mission Peninsula** — AVA · White · Riesling, Chardonnay
 - **Tip of the Mitt** — AVA · White · Riesling, Marquette
 
@@ -4316,7 +4316,7 @@ The unit is the *named wine*: an appellation, a protected denomination (AOC, DOC
 
 ### Samarkand
 
-- **Samarkand** — Regional · Sweet White · Bayanshira, Muscat Blanc à Petits Grains
+- **Samarkand** — Regional · Sweet White · Bayan Shirey, Muscat
 
 ### Tashkent
 
