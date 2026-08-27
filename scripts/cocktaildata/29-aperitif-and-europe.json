@@ -1,0 +1,1142 @@
+[
+ {
+  "id": "reverse-manhattan",
+  "name": "Reverse Manhattan",
+  "subcategory": "Spirit-Forward",
+  "description": "The Manhattan with its proportions turned around — two of vermouth to one of rye. Lighter, and a longer evening for it.",
+  "abv": "16-18%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sweet vermouth",
+   "rye",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Sweet vermouth",
+   "Rye whiskey",
+   "Angostura bitters"
+  ],
+  "funFact": "Reversing a spirit-forward drink is a modern habit with an old justification: vermouth in 1890 was a fresher, better product than most of what was sold in the century after.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sweet vermouth",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Rye whiskey",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "sherry-julep",
+  "name": "Sherry Julep",
+  "subcategory": "Julep & Cobbler",
+  "description": "Sherry, sugar and mint churned through crushed ice. The gentlest drink in the julep family by a distance.",
+  "abv": "12-14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "nutty sherry",
+   "mint",
+   "sugar"
+  ],
+  "glassware": "Julep tin",
+  "ingredients": [
+   "Sherry",
+   "Mint",
+   "Sugar"
+  ],
+  "funFact": "Juleps were made on whatever the bar had — cognac, peach brandy, rum, gin and sherry all appear in the nineteenth-century books, and bourbon is the latecomer.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Amontillado sherry",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "10"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Press the mint gently with the syrup in a julep tin.",
+    "Add the sherry and pack with crushed ice.",
+    "Churn with a barspoon until the tin frosts over.",
+    "Cap with more ice and crown with mint."
+   ],
+   "garnish": "A mint bouquet",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "vermouth-cassis",
+  "name": "Vermouth Cassis",
+  "subcategory": "Highball",
+  "description": "Dry vermouth and blackcurrant liqueur lengthened with soda. The French café order, also known as a Pompier.",
+  "abv": "10-12%",
+  "origin": "Paris, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "dry vermouth",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Dry vermouth",
+   "Crème de cassis",
+   "Soda water"
+  ],
+  "funFact": "Pompier means fireman, and the drink is named for them — a low-strength order for someone who might be called back to work.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry vermouth",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Crème de cassis",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the vermouth and the cassis.",
+    "Top with cold soda water.",
+    "Stir once and hang a lemon twist on the rim."
+   ],
+   "garnish": "A lemon twist",
+   "method": "built"
+  }
+ },
+ {
+  "id": "cynar-negroni",
+  "name": "Cynar Negroni",
+  "subcategory": "Spirit-Forward",
+  "description": "A Negroni with Cynar in Campari's place. Less bitter orange, more artichoke and earth.",
+  "abv": "22-24%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "artichoke",
+   "juniper",
+   "sweet vermouth"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Cynar",
+   "Sweet vermouth"
+  ],
+  "funFact": "Cynar is built on artichoke leaves and thirteen other botanicals, and it is noticeably lower in both bitterness and alcohol than Campari — so the same build drinks softer.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cynar",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "dukes-martini",
+  "name": "Dukes Martini",
+  "subcategory": "Spirit-Forward",
+  "description": "Frozen gin poured into a frozen glass over a vermouth rinse. No ice, no stirring, and a two-drink limit.",
+  "abv": "40-42%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "cold",
+   "lemon oil"
+  ],
+  "glassware": "Frozen martini glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth"
+  ],
+  "funFact": "The house limit of two is real and enforced. The bar keeps its gin in the freezer, so the drink is never diluted at all — which is exactly why two is the number.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "3 oz / 90 ml, from the freezer"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "a rinse"
+    },
+    {
+     "item": "Amalfi lemon peel",
+     "amount": "1 strip"
+    }
+   ],
+   "steps": [
+    "Keep the gin in the freezer and the glass in the freezer with it.",
+    "Splash a little vermouth around the frozen glass and tip out what does not cling.",
+    "Pour the frozen gin straight in. Add no ice and do not stir.",
+    "Cut a strip of lemon peel over the surface at the table and drop it in."
+   ],
+   "garnish": "A lemon peel, cut at the table",
+   "method": "built"
+  }
+ },
+ {
+  "id": "connaught-martini",
+  "name": "Connaught Martini",
+  "subcategory": "Spirit-Forward",
+  "description": "Stirred at the table from a trolley, with a choice of five bitters and a strip of Amalfi lemon.",
+  "abv": "34-36%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "dry vermouth",
+   "lemon oil"
+  ],
+  "glassware": "Martini glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Bitters"
+  ],
+  "funFact": "The trolley is the drink. It is wheeled over, the bitters are chosen in front of you, and the whole thing is stirred and poured at the table rather than at the bar.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Bitters of your choosing",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Amalfi lemon peel",
+     "amount": "1 strip"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Chill the glass thoroughly before the trolley arrives.",
+    "Stir the gin and vermouth with ice until very cold.",
+    "Strain into the chilled glass and add the chosen bitters on top.",
+    "Cut a wide strip of Amalfi lemon peel over the surface and discard it."
+   ],
+   "garnish": "A lemon peel, expressed and discarded",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "havana-cocktail",
+  "name": "Havana Cocktail",
+  "subcategory": "Sour",
+  "description": "Apricot brandy, Swedish punsch and gin with lemon. A Savoy drink named for a city it has nothing to do with.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "arrack",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Apricot brandy",
+   "Swedish punsch",
+   "Gin",
+   "Lemon juice"
+  ],
+  "funFact": "Savoy drinks named for places are usually named for the guest who ordered them or the ship they arrived on, which is why so few of them taste like anywhere.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Apricot brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Swedish punsch",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "thistle",
+  "name": "Thistle",
+  "subcategory": "Spirit-Forward",
+  "description": "Scotch and sweet vermouth with Angostura. A Rob Roy by another name, and the older one.",
+  "abv": "26-28%",
+  "origin": "Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "sweet vermouth",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Sweet vermouth",
+   "Angostura bitters"
+  ],
+  "funFact": "The thistle became Scotland's emblem from a legend about barefoot Norse raiders standing on one and giving away a night attack with the noise.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "flying-scotsman",
+  "name": "Flying Scotsman",
+  "subcategory": "Spirit-Forward",
+  "description": "Scotch, sweet vermouth, sugar and bitters. Named for the train, and sweeter than a Rob Roy.",
+  "abv": "24-26%",
+  "origin": "Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "sweet vermouth",
+   "sugar"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Sweet vermouth",
+   "Angostura bitters",
+   "Sugar"
+  ],
+  "funFact": "The Flying Scotsman ran London to Edinburgh from 1862 and in 1934 became the first locomotive officially recorded at a hundred miles an hour.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "pineapple-fizz",
+  "name": "Pineapple Fizz",
+  "subcategory": "Fizz",
+  "description": "Rum, pineapple and sugar shaken and topped with soda. One of the Savoy's plainest and best fizzes.",
+  "abv": "12-14%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "rum",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "White rum",
+   "Pineapple juice",
+   "Simple syrup",
+   "Soda water"
+  ],
+  "funFact": "Pineapple was still expensive enough in 1930 to signal something — English country houses had rented single fruits as table centrepieces within living memory.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the rum, pineapple juice and syrup hard with ice.",
+    "Strain into a tall glass over fresh ice.",
+    "Top with cold soda water.",
+    "Garnish with a pineapple wedge."
+   ],
+   "garnish": "A pineapple wedge",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "carroll-gardens",
+  "name": "Carroll Gardens",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye with Punt e Mes, an Italian amaro and a touch of maraschino. The richest of the Brooklyn variations.",
+  "abv": "24-26%",
+  "origin": "Brooklyn, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "bitter orange",
+   "cherry",
+   "amaro"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Punt e Mes",
+   "Amaro Nardini",
+   "Maraschino liqueur"
+  ],
+  "funFact": "The Brooklyn variations all replace the original's Amer Picon, which stopped being imported to America in the 1970s and sent a generation of bartenders looking for substitutes.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Punt e Mes",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Amaro Nardini",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "cobble-hill",
+  "name": "Cobble Hill",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, dry vermouth and Amaro Montenegro with muddled cucumber. The only Brooklyn variation that tastes green.",
+  "abv": "22-24%",
+  "origin": "Brooklyn, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cucumber",
+   "rye",
+   "orange peel"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Dry vermouth",
+   "Amaro Montenegro",
+   "Cucumber"
+  ],
+  "funFact": "Cucumber in a stirred whiskey drink was a genuinely odd idea in 2007, and it is the reason this one still gets made when the others have faded.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Amaro Montenegro",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cucumber",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Press the cucumber gently in the bottom of a mixing glass.",
+    "Add the rye, vermouth and amaro with ice and stir until cold.",
+    "Double-strain into a chilled coupe so no cucumber comes through.",
+    "Float a thin cucumber slice on top."
+   ],
+   "garnish": "A cucumber slice",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "bushwick",
+  "name": "Bushwick",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye, sweet vermouth, Amer Picon and maraschino. The closest of the variations to the Brooklyn it descends from.",
+  "abv": "26-28%",
+  "origin": "Brooklyn, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "bitter orange",
+   "cherry"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Sweet vermouth",
+   "Amer Picon",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Amer Picon has not been sold in America since the 1970s, so every bar making this either has a smuggled bottle or a house substitute, and they will tell you which.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Amer Picon",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "la-ultima-palabra",
+  "name": "La Última Palabra",
+  "subcategory": "Sour",
+  "description": "The Last Word rebuilt on mezcal. Same equal quarters, and the smoke changes everything about it.",
+  "abv": "24-26%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "smoke",
+   "herbal",
+   "cherry",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Mezcal",
+   "Green Chartreuse",
+   "Maraschino liqueur",
+   "Lime juice"
+  ],
+  "funFact": "The Last Word's equal-parts structure is unusually forgiving of a base swap, which is why it has produced more successful variations than almost any other classic.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mezcal",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "coffee-grog",
+  "name": "Coffee Grog",
+  "subcategory": "Hot",
+  "description": "Hot coffee with rum, butter and spice, and a flamed orange peel dropped in at the end.",
+  "abv": "16-18%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "coffee",
+   "butter",
+   "clove",
+   "rum"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Coffee",
+   "Dark rum",
+   "Butter",
+   "Spices"
+  ],
+  "funFact": "Don the Beachcomber built a batter of butter, brown sugar and spice and kept it behind the bar by the tub, so the drink was a scoop and a pour rather than a build.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Hot strong coffee",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Dark rum",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Unsalted butter",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Ground cloves",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Ground cinnamon",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "1 strip"
+    }
+   ],
+   "steps": [
+    "Mash the butter with the sugar and spices into a paste.",
+    "Drop a spoonful into a warmed mug and pour the hot coffee over it, stirring until it melts.",
+    "Add the rum and stir once more.",
+    "Hold a strip of orange peel over a flame, squeeze it so the oils catch, and drop it in."
+   ],
+   "garnish": "A flamed orange peel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sonic",
+  "name": "Sonic",
+  "subcategory": "Highball",
+  "description": "Whisky with half soda and half tonic. Named for the two mixers rather than anything faster.",
+  "abv": "10-12%",
+  "origin": "Tokyo, Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "quinine",
+   "malt",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Japanese whisky",
+   "Soda water",
+   "Tonic water"
+  ],
+  "funFact": "Splitting the mixer halves the tonic's sweetness while keeping its bitterness, which is the whole reason a Japanese bar reaches for two bottles instead of one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Japanese whisky",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Tonic water",
+     "amount": "2.5 oz / 75 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "one long spear"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with a single long ice spear, or with hard clear cubes.",
+    "Add the whisky and stir once to chill it.",
+    "Pour the soda and tonic together down a barspoon.",
+    "Lift once from the bottom and serve without garnish."
+   ],
+   "garnish": "None, or a lemon peel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "pomada",
+  "name": "Pomada",
+  "subcategory": "Regional",
+  "description": "Menorcan gin and cloudy lemonade. The drink of the island's summer fiestas, poured by the jug.",
+  "abv": "12-14%",
+  "origin": "Menorca, Spain",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "lemon",
+   "wine spirit"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Xoriguer gin",
+   "Lemonade"
+  ],
+  "funFact": "Menorcan gin is distilled from wine rather than grain, a habit left behind by the British navy during its eighteenth-century occupation of the island.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Xoriguer or Menorcan gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cloudy lemonade",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the gin.",
+    "Top with cloudy lemonade.",
+    "Stir once. At a fiesta it is mixed by the jug and poured from horseback height."
+   ],
+   "garnish": "A lemon wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "agua-de-sevilla",
+  "name": "Agua de Sevilla",
+  "subcategory": "Sparkling",
+  "description": "Cava with brandy, triple sec and pineapple under a cap of whipped cream. Seville drinks it in the heat.",
+  "abv": "14-16%",
+  "origin": "Seville, Spain",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "cava",
+   "cream",
+   "brandy"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "Cava",
+   "Brandy",
+   "Triple sec",
+   "Pineapple juice"
+  ],
+  "funFact": "It is a bar drink rather than a home one, and the whipped cream is not optional — served without it, in Seville, it is simply a different order.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cava",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Spanish brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whipped cream",
+     "amount": "to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the brandy, triple sec and pineapple juice with ice.",
+    "Strain into a large wine glass over fresh ice.",
+    "Top with cold cava and stir once, gently.",
+    "Cap with whipped cream and dust with cinnamon."
+   ],
+   "garnish": "Whipped cream and cinnamon",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "zurracapote",
+  "name": "Zurracapote",
+  "subcategory": "Punch & Cobbler",
+  "description": "Red wine macerated for days with peaches, cinnamon and lemon. Rioja's fiesta punch, and not a sangría.",
+  "abv": "9-11%",
+  "origin": "La Rioja, Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "peach",
+   "cinnamon",
+   "red wine"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "Red wine",
+   "Peaches",
+   "Cinnamon",
+   "Sugar"
+  ],
+  "funFact": "The difference from sangría is time: sangría is mixed and drunk the same day, and zurracapote is left to macerate for two or three before anyone touches it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rioja red wine",
+     "amount": "2 bottles / 1.5 L"
+    },
+    {
+     "item": "Peaches",
+     "amount": "4, sliced"
+    },
+    {
+     "item": "Lemon",
+     "amount": "1, sliced"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "3"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Combine everything in a large jar or bucket and stir until the sugar dissolves.",
+    "Cover and leave somewhere cool for two to three days.",
+    "Taste and add sugar only if the fruit has not done enough.",
+    "Strain or serve with the fruit, over ice, in tumblers."
+   ],
+   "garnish": "A slice of the macerated peach",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "sangria-blanca",
+  "name": "Sangría Blanca",
+  "subcategory": "Punch & Cobbler",
+  "description": "White wine with peach, citrus and brandy over ice. Sangría without the tannin, and easier in the heat.",
+  "abv": "10-12%",
+  "origin": "Spain",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "peach",
+   "citrus",
+   "white wine"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "White wine",
+   "Brandy",
+   "Peaches",
+   "Citrus"
+  ],
+  "funFact": "White sangría is the version served across most of northern Spain, where the local wine is white and using a Rioja red for punch would be an odd thing to do.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine",
+     "amount": "1 bottle / 750 ml"
+    },
+    {
+     "item": "Spanish brandy",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Peaches",
+     "amount": "2, sliced"
+    },
+    {
+     "item": "Orange",
+     "amount": "1, sliced"
+    },
+    {
+     "item": "Lemon",
+     "amount": "1, sliced"
+    },
+    {
+     "item": "Soda water",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine the wine, brandy, triple sec and fruit in a jug.",
+    "Chill for at least four hours so the fruit gives up its flavour.",
+    "Add ice and top with soda water just before serving.",
+    "Pour into tumblers, making sure everyone gets fruit."
+   ],
+   "garnish": "The macerated fruit",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "kir-breton",
+  "name": "Kir Breton",
+  "subcategory": "Regional",
+  "description": "Cider with blackcurrant liqueur. The Kir made with what Brittany actually grows.",
+  "abv": "5-7%",
+  "origin": "Brittany, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "apple",
+   "cider"
+  ],
+  "glassware": "Wine glass",
+  "ingredients": [
+   "Dry cider",
+   "Crème de cassis"
+  ],
+  "funFact": "The original Kir uses Burgundy's aligoté, and every French region has since made the same drink from whatever it presses — cider in Brittany, and it is the better version.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry Breton cider",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Crème de cassis",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the cassis into the bottom of a wine glass.",
+    "Add the cold cider slowly so it does not foam over.",
+    "Do not stir — the pour combines it.",
+    "Serve without ice."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "trou-normand",
+  "name": "Trou Normand",
+  "subcategory": "Shot",
+  "description": "A shot of calvados taken between courses, on the theory that it makes room for the rest of the meal.",
+  "abv": "40-42%",
+  "origin": "Normandy, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "oak",
+   "warmth"
+  ],
+  "glassware": "Small glass",
+  "ingredients": [
+   "Calvados"
+  ],
+  "funFact": "Trou normand means the Norman hole, and the modern restaurant version replaces the neat shot with apple sorbet drowned in calvados.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Calvados",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Apple sorbet",
+     "amount": "1 small scoop, optional"
+    }
+   ],
+   "steps": [
+    "Pour a small measure of calvados.",
+    "Drink it in one, between courses, standing if the table is that sort of table.",
+    "For the modern version, put a scoop of apple sorbet in a glass and pour the calvados over it.",
+    "Either way, return to the meal immediately."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ }
+]
