@@ -55,14 +55,41 @@ const drinks = JSON.parse(readFileSync(DRINKS, 'utf8'));
  * clear it at its LOW end. "Not published" is deliberately NOT alcohol-free:
  * 174 beer cards carry it and it means undocumented, not absent.
  */
-const FREE_MARKER = /alcohol[- ]?free|non[- ]?alcoholic|alkoholfrei|no alcohol/i;
+/* The alcohol floor, kept byte-compatible with abvBelowFloor() in
+ * scripts/lib/dex-merge.mjs. This is a TEMPORARY duplicate: the shared
+ * validator gained the same check as check 6, and the moment that lands on
+ * main this block should be deleted so there is one rule and not two. It is
+ * here only because that commit is not on main yet and cocktails should not
+ * go unguarded in the gap.
+ *
+ * Three details, each of which I had wrong and a peer caught:
+ *
+ *  - FIRST number, not the minimum. A range is written low end first, so the
+ *    first number IS the floor. Taking the minimum reads "5% (0.33 L)" as
+ *    0.33 and throws out a real drink. No row in the Dex flips verdict today
+ *    — the only rows where first and min differ are the two Izarra spirits at
+ *    "40% green, 32% yellow" — so this is latent rather than active, which is
+ *    exactly when it is cheap to fix.
+ *  - A leading "<" or "≤" inverts the comparison, so "<0.5%" rejects while a
+ *    bare "0.5%" clears.
+ *  - "Varies by producer" is a second undocumented-strength phrase. A
+ *    carve-out keyed only to "Not published" would have condemned it. */
+const ABV_FLOOR = 0.5;
+const ABV_UNDOCUMENTED = /not published|varies/i;
+const ABV_ABSENT = /alcohol[-\s]?free|non[-\s]?alcoholic|de[-\s]?alcoholi[sz]|no alcohol/i;
 
-function isAlcoholFree(d) {
-  const abv = String(d.abv ?? '');
-  if (FREE_MARKER.test(abv) || /<\s*0/.test(abv)) return true;
-  const nums = (abv.match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
-  return nums.length > 0 && Math.min(...nums) < 0.5;
+function abvBelowFloor(abv) {
+  const s = String(abv ?? '');
+  if (ABV_UNDOCUMENTED.test(s)) return false;
+  if (ABV_ABSENT.test(s)) return true;
+  const m = s.match(/\d+(?:\.\d+)?/);
+  if (!m) return false;
+  const n = Number(m[0]);
+  return /^\s*[<≤]/.test(s) ? n <= ABV_FLOOR : n < ABV_FLOOR;
 }
+
+const isAlcoholFree = (d) => abvBelowFloor(d.abv);
+const FREE_MARKER = ABV_ABSENT;
 
 const doomed = drinks.filter(isAlcoholFree);
 const kept = drinks.filter((d) => !isAlcoholFree(d));
@@ -82,10 +109,7 @@ const keptButFree = kept.filter((d) =>
   FREE_MARKER.test(String(d.name ?? ''))
 );
 
-const doomedButStrong = doomed.filter((d) => {
-  const nums = (String(d.abv ?? '').match(/\d+(?:\.\d+)?/g) ?? []).map(Number);
-  return nums.length > 0 && Math.min(...nums) >= 0.5;
-});
+const doomedButStrong = doomed.filter((d) => !abvBelowFloor(d.abv));
 
 if (keptButFree.length || doomedButStrong.length) {
   console.error('\nABORT — nothing written:\n');
