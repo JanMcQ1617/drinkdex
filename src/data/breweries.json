@@ -2107,13 +2107,6 @@
       "shortName": "Paracelsus",
       "style": "organic zwickl",
       "styleRef": null
-     },
-     {
-      "id": "stiegl-goldbrau-alkoholfrei-at",
-      "name": "Stiegl Goldbräu Alkoholfrei",
-      "shortName": "Goldbräu Alkoholfrei",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false
@@ -7770,28 +7763,6 @@
     "needsLineup": false
    },
    {
-    "id": "cristal-cl",
-    "name": "Cristal",
-    "city": null,
-    "beers": [
-     {
-      "id": "cristal-cl",
-      "name": "Cristal",
-      "shortName": "Cristal",
-      "style": "lager — the national beer",
-      "styleRef": "american-lager"
-     },
-     {
-      "id": "cristal-cero-cl",
-      "name": "Cristal Cero",
-      "shortName": "Cero",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "escudo-cl",
     "name": "Escudo",
     "city": null,
@@ -7845,6 +7816,21 @@
       "name": "Báltica",
       "shortName": "Báltica",
       "style": "lager",
+      "styleRef": "american-lager"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "cristal-cl",
+    "name": "Cristal",
+    "city": null,
+    "beers": [
+     {
+      "id": "cristal-cl",
+      "name": "Cristal",
+      "shortName": "Cristal",
+      "style": "lager — the national beer",
       "styleRef": "american-lager"
      }
     ],
@@ -8340,21 +8326,6 @@
       "shortName": "Taihu Rice Lager",
       "style": "lager",
       "styleRef": "american-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "zhujiang-zero-cn",
-    "name": "Zhujiang Zero",
-    "city": null,
-    "beers": [
-     {
-      "id": "zhujiang-zero-cn",
-      "name": "Zhujiang Zero",
-      "shortName": "Zhujiang Zero",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false
@@ -10154,13 +10125,6 @@
       "shortName": "Hop Burn High",
       "style": "IPA",
       "styleRef": "american-ipa"
-     },
-     {
-      "id": "mikkeller-drink-in-the-sun-dk",
-      "name": "Mikkeller Drink'in the Sun",
-      "shortName": "Drink'in the Sun",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false
@@ -10891,28 +10855,6 @@
     "needsLineup": false
    },
    {
-    "id": "birell-eg",
-    "name": "Birell",
-    "city": null,
-    "beers": [
-     {
-      "id": "birell-eg",
-      "name": "Birell",
-      "shortName": "Birell",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     },
-     {
-      "id": "birell-apple-eg",
-      "name": "Birell Apple",
-      "shortName": "Apple",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "luxor-eg",
     "name": "Luxor",
     "city": null,
@@ -11242,28 +11184,6 @@
     "needsLineup": false
    },
    {
-    "id": "harar-et",
-    "name": "Harar",
-    "city": null,
-    "beers": [
-     {
-      "id": "harar-et",
-      "name": "Harar",
-      "shortName": "Harar",
-      "style": "lager",
-      "styleRef": "american-lager"
-     },
-     {
-      "id": "harar-sofi-et",
-      "name": "Harar Sofi",
-      "shortName": "Sofi",
-      "style": "non-alcoholic malt",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "meta-et",
     "name": "Meta",
     "city": null,
@@ -11375,6 +11295,21 @@
       "id": "castel-beer-ethiopia-et",
       "name": "Castel Beer Ethiopia",
       "shortName": "Castel Beer Ethiopia",
+      "style": "lager",
+      "styleRef": "american-lager"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "harar-et",
+    "name": "Harar",
+    "city": null,
+    "beers": [
+     {
+      "id": "harar-et",
+      "name": "Harar",
+      "shortName": "Harar",
       "style": "lager",
       "styleRef": "american-lager"
      }
@@ -13090,28 +13025,6 @@
     "needsLineup": false
    },
    {
-    "id": "beck-s-de",
-    "name": "Beck's",
-    "city": null,
-    "beers": [
-     {
-      "id": "beck-s-de",
-      "name": "Beck's",
-      "shortName": "Beck's",
-      "style": "pils",
-      "styleRef": "german-pilsner"
-     },
-     {
-      "id": "beck-s-blue-de",
-      "name": "Beck's Blue",
-      "shortName": "Blue",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "bitburger-de",
     "name": "Bitburger",
     "city": null,
@@ -13283,28 +13196,6 @@
       "shortName": "Maibock",
       "style": "maibock",
       "styleRef": "maibock"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "jever-de",
-    "name": "Jever",
-    "city": null,
-    "beers": [
-     {
-      "id": "jever-de",
-      "name": "Jever",
-      "shortName": "Jever",
-      "style": "dry pils",
-      "styleRef": "german-pilsner"
-     },
-     {
-      "id": "jever-fun-de",
-      "name": "Jever Fun",
-      "shortName": "Fun",
-      "style": "non-alcoholic pils",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false
@@ -13761,6 +13652,21 @@
     "needsLineup": false
    },
    {
+    "id": "beck-s-de",
+    "name": "Beck's",
+    "city": null,
+    "beers": [
+     {
+      "id": "beck-s-de",
+      "name": "Beck's",
+      "shortName": "Beck's",
+      "style": "pils",
+      "styleRef": "german-pilsner"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
     "id": "bergquell-de",
     "name": "Bergquell",
     "city": null,
@@ -13846,21 +13752,6 @@
       "shortName": "Chiemseer",
       "style": "helles",
       "styleRef": "munich-helles"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "clausthaler-de",
-    "name": "Clausthaler",
-    "city": null,
-    "beers": [
-     {
-      "id": "clausthaler-de",
-      "name": "Clausthaler",
-      "shortName": "Clausthaler",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false
@@ -14266,6 +14157,21 @@
       "shortName": "Hummel",
       "style": "franconia kellerbier",
       "styleRef": "kellerbier"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "jever-de",
+    "name": "Jever",
+    "city": null,
+    "beers": [
+     {
+      "id": "jever-de",
+      "name": "Jever",
+      "shortName": "Jever",
+      "style": "dry pils",
+      "styleRef": "german-pilsner"
      }
     ],
     "needsLineup": false
@@ -15736,36 +15642,6 @@
   "region": "Middle East & Caucasus",
   "breweries": [
    {
-    "id": "barbican-ae",
-    "name": "Barbican",
-    "city": null,
-    "beers": [
-     {
-      "id": "barbican-ae",
-      "name": "Barbican",
-      "shortName": "Barbican",
-      "style": "non-alcoholic malt — region-wide",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "moussy-ae",
-    "name": "Moussy",
-    "city": null,
-    "beers": [
-     {
-      "id": "moussy-ae",
-      "name": "Moussy",
-      "shortName": "Moussy",
-      "style": "non-alcoholic malt",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "7-sands-ae",
     "name": "7 Sands",
     "city": "UAE",
@@ -17151,73 +17027,6 @@
   ]
  },
  {
-  "country": "Iran",
-  "code": "IR",
-  "region": "Middle East & Caucasus",
-  "breweries": [
-   {
-    "id": "behnoush-ir",
-    "name": "Behnoush",
-    "city": null,
-    "beers": [
-     {
-      "id": "behnoush-ir",
-      "name": "Behnoush",
-      "shortName": "Behnoush",
-      "style": "non-alcoholic malt",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "delster-ir",
-    "name": "Delster",
-    "city": null,
-    "beers": [
-     {
-      "id": "delster-ir",
-      "name": "Delster",
-      "shortName": "Delster",
-      "style": "non-alcoholic malt",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "hey-day-ir",
-    "name": "Hey Day",
-    "city": null,
-    "beers": [
-     {
-      "id": "hey-day-ir",
-      "name": "Hey Day",
-      "shortName": "Hey Day",
-      "style": "non-alcoholic malt",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
-    "id": "istak-ir",
-    "name": "Istak",
-    "city": null,
-    "beers": [
-     {
-      "id": "istak-ir",
-      "name": "Istak",
-      "shortName": "Istak",
-      "style": "non-alcoholic malt",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   }
-  ]
- },
- {
   "country": "Ireland",
   "code": "IE",
   "region": "Western Europe",
@@ -17254,13 +17063,6 @@
       "shortName": "Nitrosurge",
       "style": "stout",
       "styleRef": "irish-dry-stout"
-     },
-     {
-      "id": "guinness-0-0-ie",
-      "name": "Guinness 0.0",
-      "shortName": "0.0",
-      "style": "non-alcoholic stout",
-      "styleRef": "non-alcoholic-lager"
      },
      {
       "id": "guinness-west-indies-porter-ie",
@@ -22017,13 +21819,6 @@
       "shortName": "Light",
       "style": "light lager",
       "styleRef": "american-light-lager"
-     },
-     {
-      "id": "windhoek-non-alcoholic-na",
-      "name": "Windhoek Non-Alcoholic",
-      "shortName": "Non-Alcoholic",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false
@@ -22452,28 +22247,6 @@
     "needsLineup": false
    },
    {
-    "id": "heineken-nl",
-    "name": "Heineken",
-    "city": null,
-    "beers": [
-     {
-      "id": "heineken-nl",
-      "name": "Heineken",
-      "shortName": "Heineken",
-      "style": "pils",
-      "styleRef": "german-pilsner"
-     },
-     {
-      "id": "heineken-0-0-nl",
-      "name": "Heineken 0.0",
-      "shortName": "0.0",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "texels-nl",
     "name": "Texels",
     "city": null,
@@ -22601,6 +22374,21 @@
       "id": "dommelsch-nl",
       "name": "Dommelsch",
       "shortName": "Dommelsch",
+      "style": "pils",
+      "styleRef": "german-pilsner"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "heineken-nl",
+    "name": "Heineken",
+    "city": null,
+    "beers": [
+     {
+      "id": "heineken-nl",
+      "name": "Heineken",
+      "shortName": "Heineken",
       "style": "pils",
       "styleRef": "german-pilsner"
      }
@@ -25070,28 +24858,6 @@
     "needsLineup": false
    },
    {
-    "id": "san-mig-ph",
-    "name": "San Mig",
-    "city": null,
-    "beers": [
-     {
-      "id": "san-mig-light-ph",
-      "name": "San Mig Light",
-      "shortName": "Light",
-      "style": "light lager",
-      "styleRef": "american-light-lager"
-     },
-     {
-      "id": "san-mig-zero-ph",
-      "name": "San Mig Zero",
-      "shortName": "Zero",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "beer-na-beer-ph",
     "name": "Beer na Beer",
     "city": null,
@@ -25162,6 +24928,21 @@
       "shortName": "Pale Ale",
       "style": "pale ale",
       "styleRef": "american-pale-ale"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "san-ph",
+    "name": "San",
+    "city": null,
+    "beers": [
+     {
+      "id": "san-mig-light-ph",
+      "name": "San Mig Light",
+      "shortName": "Mig Light",
+      "style": "light lager",
+      "styleRef": "american-light-lager"
      }
     ],
     "needsLineup": false
@@ -25479,28 +25260,6 @@
     "needsLineup": false
    },
    {
-    "id": "lech-pl",
-    "name": "Lech",
-    "city": null,
-    "beers": [
-     {
-      "id": "lech-pl",
-      "name": "Lech",
-      "shortName": "Lech",
-      "style": "lager",
-      "styleRef": "american-lager"
-     },
-     {
-      "id": "lech-free-pl",
-      "name": "Lech Free",
-      "shortName": "Free",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
-     }
-    ],
-    "needsLineup": false
-   },
-   {
     "id": "stu-mostow-pl",
     "name": "Stu Mostów",
     "city": null,
@@ -25615,6 +25374,21 @@
       "shortName": "Komes Porter Bałtycki",
       "style": "baltic porter",
       "styleRef": "baltic-porter"
+     }
+    ],
+    "needsLineup": false
+   },
+   {
+    "id": "lech-pl",
+    "name": "Lech",
+    "city": null,
+    "beers": [
+     {
+      "id": "lech-pl",
+      "name": "Lech",
+      "shortName": "Lech",
+      "style": "lager",
+      "styleRef": "american-lager"
      }
     ],
     "needsLineup": false
@@ -26662,15 +26436,6 @@
       "styleRef": "american-lager",
       "abv": "4.5%",
       "note": "Named for the west of the island, where the brewery stands."
-     },
-     {
-      "id": "compania-cervecera-de-puerto-rico-malta-india",
-      "name": "Malta India",
-      "shortName": "Malta India",
-      "style": "Non-Alcoholic Lager",
-      "styleRef": "non-alcoholic-lager",
-      "abv": "0.0%",
-      "note": "The malta — sweet, unfermented and a Puerto Rican staple in its own right."
      }
     ]
    },
@@ -26956,13 +26721,6 @@
       "shortName": "No.9",
       "style": "strong lager",
       "styleRef": "malt-liquor"
-     },
-     {
-      "id": "baltika-0-ru",
-      "name": "Baltika 0",
-      "shortName": "0",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      },
      {
       "id": "baltika-4-original-ru",
@@ -28005,13 +27763,6 @@
       "shortName": "Milk Stout",
       "style": "milk stout",
       "styleRef": "milk-stout"
-     },
-     {
-      "id": "castle-lager-free-za",
-      "name": "Castle Lager Free",
-      "shortName": "Lager Free",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      },
      {
       "id": "castle-double-malt-za",
@@ -40302,13 +40053,6 @@
       "shortName": "Light",
       "style": "light lager",
       "styleRef": "american-light-lager"
-     },
-     {
-      "id": "polar-zero-ve",
-      "name": "Polar Zero",
-      "shortName": "Zero",
-      "style": "non-alcoholic",
-      "styleRef": "non-alcoholic-lager"
      }
     ],
     "needsLineup": false

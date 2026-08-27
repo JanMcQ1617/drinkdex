@@ -42,9 +42,10 @@ const OUT = join(ROOT, 'src', 'data', 'breweries.json');
 /* ------------------------------------------------------------------ */
 
 const STYLE_ALIASES = [
-  // Non-alcoholic must outrank 'lager' — Malta India is a malta, not a beer.
-  ['non-alcoholic', 'non-alcoholic-lager'],
-  ['malt beverage', 'non-alcoholic-lager'],
+  // No alias may point at an alcohol-free style. Sipply is an alcohol app and
+  // the non-alcoholic-lager card was removed along with every 0% entry, so an
+  // alias to it would resolve to a card that is not in the Dex. A new
+  // alcohol-free product should be left out of the source data, not aliased.
   ['trappist quadrupel', 'belgian-quadrupel'],
   ['trappist quad', 'belgian-quadrupel'],
   ['belgian strong', 'belgian-golden-strong-ale'],

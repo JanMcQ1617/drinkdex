@@ -11067,48 +11067,6 @@
   "region": "Middle East & Caucasus"
  },
  {
-  "name": "Delster",
-  "note": "non-alcoholic malt",
-  "country": "Iran",
-  "code": "IR",
-  "region": "Middle East & Caucasus"
- },
- {
-  "name": "Istak",
-  "note": "non-alcoholic malt",
-  "country": "Iran",
-  "code": "IR",
-  "region": "Middle East & Caucasus"
- },
- {
-  "name": "Behnoush",
-  "note": "non-alcoholic malt",
-  "country": "Iran",
-  "code": "IR",
-  "region": "Middle East & Caucasus"
- },
- {
-  "name": "Hey Day",
-  "note": "non-alcoholic malt",
-  "country": "Iran",
-  "code": "IR",
-  "region": "Middle East & Caucasus"
- },
- {
-  "name": "Barbican",
-  "note": "non-alcoholic malt — region-wide",
-  "country": "Gulf States",
-  "code": "AE",
-  "region": "Middle East & Caucasus"
- },
- {
-  "name": "Moussy",
-  "note": "non-alcoholic malt",
-  "country": "Gulf States",
-  "code": "AE",
-  "region": "Middle East & Caucasus"
- },
- {
   "name": "7 Sands",
   "note": "craft, UAE",
   "country": "Gulf States",
@@ -11160,13 +11118,6 @@
  {
   "name": "Meister Max",
   "note": "strong lager",
-  "country": "Egypt",
-  "code": "EG",
-  "region": "Africa"
- },
- {
-  "name": "Birell",
-  "note": "non-alcoholic",
   "country": "Egypt",
   "code": "EG",
   "region": "Africa"
@@ -13685,27 +13636,6 @@
   "region": "Western Europe"
  },
  {
-  "name": "Jever Fun",
-  "note": "non-alcoholic pils",
-  "country": "Germany",
-  "code": "DE",
-  "region": "Western Europe"
- },
- {
-  "name": "Clausthaler",
-  "note": "non-alcoholic",
-  "country": "Germany",
-  "code": "DE",
-  "region": "Western Europe"
- },
- {
-  "name": "Beck's Blue",
-  "note": "non-alcoholic",
-  "country": "Germany",
-  "code": "DE",
-  "region": "Western Europe"
- },
- {
   "name": "Krombacher Radler",
   "note": "radler",
   "country": "Germany",
@@ -14826,13 +14756,6 @@
   "region": "Western Europe"
  },
  {
-  "name": "Heineken 0.0",
-  "note": "non-alcoholic",
-  "country": "Netherlands",
-  "code": "NL",
-  "region": "Western Europe"
- },
- {
   "name": "Texels Springtij",
   "note": "tripel",
   "country": "Netherlands",
@@ -15024,13 +14947,6 @@
  {
   "name": "Gusswerk Bio Hanfbier",
   "note": "organic",
-  "country": "Austria",
-  "code": "AT",
-  "region": "Western Europe"
- },
- {
-  "name": "Stiegl Goldbräu Alkoholfrei",
-  "note": "non-alcoholic",
   "country": "Austria",
   "code": "AT",
   "region": "Western Europe"
@@ -16177,13 +16093,6 @@
   "region": "Western Europe"
  },
  {
-  "name": "Guinness 0.0",
-  "note": "non-alcoholic stout",
-  "country": "Ireland",
-  "code": "IE",
-  "region": "Western Europe"
- },
- {
   "name": "Guinness West Indies Porter",
   "note": "porter",
   "country": "Ireland",
@@ -16732,13 +16641,6 @@
  {
   "name": "Okocim Mocne",
   "note": "strong lager",
-  "country": "Poland",
-  "code": "PL",
-  "region": "Central & Eastern Europe"
- },
- {
-  "name": "Lech Free",
-  "note": "non-alcoholic",
   "country": "Poland",
   "code": "PL",
   "region": "Central & Eastern Europe"
@@ -20517,13 +20419,6 @@
   "region": "Nordics & Baltics"
  },
  {
-  "name": "Mikkeller Drink'in the Sun",
-  "note": "non-alcoholic",
-  "country": "Denmark",
-  "code": "DK",
-  "region": "Nordics & Baltics"
- },
- {
   "name": "To Øl Sur Simcoe",
   "note": "sour",
   "country": "Denmark",
@@ -22750,13 +22645,6 @@
   "region": "South America"
  },
  {
-  "name": "Cristal Cero",
-  "note": "non-alcoholic",
-  "country": "Chile",
-  "code": "CL",
-  "region": "South America"
- },
- {
   "name": "Escudo Negra",
   "note": "dark",
   "country": "Chile",
@@ -23116,13 +23004,6 @@
  {
   "name": "Polar Light",
   "note": "light lager",
-  "country": "Venezuela",
-  "code": "VE",
-  "region": "South America"
- },
- {
-  "name": "Polar Zero",
-  "note": "non-alcoholic",
   "country": "Venezuela",
   "code": "VE",
   "region": "South America"
@@ -23690,13 +23571,6 @@
  {
   "name": "Harbin Wheat King",
   "note": "wheat",
-  "country": "China",
-  "code": "CN",
-  "region": "East Asia"
- },
- {
-  "name": "Zhujiang Zero",
-  "note": "non-alcoholic",
   "country": "China",
   "code": "CN",
   "region": "East Asia"
@@ -24369,13 +24243,6 @@
  {
   "name": "Red Horse Extra Strong",
   "note": "strong lager",
-  "country": "Philippines",
-  "code": "PH",
-  "region": "Southeast Asia"
- },
- {
-  "name": "San Mig Zero",
-  "note": "non-alcoholic",
   "country": "Philippines",
   "code": "PH",
   "region": "Southeast Asia"
@@ -25487,13 +25354,6 @@
   "region": "Oceania"
  },
  {
-  "name": "Castle Lager Free",
-  "note": "non-alcoholic",
-  "country": "South Africa",
-  "code": "ZA",
-  "region": "Africa"
- },
- {
   "name": "Castle Double Malt",
   "note": "lager",
   "country": "South Africa",
@@ -25830,13 +25690,6 @@
   "region": "Africa"
  },
  {
-  "name": "Harar Sofi",
-  "note": "non-alcoholic malt",
-  "country": "Ethiopia",
-  "code": "ET",
-  "region": "Africa"
- },
- {
   "name": "Raya Beer",
   "note": "lager",
   "country": "Ethiopia",
@@ -25879,13 +25732,6 @@
   "region": "Africa"
  },
  {
-  "name": "Birell Apple",
-  "note": "non-alcoholic",
-  "country": "Egypt",
-  "code": "EG",
-  "region": "Africa"
- },
- {
   "name": "Casablanca Premium",
   "note": "lager",
   "country": "Morocco",
@@ -25911,13 +25757,6 @@
   "note": "pils",
   "country": "Morocco",
   "code": "MA",
-  "region": "Africa"
- },
- {
-  "name": "Windhoek Non-Alcoholic",
-  "note": "non-alcoholic",
-  "country": "Namibia",
-  "code": "NA",
   "region": "Africa"
  },
  {
@@ -26955,13 +26794,6 @@
   "country": "Armenia",
   "code": "AM",
   "region": "Middle East & Caucasus"
- },
- {
-  "name": "Baltika 0",
-  "note": "non-alcoholic",
-  "country": "Russia",
-  "code": "RU",
-  "region": "Central & Eastern Europe"
  },
  {
   "name": "Baltika 4 Original",
