@@ -378378,5 +378378,667 @@
    "garnish": "None",
    "method": "built"
   }
+ },
+ {
+  "id": "bacardi-cocktail",
+  "name": "Bacardi Cocktail",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Rum, lime and grenadine. A Daiquiri with grenadine, and the only cocktail a court has ruled on the recipe of.",
+  "abv": "20-22%",
+  "origin": "Santiago de Cuba, Cuba",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "pomegranate",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Lime juice",
+   "Grenadine"
+  ],
+  "funFact": "In 1936 the New York Supreme Court held that a Bacardi Cocktail must be made with Bacardi rum, which remains the only time a court has specified a cocktail's brand.",
+  "dexNumber": 7632,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bacardi white rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "new-york-sour",
+  "name": "New York Sour",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "A whiskey sour with a float of red wine sitting on top of it. The two layers are meant to be drunk together.",
+  "abv": "18-20%",
+  "origin": "Chicago, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rye",
+   "lemon",
+   "red wine",
+   "tannin"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Lemon juice",
+   "Simple syrup",
+   "Red wine"
+  ],
+  "funFact": "It is generally traced to 1880s Chicago rather than New York, and was called a Continental Sour and a Claret Snap before the name that stuck.",
+  "dexNumber": 7633,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1, optional"
+    },
+    {
+     "item": "Dry red wine",
+     "amount": "0.5 oz / 15 ml, to float"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the whiskey, lemon juice and syrup with ice.",
+    "Strain into a rocks glass over one large cube.",
+    "Pour the red wine slowly over the back of a barspoon so it sits on the surface.",
+    "Serve without stirring — the layers combine as you drink."
+   ],
+   "garnish": "The wine float itself",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "spicy-fifty",
+  "name": "Spicy Fifty",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Vodka with elderflower, honey and lime, and a slice of red chilli shaken through it.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "elderflower",
+   "chilli",
+   "honey",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Vodka",
+   "Elderflower cordial",
+   "Honey",
+   "Lime juice"
+  ],
+  "funFact": "Salvatore Calabrese built it at Fifty St James in London, and it is one of very few modern drinks the IBA has taken into its official list.",
+  "dexNumber": 7634,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vanilla vodka",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Elderflower cordial",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Red chilli",
+     "amount": "2 thin slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Put the chilli slices in the shaker and press them once — no more.",
+    "Add everything else with ice and shake hard.",
+    "Double-strain into a chilled coupe so no chilli comes through.",
+    "Float a single thin slice of chilli on the surface."
+   ],
+   "garnish": "A red chilli slice",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "spricer",
+  "name": "Špricer",
+  "category": "cocktail",
+  "subcategory": "Spritz",
+  "description": "White wine and sparkling water, half and half. Slovenia's everyday drink, and ordering it is not a compromise.",
+  "abv": "6-8%",
+  "origin": "Slovenia",
+  "rarity": "common",
+  "tastingNotes": [
+   "white wine",
+   "soda",
+   "citrus"
+  ],
+  "glassware": "Tumbler",
+  "ingredients": [
+   "White wine",
+   "Sparkling water"
+  ],
+  "funFact": "It is poured at weddings, on building sites and in wine bars without any change in status — the same glass, the same ratio, no apology for diluting good wine.",
+  "dexNumber": 7635,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry white wine",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Sparkling water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "optional"
+    }
+   ],
+   "steps": [
+    "Pour the wine into a plain tumbler.",
+    "Add an equal measure of cold sparkling water.",
+    "Ice is optional and often left out entirely.",
+    "Serve immediately, while it still has its bubble."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "southside-fizz",
+  "name": "Southside Fizz",
+  "category": "cocktail",
+  "subcategory": "Fizz",
+  "description": "The Southside lengthened with soda. Gin, lime and mint, made long.",
+  "abv": "14-16%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "mint",
+   "lime",
+   "juniper",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Lime juice",
+   "Mint",
+   "Soda water"
+  ],
+  "funFact": "The 21 Club and Chicago's South Side both claim it, and the Prohibition story that the rougher South Side gin needed mint to hide it is almost certainly invented.",
+  "dexNumber": 7636,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "8"
+    },
+    {
+     "item": "Soda water",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the gin, lime, syrup and mint hard with ice.",
+    "Double-strain into a tall glass over fresh ice.",
+    "Top with cold soda water.",
+    "Crown with a mint sprig."
+   ],
+   "garnish": "A mint sprig",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "army-and-navy",
+  "name": "Army and Navy",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, lemon and orgeat. The almond does all the work that sugar would otherwise do.",
+  "abv": "20-22%",
+  "origin": "Washington DC, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "almond",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lemon juice",
+   "Orgeat"
+  ],
+  "funFact": "Orgeat is an almond syrup thinned with orange flower water, and it brings texture as well as sweetness — which is why the drink tastes fuller than three ingredients should.",
+  "dexNumber": 7637,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orgeat",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "honeysuckle",
+  "name": "Honeysuckle",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Rum, lime and honey. A Daiquiri with honey instead of sugar, and rounder for it.",
+  "abv": "20-22%",
+  "origin": "New York City, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Lime juice",
+   "Honey"
+  ],
+  "funFact": "Honey will not dissolve in a cold drink and has to be loosened with warm water first — the step every recipe assumes and no recipe prints.",
+  "dexNumber": 7638,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "petite-fleur",
+  "name": "Petite Fleur",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Rum, Cointreau and grapefruit in equal parts. Small, sharp and almost forgotten.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "orange",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "White rum",
+   "Cointreau",
+   "Grapefruit juice"
+  ],
+  "funFact": "Equal-parts drinks were the house style of the 1930s because they were easy to teach and easy to pour fast, not because anyone thought thirds were ideal.",
+  "dexNumber": 7639,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "ideal-cocktail",
+  "name": "Ideal Cocktail",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and dry vermouth with grapefruit and maraschino. A Martini with fruit in it, which is less alarming than it sounds.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "juniper",
+   "cherry"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Grapefruit juice",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Grapefruit was a novelty ingredient in 1930s London — commercial cultivation had barely started, and it appears in the Savoy far more often than in any book before it.",
+  "dexNumber": 7640,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "marmalade-cocktail",
+  "name": "Marmalade Cocktail",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin shaken with a spoonful of orange marmalade and lemon. The bitterness of the peel is the whole point.",
+  "abv": "18-20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "marmalade",
+   "bitter orange",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Orange marmalade",
+   "Lemon juice"
+  ],
+  "funFact": "Craddock recommends it before lunch specifically, on the grounds that the bitterness in the peel is an appetiser rather than a flavour.",
+  "dexNumber": 7641,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange marmalade",
+     "amount": "1 heaped tsp"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the marmalade into the gin in the shaker until it starts to break up.",
+    "Add the lemon juice and ice and shake hard for 15 seconds.",
+    "Double-strain to catch the shreds of peel.",
+    "Garnish with a strip of orange peel."
+   ],
+   "garnish": "A strip of orange peel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "shamrock",
+  "name": "Shamrock",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Irish whiskey with dry vermouth, green Chartreuse and crème de menthe. Green, herbal and stronger than it looks.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mint",
+   "herbal",
+   "irish whiskey"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Dry vermouth",
+   "Green Chartreuse",
+   "Crème de menthe"
+  ],
+  "funFact": "Green Chartreuse and crème de menthe in the same glass is a lot of mint, which is why the measures are so small and why the drink survives at all.",
+  "dexNumber": 7642,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Green crème de menthe",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An olive, in the original",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "blarney-stone",
+  "name": "Blarney Stone",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Irish whiskey with absinthe, curaçao and maraschino. The Savoy's most crowded Irish drink.",
+  "abv": "28-30%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "orange",
+   "cherry",
+   "irish whiskey"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Absinthe",
+   "Orange curaçao",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Kissing the Blarney Stone at Cork's Castle Blarney is supposed to grant eloquence, which is a reasonable claim to make about this much whiskey too.",
+  "dexNumber": 7643,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist and an olive",
+   "method": "stirred"
+  }
  }
 ]
