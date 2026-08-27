@@ -118,10 +118,58 @@ for (const c of source) {
 
 /* ---- everything else is shared ---- */
 
+/* A drink already in the Dex under a DIFFERENT name is the collision the
+ * name check cannot see. Nine got through that way and had to be removed
+ * afterwards — Ward 8 against Ward Eight, Rose against Rose Cocktail, Yale
+ * against Yale Cocktail, and six more whose two names share no folded form at
+ * all. What they did share was a spec ingredient list, so that is the key.
+ *
+ * A WARNING and never an error. Weißer Spritzer, Gemišt and Fröccs are three
+ * countries' names for wine and soda and all three belong; so do Batanga and
+ * Charro Negro, and Mimosa and Buck's Fizz. Nothing here can tell those from a
+ * true duplicate — only a person reading the two cards can — so it asks
+ * instead of blocking. Nine such pairs survive that reading today and are
+ * meant to. */
+const ingredientKey = (row) =>
+  [...new Set((row.ingredients ?? []).map((i) => String(i).toLowerCase().trim()))]
+    .sort()
+    .join('|');
+
+const incomingIds = new Set(incoming.map((c) => c.id));
+const liveByIngredients = new Map();
+for (const d of drinks) {
+  if (d.category !== 'cocktail' || incomingIds.has(d.id)) continue;
+  const k = ingredientKey(d);
+  if (!k) continue;
+  if (!liveByIngredients.has(k)) liveByIngredients.set(k, []);
+  liveByIngredients.get(k).push(d);
+}
+/* Compare against the rest of the IMPORT as well as against the Dex. Colony
+ * and Southern Bride arrived in the same batch as each other, so a check that
+ * only looked at existing rows would have said nothing about either. */
+const twinWarnings = [];
+const seenTwin = new Set();
+for (const c of incoming) {
+  const k = ingredientKey(c);
+  if (!k) continue;
+  const twins = [
+    ...(liveByIngredients.get(k) ?? []),
+    ...incoming.filter((o) => o.id !== c.id && ingredientKey(o) === k),
+  ];
+  if (!twins.length) continue;
+  /* One warning per group, not one per member of it. */
+  const groupKey = [c.id, ...twins.map((t) => t.id)].sort().join('+');
+  if (seenTwin.has(groupKey)) continue;
+  seenTwin.add(groupKey);
+  twinWarnings.push(
+    `"${c.name}" has the same ingredients as ${twins.map((t) => `"${t.name}"`).join(', ')} — same drink under two names?`
+  );
+}
+
 const report = validate({ drinks, incoming, category: 'cocktail', owner: OWNER });
 reportAndGate({
   errors: [...errors, ...report.errors],
-  warnings: report.warnings,
+  warnings: [...twinWarnings, ...report.warnings],
   owner: OWNER,
 });
 

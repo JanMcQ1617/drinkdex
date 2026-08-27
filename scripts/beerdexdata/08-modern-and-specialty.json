@@ -1,0 +1,574 @@
+[
+ {
+  "id": "fruit-beer",
+  "name": "Fruit Beer",
+  "subcategory": "Specialty",
+  "description": "Beer where fruit is the point rather than the garnish — raspberries, cherries, peach or passion fruit fermented or blended into a finished base. Distinct from lambic-family kriek and framboise, which get their character from wild fermentation as much as from the fruit.",
+  "abv": "3.5–8%",
+  "origin": "Belgium and worldwide",
+  "rarity": "common",
+  "tastingNotes": [
+   "ripe fruit",
+   "light tartness",
+   "residual sweetness",
+   "soft malt"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Brewers split into two camps: whole fruit added at fermentation, which ferments out drier and leaves skin and stone character, or juice and purée blended after, which keeps colour and sweetness but tastes less like the orchard.",
+  "serve": {
+   "temp": "42-46°F, well chilled",
+   "glass": "Tulip glass",
+   "how": "Pour into a tulip to hold the aroma, which is where most of the fruit lives — a straight glass throws it away. Serve colder than the base beer would want, because chill keeps the sweetness in check. Do not add fresh fruit to the glass; a well-made fruit beer is already balanced and garnish only muddles it.",
+   "pair": [
+    "cheesecake",
+    "duck with cherry sauce",
+    "soft goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A finished base beer carrying fruit added at or after fermentation.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Usually a pale or wheat base kept light so the fruit is not fought by malt."
+    },
+    {
+     "label": "Hops",
+     "detail": "Restrained; bitterness is kept low so it does not clash with fruit acidity."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean ale or lager yeast in most examples, though Belgian strains are common."
+    },
+    {
+     "label": "Other",
+     "detail": "Whole fruit, purée, juice or concentrate — the choice sets how dry the finish lands."
+    }
+   ],
+   "process": "Fruit goes in during or after primary fermentation; fermenting on whole fruit gives a drier result than blending juice into finished beer."
+  }
+ },
+ {
+  "id": "extra-pale-ale",
+  "name": "Extra Pale Ale",
+  "subcategory": "Pale Ale",
+  "description": "XPA — a pale ale stripped back further: paler malt, lower body, and hop aroma pushed forward without the bitterness of an IPA. An Australian and New Zealand refinement that has since travelled.",
+  "abv": "4.2–5.5%",
+  "origin": "Australia and New Zealand",
+  "rarity": "common",
+  "tastingNotes": [
+   "passionfruit",
+   "citrus zest",
+   "light cracker malt",
+   "dry finish"
+  ],
+  "glassware": "Shaker pint or tulip",
+  "funFact": "The style exists because Australian brewers wanted the aroma of an American pale ale in something you could drink through a hot afternoon; the 'extra' refers to the pale malt bill, not to strength.",
+  "serve": {
+   "temp": "38-44°F, cold",
+   "glass": "Shaker pint or tulip",
+   "how": "Serve cold and drink young — the whole style rests on volatile hop aroma that fades within weeks of packaging. Pour with enough vigour to raise a finger of head, which carries the passionfruit and citrus up out of the glass. Do not cellar it; an XPA at six months is a different and lesser beer.",
+   "pair": [
+    "fish tacos",
+    "salt and pepper squid",
+    "grilled chicken"
+   ]
+  },
+  "composition": {
+   "summary": "A light pale malt base carrying late and dry hop additions of tropical varieties.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale ale malt with little or no crystal, keeping colour and body low."
+    },
+    {
+     "label": "Hops",
+     "detail": "Galaxy, Mosaic, Citra and Motueka, weighted to whirlpool and dry hop."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean American ale yeast that stays out of the hops' way."
+    }
+   ],
+   "process": "Bitterness is kept modest and most hops go in late, so aroma dominates and the finish stays dry."
+  }
+ },
+ {
+  "id": "honey-beer",
+  "name": "Honey Beer",
+  "subcategory": "Specialty",
+  "description": "Beer brewed with honey in the kettle or fermenter. Honey ferments almost completely, so it lends floral aroma and a drier finish rather than the sweetness drinkers expect — the sweetness in most commercial honey beers comes from malt.",
+  "abv": "4–6%",
+  "origin": "Poland, Central Europe and worldwide",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "floral honey",
+   "beeswax",
+   "light caramel",
+   "dry finish"
+  ],
+  "glassware": "Tall mug or willi becher",
+  "funFact": "Because honey is nearly all fermentable sugar, adding it to a beer makes the finished result drier and stronger, not sweeter — brewers chasing a sweet honey character have to add malt or lactose alongside it.",
+  "serve": {
+   "temp": "45-50°F, lightly chilled",
+   "glass": "Tall mug or willi becher",
+   "how": "Serve a little warmer than a standard lager; below about 45°F the honey aroma shuts down entirely and you are left with the malt. Pour gently — the aroma is delicate and a violent pour scrubs it out with the foam. Best fresh, since floral honey character fades faster than malt does.",
+   "pair": [
+    "roast pork",
+    "aged cheddar",
+    "honey cake"
+   ]
+  },
+  "composition": {
+   "summary": "A malt base with honey added late in the boil or during fermentation.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pilsner or pale malt, sometimes with caramel malt to restore body honey removes."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low and usually noble — Lubelski in Poland — so as not to fight the floral character."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean ale or lager yeast; honey sugars ferment out almost entirely."
+    },
+    {
+     "label": "Other",
+     "detail": "Honey, added late or post-boil to preserve the volatile aromatics that heat destroys."
+    }
+   ],
+   "process": "Honey added at flameout or in the fermenter keeps its aroma; boiled honey loses most of what makes it recognisable."
+  }
+ },
+ {
+  "id": "pumpkin-ale",
+  "name": "Pumpkin Ale",
+  "subcategory": "Specialty",
+  "description": "An autumn seasonal built on squash and baking spice. American in its modern form, though the colonial original used pumpkin as a cheap fermentable when barley was scarce rather than as a flavour.",
+  "abv": "4.5–8%",
+  "origin": "USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinnamon",
+   "nutmeg",
+   "roasted squash",
+   "brown sugar"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Most of the flavour drinkers identify as pumpkin is actually the spice blend; pumpkin itself contributes body and a faint vegetal sweetness, which is why some brewers now roast the squash first to get anything at all out of it.",
+  "serve": {
+   "temp": "48-54°F, cellar-cool",
+   "glass": "Tulip glass",
+   "how": "Serve warm enough that the spice opens — cold mutes cinnamon and nutmeg and leaves the beer tasting thin. A sugared rim is a bar trick, not a service tradition, and it overwhelms a well-balanced example. Drink within the season it was released; the spice character dulls noticeably after a year.",
+   "pair": [
+    "roast turkey",
+    "pecan pie",
+    "sharp cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "An amber ale base with squash in the mash and spice added late.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale and crystal malt for an amber base with caramel sweetness."
+    },
+    {
+     "label": "Hops",
+     "detail": "Minimal, purely for balance — hop character would clash with the spice."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean American ale yeast."
+    },
+    {
+     "label": "Other",
+     "detail": "Roasted or gelatinised pumpkin or kabocha squash, plus cinnamon, nutmeg, clove and allspice."
+    }
+   ],
+   "process": "Squash is cooked before mashing so its starches convert; spices go in at the end of the boil or at conditioning to keep them bright."
+  }
+ },
+ {
+  "id": "herb-spice-beer",
+  "name": "Herb & Spice Beer",
+  "subcategory": "Specialty",
+  "description": "Beer whose defining character comes from a botanical other than hops — ginger, hemp flower, green tea, agave, juniper. A broad modern category covering everything the older style guides had no room for.",
+  "abv": "4–8%",
+  "origin": "Worldwide",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "botanical",
+   "warm spice",
+   "herbal bitterness",
+   "clean malt"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Adding herbs to beer is older than adding hops; the shift to hops was driven partly by preservation and partly by tax law, since hopped beer and herbed beer were taxed differently in parts of medieval Europe.",
+  "serve": {
+   "temp": "45-50°F, lightly chilled",
+   "glass": "Tulip glass",
+   "how": "Serve at cellar temperature rather than cold — botanicals are aromatic compounds and chilling suppresses them, which is how these beers end up tasting like plain lager. Use a glass that narrows at the top. Give it a moment in the glass before the first sip; ginger and hemp in particular need air to open.",
+   "pair": [
+    "Thai and Vietnamese food",
+    "roast pork belly",
+    "ginger cake"
+   ]
+  },
+  "composition": {
+   "summary": "A conventional beer base carrying a defining botanical addition.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Varies with the base — often pale or Vienna malt kept simple."
+    },
+    {
+     "label": "Hops",
+     "detail": "Usually restrained, so the botanical rather than the hop leads."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean ale or lager yeast depending on the base beer."
+    },
+    {
+     "label": "Other",
+     "detail": "The defining botanical — fresh ginger root, hemp flower, tea leaf, spice or agave."
+    }
+   ],
+   "process": "Botanicals go in late in the boil, in the whirlpool or at conditioning, since boiling drives off the aromatics that justify the addition."
+  }
+ },
+ {
+  "id": "table-beer",
+  "name": "Table Beer",
+  "subcategory": "English Ale",
+  "description": "Deliberately low-strength beer built to be drunk by the pint without consequence — around 3% and under. Historically the everyday beer of Belgian and English households, including at school lunch; revived by modern brewers as a showcase for hop aroma at low alcohol.",
+  "abv": "2.5–3.5%",
+  "origin": "Belgium and England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "citrus hops",
+   "soft oats",
+   "light bread",
+   "dry finish"
+  ],
+  "glassware": "Half-pint or nonic pint",
+  "funFact": "Belgian schools served a low-alcohol table beer to children into the 1970s, on the reasoning that it was safer than the water and less troublesome than milk.",
+  "serve": {
+   "temp": "44-48°F, cellar-cool",
+   "glass": "Half-pint or nonic pint",
+   "how": "Serve cool rather than cold; there is little alcohol and little malt to hide behind, so a table beer served too cold reads as watery. Drink it fresh and drink it fast — the hop aroma doing most of the work here fades within weeks. Pour into a wide glass and accept a generous head, which adds body the beer itself lacks.",
+   "pair": [
+    "ploughman's lunch",
+    "fish and chips",
+    "mild cheeses"
+   ]
+  },
+  "composition": {
+   "summary": "A very light grist stretched with oats or wheat and hopped hard late.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pale malt at low rates, with oats or wheat for body the alcohol cannot provide."
+    },
+    {
+     "label": "Hops",
+     "detail": "Generous late and dry hopping; the aroma carries a beer with nothing else to carry it."
+    },
+    {
+     "label": "Yeast",
+     "detail": "English or American ale yeast, often left slightly underattenuated for mouthfeel."
+    }
+   ],
+   "process": "A high mash temperature leaves unfermentable sugars behind so the finished beer has body despite its strength."
+  }
+ },
+ {
+  "id": "belgian-strong-amber",
+  "name": "Belgian Strong Amber Ale",
+  "subcategory": "Belgian Ale",
+  "description": "Deep amber, strongly alcoholic, and drier than its colour suggests — the Belgian strong ale that is neither a dark abbey quadrupel nor a pale golden strong. Candi sugar keeps a 8-13% beer from turning syrupy.",
+  "abv": "7.5–13%",
+  "origin": "Belgium",
+  "rarity": "rare",
+  "tastingNotes": [
+   "caramelised banana",
+   "dried fig",
+   "liquorice",
+   "warming alcohol"
+  ],
+  "glassware": "Tulip or footed goblet",
+  "funFact": "Pauwel Kwak's coachman's glass — a bulb on a wooden stand — exists because the round bottom will not stand on a table; the shape is usually explained as a stirrup cup for drivers who could not leave the coach, though the story is far younger than the beer.",
+  "serve": {
+   "temp": "50-54°F, cellar temperature",
+   "glass": "Tulip or footed goblet",
+   "how": "Serve at cellar temperature in a glass that narrows toward the rim. Pour steadily and leave the last centimetre in the bottle if it is bottle-conditioned, unless you want the yeast. These beers reward slow drinking; at this strength the fig and liquorice character keeps unfolding as the glass warms in the hand.",
+   "pair": [
+    "beef carbonnade",
+    "washed-rind cheese",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "A strong amber Belgian grist lightened with candi sugar to keep the finish dry.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pilsner and Munich malt with caramel malt for the amber colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Continental hops, low enough that the yeast character leads."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Belgian ale yeast producing banana, pepper and clove esters under warm fermentation."
+    },
+    {
+     "label": "Other",
+     "detail": "Pale or amber candi sugar, which ferments fully and stops the beer being cloying."
+    }
+   ],
+   "process": "Warm primary fermentation drives ester production, then a long cold conditioning rounds the alcohol."
+  }
+ },
+ {
+  "id": "biere-de-champagne",
+  "name": "Bière de Champagne",
+  "subcategory": "Belgian Ale",
+  "description": "Bière Brut — beer put through the méthode champenoise, including riddling and disgorging, so it finishes bone dry and finely carbonated. Made by a handful of Belgian breweries and served, deliberately, like sparkling wine.",
+  "abv": "9–12%",
+  "origin": "Belgium",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "green apple",
+   "brioche",
+   "white pepper",
+   "bone dry"
+  ],
+  "glassware": "Champagne flute or white wine glass",
+  "funFact": "Bosteels sends DeuS to the Champagne region for its third fermentation, where the bottles are riddled and disgorged exactly as sparkling wine is — the beer spends a year in French chalk cellars before release.",
+  "serve": {
+   "temp": "42-46°F, chilled",
+   "glass": "Champagne flute or white wine glass",
+   "how": "Chill and open it like sparkling wine — the carbonation is at wine pressure and a careless opening loses half the bottle. Pour into a flute at an angle. Serve it at the start of a meal rather than the end; the dryness and fine bead make it an aperitif, which is exactly how the breweries intend it to be drunk.",
+   "pair": [
+    "oysters",
+    "smoked salmon",
+    "hard aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A strong pale Belgian ale refermented in bottle by the méthode champenoise.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Summer barley pilsner malt, kept pale and clean."
+    },
+    {
+     "label": "Hops",
+     "detail": "Low and continental; bitterness would disrupt the dryness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "A primary ale strain, then a champagne yeast for the bottle fermentation."
+    },
+    {
+     "label": "Other",
+     "detail": "A dosage of fermentable sugar added at bottling to drive the third fermentation."
+    }
+   ],
+   "process": "Three fermentations, then months of riddling on laths before the neck is frozen and the yeast plug disgorged."
+  }
+ },
+ {
+  "id": "biere-corse",
+  "name": "Bière Corse",
+  "subcategory": "Farmhouse Ale",
+  "description": "Corsican beer built on chestnut. Chestnut flour goes into the mash as a raw material rather than a flavouring, giving an amber beer with a nutty, faintly sweet depth that no malt bill reproduces.",
+  "abv": "5–6.5%",
+  "origin": "Corsica, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "roast chestnut",
+   "caramel malt",
+   "toasted nut",
+   "gentle bitterness"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Chestnut flour was a Corsican staple long before it was a brewing adjunct — the island's interior milled chestnuts into flour for bread when wheat would not grow, and the brewery draws on the same supply.",
+  "serve": {
+   "temp": "46-52°F, cellar-cool",
+   "glass": "Tulip glass",
+   "how": "Serve cellar-cool; over-chilling flattens the chestnut character into generic caramel. Pour to a moderate head and let it sit a minute — the nuttiness is slow to arrive and easily missed on the first sip. Treat it as a food beer rather than a thirst-quencher, which is how it is drunk on the island.",
+   "pair": [
+    "charcuterie",
+    "brocciu and other sheep cheeses",
+    "chestnut cake"
+   ]
+  },
+  "composition": {
+   "summary": "A bottom-fermented amber beer mashed with Corsican chestnut flour alongside barley malt.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt including caramel malts for the amber colour."
+    },
+    {
+     "label": "Hops",
+     "detail": "Restrained, leaving a subtle bitterness that does not compete with the nut character."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Bottom-fermenting lager yeast, unusual for a beer of this character."
+    },
+    {
+     "label": "Other",
+     "detail": "Corsican chestnut flour, mixed with the malt during mashing as a fermentable, not an infusion."
+    }
+   ],
+   "process": "Chestnut flour is mashed with the grain so its starches convert alongside the malt, then fermented cool and conditioned."
+  }
+ },
+ {
+  "id": "european-pale-lager",
+  "name": "European Pale Lager",
+  "subcategory": "Pale Lager",
+  "description": "The everyday pale lager of continental Europe — maltier than a pilsner, less hopped, and rarely exported under a style name. What most of Austria, Poland and the Low Countries actually drink.",
+  "abv": "4.5–5.6%",
+  "origin": "Continental Europe",
+  "rarity": "common",
+  "tastingNotes": [
+   "bread crust",
+   "light honey malt",
+   "soft herbal hops",
+   "clean finish"
+  ],
+  "glassware": "Willi becher or seidel",
+  "funFact": "Many of these beers are sold domestically as 'Spezial', 'Premium' or 'Export' — brewery marketing terms rather than style names, which is why the category is nearly invisible outside the countries that drink it.",
+  "serve": {
+   "temp": "42-46°F, chilled",
+   "glass": "Willi becher or seidel",
+   "how": "Pour with enough force to build a solid head, then let it settle and top up — the two-stage pour is standard across the region. Serve cold but not ice-cold, since the malt character is the whole point and freezing temperatures erase it. Drink fresh; these beers are built for turnover, not cellaring.",
+   "pair": [
+    "schnitzel",
+    "roast chicken",
+    "cured sausage"
+   ]
+  },
+  "composition": {
+   "summary": "An all-malt pale lager grist with modest continental hopping.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Pilsner malt, often with a touch of Vienna or Munich for depth."
+    },
+    {
+     "label": "Hops",
+     "detail": "Continental noble hops at moderate rates — balance rather than bitterness."
+    },
+    {
+     "label": "Yeast",
+     "detail": "European lager yeast fermented cold and lagered for several weeks."
+    }
+   ],
+   "process": "Cold fermentation and a long cold lagering, with less hop bitterness than a pilsner and more malt presence."
+  }
+ },
+ {
+  "id": "ancient-grain-beer",
+  "name": "Ancient Grain Beer",
+  "subcategory": "Specialty",
+  "description": "Beer brewed from the cereals that preceded modern barley — emmer, einkorn and spelt. The grains are difficult to malt and low-yielding, which is why they were abandoned; brewers return to them for a nutty, rustic character barley does not give.",
+  "abv": "4.5–6%",
+  "origin": "Bavaria and Austria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "nutty grain",
+   "wholemeal bread",
+   "light spice",
+   "dry finish"
+  ],
+  "glassware": "Willi becher or wheat glass",
+  "funFact": "Emmer and einkorn were the founding cereals of European agriculture and were largely out of cultivation by the twentieth century; the small acreage that survives today exists mostly because organic brewers and bakers created a market for it.",
+  "serve": {
+   "temp": "46-50°F, lightly chilled",
+   "glass": "Willi becher or wheat glass",
+   "how": "Serve lightly chilled rather than cold, since the grain character is subtle and easily lost. If the beer is unfiltered, swirl the last of the bottle and add it — the haze carries much of the nutty depth. Give it a wide glass; these beers reward smelling before drinking more than most lagers do.",
+   "pair": [
+    "sourdough and rye bread",
+    "roast root vegetables",
+    "nutty alpine cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A grist built on ancient hulled cereals, usually alongside some barley malt.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Malted emmer, einkorn or spelt, typically with barley malt for enzymes and yield."
+    },
+    {
+     "label": "Hops",
+     "detail": "Modest and traditional, so the grain rather than the hop defines the beer."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Clean ale or lager yeast depending on the brewery's tradition."
+    }
+   ],
+   "process": "Hulled ancient grains need careful milling and a lautering step that copes with their husks, which is much of why they fell out of use."
+  }
+ },
+ {
+  "id": "gruit",
+  "name": "Gruit",
+  "subcategory": "Specialty",
+  "description": "Beer bittered and preserved with a herb mixture instead of hops — traditionally bog myrtle, yarrow and wild rosemary. The dominant European beer style before hops displaced it, and now brewed only as a deliberate revival.",
+  "abv": "4–7%",
+  "origin": "Northern Europe",
+  "rarity": "rare",
+  "tastingNotes": [
+   "herbal bitterness",
+   "wild rosemary",
+   "honeyed malt",
+   "resinous finish"
+  ],
+  "glassware": "Wide goblet or drinking horn",
+  "funFact": "In much of medieval northern Europe the right to sell the gruit herb mixture was a monopoly held by the church or the local ruler, so the switch to hops was as much a way around a tax as it was a change of taste.",
+  "serve": {
+   "temp": "48-54°F, cellar-cool",
+   "glass": "Wide goblet or drinking horn",
+   "how": "Serve at cellar temperature in a wide glass — the herbs are aromatic and a narrow opening traps them where you cannot reach them. Expect the bitterness to sit differently from hops: it arrives later and lingers as a resinous, almost medicinal note rather than a clean bite. Drink slowly; the herb character builds across a glass.",
+   "pair": [
+    "game and venison",
+    "smoked fish",
+    "aged hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "A malt base bittered with a herb blend in place of hops.",
+   "components": [
+    {
+     "label": "Malt",
+     "detail": "Barley malt, often with honey or unmalted grain in traditional recipes."
+    },
+    {
+     "label": "Hops",
+     "detail": "None, or negligible — the defining feature of the style is their absence."
+    },
+    {
+     "label": "Yeast",
+     "detail": "Top-fermenting ale yeast, frequently left unfiltered and unpasteurised."
+    },
+    {
+     "label": "Other",
+     "detail": "The gruit itself: bog myrtle, yarrow, wild rosemary and other regional herbs."
+    }
+   ],
+   "process": "Herbs are boiled with the wort for bitterness and preservation, doing the job hops would otherwise do."
+  }
+ }
+]

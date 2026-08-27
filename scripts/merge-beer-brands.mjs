@@ -167,6 +167,18 @@ function extraFromNote(note, style) {
 
 function describe(b, style) {
   const where = b.city ? `${b.city}, ${b.country}` : b.country;
+
+  /* A row where the ATLAS NAMED A BREWERY, not a beer — 87 of them.
+   *
+   * The card keeps the brewery's name, so it cannot simply take the style and
+   * say nothing: "Altbier from USA" under the name "Olde Mecklenburg" asserts
+   * that the brewery is one beer, which is false of every brewery that makes
+   * more than one. Naming the flagship the style was taken from is the honest
+   * version of the same card, and costs one clause. */
+  if (b.flagship && style) {
+    return `Brewery in ${where}. Flagship: ${b.flagship} — a ${style.name}.`;
+  }
+
   /* An eponymous beer ("Bohemia" by Bohemia) must not read "X brewed by X". */
   const eponymous = fold(b.brewery) === fold(b.name);
   const head = style
@@ -176,7 +188,15 @@ function describe(b, style) {
     : eponymous
       ? `Brewed in ${where}.`
       : `Brewed by ${b.brewery} in ${where}.`;
-  const extra = extraFromNote(b.note ?? b.style, style);
+  /* Do NOT append the atlas note to a brand whose style was researched.
+   *
+   * The note is a one-word guess and several are provably wrong, so appending
+   * it produces a card that contradicts itself: "Black IPA brewed by Feral in
+   * Australia. Session." — Karma Citra is 5.8% and noted Session; Colorado
+   * Berthô is noted Honey and is brewed with Brazil nuts; Skol Beats is noted
+   * Flavoured and is a malt liquor. Where research replaced the note, the note
+   * has been superseded, not confirmed. */
+  const extra = b.factChecked ? null : extraFromNote(b.note ?? b.style, style);
   return extra ? `${head} ${extra}` : head;
 }
 

@@ -308,51 +308,6 @@
   }
  },
  {
-  "id": "snakebite-and-black",
-  "name": "Snakebite and Black",
-  "subcategory": "Party",
-  "description": "Lager, cider and blackcurrant cordial. Banned by more student unions than any other drink in Britain.",
-  "abv": "5-6%",
-  "origin": "England",
-  "rarity": "uncommon",
-  "tastingNotes": [
-   "blackcurrant",
-   "apple",
-   "malt"
-  ],
-  "glassware": "Pint glass",
-  "ingredients": [
-   "Lager",
-   "Cider",
-   "Blackcurrant cordial"
-  ],
-  "funFact": "The bans were never about the alcohol — a snakebite is weaker than most real ale — but about how fast it goes down when it tastes of blackcurrant.",
-  "recipe": {
-   "ingredients": [
-    {
-     "item": "Lager",
-     "amount": "half pint / 285 ml"
-    },
-    {
-     "item": "Dry cider",
-     "amount": "half pint / 285 ml"
-    },
-    {
-     "item": "Blackcurrant cordial",
-     "amount": "a dash"
-    }
-   ],
-   "steps": [
-    "Pour the blackcurrant cordial into the bottom of a pint glass.",
-    "Add the cider.",
-    "Top with the lager, poured slowly down the side.",
-    "Do not stir; the pour mixes it."
-   ],
-   "garnish": "None",
-   "method": "built"
-  }
- },
- {
   "id": "dogs-nose",
   "name": "Dog's Nose",
   "subcategory": "Party",
