@@ -1,0 +1,1097 @@
+[
+ {
+  "id": "attention",
+  "name": "Attention",
+  "subcategory": "Spirit-Forward",
+  "description": "Absinthe, gin, violet and dry vermouth in equal parts. Pale lilac, and considerably stranger than it looks.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "violet",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Absinthe",
+   "Gin",
+   "Crème de violette",
+   "Dry vermouth"
+  ],
+  "funFact": "The Savoy prints a whole run of equal-parts absinthe cocktails from the years just after it came back to European bars, and this is the prettiest of them.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Absinthe",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Crème de violette",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "bennett",
+  "name": "Bennett",
+  "subcategory": "Sour",
+  "description": "A Gimlet with bitters in it. That one addition changes the whole balance of the drink.",
+  "abv": "22-24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lime",
+   "juniper",
+   "bitters"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Lime juice",
+   "Simple syrup",
+   "Angostura bitters"
+  ],
+  "funFact": "Two dashes of Angostura is the entire difference between this and a Gin Rickey served up, which is a fair summary of how the old books drew their distinctions.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "colony",
+  "name": "Colony",
+  "subcategory": "Sour",
+  "description": "Gin, grapefruit and maraschino. Named for the Manhattan restaurant where being seated badly was a public event.",
+  "abv": "18-20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "cherry",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Grapefruit juice",
+   "Maraschino liqueur"
+  ],
+  "funFact": "The Colony's headwaiter Gene Cavallero was famous for seating people by status rather than reservation, which made the front room the most contested real estate in the city.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "commodore",
+  "name": "Commodore",
+  "subcategory": "Sour",
+  "description": "Rye with lemon, grenadine and orange bitters. A sour with a red tint and a dry finish.",
+  "abv": "20-22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "lemon",
+   "pomegranate"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Lemon juice",
+   "Grenadine",
+   "Orange bitters"
+  ],
+  "funFact": "Real grenadine is pomegranate syrup, not red sugar water, and in a drink this simple the difference between the two is the whole drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "duchess",
+  "name": "Duchess",
+  "subcategory": "Spirit-Forward",
+  "description": "Absinthe with both vermouths, in thirds. No base spirit at all — the absinthe is the base.",
+  "abv": "22-24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "wormwood",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Absinthe",
+   "Dry vermouth",
+   "Sweet vermouth"
+  ],
+  "funFact": "Absinthe was banned across most of Europe and America when this was written down, which is exactly why the drinks that used it read as daring rather than quaint.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Absinthe",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "earthquake",
+  "name": "Earthquake",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin, whisky and absinthe in equal measure. The name is a warning, not a flourish.",
+  "abv": "40-42%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "juniper",
+   "malt"
+  ],
+  "glassware": "Small coupe",
+  "ingredients": [
+   "Gin",
+   "Whisky",
+   "Absinthe"
+  ],
+  "funFact": "Toulouse-Lautrec drank a version of this made from cognac and absinthe and called it tremblement de terre, which the London version borrowed and then made worse.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Whisky",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "None",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "fourth-degree",
+  "name": "Fourth Degree",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin with both vermouths and a rinse of absinthe. A Perfect Martini with the corners taken off.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "anise",
+   "juniper",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Sweet vermouth",
+   "Absinthe"
+  ],
+  "funFact": "Splitting the vermouth between dry and sweet is what bartenders call perfect, a term that predates the Martini and applies to any drink built this way.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "gin-and-it",
+  "name": "Gin and It",
+  "subcategory": "Spirit-Forward",
+  "description": "Gin and Italian vermouth, at room temperature and without ice. The Martini before refrigeration reached the bar.",
+  "abv": "26-28%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "sweet vermouth",
+   "warmth"
+  ],
+  "glassware": "Small coupe",
+  "ingredients": [
+   "Gin",
+   "Sweet vermouth"
+  ],
+  "funFact": "It is served warm on purpose — the drink dates from London bars that had no reliable ice, and chilling it turns it into something else entirely.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1.5 oz / 45 ml"
+    }
+   ],
+   "steps": [
+    "Pour the gin and the sweet vermouth straight into a small glass.",
+    "Stir them together briefly with a barspoon.",
+    "Add no ice and do not chill the glass.",
+    "Drop in a cherry and serve."
+   ],
+   "garnish": "A cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "grand-slam",
+  "name": "Grand Slam",
+  "subcategory": "Spirit-Forward",
+  "description": "Swedish punsch with both vermouths. Sweet, spiced and almost entirely forgotten.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "arrack",
+   "spice",
+   "vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Swedish punsch",
+   "Dry vermouth",
+   "Sweet vermouth"
+  ],
+  "funFact": "Swedish punsch is built on Batavian arrack shipped from Java, which is how an Indonesian spirit ended up defining a Scandinavian liqueur.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Swedish punsch",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "hoop-la",
+  "name": "Hoop La",
+  "subcategory": "Sour",
+  "description": "Equal parts Lillet, Cointreau, brandy and lemon. A Corpse Reviver with brandy where the gin should be.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "lemon",
+   "cognac"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Lillet Blanc",
+   "Cointreau",
+   "Brandy",
+   "Lemon juice"
+  ],
+  "funFact": "It shares its skeleton exactly with the Corpse Reviver No. 2 — four equal parts, one of them citrus — which is the most reliable template in the whole Savoy book.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lillet Blanc",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "maidens-blush",
+  "name": "Maiden's Blush",
+  "subcategory": "Sour",
+  "description": "Gin with curaçao, grenadine and lemon. Named for its colour, which is the palest possible pink.",
+  "abv": "22-24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "pomegranate",
+   "lemon",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Orange curaçao",
+   "Grenadine",
+   "Lemon juice"
+  ],
+  "funFact": "The Savoy prints two different drinks under this name, one with curaçao and one with absinthe, and gives no hint as to which came first.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "moonlight",
+  "name": "Moonlight",
+  "subcategory": "Sour",
+  "description": "Kirsch, grapefruit and sugar. Three ingredients, dry as a bone, and nothing like as sweet as cherry brandy suggests.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry stone",
+   "grapefruit",
+   "almond"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Kirsch",
+   "Grapefruit juice",
+   "Sugar"
+  ],
+  "funFact": "Kirsch is distilled with the cherry stones left in, which is where its faint bitter-almond edge comes from and why it is not a sweet liqueur.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Kirsch",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "nineteen-twenty",
+  "name": "Nineteen Twenty",
+  "subcategory": "Spirit-Forward",
+  "description": "Kirsch, gin and sweet vermouth in thirds. A Martini with cherry stones running through it.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry stone",
+   "juniper",
+   "sweet vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Kirsch",
+   "Gin",
+   "Sweet vermouth"
+  ],
+  "funFact": "Drinks named for years cluster around 1920 in the old books, and almost all of them were invented in Europe by American bartenders who had just left home.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Kirsch",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "prince-of-wales",
+  "name": "Prince of Wales",
+  "subcategory": "Sparkling",
+  "description": "Rye, maraschino and pineapple under champagne, and attributed to a king who liked his drinks complicated.",
+  "abv": "18-20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pineapple",
+   "rye",
+   "cherry",
+   "champagne"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Rye whiskey",
+   "Maraschino liqueur",
+   "Pineapple",
+   "Champagne"
+  ],
+  "funFact": "The recipe is credited to Edward VII from his years as Prince of Wales, a period he spent building a reputation that made the attribution entirely plausible.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Pineapple",
+     "amount": "1 small piece"
+    },
+    {
+     "item": "Champagne",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Muddle the pineapple with the maraschino and bitters in a shaker.",
+    "Add the rye and ice, and shake hard.",
+    "Double-strain into a chilled flute.",
+    "Top with champagne and add an orange twist."
+   ],
+   "garnish": "An orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "rose-cocktail",
+  "name": "Rose Cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Kirsch, dry vermouth and raspberry. The one drink Paris gave the cocktail canon that London did not immediately claim.",
+  "abv": "20-22%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raspberry",
+   "cherry stone",
+   "dry vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Kirsch",
+   "Dry vermouth",
+   "Raspberry syrup"
+  ],
+  "funFact": "It is credited to Johnny Mitta at the Chatham Hotel in Paris around 1920, and became the most-ordered drink in the city for most of that decade.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry vermouth",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Kirsch",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Raspberry syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A cherry",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "soul-kiss",
+  "name": "Soul Kiss",
+  "subcategory": "Sour",
+  "description": "Dubonnet, dry vermouth, rye and orange juice. Low, aromatic and easier than its name suggests.",
+  "abv": "16-18%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "quinine",
+   "rye"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Dubonnet",
+   "Dry vermouth",
+   "Rye whiskey",
+   "Orange juice"
+  ],
+  "funFact": "Dubonnet was created in 1846 to make quinine palatable to French soldiers in North Africa, which is a strange origin for something this gentle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dubonnet",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Rye whiskey",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "An orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "southern-bride",
+  "name": "Southern Bride",
+  "subcategory": "Sour",
+  "description": "Gin, grapefruit and a bar spoon of maraschino. The Colony's shape with the proportions moved.",
+  "abv": "18-20%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grapefruit",
+   "juniper",
+   "cherry"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Grapefruit juice",
+   "Maraschino liqueur"
+  ],
+  "funFact": "Maraschino is measured in barspoons rather than ounces for good reason — it is made from whole crushed Marasca cherries, stones included, and takes over a drink quickly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Grapefruit juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A grapefruit twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "stanley",
+  "name": "Stanley",
+  "subcategory": "Sour",
+  "description": "Gin and rum together, with lemon and grenadine. Two base spirits in one glass, which the old books did far more often than modern ones.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "pomegranate",
+   "juniper",
+   "rum"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "White rum",
+   "Lemon juice",
+   "Grenadine"
+  ],
+  "funFact": "Split-base drinks were routine before Prohibition and became unfashionable afterwards, largely because they are harder to sell than a drink named after one bottle.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "ward-eight",
+  "name": "Ward Eight",
+  "subcategory": "Sour",
+  "description": "Rye with lemon, orange and grenadine. Made in Boston on an election night, for a man who had not won yet.",
+  "abv": "20-22%",
+  "origin": "Boston, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rye",
+   "lemon",
+   "orange",
+   "pomegranate"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Lemon juice",
+   "Orange juice",
+   "Grenadine"
+  ],
+  "funFact": "The story places it at Locke-Ober in 1898, mixed for Martin Lomasney's ward on the night of a vote that had not been counted — celebrating early, and correctly.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "An orange slice and a cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "whist",
+  "name": "Whist",
+  "subcategory": "Spirit-Forward",
+  "description": "Applejack, rum and sweet vermouth. Named for the card game bridge was built out of.",
+  "abv": "22-24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "rum",
+   "sweet vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Applejack",
+   "White rum",
+   "Sweet vermouth"
+  ],
+  "funFact": "Whist ruled English card tables for two centuries before bridge displaced it, which dates the naming convention as precisely as anything in the book.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Applejack",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "White rum",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "yale-cocktail",
+  "name": "Yale Cocktail",
+  "subcategory": "Modern Classic",
+  "description": "A Martini stained blue, with bitters and a splash of soda. The colour is the entire reason it exists.",
+  "abv": "26-28%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "juniper",
+   "violet",
+   "dry vermouth"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Crème de violette",
+   "Orange bitters"
+  ],
+  "funFact": "The blue was originally Crème Yvette, an American violet liqueur that went out of production in 1969 and did not come back until 2009.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Crème de violette",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "splash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the gin, vermouth, violette and bitters with ice until very cold.",
+    "Strain into a chilled coupe.",
+    "Add a short splash of soda water.",
+    "Twist a lemon peel over the surface and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ }
+]
