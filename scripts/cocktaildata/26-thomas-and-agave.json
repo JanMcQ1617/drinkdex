@@ -1,0 +1,1441 @@
+[
+ {
+  "id": "brace-up",
+  "name": "Brace Up",
+  "subcategory": "Brunch",
+  "description": "Brandy, absinthe, egg and lemon shaken to a froth. Thomas files it under morning drinks, which tells you what it was for.",
+  "abv": "20-22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "anise",
+   "egg",
+   "lemon"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Brandy",
+   "Absinthe",
+   "Whole egg",
+   "Lemon juice"
+  ],
+  "funFact": "The 1862 book groups a whole shelf of these under recuperatives, and every one of them contains raw egg — the Victorian bar's entire theory of the morning after.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Whole egg",
+     "amount": "1"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything without ice for 20 seconds.",
+    "Add ice and shake hard until the tin frosts over.",
+    "Strain into a small tumbler.",
+    "Grate nutmeg heavily over the top and drink it standing up."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "jersey-cocktail",
+  "name": "Jersey Cocktail",
+  "subcategory": "Retro",
+  "description": "Hard cider with sugar and bitters. A cocktail by the 1862 definition, built on cider instead of spirit.",
+  "abv": "5-7%",
+  "origin": "New Jersey, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "bitters",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Hard cider",
+   "Sugar",
+   "Angostura bitters"
+  ],
+  "funFact": "It qualifies as a cocktail on the original terms — a base, sugar, water and bitters — and proves the definition never actually required a distilled spirit.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry hard cider",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the syrup and bitters together in the bottom of a rocks glass.",
+    "Add ice.",
+    "Pour the cider over slowly so it keeps some of its bubble.",
+    "Twist a lemon peel over the top and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "built"
+  }
+ },
+ {
+  "id": "hot-spiced-rum",
+  "name": "Hot Spiced Rum",
+  "subcategory": "Hot",
+  "description": "Rum, butter, sugar and spice under boiling water. The buttered rum before anyone shortened the name.",
+  "abv": "18-20%",
+  "origin": "New England, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "molasses",
+   "butter",
+   "clove",
+   "nutmeg"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Dark rum",
+   "Butter",
+   "Brown sugar",
+   "Cloves"
+  ],
+  "funFact": "The butter is not a garnish or a modern flourish — Thomas prints it in 1862, and it is what keeps the drink from tasting thin.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Unsalted butter",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Cloves",
+     "amount": "3"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Boiling water",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Put the sugar, butter, cloves and cinnamon in a warmed mug.",
+    "Add a splash of boiling water and mash it into a paste.",
+    "Pour in the rum and stir.",
+    "Top with the rest of the boiling water and grate nutmeg over."
+   ],
+   "garnish": "Grated nutmeg and a cinnamon stick",
+   "method": "built"
+  }
+ },
+ {
+  "id": "champagne-cobbler",
+  "name": "Champagne Cobbler",
+  "subcategory": "Julep & Cobbler",
+  "description": "Champagne over crushed ice with curaçao and fruit. The cobbler template applied to the most expensive bottle in the room.",
+  "abv": "10-12%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "brioche",
+   "orange",
+   "berry"
+  ],
+  "glassware": "Goblet",
+  "ingredients": [
+   "Champagne",
+   "Orange curaçao",
+   "Fruit",
+   "Sugar"
+  ],
+  "funFact": "The cobbler was the drink that sold the straw — it was among the first served with one, because crushed ice made it impossible to drink any other way.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Champagne",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Orange",
+     "amount": "2 slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Fill a goblet with crushed ice.",
+    "Add the curaçao and syrup and stir once.",
+    "Pour the champagne slowly over the ice so it does not foam over.",
+    "Pile fruit and mint on top and add a straw."
+   ],
+   "garnish": "Seasonal fruit and a mint sprig",
+   "method": "built"
+  }
+ },
+ {
+  "id": "port-cobbler",
+  "name": "Port Cobbler",
+  "subcategory": "Julep & Cobbler",
+  "description": "Port, sugar and fruit churned through crushed ice. Sweeter and heavier than the sherry version, and older.",
+  "abv": "12-14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "port",
+   "berry",
+   "orange"
+  ],
+  "glassware": "Goblet",
+  "ingredients": [
+   "Port wine",
+   "Sugar",
+   "Orange",
+   "Fruit"
+  ],
+  "funFact": "Cobblers were the most-ordered American drink of the 1840s, and the sherry version in particular was what a nineteenth-century bar sold most of.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ruby port",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange",
+     "amount": "2 slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Muddle the orange slices with the syrup in the bottom of a goblet.",
+    "Fill the glass with crushed ice.",
+    "Add the port and churn with a barspoon until the glass frosts.",
+    "Cap with more ice, pile fruit on top and add a straw."
+   ],
+   "garnish": "Berries, an orange slice and mint",
+   "method": "built"
+  }
+ },
+ {
+  "id": "gin-smash",
+  "name": "Gin Smash",
+  "subcategory": "Julep & Cobbler",
+  "description": "Gin, mint and sugar over crushed ice. A julep in a short glass, which is the only difference there has ever been.",
+  "abv": "22-24%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mint",
+   "juniper",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Mint",
+   "Sugar"
+  ],
+  "funFact": "The old books separate smash from julep purely by glass size — a smash is a short drink and a julep a long one, and nothing else about them differs.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "8"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Press the mint gently with the syrup in a rocks glass.",
+    "Add the gin and fill with crushed ice.",
+    "Churn with a barspoon until the outside of the glass frosts.",
+    "Cap with more ice and crown with mint."
+   ],
+   "garnish": "A mint bouquet",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "santinas-pousse-cafe",
+  "name": "Santina's Pousse Café",
+  "subcategory": "Creamy & Dessert",
+  "description": "Brandy, maraschino and curaçao floated in three clean bands. Named for the New Orleans bartender who worked out how to do it.",
+  "abv": "26-28%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "cherry",
+   "cognac"
+  ],
+  "glassware": "Pony glass",
+  "ingredients": [
+   "Brandy",
+   "Maraschino liqueur",
+   "Orange curaçao"
+  ],
+  "funFact": "Layering works on sugar content rather than alcohol — the sweeter a liqueur, the denser it is, which is why the syrups always go in first.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the curaçao into a narrow pony glass.",
+    "Rest a barspoon just above the surface, curve upward, and pour the maraschino over the back of it.",
+    "Float the cognac last, the same way.",
+    "Serve without a stirrer — disturbing the layers ruins the drink."
+   ],
+   "garnish": "None — the three bands are the drink",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "pousse-cafe",
+  "name": "Pousse Café",
+  "subcategory": "Creamy & Dessert",
+  "description": "Five or more liqueurs floated in bands, poured heaviest first. Entirely about the pour and not at all about the taste.",
+  "abv": "24-26%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grenadine",
+   "chocolate",
+   "herbal",
+   "cream"
+  ],
+  "glassware": "Pony glass",
+  "ingredients": [
+   "Grenadine",
+   "Crème de cacao",
+   "Green Chartreuse",
+   "Brandy"
+  ],
+  "funFact": "The name means push the coffee — it was served after dinner, alongside coffee, and the more bands a bartender could hold apart the better their reputation.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Grenadine",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Brown crème de cacao",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "0.4 oz / 12 ml"
+    }
+   ],
+   "steps": [
+    "Pour the grenadine into a tall narrow glass — it is the densest and goes first.",
+    "Float each of the others in turn over the back of a barspoon, in the order given.",
+    "Pour slowly enough that the stream never breaks the layer beneath.",
+    "Serve upright and do not move it quickly."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "angels-kiss",
+  "name": "Angel's Kiss",
+  "subcategory": "Creamy & Dessert",
+  "description": "Crème de cacao under a float of cream, with a cherry balanced on top. A pousse-café with only two bands.",
+  "abv": "18-20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "chocolate",
+   "cream",
+   "cherry"
+  ],
+  "glassware": "Pony glass",
+  "ingredients": [
+   "Crème de cacao",
+   "Cream"
+  ],
+  "funFact": "It is the simplest drink in the pousse-café family and the one people actually learn on — two liqueurs are hard enough to keep apart.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brown crème de cacao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino cherry",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Pour the crème de cacao into a narrow glass.",
+    "Float the cream over the back of a barspoon so it sits in a clean band.",
+    "Balance a cherry on the surface of the cream.",
+    "Serve without a straw."
+   ],
+   "garnish": "A maraschino cherry",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "widows-dream",
+  "name": "Widow's Dream",
+  "subcategory": "Creamy & Dessert",
+  "description": "Bénédictine shaken with a whole egg and cream. Rich, herbal and almost a dessert.",
+  "abv": "16-18%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "herbal",
+   "egg",
+   "cream"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Bénédictine",
+   "Whole egg",
+   "Cream"
+  ],
+  "funFact": "Bénédictine's recipe is genuinely secret — the company says three people know it, and holds that only one of them travels at a time.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bénédictine",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whole egg",
+     "amount": "1"
+    },
+    {
+     "item": "Double cream",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the Bénédictine and egg without ice for 20 seconds.",
+    "Add ice and shake hard until cold.",
+    "Strain into a chilled coupe.",
+    "Float the cream over the back of a spoon and grate nutmeg over."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "rock-and-rye",
+  "name": "Rock and Rye",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye infused with rock candy and fruit. Sold as a cold remedy for most of the nineteenth century, and taxed as one.",
+  "abv": "30-32%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "citrus",
+   "rock sugar",
+   "clove"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Rock candy syrup",
+   "Orange",
+   "Lemon"
+  ],
+  "funFact": "It was marketed as medicine to dodge liquor law, and bottles carried a label claiming it cured colds — which is how a cocktail ended up behind a pharmacy counter.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Rock candy syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "1 strip"
+    },
+    {
+     "item": "Lemon peel",
+     "amount": "1 strip"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "barbados-rum-punch",
+  "name": "Barbados Rum Punch",
+  "subcategory": "Punch & Cobbler",
+  "description": "One of sour, two of sweet, three of strong, four of weak. The rhyme is the recipe.",
+  "abv": "18-20%",
+  "origin": "Barbados",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "molasses",
+   "nutmeg",
+   "bitters"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rum",
+   "Lime juice",
+   "Sugar syrup",
+   "Water"
+  ],
+  "funFact": "The rhyme is taught to Barbadian children and printed on tea towels, and it scales to any quantity because the ratio is the entire specification.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Barbadian rum",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "to grate"
+    }
+   ],
+   "steps": [
+    "Combine the lime, syrup, rum and water in a jug and stir.",
+    "Add the bitters and stir again — Angostura is not optional here.",
+    "Pour over ice in short glasses.",
+    "Grate nutmeg heavily over each one."
+   ],
+   "garnish": "Grated nutmeg and a lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "caudle",
+  "name": "Caudle",
+  "subcategory": "Hot",
+  "description": "Hot spiced wine or ale thickened with egg and oatmeal. Half a drink, half a meal, and given to the sick for six hundred years.",
+  "abv": "8-10%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "oat",
+   "wine",
+   "nutmeg",
+   "egg"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Wine",
+   "Egg yolks",
+   "Oatmeal",
+   "Sugar"
+  ],
+  "funFact": "Caudle and posset are sisters — a posset is curdled with wine, a caudle thickened with grain, and both were served to women after childbirth well into the 1800s.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sweet white wine",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Fine oatmeal",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Egg yolks",
+     "amount": "2"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Water",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Simmer the oatmeal in the water until it thickens into a thin gruel.",
+    "Beat the yolks with the sugar and nutmeg.",
+    "Warm the wine and whisk it into the gruel, then temper in the yolks off the heat.",
+    "Return to a very low heat and stir until it coats a spoon. Do not let it boil."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "athol-brose",
+  "name": "Athol Brose",
+  "subcategory": "Creamy & Dessert",
+  "description": "Whisky, honey and cream over strained oatmeal. Scotland's contribution to the flip family, made without an egg.",
+  "abv": "16-18%",
+  "origin": "Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "oat",
+   "honey",
+   "malt",
+   "cream"
+  ],
+  "glassware": "Small glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Honey",
+   "Oatmeal",
+   "Cream"
+  ],
+  "funFact": "The legend has a Highland earl filling a rival's drinking well with it in 1475 and capturing him while he stopped to drink — which is the best defence of the recipe available.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Steel-cut oatmeal",
+     "amount": "4 tbsp"
+    },
+    {
+     "item": "Water",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Heather honey",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Scotch whisky",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Steep the oatmeal in the water overnight, then strain and keep the liquid.",
+    "Stir the honey into the oat water until fully dissolved.",
+    "Add the whisky and stir.",
+    "Whip the cream to soft peaks, fold it through, and chill before serving."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "french-76",
+  "name": "French 76",
+  "subcategory": "Sparkling",
+  "description": "The French 75 with vodka. Cleaner, colder and with nothing in the way of the champagne.",
+  "abv": "14-16%",
+  "origin": "Paris, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "champagne",
+   "sugar"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Vodka",
+   "Lemon juice",
+   "Simple syrup",
+   "Champagne"
+  ],
+  "funFact": "The 75 family is numbered by artillery calibre, and the variants that followed kept the joke going by picking bigger guns.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Champagne",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the vodka, lemon juice and syrup with ice.",
+    "Strain into a chilled flute.",
+    "Top slowly with champagne so it does not overflow.",
+    "Express a lemon twist over the top and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "french-125",
+  "name": "French 125",
+  "subcategory": "Sparkling",
+  "description": "The French 75 rebuilt on cognac, which is what many argue it should have been all along.",
+  "abv": "16-18%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "lemon",
+   "champagne"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Cognac",
+   "Lemon juice",
+   "Simple syrup",
+   "Champagne"
+  ],
+  "funFact": "Whether the original took gin or cognac has been argued for a century; the cognac version at least puts a French spirit in a French drink.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Champagne",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the cognac, lemon juice and syrup hard with ice.",
+    "Strain into a chilled flute.",
+    "Top slowly with champagne.",
+    "Express a lemon twist over the surface and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "agavoni",
+  "name": "Agavoni",
+  "subcategory": "Spirit-Forward",
+  "description": "A Negroni with tequila in place of gin. Same equal thirds, more earth underneath.",
+  "abv": "26-28%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "bitter orange",
+   "sweet vermouth"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Campari",
+   "Sweet vermouth"
+  ],
+  "funFact": "Blanco tequila carries the vegetal edge of cooked agave straight through, which is exactly what Campari's bitterness has something to hold on to.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "tequila-sour",
+  "name": "Tequila Sour",
+  "subcategory": "Sour",
+  "description": "Tequila, lemon and sugar with egg white. The sour template on agave, and a Margarita's plainer cousin.",
+  "abv": "18-20%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "lemon",
+   "sugar"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Lemon juice",
+   "Simple syrup",
+   "Egg white"
+  ],
+  "funFact": "Lemon rather than lime is what separates this from a Margarita — swap the citrus and the drink stops tasting Mexican and starts tasting like a whiskey sour.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything without ice for 15 seconds.",
+    "Add ice and shake hard until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Let the foam settle before garnishing."
+   ],
+   "garnish": "An orange slice and a cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mezcal-sour",
+  "name": "Mezcal Sour",
+  "subcategory": "Sour",
+  "description": "Mezcal, lime and agave syrup under an egg-white foam that carries the smoke straight up.",
+  "abv": "18-20%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "smoke",
+   "lime",
+   "agave"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Mezcal",
+   "Lime juice",
+   "Agave syrup",
+   "Egg white"
+  ],
+  "funFact": "The smoke is not added — mezcal agave is roasted in earth pits lined with hot stones, and the flavour comes from a week underground.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mezcal",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Agave syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything without ice for 15 seconds.",
+    "Add ice and shake hard until very cold.",
+    "Double-strain into a chilled coupe.",
+    "Dust the foam with chilli salt."
+   ],
+   "garnish": "A dusting of chilli salt on the foam",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "toreador",
+  "name": "Toreador",
+  "subcategory": "Sour",
+  "description": "Tequila with apricot brandy and lime. One of the first tequila drinks to reach a London bar book.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "agave",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Apricot brandy",
+   "Lime juice"
+  ],
+  "funFact": "Tequila barely appears in English cocktail books before the 1930s, and when it does it is usually spelled wrong and described as a Mexican brandy.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "matador",
+  "name": "Matador",
+  "subcategory": "Sour",
+  "description": "Tequila, pineapple and lime. The easiest agave drink there is, and Trader Vic's answer to the Margarita.",
+  "abv": "12-14%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "agave",
+   "lime"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Pineapple juice",
+   "Lime juice"
+  ],
+  "funFact": "Pineapple and agave share a green, faintly vegetal note, which is why the pairing works far better than the fruit-juice shortcut it looks like.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A pineapple wedge",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "brave-bull",
+  "name": "Brave Bull",
+  "subcategory": "Spirit-Forward",
+  "description": "Tequila and coffee liqueur over ice. A Black Russian with agave instead of vodka.",
+  "abv": "28-30%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coffee",
+   "agave",
+   "chocolate"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Coffee liqueur"
+  ],
+  "funFact": "Swap the tequila for vodka and it is a Black Russian; swap it for bourbon and it has no name at all, which is a fair comment on how these drinks get named.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Coffee liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a rocks glass with ice.",
+    "Add the tequila and the coffee liqueur.",
+    "Stir briefly to combine and chill.",
+    "Twist a strip of lemon peel over the top and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chapala",
+  "name": "Chapala",
+  "subcategory": "Sour",
+  "description": "Tequila with orange, lime, grenadine and a drop of orange flower water. Named for Mexico's largest lake.",
+  "abv": "16-18%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange blossom",
+   "orange",
+   "lime",
+   "agave"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Orange juice",
+   "Lime juice",
+   "Orange flower water"
+  ],
+  "funFact": "Orange flower water is measured in drops and turns up in only a handful of classics — this one, the Ramos Gin Fizz, and almost nothing else.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange flower water",
+     "amount": "2 drops"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "An orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bertas-special",
+  "name": "Berta's Special",
+  "subcategory": "Fizz",
+  "description": "Tequila, honey, lime and soda with an egg white. From a Taxco cantina that has been open since the 1930s.",
+  "abv": "16-18%",
+  "origin": "Taxco, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "agave",
+   "bitters"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Tequila",
+   "Honey",
+   "Lime juice",
+   "Soda water"
+  ],
+  "funFact": "Bertita's still stands on the square in Taxco, and the drink is one of very few pre-war Mexican cocktails whose bar of origin is still trading.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the tequila, honey, lime, egg white and bitters without ice.",
+    "Add ice and shake hard until cold.",
+    "Strain into a tall glass over fresh ice.",
+    "Top with soda water and stir once."
+   ],
+   "garnish": "A lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "picador",
+  "name": "Picador",
+  "subcategory": "Sour",
+  "description": "Tequila, Cointreau and lime, shaken and served up with no salt. The Margarita as a London bar first wrote it down.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "agave",
+   "orange",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Cointreau",
+   "Lime juice"
+  ],
+  "funFact": "It appears in British books in the 1930s under this name, which puts a Margarita in print in London before the drink had settled on its Spanish one.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "cadillac-margarita",
+  "name": "Cadillac Margarita",
+  "subcategory": "Sour",
+  "description": "A Margarita made with reposado and finished with a float of Grand Marnier poured over the back of a spoon.",
+  "abv": "24-26%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "agave",
+   "oak",
+   "lime"
+  ],
+  "glassware": "Rocks glass with a salted half-rim",
+  "ingredients": [
+   "Reposado tequila",
+   "Cointreau",
+   "Lime juice",
+   "Grand Marnier"
+  ],
+  "funFact": "The float is the whole point — stirred in it disappears, but sitting on top the Grand Marnier hits first and the tequila arrives underneath it.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Reposado tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Agave syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Grand Marnier",
+     "amount": "0.5 oz / 15 ml, to float"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Salt half the rim of a rocks glass, so the drinker can choose.",
+    "Shake the tequila, Cointreau, lime and agave with ice.",
+    "Strain into the glass over one large cube.",
+    "Float the Grand Marnier over the back of a barspoon."
+   ],
+   "garnish": "A lime wheel and a salted rim",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "changuirongo",
+  "name": "Changuirongo",
+  "subcategory": "Highball",
+  "description": "Tequila and whatever soda is cold. Mexico's everyday highball, and deliberately unfussy.",
+  "abv": "8-10%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "citrus",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Tequila",
+   "Soda"
+  ],
+  "funFact": "Grapefruit soda makes it a Paloma and cola makes it a Charro Negro; with anything else it just keeps this name and nobody minds.",
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon-lime or grapefruit soda",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lime",
+     "amount": "1 wedge"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the tequila.",
+    "Top with whatever cold soda is to hand.",
+    "Squeeze a lime wedge in and drop it in the glass."
+   ],
+   "garnish": "A lime wedge",
+   "method": "built"
+  }
+ }
+]

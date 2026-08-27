@@ -375506,5 +375506,4022 @@
    "garnish": "A mint sprig and a lime wheel",
    "method": "blended"
   }
+ },
+ {
+  "id": "brace-up",
+  "name": "Brace Up",
+  "category": "cocktail",
+  "subcategory": "Brunch",
+  "description": "Brandy, absinthe, egg and lemon shaken to a froth. Thomas files it under morning drinks, which tells you what it was for.",
+  "abv": "20-22%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "anise",
+   "egg",
+   "lemon"
+  ],
+  "glassware": "Small tumbler",
+  "ingredients": [
+   "Brandy",
+   "Absinthe",
+   "Whole egg",
+   "Lemon juice"
+  ],
+  "funFact": "The 1862 book groups a whole shelf of these under recuperatives, and every one of them contains raw egg — the Victorian bar's entire theory of the morning after.",
+  "dexNumber": 7581,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Whole egg",
+     "amount": "1"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything without ice for 20 seconds.",
+    "Add ice and shake hard until the tin frosts over.",
+    "Strain into a small tumbler.",
+    "Grate nutmeg heavily over the top and drink it standing up."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "jersey-cocktail",
+  "name": "Jersey Cocktail",
+  "category": "cocktail",
+  "subcategory": "Retro",
+  "description": "Hard cider with sugar and bitters. A cocktail by the 1862 definition, built on cider instead of spirit.",
+  "abv": "5-7%",
+  "origin": "New Jersey, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apple",
+   "bitters",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Hard cider",
+   "Sugar",
+   "Angostura bitters"
+  ],
+  "funFact": "It qualifies as a cocktail on the original terms — a base, sugar, water and bitters — and proves the definition never actually required a distilled spirit.",
+  "dexNumber": 7582,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dry hard cider",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Stir the syrup and bitters together in the bottom of a rocks glass.",
+    "Add ice.",
+    "Pour the cider over slowly so it keeps some of its bubble.",
+    "Twist a lemon peel over the top and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "built"
+  }
+ },
+ {
+  "id": "hot-spiced-rum",
+  "name": "Hot Spiced Rum",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Rum, butter, sugar and spice under boiling water. The buttered rum before anyone shortened the name.",
+  "abv": "18-20%",
+  "origin": "New England, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "molasses",
+   "butter",
+   "clove",
+   "nutmeg"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Dark rum",
+   "Butter",
+   "Brown sugar",
+   "Cloves"
+  ],
+  "funFact": "The butter is not a garnish or a modern flourish — Thomas prints it in 1862, and it is what keeps the drink from tasting thin.",
+  "dexNumber": 7583,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dark rum",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Unsalted butter",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Cloves",
+     "amount": "3"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Boiling water",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Put the sugar, butter, cloves and cinnamon in a warmed mug.",
+    "Add a splash of boiling water and mash it into a paste.",
+    "Pour in the rum and stir.",
+    "Top with the rest of the boiling water and grate nutmeg over."
+   ],
+   "garnish": "Grated nutmeg and a cinnamon stick",
+   "method": "built"
+  }
+ },
+ {
+  "id": "champagne-cobbler",
+  "name": "Champagne Cobbler",
+  "category": "cocktail",
+  "subcategory": "Julep & Cobbler",
+  "description": "Champagne over crushed ice with curaçao and fruit. The cobbler template applied to the most expensive bottle in the room.",
+  "abv": "10-12%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "brioche",
+   "orange",
+   "berry"
+  ],
+  "glassware": "Goblet",
+  "ingredients": [
+   "Champagne",
+   "Orange curaçao",
+   "Fruit",
+   "Sugar"
+  ],
+  "funFact": "The cobbler was the drink that sold the straw — it was among the first served with one, because crushed ice made it impossible to drink any other way.",
+  "dexNumber": 7584,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Champagne",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Orange",
+     "amount": "2 slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Fill a goblet with crushed ice.",
+    "Add the curaçao and syrup and stir once.",
+    "Pour the champagne slowly over the ice so it does not foam over.",
+    "Pile fruit and mint on top and add a straw."
+   ],
+   "garnish": "Seasonal fruit and a mint sprig",
+   "method": "built"
+  }
+ },
+ {
+  "id": "port-cobbler",
+  "name": "Port Cobbler",
+  "category": "cocktail",
+  "subcategory": "Julep & Cobbler",
+  "description": "Port, sugar and fruit churned through crushed ice. Sweeter and heavier than the sherry version, and older.",
+  "abv": "12-14%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "port",
+   "berry",
+   "orange"
+  ],
+  "glassware": "Goblet",
+  "ingredients": [
+   "Port wine",
+   "Sugar",
+   "Orange",
+   "Fruit"
+  ],
+  "funFact": "Cobblers were the most-ordered American drink of the 1840s, and the sherry version in particular was what a nineteenth-century bar sold most of.",
+  "dexNumber": 7585,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ruby port",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange",
+     "amount": "2 slices"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Muddle the orange slices with the syrup in the bottom of a goblet.",
+    "Fill the glass with crushed ice.",
+    "Add the port and churn with a barspoon until the glass frosts.",
+    "Cap with more ice, pile fruit on top and add a straw."
+   ],
+   "garnish": "Berries, an orange slice and mint",
+   "method": "built"
+  }
+ },
+ {
+  "id": "gin-smash",
+  "name": "Gin Smash",
+  "category": "cocktail",
+  "subcategory": "Julep & Cobbler",
+  "description": "Gin, mint and sugar over crushed ice. A julep in a short glass, which is the only difference there has ever been.",
+  "abv": "22-24%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mint",
+   "juniper",
+   "sugar"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Gin",
+   "Mint",
+   "Sugar"
+  ],
+  "funFact": "The old books separate smash from julep purely by glass size — a smash is a short drink and a julep a long one, and nothing else about them differs.",
+  "dexNumber": 7586,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Mint leaves",
+     "amount": "8"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Press the mint gently with the syrup in a rocks glass.",
+    "Add the gin and fill with crushed ice.",
+    "Churn with a barspoon until the outside of the glass frosts.",
+    "Cap with more ice and crown with mint."
+   ],
+   "garnish": "A mint bouquet",
+   "method": "muddled"
+  }
+ },
+ {
+  "id": "santinas-pousse-cafe",
+  "name": "Santina's Pousse Café",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Brandy, maraschino and curaçao floated in three clean bands. Named for the New Orleans bartender who worked out how to do it.",
+  "abv": "26-28%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "cherry",
+   "cognac"
+  ],
+  "glassware": "Pony glass",
+  "ingredients": [
+   "Brandy",
+   "Maraschino liqueur",
+   "Orange curaçao"
+  ],
+  "funFact": "Layering works on sugar content rather than alcohol — the sweeter a liqueur, the denser it is, which is why the syrups always go in first.",
+  "dexNumber": 7587,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino liqueur",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Cognac",
+     "amount": "0.5 oz / 15 ml"
+    }
+   ],
+   "steps": [
+    "Pour the curaçao into a narrow pony glass.",
+    "Rest a barspoon just above the surface, curve upward, and pour the maraschino over the back of it.",
+    "Float the cognac last, the same way.",
+    "Serve without a stirrer — disturbing the layers ruins the drink."
+   ],
+   "garnish": "None — the three bands are the drink",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "pousse-cafe",
+  "name": "Pousse Café",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Five or more liqueurs floated in bands, poured heaviest first. Entirely about the pour and not at all about the taste.",
+  "abv": "24-26%",
+  "origin": "New Orleans, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "grenadine",
+   "chocolate",
+   "herbal",
+   "cream"
+  ],
+  "glassware": "Pony glass",
+  "ingredients": [
+   "Grenadine",
+   "Crème de cacao",
+   "Green Chartreuse",
+   "Brandy"
+  ],
+  "funFact": "The name means push the coffee — it was served after dinner, alongside coffee, and the more bands a bartender could hold apart the better their reputation.",
+  "dexNumber": 7588,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Grenadine",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Brown crème de cacao",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Green Chartreuse",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.4 oz / 12 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "0.4 oz / 12 ml"
+    }
+   ],
+   "steps": [
+    "Pour the grenadine into a tall narrow glass — it is the densest and goes first.",
+    "Float each of the others in turn over the back of a barspoon, in the order given.",
+    "Pour slowly enough that the stream never breaks the layer beneath.",
+    "Serve upright and do not move it quickly."
+   ],
+   "garnish": "None",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "angels-kiss",
+  "name": "Angel's Kiss",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Crème de cacao under a float of cream, with a cherry balanced on top. A pousse-café with only two bands.",
+  "abv": "18-20%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "chocolate",
+   "cream",
+   "cherry"
+  ],
+  "glassware": "Pony glass",
+  "ingredients": [
+   "Crème de cacao",
+   "Cream"
+  ],
+  "funFact": "It is the simplest drink in the pousse-café family and the one people actually learn on — two liqueurs are hard enough to keep apart.",
+  "dexNumber": 7589,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Brown crème de cacao",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Maraschino cherry",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Pour the crème de cacao into a narrow glass.",
+    "Float the cream over the back of a barspoon so it sits in a clean band.",
+    "Balance a cherry on the surface of the cream.",
+    "Serve without a straw."
+   ],
+   "garnish": "A maraschino cherry",
+   "method": "layered"
+  }
+ },
+ {
+  "id": "widows-dream",
+  "name": "Widow's Dream",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Bénédictine shaken with a whole egg and cream. Rich, herbal and almost a dessert.",
+  "abv": "16-18%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "herbal",
+   "egg",
+   "cream"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Bénédictine",
+   "Whole egg",
+   "Cream"
+  ],
+  "funFact": "Bénédictine's recipe is genuinely secret — the company says three people know it, and holds that only one of them travels at a time.",
+  "dexNumber": 7590,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bénédictine",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Whole egg",
+     "amount": "1"
+    },
+    {
+     "item": "Double cream",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the Bénédictine and egg without ice for 20 seconds.",
+    "Add ice and shake hard until cold.",
+    "Strain into a chilled coupe.",
+    "Float the cream over the back of a spoon and grate nutmeg over."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "rock-and-rye",
+  "name": "Rock and Rye",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Rye infused with rock candy and fruit. Sold as a cold remedy for most of the nineteenth century, and taxed as one.",
+  "abv": "30-32%",
+  "origin": "New York City, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rye",
+   "citrus",
+   "rock sugar",
+   "clove"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rye whiskey",
+   "Rock candy syrup",
+   "Orange",
+   "Lemon"
+  ],
+  "funFact": "It was marketed as medicine to dodge liquor law, and bottles carried a label claiming it cured colds — which is how a cocktail ended up behind a pharmacy counter.",
+  "dexNumber": 7591,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rye whiskey",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Rock candy syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange peel",
+     "amount": "1 strip"
+    },
+    {
+     "item": "Lemon peel",
+     "amount": "1 strip"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "barbados-rum-punch",
+  "name": "Barbados Rum Punch",
+  "category": "cocktail",
+  "subcategory": "Punch & Cobbler",
+  "description": "One of sour, two of sweet, three of strong, four of weak. The rhyme is the recipe.",
+  "abv": "18-20%",
+  "origin": "Barbados",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "molasses",
+   "nutmeg",
+   "bitters"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Rum",
+   "Lime juice",
+   "Sugar syrup",
+   "Water"
+  ],
+  "funFact": "The rhyme is taught to Barbadian children and printed on tea towels, and it scales to any quantity because the ratio is the entire specification.",
+  "dexNumber": 7592,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lime juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sugar syrup",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Barbadian rum",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "to grate"
+    }
+   ],
+   "steps": [
+    "Combine the lime, syrup, rum and water in a jug and stir.",
+    "Add the bitters and stir again — Angostura is not optional here.",
+    "Pour over ice in short glasses.",
+    "Grate nutmeg heavily over each one."
+   ],
+   "garnish": "Grated nutmeg and a lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "caudle",
+  "name": "Caudle",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Hot spiced wine or ale thickened with egg and oatmeal. Half a drink, half a meal, and given to the sick for six hundred years.",
+  "abv": "8-10%",
+  "origin": "England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "oat",
+   "wine",
+   "nutmeg",
+   "egg"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Wine",
+   "Egg yolks",
+   "Oatmeal",
+   "Sugar"
+  ],
+  "funFact": "Caudle and posset are sisters — a posset is curdled with wine, a caudle thickened with grain, and both were served to women after childbirth well into the 1800s.",
+  "dexNumber": 7593,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sweet white wine",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Fine oatmeal",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Egg yolks",
+     "amount": "2"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Nutmeg",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Water",
+     "amount": "4 oz / 120 ml"
+    }
+   ],
+   "steps": [
+    "Simmer the oatmeal in the water until it thickens into a thin gruel.",
+    "Beat the yolks with the sugar and nutmeg.",
+    "Warm the wine and whisk it into the gruel, then temper in the yolks off the heat.",
+    "Return to a very low heat and stir until it coats a spoon. Do not let it boil."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "athol-brose",
+  "name": "Athol Brose",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Whisky, honey and cream over strained oatmeal. Scotland's contribution to the flip family, made without an egg.",
+  "abv": "16-18%",
+  "origin": "Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "oat",
+   "honey",
+   "malt",
+   "cream"
+  ],
+  "glassware": "Small glass",
+  "ingredients": [
+   "Scotch whisky",
+   "Honey",
+   "Oatmeal",
+   "Cream"
+  ],
+  "funFact": "The legend has a Highland earl filling a rival's drinking well with it in 1475 and capturing him while he stopped to drink — which is the best defence of the recipe available.",
+  "dexNumber": 7594,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Steel-cut oatmeal",
+     "amount": "4 tbsp"
+    },
+    {
+     "item": "Water",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Heather honey",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Scotch whisky",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Double cream",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Steep the oatmeal in the water overnight, then strain and keep the liquid.",
+    "Stir the honey into the oat water until fully dissolved.",
+    "Add the whisky and stir.",
+    "Whip the cream to soft peaks, fold it through, and chill before serving."
+   ],
+   "garnish": "Grated nutmeg",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "french-76",
+  "name": "French 76",
+  "category": "cocktail",
+  "subcategory": "Sparkling",
+  "description": "The French 75 with vodka. Cleaner, colder and with nothing in the way of the champagne.",
+  "abv": "14-16%",
+  "origin": "Paris, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "champagne",
+   "sugar"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Vodka",
+   "Lemon juice",
+   "Simple syrup",
+   "Champagne"
+  ],
+  "funFact": "The 75 family is numbered by artillery calibre, and the variants that followed kept the joke going by picking bigger guns.",
+  "dexNumber": 7595,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Vodka",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Champagne",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the vodka, lemon juice and syrup with ice.",
+    "Strain into a chilled flute.",
+    "Top slowly with champagne so it does not overflow.",
+    "Express a lemon twist over the top and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "french-125",
+  "name": "French 125",
+  "category": "cocktail",
+  "subcategory": "Sparkling",
+  "description": "The French 75 rebuilt on cognac, which is what many argue it should have been all along.",
+  "abv": "16-18%",
+  "origin": "Paris, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cognac",
+   "lemon",
+   "champagne"
+  ],
+  "glassware": "Flute",
+  "ingredients": [
+   "Cognac",
+   "Lemon juice",
+   "Simple syrup",
+   "Champagne"
+  ],
+  "funFact": "Whether the original took gin or cognac has been argued for a century; the cognac version at least puts a French spirit in a French drink.",
+  "dexNumber": 7596,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cognac",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Champagne",
+     "amount": "3 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the cognac, lemon juice and syrup hard with ice.",
+    "Strain into a chilled flute.",
+    "Top slowly with champagne.",
+    "Express a lemon twist over the surface and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "agavoni",
+  "name": "Agavoni",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "A Negroni with tequila in place of gin. Same equal thirds, more earth underneath.",
+  "abv": "26-28%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "bitter orange",
+   "sweet vermouth"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Campari",
+   "Sweet vermouth"
+  ],
+  "funFact": "Blanco tequila carries the vegetal edge of cooked agave straight through, which is exactly what Campari's bitterness has something to hold on to.",
+  "dexNumber": 7597,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 30 seconds until properly cold and diluted.",
+    "Strain into a chilled glass.",
+    "Garnish and serve."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "tequila-sour",
+  "name": "Tequila Sour",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Tequila, lemon and sugar with egg white. The sour template on agave, and a Margarita's plainer cousin.",
+  "abv": "18-20%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "lemon",
+   "sugar"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Lemon juice",
+   "Simple syrup",
+   "Egg white"
+  ],
+  "funFact": "Lemon rather than lime is what separates this from a Margarita — swap the citrus and the drink stops tasting Mexican and starts tasting like a whiskey sour.",
+  "dexNumber": 7598,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything without ice for 15 seconds.",
+    "Add ice and shake hard until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Let the foam settle before garnishing."
+   ],
+   "garnish": "An orange slice and a cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "mezcal-sour",
+  "name": "Mezcal Sour",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Mezcal, lime and agave syrup under an egg-white foam that carries the smoke straight up.",
+  "abv": "18-20%",
+  "origin": "Oaxaca, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "smoke",
+   "lime",
+   "agave"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Mezcal",
+   "Lime juice",
+   "Agave syrup",
+   "Egg white"
+  ],
+  "funFact": "The smoke is not added — mezcal agave is roasted in earth pits lined with hot stones, and the flavour comes from a week underground.",
+  "dexNumber": 7599,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mezcal",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Agave syrup",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake everything without ice for 15 seconds.",
+    "Add ice and shake hard until very cold.",
+    "Double-strain into a chilled coupe.",
+    "Dust the foam with chilli salt."
+   ],
+   "garnish": "A dusting of chilli salt on the foam",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "toreador",
+  "name": "Toreador",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Tequila with apricot brandy and lime. One of the first tequila drinks to reach a London bar book.",
+  "abv": "20-22%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "apricot",
+   "agave",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Apricot brandy",
+   "Lime juice"
+  ],
+  "funFact": "Tequila barely appears in English cocktail books before the 1930s, and when it does it is usually spelled wrong and described as a Mexican brandy.",
+  "dexNumber": 7600,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Apricot brandy",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "matador",
+  "name": "Matador",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Tequila, pineapple and lime. The easiest agave drink there is, and Trader Vic's answer to the Margarita.",
+  "abv": "12-14%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "agave",
+   "lime"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Pineapple juice",
+   "Lime juice"
+  ],
+  "funFact": "Pineapple and agave share a green, faintly vegetal note, which is why the pairing works far better than the fruit-juice shortcut it looks like.",
+  "dexNumber": 7601,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Pineapple juice",
+     "amount": "3 oz / 90 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A pineapple wedge",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "brave-bull",
+  "name": "Brave Bull",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Tequila and coffee liqueur over ice. A Black Russian with agave instead of vodka.",
+  "abv": "28-30%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coffee",
+   "agave",
+   "chocolate"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Coffee liqueur"
+  ],
+  "funFact": "Swap the tequila for vodka and it is a Black Russian; swap it for bourbon and it has no name at all, which is a fair comment on how these drinks get named.",
+  "dexNumber": 7602,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Coffee liqueur",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a rocks glass with ice.",
+    "Add the tequila and the coffee liqueur.",
+    "Stir briefly to combine and chill.",
+    "Twist a strip of lemon peel over the top and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chapala",
+  "name": "Chapala",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Tequila with orange, lime, grenadine and a drop of orange flower water. Named for Mexico's largest lake.",
+  "abv": "16-18%",
+  "origin": "California, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange blossom",
+   "orange",
+   "lime",
+   "agave"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Tequila",
+   "Orange juice",
+   "Lime juice",
+   "Orange flower water"
+  ],
+  "funFact": "Orange flower water is measured in drops and turns up in only a handful of classics — this one, the Ramos Gin Fizz, and almost nothing else.",
+  "dexNumber": 7603,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange flower water",
+     "amount": "2 drops"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "An orange twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "bertas-special",
+  "name": "Berta's Special",
+  "category": "cocktail",
+  "subcategory": "Fizz",
+  "description": "Tequila, honey, lime and soda with an egg white. From a Taxco cantina that has been open since the 1930s.",
+  "abv": "16-18%",
+  "origin": "Taxco, Mexico",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "lime",
+   "agave",
+   "bitters"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Tequila",
+   "Honey",
+   "Lime juice",
+   "Soda water"
+  ],
+  "funFact": "Bertita's still stands on the square in Taxco, and the drink is one of very few pre-war Mexican cocktails whose bar of origin is still trading.",
+  "dexNumber": 7604,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Honey syrup",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Egg white",
+     "amount": "1"
+    },
+    {
+     "item": "Angostura bitters",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 90 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Dry-shake the tequila, honey, lime, egg white and bitters without ice.",
+    "Add ice and shake hard until cold.",
+    "Strain into a tall glass over fresh ice.",
+    "Top with soda water and stir once."
+   ],
+   "garnish": "A lime wheel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "picador",
+  "name": "Picador",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Tequila, Cointreau and lime, shaken and served up with no salt. The Margarita as a London bar first wrote it down.",
+  "abv": "24-26%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "agave",
+   "orange",
+   "lime"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Tequila",
+   "Cointreau",
+   "Lime juice"
+  ],
+  "funFact": "It appears in British books in the 1930s under this name, which puts a Margarita in print in London before the drink had settled on its Spanish one.",
+  "dexNumber": 7605,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds until the tin frosts.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve immediately."
+   ],
+   "garnish": "A lime twist",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "cadillac-margarita",
+  "name": "Cadillac Margarita",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "A Margarita made with reposado and finished with a float of Grand Marnier poured over the back of a spoon.",
+  "abv": "24-26%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "agave",
+   "oak",
+   "lime"
+  ],
+  "glassware": "Rocks glass with a salted half-rim",
+  "ingredients": [
+   "Reposado tequila",
+   "Cointreau",
+   "Lime juice",
+   "Grand Marnier"
+  ],
+  "funFact": "The float is the whole point — stirred in it disappears, but sitting on top the Grand Marnier hits first and the tequila arrives underneath it.",
+  "dexNumber": 7606,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Reposado tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Agave syrup",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Grand Marnier",
+     "amount": "0.5 oz / 15 ml, to float"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Salt half the rim of a rocks glass, so the drinker can choose.",
+    "Shake the tequila, Cointreau, lime and agave with ice.",
+    "Strain into the glass over one large cube.",
+    "Float the Grand Marnier over the back of a barspoon."
+   ],
+   "garnish": "A lime wheel and a salted rim",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "changuirongo",
+  "name": "Changuirongo",
+  "category": "cocktail",
+  "subcategory": "Highball",
+  "description": "Tequila and whatever soda is cold. Mexico's everyday highball, and deliberately unfussy.",
+  "abv": "8-10%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "agave",
+   "citrus",
+   "soda"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Tequila",
+   "Soda"
+  ],
+  "funFact": "Grapefruit soda makes it a Paloma and cola makes it a Charro Negro; with anything else it just keeps this name and nobody minds.",
+  "dexNumber": 7607,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blanco tequila",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lemon-lime or grapefruit soda",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lime",
+     "amount": "1 wedge"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the tequila.",
+    "Top with whatever cold soda is to hand.",
+    "Squeeze a lime wedge in and drop it in the glass."
+   ],
+   "garnish": "A lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "shirley-temple",
+  "name": "Shirley Temple",
+  "category": "cocktail",
+  "subcategory": "Party",
+  "description": "Ginger ale with grenadine and a cherry. The first drink most people are ever served in a glass that looks grown up.",
+  "abv": "0%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "ginger",
+   "pomegranate",
+   "cherry"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Ginger ale",
+   "Grenadine",
+   "Maraschino cherry"
+  ],
+  "funFact": "Shirley Temple herself disliked it and said so repeatedly, calling it too sweet, and never received a cent from the restaurants that sold it.",
+  "dexNumber": 7608,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ginger ale",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the ginger ale.",
+    "Pour the grenadine down the inside of the glass so it settles at the bottom.",
+    "Drop in a cherry and serve without stirring."
+   ],
+   "garnish": "A maraschino cherry",
+   "method": "built"
+  }
+ },
+ {
+  "id": "roy-rogers",
+  "name": "Roy Rogers",
+  "category": "cocktail",
+  "subcategory": "Party",
+  "description": "Cola with grenadine and a cherry. The Shirley Temple for whoever did not want the ginger ale.",
+  "abv": "0%",
+  "origin": "California, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cola",
+   "pomegranate",
+   "cherry"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Cola",
+   "Grenadine",
+   "Maraschino cherry"
+  ],
+  "funFact": "The pair were named for two film stars of the same era and served side by side, which made ordering one of them a small declaration of taste.",
+  "dexNumber": 7609,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cola",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Add the cola.",
+    "Pour the grenadine slowly down the side.",
+    "Drop in a cherry and serve."
+   ],
+   "garnish": "A maraschino cherry",
+   "method": "built"
+  }
+ },
+ {
+  "id": "arnold-palmer",
+  "name": "Arnold Palmer",
+  "category": "cocktail",
+  "subcategory": "Party",
+  "description": "Iced tea and lemonade, half and half. Named for a golfer who ordered it so often that bar staff learned the ratio.",
+  "abv": "0%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "black tea",
+   "lemon",
+   "sugar"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Iced tea",
+   "Lemonade"
+  ],
+  "funFact": "Palmer ordered it at a Palm Springs restaurant loudly enough that a woman at the next table asked for the same, and the name stuck that afternoon.",
+  "dexNumber": 7610,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cold unsweetened iced tea",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lemonade",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour the iced tea and lemonade in together.",
+    "Stir once to combine.",
+    "Hang a lemon wheel on the rim."
+   ],
+   "garnish": "A lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "virgin-mary",
+  "name": "Virgin Mary",
+  "category": "cocktail",
+  "subcategory": "Brunch",
+  "description": "A Bloody Mary with the vodka left out, which changes almost nothing about how it is made.",
+  "abv": "0%",
+  "origin": "New York City, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "tomato",
+   "horseradish",
+   "celery",
+   "pepper"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Tomato juice",
+   "Lemon juice",
+   "Worcestershire sauce",
+   "Horseradish"
+  ],
+  "funFact": "The seasoning does all the work in a Bloody Mary, which is why the alcohol-free version is one of the very few that loses nothing at all.",
+  "dexNumber": 7611,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Tomato juice",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Worcestershire sauce",
+     "amount": "4 dashes"
+    },
+    {
+     "item": "Hot sauce",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Horseradish",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Celery salt",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Black pepper",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Combine everything but the ice and roll it between two tins to mix without foaming.",
+    "Pour into a tall glass over fresh ice.",
+    "Season the top with more celery salt and cracked pepper.",
+    "Garnish with a celery stick and a lemon wedge."
+   ],
+   "garnish": "A celery stick and a lemon wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "cinderella",
+  "name": "Cinderella",
+  "category": "cocktail",
+  "subcategory": "Fizz",
+  "description": "Pineapple, orange and lemon shaken hard and topped with soda. The Savoy's own alcohol-free drink.",
+  "abv": "0%",
+  "origin": "London, England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pineapple",
+   "orange",
+   "lemon"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Pineapple juice",
+   "Orange juice",
+   "Lemon juice",
+   "Soda water"
+  ],
+  "funFact": "The Savoy Cocktail Book prints a short run of temperance drinks alongside 750 alcoholic ones, and this is the only one that has stayed in print.",
+  "dexNumber": 7612,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pineapple juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Soda water",
+     "amount": "2 oz / 60 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shake the three juices and the grenadine hard with ice.",
+    "Strain into a tall glass over fresh ice.",
+    "Top with soda water.",
+    "Garnish with orange and a cherry."
+   ],
+   "garnish": "An orange slice and a cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "egg-cream",
+  "name": "Egg Cream",
+  "category": "cocktail",
+  "subcategory": "Retro",
+  "description": "Milk, seltzer and chocolate syrup, containing neither egg nor cream. The Brooklyn candy-store drink.",
+  "abv": "0%",
+  "origin": "Brooklyn, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "chocolate",
+   "milk",
+   "soda"
+  ],
+  "glassware": "Soda glass",
+  "ingredients": [
+   "Milk",
+   "Seltzer",
+   "Chocolate syrup"
+  ],
+  "funFact": "The name has never been explained convincingly; the drink has no egg and no cream, and Brooklyn has been arguing about why for a hundred years.",
+  "dexNumber": 7613,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Whole milk",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Chocolate syrup",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cold seltzer",
+     "amount": "6 oz / 180 ml"
+    }
+   ],
+   "steps": [
+    "Pour the milk into a tall glass.",
+    "Spray the seltzer in hard, straight down, to raise a thick white head.",
+    "Slide the chocolate syrup down the inside of the glass under the foam.",
+    "Stir the bottom only, leaving the white head intact, and drink it immediately."
+   ],
+   "garnish": "None — the white head is the drink",
+   "method": "built"
+  }
+ },
+ {
+  "id": "italian-soda",
+  "name": "Italian Soda",
+  "category": "cocktail",
+  "subcategory": "Party",
+  "description": "Flavoured syrup, soda water and ice. Add cream and it becomes a French soda, which is the only difference.",
+  "abv": "0%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "berry",
+   "soda",
+   "vanilla"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Flavoured syrup",
+   "Soda water"
+  ],
+  "funFact": "It is not Italian — the name came from American coffee bars in the 1980s selling Italian-branded syrups, and no bar in Italy calls it that.",
+  "dexNumber": 7614,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Fruit syrup",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Soda water",
+     "amount": "7 oz / 210 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour the syrup over the ice.",
+    "Top with cold soda water.",
+    "Stir once, or float a spoon of cream on top to make it a French soda."
+   ],
+   "garnish": "A lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "agua-de-jamaica",
+  "name": "Agua de Jamaica",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Dried hibiscus steeped and sweetened, served ice cold. Deep red, sharply tart, and sold on every Mexican corner.",
+  "abv": "0%",
+  "origin": "Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "hibiscus",
+   "cranberry",
+   "citrus"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Hibiscus flowers",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "The flowers are calyces rather than petals, and the same plant travels the world under different names — sorrel in the Caribbean, karkade in Egypt, bissap in Senegal.",
+  "dexNumber": 7615,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dried hibiscus",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Lime",
+     "amount": "1, juiced"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Boil half the water and pour it over the hibiscus. Steep for 20 minutes.",
+    "Strain, pressing the flowers, and stir in the sugar until dissolved.",
+    "Add the remaining cold water and the lime juice.",
+    "Chill thoroughly and serve over plenty of ice."
+   ],
+   "garnish": "A lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "horchata",
+  "name": "Horchata",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Rice steeped with cinnamon, blended and strained into a cold sweet white drink.",
+  "abv": "0%",
+  "origin": "Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "rice",
+   "cinnamon",
+   "vanilla"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Rice",
+   "Cinnamon",
+   "Sugar",
+   "Milk"
+  ],
+  "funFact": "Spain's original is made from tigernuts rather than rice — horchata de chufa — and the two versions share a name, a colour and almost nothing else.",
+  "dexNumber": 7616,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Long-grain rice",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "4 cups"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Soak the rice and cinnamon in the water overnight.",
+    "Blend the whole lot until the rice breaks down completely.",
+    "Strain twice through a fine cloth until no grit remains.",
+    "Stir in the milk, sugar and vanilla, chill hard and serve over ice."
+   ],
+   "garnish": "Ground cinnamon",
+   "method": "built"
+  }
+ },
+ {
+  "id": "tamarindo",
+  "name": "Tamarindo",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Tamarind pulp, sugar and water. Sour, brown and far more refreshing than it looks.",
+  "abv": "0%",
+  "origin": "Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "tamarind",
+   "brown sugar",
+   "sour"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Tamarind",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "Tamarind reached Mexico from Asia by way of the Manila galleons, and stayed so thoroughly that it now reads as a Mexican flavour rather than an imported one.",
+  "dexNumber": 7617,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Tamarind pods",
+     "amount": "12, or 4 oz pulp"
+    },
+    {
+     "item": "Water",
+     "amount": "6 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.75 cup"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Shell the pods and simmer the pulp in half the water until it softens.",
+    "Mash and push it through a sieve, discarding the seeds and fibres.",
+    "Stir in the sugar and the remaining cold water.",
+    "Chill and serve over ice with a pinch of salt if you like it sharper."
+   ],
+   "garnish": "A lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "atole",
+  "name": "Atole",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Masa cooked into hot milk with cinnamon and sugar. Thick enough to be breakfast, and drunk from a mug.",
+  "abv": "0%",
+  "origin": "Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "corn",
+   "cinnamon",
+   "vanilla"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Masa harina",
+   "Milk",
+   "Cinnamon",
+   "Piloncillo"
+  ],
+  "funFact": "Atole predates the Spanish arrival by centuries and is one of very few pre-Columbian drinks still made the same way in the same country.",
+  "dexNumber": 7618,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Masa harina",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Piloncillo or brown sugar",
+     "amount": "4 oz / 110 g"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "1 tsp"
+    }
+   ],
+   "steps": [
+    "Whisk the masa into the cold water until completely smooth with no lumps.",
+    "Heat the milk with the cinnamon and piloncillo until the sugar dissolves.",
+    "Pour in the masa mixture in a steady stream, whisking constantly.",
+    "Simmer gently for ten minutes, stirring, until it thickens. Add the vanilla and serve hot."
+   ],
+   "garnish": "A cinnamon stick",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "champurrado",
+  "name": "Champurrado",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Atole with Mexican chocolate whisked through it. Thicker, darker, and the one that goes with tamales.",
+  "abv": "0%",
+  "origin": "Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "chocolate",
+   "corn",
+   "cinnamon"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Masa harina",
+   "Mexican chocolate",
+   "Milk",
+   "Piloncillo"
+  ],
+  "funFact": "Mexican drinking chocolate is deliberately gritty — the sugar is coarse and unrefined, and the texture is the point rather than a flaw to be smoothed out.",
+  "dexNumber": 7619,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Masa harina",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Whole milk",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Mexican chocolate",
+     "amount": "3 oz / 85 g"
+    },
+    {
+     "item": "Piloncillo",
+     "amount": "3 oz / 85 g"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    }
+   ],
+   "steps": [
+    "Whisk the masa into the cold water until smooth.",
+    "Heat the milk with the chocolate, piloncillo and cinnamon until melted.",
+    "Whisk hard with a molinillo or a balloon whisk until it foams.",
+    "Stir in the masa mixture and simmer, stirring, until thick. Serve very hot."
+   ],
+   "garnish": "None",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "ponche-navideno",
+  "name": "Ponche Navideño",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Hot fruit punch with tejocotes, guava, sugarcane and hibiscus. Mexican Christmas in a clay mug.",
+  "abv": "0%",
+  "origin": "Mexico",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "guava",
+   "tamarind",
+   "cinnamon",
+   "hibiscus"
+  ],
+  "glassware": "Clay mug",
+  "ingredients": [
+   "Tejocote",
+   "Guava",
+   "Sugarcane",
+   "Piloncillo"
+  ],
+  "funFact": "The fruit is meant to be eaten out of the bottom of the mug with a spoon, which is why it is served in a wide clay jarrito rather than a glass.",
+  "dexNumber": 7620,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Water",
+     "amount": "4 quarts"
+    },
+    {
+     "item": "Tejocotes",
+     "amount": "10, halved"
+    },
+    {
+     "item": "Guavas",
+     "amount": "4, quartered"
+    },
+    {
+     "item": "Sugarcane",
+     "amount": "1 stick, in batons"
+    },
+    {
+     "item": "Prunes",
+     "amount": "10"
+    },
+    {
+     "item": "Piloncillo",
+     "amount": "8 oz / 225 g"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "3"
+    },
+    {
+     "item": "Dried hibiscus",
+     "amount": "2 tbsp"
+    }
+   ],
+   "steps": [
+    "Simmer the water with the piloncillo, cinnamon and sugarcane for 20 minutes.",
+    "Add the tejocotes and prunes and simmer another 20 minutes until soft.",
+    "Add the guava and hibiscus and simmer for a final 15 minutes.",
+    "Ladle into clay mugs, making sure each one gets fruit, and serve very hot."
+   ],
+   "garnish": "The fruit itself, in the bottom of the mug",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "morir-sonando",
+  "name": "Morir Soñando",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Orange juice and cold milk beaten together with sugar and ice. The name means to die dreaming.",
+  "abv": "0%",
+  "origin": "Dominican Republic",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "orange",
+   "milk",
+   "vanilla"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Orange juice",
+   "Evaporated milk",
+   "Sugar"
+  ],
+  "funFact": "Everything has to be properly cold before it meets — warm juice curdles the milk instantly, and the whole technique is about avoiding that.",
+  "dexNumber": 7621,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Evaporated milk",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "4 oz / 120 ml, very cold"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Stir the sugar into the cold milk until fully dissolved.",
+    "Fill a tall glass with ice and pour the milk over it to chill it further.",
+    "Add the cold orange juice in a slow stream while stirring constantly.",
+    "Serve at once, before it has any chance to separate."
+   ],
+   "garnish": "An orange wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "chicha-morada",
+  "name": "Chicha Morada",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Purple corn boiled with pineapple, apple and spice, then cooled and sharpened with lime.",
+  "abv": "0%",
+  "origin": "Peru",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "purple corn",
+   "pineapple",
+   "clove",
+   "lime"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Purple corn",
+   "Pineapple",
+   "Cloves",
+   "Lime"
+  ],
+  "funFact": "Peruvian purple corn is one of the most anthocyanin-rich foods known, which is why the drink comes out an almost unnatural violet.",
+  "dexNumber": 7622,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Dried purple corn",
+     "amount": "1 lb / 450 g"
+    },
+    {
+     "item": "Water",
+     "amount": "4 quarts"
+    },
+    {
+     "item": "Pineapple rind",
+     "amount": "from 1 pineapple"
+    },
+    {
+     "item": "Apple",
+     "amount": "1, quartered"
+    },
+    {
+     "item": "Cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "3 oz / 90 ml"
+    }
+   ],
+   "steps": [
+    "Boil the corn with the pineapple rind, apple, cloves and cinnamon for 45 minutes.",
+    "Strain and discard the solids.",
+    "Stir in the sugar while the liquid is still warm.",
+    "Cool completely, then add the lime juice and serve over ice with diced apple."
+   ],
+   "garnish": "Diced apple and a lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "mauby",
+  "name": "Mauby",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Mauby bark boiled with spice and sweetened. Bitter in a way no other soft drink is, and drunk for exactly that.",
+  "abv": "0%",
+  "origin": "Barbados",
+  "rarity": "rare",
+  "tastingNotes": [
+   "bitter bark",
+   "aniseed",
+   "cinnamon"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Mauby bark",
+   "Sugar",
+   "Cinnamon",
+   "Aniseed"
+  ],
+  "funFact": "The bitterness comes from the bark of Colubrina elliptica and lingers long after swallowing — Barbadians describe acquiring the taste as a rite of passage.",
+  "dexNumber": 7623,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mauby bark",
+     "amount": "2 oz / 55 g"
+    },
+    {
+     "item": "Water",
+     "amount": "6 cups"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Aniseed",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1.5 cups"
+    }
+   ],
+   "steps": [
+    "Boil the bark with the spices in the water for 30 minutes.",
+    "Strain and stir in the sugar while hot.",
+    "Cool completely — it turns more bitter as it cools, which is expected.",
+    "Dilute to taste with cold water and serve over plenty of ice."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "colada-morada",
+  "name": "Colada Morada",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Purple corn flour cooked with berries, spice and herbs. Ecuador drinks it once a year, for the dead.",
+  "abv": "0%",
+  "origin": "Ecuador",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackberry",
+   "purple corn",
+   "clove",
+   "allspice"
+  ],
+  "glassware": "Mug",
+  "ingredients": [
+   "Purple corn flour",
+   "Blackberries",
+   "Blackcurrant",
+   "Spices"
+  ],
+  "funFact": "It is served on the second of November with guaguas de pan — bread shaped as swaddled infants — and the pairing is not optional.",
+  "dexNumber": 7624,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Purple corn flour",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "6 cups"
+    },
+    {
+     "item": "Blackberries",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Blackcurrants",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Pineapple",
+     "amount": "1 cup, diced"
+    },
+    {
+     "item": "Panela",
+     "amount": "8 oz / 225 g"
+    },
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2"
+    },
+    {
+     "item": "Cloves",
+     "amount": "6"
+    },
+    {
+     "item": "Lemongrass",
+     "amount": "2 stalks"
+    },
+    {
+     "item": "Allspice berries",
+     "amount": "6"
+    }
+   ],
+   "steps": [
+    "Simmer the water with the panela, spices and lemongrass for 30 minutes, then strain.",
+    "Blend and sieve the berries, and add the purée to the spiced liquid.",
+    "Whisk the corn flour into a little cold water and stir it in.",
+    "Simmer, stirring constantly, until it thickens. Add the pineapple at the end and serve hot."
+   ],
+   "garnish": "Diced fruit",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "ayran",
+  "name": "Ayran",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Yoghurt whisked with cold water and salt. Savoury rather than sweet, and drunk with grilled meat.",
+  "abv": "0%",
+  "origin": "Turkey",
+  "rarity": "common",
+  "tastingNotes": [
+   "yoghurt",
+   "salt",
+   "sour"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Yoghurt",
+   "Water",
+   "Salt"
+  ],
+  "funFact": "Turkey sells more ayran than cola, and it is the drink poured alongside kebab everywhere from roadside grills to the state airline.",
+  "dexNumber": 7625,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Plain yoghurt",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Salt",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Whisk the yoghurt and salt together until completely smooth.",
+    "Add the cold water in a stream, whisking, until it is drinkable and slightly frothy.",
+    "Pour over ice.",
+    "Serve at once, before the froth falls."
+   ],
+   "garnish": "A dried mint dusting, in some regions",
+   "method": "built"
+  }
+ },
+ {
+  "id": "doogh",
+  "name": "Doogh",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Yoghurt thinned with sparkling water and seasoned with dried mint. Ayran's sharper Persian cousin.",
+  "abv": "0%",
+  "origin": "Iran",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yoghurt",
+   "mint",
+   "salt"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Yoghurt",
+   "Sparkling water",
+   "Dried mint",
+   "Salt"
+  ],
+  "funFact": "The carbonation is the difference — Persian doogh is traditionally naturally fizzy from a brief fermentation, which soda water now imitates.",
+  "dexNumber": 7626,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Plain yoghurt",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Sparkling water",
+     "amount": "5 oz / 150 ml"
+    },
+    {
+     "item": "Dried mint",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Salt",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Whisk the yoghurt, salt and dried mint until smooth.",
+    "Add the sparkling water slowly so it keeps its bubble.",
+    "Pour over ice without stirring hard.",
+    "Dust with more dried mint and serve."
+   ],
+   "garnish": "Dried mint and a cucumber slice",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sekanjabin",
+  "name": "Sekanjabin",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Mint and vinegar syrup diluted with cold water. Sweet and sour at once, and a thousand years old.",
+  "abv": "0%",
+  "origin": "Iran",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mint",
+   "vinegar",
+   "honey"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Vinegar",
+   "Sugar",
+   "Mint",
+   "Water"
+  ],
+  "funFact": "It is the ancestor of the shrub — the drinking-vinegar tradition reached Europe through Persian and Arab medicine, and the word sherbet comes along the same route.",
+  "dexNumber": 7627,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sugar",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Water",
+     "amount": "2 cups"
+    },
+    {
+     "item": "White wine vinegar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Fresh mint",
+     "amount": "1 large bunch"
+    },
+    {
+     "item": "Cold water",
+     "amount": "to dilute"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Simmer the sugar and water until it forms a light syrup.",
+    "Add the vinegar and simmer for another 15 minutes.",
+    "Take it off the heat, drop in the mint, and leave to steep until cool. Strain and bottle.",
+    "To serve, dilute one part syrup to five parts cold water, over ice, with grated cucumber."
+   ],
+   "garnish": "Grated cucumber and a mint sprig",
+   "method": "built"
+  }
+ },
+ {
+  "id": "jallab",
+  "name": "Jallab",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Date and grape molasses with rose water, poured over crushed ice and topped with pine nuts and raisins.",
+  "abv": "0%",
+  "origin": "Lebanon",
+  "rarity": "rare",
+  "tastingNotes": [
+   "date",
+   "rose",
+   "pine nut",
+   "smoke"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Date molasses",
+   "Grape molasses",
+   "Rose water",
+   "Pine nuts"
+  ],
+  "funFact": "The syrup is traditionally smoked with Arabic incense before bottling, which is where the faint resinous note underneath the sweetness comes from.",
+  "dexNumber": 7628,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Jallab syrup",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Rose water",
+     "amount": "0.25 tsp"
+    },
+    {
+     "item": "Pine nuts",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Golden raisins",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Soak the pine nuts and raisins in cold water for an hour so they soften and float.",
+    "Stir the syrup and rose water into the cold water until fully combined.",
+    "Fill a tall glass with crushed ice and pour the mixture over.",
+    "Spoon the soaked pine nuts and raisins on top."
+   ],
+   "garnish": "Pine nuts and golden raisins",
+   "method": "built"
+  }
+ },
+ {
+  "id": "salep",
+  "name": "Salep",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Hot milk thickened with orchid tuber flour and dusted with cinnamon. Drunk from a cup on winter streets in Istanbul.",
+  "abv": "0%",
+  "origin": "Turkey",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orchid",
+   "cinnamon",
+   "milk"
+  ],
+  "glassware": "Cup",
+  "ingredients": [
+   "Salep flour",
+   "Milk",
+   "Sugar",
+   "Cinnamon"
+  ],
+  "funFact": "Real salep flour is milled from wild orchid tubers, and harvesting has been restricted for decades — most street salep today is a starch blend by necessity.",
+  "dexNumber": 7629,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Whole milk",
+     "amount": "16 oz / 500 ml"
+    },
+    {
+     "item": "Salep flour",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Sugar",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Cinnamon",
+     "amount": "to dust"
+    }
+   ],
+   "steps": [
+    "Whisk the salep flour and sugar into the cold milk before any heat goes near it.",
+    "Heat slowly, whisking constantly, so it thickens without catching.",
+    "Simmer for five minutes until it coats the back of a spoon.",
+    "Pour into cups and dust heavily with cinnamon."
+   ],
+   "garnish": "Ground cinnamon",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "boza",
+  "name": "Boza",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Fermented millet, thick and faintly sour, served cold with cinnamon and roasted chickpeas.",
+  "abv": "0-1%",
+  "origin": "Turkey",
+  "rarity": "rare",
+  "tastingNotes": [
+   "millet",
+   "sour",
+   "cinnamon"
+  ],
+  "glassware": "Cup",
+  "ingredients": [
+   "Millet",
+   "Sugar",
+   "Cinnamon",
+   "Roasted chickpeas"
+  ],
+  "funFact": "Vefa Bozacısı has sold it from the same Istanbul shop since 1876, and still keeps the glass Atatürk drank from on display.",
+  "dexNumber": 7630,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Bulgur or millet",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "6 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Active starter or yeast",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Cinnamon",
+     "amount": "to dust"
+    },
+    {
+     "item": "Roasted chickpeas",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Boil the grain in the water until it collapses completely, then blend and sieve it smooth.",
+    "Stir in the sugar and cool to room temperature.",
+    "Add the starter and leave, covered, for a day or two until it turns faintly sour and fizzy.",
+    "Chill and serve in cups, dusted with cinnamon and scattered with roasted chickpeas."
+   ],
+   "garnish": "Cinnamon and roasted chickpeas",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "lassi",
+  "name": "Lassi",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Yoghurt blended with water and sugar until frothy. The sweet version of a drink that is just as often salted.",
+  "abv": "0%",
+  "origin": "Punjab, India",
+  "rarity": "common",
+  "tastingNotes": [
+   "yoghurt",
+   "cardamom",
+   "sugar"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Yoghurt",
+   "Water",
+   "Sugar",
+   "Cardamom"
+  ],
+  "funFact": "Salted lassi came first and remains the everyday one across much of northern India; sweet lassi is the version that travelled.",
+  "dexNumber": 7631,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Plain yoghurt",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Cold water",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Ground cardamom",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Blend the yoghurt, water and sugar until light and frothy.",
+    "Add the cardamom and blend again briefly.",
+    "Pour over ice into a tall glass.",
+    "Top with a spoon of the froth from the blender."
+   ],
+   "garnish": "Ground cardamom and a pistachio dusting",
+   "method": "built"
+  }
+ },
+ {
+  "id": "mango-lassi",
+  "name": "Mango Lassi",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Lassi made with ripe mango pulp. Thicker, sweeter, and the version most of the world met first.",
+  "abv": "0%",
+  "origin": "Punjab, India",
+  "rarity": "common",
+  "tastingNotes": [
+   "mango",
+   "yoghurt",
+   "cardamom"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Mango",
+   "Yoghurt",
+   "Sugar",
+   "Cardamom"
+  ],
+  "funFact": "Alphonso mangoes are the ones worth using and are in season for barely two months, which is why tinned Alphonso pulp is a legitimate ingredient rather than a compromise.",
+  "dexNumber": 7632,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ripe mango pulp",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Plain yoghurt",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Cold milk",
+     "amount": "0.25 cup"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Ground cardamom",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Blend the mango, yoghurt, milk and sugar until completely smooth.",
+    "Taste and add sugar only if the mango needs it.",
+    "Pour over ice.",
+    "Dust with cardamom and chopped pistachio."
+   ],
+   "garnish": "Chopped pistachio and cardamom",
+   "method": "built"
+  }
+ },
+ {
+  "id": "falooda",
+  "name": "Falooda",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Rose syrup, milk, vermicelli, basil seeds and ice cream in one tall glass. Drink and dessert at once.",
+  "abv": "0%",
+  "origin": "Mumbai, India",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rose",
+   "vanilla",
+   "milk",
+   "basil seed"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Rose syrup",
+   "Milk",
+   "Vermicelli",
+   "Basil seeds"
+  ],
+  "funFact": "Basil seeds swell into translucent jelly in water within minutes, and that texture — not the flavour, which is negligible — is the entire reason they are in the glass.",
+  "dexNumber": 7633,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Rose syrup",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Cold milk",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Cooked falooda vermicelli",
+     "amount": "3 tbsp"
+    },
+    {
+     "item": "Basil seeds",
+     "amount": "1 tbsp, soaked"
+    },
+    {
+     "item": "Vanilla ice cream",
+     "amount": "1 scoop"
+    },
+    {
+     "item": "Chopped nuts",
+     "amount": "1 tbsp"
+    }
+   ],
+   "steps": [
+    "Soak the basil seeds in water for 20 minutes until they swell and turn translucent.",
+    "Spoon the rose syrup into the bottom of a tall glass, then the vermicelli and basil seeds.",
+    "Pour the cold milk over slowly so the layers stay visible.",
+    "Top with a scoop of ice cream and scatter chopped nuts over it."
+   ],
+   "garnish": "Chopped pistachio and a rose petal",
+   "method": "built"
+  }
+ },
+ {
+  "id": "teh-tarik",
+  "name": "Teh Tarik",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Strong tea and condensed milk poured between two vessels from arm's length until it foams.",
+  "abv": "0%",
+  "origin": "Malaysia",
+  "rarity": "common",
+  "tastingNotes": [
+   "black tea",
+   "condensed milk",
+   "caramel"
+  ],
+  "glassware": "Glass mug",
+  "ingredients": [
+   "Black tea",
+   "Condensed milk"
+  ],
+  "funFact": "Tarik means pulled — the long pour aerates the tea and cools it, and the height of the pull is a genuine point of pride among stall owners.",
+  "dexNumber": 7634,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Strong black tea",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Sweetened condensed milk",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Evaporated milk",
+     "amount": "1 tbsp"
+    }
+   ],
+   "steps": [
+    "Brew the tea strong and strain it.",
+    "Stir in the condensed and evaporated milk until dissolved.",
+    "Pour it back and forth between two jugs, pulling the stream as far apart as you dare.",
+    "Stop when a thick head of foam has built, and serve immediately."
+   ],
+   "garnish": "The foam itself",
+   "method": "built"
+  }
+ },
+ {
+  "id": "cendol",
+  "name": "Cendol",
+  "category": "cocktail",
+  "subcategory": "Creamy & Dessert",
+  "description": "Green rice-flour jellies in coconut milk and palm sugar syrup over shaved ice.",
+  "abv": "0%",
+  "origin": "Java, Indonesia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "pandan",
+   "coconut",
+   "palm sugar"
+  ],
+  "glassware": "Bowl or tall glass",
+  "ingredients": [
+   "Rice flour jelly",
+   "Coconut milk",
+   "Palm sugar",
+   "Pandan"
+  ],
+  "funFact": "The green comes from pandan leaf rather than food colouring, and the jellies are pressed through a perforated mould straight into iced water to set.",
+  "dexNumber": 7635,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cendol jellies",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Coconut milk",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Gula melaka syrup",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Shaved ice",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Salt",
+     "amount": "a pinch"
+    }
+   ],
+   "steps": [
+    "Pile shaved ice into a bowl or a wide glass.",
+    "Spoon the green cendol jellies over the ice.",
+    "Pour the salted coconut milk over the top.",
+    "Finish with a heavy drizzle of palm sugar syrup and stir before eating."
+   ],
+   "garnish": "A drizzle of palm sugar syrup",
+   "method": "built"
+  }
+ },
+ {
+  "id": "es-kelapa-muda",
+  "name": "Es Kelapa Muda",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Young coconut water and its soft flesh over ice with palm sugar. Served in the shell it came out of.",
+  "abv": "0%",
+  "origin": "Indonesia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "coconut",
+   "palm sugar",
+   "lime"
+  ],
+  "glassware": "Coconut shell",
+  "ingredients": [
+   "Young coconut",
+   "Palm sugar",
+   "Ice"
+  ],
+  "funFact": "The flesh of a young coconut is soft enough to scrape out with a spoon and is nothing like the hard white meat of a mature one.",
+  "dexNumber": 7636,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Young coconut",
+     "amount": "1"
+    },
+    {
+     "item": "Palm sugar syrup",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Open the coconut at the top and pour the water into a jug.",
+    "Scrape the soft flesh out in strips with a spoon.",
+    "Stir the palm sugar syrup and lime into the water.",
+    "Return everything to the shell with ice, and serve with a spoon and a straw."
+   ],
+   "garnish": "The coconut flesh itself",
+   "method": "built"
+  }
+ },
+ {
+  "id": "nam-manao",
+  "name": "Nam Manao",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Lime juice, sugar and salt over crushed ice. Three ingredients and the salt is not optional.",
+  "abv": "0%",
+  "origin": "Thailand",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "salt",
+   "sugar"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Lime juice",
+   "Sugar",
+   "Salt"
+  ],
+  "funFact": "The pinch of salt is what makes it Thai — it flattens the sharp edge of the lime and makes the drink read as balanced rather than sour.",
+  "dexNumber": 7637,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Lime juice",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Simple syrup",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "4 oz / 120 ml"
+    },
+    {
+     "item": "Salt",
+     "amount": "a pinch"
+    },
+    {
+     "item": "Ice",
+     "amount": "crushed"
+    }
+   ],
+   "steps": [
+    "Stir the lime juice, syrup and salt together until the salt dissolves.",
+    "Add the cold water.",
+    "Fill a tall glass with crushed ice and pour over.",
+    "Stir once and taste — it should be sour first, then sweet, then faintly salty."
+   ],
+   "garnish": "A lime wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "suanmeitang",
+  "name": "Suanmeitang",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Smoked sour plums boiled with hawthorn and osmanthus. Dark, tart and drunk cold all summer.",
+  "abv": "0%",
+  "origin": "Beijing, China",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "smoked plum",
+   "hawthorn",
+   "osmanthus"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Smoked sour plum",
+   "Hawthorn",
+   "Osmanthus",
+   "Rock sugar"
+  ],
+  "funFact": "It was an imperial court drink under the Qing, and Beijing families still boil a pot at the start of summer and keep it in the fridge until autumn.",
+  "dexNumber": 7638,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Smoked sour plums",
+     "amount": "8"
+    },
+    {
+     "item": "Dried hawthorn slices",
+     "amount": "1 oz / 30 g"
+    },
+    {
+     "item": "Liquorice root",
+     "amount": "2 slices"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups"
+    },
+    {
+     "item": "Rock sugar",
+     "amount": "4 oz / 110 g"
+    },
+    {
+     "item": "Dried osmanthus",
+     "amount": "1 tsp"
+    }
+   ],
+   "steps": [
+    "Rinse the plums and hawthorn and soak them for an hour.",
+    "Boil everything but the osmanthus and sugar for 45 minutes.",
+    "Add the rock sugar and osmanthus and simmer for a final five minutes.",
+    "Strain, cool completely and serve very cold over ice."
+   ],
+   "garnish": "A few osmanthus flowers",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sujeonggwa",
+  "name": "Sujeonggwa",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Cinnamon and ginger boiled separately then combined, sweetened, and served cold with persimmon and pine nuts.",
+  "abv": "0%",
+  "origin": "South Korea",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cinnamon",
+   "ginger",
+   "persimmon"
+  ],
+  "glassware": "Small bowl",
+  "ingredients": [
+   "Cinnamon",
+   "Ginger",
+   "Honey",
+   "Dried persimmon"
+  ],
+  "funFact": "The cinnamon and ginger are boiled in separate pots and only combined at the end, because cooking them together muddies both.",
+  "dexNumber": 7639,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cinnamon sticks",
+     "amount": "2 oz / 55 g"
+    },
+    {
+     "item": "Fresh ginger",
+     "amount": "2 oz / 55 g, sliced"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups, split"
+    },
+    {
+     "item": "Brown sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Dried persimmons",
+     "amount": "4"
+    },
+    {
+     "item": "Pine nuts",
+     "amount": "1 tbsp"
+    }
+   ],
+   "steps": [
+    "Boil the cinnamon in half the water and the ginger in the other half, separately, for 40 minutes each.",
+    "Strain both and combine, then stir in the sugar and simmer until dissolved.",
+    "Cool completely and refrigerate overnight.",
+    "Serve very cold with a soaked dried persimmon and a few pine nuts floating on top."
+   ],
+   "garnish": "Dried persimmon and pine nuts",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "sikhye",
+  "name": "Sikhye",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Sweet rice punch with the grains left floating. Malted, faintly grainy and served ice cold after a meal.",
+  "abv": "0%",
+  "origin": "South Korea",
+  "rarity": "rare",
+  "tastingNotes": [
+   "malt",
+   "rice",
+   "ginger"
+  ],
+  "glassware": "Small bowl",
+  "ingredients": [
+   "Malted barley",
+   "Cooked rice",
+   "Sugar"
+  ],
+  "funFact": "The malt enzymes convert the rice starch to sugar — the same process that starts a beer, halted before any fermentation can begin.",
+  "dexNumber": 7640,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Malted barley powder",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "10 cups"
+    },
+    {
+     "item": "Cooked short-grain rice",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Fresh ginger",
+     "amount": "3 slices"
+    },
+    {
+     "item": "Pine nuts",
+     "amount": "1 tbsp"
+    }
+   ],
+   "steps": [
+    "Steep the malt powder in the water for an hour, then strain and keep the clear liquid.",
+    "Add the cooked rice and hold at 60C for four to five hours until the grains float.",
+    "Skim off the floating rice and reserve it, then boil the liquid with the sugar and ginger.",
+    "Cool completely and serve very cold with a spoonful of the reserved rice and a few pine nuts."
+   ],
+   "garnish": "Floating rice grains and pine nuts",
+   "method": "built"
+  }
+ },
+ {
+  "id": "amazake",
+  "name": "Amazake",
+  "category": "cocktail",
+  "subcategory": "Hot",
+  "description": "Rice fermented with koji into a thick sweet drink. No sugar is added and none is needed.",
+  "abv": "0-1%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rice",
+   "koji",
+   "sweet"
+  ],
+  "glassware": "Small cup",
+  "ingredients": [
+   "Rice",
+   "Koji",
+   "Water"
+  ],
+  "funFact": "All the sweetness comes from koji enzymes breaking rice starch into glucose — the same mould that starts sake, stopped before yeast is ever introduced.",
+  "dexNumber": 7641,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cooked short-grain rice",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Dried rice koji",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Fresh ginger",
+     "amount": "to grate"
+    }
+   ],
+   "steps": [
+    "Cool the cooked rice to about 60C and stir the koji and water through it.",
+    "Hold it at 55 to 60C for eight to ten hours, stirring occasionally.",
+    "Taste — it is done when it is properly sweet with no starchiness left.",
+    "Thin with hot water to drink, and serve with a little grated ginger."
+   ],
+   "garnish": "Grated ginger",
+   "method": "infused"
+  }
+ },
+ {
+  "id": "calpis",
+  "name": "Calpis",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Cultured milk concentrate diluted with cold water. Tart, milky and unlike anything outside Japan.",
+  "abv": "0%",
+  "origin": "Tokyo, Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yoghurt",
+   "citrus",
+   "milk"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Calpis concentrate",
+   "Water"
+  ],
+  "funFact": "It has been made since 1919 and is sold abroad as Calpico, because the original name lands badly in English for reasons the company worked out late.",
+  "dexNumber": 7642,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Calpis concentrate",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Cold water",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a tall glass with ice.",
+    "Pour the concentrate over.",
+    "Add cold water — roughly four parts to one — and stir.",
+    "Use soda water instead for Calpis Soda."
+   ],
+   "garnish": "A lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "ramune",
+  "name": "Ramune",
+  "category": "cocktail",
+  "subcategory": "Party",
+  "description": "Lemon-lime soda sealed by a glass marble that you punch into the neck to open.",
+  "abv": "0%",
+  "origin": "Japan",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "lime",
+   "soda"
+  ],
+  "glassware": "Ramune bottle",
+  "ingredients": [
+   "Lemon-lime soda"
+  ],
+  "funFact": "The Codd-neck bottle is held shut by its own carbonation pressing a marble against a rubber seal, and the marble stays rattling in the neck for the rest of the drink.",
+  "dexNumber": 7643,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ramune",
+     "amount": "1 bottle / 200 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "to chill the bottle"
+    }
+   ],
+   "steps": [
+    "Chill the bottle thoroughly — it will foam over if it is warm.",
+    "Peel the wrapper and fit the plastic plunger into the top.",
+    "Push down hard and fast to drive the marble into the neck.",
+    "Hold it upright for a moment while it foams, then drink from the bottle."
+   ],
+   "garnish": "None — the marble is the point",
+   "method": "built"
+  }
+ },
+ {
+  "id": "barley-water",
+  "name": "Barley Water",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Barley boiled with lemon peel and sugar, strained and served cold. Wimbledon has poured it since 1935.",
+  "abv": "0%",
+  "origin": "England",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "barley",
+   "lemon",
+   "sugar"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Pearl barley",
+   "Lemon",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "Robinsons has been the Wimbledon barley water since 1935, when it was first sold there as a drink for players rather than spectators.",
+  "dexNumber": 7644,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Pearl barley",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Water",
+     "amount": "6 cups"
+    },
+    {
+     "item": "Lemons",
+     "amount": "2, peeled and juiced"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Rinse the barley, cover with the water and simmer for 30 minutes.",
+    "Add the lemon peel and simmer another 10 minutes.",
+    "Strain, stir in the sugar and lemon juice while still hot, and discard the barley.",
+    "Cool completely and serve over ice."
+   ],
+   "garnish": "A lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "kompot",
+  "name": "Kompot",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Fruit simmered in water with a little sugar and served cold. Every Polish household makes it and none the same way.",
+  "abv": "0%",
+  "origin": "Poland",
+  "rarity": "common",
+  "tastingNotes": [
+   "stone fruit",
+   "berry",
+   "sugar"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Seasonal fruit",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "It is what happens to fruit that is too ripe to keep, which is why the recipe is different in every kitchen and formalised in none of them.",
+  "dexNumber": 7645,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Mixed fruit",
+     "amount": "1 lb / 450 g"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "0.5 cup"
+    },
+    {
+     "item": "Cinnamon stick",
+     "amount": "1"
+    },
+    {
+     "item": "Cloves",
+     "amount": "3"
+    }
+   ],
+   "steps": [
+    "Put the fruit, sugar and spices in a pot with the water.",
+    "Bring to a boil, then simmer for 20 minutes until the fruit gives up its colour.",
+    "Take it off the heat and leave it to cool with the fruit still in.",
+    "Strain or don't, chill, and serve cold with a few pieces of the fruit in the glass."
+   ],
+   "garnish": "A few pieces of the cooked fruit",
+   "method": "boiled"
+  }
+ },
+ {
+  "id": "switchel",
+  "name": "Switchel",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Water, cider vinegar, ginger and molasses. What American farmhands drank in the hayfield before anyone sold sports drinks.",
+  "abv": "0%",
+  "origin": "New England, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "ginger",
+   "vinegar",
+   "molasses"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Cider vinegar",
+   "Ginger",
+   "Molasses",
+   "Water"
+  ],
+  "funFact": "It was known as haymaker's punch and drunk warm as often as cold, on the reasoning that a cold drink in the heat was dangerous.",
+  "dexNumber": 7646,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cider vinegar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Molasses or maple syrup",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Fresh ginger",
+     "amount": "1 tsp, grated"
+    },
+    {
+     "item": "Cold water",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Whisk the vinegar, molasses and grated ginger together until smooth.",
+    "Add the cold water and stir well.",
+    "Let it sit for an hour so the ginger infuses, then strain.",
+    "Serve over ice, or warm on a cold day as it was originally drunk."
+   ],
+   "garnish": "A lemon wheel",
+   "method": "built"
+  }
+ },
+ {
+  "id": "shrub",
+  "name": "Shrub",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Drinking vinegar cut with soda. A colonial way of keeping fruit that turned out to be a good drink.",
+  "abv": "0%",
+  "origin": "Philadelphia, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "berry",
+   "vinegar",
+   "sugar"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Fruit",
+   "Vinegar",
+   "Sugar",
+   "Soda water"
+  ],
+  "funFact": "Vinegar preserves the fruit and the sugar preserves the vinegar, which is why a shrub keeps for a year without refrigeration and why colonial households made it by the gallon.",
+  "dexNumber": 7647,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Raspberries",
+     "amount": "2 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Cider vinegar",
+     "amount": "1 cup"
+    },
+    {
+     "item": "Soda water",
+     "amount": "5 oz / 150 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Mash the fruit with the sugar and leave it, covered, for two days until it releases its syrup.",
+    "Strain, pressing the fruit, then stir in the vinegar. Bottle it and leave a week to mellow.",
+    "To serve, pour one ounce of shrub over ice.",
+    "Top with soda water and stir once."
+   ],
+   "garnish": "A few fresh berries",
+   "method": "built"
+  }
+ },
+ {
+  "id": "sarsaparilla",
+  "name": "Sarsaparilla",
+  "category": "cocktail",
+  "subcategory": "Retro",
+  "description": "Root-brewed soda with a medicinal edge. The drink that root beer came from and then left behind.",
+  "abv": "0%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sassafras",
+   "liquorice",
+   "vanilla"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Sarsaparilla root",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "It was sold as a blood purifier in nineteenth-century pharmacies, and the flavour still reads as medicine to anyone who did not grow up with it.",
+  "dexNumber": 7648,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sarsaparilla root",
+     "amount": "2 oz / 55 g"
+    },
+    {
+     "item": "Liquorice root",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1.5 cups"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Soda water",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Simmer the roots in the water for 30 minutes.",
+    "Strain and stir in the sugar and vanilla while hot.",
+    "Cool completely — this is the syrup, and it keeps for weeks.",
+    "Serve one part syrup to four parts soda water, over plenty of ice."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "root-beer",
+  "name": "Root Beer",
+  "category": "cocktail",
+  "subcategory": "Retro",
+  "description": "Sassafras, wintergreen and vanilla brewed into a foaming soda. Deeply American and baffling everywhere else.",
+  "abv": "0%",
+  "origin": "Philadelphia, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "sassafras",
+   "wintergreen",
+   "vanilla"
+  ],
+  "glassware": "Frosted mug",
+  "ingredients": [
+   "Sassafras",
+   "Wintergreen",
+   "Vanilla",
+   "Sugar"
+  ],
+  "funFact": "Safrole, the compound that gave real sassafras its flavour, was banned by the FDA in 1960 — every root beer since uses safrole-free extract.",
+  "dexNumber": 7649,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Sassafras-free root beer extract",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1.5 cups"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Soda water",
+     "amount": "to carbonate"
+    }
+   ],
+   "steps": [
+    "Dissolve the sugar in warm water and stir in the extract and vanilla.",
+    "Cool completely to make the syrup.",
+    "Mix one part syrup to four parts cold soda water.",
+    "Serve in a mug that has been in the freezer, which is not optional."
+   ],
+   "garnish": "None — a frosted mug is the whole presentation",
+   "method": "built"
+  }
+ },
+ {
+  "id": "birch-beer",
+  "name": "Birch Beer",
+  "category": "cocktail",
+  "subcategory": "Retro",
+  "description": "Birch bark soda, sharper and more minty than root beer. Comes red, brown or clear depending on the county.",
+  "abv": "0%",
+  "origin": "Pennsylvania, USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "birch",
+   "wintergreen",
+   "vanilla"
+  ],
+  "glassware": "Frosted mug",
+  "ingredients": [
+   "Birch bark",
+   "Sugar",
+   "Water"
+  ],
+  "funFact": "Pennsylvania Dutch country takes the colour seriously — red birch beer and white birch beer are different drinks there, and people hold opinions.",
+  "dexNumber": 7650,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Birch bark",
+     "amount": "3 oz / 85 g"
+    },
+    {
+     "item": "Water",
+     "amount": "8 cups"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1.5 cups"
+    },
+    {
+     "item": "Wintergreen extract",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Soda water",
+     "amount": "to serve"
+    }
+   ],
+   "steps": [
+    "Simmer the birch bark in the water for 30 minutes.",
+    "Strain and stir in the sugar and wintergreen while hot.",
+    "Cool completely to make the syrup.",
+    "Serve one part syrup to four parts soda water over ice, in a frosted mug."
+   ],
+   "garnish": "None",
+   "method": "built"
+  }
+ },
+ {
+  "id": "champola",
+  "name": "Champola",
+  "category": "cocktail",
+  "subcategory": "Regional",
+  "description": "Soursop pulp blended with milk and sugar. Cuba's answer to a milkshake, made from a fruit that tastes faintly of pineapple.",
+  "abv": "0%",
+  "origin": "Cuba",
+  "rarity": "rare",
+  "tastingNotes": [
+   "soursop",
+   "milk",
+   "vanilla"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Soursop",
+   "Milk",
+   "Sugar"
+  ],
+  "funFact": "Soursop flesh has to be pulled apart and the seeds picked out by hand — they are mildly toxic and never go in the blender.",
+  "dexNumber": 7651,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Soursop pulp",
+     "amount": "1 cup, seeded"
+    },
+    {
+     "item": "Cold milk",
+     "amount": "8 oz / 240 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "2 tbsp"
+    },
+    {
+     "item": "Vanilla extract",
+     "amount": "0.5 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Pull the soursop flesh apart by hand and remove every seed.",
+    "Blend the pulp with the milk, sugar and vanilla until smooth.",
+    "Add ice and blend again briefly.",
+    "Pour into a tall glass and serve at once."
+   ],
+   "garnish": "A dusting of cinnamon",
+   "method": "built"
+  }
+ },
+ {
+  "id": "batido",
+  "name": "Batido",
+  "category": "cocktail",
+  "subcategory": "Frozen",
+  "description": "Tropical fruit blended with ice and a little water or milk. The everyday drink of a Venezuelan lunch counter.",
+  "abv": "0%",
+  "origin": "Venezuela",
+  "rarity": "common",
+  "tastingNotes": [
+   "tropical fruit",
+   "lime",
+   "sugar"
+  ],
+  "glassware": "Tall glass",
+  "ingredients": [
+   "Fruit",
+   "Water or milk",
+   "Sugar",
+   "Ice"
+  ],
+  "funFact": "A batido made with water is called a batido de agua and one with milk a merengada, and ordering the wrong one gets you a different drink entirely.",
+  "dexNumber": 7652,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Ripe fruit",
+     "amount": "1.5 cups, chopped"
+    },
+    {
+     "item": "Cold water or milk",
+     "amount": "6 oz / 180 ml"
+    },
+    {
+     "item": "Sugar",
+     "amount": "1 tbsp"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "1 tsp"
+    },
+    {
+     "item": "Ice",
+     "amount": "1 cup"
+    }
+   ],
+   "steps": [
+    "Put the fruit, liquid, sugar and lime in a blender.",
+    "Add the ice and blend until smooth and thick.",
+    "Taste and adjust — ripe fruit often needs no sugar at all.",
+    "Pour into a tall glass and drink cold."
+   ],
+   "garnish": "A wedge of the fruit used",
+   "method": "built"
+  }
  }
 ]
