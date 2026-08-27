@@ -20,45 +20,12 @@
 
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import {
+  abvBelowFloor,
   validate,
   merge,
   assertShapePreserved,
   reportAndGate,
 } from './lib/dex-merge.mjs';
-
-/* The alcohol floor, kept byte-compatible with abvBelowFloor() in
- * scripts/lib/dex-merge.mjs. This is a TEMPORARY duplicate: the shared
- * validator gained the same check as check 6, and the moment that lands on
- * main this block should be deleted so there is one rule and not two. It is
- * here only because that commit is not on main yet and cocktails should not
- * go unguarded in the gap.
- *
- * Three details, each of which I had wrong and a peer caught:
- *
- *  - FIRST number, not the minimum. A range is written low end first, so the
- *    first number IS the floor. Taking the minimum reads "5% (0.33 L)" as
- *    0.33 and throws out a real drink. No row in the Dex flips verdict today
- *    — the only rows where first and min differ are the two Izarra spirits at
- *    "40% green, 32% yellow" — so this is latent rather than active, which is
- *    exactly when it is cheap to fix.
- *  - A leading "<" or "≤" inverts the comparison, so "<0.5%" rejects while a
- *    bare "0.5%" clears.
- *  - "Varies by producer" is a second undocumented-strength phrase. A
- *    carve-out keyed only to "Not published" would have condemned it. */
-const ABV_FLOOR = 0.5;
-const ABV_UNDOCUMENTED = /not published|varies/i;
-const ABV_ABSENT = /alcohol[-\s]?free|non[-\s]?alcoholic|de[-\s]?alcoholi[sz]|no alcohol/i;
-
-function abvBelowFloor(abv) {
-  const s = String(abv ?? '');
-  if (ABV_UNDOCUMENTED.test(s)) return false;
-  if (ABV_ABSENT.test(s)) return true;
-  const m = s.match(/\d+(?:\.\d+)?/);
-  if (!m) return false;
-  const n = Number(m[0]);
-  return /^\s*[<≤]/.test(s) ? n <= ABV_FLOOR : n < ABV_FLOOR;
-}
-
 
 const SOURCE = new URL('./cocktaildata/', import.meta.url);
 const DRINKS = new URL('../src/data/drinks.json', import.meta.url);
@@ -132,12 +99,19 @@ for (const c of source) {
    * record was authored against the wrong template. */
   if (c.serve || c.composition) errors.push(`${where}: cocktails must not carry serve/composition`);
 
-  if (abvBelowFloor(c.abv)) {
-    errors.push(`${where}: abv "${c.abv}" does not clear the ${ABV_FLOOR}% floor — this app catalogues alcohol`);
-  } else if (!/\d/.test(String(c.abv ?? ''))) {
-    /* Cocktail-only, and deliberately NOT promoted to the shared module: 174
-     * beer cards legitimately read "Not published". A cocktail is authored
-     * here, so it has no excuse for an unstated strength. */
+  /* The alcohol floor itself is check 6 in the shared validator and is NOT
+   * repeated here. A duplicate lived in this file while that commit was in
+   * flight; carrying two copies of one rule is what made the Kvass removal
+   * ambiguous, so it goes the moment it stops being necessary.
+   *
+   * What stays is cocktail-only and deliberately not promoted upward: a
+   * cocktail must state a strength at all. 174 beer cards legitimately read
+   * "Not published" and one wine card reads "Varies by producer", so the
+   * shared module has to let those through — a cocktail is authored right
+   * here and has no such excuse. Guarded by abvBelowFloor so that an
+   * "Alcohol-Free" row, which also contains no digit, reports the floor error
+   * alone rather than both. */
+  if (!abvBelowFloor(c.abv) && !/\d/.test(String(c.abv ?? ''))) {
     errors.push(`${where}: abv "${c.abv}" states no strength`);
   }
 }
