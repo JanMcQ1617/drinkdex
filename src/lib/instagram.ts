@@ -62,6 +62,14 @@ const RESERVED = new Set([
   'challenge',
   'session',
   'emails',
+  /*
+   * Belt to the regex's braces. `_u` can only reach here if a URL form
+   * slips past the match above, and a real account named `_u` is a price
+   * worth paying: the failure it prevents is silent — a whole following
+   * list collapsing to one handle that matches nobody, which reads as
+   * "none of your friends are here" rather than as a bug.
+   */
+  '_u',
 ]);
 
 /**
@@ -81,8 +89,19 @@ export function normalizeHandle(raw: string): string | null {
   let s = raw.trim();
   if (!s) return null;
 
-  // Strip a profile URL down to its first path segment.
-  const url = s.match(/(?:^|\/\/)(?:www\.)?instagram\.com\/([^/?#\s]+)/i);
+  /*
+   * Strip a profile URL down to the handle.
+   *
+   * The optional `_u/` is not cosmetic. Instagram's real export writes
+   * following.json entries as `instagram.com/_u/<handle>` — its
+   * open-in-app link form — and with no `value` field to fall back on.
+   * Without this, every followed account parsed as the literal handle
+   * "_u", the whole list deduped to one junk entry, and it matched
+   * nobody. Found only by running an actual export through this: the
+   * reconstructed fixtures all used the plain `instagram.com/<handle>`
+   * form that followers_1.json still uses.
+   */
+  const url = s.match(/(?:^|\/\/)(?:www\.)?instagram\.com\/(?:_u\/)?([^/?#\s]+)/i);
   if (url) s = url[1];
 
   s = s.replace(/^@+/, '').replace(/\/+$/, '').split(/[?#]/)[0].trim().toLowerCase();
