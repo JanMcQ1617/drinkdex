@@ -203,6 +203,19 @@ export function validate({ drinks, incoming, category, owner }) {
  * discards whatever landed since this script last read the file. Numbers are
  * reused by id so a re-run is a true no-op rather than renumbering the Dex.
  */
+/**
+ * KEY ORDER, for anyone porting an existing script onto this.
+ *
+ * `{ ...card, dexNumber }` appends dexNumber LAST. If your script projected
+ * it mid-object, the straight swap reorders every key in every row: the data
+ * is byte-identical and the diff is enormous — 882 insertions and 882
+ * deletions on one 441-row category — and it reads in review exactly like
+ * corruption.
+ *
+ * Carry a `dexNumber: 0` placeholder at the position you want in your
+ * projection. A spread preserves the position of a key that already exists,
+ * so the assignment below changes only the value and the diff stays empty.
+ */
 export function merge({ drinks, incoming }) {
   const incomingIds = new Set(incoming.map((c) => c.id));
   const kept = drinks.filter((d) => !incomingIds.has(d.id));
