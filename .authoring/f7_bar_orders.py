@@ -1,0 +1,446 @@
+# -*- coding: utf-8 -*-
+"""The drinks people actually order: house highballs, shots, and the
+frozen/spritz shelf. Nothing here is obscure; most of it is what a bar
+pours a hundred times a night and no cocktail book bothers to print."""
+from ck import S, T, B, C
+
+US, UK, MX, IT = "USA", "United Kingdom", "Mexico", "Italy"
+NYC, LDN = "New York City, USA", "London, England"
+
+# ================================================== THE EVERYDAY HIGHBALLS
+
+B("Jack and Coke", US, "Tennessee, USA", "Highball", "common", "12-14%",
+  "Tennessee whiskey and cola. Probably the single most-ordered mixed drink in the world.",
+  ["vanilla", "cola", "oak"], "Highball glass",
+  ["Tennessee whiskey", "Cola"],
+  "Jack Daniel's is charcoal-mellowed through ten feet of sugar maple before barrelling — the Lincoln County Process, and the reason it is not legally a bourbon.",
+  [("Tennessee whiskey", "2 oz / 60 ml"), ("Cola", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a tall glass with ice.",
+   "Add the whiskey.",
+   "Top with cold cola and stir once.",
+   "Squeeze a lime wedge over it if the bar has one."],
+  "A lime wedge")
+
+B("Rum and Coke", US, NYC, "Highball", "common", "12-14%",
+  "Rum and cola without the lime. Add the lime and it becomes a Cuba Libre, which is a different order.",
+  ["molasses", "cola", "vanilla"], "Highball glass",
+  ["Rum", "Cola"],
+  "The lime is the whole distinction — bartenders treat Cuba Libre and rum and coke as two drinks, and customers almost never do.",
+  [("Gold rum", "2 oz / 60 ml"), ("Cola", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a tall glass with ice.",
+   "Add the rum.",
+   "Top with cold cola.",
+   "Stir once and serve, with no lime."],
+  "None")
+
+B("Whiskey Ginger", US, NYC, "Highball", "common", "12-14%",
+  "Whiskey and ginger ale. The buck without the lemon, and the order people give when they want something easy.",
+  ["ginger", "rye", "vanilla"], "Highball glass",
+  ["Whiskey", "Ginger ale"],
+  "Ginger's heat reads as a continuation of the spice already in rye, which is why the pairing works better with rye than with bourbon.",
+  [("Rye or bourbon", "2 oz / 60 ml"), ("Ginger ale", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a tall glass with ice.",
+   "Add the whiskey.",
+   "Top with cold ginger ale.",
+   "Stir once and hang a lime wedge on the rim."],
+  "A lime wedge")
+
+B("Vodka Cranberry", US, NYC, "Highball", "common", "10-12%",
+  "Vodka and cranberry juice. A Cape Codder without the lime, and the most-ordered vodka drink there is.",
+  ["cranberry", "tart", "clean"], "Highball glass",
+  ["Vodka", "Cranberry juice"],
+  "Cranberry juice is almost never sold unsweetened — the fruit is far too sour to drink straight, which is why the bottle usually says cocktail on it.",
+  [("Vodka", "2 oz / 60 ml"), ("Cranberry juice", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a tall glass with ice.",
+   "Add the vodka.",
+   "Top with cranberry juice.",
+   "Stir once until the colour is even."],
+  "A lime wedge")
+
+B("Vodka Soda", US, NYC, "Highball", "common", "12-14%",
+  "Vodka and soda water. The least of all possible drinks, ordered on purpose.",
+  ["clean", "neutral", "soda"], "Highball glass",
+  ["Vodka", "Soda water"],
+  "It is ordered as much for what it leaves out as for what it contains — no sugar, no juice, and nothing to disguise a bad vodka either.",
+  [("Vodka", "2 oz / 60 ml"), ("Soda water", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a tall glass with ice.",
+   "Add the vodka.",
+   "Top with cold soda water.",
+   "Squeeze a lime wedge in and drop it in the glass."],
+  "A lime wedge")
+
+B("Vodka Tonic", US, NYC, "Highball", "common", "12-14%",
+  "Vodka and tonic. The Gin and Tonic with the botanicals taken out, which leaves the quinine exposed.",
+  ["quinine", "citrus", "clean"], "Highball glass",
+  ["Vodka", "Tonic water"],
+  "Without gin's botanicals there is nothing standing between the drinker and the tonic, so the brand of tonic matters more here than in almost any other highball.",
+  [("Vodka", "2 oz / 60 ml"), ("Tonic water", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a tall glass with ice.",
+   "Add the vodka.",
+   "Top with cold tonic, poured down a barspoon to keep the bubble.",
+   "Squeeze a lime wedge in."],
+  "A lime wedge")
+
+B("Tequila and Tonic", MX, "Jalisco, Mexico", "Highball", "uncommon", "12-14%",
+  "Blanco tequila and tonic. Spain drinks it more than Mexico does, and it works better than it sounds.",
+  ["agave", "quinine", "lime"], "Copa glass",
+  ["Blanco tequila", "Tonic water"],
+  "Quinine's bitterness meets cooked agave's vegetal edge rather than fighting it, which is why the drink took hold in Spain where the gin-tonic culture was already built.",
+  [("Blanco tequila", "2 oz / 60 ml"), ("Tonic water", "5 oz / 150 ml"),
+   ("Ice", "cubed")],
+  ["Fill a large copa glass with ice.",
+   "Add the tequila.",
+   "Top with cold tonic.",
+   "Garnish with a grapefruit peel rather than lime — it suits the agave better."],
+  "A grapefruit peel")
+
+B("Snakebite and Black", UK, "England", "Party", "uncommon", "5-6%",
+  "Lager, cider and blackcurrant cordial. Banned by more student unions than any other drink in Britain.",
+  ["blackcurrant", "apple", "malt"], "Pint glass",
+  ["Lager", "Cider", "Blackcurrant cordial"],
+  "The bans were never about the alcohol — a snakebite is weaker than most real ale — but about how fast it goes down when it tastes of blackcurrant.",
+  [("Lager", "half pint / 285 ml"), ("Dry cider", "half pint / 285 ml"),
+   ("Blackcurrant cordial", "a dash")],
+  ["Pour the blackcurrant cordial into the bottom of a pint glass.",
+   "Add the cider.",
+   "Top with the lager, poured slowly down the side.",
+   "Do not stir; the pour mixes it."],
+  "None")
+
+B("Dog's Nose", UK, "England", "Party", "rare", "8-10%",
+  "Porter with a measure of gin dropped into it. Dickens printed the recipe in 1836.",
+  ["malt", "juniper", "roast"], "Tankard",
+  ["Porter", "Gin", "Brown sugar", "Nutmeg"],
+  "The Pickwick Papers describes it as warm porter, moist sugar, gin and nutmeg, which makes it one of the earliest English drink recipes published in a novel.",
+  [("Porter", "10 oz / 300 ml"), ("Gin", "1.5 oz / 45 ml"),
+   ("Brown sugar", "1 tsp"), ("Nutmeg", "to grate")],
+  ["Warm the porter gently — not hot, just off the chill.",
+   "Stir in the sugar until it dissolves.",
+   "Add the gin and stir once.",
+   "Grate nutmeg over the top and serve in a tankard."],
+  "Grated nutmeg")
+
+# ================================================================ SHOTS
+
+C("Flaming Dr Pepper", US, "Texas, USA", "Shot", "uncommon", "10-12%",
+  "A lit shot of overproof amaretto dropped into beer. Tastes, improbably, like Dr Pepper.",
+  ["almond", "malt", "caramel"], "Shot glass and beer glass",
+  ["Amaretto", "Overproof rum", "Lager"],
+  "It contains no Dr Pepper and no cola of any kind — the resemblance comes from amaretto's almond meeting the malt, and it is genuinely close.",
+  [("Amaretto", "0.75 oz / 22 ml"), ("Overproof rum", "0.25 oz / 7 ml, to float"),
+   ("Lager", "4 oz / 120 ml")],
+  ["Fill a shot glass three-quarters with amaretto and float the overproof rum on top.",
+   "Pour the lager into a separate glass, leaving room.",
+   "Light the float, let it burn for a second, then drop the whole shot glass into the beer.",
+   "Drink it down immediately, while it is still foaming."],
+  "None", "layered")
+
+C("Blow Job", US, NYC, "Shot", "uncommon", "16-18%",
+  "Layered coffee liqueur and Baileys under whipped cream, drunk hands-free. The name is the gimmick and so is the delivery.",
+  ["coffee", "cream", "chocolate"], "Shot glass",
+  ["Coffee liqueur", "Irish cream", "Whipped cream"],
+  "It belongs to a run of 1980s layered novelty shots that were designed around how they are drunk rather than how they taste.",
+  [("Coffee liqueur", "0.5 oz / 15 ml"), ("Irish cream", "0.5 oz / 15 ml"),
+   ("Whipped cream", "to top")],
+  ["Pour the coffee liqueur into a shot glass.",
+   "Float the Irish cream over the back of a barspoon so it sits in a clean band.",
+   "Cap with a swirl of whipped cream.",
+   "Serve on a napkin, to be taken without hands."],
+  "Whipped cream", "layered")
+
+S("White Gummy Bear", US, "California, USA", "uncommon", "18-20%",
+  "Vodka, peach schnapps, sour mix and lemon-lime soda. Tastes exactly like the sweet it is named for.",
+  ["peach", "pineapple", "citrus"],
+  ["Vodka", "Peach schnapps", "Sour mix", "Lemon-lime soda"],
+  "The whole family of sweet-shop shots works by hitting one recognisable confectionery note hard enough that nobody looks for a second one.",
+  [("Vodka", "0.5 oz / 15 ml"), ("Peach schnapps", "0.5 oz / 15 ml"),
+   ("Pineapple juice", "0.5 oz / 15 ml"), ("Sweet and sour mix", "0.5 oz / 15 ml"),
+   ("Lemon-lime soda", "splash"), ("Ice", "cubed")],
+  "None", sub="Shot", glass="Shot glass")
+
+S("Chocolate Cake Shot", US, NYC, "uncommon", "22-24%",
+  "Vodka and hazelnut liqueur, chased by a sugared lemon wedge. The lemon and sugar is what makes it taste of cake.",
+  ["hazelnut", "lemon", "sugar"],
+  ["Vodka", "Frangelico", "Lemon", "Sugar"],
+  "There is no chocolate in it at all — the illusion comes entirely from hazelnut meeting sugared citrus, and it collapses if you skip the lemon.",
+  [("Vodka", "0.75 oz / 22 ml"), ("Frangelico", "0.75 oz / 22 ml"),
+   ("Lemon wedge", "1, coated in sugar"), ("Ice", "cubed")],
+  "A sugar-coated lemon wedge", sub="Shot", glass="Shot glass",
+  steps=["Shake the vodka and Frangelico with ice until very cold.",
+         "Strain into a shot glass.",
+         "Coat a lemon wedge heavily in caster sugar.",
+         "Drink the shot, then bite the lemon immediately."])
+
+S("Melon Ball", US, NYC, "uncommon", "16-18%",
+  "Midori, vodka and pineapple. Bright green, and one of the drinks that made melon liqueur a 1980s fixture.",
+  ["melon", "pineapple", "vodka"],
+  ["Midori", "Vodka", "Pineapple juice"],
+  "Midori launched in America at Studio 54 in 1978, which is roughly the most 1970s fact available about any bottle behind a bar.",
+  [("Midori", "1 oz / 30 ml"), ("Vodka", "0.5 oz / 15 ml"),
+   ("Pineapple juice", "1.5 oz / 45 ml"), ("Ice", "cubed")],
+  "A melon ball on a pick", sub="Shot", glass="Rocks glass")
+
+T("Ferrari Shot", US, "San Francisco, USA", "uncommon", "26-28%",
+  "Equal parts Fernet-Branca and Campari. Bitter twice over, and an industry handshake more than a drink.",
+  ["menthol", "bitter orange", "herbal"],
+  ["Fernet-Branca", "Campari"],
+  "San Francisco drinks more Fernet-Branca per head than anywhere outside Argentina, and the bar trade there adopted this as its shift-drink shorthand.",
+  [("Fernet-Branca", "0.75 oz / 22 ml"), ("Campari", "0.75 oz / 22 ml"),
+   ("Ice", "cubed")],
+  "None", sub="Shot", glass="Shot glass")
+
+C("Sourtoe Cocktail", "Canada", "Dawson City, Yukon, Canada", "Shot", "rare", "40-42%",
+  "A shot of whisky with a mummified human toe in it. The toe must touch your lips; the rules are posted on the wall.",
+  ["rye", "oak", "grain"], "Shot glass",
+  ["Whisky"],
+  "The Downtown Hotel has run it since 1973, keeps the toes in salt, and fines anyone who swallows one — which has happened more than once.",
+  [("Yukon whisky", "1 oz / 30 ml"), ("A preserved toe", "1")],
+  ["Pour a shot of whisky.",
+   "Add the toe.",
+   "Drink it down fast or slow — the only rule is that your lips touch the toe.",
+   "Return the toe to the salt. Swallowing it carries a fine."],
+  "The toe, which stays with the bar", "built")
+
+# ============================================================== BIG POURS
+
+S("Blue Motorcycle", US, "Florida, USA", "uncommon", "22-24%",
+  "Five white spirits with blue curaçao and lemon-lime soda. A Long Island with the cola swapped for the blue.",
+  ["orange", "citrus", "clean"],
+  ["Vodka", "Gin", "White rum", "Tequila", "Blue curaçao"],
+  "The Long Island family is defined by five spirits in equal quarter-ounces, and every variant in it changes only the mixer and the colour.",
+  [("Vodka", "0.5 oz / 15 ml"), ("Gin", "0.5 oz / 15 ml"),
+   ("White rum", "0.5 oz / 15 ml"), ("Blanco tequila", "0.5 oz / 15 ml"),
+   ("Blue curaçao", "0.5 oz / 15 ml"), ("Lemon juice", "0.75 oz / 22 ml"),
+   ("Lemon-lime soda", "2 oz / 60 ml, to top"), ("Ice", "cubed")],
+  "A lemon wheel", sub="Party", glass="Collins glass",
+  steps=["Shake everything but the soda with ice.",
+         "Strain into a tall glass packed with fresh ice.",
+         "Top with lemon-lime soda.",
+         "Garnish with a lemon wheel and a straw."])
+
+S("Trash Can", US, "Ohio, USA", "rare", "22-24%",
+  "The Long Island's five spirits with blue curaçao, finished by upending a can of energy drink into the glass.",
+  ["orange", "citrus", "sweet"],
+  ["Vodka", "Gin", "White rum", "Tequila", "Blue curaçao", "Energy drink"],
+  "The can is inverted into the glass and left standing there, draining slowly as the drink goes down — which is where the name comes from.",
+  [("Vodka", "0.5 oz / 15 ml"), ("Gin", "0.5 oz / 15 ml"),
+   ("White rum", "0.5 oz / 15 ml"), ("Blanco tequila", "0.5 oz / 15 ml"),
+   ("Peach schnapps", "0.5 oz / 15 ml"), ("Blue curaçao", "0.5 oz / 15 ml"),
+   ("Energy drink", "1 small can"), ("Ice", "cubed")],
+  "The inverted can, left in the glass", sub="Party", glass="Pint glass",
+  method="built",
+  steps=["Fill a pint glass with ice.",
+         "Add all six spirits and liqueurs and stir once.",
+         "Open a small can of energy drink and upend it into the glass.",
+         "Leave the can standing in the drink and serve it that way."])
+
+# ================================================== FROZEN & CREAM
+
+S("Banana Daiquiri", "Cuba", "Havana, Cuba", "uncommon", "14-16%",
+  "Rum, lime and banana blended with ice. A Floridita fruit daiquiri, and the one that travelled worst and furthest.",
+  ["banana", "lime", "rum"],
+  ["White rum", "Banana", "Lime juice", "Simple syrup"],
+  "La Floridita built frozen fruit daiquiris around a commercial blender in the 1930s, which put Havana ahead of every American bar on the technology.",
+  [("White rum", "2 oz / 60 ml"), ("Ripe banana", "half"),
+   ("Lime juice", "0.75 oz / 22 ml"), ("Simple syrup", "0.5 oz / 15 ml"),
+   ("Ice", "1 cup, crushed")],
+  "A banana slice and a lime wheel",
+  sub="Frozen", glass="Coupe glass", method="blended",
+  steps=["Put the rum, banana, lime and syrup in a blender.",
+         "Add the crushed ice and blend until smooth and thick.",
+         "Pour into a chilled coupe without straining.",
+         "Garnish with banana and lime."])
+
+S("Strawberry Daiquiri", US, "Florida, USA", "common", "12-14%",
+  "Rum, lime and strawberries blended to a slush. The drink that taught America what a daiquiri was, wrongly.",
+  ["strawberry", "lime", "rum"],
+  ["White rum", "Strawberries", "Lime juice", "Simple syrup"],
+  "The frozen version so completely displaced the original that bartenders now have to specify a daiquiri up when they mean the three-ingredient drink.",
+  [("White rum", "2 oz / 60 ml"), ("Strawberries", "6, hulled"),
+   ("Lime juice", "0.75 oz / 22 ml"), ("Simple syrup", "0.5 oz / 15 ml"),
+   ("Ice", "1 cup, crushed")],
+  "A strawberry on the rim",
+  sub="Frozen", glass="Hurricane glass", method="blended",
+  steps=["Blend the rum, strawberries, lime and syrup until smooth.",
+         "Add the crushed ice and blend again until thick.",
+         "Pour into a chilled glass.",
+         "Notch a strawberry onto the rim."])
+
+S("Frosé", US, NYC, "uncommon", "10-12%",
+  "Rosé frozen solid, then blended with strawberry and lemon. It only works because the wine is frozen first.",
+  ["strawberry", "rosé", "lemon"],
+  ["Rosé wine", "Strawberries", "Lemon juice", "Sugar"],
+  "Bar Primi in New York put it on in 2016 and it was everywhere within a summer; the trick is that rosé never freezes hard, so it blends into a slush rather than a block.",
+  [("Rosé wine", "1 bottle / 750 ml, frozen overnight"),
+   ("Strawberries", "8, hulled"), ("Lemon juice", "1 oz / 30 ml"),
+   ("Simple syrup", "1.5 oz / 45 ml")],
+  "A strawberry and a lemon twist",
+  sub="Frozen", glass="Wine glass", method="blended",
+  steps=["Pour the rosé into a shallow tray and freeze overnight — it will go slushy, not solid.",
+         "Scrape it into a blender with the strawberries, lemon juice and syrup.",
+         "Blend until smooth, adding a little more frozen wine if it loosens.",
+         "Pour into chilled wine glasses and serve with a straw."])
+
+S("Amaretto Stone Sour", US, "California, USA", "common", "12-14%",
+  "Amaretto with sour mix and orange juice. The gateway drink of a thousand bad decisions, and genuinely good.",
+  ["almond", "orange", "lemon"],
+  ["Amaretto", "Sour mix", "Orange juice"],
+  "A stone sour is any sour with orange juice added, so the name describes a whole family — this is simply the one everybody orders.",
+  [("Amaretto", "2 oz / 60 ml"), ("Sweet and sour mix", "2 oz / 60 ml"),
+   ("Orange juice", "2 oz / 60 ml"), ("Ice", "cubed")],
+  "An orange slice and a cherry", glass="Rocks glass")
+
+S("Brandy Ice", US, "California, USA", "rare", "14-16%",
+  "Brandy, crème de cacao and vanilla ice cream blended smooth. A dessert that arrives in a glass.",
+  ["vanilla", "chocolate", "cognac"],
+  ["Brandy", "Crème de cacao", "Vanilla ice cream"],
+  "Ice cream drinks blend rather than shake because there is no water to dilute — the ice cream is the chill, the sugar and the body all at once.",
+  [("Brandy", "1.5 oz / 45 ml"), ("White crème de cacao", "0.5 oz / 15 ml"),
+   ("Vanilla ice cream", "3 scoops")],
+  "Grated nutmeg", sub="Creamy & Dessert", glass="Wine glass", method="blended",
+  steps=["Put the ice cream, brandy and crème de cacao in a blender.",
+         "Blend just until smooth — over-blending turns it to soup.",
+         "Pour into a chilled wine glass.",
+         "Grate nutmeg over the top."])
+
+C("Bombardino", IT, "Livigno, Italy", "Hot", "uncommon", "14-16%",
+  "Hot advocaat and brandy under whipped cream. Drunk on Italian ski slopes and almost nowhere else.",
+  ["egg", "vanilla", "brandy", "cream"], "Heatproof glass",
+  ["Advocaat", "Brandy", "Whipped cream"],
+  "Order it calimero and you get coffee in it; order it bombardino sporco and you get whisky instead of brandy. The Alps have a vocabulary for this.",
+  [("Advocaat", "3 oz / 90 ml"), ("Brandy", "1 oz / 30 ml"),
+   ("Whipped cream", "to top"), ("Cocoa powder", "to dust")],
+  ["Warm the advocaat gently in a pan — it must not boil or it will split.",
+   "Stir in the brandy off the heat.",
+   "Pour into a warmed heatproof glass.",
+   "Cap with whipped cream and dust with cocoa."],
+  "Whipped cream and cocoa powder", "built")
+
+# ================================================================ SPRITZ
+
+B("Campari Spritz", IT, "Milan, Italy", "Spritz", "uncommon", "8-10%",
+  "Prosecco, Campari and soda. Sharper and more bitter than the Aperol version, and older.",
+  ["bitter orange", "prosecco", "soda"], "Wine glass",
+  ["Prosecco", "Campari", "Soda water"],
+  "Campari is roughly twice the strength of Aperol and considerably more bitter, so the same three-two-one build gives a completely different drink.",
+  [("Prosecco", "3 oz / 90 ml"), ("Campari", "2 oz / 60 ml"),
+   ("Soda water", "1 oz / 30 ml"), ("Ice", "cubed")],
+  ["Fill a large wine glass with ice.",
+   "Add the Campari, then the prosecco.",
+   "Top with a splash of soda.",
+   "Stir once from the bottom and hang an orange slice on the rim."],
+  "An orange slice")
+
+B("Rabarbaro Spritz", IT, "Milan, Italy", "Spritz", "rare", "8-10%",
+  "Prosecco with rhubarb amaro and soda. Darker and earthier than any citrus spritz.",
+  ["rhubarb", "smoke", "prosecco"], "Wine glass",
+  ["Prosecco", "Rabarbaro amaro", "Soda water"],
+  "Rabarbaro is made from Chinese rhubarb root that is smoke-dried before it is macerated, which is where the faint tarry note underneath comes from.",
+  [("Prosecco", "3 oz / 90 ml"), ("Rabarbaro Zucca", "2 oz / 60 ml"),
+   ("Soda water", "1 oz / 30 ml"), ("Ice", "cubed")],
+  ["Fill a wine glass with ice.",
+   "Add the rabarbaro, then the prosecco.",
+   "Top with a splash of soda.",
+   "Stir once and garnish with an orange half-wheel."],
+  "An orange half-wheel")
+
+B("Braulio Spritz", IT, "Bormio, Italy", "Spritz", "rare", "8-10%",
+  "Prosecco with the Alpine amaro of the Valtellina. Pine, mint and gentian instead of orange.",
+  ["pine", "mint", "gentian"], "Wine glass",
+  ["Prosecco", "Braulio", "Soda water"],
+  "Braulio is made in Bormio from mountain herbs gathered in the Stelvio valleys, and it tastes far more of a forest floor than of a citrus grove.",
+  [("Prosecco", "3 oz / 90 ml"), ("Braulio", "1.5 oz / 45 ml"),
+   ("Soda water", "1 oz / 30 ml"), ("Ice", "cubed")],
+  ["Fill a wine glass with ice.",
+   "Add the Braulio, then the prosecco.",
+   "Top with soda.",
+   "Stir once and garnish with a lemon twist rather than orange."],
+  "A lemon twist")
+
+B("Limoncello Spritz", IT, "Amalfi Coast, Italy", "Spritz", "uncommon", "9-11%",
+  "Prosecco, limoncello and soda over ice with mint. The southern Italian answer to the Venetian spritz.",
+  ["lemon", "prosecco", "mint"], "Wine glass",
+  ["Prosecco", "Limoncello", "Soda water", "Mint"],
+  "Sorrento lemons are grown under chestnut-pole pergolas and are thick-skinned by design — limoncello is made from the peel alone, never the juice.",
+  [("Prosecco", "3 oz / 90 ml"), ("Limoncello", "1.5 oz / 45 ml"),
+   ("Soda water", "1 oz / 30 ml"), ("Mint leaves", "4"), ("Ice", "cubed")],
+  ["Fill a wine glass with ice and add the mint.",
+   "Pour in the limoncello, then the prosecco.",
+   "Top with a splash of soda.",
+   "Stir once and hang a lemon wheel on the rim."],
+  "A lemon wheel and a mint sprig")
+
+# ======================================================= BRUNCH & MARTINI
+
+C("Prairie Oyster", UK, LDN, "Brunch", "rare", "14-16%",
+  "A whole raw egg yolk in brandy with Worcestershire, vinegar and pepper. Swallowed in one, unbroken.",
+  ["egg", "pepper", "vinegar", "cognac"], "Small tumbler",
+  ["Brandy", "Egg yolk", "Worcestershire sauce", "Vinegar"],
+  "The yolk is meant to stay intact all the way down, which is the entire ordeal — the drink is a Victorian hangover cure and reads as one.",
+  [("Cognac", "1 oz / 30 ml"), ("Egg yolk", "1, unbroken"),
+   ("Worcestershire sauce", "2 dashes"), ("Red wine vinegar", "1 tsp"),
+   ("Hot sauce", "2 dashes"), ("Salt and black pepper", "a pinch each")],
+  ["Pour the brandy, Worcestershire, vinegar and hot sauce into a small tumbler.",
+   "Slide the yolk in whole, taking care not to break it.",
+   "Season the top with salt and cracked pepper.",
+   "Swallow it in one, without chewing and without looking."],
+  "Cracked black pepper", "built")
+
+S("Bull Shot", US, "Detroit, USA", "rare", "12-14%",
+  "Vodka and cold beef consommé with Worcestershire and pepper. A Bloody Mary made of stock instead of tomato.",
+  ["beef", "pepper", "celery", "lemon"],
+  ["Vodka", "Beef consommé", "Worcestershire sauce", "Lemon juice"],
+  "It was invented at the Caucus Club in Detroit in 1952, and served hot as often as cold — the hot version is a different drink and a better one in winter.",
+  [("Vodka", "2 oz / 60 ml"), ("Beef consommé", "4 oz / 120 ml"),
+   ("Lemon juice", "0.5 oz / 15 ml"), ("Worcestershire sauce", "3 dashes"),
+   ("Hot sauce", "2 dashes"), ("Celery salt", "a pinch"), ("Ice", "cubed")],
+  "A lemon wedge and cracked pepper",
+  sub="Brunch", glass="Highball glass",
+  steps=["Roll everything between two tins with ice rather than shaking, so it does not foam.",
+         "Strain into a tall glass over fresh ice.",
+         "Season the top with celery salt and cracked pepper.",
+         "Serve with a lemon wedge."])
+
+T("Ojen Cocktail", US, "New Orleans, USA", "rare", "24-26%",
+  "Spanish anise liqueur with Peychaud's and soda. New Orleans drank it at Carnival for a century.",
+  ["anise", "bitters", "sugar"],
+  ["Ojén", "Peychaud's bitters", "Soda water"],
+  "Ojén came from Andalusia and New Orleans bought so much of it that when the distillery closed in the 1990s the city's last cases were rationed by the bottle.",
+  [("Ojén or anise liqueur", "2 oz / 60 ml"),
+   ("Peychaud's bitters", "4 dashes"), ("Simple syrup", "1 tsp"),
+   ("Soda water", "splash"), ("Ice", "cubed")],
+  "A lemon twist", glass="Rocks glass")
+
+T("Vodka Martini", UK, LDN, "common", "30-32%",
+  "Vodka and dry vermouth, stirred. The Martini with the botanicals taken out, which is either the point or the problem.",
+  ["clean", "dry vermouth", "olive"],
+  ["Vodka", "Dry vermouth"],
+  "Ian Fleming had Bond order his shaken, which is why half the world does — bartenders stir it, because shaking clouds the drink and over-dilutes it.",
+  [("Vodka", "2.5 oz / 75 ml"), ("Dry vermouth", "0.5 oz / 15 ml"),
+   ("Ice", "cubed")],
+  "An olive or a lemon twist", glass="Martini glass")
+
+T("Fifty-Fifty", UK, LDN, "uncommon", "22-24%",
+  "Equal parts gin and dry vermouth. The Martini as it was actually poured before the ratio started climbing.",
+  ["juniper", "dry vermouth", "herbal"],
+  ["Gin", "Dry vermouth"],
+  "Martini ratios have gone one way for a century — one to one in 1900, six to one by 1950, and effectively neat gin by 1980.",
+  [("Gin", "1.5 oz / 45 ml"), ("Dry vermouth", "1.5 oz / 45 ml"),
+   ("Orange bitters", "1 dash"), ("Ice", "cubed")],
+  "A lemon twist", glass="Martini glass")
+
+T("Tuxedo No. 2", US, NYC, "rare", "26-28%",
+  "Gin and dry vermouth with maraschino, absinthe and orange bitters. The Tuxedo with everything turned up.",
+  ["juniper", "cherry", "anise", "dry vermouth"],
+  ["Gin", "Dry vermouth", "Maraschino liqueur", "Absinthe"],
+  "It is named for the Tuxedo Club in New York, which also gave the dinner jacket its American name — the club came first and both borrowed from it.",
+  [("Gin", "1.5 oz / 45 ml"), ("Dry vermouth", "1.5 oz / 45 ml"),
+   ("Maraschino liqueur", "0.25 tsp"), ("Absinthe", "0.25 tsp"),
+   ("Orange bitters", "2 dashes"), ("Ice", "cubed")],
+  "A lemon twist and a cherry", glass="Martini glass")
