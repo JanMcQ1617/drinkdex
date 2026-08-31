@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -184,7 +185,14 @@ function AuthForm() {
           },
         ]}
         keyboardShouldPersistTaps="handled">
-        <Text style={styles.wordmark}>Sipply</Text>
+        <Image
+          source={require('../../assets/images/sipply-lockup.webp')}
+          style={styles.lockup}
+          resizeMode="contain"
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel="Sipply"
+        />
         <Text style={styles.tagline}>
           {signup
             ? 'Make an account to share your pours and follow other collectors.'
@@ -313,27 +321,43 @@ const styles = StyleSheet.create({
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.bg },
   scroll: { paddingHorizontal: space.xl, flexGrow: 1 },
 
-  wordmark: {
+  lockup: {
     /*
-     * Wine, not ink. The handoff's own splash sets the wordmark in bone on
-     * a wine ground — that beat is the launch intro, which pours wine over
-     * the whole screen. By the time the gate is reached the app is on its
-     * light page, so the wordmark keeps the brand colour and the page
-     * keeps the material every other screen is made of.
+     * The brand lockup itself — seal, wordmark and letterspaced tagline —
+     * rather than "Sipply" set in Playfair. This is the app's front door
+     * and the one screen where the mark is the content, so it is the whole
+     * lockup and not the bare seal the icon uses.
+     *
+     * CENTRED, which the rest of this screen is not. The lockup is an
+     * internally centred composition: its seal sits over the middle of the
+     * wordmark and the tagline is centred under both. Left-aligned against
+     * the form it reads as a centred thing shoved into a corner, so the
+     * mark and its supporting line take a centre axis and the form below
+     * keeps the left one it has always had.
+     *
+     * Width is fixed and the height follows the artwork's own 727:896, so
+     * the two cannot drift apart if the sheet is ever recut at a different
+     * size.
      */
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.display.fontSize,
-    lineHeight: typeScale.display.lineHeight,
-    color: colors.wine,
+    width: 170,
+    aspectRatio: 727 / 896,
+    alignSelf: 'center',
   },
   tagline: {
     fontFamily: fonts.body,
     fontSize: typeScale.body.fontSize,
     lineHeight: typeScale.body.lineHeight,
     color: colors.textMuted,
-    marginTop: space.sm,
+    /*
+     * Wider gap than the old wordmark needed. That was a line of type and
+     * this is artwork whose tagline already sits close under it, so the
+     * small step read as one crowded block of three lines.
+     */
+    marginTop: space.lg,
     marginBottom: space.xxl,
     maxWidth: 320,
+    textAlign: 'center',
+    alignSelf: 'center',
   },
 
   form: { gap: space.lg },

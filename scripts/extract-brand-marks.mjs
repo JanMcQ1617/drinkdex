@@ -33,6 +33,7 @@ import { fileURLToPath } from 'node:url';
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const ICON = join(ROOT, 'scripts/icon');
+const IMAGES = join(ROOT, 'assets/images');
 const SHEET = join(ICON, 'brand-sheet.png');
 
 /** The sheet's ground, sampled as the median of its outer border. */
@@ -107,9 +108,35 @@ const MARKS = [
     },
   ]),
   {
-    name: 'mark-lockup.png',
-    /* The full stacked lockup: seal, wordmark, rule, tagline, diamond. */
+    /*
+     * The full stacked lockup: seal, wordmark, rule, tagline, diamond.
+     *
+     * This one is rendered BY THE APP rather than consumed by the icon
+     * build, so it is written to assets/ and not to scripts/icon/. That is
+     * the rule for this directory: a master the app itself draws is a
+     * shipped asset and belongs beside the other shipped rasters; a master
+     * that only feeds build-icons.mjs stays here as a build input. Keeping
+     * a second copy in scripts/icon/ would be half a megabyte of the same
+     * pixels.
+     */
+    name: 'sipply-lockup.webp',
+    dest: IMAGES,
     rect: [274, 220, 727, 896],
+    /*
+     * The only mark that ships inside the app bundle, so it is the only
+     * one that pays for its own bytes at runtime — and it is written as
+     * WebP at the size the screen actually draws it, not at the sheet's.
+     * AuthGate sets it 170pt wide, so 512px covers @3x with a little room;
+     * the 727px master would be 1.4x more pixels than any display can use.
+     * 514 KB of PNG becomes 67 KB. cwebp is already how this repo builds
+     * assets/drinks (see build-drink-photos.mjs).
+     *
+     * q92 rather than the 82 the drink photos use. Those are photographs,
+     * where 82 is invisible; this has hairline gilt rules and 11px
+     * letterspaced caps in it, and thin light-on-dark strokes are the first
+     * thing a lossy encoder softens.
+     */
+    webp: { width: 512, quality: 92 },
   },
 ];
 
@@ -198,9 +225,10 @@ img.src = 'file://${SHEET}';
 const work = mkdtempSync(join(tmpdir(), 'sipply-marks-'));
 
 for (const m of MARKS) {
-  const html = join(work, m.name.replace('.png', '.html'));
+  const stem = m.name.replace(/\.(png|webp)$/, '');
+  const html = join(work, `${stem}.html`);
   writeFileSync(html, page(m));
-  const shot = join(work, m.name);
+  const shot = join(work, `${stem}.png`);
   execFileSync(CHROME, [
     '--headless',
     '--disable-gpu',
@@ -212,8 +240,21 @@ for (const m of MARKS) {
     `--window-size=${m.rect[2]},${m.rect[3]}`,
     `file://${html}`,
   ], { stdio: 'ignore' });
-  copyFileSync(shot, join(ICON, m.name));
-  console.log(`  ${m.name}  ${m.rect[2]}x${m.rect[3]}`);
+  const out = join(m.dest ?? ICON, m.name);
+  if (m.webp) {
+    execFileSync('cwebp', [
+      '-quiet',
+      '-q', String(m.webp.quality),
+      // Alpha stays lossless; the cut-out edge is the whole point of it.
+      '-alpha_q', '100',
+      '-resize', String(m.webp.width), '0',
+      shot,
+      '-o', out,
+    ]);
+  } else {
+    copyFileSync(shot, out);
+  }
+  console.log(`  ${m.name}  ${m.rect[2]}x${m.rect[3]}${m.webp ? ` -> webp ${m.webp.width}px q${m.webp.quality}` : ''}`);
 }
 
 console.log('\n  Marks cut from the sheet.\n');
