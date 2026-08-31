@@ -36,7 +36,7 @@ Please report:
 - Anything that looks wrong — spacing, colour, text that's cut off
 - Anything you expected to be able to do and couldn't
 
-Two things I already know about: the app is 17+ and alcohol-focused by
+Two things I already know about: the app is 18+ and alcohol-focused by
 design, and your collection lives on your device — signing in elsewhere
 won't bring it with you yet.
 
@@ -64,9 +64,16 @@ and symmetric, and removes any follow between the two accounts.
 **Account deletion.** Profile → Delete account. Deletes the account, all
 posts, all photos and all follows. No email or support request needed.
 
-**Age rating.** 17+. The app is about alcoholic drinks and includes
+**Age rating.** 18+. The app is about alcoholic drinks and includes
 references to alcohol throughout. It does not sell alcohol, does not
 facilitate purchase, and contains no commerce of any kind.
+
+**Contacts.** The app asks for contacts access, but contacts are **not
+collected**. Phone numbers are salted-SHA-256 hashed on the device and the
+hashes are sent as query arguments to a read-only matching function that
+stores nothing. The only value retained is the user's own phone hash, which
+is what makes them findable, and it is cleared by "Stop being findable" in
+Profile → Accounts.
 
 **Third-party accounts?** None. No social login, no external services
 beyond hosting.
