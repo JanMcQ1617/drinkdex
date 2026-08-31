@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { SipplyIntro } from '@/components/SipplyIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
+import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
 import { colors, fonts } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
@@ -104,6 +105,17 @@ export default function RootLayout() {
       </Stack>
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
+      {/*
+        Password-recovery deep links. Renders nothing until one arrives,
+        then covers the app with the "choose a new password" step — it has
+        to sit outside the Stack because a recovery link signs the user in,
+        so AuthGate is already showing the app by the time it is needed.
+
+        Before the intro on purpose: a cold start from a reset link should
+        still play the intro over the top and reveal this underneath, not
+        have the overlay pop in above a half-finished animation.
+      */}
+      <PasswordResetOverlay />
       {showIntro && (
         <SipplyIntro
           onDone={() => {

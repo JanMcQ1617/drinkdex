@@ -11,6 +11,7 @@ import {
   setPendingClaims,
 } from '@/lib/discovery';
 import { hashHandle } from '@/lib/instagram';
+import { recoveryRedirectUrl } from '@/lib/recovery';
 import { PROFILE_COLS, setInstagramHash, setPhoneHash } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
@@ -34,6 +35,17 @@ interface AuthState {
   error: string | null;
   /** Non-failure feedback, e.g. "confirm your email before signing in". */
   notice: string | null;
+  /**
+   * True between opening a valid reset link and choosing a new password.
+   *
+   * A recovery link is a real sign-in — GoTrue hands back an ordinary
+   * session — so by the time this is set, AuthGate has already stopped
+   * showing the form and the app is on screen behind it. That is why the
+   * "choose a new password" step is an overlay at the root rather than
+   * another mode of the sign-in form: there is no signed-out state left
+   * to render it in. See components/PasswordResetOverlay.
+   */
+  recovering: boolean;
 
   init: () => () => void;
   /**
@@ -59,6 +71,19 @@ interface AuthState {
   ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  /**
+   * Sends the reset email. Resolves the same way whether or not the address
+   * has an account — see the implementation for why that is deliberate.
+   */
+  requestPasswordReset: (email: string) => Promise<void>;
+  /** Exchanges the tokens from a recovery link for a session. */
+  beginRecovery: (accessToken: string, refreshToken: string) => Promise<void>;
+  /** Sets the new password and ends recovery. Returns true on success. */
+  completePasswordReset: (password: string) => Promise<boolean>;
+  /** Abandons a recovery without setting a password, and signs back out. */
+  cancelRecovery: () => Promise<void>;
+  /** Surfaces a dead or malformed reset link on the sign-in form. */
+  failRecovery: (message: string) => void;
   /** Irreversible. Removes the auth user, every row that cascades from it, and the photos storage does not cascade. */
   deleteAccount: () => Promise<boolean>;
   refreshProfile: () => Promise<void>;
@@ -171,6 +196,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
   busy: false,
   error: null,
   notice: null,
+  recovering: false,
 
   /**
    * Restores the persisted session, then keeps the store in sync with
@@ -260,8 +286,109 @@ export const useAuth = create<AuthState>()((set, get) => ({
   signOut: async () => {
     set({ busy: true });
     await supabase.auth.signOut();
-    set({ busy: false, session: null, profile: null });
+    set({ busy: false, session: null, profile: null, recovering: false });
   },
+
+  /**
+   * Sends a password reset email.
+   *
+   * Reports success even when the address has no account, and that is not
+   * laziness — Supabase answers identically either way on purpose. A form
+   * that said "no account with that email" would turn the sign-in screen
+   * into an oracle for which of your users exist, which for an app with
+   * public profiles is a real disclosure. The copy therefore promises only
+   * that a link was sent *if* there is an account.
+   *
+   * The link is one-time and expires (an hour by default). Note that some
+   * corporate mail scanners follow links before the recipient does, which
+   * burns the token and makes a perfectly good email look broken — the
+   * expired-link path in lib/recovery exists to say so in plain words
+   * rather than failing blankly.
+   */
+  requestPasswordReset: async (email) => {
+    set({ busy: true, error: null, notice: null });
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: recoveryRedirectUrl(),
+    });
+
+    if (error) {
+      /*
+       * Rate limiting is the one failure worth showing as itself. Everything
+       * else — including "user not found", which GoTrue does not report
+       * anyway — collapses into the same reassuring notice, so the screen
+       * cannot be used to probe for accounts.
+       */
+      const rateLimited = error.status === 429 || /rate limit/i.test(error.message);
+      set({
+        busy: false,
+        error: rateLimited
+          ? 'Too many reset emails just now. Wait a minute and try again.'
+          : null,
+        notice: rateLimited ? null : 'If that email has an account, a reset link is on its way.',
+      });
+      return;
+    }
+
+    set({
+      busy: false,
+      notice: 'If that email has an account, a reset link is on its way. It expires in an hour.',
+    });
+  },
+
+  /**
+   * Turns the tokens out of a recovery link into a session.
+   *
+   * This genuinely signs the user in — a recovery link is an authentication
+   * factor, which is why the overlay it opens cannot simply be dismissed.
+   * Backing out calls cancelRecovery, which signs back out again.
+   */
+  beginRecovery: async (accessToken, refreshToken) => {
+    set({ busy: true, error: null, notice: null });
+
+    const { data, error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+
+    if (error || !data.session) {
+      set({
+        busy: false,
+        recovering: false,
+        error: 'That reset link has expired or already been used. Request a new one.',
+      });
+      return;
+    }
+
+    set({ busy: false, session: data.session, recovering: true });
+    void get().refreshProfile();
+  },
+
+  completePasswordReset: async (password) => {
+    set({ busy: true, error: null, notice: null });
+
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      set({ busy: false, error: humanize(error.message) });
+      return false;
+    }
+
+    /*
+     * Stays signed in. updateUser leaves the session valid, and signing out
+     * here to make the user type the password they just chose would be
+     * ceremony, not security.
+     */
+    set({ busy: false, recovering: false, notice: null });
+    return true;
+  },
+
+  cancelRecovery: async () => {
+    set({ recovering: false });
+    await get().signOut();
+  },
+
+  failRecovery: (message) => set({ recovering: false, busy: false, error: message }),
 
   /**
    * Deletes the signed-in account. Returns true on success.
