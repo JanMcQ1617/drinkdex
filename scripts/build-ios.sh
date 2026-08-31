@@ -4,6 +4,11 @@
 #
 #   scripts/build-ios.sh device   # Release, signed, installed over devicectl
 #   scripts/build-ios.sh sim      # Release, unsigned, installed on a booted sim
+#   scripts/build-ios.sh archive  # Release, distribution-signed, exported .ipa
+#
+# `archive` stops at the .ipa. It does NOT upload — that needs App Store
+# Connect credentials, so the last leg is yours: Xcode Organizer, or
+# `xcrun altool`/`notarytool` with an ASC API key.
 #
 # TAKE THE BUILD LOCK FIRST. Several sessions share this machine and one
 # Xcode build lock, which lives inside the shared node_modules and is not
@@ -162,8 +167,85 @@ case "$MODE" in
     xcrun simctl launch "$UDID" com.janmcqueeny.drinkdex
     ;;
 
+  archive)
+    # Everything in `device` applies here too — the LANG export, the team read
+    # out of ExportOptions.plist, and the generic destination. Three things are
+    # different, and each is the kind of detail that costs a whole build:
+    #
+    #  1. ARCHIVE STRAIGHT INTO THE ORGANIZER'S FOLDER. Organizer only lists
+    #     archives under ~/Library/Developer/Xcode/Archives/<date>/. An archive
+    #     written anywhere else is invisible to it, and since Organizer is the
+    #     upload path, an archive it cannot see may as well not exist. Building
+    #     there directly is simpler than building elsewhere and remembering to
+    #     copy it.
+    #
+    #  2. -allowProvisioningUpdates ON BOTH LEGS. ExportOptions.plist asks for
+    #     automatic signing, and the DEVELOPMENT profile that `device` builds
+    #     with is not valid for distribution. Xcode has to mint a distribution
+    #     profile, and it will only do that with this flag — on the export as
+    #     well as the archive, because export re-signs.
+    #
+    #  3. A SEPARATE derivedDataPath. Sharing ios/build with `device` means a
+    #     distribution-signed archive and a development-signed .app fighting
+    #     over the same intermediates. They are different signing identities;
+    #     let them have different folders.
+    #
+    # The build number is echoed before any work starts. App Store Connect
+    # rejects a duplicate CFBundleVersion, and it does so at UPLOAD — after
+    # the archive, after the export, after you have waited. manageAppVersion-
+    # AndBuildNumber is false in ExportOptions.plist, so nothing bumps it for
+    # you: whatever is in app.json is what ships. Read the line and check it
+    # against what TestFlight already holds before walking away.
+    VERSION="$(node -p "require('$ROOT/app.json').expo.version")"
+    BUILD="$(node -p "require('$ROOT/app.json').expo.ios.buildNumber")"
+
+    STAMP="$(date '+%Y-%m-%d')"
+    ARCHIVE_DIR="$HOME/Library/Developer/Xcode/Archives/$STAMP"
+    ARCHIVE="$ARCHIVE_DIR/Sipply $VERSION ($BUILD) $(date '+%H.%M').xcarchive"
+    EXPORT_DIR="$ROOT/ios/build-archive/export"
+
+    mkdir -p "$ARCHIVE_DIR"
+
+    echo "==> Archiving Sipply $VERSION ($BUILD) for the App Store (team $TEAM)"
+    echo "    If TestFlight already holds build $BUILD, stop now and bump"
+    echo "    ios.buildNumber in app.json — the upload will be refused."
+
+    xcodebuild -workspace ios/Sipply.xcworkspace -scheme Sipply \
+      -configuration Release -destination 'generic/platform=iOS' \
+      -allowProvisioningUpdates -derivedDataPath ios/build-archive \
+      -archivePath "$ARCHIVE" \
+      DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic archive
+
+    # Same lesson as the device leg: a killed build leaves a stump, not
+    # nothing. An .xcarchive with no binary inside it still looks like a
+    # directory that exists.
+    [ -s "$ARCHIVE/Products/Applications/Sipply.app/Sipply" ] || {
+      echo "No binary inside $ARCHIVE — the archive did not finish." >&2
+      exit 1
+    }
+
+    echo "==> Exporting .ipa"
+    rm -rf "$EXPORT_DIR"
+    xcodebuild -exportArchive -archivePath "$ARCHIVE" \
+      -exportOptionsPlist ExportOptions.plist \
+      -exportPath "$EXPORT_DIR" \
+      -allowProvisioningUpdates
+
+    IPA="$(find "$EXPORT_DIR" -maxdepth 1 -name '*.ipa' | head -1)"
+    [ -n "$IPA" ] || { echo "Export produced no .ipa. Read the log above." >&2; exit 1; }
+
+    echo
+    echo "==> Done. Sipply $VERSION ($BUILD)"
+    echo "    Archive: $ARCHIVE"
+    echo "    IPA:     $IPA"
+    echo
+    echo "    Upload is not automated — it needs App Store Connect credentials."
+    echo "    Xcode > Window > Organizer will list the archive above; or use an"
+    echo "    ASC API key with xcrun altool."
+    ;;
+
   *)
-    echo "Usage: scripts/build-ios.sh [device|sim]" >&2
+    echo "Usage: scripts/build-ios.sh [device|sim|archive]" >&2
     exit 1
     ;;
 esac
