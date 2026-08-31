@@ -1,0 +1,470 @@
+﻿#,Variety,Colour,Origin,Synonyms,Wines,Countries,Where grown,Note
+1,Abouriou,Red,France (SW),,1,1,France,
+2,Agiorgitiko,Red,Greece (Nemea),,6,1,Greece,
+3,Aglianico,Red,Italy (Campania),,14,2,Italy; China,"Late-ripening and structured; the ""Barolo of the south""."
+4,Agudelo,White,Spain (Galicia),,1,1,Spain,Galician name for Chenin Blanc.
+5,Aidani,White,Greece (Santorini),,1,1,Greece,
+6,Airén,White,Spain (La Mancha),,1,1,Spain,"Once the single most planted wine grape on earth, almost all of it in one country."
+7,Alarije,White,Spain (Extremadura),,1,1,Spain,
+8,Albana,White,Italy (Emilia-Romagna),,1,1,Italy,
+9,Albarín Negro,Red,Spain (Asturias),,1,1,Spain,
+10,Albariño,White,Spain (Galicia),Alvarinho,10,5,Portugal; Spain; Uruguay; Japan; United States,"The same grape as Portugal's Alvarinho, across the river."
+11,Albarola,White,Italy (Liguria),,3,1,Italy,
+12,Aleatico,Red,Italy,,5,1,Italy,
+13,Aleksandrouli,Red,Georgia (Racha),,1,1,Georgia,
+14,Alfrocheiro,Red,Portugal (Dão),,2,1,Portugal,
+15,Alibernet,Red,Ukraine,,1,1,Slovakia,
+16,Alicante Bouschet,Red,France,Garnacha Tintorera,3,3,Morocco; Portugal; Spain,"A teinturier: red flesh, not just red skin."
+17,Aligoté,White,France (Burgundy),,4,2,France; Ukraine,
+18,Alphonse Lavallée,Red,France,,1,1,Indonesia,A table grape vinified in Bali.
+19,Altesse,White,France (Savoie),Roussette,5,1,France,
+20,Amigne,White,Switzerland,,1,1,Switzerland,
+21,Antão Vaz,White,Portugal (Alentejo),,2,1,Portugal,
+22,Areni Noir,Red,Armenia,Areni,4,1,Armenia,"Grown beside the world's oldest known winery, dated to about 4100 BC."
+23,Arinto,White,Portugal (Lisboa),Pedernã,6,1,Portugal,
+24,Arinto dos Açores,White,Portugal (Azores),,1,1,Portugal,
+25,Arneis,White,Italy (Piedmont),,2,1,Italy,
+26,Asprinio,White,Italy (Campania),,1,1,Italy,
+27,Assyrtiko,White,Greece (Santorini),,12,1,Greece,Holds searing acidity in volcanic heat.
+28,Athiri,White,Greece,,4,1,Greece,
+29,Auxerrois,White,France (Alsace),Auxerrois Blanc,4,3,France; Luxembourg; Netherlands,"A different grape from Malbec, confusingly also called Auxerrois in Cahors."
+30,Avanà,Red,Italy (Piedmont),,1,1,Italy,
+31,Avesso,White,Portugal (Minho),,4,1,Portugal,
+32,Azal,White,Portugal (Minho),,2,1,Portugal,
+33,Băbească Neagră,Red,Romania,,1,1,Romania,
+34,Babić,Red,Croatia,,2,1,Croatia,
+35,Bacchus,White,Germany,,6,2,United Kingdom; Canada,Silvaner x Riesling crossed with Müller-Thurgau; England's aromatic white.
+36,Baga,Red,Portugal (Bairrada),,2,1,Portugal,
+37,Baladi,White,Levant,,1,1,Palestine,
+38,Bannati,White,Egypt,,1,1,Egypt,
+39,Barbera,Red,Italy (Piedmont),,24,2,Italy; United States,
+40,Baroque,White,France (SW),,1,1,France,
+41,Bayanshira,White,Azerbaijan,Bayan Shirey,3,2,Azerbaijan; Uzbekistan,
+42,Belgia,White,Indonesia,,1,1,Indonesia,
+43,Biancame,White,Italy (Marche),,1,1,Italy,
+44,Bianchetta,White,Italy (Veneto),Bianchetta Trevigiana,2,1,Italy,
+45,Bianco d'Alessano,White,Italy (Puglia),,1,1,Italy,
+46,Biancolella,White,Italy (Campania),,2,1,Italy,
+47,Black Queen,Red,Japan,,1,1,Taiwan,
+48,Blatina,Red,Bosnia and Herzegovina,,1,1,Bosnia and Herzegovina,Female-flowered; needs a pollinator variety.
+49,Blauer Portugieser,Red,Austria,Modrý Portugal,1,1,Czechia,A separate variety from Blaufränkisch despite the shared vineyards.
+50,Blauer Wildbacher,Red,Austria,,2,1,Austria,The Schilcher grape.
+51,Blaufränkisch,Red,Austria,Lemberger; Kékfrankos; Frankovka; Modra Frankinja,18,6,Hungary; Austria; Czechia; Germany; Slovakia; Slovenia,
+52,Boal,White,Portugal (Madeira),Bual,1,1,Portugal,
+53,Bobal,Red,Spain (Valencia),,7,2,Spain; Egypt,
+54,Boğazkere,Red,Turkey (Diyarbakır),,2,1,Turkey,Tannic enough that it is almost always blended with Öküzgözü.
+55,Bogdanuša,White,Croatia (Hvar),,2,1,Croatia,
+56,Bombino Bianco,White,Italy (Puglia),Pagadebit,2,1,Italy,
+57,Bombino Nero,Red,Italy (Puglia),,1,1,Italy,
+58,Bonarda Argentina,Red,France (Savoie),Douce Noire; Corbeau,2,1,Argentina,Argentina's second-most planted red; unrelated to Italy's Bonarda.
+59,Bonarda Piemontese,Red,Italy (Piedmont),,1,1,Italy,"A third distinct grape called Bonarda, after Croatina and Argentina's."
+60,Bordô,Red,United States,Ives,1,1,Brazil,Labrusca hybrid widely grown in Brazil.
+61,Bornova Misketi,White,Turkey (Aegean),,1,1,Turkey,
+62,Bosco,White,Italy (Liguria),,2,1,Italy,
+63,Bovale,Red,Spain,,2,1,Italy,
+64,Brachetto,Red,Italy (Piedmont),,1,1,Italy,
+65,Braquet,Red,France (Provence),,1,1,France,
+66,Busuioacă de Bohotin,Pink,Romania,,2,1,Romania,
+67,Cabernet Franc,Red,France (Bordeaux),,69,9,France; United States; Canada; Argentina; Hungary; Italy; Brazil; China; Uruguay,"Parent of Cabernet Sauvignon, Merlot and Carmenère."
+68,Cabernet Gernischt,Red,France,,1,1,China,Long grown in China; DNA suggests it is Carmenère.
+69,Cabernet Pfeffer,Red,United States,,1,1,United States,A California curiosity of uncertain parentage.
+70,Cabernet Sauvignon,Red,France (Bordeaux),,275,41,United States; Italy; France; Australia; Chile; China; South Africa; Spain; Mexico; Romania; Israel; India; Moldova; Argentina; Brazil; Canada; Lebanon; New Zealand; Russia; Bolivia; Bulgaria; Greece; Jordan; Morocco; Peru; Serbia; Tunisia; Ukraine; Bhutan; Colombia; Ecuador; Ethiopia; Georgia; Kazakhstan; Laos; Nepal; Paraguay; Syria; Turkey; Vietnam; Zimbabwe,A chance Cabernet Franc x Sauvignon Blanc crossing; now the most planted wine grape on earth.
+71,Cadarcă,Red,Hungary,,1,1,Romania,
+72,Cagnulari,Red,Italy (Sardinia),,1,1,Italy,
+73,Çalkarası,Red,Turkey (Denizli),,1,1,Turkey,
+74,Callet,Red,Spain (Mallorca),,2,1,Spain,
+75,Campbell Early,Red,United States,,3,1,South Korea,Labrusca hybrid; the mainstay of Korean wine.
+76,Cardinal,Red,United States,,3,1,Vietnam,A table grape used for wine in Southeast Asia.
+77,Carignan,Red,Spain (Aragón),Cariñena; Mazuelo; Carignano; Samsó,39,9,France; Morocco; Spain; Algeria; Tunisia; Chile; Lebanon; Israel; Italy,
+78,Carmenère,Red,France (Bordeaux),,9,1,Chile,Nearly lost in France; found in Chile in 1994 after decades misidentified as Merlot.
+79,Carricante,White,Italy (Sicily),,1,1,Italy,
+80,Casetta,Red,Italy (Trentino),,1,1,Italy,
+81,Castelão,Red,Portugal,Periquita,9,1,Portugal,
+82,Catarratto,White,Italy (Sicily),,6,1,Italy,
+83,Catawba,Pink,United States,,2,1,United States,"Vitis labrusca hybrid, and America's first commercial wine grape."
+84,Cerceal,White,Portugal,,1,1,Portugal,
+85,Cesanese,Red,Italy (Lazio),,4,1,Italy,
+86,César,Red,France (Burgundy),,1,1,France,
+87,Chambourcin,Red,France,,15,2,United States; Australia,Hybrid.
+88,Chardonnay,White,France (Burgundy),Morillon,199,31,France; United States; Australia; Italy; New Zealand; South Africa; United Kingdom; Canada; Chile; Belgium; Argentina; Brazil; Hungary; Russia; Austria; Bulgaria; China; Japan; Mexico; Moldova; Slovenia; Croatia; Egypt; Israel; Lebanon; Malta; Portugal; Romania; Serbia; Switzerland; Ukraine,Neutral enough to transmit site and winemaking rather than itself.
+89,Chasselas,White,Switzerland,Fendant,19,2,Switzerland; France,
+90,Chenin Blanc,White,France (Loire),Steen; Pineau de la Loire,44,10,France; South Africa; Tanzania; Thailand; United States; Australia; Ethiopia; India; Mexico; Myanmar,"Makes bone-dry, sparkling and botrytis sweet wine from the same vineyard."
+91,Chinuri,White,Georgia (Kartli),,2,1,Georgia,
+92,Chkhaveri,Pink,Georgia,,2,1,Georgia,
+93,Ciliegiolo,Red,Italy (Tuscany),,1,1,Italy,A parent of Sangiovese.
+94,Cinsault,Red,France (Languedoc),,23,6,France; Morocco; Algeria; Chile; Lebanon; Tunisia,A parent of Pinotage.
+95,Cirfandli,White,Hungary (Pécs),,1,1,Hungary,
+96,Clairette,White,France (Rhône),,5,1,France,
+97,Colombard,White,France (SW),,8,3,South Africa; France; Namibia,
+98,Concord,Red,United States,,1,1,United States,"Vitis labrusca; the flavour most Americans call ""grape""."
+99,Cornalin,Red,Switzerland,,1,1,Switzerland,
+100,Cortese,White,Italy (Piedmont),,2,1,Italy,
+101,Corvina,Red,Italy (Veneto),Corvina Veronese,8,1,Italy,
+102,Couderc,Red,France,,1,1,Madagascar,Hybrid.
+103,Crâmpoșie Selecționată,White,Romania,,1,1,Romania,
+104,Croatina,Red,Italy (Lombardy),Bonarda,12,2,Italy; Argentina,Italy's Bonarda; unrelated to Argentina's.
+105,Cserszegi Fűszeres,White,Hungary,,1,1,Hungary,
+106,Cynthiana,Red,United States,Norton (Arkansas),2,1,United States,Arkansas's name for Norton.
+107,Dabouki,White,Levant,,1,1,Palestine,
+108,Debina,White,Greece (Epirus),,2,1,Greece,
+109,Delaware,Pink,United States,,2,1,Japan,"Vitis labrusca hybrid, widely grown in Japan."
+110,Devín,White,Slovakia,,2,1,Slovakia,
+111,Dimyat,White,Bulgaria,,2,1,Bulgaria,
+112,Dolcetto,Red,Italy (Piedmont),,7,1,Italy,
+113,Duras,Red,France (SW),,1,1,France,
+114,Durella,White,Italy (Veneto),,2,1,Italy,
+115,Early Melnik,Red,Bulgaria,,1,1,Bulgaria,
+116,Elbling,White,Germany,,4,2,Germany; Luxembourg,One of the oldest varieties on the Mosel.
+117,Emir,White,Turkey (Cappadocia),,1,1,Turkey,
+118,Enantio,Red,Italy (Trentino),,1,1,Italy,
+119,Encruzado,White,Portugal (Dão),,1,1,Portugal,
+120,Erbaluce,White,Italy (Piedmont),,2,1,Italy,
+121,Ezerjó,White,Hungary,,2,1,Hungary,
+122,Falanghina,White,Italy (Campania),,5,1,Italy,
+123,Fer Servadou,Red,France (SW),Braucol; Mansois; Pinenc,4,1,France,
+124,Fernão Pires,White,Portugal,Maria Gomes,2,1,Portugal,
+125,Fetească Albă,White,Romania,,7,2,Romania; Moldova,
+126,Fetească Neagră,Red,Romania,,5,2,Romania; Moldova,
+127,Fetească Regală,White,Romania,,3,1,Romania,A 20th-century Fetească Albă x Grasă crossing.
+128,Fiano,White,Italy (Campania),,1,1,Italy,
+129,Fogoneu,Red,Spain (Mallorca),,1,1,Spain,
+130,Fokiano,Red,Greece,,1,1,Greece,
+131,Folle Blanche,White,France,,1,1,France,
+132,Forastera,White,Italy (Campania),,1,1,Italy,
+133,Forastera Gomera,White,Spain (Canary Islands),,1,1,Spain,
+134,Francavidda,White,Italy (Puglia),,1,1,Italy,
+135,Frappato,Red,Italy (Sicily),,3,1,Italy,
+136,Freisa,Red,Italy (Piedmont),,4,1,Italy,A close relative of Nebbiolo.
+137,Friulano,White,Italy (Friuli),Sauvignonasse; Tocai Friulano,10,1,Italy,
+138,Frontenac,Red,United States,,4,2,United States; Canada,Cold-hardy hybrid bred in Minnesota.
+139,Frontenac Gris,White,United States,,1,1,United States,Colour mutation of Frontenac.
+140,Frühburgunder,Red,Germany,,1,1,Germany,Early-ripening mutation of Pinot Noir.
+141,Fumin,Red,Italy (Aosta),,1,1,Italy,
+142,Furmint,White,Hungary,Šipon; Moslavac,14,4,Hungary; Austria; Slovenia; Slovakia,The Tokaji grape; botrytis-prone and fiercely acidic.
+143,Gaglioppo,Red,Italy (Calabria),,8,1,Italy,
+144,Galego Dourado,White,Portugal (Carcavelos),,1,1,Portugal,
+145,Gamaret,Red,Switzerland,,1,1,Switzerland,
+146,Gamay,Red,France (Burgundy),,28,2,France; Switzerland,Banished from Burgundy by decree in 1395; found its home in Beaujolais.
+147,Gamay del Trasimeno,Red,Spain (Aragón),,1,1,Italy,"Grenache again, misnamed for Gamay."
+148,Gamba Rossa,Red,Italy (Piedmont),,1,1,Italy,
+149,Garganega,White,Italy (Veneto),,11,1,Italy,The Soave grape.
+150,Ġellewża,Red,Malta,,2,1,Malta,
+151,Gewurztraminer,Pink,Italy (Alto Adige),Gewürztraminer,34,4,France; Italy; New Zealand; United States,Aromatic pink-berried mutation of Savagnin.
+152,Girgentina,White,Malta,,1,1,Malta,
+153,Girò,Red,Italy (Sardinia),,1,1,Italy,
+154,Glera,White,Italy (Veneto),Prosecco,5,2,Italy; Australia,Renamed in 2009 so that Prosecco could become a protected place name.
+155,Godello,White,Spain (Galicia),,4,1,Spain,
+156,Goethe,White,United States,,1,1,Brazil,Hybrid; Santa Catarina's signature.
+157,Golden Muscat,White,United States,,2,1,Taiwan,
+158,Goruli Mtsvane,White,Georgia (Kartli),,2,1,Georgia,
+159,Gouveio,White,Portugal (Douro),Verdelho do Dão,2,1,Portugal,
+160,Graciano,Red,Spain (Rioja),,3,1,Spain,
+161,Grand Noir,Red,France,,1,1,Portugal,
+162,Grasă de Cotnari,White,Romania,,1,1,Romania,Botrytis-prone; the Cotnari sweet-wine grape.
+163,Grechetto,White,Italy (Umbria),Grechetto Gentile; Pignoletto,6,1,Italy,
+164,Greco,White,Italy (Campania),Greco Bianco,6,1,Italy,
+165,Greco Nero,Red,Italy (Calabria),,1,1,Italy,
+166,Grenache,Red,Spain (Aragón),Garnacha; Cannonau,111,9,France; Spain; United States; Australia; Egypt; Italy; Morocco; Algeria; South Africa,
+167,Grenache Blanc,White,Spain (Aragón),Garnacha Blanca,3,2,Spain; France,
+168,Grignolino,Red,Italy (Piedmont),,3,1,Italy,
+169,Grillo,White,Italy (Sicily),,2,1,Italy,
+170,Gringet,White,France (Savoie),,1,1,France,"Grown almost only at Ayze, on a few dozen hectares."
+171,Grk,White,Croatia (Korčula),,1,1,Croatia,Female-flowered; must be interplanted with another variety to fruit.
+172,Grolleau,Red,France (Loire),,2,1,France,
+173,Groppello,Red,Italy (Lombardy),,1,1,Italy,
+174,Gros Manseng,White,France (SW),,3,1,France,
+175,Grüner Veltliner,White,Austria,Veltlínské Zelené,18,4,Austria; Slovakia; Czechia; United States,
+176,Gutedel,White,Switzerland,,1,1,Germany,German name for Chasselas.
+177,Haghtanak,Red,Armenia,,1,1,Armenia,
+178,Hamdani,White,Levant,,1,1,Palestine,
+179,Hárslevelű,White,Hungary,Lipovina,5,2,Hungary; Slovakia,
+180,Hibernal,White,Germany,,1,1,Poland,Hybrid.
+181,Hondarrabi Zuri,White,Spain (Basque Country),,3,1,Spain,The Txakoli grape.
+182,Humagne Rouge,Red,Italy (Aosta),,1,1,Switzerland,
+183,Impigno,White,Italy (Puglia),,1,1,Italy,
+184,Inzolia,White,Italy (Sicily),Ansonica,6,1,Italy,
+185,Italia,White,Italy,,1,1,Peru,A table grape (Bicane x Muscat Hamburg) vinified in Peru.
+186,Jacquère,White,France (Savoie),,8,1,France,
+187,Jandali,White,Levant,,1,1,Palestine,
+188,Johanniter,White,Germany,,4,2,Netherlands; Poland,Hybrid.
+189,Juan García,Red,Spain (Castilla y León),,1,1,Spain,
+190,Juhfark,White,Hungary (Somló),,2,1,Hungary,
+191,Kadarka,Red,Hungary,Gamza,5,2,Bulgaria; Hungary,Bulgaria grows the same grape as Gamza.
+192,Kakhet,Red,Armenia,,1,1,Armenia,
+193,Kakotrygis,White,Greece (Corfu),,1,1,Greece,"Its name means ""hard to harvest""."
+194,Kalecik Karası,Red,Turkey (Anatolia),,3,1,Turkey,
+195,Kallmet,Red,Albania,,1,1,Albania,
+196,Kéknyelű,White,Hungary (Badacsony),,1,1,Hungary,
+197,Kerner,White,Germany,,4,2,Japan; Italy,Trollinger x Riesling.
+198,Kevedinka,White,Serbia,,1,1,Serbia,
+199,Kisi,White,Georgia,,1,1,Georgia,
+200,Kokur,White,Ukraine (Crimea),,2,2,Russia; Ukraine,
+201,Koshu,Pink,Japan,,3,1,Japan,"Pink-skinned, vinified white; carried to Japan along the Silk Road."
+202,Kotsifali,Red,Greece (Crete),,3,1,Greece,
+203,Krakhuna,White,Georgia (Imereti),,1,1,Georgia,
+204,Krasnostop Zolotovsky,Red,Russia (Don),,1,1,Russia,
+205,Krassato,Red,Greece (Thessaly),,1,1,Greece,
+206,Kreaca,White,Serbia,,1,1,Serbia,
+207,Krstač,White,Montenegro,,1,1,Montenegro,
+208,L'Acadie Blanc,White,Canada,,4,1,Canada,Bred in Ontario; Nova Scotia's signature white.
+209,Lacrima,Red,Italy (Marche),,1,1,Italy,
+210,Lagrein,Red,Italy (Alto Adige),,3,1,Italy,
+211,Lambrusco di Sorbara,Red,Italy (Emilia),,1,1,Italy,
+212,Lambrusco Grasparossa,Red,Italy (Emilia),,2,1,Italy,
+213,Lambrusco Marani,Red,Italy (Emilia),,1,1,Italy,
+214,Lambrusco Salamino,Red,Italy (Emilia),,2,1,Italy,
+215,Lambrusco Viadanese,Red,Italy (Lombardy),,1,1,Italy,
+216,Liatiko,Red,Greece (Crete),,2,1,Greece,
+217,Limnio,Red,Greece (Lemnos),,2,1,Greece,"Named by Aristotle, which makes it a candidate for the oldest named grape still grown."
+218,Listán Negro,Red,Spain (Canary Islands),,3,1,Spain,
+219,Longyan,White,China,,1,1,China,
+220,Loureiro,White,Portugal (Minho),,6,1,Portugal,
+221,Maceratino,White,Italy (Marche),,1,1,Italy,
+222,Madeleine Angevine,White,France,,1,1,United States,
+223,Madrasa,Red,Azerbaijan,,2,1,Azerbaijan,
+224,Magliocco,Red,Italy (Calabria),,3,1,Italy,
+225,Makutupora,Red,Tanzania,,1,1,Tanzania,
+226,Malaga Blanc,White,Spain,,1,1,Thailand,
+227,Malagousia,White,Greece,,1,1,Greece,Rescued from near-extinction in the 1970s.
+228,Malbec,Red,France (Cahors),Côt,40,5,Argentina; France; Mexico; Peru; United States,Left Bordeaux for Argentina and became someone else's national grape.
+229,Malvasia,White,Greece,Malvazija; Malvasía,19,5,Italy; Portugal; Slovenia; Spain; United States,"A family of related varieties, not one grape."
+230,Malvasia del Lazio,White,Italy (Lazio),Malvasia Puntinata,2,1,Italy,
+231,Malvasia di Candia Aromatica,White,Greece,,1,1,Italy,
+232,Malvasia di Casorzo,Red,Italy (Piedmont),,1,1,Italy,
+233,Malvasia di Lipari,White,Greece,,1,1,Italy,
+234,Malvasia di Sardegna,White,Greece,,1,1,Italy,
+235,Malvasia di Schierano,Red,Italy (Piedmont),,1,1,Italy,
+236,Malvasia Fina,White,Portugal,,2,1,Portugal,
+237,Malvasia Nera,Red,Italy,,2,1,Italy,
+238,Malvasia Rei,White,Portugal,,1,1,Portugal,
+239,Malvasía Volcánica,White,Spain (Canary Islands),,1,1,Spain,
+240,Malvazija Istarska,White,Croatia (Istria),,2,1,Croatia,
+241,Mandilaria,Red,Greece,,4,1,Greece,
+242,Manto Negro,Red,Spain (Mallorca),,2,1,Spain,
+243,Maraština,White,Croatia,,1,1,Croatia,
+244,Maratheftiko,Red,Cyprus,,2,1,Cyprus,
+245,Marquette,Red,United States,,4,1,United States,"Cold-hardy hybrid, a grandchild of Pinot Noir."
+246,Marsanne,White,France (Rhône),,7,3,France; Australia; Switzerland,
+247,Marselan,Red,France,,3,1,China,"Cabernet Sauvignon x Grenache, bred 1961; now China's calling card."
+248,Marzemino,Red,Italy (Trentino),,4,1,Italy,
+249,Mauzac,White,France (SW),,3,1,France,
+250,Mavro,Red,Cyprus,,3,1,Cyprus,Cyprus's most planted variety.
+251,Mavro Messenikola,Red,Greece (Thessaly),,1,1,Greece,
+252,Mavrodaphne,Red,Greece (Patras),,2,1,Greece,
+253,Mavrud,Red,Bulgaria,,3,1,Bulgaria,
+254,Melon de Bourgogne,White,France (Burgundy),Muscadet,4,1,France,
+255,Mencía,Red,Spain (Bierzo),Jaen,4,2,Portugal; Spain,The Jaen of Portugal's Dão is the same grape.
+256,Merlot,Red,France (Bordeaux),,134,21,France; Italy; United States; Canada; New Zealand; Romania; Brazil; Japan; Australia; Bulgaria; Israel; Mexico; South Africa; Switzerland; Uruguay; China; Jordan; Kosovo; Moldova; Spain; Syria,The world's second-most planted red; early-ripening and supple.
+257,Merseguera,White,Spain (Valencia),,1,1,Spain,
+258,Meunier,Red,France (Champagne),Schwarzriesling; Pinot Meunier,5,3,France; United Kingdom; Germany,
+259,Molette,White,France (Savoie),,1,1,France,
+260,Molinara,Red,Italy (Veneto),,2,1,Italy,
+261,Molinera,Red,Spain,,1,1,Spain,
+262,Mondeuse Noire,Red,France (Savoie),,4,1,France,
+263,Monemvasia,White,Greece,,2,1,Greece,The probable origin of the name Malvasia.
+264,Monica,Red,Italy (Sardinia),,2,1,Italy,
+265,Montepulciano,Red,Italy (Abruzzo),,19,1,Italy,"A grape, not the Tuscan town of the same name."
+266,Montuni,White,Italy (Emilia),,1,1,Italy,
+267,Moreto,Red,Portugal,,1,1,Portugal,
+268,Moristel,Red,Spain (Aragón),,1,1,Spain,
+269,Moscatel de Alejandría,White,Egypt,,0,0,,Spanish name for Muscat of Alexandria.
+270,Moscatel Roxo,Pink,Portugal (Setúbal),,1,1,Portugal,
+271,Moscato di Scanzo,Red,Italy (Lombardy),,1,1,Italy,
+272,Moscato Giallo,White,Italy (Veneto),,1,1,Italy,
+273,Moschofilero,Pink,Greece (Mantinia),,2,1,Greece,
+274,Mourvèdre,Red,Spain (Valencia),Monastrell; Mataró,24,3,France; Spain; United States,
+275,Mtsvane,White,Georgia,Mtsvane Kakhuri,4,1,Georgia,
+276,Mujuretuli,Red,Georgia (Racha),,1,1,Georgia,
+277,Müller-Thurgau,White,Switzerland,Rivaner,14,5,Germany; Belgium; Czechia; Luxembourg; Liechtenstein,"Riesling x Madeleine Royale, bred 1882."
+278,Muscadelle,White,France (Bordeaux),,5,2,France; Australia,
+279,Muscat à Petits Grains Rouge,Red,Greece,,3,1,Australia,Red-berried mutation; the Rutherglen Muscat grape.
+280,Muscat Bailey A,Red,Japan,MBA,2,2,Japan; South Korea,"Bailey x Muscat Hamburg, bred in Japan in 1927."
+281,Muscat Blanc à Petits Grains,White,Greece,Muscat Blanc; Moscato Bianco; Muscat; Moscato; Sárga Muskotály; Muscat de Frontignan; Moscatel Galego; Tămâioasă Românească; Temjanika,44,16,France; Italy; Greece; Romania; South Africa; Brazil; Hungary; Russia; Australia; China; North Macedonia; Portugal; Tajikistan; Thailand; Ukraine; Uzbekistan,The oldest domesticated wine grape still in wide use.
+282,Muscat of Alexandria,White,Egypt,Zibibbo; Moscatel de Setúbal; Moscatel,14,8,Spain; Greece; Italy; France; Indonesia; Portugal; Tajikistan; Tunisia,
+283,Muscat of Hamburg,Red,United Kingdom,,1,1,Greece,
+284,Narince,White,Turkey (Tokat),,1,1,Turkey,
+285,Nasco,White,Italy (Sardinia),,1,1,Italy,
+286,Nebbiolo,Red,Italy (Piedmont),Chiavennasca; Spanna; Picotendro,29,2,Italy; Mexico,"Pale, tannic and long-lived — Barolo and Barbaresco are both this grape."
+287,Negoska,Red,Greece (Macedonia),,1,1,Greece,
+288,Negramoll,Red,Spain (Canary Islands),Negra Mole; Tinta Negra,7,2,Portugal; Spain,Madeira's Tinta Negra is generally held to be the same variety.
+289,Négrette,Red,France (SW),,1,1,France,
+290,Negroamaro,Red,Italy (Puglia),,14,1,Italy,
+291,Nerello Cappuccio,Red,Italy (Sicily),,1,1,Italy,
+292,Nerello Mascalese,Red,Italy (Sicily),Nerello,5,1,Italy,Etna's red; often compared to Nebbiolo for its perfume and tannin.
+293,Nero Buono,Red,Italy (Lazio),,1,1,Italy,
+294,Nero d'Avola,Red,Italy (Sicily),Calabrese,13,1,Italy,
+295,Nero di Troia,Red,Italy (Puglia),Uva di Troia,7,1,Italy,
+296,Nocera,Red,Italy (Sicily),,2,1,Italy,
+297,Norton,Red,United States,,5,1,United States,A Vitis aestivalis hybrid; the backbone of 19th-century Missouri wine.
+298,Nosiola,White,Italy (Trentino),,1,1,Italy,
+299,Nuragus,White,Italy (Sardinia),,1,1,Italy,
+300,Obeidi,White,Lebanon,,1,1,Lebanon,
+301,Ojaleshi,Red,Georgia,,1,1,Georgia,
+302,Öküzgözü,Red,Turkey (Elazığ),,1,1,Turkey,
+303,Ormeasco,Red,Italy (Piedmont),Dolcetto (Liguria),1,1,Italy,Liguria's name for Dolcetto.
+304,Ortega,White,Germany,,5,1,Canada,
+305,Ortrugo,White,Italy (Emilia),,2,1,Italy,
+306,País,Red,Spain,Listán Prieto; Mission; Criolla Chica; Negra Criolla,6,2,Chile; Bolivia,"The first vinifera grape planted in the Americas, in the 1500s."
+307,Pálava,Pink,Czechia,,2,1,Czechia,
+308,Palomino,White,Spain (Jerez),Listán Blanco,12,1,Spain,"The sherry grape; neutral by nature, transformed entirely by flor and oxidation."
+309,Pamid,Red,Bulgaria,,1,1,Bulgaria,
+310,Papazkarası,Red,Turkey (Thrace),,2,1,Turkey,
+311,Parellada,White,Spain (Catalonia),,2,1,Spain,
+312,Passerina,White,Italy (Marche),,3,1,Italy,
+313,Pecorino,White,Italy (Marche),,3,1,Italy,
+314,Pedro Ximénez,White,Spain (Andalusia),PX,5,1,Spain,
+315,Pelaverga Piccolo,Red,Italy (Piedmont),Pelaverga,1,1,Italy,
+316,Perricone,Red,Italy (Sicily),,2,1,Italy,
+317,Persan,Red,France (Savoie),,0,0,,
+318,Petit Manseng,White,France (SW),,2,1,France,
+319,Petit Rouge,Red,Italy (Aosta),,2,1,Italy,
+320,Petit Verdot,Red,France (Bordeaux),,3,3,Israel; Spain; United States,
+321,Petite Arvine,White,Switzerland,,1,1,Switzerland,
+322,Petite Sirah,Red,France,Durif,1,1,United States,
+323,Picapoll,White,Spain (Catalonia),,1,1,Spain,
+324,Picolit,White,Italy (Friuli),,1,1,Italy,
+325,Piedirosso,Red,Italy (Campania),,5,1,Italy,
+326,Pineau d'Aunis,Red,France (Loire),,2,1,France,
+327,Pinela,White,Slovenia (Vipava),,1,1,Slovenia,
+328,Pinot Blanc,White,France (Alsace),Weissburgunder; Pinot Bianco,10,4,Germany; Italy; France; Luxembourg,
+329,Pinot Gris,Pink,France (Burgundy),Pinot Grigio; Grauburgunder; Szürkebarát; Ruländer,45,9,France; Italy; Canada; United States; Belgium; Germany; Hungary; Romania; Switzerland,"Pink-skinned mutation of Pinot Noir, vinified as white."
+330,Pinot Noir,Red,France (Burgundy),Spätburgunder; Pinot Nero; Blauburgunder; Rulandské Modré,232,22,France; United States; Australia; New Zealand; Germany; South Africa; Argentina; Italy; United Kingdom; Canada; Chile; Brazil; Switzerland; Belgium; Japan; Russia; Croatia; Czechia; Hungary; Liechtenstein; Mexico; Moldova,Thin-skinned and site-sensitive; the reason Burgundy is mapped vineyard by vineyard.
+331,Pinotage,Red,South Africa,,6,2,South Africa; Zimbabwe,"Pinot Noir x Cinsault, bred in 1925 at Stellenbosch."
+332,Piquepoul Blanc,White,France (Languedoc),,1,1,France,
+333,Plavac Mali,Red,Croatia,,4,1,Croatia,An offspring of Zinfandel and Dobričić.
+334,Pošip,White,Croatia (Korčula),,1,1,Croatia,
+335,Poulsard,Red,France (Jura),Ploussard,4,1,France,
+336,Prié Blanc,White,Italy (Aosta),,1,1,Italy,
+337,Prieto Picudo,Red,Spain (Castilla y León),,2,1,Spain,
+338,Prokupac,Red,Serbia,,5,1,Serbia,
+339,Pušipel,White,Hungary,,1,1,Croatia,Croatian name for Furmint.
+340,Quebranta,Red,Peru,,3,1,Peru,A País x Negramoll crossing; mostly distilled into pisco.
+341,Rabigato,White,Portugal (Douro),,1,1,Portugal,
+342,Raboso Piave,Red,Italy (Veneto),Raboso; Friularo,5,1,Italy,
+343,Ramisco,Red,Portugal (Colares),,1,1,Portugal,"Grown ungrafted in deep sand, which phylloxera cannot cross."
+344,Rara Neagră,Red,Moldova,,3,1,Moldova,
+345,Red Misket,Pink,Bulgaria,,2,1,Bulgaria,
+346,Refosco dal Peduncolo Rosso,Red,Italy (Friuli),Refosco,3,1,Italy,
+347,Regent,Red,Germany,,0,0,,Hybrid.
+348,Ribolla Gialla,White,Italy (Friuli),Rebula,5,2,Italy; Slovenia,A cornerstone of the modern orange-wine movement.
+349,Riesling,White,Germany (Rhine),Rhine Riesling; Ryzlink Rýnský; Klingelberger,170,18,Germany; France; United States; Australia; Canada; Austria; New Zealand; Poland; Chile; Colombia; Czechia; Hungary; Italy; Luxembourg; Netherlands; Russia; Slovakia; Ukraine,"Holds acidity at any ripeness, which is why it ages for decades."
+350,Riesling Lion,White,Japan,,1,1,Japan,
+351,Rkatsiteli,White,Georgia,,12,6,Georgia; Kyrgyzstan; Russia; Tajikistan; Turkmenistan; Uzbekistan,One of the oldest cultivated varieties still in commercial use.
+352,Robola,White,Greece (Cephalonia),,2,1,Greece,
+353,Roditis,Pink,Greece,,5,1,Greece,
+354,Romé,Red,Spain (Andalusia),,1,1,Spain,
+355,Romorantin,White,France (Loire),,1,1,France,Grown almost nowhere but Cour-Cheverny.
+356,Rondinella,Red,Italy (Veneto),,8,1,Italy,
+357,Rondo,Red,Czechia,,5,3,Denmark; Ireland; Sweden,Hybrid.
+358,Rossese,Red,Italy (Liguria),,1,1,Italy,
+359,Roter Veltliner,White,Austria,,1,1,Austria,
+360,Rotgipfler,White,Austria,,1,1,Austria,
+361,Roupeiro,White,Portugal (Alentejo),Síria,1,1,Portugal,
+362,Roussanne,White,France (Rhône),,5,1,France,
+363,Rubin,Red,Bulgaria,,1,1,Bulgaria,"Nebbiolo x Syrah, bred in Bulgaria in 1944."
+364,Ruby Cabernet,Red,United States,,2,1,Namibia,Cabernet Sauvignon x Carignan.
+365,Ruchè,Red,Italy (Piedmont),,1,1,Italy,
+366,Rufete,Red,Portugal,,3,2,Portugal; Spain,
+367,Rumeni Muškat,White,Greece,,1,1,Slovenia,Slovenian Yellow Muscat.
+368,Ryzlink,White,Central Europe,,1,1,Czechia,Generic Czech term for Riesling-named varieties.
+369,Sagrantino,Red,Italy (Umbria),,2,1,Italy,Among the most tannic varieties measured anywhere.
+370,Sangiovese,Red,Italy (Tuscany),Sangiovese Grosso; Prugnolo Gentile; Brunello; Nielluccio,71,4,Italy; France; Australia; San Marino,Italy's most planted grape; Corsica's Nielluccio is the same variety.
+371,Saperavi,Red,Georgia,,12,5,Georgia; Kazakhstan; Kyrgyzstan; Moldova; Ukraine,A teinturier with red flesh; Georgia's principal red.
+372,Sauvignon Blanc,White,France (Loire),Sauvignon,71,14,France; South Africa; New Zealand; United States; Chile; Australia; Austria; Italy; Kenya; Myanmar; Brazil; Colombia; Israel; Spain,
+373,Savagnin,White,France (Jura),Traminer; Heida; Païen; Savagnin Blanc,11,6,France; Austria; Romania; Serbia; Switzerland; Ukraine,"The Vin Jaune grape, and ancestor of Gewürztraminer."
+374,Savatiano,White,Greece (Attica),,4,1,Greece,The Retsina grape and Greece's most planted variety.
+375,Schiava,Red,Italy (Alto Adige),Trollinger; Vernatsch,8,2,Italy; Germany,
+376,Schioppettino,Red,Italy (Friuli),Ribolla Nera,1,1,Italy,
+377,Sciaccarello,Red,Italy (Tuscany),Mammolo,4,1,France,Corsica's name for Tuscany's Mammolo.
+378,Sciascinoso,Red,Italy (Campania),,1,1,Italy,
+379,Semidano,White,Italy (Sardinia),,1,1,Italy,
+380,Sémillon,White,France (Bordeaux),Semillon; Semillón,25,5,France; Australia; Argentina; Italy; South Africa,"Botrytis-prone, which is exactly why Sauternes exists."
+381,Sercial,White,Portugal (Madeira),,1,1,Portugal,The driest of the Madeira grapes.
+382,Seyval Blanc,White,France,Seyval,6,4,Canada; United States; Poland; United Kingdom,Hybrid.
+383,Shesh i Bardhë,White,Albania,,1,1,Albania,
+384,Shesh i Zi,Red,Albania,,1,1,Albania,
+385,Shiroka Melnishka Loza,Red,Bulgaria,,1,1,Bulgaria,
+386,Siegerrebe,Pink,Germany,,1,1,United States,
+387,Síria,White,Portugal,,1,1,Portugal,
+388,Solaris,White,Germany,,19,8,Poland; Denmark; United Kingdom; Ireland; Netherlands; Norway; Sweden; Belgium,Hybrid bred for cold climates; the reason Scandinavia has vineyards.
+389,Spergola,White,Italy (Emilia),,1,1,Italy,
+390,Stanušina,Red,North Macedonia,,1,1,North Macedonia,
+391,Stavroto,Red,Greece (Thessaly),,1,1,Greece,
+392,Sultaniye,White,Turkey,,1,1,Turkey,"Sultana / Thompson Seedless, vinified in the Aegean."
+393,Svatovavřinecké,Red,Austria,St. Laurent,3,1,Czechia,
+394,Sylvaner,White,Central Europe,Silvaner,10,4,Germany; France; Italy; Switzerland,
+395,Syrah,Red,France (Rhône),Shiraz,230,29,France; Australia; United States; South Africa; Chile; New Zealand; Spain; India; Canada; Lebanon; Mexico; Thailand; Argentina; Brazil; Greece; Israel; Italy; Morocco; Myanmar; Cambodia; Ecuador; Ethiopia; Kenya; Malta; Portugal; Switzerland; Tunisia; Turkey; Venezuela,"One grape, two names; the name signals intended style more than genetics."
+396,Tai Rosso,Red,Spain (Aragón),,1,1,Italy,Grenache under a Veneto name.
+397,Tannat,Red,France (SW),,22,7,Uruguay; France; Bolivia; Argentina; Brazil; Paraguay; Peru,"Uruguay's national grape, softer there than in its native Madiran."
+398,Tavkveri,Red,Georgia,,1,1,Georgia,
+399,Tempranillo,Red,Spain (Rioja),Tinta Roriz; Aragonez; Tinto Fino; Cencibel; Tinta de Toro; Ull de Llebre,53,5,Spain; Portugal; United States; Mexico; Venezuela,"Spain's noble red, with a different name in nearly every region that grows it."
+400,Terbash,White,Turkmenistan,,1,1,Turkmenistan,
+401,Teroldego,Red,Italy (Trentino),,1,1,Italy,
+402,Terrano,Red,Italy (Friuli),Refošk; Teran,5,3,Italy; Slovenia; Croatia,Related to but distinct from Refosco dal Peduncolo Rosso.
+403,Terrantez,White,Portugal (Madeira),,1,1,Portugal,Nearly extinct; a few hectares survive.
+404,Thrapsathiri,White,Greece (Crete),,1,1,Greece,
+405,Tibouren,Red,France (Provence),,1,1,France,
+406,Timorasso,White,Italy (Piedmont),,1,1,Italy,Rescued from near-extinction in the 1980s.
+407,Tinta Barroca,Red,Portugal (Douro),Tinta Barocca,4,2,Portugal; South Africa,
+408,Tinta Miúda,Red,Spain (Rioja),,1,1,Portugal,
+409,Tintilia,Red,Italy (Molise),,1,1,Italy,
+410,Torrontés Riojano,White,Argentina,Torrontés,5,1,Argentina,A Muscat of Alexandria x País crossing born in Argentina.
+411,Touriga Franca,Red,Portugal (Douro),,12,1,Portugal,The most planted grape in the Douro.
+412,Touriga Nacional,Red,Portugal (Douro),,18,3,Portugal; South Africa; Cape Verde,"Portugal's flagship red, for Port and increasingly for table wine."
+413,Traminac,Pink,Italy (Alto Adige),,1,1,Croatia,Croatian name for Gewürztraminer.
+414,Traminette,White,United States,,1,1,United States,Gewürztraminer x Joannes Seyve; Indiana's signature white.
+415,Trebbiano Abruzzese,White,Italy (Abruzzo),,2,1,Italy,
+416,Trebbiano Romagnolo,White,Italy (Emilia-Romagna),,1,1,Italy,
+417,Trebbiano Spoletino,White,Italy (Umbria),,2,1,Italy,
+418,Trebbiano Toscano,White,Italy (Tuscany),Trebbiano; Ugni Blanc; Procanico,25,3,Italy; France; Moldova,The base of both Vin Santo and Cognac.
+419,Treixadura,White,Spain (Galicia),Trajadura,5,2,Spain; Portugal,
+420,Trepat,Red,Spain (Catalonia),,1,1,Spain,
+421,Trincadeira,Red,Portugal (Alentejo),Tinta Amarela,12,1,Portugal,
+422,Trousseau,Red,France (Jura),Bastardo,1,1,France,
+423,Tsimlyansky Cherny,Red,Russia (Don),,1,1,Russia,
+424,Tsitska,White,Georgia (Imereti),,1,1,Georgia,
+425,Tsolikouri,White,Georgia (Imereti),,3,1,Georgia,
+426,Turbiana,White,Italy (Lombardy),Trebbiano di Lugana,1,1,Italy,
+427,Verdeca,White,Italy (Puglia),,2,1,Italy,
+428,Verdejo,White,Spain (Rueda),,1,1,Spain,
+429,Verdejo Negro,Red,Spain (Asturias),,1,1,Spain,
+430,Verdelho,White,Portugal (Madeira),,10,2,Australia; Portugal,
+431,Verdesse,White,France (Savoie),,0,0,,
+432,Verdicchio,White,Italy (Marche),Trebbiano di Soave,6,1,Italy,Genetically identical to the Veneto's Trebbiano di Soave.
+433,Verduzzo Friulano,White,Italy (Friuli),,1,1,Italy,
+434,Vermentino,White,Italy (Liguria),Rolle; Vermentinu; Pigato; Favorita,10,2,Italy; France,
+435,Vernaccia di Oristano,White,Italy (Sardinia),,1,1,Italy,
+436,Vernaccia di San Gimignano,White,Italy (Tuscany),,1,1,Italy,
+437,Vernaccia Nera,Red,Italy (Marche),,2,1,Italy,
+438,Vertzami,Red,Greece (Lefkada),,1,1,Greece,
+439,Vespaiola,White,Italy (Veneto),,1,1,Italy,
+440,Vespolina,Red,Italy (Piedmont),,5,1,Italy,
+441,Vidal,White,France,Vidal Blanc,7,3,Canada; China; United States,Hybrid; the workhorse of Canadian icewine.
+442,Vidiano,White,Greece (Crete),,2,1,Greece,
+443,Vignoles,White,France,,1,1,United States,Hybrid.
+444,Vijariego,White,Spain (Canary Islands),,1,1,Spain,
+445,Vilana,White,Greece (Crete),,2,1,Greece,
+446,Villard,White,France,,2,1,Madagascar,Hybrid.
+447,Vinhão,Red,Portugal (Minho),Sousão,1,1,Portugal,
+448,Viognier,White,France (Rhône),,6,3,France; United States; India,Down to about 14 hectares worldwide in the 1960s.
+449,Viosinho,White,Portugal (Douro),,1,1,Portugal,
+450,Vischoqueña,Red,Bolivia,,1,1,Bolivia,
+451,Vitis amurensis,Red,China,,1,1,China,"A cold-hardy wild Asian species, not a vinifera variety."
+452,Vitovska,White,Slovenia,,1,1,Italy,
+453,Viura,White,Spain (Rioja),Macabeo; Macabeu,7,2,Spain; France,
+454,Voskehat,White,Armenia,,1,1,Armenia,
+455,Vranac,Red,Montenegro,Vranec,7,4,North Macedonia; Kosovo; Montenegro; Serbia,
+456,Vugava,White,Croatia (Vis),,1,1,Croatia,
+457,Welschriesling,White,Central Europe,Olaszrizling; Laški Rizling; Graševina; Riesling Italian; Italian Riesling; Ryzlink Vlašský,28,8,Hungary; Austria; Slovenia; Croatia; Serbia; Slovakia; Czechia; Romania,No relation to Riesling despite the name.
+458,Xarel·lo,White,Spain (Catalonia),Pansa Blanca,6,1,Spain,
+459,Xinomavro,Red,Greece (Macedonia),,5,1,Greece,"Pale, tannic and slow — Greece's answer to Nebbiolo."
+460,Xynisteri,White,Cyprus,,5,1,Cyprus,
+461,Zalema,White,Spain (Andalusia),,1,1,Spain,
+462,Žametovka,Red,Slovenia,,2,1,Slovenia,"Home to the world's oldest living grapevine, in Maribor."
+463,Zelen,White,Slovenia (Vipava),,1,1,Slovenia,
+464,Zghihară de Huși,White,Romania,,1,1,Romania,
+465,Zierfandler,White,Austria,,1,1,Austria,
+466,Žilavka,White,Bosnia and Herzegovina,,1,1,Bosnia and Herzegovina,
+467,Zinfandel,Red,Croatia,Primitivo; Crljenak Kaštelanski; Tribidrag,32,2,United States; Italy,"Zinfandel, Primitivo and Croatia's Tribidrag are one grape, settled by DNA in 2001."
+468,Žlahtina,White,Croatia (Krk),,1,1,Croatia,
+469,Zweigelt,Red,Austria,,3,1,Austria,"Blaufränkisch x St. Laurent, bred 1922; Austria's most planted red."
