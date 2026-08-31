@@ -14,7 +14,15 @@
       /*
         Sipply app icon.
 
-        The wax seal from the brand sheet, on the sheet's own cream. The
+        The coupe seal from the brand sheet, on the sheet's own cream. The
+        sheet draws two seals; this is the one with fewer strokes in it,
+        which is what an icon needs — the glass-and-bottle keeps its detail
+        down to about 60px and turns to a smudge below that, and the sizes
+        an icon is actually read at start at 29. `PRIMARY` in
+        build-icons.mjs selects between them and is checked against this
+        file, so the two cannot drift apart.
+
+        The
         seal is struck in wine over gilt, so it needs a light ground to
         read at all — laid on the wine the rest of the app is built from,
         it goes to a dark smudge with a gold scratch in it. Cream is not a
@@ -32,10 +40,10 @@
         shows the seam. Square and fully opaque, which is also what App
         Store Connect requires.
 
-        The mark is 70% of the canvas. The wax blob is irregular, so the
-        percentage is measured off its bounding box — the widest lobes sit
-        a little proud of a true circle at that size, which is what keeps
-        it looking stamped rather than printed.
+        The mark is 70% of the canvas, measured on its longer edge. The wax
+        blob is irregular, so the percentage is taken off its bounding box —
+        the widest lobes sit a little proud of a true circle at that size,
+        which is what keeps it looking stamped rather than printed.
       */
       .icon {
         width: 1024px;
@@ -46,13 +54,22 @@
         justify-content: center;
       }
       .mark {
+        /*
+          A square box with contain, not a width. The two seals are not the
+          same shape — the coupe is 410x435 and the glass-and-bottle is
+          507x508 — so setting width alone makes the portrait one render
+          taller than the square one and sit heavier in the tile at the
+          same nominal scale. Fitting the longer edge makes 0.70 mean one
+          thing whichever seal PRIMARY selects.
+        */
         width: 717px; /* 0.70 × 1024 */
-        height: auto;
+        height: 717px;
+        object-fit: contain;
         display: block;
       }
     </style>
   </head>
   <body>
-    <div class="icon"><img class="mark" src="mark-seal.png" /></div>
+    <div class="icon"><img class="mark" src="mark-seal-coupe.png" /></div>
   </body>
 </html>

@@ -48,14 +48,20 @@ const GROUND = [248, 235, 222];
  * distance 40 from the ground, close by 9px to weld the strokes of a glyph
  * into one blob, then label. Every box below is a component bounding box.
  */
-const MARKS = [
+/**
+ * The two seals the sheet draws. Each one yields a colour master and a
+ * monochrome cut from the same box, so the geometry is stated once —
+ * previously the primary's rect and guard were written twice and could
+ * drift apart silently.
+ */
+const SEALS = [
   {
-    name: 'mark-seal.png',
     /*
-     * The primary seal — wine glass and bottle. It is the emblem of both
-     * the stacked and the horizontal lockup, and at 507px it is the
-     * highest-resolution copy of the mark anywhere on the sheet.
+     * Wine glass and bottle. The emblem of both the stacked and the
+     * horizontal lockup, and at 507px the highest-resolution copy of any
+     * mark on the sheet.
      */
+    slug: 'bottle',
     rect: [367, 220, 507, 508],
     /*
      * The "l" of the wordmark below ascends into this box's bottom-right
@@ -66,31 +72,44 @@ const MARKS = [
     guard: 262,
   },
   {
-    name: 'mark-seal-coupe.png',
-    /* The alternate seal — a lone coupe. Kept for surfaces too small for
-     * the glass-and-bottle to survive. Nothing crowds it. */
+    /* A lone coupe. Fewer strokes, so it survives further down the size
+     * ladder than the glass-and-bottle. Nothing crowds it on the sheet. */
+    slug: 'coupe',
     rect: [1306, 437, 410, 435],
   },
+];
+
+/**
+ * Where wax ends and gilt begins. Both seals are painted from the same two
+ * tones — 72% below the low edge, 24% above it, under 4% in the ramp
+ * between — so one pair of thresholds cuts either of them.
+ */
+const KNOCKOUT = [88, 118];
+
+const MARKS = [
+  ...SEALS.flatMap(({ slug, rect, guard }) => [
+    { name: `mark-seal-${slug}.png`, rect, guard },
+    {
+      /*
+       * Android's themed icon wants one flat silhouette that the launcher
+       * tints. A solid fill would be a featureless disc, so the cut follows
+       * the artwork's own two tones: the wax stays opaque and the gilt
+       * glass, bottle and rings are knocked out of it, the way the real
+       * thing is struck. Flat white because the launcher reads only the
+       * alpha — leaving it burgundy would look correct here and wrong
+       * there.
+       */
+      name: `mark-seal-${slug}-mono.png`,
+      rect,
+      guard,
+      knockoutAbove: KNOCKOUT,
+      flatten: [255, 255, 255],
+    },
+  ]),
   {
     name: 'mark-lockup.png',
     /* The full stacked lockup: seal, wordmark, rule, tagline, diamond. */
     rect: [274, 220, 727, 896],
-  },
-  {
-    name: 'mark-seal-mono.png',
-    /*
-     * Android's themed icon wants one flat silhouette that the launcher
-     * tints. A solid fill of the seal would be a featureless disc, so the
-     * cut follows the artwork's own two tones instead: the wax stays
-     * opaque and the gilt glass, bottle and rings are knocked out of it,
-     * the way the real thing is struck.
-     */
-    rect: [367, 220, 507, 508],
-    guard: 262,
-    knockoutAbove: [88, 118],
-    /* Flat white, because the launcher tints the shape and only reads the
-     * alpha. Leaving it burgundy would look correct here and wrong there. */
-    flatten: [255, 255, 255],
   },
 ];
 

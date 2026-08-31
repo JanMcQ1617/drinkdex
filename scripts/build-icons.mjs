@@ -14,7 +14,7 @@
  */
 
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, copyFileSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, copyFileSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,8 +30,16 @@ const ICON = join(ROOT, 'scripts/icon');
  */
 const CREAM = '#F8EBDE';
 
-const SEAL = join(ICON, 'mark-seal.png');
-const SEAL_MONO = join(ICON, 'mark-seal-mono.png');
+/**
+ * Which of the sheet's two seals is the app's face. The glass-and-bottle is
+ * the emblem of both lockups; the coupe is drawn with fewer strokes and so
+ * holds together further down the size ladder, where an app icon actually
+ * lives. Changing this constant changes every raster below.
+ */
+const PRIMARY = 'coupe';
+
+const SEAL = join(ICON, `mark-seal-${PRIMARY}.png`);
+const SEAL_MONO = join(ICON, `mark-seal-${PRIMARY}-mono.png`);
 
 /**
  * Android draws the adaptive icon at 108dp and only guarantees the middle
@@ -47,7 +55,9 @@ const ADAPTIVE = 0.58;
  * @param {object} o
  * @param {string} o.background  CSS background, or 'transparent'
  * @param {string|null} o.mark   absolute path to the mark, or null
- * @param {number} o.scale       mark width as a fraction of the canvas
+ * @param {number} o.scale       mark's LONGER edge as a fraction of the
+ *                               canvas; the two seals differ in shape, so
+ *                               fitting a square box keeps this comparable
  * @param {number} o.radius      corner radius in px, 0 for square
  */
 function page({ background, mark, scale, radius }) {
@@ -56,7 +66,8 @@ function page({ background, mark, scale, radius }) {
 html, body { margin: 0; padding: 0; width: 1024px; height: 1024px; overflow: hidden; background: transparent; }
 .icon { width: 1024px; height: 1024px; background: ${background}; border-radius: ${radius}px;
         display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.mark { width: ${Math.round(1024 * scale)}px; height: auto; display: block; }
+.mark { width: ${Math.round(1024 * scale)}px; height: ${Math.round(1024 * scale)}px;
+        object-fit: contain; display: block; }
 </style></head><body><div class="icon">${img}</div></body></html>`;
 }
 
@@ -111,6 +122,21 @@ const JOBS = [
   },
 ];
 
+/*
+ * icon.html is screenshotted as it sits on disk rather than templated from
+ * page(), which makes it the one place PRIMARY can disagree with itself. A
+ * half-swapped icon set — coupe on iOS, glass-and-bottle on Android — is
+ * exactly the kind of thing that ships unnoticed, so it is checked instead
+ * of trusted.
+ */
+const ICON_HTML = join(ICON, 'icon.html');
+if (!readFileSync(ICON_HTML, 'utf8').includes(`mark-seal-${PRIMARY}.png`)) {
+  throw new Error(
+    `PRIMARY is '${PRIMARY}' but scripts/icon/icon.html does not reference ` +
+      `mark-seal-${PRIMARY}.png. Point it at the same seal.`,
+  );
+}
+
 const work = mkdtempSync(join(tmpdir(), 'sipply-icons-'));
 
 for (const job of JOBS) {
@@ -120,7 +146,7 @@ for (const job of JOBS) {
         writeFileSync(f, job.html);
         return f;
       })()
-    : join(ROOT, 'scripts/icon/icon.html');
+    : ICON_HTML;
 
   const shot = join(work, job.name);
   execFileSync(CHROME, [
