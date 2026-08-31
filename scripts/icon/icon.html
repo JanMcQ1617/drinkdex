@@ -3,11 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <style>
-      @font-face {
-        font-family: 'PlayfairDisplayLatin';
-        font-weight: 700;
-        src: url('../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf') format('truetype');
-      }
       html,
       body {
         margin: 0;
@@ -19,45 +14,45 @@
       /*
         Sipply app icon.
 
-        Straight from the brand sheet: a 160deg merlot-to-wine gradient with
-        the monogram "S." set in Playfair Display 700 — bone letter, taupe
-        period. The sheet draws it at 128px with a 30px radius; the radius is
-        NOT baked in here because iOS applies its own corner mask and a
-        pre-rounded icon shows the seam. Square and fully opaque, which is
-        also what App Store Connect requires.
+        The wax seal from the brand sheet, on the sheet's own cream. The
+        seal is struck in wine over gilt, so it needs a light ground to
+        read at all — laid on the wine the rest of the app is built from,
+        it goes to a dark smudge with a gold scratch in it. Cream is not a
+        softening of the brand here, it is the only ground the mark works
+        on, and it is the ground the sheet itself draws it on.
 
-        The period is the whole mark. Without it the icon is a letter; with
-        it the letter is a word ending, which is what makes "S." read as an
-        abbreviation of a name rather than as a monogram of an initial.
+        #F8EBDE is that sheet's ground, sampled rather than chosen, which
+        also means the seal's anti-aliased rim was rendered against this
+        exact value and composites onto it with no fringe. It lands within
+        three points of `giltWash` in theme.ts; it is deliberately not
+        that token, because this is a property of the artwork rather than
+        a colour the UI is allowed to reach for.
+
+        No corner radius: iOS applies its own mask and a pre-rounded icon
+        shows the seam. Square and fully opaque, which is also what App
+        Store Connect requires.
+
+        The mark is 70% of the canvas. The wax blob is irregular, so the
+        percentage is measured off its bounding box — the widest lobes sit
+        a little proud of a true circle at that size, which is what keeps
+        it looking stamped rather than printed.
       */
       .icon {
         width: 1024px;
         height: 1024px;
-        background: linear-gradient(160deg, #7e2330 0%, #5b0f1a 70%);
+        background: #f8ebde;
         display: flex;
         align-items: center;
         justify-content: center;
       }
       .mark {
-        font-family: 'PlayfairDisplayLatin', Georgia, serif;
-        font-weight: 700;
-        font-size: 512px;
-        line-height: 1;
-        color: #e9e5df;
-        /*
-          Optical centring, measured off the render rather than guessed.
-          Flex centres the text BOX, and the period's advance width is
-          mostly empty space, so the ink lands ~21px left of centre; the
-          block is pushed back right by that much and up off the baseline.
-        */
-        transform: translate(3px, -26px);
-      }
-      .dot {
-        color: #cbbba5;
+        width: 717px; /* 0.70 × 1024 */
+        height: auto;
+        display: block;
       }
     </style>
   </head>
   <body>
-    <div class="icon"><div class="mark">S<span class="dot">.</span></div></div>
+    <div class="icon"><img class="mark" src="mark-seal.png" /></div>
   </body>
 </html>

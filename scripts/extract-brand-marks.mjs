@@ -1,0 +1,200 @@
+/**
+ * Cuts the individual brand marks out of the Sipply logo sheet.
+ *
+ * `scripts/icon/brand-sheet.png` is the 2048² artwork as it was delivered:
+ * a 2×2 contact sheet of lockups, every one of them sitting on the same
+ * flat cream. Nothing in it is a usable asset on its own — the tiles are
+ * separated by hairlines rather than margins, so a naive quadrant crop of
+ * the primary seal takes the ascender of the "l" next to it with it.
+ *
+ * This script is the authoring step that turns that sheet into the three
+ * masters `build-icons.mjs` consumes. It is not part of the icon build and
+ * only needs re-running if the sheet itself is redrawn.
+ *
+ * HOW THE CUT IS MADE
+ *
+ * The ground is flat #F8EBDE, so every pixel is a known background blended
+ * with an unknown mark: P = aF + (1-a)B. Alpha is recovered from distance
+ * to that background and the colour is then un-multiplied back out, which
+ * keeps the anti-aliased rim smooth instead of leaving the stair-step a
+ * hard threshold would. The ramp starts well above the drop shadow's
+ * distance so the shadow is dropped rather than baked in — iOS and Android
+ * both cast their own, and a second one underneath reads as dirt.
+ *
+ * Run: node scripts/extract-brand-marks.mjs
+ */
+
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, writeFileSync, copyFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const ROOT = fileURLToPath(new URL('../', import.meta.url));
+const ICON = join(ROOT, 'scripts/icon');
+const SHEET = join(ICON, 'brand-sheet.png');
+
+/** The sheet's ground, sampled as the median of its outer border. */
+const GROUND = [248, 235, 222];
+
+/*
+ * Every master is written at its content box's own pixel size. The sheet
+ * is the resolution ceiling — a 507px seal stored at 1024px is an upscale
+ * with no extra detail in it, and PNG pays for the interpolated texture by
+ * the byte: 1.1 MB against 253 KB for the identical mark.
+ *
+ * Content boxes, measured off the sheet rather than eyeballed: threshold at
+ * distance 40 from the ground, close by 9px to weld the strokes of a glyph
+ * into one blob, then label. Every box below is a component bounding box.
+ */
+const MARKS = [
+  {
+    name: 'mark-seal.png',
+    /*
+     * The primary seal — wine glass and bottle. It is the emblem of both
+     * the stacked and the horizontal lockup, and at 507px it is the
+     * highest-resolution copy of the mark anywhere on the sheet.
+     */
+    rect: [367, 220, 507, 508],
+    /*
+     * The "l" of the wordmark below ascends into this box's bottom-right
+     * corner. The wax blob is irregular but fits inside r=254 about the
+     * box centre, and the nearest ink of that "l" is 284px out, so a
+     * circular guard drops the letter without touching the seal.
+     */
+    guard: 262,
+  },
+  {
+    name: 'mark-seal-coupe.png',
+    /* The alternate seal — a lone coupe. Kept for surfaces too small for
+     * the glass-and-bottle to survive. Nothing crowds it. */
+    rect: [1306, 437, 410, 435],
+  },
+  {
+    name: 'mark-lockup.png',
+    /* The full stacked lockup: seal, wordmark, rule, tagline, diamond. */
+    rect: [274, 220, 727, 896],
+  },
+  {
+    name: 'mark-seal-mono.png',
+    /*
+     * Android's themed icon wants one flat silhouette that the launcher
+     * tints. A solid fill of the seal would be a featureless disc, so the
+     * cut follows the artwork's own two tones instead: the wax stays
+     * opaque and the gilt glass, bottle and rings are knocked out of it,
+     * the way the real thing is struck.
+     */
+    rect: [367, 220, 507, 508],
+    guard: 262,
+    knockoutAbove: [88, 118],
+    /* Flat white, because the launcher tints the shape and only reads the
+     * alpha. Leaving it burgundy would look correct here and wrong there. */
+    flatten: [255, 255, 255],
+  },
+];
+
+/** @param {typeof MARKS[number]} m */
+function page(m) {
+  const [rx, ry, rw, rh] = m.rect;
+  const [ow, oh] = [rw, rh];
+  return `<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;padding:0;width:${ow}px;height:${oh}px;overflow:hidden;background:transparent}
+canvas{display:block}
+</style></head><body>
+<canvas id="out" width="${ow}" height="${oh}"></canvas>
+<script>
+const G = ${JSON.stringify(GROUND)};
+const RECT = ${JSON.stringify(m.rect)};
+const GUARD = ${m.guard ?? 'null'};
+const KNOCK = ${JSON.stringify(m.knockoutAbove ?? null)};
+const FLAT = ${JSON.stringify(m.flatten ?? null)};
+
+const smooth = (x, a, b) => {
+  const t = Math.max(0, Math.min(1, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+
+const img = new Image();
+img.onload = () => {
+  const [rx, ry, rw, rh] = RECT;
+  const src = document.createElement('canvas');
+  src.width = img.width; src.height = img.height;
+  src.getContext('2d').drawImage(img, 0, 0);
+  const d = src.getContext('2d').getImageData(rx, ry, rw, rh);
+  const p = d.data;
+
+  const cx = rw / 2, cy = rh / 2;
+  for (let y = 0; y < rh; y++) {
+    for (let x = 0; x < rw; x++) {
+      const i = (y * rw + x) * 4;
+      const r = p[i], g = p[i + 1], b = p[i + 2];
+      const dist = Math.hypot(r - G[0], g - G[1], b - G[2]);
+
+      /*
+       * 25 sits above the drop shadow and below the rim; 70 is where the
+       * mark is unambiguously itself. Everything between is the
+       * anti-aliased edge and keeps a partial alpha.
+       */
+      let a = smooth(dist, 25, 70);
+
+      if (GUARD !== null && Math.hypot(x - cx, y - cy) > GUARD) a = 0;
+
+      if (KNOCK !== null) {
+        // Gilt knocks out of wax: opaque below the low edge, gone above.
+        const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        a *= 1 - smooth(lum, KNOCK[0], KNOCK[1]);
+      }
+
+      if (a <= 0.004) { p[i + 3] = 0; continue; }
+
+      if (FLAT !== null) {
+        p[i] = FLAT[0]; p[i + 1] = FLAT[1]; p[i + 2] = FLAT[2];
+        p[i + 3] = Math.round(a * 255);
+        continue;
+      }
+
+      // Un-multiply the ground back out of the blended pixel.
+      p[i]     = Math.max(0, Math.min(255, (r - (1 - a) * G[0]) / a));
+      p[i + 1] = Math.max(0, Math.min(255, (g - (1 - a) * G[1]) / a));
+      p[i + 2] = Math.max(0, Math.min(255, (b - (1 - a) * G[2]) / a));
+      p[i + 3] = Math.round(a * 255);
+    }
+  }
+
+  const cut = document.createElement('canvas');
+  cut.width = rw; cut.height = rh;
+  cut.getContext('2d').putImageData(d, 0, 0);
+
+  const out = document.getElementById('out');
+  const ctx = out.getContext('2d');
+  // The canvas IS the content box, so this is a 1:1 blit, not a resample.
+  ctx.drawImage(cut, 0, 0);
+  document.title = 'done';
+};
+img.src = 'file://${SHEET}';
+</script></body></html>`;
+}
+
+const work = mkdtempSync(join(tmpdir(), 'sipply-marks-'));
+
+for (const m of MARKS) {
+  const html = join(work, m.name.replace('.png', '.html'));
+  writeFileSync(html, page(m));
+  const shot = join(work, m.name);
+  execFileSync(CHROME, [
+    '--headless',
+    '--disable-gpu',
+    '--hide-scrollbars',
+    '--allow-file-access-from-files',
+    '--default-background-color=00000000',
+    '--virtual-time-budget=4000',
+    `--screenshot=${shot}`,
+    `--window-size=${m.rect[2]},${m.rect[3]}`,
+    `file://${html}`,
+  ], { stdio: 'ignore' });
+  copyFileSync(shot, join(ICON, m.name));
+  console.log(`  ${m.name}  ${m.rect[2]}x${m.rect[3]}`);
+}
+
+console.log('\n  Marks cut from the sheet.\n');
