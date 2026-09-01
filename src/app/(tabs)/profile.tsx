@@ -53,7 +53,7 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { DRINKS_BY_ID } from '@/data';
+import { DRINKS_BY_ID, formatCount } from '@/data';
 import { fetchPostsByAuthor, fetchProfiles, toProfile } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
@@ -158,7 +158,7 @@ function Identity({
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <View style={styles.stat} accessibilityLabel={`${value} ${label}`}>
-      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statValue}>{formatCount(value)}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
   );
@@ -848,13 +848,17 @@ const styles = StyleSheet.create({
   },
 
   /* Stats */
+  /*
+   * Three numbers with air around them, not a bordered band. The rules
+   * top and bottom were doing the separating when the page and the card
+   * were the same off-white; now that the page is cream they are a second
+   * separator doing a job the ground already does, and they cut the header
+   * into stripes.
+   */
   statRow: {
     flexDirection: 'row',
     marginTop: space.xl,
     paddingVertical: space.lg,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.cardBorder,
   },
   stat: { flex: 1, alignItems: 'center', gap: 2 },
   statValue: {

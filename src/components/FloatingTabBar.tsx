@@ -10,7 +10,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GlassSurface } from '@/components/glass';
-import { TabIcon, type TabName } from '@/components/icons';
+import { Icon, TabIcon, type TabName } from '@/components/icons';
 import { haptic } from '@/components/ui';
 import { colors, fonts, motion, radius, space } from '@/constants/theme';
 
@@ -46,6 +46,24 @@ const BAR_PAD = 6;
 
 /** How far the pill stretches at full travel. 18% reads; 30% is a cartoon. */
 const STRETCH = 0.18;
+
+/*
+ * The centre action sits BETWEEN the tabs rather than being one of them.
+ *
+ * It is not a route: logging a pour is a thing you do, not a place you
+ * are, and making it a fifth tab would put a permanently-unselectable
+ * item in a bar whose whole job is showing where you are. So the row
+ * lays out five slots for four tabs and leaves the middle one empty for
+ * the button to sit in.
+ *
+ * Everything positional has to count SLOTS, not tabs. The travelling pill
+ * skips the gap — without that, moving from Dex to Stats parks the pill
+ * under the button instead of under the icon it belongs to.
+ */
+const FAB_SLOT = 2;
+
+/** Slot a tab occupies once the centre gap is accounted for. */
+const slotOf = (tabIndex: number) => (tabIndex < FAB_SLOT ? tabIndex : tabIndex + 1);
 
 
 type TabBarIconProps = { focused: boolean; color: string; size: number };
@@ -106,13 +124,43 @@ function TabItem({
   return <Animated.View style={[styles.itemInner, style]}>{children}</Animated.View>;
 }
 
+/**
+ * The centre action — a filled wine disc that breaks the top edge of the
+ * bar.
+ *
+ * It overhangs deliberately. A button contained inside the bar reads as a
+ * fifth tab drawn slightly differently; one that crosses the edge reads as
+ * a different KIND of control, which is what it is. The overhang is why
+ * this cannot be `overflow: hidden` anywhere up the tree.
+ *
+ * No label under it, unlike the tabs. The tabs are labelled because they
+ * are destinations you need to recognise; a plus needs no gloss, and a
+ * fifth word would rebuild the visual rhythm the overhang just broke.
+ */
+function CentreAction({ width, onPress }: { width: number; onPress: () => void }) {
+  return (
+    <View style={[styles.fabSlot, width > 0 ? { width } : null]} pointerEvents="box-none">
+      <Pressable
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel="Log a pour"
+        accessibilityHint="Opens the Dex to pick what you drank"
+        hitSlop={8}
+        style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
+        <Icon name="plus" size={24} color={colors.textOnWine} />
+      </Pressable>
+    </View>
+  );
+}
+
 export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
   const reduced = useReducedMotion();
   const [barW, setBarW] = useState(0);
 
-  const count = Math.max(state.routes.length, 1);
-  const itemW = barW > 0 ? (barW - BAR_PAD * 2) / count : 0;
+  // One extra slot for the centre action — see FAB_SLOT.
+  const slots = Math.max(state.routes.length, 1) + 1;
+  const itemW = barW > 0 ? (barW - BAR_PAD * 2) / slots : 0;
 
   /*
    * A plain number, captured by the worklets below — NOT a shared value.
@@ -121,7 +169,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
    * as a closure dependency, so both worklets re-run the moment the
    * active index changes.
    */
-  const targetX = state.index * itemW;
+  const targetX = slotOf(state.index) * itemW;
 
   /*
    * The pill chases the target. useDerivedValue so the spring starts the
@@ -187,8 +235,27 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
             };
 
             return (
+              <React.Fragment key={route.key}>
+                {/*
+                  Rendered BEFORE the tab that sits after the gap, so the
+                  order is Home · Dex · action · Stats · Profile and the
+                  empty slot the pill skips is the one this fills.
+                */}
+                {i === FAB_SLOT ? (
+                  <CentreAction
+                    width={itemW}
+                    onPress={() => {
+                      haptic.tap();
+                      /*
+                       * The Dex, because a pour is logged against an entry
+                       * and this is where you pick one. There is no global
+                       * compose screen to send it to yet.
+                       */
+                      navigation.navigate('dex');
+                    }}
+                  />
+                ) : null}
               <Pressable
-                key={route.key}
                 onPress={onPress}
                 accessibilityRole="button"
                 accessibilityLabel={options.tabBarAccessibilityLabel ?? options.title ?? route.name}
@@ -204,6 +271,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                   </Text>
                 </TabItem>
               </Pressable>
+              </React.Fragment>
             );
           })}
         </View>
@@ -245,6 +313,37 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 3,
   },
+
+  /*
+   * The slot is the same width as a tab so the five-across rhythm holds;
+   * the disc inside it is bigger than the slot is tall and hangs out the
+   * top. `justifyContent: center` with a negative margin rather than a
+   * transform, so the layout box moves with it and the disc cannot end up
+   * overlapping the icons either side at narrow widths.
+   */
+  fabSlot: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -18,
+  },
+  fab: {
+    width: 52,
+    height: 52,
+    borderRadius: radius.pill,
+    backgroundColor: colors.wine,
+    alignItems: 'center',
+    justifyContent: 'center',
+    /*
+     * Its own shadow, heavier than the bar's. The disc sits above the bar
+     * in the stack and needs to read as lifted off it, not printed on it.
+     */
+    shadowColor: colors.lockInk,
+    shadowOpacity: 0.28,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 8,
+  },
+  fabPressed: { opacity: 0.88 },
   itemInner: {
     alignItems: 'center',
     gap: space.xs - 1,

@@ -42,3 +42,20 @@ export const COUNT_BY_RARITY: Record<Rarity, number> = DRINKS.reduce(
 export function formatDexNumber(n: number): string {
   return `#${String(n).padStart(3, '0')}`;
 }
+
+/**
+ * Grouped thousands — "7,653", not "7653".
+ *
+ * The index passed four figures a long time ago and the bare numerals had
+ * stopped being readable at a glance: "7653 collected" is parsed, whereas
+ * "7,653" is just seen. Every count the app shows is a magnitude the user
+ * is meant to feel, so they all get separators.
+ *
+ * Hardcoded en-US grouping rather than toLocaleString(): React Native
+ * ships without full ICU on Android unless you opt into the larger JSC
+ * build, so the locale-aware version silently returns UNGROUPED digits
+ * there while looking correct on iOS.
+ */
+export function formatCount(n: number): string {
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
