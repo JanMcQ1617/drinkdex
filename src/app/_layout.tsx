@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { SipplyIntro } from '@/components/SipplyIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
+import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
 import { colors, fonts } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
@@ -102,6 +103,16 @@ export default function RootLayout() {
           back gesture would fight it on every drag.
         */}
         <Stack.Screen name="wine-atlas/index" options={{ gestureDirection: 'horizontal' }} />
+        {/*
+          Logging a pour. A modal, not a push: it is a task you complete or
+          abandon, and the sheet's downward dismiss is the gesture that
+          matches "never mind" — a back-chevron would imply it is a place
+          you can wander out of half-finished.
+        */}
+        <Stack.Screen
+          name="log"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
       </Stack>
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
@@ -116,6 +127,12 @@ export default function RootLayout() {
         have the overlay pop in above a half-finished animation.
       */}
       <PasswordResetOverlay />
+      {/*
+        Celebrations. Above the Stack so a catch logged from the tab bar's
+        modal and one logged from a Dex card land on the same surface, and
+        below the intro so a cold start never stacks the two.
+      */}
+      <CelebrationOverlay />
       {showIntro && (
         <SipplyIntro
           onDone={() => {

@@ -26,6 +26,7 @@ import {
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatCount, formatDexNumber, TOTAL } from '@/data';
 import { RarityDonut } from '@/components/RarityDonut';
+import { MILESTONES, rankTitle } from '@/lib/milestones';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 
@@ -38,25 +39,9 @@ import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 /* stats are a different, post-derived view (see profile.tsx).          */
 /* ==================================================================== */
 
-/** The rank ladder, ascending. Also drives the milestones list. */
-export const MILESTONES: { pct: number; title: string }[] = [
-  { pct: 0, title: 'First Sips' },
-  { pct: 10, title: 'Barfly in Training' },
-  { pct: 25, title: 'The Regular' },
-  { pct: 50, title: 'Connoisseur' },
-  { pct: 75, title: 'Master of the Index' },
-  { pct: 100, title: 'Living Legend' },
-];
-
-export function rankTitle(unlocked: number, total: number): string {
-  if (unlocked === 0) return 'Empty Shelf';
-  const pct = total > 0 ? (unlocked / total) * 100 : 0;
-  let title = MILESTONES[0]!.title;
-  for (const m of MILESTONES) {
-    if (pct >= m.pct) title = m.title;
-  }
-  return title;
-}
+/* The ladder moved to lib/milestones — the collection store needs it too,
+   and a store importing a component to get at a constant is backwards. */
+export { MILESTONES, rankTitle } from '@/lib/milestones';
 
 interface UnlockedEntry {
   drink: Drink;

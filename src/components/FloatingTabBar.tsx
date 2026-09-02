@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
@@ -141,7 +142,7 @@ function CentreAction({ onPress }: { onPress: () => void }) {
         onPress={onPress}
         accessibilityRole="button"
         accessibilityLabel="Log a pour"
-        accessibilityHint="Opens the Dex to pick what you drank"
+        accessibilityHint="Take a photo and pick what you drank"
         hitSlop={8}
         style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
         <Icon name="plus" size={24} color={colors.textOnWine} />
@@ -153,6 +154,7 @@ function CentreAction({ onPress }: { onPress: () => void }) {
 export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
   const reduced = useReducedMotion();
+  const router = useRouter();
   /*
    * Where each tab ACTUALLY is, reported by layout — not computed.
    *
@@ -252,7 +254,15 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
           {state.routes.map((route, i) => {
             const options = descriptors[route.key]?.options ?? {};
             const focused = state.index === i;
-            const color = focused ? colors.wine : colors.textFaint;
+            /*
+             * textMuted, not textFaint. These labels are 9pt — small text,
+             * which WCAG holds to 4.5:1 — and textFaint measures 3.09:1 on
+             * the bar's fill. check-contrast never caught it because it only
+             * audits textFaint at the 3.0 large-text threshold, which is the
+             * right rule for the token and the wrong one for this use of it.
+             * textMuted is 5.98:1 here.
+             */
+            const color = focused ? colors.wine : colors.textMuted;
             const label = (options.title ?? route.name).toUpperCase();
 
             const onPress = () => {
@@ -280,11 +290,11 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                     onPress={() => {
                       haptic.tap();
                       /*
-                       * The Dex, because a pour is logged against an entry
-                       * and this is where you pick one. There is no global
-                       * compose screen to send it to yet.
+                       * router, not navigation: `log` is a root-stack modal,
+                       * and the tab navigator handed to this component can
+                       * only reach its own siblings.
                        */
-                      navigation.navigate('dex');
+                      router.push('/log');
                     }}
                   />
                 ) : null}
@@ -338,11 +348,20 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     paddingHorizontal: BAR_PAD,
   },
+  /*
+   * Fully rounded, and inset top and bottom.
+   *
+   * It was a 16pt-radius rectangle running nearly the full inner height,
+   * which put a squarish block flush into the corner of a fully-rounded
+   * bar — two different corner languages touching, which reads as a
+   * rendering mistake rather than a highlight. Matching the bar's own pill
+   * geometry and leaving a margin around it makes it sit *in* the bar.
+   */
   pill: {
     position: 'absolute',
-    top: 5,
-    bottom: 5,
-    borderRadius: radius.lg,
+    top: 7,
+    bottom: 7,
+    borderRadius: radius.pill,
     backgroundColor: colors.wineWash,
   },
   item: {
@@ -363,11 +382,17 @@ const styles = StyleSheet.create({
    * right; letting it flex makes five equal slots a property of the layout
    * rather than of a calculation that could drift from it.
    */
+  /*
+   * `flex: 1`, exactly like a tab. The slot used to be given a computed
+   * width, which meant the row's even pitch depended on that number being
+   * right; letting it flex makes five equal slots a property of the layout
+   * rather than of a calculation that could drift from it.
+   */
   fabSlot: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -18,
+    marginTop: -16,
   },
   fab: {
     width: 52,
@@ -377,24 +402,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     /*
-     * Its own shadow, heavier than the bar's. The disc sits above the bar
-     * in the stack and needs to read as lifted off it, not printed on it.
+     * A ring in the PAGE colour, not the bar's.
+     *
+     * Without it the disc sits directly on the bar's fill and reads as
+     * pasted onto the surface. A page-coloured ring reads as a hole cut
+     * through the bar that the disc comes up through — which is what the
+     * overhang is already claiming, so the two now say the same thing.
+     * It also guarantees a clean edge against the icons either side no
+     * matter how narrow the slot gets.
+     */
+    borderWidth: 3,
+    borderColor: colors.bg,
+    /*
+     * Tight and close, not a cloud. At radius 12 / y+6 the shadow spread
+     * far enough past the disc to read as a smudge on the cream rather
+     * than as lift — the bar it sits on is only 64pt tall, so there is no
+     * room for a soft far-throw shadow to resolve.
      */
     shadowColor: colors.lockInk,
-    shadowOpacity: 0.28,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    elevation: 8,
+    shadowOpacity: 0.18,
+    shadowRadius: 7,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 6,
   },
-  fabPressed: { opacity: 0.88 },
+  /* Scale, not opacity: a wine disc fading toward cream reads as disabled. */
+  fabPressed: { transform: [{ scale: 0.94 }] },
   itemInner: {
     alignItems: 'center',
     gap: space.xs - 1,
   },
   label: {
-    /* The brand's letterspaced label, at tab scale. */
+    /*
+     * The brand's letterspaced label, at tab scale — but one point larger
+     * and tracked tighter than the brand default. At 9/1.6 the longest
+     * label ("PROFILE") sprawled nearly the full slot and left the icons
+     * looking crowded by their own captions; 10/0.9 is wider per glyph and
+     * narrower overall.
+     */
     fontFamily: fonts.label,
-    fontSize: 9,
-    letterSpacing: 1.6,
+    fontSize: 10,
+    letterSpacing: 0.9,
   },
 });
