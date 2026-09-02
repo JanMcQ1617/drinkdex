@@ -377,12 +377,28 @@ const styles = StyleSheet.create({
      * mark and its supporting line take a centre axis and the form below
      * keeps the left one it has always had.
      *
-     * Width is fixed and the height follows the artwork's own 727:896, so
-     * the two cannot drift apart if the sheet is ever recut at a different
-     * size.
+     * BOTH dimensions are explicit, and there is a hard cap on top.
+     *
+     * This was `width: 170` plus `aspectRatio: 727 / 896`, letting Yoga
+     * derive the height — and on device it rendered the lockup at roughly
+     * full screen width, overflowing both edges and pushing the email and
+     * password fields below the fold behind the tab bar. Signing in was
+     * impossible without scrolling past a mark the size of the screen.
+     *
+     * The ratio was not the problem: the asset is 512x632, which is 727:896
+     * to three decimals. An Image carries its own intrinsic size, so a
+     * width-plus-ratio pair is an inference about how that intrinsic size
+     * gets overridden, and an inference is exactly what should not be load
+     * bearing on the app's front door. Concrete numbers cannot be
+     * misinterpreted, and maxWidth means that even if something upstream
+     * changes again, the worst case is a mark that fits the screen.
+     *
+     * 160x198 keeps the 512:632 ratio. If the sheet is recut, recompute
+     * height as width * 632 / 512.
      */
-    width: 170,
-    aspectRatio: 727 / 896,
+    width: 160,
+    height: 198,
+    maxWidth: '100%',
     alignSelf: 'center',
   },
   tagline: {
