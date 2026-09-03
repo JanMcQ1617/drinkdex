@@ -141,13 +141,7 @@ that means you accept the new version.
 
 ## Governing law
 
-<!-- TODO (Jan): confirm before publishing. This should be where you are
-     actually resident and would realistically bring or defend a claim —
-     Puerto Rico and Massachusetts are both plausible here and they are not
-     interchangeable. Replace the bracketed text, delete this comment, then
-     republish. -->
-
-These terms are governed by the laws of **[JURISDICTION — to be confirmed]**,
+These terms are governed by the laws of the **Commonwealth of Puerto Rico**,
 without regard to conflict-of-law rules. If you live somewhere with consumer
 protections that cannot be waived by contract, those protections still apply
 to you.
