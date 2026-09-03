@@ -11,7 +11,7 @@
     "backgroundColor": "#FFFDF9",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
-      "buildNumber": "2",
+      "buildNumber": "3",
       "config": {
         "usesNonExemptEncryption": false
       },
