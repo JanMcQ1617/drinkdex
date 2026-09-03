@@ -13,7 +13,7 @@ import Animated, {
 
 import { DrinkArt } from '@/components/artwork';
 import { Icon, type IconName } from '@/components/icons';
-import { Avatar, CategoryPill, haptic, RarityBadge } from '@/components/ui';
+import { Avatar, haptic } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
@@ -331,7 +331,13 @@ export const PostCard = React.memo(function PostCard({
           accessibilityRole={onOpenAuthor ? 'button' : undefined}
           accessibilityLabel={onOpenAuthor ? `Open ${who.displayName}'s profile` : undefined}
           style={({ pressed }) => [styles.headerIdentity, pressed && styles.pressed]}>
-          <Avatar name={who.displayName} accent={who.accent} size={40} ring />
+          <Avatar
+            name={who.displayName}
+            accent={who.accent}
+            size={40}
+            ring
+            avatarPath={who.avatarPath}
+          />
           <View style={styles.headerText}>
             <Text style={styles.displayName} numberOfLines={1}>
               {who.displayName}
@@ -400,10 +406,22 @@ export const PostCard = React.memo(function PostCard({
             </Text>
             <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
           </View>
-          <View style={styles.badgeRow}>
-            <CategoryPill category={drink.category} />
-            <RarityBadge rarity={drink.rarity} />
-          </View>
+          {/*
+            The spec line, not a badge row. A post is someone showing you a
+            drink, and "Tequila · Grapefruit · Lime · Rosemary" tells you
+            what it IS — which is what you want to know from a photograph.
+            Category and rarity are Dex bookkeeping; they belong on the card
+            in the index, not under someone's pour.
+
+            Cocktails carry `ingredients`; everything else falls back to its
+            style and origin, which is the nearest equivalent sentence for a
+            beer or a wine.
+          */}
+          <Text style={styles.spec} numberOfLines={1}>
+            {drink.ingredients?.length
+              ? drink.ingredients.join(' · ')
+              : [drink.subcategory, drink.origin].filter(Boolean).join(' · ')}
+          </Text>
         </View>
       </Pressable>
 
@@ -573,10 +591,14 @@ const styles = StyleSheet.create({
     letterSpacing: 1.8,
     color: colors.taupeInk,
   },
-  badgeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
+  /* The spec line under the drink name. Muted, so the name stays the
+     loudest thing in the block and this reads as its caption. */
+  spec: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    color: colors.textMuted,
+    marginTop: 2,
   },
 
   /* Actions */

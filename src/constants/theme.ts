@@ -46,16 +46,25 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 
 export const colors = {
   /*
-   * Surfaces. The handoff separates the screen (off-white) from the brand
-   * ground (bone), so the app reads as linen laid on a darker bar top.
-   * Cards are the SAME off-white as the page and are lifted by the
-   * hairline and shadow instead of by tint — which is exactly how the
-   * handoff builds its floating tab bar.
+   * Surfaces. The page is warm cream and cards are WHITE — the card is
+   * separated from the page by tint first, and only then by hairline and
+   * shadow.
+   *
+   * This inverts what was here before, where bg, surface and card were all
+   * the same #FFFDF9 and a card existed only as a shadow. That reads as
+   * linen-on-linen: correct for a floating tab bar over a page, and wrong
+   * for a screen that is mostly cards, because nothing has an edge until
+   * it casts one. The mockup's whole structure is white panels on cream,
+   * so the tint has to do the work and the shadow becomes the accent
+   * rather than the entire signal.
+   *
+   * Cream stays warm rather than gray: it sits beside wine and gilt on
+   * every screen, and a neutral page turns both of those cold.
    */
-  bg: '#FFFDF9',
+  bg: '#F7F2EA',
   bgSunk: '#E9E5DF',
-  surface: '#FFFDF9',
-  card: '#FFFDF9',
+  surface: '#FFFFFF',
+  card: '#FFFFFF',
   cardAlt: '#E9E5DF',
   cardBorder: '#EFE9E0',
   /** the "lit" border — legendary/selected only, so it stays metal */

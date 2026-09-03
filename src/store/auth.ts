@@ -11,7 +11,14 @@ import {
   setPendingClaims,
 } from '@/lib/discovery';
 import { hashHandle } from '@/lib/instagram';
-import { PROFILE_COLS, setInstagramHash, setPhoneHash } from '@/lib/social';
+import { recoveryRedirectUrl } from '@/lib/recovery';
+import {
+  disableAvatarColumn,
+  isMissingAvatarColumn,
+  profileCols,
+  setInstagramHash,
+  setPhoneHash,
+} from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
 
@@ -34,6 +41,17 @@ interface AuthState {
   error: string | null;
   /** Non-failure feedback, e.g. "confirm your email before signing in". */
   notice: string | null;
+  /**
+   * True between opening a valid reset link and choosing a new password.
+   *
+   * A recovery link is a real sign-in — GoTrue hands back an ordinary
+   * session — so by the time this is set, AuthGate has already stopped
+   * showing the form and the app is on screen behind it. That is why the
+   * "choose a new password" step is an overlay at the root rather than
+   * another mode of the sign-in form: there is no signed-out state left
+   * to render it in. See components/PasswordResetOverlay.
+   */
+  recovering: boolean;
 
   init: () => () => void;
   /**
@@ -59,9 +77,38 @@ interface AuthState {
   ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  /**
+   * Sends the reset email. Resolves the same way whether or not the address
+   * has an account — see the implementation for why that is deliberate.
+   */
+  requestPasswordReset: (email: string) => Promise<void>;
+  /** Exchanges the tokens from a recovery link for a session. */
+  beginRecovery: (accessToken: string, refreshToken: string) => Promise<void>;
+  /** Sets the new password and ends recovery. Returns true on success. */
+  completePasswordReset: (password: string) => Promise<boolean>;
+  /** Abandons a recovery without setting a password, and signs back out. */
+  cancelRecovery: () => Promise<void>;
+  /** Surfaces a dead or malformed reset link on the sign-in form. */
+  failRecovery: (message: string) => void;
   /** Irreversible. Removes the auth user, every row that cascades from it, and the photos storage does not cascade. */
   deleteAccount: () => Promise<boolean>;
   refreshProfile: () => Promise<void>;
+  /**
+   * Saves edits to your own profile row. Returns an error string to show,
+   * or null on success.
+   *
+   * A string rather than a throw: every failure here is something the user
+   * has to read and act on — a taken username, a name that is too long —
+   * and the caller is the only thing that knows where to put it.
+   */
+  updateProfile: (fields: {
+    displayName: string;
+    username: string;
+    bio: string;
+    accent: string;
+    /** Object path from a fresh upload, or undefined to leave it alone. */
+    avatarPath?: string | null;
+  }) => Promise<string | null>;
   clearError: () => void;
 }
 
@@ -171,6 +218,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
   busy: false,
   error: null,
   notice: null,
+  recovering: false,
 
   /**
    * Restores the persisted session, then keeps the store in sync with
@@ -260,8 +308,109 @@ export const useAuth = create<AuthState>()((set, get) => ({
   signOut: async () => {
     set({ busy: true });
     await supabase.auth.signOut();
-    set({ busy: false, session: null, profile: null });
+    set({ busy: false, session: null, profile: null, recovering: false });
   },
+
+  /**
+   * Sends a password reset email.
+   *
+   * Reports success even when the address has no account, and that is not
+   * laziness — Supabase answers identically either way on purpose. A form
+   * that said "no account with that email" would turn the sign-in screen
+   * into an oracle for which of your users exist, which for an app with
+   * public profiles is a real disclosure. The copy therefore promises only
+   * that a link was sent *if* there is an account.
+   *
+   * The link is one-time and expires (an hour by default). Note that some
+   * corporate mail scanners follow links before the recipient does, which
+   * burns the token and makes a perfectly good email look broken — the
+   * expired-link path in lib/recovery exists to say so in plain words
+   * rather than failing blankly.
+   */
+  requestPasswordReset: async (email) => {
+    set({ busy: true, error: null, notice: null });
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: recoveryRedirectUrl(),
+    });
+
+    if (error) {
+      /*
+       * Rate limiting is the one failure worth showing as itself. Everything
+       * else — including "user not found", which GoTrue does not report
+       * anyway — collapses into the same reassuring notice, so the screen
+       * cannot be used to probe for accounts.
+       */
+      const rateLimited = error.status === 429 || /rate limit/i.test(error.message);
+      set({
+        busy: false,
+        error: rateLimited
+          ? 'Too many reset emails just now. Wait a minute and try again.'
+          : null,
+        notice: rateLimited ? null : 'If that email has an account, a reset link is on its way.',
+      });
+      return;
+    }
+
+    set({
+      busy: false,
+      notice: 'If that email has an account, a reset link is on its way. It expires in an hour.',
+    });
+  },
+
+  /**
+   * Turns the tokens out of a recovery link into a session.
+   *
+   * This genuinely signs the user in — a recovery link is an authentication
+   * factor, which is why the overlay it opens cannot simply be dismissed.
+   * Backing out calls cancelRecovery, which signs back out again.
+   */
+  beginRecovery: async (accessToken, refreshToken) => {
+    set({ busy: true, error: null, notice: null });
+
+    const { data, error } = await supabase.auth.setSession({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    });
+
+    if (error || !data.session) {
+      set({
+        busy: false,
+        recovering: false,
+        error: 'That reset link has expired or already been used. Request a new one.',
+      });
+      return;
+    }
+
+    set({ busy: false, session: data.session, recovering: true });
+    void get().refreshProfile();
+  },
+
+  completePasswordReset: async (password) => {
+    set({ busy: true, error: null, notice: null });
+
+    const { error } = await supabase.auth.updateUser({ password });
+
+    if (error) {
+      set({ busy: false, error: humanize(error.message) });
+      return false;
+    }
+
+    /*
+     * Stays signed in. updateUser leaves the session valid, and signing out
+     * here to make the user type the password they just chose would be
+     * ceremony, not security.
+     */
+    set({ busy: false, recovering: false, notice: null });
+    return true;
+  },
+
+  cancelRecovery: async () => {
+    set({ recovering: false });
+    await get().signOut();
+  },
+
+  failRecovery: (message) => set({ recovering: false, busy: false, error: message }),
 
   /**
    * Deletes the signed-in account. Returns true on success.
@@ -300,6 +449,64 @@ export const useAuth = create<AuthState>()((set, get) => ({
    * surfaced on the screen with a retry; swallowing it is what left the
    * profile permanently headless with no spinner and no explanation.
    */
+  /*
+   * The database is the authority on every rule here, not this function.
+   * `profiles` carries CHECK constraints for the name length, the bio
+   * length and the username shape, plus a unique index on username — so
+   * the client validates to give a fast answer and the server validates to
+   * make it true. Anything that gets past the checks below still comes
+   * back as a readable error rather than a silent no-op.
+   */
+  updateProfile: async ({ displayName, username, bio, accent, avatarPath }) => {
+    const uid = get().session?.user.id;
+    if (!uid) return 'You are signed out.';
+
+    const name = displayName.trim();
+    const handle = username.trim().toLowerCase();
+    const about = bio.trim();
+
+    // Mirrors profiles_display_name_len.
+    if (name.length < 1 || name.length > 40) return 'Display name must be 1–40 characters.';
+    // Mirrors profiles_username_shape. Lowercase alphanumerics, underscore
+    // and period only — which also blocks unicode lookalike homographs.
+    if (!/^[a-z0-9._]{3,24}$/.test(handle))
+      return 'Usernames are 3–24 characters: lowercase letters, numbers, dots and underscores.';
+    // Mirrors profiles_bio_len.
+    if (about.length > 300) return 'Your about is longer than 300 characters.';
+
+    set({ busy: true });
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        display_name: name,
+        username: handle,
+        // Empty clears it, rather than storing a blank string the UI would
+        // then render as an empty line under your name.
+        bio: about.length > 0 ? about : null,
+        accent,
+        /*
+         * Omitted entirely when undefined, so saving a bio does not wipe a
+         * picture. `null` is a real value here and means "remove it".
+         */
+        ...(avatarPath !== undefined ? { avatar_path: avatarPath } : {}),
+      })
+      .eq('id', uid);
+    set({ busy: false });
+
+    if (error) {
+      /*
+       * 23505 is the unique violation on username. supabase-js surfaces
+       * the Postgres code, so this does not have to match on message text
+       * — which is the thing that changes between versions.
+       */
+      if (error.code === '23505') return 'That username is taken. Pick another.';
+      return humanize(error.message);
+    }
+
+    await get().refreshProfile();
+    return null;
+  },
+
   refreshProfile: async () => {
     const uid = get().session?.user.id;
     if (!uid) return;
@@ -323,11 +530,32 @@ export const useAuth = create<AuthState>()((set, get) => ({
        * 002's column revoke never bit: had it worked, this would have been
        * failing for every user since 002 shipped.
        */
-      const { data, error } = await supabase
+      // Cast for the same reason as the list queries: profileCols() is
+      // chosen at runtime, so the client cannot infer the row from it.
+      let { data, error } = (await supabase
         .from('profiles')
-        .select(PROFILE_COLS)
+        .select(profileCols())
         .eq('id', uid)
-        .single();
+        .single()) as { data: ProfileRow | null; error: { code?: string; message?: string } | null };
+
+      /*
+       * The avatar column is optional — the client can be ahead of the
+       * migration that adds it. PostgREST fails the whole select on an
+       * unknown column, so without this a missing `avatar_path` costs the
+       * entire profile: no name, no bio, no counts, just an error where a
+       * person should be.
+       *
+       * One retry, and the flag makes it once per session rather than
+       * once per fetch.
+       */
+      if (error && isMissingAvatarColumn(error)) {
+        disableAvatarColumn();
+        ({ data, error } = (await supabase
+          .from('profiles')
+          .select(profileCols())
+          .eq('id', uid)
+          .single()) as { data: ProfileRow | null; error: { code?: string; message?: string } | null });
+      }
 
       if (data) {
         set({ profile: data, profileLoading: false, profileError: null });
@@ -341,7 +569,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
       if (attempt === DELAYS_MS.length - 1) {
         set({
           profileLoading: false,
-          profileError: error
+          profileError: error?.message
             ? humanize(error.message)
             : 'Could not load your profile. Pull to retry.',
         });

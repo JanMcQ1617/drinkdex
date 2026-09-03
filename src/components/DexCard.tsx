@@ -45,9 +45,42 @@ import type { Drink } from '@/types';
 /* which is why the board never produced any desire to fill it.          */
 /*                                                                      */
 /* Where a photograph exists it is the card face in BOTH states. Locked  */
-/* dims it behind a scrim rather than hiding it: the drink is legible    */
-/* enough to want, which a black silhouette never managed, and unlocking */
-/* lifts the shadow instead of swapping the subject.                     */
+/* DRAINS it rather than darkening it: most of the colour pulled out,    */
+/* contrast pushed back up, under a thin warm veil. Collecting restores  */
+/* the colour, and that restoration is the reward.                       */
+/*                                                                      */
+/* It used to darken instead — a flat espresso veil at 0.72 — and that   */
+/* failed three ways at once. It crushed every photograph to the same    */
+/* brown-grey, so nine cards on screen read as nine identical            */
+/* rectangles and the board lost the variety that makes an index worth   */
+/* scrolling. It fought itself, because the veil heavy enough to say     */
+/* "not yours" was also heavy enough to hide the drink (0.82 turned an   */
+/* Espresso Martini into a black rectangle; 0.72 was a truce, not a      */
+/* fix). And it did not match the empty cards next to it: the vector     */
+/* recess is built on `slot`/`slotDeep`, which are LIGHT warm greys, so  */
+/* a near-black photo card sat in a completely different tonal band from */
+/* the empty card beside it.                                            */
+/*                                                                      */
+/* Draining solves all three. It is the photographic spelling of what    */
+/* the vector locked state already says — colour removed, form kept —    */
+/* so the two empty states finally speak one language. Form and tone     */
+/* survive, so a coupe still reads as a coupe and the grid keeps its     */
+/* variety. And the reward for collecting is COLOUR, which is a far      */
+/* stronger pull than "slightly less dark".                              */
+/*                                                                      */
+/* PARTIAL, NOT FULL. grayscale(1) was tried first and it deleted the    */
+/* drinks: these are studio shots on a neutral light backdrop, so the    */
+/* subject is carried almost entirely in CHROMA, not luminance. Strip    */
+/* the colour completely and a Caesar, a Greyhound and a Brandy          */
+/* Alexander all collapse into the same flat taupe rectangle — the exact */
+/* failure the old dark veil had, arrived at from the opposite           */
+/* direction. Keeping a quarter of the chroma and pushing contrast back  */
+/* up holds each drink apart while the gap to full colour stays obvious. */
+/*                                                                      */
+/* The veil stays, at a fraction of its old weight, because pure         */
+/* greyscale on a bone page reads cold and digital. `lockInk` is         */
+/* espresso, so a thin pass of it warms the grey into something closer   */
+/* to a sepia plate, which is in the palette rather than beside it.      */
 /*                                                                      */
 /* Once you log a pour, YOUR photo takes over as the face — the card     */
 /* becomes a record of the one you actually drank. The stock photograph  */
@@ -195,14 +228,23 @@ export const DexCard = React.memo(function DexCard({
       */}
       {photo ? (
         <>
-          <Image
-            source={photo}
-            style={styles.photo}
-            contentFit="cover"
-            transition={140}
-            accessible={false}
-            cachePolicy="memory-disk"
-          />
+          {/*
+            The filter rides a wrapper View, not the Image. `filter` is a
+            ViewStyle prop and expo-image types its style as ImageStyle,
+            which does not carry it — so putting it on the Image is a type
+            error rather than a silent no-op. It applies to the subtree
+            either way.
+          */}
+          <View pointerEvents="none" style={[styles.photo, shadowed && styles.photoLocked]}>
+            <Image
+              source={photo}
+              style={styles.photoFill}
+              contentFit="cover"
+              transition={140}
+              accessible={false}
+              cachePolicy="memory-disk"
+            />
+          </View>
           {shadowed ? <View pointerEvents="none" style={[styles.photo, styles.photoScrim]} /> : null}
         </>
       ) : null}
@@ -281,17 +323,47 @@ const styles = StyleSheet.create({
   },
 
   /* Photograph */
+  /*
+   * The locked photograph. Greyscale carries the state; brightness and
+   * contrast place it in the recess.
+   *
+   * Lifted and flattened, NOT darkened. The empty card is a well in a bone
+   * page whose own ground (`slot` / `slotDeep`) is a light warm grey — so
+   * "sunken" here has to mean faded, the way a label left in the sun goes,
+   * not shadowed. Pushing brightness down instead put the photo cards in a
+   * different tonal band from the vector cards beside them and turned the
+   * board into a wall of dark rectangles.
+   *
+   * WRITTEN AS A STRING, NOT AN ARRAY. `filter` accepts both, but
+   * react-native-web silently drops the array form of
+   * `[{grayscale: 1}, …]` — 54 photographs rendered on web and not one
+   * element carried a computed filter, with "grayscale" absent from the
+   * DOM entirely. The string is passed straight through to CSS, so the
+   * same declaration works on web and native instead of failing on one of
+   * them without saying so.
+   *
+   * That failure mode is worth remembering: when `filter` no-ops, a locked
+   * card renders in FULL COLOUR and reads as collected. Check that a
+   * locked card is grey before trusting a build.
+   *
+   * The three numbers were arrived at by looking, not by theory: rendered
+   * against the real cocktail photographs on web, and checked against an
+   * unfiltered row in the same frame so the locked-to-collected gap could
+   * be judged rather than assumed. They have NOT been seen on a device.
+   */
+  photoLocked: {
+    filter: 'grayscale(0.75) brightness(0.99) contrast(1.1)',
+  },
+  /** Fills the filter wrapper; the wrapper owns the position. */
+  photoFill: { width: '100%', height: '100%' },
   photoScrim: {
     /*
-     * Re-tuned for espresso. The 0.82 this carried was mixed against the
-     * old wine-black ink; espresso is a heavier, browner pigment and at
-     * the same opacity it closed over the darkest photographs entirely —
-     * an Espresso Martini behind it was a black rectangle, which is the
-     * silhouette this scrim exists to avoid. 0.72 keeps the drink legible
-     * enough to want and still reads unmistakably as not-yours.
+     * A quarter of its old weight. It is no longer what says "not yours" —
+     * greyscale does that — so all this has left to do is warm the grey
+     * back toward the palette and sink it a touch below the page.
      */
     backgroundColor: colors.lockInk,
-    opacity: 0.72,
+    opacity: 0.18,
   },
   photo: {
     position: 'absolute',

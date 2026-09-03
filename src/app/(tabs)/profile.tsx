@@ -3,8 +3,6 @@ import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from '
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -25,7 +23,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AuthGate } from '@/components/AuthGate';
 import { deriveStats } from '@/components/CollectionStats';
 import { DrinkArt } from '@/components/artwork';
-import { FindFriends } from '@/components/FindFriends';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon, type IconName } from '@/components/icons';
 import { PostCard, timeAgo, useSignedPhoto } from '@/components/PostCard';
@@ -53,13 +50,12 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { DRINKS_BY_ID } from '@/data';
+import { DRINKS_BY_ID, formatCount } from '@/data';
 import { fetchPostsByAuthor, fetchProfiles, toProfile } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
 import type { DrinkCategory, Post, Rarity, UserProfile } from '@/types';
-import { confirmDestructive } from '@/utils/alerts';
 
 /* ------------------------------------------------------------------ */
 /* Derivations                                                         */
@@ -140,7 +136,13 @@ function Identity({
 }) {
   return (
     <View style={styles.identity}>
-      <Avatar name={profile.displayName} accent={profile.accent} size={84} ring />
+      <Avatar
+        name={profile.displayName}
+        accent={profile.accent}
+        size={84}
+        ring
+        avatarPath={profile.avatarPath}
+      />
       <View style={styles.identityText}>
         <Text style={styles.identityName} numberOfLines={1}>
           {profile.displayName}
@@ -158,7 +160,7 @@ function Identity({
 function Stat({ value, label }: { value: number; label: string }) {
   return (
     <View style={styles.stat} accessibilityLabel={`${value} ${label}`}>
-      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statValue}>{formatCount(value)}</Text>
       <Text style={styles.statLabel}>{label}</Text>
     </View>
   );
@@ -212,7 +214,12 @@ function FollowRow({
 }) {
   return (
     <View style={styles.followRow}>
-      <Avatar name={person.displayName} accent={person.accent} size={44} />
+      <Avatar
+        name={person.displayName}
+        accent={person.accent}
+        size={44}
+        avatarPath={person.avatarPath}
+      />
       <View style={styles.followText}>
         <Text style={styles.followName} numberOfLines={1}>
           {person.displayName}
@@ -348,18 +355,14 @@ function OwnProfile() {
   const profileLoading = useAuth((s) => s.profileLoading);
   const profileError = useAuth((s) => s.profileError);
   const refreshProfile = useAuth((s) => s.refreshProfile);
-  const signOut = useAuth((s) => s.signOut);
-  const deleteAccount = useAuth((s) => s.deleteAccount);
 
   const unlocks = useCollection((s) => s.unlocks);
-  const resetAll = useCollection((s) => s.resetAll);
 
   const people = useSocial((s) => s.people);
   const following = useSocial((s) => s.following);
   const loadingPeople = useSocial((s) => s.loadingPeople);
   const loadPeople = useSocial((s) => s.loadPeople);
   const toggleFollow = useSocial((s) => s.toggleFollow);
-  const resetSocial = useSocial((s) => s.reset);
 
   const [segment, setSegment] = useState<Segment>('posts');
 
@@ -388,65 +391,20 @@ function OwnProfile() {
 
   const openDex = useCallback(() => router.push('/dex'), [router]);
 
-  const confirmReset = useCallback(() => {
-    // Only the local collection: posts already shared stay on the server.
-    confirmDestructive(
-      'Reset collection?',
-      'This relocks every entry and deletes the photos saved on this device.',
-      'Reset',
-      resetAll,
-    );
-  }, [resetAll]);
-
-  const handleSignOut = useCallback(() => {
-    void signOut().finally(resetSocial);
-  }, [resetSocial, signOut]);
-
   /*
-   * Deleting the account is the one action here that reaches the server and
-   * cannot be undone, so the copy enumerates what goes rather than saying
-   * "this cannot be undone" and leaving the user to guess the blast radius.
+   * Reset, sign out and delete moved to the Settings screen, along with the
+   * Instagram and contact controls.
    *
-   * Local state is cleared only on success. Clearing first would strand
-   * someone whose delete failed with an emptied device and a live account.
-   */
-  const confirmDeleteAccount = useCallback(() => {
-    confirmDestructive(
-      'Delete your account?',
-      'This permanently deletes your profile, every post and photo you have shared, and who you follow. It cannot be undone, and your username becomes available to someone else.',
-      'Delete account',
-      () => {
-        void deleteAccount().then((ok) => {
-          if (ok) {
-            resetSocial();
-            resetAll();
-          }
-        });
-      },
-    );
-  }, [deleteAccount, resetAll, resetSocial]);
-
-  /*
-   * Everything destructive now lives behind one control instead of sitting in
-   * the footer where a scroll could reach them. Ordered least to most severe,
-   * so the tap that ends your account is never the one nearest your thumb.
-   *
-   * Account deletion stays reachable in two taps — Apple requires it to be
-   * findable in-app, and a buried one is its own rejection.
+   * They were an Alert with three destructive buttons and no room to say
+   * what any of them did — and the web branch that used to be here existed
+   * only because a three-button Alert does not work in a browser. A screen
+   * needs no such exception, and account deletion is still two taps from
+   * the profile, which is what Apple asks for.
    */
   const openSettings = useCallback(() => {
     haptic.tap();
-    if (Platform.OS === 'web') {
-      confirmReset();
-      return;
-    }
-    Alert.alert('Settings', undefined, [
-      { text: 'Reset collection', style: 'destructive', onPress: confirmReset },
-      { text: 'Sign out', style: 'destructive', onPress: handleSignOut },
-      { text: 'Delete account', style: 'destructive', onPress: confirmDeleteAccount },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
-  }, [confirmDeleteAccount, confirmReset, handleSignOut]);
+    router.push('/settings');
+  }, [router]);
 
   return (
     <ScrollView
@@ -527,10 +485,12 @@ function OwnProfile() {
 
       {segment === 'friends' && (
         <>
-          {/* Invite, username search, and contact matching. */}
-          <FindFriends />
-
-          {/* Browse everyone else on Sipply. */}
+          {/*
+            Invite, username search, contact matching and Instagram moved to
+            Settings — they are controls over how findable YOU are, which is
+            a different thing from browsing other people. What is left here
+            is the browsing.
+          */}
           <SectionLabel style={styles.sectionLabel}>Everyone on Sipply</SectionLabel>
           {loadingPeople && people.length === 0 ? (
             <View style={styles.loading}>
@@ -848,13 +808,17 @@ const styles = StyleSheet.create({
   },
 
   /* Stats */
+  /*
+   * Three numbers with air around them, not a bordered band. The rules
+   * top and bottom were doing the separating when the page and the card
+   * were the same off-white; now that the page is cream they are a second
+   * separator doing a job the ground already does, and they cut the header
+   * into stripes.
+   */
   statRow: {
     flexDirection: 'row',
     marginTop: space.xl,
     paddingVertical: space.lg,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: colors.cardBorder,
   },
   stat: { flex: 1, alignItems: 'center', gap: 2 },
   statValue: {

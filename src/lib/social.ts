@@ -15,6 +15,7 @@ export function toProfile(row: ProfileRow): UserProfile {
     displayName: row.display_name,
     accent: row.accent,
     bio: row.bio ?? undefined,
+    avatarPath: row.avatar_path,
     joinedAt: row.created_at,
   };
 }
@@ -108,7 +109,53 @@ const POST_SELECT =
  * UserProfile mapper expects, and naming columns keeps a future private
  * column from being published by an existing query.
  */
-export const PROFILE_COLS = 'id, username, display_name, accent, bio, created_at';
+/* ==================================================================== */
+/* Profile columns                                                      */
+/*                                                                      */
+/* A function rather than a constant, because the client and the         */
+/* database can disagree about whether `avatar_path` exists yet.         */
+/*                                                                      */
+/* PostgREST fails the WHOLE select if any requested column is missing,  */
+/* so a build that asks for a column the schema has not got does not     */
+/* lose the avatar — it loses the profile. That is what "column          */
+/* profiles.avatar_path does not exist" looked like on the profile tab:  */
+/* no name, no bio, no counts, just an error where a person should be.   */
+/*                                                                      */
+/* This can happen in both directions and neither is exotic: a build     */
+/* shipped ahead of its migration, or an OTA JS update reaching a phone  */
+/* before someone runs the SQL. The optional column is therefore treated */
+/* as optional — asked for once, and dropped for the rest of the session */
+/* if the server says it does not know it.                              */
+/* ==================================================================== */
+
+const PROFILE_COLS_CORE = 'id, username, display_name, accent, bio, created_at';
+const PROFILE_COLS_FULL = 'id, username, display_name, accent, bio, avatar_path, created_at';
+
+let avatarColumnPresent = true;
+
+export function profileCols(): string {
+  return avatarColumnPresent ? PROFILE_COLS_FULL : PROFILE_COLS_CORE;
+}
+
+/**
+ * True when the error is Postgres 42703 — undefined column — naming the
+ * avatar column. Anything else is a real failure and must not be
+ * swallowed by a retry.
+ *
+ * Matched on the code first; the message is only consulted to be sure it
+ * is OUR column that is missing rather than some unrelated typo, because
+ * retrying without the avatar would not fix that and would hide it.
+ */
+export function isMissingAvatarColumn(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  const missing = error.code === '42703' || /does not exist/i.test(error.message ?? '');
+  return missing && /avatar_path/i.test(error.message ?? '');
+}
+
+/** Stops asking for the avatar column for the rest of this session. */
+export function disableAvatarColumn(): void {
+  avatarColumnPresent = false;
+}
 
 /* ==================================================================== */
 /* People and follows                                                   */
@@ -118,13 +165,16 @@ export const PROFILE_COLS = 'id, username, display_name, accent, bio, created_at
 export async function fetchPeople(myId: string): Promise<UserProfile[]> {
   const { data, error } = await supabase
     .from('profiles')
-    .select(PROFILE_COLS)
+    .select(profileCols())
     .neq('id', myId)
     .order('created_at', { ascending: false })
     .limit(200);
 
   if (error) throw error;
-  return (data ?? []).map(toProfile);
+  // The select string is chosen at runtime, so supabase-js cannot infer the
+  // row shape from it. profileCols() only ever returns a subset of
+  // ProfileRow's columns, which is exactly what the cast asserts.
+  return ((data ?? []) as unknown as ProfileRow[]).map(toProfile);
 }
 
 export async function searchPeople(myId: string, term: string): Promise<UserProfile[]> {
@@ -133,13 +183,13 @@ export async function searchPeople(myId: string, term: string): Promise<UserProf
 
   const { data, error } = await supabase
     .from('profiles')
-    .select(PROFILE_COLS)
+    .select(profileCols())
     .neq('id', myId)
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
     .limit(50);
 
   if (error) throw error;
-  return (data ?? []).map(toProfile);
+  return ((data ?? []) as unknown as ProfileRow[]).map(toProfile);
 }
 
 export async function fetchFollowing(myId: string): Promise<string[]> {
@@ -230,9 +280,11 @@ export async function fetchPostsByAuthor(authorId: string, myId: string): Promis
 /** Profiles for a set of author ids, as a lookup. */
 export async function fetchProfiles(ids: string[]): Promise<Record<string, UserProfile>> {
   if (ids.length === 0) return {};
-  const { data, error } = await supabase.from('profiles').select(PROFILE_COLS).in('id', ids);
+  const { data, error } = await supabase.from('profiles').select(profileCols()).in('id', ids);
   if (error) throw error;
-  return Object.fromEntries((data ?? []).map((r) => [r.id, toProfile(r)]));
+  return Object.fromEntries(
+    ((data ?? []) as unknown as ProfileRow[]).map((r) => [r.id, toProfile(r)]),
+  );
 }
 
 /* ==================================================================== */
@@ -266,11 +318,74 @@ export async function uploadPhoto(myId: string, localUri: string): Promise<strin
   }
 }
 
+/**
+ * Uploads a new profile picture and returns its object path.
+ *
+ * Same bucket and same `<uid>/` prefix as pour photos — see migration 010
+ * for why avatars live in `pours` rather than a bucket of their own. The
+ * short version: the RLS and the account-deletion sweep both already key
+ * on that prefix, and a second bucket would mean maintaining both twice.
+ *
+ * The `avatar-` prefix is for humans reading the bucket, not for code.
+ * Nothing keys on it.
+ */
+export async function uploadAvatar(myId: string, localUri: string): Promise<string | null> {
+  try {
+    const file = new File(localUri);
+    if (!file.exists) return null;
+
+    const ext = localUri.split('.').pop()?.split('?')[0] ?? 'jpg';
+    const path = `${myId}/avatar-${Date.now()}.${ext}`;
+    const bytes = await file.arrayBuffer();
+
+    const { error } = await supabase.storage
+      .from('pours')
+      .upload(path, bytes, { contentType: `image/${ext === 'jpg' ? 'jpeg' : ext}`, upsert: false });
+
+    if (error) throw error;
+    return path;
+  } catch {
+    return null;
+  }
+}
+
+/*
+ * Signed URLs, memoised for slightly less than the hour they are minted
+ * for.
+ *
+ * Avatars are the reason this exists. A pour photo is signed once per
+ * card, but the same avatar appears beside every post in a feed, in the
+ * follow list, on the profile and in settings — without a cache that is
+ * one network round trip per appearance of the SAME image, and a list
+ * scroll re-signs them all again on every remount.
+ *
+ * Keyed by path, holding the promise rather than the result so that N
+ * simultaneous mounts of one avatar share a single request instead of
+ * racing N of them.
+ */
+const SIGNED_TTL_MS = 55 * 60 * 1000;
+const signedCache = new Map<string, { at: number; url: Promise<string | null> }>();
+
 /** The bucket is private, so reads go through a short-lived signed URL. */
 export async function signedPhotoUrl(path: string | null): Promise<string | null> {
   if (!path) return null;
-  const { data, error } = await supabase.storage.from('pours').createSignedUrl(path, 60 * 60);
-  return error ? null : data.signedUrl;
+
+  const hit = signedCache.get(path);
+  if (hit && Date.now() - hit.at < SIGNED_TTL_MS) return hit.url;
+
+  const url = supabase.storage
+    .from('pours')
+    .createSignedUrl(path, 60 * 60)
+    .then(({ data, error }) => (error ? null : data.signedUrl))
+    .catch(() => null);
+
+  signedCache.set(path, { at: Date.now(), url });
+  return url;
+}
+
+/** Drops a path from the signed-URL cache — used when it is replaced. */
+export function forgetSignedPhoto(path: string | null): void {
+  if (path) signedCache.delete(path);
 }
 
 /* ==================================================================== */
@@ -496,6 +611,7 @@ interface MatchRow {
   display_name: string;
   accent: string;
   bio: string | null;
+  avatar_path: string | null;
   created_at: string;
 }
 
@@ -557,6 +673,7 @@ export async function matchContacts(hashes: string[]): Promise<UserProfile[]> {
           display_name: row.display_name,
           accent: row.accent,
           bio: row.bio,
+          avatar_path: row.avatar_path,
           created_at: row.created_at,
         }),
       );
@@ -615,6 +732,7 @@ export async function matchInstagram(
           display_name: row.display_name,
           accent: row.accent,
           bio: row.bio,
+          avatar_path: row.avatar_path,
           created_at: row.created_at,
         }),
       });

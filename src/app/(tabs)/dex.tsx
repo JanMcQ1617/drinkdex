@@ -43,7 +43,7 @@ import {
   type as typeScale,
   tabular,
 } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, DRINKS, TOTAL } from '@/data';
+import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory } from '@/types';
 
@@ -51,7 +51,16 @@ import type { Drink, DrinkCategory } from '@/types';
 /* Grid geometry                                                       */
 /* ------------------------------------------------------------------ */
 
-const COLUMNS = 3;
+/*
+ * Two columns, not three.
+ *
+ * Three fit more entries per screen and made every one of them a thumbnail
+ * — at a third of the width minus gutters the photograph is too small to
+ * tell a coupe from a martini glass, which is the one thing the grid has
+ * to do. Two gives the card enough width for the drink to be legible and
+ * for the name to sit on one line in most cases.
+ */
+const COLUMNS = 2;
 const GRID_PAD = space.lg;
 const GRID_GAP = space.sm;
 
@@ -224,8 +233,8 @@ function Masthead({
         <View style={[styles.mastheadRow, { paddingTop: topInset }]}>
           <Text style={styles.mastheadTitle}>The Dex</Text>
           <Text style={styles.mastheadCount}>
-            {collected}
-            <Text style={styles.mastheadTotal}> / {TOTAL}</Text>
+            {formatCount(collected)}
+            <Text style={styles.mastheadTotal}> / {formatCount(TOTAL)}</Text>
           </Text>
         </View>
         {/* Progress doubles as the bar's bottom rule. */}
@@ -403,9 +412,14 @@ export default function DexScreen() {
       <View style={styles.progressBlock}>
         <View style={styles.progressRow}>
           <Text style={styles.progressCount}>
-            {collected} of {TOTAL}
+            {formatCount(collected)} of {formatCount(TOTAL)}
           </Text>
           <Text style={styles.progressLabel}>collected</Text>
+          {/* The share, right-aligned against the count — the mockup leads
+              with the fraction and closes the line with the percentage. */}
+          <Text style={styles.progressPct}>
+            {TOTAL > 0 ? Math.round((collected / TOTAL) * 100) : 0}%
+          </Text>
         </View>
         <ProgressBar value={collected} max={TOTAL} />
       </View>
@@ -419,7 +433,7 @@ export default function DexScreen() {
         contentContainerStyle={styles.chipScrollContent}>
         <FilterChip
           label="All"
-          detail={String(TOTAL)}
+          detail={formatCount(TOTAL)}
           selected={region === 'all'}
           accessibilityLabel={`All regions, ${TOTAL} entries`}
           onPress={() => selectRegion('all')}
@@ -431,7 +445,7 @@ export default function DexScreen() {
             <FilterChip
               key={category}
               label={meta.plural}
-              detail={String(total)}
+              detail={formatCount(total)}
               selected={region === category}
               accent={meta.color}
               wash={meta.wash}
@@ -516,7 +530,7 @@ export default function DexScreen() {
         }
         onScroll={onScroll}
         scrollEventThrottle={16}
-        /* 460 rows of SVG artwork — keep the mounted window tight. */
+        /* 7,653 entries, most of them vector artwork — keep the window tight. */
         initialNumToRender={18}
         maxToRenderPerBatch={12}
         updateCellsBatchingPeriod={50}
@@ -680,6 +694,15 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
     letterSpacing: typeScale.caption.letterSpacing,
     color: colors.textFaint,
+  },
+  /* marginLeft auto rather than a spacer View — one property instead of
+     an element, and it survives the row gaining another child. */
+  progressPct: {
+    marginLeft: 'auto',
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textMuted,
+    ...tabular,
   },
 
   /* Chips */

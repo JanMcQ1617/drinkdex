@@ -44,7 +44,12 @@ export function PersonRow({
 }) {
   return (
     <View style={styles.row}>
-      <Avatar name={person.displayName} accent={person.accent} size={44} />
+      <Avatar
+        name={person.displayName}
+        accent={person.accent}
+        size={44}
+        avatarPath={person.avatarPath}
+      />
       <View style={styles.rowText}>
         <Text style={styles.rowName} numberOfLines={1}>
           {person.displayName}

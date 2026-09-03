@@ -6,6 +6,8 @@ import { StatusBar } from 'expo-status-bar';
 
 import { SipplyIntro } from '@/components/SipplyIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
+import { CelebrationOverlay } from '@/components/CelebrationOverlay';
+import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
 import { colors, fonts } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
@@ -101,9 +103,51 @@ export default function RootLayout() {
           back gesture would fight it on every drag.
         */}
         <Stack.Screen name="wine-atlas/index" options={{ gestureDirection: 'horizontal' }} />
+        {/*
+          Logging a pour. A modal, not a push: it is a task you complete or
+          abandon, and the sheet's downward dismiss is the gesture that
+          matches "never mind" — a back-chevron would imply it is a place
+          you can wander out of half-finished.
+        */}
+        <Stack.Screen
+          name="log"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
+        {/*
+          Settings pushes rather than presenting: it is a place you go and
+          come back from, and it has a child (edit-profile) that needs
+          somewhere to push onto.
+        */}
+        <Stack.Screen name="settings" options={{ gestureDirection: 'horizontal' }} />
+        {/*
+          Editing, on the other hand, is a task — modal, so the downward
+          dismiss reads as "never mind" and the Cancel in its bar means the
+          same thing as the gesture.
+        */}
+        <Stack.Screen
+          name="edit-profile"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
       </Stack>
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
+      {/*
+        Password-recovery deep links. Renders nothing until one arrives,
+        then covers the app with the "choose a new password" step — it has
+        to sit outside the Stack because a recovery link signs the user in,
+        so AuthGate is already showing the app by the time it is needed.
+
+        Before the intro on purpose: a cold start from a reset link should
+        still play the intro over the top and reveal this underneath, not
+        have the overlay pop in above a half-finished animation.
+      */}
+      <PasswordResetOverlay />
+      {/*
+        Celebrations. Above the Stack so a catch logged from the tab bar's
+        modal and one logged from a Dex card land on the same surface, and
+        below the intro so a cold start never stacks the two.
+      */}
+      <CelebrationOverlay />
       {showIntro && (
         <SipplyIntro
           onDone={() => {

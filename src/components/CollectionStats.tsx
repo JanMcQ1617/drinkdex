@@ -21,11 +21,12 @@ import {
   motion,
   radius,
   RARITY_META,
-  RARITY_ORDER,
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatDexNumber, TOTAL } from '@/data';
+import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatCount, formatDexNumber, TOTAL } from '@/data';
+import { RarityDonut } from '@/components/RarityDonut';
+import { MILESTONES, rankTitle } from '@/lib/milestones';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 
@@ -38,25 +39,9 @@ import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 /* stats are a different, post-derived view (see profile.tsx).          */
 /* ==================================================================== */
 
-/** The rank ladder, ascending. Also drives the milestones list. */
-export const MILESTONES: { pct: number; title: string }[] = [
-  { pct: 0, title: 'First Sips' },
-  { pct: 10, title: 'Barfly in Training' },
-  { pct: 25, title: 'The Regular' },
-  { pct: 50, title: 'Connoisseur' },
-  { pct: 75, title: 'Master of the Index' },
-  { pct: 100, title: 'Living Legend' },
-];
-
-export function rankTitle(unlocked: number, total: number): string {
-  if (unlocked === 0) return 'Empty Shelf';
-  const pct = total > 0 ? (unlocked / total) * 100 : 0;
-  let title = MILESTONES[0]!.title;
-  for (const m of MILESTONES) {
-    if (pct >= m.pct) title = m.title;
-  }
-  return title;
-}
+/* The ladder moved to lib/milestones — the collection store needs it too,
+   and a store importing a component to get at a constant is backwards. */
+export { MILESTONES, rankTitle } from '@/lib/milestones';
 
 interface UnlockedEntry {
   drink: Drink;
@@ -101,7 +86,7 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
   const reduced = useReducedMotion();
   const unlocks = useCollection((s) => s.unlocks);
 
-  const { unlockedCount, byCategory, byRarity, prize } = useMemo(
+  const { unlockedCount, byCategory, prize } = useMemo(
     () => deriveStats(unlocks),
     [unlocks],
   );
@@ -118,8 +103,8 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
         <Card style={styles.block}>
           <Text style={styles.rank}>{rankTitle(unlockedCount, TOTAL)}</Text>
           <View style={styles.rankCountRow}>
-            <Text style={styles.rankCount}>{unlockedCount}</Text>
-            <Text style={styles.rankTotal}>of {TOTAL} logged</Text>
+            <Text style={styles.rankCount}>{formatCount(unlockedCount)}</Text>
+            <Text style={styles.rankTotal}>of {formatCount(TOTAL)} logged</Text>
             <Text style={styles.rankPct}>{pct}%</Text>
           </View>
           <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
@@ -139,7 +124,7 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
                   <View style={[styles.categoryDot, { backgroundColor: meta.color }]} />
                   <Text style={styles.categoryName}>{meta.plural}</Text>
                   <Text style={styles.categoryCount}>
-                    {count}/{total}
+                    {formatCount(count)}/{formatCount(total)}
                   </Text>
                 </View>
                 <ProgressBar value={count} max={total} color={meta.color} height={5} />
@@ -151,19 +136,16 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
 
       {/* ---- Rarity ---- */}
       <Animated.View entering={enter(motion.stagger)}>
-        <SectionLabel style={styles.sectionLabel}>Rarity</SectionLabel>
+        <SectionLabel style={styles.sectionLabel}>Rarity breakdown</SectionLabel>
         <Card style={styles.blockTight}>
-          {RARITY_ORDER.map((rarity) => (
-            <View
-              key={rarity}
-              style={styles.rarityRow}
-              accessibilityLabel={`${RARITY_META[rarity].label}: ${byRarity[rarity]} of ${COUNT_BY_RARITY[rarity]} logged`}>
-              <RarityBadge rarity={rarity} />
-              <Text style={styles.rarityCount}>
-                {byRarity[rarity]}/{COUNT_BY_RARITY[rarity]}
-              </Text>
-            </View>
-          ))}
+          {/*
+            The whole index, not the user's own spread. This section answers
+            "what is out there to find", which is a fixed shape; the user's
+            progress against it is the Collection block above. Feeding it
+            `byRarity` instead would leave a new account staring at an empty
+            ring, which says nothing about the Dex at all.
+          */}
+          <RarityDonut counts={COUNT_BY_RARITY} caption="Total" />
         </Card>
       </Animated.View>
 
@@ -297,18 +279,6 @@ const styles = StyleSheet.create({
   categoryCount: {
     fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
-    color: colors.textMuted,
-  },
-
-  rarityRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 44,
-  },
-  rarityCount: {
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
 

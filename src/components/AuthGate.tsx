@@ -41,7 +41,14 @@ interface FieldProps {
   hintIsError?: boolean;
 }
 
-function Field({
+/**
+ * Exported for PasswordResetOverlay, which is the same auth surface reached
+ * from a deep link rather than from this screen. Sharing it keeps one
+ * implementation of the label, the hint states and the reveal toggle —
+ * three password fields that behaved subtly differently would be worse than
+ * the small coupling.
+ */
+export function Field({
   label,
   value,
   onChangeText,
@@ -126,9 +133,9 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
 function AuthForm() {
   const insets = useSafeAreaInsets();
-  const { signIn, signUp, busy, error, notice, clearError } = useAuth();
+  const { signIn, signUp, requestPasswordReset, busy, error, notice, clearError } = useAuth();
 
-  const [mode, setMode] = useState<'in' | 'up'>('in');
+  const [mode, setMode] = useState<'in' | 'up' | 'forgot'>('in');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -141,6 +148,9 @@ function AuthForm() {
   }, [mode, clearError]);
 
   const signup = mode === 'up';
+  /* The reset request needs an email and nothing else — no password field,
+     none of the signup extras, and a different button and tagline. */
+  const forgot = mode === 'forgot';
 
   /*
    * Optional, but not ignorable: a typo is blocked rather than accepted and
@@ -155,13 +165,14 @@ function AuthForm() {
 
   const canSubmit =
     email.includes('@') &&
-    password.length >= 6 &&
+    (forgot || password.length >= 6) &&
     (!signup ||
       (username.trim().length >= 3 && displayName.trim().length > 0 && instagramOk && phoneOk));
 
   const submit = () => {
     haptic.tap();
-    if (signup) void signUp(email, password, username, displayName, instagram, phone);
+    if (forgot) void requestPasswordReset(email);
+    else if (signup) void signUp(email, password, username, displayName, instagram, phone);
     else void signIn(email, password);
   };
 
@@ -194,9 +205,11 @@ function AuthForm() {
           accessibilityLabel="Sipply"
         />
         <Text style={styles.tagline}>
-          {signup
-            ? 'Make an account to share your pours and follow other collectors.'
-            : 'Sign in to see what everyone has been pouring.'}
+          {forgot
+            ? 'Type the email you signed up with and we will send a link to set a new password.'
+            : signup
+              ? 'Make an account to share your pours and follow other collectors.'
+              : 'Sign in to see what everyone has been pouring.'}
         </Text>
 
         <View style={styles.form}>
@@ -231,15 +244,32 @@ function AuthForm() {
             textContentType="emailAddress"
             inputMode="email"
           />
-          <Field
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="At least 6 characters"
-            secure
-            autoComplete={signup ? 'password-new' : 'password'}
-            textContentType={signup ? 'newPassword' : 'password'}
-          />
+          {forgot ? null : (
+            <Field
+              label="Password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="At least 6 characters"
+              secure
+              autoComplete={signup ? 'password-new' : 'password'}
+              textContentType={signup ? 'newPassword' : 'password'}
+            />
+          )}
+
+          {/*
+            Sign-in only. On the signup form there is no password to have
+            forgotten yet, and offering a reset there reads as an error
+            message about the account being created.
+          */}
+          {mode === 'in' ? (
+            <PressableScale
+              onPress={() => setMode('forgot')}
+              noHaptic
+              accessibilityRole="button"
+              style={styles.forgot}>
+              <Text style={styles.forgotText}>Forgot your password?</Text>
+            </PressableScale>
+          ) : null}
 
           {signup ? (
             <Field
@@ -294,7 +324,15 @@ function AuthForm() {
           ) : null}
 
           <Button
-            label={busy ? 'Just a moment…' : signup ? 'Create account' : 'Sign in'}
+            label={
+              busy
+                ? 'Just a moment…'
+                : forgot
+                  ? 'Send reset link'
+                  : signup
+                    ? 'Create account'
+                    : 'Sign in'
+            }
             onPress={submit}
             disabled={!canSubmit || busy}
             block
@@ -302,12 +340,16 @@ function AuthForm() {
           />
 
           <PressableScale
-            onPress={() => setMode(signup ? 'in' : 'up')}
+            onPress={() => setMode(mode === 'in' ? 'up' : 'in')}
             noHaptic
             accessibilityRole="button"
             style={styles.switch}>
             <Text style={styles.switchText}>
-              {signup ? 'Already have an account? Sign in' : 'New here? Create an account'}
+              {forgot
+                ? 'Remembered it? Sign in'
+                : signup
+                  ? 'Already have an account? Sign in'
+                  : 'New here? Create an account'}
             </Text>
           </PressableScale>
         </View>
@@ -335,12 +377,28 @@ const styles = StyleSheet.create({
      * mark and its supporting line take a centre axis and the form below
      * keeps the left one it has always had.
      *
-     * Width is fixed and the height follows the artwork's own 727:896, so
-     * the two cannot drift apart if the sheet is ever recut at a different
-     * size.
+     * BOTH dimensions are explicit, and there is a hard cap on top.
+     *
+     * This was `width: 170` plus `aspectRatio: 727 / 896`, letting Yoga
+     * derive the height — and on device it rendered the lockup at roughly
+     * full screen width, overflowing both edges and pushing the email and
+     * password fields below the fold behind the tab bar. Signing in was
+     * impossible without scrolling past a mark the size of the screen.
+     *
+     * The ratio was not the problem: the asset is 512x632, which is 727:896
+     * to three decimals. An Image carries its own intrinsic size, so a
+     * width-plus-ratio pair is an inference about how that intrinsic size
+     * gets overridden, and an inference is exactly what should not be load
+     * bearing on the app's front door. Concrete numbers cannot be
+     * misinterpreted, and maxWidth means that even if something upstream
+     * changes again, the worst case is a mark that fits the screen.
+     *
+     * 160x198 keeps the 512:632 ratio. If the sheet is recut, recompute
+     * height as width * 632 / 512.
      */
-    width: 170,
-    aspectRatio: 727 / 896,
+    width: 160,
+    height: 198,
+    maxWidth: '100%',
     alignSelf: 'center',
   },
   tagline: {
@@ -442,6 +500,25 @@ const styles = StyleSheet.create({
   },
 
   submit: { marginTop: space.sm },
+
+  /*
+   * Pulled up tight under the password field and given negative top margin
+   * to sit inside the form's `gap: space.lg` rather than adding a third
+   * gap's worth of air below the field it belongs to. Right-aligned, where
+   * every other iOS sign-in form puts it.
+   */
+  forgot: {
+    alignSelf: 'flex-end',
+    marginTop: -space.md,
+    paddingVertical: space.xs,
+    paddingHorizontal: space.xs,
+  },
+  forgotText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textMuted,
+  },
+
   switch: { alignSelf: 'center', paddingVertical: space.md, paddingHorizontal: space.lg },
   switchText: {
     fontFamily: fonts.bodySemiBold,

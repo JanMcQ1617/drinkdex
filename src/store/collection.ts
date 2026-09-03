@@ -2,6 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
+import { TOTAL } from '@/data';
+import { milestoneCrossed } from '@/lib/milestones';
+import { useCelebrate } from '@/store/celebrate';
 import type { UnlockRecord } from '@/types';
 
 /**
@@ -28,16 +31,58 @@ interface CollectionState {
 
 export const useCollection = create<CollectionState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       unlocks: {},
       hydrated: false,
-      unlock: (drinkId, photoUri, note) =>
-        set((s) => ({
+      /*
+       * The single choke point for "a pour was logged", which is why the
+       * celebration is raised here rather than at the call sites. There
+       * are two ways in now — a Dex entry and the tab bar's centre action
+       * — and celebrating from each of them would mean two chances to
+       * drift apart, with the divergence only visible to whoever happens
+       * to use the less-travelled one.
+       */
+      /*
+       * The single choke point for "a pour was logged", which is why the
+       * celebration is raised here rather than at the call sites: there are
+       * two ways in, and celebrating from each would be two chances to
+       * drift apart.
+       *
+       * THE SIDE EFFECT RUNS OUTSIDE `set`, AND THAT IS THE WHOLE POINT.
+       * It used to sit inside the updater passed to `set`, which is a
+       * function zustand calls to COMPUTE the next state and which must
+       * therefore be pure. Raising a celebration from in there meant the
+       * queue was written during a state computation — dropped or run
+       * twice depending on how React scheduled the render, and in practice
+       * the card never appeared. Read first, write, then act.
+       */
+      unlock: (drinkId, photoUri, note) => {
+        const prev = get().unlocks;
+        // Re-logging an entry you already have is an edit, not a catch.
+        const isNew = !prev[drinkId];
+        const before = Object.keys(prev).length;
+
+        set({
           unlocks: {
-            ...s.unlocks,
+            ...prev,
             [drinkId]: { drinkId, photoUri, date: new Date().toISOString(), note },
           },
-        })),
+        });
+
+        if (!isNew) return;
+
+        const after = before + 1;
+        const { celebrate } = useCelebrate.getState();
+        celebrate({ kind: 'collected', drinkId });
+
+        /*
+         * Queued second so it lands second. The entry is the thing the user
+         * just did; the rank is the consequence, and a consequence shown
+         * before its cause reads as a non-sequitur.
+         */
+        const rung = milestoneCrossed(before, after, TOTAL);
+        if (rung) celebrate({ kind: 'milestone', milestone: rung, collected: after });
+      },
       updatePhoto: (drinkId, photoUri) =>
         set((s) =>
           s.unlocks[drinkId]
@@ -50,7 +95,11 @@ export const useCollection = create<CollectionState>()(
           delete next[drinkId];
           return { unlocks: next };
         }),
-      resetAll: () => set({ unlocks: {} }),
+      resetAll: () => {
+        // Anything still queued refers to a collection that no longer exists.
+        useCelebrate.getState().clear();
+        set({ unlocks: {} });
+      },
     }),
     {
       name: 'drinkdex-collection',

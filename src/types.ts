@@ -241,6 +241,8 @@ export interface UserProfile {
   /** Avatar ring and initials background. */
   accent: string;
   bio?: string;
+  /** Object path in the private `pours` bucket. Undefined = initials. */
+  avatarPath?: string | null;
   joinedAt: string;
 }
 

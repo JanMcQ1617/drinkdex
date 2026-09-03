@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -10,7 +11,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GlassSurface } from '@/components/glass';
-import { TabIcon, type TabName } from '@/components/icons';
+import { Icon, TabIcon, type TabName } from '@/components/icons';
 import { haptic } from '@/components/ui';
 import { colors, fonts, motion, radius, space } from '@/constants/theme';
 
@@ -46,6 +47,21 @@ const BAR_PAD = 6;
 
 /** How far the pill stretches at full travel. 18% reads; 30% is a cartoon. */
 const STRETCH = 0.18;
+
+/*
+ * The centre action sits BETWEEN the tabs rather than being one of them.
+ *
+ * It is not a route: logging a pour is a thing you do, not a place you
+ * are, and making it a fifth tab would put a permanently-unselectable
+ * item in a bar whose whole job is showing where you are. It is rendered
+ * before the tab at this index, so the row reads Home · Dex · + · Stats ·
+ * Profile.
+ *
+ * Nothing positional is derived from this any more. The pill follows the
+ * tabs' MEASURED boxes, so the gap can be any width without the pill
+ * needing to know it exists.
+ */
+const FAB_SLOT = 2;
 
 
 type TabBarIconProps = { focused: boolean; color: string; size: number };
@@ -106,13 +122,69 @@ function TabItem({
   return <Animated.View style={[styles.itemInner, style]}>{children}</Animated.View>;
 }
 
+/**
+ * The centre action — a filled wine disc that breaks the top edge of the
+ * bar.
+ *
+ * It overhangs deliberately. A button contained inside the bar reads as a
+ * fifth tab drawn slightly differently; one that crosses the edge reads as
+ * a different KIND of control, which is what it is. The overhang is why
+ * this cannot be `overflow: hidden` anywhere up the tree.
+ *
+ * No label under it, unlike the tabs. The tabs are labelled because they
+ * are destinations you need to recognise; a plus needs no gloss, and a
+ * fifth word would rebuild the visual rhythm the overhang just broke.
+ */
+function CentreAction({ onPress }: { onPress: () => void }) {
+  return (
+    <View style={styles.fabSlot} pointerEvents="box-none">
+      <Pressable
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel="Log a pour"
+        accessibilityHint="Take a photo and pick what you drank"
+        hitSlop={8}
+        style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
+        <Icon name="plus" size={24} color={colors.textOnWine} />
+      </Pressable>
+    </View>
+  );
+}
+
 export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
   const reduced = useReducedMotion();
-  const [barW, setBarW] = useState(0);
+  const router = useRouter();
+  /*
+   * Where each tab ACTUALLY is, reported by layout — not computed.
+   *
+   * This used to derive the pill's position arithmetically: five slots for
+   * four tabs, each (barWidth - padding) / 5, with the pill translated to
+   * slotOf(index) * slotWidth. The arithmetic was self-consistent and the
+   * slot mapping was correct, and the pill still landed in the wrong place
+   * going Dex -> Stats on a device. That is what a disagreement between a
+   * model of the layout and the real layout looks like, and the fix is to
+   * stop keeping a second model: flexbox already knows where it put every
+   * tab, so ask it.
+   *
+   * It also makes the bar indifferent to what sits between the tabs. The
+   * centre action can change width, gain a label, or go away entirely and
+   * the pill still tracks, because nothing here assumes an even pitch.
+   */
+  const [tabs, setTabs] = useState<Record<number, { x: number; w: number }>>({});
 
-  const count = Math.max(state.routes.length, 1);
-  const itemW = barW > 0 ? (barW - BAR_PAD * 2) / count : 0;
+  const measureTab = useCallback((i: number, x: number, w: number) => {
+    setTabs((prev) => {
+      const seen = prev[i];
+      // Layout fires on every re-render; bail unless the box actually
+      // moved, or this setState loops forever.
+      if (seen && Math.abs(seen.x - x) < 0.5 && Math.abs(seen.w - w) < 0.5) return prev;
+      return { ...prev, [i]: { x, w } };
+    });
+  }, []);
+
+  const active = tabs[state.index];
+  const measured = active != null;
 
   /*
    * A plain number, captured by the worklets below — NOT a shared value.
@@ -121,7 +193,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
    * as a closure dependency, so both worklets re-run the moment the
    * active index changes.
    */
-  const targetX = state.index * itemW;
+  const targetX = active?.x ?? 0;
 
   /*
    * The pill chases the target. useDerivedValue so the spring starts the
@@ -139,9 +211,11 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
    * the lag rather than from a parallel timeline means the two can never
    * disagree — no stretched pill left behind by an interrupted gesture.
    */
+  const activeW = active?.w ?? 0;
+
   const stretch = useDerivedValue(() => {
-    if (reduced || itemW === 0) return 1;
-    const lag = Math.abs(targetX - x.value) / itemW;
+    if (reduced || activeW === 0) return 1;
+    const lag = Math.abs(targetX - x.value) / activeW;
     return 1 + Math.min(lag, 1) * STRETCH;
   });
 
@@ -159,18 +233,36 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
       pointerEvents="box-none"
       style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) + 2 }]}>
       <GlassSurface cornerRadius={radius.tab} style={styles.bar}>
-        <View style={styles.row} onLayout={(e) => setBarW(Math.round(e.nativeEvent.layout.width))}>
-          {itemW > 0 ? (
+        <View style={styles.row}>
+          {/*
+            `left: 0` and translate by the measured x. Yoga positions an
+            absolute child from its parent's padding edge, which is the same
+            origin a flex child's reported `x` is relative to — so the two
+            agree without a correction term. The old `left: BAR_PAD + 3`
+            was compensating for an origin it had guessed at.
+
+            Hidden until something has been measured, so it cannot flash at
+            slot zero on the first frame.
+          */}
+          {measured ? (
             <Animated.View
               pointerEvents="none"
-              style={[styles.pill, { width: itemW - 6, left: BAR_PAD + 3 }, pillStyle]}
+              style={[styles.pill, { width: Math.max(activeW - 6, 0), left: 3 }, pillStyle]}
             />
           ) : null}
 
           {state.routes.map((route, i) => {
             const options = descriptors[route.key]?.options ?? {};
             const focused = state.index === i;
-            const color = focused ? colors.wine : colors.textFaint;
+            /*
+             * textMuted, not textFaint. These labels are 9pt — small text,
+             * which WCAG holds to 4.5:1 — and textFaint measures 3.09:1 on
+             * the bar's fill. check-contrast never caught it because it only
+             * audits textFaint at the 3.0 large-text threshold, which is the
+             * right rule for the token and the wrong one for this use of it.
+             * textMuted is 5.98:1 here.
+             */
+            const color = focused ? colors.wine : colors.textMuted;
             const label = (options.title ?? route.name).toUpperCase();
 
             const onPress = () => {
@@ -187,9 +279,30 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
             };
 
             return (
+              <React.Fragment key={route.key}>
+                {/*
+                  Rendered BEFORE the tab that sits after the gap, so the
+                  order is Home · Dex · action · Stats · Profile and the
+                  empty slot the pill skips is the one this fills.
+                */}
+                {i === FAB_SLOT ? (
+                  <CentreAction
+                    onPress={() => {
+                      haptic.tap();
+                      /*
+                       * router, not navigation: `log` is a root-stack modal,
+                       * and the tab navigator handed to this component can
+                       * only reach its own siblings.
+                       */
+                      router.push('/log');
+                    }}
+                  />
+                ) : null}
               <Pressable
-                key={route.key}
                 onPress={onPress}
+                onLayout={(e) =>
+                  measureTab(i, e.nativeEvent.layout.x, e.nativeEvent.layout.width)
+                }
                 accessibilityRole="button"
                 accessibilityLabel={options.tabBarAccessibilityLabel ?? options.title ?? route.name}
                 accessibilityState={{ selected: focused }}
@@ -204,6 +317,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                   </Text>
                 </TabItem>
               </Pressable>
+              </React.Fragment>
             );
           })}
         </View>
@@ -234,25 +348,107 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     paddingHorizontal: BAR_PAD,
   },
+  /*
+   * Fully rounded, and inset top and bottom.
+   *
+   * It was a 16pt-radius rectangle running nearly the full inner height,
+   * which put a squarish block flush into the corner of a fully-rounded
+   * bar — two different corner languages touching, which reads as a
+   * rendering mistake rather than a highlight. Matching the bar's own pill
+   * geometry and leaving a margin around it makes it sit *in* the bar.
+   */
   pill: {
     position: 'absolute',
-    top: 5,
-    bottom: 5,
-    borderRadius: radius.lg,
+    top: 7,
+    bottom: 7,
+    borderRadius: radius.pill,
     backgroundColor: colors.wineWash,
   },
   item: {
     flex: 1,
     paddingVertical: 3,
   },
+
+  /*
+   * The slot is the same width as a tab so the five-across rhythm holds;
+   * the disc inside it is bigger than the slot is tall and hangs out the
+   * top. `justifyContent: center` with a negative margin rather than a
+   * transform, so the layout box moves with it and the disc cannot end up
+   * overlapping the icons either side at narrow widths.
+   */
+  /*
+   * `flex: 1`, exactly like a tab. The slot used to be given a computed
+   * width, which meant the row's even pitch depended on that number being
+   * right; letting it flex makes five equal slots a property of the layout
+   * rather than of a calculation that could drift from it.
+   */
+  /*
+   * `flex: 1`, exactly like a tab. The slot used to be given a computed
+   * width, which meant the row's even pitch depended on that number being
+   * right; letting it flex makes five equal slots a property of the layout
+   * rather than of a calculation that could drift from it.
+   */
+  fabSlot: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    /*
+     * -6, not -16. The larger overhang lifted the disc clear of the bar's
+     * top edge, which read as a button hovering ABOVE the bar rather than
+     * one seated in it — and it pulled the plus well above the eyeline the
+     * four icons share, so the row no longer scanned as one horizontal
+     * group. Six points still breaks the edge enough for the ring to
+     * register as a cut-through; it just stops the disc leaving.
+     */
+    marginTop: -6,
+  },
+  fab: {
+    width: 52,
+    height: 52,
+    borderRadius: radius.pill,
+    backgroundColor: colors.wine,
+    alignItems: 'center',
+    justifyContent: 'center',
+    /*
+     * A ring in the PAGE colour, not the bar's.
+     *
+     * Without it the disc sits directly on the bar's fill and reads as
+     * pasted onto the surface. A page-coloured ring reads as a hole cut
+     * through the bar that the disc comes up through — which is what the
+     * overhang is already claiming, so the two now say the same thing.
+     * It also guarantees a clean edge against the icons either side no
+     * matter how narrow the slot gets.
+     */
+    borderWidth: 3,
+    borderColor: colors.bg,
+    /*
+     * Tight and close, not a cloud. At radius 12 / y+6 the shadow spread
+     * far enough past the disc to read as a smudge on the cream rather
+     * than as lift — the bar it sits on is only 64pt tall, so there is no
+     * room for a soft far-throw shadow to resolve.
+     */
+    shadowColor: colors.lockInk,
+    shadowOpacity: 0.18,
+    shadowRadius: 7,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 6,
+  },
+  /* Scale, not opacity: a wine disc fading toward cream reads as disabled. */
+  fabPressed: { transform: [{ scale: 0.94 }] },
   itemInner: {
     alignItems: 'center',
     gap: space.xs - 1,
   },
   label: {
-    /* The brand's letterspaced label, at tab scale. */
+    /*
+     * The brand's letterspaced label, at tab scale — but one point larger
+     * and tracked tighter than the brand default. At 9/1.6 the longest
+     * label ("PROFILE") sprawled nearly the full slot and left the icons
+     * looking crowded by their own captions; 10/0.9 is wider per glyph and
+     * narrower overall.
+     */
     fontFamily: fonts.label,
-    fontSize: 9,
-    letterSpacing: 1.6,
+    fontSize: 10,
+    letterSpacing: 0.9,
   },
 });

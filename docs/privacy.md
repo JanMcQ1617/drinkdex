@@ -98,9 +98,12 @@ that vanishes when the reporter leaves is not a moderation record.
 ## Age
 
 Sipply is about alcoholic drinks and is intended for people old enough to
-drink where they live. It is rated 17+. It is not for children, and we do
+drink where they live. It is rated 18+. It is not for children, and we do
 not knowingly collect anything from anyone under 13. If you believe a
 child has an account, contact us and it will be removed.
+
+The [Terms of Use](terms) set out who may use Sipply and what is not
+allowed on it.
 
 ## Your rights
 
