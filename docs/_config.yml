@@ -1,0 +1,13 @@
+# Jekyll config for the published docs site (Pages serves main / docs).
+#
+# Without this file Jekyll falls back to the repository name, so every page
+# rendered a "drinkdex" header above its own title and a browser title of
+# "… | drinkdex". The repo slug and the bundle id are still drinkdex — only
+# the product was renamed to Sipply — so the fallback was never going to be
+# right on its own.
+#
+# Deliberately only two keys. GitHub Pages merges its own defaults over this,
+# including the theme, so naming a theme here would pin something that is
+# currently tracking Pages' default and does not need to.
+title: Sipply
+description: A drinks field guide for iPhone. Support, privacy and terms.
