@@ -109,8 +109,53 @@ const POST_SELECT =
  * UserProfile mapper expects, and naming columns keeps a future private
  * column from being published by an existing query.
  */
-export const PROFILE_COLS =
-  'id, username, display_name, accent, bio, avatar_path, created_at';
+/* ==================================================================== */
+/* Profile columns                                                      */
+/*                                                                      */
+/* A function rather than a constant, because the client and the         */
+/* database can disagree about whether `avatar_path` exists yet.         */
+/*                                                                      */
+/* PostgREST fails the WHOLE select if any requested column is missing,  */
+/* so a build that asks for a column the schema has not got does not     */
+/* lose the avatar — it loses the profile. That is what "column          */
+/* profiles.avatar_path does not exist" looked like on the profile tab:  */
+/* no name, no bio, no counts, just an error where a person should be.   */
+/*                                                                      */
+/* This can happen in both directions and neither is exotic: a build     */
+/* shipped ahead of its migration, or an OTA JS update reaching a phone  */
+/* before someone runs the SQL. The optional column is therefore treated */
+/* as optional — asked for once, and dropped for the rest of the session */
+/* if the server says it does not know it.                              */
+/* ==================================================================== */
+
+const PROFILE_COLS_CORE = 'id, username, display_name, accent, bio, created_at';
+const PROFILE_COLS_FULL = 'id, username, display_name, accent, bio, avatar_path, created_at';
+
+let avatarColumnPresent = true;
+
+export function profileCols(): string {
+  return avatarColumnPresent ? PROFILE_COLS_FULL : PROFILE_COLS_CORE;
+}
+
+/**
+ * True when the error is Postgres 42703 — undefined column — naming the
+ * avatar column. Anything else is a real failure and must not be
+ * swallowed by a retry.
+ *
+ * Matched on the code first; the message is only consulted to be sure it
+ * is OUR column that is missing rather than some unrelated typo, because
+ * retrying without the avatar would not fix that and would hide it.
+ */
+export function isMissingAvatarColumn(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  const missing = error.code === '42703' || /does not exist/i.test(error.message ?? '');
+  return missing && /avatar_path/i.test(error.message ?? '');
+}
+
+/** Stops asking for the avatar column for the rest of this session. */
+export function disableAvatarColumn(): void {
+  avatarColumnPresent = false;
+}
 
 /* ==================================================================== */
 /* People and follows                                                   */
@@ -120,13 +165,16 @@ export const PROFILE_COLS =
 export async function fetchPeople(myId: string): Promise<UserProfile[]> {
   const { data, error } = await supabase
     .from('profiles')
-    .select(PROFILE_COLS)
+    .select(profileCols())
     .neq('id', myId)
     .order('created_at', { ascending: false })
     .limit(200);
 
   if (error) throw error;
-  return (data ?? []).map(toProfile);
+  // The select string is chosen at runtime, so supabase-js cannot infer the
+  // row shape from it. profileCols() only ever returns a subset of
+  // ProfileRow's columns, which is exactly what the cast asserts.
+  return ((data ?? []) as unknown as ProfileRow[]).map(toProfile);
 }
 
 export async function searchPeople(myId: string, term: string): Promise<UserProfile[]> {
@@ -135,13 +183,13 @@ export async function searchPeople(myId: string, term: string): Promise<UserProf
 
   const { data, error } = await supabase
     .from('profiles')
-    .select(PROFILE_COLS)
+    .select(profileCols())
     .neq('id', myId)
     .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
     .limit(50);
 
   if (error) throw error;
-  return (data ?? []).map(toProfile);
+  return ((data ?? []) as unknown as ProfileRow[]).map(toProfile);
 }
 
 export async function fetchFollowing(myId: string): Promise<string[]> {
@@ -232,9 +280,11 @@ export async function fetchPostsByAuthor(authorId: string, myId: string): Promis
 /** Profiles for a set of author ids, as a lookup. */
 export async function fetchProfiles(ids: string[]): Promise<Record<string, UserProfile>> {
   if (ids.length === 0) return {};
-  const { data, error } = await supabase.from('profiles').select(PROFILE_COLS).in('id', ids);
+  const { data, error } = await supabase.from('profiles').select(profileCols()).in('id', ids);
   if (error) throw error;
-  return Object.fromEntries((data ?? []).map((r) => [r.id, toProfile(r)]));
+  return Object.fromEntries(
+    ((data ?? []) as unknown as ProfileRow[]).map((r) => [r.id, toProfile(r)]),
+  );
 }
 
 /* ==================================================================== */

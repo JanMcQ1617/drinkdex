@@ -12,7 +12,13 @@ import {
 } from '@/lib/discovery';
 import { hashHandle } from '@/lib/instagram';
 import { recoveryRedirectUrl } from '@/lib/recovery';
-import { PROFILE_COLS, setInstagramHash, setPhoneHash } from '@/lib/social';
+import {
+  disableAvatarColumn,
+  isMissingAvatarColumn,
+  profileCols,
+  setInstagramHash,
+  setPhoneHash,
+} from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
 
@@ -524,11 +530,32 @@ export const useAuth = create<AuthState>()((set, get) => ({
        * 002's column revoke never bit: had it worked, this would have been
        * failing for every user since 002 shipped.
        */
-      const { data, error } = await supabase
+      // Cast for the same reason as the list queries: profileCols() is
+      // chosen at runtime, so the client cannot infer the row from it.
+      let { data, error } = (await supabase
         .from('profiles')
-        .select(PROFILE_COLS)
+        .select(profileCols())
         .eq('id', uid)
-        .single();
+        .single()) as { data: ProfileRow | null; error: { code?: string; message?: string } | null };
+
+      /*
+       * The avatar column is optional — the client can be ahead of the
+       * migration that adds it. PostgREST fails the whole select on an
+       * unknown column, so without this a missing `avatar_path` costs the
+       * entire profile: no name, no bio, no counts, just an error where a
+       * person should be.
+       *
+       * One retry, and the flag makes it once per session rather than
+       * once per fetch.
+       */
+      if (error && isMissingAvatarColumn(error)) {
+        disableAvatarColumn();
+        ({ data, error } = (await supabase
+          .from('profiles')
+          .select(profileCols())
+          .eq('id', uid)
+          .single()) as { data: ProfileRow | null; error: { code?: string; message?: string } | null });
+      }
 
       if (data) {
         set({ profile: data, profileLoading: false, profileError: null });
@@ -542,7 +569,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
       if (attempt === DELAYS_MS.length - 1) {
         set({
           profileLoading: false,
-          profileError: error
+          profileError: error?.message
             ? humanize(error.message)
             : 'Could not load your profile. Pull to retry.',
         });

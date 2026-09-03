@@ -17,8 +17,14 @@ export type ProfileRow = {
   display_name: string;
   accent: string;
   bio: string | null;
-  /** Object path in the private `pours` bucket. Null = initials fallback. */
-  avatar_path: string | null;
+  /**
+   * Object path in the private `pours` bucket. Null = initials fallback.
+   *
+   * OPTIONAL, not merely nullable: a client running ahead of migration 010
+   * stops requesting the column entirely, so rows come back without the
+   * key at all rather than with null in it.
+   */
+  avatar_path?: string | null;
   created_at: string;
 };
 
