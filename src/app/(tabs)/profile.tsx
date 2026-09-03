@@ -136,7 +136,13 @@ function Identity({
 }) {
   return (
     <View style={styles.identity}>
-      <Avatar name={profile.displayName} accent={profile.accent} size={84} ring />
+      <Avatar
+        name={profile.displayName}
+        accent={profile.accent}
+        size={84}
+        ring
+        avatarPath={profile.avatarPath}
+      />
       <View style={styles.identityText}>
         <Text style={styles.identityName} numberOfLines={1}>
           {profile.displayName}
@@ -208,7 +214,12 @@ function FollowRow({
 }) {
   return (
     <View style={styles.followRow}>
-      <Avatar name={person.displayName} accent={person.accent} size={44} />
+      <Avatar
+        name={person.displayName}
+        accent={person.accent}
+        size={44}
+        avatarPath={person.avatarPath}
+      />
       <View style={styles.followText}>
         <Text style={styles.followName} numberOfLines={1}>
           {person.displayName}

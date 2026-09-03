@@ -331,7 +331,13 @@ export const PostCard = React.memo(function PostCard({
           accessibilityRole={onOpenAuthor ? 'button' : undefined}
           accessibilityLabel={onOpenAuthor ? `Open ${who.displayName}'s profile` : undefined}
           style={({ pressed }) => [styles.headerIdentity, pressed && styles.pressed]}>
-          <Avatar name={who.displayName} accent={who.accent} size={40} ring />
+          <Avatar
+            name={who.displayName}
+            accent={who.accent}
+            size={40}
+            ring
+            avatarPath={who.avatarPath}
+          />
           <View style={styles.headerText}>
             <Text style={styles.displayName} numberOfLines={1}>
               {who.displayName}

@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -21,6 +22,8 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
+import { pickFromCamera, pickFromLibrary, type PickResult } from '@/lib/pour';
+import { forgetSignedPhoto, uploadAvatar } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 
 /* ==================================================================== */
@@ -60,6 +63,20 @@ export default function EditProfileScreen() {
   const [accent, setAccent] = useState(profile?.accent ?? SIGNUP_ACCENTS[0]!);
   const [error, setError] = useState<string | null>(null);
 
+  /*
+   * The picture is picked now and uploaded on Save, not on pick.
+   *
+   * Uploading immediately would leave an orphan in the bucket every time
+   * someone chooses a photo and then backs out — and the storage policy
+   * lets them write, so nothing would ever clean it up. `pickedPhoto` is
+   * the local URI being previewed; it only becomes an object when the
+   * rest of the form is committed too.
+   */
+  const [pickedPhoto, setPickedPhoto] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  /** Distinct from "picked nothing": this means clear the existing one. */
+  const [removed, setRemoved] = useState(false);
+
   const handle = username.trim().toLowerCase();
   const nameOk = displayName.trim().length >= 1 && displayName.trim().length <= NAME_MAX;
   const handleOk = /^[a-z0-9._]{3,24}$/.test(handle);
@@ -69,20 +86,82 @@ export default function EditProfileScreen() {
     displayName !== (profile?.display_name ?? '') ||
     handle !== (profile?.username ?? '') ||
     bio !== (profile?.bio ?? '') ||
-    accent !== (profile?.accent ?? '');
+    accent !== (profile?.accent ?? '') ||
+    pickedPhoto !== null;
 
-  const canSave = nameOk && handleOk && bioOk && dirty && !busy;
+  const canSave = nameOk && handleOk && bioOk && dirty && !busy && !uploading;
+
+  const applyPick = useCallback((r: PickResult) => {
+    if (r.ok) setPickedPhoto(r.uri);
+    else if (r.reason !== 'cancelled') Alert.alert(r.title, r.body);
+  }, []);
+
+  const choosePhoto = useCallback(async () => {
+    haptic.tap();
+    applyPick(await pickFromLibrary());
+  }, [applyPick]);
+
+  const takePhoto = useCallback(async () => {
+    haptic.tap();
+    applyPick(await pickFromCamera());
+  }, [applyPick]);
+
+  const removePhoto = useCallback(() => {
+    haptic.tap();
+    setPickedPhoto(null);
+    setRemoved(true);
+  }, []);
 
   const save = useCallback(async () => {
     haptic.tap();
     setError(null);
-    const message = await updateProfile({ displayName, username, bio, accent });
+
+    /*
+     * Three states, and they are not the same:
+     *   a fresh pick  -> upload, then store the new path
+     *   removed       -> store null, so the avatar falls back to initials
+     *   neither       -> undefined, which leaves the column untouched
+     */
+    let avatarPath: string | null | undefined;
+    if (pickedPhoto && profile) {
+      setUploading(true);
+      const uploaded = await uploadAvatar(profile.id, pickedPhoto);
+      setUploading(false);
+      if (!uploaded) {
+        setError('Could not upload that picture. Try again.');
+        return;
+      }
+      avatarPath = uploaded;
+    } else if (removed) {
+      avatarPath = null;
+    }
+
+    const message = await updateProfile({ displayName, username, bio, accent, avatarPath });
     if (message) {
       setError(message);
       return;
     }
+
+    /*
+     * The old path's signed URL is memoised, and the object behind it is
+     * still there — so without this, every Avatar that had already
+     * resolved keeps showing the previous picture until the cache ages
+     * out an hour later.
+     */
+    if (avatarPath !== undefined) forgetSignedPhoto(profile?.avatar_path ?? null);
+
     router.back();
-  }, [updateProfile, displayName, username, bio, accent, router]);
+  }, [
+    updateProfile,
+    displayName,
+    username,
+    bio,
+    accent,
+    pickedPhoto,
+    removed,
+    profile,
+    router,
+  ]);
 
   if (!profile) {
     return (
@@ -117,7 +196,37 @@ export default function EditProfileScreen() {
         {/* Live preview — the accent is the only thing here you cannot
             picture from its label, so it gets shown rather than described. */}
         <View style={styles.preview}>
-          <Avatar name={displayName || profile.display_name} accent={accent} size={84} ring />
+          <Avatar
+            name={displayName || profile.display_name}
+            accent={accent}
+            size={96}
+            ring
+            avatarPath={removed ? null : profile.avatar_path}
+            localUri={pickedPhoto}
+          />
+          <View style={styles.photoActions}>
+            <Button
+              label="Camera roll"
+              variant="secondary"
+              icon="grid"
+              onPress={() => void choosePhoto()}
+            />
+            <Button
+              label="Camera"
+              variant="secondary"
+              icon="camera"
+              onPress={() => void takePhoto()}
+            />
+          </View>
+          {(profile.avatar_path && !removed) || pickedPhoto ? (
+            <PressableScale
+              onPress={removePhoto}
+              noHaptic
+              accessibilityRole="button"
+              style={styles.removePhoto}>
+              <Text style={styles.removePhotoText}>Remove picture</Text>
+            </PressableScale>
+          ) : null}
         </View>
 
         <Text style={styles.label}>Accent</Text>
@@ -197,7 +306,7 @@ export default function EditProfileScreen() {
         ) : null}
 
         <Button
-          label={busy ? 'Saving…' : 'Save changes'}
+          label={uploading ? 'Uploading…' : busy ? 'Saving…' : 'Save changes'}
           onPress={() => void save()}
           disabled={!canSave}
           block
@@ -233,7 +342,14 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
 
-  preview: { alignItems: 'center', paddingVertical: space.lg },
+  preview: { alignItems: 'center', paddingVertical: space.lg, gap: space.lg },
+  photoActions: { flexDirection: 'row', gap: space.md },
+  removePhoto: { paddingVertical: space.xs, paddingHorizontal: space.md },
+  removePhotoText: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.danger,
+  },
 
   label: {
     fontFamily: fonts.label,

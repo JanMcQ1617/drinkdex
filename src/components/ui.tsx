@@ -1,5 +1,6 @@
 import * as Haptics from 'expo-haptics';
-import React from 'react';
+import { Image } from 'expo-image';
+import React, { useEffect, useState } from 'react';
 import {
   Platform,
   Pressable,
@@ -30,6 +31,7 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
+import { signedPhotoUrl } from '@/lib/social';
 import type { DrinkCategory, Rarity } from '@/types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -228,18 +230,61 @@ export function CategoryPill({ category }: { category: DrinkCategory }) {
  * and colour can't be controlled by design tokens, and at avatar size they
  * read as placeholder art.
  */
+/**
+ * Resolves an avatar's signed URL.
+ *
+ * Lives here rather than being passed in because Avatar has seven call
+ * sites, several of them inside lists, and threading a resolved URL
+ * through every one of them means seven chances to forget. The signing
+ * itself is memoised by path in lib/social, so the same face appearing
+ * beside twenty posts costs one request.
+ *
+ * `localUri` short-circuits it: an image just picked from the camera roll
+ * has not been uploaded yet, and the editor needs to preview it now.
+ */
+function useAvatarUrl(path: string | null | undefined, localUri?: string | null): string | null {
+  const [resolved, setResolved] = useState<{ path: string; url: string | null } | null>(null);
+
+  useEffect(() => {
+    if (!path) return;
+    let alive = true;
+    signedPhotoUrl(path)
+      .then((url) => {
+        if (alive) setResolved({ path, url });
+      })
+      .catch(() => {
+        // An avatar that will not sign falls back to initials, which is
+        // never wrong — just less personal.
+        if (alive) setResolved({ path, url: null });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [path]);
+
+  if (localUri) return localUri;
+  return resolved && resolved.path === path ? resolved.url : null;
+}
+
 export function Avatar({
   name,
   accent,
   size = 40,
   ring,
+  avatarPath,
+  localUri,
 }: {
   name: string;
   accent: string;
   size?: number;
   /** Draws an unseen-story style ring. */
   ring?: boolean;
+  /** Object path from `profiles.avatar_path`. */
+  avatarPath?: string | null;
+  /** A just-picked local image, previewed before it is uploaded. */
+  localUri?: string | null;
 }) {
+  const photo = useAvatarUrl(avatarPath, localUri);
   const initials = name
     .replace(/[^a-zA-Z0-9 ._-]/g, '')
     .split(/[ ._-]+/)
@@ -268,9 +313,13 @@ export function Avatar({
             borderColor: colors.wine,
           },
         ]}>
-        <Text style={[styles.avatarText, { fontSize: inner * 0.42, color: colors.textOnWine }]}>
-          {initials || '?'}
-        </Text>
+        {photo ? (
+          <Image source={{ uri: photo }} style={styles.avatarPhoto} contentFit="cover" />
+        ) : (
+          <Text style={[styles.avatarText, { fontSize: inner * 0.42, color: colors.textOnWine }]}>
+            {initials || '?'}
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -425,8 +474,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    // Clips the photo to the circle; without it the image renders square
+    // inside a round border.
+    overflow: 'hidden',
   },
   avatarText: { fontFamily: fonts.displayBold },
+  /* Fills the inner circle, which already carries the radius and clips. */
+  avatarPhoto: { width: '100%', height: '100%' },
 
   sectionLabel: {
     /*

@@ -100,6 +100,8 @@ interface AuthState {
     username: string;
     bio: string;
     accent: string;
+    /** Object path from a fresh upload, or undefined to leave it alone. */
+    avatarPath?: string | null;
   }) => Promise<string | null>;
   clearError: () => void;
 }
@@ -449,7 +451,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
    * make it true. Anything that gets past the checks below still comes
    * back as a readable error rather than a silent no-op.
    */
-  updateProfile: async ({ displayName, username, bio, accent }) => {
+  updateProfile: async ({ displayName, username, bio, accent, avatarPath }) => {
     const uid = get().session?.user.id;
     if (!uid) return 'You are signed out.';
 
@@ -476,6 +478,11 @@ export const useAuth = create<AuthState>()((set, get) => ({
         // then render as an empty line under your name.
         bio: about.length > 0 ? about : null,
         accent,
+        /*
+         * Omitted entirely when undefined, so saving a bio does not wipe a
+         * picture. `null` is a real value here and means "remove it".
+         */
+        ...(avatarPath !== undefined ? { avatar_path: avatarPath } : {}),
       })
       .eq('id', uid);
     set({ busy: false });

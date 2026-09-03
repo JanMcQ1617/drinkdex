@@ -17,6 +17,8 @@ export type ProfileRow = {
   display_name: string;
   accent: string;
   bio: string | null;
+  /** Object path in the private `pours` bucket. Null = initials fallback. */
+  avatar_path: string | null;
   created_at: string;
 };
 

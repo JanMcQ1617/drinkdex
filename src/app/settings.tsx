@@ -146,7 +146,13 @@ export default function SettingsScreen() {
           accessibilityRole="button"
           accessibilityLabel="Edit your profile"
           style={styles.identity}>
-          <Avatar name={profile.display_name} accent={profile.accent} size={54} ring />
+          <Avatar
+            name={profile.display_name}
+            accent={profile.accent}
+            size={54}
+            ring
+            avatarPath={profile.avatar_path}
+          />
           <View style={styles.identityText}>
             <Text style={styles.identityName} numberOfLines={1}>
               {profile.display_name}
