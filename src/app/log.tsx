@@ -6,7 +6,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -218,19 +217,19 @@ export default function LogPourScreen() {
   const header = (
     <View>
       {/* ---- The photograph ---- */}
-      <Pressable
-        onPress={photoUri ? choosePhoto : takePhoto}
-        accessibilityRole="button"
-        accessibilityLabel={photoUri ? 'Change the photo' : 'Take a photo of your pour'}
-        style={styles.photoFrame}>
+      {/*
+        The frame shows; the two buttons under it act.
+        
+        It used to be the frame itself that took a photo, with the library
+        as a text link below — which made the camera the only obvious way
+        in and hid the fact that a pour already in your roll works just as
+        well. Half the time the drink was photographed before anyone
+        thought to open Sipply, so the two routes are peers now rather than
+        a button and a footnote.
+      */}
+      <View style={styles.photoFrame}>
         {photoUri ? (
-          <>
-            <Image source={{ uri: photoUri }} style={styles.photo} contentFit="cover" />
-            <View style={styles.photoBadge}>
-              <Icon name="camera" size={15} color={colors.textOnWine} />
-              <Text style={styles.photoBadgeText}>Change</Text>
-            </View>
-          </>
+          <Image source={{ uri: photoUri }} style={styles.photo} contentFit="cover" />
         ) : (
           <View style={styles.photoEmpty}>
             <View style={styles.photoEmptyDisc}>
@@ -238,23 +237,28 @@ export default function LogPourScreen() {
             </View>
             <Text style={styles.photoEmptyTitle}>Photograph your pour</Text>
             <Text style={styles.photoEmptyBody}>
-              You can work out what it was afterwards.
+              Or pick one you already took.
             </Text>
           </View>
         )}
-      </Pressable>
+      </View>
 
-      {/* A second, quieter route to the same slot — the camera is the
-          primary action, but the drink is often already in your roll. */}
-      <PressableScale
-        onPress={choosePhoto}
-        noHaptic
-        accessibilityRole="button"
-        style={styles.libraryLink}>
-        <Text style={styles.libraryLinkText}>
-          {photoUri ? 'Pick a different photo' : 'Choose from your library'}
-        </Text>
-      </PressableScale>
+      <View style={styles.photoActions}>
+        <Button
+          label={photoUri ? 'Retake' : 'Take photo'}
+          variant="secondary"
+          icon="camera"
+          onPress={() => void takePhoto()}
+          style={styles.photoAction}
+        />
+        <Button
+          label={photoUri ? 'Choose another' : 'Camera roll'}
+          variant="secondary"
+          icon="grid"
+          onPress={() => void choosePhoto()}
+          style={styles.photoAction}
+        />
+      </View>
 
       {/* ---- What was it ---- */}
       <Text style={styles.sectionTitle}>What was it?</Text>
@@ -455,12 +459,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
-  libraryLink: { alignSelf: 'center', paddingVertical: space.md },
-  libraryLinkText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.wine,
-  },
+  photoActions: { flexDirection: 'row', gap: space.md, marginTop: space.md },
+  photoAction: { flex: 1 },
 
   sectionTitle: {
     fontFamily: fonts.displayBold,
