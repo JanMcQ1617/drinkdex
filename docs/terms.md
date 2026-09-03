@@ -1,4 +1,4 @@
-# Sipply — Terms of Use
+# Terms of Use
 
 **Last updated: 31 August 2026**
 

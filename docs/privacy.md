@@ -1,4 +1,4 @@
-# Sipply — Privacy Policy
+# Privacy Policy
 
 **Last updated: 25 August 2026**
 

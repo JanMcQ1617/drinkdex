@@ -1,4 +1,4 @@
-# Sipply — Support
+# Support
 
 **Last updated: 31 August 2026**
 
