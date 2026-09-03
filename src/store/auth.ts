@@ -87,6 +87,20 @@ interface AuthState {
   /** Irreversible. Removes the auth user, every row that cascades from it, and the photos storage does not cascade. */
   deleteAccount: () => Promise<boolean>;
   refreshProfile: () => Promise<void>;
+  /**
+   * Saves edits to your own profile row. Returns an error string to show,
+   * or null on success.
+   *
+   * A string rather than a throw: every failure here is something the user
+   * has to read and act on — a taken username, a name that is too long —
+   * and the caller is the only thing that knows where to put it.
+   */
+  updateProfile: (fields: {
+    displayName: string;
+    username: string;
+    bio: string;
+    accent: string;
+  }) => Promise<string | null>;
   clearError: () => void;
 }
 
@@ -427,6 +441,59 @@ export const useAuth = create<AuthState>()((set, get) => ({
    * surfaced on the screen with a retry; swallowing it is what left the
    * profile permanently headless with no spinner and no explanation.
    */
+  /*
+   * The database is the authority on every rule here, not this function.
+   * `profiles` carries CHECK constraints for the name length, the bio
+   * length and the username shape, plus a unique index on username — so
+   * the client validates to give a fast answer and the server validates to
+   * make it true. Anything that gets past the checks below still comes
+   * back as a readable error rather than a silent no-op.
+   */
+  updateProfile: async ({ displayName, username, bio, accent }) => {
+    const uid = get().session?.user.id;
+    if (!uid) return 'You are signed out.';
+
+    const name = displayName.trim();
+    const handle = username.trim().toLowerCase();
+    const about = bio.trim();
+
+    // Mirrors profiles_display_name_len.
+    if (name.length < 1 || name.length > 40) return 'Display name must be 1–40 characters.';
+    // Mirrors profiles_username_shape. Lowercase alphanumerics, underscore
+    // and period only — which also blocks unicode lookalike homographs.
+    if (!/^[a-z0-9._]{3,24}$/.test(handle))
+      return 'Usernames are 3–24 characters: lowercase letters, numbers, dots and underscores.';
+    // Mirrors profiles_bio_len.
+    if (about.length > 300) return 'Your about is longer than 300 characters.';
+
+    set({ busy: true });
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        display_name: name,
+        username: handle,
+        // Empty clears it, rather than storing a blank string the UI would
+        // then render as an empty line under your name.
+        bio: about.length > 0 ? about : null,
+        accent,
+      })
+      .eq('id', uid);
+    set({ busy: false });
+
+    if (error) {
+      /*
+       * 23505 is the unique violation on username. supabase-js surfaces
+       * the Postgres code, so this does not have to match on message text
+       * — which is the thing that changes between versions.
+       */
+      if (error.code === '23505') return 'That username is taken. Pick another.';
+      return humanize(error.message);
+    }
+
+    await get().refreshProfile();
+    return null;
+  },
+
   refreshProfile: async () => {
     const uid = get().session?.user.id;
     if (!uid) return;

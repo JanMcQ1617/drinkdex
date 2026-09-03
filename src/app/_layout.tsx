@@ -113,6 +113,21 @@ export default function RootLayout() {
           name="log"
           options={{ presentation: 'modal', gestureDirection: 'vertical' }}
         />
+        {/*
+          Settings pushes rather than presenting: it is a place you go and
+          come back from, and it has a child (edit-profile) that needs
+          somewhere to push onto.
+        */}
+        <Stack.Screen name="settings" options={{ gestureDirection: 'horizontal' }} />
+        {/*
+          Editing, on the other hand, is a task — modal, so the downward
+          dismiss reads as "never mind" and the Cancel in its bar means the
+          same thing as the gesture.
+        */}
+        <Stack.Screen
+          name="edit-profile"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
       </Stack>
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
