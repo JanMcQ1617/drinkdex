@@ -392,7 +392,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -16,
+    /*
+     * -6, not -16. The larger overhang lifted the disc clear of the bar's
+     * top edge, which read as a button hovering ABOVE the bar rather than
+     * one seated in it — and it pulled the plus well above the eyeline the
+     * four icons share, so the row no longer scanned as one horizontal
+     * group. Six points still breaks the edge enough for the ring to
+     * register as a cut-through; it just stops the disc leaving.
+     */
+    marginTop: -6,
   },
   fab: {
     width: 52,

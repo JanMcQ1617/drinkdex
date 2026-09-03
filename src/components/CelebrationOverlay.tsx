@@ -68,27 +68,38 @@ function Card({ children, onDismiss }: { children: React.ReactNode; onDismiss: (
   }));
 
   return (
-    <Pressable
-      style={styles.scrim}
-      onPress={onDismiss}
-      accessibilityRole="button"
-      accessibilityLabel="Dismiss">
+    <View style={styles.scrim} pointerEvents="box-none">
       <Animated.View
+        pointerEvents="none"
         entering={reduced ? undefined : FadeIn.duration(SETTLE)}
         exiting={reduced ? undefined : FadeOut.duration(220)}
         style={styles.scrimFill}
       />
+
       {/*
-        The card stops taps reaching the scrim behind it, so the buttons
-        inside stay usable — but the scrim itself is still the dismiss
-        target everywhere around it.
+        The dismiss target is a SIBLING under the card, not a wrapper round
+        it. Wrapping made the card's own buttons descendants of a button —
+        invalid on web ("<button> cannot contain a nested <button>") and a
+        nested touchable on native. Underneath, it still catches every tap
+        that lands outside the card.
       */}
-      <Animated.View style={[styles.card, style]}>
-        <Pressable onPress={() => {}} accessible={false}>
-          {children}
-        </Pressable>
+      <Pressable
+        style={StyleSheet.absoluteFill}
+        onPress={onDismiss}
+        accessibilityRole="button"
+        accessibilityLabel="Dismiss"
+      />
+
+      {/*
+        Absorbs its own touches without being a button, so a tap on the
+        card does not fall through to the dismiss layer below it.
+      */}
+      <Animated.View
+        style={[styles.card, style]}
+        onStartShouldSetResponder={() => true}>
+        {children}
       </Animated.View>
-    </Pressable>
+    </View>
   );
 }
 
