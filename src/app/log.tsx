@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -21,7 +21,9 @@ import { colors, fonts, radius, space, type as typeScale } from '@/constants/the
 import { DRINKS, formatDexNumber } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { persistPhoto, pickFromCamera, pickFromLibrary, type PickResult } from '@/lib/pour';
+import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { useAuth } from '@/store/auth';
+import { useCelebrate } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
 import type { Drink } from '@/types';
@@ -114,6 +116,24 @@ export default function LogPourScreen() {
   const [query, setQuery] = useState('');
   const [note, setNote] = useState('');
   const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  /*
+   * This screen closes itself only once there is nothing left to show.
+   *
+   * It used to call router.back() the instant the pour was saved, which
+   * put the celebration in an impossible position: this is a native-stack
+   * MODAL, presented by iOS in its own view controller above the React
+   * root, so the overlay mounted beside <Stack> renders underneath it and
+   * is never seen. Dismissing first and hoping the card catches up is a
+   * race against an animation.
+   *
+   * So the sheet stays, renders the celebration itself — same tree, no
+   * cross-window layering to reason about — and leaves when the queue is
+   * empty. Both this instance and the root one read the same queue, and a
+   * dismissal pops it once, so the card can never appear twice.
+   */
+  const pending = useCelebrate((s) => s.queue.length);
 
   /*
    * Nothing is listed until something is typed. A bare list of 7,653
@@ -182,13 +202,18 @@ export default function LogPourScreen() {
         }
 
         haptic.tap();
-        router.back();
+        setSaved(true);
       } finally {
         setBusy(false);
       }
     },
-    [photoUri, drink, busy, note, unlock, myId, addPost, router],
+    [photoUri, drink, busy, note, unlock, myId, addPost],
   );
+
+  useEffect(() => {
+    // Navigation, not state — this leaves once the celebration is done.
+    if (saved && pending === 0) router.back();
+  }, [saved, pending, router]);
 
   const header = (
     <View>
@@ -342,6 +367,13 @@ export default function LogPourScreen() {
           <Text style={styles.saveHint}>Sign in to post. Saving to your Dex works either way.</Text>
         ) : null}
       </View>
+
+      {/*
+        Rendered here as well as at the root. While this sheet is up it is
+        the only one that can be seen; once it closes, the root instance
+        covers every other way a pour gets logged.
+      */}
+      <CelebrationOverlay />
     </KeyboardAvoidingView>
   );
 }
