@@ -1,3 +1,4 @@
+import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -130,6 +131,15 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
   return session ? <>{children}</> : <AuthForm />;
 }
+
+/*
+ * The published documents. Extensionless on purpose — GitHub Pages serves
+ * `terms.html` for `/terms`, and these are the exact strings recorded in
+ * `docs/appstore.md` as the App Store Connect URLs, so the app and the
+ * listing point at one thing rather than two spellings of it.
+ */
+const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
+const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
 
 function AuthForm() {
   const insets = useSafeAreaInsets();
@@ -339,6 +349,36 @@ function AuthForm() {
             style={styles.submit}
           />
 
+          {/*
+            Signup only. terms.md opens "By creating an account you agree to
+            these terms" — a claim the app never actually put in front of
+            anyone until this line existed. On the sign-in and reset paths no
+            account is being created, so the sentence would be untrue there.
+
+            Nested <Text onPress> rather than two Pressables: this has to read
+            and wrap as one sentence, and a Pressable in the middle of a
+            paragraph breaks the line around itself.
+          */}
+          {signup ? (
+            <Text style={styles.consent}>
+              By creating an account you agree to the{' '}
+              <Text
+                style={styles.consentLink}
+                accessibilityRole="link"
+                onPress={() => void WebBrowser.openBrowserAsync(TERMS_URL)}>
+                Terms of Use
+              </Text>{' '}
+              and the{' '}
+              <Text
+                style={styles.consentLink}
+                accessibilityRole="link"
+                onPress={() => void WebBrowser.openBrowserAsync(PRIVACY_URL)}>
+                Privacy Policy
+              </Text>
+              .
+            </Text>
+          ) : null}
+
           <PressableScale
             onPress={() => setMode(mode === 'in' ? 'up' : 'in')}
             noHaptic
@@ -518,6 +558,21 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
+
+  consent: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    color: colors.textMuted,
+    textAlign: 'center',
+    marginTop: space.lg,
+    /* Keeps the sentence off the screen edges when it wraps to three lines
+       on a small handset. */
+    paddingHorizontal: space.sm,
+  },
+  /* Same wine as the mode switch below it, which is already the established
+     "this is tappable" colour on this screen. */
+  consentLink: { fontFamily: fonts.bodySemiBold, color: colors.wine },
 
   switch: { alignSelf: 'center', paddingVertical: space.md, paddingHorizontal: space.lg },
   switchText: {
