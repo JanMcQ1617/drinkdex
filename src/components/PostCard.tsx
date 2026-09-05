@@ -211,9 +211,21 @@ export const PostCard = React.memo(function PostCard({
    * cannot open on someone else's third picture.
    */
   const gallery = post.photoPaths?.length ? post.photoPaths : [];
-  const [index, setIndex] = useState(0);
   const galleryKey = gallery.join('|');
-  useEffect(() => setIndex(0), [galleryKey]);
+  /*
+   * The page carries the photo set it belongs to, exactly as `flip` above
+   * carries its like key, and for the same reason: the reset is then a
+   * derivation rather than an effect.
+   *
+   * This was `useState(0)` plus `useEffect(() => setIndex(0), [galleryKey])`,
+   * which React Compiler rejects — setting state synchronously inside an
+   * effect renders the card once with the WRONG photo and then again with the
+   * right one. In a virtualised feed that stale first frame is the recycling
+   * bug the reset exists to prevent, so the effect was reintroducing on paint
+   * the very thing it fixed on the next tick.
+   */
+  const [paged, setPaged] = useState<{ key: string; index: number } | null>(null);
+  const index = paged?.key === galleryKey ? paged.index : 0;
 
   const current = gallery[index] ?? photoPath ?? post.photoPath;
   const photoUrl = useSignedPhoto(current) ?? post.photoUri;
@@ -379,7 +391,10 @@ export const PostCard = React.memo(function PostCard({
               <Pressable
                 onPress={() => {
                   haptic.select();
-                  setIndex((i) => (i + 1) % gallery.length);
+                  // Computed from the rendered `index` rather than a functional
+                  // updater, because the new value has to be stamped with the
+                  // gallery key it belongs to.
+                  setPaged({ key: galleryKey, index: (index + 1) % gallery.length });
                 }}
                 accessibilityRole="button"
                 accessibilityLabel={`Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`}
