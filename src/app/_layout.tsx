@@ -120,6 +120,13 @@ export default function RootLayout() {
         */}
         <Stack.Screen name="settings" options={{ gestureDirection: 'horizontal' }} />
         {/*
+          My Bar. Pushes for the same reason Settings does — somewhere you go
+          and come back from, and it pushes drink cards of its own. Edge-swipe
+          only rather than full-width: the shelf is rows of wrapped chips and
+          a full-width back gesture would fire on a mistimed tap at them.
+        */}
+        <Stack.Screen name="bar" options={{ gestureDirection: 'horizontal' }} />
+        {/*
           Editing, on the other hand, is a task — modal, so the downward
           dismiss reads as "never mind" and the Cancel in its bar means the
           same thing as the gesture.

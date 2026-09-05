@@ -44,6 +44,8 @@ import {
   tabular,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
+import { matchBar } from '@/lib/bar';
+import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory } from '@/types';
 
@@ -288,6 +290,19 @@ export default function DexScreen() {
   const { width } = useWindowDimensions();
 
   /*
+   * How many drinks the shelf can currently make, for the My Bar row below.
+   *
+   * matchBar walks all 882 specs, so it is memoised on the owned set rather
+   * than run per render — this screen re-renders on every keystroke in its
+   * own search field and on every scroll-driven masthead change.
+   */
+  const ownedBar = useBar((s) => s.owned);
+  const barCount = useMemo(
+    () => matchBar(new Set(Object.keys(ownedBar))).makeable.length,
+    [ownedBar],
+  );
+
+  /*
    * Membership size, not the map itself. Subscribing to `unlocks` here would
    * re-render the screen every time a photo is swapped on an entry already
    * collected; the count moves only when something is added or removed, which
@@ -423,6 +438,40 @@ export default function DexScreen() {
         </View>
         <ProgressBar value={collected} max={TOTAL} />
       </View>
+
+      {/*
+        My Bar. Sits above the filters rather than among them because it is a
+        destination, not another way to slice this grid — and below the
+        progress block because the Dex's own headline should stay the first
+        thing read.
+
+        The count is live so the row earns its place: "48 you can make right
+        now" is a reason to tap, where a bare "My Bar" is furniture.
+      */}
+      <PressableScale
+        onPress={() => {
+          haptic.tap();
+          router.push('/bar');
+        }}
+        noHaptic
+        accessibilityRole="button"
+        accessibilityLabel={
+          barCount > 0
+            ? `My Bar, ${barCount} drinks you can make right now`
+            : 'My Bar, tick what you own to see what you can make'
+        }
+        style={styles.barLink}>
+        <Icon name="sparkle" size={18} color={colors.wine} />
+        <View style={styles.barLinkText}>
+          <Text style={styles.barLinkTitle}>My Bar</Text>
+          <Text style={styles.barLinkBody} numberOfLines={1}>
+            {barCount > 0
+              ? `${barCount} ${barCount === 1 ? 'drink' : 'drinks'} you can make right now`
+              : 'Tick what you own, see what you can pour'}
+          </Text>
+        </View>
+        <Icon name="chevronRight" size={16} color={colors.textFaint} />
+      </PressableScale>
 
       {/* Region */}
       <ScrollView
@@ -706,6 +755,34 @@ const styles = StyleSheet.create({
   },
 
   /* Chips */
+  /* My Bar entry point. Same surface + hairline as the other cards on this
+     screen, so it reads as a place rather than a banner. */
+  barLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    marginTop: space.lg,
+    paddingHorizontal: space.lg,
+    paddingVertical: space.md,
+    minHeight: 56,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    borderRadius: radius.lg,
+  },
+  barLinkText: { flex: 1 },
+  barLinkTitle: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.body.fontSize,
+    color: colors.text,
+  },
+  barLinkBody: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    color: colors.textMuted,
+    marginTop: 1,
+  },
+
   chipScroll: {
     // Bleeds past the list padding so the row can scroll edge to edge.
     marginHorizontal: -GRID_PAD,
