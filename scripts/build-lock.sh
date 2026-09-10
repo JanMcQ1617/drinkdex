@@ -36,12 +36,33 @@ set -euo pipefail
 LOCK_DIR="/tmp/drinkdex-build.lock"
 OWNER_FILE="$LOCK_DIR/owner"
 
-# The CALLER's shell, not this script — $$ dies the moment this exits, which
-# would make every lock instantly look stale. $PPID is the shell running the
-# acquire/build/release sequence, so its liveness is a real signal.
-CALLER_PID="$PPID"
+# WHAT MAKES A LOCK STALE IS NOT A PID.
+#
+# The first version of this recorded $PPID and treated "owner still alive" as
+# "lock still valid". It broke immediately, on its own documented workflow:
+# $PPID is not stable across invocations from one shell, because bash may
+# exec the last command of a subshell in place rather than forking. acquire
+# recorded one pid, release ran under another, and the script refused to
+# release a lock it had taken four lines earlier — then called it stale.
+#
+# So ask about the RESOURCE instead of about a process tree. The thing being
+# protected is "an xcodebuild is working in this repo", and that is directly
+# observable. A lock is stale when no xcodebuild is running and it has sat
+# there longer than a build could plausibly take to start.
+GRACE_SECONDS=300
 
-alive() { kill -0 "$1" 2>/dev/null; }
+xcodebuild_running() { pgrep -x xcodebuild >/dev/null 2>&1; }
+
+lock_age() {
+  local mtime now
+  mtime=$(stat -f %m "$LOCK_DIR" 2>/dev/null) || return 1
+  now=$(date +%s)
+  echo $(( now - mtime ))
+}
+
+stamp() {
+  printf '%s|%s|%s\n' "$1" "$$" "$(date '+%Y-%m-%d %H:%M:%S')" > "$OWNER_FILE"
+}
 
 read_owner() {
   [ -f "$OWNER_FILE" ] || return 1
@@ -53,28 +74,30 @@ case "${1:-status}" in
   acquire)
     WHO="${2:-unnamed}"
     if mkdir "$LOCK_DIR" 2>/dev/null; then
-      printf '%s|%s|%s\n' "$WHO" "$CALLER_PID" "$(date '+%Y-%m-%d %H:%M:%S')" > "$OWNER_FILE"
-      echo "acquired by $WHO"
-      exit 0
+      stamp "$WHO"; echo "acquired by $WHO"; exit 0
     fi
 
-    # Someone holds it — or something did, and died mid-build. A build killed
-    # by a closed laptop leaves the directory behind with nothing running.
-    if ! read_owner; then
-      echo "lock directory exists but has no owner file — reclaiming" >&2
-      printf '%s|%s|%s\n' "$WHO" "$CALLER_PID" "$(date '+%Y-%m-%d %H:%M:%S')" > "$OWNER_FILE"
-      echo "acquired by $WHO"
-      exit 0
-    fi
+    read_owner || { LOCK_WHO="someone"; LOCK_AT="unknown"; }
+    AGE=$(lock_age || echo 0)
 
-    if alive "$LOCK_PID"; then
-      echo "BUSY — held by $LOCK_WHO (pid $LOCK_PID) since $LOCK_AT" >&2
+    # A build is genuinely in progress.
+    if xcodebuild_running; then
+      echo "BUSY — held by $LOCK_WHO since $LOCK_AT, and xcodebuild is running" >&2
       exit 1
     fi
 
-    echo "stale lock from $LOCK_WHO (pid $LOCK_PID, dead) since $LOCK_AT — reclaiming" >&2
-    printf '%s|%s|%s\n' "$WHO" "$CALLER_PID" "$(date '+%Y-%m-%d %H:%M:%S')" > "$OWNER_FILE"
-    echo "acquired by $WHO"
+    # Nothing running, but the lock is young: a caller took it and has not
+    # reached its xcodebuild yet. Taking it now is the race the lock exists
+    # to prevent.
+    if [ "$AGE" -lt "$GRACE_SECONDS" ]; then
+      echo "BUSY — held by $LOCK_WHO since $LOCK_AT (${AGE}s ago, build not started yet)" >&2
+      exit 1
+    fi
+
+    # Old, and nothing is building: whatever held this is gone. A laptop
+    # closed mid-archive leaves exactly this.
+    echo "stale lock from $LOCK_WHO since $LOCK_AT (${AGE}s, no xcodebuild) — reclaiming" >&2
+    stamp "$WHO"; echo "acquired by $WHO"
     ;;
 
   release)
@@ -82,13 +105,12 @@ case "${1:-status}" in
       echo "not held — nothing to release"
       exit 0
     fi
-    # Refusing a foreign release cannot strand anything: the owner's pid dying
-    # is what makes a lock stale, and acquire reclaims a stale one on sight.
-    if read_owner && [ "$LOCK_PID" != "$CALLER_PID" ] && alive "$LOCK_PID" \
-       && [ "${2:-}" != "--force" ]; then
-      echo "refusing — held by $LOCK_WHO (pid $LOCK_PID), not you (pid $CALLER_PID)." >&2
-      echo "Pass --force only if you are certain that build is finished." >&2
-      exit 1
+    # Unconditional. There is no reliable way to tell "the caller who
+    # acquired this" from "another shell in the same session", and guessing
+    # wrong strands the lock — which is worse than releasing early, since a
+    # released lock only costs the next caller a wait.
+    if read_owner && xcodebuild_running && [ "${2:-}" != "--force" ]; then
+      echo "warning: releasing $LOCK_WHO's lock while an xcodebuild is still running" >&2
     fi
     rm -rf "$LOCK_DIR"
     echo "released"
@@ -98,10 +120,13 @@ case "${1:-status}" in
     if [ ! -d "$LOCK_DIR" ]; then
       echo "free"
     elif read_owner; then
-      if alive "$LOCK_PID"; then
-        echo "held by $LOCK_WHO (pid $LOCK_PID) — owner alive, since $LOCK_AT"
+      AGE=$(lock_age || echo 0)
+      if xcodebuild_running; then
+        echo "held by $LOCK_WHO since $LOCK_AT — xcodebuild running"
+      elif [ "$AGE" -lt "$GRACE_SECONDS" ]; then
+        echo "held by $LOCK_WHO since $LOCK_AT — no xcodebuild yet (${AGE}s)"
       else
-        echo "held by $LOCK_WHO (pid $LOCK_PID) — OWNER DEAD, stale since $LOCK_AT"
+        echo "held by $LOCK_WHO since $LOCK_AT — STALE (${AGE}s, no xcodebuild)"
       fi
     else
       echo "held, but the owner file is missing — stale"
