@@ -4,6 +4,8 @@
     "slug": "drinkdex",
     "version": "1.0.0",
     "runtimeVersion": { "policy": "fingerprint" },
+    "owner": "the-idealize",
+    "updates": { "url": "https://u.expo.dev/d45e5a60-57d3-4bfb-9c61-7f5f34284184" },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
@@ -111,6 +113,9 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": { "projectId": "d45e5a60-57d3-4bfb-9c61-7f5f34284184" }
     }
   }
 }
