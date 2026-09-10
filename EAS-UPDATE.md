@@ -34,9 +34,9 @@ y ese solo existe después de `eas init`. No se inventa a mano.
 `expo-updates` trae código nativo, así que el binario que hay hoy en el
 teléfono NO sabe buscar updates. Hace falta un build más:
 
-    /tmp/drinkdex-build-lock.sh acquire "eas update setup"
+    scripts/build-lock.sh acquire "eas update setup"
     scripts/build-ios.sh device
-    /tmp/drinkdex-build-lock.sh release
+    scripts/build-lock.sh release
 
 Ese es el último que necesita cable. De ahí en adelante:
 

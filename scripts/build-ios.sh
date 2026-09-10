@@ -14,9 +14,9 @@
 # Xcode build lock, which lives inside the shared node_modules and is not
 # isolated by git worktrees:
 #
-#     /tmp/drinkdex-build-lock.sh acquire "who you are"
+#     scripts/build-lock.sh acquire "who you are"
 #     scripts/build-ios.sh device
-#     /tmp/drinkdex-build-lock.sh release
+#     scripts/build-lock.sh release
 #
 # The `pgrep` guard below is NOT a substitute. It is check-then-act: two
 # builds started within the same prebuild window both see a clear machine
@@ -24,8 +24,10 @@
 # handles coordination, so nobody looks for the lock — which is exactly how
 # two sessions each waited 26 minutes behind a third that had not taken it.
 #
-# The lock lives in /tmp because it is machine state, not repo state. It
-# does not survive a reboot; recreate it if it is missing.
+# The lock DIRECTORY lives in /tmp because it is machine state and should
+# die with the machine. The SCRIPT lives in scripts/ because on 9 Sep 2026
+# the old /tmp copy was gone — macOS reaps /tmp after ~3 idle days — and an
+# archive ran unprotected while `acquire` failed silently.
 #
 # IF THE INSTALL FAILS, DO NOT REBUILD. The build and the install are
 # separate legs and they fail for unrelated reasons. A dropped tunnel looks
