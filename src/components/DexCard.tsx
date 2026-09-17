@@ -77,10 +77,11 @@ import type { Drink } from '@/types';
 /* direction. Keeping a quarter of the chroma and pushing contrast back  */
 /* up holds each drink apart while the gap to full colour stays obvious. */
 /*                                                                      */
-/* The veil stays, at a fraction of its old weight, because pure         */
-/* greyscale on a bone page reads cold and digital. `lockInk` is         */
-/* espresso, so a thin pass of it warms the grey into something closer   */
-/* to a sepia plate, which is in the palette rather than beside it.      */
+/* THE ESPRESSO VEIL IS GONE. A second scrim View used to sit over the   */
+/* greyscale to warm it toward sepia. Two layers were saying one thing,  */
+/* and with the name no longer in a tinted trough the card had to carry  */
+/* less treatment overall, not more. Greyscale alone still opens a wide  */
+/* gap — checked against a collected card in the same frame.             */
 /*                                                                      */
 /* Once you log a pour, YOUR photo takes over as the face — the card     */
 /* becomes a record of the one you actually drank. The stock photograph  */
@@ -94,12 +95,17 @@ import type { Drink } from '@/types';
 const ART_ASPECT = 112 / 100;
 
 /**
- * Height the nameplate reserves at the foot of the card.
+ * Minimum height the name overlay occupies at the foot of the card.
  *
- * The photo stops here rather than running under the plate: cover-cropping a
- * square source into the full 0.72 card would push the vessel's base behind
- * the nameplate. Ending at the plate leaves the container near-square, so the
- * crop takes a few points off the sides and the whole drink stays visible.
+ * It used to be the height the photo STOPPED at, so a square source cropped
+ * into a near-square box and the whole drink stayed visible. The photo now
+ * fills the full 0.72 cell, which does crop top and bottom — the old note
+ * warned this would hide the vessel's base behind the plate.
+ *
+ * Checked rather than assumed: against the real photographs the glasses keep
+ * their bases, because the drink is centred in a square frame with headroom
+ * above and below. If a future photo set crops badly, the fix is the source
+ * framing, not reinstating a 38pt band across every card.
  */
 const NAMEPLATE_MIN = 38;
 
@@ -184,6 +190,7 @@ export const DexCard = React.memo(function DexCard({
    * so keying by category alone would let a collected card and an empty one
    * of the same category resolve to whichever mounted last.
    */
+  const washId = `nameWash-${drink.id}`;
   const fieldId = `dexField-${drink.id}-${collected ? 'c' : 'e'}`;
 
   return (
@@ -245,21 +252,10 @@ export const DexCard = React.memo(function DexCard({
               cachePolicy="memory-disk"
             />
           </View>
-          {shadowed ? <View pointerEvents="none" style={[styles.photo, styles.photoScrim]} /> : null}
         </>
       ) : null}
 
-      {/* The lit lip along the top edge — what makes a recess read as cut in. */}
-      {collected ? null : <View pointerEvents="none" style={styles.wellLip} />}
-
       {legendary && !reduced ? <FoilSweep width={cardWidth} /> : null}
-
-      {/* ---- Dex number plate ---- */}
-      <View style={[styles.plate, collected ? styles.plateLit : styles.plateSunk]}>
-        <Text style={[styles.plateText, !collected && styles.plateTextSunk]}>
-          {formatDexNumber(drink.dexNumber)}
-        </Text>
-      </View>
 
       {/* ---- Rarity / lock marker ---- */}
       <View style={styles.marker} pointerEvents="none">
@@ -284,8 +280,29 @@ export const DexCard = React.memo(function DexCard({
         </View>
       )}
 
-      {/* ---- Nameplate ---- */}
-      <View style={[styles.nameplate, collected ? styles.nameplateLit : styles.nameplateSunk]}>
+      {/* ---- Name ---- */}
+      {/*
+        A second Svg rather than another Rect on the field one above: that Svg
+        is painted UNDER the photograph, and this wash has to sit over it. It
+        is one extra node per RENDERED cell, not per entry — the grid is
+        virtualised, so the cost is bounded by what fits on screen.
+
+        The gradient is its own layer rather than a background on the text
+        container, because a View background cannot fade, and a hard-edged
+        fill is exactly the trough this replaces.
+      */}
+      <Svg style={styles.nameWash} pointerEvents="none">
+        <Defs>
+          <LinearGradient id={washId} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={colors.surface} stopOpacity="0" />
+            <Stop offset="0.55" stopColor={colors.surface} stopOpacity="0.72" />
+            <Stop offset="1" stopColor={colors.surface} stopOpacity="0.94" />
+          </LinearGradient>
+        </Defs>
+        <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${washId})`} />
+      </Svg>
+      <View style={styles.nameplate}>
+        <Text style={styles.numberLine}>{formatDexNumber(drink.dexNumber)}</Text>
         <Text numberOfLines={2} style={[styles.name, !collected && styles.nameEmpty]}>
           {drink.name}
         </Text>
@@ -312,15 +329,6 @@ const styles = StyleSheet.create({
     borderColor: colors.slotBorder,
   },
 
-  /* Recess */
-  wellLip: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 1,
-    backgroundColor: colors.embossShadow,
-  },
 
   /* Photograph */
   /*
@@ -356,21 +364,19 @@ const styles = StyleSheet.create({
   },
   /** Fills the filter wrapper; the wrapper owns the position. */
   photoFill: { width: '100%', height: '100%' },
-  photoScrim: {
-    /*
-     * A quarter of its old weight. It is no longer what says "not yours" —
-     * greyscale does that — so all this has left to do is warm the grey
-     * back toward the palette and sink it a touch below the page.
-     */
-    backgroundColor: colors.lockInk,
-    opacity: 0.18,
-  },
   photo: {
+    /*
+     * Fills the whole cell. It used to stop NAMEPLATE_MIN short so the tinted
+     * nameplate could have its own strip of card — the photograph was being
+     * cropped to make room for a caption trough. The name now sits over the
+     * image on a light gradient, so the picture gets those 38pt back and the
+     * cell reads as a photograph rather than a photograph-and-a-label.
+     */
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: NAMEPLATE_MIN,
+    bottom: 0,
   },
 
   /* Foil */
@@ -381,47 +387,6 @@ const styles = StyleSheet.create({
     left: 0,
   },
 
-  /* Dex plate */
-  plate: {
-    position: 'absolute',
-    top: space.sm,
-    left: space.sm,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    borderRadius: radius.sm,
-    borderWidth: StyleSheet.hairlineWidth,
-    zIndex: 1,
-  },
-  plateLit: {
-    backgroundColor: glass.fillStrong,
-    borderColor: colors.embossLight,
-  },
-  plateSunk: {
-    /*
-     * A bone plaque, not the recess floor. The Sipply muted ink clears
-     * 4.5:1 on bone (4.88) but only reaches 4.04 on `slotDeep`, so the
-     * plate is the lighter object sitting IN the well rather than a
-     * darker patch of it — which is also how a real engraved plate reads.
-     */
-    backgroundColor: colors.cardAlt,
-    borderColor: colors.slotBorder,
-  },
-  plateText: {
-    /*
-     * The catalogue number is now the brand's letterspaced label — Inter
-     * Medium, tracked out, tabular so the digits hold a column down the
-     * grid. 2pt at 9px is the label style pulled in slightly so six
-     * characters still fit the plate.
-     */
-    fontFamily: fonts.label,
-    fontSize: 9,
-    letterSpacing: 2,
-    color: colors.textMuted,
-    ...tabular,
-  },
-  plateTextSunk: {
-    color: colors.textMuted,
-  },
 
   /* Marker */
   marker: {
@@ -448,24 +413,45 @@ const styles = StyleSheet.create({
   },
 
   /* Nameplate */
+  nameWash: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    /* Taller than the text so the fade begins well above it and never reads
+       as a band with an edge. */
+    height: NAMEPLATE_MIN * 2,
+  },
   nameplate: {
+    /*
+     * An overlay, not a bar. It was a filled strip with a hairline along its
+     * top — a caption trough, in two tints, across every one of 7,653 cells.
+     * What is left is the text over a light gradient painted on the card.
+     *
+     * The gradient goes to WHITE rather than to ink, so one treatment serves
+     * both grounds: over a photograph it lifts the bottom edge until dark
+     * text clears comfortably, and over the vector field — already a pale
+     * tint — it is nearly invisible. Fading to ink would have required light
+     * text, which the vector cards could not carry.
+     */
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
     minHeight: NAMEPLATE_MIN,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     paddingHorizontal: space.sm,
-    paddingVertical: space.xs,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingBottom: space.sm,
+    gap: 1,
   },
-  nameplateLit: {
-    backgroundColor: glass.fillStrong,
-    borderTopColor: colors.embossLight,
-  },
-  nameplateSunk: {
-    backgroundColor: colors.cardAlt,
-    borderTopColor: colors.slotBorder,
+  /* The catalogue number sits above the name here rather than in a bordered
+     plate of its own in the corner. */
+  numberLine: {
+    fontFamily: fonts.label,
+    fontSize: 9,
+    letterSpacing: 2,
+    color: colors.textMuted,
+    ...tabular,
   },
   name: {
     fontFamily: fonts.displayBold,
