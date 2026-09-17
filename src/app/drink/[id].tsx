@@ -120,6 +120,7 @@ const HERO_FOIL_WIDTH = 420;
 /* Small in-file components                                             */
 /* ==================================================================== */
 
+/** Two-up fact tile. Used by ServePanel for Temp/Glass. */
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.statCard}>
@@ -128,6 +129,32 @@ function StatCard({ label, value }: { label: string; value: string }) {
         {value}
       </Text>
     </View>
+  );
+}
+
+/*
+ * The facts line — ABV, origin, glass — as one wrapping sentence rather than
+ * three bordered cards.
+ *
+ * As cards they were three white panels with three letterspaced-caps labels,
+ * and the third clipped its own content: "Highball glass with…". A container
+ * that truncates the thing it exists to show is worse than no container, and
+ * the label above each value was doing work the value already does — nobody
+ * reads "8–10%" and wonders which field it is.
+ *
+ * Set as text it wraps instead of clipping, drops three borders and three
+ * caps labels, and reads the way a wine app states a vintage.
+ */
+function FactsLine({ facts }: { facts: string[] }) {
+  return (
+    <Text style={styles.facts}>
+      {facts.map((f, i) => (
+        <Text key={f}>
+          {i > 0 ? <Text style={styles.factsDot}>{'   ·   '}</Text> : null}
+          {f}
+        </Text>
+      ))}
+    </Text>
   );
 }
 
@@ -600,31 +627,6 @@ export default function DrinkDetailScreen() {
           { paddingTop: insets.top + space.md, paddingBottom: Math.max(insets.bottom, space.xl) + 48 },
         ]}
         showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <PressableScale
-          onPress={() => router.back()}
-          style={styles.backButton}
-          accessibilityRole="button"
-          accessibilityLabel="Go back">
-          {/*
-           * Same material as the tab bar. It was a flat outlined circle,
-           * which read as a different design language from the bar the
-           * user just came from — one app should be made of one substance.
-           */}
-          <GlassCircle size={44}>
-            <Icon name="chevronLeft" size={22} color={colors.text} />
-          </GlassCircle>
-        </PressableScale>
-
-        <Animated.View entering={enter(0)}>
-          <Text style={styles.dexLine}>
-            <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
-            {'  ·  '}
-            {drink.subcategory.toUpperCase()}
-          </Text>
-          <Text style={styles.name}>{drink.name}</Text>
-        </Animated.View>
-
         {/*
           Always full color here, even before logging: you're on this
           screen to make the drink, and the color tells you what you're
@@ -649,7 +651,23 @@ export default function DrinkDetailScreen() {
             // that framed the 150pt vector would only band the image.
             heroPhoto ? styles.heroPhotoMode : null,
             unlocked && styles.heroUnlocked,
-            unlocked && { borderColor: rarityMeta.edge, borderWidth: rarityMeta.edgeWidth },
+            /*
+             * The rarity tier as a bottom RULE, not a frame.
+             *
+             * It was a border on all four sides, which worked while the hero
+             * was an inset panel and became a coloured stripe hugging the
+             * screen edges the moment the photograph went full bleed. The
+             * tier still has to read — it is the collection payoff, and
+             * legendary earns its gilt — so the frame collapses to the one
+             * edge that still exists: where the photo meets the page.
+             *
+             * Widths keep the existing ladder, thickened so a 1pt hairline
+             * does not vanish against a photograph.
+             */
+            unlocked && {
+              borderBottomColor: rarityMeta.edge,
+              borderBottomWidth: rarityMeta.edgeWidth + 2,
+            },
             !unlocked && styles.heroLocked,
           ]}
           accessible
@@ -694,20 +712,47 @@ export default function DrinkDetailScreen() {
           ) : (
             <DrinkArt drink={drink} size={150} />
           )}
-          {unlocked ? null : <Text style={styles.heroCaption}>Not yet logged</Text>}
+        </Animated.View>
+
+        {/*
+          Back button, floating over the photograph rather than sitting above
+          it in the flow. It was pushing the hero a full row down the screen
+          to hold a 44pt circle.
+        */}
+        <PressableScale
+          onPress={() => router.back()}
+          style={[styles.backButton, { top: insets.top + space.sm }]}
+          accessibilityRole="button"
+          accessibilityLabel="Go back">
+          <GlassCircle size={44}>
+            <Icon name="chevronLeft" size={22} color={colors.text} />
+          </GlassCircle>
+        </PressableScale>
+
+        {/*
+          Title UNDER the photograph now, not above it.
+
+          The name above a framed picture is a caption layout — it makes the
+          photo an illustration of the heading. Under it, the photo is the
+          subject and the name identifies it, which is how Vivino, and every
+          wine label, orders the same two elements.
+        */}
+        <Animated.View entering={enter(0)} style={styles.titleBlock}>
+          <Text style={styles.dexLine}>
+            <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
+            {'  ·  '}
+            {drink.subcategory.toUpperCase()}
+          </Text>
+          <Text style={styles.name}>{drink.name}</Text>
+          <FactsLine
+            facts={[drink.abv, drink.origin, drink.glassware ?? '—'].filter(Boolean)}
+          />
         </Animated.View>
 
         {/* Meta row */}
         <Animated.View entering={enter(140)} style={styles.metaRow}>
           <CategoryPill category={drink.category} />
           <RarityBadge rarity={drink.rarity} />
-        </Animated.View>
-
-        {/* Basic facts — visible whether or not the entry is logged */}
-        <Animated.View entering={enter(200)} style={styles.statRow}>
-          <StatCard label="ABV" value={drink.abv} />
-          <StatCard label="Origin" value={drink.origin} />
-          <StatCard label="Glass" value={drink.glassware ?? '—'} />
         </Animated.View>
 
         {/*
@@ -930,15 +975,11 @@ const styles = StyleSheet.create({
 
   /* Header */
   backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.pill,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    marginBottom: space.lg,
+    /* Floats over the photograph; `top` is set at the call site from the
+       safe-area inset. Left matches the page gutter it no longer sits in. */
+    position: 'absolute',
+    left: space.xl,
+    zIndex: 2,
   },
   dexLine: {
     /* The brand's letterspaced sub-label, above the name. */
@@ -971,22 +1012,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: space.sm,
     paddingVertical: space.xl,
-    /* Photographs carry the handoff's 16pt radius wherever they appear. */
-    borderRadius: radius.lg,
-    borderWidth: 1,
     backgroundColor: colors.surface,
     marginBottom: space.lg,
-    // Clips the category field and the legendary foil to the rounded corners.
+    /*
+     * FULL BLEED. The scroll content carries a 24pt gutter; the hero cancels
+     * it on both sides and above, so the photograph runs to the screen edges
+     * and up under the status bar.
+     *
+     * It used to sit inset inside a 16pt-radius, 1pt-bordered white panel on
+     * cream — a picture of a drink, framed and hung. Vivino, and every app
+     * whose subject is a photograph, lets the image be the surface instead of
+     * an object placed on one. There is nothing left to round off or outline
+     * once it reaches the edges.
+     */
+    marginHorizontal: -space.xl,
+    marginTop: -space.md,
+    // Still clips the category field and the legendary foil.
     overflow: 'hidden',
   },
   heroUnlocked: {
-    // borderColor/Width come from the entry's rarity tier at the call site.
-    ...elevation.card,
+    /*
+     * No shadow. elevation.card lifted the hero off the page when it was a
+     * panel with corners; a block that runs to all three edges has nothing
+     * to cast onto. The rarity rule at the call site is the whole treatment
+     * now.
+     */
   },
-  heroLocked: {
-    borderColor: colors.cardBorder,
-    borderStyle: 'dashed',
-  },
+  /*
+   * Locked entries no longer get a dashed frame and a "NOT YET LOGGED" caps
+   * caption. The dashes read as a coupon, and the caption repeated what the
+   * card eight rows below already says in a full sentence — two elements
+   * announcing the same absence, in the loudest typography on the screen.
+   *
+   * Kept as an empty style so the call site's `!unlocked &&` branch stays
+   * legible next to `unlocked &&` rather than becoming a lone conditional.
+   */
+  heroLocked: {},
   heroPhotoMode: {
     paddingVertical: 0,
     gap: 0,
@@ -1001,13 +1062,18 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
   },
-  heroCaption: {
-    fontFamily: fonts.label,
-    fontSize: typeScale.micro.fontSize,
-    letterSpacing: 2.6,
-    textTransform: 'uppercase',
-    color: colors.taupeInk,
+  titleBlock: { marginBottom: space.lg },
+
+  facts: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight + 2,
+    color: colors.textMuted,
+    marginTop: space.xs,
   },
+  /* The separator sits lighter than the facts so the row reads as items
+     rather than as one run-on string. */
+  factsDot: { color: colors.textFaint },
 
   /* Meta */
   metaRow: {
@@ -1022,6 +1088,9 @@ const styles = StyleSheet.create({
     gap: space.sm,
     marginTop: space.md,
   },
+  /* Still used by ServePanel's Temp/Glass pair — only the drink's own three
+     facts moved out to FactsLine. Two of these side by side read fine; three
+     of them, one of which clipped its value, did not. */
   statCard: {
     flex: 1,
     backgroundColor: colors.card,
