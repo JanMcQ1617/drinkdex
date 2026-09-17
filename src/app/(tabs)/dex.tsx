@@ -490,7 +490,7 @@ export default function DexScreen() {
           <Text style={styles.barLinkTitle}>My Bar</Text>
           <Text style={styles.barLinkBody} numberOfLines={1}>
             {barCount > 0
-              ? `${barCount} ${barCount === 1 ? 'drink' : 'drinks'} you can make right now`
+              ? `${barCount} ${barCount === 1 ? 'drink' : 'drinks'} you can make now`
               : 'Tick what you own, see what you can pour'}
           </Text>
         </View>
@@ -766,9 +766,17 @@ const styles = StyleSheet.create({
   },
   barLinkBody: {
     fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    /*
+     * A step down from caption, because this line shares its row with a
+     * 18pt icon, a chevron and two gaps — at caption size the empty state
+     * clipped to "Tick what you own, see what you can …", losing the half
+     * that says what the feature is for. Shrinking the type rather than
+     * cutting the sentence keeps the promise intact.
+     */
+    fontSize: typeScale.micro.fontSize,
+    lineHeight: typeScale.micro.lineHeight,
     color: colors.textMuted,
-    marginTop: 1,
+    marginTop: 2,
   },
 
   chipScroll: {

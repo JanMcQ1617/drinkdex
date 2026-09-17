@@ -364,7 +364,19 @@ const styles = StyleSheet.create({
    * be judged rather than assumed. They have NOT been seen on a device.
    */
   photoLocked: {
-    filter: 'grayscale(0.75) brightness(0.99) contrast(1.1)',
+    /*
+     * 0.85, up from 0.75. The espresso veil that used to sit over this was
+     * removed so one mechanism carries the state — which left the locked
+     * card closer to full colour than intended. Raising greyscale puts the
+     * gap back without reintroducing a second layer.
+     *
+     * NOT 1.0: full greyscale deletes these drinks. They are studio shots on
+     * a neutral backdrop, so the subject lives in chroma rather than
+     * luminance, and at 1.0 a Caesar, a Greyhound and a Brandy Alexander
+     * collapse into the same taupe rectangle. A sixth of the colour left,
+     * with contrast pushed up, holds them apart.
+     */
+    filter: 'grayscale(0.85) brightness(0.99) contrast(1.12)',
   },
   /** Fills the filter wrapper; the wrapper owns the position. */
   photoFill: { width: '100%', height: '100%' },
