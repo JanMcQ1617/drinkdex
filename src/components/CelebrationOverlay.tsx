@@ -235,10 +235,9 @@ const styles = StyleSheet.create({
   body: { alignItems: 'center', padding: space.xl },
 
   eyebrow: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 11,
-    letterSpacing: 1.8,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.textMuted,
     marginBottom: space.lg,
   },

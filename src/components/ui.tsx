@@ -463,10 +463,9 @@ const styles = StyleSheet.create({
   },
   dot: { width: 6, height: 6, borderRadius: 3 },
   badgeText: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 11,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
   },
 
   avatarOuter: { alignItems: 'center', justifyContent: 'center' },
@@ -487,6 +486,19 @@ const styles = StyleSheet.create({
      * The brand's letterspaced sub-label: Inter Medium, uppercase, tracked
      * to 0.3em, in taupe. `taupeInk` rather than `taupe` because this one
      * lands on the light page, where raw taupe is 1.85:1 and decorative.
+     *
+     * THE ONLY UPPERCASE ROLE LEFT IN THE APP, deliberately. Letterspaced
+     * caps were also on tab labels, form field labels, category and rarity
+     * badges, stat labels, the dex eyebrow, celebration eyebrows, wine style
+     * tags and the locked-card caption — nine more places. Used everywhere it
+     * stops being a device and becomes a tic, and it is the habit that most
+     * makes an interface look machine-designed.
+     *
+     * Section headings keep it because they are structure rather than
+     * content: they name a region of the page, they are never read as a
+     * value, and small caps above a rule is an editorial convention that
+     * suits Playfair and wine. If a new label wants uppercase, the question
+     * is whether it is a section heading. If it is not, it is sentence case.
      */
     fontFamily: fonts.label,
     fontSize: labelType.ui.fontSize,

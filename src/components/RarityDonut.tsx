@@ -184,10 +184,9 @@ const styles = StyleSheet.create({
     ...tabular,
   },
   caption: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 10,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.textFaint,
   },
 

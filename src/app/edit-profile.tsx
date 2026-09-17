@@ -352,10 +352,9 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 11,
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.textMuted,
     marginTop: space.lg,
     marginBottom: space.sm,

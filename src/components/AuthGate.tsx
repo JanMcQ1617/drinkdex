@@ -462,10 +462,9 @@ const styles = StyleSheet.create({
 
   field: { gap: 6 },
   fieldLabel: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 12,
-    letterSpacing: 2.6,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.textMuted,
   },
   inputWrap: { justifyContent: 'center' },

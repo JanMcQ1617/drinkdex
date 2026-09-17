@@ -561,10 +561,9 @@ const styles = StyleSheet.create({
   },
   rowMeta: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   styleTag: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     ...typeScale.micro,
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
   },
   tierText: {
     flex: 1,

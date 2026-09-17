@@ -741,7 +741,7 @@ export default function DrinkDetailScreen() {
           <Text style={styles.dexLine}>
             <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
             {'  ·  '}
-            {drink.subcategory.toUpperCase()}
+            {drink.subcategory}
           </Text>
           <Text style={styles.name}>{drink.name}</Text>
           <FactsLine
@@ -1102,10 +1102,9 @@ const styles = StyleSheet.create({
     gap: space.xs,
   },
   statLabel: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 11,
-    letterSpacing: 2.6,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.taupeInk,
   },
   statValue: {
@@ -1134,10 +1133,9 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   miniLabel: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 11,
-    letterSpacing: 2.6,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.taupeInk,
   },
 
@@ -1224,10 +1222,9 @@ const styles = StyleSheet.create({
     gap: space.xs,
   },
   componentLabel: {
-    fontFamily: fonts.label,
+    fontFamily: fonts.bodyMedium,
     fontSize: 11,
-    letterSpacing: 2.6,
-    textTransform: 'uppercase',
+    letterSpacing: 0.2,
     color: colors.giltInk,
   },
   componentDetail: {
