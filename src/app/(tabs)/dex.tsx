@@ -14,7 +14,6 @@ import Animated, {
   FadeIn,
   FadeOut,
   interpolate,
-  interpolateColor,
   runOnJS,
   type SharedValue,
   useAnimatedReaction,
@@ -88,8 +87,6 @@ function FilterChip({
   detail,
   selected,
   accent,
-  wash,
-  dot,
   accessibilityLabel,
   onPress,
 }: {
@@ -98,10 +95,6 @@ function FilterChip({
   selected: boolean;
   /** Text and border once selected. Defaults to wine ink. */
   accent?: string;
-  /** Fill once selected. Defaults to the wine wash. */
-  wash?: string;
-  /** Category swatch — carries the color the old chips got from an emoji. */
-  dot?: string;
   accessibilityLabel: string;
   onPress: () => void;
 }) {
@@ -124,12 +117,11 @@ function FilterChip({
     reduced ? (selected ? 1 : 0) : withSpring(selected ? 1 : 0, motion.selection),
   );
 
-  const washStyle = useAnimatedStyle(() => ({
+  /* Grows from the centre so the rule reads as arriving under the word it
+     belongs to rather than sliding in from one side. */
+  const ruleStyle = useAnimatedStyle(() => ({
     opacity: p.value,
-    transform: [{ scale: 0.9 + 0.1 * p.value }],
-  }));
-  const borderStyle = useAnimatedStyle(() => ({
-    borderColor: interpolateColor(p.value, [0, 1], [colors.cardBorder, activeFg]),
+    transform: [{ scaleX: 0.4 + 0.6 * p.value }],
   }));
 
   return (
@@ -142,14 +134,20 @@ function FilterChip({
       accessibilityState={{ selected }}
       accessibilityLabel={accessibilityLabel}
       style={styles.chip}>
-      <Animated.View style={[styles.chipBorder, borderStyle]} pointerEvents="none" />
-      <Animated.View
-        pointerEvents="none"
-        style={[styles.chipWash, { backgroundColor: wash ?? colors.wineWash }, washStyle]}
-      />
-      {dot ? <View style={[styles.chipDot, { backgroundColor: dot }]} /> : null}
       <Text style={[styles.chipLabel, { color: fg }]}>{label}</Text>
       {detail ? <Text style={styles.chipDetail}>{detail}</Text> : null}
+      {/*
+        The selected state is a rule under the label, not a filled pill.
+        Five bordered, washed, dotted pills in a row was the busiest element
+        on the screen and the least important — it is a filter, not content.
+        Vivino's equivalent (Styles / Regions / Grapes) is plain text with an
+        underline, which is also what lets the row hold two axes without
+        looking like ten competing buttons.
+      */}
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.chipRule, { backgroundColor: activeFg }, ruleStyle]}
+      />
     </PressableScale>
   );
 }
@@ -421,8 +419,39 @@ export default function DexScreen() {
 
   const header = (
     <View>
-      <Text style={styles.title}>The Dex</Text>
-      <Text style={styles.subtitle}>Every pour you have met, kept in one place.</Text>
+      {/*
+        Title and search share a row. Search was a 48pt bordered field on a
+        line of its own, and the subtitle below the title — "Every pour you
+        have met, kept in one place" — restated the screen's name at body
+        size. Between them they cost about 90pt above the fold on a screen
+        where the first drink already sat 409pt down, half the display.
+      */}
+      <View style={styles.titleRow}>
+        <Text style={styles.title}>The Dex</Text>
+        <View style={styles.searchWrap}>
+          <Icon name="search" size={16} color={colors.textFaint} />
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search"
+            placeholderTextColor={colors.textFaint}
+            autoCorrect={false}
+            autoCapitalize="none"
+            returnKeyType="search"
+            style={styles.searchInput}
+            accessibilityLabel="Search drinks by name or style"
+          />
+          {query.length > 0 ? (
+            <PressableScale
+              onPress={() => setQuery('')}
+              accessibilityRole="button"
+              accessibilityLabel="Clear search"
+              hitSlop={8}>
+              <Icon name="close" size={15} color={colors.textMuted} />
+            </PressableScale>
+          ) : null}
+        </View>
+      </View>
 
       <View style={styles.progressBlock}>
         <View style={styles.progressRow}>
@@ -430,11 +459,6 @@ export default function DexScreen() {
             {formatCount(collected)} of {formatCount(TOTAL)}
           </Text>
           <Text style={styles.progressLabel}>collected</Text>
-          {/* The share, right-aligned against the count — the mockup leads
-              with the fraction and closes the line with the percentage. */}
-          <Text style={styles.progressPct}>
-            {TOTAL > 0 ? Math.round((collected / TOTAL) * 100) : 0}%
-          </Text>
         </View>
         <ProgressBar value={collected} max={TOTAL} />
       </View>
@@ -497,44 +521,20 @@ export default function DexScreen() {
               detail={formatCount(total)}
               selected={region === category}
               accent={meta.color}
-              wash={meta.wash}
-              dot={meta.color}
               accessibilityLabel={`${meta.plural}, ${total} entries`}
               onPress={() => selectRegion(category)}
             />
           );
         })}
-      </ScrollView>
 
-      {/* Search */}
-      <View style={styles.searchWrap}>
-        <View style={styles.searchIcon}>
-          <Icon name="search" size={17} color={colors.textFaint} />
-        </View>
-        <TextInput
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Search the index"
-          placeholderTextColor={colors.textFaint}
-          autoCorrect={false}
-          autoCapitalize="none"
-          returnKeyType="search"
-          style={styles.searchInput}
-          accessibilityLabel="Search drinks by name or style"
-        />
-        {query.length > 0 ? (
-          <PressableScale
-            onPress={() => setQuery('')}
-            accessibilityRole="button"
-            accessibilityLabel="Clear search"
-            style={styles.clearBtn}>
-            <Icon name="close" size={16} color={colors.textMuted} />
-          </PressableScale>
-        ) : null}
-      </View>
-
-      {/* Status */}
-      <View style={styles.statusRow}>
+        {/*
+          The collected/not-yet axis rides the same scroller, behind a rule.
+          It was a third filter row of its own. Two axes in one row needs the
+          divider to work — without it the eye reads seven peers and cannot
+          tell that picking "Beers" and picking "Not yet" are different
+          questions.
+        */}
+        <View style={styles.axisRule} />
         {STATUS_OPTIONS.map((option) => (
           <FilterChip
             key={option.key}
@@ -544,7 +544,9 @@ export default function DexScreen() {
             onPress={() => selectStatus(option.key)}
           />
         ))}
-      </View>
+      </ScrollView>
+
+
 
       <Divider style={styles.headerRule} />
     </View>
@@ -716,13 +718,6 @@ const styles = StyleSheet.create({
     lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
   },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    marginTop: space.xs,
-  },
   progressBlock: {
     marginTop: space.lg,
     gap: space.sm,
@@ -746,13 +741,6 @@ const styles = StyleSheet.create({
   },
   /* marginLeft auto rather than a spacer View — one property instead of
      an element, and it survives the row gaining another child. */
-  progressPct: {
-    marginLeft: 'auto',
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-    ...tabular,
-  },
 
   /* Chips */
   /* My Bar entry point. Same surface + hairline as the other cards on this
@@ -795,34 +783,26 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    minHeight: 40,
-    paddingHorizontal: space.md,
-    borderRadius: radius.pill,
-    backgroundColor: colors.surface,
+    gap: 5,
+    minHeight: 36,
+    paddingHorizontal: space.xs,
+    paddingBottom: 6,
   },
-  // Borde y relleno viven en capas propias para poder animarlos por separado.
-  chipBorder: {
+  chipRule: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
+    left: space.xs,
+    right: space.xs,
     bottom: 0,
-    borderRadius: radius.pill,
-    borderWidth: 1,
+    height: 2,
+    borderRadius: 1,
   },
-  chipWash: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: radius.pill,
-  },
-  chipDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 4,
+  /* Separates the two filter axes sharing the scroller. */
+  axisRule: {
+    width: 1,
+    alignSelf: 'center',
+    height: 16,
+    marginHorizontal: space.sm,
+    backgroundColor: colors.cardBorder,
   },
   chipLabel: {
     fontFamily: fonts.bodySemiBold,
@@ -831,43 +811,40 @@ const styles = StyleSheet.create({
   chipDetail: {
     fontFamily: fonts.numeral,
     fontSize: 10,
-    color: colors.textFaint,
+    /*
+     * textMuted, not textFaint. The per-category count is content — it is
+     * how you learn there are 3,224 beers — and textFaint renders it at
+     * 2.84:1 on this page, under the 4.5:1 floor for text this size. It was
+     * already failing on the old white chip; moving the row onto the page
+     * ground made it marginally worse, so it is corrected here rather than
+     * carried forward. textMuted clears at 5.50:1.
+     */
+    color: colors.textMuted,
     ...tabular,
   },
 
   /* Search */
-  searchWrap: {
+  titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 48,
-    marginTop: space.md,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    backgroundColor: colors.surface,
+    gap: space.md,
   },
-  searchIcon: {
-    paddingLeft: space.md,
-    paddingRight: space.sm,
+  searchWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.xs,
+    minHeight: 36,
+    paddingHorizontal: space.md,
+    borderRadius: radius.pill,
+    backgroundColor: colors.bgSunk,
   },
   searchInput: {
     flex: 1,
     alignSelf: 'stretch',
-    paddingRight: space.sm,
     fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
+    fontSize: typeScale.caption.fontSize,
     color: colors.text,
-  },
-  clearBtn: {
-    width: 44,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  statusRow: {
-    flexDirection: 'row',
-    gap: space.sm,
-    marginTop: space.md,
   },
   headerRule: {
     marginTop: space.xl,
