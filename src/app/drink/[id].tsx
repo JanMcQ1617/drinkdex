@@ -1362,11 +1362,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
+    /*
+     * A bottom sheet's only visible edge is its top one, and
+     * `elevation.sheet` casts UPWARD (-4pt offset) precisely to draw it. The
+     * 1pt border that used to sit here outlined all four sides, three of
+     * which are off-screen, and doubled the shadow on the fourth.
+     */
     backgroundColor: colors.surface,
     borderTopLeftRadius: radius.xl,
     borderTopRightRadius: radius.xl,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
     padding: space.xl,
     paddingTop: space.md,
     ...elevation.sheet,

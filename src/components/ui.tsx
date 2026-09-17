@@ -343,18 +343,34 @@ export function SectionLabel({
   );
 }
 
+/**
+ * A panel on the page.
+ *
+ * ONE EDGE, DRAWN ONCE. This used to be tint plus hairline plus shadow —
+ * three mechanisms separating every one of twenty-one cards from the same
+ * ground. Measured against this palette, the shadow was doing the tint's job
+ * twice: white on cream is 1.114:1 across the whole card edge, and the
+ * shadow's darkest point is 1.115:1 — the same separation, smeared over 8pt
+ * of blur instead of landing on a boundary. The hairline is the only one of
+ * the three contributing something the others do not, a crisp 1pt line at
+ * 1.207:1 against the card face.
+ *
+ * So: tint and hairline stay, the shadow goes. Soft drop shadows under
+ * everything are also the most reliable tell that nobody decided where the
+ * light was coming from.
+ *
+ * The `raised` prop went with it — no caller ever passed it. Surfaces that
+ * genuinely float (the tab bar, sheets) carry their own elevation and are
+ * not Cards.
+ */
 export function Card({
   children,
   style,
-  raised,
 }: {
   children: React.ReactNode;
   style?: ViewStyle | (ViewStyle | false | undefined)[];
-  raised?: boolean;
 }) {
-  return (
-    <View style={[styles.card, raised ? elevation.raised : elevation.card, style]}>{children}</View>
-  );
+  return <View style={[styles.card, style]}>{children}</View>;
 }
 
 export function Divider({ style }: { style?: ViewStyle }) {

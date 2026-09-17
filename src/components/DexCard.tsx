@@ -17,7 +17,6 @@ import { PressableScale } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
-  elevation,
   fonts,
   glass,
   radius,
@@ -204,8 +203,13 @@ export const DexCard = React.memo(function DexCard({
       style={[
         styles.card,
         collected && styles.cardCollected,
+        /*
+         * The rarity edge is the collected card's one separator. It used to
+         * carry a shadow as well — tint, border and lift for a cell already
+         * distinguished from its neighbours by being in full colour beside
+         * greyed ones.
+         */
         collected && { borderColor: rarity.edge, borderWidth: rarity.edgeWidth },
-        collected && elevation.card,
         !collected && styles.cardEmpty,
       ]}>
       {/* ---- Field ---- */}
