@@ -1,12 +1,10 @@
 import { useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
-  useDerivedValue,
   useReducedMotion,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -45,8 +43,6 @@ export const TAB_BAR_CLEARANCE = 84;
 /** Inner horizontal padding of the bar; the pill's track starts here. */
 const BAR_PAD = 6;
 
-/** How far the pill stretches at full travel. 18% reads; 30% is a cartoon. */
-const STRETCH = 0.18;
 
 /*
  * The centre action sits BETWEEN the tabs rather than being one of them.
@@ -155,102 +151,12 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
   const insets = useSafeAreaInsets();
   const reduced = useReducedMotion();
   const router = useRouter();
-  /*
-   * Where each tab ACTUALLY is, reported by layout — not computed.
-   *
-   * This used to derive the pill's position arithmetically: five slots for
-   * four tabs, each (barWidth - padding) / 5, with the pill translated to
-   * slotOf(index) * slotWidth. The arithmetic was self-consistent and the
-   * slot mapping was correct, and the pill still landed in the wrong place
-   * going Dex -> Stats on a device. That is what a disagreement between a
-   * model of the layout and the real layout looks like, and the fix is to
-   * stop keeping a second model: flexbox already knows where it put every
-   * tab, so ask it.
-   *
-   * It also makes the bar indifferent to what sits between the tabs. The
-   * centre action can change width, gain a label, or go away entirely and
-   * the pill still tracks, because nothing here assumes an even pitch.
-   */
-  const [tabs, setTabs] = useState<Record<number, { x: number; w: number }>>({});
-
-  const measureTab = useCallback((i: number, x: number, w: number) => {
-    setTabs((prev) => {
-      const seen = prev[i];
-      // Layout fires on every re-render; bail unless the box actually
-      // moved, or this setState loops forever.
-      if (seen && Math.abs(seen.x - x) < 0.5 && Math.abs(seen.w - w) < 0.5) return prev;
-      return { ...prev, [i]: { x, w } };
-    });
-  }, []);
-
-  const active = tabs[state.index];
-  const measured = active != null;
-
-  /*
-   * A plain number, captured by the worklets below — NOT a shared value.
-   * Writing a shared value during render is exactly what Reanimated warns
-   * about, and it buys nothing here: the babel plugin picks `targetX` up
-   * as a closure dependency, so both worklets re-run the moment the
-   * active index changes.
-   */
-  const targetX = active?.x ?? 0;
-
-  /*
-   * The pill chases the target. useDerivedValue so the spring starts the
-   * moment the index changes — no effect, no extra state, no frame of lag.
-   */
-  const x = useDerivedValue(() =>
-    reduced
-      ? withTiming(targetX, { duration: motion.fast })
-      : withSpring(targetX, motion.selection),
-  );
-
-  /*
-   * Distance still to travel drives the stretch, so it peaks mid-flight
-   * and resolves to exactly 1 when the spring settles. Deriving it from
-   * the lag rather than from a parallel timeline means the two can never
-   * disagree — no stretched pill left behind by an interrupted gesture.
-   */
-  const activeW = active?.w ?? 0;
-
-  const stretch = useDerivedValue(() => {
-    if (reduced || activeW === 0) return 1;
-    const lag = Math.abs(targetX - x.value) / activeW;
-    return 1 + Math.min(lag, 1) * STRETCH;
-  });
-
-  const pillStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: x.value },
-      { scaleX: stretch.value },
-      // Conserve area: a pill that only widens looks inflated.
-      { scaleY: 2 - stretch.value },
-    ],
-  }));
-
   return (
     <View
       pointerEvents="box-none"
       style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) + 2 }]}>
       <GlassSurface cornerRadius={radius.tab} style={styles.bar}>
         <View style={styles.row}>
-          {/*
-            `left: 0` and translate by the measured x. Yoga positions an
-            absolute child from its parent's padding edge, which is the same
-            origin a flex child's reported `x` is relative to — so the two
-            agree without a correction term. The old `left: BAR_PAD + 3`
-            was compensating for an origin it had guessed at.
-
-            Hidden until something has been measured, so it cannot flash at
-            slot zero on the first frame.
-          */}
-          {measured ? (
-            <Animated.View
-              pointerEvents="none"
-              style={[styles.pill, { width: Math.max(activeW - 6, 0), left: 3 }, pillStyle]}
-            />
-          ) : null}
-
           {state.routes.map((route, i) => {
             const options = descriptors[route.key]?.options ?? {};
             const focused = state.index === i;
@@ -263,7 +169,15 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
              * textMuted is 5.98:1 here.
              */
             const color = focused ? colors.wine : colors.textMuted;
-            const label = (options.title ?? route.name).toUpperCase();
+            /*
+             * Sentence case. These were UPPERCASE and letterspaced, which is
+             * the single most AI-looking habit in this app — it was on the
+             * tab labels, the section headings, the dex eyebrow, the stat
+             * labels and the locked caption all at once. A tab label is the
+             * one place tiny caps are conventional, and it is still four
+             * shouted words under four icons that already say the same thing.
+             */
+            const label = options.title ?? route.name;
 
             const onPress = () => {
               const event = navigation.emit({
@@ -300,9 +214,6 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                 ) : null}
               <Pressable
                 onPress={onPress}
-                onLayout={(e) =>
-                  measureTab(i, e.nativeEvent.layout.x, e.nativeEvent.layout.width)
-                }
                 accessibilityRole="button"
                 accessibilityLabel={options.tabBarAccessibilityLabel ?? options.title ?? route.name}
                 accessibilityState={{ selected: focused }}
@@ -347,22 +258,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 9,
     paddingHorizontal: BAR_PAD,
-  },
-  /*
-   * Fully rounded, and inset top and bottom.
-   *
-   * It was a 16pt-radius rectangle running nearly the full inner height,
-   * which put a squarish block flush into the corner of a fully-rounded
-   * bar — two different corner languages touching, which reads as a
-   * rendering mistake rather than a highlight. Matching the bar's own pill
-   * geometry and leaving a margin around it makes it sit *in* the bar.
-   */
-  pill: {
-    position: 'absolute',
-    top: 7,
-    bottom: 7,
-    borderRadius: radius.pill,
-    backgroundColor: colors.wineWash,
   },
   item: {
     flex: 1,
@@ -447,8 +342,8 @@ const styles = StyleSheet.create({
      * looking crowded by their own captions; 10/0.9 is wider per glyph and
      * narrower overall.
      */
-    fontFamily: fonts.label,
-    fontSize: 10,
-    letterSpacing: 0.9,
+    fontFamily: fonts.bodyMedium,
+    fontSize: 11,
+    letterSpacing: 0,
   },
 });
