@@ -6,10 +6,19 @@ Paste these into App Store Connect. Written to be pasted, not edited.
 
 ## Beta App Description
 
-Sipply is a field guide to drinks. Every cocktail, beer, wine and spirit you
-try is an entry to collect — 460 of them, with the real recipe, the
-glassware, and where it comes from. Log what you're drinking, keep a photo,
-and see what the people you follow have been having.
+Sipply is a field guide to cocktails and spirits. Every drink you try is an entry to collect: 2,089 of them, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
+
+Log what you are drinking and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Tell it what is on your shelf and My Bar works out what you can make tonight, and ranks the one bottle that unlocks the most.
+
+This build reworks the interface throughout: Dex cells are photographs rather than framed thumbnails, the drink card runs full bleed, and the tab bar, filters and headings have been stripped back.
+
+Worth trying:
+- The Dex grid and its filters, and how locked entries read next to collected ones
+- Logging a pour end to end, with and without a photo
+- My Bar: tick a dozen bottles and check whether what it says you can make is right
+- Account deletion and password reset
+
+Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ---
 
@@ -20,7 +29,7 @@ both are useful.
 
 Worth poking at:
 
-- **The Dex.** 460 entries. Filter by category, search, and open a few.
+- **The Dex.** 2,089 entries. Filter by category, search, and open a few.
   Does it stay smooth when you scroll fast?
 - **Logging a drink.** Add a photo and a caption. Does it show up on your
   profile and in the feed?

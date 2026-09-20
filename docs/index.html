@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sipply — a drinks field guide for iPhone</title>
-<meta name="description" content="Collect what you drink, keep the photo, and find out what you can pour tonight. 7,653 entries across cocktails, beer, wine and spirits.">
+<meta name="description" content="Collect what you drink, keep the photo, and find out what you can pour tonight. 2,089 cocktails and spirits, each with the real recipe.">
 <link rel="icon" href="img/icon.png">
 <meta property="og:title" content="Sipply — a drinks field guide for iPhone">
 <meta property="og:description" content="Collect what you drink, keep the photo, and find out what you can pour tonight.">
@@ -135,9 +135,9 @@
   <img class="mark" src="img/icon.png" alt="" width="84" height="84">
   <h1>Know what you drank. And what you can pour tonight.</h1>
   <p class="lede">
-    Sipply is a field guide to 7,653 drinks. Photograph what you have, and it
-    joins a collection you actually own — then tell it what is on your shelf
-    and it works out the rest.
+    Sipply is a field guide to 2,089 cocktails and spirits. Photograph what you
+    have, and it joins a collection you actually own — then tell it what is on
+    your shelf and it works out the rest.
   </p>
   <div class="cta">
     <span class="badge" aria-disabled="true">Not on the App Store yet</span>
@@ -159,14 +159,14 @@
       <p class="kicker">The Dex</p>
       <h2>A collection, not a checklist</h2>
       <p>
-        Cocktails, beer, wine and spirits, each with its own entry. Locked ones
+        Every cocktail and every bottle, each with its own entry. Locked ones
         sit in greyscale until you log them; yours keep the photograph you
         took, and your own shot replaces the stock one from then on.
       </p>
       <ul class="stats">
-        <li><b>7,653</b><span>entries</span></li>
-        <li><b>882</b><span>cocktails</span></li>
-        <li><b>3,224</b><span>beers</span></li>
+        <li><b>2,089</b><span>entries</span></li>
+        <li><b>899</b><span>cocktails</span></li>
+        <li><b>1,190</b><span>spirits</span></li>
       </ul>
     </div>
     <div class="shot"><span>Dex grid</span></div>
@@ -178,10 +178,19 @@
     <div class="copy">
       <p class="kicker">My Bar</p>
       <h2>Tick what you own. See what that buys you.</h2>
+      <!--
+        These two numbers are measured, not guessed, and the model matters:
+        fifteen BOTTLES (gin, vodka, two rums, bourbon, rye, tequila, brandy,
+        both vermouths, Campari, triple sec, maraschino, absinthe, Angostura)
+        plus the citrus, sugar and soda any kitchen already has. Counting the
+        bottles alone and nothing else gives 28 and 131 instead. Re-derive
+        both from src/data/barIndex.json before changing either figure.
+      -->
       <p>
-        A fifteen-bottle bar makes about fifty drinks outright — and sits one
-        ingredient short of two hundred more. Sipply ranks the bottle that
-        unlocks the most, so the next thing you buy is the useful one.
+        Fifteen bottles and a bowl of lemons covers about a third of the book —
+        and leaves another four hundred drinks one ingredient away. Sipply ranks
+        the bottle that unlocks the most, so the next thing you buy is the
+        useful one.
       </p>
     </div>
     <div class="shot"><span>My Bar — what you can make</span></div>
@@ -194,9 +203,10 @@
       <p class="kicker">Every entry</p>
       <h2>The recipe, the glass, and where it came from</h2>
       <p>
-        Build, method, garnish and serving notes for what you mix; grapes,
-        region and ageing for what you pour. Written to be read at a bar, not
-        scrolled past.
+        Build, method, garnish and serving notes for what you mix; base,
+        distillation and ageing for what you pour — and grapes and region for
+        the sherries and vermouths that sit between the two. Written to be read
+        at a bar, not scrolled past.
       </p>
     </div>
     <div class="shot"><span>Recipe detail</span></div>

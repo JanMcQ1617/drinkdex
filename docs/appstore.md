@@ -42,7 +42,7 @@ A field guide to drinking
 [25]
 
 ```
-7,653 drinks. Collect them.
+2,089 drinks. Collect them.
 ```
 [27]
 
@@ -51,7 +51,7 @@ A field guide to drinking
 ## Keywords — 100 max, comma-separated, NO spaces
 
 ```
-cocktail,beer,wine,whisky,whiskey,spirits,bar,recipes,tasting,journal,brewery,vintage,mixology,pour
+cocktail,whisky,whiskey,spirits,bar,recipes,tasting,journal,mixology,pour,gin,rum,tequila,amaro
 ```
 
 [99]
@@ -72,7 +72,7 @@ Updatable any time without shipping a build, so this is the line to change
 when the Dex grows or something is worth announcing.
 
 ```
-7,653 drinks waiting to be found: 3,224 beers, 2,369 wines, 1,178 spirits and 882 cocktails. Log what you pour, keep the photo, and see what your friends are drinking.
+2,089 drinks waiting to be found: 1,190 spirits and 899 cocktails with real recipes. Log what you pour, keep the photo, and see what your friends are drinking.
 ```
 
 [165]
@@ -84,7 +84,7 @@ when the Dex grows or something is worth announcing.
 ```
 Sipply is a field guide to drinks, and a record of the ones you have had.
 
-Every cocktail, beer, wine and spirit is an entry to find. There are 7,653 of them — 3,224 beers, 2,369 wines, 1,178 spirits and 882 cocktails — and each one tells you the glass it belongs in and where it comes from. Every cocktail carries its real recipe, the proper measures, and the story behind it.
+Every cocktail and every bottle is an entry to find. There are 2,089 of them — 899 cocktails and 1,190 spirits — and each one tells you the glass it belongs in and where it comes from. Every cocktail carries its real recipe, the proper measures, and the story behind it.
 
 Entries start locked. You collect one by drinking it: log the pour, add a photo and a note, and the card turns over and joins your collection.
 
@@ -153,7 +153,7 @@ The first two are what people see in search results without tapping
 through. Lead with the two that carry the scale and the payoff:
 
 1. **The Dex grid**, scrolled to somewhere dense. This is the shot that
-   sells 7,653 entries; nothing else in the app communicates the size of
+   sells 2,089 entries; nothing else in the app communicates the size of
    it in one frame.
 2. **An open drink card** — ideally a legendary one, so the rarity
    treatment is visible.
