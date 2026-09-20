@@ -86,8 +86,9 @@ import type { Drink } from '@/types';
 /* becomes a record of the one you actually drank. The stock photograph  */
 /* is the placeholder standing in until then.                            */
 /*                                                                      */
-/* Entries with no photograph at all (every beer, wine and spirit) keep  */
-/* the vector artwork and its black-ink locked state.                    */
+/* Entries with no photograph at all — every spirit, and the cocktails  */
+/* beyond the photographed 150 — keep the vector artwork and its         */
+/* black-ink locked state.                                               */
 /* ==================================================================== */
 
 /** DrinkArt's viewBox is 100×112, so height follows width by this factor. */

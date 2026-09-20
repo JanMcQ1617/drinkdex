@@ -50,7 +50,7 @@ for (const name of ['liquid', 'glasses']) {
 const { liquidColor, LIQUID, BEER_BY_SUBCATEGORY, WINE_BY_SUBCATEGORY } = await import(
   join(out, 'liquid.mjs')
 );
-const { resolveShape, takesFoam } = await import(join(out, 'glasses.mjs'));
+const { resolveShape } = await import(join(out, 'glasses.mjs'));
 
 const drinks = JSON.parse(readFileSync(join(ROOT, 'src/data/drinks.json'), 'utf8'));
 const NAME_OF = Object.fromEntries(Object.entries(LIQUID).map(([k, v]) => [v, k]));
@@ -92,12 +92,8 @@ const pad = (o) =>
 console.log(`\n  Glass shapes (${Object.keys(shapeCount).length} distinct)\n  ${pad(shapeCount)}`);
 console.log(`\n  Pour colors (${Object.keys(colorCount).length} distinct)\n  ${pad(colorCount)}`);
 
-// Foam should appear on the beers that are actually served with a head.
-const foamed = drinks.filter((d) => takesFoam(resolveShape(d), d.category)).length;
-console.log(`\n  Beers rendered with a foam head: ${foamed} / 100`);
-
-// Beer and wine resolve via subcategory, so an unmapped one silently falls
-// back to the category default. Catch that here rather than on screen.
+// Fortified wine resolves via subcategory, so an unmapped one silently
+// falls back to the category default. Catch that here rather than on screen.
 const unmapped = [];
 for (const d of drinks) {
   if (d.category === 'beer' && !BEER_BY_SUBCATEGORY[d.subcategory])
@@ -109,7 +105,7 @@ const uniqueUnmapped = [...new Set(unmapped)];
 console.log(
   uniqueUnmapped.length
     ? `\n  UNMAPPED subcategories: ${uniqueUnmapped.join(', ')}`
-    : '\n  Every beer and wine subcategory is mapped.',
+    : '\n  Every fortified-wine subcategory is mapped.',
 );
 
 if (suspicious.length) {

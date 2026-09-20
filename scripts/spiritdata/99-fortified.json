@@ -1,0 +1,591 @@
+[
+  {
+    "id": "ruby-port",
+    "name": "Ruby Port",
+    "subcategory": "Port",
+    "description": "The youngest and brightest of the Port family, bottled early to preserve its deep red color and primary fruit. An approachable gateway into fortified territory.",
+    "abv": "19–22%",
+    "origin": "Douro Valley, Portugal",
+    "rarity": "common",
+    "tastingNotes": [
+      "black plum",
+      "raspberry",
+      "chocolate",
+      "warm spice"
+    ],
+    "glassware": "Port glass",
+    "funFact": "Port is fortified mid-fermentation with 77% grape spirit, which stuns the yeast and locks in the wine's natural sweetness.",
+    "serve": {
+      "temp": "55-60°F, lightly chilled",
+      "glass": "Port glass",
+      "how": "Serve slightly cooler than room temperature in a port glass, pouring around three ounces — its 20% strength makes a little go a long way. No decanting required for this young style; just swirl and enjoy the deep purple color with its rush of plum, raspberry, and chocolate. It is the friendliest entry into Port, so keep it simple and pair it with dessert.",
+      "pair": [
+        "dark chocolate desserts",
+        "Stilton cheese",
+        "berry cobbler"
+      ]
+    },
+    "composition": {
+      "summary": "Douro field blend of Touriga Nacional and friends, fortified young and bottled early.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Touriga Nacional, Touriga Franca, Tinta Roriz, Tinta Barroca, Tinto Cão"
+        },
+        {
+          "label": "Region",
+          "detail": "Terraced schist slopes of the Douro Valley, Portugal"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Fortified mid-fermentation with 77% grape spirit, halting the yeast"
+        },
+        {
+          "label": "Aging",
+          "detail": "A short rest in large vats; bottled young to keep fruit"
+        }
+      ],
+      "process": "Spirit goes in while sugar remains, stunning the yeast and locking bright primary fruit into the wine."
+    }
+  },
+  {
+    "id": "tawny-port",
+    "name": "Tawny Port",
+    "subcategory": "Port",
+    "description": "Port that traded youthful fruit for decades in wooden casks, slowly fading to amber and gaining nut and caramel powers. Serve slightly chilled for maximum effect.",
+    "abv": "19–22%",
+    "origin": "Douro Valley, Portugal",
+    "rarity": "common",
+    "tastingNotes": [
+      "caramel",
+      "hazelnut",
+      "dried fig",
+      "orange peel"
+    ],
+    "glassware": "Port glass",
+    "funFact": "The age statement on a tawny Port — 10, 20, 30, or 40 years — refers to the average age of the blend, not the youngest wine in the bottle.",
+    "serve": {
+      "temp": "50-55°F, lightly chilled",
+      "glass": "Port glass",
+      "how": "This is the Port that genuinely wants a chill — half an hour in the fridge sharpens its caramel and hazelnut beautifully. Pour three ounces into a port glass, swirl, and watch for the amber rim that decades in cask have painted. Sip slowly and notice how dried fig and orange peel emerge as it warms in your hand; an open bottle keeps for a month or more.",
+      "pair": [
+        "crème brûlée",
+        "pecan pie",
+        "aged Gouda"
+      ]
+    },
+    "composition": {
+      "summary": "Same Douro red varieties as any Port, but aged to amber in wooden casks.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Touriga Nacional, Touriga Franca, Tinta Roriz and other Douro reds"
+        },
+        {
+          "label": "Region",
+          "detail": "Douro Valley fruit, traditionally aged in Vila Nova de Gaia lodges"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Fortified mid-fermentation, then handed over to oxygen"
+        },
+        {
+          "label": "Aging",
+          "detail": "Years to decades in seasoned oak pipes; blends carry age statements"
+        }
+      ],
+      "process": "Slow oxidative aging in small wooden pipes fades the color and trades fruit for walnut and caramel."
+    }
+  },
+  {
+    "id": "vintage-port",
+    "name": "Vintage Port",
+    "subcategory": "Port",
+    "description": "The final boss of fortified wine, made only from a single declared harvest and built to outlive its buyers. Requires decanting, patience, and ideally an heir.",
+    "abv": "19–22%",
+    "origin": "Douro Valley, Portugal",
+    "rarity": "legendary",
+    "tastingNotes": [
+      "cassis",
+      "violet",
+      "dark chocolate",
+      "spice"
+    ],
+    "glassware": "Port glass",
+    "funFact": "Vintage Port is made only in exceptional years 'declared' by each house — roughly three per decade — and spends just two years in barrel before decades of bottle aging.",
+    "serve": {
+      "temp": "60-65°F, cellar temp",
+      "glass": "Port glass",
+      "how": "Stand the bottle upright for a day, then decant carefully off its heavy sediment an hour or two before serving — this ritual is mandatory, not optional. Serve at cellar temperature in port glasses and give it time; the cassis, violet, and dark chocolate unfurl slowly with air. Traditionally the decanter passes to the left around the table, and a mature bottle deserves an unhurried evening.",
+      "pair": [
+        "Stilton cheese",
+        "walnuts",
+        "flourless chocolate cake"
+      ]
+    },
+    "composition": {
+      "summary": "A single declared Douro harvest of Touriga Nacional and its blending partners.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Touriga Nacional at the core, with Touriga Franca and Tinta Roriz"
+        },
+        {
+          "label": "Region",
+          "detail": "The best quintas of the Douro Valley, one harvest only"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Foot-trodden in lagares by many houses, then fortified mid-ferment"
+        },
+        {
+          "label": "Aging",
+          "detail": "About two years in wood, then decades in bottle"
+        }
+      ],
+      "process": "A house declares the vintage only in exceptional years, bottling unfiltered so the wine keeps evolving for generations."
+    }
+  },
+  {
+    "id": "amontillado-sherry",
+    "name": "Amontillado Sherry",
+    "subcategory": "Sherry",
+    "description": "A sherry with two lives: it begins under protective flor like a fino, then loses its yeast shield and ages exposed to air. The result is amber, nutty, and quietly complex.",
+    "abv": "16–18%",
+    "origin": "Jerez, Spain",
+    "rarity": "uncommon",
+    "tastingNotes": [
+      "hazelnut",
+      "dried tobacco",
+      "orange peel",
+      "salted caramel"
+    ],
+    "glassware": "Copita",
+    "funFact": "Edgar Allan Poe made this style infamous in his 1846 tale 'The Cask of Amontillado,' in which a wine lover is lured to his doom by the promise of a taste.",
+    "serve": {
+      "temp": "55-60°F, lightly chilled",
+      "glass": "Copita",
+      "how": "Serve cool but not cold in a copita — the narrow tulip concentrates the hazelnut and orange-peel aromatics. Pour small (two to three ounces), swirl, and sip slowly; an open bottle keeps for weeks in the fridge, so there's no rush. Notice the two lives in one glass: fino's saline snap up front, oxidative nut and tobacco depth behind.",
+      "pair": [
+        "roasted almonds",
+        "cured ham",
+        "mushroom dishes"
+      ]
+    },
+    "composition": {
+      "summary": "Palomino from Jerez, aged first under flor yeast and then exposed to air.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Palomino Fino, grown on the chalk albariza soils of Jerez"
+        },
+        {
+          "label": "Region",
+          "detail": "The sherry triangle: Jerez, El Puerto de Santa María, Sanlúcar"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Biological aging under flor, then refortified so the yeast dies"
+        },
+        {
+          "label": "Aging",
+          "detail": "Years in a solera, first protected, then oxidative"
+        }
+      ],
+      "process": "Refortifying kills the flor blanket mid-life, handing the wine over to oxygen for its second, nuttier existence."
+    }
+  },
+  {
+    "id": "cream-sherry",
+    "name": "Cream Sherry",
+    "subcategory": "Sherry",
+    "description": "An oloroso sweetened into plush, toffee-toned comfort, long the gateway sherry of grandmotherly sideboards. Modern bartenders have quietly rediscovered its charms over ice.",
+    "abv": "17–20%",
+    "origin": "Jerez, Spain",
+    "rarity": "common",
+    "tastingNotes": [
+      "toffee",
+      "raisin",
+      "walnut",
+      "brown sugar"
+    ],
+    "glassware": "Copita",
+    "funFact": "The style was created for the British market, and the term 'cream' was popularized in Bristol as a plusher successor to the older blend known as 'Bristol Milk.'",
+    "serve": {
+      "temp": "55-60°F lightly chilled, or over one large cube",
+      "glass": "Copita",
+      "how": "Serve it slightly chilled in a copita after dinner, or take the modern bartender's route: a big ice cube in a rocks glass with an orange twist. The chill and slight dilution wake up the toffee and walnut notes and trim the sweetness. Sip slowly and let it warm in your hand; raisin and brown sugar keep unfolding.",
+      "pair": [
+        "blue cheese",
+        "pecan pie",
+        "salted caramel desserts"
+      ]
+    },
+    "composition": {
+      "summary": "Oxidative Palomino oloroso, sweetened with Pedro Ximénez, blended for the British market.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Palomino base, sweetened with Pedro Ximénez or Moscatel"
+        },
+        {
+          "label": "Region",
+          "detail": "Jerez de la Frontera, Andalucía, Spain"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Dry oloroso blended with sweet wine after aging, not before"
+        },
+        {
+          "label": "Aging",
+          "detail": "Oxidative solera aging before the sweetening blend goes in"
+        }
+      ],
+      "process": "Sweetening happens at the end: a fully dry, oxidatively aged oloroso is blended with syrupy PX to order."
+    }
+  },
+  {
+    "id": "fino-sherry",
+    "name": "Fino Sherry",
+    "subcategory": "Sherry",
+    "description": "Bone-dry sherry raised beneath flor, a living blanket of yeast that guards it from air. Emerges pale, saline, and almond-tinged — the driest creature in the bodega.",
+    "abv": "15–17%",
+    "origin": "Jerez, Spain",
+    "rarity": "uncommon",
+    "tastingNotes": [
+      "green almond",
+      "sea spray",
+      "green apple",
+      "dough"
+    ],
+    "glassware": "Copita",
+    "funFact": "The flor yeast that shapes fino consumes the wine's glycerin and residual sugar as it protects it, which is why fino tastes so strikingly dry and lean.",
+    "serve": {
+      "temp": "38-45°F, well chilled",
+      "glass": "Copita",
+      "how": "Serve fino cold from the fridge in a copita, treating it like a crisp white wine — and finish the bottle within a few days, as the flor's protection is gone once opened. Pour small measures and keep the bottle on ice at the table. Taste for the bracing, bone-dry salinity: green almond, sea spray, and a sourdough tang that makes it the world's greatest aperitif.",
+      "pair": [
+        "green olives and marcona almonds",
+        "fried calamari",
+        "jamón ibérico"
+      ]
+    },
+    "composition": {
+      "summary": "Palomino from the albariza chalk of Jerez, aged entirely beneath a yeast blanket.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Palomino Fino, on the white albariza chalk soils"
+        },
+        {
+          "label": "Region",
+          "detail": "Jerez de la Frontera and El Puerto de Santa María"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Fortified only to about 15%, low enough for flor to live"
+        },
+        {
+          "label": "Aging",
+          "detail": "Years in a solera, never touching oxygen, then bottled"
+        }
+      ],
+      "process": "The living flor blanket seals the wine from air while eating its glycerin and sugar, leaving it lean and saline."
+    }
+  },
+  {
+    "id": "manzanilla-sherry",
+    "name": "Manzanilla Sherry",
+    "subcategory": "Sherry",
+    "description": "Fino's coastal cousin, aged only in one seaside town where ocean air keeps its yeast blanket thriving. Drinkers swear they taste salt spray and chamomile in every sip.",
+    "abv": "15–17%",
+    "origin": "Sanlúcar de Barrameda, Spain",
+    "rarity": "rare",
+    "tastingNotes": [
+      "sea salt",
+      "chamomile",
+      "green olive",
+      "almond"
+    ],
+    "glassware": "Copita",
+    "funFact": "Manzanilla may only be aged in Sanlúcar de Barrameda, where humid Atlantic air keeps the flor yeast alive and vigorous year-round.",
+    "serve": {
+      "temp": "38-45°F, well chilled",
+      "glass": "Copita",
+      "how": "Pour it well chilled into a copita and drink it fresh — buy small bottles and finish them within days, as its delicate coastal character fades fast once open. Serve as the opening act of a meal with salty snacks in hand. Notice the seaside signature: chamomile and green olive over an almost briny, sea-salt finish.",
+      "pair": [
+        "fresh oysters",
+        "boquerones (white anchovies)",
+        "potato chips with sea salt"
+      ]
+    },
+    "composition": {
+      "summary": "Palomino aged under flor exclusively in the seaside town of Sanlúcar de Barrameda.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Palomino Fino, from the same albariza vineyards as fino"
+        },
+        {
+          "label": "Region",
+          "detail": "Sanlúcar de Barrameda only, at the mouth of the Guadalquivir"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Fortified low; humid Atlantic air keeps flor thick year-round"
+        },
+        {
+          "label": "Aging",
+          "detail": "Solera aging in coastal bodegas built with high, ventilated walls"
+        }
+      ],
+      "process": "Sanlúcar's damp ocean air feeds a heavier, more persistent flor than inland Jerez, which is why it tastes of salt spray."
+    }
+  },
+  {
+    "id": "oloroso-sherry",
+    "name": "Oloroso Sherry",
+    "subcategory": "Sherry",
+    "description": "Fortified high from the start so no yeast can shield it, this sherry ages in open combat with oxygen. Decades later it emerges dark, walnut-rich, and structurally imposing.",
+    "abv": "17–20%",
+    "origin": "Jerez, Spain",
+    "rarity": "uncommon",
+    "tastingNotes": [
+      "walnut",
+      "toffee",
+      "leather",
+      "dried fruit"
+    ],
+    "glassware": "Copita",
+    "funFact": "Oloroso means 'fragrant' in Spanish; the style is fortified above 17% precisely so that flor yeast cannot survive on its surface.",
+    "serve": {
+      "temp": "55-65°F, cool room temp",
+      "glass": "Copita",
+      "how": "Serve at cool room temperature in a copita — chilling too hard mutes its walnut-and-leather depth. Pour a couple of ounces, swirl generously, and sip it like you would an aged whisky; an open bottle holds for a month or more. Notice the paradox of a dry sherry that smells sweet: all that toffee and dried fruit on the nose resolves into a savory, structured palate.",
+      "pair": [
+        "oxtail stew",
+        "aged manchego",
+        "roasted walnuts"
+      ]
+    },
+    "composition": {
+      "summary": "Palomino fortified high enough to kill flor, then aged openly against oxygen.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Palomino Fino, from the albariza chalk of Jerez"
+        },
+        {
+          "label": "Region",
+          "detail": "Jerez de la Frontera, Andalucía, Spain"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Fortified above 17% from the start, so flor never forms"
+        },
+        {
+          "label": "Aging",
+          "detail": "Decades of oxidative solera aging; the wine concentrates as it evaporates"
+        }
+      ],
+      "process": "Fortifying past 17% at the outset denies flor any chance to grow, committing the wine to a life of oxidation."
+    }
+  },
+  {
+    "id": "palo-cortado-sherry",
+    "name": "Palo Cortado Sherry",
+    "subcategory": "Sherry",
+    "description": "The bodega's happy accident: a wine that set out to become fino but lost its flor and drifted toward oloroso richness. It keeps amontillado's finesse and oloroso's body.",
+    "abv": "17–20%",
+    "origin": "Jerez, Spain",
+    "rarity": "rare",
+    "tastingNotes": [
+      "hazelnut",
+      "citrus peel",
+      "toffee",
+      "sea salt"
+    ],
+    "glassware": "Copita",
+    "funFact": "Its name means 'cut stick,' after the chalk mark cellar masters slash across casks whose flor has unexpectedly died, rerouting the wine to oxidative aging.",
+    "serve": {
+      "temp": "55-60°F, lightly chilled",
+      "glass": "Copita",
+      "how": "Serve just cool in a copita and give it a real swirl — this rarity carries amontillado's aromatic finesse on oloroso's rich frame, and both deserve airtime. Pour small, sip slow, and revisit as it warms in the glass. Track the shape-shift from bright citrus peel and sea salt into hazelnut and toffee on the long finish.",
+      "pair": [
+        "roast game birds",
+        "consommé",
+        "aged Comté"
+      ]
+    },
+    "composition": {
+      "summary": "Palomino that began as fino, lost its flor unexpectedly, and turned oxidative.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Palomino Fino, selected from the finest albariza parcels"
+        },
+        {
+          "label": "Region",
+          "detail": "Jerez de la Frontera and El Puerto de Santa María"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Flor dies unbidden; the cask is refortified and rerouted"
+        },
+        {
+          "label": "Aging",
+          "detail": "Long oxidative solera aging, often decades in the bodega"
+        }
+      ],
+      "process": "A cellar master chalks a cut mark on the butt whose flor has failed, sending it down the oxidative path."
+    }
+  },
+  {
+    "id": "pedro-ximenez-sherry",
+    "name": "Pedro Ximénez Sherry",
+    "subcategory": "Sherry",
+    "description": "Grapes sun-dried to near-raisins before pressing yield a black, syrupy elixir of fig and molasses. Less a beverage than a dessert that happens to pour.",
+    "abv": "15–17%",
+    "origin": "Jerez, Spain",
+    "rarity": "uncommon",
+    "tastingNotes": [
+      "fig syrup",
+      "raisin",
+      "molasses",
+      "espresso"
+    ],
+    "glassware": "Copita",
+    "funFact": "PX can exceed 400 grams of sugar per liter, and in Spain it is famously poured straight over vanilla ice cream.",
+    "serve": {
+      "temp": "55-60°F, lightly chilled",
+      "glass": "Copita",
+      "how": "Serve small, slightly cool pours in a copita — an ounce or two is dessert in itself — or go full Spanish and pour it straight over vanilla ice cream. Swirl and watch the black syrup coat the glass in slow legs. Sip in tiny amounts and let fig, molasses, and espresso saturate the palate; a bottle lasts for months in the fridge.",
+      "pair": [
+        "vanilla ice cream",
+        "sticky toffee pudding",
+        "blue cheese"
+      ]
+    },
+    "composition": {
+      "summary": "Pedro Ximénez grapes sun-dried to raisins, pressed into black syrup in Andalucía.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Pedro Ximénez, much of it grown in neighbouring Montilla-Moriles"
+        },
+        {
+          "label": "Region",
+          "detail": "Jerez, with fruit historically dried in Montilla-Moriles"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Grapes sun-dried on esparto mats, pressed, then muted with spirit"
+        },
+        {
+          "label": "Aging",
+          "detail": "Solera aging in old butts, deepening to opaque black"
+        }
+      ],
+      "process": "Spirit is added almost immediately to stop fermentation, preserving nearly all the raisined sugar in the pressed juice."
+    }
+  },
+  {
+    "id": "dry-vermouth",
+    "name": "Dry Vermouth",
+    "subcategory": "Vermouth",
+    "description": "The pale, herbal French counterpart to Italy's sweet style, crisp with alpine botanicals and citrus. Best known as the whispering partner in a Martini.",
+    "abv": "16–18%",
+    "origin": "Lyon, France",
+    "rarity": "common",
+    "tastingNotes": [
+      "chamomile",
+      "lemon peel",
+      "green herbs",
+      "white flowers"
+    ],
+    "glassware": "Chilled small wine glass",
+    "funFact": "The dry French style was developed around 1813 by Joseph Noilly, whose Noilly Prat remains the benchmark bartenders reach for in a classic Martini.",
+    "serve": {
+      "temp": "38-45°F, straight from the fridge",
+      "glass": "Chilled small wine glass",
+      "how": "Vermouth is wine, so keep the open bottle in the refrigerator and finish it within a month or two. Pour a small measure into a chilled small wine glass — no ice needed if the bottle is cold — and add a twist of lemon peel, expressing the oils over the surface. Sip it slowly as an aperitif and pick out the chamomile and alpine herbs that usually hide inside your Martini.",
+      "pair": [
+        "olives and almonds",
+        "anchovy toasts",
+        "hard sheep's cheese"
+      ]
+    },
+    "composition": {
+      "summary": "Neutral white wine from southern France, fortified and steeped with alpine botanicals.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Neutral whites: Clairette, Piquepoul and Ugni Blanc in the French style"
+        },
+        {
+          "label": "Region",
+          "detail": "Marseillan and the Lyon region; the French dry tradition"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Wine fortified, then infused with wormwood, chamomile and citrus peel"
+        },
+        {
+          "label": "Aging",
+          "detail": "Noilly Prat weathers its base wine outdoors in oak for a year"
+        }
+      ],
+      "process": "Leaving the base wine exposed to sun, wind and sea air oxidizes it before the botanicals ever go in."
+    }
+  },
+  {
+    "id": "sweet-vermouth",
+    "name": "Sweet Vermouth",
+    "subcategory": "Vermouth",
+    "description": "Wine aromatized with wormwood, spices, and bittersweet botanicals in the Italian style. Equally content stirred into a Negroni or served alone over ice with an orange slice, as Turin intended.",
+    "abv": "15–18%",
+    "origin": "Turin, Italy",
+    "rarity": "common",
+    "tastingNotes": [
+      "bitter orange",
+      "clove",
+      "vanilla",
+      "gentian",
+      "cola"
+    ],
+    "glassware": "Rocks glass",
+    "funFact": "Modern sweet vermouth was born in Turin in 1786 at the shop of Antonio Benedetto Carpano, and the word 'vermouth' comes from 'Wermut,' German for wormwood.",
+    "serve": {
+      "temp": "Chilled bottle, served over one large cube",
+      "glass": "Rocks glass",
+      "how": "Do it as Turin intended: pour two to three ounces over a large ice cube in a rocks glass and garnish with a fat orange slice or expressed peel. A splash of soda turns it into a proper low-proof aperitivo highball if you like. Sip slowly and trace the bitter orange, clove, and cola notes as the ice slowly opens it up — and keep the bottle in the fridge once opened.",
+      "pair": [
+        "salted nuts and olives",
+        "aged salami",
+        "dark chocolate"
+      ]
+    },
+    "composition": {
+      "summary": "Neutral white wine, fortified and aromatized with wormwood, spices and caramel in Turin.",
+      "components": [
+        {
+          "label": "Grapes",
+          "detail": "Neutral white base wine; the red color comes from caramel, not grapes"
+        },
+        {
+          "label": "Region",
+          "detail": "Turin and Piedmont, home of the Italian rosso style"
+        },
+        {
+          "label": "Vinification",
+          "detail": "Fortified, infused with wormwood and spices, sweetened with sugar"
+        },
+        {
+          "label": "Aging",
+          "detail": "Little or none; house botanical recipes matter more than time"
+        }
+      ],
+      "process": "Wormwood — Wermut in German, hence the name — is macerated with dozens of spices to build a bittersweet profile."
+    }
+  }
+]

@@ -49,7 +49,7 @@ interface UnlockedEntry {
 }
 
 export function deriveStats(unlocks: Record<string, UnlockRecord>) {
-  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, beer: 0, wine: 0, spirit: 0 };
+  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0 };
   const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
 
   const entries: UnlockedEntry[] = [];

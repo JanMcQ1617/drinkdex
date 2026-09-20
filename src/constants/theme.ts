@@ -373,7 +373,7 @@ export const motion = {
 /* its label anyway, so the dot is reinforcement, never the message.     */
 /* ==================================================================== */
 
-export const CATEGORY_ORDER: DrinkCategory[] = ['cocktail', 'beer', 'wine', 'spirit'];
+export const CATEGORY_ORDER: DrinkCategory[] = ['cocktail', 'spirit'];
 
 export const CATEGORY_META: Record<
   DrinkCategory,
@@ -405,26 +405,6 @@ export const CATEGORY_META: Record<
     fieldTo: '#F5E6E5',
     emoji: '🍸',
     blurb: 'Mixed & stirred',
-  },
-  beer: {
-    label: 'Beer',
-    plural: 'Beers',
-    color: '#8A5F10',
-    wash: '#F6EDDC',
-    fieldFrom: '#FFFBF2',
-    fieldTo: '#F6EDDC',
-    emoji: '🍺',
-    blurb: 'Brewed & poured',
-  },
-  wine: {
-    label: 'Wine',
-    plural: 'Wines',
-    color: '#5E2545',
-    wash: '#F1E6EC',
-    fieldFrom: '#FEF9FB',
-    fieldTo: '#F1E6EC',
-    emoji: '🍷',
-    blurb: 'Pressed & aged',
   },
   spirit: {
     label: 'Spirit',
@@ -528,10 +508,6 @@ export function drinkGlyph(drink: Pick<Drink, 'category' | 'glassware' | 'subcat
   switch (drink.category) {
     case 'cocktail':
       return '🍸';
-    case 'beer':
-      return '🍺';
-    case 'wine':
-      return '🍷';
     case 'spirit':
       return '🥃';
   }
@@ -545,8 +521,16 @@ export function drinkGlyph(drink: Pick<Drink, 'category' | 'glassware' | 'subcat
  */
 export const SIGNUP_ACCENTS: readonly string[] = [
   CATEGORY_META.cocktail.color,
-  CATEGORY_META.beer.color,
-  CATEGORY_META.wine.color,
+  /*
+   * The amber and the plum were CATEGORY_META.beer.color and .wine.color
+   * until those categories were retired. They are kept as literals rather
+   * than dropped: accents are stored on the profile as hex, so removing
+   * them would not have changed a single existing avatar — it would only
+   * have narrowed the palette new accounts draw from, from six to four,
+   * for no reason other than where the numbers used to live.
+   */
+  '#8A5F10',
+  '#5E2545',
   CATEGORY_META.spirit.color,
   colors.wine,
   colors.taupeInk,

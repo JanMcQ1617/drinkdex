@@ -531,7 +531,7 @@ export default function DexScreen() {
           The collected/not-yet axis rides the same scroller, behind a rule.
           It was a third filter row of its own. Two axes in one row needs the
           divider to work — without it the eye reads seven peers and cannot
-          tell that picking "Beers" and picking "Not yet" are different
+          tell that picking "Spirits" and picking "Not yet" are different
           questions.
         */}
         <View style={styles.axisRule} />
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     /*
      * textMuted, not textFaint. The per-category count is content — it is
-     * how you learn there are 3,224 beers — and textFaint renders it at
+     * how you learn there are 1,190 spirits — and textFaint renders it at
      * 2.84:1 on this page, under the 4.5:1 floor for text this size. It was
      * already failing on the old white chip; moving the row onto the page
      * ground made it marginally worse, so it is corrected here rather than

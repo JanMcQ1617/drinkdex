@@ -97,13 +97,6 @@ export default function RootLayout() {
           }}
         />
         {/*
-          The WINE atlas — reference, not collection. Distinct from the
-          Atlas tab, which catalogues breweries. Edge-swipe only: this
-          screen has a horizontally scrolling filter row, and a full-width
-          back gesture would fight it on every drag.
-        */}
-        <Stack.Screen name="wine-atlas/index" options={{ gestureDirection: 'horizontal' }} />
-        {/*
           Logging a pour. A modal, not a push: it is a task you complete or
           abandon, and the sheet's downward dismiss is the gesture that
           matches "never mind" — a back-chevron would imply it is a place

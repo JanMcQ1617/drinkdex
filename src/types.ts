@@ -1,4 +1,4 @@
-export type DrinkCategory = 'cocktail' | 'beer' | 'wine' | 'spirit';
+export type DrinkCategory = 'cocktail' | 'spirit';
 
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'legendary';
 
@@ -15,7 +15,7 @@ export interface Recipe {
   method?: string;
 }
 
-/** Home serving guide — beers, wines, and spirits */
+/** Home serving guide — spirits, including the fortified wines that mix */
 export interface ServeGuide {
   temp: string;
   glass: string;
@@ -25,9 +25,9 @@ export interface ServeGuide {
 
 export interface CompositionComponent {
   /**
-   * Varies by category — Malt/Hops/Yeast for beer, Grapes/Region/Vinification
-   * for wine, Base/Distillation/Aging for spirits. Sake, filed under wine but
-   * brewed from rice, overrides "Grapes" with "Rice".
+   * Varies by what the thing is — Base/Distillation/Aging for a distilled
+   * spirit, Grapes/Region/Vinification for the fortified wines that stayed
+   * on the spirit shelf, so a sherry still reads as a sherry.
    */
   label: string;
   detail: string;
@@ -36,8 +36,8 @@ export interface CompositionComponent {
 /**
  * What a drink is made of.
  *
- * Beers, wines, and spirits carry this instead of a `recipe` — you don't
- * build them, so a step list would be a lie.
+ * Spirits carry this instead of a `recipe` — you don't build them, so a
+ * step list would be a lie.
  */
 export interface Composition {
   summary: string;
@@ -68,162 +68,6 @@ export interface Drink {
   composition?: Composition;
 }
 
-/* ------------------------------------------------------------------ */
-/* Wine atlas                                                          */
-/*                                                                     */
-/* Reference, not collection. The Dex is 460 authored cards you go out  */
-/* and collect; the atlas is the map behind them — every named wine and */
-/* every grape variety, so a wine card has somewhere to point.          */
-/* Nothing here carries a dexNumber.                                    */
-/* ------------------------------------------------------------------ */
-
-export type WineStyle =
-  | 'Red'
-  | 'White'
-  | 'Rosé'
-  | 'Sparkling'
-  | 'Sparkling Red'
-  | 'Sparkling Rosé'
-  | 'Sweet White'
-  | 'Sweet Red'
-  | 'Sweet Rosé'
-  | 'Fortified'
-  | 'Orange'
-  | 'Vin Jaune'
-  | 'Various';
-
-export type GrapeColor = 'Red' | 'White' | 'Pink';
-
-/**
- * A named wine: an appellation, a protected denomination (AOC, DOCG, DO,
- * AVA, GI, WO, PDO) or a classic style. Not a producer's label — those
- * number in the millions and cannot be enumerated.
- *
- * Keys are short because this ships 1,558 of them in the bundle.
- */
-export interface AtlasWine {
-  /** Name. */
-  n: string;
-  /** Index into WineAtlas.countries. */
-  c: number;
-  /** Region. */
-  r: string;
-  /** Classification tier, as that country records it. */
-  t: string;
-  /** Style. */
-  s: WineStyle;
-  /** Indices into WineAtlas.grapes. */
-  g: number[];
-}
-
-export interface AtlasCountry {
-  name: string;
-  /** One line of orientation. */
-  note: string;
-  /** How many atlas wines it holds. */
-  wines: number;
-}
-
-export interface AtlasGrape {
-  name: string;
-  color: GrapeColor;
-  /** Where the variety is from, not where it is grown. */
-  origin: string;
-  /** Regional names folded into this entry — Shiraz under Syrah. */
-  synonyms: string[];
-  note: string;
-  /** Indices into WineAtlas.wines. */
-  wines: number[];
-  /** Indices into WineAtlas.countries. */
-  countries: number[];
-}
-
-/**
- * What a wine Dex card points at in the atlas.
- *
- * Keyed by NAME rather than array position. Positions move — adding one row
- * to winedata/wines.psv re-sorts the atlas and every later index retargets
- * silently. Wine names are globally unique, so they survive inserts,
- * deletes and re-sorts alike.
- */
-export interface AtlasLink {
-  /** Atlas wine names. */
-  wines: string[];
-  /** Atlas grape name, for cards that are a variety. */
-  grape: string | null;
-  /** Why this card has nothing to link to — sake, vermouth. */
-  absent?: string;
-}
-
-export interface WineAtlas {
-  version: number;
-  generated: string;
-  note: string;
-  counts: {
-    wines: number;
-    countries: number;
-    regions: number;
-    grapes: number;
-    /** Canonical varieties plus every synonym. */
-    grapeNames: number;
-  };
-  countries: AtlasCountry[];
-  grapes: AtlasGrape[];
-  wines: AtlasWine[];
-}
-
-/* ------------------------------------------------------------------ */
-/* The brand layer                                                     */
-/*                                                                     */
-/* A `Drink` with category 'beer' is a STYLE — "American IPA", "Gose".  */
-/* Nobody orders a style, though; they order Ocean IPA. These types are */
-/* the other axis: real products, made by a real brewery, standing in a */
-/* real country.                                                       */
-/*                                                                     */
-/* A brand deliberately carries almost no tasting content. `styleRef`   */
-/* points at the `Drink.id` of its style, and that entry already has    */
-/* the serve guide, glassware and composition written — so a brand      */
-/* inherits its depth instead of duplicating it thinly.                 */
-/* ------------------------------------------------------------------ */
-
-export interface BeerBrand {
-  id: string;
-  /** Full product name, including the brewery: "Sierra Nevada Torpedo". */
-  name: string;
-  /** The name with the brewery stripped — "Torpedo" — for use under a
-   *  brewery heading, where repeating the house name is noise. */
-  shortName: string;
-  /** As written in the source survey: "west coast IPA", "trappist quad". */
-  style: string | null;
-  /** `Drink.id` of the matching Dex style, or null when nothing matches. */
-  styleRef: string | null;
-  abv?: string | null;
-  note?: string | null;
-}
-
-export interface Brewery {
-  id: string;
-  name: string;
-  city: string | null;
-  founded?: number | null;
-  note?: string | null;
-  beers: BeerBrand[];
-  /**
-   * True when we know the brewery is real but have not yet researched what
-   * it makes. The app says so plainly rather than inventing product names.
-   */
-  needsLineup?: boolean;
-  /** Lineup verified against the brewery's own listing. */
-  researched?: boolean;
-}
-
-export interface BeerCountry {
-  country: string;
-  /** ISO-ish two-letter code, also used as the card chip. */
-  code: string;
-  region: string;
-  breweries: Brewery[];
-}
 
 /* ------------------------------------------------------------------ */
 /* Social                                                              */

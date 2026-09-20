@@ -28,15 +28,48 @@ const DRINKS = path.join(ROOT, 'src', 'data', 'drinks.json');
 const SCRIPTS = path.join(ROOT, 'scripts');
 
 const dry = process.argv.includes('--dry');
-const targets = process.argv.slice(2).filter((a) => !a.startsWith('--'));
-
-if (!targets.length) {
-  console.error('usage: node scripts/remove-drinks.mjs <id> [<id> ...] [--dry]');
-  process.exit(1);
-}
 
 const drinks = JSON.parse(readFileSync(DRINKS, 'utf8'));
 const byId = new Map(drinks.map((d) => [d.id, d]));
+
+/*
+ * `--category=beer` expands to every id in that category.
+ *
+ * Retiring a whole category means thousands of ids, which is not something
+ * you can put on a command line and still be able to read what you ran. The
+ * expansion happens HERE, against drinks.json, so everything downstream —
+ * the existence check, the content-unchanged proof, the renumbering and the
+ * source-file guard — sees a plain list of ids and behaves exactly as it
+ * does for a hand-typed removal. No guard is skipped for a bulk run.
+ *
+ * An unknown category is an abort rather than a no-op, for the same reason a
+ * mistyped id is: a run that removes nothing and reports success is worse
+ * than one that fails.
+ */
+const explicit = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+const categories = process.argv
+  .filter((a) => a.startsWith('--category='))
+  .map((a) => a.slice('--category='.length));
+
+const known = new Set(drinks.map((d) => d.category));
+const badCategories = categories.filter((c) => !known.has(c));
+if (badCategories.length) {
+  console.error(`\nABORT — no such category: ${badCategories.join(', ')}`);
+  console.error(`Categories present: ${[...known].sort().join(', ')}`);
+  process.exit(1);
+}
+
+const fromCategories = categories.flatMap((c) =>
+  drinks.filter((d) => d.category === c).map((d) => d.id),
+);
+const targets = [...new Set([...explicit, ...fromCategories])];
+
+if (!targets.length) {
+  console.error(
+    'usage: node scripts/remove-drinks.mjs <id> [<id> ...] [--category=<cat> ...] [--dry]',
+  );
+  process.exit(1);
+}
 
 /* Every id must exist. A typo that silently removes nothing is worse than an
  * error, because the run reports success and the duplicate stays in the Dex. */
@@ -98,7 +131,18 @@ if (stillSourced.length) {
   process.exit(1);
 }
 
-for (const id of targets) console.log(`  removing #${byId.get(id).dexNumber} ${byId.get(id).name}`);
+/* Name every removal when a human could read the list; summarise a bulk run
+ * by category instead, because 5,000 lines of scrollback proves nothing the
+ * post-conditions above have not already checked. */
+if (targets.length <= 40) {
+  for (const id of targets) console.log(`  removing #${byId.get(id).dexNumber} ${byId.get(id).name}`);
+} else {
+  const going = targets.reduce((a, id) => {
+    const c = byId.get(id).category;
+    return ((a[c] = (a[c] ?? 0) + 1), a);
+  }, {});
+  console.log('  removing:', going);
+}
 if (dry) {
   console.log(`\ndry run — would remove ${targets.length} and renumber ${out.length}`);
 } else {

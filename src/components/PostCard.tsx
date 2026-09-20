@@ -428,9 +428,9 @@ export const PostCard = React.memo(function PostCard({
             Category and rarity are Dex bookkeeping; they belong on the card
             in the index, not under someone's pour.
 
-            Cocktails carry `ingredients`; everything else falls back to its
-            style and origin, which is the nearest equivalent sentence for a
-            beer or a wine.
+            Cocktails carry `ingredients`; spirits fall back to their style
+            and origin, which is the nearest equivalent sentence for a bottle
+            nobody builds.
           */}
           <Text style={styles.spec} numberOfLines={1}>
             {drink.ingredients?.length

@@ -32,18 +32,18 @@ export const PEOPLE: UserProfile[] = [
   },
   {
     id: 'u-henry',
-    username: 'hopheadhenry',
+    username: 'henrypours',
     displayName: 'Henry Kwon',
-    accent: CATEGORY_META.beer.color,
-    bio: 'Beer first. 100 styles or bust.',
+    accent: CATEGORY_META.spirit.color,
+    bio: 'Agave first. Working through the mezcal shelf.',
     joinedAt: '2026-04-18T00:00:00Z',
   },
   {
     id: 'u-sofia',
     username: 'sofiadrinks',
     displayName: 'Sofía Reyes',
-    accent: CATEGORY_META.wine.color,
-    bio: 'Wine buyer. Ask me about Jerez.',
+    accent: CATEGORY_META.cocktail.color,
+    bio: 'Sherry in everything. Ask me about Jerez.',
     joinedAt: '2026-03-27T00:00:00Z',
   },
   {

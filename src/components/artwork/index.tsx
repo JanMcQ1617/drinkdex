@@ -4,7 +4,7 @@ import Svg, { Circle, Defs, G, LinearGradient, Path, Stop } from 'react-native-s
 import { colors } from '@/constants/theme';
 import type { Drink } from '@/types';
 
-import { resolveShape, SHAPES, takesFoam } from './glasses';
+import { resolveShape, SHAPES } from './glasses';
 import { liquidColor } from './liquid';
 
 export { resolveShape, SHAPES } from './glasses';
@@ -133,9 +133,7 @@ export const DrinkArt = React.memo(function DrinkArt({
 
   const pour = locked ? colors.lockInkSoft : liquidColor(drink);
   const glassStroke = locked ? colors.lockInk : 'rgba(43, 35, 34, 0.55)';
-  const foamFill = locked ? '#4A2C36' : '#FBF3E4';
   const garnish = locked ? null : resolveGarnish(drink);
-  const showFoam = def.foam && takesFoam(shape, drink.category);
 
   return (
     <Svg width={size} height={size * (112 / 100)} viewBox="0 0 100 112" fill="none">
@@ -150,7 +148,6 @@ export const DrinkArt = React.memo(function DrinkArt({
       {!flat && <Circle cx={50} cy={103} r={20} fill={colors.text} opacity={0.06} />}
 
       <Path d={def.liquid} fill={`url(#${gradId})`} />
-      {showFoam && <Path d={def.foam} fill={foamFill} opacity={locked ? 1 : 0.96} />}
 
       <Path
         d={def.vessel}

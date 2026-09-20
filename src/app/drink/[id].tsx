@@ -62,13 +62,6 @@ import { DRINKS_BY_ID, formatDexNumber } from '@/data';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
-import {
-  ATLAS_COUNTRIES,
-  grapeByName,
-  grapeIndexByName,
-  winesByName,
-} from '@/data/wineAtlas';
-import { atlasLinkFor } from '@/data/wineAtlasLinks';
 import type { Composition, Recipe, ServeGuide } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
@@ -211,11 +204,12 @@ function RecipePanel({ recipe }: { recipe: Recipe }) {
 }
 
 /**
- * Beers, wines, and spirits — what the drink is made of.
+ * Spirits — what the drink is made of.
  *
  * Deliberately not framed as a recipe: nobody builds these at the bar, so a
- * step list would be a lie. Labels come from the data because they change by
- * category (Malt/Hops/Yeast, Grapes/Region/Aging, Base/Distillation, Rice).
+ * step list would be a lie. Labels come from the data rather than this file,
+ * because they differ by what the bottle is — Base/Distillation/Aging for a
+ * distilled spirit, Grapes/Region/Vinification for a sherry or a port.
  */
 function CompositionPanel({ composition }: { composition: Composition }) {
   return (
@@ -278,70 +272,6 @@ function ServePanel({ serve }: { serve: ServeGuide }) {
 
 type PickerMode = 'unlock' | 'update';
 
-/**
- * Where this wine sits on the map.
- *
- * The Dex is 460 authored cards; the atlas behind it holds every named
- * wine and grape variety. A varietal card ("Nebbiolo") points at the
- * grape, a place card ("Barolo") at the appellations themselves. Cards
- * with nothing to point at — sake, vermouth — say so instead of linking
- * to something adjacent.
- */
-function AtlasPanel({ drinkId }: { drinkId: string }) {
-  const router = useRouter();
-  const link = atlasLinkFor(drinkId);
-  if (!link) return null;
-
-  if (link.absent) {
-    return (
-      <>
-        <SectionLabel style={styles.section}>On the map</SectionLabel>
-        <Text style={styles.bodyText}>{link.absent}</Text>
-      </>
-    );
-  }
-
-  /* Links carry names; resolve them here. A name that no longer exists is
-     dropped rather than rendering someone else's wine. */
-  const grape = grapeByName(link.grape);
-  const wines = winesByName(link.wines);
-  const count = grape ? grape.wines.length : wines.length;
-  if (!count) return null;
-
-  const countries = grape
-    ? grape.countries.map((c) => ATLAS_COUNTRIES[c].name)
-    : [...new Set(wines.map((w) => ATLAS_COUNTRIES[w.c].name))];
-
-  return (
-    <>
-      <SectionLabel style={styles.section}>On the map</SectionLabel>
-      <Text style={styles.lead}>
-        {grape
-          ? `${grape.name} makes ${count} named ${count === 1 ? 'wine' : 'wines'} in the atlas`
-          : `${count} matching ${count === 1 ? 'appellation' : 'appellations'} in the atlas`}
-        {countries.length ? `, across ${countries.length} ` : ''}
-        {countries.length ? (countries.length === 1 ? 'country' : 'countries') : ''}.
-      </Text>
-      {grape?.synonyms.length ? (
-        <Text style={styles.bodyText}>Also called {grape.synonyms.join(', ')}.</Text>
-      ) : null}
-      <PressableScale
-        onPress={() =>
-          router.push(
-            grape
-              ? { pathname: '/wine-atlas', params: { grape: String(grapeIndexByName(link.grape)) } }
-              : { pathname: '/wine-atlas', params: { q: wines[0].n } }
-          )
-        }
-        accessibilityRole="button"
-        accessibilityLabel="Open this in the wine atlas"
-        style={styles.atlasLink}>
-        <Text style={styles.atlasLinkText}>Open in the Wine Atlas</Text>
-        <Icon name="chevronRight" size={16} color={colors.wine} />
-      </PressableScale>
-    </>
-  );
-}
 
 
 export default function DrinkDetailScreen() {
@@ -818,8 +748,6 @@ export default function DrinkDetailScreen() {
 
         {drink.serve ? <ServePanel serve={drink.serve} /> : null}
 
-        {drink.category === 'wine' ? <AtlasPanel drinkId={drink.id} /> : null}
-
         {/* Lore */}
         <SectionLabel style={styles.section}>Field notes</SectionLabel>
         <Text style={styles.bodyText}>{drink.description}</Text>
@@ -1234,22 +1162,6 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
 
-  /* Atlas */
-  atlasLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: space.md,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.md,
-    borderRadius: radius.md,
-    backgroundColor: colors.wineWash,
-  },
-  atlasLinkText: {
-    fontFamily: fonts.bodySemiBold,
-    ...typeScale.caption,
-    color: colors.wine,
-  },
 
   /* Serve */
   serveCard: {

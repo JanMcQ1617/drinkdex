@@ -70,7 +70,7 @@ import type { DrinkCategory, Post, Rarity, UserProfile } from '@/types';
  * isn't in this build, so the bars sum to the drinks we can classify.
  */
 function derivePostStats(posts: Post[]) {
-  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, beer: 0, wine: 0, spirit: 0 };
+  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0 };
   const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
 
   let counted = 0;
