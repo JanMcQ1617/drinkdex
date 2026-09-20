@@ -110051,5 +110051,456 @@
    "garnish": "A lemon peel",
    "method": "stirred"
   }
+ },
+ {
+  "id": "cherry-blossom",
+  "name": "Cherry Blossom",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Cherry brandy and cognac cut with curaçao and lemon. Japan's own contribution to the Savoy era, built to look like the flower it is named for.",
+  "abv": "19-22%",
+  "origin": "Yokohama, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "cherry",
+   "orange peel",
+   "cognac",
+   "lemon"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Cherry brandy",
+   "Brandy",
+   "Orange curaçao",
+   "Lemon juice",
+   "Grenadine"
+  ],
+  "funFact": "It was created by Tasaburo Tao at Bar Paris in Yokohama, the port city where Japanese cocktail culture actually began — the same city that produced the Bamboo a generation earlier.",
+  "dexNumber": 2079,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Cherry brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Brandy",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Orange curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Garnish and serve."
+   ],
+   "garnish": "A brandied cherry",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "yokohama",
+  "name": "Yokohama",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin and vodka under orange and grenadine, with one dash of absinthe doing all the talking.",
+  "abv": "16-19%",
+  "origin": "Yokohama, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "anise",
+   "pomegranate",
+   "juniper"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Vodka",
+   "Orange juice",
+   "Grenadine",
+   "Absinthe"
+  ],
+  "funFact": "A single dash of absinthe carries a drink that is otherwise mostly orange juice — which is why the recipe survives in the old books exactly as written, with the absinthe measured in dashes rather than fractions.",
+  "dexNumber": 2080,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Vodka",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange juice",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Grenadine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "1 dash"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds.",
+    "Strain into a chilled coupe.",
+    "Serve without garnish."
+   ],
+   "garnish": "None",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "joy-division",
+  "name": "Joy Division",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "A Martini given Cointreau and three dashes of absinthe. Bright, herbaceous and considerably less austere than the name suggests.",
+  "abv": "27-30%",
+  "origin": "New York, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "juniper",
+   "anise",
+   "orange",
+   "wormwood"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Dry vermouth",
+   "Cointreau",
+   "Absinthe"
+  ],
+  "funFact": "Phil Ward built it at Death & Co in 2008 by taking a 2:1 gin Martini and adding half an ounce of Cointreau — a reminder that most modern classics are an existing drink plus one idea.",
+  "dexNumber": 2081,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "London dry gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Cointreau",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Absinthe",
+     "amount": "3 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 25 seconds until well chilled.",
+    "Strain into a chilled coupe.",
+    "Express a lemon twist over the surface and drop it in."
+   ],
+   "garnish": "A lemon twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "paper-tiger",
+  "name": "Paper Tiger",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "A Negroni that swapped gin for spiced dark rum. Same bitter architecture, warmer floor.",
+  "abv": "20-23%",
+  "origin": "Vancouver, Canada",
+  "rarity": "rare",
+  "tastingNotes": [
+   "baking spice",
+   "bitter orange",
+   "molasses",
+   "vermouth"
+  ],
+  "glassware": "Rocks glass",
+  "ingredients": [
+   "Spiced dark rum",
+   "Carpano Antica",
+   "Campari"
+  ],
+  "funFact": "It holds the Negroni's equal-thirds structure exactly and changes only the base — the cleanest way to prove that the Negroni is a template rather than a recipe.",
+  "dexNumber": 2082,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Spiced dark rum",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Carpano Antica sweet vermouth",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Campari",
+     "amount": "1 oz / 30 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed, plus a large cube to serve"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 25 seconds.",
+    "Strain over a large cube in a rocks glass.",
+    "Express an orange peel over the top and drop it in."
+   ],
+   "garnish": "An orange peel",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "brainstorm",
+  "name": "Brainstorm",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Irish whiskey with a quarter-ounce each of dry vermouth and Bénédictine. Small, dry and pre-Prohibition.",
+  "abv": "28-31%",
+  "origin": "USA",
+  "rarity": "rare",
+  "tastingNotes": [
+   "honey",
+   "herbal",
+   "malt",
+   "orange peel"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Irish whiskey",
+   "Dry vermouth",
+   "Bénédictine"
+  ],
+  "funFact": "It is one of the few pre-Prohibition cocktails built on Irish whiskey rather than rye — a category that all but vanished from American bars for most of the twentieth century and only came back in this one.",
+  "dexNumber": 2083,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Irish whiskey",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Dry vermouth",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Bénédictine",
+     "amount": "0.25 oz / 7 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir for about 25 seconds until well chilled.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the surface and drop it in."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
+ },
+ {
+  "id": "fog-horn",
+  "name": "Fog Horn",
+  "category": "cocktail",
+  "subcategory": "Highball",
+  "description": "Gin, lime and ginger beer over ice. A Moscow Mule that predates the Moscow Mule and never needed a copper mug.",
+  "abv": "10-13%",
+  "origin": "New York, USA",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ginger",
+   "lime",
+   "juniper",
+   "spice"
+  ],
+  "glassware": "Highball glass",
+  "ingredients": [
+   "Gin",
+   "Lime juice",
+   "Ginger beer"
+  ],
+  "funFact": "The Waldorf Astoria put it on the map decades before vodka arrived in America — the gin-and-ginger build the Moscow Mule would later borrow wholesale.",
+  "dexNumber": 2084,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lime juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ginger beer",
+     "amount": "4 oz / 120 ml, to top"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Fill a highball glass with ice.",
+    "Add the gin and lime juice.",
+    "Top with ginger beer and stir once, gently, to combine.",
+    "Garnish and serve with a straw."
+   ],
+   "garnish": "A lime wedge",
+   "method": "built"
+  }
+ },
+ {
+  "id": "blue-train",
+  "name": "Blue Train",
+  "category": "cocktail",
+  "subcategory": "Sour",
+  "description": "Gin, lemon and curaçao, named for the overnight sleeper to the Riviera. The blue arrived later than the drink did.",
+  "abv": "21-24%",
+  "origin": "London, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange",
+   "lemon",
+   "juniper",
+   "candied peel"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Gin",
+   "Blue curaçao",
+   "Triple sec",
+   "Lemon juice"
+  ],
+  "funFact": "The original was a plain gin-lemon-triple sec sour; the blue curaçao was added decades later so the drink would match the name of the Calais–Mediterranée express it honoured.",
+  "dexNumber": 2085,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Gin",
+     "amount": "1.5 oz / 45 ml"
+    },
+    {
+     "item": "Triple sec",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Blue curaçao",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Lemon juice",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a shaker with ice.",
+    "Shake hard for about 12 seconds.",
+    "Double-strain into a chilled coupe.",
+    "Flame an orange peel over the surface if you have one."
+   ],
+   "garnish": "A flamed orange peel",
+   "method": "shaken"
+  }
+ },
+ {
+  "id": "prince-edward",
+  "name": "Prince Edward",
+  "category": "cocktail",
+  "subcategory": "Spirit-Forward",
+  "description": "Scotch and Drambuie held together by Lillet Blanc. A Bobby Burns that traded its vermouth for something lighter.",
+  "abv": "28-31%",
+  "origin": "Scotland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "heather honey",
+   "malt",
+   "orange",
+   "quinine"
+  ],
+  "glassware": "Coupe glass",
+  "ingredients": [
+   "Blended Scotch whisky",
+   "Lillet Blanc",
+   "Drambuie",
+   "Orange bitters"
+  ],
+  "funFact": "It is a Bobby Burns with Kina Lillet where the Italian vermouth should be — the same substitution that made the Vesper and the Corpse Reviver No. 2 taste the way they originally did, before Kina Lillet was reformulated in 1986.",
+  "dexNumber": 2086,
+  "recipe": {
+   "ingredients": [
+    {
+     "item": "Blended Scotch whisky",
+     "amount": "2 oz / 60 ml"
+    },
+    {
+     "item": "Lillet Blanc",
+     "amount": "0.75 oz / 22 ml"
+    },
+    {
+     "item": "Drambuie",
+     "amount": "0.5 oz / 15 ml"
+    },
+    {
+     "item": "Orange bitters",
+     "amount": "2 dashes"
+    },
+    {
+     "item": "Ice",
+     "amount": "cubed"
+    }
+   ],
+   "steps": [
+    "Add all ingredients to a mixing glass with ice.",
+    "Stir until cold and properly diluted, about 25 seconds.",
+    "Strain into a chilled coupe.",
+    "Express an orange twist over the top and drop it in."
+   ],
+   "garnish": "An orange twist",
+   "method": "stirred"
+  }
  }
 ]
