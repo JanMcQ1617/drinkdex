@@ -1,0 +1,90 @@
+[
+  {
+    "id": "la-perla",
+    "name": "La Perla",
+    "subcategory": "Spirit-Forward",
+    "description": "Manzanilla sherry and reposado tequila in equal measure, sweetened with pear. Saline, dry and unlike anything else on the shelf.",
+    "abv": "19-22%",
+    "origin": "San Francisco, USA",
+    "rarity": "rare",
+    "tastingNotes": ["saline", "pear", "agave", "almond"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Manzanilla sherry", "Reposado tequila", "Pear liqueur"],
+    "funFact": "Jacques Bezuidenhaut built it at Tres Agaves in San Francisco in 2005, and it did more than any other drink to put dry sherry back behind American bars — manzanilla is aged under a living cap of flor yeast that keeps air off the wine entirely.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Manzanilla sherry", "amount": "1.5 oz / 45 ml" },
+        { "item": "Reposado tequila", "amount": "1.5 oz / 45 ml" },
+        { "item": "Pear liqueur", "amount": "0.75 oz / 22 ml" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a mixing glass with ice.",
+        "Stir for about 25 seconds until well chilled.",
+        "Strain into a chilled coupe.",
+        "Express a lemon twist over the surface and drop it in."
+      ],
+      "garnish": "A lemon twist",
+      "method": "stirred"
+    }
+  },
+  {
+    "id": "ferrari",
+    "name": "Ferrari",
+    "subcategory": "Spirit-Forward",
+    "description": "Fernet-Branca and Campari, half and half, and nothing else. Two amari that were never meant to meet.",
+    "abv": "28-32%",
+    "origin": "Italy",
+    "rarity": "rare",
+    "tastingNotes": ["menthol", "bitter orange", "saffron", "myrrh"],
+    "glassware": "Rocks glass",
+    "ingredients": ["Fernet-Branca", "Campari"],
+    "funFact": "The name is for the colour, not the car — though it is also the drink bartenders hand each other at the end of a shift, which is how a two-ingredient pour with no history became a fixture without ever appearing in a book.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Fernet-Branca", "amount": "1 oz / 30 ml" },
+        { "item": "Campari", "amount": "1 oz / 30 ml" },
+        { "item": "Ice", "amount": "cubed, or none if taken as a shot" }
+      ],
+      "steps": [
+        "Add both amari to a mixing glass with ice.",
+        "Stir briefly — about 15 seconds, as there is nothing here to dilute far.",
+        "Strain over fresh ice in a rocks glass, or into a shot glass neat.",
+        "Serve with no garnish."
+      ],
+      "garnish": "None",
+      "method": "stirred"
+    }
+  },
+  {
+    "id": "boomerang",
+    "name": "Boomerang",
+    "subcategory": "Spirit-Forward",
+    "description": "Rye, dry vermouth and Swedish Punsch, with a dash of lemon to stop it closing up. Craddock at his most obscure.",
+    "abv": "21-24%",
+    "origin": "London, England",
+    "rarity": "rare",
+    "tastingNotes": ["rye spice", "arrack", "tea", "lemon"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Rye whiskey", "Swedish Punsch", "Dry vermouth", "Angostura bitters", "Lemon juice"],
+    "funFact": "Swedish Punsch is a rum-and-arrack liqueur that Sweden has been making since 1733, and it was common enough in 1930 that the Savoy Cocktail Book used it without explanation. It then vanished from English-speaking bars for seventy years.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Rye whiskey", "amount": "1 oz / 30 ml" },
+        { "item": "Swedish Punsch", "amount": "1 oz / 30 ml" },
+        { "item": "Dry vermouth", "amount": "1 oz / 30 ml" },
+        { "item": "Angostura bitters", "amount": "1 dash" },
+        { "item": "Lemon juice", "amount": "1 dash" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a mixing glass with ice.",
+        "Stir well for about 25 seconds.",
+        "Strain into a chilled coupe.",
+        "Garnish and serve."
+      ],
+      "garnish": "A lemon twist",
+      "method": "stirred"
+    }
+  }
+]
