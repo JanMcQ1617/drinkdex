@@ -1,0 +1,185 @@
+[
+  {
+    "id": "lions-tail",
+    "name": "Lion's Tail",
+    "subcategory": "Sour",
+    "description": "Bourbon soured with lime and sweetened with Jamaican allspice. A London book's American drink, and the reason allspice dram sits behind modern bars.",
+    "abv": "22-25%",
+    "origin": "London, England",
+    "rarity": "uncommon",
+    "tastingNotes": ["allspice", "lime", "bourbon", "clove"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Bourbon", "Allspice dram", "Lime juice", "Simple syrup", "Angostura bitters"],
+    "funFact": "\"Twisting the lion's tail\" was American slang for provoking the British, whose royal arms carry a lion — which is why a drink printed in a London book in 1937 is almost certainly the work of an American bartender that Prohibition had driven across the Atlantic.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Bourbon", "amount": "2 oz / 60 ml" },
+        { "item": "Allspice dram", "amount": "0.5 oz / 15 ml" },
+        { "item": "Lime juice", "amount": "0.5 oz / 15 ml" },
+        { "item": "Simple syrup", "amount": "0.25 oz / 7 ml" },
+        { "item": "Angostura bitters", "amount": "1 dash" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a shaker with ice.",
+        "Shake hard for about 12 seconds until the tin frosts.",
+        "Double-strain into a chilled coupe.",
+        "Express a lime twist over the surface and drop it in."
+      ],
+      "garnish": "A lime twist",
+      "method": "shaken"
+    }
+  },
+  {
+    "id": "million-dollar-cocktail",
+    "name": "Million Dollar Cocktail",
+    "subcategory": "Sour",
+    "description": "Gin, sweet vermouth and pineapple shaken to a thick foam with egg white. The Singapore Sling's older, richer sibling from the same bar.",
+    "abv": "15-18%",
+    "origin": "Singapore",
+    "rarity": "rare",
+    "tastingNotes": ["pineapple", "juniper", "vermouth", "foam"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Gin", "Sweet vermouth", "Pineapple juice", "Grenadine", "Egg white"],
+    "funFact": "Somerset Maugham put it in his 1926 story The Letter, which did more for the drink than any bartender — though cocktail historian David Wondrich disputes the Raffles origin entirely and argues it was first poured at the Shanghai Club.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Gin", "amount": "1.5 oz / 45 ml" },
+        { "item": "Sweet vermouth", "amount": "0.5 oz / 15 ml" },
+        { "item": "Pineapple juice", "amount": "1 oz / 30 ml" },
+        { "item": "Grenadine", "amount": "0.25 oz / 7 ml" },
+        { "item": "Egg white", "amount": "1" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Dry-shake everything without ice for 10 seconds to build the foam.",
+        "Add ice and shake hard for a further 12 seconds.",
+        "Double-strain into a chilled coupe.",
+        "Let the foam settle before serving."
+      ],
+      "garnish": "A pineapple wedge",
+      "method": "shaken"
+    }
+  },
+  {
+    "id": "maximilian-affair",
+    "name": "Maximilian Affair",
+    "subcategory": "Modern Classic",
+    "description": "Mezcal met elderflower and Punt e Mes in Boston. Smoke, blossom and bitter orange, with the lemon holding them apart.",
+    "abv": "18-21%",
+    "origin": "Boston, USA",
+    "rarity": "uncommon",
+    "tastingNotes": ["smoke", "elderflower", "bitter orange", "lemon"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Mezcal", "Elderflower liqueur", "Punt e Mes", "Lemon juice"],
+    "funFact": "Misty Kalkofen improvised it at Green Street in 2008 when Ron Cooper, who founded Del Maguey mezcal, walked into the bar unannounced. The name is a joke about France's 1860s adventure in Mexico — French elderflower, Mexican mezcal.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Mezcal", "amount": "1 oz / 30 ml" },
+        { "item": "Elderflower liqueur", "amount": "1 oz / 30 ml" },
+        { "item": "Punt e Mes", "amount": "0.5 oz / 15 ml" },
+        { "item": "Lemon juice", "amount": "0.5 oz / 15 ml" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a shaker with ice.",
+        "Shake hard for about 12 seconds.",
+        "Double-strain into a chilled coupe.",
+        "Express a lemon twist over the top and discard it."
+      ],
+      "garnish": "A lemon twist",
+      "method": "shaken"
+    }
+  },
+  {
+    "id": "east-india-cocktail",
+    "name": "East India Cocktail",
+    "subcategory": "Spirit-Forward",
+    "description": "Brandy laid over curaçao, maraschino and raspberry. An 1880s after-dinner drink built like a sweetmeat.",
+    "abv": "24-27%",
+    "origin": "New York, USA",
+    "rarity": "rare",
+    "tastingNotes": ["cognac", "raspberry", "orange peel", "maraschino"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Brandy", "Orange curaçao", "Raspberry syrup", "Maraschino liqueur", "Angostura bitters"],
+    "funFact": "Harry Johnson printed it in 1882 and then changed his own sweetener by 1890; Harry Craddock dropped the maraschino altogether in 1930 and poured in pineapple juice instead. Three books, three different drinks, one name.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Brandy", "amount": "2 oz / 60 ml" },
+        { "item": "Orange curaçao", "amount": "0.5 oz / 15 ml" },
+        { "item": "Raspberry syrup", "amount": "0.5 oz / 15 ml" },
+        { "item": "Maraschino liqueur", "amount": "2 dashes" },
+        { "item": "Angostura bitters", "amount": "3 dashes" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a mixing glass with ice.",
+        "Stir for about 25 seconds until well chilled.",
+        "Strain into a chilled coupe.",
+        "Garnish and serve."
+      ],
+      "garnish": "A lemon twist",
+      "method": "stirred"
+    }
+  },
+  {
+    "id": "up-to-date",
+    "name": "Up-to-Date",
+    "subcategory": "Spirit-Forward",
+    "description": "Amontillado sherry stood up to rye in equal measure, with Grand Marnier closing it. Nutty, dry and far older than it tastes.",
+    "abv": "25-28%",
+    "origin": "New York, USA",
+    "rarity": "rare",
+    "tastingNotes": ["walnut", "rye spice", "orange", "dried fruit"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Amontillado sherry", "Rye whiskey", "Grand Marnier", "Angostura bitters"],
+    "funFact": "It comes from Hugo Ensslin's Recipes for Mixed Drinks — the last book to record New York bartending before Prohibition closed the bars, written by the head bartender of the Hotel Wallick on Times Square.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Amontillado sherry", "amount": "1.25 oz / 37 ml" },
+        { "item": "Rye whiskey", "amount": "1.25 oz / 37 ml" },
+        { "item": "Grand Marnier", "amount": "0.5 oz / 15 ml" },
+        { "item": "Angostura bitters", "amount": "2 dashes" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a mixing glass with ice.",
+        "Stir for about 25 seconds until well chilled.",
+        "Strain into a chilled coupe.",
+        "Express a lemon peel over the surface and drop it in."
+      ],
+      "garnish": "A lemon peel",
+      "method": "stirred"
+    }
+  },
+  {
+    "id": "old-hickory",
+    "name": "Old Hickory",
+    "subcategory": "Spirit-Forward",
+    "description": "Two vermouths and two bitters, and nothing else. The lowest-proof drink in New Orleans and one of the best-balanced.",
+    "abv": "13-16%",
+    "origin": "New Orleans, USA",
+    "rarity": "rare",
+    "tastingNotes": ["wormwood", "orange peel", "anise", "bitter herbs"],
+    "glassware": "Coupe glass",
+    "ingredients": ["Dry vermouth", "Sweet vermouth", "Peychaud's bitters", "Orange bitters"],
+    "funFact": "Stanley Clisby Arthur recorded in 1937 that it was Andrew Jackson's favourite drink while he and the pirate Jean Lafitte were winning the Battle of New Orleans in the winter of 1814. Jackson's nickname was Old Hickory.",
+    "recipe": {
+      "ingredients": [
+        { "item": "Dry vermouth", "amount": "1.5 oz / 45 ml" },
+        { "item": "Sweet vermouth", "amount": "1.5 oz / 45 ml" },
+        { "item": "Peychaud's bitters", "amount": "2 dashes" },
+        { "item": "Orange bitters", "amount": "1 dash" },
+        { "item": "Ice", "amount": "cubed" }
+      ],
+      "steps": [
+        "Add all ingredients to a mixing glass with ice.",
+        "Stir for about 25 seconds — it is low-proof, so it takes dilution well.",
+        "Strain into a chilled coupe.",
+        "Twist a lemon peel over the top and drop it in."
+      ],
+      "garnish": "A lemon peel",
+      "method": "stirred"
+    }
+  }
+]
