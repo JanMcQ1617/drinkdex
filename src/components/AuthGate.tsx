@@ -16,9 +16,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { Button, PressableScale, haptic } from '@/components/ui';
+import { WelcomeConnect } from '@/components/WelcomeConnect';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { normalizePhone } from '@/lib/contacts';
 import { normalizeHandle } from '@/lib/instagram';
+import { hasSeenWelcome, markWelcomeSeen } from '@/lib/onboarding';
 import { useAuth } from '@/store/auth';
 
 /* ==================================================================== */
@@ -120,6 +122,42 @@ export function Field({
 export function AuthGate({ children }: { children: React.ReactNode }) {
   const session = useAuth((s) => s.session);
   const ready = useAuth((s) => s.ready);
+  const userId = session?.user.id;
+
+  /*
+   * The answer is stored WITH the account it belongs to, rather than as a
+   * bare boolean, for two reasons.
+   *
+   * It removes a synchronous setState from the effect — resetting to null
+   * on sign-out is what `react-hooks/set-state-in-effect` rejects under
+   * the React Compiler. Comparing ids during render does the same job for
+   * free.
+   *
+   * And it is correct across a sign-out and a sign-in as someone else on
+   * the same phone: a stale "seen" from the previous account cannot apply
+   * to the new one, because the ids will not match and the value reads as
+   * not-yet-known until the real answer lands.
+   */
+  const [welcome, setWelcome] = useState<{ userId: string; seen: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!userId) return;
+    let alive = true;
+    hasSeenWelcome(userId)
+      .then((seen) => {
+        if (alive) setWelcome({ userId, seen });
+      })
+      .catch(() => {
+        /* hasSeenWelcome already swallows and answers true; belt and braces. */
+        if (alive) setWelcome({ userId, seen: true });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [userId]);
+
+  /* null = not yet known for THIS account. */
+  const welcomeSeen = welcome && welcome.userId === userId ? welcome.seen : null;
 
   if (!ready) {
     return (
@@ -129,7 +167,34 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     );
   }
 
-  return session ? <>{children}</> : <AuthForm />;
+  if (!session || !userId) return <AuthForm />;
+
+  if (welcomeSeen === null) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator color={colors.wine} />
+      </View>
+    );
+  }
+
+  if (!welcomeSeen) {
+    return (
+      <WelcomeConnect
+        onDone={() => {
+          /*
+           * Dismiss locally FIRST, then persist. The write can fail on a
+           * full disk and the user still expects the step to close; the
+           * cost of a lost write is being offered it once more, which
+           * lib/onboarding.ts is explicit about accepting.
+           */
+          setWelcome({ userId, seen: true });
+          void markWelcomeSeen(userId);
+        }}
+      />
+    );
+  }
+
+  return <>{children}</>;
 }
 
 /*

@@ -113,6 +113,19 @@ export default function RootLayout() {
         */}
         <Stack.Screen name="settings" options={{ gestureDirection: 'horizontal' }} />
         {/*
+          Settings' two children. Both push rather than presenting, and both
+          take the edge-swipe rather than the full-width one: Find friends
+          holds text inputs and a horizontally scrolling result row, and a
+          full-width back gesture would fire on a mistimed tap at either.
+
+          They are screens rather than expanding rows because there is a
+          screen's worth behind each — Find friends alone is four cards with
+          headings. Nested inside a settings group they boxed four borders
+          inside a fifth and pushed "Sign out" out of reach.
+        */}
+        <Stack.Screen name="blocked" options={{ gestureDirection: 'horizontal' }} />
+        <Stack.Screen name="find-friends" options={{ gestureDirection: 'horizontal' }} />
+        {/*
           My Bar. Pushes for the same reason Settings does — somewhere you go
           and come back from, and it pushes drink cards of its own. Edge-swipe
           only rather than full-width: the shelf is rows of wrapped chips and

@@ -1,9 +1,9 @@
+import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import React, { useCallback } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { FindFriends } from '@/components/FindFriends';
 import { Icon, type IconName } from '@/components/icons';
 import { Avatar, Card, PressableScale, SectionLabel, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
@@ -14,20 +14,33 @@ import { useSocial } from '@/store/social';
 /* ==================================================================== */
 /* Settings                                                             */
 /*                                                                      */
-/* A screen, where this used to be an Alert with three destructive       */
-/* buttons in it.                                                       */
+/* Built on Instagram's settings model, which is worth copying for one   */
+/* reason: it scales. Its shape is a single scroll of SECTIONS, each a   */
+/* short list of icon + label + chevron rows, ordered so that the things */
+/* that change what other people see sit above the things that only      */
+/* change your own app, and the irreversible ones sit last under their   */
+/* own heading.                                                          */
 /*                                                                      */
-/* That Alert was the only home for signing out, resetting the           */
-/* collection and deleting the account — three irreversible things       */
-/* stacked in a list with no room to say what any of them did. An        */
-/* action sheet is for confirming a decision already taken, not for      */
-/* browsing what is available, and it cannot hold the Instagram and      */
-/* contact controls that also belong here.                              */
+/* Three things are deliberately NOT copied.                            */
 /*                                                                      */
-/* Ordered by how much damage each row can do, gently at the top. The    */
-/* three that cannot be undone sit at the bottom under their own         */
-/* heading, well away from anything you might tap on the way past.       */
+/* No search field. Instagram has one because it has sixty-odd rows      */
+/* across nine groups and nobody can find "Hidden Words" by scanning.    */
+/* This screen has eleven. A search box over eleven rows is furniture    */
+/* that says "this is complicated" about something that is not.          */
+/*                                                                      */
+/* No drill-down for its own sake. Instagram pushes almost every row to  */
+/* a sub-screen; most of ours would be a sub-screen holding one switch.  */
+/* Only "Find friends" and "Blocked accounts" push, because those two    */
+/* genuinely have a screen behind them.                                  */
+/*                                                                      */
+/* No Accounts Centre row. That exists to span Instagram, Facebook and   */
+/* Threads. There is one account here, so the identity row goes straight */
+/* to editing it.                                                        */
 /* ==================================================================== */
+
+const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
+const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
+const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
 
 function Row({
   icon,
@@ -35,12 +48,15 @@ function Row({
   detail,
   onPress,
   danger,
+  last,
 }: {
   icon: IconName;
   label: string;
   detail?: string;
   onPress: () => void;
   danger?: boolean;
+  /** Suppresses the chevron on rows that act rather than navigate. */
+  last?: boolean;
 }) {
   return (
     <PressableScale
@@ -55,8 +71,20 @@ function Row({
         <Text style={[styles.rowLabel, danger && styles.rowLabelDanger]}>{label}</Text>
         {detail ? <Text style={styles.rowDetail}>{detail}</Text> : null}
       </View>
-      {danger ? null : <Icon name="chevronRight" size={16} color={colors.textFaint} />}
+      {danger || last ? null : (
+        <Icon name="chevronRight" size={16} color={colors.textFaint} />
+      )}
     </PressableScale>
+  );
+}
+
+/** Section heading + its card. Keeps the rhythm identical across groups. */
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <>
+      <SectionLabel style={styles.sectionLabel}>{title}</SectionLabel>
+      <Card style={styles.block}>{children}</Card>
+    </>
   );
 }
 
@@ -69,6 +97,13 @@ export default function SettingsScreen() {
   const deleteAccount = useAuth((s) => s.deleteAccount);
   const resetAll = useCollection((s) => s.resetAll);
   const resetSocial = useSocial((s) => s.reset);
+
+  const open = useCallback((url: string) => {
+    haptic.tap();
+    void Linking.openURL(url).catch(() =>
+      Alert.alert('Could not open the link', 'Check your connection and try again.'),
+    );
+  }, []);
 
   const confirmReset = useCallback(() => {
     Alert.alert(
@@ -114,6 +149,9 @@ export default function SettingsScreen() {
     );
   }, [deleteAccount, resetAll, resetSocial]);
 
+  const version = Constants.expoConfig?.version ?? '1.0.0';
+  const build = Constants.expoConfig?.ios?.buildNumber ?? '';
+
   return (
     <ScrollView
       style={styles.screen}
@@ -135,7 +173,7 @@ export default function SettingsScreen() {
         <Text style={styles.title}>Settings</Text>
       </View>
 
-      {/* ---- You ---- */}
+      {/* ---- Identity. Instagram's Accounts Centre slot. ---- */}
       {profile ? (
         <PressableScale
           onPress={() => {
@@ -165,18 +203,56 @@ export default function SettingsScreen() {
         </PressableScale>
       ) : null}
 
-      {/* ---- Discovery ---- */}
-      {/*
-        Instagram and contact matching live here rather than on the profile
-        tab because they are settings about how findable you are, not
-        things to browse. Browsing other people stayed behind on Profile.
-      */}
-      <SectionLabel style={styles.sectionLabel}>Finding people</SectionLabel>
-      <FindFriends />
+      {/* ---- How people find you ---- */}
+      <Section title="How people find you">
+        <Row
+          icon="users"
+          label="Find friends"
+          detail="Instagram, contacts, username search and invites."
+          onPress={() => {
+            haptic.tap();
+            router.push('/find-friends');
+          }}
+        />
+      </Section>
 
-      {/* ---- The irreversible half ---- */}
-      <SectionLabel style={styles.sectionLabel}>Danger zone</SectionLabel>
-      <Card style={styles.block}>
+      {/* ---- Who you have shut out ---- */}
+      <Section title="Who can reach you">
+        <Row
+          icon="lock"
+          label="Blocked accounts"
+          detail="See who you have blocked, and undo it."
+          onPress={() => {
+            haptic.tap();
+            router.push('/blocked');
+          }}
+        />
+      </Section>
+
+      {/* ---- Instagram's "Help" and "About", merged. ---- */}
+      <Section title="About">
+        <Row
+          icon="comment"
+          label="Help and support"
+          detail="One person reads this address."
+          onPress={() => open(SUPPORT_URL)}
+        />
+        <View style={styles.divider} />
+        <Row
+          icon="eye"
+          label="Privacy Policy"
+          onPress={() => open(PRIVACY_URL)}
+        />
+        <View style={styles.divider} />
+        <Row icon="bookmark" label="Terms of Use" onPress={() => open(TERMS_URL)} />
+      </Section>
+
+      {/*
+        Instagram parks Log Out at the very bottom under its own "Login"
+        heading, far from anything routine. The three irreversible actions
+        get the same treatment, ordered by how much they destroy.
+      */}
+      <Section title="Account">
         <Row
           icon="flame"
           label="Reset collection"
@@ -200,7 +276,16 @@ export default function SettingsScreen() {
           onPress={confirmDelete}
           danger
         />
-      </Card>
+      </Section>
+
+      {/*
+        Version last, unemphasised. It is here because it is the first
+        thing a bug report needs and the last thing anyone browsing wants.
+      */}
+      <Text style={styles.version}>
+        Sipply {version}
+        {build ? ` (${build})` : ''}
+      </Text>
     </ScrollView>
   );
 }
@@ -249,6 +334,7 @@ const styles = StyleSheet.create({
     gap: space.lg,
     paddingVertical: space.lg,
     paddingHorizontal: space.lg,
+    /* 56 clears the 44pt floor with room for the two-line rows. */
     minHeight: 56,
   },
   rowText: { flex: 1 },
@@ -266,4 +352,18 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   divider: { height: 1, backgroundColor: colors.cardBorder, marginHorizontal: space.lg },
+
+  version: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    /*
+     * textMuted, not textFaint. This is caption-sized, which WCAG holds to
+     * 4.5:1, and textFaint measures 2.84:1 on the page — the same failure
+     * the Dex chip counts had. Quiet is a job for size and placement; it
+     * is not a licence to make the text unreadable. 5.50:1 here.
+     */
+    color: colors.textMuted,
+    textAlign: 'center',
+    marginTop: space.xxl,
+  },
 });

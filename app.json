@@ -3,9 +3,13 @@
     "name": "Sipply",
     "slug": "drinkdex",
     "version": "1.0.0",
-    "runtimeVersion": { "policy": "fingerprint" },
+    "runtimeVersion": {
+      "policy": "fingerprint"
+    },
     "owner": "the-idealize",
-    "updates": { "url": "https://u.expo.dev/d45e5a60-57d3-4bfb-9c61-7f5f34284184" },
+    "updates": {
+      "url": "https://u.expo.dev/d45e5a60-57d3-4bfb-9c61-7f5f34284184"
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
@@ -13,7 +17,7 @@
     "backgroundColor": "#FFFDF9",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
-      "buildNumber": "7",
+      "buildNumber": "8",
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -98,7 +102,7 @@
       [
         "expo-contacts",
         {
-          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Your contacts are never uploaded — only one-way hashes are compared."
+          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Your contacts are never uploaded \u2014 only one-way hashes are compared."
         }
       ],
       [
@@ -115,7 +119,9 @@
       "reactCompiler": true
     },
     "extra": {
-      "eas": { "projectId": "d45e5a60-57d3-4bfb-9c61-7f5f34284184" }
+      "eas": {
+        "projectId": "d45e5a60-57d3-4bfb-9c61-7f5f34284184"
+      }
     }
   }
 }
