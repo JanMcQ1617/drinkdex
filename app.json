@@ -102,7 +102,7 @@
       [
         "expo-contacts",
         {
-          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Your contacts are never uploaded \u2014 only one-way hashes are compared."
+          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Your contacts are never uploaded — only one-way hashes are compared."
         }
       ],
       [
@@ -112,7 +112,8 @@
           "cameraPermission": "Sipply uses the camera to photograph the drink you are logging.",
           "microphonePermission": false
         }
-      ]
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -4,9 +4,10 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
-import { SipplyIntro } from '@/components/SipplyIntro';
+import { VideoIntro } from '@/components/VideoIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
+import { Grain } from '@/components/Grain';
 import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
 import { colors, fonts } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
@@ -142,6 +143,12 @@ export default function RootLayout() {
           options={{ presentation: 'modal', gestureDirection: 'vertical' }}
         />
       </Stack>
+      {/*
+        Paper grain over everything. Above the Stack so every screen gets
+        it without each one remembering to, and below the overlays so the
+        intro and the celebration stay clean sheets.
+      */}
+      <Grain />
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
       {/*
@@ -162,7 +169,7 @@ export default function RootLayout() {
       */}
       <CelebrationOverlay />
       {showIntro && (
-        <SipplyIntro
+        <VideoIntro
           onDone={() => {
             introPlayed = true;
             setShowIntro(false);

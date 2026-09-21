@@ -8,7 +8,6 @@ import {
   Modal,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -17,6 +16,7 @@ import {
 import Animated, {
   Easing,
   FadeInDown,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -312,6 +312,36 @@ export default function DrinkDetailScreen() {
    * place it appears, which is exactly why it still means something here.
    */
   const [celebrating, setCelebrating] = useState(false);
+  /* ==================================================================
+   * Hero parallax
+   *
+   * The photograph is the screen. Scrolling it away at the same speed as
+   * the text sitting on top of it reads as one flat sheet moving; at a
+   * fraction of that speed the hero sits BEHIND the page and the card
+   * gains a floor. 0.35 is the fraction — far enough to register, near
+   * enough that the image never separates from its rarity rule.
+   *
+   * Pulling DOWN past the top scales the hero instead of exposing the
+   * ground behind it, which is the behaviour every photo header on iOS
+   * has and the one thing people notice by its absence.
+   * ================================================================== */
+  const scrollY = useSharedValue(0);
+  const onScroll = useAnimatedScrollHandler((e) => {
+    scrollY.value = e.contentOffset.y;
+  });
+
+  const heroParallax = useAnimatedStyle(() => {
+    if (reduced) return {};
+    const y = scrollY.value;
+    return {
+      transform: [
+        { translateY: y < 0 ? 0 : y * 0.35 },
+        /* Overscroll only. 1 + (-y / 420) grows ~1.5% per 6pt of pull. */
+        { scale: y < 0 ? 1 - y / 420 : 1 },
+      ],
+    };
+  });
+
   const celebScrim = useSharedValue(0);
   const celebScale = useSharedValue(0.82);
   const celebOpacity = useSharedValue(0);
@@ -551,7 +581,9 @@ export default function DrinkDetailScreen() {
 
   return (
     <View style={styles.screen}>
-      <ScrollView
+      <Animated.ScrollView
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         contentContainerStyle={[
           styles.content,
           { paddingTop: insets.top + space.md, paddingBottom: Math.max(insets.bottom, space.xl) + 48 },
@@ -577,6 +609,7 @@ export default function DrinkDetailScreen() {
            */
           style={[
             styles.hero,
+            heroParallax,
             // A photograph defines the hero's height itself, so the padding
             // that framed the 150pt vector would only band the image.
             heroPhoto ? styles.heroPhotoMode : null,
@@ -779,7 +812,7 @@ export default function DrinkDetailScreen() {
             />
           </>
         ) : null}
-      </ScrollView>
+      </Animated.ScrollView>
 
       {/* Unlock / update-photo modal */}
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={closeModal}>
