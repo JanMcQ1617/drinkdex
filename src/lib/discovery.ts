@@ -113,3 +113,21 @@ export async function getPendingClaims(): Promise<PendingClaims | null> {
 export async function clearPendingClaims(): Promise<void> {
   await AsyncStorage.removeItem(PENDING_KEY);
 }
+
+/*
+ * Everything discovery remembers on the device, cleared together.
+ *
+ * Called on sign-out and on account deletion. Without it the previous
+ * account's phone number, Instagram handle and imported list survive on
+ * the phone and are shown to whoever signs in next.
+ */
+const IG_CONNECTIONS_KEY = 'clink-ig-connections';
+
+export async function clearDiscoveryCache(): Promise<void> {
+  await Promise.all([
+    forgetRememberedPhone(),
+    forgetRememberedHandle(),
+    clearPendingClaims(),
+    AsyncStorage.removeItem(IG_CONNECTIONS_KEY),
+  ]);
+}

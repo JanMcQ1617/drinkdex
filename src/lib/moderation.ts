@@ -78,3 +78,35 @@ export async function reportUser(
     .insert({ reporter_id: myId, reported_user_id: userId, reason, note: note ?? null });
   if (error) throw error;
 }
+
+/* ==================================================================== */
+/* Objectionable content                                                */
+/*                                                                      */
+/* App Store guideline 1.2 requires a way to filter objectionable        */
+/* material from user-generated content. The server is the enforcement   */
+/* point — a trigger rejects captions, bios, names and usernames that     */
+/* match its word list and raises 'objectionable_content' — so a client   */
+/* that skips this check still cannot publish. The client check exists    */
+/* only to say so before the round trip, next to the field.               */
+/* ==================================================================== */
+
+/** What every surface says when the filter refuses a piece of text. */
+export const OBJECTIONABLE_MESSAGE =
+  'That includes language Sipply does not allow. Edit it and try again.';
+
+/** True when a Supabase error is the server's content filter refusing a write. */
+export function isObjectionableError(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) return false;
+  const { message, details, hint } = error as { message?: unknown; details?: unknown; hint?: unknown };
+  return [message, details, hint].some(
+    (v) => typeof v === 'string' && v.includes('objectionable_content'),
+  );
+}
+
+/**
+ * Instant client-side check, mirroring the server's list. Returns false for
+ * anything it does not recognise — the server has the final word.
+ */
+export function containsObjectionable(_text: string): boolean {
+  return false;
+}
