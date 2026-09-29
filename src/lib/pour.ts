@@ -118,3 +118,14 @@ export async function pickFromCamera(): Promise<PickResult> {
     };
   }
 }
+
+/**
+ * Re-encodes a photo as a fresh JPEG with no metadata — no EXIF, no GPS —
+ * and returns the new file's uri. Every photo that leaves the device goes
+ * through this first.
+ *
+ * STUB until the logging fixes land: returns the uri unchanged.
+ */
+export async function stripMetadata(uri: string, _maxEdge = 2048): Promise<string> {
+  return uri;
+}
