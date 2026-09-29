@@ -234,7 +234,8 @@ ${lines}
 
 /** The photograph for a drink, or undefined when it has none. */
 export function drinkPhoto(id: string): number | undefined {
-  return PHOTOS[id];
+  // Own keys only: a hostile id like 'constructor' must not resolve.
+  return Object.prototype.hasOwnProperty.call(PHOTOS, id) ? PHOTOS[id] : undefined;
 }
 
 /** How many entries ship with a photograph. */

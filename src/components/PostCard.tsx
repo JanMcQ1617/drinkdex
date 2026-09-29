@@ -23,7 +23,7 @@ import {
   tabular,
   type as typeScale,
 } from '@/constants/theme';
-import { DRINKS_BY_ID, formatDexNumber } from '@/data';
+import { getDrink, formatDexNumber } from '@/data';
 import { blockUser, REPORT_REASONS, reportPost } from '@/lib/moderation';
 import { signedPhotoUrl } from '@/lib/social';
 import { useAuth } from '@/store/auth';
@@ -231,7 +231,7 @@ export const PostCard = React.memo(function PostCard({
   const photoUrl = useSignedPhoto(current) ?? post.photoUri;
   const hasGallery = gallery.length > 1;
 
-  const drink = DRINKS_BY_ID[post.drinkId];
+  const drink = getDrink(post.drinkId);
   // A post can outrun its author's profile row; render it rather than crash.
   const who = author ?? {
     id: post.authorId,

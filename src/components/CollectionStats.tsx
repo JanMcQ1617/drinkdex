@@ -24,7 +24,7 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, DRINKS_BY_ID, formatCount, formatDexNumber, TOTAL } from '@/data';
+import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
 import { RarityDonut } from '@/components/RarityDonut';
 import { MILESTONES, rankTitle } from '@/lib/milestones';
 import { useCollection } from '@/store/collection';
@@ -54,7 +54,7 @@ export function deriveStats(unlocks: Record<string, UnlockRecord>) {
 
   const entries: UnlockedEntry[] = [];
   for (const record of Object.values(unlocks)) {
-    const drink = DRINKS_BY_ID[record.drinkId];
+    const drink = getDrink(record.drinkId);
     if (!drink) continue; // orphaned record — skip defensively
     entries.push({ drink, record });
     byCategory[drink.category] += 1;

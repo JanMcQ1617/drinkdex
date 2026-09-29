@@ -50,7 +50,7 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { DRINKS_BY_ID, formatCount } from '@/data';
+import { getDrink, formatCount } from '@/data';
 import { fetchPostsByAuthor, fetchProfiles, toProfile } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
@@ -75,7 +75,7 @@ function derivePostStats(posts: Post[]) {
 
   let counted = 0;
   for (const post of posts) {
-    const drink = DRINKS_BY_ID[post.drinkId];
+    const drink = getDrink(post.drinkId);
     if (!drink) continue;
     counted += 1;
     byCategory[drink.category] += 1;
@@ -177,7 +177,7 @@ function PostTile({
   onPress: (drinkId: string) => void;
 }) {
   const photoUrl = useSignedPhoto(post.photoPath);
-  const drink = DRINKS_BY_ID[post.drinkId];
+  const drink = getDrink(post.drinkId);
   if (!drink) return null;
 
   return (

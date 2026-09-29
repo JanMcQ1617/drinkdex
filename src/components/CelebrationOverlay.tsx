@@ -25,7 +25,7 @@ import {
   space,
   type as typeScale,
 } from '@/constants/theme';
-import { DRINKS_BY_ID, formatCount, formatDexNumber, TOTAL } from '@/data';
+import { getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { useCelebrate } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
@@ -136,7 +136,7 @@ export function CelebrationOverlay() {
   if (!current) return null;
 
   if (current.kind === 'collected') {
-    const drink = DRINKS_BY_ID[current.drinkId];
+    const drink = getDrink(current.drinkId);
     if (!drink) return null;
 
     const record = unlocks[current.drinkId];

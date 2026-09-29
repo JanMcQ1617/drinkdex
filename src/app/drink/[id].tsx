@@ -58,7 +58,7 @@ import {
   type as typeScale,
   tabular,
 } from '@/constants/theme';
-import { DRINKS_BY_ID, formatDexNumber } from '@/data';
+import { getDrink, formatDexNumber } from '@/data';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
@@ -279,7 +279,7 @@ export default function DrinkDetailScreen() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const drink = id ? DRINKS_BY_ID[id] : undefined;
+  const drink = getDrink(id);
 
   const record = useCollection((s) => (drink ? s.unlocks[drink.id] : undefined));
   const unlock = useCollection((s) => s.unlock);

@@ -10,9 +10,28 @@ export const DRINKS: Drink[] = (raw as unknown as Drink[])
 
 export const TOTAL = DRINKS.length;
 
-export const DRINKS_BY_ID: Record<string, Drink> = Object.fromEntries(
-  DRINKS.map((d) => [d.id, d])
+/*
+ * Built on a null prototype, and read through getDrink(), never by bare
+ * index. A drink id arrives from places the app does not control — a
+ * post's drink_id is free text, and drinkdex://drink/<id> is a public
+ * deep link — and on an ordinary object DRINKS_BY_ID['constructor'] is the
+ * Object function: truthy, so every `if (!drink)` guard waves it through,
+ * and the first `drink.category` read crashes the screen. One post with
+ * that id would crash the feed of everyone following its author.
+ */
+const BY_ID: Record<string, Drink> = Object.assign(
+  Object.create(null) as Record<string, Drink>,
+  Object.fromEntries(DRINKS.map((d) => [d.id, d])),
 );
+
+export const DRINKS_BY_ID: Readonly<Record<string, Drink>> = BY_ID;
+
+const hasOwn = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
+
+/** The drink with this id, or undefined — safe for any string, including hostile ones. */
+export function getDrink(id: string | null | undefined): Drink | undefined {
+  return typeof id === 'string' && hasOwn(BY_ID, id) ? BY_ID[id] : undefined;
+}
 
 export const DRINKS_BY_CATEGORY: Record<DrinkCategory, Drink[]> = CATEGORY_ORDER.reduce(
   (acc, cat) => {

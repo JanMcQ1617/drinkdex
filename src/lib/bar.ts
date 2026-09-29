@@ -1,4 +1,4 @@
-import { DRINKS_BY_ID } from '@/data';
+import { getDrink } from '@/data';
 import rawIndex from '@/data/barIndex.json';
 import type { Drink } from '@/types';
 
@@ -109,7 +109,7 @@ export function matchBar(owned: ReadonlySet<string>): BarResult {
   const nearly: Match[] = [];
 
   for (const recipe of index.recipes) {
-    const drink = DRINKS_BY_ID[recipe.id];
+    const drink = getDrink(recipe.id);
     if (!drink) continue; // a drink pruned from the index since the last build
 
     const missing: string[] = [];
