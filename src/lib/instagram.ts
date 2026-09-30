@@ -1,5 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import { File } from 'expo-file-system';
+import { strFromU8, unzipSync, type UnzipFileInfo } from 'fflate';
 
 /* ==================================================================== */
 /* Instagram connections                                                */
@@ -21,9 +22,9 @@ import { File } from 'expo-file-system';
 /*                                                                      */
 /* What is left is the one copy of the list that legitimately exists:    */
 /* the user's own. Instagram's "Download your information" hands any     */
-/* account its followers and following as JSON, usually within half an   */
-/* hour. We parse that file on the device, hash the handles, and match   */
-/* them the same way contacts are matched.                              */
+/* account its followers and following as a .zip of JSON or HTML,        */
+/* usually within half an hour. We unzip and parse it on the device,     */
+/* hash the handles, and match them the same way contacts are matched.   */
 /* ==================================================================== */
 
 /*
@@ -144,8 +145,13 @@ export interface ImportedConnection {
  * follow requests are excluded on the same principle: in one direction they
  * are people who have not accepted you, in the other they are strangers
  * asking in, and neither belongs in a list the user is about to bulk-follow.
+ *
+ * Hashtags are skipped because they are not people at all. Choosing the
+ * files by hand, nobody picked following_hashtags.json; reading the whole
+ * folder out of the zip, every followed tag would arrive as a "handle",
+ * and a tag like "cocktails" is also somebody's username.
  */
-const SKIP_FILE = /blocked|restricted|unfollowed|dismissed|hide|removed|permanent|request/i;
+const SKIP_FILE = /blocked|restricted|unfollowed|dismissed|hide|removed|permanent|request|hashtag/i;
 
 /*
  * Top-level keys Instagram uses. followers_1.json is a BARE ARRAY with no
@@ -166,8 +172,9 @@ const KEY_KIND: { pattern: RegExp; kind: ConnectionKind }[] = [
  * nothing. `request` covers both directions — follow_requests_sent is people
  * who have not accepted you, follow_requests_received is strangers asking in;
  * neither is a friend, and both are keyed without the word "pending".
+ * Followed hashtags are skipped for SKIP_FILE's reason.
  */
-const SKIP_KEY = /blocked|restricted|unfollowed|dismissed|hide_story|pending|request/i;
+const SKIP_KEY = /blocked|restricted|unfollowed|dismissed|hide_story|pending|request|hashtag/i;
 
 /** Pulls handles out of one `string_list_data` entry. */
 function handlesFromEntry(entry: unknown): string[] {
@@ -189,36 +196,72 @@ function handlesFromEntry(entry: unknown): string[] {
   return out;
 }
 
-/**
- * Extracts handles from any blob of text.
+/*
+ * A profile link anywhere in a blob of text. Three things it has to get
+ * right, each of which it once got wrong:
  *
- * The fallback path, and the reason the HTML flavour of the export works
- * too: it scans for profile URLs and @mentions rather than assuming a
- * structure. Also what makes "paste your list" viable for anyone who does
- * not want to deal with a download at all.
+ * The optional `_u/` is the open-in-app form following lists use (see
+ * normalizeHandle). Without it this captured "_u" itself, which is
+ * reserved, so an HTML following list yielded nobody.
+ *
+ * The character before the domain may not be a dot or a word character,
+ * so help.instagram.com/<article id> and the like are not read as a
+ * person called "12345".
+ *
+ * `www.` is optional, for pasted links typed by hand.
  */
-export function extractHandles(text: string): string[] {
+const PROFILE_LINK = /(?:^|[^.\w])(?:www\.)?instagram\.com\/(?:_u\/)?([A-Za-z0-9._]{1,30})/gi;
+
+function collector(): { out: string[]; push: (raw: string) => void } {
   const out: string[] = [];
   const seen = new Set<string>();
-
-  const push = (raw: string) => {
-    const h = normalizeHandle(raw);
-    if (h && !seen.has(h)) {
-      seen.add(h);
-      out.push(h);
-    }
+  return {
+    out,
+    push: (raw) => {
+      const h = normalizeHandle(raw);
+      if (h && !seen.has(h)) {
+        seen.add(h);
+        out.push(h);
+      }
+    },
   };
+}
 
-  for (const m of text.matchAll(/(?:www\.)?instagram\.com\/([A-Za-z0-9._]{1,30})/gi)) push(m[1]);
+/**
+ * Extracts handles from any blob of text a person pasted.
+ *
+ * Scans for profile links and @mentions rather than assuming a structure,
+ * and takes bare words one per line — what you get pasting a plain list.
+ * It is what makes "paste your list" viable for anyone who does not want
+ * to deal with a download at all.
+ */
+export function extractHandles(text: string): string[] {
+  const { out, push } = collector();
+  for (const m of text.matchAll(PROFILE_LINK)) push(m[1]);
   for (const m of text.matchAll(/@([A-Za-z0-9._]{1,30})/g)) push(m[1]);
-  // Bare handles, one per line — what you get pasting a plain list.
   for (const line of text.split(/[\r\n,;\t]+/)) {
     const t = line.trim();
     if (t && /^[A-Za-z0-9._]{1,30}$/.test(t)) push(t);
   }
-
   return out;
 }
+
+/**
+ * Handles from the HTML flavour of the export: profile links only.
+ *
+ * Not extractHandles. Every person in Instagram's HTML files is a link to
+ * their profile, so the links are the whole list — and extractHandles'
+ * bare-word pass, which a pasted list needs, would also read the page's
+ * own words and stylesheet ("Followers", "auto") as handles, each one
+ * somebody's account.
+ */
+function handlesFromHtml(text: string): string[] {
+  const { out, push } = collector();
+  for (const m of text.matchAll(PROFILE_LINK)) push(m[1]);
+  return out;
+}
+
+const looksLikeHtml = (text: string) => /<(?:!doctype|html|head|body|div|table|a)\b/i.test(text.slice(0, 4096));
 
 /**
  * Parses one file from an Instagram export into handles plus which list
@@ -245,8 +288,8 @@ export function parseExportFile(
   try {
     parsed = JSON.parse(text);
   } catch {
-    // Not JSON — the HTML export, or a pasted list. Scan it as text.
-    return { handles: extractHandles(text), kind };
+    // Not JSON: the HTML flavour of the export, or some other text file.
+    return { handles: looksLikeHtml(text) ? handlesFromHtml(text) : extractHandles(text), kind };
   }
 
   const handles: string[] = [];
@@ -283,24 +326,193 @@ export function parseExportFile(
 }
 
 /* ==================================================================== */
-/* Picking files                                                        */
+/* Your own username                                                     */
+/* ==================================================================== */
+
+/*
+ * The label Instagram gives the username row in personal_information,
+ * in the languages this app's users are likeliest to export in. The
+ * export's labels follow the account's language setting, which is not
+ * the phone's; a label missed here only costs the one-tap offer, and the
+ * card falls back to typing the name.
+ */
+const USERNAME_LABEL =
+  /^(?:user ?name|nombre de usuario|nome (?:de|do) usu[aá]rio|nome utente|nom d.utilisateur|benutzername)$/i;
+
+const isRecord = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/** The `value` of a username row in a `string_map_data` object, if it has one. */
+function usernameFromStringMap(map: unknown): string | null {
+  if (!isRecord(map)) return null;
+  for (const [label, row] of Object.entries(map)) {
+    if (!USERNAME_LABEL.test(label.trim()) || !isRecord(row)) continue;
+    const handle = typeof row.value === 'string' ? normalizeHandle(row.value) : null;
+    if (handle) return handle;
+  }
+  return null;
+}
+
+/**
+ * Walks any shape looking for a string_map_data with a username row. Meta
+ * renames and re-nests these files without notice, so the documented path
+ * is tried first and this is what survives the next reshuffle. Depth-
+ * capped: the file is a handful of levels deep, and a pathological one
+ * should cost nothing.
+ */
+function findUsername(node: unknown, depth: number): string | null {
+  if (depth > 6) return null;
+  if (Array.isArray(node)) {
+    for (const item of node) {
+      const hit = findUsername(item, depth + 1);
+      if (hit) return hit;
+    }
+    return null;
+  }
+  if (!isRecord(node)) return null;
+  const direct = usernameFromStringMap(node.string_map_data);
+  if (direct) return direct;
+  for (const value of Object.values(node)) {
+    const hit = findUsername(value, depth + 1);
+    if (hit) return hit;
+  }
+  return null;
+}
+
+/**
+ * The account's own username, from personal_information.json (or .html).
+ *
+ * The documented place is profile_user[0].string_map_data.Username.value.
+ * Only the username is taken; the rest of the file (email, phone, date of
+ * birth) is read into memory with it and dropped with it, never kept and
+ * never sent.
+ */
+export function ownHandleFromPersonalInfo(text: string): string | null {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    // The HTML flavour: a table row, the label in one cell and the value
+    // in the next, with any amount of markup between the two.
+    const row = text.match(
+      />\s*(?:user ?name|nombre de usuario|nome (?:de|do) usu[aá]rio|nome utente|nom d.utilisateur|benutzername)\s*<(?:[^>]*>\s*<)*?[^>]*>\s*@?([A-Za-z0-9._]{1,30})\s*</i,
+    );
+    return row ? normalizeHandle(row[1]) : null;
+  }
+  if (isRecord(parsed) && Array.isArray(parsed.profile_user)) {
+    const first: unknown = parsed.profile_user[0];
+    const documented = isRecord(first) ? usernameFromStringMap(first.string_map_data) : null;
+    if (documented) return documented;
+  }
+  return findUsername(parsed, 0);
+}
+
+/**
+ * The username in the download's own file name, when it carries one.
+ *
+ * Instagram names the archive instagram-<username>-<date>-<id>.zip (older
+ * exports: <username>_<yyyymmdd>.zip), and a download of "Followers and
+ * following" only, which is what the card asks for, has no
+ * personal_information file to read it from. A handle cannot contain a
+ * hyphen, so the first hyphen after the prefix ends it. Only a guess, and
+ * treated as one: the card shows it and asks before anything is saved,
+ * and the file's own personal information wins when both exist.
+ */
+export function ownHandleFromArchiveName(name: string): string | null {
+  const m =
+    name.match(/^instagram[-_]([A-Za-z0-9._]{1,30})-\d{4}-?\d{2}-?\d{2}/i) ??
+    name.match(/^([A-Za-z0-9._]{1,30})_\d{8}(?:_part_\d+)?\.zip$/i);
+  return m ? normalizeHandle(m[1]) : null;
+}
+
+/* ==================================================================== */
+/* Picking the download                                                  */
 /* ==================================================================== */
 
 /**
- * Where to send someone to get the file. Deep-links into the Instagram
- * app's download page when it is installed, and to the same page on the
- * web when it is not.
+ * Where to send someone to ask for the file: the Accounts Center's
+ * "Download your information" page.
+ *
+ * Opened with Linking.openURL, which hands it to Safari, or to the
+ * Instagram app if the app claims the address. Either is somewhere the
+ * user is usually already signed in. It used to open in the in-app
+ * browser, whose comment here said it deep-linked into the Instagram app;
+ * it never did. SFSafariViewController keeps its own cookies, apart from
+ * Safari's, so every visit began at a fresh Instagram login.
  */
 export const DYI_URL = 'https://accountscenter.instagram.com/info_and_permissions/dyi/';
 
 /*
- * The export arrives as a .zip. iOS unpacks one in place when you tap it
- * in Files, so the realistic flow is: download, tap the zip, open Sipply,
- * pick the JSON. Android's Files app does the same from the Downloads
- * entry. We cannot unzip in-app without pulling in a zip library, and the
- * OS already does it in one tap, so we do not.
+ * The download itself is what gets picked: the .zip, as Instagram sends
+ * it. It used to be the JSON inside, which meant tapping the zip in Files
+ * to unpack it, finding connections/followers_and_following among dozens
+ * of folders, and choosing two files by name. fflate unzips it here
+ * instead. Loose .json and .html still work, for anyone who has already
+ * unpacked it; octet-stream is how some providers label all three.
  */
-const PICK_TYPES = ['application/json', 'text/html', 'text/plain', 'application/octet-stream'];
+const PICK_TYPES = [
+  'application/zip',
+  'application/x-zip-compressed',
+  'application/json',
+  'text/html',
+  'text/plain',
+  'application/octet-stream',
+];
+
+/*
+ * A "Followers and following" download is a few MB even for a large
+ * account. Past this it is almost certainly the full export, every photo
+ * and video included, which is a lot to hold in memory to read two text
+ * files out of — so it is refused, and the card says to request the
+ * smaller one.
+ */
+export const MAX_EXPORT_BYTES = 50 * 1024 * 1024;
+
+/*
+ * Per inflated entry, and for everything inflated from one zip. A real
+ * followers file is well under the first; an entry past it is not one,
+ * and these keep a hostile or broken archive from inflating without end.
+ */
+const MAX_ENTRY_BYTES = 20 * 1024 * 1024;
+const MAX_INFLATED_BYTES = 60 * 1024 * 1024;
+
+/*
+ * The only entries inflated. Matched anywhere in the path, not from its
+ * root: exports have moved these folders before (followers_and_following
+ * used to sit at the top level, personal_information.json is now one
+ * folder deeper), and some unzip-and-rezip tools add a folder above it all.
+ */
+const CONNECTIONS_ENTRY = /(?:^|\/)followers_and_following\/[^/]+\.(?:json|html?)$/i;
+const PERSONAL_ENTRY = /(?:^|\/)personal_information\.(?:json|html?)$/i;
+
+const baseName = (path: string) => path.slice(path.lastIndexOf('/') + 1);
+
+/* A zip starts "PK". Sniffed rather than trusted to a name or a type. */
+const isZip = (bytes: Uint8Array) => bytes.length > 3 && bytes[0] === 0x50 && bytes[1] === 0x4b;
+
+/* Decoded as UTF-8, with a byte-order mark taken off so JSON.parse accepts it. */
+const toText = (bytes: Uint8Array) => strFromU8(bytes).replace(/^\uFEFF/, '');
+
+/**
+ * The entries worth reading from one archive, as [path, text] pairs.
+ *
+ * The filter runs before anything is inflated, so the photos, messages
+ * and everything else in a larger export are never decompressed. The skip
+ * list applies here too: a blocked list is not even inflated.
+ */
+function readArchive(bytes: Uint8Array): [string, string][] {
+  let inflated = 0;
+  const filter = (entry: UnzipFileInfo) => {
+    if (entry.name.includes('__MACOSX/')) return false;
+    if (!CONNECTIONS_ENTRY.test(entry.name) && !PERSONAL_ENTRY.test(entry.name)) return false;
+    if (SKIP_FILE.test(baseName(entry.name))) return false;
+    if (entry.originalSize > MAX_ENTRY_BYTES) return false;
+    if (inflated + entry.originalSize > MAX_INFLATED_BYTES) return false;
+    inflated += entry.originalSize;
+    return true;
+  };
+  return Object.entries(unzipSync(bytes, { filter })).map(([path, data]) => [path, toText(data)]);
+}
 
 export interface PickedExport {
   connections: ImportedConnection[];
@@ -308,15 +520,26 @@ export interface PickedExport {
   files: string[];
   /** True when the picked files parsed but held nothing we recognised. */
   empty: boolean;
+  /** True when a picked file was refused for size (MAX_EXPORT_BYTES). */
+  tooLarge: boolean;
+  /**
+   * The account's own username, when the download says whose it is: its
+   * personal_information file, or failing that the archive's name.
+   */
+  ownHandle: string | null;
 }
 
 /**
- * Opens the system file picker and turns the chosen export files into
- * hashed connections.
+ * Opens the system file picker and turns the chosen download into hashed
+ * connections.
  *
- * Multi-select on purpose: followers and following are separate files, and
- * having both is what lets the UI put mutuals first — the people you
- * actually know, rather than every brand you follow.
+ * Takes the .zip Instagram sends, or loose files from inside it. Multi-
+ * select stays for the loose files: followers and following are separate,
+ * and having both is what lets the UI put mutuals first — the people you
+ * actually know, rather than every brand you follow. The zip holds both.
+ *
+ * Everything happens on the device. Only the hashes built from the result
+ * ever leave it, and only when the caller matches them.
  */
 export async function pickExportFiles(
   onProgress?: (done: number, total: number) => void,
@@ -327,31 +550,52 @@ export async function pickExportFiles(
   const files: string[] = [];
   // handle -> which lists it appeared in, merged across every picked file.
   const found = new Map<string, { follower: boolean; followed: boolean }>();
+  let tooLarge = false;
+  // Whose download it is, by the two sources ownHandle ranks.
+  const owner: { info: string | null; name: string | null } = { info: null, name: null };
 
-  for (const file of picked.result) {
-    let text: string;
-    try {
-      text = await file.text();
-    } catch {
-      continue; // Unreadable file shouldn't lose the ones that did read.
+  /* One file's text: the owner's details, or a list of people. */
+  const take = (path: string, text: string) => {
+    const name = baseName(path);
+    if (PERSONAL_ENTRY.test(name)) {
+      owner.info = owner.info ?? ownHandleFromPersonalInfo(text);
+      return;
     }
-
-    const { handles, kind } = parseExportFile(file.name, text);
-    if (handles.length === 0) continue;
-    files.push(file.name);
-
+    const { handles, kind } = parseExportFile(name, text);
+    if (handles.length === 0) return;
+    files.push(name);
     for (const h of handles) {
       const entry = found.get(h) ?? { follower: false, followed: false };
       if (kind === 'followers') entry.follower = true;
       else entry.followed = true;
       found.set(h, entry);
     }
+  };
+
+  for (const file of picked.result) {
+    if (file.size > MAX_EXPORT_BYTES) {
+      tooLarge = true;
+      continue;
+    }
+    // An unreadable or corrupt file shouldn't lose the ones that did read.
+    try {
+      const bytes = await file.bytes();
+      if (isZip(bytes)) {
+        for (const [path, text] of readArchive(bytes)) take(path, text);
+        owner.name = owner.name ?? ownHandleFromArchiveName(file.name);
+      } else {
+        take(file.name, toText(bytes));
+      }
+    } catch {
+      continue;
+    }
   }
 
-  if (found.size === 0) return { connections: [], files, empty: true };
+  const ownHandle = owner.info ?? owner.name;
+  if (found.size === 0) return { connections: [], files, empty: true, tooLarge, ownHandle };
 
   const connections = await hashHandles(found, onProgress);
-  return { connections, files, empty: false };
+  return { connections, files, empty: false, tooLarge, ownHandle };
 }
 
 /**

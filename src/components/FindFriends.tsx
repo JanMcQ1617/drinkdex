@@ -1,20 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  AccessibilityInfo,
-  ActivityIndicator,
-  Linking,
-  Platform,
-  Share,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Linking, Share, StyleSheet, Text, View } from 'react-native';
 
+import { FacebookFriends } from '@/components/FacebookFriends';
 import { Icon } from '@/components/icons';
 import { InstagramImport } from '@/components/InstagramImport';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
-import { Button, Card } from '@/components/ui';
+import { Button, Card, Field, SearchField, announce } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { formatCount } from '@/data';
 import { hashPhone, normalizePhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
@@ -39,34 +30,30 @@ import type { UserProfile } from '@/types';
 /* ------------------------------------------------------------------ */
 
 /*
- * Speaks a failure or notice to VoiceOver as it is set.
- *
- * Every such string here is drawn in a notice box with
+ * Every failure or notice here is drawn in a notice box with
  * accessibilityLiveRegion, which is Android-only: on iOS a VoiceOver user
  * tapped Try again, heard the button go busy and come back, and was never
- * told why nothing changed. The live regions stay for Android, and this is
- * gated to iOS so Android does not hear it twice. `queue` so the button's
- * own label change, landing at the same moment, does not cut it off.
- *
- * Called from the handler that sets the string rather than through
- * AuthGate's useAnnounce, which would be the obvious reuse: AuthGate
- * renders WelcomeConnect, which renders this, so importing from it is a
- * require cycle. InstagramImport keeps its own copy for the same reason.
+ * told why nothing changed. So each handler that sets one also calls
+ * announce (components/ui), which speaks it on iOS only. From the handler
+ * rather than a useAnnounce on the state, so a failure that happens twice
+ * is heard twice. Contacts access being off is not a failure, but it is
+ * the same silent swap of a button for a sentence, so it is spoken too.
  */
-function announce(message: string) {
-  if (Platform.OS === 'ios') {
-    AccessibilityInfo.announceForAccessibilityWithOptions(message, { queue: true });
-  }
-}
-
 const SEARCH_FAILED = 'Search failed. Try again.';
+const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings, then try again.';
 
 /**
- * The discovery surface: match your phone contacts, make yourself
- * findable, invite a friend, search by @username, or import your
- * Instagram connections — in that order, because the order is the
- * recommendation. Rendered by the Find friends screen and by the welcome
- * step at signup.
+ * The discovery surface: your Facebook friends already here, match your
+ * phone contacts, make yourself findable, invite a friend, search by
+ * @username, or import your Instagram connections — in that order,
+ * because the order is the recommendation. Rendered by the Find friends
+ * screen and by the welcome step at signup, so both get Facebook first.
+ *
+ * Facebook leads because, for an account signed in with it, it is the
+ * only source that asks nothing more: the sign-in already said which of
+ * its friends are here. <FacebookFriends> decides for itself whether it has
+ * anything to show — the friends, a row to connect Facebook, or nothing —
+ * so this only gives it the first slot.
  *
  * Every list ends in <MatchResults>, which leads with "Follow all" —
  * finding forty people is worthless if acting on them is forty taps.
@@ -195,6 +182,7 @@ export function FindFriends() {
       const perm = await requestContactsPermission();
       if (perm !== 'granted') {
         setContactsState('denied');
+        announce(CONTACTS_OFF);
         return;
       }
       const { hashes, contactCount } = await readContactHashes();
@@ -343,6 +331,8 @@ export function FindFriends() {
 
   return (
     <View style={styles.wrap}>
+      <FacebookFriends />
+
       {/* Contacts — the recommended path, so it holds the card stack's filled button. */}
       <Card style={styles.card}>
         <View style={styles.cardHead}>
@@ -374,9 +364,7 @@ export function FindFriends() {
 
         {contactsState === 'denied' ? (
           <View style={styles.deniedBox}>
-            <Text style={styles.cardBody}>
-              Contacts access is off. Turn it on for Sipply in Settings, then try again.
-            </Text>
+            <Text style={styles.cardBody}>{CONTACTS_OFF}</Text>
             <Button
               label="Open Settings"
               variant="secondary"
@@ -457,19 +445,16 @@ export function FindFriends() {
               Add your number so friends who already have it can find you here. It is stored
               scrambled and never shown to anyone.
             </Text>
-            <View style={styles.searchWrap}>
-              <TextInput
-                value={phone}
-                onChangeText={setPhone}
-                placeholder="Your phone number"
-                placeholderTextColor={colors.textMuted}
-                inputMode="tel"
-                autoComplete="tel"
-                textContentType="telephoneNumber"
-                style={styles.searchInput}
-                accessibilityLabel="Your phone number, to be findable by contacts"
-              />
-            </View>
+            {/* A visible label, not a placeholder standing in for one; see Field. */}
+            <Field
+              label="Your phone number"
+              value={phone}
+              onChangeText={setPhone}
+              inputMode="tel"
+              autoComplete="tel"
+              textContentType="telephoneNumber"
+              accessibilityLabel="Your phone number, to be findable by contacts"
+            />
             {phoneError ? (
               <Text style={styles.notice} accessibilityLiveRegion="polite">
                 {phoneError}
@@ -525,26 +510,19 @@ export function FindFriends() {
           <Icon name="search" size={18} color={colors.wine} />
           <Text style={styles.cardTitle} accessibilityRole="header">Find by username</Text>
         </View>
-        {/*
-          The glyph takes the placeholder's ink, as the Dex, Log and My Bar
-          search fields do, so it never sits fainter than the words beside it.
-        */}
-        <View style={styles.searchWrap}>
-          <Icon name="search" size={18} color={colors.textMuted} />
-          <TextInput
-            value={term}
-            onChangeText={setTerm}
-            placeholder="Search @username or name"
-            placeholderTextColor={colors.textMuted}
-            autoCapitalize="none"
-            autoCorrect={false}
-            style={styles.searchInput}
-            accessibilityLabel="Search for people by username"
-          />
-          {showSearch && searching ? (
-            <ActivityIndicator size="small" color={colors.wineSoft} />
-          ) : null}
-        </View>
+        {/* The app's one search field, on the card's cream so its edge shows. */}
+        <SearchField
+          value={term}
+          onChangeText={setTerm}
+          placeholder="Search @username or name"
+          accessibilityLabel="Search for people by username"
+          onCard
+          trailing={
+            showSearch && searching ? (
+              <ActivityIndicator size="small" color={colors.wineSoft} />
+            ) : null
+          }
+        />
         {searchFailed ? (
           <View style={styles.deniedBox}>
             <Text style={styles.notice} accessibilityLiveRegion="polite">
@@ -590,24 +568,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   cardCta: { marginTop: space.xs },
-
-  searchWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    backgroundColor: colors.bg,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.md,
-    paddingHorizontal: space.md,
-  },
-  searchInput: {
-    flex: 1,
-    minHeight: 46,
-    fontSize: 16,
-    fontFamily: fonts.body,
-    color: colors.text,
-  },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   deniedBox: { gap: space.sm },

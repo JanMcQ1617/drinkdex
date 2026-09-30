@@ -4,7 +4,16 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 're
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
-import { Avatar, Button, Card, Divider, EmptyState, PressableScale, haptic } from '@/components/ui';
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  EmptyState,
+  PressableScale,
+  announce,
+  haptic,
+} from '@/components/ui';
 import { colors, fonts, space, type as typeScale } from '@/constants/theme';
 import { fetchBlocked, unblockUser } from '@/lib/moderation';
 import { fetchProfiles } from '@/lib/social';
@@ -98,9 +107,14 @@ export default function BlockedScreen() {
          * identical on screen, and telling someone they have blocked
          * nobody when the request failed is the kind of quiet lie that
          * makes people distrust a block button.
+         *
+         * Spoken as well: the spinner giving way to the message is a
+         * silent swap to VoiceOver, and a failed Try again would otherwise
+         * sound exactly like nothing happening.
          */
         setPeople([]);
         setFailed(true);
+        announce('Could not load your blocks.');
       });
   }, [myId]);
 
@@ -174,7 +188,7 @@ export default function BlockedScreen() {
         <EmptyState
           icon="eyeOff"
           title="Nobody is blocked"
-          body="You can block someone from the menu on any of their posts. They will not be told."
+          body="You can block someone from the menu on their profile or on any of their posts. They will not be told."
         />
       ) : (
         <Card style={styles.block}>

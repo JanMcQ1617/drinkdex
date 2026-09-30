@@ -8,7 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icon, type IconName } from '@/components/icons';
 import { Avatar, Card, PressableScale, SectionLabel, haptic } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
-import { useAuth } from '@/store/auth';
+import { hasFacebookIdentity } from '@/lib/facebook';
+import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
 
@@ -108,6 +109,9 @@ export default function SettingsScreen() {
   const router = useRouter();
 
   const profile = useAuth((s) => s.profile);
+  const facebookShown = useAuth(
+    (s) => FACEBOOK_SIGN_IN_ENABLED || hasFacebookIdentity(s.session?.user),
+  );
   const signOut = useAuth((s) => s.signOut);
   const deleteAccount = useAuth((s) => s.deleteAccount);
   const resetAll = useCollection((s) => s.resetAll);
@@ -283,12 +287,24 @@ export default function SettingsScreen() {
         </PressableScale>
       ) : null}
 
-      {/* ---- How people find you ---- */}
+      {/*
+        ---- How people find you ----
+        The detail lists what the screen behind it holds, in its order.
+        Facebook only when the Facebook card there has something to draw,
+        by the card's own rule: the account already has Facebook, or
+        Facebook sign-in is switched on and it can be connected. Otherwise
+        the card draws nothing, and naming it here would promise a row
+        that is not there.
+      */}
       <Section title="How people find you">
         <Row
           icon="users"
           label="Find friends"
-          detail="Instagram, contacts, username search and invites."
+          detail={
+            facebookShown
+              ? 'Facebook, contacts, invites, search and Instagram.'
+              : 'Contacts, invites, search and Instagram.'
+          }
           onPress={() => {
             haptic.tap();
             router.push('/find-friends');
@@ -328,7 +344,8 @@ export default function SettingsScreen() {
           onPress={() => open(PRIVACY_URL)}
         />
         <View style={styles.divider} />
-        <Row icon="bookmark" label="Terms of Use" onPress={() => open(TERMS_URL)} />
+        {/* The page, not the bookmark: the bookmark is "save a post" on every card in the feed. */}
+        <Row icon="document" label="Terms of Use" onPress={() => open(TERMS_URL)} />
       </Section>
 
       {/*

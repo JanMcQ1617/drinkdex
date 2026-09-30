@@ -69,6 +69,11 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
           over now, or do it later from Settings — nothing here is one-time.
         </Text>
 
+        {/*
+          FindFriends opens with <FacebookFriends />, so someone who has
+          just signed in with Facebook sees their friends first, right
+          under the lede. Not mounted here as well: it would draw twice.
+        */}
         <FindFriends />
       </ScrollView>
 

@@ -293,10 +293,63 @@ export function discoveryErrorMessage(error: unknown, fallback: string): string 
  */
 export const IG_CONNECTIONS_KEY = 'clink-ig-connections';
 
+/* ==================================================================== */
+/* When the Instagram list was asked for                                 */
+/*                                                                      */
+/* Instagram makes the download in the background and it usually takes   */
+/* about half an hour, so the import is two visits: ask, leave, come     */
+/* back. Remembering when "Request your list" was tapped is what lets    */
+/* the second visit lead with choosing the download, and say how long    */
+/* ago it was asked for, instead of starting the errand over.            */
+/*                                                                      */
+/* The one key here that names its account, inside the value rather      */
+/* than in the key, so clearDiscoveryCache still removes it by name.     */
+/* Sign-out clears it, but that clear is best-effort; if it failed, the  */
+/* next account on this phone would be told it had asked for a list it   */
+/* never asked for, and led straight past the step that asks.            */
+/* ==================================================================== */
+
+const IG_REQUEST_KEY = 'clink-ig-requested';
+
+/*
+ * Instagram keeps a finished download for a few days (four, at the time
+ * of writing) and then it is gone. A request older than that has nothing
+ * waiting behind it, so it reads as never made and the card asks again.
+ */
+const IG_REQUEST_TTL_MS = 4 * 24 * 60 * 60 * 1000;
+
+/** Records that `userId` has just asked Instagram for their list. */
+export async function rememberInstagramRequest(userId: string): Promise<void> {
+  await AsyncStorage.setItem(IG_REQUEST_KEY, JSON.stringify({ userId, at: Date.now() }));
+  notify();
+}
+
+/**
+ * When `userId` asked Instagram for their list, as epoch milliseconds, or
+ * null: never, another account's, or too long ago to still be waiting.
+ */
+export async function getInstagramRequest(userId: string): Promise<number | null> {
+  const raw = await AsyncStorage.getItem(IG_REQUEST_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as { userId?: unknown; at?: unknown };
+    if (parsed.userId !== userId || typeof parsed.at !== 'number') return null;
+    return Date.now() - parsed.at > IG_REQUEST_TTL_MS ? null : parsed.at;
+  } catch {
+    return null;
+  }
+}
+
+/** The list arrived and was read, so nothing is waiting any more. */
+export async function forgetInstagramRequest(): Promise<void> {
+  await AsyncStorage.removeItem(IG_REQUEST_KEY);
+  notify();
+}
+
 /**
  * Everything discovery remembers on the device, cleared together: the
- * phone number, the Instagram handle, claims parked at signup, and the
- * imported Instagram list.
+ * phone number, the Instagram handle, claims parked at signup, the
+ * imported Instagram list, and when that list was last asked for.
  *
  * Called by the auth store on sign-out and after account deletion.
  * Without it the previous account's number, handle and imported list —
@@ -315,6 +368,12 @@ export const IG_CONNECTIONS_KEY = 'clink-ig-connections';
  * and this removes the claims parked for exactly that signup.
  */
 export async function clearDiscoveryCache(): Promise<void> {
-  await AsyncStorage.multiRemove([PHONE_KEY, HANDLE_KEY, PENDING_KEY, IG_CONNECTIONS_KEY]);
+  await AsyncStorage.multiRemove([
+    PHONE_KEY,
+    HANDLE_KEY,
+    PENDING_KEY,
+    IG_CONNECTIONS_KEY,
+    IG_REQUEST_KEY,
+  ]);
   notify();
 }

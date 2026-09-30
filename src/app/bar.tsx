@@ -1,18 +1,20 @@
 import { useRouter } from 'expo-router';
 import React, { memo, useCallback, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useDerivedValue,
-  useReducedMotion,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
-import { Button, Card, EmptyState, PressableScale, SectionLabel, haptic } from '@/components/ui';
-import { colors, fonts, motion, radius, space, tabular, type as typeScale } from '@/constants/theme';
+import {
+  Button,
+  Card,
+  EmptyState,
+  PressableScale,
+  SearchField,
+  SectionLabel,
+  SegmentedControl,
+  haptic,
+} from '@/components/ui';
+import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { formatCount } from '@/data';
 import {
   CATEGORY_LABEL,
@@ -38,7 +40,8 @@ import { confirmDestructive } from '@/utils/alerts';
 /* The counts live in the segmented control itself so the payoff is      */
 /* visible while you are still on the Shelf pane — ticking a bottle and  */
 /* watching "Drinks 48" tick up is the whole loop, and hiding it behind  */
-/* a tap would break it.                                                 */
+/* a tap would break it. The control is SegmentedControl from            */
+/* components/ui, so it draws and moves like every other one in the app. */
 /* ==================================================================== */
 
 const STARTER = [
@@ -97,94 +100,6 @@ const Chip = memo(function Chip({
 });
 
 type Pane = 'shelf' | 'drinks';
-
-/*
- * The segmented control, drawn and moved the way the profile's is: a sunk
- * track, a white thumb that slides, the active label in wine. This one
- * used to snap a solid wine pill between two plain buttons — the only two
- * segmented controls in the app, answering the same gesture two opposite
- * ways. It is a copy of SegmentBar in (tabs)/profile.tsx for now, so
- * change the two together. The track is a tab bar to VoiceOver, as there,
- * which is what makes it say "tab, 1 of 2".
- *
- * The thumb takes motion.selection, the spring for a selection answering;
- * see theme.ts. Plain Pressable with no press-scale, as there: the
- * segments are wide, and the thumb arriving is already the feedback.
- *
- * The counts stay inside the control, per the header: ticking a bottle
- * and watching "Drinks 48" tick up is the loop.
- */
-function PaneSwitch({
-  value,
-  onChange,
-  shelfCount,
-  drinkCount,
-}: {
-  value: Pane;
-  onChange: (pane: Pane) => void;
-  shelfCount: number;
-  drinkCount: number;
-}) {
-  const reduced = useReducedMotion();
-  const [barW, setBarW] = useState(0);
-  const index = value === 'shelf' ? 0 : 1;
-
-  const PAD = space.xs;
-  const GAP = space.xs;
-  const segW = barW > 0 ? (barW - PAD * 2 - GAP) / 2 : 0;
-
-  const x = useDerivedValue(() => {
-    const target = index * (segW + GAP);
-    return reduced
-      ? withTiming(target, { duration: motion.fast })
-      : withSpring(target, motion.selection);
-  });
-  const thumbStyle = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
-
-  const items: { key: Pane; label: string; count: number }[] = [
-    { key: 'shelf', label: 'Shelf', count: shelfCount },
-    { key: 'drinks', label: 'Drinks', count: drinkCount },
-  ];
-
-  return (
-    <View
-      accessibilityRole="tabbar"
-      style={styles.segments}
-      onLayout={(e) => setBarW(Math.round(e.nativeEvent.layout.width))}>
-      {segW > 0 ? (
-        <Animated.View
-          pointerEvents="none"
-          style={[styles.segmentThumb, { width: segW, left: PAD }, thumbStyle]}
-        />
-      ) : null}
-      {items.map((item) => {
-        const active = value === item.key;
-        return (
-          <Pressable
-            key={item.key}
-            onPress={() => {
-              if (active) return;
-              onChange(item.key);
-              haptic.select();
-            }}
-            accessibilityRole="tab"
-            accessibilityState={{ selected: active }}
-            accessibilityLabel={item.count ? `${item.label}, ${item.count}` : item.label}
-            style={styles.segment}>
-            <Text style={[styles.segmentLabel, active && styles.segmentLabelActive]}>
-              {item.label}
-            </Text>
-            {item.count ? (
-              <Text style={[styles.segmentLabel, tabular, active && styles.segmentLabelActive]}>
-                {formatCount(item.count)}
-              </Text>
-            ) : null}
-          </Pressable>
-        );
-      })}
-    </View>
-  );
-}
 
 /*
  * Both drink lists stop at forty rows until asked. "One thing short" used
@@ -277,11 +192,14 @@ export default function BarScreen() {
         <Text style={styles.title} accessibilityRole="header">My Bar</Text>
       </View>
 
-      <PaneSwitch
+      <SegmentedControl
+        items={[
+          { key: 'shelf', label: 'Shelf', count: shelf.length },
+          { key: 'drinks', label: 'Drinks', count: result.makeable.length },
+        ]}
         value={pane}
         onChange={setPane}
-        shelfCount={shelf.length}
-        drinkCount={result.makeable.length}
+        style={styles.segments}
       />
 
       <ScrollView
@@ -291,34 +209,14 @@ export default function BarScreen() {
         showsVerticalScrollIndicator={false}>
         {pane === 'shelf' ? (
           <>
-            {/*
-              The glyph takes the placeholder's ink, as the Dex and Log
-              search fields do, so every search field in the app reads the
-              same and the icon never sits fainter than the words beside it.
-            */}
-            <View style={styles.searchRow}>
-              <Icon name="search" size={17} color={colors.textMuted} />
-              <TextInput
-                value={query}
-                onChangeText={setQuery}
-                placeholder={`Search ${formatCount(INGREDIENTS.length)} ingredients`}
-                placeholderTextColor={colors.textMuted}
-                autoCorrect={false}
-                autoCapitalize="none"
-                style={styles.searchInput}
-                accessibilityLabel="Search ingredients"
-              />
-              {query ? (
-                <PressableScale
-                  onPress={() => setQuery('')}
-                  noHaptic
-                  hitSlop={14}
-                  accessibilityRole="button"
-                  accessibilityLabel="Clear search">
-                  <Icon name="close" size={16} color={colors.textMuted} />
-                </PressableScale>
-              ) : null}
-            </View>
+            {/* The app's one search field, as on the Dex and Log. */}
+            <SearchField
+              value={query}
+              onChangeText={setQuery}
+              placeholder={`Search ${formatCount(INGREDIENTS.length)} ingredients`}
+              accessibilityLabel="Search ingredients"
+              style={styles.search}
+            />
 
             {query ? (
               results.length ? (
@@ -399,11 +297,12 @@ export default function BarScreen() {
           <>
             {shelf.length === 0 ? (
               /*
-                The coupe, not the sparkle: the sparkle is the legendary
-                mark on every Dex card, and this state is about drinks.
+                The bottle, which is what this screen holds. The sparkle it
+                once had is the legendary mark on every Dex card, and the
+                coupe after it is the Dex's own tab.
               */
               <EmptyState
-                icon="dex"
+                icon="bottle"
                 title="Nothing on the shelf yet"
                 body="Tick what you actually have and this fills with drinks you can pour tonight."
                 action={{ label: 'Stock the shelf', onPress: () => setPane('shelf') }}
@@ -565,60 +464,10 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
 
-  /* Same geometry and ink as the profile's SegmentBar; see PaneSwitch. */
-  segments: {
-    flexDirection: 'row',
-    gap: space.xs,
-    marginHorizontal: space.xl,
-    marginBottom: space.lg,
-    padding: space.xs,
-    backgroundColor: colors.bgSunk,
-    borderRadius: radius.pill,
-  },
-  segment: {
-    flex: 1,
-    minHeight: 44,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.sm,
-    borderRadius: radius.pill,
-  },
-  segmentThumb: {
-    position: 'absolute',
-    top: space.xs,
-    bottom: space.xs,
-    borderRadius: radius.pill,
-    backgroundColor: colors.surface,
-  },
-  segmentLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
-  segmentLabelActive: { color: colors.wine },
+  /* The control carries no margin of its own; see SegmentedControl. */
+  segments: { marginHorizontal: space.xl, marginBottom: space.lg },
 
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.pill,
-    paddingHorizontal: space.lg,
-    /* The Dex field's height: the 44pt floor, on the 4pt grid. A minimum,
-       so Larger Text grows the field instead of clipping the query. */
-    minHeight: 44,
-    marginBottom: space.lg,
-  },
-  searchInput: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-    paddingVertical: space.sm,
-  },
+  search: { marginBottom: space.lg },
   noHits: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
