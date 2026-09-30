@@ -17,13 +17,12 @@ import { haptic, PressableScale } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
+  dexNumber,
   fonts,
   glass,
-  label,
   radius,
   RARITY_META,
   space,
-  tabular,
   type as typeScale,
 } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
@@ -357,17 +356,24 @@ export const DexCard = React.memo(function DexCard({
         container, because a View background cannot fade, and a hard-edged
         fill is exactly the trough this replaces.
 
-        The recess wash turns fully opaque at 0.4, not 0.55: `slot` is the
-        darkest ground the muted name can sit on and still clear 4.5:1, so
-        every line of a two-line name has to land on solid slot rather than
-        on slot thinned over slotDeep.
+        The recess wash turns fully opaque at 0.3, not 0.55: `slot` is the
+        darkest ground the muted name and number can sit on and still clear
+        4.5:1, so both lines of a two-line name and the number above them
+        have to land on solid slot rather than on slot thinned over
+        slotDeep. At 0.4 the name was covered but the top of the number
+        was not, and read at about 4.45:1.
+
+        That holds at the default text size only. Each Dynamic Type step
+        up lifts the number back onto the fade, down to about 4.3:1 at the
+        1.4 cap. A stop high enough to cover that would be a hard edge
+        across the recess, the seam the field gradient exists to avoid.
       */}
       <Svg style={styles.nameWash} pointerEvents="none">
         <Defs>
           <LinearGradient id={washId} x1="0" y1="0" x2="0" y2="1">
             <Stop offset="0" stopColor={washColor} stopOpacity="0" />
             <Stop
-              offset={recessWash ? '0.4' : '0.55'}
+              offset={recessWash ? '0.3' : '0.55'}
               stopColor={washColor}
               stopOpacity={recessWash ? '1' : '0.72'}
             />
@@ -386,7 +392,9 @@ export const DexCard = React.memo(function DexCard({
         gives VoiceOver all of it, and the drink page sets it at full size.
       */}
       <View style={styles.nameplate}>
-        <Text style={styles.numberLine} maxFontSizeMultiplier={1.4}>
+        <Text
+          style={[styles.numberLine, !collected && styles.numberLineEmpty]}
+          maxFontSizeMultiplier={1.4}>
           {formatDexNumber(drink.dexNumber)}
         </Text>
         <Text
@@ -532,17 +540,19 @@ const styles = StyleSheet.create({
   },
   /*
    * The catalogue number sits above the name here rather than in a bordered
-   * plate of its own in the corner. It is the brand's letterspaced label,
-   * `label.ui`, as theme.ts specifies for dex numbers — it was a 9pt one-off
-   * below the type scale and below the 11pt the platform treats as the
-   * smallest legible size.
+   * plate of its own in the corner. It is theme.ts's `dexNumber`, the one
+   * stamp the app defines for "#0042" wherever it appears: 11pt, `tag` size,
+   * tracked half as wide as `label.ui` because it is figures, in taupeInk.
+   * It was a 9pt one-off below the scale, then `label.ui` at the full
+   * tracking meant for words.
    */
-  numberLine: {
-    fontFamily: fonts.label,
-    ...label.ui,
-    color: colors.textMuted,
-    ...tabular,
-  },
+  numberLine: dexNumber,
+  /*
+   * taupeInk is 4.36:1 on the empty recess's `slot`, under the 4.5:1 an
+   * 11pt number needs. The locked card's number takes textMuted instead,
+   * as its name does.
+   */
+  numberLineEmpty: { color: colors.textMuted },
   name: {
     fontFamily: fonts.displayBold,
     fontSize: typeScale.micro.fontSize,

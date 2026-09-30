@@ -18,6 +18,7 @@ import {
   CATEGORY_META,
   CATEGORY_ORDER,
   colors,
+  dexNumber,
   fonts,
   motion,
   radius,
@@ -38,7 +39,7 @@ import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 /* The four blocks — Collection, Rarity, Milestones, Rarest entry —     */
 /* extracted from the profile so the Stats tab and any future surface   */
 /* render the identical thing. Reads the LOCAL collection; a peer's     */
-/* stats are a different, post-derived view (see profile.tsx).          */
+/* stats are a different, post-derived view (see PeerProfile.tsx).      */
 /* ==================================================================== */
 
 /* The ladder moved to lib/milestones — the collection store needs it too,
@@ -400,9 +401,9 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   /*
-   * textMuted, not textFaint, here and on the percentages, the lock and the
-   * dex number below: all of it is small text or a state glyph, and the
-   * unreached names are content — for most users, most of the ladder.
+   * textMuted, not textFaint, here and on the percentages and the lock: all
+   * of it is small text or a state glyph, and the unreached names are
+   * content — for most users, most of the ladder.
    * Reached still differs by ink, weight and mark (check on wine wash
    * against lock on sunk).
    */
@@ -439,9 +440,7 @@ const styles = StyleSheet.create({
     fontSize: typeScale.body.fontSize,
     color: colors.text,
   },
-  prizeDex: {
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.micro.fontSize,
-    color: colors.textMuted,
-  },
+  /* The catalogue number's one stamp, as on the entry's Dex card. taupeInk
+     on this white card is 5.89:1. */
+  prizeDex: dexNumber,
 });

@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -30,13 +29,19 @@ import { DexCard } from '@/components/DexCard';
 import { GlassSurface } from '@/components/glass';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
-import { Divider, EmptyState, haptic, PressableScale, ProgressBar } from '@/components/ui';
+import {
+  Divider,
+  EmptyState,
+  haptic,
+  PressableScale,
+  ProgressBar,
+  SearchField,
+} from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
   colors,
   fonts,
-  label,
   motion,
   radius,
   space,
@@ -493,7 +498,7 @@ export default function DexScreen() {
   );
 
   const scrollToTop = useCallback(() => {
-    haptic.tap();
+    // No haptic here: the PressableScale that calls this already taps.
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
   }, []);
 
@@ -537,10 +542,10 @@ export default function DexScreen() {
         size. Between them they cost about 90pt above the fold on a screen
         where the first drink already sat 409pt down, half the display.
 
-        The field is a white pill on a hairline, 44pt tall with 16pt text,
-        like the app's other search inputs — not a smaller sunk variant of
-        its own. At 36pt with 13pt text it was under the touch minimum, and
-        its glyph and placeholder sat at 2.5:1 in the sunk well. The
+        The field is SearchField (components/ui), the one search input the
+        app's screens share — not a smaller sunk variant of its own, as it
+        once was. At 36pt with 13pt text it was under the touch minimum,
+        and its glyph and placeholder sat at 2.5:1 in the sunk well. The
         placeholder names what it searches, country included: nothing else
         on screen says the index can be browsed that way.
       */}
@@ -548,31 +553,13 @@ export default function DexScreen() {
         <Text style={styles.title} accessibilityRole="header">
           The Dex
         </Text>
-        <View style={styles.searchWrap}>
-          <Icon name="search" size={17} color={colors.textMuted} />
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            placeholder="Name, style or country"
-            placeholderTextColor={colors.textMuted}
-            autoCorrect={false}
-            autoCapitalize="none"
-            returnKeyType="search"
-            style={styles.searchInput}
-            accessibilityLabel="Search drinks by name, style or country"
-          />
-          {query.length > 0 ? (
-            <PressableScale
-              onPress={() => setQuery('')}
-              accessibilityRole="button"
-              accessibilityLabel="Clear search"
-              // A 28pt box plus the slop is 44pt; the bare glyph was 31.
-              hitSlop={space.sm}
-              style={styles.clearSearch}>
-              <Icon name="close" size={16} color={colors.textMuted} />
-            </PressableScale>
-          ) : null}
-        </View>
+        <SearchField
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Name, style or country"
+          accessibilityLabel="Search drinks by name, style or country"
+          style={styles.search}
+        />
       </View>
 
       <View style={styles.progressBlock}>
@@ -608,11 +595,12 @@ export default function DexScreen() {
         }
         style={styles.barLink}>
         {/*
-          The coupe, as on My Bar's own empty state. This was the sparkle,
-          which is the legendary mark on the cards a few rows down — one
-          glyph meaning two things on the same screen.
+          The bottle: what My Bar holds. This was the sparkle, which is the
+          legendary mark on the cards a few rows down, and then the coupe,
+          which is the Dex's own tab glyph. Each one pointed at this screen
+          rather than at the one the row opens.
         */}
-        <Icon name="dex" size={18} color={colors.wine} />
+        <Icon name="bottle" size={18} color={colors.wine} />
         <View style={styles.barLinkText}>
           <Text style={styles.barLinkTitle}>My Bar</Text>
           <Text style={styles.barLinkBody} numberOfLines={1}>
@@ -673,8 +661,6 @@ export default function DexScreen() {
           />
         ))}
       </ScrollView>
-
-
 
       <Divider style={styles.headerRule} />
     </View>
@@ -882,10 +868,7 @@ const styles = StyleSheet.create({
     // Small text, so textMuted — as chipDetail below, and for its reason.
     color: colors.textMuted,
   },
-  /* marginLeft auto rather than a spacer View — one property instead of
-     an element, and it survives the row gaining another child. */
 
-  /* Chips */
   /* My Bar entry point. Same surface + hairline as the other cards on this
      screen, so it reads as a place rather than a banner. */
   barLink: {
@@ -922,6 +905,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 
+  /* Chips */
   chipScroll: {
     // Bleeds past the list padding so the row can scroll edge to edge.
     marginHorizontal: -GRID_PAD,
@@ -962,11 +946,11 @@ const styles = StyleSheet.create({
   chipDetail: {
     fontFamily: fonts.numeral,
     /*
-     * 11, the smallest size in the scale (label.ui) — it was a 10pt one-off.
-     * Still a step under the 13pt chip label, which it has to sit beneath;
-     * micro at 12 would read almost level with it.
+     * tag, the scale's 11pt floor for chips and badges — it was a 10pt
+     * one-off. Still a step under the 13pt chip label, which it has to sit
+     * beneath; micro at 12 would read almost level with it.
      */
-    fontSize: label.ui.fontSize,
+    fontSize: typeScale.tag.fontSize,
     /*
      * textMuted, not textFaint. The per-category count is content — it is
      * how you learn there are 1,190 spirits — and textFaint is for large
@@ -983,31 +967,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: space.md,
   },
-  searchWrap: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    minHeight: 44,
-    paddingHorizontal: space.md,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    backgroundColor: colors.surface,
-  },
-  searchInput: {
-    flex: 1,
-    alignSelf: 'stretch',
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
-  clearSearch: {
-    minWidth: 28,
-    minHeight: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  /* The field takes whatever the title leaves; SearchField draws the rest. */
+  search: { flex: 1 },
   headerRule: {
     marginTop: space.xl,
     marginBottom: space.xs,
