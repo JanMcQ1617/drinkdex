@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 014
+-- Sipply — the whole schema, as of migration 015
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-014 built on the live project, and records every one of
+-- migrations 002-015 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -243,24 +243,48 @@ create index if not exists discovery_usage_user_idx      on public.discovery_usa
 -- tables they read, because Postgres checks their bodies on creation.
 -- --------------------------------------------------------------------
 
--- A profile row for every new auth user, from the signup metadata.
+-- A profile row for every new auth user (015). An email sign-up names its
+-- own handle and name in the metadata, used as sent. Apple and Facebook
+-- send neither: the handle is 'pour_' plus 8 hex digits of the id, moving
+-- one digit along the id past a clash or a filter hit; the name is the
+-- provider's, cut to 40 characters, or 'New collector' when there is none
+-- or the filter would refuse it, because a raise here fails the whole
+-- sign-in.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
 set search_path = ''
 as $$
+declare
+  meta   jsonb   := coalesce(new.raw_user_meta_data, '{}'::jsonb);
+  hex    text    := replace(new.id::text, '-', '');
+  handle text    := nullif(meta ->> 'username', '');
+  shown  text    := nullif(meta ->> 'display_name', '');
+  pos    integer := 1;
 begin
+  if handle is null then
+    handle := 'pour_' || substr(hex, pos, 8);
+    while pos < 25
+      and (exists (select 1 from public.profiles p where p.username = handle)
+           or public.is_objectionable(handle, true))
+    loop
+      pos := pos + 1;
+      handle := 'pour_' || substr(hex, pos, 8);
+    end loop;
+  end if;
+
+  if shown is null then
+    shown := btrim(left(btrim(regexp_replace(
+               coalesce(nullif(meta ->> 'full_name', ''), nullif(meta ->> 'name', ''), ''),
+               '\s+', ' ', 'g')), 40));
+    if shown = '' or public.is_objectionable(shown) then
+      shown := 'New collector';
+    end if;
+  end if;
+
   insert into public.profiles (id, username, display_name, accent)
-  values (
-    new.id,
-    coalesce(
-      nullif(new.raw_user_meta_data ->> 'username', ''),
-      'pour_' || substr(replace(new.id::text, '-', ''), 1, 8)
-    ),
-    coalesce(nullif(new.raw_user_meta_data ->> 'display_name', ''), 'New collector'),
-    coalesce(nullif(new.raw_user_meta_data ->> 'accent', ''), '#633444')
-  );
+  values (new.id, handle, shown, coalesce(nullif(meta ->> 'accent', ''), '#633444'));
   return new;
 end;
 $$;
@@ -748,6 +772,66 @@ begin
 end;
 $$;
 
+-- 015: Facebook friends on Sipply, by the app-scoped ids Graph returned,
+-- matched against Facebook identities the auth server verified. Callers
+-- with no Facebook identity of their own get no rows. At most 5,000 ids a
+-- call and not metered: those ids cannot be walked the way numbers can.
+create or replace function public.match_facebook_friends(fb_ids text[])
+returns table (
+  id uuid,
+  username text,
+  display_name text,
+  accent text,
+  bio text,
+  avatar_path text,
+  created_at timestamptz
+)
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+  wanted text[];
+begin
+  if me is null then
+    raise exception 'not signed in: match_facebook_friends got no auth.uid()' using errcode = '28000';
+  end if;
+
+  if coalesce(cardinality(fb_ids), 0) > 5000 then
+    raise exception 'too_many_ids'
+      using errcode = '22023',
+            detail  = 'At most 5000 Facebook ids per call.';
+  end if;
+
+  if not exists (
+    select 1 from auth.identities i
+    where i.user_id = me
+      and i.provider = 'facebook'
+  ) then
+    return;
+  end if;
+
+  select coalesce(array_agg(distinct f.v), '{}') into wanted
+  from unnest(fb_ids) as f(v)
+  where f.v is not null;
+
+  if cardinality(wanted) = 0 then
+    return;
+  end if;
+
+  return query
+    select p.id, p.username, p.display_name, p.accent, p.bio, p.avatar_path, p.created_at
+    from auth.identities i
+    join public.profiles p on p.id = i.user_id
+    where i.provider = 'facebook'
+      and i.provider_id = any(wanted)
+      and p.id <> me
+      and not public.blocked_with(p.id);
+end;
+$$;
+
 -- 008: batch follow. SECURITY INVOKER, so follows_insert_own (and its
 -- block check) runs per row exactly as for a single insert.
 create or replace function public.follow_many(targets uuid[])
@@ -840,20 +924,22 @@ grant execute on function public.blocked_with(uuid) to authenticated;
 revoke all on function public.is_objectionable(text, boolean) from public;
 grant execute on function public.is_objectionable(text, boolean) to anon, authenticated;
 
-revoke all on function public.delete_own_account()       from public, anon;
-revoke all on function public.set_phone_hash(text)       from public, anon;
-revoke all on function public.set_instagram_hash(text)   from public, anon;
-revoke all on function public.match_contacts(text[])     from public, anon;
-revoke all on function public.match_instagram(text[])    from public, anon;
-revoke all on function public.follow_many(uuid[])        from public, anon;
-revoke all on function public.accept_invite(uuid)        from public, anon;
-grant execute on function public.delete_own_account()     to authenticated;
-grant execute on function public.set_phone_hash(text)     to authenticated;
-grant execute on function public.set_instagram_hash(text) to authenticated;
-grant execute on function public.match_contacts(text[])   to authenticated;
-grant execute on function public.match_instagram(text[])  to authenticated;
-grant execute on function public.follow_many(uuid[])      to authenticated;
-grant execute on function public.accept_invite(uuid)      to authenticated;
+revoke all on function public.delete_own_account()             from public, anon;
+revoke all on function public.set_phone_hash(text)             from public, anon;
+revoke all on function public.set_instagram_hash(text)         from public, anon;
+revoke all on function public.match_contacts(text[])           from public, anon;
+revoke all on function public.match_instagram(text[])          from public, anon;
+revoke all on function public.match_facebook_friends(text[])   from public, anon;
+revoke all on function public.follow_many(uuid[])              from public, anon;
+revoke all on function public.accept_invite(uuid)              from public, anon;
+grant execute on function public.delete_own_account()           to authenticated;
+grant execute on function public.set_phone_hash(text)           to authenticated;
+grant execute on function public.set_instagram_hash(text)       to authenticated;
+grant execute on function public.match_contacts(text[])         to authenticated;
+grant execute on function public.match_instagram(text[])        to authenticated;
+grant execute on function public.match_facebook_friends(text[]) to authenticated;
+grant execute on function public.follow_many(uuid[])            to authenticated;
+grant execute on function public.accept_invite(uuid)            to authenticated;
 
 
 -- --------------------------------------------------------------------
@@ -1184,7 +1270,7 @@ on conflict (term) do nothing;
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 014'),
+  ('schema',                  'schema.sql, current as of 015'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -1197,5 +1283,6 @@ insert into public.schema_migrations (version, note) values
   ('011_trust_and_safety',    'contained in schema.sql'),
   ('012_report_retention',    'contained in schema.sql'),
   ('013_report_alerts',       'contained in schema.sql'),
-  ('014_bounds_and_indexes',  'contained in schema.sql')
+  ('014_bounds_and_indexes',  'contained in schema.sql'),
+  ('015_social_sign_in',      'contained in schema.sql')
 on conflict (version) do nothing;
