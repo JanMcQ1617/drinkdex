@@ -1,7 +1,8 @@
+import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
-import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { Avatar, Button, PressableScale } from '@/components/ui';
+import { announce, Avatar, Button, PressableScale } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
@@ -76,11 +77,16 @@ export function FollowButton({
 /* ------------------------------------------------------------------ */
 
 /**
- * Someone in a matched list. With `onOpen`, the picture and name open their
- * profile, as the profile's own accounts list does: a match is a stranger
- * until you have seen who it is, and their profile is where Report and
- * Block live for an account that has never posted. Without it (the welcome
- * flow, which has nowhere to go yet) the row is only a Follow decision.
+ * Someone in a matched list. The picture and name open their profile, as
+ * the profile's own accounts list does: a match is a stranger until you
+ * have seen who it is, and their profile is where Report and Block live
+ * for an account that has never posted, which no post menu can reach.
+ *
+ * By default that is the /user/[id] screen, pushed over whatever list this
+ * is in: Find friends, the Instagram and Facebook matches, and the welcome
+ * step too, because that screen does not gate on the welcome step and so
+ * opens the person rather than a second copy of it. `onOpen` replaces the
+ * destination; `null` leaves the row as only a Follow decision.
  */
 export function PersonRow({
   person,
@@ -93,8 +99,14 @@ export function PersonRow({
   note?: string;
   following: boolean;
   onToggle: () => void;
-  onOpen?: (id: string) => void;
+  onOpen?: ((id: string) => void) | null;
 }) {
+  const router = useRouter();
+  const open =
+    onOpen === null
+      ? null
+      : (onOpen ?? ((id: string) => router.push({ pathname: '/user/[id]', params: { id } })));
+
   const identity = (
     <>
       <Avatar
@@ -116,9 +128,9 @@ export function PersonRow({
 
   return (
     <View style={styles.row}>
-      {onOpen ? (
+      {open ? (
         <PressableScale
-          onPress={() => onOpen(person.id)}
+          onPress={() => open(person.id)}
           accessibilityRole="button"
           accessibilityLabel={`Open ${person.displayName}'s profile`}
           style={styles.rowIdentity}>
@@ -152,8 +164,8 @@ export function MatchResults({
 }: {
   entries: MatchEntry[];
   emptyText?: string;
-  /** Opens a matched person's profile; leave it off where there is none to open. */
-  onOpenPerson?: (id: string) => void;
+  /** Where a row's name opens. Left off, their profile; `null`, nowhere (see PersonRow). */
+  onOpenPerson?: ((id: string) => void) | null;
 }) {
   const myId = useAuth((s) => s.session?.user.id);
   const following = useSocial((s) => s.following);
@@ -180,7 +192,8 @@ export function MatchResults({
         pending.map((e) => e.profile.id),
       );
       setOutcome(added ?? 'failed');
-      if (added === null) AccessibilityInfo.announceForAccessibility(FOLLOW_ALL_FAILED);
+      // Spoken on iOS, where live regions do nothing; the line below is Android's.
+      if (added === null) announce(FOLLOW_ALL_FAILED);
     } finally {
       setBusy(false);
     }
@@ -211,7 +224,9 @@ export function MatchResults({
         as a tap that had not registered.
       */}
       {outcome === 'failed' && pending.length > 0 ? (
-        <Text style={styles.hint}>{FOLLOW_ALL_FAILED}</Text>
+        <Text style={styles.hint} accessibilityLiveRegion="polite">
+          {FOLLOW_ALL_FAILED}
+        </Text>
       ) : null}
 
       {typeof outcome === 'number' && pending.length === 0 ? (

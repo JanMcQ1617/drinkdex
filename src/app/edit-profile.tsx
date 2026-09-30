@@ -2,7 +2,6 @@ import { useNavigation, useRouter } from 'expo-router';
 import { usePreventRemove } from 'expo-router/react-navigation';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-  AccessibilityInfo,
   Alert,
   KeyboardAvoidingView,
   Linking,
@@ -10,16 +9,14 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useAnnounce } from '@/components/AuthGate';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { Avatar, Button, PressableScale, haptic } from '@/components/ui';
+import { Avatar, Button, Field, PressableScale, haptic, useAnnounce } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
@@ -178,8 +175,6 @@ export default function EditProfileScreen() {
   const [saving, setSaving] = useState(false);
   /** The save went through; the screen is closing and must not ask to discard. */
   const [committed, setCommitted] = useState(false);
-  /** Which field has the keyboard, for the edge the sign-in fields draw. */
-  const [focused, setFocused] = useState<TextField | null>(null);
 
   const handle = username.trim().toLowerCase();
   const nameOk = displayName.trim().length >= 1 && displayName.trim().length <= NAME_MAX;
@@ -261,14 +256,14 @@ export default function EditProfileScreen() {
 
   /**
    * Puts the content filter's refusal next to the field it is about. A
-   * refusal under a field is spoken here, since nothing else announces it;
-   * one that lands in the error box is spoken by useAnnounce (iOS) and the
-   * box's live region (Android), so saying it here too would say it twice.
+   * refusal under a field is spoken by that Field, which announces an error
+   * as it appears; one that lands in the error box is spoken by useAnnounce
+   * (iOS) and the box's live region (Android). Neither is said here, which
+   * would say it twice.
    */
   const refuse = (fields: TextField[]) => {
     if (fields.length > 0) {
       setRefused(Object.fromEntries(fields.map((f) => [f, valueOf(f)])));
-      AccessibilityInfo.announceForAccessibility(OBJECTIONABLE_MESSAGE);
     } else {
       setError(OBJECTIONABLE_MESSAGE);
     }
@@ -390,16 +385,19 @@ export default function EditProfileScreen() {
     );
   }
 
-  const nameRefused = isRefused('name');
-  const handleRefused = isRefused('handle');
-  const bioRefused = isRefused('bio');
-  // One string for the line under the field and for the field's own hint,
-  // so VoiceOver reads the rule or the problem with the field itself.
-  const handleHint = handleRefused
+  /*
+   * What is wrong with each field now, or null. Field shows it in place of
+   * the hint, reads it with the field and announces it as it appears, so
+   * each one is written to stand on its own.
+   */
+  const nameError = isRefused('name') ? OBJECTIONABLE_MESSAGE : null;
+  const handleError = isRefused('handle')
     ? OBJECTIONABLE_MESSAGE
     : username.length > 0 && !handleOk
       ? 'Lowercase letters, numbers, dots and underscores. 3–24 characters.'
-      : 'How people find you. Changing it frees your old one for someone else.';
+      : null;
+  const bioError = isRefused('bio') ? OBJECTIONABLE_MESSAGE : null;
+  const bioLength = bio.trim().length;
 
   return (
     <KeyboardAvoidingView
@@ -466,14 +464,13 @@ export default function EditProfileScreen() {
             />
           </View>
           {(profile.avatar_path && !removed) || pickedPhoto ? (
-            // Its own press tick, like the Buttons above; the handler adds none.
-            <PressableScale
-              onPress={removePhoto}
-              accessibilityRole="button"
-              accessibilityLabel="Remove photo"
-              style={styles.removePhoto}>
-              <Text style={styles.removePhotoText}>Remove photo</Text>
-            </PressableScale>
+            /*
+             * Red text, no fill: a quiet destructive action under the two
+             * buttons that are this block's point. Row-sized, so it keeps a
+             * 44pt target without standing as tall as they do. Its own press
+             * tick, like theirs; the handler adds none.
+             */
+            <Button label="Remove photo" variant="dangerText" size="sm" onPress={removePhoto} />
           ) : null}
         </View>
 
@@ -501,75 +498,50 @@ export default function EditProfileScreen() {
           })}
         </View>
 
-        <Text style={styles.label}>Display name</Text>
-        <TextInput
+        {/*
+          The app's one form field, as sign-in draws it: a visible label,
+          the hint or the problem beneath, both read with the field.
+        */}
+        <Field
+          label="Display name"
           value={displayName}
           onChangeText={setDisplayName}
           placeholder="Your name"
-          placeholderTextColor={colors.textMuted}
+          autoCapitalize="words"
           maxLength={NAME_MAX}
-          onFocus={() => setFocused('name')}
-          onBlur={() => setFocused(null)}
-          style={[styles.input, focused === 'name' && styles.inputFocused]}
-          accessibilityLabel="Display name"
-          accessibilityHint={nameRefused ? OBJECTIONABLE_MESSAGE : undefined}
+          error={nameError}
+          style={styles.field}
         />
-        {nameRefused ? (
-          <Text style={[styles.hint, styles.hintError]}>{OBJECTIONABLE_MESSAGE}</Text>
-        ) : null}
 
-        <Text style={styles.label}>Username</Text>
-        <View style={[styles.handleWrap, focused === 'handle' && styles.inputFocused]}>
-          <Text style={styles.at}>@</Text>
-          <TextInput
-            value={username}
-            onChangeText={setUsername}
-            placeholder="yourname"
-            placeholderTextColor={colors.textMuted}
-            autoCapitalize="none"
-            autoCorrect={false}
-            maxLength={HANDLE_MAX}
-            onFocus={() => setFocused('handle')}
-            onBlur={() => setFocused(null)}
-            style={styles.handleInput}
-            accessibilityLabel="Username"
-            accessibilityHint={handleHint}
-          />
-        </View>
-        <Text
-          style={[
-            styles.hint,
-            (handleRefused || (username.length > 0 && !handleOk)) && styles.hintError,
-          ]}>
-          {handleHint}
-        </Text>
+        <Field
+          label="Username"
+          prefix="@"
+          value={username}
+          onChangeText={setUsername}
+          placeholder="yourname"
+          maxLength={HANDLE_MAX}
+          hint="How people find you. Changing it frees your old one for someone else."
+          error={handleError}
+          style={styles.field}
+        />
 
-        <Text style={styles.label}>About</Text>
-        <TextInput
+        <Field
+          label="About"
+          accessibilityLabel="About you"
           value={bio}
           onChangeText={setBio}
           placeholder="What you drink, and where"
-          placeholderTextColor={colors.textMuted}
           multiline
+          autoCapitalize="sentences"
+          autoCorrect
           maxLength={BIO_MAX}
-          onFocus={() => setFocused('bio')}
-          onBlur={() => setFocused(null)}
-          style={[styles.input, styles.bioInput, focused === 'bio' && styles.inputFocused]}
-          accessibilityLabel="About you"
-          accessibilityHint={bioRefused ? OBJECTIONABLE_MESSAGE : undefined}
+          error={bioError}
+          style={styles.field}
         />
-        <View style={styles.bioFoot}>
-          {bioRefused ? (
-            <Text style={[styles.hint, styles.hintError, styles.bioRefusal]}>
-              {OBJECTIONABLE_MESSAGE}
-            </Text>
-          ) : (
-            <View style={styles.bioRefusal} />
-          )}
-          <Text style={styles.counter}>
-            {bio.trim().length}/{BIO_MAX}
-          </Text>
-        </View>
+        {/* Its own line under the field, so a refusal above it never shares the row. */}
+        <Text style={styles.counter} accessibilityLabel={`${bioLength} of ${BIO_MAX} characters`}>
+          {bioLength}/{BIO_MAX}
+        </Text>
 
         {error ? (
           <View style={styles.errorBox} accessibilityLiveRegion="polite">
@@ -619,27 +591,14 @@ const styles = StyleSheet.create({
 
   preview: { alignItems: 'center', paddingVertical: space.lg, gap: space.lg },
   photoActions: { flexDirection: 'row', gap: space.md },
-  // 44pt tall: it sits right under two 52pt buttons and is destructive.
-  removePhoto: { minHeight: 44, justifyContent: 'center', paddingHorizontal: space.md },
-  removePhotoText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.danger,
-  },
 
   /*
-   * Label size, field height and edge match the sign-in Field (AuthGate),
-   * the other place this app draws a labelled text field: 12pt on the type
-   * scale, 50pt tall, and a textFaint edge that turns wine while you type.
-   * The cardBorder hairline these had measured 1.08:1 against the page and
-   * 1.21:1 against the white fill, so the fields were close to invisible to
-   * anyone with low vision; a control's edge needs 3:1 (textFaint: 3.51:1
-   * and 3.91:1), and the "tint and hairline" rule is for cards.
+   * The swatches' label, set as Field sets its own (12pt on the type scale,
+   * textMuted) so the one label that is not a Field's reads as one of them.
    */
   label: {
     fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.micro.fontSize,
-    letterSpacing: 0.2,
+    ...typeScale.micro,
     color: colors.textMuted,
     marginTop: space.lg,
     marginBottom: space.sm,
@@ -659,53 +618,9 @@ const styles = StyleSheet.create({
      swatch rather than a second colour competing with the one it marks. */
   swatchOn: { borderColor: colors.bg },
 
-  input: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.textFaint,
-    borderRadius: radius.md,
-    paddingHorizontal: space.lg,
-    minHeight: 50,
-    fontFamily: fonts.body,
-    /* 16 so iOS does not auto-zoom the screen when the field takes focus. */
-    fontSize: 16,
-    color: colors.text,
-  },
-  bioInput: { minHeight: 108, paddingTop: space.md, textAlignVertical: 'top' },
-  // Same width as the resting edge, so focusing does not nudge the layout.
-  inputFocused: { borderColor: colors.wine },
-
-  handleWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.textFaint,
-    borderRadius: radius.md,
-    paddingHorizontal: space.lg,
-    minHeight: 50,
-  },
-  at: { fontFamily: fonts.body, fontSize: 16, color: colors.textMuted },
-  handleInput: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: 16,
-    color: colors.text,
-    paddingLeft: 2,
-  },
-
-  hint: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    marginTop: space.sm,
-  },
-  hintError: { color: colors.danger },
-  // The refusal and the counter share a line: message left, count right.
-  bioFoot: { flexDirection: 'row', alignItems: 'flex-start', gap: space.md },
-  bioRefusal: { flex: 1 },
+  field: { marginTop: space.lg },
   counter: {
+    alignSelf: 'flex-end',
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,

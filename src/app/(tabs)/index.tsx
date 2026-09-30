@@ -179,9 +179,18 @@ function HomeFeed() {
 
   const openFindFriends = useCallback(() => router.push('/find-friends'), [router]);
 
+  /*
+   * Someone else is their own screen, pushed over the tabs, so Back and the
+   * swipe return here and the tab bar never lights Profile for them. Your
+   * own name (on your own posts, which the feed also carries) is the
+   * Profile tab, where Edit profile is.
+   */
   const openPerson = useCallback(
-    (id: string) => router.push({ pathname: '/profile', params: { user: id } }),
-    [router],
+    (id: string) => {
+      if (id === myId) router.navigate('/profile');
+      else router.push({ pathname: '/user/[id]', params: { id } });
+    },
+    [myId, router],
   );
 
   const renderItem = useCallback(

@@ -26,6 +26,7 @@ import { Avatar, haptic, PressableScale } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
+  dexNumber,
   fonts,
   radius,
   space,
@@ -578,7 +579,7 @@ export const PostCard = React.memo(function PostCard({
           <Text style={styles.drinkName} numberOfLines={1}>
             {drink.name}
           </Text>
-          <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
+          <Text style={dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
         </View>
         {/*
           The spec line, not a badge row. A post is someone showing you a
@@ -761,19 +762,14 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     gap: space.sm,
   },
+  /* The catalogue number beside it is theme's `dexNumber`, the one stamp
+     every surface that names a drink uses. */
   drinkName: {
     flex: 1,
     fontFamily: fonts.displayBold,
     fontSize: typeScale.bodyLg.fontSize,
     lineHeight: typeScale.bodyLg.lineHeight,
     color: colors.text,
-  },
-  dexNumber: {
-    fontFamily: fonts.label,
-    fontSize: typeScale.micro.fontSize,
-    letterSpacing: 1.8,
-    color: colors.taupeInk,
-    ...tabular,
   },
   /* The spec line under the drink name. Muted, so the name stays the
      loudest thing in the block and this reads as its caption. */
