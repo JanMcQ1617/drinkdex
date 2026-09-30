@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
-import { VideoIntro } from '@/components/VideoIntro';
+import { hasSeenIntro, VideoIntro } from '@/components/VideoIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { Grain } from '@/components/Grain';
@@ -14,9 +14,23 @@ import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 
 SplashScreen.preventAutoHideAsync();
+/*
+ * Fade the native splash out rather than cutting it. iOS defaults to no
+ * fade, so the bone launch screen vanished in one frame and the film (or,
+ * on later launches, the cream page) was simply there — a hard cut at the
+ * one moment the app is making its first impression. A quarter-second
+ * dissolve covers the change of ground instead. The hide itself stays
+ * tied to `ready` below rather than to the film's first decoded frame:
+ * a clip that never decodes must not be able to hold the splash up.
+ */
+SplashScreen.setOptions({ fade: true, duration: 250 });
 
-/** Play the intro once per cold start (survives fast-refresh remounts). */
-let introPlayed = false;
+/*
+ * Whether this launch plays the intro: null until storage has answered.
+ * Module scope so a fast-refresh remount neither asks again nor replays
+ * it. The once-per-install rule itself lives with the film (VideoIntro).
+ */
+let introDecision: boolean | null = null;
 
 const SipplyTheme = {
   ...DefaultTheme,
@@ -49,10 +63,20 @@ export default function RootLayout() {
     InterLatin_600SemiBold: require('../../assets/fonts/InterLatin_600SemiBold.ttf'),
   });
 
-  const hydrated = useCollection((s) => s.hydrated);
-  const ready = (fontsLoaded || fontError != null) && hydrated;
+  const [showIntro, setShowIntro] = useState(introDecision);
+  // Asked alongside font loading and collection hydration, so it is in
+  // before the splash lifts: an intro that decided afterwards would flash
+  // the app first.
+  useEffect(() => {
+    if (introDecision !== null) return;
+    hasSeenIntro().then((seen) => {
+      introDecision = !seen;
+      setShowIntro(introDecision);
+    });
+  }, []);
 
-  const [showIntro, setShowIntro] = useState(!introPlayed);
+  const hydrated = useCollection((s) => s.hydrated);
+  const ready = (fontsLoaded || fontError != null) && hydrated && showIntro !== null;
 
   // Restores the persisted Supabase session and keeps it refreshed. The
   // returned unsubscribe tears down the auth listener.
@@ -71,7 +95,10 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={SipplyTheme}>
-      {/* Dark glyphs — the app is light-first now. */}
+      {/*
+        Dark glyphs — the app is light-first now. The intros hide the bar
+        while they play and hand it back as they leave (see VideoIntro).
+      */}
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
@@ -120,9 +147,9 @@ export default function RootLayout() {
           full-width back gesture would fire on a mistimed tap at either.
 
           They are screens rather than expanding rows because there is a
-          screen's worth behind each — Find friends alone is four cards with
-          headings. Nested inside a settings group they boxed four borders
-          inside a fifth and pushed "Sign out" out of reach.
+          screen's worth behind each — Find friends alone is six cards with
+          headings. Nested inside a settings group they boxed bordered cards
+          inside another and pushed "Sign out" out of reach.
         */}
         <Stack.Screen name="blocked" options={{ gestureDirection: 'horizontal' }} />
         <Stack.Screen name="find-friends" options={{ gestureDirection: 'horizontal' }} />
@@ -144,9 +171,14 @@ export default function RootLayout() {
         />
       </Stack>
       {/*
-        Paper grain over everything. Above the Stack so every screen gets
-        it without each one remembering to, and below the overlays so the
-        intro and the celebration stay clean sheets.
+        Paper grain over everything. Above the Stack so every tab and every
+        pushed screen gets it without each one remembering to, and below the
+        overlays so the intro and the celebration stay clean sheets.
+
+        Not the modals. `presentation: 'modal'` screens (log, edit-profile)
+        are presented natively, in their own view controller above this
+        whole view, so nothing drawn here can reach them; each renders its
+        own Grain.
       */}
       <Grain />
       {/* Redeems invite deep links; renders nothing. */}
@@ -157,9 +189,10 @@ export default function RootLayout() {
         to sit outside the Stack because a recovery link signs the user in,
         so AuthGate is already showing the app by the time it is needed.
 
-        Before the intro on purpose: a cold start from a reset link should
-        still play the intro over the top and reveal this underneath, not
-        have the overlay pop in above a half-finished animation.
+        Before the intro on purpose: on the one launch that plays the intro,
+        a reset link should still play it over the top and reveal this
+        underneath, not have the overlay pop in above a half-finished
+        animation.
       */}
       <PasswordResetOverlay />
       {/*
@@ -171,7 +204,7 @@ export default function RootLayout() {
       {showIntro && (
         <VideoIntro
           onDone={() => {
-            introPlayed = true;
+            introDecision = false;
             setShowIntro(false);
           }}
         />

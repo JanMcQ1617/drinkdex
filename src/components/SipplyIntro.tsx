@@ -1,9 +1,11 @@
 import * as Haptics from 'expo-haptics';
+import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, {
   Easing,
   interpolate,
+  ReduceMotion,
   runOnJS,
   useAnimatedStyle,
   useReducedMotion,
@@ -39,15 +41,24 @@ import { colors, fonts, label as labelType } from '@/constants/theme';
  *    floods the frame — the app is simply what was underneath. Inherited
  *    from the intro this replaces, and the reason there is no visible seam.
  *
- * Three rules this file learned the hard way and keeps:
+ * Four rules this file learned the hard way and keeps:
  *  1. ONE shared value, set ONCE. Everything derives from a single master
  *     clock in milliseconds. Two `.set()` calls on one value in one tick
  *     cancel the first outright, which is how the old timeline lost frames.
  *  2. Never trust the animation callback alone to dismiss the overlay — if
  *     the app is backgrounded mid-intro the frames stall and the callback
  *     never fires. The plain timer is the guarantee.
- *  3. Honour reduced motion: no pour, no pop, no drift — the lockup is
- *     simply there, and it still gets out of the way on time.
+ *  3. Honour reduced motion: no pour, no pop, no drift, no zoom — the
+ *     lockup is simply there, and the page dissolves in over it on time.
+ *     Since the film took over, this file only runs when Reduce Motion is
+ *     on, so this is the path that matters, not an afterthought.
+ *  4. The clock opts OUT of Reanimated's own reduced-motion handling
+ *     (`ReduceMotion.Never`). The clock is the timeline, not a motion, and
+ *     each style that reads it decides its own reduced form. Left on the
+ *     System default, Reanimated jumps a timing straight to its end when
+ *     the setting is on — the clock read 3350 on frame one, the callback
+ *     fired, and the intro vanished before it was ever drawn: exactly the
+ *     jolt this fallback exists to prevent.
  */
 
 /* ---- Timeline, in milliseconds ---------------------------------------- */
@@ -147,6 +158,13 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
   const { width: W, height: H } = useWindowDimensions();
   const reduced = useReducedMotion();
   const [gone, setGone] = useState(false);
+  /*
+   * No status bar over the wine: the app's dark glyphs measure 1.53:1 on
+   * it. It comes back as the page starts to open rather than after, so on
+   * a home-button iPhone — where a hidden bar gives the page its 20pt
+   * back — the re-layout happens under the dissolve, not in plain sight.
+   */
+  const [opening, setOpening] = useState(false);
   const doneRef = useRef(false);
 
   const finish = useCallback(() => {
@@ -163,9 +181,14 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
 
   useEffect(() => {
     clock.set(
-      withTiming(TOTAL, { duration: TOTAL, easing: Easing.linear }, (ok) => {
-        if (ok) runOnJS(finish)();
-      }),
+      withTiming(
+        TOTAL,
+        // Rule 4: the timeline runs whatever the setting says.
+        { duration: TOTAL, easing: Easing.linear, reduceMotion: ReduceMotion.Never },
+        (ok) => {
+          if (ok) runOnJS(finish)();
+        },
+      ),
     );
 
     /*
@@ -179,17 +202,21 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
       }, T.wineIn[1]);
     }
 
+    const openTimer = setTimeout(() => setOpening(true), T.floodIn[0]);
     const failsafe = setTimeout(finish, FAILSAFE);
     return () => {
       if (pourTimer) clearTimeout(pourTimer);
+      clearTimeout(openTimer);
       clearTimeout(failsafe);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const skip = useCallback(() => {
+    setOpening(true);
     rootO.set(
-      withTiming(0, { duration: 220 }, (ok) => {
+      // A dissolve is what Reduce Motion asks for, so it is not snapped away.
+      withTiming(0, { duration: 220, reduceMotion: ReduceMotion.Never }, (ok) => {
         if (ok) runOnJS(finish)();
       }),
     );
@@ -250,16 +277,34 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
     return { opacity: p, transform: [{ translateY: 28 - p * 28 }] };
   });
 
-  const floodStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: clamp01(seg(clock.value, T.floodIn[0], T.floodIn[1])) },
-    ],
-  }));
+  /*
+   * The exit. With motion, the page opens as a disc from the centre; with
+   * Reduce Motion, the same full-size disc fades in instead — a dissolve
+   * rather than a screen-filling zoom, and still no seam at the end.
+   */
+  const floodStyle = useAnimatedStyle(() => {
+    const p = seg(clock.value, T.floodIn[0], T.floodIn[1]);
+    return reduced
+      ? { opacity: p, transform: [{ scale: 1 }] }
+      : { opacity: 1, transform: [{ scale: p }] };
+  });
 
   if (gone) return null;
 
+  /*
+   * accessibilityViewIsModal: VoiceOver otherwise walks straight past the
+   * intro into the Stack underneath it — a sighted user sees one screen
+   * and a VoiceOver user hears another. Marked modal, the only things it
+   * can reach are the wordmark and the skip button. It works because this
+   * view is a native sibling of the Stack (RootLayout renders it straight
+   * into its fragment, through VideoIntro), which is what the flag scopes.
+   */
   return (
-    <Animated.View style={[StyleSheet.absoluteFill, styles.root, rootStyle]} pointerEvents="box-none">
+    <Animated.View
+      style={[StyleSheet.absoluteFill, styles.root, rootStyle]}
+      pointerEvents="box-none"
+      accessibilityViewIsModal>
+      <StatusBar style="dark" hidden={!opening} animated />
       {/* ---- The pour ---- */}
       <Animated.View
         pointerEvents="none"
