@@ -88,10 +88,19 @@ cd "$ROOT"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-if pgrep -f "xcodebuild.*Sipply" >/dev/null 2>&1; then
-  echo "Another xcodebuild is already running against this repo. Wait for it." >&2
-  exit 1
-fi
+# Only a process whose NAME is xcodebuild counts, and only if it is building
+# Sipply. `pgrep -f` matches the whole command line of every process, so a
+# shell that merely mentions xcodebuild — a watcher loop polling for builds,
+# a grep, another session's monitor — blocked every archive on 30 Sep 2026
+# while no build was running. `pgrep -x` matches the process name itself.
+# (Not `ps -o comm`: it truncates the path to 16 characters unless it is the
+# last column, so Xcode's real /Applications/.../xcodebuild never matched.)
+for pid in $(pgrep -x xcodebuild 2>/dev/null); do
+  if ps -o args= -p "$pid" 2>/dev/null | grep -q Sipply; then
+    echo "Another xcodebuild is already running against this repo. Wait for it." >&2
+    exit 1
+  fi
+done
 
 TEAM="$(/usr/libexec/PlistBuddy -c 'Print :teamID' ExportOptions.plist)"
 
