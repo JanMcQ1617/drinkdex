@@ -25,6 +25,13 @@ import type { UserProfile } from '@/types';
 /* mis-taps deserves better than a permanent mistake.                    */
 /* ==================================================================== */
 
+/*
+ * Sized like the follow rows in PeopleList — 44pt avatar, the 44pt `sm`
+ * button — because it is the same kind of list: a person and one action.
+ * The full 52pt call-to-action pill made every row 84pt tall against a
+ * 40pt avatar. The spoken label names the person, or VoiceOver's rotor
+ * lists a column of identical "Unblock" buttons.
+ */
 function BlockedRow({
   person,
   onUnblock,
@@ -39,7 +46,7 @@ function BlockedRow({
       <Avatar
         name={person.displayName}
         accent={person.accent}
-        size={40}
+        size={44}
         avatarPath={person.avatarPath}
       />
       <View style={styles.rowText}>
@@ -50,7 +57,14 @@ function BlockedRow({
           @{person.username}
         </Text>
       </View>
-      <Button label="Unblock" variant="secondary" onPress={onUnblock} disabled={busy} />
+      <Button
+        label="Unblock"
+        variant="secondary"
+        size="sm"
+        loading={busy}
+        onPress={onUnblock}
+        accessibilityLabel={`Unblock ${person.displayName}`}
+      />
     </View>
   );
 }
@@ -142,7 +156,7 @@ export default function BlockedScreen() {
           style={styles.back}>
           <Icon name="chevronLeft" size={22} color={colors.text} />
         </PressableScale>
-        <Text style={styles.title}>Blocked accounts</Text>
+        <Text style={styles.title} accessibilityRole="header">Blocked accounts</Text>
       </View>
 
       {people === null ? (
@@ -158,7 +172,7 @@ export default function BlockedScreen() {
         />
       ) : people.length === 0 ? (
         <EmptyState
-          icon="lock"
+          icon="eyeOff"
           title="Nobody is blocked"
           body="You can block someone from the menu on any of their posts. They will not be told."
         />
@@ -199,8 +213,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.lg,
-    paddingVertical: space.lg,
+    gap: space.md,
+    paddingVertical: space.md,
     paddingHorizontal: space.lg,
     minHeight: 56,
   },

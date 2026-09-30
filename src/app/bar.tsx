@@ -1,21 +1,31 @@
 import { useRouter } from 'expo-router';
-import React, { useCallback, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { memo, useCallback, useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useDerivedValue,
+  useReducedMotion,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon } from '@/components/icons';
 import { Button, Card, EmptyState, PressableScale, SectionLabel, haptic } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { colors, fonts, motion, radius, space, tabular, type as typeScale } from '@/constants/theme';
+import { formatCount } from '@/data';
 import {
   CATEGORY_LABEL,
   CATEGORY_ORDER,
   COMMON_INGREDIENTS,
+  INGREDIENTS,
   INGREDIENTS_BY_ID,
-  matchBar,
+  matchOwned,
   searchIngredients,
   type Ingredient,
 } from '@/lib/bar';
 import { useBar } from '@/store/bar';
+import { confirmDestructive } from '@/utils/alerts';
 
 /* ==================================================================== */
 /* My Bar                                                               */
@@ -23,7 +33,7 @@ import { useBar } from '@/store/bar';
 /* Two panes behind a segmented control, because owning things and       */
 /* making things are separate errands. You stock the shelf once, in a    */
 /* burst; you come back to Drinks repeatedly and want it uncluttered by  */
-/* a 488-row picker.                                                     */
+/* a picker of every ingredient in the index.                            */
 /*                                                                      */
 /* The counts live in the segmented control itself so the payoff is      */
 /* visible while you are still on the Shelf pane — ticking a bottle and  */
@@ -37,31 +47,153 @@ const STARTER = [
   'triple-sec', 'mint',
 ];
 
-function Chip({
+/*
+ * ONE SIGNAL, AND THE SAME WIDTH IN BOTH STATES. Selection is the wine
+ * fill — white to wine is a large luminance step, not a hue alone, and
+ * VoiceOver hears the selected state. It used to add a check and switch to
+ * SemiBold as well, so a chip grew by some 17pt when tapped and every chip
+ * after it in the wrapped grid shifted, often onto another line, under the
+ * thumb that was about to tap the next one. One weight, no conditional
+ * glyph, and the grid holds still.
+ *
+ * Memoised, with the id and a stable toggle passed rather than a fresh
+ * closure per chip: one tap used to re-render all ~160 browse chips, each
+ * an animated pressable. Now only the chip that changed does.
+ *
+ * The vertical slop brings the 36pt chip to the 44pt floor, as the Dex's
+ * filter chips do. It is exactly the 8pt row gap, split, so neighbouring
+ * rows' targets meet without overlapping.
+ */
+const Chip = memo(function Chip({
+  id,
   label,
   selected,
-  onPress,
+  onToggle,
   detail,
+  a11yDetail,
 }: {
+  id: string;
   label: string;
   selected?: boolean;
-  onPress: () => void;
+  onToggle: (id: string) => void;
+  /** Shown after the label, e.g. "+12". */
   detail?: string;
+  /** What `detail` means, spoken — "+12" alone never says twelve of what. */
+  a11yDetail?: string;
 }) {
   return (
     <PressableScale
-      onPress={onPress}
+      onPress={() => onToggle(id)}
       noHaptic
+      hitSlop={{ top: space.xs, bottom: space.xs }}
       accessibilityRole="button"
       accessibilityState={{ selected: !!selected }}
-      accessibilityLabel={detail ? `${label}, ${detail}` : label}
+      accessibilityLabel={detail ? `${label}, ${a11yDetail ?? detail}` : label}
       style={[styles.chip, selected && styles.chipOn]}>
-      {selected ? <Icon name="check" size={13} color={colors.bg} /> : null}
       <Text style={[styles.chipText, selected && styles.chipTextOn]}>{label}</Text>
       {detail ? <Text style={styles.chipDetail}>{detail}</Text> : null}
     </PressableScale>
   );
+});
+
+type Pane = 'shelf' | 'drinks';
+
+/*
+ * The segmented control, drawn and moved the way the profile's is: a sunk
+ * track, a white thumb that slides, the active label in wine. This one
+ * used to snap a solid wine pill between two plain buttons — the only two
+ * segmented controls in the app, answering the same gesture two opposite
+ * ways. It is a copy of SegmentBar in (tabs)/profile.tsx for now, so
+ * change the two together. The track is a tab bar to VoiceOver, as there,
+ * which is what makes it say "tab, 1 of 2".
+ *
+ * The thumb takes motion.selection, the spring for a selection answering;
+ * see theme.ts. Plain Pressable with no press-scale, as there: the
+ * segments are wide, and the thumb arriving is already the feedback.
+ *
+ * The counts stay inside the control, per the header: ticking a bottle
+ * and watching "Drinks 48" tick up is the loop.
+ */
+function PaneSwitch({
+  value,
+  onChange,
+  shelfCount,
+  drinkCount,
+}: {
+  value: Pane;
+  onChange: (pane: Pane) => void;
+  shelfCount: number;
+  drinkCount: number;
+}) {
+  const reduced = useReducedMotion();
+  const [barW, setBarW] = useState(0);
+  const index = value === 'shelf' ? 0 : 1;
+
+  const PAD = space.xs;
+  const GAP = space.xs;
+  const segW = barW > 0 ? (barW - PAD * 2 - GAP) / 2 : 0;
+
+  const x = useDerivedValue(() => {
+    const target = index * (segW + GAP);
+    return reduced
+      ? withTiming(target, { duration: motion.fast })
+      : withSpring(target, motion.selection);
+  });
+  const thumbStyle = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
+
+  const items: { key: Pane; label: string; count: number }[] = [
+    { key: 'shelf', label: 'Shelf', count: shelfCount },
+    { key: 'drinks', label: 'Drinks', count: drinkCount },
+  ];
+
+  return (
+    <View
+      accessibilityRole="tabbar"
+      style={styles.segments}
+      onLayout={(e) => setBarW(Math.round(e.nativeEvent.layout.width))}>
+      {segW > 0 ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.segmentThumb, { width: segW, left: PAD }, thumbStyle]}
+        />
+      ) : null}
+      {items.map((item) => {
+        const active = value === item.key;
+        return (
+          <Pressable
+            key={item.key}
+            onPress={() => {
+              if (active) return;
+              onChange(item.key);
+              haptic.select();
+            }}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={item.count ? `${item.label}, ${item.count}` : item.label}
+            style={styles.segment}>
+            <Text style={[styles.segmentLabel, active && styles.segmentLabelActive]}>
+              {item.label}
+            </Text>
+            {item.count ? (
+              <Text style={[styles.segmentLabel, tabular, active && styles.segmentLabelActive]}>
+                {formatCount(item.count)}
+              </Text>
+            ) : null}
+          </Pressable>
+        );
+      })}
+    </View>
+  );
 }
+
+/*
+ * Both drink lists stop at forty rows until asked. "One thing short" used
+ * to stop there for good — the rest was a sentence, "…and 152 more", with
+ * nothing to tap, on the list lib/bar.ts calls the useful half of the
+ * feature — while "Pour tonight" had no limit and mounted every row, six
+ * hundred on a well-stocked shelf. One rule for both, and a way through.
+ */
+const LIST_PREVIEW = 40;
 
 export default function BarScreen() {
   const insets = useSafeAreaInsets();
@@ -72,16 +204,17 @@ export default function BarScreen() {
   const add = useBar((s) => s.add);
   const clear = useBar((s) => s.clear);
 
-  const [pane, setPane] = useState<'shelf' | 'drinks'>('shelf');
+  const [pane, setPane] = useState<Pane>('shelf');
   const [query, setQuery] = useState('');
+  const [allMakeable, setAllMakeable] = useState(false);
+  const [allNearly, setAllNearly] = useState(false);
 
   /*
-   * `owned` is a Record so it survives JSON persistence; matching wants a Set.
-   * Both this and the match below are memoised on the same identity, so a
-   * keystroke in the search field re-runs neither.
+   * matchOwned remembers its answer for the store's `owned` object, so a
+   * keystroke in the search field re-runs nothing, and the Dex's count row
+   * underneath reuses this result instead of walking the index again.
    */
-  const ownedSet = useMemo(() => new Set(Object.keys(owned)), [owned]);
-  const result = useMemo(() => matchBar(ownedSet), [ownedSet]);
+  const result = matchOwned(owned);
 
   const results = useMemo(() => searchIngredients(query), [query]);
 
@@ -100,6 +233,24 @@ export default function BarScreen() {
       toggle(id);
     },
     [toggle],
+  );
+
+  /*
+   * A shelf is built a tap at a time, dozens of them, and this took it all
+   * in one — a 13pt word right above the first row of chips, in wine, the
+   * colour this palette keeps for affirmative actions. It confirms now, like
+   * every other destructive action in the app, and wears danger.
+   */
+  const confirmClear = useCallback(
+    (count: number) => {
+      confirmDestructive(
+        'Clear your shelf?',
+        `${formatCount(count)} ${count === 1 ? 'item comes' : 'items come'} off the shelf. This cannot be undone.`,
+        'Clear shelf',
+        clear,
+      );
+    },
+    [clear],
   );
 
   const shelf: Ingredient[] = useMemo(
@@ -123,31 +274,15 @@ export default function BarScreen() {
           style={styles.back}>
           <Icon name="chevronLeft" size={22} color={colors.text} />
         </PressableScale>
-        <Text style={styles.title}>My Bar</Text>
+        <Text style={styles.title} accessibilityRole="header">My Bar</Text>
       </View>
 
-      <View style={styles.segment}>
-        <PressableScale
-          onPress={() => setPane('shelf')}
-          noHaptic
-          accessibilityRole="button"
-          accessibilityState={{ selected: pane === 'shelf' }}
-          style={[styles.segmentItem, pane === 'shelf' && styles.segmentItemOn]}>
-          <Text style={[styles.segmentText, pane === 'shelf' && styles.segmentTextOn]}>
-            Shelf {shelf.length ? shelf.length : ''}
-          </Text>
-        </PressableScale>
-        <PressableScale
-          onPress={() => setPane('drinks')}
-          noHaptic
-          accessibilityRole="button"
-          accessibilityState={{ selected: pane === 'drinks' }}
-          style={[styles.segmentItem, pane === 'drinks' && styles.segmentItemOn]}>
-          <Text style={[styles.segmentText, pane === 'drinks' && styles.segmentTextOn]}>
-            Drinks {result.makeable.length ? result.makeable.length : ''}
-          </Text>
-        </PressableScale>
-      </View>
+      <PaneSwitch
+        value={pane}
+        onChange={setPane}
+        shelfCount={shelf.length}
+        drinkCount={result.makeable.length}
+      />
 
       <ScrollView
         style={styles.flex}
@@ -156,13 +291,18 @@ export default function BarScreen() {
         showsVerticalScrollIndicator={false}>
         {pane === 'shelf' ? (
           <>
+            {/*
+              The glyph takes the placeholder's ink, as the Dex and Log
+              search fields do, so every search field in the app reads the
+              same and the icon never sits fainter than the words beside it.
+            */}
             <View style={styles.searchRow}>
-              <Icon name="search" size={17} color={colors.textFaint} />
+              <Icon name="search" size={17} color={colors.textMuted} />
               <TextInput
                 value={query}
                 onChangeText={setQuery}
-                placeholder="Search 488 ingredients"
-                placeholderTextColor={colors.textFaint}
+                placeholder={`Search ${formatCount(INGREDIENTS.length)} ingredients`}
+                placeholderTextColor={colors.textMuted}
                 autoCorrect={false}
                 autoCapitalize="none"
                 style={styles.searchInput}
@@ -172,7 +312,7 @@ export default function BarScreen() {
                 <PressableScale
                   onPress={() => setQuery('')}
                   noHaptic
-                  hitSlop={8}
+                  hitSlop={14}
                   accessibilityRole="button"
                   accessibilityLabel="Clear search">
                   <Icon name="close" size={16} color={colors.textMuted} />
@@ -186,9 +326,10 @@ export default function BarScreen() {
                   {results.map((i) => (
                     <Chip
                       key={i.id}
+                      id={i.id}
                       label={i.label}
                       selected={!!owned[i.id]}
-                      onPress={() => onToggle(i.id)}
+                      onToggle={onToggle}
                     />
                   ))}
                 </View>
@@ -202,17 +343,18 @@ export default function BarScreen() {
                     <View style={styles.shelfHead}>
                       <SectionLabel>On your shelf</SectionLabel>
                       <PressableScale
-                        onPress={clear}
+                        onPress={() => confirmClear(shelf.length)}
                         noHaptic
-                        hitSlop={8}
+                        hitSlop={14}
                         accessibilityRole="button"
-                        accessibilityLabel="Clear the shelf">
-                        <Text style={styles.clear}>Clear</Text>
+                        accessibilityLabel="Clear shelf"
+                        accessibilityHint="Asks first, then removes everything on the shelf">
+                        <Text style={styles.clear}>Clear shelf</Text>
                       </PressableScale>
                     </View>
                     <View style={styles.chipWrap}>
                       {shelf.map((i) => (
-                        <Chip key={i.id} label={i.label} selected onPress={() => onToggle(i.id)} />
+                        <Chip key={i.id} id={i.id} label={i.label} selected onToggle={onToggle} />
                       ))}
                     </View>
                   </>
@@ -226,10 +368,7 @@ export default function BarScreen() {
                     <Button
                       label="Add the basics"
                       variant="secondary"
-                      onPress={() => {
-                        haptic.tap();
-                        add(STARTER);
-                      }}
+                      onPress={() => add(STARTER)}
                       style={styles.starterButton}
                     />
                   </Card>
@@ -244,9 +383,10 @@ export default function BarScreen() {
                       {s.items.map((i) => (
                         <Chip
                           key={i.id}
+                          id={i.id}
                           label={i.label}
                           selected={!!owned[i.id]}
-                          onPress={() => onToggle(i.id)}
+                          onToggle={onToggle}
                         />
                       ))}
                     </View>
@@ -258,8 +398,12 @@ export default function BarScreen() {
         ) : (
           <>
             {shelf.length === 0 ? (
+              /*
+                The coupe, not the sparkle: the sparkle is the legendary
+                mark on every Dex card, and this state is about drinks.
+              */
               <EmptyState
-                icon="sparkle"
+                icon="dex"
                 title="Nothing on the shelf yet"
                 body="Tick what you actually have and this fills with drinks you can pour tonight."
                 action={{ label: 'Stock the shelf', onPress: () => setPane('shelf') }}
@@ -268,13 +412,17 @@ export default function BarScreen() {
               <>
                 <View style={styles.tally}>
                   <View style={styles.tallyHalf}>
-                    <Text style={styles.tallyNumber}>{result.makeable.length}</Text>
+                    <Text style={styles.tallyNumber}>{formatCount(result.makeable.length)}</Text>
                     <Text style={styles.tallyLabel}>you can make</Text>
                   </View>
                   <View style={styles.tallyRule} />
+                  {/*
+                    The same name as the list below. The missing thing is as
+                    often lime, mint or egg white as a bottle.
+                  */}
                   <View style={styles.tallyHalf}>
-                    <Text style={styles.tallyNumber}>{result.nearly.length}</Text>
-                    <Text style={styles.tallyLabel}>one bottle away</Text>
+                    <Text style={styles.tallyNumber}>{formatCount(result.nearly.length)}</Text>
+                    <Text style={styles.tallyLabel}>one thing short</Text>
                   </View>
                 </View>
 
@@ -288,9 +436,11 @@ export default function BarScreen() {
                       {result.nextBest.map(({ ingredient, unlocks }) => (
                         <Chip
                           key={ingredient.id}
+                          id={ingredient.id}
                           label={ingredient.label}
                           detail={`+${unlocks}`}
-                          onPress={() => onToggle(ingredient.id)}
+                          a11yDetail={`makes ${unlocks} more ${unlocks === 1 ? 'drink' : 'drinks'}`}
+                          onToggle={onToggle}
                         />
                       ))}
                     </View>
@@ -303,7 +453,10 @@ export default function BarScreen() {
                       Pour tonight
                     </SectionLabel>
                     <Card style={styles.list}>
-                      {result.makeable.map((m, i) => (
+                      {(allMakeable
+                        ? result.makeable
+                        : result.makeable.slice(0, LIST_PREVIEW)
+                      ).map((m, i) => (
                         <React.Fragment key={m.drink.id}>
                           {i > 0 ? <View style={styles.rowRule} /> : null}
                           <PressableScale
@@ -322,10 +475,26 @@ export default function BarScreen() {
                         </React.Fragment>
                       ))}
                     </Card>
+                    {!allMakeable && result.makeable.length > LIST_PREVIEW ? (
+                      <Button
+                        label={`Show all ${formatCount(result.makeable.length)}`}
+                        variant="secondary"
+                        block
+                        onPress={() => setAllMakeable(true)}
+                        style={styles.showAll}
+                      />
+                    ) : null}
                   </>
                 ) : (
+                  /*
+                    "Above" only when there is something above: a shelf of
+                    rarities can leave nothing one short either, and then the
+                    next step is the shelf itself.
+                  */
                   <Text style={styles.hint}>
-                    Nothing is fully in reach yet — the bottles above are the shortest way there.
+                    {result.nextBest.length
+                      ? 'Nothing is fully in reach yet — the ingredients above are the shortest way there.'
+                      : 'Nothing is in reach yet. Add a few more common ingredients to your shelf.'}
                   </Text>
                 )}
 
@@ -333,7 +502,7 @@ export default function BarScreen() {
                   <>
                     <SectionLabel style={styles.sectionLabel}>One thing short</SectionLabel>
                     <Card style={styles.list}>
-                      {result.nearly.slice(0, 40).map((m, i) => (
+                      {(allNearly ? result.nearly : result.nearly.slice(0, LIST_PREVIEW)).map((m, i) => (
                         <React.Fragment key={m.drink.id}>
                           {i > 0 ? <View style={styles.rowRule} /> : null}
                           <PressableScale
@@ -356,10 +525,14 @@ export default function BarScreen() {
                         </React.Fragment>
                       ))}
                     </Card>
-                    {result.nearly.length > 40 ? (
-                      <Text style={styles.hint}>
-                        …and {result.nearly.length - 40} more.
-                      </Text>
+                    {!allNearly && result.nearly.length > LIST_PREVIEW ? (
+                      <Button
+                        label={`Show all ${formatCount(result.nearly.length)}`}
+                        variant="secondary"
+                        block
+                        onPress={() => setAllNearly(true)}
+                        style={styles.showAll}
+                      />
                     ) : null}
                   </>
                 ) : null}
@@ -392,31 +565,38 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
 
-  segment: {
+  /* Same geometry and ink as the profile's SegmentBar; see PaneSwitch. */
+  segments: {
     flexDirection: 'row',
     gap: space.xs,
     marginHorizontal: space.xl,
     marginBottom: space.lg,
     padding: space.xs,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.bgSunk,
     borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
   },
-  segmentItem: {
+  segment: {
     flex: 1,
+    minHeight: 44,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 38,
+    gap: space.sm,
     borderRadius: radius.pill,
   },
-  segmentItemOn: { backgroundColor: colors.wine },
-  segmentText: {
+  segmentThumb: {
+    position: 'absolute',
+    top: space.xs,
+    bottom: space.xs,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surface,
+  },
+  segmentLabel: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
   },
-  segmentTextOn: { color: colors.bg },
+  segmentLabelActive: { color: colors.wine },
 
   searchRow: {
     flexDirection: 'row',
@@ -427,7 +607,9 @@ const styles = StyleSheet.create({
     borderColor: colors.cardBorder,
     borderRadius: radius.pill,
     paddingHorizontal: space.lg,
-    minHeight: 46,
+    /* The Dex field's height: the 44pt floor, on the 4pt grid. A minimum,
+       so Larger Text grows the field instead of clipping the query. */
+    minHeight: 44,
     marginBottom: space.lg,
   },
   searchInput: {
@@ -448,7 +630,7 @@ const styles = StyleSheet.create({
   clear: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.caption.fontSize,
-    color: colors.wine,
+    color: colors.danger,
   },
 
   chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: space.md },
@@ -470,7 +652,7 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
     color: colors.text,
   },
-  chipTextOn: { color: colors.bg, fontFamily: fonts.bodySemiBold },
+  chipTextOn: { color: colors.textOnWine },
   chipDetail: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.micro.fontSize,
@@ -525,6 +707,7 @@ const styles = StyleSheet.create({
   },
 
   list: { padding: 0, marginTop: space.md },
+  showAll: { marginTop: space.md },
   row: {
     flexDirection: 'row',
     alignItems: 'center',

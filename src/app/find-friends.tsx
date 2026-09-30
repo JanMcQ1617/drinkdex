@@ -12,16 +12,23 @@ import { colors, fonts, space, type as typeScale } from '@/constants/theme';
 /*                                                                      */
 /* A screen, not a settings row that expands.                           */
 /*                                                                      */
-/* FindFriends is four cards — contacts, Instagram, username search and  */
-/* invites — each with a heading and a body paragraph. Expanded inside a */
-/* settings group that is itself a card, it nested four bordered boxes   */
-/* inside a fifth, and pushed "Sign out" a screen and a half down.       */
-/* Instagram drills down for exactly this reason, and this is the one    */
-/* row here with enough behind it to deserve it.                        */
+/* FindFriends is six cards — contacts, being findable, invites,         */
+/* username search, and the two halves of the Instagram import — each    */
+/* with a heading and a body paragraph. Expanded inside a settings group */
+/* that is itself a card, it nested bordered boxes inside a bordered box */
+/* and pushed "Sign out" screens down. Instagram drills down for exactly */
+/* this reason, and this is the one row here with enough behind it to    */
+/* deserve it.                                                           */
 /*                                                                      */
 /* The same component is rendered full-width by WelcomeConnect at        */
 /* signup, so the thing offered on day one and the thing reachable from  */
 /* Settings are one implementation rather than two that drift.           */
+/*                                                                      */
+/* Four text fields live in that stack, so the scroll view carries the   */
+/* keyboard props every other input screen here does. Without "handled", */
+/* the first tap on Follow under a search result only closed the         */
+/* keyboard; without the inset adjustment, the fields near the end sat   */
+/* behind it.                                                            */
 /* ==================================================================== */
 
 export default function FindFriendsScreen() {
@@ -35,6 +42,9 @@ export default function FindFriendsScreen() {
         styles.content,
         { paddingTop: insets.top + space.sm, paddingBottom: insets.bottom + space.xxxl },
       ]}
+      keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive"
+      automaticallyAdjustKeyboardInsets
       showsVerticalScrollIndicator={false}>
       <View style={styles.topBar}>
         <PressableScale
@@ -46,7 +56,7 @@ export default function FindFriendsScreen() {
           style={styles.back}>
           <Icon name="chevronLeft" size={22} color={colors.text} />
         </PressableScale>
-        <Text style={styles.title}>Find friends</Text>
+        <Text style={styles.title} accessibilityRole="header">Find friends</Text>
       </View>
 
       <FindFriends />

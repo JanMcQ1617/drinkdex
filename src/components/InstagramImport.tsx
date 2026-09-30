@@ -1,29 +1,46 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  AccessibilityInfo,
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 
 import { Icon } from '@/components/icons';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
-import { Button, Card, haptic } from '@/components/ui';
+import { Button, Card } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { formatCount } from '@/data';
 import {
+  IG_CONNECTIONS_KEY,
+  RATE_LIMITED_IMPORT_MESSAGE,
+  discoveryErrorMessage,
+  dropParkedClaim,
   forgetRememberedHandle,
+  getParkedClaims,
   getRememberedHandle,
+  matchWithinQuota,
   rememberHandle,
+  subscribeDiscovery,
 } from '@/lib/discovery';
 import {
   DYI_URL,
+  compareCloseness,
   connectionsFromText,
   hashHandle,
   normalizeHandle,
   pickExportFiles,
-  sortByCloseness,
   type ImportedConnection,
 } from '@/lib/instagram';
 import { matchInstagram, setInstagramHash } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import type { UserProfile } from '@/types';
+import { confirmDestructive } from '@/utils/alerts';
 
 /* ==================================================================== */
 /* Instagram import                                                     */
@@ -48,12 +65,31 @@ import type { UserProfile } from '@/types';
  * list is stale the moment it is made, and the people worth finding are
  * the ones who join next month.
  *
+ * The key lives in lib/discovery.ts, beside clearDiscoveryCache, so the
+ * cache and the sign-out that forgets it cannot drift onto two names.
+ *
  * Capped well under the 10k import ceiling — AsyncStorage is a single
  * JSON blob per key, and a 10k-entry write on every import is a stutter
  * nobody asked for.
  */
-const CACHE_KEY = 'clink-ig-connections';
 const CACHE_MAX = 5_000;
+
+/*
+ * Speaks a notice to VoiceOver as it is set. The notice boxes carry
+ * accessibilityLiveRegion, which is Android-only, so on iOS a failed or
+ * refused check changed the screen and said nothing. Gated to iOS so
+ * Android does not hear it twice; queued so a button's own label change
+ * does not cut it off.
+ *
+ * A copy of the one in FindFriends rather than AuthGate's useAnnounce:
+ * AuthGate renders WelcomeConnect, which renders FindFriends, which
+ * renders this, so importing from AuthGate is a require cycle.
+ */
+function announce(message: string) {
+  if (Platform.OS === 'ios') {
+    AccessibilityInfo.announceForAccessibilityWithOptions(message, { queue: true });
+  }
+}
 
 type Phase = 'idle' | 'reading' | 'matching' | 'done';
 
@@ -64,13 +100,15 @@ export function InstagramImport() {
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [connections, setConnections] = useState<ImportedConnection[]>([]);
   const [matches, setMatches] = useState<{ profile: UserProfile; hash: string }[]>([]);
+  /* True when the day's match quota ran out before the whole list was checked. */
+  const [partial, setPartial] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [showPaste, setShowPaste] = useState(false);
   const [pasted, setPasted] = useState('');
 
   /* ---- restore a previous import ---- */
   useEffect(() => {
-    AsyncStorage.getItem(CACHE_KEY)
+    AsyncStorage.getItem(IG_CONNECTIONS_KEY)
       .then((raw) => {
         if (!raw) return;
         const cached = JSON.parse(raw) as ImportedConnection[];
@@ -83,61 +121,108 @@ export function InstagramImport() {
 
   /* ---- matching ---- */
 
-  const runMatch = useCallback(async (list: ImportedConnection[]) => {
+  /*
+   * A failure never lands in 'done'. It used to, and 'done' is what draws
+   * "None of your 1,843 Instagram connections are here yet" — so a dropped
+   * connection was reported as a confident empty result, right under the
+   * error. Back to 'idle' instead, where "Check my connections again" is
+   * the retry.
+   *
+   * Sent closest first, a slice at a time (see matchWithinQuota): a large
+   * list is more than a day's quota, and when it runs out it should run
+   * out on brands and strangers, with the mutuals already checked and
+   * shown.
+   *
+   * A refusal that found nothing is not a failure either, and lands on the
+   * phase the caller passes as `refused`. A re-check passes 'done', so the
+   * people the last check found stay on screen under the notice instead of
+   * vanishing until tomorrow. A new list passes nothing and lands on 'idle'.
+   */
+  const runMatch = useCallback(async (list: ImportedConnection[], refused: Phase = 'idle') => {
     setPhase('matching');
+    setNotice(null);
     try {
-      const found = await matchInstagram(list.map((c) => c.hash));
+      const ordered = [...list].sort(compareCloseness).map((c) => c.hash);
+      const { found, limited } = await matchWithinQuota(ordered, matchInstagram);
+      if (limited) {
+        setNotice(RATE_LIMITED_IMPORT_MESSAGE);
+        announce(RATE_LIMITED_IMPORT_MESSAGE);
+      }
+      if (limited && found.length === 0) {
+        if (refused === 'idle') setMatches([]);
+        setPhase(refused);
+        return;
+      }
       setMatches(found);
+      setPartial(limited);
       setPhase('done');
     } catch (e) {
-      setNotice((e as Error).message);
-      setPhase('done');
+      const message = discoveryErrorMessage(
+        e,
+        'Could not check your list right now. Try again in a moment.',
+      );
+      setMatches([]);
+      setPartial(false);
+      setNotice(message);
+      announce(message);
+      setPhase('idle');
     }
   }, []);
 
   const persist = useCallback(async (list: ImportedConnection[]) => {
     setConnections(list);
     try {
-      await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(list.slice(0, CACHE_MAX)));
+      await AsyncStorage.setItem(IG_CONNECTIONS_KEY, JSON.stringify(list.slice(0, CACHE_MAX)));
     } catch {
       /* Cache is an optimisation; losing it only costs a re-import. */
     }
   }, []);
 
   const importFiles = useCallback(async () => {
-    haptic.tap();
+    /*
+     * A cancelled picker goes back to where it was. It used to go to 'done'
+     * whenever a list was cached, and a restored list has never been
+     * matched — so cancelling "Choose a newer file" announced that none of
+     * the user's connections were here, having checked nobody.
+     */
+    const before: Phase = phase === 'done' ? 'done' : 'idle';
     setNotice(null);
     setPhase('reading');
     setProgress(null);
     try {
       const result = await pickExportFiles((done, total) => setProgress({ done, total }));
       if (!result) {
-        setPhase(connections.length ? 'done' : 'idle');
+        setPhase(before);
         return;
       }
       if (result.empty || result.connections.length === 0) {
-        setNotice(
-          "That file didn't have any accounts in it. In the download, look inside connections › followers_and_following and pick followers_1.json and following.json.",
-        );
+        const message =
+          "That file didn't have any accounts in it. In the download, look inside connections › followers_and_following and pick followers_1.json and following.json.";
+        setNotice(message);
+        announce(message);
         setPhase('idle');
         return;
       }
       await persist(result.connections);
       await runMatch(result.connections);
     } catch (e) {
-      setNotice((e as Error).message);
+      // runMatch catches its own failures; what reaches here is the file.
+      const message = discoveryErrorMessage(e, 'Could not read that file. Try choosing it again.');
+      setNotice(message);
+      announce(message);
       setPhase('idle');
     }
-  }, [connections.length, persist, runMatch]);
+  }, [phase, persist, runMatch]);
 
   const importPasted = useCallback(async () => {
-    haptic.tap();
     setNotice(null);
     setPhase('reading');
     try {
       const list = await connectionsFromText(pasted);
       if (list.length === 0) {
-        setNotice("Couldn't find any usernames in that.");
+        const message = "Couldn't find any usernames in that.";
+        setNotice(message);
+        announce(message);
         setPhase('idle');
         return;
       }
@@ -146,15 +231,16 @@ export function InstagramImport() {
       await persist(list);
       await runMatch(list);
     } catch (e) {
-      setNotice((e as Error).message);
+      const message = discoveryErrorMessage(e, 'Could not read that list. Try again.');
+      setNotice(message);
+      announce(message);
       setPhase('idle');
     }
   }, [pasted, persist, runMatch]);
 
   const recheck = useCallback(() => {
-    haptic.tap();
-    void runMatch(connections);
-  }, [connections, runMatch]);
+    void runMatch(connections, phase === 'done' ? 'done' : 'idle');
+  }, [connections, phase, runMatch]);
 
   /**
    * Drops the imported list from the device.
@@ -163,15 +249,32 @@ export function InstagramImport() {
    * clear: the cache, the matches on screen, and the phase, not just the
    * visible list. Nothing server-side to delete — the handles were never
    * sent, only their hashes, and those were never stored.
+   *
+   * Confirmed first. It sits directly under "Check my connections again",
+   * drawn the same way, and getting the list back means finding the
+   * export again — or, if it is gone, another request and another wait.
    */
   const forget = useCallback(async () => {
-    haptic.tap();
-    await AsyncStorage.removeItem(CACHE_KEY);
+    try {
+      await AsyncStorage.removeItem(IG_CONNECTIONS_KEY);
+    } catch {
+      /* The on-screen list still goes; a stale cache is replaced by the next import. */
+    }
     setConnections([]);
     setMatches([]);
+    setPartial(false);
     setNotice(null);
     setPhase('idle');
   }, []);
+
+  const confirmForget = useCallback(() => {
+    confirmDestructive(
+      'Forget your imported list?',
+      'To check it again you will need to choose the Instagram files again.',
+      'Forget',
+      () => void forget(),
+    );
+  }, [forget]);
 
   /* ---- rows ---- */
 
@@ -180,22 +283,50 @@ export function InstagramImport() {
    * strangers, and the people who follow you back are the ones worth
    * putting at the top. The note is built here rather than server-side
    * because the handle behind a hash only exists on this device.
+   *
+   * THE HANDLE IS A CLAIM, AND THE ROW SAYS SO. Anyone can type any handle
+   * into "Let Instagram friends find you" (see FindableByHandle), and
+   * nothing stops two accounts typing the same one. So the row keeps the
+   * account's Sipply @username — the one identifier Sipply controls — and
+   * words the Instagram handle as theirs to claim. A handle more than one
+   * account claims says so, and stays out of "Follow all": following
+   * everyone who says they are @sarah.g is how an impostor gets followed.
+   *
+   * One row per match, built from the matches themselves. It used to walk
+   * the connections and look each one's match up by hash, which found the
+   * FIRST claimant twice and never the second.
    */
   const entries: MatchEntry[] = useMemo(() => {
     const byHash = new Map(connections.map((c) => [c.hash, c]));
-    const enriched = matches
-      .map((m) => ({ m, c: byHash.get(m.hash) }))
-      .filter((x): x is { m: (typeof matches)[number]; c: ImportedConnection } => !!x.c);
+    const claimants = new Map<string, number>();
+    for (const m of matches) claimants.set(m.hash, (claimants.get(m.hash) ?? 0) + 1);
 
-    return sortByCloseness(enriched.map((x) => x.c)).map((c) => {
-      const match = enriched.find((x) => x.c.hash === c.hash)!;
-      const mutual = c.follower && c.followed;
-      return {
-        profile: match.m.profile,
-        note: mutual ? `@${c.handle} · you follow each other` : `@${c.handle}`,
-      };
-    });
+    return matches
+      .flatMap((m) => {
+        const c = byHash.get(m.hash);
+        return c ? [{ m, c }] : [];
+      })
+      .sort((a, b) => compareCloseness(a.c, b.c))
+      .map(({ m, c }) => {
+        const username = `@${m.profile.username}`;
+        const claimedBy = claimants.get(m.hash) ?? 1;
+        if (claimedBy > 1) {
+          return {
+            profile: m.profile,
+            note: `${username} · one of ${claimedBy} accounts claiming @${c.handle}`,
+            bulk: false,
+          };
+        }
+        const mutual = c.follower && c.followed;
+        return {
+          profile: m.profile,
+          note: `${username} · says they’re @${c.handle}${mutual ? ' · you follow each other' : ''}`,
+        };
+      });
   }, [connections, matches]);
+
+  /* People, not accounts: a contested handle is one connection, however many claim it. */
+  const matchedConnections = new Set(matches.map((m) => m.hash)).size;
 
   if (!myId) return null;
 
@@ -208,7 +339,9 @@ export function InstagramImport() {
       <Card style={styles.card}>
         <View style={styles.cardHead}>
           <Icon name="instagram" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle}>Bring your Instagram friends</Text>
+          <Text style={styles.cardTitle} accessibilityRole="header">
+            Bring your Instagram friends
+          </Text>
         </View>
 
         <Text style={styles.cardBody}>
@@ -219,7 +352,9 @@ export function InstagramImport() {
 
         {/* Step 1 */}
         <View style={styles.step}>
-          <Text style={styles.stepNum}>1</Text>
+          <View style={styles.stepBadge}>
+            <Text style={styles.stepNum} maxFontSizeMultiplier={1.5}>1</Text>
+          </View>
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Ask Instagram for your list</Text>
             <Text style={styles.cardBody}>
@@ -231,10 +366,7 @@ export function InstagramImport() {
               label="Open Instagram download page"
               variant="secondary"
               block
-              onPress={() => {
-                haptic.tap();
-                void WebBrowser.openBrowserAsync(DYI_URL);
-              }}
+              onPress={() => void WebBrowser.openBrowserAsync(DYI_URL)}
               style={styles.cardCta}
             />
           </View>
@@ -242,7 +374,9 @@ export function InstagramImport() {
 
         {/* Step 2 */}
         <View style={styles.step}>
-          <Text style={styles.stepNum}>2</Text>
+          <View style={styles.stepBadge}>
+            <Text style={styles.stepNum} maxFontSizeMultiplier={1.5}>2</Text>
+          </View>
           <View style={styles.stepBody}>
             <Text style={styles.stepTitle}>Open the file here</Text>
             <Text style={styles.cardBody}>
@@ -253,6 +387,7 @@ export function InstagramImport() {
             <Button
               label={connections.length ? 'Choose a newer file' : 'Choose export file'}
               icon="plus"
+              variant="secondary"
               block
               disabled={working}
               onPress={importFiles}
@@ -268,13 +403,17 @@ export function InstagramImport() {
               {phase === 'matching'
                 ? 'Checking who’s already on Sipply…'
                 : progress
-                  ? `Reading your list… ${progress.done} of ${progress.total}`
+                  ? `Reading your list… ${formatCount(progress.done)} of ${formatCount(progress.total)}`
                   : 'Reading your list…'}
             </Text>
           </View>
         ) : null}
 
-        {notice ? <Text style={styles.notice}>{notice}</Text> : null}
+        {notice ? (
+          <Text style={styles.notice} accessibilityLiveRegion="polite">
+            {notice}
+          </Text>
+        ) : null}
 
         {/* Paste fallback */}
         {!working && !showPaste ? (
@@ -282,10 +421,7 @@ export function InstagramImport() {
             label="Paste a list of usernames instead"
             variant="ghost"
             block
-            onPress={() => {
-              haptic.tap();
-              setShowPaste(true);
-            }}
+            onPress={() => setShowPaste(true)}
           />
         ) : null}
 
@@ -295,7 +431,7 @@ export function InstagramImport() {
               value={pasted}
               onChangeText={setPasted}
               placeholder="@one, @two, instagram.com/three…"
-              placeholderTextColor={colors.textFaint}
+              placeholderTextColor={colors.textMuted}
               multiline
               autoCapitalize="none"
               autoCorrect={false}
@@ -305,6 +441,7 @@ export function InstagramImport() {
             <Button
               label="Find these people"
               block
+              loading={working}
               disabled={pasted.trim().length === 0}
               onPress={importPasted}
               style={styles.cardCta}
@@ -313,18 +450,28 @@ export function InstagramImport() {
         ) : null}
 
         {/* Results */}
+        {/*
+          Nothing re-checks the list on its own. Coming back used to promise
+          it did; it never ran, and running it on every visit would spend
+          most of the day's matching quota on a list that has not changed.
+          The copy points at the button that does it instead.
+        */}
         {phase === 'done' && !working ? (
           <View style={styles.results}>
             <Text style={styles.resultHead}>
-              {matches.length > 0
-                ? `${matches.length} of your ${connections.length} Instagram connections ${
-                    matches.length === 1 ? 'is' : 'are'
-                  } on Sipply`
-                : `None of your ${connections.length} Instagram connections are here yet.`}
+              {partial
+                ? `${formatCount(matchedConnections)} ${
+                    matchedConnections === 1 ? 'person' : 'people'
+                  } from your list ${matchedConnections === 1 ? 'is' : 'are'} on Sipply so far`
+                : matchedConnections > 0
+                  ? `${formatCount(matchedConnections)} of your ${formatCount(
+                      connections.length,
+                    )} Instagram connections ${matchedConnections === 1 ? 'is' : 'are'} on Sipply`
+                  : `None of your ${formatCount(connections.length)} Instagram connections are here yet.`}
             </Text>
             <MatchResults
               entries={entries}
-              emptyText="Share your invite link above — this list gets checked again every time you come back."
+              emptyText="Share your invite link above. People who join later show up when you check your list again."
             />
           </View>
         ) : null}
@@ -332,7 +479,7 @@ export function InstagramImport() {
         {connections.length > 0 && !working ? (
           <>
             <Button
-              label={`Check my ${connections.length} connections again`}
+              label={`Check my ${formatCount(connections.length)} connections again`}
               variant="ghost"
               block
               onPress={recheck}
@@ -342,8 +489,8 @@ export function InstagramImport() {
               label="Forget my imported list"
               variant="ghost"
               block
-              onPress={forget}
-              accessibilityHint="Deletes the Instagram list saved on this device"
+              onPress={confirmForget}
+              accessibilityHint="Asks first, then deletes the Instagram list saved on this device"
             />
           </>
         ) : null}
@@ -366,30 +513,66 @@ export function InstagramImport() {
  *
  * The handle is not verified. Instagram offers no way to prove ownership
  * without a Business account, so this is a claim, not a credential — which
- * is why it is only ever compared as a hash and never displayed on a
- * profile as though Sipply had checked it.
+ * is why it is only ever compared as a hash, never displayed on a profile,
+ * and worded as a claim on the import rows that match it.
  */
 function FindableByHandle({ myId }: { myId: string }) {
+  const email = useAuth((s) => s.session?.user.email);
   const [handle, setHandle] = useState('');
   const [saved, setSaved] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  /* Local to this card — the import card above has its own notice. */
+  const [saving, setSaving] = useState(false);
+  const [clearing, setClearing] = useState(false);
+  /* Local to this card — the import card below has its own notice. */
   const [error, setError] = useState<string | null>(null);
 
+  /*
+   * Re-read on every change, and fill the field from a claim parked at
+   * signup — the same signup race FindFriends' phone card handles; see
+   * subscribeDiscovery.
+   */
   useEffect(() => {
-    getRememberedHandle().then(setSaved);
-  }, []);
+    let alive = true;
+    const read = () => {
+      getRememberedHandle()
+        .then((value) => {
+          if (!alive) return;
+          setSaved(value);
+          // Once it is saved the field is hidden; a prefill left in it would
+          // reappear after "Stop being findable" as though typed.
+          if (value) setHandle('');
+        })
+        .catch(() => {
+          /* Unreadable storage reads as not saved; the card asks, which is safe. */
+        });
+    };
+    read();
+    getParkedClaims(email)
+      .then((parked) => {
+        const parkedHandle = parked?.handle;
+        if (alive && parkedHandle) setHandle((typed) => typed || parkedHandle);
+      })
+      .catch(() => {
+        /* Nothing parked is the normal case. */
+      });
+    const unsubscribe = subscribeDiscovery(read);
+    return () => {
+      alive = false;
+      unsubscribe();
+    };
+  }, [email]);
 
   const save = useCallback(async () => {
     const normalized = normalizeHandle(handle);
     if (!normalized) return;
-    setBusy(true);
+    setSaving(true);
     setError(null);
     try {
       const hash = await hashHandle(normalized);
       if (!hash) return;
       await setInstagramHash(myId, hash);
       await rememberHandle(normalized);
+      // Settled by hand; see dropParkedClaim. A storage failure here is not the save's.
+      await dropParkedClaim('handle').catch(() => undefined);
       setSaved(normalized);
       setHandle('');
     } catch (e) {
@@ -399,20 +582,34 @@ function FindableByHandle({ myId }: { myId: string }) {
        * setInstagramHash is a direct call. A failure looked identical to
        * never having tapped the button.
        */
-      setError((e as Error).message || 'Could not save. Check your connection and try again.');
+      const message = discoveryErrorMessage(e, 'Could not save your username. Try again.');
+      setError(message);
+      announce(message);
     } finally {
-      setBusy(false);
+      setSaving(false);
     }
   }, [handle, myId]);
 
+  /*
+   * The opt-out, and it fails out loud too. It was try/finally with no
+   * catch, so offline it was an unhandled rejection and the card went on
+   * saying "find you as @…" with nothing to explain why.
+   */
   const clear = useCallback(async () => {
-    setBusy(true);
+    setClearing(true);
+    setError(null);
     try {
       await setInstagramHash(myId, null);
       await forgetRememberedHandle();
+      // Or a claim parked at signup writes the handle back on the next launch.
+      await dropParkedClaim('handle').catch(() => undefined);
       setSaved(null);
+    } catch (e) {
+      const message = discoveryErrorMessage(e, 'Could not turn this off. Try again.');
+      setError(message);
+      announce(message);
     } finally {
-      setBusy(false);
+      setClearing(false);
     }
   }, [myId]);
 
@@ -420,21 +617,28 @@ function FindableByHandle({ myId }: { myId: string }) {
     <Card style={styles.card}>
       <View style={styles.cardHead}>
         <Icon name="instagram" size={18} color={colors.wine} />
-        <Text style={styles.cardTitle}>Let Instagram friends find you</Text>
+        <Text style={styles.cardTitle} accessibilityRole="header">
+          Let Instagram friends find you
+        </Text>
       </View>
 
       {saved ? (
         <>
           <Text style={styles.cardBody}>
             Friends who import their Instagram list will find you as{' '}
-            <Text style={styles.em}>@{saved}</Text>. We stored a one-way hash of it, not the handle
-            — nobody can read it off your profile.
+            <Text style={styles.em}>@{saved}</Text>. It is stored scrambled and never shown on your
+            profile.
           </Text>
+          {error ? (
+            <Text style={styles.notice} accessibilityLiveRegion="polite">
+              {error}
+            </Text>
+          ) : null}
           <Button
             label="Stop being findable"
             variant="ghost"
             block
-            disabled={busy}
+            loading={clearing}
             onPress={clear}
             style={styles.cardCta}
           />
@@ -442,8 +646,8 @@ function FindableByHandle({ myId }: { myId: string }) {
       ) : (
         <>
           <Text style={styles.cardBody}>
-            Add your Instagram username so the people importing their lists can find you. Only a
-            one-way hash is stored, never the username itself.
+            Add your Instagram username so the people importing their lists can find you. It is
+            stored scrambled and never shown on your profile.
           </Text>
           <View style={styles.searchWrap}>
             <Text style={styles.at}>@</Text>
@@ -451,7 +655,7 @@ function FindableByHandle({ myId }: { myId: string }) {
               value={handle}
               onChangeText={setHandle}
               placeholder="yourusername"
-              placeholderTextColor={colors.textFaint}
+              placeholderTextColor={colors.textMuted}
               autoCapitalize="none"
               autoCorrect={false}
               autoComplete="username"
@@ -459,12 +663,17 @@ function FindableByHandle({ myId }: { myId: string }) {
               accessibilityLabel="Your Instagram username"
             />
           </View>
-          {error ? <Text style={styles.notice}>{error}</Text> : null}
+          {error ? (
+            <Text style={styles.notice} accessibilityLiveRegion="polite">
+              {error}
+            </Text>
+          ) : null}
           <Button
-            label={busy ? 'Saving…' : 'Make me findable'}
+            label="Make me findable"
             variant="secondary"
             block
-            disabled={busy || !normalizeHandle(handle)}
+            loading={saving}
+            disabled={!normalizeHandle(handle)}
             onPress={save}
             style={styles.cardCta}
           />
@@ -496,19 +705,29 @@ const styles = StyleSheet.create({
   /* Numbered steps — the download is a two-part errand, and a wall of
      prose loses people between the two halves. */
   step: { flexDirection: 'row', gap: space.md, alignItems: 'flex-start' },
+  /*
+   * The ring is a View around the numeral, not a border on the Text. It
+   * was one Text at a fixed 24 x 24 with a 22pt line height, so Larger Text
+   * grew the glyph inside a box that could not grow and clipped it. Minimums
+   * here, so the ring widens and deepens with the numeral; the numeral is
+   * capped at 1.5x so a step marker never outgrows the step title beside it.
+   */
+  stepBadge: {
+    minWidth: 24,
+    minHeight: 24,
+    paddingHorizontal: space.xs,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    backgroundColor: colors.bg,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   stepNum: {
     fontFamily: fonts.display,
     fontSize: typeScale.caption.fontSize,
     color: colors.wine,
-    backgroundColor: colors.bg,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: 999,
-    width: 24,
-    height: 24,
-    lineHeight: 22,
     textAlign: 'center',
-    overflow: 'hidden',
   },
   stepBody: { flex: 1, gap: space.xs },
   stepTitle: {
@@ -527,10 +746,11 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     paddingHorizontal: space.md,
   },
+  /* 16pt regular is not large text, so the prefix takes the 4.5:1 ink. */
   at: {
     fontFamily: fonts.body,
     fontSize: 16,
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
   searchInput: {
     flex: 1,
@@ -555,22 +775,28 @@ const styles = StyleSheet.create({
   },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
+  /* Small text on a white card: textMuted, which holds 4.5:1 there. */
   hint: {
     flex: 1,
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
+  /*
+   * Every notice on this card is a failure or a refusal — an unreadable
+   * file, nothing found in it, a dropped connection, the day's quota. It
+   * was espresso on a neutral box, which read as help text one card below
+   * FindFriends' red one. Same box as FindFriends now.
+   */
   notice: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
     lineHeight: 19,
-    color: colors.text,
-    backgroundColor: colors.bg,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
+    color: colors.danger,
+    backgroundColor: colors.dangerWash,
     borderRadius: radius.md,
     padding: space.md,
+    overflow: 'hidden',
   },
 
   results: { gap: space.sm },

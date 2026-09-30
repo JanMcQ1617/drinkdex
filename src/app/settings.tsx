@@ -1,7 +1,8 @@
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
-import React, { useCallback } from 'react';
-import { Alert, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icons';
@@ -25,7 +26,7 @@ import { useSocial } from '@/store/social';
 /*                                                                      */
 /* No search field. Instagram has one because it has sixty-odd rows      */
 /* across nine groups and nobody can find "Hidden Words" by scanning.    */
-/* This screen has eleven. A search box over eleven rows is furniture    */
+/* This screen has nine. A search box over nine rows is furniture        */
 /* that says "this is complicated" about something that is not.          */
 /*                                                                      */
 /* No drill-down for its own sake. Instagram pushes almost every row to  */
@@ -42,38 +43,52 @@ const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
 const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
 const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
 
+/*
+ * `busy` is the row whose action is running: a spinner in the icon slot,
+ * and the row stops taking taps so a second confirm cannot start a second
+ * run. `disabled` is every other account row meanwhile, dimmed the way a
+ * disabled Button is. Danger rows act rather than navigate, so they carry
+ * no chevron.
+ */
 function Row({
   icon,
   label,
   detail,
   onPress,
   danger,
-  last,
+  busy,
+  disabled,
 }: {
   icon: IconName;
   label: string;
   detail?: string;
   onPress: () => void;
   danger?: boolean;
-  /** Suppresses the chevron on rows that act rather than navigate. */
-  last?: boolean;
+  busy?: boolean;
+  disabled?: boolean;
 }) {
+  const inert = !!busy || !!disabled;
+  const tint = danger ? colors.danger : colors.textMuted;
   return (
     <PressableScale
-      onPress={onPress}
+      onPress={inert ? undefined : onPress}
+      disabled={inert}
       noHaptic
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={detail}
-      style={styles.row}>
-      <Icon name={icon} size={19} color={danger ? colors.danger : colors.textMuted} />
+      accessibilityState={{ disabled: inert, busy: !!busy }}
+      style={[styles.row, disabled && !busy && styles.rowDisabled]}>
+      {busy ? (
+        <ActivityIndicator size="small" color={tint} style={styles.rowSpinner} />
+      ) : (
+        <Icon name={icon} size={19} color={tint} />
+      )}
       <View style={styles.rowText}>
         <Text style={[styles.rowLabel, danger && styles.rowLabelDanger]}>{label}</Text>
         {detail ? <Text style={styles.rowDetail}>{detail}</Text> : null}
       </View>
-      {danger || last ? null : (
-        <Icon name="chevronRight" size={16} color={colors.textFaint} />
-      )}
+      {danger ? null : <Icon name="chevronRight" size={16} color={colors.textFaint} />}
     </PressableScale>
   );
 }
@@ -98,12 +113,34 @@ export default function SettingsScreen() {
   const resetAll = useCollection((s) => s.resetAll);
   const resetSocial = useSocial((s) => s.reset);
 
+  /* Which account action is running, if any. Set from the confirm's tap. */
+  const [pending, setPending] = useState<'signout' | 'delete' | null>(null);
+
+  /*
+   * The in-app browser sheet, as the sign-in screen opens these same
+   * documents: the page slides up over Settings and Done comes back here.
+   * Linking.openURL threw the user out to Safari. It also blamed the
+   * connection when it failed, which is not why a URL fails to open.
+   */
   const open = useCallback((url: string) => {
     haptic.tap();
-    void Linking.openURL(url).catch(() =>
-      Alert.alert('Could not open the link', 'Check your connection and try again.'),
+    WebBrowser.openBrowserAsync(url).catch(() =>
+      Alert.alert('Could not open the page', 'Try again in a moment.'),
     );
   }, []);
+
+  /*
+   * Out of Settings once the account is gone. This screen is an ungated
+   * stack screen, so after sign-out or deletion it stayed up for an
+   * account that no longer existed — Find friends pushed an empty page,
+   * Blocked accounts spun forever, and Delete could be tapped again with
+   * no session. Popping to the tabs lands on the sign-in form. Done from
+   * the handlers rather than a <Redirect> on the session, which would
+   * race them and could push a second copy of the tabs instead of popping.
+   */
+  const leave = useCallback(() => {
+    if (router.canDismiss()) router.dismissAll();
+  }, [router]);
 
   const confirmReset = useCallback(() => {
     Alert.alert(
@@ -117,37 +154,80 @@ export default function SettingsScreen() {
   }, [resetAll]);
 
   const confirmSignOut = useCallback(() => {
+    if (pending) return;
     Alert.alert('Sign out', 'Your collection stays on this phone.', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Sign out',
         style: 'destructive',
-        onPress: () => void signOut().finally(resetSocial),
+        onPress: () => {
+          setPending('signout');
+          void signOut().finally(() => {
+            resetSocial();
+            setPending(null);
+            leave();
+          });
+        },
       },
     ]);
-  }, [signOut, resetSocial]);
+  }, [pending, signOut, resetSocial, leave]);
 
+  /*
+   * The confirmation lists everything that goes, the collection on this
+   * phone included. Sign out keeps the collection and says so in the row
+   * above, so leaving it out here read as a promise that deletion kept it
+   * too. It does not: resetAll() runs on success, deliberately, so a
+   * deleted account leaves a clean slate rather than a Dex of photos the
+   * server no longer has. Only on success — a failed delete must not
+   * leave a wiped phone and a live account.
+   *
+   * A failure is said out loud. deleteAccount writes it to the store's
+   * `error`, which only the sign-in form renders, and that form is not
+   * mounted while anyone is signed in — so a dropped connection used to
+   * close the alert and change nothing on screen. The message is read and
+   * cleared here, so it does not surface later on the sign-in form either.
+   * No "nothing was deleted": a response lost after the server committed
+   * would make that false.
+   */
   const confirmDelete = useCallback(() => {
+    if (pending) return;
     Alert.alert(
       'Delete account',
-      'This removes your profile, every post, every photo you uploaded, your likes and your follows. It cannot be undone.',
+      'This removes your profile, every post, every photo you uploaded, your likes and your follows, and resets the collection on this phone. It cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete account',
           style: 'destructive',
           onPress: () => {
-            void deleteAccount().then((ok) => {
-              if (ok) {
-                resetAll();
-                resetSocial();
-              }
-            });
+            setPending('delete');
+            void deleteAccount()
+              .then((ok) => {
+                if (ok) {
+                  resetAll();
+                  resetSocial();
+                  leave();
+                  Alert.alert(
+                    'Account deleted',
+                    'Your profile, posts and photos have been removed from Sipply.',
+                  );
+                  return;
+                }
+                // Titled like the confirm it answers: the store's messages
+                // already open with "Could not delete your account".
+                const { error, clearError } = useAuth.getState();
+                clearError();
+                Alert.alert(
+                  'Delete account',
+                  error ?? 'Could not delete your account. Check your connection and try again.',
+                );
+              })
+              .finally(() => setPending(null));
           },
         },
       ],
     );
-  }, [deleteAccount, resetAll, resetSocial]);
+  }, [pending, deleteAccount, resetAll, resetSocial, leave]);
 
   const version = Constants.expoConfig?.version ?? '1.0.0';
   const build = Constants.expoConfig?.ios?.buildNumber ?? '';
@@ -170,7 +250,7 @@ export default function SettingsScreen() {
           style={styles.back}>
           <Icon name="chevronLeft" size={22} color={colors.text} />
         </PressableScale>
-        <Text style={styles.title}>Settings</Text>
+        <Text style={styles.title} accessibilityRole="header">Settings</Text>
       </View>
 
       {/* ---- Identity. Instagram's Accounts Centre slot. ---- */}
@@ -218,8 +298,12 @@ export default function SettingsScreen() {
 
       {/* ---- Who you have shut out ---- */}
       <Section title="Who can reach you">
+        {/*
+          eyeOff, not lock: the lock is the Dex's "not collected yet", and
+          blocking is two people hidden from each other.
+        */}
         <Row
-          icon="lock"
+          icon="eyeOff"
           label="Blocked accounts"
           detail="See who you have blocked, and undo it."
           onPress={() => {
@@ -234,7 +318,7 @@ export default function SettingsScreen() {
         <Row
           icon="comment"
           label="Help and support"
-          detail="One person reads this address."
+          detail="Answers, and an email one person reads."
           onPress={() => open(SUPPORT_URL)}
         />
         <View style={styles.divider} />
@@ -259,22 +343,31 @@ export default function SettingsScreen() {
           detail="Locks every entry again. Posts and account stay."
           onPress={confirmReset}
           danger
+          disabled={pending !== null}
         />
         <View style={styles.divider} />
         <Row
           icon="profile"
           label="Sign out"
-          detail="Your collection stays on this phone."
+          detail={pending === 'signout' ? 'Signing out…' : 'Your collection stays on this phone.'}
           onPress={confirmSignOut}
           danger
+          busy={pending === 'signout'}
+          disabled={pending === 'delete'}
         />
         <View style={styles.divider} />
         <Row
           icon="close"
           label="Delete account"
-          detail="Profile, posts, photos and follows. Permanent."
+          detail={
+            pending === 'delete'
+              ? 'Deleting your account…'
+              : 'Profile, posts, photos, follows and this phone’s collection. Permanent.'
+          }
           onPress={confirmDelete}
           danger
+          busy={pending === 'delete'}
+          disabled={pending === 'signout'}
         />
       </Section>
 
@@ -337,6 +430,9 @@ const styles = StyleSheet.create({
     /* 56 clears the 44pt floor with room for the two-line rows. */
     minHeight: 56,
   },
+  rowDisabled: { opacity: 0.42 },
+  /* Same footprint as the 19pt glyph it stands in for, so the label does not shift. */
+  rowSpinner: { width: 19, height: 19 },
   rowText: { flex: 1 },
   rowLabel: {
     fontFamily: fonts.bodySemiBold,
@@ -358,9 +454,10 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
     /*
      * textMuted, not textFaint. This is caption-sized, which WCAG holds to
-     * 4.5:1, and textFaint measures 2.84:1 on the page — the same failure
-     * the Dex chip counts had. Quiet is a job for size and placement; it
-     * is not a licence to make the text unreadable. 5.50:1 here.
+     * 4.5:1, and textFaint measures 3.51:1 on the page: enough for large
+     * type and glyphs, which is its job, and short of what a caption needs.
+     * Quiet is a job for size and placement; it is not a licence to make
+     * the text unreadable. 5.50:1 here.
      */
     color: colors.textMuted,
     textAlign: 'center',

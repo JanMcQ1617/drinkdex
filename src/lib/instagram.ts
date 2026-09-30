@@ -395,8 +395,15 @@ export async function connectionsFromText(text: string): Promise<ImportedConnect
   return hashHandles(map);
 }
 
-/** Mutuals first, then everyone else — the order people expect to act on. */
-export function sortByCloseness(connections: ImportedConnection[]): ImportedConnection[] {
+/**
+ * Mutuals first, then accounts you follow, then accounts that follow you.
+ *
+ * A comparator rather than a sort, because two orders need it and sort
+ * different things: the results list people act on, and the order hashes
+ * are sent in — the daily match quota can run out part way through a
+ * large list, and it should run out on strangers rather than on friends.
+ */
+export function compareCloseness(a: ImportedConnection, b: ImportedConnection): number {
   const rank = (c: ImportedConnection) => (c.follower && c.followed ? 0 : c.followed ? 1 : 2);
-  return [...connections].sort((a, b) => rank(a) - rank(b) || a.handle.localeCompare(b.handle));
+  return rank(a) - rank(b) || a.handle.localeCompare(b.handle);
 }

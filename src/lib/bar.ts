@@ -46,10 +46,11 @@ export const INGREDIENTS_BY_ID: Record<string, Ingredient> = Object.fromEntries(
 );
 
 /**
- * The picker's default view. Everything is searchable, but showing 488
- * ingredients at rest is a wall — and the tail is genuinely obscure
- * (Brennivín appears in two drinks). Anything named by three or more
- * cocktails earns a place in the browse list; the rest is found by typing.
+ * The picker's default view. Everything is searchable, but showing every
+ * ingredient at rest — nearly five hundred — is a wall, and the tail is
+ * genuinely obscure (Brennivín appears in two drinks). Anything named by
+ * three or more cocktails earns a place in the browse list; the rest is
+ * found by typing.
  */
 export const COMMON_INGREDIENTS: Ingredient[] = INGREDIENTS.filter((i) => i.uses >= 3);
 
@@ -90,17 +91,40 @@ export interface BarResult {
   /**
    * Ingredients ranked by how many `nearly` drinks each would unlock. This is
    * the shopping list, and it is the reason `nearly` is computed at all: on a
-   * realistic 15-bottle bar it is 207 drinks against 48 makeable ones.
+   * realistic fifteen-item bar it runs to about four times the makeable list.
    */
   nextBest: { ingredient: Ingredient; unlocks: number }[];
 }
 
 const EMPTY: BarResult = { makeable: [], nearly: [], nextBest: [] };
 
+/*
+ * The recipes in drink-name order, sorted once on first use. matchBar walks
+ * them in this order, so both of its lists come out alphabetical with no
+ * sort of their own — it used to run two localeCompare sorts of up to ~800
+ * rows on every tap of a shelf chip. Lazily rather than at module load:
+ * the Dex imports this file, and a load-time sort would run at app start
+ * for a screen most launches never open.
+ */
+let recipesByName: { recipe: RawRecipe; drink: Drink }[] | null = null;
+
+function sortedRecipes(): { recipe: RawRecipe; drink: Drink }[] {
+  if (!recipesByName) {
+    recipesByName = index.recipes
+      .flatMap((recipe) => {
+        const drink = getDrink(recipe.id);
+        return drink ? [{ recipe, drink }] : []; // a drink pruned since the last build
+      })
+      .sort((a, b) => a.drink.name.localeCompare(b.drink.name));
+  }
+  return recipesByName;
+}
+
 /**
- * Walks all 882 specs. Cheap enough to run on every change — the whole index
- * is ~3,000 slots — but callers should still memoise on `owned`, because the
- * screen re-renders on every keystroke in the search field.
+ * Walks every spec in the index. Cheap enough to run on every change — the
+ * whole index is a few thousand slots — but callers should still memoise
+ * on `owned`, because the screen re-renders on every keystroke in the
+ * search field. matchOwned below does that for the persisted shelf.
  */
 export function matchBar(owned: ReadonlySet<string>): BarResult {
   if (owned.size === 0) return EMPTY;
@@ -108,10 +132,7 @@ export function matchBar(owned: ReadonlySet<string>): BarResult {
   const makeable: Match[] = [];
   const nearly: Match[] = [];
 
-  for (const recipe of index.recipes) {
-    const drink = getDrink(recipe.id);
-    if (!drink) continue; // a drink pruned from the index since the last build
-
+  for (const { recipe, drink } of sortedRecipes()) {
     const missing: string[] = [];
     for (const slot of recipe.slots) {
       if (slot.some((id) => owned.has(id))) continue;
@@ -125,10 +146,6 @@ export function matchBar(owned: ReadonlySet<string>): BarResult {
     else if (missing.length === 1) nearly.push({ drink, missing });
   }
 
-  const byName = (a: Match, b: Match) => a.drink.name.localeCompare(b.drink.name);
-  makeable.sort(byName);
-  nearly.sort(byName);
-
   const tally = new Map<string, number>();
   for (const m of nearly) tally.set(m.missing[0], (tally.get(m.missing[0]) ?? 0) + 1);
 
@@ -141,18 +158,56 @@ export function matchBar(owned: ReadonlySet<string>): BarResult {
   return { makeable, nearly, nextBest };
 }
 
+let lastOwned: Record<string, true> | null = null;
+let lastResult: BarResult = EMPTY;
+
+/**
+ * matchBar for the persisted shelf, remembered for the last shelf seen.
+ *
+ * Two screens want the same answer at the same moment: My Bar, and the Dex
+ * row that shows its count, which stays mounted underneath while My Bar is
+ * pushed. Keyed on the store's Record identity — the bar store hands out a
+ * new object on every change and the same one otherwise — so whichever
+ * screen asks second on a given tap gets the first one's result instead of
+ * walking every recipe again.
+ */
+export function matchOwned(owned: Record<string, true>): BarResult {
+  if (owned !== lastOwned) {
+    lastOwned = owned;
+    lastResult = matchBar(new Set(Object.keys(owned)));
+  }
+  return lastResult;
+}
+
+/** Lowercase with the accents taken off, so "creme" and "Crème" compare equal. */
+const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+/* Each label folded once, on the first search that reaches it. */
+const foldedLabels = new Map<string, string>();
+function foldedLabel(i: Ingredient): string {
+  let folded = foldedLabels.get(i.id);
+  if (folded === undefined) {
+    folded = fold(i.label);
+    foldedLabels.set(i.id, folded);
+  }
+  return folded;
+}
+
 /** Case- and accent-insensitive contains, so "creme" finds "Crème de cacao". */
 export function searchIngredients(query: string): Ingredient[] {
-  const q = query.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const q = fold(query.trim());
   if (!q) return [];
-  const hits = INGREDIENTS.filter((i) =>
-    i.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(q),
-  );
-  // Prefix matches first — typing "gin" should not bury Gin under Ginger ale.
+  const hits = INGREDIENTS.filter((i) => foldedLabel(i).includes(q));
+  /*
+   * Prefix matches first — typing "gin" should not bury Gin under Ginger
+   * ale. Folded on both sides, like the filter: comparing a folded query to
+   * an unfolded label put "Rosé wine" under Prosecco for "rose", and every
+   * Crème below a mid-word hit for "creme".
+   */
   return hits
     .sort((a, b) => {
-      const ap = a.label.toLowerCase().startsWith(q) ? 0 : 1;
-      const bp = b.label.toLowerCase().startsWith(q) ? 0 : 1;
+      const ap = foldedLabel(a).startsWith(q) ? 0 : 1;
+      const bp = foldedLabel(b).startsWith(q) ? 0 : 1;
       return ap - bp || b.uses - a.uses || a.label.localeCompare(b.label);
     })
     .slice(0, 40);
