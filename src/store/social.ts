@@ -67,9 +67,11 @@ interface SocialState {
    * bumps. The auth store resets on every change of account, but a request
    * already in flight outlives that: a load for account A that resolved
    * after the switch wrote A's feed and people list back under account B.
-   * Every action reads this before its first await and writes nothing, and
-   * starts no follow-up refresh, once it has moved on. Kept out of EMPTY so
-   * a reset cannot put it back to a number an older request still holds.
+   * Every action reads this before its first await and checks it again
+   * after any await with work still to follow; once it has moved on, the
+   * action writes nothing, sends no further request and starts no
+   * follow-up refresh. Kept out of EMPTY so a reset cannot put it back to
+   * a number an older request still holds.
    */
   gen: number;
 
@@ -100,8 +102,10 @@ interface SocialState {
   ) => Promise<PostOutcome>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
   /**
-   * Adds another photo to this drink's post, if it has one; an entry that
-   * was never posted stays private. False if the upload failed.
+   * Adds another photo to this drink's post, if it has one. It never
+   * creates a post: an entry that was never posted stays private, and true
+   * comes back with nothing uploaded. False when there is a post and the
+   * photo did not reach it, or when the lookup for the post failed.
    */
   addPhotoForDrink: (myId: string, drinkId: string, localUri: string) => Promise<boolean>;
   /**
@@ -151,8 +155,15 @@ export const useSocial = create<SocialState>()((set, get) => ({
     const gen = get().gen;
     set({ loadingFeed: true, feedError: null });
     try {
+      /*
+       * Checked between the three reads as well as before the write: each
+       * one after a switch would go out under the new account's session
+       * asking about the old one, for an answer that is thrown away.
+       */
       const following = await api.fetchFollowing(myId);
+      if (get().gen !== gen) return;
       const feed = await api.fetchFeed(myId, following);
+      if (get().gen !== gen) return;
       const profiles = await api.fetchProfiles(profileIdsFor(myId, feed, following));
       if (get().gen !== gen) return;
       set({ following, feed, profiles, loadingFeed: false });
@@ -177,6 +188,7 @@ export const useSocial = create<SocialState>()((set, get) => ({
     try {
       const following = get().following;
       const feed = await api.fetchFeed(myId, following);
+      if (get().gen !== gen) return;
       const fetched = await api.fetchProfiles(profileIdsFor(myId, feed, following));
       if (get().gen !== gen) return;
       set({ feed, profiles: { ...get().profiles, ...fetched }, feedError: null });
@@ -231,10 +243,17 @@ export const useSocial = create<SocialState>()((set, get) => ({
   },
 
   /**
-   * Optimistic like toggleFollow, but the rollback is a resync rather than
-   * an inverse: a batch can partly succeed (blocked or deleted accounts are
-   * skipped server-side), so the local list must come from the server
-   * afterwards instead of being guessed from what we sent.
+   * Optimistic like toggleFollow, but the settled list is a resync rather
+   * than an inverse: a batch can partly succeed (blocked or deleted
+   * accounts are skipped server-side), so the local list must come from the
+   * server afterwards instead of being guessed from what we sent.
+   *
+   * Only a failed batch rolls back and answers null. Once the batch has
+   * gone through, the follows are written whatever the resync does, so a
+   * resync that fails keeps the optimistic list and still returns the
+   * count: rolling back there showed Follow beside people just followed,
+   * and null had the caller say the follow failed when it had not. The
+   * next load settles the list from the server.
    */
   followMany: async (myId, targetIds) => {
     const gen = get().gen;
@@ -242,19 +261,26 @@ export const useSocial = create<SocialState>()((set, get) => ({
     const merged = [...new Set([...before, ...targetIds])];
     set({ following: merged });
 
+    let added: number;
     try {
-      const added = await api.followMany(targetIds);
-      const following = await api.fetchFollowing(myId);
-      // The list that asked is gone with its account, so it gets no count.
-      if (get().gen !== gen) return null;
-      set({ following });
-      await get().refreshFeed(myId);
-      return added;
+      added = await api.followMany(targetIds);
     } catch (e) {
       if (get().gen !== gen) return null;
       set({ following: before, error: (e as Error).message });
       return null;
     }
+
+    // The list that asked is gone with its account, so it gets no count.
+    if (get().gen !== gen) return null;
+    try {
+      const following = await api.fetchFollowing(myId);
+      if (get().gen !== gen) return null;
+      set({ following });
+    } catch {
+      if (get().gen !== gen) return null;
+    }
+    await get().refreshFeed(myId);
+    return added;
   },
 
   /*
@@ -331,15 +357,21 @@ export const useSocial = create<SocialState>()((set, get) => ({
   addPhotoForDrink: async (myId, drinkId, localUri) => {
     const gen = get().gen;
     try {
-      const ok = await api.addPhotoForDrink(myId, drinkId, localUri);
-      // Refetch rather than patching in place: the feed holds photo PATHS and
-      // the cards resolve them to signed URLs, so a stale path would render
-      // the replaced image until the next natural refresh.
-      if (ok && get().gen === gen) {
+      const outcome = await api.addPhotoForDrink(myId, drinkId, localUri);
+      /*
+       * Only a post that changed is refetched. With no post nothing was
+       * written, so there is no version to bump and no feed to reload — the
+       * private entry's new photo lives in the Dex alone.
+       *
+       * Refetched rather than patched in place: the feed holds photo PATHS
+       * and the cards resolve them to signed URLs, so a stale path would
+       * render the replaced image until the next natural refresh.
+       */
+      if (outcome === 'added' && get().gen === gen) {
         set({ postsVersion: get().postsVersion + 1 });
         await get().refreshFeed(myId);
       }
-      return ok;
+      return outcome !== 'failed';
     } catch (e) {
       if (get().gen !== gen) return false;
       set({ error: (e as Error).message });
@@ -363,13 +395,18 @@ export const useSocial = create<SocialState>()((set, get) => ({
     }
   },
 
-  dropAuthor: (authorId) =>
+  dropAuthor: (authorId) => {
+    // The cached profile goes too: otherwise an old drinkdex://u/<id> link
+    // renders the blocked person from this row instead of "unavailable".
+    const { [authorId]: _dropped, ...profiles } = get().profiles;
     set({
+      profiles,
       feed: get().feed.filter((p) => p.authorId !== authorId),
       // The server trigger has already removed the follow edges both ways.
       following: get().following.filter((id) => id !== authorId),
       people: get().people.filter((p) => p.id !== authorId),
-    }),
+    });
+  },
 
   reset: () => set({ ...EMPTY, gen: get().gen + 1 }),
 }));

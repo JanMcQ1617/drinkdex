@@ -657,21 +657,32 @@ export async function createPost(
 }
 
 /**
- * Adds another photo to the post for this drink, newest first.
+ * What became of a photo meant to keep a post in step with the Dex.
+ *
+ *   'added'   — the photo is on the post, as its newest picture.
+ *   'no-post' — there is no post for this drink, so nothing was uploaded
+ *               and nothing was written. The entry stays private.
+ *   'failed'  — there is a post, but the photo did not make it onto it.
+ */
+export type PostPhotoOutcome = 'added' | 'no-post' | 'failed';
+
+/**
+ * Adds another photo to the post for this drink, newest first — and ONLY to
+ * a post that already exists. It never creates one.
  *
  * Replaces the old behaviour, which swapped the single photo and deleted the
  * previous file. Several pictures of one drink taken weeks apart are the
  * same entry photographed twice, not a reason to throw the first away.
  *
- * Returns false if the photo did not make it onto the post, so the caller
- * can say the post still shows the old picture. True when there was nothing
- * to keep in step (see below).
+ * 'failed' lets the caller say the post still shows the old picture, and
+ * 'no-post' lets it skip the refetch a changed post needs. Throws when the
+ * lookup for the post itself did not go through.
  */
 export async function addPhotoForDrink(
   myId: string,
   drinkId: string,
   localPhotoUri: string,
-): Promise<boolean> {
+): Promise<PostPhotoOutcome> {
   const { data: post, error } = await supabase
     .from('posts')
     .select('id')
@@ -688,23 +699,29 @@ export async function addPhotoForDrink(
    * follower without being asked. Sharing a never-posted entry is the
    * explicit "Save & post", which goes through addPost -> createPost and
    * keeps the caption; drink/[id].tsx's "Save photo" relies on this branch
-   * to leave the entry private.
+   * to leave the entry private. The photo is not even uploaded: a picture
+   * in the bucket with no post pointing at it is one nobody asked to share.
    */
-  if (!post) return true;
+  if (!post) return 'no-post';
 
   const path = await uploadPhoto(myId, localPhotoUri);
-  if (!path) return false;
+  if (!path) return 'failed';
 
-  // As in createPost: an object no row points at is removed, not left behind.
+  /*
+   * As in createPost: an object no row points at is removed, not left
+   * behind. That includes a post deleted between the lookup above and this
+   * insert: the post_photos insert policy and its foreign key both need the
+   * post to exist, so the row is refused, and nothing is re-created.
+   */
   const { error: photoError } = await supabase
     .from('post_photos')
     .insert({ post_id: post.id, path });
   if (photoError) {
     await removeStoredPhoto(path);
-    return false;
+    return 'failed';
   }
 
-  return true;
+  return 'added';
 }
 
 /**
@@ -900,6 +917,44 @@ export async function matchInstagram(
       if (seen.has(row.id)) continue;
       seen.add(row.id);
       out.push({ hash: row.matched_hash, profile: toProfile(row) });
+    }
+  }
+  return out;
+}
+
+/*
+ * Ids per match_facebook_friends call: the server's own cap, past which it
+ * raises 'too_many_ids'. Facebook stops a personal account at 5,000 friends
+ * and user_friends lists only those who use Sipply, so this is one call in
+ * practice. Chunked anyway, so a longer list becomes a second request
+ * rather than a refusal of the whole list.
+ */
+const FACEBOOK_IDS_PER_CALL = 5000;
+
+/**
+ * Given the app-scoped Facebook ids of the user's friends, returns the
+ * Sipply accounts signed in with those Facebook identities.
+ *
+ * Sent as they are, not hashed like the contact and Instagram matchers: an
+ * app-scoped id means nothing outside Sipply's Facebook app, and the server
+ * has to compare it with the identity Supabase Auth already holds. Never
+ * includes you or anyone blocked either way — the server leaves them out —
+ * and comes back empty when this account has no Facebook identity itself.
+ */
+export async function matchFacebookFriends(fbIds: string[]): Promise<UserProfile[]> {
+  const unique = [...new Set(fbIds.map((id) => id.trim()))].filter(Boolean);
+  if (unique.length === 0) return [];
+
+  const out: UserProfile[] = [];
+  const seen = new Set<string>();
+
+  for (const part of chunk(unique, FACEBOOK_IDS_PER_CALL)) {
+    const { data, error } = await supabase.rpc('match_facebook_friends', { fb_ids: part });
+    if (error) throw error;
+    for (const row of data ?? []) {
+      if (seen.has(row.id)) continue;
+      seen.add(row.id);
+      out.push(toProfile(row));
     }
   }
   return out;

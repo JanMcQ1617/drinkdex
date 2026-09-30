@@ -34,7 +34,9 @@ export type ProfileRow = {
  * Declared for documentation only — no client role holds any grant on
  * profile_secrets, so this is never selected, inserted or updated from the
  * app. It is reached exclusively through set_phone_hash /
- * set_instagram_hash and the two matchers, all SECURITY DEFINER.
+ * set_instagram_hash and the two hash matchers, match_contacts and
+ * match_instagram, all SECURITY DEFINER. match_facebook_friends never
+ * reads it: it matches on auth.identities instead.
  */
 export type ProfileSecretRow = {
   user_id: string;
@@ -113,6 +115,22 @@ export type InviteRow = {
   inviter_id: string;
   created_at: string;
   expires_at: string;
+};
+
+/**
+ * What every friend matcher returns: the public profile columns of each
+ * account it found, the same set PROFILE_COLS_FULL reads from profiles.
+ * One declaration, so the three matchers cannot drift apart and each row
+ * goes through the one toProfile mapper.
+ */
+export type MatchedProfileRow = {
+  id: string;
+  username: string;
+  display_name: string;
+  accent: string;
+  bio: string | null;
+  avatar_path: string | null;
+  created_at: string;
 };
 
 export type Database = {
@@ -252,15 +270,7 @@ export type Database = {
        */
       match_contacts: {
         Args: { hashes: string[] };
-        Returns: {
-          id: string;
-          username: string;
-          display_name: string;
-          accent: string;
-          bio: string | null;
-          avatar_path: string | null;
-          created_at: string;
-        }[];
+        Returns: MatchedProfileRow[];
       };
       /**
        * Echoes matched_hash back so the caller can label a row with the
@@ -270,16 +280,27 @@ export type Database = {
        */
       match_instagram: {
         Args: { hashes: string[] };
-        Returns: {
-          id: string;
-          username: string;
-          display_name: string;
-          accent: string;
-          bio: string | null;
-          avatar_path: string | null;
-          created_at: string;
-          matched_hash: string;
-        }[];
+        Returns: (MatchedProfileRow & { matched_hash: string })[];
+      };
+      /**
+       * Sipply accounts behind a list of Facebook user ids. Migration 015.
+       *
+       * The ids are the app-scoped ones Facebook's user_friends edge returns:
+       * only friends who also signed in to Sipply with Facebook and granted
+       * that permission, each under an id that means nothing outside
+       * Sipply's Facebook app. The server matches them against the Facebook
+       * identities Supabase Auth stores for each account.
+       *
+       * Authenticated only, and empty for a caller with no Facebook identity
+       * of their own. Never returns the caller, or anyone who has blocked
+       * the caller or been blocked by them. At most 5,000 ids per call; past
+       * that it raises 'too_many_ids'. Not metered against the hash
+       * matchers' daily quota: app-scoped ids cannot be walked the way phone
+       * numbers can.
+       */
+      match_facebook_friends: {
+        Args: { fb_ids: string[] };
+        Returns: MatchedProfileRow[];
       };
       /**
        * The content filter itself, callable by anon as well: at signup the
