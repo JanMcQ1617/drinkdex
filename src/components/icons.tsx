@@ -47,7 +47,9 @@ export type IconName =
   | 'grid'
   | 'settings'
   | 'comment'
-  | 'instagram';
+  | 'instagram'
+  | 'document'
+  | 'bottle';
 
 export interface IconProps {
   name: IconName;
@@ -207,6 +209,31 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     </>
   ),
   bookmark: <Path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z" />,
+  /*
+   * A page with a turned corner — a document to read (Terms of Use). The
+   * bookmark stood in for it and already means "save a post"; one glyph
+   * with two jobs on neighbouring screens reads as the same action.
+   */
+  document: (
+    <>
+      <Path d="M13.8 3.4H6.6a1.4 1.4 0 0 0-1.4 1.4v14.4a1.4 1.4 0 0 0 1.4 1.4h10.8a1.4 1.4 0 0 0 1.4-1.4V8.4z" />
+      <Path d="M13.8 3.4v3.6a1.4 1.4 0 0 0 1.4 1.4h3.6" />
+      <Path d="M8.6 12.6h6.8" />
+      <Path d="M8.6 16.4h4.4" />
+    </>
+  ),
+  /*
+   * A bottle on the shelf — what My Bar holds. The coupe is the Dex's own
+   * mark; borrowed for an empty shelf it pointed at the wrong screen.
+   */
+  bottle: (
+    <>
+      <Path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z" />
+      <Path d="M10.4 5.4h3.2" />
+      <Path d="M7.2 12.8h9.6" />
+      <Path d="M7.2 17h9.6" />
+    </>
+  ),
   trophy: (
     <>
       <Path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z" />
@@ -355,27 +382,11 @@ export const Icon = React.memo(function Icon({
   );
 });
 
-export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile';
-
 /**
- * Bottom-nav icon. Outline at rest, solid when active — the iOS
- * convention, and it reads as a state change without relying on color.
+ * The tab routes that have an icon. (tabs)/_layout.tsx and FloatingTabBar
+ * draw them with <Icon filled={focused} /> in the colour the bar hands
+ * them, so the glyph always matches its own label — outline at rest, solid
+ * when active, the iOS convention, which reads as a state change without
+ * relying on colour.
  */
-export const TabIcon = React.memo(function TabIcon({
-  name,
-  focused,
-  size = 25,
-}: {
-  name: TabName;
-  focused: boolean;
-  size?: number;
-}) {
-  return (
-    <Icon
-      name={name}
-      size={size}
-      filled={focused}
-      color={focused ? colors.wine : colors.textFaint}
-    />
-  );
-});
+export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile';

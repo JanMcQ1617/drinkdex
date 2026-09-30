@@ -28,9 +28,10 @@ import { elevation, glass, radius } from '@/constants/theme';
 /**
  * True only where the OS can render the real material.
  *
- * Exported because a few callers need to *compensate*: native glass
- * already carries its own shadow and rim, so drawing ours on top of it
- * double-draws the edge.
+ * Only GlassSurface reads it today. Both branches draw their own edge and
+ * the same lift (see GlassSurface), so a caller has nothing to compensate
+ * for; it stays exported for a caller that genuinely needs to know which
+ * material it got.
  */
 export const LIQUID_GLASS = Platform.OS === 'ios' && isLiquidGlassAvailable();
 
@@ -90,7 +91,16 @@ export function GlassSurface({
   flat = false,
   style,
 }: GlassSurfaceProps) {
-  const lift = flat ? null : elevation.raised;
+  /*
+   * A boxShadow, not the legacy shadow props. Both branches clip with
+   * overflow: 'hidden' so children follow the corner radius, and on iOS
+   * that clip also cut away a legacy shadow drawn on the same layer — the
+   * tab bar's handoff-specified lift never rendered, and `flat` changed
+   * nothing. A boxShadow makes React Native move the clip onto an inner
+   * container and draw the shadow outside it, on the plain View and on
+   * GlassView's host alike, with no wrapper view to keep in sync.
+   */
+  const lift = flat ? null : elevation.raisedBox;
 
   if (LIQUID_GLASS) {
     return (
@@ -115,7 +125,7 @@ export function GlassSurface({
           * Native Liquid Glass draws NO border of its own — the hairline and
           * lit edge below belong to the fallback branch only. On the old
           * porcelain page the material had enough tint difference to find its
-          * own edge; against the white page it resolves to near-white and the
+          * own edge; against the cream page it resolves to near-page and the
           * surface loses its silhouette. This is that branch's only contour.
           */}
         <View
