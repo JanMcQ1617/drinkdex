@@ -1,4 +1,12 @@
-import { isAuthRetryableFetchError, type AuthError, type Session } from '@supabase/supabase-js';
+import {
+  isAuthRetryableFetchError,
+  type AuthError,
+  type Session,
+  type User,
+} from '@supabase/supabase-js';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Crypto from 'expo-crypto';
+import { Platform } from 'react-native';
 import { create } from 'zustand';
 
 import { SIGNUP_ACCENTS } from '@/constants/theme';
@@ -11,6 +19,14 @@ import {
   rememberPhone,
   setPendingClaims,
 } from '@/lib/discovery';
+import {
+  clearFacebookCache,
+  hasFacebookIdentity,
+  holdFacebookToken,
+  openFacebookAuth,
+  syncFacebookFriends,
+  type FacebookAuthOutcome,
+} from '@/lib/facebook';
 import { hashHandle } from '@/lib/instagram';
 import { containsObjectionable, isObjectionableError, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import {
@@ -93,10 +109,30 @@ interface AuthState {
     phone?: string,
   ) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  /*
+   * The three below answer with an error to show, or null — null for a
+   * success and for a cancel alike, because closing Apple's sheet or
+   * Facebook's page is a decision, not a failure. A string rather than the
+   * store's `error`, so the sign-in form can put a failure under the
+   * button that caused it instead of above the email form's.
+   *
+   * None of them sets `busy`, which belongs to the email form: its button
+   * would otherwise say "Signing in…" while Apple's sheet was up.
+   */
+  /** Sign in with Apple: makes the account on first use. iOS only. */
+  signInWithApple: () => Promise<string | null>;
+  /** Continue with Facebook: makes the account on first use. */
+  signInWithFacebook: () => Promise<string | null>;
+  /**
+   * For the signed-in account: adds Facebook to it when it has none
+   * (linkIdentity), or goes back through Facebook for a fresh friends list
+   * when it has. Either way the friends check runs straight after.
+   */
+  connectFacebook: () => Promise<string | null>;
   /**
    * Signs out and forgets what this account left on the device: discovery
-   * claims, a half-finished reset. The Dex collection stays; it is the
-   * phone's, not the account's.
+   * claims, the Facebook friends list, a half-finished reset. The Dex
+   * collection stays; it is the phone's, not the account's.
    */
   signOut: () => Promise<void>;
   /**
@@ -172,6 +208,9 @@ export const DISPLAY_NAME_MAX = 40;
 const BIO_MAX = 300;
 /** The username rule as the forms state it. */
 export const USERNAME_RULE = 'Lowercase letters, numbers, dots and underscores. 3–24 characters.';
+/** updateProfile's answer for a username someone else has; the username
+ *  step compares against it to put the message under the right field. */
+export const USERNAME_TAKEN = 'That username is taken. Pick another.';
 
 /**
  * The content filter's verdict on a username. `glued` because the server
@@ -213,6 +252,120 @@ function refusedColumn(name: string, handle: string, about = ''): FilteredColumn
 function filterRefusal(column: string | null | undefined): string {
   return ['objectionable_content', column].filter(Boolean).join(' ');
 }
+
+/* ==================================================================== */
+/* Accounts made by Apple or Facebook                                   */
+/*                                                                      */
+/* Neither provider sends a username, so handle_new_user (migration 015) */
+/* gives the account 'pour_' and 8 hex digits of its id, and a display   */
+/* name from Facebook, or 'New collector' when there is none — always,   */
+/* for Apple, whose identity token carries no name. AuthGate asks for a  */
+/* real username once, before anything else, whenever the handle still  */
+/* has that shape.                                                       */
+/* ==================================================================== */
+
+/** The handle handle_new_user makes. The step that replaces it keys on this shape. */
+const PLACEHOLDER_USERNAME = /^pour_[0-9a-f]{8}$/;
+/** handle_new_user's name when the provider sent none (migration 015). */
+const PLACEHOLDER_NAME = 'New collector';
+
+export function isPlaceholderUsername(handle: string): boolean {
+  return PLACEHOLDER_USERNAME.test(handle);
+}
+
+/**
+ * Said when someone types the placeholder shape themselves. It is refused
+ * by the client (the forms, signUp and updateProfile), not by the server:
+ * an account that chose it would be asked to choose a username again on
+ * every launch.
+ */
+export const PLACEHOLDER_USERNAME_RULE =
+  'That is the kind of name Sipply gives new accounts. Choose one of your own.';
+
+/** Collapsed and cut to what profiles_display_name_len allows. */
+function tidyName(name: string): string {
+  return name.replace(/\s+/g, ' ').trim().slice(0, DISPLAY_NAME_MAX).trim();
+}
+
+/*
+ * The name Apple gave this session, by account. Apple sends it on the very
+ * first authorisation only — never again, on any phone — so it is written
+ * to the profile at once (adoptProviderName) and kept here to prefill the
+ * username step even if that write has not landed.
+ */
+const providerNames = new Map<string, string>();
+
+/**
+ * The display name the username step starts from: Apple's name from this
+ * session, then the profile's own unless it is the placeholder (Facebook's
+ * name is already there, from migration 015), then Facebook's name as the
+ * auth user holds it. Empty when nobody sent one.
+ */
+export function suggestedDisplayName(profile: ProfileRow | null, user: User | null | undefined): string {
+  const fromApple = user ? providerNames.get(user.id) : undefined;
+  if (fromApple) return fromApple;
+  if (profile && profile.display_name !== PLACEHOLDER_NAME) return profile.display_name;
+  const meta = (user?.user_metadata ?? {}) as { full_name?: unknown; name?: unknown };
+  const named = [meta.full_name, meta.name].find(
+    (v): v is string => typeof v === 'string' && v.trim().length > 0,
+  );
+  return named ? tidyName(named) : '';
+}
+
+/**
+ * Replaces 'New collector' with the name Apple sent, straight away, so the
+ * account has it even if the username step is abandoned. Only over the
+ * placeholder, so a name someone chose is never overwritten, and not at
+ * all when the word list would refuse it: the step shows it for editing.
+ */
+async function adoptProviderName(uid: string, name: string): Promise<void> {
+  providerNames.set(uid, name);
+  if (containsObjectionable(name)) return;
+  const { error } = await supabase
+    .from('profiles')
+    .update({ display_name: name })
+    .eq('id', uid)
+    .eq('display_name', PLACEHOLDER_NAME);
+  if (!error && useAuth.getState().session?.user.id === uid) void useAuth.getState().refreshProfile();
+}
+
+/** Apple's name parts as one line, or null when the person shared none. */
+function appleName(fullName: AppleAuthentication.AppleAuthenticationFullName | null): string | null {
+  if (!fullName) return null;
+  let formatted = '';
+  try {
+    formatted = AppleAuthentication.formatFullName(fullName);
+  } catch {
+    formatted = [fullName.givenName, fullName.familyName].filter(Boolean).join(' ');
+  }
+  const name = tidyName(formatted);
+  return name.length > 0 ? name : null;
+}
+
+/* ==================================================================== */
+/* Which sign-in buttons this build shows                               */
+/*                                                                      */
+/* Both off until the dashboard and Meta work listed in .env is done:    */
+/* a button whose provider is not configured fails on the first tap.     */
+/* 'on' in .env shows it; anything else hides it. Read with static dot   */
+/* access, which is what lets Expo inline them into the bundle.          */
+/* ==================================================================== */
+
+/** Sign in with Apple: iOS only. AuthForm also asks isAvailableAsync. */
+export const APPLE_SIGN_IN_ENABLED =
+  Platform.OS === 'ios' && process.env.EXPO_PUBLIC_APPLE_SIGN_IN === 'on';
+
+/**
+ * Continue with Facebook, and Connect Facebook for an account without it.
+ * AuthForm shows the sign-in button only beside Apple's: App Review
+ * guideline 4.8 requires Sign in with Apple wherever another third-party
+ * sign-in is offered.
+ */
+export const FACEBOOK_SIGN_IN_ENABLED = process.env.EXPO_PUBLIC_FACEBOOK_SIGN_IN === 'on';
+
+const APPLE_FAILED = 'Apple did not sign you in. Try again, or use your email.';
+const OTHER_ACCOUNT =
+  'That Facebook account belongs to a different Sipply account. Sign out first to use it.';
 
 /* ==================================================================== */
 /* Error copy                                                           */
@@ -369,16 +522,85 @@ async function drainPendingClaims(uid: string, email: string | null): Promise<vo
 /**
  * What an account leaves on the device, forgotten on sign-out and after
  * deletion: the discovery claims and imported list (lib/discovery says why
- * those go on every sign-out), a half-finished reset, and the record of a
- * reset this phone asked for. Each part swallows its own failure; a full
- * disk must not stop anyone signing out.
+ * those go on every sign-out), the Facebook friends list and token, a
+ * half-finished reset, and the record of a reset this phone asked for.
+ * Each part swallows its own failure; a full disk must not stop anyone
+ * signing out.
  */
 async function forgetAccountOnDevice(): Promise<void> {
   await Promise.all([
     clearDiscoveryCache().catch(() => undefined),
+    clearFacebookCache(),
     clearRecovering(),
     forgetResetRequest(),
   ]);
+}
+
+/**
+ * Turns what came back from Facebook into a session, then starts the
+ * friends check with the Facebook token it carried.
+ *
+ * `expected` is the signed-in account when Facebook is being connected to
+ * it. The tokens are refused, before setSession, unless they are for that
+ * same account: a Facebook identity that already belongs to someone else
+ * would otherwise swap the person into that other account mid-session.
+ * The same check, and the same reason, as a reset link (lib/recovery).
+ *
+ * setSession is handed the two Supabase tokens and nothing else, which is
+ * what keeps the Facebook token out of the session supabase-js persists.
+ */
+async function finishFacebook(
+  outcome: FacebookAuthOutcome,
+  expected: string | null,
+  failed: string,
+): Promise<string | null> {
+  if (outcome.kind === 'cancelled') return null;
+  if (outcome.kind === 'error') return outcome.message;
+
+  let session: Session;
+  let providerToken: string | null = outcome.providerToken;
+
+  if (outcome.kind === 'code') {
+    /*
+     * PKCE only, which this client is not on; read in case GoTrue ever
+     * answers that way. Never while connecting: the exchange signs in
+     * before the account can be checked.
+     */
+    if (expected) return failed;
+    const exchanged = await supabase.auth.exchangeCodeForSession(outcome.code);
+    if (exchanged.error || !exchanged.data.session) {
+      return exchanged.error ? humanizeAuth(exchanged.error, failed) : failed;
+    }
+    providerToken = exchanged.data.session.provider_token ?? null;
+    /*
+     * The exchange saved a session with the Facebook token inside it.
+     * Setting it again from its two Supabase tokens saves it without.
+     */
+    const resaved = await supabase.auth.setSession({
+      access_token: exchanged.data.session.access_token,
+      refresh_token: exchanged.data.session.refresh_token,
+    });
+    session = resaved.data.session ?? exchanged.data.session;
+  } else {
+    const account = readTokenAccount(outcome.accessToken);
+    if (!account) return failed;
+    if (expected && account.id !== expected) return OTHER_ACCOUNT;
+    const { data, error } = await supabase.auth.setSession({
+      access_token: outcome.accessToken,
+      refresh_token: outcome.refreshToken,
+    });
+    if (error || !data.session) return error ? humanizeAuth(error, failed) : failed;
+    session = data.session;
+  }
+
+  // As after a password sign-in: a stale reset flag is void now.
+  await clearRecovering();
+
+  if (providerToken) {
+    holdFacebookToken(session.user.id, providerToken);
+    void syncFacebookFriends(session.user.id);
+  }
+  return null;
 }
 
 /**
@@ -521,7 +743,9 @@ export const useAuth = create<AuthState>()((set, get) => ({
     // The form already blocks these; this is the backstop, and it keeps a
     // 500 from being the only thing the server can say.
     const problem =
-      profileFieldProblem(name, handle) ?? (refusedColumn(name, handle) ? OBJECTIONABLE_MESSAGE : null);
+      profileFieldProblem(name, handle) ??
+      (isPlaceholderUsername(handle) ? PLACEHOLDER_USERNAME_RULE : null) ??
+      (refusedColumn(name, handle) ? OBJECTIONABLE_MESSAGE : null);
     if (problem) {
       set({ error: problem, notice: null });
       return;
@@ -625,6 +849,90 @@ export const useAuth = create<AuthState>()((set, get) => ({
       });
     } catch {
       set({ busy: false, error: OFFLINE });
+    }
+  },
+
+  /**
+   * Apple's sheet, then GoTrue.
+   *
+   * The nonce is what stops a stolen identity token being replayed here:
+   * Apple signs the SHA-256 of a random value into the token, and GoTrue
+   * checks the raw value against it. So Apple is given the hash (hex, as
+   * GoTrue compares it) and signInWithIdToken the raw value.
+   *
+   * Apple sends the person's name on the first authorisation only — see
+   * providerNames — so it is taken now or never.
+   */
+  signInWithApple: async () => {
+    set({ error: null, notice: null });
+    try {
+      const rawNonce = Crypto.randomUUID();
+      const nonce = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, rawNonce);
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+        nonce,
+      });
+      if (!credential.identityToken) return APPLE_FAILED;
+
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'apple',
+        token: credential.identityToken,
+        nonce: rawNonce,
+      });
+      if (error || !data.user) {
+        if (error?.code === 'provider_disabled') return 'Sign in with Apple is not switched on for Sipply yet.';
+        return error ? humanizeAuth(error, APPLE_FAILED) : APPLE_FAILED;
+      }
+
+      /*
+       * Taken before anything else is awaited. The sign-in has already
+       * started the profile fetch, and the username step that fetch opens
+       * reads its prefill from providerNames as it mounts.
+       */
+      const name = appleName(credential.fullName);
+      if (name) void adoptProviderName(data.user.id, name);
+      await clearRecovering();
+      return null;
+    } catch (e) {
+      // Closing Apple's sheet. Nothing went wrong, so nothing is said.
+      if ((e as { code?: unknown } | null)?.code === 'ERR_REQUEST_CANCELED') return null;
+      return APPLE_FAILED;
+    }
+  },
+
+  signInWithFacebook: async () => {
+    set({ error: null, notice: null });
+    const failed = 'Facebook did not sign you in. Try again, or use your email.';
+    try {
+      return await finishFacebook(await openFacebookAuth('sign-in'), null, failed);
+    } catch {
+      return failed;
+    }
+  },
+
+  /*
+   * An account that already has Facebook goes through Facebook's sign-in
+   * again rather than linkIdentity, which refuses an identity the account
+   * already holds. That comes back as a session for whichever account owns
+   * the Facebook identity chosen in the browser: this one, or finishFacebook
+   * refuses it before setSession. One cost of that route: choosing a
+   * Facebook account that is on nobody's Sipply account makes GoTrue create
+   * a new, empty Sipply account for it, which is then refused here and left
+   * unused. linkIdentity has no way to fetch a fresh Facebook token for an
+   * identity already linked, so there is no quieter route to take.
+   */
+  connectFacebook: async () => {
+    const user = get().session?.user;
+    if (!user) return 'You are signed out.';
+    const mode = hasFacebookIdentity(user) ? 'sign-in' : 'link';
+    const failed = 'Could not connect Facebook. Try again.';
+    try {
+      return await finishFacebook(await openFacebookAuth(mode), user.id, failed);
+    } catch {
+      return failed;
     }
   },
 
@@ -1013,6 +1321,13 @@ export const useAuth = create<AuthState>()((set, get) => ({
 
     const problem = profileFieldProblem(name, handle);
     if (problem) return problem;
+    /*
+     * Changing TO the placeholder shape is refused, as the forms refuse it:
+     * the account would be sent back to the username step on every launch.
+     * Keeping it is not, so an account still on it can save a bio.
+     */
+    if (isPlaceholderUsername(handle) && handle !== get().profile?.username)
+      return PLACEHOLDER_USERNAME_RULE;
     if (about.length > BIO_MAX) return 'Your about is longer than 300 characters.';
     const refused = refusedColumn(name, handle, about);
     if (refused) return filterRefusal(refused);
@@ -1048,7 +1363,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
        * — which is the thing that changes between versions.
        */
       if (isObjectionableError(error)) return filterRefusal(error.details);
-      if (error.code === '23505') return 'That username is taken. Pick another.';
+      if (error.code === '23505') return USERNAME_TAKEN;
       return 'Could not save your profile. Check your connection and try again.';
     }
 

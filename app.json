@@ -18,6 +18,10 @@
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
       "buildNumber": "9",
+      "usesAppleSignIn": true,
+      "associatedDomains": [
+        "webcredentials:janmcq1617.github.io"
+      ],
       "config": {
         "usesNonExemptEncryption": false
       },
@@ -71,6 +75,14 @@
             "NSPrivacyCollectedDataTypePurposes": [
               "NSPrivacyCollectedDataTypePurposeAppFunctionality"
             ]
+          },
+          {
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeOtherUsageData",
+            "NSPrivacyCollectedDataTypeLinked": true,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           }
         ]
       }
@@ -99,6 +111,7 @@
         }
       ],
       "expo-sharing",
+      "expo-apple-authentication",
       [
         "expo-contacts",
         {

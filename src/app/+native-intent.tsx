@@ -1,3 +1,4 @@
+import { AUTH_CALLBACK_PATH } from '@/lib/facebook';
 import { INVITE_PATH } from '@/lib/invite';
 import { RECOVERY_PATH } from '@/lib/recovery';
 
@@ -11,19 +12,27 @@ import { RECOVERY_PATH } from '@/lib/recovery';
 /* invite tap and every reset email ended on the router's black          */
 /* "Unmatched Route" page, with the real work happening unseen behind it. */
 /*                                                                      */
-/* So those two are taken away from the router here. InviteLinkHandler   */
-/* and PasswordResetOverlay still receive the raw URL through their own  */
-/* listeners — this only decides where the navigator goes:               */
+/* So those two are taken away from the router here, with a third:      */
+/* drinkdex://auth/callback, where GoTrue sends the browser back after   */
+/* Continue with Facebook. The system auth sheet normally hands that URL */
+/* straight to lib/facebook and the router never sees it, but a sheet    */
+/* that is dismissed as the redirect lands, or Android's browser, can    */
+/* deliver it as an ordinary link, and that must not end on Unmatched    */
+/* Route either. InviteLinkHandler and PasswordResetOverlay still        */
+/* receive their raw URLs through their own listeners — this only        */
+/* decides where the navigator goes:                                     */
 /*                                                                      */
 /*   • on a cold start, Home, which is where both flows are meant to     */
 /*     unfold (the sign-up form for a signed-out invitee, the overlay    */
 /*     for a reset);                                                     */
 /*   • while running, nowhere. Returning null leaves the user on the     */
 /*     screen they were on, and the handler's own alert or overlay       */
-/*     arrives over it.                                                  */
+/*     arrives over it. A stray auth callback has no handler to wait     */
+/*     for: its session was already taken, or the sheet was closed.      */
 /*                                                                      */
 /* The old drinkdex://u/<uuid> invite, which named a user rather than    */
-/* carrying a token, opens that person's profile and follows nobody.     */
+/* carrying a token, opens that person's profile (the /user/[id] screen) */
+/* and follows nobody.                                                  */
 /* Anything else is passed through untouched.                           */
 /*                                                                      */
 /* Must never throw: an exception here is raised inside the router's     */
@@ -56,7 +65,9 @@ export function redirectSystemPath({
 
     if (first === INVITE_PATH || first === RECOVERY_PATH) return initial ? '/' : null;
 
-    if (first === 'u' && UUID.test(second)) return `/profile?user=${second.toLowerCase()}`;
+    if (`${first}/${second}` === AUTH_CALLBACK_PATH) return initial ? '/' : null;
+
+    if (first === 'u' && UUID.test(second)) return `/user/${second.toLowerCase()}`;
 
     return path;
   } catch {

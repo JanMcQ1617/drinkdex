@@ -38,9 +38,10 @@ import * as Linking from 'expo-linking';
 /* NOT switched to PKCE, which would bind the link to this device by     */
 /* construction. flowType is a client-wide setting, so changing it also  */
 /* changes how signup confirmation resolves, and that path has not been  */
-/* tested on a real build. The request check above gives the same        */
-/* guarantee for the one flow that needs it; PKCE stays the better       */
-/* long-term answer once signup confirmation has been verified with it.  */
+/* tested on a real build — and Continue with Facebook reads its session */
+/* out of the same kind of fragment (lib/facebook). The request check    */
+/* above gives the same guarantee for the one flow that needs it; PKCE   */
+/* stays the better long-term answer once both have been verified on it. */
 /* ==================================================================== */
 
 /** Where GoTrue is told to send the user back to. Must be allowlisted in
@@ -91,23 +92,37 @@ function parsePairs(raw: string): Record<string, string> {
 }
 
 /**
+ * Every pair in a URL's query string and its fragment, the fragment winning
+ * where both name the same key.
+ *
+ * Both, because GoTrue puts a session in the fragment under the implicit
+ * flow and a `code` in the query under PKCE, and has moved things between
+ * the two across versions; reading both costs nothing. Exported for the
+ * Facebook return link (lib/facebook), which GoTrue builds the same way as
+ * a reset link and which must be just as unable to throw.
+ */
+export function urlFields(url: string): Record<string, string> {
+  const hash = url.indexOf('#');
+  const query = url.indexOf('?');
+  return {
+    ...(query >= 0 ? parsePairs(url.slice(query, hash > query ? hash : undefined)) : {}),
+    ...(hash >= 0 ? parsePairs(url.slice(hash)) : {}),
+  };
+}
+
+/**
  * Reads a recovery deep link. Returns null for any URL that is not one —
  * the invite handler and this one both see every incoming link, so each
  * has to ignore the other's without complaining.
  *
- * Checks the fragment first and the query string second. Only the fragment
- * is used today, but a project switched to PKCE, or GoTrue changing where
- * it puts things, would land in the query — and reading both costs nothing.
+ * Checks the fragment first and the query string second (urlFields). Only
+ * the fragment is used today, but a project switched to PKCE, or GoTrue
+ * changing where it puts things, would land in the query.
  */
 export function parseRecoveryUrl(url: string): RecoveryLink | null {
   if (!url) return null;
 
-  const hash = url.indexOf('#');
-  const query = url.indexOf('?');
-  const fields = {
-    ...(query >= 0 ? parsePairs(url.slice(query, hash > query ? hash : undefined)) : {}),
-    ...(hash >= 0 ? parsePairs(url.slice(hash)) : {}),
-  };
+  const fields = urlFields(url);
 
   /*
    * Match on the payload, not on the path. GoTrue preserves `redirect_to`

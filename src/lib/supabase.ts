@@ -23,10 +23,16 @@ export const supabase = createClient<Database>(url, key, {
     storage: AsyncStorage,
     autoRefreshToken: true,
     persistSession: true,
-    // Off on purpose. The one link that carries a session, a password reset,
-    // is read by hand (lib/recovery) so it can be checked against the reset
-    // this phone asked for before it replaces anyone's session. On web this
-    // would also try to read a session out of the address bar.
+    // Off on purpose. The two links that carry a session are read by hand:
+    // a password reset (lib/recovery), so it can be checked against the
+    // reset this phone asked for before it replaces anyone's session, and
+    // the Facebook return link (lib/facebook), so its Facebook token never
+    // reaches the persisted session. On web this would also try to read a
+    // session out of the address bar.
+    //
+    // flowType is left at the default, implicit, which is what puts both
+    // sessions in a URL fragment. Both readers depend on that; see
+    // lib/recovery before switching this client to PKCE.
     detectSessionInUrl: false,
   },
   global: {

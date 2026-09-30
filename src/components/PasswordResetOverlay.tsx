@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AuthMessage, Field } from '@/components/AuthGate';
+import { AuthMessage } from '@/components/AuthGate';
 import { Icon } from '@/components/icons';
-import { Button, PressableScale } from '@/components/ui';
+import { Button, Field, PressableScale } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { parseRecoveryUrl } from '@/lib/recovery';
 import { useAuth } from '@/store/auth';
@@ -214,11 +214,8 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
             returnKeyType="next"
             submitBehavior="submit"
             onSubmitEditing={() => confirmRef.current?.focus()}
-            hintIsError={password.length > 0 && !longEnough}
-            hint={
-              password.length > 0 && !longEnough
-                ? 'Passwords must be at least 6 characters.'
-                : undefined
+            error={
+              password.length > 0 && !longEnough ? 'Passwords must be at least 6 characters.' : null
             }
           />
           <Field
@@ -235,8 +232,7 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
             returnKeyType="go"
             submitBehavior="blurAndSubmit"
             onSubmitEditing={() => void submit()}
-            hintIsError={typedConfirm && !matches}
-            hint={typedConfirm && !matches ? 'These do not match.' : undefined}
+            error={typedConfirm && !matches ? 'These do not match.' : null}
           />
 
           {error ? <AuthMessage tone="error">{error}</AuthMessage> : null}

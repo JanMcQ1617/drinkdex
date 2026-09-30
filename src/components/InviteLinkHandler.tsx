@@ -55,7 +55,7 @@ function reportOutcome(outcome: InviteOutcome, parked: boolean) {
         {
           text: 'View profile',
           onPress: () =>
-            router.push({ pathname: '/profile', params: { user: outcome.inviterId } }),
+            router.push({ pathname: '/user/[id]', params: { id: outcome.inviterId } }),
         },
       ],
     );
