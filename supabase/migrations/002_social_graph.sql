@@ -2,7 +2,12 @@
 -- Clink — migration 002: friend discovery
 --
 -- Adds phone-contact matching and mutual invites on top of schema.sql.
--- Paste into the Supabase SQL Editor and Run. Safe to re-run.
+-- Paste into the Supabase SQL Editor and Run.
+--
+-- SUPERSEDED: both functions below have since been replaced (match_contacts
+-- by 008, 010 and 011; accept_invite by 011). Do not re-run this file: it
+-- would fail on the changed return types, and it is kept only as the record
+-- of what was first applied.
 -- ====================================================================
 
 -- --------------------------------------------------------------------
@@ -30,9 +35,13 @@ revoke select (phone_hash) on public.profiles from anon, authenticated;
 --
 -- The caller hashes the phone numbers in their address book and passes
 -- the set here; we return the profiles that opted in with a matching
--- hash. Because the caller must already hold a hash to get a hit, this
--- confirms "is this number on Clink?" for numbers they already know —
--- it cannot enumerate the column or reverse anyone else's number.
+-- hash.
+--
+-- This version was an enumeration oracle, contrary to what this comment
+-- used to claim. The salt ships in the app and a Puerto Rico number has
+-- ten digits, so every possible hash can be computed offline, and with no
+-- limit on the input one account could ask about all of them and map
+-- numbers to profiles. 011 caps it at 500 hashes a call and 3,000 a day.
 -- --------------------------------------------------------------------
 
 create or replace function public.match_contacts(hashes text[])
@@ -65,6 +74,11 @@ grant execute on function public.match_contacts(text[]) to authenticated;
 -- inviter AND the inviter follows the caller, so both feeds light up.
 -- SECURITY DEFINER because the reciprocal edge (inviter -> caller) is one
 -- the caller is forbidden to insert under the follows RLS policy.
+--
+-- Dropped by 011. Its only input was a user id, which is public, so any
+-- account could make any other account follow it, and it never checked
+-- blocks. 011's accept_invite(invite_token uuid) takes an expiring random
+-- token the inviter created instead.
 -- --------------------------------------------------------------------
 
 create or replace function public.accept_invite(inviter uuid)

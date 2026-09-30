@@ -2,7 +2,9 @@
 -- Sipply — migration 008: discovery secrets, Instagram matching,
 --                         and batch follow
 --
--- Paste into the Supabase SQL Editor and Run. Safe to re-run.
+-- Paste into the Supabase SQL Editor and Run. Do not re-run it: 010
+-- changed match_contacts' return type, so a re-run now fails outright,
+-- and the functions below predate 011's limits and hash format check.
 --
 -- WHY THERE IS NO INSTAGRAM LOGIN BUTTON
 --
@@ -73,7 +75,7 @@ revoke all on public.profile_secrets from anon, authenticated;
 -- Carry across what 002 already collected, then drop the leaky column so
 -- there is exactly one home for a phone hash.
 --
--- Guarded and dynamic because the header promises this file is re-runnable:
+-- Guarded and dynamic because this file was written to be re-runnable:
 -- the second run happens after the column is gone, and a static reference
 -- to profiles.phone_hash would fail to resolve at plan time even inside an
 -- IF branch that is not taken. EXECUTE defers resolution to the moment the
@@ -207,9 +209,14 @@ grant execute on function public.match_contacts(text[]) to authenticated;
 --
 -- The caller hashes the handles from their own Instagram export and sends
 -- the set; we return the profiles that opted in with a matching hash.
--- Because a hit requires already holding the hash, this answers "is this
--- handle on Sipply?" for handles the caller already knows — it cannot
--- enumerate anything or reverse anyone else's handle.
+--
+-- This comment used to say the function "cannot enumerate anything",
+-- because a hit requires already holding the hash. That was wrong: the
+-- salt ships in the app, so anyone can hash any handle, and with no limit
+-- on the input a scraped list of handles mapped straight to Sipply
+-- profiles. The same went for match_contacts over the whole phone-number
+-- space. 011 caps both at 500 hashes a call and 3,000 a day per account,
+-- and redefines both functions; do not re-run this file after 011.
 -- --------------------------------------------------------------------
 
 create or replace function public.match_instagram(hashes text[])
@@ -291,9 +298,9 @@ grant execute on function public.follow_many(uuid[]) to authenticated;
 -- --------------------------------------------------------------------
 -- 6. Account deletion
 --
--- delete_own_account (005) removes the profile row; profile_secrets
--- cascades from it, so the hashes go with it. Nothing to add — this note
--- exists so the next person checks 005 rather than assuming.
+-- delete_own_account (005, rewritten by 011) removes the profile row;
+-- profile_secrets cascades from it, so the hashes go with it. Nothing to
+-- add — this note exists so the next person checks rather than assuming.
 -- --------------------------------------------------------------------
 
 -- --------------------------------------------------------------------

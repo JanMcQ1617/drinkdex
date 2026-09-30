@@ -1,7 +1,10 @@
 -- ====================================================================
 -- Clink — in-app account deletion
 --
--- Paste into the Supabase SQL Editor and press Run. Safe to re-run.
+-- SUPERSEDED BY 011. Do not re-run this file: it would put back the
+-- storage delete below, which fails for every user on a current Supabase
+-- project. The reasoning about why storage needs handling still stands;
+-- the way it was handled here did not work.
 --
 -- Apple requires any app offering account creation to offer account
 -- DELETION from inside the app (App Store guideline 5.1.1(v)), and an
@@ -19,6 +22,13 @@
 -- which is both a privacy failure and exactly what the deletion
 -- requirement exists to prevent. The photo delete is therefore FIRST and
 -- explicit.
+--
+-- That delete was the mistake. A SQL DELETE on storage.objects removes only
+-- the metadata row and orphans the file, and Supabase Storage now refuses
+-- it outright with a statement-level trigger, so this function raised for
+-- every caller and no account could be deleted. Since 011 the client
+-- empties the folder through the Storage API and the function only checks
+-- that nothing is left.
 -- ====================================================================
 
 create or replace function public.delete_own_account()
@@ -43,6 +53,7 @@ begin
 
   -- Photos first: no cascade covers these, and if the auth row went
   -- first we would lose the only handle on which objects were theirs.
+  -- (Never worked: see the header. 011 replaces this with a check.)
   delete from storage.objects
   where bucket_id = 'pours'
     and (storage.foldername(name))[1] = uid::text;

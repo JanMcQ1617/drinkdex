@@ -1,7 +1,9 @@
 -- ====================================================================
 -- Clink — several photos per drink, one post
 --
--- Paste into the Supabase SQL Editor and press Run. Safe to re-run.
+-- Paste into the Supabase SQL Editor and press Run. Was safe to re-run
+-- until 014; since then a re-run would put back the older photo insert
+-- policy (see section 6), so do not.
 --
 -- Logging the same drink twice used to create two unrelated posts, so a
 -- profile filled up with duplicates of one entry and the feed showed the
@@ -131,6 +133,10 @@ create trigger on_post_photo_change
 -- Reuses the posts policy by existence check rather than restating the
 -- block rules, so blocking keeps working here without a second copy of
 -- the logic that could drift.
+--
+-- 014 replaces post_photos_insert_own so a path must also sit in the
+-- caller's own folder. Re-running this file after 014 would drop that
+-- check again.
 -- --------------------------------------------------------------------
 
 alter table public.post_photos enable row level security;

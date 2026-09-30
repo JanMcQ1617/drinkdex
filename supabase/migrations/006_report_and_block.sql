@@ -26,6 +26,11 @@ create table if not exists public.blocks (
   constraint no_self_block check (blocker_id <> blocked_id)
 );
 
+-- The cascades and the exactly-one check below are superseded by 012: a
+-- report now survives the deletion of its reporter, its post or the person
+-- it names (the column is set to null instead), exactly-one is enforced
+-- when the report is filed, and each report keeps the author's id and a
+-- copy of the reported text.
 create table if not exists public.reports (
   id                 uuid primary key default gen_random_uuid(),
   reporter_id        uuid not null references public.profiles on delete cascade,
@@ -102,7 +107,9 @@ create policy blocks_delete_own on public.blocks
 
 -- Reports are write-only from the app's point of view: you may file one
 -- and read back your own, but nobody can enumerate what others reported.
--- Moderation happens in the Supabase dashboard, not in the client.
+-- Moderation happens in the Supabase dashboard, not in the client. (013
+-- adds a webhook alert so a new report does not wait for someone to open
+-- the table.)
 drop policy if exists reports_read_own   on public.reports;
 drop policy if exists reports_insert_own on public.reports;
 
@@ -150,6 +157,12 @@ grant execute on function public.blocked_with(uuid) to authenticated;
 -- Replaces posts_read and profiles_read from schema.sql. Symmetric on
 -- purpose: blocking someone hides you from them as well, so a block
 -- cannot be used to keep watching a person who wanted you gone.
+--
+-- Only posts and profiles, though. Follows, likes and the photo bucket
+-- stayed open to a blocked account until 011, which also rewrites these
+-- two policies to read the block set once per query instead of calling
+-- blocked_with for every row. Re-running this file would put back the
+-- slower per-row form; the meaning would not change.
 -- --------------------------------------------------------------------
 
 drop policy if exists posts_read on public.posts;

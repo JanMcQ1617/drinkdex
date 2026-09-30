@@ -12,18 +12,23 @@
 --     (storage.foldername(name))[1] = auth.uid()::text, so a user can
 --     only write and remove objects under their own prefix.
 --   * pours_read grants select to `authenticated`, which is exactly the
---     audience for an avatar — the app has no anonymous browsing.
---   * delete_own_account() in 005 deletes EVERY object in `pours` under
---     the user's prefix. An avatar stored there is therefore already
---     covered by account deletion, and the privacy policy's promise that
---     deletion removes your photos stays true without touching that
---     function.
+--     audience for an avatar — the app has no anonymous browsing. (Since
+--     011 it also hides the folder of anyone you are blocked with, avatars
+--     included.)
+--   * Account deletion clears EVERY object in `pours` under the user's
+--     prefix, so an avatar stored there is covered without extra work.
 --
--- A separate bucket would mean three new policies plus an edit to the
--- deletion function, and the failure mode of forgetting the last one is
--- avatars outliving deleted accounts — the precise thing 005 exists to
--- prevent. The cost is that one bucket holds two kinds of image, which is
--- a naming inconvenience rather than a correctness problem.
+-- That second point was written about 005, whose SQL delete from
+-- storage.objects never actually worked (see 011). Since 011 the client
+-- empties pours/<uid>/ through the Storage API and delete_own_account
+-- refuses to finish while anything is left; the argument for one bucket
+-- holds exactly as before, because that sweep covers avatars too.
+--
+-- A separate bucket would mean three new policies plus a second folder to
+-- sweep on deletion, and the failure mode of forgetting the last one is
+-- avatars outliving deleted accounts — the precise thing account deletion
+-- exists to prevent. The cost is that one bucket holds two kinds of image,
+-- which is a naming inconvenience rather than a correctness problem.
 --
 -- The column stores the object PATH, not a URL. The bucket is private, so
 -- every read is a short-lived signed URL minted on demand; storing a URL
@@ -55,6 +60,10 @@ comment on column public.profiles.avatar_path is
 -- table` is exactly that. The grants go with the old function, so they
 -- are reissued below — forgetting them is how these silently start
 -- failing with "permission denied for function" for every signed-in user.
+--
+-- 011 redefines both with per-call and per-day limits. Do not re-run this
+-- file after 011: its DROP and CREATE would put back the unlimited
+-- versions without a word.
 -- --------------------------------------------------------------------
 
 drop function if exists public.match_contacts(text[]);
