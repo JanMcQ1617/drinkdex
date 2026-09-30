@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import React, { useCallback, useEffect } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
@@ -27,7 +27,7 @@ import {
 } from '@/constants/theme';
 import { getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
-import { useCelebrate } from '@/store/celebrate';
+import { useCelebrate, type Celebration } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
 
 /* ==================================================================== */
@@ -52,7 +52,12 @@ import { useCollection } from '@/store/collection';
 /** How long the card takes to settle. Kept under the 400ms ceiling. */
 const SETTLE = 380;
 
-function Card({ children, onDismiss }: { children: React.ReactNode; onDismiss: () => void }) {
+/*
+ * The card alone. The scrim and the dismiss layer belong to the overlay,
+ * which mounts them once for the whole queue; each card is keyed on its
+ * queue id, so the next one springs in fresh while this one fades out.
+ */
+function Card({ children }: { children: React.ReactNode }) {
   const reduced = useReducedMotion();
   const scale = useSharedValue(reduced ? 1 : 0.86);
   const lift = useSharedValue(reduced ? 0 : 18);
@@ -67,44 +72,34 @@ function Card({ children, onDismiss }: { children: React.ReactNode; onDismiss: (
     transform: [{ scale: scale.value }, { translateY: lift.value }],
   }));
 
+  /*
+    Absorbs its own touches without being a button, so a tap on the card
+    does not fall through to the dismiss layer below it.
+  */
   return (
-    <View style={styles.scrim} pointerEvents="box-none">
-      <Animated.View
-        pointerEvents="none"
-        entering={reduced ? undefined : FadeIn.duration(SETTLE)}
-        exiting={reduced ? undefined : FadeOut.duration(220)}
-        style={styles.scrimFill}
-      />
-
-      {/*
-        The dismiss target is a SIBLING under the card, not a wrapper round
-        it. Wrapping made the card's own buttons descendants of a button —
-        invalid on web ("<button> cannot contain a nested <button>") and a
-        nested touchable on native. Underneath, it still catches every tap
-        that lands outside the card.
-      */}
-      <Pressable
-        style={StyleSheet.absoluteFill}
-        onPress={onDismiss}
-        accessibilityRole="button"
-        accessibilityLabel="Dismiss"
-      />
-
-      {/*
-        Absorbs its own touches without being a button, so a tap on the
-        card does not fall through to the dismiss layer below it.
-      */}
-      <Animated.View
-        style={[styles.card, style]}
-        onStartShouldSetResponder={() => true}>
-        {children}
-      </Animated.View>
-    </View>
+    <Animated.View
+      style={[styles.card, style]}
+      exiting={reduced ? undefined : FadeOut.duration(motion.exit)}
+      onStartShouldSetResponder={() => true}>
+      {children}
+    </Animated.View>
   );
 }
 
-/** The gilt ring that sweeps out from behind a legendary catch. */
-function Halo() {
+/*
+ * The ring that sweeps out from behind the art.
+ *
+ * Its colour is the caller's, because two cards use it and only one has
+ * earned gilt: a legendary catch rings in gilt, and a new rank rings in
+ * wineSoft, the palette's stroke cut of wine. Gilt means legendary
+ * everywhere else in the app, and a rank ringed in it would say a rarity
+ * it does not have. Not the disc's own wine either: the same colour as
+ * the fill it sweeps out from reads as the disc swelling, not a ring.
+ *
+ * Required, with no gilt default, so a third card cannot pick up the
+ * legendary metal by leaving the prop off.
+ */
+function Halo({ color }: { color: string }) {
   const reduced = useReducedMotion();
   const s = useSharedValue(0.6);
   const o = useSharedValue(0);
@@ -121,19 +116,54 @@ function Halo() {
   }));
 
   if (reduced) return null;
-  return <Animated.View pointerEvents="none" style={[styles.halo, style]} />;
+  return <Animated.View pointerEvents="none" style={[styles.halo, { borderColor: color }, style]} />;
 }
 
 /* -------------------------------------------------------------------- */
+
+/*
+ * Which queued card has been spoken. Module scope because there are two
+ * overlays mounted while the log sheet is up, both reading the same front
+ * of the queue; whichever effect runs first announces it and the other
+ * sees the id and stays quiet, so VoiceOver hears each card once.
+ */
+let lastAnnounced = 0;
+
+function announcement(c: Celebration, collected: number): string {
+  if (c.kind === 'milestone') {
+    return `New rank: ${c.milestone.title}. ${formatCount(c.collected)} of ${formatCount(TOTAL)} collected.`;
+  }
+  const name = getDrink(c.drinkId)?.name ?? 'New entry';
+  return `${name} collected. ${formatCount(collected)} of ${formatCount(TOTAL)}.`;
+}
 
 export function CelebrationOverlay() {
   const current = useCelebrate((s) => s.queue[0]);
   const dismiss = useCelebrate((s) => s.dismiss);
   const unlocks = useCollection((s) => s.unlocks);
+  const reduced = useReducedMotion();
 
   const onDismiss = useCallback(() => dismiss(), [dismiss]);
 
+  /*
+   * The card has to be heard, not only seen. Without this a VoiceOver
+   * user logs a pour and gets the app's biggest moment in silence, with
+   * focus still sitting on the button they pressed. Queued rather than
+   * interrupting, so it follows the button's own feedback instead of
+   * cutting it off.
+   */
+  useEffect(() => {
+    if (!current || current.id === lastAnnounced) return;
+    lastAnnounced = current.id;
+    const text = announcement(current, Object.keys(unlocks).length);
+    // react-native-web has no WithOptions variant; the plain call is its no-op.
+    if (Platform.OS === 'web') AccessibilityInfo.announceForAccessibility(text);
+    else AccessibilityInfo.announceForAccessibilityWithOptions(text, { queue: true });
+  }, [current, unlocks]);
+
   if (!current) return null;
+
+  let card: React.ReactNode;
 
   if (current.kind === 'collected') {
     const drink = getDrink(current.drinkId);
@@ -144,46 +174,42 @@ export function CelebrationOverlay() {
     const legendary = drink.rarity === 'legendary';
     const collected = Object.keys(unlocks).length;
 
-    return (
-      <Card onDismiss={onDismiss}>
-        <View style={styles.body}>
-          <Text style={styles.eyebrow}>Collected</Text>
+    card = (
+      <View style={styles.body}>
+        <Text style={styles.eyebrow}>Collected</Text>
 
-          <View style={styles.artWrap}>
-            {legendary ? <Halo /> : null}
-            <View style={styles.art}>
-              {photo ? (
-                <Image source={photo} style={styles.artPhoto} contentFit="cover" />
-              ) : (
-                <DrinkArt drink={drink} size={104} flat />
-              )}
-            </View>
+        <View style={styles.artWrap}>
+          {legendary ? <Halo color={colors.gilt} /> : null}
+          <View style={styles.art}>
+            {photo ? (
+              <Image source={photo} style={styles.artPhoto} contentFit="cover" />
+            ) : (
+              <DrinkArt drink={drink} size={104} flat />
+            )}
           </View>
-
-          <Text style={styles.title}>{drink.name}</Text>
-          <Text style={styles.dex}>{formatDexNumber(drink.dexNumber)}</Text>
-
-          <View style={styles.badgeRow}>
-            <RarityBadge rarity={drink.rarity} />
-          </View>
-
-          <Text style={styles.progress}>
-            {formatCount(collected)} of {formatCount(TOTAL)} collected
-          </Text>
-
-          <Button label="Nice" onPress={onDismiss} block style={styles.cta} />
         </View>
-      </Card>
-    );
-  }
 
-  return (
-    <Card onDismiss={onDismiss}>
+        <Text style={styles.title}>{drink.name}</Text>
+        <Text style={styles.dex}>{formatDexNumber(drink.dexNumber)}</Text>
+
+        <View style={styles.badgeRow}>
+          <RarityBadge rarity={drink.rarity} />
+        </View>
+
+        <Text style={styles.progress}>
+          {formatCount(collected)} of {formatCount(TOTAL)} collected
+        </Text>
+
+        <Button label="Done" onPress={onDismiss} block style={styles.cta} />
+      </View>
+    );
+  } else {
+    card = (
       <View style={styles.body}>
         <Text style={styles.eyebrow}>New rank</Text>
 
         <View style={styles.artWrap}>
-          <Halo />
+          <Halo color={colors.wineSoft} />
           <View style={styles.rankDisc}>
             <Icon name="trophy" size={40} color={colors.textOnWine} />
           </View>
@@ -194,9 +220,50 @@ export function CelebrationOverlay() {
           {formatCount(current.collected)} of {formatCount(TOTAL)} collected
         </Text>
 
-        <Button label="Onwards" onPress={onDismiss} block style={styles.cta} />
+        <Button label="Done" onPress={onDismiss} block style={styles.cta} />
       </View>
-    </Card>
+    );
+  }
+
+  /*
+    Modal for VoiceOver: everything behind the scrim — the Stack at the
+    root, the list and save bar in the log sheet — drops out of the
+    swipe order while a card is up, and the two-finger escape dismisses
+    it the way a tap does.
+  */
+  return (
+    <View
+      style={styles.scrim}
+      pointerEvents="box-none"
+      accessibilityViewIsModal
+      onAccessibilityEscape={onDismiss}>
+      <Animated.View
+        pointerEvents="none"
+        entering={reduced ? undefined : FadeIn.duration(SETTLE)}
+        exiting={reduced ? undefined : FadeOut.duration(220)}
+        style={styles.scrimFill}
+      />
+
+      {/*
+        The dismiss target is a SIBLING under the card, not a wrapper round
+        it. Wrapping made the card's own buttons descendants of a button —
+        invalid on web ("<button> cannot contain a nested <button>") and a
+        nested touchable on native. Underneath, it still catches every tap
+        that lands outside the card.
+
+        Hidden from screen readers. As a screen-sized "Dismiss" button it
+        was the first thing VoiceOver reached, ahead of the card it
+        dismisses; Done and the escape gesture already do its job.
+      */}
+      <Pressable
+        style={StyleSheet.absoluteFill}
+        onPress={onDismiss}
+        accessible={false}
+        importantForAccessibility="no"
+      />
+
+      <Card key={current.id}>{card}</Card>
+    </View>
   );
 }
 
@@ -249,7 +316,6 @@ const styles = StyleSheet.create({
     height: 132,
     borderRadius: radius.pill,
     borderWidth: 2,
-    borderColor: colors.gilt,
   },
   art: {
     width: 116,
