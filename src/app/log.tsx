@@ -3,7 +3,6 @@ import { useNavigation, useRouter } from 'expo-router';
 import { usePreventRemove } from 'expo-router/react-navigation';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  AccessibilityInfo,
   Alert,
   FlatList,
   Keyboard,
@@ -12,7 +11,6 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -20,9 +18,18 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DrinkArt } from '@/components/artwork';
 import { Icon } from '@/components/icons';
-import { Button, CategoryPill, EmptyState, PressableScale, haptic } from '@/components/ui';
+import {
+  announce,
+  Button,
+  CategoryPill,
+  EmptyState,
+  Field,
+  haptic,
+  PressableScale,
+  SearchField,
+} from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
-import { DRINKS, formatCount, TOTAL } from '@/data';
+import { DRINKS, formatCount } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import {
@@ -31,6 +38,7 @@ import {
   pickFromCamera,
   pickFromLibrary,
   reportPost,
+  reportPostPhoto,
   type PickResult,
 } from '@/lib/pour';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
@@ -152,8 +160,12 @@ function DrinkRow({
    * Spoken as a plain number. The Dex prints it padded, "#0042", which
    * VoiceOver reads out zero by zero; the padding is for the eye, and
    * DexCard says it the same way.
+   *
+   * "Collected" is the state's one word: the Dex filter, the profile stat
+   * and the celebration card all use it, and this row said "In your Dex"
+   * for the same thing.
    */
-  const spoken = `${drink.name}, ${drink.subcategory}, number ${drink.dexNumber}${collected ? ', in your Dex' : ''}`;
+  const spoken = `${drink.name}, ${drink.subcategory}, number ${drink.dexNumber}${collected ? ', collected' : ''}`;
   return (
     /* noHaptic: selectDrink gives the selection tick, and two pulses for one tap read as a buzz. */
     <PressableScale
@@ -185,7 +197,7 @@ function DrinkRow({
           <Icon name="check" size={14} color={colors.textOnWine} />
         </View>
       ) : collected ? (
-        <Text style={styles.rowCollected}>In your Dex</Text>
+        <Text style={styles.rowCollected}>Collected</Text>
       ) : (
         <CategoryPill category={drink.category} />
       )}
@@ -203,6 +215,7 @@ export default function LogPourScreen() {
   const unlock = useCollection((s) => s.unlock);
   const unlocks = useCollection((s) => s.unlocks);
   const addPost = useSocial((s) => s.addPost);
+  const addPhotoForDrink = useSocial((s) => s.addPhotoForDrink);
   const myId = useAuth((s) => s.session?.user.id);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -224,11 +237,15 @@ export default function LogPourScreen() {
    * starting a second one. The rows and the button say so up front, where
    * "Save to Dex" used to read as adding.
    *
+   * In the drink card's words, because it is the drink card's act: that
+   * card's Update photo sheet commits with "Save photo", and so does this
+   * button. It behaves the same way too — a post of the entry, if there is
+   * one, takes the new photo, and none is created (see save()).
+   *
    * After the save it is read from what the save was, not from the
    * collection. By then every drink on this sheet is in the Dex, so
-   * re-reading it would flip a new entry's button to "Update photo" under
-   * its celebration, and a re-log's back to "Save to Dex" as the sheet
-   * closes.
+   * re-reading it would flip a new entry's button to "Save photo", and
+   * its hint to a re-log's, under its celebration.
    */
   const relog = drink != null && (saved ? saved === 'relog' : inDex(unlocks, drink.id));
 
@@ -306,6 +323,24 @@ export default function LogPourScreen() {
    */
   const canSave = photoUri != null && drink != null && !saved;
 
+  /*
+   * One line under the buttons, once there is something to save, and only
+   * when a button needs explaining. Signed out, it says why the second
+   * button is dead rather than leaving a disabled control with no reason:
+   * the collection works signed out and only sharing does not. On a
+   * re-log it says where the new photo goes, in the drink card's words
+   * for the same act, since "Save photo" can change a post it does not
+   * name.
+   */
+  const saveHint =
+    photoUri == null || drink == null
+      ? null
+      : !myId
+        ? 'Sign in to post. Saving to your Dex works either way.'
+        : relog
+          ? 'If you shared this entry, the post gets the new photo too.'
+          : null;
+
   const onNoteChange = useCallback((text: string) => {
     setNote(text);
     setNoteError(null);
@@ -330,8 +365,12 @@ export default function LogPourScreen() {
        */
       if (alsoPost && trimmed.length > 0 && containsObjectionable(trimmed)) {
         setNoteError(OBJECTIONABLE_MESSAGE);
-        // The live region under the field is Android-only; iOS is told here.
-        if (Platform.OS === 'ios') AccessibilityInfo.announceForAccessibility(OBJECTIONABLE_MESSAGE);
+        /*
+         * Field speaks an error when it appears. Pressed again with the
+         * same words, the error is already showing and nothing changes, so
+         * the repeat press is answered here instead of in silence.
+         */
+        if (noteError) announce(OBJECTIONABLE_MESSAGE);
         return;
       }
 
@@ -356,9 +395,17 @@ export default function LogPourScreen() {
          * the post that already exists and keeps its caption, which a note
          * only fills if it was blank. No note means no caption, not a
          * filler line — the post already says what was logged.
+         *
+         * A re-log kept off the feed ("Save photo") still keeps a post in
+         * step, as the drink card's Update photo does: a post left showing
+         * the replaced picture is the entry contradicting itself. It never
+         * creates one, so an entry kept to the Dex stays there. Not awaited
+         * either; a failure arrives as a notice, as a post's does.
          */
         if (alsoPost && myId) {
           void addPost(myId, drink.id, trimmed, uri).then(reportPost);
+        } else if (relog && myId) {
+          void addPhotoForDrink(myId, drink.id, uri).then(reportPostPhoto);
         }
 
         haptic.success();
@@ -367,7 +414,7 @@ export default function LogPourScreen() {
         setSavingAs(null);
       }
     },
-    [photoUri, drink, busy, saved, relog, note, unlock, myId, addPost],
+    [photoUri, drink, busy, saved, relog, note, noteError, unlock, myId, addPost, addPhotoForDrink],
   );
 
   useEffect(() => {
@@ -443,21 +490,22 @@ export default function LogPourScreen() {
         )}
       </View>
 
+      {/*
+        The drink card's two labels, Take photo and Choose photo, and one
+        label each in both states: the frame above already shows that a
+        photo has been chosen. "Retake" came up after a library pick too,
+        naming a photo that was never taken; "Choose another" did not fit a
+        half-width button; "Camera roll" was a third name for the library.
+        One app names the two routes once.
+      */}
       <View style={styles.photoActions}>
         <Button
-          label={photoUri ? 'Retake' : 'Take photo'}
+          label="Take photo"
           variant="secondary"
           icon="camera"
           onPress={() => void takePhoto()}
           style={styles.photoAction}
         />
-        {/*
-          One label in both states. "Choose another" did not fit a half-width
-          button and broke onto two lines beside a one-line Retake; the frame
-          above already shows that a photo has been chosen. "Choose photo",
-          not "Camera roll": the drink card offers the same two routes as
-          Take photo and Choose photo, and one app should name them once.
-        */}
         <Button
           label="Choose photo"
           variant="secondary"
@@ -470,30 +518,22 @@ export default function LogPourScreen() {
       {/* ---- What was it ---- */}
       <Text style={styles.sectionTitle}>What was it?</Text>
 
-      <View style={styles.searchWrap}>
-        <Icon name="search" size={17} color={colors.textMuted} />
-        <TextInput
-          value={query}
-          onChangeText={setQuery}
-          placeholder={`Search ${formatCount(TOTAL)} entries`}
-          placeholderTextColor={colors.textMuted}
-          autoCorrect={false}
-          autoCapitalize="none"
-          returnKeyType="search"
-          style={styles.searchInput}
-          accessibilityLabel="Search for the drink you had"
-        />
-        {query.length > 0 ? (
-          <PressableScale
-            onPress={() => setQuery('')}
-            noHaptic
-            accessibilityRole="button"
-            accessibilityLabel="Clear search"
-            hitSlop={10}>
-            <Icon name="close" size={16} color={colors.textMuted} />
-          </PressableScale>
-        ) : null}
-      </View>
+      {/*
+        The app's one search field, so it is the Dex's field and not a
+        near-miss of it. It searches the same three fields as the Dex, name,
+        style and origin, so it takes the same placeholder: it names how to
+        search rather than how much, which is the help this screen exists
+        for. Someone at a bar who never heard the drink's name can still
+        type "tiki" or "mexico".
+        The entry count it replaces said only how big the index was.
+      */}
+      <SearchField
+        value={query}
+        onChangeText={setQuery}
+        placeholder="Name, style or country"
+        accessibilityLabel="Search for the drink you had, by name, style or country"
+        style={styles.search}
+      />
 
       {/*
         The choice stays in view whatever is typed next. It used to show only
@@ -565,12 +605,22 @@ export default function LogPourScreen() {
           />
         )}
         ListHeaderComponent={header}
+        /*
+          The Dex's empty search, in the Dex's words: the same field, so the
+          same miss reads the same way, with the same way out. It keeps
+          examples the Dex does not print, because this screen is where
+          someone has a drink and no name for it, and "tiki", "amaro" and
+          "mexico" each find dozens. "Style or country" is the placeholder's
+          pair; a region such as "oaxaca" matches too, but a third word for
+          the one field would undo the placeholder's.
+        */
         ListEmptyComponent={
           query.trim().length > 0 ? (
             <EmptyState
               icon="search"
-              title="Nothing by that name"
-              body="Try the style or the place instead — “tiki”, “amaro”, “oaxaca” all work."
+              title={`No match for “${query.trim()}”`}
+              body="Check the spelling, or search by style or country: “tiki”, “amaro” and “mexico” all work."
+              action={{ label: 'Clear search', onPress: () => setQuery('') }}
             />
           ) : null
         }
@@ -590,28 +640,27 @@ export default function LogPourScreen() {
       {/* ---- Save ---- */}
       <View style={[styles.saveBar, { paddingBottom: insets.bottom + space.md }]}>
         {/*
-          A visible label, not only a placeholder: the placeholder is gone
-          the moment anything is typed, and with it the only sign that the
-          note is optional and becomes the caption when posted. The same
-          strings as the drink card's sheet.
+          The app's one form input, with the same label, prompt, cap and
+          props as the note on the drink card's sheet, so the one note is
+          asked for one way from both doors. A visible label, not only a
+          placeholder: the placeholder is gone the moment anything is
+          typed, and with it the only sign that the note is optional. Field
+          links a refused caption to the input and speaks it when it
+          appears, which the hand-built box here did with a call of its own.
+          Prose, so capitals and autocorrect are on.
         */}
-        <View>
-          <Text style={styles.fieldLabel}>Note (optional)</Text>
-          <TextInput
-            value={note}
-            onChangeText={onNoteChange}
-            placeholder="Where you had it, what you thought"
-            placeholderTextColor={colors.textMuted}
-            maxLength={NOTE_MAX}
-            style={styles.noteInput}
-            accessibilityLabel="Note, optional"
-          />
-          {noteError ? (
-            <Text style={styles.fieldError} accessibilityLiveRegion="polite">
-              {noteError}
-            </Text>
-          ) : null}
-        </View>
+        <Field
+          label="Note (optional)"
+          value={note}
+          onChangeText={onNoteChange}
+          placeholder="Where you had it, what you thought"
+          maxLength={NOTE_MAX}
+          autoCapitalize="sentences"
+          autoCorrect
+          returnKeyType="done"
+          error={noteError}
+          accessibilityLabel="Note, optional"
+        />
         {/*
           The same pair, in the same order, as the sheet on a Dex card.
           Only the pressed one shows it is working. The other keeps its
@@ -621,7 +670,7 @@ export default function LogPourScreen() {
         */}
         <View style={styles.saveRow}>
           <Button
-            label={relog ? 'Update photo' : 'Save to Dex'}
+            label={relog ? 'Save photo' : 'Save to Dex'}
             variant="secondary"
             onPress={() => void save(false)}
             disabled={!canSave}
@@ -638,14 +687,7 @@ export default function LogPourScreen() {
             style={styles.saveBtn}
           />
         </View>
-        {/*
-          Says why the second button is dead rather than leaving a disabled
-          control with no explanation — the collection works signed out and
-          only sharing does not.
-        */}
-        {!myId && photoUri && drink ? (
-          <Text style={styles.saveHint}>Sign in to post. Saving to your Dex works either way.</Text>
-        ) : null}
+        {saveHint ? <Text style={styles.saveHint}>{saveHint}</Text> : null}
       </View>
 
       {/*
@@ -739,29 +781,7 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
 
-  searchWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.pill,
-    paddingHorizontal: space.md,
-    /* The Dex search's size, so the app's search fields are one field,
-       not four near-misses. 44 is the tap minimum; it is a minimum, so
-       Larger Text grows the field instead of clipping the query. */
-    minHeight: 44,
-    marginBottom: space.md,
-  },
-  searchInput: {
-    flex: 1,
-    alignSelf: 'stretch',
-    fontFamily: fonts.body,
-    /* 16 (body) so a mobile browser does not zoom the page on focus. */
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
+  search: { marginBottom: space.md },
 
   /* Result row */
   row: {
@@ -832,31 +852,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.cardBorder,
     backgroundColor: colors.surface,
-  },
-  fieldLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    marginBottom: space.xs,
-  },
-  noteInput: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-    backgroundColor: colors.bg,
-    borderRadius: radius.md,
-    paddingHorizontal: space.lg,
-    /* A minimum with its own padding, so Larger Text grows the field. */
-    paddingVertical: space.sm,
-    minHeight: 46,
-  },
-  fieldError: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.danger,
-    marginTop: space.xs,
   },
   saveRow: { flexDirection: 'row', gap: space.md },
   saveBtn: { flex: 1 },

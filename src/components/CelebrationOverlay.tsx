@@ -303,8 +303,7 @@ const styles = StyleSheet.create({
 
   eyebrow: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 11,
-    letterSpacing: 0.2,
+    ...typeScale.tag,
     color: colors.textMuted,
     marginBottom: space.lg,
   },

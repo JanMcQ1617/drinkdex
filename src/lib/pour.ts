@@ -17,7 +17,9 @@ import { showNotice } from '@/utils/alerts';
 /* from one entry point and vanish from the other.                      */
 /*                                                                      */
 /* The pickers and stripMetadata also serve the profile picture, so the */
-/* words they return must not assume a drink.                           */
+/* words they return must not assume a drink. reportPost and            */
+/* reportPostPhoto are the pour's alone, worded for either way of       */
+/* logging.                                                             */
 /* ==================================================================== */
 
 /*
@@ -260,4 +262,27 @@ export function reportPost(outcome: PostOutcome): void {
       'Your pour is saved in your Dex. To try again, open the drink, use Update photo and choose Save & post.',
     );
   }
+}
+
+/**
+ * Says so when a new photo did not reach the post it was meant to follow.
+ *
+ * "Save photo" on an entry already collected keeps a post of it in step
+ * and never creates one (the social store's addPhotoForDrink), and there
+ * are two ways to press it: a Dex card's Update photo, and re-logging the
+ * drink from the centre tab. `kept` is addPhotoForDrink's answer — true
+ * when the post has the photo or there was no post to follow — so this
+ * cannot claim a post exists, and says "if", as the sheet does.
+ *
+ * Beside reportPost so that one failure can have one wording from either
+ * door. It names the way back as "open the drink" rather than assuming the
+ * reader is on it: from the centre tab the sheet is gone by the time the
+ * answer lands, and from a Dex card the sheet has closed as well.
+ */
+export function reportPostPhoto(kept: boolean): void {
+  if (kept) return;
+  showNotice(
+    'Post not updated',
+    'Your Dex has the new photo. If you shared this entry, the post still shows the old one. To try again, open the drink and use Update photo.',
+  );
 }
