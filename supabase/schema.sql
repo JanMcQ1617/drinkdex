@@ -1042,7 +1042,7 @@ drop policy if exists profiles_update_own on public.profiles;
 
 create policy profiles_read on public.profiles
   for select to authenticated
-  using (not (id = any ((select private.my_block_set()))));
+  using (not (id = any ((select private.my_block_set())::uuid[])));
 
 create policy profiles_insert_own on public.profiles
   for insert to authenticated with check (auth.uid() = id);
@@ -1078,7 +1078,7 @@ drop policy if exists posts_delete_own on public.posts;
 
 create policy posts_read on public.posts
   for select to authenticated
-  using (not (author_id = any ((select private.my_block_set()))));
+  using (not (author_id = any ((select private.my_block_set())::uuid[])));
 
 create policy posts_insert_own on public.posts
   for insert to authenticated with check (auth.uid() = author_id);
@@ -1119,7 +1119,7 @@ drop policy if exists likes_delete_own on public.likes;
 
 create policy likes_read on public.likes
   for select to authenticated
-  using (not (user_id = any ((select private.my_block_set()))));
+  using (not (user_id = any ((select private.my_block_set())::uuid[])));
 
 create policy likes_insert_own on public.likes
   for insert to authenticated
@@ -1207,7 +1207,7 @@ create policy pours_read on storage.objects
   for select to authenticated
   using (
     bucket_id = 'pours'
-    and not (coalesce((storage.foldername(name))[1], '') = any ((select private.my_block_set()::text[])))
+    and not (coalesce((storage.foldername(name))[1], '') = any ((select private.my_block_set())::text[]))
   );
 
 create policy pours_insert_own on storage.objects

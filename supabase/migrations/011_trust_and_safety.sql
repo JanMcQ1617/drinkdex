@@ -840,6 +840,13 @@ create trigger profiles_reject_objectionable
 -- the caller's blocked-either-way ids once; wrapped in (select ...) it
 -- becomes an InitPlan the planner evaluates a single time per query.
 --
+-- The cast OUTSIDE the parentheses is load-bearing:
+-- `x = any ((select f())::uuid[])`. Written `x = any ((select f()))`,
+-- Postgres reads the doubled parentheses as a subquery, not as an array
+-- expression, compares x to each ROW (a whole uuid[]) and fails with
+-- "operator does not exist: uuid = uuid[]" — which is exactly how the
+-- first run of this file failed on the live project, 30 Sep 2026.
+--
 -- The coalesce to an empty array is not optional. array_agg over no rows
 -- is NULL, `x = any(NULL)` is NULL, and `not NULL` is NULL, which a policy
 -- reads as false: without it, everyone with no blocks would see nothing.
@@ -875,12 +882,12 @@ grant execute on function private.my_block_set() to authenticated;
 drop policy if exists posts_read on public.posts;
 create policy posts_read on public.posts
   for select to authenticated
-  using (not (author_id = any ((select private.my_block_set()))));
+  using (not (author_id = any ((select private.my_block_set())::uuid[])));
 
 drop policy if exists profiles_read on public.profiles;
 create policy profiles_read on public.profiles
   for select to authenticated
-  using (not (id = any ((select private.my_block_set()))));
+  using (not (id = any ((select private.my_block_set())::uuid[])));
 
 -- An edge disappears if either end is someone you are blocked with, so
 -- follower counts and lists stop reporting on them in both directions.
@@ -897,7 +904,7 @@ create policy follows_insert_own on public.follows
 drop policy if exists likes_read on public.likes;
 create policy likes_read on public.likes
   for select to authenticated
-  using (not (user_id = any ((select private.my_block_set()))));
+  using (not (user_id = any ((select private.my_block_set())::uuid[])));
 
 -- The subquery runs under posts_read, so a post hidden by a block cannot
 -- be liked even by someone who kept its id.
@@ -921,7 +928,7 @@ create policy pours_read on storage.objects
   for select to authenticated
   using (
     bucket_id = 'pours'
-    and not (coalesce((storage.foldername(name))[1], '') = any ((select private.my_block_set()::text[])))
+    and not (coalesce((storage.foldername(name))[1], '') = any ((select private.my_block_set())::text[]))
   );
 
 
