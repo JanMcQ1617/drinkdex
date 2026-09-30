@@ -2,7 +2,6 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
-  AccessibilityInfo,
   Alert,
   KeyboardAvoidingView,
   Linking,
@@ -11,7 +10,6 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -32,11 +30,13 @@ import { FoilSweep } from '@/components/DexCard';
 import { GlassCircle } from '@/components/glass';
 import { Icon } from '@/components/icons';
 import {
+  announce,
   Button,
   Card,
   CategoryPill,
   Divider,
   EmptyState,
+  Field,
   haptic,
   PressableScale,
   RarityBadge,
@@ -62,6 +62,7 @@ import {
   pickFromCamera,
   pickFromLibrary,
   reportPost,
+  reportPostPhoto,
   type PickResult,
 } from '@/lib/pour';
 import { useAuth } from '@/store/auth';
@@ -448,8 +449,12 @@ export default function DrinkDetailScreen() {
        */
       if (alsoPost && trimmed.length > 0 && containsObjectionable(trimmed)) {
         setNoteError(OBJECTIONABLE_MESSAGE);
-        // The live region under the field is Android-only; iOS is told here.
-        if (Platform.OS === 'ios') AccessibilityInfo.announceForAccessibility(OBJECTIONABLE_MESSAGE);
+        /*
+         * Field speaks an error when it appears. Pressed again with the
+         * same words, the error is already showing and nothing changes, so
+         * the repeat press is answered here instead of in silence.
+         */
+        if (noteError) announce(OBJECTIONABLE_MESSAGE);
         return;
       }
 
@@ -462,29 +467,30 @@ export default function DrinkDetailScreen() {
            * A post has to follow the collection, or it keeps showing the
            * picture just replaced. Both paths ADD rather than replace:
            * several photos of one drink taken weeks apart are the same entry
-           * photographed twice, and the newest becomes the preview. Neither
-           * is awaited, for the same reason as the log path below; a failure
-           * is said once it is known.
+           * photographed twice, and the newest becomes the preview. "Save
+           * photo" only ever adds to a post that exists; with none it writes
+           * nothing, so an entry kept to the Dex stays there. Neither is
+           * awaited, for the same reason as the log path below.
            *
-           * The caption is empty because this sheet has no note field: an
+           * The caption is empty because Update photo has no note field: an
            * existing post keeps the words it was first shared with, and a
-           * new one says nothing rather than a filler line.
+           * new one says nothing rather than a filler line. The note saved
+           * with the entry is not sent either. A post the server refused
+           * for its note is retried from here, and reportPost promises that
+           * retry goes out without the note; sending it again would be
+           * refused again.
            *
+           * A failure is said once it is known, by lib/pour's reporters —
+           * the centre-tab log screen's, so the same failure reads the same
+           * from either door. reportPostPhoto cannot claim a post exists:
            * addPhotoForDrink answers false both when the upload failed and
-           * when the lookup for a post did not go through, so its notice
-           * cannot claim a post exists. It says "if", as the sheet does.
+           * when the lookup for a post did not go through, so it says "if",
+           * as the sheet does.
            */
           if (myId && alsoPost) {
             void addPost(myId, drink.id, '', uri).then(reportPost);
           } else if (myId) {
-            void addPhotoForDrink(myId, drink.id, uri).then((kept) => {
-              if (!kept) {
-                showNotice(
-                  'Post not updated',
-                  'Your Dex has the new photo. If you shared this entry, the post still shows the old one. Use Update photo to try again.'
-                );
-              }
-            });
+            void addPhotoForDrink(myId, drink.id, uri).then(reportPostPhoto);
           }
           closeModal();
         } else {
@@ -524,6 +530,7 @@ export default function DrinkDetailScreen() {
       drink,
       myId,
       note,
+      noteError,
       pickedUri,
       pickerMode,
       saving,
@@ -848,7 +855,7 @@ export default function DrinkDetailScreen() {
               />
               <Button
                 label="Remove from collection"
-                variant="danger"
+                variant="dangerText"
                 block
                 onPress={handleRemove}
                 accessibilityLabel={`Remove ${drink.name} from collection`}
@@ -933,25 +940,30 @@ export default function DrinkDetailScreen() {
                       contentFit="cover"
                       accessibilityLabel="Photo preview"
                     />
+                    {/*
+                      Field, the app's one form input, so the note is drawn,
+                      labelled and announced like every other field, and like
+                      the note on the centre-tab log screen. The hand-built box it
+                      replaces had a cardBorder edge at 1.21:1, close to
+                      invisible to anyone with low vision. Field links a
+                      refused caption to the input and speaks it when it
+                      appears; handleConfirm speaks it again on a repeat press,
+                      when nothing on screen changes. Prose, so capitals and
+                      autocorrect are on.
+                    */}
                     {pickerMode === 'unlock' ? (
-                      <>
-                        <Text style={styles.fieldLabel}>Note (optional)</Text>
-                        <TextInput
-                          value={note}
-                          onChangeText={onNoteChange}
-                          placeholder="Where you had it, what you thought"
-                          placeholderTextColor={colors.textMuted}
-                          maxLength={NOTE_MAX}
-                          style={styles.noteInput}
-                          returnKeyType="done"
-                          accessibilityLabel="Note, optional"
-                        />
-                        {noteError ? (
-                          <Text style={styles.fieldError} accessibilityLiveRegion="polite">
-                            {noteError}
-                          </Text>
-                        ) : null}
-                      </>
+                      <Field
+                        label="Note (optional)"
+                        value={note}
+                        onChangeText={onNoteChange}
+                        placeholder="Where you had it, what you thought"
+                        maxLength={NOTE_MAX}
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        returnKeyType="done"
+                        error={noteError}
+                        accessibilityLabel="Note, optional"
+                      />
                     ) : null}
 
                     {/*
@@ -1396,14 +1408,13 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     /*
-     * The destructive skin's ink without its wash and outline. Red text is
-     * the iOS signal for an action that deletes; the ghost grey it used to
-     * be looked like a harmless link, and a filled red pill under "Update
-     * photo" would outweigh the action people come here for.
+     * Spacing only; the look is Button's `dangerText` skin — red text, no
+     * fill, no edge. Red text is the iOS signal for an action that deletes;
+     * the ghost grey it used to be looked like a harmless link, and a filled
+     * red pill under "Update photo" would outweigh the action people come
+     * here for.
      */
     marginTop: space.xs,
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
   },
 
   /* Modal sheet */
@@ -1486,32 +1497,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.cardBorder,
     marginBottom: space.md,
-  },
-  fieldLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    marginBottom: space.xs,
-  },
-  noteInput: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.md,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.md,
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-    minHeight: 48,
-  },
-  /* The refused note's one signal: this line, directly under the field. */
-  fieldError: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.danger,
-    marginTop: space.xs,
   },
 });
