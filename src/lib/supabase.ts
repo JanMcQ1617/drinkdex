@@ -23,8 +23,10 @@ export const supabase = createClient<Database>(url, key, {
     storage: AsyncStorage,
     autoRefreshToken: true,
     persistSession: true,
-    // No deep-link callback flow in this app, and on web this would try to
-    // read a session out of the address bar.
+    // Off on purpose. The one link that carries a session, a password reset,
+    // is read by hand (lib/recovery) so it can be checked against the reset
+    // this phone asked for before it replaces anyone's session. On web this
+    // would also try to read a session out of the address bar.
     detectSessionInUrl: false,
   },
   global: {

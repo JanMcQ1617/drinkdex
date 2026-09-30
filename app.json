@@ -14,7 +14,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#FFFDF9",
+    "backgroundColor": "#F7F2EA",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
       "buildNumber": "9",
@@ -102,14 +102,14 @@
       [
         "expo-contacts",
         {
-          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Your contacts are never uploaded — only one-way hashes are compared."
+          "contactsPermission": "Sipply matches your contacts against people already on Sipply so you can follow friends you already know. Numbers are scrambled on your phone before they are compared; your address book is never uploaded."
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "Sipply attaches a photo to the drink you are logging. Nothing is read from your library unless you pick it.",
-          "cameraPermission": "Sipply uses the camera to photograph the drink you are logging.",
+          "photosPermission": "Sipply attaches a photo you pick to a drink you log, or uses it as your profile picture. Nothing is read from your library unless you pick it.",
+          "cameraPermission": "Sipply uses the camera to photograph a drink you are logging, or to take your profile picture.",
           "microphonePermission": false
         }
       ],

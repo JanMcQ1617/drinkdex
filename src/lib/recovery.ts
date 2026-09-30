@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 
 /* ==================================================================== */
@@ -24,10 +25,22 @@ import * as Linking from 'expo-linking';
 /*     so nothing picks these tokens up on its own. beginRecovery in    */
 /*     the auth store hands them to setSession explicitly.              */
 /*                                                                      */
-/* NOT switched to PKCE to get a tidier `?code=`. flowType is a         */
-/* client-wide setting, so changing it would also change how signup     */
-/* confirmation resolves — a much wider blast radius than one screen    */
-/* is worth. Implicit is what this client already does everywhere else. */
+/* WHAT IMPLICIT FLOW COSTS, AND HOW IT IS PAID FOR. A link like the one */
+/* above carries a live session, and anyone can build one out of their  */
+/* OWN tokens. Handed to setSession blindly, a crafted link would sign   */
+/* whoever tapped it into the crafter's account and invite them to set   */
+/* its password — a login swap the victim would not notice, while their  */
+/* pours and photos went to the wrong account. So a link is honoured     */
+/* only when the account inside it is the one this phone asked to reset, */
+/* within the hour the link lives (see checkResetRequest below), and     */
+/* never when it would replace a different signed-in account.           */
+/*                                                                      */
+/* NOT switched to PKCE, which would bind the link to this device by     */
+/* construction. flowType is a client-wide setting, so changing it also  */
+/* changes how signup confirmation resolves, and that path has not been  */
+/* tested on a real build. The request check above gives the same        */
+/* guarantee for the one flow that needs it; PKCE stays the better       */
+/* long-term answer once signup confirmation has been verified with it.  */
 /* ==================================================================== */
 
 /** Where GoTrue is told to send the user back to. Must be allowlisted in
@@ -49,6 +62,12 @@ export type RecoveryLink =
  * because react-native-url-polyfill is imported for Supabase's benefit, and
  * depending on another module's import side effect for correctness is the
  * kind of coupling that breaks silently when imports get reordered.
+ *
+ * A pair that will not decode is skipped, never thrown. This runs on EVERY
+ * incoming URL, from a synchronous Linking listener, and decodeURIComponent
+ * throws on a valid escape that is not UTF-8 (`?a=%FF`). A throw there is a
+ * fatal error in a release build, so any web page could have closed the
+ * app with one crafted link.
  */
 function parsePairs(raw: string): Record<string, string> {
   const out: Record<string, string> = {};
@@ -56,10 +75,16 @@ function parsePairs(raw: string): Record<string, string> {
     if (!part) continue;
     const eq = part.indexOf('=');
     if (eq < 0) continue;
-    const key = decodeURIComponent(part.slice(0, eq));
-    // '+' is a space in form encoding; decodeURIComponent leaves it alone,
-    // which is what turned "Email link is invalid" into "Email+link+is+invalid".
-    const value = decodeURIComponent(part.slice(eq + 1).replace(/\+/g, ' '));
+    let key: string;
+    let value: string;
+    try {
+      key = decodeURIComponent(part.slice(0, eq));
+      // '+' is a space in form encoding; decodeURIComponent leaves it alone,
+      // which is what turned "Email link is invalid" into "Email+link+is+invalid".
+      value = decodeURIComponent(part.slice(eq + 1).replace(/\+/g, ' '));
+    } catch {
+      continue;
+    }
     if (key) out[key] = value;
   }
   return out;
@@ -78,8 +103,9 @@ export function parseRecoveryUrl(url: string): RecoveryLink | null {
   if (!url) return null;
 
   const hash = url.indexOf('#');
+  const query = url.indexOf('?');
   const fields = {
-    ...parsePairs(url.slice(url.indexOf('?'))),
+    ...(query >= 0 ? parsePairs(url.slice(query, hash > query ? hash : undefined)) : {}),
     ...(hash >= 0 ? parsePairs(url.slice(hash)) : {}),
   };
 
@@ -123,4 +149,148 @@ export function parseRecoveryUrl(url: string): RecoveryLink | null {
   }
 
   return { kind: 'tokens', accessToken, refreshToken };
+}
+
+/* ==================================================================== */
+/* Whose link is it                                                     */
+/* ==================================================================== */
+
+const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+/** base64url to a UTF-8 string, or null. Hand-rolled for the same reason as
+ *  parsePairs: atob and TextDecoder depend on which Hermes build shipped. */
+function base64UrlToText(input: string): string | null {
+  let bits = 0;
+  let value = 0;
+  let escaped = '';
+  for (const ch of input.replace(/-/g, '+').replace(/_/g, '/')) {
+    if (ch === '=') break;
+    const digit = B64.indexOf(ch);
+    if (digit < 0) return null;
+    value = ((value << 6) | digit) & 0xffff;
+    bits += 6;
+    if (bits >= 8) {
+      bits -= 8;
+      escaped += '%' + ((value >> bits) & 0xff).toString(16).padStart(2, '0');
+    }
+  }
+  try {
+    return decodeURIComponent(escaped);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The account a recovery link would sign in as, read from its access token.
+ *
+ * UNVERIFIED, and that is fine for what it is used for: it only decides
+ * whether to call setSession at all. setSession is what checks the
+ * signature, so a token forged to name the right account still fails there.
+ */
+export function readTokenAccount(accessToken: string): { id: string; email: string | null } | null {
+  const payload = accessToken.split('.')[1];
+  if (!payload) return null;
+  const text = base64UrlToText(payload);
+  if (!text) return null;
+  try {
+    const claims = JSON.parse(text) as { sub?: unknown; email?: unknown };
+    if (typeof claims.sub !== 'string') return null;
+    return {
+      id: claims.sub,
+      email: typeof claims.email === 'string' ? claims.email.trim().toLowerCase() : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/*
+ * The reset this phone asked for. Written when the request succeeds and
+ * read before a link is honoured, which is what ties a link to the person
+ * holding the phone: the only way to get a real token for that address is
+ * to open that address's mail.
+ *
+ * The window matches GoTrue's default one-hour link, plus five minutes for
+ * mail delay and clock skew. A failed write means the link is refused and
+ * the user asks again, which is the safe way for it to fail.
+ */
+const REQUEST_KEY = 'sipply-reset-request';
+const REQUEST_WINDOW_MS = 65 * 60 * 1000;
+
+export async function rememberResetRequest(email: string): Promise<void> {
+  try {
+    await AsyncStorage.setItem(
+      REQUEST_KEY,
+      JSON.stringify({ email: email.trim().toLowerCase(), at: Date.now() }),
+    );
+  } catch {
+    /* See above: the link will be refused and can be requested again. */
+  }
+}
+
+export async function forgetResetRequest(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(REQUEST_KEY);
+  } catch {
+    /* Expires on its own within the hour. */
+  }
+}
+
+/**
+ * 'ok' when this phone asked to reset `email` within the link's lifetime.
+ * 'expired' when it did, but too long ago. 'not-requested' otherwise,
+ * including a link for a different address than the one asked about.
+ */
+export async function checkResetRequest(
+  email: string | null,
+): Promise<'ok' | 'expired' | 'not-requested'> {
+  let record: { email?: unknown; at?: unknown } | null = null;
+  try {
+    const raw = await AsyncStorage.getItem(REQUEST_KEY);
+    record = raw ? (JSON.parse(raw) as { email?: unknown; at?: unknown }) : null;
+  } catch {
+    record = null;
+  }
+  if (!record || typeof record.email !== 'string' || typeof record.at !== 'number') {
+    return 'not-requested';
+  }
+  if (!email || email !== record.email) return 'not-requested';
+  return Date.now() - record.at > REQUEST_WINDOW_MS ? 'expired' : 'ok';
+}
+
+/*
+ * Which account is part-way through a reset, persisted.
+ *
+ * A recovery link signs the user in, and supabase-js persists that session
+ * on its own. The "choose a new password" step lived only in memory, so
+ * swiping the app away on that screen and reopening it left the user
+ * signed in with no overlay and the forgotten password still in force.
+ * Keyed by user id so it can only ever re-open the step for the account
+ * whose session it came with.
+ */
+const RECOVERING_KEY = 'sipply-recovering';
+
+export async function markRecovering(userId: string): Promise<void> {
+  try {
+    await AsyncStorage.setItem(RECOVERING_KEY, userId);
+  } catch {
+    /* The overlay is up for this launch either way. */
+  }
+}
+
+export async function recoveringUserId(): Promise<string | null> {
+  try {
+    return await AsyncStorage.getItem(RECOVERING_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export async function clearRecovering(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(RECOVERING_KEY);
+  } catch {
+    /* A stale flag only matches its own account, and signIn clears it. */
+  }
 }

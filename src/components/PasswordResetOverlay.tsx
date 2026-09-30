@@ -1,18 +1,20 @@
 import * as Linking from 'expo-linking';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import {
+  AccessibilityInfo,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Field } from '@/components/AuthGate';
+import { AuthMessage, Field } from '@/components/AuthGate';
 import { Icon } from '@/components/icons';
-import { Button, PressableScale, haptic } from '@/components/ui';
+import { Button, PressableScale } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { parseRecoveryUrl } from '@/lib/recovery';
 import { useAuth } from '@/store/auth';
@@ -30,13 +32,31 @@ import { useAuth } from '@/store/auth';
 /* gets back in. So by the time this needs to be on screen, AuthGate has */
 /* already swapped the sign-in form for the app itself. There is no      */
 /* signed-out surface left to host it. It is mounted at the root beside  */
-/* the intro, above the whole navigator.                                */
+/* the intro, above the whole navigator. The router itself is kept off   */
+/* the reset link by app/+native-intent.                                */
 /*                                                                      */
 /* It is deliberately not dismissible by gesture. Backing out is an      */
 /* explicit "Cancel", which signs back out — leaving someone silently    */
 /* signed in off a mailed link, with a password they do not know, is the */
-/* one outcome worth designing against.                                 */
+/* one outcome worth designing against. That holds for VoiceOver too:    */
+/* both steps are accessibilityViewIsModal, so the app underneath is not */
+/* in the swipe order, and focus starts on the step's title.             */
 /* ==================================================================== */
+
+/**
+ * Hands VoiceOver focus to `ref` once the step has laid out. Without it
+ * focus stayed wherever it was in the app underneath, which is now hidden.
+ * A short delay rather than the first frame: the overlay mounts in the same
+ * commit that changed the screen, and focus sent before layout is dropped.
+ */
+function useInitialFocus(ref: RefObject<Text | null>) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (ref.current) AccessibilityInfo.sendAccessibilityEvent(ref.current, 'focus');
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [ref]);
+}
 
 export function PasswordResetOverlay() {
   const recovering = useAuth((s) => s.recovering);
@@ -58,17 +78,25 @@ export function PasswordResetOverlay() {
    * tapped while the app is closed arrives through getInitialURL and never
    * fires the listener. Every incoming URL reaches both handlers; each
    * returns null for the other's links rather than treating them as junk.
+   *
+   * The body is guarded. `handle` runs synchronously inside a native
+   * Linking listener, where anything thrown is a fatal error in a release
+   * build, and it sees every URL any web page or message can open.
    */
   useEffect(() => {
     let active = true;
 
     const handle = (url: string | null) => {
       if (!url || !active) return;
-      const link = parseRecoveryUrl(url);
-      if (!link) return;
+      try {
+        const link = parseRecoveryUrl(url);
+        if (!link) return;
 
-      if (link.kind === 'error') failRecovery(link.message);
-      else void beginRecovery(link.accessToken, link.refreshToken);
+        if (link.kind === 'error') failRecovery(link.message);
+        else void beginRecovery(link.accessToken, link.refreshToken);
+      } catch {
+        /* Not a link this app can use; ignoring it is the whole answer. */
+      }
     };
 
     void Linking.getInitialURL().then(handle);
@@ -91,14 +119,20 @@ export function PasswordResetOverlay() {
 
 function Confirmation({ onDismiss }: { onDismiss: () => void }) {
   const insets = useSafeAreaInsets();
+  const titleRef = useRef<Text>(null);
+  useInitialFocus(titleRef);
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+    <View
+      style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
+      accessibilityViewIsModal>
       <View style={styles.doneWrap}>
         <View style={styles.doneMark}>
           <Icon name="check" size={22} color={colors.textOnWine} />
         </View>
-        <Text style={styles.title}>Password changed</Text>
+        <Text ref={titleRef} style={styles.title} accessibilityRole="header">
+          Password changed
+        </Text>
         <Text style={[styles.blurb, styles.blurbCentred]}>
           You are signed in on this phone. The old password no longer works anywhere.
         </Text>
@@ -117,21 +151,43 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
 
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  /*
+   * Cancel keeps this step on screen until the sign-out has gone through
+   * (see cancelRecovery). The store's `busy` covers that wait too, so this
+   * is what tells the two apart: without it the button would say "Setting
+   * password…" while the user was leaving without setting one.
+   */
+  const [leaving, setLeaving] = useState(false);
+
+  const titleRef = useRef<Text>(null);
+  const confirmRef = useRef<TextInput>(null);
+  useInitialFocus(titleRef);
 
   const longEnough = password.length >= 6;
   const typedConfirm = confirm.length > 0;
   const matches = password === confirm;
-  const canSubmit = longEnough && typedConfirm && matches && !busy;
+  const canSubmit = longEnough && typedConfirm && matches && !leaving;
 
-  const submit = useCallback(async () => {
-    haptic.tap();
+  /*
+   * No haptic here: Button's press-in already ticks. Guarded because the
+   * keyboard's return key reaches this too.
+   */
+  const submit = async () => {
+    if (!canSubmit || busy) return;
     if (await completePasswordReset(password)) onDone();
-  }, [completePasswordReset, password, onDone]);
+  };
+
+  const cancel = () => {
+    if (leaving || busy) return;
+    setLeaving(true);
+    void cancelRecovery();
+  };
 
   return (
     <KeyboardAvoidingView
       style={styles.root}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      accessibilityViewIsModal>
       <ScrollView
         contentContainerStyle={[
           styles.scroll,
@@ -139,7 +195,9 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
         ]}
         keyboardShouldPersistTaps="handled">
         <Text style={styles.wordmark}>Sipply</Text>
-        <Text style={styles.title}>Choose a new password</Text>
+        <Text ref={titleRef} style={styles.title} accessibilityRole="header">
+          Choose a new password
+        </Text>
         <Text style={styles.blurb}>
           You opened a reset link, so you are already signed in. Pick a password and it is done.
         </Text>
@@ -153,6 +211,9 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
             secure
             autoComplete="password-new"
             textContentType="newPassword"
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => confirmRef.current?.focus()}
             hintIsError={password.length > 0 && !longEnough}
             hint={
               password.length > 0 && !longEnough
@@ -161,6 +222,7 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
             }
           />
           <Field
+            ref={confirmRef}
             label="Confirm password"
             value={confirm}
             onChangeText={setConfirm}
@@ -170,32 +232,33 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
                this field is how a mismatched pair gets saved to the keychain. */
             autoComplete="off"
             textContentType="newPassword"
+            returnKeyType="go"
+            submitBehavior="blurAndSubmit"
+            onSubmitEditing={() => void submit()}
             hintIsError={typedConfirm && !matches}
             hint={typedConfirm && !matches ? 'These do not match.' : undefined}
           />
 
-          {error ? (
-            <View style={styles.errorBox} accessibilityLiveRegion="polite">
-              <Icon name="close" size={16} color={colors.danger} />
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
+          {error ? <AuthMessage tone="error">{error}</AuthMessage> : null}
 
           <Button
-            label={busy ? 'Just a moment…' : 'Set password'}
+            label={busy && !leaving ? 'Setting password…' : 'Set password'}
             onPress={() => void submit()}
             disabled={!canSubmit}
+            loading={busy && !leaving}
             block
             style={styles.submit}
           />
 
           <PressableScale
-            onPress={() => void cancelRecovery()}
+            onPress={cancel}
+            disabled={leaving}
             noHaptic
             accessibilityRole="button"
+            accessibilityState={{ disabled: leaving, busy: leaving }}
             accessibilityHint="Signs you back out without changing your password"
             style={styles.cancel}>
-            <Text style={styles.cancelText}>Cancel and sign out</Text>
+            <Text style={styles.cancelText}>{leaving ? 'Signing out…' : 'Cancel and sign out'}</Text>
           </PressableScale>
         </View>
       </ScrollView>
@@ -247,24 +310,13 @@ const styles = StyleSheet.create({
   form: { gap: space.lg },
   submit: { marginTop: space.sm },
 
-  errorBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    backgroundColor: colors.dangerWash,
-    borderRadius: radius.md,
+  cancel: {
+    alignSelf: 'center',
+    minHeight: 44,
+    justifyContent: 'center',
     paddingVertical: space.md,
     paddingHorizontal: space.lg,
   },
-  errorText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.danger,
-  },
-
-  cancel: { alignSelf: 'center', paddingVertical: space.md, paddingHorizontal: space.lg },
   cancelText: {
     fontFamily: fonts.bodyMedium,
     fontSize: typeScale.caption.fontSize,
