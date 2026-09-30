@@ -59,14 +59,21 @@ export type BlockRow = {
 };
 
 /**
- * A report names EITHER a post or a person, never both — the
- * report_has_one_subject check in migration 006 enforces it server-side.
+ * A report names EITHER a post or a person, never both. Exactly one subject
+ * is enforced when the report is filed (prepare_report trigger, migration
+ * 012). A report outlives its reporter, post and subject: each column is set
+ * to null on deletion, and reported_author_id plus snapshot keep what a
+ * moderator needs.
  */
 export type ReportRow = {
   id: string;
-  reporter_id: string;
+  reporter_id: string | null;
   reported_post_id: string | null;
   reported_user_id: string | null;
+  /** Who wrote the reported post, or the reported person. No foreign key, so it survives them. */
+  reported_author_id: string | null;
+  /** The post's caption and drink, and the author's name and bio, as they stood when it was filed. */
+  snapshot: { [key: string]: unknown } | null;
   reason: string;
   note: string | null;
   created_at: string;
@@ -93,13 +100,33 @@ export type LikeRow = {
   created_at: string;
 };
 
+/**
+ * An invite link's token (migration 011).
+ *
+ * The link carries this random token rather than the inviter's user id, so
+ * a link cannot be forged for someone who never sent one. Every column has a
+ * server default — inviter_id is auth.uid() — so the client creates one
+ * with an empty insert and reads the token back.
+ */
+export type InviteRow = {
+  token: string;
+  inviter_id: string;
+  created_at: string;
+  expires_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
       profiles: {
         Row: ProfileRow;
-        Insert: Omit<ProfileRow, 'created_at'> & { created_at?: string };
-        Update: Partial<Omit<ProfileRow, 'id'>>;
+        Insert: Omit<ProfileRow, 'created_at'>;
+        /*
+         * No created_at, here or on posts: the server owns both (migration
+         * 011's pin_created_at triggers set it on insert and refuse to
+         * change it on update), so the types stop a client from even trying.
+         */
+        Update: Partial<Omit<ProfileRow, 'id' | 'created_at'>>;
         Relationships: [];
       };
       posts: {
@@ -112,10 +139,9 @@ export type Database = {
          */
         Insert: Omit<PostRow, 'id' | 'created_at' | 'photo_path'> & {
           id?: string;
-          created_at?: string;
           photo_path?: string | null;
         };
-        Update: Partial<Omit<PostRow, 'id' | 'author_id'>>;
+        Update: Partial<Omit<PostRow, 'id' | 'author_id' | 'created_at'>>;
         Relationships: [];
       };
       follows: {
@@ -151,15 +177,41 @@ export type Database = {
         /*
          * Both subject columns are optional on insert, not just nullable:
          * a report names EITHER a post or a person, so requiring the caller
-         * to pass the other as an explicit null is noise. The
-         * report_has_one_subject check enforces that exactly one arrives.
+         * to pass the other as an explicit null is noise. The prepare_report
+         * trigger (migration 012) enforces that exactly one arrives.
+         *
+         * reported_author_id and snapshot are not offered at all: the same
+         * trigger fills them from the subject and overwrites anything sent.
+         * reporter_id is nullable on the row only because deleting the
+         * reporter blanks it; a new report always names who filed it.
          */
-        Insert: Omit<ReportRow, 'id' | 'created_at' | 'reported_post_id' | 'reported_user_id'> & {
+        Insert: Omit<
+          ReportRow,
+          | 'id'
+          | 'created_at'
+          | 'reporter_id'
+          | 'reported_post_id'
+          | 'reported_user_id'
+          | 'reported_author_id'
+          | 'snapshot'
+        > & {
           id?: string;
           created_at?: string;
+          reporter_id: string;
           reported_post_id?: string | null;
           reported_user_id?: string | null;
         };
+        Update: never;
+        Relationships: [];
+      };
+      invites: {
+        Row: InviteRow;
+        /*
+         * inviter_id and nothing else, matching the column grant. The token,
+         * creation time and expiry are the server's; a client that sent an
+         * expiry would be refused, so the type does not offer one.
+         */
+        Insert: { inviter_id?: string };
         Update: never;
         Relationships: [];
       };
@@ -169,6 +221,11 @@ export type Database = {
       /**
        * Takes no arguments on purpose: it reads auth.uid() server-side, so it
        * cannot be aimed at another account. See migration 005.
+       *
+       * Since migration 011 it no longer touches storage: the client empties
+       * the user's folder in `pours` through the Storage API first, and the
+       * function raises an error containing 'photos_remaining' if any object
+       * is still there.
        */
       delete_own_account: {
         Args: Record<never, never>;
@@ -179,10 +236,20 @@ export type Database = {
         Args: { other: string };
         Returns: boolean;
       };
+      /**
+       * Redeems an invite token into a mutual follow. Returns the inviter's
+       * id, or null when the token is expired or unknown, is your own, or
+       * either of you has blocked the other. Migration 011; the old
+       * accept_invite(inviter uuid), which took a bare user id, is dropped.
+       */
       accept_invite: {
-        Args: { inviter: string };
-        Returns: undefined;
+        Args: { invite_token: string };
+        Returns: string | null;
       };
+      /**
+       * At most 500 hashes per call, and 3,000 per rolling day across both
+       * matchers; past that the server raises 'rate_limited'. Migration 011.
+       */
       match_contacts: {
         Args: { hashes: string[] };
         Returns: {
@@ -191,13 +258,15 @@ export type Database = {
           display_name: string;
           accent: string;
           bio: string | null;
+          avatar_path: string | null;
           created_at: string;
         }[];
       };
       /**
        * Echoes matched_hash back so the caller can label a row with the
        * handle it came from — the plaintext never leaves the device, so
-       * only the device can read that mapping. See migration 008.
+       * only the device can read that mapping. See migration 008. Same
+       * per-call and per-day caps as match_contacts.
        */
       match_instagram: {
         Args: { hashes: string[] };
@@ -207,9 +276,21 @@ export type Database = {
           display_name: string;
           accent: string;
           bio: string | null;
+          avatar_path: string | null;
           created_at: string;
           matched_hash: string;
         }[];
+      };
+      /**
+       * The content filter itself, callable by anon as well: at signup the
+       * profile row is written by a trigger, and a refusal there reaches
+       * the app as a bare 500, so a form can ask this first. `glued` is the
+       * username check. src/lib/moderation.ts mirrors it offline.
+       * Migration 011.
+       */
+      is_objectionable: {
+        Args: { t: string; glued?: boolean };
+        Returns: boolean;
       };
       /** Batch follow. Returns the number of NEW edges. See migration 008. */
       follow_many: {

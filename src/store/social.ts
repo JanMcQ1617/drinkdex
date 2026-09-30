@@ -1,7 +1,36 @@
 import { create } from 'zustand';
 
+import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import * as api from '@/lib/social';
 import type { Post, UserProfile } from '@/types';
+
+/**
+ * What became of a post.
+ *
+ *   'ok'            — the post is up, with its photo if there was one.
+ *   'no-photo'      — the post is up but the photo did not upload.
+ *   'objectionable' — the caption was refused; show OBJECTIONABLE_MESSAGE
+ *                     next to the field. Nothing was written.
+ *   'failed'        — nothing reached the server.
+ *
+ * A string rather than a boolean because the first three want different
+ * words from the caller, and a boolean would fold them into one "failed".
+ */
+export type PostOutcome = 'ok' | 'no-photo' | 'objectionable' | 'failed';
+
+/**
+ * What became of an invite link.
+ *
+ *   'accepted' — you and the inviter now follow each other.
+ *   'invalid'  — the link is expired or unknown, is your own, or one of you
+ *                has blocked the other. The server does not say which, on
+ *                purpose: a block must not be discoverable this way.
+ *   'failed'   — the request did not go through; worth trying again.
+ */
+export type InviteOutcome =
+  | { status: 'accepted'; inviterId: string }
+  | { status: 'invalid' }
+  | { status: 'failed' };
 
 interface SocialState {
   /** Author id -> profile, for everyone appearing in the feed or lists. */
@@ -14,25 +43,80 @@ interface SocialState {
 
   loadingFeed: boolean;
   loadingPeople: boolean;
+  /*
+   * Load failures have their own fields, because they are the ones a screen
+   * has to show: a failed feed load left `feed` empty, and Home told someone
+   * who follows twenty people to go and follow a few. They are separate from
+   * `error` so that a failed like cannot make the feed say it did not load.
+   */
+  /** Why the feed last failed to load; null once it has loaded. */
+  feedError: string | null;
+  /** Why the accounts list last failed to load; null once it has loaded. */
+  peopleError: string | null;
+  /** The last failure from a write (follow, like, post). */
   error: string | null;
+  /**
+   * Bumped whenever one of YOUR posts is written or removed, so a screen that
+   * holds its own copy of your posts (the profile grid) knows to refetch. A
+   * counter rather than the feed's length: adding a photo to an existing post
+   * changes the post without changing how many there are.
+   */
+  postsVersion: number;
+  /**
+   * Which account's data this store is filling, as a counter that reset()
+   * bumps. The auth store resets on every change of account, but a request
+   * already in flight outlives that: a load for account A that resolved
+   * after the switch wrote A's feed and people list back under account B.
+   * Every action reads this before its first await and writes nothing, and
+   * starts no follow-up refresh, once it has moved on. Kept out of EMPTY so
+   * a reset cannot put it back to a number an older request still holds.
+   */
+  gen: number;
 
   load: (myId: string) => Promise<void>;
+  /** Refetches the feed; a full `load` instead while feedError is set. */
   refreshFeed: (myId: string) => Promise<void>;
   loadPeople: (myId: string) => Promise<void>;
   toggleFollow: (myId: string, targetId: string) => Promise<void>;
   /**
    * Follows a whole matched list at once. Resolves to the number of NEW
    * follows so the caller can report "Followed 12" rather than the size of
-   * the list, most of which may already be followed.
+   * the list, most of which may already be followed — or to null when the
+   * request failed, which a 0 would pass off as "already following them".
    */
-  followMany: (myId: string, targetIds: string[]) => Promise<number>;
-  toggleLike: (myId: string, postId: string) => Promise<void>;
-  addPost: (myId: string, drinkId: string, caption: string, photoUri: string | null) => Promise<void>;
+  followMany: (myId: string, targetIds: string[]) => Promise<number | null>;
+  /**
+   * Likes or unlikes a post from anywhere — the feed, or a profile holding
+   * its own list. `wasLiked` is the state the user saw when they tapped.
+   * Resolves to false if the write failed, so the card can drop its
+   * optimistic heart.
+   */
+  toggleLike: (myId: string, postId: string, wasLiked: boolean) => Promise<boolean>;
+  addPost: (
+    myId: string,
+    drinkId: string,
+    caption: string,
+    photoUri: string | null,
+  ) => Promise<PostOutcome>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
-  /** Adds another photo to this drink's post. False if the upload failed. */
+  /**
+   * Adds another photo to this drink's post, if it has one; an entry that
+   * was never posted stays private. False if the upload failed.
+   */
   addPhotoForDrink: (myId: string, drinkId: string, localUri: string) => Promise<boolean>;
-  /** Redeem an invite into a mutual follow, then resync the graph. */
-  acceptInvite: (myId: string, inviterId: string) => Promise<boolean>;
+  /**
+   * Redeems an invite token into a mutual follow, then resyncs the graph.
+   * 'failed' if the account changed while it ran: whatever the server did,
+   * nothing happened for the person now signed in.
+   */
+  acceptInvite: (myId: string, token: string) => Promise<InviteOutcome>;
+  /**
+   * Takes someone off every list this store holds, at once. Called after a
+   * block: RLS hides them from the NEXT query, and without this the blocked
+   * person's posts and friend bubble stayed on screen until a refresh, which
+   * reads as a block that did not work.
+   */
+  dropAuthor: (authorId: string) => void;
   reset: () => void;
 }
 
@@ -43,45 +127,77 @@ const EMPTY = {
   feed: [] as Post[],
   loadingFeed: false,
   loadingPeople: false,
+  feedError: null as string | null,
+  peopleError: null as string | null,
   error: null as string | null,
+  postsVersion: 0,
 };
+
+/*
+ * Profiles for the feed's authors AND everyone you follow. The friends row is
+ * built from `following`, so fetching only the feed's authors dropped anyone
+ * who had not posted yet, or whose posts were past the newest hundred: five
+ * follows, and a row with nobody in it but you.
+ */
+function profileIdsFor(myId: string, feed: Post[], following: string[]): string[] {
+  return [...new Set([myId, ...following, ...feed.map((p) => p.authorId)])];
+}
 
 export const useSocial = create<SocialState>()((set, get) => ({
   ...EMPTY,
+  gen: 0,
 
   load: async (myId) => {
-    set({ loadingFeed: true, error: null });
+    const gen = get().gen;
+    set({ loadingFeed: true, feedError: null });
     try {
       const following = await api.fetchFollowing(myId);
       const feed = await api.fetchFeed(myId, following);
-      const authorIds = [...new Set(feed.map((p) => p.authorId))];
-      const profiles = await api.fetchProfiles([...authorIds, myId]);
+      const profiles = await api.fetchProfiles(profileIdsFor(myId, feed, following));
+      if (get().gen !== gen) return;
       set({ following, feed, profiles, loadingFeed: false });
     } catch (e) {
-      set({ loadingFeed: false, error: (e as Error).message });
+      if (get().gen !== gen) return;
+      set({ loadingFeed: false, feedError: (e as Error).message });
     }
   },
 
+  /*
+   * Refetches the feed for the follow set already held — unless the last
+   * load failed, in which case it loads again from the top. After a failed
+   * `load` the follow set was never fetched, so a plain refresh came back
+   * with only your own posts, cleared the error and looked like success;
+   * every later refresh then trusted that empty set. Logging a pour or
+   * following someone after an offline launch did exactly that, because
+   * both refresh the feed. Doing the check here covers every caller.
+   */
   refreshFeed: async (myId) => {
+    if (get().feedError) return get().load(myId);
+    const gen = get().gen;
     try {
-      const feed = await api.fetchFeed(myId, get().following);
-      const authorIds = [...new Set(feed.map((p) => p.authorId))];
-      const fetched = await api.fetchProfiles([...authorIds, myId]);
-      set({ feed, profiles: { ...get().profiles, ...fetched } });
+      const following = get().following;
+      const feed = await api.fetchFeed(myId, following);
+      const fetched = await api.fetchProfiles(profileIdsFor(myId, feed, following));
+      if (get().gen !== gen) return;
+      set({ feed, profiles: { ...get().profiles, ...fetched }, feedError: null });
     } catch (e) {
-      set({ error: (e as Error).message });
+      if (get().gen !== gen) return;
+      set({ feedError: (e as Error).message });
     }
   },
 
   loadPeople: async (myId) => {
-    set({ loadingPeople: true });
+    const gen = get().gen;
+    set({ loadingPeople: true, peopleError: null });
     try {
       const people = await api.fetchPeople(myId);
+      if (get().gen !== gen) return;
       const merged = { ...get().profiles };
       for (const p of people) merged[p.id] = p;
       set({ people, profiles: merged, loadingPeople: false });
     } catch (e) {
-      set({ loadingPeople: false, error: (e as Error).message });
+      if (get().gen !== gen) return;
+      set({ loadingPeople: false, peopleError: (e as Error).message });
     }
   },
 
@@ -90,6 +206,7 @@ export const useSocial = create<SocialState>()((set, get) => ({
    * refetched because following someone changes what it contains.
    */
   toggleFollow: async (myId, targetId) => {
+    const gen = get().gen;
     const wasFollowing = get().following.includes(targetId);
     const next = wasFollowing
       ? get().following.filter((id) => id !== targetId)
@@ -100,8 +217,11 @@ export const useSocial = create<SocialState>()((set, get) => ({
     try {
       if (wasFollowing) await api.unfollow(myId, targetId);
       else await api.follow(myId, targetId);
+      // Not even the refresh: it would fetch the old account's feed.
+      if (get().gen !== gen) return;
       await get().refreshFeed(myId);
     } catch (e) {
+      if (get().gen !== gen) return;
       // Roll back to the server's truth.
       set({
         following: wasFollowing ? [...get().following, targetId] : get().following.filter((id) => id !== targetId),
@@ -117,6 +237,7 @@ export const useSocial = create<SocialState>()((set, get) => ({
    * afterwards instead of being guessed from what we sent.
    */
   followMany: async (myId, targetIds) => {
+    const gen = get().gen;
     const before = get().following;
     const merged = [...new Set([...before, ...targetIds])];
     set({ following: merged });
@@ -124,83 +245,131 @@ export const useSocial = create<SocialState>()((set, get) => ({
     try {
       const added = await api.followMany(targetIds);
       const following = await api.fetchFollowing(myId);
+      // The list that asked is gone with its account, so it gets no count.
+      if (get().gen !== gen) return null;
       set({ following });
       await get().refreshFeed(myId);
       return added;
     } catch (e) {
+      if (get().gen !== gen) return null;
       set({ following: before, error: (e as Error).message });
-      return 0;
+      return null;
     }
   },
 
-  toggleLike: async (myId, postId) => {
-    const post = get().feed.find((p) => p.id === postId);
-    if (!post) return;
-    const liked = !!post.likedByMe;
-
-    const apply = (on: boolean) =>
+  /*
+   * The write always goes out. This used to look the post up in `feed` and
+   * return early when it was not there — and the feed holds only people you
+   * follow and only the newest hundred posts, so a like on a stranger's
+   * profile, or on an older post, filled the heart and wrote nothing. The
+   * feed copy, when there is one, is patched alongside so the two agree.
+   */
+  toggleLike: async (myId, postId, wasLiked) => {
+    const gen = get().gen;
+    const patch = (on: boolean) =>
       set({
         feed: get().feed.map((p) =>
-          p.id === postId
+          p.id === postId && !!p.likedByMe !== on
             ? { ...p, likedByMe: on, likes: Math.max(0, p.likes + (on ? 1 : -1)) }
             : p,
         ),
       });
 
-    apply(!liked);
+    patch(!wasLiked);
 
     try {
-      if (liked) await api.unlikePost(myId, postId);
+      if (wasLiked) await api.unlikePost(myId, postId);
       else await api.likePost(myId, postId);
+      return true;
     } catch (e) {
-      apply(liked);
+      if (get().gen !== gen) return false;
+      patch(wasLiked);
       set({ error: (e as Error).message });
+      return false;
     }
   },
 
+  /*
+   * The outcome is still returned after an account change, because the
+   * post was or was not written whoever is signed in now; only the store
+   * writes and the follow-up refresh are skipped.
+   */
   addPost: async (myId, drinkId, caption, photoUri) => {
+    // Refused here without a round trip; the server holds the same line.
+    if (containsObjectionable(caption)) return 'objectionable';
+    const gen = get().gen;
     try {
-      await api.createPost(myId, drinkId, caption, photoUri);
+      const withPhoto = await api.createPost(myId, drinkId, caption, photoUri);
+      const outcome = withPhoto ? 'ok' : 'no-photo';
+      if (get().gen !== gen) return outcome;
+      set({ postsVersion: get().postsVersion + 1 });
       await get().refreshFeed(myId);
+      return outcome;
     } catch (e) {
+      const outcome = isObjectionableError(e) ? 'objectionable' : 'failed';
+      if (get().gen !== gen) return outcome;
       set({ error: (e as Error).message });
+      return outcome;
     }
   },
 
   removePostsForDrink: async (myId, drinkId) => {
+    const gen = get().gen;
     try {
       await api.deletePostsForDrink(myId, drinkId);
-      set({ feed: get().feed.filter((p) => !(p.mine && p.drinkId === drinkId)) });
+      if (get().gen !== gen) return;
+      set({
+        feed: get().feed.filter((p) => !(p.mine && p.drinkId === drinkId)),
+        postsVersion: get().postsVersion + 1,
+      });
     } catch (e) {
+      if (get().gen !== gen) return;
       set({ error: (e as Error).message });
     }
   },
 
   addPhotoForDrink: async (myId, drinkId, localUri) => {
+    const gen = get().gen;
     try {
       const ok = await api.addPhotoForDrink(myId, drinkId, localUri);
       // Refetch rather than patching in place: the feed holds photo PATHS and
       // the cards resolve them to signed URLs, so a stale path would render
       // the replaced image until the next natural refresh.
-      if (ok) await get().refreshFeed(myId);
+      if (ok && get().gen === gen) {
+        set({ postsVersion: get().postsVersion + 1 });
+        await get().refreshFeed(myId);
+      }
       return ok;
     } catch (e) {
+      if (get().gen !== gen) return false;
       set({ error: (e as Error).message });
       return false;
     }
   },
 
-  acceptInvite: async (myId, inviterId) => {
+  acceptInvite: async (myId, token) => {
+    const gen = get().gen;
     try {
-      await api.acceptInvite(inviterId);
+      const inviterId = await api.acceptInvite(token);
+      if (get().gen !== gen) return { status: 'failed' };
+      if (!inviterId) return { status: 'invalid' };
       // The mutual follow changes both the follow set and the feed.
       await get().load(myId);
-      return true;
+      return { status: 'accepted', inviterId };
     } catch (e) {
+      if (get().gen !== gen) return { status: 'failed' };
       set({ error: (e as Error).message });
-      return false;
+      return { status: 'failed' };
     }
   },
 
-  reset: () => set({ ...EMPTY }),
+  dropAuthor: (authorId) =>
+    set({
+      feed: get().feed.filter((p) => p.authorId !== authorId),
+      // The server trigger has already removed the follow edges both ways.
+      following: get().following.filter((id) => id !== authorId),
+      people: get().people.filter((p) => p.id !== authorId),
+    }),
+
+  reset: () => set({ ...EMPTY, gen: get().gen + 1 }),
 }));

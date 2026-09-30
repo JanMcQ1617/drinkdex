@@ -1,6 +1,15 @@
 import { Image } from 'expo-image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Platform, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import {
+  ActionSheetIOS,
+  Alert,
+  Platform,
+  Pressable,
+  Share,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -13,7 +22,7 @@ import Animated, {
 
 import { DrinkArt } from '@/components/artwork';
 import { Icon, type IconName } from '@/components/icons';
-import { Avatar, haptic } from '@/components/ui';
+import { Avatar, haptic, PressableScale } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
@@ -24,8 +33,8 @@ import {
   type as typeScale,
 } from '@/constants/theme';
 import { getDrink, formatDexNumber } from '@/data';
-import { blockUser, REPORT_REASONS, reportPost } from '@/lib/moderation';
-import { signedPhotoUrl } from '@/lib/social';
+import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
+import { isBlankCaption, peekSignedPhoto, signedPhotoUrl } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
 import type { Post, UserProfile } from '@/types';
@@ -34,48 +43,87 @@ import type { Post, UserProfile } from '@/types';
 /* Helpers                                                              */
 /* ==================================================================== */
 
+/** Whole units since `iso`, or null for "just now". */
+function elapsed(iso: string): { n: number; unit: 'minute' | 'hour' | 'day' | 'week' } | null {
+  const ms = Date.now() - Date.parse(iso);
+  if (Number.isNaN(ms) || ms < 0) return null;
+  const min = Math.floor(ms / 60000);
+  if (min < 1) return null;
+  if (min < 60) return { n: min, unit: 'minute' };
+  const h = Math.floor(min / 60);
+  if (h < 24) return { n: h, unit: 'hour' };
+  const d = Math.floor(h / 24);
+  if (d < 7) return { n: d, unit: 'day' };
+  return { n: Math.floor(d / 7), unit: 'week' };
+}
+
 /** "2h" / "3d" style relative timestamp. */
 export function timeAgo(iso: string): string {
-  const ms = Date.now() - Date.parse(iso);
-  if (Number.isNaN(ms) || ms < 0) return 'now';
-  const min = Math.floor(ms / 60000);
-  if (min < 1) return 'now';
-  if (min < 60) return `${min}m`;
-  const h = Math.floor(min / 60);
-  if (h < 24) return `${h}h`;
-  const d = Math.floor(h / 24);
-  if (d < 7) return `${d}d`;
-  return `${Math.floor(d / 7)}w`;
+  const t = elapsed(iso);
+  return t ? `${t.n}${t.unit[0]}` : 'now';
+}
+
+/**
+ * The same timestamp in words, for VoiceOver — which reads "2h" as
+ * "2 h" and "3w" as "3 w".
+ */
+export function timeAgoSpoken(iso: string): string {
+  const t = elapsed(iso);
+  return t ? `${t.n} ${t.unit}${t.n === 1 ? '' : 's'} ago` : 'just now';
 }
 
 /**
  * Turns a private-bucket object key into a displayable URL.
  *
+ * Three answers, because "not yet" and "never" look different on screen: a
+ * string once signed, `undefined` while signing is in flight, and `null`
+ * when there is no path or it would not sign. A caller that waits on
+ * `undefined` keeps the photo's frame in place; only `null` should fall
+ * back to artwork. Treating the two alike is what made every photo post
+ * open as an illustration and then jump taller when its URL arrived.
+ *
+ * An already-signed path is answered on the first render, from the cache,
+ * so a card remounting in the feed or a gallery paging back paints at once.
+ *
+ * `retryKey` re-asks when it changes — pass something that changes on
+ * refresh (the post object does). A success is memoised, so on the happy
+ * path that costs nothing; after a failed signing, which the cache no longer
+ * keeps, it is what lets a pull-to-refresh bring a mounted photo back.
+ *
  * Exported because the profile grid renders the same photos in a different
  * frame, and the signing round-trip shouldn't be written twice.
  */
-export function useSignedPhoto(path: string | null | undefined): string | null {
+export function useSignedPhoto(
+  path: string | null | undefined,
+  retryKey?: unknown,
+): string | null | undefined {
   // Keyed by the path it was signed for, so a changed path reads as "not
   // resolved yet" without a synchronous reset that would cascade renders.
   const [signed, setSigned] = useState<{ path: string; url: string | null } | null>(null);
+  const cached = peekSignedPhoto(path);
 
   useEffect(() => {
-    if (!path) return;
+    /*
+     * Skipped only when THIS render already had the URL. Asking the cache
+     * again here would race: a signing that settles between the render and
+     * the effect would make the effect bail while the render still showed
+     * the empty frame, and nothing would ever fill it.
+     */
+    if (!path || cached !== undefined) return;
     let alive = true;
-    signedPhotoUrl(path)
-      .then((url) => {
-        if (alive) setSigned({ path, url });
-      })
-      .catch(() => {
-        // A photo that won't sign falls back to the drink's artwork.
-        if (alive) setSigned({ path, url: null });
-      });
+    // signedPhotoUrl never rejects; a photo that won't sign resolves null
+    // and falls back to the drink's artwork.
+    void signedPhotoUrl(path).then((url) => {
+      if (alive) setSigned({ path, url });
+    });
     return () => {
       alive = false;
     };
-  }, [path]);
+  }, [path, retryKey, cached]);
 
-  return signed && signed.path === path ? signed.url : null;
+  if (!path) return null;
+  if (cached !== undefined) return cached;
+  return signed && signed.path === path ? signed.url : undefined;
 }
 
 /* ==================================================================== */
@@ -183,14 +231,18 @@ export const PostCard = React.memo(function PostCard({
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
-  // Saving has no store yet — a local flag still gives the control real feedback.
-  const [saved, setSaved] = useState(false);
 
   /*
-   * Optimistic overlay on the server's like state. The store only tracks the
-   * feed, so on a profile — which holds its own list — a tap would otherwise
-   * look like it did nothing. Keyed by the server's answer: once that catches
-   * up the overlay stops matching and quietly drops out.
+   * Optimistic overlay on the server's like state. The store only patches
+   * the feed's copy of a post, so on a profile — which holds its own list —
+   * a tap would otherwise look like it did nothing. Keyed by the server's
+   * answer: once that catches up the overlay stops matching and quietly
+   * drops out.
+   *
+   * A failed write clears the overlay. Without that, the store's rollback
+   * restored the very key the overlay was stamped with, so the card went on
+   * showing a like that never happened — and the next tap, meant as an
+   * unlike, sent a second like.
    */
   const [flip, setFlip] = useState<{ key: string; on: boolean } | null>(null);
   const serverLiked = !!post.likedByMe;
@@ -199,9 +251,14 @@ export const PostCard = React.memo(function PostCard({
   const likes = Math.max(0, post.likes + (liked === serverLiked ? 0 : liked ? 1 : -1));
 
   const onLike = useCallback(() => {
+    // Signed out, nothing could be written, so nothing is shown as liked.
+    if (!myId) return;
     haptic.tap();
-    setFlip({ key: likeKey, on: !liked });
-    if (myId) void toggleLike(myId, post.id);
+    const next = { key: likeKey, on: !liked };
+    setFlip(next);
+    void toggleLike(myId, post.id, liked).then((ok) => {
+      if (!ok) setFlip((f) => (f === next ? null : f));
+    });
   }, [liked, likeKey, myId, post.id, toggleLike]);
 
   /*
@@ -228,8 +285,20 @@ export const PostCard = React.memo(function PostCard({
   const index = paged?.key === galleryKey ? paged.index : 0;
 
   const current = gallery[index] ?? photoPath ?? post.photoPath;
-  const photoUrl = useSignedPhoto(current) ?? post.photoUri;
+  // `post` as the retry key: every refetch hands over a new object, so a
+  // photo that failed to sign gets another try on pull-to-refresh.
+  const photoUrl = useSignedPhoto(current, post);
   const hasGallery = gallery.length > 1;
+
+  /*
+   * Sign the rest of the gallery up front, so a tap to the next photo finds
+   * its URL already in hand and paints at once instead of blanking the frame
+   * for a round trip.
+   */
+  useEffect(() => {
+    if (!galleryKey.includes('|')) return;
+    for (const path of galleryKey.split('|')) void signedPhotoUrl(path);
+  }, [galleryKey]);
 
   const drink = getDrink(post.drinkId);
   // A post can outrun its author's profile row; render it rather than crash.
@@ -259,30 +328,45 @@ export const PostCard = React.memo(function PostCard({
    */
   const openReport = useCallback(() => {
     if (!myId) return;
-    Alert.alert(
-      'Report this post',
-      'What is wrong with it? Reports are reviewed privately; the poster is not told who reported them.',
-      [
-        ...REPORT_REASONS.map((r) => ({
-          text: r.label,
-          onPress: () => {
-            void reportPost(myId, post.id, r.key)
-              .then(() =>
-                Alert.alert('Thanks', 'This post has been reported. You can also block this person from the post menu.'),
-              )
-              .catch(() => Alert.alert('Could not report', 'Check your connection and try again.'));
-          },
-        })),
-        { text: 'Cancel', style: 'cancel' as const },
-      ],
-    );
+    const file = (reason: ReportReason) => {
+      void reportPost(myId, post.id, reason)
+        .then(() =>
+          Alert.alert('Thanks', 'This post has been reported. You can also block this person from the post menu.'),
+        )
+        .catch(() => Alert.alert('Could not report', 'Check your connection and try again.'));
+    };
+    const title = 'Report this post';
+    const message =
+      'What is wrong with it? Reports are reviewed privately; the poster is not told who reported them.';
+
+    // A choice among six is an action sheet on iOS; an alert is for a yes or no.
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title,
+          message,
+          options: [...REPORT_REASONS.map((r) => r.label), 'Cancel'],
+          cancelButtonIndex: REPORT_REASONS.length,
+        },
+        (i) => {
+          const reason = REPORT_REASONS[i];
+          if (reason) file(reason.key);
+        },
+      );
+      return;
+    }
+    Alert.alert(title, message, [
+      ...REPORT_REASONS.map((r) => ({ text: r.label, onPress: () => file(r.key) })),
+      { text: 'Cancel', style: 'cancel' as const },
+    ]);
   }, [myId, post.id]);
 
   const confirmBlock = useCallback(() => {
     if (!myId) return;
+    // A true two-way confirmation, so it stays an alert on every platform.
     Alert.alert(
       `Block @${who.username}?`,
-      'You will not see their posts and they will not see yours. Any follow between you is removed. You can undo this from their profile.',
+      'You will not see their posts and they will not see yours. Any follow between you is removed. You can undo this in Settings, under Blocked accounts.',
       [
         { text: 'Cancel', style: 'cancel' as const },
         {
@@ -312,18 +396,42 @@ export const PostCard = React.memo(function PostCard({
      * Moderation actions are offered only on OTHER people's posts. Offering
      * to report or block yourself is nonsense, and the server would reject
      * the block anyway (no_self_block).
+     *
+     * Report is not styled destructive: filing a report removes nothing.
+     * Block is, because it takes a person out of your feed.
      */
     const mine = who.id === myId;
-
-    Alert.alert(drink.name, undefined, [
+    const actions: { text: string; onPress: () => void; destructive?: boolean }[] = [
       { text: 'Open in the Dex', onPress: () => onOpenDrink(drink.id) },
       { text: 'Share', onPress: share },
       ...(mine
         ? []
         : [
-            { text: 'Report post', style: 'destructive' as const, onPress: openReport },
-            { text: `Block @${who.username}`, style: 'destructive' as const, onPress: confirmBlock },
+            { text: 'Report post', onPress: openReport },
+            { text: `Block @${who.username}`, onPress: confirmBlock, destructive: true },
           ]),
+    ];
+
+    // An overflow menu is an action sheet on iOS, anchored to the thumb.
+    if (Platform.OS === 'ios') {
+      const blockIndex = actions.findIndex((a) => a.destructive);
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title: drink.name,
+          options: [...actions.map((a) => a.text), 'Cancel'],
+          cancelButtonIndex: actions.length,
+          destructiveButtonIndex: blockIndex >= 0 ? blockIndex : undefined,
+        },
+        (i) => actions[i]?.onPress(),
+      );
+      return;
+    }
+    Alert.alert(drink.name, undefined, [
+      ...actions.map((a) => ({
+        text: a.text,
+        onPress: a.onPress,
+        style: a.destructive ? ('destructive' as const) : ('default' as const),
+      })),
       { text: 'Cancel', style: 'cancel' as const },
     ]);
   }, [drink, onOpenDrink, share, who.id, who.username, myId, openReport, confirmBlock]);
@@ -331,116 +439,173 @@ export const PostCard = React.memo(function PostCard({
   if (!drink) return null;
 
   const category = CATEGORY_META[drink.category];
-  const comments = post.commentCount ?? 0;
+  const posted = timeAgoSpoken(post.createdAt);
+  const showCaption = !isBlankCaption(post.caption);
+  /*
+   * The photo's frame is chosen from the PATH, not the signed URL. While the
+   * URL is on its way (`undefined`) the frame holds its place on the sunk
+   * ground; only a post with no photo, or one that would not sign (`null`),
+   * gets the artwork panel.
+   */
+  const showPhoto = !!current && photoUrl !== null;
+
+  const identity = (
+    <>
+      <Avatar
+        name={who.displayName}
+        accent={who.accent}
+        size={40}
+        ring
+        avatarPath={who.avatarPath}
+      />
+      <View style={styles.headerText}>
+        <Text style={styles.displayName} numberOfLines={1}>
+          {who.displayName}
+        </Text>
+        <Text style={styles.handle} numberOfLines={1}>
+          @{who.username} · {timeAgo(post.createdAt)}
+        </Text>
+      </View>
+    </>
+  );
 
   return (
     <View style={styles.card}>
-      {/* ---- Author ---- */}
+      {/*
+        ---- Author ----
+        A button only where it goes somewhere. On a profile, where you are
+        already looking at the author, it is plain text read as one element:
+        a disabled button there made VoiceOver call the name "dimmed".
+      */}
       <View style={styles.header}>
-        <Pressable
-          onPress={onOpenAuthor ? () => onOpenAuthor(who.id) : undefined}
-          disabled={!onOpenAuthor}
-          accessibilityRole={onOpenAuthor ? 'button' : undefined}
-          accessibilityLabel={onOpenAuthor ? `Open ${who.displayName}'s profile` : undefined}
-          style={({ pressed }) => [styles.headerIdentity, pressed && styles.pressed]}>
-          <Avatar
-            name={who.displayName}
-            accent={who.accent}
-            size={40}
-            ring
-            avatarPath={who.avatarPath}
-          />
-          <View style={styles.headerText}>
-            <Text style={styles.displayName} numberOfLines={1}>
-              {who.displayName}
-            </Text>
-            <Text style={styles.handle} numberOfLines={1}>
-              @{who.username} · {timeAgo(post.createdAt)}
-            </Text>
+        {onOpenAuthor ? (
+          <PressableScale
+            onPress={() => onOpenAuthor(who.id)}
+            noHaptic
+            accessibilityRole="button"
+            accessibilityLabel={`Open ${who.displayName}'s profile, posted ${posted}`}
+            style={styles.headerIdentity}>
+            {identity}
+          </PressableScale>
+        ) : (
+          <View
+            accessible
+            accessibilityLabel={`${who.displayName}, @${who.username}, posted ${posted}`}
+            style={styles.headerIdentity}>
+            {identity}
           </View>
-        </Pressable>
+        )}
         <IconButton name="more" label="Post options" onPress={openMenu} color={colors.textMuted} />
       </View>
 
-      {/* ---- The pour ---- */}
-      <Pressable
-        onPress={() => onOpenDrink(drink.id)}
-        accessibilityRole="button"
-        accessibilityLabel={`Open ${drink.name}, ${formatDexNumber(drink.dexNumber)}, in the Dex`}
-        style={({ pressed }) => [styles.body, pressed && styles.pressed]}>
-        {photoUrl ? (
-          <View style={styles.photoFrame}>
-            <Image
-              source={{ uri: photoUrl }}
-              style={styles.photo}
-              contentFit="cover"
-              transition={180}
-              accessibilityLabel={
-                hasGallery
-                  ? `Photo ${index + 1} of ${gallery.length} of ${drink.name}`
-                  : `Photo of ${drink.name}`
-              }
-            />
-            {hasGallery ? (
-              /*
-               * Tap-to-advance rather than a swipe: this card already sits in
-               * a vertically scrolling feed, and a horizontal pan inside it
-               * fights the list for the gesture on every drag that is not
-               * perfectly sideways.
-               */
-              <Pressable
-                onPress={() => {
-                  haptic.select();
-                  // Computed from the rendered `index` rather than a functional
-                  // updater, because the new value has to be stamped with the
-                  // gallery key it belongs to.
-                  setPaged({ key: galleryKey, index: (index + 1) % gallery.length });
-                }}
-                accessibilityRole="button"
-                accessibilityLabel={`Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`}
-                style={styles.galleryTapTarget}>
-                <View style={styles.galleryCount}>
-                  <Text style={styles.galleryCountLabel}>
-                    {index + 1}/{gallery.length}
-                  </Text>
-                </View>
-              </Pressable>
-            ) : null}
-          </View>
-        ) : (
-          <View style={[styles.artPanel, { backgroundColor: category.wash }]}>
-            {/* Sized to fill the panel — 190 left it adrift in the wash. */}
-            <DrinkArt drink={drink} size={220} />
-          </View>
-        )}
-
-        <View style={styles.drinkMeta}>
-          <View style={styles.drinkNameRow}>
-            <Text style={styles.drinkName} numberOfLines={1}>
-              {drink.name}
-            </Text>
-            <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
-          </View>
-          {/*
-            The spec line, not a badge row. A post is someone showing you a
-            drink, and "Tequila · Grapefruit · Lime · Rosemary" tells you
-            what it IS — which is what you want to know from a photograph.
-            Category and rarity are Dex bookkeeping; they belong on the card
-            in the index, not under someone's pour.
-
-            Cocktails carry `ingredients`; spirits fall back to their style
-            and origin, which is the nearest equivalent sentence for a bottle
-            nobody builds.
-          */}
-          <Text style={styles.spec} numberOfLines={1}>
-            {drink.ingredients?.length
-              ? drink.ingredients.join(' · ')
-              : [drink.subcategory, drink.origin].filter(Boolean).join(' · ')}
-          </Text>
+      {/*
+        ---- The pour ----
+        The photograph and the link to the drink are siblings, not one
+        button wrapped around the other. Nested, the same tap on the same
+        picture opened the Dex on a single-photo post and paged the photos on
+        a gallery, and VoiceOver — which treats a button as one element —
+        could never reach the pager or anything past the first photo. The
+        photo now does one thing, page a gallery; the name block below it
+        opens the drink, as does the post menu.
+      */}
+      {showPhoto ? (
+        <View style={styles.photoFrame}>
+          <Image
+            source={photoUrl ? { uri: photoUrl, cacheKey: current } : undefined}
+            /*
+             * Keyed on the storage path, not the URL. A signed URL carries a
+             * fresh token every time it is minted, so keyed on the URL every
+             * photo downloaded again after each launch and every hour. A path
+             * never changes content — each upload gets a new name — so it is
+             * a safe key, and the memory tier spares a remount the decode.
+             */
+            cachePolicy="memory-disk"
+            style={styles.photo}
+            contentFit="cover"
+            transition={180}
+            accessible
+            accessibilityRole="image"
+            accessibilityLabel={
+              hasGallery
+                ? `Photo of ${drink.name}, ${index + 1} of ${gallery.length}`
+                : `Photo of ${drink.name}`
+            }
+          />
+          {hasGallery ? (
+            /*
+             * Tap-to-advance rather than a swipe: this card already sits in
+             * a vertically scrolling feed, and a horizontal pan inside it
+             * fights the list for the gesture on every drag that is not
+             * perfectly sideways.
+             */
+            <Pressable
+              onPress={() => {
+                haptic.select();
+                // Computed from the rendered `index` rather than a functional
+                // updater, because the new value has to be stamped with the
+                // gallery key it belongs to.
+                setPaged({ key: galleryKey, index: (index + 1) % gallery.length });
+              }}
+              accessibilityRole="button"
+              accessibilityLabel={`Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`}
+              style={styles.galleryTapTarget}>
+              <View style={styles.galleryCount}>
+                <Text style={styles.galleryCountLabel}>
+                  {index + 1}/{gallery.length}
+                </Text>
+              </View>
+            </Pressable>
+          ) : null}
         </View>
-      </Pressable>
+      ) : (
+        <View
+          style={[styles.artPanel, { backgroundColor: category.wash }]}
+          accessible
+          accessibilityRole="image"
+          accessibilityLabel={`Illustration of ${drink.name}`}>
+          {/* Sized to fill the panel — 190 left it adrift in the wash. */}
+          <DrinkArt drink={drink} size={220} />
+        </View>
+      )}
 
-      {/* ---- Actions ---- */}
+      <PressableScale
+        onPress={() => onOpenDrink(drink.id)}
+        noHaptic
+        accessibilityRole="button"
+        accessibilityLabel={`Open ${drink.name}, number ${drink.dexNumber}, in the Dex`}
+        style={styles.drinkMeta}>
+        <View style={styles.drinkNameRow}>
+          <Text style={styles.drinkName} numberOfLines={1}>
+            {drink.name}
+          </Text>
+          <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
+        </View>
+        {/*
+          The spec line, not a badge row. A post is someone showing you a
+          drink, and "Tequila · Grapefruit · Lime · Rosemary" tells you
+          what it IS — which is what you want to know from a photograph.
+          Category and rarity are Dex bookkeeping; they belong on the card
+          in the index, not under someone's pour.
+
+          Cocktails carry `ingredients`; spirits fall back to their style
+          and origin, which is the nearest equivalent sentence for a bottle
+          nobody builds.
+        */}
+        <Text style={styles.spec} numberOfLines={1}>
+          {drink.ingredients?.length
+            ? drink.ingredients.join(' · ')
+            : [drink.subcategory, drink.origin].filter(Boolean).join(' · ')}
+        </Text>
+      </PressableScale>
+
+      {/*
+        ---- Actions ----
+        Like and share, and nothing that only looks like a control. The
+        comment glyph and the bookmark are gone: there is no thread to open
+        and no saved list to find a post in, and a Save that forgets itself
+        when the card scrolls away confirms something that never happened.
+        They come back with the table and the screen behind them.
+      */}
       <View style={styles.actions}>
         <IconButton
           name="heart"
@@ -450,34 +615,27 @@ export const PostCard = React.memo(function PostCard({
           selected={liked}
           color={liked ? colors.wine : colors.text}
         />
-        {/* Static: there's no thread view to open yet. */}
-        <View style={styles.commentCount} accessibilityLabel={`${comments} comments`}>
-          <Icon name="comment" size={23} color={colors.text} />
-          {comments > 0 ? <Text style={styles.commentCountText}>{comments}</Text> : null}
-        </View>
         <IconButton name="share" label="Share this entry" onPress={share} />
-        <View style={styles.spacer} />
-        <IconButton
-          name="bookmark"
-          label={saved ? 'Remove from saved' : 'Save this entry'}
-          onPress={() => {
-            setSaved((s) => !s);
-            haptic.tap();
-          }}
-          filled={saved}
-          selected={saved}
-          color={saved ? colors.giltInk : colors.text}
-        />
       </View>
 
-      {/* ---- Likes and caption ---- */}
-      <Text style={styles.likes}>
-        {likes} {likes === 1 ? 'like' : 'likes'}
-      </Text>
-      <Text style={styles.caption}>
-        <Text style={styles.captionAuthor}>{who.username} </Text>
-        {post.caption}
-      </Text>
+      {/*
+        ---- Likes and caption ----
+        Both only when there is something to say. The like count is the one
+        coloured figure on the post, and on a new post it spent that on a 0;
+        the first like adds the line. An uncaptioned post shows no caption
+        rather than a stock sentence under every picture.
+      */}
+      {likes > 0 ? (
+        <Text style={styles.likes}>
+          {likes} {likes === 1 ? 'like' : 'likes'}
+        </Text>
+      ) : null}
+      {showCaption ? (
+        <Text style={styles.caption}>
+          <Text style={styles.captionAuthor}>{who.username} </Text>
+          {post.caption}
+        </Text>
+      ) : null}
     </View>
   );
 });
@@ -492,12 +650,20 @@ const styles = StyleSheet.create({
      * caption below — so the hairline top/bottom rules are gone. They were
      * the last of the borrowed Instagram frame: with them the photo read
      * as an inset panel, without them it reads as the object itself.
+     *
+     * No fill either. The post was white while the page was too; once the
+     * page went cream, a white post became a tinted slab with the photo
+     * inset in it — exactly how Card draws a panel. Transparent, the post
+     * sits on the page the way this comment always said it did.
      */
-    backgroundColor: colors.surface,
     paddingVertical: space.md,
   },
+  /*
+   * The icon buttons' press state. They are the one place a dim is kept:
+   * the value-driven pop is their real feedback, and the dim only marks the
+   * touch. Everything larger on the card scales, as PressableScale does.
+   */
   pressed: { opacity: 0.72 },
-  spacer: { flex: 1 },
 
   /* Author */
   header: {
@@ -524,15 +690,16 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: typeScale.micro.fontSize,
     lineHeight: typeScale.micro.lineHeight,
-    color: colors.textFaint,
+    // 12pt is small text: textMuted, never textFaint.
+    color: colors.textMuted,
   },
 
   /* Body */
-  body: { gap: space.md },
   /*
    * The frame carries the inset and the radius so the gallery tap target,
    * which fills it, lands exactly on the photograph and not on the page
-   * beside it.
+   * beside it. It also holds the photo's full height while the signed URL
+   * is on its way, so nothing below it moves when the picture arrives.
    */
   photoFrame: {
     marginHorizontal: space.lg,
@@ -559,7 +726,7 @@ const styles = StyleSheet.create({
   galleryCount: {
     paddingHorizontal: space.sm,
     paddingVertical: 2,
-    borderRadius: 999,
+    borderRadius: radius.pill,
     backgroundColor: colors.scrim,
   },
   galleryCountLabel: {
@@ -586,6 +753,7 @@ const styles = StyleSheet.create({
   },
   drinkMeta: {
     paddingHorizontal: space.lg,
+    paddingTop: space.md,
     gap: space.sm,
   },
   drinkNameRow: {
@@ -605,6 +773,7 @@ const styles = StyleSheet.create({
     fontSize: typeScale.micro.fontSize,
     letterSpacing: 1.8,
     color: colors.taupeInk,
+    ...tabular,
   },
   /* The spec line under the drink name. Muted, so the name stays the
      loudest thing in the block and this reads as its caption. */
@@ -630,17 +799,6 @@ const styles = StyleSheet.create({
     height: 32,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  commentCount: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.xs,
-    height: 32,
-  },
-  commentCountText: {
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.micro.fontSize,
-    color: colors.textMuted,
   },
 
   /* Copy */

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, StyleSheet, Text, View } from 'react-native';
 
-import { Avatar, Button, haptic } from '@/components/ui';
+import { Avatar, Button, PressableScale } from '@/components/ui';
 import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
@@ -25,25 +25,78 @@ export interface MatchEntry {
    * learns the Instagram handle behind a match, so it cannot say.
    */
   note?: string;
+  /**
+   * False keeps this entry out of "Follow all" while leaving its own Follow
+   * button in place — for a match the caller is not sure of, such as a
+   * handle more than one account claims.
+   */
+  bulk?: boolean;
+}
+
+/* ------------------------------------------------------------------ */
+/* Follow button                                                       */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The in-row Follow / Following toggle, the one every list of people uses.
+ *
+ * There were two, drawn differently for the same decision: 40pt with no
+ * state icon here — under the 44pt touch minimum — and 52pt with a check on
+ * the profile's account list. This is Button's row size (`sm`, 44pt), with
+ * a check once followed. A profile header's lone Follow stays the full-size
+ * Button, since there it is the screen's main action rather than one of
+ * fifty.
+ *
+ * No extra haptic: Button's press already ticks.
+ */
+export function FollowButton({
+  following,
+  name,
+  onToggle,
+}: {
+  following: boolean;
+  /** Who, for the spoken label: "Follow Maya Ortiz". */
+  name: string;
+  onToggle: () => void;
+}) {
+  return (
+    <Button
+      label={following ? 'Following' : 'Follow'}
+      variant={following ? 'secondary' : 'primary'}
+      icon={following ? 'check' : undefined}
+      onPress={onToggle}
+      size="sm"
+      accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${name}`}
+    />
+  );
 }
 
 /* ------------------------------------------------------------------ */
 /* Person row                                                          */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Someone in a matched list. With `onOpen`, the picture and name open their
+ * profile, as the profile's own accounts list does: a match is a stranger
+ * until you have seen who it is, and their profile is where Report and
+ * Block live for an account that has never posted. Without it (the welcome
+ * flow, which has nowhere to go yet) the row is only a Follow decision.
+ */
 export function PersonRow({
   person,
   note,
   following,
   onToggle,
+  onOpen,
 }: {
   person: UserProfile;
   note?: string;
   following: boolean;
   onToggle: () => void;
+  onOpen?: (id: string) => void;
 }) {
-  return (
-    <View style={styles.row}>
+  const identity = (
+    <>
       <Avatar
         name={person.displayName}
         accent={person.accent}
@@ -58,13 +111,23 @@ export function PersonRow({
           {note ?? `@${person.username}`}
         </Text>
       </View>
-      <Button
-        label={following ? 'Following' : 'Follow'}
-        variant={following ? 'secondary' : 'primary'}
-        onPress={onToggle}
-        accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${person.displayName}`}
-        style={styles.rowBtn}
-      />
+    </>
+  );
+
+  return (
+    <View style={styles.row}>
+      {onOpen ? (
+        <PressableScale
+          onPress={() => onOpen(person.id)}
+          accessibilityRole="button"
+          accessibilityLabel={`Open ${person.displayName}'s profile`}
+          style={styles.rowIdentity}>
+          {identity}
+        </PressableScale>
+      ) : (
+        <View style={styles.rowIdentity}>{identity}</View>
+      )}
+      <FollowButton following={following} name={person.displayName} onToggle={onToggle} />
     </View>
   );
 }
@@ -72,6 +135,8 @@ export function PersonRow({
 /* ------------------------------------------------------------------ */
 /* Match results                                                       */
 /* ------------------------------------------------------------------ */
+
+const FOLLOW_ALL_FAILED = 'Could not follow them. Check your connection and try again.';
 
 /**
  * A matched set, with one tap to follow all of them.
@@ -83,9 +148,12 @@ export function PersonRow({
 export function MatchResults({
   entries,
   emptyText,
+  onOpenPerson,
 }: {
   entries: MatchEntry[];
   emptyText?: string;
+  /** Opens a matched person's profile; leave it off where there is none to open. */
+  onOpenPerson?: (id: string) => void;
 }) {
   const myId = useAuth((s) => s.session?.user.id);
   const following = useSocial((s) => s.following);
@@ -93,24 +161,26 @@ export function MatchResults({
   const followMany = useSocial((s) => s.followMany);
 
   const [busy, setBusy] = useState(false);
-  const [justAdded, setJustAdded] = useState<number | null>(null);
+  /** How many the last "Follow all" added, or 'failed' when it did not go through. */
+  const [outcome, setOutcome] = useState<number | 'failed' | null>(null);
 
   const followingSet = useMemo(() => new Set(following), [following]);
   const pending = useMemo(
-    () => entries.filter((e) => !followingSet.has(e.profile.id)),
+    () => entries.filter((e) => e.bulk !== false && !followingSet.has(e.profile.id)),
     [entries, followingSet],
   );
 
   const followAll = useCallback(async () => {
     if (!myId || pending.length === 0) return;
-    haptic.tap();
+    // No haptic here: the Button's own press already ticked.
     setBusy(true);
     try {
       const added = await followMany(
         myId,
         pending.map((e) => e.profile.id),
       );
-      setJustAdded(added);
+      setOutcome(added ?? 'failed');
+      if (added === null) AccessibilityInfo.announceForAccessibility(FOLLOW_ALL_FAILED);
     } finally {
       setBusy(false);
     }
@@ -129,17 +199,26 @@ export function MatchResults({
           label={busy ? 'Following…' : `Follow all ${pending.length}`}
           icon="plus"
           block
-          disabled={busy}
+          loading={busy}
           onPress={followAll}
           accessibilityLabel={`Follow all ${pending.length} people in this list`}
         />
       ) : null}
 
-      {justAdded !== null && pending.length === 0 ? (
+      {/*
+        A failed "Follow all" says so under the button it leaves in place.
+        It used to put the list back without a word, which looked the same
+        as a tap that had not registered.
+      */}
+      {outcome === 'failed' && pending.length > 0 ? (
+        <Text style={styles.hint}>{FOLLOW_ALL_FAILED}</Text>
+      ) : null}
+
+      {typeof outcome === 'number' && pending.length === 0 ? (
         <Text style={styles.done}>
-          {justAdded === 0
+          {outcome === 0
             ? 'You already followed everyone here.'
-            : `Followed ${justAdded} ${justAdded === 1 ? 'person' : 'people'}.`}
+            : `Followed ${outcome} ${outcome === 1 ? 'person' : 'people'}.`}
         </Text>
       ) : null}
 
@@ -150,6 +229,7 @@ export function MatchResults({
           note={entry.note}
           following={followingSet.has(entry.profile.id)}
           onToggle={() => toggleFollow(myId, entry.profile.id)}
+          onOpen={onOpenPerson}
         />
       ))}
     </View>
@@ -167,23 +247,30 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: colors.cardBorder,
   },
+  // The same 44pt identity block as the profile's accounts rows.
+  rowIdentity: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    minHeight: 44,
+  },
   rowText: { flex: 1 },
   rowName: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.body.fontSize,
     color: colors.text,
   },
+  // 13pt secondary lines: textMuted, which holds 4.5:1 where textFaint cannot.
   rowHandle: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
-  rowBtn: { paddingHorizontal: space.lg, minHeight: 40 },
-
   hint: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
-    color: colors.textFaint,
+    color: colors.textMuted,
     paddingTop: space.sm,
   },
   done: {

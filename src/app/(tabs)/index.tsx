@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useRouter, useScrollToTop } from 'expo-router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,16 +21,20 @@ import type { Post, UserProfile } from '@/types';
 function PersonBubble({
   name,
   accent,
+  avatarPath,
   label,
   onPress,
   accessibilityLabel,
+  accessibilityHint,
   badge,
 }: {
   name: string;
   accent: string;
+  avatarPath?: string | null;
   label: string;
   onPress: () => void;
   accessibilityLabel: string;
+  accessibilityHint?: string;
   badge?: boolean;
 }) {
   return (
@@ -38,9 +42,10 @@ function PersonBubble({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
       style={styles.bubble}>
       <View>
-        <Avatar name={name} accent={accent} size={66} ring />
+        <Avatar name={name} accent={accent} size={66} ring avatarPath={avatarPath} />
         {badge ? (
           <View style={styles.bubbleBadge}>
             <Icon name="plus" size={13} color={colors.textOnWine} />
@@ -60,30 +65,45 @@ function FriendsRow({
   onOpenPerson,
   onLog,
 }: {
-  me: { name: string; accent: string };
+  me: { name: string; accent: string; avatarPath?: string | null };
   followed: UserProfile[];
   onOpenPerson: (id: string) => void;
   onLog: () => void;
 }) {
+  /*
+   * scrollsToTop off: UIKit honours a status-bar tap only when exactly one
+   * scroll view on screen opts in, and every ScrollView opts in by default.
+   * With this row in too, the tap reached neither, and the feed never went
+   * back to the top.
+   */
   return (
     <ScrollView
       horizontal
+      scrollsToTop={false}
       showsHorizontalScrollIndicator={false}
       style={styles.bubbleRow}
       contentContainerStyle={styles.bubbleRowContent}>
+      {/*
+        Your own bubble is the log action, and says so in the same words as
+        the tab bar's centre plus — it used to read "Your pour" and open the
+        Dex grid, so one glyph did two different things on one screen.
+      */}
       <PersonBubble
         name={me.name}
         accent={me.accent}
-        label="Your pour"
+        avatarPath={me.avatarPath}
+        label="Log a pour"
         badge
         onPress={onLog}
-        accessibilityLabel="Log a new entry in the Dex"
+        accessibilityLabel="Log a pour"
+        accessibilityHint="Take a photo and pick what you drank"
       />
       {followed.map((p) => (
         <PersonBubble
           key={p.id}
           name={p.displayName}
           accent={p.accent}
+          avatarPath={p.avatarPath}
           label={p.username}
           onPress={() => onOpenPerson(p.id)}
           accessibilityLabel={`Open ${p.displayName}'s profile`}
@@ -117,10 +137,24 @@ function HomeFeed() {
   const profiles = useSocial((s) => s.profiles);
   const following = useSocial((s) => s.following);
   const loadingFeed = useSocial((s) => s.loadingFeed);
+  const feedError = useSocial((s) => s.feedError);
   const load = useSocial((s) => s.load);
   const refreshFeed = useSocial((s) => s.refreshFeed);
+  const dropAuthor = useSocial((s) => s.dropAuthor);
 
   const [refreshing, setRefreshing] = useState(false);
+
+  // Tapping Home while already on it returns the feed to the top.
+  const listRef = useRef<FlatList<Post>>(null);
+  useScrollToTop(listRef);
+
+  /*
+   * Whether the reader has started scrolling. The entrance stagger is for
+   * the feed arriving, not for a card the list re-mounts on the way back
+   * up, so once the list has been dragged no card animates in again.
+   */
+  const [scrolled, setScrolled] = useState(false);
+  const markScrolled = useCallback(() => setScrolled(true), []);
 
   // Re-runs when the signed-in user changes, so switching accounts doesn't
   // leave the previous person's feed on screen. `load` handles its own errors.
@@ -128,6 +162,8 @@ function HomeFeed() {
     if (myId) void load(myId);
   }, [myId, load]);
 
+  // After a failed load this is a full reload: refreshFeed checks feedError
+  // itself, so the follow list that never arrived is fetched again.
   const onRefresh = useCallback(() => {
     if (!myId) return;
     setRefreshing(true);
@@ -139,9 +175,9 @@ function HomeFeed() {
     [router],
   );
 
-  const openDex = useCallback(() => router.push('/dex'), [router]);
+  const openLog = useCallback(() => router.push('/log'), [router]);
 
-  const openProfile = useCallback(() => router.push('/profile'), [router]);
+  const openFindFriends = useCallback(() => router.push('/find-friends'), [router]);
 
   const openPerson = useCallback(
     (id: string) => router.push({ pathname: '/profile', params: { user: id } }),
@@ -152,20 +188,23 @@ function HomeFeed() {
     ({ item, index }: { item: Post; index: number }) => (
       <Animated.View
         entering={
-          reduced
+          reduced || scrolled || index > 2
             ? undefined
-            : // Capped: past the first screenful the delay only feels like lag.
-              FadeInDown.duration(motion.base).delay(Math.min(index, 4) * motion.stagger)
+            : // The first screenful only: past it the delay just feels like lag.
+              FadeInDown.duration(motion.base).delay(index * motion.stagger)
         }>
         <PostCard
           post={item}
           author={profiles[item.authorId]}
           onOpenDrink={openDrink}
           onOpenAuthor={openPerson}
+          // A block takes their posts and bubble off screen at once; RLS
+          // keeps them off from the next fetch on.
+          onBlocked={dropAuthor}
         />
       </Animated.View>
     ),
-    [openDrink, openPerson, profiles, reduced],
+    [dropAuthor, openDrink, openPerson, profiles, reduced, scrolled],
   );
 
   // Follow order, minus anyone whose profile hasn't been fetched yet.
@@ -174,23 +213,48 @@ function HomeFeed() {
   const header = (
     <View>
       <View style={styles.masthead}>
-        <Text style={styles.wordmark}>Sipply</Text>
-        <Text style={styles.subtitle}>Pours from the accounts you follow.</Text>
+        <Text style={styles.wordmark} accessibilityRole="header">
+          Sipply
+        </Text>
+        {/*
+          A refresh that fails over a feed already on screen says so here,
+          in the subtitle's place, rather than adding a line that would push
+          the posts down. The posts stay: they are still the last good copy.
+        */}
+        <Text style={styles.subtitle}>
+          {feedError && feed.length > 0
+            ? 'Could not refresh. Pull down to try again.'
+            : 'Pours from the accounts you follow.'}
+        </Text>
       </View>
       <FriendsRow
-        me={{ name: profile?.display_name ?? 'You', accent: profile?.accent ?? colors.wine }}
+        me={{
+          name: profile?.display_name ?? 'You',
+          accent: profile?.accent ?? colors.wine,
+          avatarPath: profile?.avatar_path,
+        }}
         followed={followed}
         onOpenPerson={openPerson}
-        onLog={openDex}
+        onLog={openLog}
       />
     </View>
   );
 
   return (
     <FlatList
+      ref={listRef}
       data={feed}
       renderItem={renderItem}
       keyExtractor={(post) => post.id}
+      /*
+       * A post is about a screen tall — a 1:1.3 photo plus its header and
+       * caption — so the default window (10 items up front, 21 screens kept
+       * mounted) held twenty-odd full-size photos in memory to show one.
+       */
+      initialNumToRender={2}
+      maxToRenderPerBatch={2}
+      windowSize={5}
+      onScrollBeginDrag={scrolled ? undefined : markScrolled}
       style={styles.screen}
       contentContainerStyle={[
         styles.content,
@@ -202,17 +266,33 @@ function HomeFeed() {
         },
       ]}
       ListHeaderComponent={header}
+      /*
+       * Three states, never confused. A failed load used to fall through to
+       * "Nothing poured yet — follow a few collectors", which told someone
+       * offline with twenty follows to go and find people. While a pull is
+       * already spinning, the body stays empty rather than showing a second
+       * spinner.
+       */
       ListEmptyComponent={
         loadingFeed ? (
-          <View style={styles.loading}>
-            <ActivityIndicator color={colors.wine} />
-          </View>
+          refreshing ? null : (
+            <View style={styles.loading}>
+              <ActivityIndicator color={colors.wine} />
+            </View>
+          )
+        ) : feedError ? (
+          <EmptyState
+            icon="close"
+            title="Could not load your feed"
+            body="Check your connection and try again. The people you follow are still there."
+            action={{ label: 'Try again', onPress: () => myId && void load(myId) }}
+          />
         ) : (
           <EmptyState
             icon="users"
             title="Nothing poured yet"
-            body="Follow a few collectors from the Accounts list on your profile — their pours land here. Yours will too, once you log an entry."
-            action={{ label: 'Find people', onPress: openProfile }}
+            body="Follow friends and their pours land here. Yours will too, once you log one."
+            action={{ label: 'Find friends', onPress: openFindFriends }}
           />
         )
       }

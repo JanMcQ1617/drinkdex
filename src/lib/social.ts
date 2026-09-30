@@ -1,8 +1,40 @@
 import { File } from 'expo-file-system';
 
+import { getDrink } from '@/data';
 import type { ProfileRow } from '@/lib/database.types';
+import { stripMetadata } from '@/lib/pour';
 import { supabase } from '@/lib/supabase';
 import type { Post, UserProfile } from '@/types';
+
+/** Splits a list into runs of at most `size`, for requests that carry ids in the URL. */
+function chunk<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
+}
+
+/*
+ * Ids per GET request. `.in()` puts every id in the query string, about 39
+ * encoded bytes each, and gateways refuse URLs past a few kilobytes. 150
+ * keeps a request near 6 KB — so a follow list built by one "Follow all" on
+ * an Instagram import no longer fails every feed load, which is what one
+ * unchunked `.in()` did past a few hundred follows.
+ */
+const IDS_PER_REQUEST = 150;
+
+/*
+ * The caption older builds wrote when the user typed nothing. The photo,
+ * the drink name and its spec line already say an entry was logged, so the
+ * sentence was filler under every post; nothing writes it any more, but
+ * rows from before still carry it, so it is treated as no caption at all.
+ */
+const LEGACY_FILLER_CAPTION = 'Logged a new entry.';
+
+/** True when a caption has nothing to show: empty, or the old filler line. */
+export function isBlankCaption(caption: string | null | undefined): boolean {
+  const c = caption?.trim() ?? '';
+  return c.length === 0 || c === LEGACY_FILLER_CAPTION;
+}
 
 /* ==================================================================== */
 /* Mapping                                                              */
@@ -95,11 +127,6 @@ function toPost(row: PostQueryRow, myId: string, myLikes: Set<string>): Post {
 const POST_SELECT =
   'id, author_id, drink_id, caption, photo_path, created_at, likes(count), post_photos(path, taken_at)';
 
-/*
- * Explicit columns, never '*'. Migration 002 revokes the column privilege
- * on profiles.phone_hash, so a `select *` would fail with "permission
- * denied for column phone_hash". Only the match_contacts RPC reads it.
- */
 /**
  * The columns a normal client reads from profiles.
  *
@@ -178,28 +205,65 @@ export async function fetchPeople(myId: string): Promise<UserProfile[]> {
 }
 
 export async function searchPeople(myId: string, term: string): Promise<UserProfile[]> {
-  const q = term.trim();
+  // The search box invites "@username", but usernames are stored bare.
+  const q = term.trim().replace(/^@+/, '');
   if (!q) return fetchPeople(myId);
+
+  /*
+   * Escaped twice, in this order, because the term passes through two
+   * parsers.
+   *
+   * First for LIKE, so a typed % or _ is a character rather than a
+   * wildcard. Then for PostgREST: inside or=(…) a comma or parenthesis is
+   * grammar, so an unquoted "Smith, J" split the filter, the request failed
+   * with a 400, and the screen said nobody was found. Double-quoted, those
+   * are plain text; PostgREST then strips one level of backslashes, which is
+   * why the LIKE escapes need escaping again to reach Postgres intact.
+   *
+   * A typed * still matches anything: PostgREST maps it to % after
+   * unquoting, and for a people search that is harmless.
+   */
+  const like = q.replace(/[\\%_]/g, (c) => `\\${c}`);
+  const v = like.replace(/[\\"]/g, (c) => `\\${c}`);
 
   const { data, error } = await supabase
     .from('profiles')
     .select(profileCols())
     .neq('id', myId)
-    .or(`username.ilike.%${q}%,display_name.ilike.%${q}%`)
+    .or(`username.ilike."%${v}%",display_name.ilike."%${v}%"`)
     .limit(50);
 
   if (error) throw error;
   return ((data ?? []) as unknown as ProfileRow[]).map(toProfile);
 }
 
-export async function fetchFollowing(myId: string): Promise<string[]> {
-  const { data, error } = await supabase
-    .from('follows')
-    .select('following_id')
-    .eq('follower_id', myId);
+/*
+ * Paged, because an unpaged select stops at the API's row cap (1,000 on
+ * hosted Supabase) without saying so, and every follow past it silently
+ * dropped out of the feed.
+ */
+const FOLLOWING_PAGE = 1000;
 
-  if (error) throw error;
-  return (data ?? []).map((r) => r.following_id);
+export async function fetchFollowing(myId: string): Promise<string[]> {
+  const out: string[] = [];
+  let from = 0;
+  let more = true;
+
+  while (more) {
+    const { data, error } = await supabase
+      .from('follows')
+      .select('following_id')
+      .eq('follower_id', myId)
+      .order('following_id')
+      .range(from, from + FOLLOWING_PAGE - 1);
+
+    if (error) throw error;
+    const rows = data ?? [];
+    out.push(...rows.map((r) => r.following_id));
+    more = rows.length === FOLLOWING_PAGE;
+    from += FOLLOWING_PAGE;
+  }
+  return out;
 }
 
 export async function fetchFollowerCount(userId: string): Promise<number> {
@@ -233,63 +297,159 @@ export async function unfollow(myId: string, targetId: string): Promise<void> {
 /* Posts                                                                */
 /* ==================================================================== */
 
-async function fetchMyLikes(myId: string): Promise<Set<string>> {
-  const { data, error } = await supabase.from('likes').select('post_id').eq('user_id', myId);
+/**
+ * Which of THESE posts you have liked.
+ *
+ * Scoped to the rows on screen rather than every like you have ever made:
+ * the unscoped read grew without limit, and past the API's 1,000-row cap it
+ * came back as an arbitrary subset, so some liked posts rendered unliked and
+ * the next tap sent a second like. A hundred ids fit one request.
+ */
+async function fetchMyLikes(myId: string, postIds: string[]): Promise<Set<string>> {
+  if (postIds.length === 0) return new Set();
+  const { data, error } = await supabase
+    .from('likes')
+    .select('post_id')
+    .eq('user_id', myId)
+    .in('post_id', postIds);
   if (error) throw error;
   return new Set((data ?? []).map((r) => r.post_id));
 }
 
 /**
+ * Rows to posts, minus any whose drink has left the Dex.
+ *
+ * posts.drink_id has no foreign key, and beer and wine were removed on
+ * 20 Sep 2026 with no server cleanup, so those posts still come back. The
+ * cards render nothing for them, but every count, grid and empty-state check
+ * works from the array — "Posts 12" over five tiles, or a feed of nothing
+ * with no empty state. Dropping them here keeps every consumer on one list.
+ */
+async function toPosts(rows: PostQueryRow[], myId: string): Promise<Post[]> {
+  const live = rows.filter((r) => getDrink(r.drink_id));
+  const myLikes = await fetchMyLikes(
+    myId,
+    live.map((r) => r.id),
+  );
+  return live.map((r) => toPost(r, myId, myLikes));
+}
+
+const FEED_SIZE = 100;
+
+const newestFirst = (a: PostQueryRow, b: PostQueryRow) =>
+  a.created_at < b.created_at ? 1 : a.created_at > b.created_at ? -1 : 0;
+
+/**
  * The home feed: posts from the people you follow, plus your own.
  *
  * The follow set is passed in rather than joined so the feed can render
- * from cache while follows are still loading.
+ * from cache while follows are still loading. Past IDS_PER_REQUEST authors
+ * the set is split: each request returns its own newest hundred, and the
+ * feed is the newest hundred of all of them.
  */
 export async function fetchFeed(myId: string, followingIds: string[]): Promise<Post[]> {
-  const authors = [myId, ...followingIds];
+  const authors = [...new Set([myId, ...followingIds])];
 
-  const [{ data, error }, myLikes] = await Promise.all([
-    supabase
-      .from('posts')
-      .select(POST_SELECT)
-      .in('author_id', authors)
-      .order('created_at', { ascending: false })
-      .limit(100),
-    fetchMyLikes(myId),
-  ]);
+  const pages = await Promise.all(
+    chunk(authors, IDS_PER_REQUEST).map(async (ids) => {
+      const { data, error } = await supabase
+        .from('posts')
+        .select(POST_SELECT)
+        .in('author_id', ids)
+        .order('created_at', { ascending: false })
+        .limit(FEED_SIZE);
+      if (error) throw error;
+      return (data ?? []) as unknown as PostQueryRow[];
+    }),
+  );
 
-  if (error) throw error;
-  return (data ?? []).map((r) => toPost(r as PostQueryRow, myId, myLikes));
+  const rows = pages.length === 1 ? pages[0] : pages.flat().sort(newestFirst).slice(0, FEED_SIZE);
+  return toPosts(rows, myId);
 }
 
 export async function fetchPostsByAuthor(authorId: string, myId: string): Promise<Post[]> {
-  const [{ data, error }, myLikes] = await Promise.all([
-    supabase
-      .from('posts')
-      .select(POST_SELECT)
-      .eq('author_id', authorId)
-      .order('created_at', { ascending: false })
-      .limit(100),
-    fetchMyLikes(myId),
-  ]);
+  const { data, error } = await supabase
+    .from('posts')
+    .select(POST_SELECT)
+    .eq('author_id', authorId)
+    .order('created_at', { ascending: false })
+    .limit(FEED_SIZE);
 
   if (error) throw error;
-  return (data ?? []).map((r) => toPost(r as PostQueryRow, myId, myLikes));
+  return toPosts((data ?? []) as unknown as PostQueryRow[], myId);
+}
+
+/**
+ * How many posts someone has, for a profile header. The list above stops at
+ * FEED_SIZE, so its length cannot be the count.
+ *
+ * A head request through the same RLS as fetchPostsByAuthor, so a block
+ * hides the count along with the posts. It counts rows the server holds,
+ * which includes any post whose drink has left the Dex (toPosts drops those
+ * from lists); while a profile's whole list fits in one page, the list's
+ * own length is the number that matches the grid.
+ */
+export async function fetchPostCount(authorId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from('posts')
+    .select('id', { count: 'exact', head: true })
+    .eq('author_id', authorId);
+  if (error) throw error;
+  return count ?? 0;
 }
 
 /** Profiles for a set of author ids, as a lookup. */
 export async function fetchProfiles(ids: string[]): Promise<Record<string, UserProfile>> {
-  if (ids.length === 0) return {};
-  const { data, error } = await supabase.from('profiles').select(profileCols()).in('id', ids);
-  if (error) throw error;
-  return Object.fromEntries(
-    ((data ?? []) as unknown as ProfileRow[]).map((r) => [r.id, toProfile(r)]),
+  const unique = [...new Set(ids)];
+  if (unique.length === 0) return {};
+  const pages = await Promise.all(
+    chunk(unique, IDS_PER_REQUEST).map(async (part) => {
+      const { data, error } = await supabase.from('profiles').select(profileCols()).in('id', part);
+      if (error) throw error;
+      return (data ?? []) as unknown as ProfileRow[];
+    }),
   );
+  return Object.fromEntries(pages.flat().map((r) => [r.id, toProfile(r)]));
 }
 
 /* ==================================================================== */
 /* Photos                                                               */
 /* ==================================================================== */
+
+/*
+ * Every photo leaves the device through stripMetadata first, pour photos
+ * and avatars alike: a fresh JPEG with no EXIF and no GPS. A picture taken
+ * at home and posted to a feed would otherwise publish where the poster
+ * lives. The object is therefore always a .jpg sent as image/jpeg, whatever
+ * the picker handed over — HEIC included.
+ *
+ * If stripping fails, the upload fails. The original is never sent as a
+ * fallback, because that fallback is the leak.
+ *
+ * The stripped copy is a temporary file made for this upload alone, so it
+ * is removed afterwards, sent or not; the caller's own file is left alone.
+ */
+async function putStrippedPhoto(localUri: string, path: string): Promise<boolean> {
+  if (!new File(localUri).exists) return false;
+  const clean = await stripMetadata(localUri);
+  try {
+    const bytes = await new File(clean).arrayBuffer();
+    const { error } = await supabase.storage
+      .from('pours')
+      .upload(path, bytes, { contentType: 'image/jpeg', upsert: false });
+    if (error) throw error;
+    return true;
+  } finally {
+    if (clean !== localUri) {
+      try {
+        const temp = new File(clean);
+        if (temp.exists) temp.delete();
+      } catch {
+        // A stray file in the cache directory, which the OS clears anyway.
+      }
+    }
+  }
+}
 
 /**
  * Uploads a locally-persisted proof photo.
@@ -299,19 +459,8 @@ export async function fetchProfiles(ids: string[]): Promise<Record<string, UserP
  */
 export async function uploadPhoto(myId: string, localUri: string): Promise<string | null> {
   try {
-    const file = new File(localUri);
-    if (!file.exists) return null;
-
-    const ext = localUri.split('.').pop()?.split('?')[0] ?? 'jpg';
-    const path = `${myId}/${Date.now()}.${ext}`;
-    const bytes = await file.arrayBuffer();
-
-    const { error } = await supabase.storage
-      .from('pours')
-      .upload(path, bytes, { contentType: `image/${ext === 'jpg' ? 'jpeg' : ext}`, upsert: false });
-
-    if (error) throw error;
-    return path;
+    const path = `${myId}/${Date.now()}.jpg`;
+    return (await putStrippedPhoto(localUri, path)) ? path : null;
   } catch {
     // A failed photo upload must not lose the post itself.
     return null;
@@ -331,19 +480,8 @@ export async function uploadPhoto(myId: string, localUri: string): Promise<strin
  */
 export async function uploadAvatar(myId: string, localUri: string): Promise<string | null> {
   try {
-    const file = new File(localUri);
-    if (!file.exists) return null;
-
-    const ext = localUri.split('.').pop()?.split('?')[0] ?? 'jpg';
-    const path = `${myId}/avatar-${Date.now()}.${ext}`;
-    const bytes = await file.arrayBuffer();
-
-    const { error } = await supabase.storage
-      .from('pours')
-      .upload(path, bytes, { contentType: `image/${ext === 'jpg' ? 'jpeg' : ext}`, upsert: false });
-
-    if (error) throw error;
-    return path;
+    const path = `${myId}/avatar-${Date.now()}.jpg`;
+    return (await putStrippedPhoto(localUri, path)) ? path : null;
   } catch {
     return null;
   }
@@ -362,9 +500,26 @@ export async function uploadAvatar(myId: string, localUri: string): Promise<stri
  * Keyed by path, holding the promise rather than the result so that N
  * simultaneous mounts of one avatar share a single request instead of
  * racing N of them.
+ *
+ * Only successes are kept. A failure used to be cached like any answer, so
+ * one dropped request — a Wi-Fi to cellular handoff, a request cut off by
+ * backgrounding — replaced that photo with artwork everywhere for the rest
+ * of the hour. A failed entry now removes itself when it settles: mounts
+ * already waiting share the one failure, and the next mount signs again.
+ *
+ * The settled URL is kept beside the promise so a card that remounts, or a
+ * gallery that pages back, can paint the photo on its first frame instead
+ * of waiting a tick for a promise that has already resolved.
  */
 const SIGNED_TTL_MS = 55 * 60 * 1000;
-const signedCache = new Map<string, { at: number; url: Promise<string | null> }>();
+
+interface SignedEntry {
+  at: number;
+  url: Promise<string | null>;
+  settled?: string;
+}
+
+const signedCache = new Map<string, SignedEntry>();
 
 /** The bucket is private, so reads go through a short-lived signed URL. */
 export async function signedPhotoUrl(path: string | null): Promise<string | null> {
@@ -373,14 +528,40 @@ export async function signedPhotoUrl(path: string | null): Promise<string | null
   const hit = signedCache.get(path);
   if (hit && Date.now() - hit.at < SIGNED_TTL_MS) return hit.url;
 
-  const url = supabase.storage
+  const entry = { at: Date.now() } as SignedEntry;
+  // Only evicts THIS entry: a newer one for the same path is left alone.
+  const evict = () => {
+    if (signedCache.get(path) === entry) signedCache.delete(path);
+  };
+
+  entry.url = supabase.storage
     .from('pours')
     .createSignedUrl(path, 60 * 60)
-    .then(({ data, error }) => (error ? null : data.signedUrl))
-    .catch(() => null);
+    .then(({ data, error }) => {
+      if (error || !data?.signedUrl) {
+        evict();
+        return null;
+      }
+      entry.settled = data.signedUrl;
+      return data.signedUrl;
+    })
+    .catch(() => {
+      evict();
+      return null;
+    });
 
-  signedCache.set(path, { at: Date.now(), url });
-  return url;
+  signedCache.set(path, entry);
+  return entry.url;
+}
+
+/**
+ * The signed URL for `path` if one has already arrived, synchronously.
+ * Undefined when it has not — the caller then waits on signedPhotoUrl.
+ */
+export function peekSignedPhoto(path: string | null | undefined): string | undefined {
+  if (!path) return undefined;
+  const hit = signedCache.get(path);
+  return hit && Date.now() - hit.at < SIGNED_TTL_MS ? hit.settled : undefined;
 }
 
 /** Drops a path from the signed-URL cache — used when it is replaced. */
@@ -400,39 +581,79 @@ export function forgetSignedPhoto(path: string | null): void {
  * Logging the same drink again used to insert a second row, so a profile
  * filled with duplicates of one entry — it now adds a photo to the post that
  * already exists, and the trigger promotes the newest to the preview.
+ *
+ * Resolves to false when the post is up but its photo is not on it, so the
+ * caller can say so; throws when the post itself could not be written. The
+ * server dates the post (created_at is never sent).
  */
 export async function createPost(
   myId: string,
   drinkId: string,
   caption: string,
   localPhotoUri: string | null,
-): Promise<void> {
+): Promise<boolean> {
   /*
    * onConflict rather than a select-then-insert: two logs racing from the
    * same account would both see "no post" and the second insert would fail
-   * on the unique constraint. The caption is NOT overwritten — the first one
-   * describes the first time they had it, which is what the post is dated.
+   * on the unique constraint.
+   *
+   * DO NOTHING on that conflict, not DO UPDATE. `ignoreDuplicates: false`
+   * made PostgREST rewrite every column it was sent, caption included, so
+   * re-logging a drink replaced "First one at the Tales bar" with whatever
+   * the new log said. The first caption describes the first time they had
+   * it, which is what the post is dated, so it stays — except on a post
+   * that never had words, where a later note fills the gap rather than
+   * being dropped.
    */
-  const { data: post, error } = await supabase
+  const { data: inserted, error } = await supabase
     .from('posts')
     .upsert(
       { author_id: myId, drink_id: drinkId, caption },
-      { onConflict: 'author_id,drink_id', ignoreDuplicates: false },
+      { onConflict: 'author_id,drink_id', ignoreDuplicates: true },
     )
     .select('id')
-    .single();
-
+    .maybeSingle();
   if (error) throw error;
-  if (!localPhotoUri || !post) return;
+
+  let postId = inserted?.id;
+  if (!postId) {
+    const { data: existing, error: readError } = await supabase
+      .from('posts')
+      .select('id, caption')
+      .eq('author_id', myId)
+      .eq('drink_id', drinkId)
+      .single();
+    if (readError) throw readError;
+    postId = existing.id;
+
+    if (!isBlankCaption(caption) && isBlankCaption(existing.caption)) {
+      const { error: captionError } = await supabase
+        .from('posts')
+        .update({ caption })
+        .eq('id', existing.id);
+      if (captionError) throw captionError;
+    }
+  }
+
+  if (!localPhotoUri) return true;
 
   const path = await uploadPhoto(myId, localPhotoUri);
-  if (!path) return;
+  if (!path) return false;
 
-  // The trigger repoints posts.photo_path at the newest photo.
+  /*
+   * The trigger repoints posts.photo_path at the newest photo. If the row
+   * cannot be written the post is still up, so this is the same answer as a
+   * failed upload rather than a throw that would call the whole post failed —
+   * and the object just uploaded is removed, since nothing points at it.
+   */
   const { error: photoError } = await supabase
     .from('post_photos')
-    .insert({ post_id: post.id, path });
-  if (photoError) throw photoError;
+    .insert({ post_id: postId, path });
+  if (photoError) {
+    await removeStoredPhoto(path);
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -442,8 +663,9 @@ export async function createPost(
  * previous file. Several pictures of one drink taken weeks apart are the
  * same entry photographed twice, not a reason to throw the first away.
  *
- * Returns false if the upload failed, so the caller can leave the local
- * record alone rather than showing a photo the server does not have.
+ * Returns false if the photo did not make it onto the post, so the caller
+ * can say the post still shows the old picture. True when there was nothing
+ * to keep in step (see below).
  */
 export async function addPhotoForDrink(
   myId: string,
@@ -458,19 +680,29 @@ export async function addPhotoForDrink(
     .maybeSingle();
   if (error) throw error;
 
-  // No post yet — the entry was collected before sharing existed, or offline.
-  if (!post) {
-    await createPost(myId, drinkId, 'Logged a new entry.', localPhotoUri);
-    return true;
-  }
+  /*
+   * No post, so nothing to keep in step: the entry was kept to the Dex
+   * ("Save to Dex"), was collected before sharing existed, or its post
+   * failed. Following a post never publishes one. This branch used to call
+   * createPost, so changing the photo on a private entry posted it to every
+   * follower without being asked. Sharing a never-posted entry is the
+   * explicit "Save & post", which goes through addPost -> createPost and
+   * keeps the caption; drink/[id].tsx's "Save photo" relies on this branch
+   * to leave the entry private.
+   */
+  if (!post) return true;
 
   const path = await uploadPhoto(myId, localPhotoUri);
   if (!path) return false;
 
+  // As in createPost: an object no row points at is removed, not left behind.
   const { error: photoError } = await supabase
     .from('post_photos')
     .insert({ post_id: post.id, path });
-  if (photoError) throw photoError;
+  if (photoError) {
+    await removeStoredPhoto(path);
+    return false;
+  }
 
   return true;
 }
@@ -487,7 +719,7 @@ export async function addPhotoForDrink(
  * a throw here would abort the row delete and leave the user unable to remove
  * an entry at all. The row is the thing the user can see.
  */
-async function removeStoredPhoto(path: string | null | undefined): Promise<void> {
+export async function removeStoredPhoto(path: string | null | undefined): Promise<void> {
   if (!path) return;
   try {
     await supabase.storage.from('pours').remove([path]);
@@ -534,51 +766,6 @@ export async function deletePostsForDrink(myId: string, drinkId: string): Promis
   await Promise.all([...paths].map((path) => removeStoredPhoto(path)));
 }
 
-/**
- * Points every post for this drink at a NEW photo, and deletes the old files.
- *
- * Changing the photo on a collected entry used to be purely local: the store
- * swapped `unlocks[drinkId].photoUri` and nothing reached the server, so the
- * post kept showing the replaced image and the old object stayed in the
- * bucket. Both are fixed here.
- *
- * Returns false if the upload failed, so the caller can leave the local record
- * alone rather than showing a photo the server does not have.
- */
-export async function replacePostPhotoForDrink(
-  myId: string,
-  drinkId: string,
-  localPhotoUri: string,
-): Promise<boolean> {
-  const newPath = await uploadPhoto(myId, localPhotoUri);
-  if (!newPath) return false;
-
-  const { data: previous, error: readError } = await supabase
-    .from('posts')
-    .select('photo_path')
-    .eq('author_id', myId)
-    .eq('drink_id', drinkId);
-  if (readError) throw readError;
-
-  const { error } = await supabase
-    .from('posts')
-    .update({ photo_path: newPath })
-    .eq('author_id', myId)
-    .eq('drink_id', drinkId);
-  if (error) throw error;
-
-  // Only after the rows point at the new file — deleting first would leave a
-  // window where the post references an object that is already gone.
-  await Promise.all(
-    (previous ?? [])
-      .map((row) => row.photo_path)
-      .filter((path) => path && path !== newPath)
-      .map((path) => removeStoredPhoto(path)),
-  );
-
-  return true;
-}
-
 export async function likePost(myId: string, postId: string): Promise<void> {
   const { error } = await supabase.from('likes').insert({ post_id: postId, user_id: myId });
   if (error && !error.message.includes('duplicate')) throw error;
@@ -605,25 +792,22 @@ export async function updateProfile(
 /* Friend discovery — invites and contacts                              */
 /* ==================================================================== */
 
-interface MatchRow {
-  id: string;
-  username: string;
-  display_name: string;
-  accent: string;
-  bio: string | null;
-  avatar_path: string | null;
-  created_at: string;
-}
-
 /**
- * Turns an accepted invite into a mutual follow via the accept_invite RPC.
+ * Redeems an invite token into a mutual follow via the accept_invite RPC.
  *
  * The reciprocal edge (inviter → me) is one RLS forbids the client to
- * write, so the server does both sides. No-ops on a self- or bad invite.
+ * write, so the server does both sides. The link carries a random token,
+ * not the inviter's user id (migration 011): a bare id could be pasted into
+ * a link by anyone, and made its owner follow whoever opened it.
+ *
+ * Resolves to the inviter's id, or null when the token is expired or
+ * unknown, is your own, or either of you has blocked the other — none of
+ * which is an error. Throws only when the request itself failed.
  */
-export async function acceptInvite(inviterId: string): Promise<void> {
-  const { error } = await supabase.rpc('accept_invite', { inviter: inviterId });
+export async function acceptInvite(token: string): Promise<string | null> {
+  const { data, error } = await supabase.rpc('accept_invite', { invite_token: token });
   if (error) throw error;
+  return data ?? null;
 }
 
 /**
@@ -643,40 +827,34 @@ export async function setPhoneHash(_myId: string, phoneHash: string | null): Pro
   if (error) throw error;
 }
 
+/*
+ * Hashes per matcher call. The server refuses more than 500 in one call
+ * (migration 011); 300 stays clear of that edge. The daily quota — 3,000
+ * hashes across both matchers — is counted per hash, so smaller calls cost
+ * nothing extra. Past the quota the server raises 'rate_limited', which is
+ * thrown to the caller as is: it is the caller that has to say "try again
+ * tomorrow" rather than "none of your contacts are here".
+ */
+const HASHES_PER_CALL = 300;
+
 /**
  * Given hashes of the numbers in the user's address book, returns the
  * Sipply accounts that opted in with a matching hash.
- *
- * Chunked because the hash set can be large and PostgREST caps URL length
- * on the array argument.
  */
 export async function matchContacts(hashes: string[]): Promise<UserProfile[]> {
   const unique = [...new Set(hashes)].filter(Boolean);
   if (unique.length === 0) return [];
 
-  const CHUNK = 300;
   const out: UserProfile[] = [];
   const seen = new Set<string>();
 
-  for (let i = 0; i < unique.length; i += CHUNK) {
-    const { data, error } = await supabase.rpc('match_contacts', {
-      hashes: unique.slice(i, i + CHUNK),
-    });
+  for (const part of chunk(unique, HASHES_PER_CALL)) {
+    const { data, error } = await supabase.rpc('match_contacts', { hashes: part });
     if (error) throw error;
-    for (const row of (data ?? []) as MatchRow[]) {
+    for (const row of data ?? []) {
       if (seen.has(row.id)) continue;
       seen.add(row.id);
-      out.push(
-        toProfile({
-          id: row.id,
-          username: row.username,
-          display_name: row.display_name,
-          accent: row.accent,
-          bio: row.bio,
-          avatar_path: row.avatar_path,
-          created_at: row.created_at,
-        }),
-      );
+      out.push(toProfile(row));
     }
   }
   return out;
@@ -703,8 +881,8 @@ export async function setInstagramHash(
  *
  * Keyed by hash rather than returning bare profiles: the caller holds the
  * hash → handle map locally, so it can label a row "@sarah.g" without the
- * server ever having seen the handle. Chunked for the same reason
- * matchContacts is — PostgREST caps the URL length of an array argument.
+ * server ever having seen the handle. Chunked and rate-limited exactly as
+ * matchContacts is — the two share one daily quota.
  */
 export async function matchInstagram(
   hashes: string[],
@@ -712,30 +890,16 @@ export async function matchInstagram(
   const unique = [...new Set(hashes)].filter(Boolean);
   if (unique.length === 0) return [];
 
-  const CHUNK = 300;
   const out: { profile: UserProfile; hash: string }[] = [];
   const seen = new Set<string>();
 
-  for (let i = 0; i < unique.length; i += CHUNK) {
-    const { data, error } = await supabase.rpc('match_instagram', {
-      hashes: unique.slice(i, i + CHUNK),
-    });
+  for (const part of chunk(unique, HASHES_PER_CALL)) {
+    const { data, error } = await supabase.rpc('match_instagram', { hashes: part });
     if (error) throw error;
-    for (const row of (data ?? []) as (MatchRow & { matched_hash: string })[]) {
+    for (const row of data ?? []) {
       if (seen.has(row.id)) continue;
       seen.add(row.id);
-      out.push({
-        hash: row.matched_hash,
-        profile: toProfile({
-          id: row.id,
-          username: row.username,
-          display_name: row.display_name,
-          accent: row.accent,
-          bio: row.bio,
-          avatar_path: row.avatar_path,
-          created_at: row.created_at,
-        }),
-      });
+      out.push({ hash: row.matched_hash, profile: toProfile(row) });
     }
   }
   return out;
