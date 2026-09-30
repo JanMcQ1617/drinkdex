@@ -79,10 +79,21 @@ export const haptic = {
  * FindFriends and InstagramImport — so both of those kept a private copy
  * rather than import it back through a require cycle.
  */
+/*
+ * The same message twice within a moment is one event, said once. Each gated
+ * screen mounts its own AuthGate, so a signed-out user who has visited two of
+ * them has two forms subscribed to the same store error — and without this,
+ * VoiceOver read every failure once per mounted form.
+ */
+let lastAnnounced = { message: '', at: 0 };
+const REPEAT_WINDOW_MS = 800;
+
 export function announce(message: string) {
-  if (Platform.OS === 'ios') {
-    AccessibilityInfo.announceForAccessibilityWithOptions(message, { queue: true });
-  }
+  if (Platform.OS !== 'ios') return;
+  const now = Date.now();
+  if (message === lastAnnounced.message && now - lastAnnounced.at < REPEAT_WINDOW_MS) return;
+  lastAnnounced = { message, at: now };
+  AccessibilityInfo.announceForAccessibilityWithOptions(message, { queue: true });
 }
 
 /**
@@ -216,7 +227,7 @@ export interface ButtonProps {
  * washed pill, for the one irreversible action a screen exists to offer.
  * `dangerText` is the same red with no fill and no edge, for a quiet
  * destructive action at the foot of a screen about something else —
- * "Remove from collection", "Remove picture" — where a red pill would
+ * "Remove from collection", "Remove photo" — where a red pill would
  * outshout the screen's real call to action. Without it, those were
  * built by hand from `danger` with the fill and border overridden away.
  * `danger` text is 5.99:1 on the page and above that on a white card.
@@ -724,7 +735,28 @@ export function SegmentedControl<K extends string>({
 /* Search field                                                         */
 /* ==================================================================== */
 
-export interface SearchFieldProps {
+type InputProps = React.ComponentProps<typeof TextInput>;
+
+/**
+ * Every TextInput prop passes through (autoFocus, maxLength, onKeyPress…)
+ * except the ones that make it the app's search field and not a screen's
+ * own: the text style, the placeholder colour, and autocorrect,
+ * autocapitalisation and multiline, which a query never wants.
+ */
+export interface SearchFieldProps
+  extends Omit<
+    InputProps,
+    | 'value'
+    | 'onChangeText'
+    | 'placeholder'
+    | 'accessibilityLabel'
+    | 'style'
+    | 'ref'
+    | 'placeholderTextColor'
+    | 'autoCorrect'
+    | 'autoCapitalize'
+    | 'multiline'
+  > {
   value: string;
   onChangeText: (text: string) => void;
   /** Names what is searched — "Name, style or country". Never the only label. */
@@ -739,12 +771,9 @@ export interface SearchFieldProps {
   onCard?: boolean;
   /** A slot after the text and before the clear button, e.g. a spinner. */
   trailing?: React.ReactNode;
-  returnKeyType?: React.ComponentProps<typeof TextInput>['returnKeyType'];
-  onSubmitEditing?: () => void;
-  onFocus?: () => void;
-  onBlur?: () => void;
   /** A plain prop under React 19; lets a screen focus the field. */
   ref?: React.Ref<TextInput>;
+  /** The pill's outer box: margins and width. The text inside is fixed. */
   style?: ViewStyle;
 }
 
@@ -777,16 +806,15 @@ export function SearchField({
   onCard,
   trailing,
   returnKeyType = 'search',
-  onSubmitEditing,
-  onFocus,
-  onBlur,
   ref,
   style,
+  ...input
 }: SearchFieldProps) {
   return (
     <View style={[styles.search, onCard && styles.searchOnCard, style]}>
       <Icon name="search" size={17} color={colors.textMuted} />
       <TextInput
+        {...input}
         ref={ref}
         value={value}
         onChangeText={onChangeText}
@@ -795,9 +823,6 @@ export function SearchField({
         autoCorrect={false}
         autoCapitalize="none"
         returnKeyType={returnKeyType}
-        onSubmitEditing={onSubmitEditing}
-        onFocus={onFocus}
-        onBlur={onBlur}
         style={styles.searchInput}
         accessibilityLabel={accessibilityLabel}
       />
@@ -821,43 +846,58 @@ export function SearchField({
 /* Form field                                                           */
 /* ==================================================================== */
 
-type InputProps = React.ComponentProps<typeof TextInput>;
-
-export interface FieldProps {
+/**
+ * Every TextInput prop passes through — autoComplete, textContentType,
+ * inputMode, maxLength, returnKeyType, onSubmitEditing, submitBehavior,
+ * autoFocus, editable — except what Field decides itself: the text style
+ * (every field is drawn one way), the placeholder colour, masking (see
+ * `secure`) and the spoken hint (see `hint` and `error`).
+ */
+export interface FieldProps
+  extends Omit<
+    InputProps,
+    | 'value'
+    | 'onChangeText'
+    | 'style'
+    | 'ref'
+    | 'placeholderTextColor'
+    | 'secureTextEntry'
+    | 'accessibilityHint'
+  > {
   label: string;
   value: string;
   onChangeText: (v: string) => void;
-  placeholder?: string;
   /** A password: masked, with a reveal toggle inside the field's right edge. */
   secure?: boolean;
-  autoComplete?: InputProps['autoComplete'];
-  textContentType?: InputProps['textContentType'];
-  inputMode?: InputProps['inputMode'];
   /** Defaults to 'none', which is right for everything but names and prose. */
   autoCapitalize?: InputProps['autoCapitalize'];
   /** Defaults to off. Turn it on for prose (a bio), never for a handle. */
   autoCorrect?: boolean;
-  maxLength?: number;
   /** Prose that wraps: a taller box, text from the top. */
   multiline?: boolean;
-  /** Keyboard chaining: 'next' with a focus hop, or the form's own action. */
-  returnKeyType?: InputProps['returnKeyType'];
-  onSubmitEditing?: () => void;
-  submitBehavior?: InputProps['submitBehavior'];
   /** Called when the field takes focus, after its own focus ring shows. */
-  onFocus?: () => void;
+  onFocus?: InputProps['onFocus'];
   /** Called when the field loses focus, after its own focus ring drops. */
-  onBlur?: () => void;
+  onBlur?: InputProps['onBlur'];
   /** A plain prop under React 19; lets the form move focus between fields. */
   ref?: React.Ref<TextInput>;
+  /** The rule or the promise — "3 to 20 letters, numbers or underscores". */
   hint?: string;
+  /**
+   * What is wrong with the value now. Shown in place of `hint` while set,
+   * and announced when it appears. See the note on Field.
+   */
+  error?: string | null;
   /** Fixed leading character, e.g. the '@' on a handle. Not part of the value. */
   prefix?: string;
-  /** Colours the hint as a problem. The submit button is disabled either
-   *  way, so without this the reason reads as ordinary help text. */
+  /**
+   * Colours the hint itself as a problem: the older spelling of `error`,
+   * for a form that swaps its hint text rather than passing both.
+   */
   hintIsError?: boolean;
   /** Spoken instead of `label`, when the visible label is terse ("About"). */
   accessibilityLabel?: string;
+  /** The field's outer box: margins and width. The input inside is fixed. */
   style?: ViewStyle;
 }
 
@@ -875,37 +915,48 @@ export interface FieldProps {
  * label, the placeholder, the '@' and a non-error hint are all textMuted:
  * each is small text a person has to read, so each needs 4.5:1, and
  * textFaint is for large type and glyphs only.
+ *
+ * AN ERROR REPLACES THE HINT; IT DOES NOT STACK UNDER IT. The line below
+ * the field shows one thing: the error while there is one, the hint
+ * otherwise. A grey rule with a red complaint beneath it is two signals
+ * for one state, and the second pushes the form down mid-typing. So write
+ * an error that stands on its own ("Usernames are 3 to 20 letters,
+ * numbers or underscores", not "Too short"): it is all the person sees.
+ *
+ * Linked for VoiceOver twice over. That line is the input's
+ * accessibilityHint, so it is read with the field instead of being left as
+ * a separate element to find afterwards. It also stays a visible, readable
+ * Text of its own, because a VoiceOver user can switch hints off, and an
+ * error that lived only in the hint would then never be heard. An error is
+ * also announced when it appears: iOS has no live regions.
  */
 export function Field({
   label,
   value,
   onChangeText,
-  placeholder,
   secure,
-  autoComplete,
-  textContentType,
-  inputMode,
   autoCapitalize = 'none',
   autoCorrect = false,
-  maxLength,
   multiline,
-  returnKeyType,
-  onSubmitEditing,
-  submitBehavior,
   onFocus,
   onBlur,
   ref,
   hint,
+  error,
   prefix,
   hintIsError,
   accessibilityLabel,
   style,
+  ...input
 }: FieldProps) {
   const [reveal, setReveal] = useState(false);
   const [focused, setFocused] = useState(false);
 
-  // A hint that turns into an error is news; the same hint as help is not.
-  useAnnounce(hintIsError ? hint : null);
+  const note = error || hint || null;
+  const noteIsError = !!error || (!!hint && !!hintIsError);
+
+  // An error is news; the same hint as help is not.
+  useAnnounce(noteIsError ? note : null);
 
   return (
     <View style={[styles.field, style]}>
@@ -926,29 +977,22 @@ export function Field({
           </Text>
         ) : null}
         <TextInput
+          {...input}
           ref={ref}
           value={value}
           onChangeText={onChangeText}
-          placeholder={placeholder}
           placeholderTextColor={colors.textMuted}
           secureTextEntry={secure && !reveal}
           autoCapitalize={autoCapitalize}
           autoCorrect={autoCorrect}
-          autoComplete={autoComplete}
-          textContentType={textContentType}
-          inputMode={inputMode}
-          maxLength={maxLength}
           multiline={multiline}
-          returnKeyType={returnKeyType}
-          onSubmitEditing={onSubmitEditing}
-          submitBehavior={submitBehavior}
-          onFocus={() => {
+          onFocus={(e) => {
             setFocused(true);
-            onFocus?.();
+            onFocus?.(e);
           }}
-          onBlur={() => {
+          onBlur={(e) => {
             setFocused(false);
-            onBlur?.();
+            onBlur?.(e);
           }}
           style={[
             styles.input,
@@ -958,9 +1002,7 @@ export function Field({
             focused && styles.inputFocused,
           ]}
           accessibilityLabel={accessibilityLabel ?? label}
-          /* The rule or the error is read with the field, not left for a
-             VoiceOver user to find as a separate element afterwards. */
-          accessibilityHint={hint}
+          accessibilityHint={note ?? undefined}
         />
         {secure ? (
           <PressableScale
@@ -974,11 +1016,11 @@ export function Field({
           </PressableScale>
         ) : null}
       </View>
-      {hint ? (
+      {note ? (
         <Text
-          style={[styles.fieldHint, hintIsError && styles.fieldHintError]}
-          accessibilityLiveRegion={hintIsError ? 'polite' : 'none'}>
-          {hint}
+          style={[styles.fieldHint, noteIsError && styles.fieldHintError]}
+          accessibilityLiveRegion={noteIsError ? 'polite' : 'none'}>
+          {note}
         </Text>
       ) : null}
     </View>

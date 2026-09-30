@@ -234,6 +234,16 @@ const PAIRS = [
   [C.textMuted, C.cardAlt, 3.0, 'dex number on the bone plate (secondary)'],
   [C.text, C.slot, 4.5, 'body text on empty slot'],
   [C.wine, C.slot, 4.5, 'progress count on the empty-slot recess'],
+  // Continue with Facebook: a Button-sized label, 16pt semibold, which is
+  // not large text, so it needs 4.5:1 — the reason colors.facebook is the
+  // 2023 blue and not #1877F2 (4.23:1). The solid mark on the button is
+  // the same white on the same blue.
+  [C.onFacebook, C.facebook, 4.5, 'Continue with Facebook label on Facebook blue'],
+  // The outline mark, if a Connect Facebook row draws it in Facebook blue.
+  [C.facebook, C.bg, 3.0, 'Facebook mark on page'],
+  [C.facebook, C.surface, 3.0, 'Facebook mark on a card'],
+  // colors.filmPaper has no pair: it is the intro film's ground, and
+  // nothing is written on it (theme.ts says why).
 ];
 
 let failed = 0;

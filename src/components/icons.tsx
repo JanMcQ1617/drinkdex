@@ -14,6 +14,10 @@ import { colors } from '@/constants/theme';
 /*                                                                      */
 /* Replaces the emoji glyphs, which rendered as system font art —       */
 /* inconsistent weight, uncontrollable color, and visibly "cheap".      */
+/*                                                                      */
+/* One glyph is not ours: the solid `facebook` is Meta's published      */
+/* mark, drawn as published for the sign-in button (see its note in     */
+/* SOLID). It is neither hand-drawn nor an active state.                */
 /* ==================================================================== */
 
 const STROKE = 1.75;
@@ -48,6 +52,7 @@ export type IconName =
   | 'settings'
   | 'comment'
   | 'instagram'
+  | 'facebook'
   | 'document'
   | 'bottle';
 
@@ -55,7 +60,8 @@ export interface IconProps {
   name: IconName;
   size?: number;
   color?: string;
-  /** Solid weight — used for active nav and engaged toggles. */
+  /** Solid weight — used for active nav and engaged toggles, and for the
+   *  Facebook mark on the sign-in button. */
   filled?: boolean;
 }
 
@@ -164,6 +170,26 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
       <Path d="M7.6 3.9h8.8a3.7 3.7 0 0 1 3.7 3.7v8.8a3.7 3.7 0 0 1-3.7 3.7H7.6a3.7 3.7 0 0 1-3.7-3.7V7.6a3.7 3.7 0 0 1 3.7-3.7Z" />
       <Circle cx={12} cy={12} r={3.6} />
       <Path d="M16.9 7.15h.01" />
+    </>
+  ),
+  /*
+   * Facebook, drawn two ways for two jobs.
+   *
+   * This outline is ours, on our grid, for the same reason as the Instagram
+   * glyph above: where it labels a Sipply feature (a "Connect Facebook"
+   * row, a friends list), it should read as part of this set. The ring is
+   * the Atlas ring and the f stands on its lowest point, as Facebook's own
+   * f runs out through the foot of its disc.
+   *
+   * The solid (below) is Facebook's own mark. It is for the sign-in button,
+   * where the control stands for their account and Meta's guidelines ask
+   * for their logo as published.
+   */
+  facebook: (
+    <>
+      <Circle cx={12} cy={12} r={8.7} />
+      <Path d="M11.5 20.7V11.1a3.7 3.7 0 0 1 3.7-3.7" />
+      <Path d="M9 13.4h6" />
     </>
   ),
   plus: (
@@ -307,6 +333,18 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
     <Path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z" />
   ),
   bookmark: <Path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z" />,
+  /*
+   * Facebook's published mark: a disc with the f cut out of it, the f's
+   * stem open through the foot. Meta's 2023 geometry (the Simple Icons
+   * path, CC0; the mark itself is Meta's trademark), scaled from its
+   * 24-unit disc to 19.2 about the centre so it sits at the optical size
+   * of the other solids rather than touching the box. One contour, no
+   * evenodd: the f is a notch in the disc's outline, so drawn in
+   * onFacebook on a facebook fill, the f shows the button's own blue.
+   */
+  facebook: (
+    <Path d="M9.681 21.353v-6.384H7.702v-2.934h1.979v-1.264c0-3.268 1.478-4.782 4.686-4.782.321 0 .764.034 1.174.082a6.944 6.944 0 0 1 .913.156v2.66a6.898 6.898 0 0 0-.522-.029 21.444 21.444 0 0 0-.586-.007c-.566 0-1.007.077-1.34.247a1.349 1.349 0 0 0-.543.498c-.206.336-.299.796-.299 1.402v1.038h3.135l-.309 1.682-.23 1.251h-2.597v6.596C17.917 20.99 21.6 16.943 21.6 12.035c0-5.302-4.298-9.6-9.6-9.6s-9.6 4.298-9.6 9.6c0 4.502 3.099 8.28 7.281 9.318Z" />
+  ),
   sparkle: (
     <>
       <Path d="M12 3a.6.6 0 0 1 .6.52c.5 3.66 1.62 4.78 5.28 5.28a.6.6 0 0 1 0 1.19c-3.66.5-4.78 1.62-5.28 5.28a.6.6 0 0 1-1.19 0c-.5-3.66-1.62-4.78-5.28-5.28a.6.6 0 0 1 0-1.19c3.66-.5 4.78-1.62 5.28-5.28A.6.6 0 0 1 12 3z" />

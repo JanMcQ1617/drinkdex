@@ -166,6 +166,36 @@ export const colors = {
   /* Emboss — the hairline pair that fakes a stamped plate. */
   embossLight: 'rgba(255, 253, 249, 0.72)',
   embossShadow: 'rgba(43, 35, 34, 0.14)',
+
+  /*
+   * Facebook's blue and the white it carries: the "Continue with Facebook"
+   * button and the Facebook mark, and nothing else. A third party's colour
+   * in this palette is a quotation. It appears where the control stands
+   * for that company's account, and never as an accent of ours.
+   *
+   * #0866FF is the blue of Facebook's 2023 identity (Meta's brand
+   * resources), not the #1877F2 of the 2019 mark that SDK samples still
+   * carry. The difference is not only currency: white on #1877F2 is
+   * 4.23:1, under the 4.5:1 a 16pt semibold button label needs, and white
+   * on #0866FF is 4.82:1. The current brand is also the one that passes,
+   * so neither the brand nor the contrast rule had to bend.
+   */
+  facebook: '#0866FF',
+  onFacebook: '#FFFFFF',
+
+  /*
+   * The intro film's paper: frame 0 of assets/video/intro.mp4, sampled
+   * across the top edge in BT.709. The paper darkens a step toward the
+   * foot of the frame, so this is its lightest honest value, not an
+   * average. It is for VideoIntro's ground (its styles.fill), so the
+   * moment before the first decoded frame is already the film's paper
+   * rather than a flash of cream page between the splash and the film.
+   *
+   * Carries no text: the status bar is hidden and the skip control is
+   * invisible while the film plays, so check-contrast has no pair for it.
+   * Re-sample it whenever the clip changes.
+   */
+  filmPaper: '#D6C4B1',
 } as const;
 
 /* ==================================================================== */
