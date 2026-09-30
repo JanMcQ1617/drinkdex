@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 31 August 2026**
+**Last updated: 29 September 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -16,10 +16,12 @@ subject and it will be treated that way.
 
 ## Things you can do yourself, right now
 
-**Delete your account.** Profile → the settings control → **Delete account**.
-It removes your profile, every post, every photo, your likes, and your
-follows in both directions. It is immediate, it cannot be undone, and you do
-not need to email anyone first.
+**Delete your account.** Profile → **Settings** (the gear, top right) →
+**Delete account**. It removes your profile, every post, every photo, your
+likes, and your follows in both directions. It is immediate, it cannot be
+undone, and you do not need to email anyone first. If a photo cannot be
+removed, the account stays and the app tells you; try again once you have a
+signal.
 
 **Report a post.** The **"..."** menu on any post that is not yours →
 **Report**. Pick a reason. It comes straight to us.
@@ -28,17 +30,20 @@ not need to email anyone first.
 immediately, it works in both directions, it drops any follow between you,
 and the other person is not told.
 
-**Stop being findable by your phone number.** Profile → **Accounts** →
-**Stop being findable**. This clears the stored hash on the server, not just
-on your phone.
+**Unblock someone.** Profile → **Settings** → **Blocked accounts** →
+**Unblock**. Follows the block dropped do not come back on their own.
 
-**Forget an imported Instagram list.** Profile → **Accounts** → **Forget my
-imported list**. Clears the cached list and the matches. Your own handle can
-be cleared separately in the same place.
+**Stop being findable by your phone number.** Profile → **Settings** →
+**Find friends** → **Stop being findable**. This clears the stored hash on
+the server, not just on your phone.
 
-**Start your collection over.** Profile → the settings control → **Reset
-collection**. This clears your collected entries. It does not delete your
-account or your posts.
+**Forget an imported Instagram list.** Profile → **Settings** → **Find
+friends** → **Forget my imported list**. Clears the cached list and the
+matches. Your own handle can be cleared separately in the same place.
+
+**Start your collection over.** Profile → **Settings** → **Reset
+collection**. This clears your collected entries and the photos saved with
+them on this phone. It does not delete your account or your posts.
 
 ## If you have forgotten your password
 
@@ -92,17 +97,37 @@ one, here's a screenshot" is a good bug report.
 
 ## Things people ask
 
-**Where did my collection go?** Your collection lives on the device as well
-as on the server. Signing in on a different phone does not bring it with you
-yet.
+**Where did my collection go?** Your collection lives only on the phone
+where you logged it. It is not backed up to Sipply, and signing in on a
+different phone does not bring it with you. Posts you shared are still on
+your profile.
 
 **Are my photos public?** No. They are stored privately and served through
-short-lived links that expire. But anyone signed in to Sipply can see the
+short-lived links that expire, and location and camera details are removed
+before a photo leaves your phone. But anyone signed in to Sipply can see the
 posts you make, so treat a post as public.
 
-**Do you upload my contacts?** No. Phone numbers are turned into one-way
-hashes on your phone and only the hashes are compared. The
-[Privacy Policy](privacy) explains this in full.
+**Do you upload my contacts?** No. Phone numbers are turned into hashes on
+your phone, and only the hashes are sent to be compared; they are not
+stored. The [Privacy Policy](privacy) explains this in full.
+
+**It says I have checked a lot of numbers, or run a lot of checks, today.**
+Matching is limited to 3,000 phone numbers and Instagram handles per
+account in any 24 hours, counted together, so that it is hard to misuse for
+looking up strangers. Try again tomorrow.
+
+**It says my text includes language Sipply does not allow.** Captions,
+bios, display names and usernames are checked for slurs and explicit sexual
+terms when you save them. Drink names that only sound rude are fine. If it
+refused something innocent, email us the exact text and we will look at the
+list.
+
+**How long does an invite link last?** Thirty days. Anyone you send it to
+can use it until then, and once they accept it, the two of you follow each
+other. Opening it while signed in accepts it; opening it before signing in
+asks once they have. The link only opens on a phone that already has Sipply.
+A link shared from an older version of the app still opens your profile,
+but no longer follows anyone.
 
 **Can you connect my Instagram automatically?** No — and not because it is
 unbuilt. No Meta API hands a third-party app your follower or following

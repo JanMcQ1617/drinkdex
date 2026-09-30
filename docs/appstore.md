@@ -8,7 +8,18 @@ actually use, so there is room to fiddle without going over.
 Every number here was counted out of `src/data/drinks.json` rather than
 remembered. If the Dex grows before you submit, recount — an inflated
 number in a listing is the kind of thing that is easy to write and
-awkward to defend.
+awkward to defend. So is an example drink the Dex no longer has, which
+is why the description only names entries that are in the file.
+
+Recount whenever `scripts/*data` changes, from the repo root. It prints
+the total, then a count for each category and each rarity:
+
+```sh
+node -e 'const d=require("./src/data/drinks.json"),c={};for(const x of d){c[x.category]=(c[x.category]||0)+1;c[x.rarity]=(c[x.rarity]||0)+1}console.log(d.length,c)'
+```
+
+Then check every drink the description names by searching the file for
+it, and recount the bracketed lengths after any edit.
 
 ---
 
@@ -54,7 +65,7 @@ A field guide to drinking
 cocktail,whisky,whiskey,spirits,bar,recipes,tasting,journal,mixology,pour,gin,rum,tequila,amaro
 ```
 
-[99]
+[95]
 
 Two rules this already follows, both easy to get wrong: **no spaces after
 the commas** (a space costs a character and buys nothing), and **nothing
@@ -75,7 +86,7 @@ when the Dex grows or something is worth announcing.
 2,089 drinks waiting to be found: 1,190 spirits and 899 cocktails with real recipes. Log what you pour, keep the photo, and see what your friends are drinking.
 ```
 
-[165]
+[159]
 
 ---
 
@@ -90,21 +101,21 @@ Entries start locked. You collect one by drinking it: log the pour, add a photo 
 
 THE DEX
 
-Search it, filter it by category, or just scroll and find something you have never heard of. Some entries are everywhere — a Margarita, a Hefeweizen. Others are genuinely obscure: a 1930s Mexico City sour nobody wrote down for seventy years, a whisky forgotten in a warehouse for two decades, an amber lager invented in Vienna that only survived an ocean away.
+Search it, filter it by category, or just scroll and find something you have never heard of. Some entries are everywhere — a Margarita, a Negroni. Others are genuinely obscure: a 1930s Mexico City sour the world forgot for seventy years, a whisky forgotten in a warehouse for two decades, a Mallorcan bitter sold against malaria that outlived the malaria.
 
-Entries are graded common, uncommon, rare and legendary. There are 402 legendary cards and you will not find them by accident.
+Entries are graded common, uncommon, rare and legendary. There are 229 legendary cards and you will not find them by accident.
 
 YOUR SHELF
 
 Log a drink and it lands on your profile with your own photograph of it — not a stock picture of someone else's glass. Your collection, your notes, your camera roll.
 
-Stats show you what you have covered and what you have not: progress by category, how your rarity spread compares, and the milestones you are closing in on.
+Stats show you what you have covered and what you have not: progress by category and by rarity, and the milestones you are closing in on.
 
 PEOPLE
 
-Follow other collectors and see what they have been pouring. Find friends by username, or match your contacts — phone numbers are turned into one-way hashes on your phone and your contacts are never uploaded.
+Follow other collectors and see what they have been pouring. Find friends by username, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
 
-If you would rather bring your Instagram circle, you can import the follower list Instagram gives you when you download your own data. Sipply never connects to your Instagram account and never learns which handle belongs to which person here.
+If you would rather bring your Instagram circle, you can import the follower list Instagram gives you when you download your own data. Sipply never connects to your Instagram account: the file is read on your phone, and the usernames in it are scrambled there before they are compared.
 
 WHAT SIPPLY DOES NOT DO
 
@@ -112,14 +123,14 @@ No ads. No analytics. No trackers. No advertising identifier. Nothing is sold or
 
 Sipply does not sell alcohol and cannot be used to order it. It is a reference and a diary, nothing more.
 
-You can delete your account from inside the app, in one tap, without emailing anyone. It takes your posts and your photos with it.
+You can delete your account from Settings inside the app, without emailing anyone. It takes your posts and your photos with it.
 
 —
 
 Sipply is for people old enough to drink where they live. Please drink responsibly, and never drive after drinking.
 ```
 
-[~2,180 — comfortably inside 4000, with room if you want to add a line]
+[2,345 — comfortably inside 4000, with room if you want to add a line]
 
 ---
 
@@ -138,9 +149,10 @@ every update after this one.
 | Support URL | `https://janmcq1617.github.io/drinkdex/support` |
 | Marketing URL | leave blank — there is no marketing site, and a dead link is worse than none |
 
-**The support URL 404s until `docs/` is merged to `main`.** Pages serves
-from `main` / `/docs`, so the branch alone does not publish it. Check that
-it resolves before you submit — a support URL that 404s is a rejection.
+**Pages serves from `main` / `/docs`**, so a branch alone publishes
+nothing, and these pages change only when `main` moves. The privacy,
+support and terms pages all resolved on 29 September 2026. Check again
+before you submit — a support URL that 404s is a rejection.
 
 ---
 

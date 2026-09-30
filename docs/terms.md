@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 31 August 2026**
+**Last updated: 29 September 2026**
 
 Sipply is a drinks field guide. You collect entries, log what you drink, and
 share it with people you follow. These are the rules for using it.
@@ -44,6 +44,11 @@ Specifically, do not post or send:
 - Someone else's photos or personal information posted without their consent
 - Impersonation of another person or account
 
+Captions, bios, display names and usernames are checked when you save them,
+and text containing a slur or an explicit sexual term is refused. That
+filter is a floor, not the rule: anything on the list above is removed when
+it is reported, whether or not the filter caught it.
+
 Do not try to break the app either: no scraping, no automated accounts, no
 attempts to reach data that is not yours, and no reverse-engineering of the
 app to get around the rules above.
@@ -59,7 +64,10 @@ the account is suspended or deleted depending on what it did.
 
 **Block** takes effect immediately. The person you block cannot see you and
 you cannot see them, any follow between you is dropped in both directions,
-and they are not told. You do not need our involvement to block someone.
+and they are not told. Neither of you can follow the other while the block
+stands, not even through an invite link. You do not need our involvement to
+block someone, and you can undo it yourself from **Profile → Settings →
+Blocked accounts**.
 
 If something is urgent, email **mcqueeny1617@gmail.com** rather than waiting.
 
@@ -73,7 +81,9 @@ permission is limited to running the app. We do not sell your content,
 license it to anyone else, or use it to advertise.
 
 That permission ends when you delete the content or your account. Copies may
-survive briefly in backups before they age out.
+survive briefly in backups before they age out, and a report keeps its own
+copy of the text it is about, so that it can still be acted on after the
+original is gone.
 
 **Treat anything you post as visible to everyone signed in to Sipply.**
 
@@ -107,9 +117,10 @@ belong to their owners and appear for identification only.
 
 ## Ending it
 
-**You can delete your account at any time** from **Profile → Delete
-account**. It removes your profile, posts, photos, likes, and follows. It is
-immediate and cannot be undone. You do not need to ask us.
+**You can delete your account at any time** from **Profile → Settings**
+(the gear, top right) **→ Delete account**. It removes your profile, posts,
+photos, likes, and follows. It is immediate and cannot be undone. You do not
+need to ask us.
 
 We may suspend or delete an account that breaks these terms. Where it is
 reasonable to do so we will say why, but conduct in the list above may be
@@ -129,9 +140,9 @@ warranties of any kind, and we are not liable for indirect or consequential
 losses arising from using it. Nothing here limits liability that cannot
 legally be limited — including for death, personal injury, or fraud.
 
-Your collection is stored on your device as well as on our servers, but
-**keep your own copies of photos you care about.** Do not treat the app as a
-backup.
+Your collection is stored only on your device. It is not backed up to
+Sipply, so if you delete the app or lose the phone, it is gone. **Keep your
+own copies of photos you care about.** Do not treat the app as a backup.
 
 ## Changes
 

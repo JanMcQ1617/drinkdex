@@ -47,10 +47,11 @@ Please report:
 
 Two things I already know about: the app is 18+ and alcohol-focused by
 design, and your collection lives on your device — signing in elsewhere
-won't bring it with you yet.
+won't bring it with you.
 
-You can delete your account any time from **Profile → Delete account**. It
-removes everything, including your photos.
+You can delete your account any time from **Profile → Settings** (the gear,
+top right) **→ Delete account**. It removes everything, including your
+photos.
 
 ---
 
@@ -68,10 +69,14 @@ there is no invite code or gate.
 **User-generated content.** Sipply has posts, photos and usernames from
 other users. Reporting and blocking are both available from the "..." menu
 on any post that isn't yours: report offers a reason, block is immediate
-and symmetric, and removes any follow between the two accounts.
+and symmetric, and removes any follow between the two accounts. Blocks can
+be undone from Profile → Settings → Blocked accounts. Captions, bios,
+display names and usernames pass a server-side filter that refuses slurs
+and explicit sexual terms before they are saved.
 
-**Account deletion.** Profile → Delete account. Deletes the account, all
-posts, all photos and all follows. No email or support request needed.
+**Account deletion.** Profile → Settings (the gear, top right) → Delete
+account. Deletes the account, all posts, all photos and all follows. No
+email or support request needed.
 
 **Age rating.** 18+. The app is about alcoholic drinks and includes
 references to alcohol throughout. It does not sell alcohol, does not
@@ -79,10 +84,12 @@ facilitate purchase, and contains no commerce of any kind.
 
 **Contacts.** The app asks for contacts access, but contacts are **not
 collected**. Phone numbers are salted-SHA-256 hashed on the device and the
-hashes are sent as query arguments to a read-only matching function that
-stores nothing. The only value retained is the user's own phone hash, which
-is what makes them findable, and it is cleared by "Stop being findable" in
-Profile → Accounts.
+hashes are sent as query arguments, at most 500 per call, to a matching
+function that stores none of them. It records only a count per account, to
+enforce a limit of 3,000 hashes per rolling 24 hours. The only value
+retained is the user's own phone hash, which is what makes them findable,
+and it is cleared by "Stop being findable" in Profile → Settings → Find
+friends.
 
-**Third-party accounts?** None. No social login, no external services
-beyond hosting.
+**Third-party accounts?** None. No social login. The only outside services
+are Supabase for hosting and Expo for app updates.
