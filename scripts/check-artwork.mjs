@@ -3,7 +3,7 @@
  *
  * Compiles the two pure artwork modules standalone (they import only
  * types, so tsc can build them without React or the '@/' alias) and runs
- * all 460 drinks through them.
+ * every drink in src/data/drinks.json through them.
  *
  * Run: node scripts/check-artwork.mjs
  */

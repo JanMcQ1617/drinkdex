@@ -129,7 +129,15 @@ export const DrinkArt = React.memo(function DrinkArt({
 }: DrinkArtProps) {
   const shape = resolveShape(drink);
   const def = SHAPES[shape];
-  const gradId = `g-${shape}-${locked ? 'l' : 'u'}`;
+  /*
+   * Keyed by drink, not by glass. The pour colour is per drink, and on web
+   * every SVG id shares one document namespace, so an id per shape let
+   * every collected coupe on screen resolve to whichever pour mounted
+   * first — an Aviation and a Daiquiri both violet. Two sizes of the same
+   * drink sharing an id is harmless: the gradient is in bounding-box units
+   * and the colour is the same.
+   */
+  const gradId = `g-${drink.id}-${locked ? 'l' : 'u'}`;
 
   const pour = locked ? colors.lockInkSoft : liquidColor(drink);
   const glassStroke = locked ? colors.lockInk : 'rgba(43, 35, 34, 0.55)';

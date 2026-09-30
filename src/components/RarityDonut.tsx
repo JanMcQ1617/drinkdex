@@ -22,9 +22,20 @@ import type { Rarity } from '@/types';
 /*                                                                      */
 /* It replaces four stacked progress rows. Rows answer "how much of the */
 /* rare tier have I got" one tier at a time; the ring answers "what is  */
-/* this collection MADE of" in a single read, which is the question the */
-/* section is actually asking. The legend keeps the per-tier numbers    */
-/* that the rows were carrying, so nothing is lost by the change.       */
+/* this collection MADE of" in a single read. Given `collected`, the    */
+/* legend still answers the rows' question — "12/646" per tier — so     */
+/* the ring shows the shape of the index and the legend the user's      */
+/* progress through it. Without it the legend shows each tier's share.  */
+/*                                                                      */
+/* The ring does not use RARITY_META.color. That is the badge TEXT      */
+/* colour, tuned for contrast against the page rather than against its  */
+/* neighbours, and common, uncommon and legendary sit within 1.04:1 of  */
+/* each other in it — common and uncommon, adjacent from twelve         */
+/* o'clock and over half the index, read as one brown arc. CHART below  */
+/* takes each tier's mark as the Dex draws it instead: common's ink     */
+/* ring, uncommon's taupe frame, rare's wine, legendary's gilt. Gilt    */
+/* stays legendary's alone, and the legend names every tier, so colour  */
+/* is never the only thing saying which is which.                       */
 /*                                                                      */
 /* Drawn with stroke-dasharray on one circle per segment rather than    */
 /* with arc paths. Four circles with a dash pattern is far less code    */
@@ -45,14 +56,24 @@ const CIRCUMFERENCE = 2 * Math.PI * R;
  */
 const GAP = 2;
 
+/** Segment and swatch colours — see the header. */
+const CHART: Record<Rarity, string> = {
+  common: colors.textMuted,
+  uncommon: colors.taupe,
+  rare: colors.wine,
+  legendary: colors.giltGlyph,
+};
+
 export interface RarityDonutProps {
   /** Entries per tier. Usually COUNT_BY_RARITY, or the user's own spread. */
   counts: Record<Rarity, number>;
+  /** The user's entries per tier. Turns the legend into progress. */
+  collected?: Record<Rarity, number>;
   /** Centre caption under the total. */
   caption?: string;
 }
 
-export function RarityDonut({ counts, caption = 'Total' }: RarityDonutProps) {
+export function RarityDonut({ counts, collected, caption = 'Total' }: RarityDonutProps) {
   const total = RARITY_ORDER.reduce((sum, r) => sum + (counts[r] ?? 0), 0);
 
   /*
@@ -115,7 +136,7 @@ export function RarityDonut({ counts, caption = 'Total' }: RarityDonutProps) {
                   cx={SIZE / 2}
                   cy={SIZE / 2}
                   r={R}
-                  stroke={RARITY_META[seg.rarity].color}
+                  stroke={CHART[seg.rarity]}
                   strokeWidth={STROKE}
                   strokeLinecap="butt"
                   fill="none"
@@ -139,27 +160,53 @@ export function RarityDonut({ counts, caption = 'Total' }: RarityDonutProps) {
       </View>
 
       <View style={styles.legend}>
-        {segments.map((seg) => (
-          <View
-            key={seg.rarity}
-            style={styles.legendRow}
-            accessibilityRole="text"
-            accessibilityLabel={`${RARITY_META[seg.rarity].label}: ${formatCount(seg.value)} entries, ${seg.pct} percent`}>
-            <View style={[styles.swatch, { backgroundColor: RARITY_META[seg.rarity].color }]} />
-            <Text style={styles.legendLabel}>{RARITY_META[seg.rarity].label}</Text>
-            <Text style={styles.legendPct}>{seg.pct}%</Text>
-          </View>
-        ))}
+        {segments.map((seg) => {
+          const label = RARITY_META[seg.rarity].label;
+          const mine = collected ? (collected[seg.rarity] ?? 0) : null;
+          return (
+            /*
+             * `accessible` makes the row one VoiceOver element; without it
+             * iOS ignores the label and reads the children one at a time.
+             * The label carries the share too, since the ring is invisible
+             * to VoiceOver.
+             */
+            <View
+              key={seg.rarity}
+              accessible
+              style={styles.legendRow}
+              accessibilityRole="text"
+              accessibilityLabel={
+                mine === null
+                  ? `${label}: ${formatCount(seg.value)} entries, ${seg.pct} percent`
+                  : `${label}: ${formatCount(mine)} of ${formatCount(seg.value)} collected, ${seg.pct} percent of the Dex`
+              }>
+              <View style={[styles.swatch, { backgroundColor: CHART[seg.rarity] }]} />
+              <Text style={styles.legendLabel}>{label}</Text>
+              <Text style={styles.legendPct}>
+                {mine === null
+                  ? `${seg.pct}%`
+                  : `${formatCount(mine)}/${formatCount(seg.value)}`}
+              </Text>
+            </View>
+          );
+        })}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  /*
+   * space.md between ring and legend, not xl. With progress in it the
+   * legend's widest row is "Uncommon" plus "100/595" — about 151pt with its
+   * swatch and gaps — and on a 375pt phone the legend gets 141pt at xl, so
+   * the label broke mid-word. At md it gets 153. The value is written
+   * "12/595", unspaced, as the category rows above it write theirs.
+   */
   wrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.xl,
+    gap: space.md,
   },
   ringWrap: {
     width: SIZE,
@@ -183,11 +230,16 @@ const styles = StyleSheet.create({
     color: colors.text,
     ...tabular,
   },
+  /*
+   * micro and textMuted: this is small text. It was a 10pt one-off below
+   * the scale, in textFaint, which is for large type and glyphs only.
+   */
   caption: {
     fontFamily: fonts.bodyMedium,
-    fontSize: 10,
-    letterSpacing: 0.2,
-    color: colors.textFaint,
+    fontSize: typeScale.micro.fontSize,
+    lineHeight: typeScale.micro.lineHeight,
+    letterSpacing: typeScale.micro.letterSpacing,
+    color: colors.textMuted,
   },
 
   legend: { flex: 1, gap: space.sm },

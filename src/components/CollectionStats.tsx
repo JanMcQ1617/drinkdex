@@ -6,6 +6,7 @@ import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated'
 import { DrinkArt } from '@/components/artwork';
 import { Icon } from '@/components/icons';
 import {
+  Button,
   Card,
   Divider,
   PressableScale,
@@ -25,6 +26,7 @@ import {
   type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
+import { drinkPhoto } from '@/data/drinkPhotos';
 import { RarityDonut } from '@/components/RarityDonut';
 import { MILESTONES, rankTitle } from '@/lib/milestones';
 import { useCollection } from '@/store/collection';
@@ -82,15 +84,35 @@ export function deriveStats(unlocks: Record<string, UnlockRecord>) {
 /* Component                                                            */
 /* ==================================================================== */
 
-export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => void }) {
+export function CollectionStats({
+  onOpenDrink,
+  onOpenDex,
+}: {
+  onOpenDrink: (id: string) => void;
+  /** Where a collection with nothing in it is sent to start. */
+  onOpenDex?: () => void;
+}) {
   const reduced = useReducedMotion();
   const unlocks = useCollection((s) => s.unlocks);
 
-  const { unlockedCount, byCategory, prize } = useMemo(
+  const { unlockedCount, byCategory, byRarity, prize } = useMemo(
     () => deriveStats(unlocks),
     [unlocks],
   );
   const pct = TOTAL > 0 ? Math.floor((unlockedCount / TOTAL) * 100) : 0;
+
+  /*
+   * The rarest entry's face follows the Dex card's order — your pour, else
+   * the stock photograph, else the vector art. It skipped the middle step,
+   * so a photographed drink showed as a photo on one tab and as a drawing
+   * on the next.
+   */
+  const prizePhoto = prize
+    ? prize.record.photoUri
+      ? { uri: prize.record.photoUri }
+      : drinkPhoto(prize.drink.id)
+    : undefined;
+  const prizeRarity = prize ? RARITY_META[prize.drink.rarity] : null;
 
   const enter = (delay: number) =>
     reduced ? undefined : FadeInDown.duration(motion.base).delay(delay);
@@ -104,48 +126,93 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
           <Text style={styles.rank}>{rankTitle(unlockedCount, TOTAL)}</Text>
           <View style={styles.rankCountRow}>
             <Text style={styles.rankCount}>{formatCount(unlockedCount)}</Text>
-            <Text style={styles.rankTotal}>of {formatCount(TOTAL)} logged</Text>
-            <Text style={styles.rankPct}>{pct}%</Text>
+            {/* "Collected", as the Dex says it: one state, one word. */}
+            <Text style={styles.rankTotal}>of {formatCount(TOTAL)} collected</Text>
+            {/*
+              Floored, so the first twenty entries of 2,089 all read 0% — "14
+              of 2,089 collected, 0%" contradicts itself exactly when the
+              reward loop matters most. Under one percent says so.
+            */}
+            <Text style={styles.rankPct}>
+              {unlockedCount > 0 && pct === 0 ? '<1%' : `${pct}%`}
+            </Text>
           </View>
           <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
 
+          {/*
+            With nothing logged, every number on this page is a zero and
+            none of them says how to change it. The rest of the page stays —
+            the donut and the ladder are what there is to aim for — but the
+            first block gets the way in.
+          */}
+          {unlockedCount === 0 && onOpenDex ? (
+            <View style={styles.start}>
+              <Text style={styles.startBody}>
+                Open any entry in the Dex and tap Log this drink to start your collection.
+              </Text>
+              <Button variant="secondary" label="Open the Dex" onPress={onOpenDex} />
+            </View>
+          ) : null}
+
           <Divider style={styles.blockDivider} />
 
-          {CATEGORY_ORDER.map((category) => {
-            const meta = CATEGORY_META[category];
-            const total = COUNT_BY_CATEGORY[category];
-            const count = byCategory[category];
-            return (
-              <View
-                key={category}
-                style={styles.categoryRow}
-                accessibilityLabel={`${meta.plural}: ${count} of ${total} logged`}>
-                <View style={styles.categoryHead}>
-                  <View style={[styles.categoryDot, { backgroundColor: meta.color }]} />
-                  <Text style={styles.categoryName}>{meta.plural}</Text>
-                  <Text style={styles.categoryCount}>
-                    {formatCount(count)}/{formatCount(total)}
-                  </Text>
+          {/*
+            A gap on the list rather than a margin on each row: the margin
+            also fell under the last row and gave the card 28pt of padding
+            at the foot against 16 at the head.
+          */}
+          <View style={styles.categoryList}>
+            {CATEGORY_ORDER.map((category) => {
+              const meta = CATEGORY_META[category];
+              const total = COUNT_BY_CATEGORY[category];
+              const count = byCategory[category];
+              return (
+                /*
+                 * `accessible` makes the row one VoiceOver element that
+                 * speaks its label. Without it iOS ignores the label and
+                 * reads the children one by one.
+                 */
+                <View
+                  key={category}
+                  accessible
+                  accessibilityLabel={`${meta.plural}: ${count} of ${total} collected`}>
+                  <View style={styles.categoryHead}>
+                    <View style={[styles.categoryDot, { backgroundColor: meta.color }]} />
+                    <Text style={styles.categoryName}>{meta.plural}</Text>
+                    <Text style={styles.categoryCount}>
+                      {formatCount(count)}/{formatCount(total)}
+                    </Text>
+                  </View>
+                  <ProgressBar value={count} max={total} color={meta.color} height={5} />
                 </View>
-                <ProgressBar value={count} max={total} color={meta.color} height={5} />
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
         </Card>
       </Animated.View>
 
       {/* ---- Rarity ---- */}
       <Animated.View entering={enter(motion.stagger)}>
         <SectionLabel style={styles.sectionLabel}>Rarity breakdown</SectionLabel>
-        <Card style={styles.blockTight}>
+        <Card style={styles.block}>
           {/*
-            The whole index, not the user's own spread. This section answers
-            "what is out there to find", which is a fixed shape; the user's
-            progress against it is the Collection block above. Feeding it
-            `byRarity` instead would leave a new account staring at an empty
-            ring, which says nothing about the Dex at all.
+            The RING is the whole index, not the user's own spread. It
+            answers "what is out there to find", which is a fixed shape, and
+            feeding it `byRarity` instead would leave a new account staring
+            at an empty ring, which says nothing about the Dex at all.
+
+            The LEGEND is the user's: how many of each tier they hold. The
+            four rows the ring replaced carried exactly that, and the ring
+            alone showed only index shares — the same numbers for every
+            user on every day — so the one chart on this tab never moved as
+            you played. The Collection block above has totals and
+            categories; per-tier progress lives here.
+
+            The card's full padding, not the list-row padding the milestones
+            use: the ring is 128pt with no margin of its own, and at 4pt it
+            nearly touched the card's top and bottom.
           */}
-          <RarityDonut counts={COUNT_BY_RARITY} caption="Total" />
+          <RarityDonut counts={COUNT_BY_RARITY} collected={byRarity} caption="Total" />
         </Card>
       </Animated.View>
 
@@ -155,11 +222,23 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
         <Card style={styles.blockTight}>
           {MILESTONES.map((m) => {
             const reached = unlockedCount > 0 && pct >= m.pct;
+            /*
+             * The first rung is reached by one entry, not by a percentage;
+             * printed as "0%" beside a lock it read as already achieved.
+             */
+            const target = m.pct === 0 ? '1 entry' : `${m.pct}%`;
+            const spokenTarget = m.pct === 0 ? 'first entry' : `${m.pct} percent`;
             return (
+              /*
+               * `accessible`, so VoiceOver reads the label — the only place
+               * reached or not reached is said in words. The check and the
+               * lock are unlabelled glyphs.
+               */
               <View
                 key={m.title}
+                accessible
                 style={styles.milestoneRow}
-                accessibilityLabel={`${m.title}, ${m.pct} percent, ${reached ? 'reached' : 'not reached'}`}>
+                accessibilityLabel={`${m.title}, ${spokenTarget}, ${reached ? 'reached' : 'not reached'}`}>
                 <View
                   style={[
                     styles.milestoneMark,
@@ -171,13 +250,13 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
                   <Icon
                     name={reached ? 'check' : 'lock'}
                     size={13}
-                    color={reached ? colors.wine : colors.textFaint}
+                    color={reached ? colors.wine : colors.textMuted}
                   />
                 </View>
                 <Text style={[styles.milestoneName, !reached && styles.milestoneNameDim]}>
                   {m.title}
                 </Text>
-                <Text style={styles.milestonePct}>{m.pct}%</Text>
+                <Text style={styles.milestonePct}>{target}</Text>
               </View>
             );
           })}
@@ -185,22 +264,30 @@ export function CollectionStats({ onOpenDrink }: { onOpenDrink: (id: string) => 
       </Animated.View>
 
       {/* ---- Rarest entry ---- */}
-      {prize ? (
+      {prize && prizeRarity ? (
         <Animated.View entering={enter(motion.stagger * 3)}>
           <SectionLabel style={styles.sectionLabel}>Rarest entry</SectionLabel>
           <PressableScale
             onPress={() => onOpenDrink(prize.drink.id)}
             accessibilityRole="button"
             accessibilityLabel={`Open ${prize.drink.name}, your rarest entry`}
-            style={styles.prize}>
+            /*
+             * Framed in the entry's own tier, as its Dex card is. It was
+             * gilt whatever the tier — the legendary metal around a badge
+             * that said Common, on the screen that explains rarity.
+             */
+            style={[
+              styles.prize,
+              { borderColor: prizeRarity.edge, borderWidth: prizeRarity.edgeWidth },
+            ]}>
             <View
               style={[
                 styles.prizeThumb,
                 { backgroundColor: CATEGORY_META[prize.drink.category].wash },
               ]}>
-              {prize.record.photoUri ? (
+              {prizePhoto ? (
                 <Image
-                  source={{ uri: prize.record.photoUri }}
+                  source={prizePhoto}
                   style={styles.prizeImage}
                   contentFit="cover"
                   transition={150}
@@ -262,7 +349,15 @@ const styles = StyleSheet.create({
   },
   blockDivider: { marginVertical: space.lg },
 
-  categoryRow: { marginBottom: space.md },
+  start: { marginTop: space.lg, gap: space.md },
+  startBody: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    color: colors.textMuted,
+  },
+
+  categoryList: { gap: space.md },
   categoryHead: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -304,13 +399,21 @@ const styles = StyleSheet.create({
     fontSize: typeScale.caption.fontSize,
     color: colors.text,
   },
-  milestoneNameDim: { fontFamily: fonts.body, color: colors.textFaint },
+  /*
+   * textMuted, not textFaint, here and on the percentages, the lock and the
+   * dex number below: all of it is small text or a state glyph, and the
+   * unreached names are content — for most users, most of the ladder.
+   * Reached still differs by ink, weight and mark (check on wine wash
+   * against lock on sunk).
+   */
+  milestoneNameDim: { fontFamily: fonts.body, color: colors.textMuted },
   milestonePct: {
     fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
 
+  /* The frame is set per tier on the element. */
   prize: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -318,8 +421,6 @@ const styles = StyleSheet.create({
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.cardBorderLit,
   },
   prizeThumb: {
     width: 56,
@@ -341,6 +442,6 @@ const styles = StyleSheet.create({
   prizeDex: {
     fontFamily: fonts.numeral,
     fontSize: typeScale.micro.fontSize,
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
 });

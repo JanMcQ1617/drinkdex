@@ -57,17 +57,29 @@ export const COUNT_BY_RARITY: Record<Rarity, number> = DRINKS.reduce(
   { common: 0, uncommon: 0, rare: 0, legendary: 0 } as Record<Rarity, number>
 );
 
-/** "#042"-style dex number formatting. */
+/*
+ * As many digits as the highest dex number has, so every number in the
+ * index is the same width. It was padded to three from the first scaffold,
+ * when the index was under a thousand; past that, over half the entries
+ * printed four digits beside others' three — "#042" next to "#1042" — and
+ * the padding was fixing a width it no longer fixed.
+ *
+ * Read from the data rather than from TOTAL, because the generator can
+ * leave gaps in the numbering.
+ */
+const DEX_DIGITS = String(DRINKS[DRINKS.length - 1]?.dexNumber ?? 0).length;
+
+/** "#0042"-style dex number formatting. */
 export function formatDexNumber(n: number): string {
-  return `#${String(n).padStart(3, '0')}`;
+  return `#${String(n).padStart(DEX_DIGITS, '0')}`;
 }
 
 /**
- * Grouped thousands — "7,653", not "7653".
+ * Grouped thousands — "2,089", not "2089".
  *
  * The index passed four figures a long time ago and the bare numerals had
- * stopped being readable at a glance: "7653 collected" is parsed, whereas
- * "7,653" is just seen. Every count the app shows is a magnitude the user
+ * stopped being readable at a glance: "2089 collected" is parsed, whereas
+ * "2,089" is just seen. Every count the app shows is a magnitude the user
  * is meant to feel, so they all get separators.
  *
  * Hardcoded en-US grouping rather than toLocaleString(): React Native

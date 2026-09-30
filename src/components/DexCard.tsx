@@ -13,19 +13,21 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { DrinkArt } from '@/components/artwork';
 import { Icon } from '@/components/icons';
-import { PressableScale } from '@/components/ui';
+import { haptic, PressableScale } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
   fonts,
   glass,
+  label,
   radius,
   RARITY_META,
   space,
   tabular,
+  type as typeScale,
 } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
-import { drinkPhoto } from '@/data/drinkPhotos';
+import { drinkPhoto, drinkPhotoLocked } from '@/data/drinkPhotos';
 import type { Drink } from '@/types';
 
 /* ==================================================================== */
@@ -36,17 +38,18 @@ import type { Drink } from '@/types';
 /* the same card:                                                       */
 /*                                                                      */
 /*   COLLECTED  a card. Lit category field, framed in its rarity tier,   */
-/*              lifted off the page by a shadow, name on a plate.        */
-/*   EMPTY      a recess. Sunk below the page, no lift, hairline shadow  */
-/*              along the top edge to sell the depth, silhouette only.   */
+/*              name over a light wash. No shadow: the frame and the    */
+/*              colour already separate it from its neighbours.         */
+/*   EMPTY      a recess. Sunk below the page in `slot`, darkening      */
+/*              toward its floor, silhouette only.                      */
 /*                                                                      */
 /* The old grid separated these by 2% luminance (#FBFBF8 vs #F6F5F0),    */
 /* which is why the board never produced any desire to fill it.          */
 /*                                                                      */
 /* Where a photograph exists it is the card face in BOTH states. Locked  */
 /* DRAINS it rather than darkening it: most of the colour pulled out,    */
-/* contrast pushed back up, under a thin warm veil. Collecting restores  */
-/* the colour, and that restoration is the reward.                       */
+/* contrast pushed back up. Collecting restores the colour, and that     */
+/* restoration is the reward.                                            */
 /*                                                                      */
 /* It used to darken instead — a flat espresso veil at 0.72 — and that   */
 /* failed three ways at once. It crushed every photograph to the same    */
@@ -82,13 +85,24 @@ import type { Drink } from '@/types';
 /* less treatment overall, not more. Greyscale alone still opens a wide  */
 /* gap — checked against a collected card in the same frame.             */
 /*                                                                      */
+/* THE DRAIN IS BAKED INTO THE IMAGE, NOT APPLIED AT RUNTIME. It was a   */
+/* `filter` on the card, and on iOS that filter silently did not run:    */
+/* React Native 0.86 draws grayscale() and contrast() through a SwiftUI  */
+/* wrapper that only exists behind a flag that is off at the Stable      */
+/* release level this app ships on. Only the 1% brightness step reached  */
+/* the screen, so every photographed entry showed in full colour while   */
+/* locked and read as collected — the one thing this card must not do.   */
+/* scripts/build-drink-photos.mjs now writes a drained copy of each      */
+/* photograph (drinkPhotoLocked) with the same numbers, and the card     */
+/* just shows it. One asset per state, identical on every platform, and  */
+/* no extra layer per locked card.                                       */
+/*                                                                      */
 /* Once you log a pour, YOUR photo takes over as the face — the card     */
 /* becomes a record of the one you actually drank. The stock photograph  */
 /* is the placeholder standing in until then.                            */
 /*                                                                      */
-/* Entries with no photograph at all — every spirit, and the cocktails  */
-/* beyond the photographed 150 — keep the vector artwork and its         */
-/* black-ink locked state.                                               */
+/* Entries with no photograph — most of the index — keep the vector      */
+/* artwork and its black-ink locked state.                               */
 /* ==================================================================== */
 
 /** DrinkArt's viewBox is 100×112, so height follows width by this factor. */
@@ -113,7 +127,7 @@ const NAMEPLATE_MIN = 38;
  * The foil sweep on a collected legendary.
  *
  * Gated to legendary-and-collected on purpose: it is the only looping
- * animation in a 460-cell virtualised grid, and legendaries are a small
+ * animation in a 2,089-cell virtualised grid, and legendaries are a small
  * fraction of the index, so at most one or two are ever on screen. A sweep
  * on every card would be both a battery cost and visual noise.
  */
@@ -154,6 +168,17 @@ export interface DexCardProps {
   drink: Drink;
   /** Width of the artwork in points — derived from the live column width. */
   artSize: number;
+  /**
+   * Width of the card itself: the exact column width, unrounded.
+   *
+   * Explicit rather than `flex: 1`, because FlatList lays each grid row out
+   * as a plain flex row, so a card alone in the last row — every odd-length
+   * search result, a single match, the first entry on Collected — stretched
+   * to the full row and, at a 0.72 aspect, to twice the height of every
+   * other card, with column-sized art floating in it. A fixed width keeps
+   * that card a grid cell, left-aligned like the rest.
+   */
+  cardWidth: number;
   collected: boolean;
   /** The user's own pour photo, once they have logged one. */
   userPhotoUri?: string | null;
@@ -163,6 +188,7 @@ export interface DexCardProps {
 export const DexCard = React.memo(function DexCard({
   drink,
   artSize,
+  cardWidth,
   collected,
   userPhotoUri,
   onPress,
@@ -175,34 +201,64 @@ export const DexCard = React.memo(function DexCard({
    * Face precedence: the pour you logged, else the stock photograph, else
    * the vector art. `userPhotoUri` is null when a logged photo went missing,
    * so fall through to the stock image rather than showing an empty card.
+   *
+   * A locked card only ever gets the DRAINED photograph. If a locked copy
+   * were missing it falls to the vector silhouette, never to the colour
+   * one — a full-colour face on a locked card reads as collected.
    */
-  const stock = drinkPhoto(drink.id);
   const mine = collected && userPhotoUri ? userPhotoUri : null;
-  const photo = mine ? { uri: mine } : stock;
-  // Dim the stock photo until it is collected. A logged pour is never dimmed.
-  const shadowed = Boolean(photo) && !collected;
+  const photo = mine
+    ? { uri: mine }
+    : collected
+      ? drinkPhoto(drink.id)
+      : drinkPhotoLocked(drink.id);
   const legendary = collected && drink.rarity === 'legendary';
-  // The field is ~1.9× the art box; enough for the sweep to clear the card.
-  const cardWidth = Math.round(artSize / 0.66);
+
+  /*
+   * The empty vector recess gets its own name wash, in `slot`. The white
+   * one below is right over a photograph and over a collected card's pale
+   * field, but over the recess it painted a near-white band across the
+   * foot of the cell (1.48:1 against slotDeep) — undoing the darkening the
+   * field exists to show, on the cell most of the Dex is made of.
+   */
+  const recessWash = !photo && !collected;
 
   /*
    * Per-card gradient id. On web, SVG <Defs> ids share one global namespace,
    * so keying by category alone would let a collected card and an empty one
    * of the same category resolve to whichever mounted last.
    */
-  const washId = `nameWash-${drink.id}`;
+  const washId = `nameWash-${drink.id}-${recessWash ? 'r' : 'w'}`;
   const fieldId = `dexField-${drink.id}-${collected ? 'c' : 'e'}`;
+  const washColor = recessWash ? colors.slot : colors.surface;
 
   return (
     <PressableScale
-      onPress={() => onPress(drink.id)}
+      /*
+       * No tick on touch-down, and a short delay before the press state.
+       * The grid is wall-to-wall cards, so nearly every flick starts on
+       * one, and PressableScale's default answers onPressIn — before the
+       * list has claimed the gesture. Every scroll buzzed the phone and
+       * pulsed the card under the thumb, feedback for a press that never
+       * happened. A flick leaves the slop inside 120ms and cancels the
+       * touch before either fires; a tap still lands, and ticks on
+       * release.
+       */
+      noHaptic
+      unstable_pressDelay={120}
+      onPress={() => {
+        haptic.tap();
+        onPress(drink.id);
+      }}
       accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, ${formatDexNumber(drink.dexNumber)}, ${
+      // The spoken number is unpadded: "#0042" is read digit by digit.
+      accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${
         rarity.label
       }, ${collected ? 'collected' : 'not collected yet'}`}
       // Flat, not nested: PressableScale takes a one-level style array.
       style={[
         styles.card,
+        { width: cardWidth },
         collected && styles.cardCollected,
         /*
          * The rarity edge is the collected card's one separator. It used to
@@ -220,44 +276,33 @@ export const DexCard = React.memo(function DexCard({
         empty DARKENS toward the bottom (a recess loses light at its floor).
         Gradient rather than two stacked Views — a hard boundary partway down
         the card reads as a seam, which is a rendering bug, not depth.
+
+        Not drawn under a photograph. The photo covers the whole cell, so
+        the field was a full-card vector layer rasterised only to be hidden;
+        the card's own flat fill is the ground while the image decodes.
       */}
-      <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
-        <Defs>
-          <LinearGradient id={fieldId} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor={collected ? category.fieldFrom : colors.slot} />
-            <Stop offset="1" stopColor={collected ? category.fieldTo : colors.slotDeep} />
-          </LinearGradient>
-        </Defs>
-        <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${fieldId})`} />
-      </Svg>
+      {photo ? null : (
+        <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Defs>
+            <LinearGradient id={fieldId} x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0" stopColor={collected ? category.fieldFrom : colors.slot} />
+              <Stop offset="1" stopColor={collected ? category.fieldTo : colors.slotDeep} />
+            </LinearGradient>
+          </Defs>
+          <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${fieldId})`} />
+        </Svg>
+      )}
 
       {/* ---- Photograph ---- */}
-      {/*
-        Sits over the field gradient, which stays underneath as the ground
-        while the image decodes. The dex plate and nameplate both use
-        `glass.fillStrong`, the token specced for surfaces over photography,
-        so they stay legible without a scrim.
-      */}
       {photo ? (
-        <>
-          {/*
-            The filter rides a wrapper View, not the Image. `filter` is a
-            ViewStyle prop and expo-image types its style as ImageStyle,
-            which does not carry it — so putting it on the Image is a type
-            error rather than a silent no-op. It applies to the subtree
-            either way.
-          */}
-          <View pointerEvents="none" style={[styles.photo, shadowed && styles.photoLocked]}>
-            <Image
-              source={photo}
-              style={styles.photoFill}
-              contentFit="cover"
-              transition={140}
-              accessible={false}
-              cachePolicy="memory-disk"
-            />
-          </View>
-        </>
+        <Image
+          source={photo}
+          style={styles.photo}
+          contentFit="cover"
+          transition={140}
+          accessible={false}
+          cachePolicy="memory-disk"
+        />
       ) : null}
 
       {legendary && !reduced ? <FoilSweep width={cardWidth} /> : null}
@@ -268,10 +313,25 @@ export const DexCard = React.memo(function DexCard({
           legendary ? (
             <Icon name="sparkle" size={13} color={colors.giltGlyph} filled />
           ) : (
-            // `color`, not `edge`: the pip CONVEYS the tier, so it takes the
-            // contrast-audited value. `edge` is decorative and too pale here
-            // — as `common` it read as a smudge on the category field.
-            <View style={[styles.rarityPip, { backgroundColor: rarity.color }]} />
+            /*
+             * `color`, not `edge`: the pip CONVEYS the tier, so it takes the
+             * contrast-audited value. `edge` is decorative and too pale here
+             * — as `common` it read as a smudge on the category field.
+             *
+             * Common is a RING, the others a filled dot. Common's ink and
+             * uncommon's are 1.04:1 apart and nearly one hue, so as two
+             * dots they were the same mark; shape tells them apart where
+             * colour cannot. Rare then differs from uncommon by hue and
+             * weight, and legendary is the sparkle.
+             */
+            <View
+              style={[
+                styles.rarityPip,
+                drink.rarity === 'common'
+                  ? { borderColor: rarity.color, borderWidth: 1.5 }
+                  : { backgroundColor: rarity.color },
+              ]}
+            />
           )
         ) : (
           <Icon name="lock" size={11} color={colors.textMuted} filled />
@@ -287,28 +347,52 @@ export const DexCard = React.memo(function DexCard({
 
       {/* ---- Name ---- */}
       {/*
-        A second Svg rather than another Rect on the field one above: that Svg
-        is painted UNDER the photograph, and this wash has to sit over it. It
-        is one extra node per RENDERED cell, not per entry — the grid is
-        virtualised, so the cost is bounded by what fits on screen.
+        A second Svg rather than another Rect on the field one above: the
+        field belongs UNDER the photograph (and is skipped when there is
+        one), and this wash has to sit over it. It is one extra node per
+        MOUNTED cell, not per entry — the grid is virtualised, so the cost is
+        bounded by the list's render window.
 
         The gradient is its own layer rather than a background on the text
         container, because a View background cannot fade, and a hard-edged
         fill is exactly the trough this replaces.
+
+        The recess wash turns fully opaque at 0.4, not 0.55: `slot` is the
+        darkest ground the muted name can sit on and still clear 4.5:1, so
+        every line of a two-line name has to land on solid slot rather than
+        on slot thinned over slotDeep.
       */}
       <Svg style={styles.nameWash} pointerEvents="none">
         <Defs>
           <LinearGradient id={washId} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor={colors.surface} stopOpacity="0" />
-            <Stop offset="0.55" stopColor={colors.surface} stopOpacity="0.72" />
-            <Stop offset="1" stopColor={colors.surface} stopOpacity="0.94" />
+            <Stop offset="0" stopColor={washColor} stopOpacity="0" />
+            <Stop
+              offset={recessWash ? '0.4' : '0.55'}
+              stopColor={washColor}
+              stopOpacity={recessWash ? '1' : '0.72'}
+            />
+            <Stop offset="1" stopColor={washColor} stopOpacity={recessWash ? '1' : '0.94'} />
           </LinearGradient>
         </Defs>
         <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${washId})`} />
       </Svg>
+      {/*
+        Dynamic Type is capped at 1.4 on both lines. Uncapped, the largest
+        accessibility sizes grew the plate past the wash above it, so the
+        name climbed onto bare photograph where nothing guarantees contrast.
+        At 1.4 the number and a two-line name come to about 65pt of text,
+        inside the fixed wash (NAMEPLATE_MIN * 2 = 76pt). A thumbnail is not
+        where the full name has to be read: the card's accessibilityLabel
+        gives VoiceOver all of it, and the drink page sets it at full size.
+      */}
       <View style={styles.nameplate}>
-        <Text style={styles.numberLine}>{formatDexNumber(drink.dexNumber)}</Text>
-        <Text numberOfLines={2} style={[styles.name, !collected && styles.nameEmpty]}>
+        <Text style={styles.numberLine} maxFontSizeMultiplier={1.4}>
+          {formatDexNumber(drink.dexNumber)}
+        </Text>
+        <Text
+          numberOfLines={2}
+          maxFontSizeMultiplier={1.4}
+          style={[styles.name, !collected && styles.nameEmpty]}>
           {drink.name}
         </Text>
       </View>
@@ -319,8 +403,8 @@ export const DexCard = React.memo(function DexCard({
 /* ==================================================================== */
 
 const styles = StyleSheet.create({
+  /* Width comes from the `cardWidth` prop — see DexCardProps. */
   card: {
-    flex: 1,
     aspectRatio: 0.72,
     borderRadius: radius.lg,
     overflow: 'hidden',
@@ -337,50 +421,34 @@ const styles = StyleSheet.create({
 
   /* Photograph */
   /*
-   * The locked photograph. Greyscale carries the state; brightness and
-   * contrast place it in the recess.
+   * THE LOCKED LOOK — grayscale(0.85) brightness(0.99) contrast(1.12) —
+   * now lives in scripts/build-drink-photos.mjs (LOCK), baked into
+   * assets/drinks/locked/. Why those numbers, which still hold:
    *
-   * Lifted and flattened, NOT darkened. The empty card is a well in a bone
-   * page whose own ground (`slot` / `slotDeep`) is a light warm grey — so
-   * "sunken" here has to mean faded, the way a label left in the sun goes,
-   * not shadowed. Pushing brightness down instead put the photo cards in a
-   * different tonal band from the vector cards beside them and turned the
-   * board into a wall of dark rectangles.
+   * Greyscale carries the state; brightness and contrast place it in the
+   * recess. Lifted and flattened, NOT darkened. The empty card is a well in
+   * a bone page whose own ground (`slot` / `slotDeep`) is a light warm grey
+   * — so "sunken" here has to mean faded, the way a label left in the sun
+   * goes, not shadowed. Pushing brightness down instead put the photo cards
+   * in a different tonal band from the vector cards beside them and turned
+   * the board into a wall of dark rectangles.
    *
-   * WRITTEN AS A STRING, NOT AN ARRAY. `filter` accepts both, but
-   * react-native-web silently drops the array form of
-   * `[{grayscale: 1}, …]` — 54 photographs rendered on web and not one
-   * element carried a computed filter, with "grayscale" absent from the
-   * DOM entirely. The string is passed straight through to CSS, so the
-   * same declaration works on web and native instead of failing on one of
-   * them without saying so.
+   * 0.85, up from 0.75. The espresso veil that used to sit over this was
+   * removed so one mechanism carries the state — which left the locked card
+   * closer to full colour than intended. Raising greyscale put the gap back
+   * without reintroducing a second layer.
    *
-   * That failure mode is worth remembering: when `filter` no-ops, a locked
-   * card renders in FULL COLOUR and reads as collected. Check that a
-   * locked card is grey before trusting a build.
+   * NOT 1.0: full greyscale deletes these drinks. They are studio shots on a
+   * neutral backdrop, so the subject lives in chroma rather than luminance,
+   * and at 1.0 a Caesar, a Greyhound and a Brandy Alexander collapse into
+   * the same taupe rectangle. A sixth of the colour left, with contrast
+   * pushed up, holds them apart.
    *
-   * The three numbers were arrived at by looking, not by theory: rendered
-   * against the real cocktail photographs on web, and checked against an
-   * unfiltered row in the same frame so the locked-to-collected gap could
-   * be judged rather than assumed. They have NOT been seen on a device.
+   * The numbers were arrived at by looking, on web, against the real
+   * photographs and an unfiltered row in the same frame. The baked assets
+   * were checked against Chrome's own `filter` on the same source: under
+   * 1.2/255 mean difference per channel, which is encoder noise.
    */
-  photoLocked: {
-    /*
-     * 0.85, up from 0.75. The espresso veil that used to sit over this was
-     * removed so one mechanism carries the state — which left the locked
-     * card closer to full colour than intended. Raising greyscale puts the
-     * gap back without reintroducing a second layer.
-     *
-     * NOT 1.0: full greyscale deletes these drinks. They are studio shots on
-     * a neutral backdrop, so the subject lives in chroma rather than
-     * luminance, and at 1.0 a Caesar, a Greyhound and a Brandy Alexander
-     * collapse into the same taupe rectangle. A sixth of the colour left,
-     * with contrast pushed up, holds them apart.
-     */
-    filter: 'grayscale(0.85) brightness(0.99) contrast(1.12)',
-  },
-  /** Fills the filter wrapper; the wrapper owns the position. */
-  photoFill: { width: '100%', height: '100%' },
   photo: {
     /*
      * Fills the whole cell. It used to stop NAMEPLATE_MIN short so the tinted
@@ -442,14 +510,15 @@ const styles = StyleSheet.create({
   nameplate: {
     /*
      * An overlay, not a bar. It was a filled strip with a hairline along its
-     * top — a caption trough, in two tints, across every one of 7,653 cells.
+     * top — a caption trough, in two tints, across every cell in the Dex.
      * What is left is the text over a light gradient painted on the card.
      *
-     * The gradient goes to WHITE rather than to ink, so one treatment serves
-     * both grounds: over a photograph it lifts the bottom edge until dark
-     * text clears comfortably, and over the vector field — already a pale
-     * tint — it is nearly invisible. Fading to ink would have required light
-     * text, which the vector cards could not carry.
+     * The gradient goes LIGHT rather than to ink, so dark text works on
+     * every ground: over a photograph, white lifts the bottom edge until
+     * the name clears comfortably; over a collected card's pale field,
+     * white is nearly invisible; over the empty recess it is `slot`, the
+     * recess's own colour (see `recessWash`). Fading to ink would have
+     * required light text, which the vector cards could not carry.
      */
     position: 'absolute',
     left: 0,
@@ -461,19 +530,23 @@ const styles = StyleSheet.create({
     paddingBottom: space.sm,
     gap: 1,
   },
-  /* The catalogue number sits above the name here rather than in a bordered
-     plate of its own in the corner. */
+  /*
+   * The catalogue number sits above the name here rather than in a bordered
+   * plate of its own in the corner. It is the brand's letterspaced label,
+   * `label.ui`, as theme.ts specifies for dex numbers — it was a 9pt one-off
+   * below the type scale and below the 11pt the platform treats as the
+   * smallest legible size.
+   */
   numberLine: {
     fontFamily: fonts.label,
-    fontSize: 9,
-    letterSpacing: 2,
+    ...label.ui,
     color: colors.textMuted,
     ...tabular,
   },
   name: {
     fontFamily: fonts.displayBold,
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: typeScale.micro.fontSize,
+    lineHeight: typeScale.micro.lineHeight,
     color: colors.text,
   },
   nameEmpty: {

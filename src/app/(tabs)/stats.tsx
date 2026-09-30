@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import React, { useCallback } from 'react';
+import { useRouter, useScrollToTop } from 'expo-router';
+import React, { useCallback, useRef } from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -22,9 +22,15 @@ export default function StatsScreen() {
     (id: string) => router.push({ pathname: '/drink/[id]', params: { id } }),
     [router],
   );
+  const openDex = useCallback(() => router.navigate('/dex'), [router]);
+
+  // Tapping the Stats tab while already on it scrolls back to the top.
+  const scrollRef = useRef<ScrollView>(null);
+  useScrollToTop(scrollRef);
 
   return (
     <ScrollView
+      ref={scrollRef}
       style={styles.screen}
       contentContainerStyle={[
         styles.content,
@@ -34,10 +40,19 @@ export default function StatsScreen() {
         },
       ]}
       showsVerticalScrollIndicator={false}>
-      <Text style={styles.title}>Stats</Text>
-      <Text style={styles.subtitle}>How the collection is coming along.</Text>
+      {/*
+        The Dex tab's title, size for size, and no subtitle. This was the one
+        tab title at display size, so moving between two neighbouring tabs
+        made the heading jump 8pt; and its subtitle, "How the collection is
+        coming along.", restated the screen's name — the reason the Dex
+        dropped its own. The first section label's margin spaces what
+        follows.
+      */}
+      <Text style={styles.title} accessibilityRole="header">
+        Stats
+      </Text>
 
-      <CollectionStats onOpenDrink={openDrink} />
+      <CollectionStats onOpenDrink={openDrink} onOpenDex={openDex} />
     </ScrollView>
   );
 }
@@ -47,15 +62,8 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: space.xl, paddingBottom: space.xxxl },
   title: {
     fontFamily: fonts.display,
-    fontSize: typeScale.display.fontSize,
-    lineHeight: typeScale.display.lineHeight,
+    fontSize: typeScale.headline.fontSize,
+    lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
-  },
-  subtitle: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    marginTop: space.xs,
   },
 });

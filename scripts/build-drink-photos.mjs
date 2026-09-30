@@ -1,15 +1,20 @@
 /**
  * Maps the generated cocktail photographs onto dex entries and emits
- * app-sized WebP into assets/drinks/, plus a static require map.
+ * app-sized WebP into assets/drinks/ — each photograph twice, in colour and
+ * with the locked treatment baked in (assets/drinks/locked/) — plus a static
+ * require map for both.
  *
  * The source folders are named after the generation PROMPT, not the drink, so
  * the drink has to be parsed back out of the prompt text. ALIASES covers the
  * cases where the prompt wording and the dataset name genuinely differ.
  *
- *   node scripts/build-drink-photos.mjs [--src <dir>] [--size 512] [--quality 82]
+ * Needs `cwebp` and `dwebp` (brew install webp).
+ *
+ *   node scripts/build-drink-photos.mjs [--src <dir>] [--size 1024] [--quality 82]
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -40,10 +45,84 @@ const SOURCES = [path.join(process.env.HOME, 'Desktop', 'CLINK DEX PHOTOS')];
 
 const srcArg = arg('--src', null);
 const sources = srcArg ? srcArg.split(',') : SOURCES;
-const SIZE = Number(arg('--size', 512));
+/**
+ * 1024, the masters' own size, so the colour set is re-encoded but never
+ * resampled. It was 512, which every surface that shows these upscaled:
+ * the drink page's full-bleed hero is about 1,179px wide at 3x, and a Dex
+ * cell (two columns, a 0.72 card the square photo has to cover) needs
+ * about 735px on a 6.1-inch phone and 813px on the largest. The locked set
+ * is written at the same size because it is the grid's face too.
+ *
+ * The cost is weight: about 3x per photograph, roughly 32KB a face at q82
+ * instead of 11KB. At 162 photographs the two sets together went from about
+ * 4MB to 10MB. Nearer full coverage it is the number to watch, and the lever
+ * is a split: a smaller grid set, with this size kept only for the hero.
+ */
+const SIZE = Number(arg('--size', 1024));
 const QUALITY = Number(arg('--quality', 82));
 const OUT_DIR = path.join(ROOT, 'assets', 'drinks');
+const LOCKED_DIR = path.join(OUT_DIR, 'locked');
 const MAP_FILE = path.join(ROOT, 'src', 'data', 'drinkPhotos.ts');
+
+/**
+ * The locked face: CSS `grayscale(0.85) brightness(0.99) contrast(1.12)`,
+ * applied here to the pixels rather than asked of the renderer.
+ *
+ * It used to be a runtime `filter` on the card, and on iOS that filter
+ * mostly does not run. React Native 0.86 draws grayscale() and contrast()
+ * through a SwiftUI wrapper that only exists behind the
+ * enableSwiftUIBasedFilters flag, which is off at the Stable release level
+ * this app ships on; only brightness() reached the screen. Every
+ * photographed entry showed in full colour while locked and read as
+ * collected. The values were tuned on web, where the filter does run, so
+ * they are kept exactly — see components/DexCard.tsx for why each one is
+ * what it is.
+ *
+ * Maths per the Filter Effects spec, in sRGB, clamped after each function
+ * as a chain of filter primitives is: the grayscale matrix with Rec.709
+ * weights, a multiply, and contrast pivoting on 0.5 (not on the image mean,
+ * which is what an image library's "contrast" usually means, and which
+ * would drift from what was tuned).
+ */
+const LOCK = { grayscale: 0.85, brightness: 0.99, contrast: 1.12 };
+
+function drain(pixels, depth) {
+  const k = 1 - LOCK.grayscale;
+  const m = [
+    0.2126 + 0.7874 * k, 0.7152 - 0.7152 * k, 0.0722 - 0.0722 * k,
+    0.2126 - 0.2126 * k, 0.7152 + 0.2848 * k, 0.0722 - 0.0722 * k,
+    0.2126 - 0.2126 * k, 0.7152 - 0.7152 * k, 0.0722 + 0.9278 * k,
+  ];
+  const clamp = (v) => (v < 0 ? 0 : v > 1 ? 1 : v);
+  const tone = (v) => clamp(clamp(v * LOCK.brightness) * LOCK.contrast + 0.5 - 0.5 * LOCK.contrast);
+  for (let i = 0; i < pixels.length; i += depth) {
+    const r = pixels[i] / 255;
+    const g = pixels[i + 1] / 255;
+    const b = pixels[i + 2] / 255;
+    pixels[i] = Math.round(tone(clamp(m[0] * r + m[1] * g + m[2] * b)) * 255);
+    pixels[i + 1] = Math.round(tone(clamp(m[3] * r + m[4] * g + m[5] * b)) * 255);
+    pixels[i + 2] = Math.round(tone(clamp(m[6] * r + m[7] * g + m[8] * b)) * 255);
+  }
+}
+
+/**
+ * Writes the locked variant of one master. Resized losslessly first, so the
+ * only lossy step is the final encode, at the same quality as the colour one.
+ * PAM is the interchange because both webp tools speak it and it needs no
+ * image library: a text header, then raw samples.
+ */
+function writeLocked(master, out, tmp) {
+  const lossless = path.join(tmp, 'resized.webp');
+  const pam = path.join(tmp, 'frame.pam');
+  execFileSync('cwebp', ['-quiet', '-lossless', '-resize', String(SIZE), String(SIZE), master, '-o', lossless]);
+  execFileSync('dwebp', ['-quiet', lossless, '-pam', '-o', pam]);
+  const buf = fs.readFileSync(pam);
+  const end = buf.indexOf('ENDHDR\n') + 'ENDHDR\n'.length;
+  const depth = Number(/^DEPTH (\d+)$/m.exec(buf.subarray(0, end).toString('latin1'))[1]);
+  drain(buf.subarray(end), depth);
+  fs.writeFileSync(pam, buf);
+  execFileSync('cwebp', ['-quiet', '-q', String(QUALITY), pam, '-o', out]);
+}
 
 /**
  * Where several takes exist, the default pick is the largest file. These are
@@ -205,17 +284,26 @@ picks.sort((a, b) => a.drink.dexNumber - b.drink.dexNumber);
 
 /* ---- Encode ---- */
 fs.rmSync(OUT_DIR, { recursive: true, force: true });
-fs.mkdirSync(OUT_DIR, { recursive: true });
+fs.mkdirSync(LOCKED_DIR, { recursive: true });
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'drink-photos-'));
 
 let outBytes = 0;
+let lockedBytes = 0;
 for (const p of picks) {
   const out = path.join(OUT_DIR, `${p.id}.webp`);
   execFileSync('cwebp', ['-quiet', '-q', String(QUALITY), '-resize', String(SIZE), String(SIZE), p.png, '-o', out]);
   outBytes += fs.statSync(out).size;
+  const locked = path.join(LOCKED_DIR, `${p.id}.webp`);
+  writeLocked(p.png, locked, tmp);
+  lockedBytes += fs.statSync(locked).size;
 }
+fs.rmSync(tmp, { recursive: true, force: true });
 
 /* ---- Static require map (Metro cannot resolve a dynamic require) ---- */
 const lines = picks.map((p) => `  '${p.id}': require('../../assets/drinks/${p.id}.webp'),`).join('\n');
+const lockedLines = picks
+  .map((p) => `  '${p.id}': require('../../assets/drinks/locked/${p.id}.webp'),`)
+  .join('\n');
 fs.writeFileSync(
   MAP_FILE,
   `/**
@@ -232,10 +320,25 @@ const PHOTOS: Record<string, number> = {
 ${lines}
 };
 
+/**
+ * The same photographs with the locked treatment baked into the pixels —
+ * the colour mostly drained, contrast pushed back up. Baked because the
+ * runtime \`filter\` that used to do this silently does nothing on iOS; the
+ * generator explains, and DexCard explains the look.
+ */
+const LOCKED: Record<string, number> = {
+${lockedLines}
+};
+
 /** The photograph for a drink, or undefined when it has none. */
 export function drinkPhoto(id: string): number | undefined {
   // Own keys only: a hostile id like 'constructor' must not resolve.
   return Object.prototype.hasOwnProperty.call(PHOTOS, id) ? PHOTOS[id] : undefined;
+}
+
+/** The locked face of drinkPhoto(id), or undefined when there is no photograph. */
+export function drinkPhotoLocked(id: string): number | undefined {
+  return Object.prototype.hasOwnProperty.call(LOCKED, id) ? LOCKED[id] : undefined;
 }
 
 /** How many entries ship with a photograph. */
@@ -277,6 +380,7 @@ const cocktails = drinks.filter((d) => d.category === 'cocktail');
 
 console.log(`source images      ${candidates.length}  (${mb(candidates.reduce((s, c) => s + c.bytes, 0))})`);
 console.log(`written            ${picks.length} webp @ ${SIZE}px q${QUALITY}  (${mb(outBytes)})`);
+console.log(`locked variants    ${picks.length} webp  (${mb(lockedBytes)})`);
 console.log(`duplicates dropped ${duplicatesDropped}`);
 if (overridesUsed.length) console.log(`overrides applied  ${overridesUsed.join(', ')}`);
 console.log(`cocktail coverage  ${cocktails.filter((c) => covered.has(c.id)).length} / ${cocktails.length}`);

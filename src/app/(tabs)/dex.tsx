@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRouter, useScrollToTop } from 'expo-router';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 import Animated, {
   Extrapolation,
-  FadeIn,
-  FadeOut,
   interpolate,
   runOnJS,
   type SharedValue,
@@ -23,6 +21,8 @@ import Animated, {
   useReducedMotion,
   useSharedValue,
   withSpring,
+  ZoomIn,
+  ZoomOut,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -36,6 +36,7 @@ import {
   CATEGORY_ORDER,
   colors,
   fonts,
+  label,
   motion,
   radius,
   space,
@@ -43,7 +44,7 @@ import {
   tabular,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
-import { matchBar } from '@/lib/bar';
+import { matchOwned } from '@/lib/bar';
 import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory } from '@/types';
@@ -69,7 +70,7 @@ const GRID_GAP = space.sm;
 /* Filters                                                             */
 /* ------------------------------------------------------------------ */
 
-type RegionFilter = DrinkCategory | 'all';
+type CategoryFilter = DrinkCategory | 'all';
 type StatusFilter = 'all' | 'unlocked' | 'locked';
 
 const STATUS_OPTIONS: { key: StatusFilter; label: string; a11y: string }[] = [
@@ -77,6 +78,44 @@ const STATUS_OPTIONS: { key: StatusFilter; label: string; a11y: string }[] = [
   { key: 'unlocked', label: 'Collected', a11y: 'Show only entries you have collected' },
   { key: 'locked', label: 'Not yet', a11y: 'Show only entries you have not collected' },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Search                                                              */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Folded for matching: accents stripped, apostrophes dropped, lowercased.
+ *
+ * A plain lowercase substring check missed 188 names with accents and 89
+ * with apostrophes — "pina colada", "cachaca", "creme de cassis" and "bees
+ * knees" all came back empty for drinks that are in the Dex, because a US
+ * keyboard does not type ñ, ç or è and nobody types the apostrophe. The
+ * iOS keyboard's curly ’ would not have matched the data's straight ' in
+ * any case. NFD splits each accented letter into base plus mark and the
+ * marks go; the explicit maps are the letters NFD does not decompose
+ * (ı, ß, ø, đ), which were all that was left in the catalogue after it.
+ */
+const fold = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ı/g, 'i')
+    .replace(/ß/g, 'ss')
+    .replace(/[øØ]/g, 'o')
+    .replace(/[đĐ]/g, 'd')
+    .replace(/['‘’`]/g, '')
+    .toLowerCase();
+
+/*
+ * Name, style and origin, folded once at load rather than per keystroke.
+ * Newline-joined so a query cannot match across the seam between two
+ * fields. Origin is here so the Dex can be browsed by country — "peru",
+ * "jalisco", "iceland" — the only way the world-spanning half of the index
+ * is discoverable.
+ */
+const SEARCH_KEY = new Map(
+  DRINKS.map((d) => [d.id, [d.name, d.subcategory, d.origin].map(fold).join('\n')]),
+);
 
 /* ------------------------------------------------------------------ */
 /* Subcomponents                                                       */
@@ -224,10 +263,23 @@ function Masthead({
      * glass can run up under the status bar. Setting it in both places padded
      * the inset twice, which pushed the bar a full status-bar height down the
      * screen and left it sitting on top of the grid instead of over it.
+     *
+     * Takes touches, deliberately. It was `pointerEvents="none"`, so a tap on
+     * the visible bar went straight through to whichever card sat under the
+     * glass and opened a drink the user had not seen. Parked, the bar is
+     * translated wholly off-screen and cannot catch anything; the cost is
+     * that a drag starting on it does not scroll the grid, as with any
+     * navigation bar.
+     *
+     * Hidden from VoiceOver. It is a visual repeat of the list header's
+     * title and progress, which stay in the accessibility order; parked
+     * off-screen it was still read, so every visit to the tab heard "The
+     * Dex" twice and a count that was not on screen.
      */
     <Animated.View
       style={[styles.masthead, barStyle]}
-      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
       onLayout={(e) => height.set(e.nativeEvent.layout.height)}>
       <GlassSurface cornerRadius={0} strong flat style={styles.mastheadGlass}>
         <View style={[styles.mastheadRow, { paddingTop: topInset }]}>
@@ -250,33 +302,89 @@ function Masthead({
  * Grid cell.
  *
  * A thin wrapper over `DexCard` that owns the per-card store subscription —
- * collecting one drink must not re-render the other 459. Keeping the
- * subscription here leaves DexCard a pure presentational component, so the
- * detail screen and any future surface can render the same card.
+ * collecting one drink must not re-render every other mounted cell. Keeping
+ * the subscription here leaves DexCard a pure presentational component, so
+ * the detail screen and any future surface can render the same card.
  */
 const GridCell = React.memo(function GridCell({
   drink,
   artSize,
+  cardWidth,
   onPress,
 }: {
   drink: Drink;
   artSize: number;
+  cardWidth: number;
   onPress: (id: string) => void;
 }) {
   // The whole record, not just the boolean: the card shows the user's own
   // pour photo once one exists. Still a single-entry subscription, so
-  // collecting one drink does not re-render the other 459.
+  // collecting one drink does not re-render the others.
   const record = useCollection((s) => s.unlocks[drink.id]);
   return (
     <DexCard
       drink={drink}
       artSize={artSize}
+      cardWidth={cardWidth}
       collected={Boolean(record)}
       userPhotoUri={record?.photoUri}
       onPress={onPress}
     />
   );
 });
+
+/**
+ * The empty grid, which has three causes and gets three answers.
+ *
+ * It was one message for all of them — "widen the search" — so a new user
+ * tapping Collected was told to widen a search they had never run, and
+ * never told the actual next step. A search miss now repeats the query and
+ * clears only the query, so a typo made inside Spirits does not also throw
+ * away Spirits. An empty Collected says how things get collected. Anything
+ * else is a filter combination with nothing in it, and resets the filters.
+ */
+function GridEmpty({
+  query,
+  nothingCollected,
+  onClearSearch,
+  onShowAll,
+  onReset,
+}: {
+  query: string;
+  nothingCollected: boolean;
+  onClearSearch: () => void;
+  onShowAll: () => void;
+  onReset: () => void;
+}) {
+  if (query.length > 0) {
+    return (
+      <EmptyState
+        icon="search"
+        title={`No match for “${query}”`}
+        body="Check the spelling, or search by style or country."
+        action={{ label: 'Clear search', onPress: onClearSearch }}
+      />
+    );
+  }
+  if (nothingCollected) {
+    return (
+      <EmptyState
+        icon="dex"
+        title="Nothing collected yet"
+        body="Open any entry and log a pour to add it here."
+        action={{ label: 'Show every entry', onPress: onShowAll }}
+      />
+    );
+  }
+  return (
+    <EmptyState
+      icon="filter"
+      title="No matches"
+      body="Nothing in the Dex matches these filters."
+      action={{ label: 'Clear filters', onPress: onReset }}
+    />
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Screen                                                              */
@@ -290,62 +398,67 @@ export default function DexScreen() {
   /*
    * How many drinks the shelf can currently make, for the My Bar row below.
    *
-   * matchBar walks all 882 specs, so it is memoised on the owned set rather
-   * than run per render — this screen re-renders on every keystroke in its
-   * own search field and on every scroll-driven masthead change.
+   * The selector returns the number, not the shelf, so ticking a bottle on
+   * My Bar re-renders this screen only when the count actually moves — this
+   * screen stays mounted under My Bar, and subscribing to `owned` itself
+   * re-rendered the whole grid on every tick. The count comes from
+   * matchOwned, which remembers its last answer keyed on the store's Record
+   * identity: My Bar and this row ask about the same shelf on the same tap,
+   * so whichever asks second reuses the first one's match instead of
+   * walking every recipe again.
    */
-  const ownedBar = useBar((s) => s.owned);
-  const barCount = useMemo(
-    () => matchBar(new Set(Object.keys(ownedBar))).makeable.length,
-    [ownedBar],
-  );
+  const barCount = useBar((s) => matchOwned(s.owned).makeable.length);
 
   /*
    * Membership size, not the map itself. Subscribing to `unlocks` here would
    * re-render the screen every time a photo is swapped on an entry already
    * collected; the count moves only when something is added or removed, which
    * is the only change the grid's filtering and progress care about.
+   *
+   * A plain key count is honest here because the store keeps `unlocks` to
+   * catalogue ids only: records for drinks that left the index are moved
+   * aside when the collection loads (see settle() in store/collection), so
+   * this header, Stats and the celebrations all count the same entries.
    */
   const collected = useCollection((s) => Object.keys(s.unlocks).length);
 
-  const [region, setRegion] = useState<RegionFilter>('all');
+  const [category, setCategory] = useState<CategoryFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
 
-  const artSize = useMemo(() => {
+  /*
+   * The card width is the exact column, unrounded: rounding it could push
+   * two cards and the gap past the row by a point and a half.
+   */
+  const { column, artSize } = useMemo(() => {
     const column = (width - GRID_PAD * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS;
-    return Math.round(column * 0.66);
+    return { column, artSize: Math.round(column * 0.66) };
   }, [width]);
 
   const rows = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = fold(query.trim());
     // Read-not-subscribe: `collected` above is what invalidates this memo.
     const unlocks = useCollection.getState().unlocks;
 
     return DRINKS.filter((drink) => {
-      if (region !== 'all' && drink.category !== region) return false;
+      if (category !== 'all' && drink.category !== category) return false;
       if (status !== 'all') {
         const has = Boolean(unlocks[drink.id]);
         if (status === 'unlocked' ? !has : has) return false;
       }
-      // Origin is searchable so the dex can be browsed by country — "peru",
-      // "jalisco" and "iceland" all resolve, which is the only way the
-      // world-spanning half of the index is discoverable.
-      if (
-        q.length > 0 &&
-        !drink.name.toLowerCase().includes(q) &&
-        !drink.subcategory.toLowerCase().includes(q) &&
-        !drink.origin.toLowerCase().includes(q)
-      ) {
-        return false;
-      }
-      return true;
+      return q.length === 0 || (SEARCH_KEY.get(drink.id) ?? '').includes(q);
     });
     // `collected` looks unused — it is the invalidation key for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collected, query, region, status]);
+  }, [collected, query, category, status]);
 
   const listRef = useRef<FlatList<Drink>>(null);
+  /*
+   * Tapping the Dex tab while already on it scrolls the grid home, the way
+   * every iOS tab bar behaves. The chip scroller below opts out of
+   * scrollsToTop so a status-bar tap reaches the grid, not the chips.
+   */
+  useScrollToTop(listRef);
   const reduced = useReducedMotion();
 
   const scrollY = useSharedValue(0);
@@ -364,7 +477,7 @@ export default function DexScreen() {
    *
    * useAnimatedReaction runs on first evaluation too (prev is null), so the
    * flag seeds itself from wherever the list actually is. Still only writes on
-   * change — writing every frame would re-render 460 cells on every pixel.
+   * change — writing every frame would re-render the screen on every pixel.
    */
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -393,14 +506,14 @@ export default function DexScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: Drink }) => (
-      <GridCell drink={item} artSize={artSize} onPress={openDrink} />
+      <GridCell drink={item} artSize={artSize} cardWidth={column} onPress={openDrink} />
     ),
-    [artSize, openDrink],
+    [artSize, column, openDrink],
   );
 
-  const selectRegion = useCallback((next: RegionFilter) => {
+  const selectCategory = useCallback((next: CategoryFilter) => {
     haptic.select();
-    setRegion(next);
+    setCategory(next);
   }, []);
 
   const selectStatus = useCallback((next: StatusFilter) => {
@@ -410,12 +523,10 @@ export default function DexScreen() {
 
   const resetFilters = useCallback(() => {
     haptic.select();
-    setRegion('all');
+    setCategory('all');
     setStatus('all');
     setQuery('');
   }, []);
-
-  const filtered = region !== 'all' || status !== 'all' || query.length > 0;
 
   const header = (
     <View>
@@ -425,29 +536,40 @@ export default function DexScreen() {
         have met, kept in one place" — restated the screen's name at body
         size. Between them they cost about 90pt above the fold on a screen
         where the first drink already sat 409pt down, half the display.
+
+        The field is a white pill on a hairline, 44pt tall with 16pt text,
+        like the app's other search inputs — not a smaller sunk variant of
+        its own. At 36pt with 13pt text it was under the touch minimum, and
+        its glyph and placeholder sat at 2.5:1 in the sunk well. The
+        placeholder names what it searches, country included: nothing else
+        on screen says the index can be browsed that way.
       */}
       <View style={styles.titleRow}>
-        <Text style={styles.title}>The Dex</Text>
+        <Text style={styles.title} accessibilityRole="header">
+          The Dex
+        </Text>
         <View style={styles.searchWrap}>
-          <Icon name="search" size={16} color={colors.textFaint} />
+          <Icon name="search" size={17} color={colors.textMuted} />
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="Search"
-            placeholderTextColor={colors.textFaint}
+            placeholder="Name, style or country"
+            placeholderTextColor={colors.textMuted}
             autoCorrect={false}
             autoCapitalize="none"
             returnKeyType="search"
             style={styles.searchInput}
-            accessibilityLabel="Search drinks by name or style"
+            accessibilityLabel="Search drinks by name, style or country"
           />
           {query.length > 0 ? (
             <PressableScale
               onPress={() => setQuery('')}
               accessibilityRole="button"
               accessibilityLabel="Clear search"
-              hitSlop={8}>
-              <Icon name="close" size={15} color={colors.textMuted} />
+              // A 28pt box plus the slop is 44pt; the bare glyph was 31.
+              hitSlop={space.sm}
+              style={styles.clearSearch}>
+              <Icon name="close" size={16} color={colors.textMuted} />
             </PressableScale>
           ) : null}
         </View>
@@ -485,7 +607,12 @@ export default function DexScreen() {
             : 'My Bar, tick what you own to see what you can make'
         }
         style={styles.barLink}>
-        <Icon name="sparkle" size={18} color={colors.wine} />
+        {/*
+          The coupe, as on My Bar's own empty state. This was the sparkle,
+          which is the legendary mark on the cards a few rows down — one
+          glyph meaning two things on the same screen.
+        */}
+        <Icon name="dex" size={18} color={colors.wine} />
         <View style={styles.barLinkText}>
           <Text style={styles.barLinkTitle}>My Bar</Text>
           <Text style={styles.barLinkBody} numberOfLines={1}>
@@ -497,32 +624,33 @@ export default function DexScreen() {
         <Icon name="chevronRight" size={16} color={colors.textFaint} />
       </PressableScale>
 
-      {/* Region */}
+      {/* Category */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
+        scrollsToTop={false}
         style={styles.chipScroll}
         contentContainerStyle={styles.chipScrollContent}>
         <FilterChip
           label="All"
           detail={formatCount(TOTAL)}
-          selected={region === 'all'}
-          accessibilityLabel={`All regions, ${TOTAL} entries`}
-          onPress={() => selectRegion('all')}
+          selected={category === 'all'}
+          accessibilityLabel={`All drinks, ${formatCount(TOTAL)} entries`}
+          onPress={() => selectCategory('all')}
         />
-        {CATEGORY_ORDER.map((category) => {
-          const meta = CATEGORY_META[category];
-          const total = COUNT_BY_CATEGORY[category];
+        {CATEGORY_ORDER.map((key) => {
+          const meta = CATEGORY_META[key];
+          const total = COUNT_BY_CATEGORY[key];
           return (
             <FilterChip
-              key={category}
+              key={key}
               label={meta.plural}
               detail={formatCount(total)}
-              selected={region === category}
+              selected={category === key}
               accent={meta.color}
-              accessibilityLabel={`${meta.plural}, ${total} entries`}
-              onPress={() => selectRegion(category)}
+              accessibilityLabel={`${meta.plural}, ${formatCount(total)} entries`}
+              onPress={() => selectCategory(key)}
             />
           );
         })}
@@ -572,20 +700,27 @@ export default function DexScreen() {
         ]}
         ListHeaderComponent={header}
         ListEmptyComponent={
-          <EmptyState
-            icon="search"
-            title="Nothing on this shelf"
-            body="No entry matches that combination yet. Widen the search and the board fills back in."
-            action={filtered ? { label: 'Clear filters', onPress: resetFilters } : undefined}
+          <GridEmpty
+            query={query.trim()}
+            nothingCollected={status === 'unlocked' && collected === 0}
+            onClearSearch={() => setQuery('')}
+            onShowAll={() => selectStatus('all')}
+            onReset={resetFilters}
           />
         }
         onScroll={onScroll}
         scrollEventThrottle={16}
-        /* 7,653 entries, most of them vector artwork — keep the window tight. */
-        initialNumToRender={18}
-        maxToRenderPerBatch={12}
+        /*
+         * 2,089 entries, most of them vector artwork — keep the window tight.
+         * With numColumns these counts are ROWS, not cards: FlatList hands
+         * the virtualiser one item per row. At 18 and 12 the first commit
+         * built 36 cards when four to six are on screen below the header.
+         * Four rows fills the first screen on the largest phone.
+         */
+        initialNumToRender={4}
+        maxToRenderPerBatch={4}
         updateCellsBatchingPeriod={50}
-        windowSize={7}
+        windowSize={5}
         removeClippedSubviews
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
@@ -596,9 +731,15 @@ export default function DexScreen() {
       <Masthead scrollY={scrollY} collected={collected} topInset={insets.top} />
 
       {showScrollTop ? (
+        /*
+         * Scales in and out rather than fading, for the masthead's reason:
+         * UIKit drops a glass material while any ancestor's alpha is under
+         * 1, so a fade showed a bare chevron until the glass popped in at
+         * the end, and lost the glass the moment the exit began.
+         */
         <Animated.View
-          entering={reduced ? undefined : FadeIn.duration(motion.fast)}
-          exiting={reduced ? undefined : FadeOut.duration(motion.exit)}
+          entering={reduced ? undefined : ZoomIn.duration(motion.fast)}
+          exiting={reduced ? undefined : ZoomOut.duration(motion.exit)}
           style={[
             styles.scrollTop,
             { bottom: insets.bottom + TAB_BAR_CLEARANCE + space.md },
@@ -699,8 +840,9 @@ const styles = StyleSheet.create({
     color: colors.text,
     ...tabular,
   },
+  // textMuted: 13pt text on the glass, where textFaint is 3.82:1 — a 3:1 ink under a 4.5:1 floor.
   mastheadTotal: {
-    color: colors.textFaint,
+    color: colors.textMuted,
   },
   mastheadTrack: {
     height: 2,
@@ -737,7 +879,8 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,
     letterSpacing: typeScale.caption.letterSpacing,
-    color: colors.textFaint,
+    // Small text, so textMuted — as chipDetail below, and for its reason.
+    color: colors.textMuted,
   },
   /* marginLeft auto rather than a spacer View — one property instead of
      an element, and it survives the row gaining another child. */
@@ -818,14 +961,17 @@ const styles = StyleSheet.create({
   },
   chipDetail: {
     fontFamily: fonts.numeral,
-    fontSize: 10,
+    /*
+     * 11, the smallest size in the scale (label.ui) — it was a 10pt one-off.
+     * Still a step under the 13pt chip label, which it has to sit beneath;
+     * micro at 12 would read almost level with it.
+     */
+    fontSize: label.ui.fontSize,
     /*
      * textMuted, not textFaint. The per-category count is content — it is
-     * how you learn there are 1,190 spirits — and textFaint renders it at
-     * 2.84:1 on this page, under the 4.5:1 floor for text this size. It was
-     * already failing on the old white chip; moving the row onto the page
-     * ground made it marginally worse, so it is corrected here rather than
-     * carried forward. textMuted clears at 5.50:1.
+     * how you learn there are 1,190 spirits — and textFaint is for large
+     * type and glyphs: it renders it at 3.51:1 on this page, under the
+     * 4.5:1 floor for text this size. textMuted clears at 5.50:1.
      */
     color: colors.textMuted,
     ...tabular,
@@ -841,18 +987,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.xs,
-    minHeight: 36,
+    gap: space.sm,
+    minHeight: 44,
     paddingHorizontal: space.md,
     borderRadius: radius.pill,
-    backgroundColor: colors.bgSunk,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
+    backgroundColor: colors.surface,
   },
   searchInput: {
     flex: 1,
     alignSelf: 'stretch',
     fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    fontSize: typeScale.body.fontSize,
     color: colors.text,
+  },
+  clearSearch: {
+    minWidth: 28,
+    minHeight: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerRule: {
     marginTop: space.xl,
