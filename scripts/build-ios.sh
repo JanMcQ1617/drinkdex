@@ -245,6 +245,11 @@ case "$MODE" in
     IPA="$(find "$EXPORT_DIR" -maxdepth 1 -name '*.ipa' | head -1)"
     [ -n "$IPA" ] || { echo "Export produced no .ipa. Read the log above." >&2; exit 1; }
 
+    # Build 10 archived, exported and uploaded cleanly, then died at launch on
+    # every phone: two prebuilt modules needed Swift symbols the app's
+    # ExpoModulesCore did not have. Nothing before this line can see that.
+    "$ROOT/scripts/check-native-links.sh" "$IPA"
+
     echo
     echo "==> Done. Sipply $VERSION ($BUILD)"
     echo "    Archive: $ARCHIVE"
