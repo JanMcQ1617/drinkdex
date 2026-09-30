@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 29 September 2026**
+**Last updated: 30 September 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -21,10 +21,12 @@ subject and it will be treated that way.
 likes, and your follows in both directions. It is immediate, it cannot be
 undone, and you do not need to email anyone first. If a photo cannot be
 removed, the account stays and the app tells you; try again once you have a
-signal.
+signal. If you signed in with Apple or Facebook, removing Sipply from that
+account is done in Apple's or Facebook's settings:
+[Deleting your data](data-deletion) explains how.
 
-**Report a post.** The **"..."** menu on any post that is not yours →
-**Report**. Pick a reason. It comes straight to us.
+**Report a post or an account.** The **"..."** menu on any post or profile
+that is not yours → **Report**. Pick a reason. It comes straight to us.
 
 **Block someone.** Same **"..."** menu → **Block**. It takes effect
 immediately, it works in both directions, it drops any follow between you,
@@ -47,9 +49,13 @@ them on this phone. It does not delete your account or your posts.
 
 ## If you have forgotten your password
 
-On the sign-in screen, tap **Forgot your password?**, type the email you
-signed up with, and tap **Send reset link**. Opening the link from your
-email takes you straight into Sipply and asks you to choose a new password.
+If you signed up with Apple or Facebook, there is no Sipply password to
+forget: use the same button on the sign-in screen again.
+
+Otherwise, on the sign-in screen, tap **Forgot your password?**, type the
+email you signed up with, and tap **Send reset link**. Opening the link from
+your email takes you straight into Sipply and asks you to choose a new
+password.
 
 Three things worth knowing, because each of them looks like a bug and none
 of them is:
@@ -134,6 +140,30 @@ unbuilt. No Meta API hands a third-party app your follower or following
 list, and scraping it would put *your* account at risk, not ours. Importing
 your own downloaded list is the only honest version of that feature.
 
+**Which Instagram download do I choose?** In Find friends, tap **Request
+your list**. On Instagram's page, ask for **Followers and following** only;
+any format works, and it usually arrives within half an hour. Then tap
+**Choose the download** and pick the .zip Instagram gave you, as it is,
+without unzipping it. If Sipply says the download is too big, it is the
+full export with every photo in it: request again with only Followers and
+following. The file is read on your phone and never uploaded.
+
+**Why do I only see some of my Facebook friends?** Facebook only tells
+Sipply about friends who also use Sipply and allowed their friends list
+when they connected it. Friends who use Sipply without connecting Facebook
+are not on that list; find them by username instead. If you expected
+some and see none, tap **Check Facebook** again and allow your friends list
+when Facebook asks.
+
+**Does Sipply post to Facebook or Instagram?** No, never. It asks Facebook
+for your name, email, picture and friends list, and nothing else, and it has
+no connection to Instagram at all.
+
+**How do I stop Sipply using my Facebook account?** Remove Sipply under
+**Apps and websites** in Facebook's settings.
+[Deleting your data](data-deletion) has the steps, and what that does and
+does not remove.
+
 **Why is the app 18+?** It is about alcoholic drinks throughout. It does not
 sell alcohol and contains no purchases of any kind.
 
@@ -154,5 +184,8 @@ acting on it.
 
 [Privacy Policy](privacy) — what Sipply stores, who can see it, and how to
 delete it.
+
+[Deleting your data](data-deletion) — deleting your account, and removing
+Sipply from Facebook.
 
 [Terms of Use](terms) — the rules for using Sipply, and what is not allowed.

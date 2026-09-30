@@ -6,8 +6,15 @@
 # the product was renamed to Sipply — so the fallback was never going to be
 # right on its own.
 #
-# Deliberately only two keys. GitHub Pages merges its own defaults over this,
+# Deliberately few keys. GitHub Pages merges its own defaults over this,
 # including the theme, so naming a theme here would pin something that is
 # currently tracking Pages' default and does not need to.
+#
+# appstore.md and testflight.md are working notes for App Store Connect and
+# TestFlight, not pages for users. Without the exclude, Pages published them
+# at /appstore and /testflight like everything else in docs/.
 title: Sipply
 description: A drinks field guide for iPhone. Support, privacy and terms.
+exclude:
+  - appstore.md
+  - testflight.md

@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 29 September 2026**
+**Last updated: 30 September 2026**
 
 Sipply is a drinks field guide. You collect entries, log what you drink, and
 share it with people you follow. These are the rules for using it.
@@ -9,7 +9,8 @@ They are written to be read. Where a term matters, it is stated plainly
 rather than buried, and there is nothing here that is not actually enforced
 in the app.
 
-By creating an account you agree to these terms. If you do not agree, do not
+By creating an account, whether with an email address, Sign in with Apple or
+Continue with Facebook, you agree to these terms. If you do not agree, do not
 create one.
 
 ---
@@ -22,6 +23,11 @@ throughout.
 
 One account per person. Do not share your account, and do not let anyone else
 use it. You are responsible for what happens under your account.
+
+Sign in with Apple and Continue with Facebook are Apple's and Meta's
+services, so their own terms apply to them as well. Sipply is not affiliated
+with Apple, Meta or Instagram, and never posts to Facebook or Instagram for
+you.
 
 ## The one rule that matters most
 
@@ -55,8 +61,8 @@ app to get around the rules above.
 
 ## Reporting and blocking
 
-Every post that is not yours has a **"..."** menu with **Report** and
-**Block**.
+Every post and every profile that is not yours has a **"..."** menu with
+**Report** and **Block**.
 
 **Report** asks for a reason and sends it to us. Reports are reviewed and
 acted on **within 24 hours**. Content that breaks these terms is removed, and
@@ -120,7 +126,9 @@ belong to their owners and appear for identification only.
 **You can delete your account at any time** from **Profile → Settings**
 (the gear, top right) **→ Delete account**. It removes your profile, posts,
 photos, likes, and follows. It is immediate and cannot be undone. You do not
-need to ask us.
+need to ask us. If you signed in with Apple or Facebook, removing Sipply from
+that account is done in Apple's or Facebook's settings;
+[Deleting your data](data-deletion) explains how.
 
 We may suspend or delete an account that breaks these terms. Where it is
 reasonable to do so we will say why, but conduct in the list above may be
@@ -146,9 +154,11 @@ own copies of photos you care about.** Do not treat the app as a backup.
 
 ## Changes
 
-If these terms change materially, the date at the top changes and the app
-will say so before the change takes effect. Continuing to use Sipply after
-that means you accept the new version.
+When these terms change, the date at the top changes with it, and the new
+version applies from that date. The app does not announce changes itself:
+the current terms are always the ones at this address, which **Profile →
+Settings → Terms of Use** opens. Continuing to use Sipply after a change
+means you accept the new version.
 
 ## Governing law
 

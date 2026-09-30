@@ -115,7 +115,9 @@ PEOPLE
 
 Follow other collectors and see what they have been pouring. Find friends by username, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
 
-If you would rather bring your Instagram circle, you can import the follower list Instagram gives you when you download your own data. Sipply never connects to your Instagram account: the file is read on your phone, and the usernames in it are scrambled there before they are compared.
+Continue with Facebook and see which of your Facebook friends are already here. Facebook only shows Sipply the friends who connected it too, and Sipply never posts anything there.
+
+If you would rather bring your Instagram circle, ask Instagram for a copy of your followers and following and hand Sipply the .zip it sends. Sipply never connects to your Instagram account: the file is read on your phone, and the usernames in it are scrambled there before they are compared.
 
 WHAT SIPPLY DOES NOT DO
 
@@ -130,7 +132,11 @@ You can delete your account from Settings inside the app, without emailing anyon
 Sipply is for people old enough to drink where they live. Please drink responsibly, and never drive after drinking.
 ```
 
-[2,345 — comfortably inside 4000, with room if you want to add a line]
+[2,532 — comfortably inside 4000, with room if you want to add a line]
+
+The Facebook paragraph under PEOPLE describes a build made with
+`EXPO_PUBLIC_FACEBOOK_SIGN_IN=on`. If the build you submit has it off,
+delete that paragraph, and the count drops by 181.
 
 ---
 
@@ -153,6 +159,77 @@ every update after this one.
 nothing, and these pages change only when `main` moves. The privacy,
 support and terms pages all resolved on 29 September 2026. Check again
 before you submit — a support URL that 404s is a rejection.
+
+### Meta app settings, for Continue with Facebook
+
+Not App Store Connect: these go in the Meta developer app whose App ID and
+secret Supabase's Facebook provider uses, under App settings → Basic. Meta
+needs the privacy policy and the data deletion page before the app can go
+live or `user_friends` can be reviewed; the terms URL is optional and
+costs nothing to fill in.
+
+| Field | Value |
+| --- | --- |
+| Privacy Policy URL | `https://janmcq1617.github.io/drinkdex/privacy` |
+| Terms of Service URL | `https://janmcq1617.github.io/drinkdex/terms` |
+| User data deletion → Data deletion instructions URL | `https://janmcq1617.github.io/drinkdex/data-deletion` |
+
+`data-deletion` is new and does not exist until `main` moves. It has to
+be live, along with the privacy policy that describes Facebook, before
+the Meta app goes to review, which is before any build with the Facebook
+button reaches testers.
+
+---
+
+## App Privacy — the questionnaire
+
+App Store Connect → the app → **App Privacy**. These answers restate
+[the privacy policy](privacy), which is the source: if either changes, the
+other has to.
+
+Apple's test for "collected" is that data leaves the phone and is kept
+longer than it takes to answer the request. So the contact hashes, the
+Instagram hashes and the Facebook friend ids sent for matching are **not**
+collected — they are compared and dropped — and nothing that stays on the
+phone is either: the collection, unposted photos, the cached Instagram and
+Facebook lists. Crash reports Apple gathers itself, through TestFlight or
+the App Store, are Apple's to declare, not the app's.
+
+**Do you or your third-party partners collect data from this app?** Yes.
+
+**Tracking.** No, for every type below. Nothing is combined with other
+companies' data, and nothing goes to a data broker.
+
+Declare these eight, each **linked to the user** unless the table says
+otherwise, and each for **App Functionality** only:
+
+| Category → data type | Linked | What it actually is |
+| --- | --- | --- |
+| Contact Info → Name | Yes | The display name, including the name Apple or Facebook sends at sign-in |
+| Contact Info → Email Address | Yes | The sign-in address; for Sign in with Apple it may be a Hide My Email relay |
+| Contact Info → Phone Number | Yes | Only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
+| User Content → Photos or Videos | Yes | Post photos and the profile photo. Also covers the link to a Facebook profile picture that Supabase keeps from Continue with Facebook, which the app never shows or copies |
+| User Content → Other User Content | Yes | Captions, bios, likes, follows, invites, reports and the copy a report keeps |
+| Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply; the hash of the user's own Instagram handle |
+| Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
+| Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit |
+
+App Functionality covers the last one: Apple's definition of the purpose
+includes preventing fraud and implementing security measures, which is
+what the matching limit is. Device ID stays App Functionality only as long
+as Expo's install counts are used for checking rollouts; if they start
+informing product decisions, add Analytics to it.
+
+Everything else is **Not collected**: Contacts, Location (photos are
+re-encoded without it), Search History (the Dex is searched on the
+phone), Browsing History, Health, Financial Info, Purchases, Sensitive
+Info, Product Interaction, Advertising Data, Diagnostics and Other Data.
+
+The same types belong in the app's privacy manifest,
+`ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. On 30
+September 2026 it lists six of the eight: Device ID and Other Usage Data
+are missing, and need adding, with Device ID's
+`NSPrivacyCollectedDataTypeLinked` false, before the next archive.
 
 ---
 
