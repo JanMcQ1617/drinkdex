@@ -37,7 +37,6 @@ export const TAB_BAR_CLEARANCE = 84;
 /** Inner horizontal padding of the bar. */
 const BAR_PAD = 6;
 
-
 /*
  * The centre action sits BETWEEN the tabs rather than being one of them.
  *
@@ -48,7 +47,6 @@ const BAR_PAD = 6;
  * Profile.
  */
 const FAB_SLOT = 2;
-
 
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 

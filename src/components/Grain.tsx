@@ -7,7 +7,7 @@ import { Image, StyleSheet, View } from 'react-native';
 /* at low opacity.                                                      */
 /*                                                                      */
 /* WHY. The palette is called Porcelain Speakeasy and the ground is a    */
-/* warm bone (#F7F2EA) meant to read as paper. Rendered as a flat fill   */
+/* warm cream (#F7F2EA) meant to read as paper. Rendered as a flat fill  */
 /* it reads as a hex value instead — perfectly even, which no paper      */
 /* ever is. The grain is what makes a cream rectangle look like stock    */
 /* rather than a swatch, and it is the cheapest depth in the app: no     */

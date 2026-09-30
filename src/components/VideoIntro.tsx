@@ -20,17 +20,35 @@ import { colors } from '@/constants/theme';
 /* Launch intro — the film                                              */
 /*                                                                      */
 /* A 5s 1080x1920 H.264 clip generated from the app icon: the wax seal   */
-/* on bone paper, merlot flooding up and settling.                      */
+/* on tan paper (colors.filmPaper, a step darker than the splash's      */
+/* bone), merlot flooding up and settling.                              */
 /*                                                                      */
 /* ONCE PER INSTALL, not once per cold start. iOS kills a backgrounded  */
-/* app freely, so "every cold start" meant most launches, and the drawn */
-/* intro had already cut its own tail to 3.35s because a launch screen  */
-/* that outstays 3s is felt every single time. The film is a first      */
-/* impression: it plays on the first launch and is then remembered.     */
-/* The key is versioned by the FILM, not by the app — bump it when the  */
-/* clip changes and everyone sees the new one once; an ordinary update  */
-/* does not replay it. It is not sped up to fit 3.35s instead: a clip   */
-/* that plays once can keep the pacing it was cut with.                 */
+/* app freely, so "every cold start" meant most launches: five seconds  */
+/* at the door almost every time the app was opened, and an invite or   */
+/* password-reset link that cold-started the app waited behind the      */
+/* whole film too. The drawn intro had already cut its own tail to      */
+/* 3.35s because a launch screen that outstays 3s is felt every single  */
+/* time. The film is a first impression: it plays on the first launch   */
+/* and is then remembered, and every launch after that goes from the    */
+/* splash straight to the app. The key is versioned by the FILM, not by */
+/* the app — bump it when the clip changes and everyone sees the new    */
+/* one once; an ordinary update does not replay it. It is not sped up   */
+/* to fit 3.35s instead: a clip that plays once can keep the pacing it  */
+/* was cut with.                                                        */
+/*                                                                      */
+/* THE SPLASH HANDS STRAIGHT TO THE FILM. On the launch that plays it,  */
+/* the native splash stays up until the film has drawn its first frame  */
+/* and then dissolves onto that frame: the film calls `onVisible` and   */
+/* RootLayout lifts the splash. Lifted as soon as the app was ready     */
+/* instead, it dissolved onto whatever sat under the film before the    */
+/* first decoded frame — one more ground between splash and film. What  */
+/* sits under the video is the film's own paper (colors.filmPaper), so  */
+/* if the splash does go first it still lands on the film's colour, not */
+/* on the cream page. A short timer is the guarantee here as well: a    */
+/* clip that never draws a frame must not be able to hold the splash    */
+/* up. The seal still jumps from the splash's size to the film's; only  */
+/* a re-cut of the clip's opening can remove that.                      */
 /*                                                                      */
 /* REDUCED MOTION FALLS BACK TO THE DRAWN INTRO, it does not skip.      */
 /* A video has one timeline and cannot soften itself, so honouring the  */
@@ -94,9 +112,29 @@ async function markIntroSeen(): Promise<void> {
 const CEILING_MS = 9000;
 /** The dissolve to the page. */
 const EXIT_MS = 280;
+/**
+ * How long the splash waits for the film's first frame. A bundled clip
+ * decodes well inside this; past it the splash lifts onto the film's
+ * paper and the frame arrives under the dissolve or just after it.
+ */
+const FIRST_FRAME_WAIT_MS = 800;
 
-export function VideoIntro({ onDone }: { onDone: () => void }) {
+/**
+ * `onVisible` fires once the intro has something on screen for the native
+ * splash to dissolve onto — the film's first frame (or, if that frame is
+ * slow, the film's paper after FIRST_FRAME_WAIT_MS), or at once for the
+ * drawn intro. It may fire more than once; the caller must not care.
+ */
+export function VideoIntro({ onDone, onVisible }: { onDone: () => void; onVisible: () => void }) {
   const reduced = useReducedMotion();
+
+  /*
+   * The drawn intro is drawn on its first render — there is nothing to
+   * decode — so the splash can go as soon as it has mounted.
+   */
+  useEffect(() => {
+    if (reduced) onVisible();
+  }, [reduced, onVisible]);
 
   /*
    * Recorded when the intro ENDS, however it ends, rather than when it
@@ -107,10 +145,14 @@ export function VideoIntro({ onDone }: { onDone: () => void }) {
     onDone();
   };
 
-  return reduced ? <SipplyIntro onDone={done} /> : <Film onDone={done} />;
+  return reduced ? (
+    <SipplyIntro onDone={done} />
+  ) : (
+    <Film onDone={done} onVisible={onVisible} />
+  );
 }
 
-function Film({ onDone }: { onDone: () => void }) {
+function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void }) {
   const [leaving, setLeaving] = useState(false);
   const opacity = useSharedValue(1);
 
@@ -168,6 +210,12 @@ function Film({ onDone }: { onDone: () => void }) {
     return () => clearTimeout(ceiling);
   }, [finish]);
 
+  /* The splash's guarantee: the first frame lifts it, or this timer does. */
+  useEffect(() => {
+    const fallback = setTimeout(onVisible, FIRST_FRAME_WAIT_MS);
+    return () => clearTimeout(fallback);
+  }, [onVisible]);
+
   /* A short interruption — a notification, a quick app switch — picks the film up where it paused. */
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
@@ -212,6 +260,11 @@ function Film({ onDone }: { onDone: () => void }) {
          */
         contentFit="cover"
         allowsPictureInPicture={false}
+        /*
+         * Lifts the splash. It can fire again when the video track
+         * changes; lifting an already-lifted splash does nothing.
+         */
+        onFirstFrameRender={onVisible}
       />
       <Pressable
         style={StyleSheet.absoluteFill}
@@ -224,13 +277,20 @@ function Film({ onDone }: { onDone: () => void }) {
 }
 
 const styles = StyleSheet.create({
-  /* The ground shows for the frame before the first video frame lands. */
+  /*
+   * The ground shows before the first video frame lands, and is what the
+   * splash dissolves onto if its fallback lifts it first. The film's own
+   * paper rather than the page's cream: cream there was a bright flash
+   * between the bone splash and the tan film, a third ground in half a
+   * second. On the dissolve out it fades with the film, so the page is
+   * all that is left.
+   */
   fill: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.filmPaper,
   },
 });

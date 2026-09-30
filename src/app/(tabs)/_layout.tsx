@@ -21,8 +21,9 @@ import { colors, motion } from '@/constants/theme';
  * size whichever path renders it and the same grey or wine as its own
  * label. They used to draw a resting icon in a grey lighter than the
  * caption under it: two greys in one control, and that lighter one
- * (textFaint) falls to about 2.6:1 once a dark photograph shows through
- * the glass, under the 3:1 a glyph needs. textMuted holds 5:1 there.
+ * (textFaint) is 3.82:1 on the bar's own fill, a hair over the 3:1 a
+ * glyph needs, with no margin left for a dark photograph showing through
+ * the glass. textMuted is 5.98:1 on the same fill.
  */
 export default function TabLayout() {
   const reduced = useReducedMotion();

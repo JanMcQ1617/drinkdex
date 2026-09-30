@@ -37,7 +37,7 @@ import { colors, fonts, label as labelType } from '@/constants/theme';
  *    opened, so the rule and tagline land by 2.4s and the hold runs to 2.9s.
  *    The beats keep their proportions and their easings.
  *  - It exits by flooding, not by cutting. The source ends on wine and the
- *    app's page is off-white, so an off-white disc opens from the centre and
+ *    app's page is cream, so a cream disc opens from the centre and
  *    floods the frame — the app is simply what was underneath. Inherited
  *    from the intro this replaces, and the reason there is no visible seam.
  *

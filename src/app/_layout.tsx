@@ -19,16 +19,24 @@ SplashScreen.preventAutoHideAsync();
  * fade, so the bone launch screen vanished in one frame and the film (or,
  * on later launches, the cream page) was simply there — a hard cut at the
  * one moment the app is making its first impression. A quarter-second
- * dissolve covers the change of ground instead. The hide itself stays
- * tied to `ready` below rather than to the film's first decoded frame:
- * a clip that never decodes must not be able to hold the splash up.
+ * dissolve covers the change of ground instead.
  */
 SplashScreen.setOptions({ fade: true, duration: 250 });
 
 /*
+ * Lifts the native splash. Safe to call any number of times: the native
+ * side does nothing once the splash is gone, which is what lets the film
+ * call it from its first frame and from its fallback timer both.
+ */
+function liftSplash() {
+  void SplashScreen.hideAsync();
+}
+
+/*
  * Whether this launch plays the intro: null until storage has answered.
  * Module scope so a fast-refresh remount neither asks again nor replays
- * it. The once-per-install rule itself lives with the film (VideoIntro).
+ * it. The once-per-install rule, and why it is not once per cold start,
+ * live with the film (VideoIntro).
  */
 let introDecision: boolean | null = null;
 
@@ -83,11 +91,16 @@ export default function RootLayout() {
   const initAuth = useAuth((s) => s.init);
   useEffect(() => initAuth(), [initAuth]);
 
+  /*
+   * On the launch that plays the intro, the intro lifts the splash itself
+   * (`onVisible` below) — for the film, once its first frame is drawn, so
+   * the splash dissolves onto the film rather than onto the ground under
+   * it. Every other launch lifts it as soon as the app is ready. When the
+   * intro ends this runs again, a no-op unless nothing lifted it yet.
+   */
   useEffect(() => {
-    if (ready) {
-      SplashScreen.hideAsync();
-    }
-  }, [ready]);
+    if (ready && !showIntro) liftSplash();
+  }, [ready, showIntro]);
 
   if (!ready) {
     return null;
@@ -124,6 +137,12 @@ export default function RootLayout() {
             fullScreenGestureEnabled: true,
           }}
         />
+        {/*
+          user/[id], a person's profile, is not listed on purpose: the stack
+          defaults are all it needs — a push, so Back returns to whatever
+          opened it, with the standard edge swipe. An entry here would only
+          repeat them.
+        */}
         {/*
           Logging a pour. A modal, not a push: it is a task you complete or
           abandon, and the sheet's downward dismiss is the gesture that
@@ -203,6 +222,7 @@ export default function RootLayout() {
       <CelebrationOverlay />
       {showIntro && (
         <VideoIntro
+          onVisible={liftSplash}
           onDone={() => {
             introDecision = false;
             setShowIntro(false);
