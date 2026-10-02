@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { announce, Avatar, Button, PressableScale } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { announce, Avatar, Button, Notice } from '@/components/ui';
+import { colors, fonts, layout, space, stroke, textRole } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
 import type { UserProfile } from '@/types';
@@ -41,14 +41,17 @@ export interface MatchEntry {
 /**
  * The in-row Follow / Following toggle, the one every list of people uses.
  *
- * There were two, drawn differently for the same decision: 40pt with no
- * state icon here — under the 44pt touch minimum — and 52pt with a check on
- * the profile's account list. This is Button's row size (`sm`, 44pt), with
- * a check once followed. A profile header's lone Follow stays the full-size
- * Button, since there it is the screen's main action rather than one of
- * fifty.
+ * Button's row size (`sm`: 36pt drawn, 44pt to the finger). Follow is the
+ * primary, the action to take; Following is tonal, a quiet fill with no
+ * check, because it is a state rather than a second call to action, and a
+ * column of wine-and-check buttons down a list of people you already
+ * follow made every row shout. A profile header draws its own Follow, the
+ * same two skins at the header's width.
  *
- * No extra haptic: Button's press already ticks.
+ * It toggles at once, with no confirmation: lists of people are bulk
+ * tools. Only the profile header asks before an unfollow.
+ *
+ * No haptic: buttons do not tick on press (specs/01 §5.0).
  */
 export function FollowButton({
   following,
@@ -63,8 +66,7 @@ export function FollowButton({
   return (
     <Button
       label={following ? 'Following' : 'Follow'}
-      variant={following ? 'secondary' : 'primary'}
-      icon={following ? 'check' : undefined}
+      variant={following ? 'tonal' : 'primary'}
       onPress={onToggle}
       size="sm"
       accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${name}`}
@@ -76,17 +78,27 @@ export function FollowButton({
 /* Person row                                                          */
 /* ------------------------------------------------------------------ */
 
+/** The avatar in a person row: ListRow's 40pt leading node. */
+const ROW_AVATAR = 40;
+
 /**
- * Someone in a matched list. The picture and name open their profile, as
- * the profile's own accounts list does: a match is a stranger until you
- * have seen who it is, and their profile is where Report and Block live
- * for an account that has never posted, which no post menu can reach.
+ * Someone in a list of people. The picture and name open their profile: a
+ * match is a stranger until you have seen who it is, and their profile is
+ * where Report and Block live for an account that has never posted, which
+ * no post menu can reach.
  *
  * By default that is the /user/[id] screen, pushed over whatever list this
- * is in: Find friends, the Instagram and Facebook matches, and the welcome
- * step too, because that screen does not gate on the welcome step and so
- * opens the person rather than a second copy of it. `onOpen` replaces the
- * destination; `null` leaves the row as only a Follow decision.
+ * is in: Find friends, the Instagram and Facebook matches, followers and
+ * following, and the welcome step too, because that screen does not gate on
+ * the welcome step and so opens the person rather than a second copy of
+ * it. `onOpen` replaces the destination; `null` leaves the row as only a
+ * Follow decision.
+ *
+ * ListRow's metrics (64pt with a 40pt avatar, name over handle, a hairline
+ * that starts at the text), but not a ListRow: a pressable ListRow is one
+ * button to VoiceOver, and this row holds two controls, the person and
+ * their Follow, so each stays reachable on its own. Pressing the person
+ * fills the row, as a ListRow does; nothing scales.
  */
 export function PersonRow({
   person,
@@ -94,25 +106,39 @@ export function PersonRow({
   following,
   onToggle,
   onOpen,
+  hideFollow,
+  gutter,
+  separator,
 }: {
   person: UserProfile;
   note?: string;
   following: boolean;
   onToggle: () => void;
   onOpen?: ((id: string) => void) | null;
+  /** No Follow button: your own row in someone's followers. */
+  hideFollow?: boolean;
+  /**
+   * Pads the row to the screen gutter, for rows that run edge to edge (on
+   * the page, or in a ListGroup). Off inside a card that has its own padding.
+   */
+  gutter?: boolean;
+  /** A hairline under the row, from the text to the right edge. Off on a list's last row. */
+  separator?: boolean;
 }) {
   const router = useRouter();
+  const [pressed, setPressed] = useState(false);
   const open =
     onOpen === null
       ? null
       : (onOpen ?? ((id: string) => router.push({ pathname: '/user/[id]', params: { id } })));
+  const inset = gutter ? layout.gutter : 0;
 
   const identity = (
     <>
       <Avatar
         name={person.displayName}
         accent={person.accent}
-        size={44}
+        size={ROW_AVATAR}
         avatarPath={person.avatarPath}
       />
       <View style={styles.rowText}>
@@ -127,19 +153,31 @@ export function PersonRow({
   );
 
   return (
-    <View style={styles.row}>
+    <View
+      style={[
+        styles.row,
+        { paddingHorizontal: inset },
+        pressed && styles.rowPressed,
+      ]}>
       {open ? (
-        <PressableScale
+        <Pressable
           onPress={() => open(person.id)}
+          onPressIn={() => setPressed(true)}
+          onPressOut={() => setPressed(false)}
           accessibilityRole="button"
           accessibilityLabel={`Open ${person.displayName}'s profile`}
           style={styles.rowIdentity}>
           {identity}
-        </PressableScale>
+        </Pressable>
       ) : (
         <View style={styles.rowIdentity}>{identity}</View>
       )}
-      <FollowButton following={following} name={person.displayName} onToggle={onToggle} />
+      {hideFollow ? null : (
+        <FollowButton following={following} name={person.displayName} onToggle={onToggle} />
+      )}
+      {separator ? (
+        <View style={[styles.separator, { left: inset + ROW_AVATAR + space.md }]} />
+      ) : null}
     </View>
   );
 }
@@ -184,7 +222,6 @@ export function MatchResults({
 
   const followAll = useCallback(async () => {
     if (!myId || pending.length === 0) return;
-    // No haptic here: the Button's own press already ticked.
     setBusy(true);
     try {
       const added = await followMany(
@@ -192,7 +229,11 @@ export function MatchResults({
         pending.map((e) => e.profile.id),
       );
       setOutcome(added ?? 'failed');
-      // Spoken on iOS, where live regions do nothing; the line below is Android's.
+      /*
+       * Said here as well as by the notice below: a second failure in a row
+       * leaves that notice on screen with the same words, and a notice that
+       * does not change is not announced again.
+       */
       if (added === null) announce(FOLLOW_ALL_FAILED);
     } finally {
       setBusy(false);
@@ -224,78 +265,69 @@ export function MatchResults({
         as a tap that had not registered.
       */}
       {outcome === 'failed' && pending.length > 0 ? (
-        <Text style={styles.hint} accessibilityLiveRegion="polite">
-          {FOLLOW_ALL_FAILED}
-        </Text>
+        <Notice tone="error">{FOLLOW_ALL_FAILED}</Notice>
       ) : null}
 
       {typeof outcome === 'number' && pending.length === 0 ? (
-        <Text style={styles.done}>
+        <Notice tone="success">
           {outcome === 0
             ? 'You already followed everyone here.'
             : `Followed ${outcome} ${outcome === 1 ? 'person' : 'people'}.`}
-        </Text>
+        </Notice>
       ) : null}
 
-      {entries.map((entry) => (
-        <PersonRow
-          key={entry.profile.id}
-          person={entry.profile}
-          note={entry.note}
-          following={followingSet.has(entry.profile.id)}
-          onToggle={() => toggleFollow(myId, entry.profile.id)}
-          onOpen={onOpenPerson}
-        />
-      ))}
+      {/* The rows sit flush: each draws its own hairline, the last none. */}
+      <View>
+        {entries.map((entry, i) => (
+          <PersonRow
+            key={entry.profile.id}
+            person={entry.profile}
+            note={entry.note}
+            following={followingSet.has(entry.profile.id)}
+            onToggle={() => toggleFollow(myId, entry.profile.id)}
+            onOpen={onOpenPerson}
+            separator={i < entries.length - 1}
+          />
+        ))}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  results: { gap: space.xs },
+  results: { gap: space.sm },
 
+  /* ListRow's metrics: 64pt with a 40pt avatar, 12pt between the parts. */
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    paddingTop: space.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.cardBorder,
+    minHeight: layout.rowTall,
+    paddingVertical: space.md,
   },
-  // The same 44pt identity block as the profile's accounts rows.
+  rowPressed: { backgroundColor: colors.bgSunk },
   rowIdentity: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    minHeight: 44,
+    minHeight: layout.hit,
   },
   rowText: { flex: 1 },
-  rowName: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
+  rowName: { ...textRole.rowTitle, fontFamily: fonts.bodySemiBold, color: colors.text },
   // 13pt secondary lines: textMuted, which holds 4.5:1 where textFaint cannot.
-  rowHandle: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
+  rowHandle: { ...textRole.rowSubtitle, color: colors.textMuted },
+  // From the start of the name to the row's right edge, as iOS's own lists draw it.
+  separator: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    height: stroke.hair,
+    backgroundColor: colors.line,
   },
   hint: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    ...textRole.helper,
     color: colors.textMuted,
     paddingTop: space.sm,
-  },
-  done: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.wine,
-    backgroundColor: colors.bg,
-    borderRadius: radius.md,
-    paddingVertical: space.sm,
-    paddingHorizontal: space.md,
-    overflow: 'hidden',
   },
 });
