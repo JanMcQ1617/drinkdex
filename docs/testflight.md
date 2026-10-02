@@ -4,8 +4,11 @@ Paste these into App Store Connect. Written to be pasted, not edited.
 
 Sign in with Apple and Continue with Facebook appear only in a build made
 with `EXPO_PUBLIC_APPLE_SIGN_IN` and `EXPO_PUBLIC_FACEBOOK_SIGN_IN` set to
-`on`. The parts that describe them sit under their own headings below;
-leave those out of a build made without the two flags.
+`on`. Phone sign-in and Continue with Google work the same way, with
+`EXPO_PUBLIC_PHONE_SIGN_IN` and `EXPO_PUBLIC_GOOGLE_SIGN_IN`; Google, like
+Facebook, shows only beside Apple. The parts that describe each sit under
+their own headings below; leave those out of a build made without the
+flag.
 
 ---
 
@@ -120,6 +123,25 @@ file only the user's own username is read, and it is stored, as a hash,
 only if the user accepts it. The usernames are hashed and matched the same way as
 phone numbers, under the same limit.
 
+### Add for a build with phone sign-in
+
+Paste this into the notes, then add the test code on the line after it.
+The code is set beside the number in Supabase → Authentication → Sign In /
+Providers → Phone → **Test phone numbers and OTPs**, and it is kept out of
+this file on purpose: the repository is public, and the number with its
+code signs anyone in to that account. For the same reason, make the code
+random rather than 123456 or another easy guess: the number is written
+here, so the code is all that guards the account. Supabase gives each test
+number an expiry date; check it has not passed before you submit.
+
+**Phone sign-in.** Reviewers can try it without a SIM: enter the test
+number +1 (787) 555-0100, then the six-digit code below. No text message is
+sent; this number's code is fixed. The first sign-in creates an account and
+asks for a username before anything else, as it does for any new number.
+Email sign-in still works as described above. For real numbers, the text
+message is sent by Twilio Verify, configured in Supabase; the app has no
+SMS code of its own.
+
 ### Third-party accounts — a build WITHOUT Apple and Facebook sign-in
 
 **Third-party accounts?** None. No social login. The only outside services
@@ -138,3 +160,19 @@ Sipply are sent to a matching function, which stores none of them. The
 Facebook access token stays in memory and is never stored. The other
 outside services are Supabase for hosting and sign-in, and Expo for app
 updates.
+
+### Third-party accounts — a build WITH Apple, Google and Facebook sign-in
+
+**Third-party accounts?** Sign in with Apple, Continue with Google and
+Continue with Facebook, alongside email. Sign in with Apple is shown
+wherever Continue with Google or Continue with Facebook is (guideline 4.8),
+and each one asks a new account to choose a username before anything else.
+Continue with Google asks for openid, email and profile only; its access
+token is discarded on the device and never stored. Continue with Facebook
+asks for public_profile, email and user_friends. Both run in the system
+authentication sheet; there is no Google or Facebook SDK in the app. The
+Facebook friends list is read on the device, and only the app-scoped ids of
+friends who also use Sipply are sent to a matching function, which stores
+none of them. The Facebook access token stays in memory and is never
+stored. The other outside services are Supabase for hosting and sign-in,
+and Expo for app updates.

@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 30 September 2026**
+**Last updated: 1 October 2026**
 
 Sipply is a drinks field guide. You collect entries, log what you drink, and
 share it with people you follow. These are the rules for using it.
@@ -9,9 +9,9 @@ They are written to be read. Where a term matters, it is stated plainly
 rather than buried, and there is nothing here that is not actually enforced
 in the app.
 
-By creating an account, whether with an email address, Sign in with Apple or
-Continue with Facebook, you agree to these terms. If you do not agree, do not
-create one.
+By creating an account, whether with an email address, a phone number, Sign in
+with Apple, Continue with Google or Continue with Facebook, you agree to these
+terms. If you do not agree, do not create one.
 
 ---
 
@@ -24,10 +24,10 @@ throughout.
 One account per person. Do not share your account, and do not let anyone else
 use it. You are responsible for what happens under your account.
 
-Sign in with Apple and Continue with Facebook are Apple's and Meta's
-services, so their own terms apply to them as well. Sipply is not affiliated
-with Apple, Meta or Instagram, and never posts to Facebook or Instagram for
-you.
+Sign in with Apple, Continue with Google and Continue with Facebook are
+Apple's, Google's and Meta's services, so their own terms apply to them as
+well. Sipply is not affiliated with Apple, Google, Meta or Instagram, and
+never posts to Facebook or Instagram for you.
 
 ## The one rule that matters most
 
@@ -50,10 +50,10 @@ Specifically, do not post or send:
 - Someone else's photos or personal information posted without their consent
 - Impersonation of another person or account
 
-Captions, bios, display names and usernames are checked when you save them,
-and text containing a slur or an explicit sexual term is refused. That
-filter is a floor, not the rule: anything on the list above is removed when
-it is reported, whether or not the filter caught it.
+Captions, bios, display names, usernames and the drinks you add are checked
+when you save them, and text containing a slur or an explicit sexual term is
+refused. That filter is a floor, not the rule: anything on the list above is
+removed when it is reported, whether or not the filter caught it.
 
 Do not try to break the app either: no scraping, no automated accounts, no
 attempts to reach data that is not yours, and no reverse-engineering of the
@@ -91,6 +91,12 @@ survive briefly in backups before they age out, and a report keeps its own
 copy of the text it is about, so that it can still be acted on after the
 original is gone.
 
+**Drinks you suggest.** When you add a drink, you let Sipply use what you
+wrote to add that drink to the Dex for everyone, rewritten in Sipply's
+words. That entry stays in the Dex if you later delete your account. Photos
+you send with a suggestion are only used for reference and are never
+published.
+
 **Treat anything you post as visible to everyone signed in to Sipply.**
 
 ## Drinking
@@ -125,10 +131,11 @@ belong to their owners and appear for identification only.
 
 **You can delete your account at any time** from **Profile → Settings**
 (the gear, top right) **→ Delete account**. It removes your profile, posts,
-photos, likes, and follows. It is immediate and cannot be undone. You do not
-need to ask us. If you signed in with Apple or Facebook, removing Sipply from
-that account is done in Apple's or Facebook's settings;
-[Deleting your data](data-deletion) explains how.
+photos, likes, saves, follows and the drinks you added. It is immediate and
+cannot be undone. You do not need to ask us. If you signed in with Apple,
+Google or Facebook, removing Sipply from that account is done in Apple's,
+Google's or Facebook's settings; [Deleting your data](data-deletion)
+explains how.
 
 We may suspend or delete an account that breaks these terms. Where it is
 reasonable to do so we will say why, but conduct in the list above may be

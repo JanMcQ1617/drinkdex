@@ -190,10 +190,12 @@ other has to.
 Apple's test for "collected" is that data leaves the phone and is kept
 longer than it takes to answer the request. So the contact hashes, the
 Instagram hashes and the Facebook friend ids sent for matching are **not**
-collected — they are compared and dropped — and nothing that stays on the
-phone is either: the collection, unposted photos, the cached Instagram and
-Facebook lists. Crash reports Apple gathers itself, through TestFlight or
-the App Store, are Apple's to declare, not the app's.
+collected — they are compared and dropped — and neither is the email
+address the sign-in screen checks for an account. Nothing that stays on the
+phone is collected either: the collection, unposted photos, the cached
+Instagram and Facebook lists, and which pours and activity have been seen.
+Crash reports Apple gathers itself, through TestFlight or the App Store,
+are Apple's to declare, not the app's.
 
 **Do you or your third-party partners collect data from this app?** Yes.
 
@@ -205,20 +207,20 @@ otherwise, and each for **App Functionality** only:
 
 | Category → data type | Linked | What it actually is |
 | --- | --- | --- |
-| Contact Info → Name | Yes | The display name, including the name Apple or Facebook sends at sign-in |
+| Contact Info → Name | Yes | The display name, including the name Apple, Google or Facebook sends at sign-in |
 | Contact Info → Email Address | Yes | The sign-in address; for Sign in with Apple it may be a Hide My Email relay |
-| Contact Info → Phone Number | Yes | Only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
-| User Content → Photos or Videos | Yes | Post photos and the profile photo. Also covers the link to a Facebook profile picture that Supabase keeps from Continue with Facebook, which the app never shows or copies |
-| User Content → Other User Content | Yes | Captions, bios, likes, follows, invites, reports and the copy a report keeps |
-| Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply; the hash of the user's own Instagram handle |
+| Contact Info → Phone Number | Yes | The sign-in number for anyone who signs in by phone, kept by the authentication provider; otherwise only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
+| User Content → Photos or Videos | Yes | Post photos, the profile photo, and the photo sent with a drink suggestion. Also covers the link to a Google or Facebook profile picture that Supabase keeps from sign-in, which the app never shows or copies |
+| User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps |
+| Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
 | Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
-| Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit |
+| Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
 
 App Functionality covers the last one: Apple's definition of the purpose
-includes preventing fraud and implementing security measures, which is
-what the matching limit is. Device ID stays App Functionality only as long
-as Expo's install counts are used for checking rollouts; if they start
-informing product decisions, add Analytics to it.
+includes preventing fraud and implementing security measures, which is what
+the matching limit and the sign-in meter are. Device ID stays App
+Functionality only as long as Expo's install counts are used for checking
+rollouts; if they start informing product decisions, add Analytics to it.
 
 Everything else is **Not collected**: Contacts, Location (photos are
 re-encoded without it), Search History (the Dex is searched on the
@@ -226,14 +228,22 @@ phone), Browsing History, Health, Financial Info, Purchases, Sensitive
 Info, Product Interaction, Advertising Data, Diagnostics and Other Data.
 
 The same types belong in the app's privacy manifest,
-`ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. On 30
-September 2026 it lists six of the eight: Device ID and Other Usage Data
-are missing, and need adding, with Device ID's
-`NSPrivacyCollectedDataTypeLinked` false, before the next archive.
+`ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. It lists
+all eight, Device ID with `NSPrivacyCollectedDataTypeLinked` false, and a
+ninth, Audio Data, for the microphone the Reels recorder uses. The
+manifest ships inside the binary, and the recorder is in every build from
+the one after 11 even while Reels is switched off, so the manifest
+declares it from that build on. The questionnaire above adds Audio Data
+only when Reels is turned on, because until then no build records or
+uploads any sound.
 
 ---
 
 ## Screenshots — the bit that is actually missing
+
+Retake the whole set on the v2 build: the current screenshots show the old
+pill buttons and the glass tab bar. Stats is no longer a tab; it opens
+from the Dex top bar.
 
 Required: **6.9" iPhone**, 1320 × 2868 or 1290 × 2796. Apple scales that
 set down to the smaller sizes, so one set is enough.

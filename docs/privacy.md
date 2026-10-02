@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 30 September 2026**
+**Last updated: 1 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -13,10 +13,18 @@ here, Sipply does not collect it.
 
 ## What Sipply stores about you
 
-**Account.** Your email address, used to sign in and nothing else. It is
-held by our authentication provider and is never shown to other users. If
-you sign in with Apple or Facebook, the next two sections say what comes
+**Account.** Your email address or phone number, whichever you sign in
+with, used to sign in and nothing else. It is held by our authentication
+provider and is never shown to other users. If you sign in with your phone
+number, Apple, Google or Facebook, the next four sections say what comes
 with it.
+
+**Phone number sign-in (only if you use it).** Our authentication provider
+keeps the number you sign in with, to sign you in and nothing else. It is
+never shown to other users. To deliver the code, the number is passed to
+Twilio, which sends the text message and keeps it under its own policy. It
+is not used for contact matching unless you also choose to become findable
+under Find friends, which offers the number already filled in.
 
 **Sign in with Apple (only if you use it).** Apple confirms who you are to
 our authentication provider with an identifier Apple issues for Sipply's
@@ -27,6 +35,16 @@ share it. The app puts that name on your profile as your display name, which
 other users can see like any display name; you can change it before you
 finish signing up, or later in Edit profile. Sipply never sees your Apple
 Account password, and Apple sends nothing else.
+
+**Continue with Google (only if you use it).** Google gives our
+authentication provider your name, email address, a link to your profile
+picture and an identifier for you. Your name becomes your display name if
+Google is how you sign up; other users can see it like any display name,
+and you can change it before you finish signing up, or later in Edit
+profile. Sipply does not show the profile picture or copy it. Google's
+temporary access key is discarded on your phone and never stored. If your
+Google email address already has a Sipply account, Continue with Google
+signs you in to that account.
 
 **Continue with Facebook (only if you use it).** Facebook's own page asks
 you to let Sipply have your name, profile picture, email address and
@@ -68,16 +86,26 @@ signed in to Sipply.
 **Posts.** When you log a drink you may share it as a post, with a caption
 and your photo. Posts are visible to anyone signed in to Sipply.
 
-**Photos.** Before a photo leaves your phone, whether for a post or for
-your profile, it is re-encoded as a new image with no location and no other
-camera metadata, and scaled to at most 2048 pixels on its longest side. If
-that cannot be done, the photo is not uploaded. Photos are stored in a
-private bucket and served only through short-lived signed links. They are
-not public URLs and cannot be found by guessing an address. Each link
-expires within the hour, and nobody you have blocked, or who has blocked
-you, can get one.
+**Photos.** Before a photo leaves your phone, whether for a post, for your
+profile or with a drink you add, it is re-encoded as a new image with no
+location and no other camera metadata, and scaled to at most 2048 pixels on
+its longest side. If that cannot be done, the photo is not uploaded. Photos
+are stored in a private bucket and served only through short-lived signed
+links. They are not public URLs and cannot be found by guessing an address.
+Each link expires within the hour, and nobody you have blocked, or who has
+blocked you, can get one.
 
-**Social graph.** Who you follow, and which posts you have liked.
+**Drinks you add.** If you add a drink that isn't in the Dex, it is saved
+in your Dex on your phone and, once you are signed in, sent to Sipply as a
+suggestion: everything you filled in, the photo if you added one, and your
+username. Only you can see it in the app. On the 1st of each month the
+suggestions from the month before are emailed to the Sipply team so they
+can decide which to add to the Dex. The photo is stored in your photo
+folder like a pour photo, so the same people who can see your pour photos
+could see it. It is used only for reference and is never published.
+
+**Social graph.** Who you follow, which posts you have liked, and which
+posts you have saved. Saved posts are visible only to you.
 
 **Invite links.** When you share an invite, Sipply creates a random link
 that stops working after 30 days. Anyone who accepts it in that time
@@ -91,7 +119,7 @@ username, display name and bio — so that it can still be reviewed if the
 post or the account is deleted. Blocks are private — the person you
 blocked is not told.
 
-**Your phone number (optional).** If you give it at signup, or later under
+**Your phone number for finding friends (optional).** If you give it under
 Find friends, it is stored as a salted hash rather than as the number, so
 that people who already have your number can find you. It is never shown
 to anyone. **Stop being findable** in Profile → Settings → Find friends
@@ -135,20 +163,31 @@ record how many you checked, from which list, and when, never the hashes
 themselves. Facebook friends are not counted, because Facebook itself
 decides whom it lists.
 
+The sign-in screen has a limit of its own. When you enter an email
+address there, Sipply checks whether it already has an account, so the
+next step can ask you to sign in or to create one; the address is checked
+and not kept. To limit how often anyone can check whether an email has an
+account, a scrambled form of your IP address is kept for one hour, with the
+time of the check and nothing else: no account and no email address. After
+the hour it no longer counts, and the next check anyone makes deletes it.
+
 **On your device.** Your collection progress is stored only on your phone,
 never on our servers, so the app works without a connection. The photos you
 take are kept on your phone too; a photo is uploaded only when you share it
-as a post or make it your profile photo. The phone number and Instagram
-username you give for finding friends are kept on the phone in readable
-form, because our servers hold only their hashes and the app would
-otherwise ask for them again; **Stop being findable** removes them here as
-well. The Instagram list you import is cached on the phone too, so
-re-checking it does not need another download, and **Forget my imported
-list** in Profile → Settings → Find friends clears it. If you connected
-Facebook, the Sipply profiles of your Facebook friends who are here are
-kept on the phone, with when they were checked, so the list is there next
-time; never a Facebook identifier. Signing out clears the Instagram list,
-the number, the username and the Facebook friends; your collection stays.
+as a post, make it your profile photo or send it with a drink you add.
+Which of today's pours, and which likes and new followers, you have already
+seen is remembered on the phone only, so nobody is told that you looked.
+The phone number and Instagram username you give for finding friends are
+kept on the phone in readable form, because our servers hold only their
+hashes and the app would otherwise ask for them again; **Stop being
+findable** removes them here as well. The Instagram list you import is
+cached on the phone too, so re-checking it does not need another download,
+and **Forget my imported list** in Profile → Settings → Find friends clears
+it. If you connected Facebook, the Sipply profiles of your Facebook friends
+who are here are kept on the phone, with when they were checked, so the
+list is there next time; never a Facebook identifier. Signing out clears
+the Instagram list, the number, the username and the Facebook friends; your
+collection stays.
 
 ## What Sipply does not do
 
@@ -162,18 +201,25 @@ the number, the username and the Facebook friends; your collection stays.
   Meta code.
 - **No profiling.** Nothing about you is scored or predicted. The one
   automatic check on what you write is a text filter: captions, bios,
-  display names and usernames are checked when you save them, and text
-  containing a slur or an explicit sexual term is refused. It refuses the
-  text and does nothing else to your account.
+  display names, usernames and the drinks you add are checked when you
+  save them, and text containing a slur or an explicit sexual term is
+  refused. It refuses the text and does nothing else to your account.
 
 ## Who else can see it
 
-**Other Sipply users** can see your profile, your posts, your photos, and
-who you follow. Treat anything you post as public to everyone signed in.
+**Other Sipply users** can see your profile, your posts, your photos, who
+you follow and who follows you, and which posts you have liked. When you
+like a post, its author can see that you liked it. Treat anything you post
+as public to everyone signed in.
 
 **Supabase**, our hosting provider, stores the database and photos on our
-behalf, and runs sign-in, including Sign in with Apple and Continue with
-Facebook. They do not use any of it for their own purposes.
+behalf, and runs sign-in, including phone sign-in, Sign in with Apple,
+Continue with Google and Continue with Facebook. They do not use any of it
+for their own purposes.
+
+**Twilio**, if you sign in with your phone number, receives the number from
+our authentication provider and sends the text message with your code,
+under Twilio's own privacy policy. It is told nothing else about you.
 
 **Expo** delivers app updates. Each time Sipply starts, it asks Expo's
 update server whether a newer version exists. The request carries the app
@@ -187,6 +233,10 @@ that you use Sipply, under Apple's own privacy policy. If you are testing
 Sipply through TestFlight, Apple also receives standard crash and
 installation information.
 
+**Google**, if you use Continue with Google, confirms who you are and so
+knows that you use Sipply, under Google's own privacy policy. Sipply sends
+Google nothing else about you or what you do here.
+
 **Meta**, if you use Continue with Facebook, knows that you connected
 Sipply and when the app asks for your friends list, under Meta's own
 privacy policy. Sipply sends Facebook nothing else about you or what you do
@@ -199,6 +249,11 @@ report was made, whether it is about a post or an account, when it was
 filed, and the report's reference number. It carries no names, captions or
 photos; those are read only in the database.
 
+**Resend** delivers the monthly email of drink suggestions to the Sipply
+team. It handles the text of those suggestions, the usernames of the people
+who sent them and when, and where each photo is stored (never the photo
+itself), and nothing else.
+
 That is the complete list.
 
 ## Deleting your account
@@ -206,16 +261,22 @@ That is the complete list.
 Open **Profile → Settings** (the gear, top right) **→ Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
-have made, every photo you have uploaded, your likes, your follows in both
-directions, your blocks, your invite links, the hashes that make you
-findable, and the record kept for the matching limits. If you signed in
-with Apple or Facebook, it also deletes the link to that account, with
-everything Apple or Facebook sent when you signed in. On the phone you
-delete from, the collection is reset and the photos Sipply kept for it are
-removed, and what Sipply remembered there for finding friends (your
-number, your Instagram username, an imported Instagram list, your Facebook
-friends) is forgotten. It cannot be undone, and your username becomes
-available to someone else.
+have made, every photo you have uploaded, your likes, your saved posts,
+your follows in both directions, your blocks, your invite links, the drinks
+you added and their photos, the hashes that make you findable, and the
+record kept for the matching limits. If you signed in with your phone
+number, it also deletes the number (Twilio keeps its own record of the
+texts it sent, under its own policy); if you signed in with Apple, Google or
+Facebook, it deletes the link to that account, with everything Apple,
+Google or Facebook sent when you signed in. On the phone you delete from,
+the collection and the drinks you added are reset and the photos Sipply
+kept for them are removed, and what Sipply remembered there for finding
+friends (your number, your Instagram username, an imported Instagram list,
+your Facebook friends) is forgotten. It cannot be undone, and your username
+becomes available to someone else.
+
+A suggestion already included in a monthly email stays in that email. A
+drink already added to the Dex stays in the Dex, without your name.
 
 Your photos go first. The app deletes every one of them from storage, and
 only when none are left is the account itself deleted. If a photo cannot be
@@ -223,13 +284,16 @@ removed — because the connection drops, say — the account stays and the
 app tells you, so you can try again. An account is never removed with its
 photos left behind. You do not have to email anyone to be deleted.
 
-Deleting your Sipply account does not change your Apple or Facebook
-settings, which belong to Apple and Meta:
+Deleting your Sipply account does not change your Apple, Google or
+Facebook settings, which belong to Apple, Google and Meta:
 
 - **Apple.** Sipply stays listed under your Apple Account until you remove
   it there. On your iPhone, open **Settings**, tap your name, then
   **Sign-In & Security → Sign in with Apple**, choose Sipply, and stop
   using it. The menu names shift a little between iOS versions.
+- **Google.** Sipply stays listed under your Google Account until you
+  remove it there, under **Security → Your connections to third-party
+  apps & services**. [Deleting your data](data-deletion) walks through it.
 - **Facebook.** Remove Sipply under **Apps and websites** in Facebook's
   settings. [Deleting your data](data-deletion) walks through it, and what
   it does and does not remove.
@@ -259,9 +323,10 @@ correct it, or ask us to delete it. Deletion is built into the app; for
 anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
-service you asked for (your account, your posts, and the sign-in and
-friend finding you choose to use) and our legitimate interest in keeping
-the app safe (reports, blocks, the text filter and the matching limits).
+service you asked for (your account, your posts, the drinks you add, and
+the sign-in and friend finding you choose to use) and our legitimate
+interest in keeping the app safe (reports, blocks, the text filter, the
+matching limits and the sign-in screen's limit).
 You may complain to your local data protection authority.
 
 If you are in California: we do not sell or share personal information,
