@@ -49,8 +49,9 @@ them on this phone. It does not delete your account or your posts.
 
 ## If you have forgotten your password
 
-If you signed up with Apple or Facebook, there is no Sipply password to
-forget: use the same button on the sign-in screen again.
+If you signed up with Apple, Google, Facebook or your phone number, there
+is no Sipply password to forget: use the same button on the sign-in screen
+again (or your number, for a new code).
 
 Otherwise, on the sign-in screen, tap **Forgot your password?**, type the
 email you signed up with, and tap **Send reset link**. Opening the link from
@@ -60,11 +61,13 @@ password.
 Three things worth knowing, because each of them looks like a bug and none
 of them is:
 
-**The screen says the same thing whether or not you have an account.** It
-will always tell you a link is on its way "if that email has an account."
-That is deliberate — a form that said "no account with that email" would
-let anyone use the sign-in screen to check which addresses are registered
-here. It is not the app failing to find you.
+**The reset message is worded "if that email has an account."** By the
+time you see it, the sign-in screen has usually already recognised your
+address, since it asks for your email first and then shows the password
+step only to addresses that have one. The wording stays careful because
+the reset form can be reached without that step, and because the lookup
+behind the email step answers at most 30 checks an hour from one
+connection, so the sign-in screen cannot be used to test addresses in bulk.
 
 **The link works once, and expires after an hour.** Request a fresh one if
 it has gone stale; the app will tell you plainly if the link you opened is
