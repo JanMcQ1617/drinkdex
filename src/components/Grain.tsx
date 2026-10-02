@@ -1,3 +1,4 @@
+import { usePathname } from 'expo-router';
 import { Image, StyleSheet, View } from 'react-native';
 
 /* ==================================================================== */
@@ -28,12 +29,19 @@ import { Image, StyleSheet, View } from 'react-native';
 /* pointerEvents="none" is load-bearing: this covers every pixel of the  */
 /* app and would otherwise swallow every tap in it.                     */
 /*                                                                      */
+/* NOT OVER VIDEO. The Reels tab and a person's reels (/reel/<id>) draw */
+/* nothing: paper grain over a moving picture reads as sensor noise,    */
+/* not as stock. The recorder is a native full-screen modal, above this */
+/* whole view, so it never had any.                                     */
+/*                                                                      */
 /* The tile is generated, not drawn — the seeded script is recorded in   */
 /* the commit that added assets/images/grain.png, so it can be made      */
 /* again rather than being a binary nobody can reproduce.                */
 /* ==================================================================== */
 
 export function Grain() {
+  const path = usePathname();
+  if (path === '/reels' || path.startsWith('/reel/')) return null;
   return (
     <View style={StyleSheet.absoluteFill} pointerEvents="none">
       <Image

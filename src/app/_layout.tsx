@@ -4,12 +4,14 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
-import { hasSeenIntro, VideoIntro } from '@/components/VideoIntro';
+import { VideoIntro } from '@/components/VideoIntro';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { Grain } from '@/components/Grain';
 import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
+import { SubmissionSync } from '@/components/SubmissionSync';
 import { colors, fonts } from '@/constants/theme';
+import { introHasPlayed, markIntroPlayed } from '@/lib/intro';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 
@@ -17,8 +19,8 @@ SplashScreen.preventAutoHideAsync();
 /*
  * Fade the native splash out rather than cutting it. iOS defaults to no
  * fade, so the bone launch screen vanished in one frame and the film (or,
- * on later launches, the cream page) was simply there — a hard cut at the
- * one moment the app is making its first impression. A quarter-second
+ * under Reduce Motion, the drawn intro) was simply there — a hard cut at
+ * the one moment the app is making its first impression. A quarter-second
  * dissolve covers the change of ground instead.
  */
 SplashScreen.setOptions({ fade: true, duration: 250 });
@@ -32,14 +34,6 @@ function liftSplash() {
   void SplashScreen.hideAsync();
 }
 
-/*
- * Whether this launch plays the intro: null until storage has answered.
- * Module scope so a fast-refresh remount neither asks again nor replays
- * it. The once-per-install rule, and why it is not once per cold start,
- * live with the film (VideoIntro).
- */
-let introDecision: boolean | null = null;
-
 const SipplyTheme = {
   ...DefaultTheme,
   colors: {
@@ -47,7 +41,8 @@ const SipplyTheme = {
     background: colors.bg,
     card: colors.surface,
     text: colors.text,
-    border: colors.cardBorder,
+    // The v2 edge. cardBorder measured 1.08:1 on the page: an edge nobody saw.
+    border: colors.line,
     primary: colors.wine,
     notification: colors.danger,
   },
@@ -71,20 +66,17 @@ export default function RootLayout() {
     InterLatin_600SemiBold: require('../../assets/fonts/InterLatin_600SemiBold.ttf'),
   });
 
-  const [showIntro, setShowIntro] = useState(introDecision);
-  // Asked alongside font loading and collection hydration, so it is in
-  // before the splash lifts: an intro that decided afterwards would flash
-  // the app first.
-  useEffect(() => {
-    if (introDecision !== null) return;
-    hasSeenIntro().then((seen) => {
-      introDecision = !seen;
-      setShowIntro(introDecision);
-    });
-  }, []);
+  /*
+   * Every cold start plays the intro; a resume never does (lib/intro: the
+   * JS runtime's own lifetime is the test, so there is nothing to read).
+   * Known from the first render, so the splash never has to wait on a
+   * question, and a fast-refresh remount after the film has ended does not
+   * replay it.
+   */
+  const [showIntro, setShowIntro] = useState(() => !introHasPlayed());
 
   const hydrated = useCollection((s) => s.hydrated);
-  const ready = (fontsLoaded || fontError != null) && hydrated && showIntro !== null;
+  const ready = (fontsLoaded || fontError != null) && hydrated;
 
   // Restores the persisted Supabase session and keeps it refreshed. The
   // returned unsubscribe tears down the auth listener.
@@ -92,11 +84,13 @@ export default function RootLayout() {
   useEffect(() => initAuth(), [initAuth]);
 
   /*
-   * On the launch that plays the intro, the intro lifts the splash itself
+   * Every cold start plays the intro, which lifts the splash itself
    * (`onVisible` below) — for the film, once its first frame is drawn, so
    * the splash dissolves onto the film rather than onto the ground under
-   * it. Every other launch lifts it as soon as the app is ready. When the
-   * intro ends this runs again, a no-op unless nothing lifted it yet.
+   * it. So this lifts nothing while the intro is up. When the intro ends it
+   * runs again, a no-op unless nothing lifted the splash yet, and it is
+   * what lifts it if the intro has already played in this runtime (a fast
+   * refresh of this file in development).
    */
   useEffect(() => {
     if (ready && !showIntro) liftSplash();
@@ -138,10 +132,27 @@ export default function RootLayout() {
           }}
         />
         {/*
+          A drink someone added themselves: the same kind of page as a Dex
+          entry, browsed and dismissed the same way, so the same swipe.
+        */}
+        <Stack.Screen
+          name="custom/[id]"
+          options={{ gestureDirection: 'horizontal', fullScreenGestureEnabled: true }}
+        />
+        {/*
+          Stats. It was a tab; it is a report on the Dex rather than a place
+          visited every day, so it left the bar and pushes from the Dex's
+          top bar. Edge swipe only: its rarest-entry row and the Dex button
+          are tappable, and a full-width back gesture would fire on a
+          mistimed tap at either.
+        */}
+        <Stack.Screen name="stats" options={{ gestureDirection: 'horizontal' }} />
+        {/*
           user/[id], a person's profile, is not listed on purpose: the stack
           defaults are all it needs — a push, so Back returns to whatever
           opened it, with the standard edge swipe. An entry here would only
-          repeat them.
+          repeat them. The same goes for activity, post/[id], saved and
+          connections/[id], which are plain pushes too.
         */}
         {/*
           Logging a pour. A modal, not a push: it is a task you complete or
@@ -151,6 +162,23 @@ export default function RootLayout() {
         */}
         <Stack.Screen
           name="log"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
+        {/*
+          Today's pours, one person after another, opened from Home's row
+          of them. A sheet you look through and swipe down to close; it is
+          not a place with somewhere further to go.
+        */}
+        <Stack.Screen
+          name="pours/[authorId]"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
+        {/*
+          Adding a drink the Dex does not have. A task, like logging, so a
+          modal for the same reason: the downward dismiss means "never mind".
+        */}
+        <Stack.Screen
+          name="add-drink"
           options={{ presentation: 'modal', gestureDirection: 'vertical' }}
         />
         {/*
@@ -188,30 +216,58 @@ export default function RootLayout() {
           name="edit-profile"
           options={{ presentation: 'modal', gestureDirection: 'vertical' }}
         />
+        {/*
+          Filming a reel. Full-screen, not a sheet: a sheet's swipe-down
+          would fight hold-to-record, so the gesture is off and the recorder
+          has its own close button. While Reels is switched off nothing opens
+          it, and the route sends anyone who reaches it back to Home.
+        */}
+        <Stack.Screen
+          name="record"
+          options={{
+            presentation: 'fullScreenModal',
+            animation: 'slide_from_bottom',
+            gestureEnabled: false,
+          }}
+        />
+        {/*
+          One person's reels, opened from a tile on their profile. A push
+          with the edge swipe: the pager scrolls vertically, so nothing
+          competes with the swipe back.
+        */}
+        <Stack.Screen name="reel/[id]" options={{ gestureDirection: 'horizontal' }} />
       </Stack>
       {/*
         Paper grain over everything. Above the Stack so every tab and every
         pushed screen gets it without each one remembering to, and below the
-        overlays so the intro and the celebration stay clean sheets.
+        overlays so the intro and the celebration stay clean sheets. It
+        steps aside on the reel screens itself (Grain.tsx).
 
-        Not the modals. `presentation: 'modal'` screens (log, edit-profile)
-        are presented natively, in their own view controller above this
-        whole view, so nothing drawn here can reach them; each renders its
-        own Grain.
+        Not the modals. Modal and full-screen-modal screens (log,
+        edit-profile, add-drink, the pours viewer, the recorder) are
+        presented natively, in their own view controller above this whole
+        view, so nothing drawn here can reach them. A modal that wants the
+        texture renders its own Grain, as log and edit-profile do.
       */}
       <Grain />
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
+      {/*
+        Sends the drinks people add to Sipply and fetches Jan's answers;
+        renders nothing. Not part of the splash gate above: nothing on
+        screen waits for the custom-drinks store, and one more thing the
+        splash waited on would be one more way to hold a blank page.
+      */}
+      <SubmissionSync />
       {/*
         Password-recovery deep links. Renders nothing until one arrives,
         then covers the app with the "choose a new password" step — it has
         to sit outside the Stack because a recovery link signs the user in,
         so AuthGate is already showing the app by the time it is needed.
 
-        Before the intro on purpose: on the one launch that plays the intro,
-        a reset link should still play it over the top and reveal this
-        underneath, not have the overlay pop in above a half-finished
-        animation.
+        Before the intro on purpose: on a cold start, a reset link plays the
+        intro over the top and reveals this underneath, rather than having
+        the overlay pop in above a half-finished film.
       */}
       <PasswordResetOverlay />
       {/*
@@ -224,7 +280,9 @@ export default function RootLayout() {
         <VideoIntro
           onVisible={liftSplash}
           onDone={() => {
-            introDecision = false;
+            // Recorded first, so an invite's Alert waiting on it
+            // (InviteLinkHandler) is raised as the film leaves.
+            markIntroPlayed();
             setShowIntro(false);
           }}
         />

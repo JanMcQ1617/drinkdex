@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
 
+import { whenIntroPlayed } from '@/lib/intro';
 import {
   clearPendingInvite,
   getPendingInvite,
@@ -121,6 +122,12 @@ function offerInvite(lead: string, onAccept: () => void, onIgnore?: () => void) 
  *
  * The result is reported either way (reportOutcome).
  *
+ * Neither path asks over the intro film. An invite link usually
+ * cold-starts the app, and every cold start plays the film (lib/intro), so
+ * "Accept the invite?" raised on arrival landed on top of it, half-watched.
+ * Both wait for whenIntroPlayed, which resolves at once when the app was
+ * already running. The answer's report needs no wait: it comes after a tap.
+ *
  * Where the router goes when one of these links opens the app is decided
  * in app/+native-intent, not here.
  */
@@ -143,6 +150,8 @@ export function InviteLinkHandler() {
         await setPendingInvite(token);
         return;
       }
+      await whenIntroPlayed();
+      if (!active) return;
       offerInvite('You opened an invite link.', () => {
         void acceptInvite(currentId, token).then((outcome) => reportOutcome(outcome, false));
       });
@@ -171,8 +180,10 @@ export function InviteLinkHandler() {
       reportOutcome(outcome, true);
     };
 
-    void getPendingInvite().then((token) => {
+    void getPendingInvite().then(async (token) => {
       if (!active || !token) return;
+      await whenIntroPlayed();
+      if (!active) return;
       offerInvite(
         'You opened an invite link before signing in.',
         () => void redeem(token),

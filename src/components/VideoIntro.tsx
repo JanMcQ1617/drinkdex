@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEventListener } from 'expo';
 import { StatusBar } from 'expo-status-bar';
 import { useVideoPlayer, VideoView } from 'expo-video';
@@ -23,22 +22,23 @@ import { colors } from '@/constants/theme';
 /* on tan paper (colors.filmPaper, a step darker than the splash's      */
 /* bone), merlot flooding up and settling.                              */
 /*                                                                      */
-/* ONCE PER INSTALL, not once per cold start. iOS kills a backgrounded  */
-/* app freely, so "every cold start" meant most launches: five seconds  */
-/* at the door almost every time the app was opened, and an invite or   */
-/* password-reset link that cold-started the app waited behind the      */
-/* whole film too. The drawn intro had already cut its own tail to      */
-/* 3.35s because a launch screen that outstays 3s is felt every single  */
-/* time. The film is a first impression: it plays on the first launch   */
-/* and is then remembered, and every launch after that goes from the    */
-/* splash straight to the app. The key is versioned by the FILM, not by */
-/* the app — bump it when the clip changes and everyone sees the new    */
-/* one once; an ordinary update does not replay it. It is not sped up   */
-/* to fit 3.35s instead: a clip that plays once can keep the pacing it  */
-/* was cut with.                                                        */
+/* EVERY COLD START (Jan, 30 Sep 2026; confirmed 1 Oct 2026). It used   */
+/* to play once per install, remembered in AsyncStorage, because iOS    */
+/* kills a backgrounded app freely: "every cold start" means most       */
+/* launches, a return after iOS has reclaimed the app included, and an  */
+/* invite or password-reset link that cold-starts the app waits behind  */
+/* the film too. Jan wants the film as the door every time the app is   */
+/* opened fresh, knowing that. What keeps it tolerable is that it is    */
+/* never forced: tap anywhere skips (below), and a resume from the      */
+/* background never replays it, because "this runtime has not played    */
+/* it" is the whole test (src/lib/intro.ts holds it, and holds nothing  */
+/* on disk). The old install key, sipply.intro.v1, is left behind in    */
+/* existing installs: one byte, never read again. The clip is not sped  */
+/* up to the drawn intro's 3.35s either: skipping is the answer to its  */
+/* length, not a faster cut of a film that was paced to be watched.     */
 /*                                                                      */
-/* THE SPLASH HANDS STRAIGHT TO THE FILM. On the launch that plays it,  */
-/* the native splash stays up until the film has drawn its first frame  */
+/* THE SPLASH HANDS STRAIGHT TO THE FILM. On every cold start the       */
+/* native splash stays up until the film has drawn its first frame      */
 /* and then dissolves onto that frame: the film calls `onVisible` and   */
 /* RootLayout lifts the splash. Lifted as soon as the app was ready     */
 /* instead, it dissolved onto whatever sat under the film before the    */
@@ -60,10 +60,10 @@ import { colors } from '@/constants/theme';
 /* only exists on the motion path; created above the branch, it loaded  */
 /* and played the clip unseen underneath the drawn intro.               */
 /*                                                                      */
-/* TAP ANYWHERE SKIPS, same as the drawn one. Playing once does not     */
-/* make five seconds short: it is still a long time to hold someone at  */
-/* the door who opened the app to do something, and a film with no way  */
-/* past it turns a first impression into a wait.                        */
+/* TAP ANYWHERE SKIPS, same as the drawn one. Five seconds on every     */
+/* cold start is a long time to hold someone at the door who opened the */
+/* app to do something, and a film with no way past it turns the        */
+/* welcome into a toll.                                                 */
 /*                                                                      */
 /* IT DISSOLVES OUT, it does not cut. The clip ends on merlot and the   */
 /* app's page is cream, so unmounting on the last frame flashed from    */
@@ -80,33 +80,6 @@ import { colors } from '@/constants/theme';
 /* H.264 rather than the HEVC Higgsfield returns: a bundled asset       */
 /* should not depend on hardware HEVC, and it keeps Android open.       */
 /* ==================================================================== */
-
-const SEEN_KEY = 'sipply.intro.v1';
-
-/**
- * Has this install already been shown the intro?
- *
- * An unreadable store answers TRUE, which skips it — the same way round as
- * lib/onboarding.ts. Answering false would turn a one-time film into a
- * five-second toll on every launch, because the write that records it
- * goes through the same broken storage.
- */
-export async function hasSeenIntro(): Promise<boolean> {
-  try {
-    return (await AsyncStorage.getItem(SEEN_KEY)) === '1';
-  } catch {
-    return true;
-  }
-}
-
-/** Failing to record is not fatal: the intro plays once more. */
-async function markIntroSeen(): Promise<void> {
-  try {
-    await AsyncStorage.setItem(SEEN_KEY, '1');
-  } catch {
-    /* Worst case it plays again next launch. */
-  }
-}
 
 /** Past the 5.04s clip with room for a slow start; only a stalled film is still up by now. */
 const CEILING_MS = 9000;
@@ -137,18 +110,14 @@ export function VideoIntro({ onDone, onVisible }: { onDone: () => void; onVisibl
   }, [reduced, onVisible]);
 
   /*
-   * Recorded when the intro ENDS, however it ends, rather than when it
-   * starts: a launch killed halfway through the film has not seen it.
+   * onDone goes straight through. RootLayout records the intro as played
+   * when it ENDS, however it ends (src/lib/intro.ts), so whatever is
+   * waiting for the film to leave (an invite's Alert) waits for this.
    */
-  const done = () => {
-    void markIntroSeen();
-    onDone();
-  };
-
   return reduced ? (
-    <SipplyIntro onDone={done} />
+    <SipplyIntro onDone={onDone} />
   ) : (
-    <Film onDone={done} onVisible={onVisible} />
+    <Film onDone={onDone} onVisible={onVisible} />
   );
 }
 

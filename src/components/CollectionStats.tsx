@@ -1,29 +1,20 @@
 import { Image } from 'expo-image';
 import React, { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Animated, { FadeInDown, useReducedMotion } from 'react-native-reanimated';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { DrinkArt } from '@/components/artwork';
 import { Icon } from '@/components/icons';
-import {
-  Button,
-  Card,
-  Divider,
-  PressableScale,
-  ProgressBar,
-  RarityBadge,
-  SectionLabel,
-} from '@/components/ui';
+import { Button, Card, Divider, ProgressBar, RarityBadge, SectionHeader } from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
   colors,
   dexNumber,
   fonts,
-  motion,
   radius,
   RARITY_META,
   space,
+  stroke,
   type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
@@ -37,9 +28,16 @@ import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
 /* Collection stats                                                     */
 /*                                                                      */
 /* The four blocks — Collection, Rarity, Milestones, Rarest entry —     */
-/* extracted from the profile so the Stats tab and any future surface   */
-/* render the identical thing. Reads the LOCAL collection; a peer's     */
-/* stats are a different, post-derived view (see PeerProfile.tsx).      */
+/* extracted from the profile so the Stats screen and any future        */
+/* surface render the identical thing. Reads the LOCAL collection; a    */
+/* peer's stats are a different, post-derived view (see PeerProfile).   */
+/*                                                                      */
+/* NO ENTRANCE ANIMATION. The four blocks used to fade up in a stagger, */
+/* and they are everything on the Stats screen under its title: a       */
+/* Reanimated entrance that stalled after a cold start (it can, in      */
+/* Release builds) left them at opacity 0, and the screen read as blank */
+/* cream for the rest of the session. Content never waits on an         */
+/* animation to be visible (specs/06-tab-switch-bug.md, cause 1).       */
 /* ==================================================================== */
 
 /* The ladder moved to lib/milestones — the collection store needs it too,
@@ -93,7 +91,6 @@ export function CollectionStats({
   /** Where a collection with nothing in it is sent to start. */
   onOpenDex?: () => void;
 }) {
-  const reduced = useReducedMotion();
   const unlocks = useCollection((s) => s.unlocks);
 
   const { unlockedCount, byCategory, byRarity, prize } = useMemo(
@@ -105,8 +102,8 @@ export function CollectionStats({
   /*
    * The rarest entry's face follows the Dex card's order — your pour, else
    * the stock photograph, else the vector art. It skipped the middle step,
-   * so a photographed drink showed as a photo on one tab and as a drawing
-   * on the next.
+   * so a photographed drink showed as a photo in the Dex and as a drawing
+   * here.
    */
   const prizePhoto = prize
     ? prize.record.photoUri
@@ -114,15 +111,19 @@ export function CollectionStats({
       : drinkPhoto(prize.drink.id)
     : undefined;
   const prizeRarity = prize ? RARITY_META[prize.drink.rarity] : null;
-
-  const enter = (delay: number) =>
-    reduced ? undefined : FadeInDown.duration(motion.base).delay(delay);
+  /*
+   * A common entry's tier edge is the pale tint of its badge, 1.21:1 on the
+   * card's white: an edge nobody can see. It takes the plain card edge
+   * instead; the badge inside still says Common.
+   */
+  const prizeEdge =
+    !prizeRarity || prize?.drink.rarity === 'common' ? colors.line : prizeRarity.edge;
 
   return (
     <>
       {/* ---- Collection ---- */}
-      <Animated.View entering={enter(0)}>
-        <SectionLabel style={styles.sectionLabel}>Collection</SectionLabel>
+      <View>
+        <SectionHeader title="Collection" style={styles.sectionHeader} />
         <Card style={styles.block}>
           <Text style={styles.rank}>{rankTitle(unlockedCount, TOTAL)}</Text>
           <View style={styles.rankCountRow}>
@@ -138,7 +139,7 @@ export function CollectionStats({
               {unlockedCount > 0 && pct === 0 ? '<1%' : `${pct}%`}
             </Text>
           </View>
-          <ProgressBar value={unlockedCount} max={TOTAL} color={colors.wine} />
+          <ProgressBar value={unlockedCount} max={TOTAL} />
 
           {/*
             With nothing logged, every number on this page is a zero and
@@ -184,17 +185,17 @@ export function CollectionStats({
                       {formatCount(count)}/{formatCount(total)}
                     </Text>
                   </View>
-                  <ProgressBar value={count} max={total} color={meta.color} height={5} />
+                  <ProgressBar value={count} max={total} color={meta.color} />
                 </View>
               );
             })}
           </View>
         </Card>
-      </Animated.View>
+      </View>
 
       {/* ---- Rarity ---- */}
-      <Animated.View entering={enter(motion.stagger)}>
-        <SectionLabel style={styles.sectionLabel}>Rarity breakdown</SectionLabel>
+      <View>
+        <SectionHeader title="Rarity breakdown" style={styles.sectionHeader} />
         <Card style={styles.block}>
           {/*
             The RING is the whole index, not the user's own spread. It
@@ -205,8 +206,8 @@ export function CollectionStats({
             The LEGEND is the user's: how many of each tier they hold. The
             four rows the ring replaced carried exactly that, and the ring
             alone showed only index shares — the same numbers for every
-            user on every day — so the one chart on this tab never moved as
-            you played. The Collection block above has totals and
+            user on every day — so the one chart on this screen never moved
+            as you played. The Collection block above has totals and
             categories; per-tier progress lives here.
 
             The card's full padding, not the list-row padding the milestones
@@ -215,11 +216,11 @@ export function CollectionStats({
           */}
           <RarityDonut counts={COUNT_BY_RARITY} collected={byRarity} caption="Total" />
         </Card>
-      </Animated.View>
+      </View>
 
       {/* ---- Milestones ---- */}
-      <Animated.View entering={enter(motion.stagger * 2)}>
-        <SectionLabel style={styles.sectionLabel}>Milestones</SectionLabel>
+      <View>
+        <SectionHeader title="Milestones" style={styles.sectionHeader} />
         <Card style={styles.blockTight}>
           {MILESTONES.map((m) => {
             const reached = unlockedCount > 0 && pct >= m.pct;
@@ -232,27 +233,17 @@ export function CollectionStats({
             return (
               /*
                * `accessible`, so VoiceOver reads the label — the only place
-               * reached or not reached is said in words. The check and the
-               * lock are unlabelled glyphs.
+               * reached or not reached is said in words. The mark is an
+               * unlabelled checkbox: an empty box with a control edge, or
+               * wine with a bone check.
                */
               <View
                 key={m.title}
                 accessible
                 style={styles.milestoneRow}
                 accessibilityLabel={`${m.title}, ${spokenTarget}, ${reached ? 'reached' : 'not reached'}`}>
-                <View
-                  style={[
-                    styles.milestoneMark,
-                    reached && {
-                      backgroundColor: colors.wineWash,
-                      borderColor: colors.wineSoft,
-                    },
-                  ]}>
-                  <Icon
-                    name={reached ? 'check' : 'lock'}
-                    size={13}
-                    color={reached ? colors.wine : colors.textMuted}
-                  />
+                <View style={[styles.milestoneMark, reached && styles.milestoneMarkReached]}>
+                  {reached ? <Icon name="check" size={14} color={colors.textOnWine} filled /> : null}
                 </View>
                 <Text style={[styles.milestoneName, !reached && styles.milestoneNameDim]}>
                   {m.title}
@@ -262,13 +253,13 @@ export function CollectionStats({
             );
           })}
         </Card>
-      </Animated.View>
+      </View>
 
       {/* ---- Rarest entry ---- */}
       {prize && prizeRarity ? (
-        <Animated.View entering={enter(motion.stagger * 3)}>
-          <SectionLabel style={styles.sectionLabel}>Rarest entry</SectionLabel>
-          <PressableScale
+        <View>
+          <SectionHeader title="Rarest entry" style={styles.sectionHeader} />
+          <Pressable
             onPress={() => onOpenDrink(prize.drink.id)}
             accessibilityRole="button"
             accessibilityLabel={`Open ${prize.drink.name}, your rarest entry`}
@@ -276,10 +267,14 @@ export function CollectionStats({
              * Framed in the entry's own tier, as its Dex card is. It was
              * gilt whatever the tier — the legendary metal around a badge
              * that said Common, on the screen that explains rarity.
+             *
+             * A row you tap, so it answers with its fill, not a scale:
+             * shrinking is for media tiles.
              */
-            style={[
+            style={({ pressed }) => [
               styles.prize,
-              { borderColor: prizeRarity.edge, borderWidth: prizeRarity.edgeWidth },
+              { borderColor: prizeEdge, borderWidth: prizeRarity.edgeWidth },
+              pressed && styles.prizePressed,
             ]}>
             <View
               style={[
@@ -307,20 +302,25 @@ export function CollectionStats({
               <RarityBadge rarity={prize.drink.rarity} />
             </View>
             <Icon name="chevronRight" size={18} color={colors.textFaint} />
-          </PressableScale>
-        </Animated.View>
+          </Pressable>
+        </View>
       ) : null}
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionLabel: { marginTop: space.xl, marginBottom: space.md },
+  sectionHeader: { marginTop: space.xl, marginBottom: space.md },
   block: { padding: space.lg },
   blockTight: { paddingHorizontal: space.lg, paddingVertical: space.xs },
 
+  /*
+   * Inter, not Playfair: the display face is kept for the brand's voice
+   * (the wordmark, a drink's name), and a rank is a reading of the
+   * collection, like the figures under it.
+   */
   rank: {
-    fontFamily: fonts.display,
+    fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.bodyLg.fontSize,
     lineHeight: typeScale.bodyLg.lineHeight,
     color: colors.wine,
@@ -365,7 +365,12 @@ const styles = StyleSheet.create({
     gap: space.sm,
     marginBottom: space.sm,
   },
-  categoryDot: { width: 8, height: 8, borderRadius: 4 },
+  categoryDot: {
+    width: 8,
+    height: 8,
+    // round-ok: dot
+    borderRadius: radius.round,
+  },
   categoryName: {
     flex: 1,
     fontFamily: fonts.bodySemiBold,
@@ -384,16 +389,23 @@ const styles = StyleSheet.create({
     gap: space.md,
     minHeight: 44,
   },
+  /*
+   * The checkbox anatomy: a 20pt square at the badge radius, a control edge
+   * (3.91:1 on white) while unreached, wine with a bone check once reached.
+   * It was a pill-round disc with a lock in it, a second glyph saying what
+   * the row's ink and weight already say.
+   */
   milestoneMark: {
-    width: 24,
-    height: 24,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    backgroundColor: colors.bgSunk,
+    width: 20,
+    height: 20,
+    borderRadius: radius.badge,
+    borderWidth: stroke.edge,
+    borderColor: colors.lineControl,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  milestoneMarkReached: { backgroundColor: colors.wine, borderColor: colors.wine },
   milestoneName: {
     flex: 1,
     fontFamily: fonts.bodySemiBold,
@@ -401,11 +413,11 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   /*
-   * textMuted, not textFaint, here and on the percentages and the lock: all
-   * of it is small text or a state glyph, and the unreached names are
-   * content — for most users, most of the ladder.
-   * Reached still differs by ink, weight and mark (check on wine wash
-   * against lock on sunk).
+   * textMuted, not textFaint, here and on the percentages: both are small
+   * text, and the unreached names are content — for most users, most of
+   * the ladder.
+   * Reached still differs by ink, weight and mark (a wine box with a check
+   * against an empty one).
    */
   milestoneNameDim: { fontFamily: fonts.body, color: colors.textMuted },
   milestonePct: {
@@ -421,12 +433,16 @@ const styles = StyleSheet.create({
     gap: space.md,
     padding: space.md,
     backgroundColor: colors.surface,
-    borderRadius: radius.lg,
+    borderRadius: radius.card,
   },
+  prizePressed: { backgroundColor: colors.bgSunk },
+  /* A thumbnail between 49 and 96pt: the control radius and a drawn edge. */
   prizeThumb: {
     width: 56,
     height: 56,
-    borderRadius: radius.md,
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
