@@ -20,6 +20,14 @@ import { showNotice } from '@/utils/alerts';
 /* words they return must not assume a drink. reportPost and            */
 /* reportPostPhoto are the pour's alone, worded for either way of       */
 /* logging.                                                             */
+/*                                                                      */
+/* The files on disk are this module's too: where they are written, how */
+/* a saved path is re-rooted after an update, and how they are deleted. */
+/* Those three lived in the collection store while it was the only     */
+/* thing holding a photo. Drinks people add themselves hold photos as   */
+/* well (their pours and their entry photos), and a second copy of      */
+/* "which folder, and what may be deleted" is the divergence this file  */
+/* exists to prevent.                                                   */
 /* ==================================================================== */
 
 /*
@@ -45,8 +53,20 @@ export const PICKER_OPTIONS: ImagePicker.ImagePickerOptions = {
 /** JPEG quality for the stripped copy. Visually clean at 2048px, a few hundred KB. */
 const JPEG_QUALITY = 0.8;
 
-/** Where persistPhoto keeps pour photos, relative to the document directory. */
+/**
+ * Where persistPhoto keeps pour photos, relative to the document directory.
+ * Every pour photo, a catalogue drink's or one of the drinks people add
+ * themselves: they are told apart by the id at the front of the file name,
+ * and nothing reads that back.
+ */
 const UNLOCKS = 'unlocks';
+
+/**
+ * Where persistCustomPhoto keeps the photo on a drink someone added, the
+ * one that goes with the suggestion (as against the photo of a pour of it,
+ * which is an ordinary pour photo in UNLOCKS).
+ */
+const CUSTOM = 'custom';
 
 /**
  * The pour note's length cap, for both ways of logging.
@@ -145,8 +165,9 @@ export async function stripMetadata(uri: string, maxEdge = 2048): Promise<string
  *
  * The URI returned is absolute, and the absolute part is not stable: iOS
  * can hand the app a new container path on an update or a restore. The
- * collection store re-roots every `unlocks/` path under the current
- * container when it loads, so nothing that reads a photo back has to.
+ * collection store and the custom-drinks store re-root every `unlocks/`
+ * path under the current container when they load (rebase, below), so
+ * nothing that reads a photo back has to.
  */
 export async function persistPhoto(drinkId: string, sourceUri: string): Promise<string> {
   if (Platform.OS === 'web') return sourceUri;
@@ -160,6 +181,155 @@ export async function persistPhoto(drinkId: string, sourceUri: string): Promise<
     return dest.uri;
   } catch {
     return sourceUri;
+  }
+}
+
+/**
+ * The photo's uri under the CURRENT app container.
+ *
+ * The stores hold absolute `file://` uris, and on iOS the absolute path
+ * includes the app container's id — which iOS is free to change when the
+ * app is updated or restored. The file moves with the container; the saved
+ * uri does not, so every logged photo went blank after an update. Rebuilt
+ * from the file name at every launch, a uri always points into the
+ * container the app is actually running in, and nothing that reads
+ * `photoUri` has to know this happened.
+ *
+ * Only files in the photo folder are rebuilt. A uri from anywhere else —
+ * the picker's cache, which persistPhoto falls back to when the copy
+ * fails, or a web blob — is left as it came.
+ */
+export function rebase(uri: string | null): string | null {
+  // Typed as a string, but it came off disk. Anything that throws here
+  // throws out of a store's merge, and persist's error path would then save
+  // the empty store over the real one — so a bad value passes through.
+  if (typeof uri !== 'string' || !uri || Platform.OS === 'web') return uri;
+  const marker = `/${UNLOCKS}/`;
+  const at = uri.lastIndexOf(marker);
+  if (at === -1) return uri;
+  const name = uri.slice(at + marker.length);
+  if (!name || name.includes('/')) return uri;
+  try {
+    return new File(Paths.document, UNLOCKS, name).uri;
+  } catch {
+    return uri;
+  }
+}
+
+/**
+ * Deletes a pour photo a store has stopped pointing at.
+ *
+ * Only inside the photo folder — a picker-cache fallback belongs to the
+ * picker. Failure is swallowed: a file that would not delete is disk space,
+ * not a broken collection, and the record has already gone.
+ */
+export function discardPhoto(uri: string | null | undefined) {
+  if (!uri || Platform.OS === 'web') return;
+  try {
+    const dir = new Directory(Paths.document, UNLOCKS).uri;
+    if (!uri.startsWith(dir.endsWith('/') ? dir : `${dir}/`)) return;
+    const file = new File(uri);
+    if (file.exists) file.delete();
+  } catch {
+    // See above.
+  }
+}
+
+/**
+ * Every pour photo at once, for a reset. persistPhoto recreates the folder.
+ *
+ * The folder holds the pours of drinks people added as well, so Reset
+ * collection clears those pours in the same breath (the custom-drinks
+ * store's clearPours); a record left pointing into a deleted folder would
+ * draw an empty frame.
+ */
+export function discardAllPhotos() {
+  if (Platform.OS === 'web') return;
+  try {
+    const dir = new Directory(Paths.document, UNLOCKS);
+    if (dir.exists) dir.delete();
+  } catch {
+    // As discardPhoto.
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* The photo on a drink someone added                                   */
+/* -------------------------------------------------------------------- */
+
+/**
+ * Stores the photo for a drink someone is adding, as a stripped copy in
+ * Documents/custom/, and returns its FILE NAME.
+ *
+ * A name rather than a uri because the record keeps it for as long as the
+ * drink exists, across app updates, and an absolute uri goes stale when iOS
+ * moves the container (see rebase). customPhotoUri builds the uri each
+ * time it is drawn, so there is nothing to re-root.
+ *
+ * Always a copy. The photo often arrives from the log sheet, whose own
+ * file the sheet still owns and may yet save as a pour photo; moving it
+ * would leave that pour pointing at nothing.
+ *
+ * THROWS on failure, unlike persistPhoto. There is no fallback a file name
+ * can express, and the form has a better answer than a broken frame: it
+ * says the photo could not be saved and saves the drink without it.
+ *
+ * As with persistPhoto, a re-encode that fails copies the original, and
+ * that file never leaves the phone as it is: the suggestion's upload
+ * (putStrippedPhoto in lib/social) strips again and refuses to send what it
+ * cannot clean.
+ */
+export async function persistCustomPhoto(id: string, sourceUri: string): Promise<string> {
+  if (Platform.OS === 'web') return sourceUri;
+  const dir = new Directory(Paths.document, CUSTOM);
+  dir.create({ intermediates: true, idempotent: true });
+  const name = `${id.replace(/[^A-Za-z0-9_-]/g, '')}-${Date.now()}.jpg`;
+  const dest = new File(dir, name);
+  const clean = await stripMetadata(sourceUri).catch(() => null);
+  if (clean) await new File(clean).move(dest);
+  else await new File(sourceUri).copy(dest);
+  return name;
+}
+
+/**
+ * The uri to draw a custom drink's photo from, built from its file name
+ * under the current container. Empty for no photo (a drink's photoFile is
+ * null when it has none, so `pourUri || customPhotoUri(c.photoFile)` needs
+ * no check of its own) and for a name that cannot be one of
+ * persistCustomPhoto's (a path), which draws as no photo either.
+ *
+ * On web persistCustomPhoto keeps the picker's uri as the "name", so it
+ * comes back as it went in.
+ */
+export function customPhotoUri(fileName: string | null | undefined): string {
+  if (Platform.OS === 'web') return fileName ?? '';
+  if (!fileName || fileName.includes('/')) return '';
+  try {
+    return new File(Paths.document, CUSTOM, fileName).uri;
+  } catch {
+    return '';
+  }
+}
+
+/** Deletes one custom drink's photo. Swallows failure, as discardPhoto does. */
+export function discardCustomPhoto(fileName: string | null | undefined) {
+  if (!fileName || fileName.includes('/') || Platform.OS === 'web') return;
+  try {
+    const file = new File(Paths.document, CUSTOM, fileName);
+    if (file.exists) file.delete();
+  } catch {
+    // As discardPhoto.
+  }
+}
+
+/** Every custom drink's photo at once, for an account deletion. */
+export function discardAllCustomPhotos() {
+  if (Platform.OS === 'web') return;
+  try {
+    const dir = new Directory(Paths.document, CUSTOM);
+    if (dir.exists) dir.delete();
+  } catch {
+    // As discardPhoto.
   }
 }
 

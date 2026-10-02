@@ -163,6 +163,9 @@ export function abvBelowFloor(abv) {
 /* Checks                                                              */
 /* ------------------------------------------------------------------ */
 
+/** What a catalogue id may contain. Drinks added in the app use `u_`, outside it (check 7). */
+export const ID_ALPHABET = /^[a-z0-9-]+$/;
+
 /**
  * Every check runs over both the rows being written and the rows already
  * present, so a problem is caught wherever it entered.
@@ -263,6 +266,31 @@ export function validate({ drinks, incoming, category, owner }) {
   for (const d of drinks) {
     if (!seenId.has(d.id) && abvBelowFloor(d.abv)) {
       warnings.push(`${d.id}: abv "${d.abv}" does not clear the ${ABV_FLOOR}% floor`);
+    }
+  }
+
+  /* 7. Id alphabet.
+   *
+   * Catalogue ids are lower-case letters, digits and hyphens, and the app
+   * relies on it: a drink someone adds in the app gets the id `u_<uuid>`,
+   * and the underscore is what keeps the two kinds apart. getDrink() stays
+   * catalogue-only because no catalogue id can ever start with `u_`, and
+   * every count in the app (the Dex progress, Stats, ranks) is honest
+   * about added drinks only because of that. Today it holds because every
+   * generator slugs its ids; this makes it a rule rather than a habit,
+   * which matters most for scripts/import-submissions.mjs, whose ids come
+   * from what people typed and then from Jan's hand edits.
+   *
+   * Errors for rows this script writes, warnings for rows it inherited,
+   * as with the labels in check 4. */
+  for (const c of incoming) {
+    if (typeof c.id !== 'string' || !ID_ALPHABET.test(c.id)) {
+      errors.push(`${c.id}: id must be lower-case letters, digits and hyphens (drinks added in the app use u_<uuid>)`);
+    }
+  }
+  for (const d of drinks) {
+    if (!seenId.has(d.id) && (typeof d.id !== 'string' || !ID_ALPHABET.test(d.id))) {
+      warnings.push(`${d.id}: id is outside the catalogue alphabet [a-z0-9-]`);
     }
   }
 

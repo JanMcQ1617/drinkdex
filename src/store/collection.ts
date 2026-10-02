@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Directory, File, Paths } from 'expo-file-system';
-import { Platform } from 'react-native';
 import { create } from 'zustand';
 import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
 
 import { getDrink, TOTAL } from '@/data';
 import { MILESTONES, milestoneCrossed, rankTitle } from '@/lib/milestones';
+import { discardAllPhotos, discardPhoto, rebase } from '@/lib/pour';
 import { useCelebrate } from '@/store/celebrate';
 import type { UnlockRecord } from '@/types';
 
@@ -51,75 +50,6 @@ const guardedStorage: StateStorage = {
   },
   removeItem: (name) => AsyncStorage.removeItem(name),
 };
-
-/* ==================================================================== */
-/* Pour photos on disk                                                  */
-/* ==================================================================== */
-
-/** Where persistPhoto (lib/pour.ts) copies every logged photo. */
-const PHOTO_DIR = 'unlocks';
-
-/**
- * The photo's uri under the CURRENT app container.
- *
- * The store holds absolute `file://` uris, and on iOS the absolute path
- * includes the app container's id — which iOS is free to change when the
- * app is updated or restored. The file moves with the container; the saved
- * uri does not, so every logged photo went blank after an update. Rebuilt
- * from the file name at every launch, a uri always points into the
- * container the app is actually running in, and nothing that reads
- * `photoUri` has to know this happened.
- *
- * Only files in the photo folder are rebuilt. A uri from anywhere else —
- * the picker's cache, which persistPhoto falls back to when the copy
- * fails, or a web blob — is left as it came.
- */
-function rebase(uri: string | null): string | null {
-  // Typed as a string, but it came off disk. Anything that throws here
-  // throws out of merge, and persist's error path would then save the
-  // empty collection over the real one — so a bad value passes through.
-  if (typeof uri !== 'string' || !uri || Platform.OS === 'web') return uri;
-  const marker = `/${PHOTO_DIR}/`;
-  const at = uri.lastIndexOf(marker);
-  if (at === -1) return uri;
-  const name = uri.slice(at + marker.length);
-  if (!name || name.includes('/')) return uri;
-  try {
-    return new File(Paths.document, PHOTO_DIR, name).uri;
-  } catch {
-    return uri;
-  }
-}
-
-/**
- * Deletes a photo this store has stopped pointing at.
- *
- * Only inside the photo folder — a picker-cache fallback belongs to the
- * picker. Failure is swallowed: a file that would not delete is disk space,
- * not a broken collection, and the record has already gone.
- */
-function discardPhoto(uri: string | null | undefined) {
-  if (!uri || Platform.OS === 'web') return;
-  try {
-    const dir = new Directory(Paths.document, PHOTO_DIR).uri;
-    if (!uri.startsWith(dir.endsWith('/') ? dir : `${dir}/`)) return;
-    const file = new File(uri);
-    if (file.exists) file.delete();
-  } catch {
-    // See above.
-  }
-}
-
-/** Every photo at once, for a reset. persistPhoto recreates the folder. */
-function discardAllPhotos() {
-  if (Platform.OS === 'web') return;
-  try {
-    const dir = new Directory(Paths.document, PHOTO_DIR);
-    if (dir.exists) dir.delete();
-  } catch {
-    // As discardPhoto.
-  }
-}
 
 /* ==================================================================== */
 /* Rehydration                                                          */
@@ -198,6 +128,14 @@ interface CollectionState {
   /** true once persisted state has been rehydrated from disk */
   hydrated: boolean;
   unlock: (drinkId: string, photoUri: string | null, note?: string) => void;
+  /**
+   * Takes in the pour of a drink someone added, once the catalogue has it
+   * (lib/submissions). False when this bundle does not know the id yet, or
+   * when this launch could not read the collection back (so nothing written
+   * now would be saved); the caller keeps its entry and tries again on a
+   * later launch.
+   */
+  adopt: (drinkId: string, record: UnlockRecord) => boolean;
   updatePhoto: (drinkId: string, photoUri: string) => void;
   relock: (drinkId: string) => void;
   resetAll: () => void;
@@ -205,48 +143,18 @@ interface CollectionState {
 
 export const useCollection = create<CollectionState>()(
   persist(
-    (set, get) => ({
-      unlocks: {},
-      retired: {},
-      bestRung: -1,
-      hydrated: false,
+    (set, get) => {
       /*
-       * The single choke point for "a pour was logged", which is why the
-       * celebration is raised here rather than at the call sites: there are
-       * two ways in — a Dex entry and the tab bar's centre action — and
-       * celebrating from each would be two chances to drift apart.
-       *
-       * THE SIDE EFFECTS RUN OUTSIDE `set`, AND THAT IS THE WHOLE POINT.
-       * The celebration used to be raised inside the updater passed to
-       * `set`, which is a function zustand calls to COMPUTE the next state
-       * and which must therefore be pure. Raising it from in there meant the
-       * queue was written during a state computation — dropped or run twice
-       * depending on how React scheduled the render, and in practice the
-       * card never appeared. Read first, write, then act. Deleting a
-       * replaced photo file is an act, so it follows the same rule.
+       * A drink joining the collection: write it, then raise the
+       * celebrations. Shared by unlock and adopt so the two ways an entry
+       * can arrive cannot drift apart on what a new entry is owed — the
+       * rank rules below apply to both. See unlock for why the side effects
+       * come after `set`.
        */
-      unlock: (drinkId, photoUri, note) => {
-        // Unknown ids are refused, which keeps settle()'s invariant true
-        // between launches as well as at them.
-        if (!getDrink(drinkId)) return;
+      const enter = (record: UnlockRecord) => {
         const { unlocks: prev, bestRung } = get();
-        const old = recordFor(prev, drinkId);
-
-        /*
-         * Re-logging an entry you already have is an edit, not a catch —
-         * and an edit keeps what it was not asked to change. The record
-         * used to be rebuilt from scratch, so a re-log with the note left
-         * blank erased the saved note, and the "Logged <date>" on the
-         * detail screen jumped to today, away from the post it was first
-         * shared with. Only a new photo, and the note if one was written,
-         * move.
-         */
-        const record: UnlockRecord = old
-          ? { ...old, photoUri: photoUri ?? old.photoUri, note: note ?? old.note }
-          : { drinkId, photoUri, date: new Date().toISOString(), note };
-
         const before = Object.keys(prev).length;
-        const after = old ? before : before + 1;
+        const after = before + 1;
         const rung = milestoneCrossed(before, after, TOTAL);
         const rungIndex = rung ? MILESTONES.indexOf(rung) : -1;
         /*
@@ -257,15 +165,12 @@ export const useCollection = create<CollectionState>()(
         const earned = rungIndex > bestRung;
 
         set({
-          unlocks: { ...prev, [drinkId]: record },
+          unlocks: { ...prev, [record.drinkId]: record },
           ...(earned ? { bestRung: rungIndex } : null),
         });
 
-        if (old && old.photoUri !== record.photoUri) discardPhoto(old.photoUri);
-        if (old) return;
-
         const { celebrate } = useCelebrate.getState();
-        celebrate({ kind: 'collected', drinkId });
+        celebrate({ kind: 'collected', drinkId: record.drinkId });
 
         /*
          * Queued second so it lands second. The entry is the thing the user
@@ -273,36 +178,117 @@ export const useCollection = create<CollectionState>()(
          * before its cause reads as a non-sequitur.
          */
         if (rung && earned) celebrate({ kind: 'milestone', milestone: rung, collected: after });
-      },
-      updatePhoto: (drinkId, photoUri) => {
-        const { unlocks } = get();
-        const old = recordFor(unlocks, drinkId);
-        if (!old) return;
-        set({ unlocks: { ...unlocks, [drinkId]: { ...old, photoUri } } });
-        if (old.photoUri !== photoUri) discardPhoto(old.photoUri);
-      },
-      /*
-       * Relock and reset delete the photo files as well as the records.
-       * Both confirmations tell the user their photo is forgotten, and a
-       * photo left in Documents is not forgotten: it stays on the phone and
-       * in its backups, and the folder only ever grew.
-       */
-      relock: (drinkId) => {
-        const { unlocks } = get();
-        const old = recordFor(unlocks, drinkId);
-        if (!old) return;
-        const next = { ...unlocks };
-        delete next[drinkId];
-        set({ unlocks: next });
-        discardPhoto(old.photoUri);
-      },
-      resetAll: () => {
-        // Anything still queued refers to a collection that no longer exists.
-        useCelebrate.getState().clear();
-        set({ unlocks: {}, retired: {}, bestRung: -1 });
-        discardAllPhotos();
-      },
-    }),
+      };
+
+      return {
+        unlocks: {},
+        retired: {},
+        bestRung: -1,
+        hydrated: false,
+        /*
+         * The single choke point for "a pour was logged", which is why the
+         * celebration is raised in this store (enter, above) rather than at
+         * the call sites: there are two ways in — a Dex entry and the tab
+         * bar's centre action — and celebrating from each would be two
+         * chances to drift apart.
+         *
+         * THE SIDE EFFECTS RUN OUTSIDE `set`, AND THAT IS THE WHOLE POINT.
+         * The celebration used to be raised inside the updater passed to
+         * `set`, which is a function zustand calls to COMPUTE the next state
+         * and which must therefore be pure. Raising it from in there meant the
+         * queue was written during a state computation — dropped or run twice
+         * depending on how React scheduled the render, and in practice the
+         * card never appeared. Read first, write, then act. Deleting a
+         * replaced photo file is an act, so it follows the same rule.
+         */
+        unlock: (drinkId, photoUri, note) => {
+          // Unknown ids are refused, which keeps settle()'s invariant true
+          // between launches as well as at them.
+          if (!getDrink(drinkId)) return;
+          const { unlocks: prev } = get();
+          const old = recordFor(prev, drinkId);
+
+          if (!old) {
+            enter({ drinkId, photoUri, date: new Date().toISOString(), note });
+            return;
+          }
+
+          /*
+           * Re-logging an entry you already have is an edit, not a catch —
+           * and an edit keeps what it was not asked to change. The record
+           * used to be rebuilt from scratch, so a re-log with the note left
+           * blank erased the saved note, and the "Logged <date>" on the
+           * detail screen jumped to today, away from the post it was first
+           * shared with. Only a new photo, and the note if one was written,
+           * move. No celebration and no rank: the count did not change.
+           */
+          const record: UnlockRecord = {
+            ...old,
+            photoUri: photoUri ?? old.photoUri,
+            note: note ?? old.note,
+          };
+          set({ unlocks: { ...prev, [drinkId]: record } });
+          if (old.photoUri !== record.photoUri) discardPhoto(old.photoUri);
+        },
+        /*
+         * A drink someone added has joined the catalogue (drink_submissions
+         * marked 'added' or 'duplicate', and this bundle has the id), so its
+         * pour becomes an ordinary entry, keeping the date and note it was
+         * logged with. It is a new entry like any other: it counts, it can be
+         * posted, and it raises the collected card and any rank it earns.
+         *
+         * Already collected under the catalogue id: the entry the user has
+         * keeps its place and its photo, and the incoming photo is deleted,
+         * since the caller is about to forget the record that held it.
+         */
+        adopt: (drinkId, record) => {
+          if (!getDrink(drinkId)) return false;
+          /*
+           * This launch could not read the collection back, so nothing
+           * written now is saved (guardedStorage, above). The caller would
+           * still forget its own record, and the pour would be gone from
+           * both stores at the next launch. Refused instead: the custom
+           * entry keeps the pour and adoption runs again on a later launch.
+           */
+          if (!readBack) return false;
+          const existing = recordFor(get().unlocks, drinkId);
+          if (existing) {
+            if (record.photoUri !== existing.photoUri) discardPhoto(record.photoUri);
+            return true;
+          }
+          enter({ ...record, drinkId, photoUri: record.photoUri ?? null });
+          return true;
+        },
+        updatePhoto: (drinkId, photoUri) => {
+          const { unlocks } = get();
+          const old = recordFor(unlocks, drinkId);
+          if (!old) return;
+          set({ unlocks: { ...unlocks, [drinkId]: { ...old, photoUri } } });
+          if (old.photoUri !== photoUri) discardPhoto(old.photoUri);
+        },
+        /*
+         * Relock and reset delete the photo files as well as the records.
+         * Both confirmations tell the user their photo is forgotten, and a
+         * photo left in Documents is not forgotten: it stays on the phone and
+         * in its backups, and the folder only ever grew.
+         */
+        relock: (drinkId) => {
+          const { unlocks } = get();
+          const old = recordFor(unlocks, drinkId);
+          if (!old) return;
+          const next = { ...unlocks };
+          delete next[drinkId];
+          set({ unlocks: next });
+          discardPhoto(old.photoUri);
+        },
+        resetAll: () => {
+          // Anything still queued refers to a collection that no longer exists.
+          useCelebrate.getState().clear();
+          set({ unlocks: {}, retired: {}, bestRung: -1 });
+          discardAllPhotos();
+        },
+      };
+    },
     {
       name: 'drinkdex-collection',
       storage: createJSONStorage(() =>
