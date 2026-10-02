@@ -1,4 +1,4 @@
-import type { TextStyle } from 'react-native';
+import { StyleSheet, type TextStyle } from 'react-native';
 
 import type { Drink, DrinkCategory, Rarity } from '@/types';
 
@@ -47,7 +47,8 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /*    hex: it is the same hue walked to #8A7F74, which clears 3:1 on     */
 /*    every ground it lands on — 3.51 page, 3.12 sunk well, 3.91 white — */
 /*    and still sits a visible step above textMuted. OFF-WHITE survives  */
-/*    as the glass fill, the sheen and the emboss highlight.             */
+/*    as reelInk (type on the dark reels ground), the Dex card's foil    */
+/*    and the emboss highlight.                                          */
 /*                                                                      */
 /* scripts/check-contrast.mjs reads this file directly — there is no     */
 /* hand-kept copy of the palette to drift — and fails on any pair under  */
@@ -58,9 +59,10 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 
 export const colors = {
   /*
-   * Surfaces. The page is warm cream and cards are WHITE — the card is
-   * separated from the page by tint first, and then by a hairline. Cards
-   * cast no shadow (see Card in components/ui.tsx).
+   * Surfaces. The page is warm cream and cards are WHITE, and every card
+   * also draws a 1pt `line` edge: white on cream is 1.11:1, so the tint
+   * alone is never the separator. Cards cast no shadow (see Card in
+   * components/ui.tsx).
    *
    * This inverts what was here before, where bg, surface and card were all
    * the same #FFFDF9 and a card existed only as a shadow. That reads as
@@ -78,10 +80,29 @@ export const colors = {
   surface: '#FFFFFF',
   card: '#FFFFFF',
   cardAlt: '#E9E5DF',
+  /**
+   * A tint, no longer an edge: RARITY_META.common's wash (and the hairline
+   * that matches it) and the rarity donut's empty groove. Every other edge
+   * and rule in the app is drawn with `line`.
+   */
   cardBorder: '#EFE9E0',
   /** the "lit" border — legendary/selected only, so it stays metal */
   cardBorderLit: '#B08A3E',
   borderStrong: '#CBBBA5',
+
+  /*
+   * v2 EDGES. cardBorder (#EFE9E0) is retired as an edge: it measured
+   * 1.08:1 on the page and 1.21:1 on white, which is invisible.
+   */
+  /** 1pt edges: cards, list groups, chips, tags, search, the tab bar, rules
+   *  under bars; hairline row separators. Decorative: 1.54:1 white, 1.38:1 page. */
+  line: '#D9CFC1',
+  /** 1pt edge of inputs, selects, checkboxes; outline buttons where a spec
+   *  asks for a control edge. Same value as textFaint, separate intent.
+   *  Non-text UI (WCAG 1.4.11): 3.91:1 on white, 3.51:1 on the page. */
+  lineControl: '#8A7F74',
+  /** Secondary-button outline, focus ring, active TabStrip underline. */
+  lineInk: '#2B2322',
 
   /* Ink — espresso, never neutral gray */
   text: '#2B2322',
@@ -94,8 +115,8 @@ export const colors = {
    * Large type (≥18pt, or ≥14pt bold) and non-text glyphs ONLY — never
    * small text, never a placeholder. The handoff's MUTED #9A8F85 walked to
    * hold 3:1 on the cream page (see 4. in the header): 3.51:1 on the page,
-   * 3.12:1 in a sunk well, 3.82:1 on glass, 3.91:1 on white. Not on the
-   * Dex slot recess, where it drops to 2.90:1.
+   * 3.12:1 in a sunk well, 3.91:1 on white. Not on the Dex slot recess,
+   * where it drops to 2.90:1.
    */
   textFaint: '#8A7F74',
   textOnWine: '#E9E5DF',
@@ -168,6 +189,41 @@ export const colors = {
   embossShadow: 'rgba(43, 35, 34, 0.14)',
 
   /*
+   * Reels. The one dark surface in the app: video needs a black-ish ground,
+   * and a cream frame around a moving picture reads as a web embed. Warm,
+   * not neutral, so it still belongs beside wine. Paper screens never touch
+   * these: they are for the Reels tab, the recorder, the reel viewer, and
+   * markers drawn over photographs.
+   */
+  reelGround: '#0E0B0B',
+  /** Text and glyphs on reelGround and over video. 19.3:1 on the ground. */
+  reelInk: '#FFFDF9',
+  /** Secondary text on the SOLID ground only (13.1:1) — never over video. */
+  reelInkMuted: '#D8D2CB',
+  /** The shutter core and the recording dot. 4.4:1 on reelGround. */
+  record: '#D8402F',
+  /** Control chips over video/camera: fill and 1pt border. */
+  reelControlFill: 'rgba(14, 11, 11, 0.55)',
+  reelControlBorder: 'rgba(255, 253, 249, 0.28)',
+  /**
+   * Bottom scrim stops under captions; top scrim uses reelScrimMid → clear.
+   * reelScrim is also the fill of every marker over a photograph (gallery
+   * count, stack, duration), with reelInk on it: ≈10:1 even over a white
+   * frame, where the paper `scrim` with bone type failed 4.5:1.
+   */
+  reelScrim: 'rgba(14, 11, 11, 0.78)',
+  reelScrimMid: 'rgba(14, 11, 11, 0.62)',
+  reelScrimClear: 'rgba(14, 11, 11, 0)',
+  /** Progress tracks over video. */
+  reelTrack: 'rgba(255, 253, 249, 0.24)',
+  /** textShadowColor for every word over video. */
+  reelTextShadow: 'rgba(14, 11, 11, 0.6)',
+  /** The tab bar's fill while Reels is focused. Espresso; 1.28:1 above reelGround, so its edge does the separating. */
+  reelBar: '#2B2322',
+  /** Resting tab icon + label on reelBar: 5.86:1 (7.47:1 on reelGround). Clearly dimmer than reelInk, which marks the active tab. */
+  reelInkDim: '#A99E94',
+
+  /*
    * Facebook's blue and the white it carries: the "Continue with Facebook"
    * button and the Facebook mark, and nothing else. A third party's colour
    * in this palette is a quotation. It appears where the control stands
@@ -182,6 +238,17 @@ export const colors = {
    */
   facebook: '#0866FF',
   onFacebook: '#FFFFFF',
+
+  /*
+   * Google's four mark colours, for the G on Continue with Google and
+   * nothing else. A quotation, like Facebook's blue above: the mark is
+   * drawn as Google publishes it because the button stands for a Google
+   * account. No text sits on them, so check-contrast has no pair.
+   */
+  googleBlue: '#4285F4',
+  googleGreen: '#34A853',
+  googleYellow: '#FBBC05',
+  googleRed: '#EA4335',
 
   /*
    * The intro film's paper: frame 0 of assets/video/intro.mp4, sampled
@@ -204,10 +271,10 @@ export const colors = {
 /*                                                                      */
 /* The handoff names exactly two families and three Inter weights, so    */
 /* the third family is gone: Space Mono no longer sets the dex numbers.  */
-/* They are now Inter Medium tracked out and uppercased — the handoff's  */
-/* own "letterspaced label" style, which is what a catalogue number      */
-/* wanted to be all along. The `tabular` style carries the numeric        */
-/* the mono was really there for.                                       */
+/* They are now Inter Medium, tracked out (see dexNumber) — the          */
+/* handoff's own "letterspaced label" style, which is what a catalogue   */
+/* number wanted to be all along. The `tabular` style carries the        */
+/* numeric the mono was really there for.                               */
 /*                                                                      */
 /* Both families are LATIN-ONLY SUBSETS, self-hosted from assets/fonts/. */
 /* See assets/fonts/README.md before changing them, and do not reach for */
@@ -222,7 +289,7 @@ export const fonts = {
   bodyMedium: 'InterLatin_500Medium',
   bodySemiBold: 'InterLatin_600SemiBold',
   bodyBold: 'InterLatin_600SemiBold',
-  /** Letterspaced sub-labels, and the dex numbers. */
+  /** The dex numbers, and the intro's letterspaced tagline. */
   label: 'InterLatin_500Medium',
   /** Figures. Inter, with the `tabular` style for column alignment. */
   numeral: 'InterLatin_500Medium',
@@ -241,9 +308,9 @@ export const fonts = {
  */
 export const type = {
   /**
-   * Badges, chips and pills: the rarity and category badges, the tab bar
-   * label. The floor of the scale — 11pt is the smallest size iOS treats
-   * as legible, so nothing in the app goes below it.
+   * Tags and badges: the rarity and category tags, the tab bar label. The
+   * floor of the scale — 11pt is the smallest size iOS treats as legible,
+   * so nothing in the app goes below it.
    */
   tag: { fontSize: 11, lineHeight: 14, letterSpacing: 0.2 },
   micro: { fontSize: 12, lineHeight: 16, letterSpacing: 0.4 },
@@ -263,16 +330,46 @@ export const type = {
 } as const;
 
 /**
- * The brand's letterspaced label, at the two tracking values the sheet
- * uses: 0.3em for UI sub-labels, 0.5em for the tagline lockup. RN takes
- * letterSpacing in points, so these are pre-multiplied — keep them in
- * step with `fontSize` if you change one.
+ * v2 text roles. Chrome is Inter; Playfair only where named.
  *
- * Always uppercase, always `fonts.label`, taupe on dark grounds and
- * `taupeInk` on light ones.
+ * A role is a whole text style (family, size, line height) for one job, so
+ * a top bar or a field label is set the same way on every screen instead
+ * of being rebuilt from `fonts` and `type` at each call site, which is how
+ * the app ended up with three bar-title sizes in two families. Colour is
+ * left to the caller: the same role is ink on paper and reelInk on dark.
+ *
+ * 17 and 20 are the only sizes here that are not on `type`, and they are
+ * bar titles only: 17 is iOS's navigation-title size and 20 is the profile
+ * username. Every other role reuses a `type` size.
+ */
+export const textRole = {
+  wordmark:     { fontFamily: fonts.displayBold, fontSize: 28, lineHeight: 34 },  // Home top bar
+  barTitle:     { fontFamily: fonts.bodySemiBold, fontSize: 17, lineHeight: 22 }, // ScreenTopBar md
+  barTitleLg:   { fontFamily: fonts.bodySemiBold, fontSize: 20, lineHeight: 26 }, // ScreenTopBar lg, Reels header
+  emptyTitle:   { fontFamily: fonts.bodySemiBold, fontSize: 22, lineHeight: 28 }, // EmptyState, primers
+  sectionTitle: { fontFamily: fonts.bodySemiBold, fontSize: 16, lineHeight: 22 },
+  groupTitle:   { fontFamily: fonts.bodySemiBold, fontSize: 14, lineHeight: 20 },
+  rowTitle:     { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
+  rowSubtitle:  { fontFamily: fonts.body, fontSize: 13, lineHeight: 18 },
+  button:       { fontFamily: fonts.bodySemiBold, fontSize: 16, lineHeight: 20 },
+  buttonSm:     { fontFamily: fonts.bodySemiBold, fontSize: 14, lineHeight: 18 },
+  fieldLabel:   { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
+  fieldValue:   { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
+  helper:       { fontFamily: fonts.body, fontSize: 13, lineHeight: 18 },
+} satisfies Record<string, TextStyle>;
+
+/**
+ * The brand's letterspaced label. RN takes letterSpacing in points, so
+ * these are pre-multiplied — keep them in step with `fontSize` if you
+ * change one.
+ *
+ * `tagline` (0.5em) is the intro lockup's, and the intro is a brand film,
+ * not interface. The app's own chrome sets no uppercase and no letterspaced
+ * words (beyond the hair of optical tracking `type` gives its small sizes):
+ * letterspaced caps headings were the habit that most made it look
+ * machine-designed, and check-design bans `textTransform: 'uppercase'`.
  */
 export const label = {
-  ui: { fontSize: 11, lineHeight: 14, letterSpacing: 3.3 },
   tagline: { fontSize: 12, lineHeight: 16, letterSpacing: 6 },
 } as const;
 
@@ -293,9 +390,10 @@ export const tabular: TextStyle = { fontVariant: ['tabular-nums'] };
  * and the stats. It had become five: two families, three sizes and three
  * inks for the same four digits.
  *
- * The brand's letterspaced label, tracked less than `label.ui` because it
- * is figures rather than words, which read as a code at half the tracking.
- * Tabular so a column of them lines up.
+ * Tracked at 1.5pt, the one wide tracking left in the interface (`type`'s
+ * small sizes carry only a hair of optical spacing): it is a code made of
+ * figures, not words, and four digits set tight read as a price or a count
+ * rather than a catalogue stamp. Tabular so a column of them lines up.
  *
  * taupeInk: 5.89:1 on a white card, 5.28:1 on the page, 4.80:1 or better
  * on the category washes. NOT on the empty-slot recess, where it is
@@ -327,49 +425,105 @@ export const space = {
 } as const;
 
 /**
- * Radii are the handoff's, verbatim: grid thumbs 10, cards and feed
- * photos 16, brand panels 24, the floating tab bar 32, buttons a pill at
- * 26 on a 52pt height.
+ * Stroke widths. Every edge is drawn, and drawn at one of these.
+ *
+ * Focus and error rings are `ring` wide but sit on an absolute overlay
+ * outside the 1pt edge, so a field that takes focus never moves by a
+ * pixel; a border that thickened on focus would push its own text.
+ */
+export const stroke = {
+  /** Row separators inside list groups. */
+  hair: StyleSheet.hairlineWidth,
+  /** Every container and control edge, and the rule under a top bar or TabStrip. */
+  edge: 1,
+  /** Focus and error rings on inputs, drawn as an overlay so layout never moves. */
+  ring: 2,
+  /** TabStrip underline, Dex progress rule. */
+  indicator: 2,
+} as const;
+
+/**
+ * Layout sizes, in points. Heights are minimums (boxes grow with Dynamic
+ * Type); anything under `hit` reaches 44 with hitSlop at the call site.
+ */
+export const layout = {
+  gutter: 16,       // screen side padding everywhere (was 24 on 12 screens)
+  hit: 44,          // minimum touch target; smaller visuals reach it with hitSlop
+  topBar: 44,
+  tabBar: 64,
+  tabBarInset: 12,  // floating tab bar inset from each screen edge
+  control: 48,      // Button md
+  controlSm: 36,    // Button sm (hitSlop 4 top/bottom → 44)
+  field: 56,        // Field / SelectField row
+  fieldMultiline: 112,
+  search: 44,
+  chip: 32,         // hitSlop 6 top/bottom → 44
+  tag: 22,
+  segmented: 36,    // hitSlop 4 top/bottom → 44
+  tabStrip: 44,
+  row: 52,          // ListRow, one line
+  rowTall: 64,      // ListRow with a subtitle or a 40pt avatar
+  gridGap: 2,       // between media grid tiles
+} as const;
+
+/**
+ * v2 radius scale. Role-named, so a call site says what it is.
+ *   none     full-bleed media, grid tiles, docked bars, progress bars, rules
+ *   badge    things ≤ 24pt: tags and badges, markers on media (gallery count,
+ *            duration, + badge on a pour tile), checkboxes, thumbnails ≤ 48pt
+ *   control  28–56pt interactive things: buttons, inputs, search, chips,
+ *            segmented control, notices, media icon buttons, Dex cards
+ *   card     panels: Card, list groups, sheets' top corners, dialogs, the
+ *            tab bar, inset photos
+ *   round    ONLY avatars (with their rings and badges), the camera
+ *            shutter, dots ≤ 10pt. Lint-enforced (scripts/check-design.mjs).
+ * A nested shape takes the concentric radius, outer − inset, computed at
+ * the call site (the segmented thumb is `radius.control - 2`).
+ *
+ * Why rectangles: the handoff drew every control as a pill, and a screen
+ * where every button, field, tag and the tab bar itself is a stadium is the
+ * clearest sign nobody decided anything. 8pt is what native forms and
+ * buttons measure.
+ *
+ * The old size-named keys (sm 10, md 12, lg 16, xl 24, tab 32, pill 999)
+ * were deleted, never re-valued: a new value under an old name would have
+ * silently restyled every site that used it, where a deleted name made
+ * `tsc` list them.
  */
 export const radius = {
-  sm: 10,
-  md: 12,
-  lg: 16,
-  xl: 24,
-  tab: 32,
-  pill: 999,
+  none: 0,
+  badge: 4,
+  control: 8,
+  card: 12,
+  round: 999,
 } as const;
 
 /**
  * Espresso-tinted shadows. These were cool green (#334B48) for the white
- * page; on a warm cream page a cool shadow reads as a smudge. `raisedBox`
- * and `brand` are the two shadows the handoff specifies outright — the tab
- * bar's `0 12px 30px rgba(43,35,34,.14)` and the app icon's
- * `0 18px 40px rgba(91,15,26,.3)`.
+ * page; on a warm cream page a cool shadow reads as a smudge.
  *
- * There is no card shadow. Panels and buttons separate from the page by
- * tint and hairline (see Card in components/ui.tsx); a shadow is for
- * something that genuinely floats over the page.
+ * Two things cast one: the floating tab bar and the Dex scroll-to-top
+ * (`bar`), and bottom sheets (`sheet`). Nothing else does — no buttons, no
+ * cards, no dialogs. Panels separate from the page by a drawn edge (see
+ * Card in components/ui.tsx); a shadow is for something that genuinely
+ * floats over the page.
  */
 export const elevation = {
   /**
-   * The tab bar's lift, and that of every glass pane not marked `flat`
-   * (GlassSurface applies it).
+   * The floating tab bar and the Dex scroll-to-top. Tight: lift, not
+   * smudge. The handoff's tab-bar shadow spread 30pt of blur under a bar
+   * that already has a drawn 1pt edge, which reads as a soft glow rather
+   * than an object resting above the page.
    *
    * Written as a CSS box-shadow, not the legacy shadowColor/Offset/Opacity/
-   * Radius props it used to be as `raised`. Those draw on the view's own
-   * layer, and a glass pane clips its children with `overflow: 'hidden'`,
-   * so on iOS the clip took the shadow with it and the handoff's lift never
-   * rendered. The legacy form had no other caller, so it is gone rather
-   * than left as a second spelling that fails silently on a clipping view.
-   *
-   * A non-empty `boxShadow` makes React Native split a clipping view in
-   * two: the clip moves onto an inner container and the shadow is drawn
-   * outside it. The shadow is cast from an explicit rounded-rect path
-   * rather than traced from the view's pixels, and masked out under the
-   * view itself, so it does not darken translucent glass from behind.
+   * Radius props. Those draw on the view's own layer, and a view that
+   * clips its children with `overflow: 'hidden'` takes a legacy shadow
+   * away with the clip on iOS. A non-empty `boxShadow` makes React Native
+   * split a clipping view in two: the clip moves onto an inner container
+   * and the shadow is drawn outside it, cast from an explicit rounded-rect
+   * path and masked out under the view itself.
    */
-  raisedBox: { boxShadow: '0px 12px 30px rgba(43, 35, 34, 0.14)' },
+  bar: { boxShadow: '0px 4px 14px rgba(43, 35, 34, 0.10)' },
   sheet: {
     shadowColor: '#2B2322',
     shadowOffset: { width: 0, height: -4 },
@@ -377,63 +531,20 @@ export const elevation = {
     shadowRadius: 24,
     elevation: 12,
   },
-  /** Wine objects that sit above the page: the app icon, the FAB. */
-  brand: {
-    shadowColor: '#5B0F1A',
-    shadowOffset: { width: 0, height: 18 },
-    shadowOpacity: 0.3,
-    shadowRadius: 40,
-    elevation: 14,
-  },
 } as const;
 
-/* ==================================================================== */
-/* Glass                                                                */
-/*                                                                      */
-/* iOS 26 renders these surfaces with real Liquid Glass (expo-glass-     */
-/* effect). Everywhere else `components/glass.tsx` fakes it with the     */
-/* values below: a translucent off-white fill, a specular sheen down the */
-/* top third, and a hairline rim that is brighter on top than on the     */
-/* bottom — which is what actually sells "lit from above".               */
-/*                                                                      */
-/* `fill` is the handoff's tab-bar material exactly: off-white at 92%    */
-/* over a 10px blur.                                                     */
-/*                                                                      */
-/* Deliberately NOT hex: alpha is the whole point of the material.       */
-/* ==================================================================== */
-
-export const glass = {
-  /** Body fill of a frosted surface on the cream page. */
-  fill: 'rgba(255, 253, 249, 0.92)',
-  /** Heavier fill for surfaces that sit over photography or artwork. */
-  fillStrong: 'rgba(255, 253, 249, 0.96)',
-  /** Wine-tinted glass — the active/selected material. */
-  fillWine: 'rgba(91, 15, 26, 0.12)',
-  /** Bone-tinted glass — collection surfaces (progress, stats, collected). */
-  fillBone: 'rgba(233, 229, 223, 0.86)',
-  /** Top rim: the lit edge. */
-  rimTop: 'rgba(255, 253, 249, 0.94)',
-  /** Perimeter rim: everything that isn't the lit edge. */
-  rim: 'rgba(43, 35, 34, 0.10)',
-  /**
-   * Contour for the NATIVE Liquid Glass branch, which draws no border of
-   * its own and otherwise resolves to near-page and loses its silhouette.
-   * Stronger than `rim` because it is the only edge that branch gets.
-   */
-  rimContour: 'rgba(43, 35, 34, 0.16)',
-  /** Specular sheen stops, top → bottom of the highlight band. */
-  sheenFrom: 'rgba(255, 253, 249, 0.62)',
-  sheenTo: 'rgba(255, 253, 249, 0)',
-  /** Tint fed to the native Liquid Glass view so it keeps our warmth. */
-  nativeTint: 'rgba(255, 253, 249, 0.30)',
-  /**
-   * `strong` for the native branch. GlassView exposes only
-   * glassEffectStyle and tintColor, so tint opacity is the only lever;
-   * without this, `strong` reached nothing but the fallback and was
-   * silently dropped on every iOS 26 device.
-   */
-  nativeTintStrong: 'rgba(255, 253, 249, 0.48)',
+/**
+ * The Dex card's legendary foil sweep: off-white, clear at both edges of
+ * the band and brightest in the middle. It used to borrow the glass sheen's
+ * stops, and became its own token so the frosted glass layer could be
+ * deleted (v2 draws opaque surfaces with a `line` edge) without taking the
+ * one shimmer the app keeps: a collected legendary is the reward.
+ */
+export const foil = {
+  edge: 'rgba(255, 253, 249, 0)',
+  peak: 'rgba(255, 253, 249, 0.62)',
 } as const;
+
 /** Micro-interactions 150–300ms; springs over cubic curves. */
 export const motion = {
   fast: 150,
@@ -441,19 +552,18 @@ export const motion = {
   slow: 300,
   /** Exit ~65% of enter. */
   exit: 140,
-  /** Per-item list stagger. */
-  stagger: 36,
   spring: { damping: 18, stiffness: 220, mass: 0.9 },
   /**
-   * How a SELECTION answers — the tab page transition and the filter chips,
-   * and the thumb of SegmentedControl (components/ui.tsx). The tab scene
-   * shift in (tabs)/_layout.tsx runs it with overshootClamping, so a page
-   * arrives at this speed without swinging past its edge.
+   * How a SELECTION indicator answers: the thumb of SegmentedControl and
+   * the underline of TabStrip (components/), and the Dex filter rule. Each
+   * of them also shows its state without motion (a label colour, a filled
+   * glyph), so a spring that stalls never hides which option is on. Tab
+   * switches do not use it: they cut instantly, as iOS's own tab bar does.
    *
-   * Faster than `spring`, which stays where it is because it drives eight
-   * other things (sheets, press scale, the profile meter). Selection is the
-   * one interaction that felt sluggish, so it gets its own value rather than
-   * the whole app getting quicker.
+   * Faster than `spring`, which stays where it is because it drives other
+   * things (sheets, the media-tile press scale, the profile meter).
+   * Selection is the one interaction that felt sluggish, so it gets its own
+   * value rather than the whole app getting quicker.
    *
    * Speed, not character: natural frequency up, damping ratio held, so the
    * overshoot is identical and simply arrives sooner.
@@ -464,13 +574,13 @@ export const motion = {
    * ~1.7x faster; settling ~0.40s -> ~0.23s. Confirmed on device.
    *
    * A token and not a local const because unrelated components need the
-   * same number: the tab bar at the bottom of the Dex and the filter chips at
-   * the top of it, and the segmented controls on the profile and in My Bar.
-   * They are one tap apart, and a user who taps a filter and then a tab must
-   * not see the same gesture answered at two speeds.
+   * same number: the filter rule at the top of the Dex, the TabStrip on a
+   * profile and the segmented control in My Bar. A user who taps one and
+   * then another must not see the same gesture answered at two speeds.
    */
   selection: { damping: 31, stiffness: 640, mass: 0.9 },
-  pressScale: 0.965,
+  /** Media tiles only (PressableScale): Dex cards, grid tiles, reel tiles. Controls answer with a fill. */
+  pressScale: 0.97,
 } as const;
 
 /* ==================================================================== */

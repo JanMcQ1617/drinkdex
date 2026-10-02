@@ -65,18 +65,23 @@ function section(start, end) {
   return THEME.slice(from, to);
 }
 
+const COLORS = section('export const colors = {', '} as const;');
+
 const found = {};
-for (const [, key, value] of section('export const colors = {', '} as const;').matchAll(
-  /(\w+):\s*'(#[0-9A-Fa-f]{6})'/g,
-)) {
+for (const [, key, value] of COLORS.matchAll(/(\w+):\s*'(#[0-9A-Fa-f]{6})'/g)) {
   found[key] = value.toUpperCase();
 }
 
-const rgba = {};
-for (const [, key, r, g, b, a] of section('export const glass = {', '} as const;').matchAll(
+/*
+ * The translucent colours in `colors` (the reel scrims and control fill),
+ * read the same way, so a pair that composites one over a ground uses the
+ * value the app draws rather than a copy of its numbers.
+ */
+const foundRgba = {};
+for (const [, key, r, g, b, a] of COLORS.matchAll(
   /(\w+):\s*'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)'/g,
 )) {
-  rgba[key] = [Number(r), Number(g), Number(b), Number(a)];
+  foundRgba[key] = [Number(r), Number(g), Number(b), Number(a)];
 }
 
 /*
@@ -104,6 +109,24 @@ const C = new Proxy(found, {
   },
 });
 
+/** The same guard for the rgba entries of `colors`. */
+const R = new Proxy(foundRgba, {
+  get(target, key) {
+    if (typeof key === 'string' && !(key in target)) {
+      console.error(`\n  check-contrast: colors.${key} is not an rgba value in theme.ts.\n`);
+      process.exit(2);
+    }
+    return target[key];
+  },
+});
+
+/*
+ * The worst case under anything drawn over a photograph or a video: a
+ * blown-out white frame. Not a token, because the app never paints it;
+ * the picture does.
+ */
+const WHITE_FRAME = '#FFFFFF';
+
 /*
  * Every category in CATEGORY_ORDER must have been parsed. A reordered or
  * reformatted CATEGORY_META entry would otherwise drop out of the audit
@@ -123,12 +146,6 @@ if (ORDER.length === 0 || unparsed.length > 0) {
   );
   process.exit(2);
 }
-for (const key of ['fill', 'fillStrong']) {
-  if (!rgba[key]) {
-    console.error(`\n  check-contrast: glass.${key} is not defined in theme.ts.\n`);
-    process.exit(2);
-  }
-}
 
 /*
  * The two signup accents with no token of their own (see SIGNUP_ACCENTS).
@@ -146,10 +163,6 @@ for (const key of ['ACCENT_AMBER', 'ACCENT_PLUM']) {
   }
 }
 
-/* Glass panes are translucent: what text sits on is the fill over the page. */
-const GLASS = over(rgba.fill, C.bg);
-const GLASS_STRONG = over(rgba.fillStrong, C.bg);
-
 // [foreground, background, minimum, label]
 const PAIRS = [
   [C.text, C.bg, 4.5, 'body text on page'],
@@ -161,8 +174,6 @@ const PAIRS = [
   [C.textMuted, C.surface, 4.5, 'muted text on card'],
   [C.textMuted, C.bgSunk, 4.5, 'muted text on sunk well'],
   [C.textMuted, C.wineWash, 4.5, 'muted text on a wine-wash note card'],
-  [C.textMuted, GLASS, 4.5, 'muted text on glass (tab bar labels)'],
-  [C.textMuted, GLASS_STRONG, 4.5, 'muted text on strong glass (Dex masthead)'],
   // textFaint is large type and glyphs only (≥3:1). It is tested on every
   // ground theme.ts allows it on, down to the sunk well, the darkest of
   // them. The Dex slot recess is darker still and is off limits to it
@@ -170,12 +181,10 @@ const PAIRS = [
   [C.textFaint, C.bg, 3.0, 'faint glyph / large text on page'],
   [C.textFaint, C.surface, 3.0, 'faint glyph / large text on card'],
   [C.textFaint, C.bgSunk, 3.0, 'faint glyph on sunk well'],
-  [C.textFaint, GLASS, 3.0, 'faint glyph on glass fill'],
   [C.wine, C.bg, 4.5, 'wine text on page'],
   [C.wine, C.surface, 4.5, 'wine text on card'],
   [C.wine, C.bgSunk, 4.5, 'wine text on sunk well'],
   [C.wine, C.wineWash, 4.5, 'wine text on its own wash'],
-  [C.wine, GLASS, 4.5, 'wine text on glass'],
   [C.merlot, C.bg, 4.5, 'merlot text on page'],
   [C.giltInk, C.bg, 4.5, 'gilt text on page'],
   [C.giltInk, C.surface, 4.5, 'gilt text on card'],
@@ -243,12 +252,41 @@ const PAIRS = [
   [C.facebook, C.bg, 3.0, 'Facebook mark on page'],
   [C.facebook, C.surface, 3.0, 'Facebook mark on a card'],
   // colors.filmPaper has no pair: it is the intro film's ground, and
-  // nothing is written on it (theme.ts says why).
+  // nothing is written on it (theme.ts says why). Nor do the four google*
+  // colours: they fill the G and carry no text.
+
+  // v2 edges. `line` is decorative (cards, chips, rules) and never the only
+  // thing that identifies a control, so it has no pair. Input edges and the
+  // ink outline are non-text UI that identifies a control: 3:1 (WCAG 1.4.11).
+  [C.lineControl, C.surface, 3.0, 'input edge on its white fill'], // 3.91
+  [C.lineControl, C.bg, 3.0, 'input edge against the page'], // 3.51
+  [C.lineInk, C.surface, 3.0, 'secondary button edge / focus ring'], // 15.37
+  [C.textOnWine, C.wineDeep, 4.5, 'primary button label, pressed'], // 13.32
+
+  // The dark tab bar, shown while Reels is focused.
+  [C.reelInk, C.reelBar, 4.5, 'active tab on the dark bar'], // 15.13
+  [C.reelInkDim, C.reelBar, 4.5, 'resting tab label on the dark bar'], // 5.86
+  [C.wine, C.reelInk, 4.5, 'plus glyph on the log action, dark bar'], // 13.53
+
+  // Reels: the dark ground, and words and controls over video. Every rgba
+  // is composited over a blown-out white frame, the worst case under it.
+  [C.reelInk, C.reelGround, 4.5, 'text on the reels ground'],
+  [C.reelInkMuted, C.reelGround, 4.5, 'secondary text on the reels ground'],
+  [C.record, C.reelGround, 3.0, 'record core glyph on the reels ground'],
+  [C.wineSoft, C.reelGround, 3.0, 'liked heart and heart burst on the reels ground'], // 4.02
+  [C.reelGround, C.reelInk, 4.5, 'onDark button label (and a selected media control)'], // 19.29
+  [C.reelGround, C.reelInkMuted, 4.5, 'onDark button label, pressed'],
+  [C.reelInk, over(R.reelControlFill, WHITE_FRAME), 3.0, 'control glyph on its chip over a white frame'], // 4.27
+  [C.reelInk, over(R.reelScrimMid, WHITE_FRAME), 4.5, 'caption at the shallow end of the scrim over a white frame'], // 5.45
+  // Markers on photographs (gallery count, stack, duration) sit on
+  // reelScrim with reelInk. The paper `scrim` with bone type failed 4.5:1
+  // over a bright photo.
+  [C.reelInk, over(R.reelScrim, WHITE_FRAME), 4.5, 'marker text on media over a white frame'], // 9.98
 ];
 
 let failed = 0;
 console.log('\n  Sipply palette — WCAG contrast audit\n');
-console.log(`  page ${C.bg}   glass ${GLASS}   strong glass ${GLASS_STRONG}\n`);
+console.log(`  page ${C.bg}   card ${C.surface}   reels ${C.reelGround}\n`);
 for (const [fg, bg, min, label] of PAIRS) {
   const r = ratio(fg, bg);
   const ok = r >= min;

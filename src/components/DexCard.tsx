@@ -18,11 +18,12 @@ import {
   CATEGORY_META,
   colors,
   dexNumber,
+  foil,
   fonts,
-  glass,
   radius,
   RARITY_META,
   space,
+  stroke,
   type as typeScale,
 } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
@@ -152,9 +153,9 @@ export function FoilSweep({ width }: { width: number }) {
       <Svg style={StyleSheet.absoluteFill}>
         <Defs>
           <LinearGradient id="dexFoil" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0" stopColor={glass.sheenTo} />
-            <Stop offset="0.5" stopColor={glass.sheenFrom} />
-            <Stop offset="1" stopColor={glass.sheenTo} />
+            <Stop offset="0" stopColor={foil.edge} />
+            <Stop offset="0.5" stopColor={foil.peak} />
+            <Stop offset="1" stopColor={foil.edge} />
           </LinearGradient>
         </Defs>
         <Rect x="0" y="0" width="100%" height="100%" fill="url(#dexFoil)" />
@@ -411,10 +412,16 @@ export const DexCard = React.memo(function DexCard({
 /* ==================================================================== */
 
 const styles = StyleSheet.create({
-  /* Width comes from the `cardWidth` prop — see DexCardProps. */
+  /*
+   * Width comes from the `cardWidth` prop — see DexCardProps.
+   *
+   * `radius.control`, a printed card's corner, not an app tile's: at 16pt
+   * on a ~110pt cell the Dex read as a grid of app icons. The card is a
+   * collectible, and collectibles have tight corners.
+   */
   card: {
     aspectRatio: 0.72,
-    borderRadius: radius.lg,
+    borderRadius: radius.control,
     overflow: 'hidden',
   },
   cardCollected: {
@@ -422,7 +429,7 @@ const styles = StyleSheet.create({
   },
   cardEmpty: {
     backgroundColor: colors.slot,
-    borderWidth: 1,
+    borderWidth: stroke.edge,
     borderColor: colors.slotBorder,
   },
 
@@ -542,9 +549,9 @@ const styles = StyleSheet.create({
    * The catalogue number sits above the name here rather than in a bordered
    * plate of its own in the corner. It is theme.ts's `dexNumber`, the one
    * stamp the app defines for "#0042" wherever it appears: 11pt, `tag` size,
-   * tracked half as wide as `label.ui` because it is figures, in taupeInk.
-   * It was a 9pt one-off below the scale, then `label.ui` at the full
-   * tracking meant for words.
+   * lightly tracked because it is figures, in taupeInk. It was a 9pt one-off
+   * below the scale, then the brand's 0.3em label tracking, which is meant
+   * for words.
    */
   numberLine: dexNumber,
   /*

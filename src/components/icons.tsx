@@ -15,9 +15,15 @@ import { colors } from '@/constants/theme';
 /* Replaces the emoji glyphs, which rendered as system font art —       */
 /* inconsistent weight, uncontrollable color, and visibly "cheap".      */
 /*                                                                      */
-/* One glyph is not ours: the solid `facebook` is Meta's published      */
+/* Two marks are not ours. The solid `facebook` is Meta's published     */
 /* mark, drawn as published for the sign-in button (see its note in     */
-/* SOLID). It is neither hand-drawn nor an active state.                */
+/* SOLID); it is neither hand-drawn nor an active state. GoogleMark,    */
+/* at the foot of this file, is Google's "G" for the same reason, and   */
+/* is a component of its own because it is four colours, not one.       */
+/*                                                                      */
+/* Nothing here copies another app's glyph. `reels` in particular is a  */
+/* portrait film gate, not a clapperboard and not a play-in-a-square,   */
+/* which are Instagram's.                                               */
 /* ==================================================================== */
 
 const STROKE = 1.75;
@@ -54,7 +60,17 @@ export type IconName =
   | 'instagram'
   | 'facebook'
   | 'document'
-  | 'bottle';
+  | 'bottle'
+  | 'reels'
+  | 'alert'
+  | 'mail'
+  | 'addPerson'
+  | 'stack'
+  | 'flip'
+  | 'flash'
+  | 'volume'
+  | 'volumeOff'
+  | 'play';
 
 export interface IconProps {
   name: IconName;
@@ -286,6 +302,94 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
       <Path d="M19.1 14.6a1.6 1.6 0 0 0 .3 1.7l.1.1a1.9 1.9 0 1 1-2.7 2.7l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.4v.2a1.9 1.9 0 1 1-3.8 0v-.1a1.6 1.6 0 0 0-1-1.4 1.6 1.6 0 0 0-1.7.3l-.1.1a1.9 1.9 0 1 1-2.7-2.7l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.4-1h-.2a1.9 1.9 0 1 1 0-3.8h.1a1.6 1.6 0 0 0 1.4-1 1.6 1.6 0 0 0-.3-1.7l-.1-.1a1.9 1.9 0 1 1 2.7-2.7l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.4v-.2a1.9 1.9 0 1 1 3.8 0v.1a1.6 1.6 0 0 0 1 1.4 1.6 1.6 0 0 0 1.7-.3l.1-.1a1.9 1.9 0 1 1 2.7 2.7l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1a1.6 1.6 0 0 0 1.4 1h.2a1.9 1.9 0 1 1 0 3.8h-.1a1.6 1.6 0 0 0-1.4 1z" />
     </>
   ),
+  /*
+   * Reels: a portrait film gate. A tall frame (the shape of a phone held
+   * upright, which is the shape of what it holds), a play triangle, and two
+   * short ticks hanging from the top edge like the claws of a film gate.
+   * Deliberately not a clapperboard band with diagonal stripes, and not a
+   * play triangle in a square: those are other apps' marks.
+   */
+  reels: (
+    <>
+      <Path d="M7.75 2.75h8.5a2.5 2.5 0 0 1 2.5 2.5v13.5a2.5 2.5 0 0 1-2.5 2.5h-8.5a2.5 2.5 0 0 1-2.5-2.5V5.25a2.5 2.5 0 0 1 2.5-2.5Z" />
+      <Path d="M10.4 9.3v5.4l4.3-2.7Z" />
+      <Path d="M9.5 2.75v2.5" />
+      <Path d="M14.5 2.75v2.5" />
+    </>
+  ),
+  /*
+   * Something is wrong: errors in fields and notices, and the "could not
+   * load" state. A ring and an exclamation, so it is not mistaken for the
+   * close cross beside it.
+   */
+  alert: (
+    <>
+      <Circle cx={12} cy={12} r={8.7} />
+      <Path d="M12 7.7v5.1" />
+      <Path d="M12 16.3h.01" />
+    </>
+  ),
+  /* An envelope: "Continue with email". */
+  mail: (
+    <>
+      <Path d="M4.4 5.6h15.2a1.6 1.6 0 0 1 1.6 1.6v9.6a1.6 1.6 0 0 1-1.6 1.6H4.4a1.6 1.6 0 0 1-1.6-1.6V7.2a1.6 1.6 0 0 1 1.6-1.6Z" />
+      <Path d="m3.4 7.1 8.6 6.3 8.6-6.3" />
+    </>
+  ),
+  /* A person with a plus: follow someone, find friends. */
+  addPerson: (
+    <>
+      <Circle cx={9.6} cy={8.2} r={3.6} />
+      <Path d="M3.2 20.2a6.4 6.4 0 0 1 12.8 0" />
+      <Path d="M18.6 8.4v6" />
+      <Path d="M15.6 11.4h6" />
+    </>
+  ),
+  /* Two squares offset: a post with more than one photo. */
+  stack: (
+    <>
+      <Path d="M8.4 8.4h11.2v11.2H8.4z" />
+      <Path d="M4.4 15.6V4.4h11.2" />
+    </>
+  ),
+  /*
+   * Flip camera: a small camera body inside two arcs that chase each other
+   * round it, each with its arrowhead, so it reads as "turn around" rather
+   * than "refresh" (one arc) or "sync" (two arcs with nothing inside).
+   */
+  flip: (
+    <>
+      <Path d="M4.47 9.98A7.8 7.8 0 0 1 19.53 9.98" />
+      <Path d="M20.46 7.98 19.53 9.98 17.73 8.72" />
+      <Path d="M19.53 14.02A7.8 7.8 0 0 1 4.47 14.02" />
+      <Path d="M3.54 16.02 4.47 14.02 6.27 15.28" />
+      <Path d="M9.7 9.5h4.6a1.1 1.1 0 0 1 1.1 1.1v3.4a1.1 1.1 0 0 1-1.1 1.1H9.7a1.1 1.1 0 0 1-1.1-1.1v-3.4a1.1 1.1 0 0 1 1.1-1.1Z" />
+      <Circle cx={12} cy={12.3} r={0.7} />
+    </>
+  ),
+  /* A lightning bolt: the torch. Solid when it is on. */
+  flash: <Path d="M13.4 2.8 5.8 13.3h5.5l-.9 7.9 7.8-10.6h-5.5z" />,
+  /* A speaker and two waves: sound is on. */
+  volume: (
+    <>
+      <Path d="M3.5 10.3a.9.9 0 0 1 .9-.9h3.1l4.6-4v13.2l-4.6-4H4.4a.9.9 0 0 1-.9-.9z" />
+      <Path d="M15.3 9.2a4 4 0 0 1 0 5.6" />
+      <Path d="M17.9 6.6a7.6 7.6 0 0 1 0 10.8" />
+    </>
+  ),
+  /* The same speaker, no waves, struck through: sound is off. */
+  volumeOff: (
+    <>
+      <Path d="M3.5 10.3a.9.9 0 0 1 .9-.9h3.1l4.6-4v13.2l-4.6-4H4.4a.9.9 0 0 1-.9-.9z" />
+      <Path d="M4.4 4.4 19.6 19.6" />
+    </>
+  ),
+  /*
+   * A small play triangle, for the badge on a reel tile. Always drawn
+   * filled (see SOLID); this outline exists only because every name must
+   * have one.
+   */
+  play: <Path d="M8.2 5.6v12.8a.8.8 0 0 0 1.22.68l10.2-6.4a.8.8 0 0 0 0-1.36L9.42 4.92A.8.8 0 0 0 8.2 5.6Z" />,
 };
 
 /**
@@ -378,6 +482,24 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
       />
     </>
   ),
+  /*
+   * The gate filled, with the triangle and the two ticks knocked out of it
+   * (one path, evenodd), so the active tab is a solid slab with the same
+   * features as the resting outline. The frame is the outline's outer edge
+   * (half a stroke wider all round), and the ticks become slots under a
+   * thin top band so the silhouette stays a plain rounded rectangle.
+   */
+  reels: (
+    <Path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M7.75 1.875h8.5a3.375 3.375 0 0 1 3.375 3.375v13.5a3.375 3.375 0 0 1-3.375 3.375h-8.5a3.375 3.375 0 0 1-3.375-3.375V5.25A3.375 3.375 0 0 1 7.75 1.875ZM10 8.6v6.8l5.4-3.4ZM8.9 3.4h1.2v2.7H8.9ZM13.9 3.4h1.2v2.7h-1.2Z"
+    />
+  ),
+  flash: <Path d="M13.4 2.8 5.8 13.3h5.5l-.9 7.9 7.8-10.6h-5.5z" />,
+  play: (
+    <Path d="M8.2 5.6v12.8a.8.8 0 0 0 1.22.68l10.2-6.4a.8.8 0 0 0 0-1.36L9.42 4.92A.8.8 0 0 0 8.2 5.6Z" />
+  ),
 };
 
 /* ------------------------------------------------------------------ */
@@ -421,10 +543,46 @@ export const Icon = React.memo(function Icon({
 });
 
 /**
+ * Google's "G", for "Continue with Google" and nothing else.
+ *
+ * Drawn as Google publishes it, on its own 48-unit grid and in its four
+ * colours, because the sign-in button stands for a Google account and
+ * Google's branding guidelines ask for the mark unaltered. That is also why
+ * it is not an `Icon`: it does not take a colour, a stroke or a filled
+ * state. The colours are theme tokens (colors.google*), quoted like
+ * Facebook's blue. Check the paths against the SVG in Google's branding
+ * download before shipping a change to them.
+ *
+ * Decorative: the button around it carries the label.
+ */
+export const GoogleMark = React.memo(function GoogleMark({ size = 20 }: { size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 48 48">
+      <Path
+        fill={colors.googleRed}
+        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+      />
+      <Path
+        fill={colors.googleBlue}
+        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+      />
+      <Path
+        fill={colors.googleYellow}
+        d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+      />
+      <Path
+        fill={colors.googleGreen}
+        d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+      />
+    </Svg>
+  );
+});
+
+/**
  * The tab routes that have an icon. (tabs)/_layout.tsx and FloatingTabBar
  * draw them with <Icon filled={focused} /> in the colour the bar hands
  * them, so the glyph always matches its own label — outline at rest, solid
  * when active, the iOS convention, which reads as a state change without
  * relying on colour.
  */
-export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile';
+export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels';
