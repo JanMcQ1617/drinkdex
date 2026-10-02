@@ -1,0 +1,365 @@
+--- a/docs/appstore.md
++++ b/docs/appstore.md
+@@ -111,6 +111,10 @@
+ 
+ Stats show you what you have covered and what you have not: progress by category and by rarity, and the milestones you are closing in on.
+ 
++REELS
++
++Film a drink in up to 30 seconds and post it to Reels, where everyone on Sipply can watch, like and find out what's in the glass. Tag the Dex entry and it's one tap from your reel to the recipe.
++
+ PEOPLE
+ 
+ Follow other collectors and see what they have been pouring. Find friends by username, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
+@@ -125,14 +129,14 @@
+ 
+ Sipply does not sell alcohol and cannot be used to order it. It is a reference and a diary, nothing more.
+ 
+-You can delete your account from Settings inside the app, without emailing anyone. It takes your posts and your photos with it.
++You can delete your account from Settings inside the app, without emailing anyone. It takes your posts, your reels and your photos with it.
+ 
+ —
+ 
+ Sipply is for people old enough to drink where they live. Please drink responsibly, and never drive after drinking.
+ ```
+ 
+-[2,532 — comfortably inside 4000, with room if you want to add a line]
++[2,747 — comfortably inside 4000, with room if you want to add a line]
+ 
+ The Facebook paragraph under PEOPLE describes a build made with
+ `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on`. If the build you submit has it off,
+@@ -202,7 +206,7 @@
+ **Tracking.** No, for every type below. Nothing is combined with other
+ companies' data, and nothing goes to a data broker.
+ 
+-Declare these eight, each **linked to the user** unless the table says
++Declare these nine, each **linked to the user** unless the table says
+ otherwise, and each for **App Functionality** only:
+ 
+ | Category → data type | Linked | What it actually is |
+@@ -210,8 +214,9 @@
+ | Contact Info → Name | Yes | The display name, including the name Apple, Google or Facebook sends at sign-in |
+ | Contact Info → Email Address | Yes | The sign-in address; for Sign in with Apple it may be a Hide My Email relay |
+ | Contact Info → Phone Number | Yes | The sign-in number for anyone who signs in by phone, kept by the authentication provider; otherwise only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
+-| User Content → Photos or Videos | Yes | Post photos, the profile photo, and the photo sent with a drink suggestion. Also covers the link to a Google or Facebook profile picture that Supabase keeps from sign-in, which the app never shows or copies |
+-| User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps |
++| User Content → Photos or Videos | Yes | Post photos, the profile photo, the photo sent with a drink suggestion, and each reel's video and poster image. Also covers the link to a Google or Facebook profile picture that Supabase keeps from sign-in, which the app never shows or copies |
++| User Content → Audio Data | Yes | The sound recorded with a reel, kept inside the reel's video file. The microphone is on only while recording |
++| User Content → Other User Content | Yes | Captions (of posts and reels), bios, likes (of posts and reels), saves, follows, invites, drink suggestions, reports and the copy a report keeps |
+ | Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
+ | Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
+ | Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
+@@ -229,13 +234,11 @@
+ 
+ The same types belong in the app's privacy manifest,
+ `ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. It lists
+-all eight, Device ID with `NSPrivacyCollectedDataTypeLinked` false, and a
+-ninth, Audio Data, for the microphone the Reels recorder uses. The
+-manifest ships inside the binary, and the recorder is in every build from
+-the one after 11 even while Reels is switched off, so the manifest
+-declares it from that build on. The questionnaire above adds Audio Data
+-only when Reels is turned on, because until then no build records or
+-uploads any sound.
++all nine, Device ID with `NSPrivacyCollectedDataTypeLinked` false. Audio
++Data has been there since the first build that carried the recorder (the
++one after 11), because the manifest ships inside the binary while Reels is
++a JS-only flag; the questionnaire declares it from the day Reels is turned
++on.
+ 
+ ---
+ 
+Only in b/docs: appstore.md.rej
+--- a/docs/data-deletion.md
++++ b/docs/data-deletion.md
+@@ -16,15 +16,15 @@
+ It happens straight away, it cannot be undone, and you do not need to email
+ anyone first. If a photo cannot be removed, because the connection drops,
+ say, the account stays and the app tells you, so you can try again once
+-you have a signal.
++you have a signal. The same goes for a reel.
+ 
+ ## What that removes
+ 
+ From our servers:
+ 
+-- your profile and profile photo, every post and every photo you uploaded,
+-  your likes, your saved posts, your follows in both directions, and your
+-  blocks
++- your profile and profile photo, every post, every reel (its video and
++  poster image) and every photo you uploaded, your likes, your saved posts,
++  your follows in both directions, and your blocks
+ - the drinks you added and the photos you sent with them
+ - your invite links, the hashes that let people find you by phone number
+   or Instagram username, and the record kept for the matching limits
+@@ -39,14 +39,16 @@
+   access key if it is still in memory
+ - your collection, the drinks you added, the photos kept for them, and
+   what Sipply remembered there for finding friends
++- the reels the app cached while you watched them
+ 
+ Your Facebook friends list was never on our servers to begin with. It is
+ matched each time you connect or check it and never kept, and the
+ [Privacy Policy](privacy) explains how.
+ 
+ A few things outlast the account. A report someone filed about you, or
+-about a post of yours, keeps its own copy of what it was about, your
+-username included, so that it can still be reviewed. A report you filed is
++about a post or reel of yours, keeps its own copy of what it was about,
++your username included, so that it can still be reviewed; for a reel, that
++copy holds its caption and details, never the video. A report you filed is
+ kept without your identity. A drink you suggested that was already in a
+ monthly email stays in that email, and one already added to the Dex stays
+ in the Dex, without your name.
+--- a/docs/privacy.md
++++ b/docs/privacy.md
+@@ -95,6 +95,17 @@
+ Each link expires within the hour, and nobody you have blocked, or who has
+ blocked you, can get one.
+ 
++**Reels (only if you film one).** The video and its sound are recorded only
++while you hold or tap the record button, and nothing is uploaded unless you
++press Post. A reel, its poster image, its caption and the drink you tag, if
++any, are stored in a private bucket and shown, through links that expire
++within the hour, to people signed in to Sipply whom you have not blocked
++and who have not blocked you. The poster image is made on your phone as a
++new image with no camera metadata. Unlike photos, the video file itself is
++not re-encoded: Sipply never writes a location into it, but it may carry
++the recording time and the phone model that iOS writes into every video.
++Reports keep a copy of a reel's caption, never the video.
++
+ **Drinks you add.** If you add a drink that isn't in the Dex, it is saved
+ in your Dex on your phone and, once you are signed in, sent to Sipply as a
+ suggestion: everything you filled in, the photo if you added one, and your
+@@ -104,20 +115,21 @@
+ folder like a pour photo, so the same people who can see your pour photos
+ could see it. It is used only for reference and is never published.
+ 
+-**Social graph.** Who you follow, which posts you have liked, and which
+-posts you have saved. Saved posts are visible only to you.
++**Social graph.** Who you follow, which posts and reels you have liked,
++and which posts you have saved. Saved posts are visible only to you.
+ 
+ **Invite links.** When you share an invite, Sipply creates a random link
+ that stops working after 30 days. Anyone who accepts it in that time
+ follows you, and you follow them back, unless one of you has blocked the
+ other. We store the link, who made it and when, and when it stops working.
+ 
+-**Reports and blocks.** If you report a post or an account, or block
+-someone, we store that you did so. A report also keeps a copy of what it
+-is about — the caption, the drink and when it was posted, and the author's
+-username, display name and bio — so that it can still be reviewed if the
+-post or the account is deleted. Blocks are private — the person you
+-blocked is not told.
++**Reports and blocks.** If you report a post, a reel or an account, or
++block someone, we store that you did so. A report also keeps a copy of what
++it is about — the caption, the drink and when it was posted (for a reel,
++also its length, never the video), and the author's username, display name
++and bio — so that it can still be reviewed if the post, the reel or the
++account is deleted. A reel you report is hidden from you from then on.
++Blocks are private — the person you blocked is not told.
+ 
+ **Your phone number for finding friends (optional).** If you give it under
+ Find friends, it is stored as a salted hash rather than as the number, so
+@@ -174,20 +186,25 @@
+ **On your device.** Your collection progress is stored only on your phone,
+ never on our servers, so the app works without a connection. The photos you
+ take are kept on your phone too; a photo is uploaded only when you share it
+-as a post, make it your profile photo or send it with a drink you add.
+-Which of today's pours, and which likes and new followers, you have already
+-seen is remembered on the phone only, so nobody is told that you looked.
+-The phone number and Instagram username you give for finding friends are
+-kept on the phone in readable form, because our servers hold only their
+-hashes and the app would otherwise ask for them again; **Stop being
+-findable** removes them here as well. The Instagram list you import is
+-cached on the phone too, so re-checking it does not need another download,
+-and **Forget my imported list** in Profile → Settings → Find friends clears
+-it. If you connected Facebook, the Sipply profiles of your Facebook friends
+-who are here are kept on the phone, with when they were checked, so the
+-list is there next time; never a Facebook identifier. Signing out clears
+-the Instagram list, the number, the username and the Facebook friends; your
+-collection stays.
++as a post, make it your profile photo or send it with a drink you add. A
++reel you film but do not post, and the still frame made from it, are kept
++only in the app's cache on the phone; the video is deleted the next time
++you open the recorder, and iOS clears that cache from time to time. Reels
++you watch are cached on the phone by the video player, up to 256 MB with
++the oldest dropped first, and deleting your account from the phone clears
++them. Which of today's pours, and which likes and new followers, you have
++already seen is remembered on the phone only, so nobody is told that you
++looked. The phone number and Instagram username you give for finding
++friends are kept on the phone in readable form, because our servers hold
++only their hashes and the app would otherwise ask for them again; **Stop
++being findable** removes them here as well. The Instagram list you import
++is cached on the phone too, so re-checking it does not need another
++download, and **Forget my imported list** in Profile → Settings → Find
++friends clears it. If you connected Facebook, the Sipply profiles of your
++Facebook friends who are here are kept on the phone, with when they were
++checked, so the list is there next time; never a Facebook identifier.
++Signing out clears the Instagram list, the number, the username and the
++Facebook friends; your collection stays.
+ 
+ ## What Sipply does not do
+ 
+@@ -207,15 +224,15 @@
+ 
+ ## Who else can see it
+ 
+-**Other Sipply users** can see your profile, your posts, your photos, who
+-you follow and who follows you, and which posts you have liked. When you
+-like a post, its author can see that you liked it. Treat anything you post
+-as public to everyone signed in.
++**Other Sipply users** can see your profile, your posts, your reels, your
++photos, who you follow and who follows you, and which posts and reels you
++have liked. When you like a post, its author can see that you liked it.
++Treat anything you post as public to everyone signed in.
+ 
+-**Supabase**, our hosting provider, stores the database and photos on our
+-behalf, and runs sign-in, including phone sign-in, Sign in with Apple,
+-Continue with Google and Continue with Facebook. They do not use any of it
+-for their own purposes.
++**Supabase**, our hosting provider, stores the database, photos and reels
++on our behalf, and runs sign-in, including phone sign-in, Sign in with
++Apple, Continue with Google and Continue with Facebook. They do not use any
++of it for their own purposes.
+ 
+ **Twilio**, if you sign in with your phone number, receives the number from
+ our authentication provider and sends the text message with your code,
+@@ -245,9 +262,9 @@
+ 
+ **Our report alerts.** When anyone files a report, a one-line alert goes to
+ the private chat channel where reports are picked up. It says why the
+-report was made, whether it is about a post or an account, when it was
+-filed, and the report's reference number. It carries no names, captions or
+-photos; those are read only in the database.
++report was made, whether it is about a post, a reel or an account, when it
++was filed, and the report's reference number. It carries no names, captions
++or photos; those are read only in the database.
+ 
+ **Resend** delivers the monthly email of drink suggestions to the Sipply
+ team. It handles the text of those suggestions, the usernames of the people
+@@ -261,28 +278,30 @@
+ Open **Profile → Settings** (the gear, top right) **→ Delete account**.
+ 
+ This permanently deletes your profile and profile photo, every post you
+-have made, every photo you have uploaded, your likes, your saved posts,
+-your follows in both directions, your blocks, your invite links, the drinks
+-you added and their photos, the hashes that make you findable, and the
+-record kept for the matching limits. If you signed in with your phone
+-number, it also deletes the number (Twilio keeps its own record of the
+-texts it sent, under its own policy); if you signed in with Apple, Google or
+-Facebook, it deletes the link to that account, with everything Apple,
+-Google or Facebook sent when you signed in. On the phone you delete from,
+-the collection and the drinks you added are reset and the photos Sipply
+-kept for them are removed, and what Sipply remembered there for finding
+-friends (your number, your Instagram username, an imported Instagram list,
+-your Facebook friends) is forgotten. It cannot be undone, and your username
+-becomes available to someone else.
++have made, every reel you have posted, every photo you have uploaded, your
++likes, your saved posts, your follows in both directions, your blocks, your
++invite links, the drinks you added and their photos, the hashes that make
++you findable, and the record kept for the matching limits. If you signed in
++with your phone number, it also deletes the number (Twilio keeps its own
++record of the texts it sent, under its own policy); if you signed in with
++Apple, Google or Facebook, it deletes the link to that account, with
++everything Apple, Google or Facebook sent when you signed in. On the phone
++you delete from, the collection and the drinks you added are reset, the
++photos Sipply kept for them and the reels cached for playback are removed,
++and what Sipply remembered there for finding friends (your number, your
++Instagram username, an imported Instagram list, your Facebook friends) is
++forgotten. It cannot be undone, and your username becomes available to
++someone else.
+ 
+ A suggestion already included in a monthly email stays in that email. A
+ drink already added to the Dex stays in the Dex, without your name.
+ 
+-Your photos go first. The app deletes every one of them from storage, and
+-only when none are left is the account itself deleted. If a photo cannot be
+-removed — because the connection drops, say — the account stays and the
+-app tells you, so you can try again. An account is never removed with its
+-photos left behind. You do not have to email anyone to be deleted.
++Your photos and reels go first. The app deletes every one of them from
++storage, and only when none are left is the account itself deleted. If a
++photo or reel cannot be removed — because the connection drops, say — the
++account stays and the app tells you, so you can try again. An account is
++never removed with its photos or reels left behind. You do not have to
++email anyone to be deleted.
+ 
+ Deleting your Sipply account does not change your Apple, Google or
+ Facebook settings, which belong to Apple, Google and Meta:
+@@ -323,11 +342,11 @@
+ anything else, email us.
+ 
+ If you are in the EEA or UK: our basis for processing is performing the
+-service you asked for (your account, your posts, the drinks you add, and
+-the sign-in and friend finding you choose to use) and our legitimate
+-interest in keeping the app safe (reports, blocks, the text filter, the
+-matching limits and the sign-in screen's limit).
+-You may complain to your local data protection authority.
++service you asked for (your account, your posts and reels, the drinks you
++add, and the sign-in and friend finding you choose to use) and our
++legitimate interest in keeping the app safe (reports, blocks, the text
++filter, the matching limits and the sign-in screen's limit). You may
++complain to your local data protection authority.
+ 
+ If you are in California: we do not sell or share personal information,
+ and we have not in the past twelve months.
+@@ -335,8 +354,8 @@
+ ## Security, honestly
+ 
+ Access to your data is enforced at the database level, so a modified app
+-cannot read what it should not. Photos are private and served only through
+-expiring links.
++cannot read what it should not. Photos and reels are private and served
++only through expiring links.
+ 
+ No service is perfectly secure, and Sipply is a small independent app rather
+ than a company with a security team. Please do not post anything you would
+--- a/docs/terms.md
++++ b/docs/terms.md
+@@ -45,7 +45,7 @@
+   sex, gender identity, sexual orientation, age, or national origin
+ - Violent or graphic content
+ - Anything encouraging or glamorising **underage drinking**, drink-driving,
+-  or dangerous drinking
++  dangerous drinking or drinking to excess
+ - Spam, scams, or attempts to sell anything — including alcohol
+ - Someone else's photos or personal information posted without their consent
+ - Impersonation of another person or account
+@@ -61,8 +61,8 @@
+ 
+ ## Reporting and blocking
+ 
+-Every post and every profile that is not yours has a **"..."** menu with
+-**Report** and **Block**.
++Every post, every reel and every profile that is not yours has a **"..."**
++menu with **Report** and **Block**.
+ 
+ **Report** asks for a reason and sends it to us. Reports are reviewed and
+ acted on **within 24 hours**. Content that breaks these terms is removed, and
+@@ -79,7 +79,7 @@
+ 
+ ## What happens to your content
+ 
+-**You own what you post.** Your photos and captions stay yours.
++**You own what you post.** Your photos, reels and captions stay yours.
+ 
+ By posting, you give Sipply permission to store your content and show it to
+ other people signed in to Sipply — which is what makes the app work. That
+@@ -129,13 +129,13 @@
+ 
+ ## Ending it
+ 
+-**You can delete your account at any time** from **Profile → Settings**
+-(the gear, top right) **→ Delete account**. It removes your profile, posts,
++**You can delete your account at any time** from **Profile → Settings** (the
++gear, top right) **→ Delete account**. It removes your profile, posts, reels,
+ photos, likes, saves, follows and the drinks you added. It is immediate and
+ cannot be undone. You do not need to ask us. If you signed in with Apple,
+ Google or Facebook, removing Sipply from that account is done in Apple's,
+-Google's or Facebook's settings; [Deleting your data](data-deletion)
+-explains how.
++Google's or Facebook's settings; [Deleting your data](data-deletion) explains
++how.
+ 
+ We may suspend or delete an account that breaks these terms. Where it is
+ reasonable to do so we will say why, but conduct in the list above may be
