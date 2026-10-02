@@ -83,6 +83,22 @@
             "NSPrivacyCollectedDataTypePurposes": [
               "NSPrivacyCollectedDataTypePurposeAppFunctionality"
             ]
+          },
+          {
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeAudioData",
+            "NSPrivacyCollectedDataTypeLinked": true,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
+          },
+          {
+            "NSPrivacyCollectedDataType": "NSPrivacyCollectedDataTypeDeviceID",
+            "NSPrivacyCollectedDataTypeLinked": false,
+            "NSPrivacyCollectedDataTypeTracking": false,
+            "NSPrivacyCollectedDataTypePurposes": [
+              "NSPrivacyCollectedDataTypePurposeAppFunctionality"
+            ]
           }
         ]
       }
@@ -122,8 +138,17 @@
         "expo-image-picker",
         {
           "photosPermission": "Sipply attaches a photo you pick to a drink you log, or uses it as your profile picture. Nothing is read from your library unless you pick it.",
-          "cameraPermission": "Sipply uses the camera to photograph a drink you are logging, or to take your profile picture.",
-          "microphonePermission": false
+          "cameraPermission": "Sipply uses the camera to photograph a drink you are logging, to take your profile picture, and to film the videos you post to Reels.",
+          "microphonePermission": "Sipply records sound with the videos you film for Reels. The microphone is on only while you are recording."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Sipply uses the camera to photograph a drink you are logging, to take your profile picture, and to film the videos you post to Reels.",
+          "microphonePermission": "Sipply records sound with the videos you film for Reels. The microphone is on only while you are recording.",
+          "recordAudioAndroid": true,
+          "barcodeScannerEnabled": false
         }
       ],
       "expo-video",
