@@ -4,8 +4,18 @@ import { ActivityIndicator, AppState, Linking, StyleSheet, Text, View } from 're
 
 import { Icon } from '@/components/icons';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
-import { Button, Card, Divider, Field, announce } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { Button, Card, Divider, Field, Notice, SectionHeader, announce } from '@/components/ui';
+import {
+  colors,
+  fonts,
+  layout,
+  radius,
+  space,
+  stroke,
+  tabular,
+  textRole,
+  type as typeScale,
+} from '@/constants/theme';
 import { formatCount } from '@/data';
 import {
   IG_CONNECTIONS_KEY,
@@ -101,6 +111,32 @@ function sinceLabel(ms: number): string {
 
 /* How long Instagram usually takes, and the point after which the copy says so. */
 const USUALLY_READY_MS = 30 * 60_000;
+
+/*
+ * A step's marker: its numeral, or a check once the step is done. Drawn as
+ * a tag (22pt, a 4pt corner, a 1pt edge on bone, a muted label), because a
+ * numbered marker is a label, and the disc it used to be was one more oval
+ * on a screen of them.
+ *
+ * A View around the numeral, not a border on the Text. It was one Text at
+ * a fixed 24 x 24 with a 22pt line height, so Larger Text grew the glyph
+ * inside a box that could not grow and clipped it. Minimums here, so the
+ * marker widens and deepens with the numeral; the numeral is capped at
+ * 1.5x so a step marker never outgrows the step title beside it.
+ */
+function StepMarker({ step }: { step: number | 'done' }) {
+  return (
+    <View style={styles.stepMarker}>
+      {step === 'done' ? (
+        <Icon name="check" size={14} color={colors.textMuted} />
+      ) : (
+        <Text style={styles.stepNum} maxFontSizeMultiplier={1.5}>
+          {step}
+        </Text>
+      )}
+    </View>
+  );
+}
 
 type Phase = 'idle' | 'reading' | 'matching' | 'done';
 
@@ -348,10 +384,10 @@ export function InstagramImport() {
    * visible list. Nothing server-side to delete — the handles were never
    * sent, only their hashes, and those were never stored.
    *
-   * Confirmed first, and drawn in danger red (Button's dangerText) where it
-   * used to be the same grey as "Check my connections again" just above
-   * it: getting the list back means finding the download again — or, if it
-   * is gone, another request and another wait.
+   * Confirmed first, and drawn in danger red (Button's dangerText). It used
+   * to be a quiet grey, the same as "Check my connections again" just above
+   * it, and getting the list back means finding the download again — or, if
+   * it is gone, another request and another wait.
    */
   const forget = useCallback(async () => {
     try {
@@ -443,10 +479,8 @@ export function InstagramImport() {
   return (
     <Card style={styles.card}>
       <View style={styles.cardHead}>
-        <Icon name="instagram" size={18} color={colors.wine} />
-        <Text style={styles.cardTitle} accessibilityRole="header">
-          Bring your Instagram friends
-        </Text>
+        <Icon name="instagram" size={20} color={colors.text} />
+        <SectionHeader title="Bring your Instagram friends" style={styles.cardTitle} />
       </View>
 
       {showSteps ? (
@@ -474,16 +508,12 @@ export function InstagramImport() {
           */}
           {request ? (
             <View style={[styles.step, styles.stepFolded]}>
-              <View style={styles.stepBadge}>
-                <Icon name="check" size={14} color={colors.wine} />
-              </View>
+              <StepMarker step="done" />
               <Text style={[styles.stepTitle, styles.stepBody]}>Requested {sinceLabel(waited)}</Text>
             </View>
           ) : (
             <View style={styles.step}>
-              <View style={styles.stepBadge}>
-                <Text style={styles.stepNum} maxFontSizeMultiplier={1.5}>1</Text>
-              </View>
+              <StepMarker step={1} />
               <View style={styles.stepBody}>
                 <Text style={styles.stepTitle}>Ask Instagram for your list</Text>
                 <Text style={styles.cardBody}>
@@ -504,9 +534,7 @@ export function InstagramImport() {
           )}
 
           <View style={styles.step}>
-            <View style={styles.stepBadge}>
-              <Text style={styles.stepNum} maxFontSizeMultiplier={1.5}>2</Text>
-            </View>
+            <StepMarker step={2} />
             <View style={styles.stepBody}>
               <Text style={styles.stepTitle}>When it arrives</Text>
               <Text style={styles.cardBody}>
@@ -528,7 +556,7 @@ export function InstagramImport() {
               {request ? (
                 <Button
                   label="Open Instagram’s page"
-                  variant="ghost"
+                  variant="text"
                   size="sm"
                   onPress={() => void openDownloadPage(false)}
                   accessibilityHint="Opens Instagram’s download page, where the file waits when it is ready"
@@ -553,17 +581,22 @@ export function InstagramImport() {
         </View>
       ) : null}
 
-      {notice ? (
-        <Text style={styles.notice} accessibilityLiveRegion="polite">
-          {notice}
-        </Text>
-      ) : null}
+      {/*
+        Every notice on this card is a failure or a refusal: an unreadable
+        file, nothing found in it, a download too big, a dropped connection,
+        the day's quota. An error Notice, as on every card of Find friends,
+        so a failure looks like one wherever it lands. The Notice speaks it
+        as it appears; each handler also announces it, for a failure that
+        repeats while its Notice is still up, and announce drops the same
+        words said twice within a moment, so the two never double up.
+      */}
+      {notice ? <Notice tone="error">{notice}</Notice> : null}
 
       {/* Paste fallback, for anyone who would rather not deal with a download. */}
       {showSteps && !working && !showPaste ? (
         <Button
           label="Paste a list of usernames instead"
-          variant="ghost"
+          variant="text"
           block
           onPress={() => setShowPaste(true)}
         />
@@ -578,8 +611,10 @@ export function InstagramImport() {
             placeholder="@one, @two, instagram.com/three…"
             multiline
           />
+          {/* Secondary, like every boxed button on this card: of the cards' own buttons, only contacts' is filled. */}
           <Button
             label="Find these people"
+            variant="secondary"
             block
             loading={working}
             disabled={pasted.trim().length === 0}
@@ -619,7 +654,7 @@ export function InstagramImport() {
         <>
           <Button
             label={`Check my ${formatCount(connections.length)} connections again`}
-            variant="ghost"
+            variant="text"
             block
             onPress={recheck}
             accessibilityHint="Re-checks your saved Instagram list for people who joined since last time"
@@ -627,7 +662,7 @@ export function InstagramImport() {
           {showSteps ? null : (
             <Button
               label="Import a newer list"
-              variant="ghost"
+              variant="text"
               block
               onPress={() => setReimport(true)}
               accessibilityHint="Shows the steps for a fresh download from Instagram"
@@ -781,11 +816,7 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
     </>
   );
 
-  const errorBox = error ? (
-    <Text style={styles.notice} accessibilityLiveRegion="polite">
-      {error}
-    </Text>
-  ) : null;
+  const errorBox = error ? <Notice tone="error">{error}</Notice> : null;
 
   if (saved) {
     return section(
@@ -796,9 +827,11 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
           profile.
         </Text>
         {errorBox}
+        {/* The way back out of being findable, as on the phone card: a quiet text button, muted. */}
         <Button
           label="Stop being findable"
-          variant="ghost"
+          variant="text"
+          muted
           block
           loading={clearing}
           onPress={clear}
@@ -856,7 +889,7 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
         />
         <Button
           label="Use a different username"
-          variant="ghost"
+          variant="text"
           size="sm"
           onPress={() => {
             setHandle(suggestion);
@@ -871,7 +904,7 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
   return section(
     <Button
       label="Let Instagram friends find you"
-      variant="ghost"
+      variant="text"
       block
       onPress={() => setManual(true)}
       accessibilityHint="Asks for your Instagram username"
@@ -879,94 +912,57 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
   );
 }
 
+/*
+ * Find friends' card styles, so this card reads as one of them: the glyph
+ * and a sentence-case heading in ink, 13pt muted body. Of the cards' own
+ * buttons only contacts' is filled wine.
+ */
 const styles = StyleSheet.create({
   card: { padding: space.lg, gap: space.md },
   cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  cardTitle: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.bodyLg.fontSize,
-    color: colors.text,
-  },
-  cardBody: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: 19,
-    color: colors.textMuted,
-  },
+  cardTitle: { flex: 1 },
+  cardBody: { ...textRole.helper, color: colors.textMuted },
   cardCta: { marginTop: space.xs },
   /* A quiet second action under a step, sized to its words rather than the card. */
   inlineAction: { alignSelf: 'flex-start', paddingHorizontal: 0 },
   em: { fontFamily: fonts.bodySemiBold, color: colors.text },
 
   /* Numbered steps — the download is a two-visit errand, and a wall of
-     prose loses people between the two halves. */
+     prose loses people between the two halves. The marker's 22pt matches
+     the title's line, so the two share a top edge. */
   step: { flexDirection: 'row', gap: space.md, alignItems: 'flex-start' },
   /* A step already done: the check and one line beside it, centred on each other. */
   stepFolded: { alignItems: 'center' },
-  /*
-   * The ring is a View around the numeral, not a border on the Text. It
-   * was one Text at a fixed 24 x 24 with a 22pt line height, so Larger Text
-   * grew the glyph inside a box that could not grow and clipped it. Minimums
-   * here, so the ring widens and deepens with the numeral; the numeral is
-   * capped at 1.5x so a step marker never outgrows the step title beside it.
-   * A step already done shows the check in place of its numeral.
-   */
-  stepBadge: {
-    minWidth: 24,
-    minHeight: 24,
-    paddingHorizontal: space.xs,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    backgroundColor: colors.bg,
+  /* The tag anatomy (ui.tsx's Tag), with minimums so it grows; see StepMarker. */
+  stepMarker: {
+    minWidth: layout.tag,
+    minHeight: layout.tag,
+    paddingHorizontal: 6,
+    borderRadius: radius.badge,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
+    backgroundColor: colors.cardAlt,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  /* Set as a tag's label is; a figure, so tabular. textMuted on bone is 4.5:1 or better. */
   stepNum: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.wine,
+    fontFamily: fonts.bodyMedium,
+    ...typeScale.tag,
+    ...tabular,
+    color: colors.textMuted,
     textAlign: 'center',
   },
   stepBody: { flex: 1, gap: space.xs },
-  stepTitle: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
+  stepTitle: { ...textRole.sectionTitle, color: colors.text },
 
   pasteBox: { gap: space.sm },
   findable: { gap: space.sm },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   /* Small text on a white card: textMuted, which holds 4.5:1 there. */
-  hint: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
-  /*
-   * Every notice on this card is a failure or a refusal — an unreadable
-   * file, nothing found in it, a download too big, a dropped connection,
-   * the day's quota. Same box as FindFriends, so a failure looks like one
-   * on every card of this screen.
-   */
-  notice: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: 19,
-    color: colors.danger,
-    backgroundColor: colors.dangerWash,
-    borderRadius: radius.md,
-    padding: space.md,
-    overflow: 'hidden',
-  },
+  hint: { flex: 1, ...textRole.helper, color: colors.textMuted },
 
   results: { gap: space.sm },
-  resultHead: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
+  resultHead: { ...textRole.sectionTitle, color: colors.text },
 });

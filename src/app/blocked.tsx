@@ -1,20 +1,11 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Icon } from '@/components/icons';
-import {
-  Avatar,
-  Button,
-  Card,
-  Divider,
-  EmptyState,
-  PressableScale,
-  announce,
-  haptic,
-} from '@/components/ui';
-import { colors, fonts, space, type as typeScale } from '@/constants/theme';
+import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { Avatar, Button, EmptyState, Hold, ListGroup, ListRow, announce } from '@/components/ui';
+import { colors, layout, space } from '@/constants/theme';
 import { fetchBlocked, unblockUser } from '@/lib/moderation';
 import { fetchProfiles } from '@/lib/social';
 import { useAuth } from '@/store/auth';
@@ -35,11 +26,12 @@ import type { UserProfile } from '@/types';
 /* ==================================================================== */
 
 /*
- * Sized like the follow rows in PeopleList — 44pt avatar, the 44pt `sm`
- * button — because it is the same kind of list: a person and one action.
- * The full 52pt call-to-action pill made every row 84pt tall against a
- * 40pt avatar. The spoken label names the person, or VoiceOver's rotor
- * lists a column of identical "Unblock" buttons.
+ * A list row like every other list of people: 40pt avatar, the name and
+ * handle, and one action at the end, the 36pt `sm` button, which keeps the
+ * row at 64 rather than stretching it to a call to action's height. A
+ * static row, so VoiceOver reads the person and then reaches the button
+ * on its own. The button's spoken label names the person, or VoiceOver's
+ * rotor lists a column of identical "Unblock" buttons.
  */
 function BlockedRow({
   person,
@@ -51,30 +43,33 @@ function BlockedRow({
   busy: boolean;
 }) {
   return (
-    <View style={styles.row}>
-      <Avatar
-        name={person.displayName}
-        accent={person.accent}
-        size={44}
-        avatarPath={person.avatarPath}
-      />
-      <View style={styles.rowText}>
-        <Text style={styles.name} numberOfLines={1}>
-          {person.displayName}
-        </Text>
-        <Text style={styles.handle} numberOfLines={1}>
-          @{person.username}
-        </Text>
-      </View>
-      <Button
-        label="Unblock"
-        variant="secondary"
-        size="sm"
-        loading={busy}
-        onPress={onUnblock}
-        accessibilityLabel={`Unblock ${person.displayName}`}
-      />
-    </View>
+    <ListRow
+      title={person.displayName}
+      subtitle={`@${person.username}`}
+      emphasis
+      leading={{
+        node: (
+          <Avatar
+            name={person.displayName}
+            accent={person.accent}
+            size={40}
+            avatarPath={person.avatarPath}
+          />
+        ),
+      }}
+      trailing={{
+        node: (
+          <Button
+            label="Unblock"
+            variant="secondary"
+            size="sm"
+            loading={busy}
+            onPress={onUnblock}
+            accessibilityLabel={`Unblock ${person.displayName}`}
+          />
+        ),
+      }}
+    />
   );
 }
 
@@ -82,6 +77,13 @@ export default function BlockedScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const myId = useAuth((s) => s.session?.user.id);
+  const [scrolled, onScroll] = useScrolledPast();
+
+  /* Back to Settings, which opens it; with nothing under it, to Settings anyway. */
+  const back = useCallback(() => {
+    if (router.canGoBack()) router.back();
+    else router.replace('/settings');
+  }, [router]);
 
   const [people, setPeople] = useState<UserProfile[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -138,7 +140,6 @@ export default function BlockedScreen() {
             text: 'Unblock',
             onPress: () => {
               if (!myId) return;
-              haptic.tap();
               setWorking(person.id);
               unblockUser(myId, person.id)
                 .then(() => setPeople((prev) => (prev ?? []).filter((p) => p.id !== person.id)))
@@ -153,94 +154,60 @@ export default function BlockedScreen() {
   );
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={[
-        styles.content,
-        { paddingTop: insets.top + space.sm, paddingBottom: insets.bottom + space.xxxl },
-      ]}
-      showsVerticalScrollIndicator={false}>
-      <View style={styles.topBar}>
-        <PressableScale
-          onPress={() => router.back()}
-          noHaptic
-          hitSlop={10}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-          style={styles.back}>
-          <Icon name="chevronLeft" size={22} color={colors.text} />
-        </PressableScale>
-        <Text style={styles.title} accessibilityRole="header">Blocked accounts</Text>
-      </View>
-
-      {people === null ? (
-        <View style={styles.loading}>
-          <ActivityIndicator color={colors.wine} />
-        </View>
-      ) : failed ? (
-        <EmptyState
-          icon="close"
-          title="Could not load your blocks"
-          body="The list could not be fetched. This is not the same as having blocked nobody."
-          action={{ label: 'Try again', onPress: retry }}
-        />
-      ) : people.length === 0 ? (
-        <EmptyState
-          icon="eyeOff"
-          title="Nobody is blocked"
-          body="You can block someone from the menu on their profile or on any of their posts. They will not be told."
-        />
-      ) : (
-        <Card style={styles.block}>
-          {people.map((p, i) => (
-            <View key={p.id}>
-              {i > 0 ? <Divider /> : null}
+    <View style={styles.screen}>
+      <ScreenTopBar
+        title="Blocked accounts"
+        showRule={scrolled}
+        left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
+      />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: insets.bottom + space.xxxl },
+        ]}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}>
+        {people === null ? (
+          /*
+            Not a bare spinner: a wait that runs long says what it is
+            waiting for, so it cannot be mistaken for an empty list.
+          */
+          <Hold fill={false} slowMessage="Still loading your blocked accounts." />
+        ) : failed ? (
+          <EmptyState
+            icon="alert"
+            title="Could not load your blocks"
+            body="Check your connection and try again. A list that did not load is not the same as having blocked nobody."
+            action={{ label: 'Try again', onPress: retry }}
+            actionVariant="secondary"
+          />
+        ) : people.length === 0 ? (
+          <EmptyState
+            icon="eyeOff"
+            title="Nobody is blocked"
+            body="You can block someone from the menu on their profile or on any of their posts. They will not be told."
+          />
+        ) : (
+          <ListGroup>
+            {people.map((p) => (
               <BlockedRow
+                key={p.id}
                 person={p}
                 busy={working === p.id}
                 onUnblock={() => confirmUnblock(p)}
               />
-            </View>
-          ))}
-        </Card>
-      )}
-    </ScrollView>
+            ))}
+          </ListGroup>
+        )}
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { paddingHorizontal: space.xl },
-
-  topBar: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingBottom: space.lg },
-  back: { padding: space.xs },
-  title: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
-  },
-
-  loading: { paddingVertical: space.xxxl, alignItems: 'center' },
-  block: { padding: 0 },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    paddingVertical: space.md,
-    paddingHorizontal: space.lg,
-    minHeight: 56,
-  },
-  rowText: { flex: 1 },
-  name: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
-  handle: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
+  scroll: { flex: 1 },
+  content: { paddingHorizontal: layout.gutter, paddingTop: space.sm },
 });

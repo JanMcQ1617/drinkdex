@@ -14,8 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthMessage } from '@/components/AuthGate';
 import { Icon } from '@/components/icons';
-import { Button, Field, PressableScale } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { Button, Field, haptic } from '@/components/ui';
+import { colors, fonts, layout, space, textRole, type as typeScale } from '@/constants/theme';
 import { parseRecoveryUrl } from '@/lib/recovery';
 import { useAuth } from '@/store/auth';
 
@@ -127,9 +127,8 @@ function Confirmation({ onDismiss }: { onDismiss: () => void }) {
       style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       accessibilityViewIsModal>
       <View style={styles.doneWrap}>
-        <View style={styles.doneMark}>
-          <Icon name="check" size={22} color={colors.textOnWine} />
-        </View>
+        {/* The check drawn bare, in wine: a glyph does not need a disc to be seen. */}
+        <Icon name="check" size={40} color={colors.wine} />
         <Text ref={titleRef} style={styles.title} accessibilityRole="header">
           Password changed
         </Text>
@@ -169,12 +168,16 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
   const canSubmit = longEnough && typedConfirm && matches && !leaving;
 
   /*
-   * No haptic here: Button's press-in already ticks. Guarded because the
-   * keyboard's return key reaches this too.
+   * A press does not tick; the new password being saved does, as every
+   * completed save in the app does. Guarded because the keyboard's return
+   * key reaches this too.
    */
   const submit = async () => {
     if (!canSubmit || busy) return;
-    if (await completePasswordReset(password)) onDone();
+    if (await completePasswordReset(password)) {
+      haptic.success();
+      onDone();
+    }
   };
 
   const cancel = () => {
@@ -246,16 +249,25 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
             style={styles.submit}
           />
 
-          <PressableScale
+          {/*
+            The way back out, so it is the muted text button, under the
+            one action this step is for. While the sign-out runs it keeps
+            its size and shows a spinner, and its spoken name says what is
+            happening. The visible label stays put for that: Button hides
+            it under the spinner but keeps its width, so a shorter label
+            would only make the button jump narrower.
+          */}
+          <Button
+            label="Cancel and sign out"
+            accessibilityLabel={leaving ? 'Signing out' : undefined}
+            variant="text"
+            muted
+            size="sm"
+            loading={leaving}
             onPress={cancel}
-            disabled={leaving}
-            noHaptic
-            accessibilityRole="button"
-            accessibilityState={{ disabled: leaving, busy: leaving }}
             accessibilityHint="Signs you back out without changing your password"
-            style={styles.cancel}>
-            <Text style={styles.cancelText}>{leaving ? 'Signing out…' : 'Cancel and sign out'}</Text>
-          </PressableScale>
+            style={styles.cancel}
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -277,18 +289,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
     zIndex: 20,
   },
-  scroll: { paddingHorizontal: space.xl, flexGrow: 1 },
+  scroll: { paddingHorizontal: layout.gutter, flexGrow: 1 },
 
+  /* The wordmark is the brand's voice, so it keeps the display face. */
   wordmark: {
     fontFamily: fonts.displayBold,
     fontSize: typeScale.display.fontSize,
     lineHeight: typeScale.display.lineHeight,
     color: colors.wine,
   },
+  /* A step's title is chrome: Inter, at the size every state title uses. */
   title: {
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.title.fontSize,
-    lineHeight: typeScale.title.lineHeight,
+    ...textRole.emptyTitle,
     color: colors.text,
     marginTop: space.lg,
   },
@@ -306,32 +318,12 @@ const styles = StyleSheet.create({
   form: { gap: space.lg },
   submit: { marginTop: space.sm },
 
-  cancel: {
-    alignSelf: 'center',
-    minHeight: 44,
-    justifyContent: 'center',
-    paddingVertical: space.md,
-    paddingHorizontal: space.lg,
-  },
-  cancelText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
+  cancel: { alignSelf: 'center' },
 
   doneWrap: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: space.xl,
-  },
-  doneMark: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.pill,
-    backgroundColor: colors.wine,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: space.lg,
+    paddingHorizontal: layout.gutter,
   },
 });

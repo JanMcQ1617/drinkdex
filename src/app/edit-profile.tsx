@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Linking,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,15 +16,19 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Grain } from '@/components/Grain';
-import { Icon } from '@/components/icons';
-import { Avatar, Button, Field, PressableScale, haptic, useAnnounce } from '@/components/ui';
+import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
+import { Avatar, Button, Field, Notice, haptic } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
   fonts,
+  layout,
   radius,
   SIGNUP_ACCENTS,
   space,
+  stroke,
+  tabular,
+  textRole,
   type as typeScale,
 } from '@/constants/theme';
 import {
@@ -137,12 +142,8 @@ export default function EditProfileScreen() {
   const [username, setUsername] = useState(profile?.username ?? '');
   const [bio, setBio] = useState(profile?.bio ?? '');
   const [accent, setAccent] = useState(profile?.accent ?? SIGNUP_ACCENTS[0]!);
+  /* A form-level failure, shown in a Notice above Save, which also speaks it. */
   const [error, setError] = useState<string | null>(null);
-  /*
-   * The error box's live region is Android's; iOS ignores it, so VoiceOver
-   * heard nothing when Save failed. This speaks it there.
-   */
-  useAnnounce(error);
 
   /*
    * Text the content filter refused, by field, holding the exact value it
@@ -240,7 +241,7 @@ export default function EditProfileScreen() {
     else if (r.reason !== 'cancelled') pickNotice(r);
   }, []);
 
-  // No haptics in these three: the controls they sit behind tick on press.
+  // No haptics in these three: a button press does not tick, only a completed save does.
   const choosePhoto = useCallback(async () => {
     applyPick(await pickFromLibrary());
   }, [applyPick]);
@@ -257,8 +258,8 @@ export default function EditProfileScreen() {
   /**
    * Puts the content filter's refusal next to the field it is about. A
    * refusal under a field is spoken by that Field, which announces an error
-   * as it appears; one that lands in the error box is spoken by useAnnounce
-   * (iOS) and the box's live region (Android). Neither is said here, which
+   * as it appears; one that lands in the form's Notice is spoken by the
+   * Notice (and its live region on Android). Neither is said here, which
    * would say it twice.
    */
   const refuse = (fields: TextField[]) => {
@@ -269,7 +270,7 @@ export default function EditProfileScreen() {
     }
   };
 
-  // No haptic of its own: the Save button's press already ticked.
+  // The press does not tick; the success haptic lands when the save has gone through.
   const save = async () => {
     if (!profile || saving) return;
     setError(null);
@@ -369,6 +370,7 @@ export default function EditProfileScreen() {
      */
     if (!feedError) void refreshFeed(profile.id);
 
+    haptic.success();
     setCommitted(true);
   };
 
@@ -406,32 +408,19 @@ export default function EditProfileScreen() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheetH : 0}
       onLayout={(e) => setSheetH(e.nativeEvent.layout.height)}>
       {/*
-        No status-bar inset on iOS: the page sheet starts below the status
-        bar, and the root's inset added inside it left a blank band above
-        Cancel. Android presents the modal full screen and does need it.
+        The sheet inset on iOS, not the status bar's: the page sheet starts
+        below the status bar, and the root's inset added inside it left a
+        blank band above Cancel. Android presents the modal full screen and
+        does need it. The rule is always on: the bar sits over a form that
+        scrolls under it from the first field. Save stays at the foot of the
+        form rather than in the bar, beside the fields it commits.
       */}
-      <View
-        style={[
-          styles.topBar,
-          { paddingTop: Platform.OS === 'ios' ? space.lg : insets.top + space.sm },
-        ]}>
-        <PressableScale
-          onPress={() => router.back()}
-          noHaptic
-          hitSlop={10}
-          accessibilityRole="button"
-          accessibilityLabel="Cancel"
-          style={styles.topBarSide}>
-          {/* Capped so it stays one line in the fixed slot that keeps the title centred. */}
-          <Text style={styles.cancel} numberOfLines={1} maxFontSizeMultiplier={1.3}>
-            Cancel
-          </Text>
-        </PressableScale>
-        <Text style={styles.topBarTitle} accessibilityRole="header">
-          Edit profile
-        </Text>
-        <View style={styles.topBarSide} />
-      </View>
+      <ScreenTopBar
+        title="Edit profile"
+        inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
+        showRule
+        left={<TopBarTextButton label="Cancel" muted onPress={() => router.back()} />}
+      />
 
       <ScrollView
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl }]}
@@ -467,33 +456,46 @@ export default function EditProfileScreen() {
             /*
              * Red text, no fill: a quiet destructive action under the two
              * buttons that are this block's point. Row-sized, so it keeps a
-             * 44pt target without standing as tall as they do. Its own press
-             * tick, like theirs; the handler adds none.
+             * 44pt target without standing as tall as they do. No tick, like
+             * theirs: a press does not tick, and nothing is removed until Save.
              */
             <Button label="Remove photo" variant="dangerText" size="sm" onPress={removePhoto} />
           ) : null}
         </View>
 
         <Text style={styles.label}>Accent</Text>
+        {/*
+          Six squares of colour, the selected one ringed in ink. The ring is
+          the mark, not a check drawn on the colour: a bone check measured
+          under 2:1 on the amber, and the ring is the same strong edge on
+          every one of them. It sits 2pt outside the swatch, so it reads as
+          a frame around the colour rather than a darker rim of it.
+        */}
         <View style={styles.swatches}>
           {SIGNUP_ACCENTS.map((c) => {
             const selected = c === accent;
             return (
-              <PressableScale
+              <Pressable
                 key={c}
                 onPress={() => {
+                  if (selected) return;
                   haptic.select();
                   setAccent(c);
                 }}
-                noHaptic
                 accessibilityRole="button"
                 // "Selected" comes from the state; saying it in the label too
                 // made VoiceOver announce it twice.
                 accessibilityState={{ selected }}
                 accessibilityLabel={`${ACCENT_NAMES[c] ?? 'Custom'} accent`}
-                style={[styles.swatch, { backgroundColor: c }, selected && styles.swatchOn]}>
-                {selected ? <Icon name="check" size={15} color={colors.textOnWine} /> : null}
-              </PressableScale>
+                // A swatch's fill IS the choice, so it dims while held
+                // rather than changing colour.
+                style={({ pressed }) => [
+                  styles.swatch,
+                  { backgroundColor: c },
+                  pressed && styles.swatchPressed,
+                ]}>
+                {selected ? <View pointerEvents="none" style={styles.swatchRing} /> : null}
+              </Pressable>
             );
           })}
         </View>
@@ -544,10 +546,9 @@ export default function EditProfileScreen() {
         </Text>
 
         {error ? (
-          <View style={styles.errorBox} accessibilityLiveRegion="polite">
-            <Icon name="close" size={16} color={colors.danger} />
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
+          <Notice tone="error" style={styles.notice}>
+            {error}
+          </Notice>
         ) : null}
 
         <Button
@@ -567,81 +568,59 @@ export default function EditProfileScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   centre: { alignItems: 'center', justifyContent: 'center' },
-  content: { paddingHorizontal: space.xl },
-
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: space.lg,
-    paddingBottom: space.sm,
-  },
-  topBarSide: { width: 72 },
-  topBarTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.title.fontSize,
-    color: colors.text,
-  },
-  cancel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.body.fontSize,
-    color: colors.textMuted,
-  },
+  content: { paddingHorizontal: layout.gutter },
 
   preview: { alignItems: 'center', paddingVertical: space.lg, gap: space.lg },
   photoActions: { flexDirection: 'row', gap: space.md },
 
   /*
-   * The swatches' label, set as Field sets its own (12pt on the type scale,
-   * textMuted) so the one label that is not a Field's reads as one of them.
+   * The swatches' label, set as Field sets its own, so the one label that
+   * is not a Field's reads as one of them.
    */
   label: {
-    fontFamily: fonts.bodyMedium,
-    ...typeScale.micro,
+    ...textRole.fieldLabel,
     color: colors.textMuted,
     marginTop: space.lg,
-    marginBottom: space.sm,
+    marginBottom: space.md,
   },
 
+  /* 12 between swatches leaves room for two rings (4pt each) without touching. */
   swatches: { flexDirection: 'row', gap: space.md, flexWrap: 'wrap' },
   swatch: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.pill,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'transparent',
+    width: layout.hit,
+    height: layout.hit,
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
   },
-  /* The ring is drawn in the page colour so it reads as a gap around the
-     swatch rather than a second colour competing with the one it marks. */
-  swatchOn: { borderColor: colors.bg },
+  swatchPressed: { opacity: 0.7 },
+  /*
+   * The selection ring: 2pt of ink, 2pt clear of the swatch's own edge, so
+   * it is drawn over the gap and never resizes the swatch. Its corner is
+   * the swatch's plus the 4pt it stands out, so the two curves stay
+   * concentric.
+   */
+  swatchRing: {
+    position: 'absolute',
+    top: -(stroke.edge + 4),
+    left: -(stroke.edge + 4),
+    right: -(stroke.edge + 4),
+    bottom: -(stroke.edge + 4),
+    borderRadius: radius.control + 4,
+    borderWidth: stroke.ring,
+    borderColor: colors.lineInk,
+  },
 
   field: { marginTop: space.lg },
   counter: {
     alignSelf: 'flex-end',
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    ...textRole.helper,
+    ...tabular,
     color: colors.textMuted,
     marginTop: space.sm,
   },
 
-  errorBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    backgroundColor: colors.dangerWash,
-    borderRadius: radius.md,
-    padding: space.md,
-    marginTop: space.lg,
-  },
-  errorText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.danger,
-  },
+  notice: { marginTop: space.lg },
 
   save: { marginTop: space.xl },
   blurb: {

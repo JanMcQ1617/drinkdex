@@ -2,15 +2,16 @@ import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Icon, type IconName } from '@/components/icons';
-import { Avatar, Card, PressableScale, SectionLabel, haptic } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { Avatar, ListGroup, ListRow, SectionHeader } from '@/components/ui';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import { hasFacebookIdentity } from '@/lib/facebook';
 import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
+import { useCustomDrinks } from '@/store/customDrinks';
 import { useSocial } from '@/store/social';
 
 /* ==================================================================== */
@@ -27,13 +28,13 @@ import { useSocial } from '@/store/social';
 /*                                                                      */
 /* No search field. Instagram has one because it has sixty-odd rows      */
 /* across nine groups and nobody can find "Hidden Words" by scanning.    */
-/* This screen has nine. A search box over nine rows is furniture        */
+/* This screen has eleven. A search box over eleven rows is furniture    */
 /* that says "this is complicated" about something that is not.          */
 /*                                                                      */
 /* No drill-down for its own sake. Instagram pushes almost every row to  */
 /* a sub-screen; most of ours would be a sub-screen holding one switch.  */
-/* Only "Find friends" and "Blocked accounts" push, because those two    */
-/* genuinely have a screen behind them.                                  */
+/* A row pushes only when a real screen is behind it: your profile,      */
+/* Saved, Activity, Find friends and Blocked accounts.                   */
 /*                                                                      */
 /* No Accounts Centre row. That exists to span Instagram, Facebook and   */
 /* Threads. There is one account here, so the identity row goes straight */
@@ -45,61 +46,27 @@ const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
 const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
 
 /*
- * `busy` is the row whose action is running: a spinner in the icon slot,
- * and the row stops taking taps so a second confirm cannot start a second
- * run. `disabled` is every other account row meanwhile, dimmed the way a
- * disabled Button is. Danger rows act rather than navigate, so they carry
- * no chevron.
+ * What deleting an account removes, said in the confirm before it happens.
+ * One sentence that covers every kind of thing the account can hold: the
+ * profile, posts and their photos, reels, the drinks you added (the
+ * suggestions sent with them go too), likes, saves and follows, and the
+ * collection on this phone. A list that left one out would read as a
+ * promise that it stays.
  */
-function Row({
-  icon,
-  label,
-  detail,
-  onPress,
-  danger,
-  busy,
-  disabled,
-}: {
-  icon: IconName;
-  label: string;
-  detail?: string;
-  onPress: () => void;
-  danger?: boolean;
-  busy?: boolean;
-  disabled?: boolean;
-}) {
-  const inert = !!busy || !!disabled;
-  const tint = danger ? colors.danger : colors.textMuted;
-  return (
-    <PressableScale
-      onPress={inert ? undefined : onPress}
-      disabled={inert}
-      noHaptic
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityHint={detail}
-      accessibilityState={{ disabled: inert, busy: !!busy }}
-      style={[styles.row, disabled && !busy && styles.rowDisabled]}>
-      {busy ? (
-        <ActivityIndicator size="small" color={tint} style={styles.rowSpinner} />
-      ) : (
-        <Icon name={icon} size={19} color={tint} />
-      )}
-      <View style={styles.rowText}>
-        <Text style={[styles.rowLabel, danger && styles.rowLabelDanger]}>{label}</Text>
-        {detail ? <Text style={styles.rowDetail}>{detail}</Text> : null}
-      </View>
-      {danger ? null : <Icon name="chevronRight" size={16} color={colors.textFaint} />}
-    </PressableScale>
-  );
-}
+const DELETE_CONFIRM =
+  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, and resets the collection on this phone. It cannot be undone.';
 
-/** Section heading + its card. Keeps the rhythm identical across groups. */
+/*
+ * A section: its heading, then its rows in one bordered group. The
+ * heading is the group size (14pt, muted), inset 16pt so it starts where
+ * the rows' icons do. Rows are passed straight in, so the group can tell
+ * the last one to drop its separator.
+ */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <>
-      <SectionLabel style={styles.sectionLabel}>{title}</SectionLabel>
-      <Card style={styles.block}>{children}</Card>
+      <SectionHeader title={title} size="group" style={styles.sectionHeader} />
+      <ListGroup>{children}</ListGroup>
     </>
   );
 }
@@ -107,6 +74,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const [scrolled, onScroll] = useScrolledPast();
 
   const profile = useAuth((s) => s.profile);
   const facebookShown = useAuth(
@@ -115,6 +83,13 @@ export default function SettingsScreen() {
   const signOut = useAuth((s) => s.signOut);
   const deleteAccount = useAuth((s) => s.deleteAccount);
   const resetAll = useCollection((s) => s.resetAll);
+  /*
+   * The drinks you added keep their own pours and photos, beside the
+   * collection's (store/customDrinks). Each reset below clears both, or a
+   * reset collection would still show the pours of every drink you added.
+   */
+  const clearCustomPours = useCustomDrinks((s) => s.clearPours);
+  const resetCustomDrinks = useCustomDrinks((s) => s.resetAll);
   const resetSocial = useSocial((s) => s.reset);
 
   /* Which account action is running, if any. Set from the confirm's tap. */
@@ -127,7 +102,6 @@ export default function SettingsScreen() {
    * connection when it failed, which is not why a URL fails to open.
    */
   const open = useCallback((url: string) => {
-    haptic.tap();
     WebBrowser.openBrowserAsync(url).catch(() =>
       Alert.alert('Could not open the page', 'Try again in a moment.'),
     );
@@ -146,16 +120,34 @@ export default function SettingsScreen() {
     if (router.canDismiss()) router.dismissAll();
   }, [router]);
 
+  /* Back to the profile, which opens it; with nothing under it, to the profile anyway. */
+  const back = useCallback(() => {
+    if (router.canGoBack()) router.back();
+    else router.replace('/profile');
+  }, [router]);
+
+  /*
+   * The drinks you added stay, unlogged, just as catalogue entries stay
+   * locked: a reset forgets what you poured, not what exists. So the copy
+   * is the same as before they existed.
+   */
   const confirmReset = useCallback(() => {
     Alert.alert(
       'Reset collection',
       'Every entry goes back to locked, and the photos you logged are forgotten. Your posts and account stay.',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Reset', style: 'destructive', onPress: () => resetAll() },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: () => {
+            resetAll();
+            clearCustomPours();
+          },
+        },
       ],
     );
-  }, [resetAll]);
+  }, [resetAll, clearCustomPours]);
 
   const confirmSignOut = useCallback(() => {
     if (pending) return;
@@ -178,12 +170,16 @@ export default function SettingsScreen() {
 
   /*
    * The confirmation lists everything that goes, the collection on this
-   * phone included. Sign out keeps the collection and says so in the row
-   * above, so leaving it out here read as a promise that deletion kept it
-   * too. It does not: resetAll() runs on success, deliberately, so a
-   * deleted account leaves a clean slate rather than a Dex of photos the
-   * server no longer has. Only on success — a failed delete must not
-   * leave a wiped phone and a live account.
+   * phone included (DELETE_CONFIRM). Sign out keeps the collection and says
+   * so in the row above, so leaving it out here read as a promise that
+   * deletion kept it too. It does not: both resets run on success,
+   * deliberately, so a deleted account leaves a clean slate rather than a
+   * Dex of photos the server no longer has. The drinks you added go
+   * entirely, entries and their photos on this phone with them: the
+   * suggestions they were sent as are deleted with the account, so a
+   * drink left behind would be one nobody can sync or delete again. Only
+   * on success: a failed delete must not leave a wiped phone and a live
+   * account.
    *
    * A failure is said out loud. deleteAccount writes it to the store's
    * `error`, which only the sign-in form renders, and that form is not
@@ -197,7 +193,7 @@ export default function SettingsScreen() {
     if (pending) return;
     Alert.alert(
       'Delete account',
-      'This removes your profile, every post, every photo you uploaded, your likes and your follows, and resets the collection on this phone. It cannot be undone.',
+      DELETE_CONFIRM,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -209,6 +205,7 @@ export default function SettingsScreen() {
               .then((ok) => {
                 if (ok) {
                   resetAll();
+                  resetCustomDrinks();
                   resetSocial();
                   leave();
                   Alert.alert(
@@ -231,244 +228,202 @@ export default function SettingsScreen() {
         },
       ],
     );
-  }, [pending, deleteAccount, resetAll, resetSocial, leave]);
+  }, [pending, deleteAccount, resetAll, resetCustomDrinks, resetSocial, leave]);
 
   const version = Constants.expoConfig?.version ?? '1.0.0';
   const build = Constants.expoConfig?.ios?.buildNumber ?? '';
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={[
-        styles.content,
-        { paddingTop: insets.top + space.sm, paddingBottom: insets.bottom + space.xxxl },
-      ]}
-      showsVerticalScrollIndicator={false}>
-      <View style={styles.topBar}>
-        <PressableScale
-          onPress={() => router.back()}
-          noHaptic
-          hitSlop={10}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-          style={styles.back}>
-          <Icon name="chevronLeft" size={22} color={colors.text} />
-        </PressableScale>
-        <Text style={styles.title} accessibilityRole="header">Settings</Text>
-      </View>
+    <View style={styles.screen}>
+      <ScreenTopBar
+        title="Settings"
+        showRule={scrolled}
+        left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
+      />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl }]}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}>
+        {/* ---- Identity. Instagram's Accounts Centre slot. ---- */}
+        {profile ? (
+          <ListGroup style={styles.identity}>
+            <ListRow
+              title={profile.display_name}
+              subtitle={`@${profile.username}`}
+              emphasis
+              leading={{
+                node: (
+                  <Avatar
+                    name={profile.display_name}
+                    accent={profile.accent}
+                    size={40}
+                    ring
+                    avatarPath={profile.avatar_path}
+                  />
+                ),
+              }}
+              trailing="chevron"
+              onPress={() => router.push('/edit-profile')}
+              accessibilityLabel={`${profile.display_name}, @${profile.username}`}
+              accessibilityHint="Edits your profile"
+            />
+          </ListGroup>
+        ) : null}
 
-      {/* ---- Identity. Instagram's Accounts Centre slot. ---- */}
-      {profile ? (
-        <PressableScale
-          onPress={() => {
-            haptic.tap();
-            router.push('/edit-profile');
-          }}
-          noHaptic
-          accessibilityRole="button"
-          accessibilityLabel="Edit your profile"
-          style={styles.identity}>
-          <Avatar
-            name={profile.display_name}
-            accent={profile.accent}
-            size={54}
-            ring
-            avatarPath={profile.avatar_path}
-          />
-          <View style={styles.identityText}>
-            <Text style={styles.identityName} numberOfLines={1}>
-              {profile.display_name}
-            </Text>
-            <Text style={styles.identityHandle} numberOfLines={1}>
-              @{profile.username}
-            </Text>
-          </View>
-          <Icon name="chevronRight" size={16} color={colors.textFaint} />
-        </PressableScale>
-      ) : null}
-
-      {/*
-        ---- How people find you ----
-        The detail lists what the screen behind it holds, in its order.
-        Facebook only when the Facebook card there has something to draw,
-        by the card's own rule: the account already has Facebook, or
-        Facebook sign-in is switched on and it can be connected. Otherwise
-        the card draws nothing, and naming it here would promise a row
-        that is not there.
-      */}
-      <Section title="How people find you">
-        <Row
-          icon="users"
-          label="Find friends"
-          detail={
-            facebookShown
-              ? 'Facebook, contacts, invites, search and Instagram.'
-              : 'Contacts, invites, search and Instagram.'
-          }
-          onPress={() => {
-            haptic.tap();
-            router.push('/find-friends');
-          }}
-        />
-      </Section>
-
-      {/* ---- Who you have shut out ---- */}
-      <Section title="Who can reach you">
         {/*
-          eyeOff, not lock: the lock is the Dex's "not collected yet", and
-          blocking is two people hidden from each other.
+          ---- What you keep and what came of it ----
+          Straight after the identity row: the two things about your own
+          account people come back for. Saved has no other door, and the
+          heart on Home is Activity's only other one.
         */}
-        <Row
-          icon="eyeOff"
-          label="Blocked accounts"
-          detail="See who you have blocked, and undo it."
-          onPress={() => {
-            haptic.tap();
-            router.push('/blocked');
-          }}
-        />
-      </Section>
+        <Section title="Your activity">
+          <ListRow
+            leading={{ icon: 'bookmark' }}
+            title="Saved"
+            subtitle="Pours you bookmarked. Only you can see them."
+            trailing="chevron"
+            onPress={() => router.push('/saved')}
+          />
+          <ListRow
+            leading={{ icon: 'heart' }}
+            title="Activity"
+            subtitle="Likes on your pours and new followers."
+            trailing="chevron"
+            onPress={() => router.push('/activity')}
+          />
+        </Section>
 
-      {/* ---- Instagram's "Help" and "About", merged. ---- */}
-      <Section title="About">
-        <Row
-          icon="comment"
-          label="Help and support"
-          detail="Answers, and an email one person reads."
-          onPress={() => open(SUPPORT_URL)}
-        />
-        <View style={styles.divider} />
-        <Row
-          icon="eye"
-          label="Privacy Policy"
-          onPress={() => open(PRIVACY_URL)}
-        />
-        <View style={styles.divider} />
-        {/* The page, not the bookmark: the bookmark is "save a post" on every card in the feed. */}
-        <Row icon="document" label="Terms of Use" onPress={() => open(TERMS_URL)} />
-      </Section>
+        {/*
+          ---- How people find you ----
+          The detail lists what the screen behind it holds, in its order.
+          Facebook only when the Facebook card there has something to draw,
+          by the card's own rule: the account already has Facebook, or
+          Facebook sign-in is switched on and it can be connected. Otherwise
+          the card draws nothing, and naming it here would promise a row
+          that is not there.
+        */}
+        <Section title="How people find you">
+          <ListRow
+            leading={{ icon: 'users' }}
+            title="Find friends"
+            subtitle={
+              facebookShown
+                ? 'Facebook, contacts, invites, search and Instagram.'
+                : 'Contacts, invites, search and Instagram.'
+            }
+            trailing="chevron"
+            onPress={() => router.push('/find-friends')}
+          />
+        </Section>
 
-      {/*
-        Instagram parks Log Out at the very bottom under its own "Login"
-        heading, far from anything routine. The three irreversible actions
-        get the same treatment, ordered by how much they destroy.
-      */}
-      <Section title="Account">
-        <Row
-          icon="flame"
-          label="Reset collection"
-          detail="Locks every entry again. Posts and account stay."
-          onPress={confirmReset}
-          danger
-          disabled={pending !== null}
-        />
-        <View style={styles.divider} />
-        <Row
-          icon="profile"
-          label="Sign out"
-          detail={pending === 'signout' ? 'Signing out…' : 'Your collection stays on this phone.'}
-          onPress={confirmSignOut}
-          danger
-          busy={pending === 'signout'}
-          disabled={pending === 'delete'}
-        />
-        <View style={styles.divider} />
-        <Row
-          icon="close"
-          label="Delete account"
-          detail={
-            pending === 'delete'
-              ? 'Deleting your account…'
-              : 'Profile, posts, photos, follows and this phone’s collection. Permanent.'
-          }
-          onPress={confirmDelete}
-          danger
-          busy={pending === 'delete'}
-          disabled={pending === 'signout'}
-        />
-      </Section>
+        {/* ---- Who you have shut out ---- */}
+        <Section title="Who can reach you">
+          {/*
+            eyeOff, not lock: the lock is the Dex's "not collected yet", and
+            blocking is two people hidden from each other.
+          */}
+          <ListRow
+            leading={{ icon: 'eyeOff' }}
+            title="Blocked accounts"
+            subtitle="See who you have blocked, and undo it."
+            trailing="chevron"
+            onPress={() => router.push('/blocked')}
+          />
+        </Section>
 
-      {/*
-        Version last, unemphasised. It is here because it is the first
-        thing a bug report needs and the last thing anyone browsing wants.
-      */}
-      <Text style={styles.version}>
-        Sipply {version}
-        {build ? ` (${build})` : ''}
-      </Text>
-    </ScrollView>
+        {/* ---- Instagram's "Help" and "About", merged. ---- */}
+        <Section title="About">
+          <ListRow
+            leading={{ icon: 'comment' }}
+            title="Help and support"
+            subtitle="Answers, and an email one person reads."
+            trailing="chevron"
+            onPress={() => open(SUPPORT_URL)}
+          />
+          <ListRow
+            leading={{ icon: 'eye' }}
+            title="Privacy Policy"
+            trailing="chevron"
+            onPress={() => open(PRIVACY_URL)}
+          />
+          {/* The page, not the bookmark: the bookmark is "save a post" on every card in the feed. */}
+          <ListRow
+            leading={{ icon: 'document' }}
+            title="Terms of Use"
+            trailing="chevron"
+            onPress={() => open(TERMS_URL)}
+          />
+        </Section>
+
+        {/*
+          Instagram parks Log Out at the very bottom under its own "Login"
+          heading, far from anything routine. The three irreversible actions
+          get the same treatment, ordered by how much they destroy, and drawn
+          in danger with no chevron: they act rather than navigate.
+
+          `busy` is the row whose action is running: a spinner in the icon
+          slot, and the row stops taking taps so a second confirm cannot
+          start a second run. `disabled` is every other account row
+          meanwhile, dimmed the way a disabled Button is.
+        */}
+        <Section title="Account">
+          <ListRow
+            leading={{ icon: 'flame' }}
+            title="Reset collection"
+            subtitle="Locks every entry again. Posts and account stay."
+            onPress={confirmReset}
+            destructive
+            disabled={pending !== null}
+          />
+          <ListRow
+            leading={{ icon: 'profile' }}
+            title="Sign out"
+            subtitle={pending === 'signout' ? 'Signing out…' : 'Your collection stays on this phone.'}
+            onPress={confirmSignOut}
+            destructive
+            busy={pending === 'signout'}
+            disabled={pending === 'delete'}
+          />
+          <ListRow
+            leading={{ icon: 'close' }}
+            title="Delete account"
+            subtitle={
+              pending === 'delete'
+                ? 'Deleting your account…'
+                : 'Profile, posts, photos, follows and this phone’s collection. Permanent.'
+            }
+            onPress={confirmDelete}
+            destructive
+            busy={pending === 'delete'}
+            disabled={pending === 'signout'}
+          />
+        </Section>
+
+        {/*
+          Version last, unemphasised. It is here because it is the first
+          thing a bug report needs and the last thing anyone browsing wants.
+        */}
+        <Text style={styles.version}>
+          Sipply {version}
+          {build ? ` (${build})` : ''}
+        </Text>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { paddingHorizontal: space.xl },
+  scroll: { flex: 1 },
+  content: { paddingHorizontal: layout.gutter, paddingTop: space.sm },
 
-  topBar: { flexDirection: 'row', alignItems: 'center', gap: space.sm, paddingBottom: space.lg },
-  back: { padding: space.xs },
-  title: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
-  },
-
-  identity: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.lg,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.lg,
-    padding: space.lg,
-  },
-  identityText: { flex: 1 },
-  identityName: {
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.bodyLg.fontSize,
-    color: colors.text,
-  },
-  identityHandle: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
-
-  sectionLabel: { marginTop: space.xxl, marginBottom: space.md },
-  block: { padding: 0 },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.lg,
-    paddingVertical: space.lg,
-    paddingHorizontal: space.lg,
-    /* 56 clears the 44pt floor with room for the two-line rows. */
-    minHeight: 56,
-  },
-  rowDisabled: { opacity: 0.42 },
-  /* Same footprint as the 19pt glyph it stands in for, so the label does not shift. */
-  rowSpinner: { width: 19, height: 19 },
-  rowText: { flex: 1 },
-  rowLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
-  rowLabelDanger: { color: colors.danger },
-  rowDetail: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    marginTop: 1,
-  },
-  divider: { height: 1, backgroundColor: colors.cardBorder, marginHorizontal: space.lg },
+  identity: { marginBottom: space.sm },
+  sectionHeader: { marginTop: space.xl, marginBottom: space.sm },
 
   version: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    ...textRole.helper,
     /*
      * textMuted, not textFaint. This is caption-sized, which WCAG holds to
      * 4.5:1, and textFaint measures 3.51:1 on the page: enough for large

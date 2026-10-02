@@ -5,8 +5,8 @@ import { FacebookFriends } from '@/components/FacebookFriends';
 import { Icon } from '@/components/icons';
 import { InstagramImport } from '@/components/InstagramImport';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
-import { Button, Card, Field, SearchField, announce } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { Button, Card, Field, Notice, SearchField, SectionHeader, announce } from '@/components/ui';
+import { colors, space, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
 import { hashPhone, normalizePhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
 import {
@@ -30,13 +30,12 @@ import type { UserProfile } from '@/types';
 /* ------------------------------------------------------------------ */
 
 /*
- * Every failure or notice here is drawn in a notice box with
- * accessibilityLiveRegion, which is Android-only: on iOS a VoiceOver user
- * tapped Try again, heard the button go busy and come back, and was never
- * told why nothing changed. So each handler that sets one also calls
- * announce (components/ui), which speaks it on iOS only. From the handler
- * rather than a useAnnounce on the state, so a failure that happens twice
- * is heard twice. Contacts access being off is not a failure, but it is
+ * Every failure here is drawn in a Notice, which speaks an error as it
+ * appears (iOS has no live regions; the region stays for Android). Each
+ * handler that sets one ALSO calls announce, so a failure that happens
+ * twice while its Notice stays on screen is heard twice; announce drops
+ * the same words said twice within a moment, so the two never double up.
+ * Contacts access being off is not a failure and has no Notice, but it is
  * the same silent swap of a button for a sentence, so it is spoken too.
  */
 const SEARCH_FAILED = 'Search failed. Try again.';
@@ -66,6 +65,8 @@ const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings,
 export function FindFriends() {
   const myId = useAuth((s) => s.session?.user.id);
   const email = useAuth((s) => s.session?.user.email);
+  /* A number the account signed in with, already proven by its SMS code. GoTrue stores digits, no '+'. */
+  const verifiedPhone = useAuth((s) => s.session?.user.phone);
   const profile = useAuth((s) => s.profile);
 
   /* ---- invite ---- */
@@ -232,37 +233,45 @@ export function FindFriends() {
    * subscribeDiscovery. Until then the field is filled with what was typed
    * at signup, so nobody is asked to type it twice — and if the drain fails
    * offline, one tap here finishes the job.
+   *
+   * An account that signed in with its phone number is offered that number
+   * the same way when nothing is parked. Only offered: becoming findable
+   * stays a tap on "Make me findable", never a side effect of signing in.
+   *
+   * The prefill waits for the saved number to be read, and is skipped when
+   * there is one. Once it is saved the field is hidden, and a prefill
+   * landing in it afterwards would reappear after "Stop being findable" as
+   * though typed.
    */
   useEffect(() => {
     let alive = true;
-    const read = () => {
+    const read = () =>
       getRememberedPhone()
         .then((value) => {
-          if (!alive) return;
+          if (!alive) return value;
           setSavedPhone(value);
-          // Once it is saved the field is hidden; a prefill left in it would
-          // reappear after "Stop being findable" as though typed.
           if (value) setPhone('');
+          return value;
         })
         .catch(() => {
           /* Unreadable storage reads as not saved; the card asks, which is safe. */
+          return null;
         });
-    };
-    read();
-    getParkedClaims(email)
-      .then((parked) => {
-        const parkedPhone = parked?.phone;
-        if (alive && parkedPhone) setPhone((typed) => typed || parkedPhone);
-      })
-      .catch(() => {
+    void read().then(async (saved) => {
+      if (saved || !alive) return;
+      const parked = await getParkedClaims(email).catch(() => {
         /* Nothing parked is the normal case. */
+        return null;
       });
-    const unsubscribe = subscribeDiscovery(read);
+      const offer = parked?.phone ?? (verifiedPhone ? `+${verifiedPhone}` : undefined);
+      if (alive && offer) setPhone((typed) => typed || offer);
+    });
+    const unsubscribe = subscribeDiscovery(() => void read());
     return () => {
       alive = false;
       unsubscribe();
     };
-  }, [email]);
+  }, [email, verifiedPhone]);
 
   const saveDiscoverable = useCallback(async () => {
     if (!myId) return;
@@ -336,8 +345,8 @@ export function FindFriends() {
       {/* Contacts — the recommended path, so it holds the card stack's filled button. */}
       <Card style={styles.card}>
         <View style={styles.cardHead}>
-          <Icon name="users" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle} accessibilityRole="header">Friends you already know</Text>
+          <Icon name="users" size={20} color={colors.text} />
+          <SectionHeader title="Friends you already know" style={styles.cardTitle} />
         </View>
         <Text style={styles.cardBody}>
           The fastest way to find people. Sipply checks your contacts against everyone here, with
@@ -377,9 +386,7 @@ export function FindFriends() {
 
         {contactsState === 'failed' ? (
           <View style={styles.deniedBox}>
-            <Text style={styles.notice} accessibilityLiveRegion="polite">
-              {contactsNotice}
-            </Text>
+            <Notice tone="error">{contactsNotice}</Notice>
             <Button
               label="Try again"
               variant="secondary"
@@ -390,20 +397,12 @@ export function FindFriends() {
           </View>
         ) : null}
 
-        {contactsState === 'limited' ? (
-          <Text style={styles.notice} accessibilityLiveRegion="polite">
-            {contactsNotice}
-          </Text>
-        ) : null}
+        {contactsState === 'limited' ? <Notice tone="error">{contactsNotice}</Notice> : null}
 
         {contactsState === 'done' ? (
           <>
             {/* Only set when the quota ran out part way: what is listed is not everyone. */}
-            {contactsNotice ? (
-              <Text style={styles.notice} accessibilityLiveRegion="polite">
-                {contactsNotice}
-              </Text>
-            ) : null}
+            {contactsNotice ? <Notice tone="error">{contactsNotice}</Notice> : null}
             <MatchResults
               entries={contactEntries}
               emptyText={contactsNotice ? undefined : contactsEmptyText}
@@ -416,8 +415,8 @@ export function FindFriends() {
       <Card style={styles.card}>
         <View style={styles.cardHead}>
           {/* The check is earned: it appears once the user actually is findable. */}
-          <Icon name={savedPhone ? 'check' : 'eye'} size={18} color={colors.wine} />
-          <Text style={styles.cardTitle} accessibilityRole="header">Let friends find you</Text>
+          <Icon name={savedPhone ? 'check' : 'eye'} size={20} color={colors.text} />
+          <SectionHeader title="Let friends find you" style={styles.cardTitle} />
         </View>
         {savedPhone ? (
           <>
@@ -425,14 +424,12 @@ export function FindFriends() {
               You’re findable by contacts. Your number is stored scrambled and never shown to
               anyone.
             </Text>
-            {phoneError ? (
-              <Text style={styles.notice} accessibilityLiveRegion="polite">
-                {phoneError}
-              </Text>
-            ) : null}
+            {phoneError ? <Notice tone="error">{phoneError}</Notice> : null}
+            {/* The way back out of being findable: a quiet text button, muted. */}
             <Button
               label="Stop being findable"
-              variant="ghost"
+              variant="text"
+              muted
               block
               loading={stoppingPhone}
               onPress={stopDiscoverable}
@@ -455,11 +452,7 @@ export function FindFriends() {
               textContentType="telephoneNumber"
               accessibilityLabel="Your phone number, to be findable by contacts"
             />
-            {phoneError ? (
-              <Text style={styles.notice} accessibilityLiveRegion="polite">
-                {phoneError}
-              </Text>
-            ) : null}
+            {phoneError ? <Notice tone="error">{phoneError}</Notice> : null}
             <Button
               label="Make me findable"
               variant="secondary"
@@ -481,17 +474,13 @@ export function FindFriends() {
       */}
       <Card style={styles.card}>
         <View style={styles.cardHead}>
-          <Icon name="share" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle} accessibilityRole="header">Invite a friend</Text>
+          <Icon name="share" size={20} color={colors.text} />
+          <SectionHeader title="Invite a friend" style={styles.cardTitle} />
         </View>
         <Text style={styles.cardBody}>
           Share your link. If they already have Sipply, opening it makes you follow each other.
         </Text>
-        {inviteError ? (
-          <Text style={styles.notice} accessibilityLiveRegion="polite">
-            {inviteError}
-          </Text>
-        ) : null}
+        {inviteError ? <Notice tone="error">{inviteError}</Notice> : null}
         <Button
           label="Share invite link"
           icon="share"
@@ -507,8 +496,8 @@ export function FindFriends() {
       {/* Search */}
       <Card style={styles.card}>
         <View style={styles.cardHead}>
-          <Icon name="search" size={18} color={colors.wine} />
-          <Text style={styles.cardTitle} accessibilityRole="header">Find by username</Text>
+          <Icon name="search" size={20} color={colors.text} />
+          <SectionHeader title="Find by username" style={styles.cardTitle} />
         </View>
         {/* The app's one search field, on the card's cream so its edge shows. */}
         <SearchField
@@ -525,9 +514,7 @@ export function FindFriends() {
         />
         {searchFailed ? (
           <View style={styles.deniedBox}>
-            <Text style={styles.notice} accessibilityLiveRegion="polite">
-              {SEARCH_FAILED}
-            </Text>
+            <Notice tone="error">{SEARCH_FAILED}</Notice>
             <Button
               label="Try again"
               variant="secondary"
@@ -555,46 +542,25 @@ const styles = StyleSheet.create({
   wrap: { gap: space.lg, paddingTop: space.sm },
 
   card: { padding: space.lg, gap: space.md },
+  /*
+   * Each card opens on its glyph and a heading, in ink: the cards are
+   * sections of one screen, and its wine is kept for what it asks you to
+   * do. Of the cards' own buttons only one is filled, "Find from
+   * contacts", the path this screen recommends; the rest are outlined or
+   * text. The Follow buttons on the people a card finds are wine as well
+   * (PeopleList), since following them is the point of finding them.
+   */
   cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  cardTitle: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.bodyLg.fontSize,
-    color: colors.text,
-  },
-  cardBody: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: 19,
-    color: colors.textMuted,
-  },
+  cardTitle: { flex: 1 },
+  cardBody: { ...textRole.helper, color: colors.textMuted },
   cardCta: { marginTop: space.xs },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   deniedBox: { gap: space.sm },
   /*
-   * Failures, drawn the way the sign-in and edit-profile forms draw theirs:
-   * danger ink on its wash (5.53:1). InstagramImport uses the same box, so
-   * a failed check looks like a failure on every card of this screen.
-   */
-  notice: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: 19,
-    color: colors.danger,
-    backgroundColor: colors.dangerWash,
-    borderRadius: radius.md,
-    padding: space.md,
-    overflow: 'hidden',
-  },
-  /*
    * textMuted, not textFaint: 13pt progress text on a white card is small
    * text, which the palette holds to 4.5:1. No top padding either — the
    * row centres it on its spinner, and padding pushed it 4pt below.
    */
-  hint: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
+  hint: { flex: 1, ...textRole.helper, color: colors.textMuted },
 });

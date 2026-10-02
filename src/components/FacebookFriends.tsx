@@ -3,8 +3,8 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
 import { MatchResults } from '@/components/PeopleList';
-import { Button, Card, PressableScale, useAnnounce } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { Button, Card, Notice, SectionHeader } from '@/components/ui';
+import { colors, space, textRole } from '@/constants/theme';
 import {
   canCheckWithoutFacebook,
   hasFacebookIdentity,
@@ -53,9 +53,8 @@ export function FacebookFriends() {
   const [connecting, setConnecting] = useState(false);
   const [connectError, setConnectError] = useState<string | null>(null);
 
+  /* Drawn in a Notice, which speaks an error as it appears (iOS has no live regions). */
   const error = connectError ?? failure;
-  // Spoken on iOS, where the notice's live region does nothing.
-  useAnnounce(error);
 
   useEffect(() => {
     if (myId && linked) void loadFacebookFriends(myId);
@@ -148,37 +147,35 @@ export function FacebookFriends() {
       );
     /*
      * Quiet, under the list: the list is the content, and friends who join
-     * later only appear once Facebook is asked again.
+     * later only appear once Facebook is asked again. A text button, so it
+     * answers a press as every other one does. Only a connect can be under
+     * way here (a check in flight shows the row above instead of the
+     * list), and that is this button's own tap working, so it shows a
+     * spinner at full strength rather than fading as if it could not be
+     * pressed yet.
      */
     action = (
-      <PressableScale
+      <Button
+        label={error ? 'Try again' : 'Check Facebook again'}
+        variant="text"
+        size="sm"
+        block
+        loading={busy}
         onPress={checkAgain}
-        disabled={busy}
-        noHaptic
-        accessibilityRole="button"
-        accessibilityState={{ disabled: busy, busy }}
-        style={styles.again}>
-        <Text style={styles.againText}>{error ? 'Try again' : 'Check Facebook again'}</Text>
-      </PressableScale>
+      />
     );
   }
 
   return (
     <Card style={styles.card}>
       <View style={styles.cardHead}>
-        <Icon name="facebook" size={18} color={colors.wine} />
-        <Text style={styles.cardTitle} accessibilityRole="header">
-          Friends from Facebook
-        </Text>
+        <Icon name="facebook" size={20} color={colors.text} />
+        <SectionHeader title="Friends from Facebook" style={styles.cardTitle} />
       </View>
 
       {body}
 
-      {error ? (
-        <Text style={styles.notice} accessibilityLiveRegion="polite">
-          {error}
-        </Text>
-      ) : null}
+      {error ? <Notice tone="error">{error}</Notice> : null}
 
       {action}
     </Card>
@@ -187,54 +184,18 @@ export function FacebookFriends() {
 
 /*
  * The section styles Find friends' other cards use, so this one reads as
- * one of them: a Playfair title on the wine glyph, 13pt muted body, and
- * failures in danger ink on its wash (5.53:1).
+ * one of them: the glyph and a sentence-case heading in ink (of the
+ * cards' own buttons only contacts' is filled wine), 13pt muted body, and
+ * failures in an error Notice.
  */
 const styles = StyleSheet.create({
   card: { padding: space.lg, gap: space.md },
   cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  cardTitle: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.bodyLg.fontSize,
-    color: colors.text,
-  },
-  cardBody: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: 19,
-    color: colors.textMuted,
-  },
+  cardTitle: { flex: 1 },
+  cardBody: { ...textRole.helper, color: colors.textMuted },
   cardCta: { marginTop: space.xs },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   /* textMuted: 13pt on a white card is small text, held to 4.5:1. */
-  hint: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-  },
-  notice: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: 19,
-    color: colors.danger,
-    backgroundColor: colors.dangerWash,
-    borderRadius: radius.md,
-    padding: space.md,
-    overflow: 'hidden',
-  },
-
-  /* A text action at the 44pt touch floor, left on the card's own edge. */
-  again: {
-    alignSelf: 'flex-start',
-    minHeight: 44,
-    justifyContent: 'center',
-  },
-  againText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.wine,
-  },
+  hint: { flex: 1, ...textRole.helper, color: colors.textMuted },
 });

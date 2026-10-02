@@ -1,20 +1,30 @@
 import { useRouter } from 'expo-router';
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Icon } from '@/components/icons';
+import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import {
   Button,
   Card,
+  Chip,
   EmptyState,
-  PressableScale,
+  ListGroup,
+  ListRow,
   SearchField,
-  SectionLabel,
+  SectionHeader,
   SegmentedControl,
-  haptic,
 } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import {
+  colors,
+  fonts,
+  layout,
+  space,
+  stroke,
+  tabular,
+  textRole,
+  type as typeScale,
+} from '@/constants/theme';
 import { formatCount } from '@/data';
 import {
   CATEGORY_LABEL,
@@ -51,51 +61,51 @@ const STARTER = [
 ];
 
 /*
- * ONE SIGNAL, AND THE SAME WIDTH IN BOTH STATES. Selection is the wine
- * fill — white to wine is a large luminance step, not a hue alone, and
- * VoiceOver hears the selected state. It used to add a check and switch to
- * SemiBold as well, so a chip grew by some 17pt when tapped and every chip
- * after it in the wrapped grid shifted, often onto another line, under the
- * thumb that was about to tap the next one. One weight, no conditional
- * glyph, and the grid holds still.
+ * One ingredient on the shelf: the app's Chip, so a toggle here looks and
+ * answers like every other toggle in the app.
+ *
+ * Selected is wine on its wash with a wine edge AND a leading check, so
+ * the state does not rest on colour alone, and VoiceOver hears it. The
+ * check and the SemiBold label make a selected chip wider, so ticking one
+ * can move the chips after it in the wrapped grid. That is the cost of a
+ * state that reads without colour; the old wine fill kept one width, but
+ * told a colour-blind eye nothing a white chip did not.
  *
  * Memoised, with the id and a stable toggle passed rather than a fresh
- * closure per chip: one tap used to re-render all ~160 browse chips, each
- * an animated pressable. Now only the chip that changed does.
+ * closure per chip: one tap used to re-render all ~160 browse chips. The
+ * closure Chip needs is made in here, so it is new only when this chip's
+ * own props are, and only the chip that changed re-renders.
  *
- * The vertical slop brings the 36pt chip to the 44pt floor, as the Dex's
- * filter chips do. It is exactly the 8pt row gap, split, so neighbouring
- * rows' targets meet without overlapping.
+ * `unlocks` is for "Worth buying next": a + for "put it on the shelf", and
+ * the number of drinks it would add. The count alone never says what it
+ * counts, so the spoken label does.
  */
-const Chip = memo(function Chip({
+const ShelfChip = memo(function ShelfChip({
   id,
   label,
   selected,
   onToggle,
-  detail,
-  a11yDetail,
+  unlocks,
 }: {
   id: string;
   label: string;
-  selected?: boolean;
+  selected: boolean;
   onToggle: (id: string) => void;
-  /** Shown after the label, e.g. "+12". */
-  detail?: string;
-  /** What `detail` means, spoken — "+12" alone never says twelve of what. */
-  a11yDetail?: string;
+  unlocks?: number;
 }) {
   return (
-    <PressableScale
+    <Chip
+      label={label}
+      selected={selected}
       onPress={() => onToggle(id)}
-      noHaptic
-      hitSlop={{ top: space.xs, bottom: space.xs }}
-      accessibilityRole="button"
-      accessibilityState={{ selected: !!selected }}
-      accessibilityLabel={detail ? `${label}, ${a11yDetail ?? detail}` : label}
-      style={[styles.chip, selected && styles.chipOn]}>
-      <Text style={[styles.chipText, selected && styles.chipTextOn]}>{label}</Text>
-      {detail ? <Text style={styles.chipDetail}>{detail}</Text> : null}
-    </PressableScale>
+      icon={unlocks != null ? 'plus' : undefined}
+      count={unlocks}
+      accessibilityLabel={
+        unlocks != null
+          ? `${label}, makes ${unlocks} more ${unlocks === 1 ? 'drink' : 'drinks'}`
+          : undefined
+      }
+    />
   );
 });
 
@@ -113,6 +123,13 @@ const LIST_PREVIEW = 40;
 export default function BarScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const [scrolled, onScroll] = useScrolledPast();
+
+  /* Back to the Dex, which opens it; with nothing under it, to the Dex anyway. */
+  const back = useCallback(() => {
+    if (router.canGoBack()) router.back();
+    else router.replace('/dex');
+  }, [router]);
 
   const owned = useBar((s) => s.owned);
   const toggle = useBar((s) => s.toggle);
@@ -142,13 +159,11 @@ export default function BarScreen() {
     [],
   );
 
-  const onToggle = useCallback(
-    (id: string) => {
-      haptic.tap();
-      toggle(id);
-    },
-    [toggle],
-  );
+  /*
+   * The store's own action, which is stable, so the memoised chips hold.
+   * No haptic here: Chip answers a change of selection itself.
+   */
+  const onToggle = toggle;
 
   /*
    * A shelf is built a tap at a time, dozens of them, and this took it all
@@ -179,18 +194,11 @@ export default function BarScreen() {
 
   return (
     <View style={styles.screen}>
-      <View style={[styles.topBar, { paddingTop: insets.top + space.sm }]}>
-        <PressableScale
-          onPress={() => router.back()}
-          noHaptic
-          hitSlop={10}
-          accessibilityRole="button"
-          accessibilityLabel="Back"
-          style={styles.back}>
-          <Icon name="chevronLeft" size={22} color={colors.text} />
-        </PressableScale>
-        <Text style={styles.title} accessibilityRole="header">My Bar</Text>
-      </View>
+      <ScreenTopBar
+        title="My Bar"
+        showRule={scrolled}
+        left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
+      />
 
       <SegmentedControl
         items={[
@@ -206,6 +214,8 @@ export default function BarScreen() {
         style={styles.flex}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl * 2 }]}
         keyboardShouldPersistTaps="handled"
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         {pane === 'shelf' ? (
           <>
@@ -222,7 +232,7 @@ export default function BarScreen() {
               results.length ? (
                 <View style={styles.chipWrap}>
                   {results.map((i) => (
-                    <Chip
+                    <ShelfChip
                       key={i.id}
                       id={i.id}
                       label={i.label}
@@ -238,21 +248,25 @@ export default function BarScreen() {
               <>
                 {shelf.length ? (
                   <>
+                    {/*
+                      Clear is a red text button, not the heading's own wine
+                      action: it takes the whole shelf, built a tap at a time,
+                      so it asks first and wears danger, like every other
+                      destructive action in the app.
+                    */}
                     <View style={styles.shelfHead}>
-                      <SectionLabel>On your shelf</SectionLabel>
-                      <PressableScale
+                      <SectionHeader title="On your shelf" style={styles.shelfTitle} />
+                      <Button
+                        label="Clear shelf"
+                        variant="dangerText"
+                        size="sm"
                         onPress={() => confirmClear(shelf.length)}
-                        noHaptic
-                        hitSlop={14}
-                        accessibilityRole="button"
-                        accessibilityLabel="Clear shelf"
-                        accessibilityHint="Asks first, then removes everything on the shelf">
-                        <Text style={styles.clear}>Clear shelf</Text>
-                      </PressableScale>
+                        accessibilityHint="Asks first, then removes everything on the shelf"
+                      />
                     </View>
                     <View style={styles.chipWrap}>
                       {shelf.map((i) => (
-                        <Chip key={i.id} id={i.id} label={i.label} selected onToggle={onToggle} />
+                        <ShelfChip key={i.id} id={i.id} label={i.label} selected onToggle={onToggle} />
                       ))}
                     </View>
                   </>
@@ -274,12 +288,10 @@ export default function BarScreen() {
 
                 {sections.map((s) => (
                   <View key={s.cat}>
-                    <SectionLabel style={styles.sectionLabel}>
-                      {CATEGORY_LABEL[s.cat]}
-                    </SectionLabel>
+                    <SectionHeader title={CATEGORY_LABEL[s.cat]} style={styles.sectionHeader} />
                     <View style={styles.chipWrap}>
                       {s.items.map((i) => (
-                        <Chip
+                        <ShelfChip
                           key={i.id}
                           id={i.id}
                           label={i.label}
@@ -309,7 +321,13 @@ export default function BarScreen() {
               />
             ) : (
               <>
-                <View style={styles.tally}>
+                {/*
+                  The two figures the shelf earns, side by side in one panel.
+                  Inter and ink, not the display face and wine: they are
+                  readings, and the wine on this screen is kept for what
+                  you tap.
+                */}
+                <Card style={styles.tally}>
                   <View style={styles.tallyHalf}>
                     <Text style={styles.tallyNumber}>{formatCount(result.makeable.length)}</Text>
                     <Text style={styles.tallyLabel}>you can make</Text>
@@ -323,22 +341,23 @@ export default function BarScreen() {
                     <Text style={styles.tallyNumber}>{formatCount(result.nearly.length)}</Text>
                     <Text style={styles.tallyLabel}>one thing short</Text>
                   </View>
-                </View>
+                </Card>
 
                 {result.nextBest.length ? (
                   <>
-                    <SectionLabel style={styles.sectionLabel}>Worth buying next</SectionLabel>
+                    <SectionHeader title="Worth buying next" style={styles.sectionHeader} />
                     <Text style={styles.hint}>
-                      Tap to put it on the shelf and watch the count move.
+                      The number is how many more drinks each one makes. Tap to put it on the
+                      shelf.
                     </Text>
                     <View style={styles.chipWrap}>
                       {result.nextBest.map(({ ingredient, unlocks }) => (
-                        <Chip
+                        <ShelfChip
                           key={ingredient.id}
                           id={ingredient.id}
                           label={ingredient.label}
-                          detail={`+${unlocks}`}
-                          a11yDetail={`makes ${unlocks} more ${unlocks === 1 ? 'drink' : 'drinks'}`}
+                          selected={false}
+                          unlocks={unlocks}
                           onToggle={onToggle}
                         />
                       ))}
@@ -348,32 +367,23 @@ export default function BarScreen() {
 
                 {result.makeable.length ? (
                   <>
-                    <SectionLabel style={styles.sectionLabel}>
-                      Pour tonight
-                    </SectionLabel>
-                    <Card style={styles.list}>
+                    <SectionHeader title="Pour tonight" style={styles.sectionHeader} />
+                    <ListGroup style={styles.list}>
                       {(allMakeable
                         ? result.makeable
                         : result.makeable.slice(0, LIST_PREVIEW)
-                      ).map((m, i) => (
-                        <React.Fragment key={m.drink.id}>
-                          {i > 0 ? <View style={styles.rowRule} /> : null}
-                          <PressableScale
-                            onPress={() =>
-                              router.push({ pathname: '/drink/[id]', params: { id: m.drink.id } })
-                            }
-                            noHaptic
-                            accessibilityRole="button"
-                            accessibilityLabel={m.drink.name}
-                            style={styles.row}>
-                            <Text style={styles.rowName} numberOfLines={1}>
-                              {m.drink.name}
-                            </Text>
-                            <Icon name="chevronRight" size={15} color={colors.textFaint} />
-                          </PressableScale>
-                        </React.Fragment>
+                      ).map((m) => (
+                        <ListRow
+                          key={m.drink.id}
+                          title={m.drink.name}
+                          emphasis
+                          trailing="chevron"
+                          onPress={() =>
+                            router.push({ pathname: '/drink/[id]', params: { id: m.drink.id } })
+                          }
+                        />
                       ))}
-                    </Card>
+                    </ListGroup>
                     {!allMakeable && result.makeable.length > LIST_PREVIEW ? (
                       <Button
                         label={`Show all ${formatCount(result.makeable.length)}`}
@@ -390,7 +400,7 @@ export default function BarScreen() {
                     rarities can leave nothing one short either, and then the
                     next step is the shelf itself.
                   */
-                  <Text style={styles.hint}>
+                  <Text style={[styles.hint, styles.hintAlone]}>
                     {result.nextBest.length
                       ? 'Nothing is fully in reach yet — the ingredients above are the shortest way there.'
                       : 'Nothing is in reach yet. Add a few more common ingredients to your shelf.'}
@@ -399,31 +409,35 @@ export default function BarScreen() {
 
                 {result.nearly.length ? (
                   <>
-                    <SectionLabel style={styles.sectionLabel}>One thing short</SectionLabel>
-                    <Card style={styles.list}>
-                      {(allNearly ? result.nearly : result.nearly.slice(0, LIST_PREVIEW)).map((m, i) => (
-                        <React.Fragment key={m.drink.id}>
-                          {i > 0 ? <View style={styles.rowRule} /> : null}
-                          <PressableScale
+                    <SectionHeader title="One thing short" style={styles.sectionHeader} />
+                    <ListGroup style={styles.list}>
+                      {(allNearly ? result.nearly : result.nearly.slice(0, LIST_PREVIEW)).map((m) => {
+                        const need = INGREDIENTS_BY_ID[m.missing[0]]?.label;
+                        return (
+                          <ListRow
+                            key={m.drink.id}
+                            title={m.drink.name}
+                            emphasis
+                            /*
+                              What is missing, at the row's end and held to
+                              one line, so a long ingredient never squeezes
+                              the drink's name.
+                            */
+                            trailing={{
+                              node: (
+                                <Text style={styles.rowNeed} numberOfLines={1}>
+                                  {need ?? '—'}
+                                </Text>
+                              ),
+                            }}
                             onPress={() =>
                               router.push({ pathname: '/drink/[id]', params: { id: m.drink.id } })
                             }
-                            noHaptic
-                            accessibilityRole="button"
-                            accessibilityLabel={`${m.drink.name}, needs ${
-                              INGREDIENTS_BY_ID[m.missing[0]]?.label ?? 'one more thing'
-                            }`}
-                            style={styles.row}>
-                            <Text style={styles.rowName} numberOfLines={1}>
-                              {m.drink.name}
-                            </Text>
-                            <Text style={styles.rowNeed} numberOfLines={1}>
-                              {INGREDIENTS_BY_ID[m.missing[0]]?.label ?? '—'}
-                            </Text>
-                          </PressableScale>
-                        </React.Fragment>
-                      ))}
-                    </Card>
+                            accessibilityLabel={`${m.drink.name}, needs ${need ?? 'one more thing'}`}
+                          />
+                        );
+                      })}
+                    </ListGroup>
                     {!allNearly && result.nearly.length > LIST_PREVIEW ? (
                       <Button
                         label={`Show all ${formatCount(result.nearly.length)}`}
@@ -447,86 +461,47 @@ export default function BarScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   flex: { flex: 1 },
-  content: { paddingHorizontal: space.xl },
-
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.sm,
-    paddingHorizontal: space.xl,
-    paddingBottom: space.md,
-  },
-  back: { padding: space.xs },
-  title: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
-  },
+  content: { paddingHorizontal: layout.gutter },
 
   /* The control carries no margin of its own; see SegmentedControl. */
-  segments: { marginHorizontal: space.xl, marginBottom: space.lg },
+  segments: { marginHorizontal: layout.gutter, marginTop: space.xs, marginBottom: space.lg },
 
   search: { marginBottom: space.lg },
   noHits: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    ...textRole.helper,
     color: colors.textMuted,
     paddingVertical: space.lg,
   },
 
   shelfHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  clear: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.danger,
-  },
+  shelfTitle: { flexShrink: 1 },
 
-  chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: space.md },
-  chip: {
+  /*
+   * 12 between rows, not 8: a Chip is 32pt with 6pt of slop above and
+   * below, so rows 44pt apart put each chip's touch target edge to edge
+   * with the next row's. At 8 the two overlapped by 4pt, and a tap there
+   * went to whichever chip was drawn later.
+   */
+  chipWrap: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.xs,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-    minHeight: 36,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    backgroundColor: colors.surface,
-  },
-  chipOn: { backgroundColor: colors.wine, borderColor: colors.wine },
-  chipText: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.text,
-  },
-  chipTextOn: { color: colors.textOnWine },
-  chipDetail: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.micro.fontSize,
-    color: colors.wine,
+    flexWrap: 'wrap',
+    columnGap: space.sm,
+    rowGap: space.md,
+    marginTop: space.md,
   },
 
-  sectionLabel: { marginTop: space.xl },
+  sectionHeader: { marginTop: space.xl },
   hint: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    ...textRole.helper,
     color: colors.textMuted,
     marginTop: space.xs,
   },
+  hintAlone: { marginTop: space.lg },
 
-  starter: { marginTop: space.sm },
-  starterTitle: {
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.bodyLg.fontSize,
-    color: colors.text,
-  },
+  starter: { marginTop: space.sm, padding: space.lg },
+  starterTitle: { ...textRole.sectionTitle, color: colors.text },
   starterBody: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    ...textRole.helper,
     color: colors.textMuted,
     marginTop: space.xs,
   },
@@ -535,48 +510,25 @@ const styles = StyleSheet.create({
   tally: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.lg,
     paddingVertical: space.lg,
   },
   tallyHalf: { flex: 1, alignItems: 'center' },
-  tallyRule: { width: 1, alignSelf: 'stretch', backgroundColor: colors.cardBorder },
+  tallyRule: { width: stroke.edge, alignSelf: 'stretch', backgroundColor: colors.line },
   tallyNumber: {
-    fontFamily: fonts.display,
+    fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.headline.fontSize,
     lineHeight: typeScale.headline.lineHeight,
-    color: colors.wine,
-  },
-  tallyLabel: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-  },
-
-  list: { padding: 0, marginTop: space.md },
-  showAll: { marginTop: space.md },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.md,
-    minHeight: 48,
-  },
-  rowName: {
-    flex: 1,
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
     color: colors.text,
+    ...tabular,
   },
+  tallyLabel: { ...textRole.helper, color: colors.textMuted },
+
+  list: { marginTop: space.md },
+  showAll: { marginTop: space.md },
   rowNeed: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    ...textRole.rowSubtitle,
     color: colors.textMuted,
     maxWidth: '45%',
     textAlign: 'right',
   },
-  rowRule: { height: 1, backgroundColor: colors.cardBorder, marginHorizontal: space.lg },
 });

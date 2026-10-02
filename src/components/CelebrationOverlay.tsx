@@ -2,16 +2,11 @@ import { Image } from 'expo-image';
 import React, { useCallback, useEffect } from 'react';
 import { AccessibilityInfo, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
-  Easing,
   FadeIn,
-  FadeOut,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
-  withDelay,
-  withSequence,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 
 import { DrinkArt } from '@/components/artwork';
@@ -19,10 +14,15 @@ import { Icon } from '@/components/icons';
 import { Button, RarityBadge } from '@/components/ui';
 import {
   colors,
+  dexNumber,
   fonts,
+  layout,
   motion,
   radius,
   space,
+  stroke,
+  tabular,
+  textRole,
   type as typeScale,
 } from '@/constants/theme';
 import { getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
@@ -55,7 +55,19 @@ const SETTLE = 380;
 /*
  * The card alone. The scrim and the dismiss layer belong to the overlay,
  * which mounts them once for the whole queue; each card is keyed on its
- * queue id, so the next one springs in fresh while this one fades out.
+ * queue id, so the next one springs in fresh.
+ *
+ * NO EXIT ANIMATION. The card that is done goes at once. An `exiting`
+ * fade has two ways never to finish on this Reanimated (4.5.x): when
+ * layout animations overlap (Done tapped while the scrim is still fading
+ * in), the exit's "remove" is dropped; and a frame loop that stalls after
+ * a cold start never reaches the end. Either way the card, or the dimmed
+ * layer behind it, stays over the app for the rest of the session with
+ * nothing to tap.
+ *
+ * The spring itself is safe to keep: it is a transform on a card that is
+ * fully opaque from its first frame, so a stalled spring leaves the card
+ * a little small and low, never invisible.
  */
 function Card({ children }: { children: React.ReactNode }) {
   const reduced = useReducedMotion();
@@ -77,46 +89,10 @@ function Card({ children }: { children: React.ReactNode }) {
     does not fall through to the dismiss layer below it.
   */
   return (
-    <Animated.View
-      style={[styles.card, style]}
-      exiting={reduced ? undefined : FadeOut.duration(motion.exit)}
-      onStartShouldSetResponder={() => true}>
+    <Animated.View style={[styles.card, style]} onStartShouldSetResponder={() => true}>
       {children}
     </Animated.View>
   );
-}
-
-/*
- * The ring that sweeps out from behind the art.
- *
- * Its colour is the caller's, because two cards use it and only one has
- * earned gilt: a legendary catch rings in gilt, and a new rank rings in
- * wineSoft, the palette's stroke cut of wine. Gilt means legendary
- * everywhere else in the app, and a rank ringed in it would say a rarity
- * it does not have. Not the disc's own wine either: the same colour as
- * the fill it sweeps out from reads as the disc swelling, not a ring.
- *
- * Required, with no gilt default, so a third card cannot pick up the
- * legendary metal by leaving the prop off.
- */
-function Halo({ color }: { color: string }) {
-  const reduced = useReducedMotion();
-  const s = useSharedValue(0.6);
-  const o = useSharedValue(0);
-
-  useEffect(() => {
-    if (reduced) return;
-    o.set(withSequence(withTiming(0.5, { duration: 220 }), withDelay(120, withTiming(0, { duration: 520 }))));
-    s.set(withTiming(1.5, { duration: 860, easing: Easing.out(Easing.quad) }));
-  }, [reduced, s, o]);
-
-  const style = useAnimatedStyle(() => ({
-    opacity: o.value,
-    transform: [{ scale: s.value }],
-  }));
-
-  if (reduced) return null;
-  return <Animated.View pointerEvents="none" style={[styles.halo, { borderColor: color }, style]} />;
 }
 
 /* -------------------------------------------------------------------- */
@@ -178,15 +154,18 @@ export function CelebrationOverlay() {
       <View style={styles.body}>
         <Text style={styles.eyebrow}>Collected</Text>
 
-        <View style={styles.artWrap}>
-          {legendary ? <Halo color={colors.gilt} /> : null}
-          <View style={styles.art}>
-            {photo ? (
-              <Image source={photo} style={styles.artPhoto} contentFit="cover" />
-            ) : (
-              <DrinkArt drink={drink} size={104} flat />
-            )}
-          </View>
+        {/*
+          The pour as an inset photo: a rectangle with a drawn edge, as a
+          print would sit on the card. A legendary catch says so with a
+          gilt edge, the metal that means legendary everywhere else; the
+          rarity tag below says it in words.
+        */}
+        <View style={[styles.art, legendary && styles.artLegendary]}>
+          {photo ? (
+            <Image source={photo} style={styles.artPhoto} contentFit="cover" />
+          ) : (
+            <DrinkArt drink={drink} size={104} flat />
+          )}
         </View>
 
         <Text style={styles.title}>{drink.name}</Text>
@@ -208,14 +187,12 @@ export function CelebrationOverlay() {
       <View style={styles.body}>
         <Text style={styles.eyebrow}>New rank</Text>
 
-        <View style={styles.artWrap}>
-          <Halo color={colors.wineSoft} />
-          <View style={styles.rankDisc}>
-            <Icon name="trophy" size={40} color={colors.textOnWine} />
-          </View>
+        {/* The trophy drawn bare, in wine: a glyph does not need a disc to be seen. */}
+        <View style={styles.rankMark}>
+          <Icon name="trophy" size={48} color={colors.wine} />
         </View>
 
-        <Text style={styles.title}>{current.milestone.title}</Text>
+        <Text style={[styles.title, styles.rankTitle]}>{current.milestone.title}</Text>
         <Text style={styles.progress}>
           {formatCount(current.collected)} of {formatCount(TOTAL)} collected
         </Text>
@@ -237,10 +214,15 @@ export function CelebrationOverlay() {
       pointerEvents="box-none"
       accessibilityViewIsModal
       onAccessibilityEscape={onDismiss}>
+      {/*
+        Fades in, and leaves at once with the overlay: an exit fade is the
+        dead dimmed layer described on Card. The fade-in is decoration
+        over a card that is already visible, so one that stalls leaves only
+        a lighter scrim.
+      */}
       <Animated.View
         pointerEvents="none"
         entering={reduced ? undefined : FadeIn.duration(SETTLE)}
-        exiting={reduced ? undefined : FadeOut.duration(220)}
         style={styles.scrimFill}
       />
 
@@ -278,10 +260,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: space.xl,
+    padding: layout.gutter,
     zIndex: 30,
   },
-  /* Separate fill so the scrim can fade while the card springs. */
+  /* Separate fill so the scrim can fade in while the card springs. */
   scrimFill: {
     position: 'absolute',
     top: 0,
@@ -290,51 +272,44 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: colors.scrim,
   },
+  /* A dialog: a panel with one drawn edge and no shadow. */
   card: {
     width: '100%',
     maxWidth: 340,
     backgroundColor: colors.surface,
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
+    borderRadius: radius.card,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
     overflow: 'hidden',
   },
   body: { alignItems: 'center', padding: space.xl },
 
+  /* Sentence case and untracked, in wine: the one word that names the moment. */
   eyebrow: {
-    fontFamily: fonts.bodyMedium,
-    ...typeScale.tag,
-    color: colors.textMuted,
+    fontFamily: fonts.bodySemiBold,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    color: colors.wine,
     marginBottom: space.lg,
   },
 
-  artWrap: { alignItems: 'center', justifyContent: 'center', marginBottom: space.lg },
-  halo: {
-    position: 'absolute',
-    width: 132,
-    height: 132,
-    borderRadius: radius.pill,
-    borderWidth: 2,
-  },
   art: {
-    width: 116,
-    height: 116,
-    borderRadius: radius.pill,
+    width: 120,
+    height: 120,
+    borderRadius: radius.card,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.cardAlt,
+    backgroundColor: colors.bgSunk,
+    marginBottom: space.lg,
   },
+  artLegendary: { borderWidth: 2.5, borderColor: colors.gilt },
   artPhoto: { width: '100%', height: '100%' },
-  rankDisc: {
-    width: 116,
-    height: 116,
-    borderRadius: radius.pill,
-    backgroundColor: colors.wine,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  rankMark: { marginBottom: space.lg },
 
+  /* The drink's name, in the display face: the drink is the subject here. */
   title: {
     fontFamily: fonts.displayBold,
     fontSize: typeScale.headline.fontSize,
@@ -342,16 +317,18 @@ const styles = StyleSheet.create({
     color: colors.text,
     textAlign: 'center',
   },
-  dex: {
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
-    marginTop: 2,
-  },
+  /*
+   * A rank is a reading of the collection, not a drink, so it is Inter, as
+   * Stats sets it. Same size as a drink's name, so the two cards of one
+   * log hold the same shape.
+   */
+  rankTitle: { fontFamily: fonts.bodySemiBold },
+  /* The catalogue number's one stamp, as on the entry's Dex card. taupeInk on white is 5.89:1. */
+  dex: { ...dexNumber, marginTop: space.xs },
   badgeRow: { marginTop: space.md },
   progress: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
+    ...textRole.helper,
+    ...tabular,
     color: colors.textMuted,
     marginTop: space.md,
   },
