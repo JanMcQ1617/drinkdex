@@ -61,20 +61,26 @@ export type BlockRow = {
 };
 
 /**
- * A report names EITHER a post or a person, never both. Exactly one subject
- * is enforced when the report is filed (prepare_report trigger, migration
- * 012). A report outlives its reporter, post and subject: each column is set
- * to null on deletion, and reported_author_id plus snapshot keep what a
- * moderator needs.
+ * A report names exactly ONE subject: a post, a reel or a person. That is
+ * enforced when the report is filed (prepare_report trigger, migration 012,
+ * widened to reels by 019). A report outlives its reporter and its subject:
+ * each column is set to null on deletion, and reported_author_id plus
+ * snapshot keep what a moderator needs.
  */
 export type ReportRow = {
   id: string;
   reporter_id: string | null;
   reported_post_id: string | null;
   reported_user_id: string | null;
-  /** Who wrote the reported post, or the reported person. No foreign key, so it survives them. */
+  /** The reported reel (migration 019). Set to null when the reel is deleted. */
+  reported_reel_id: string | null;
+  /** Who wrote the reported post or reel, or the reported person. No foreign key, so it survives them. */
   reported_author_id: string | null;
-  /** The post's caption and drink, and the author's name and bio, as they stood when it was filed. */
+  /**
+   * The caption, drink and date of the post or reel, and the author's name
+   * and bio, as they stood when it was filed. Since 019 it also says which
+   * kind of subject it was ('post', 'reel' or 'account').
+   */
   snapshot: { [key: string]: unknown } | null;
   reason: string;
   note: string | null;
@@ -118,6 +124,111 @@ export type InviteRow = {
 };
 
 /**
+ * A saved post (migration 017): a private bookmark, readable by its owner
+ * only. Insert names the two ids; created_at is the server's.
+ */
+export type SaveRow = {
+  user_id: string;
+  post_id: string;
+  created_at: string;
+};
+
+/**
+ * One row of recent_pours() (migration 017): a photo shared in the last
+ * 24 hours by the caller or someone the caller follows. poured_at is the
+ * photo's created_at, not the post's: logging a drink again adds a photo to
+ * the old post, and that photo is still today's pour.
+ */
+export type RecentPourRow = {
+  post_id: string;
+  author_id: string;
+  drink_id: string;
+  path: string;
+  poured_at: string;
+};
+
+/**
+ * A drink someone added themselves, sent as a suggestion (migration 018).
+ * Readable and writable by its submitter only. status, catalogue_id and
+ * reviewed_at are Jan's columns: no client role is granted them, and the
+ * prepare trigger resets them on every client insert. name_key, created_at
+ * and updated_at are the trigger's.
+ */
+export type DrinkSubmissionRow = {
+  /** Made on the phone, so a retry after a lost response is the same row. */
+  id: string;
+  submitter_id: string;
+  name: string;
+  /** Lower-cased, accent-free letters and digits of the name; one per submitter. */
+  name_key: string;
+  category: 'cocktail' | 'spirit';
+  subcategory: string;
+  subcategory_is_new: boolean;
+  description: string;
+  abv_low: number | null;
+  abv_high: number | null;
+  origin: string;
+  glassware: string;
+  tasting_notes: string[];
+  fun_fact: string;
+  ingredients: { item: string; amount: string }[];
+  steps: string[];
+  method: string;
+  garnish: string;
+  base: string;
+  distillation: string;
+  aging: string;
+  serve_temp: string;
+  serve_how: string;
+  pairings: string[];
+  process: string;
+  note_for_team: string;
+  /** `<submitter_id>/submission-<id>-<ts>.jpg` in the private `pours` bucket. */
+  photo_path: string | null;
+  status: 'new' | 'added' | 'duplicate' | 'declined';
+  catalogue_id: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/** A short video (migration 019). Called a reel everywhere, in code and on screen. */
+export type ReelRow = {
+  /** Made on the phone, so the files can be named after it before the row exists. */
+  id: string;
+  author_id: string;
+  /** `<author_id>/<id>.mov` (or `.mp4`) in the private `reels` bucket (CHECK-enforced). */
+  video_path: string;
+  /** `<author_id>/<id>.jpg` in the private `reels` bucket. */
+  poster_path: string;
+  caption: string;
+  /** An id in the bundled drinks.json, like posts.drink_id. Optional. */
+  drink_id: string | null;
+  duration_ms: number;
+  /** Filmed with the phone sideways: the viewer letterboxes instead of cropping. */
+  landscape: boolean;
+  created_at: string;
+};
+
+export type ReelLikeRow = {
+  reel_id: string;
+  user_id: string;
+  created_at: string;
+};
+
+/**
+ * my_reel_quota() (migration 019): the caller's counts and the server's
+ * limits, read back so the recorder's copy follows whatever the SQL says.
+ */
+export type ReelQuotaRow = {
+  posted_today: number;
+  live: number;
+  files: number;
+  day_limit: number;
+  live_limit: number;
+};
+
+/**
  * What every friend matcher returns: the public profile columns of each
  * account it found, the same set PROFILE_COLS_FULL reads from profiles.
  * One declaration, so the three matchers cannot drift apart and each row
@@ -140,9 +251,10 @@ export type Database = {
         Row: ProfileRow;
         Insert: Omit<ProfileRow, 'created_at'>;
         /*
-         * No created_at, here or on posts: the server owns both (migration
-         * 011's pin_created_at triggers set it on insert and refuse to
-         * change it on update), so the types stop a client from even trying.
+         * No created_at, here or on posts, follows, likes and post_photos:
+         * the server owns it (the pin_created_at triggers of migrations 011
+         * and 017 set it on insert and refuse to change it on update), so
+         * the types stop a client from even trying.
          */
         Update: Partial<Omit<ProfileRow, 'id' | 'created_at'>>;
         Relationships: [];
@@ -164,13 +276,13 @@ export type Database = {
       };
       follows: {
         Row: FollowRow;
-        Insert: Omit<FollowRow, 'created_at'> & { created_at?: string };
+        Insert: Omit<FollowRow, 'created_at'>;
         Update: never;
         Relationships: [];
       };
       likes: {
         Row: LikeRow;
-        Insert: Omit<LikeRow, 'created_at'> & { created_at?: string };
+        Insert: Omit<LikeRow, 'created_at'>;
         Update: never;
         Relationships: [];
       };
@@ -179,7 +291,6 @@ export type Database = {
         Insert: Omit<PostPhotoRow, 'id' | 'taken_at' | 'created_at'> & {
           id?: string;
           taken_at?: string;
-          created_at?: string;
         };
         Update: never;
         Relationships: [];
@@ -193,10 +304,11 @@ export type Database = {
       reports: {
         Row: ReportRow;
         /*
-         * Both subject columns are optional on insert, not just nullable:
-         * a report names EITHER a post or a person, so requiring the caller
-         * to pass the other as an explicit null is noise. The prepare_report
-         * trigger (migration 012) enforces that exactly one arrives.
+         * The subject columns are optional on insert, not just nullable:
+         * a report names ONE of a post, a reel or a person, so requiring the
+         * caller to pass the others as explicit nulls is noise. The
+         * prepare_report trigger (migration 012, widened by 019) enforces
+         * that exactly one arrives.
          *
          * reported_author_id and snapshot are not offered at all: the same
          * trigger fills them from the subject and overwrites anything sent.
@@ -210,6 +322,7 @@ export type Database = {
           | 'reporter_id'
           | 'reported_post_id'
           | 'reported_user_id'
+          | 'reported_reel_id'
           | 'reported_author_id'
           | 'snapshot'
         > & {
@@ -218,6 +331,7 @@ export type Database = {
           reporter_id: string;
           reported_post_id?: string | null;
           reported_user_id?: string | null;
+          reported_reel_id?: string | null;
         };
         Update: never;
         Relationships: [];
@@ -233,6 +347,67 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      /*
+       * Migration 017. Insert names the two ids and nothing else, matching
+       * the column grant. No update: a save is made or removed, never
+       * changed.
+       */
+      saves: {
+        Row: SaveRow;
+        Insert: { user_id: string; post_id: string };
+        Update: never;
+        Relationships: [];
+      };
+      drink_submissions: {
+        Row: DrinkSubmissionRow;
+        /*
+         * Only the granted columns (migration 018). submitter_id comes from
+         * its default, auth.uid(), and the trigger overwrites it anyway; the
+         * review columns and the clocks are the server's.
+         */
+        Insert: Omit<
+          DrinkSubmissionRow,
+          | 'submitter_id'
+          | 'name_key'
+          | 'status'
+          | 'catalogue_id'
+          | 'reviewed_at'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<
+          Omit<
+            DrinkSubmissionRow,
+            | 'id'
+            | 'submitter_id'
+            | 'name_key'
+            | 'status'
+            | 'catalogue_id'
+            | 'reviewed_at'
+            | 'created_at'
+            | 'updated_at'
+          >
+        >;
+        Relationships: [];
+      };
+      reels: {
+        Row: ReelRow;
+        /*
+         * The id is sent (the files are already named after it); created_at
+         * is the server's (pin_created_at). landscape defaults to false.
+         */
+        Insert: Omit<ReelRow, 'created_at' | 'landscape'> & { landscape?: boolean };
+        /* No update grant and no update policy: delete and post again. */
+        Update: { [k: string]: never };
+        Relationships: [];
+      };
+      reel_likes: {
+        Row: ReelLikeRow;
+        /* Like likes: the two ids. created_at is its default's. */
+        Insert: Omit<ReelLikeRow, 'created_at'>;
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: {
@@ -241,13 +416,47 @@ export type Database = {
        * cannot be aimed at another account. See migration 005.
        *
        * Since migration 011 it no longer touches storage: the client empties
-       * the user's folder in `pours` through the Storage API first, and the
-       * function raises an error containing 'photos_remaining' if any object
-       * is still there.
+       * the user's folders through the Storage API first, and the function
+       * raises an error containing 'photos_remaining' if any object is still
+       * there. Since 019 that check covers `reels/<uid>/` as well as
+       * `pours/<uid>/`, under the same error string.
        */
       delete_own_account: {
         Args: Record<never, never>;
         Returns: undefined;
+      };
+      /**
+       * The email step's "sign in or sign up" lookup. Migration 016.
+       *
+       * 'new' (no account), 'password' (an account with a password) or
+       * 'other' (an account made by Apple, Google, Facebook or phone, with no
+       * password). Callable by anon. Metered per caller and overall; past
+       * the meter it raises 'rate_limited', and the app falls back to a
+       * password step that offers both paths, as it does when the function
+       * is missing. An address it cannot read raises 'invalid_email', which
+       * the app shows as "doesn't look right" on the email step.
+       */
+      sign_in_method: {
+        Args: { e: string };
+        Returns: string;
+      };
+      /**
+       * Photos shared in the last 24 h by you and the people you follow.
+       * Migration 017. SECURITY INVOKER, so blocks are honoured by the
+       * tables' own read policies. At most 300 rows, newest first.
+       */
+      recent_pours: {
+        Args: Record<never, never>;
+        Returns: RecentPourRow[];
+      };
+      /**
+       * The caller's reel counts and the server's limits, so the recorder
+       * can say "come back tomorrow" before anyone films anything. One row.
+       * Migration 019.
+       */
+      my_reel_quota: {
+        Args: Record<string, never>;
+        Returns: ReelQuotaRow[];
       };
       /** True if either party has blocked the other. See migration 006. */
       blocked_with: {

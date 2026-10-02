@@ -67,11 +67,12 @@ export async function fetchBlocked(myId: string): Promise<string[]> {
 }
 
 /*
- * A second report of the same post or person by the same reporter is
+ * A second report of the same post, reel or person by the same reporter is
  * success, not failure. Migration 012 allows one report per reporter per
- * post and per person (two unique indexes), so a repeat fails with 23505 —
- * which means it is already on file, so the user is thanked the same as the
- * first time. "Could not report" would tell them otherwise.
+ * post and per person, and 019 per reel (a unique index each), so a repeat
+ * fails with 23505 — which means it is already on file, so the user is
+ * thanked the same as the first time. "Could not report" would tell them
+ * otherwise.
  */
 const isDuplicate = (error: { code?: string }) => error.code === '23505';
 
@@ -96,6 +97,25 @@ export async function reportUser(
   const { error } = await supabase
     .from('reports')
     .insert({ reporter_id: myId, reported_user_id: userId, reason, note: note ?? null });
+  if (error && !isDuplicate(error)) throw error;
+}
+
+/**
+ * Reports a reel. Besides filing it, a report hides the reel from the
+ * reporter at once and for good: the reels read policy leaves out every
+ * reel the caller has reported (migration 019), so it is gone from the
+ * feed and from profiles on the next query, and after a relaunch. The
+ * caller drops it from what is already on screen.
+ */
+export async function reportReel(
+  myId: string,
+  reelId: string,
+  reason: ReportReason,
+  note?: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('reports')
+    .insert({ reporter_id: myId, reported_reel_id: reelId, reason, note: note ?? null });
   if (error && !isDuplicate(error)) throw error;
 }
 

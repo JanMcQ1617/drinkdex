@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import * as api from '@/lib/social';
-import type { Post, UserProfile } from '@/types';
+import type { Post, Pour, UserProfile } from '@/types';
 
 /**
  * What became of a post.
@@ -40,6 +40,17 @@ interface SocialState {
   /** Ids you follow. */
   following: string[];
   feed: Post[];
+  /**
+   * Photos shared in the last 24 hours by you and the people you follow,
+   * newest first, for Today's pours on Home. Fetched alongside the feed.
+   */
+  pours: Pour[];
+  /** 'idle' before the first answer; 'error' when the last fetch failed (the row then shows your tile only). */
+  poursStatus: 'idle' | 'ready' | 'error';
+  /** Newest like-on-your-post or new follower, for the Home heart badge. */
+  activityLatestAt: string | null;
+  /** Bumped on every successful save/unsave, so Saved refetches on focus. */
+  savesVersion: number;
 
   loadingFeed: boolean;
   loadingPeople: boolean;
@@ -94,6 +105,13 @@ interface SocialState {
    * optimistic heart.
    */
   toggleLike: (myId: string, postId: string, wasLiked: boolean) => Promise<boolean>;
+  /**
+   * Saves or unsaves a post, shaped like toggleLike: the feed copy's
+   * bookmark flips at once and rolls back if the write fails. Resolves to
+   * false on failure, and at once without writing when the server has no
+   * saves table (savesSupported), so the card can drop its optimistic state.
+   */
+  toggleSave: (myId: string, postId: string, wasSaved: boolean) => Promise<boolean>;
   addPost: (
     myId: string,
     drinkId: string,
@@ -129,6 +147,10 @@ const EMPTY = {
   people: [] as UserProfile[],
   following: [] as string[],
   feed: [] as Post[],
+  pours: [] as Pour[],
+  poursStatus: 'idle' as 'idle' | 'ready' | 'error',
+  activityLatestAt: null as string | null,
+  savesVersion: 0,
   loadingFeed: false,
   loadingPeople: false,
   feedError: null as string | null,
@@ -147,6 +169,15 @@ function profileIdsFor(myId: string, feed: Post[], following: string[]): string[
   return [...new Set([myId, ...following, ...feed.map((p) => p.authorId)])];
 }
 
+/*
+ * Today's pours ride along with every feed fetch, but never fail it: a
+ * failed pours request becomes null here, and the store keeps the last
+ * pours it had and says 'error', so the row shows your own tile rather
+ * than taking the feed down with it. A missing recent_pours function is
+ * not a failure at all; it resolves empty (lib/social).
+ */
+const fetchPoursOrNull = () => api.fetchRecentPours().catch(() => null);
+
 export const useSocial = create<SocialState>()((set, get) => ({
   ...EMPTY,
   gen: 0,
@@ -154,6 +185,7 @@ export const useSocial = create<SocialState>()((set, get) => ({
   load: async (myId) => {
     const gen = get().gen;
     set({ loadingFeed: true, feedError: null });
+    refreshActivityBadge(myId, gen);
     try {
       /*
        * Checked between the three reads as well as before the write: each
@@ -162,11 +194,26 @@ export const useSocial = create<SocialState>()((set, get) => ({
        */
       const following = await api.fetchFollowing(myId);
       if (get().gen !== gen) return;
-      const feed = await api.fetchFeed(myId, following);
+      const [feed, pours] = await Promise.all([api.fetchFeed(myId, following), fetchPoursOrNull()]);
       if (get().gen !== gen) return;
+      // Pour authors are you and people you follow, so these cover them too.
       const profiles = await api.fetchProfiles(profileIdsFor(myId, feed, following));
       if (get().gen !== gen) return;
-      set({ following, feed, profiles, loadingFeed: false });
+      set({
+        following,
+        feed,
+        /*
+         * Merged, not replaced: Activity, Find friends and peer profiles
+         * keep rows here for people outside the feed, and a reload used to
+         * wipe them mid-view. A block still clears a person — dropAuthor
+         * deletes their row, and the server stops returning their likes and
+         * follows — and an account switch resets the whole store.
+         */
+        profiles: { ...get().profiles, ...profiles },
+        loadingFeed: false,
+        pours: pours ?? get().pours,
+        poursStatus: pours ? 'ready' : 'error',
+      });
     } catch (e) {
       if (get().gen !== gen) return;
       set({ loadingFeed: false, feedError: (e as Error).message });
@@ -185,13 +232,20 @@ export const useSocial = create<SocialState>()((set, get) => ({
   refreshFeed: async (myId) => {
     if (get().feedError) return get().load(myId);
     const gen = get().gen;
+    refreshActivityBadge(myId, gen);
     try {
       const following = get().following;
-      const feed = await api.fetchFeed(myId, following);
+      const [feed, pours] = await Promise.all([api.fetchFeed(myId, following), fetchPoursOrNull()]);
       if (get().gen !== gen) return;
       const fetched = await api.fetchProfiles(profileIdsFor(myId, feed, following));
       if (get().gen !== gen) return;
-      set({ feed, profiles: { ...get().profiles, ...fetched }, feedError: null });
+      set({
+        feed,
+        profiles: { ...get().profiles, ...fetched },
+        feedError: null,
+        pours: pours ?? get().pours,
+        poursStatus: pours ? 'ready' : 'error',
+      });
     } catch (e) {
       if (get().gen !== gen) return;
       set({ feedError: (e as Error).message });
@@ -316,6 +370,37 @@ export const useSocial = create<SocialState>()((set, get) => ({
   },
 
   /*
+   * Same rule as toggleLike: the write goes out whether or not the post is
+   * in the feed (a save from a profile, Saved or a single post), and the
+   * feed copy, when there is one, is patched alongside. The version bump is
+   * what tells a mounted Saved screen its list is stale.
+   */
+  toggleSave: async (myId, postId, wasSaved) => {
+    if (!api.savesSupported()) return false;
+    const gen = get().gen;
+    const patch = (on: boolean) =>
+      set({
+        feed: get().feed.map((p) =>
+          p.id === postId && !!p.savedByMe !== on ? { ...p, savedByMe: on } : p,
+        ),
+      });
+
+    patch(!wasSaved);
+
+    try {
+      if (wasSaved) await api.unsavePost(myId, postId);
+      else await api.savePost(myId, postId);
+      if (get().gen === gen) set({ savesVersion: get().savesVersion + 1 });
+      return true;
+    } catch (e) {
+      if (get().gen !== gen) return false;
+      patch(wasSaved);
+      set({ error: (e as Error).message });
+      return false;
+    }
+  },
+
+  /*
    * The outcome is still returned after an account change, because the
    * post was or was not written whoever is signed in now; only the store
    * writes and the follow-up refresh are skipped.
@@ -344,8 +429,10 @@ export const useSocial = create<SocialState>()((set, get) => ({
     try {
       await api.deletePostsForDrink(myId, drinkId);
       if (get().gen !== gen) return;
+      // Today's pours goes with them: those photos' files are gone too.
       set({
         feed: get().feed.filter((p) => !(p.mine && p.drinkId === drinkId)),
+        pours: get().pours.filter((p) => !(p.authorId === myId && p.drinkId === drinkId)),
         postsVersion: get().postsVersion + 1,
       });
     } catch (e) {
@@ -402,6 +489,7 @@ export const useSocial = create<SocialState>()((set, get) => ({
     set({
       profiles,
       feed: get().feed.filter((p) => p.authorId !== authorId),
+      pours: get().pours.filter((p) => p.authorId !== authorId),
       // The server trigger has already removed the follow edges both ways.
       following: get().following.filter((id) => id !== authorId),
       people: get().people.filter((p) => p.id !== authorId),
@@ -410,3 +498,18 @@ export const useSocial = create<SocialState>()((set, get) => ({
 
   reset: () => set({ ...EMPTY, gen: get().gen + 1 }),
 }));
+
+/*
+ * The dot on Home's heart. Fired without awaiting from load and
+ * refreshFeed, so a slow or failed answer never holds the feed up; a
+ * failure keeps whatever the dot showed before. Written only while the
+ * same account is signed in, like every other write in this store.
+ */
+function refreshActivityBadge(myId: string, gen: number): void {
+  api
+    .fetchLatestActivityAt(myId)
+    .then((at) => {
+      if (useSocial.getState().gen === gen) useSocial.setState({ activityLatestAt: at });
+    })
+    .catch(() => {});
+}

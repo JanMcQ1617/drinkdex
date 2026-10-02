@@ -110,10 +110,39 @@ export interface Post {
   createdAt: string;
   likes: number;
   likedByMe?: boolean;
+  /** The signed-in user saved this post (saves table). */
+  savedByMe?: boolean;
   commentCount?: number;
   /** True when authored by the signed-in user. */
   mine?: boolean;
 }
+
+/** One photo shared to a post in the last 24 hours (recent_pours). */
+export interface Pour {
+  postId: string;
+  authorId: string;
+  drinkId: string;
+  path: string;
+  /** ISO */
+  at: string;
+}
+
+/**
+ * One row of Activity: a like on one of your posts, or a new follower.
+ * `key` is unique across both kinds (`like:<post>:<user>`, `follow:<user>`),
+ * so a list can key on it directly.
+ */
+export type ActivityItem =
+  | {
+      kind: 'like';
+      key: string;
+      actorId: string;
+      postId: string;
+      drinkId: string;
+      photoPath: string | null;
+      at: string;
+    }
+  | { kind: 'follow'; key: string; actorId: string; at: string };
 
 /** Directed edge — mirrors a `follows` table. */
 export interface Follow {
@@ -129,4 +158,82 @@ export interface UnlockRecord {
   /** ISO date of the unlock */
   date: string;
   note?: string;
+}
+
+/* ------------------------------------------------------------------ */
+/* Drinks people add themselves                                        */
+/*                                                                     */
+/* A custom drink lives in its own store, never in the collection's    */
+/* unlocks, and is sent to the server as a suggestion (the              */
+/* drink_submissions table, migration 018).                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Where a custom drink stands with the server.
+ *
+ *   'local'     — signed out when it was saved; sent once someone signs in.
+ *   'pending'   — waiting to be sent, or sent and not yet acknowledged.
+ *   'synced'    — the server holds this version.
+ *   'refused'   — the server's checks or content filter refused a field
+ *                 (named in `syncDetail`); an edit sends it again.
+ *   'quota'     — 30 suggestions in 30 days; it retries on its own.
+ *   'duplicate' — this account already suggested a drink with this name.
+ */
+export type CustomSync = 'local' | 'pending' | 'synced' | 'refused' | 'quota' | 'duplicate';
+
+/** Jan's verdict on a suggestion: drink_submissions.status. */
+export type SubmissionStatus = 'new' | 'added' | 'duplicate' | 'declined';
+
+export interface CustomDrinkFields {
+  name: string;
+  category: DrinkCategory;
+  subcategory: string;
+  subcategoryIsNew: boolean;
+  description: string;
+  abvLow: number | null;
+  abvHigh: number | null;
+  origin: string;
+  glassware: string;
+  tastingNotes: string[];
+  funFact: string;
+  // Cocktail only.
+  ingredients: RecipeIngredient[];
+  steps: string[];
+  method: string;
+  garnish: string;
+  // Spirit only.
+  base: string;
+  distillation: string;
+  aging: string;
+  serveTemp: string;
+  serveHow: string;
+  pairings: string[];
+  process: string;
+  noteForTeam: string;
+}
+
+export interface CustomDrink extends CustomDrinkFields {
+  /** 'u_<uuid>'. The uuid doubles as the drink_submissions primary key. */
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  /** FILE NAME under Documents/custom/, never an absolute uri: the container path changes on update. */
+  photoFile: string | null;
+  /** Which photoFile the server copy is of. */
+  uploadedPhotoFile: string | null;
+  /** '<uid>/submission-<uuid>-<ts>.jpg' in `pours`. */
+  photoPath: string | null;
+  /** Uid that owns the server row; null = never sent. */
+  submittedBy: string | null;
+  /**
+   * Whether the server row exists, so the next write is an update. Never an
+   * upsert: the quota trigger fires on an upsert's insert half even when
+   * the row is already there, so every edit would count against the quota.
+   */
+  everInserted: boolean;
+  sync: CustomSync;
+  /** The column the server refused, for the status line. */
+  syncDetail?: string;
+  status: SubmissionStatus;
+  catalogueId: string | null;
 }

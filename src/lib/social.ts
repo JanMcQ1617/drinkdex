@@ -4,7 +4,7 @@ import { getDrink } from '@/data';
 import type { ProfileRow } from '@/lib/database.types';
 import { stripMetadata } from '@/lib/pour';
 import { supabase } from '@/lib/supabase';
-import type { Post, UserProfile } from '@/types';
+import type { ActivityItem, Post, Pour, UserProfile } from '@/types';
 
 /** Splits a list into runs of at most `size`, for requests that carry ids in the URL. */
 function chunk<T>(items: T[], size: number): T[][] {
@@ -102,7 +102,12 @@ function photoList(raw: unknown): string[] {
     .map((r) => r.path);
 }
 
-function toPost(row: PostQueryRow, myId: string, myLikes: Set<string>): Post {
+function toPost(
+  row: PostQueryRow,
+  myId: string,
+  myLikes: Set<string>,
+  mySaves: Set<string>,
+): Post {
   return {
     id: row.id,
     authorId: row.author_id,
@@ -119,6 +124,7 @@ function toPost(row: PostQueryRow, myId: string, myLikes: Set<string>): Post {
     createdAt: row.created_at,
     likes: likeCount(row.likes),
     likedByMe: myLikes.has(row.id),
+    savedByMe: mySaves.has(row.id),
     commentCount: 0,
     mine: row.author_id === myId,
   };
@@ -182,6 +188,41 @@ export function isMissingAvatarColumn(error: { code?: string; message?: string }
 /** Stops asking for the avatar column for the rest of this session. */
 export function disableAvatarColumn(): void {
   avatarColumnPresent = false;
+}
+
+/* ==================================================================== */
+/* Feature presence                                                     */
+/*                                                                      */
+/* The same problem one level up: a build can reach a phone before Jan  */
+/* runs the migration that adds a table or a function. Saves (017) and  */
+/* recent_pours (017) are the ones this file reads. A missing one is     */
+/* read as "feature off", never as a failure: the save button hides and  */
+/* Today's pours shows only your own tile, while the feed itself, which  */
+/* needs neither, keeps working.                                         */
+/*                                                                      */
+/* Saves is remembered for the rest of the session once the server says  */
+/* the table is not there, as the avatar column is. A relaunch asks      */
+/* again, so applying the migration needs no new build.                  */
+/* ==================================================================== */
+
+let savesTablePresent = true;
+
+/** False once the server has said the saves table does not exist. */
+export const savesSupported = () => savesTablePresent;
+
+/** Postgres's undefined_table, or PostgREST's "not in the schema cache". */
+function isMissingRelation(e: { code?: string; message?: string } | null): boolean {
+  return (
+    !!e &&
+    (e.code === '42P01' ||
+      e.code === 'PGRST205' ||
+      /does not exist|could not find the table/i.test(e.message ?? ''))
+  );
+}
+
+/** PostgREST's "no such function", or Postgres's undefined_function. */
+function isMissingFunction(e: { code?: string } | null): boolean {
+  return !!e && (e.code === 'PGRST202' || e.code === '42883');
 }
 
 /* ==================================================================== */
@@ -276,6 +317,76 @@ export async function fetchFollowerCount(userId: string): Promise<number> {
   return count ?? 0;
 }
 
+/** How many people someone follows. The pair to fetchFollowerCount. */
+export async function fetchFollowingCount(userId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from('follows')
+    .select('*', { count: 'exact', head: true })
+    .eq('follower_id', userId);
+
+  if (error) throw error;
+  return count ?? 0;
+}
+
+/**
+ * Whether `theirId` follows you, for a "Follow back" label. A head request:
+ * follows are readable under RLS (that is what makes counts work), so this
+ * reads nothing a count does not already reveal.
+ */
+export async function fetchFollowsMe(theirId: string, myId: string): Promise<boolean> {
+  const { count, error } = await supabase
+    .from('follows')
+    .select('*', { count: 'exact', head: true })
+    .eq('follower_id', theirId)
+    .eq('following_id', myId);
+
+  if (error) throw error;
+  return (count ?? 0) > 0;
+}
+
+/** Rows per followers or following list. A full page gets a "latest 200" footer. */
+export const CONNECTIONS_PAGE = 200;
+
+/*
+ * Each follow row embeds the profile on the far end of the edge. follows
+ * has two foreign keys to profiles, so the embed has to name which one;
+ * these are Postgres's default names for the two inline references in the
+ * base schema. A PGRST201 ("more than one relationship") means they are not
+ * what the live database calls them: check with
+ *   select conname from pg_constraint where conrelid = 'public.follows'::regclass;
+ */
+const CONNECTION_EMBED = {
+  followers: { fk: 'follows_follower_id_fkey', on: 'following_id' },
+  following: { fk: 'follows_following_id_fkey', on: 'follower_id' },
+} as const;
+
+/**
+ * Someone's followers, or the people they follow, newest edge first.
+ *
+ * Visible to any signed-in account: follows are already readable for the
+ * counts, so the list exposes nothing new. Anyone blocked either way is
+ * missing on both sides of RLS: follows_read drops the edge, and
+ * profiles_read would null the embed, which is dropped here too.
+ */
+export async function fetchConnections(
+  userId: string,
+  list: 'followers' | 'following',
+): Promise<UserProfile[]> {
+  const { fk, on } = CONNECTION_EMBED[list];
+  const { data, error } = await supabase
+    .from('follows')
+    .select(`created_at, person:profiles!${fk}(${profileCols()})`)
+    .eq(on, userId)
+    .order('created_at', { ascending: false })
+    .limit(CONNECTIONS_PAGE);
+
+  if (error) throw error;
+  // Cast through unknown like every embed here: database.types.ts declares
+  // no relationships, so supabase-js cannot type the embedded profile.
+  const rows = (data ?? []) as unknown as { person: ProfileRow | null }[];
+  return rows.flatMap((r) => (r.person ? [toProfile(r.person)] : []));
+}
+
 export async function follow(myId: string, targetId: string): Promise<void> {
   const { error } = await supabase
     .from('follows')
@@ -317,6 +428,32 @@ async function fetchMyLikes(myId: string, postIds: string[]): Promise<Set<string
 }
 
 /**
+ * Which of THESE posts you saved, scoped like fetchMyLikes.
+ *
+ * Never throws: any failure reads as "none saved". A bookmark drawn empty
+ * on a saved post costs one tap that changes nothing (the insert is a
+ * duplicate, which counts as success); a throw here would cost the whole
+ * feed. A missing table also switches saving off for the session.
+ */
+async function fetchMySaves(myId: string, postIds: string[]): Promise<Set<string>> {
+  if (postIds.length === 0 || !savesTablePresent) return new Set();
+  try {
+    const { data, error } = await supabase
+      .from('saves')
+      .select('post_id')
+      .eq('user_id', myId)
+      .in('post_id', postIds);
+    if (error) {
+      if (isMissingRelation(error)) savesTablePresent = false;
+      return new Set();
+    }
+    return new Set((data ?? []).map((r) => r.post_id));
+  } catch {
+    return new Set();
+  }
+}
+
+/**
  * Rows to posts, minus any whose drink has left the Dex.
  *
  * posts.drink_id has no foreign key, and beer and wine were removed on
@@ -324,14 +461,25 @@ async function fetchMyLikes(myId: string, postIds: string[]): Promise<Set<string
  * cards render nothing for them, but every count, grid and empty-state check
  * works from the array — "Posts 12" over five tiles, or a feed of nothing
  * with no empty state. Dropping them here keeps every consumer on one list.
+ * Order is kept, so a caller that sorted the rows (Saved, by when you saved
+ * each one) gets its posts back in that order.
  */
 async function toPosts(rows: PostQueryRow[], myId: string): Promise<Post[]> {
   const live = rows.filter((r) => getDrink(r.drink_id));
-  const myLikes = await fetchMyLikes(
-    myId,
-    live.map((r) => r.id),
-  );
-  return live.map((r) => toPost(r, myId, myLikes));
+  const ids = live.map((r) => r.id);
+  const [myLikes, mySaves] = await Promise.all([fetchMyLikes(myId, ids), fetchMySaves(myId, ids)]);
+  return live.map((r) => toPost(r, myId, myLikes, mySaves));
+}
+
+/**
+ * Whether PostCard draws anything for this post. It renders null for a
+ * drink that is not in this build (the wine and beer removed on 20 Sep
+ * 2026 still have posts), so every list of posts filters with this
+ * rather than leaving a zero-height cell and its gap. Widen it here, and
+ * only here, when another kind of drink gains posts.
+ */
+export function isRenderablePost(post: Post): boolean {
+  return getDrink(post.drinkId) !== undefined;
 }
 
 const FEED_SIZE = 100;
@@ -398,6 +546,60 @@ export async function fetchPostCount(authorId: string): Promise<number> {
   return count ?? 0;
 }
 
+/**
+ * One post, for the single-post screen. Null when it is gone, when you are
+ * blocked with its author either way (posts_read hides it), or when its
+ * drink has left the Dex: all three are "unavailable" to the screen, and
+ * none is an error. Throws only when the request itself failed.
+ */
+export async function fetchPost(postId: string, myId: string): Promise<Post | null> {
+  const { data, error } = await supabase
+    .from('posts')
+    .select(POST_SELECT)
+    .eq('id', postId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) return null;
+  const [post] = await toPosts([data as unknown as PostQueryRow], myId);
+  return post ?? null;
+}
+
+/**
+ * Your saved posts, most recently saved first.
+ *
+ * A saved post whose author you have since blocked, either way, comes back
+ * with a null `post`, because posts_read applies inside the embed; those
+ * are dropped. The save row itself stays, and goes with the post or with
+ * your account (both cascade).
+ *
+ * With the table missing (migration 017 not applied) this switches saving
+ * off and resolves empty, so the screen can ask savesSupported() and say
+ * "not available" rather than "nothing saved".
+ */
+export async function fetchSavedPosts(myId: string): Promise<Post[]> {
+  if (!savesTablePresent) return [];
+  const { data, error } = await supabase
+    .from('saves')
+    .select(`created_at, post:posts(${POST_SELECT})`)
+    .eq('user_id', myId)
+    .order('created_at', { ascending: false })
+    .limit(FEED_SIZE);
+
+  if (error) {
+    if (isMissingRelation(error)) {
+      savesTablePresent = false;
+      return [];
+    }
+    throw error;
+  }
+  const rows = (data ?? []) as unknown as { post: PostQueryRow | null }[];
+  return toPosts(
+    rows.flatMap((r) => (r.post ? [r.post] : [])),
+    myId,
+  );
+}
+
 /** Profiles for a set of author ids, as a lookup. */
 export async function fetchProfiles(ids: string[]): Promise<Record<string, UserProfile>> {
   const unique = [...new Set(ids)];
@@ -413,23 +615,181 @@ export async function fetchProfiles(ids: string[]): Promise<Record<string, UserP
 }
 
 /* ==================================================================== */
+/* Today's pours and Activity                                           */
+/* ==================================================================== */
+
+/**
+ * Every photo shared in the last 24 hours by you or anyone you follow,
+ * newest first, for the row of pour tiles on Home.
+ *
+ * By photo, not by post: logging a drink again adds a photo to its old post
+ * (one post per drink), and that photo is still today's pour. The function
+ * runs as the caller, so the tables' own read policies, blocks included,
+ * decide what comes back.
+ *
+ * Empty, not an error, when the function is missing (migration 017 not
+ * applied): the row then shows only your own tile. Pours of drinks that
+ * have left the Dex are dropped, as toPosts drops their posts.
+ */
+export async function fetchRecentPours(): Promise<Pour[]> {
+  const { data, error } = await supabase.rpc('recent_pours');
+  if (error) {
+    if (isMissingFunction(error)) return [];
+    throw error;
+  }
+  return (data ?? [])
+    .filter((r) => getDrink(r.drink_id))
+    .map((r) => ({
+      postId: r.post_id,
+      authorId: r.author_id,
+      drinkId: r.drink_id,
+      path: r.path,
+      at: r.poured_at,
+    }));
+}
+
+/** At most this many Activity rows, from at most ACTIVITY_DAYS back. */
+const ACTIVITY_LIMIT = 60;
+const ACTIVITY_DAYS = 30;
+
+/*
+ * The likes side of Activity embeds the liked post with !inner, so the
+ * filter on posts.author_id narrows the likes themselves (a plain embed
+ * would return every like and null out the posts that did not match).
+ * Typed `unknown` like every embed here, and narrowed by shape: PostgREST
+ * returns a many-to-one embed as an object, but nothing in the types
+ * promises that.
+ */
+interface LikeActivityRow {
+  post_id: string;
+  user_id: string;
+  created_at: string;
+  posts?: unknown;
+}
+
+/** The liked post's drink and preview photo; the author filter already ran on the server. */
+type LikedPost = { drink_id: string; photo_path: string | null };
+
+function likedPost(raw: unknown): LikedPost | null {
+  const one = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof one !== 'object' || one === null) return null;
+  const p = one as { drink_id?: unknown; photo_path?: unknown };
+  if (typeof p.drink_id !== 'string') return null;
+  return { drink_id: p.drink_id, photo_path: typeof p.photo_path === 'string' ? p.photo_path : null };
+}
+
+const newestAtFirst = (a: { at: string }, b: { at: string }) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0);
+
+/**
+ * Likes on your posts and new followers, newest first: one row per event,
+ * at most 60, from the last 30 days. Built from the likes and follows
+ * tables as they are; nothing new is stored. Your own likes of your own
+ * posts are not activity. Likes on a drink that has left the Dex are
+ * dropped, since the row would point at a post nobody can open.
+ */
+export async function fetchActivity(myId: string): Promise<ActivityItem[]> {
+  const since = new Date(Date.now() - ACTIVITY_DAYS * 24 * 60 * 60 * 1000).toISOString();
+
+  const [likes, follows] = await Promise.all([
+    supabase
+      .from('likes')
+      .select('post_id, user_id, created_at, posts!inner(id, author_id, drink_id, photo_path)')
+      .eq('posts.author_id', myId)
+      .neq('user_id', myId)
+      .gte('created_at', since)
+      .order('created_at', { ascending: false })
+      .limit(ACTIVITY_LIMIT),
+    supabase
+      .from('follows')
+      .select('follower_id, created_at')
+      .eq('following_id', myId)
+      .gte('created_at', since)
+      .order('created_at', { ascending: false })
+      .limit(ACTIVITY_LIMIT),
+  ]);
+  if (likes.error) throw likes.error;
+  if (follows.error) throw follows.error;
+
+  const items: ActivityItem[] = [];
+  for (const row of (likes.data ?? []) as unknown as LikeActivityRow[]) {
+    const post = likedPost(row.posts);
+    if (!post || !getDrink(post.drink_id)) continue;
+    items.push({
+      kind: 'like',
+      key: `like:${row.post_id}:${row.user_id}`,
+      actorId: row.user_id,
+      postId: row.post_id,
+      drinkId: post.drink_id,
+      photoPath: post.photo_path,
+      at: row.created_at,
+    });
+  }
+  for (const row of follows.data ?? []) {
+    items.push({
+      kind: 'follow',
+      key: `follow:${row.follower_id}`,
+      actorId: row.follower_id,
+      at: row.created_at,
+    });
+  }
+  return items.sort(newestAtFirst).slice(0, ACTIVITY_LIMIT);
+}
+
+/**
+ * When the newest like on one of your posts or the newest follow of you
+ * happened, whichever is later; null when there is neither. Feeds the dot
+ * on Home's heart, so it has no time floor: a like from five weeks ago is
+ * still unseen if Activity was never opened. Two one-row reads.
+ */
+export async function fetchLatestActivityAt(myId: string): Promise<string | null> {
+  const [like, follow] = await Promise.all([
+    supabase
+      .from('likes')
+      .select('created_at, posts!inner(author_id)')
+      .eq('posts.author_id', myId)
+      .neq('user_id', myId)
+      .order('created_at', { ascending: false })
+      .limit(1),
+    supabase
+      .from('follows')
+      .select('created_at')
+      .eq('following_id', myId)
+      .order('created_at', { ascending: false })
+      .limit(1),
+  ]);
+  if (like.error) throw like.error;
+  if (follow.error) throw follow.error;
+
+  const a = (like.data?.[0] as { created_at?: string } | undefined)?.created_at ?? null;
+  const b = follow.data?.[0]?.created_at ?? null;
+  if (!a) return b;
+  if (!b) return a;
+  return a > b ? a : b;
+}
+
+/* ==================================================================== */
 /* Photos                                                               */
 /* ==================================================================== */
 
 /*
- * Every photo leaves the device through stripMetadata first, pour photos
- * and avatars alike: a fresh JPEG with no EXIF and no GPS. A picture taken
- * at home and posted to a feed would otherwise publish where the poster
- * lives. The object is therefore always a .jpg sent as image/jpeg, whatever
- * the picker handed over — HEIC included.
+ * Every photo leaves the device through stripMetadata first, pour photos,
+ * avatars and the photo on a drink suggestion alike: a fresh JPEG with no
+ * EXIF and no GPS. A picture taken at home and posted to a feed would
+ * otherwise publish where the poster lives. The object is therefore always
+ * a .jpg sent as image/jpeg, whatever the picker handed over — HEIC
+ * included.
  *
  * If stripping fails, the upload fails. The original is never sent as a
  * fallback, because that fallback is the leak.
  *
  * The stripped copy is a temporary file made for this upload alone, so it
  * is removed afterwards, sent or not; the caller's own file is left alone.
+ *
+ * Exported for lib/submissions, whose suggestion photos go to the same
+ * `pours/<uid>/` folder and must take the same strip. Resolves false when
+ * the local file is gone; throws when stripping or the upload fails.
  */
-async function putStrippedPhoto(localUri: string, path: string): Promise<boolean> {
+export async function putStrippedPhoto(localUri: string, path: string): Promise<boolean> {
   if (!new File(localUri).exists) return false;
   const clean = await stripMetadata(localUri);
   try {
@@ -497,9 +857,11 @@ export async function uploadAvatar(myId: string, localUri: string): Promise<stri
  * one network round trip per appearance of the SAME image, and a list
  * scroll re-signs them all again on every remount.
  *
- * Keyed by path, holding the promise rather than the result so that N
- * simultaneous mounts of one avatar share a single request instead of
- * racing N of them.
+ * Keyed by bucket and path, holding the promise rather than the result so
+ * that N simultaneous mounts of one avatar share a single request instead
+ * of racing N of them. Two buckets are read this way: `pours` (pour photos,
+ * avatars, suggestion photos) and `reels` (a reel's poster and video). The
+ * same path in each is a different object, hence the bucket in the key.
  *
  * Only successes are kept. A failure used to be cached like any answer, so
  * one dropped request — a Wi-Fi to cellular handoff, a request cut off by
@@ -510,8 +872,17 @@ export async function uploadAvatar(myId: string, localUri: string): Promise<stri
  * The settled URL is kept beside the promise so a card that remounts, or a
  * gallery that pages back, can paint the photo on its first frame instead
  * of waiting a tick for a promise that has already resolved.
+ *
+ * Still one hour, in memory only, for reels too. A longer-lived URL, or one
+ * persisted across launches, would let someone you have since blocked keep
+ * fetching your file for its whole life, which undoes the block-aware
+ * Storage policies both buckets have.
  */
 const SIGNED_TTL_MS = 55 * 60 * 1000;
+const SIGNED_URL_SECONDS = 60 * 60;
+
+/** The private buckets whose objects are read through signed URLs. */
+export type Bucket = 'pours' | 'reels';
 
 interface SignedEntry {
   at: number;
@@ -521,52 +892,116 @@ interface SignedEntry {
 
 const signedCache = new Map<string, SignedEntry>();
 
-/** The bucket is private, so reads go through a short-lived signed URL. */
-export async function signedPhotoUrl(path: string | null): Promise<string | null> {
-  if (!path) return null;
+const signedKey = (bucket: Bucket, path: string) => `${bucket}:${path}`;
 
-  const hit = signedCache.get(path);
-  if (hit && Date.now() - hit.at < SIGNED_TTL_MS) return hit.url;
+/** A cache entry still inside its TTL, or undefined. */
+function freshEntry(key: string): SignedEntry | undefined {
+  const hit = signedCache.get(key);
+  return hit && Date.now() - hit.at < SIGNED_TTL_MS ? hit : undefined;
+}
 
+/**
+ * Puts an entry in the cache whose URL is whatever `sign` resolves to.
+ * Only successes stay: an entry whose URL comes back null removes itself
+ * (and only itself, never a newer entry for the same key), so the next
+ * mount signs again. Never rejects.
+ */
+function cacheSigning(key: string, sign: Promise<string | null>): SignedEntry {
   const entry = { at: Date.now() } as SignedEntry;
-  // Only evicts THIS entry: a newer one for the same path is left alone.
   const evict = () => {
-    if (signedCache.get(path) === entry) signedCache.delete(path);
+    if (signedCache.get(key) === entry) signedCache.delete(key);
   };
-
-  entry.url = supabase.storage
-    .from('pours')
-    .createSignedUrl(path, 60 * 60)
-    .then(({ data, error }) => {
-      if (error || !data?.signedUrl) {
+  entry.url = sign
+    .then((url) => {
+      if (!url) {
         evict();
         return null;
       }
-      entry.settled = data.signedUrl;
-      return data.signedUrl;
+      entry.settled = url;
+      return url;
     })
     .catch(() => {
       evict();
       return null;
     });
+  signedCache.set(key, entry);
+  return entry;
+}
 
-  signedCache.set(path, entry);
-  return entry.url;
+/** The bucket is private, so reads go through a short-lived signed URL. Never rejects. */
+export async function signedPhotoUrl(path: string | null, bucket: Bucket = 'pours'): Promise<string | null> {
+  if (!path) return null;
+
+  const key = signedKey(bucket, path);
+  const hit = freshEntry(key);
+  if (hit) return hit.url;
+
+  return cacheSigning(
+    key,
+    supabase.storage
+      .from(bucket)
+      .createSignedUrl(path, SIGNED_URL_SECONDS)
+      .then(({ data, error }) => (error ? null : (data?.signedUrl ?? null))),
+  ).url;
+}
+
+/*
+ * Paths per createSignedUrls request. The paths travel in a POST body, not
+ * the URL, so this is about keeping one failure small rather than a size
+ * limit: a profile grid or a page of reels is one request either way.
+ */
+const SIGN_PER_REQUEST = 100;
+
+/**
+ * Signs many paths at once and seeds the cache with them: one request for
+ * a whole profile grid or a page of reel posters, instead of one per tile
+ * as each mounts.
+ *
+ * Paths already signed and still fresh are skipped. The rest are cached at
+ * once, before the request returns, so a tile that mounts meanwhile shares
+ * this request instead of starting its own. A path the server would not
+ * sign, or a request that failed, leaves no entry behind: the tile then
+ * signs on its own, as if this had never run. Never rejects.
+ */
+export async function primeSignedUrls(bucket: Bucket, paths: string[]): Promise<void> {
+  const wanted = [...new Set(paths.filter(Boolean))].filter((p) => !freshEntry(signedKey(bucket, p)));
+  if (wanted.length === 0) return;
+
+  await Promise.all(
+    chunk(wanted, SIGN_PER_REQUEST).map((part) => {
+      const batch = supabase.storage
+        .from(bucket)
+        .createSignedUrls(part, SIGNED_URL_SECONDS)
+        .then(({ data, error }) => {
+          const urls = new Map<string, string>();
+          if (error || !data) return urls;
+          for (const row of data) {
+            if (row.path && row.signedUrl && !row.error) urls.set(row.path, row.signedUrl);
+          }
+          return urls;
+        });
+      return Promise.all(
+        part.map((p) => cacheSigning(signedKey(bucket, p), batch.then((urls) => urls.get(p) ?? null)).url),
+      );
+    }),
+  );
 }
 
 /**
  * The signed URL for `path` if one has already arrived, synchronously.
  * Undefined when it has not — the caller then waits on signedPhotoUrl.
  */
-export function peekSignedPhoto(path: string | null | undefined): string | undefined {
+export function peekSignedPhoto(path: string | null | undefined, bucket: Bucket = 'pours'): string | undefined {
   if (!path) return undefined;
-  const hit = signedCache.get(path);
-  return hit && Date.now() - hit.at < SIGNED_TTL_MS ? hit.settled : undefined;
+  return freshEntry(signedKey(bucket, path))?.settled;
 }
 
-/** Drops a path from the signed-URL cache — used when it is replaced. */
-export function forgetSignedPhoto(path: string | null): void {
-  if (path) signedCache.delete(path);
+/**
+ * Drops a path from the signed-URL cache: when its file is replaced or
+ * deleted, or when a reel's video would not play and is signed again.
+ */
+export function forgetSignedPhoto(path: string | null, bucket: Bucket = 'pours'): void {
+  if (path) signedCache.delete(signedKey(bucket, path));
 }
 
 /* ==================================================================== */
@@ -795,6 +1230,32 @@ export async function unlikePost(myId: string, postId: string): Promise<void> {
     .eq('post_id', postId)
     .eq('user_id', myId);
   if (error) throw error;
+}
+
+/*
+ * Saves are private bookmarks (migration 017): only their owner can read
+ * them, and only a post the saver can see can be saved. A missing table
+ * switches saving off for the session before the error goes up, so the
+ * bookmark that was just tapped is the last one drawn.
+ */
+
+/** Saves a post. A second save of the same post is already the desired state. */
+export async function savePost(myId: string, postId: string): Promise<void> {
+  const { error } = await supabase.from('saves').insert({ user_id: myId, post_id: postId });
+  if (!error || error.code === '23505' || error.message.includes('duplicate')) return;
+  if (isMissingRelation(error)) savesTablePresent = false;
+  throw error;
+}
+
+export async function unsavePost(myId: string, postId: string): Promise<void> {
+  const { error } = await supabase
+    .from('saves')
+    .delete()
+    .eq('user_id', myId)
+    .eq('post_id', postId);
+  if (!error) return;
+  if (isMissingRelation(error)) savesTablePresent = false;
+  throw error;
 }
 
 export async function updateProfile(

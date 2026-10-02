@@ -2,6 +2,8 @@
 -- Sipply — migration 012: reports outlive what they report
 --
 -- Paste into the Supabase SQL Editor and Run. Safe to re-run.
+-- Since 019: do not re-run. It would drop reports_reported_reel_id_fkey
+-- and put back the two-subject prepare_report, which refuses every reel report.
 --
 -- WHAT IT FIXES
 --
