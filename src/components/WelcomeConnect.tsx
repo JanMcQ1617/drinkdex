@@ -4,8 +4,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FindFriends } from '@/components/FindFriends';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
+import { ScreenTopBar, useScrolledPast } from '@/components/ScreenTopBar';
 import { Button } from '@/components/ui';
-import { colors, fonts, radius, space, type as typeScale } from '@/constants/theme';
+import { colors, fonts, layout, space, stroke, type as typeScale } from '@/constants/theme';
 
 /* ==================================================================== */
 /* Welcome — find your people                                           */
@@ -37,13 +38,22 @@ import { colors, fonts, radius, space, type as typeScale } from '@/constants/the
 /* renders this inside the Home and Profile tab scenes, and the bar      */
 /* floats over their bottom edge, which is where the old button ended up */
 /* at full scroll. log.tsx pins its save the same way.                   */
+/*                                                                      */
+/* THE TITLE IS THE BAR'S. The app's one top bar names the step, as it   */
+/* names the sign-in steps and the username step just before this one,  */
+/* so the three read as one flow; the bar's rule shows once the long     */
+/* list scrolls under it. The glyph under it is drawn bare, with no disc */
+/* behind it: an icon in a tinted circle is the most copied header there */
+/* is.                                                                   */
 /* ==================================================================== */
 
 export function WelcomeConnect({ onDone }: { onDone: () => void }) {
   const insets = useSafeAreaInsets();
+  const [scrolled, onScroll] = useScrolledPast();
 
   return (
     <View style={styles.screen}>
+      <ScreenTopBar title="Find your people" size="md" showRule={scrolled} />
       {/*
         Keyboard props as on /find-friends: the same four fields live here.
         Insets rather than a KeyboardAvoidingView, so the pinned footer
@@ -51,19 +61,15 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
       */}
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={[
-          styles.content,
-          { paddingTop: insets.top + space.xxl, paddingBottom: space.xl },
-        ]}
+        contentContainerStyle={styles.content}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
         automaticallyAdjustKeyboardInsets
         showsVerticalScrollIndicator={false}>
-        <View style={styles.mark}>
-          <Icon name="users" size={26} color={colors.wine} />
-        </View>
+        <Icon name="users" size={28} color={colors.text} />
 
-        <Text style={styles.title} accessibilityRole="header">Find your people</Text>
         <Text style={styles.lede}>
           Sipply is better with the friends you already drink with. You can bring them
           over now, or do it later from Settings — nothing here is one-time.
@@ -84,12 +90,11 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
         so, which is why the footnote that repeated it is gone.
 
         Bottom padding is the tab-screen clearance plus the space.md every
-        tab screen and the sign-in form add. Without it the button cleared
+        tab screen and the sign-in screen add. Without it the button cleared
         a notchless phone's bar by 6pt, close enough to read as part of it.
       */}
       <View
         style={[styles.footer, { paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md }]}>
-        {/* No haptic of its own: Button's press already ticks. */}
         <Button label="Continue" onPress={onDone} block />
       </View>
     </View>
@@ -99,37 +104,27 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: space.xl },
+  content: {
+    paddingHorizontal: layout.gutter,
+    paddingTop: space.xl,
+    paddingBottom: space.xl,
+  },
 
-  mark: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.pill,
-    backgroundColor: colors.wineWash,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: space.lg,
-  },
-  title: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
-  },
   lede: {
     fontFamily: fonts.body,
     fontSize: typeScale.body.fontSize,
     lineHeight: typeScale.body.lineHeight,
     color: colors.textMuted,
-    marginTop: space.sm,
+    marginTop: space.md,
     marginBottom: space.xl,
   },
 
+  /* A drawn edge between the list and the pinned way out (01: every edge is drawn). */
   footer: {
-    paddingHorizontal: space.xl,
+    paddingHorizontal: layout.gutter,
     paddingTop: space.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.cardBorder,
+    borderTopWidth: stroke.edge,
+    borderTopColor: colors.line,
     backgroundColor: colors.bg,
   },
 });

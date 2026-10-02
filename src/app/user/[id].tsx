@@ -23,11 +23,15 @@ import { isPlaceholderUsername, useAuth } from '@/store/auth';
 /* here too, it would open a second copy of the welcome step instead of  */
 /* the person. The username step is different: it comes before welcome, */
 /* so nothing inside the app opens this screen while it is pending, but  */
-/* an old drinkdex://u/<id> link lands here cold, and an Apple or        */
-/* Facebook account made on this screen's sign-in form still has its    */
-/* pour_1a2b3c4d handle and has not yet been shown the terms line that   */
-/* step carries. So signed out, AuthGate stands in with the sign-in      */
-/* form, and with the handle still a placeholder, with that step.        */
+/* an old drinkdex://u/<id> link lands here cold, and an account made on */
+/* this screen's sign-in form, by any method, still has its              */
+/* pour_1a2b3c4d handle and has not yet been through that step. So       */
+/* signed out, AuthGate stands in with the sign-in screen, and with the  */
+/* handle still a placeholder, with that step.                           */
+/*                                                                      */
+/* Both gates close the way Back does (`leave`): out of this screen, or  */
+/* Home when a link opened it cold, rather than to the Dex, which is     */
+/* where a tab's gate closes to.                                         */
 /* ==================================================================== */
 
 export default function UserScreen() {
@@ -62,9 +66,9 @@ export default function UserScreen() {
     else router.replace('/');
   }, [router]);
 
-  if (!myId) return <AuthGate>{null}</AuthGate>;
+  if (!myId) return <AuthGate onClose={leave}>{null}</AuthGate>;
   if (isSelf) return <View style={styles.screen} />;
-  if (unnamed) return <AuthGate>{null}</AuthGate>;
+  if (unnamed) return <AuthGate onClose={leave}>{null}</AuthGate>;
   return <PeerProfile id={id} onBack={leave} />;
 }
 
