@@ -6,6 +6,7 @@ import {
 } from '@supabase/supabase-js';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Crypto from 'expo-crypto';
+import { clearVideoCacheAsync } from 'expo-video';
 import { Platform } from 'react-native';
 import { create } from 'zustand';
 
@@ -17,7 +18,6 @@ import {
   getPendingClaims,
   rememberHandle,
   rememberPhone,
-  setPendingClaims,
 } from '@/lib/discovery';
 import {
   clearFacebookCache,
@@ -25,10 +25,10 @@ import {
   holdFacebookToken,
   openFacebookAuth,
   syncFacebookFriends,
-  type FacebookAuthOutcome,
 } from '@/lib/facebook';
 import { hashHandle } from '@/lib/instagram';
-import { containsObjectionable, isObjectionableError, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
+import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
+import { openOAuth, type OAuthOutcome } from '@/lib/oauth';
 import {
   checkResetRequest,
   clearRecovering,
@@ -48,6 +48,8 @@ import {
 } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { ProfileRow } from '@/lib/database.types';
+/* A type only, erased at build time, so no require cycle: at runtime store/signInFlow imports this file, never the reverse. */
+import type { EmailStatus } from '@/store/signInFlow';
 import { useSocial } from '@/store/social';
 import { showNotice } from '@/utils/alerts';
 
@@ -88,39 +90,67 @@ interface AuthState {
 
   init: () => () => void;
   /**
-   * `phone` and `instagram` are both optional and neither blocks the
-   * account — they only decide whether other people can find this one.
+   * Makes an account from an email and a password, and nothing else: no
+   * username, no name, no discovery claims. handle_new_user (migration
+   * 015) gives it the placeholder handle, and AuthGate's username step
+   * asks for a real one, as it does for an account made any other way.
+   * A taken username then comes back as updateProfile's clean 23505
+   * rather than the opaque 500 a username at sign-up could only ever be.
    *
-   * Phone is the one that carries the feature. Contact matching needs
-   * only that two people are already in each other's address books;
-   * asking here is what removes the separate "make me findable" step that
-   * almost nobody would have taken. Instagram needs both parties to have
-   * typed a handle, so it stays a secondary path.
-   *
-   * Both are stored as hashes, and not until the profile row exists — see
-   * setPendingClaims in src/lib/discovery.ts for why they take a detour.
+   * Answers through `error` and `notice`, like signIn. A project that
+   * wants the email confirmed returns no session, and the notice says to
+   * confirm and come back to sign in.
    */
-  signUp: (
-    email: string,
-    password: string,
-    username: string,
-    displayName: string,
-    instagram?: string,
-    phone?: string,
-  ) => Promise<void>;
+  signUpEmail: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
+  /**
+   * How an email signs in, for the sign-in screen's email step: 'new',
+   * 'password' or 'other' from sign_in_method (migration 016), or
+   * 'unknown' when it will not say (metered, missing, anything but the
+   * two failures below). `error` is set, and `status` null, only for no
+   * connection and an address the server cannot read; both keep the
+   * person on the email step.
+   */
+  lookupEmail: (
+    email: string,
+  ) => Promise<
+    { status: EmailStatus; error: null } | { status: null; error: string }
+  >;
   /*
-   * The three below answer with an error to show, or null — null for a
+   * The two below answer like the providers further down: an error to
+   * show, or null. Neither sets `busy`; the sign-in flow store tracks
+   * them as its own requests.
+   */
+  /**
+   * Texts a 6-digit code to an E.164 number (Supabase's phone OTP, sent
+   * by Twilio Verify). Makes the account on first use. Null once the
+   * text is on its way. Nothing about the number is logged, ever.
+   */
+  sendPhoneCode: (e164: string) => Promise<string | null>;
+  /**
+   * Checks the code. Null once signed in; CODE_WRONG for a wrong or
+   * expired code, which the flow counts toward its lock; other copy for
+   * anything else.
+   */
+  verifyPhoneCode: (e164: string, code: string) => Promise<string | null>;
+  /*
+   * The four below answer with an error to show, or null — null for a
    * success and for a cancel alike, because closing Apple's sheet or
-   * Facebook's page is a decision, not a failure. A string rather than the
-   * store's `error`, so the sign-in form can put a failure under the
-   * button that caused it instead of above the email form's.
+   * Google's or Facebook's page is a decision, not a failure. A string
+   * rather than the store's `error`, so the sign-in screen can put a
+   * failure under the button that caused it instead of under the email
+   * form's.
    *
    * None of them sets `busy`, which belongs to the email form: its button
    * would otherwise say "Signing in…" while Apple's sheet was up.
    */
   /** Sign in with Apple: makes the account on first use. iOS only. */
   signInWithApple: () => Promise<string | null>;
+  /**
+   * Continue with Google: makes the account on first use. Google's own
+   * access token is dropped as it arrives; nothing here needs it.
+   */
+  signInWithGoogle: () => Promise<string | null>;
   /** Continue with Facebook: makes the account on first use. */
   signInWithFacebook: () => Promise<string | null>;
   /**
@@ -132,7 +162,9 @@ interface AuthState {
   /**
    * Signs out and forgets what this account left on the device: discovery
    * claims, the Facebook friends list, a half-finished reset. The Dex
-   * collection stays; it is the phone's, not the account's.
+   * collection stays; it is the phone's, not the account's. The sign-in
+   * screen's flow and the Reels feed reset themselves when the session
+   * ends (store/signInFlow, store/reels), so nothing here calls them.
    */
   signOut: () => Promise<void>;
   /**
@@ -154,7 +186,8 @@ interface AuthState {
    */
   failRecovery: (message: string) => void;
   /**
-   * Irreversible. Empties the account's photo folder, then removes the auth
+   * Irreversible. Takes the account's reels off the feed, empties its
+   * folders in both storage buckets (photos, reels), then removes the auth
    * user and every row that cascades from it.
    */
   deleteAccount: () => Promise<boolean>;
@@ -193,9 +226,8 @@ interface AuthState {
 /* carries CHECK constraints for the name length, the bio length and     */
 /* the username shape (003/004), a unique index on username, and the     */
 /* content filter trigger (011). The client mirrors them to answer fast  */
-/* and next to the field, and — at signup — because the server cannot    */
-/* answer readably at all (see humanizeSignUp). One copy here, used by   */
-/* the sign-up form and by updateProfile, so the two cannot drift.       */
+/* and next to the field. One copy here, used by the forms and by        */
+/* updateProfile, so they cannot drift.                                 */
 /* ==================================================================== */
 
 /** Mirrors profiles_username_shape. Lowercase alphanumerics, underscore and
@@ -216,8 +248,9 @@ export const USERNAME_TAKEN = 'That username is taken. Pick another.';
  * The content filter's verdict on a username. `glued` because the server
  * checks usernames that way — 'the_<term>' has no spaces to find a word
  * between — and a client check that let those through would leave them for
- * the server to refuse, which at signup it can only do as an opaque 500.
- * Exported so the sign-up form asks the same question this file does.
+ * the server to refuse, a round trip after the person has moved on.
+ * Exported so AuthGate's username step asks the same question this file
+ * does.
  */
 export function usernameObjectionable(handle: string): boolean {
   return containsObjectionable(handle, { glued: true });
@@ -254,14 +287,16 @@ function filterRefusal(column: string | null | undefined): string {
 }
 
 /* ==================================================================== */
-/* Accounts made by Apple or Facebook                                   */
+/* New accounts                                                         */
 /*                                                                      */
-/* Neither provider sends a username, so handle_new_user (migration 015) */
-/* gives the account 'pour_' and 8 hex digits of its id, and a display   */
-/* name from Facebook, or 'New collector' when there is none — always,   */
-/* for Apple, whose identity token carries no name. AuthGate asks for a  */
-/* real username once, before anything else, whenever the handle still  */
-/* has that shape.                                                       */
+/* No way of signing up sends a username: not a phone number, an email   */
+/* (signUpEmail), Apple, Google or Facebook. So handle_new_user         */
+/* (migration 015) gives the account 'pour_' and 8 hex digits of its    */
+/* id, and a display name from Google or Facebook, or 'New collector'   */
+/* when there is none — always for a phone number, an email, and Apple, */
+/* whose identity token carries no name. AuthGate asks for a real       */
+/* username once, before anything else, whenever the handle still has   */
+/* that shape.                                                          */
 /* ==================================================================== */
 
 /** The handle handle_new_user makes. The step that replaces it keys on this shape. */
@@ -275,7 +310,7 @@ export function isPlaceholderUsername(handle: string): boolean {
 
 /**
  * Said when someone types the placeholder shape themselves. It is refused
- * by the client (the forms, signUp and updateProfile), not by the server:
+ * by the client (the username step and updateProfile), not by the server:
  * an account that chose it would be asked to choose a username again on
  * every launch.
  */
@@ -297,9 +332,9 @@ const providerNames = new Map<string, string>();
 
 /**
  * The display name the username step starts from: Apple's name from this
- * session, then the profile's own unless it is the placeholder (Facebook's
- * name is already there, from migration 015), then Facebook's name as the
- * auth user holds it. Empty when nobody sent one.
+ * session, then the profile's own unless it is the placeholder (Google's
+ * or Facebook's name is already there, from migration 015), then the name
+ * Google or Facebook gave the auth user. Empty when nobody sent one.
  */
 export function suggestedDisplayName(profile: ProfileRow | null, user: User | null | undefined): string {
   const fromApple = user ? providerNames.get(user.id) : undefined;
@@ -343,27 +378,40 @@ function appleName(fullName: AppleAuthentication.AppleAuthenticationFullName | n
 }
 
 /* ==================================================================== */
-/* Which sign-in buttons this build shows                               */
+/* Which sign-in methods this build shows                               */
 /*                                                                      */
-/* Both off until the dashboard and Meta work listed in .env is done:    */
-/* a button whose provider is not configured fails on the first tap.     */
-/* 'on' in .env shows it; anything else hides it. Read with static dot   */
-/* access, which is what lets Expo inline them into the bundle.          */
+/* All off until the setup listed in .env is done (Apple's and Meta's    */
+/* consoles, Twilio, Google Cloud, the Supabase providers): a method     */
+/* whose provider is not configured fails on the first tap. 'on' in .env */
+/* shows it; anything else hides it. Read with static dot access, which  */
+/* is what lets Expo inline them into the bundle. Email has no flag: it  */
+/* is always offered.                                                   */
 /* ==================================================================== */
 
-/** Sign in with Apple: iOS only. AuthForm also asks isAvailableAsync. */
+/** Sign in with Apple: iOS only. The sign-in screen also asks isAvailableAsync. */
 export const APPLE_SIGN_IN_ENABLED =
   Platform.OS === 'ios' && process.env.EXPO_PUBLIC_APPLE_SIGN_IN === 'on';
 
 /**
  * Continue with Facebook, and Connect Facebook for an account without it.
- * AuthForm shows the sign-in button only beside Apple's: App Review
- * guideline 4.8 requires Sign in with Apple wherever another third-party
- * sign-in is offered.
+ * The sign-in screen shows the sign-in button only beside Apple's: App
+ * Review guideline 4.8 requires Sign in with Apple wherever another
+ * third-party sign-in is offered.
  */
 export const FACEBOOK_SIGN_IN_ENABLED = process.env.EXPO_PUBLIC_FACEBOOK_SIGN_IN === 'on';
 
+/**
+ * Sign in with a phone number and a texted code. First-party, so 4.8 does
+ * not tie it to Apple; with it off, the sign-in screen's top field is the
+ * email instead.
+ */
+export const PHONE_SIGN_IN_ENABLED = process.env.EXPO_PUBLIC_PHONE_SIGN_IN === 'on';
+
+/** Continue with Google. Third-party, so like Facebook it shows only beside Apple (4.8). */
+export const GOOGLE_SIGN_IN_ENABLED = process.env.EXPO_PUBLIC_GOOGLE_SIGN_IN === 'on';
+
 const APPLE_FAILED = 'Apple did not sign you in. Try again, or use your email.';
+const GOOGLE_FAILED = 'Google did not sign you in. Try again, or use another way.';
 const OTHER_ACCOUNT =
   'That Facebook account belongs to a different Sipply account. Sign out first to use it.';
 
@@ -374,13 +422,34 @@ const OTHER_ACCOUNT =
 const OFFLINE = 'Cannot reach Sipply. Check your connection and try again.';
 const TOO_MANY = 'Too many attempts just now. Wait a minute and try again.';
 
+/*
+ * Exported because the sign-in flow (store/signInFlow) compares the
+ * store's answer against them to decide its next step, as the username
+ * step compares against USERNAME_TAKEN. Copy, not codes, because that is
+ * what the store holds; keep each written once, here.
+ */
+/** A password sign-in GoTrue refused as invalid_credentials. */
+export const WRONG_PASSWORD = 'That email and password do not match.';
+/** A sign-up for an address that already has an account. */
+export const EMAIL_HAS_ACCOUNT = 'That email already has an account. Try signing in.';
+/** A wrong or expired phone code: the one verify failure the flow counts toward its lock. */
+export const CODE_WRONG = 'That code is wrong or has expired. Check it, or send a new one.';
+/** A number that cannot be a mobile number, from the field's own check or GoTrue's. */
+export const PHONE_INVALID = 'That number doesn’t look right. Check the country and the number.';
+/** An address the email step's check, or the lookup, refuses. */
+export const EMAIL_INVALID = 'That email address doesn’t look right.';
+
+const SIGN_UP_FAILED = 'Could not create your account. Try again.';
+const CODE_FAILED = 'Couldn’t check that code. Try again.';
+const SEND_FAILED = 'Couldn’t send a code just now. Try again.';
+
 /**
  * GoTrue errors, in words a person can act on.
  *
  * Keyed on `error.code`, which auth-js sets from GoTrue's stable error
  * codes, never on the message. The old version matched substrings, and
  * "any message containing 'email'" caught "Email not confirmed" — the
- * state signUp's own notice sends people into — and told them their
+ * state signUpEmail's own notice sends people into — and told them their
  * address looked wrong. "Any message containing 'password'" turned
  * same_password into "must be at least 6 characters" for a password of
  * twelve. What no code covers gets the caller's `fallback`, never the raw
@@ -392,7 +461,7 @@ function humanizeAuth(error: AuthError, fallback: string): string {
   if (isAuthRetryableFetchError(error) && !error.status) return OFFLINE;
   switch (error.code) {
     case 'invalid_credentials':
-      return 'That email and password do not match.';
+      return WRONG_PASSWORD;
     case 'email_not_confirmed':
       return 'Confirm your email first. The link is in your inbox.';
     case 'same_password':
@@ -406,59 +475,94 @@ function humanizeAuth(error: AuthError, fallback: string): string {
       return 'That email address does not look right.';
     case 'user_already_exists':
     case 'email_exists':
-      return 'That email already has an account. Try signing in.';
+      return EMAIL_HAS_ACCOUNT;
   }
   if (error.status === 429) return TOO_MANY;
-  if (/invalid login credentials/i.test(error.message)) return 'That email and password do not match.';
+  if (/invalid login credentials/i.test(error.message)) return WRONG_PASSWORD;
   if (/email not confirmed/i.test(error.message))
     return 'Confirm your email first. The link is in your inbox.';
   return fallback;
 }
 
 /**
- * Sign-up errors need their own translation because a rejected profile
- * arrives as an opaque 500 rather than anything readable.
+ * signUpEmail's errors. It sends no username and no name, so the
+ * on_auth_user_created trigger only ever writes the placeholder handle
+ * and 'New collector', which nothing refuses: a 500 can no longer mean
+ * "that username is taken", only that the server failed.
  *
- * The profile row is written by the on_auth_user_created trigger, and
- * GoTrue reports any failure inside that trigger as an unexpected server
- * error. Four things can fail there: the unique index on username, the
- * username-shape and display-name-length CHECKs (003), and the content
- * filter (011), which runs on that insert like any other.
- *
- * Match on `status`, never on `message`. The wire body is a perfectly
- * clear Postgres error, but supabase-js never parses it: it raises
- * AuthRetryableFetchError, whose message is "{}" under Node and a
- * stringified Response on React Native. Reading the message is what put a
- * raw JSON blob on the signup screen.
- *
- * So signUp rules out three of the four before sending anything: the two
- * CHECKs and the client's copy of the word list locally, then the server's
- * own list through is_objectionable, which catches terms added from the
- * dashboard since this build shipped. That pre-check is what lets a 500
- * mean "taken" — the one failure nobody can ask about ahead of time,
- * because another signup can claim the name in between. `screened` says
- * whether it answered. When it did not (an older server, a dropped
- * request) the copy allows for "not allowed" rather than insisting the
- * name is spoken for. An unreachable server fails as a fetch error and a
- * busy one answers 502/503, so neither lands in this branch.
+ * The 500 is matched on `status`, never on `message`. GoTrue reports a
+ * failure inside that trigger as an unexpected server error, and
+ * supabase-js never parses the body: it raises AuthRetryableFetchError,
+ * whose message is "{}" under Node and a stringified Response on React
+ * Native. Reading the message is what once put a raw JSON blob on the
+ * sign-up screen. The one message check, "already registered", is for a
+ * duplicate email from GoTrue versions that predate codes.
  */
-function humanizeSignUp(error: AuthError, screened: boolean): string {
+function humanizeSignUp(error: AuthError): string {
   // Checked first: a duplicate email is a clean, readable 4xx.
   if (
     error.code === 'user_already_exists' ||
     error.code === 'email_exists' ||
     /already registered/i.test(error.message)
   )
-    return 'That email already has an account. Try signing in.';
+    return EMAIL_HAS_ACCOUNT;
+  if (error.status === 500) return SIGN_UP_FAILED;
+  return humanizeAuth(error, SIGN_UP_FAILED);
+}
 
-  if (isObjectionableError(error)) return OBJECTIONABLE_MESSAGE;
+/**
+ * Sending a phone code, in words. GoTrue's codes, never its text, as in
+ * humanizeAuth. An unserved country fails as sms_send_failed and is told
+ * to use another way: SMS pumping is stopped by Twilio's Fraud Guard and
+ * geo permissions on the server, where it can be, not by a client list.
+ */
+function humanizePhone(error: AuthError): string {
+  if (isAuthRetryableFetchError(error) && !error.status) return OFFLINE;
+  switch (error.code) {
+    case 'validation_failed':
+      return PHONE_INVALID;
+    case 'sms_send_failed':
+      return 'Couldn’t text that number. Check it, or use another way to sign in.';
+    case 'phone_provider_disabled':
+      return 'Phone sign-in isn’t switched on for Sipply yet.';
+    case 'over_sms_send_rate_limit':
+      return 'Too many codes sent just now. Wait a few minutes and try again.';
+    case 'over_request_rate_limit':
+      return TOO_MANY;
+    case 'signup_disabled':
+    case 'otp_disabled':
+      return 'New accounts are paused right now. Try again later.';
+  }
+  if (error.status === 429) return TOO_MANY;
+  return SEND_FAILED;
+}
 
-  if (error.status === 500)
-    return screened
-      ? 'That username is taken. Try another.'
-      : 'That username is taken or not allowed. Try another.';
+/**
+ * Checking a phone code, in words. otp_expired is GoTrue's answer for a
+ * wrong code and an expired one alike, so the copy names both. The
+ * message check is for GoTrue versions that predate codes.
+ */
+function humanizeCode(error: AuthError): string {
+  if (isAuthRetryableFetchError(error) && !error.status) return OFFLINE;
+  if (error.code === 'otp_expired') return CODE_WRONG;
+  if (error.code === 'over_request_rate_limit' || error.status === 429) return TOO_MANY;
+  if (!error.code && /expired|invalid/i.test(error.message)) return CODE_WRONG;
+  return CODE_FAILED;
+}
 
-  return humanizeAuth(error, 'Could not create your account. Try again.');
+/** Continue with Google's failures, from the API call or the return link (lib/oauth). */
+function describeGoogle(code?: string): string {
+  switch (code) {
+    case 'provider_disabled':
+      return 'Google sign-in isn’t switched on for Sipply yet.';
+    case 'email_exists':
+    case 'user_already_exists':
+      return 'That email already has a Sipply account. Sign in with your email and password.';
+    case 'over_request_rate_limit':
+      return TOO_MANY;
+    default:
+      return GOOGLE_FAILED;
+  }
 }
 
 /* ==================================================================== */
@@ -466,9 +570,23 @@ function humanizeSignUp(error: AuthError, screened: boolean): string {
 /* ==================================================================== */
 
 /**
+ * A new account's profile colour, sent as user_metadata.accent, which
+ * handle_new_user copies onto the profile row. Every way of signing up
+ * that can send metadata sends one (email, a phone number); Apple,
+ * Google and Facebook cannot, and get the trigger's default.
+ */
+function randomAccent(): string {
+  return SIGNUP_ACCENTS[Math.floor(Math.random() * SIGNUP_ACCENTS.length)]!;
+}
+
+/**
  * Writes the discovery hashes given at signup, once there is a profile row
  * to hang them off. No-ops when nothing is parked, which is every launch
  * after the first.
+ *
+ * Nothing parks claims any more: only the old email form's sign-up did,
+ * and it went with that form. This stays for claims builds 8 to 11 parked
+ * on phones that are still waiting on an email confirmation.
  *
  * The email check guards a signup that was started but never confirmed:
  * without it, claims parked on this device would attach themselves to
@@ -537,22 +655,27 @@ async function forgetAccountOnDevice(): Promise<void> {
 }
 
 /**
- * Turns what came back from Facebook into a session, then starts the
- * friends check with the Facebook token it carried.
+ * Turns what came back from the browser leg (lib/oauth) into a session.
+ * Shared by Google and Facebook; only the provider token differs, and
+ * `onProviderToken` decides what happens to it. Facebook keeps it in
+ * memory for the friends check (keepFacebookToken, below). Google passes
+ * nothing, so Google's token is dropped here, unread.
  *
- * `expected` is the signed-in account when Facebook is being connected to
- * it. The tokens are refused, before setSession, unless they are for that
- * same account: a Facebook identity that already belongs to someone else
- * would otherwise swap the person into that other account mid-session.
- * The same check, and the same reason, as a reset link (lib/recovery).
+ * `expected` is the signed-in account when a provider is being connected
+ * to it (only Facebook, today). The tokens are refused, before
+ * setSession, unless they are for that same account: an identity that
+ * already belongs to someone else would otherwise swap the person into
+ * that other account mid-session. The same check, and the same reason,
+ * as a reset link (lib/recovery).
  *
  * setSession is handed the two Supabase tokens and nothing else, which is
- * what keeps the Facebook token out of the session supabase-js persists.
+ * what keeps any provider token out of the session supabase-js persists.
  */
-async function finishFacebook(
-  outcome: FacebookAuthOutcome,
+async function finishOAuth(
+  outcome: OAuthOutcome,
   expected: string | null,
   failed: string,
+  onProviderToken?: (uid: string, token: string) => void,
 ): Promise<string | null> {
   if (outcome.kind === 'cancelled') return null;
   if (outcome.kind === 'error') return outcome.message;
@@ -573,7 +696,7 @@ async function finishFacebook(
     }
     providerToken = exchanged.data.session.provider_token ?? null;
     /*
-     * The exchange saved a session with the Facebook token inside it.
+     * The exchange saved a session with the provider token inside it.
      * Setting it again from its two Supabase tokens saves it without.
      */
     const resaved = await supabase.auth.setSession({
@@ -596,32 +719,64 @@ async function finishFacebook(
   // As after a password sign-in: a stale reset flag is void now.
   await clearRecovering();
 
-  if (providerToken) {
-    holdFacebookToken(session.user.id, providerToken);
-    void syncFacebookFriends(session.user.id);
-  }
+  if (providerToken && onProviderToken) onProviderToken(session.user.id, providerToken);
   return null;
 }
 
+/** Facebook's onProviderToken: held in memory, then the friends check starts with it. */
+function keepFacebookToken(uid: string, token: string): void {
+  holdFacebookToken(uid, token);
+  void syncFacebookFriends(uid);
+}
+
+/** The buckets that keep files under the account's id: <bucket>/<uid>/<file>. */
+const SWEPT_BUCKETS = ['pours', 'reels'] as const;
+
+/*
+ * A bucket the project does not have yet holds nothing of anyone's, so it
+ * counts as empty: a project without migration 019 has no `reels` bucket,
+ * and deleting an account must not depend on a feature that is switched
+ * off. Depending on the Storage version, listing it answers an empty list
+ * (handled by the loop as it is) or "Bucket not found" (this).
+ */
+function isMissingBucket(error: unknown): boolean {
+  const e = error as { message?: unknown; statusCode?: unknown } | null;
+  return (
+    (typeof e?.message === 'string' && /bucket not found/i.test(e.message)) ||
+    e?.statusCode === 'NoSuchBucket'
+  );
+}
+
 /**
- * Empties the account's folder in the `pours` bucket: pour photos and
- * avatars both live at pours/<uid>/<file> (migrations 007 and 010).
+ * Empties the account's folder in one bucket. `pours` holds pour photos,
+ * avatars and custom-drink photos at pours/<uid>/<file> (migrations 007
+ * and 010); `reels` holds each reel's video and poster at reels/<uid>/<file>
+ * (migration 019).
  *
  * The client has to do this, not delete_own_account. SQL cannot delete
  * stored bytes — Supabase guards storage.objects against it — so since
  * migration 011 the function refuses with 'photos_remaining' while the
  * folder has anything in it, rather than deleting the account and
- * orphaning the files for good.
+ * orphaning the files for good. Since 019 that covers both buckets,
+ * under the same error string.
  *
  * Always lists at offset 0, because paging forward while deleting skips
  * files. A remove that fails, or that reports removing nothing, throws:
- * the listing would come back the same and this would never finish.
+ * the listing would come back the same and this would never finish. The
+ * error says photos for both buckets, as delete_own_account's does since
+ * 019, so deleteAccount's one mapping catches either.
  */
-async function emptyPhotoFolder(uid: string): Promise<void> {
-  const bucket = supabase.storage.from('pours');
+async function emptyStorageFolder(
+  bucketName: (typeof SWEPT_BUCKETS)[number],
+  uid: string,
+): Promise<void> {
+  const bucket = supabase.storage.from(bucketName);
   for (;;) {
     const { data: listed, error: listError } = await bucket.list(uid, { limit: 1000 });
-    if (listError) throw listError;
+    if (listError) {
+      if (isMissingBucket(listError)) return;
+      throw listError;
+    }
     if (!listed || listed.length === 0) return;
 
     const { data: removed, error: removeError } = await bucket.remove(
@@ -630,6 +785,11 @@ async function emptyPhotoFolder(uid: string): Promise<void> {
     if (removeError) throw removeError;
     if (!removed || removed.length === 0) throw new Error('photos_not_removed');
   }
+}
+
+/** Every bucket's folder for the account, one after the other. */
+async function emptyAccountStorage(uid: string): Promise<void> {
+  for (const bucketName of SWEPT_BUCKETS) await emptyStorageFolder(bucketName, uid);
 }
 
 /*
@@ -736,80 +896,38 @@ export const useAuth = create<AuthState>()((set, get) => ({
     return () => sub.subscription.unsubscribe();
   },
 
-  signUp: async (email, password, username, displayName, instagram, phone) => {
-    const handle = username.trim().toLowerCase();
-    const name = displayName.trim();
-
-    // The form already blocks these; this is the backstop, and it keeps a
-    // 500 from being the only thing the server can say.
-    const problem =
-      profileFieldProblem(name, handle) ??
-      (isPlaceholderUsername(handle) ? PLACEHOLDER_USERNAME_RULE : null) ??
-      (refusedColumn(name, handle) ? OBJECTIONABLE_MESSAGE : null);
-    if (problem) {
-      set({ error: problem, notice: null });
-      return;
-    }
-
+  signUpEmail: async (email, password) => {
     set({ busy: true, error: null, notice: null });
-    const accent = SIGNUP_ACCENTS[Math.floor(Math.random() * SIGNUP_ACCENTS.length)]!;
 
     /*
      * Everything after `busy: true` sits in one try, so no rejection can
-     * leave the form stuck on its busy label: AuthForm calls this with
-     * `void`, and a throw used to go nowhere with `busy` still set.
+     * leave the screen stuck on "Creating account…": the sign-in flow
+     * awaits this, and a throw would otherwise leave `busy` set.
      */
     try {
-      /*
-       * The server's word list, asked before the account is. The client's
-       * copy above can be behind it, and a refusal from the trigger comes
-       * back as the bare 500 humanizeSignUp describes. is_objectionable is
-       * granted to anon, so it answers before there is a session.
-       *
-       * Asked before the discovery claims are parked, so a refusal here
-       * leaves nothing on the device to clear. A check that does not answer
-       * is not a verdict: signup goes ahead unscreened.
-       */
-      const [nameCheck, handleCheck] = await Promise.all([
-        supabase.rpc('is_objectionable', { t: name }),
-        supabase.rpc('is_objectionable', { t: handle, glued: true }),
-      ]);
-      if (nameCheck.data === true || handleCheck.data === true) {
-        set({ busy: false, error: OBJECTIONABLE_MESSAGE });
-        return;
-      }
-      const screened = nameCheck.data === false && handleCheck.data === false;
-
-      /*
-       * Parked before the request, not after: on a project that requires
-       * email confirmation this call returns without a session, and the
-       * handle would otherwise be gone by the time the user comes back to
-       * sign in. Cleared again below if the signup itself fails.
-       *
-       * Best effort. A full or corrupt store must not turn two optional
-       * fields into a reason the account cannot be made.
-       */
-      try {
-        await setPendingClaims(email, { phone: phone?.trim(), handle: instagram?.trim() });
-      } catch {
-        /* Signs up without them; the Accounts screen can add them later. */
-      }
-
-      // The profile row is created by the on_auth_user_created trigger,
-      // which reads these values out of user_metadata.
+      // Only the colour: handle_new_user makes the rest (see "New accounts").
       const { data, error } = await supabase.auth.signUp({
         email: email.trim(),
         password,
-        options: {
-          data: { username: handle, display_name: name, accent },
-        },
+        options: { data: { accent: randomAccent() } },
       });
 
       if (error) {
-        // Nothing was created, so nothing should be waiting to attach itself
-        // to the next account that signs in on this device.
-        await clearPendingClaims().catch(() => undefined);
-        set({ busy: false, error: humanizeSignUp(error, screened) });
+        set({ busy: false, error: humanizeSignUp(error) });
+        return;
+      }
+
+      /*
+       * With email confirmation on, GoTrue answers a sign-up for an address
+       * that already has an account the way it answers a new one, so that
+       * the endpoint cannot be used to find accounts: no error, no session,
+       * and a user with no identities. The lookup already said this
+       * address was new, so this is the race where it was taken in
+       * between; it is told as the taken address it is, rather than as an
+       * account that was made.
+       */
+      if (!data.session && data.user?.identities?.length === 0) {
+        set({ busy: false, error: EMAIL_HAS_ACCOUNT });
         return;
       }
 
@@ -829,7 +947,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
 
       set({ busy: false });
     } catch {
-      set({ busy: false, error: 'Could not create your account. Try again.' });
+      set({ busy: false, error: SIGN_UP_FAILED });
     }
   },
 
@@ -849,6 +967,64 @@ export const useAuth = create<AuthState>()((set, get) => ({
       });
     } catch {
       set({ busy: false, error: OFFLINE });
+    }
+  },
+
+  /*
+   * The answer the email step moves on. A lookup that is refused (the
+   * meter, rate_limited), missing (016 not applied) or anything else the
+   * server says is not a failure the person can act on, so it becomes
+   * 'unknown', whose password step offers both sign-in and sign-up. Only
+   * no connection and an unreadable address stop them on the email step.
+   * PostgREST reports a failed fetch as an error rather than a throw;
+   * the catch is for anything stranger, and errs toward letting them on.
+   */
+  lookupEmail: async (email) => {
+    try {
+      const { data, error } = await supabase.rpc('sign_in_method', { e: email.trim() });
+      if (!error && (data === 'new' || data === 'password' || data === 'other')) {
+        return { status: data, error: null };
+      }
+      if (error && /network|fetch|timed? ?out/i.test(error.message ?? '')) {
+        return { status: null, error: OFFLINE };
+      }
+      if (error && /invalid_email/.test(`${error.message} ${error.details ?? ''}`)) {
+        return { status: null, error: EMAIL_INVALID };
+      }
+      return { status: 'unknown', error: null };
+    } catch {
+      return { status: 'unknown', error: null };
+    }
+  },
+
+  /*
+   * shouldCreateUser: one Continue for a new number and a known one alike,
+   * which is the whole point of the phone row. The accent is the only
+   * metadata sent; handle_new_user makes the rest, and the username step
+   * follows. The number and the code are never logged or stored by the
+   * app, not even under __DEV__: supabase-js persists only the session.
+   */
+  sendPhoneCode: async (e164) => {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone: e164,
+        options: { channel: 'sms', shouldCreateUser: true, data: { accent: randomAccent() } },
+      });
+      return error ? humanizePhone(error) : null;
+    } catch {
+      return OFFLINE;
+    }
+  },
+
+  verifyPhoneCode: async (e164, code) => {
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({ phone: e164, token: code, type: 'sms' });
+      if (error || !data.session) return error ? humanizeCode(error) : CODE_FAILED;
+      // As after a password sign-in: a stale reset flag is void now.
+      await clearRecovering();
+      return null;
+    } catch {
+      return OFFLINE;
     }
   },
 
@@ -903,11 +1079,34 @@ export const useAuth = create<AuthState>()((set, get) => ({
     }
   },
 
+  /*
+   * The same browser leg as Facebook (lib/oauth), with Google's scopes and
+   * its account chooser forced open (prompt=select_account), so a phone
+   * signed in to two Google accounts is asked which one rather than
+   * silently using the last. Supabase links a Google account whose
+   * verified email matches an existing account into that account by
+   * itself; nothing here decides that.
+   */
+  signInWithGoogle: async () => {
+    set({ error: null, notice: null });
+    try {
+      const outcome = await openOAuth('google', 'sign-in', {
+        scopes: 'openid email profile',
+        queryParams: { prompt: 'select_account' },
+        describe: describeGoogle,
+      });
+      // No onProviderToken: Google's token is dropped.
+      return await finishOAuth(outcome, null, GOOGLE_FAILED);
+    } catch {
+      return GOOGLE_FAILED;
+    }
+  },
+
   signInWithFacebook: async () => {
     set({ error: null, notice: null });
     const failed = 'Facebook did not sign you in. Try again, or use your email.';
     try {
-      return await finishFacebook(await openFacebookAuth('sign-in'), null, failed);
+      return await finishOAuth(await openFacebookAuth('sign-in'), null, failed, keepFacebookToken);
     } catch {
       return failed;
     }
@@ -917,7 +1116,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
    * An account that already has Facebook goes through Facebook's sign-in
    * again rather than linkIdentity, which refuses an identity the account
    * already holds. That comes back as a session for whichever account owns
-   * the Facebook identity chosen in the browser: this one, or finishFacebook
+   * the Facebook identity chosen in the browser: this one, or finishOAuth
    * refuses it before setSession. One cost of that route: choosing a
    * Facebook account that is on nobody's Sipply account makes GoTrue create
    * a new, empty Sipply account for it, which is then refused here and left
@@ -930,7 +1129,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
     const mode = hasFacebookIdentity(user) ? 'sign-in' : 'link';
     const failed = 'Could not connect Facebook. Try again.';
     try {
-      return await finishFacebook(await openFacebookAuth(mode), user.id, failed);
+      return await finishOAuth(await openFacebookAuth(mode), user.id, failed, keepFacebookToken);
     } catch {
       return failed;
     }
@@ -1161,15 +1360,17 @@ export const useAuth = create<AuthState>()((set, get) => ({
   /**
    * Deletes the signed-in account. Returns true on success.
    *
-   * Two halves, in this order. The client empties the photo folder through
-   * the Storage API (emptyPhotoFolder above), then the server does the rest
-   * in public.delete_own_account(), which takes no arguments on purpose — it
-   * reads auth.uid() itself, so this call cannot be aimed at anyone else's
-   * account. See migrations 005 and 011.
+   * Three steps, in this order. The account's reels come off the feed
+   * first, so nobody is left watching one whose file is about to vanish.
+   * Then the client empties the account's folders in both buckets through
+   * the Storage API (emptyAccountStorage above), and the server does the
+   * rest in public.delete_own_account(), which takes no arguments on
+   * purpose — it reads auth.uid() itself, so this call cannot be aimed at
+   * anyone else's account. See migrations 005, 011 and 019.
    *
    * The function refuses with 'photos_remaining' if a file arrived between
-   * the sweep and the call — a photo uploaded from another phone — so that
-   * case gets one more sweep before giving up.
+   * the sweep and the call — a photo or reel uploaded from another phone —
+   * so that case gets one more sweep before giving up.
    *
    * Signs out afterwards regardless: once the auth row is gone the local
    * session is a token for a user that no longer exists, and leaving it
@@ -1183,10 +1384,22 @@ export const useAuth = create<AuthState>()((set, get) => ({
     set({ busy: true, error: null });
 
     try {
-      await emptyPhotoFolder(uid);
+      /*
+       * Best effort, and its answer is ignored: the rows cascade from the
+       * profile anyway when delete_own_account runs, and a project without
+       * migration 019 has no such table. This only makes them disappear
+       * from other people's feeds before the files under them do.
+       */
+      try {
+        await supabase.from('reels').delete().eq('author_id', uid);
+      } catch {
+        /* See above. */
+      }
+
+      await emptyAccountStorage(uid);
       let { error } = await supabase.rpc('delete_own_account');
       if (error?.message.includes('photos_remaining')) {
-        await emptyPhotoFolder(uid);
+        await emptyAccountStorage(uid);
         ({ error } = await supabase.rpc('delete_own_account'));
       }
       if (error) throw error;
@@ -1214,6 +1427,16 @@ export const useAuth = create<AuthState>()((set, get) => ({
     }
     await forgetAccountOnDevice();
     set({ busy: false, session: null, profile: null, profileError: null, recovering: false });
+    /*
+     * Every reel this account watched (anyone's) is cached on disk by the
+     * video player. The account is gone, so what it watched goes too. Not
+     * awaited, and a refusal is ignored: expo-video declines while any
+     * player exists, and the account is already deleted either way.
+     * Wrapped so that a throw before the promise exists is caught as well.
+     */
+    void Promise.resolve()
+      .then(() => clearVideoCacheAsync())
+      .catch(() => undefined);
     return true;
   },
 
@@ -1291,7 +1514,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
       if (data) {
         set({ profile: data, profileLoading: false, profileError: null });
         // Safe to write only now: the row the update targets is confirmed
-        // to exist, which is the whole reason this is not done in signUp.
+        // to exist, which is the whole reason this is not done at sign-up.
         void drainPendingClaims(uid, get().session?.user.email ?? null);
         return;
       }

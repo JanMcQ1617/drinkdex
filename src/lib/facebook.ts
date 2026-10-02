@@ -1,10 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { isAuthRetryableFetchError, type AuthError, type User } from '@supabase/supabase-js';
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
+import type { User } from '@supabase/supabase-js';
 import { create } from 'zustand';
 
-import { urlFields } from '@/lib/recovery';
+import { openOAuth, type OAuthMode, type OAuthOutcome } from '@/lib/oauth';
 import { fetchProfiles, matchFacebookFriends } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
 import type { UserProfile } from '@/types';
@@ -22,22 +20,17 @@ import type { UserProfile } from '@/types';
 /* turns those ids into profiles against the Facebook identities         */
 /* Supabase Auth holds, so nobody can claim someone else's account.      */
 /*                                                                      */
-/* THE BROWSER LEG. supabase-js builds the /authorize URL (or, to add    */
-/* Facebook to an existing account, /user/identities/authorize), the     */
-/* system auth sheet opens it, and GoTrue sends the browser back to      */
-/* drinkdex://auth/callback with the session in the URL. The client is   */
-/* on the default implicit flow, so that session is a FRAGMENT, as on a  */
-/* reset link (lib/recovery), and is read by hand for the same reason:   */
-/* detectSessionInUrl is off. Do not switch the client to PKCE for this; */
-/* password recovery depends on the implicit flow.                      */
+/* THE BROWSER LEG is lib/oauth's, shared with Continue with Google.    */
+/* This file passes it Facebook's scopes, its auth_type and its copy.    */
 /*                                                                      */
-/* THE FACEBOOK TOKEN. The fragment also carries provider_token, a       */
-/* Facebook user token that can read the person's Facebook account for  */
-/* an hour or two. It is used only to list friends (and, when that list  */
-/* is empty, to ask whether it was shared), and lives only in this       */
-/* module's memory: never in AsyncStorage (the store hands               */
-/* setSession the two Supabase tokens alone, so supabase-js never sees   */
-/* it), never in a log, never in an error message. Sign-out drops it.    */
+/* THE FACEBOOK TOKEN. The return link's fragment (lib/oauth) also      */
+/* carries provider_token, a Facebook user token that can read the      */
+/* person's Facebook account for an hour or two. It is used only to     */
+/* list friends (and, when that list is empty, to ask whether it was    */
+/* shared), and lives only in this module's memory: never in            */
+/* AsyncStorage (the store hands setSession the two Supabase tokens     */
+/* alone, so supabase-js never sees it), never in a log, never in an    */
+/* error message. Sign-out drops it.                                    */
 /*                                                                      */
 /* THE LIST. The matched profiles are cached per account with the time   */
 /* they were matched, so the friends list survives a relaunch without    */
@@ -45,15 +38,6 @@ import type { UserProfile } from '@/types';
 /* Facebook id. Every read refreshes those profiles through RLS, which   */
 /* also drops anyone blocked or deleted since.                          */
 /* ==================================================================== */
-
-/** The OAuth return link's path. app/+native-intent keys on it too. */
-export const AUTH_CALLBACK_PATH = 'auth/callback';
-
-/** drinkdex://auth/callback in a release build. Must be on Supabase's
- *  Redirect URLs allow-list, or GoTrue sends the browser to the Site URL. */
-export function authCallbackUrl(): string {
-  return Linking.createURL(AUTH_CALLBACK_PATH);
-}
 
 /** Name and email to make the account; user_friends is the reason to ask. */
 const SCOPES = 'public_profile email user_friends';
@@ -74,8 +58,6 @@ const MAX_PAGES = 50;
 const PAGE_TIMEOUT_MS = 15_000;
 
 const CACHE_PREFIX = 'sipply-facebook-friends:';
-
-const OFFLINE = 'Cannot reach Sipply. Check your connection and try again.';
 
 /* ==================================================================== */
 /* Identity                                                             */
@@ -100,20 +82,15 @@ export function hasFacebookIdentity(user: User | null | undefined): boolean {
 /* Browser leg                                                          */
 /* ==================================================================== */
 
-export type FacebookAuthOutcome =
-  | { kind: 'tokens'; accessToken: string; refreshToken: string; providerToken: string | null }
-  /** Only under PKCE, which this client does not use; handled rather than dropped. */
-  | { kind: 'code'; code: string; providerToken: null }
-  /** Closed the sheet, or said no on Facebook's own page. Nothing to say. */
-  | { kind: 'cancelled' }
-  | { kind: 'error'; message: string };
+/** What lib/oauth's browser leg answers, under the name it had while it lived here. */
+export type FacebookAuthOutcome = OAuthOutcome;
 
 /**
  * 'sign-in' makes or opens the account the Facebook identity belongs to.
  * 'link' adds Facebook to the signed-in account (supabase.auth.linkIdentity),
  * which needs "Allow manual linking" on in the Supabase dashboard.
  */
-export type FacebookMode = 'sign-in' | 'link';
+export type FacebookMode = OAuthMode;
 
 function failedCopy(mode: FacebookMode): string {
   return mode === 'link'
@@ -123,9 +100,9 @@ function failedCopy(mode: FacebookMode): string {
 
 /**
  * GoTrue's answer in words, keyed on its stable error codes, never on the
- * text, which is written for developers. Shared by an error the API call
- * returns and one the return link carries, since GoTrue reports the same
- * failures both ways.
+ * text, which is written for developers. lib/oauth asks it about an error
+ * the API call returns and one the return link carries alike, since
+ * GoTrue reports the same failures both ways.
  */
 function describe(code: string | undefined, mode: FacebookMode): string {
   switch (code) {
@@ -149,60 +126,15 @@ function describe(code: string | undefined, mode: FacebookMode): string {
   }
 }
 
-function describeApiError(error: AuthError, mode: FacebookMode): string {
-  if (isAuthRetryableFetchError(error) && !error.status) return OFFLINE;
-  return describe(error.code, mode);
-}
-
 /**
- * Reads the return link. Never throws: urlFields skips anything that will
- * not decode, and this runs on a URL a web page could have written.
+ * Runs Facebook's sign-in page in the system auth sheet (lib/oauth) and
+ * reads what GoTrue sends back. Changes no session: the auth store decides
+ * what to do with the tokens, including refusing them (see connectFacebook
+ * there).
  */
-export function parseAuthCallback(url: string, mode: FacebookMode): FacebookAuthOutcome {
-  const fields = urlFields(url);
-
-  if (fields.error || fields.error_code || fields.error_description) {
-    /*
-     * Cancel on Facebook's own dialog comes back as access_denied with the
-     * reason user_denied, or, once GoTrue has passed it on without the
-     * reason, with Facebook's description of it ("Permissions error"). It is
-     * the same decision as closing the sheet, so it is answered the same
-     * way: with nothing. An access_denied that carries one of GoTrue's own
-     * error codes is a real refusal and falls through to be described.
-     */
-    const denied =
-      fields.error_reason === 'user_denied' ||
-      (fields.error === 'access_denied' &&
-        !/[a-z]/i.test(fields.error_code ?? '') &&
-        /denied|cancel|permission/i.test(fields.error_description ?? ''));
-    if (denied) return { kind: 'cancelled' };
-    return { kind: 'error', message: describe(fields.error_code || fields.error, mode) };
-  }
-
-  if (fields.access_token && fields.refresh_token) {
-    return {
-      kind: 'tokens',
-      accessToken: fields.access_token,
-      refreshToken: fields.refresh_token,
-      providerToken: fields.provider_token || null,
-    };
-  }
-  if (fields.code) return { kind: 'code', code: fields.code, providerToken: null };
-
-  return { kind: 'error', message: failedCopy(mode) };
-}
-
-/**
- * Runs Facebook's sign-in page in the system auth sheet and reads what
- * GoTrue sends back. Changes no session: the auth store decides what to do
- * with the tokens, including refusing them (see connectFacebook there).
- */
-export async function openFacebookAuth(mode: FacebookMode): Promise<FacebookAuthOutcome> {
-  const redirectTo = authCallbackUrl();
-  const options = {
-    redirectTo,
+export function openFacebookAuth(mode: FacebookMode): Promise<FacebookAuthOutcome> {
+  return openOAuth('facebook', mode, {
     scopes: SCOPES,
-    skipBrowserRedirect: true,
     /*
      * Passed on to Facebook by GoTrue. Facebook never asks again for a
      * permission someone once declined unless told to, so without this a
@@ -210,23 +142,8 @@ export async function openFacebookAuth(mode: FacebookMode): Promise<FacebookAuth
      * afterwards. With nothing declined it is the ordinary dialog.
      */
     queryParams: { auth_type: 'rerequest' },
-  };
-
-  try {
-    const { data, error } =
-      mode === 'link'
-        ? await supabase.auth.linkIdentity({ provider: 'facebook', options })
-        : await supabase.auth.signInWithOAuth({ provider: 'facebook', options });
-    if (error) return { kind: 'error', message: describeApiError(error, mode) };
-    if (!data?.url) return { kind: 'error', message: failedCopy(mode) };
-
-    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-    if (result.type !== 'success') return { kind: 'cancelled' };
-    return parseAuthCallback(result.url, mode);
-  } catch {
-    // A second sheet while one is open throws, as does a failed fetch.
-    return { kind: 'error', message: failedCopy(mode) };
-  }
+    describe: (code) => describe(code, mode),
+  });
 }
 
 /* ==================================================================== */

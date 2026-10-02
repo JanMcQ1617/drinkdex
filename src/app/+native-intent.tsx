@@ -1,5 +1,5 @@
-import { AUTH_CALLBACK_PATH } from '@/lib/facebook';
 import { INVITE_PATH } from '@/lib/invite';
+import { AUTH_CALLBACK_PATH } from '@/lib/oauth';
 import { RECOVERY_PATH } from '@/lib/recovery';
 
 /* ==================================================================== */
@@ -14,12 +14,12 @@ import { RECOVERY_PATH } from '@/lib/recovery';
 /*                                                                      */
 /* So those two are taken away from the router here, with a third:      */
 /* drinkdex://auth/callback, where GoTrue sends the browser back after   */
-/* Continue with Facebook. The system auth sheet normally hands that URL */
-/* straight to lib/facebook and the router never sees it, but a sheet    */
-/* that is dismissed as the redirect lands, or Android's browser, can    */
-/* deliver it as an ordinary link, and that must not end on Unmatched    */
-/* Route either. InviteLinkHandler and PasswordResetOverlay still        */
-/* receive their raw URLs through their own listeners — this only        */
+/* Continue with Google or Facebook. The system auth sheet normally      */
+/* hands that URL straight to lib/oauth and the router never sees it,    */
+/* but a sheet that is dismissed as the redirect lands, or Android's     */
+/* browser, can deliver it as an ordinary link, and that must not end on */
+/* Unmatched Route either. InviteLinkHandler and PasswordResetOverlay    */
+/* still receive their raw URLs through their own listeners — this only  */
 /* decides where the navigator goes:                                     */
 /*                                                                      */
 /*   • on a cold start, Home, which is where both flows are meant to     */
