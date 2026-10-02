@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import Animated, {
-  FadeInDown,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useReducedMotion,
@@ -27,32 +26,40 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { DrinkArt } from '@/components/artwork';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { FoilSweep } from '@/components/DexCard';
-import { GlassCircle } from '@/components/glass';
-import { Icon } from '@/components/icons';
+import {
+  CompositionPanel,
+  DexNumber,
+  DrinkTitle,
+  FieldNotes,
+  MetaRow,
+  NotLoggedCard,
+  RecipePanel,
+  sentence,
+  ServePanel,
+  TastingNotes,
+  YourPour,
+} from '@/components/DrinkPanels';
 import {
   announce,
   Button,
-  Card,
-  CategoryPill,
-  Divider,
+  CategoryTag,
   EmptyState,
   Field,
   haptic,
-  PressableScale,
+  MediaIconButton,
   RarityBadge,
-  SectionLabel,
 } from '@/components/ui';
 import {
   CATEGORY_META,
   colors,
   elevation,
-  fonts,
-  motion,
+  layout,
   radius,
   RARITY_META,
   space,
+  stroke,
+  textRole,
   type as typeScale,
-  tabular,
 } from '@/constants/theme';
 import { getDrink, formatDexNumber } from '@/data';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
@@ -68,224 +75,14 @@ import {
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
-import type { Composition, Recipe, ServeGuide } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
-/* ==================================================================== */
-/* Helpers                                                              */
-/* ==================================================================== */
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-/** ISO date -> "Jul 16, 2026" */
-function formatLogDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-}
-
-/**
- * First letter up, the rest as written.
- *
- * The spirit data stores its serving facts the way they read mid-sentence
- * — "veladora", "room temp, never chilled", "shaken" — and this screen
- * sets each one as a value on its own, where lowercase reads as a typo
- * beside a capitalised ABV and origin. Done here, at render, because this
- * screen is the only place those values are shown and drinks.json is
- * generated, never edited by hand.
- */
-function sentence(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-/* ==================================================================== */
-/* Small in-file components                                             */
-/* ==================================================================== */
-
-/**
- * Two-up fact tile. Used by ServePanel for Temp/Glass.
- *
- * No line cap. The longest serving temperatures run to three lines at
- * this width ("Well chilled (38-45°F), served over plenty of ice"), and
- * an ellipsis there clipped the one thing the tile is for — the failure
- * the FactsLine note below gives as its reason for dropping cards. The
- * row stretches both tiles to the taller one, so the pair stays even.
- */
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.statCard}>
-      <Text style={styles.statLabel}>{label}</Text>
-      <Text style={styles.statValue}>{value}</Text>
-    </View>
-  );
-}
-
 /*
- * The facts line — ABV, origin, glass — as one wrapping sentence rather than
- * three bordered cards.
- *
- * As cards they were three white panels with three letterspaced-caps labels,
- * and the third clipped its own content: "Highball glass with…". A container
- * that truncates the thing it exists to show is worse than no container, and
- * the label above each value was doing work the value already does — nobody
- * reads "8–10%" and wonders which field it is.
- *
- * Set as text it wraps instead of clipping, drops three borders and three
- * caps labels, and reads the way a wine app states a vintage.
+ * The panels under the photograph (recipe, composition, serve, the title
+ * block, your pour) live in components/DrinkPanels, shared with the screen
+ * for a drink someone added themselves (custom/[id].tsx), so the two are
+ * drawn by one piece of code.
  */
-function FactsLine({ facts }: { facts: string[] }) {
-  return (
-    <Text style={styles.facts}>
-      {facts.map((f, i) => (
-        <Text key={f}>
-          {i > 0 ? <Text style={styles.factsDot}>{'   ·   '}</Text> : null}
-          {f}
-        </Text>
-      ))}
-    </Text>
-  );
-}
-
-function Chip({ label }: { label: string }) {
-  return (
-    <View style={styles.chip}>
-      <Text style={styles.chipText}>{label}</Text>
-    </View>
-  );
-}
-
-/**
- * Cocktails — the make-at-home build.
- *
- * Amounts are set in tabular figures and right-aligned so the numerals stack
- * into a column the eye can scan, the way a printed spec sheet reads. They
- * are in the muted ink, not gilt: gilt means legendary and nothing else, and
- * a recipe card on a common entry printed in the legendary metal was
- * spending that colour on every cocktail in the Dex.
- *
- * Method and garnish sit in a label-and-detail card of their own, the row
- * CompositionPanel uses for a spirit's make-up. They were pill chips, which
- * are for tags — and a garnish is a sentence ("Celery stalk and lime wedge
- * on a celery-salt rim") that wrapped a pill into a two-line capsule. They
- * are a card of their own rather than more rows in the ingredient card,
- * whose rows are item-and-amount; two row shapes in one card would read as
- * one list that changed its mind halfway.
- */
-function RecipePanel({ recipe }: { recipe: Recipe }) {
-  const details = [
-    { label: 'Method', detail: recipe.method },
-    { label: 'Garnish', detail: recipe.garnish },
-  ].filter((d): d is { label: string; detail: string } => Boolean(d.detail));
-
-  return (
-    <>
-      <SectionLabel style={styles.section}>How it&apos;s made</SectionLabel>
-
-      <Card style={styles.listCard}>
-        {recipe.ingredients.map((ing, i) => (
-          <View key={`${i}-${ing.item}`}>
-            {i > 0 ? <Divider /> : null}
-            <View style={styles.ingredientRow}>
-              <Text style={styles.ingredientItem}>{ing.item}</Text>
-              <Text style={styles.ingredientAmount}>{ing.amount}</Text>
-            </View>
-          </View>
-        ))}
-      </Card>
-
-      <View style={styles.steps}>
-        {recipe.steps.map((step, i) => (
-          <View key={`step-${i}`} style={styles.stepRow}>
-            <View style={styles.stepNum}>
-              <Text style={styles.stepNumText}>{i + 1}</Text>
-            </View>
-            <Text style={styles.stepText}>{step}</Text>
-          </View>
-        ))}
-      </View>
-
-      {details.length > 0 ? (
-        <Card style={[styles.listCard, styles.detailCard]}>
-          {details.map((d, i) => (
-            <View key={d.label}>
-              {i > 0 ? <Divider /> : null}
-              <View style={styles.componentRow}>
-                <Text style={styles.componentLabel}>{d.label}</Text>
-                <Text style={styles.componentDetail}>{sentence(d.detail)}</Text>
-              </View>
-            </View>
-          ))}
-        </Card>
-      ) : null}
-    </>
-  );
-}
-
-/**
- * Spirits — what the drink is made of.
- *
- * Deliberately not framed as a recipe: nobody builds these at the bar, so a
- * step list would be a lie. Labels come from the data rather than this file,
- * because they differ by what the bottle is — Base/Distillation/Aging for a
- * distilled spirit, Grapes/Region/Vinification for a sherry or a port.
- *
- * The process paragraph is plain prose under the card, set like Field
- * notes. It used to be a tinted callout with a wine stripe down its left
- * edge, which bent round the rounded corners and set a paragraph of
- * explanation in 13pt fine print.
- */
-function CompositionPanel({ composition }: { composition: Composition }) {
-  return (
-    <>
-      <SectionLabel style={styles.section}>What&apos;s in it</SectionLabel>
-
-      <Text style={styles.lead}>{composition.summary}</Text>
-
-      <Card style={styles.listCard}>
-        {composition.components.map((component, i) => (
-          <View key={`${i}-${component.label}`}>
-            {i > 0 ? <Divider /> : null}
-            <View style={styles.componentRow}>
-              <Text style={styles.componentLabel}>{component.label}</Text>
-              <Text style={styles.componentDetail}>{component.detail}</Text>
-            </View>
-          </View>
-        ))}
-      </Card>
-
-      <Text style={[styles.bodyText, styles.process]}>{composition.process}</Text>
-    </>
-  );
-}
-
-/** How to serve it at home — complements, never replaces, the composition. */
-function ServePanel({ serve }: { serve: ServeGuide }) {
-  return (
-    <>
-      <SectionLabel style={styles.section}>Serve it right</SectionLabel>
-
-      <View style={styles.statRow}>
-        <StatCard label="Temp" value={sentence(serve.temp)} />
-        <StatCard label="Glass" value={sentence(serve.glass)} />
-      </View>
-
-      <View style={styles.serveCard}>
-        <Text style={styles.bodyText}>{serve.how}</Text>
-      </View>
-
-      {serve.pair && serve.pair.length > 0 ? (
-        <View style={styles.pairWrap}>
-          <Text style={styles.miniLabel}>Pairs with</Text>
-          <View style={styles.chipRow}>
-            {serve.pair.map((p, i) => (
-              <Chip key={`${i}-${p}`} label={p} />
-            ))}
-          </View>
-        </View>
-      ) : null}
-    </>
-  );
-}
 
 /* ==================================================================== */
 /* Screen                                                               */
@@ -565,19 +362,19 @@ export default function DrinkDetailScreen() {
   }, [drink, myId, relock, removePostsForDrink, router]);
 
   /*
-   * Entrance choreography. The words under the photograph settle in reading
-   * order — number and name, then the tags.
+   * No entrance animation on the words under the photograph. Content must
+   * never depend on an animation finishing to be visible: Reanimated can
+   * stall after a cold start in Release builds and leave it at opacity 0
+   * (specs/06-tab-switch-bug.md, cause 1).
    *
-   * The photograph itself does not animate. It used to spring up from
-   * scale 0 with an 8% overshoot, which was a flourish when the hero was a
-   * 150pt drawing in a framed panel and became a full-width photograph
-   * ballooning past both screen edges once it went full bleed — mid-push,
-   * on top of the native slide. It arrives with the screen instead, the way
-   * a detail page's photo does everywhere else on iOS, and expo-image's own
-   * short fade covers the decode.
+   * The photograph itself does not animate either. It used to spring up
+   * from scale 0 with an 8% overshoot, which was a flourish when the hero
+   * was a 150pt drawing in a framed panel and became a full-width
+   * photograph ballooning past both screen edges once it went full bleed —
+   * mid-push, on top of the native slide. It arrives with the screen
+   * instead, the way a detail page's photo does everywhere else on iOS, and
+   * expo-image's own short fade covers the decode.
    */
-  const enter = (delay: number) =>
-    reduced ? undefined : FadeInDown.duration(motion.base).delay(delay);
 
   /* ---- Unknown entry --------------------------------------------- */
   if (!drink) {
@@ -737,30 +534,25 @@ export default function DrinkDetailScreen() {
             },
           ]}>
           {/*
-            Title UNDER the photograph, not above it.
-
-            The name above a framed picture is a caption layout — it makes the
-            photo an illustration of the heading. Under it, the photo is the
-            subject and the name identifies it, which is how Vivino, and every
-            wine label, orders the same two elements.
+            The title block and the tags (DrinkPanels). The catalogue number
+            is the only tracked text on the page: it is a code made of
+            figures; the style beside it is a word and is set plainly.
           */}
-          <Animated.View entering={enter(0)} style={styles.titleBlock}>
-            <Text style={styles.dexLine}>
-              <Text style={styles.dexNumber}>{formatDexNumber(drink.dexNumber)}</Text>
-              {'  ·  '}
-              {drink.subcategory}
-            </Text>
-            <Text style={styles.name} accessibilityRole="header">
-              {drink.name}
-            </Text>
-            <FactsLine facts={facts} />
-          </Animated.View>
-
-          {/* Meta row */}
-          <Animated.View entering={enter(140)} style={styles.metaRow}>
-            <CategoryPill category={drink.category} />
+          <DrinkTitle
+            eyebrow={
+              <>
+                <DexNumber>{formatDexNumber(drink.dexNumber)}</DexNumber>
+                {'  ·  '}
+                {drink.subcategory}
+              </>
+            }
+            name={drink.name}
+            facts={facts}
+          />
+          <MetaRow>
+            <CategoryTag category={drink.category} />
             <RarityBadge rarity={drink.rarity} />
-          </Animated.View>
+          </MetaRow>
 
           {/*
             Everything below is visible whether or not the entry is logged.
@@ -769,52 +561,18 @@ export default function DrinkDetailScreen() {
             record that you did it, not the key to finding out how.
           */}
 
-          {/*
-            Your pour — when you logged it, and what you said.
+          {record ? <YourPour record={record} /> : null}
 
-            The photograph is not repeated here. The hero at the top of the
-            screen already IS your photo once you have logged one, so the
-            framed copy that used to sit here showed the same picture twice,
-            one screen apart, inset in exactly the bordered panel the hero
-            stopped being.
-          */}
-          {record ? (
-            <>
-              <SectionLabel style={styles.section}>Your pour</SectionLabel>
-              <Text style={styles.logMeta}>Logged {formatLogDate(record.date)}</Text>
-              {record.note ? <Text style={styles.quote}>“{record.note}”</Text> : null}
-            </>
-          ) : null}
-
-          {/* Not logged yet — an invitation, sitting above the how-to */}
           {!unlocked ? (
-            <Card style={styles.lockedCard}>
-              <View style={styles.lockedIcon}>
-                <Icon name="lock" size={22} color={colors.wine} />
-              </View>
-              <Text style={styles.lockedTitle}>Not in your collection yet</Text>
-              <Text style={styles.lockedBody}>
-                Everything you need to make it is right below. Snap a photo when you do and it
-                joins your Dex.
-              </Text>
-              <Button
-                label="Log this drink"
-                icon="camera"
-                block
-                onPress={() => openPicker('unlock')}
-                accessibilityLabel={`Log ${drink.name}`}
-                style={styles.lockedCta}
-              />
-            </Card>
+            <NotLoggedCard
+              title="Not in your collection yet"
+              body="Everything you need to make it is right below. Snap a photo when you do and it joins your Dex."
+              onLog={() => openPicker('unlock')}
+              accessibilityLabel={`Log ${drink.name}`}
+            />
           ) : null}
 
-          {/* Tasting notes */}
-          <SectionLabel style={styles.section}>Tasting notes</SectionLabel>
-          <View style={styles.chipRow}>
-            {drink.tastingNotes.map((n, i) => (
-              <Chip key={`${i}-${n}`} label={n} />
-            ))}
-          </View>
+          <TastingNotes notes={drink.tastingNotes} />
 
           {/* How it's made — a recipe for cocktails, a composition for the rest */}
           {drink.recipe ? <RecipePanel recipe={drink.recipe} /> : null}
@@ -824,12 +582,7 @@ export default function DrinkDetailScreen() {
 
           {drink.serve ? <ServePanel serve={drink.serve} /> : null}
 
-          {/* Lore */}
-          <SectionLabel style={styles.section}>Field notes</SectionLabel>
-          <Text style={styles.bodyText}>{drink.description}</Text>
-
-          <SectionLabel style={styles.section}>Bar trivia</SectionLabel>
-          <Text style={styles.bodyText}>{drink.funFact}</Text>
+          <FieldNotes description={drink.description} funFact={drink.funFact} />
 
           {/*
             Footer actions.
@@ -880,18 +633,19 @@ export default function DrinkDetailScreen() {
         inside the scroll content, which meant it drifted across the slower
         hero while scrolling and then left with the first screenful — on the
         longest page in the app. Swipe-back still works; this is for everyone
-        who does not know it does. No haptic, like the system back.
+        who does not know it does.
+
+        The media icon button (a dark translucent square with a faint bone
+        edge), not a frosted glass disc: it holds on a white photograph and a
+        dark one alike, and it is the one control the app draws over media.
+        No haptic, like the system back.
       */}
-      <PressableScale
+      <MediaIconButton
+        icon="chevronLeft"
+        label="Back"
         onPress={() => router.back()}
-        noHaptic
         style={[styles.backButton, { top: insets.top + space.sm }]}
-        accessibilityRole="button"
-        accessibilityLabel="Go back">
-        <GlassCircle size={44}>
-          <Icon name="chevronLeft" size={22} color={colors.text} />
-        </GlassCircle>
-      </PressableScale>
+      />
 
       {/* Unlock / update-photo modal */}
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={closeModal}>
@@ -912,7 +666,7 @@ export default function DrinkDetailScreen() {
               did nothing.
             */}
             <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, space.lg) + space.sm }]}>
-              <Text style={styles.sheetTitle}>
+              <Text style={styles.sheetTitle} accessibilityRole="header">
                 {pickerMode === 'update' ? 'Update photo' : `Log ${drink.name}`}
               </Text>
               {/*
@@ -943,9 +697,7 @@ export default function DrinkDetailScreen() {
                     {/*
                       Field, the app's one form input, so the note is drawn,
                       labelled and announced like every other field, and like
-                      the note on the centre-tab log screen. The hand-built box it
-                      replaces had a cardBorder edge at 1.21:1, close to
-                      invisible to anyone with low vision. Field links a
+                      the note on the centre-tab log screen. Field links a
                       refused caption to the input and speaks it when it
                       appears; handleConfirm speaks it again on a repeat press,
                       when nothing on screen changes. Prose, so capitals and
@@ -970,9 +722,8 @@ export default function DrinkDetailScreen() {
                       The same pair, in the same order, as the centre-tab log
                       screen. Posting is the primary action because it is the
                       social half of the app, but it is never the only one: the
-                      first button keeps the pour on this phone. No press tick
-                      on either while logging — a saved pour answers with the
-                      success haptic, and the tick landed a beat before it.
+                      first button keeps the pour on this phone. A saved pour
+                      answers with the success haptic; buttons do not tick.
                     */}
                     <View style={styles.sheetActions}>
                       <Button
@@ -981,7 +732,6 @@ export default function DrinkDetailScreen() {
                         onPress={() => void handleConfirm(false)}
                         disabled={busy && saving !== 'dex'}
                         loading={saving === 'dex'}
-                        noHaptic={pickerMode === 'unlock'}
                         style={styles.sheetAction}
                       />
                       <Button
@@ -989,7 +739,6 @@ export default function DrinkDetailScreen() {
                         onPress={() => void handleConfirm(true)}
                         disabled={!myId || (busy && saving !== 'post')}
                         loading={saving === 'post'}
-                        noHaptic={pickerMode === 'unlock'}
                         style={styles.sheetAction}
                       />
                     </View>
@@ -1009,7 +758,8 @@ export default function DrinkDetailScreen() {
                     */}
                     <Button
                       label="Choose another"
-                      variant="ghost"
+                      variant="text"
+                      muted
                       block
                       onPress={() => setPickedUri(null)}
                       disabled={busy}
@@ -1017,24 +767,29 @@ export default function DrinkDetailScreen() {
                     />
                   </>
                 ) : (
-                  <>
-                    <PressableScale
+                  /*
+                    The two sources as outlined buttons with their glyph
+                    pinned at the left, as a sign-in stack draws them. They
+                    were hand-built rows on a near-invisible hairline that
+                    shrank when pressed; a secondary button is the app's one
+                    way of drawing "an action that is not the main one".
+                  */
+                  <View style={styles.sources}>
+                    <Button
+                      label="Take photo"
+                      variant="secondary"
+                      icon="camera"
+                      block
                       onPress={() => void takePhoto()}
-                      style={styles.optionRow}
-                      accessibilityRole="button"
-                      accessibilityLabel="Take photo">
-                      <Icon name="camera" size={20} color={colors.wine} />
-                      <Text style={styles.optionText}>Take photo</Text>
-                    </PressableScale>
-                    <PressableScale
+                    />
+                    <Button
+                      label="Choose photo"
+                      variant="secondary"
+                      icon="grid"
+                      block
                       onPress={() => void choosePhoto()}
-                      style={styles.optionRow}
-                      accessibilityRole="button"
-                      accessibilityLabel="Choose photo">
-                      <Icon name="grid" size={20} color={colors.wine} />
-                      <Text style={styles.optionText}>Choose photo</Text>
-                    </PressableScale>
-                  </>
+                    />
+                  </View>
                 )}
               </View>
             </View>
@@ -1061,47 +816,24 @@ const styles = StyleSheet.create({
   /*
    * Everything below the photograph. Opaque on purpose: the parallax slides
    * this page over the slower hero, and without a ground of its own the
-   * text would be drawn across the photograph. It also carries the 24pt
-   * gutter the scroll content no longer has, so the hero above it can run
+   * text would be drawn across the photograph. It also carries the screen
+   * gutter the scroll content does not have, so the hero above it can run
    * edge to edge without cancelling a margin.
    */
   page: {
     backgroundColor: colors.bg,
-    paddingHorizontal: space.xl,
+    paddingHorizontal: layout.gutter,
     paddingTop: space.lg,
   },
 
   /* Header */
   backButton: {
     /* Pinned over the photograph; `top` is set at the call site from the
-       safe-area inset. Left matches the page gutter. */
+       safe-area inset. 12 from the edge, a little inside the page gutter,
+       as a bar's back control sits. */
     position: 'absolute',
-    left: space.xl,
+    left: space.md,
     zIndex: 2,
-  },
-  dexLine: {
-    /* The brand's letterspaced sub-label, above the name. */
-    fontFamily: fonts.label,
-    fontSize: typeScale.micro.fontSize,
-    letterSpacing: 2.6,
-    color: colors.taupeInk,
-    marginBottom: space.xs,
-  },
-  dexNumber: {
-    /*
-     * Wine, not gilt. Gilt means legendary and nothing else now, and a
-     * catalogue number printed in the legendary metal on every entry was
-     * spending the one colour the rarity ladder tops out at.
-     */
-    color: colors.wine,
-  },
-  name: {
-    /* Drink names are the handoff's Playfair 700 at 28. */
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
-    marginBottom: space.lg,
   },
 
   /* Hero */
@@ -1151,256 +883,6 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
   },
-  titleBlock: { marginBottom: space.lg },
-
-  facts: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight + 2,
-    color: colors.textMuted,
-    marginTop: space.xs,
-  },
-  /* The separator sits lighter than the facts so the row reads as items
-     rather than as one run-on string. A glyph, not text: it carries no
-     information of its own. */
-  factsDot: { color: colors.textFaint },
-
-  /* Meta */
-  metaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: space.sm,
-  },
-
-  /* Stats */
-  statRow: {
-    flexDirection: 'row',
-    gap: space.sm,
-    marginTop: space.md,
-  },
-  /* Still used by ServePanel's Temp/Glass pair — only the drink's own three
-     facts moved out to FactsLine. Two of these side by side read fine; three
-     of them, one of which clipped its value, did not. */
-  statCard: {
-    flex: 1,
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.lg,
-    paddingVertical: space.md,
-    paddingHorizontal: space.md,
-    gap: space.xs,
-  },
-  statLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 11,
-    letterSpacing: 0.2,
-    color: colors.taupeInk,
-  },
-  statValue: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.text,
-  },
-
-  /* Sections */
-  section: {
-    marginTop: space.xxl,
-    marginBottom: space.md,
-  },
-  lead: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.bodyLg.fontSize,
-    lineHeight: typeScale.bodyLg.lineHeight,
-    color: colors.text,
-    marginBottom: space.lg,
-  },
-  bodyText: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
-  },
-  /* The composition's process paragraph, under its card. */
-  process: {
-    marginTop: space.lg,
-  },
-  miniLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 11,
-    letterSpacing: 0.2,
-    color: colors.taupeInk,
-  },
-
-  /* Chips */
-  chipRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: space.sm,
-  },
-  chip: {
-    backgroundColor: colors.cardAlt,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.pill,
-    paddingHorizontal: space.md,
-    // 7 + the 1pt border = an 8pt inset, on the grid.
-    paddingVertical: 7,
-  },
-  chipText: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-  },
-
-  /* Recipe + composition rows */
-  listCard: {
-    paddingHorizontal: space.lg,
-  },
-  /* Method and garnish, under the steps. */
-  detailCard: {
-    marginTop: space.lg,
-  },
-  ingredientRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: space.md,
-    paddingVertical: space.md,
-  },
-  ingredientItem: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
-  },
-  ingredientAmount: {
-    maxWidth: '42%',
-    textAlign: 'right',
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    ...tabular,
-  },
-  steps: {
-    marginTop: space.lg,
-    gap: space.md,
-  },
-  stepRow: {
-    flexDirection: 'row',
-    gap: space.md,
-    alignItems: 'flex-start',
-  },
-  stepNum: {
-    /*
-     * The chip's tint and hairline. These discs were a gilt rim on a gilt
-     * wash, which put the legendary metal on every recipe in the Dex.
-     */
-    width: 26,
-    height: 26,
-    borderRadius: radius.pill,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    backgroundColor: colors.cardAlt,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stepNumText: {
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.micro.fontSize,
-    color: colors.textMuted,
-  },
-  stepText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
-  },
-  componentRow: {
-    paddingVertical: space.md,
-    gap: space.xs,
-  },
-  componentLabel: {
-    /* The label ink the other 11pt labels on this screen use. */
-    fontFamily: fonts.bodyMedium,
-    fontSize: 11,
-    letterSpacing: 0.2,
-    color: colors.taupeInk,
-  },
-  componentDetail: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
-  },
-
-  /* Serve */
-  serveCard: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.lg,
-    padding: space.lg,
-    marginTop: space.md,
-  },
-  pairWrap: {
-    marginTop: space.lg,
-    gap: space.sm,
-  },
-
-  /* Your pour */
-  logMeta: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-  },
-  quote: {
-    /* Your own words about the drink — set as reading text, not fine print. */
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    fontStyle: 'italic',
-    color: colors.text,
-    marginTop: space.sm,
-  },
-
-  /* Locked */
-  lockedCard: {
-    alignItems: 'center',
-    padding: space.xl,
-    marginTop: space.xl,
-  },
-  lockedIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.pill,
-    backgroundColor: colors.wineWash,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: space.md,
-  },
-  lockedTitle: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.title.fontSize,
-    lineHeight: typeScale.title.lineHeight,
-    color: colors.text,
-    marginBottom: space.sm,
-  },
-  lockedBody: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
-  lockedCta: {
-    marginTop: space.xl,
-  },
 
   /* Footer actions */
   footerButton: {
@@ -1410,8 +892,8 @@ const styles = StyleSheet.create({
     /*
      * Spacing only; the look is Button's `dangerText` skin — red text, no
      * fill, no edge. Red text is the iOS signal for an action that deletes;
-     * the ghost grey it used to be looked like a harmless link, and a filled
-     * red pill under "Update photo" would outweigh the action people come
+     * the grey it used to be looked like a harmless link, and a filled red
+     * button under "Update photo" would outweigh the action people come
      * here for.
      */
     marginTop: space.xs,
@@ -1429,25 +911,25 @@ const styles = StyleSheet.create({
   sheet: {
     /*
      * A bottom sheet's only visible edge is its top one, and
-     * `elevation.sheet` casts UPWARD (-4pt offset) precisely to draw it. The
-     * 1pt border that used to sit here outlined all four sides, three of
-     * which are off-screen, and doubled the shadow on the fourth.
+     * `elevation.sheet` casts UPWARD (-4pt offset) precisely to draw it. A
+     * border would outline all four sides, three of which are off-screen,
+     * and double the shadow on the fourth. Panel corners, top only.
      */
     backgroundColor: colors.surface,
-    borderTopLeftRadius: radius.xl,
-    borderTopRightRadius: radius.xl,
-    padding: space.xl,
+    borderTopLeftRadius: radius.card,
+    borderTopRightRadius: radius.card,
+    paddingTop: space.xl,
+    paddingHorizontal: layout.gutter,
     ...elevation.sheet,
   },
   sheetTitle: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.title.fontSize,
-    lineHeight: typeScale.title.lineHeight,
+    /* Chrome, so Inter: the drink's name is the subject of the page, not of a dialog. */
+    ...textRole.barTitleLg,
     color: colors.text,
     marginBottom: space.xs,
   },
   sheetSubtitle: {
-    fontFamily: fonts.body,
+    fontFamily: textRole.helper.fontFamily,
     fontSize: typeScale.caption.fontSize,
     lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
@@ -1456,6 +938,7 @@ const styles = StyleSheet.create({
   sheetBody: {
     marginTop: space.lg,
   },
+  sources: { gap: space.sm },
   sheetActions: {
     flexDirection: 'row',
     gap: space.md,
@@ -1464,38 +947,21 @@ const styles = StyleSheet.create({
   },
   sheetAction: { flex: 1 },
   sheetHint: {
-    fontFamily: fonts.body,
+    fontFamily: textRole.helper.fontFamily,
     fontSize: typeScale.caption.fontSize,
     lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
     textAlign: 'center',
     marginBottom: space.xs,
   },
-  optionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.md,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.lg,
-    marginBottom: space.sm,
-    minHeight: 52,
-  },
-  optionText: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.text,
-  },
+  /* An inset photo: the panel corner and a drawn edge, on the sunk well while it decodes. */
   previewImage: {
     width: '100%',
     aspectRatio: 3 / 2,
-    borderRadius: radius.md,
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
+    borderRadius: radius.card,
+    backgroundColor: colors.bgSunk,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
     marginBottom: space.md,
   },
 });

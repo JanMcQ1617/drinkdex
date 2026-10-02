@@ -1,7 +1,8 @@
-import { useRouter, useScrollToTop } from 'expo-router';
+import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,50 +10,50 @@ import {
   View,
 } from 'react-native';
 import Animated, {
-  Extrapolation,
-  interpolate,
-  runOnJS,
-  type SharedValue,
-  useAnimatedReaction,
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useDerivedValue,
   useReducedMotion,
-  useSharedValue,
   withSpring,
-  ZoomIn,
-  ZoomOut,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { CustomDrinkTile } from '@/components/CustomDrinkTile';
 import { DexCard } from '@/components/DexCard';
-import { GlassSurface } from '@/components/glass';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
+import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import {
+  Button,
   Divider,
   EmptyState,
   haptic,
+  ListGroup,
+  ListRow,
   PressableScale,
-  ProgressBar,
   SearchField,
 } from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
   colors,
+  elevation,
   fonts,
+  layout,
   motion,
   radius,
   space,
-  type as typeScale,
+  stroke,
   tabular,
+  textRole,
+  type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
 import { matchOwned } from '@/lib/bar';
+import { catalogueTwin, ownTwin, shortQuery } from '@/lib/customDrinks';
 import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
-import type { Drink, DrinkCategory } from '@/types';
+import { useCustomDrinks } from '@/store/customDrinks';
+import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 
 /* ------------------------------------------------------------------ */
 /* Grid geometry                                                       */
@@ -68,7 +69,8 @@ import type { Drink, DrinkCategory } from '@/types';
  * for the name to sit on one line in most cases.
  */
 const COLUMNS = 2;
-const GRID_PAD = space.lg;
+/** The screen gutter: 16, as on every screen in v2. */
+const GRID_PAD = layout.gutter;
 const GRID_GAP = space.sm;
 
 /* ------------------------------------------------------------------ */
@@ -99,11 +101,15 @@ const STATUS_OPTIONS: { key: StatusFilter; label: string; a11y: string }[] = [
  * any case. NFD splits each accented letter into base plus mark and the
  * marks go; the explicit maps are the letters NFD does not decompose
  * (ı, ß, ø, đ), which were all that was left in the catalogue after it.
+ *
+ * This is the Dex's own search, broader than the log sheet's
+ * (lib/drinkSearch): a substring over name, style and origin, for
+ * browsing, not ranked for picking one drink.
  */
 const fold = (s: string) =>
   s
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[̀-ͯ]/g, '')
     .replace(/ı/g, 'i')
     .replace(/ß/g, 'ss')
     .replace(/[øØ]/g, 'o')
@@ -121,6 +127,13 @@ const fold = (s: string) =>
 const SEARCH_KEY = new Map(
   DRINKS.map((d) => [d.id, [d.name, d.subcategory, d.origin].map(fold).join('\n')]),
 );
+
+/** The same key for a drink someone added: a handful of them, folded per search. */
+const customKey = (c: CustomDrink) => [c.name, c.subcategory, c.origin].map(fold).join('\n');
+
+/** Own keys only: the stores are plain objects, and 'constructor' is not a drink. */
+const has = (map: Record<string, unknown>, id: string) =>
+  Object.prototype.hasOwnProperty.call(map, id);
 
 /* ------------------------------------------------------------------ */
 /* Subcomponents                                                       */
@@ -147,17 +160,16 @@ function FilterChip({
   const reduced = useReducedMotion();
 
   /*
-   * The selected wash grows in behind the label and the border warms toward
-   * the category colour on the same spring, so the chip reads as one thing
-   * changing state rather than two properties flipping at different moments.
-   * Border colour needs interpolateColor — a plain style swap would snap
-   * while the fill was still animating, which looks like a bug.
+   * The rule under the label grows in on a spring, the selection indicator
+   * every selectable thing in the app answers with. It is not what says
+   * which chip is on: the label's colour does that the moment it is
+   * tapped, so a rule that stalls (Reanimated can, after a cold start)
+   * never hides the selection.
    */
   const p = useDerivedValue(() =>
-    // motion.selection, not motion.spring: these chips and the tab pill are
-    // both selection affordances on this same screen, one tap apart. On the
-    // general spring they settled in ~0.40s against the pill's ~0.23s, so the
-    // same gesture got two different answers depending on where you tapped.
+    // motion.selection, not motion.spring: these chips and the segmented
+    // and tab indicators elsewhere are all selection affordances, and the
+    // same gesture must get the same answer wherever it is made.
     reduced ? (selected ? 1 : 0) : withSpring(selected ? 1 : 0, motion.selection),
   );
 
@@ -186,7 +198,8 @@ function FilterChip({
         on the screen and the least important — it is a filter, not content.
         Vivino's equivalent (Styles / Regions / Grapes) is plain text with an
         underline, which is also what lets the row hold two axes without
-        looking like ten competing buttons.
+        looking like ten competing buttons. These are tabs, so they stay
+        tabs; the toggles elsewhere in the app are Chips.
       */}
       <Animated.View
         pointerEvents="none"
@@ -196,112 +209,12 @@ function FilterChip({
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Collapsing masthead                                                 */
-/* ------------------------------------------------------------------ */
-
 /**
- * Scroll distance over which the compact bar takes over from the big title.
- *
- * Starts below the title's own height so the two never read as duplicated —
- * the bar only appears once "The Dex" has genuinely left the screen.
- */
-const MASTHEAD_FADE_FROM = 44;
-const MASTHEAD_FADE_TO = 96;
-
-/**
- * Scroll depth at which the back-to-top button appears.
- *
- * Set past MASTHEAD_FADE_TO: until the compact bar has fully taken over, the
- * big title is still on screen and there is nothing to go back to.
+ * Scroll depth at which the back-to-top button appears: about one screen
+ * of cards below the header, where getting back up starts to take more
+ * than a flick.
  */
 const SCROLL_TOP_SHOW_AT = 320;
-
-/** Button and its container share this, so the touch target cannot drift. */
-const SCROLL_TOP_SIZE = 40;
-
-/**
- * The compact bar that replaces the scrolled-away title.
- *
- * Glass rather than a solid fill so the grid stays visible sliding under it,
- * which is what tells you the page is still moving. The progress hairline
- * along the bottom edge doubles as the bar's separator — one element doing
- * two jobs instead of a rule plus a meter.
- */
-function Masthead({
-  scrollY,
-  collected,
-  topInset,
-}: {
-  scrollY: SharedValue<number>;
-  collected: number;
-  topInset: number;
-}) {
-  const pct = TOTAL > 0 ? Math.min(100, (collected / TOTAL) * 100) : 0;
-
-  /*
-   * Measured height. The bar hides by sliding fully above the top edge,
-   * so it has to know how tall it is; 120 is a first-frame stand-in only.
-   */
-  const height = useSharedValue(0);
-
-  const barStyle = useAnimatedStyle(() => {
-    const p = interpolate(
-      scrollY.value,
-      [MASTHEAD_FADE_FROM, MASTHEAD_FADE_TO],
-      [0, 1],
-      Extrapolation.CLAMP,
-    );
-    /*
-     * Slides rather than fades, and the distinction is not cosmetic:
-     * UIKit drops a UIVisualEffectView's material entirely when any
-     * ancestor has alpha < 1. Animating opacity here left the bar with no
-     * glass at all — bare text over the scrolling grid, only the progress
-     * hairline still drawn. Translating keeps the layer fully opaque.
-     */
-    return { transform: [{ translateY: -(1 - p) * (height.value || 120) }] };
-  });
-
-  return (
-    /*
-     * No paddingTop here — the inner row owns it (see `mastheadGlass`), so the
-     * glass can run up under the status bar. Setting it in both places padded
-     * the inset twice, which pushed the bar a full status-bar height down the
-     * screen and left it sitting on top of the grid instead of over it.
-     *
-     * Takes touches, deliberately. It was `pointerEvents="none"`, so a tap on
-     * the visible bar went straight through to whichever card sat under the
-     * glass and opened a drink the user had not seen. Parked, the bar is
-     * translated wholly off-screen and cannot catch anything; the cost is
-     * that a drag starting on it does not scroll the grid, as with any
-     * navigation bar.
-     *
-     * Hidden from VoiceOver. It is a visual repeat of the list header's
-     * title and progress, which stay in the accessibility order; parked
-     * off-screen it was still read, so every visit to the tab heard "The
-     * Dex" twice and a count that was not on screen.
-     */
-    <Animated.View
-      style={[styles.masthead, barStyle]}
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
-      onLayout={(e) => height.set(e.nativeEvent.layout.height)}>
-      <GlassSurface cornerRadius={0} strong flat style={styles.mastheadGlass}>
-        <View style={[styles.mastheadRow, { paddingTop: topInset }]}>
-          <Text style={styles.mastheadTitle}>The Dex</Text>
-          <Text style={styles.mastheadCount}>
-            {formatCount(collected)}
-            <Text style={styles.mastheadTotal}> / {formatCount(TOTAL)}</Text>
-          </Text>
-        </View>
-        {/* Progress doubles as the bar's bottom rule. */}
-        <View style={styles.mastheadTrack}>
-          <View style={[styles.mastheadFill, { width: `${pct}%` }]} />
-        </View>
-      </GlassSurface>
-    </Animated.View>
-  );
-}
 
 /**
  * Grid cell.
@@ -339,7 +252,94 @@ const GridCell = React.memo(function GridCell({
 });
 
 /**
- * The empty grid, which has three causes and gets three answers.
+ * "Added by you": the drinks this person added themselves, above the
+ * catalogue's filters.
+ *
+ * A shelf of its own and never cards in the grid. The grid, its chips
+ * ("All 2,089") and the progress line all mean "the catalogue"; a custom
+ * card among them would make every count on this screen wrong, and its
+ * absence of a number and a rarity would look like a broken card. The
+ * shelf follows the same filters (category, collected, the search) so it
+ * never shows a drink the filters above it say is not there.
+ *
+ * Newest first: the one just added is the one being looked for.
+ */
+function AddedByYou({
+  drinks,
+  pours,
+  onOpen,
+  onAdd,
+}: {
+  drinks: CustomDrink[];
+  pours: Record<string, UnlockRecord>;
+  onOpen: (id: string) => void;
+  onAdd: () => void;
+}) {
+  return (
+    <View style={styles.shelf}>
+      <View style={styles.shelfHead}>
+        {/*
+          One heading with its count, read together ("Added by you 3"). The
+          count sits on the title's baseline, a step down and muted, as the
+          filter chips print theirs.
+        */}
+        <Text style={styles.shelfTitle} accessibilityRole="header">
+          Added by you<Text style={styles.shelfCount}>{`  ${formatCount(drinks.length)}`}</Text>
+        </Text>
+        <Button
+          label="Add a drink"
+          variant="text"
+          size="sm"
+          icon="plus"
+          onPress={onAdd}
+          accessibilityHint="Opens a form to add a drink that is not in the Dex"
+          style={styles.shelfAdd}
+        />
+      </View>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        // A status-bar tap scrolls the grid home, not this row.
+        scrollsToTop={false}
+        style={styles.shelfScroll}
+        contentContainerStyle={styles.shelfScrollContent}>
+        {drinks.map((c) => (
+          <CustomDrinkTile
+            key={c.id}
+            drink={c}
+            pourPhotoUri={has(pours, c.id) ? (pours[c.id].photoUri ?? null) : null}
+            collected={has(pours, c.id)}
+            onPress={onOpen}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
+}
+
+/**
+ * Under a search that found things, none of them with the name typed:
+ * "margarita" always matches something, so an empty grid alone would hide
+ * the way to add a drink the Dex does not have.
+ */
+function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
+  return (
+    <View style={styles.notTheOne}>
+      <Text style={styles.notTheOneText}>Not the one you meant?</Text>
+      <Button
+        label={`Add “${shortQuery(query)}”`}
+        variant="secondary"
+        size="sm"
+        icon="plus"
+        onPress={onAdd}
+        accessibilityLabel={`Add ${query} to your Dex`}
+      />
+    </View>
+  );
+}
+
+/**
+ * The empty grid, which has several causes and gets an answer for each.
  *
  * It was one message for all of them — "widen the search" — so a new user
  * tapping Collected was told to widen a search they had never run, and
@@ -347,21 +347,84 @@ const GridCell = React.memo(function GridCell({
  * clears only the query, so a typo made inside Spirits does not also throw
  * away Spirits. An empty Collected says how things get collected. Anything
  * else is a filter combination with nothing in it, and resets the filters.
+ *
+ * A search that finds nothing in the whole catalogue may be a drink the
+ * Dex does not have yet, so it offers to add it: it goes into this
+ * person's Dex at once and to Sipply as a suggestion. One they already
+ * added is on the shelf above, and the message points there instead. A
+ * search that the catalogue does answer, but only under other filters,
+ * says so and clears the filters, not the words; so does a name they
+ * added themselves that the filters keep off the shelf, rather than
+ * offering to add it a second time.
  */
 function GridEmpty({
   query,
+  matchesCatalogue,
+  onShelf,
+  ownHidden,
   nothingCollected,
   onClearSearch,
+  onAdd,
+  onClearFilters,
   onShowAll,
   onReset,
 }: {
   query: string;
+  /** The query finds something in the catalogue under any filter. */
+  matchesCatalogue: boolean;
+  /** One of the drinks on the shelf above has exactly this name. */
+  onShelf: boolean;
+  /** A drink they added has exactly this name, and the filters keep it off the shelf. */
+  ownHidden: string | null;
   nothingCollected: boolean;
   onClearSearch: () => void;
+  onAdd: () => void;
+  onClearFilters: () => void;
   onShowAll: () => void;
   onReset: () => void;
 }) {
   if (query.length > 0) {
+    if (onShelf) {
+      return (
+        <EmptyState
+          icon="search"
+          title="Not in the Dex yet"
+          body="It's in the drinks you added, above."
+          action={{ label: 'Clear search', onPress: onClearSearch }}
+        />
+      );
+    }
+    if (matchesCatalogue) {
+      return (
+        <EmptyState
+          icon="filter"
+          title="Not under these filters"
+          body={`“${query}” is in the Dex, but the filters hide it.`}
+          action={{ label: 'Clear filters', onPress: onClearFilters }}
+        />
+      );
+    }
+    if (ownHidden) {
+      return (
+        <EmptyState
+          icon="filter"
+          title="Not under these filters"
+          body={`You added “${ownHidden}”, but the filters hide it.`}
+          action={{ label: 'Clear filters', onPress: onClearFilters }}
+        />
+      );
+    }
+    if (query.length >= 2) {
+      return (
+        <EmptyState
+          icon="search"
+          title={`No match for “${query}”`}
+          body="It may not be in the Dex yet. Add it and it's in your Dex straight away. We'll look at adding it for everyone."
+          action={{ label: `Add “${shortQuery(query)}”`, onPress: onAdd }}
+          secondaryAction={{ label: 'Clear search', onPress: onClearSearch }}
+        />
+      );
+    }
     return (
       <EmptyState
         icon="search"
@@ -422,14 +485,30 @@ export default function DexScreen() {
    *
    * A plain key count is honest here because the store keeps `unlocks` to
    * catalogue ids only: records for drinks that left the index are moved
-   * aside when the collection loads (see settle() in store/collection), so
-   * this header, Stats and the celebrations all count the same entries.
+   * aside when the collection loads (see settle() in store/collection), and
+   * drinks people add themselves live in a store of their own
+   * (store/customDrinks), so this progress, Stats and the celebrations all
+   * count the same entries.
    */
   const collected = useCollection((s) => Object.keys(s.unlocks).length);
+
+  /*
+   * The drinks this person added, and their pours. The stable records, not
+   * a list made in the selector: zustand v5 throws on a selector that
+   * returns a new array each call. The shelf is derived below.
+   *
+   * The splash does not wait for this store, so for a moment after launch
+   * the shelf may not be drawn; it appears once the store has loaded.
+   * Holding the splash for it would be one more way to show a blank screen.
+   */
+  const customDrinks = useCustomDrinks((s) => s.drinks);
+  const customPours = useCustomDrinks((s) => s.pours);
+  const customReady = useCustomDrinks((s) => s.hydrated);
 
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
+  const trimmed = query.trim();
 
   /*
    * The card width is the exact column, unrounded: rounding it could push
@@ -440,65 +519,84 @@ export default function DexScreen() {
     return { column, artSize: Math.round(column * 0.66) };
   }, [width]);
 
-  const rows = useMemo(() => {
+  /*
+   * The grid, and whether the search finds anything in the catalogue at
+   * all, under any filter: that is what tells "the filters hide it" apart
+   * from "the Dex does not have it" when the grid comes back empty. One
+   * pass over the index for both. A plain loop rather than a filter
+   * callback, so the "found anywhere" flag is a local of this function and
+   * not a variable a callback reassigns.
+   */
+  const { rows, matchesCatalogue } = useMemo(() => {
     const q = fold(query.trim());
     // Read-not-subscribe: `collected` above is what invalidates this memo.
     const unlocks = useCollection.getState().unlocks;
+    const rows: Drink[] = [];
+    let anywhere = false;
 
-    return DRINKS.filter((drink) => {
-      if (category !== 'all' && drink.category !== category) return false;
+    for (const drink of DRINKS) {
+      const hit = q.length === 0 || (SEARCH_KEY.get(drink.id) ?? '').includes(q);
+      if (!hit) continue;
+      anywhere = true;
+      if (category !== 'all' && drink.category !== category) continue;
       if (status !== 'all') {
-        const has = Boolean(unlocks[drink.id]);
-        if (status === 'unlocked' ? !has : has) return false;
+        const owned = Boolean(unlocks[drink.id]);
+        if (status === 'unlocked' ? !owned : owned) continue;
       }
-      return q.length === 0 || (SEARCH_KEY.get(drink.id) ?? '').includes(q);
-    });
+      rows.push(drink);
+    }
+    return { rows, matchesCatalogue: anywhere };
     // `collected` looks unused — it is the invalidation key for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collected, query, category, status]);
 
+  /* The shelf: the same three filters, newest first. */
+  const shelf = useMemo(() => {
+    if (!customReady) return [];
+    const q = fold(query.trim());
+    return Object.values(customDrinks)
+      .filter((c) => {
+        if (category !== 'all' && c.category !== category) return false;
+        if (status !== 'all') {
+          const poured = has(customPours, c.id);
+          if (status === 'unlocked' ? !poured : poured) return false;
+        }
+        return q.length === 0 || customKey(c).includes(q);
+      })
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  }, [customReady, customDrinks, customPours, query, category, status]);
+
+  /*
+   * Whether the search is a name the Dex or this person already has,
+   * folded the way the form and the server compare names. Two characters
+   * at least: one letter is not a name anybody means.
+   */
+  const named = trimmed.length >= 2;
+  const catalogueHasName = named && catalogueTwin(trimmed) !== undefined;
+  const ownNamed = named && customReady ? ownTwin(trimmed, customDrinks) : undefined;
+
   const listRef = useRef<FlatList<Drink>>(null);
   /*
    * Tapping the Dex tab while already on it scrolls the grid home, the way
-   * every iOS tab bar behaves. The chip scroller below opts out of
-   * scrollsToTop so a status-bar tap reaches the grid, not the chips.
+   * every iOS tab bar behaves. The chip and shelf scrollers opt out of
+   * scrollsToTop so a status-bar tap reaches the grid, not them.
    */
   useScrollToTop(listRef);
-  const reduced = useReducedMotion();
-
-  const scrollY = useSharedValue(0);
 
   /*
-   * The scroll-to-top button mounts on a state flag rather than on an animated
+   * The back-to-top button mounts on a state flag rather than on an animated
    * opacity, so a hidden button cannot swallow taps over the grid.
    *
-   * Derived by reaction rather than written from the scroll handler. The
-   * handler version only wrote the flag when a scroll event actually CROSSED
-   * the threshold, which left every path that arrives past it without crossing
-   * it — a remount at a restored offset, a preserved tab position, Fast
-   * Refresh at depth — showing no button no matter how far you scrolled. It
-   * also meant two sources of truth that could desync, which is exactly what
-   * Fast Refresh did: it preserves shared values but resets React state.
-   *
-   * useAnimatedReaction runs on first evaluation too (prev is null), so the
-   * flag seeds itself from wherever the list actually is. Still only writes on
-   * change — writing every frame would re-render the screen on every pixel.
+   * useScrolledPast compares each scroll event with where the list last
+   * was on either side of the line, not with the event before it, so a
+   * list that arrives past the line without crossing it (a restored
+   * offset, a preserved tab position) shows the button at its first scroll
+   * event. It writes state only when the side changes; a write per frame
+   * would re-render the screen on every pixel.
    */
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  const onScroll = useAnimatedScrollHandler((e) => {
-    scrollY.set(e.contentOffset.y);
-  });
-
-  useAnimatedReaction(
-    () => scrollY.value > SCROLL_TOP_SHOW_AT,
-    (past, prev) => {
-      if (past !== prev) runOnJS(setShowScrollTop)(past);
-    },
-  );
+  const [showScrollTop, onScroll] = useScrolledPast(SCROLL_TOP_SHOW_AT);
 
   const scrollToTop = useCallback(() => {
-    // No haptic here: the PressableScale that calls this already taps.
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
   }, []);
 
@@ -507,6 +605,48 @@ export default function DexScreen() {
       router.push({ pathname: '/drink/[id]', params: { id } });
     },
     [router],
+  );
+
+  const openCustom = useCallback(
+    (id: string) => {
+      router.push({ pathname: '/custom/[id]', params: { id } });
+    },
+    [router],
+  );
+
+  /*
+   * The add-a-drink form, named after the search when it came from one
+   * (`from=dex`) and blank from the shelf's own link (`from=shelf`). A
+   * filtered Dex passes its category, so someone browsing Spirits starts
+   * on a spirit.
+   */
+  const openAdd = useCallback(
+    (from: 'dex' | 'shelf', name?: string) => {
+      router.push({
+        pathname: '/add-drink',
+        params: {
+          from,
+          ...(name ? { name } : null),
+          ...(category !== 'all' ? { category } : null),
+        },
+      });
+    },
+    [category, router],
+  );
+
+  /*
+   * Back from the form. It leaves a note in the custom-drinks store saying
+   * where to go next: the entry just added, or the catalogue drink a
+   * "Already in the Dex?" row pointed at. Taken on focus, so it is read
+   * once, by this screen, after the form has gone.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      const h = useCustomDrinks.getState().takeHandoff('dex');
+      if (!h) return;
+      if (h.kind === 'custom') router.push({ pathname: '/custom/[id]', params: { id: h.id } });
+      else router.push({ pathname: '/drink/[id]', params: { id: h.id } });
+    }, [router]),
   );
 
   const renderItem = useCallback(
@@ -526,6 +666,12 @@ export default function DexScreen() {
     setStatus(next);
   }, []);
 
+  const clearFilters = useCallback(() => {
+    haptic.select();
+    setCategory('all');
+    setStatus('all');
+  }, []);
+
   const resetFilters = useCallback(() => {
     haptic.select();
     setCategory('all');
@@ -533,84 +679,72 @@ export default function DexScreen() {
     setQuery('');
   }, []);
 
+  const pct = TOTAL > 0 ? Math.min(100, (collected / TOTAL) * 100) : 0;
+
   const header = (
     <View>
       {/*
-        Title and search share a row. Search was a 48pt bordered field on a
-        line of its own, and the subtitle below the title — "Every pour you
-        have met, kept in one place" — restated the screen's name at body
-        size. Between them they cost about 90pt above the fold on a screen
-        where the first drink already sat 409pt down, half the display.
-
-        The field is SearchField (components/ui), the one search input the
-        app's screens share — not a smaller sunk variant of its own, as it
-        once was. At 36pt with 13pt text it was under the touch minimum,
-        and its glyph and placeholder sat at 2.5:1 in the sunk well. The
-        placeholder names what it searches, country included: nothing else
-        on screen says the index can be browsed that way.
+        The app's one search field (components/ui), full width now that the
+        title lives in the bar above. The placeholder names what it
+        searches, country included: nothing else on screen says the index
+        can be browsed that way.
       */}
-      <View style={styles.titleRow}>
-        <Text style={styles.title} accessibilityRole="header">
-          The Dex
-        </Text>
-        <SearchField
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Name, style or country"
-          accessibilityLabel="Search drinks by name, style or country"
-          style={styles.search}
-        />
-      </View>
+      <SearchField
+        value={query}
+        onChangeText={setQuery}
+        placeholder="Name, style or country"
+        accessibilityLabel="Search drinks by name, style or country"
+      />
 
-      <View style={styles.progressBlock}>
-        <View style={styles.progressRow}>
-          <Text style={styles.progressCount}>
-            {formatCount(collected)} of {formatCount(TOTAL)}
-          </Text>
-          <Text style={styles.progressLabel}>collected</Text>
-        </View>
-        <ProgressBar value={collected} max={TOTAL} />
-      </View>
+      {/*
+        The count, as one plain line. The rule under the bar draws the same
+        figure; this says it in words, and is what VoiceOver reads.
+      */}
+      <Text style={styles.progressLine}>
+        {formatCount(collected)} of {formatCount(TOTAL)} collected
+      </Text>
 
       {/*
         My Bar. Sits above the filters rather than among them because it is a
-        destination, not another way to slice this grid — and below the
-        progress block because the Dex's own headline should stay the first
-        thing read.
+        destination, not another way to slice this grid. A one-row list
+        group, the app's one way of drawing "a place you go from here", with
+        a chevron for the push.
+
+        The bottle: what My Bar holds. This was the sparkle, which is the
+        legendary mark on the cards a few rows down, and then the coupe,
+        which is the Dex's own tab glyph. Each one pointed at this screen
+        rather than at the one the row opens.
 
         The count is live so the row earns its place: "48 you can make right
         now" is a reason to tap, where a bare "My Bar" is furniture.
       */}
-      <PressableScale
-        onPress={() => {
-          haptic.tap();
-          router.push('/bar');
-        }}
-        noHaptic
-        accessibilityRole="button"
-        accessibilityLabel={
-          barCount > 0
-            ? `My Bar, ${barCount} drinks you can make right now`
-            : 'My Bar, tick what you own to see what you can make'
-        }
-        style={styles.barLink}>
-        {/*
-          The bottle: what My Bar holds. This was the sparkle, which is the
-          legendary mark on the cards a few rows down, and then the coupe,
-          which is the Dex's own tab glyph. Each one pointed at this screen
-          rather than at the one the row opens.
-        */}
-        <Icon name="bottle" size={18} color={colors.wine} />
-        <View style={styles.barLinkText}>
-          <Text style={styles.barLinkTitle}>My Bar</Text>
-          <Text style={styles.barLinkBody} numberOfLines={1}>
-            {barCount > 0
+      <ListGroup style={styles.barGroup}>
+        <ListRow
+          leading={{ icon: 'bottle' }}
+          title="My Bar"
+          subtitle={
+            barCount > 0
               ? `${barCount} ${barCount === 1 ? 'drink' : 'drinks'} you can make now`
-              : 'Tick what you own, see what you can pour'}
-          </Text>
-        </View>
-        <Icon name="chevronRight" size={16} color={colors.textFaint} />
-      </PressableScale>
+              : 'Tick what you own, see what you can pour'
+          }
+          trailing="chevron"
+          onPress={() => router.push('/bar')}
+          accessibilityLabel={
+            barCount > 0
+              ? `My Bar, ${barCount} drinks you can make right now`
+              : 'My Bar, tick what you own to see what you can make'
+          }
+        />
+      </ListGroup>
+
+      {shelf.length > 0 ? (
+        <AddedByYou
+          drinks={shelf}
+          pours={customPours}
+          onOpen={openCustom}
+          onAdd={() => openAdd('shelf')}
+        />
+      ) : null}
 
       {/* Category */}
       <ScrollView
@@ -668,7 +802,38 @@ export default function DexScreen() {
 
   return (
     <View style={styles.screen}>
-      <Animated.FlatList
+      {/*
+        A fixed bar, the app's one top bar: the screen's name and the way to
+        Stats, which left the tab bar to become a report on this collection.
+        It replaces a glass masthead that slid down over the grid once the
+        big title scrolled away — a second, frosted copy of the title that
+        only appeared halfway down the page.
+      */}
+      <ScreenTopBar
+        size="lg"
+        title="Dex"
+        showRule={false}
+        right={
+          <TopBarButton
+            icon="stats"
+            label="Collection stats"
+            onPress={() => router.push('/stats')}
+          />
+        }
+      />
+      {/*
+        The bar's rule IS the progress: 2pt, sunk track, wine to the share
+        collected. One line doing two jobs, under a bar that never moves.
+        Hidden from VoiceOver; the line in the list header says the figure.
+      */}
+      <View
+        style={styles.progressTrack}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants">
+        <View style={[styles.progressFill, { width: `${pct}%` }]} />
+      </View>
+
+      <FlatList
         data={rows}
         renderItem={renderItem}
         keyExtractor={(drink) => drink.id}
@@ -678,21 +843,30 @@ export default function DexScreen() {
         contentContainerStyle={[
           styles.listContent,
           {
-            paddingTop: insets.top + space.md,
             // Clears the floating tab bar — the grid's last row would
-            // otherwise sit under frosted glass.
+            // otherwise sit under it.
             paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
           },
         ]}
         ListHeaderComponent={header}
         ListEmptyComponent={
           <GridEmpty
-            query={query.trim()}
+            query={trimmed}
+            matchesCatalogue={matchesCatalogue}
+            onShelf={ownNamed !== undefined && shelf.includes(ownNamed)}
+            ownHidden={ownNamed !== undefined && !shelf.includes(ownNamed) ? ownNamed.name : null}
             nothingCollected={status === 'unlocked' && collected === 0}
             onClearSearch={() => setQuery('')}
+            onAdd={() => openAdd('dex', trimmed)}
+            onClearFilters={clearFilters}
             onShowAll={() => selectStatus('all')}
             onReset={resetFilters}
           />
+        }
+        ListFooterComponent={
+          rows.length > 0 && named && !catalogueHasName && !ownNamed ? (
+            <NotTheOne query={trimmed} onAdd={() => openAdd('dex', trimmed)} />
+          ) : null
         }
         onScroll={onScroll}
         scrollEventThrottle={16}
@@ -702,48 +876,48 @@ export default function DexScreen() {
          * the virtualiser one item per row. At 18 and 12 the first commit
          * built 36 cards when four to six are on screen below the header.
          * Four rows fills the first screen on the largest phone.
+         *
+         * No removeClippedSubviews: on iOS Fabric it puts the header and
+         * cells on screen only during the scroll view's own remount pass,
+         * and a missed pass blanked the whole tab (specs/06, cause 4). The
+         * window below already caps what is mounted.
          */
         initialNumToRender={4}
         maxToRenderPerBatch={4}
         updateCellsBatchingPeriod={50}
         windowSize={5}
-        removeClippedSubviews
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         ref={listRef}
       />
 
-      <Masthead scrollY={scrollY} collected={collected} topInset={insets.top} />
-
       {showScrollTop ? (
         /*
-         * Scales in and out rather than fading, for the masthead's reason:
-         * UIKit drops a glass material while any ancestor's alpha is under
-         * 1, so a fade showed a bare chevron until the glass popped in at
-         * the end, and lost the glass the moment the exit began.
+         * Appears and disappears without a layout animation: an exit that
+         * never finishes leaves a ghost button over the grid (specs/06,
+         * 3.8). A floating control, so it is the one thing on this screen
+         * besides the tab bar that casts the bar's tight shadow; white on a
+         * drawn edge, pressed to the sunk fill, as every control answers.
+         *
+         * A sized, absolutely placed box with an explicit zIndex, so it
+         * hit-tests above the grid rather than letting a tap through to the
+         * card underneath.
          */
-        <Animated.View
-          entering={reduced ? undefined : ZoomIn.duration(motion.fast)}
-          exiting={reduced ? undefined : ZoomOut.duration(motion.exit)}
-          style={[
+        <Pressable
+          onPress={scrollToTop}
+          accessibilityRole="button"
+          accessibilityLabel="Back to top"
+          style={({ pressed }) => [
             styles.scrollTop,
             { bottom: insets.bottom + TAB_BAR_CLEARANCE + space.md },
+            pressed && styles.scrollTopPressed,
           ]}>
-          <PressableScale
-            onPress={scrollToTop}
-            // 40pt is under the 44pt minimum, so the slop makes up the rest.
-            hitSlop={space.sm}
-            accessibilityRole="button"
-            accessibilityLabel="Back to top">
-            <GlassSurface cornerRadius={radius.pill} strong style={styles.scrollTopGlass}>
-              {/* No chevronUp in the set — the down chevron, turned over. */}
-              <View style={styles.scrollTopIcon}>
-                <Icon name="chevronDown" size={18} color={colors.wine} />
-              </View>
-            </GlassSurface>
-          </PressableScale>
-        </Animated.View>
+          {/* No chevronUp in the set — the down chevron, turned over. */}
+          <View style={styles.scrollTopIcon}>
+            <Icon name="chevronDown" size={18} color={colors.text} />
+          </View>
+        </Pressable>
       ) : null}
     </View>
   );
@@ -760,149 +934,99 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: GRID_PAD,
-    paddingBottom: space.xxxl,
+    paddingTop: space.md,
     gap: GRID_GAP,
   },
   gridRow: {
     gap: GRID_GAP,
   },
 
-  /* Collapsing masthead */
-  masthead: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-  },
-  /*
-   * Deliberately small: an assist, not a control the grid has to work around.
-   *
-   * The size is declared HERE as well as on the glass. This container is
-   * absolutely positioned with only `right`/`bottom`, so without explicit
-   * dimensions it is content-sized — and a content-sized absolute box that is
-   * also running an entering animation can hit-test as empty, which sent the
-   * tap through to the card underneath and opened a drink instead of
-   * scrolling. zIndex makes "above the grid" explicit rather than relying on
-   * sibling paint order.
-   */
-  scrollTop: {
-    position: 'absolute',
-    right: GRID_PAD,
-    width: SCROLL_TOP_SIZE,
-    height: SCROLL_TOP_SIZE,
-    zIndex: 2,
-  },
-  scrollTopGlass: {
-    width: SCROLL_TOP_SIZE,
-    height: SCROLL_TOP_SIZE,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  scrollTopIcon: {
-    transform: [{ rotate: '180deg' }],
-  },
-  mastheadGlass: {
-    // paddingTop is applied to the inner row instead, so the glass itself
-    // extends under the status bar rather than starting below it.
-    paddingTop: 0,
-  },
-  mastheadRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: GRID_PAD,
-    paddingBottom: space.sm,
-    minHeight: 44,
-  },
-  mastheadTitle: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.title.fontSize,
-    lineHeight: typeScale.title.lineHeight,
-    color: colors.text,
-  },
-  mastheadCount: {
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.caption.fontSize,
-    color: colors.text,
-    ...tabular,
-  },
-  // textMuted: 13pt text on the glass, where textFaint is 3.82:1 — a 3:1 ink under a 4.5:1 floor.
-  mastheadTotal: {
-    color: colors.textMuted,
-  },
-  mastheadTrack: {
-    height: 2,
+  /* The progress rule under the bar. Square ends: a measurement. */
+  progressTrack: {
+    height: stroke.indicator,
     backgroundColor: colors.bgSunk,
   },
-  mastheadFill: {
-    height: 2,
+  progressFill: {
+    height: stroke.indicator,
     backgroundColor: colors.wine,
   },
 
-  /* Header */
-  title: {
-    fontFamily: fonts.display,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
+  /* Back to top */
+  scrollTop: {
+    position: 'absolute',
+    right: GRID_PAD,
+    width: layout.hit,
+    height: layout.hit,
+    zIndex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
+    backgroundColor: colors.surface,
+    ...elevation.bar,
   },
-  progressBlock: {
-    marginTop: space.lg,
-    gap: space.sm,
-  },
-  progressRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: space.xs,
-  },
-  progressCount: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    color: colors.wine,
-    ...tabular,
-  },
-  progressLabel: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    letterSpacing: typeScale.caption.letterSpacing,
-    // Small text, so textMuted — as chipDetail below, and for its reason.
-    color: colors.textMuted,
+  scrollTopPressed: { backgroundColor: colors.bgSunk },
+  scrollTopIcon: {
+    transform: [{ rotate: '180deg' }],
   },
 
-  /* My Bar entry point. Same surface + hairline as the other cards on this
-     screen, so it reads as a place rather than a banner. */
-  barLink: {
+  /* Header */
+  progressLine: {
+    marginTop: space.md,
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    // Small text, so textMuted — as chipDetail below, and for its reason.
+    color: colors.textMuted,
+    ...tabular,
+  },
+  barGroup: { marginTop: space.lg },
+
+  /* Added by you */
+  shelf: { marginTop: space.lg },
+  shelfHead: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: space.md,
-    marginTop: space.lg,
-    paddingHorizontal: space.lg,
-    paddingVertical: space.md,
-    minHeight: 56,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.cardBorder,
-    borderRadius: radius.lg,
+    justifyContent: 'space-between',
+    gap: space.sm,
   },
-  barLinkText: { flex: 1 },
-  barLinkTitle: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
+  shelfTitle: {
+    ...textRole.sectionTitle,
+    flexShrink: 1,
     color: colors.text,
   },
-  barLinkBody: {
-    fontFamily: fonts.body,
-    /*
-     * A step down from caption, because this line shares its row with a
-     * 18pt icon, a chevron and two gaps — at caption size the empty state
-     * clipped to "Tick what you own, see what you can …", losing the half
-     * that says what the feature is for. Shrinking the type rather than
-     * cutting the sentence keeps the promise intact.
-     */
-    fontSize: typeScale.micro.fontSize,
-    lineHeight: typeScale.micro.lineHeight,
+  shelfCount: {
+    fontFamily: fonts.numeral,
+    fontSize: typeScale.caption.fontSize,
     color: colors.textMuted,
-    marginTop: 2,
+    ...tabular,
+  },
+  /* The text button's own inset, taken back so its words end on the gutter. */
+  shelfAdd: { marginRight: -space.sm },
+  shelfScroll: {
+    // Bleeds past the list padding so the row can scroll edge to edge.
+    marginHorizontal: -GRID_PAD,
+    marginTop: space.sm,
+  },
+  shelfScrollContent: {
+    paddingHorizontal: GRID_PAD,
+    gap: space.sm,
+  },
+
+  /* "Not the one you meant?" under a search */
+  notTheOne: {
+    paddingTop: space.xl,
+    paddingBottom: space.md,
+    alignItems: 'center',
+    gap: space.sm,
+  },
+  notTheOneText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.caption.fontSize,
+    lineHeight: typeScale.caption.lineHeight,
+    color: colors.textMuted,
+    textAlign: 'center',
   },
 
   /* Chips */
@@ -923,21 +1047,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.xs,
     paddingBottom: 6,
   },
+  /* A square-ended rule, like the progress rule under the bar. */
   chipRule: {
     position: 'absolute',
     left: space.xs,
     right: space.xs,
     bottom: 0,
-    height: 2,
-    borderRadius: 1,
+    height: stroke.indicator,
+    borderRadius: radius.none,
   },
   /* Separates the two filter axes sharing the scroller. */
   axisRule: {
-    width: 1,
+    width: stroke.edge,
     alignSelf: 'center',
     height: 16,
     marginHorizontal: space.sm,
-    backgroundColor: colors.cardBorder,
+    backgroundColor: colors.line,
   },
   chipLabel: {
     fontFamily: fonts.bodySemiBold,
@@ -961,14 +1086,6 @@ const styles = StyleSheet.create({
     ...tabular,
   },
 
-  /* Search */
-  titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-  },
-  /* The field takes whatever the title leaves; SearchField draws the rest. */
-  search: { flex: 1 },
   headerRule: {
     marginTop: space.xl,
     marginBottom: space.xs,
