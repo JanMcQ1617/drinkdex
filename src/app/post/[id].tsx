@@ -182,6 +182,7 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
             onOpenDrink={openDrink}
             onOpenAuthor={openAuthor}
             onBlocked={onBlocked}
+            onDeleted={onBack}
           />
         </ScrollView>
       )}

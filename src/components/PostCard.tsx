@@ -240,6 +240,11 @@ export interface PostCardProps {
    * blocked person on screen and the block looking like it failed.
    */
   onBlocked?: (authorId: string) => void;
+  /**
+   * Called after you delete this post, so a screen that shows only this post
+   * can leave. Lists need nothing: the store drops the post from the feed.
+   */
+  onDeleted?: (postId: string) => void;
 }
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -251,9 +256,11 @@ export const PostCard = React.memo(function PostCard({
   onOpenAuthor,
   photoPath,
   onBlocked,
+  onDeleted,
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
+  const removePost = useSocial((s) => s.removePost);
   const toggleSave = useSocial((s) => s.toggleSave);
   const reduced = useReducedMotion();
   const { width } = useWindowDimensions();
@@ -508,6 +515,32 @@ export const PostCard = React.memo(function PostCard({
     );
   }, [myId, who.id, who.username, onBlocked]);
 
+  const confirmDelete = useCallback(() => {
+    if (!myId) return;
+    // Permanent, so a two-way alert on every platform, like Block.
+    Alert.alert(
+      'Delete this post?',
+      'It is removed from your profile and from everyone\'s feed, with its photos. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' as const },
+        {
+          text: 'Delete',
+          style: 'destructive' as const,
+          onPress: () => {
+            void removePost(myId, post.id).then((ok) => {
+              if (ok) {
+                haptic.select();
+                onDeleted?.(post.id);
+              } else {
+                Alert.alert('Could not delete', 'Check your connection and try again.');
+              }
+            });
+          },
+        },
+      ],
+    );
+  }, [myId, post.id, removePost, onDeleted]);
+
   const openMenu = useCallback(() => {
     if (!drink) return;
     // Alert.alert is a no-op on web; go straight to the primary action there.
@@ -521,14 +554,15 @@ export const PostCard = React.memo(function PostCard({
      * the block anyway (no_self_block).
      *
      * Report is not styled destructive: filing a report removes nothing.
-     * Block is, because it takes a person out of your feed.
+     * Block is, because it takes a person out of your feed. On your own post
+     * the destructive action is Delete.
      */
     const mine = who.id === myId;
     const actions: { text: string; onPress: () => void; destructive?: boolean }[] = [
       { text: 'Open in the Dex', onPress: () => onOpenDrink(drink.id) },
       { text: 'Share', onPress: share },
       ...(mine
-        ? []
+        ? [{ text: 'Delete post', onPress: confirmDelete, destructive: true }]
         : [
             { text: 'Report post', onPress: openReport },
             { text: `Block @${who.username}`, onPress: confirmBlock, destructive: true },
@@ -557,7 +591,7 @@ export const PostCard = React.memo(function PostCard({
       })),
       { text: 'Cancel', style: 'cancel' as const },
     ]);
-  }, [drink, onOpenDrink, share, who.id, who.username, myId, openReport, confirmBlock]);
+  }, [drink, onOpenDrink, share, who.id, who.username, myId, openReport, confirmBlock, confirmDelete]);
 
   /*
    * One rule for "draws nothing", shared with every list of posts

@@ -119,6 +119,8 @@ interface SocialState {
     photoUri: string | null,
   ) => Promise<PostOutcome>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
+  /** Deletes one of your posts and its photos. Resolves false when it failed. */
+  removePost: (myId: string, postId: string) => Promise<boolean>;
   /**
    * Adds another photo to this drink's post, if it has one. It never
    * creates a post: an entry that was never posted stays private, and true
@@ -503,6 +505,26 @@ export const useSocial = create<SocialState>()((set, get) => ({
       if (get().gen !== gen) return outcome;
       set({ error: (e as Error).message });
       return outcome;
+    }
+  },
+
+  removePost: async (myId, postId) => {
+    const gen = get().gen;
+    try {
+      await api.deletePost(myId, postId);
+      if (get().gen !== gen) return true;
+      // Today's pours shows the same photos, whose files are now gone.
+      set({
+        feed: get().feed.filter((p) => p.id !== postId),
+        pours: get().pours.filter((p) => p.postId !== postId),
+        postsVersion: get().postsVersion + 1,
+        savesVersion: get().savesVersion + 1,
+      });
+      return true;
+    } catch (e) {
+      if (get().gen !== gen) return false;
+      set({ error: (e as Error).message });
+      return false;
     }
   },
 

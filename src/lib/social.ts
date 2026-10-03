@@ -1251,6 +1251,36 @@ export async function deletePostsForDrink(myId: string, drinkId: string): Promis
   await Promise.all([...paths].map((path) => removeStoredPhoto(path)));
 }
 
+/**
+ * Deletes one of your own posts: the row, its gallery rows (they cascade),
+ * likes and saves (they cascade too, 017), and the photo files in storage.
+ * Paths are read BEFORE the delete for the same reason as
+ * deletePostsForDrink: afterwards nothing records which files were the
+ * post's. Someone else's post id deletes nothing — the author filter here
+ * and posts_delete_own on the server both refuse it.
+ */
+export async function deletePost(myId: string, postId: string): Promise<void> {
+  const { data: row, error: readError } = await supabase
+    .from('posts')
+    .select('photo_path')
+    .eq('id', postId)
+    .eq('author_id', myId)
+    .maybeSingle();
+  if (readError) throw readError;
+  if (!row) return; // Already gone.
+
+  const { data: extra } = await supabase.from('post_photos').select('path').eq('post_id', postId);
+
+  const { error } = await supabase.from('posts').delete().eq('id', postId).eq('author_id', myId);
+  if (error) throw error;
+
+  const paths = new Set<string>([
+    ...(row.photo_path ? [row.photo_path] : []),
+    ...(extra ?? []).map((photo) => photo.path),
+  ]);
+  await Promise.all([...paths].map((path) => removeStoredPhoto(path)));
+}
+
 export async function likePost(myId: string, postId: string): Promise<void> {
   const { error } = await supabase.from('likes').insert({ post_id: postId, user_id: myId });
   if (error && !error.message.includes('duplicate')) throw error;
