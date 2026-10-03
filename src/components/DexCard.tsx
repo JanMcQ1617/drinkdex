@@ -294,6 +294,20 @@ export const DexCard = React.memo(function DexCard({
       )}
 
       {/* ---- Photograph ---- */}
+      {/*
+        Disk, not memory-disk. expo-image's memory cache (SDWebImage's, on
+        iOS) holds the FULL decoded bitmap, not the downscaled one drawn
+        here: 4 MB for a 1024px stock photo, 12 MB for a 2048px pour. With
+        the memory tier every photographed card scrolled past stayed
+        resident (up to 324 stock faces, locked and collected, plus every
+        pour), so the Dex alone grew memory with use. The root layout now
+        caps that cache, but it is one pool shared with the feed and every
+        avatar, and a single scroll down the grid would fill it and push
+        those out. These files are already on the phone, so the disk policy
+        costs one off-main-thread decode when a cell mounts and holds
+        nothing once it unmounts. The catalogue's other thumbnails already
+        use it.
+      */}
       {photo ? (
         <Image
           source={photo}
@@ -301,7 +315,10 @@ export const DexCard = React.memo(function DexCard({
           contentFit="cover"
           transition={140}
           accessible={false}
-          cachePolicy="memory-disk"
+          cachePolicy="disk"
+          // A collected card can show your own pour photo, stored at up to
+          // 2048px; decode it at the card's size rather than the file's.
+          enforceEarlyResizing
         />
       ) : null}
 

@@ -391,7 +391,7 @@ function SimilarInDex({
             style={({ pressed }) => [styles.similarRow, pressed && styles.similarPressed]}>
             <View style={styles.similarThumb}>
               {photo ? (
-                <Image source={photo} style={styles.fill} contentFit="cover" accessible={false} />
+                <Image source={photo} style={styles.fill} contentFit="cover" accessible={false} enforceEarlyResizing />
               ) : (
                 <DrinkArt drink={d} size={28} flat />
               )}
@@ -1374,6 +1374,7 @@ function AddDrinkForm({
                   source={{ uri: photoUri }}
                   style={styles.fill}
                   contentFit="cover"
+                  enforceEarlyResizing
                   accessibilityLabel="Photo of the drink"
                 />
               ) : (

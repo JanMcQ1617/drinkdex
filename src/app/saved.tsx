@@ -8,7 +8,7 @@ import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { EmptyState, Hold, Notice } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
-import { fetchSavedPosts, isRenderablePost, savesSupported } from '@/lib/social';
+import { fetchSavedPosts, isRenderablePost, primeSignedUrls, savesSupported } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
 import type { Post } from '@/types';
@@ -76,7 +76,13 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
     let alive = true;
     fetchSavedPosts(myId)
       .then((posts) => {
-        if (alive) setLoaded({ myId, request, posts, failed: false });
+        if (!alive) return;
+        // One signing request for the grid rather than one per tile; see usePostsByAuthor.
+        void primeSignedUrls(
+          'pours',
+          posts.flatMap((p) => (p.photoPath ? [p.photoPath] : [])),
+        );
+        setLoaded({ myId, request, posts, failed: false });
       })
       .catch(() => {
         if (!alive) return;

@@ -34,7 +34,7 @@ export default function StatsScreen() {
   }, [router]);
 
   const openDrink = useCallback(
-    (id: string) => router.push({ pathname: '/drink/[id]', params: { id } }),
+    (id: string) => router.navigate({ pathname: '/drink/[id]', params: { id } }),
     [router],
   );
 

@@ -218,7 +218,7 @@ export function ProfileView({
   /* ---- Actions ---- */
 
   const openList = (list: 'followers' | 'following') =>
-    router.push({ pathname: '/connections/[id]', params: { id: person.id, list } });
+    router.navigate({ pathname: '/connections/[id]', params: { id: person.id, list } });
 
   /*
    * Unfollowing from the profile asks first: on the screen whose main
@@ -364,7 +364,7 @@ export function ProfileView({
           icon="dex"
           title="Nothing shared yet"
           body="Drinks you share land here in Dex order."
-          action={{ label: 'Log a pour', onPress: () => router.push('/log') }}
+          action={{ label: 'Log a pour', onPress: () => router.navigate('/log') }}
         />
       ) : (
         <EmptyState
@@ -383,7 +383,7 @@ export function ProfileView({
         icon="camera"
         title="Log your first pour"
         body="Pours you share show up here."
-        action={{ label: 'Log a pour', onPress: () => router.push('/log') }}
+        action={{ label: 'Log a pour', onPress: () => router.navigate('/log') }}
       />
     ) : (
       <EmptyState icon="camera" title="No pours yet" body={`${u} hasn't shared a pour yet.`} />

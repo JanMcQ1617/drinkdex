@@ -169,6 +169,41 @@ function profileIdsFor(myId: string, feed: Post[], following: string[]): string[
   return [...new Set([myId, ...following, ...feed.map((p) => p.authorId)])];
 }
 
+/** Same fields, same values. Every field of a profile is a primitive. */
+function sameProfile(a: UserProfile, b: UserProfile): boolean {
+  const keys = Object.keys(a) as (keyof UserProfile)[];
+  return keys.length === Object.keys(b).length && keys.every((k) => Object.is(a[k], b[k]));
+}
+
+/**
+ * `incoming` merged over `held`, keeping the held object for anyone whose
+ * row did not change, and `held` itself when nobody's did.
+ *
+ * Every feed fetch reads the profiles of everyone in the feed and everyone
+ * you follow again, and merging them with a spread handed out a new map of
+ * new objects each time, changed or not. Home's renderItem closes over the
+ * map, so every pull, follow, post and added photo re-rendered every card
+ * on Home, and every screen still mounted in the stack that reads the map
+ * (Activity, a post, Today's pours) re-rendered with it. Now only a profile
+ * that actually changed is a new object, and only it re-renders.
+ *
+ * Exported so the screens that merge rows into the store themselves can
+ * take the same path.
+ */
+export function mergeProfiles(
+  held: Record<string, UserProfile>,
+  incoming: Record<string, UserProfile>,
+): Record<string, UserProfile> {
+  let next: Record<string, UserProfile> | null = null;
+  for (const [id, profile] of Object.entries(incoming)) {
+    const old = Object.prototype.hasOwnProperty.call(held, id) ? held[id] : undefined;
+    if (old && sameProfile(old, profile)) continue;
+    next ??= { ...held };
+    next[id] = profile;
+  }
+  return next ?? held;
+}
+
 /*
  * Today's pours ride along with every feed fetch, but never fail it: a
  * failed pours request becomes null here, and the store keeps the last
@@ -177,6 +212,21 @@ function profileIdsFor(myId: string, feed: Post[], following: string[]): string[
  * not a failure at all; it resolves empty (lib/social).
  */
 const fetchPoursOrNull = () => api.fetchRecentPours().catch(() => null);
+
+/*
+ * The feed refresh under way, if any, for one account (`gen`).
+ *
+ * Every follow tap refreshes the feed (toggleFollow), and so does every
+ * post and added photo. Following ten people down Find friends sent ten
+ * refreshes at once, seven requests each, and each one handed Home a new
+ * hundred-post feed to re-render under the screen being tapped. They also
+ * landed in any order, so an older refresh could overwrite a newer one and
+ * leave out the last person followed until the next pull. A call while one
+ * runs now shares it and asks for one more pass after it, which reads the
+ * follow set as it is by then: the same answer for every caller, from at
+ * most two refreshes, written in order.
+ */
+let feedFlight: { gen: number; again: boolean; done: Promise<void> } | null = null;
 
 export const useSocial = create<SocialState>()((set, get) => ({
   ...EMPTY,
@@ -209,7 +259,7 @@ export const useSocial = create<SocialState>()((set, get) => ({
          * deletes their row, and the server stops returning their likes and
          * follows — and an account switch resets the whole store.
          */
-        profiles: { ...get().profiles, ...profiles },
+        profiles: mergeProfiles(get().profiles, profiles),
         loadingFeed: false,
         pours: pours ?? get().pours,
         poursStatus: pours ? 'ready' : 'error',
@@ -228,28 +278,53 @@ export const useSocial = create<SocialState>()((set, get) => ({
    * every later refresh then trusted that empty set. Logging a pour or
    * following someone after an offline launch did exactly that, because
    * both refresh the feed. Doing the check here covers every caller.
+   *
+   * One at a time per account (see feedFlight): a call while one runs
+   * shares it, plus one more pass that makes the same check afresh.
    */
   refreshFeed: async (myId) => {
     if (get().feedError) return get().load(myId);
     const gen = get().gen;
-    refreshActivityBadge(myId, gen);
-    try {
-      const following = get().following;
-      const [feed, pours] = await Promise.all([api.fetchFeed(myId, following), fetchPoursOrNull()]);
-      if (get().gen !== gen) return;
-      const fetched = await api.fetchProfiles(profileIdsFor(myId, feed, following));
-      if (get().gen !== gen) return;
-      set({
-        feed,
-        profiles: { ...get().profiles, ...fetched },
-        feedError: null,
-        pours: pours ?? get().pours,
-        poursStatus: pours ? 'ready' : 'error',
-      });
-    } catch (e) {
-      if (get().gen !== gen) return;
-      set({ feedError: (e as Error).message });
+    if (feedFlight?.gen === gen) {
+      feedFlight.again = true;
+      return feedFlight.done;
     }
+
+    const once = async () => {
+      refreshActivityBadge(myId, gen);
+      try {
+        const following = get().following;
+        const [feed, pours] = await Promise.all([api.fetchFeed(myId, following), fetchPoursOrNull()]);
+        if (get().gen !== gen) return;
+        const fetched = await api.fetchProfiles(profileIdsFor(myId, feed, following));
+        if (get().gen !== gen) return;
+        set({
+          feed,
+          profiles: mergeProfiles(get().profiles, fetched),
+          feedError: null,
+          pours: pours ?? get().pours,
+          poursStatus: pours ? 'ready' : 'error',
+        });
+      } catch (e) {
+        if (get().gen !== gen) return;
+        set({ feedError: (e as Error).message });
+      }
+    };
+
+    const flight = { gen, again: false, done: Promise.resolve() };
+    flight.done = (async () => {
+      try {
+        do {
+          flight.again = false;
+          if (get().feedError) await get().load(myId);
+          else await once();
+        } while (flight.again && get().gen === gen);
+      } finally {
+        if (feedFlight === flight) feedFlight = null;
+      }
+    })();
+    feedFlight = flight;
+    return flight.done;
   },
 
   loadPeople: async (myId) => {
@@ -258,9 +333,9 @@ export const useSocial = create<SocialState>()((set, get) => ({
     try {
       const people = await api.fetchPeople(myId);
       if (get().gen !== gen) return;
-      const merged = { ...get().profiles };
-      for (const p of people) merged[p.id] = p;
-      set({ people, profiles: merged, loadingPeople: false });
+      const byId: Record<string, UserProfile> = {};
+      for (const p of people) byId[p.id] = p;
+      set({ people, profiles: mergeProfiles(get().profiles, byId), loadingPeople: false });
     } catch (e) {
       if (get().gen !== gen) return;
       set({ loadingPeople: false, peopleError: (e as Error).message });
@@ -346,14 +421,21 @@ export const useSocial = create<SocialState>()((set, get) => ({
    */
   toggleLike: async (myId, postId, wasLiked) => {
     const gen = get().gen;
-    const patch = (on: boolean) =>
+    /*
+     * Written only when a feed post actually flips. A like on a profile,
+     * a saved post or a single post is usually not in the feed, and the
+     * map used to hand Home a new copy of the same feed anyway, which
+     * re-ran Home's whole list underneath the screen that was tapped.
+     */
+    const patch = (on: boolean) => {
+      const flips = (p: Post) => p.id === postId && !!p.likedByMe !== on;
+      if (!get().feed.some(flips)) return;
       set({
         feed: get().feed.map((p) =>
-          p.id === postId && !!p.likedByMe !== on
-            ? { ...p, likedByMe: on, likes: Math.max(0, p.likes + (on ? 1 : -1)) }
-            : p,
+          flips(p) ? { ...p, likedByMe: on, likes: Math.max(0, p.likes + (on ? 1 : -1)) } : p,
         ),
       });
+    };
 
     patch(!wasLiked);
 
@@ -378,12 +460,12 @@ export const useSocial = create<SocialState>()((set, get) => ({
   toggleSave: async (myId, postId, wasSaved) => {
     if (!api.savesSupported()) return false;
     const gen = get().gen;
-    const patch = (on: boolean) =>
-      set({
-        feed: get().feed.map((p) =>
-          p.id === postId && !!p.savedByMe !== on ? { ...p, savedByMe: on } : p,
-        ),
-      });
+    // Only when a feed post flips, as toggleLike's patch.
+    const patch = (on: boolean) => {
+      const flips = (p: Post) => p.id === postId && !!p.savedByMe !== on;
+      if (!get().feed.some(flips)) return;
+      set({ feed: get().feed.map((p) => (flips(p) ? { ...p, savedByMe: on } : p)) });
+    };
 
     patch(!wasSaved);
 
@@ -509,7 +591,13 @@ function refreshActivityBadge(myId: string, gen: number): void {
   api
     .fetchLatestActivityAt(myId)
     .then((at) => {
-      if (useSocial.getState().gen === gen) useSocial.setState({ activityLatestAt: at });
+      /*
+       * Skipped when the answer is the one already held, which it nearly
+       * always is: every setState wakes every component subscribed to this
+       * store to re-run its selector, and this fires on every feed fetch.
+       */
+      const s = useSocial.getState();
+      if (s.gen === gen && s.activityLatestAt !== at) useSocial.setState({ activityLatestAt: at });
     })
     .catch(() => {});
 }

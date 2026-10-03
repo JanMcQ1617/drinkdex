@@ -90,11 +90,11 @@ function HomeFeed() {
   }, [myId, refreshFeed]);
 
   const openDrink = useCallback(
-    (id: string) => router.push({ pathname: '/drink/[id]', params: { id } }),
+    (id: string) => router.navigate({ pathname: '/drink/[id]', params: { id } }),
     [router],
   );
 
-  const openLog = useCallback(() => router.push('/log'), [router]);
+  const openLog = useCallback(() => router.navigate('/log'), [router]);
 
   const openFindFriends = useCallback(() => router.push('/find-friends'), [router]);
 
@@ -109,14 +109,14 @@ function HomeFeed() {
   const openPerson = useCallback(
     (id: string) => {
       if (id === myId) router.navigate('/profile');
-      else router.push({ pathname: '/user/[id]', params: { id } });
+      else router.navigate({ pathname: '/user/[id]', params: { id } });
     },
     [myId, router],
   );
 
   /* A person's pours today, in the viewer: a modal over the tabs. */
   const openPours = useCallback(
-    (authorId: string) => router.push({ pathname: '/pours/[authorId]', params: { authorId } }),
+    (authorId: string) => router.navigate({ pathname: '/pours/[authorId]', params: { authorId } }),
     [router],
   );
 

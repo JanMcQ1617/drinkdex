@@ -231,7 +231,7 @@ function DrinkRow({
       ]}>
       <View style={[styles.rowArt, { backgroundColor: CATEGORY_META[drink.category].wash }]}>
         {photo ? (
-          <Image source={photo} style={styles.rowPhoto} contentFit="cover" transition={120} />
+          <Image source={photo} style={styles.rowPhoto} contentFit="cover" transition={120} enforceEarlyResizing />
         ) : (
           <DrinkArt drink={drink} size={34} flat />
         )}
@@ -648,7 +648,7 @@ export default function LogPourScreen() {
       */}
       <View style={styles.photoFrame}>
         {photoUri ? (
-          <Image source={{ uri: photoUri }} style={styles.photo} contentFit="cover" />
+          <Image source={{ uri: photoUri }} style={styles.photo} contentFit="cover" enforceEarlyResizing />
         ) : (
           <View style={styles.photoEmpty}>
             <Icon name="camera" size={32} color={colors.text} />

@@ -195,14 +195,21 @@ export const useReels = create<ReelsState>()((set, get) => ({
 
   toggleLike: async (myId, reelId, wasLiked) => {
     const gen = get().gen;
-    const patch = (on: boolean) =>
+    /*
+     * Written only when a feed reel actually flips: a like on a reel opened
+     * on its own (reel/[id], an author's reels) is often on one the feed
+     * does not hold, and a fresh copy of the same feed re-ran the Reels
+     * tab's list underneath it.
+     */
+    const patch = (on: boolean) => {
+      const flips = (r: Reel) => r.id === reelId && r.likedByMe !== on;
+      if (!get().feed.some(flips)) return;
       set({
         feed: get().feed.map((r) =>
-          r.id === reelId && r.likedByMe !== on
-            ? { ...r, likedByMe: on, likes: Math.max(0, r.likes + (on ? 1 : -1)) }
-            : r,
+          flips(r) ? { ...r, likedByMe: on, likes: Math.max(0, r.likes + (on ? 1 : -1)) } : r,
         ),
       });
+    };
 
     patch(!wasLiked);
     try {

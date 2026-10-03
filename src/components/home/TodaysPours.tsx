@@ -238,6 +238,13 @@ function PhotoTile({
               <Image
                 source={{ uri: url, cacheKey: pour.path }}
                 cachePolicy="memory-disk"
+                /*
+                 * Decoded at the tile's 72pt size, not the 2048px upload: the
+                 * row is a plain ScrollView, so every tile in it (up to 50) is
+                 * mounted at once, for as long as Home is. PostGridTile
+                 * (profile/PostGrid) has the whole reason.
+                 */
+                enforceEarlyResizing
                 contentFit="cover"
                 transition={motion.fast}
                 style={StyleSheet.absoluteFill}

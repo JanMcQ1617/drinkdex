@@ -36,7 +36,7 @@ function OwnProfile() {
   const refreshProfile = useAuth((s) => s.refreshProfile);
 
   // Logging is the most frequent action, so + goes straight to the sheet.
-  const left = <TopBarButton icon="plus" label="Log a pour" onPress={() => router.push('/log')} />;
+  const left = <TopBarButton icon="plus" label="Log a pour" onPress={() => router.navigate('/log')} />;
   const right = (
     <TopBarButton icon="settings" label="Settings" onPress={() => router.push('/settings')} />
   );

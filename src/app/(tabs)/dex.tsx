@@ -602,14 +602,14 @@ export default function DexScreen() {
 
   const openDrink = useCallback(
     (id: string) => {
-      router.push({ pathname: '/drink/[id]', params: { id } });
+      router.navigate({ pathname: '/drink/[id]', params: { id } });
     },
     [router],
   );
 
   const openCustom = useCallback(
     (id: string) => {
-      router.push({ pathname: '/custom/[id]', params: { id } });
+      router.navigate({ pathname: '/custom/[id]', params: { id } });
     },
     [router],
   );
@@ -644,8 +644,8 @@ export default function DexScreen() {
     useCallback(() => {
       const h = useCustomDrinks.getState().takeHandoff('dex');
       if (!h) return;
-      if (h.kind === 'custom') router.push({ pathname: '/custom/[id]', params: { id: h.id } });
-      else router.push({ pathname: '/drink/[id]', params: { id: h.id } });
+      if (h.kind === 'custom') router.navigate({ pathname: '/custom/[id]', params: { id: h.id } });
+      else router.navigate({ pathname: '/drink/[id]', params: { id: h.id } });
     }, [router]),
   );
 

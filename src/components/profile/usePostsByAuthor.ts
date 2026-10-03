@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { fetchPostCount, fetchPostsByAuthor } from '@/lib/social';
+import { fetchPostCount, fetchPostsByAuthor, primeSignedUrls } from '@/lib/social';
 import type { Post } from '@/types';
 
 /*
@@ -93,6 +93,17 @@ export function usePostsByAuthor(
     ])
       .then(([rows, count]) => {
         if (!alive) return;
+        /*
+         * Every tile's photo signed in one request, before the grid mounts.
+         * Left to the tiles, each signed its own as it mounted: one request
+         * per tile, dozens at once every time a profile opened, each answer
+         * parsed on the JS thread while the grid was trying to draw. Tiles
+         * that mount while this is out share it (primeSignedUrls).
+         */
+        void primeSignedUrls(
+          'pours',
+          rows.flatMap((p) => (p.photoPath ? [p.photoPath] : [])),
+        );
         setLoaded((prev) => ({
           who,
           request,

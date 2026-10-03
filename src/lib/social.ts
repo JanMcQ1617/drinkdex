@@ -789,9 +789,13 @@ export async function fetchLatestActivityAt(myId: string): Promise<string | null
  * `pours/<uid>/` folder and must take the same strip. Resolves false when
  * the local file is gone; throws when stripping or the upload fails.
  */
-export async function putStrippedPhoto(localUri: string, path: string): Promise<boolean> {
+export async function putStrippedPhoto(
+  localUri: string,
+  path: string,
+  maxEdge?: number,
+): Promise<boolean> {
   if (!new File(localUri).exists) return false;
-  const clean = await stripMetadata(localUri);
+  const clean = await stripMetadata(localUri, maxEdge);
   try {
     const bytes = await new File(clean).arrayBuffer();
     const { error } = await supabase.storage
@@ -827,6 +831,8 @@ export async function uploadPhoto(myId: string, localUri: string): Promise<strin
   }
 }
 
+const AVATAR_MAX_EDGE = 512;
+
 /**
  * Uploads a new profile picture and returns its object path.
  *
@@ -841,7 +847,12 @@ export async function uploadPhoto(myId: string, localUri: string): Promise<strin
 export async function uploadAvatar(myId: string, localUri: string): Promise<string | null> {
   try {
     const path = `${myId}/avatar-${Date.now()}.jpg`;
-    return (await putStrippedPhoto(localUri, path)) ? path : null;
+    /*
+     * 512px, not the 2048px pour photos get: an avatar is never drawn larger
+     * than the 86pt profile header (258px on a 3x screen), and every list of
+     * people downloads and decodes one per row.
+     */
+    return (await putStrippedPhoto(localUri, path, AVATAR_MAX_EDGE)) ? path : null;
   } catch {
     return null;
   }
@@ -900,6 +911,27 @@ function freshEntry(key: string): SignedEntry | undefined {
   return hit && Date.now() - hit.at < SIGNED_TTL_MS ? hit : undefined;
 }
 
+/*
+ * Entries past their TTL are deleted, at most once a minute, as new ones
+ * go in. freshEntry already reads them as misses, but nothing removed
+ * them: every path signed in a session stayed in the map until the app
+ * was killed, a long signed URL and its promise each. Every page of the
+ * Reels feed adds two per reel (fetchReels signs the poster and the video
+ * up front), plus one per pour photo and avatar scrolled past, so the map
+ * grew for as long as someone kept swiping. Only expired entries go, so
+ * no answer changes.
+ */
+const SWEEP_EVERY_MS = 60 * 1000;
+let lastSweep = 0;
+
+function sweepExpired(now: number): void {
+  if (now - lastSweep < SWEEP_EVERY_MS) return;
+  lastSweep = now;
+  for (const [key, entry] of signedCache) {
+    if (now - entry.at >= SIGNED_TTL_MS) signedCache.delete(key);
+  }
+}
+
 /**
  * Puts an entry in the cache whose URL is whatever `sign` resolves to.
  * Only successes stay: an entry whose URL comes back null removes itself
@@ -908,6 +940,7 @@ function freshEntry(key: string): SignedEntry | undefined {
  */
 function cacheSigning(key: string, sign: Promise<string | null>): SignedEntry {
   const entry = { at: Date.now() } as SignedEntry;
+  sweepExpired(entry.at);
   const evict = () => {
     if (signedCache.get(key) === entry) signedCache.delete(key);
   };

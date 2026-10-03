@@ -145,6 +145,12 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
           source={{ uri: poster, cacheKey: video.posterPath }}
           // Keyed on the path: a signed URL is new every hour, the poster never changes.
           cachePolicy="memory-disk"
+          /*
+           * Decoded at the tile's size rather than the poster's full frame;
+           * PostGridTile says why. A poster is 9:16 like the tile, so the
+           * thumbnail fills it exactly.
+           */
+          enforceEarlyResizing
           style={styles.poster}
           contentFit="cover"
           transition={motion.fast}

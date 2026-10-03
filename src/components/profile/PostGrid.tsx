@@ -96,7 +96,7 @@ export function PostGridTile({
   const open = () => {
     haptic.tap();
     if (onOpen) onOpen(post);
-    else router.push({ pathname: '/post/[id]', params: { id: post.id } });
+    else router.navigate({ pathname: '/post/[id]', params: { id: post.id } });
   };
 
   return (
@@ -129,6 +129,24 @@ export function PostGridTile({
            * the disk cache never hit and every visit downloaded the grid again.
            */
           cachePolicy="memory-disk"
+          /*
+           * Decoded at the tile's size, not the upload's. Pours are stored at
+           * up to 2048px (lib/pour, stripMetadata), and without this expo-image
+           * on iOS decodes the WHOLE file (a 3:4 pour is 1536x2048, 12.6 MB of
+           * pixels) into SDWebImage's memory cache, which has no cost limit,
+           * then redraws a tile-sized copy on the main thread every time the
+           * tile mounts. A grid mounts dozens of tiles at once, so each profile
+           * opened could add hundreds of MB and a burst of main-thread work:
+           * lag that grows with use, and in the end a memory kill. Early
+           * resizing asks ImageIO for a thumbnail at the frame's pixel size
+           * instead (about 0.8 MB here), and nothing is redrawn on the main
+           * thread.
+           *
+           * The thumbnail is fitted inside the frame, so a photo of another
+           * shape is scaled up to fill the crop: by a third for a 3:4 pour in
+           * this square, which at tile size the eye does not pick out.
+           */
+          enforceEarlyResizing
           style={styles.image}
           contentFit="cover"
           transition={motion.fast}

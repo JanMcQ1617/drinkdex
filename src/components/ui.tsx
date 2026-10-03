@@ -767,6 +767,13 @@ export function Avatar({
           <Image
             source={{ uri: photo, cacheKey: localUri ? undefined : (avatarPath ?? undefined) }}
             cachePolicy="memory-disk"
+            /*
+             * Decoded at the circle's size, not the file's. Avatars were
+             * stored at up to 2048px — about 16 MB each once decoded — and
+             * drawn at 24-40pt; a list of people filled the image cache in a
+             * screenful, which is the lag that built up until the app died.
+             */
+            enforceEarlyResizing
             style={styles.avatarPhoto}
             contentFit="cover"
           />

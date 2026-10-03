@@ -487,6 +487,14 @@ export default function DrinkDetailScreen() {
             you open to decide whether to make the drink. Hiding what it looks
             like here would work against the recipe sitting directly below it.
           */}
+          {/*
+            Disk, not memory-disk, for the Dex card's reason (DexCard): the
+            memory tier keeps the full decoded bitmap, so each entry opened
+            here left its 1024px stock photo (4 MB) or 2048px pour (12 MB)
+            resident after the page closed, one more per drink looked at, in
+            the pool the feed and avatars share. The file is on the phone;
+            the short fade covers the decode.
+          */}
           {heroPhoto ? (
             <Image
               source={heroPhoto}
@@ -494,7 +502,8 @@ export default function DrinkDetailScreen() {
               contentFit="cover"
               transition={160}
               accessible={false}
-              cachePolicy="memory-disk"
+              cachePolicy="disk"
+              enforceEarlyResizing
             />
           ) : (
             <DrinkArt drink={drink} size={150} />
@@ -692,6 +701,7 @@ export default function DrinkDetailScreen() {
                       source={{ uri: pickedUri }}
                       style={styles.previewImage}
                       contentFit="cover"
+                      enforceEarlyResizing
                       accessibilityLabel="Photo preview"
                     />
                     {/*

@@ -379,7 +379,7 @@ export default function BarScreen() {
                           emphasis
                           trailing="chevron"
                           onPress={() =>
-                            router.push({ pathname: '/drink/[id]', params: { id: m.drink.id } })
+                            router.navigate({ pathname: '/drink/[id]', params: { id: m.drink.id } })
                           }
                         />
                       ))}
@@ -431,7 +431,7 @@ export default function BarScreen() {
                               ),
                             }}
                             onPress={() =>
-                              router.push({ pathname: '/drink/[id]', params: { id: m.drink.id } })
+                              router.navigate({ pathname: '/drink/[id]', params: { id: m.drink.id } })
                             }
                             accessibilityLabel={`${m.drink.name}, needs ${need ?? 'one more thing'}`}
                           />

@@ -135,7 +135,7 @@ export default function CustomDrinkScreen() {
     cocktail && drink.glassware ? sentence(drink.glassware) : null,
   ].filter((f): f is string => Boolean(f));
 
-  const logIt = () => router.push({ pathname: '/log', params: { drink: drink.id } });
+  const logIt = () => router.navigate({ pathname: '/log', params: { drink: drink.id } });
 
   const moveToDex = () => {
     if (!twin) return;

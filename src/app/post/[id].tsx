@@ -10,7 +10,7 @@ import { EmptyState, Hold } from '@/components/ui';
 import { colors, space } from '@/constants/theme';
 import { fetchPost, fetchProfiles, toProfile } from '@/lib/social';
 import { useAuth } from '@/store/auth';
-import { useSocial } from '@/store/social';
+import { mergeProfiles, useSocial } from '@/store/social';
 import type { Post } from '@/types';
 
 /* ==================================================================== */
@@ -69,7 +69,10 @@ async function loadPost(id: string, myId: string): Promise<Post | null> {
   if (post && !useSocial.getState().profiles[post.authorId]) {
     const people = await fetchProfiles([post.authorId]).catch(() => ({}));
     if (useSocial.getState().gen === gen) {
-      useSocial.setState((s) => ({ profiles: { ...s.profiles, ...people } }));
+      // mergeProfiles keeps the map as it was when nothing new came back (a
+      // failed read is `{}`), where a spread made a new one and re-rendered
+      // everything that reads it, Home's whole list included.
+      useSocial.setState((s) => ({ profiles: mergeProfiles(s.profiles, people) }));
     }
   }
   return post;
@@ -111,7 +114,7 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
   };
 
   const openDrink = useCallback(
-    (drinkId: string) => router.push({ pathname: '/drink/[id]', params: { id: drinkId } }),
+    (drinkId: string) => router.navigate({ pathname: '/drink/[id]', params: { id: drinkId } }),
     [router],
   );
 
@@ -122,7 +125,7 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
   const openAuthor = useCallback(
     (authorId: string) => {
       if (authorId === myId) router.navigate('/profile');
-      else router.push({ pathname: '/user/[id]', params: { id: authorId } });
+      else router.navigate({ pathname: '/user/[id]', params: { id: authorId } });
     },
     [myId, router],
   );

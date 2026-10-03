@@ -266,8 +266,16 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                        * router, not navigation: `log` is a root-stack modal,
                        * and the tab navigator handed to this component can
                        * only reach its own siblings.
+                       *
+                       * `navigate`, not `push`. A push always adds a route,
+                       * so a double tap, or taps that queued up while the JS
+                       * thread was busy, stacked one log sheet per tap, each
+                       * a full search list kept alive underneath the next.
+                       * navigate reuses the route when `log` is already the
+                       * one on top (expo-router's stack override), and from
+                       * anywhere else it pushes exactly as before.
                        */
-                      router.push('/log');
+                      router.navigate('/log');
                     }}
                   />
                 ) : null}

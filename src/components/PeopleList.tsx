@@ -130,7 +130,7 @@ export function PersonRow({
   const open =
     onOpen === null
       ? null
-      : (onOpen ?? ((id: string) => router.push({ pathname: '/user/[id]', params: { id } })));
+      : (onOpen ?? ((id: string) => router.navigate({ pathname: '/user/[id]', params: { id } })));
   const inset = gutter ? layout.gutter : 0;
 
   const identity = (

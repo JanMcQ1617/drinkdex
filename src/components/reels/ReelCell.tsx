@@ -385,13 +385,13 @@ export function ReelCell({
    * not the current one pushes a new copy of it, here a second set of tabs.
    */
   const openAuthor = () => {
-    if (!reel.mine) router.push({ pathname: '/user/[id]', params: { id: reel.authorId } });
+    if (!reel.mine) router.navigate({ pathname: '/user/[id]', params: { id: reel.authorId } });
     else if (inTabs) router.navigate('/profile');
     else router.dismissTo('/profile');
   };
 
   const openDrink = () => {
-    if (drink) router.push({ pathname: '/drink/[id]', params: { id: drink.id } });
+    if (drink) router.navigate({ pathname: '/drink/[id]', params: { id: drink.id } });
   };
 
   /*

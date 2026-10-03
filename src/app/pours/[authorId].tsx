@@ -182,12 +182,12 @@ function PoursViewer({
   const openDrink = (id: string) => {
     if (closed.current) return;
     close();
-    router.push({ pathname: '/drink/[id]', params: { id } });
+    router.navigate({ pathname: '/drink/[id]', params: { id } });
   };
   const openPost = (id: string) => {
     if (closed.current) return;
     close();
-    router.push({ pathname: '/post/[id]', params: { id } });
+    router.navigate({ pathname: '/post/[id]', params: { id } });
   };
 
   const top = Platform.OS === 'ios' ? space.sm : insets.top + space.sm;
@@ -306,6 +306,15 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
         <Image
           source={{ uri: url, cacheKey: pour.path }}
           cachePolicy="memory-disk"
+          /*
+           * Decoded at the stage's size rather than the full upload, so each
+           * step neither keeps another full-size decode in the image cache
+           * nor redraws one on the main thread (PostGridTile, in
+           * profile/PostGrid, has the whole reason). The thumbnail is fitted
+           * inside the frame, which is exactly what contain draws, so the
+           * photo looks the same.
+           */
+          enforceEarlyResizing
           contentFit="contain"
           style={StyleSheet.absoluteFill}
         />

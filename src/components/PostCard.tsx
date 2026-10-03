@@ -695,6 +695,8 @@ export const PostCard = React.memo(function PostCard({
              * a safe key, and the memory tier spares a remount the decode.
              */
             cachePolicy="memory-disk"
+            // Pour photos are stored at up to 2048px; decode at the card's width.
+            enforceEarlyResizing
             style={styles.photo}
             contentFit="cover"
             transition={motion.fast}

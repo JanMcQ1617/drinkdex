@@ -164,7 +164,7 @@ export function DexShelfRow({ drinks }: { drinks: Drink[] }) {
           userPhotoUri={null}
           cardWidth={cardWidth}
           artSize={artSize}
-          onPress={(id) => router.push({ pathname: '/drink/[id]', params: { id } })}
+          onPress={(id) => router.navigate({ pathname: '/drink/[id]', params: { id } })}
         />
       ))}
     </View>

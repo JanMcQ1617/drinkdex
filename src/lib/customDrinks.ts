@@ -278,7 +278,38 @@ export function subcategoriesFor(category: DrinkCategory): string[] {
   return styles;
 }
 
+/*
+ * Two caches, so that neither grows with typing. The form asks on every
+ * render, and a new style is free text: one cache keyed by whatever was in
+ * the field gained an entry per keystroke ("S", "Sm", "Smo"…) for the rest
+ * of the session, and each of those misses walked the whole catalogue
+ * twice, only to land on the category's notes every time. Only styles the
+ * catalogue has are keyed now (a fixed few dozen); everything else reads
+ * the category's notes, worked out once per category.
+ */
 const notesCache = new Map<string, string[]>();
+const categoryNotesCache = new Map<DrinkCategory, string[]>();
+
+/** The 8 tasting notes the catalogue drinks that `match` uses most. */
+function tallyNotes(match: (d: Drink) => boolean): string[] {
+  const counts = new Map<string, number>();
+  for (const d of DRINKS) {
+    if (!match(d)) continue;
+    for (const n of d.tastingNotes) {
+      const note = n.trim().toLowerCase();
+      if (note) counts.set(note, (counts.get(note) ?? 0) + 1);
+    }
+  }
+  return byFrequency(counts).slice(0, 8);
+}
+
+function categoryNotes(category: DrinkCategory): string[] {
+  const hit = categoryNotesCache.get(category);
+  if (hit) return hit;
+  const notes = tallyNotes((d) => d.category === category);
+  categoryNotesCache.set(category, notes);
+  return notes;
+}
 
 /**
  * The 8 tasting notes catalogue drinks of this category and style use
@@ -286,22 +317,13 @@ const notesCache = new Map<string, string[]>();
  * yet) gets the category's 8 instead, so the suggestions are never empty.
  */
 export function suggestedNotes(category: DrinkCategory, subcategory: string): string[] {
+  // No catalogue drink has a style missing from this list, so its own tally is always empty.
+  if (!subcategoriesFor(category).includes(subcategory)) return categoryNotes(category);
   const key = `${category}\n${subcategory}`;
   const hit = notesCache.get(key);
   if (hit) return hit;
-  const tally = (match: (d: Drink) => boolean) => {
-    const counts = new Map<string, number>();
-    for (const d of DRINKS) {
-      if (!match(d)) continue;
-      for (const n of d.tastingNotes) {
-        const note = n.trim().toLowerCase();
-        if (note) counts.set(note, (counts.get(note) ?? 0) + 1);
-      }
-    }
-    return byFrequency(counts).slice(0, 8);
-  };
-  let notes = tally((d) => d.category === category && d.subcategory === subcategory);
-  if (notes.length === 0) notes = tally((d) => d.category === category);
+  let notes = tallyNotes((d) => d.category === category && d.subcategory === subcategory);
+  if (notes.length === 0) notes = categoryNotes(category);
   notesCache.set(key, notes);
   return notes;
 }

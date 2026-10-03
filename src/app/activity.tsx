@@ -16,7 +16,7 @@ import { fetchActivity, fetchProfiles } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
 import { isLater, laterOf, useSeen } from '@/store/seen';
-import { useSocial } from '@/store/social';
+import { mergeProfiles, useSocial } from '@/store/social';
 import type { ActivityItem, UserProfile } from '@/types';
 
 /* ==================================================================== */
@@ -71,7 +71,15 @@ async function fetchActivityWithPeople(myId: string): Promise<ActivityItem[]> {
   const items = await fetchActivity(myId);
   const people = await fetchProfiles(items.map((i) => i.actorId));
   if (useSocial.getState().gen === gen) {
-    useSocial.setState((s) => ({ profiles: { ...s.profiles, ...people } }));
+    /*
+     * Through the store's mergeProfiles, not a spread. The spread handed
+     * every actor a fresh object on every open and every pull, changed or
+     * not, and a new map with them; most actors are people you follow, so
+     * each visit re-rendered their cards on Home underneath (PostCard's memo
+     * compares `author` by identity) and every screen still mounted that
+     * reads the map. Merged, only a profile that actually changed is new.
+     */
+    useSocial.setState((s) => ({ profiles: mergeProfiles(s.profiles, people) }));
   }
   return items;
 }
@@ -150,9 +158,9 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
 
   const openPerson = (id: string) => {
     if (id === myId) router.navigate('/profile');
-    else router.push({ pathname: '/user/[id]', params: { id } });
+    else router.navigate({ pathname: '/user/[id]', params: { id } });
   };
-  const openPost = (id: string) => router.push({ pathname: '/post/[id]', params: { id } });
+  const openPost = (id: string) => router.navigate({ pathname: '/post/[id]', params: { id } });
 
   /*
    * Rows whose person is not in hand are left out: an account deleted, or
@@ -344,6 +352,13 @@ function LikedThumb({
         <Image
           source={{ uri: url, cacheKey: path ?? undefined }}
           cachePolicy="memory-disk"
+          /*
+           * A 44pt thumbnail of a photo stored at up to 2048px: decoded at
+           * the frame's size, or every row would hold a full-size decode and
+           * redraw it on the main thread as it scrolls in (PostGridTile, in
+           * profile/PostGrid, has the whole reason).
+           */
+          enforceEarlyResizing
           contentFit="cover"
           transition={motion.fast}
           style={StyleSheet.absoluteFill}

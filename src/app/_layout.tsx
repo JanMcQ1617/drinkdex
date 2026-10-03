@@ -1,7 +1,9 @@
 import { useFonts } from 'expo-font';
+import { Image } from 'expo-image';
 import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import { VideoIntro } from '@/components/VideoIntro';
@@ -24,6 +26,23 @@ SplashScreen.preventAutoHideAsync();
  * dissolve covers the change of ground instead.
  */
 SplashScreen.setOptions({ fade: true, duration: 250 });
+
+/*
+ * A ceiling on expo-image's in-memory cache, which has none by default
+ * (maxMemoryCost 0 means unlimited). Feed photos, grids, reel posters and
+ * every avatar are drawn with cachePolicy "memory-disk", and iOS keeps the
+ * FULL decoded bitmap there: expo-image only shrinks a picture to its view
+ * after the load. A pour photo is up to 2048px, so 12 to 16 MB once
+ * decoded, even in a 40pt avatar. Each new post or face scrolled past added
+ * another one and nothing gave any back, so memory climbed with use until
+ * iOS slowed the app and then killed it. With the ceiling, the oldest
+ * bitmaps go first and come back from the disk cache when they are needed
+ * again. A picture already on screen is unaffected: its view holds its own
+ * drawn copy, which the cache never touches. iOS only: the Android module
+ * has no configureCache, and calling it there would throw.
+ */
+const IMAGE_MEMORY_CACHE_BYTES = 256 * 1024 * 1024;
+if (Platform.OS === 'ios') Image.configureCache({ maxMemoryCost: IMAGE_MEMORY_CACHE_BYTES });
 
 /*
  * Lifts the native splash. Safe to call any number of times: the native
