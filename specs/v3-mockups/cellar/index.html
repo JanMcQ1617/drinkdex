@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=440, initial-scale=1">
+<title>After hours mockup</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+:root{
+  /* night grounds */
+  --night:#140E0D; --night-raised:#201817; --night-sunk:#0D0909;
+  --backbar:#3E0A12; --backbar-low:#2C0810;
+  --night-edge:#3B302D; --night-edge-ctl:#857A71;
+  /* ink on night */
+  --ink:#F2EBE1; --ink-muted:#ADA298; --ink-faint:#857A71;
+  /* brand on night */
+  --wine:#5B0F1A; --wine-soft:#A85A63; --wine-lit:#E08A95; --ember:#D25366;
+  --gilt:#B08A3E; --gilt-lit:#D4B06A; --taupe:#CBBBA5;
+  --glow:rgba(217,162,92,.20);
+  /* paper (cream is the accent now) */
+  --paper:#F7F2EA; --paper-sunk:#EFE8DD; --paper-ink:#2B2322; --paper-muted:#6A6058;
+  --paper-line:#D9CFC1; --paper-ctl:#8A7F74; --white:#FFFFFF; --taupe-ink:#736247; --gilt-ink:#7D5F1C; --wine-wash:#F5E7E7;
+  /* media */
+  --scrim:rgba(14,11,11,.78); --scrim-mid:rgba(14,11,11,.62); --scrim-clear:rgba(14,11,11,0);
+  --ctl-fill:rgba(14,11,11,.55); --ctl-edge:rgba(255,253,249,.28);
+  --tabbar:#241C1B; --tabbar-edge:#4A3E3A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#080606}
+body{font-family:Inter,system-ui;color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 0}
+.tab{font-variant-numeric:tabular-nums}
+.gallery{display:flex;gap:32px;padding:32px;align-items:flex-start}
+.screen{width:440px;height:956px;position:relative;overflow:hidden;background:var(--night);flex:none;isolation:isolate}
+body.solo .gallery{padding:0;gap:0;display:block}
+body.solo .screen{display:none}
+body.solo .screen.on{display:block}
+svg.icon{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.grain{position:absolute;inset:0;background:url(img/grain.png);background-size:128px 128px;opacity:.35;pointer-events:none;z-index:50}
+
+/* ---------- device chrome (hardware, not app UI) ---------- */
+.status{position:absolute;left:0;right:0;top:0;height:62px;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 34px 0 50px;color:var(--ink);font:600 17px/22px Inter}
+.status .island{position:absolute;left:157px;top:11px;width:126px;height:37px;background:#000;border-radius:19px}
+.status .right{display:flex;gap:7px;align-items:center}
+.status.dark{color:var(--paper-ink)}
+.homebar{position:absolute;bottom:8px;left:50%;width:144px;height:5px;margin-left:-72px;background:var(--ink);border-radius:3px;z-index:60;opacity:.9}
+.homebar.dark{background:var(--paper-ink)}
+
+/* ---------- top bar ---------- */
+.topbar{position:absolute;top:62px;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:30}
+.topbar .btn{width:44px;height:44px;display:grid;place-items:center;color:var(--ink);position:relative}
+.topbar .btn svg.icon{width:26px;height:26px}
+.wordmark{font:700 31px/36px Playfair;color:var(--ink);letter-spacing:0}
+.bar-title{font:600 17px/22px Inter;color:var(--ink)}
+.dot{position:absolute;top:9px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--wine-lit);box-shadow:0 0 0 2px var(--backbar)}
+
+/* ---------- back-bar band (Home + Profile heads) ---------- */
+.band{position:absolute;left:0;right:0;top:0;background:
+  radial-gradient(90% 60% at 50% -8%, rgba(217,162,92,.20), rgba(217,162,92,0) 62%),
+  linear-gradient(180deg,#45101A 0%,#3E0A12 46%,#300810 100%);}
+.band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(203,187,165,.30)}
+.band-shadow{position:absolute;left:0;right:0;height:18px;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,0));z-index:2}
+
+/* ---------- today's pours ---------- */
+.pours{position:absolute;left:0;right:0;display:flex;gap:10px;padding:0 16px;overflow:hidden;z-index:3}
+.pour{width:78px;flex:none}
+.pour .frame{width:78px;height:100px;border-radius:8px;padding:3px;position:relative}
+.pour.unseen .frame{border:2px solid var(--ink);padding:2px}
+.pour.seen .frame{border:1px solid rgba(242,235,225,.34)}
+.pour .frame img{width:100%;height:100%;object-fit:cover;border-radius:5px;display:block}
+.pour .who{font:500 12px/16px Inter;color:var(--ink);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pour .what{font:600 13px/17px Playfair;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pour.seen .who,.pour.seen .what{color:var(--ink-muted)}
+.pour .badge{position:absolute;right:-6px;bottom:-6px;width:24px;height:24px;border-radius:4px;background:var(--ink);color:var(--wine);display:grid;place-items:center;border:2px solid var(--backbar)}
+.pour .badge svg.icon{width:16px;height:16px;stroke-width:2.4}
+
+/* ---------- post ---------- */
+.post{position:absolute;left:0;right:0}
+.author{height:52px;display:flex;align-items:center;gap:10px;padding:0 8px 0 16px}
+.av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:600 13px/1 Inter;color:var(--ink);flex:none;box-shadow:0 0 0 1px rgba(242,235,225,.18)}
+.author .name{font:600 15px/20px Inter;color:var(--ink)}
+.author .time{font:400 15px/20px Inter;color:var(--ink-muted)}
+.author .more{margin-left:auto;width:44px;height:44px;display:grid;place-items:center;color:var(--ink-muted)}
+.photo{position:relative;width:440px;height:550px;overflow:hidden;background:var(--night-sunk)}
+.photo>img{width:100%;height:100%;object-fit:cover;display:block}
+.nameplate{position:absolute;left:0;right:0;bottom:0;padding:120px 16px 18px;background:linear-gradient(180deg,var(--scrim-clear) 0%,var(--scrim-mid) 46%,rgba(14,11,11,.86) 100%)}
+.nameplate .dn{font:600 31px/35px Playfair;color:var(--ink)}
+.meta{display:flex;align-items:center;gap:8px;margin-top:6px;font:500 13px/18px Inter;color:var(--ink)}
+.no{font:500 12px/16px Inter;letter-spacing:1.5px;font-variant-numeric:tabular-nums}
+.plaque{height:22px;padding:0 7px;border-radius:4px;display:inline-flex;align-items:center;gap:4px;font:600 12px/16px Inter}
+.plaque.rare{background:var(--wine);border:1px solid var(--wine-soft);color:var(--ink)}
+.plaque.legendary{background:var(--gilt);border:1px solid var(--gilt-lit);color:var(--paper-ink)}
+.plaque.uncommon{border:1px solid rgba(203,187,165,.6);color:var(--taupe)}
+.plaque svg.icon{width:12px;height:12px}
+.sep{color:var(--ink-muted)}
+.rule-rare{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--wine-lit)}
+.rule-legendary{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--gilt),var(--gilt-lit) 50%,var(--gilt))}
+.marker{position:absolute;top:12px;right:12px;height:24px;padding:0 8px;border-radius:4px;background:var(--scrim);color:var(--ink);font:600 12px/24px Inter}
+.actions{height:48px;display:flex;align-items:center;padding:0 6px}
+.actions .a{width:44px;height:44px;display:grid;place-items:center;color:var(--ink)}
+.actions .a svg.icon{width:26px;height:26px}
+.actions .liked{color:var(--ember)}
+.actions .liked svg.icon{fill:var(--ember)}
+.newtag{margin-left:auto;margin-right:2px;height:30px;padding:0 10px;border-radius:8px;border:1px solid var(--wine-lit);color:var(--wine-lit);font:600 13px/18px Inter;display:flex;align-items:center;gap:5px}
+.newtag svg.icon{width:14px;height:14px;stroke-width:2.2}
+.likes{font:600 15px/20px Inter;padding:0 16px}
+.cap{font:400 15px/22px Inter;padding:4px 16px 0;color:var(--ink)}
+.cap b{font-weight:600}
+.ago{font:400 13px/18px Inter;color:var(--ink-muted);padding:6px 16px 0}
+
+/* ---------- tab bar (espresso skin on every tab) ---------- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:64px;border-radius:12px;background:var(--tabbar);border:1px solid var(--tabbar-edge);box-shadow:0 6px 18px rgba(0,0,0,.45);display:flex;z-index:45}
+.tabbar .slot{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--ink-muted);font:500 11px/14px Inter;position:relative}
+.tabbar .slot.on{color:var(--ink);font-weight:600}
+.tabbar .slot.on::before{content:"";position:absolute;top:-1px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--ink)}
+.tabbar .slot.on svg.icon{stroke-width:2.4}
+.tabbar .make{width:50px;height:38px;border-radius:8px;background:var(--wine);border:1px solid var(--wine-soft);display:grid;place-items:center;color:var(--ink)}
+.tabbar .make svg.icon{width:22px;height:22px;stroke-width:2.2}
+.tabbar .me{width:26px;height:26px;border-radius:50%;background:#5E2545;font:600 10px/26px Inter;text-align:center;color:var(--ink);box-shadow:0 0 0 1px rgba(242,235,225,.3)}
+
+/* ---------- module: not in your Dex yet ---------- */
+.module{position:absolute;left:0;right:0;background:var(--night-raised);border-top:1px solid var(--night-edge);border-bottom:1px solid var(--night-edge)}
+.module .mh{display:flex;align-items:baseline;justify-content:space-between;padding:16px 16px 0}
+.module .mt{font:600 17px/22px Inter;color:var(--ink)}
+.module .ms{font:400 13px/18px Inter;color:var(--ink-muted);padding:2px 16px 12px}
+.module .see{font:500 15px/20px Inter;color:var(--ink-muted)}
+.strip{display:flex;gap:10px;padding:0 16px 16px;overflow:hidden}
+.ncard{width:124px;flex:none}
+.ncard .f{width:124px;height:166px;border-radius:8px;overflow:hidden;position:relative;border:1px solid var(--night-edge)}
+.ncard .f img{width:100%;height:100%;object-fit:cover;display:block}
+.ncard .f .lk{position:absolute;top:8px;right:8px;color:var(--ink-muted)}
+.ncard .f .lk svg.icon{width:14px;height:14px}
+.ncard .f .nm{position:absolute;left:0;right:0;bottom:0;padding:30px 9px 9px;background:linear-gradient(180deg,var(--scrim-clear),rgba(14,11,11,.82));font:600 16px/19px Playfair;color:var(--ink)}
+.ncard .nt{font:600 12px/16px Inter;margin-top:2px}
+.ncard .f .lk{background:var(--scrim);width:24px;height:24px;border-radius:4px;display:grid;place-items:center;top:6px;right:6px;color:var(--ink)}
+.ncard .by{font:400 12px/16px Inter;color:var(--ink-muted);margin-top:6px}
+
+/* ---------- Dex ---------- */
+.hero-shelf{position:absolute;left:16px;right:16px;top:114px;height:140px;border-radius:12px;overflow:hidden;border:1px solid var(--night-edge);background:var(--night-raised)}
+.hero-shelf img{position:absolute;right:-18px;top:-20px;width:230px;height:180px;object-fit:cover;object-position:50% 52%}
+.hero-shelf .fade{position:absolute;inset:0;background:linear-gradient(90deg,var(--night-raised) 34%,rgba(32,24,23,.0) 78%)}
+.hero-shelf .txt{position:absolute;left:16px;top:14px;right:150px}
+.k{font:400 13px/18px Inter;color:var(--ink-muted)}
+.hero-shelf .dn{font:600 28px/32px Playfair;color:var(--ink);margin-top:2px;white-space:nowrap}
+.hero-shelf .count{position:absolute;left:16px;bottom:14px;display:flex;align-items:baseline;gap:6px}
+.big{font:600 22px/26px Inter;color:var(--ink);font-variant-numeric:tabular-nums}
+.search{position:absolute;left:16px;right:16px;height:44px;border-radius:8px;background:var(--night-raised);border:1px solid var(--night-edge-ctl);display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--ink-faint);font:400 16px/22px Inter}
+.search span{color:var(--ink-muted)}
+.chips{position:absolute;left:0;right:0;display:flex;gap:8px;padding:0 16px;overflow:hidden}
+.chip{height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--night-edge-ctl);display:flex;align-items:center;gap:6px;font:500 14px/18px Inter;color:var(--ink);white-space:nowrap;flex:none}
+.chip .c{color:var(--ink-muted);font-variant-numeric:tabular-nums}
+.chip.on{background:var(--paper);border-color:var(--paper);color:var(--paper-ink)}
+.chip.on .c{color:var(--paper-muted)}
+.chip svg.icon{width:14px;height:14px;stroke-width:2.2}
+.chapter{position:absolute;left:16px;right:16px;height:40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--night-edge)}
+.chapter .t{font:600 20px/26px Inter;color:var(--ink)}
+.chapter .n{font:500 13px/18px Inter;color:var(--ink-muted)}
+.grid2{position:absolute;left:16px;right:16px;display:grid;grid-template-columns:200px 200px;gap:8px}
+.card{width:200px;height:252px;border-radius:8px;position:relative;overflow:hidden;background:var(--night-sunk)}
+.card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 62%}
+.card .edge{position:absolute;inset:0;border-radius:8px;pointer-events:none}
+.card.common .edge{border:1px solid var(--night-edge)}
+.card.uncommon .edge{border:1.5px solid var(--taupe)}
+.card.rare .edge{border:2px solid var(--wine-lit)}
+.card.legendary .edge{border:2.5px solid var(--gilt);box-shadow:inset 0 0 0 4px var(--night-sunk),inset 0 0 0 5px rgba(212,176,106,.7)}
+.card.locked .edge{border:1px solid var(--night-edge)}
+.label{position:absolute;left:8px;right:8px;top:8px;background:var(--paper);border-radius:4px;padding:6px 8px 6px;border:1px solid var(--paper-line);box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.card.legendary .label{left:10px;right:10px;top:10px;border:1px solid var(--gilt)}
+.label .dn{font:700 17px/21px Playfair;color:var(--paper-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.label .row{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.label .no{font:500 11px/14px Inter;letter-spacing:1.5px;color:var(--taupe-ink)}
+.label .tier{font:600 11px/14px Inter;display:flex;gap:3px;align-items:center}
+.label .tier svg.icon{width:11px;height:11px}
+.ghost{position:absolute;left:12px;right:12px;top:12px}
+.ghost .gn{font:500 14px/18px Inter;color:var(--ink-muted)}
+.ghost .gno{font:500 11px/14px Inter;letter-spacing:1.5px;color:var(--ink-muted);margin-top:2px}
+.ghost .lk{position:absolute;right:0;top:1px;color:var(--ink-muted)}
+.ghost .lk svg.icon{width:14px;height:14px}
+.foil{position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,rgba(255,253,249,0),rgba(255,253,249,.0) 30%,rgba(255,253,249,.0) 70%,rgba(255,253,249,0))}
+
+/* ---------- drink page ---------- */
+.dhero{position:absolute;left:0;right:0;top:0;height:500px;overflow:hidden}
+.dhero img{width:100%;height:100%;object-fit:cover;object-position:50% 58%;display:block}
+.dhero .low{position:absolute;left:0;right:0;bottom:0;height:200px;background:linear-gradient(180deg,rgba(20,14,13,0),var(--night))}
+.mbtn{position:absolute;top:66px;width:44px;height:44px;border-radius:8px;background:var(--ctl-fill);border:1px solid var(--ctl-edge);display:grid;place-items:center;color:var(--ink);z-index:20}
+.mbtn svg.icon{width:22px;height:22px}
+.dtitle{position:absolute;left:16px;right:16px;top:388px}
+.dtitle .eyebrow{display:flex;gap:8px;align-items:center;font:500 13px/18px Inter;color:var(--ink-muted)}
+.dtitle h1{font:700 52px/56px Playfair;color:var(--ink);margin-top:6px;letter-spacing:-.3px}
+.labelband{position:absolute;left:16px;right:16px;top:484px;height:62px;border-top:1px solid var(--night-edge);border-bottom:1px solid var(--night-edge);display:grid;grid-template-columns:1fr 1fr 1fr 1fr}
+.labelband>div{padding:10px 0 0 12px;border-left:1px solid var(--night-edge)}
+.labelband>div:first-child{border-left:0;padding-left:0}
+.labelband .v{font:600 15px/20px Inter;color:var(--ink)}
+.labelband .l{font:400 12px/16px Inter;color:var(--ink-muted);margin-top:2px}
+.yours{position:absolute;left:16px;right:16px;top:560px;height:52px;display:flex;align-items:center;gap:12px}
+.yours img{width:44px;height:52px;border-radius:4px;object-fit:cover;border:1px solid var(--night-edge)}
+.yours .t1{font:500 15px/20px Inter;color:var(--ink)}
+.yours .t2{font:400 13px/18px Inter;color:var(--ink-muted)}
+.yours .chev{margin-left:auto;color:var(--ink-faint)}
+.notes{position:absolute;left:16px;right:16px;top:628px}
+.notes .v{font:400 18px/26px Inter;color:var(--ink);margin-top:2px}
+.spec{position:absolute;left:16px;right:16px;top:700px;background:var(--paper);border-radius:12px;border:1px solid var(--paper-line);color:var(--paper-ink);padding:0 16px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.spec .sh{height:52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--paper-line)}
+.spec .sh b{font:600 17px/22px Inter}
+.spec .sh span{font:400 13px/18px Inter;color:var(--paper-muted)}
+.ing{display:grid;grid-template-columns:76px 1fr auto;align-items:baseline;min-height:46px;padding:12px 0;border-bottom:1px solid var(--paper-line)}
+.ing .amt{font:600 17px/22px Inter;font-variant-numeric:tabular-nums}
+.ing .it{font:400 16px/22px Inter}
+.ing .ml{font:400 13px/18px Inter;color:var(--paper-muted);font-variant-numeric:tabular-nums}
+.actionbar{position:absolute;left:0;right:0;bottom:0;height:108px;background:var(--night-raised);border-top:1px solid var(--night-edge);padding:12px 16px 0;display:flex;gap:10px;z-index:30}
+.btn-wine{flex:1;height:50px;border-radius:8px;background:var(--wine);border:1px solid var(--wine-soft);color:var(--ink);font:600 16px/20px Inter;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-ghost{width:50px;height:50px;border-radius:8px;border:1px solid var(--night-edge-ctl);color:var(--ink);display:grid;place-items:center}
+.btn-ghost.on svg.icon{fill:var(--ink)}
+
+/* ---------- profile ---------- */
+.ph-av{position:absolute;left:16px;top:122px;width:88px;height:88px;border-radius:50%;padding:3px;border:2px solid var(--ink)}
+.ph-av .in{width:100%;height:100%;border-radius:50%;background:#5E2545;display:grid;place-items:center;font:600 30px/1 Inter;color:var(--ink)}
+.counts{position:absolute;left:120px;right:12px;top:136px;display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+.counts .v{font:600 19px/24px Inter;color:var(--ink);font-variant-numeric:tabular-nums}
+.counts .l{font:400 13px/18px Inter;color:var(--ink-muted);margin-top:2px}
+.pname{position:absolute;left:16px;right:16px;top:222px}
+.pname .n{font:600 16px/22px Inter;color:var(--ink)}
+.pname .b{font:400 15px/21px Inter;color:var(--ink);margin-top:2px}
+.pbtns{position:absolute;left:16px;right:16px;top:292px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pbtn{height:36px;border-radius:8px;background:rgba(242,235,225,.08);border:1px solid rgba(242,235,225,.34);font:600 14px/18px Inter;color:var(--ink);display:grid;place-items:center}
+.shelf{position:absolute;left:0;right:0;top:344px;display:flex;gap:12px;padding:0 16px}
+.sc{width:92px;flex:none;text-align:left}
+.sc .f{width:92px;height:100px;border-radius:6px;overflow:hidden;position:relative;background:var(--night-sunk)}
+.sc .f img{width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.sc .f .e{position:absolute;inset:0;border-radius:6px}
+.sc.legendary .e{border:2px solid var(--gilt)}
+.sc.rare .e{border:2px solid var(--wine-lit)}
+.sc.uncommon .e{border:1.5px solid var(--taupe)}
+.sc .sp{position:absolute;top:5px;left:5px;color:var(--gilt-lit)}
+.sc .sp svg.icon{width:13px;height:13px;fill:currentColor;stroke:none}
+.sc .nm{font:600 13px/16px Playfair;color:var(--ink);margin-top:6px}
+.sc .tr{font:500 11px/14px Inter;margin-top:2px}
+.tabstrip{position:absolute;left:0;right:0;height:46px;display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--night-edge);z-index:4}
+.tabstrip div{display:grid;place-items:center;font:600 15px/20px Inter;color:var(--ink-muted);position:relative}
+.tabstrip .on{color:var(--ink)}
+.tabstrip .on::after{content:"";position:absolute;bottom:-1px;left:22%;right:22%;height:2px;background:var(--ink)}
+.grid3{position:absolute;left:0;right:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.grid3 .t{height:182px;position:relative;overflow:hidden;background:var(--night-sunk)}
+.grid3 .t img{width:100%;height:100%;object-fit:cover;display:block}
+.grid3 .t .mk{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:4px;background:var(--scrim);display:grid;place-items:center;color:var(--ink)}
+.grid3 .t .mk svg.icon{width:14px;height:14px}
+.grid3 .t .mk.g{color:var(--gilt-lit)}
+.grid3 .t .mk.g svg.icon{fill:currentColor;stroke:none}
+
+/* ---------- sheets (paper: where you write) ---------- */
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:12px 12px 0 0;color:var(--paper-ink);z-index:35;box-shadow:0 -8px 30px rgba(0,0,0,.5)}
+.sheet .grain2{position:absolute;inset:0;background:url(img/grain.png);background-size:128px;opacity:.35;border-radius:12px 12px 0 0;pointer-events:none}
+.stitle{height:56px;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--paper-line);font:600 17px/22px Inter}
+.stitle .x{position:absolute;left:6px;top:6px;width:44px;height:44px;display:grid;place-items:center;color:var(--paper-ink)}
+.group{margin:20px 16px 0;border:1px solid var(--paper-ctl);border-radius:8px;background:var(--white);overflow:hidden}
+.group .r{height:58px;padding:9px 14px 0;position:relative}
+.group .r+.r{border-top:1px solid var(--paper-line)}
+.group .fl{font:500 12px/16px Inter;color:var(--paper-muted)}
+.group .fv{font:400 16px/22px Inter;color:var(--paper-ink);margin-top:1px}
+.group .fv.ph{color:var(--paper-muted)}
+.group .chev{position:absolute;right:12px;top:17px;color:var(--paper-ink)}
+.helper{font:400 13px/18px Inter;color:var(--paper-muted);margin:8px 16px 0}
+.btn-primary{margin:18px 16px 0;height:50px;border-radius:8px;background:var(--wine);color:var(--ink);font:600 16px/20px Inter;display:grid;place-items:center;border:1px solid var(--wine)}
+.or{display:flex;align-items:center;gap:12px;margin:18px 16px;font:400 13px/18px Inter;color:var(--paper-muted)}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--paper-line)}
+.prov{margin:0 16px 10px;height:50px;border-radius:8px;border:1px solid var(--paper-ink);background:var(--paper);display:flex;align-items:center;justify-content:center;position:relative;font:600 16px/20px Inter;color:var(--paper-ink)}
+.prov .ic{position:absolute;left:16px;top:13px;width:24px;height:24px;display:grid;place-items:center}
+.consent{font:400 12px/17px Inter;color:var(--paper-muted);margin:12px 24px 0;text-align:center}
+.consent u{color:var(--paper-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+.scrimbg{position:absolute;inset:0;background:rgba(8,6,6,.52);z-index:34}
+
+/* log sheet */
+.sec{font:600 17px/22px Inter;color:var(--paper-ink);margin:18px 16px 10px}
+.photowell{margin:16px 16px 0;height:96px;border:1px solid var(--paper-ctl);border-radius:8px;background:var(--white);display:flex;align-items:center;gap:14px;padding:0 14px}
+.photowell .cam{width:64px;height:64px;border-radius:8px;background:var(--paper-sunk);border:1px solid var(--paper-line);display:grid;place-items:center;color:var(--paper-ink)}
+.photowell .t1{font:600 16px/22px Inter}
+.photowell .t2{font:400 13px/18px Inter;color:var(--paper-muted)}
+.sfield{margin:0 16px;height:48px;border-radius:8px;border:1px solid var(--paper-ink);background:var(--white);display:flex;align-items:center;gap:8px;padding:0 6px 0 12px;font:400 16px/22px Inter;color:var(--paper-ink);position:relative}
+.sfield .caret{width:2px;height:20px;background:var(--wine);margin-left:-6px}
+.sfield .clr{margin-left:auto;width:36px;height:36px;display:grid;place-items:center;color:var(--paper-muted)}
+.sfield .ring{position:absolute;inset:-3px;border:2px solid var(--paper-ink);border-radius:10px;opacity:.0}
+.rcount{font:400 13px/18px Inter;color:var(--paper-muted);margin:12px 16px 4px}
+.res{display:flex;align-items:center;gap:12px;height:76px;padding:0 16px;border-bottom:1px solid var(--paper-line)}
+.res .th{width:56px;height:56px;border-radius:8px;overflow:hidden;flex:none;background:var(--night);position:relative;border:1px solid rgba(43,35,34,.25)}
+.res .th img{width:100%;height:100%;object-fit:cover;object-position:50% 58%}
+.res .rn{font:600 19px/24px Playfair;color:var(--paper-ink)}
+.res .rm{font:400 13px/18px Inter;color:var(--paper-muted);margin-top:1px}
+.res .rm .no{font-size:11px;letter-spacing:1.5px;color:var(--taupe-ink)}
+.res .tg{margin-left:auto;height:26px;padding:0 8px;border-radius:4px;font:600 12px/16px Inter;display:flex;align-items:center;gap:4px;flex:none}
+.tg.have{border:1px solid var(--paper-line);color:var(--paper-muted)}
+.tg.new{border:1px solid var(--wine);background:var(--wine-wash);color:var(--wine)}
+.tg svg.icon{width:12px;height:12px;stroke-width:2.4}
+.addrow{display:flex;align-items:center;gap:12px;height:60px;padding:0 16px;font:500 15px/20px Inter;color:var(--paper-ink)}
+.addrow .pl{width:56px;height:40px;border-radius:8px;border:1px solid var(--paper-ctl);display:grid;place-items:center}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.6 2.4c0 5.8-7.6 10.4-7.6 10.4z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 14.5V3.5M8 7.2l4-3.7 4 3.7M7 10.5H5.8a.8.8 0 0 0-.8.8v8.4c0 .5.4.8.8.8h12.4c.5 0 .8-.3.8-.8v-8.4a.8.8 0 0 0-.8-.8H17"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-3.8-5.5 3.8z"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.6 12 4l8 6.6V20h-5.2v-5.6H9.2V20H4z"/></symbol>
+    <symbol id="i-coupe" viewBox="0 0 24 24"><path d="M3.8 5.5h16.4c-.4 4.4-3.9 7.6-8.2 7.6s-7.8-3.2-8.2-7.6zM12 13.1v6M7.8 19.6h8.4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.6 15.6 4.6 4.6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 4.5 7.5 7.5L9 19.5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M10.3 3.2h3.4l.5 2.5 1.6.9 2.4-.9 1.7 2.9-1.9 1.7v1.8l1.9 1.7-1.7 2.9-2.4-.9-1.6.9-.5 2.5h-3.4l-.5-2.5-1.6-.9-2.4.9-1.7-2.9 1.9-1.7v-1.8L3.6 8.6l1.7-2.9 2.4.9 1.6-.9z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="10" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 2.5c.7 5.2 2.6 7.6 8 9.5-5.4 1.9-7.3 4.3-8 9.5-.7-5.2-2.6-7.6-8-9.5 5.4-1.9 7.3-4.3 8-9.5z"/></symbol>
+    <symbol id="i-stats" viewBox="0 0 24 24"><path d="M5.5 20v-8M12 20V5M18.5 20v-5.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.8 7 8.2 6.2L20.2 7"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4.8 7.5h2.9l1.6-2.5h5.4l1.6 2.5h2.9c.5 0 .8.3.8.8v10.4c0 .5-.3.8-.8.8H4.8a.8.8 0 0 1-.8-.8V8.3c0-.5.3-.8.8-.8z"/><circle cx="12" cy="13" r="3.6"/></symbol>
+    <symbol id="i-stack" viewBox="0 0 24 24"><rect x="7.5" y="7.5" width="12" height="12" rx="1.5"/><path d="M4.5 16.5v-11a1 1 0 0 1 1-1h11"/></symbol>
+    <symbol id="i-reel" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="m10 8.8 5 3.2-5 3.2z"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M9.3 4v16M14.7 4v16M4 9.3h16M4 14.7h16"/></symbol>
+  </defs>
+</svg>
+
+<div class="gallery">
+
+<!-- =============================== HOME (at rest) =============================== -->
+<section class="screen" id="home" aria-label="Home">
+  <div class="band" style="height:270px"></div>
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <header class="topbar">
+    <div class="btn" aria-label="Log a pour"><svg class="icon"><use href="#i-plus"/></svg></div>
+    <div class="wordmark">Sipply</div>
+    <div class="btn" aria-label="Activity, new"><svg class="icon"><use href="#i-heart"/></svg><span class="dot"></span></div>
+  </header>
+  <div class="pours" style="top:120px">
+    <div class="pour seen"><div class="frame"><img src="img/night-locked/negroni.webp" alt=""><span class="badge"><svg class="icon"><use href="#i-plus"/></svg></span></div><div class="who" style="color:var(--ink)">You</div><div class="who" style="margin-top:0;color:var(--ink-muted);font-size:12px">Log a pour</div></div>
+    <div class="pour unseen"><div class="frame"><img src="img/paper-plane.webp" alt=""></div><div class="who">leo.okafor</div><div class="what">Paper Plane</div></div>
+    <div class="pour unseen"><div class="frame"><img src="img/last-word.webp" alt=""></div><div class="who">ana.vidal</div><div class="what">Last Word</div></div>
+    <div class="pour unseen"><div class="frame"><img src="img/penicillin.webp" alt=""></div><div class="who">sam.whitlock</div><div class="what">Penicillin</div></div>
+    <div class="pour seen"><div class="frame"><img src="img/mai-tai.webp" alt=""></div><div class="who">jules.b</div><div class="what">Mai Tai</div></div>
+  </div>
+  <div class="band-shadow" style="top:270px"></div>
+  <article class="post" style="top:270px">
+    <div class="author"><div class="av" style="background:#8A5F10">TM</div><span class="name">theo.marsh</span><span class="time">· 2h</span><div class="more"><svg class="icon"><use href="#i-more"/></svg></div></div>
+    <div class="photo"><img src="img/martinez.webp" alt="theo.marsh's Martinez">
+      <span class="marker tab">1/3</span>
+      <div class="nameplate"><div class="dn">Martinez</div>
+        <div class="meta"><span class="no">No. 0125</span><span class="plaque rare">Rare</span><span class="sep">·</span><span>Spirit-forward</span></div></div>
+      <div class="rule-rare"></div>
+    </div>
+    <div class="actions"><div class="a"><svg class="icon"><use href="#i-heart"/></svg></div><div class="a"><svg class="icon"><use href="#i-share"/></svg></div><div class="newtag"><svg class="icon"><use href="#i-plus"/></svg>New to your Dex</div><div class="a"><svg class="icon"><use href="#i-bookmark"/></svg></div></div>
+  </article>
+  <nav class="tabbar">
+    <div class="slot on"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+    <div class="slot"><svg class="icon"><use href="#i-coupe"/></svg>Dex</div>
+    <div class="slot"><div class="make"><svg class="icon"><use href="#i-plus"/></svg></div></div>
+    <div class="slot"><div class="me">MR</div>Profile</div>
+  </nav>
+  <div class="homebar"></div><div class="grain"></div>
+</section>
+
+<!-- =============================== HOME (scrolled) =============================== -->
+<section class="screen" id="feed" aria-label="Home, scrolled">
+  <article class="post" style="top:-262px">
+    <div class="author"><div class="av" style="background:#8A5F10">TM</div><span class="name">theo.marsh</span><span class="time">· 2h</span></div>
+    <div class="photo"><img src="img/martinez.webp" alt="">
+      <div class="nameplate"><div class="dn">Martinez</div>
+        <div class="meta"><span class="no">No. 0125</span><span class="plaque rare">Rare</span><span class="sep">·</span><span>Spirit-forward</span></div></div>
+      <div class="rule-rare"></div>
+    </div>
+    <div class="actions"><div class="a liked"><svg class="icon"><use href="#i-heart"/></svg></div><div class="a"><svg class="icon"><use href="#i-share"/></svg></div><div class="newtag"><svg class="icon"><use href="#i-plus"/></svg>New to your Dex</div><div class="a"><svg class="icon"><use href="#i-bookmark"/></svg></div></div>
+    <div class="likes tab">18 likes</div>
+    <div class="cap"><b>theo.marsh</b> Old Tom, sweet vermouth, a little maraschino. Sweeter than I expected, in the best way.</div>
+    <div class="ago">2 hours ago</div>
+  </article>
+  <section class="module" style="top:494px">
+    <div class="mh"><span class="mt">Poured by friends, not in your Dex</span><span class="see">See all</span></div>
+    <div class="ms">Poured this week. Log one and it joins your cabinet.</div>
+    <div class="strip">
+      <div class="ncard"><div class="f"><img src="img/night/final-ward.webp" alt=""><span class="lk"><svg class="icon"><use href="#i-lock"/></svg></span><div class="nm">Final Ward<div class="nt" style="color:var(--wine-lit)">Rare</div></div></div><div class="by">sam.whitlock</div></div>
+      <div class="ncard"><div class="f"><img src="img/night/naked-and-famous.webp" alt=""><span class="lk"><svg class="icon"><use href="#i-lock"/></svg></span><div class="nm">Naked and Famous<div class="nt" style="color:var(--taupe)">Uncommon</div></div></div><div class="by">leo.okafor</div></div>
+      <div class="ncard"><div class="f"><img src="img/night/last-word.webp" alt=""><span class="lk"><svg class="icon"><use href="#i-lock"/></svg></span><div class="nm">Last Word<div class="nt" style="color:var(--taupe)">Uncommon</div></div></div><div class="by">ana.vidal</div></div>
+      <div class="ncard"><div class="f"><img src="img/night/aviation.webp" alt=""><span class="lk"><svg class="icon"><use href="#i-lock"/></svg></span><div class="nm">Aviation<div class="nt" style="color:var(--taupe)">Uncommon</div></div></div><div class="by">jules.b</div></div>
+    </div>
+  </section>
+  <article class="post" style="top:776px">
+    <div class="author"><div class="av" style="background:#7E2330">AV</div><span class="name">ana.vidal</span><span class="time">· 5h</span><div class="more"><svg class="icon"><use href="#i-more"/></svg></div></div>
+    <div class="photo"><img src="img/ramos-gin-fizz.webp" alt="" style="object-position:50% 30%"></div>
+  </article>
+  <div class="band" style="height:110px;z-index:20"></div>
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <header class="topbar">
+    <div class="btn"><svg class="icon"><use href="#i-plus"/></svg></div>
+    <div class="wordmark" style="transform:scale(.82)">Sipply</div>
+    <div class="btn"><svg class="icon"><use href="#i-heart"/></svg><span class="dot"></span></div>
+  </header>
+  <nav class="tabbar">
+    <div class="slot on"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+    <div class="slot"><svg class="icon"><use href="#i-coupe"/></svg>Dex</div>
+    <div class="slot"><div class="make"><svg class="icon"><use href="#i-plus"/></svg></div></div>
+    <div class="slot"><div class="me">MR</div>Profile</div>
+  </nav>
+  <div class="homebar"></div><div class="grain"></div>
+</section>
+
+<!-- =============================== DEX =============================== -->
+<section class="screen" id="dex" aria-label="Dex">
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <header class="topbar" style="height:44px">
+    <div class="btn"></div><div class="bar-title">Dex</div>
+    <div class="btn" aria-label="Stats"><svg class="icon"><use href="#i-stats"/></svg></div>
+  </header>
+  <div class="hero-shelf">
+    <img src="img/night/paper-plane.webp" alt="">
+    <div class="fade"></div>
+    <div class="txt"><div class="k">Latest catch · Saturday</div><div class="dn">Paper Plane</div>
+      <div class="meta" style="margin-top:4px"><span class="no" style="color:var(--ink-muted)">No. 0107</span><span class="plaque uncommon">Uncommon</span></div></div>
+    <div class="count"><span class="big">14</span><span class="k">of 2,089 collected · 11 to your next 25</span></div>
+  </div>
+  <div class="search" style="top:268px"><svg class="icon" style="width:20px;height:20px"><use href="#i-search"/></svg><span>Search 2,089 drinks</span></div>
+  <div class="chips" style="top:324px">
+    <div class="chip on">Cocktails <span class="c tab">899</span></div>
+    <div class="chip on">Fizz <svg class="icon"><use href="#i-close"/></svg></div>
+    <div class="chip">Collected <span class="c tab">14</span></div>
+    <div class="chip">Rarity <svg class="icon"><use href="#i-down"/></svg></div>
+    <div class="chip">Spirits</div>
+  </div>
+  <div class="chapter" style="top:370px"><span class="t">Fizz</span><span class="n tab">2 of 14 collected</span></div>
+  <div class="grid2" style="top:420px">
+    <!-- locked photo -->
+    <div class="card locked"><img src="img/night-locked/gin-fizz.webp" alt=""><div class="edge"></div>
+      <div class="ghost"><div class="gn">Gin Fizz</div><div class="gno tab">No. 0008</div><span class="lk"><svg class="icon"><use href="#i-lock"/></svg></span></div></div>
+    <!-- legendary collected photo -->
+    <div class="card legendary"><img src="img/night/ramos-gin-fizz.webp" alt="" style="object-position:50% 64%"><div class="edge"></div>
+      <div class="foil"></div>
+      <div class="label"><div class="dn">Ramos Gin Fizz</div><div class="row"><span class="no tab">No. 0009</span><span class="tier" style="color:var(--gilt-ink)"><svg class="icon" style="fill:#A8823A;stroke:none"><use href="#i-sparkle"/></svg>Legendary</span></div></div></div>
+    <!-- rare collected vector -->
+    <div class="card rare" style="background:radial-gradient(70% 55% at 50% 62%, #5A2A22 0%, #2A1513 55%, #140E0D 100%)">
+      <svg viewBox="0 0 200 252" width="200" height="252" style="position:absolute;inset:0">
+        <defs>
+          <linearGradient id="liqA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E3A0"/><stop offset="1" stop-color="#E0B84A"/></linearGradient>
+          <radialGradient id="poolA" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect x="0" y="206" width="200" height="46" fill="#120B0A" opacity=".55"/>
+        <path d="M0 206.5H200" stroke="#6A4A38" stroke-width="1"/>
+        <ellipse cx="100" cy="208" rx="40" ry="5" fill="url(#poolA)"/>
+        <path d="M70 92 L130 92 L126 200 Q125 206 119 206 L81 206 Q75 206 74 200 Z" fill="rgba(255,253,249,.06)"/>
+        <path d="M71.6 118 L128.4 118 L125.6 198 Q125 203 119.5 203 L80.5 203 Q75 203 74.4 198 Z" fill="url(#liqA)" opacity=".95"/>
+        <path d="M71 104 L129 104 L128.5 118 L71.5 118 Z" fill="#F3ECDC"/>
+        <g fill="#FFF8E6" opacity=".7"><circle cx="88" cy="150" r="1.6"/><circle cx="104" cy="170" r="1.3"/><circle cx="113" cy="139" r="1.5"/><circle cx="95" cy="186" r="1.2"/><circle cx="118" cy="182" r="1.1"/></g>
+        <path d="M70 92 L130 92 L126 200 Q125 206 119 206 L81 206 Q75 206 74 200 Z" fill="none" stroke="#F2EBE1" stroke-opacity=".75" stroke-width="1.6"/>
+        <path d="M80 98 L78 196" stroke="#FFFFFF" stroke-opacity=".28" stroke-width="3" stroke-linecap="round"/>
+        <g transform="translate(128 92)"><circle r="13" fill="#F1D04A"/><circle r="10.5" fill="#F8E58C"/><path d="M0 -10.5V10.5M-10.5 0H10.5M-7.4 -7.4L7.4 7.4M7.4 -7.4L-7.4 7.4" stroke="#F1D04A" stroke-width="1.2"/></g>
+      </svg>
+      <div class="edge"></div>
+      <div class="label"><div class="dn">Morning Glory Fizz</div><div class="row"><span class="no tab">No. 0762</span><span class="tier" style="color:var(--wine)">Rare</span></div></div></div>
+    <!-- locked vector (debossed) -->
+    <div class="card locked" style="background:linear-gradient(180deg,#171110,#0E0A09)">
+      <svg viewBox="0 0 200 252" width="200" height="252" style="position:absolute;inset:0">
+        <path d="M0 206.5H200" stroke="#2E2523" stroke-width="1"/>
+        <g transform="translate(0 1)"><path d="M70 92 L130 92 L126 200 Q125 206 119 206 L81 206 Q75 206 74 200 Z" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="2"/></g>
+        <path d="M71.6 118 L128.4 118 L125.6 198 Q125 203 119.5 203 L80.5 203 Q75 203 74.4 198 Z" fill="#E46E97" opacity=".10"/>
+        <path d="M70 92 L130 92 L126 200 Q125 206 119 206 L81 206 Q75 206 74 200 Z" fill="none" stroke="#E46E97" stroke-opacity=".30" stroke-width="1.6"/>
+        <g transform="translate(0 -1)"><path d="M70 92 L130 92" stroke="#FFFDF9" stroke-opacity=".10" stroke-width="1"/></g>
+      </svg>
+      <div class="edge"></div>
+      <div class="ghost"><div class="gn">Sloe Gin Fizz</div><div class="gno tab">No. 0763</div><span class="lk"><svg class="icon"><use href="#i-lock"/></svg></span></div></div>
+  </div>
+  <nav class="tabbar">
+    <div class="slot"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+    <div class="slot on"><svg class="icon"><use href="#i-coupe"/></svg>Dex</div>
+    <div class="slot"><div class="make"><svg class="icon"><use href="#i-plus"/></svg></div></div>
+    <div class="slot"><div class="me">MR</div>Profile</div>
+  </nav>
+  <div class="homebar"></div><div class="grain"></div>
+</section>
+
+<!-- =============================== DRINK =============================== -->
+<section class="screen" id="drink" aria-label="Drink page">
+  <div class="dhero"><img src="img/night/hanky-panky.webp" alt="Hanky Panky in a coupe"><div class="low"></div></div>
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <div class="mbtn" style="left:16px" aria-label="Back"><svg class="icon"><use href="#i-left"/></svg></div>
+  <div class="mbtn" style="right:16px" aria-label="Share"><svg class="icon"><use href="#i-share"/></svg></div>
+  <div class="dtitle">
+    <div class="eyebrow"><span class="no">No. 0123</span><span class="plaque rare">Rare</span><span>·</span><span>Spirit-forward cocktail</span></div>
+    <h1>Hanky Panky</h1>
+  </div>
+  <div class="labelband">
+    <div><div class="v">28%</div><div class="l">abv</div></div>
+    <div><div class="v">London</div><div class="l">England</div></div>
+    <div><div class="v">Coupe</div><div class="l">glass</div></div>
+    <div><div class="v">Stirred</div><div class="l">method</div></div>
+  </div>
+  <div class="yours"><img src="img/hanky-panky.webp" alt="">
+    <div><div class="t1">In your Dex since 14 September</div><div class="t2">3 pours logged · last one Saturday</div></div>
+    <span class="chev"><svg class="icon" style="width:18px;height:18px"><use href="#i-right"/></svg></span></div>
+  <div class="notes"><div class="k">Tastes of</div><div class="v">Menthol, bitter herbs, juniper, cola spice</div></div>
+  <div class="spec">
+    <div class="sh"><b>The spec</b><span>Serves 1 · 2 minutes</span></div>
+    <div class="ing"><span class="amt">1.5 oz</span><span class="it">Gin</span><span class="ml">45 ml</span></div>
+    <div class="ing"><span class="amt">1.5 oz</span><span class="it">Sweet vermouth</span><span class="ml">45 ml</span></div>
+    <div class="ing"><span class="amt">0.25 oz</span><span class="it">Fernet-Branca</span><span class="ml">2 barspoons</span></div>
+  </div>
+  <div class="actionbar">
+    <div class="btn-wine"><svg class="icon" style="width:20px;height:20px"><use href="#i-plus"/></svg>Log another Hanky Panky</div>
+    <div class="btn-ghost on" aria-label="Saved"><svg class="icon"><use href="#i-bookmark"/></svg></div>
+  </div>
+  <div class="homebar"></div><div class="grain"></div>
+</section>
+
+<!-- =============================== PROFILE =============================== -->
+<section class="screen" id="profile" aria-label="Profile">
+  <div class="band" style="height:512px"></div>
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <header class="topbar" style="height:44px">
+    <div class="btn"><svg class="icon"><use href="#i-plus"/></svg></div><div class="bar-title" style="font-size:18px">mara.ruiz</div>
+    <div class="btn"><svg class="icon"><use href="#i-gear"/></svg></div>
+  </header>
+  <div class="ph-av"><div class="in">MR</div></div>
+  <div class="counts">
+    <div><div class="v">48</div><div class="l">pours</div></div>
+    <div><div class="v">14</div><div class="l">in Dex</div></div>
+    <div><div class="v">312</div><div class="l">followers</div></div>
+    <div><div class="v">190</div><div class="l">following</div></div>
+  </div>
+  <div class="pname"><div class="n">Mara Ruiz</div><div class="b">Amaro over everything. Stirred, never shaken. Chicago.</div></div>
+  <div class="pbtns"><div class="pbtn">Edit profile</div><div class="pbtn">Share profile</div></div>
+  <div class="shelf">
+    <div class="sc legendary"><div class="f"><img src="img/night/ramos-gin-fizz.webp" alt=""><div class="e"></div><span class="sp"><svg class="icon"><use href="#i-sparkle"/></svg></span></div><div class="nm">Ramos Gin Fizz</div><div class="tr" style="color:var(--gilt-lit)">Legendary</div></div>
+    <div class="sc rare"><div class="f"><img src="img/night/hanky-panky.webp" alt=""><div class="e"></div></div><div class="nm">Hanky Panky</div><div class="tr" style="color:var(--wine-lit)">Rare</div></div>
+    <div class="sc rare"><div class="f"><img src="img/night/blood-and-sand.webp" alt=""><div class="e"></div></div><div class="nm">Blood and Sand</div><div class="tr" style="color:var(--wine-lit)">Rare</div></div>
+    <div class="sc uncommon"><div class="f"><img src="img/night/paper-plane.webp" alt=""><div class="e"></div></div><div class="nm">Paper Plane</div><div class="tr" style="color:var(--taupe)">Uncommon</div></div>
+  </div>
+  <div class="tabstrip" style="top:512px;background:var(--night)">
+    <div class="on">Pours</div><div>Reels</div><div>Dex</div>
+  </div>
+  <div class="grid3" style="top:559px">
+    <div class="t"><img src="img/negroni.webp" alt=""></div>
+    <div class="t"><img src="img/paper-plane.webp" alt=""><span class="mk"><svg class="icon"><use href="#i-stack"/></svg></span></div>
+    <div class="t"><img src="img/ramos-gin-fizz.webp" alt="" style="object-position:50% 35%"><span class="mk g"><svg class="icon"><use href="#i-sparkle"/></svg></span></div>
+    <div class="t"><img src="img/boulevardier.webp" alt=""></div>
+    <div class="t"><img src="img/sazerac.webp" alt=""></div>
+    <div class="t"><img src="img/vieux-carre.webp" alt=""><span class="mk"><svg class="icon"><use href="#i-reel"/></svg></span></div>
+    <div class="t"><img src="img/espresso-martini.webp" alt=""></div>
+    <div class="t"><img src="img/blood-and-sand.webp" alt=""></div>
+    <div class="t"><img src="img/jungle-bird.webp" alt=""></div>
+  </div>
+  <nav class="tabbar">
+    <div class="slot"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+    <div class="slot"><svg class="icon"><use href="#i-coupe"/></svg>Dex</div>
+    <div class="slot"><div class="make"><svg class="icon"><use href="#i-plus"/></svg></div></div>
+    <div class="slot on"><div class="me" style="box-shadow:0 0 0 2px var(--ink)">MR</div>Profile</div>
+  </nav>
+  <div class="homebar"></div><div class="grain"></div>
+</section>
+
+<!-- =============================== SIGN IN =============================== -->
+<section class="screen" id="signin" aria-label="Sign in">
+  <img src="img/night/negroni.webp" alt="" style="position:absolute;left:-30px;top:84px;width:500px;height:500px;object-fit:cover">
+  <div style="position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(180deg,rgba(20,14,13,.85),rgba(20,14,13,0))"></div>
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <div style="position:absolute;left:0;right:0;top:86px;text-align:center;z-index:5">
+    <div class="wordmark" style="font-size:44px;line-height:50px">Sipply</div>
+    <div style="font:400 16px/22px Inter;color:var(--ink-muted);margin-top:4px">Every drink you’ve had, in one Dex.</div>
+  </div>
+  <div class="sheet" style="top:284px">
+    <div class="grain2"></div>
+    <div class="stitle"><div class="x" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></div>Sign in or join Sipply</div>
+    <div class="group">
+      <div class="r"><div class="fl">Country or region</div><div class="fv">United States (+1)</div><span class="chev"><svg class="icon" style="width:20px;height:20px"><use href="#i-down"/></svg></span></div>
+      <div class="r"><div class="fl">Phone number</div><div class="fv ph">(555) 000-0000</div></div>
+    </div>
+    <div class="helper">We’ll text a 6-digit code to confirm it’s you. Message and data rates may apply.</div>
+    <div class="btn-primary">Continue</div>
+    <div class="or">or</div>
+    <div class="prov"><span class="ic"><svg class="icon"><use href="#i-mail"/></svg></span>Continue with email</div>
+    <div class="prov"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="#2B2322" d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.9-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.8zM14.1 5.9c.6-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.1 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4z"/></svg></span>Continue with Apple</div>
+    <div class="prov"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22"><path fill="#4285F4" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1a10 10 0 0 0 0 9.2z"/><path fill="#EA4335" d="M12 6c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10C7.2 7.7 9.4 6 12 6z"/></svg></span>Continue with Google</div>
+    <div class="prov"><span class="ic"><svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="10" fill="#0866FF"/><path fill="#FFFFFF" d="M13.3 22v-7h2.3l.4-2.8h-2.7v-1.8c0-.8.3-1.4 1.4-1.4h1.4V6.5c-.3 0-1.1-.1-2.1-.1-2.1 0-3.4 1.200-3.4 3.500v2.300H8.300V15h2.300v7z"/></svg></span>Continue with Facebook</div>
+    <div class="consent">By continuing, you agree to Sipply’s <u>Terms</u> and confirm you have read the <u>Privacy Policy</u>. You must be of legal drinking age.</div>
+  </div>
+  <div class="homebar dark"></div><div class="grain"></div>
+</section>
+
+<!-- =============================== LOG SHEET =============================== -->
+<section class="screen" id="log" aria-label="Log a pour">
+  <div class="band" style="height:270px"></div>
+  <div class="status"><span class="tab">9:41</span><div class="island"></div><div class="right">
+    <svg width="18" height="12" viewBox="0 0 18 12"><g fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></g></svg>
+    <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2 5.6 8.6a3.4 3.4 0 0 1 4.8 0zM3.4 6.4a6.5 6.5 0 0 1 9.2 0l1.4-1.5a8.6 8.6 0 0 0-12 0zM.6 3.6a10.5 10.5 0 0 1 14.8 0L16 3a11.4 11.4 0 0 0-16 0z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="18" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.3" width="1.8" height="4.4" rx=".9" fill="currentColor" opacity=".5"/></svg>
+  </div></div>
+  <header class="topbar"><div class="btn"></div><div class="wordmark">Sipply</div><div class="btn"></div></header>
+  <div class="scrimbg"></div>
+  <div class="sheet" style="top:74px">
+    <div class="grain2"></div>
+    <div class="stitle"><div class="x" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></div>Log a pour</div>
+    <div class="photowell"><div class="cam"><svg class="icon" style="width:28px;height:28px"><use href="#i-camera"/></svg></div><div><div class="t1">Add a photo</div><div class="t2">Take one now, or pick one you already took.</div></div></div>
+    <div class="sec">What was it?</div>
+    <div class="sfield"><svg class="icon" style="width:20px;height:20px;color:var(--paper-muted)"><use href="#i-search"/></svg>negr<span class="caret"></span><span class="clr" aria-label="Clear"><svg class="icon" style="width:18px;height:18px"><use href="#i-close"/></svg></span></div>
+    <div class="rcount">9 drinks match</div>
+    <div class="res"><div class="th"><img src="img/night/negroni.webp" alt=""></div><div><div class="rn">Negroni</div><div class="rm"><span class="no">No. 0127</span> · Common · Rocks glass</div></div><span class="tg have"><svg class="icon"><use href="#i-check"/></svg>In your Dex</span></div>
+    <div class="res"><div class="th"><img src="img/night/negroni-sbagliato.webp" alt=""></div><div><div class="rn">Negroni Sbagliato</div><div class="rm"><span class="no">No. 0119</span> · Uncommon · Rocks glass</div></div><span class="tg new">New</span></div>
+    <div class="res"><div class="th"><img src="img/night/white-negroni.webp" alt=""></div><div><div class="rn">White Negroni</div><div class="rm"><span class="no">No. 0059</span> · Uncommon · Rocks glass</div></div><span class="tg new">New</span></div>
+    <div class="res"><div class="th" style="background:radial-gradient(70% 60% at 50% 60%,#4A2420,#140E0D)">
+        <svg viewBox="0 0 56 56" width="56" height="56" style="position:absolute;inset:0"><path d="M17 24h22l-1.6 18.5c-.1 1-1 1.8-2 1.8H20.6c-1 0-1.9-.8-2-1.8z" fill="#B4601F" opacity=".95"/><path d="M15.5 18h25l-2 25c-.1 1.2-1.1 2-2.2 2H19.7c-1.1 0-2.1-.8-2.2-2z" fill="none" stroke="#F2EBE1" stroke-opacity=".8" stroke-width="1.3"/><rect x="21" y="27" width="8" height="8" rx="1.5" fill="#FFFFFF" opacity=".28"/></svg></div>
+      <div><div class="rn">Kingston Negroni</div><div class="rm"><span class="no">No. 0779</span> · Uncommon · Rocks glass</div></div><span class="tg new">New</span></div>
+    <div class="res"><div class="th" style="background:radial-gradient(70% 60% at 50% 60%,#4A2420,#140E0D)">
+        <svg viewBox="0 0 56 56" width="56" height="56" style="position:absolute;inset:0"><path d="M17 24h22l-1.6 18.5c-.1 1-1 1.8-2 1.8H20.6c-1 0-1.9-.8-2-1.8z" fill="#BF3A22" opacity=".9"/><path d="M15.5 18h25l-2 25c-.1 1.2-1.1 2-2.2 2H19.7c-1.1 0-2.1-.8-2.2-2z" fill="none" stroke="#F2EBE1" stroke-opacity=".8" stroke-width="1.3"/><rect x="26" y="28" width="8" height="8" rx="1.5" fill="#FFFFFF" opacity=".28"/></svg></div>
+      <div><div class="rn">Mezcal Negroni</div><div class="rm"><span class="no">No. 0780</span> · Common · Rocks glass</div></div><span class="tg new">New</span></div>
+    <div class="res"><div class="th" style="background:radial-gradient(70% 60% at 50% 60%,#4A2420,#140E0D)">
+        <svg viewBox="0 0 56 56" width="56" height="56" style="position:absolute;inset:0"><path d="M17 24h22l-1.6 18.5c-.1 1-1 1.8-2 1.8H20.6c-1 0-1.9-.8-2-1.8z" fill="#4E2711" opacity=".95"/><path d="M15.5 18h25l-2 25c-.1 1.2-1.1 2-2.2 2H19.7c-1.1 0-2.1-.8-2.2-2z" fill="none" stroke="#F2EBE1" stroke-opacity=".8" stroke-width="1.3"/><rect x="22" y="27" width="8" height="8" rx="1.5" fill="#FFFFFF" opacity=".22"/></svg></div>
+      <div><div class="rn">Cynar Negroni</div><div class="rm"><span class="no">No. 2023</span> · Uncommon · Rocks glass</div></div><span class="tg new">New</span></div>
+    <div class="addrow"><span class="pl"><svg class="icon" style="width:20px;height:20px"><use href="#i-plus"/></svg></span>Not the one you meant? Add a drink</div>
+  </div>
+  <div class="homebar dark"></div>
+</section>
+
+</div>
+<script>
+  var h = location.hash.replace('#','');
+  if (h) { document.body.classList.add('solo'); var el = document.getElementById(h); if (el) el.classList.add('on'); }
+</script>
+</body>
+</html>

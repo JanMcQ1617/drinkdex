@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=440">
+<title>Sipply Menu Card</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+:root{
+  --cream:#F7F2EA; --sunk:#E9E5DF; --white:#FFFFFF; --line:#D9CFC1; --lineControl:#8A7F74; --lineInk:#2B2322;
+  --ink:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --bone:#E9E5DF; --wine:#5B0F1A; --wineDeep:#3E0A12; --merlot:#7E2330; --wineSoft:#A85A63; --wineMist:#C9AFA8; --wineWash:#F5E7E7;
+  --taupe:#CBBBA5; --taupeInk:#736247;
+  --gilt:#B08A3E; --giltGlyph:#A8823A; --giltInk:#7D5F1C; --giltOnDark:#D9BF84;
+  --slot:#E3DDD3; --slotDeep:#D8D1C5; --slotBorder:#CBBBA5;
+  --reelGround:#0E0B0B; --reelBar:#2B2322; --reelInk:#FFFDF9; --reelInkDim:#A99E94; --ctl:rgba(14,11,11,.55); --ctlEdge:rgba(255,253,249,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#CFC8BE}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;display:flex;flex-wrap:wrap;gap:24px;padding:24px}
+body.solo{padding:0;gap:0;background:var(--cream)}
+body.solo .phone{display:none}
+body.solo .phone.on{display:block}
+.pf{font-family:Playfair,serif}
+.tab{font-variant-numeric:tabular-nums}
+svg{display:block}
+img{display:block}
+
+/* ---------- phone chrome ---------- */
+.phone{width:440px;height:956px;position:relative;overflow:hidden;background:var(--cream);flex:none}
+.grain{position:absolute;inset:0;background:url(img/grain.png) repeat;background-size:128px;opacity:.35;pointer-events:none;z-index:40}
+.status{position:absolute;left:0;right:0;top:0;height:62px;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0 52px;font-weight:600;font-size:17px;letter-spacing:-.2px}
+.status .island{position:absolute;left:50%;top:11px;width:126px;height:37px;margin-left:-63px;background:#000;border-radius:19px}
+.status.light{color:#FFFDF9}
+.status.dark{color:#141010}
+.status .sys{display:flex;gap:7px;align-items:center}
+.homeind{position:absolute;bottom:8px;left:50%;width:144px;height:5px;margin-left:-72px;border-radius:3px;background:#141010;z-index:50}
+.homeind.light{background:#FFFDF9}
+
+/* tab bar: the espresso skin on every tab */
+.tabbar{position:absolute;left:12px;right:12px;bottom:34px;height:64px;border-radius:12px;background:var(--reelBar);border:1px solid #4A3B38;box-shadow:0 4px 14px rgba(43,35,34,.22);display:flex;z-index:45}
+.tabbar .slot{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--reelInkDim);position:relative;font-size:11px;font-weight:600}
+.tabbar .slot.on{color:var(--reelInk)}
+.tabbar .slot.on::before{content:"";position:absolute;top:-1px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--reelInk)}
+.tabbar .plusbtn{width:48px;height:36px;border-radius:8px;background:var(--bone);color:var(--wine);display:flex;align-items:center;justify-content:center}
+.tabbar .me{width:26px;height:26px;border-radius:50%;background:var(--wine);color:var(--bone);font-family:Playfair;font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--reelInkDim)}
+
+/* ---------- shared atoms ---------- */
+.av{border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-family:Playfair;font-weight:700;color:var(--bone);flex:none}
+.rule2{height:5px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}
+.hair{height:1px;background:var(--line)}
+.chip{height:32px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--white);display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;white-space:nowrap;flex:none}
+.chip .n{color:var(--muted);font-weight:400;font-size:13px}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--reelInk)}
+.chip.on .n{color:#D8D2CB}
+.search{height:44px;border:1px solid var(--lineControl);border-radius:8px;background:var(--white);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:16px;color:var(--muted)}
+.btn{height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px}
+.btn.wine{background:var(--wine);color:var(--bone)}
+.btn.outline{border:1px solid var(--lineInk);color:var(--ink);background:transparent}
+.btn.sm{height:36px;font-size:14px}
+.leader{display:flex;align-items:baseline;gap:0}
+.leader .dots{flex:1;margin:0 8px;border-bottom:2px dotted var(--lineControl);transform:translateY(-4px);min-width:16px}
+.chips{display:flex;gap:8px;overflow:hidden}
+.tagd{height:22px;padding:0 7px;border:1px solid var(--bone);border-radius:4px;display:inline-flex;align-items:center;font-size:12px;font-weight:500;color:var(--bone);white-space:nowrap}
+.tagw{height:22px;padding:0 7px;border:1px solid var(--wine);border-radius:4px;display:inline-flex;align-items:center;font-size:12px;font-weight:500;color:var(--wine);white-space:nowrap}
+
+/* ---------- HOME ---------- */
+.cover{background:var(--wineDeep);color:var(--bone);padding-top:62px}
+.topbar{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:relative}
+.topbar .t{position:absolute;left:0;right:0;text-align:center;pointer-events:none}
+.topbar .ib{width:44px;height:44px;display:flex;align-items:center;justify-content:center;position:relative}
+.wordmark{font-family:Playfair;font-weight:700;font-size:30px;line-height:36px;color:var(--bone)}
+.dot{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--bone);top:9px;right:8px;box-shadow:0 0 0 2px var(--wineDeep)}
+.pours{display:flex;gap:12px;padding:8px 16px 14px;overflow:hidden}
+.pour{width:80px;flex:none}
+.pour .fr{width:80px;height:100px;border-radius:8px;padding:3px;border:1px solid var(--wineSoft)}
+.pour.new .fr{border:2px solid var(--bone);padding:2px}
+.pour .fr .im{width:100%;height:100%;border-radius:5px;overflow:hidden;position:relative;background:#2a1a1c}
+.pour .fr img{width:100%;height:100%;object-fit:cover}
+.pour .who{margin-top:6px;font-size:12px;line-height:16px;font-weight:600;color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.pour:not(.new) .who{color:var(--wineMist);font-weight:500}
+.pour .what{font-family:Playfair;font-weight:600;font-size:13px;line-height:17px;color:var(--bone);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pour:not(.new) .what{color:var(--wineMist)}
+.pour.mine .fr{border:1px dashed var(--wineSoft)}
+.pour.mine img{opacity:.42}
+.pour .badge{position:absolute;right:-1px;bottom:-1px;width:24px;height:24px;border-radius:4px;background:var(--bone);color:var(--wine);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--wineDeep)}
+
+.post{background:var(--cream)}
+.plate{background:var(--deep);color:var(--bone);padding:12px 16px 14px}
+.plate .by{display:flex;align-items:center;gap:8px;font-size:13px;line-height:18px;height:24px}
+.plate .by b{font-weight:600}
+.plate .by .dm{color:var(--dmuted)}
+.plate .by .more{margin-left:auto;color:var(--bone)}
+.plate .main{display:flex;align-items:flex-end;justify-content:space-between;margin-top:8px;gap:12px}
+.plate h3{font-family:Playfair;font-weight:700;font-size:36px;line-height:40px;letter-spacing:-.3px}
+.plate .meta{text-align:right;font-size:12px;line-height:16px;color:var(--dmuted);padding-bottom:5px;white-space:nowrap}
+.plate .meta b{display:block;font-weight:500;color:var(--bone);font-size:13px}
+.plate .sub{display:flex;align-items:center;justify-content:space-between;margin-top:6px;font-size:13px;line-height:18px;color:var(--dmuted)}
+.post .ph{width:440px;height:550px;overflow:hidden;background:var(--sunk);position:relative}
+.post .ph img{width:100%;height:100%;object-fit:cover}
+.post .acts{height:44px;display:flex;align-items:center;padding:0 10px;gap:4px}
+.post .acts .ib{width:40px;height:44px;display:flex;align-items:center;justify-content:center}
+.post .acts .sp{flex:1}
+.post .likes{padding:0 16px;font-size:14px;font-weight:600;line-height:20px}
+.post .cap{padding:4px 16px 0;font-size:15px;line-height:22px}
+.post .cap b{font-weight:600}
+.post .time{padding:4px 16px 0;font-size:12px;line-height:16px;color:var(--muted)}
+
+.module{padding:28px 0 28px}
+.module .hd{display:flex;align-items:baseline;justify-content:space-between;padding:0 16px 4px}
+.module .hd h4{font-size:17px;font-weight:600;line-height:22px}
+.module .hd span{font-size:14px;font-weight:500;color:var(--wine)}
+.module .lede{padding:0 16px 14px;font-size:13px;color:var(--muted);line-height:18px}
+.strip{display:flex;gap:10px;padding:0 16px;overflow:hidden}
+.mini{width:138px;flex:none;border-radius:8px;overflow:hidden;background:var(--seam);border:1px solid rgba(43,35,34,.10)}
+.mini .f{height:138px;overflow:hidden}
+.mini .f img{width:100%;height:100%;object-fit:cover}
+.mini .p{padding:8px 10px 10px;color:var(--deep)}
+.mini .p .nm{font-family:Playfair;font-weight:700;font-size:17px;line-height:21px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini .p .by{font-size:12px;line-height:16px;margin-top:2px}
+.mini.rare{border:2px solid var(--wineSoft)}
+
+/* ---------- DEX ---------- */
+.papertop{padding-top:62px;background:var(--cream)}
+.barT{font-size:17px;font-weight:600;line-height:22px}
+.dexhead{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px}
+.dexhead .big{display:flex;align-items:center;gap:10px}
+.dexhead .big .n{font-size:50px;line-height:52px;font-weight:600;letter-spacing:-2px}
+.dexhead .big .of{font-size:14px;line-height:18px;color:var(--muted)}
+.dexhead .icons{display:flex}
+.dexhead .ib{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.tally{padding:4px 16px 0}
+.tally .row{display:flex;margin:0 0 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);height:36px;align-items:center}
+.tally .row div{font-size:13px;line-height:18px;color:var(--muted);padding:0 12px;white-space:nowrap}
+.tally .row div:first-child{padding-left:0}
+.tally .row div+div{border-left:1px solid var(--line)}
+.tally .row b{color:var(--ink);font-weight:600;font-size:15px}
+.tally .row .lg b{color:var(--giltInk)}
+.chapter{padding:16px 16px 10px}
+.chapter .ln{display:flex;align-items:baseline;justify-content:space-between;margin-top:10px}
+.chapter h4{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.2px}
+.chapter .ct{font-size:13px;color:var(--muted)}
+.chapter p{font-size:13px;line-height:18px;color:var(--muted);margin-top:1px}
+.grid{display:grid;grid-template-columns:200px 200px;gap:8px;padding:0 16px}
+.dc{border-radius:8px;overflow:hidden;background:var(--seam);border:1px solid rgba(43,35,34,.14);position:relative;height:240px}
+.dc .face{height:180px;overflow:hidden;position:relative}
+.dc .face img{width:100%;height:100%;object-fit:cover}
+.dc .pl{padding:7px 10px;color:var(--deep);height:60px}
+.dc .pl .nm{font-family:Playfair;font-weight:700;font-size:19px;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc .pl .mt{font-size:12px;line-height:16px;margin-top:3px;display:flex;justify-content:space-between}
+.dc.rare{border:2px solid var(--wineSoft)}
+.dc.leg{border:2.5px solid var(--gilt)}
+.dc.locked{background:var(--slot);border:1px solid var(--slotBorder)}
+.dc.locked.rare{border:2px solid var(--wineSoft)}
+.dc.locked .pl{color:var(--muted)}
+.dc.locked .pl .nm{font-family:Inter;font-weight:500;font-size:15px;line-height:22px}
+.dc.locked .pl .mt .r{color:var(--wine);font-weight:500}
+.dc .corner{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.dc.locked .corner{background:var(--slot);color:var(--muted)}
+.feature{margin:8px 16px 0;border-radius:8px;background:var(--deep);border:2.5px solid var(--gilt);position:relative;display:flex;gap:14px;padding:12px;color:var(--bone);height:152px}
+.feature::after{content:"";position:absolute;inset:4px;border:1px solid rgba(217,191,132,.42);border-radius:5px;pointer-events:none}
+.feature .stage{width:124px;height:124px;border-radius:4px;background:linear-gradient(180deg,var(--seam) 0%,var(--seam) 70%,var(--seamFloor) 70%);flex:none;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.feature .tx{display:flex;flex-direction:column;justify-content:center;min-width:0}
+.feature .lg{display:flex;align-items:center;gap:6px;color:var(--giltOnDark);font-size:13px;font-weight:600}
+.feature h3{font-family:Playfair;font-weight:700;font-size:30px;line-height:32px;margin-top:4px}
+.feature .mt{font-size:13px;line-height:18px;color:var(--dmuted);margin-top:8px}
+
+/* ---------- DRINK ---------- */
+.hero{height:440px;overflow:hidden;position:relative}
+.hero img{width:100%;height:100%;object-fit:cover}
+.fab{position:absolute;top:66px;width:44px;height:44px;border-radius:8px;background:var(--ctl);border:1px solid var(--ctlEdge);color:var(--reelInk);display:flex;align-items:center;justify-content:center;z-index:30}
+.nameband{background:var(--deep);color:var(--bone);padding:16px 16px 14px}
+.nameband .eb{display:flex;justify-content:space-between;align-items:center;font-size:13px;line-height:18px;color:var(--dmuted)}
+.nameband .eb b{font-weight:500;color:var(--bone)}
+.nameband h1{font-family:Playfair;font-weight:700;font-size:68px;line-height:70px;letter-spacing:-1px;margin-top:8px}
+.nameband .dl{font-size:16px;line-height:22px;margin-top:12px}
+.facts{display:flex;margin-top:14px;border-top:1px solid rgba(233,229,223,.32)}
+.facts div{flex:1;padding-top:10px}
+.facts div+div{border-left:1px solid rgba(233,229,223,.32);padding-left:12px}
+.facts b{display:block;font-size:16px;line-height:22px;font-weight:600}
+.facts span{font-size:12px;line-height:16px;color:var(--dmuted)}
+.recipe{padding:18px 16px 0}
+.recipe .hd{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 8px}
+.recipe h2{font-size:22px;line-height:28px;font-weight:600}
+.recipe .hd span{font-size:13px;color:var(--muted)}
+.recipe .ing{font-size:17px;line-height:24px;padding:7px 0}
+.recipe .ing .amt{font-weight:600}
+.recipe .ing .amt i{font-style:normal;font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
+.steps{margin-top:14px}
+.step{display:flex;gap:14px;font-size:16px;line-height:23px;padding:6px 0}
+.step .k{font-size:22px;line-height:24px;font-weight:600;color:var(--dink);width:16px;flex:none}
+.actionbar{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 42px;background:var(--cream);border-top:1px solid var(--line);display:flex;gap:10px;z-index:35}
+.actionbar .btn.wine{flex:1}
+.actionbar .sq{width:48px;height:48px;border:1px solid var(--lineInk);border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none}
+
+/* ---------- PROFILE ---------- */
+.prof{padding:4px 16px 0}
+.prof .r1{display:flex;align-items:center;gap:16px}
+.counts{display:flex;flex:1;justify-content:space-between}
+.counts div{text-align:center;min-width:0}
+.counts b{display:block;font-size:19px;line-height:24px;font-weight:600}
+.counts span{font-size:13px;line-height:18px;color:var(--muted)}
+.prof .nm{font-size:15px;font-weight:600;line-height:20px;margin-top:12px}
+.prof .bio{font-size:15px;line-height:21px;margin-top:2px}
+.prof .btns{display:flex;gap:8px;margin-top:14px}
+.prof .btns .btn{flex:1}
+.house{margin-top:18px;background:var(--deep);color:var(--bone);display:flex;height:132px}
+.house .f{width:132px;height:132px;flex:none;overflow:hidden}
+.house .f img{width:100%;height:100%;object-fit:cover}
+.house .tx{padding:14px 16px;display:flex;flex-direction:column;justify-content:center;flex:1;min-width:0}
+.house .k{font-size:13px;color:var(--dmuted);line-height:18px}
+.house h3{font-family:Playfair;font-weight:700;font-size:38px;line-height:42px;margin-top:2px}
+.house .mt{font-size:13px;line-height:18px;color:var(--dmuted);margin-top:4px}
+.tabs{display:flex;border-bottom:1px solid var(--line);height:46px}
+.tabs div{flex:1;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--muted);position:relative}
+.tabs div.on{color:var(--ink)}
+.tabs div.on::after{content:"";position:absolute;bottom:-1px;left:16px;right:16px;height:2px;background:var(--lineInk)}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2px}
+.pgrid .t{aspect-ratio:3/4;overflow:hidden;position:relative;background:var(--sunk)}
+.pgrid .t img{width:100%;height:100%;object-fit:cover}
+.pgrid .t .rl{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--gilt)}
+.pgrid .t .rr{position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--wineSoft)}
+.pgrid .t .mk{position:absolute;top:6px;right:6px;height:22px;padding:0 6px;border-radius:4px;background:rgba(14,11,11,.78);color:var(--reelInk);font-size:12px;font-weight:500;display:flex;align-items:center}
+
+/* ---------- SIGN IN ---------- */
+.cover-photo{position:absolute;left:0;top:56px;width:440px;height:440px}
+.cover-photo img{width:100%;height:100%;object-fit:cover}
+.cover-photo::before{content:"";position:absolute;left:0;right:0;top:-56px;height:120px;background:linear-gradient(180deg,#F9D3CD 40%,rgba(249,211,205,0))}
+.brand{position:absolute;left:24px;top:74px;color:var(--deep);z-index:5}
+.brand .wm{font-family:Playfair;font-weight:700;font-size:64px;line-height:64px;letter-spacing:-1px}
+.brand .tl{font-size:17px;line-height:24px;margin-top:10px;font-weight:500}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--cream);border-radius:12px 12px 0 0;box-shadow:0 -4px 24px rgba(43,35,34,.16);z-index:10}
+.sheet .tb{height:56px;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--line)}
+.sheet .tb .x{position:absolute;left:6px;top:6px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.grp{border:1px solid var(--lineControl);border-radius:8px;background:var(--white);overflow:hidden}
+.grp .f{height:56px;padding:8px 14px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.grp .f+.f{border-top:1px solid var(--lineControl)}
+.grp .f .l{font-size:12px;font-weight:500;line-height:16px;color:var(--muted)}
+.grp .f .v{font-size:16px;line-height:22px}
+.grp .f .ph{font-size:16px;line-height:22px;color:var(--muted)}
+.grp .f .chev{position:absolute;right:12px;top:16px;color:var(--ink)}
+.hint{font-size:13px;line-height:18px;color:var(--muted);margin-top:8px}
+.ordiv{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:16px 0}
+.ordiv::before,.ordiv::after{content:"";flex:1;height:1px;background:var(--line)}
+.prov{height:48px;border:1px solid var(--lineInk);border-radius:8px;display:flex;align-items:center;position:relative;font-size:16px;font-weight:600;justify-content:center}
+.prov .ic{position:absolute;left:16px;top:12px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.prov+.prov{margin-top:10px}
+.consent{font-size:12px;line-height:17px;color:var(--muted);text-align:center;margin-top:14px}
+.consent u{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:2px}
+
+/* ---------- LOG ---------- */
+.behind{position:absolute;left:12px;right:12px;top:50px;height:60px;border-radius:12px 12px 0 0;background:#4a1e24;opacity:.9}
+.logsheet{position:absolute;left:0;right:0;top:62px;bottom:0;background:var(--cream);border-radius:12px 12px 0 0;overflow:hidden;z-index:10}
+.ltb{height:52px;display:flex;align-items:center;justify-content:center;position:relative}
+.ltb .x{position:absolute;left:6px;top:4px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.lsearch{margin:4px 16px 0;height:44px;border-radius:8px;border:1px solid var(--lineInk);background:var(--white);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:16px;position:relative}
+.lsearch::after{content:"";position:absolute;inset:-3px;border:2px solid var(--lineInk);border-radius:10px;opacity:.22}
+.caret{width:2px;height:20px;background:var(--wine);margin-left:-9px}
+.best{margin:0 16px;border-radius:8px;background:var(--deep);color:var(--bone);display:flex;gap:14px;padding:12px;height:164px;position:relative}
+.best .f{width:140px;height:140px;border-radius:4px;overflow:hidden;flex:none}
+.best .f img{width:100%;height:100%;object-fit:cover}
+.best .tx{display:flex;flex-direction:column;min-width:0;flex:1}
+.best .k{font-size:12px;line-height:16px;color:var(--dmuted)}
+.best h3{font-family:Playfair;font-weight:700;font-size:38px;line-height:42px;margin-top:4px}
+.best .mt{font-size:13px;line-height:18px;color:var(--dmuted);margin-top:2px}
+.best .go{margin-top:auto;height:36px;border-radius:8px;border:1px solid var(--bone);display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600}
+.lrow{display:flex;gap:12px;padding:10px 16px;align-items:center;min-height:72px}
+.lrow+.lrow{border-top:1px solid var(--line)}
+.lrow .th{width:52px;height:52px;border-radius:4px;overflow:hidden;flex:none;background:var(--seam);display:flex;align-items:flex-end;justify-content:center}
+.lrow .th img{width:100%;height:100%;object-fit:cover}
+.lrow .bd{flex:1;min-width:0}
+.lrow .nm{font-family:Playfair;font-weight:600;font-size:20px;line-height:25px;color:var(--ink)}
+.lrow .leader .no{font-size:13px;color:var(--muted);white-space:nowrap}
+.lrow .s2{display:flex;justify-content:space-between;align-items:center;font-size:13px;line-height:18px;color:var(--muted);margin-top:2px;gap:8px}
+.lrow .s2 .in{display:flex;align-items:center;gap:4px;color:var(--muted);white-space:nowrap}
+.lrow .s2 .tx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+
+<!-- ===================================================== HOME (at rest) -->
+<section class="phone" id="home">
+  <div class="cover">
+    <div class="topbar">
+      <div class="ib" aria-label="New post"><i data-i="plus" data-s="26"></i></div>
+      <div class="t"><span class="wordmark">Sipply</span></div>
+      <div class="ib" aria-label="Activity, 3 new"><i data-i="heart" data-s="26"></i><span class="dot"></span></div>
+    </div>
+    <div class="pours">
+      <div class="pour mine"><div class="fr"><div class="im"><img src="img/daiquiri.webp" alt=""><span class="badge"><i data-i="plus" data-s="16" data-w="2.4"></i></span></div></div><div class="who">Your pour</div><div class="what" style="font-family:Inter;font-weight:500;font-size:12px">Log one</div></div>
+      <div class="pour new"><div class="fr"><div class="im"><img src="img/aviation.webp" alt=""></div></div><div class="who">marisol.r</div><div class="what">Aviation</div></div>
+      <div class="pour new"><div class="fr"><div class="im"><img src="img/clover-club.webp" alt=""></div></div><div class="who">theo.stirs</div><div class="what">Clover Club</div></div>
+      <div class="pour"><div class="fr"><div class="im"><img src="img/bramble.webp" alt=""></div></div><div class="who">ana_rivera</div><div class="what">Bramble</div></div>
+      <div class="pour"><div class="fr"><div class="im"><img src="img/paloma.webp" alt=""></div></div><div class="who">nico.bars</div><div class="what">Paloma</div></div>
+    </div>
+  </div>
+  <div style="height:12px"></div>
+  <article class="post" style="--deep:#2F386B;--dmuted:#B9BAC6">
+    <header class="plate">
+      <div class="by"><span class="av" style="width:24px;height:24px;font-size:10px;background:#5E2545;box-shadow:0 0 0 1.5px #E9E5DF">MR</span><b>marisol.r</b><span class="dm">2h</span><span class="more"><i data-i="more" data-s="22"></i></span></div>
+      <div class="main"><h3>Aviation</h3><div class="meta"><b class="tab">No. 092</b>Uncommon</div></div>
+      <div class="sub"><span>Sour · Coupe · New York City</span><span class="tagd">New to your Dex</span></div>
+    </header>
+    <div class="ph"><img src="img/aviation.webp" alt="marisol.r's Aviation"></div>
+  </article>
+  <div class="status light"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <nav class="tabbar" data-tab="home"></nav>
+  <div class="grain"></div><div class="homeind light"></div>
+</section>
+
+<!-- ===================================================== HOME (scrolled) -->
+<section class="phone" id="home-feed">
+  <div class="cover" style="position:relative;z-index:20">
+    <div class="topbar">
+      <div class="ib"><i data-i="plus" data-s="26"></i></div>
+      <div class="t"><span class="wordmark" style="font-size:24px;line-height:30px">Sipply</span></div>
+      <div class="ib"><i data-i="heart" data-s="26"></i><span class="dot"></span></div>
+    </div>
+  </div>
+  <article class="post">
+    <div class="acts">
+      <div class="ib"><i data-i="heartfill" data-s="25" style="color:var(--wine)"></i></div>
+      <div class="ib"><i data-i="share" data-s="24"></i></div>
+      <div class="sp"></div>
+      <div class="ib"><i data-i="bookmark" data-s="24"></i></div>
+    </div>
+    <div class="likes tab">38 likes</div>
+    <div class="cap"><b>marisol.r</b> First one with real crème de violette. Tastes like a florist’s walk-in, in the best way.</div>
+    <div class="time">2 hours ago</div>
+  </article>
+  <section class="module">
+    <div class="hd"><h4>Your friends poured these</h4><span>See all</span></div>
+    <div class="lede">This week, and not in your Dex yet</div>
+    <div class="strip">
+      <div class="mini" style="--seam:#D6DEFC;--deep:#2F386B"><div class="f"><img src="img/menu/aviation.webp" alt=""></div><div class="p"><div class="nm">Aviation</div><div class="by">marisol.r and 1 other</div></div></div>
+      <div class="mini rare" style="--seam:#EFDEBB;--deep:#563600"><div class="f"><img src="img/menu/saturn.webp" alt=""></div><div class="p"><div class="nm">Saturn</div><div class="by">Rare · leo.k</div></div></div>
+      <div class="mini rare" style="--seam:#FCD7C2;--deep:#682600"><div class="f"><img src="img/menu/division-bell.webp" alt=""></div><div class="p"><div class="nm">Division Bell</div><div class="by">Rare · ana_rivera</div></div></div>
+      <div class="mini" style="--seam:#FFD4CB;--deep:#6B2011"><div class="f"><img src="img/menu/paper-plane.webp" alt=""></div><div class="p"><div class="nm">Paper Plane</div><div class="by">theo.stirs</div></div></div>
+    </div>
+  </section>
+  <article class="post" style="--deep:#513719;--dmuted:#BFB5A8">
+    <header class="plate">
+      <div class="by"><span class="av" style="width:24px;height:24px;font-size:10px;background:#8A5F10;box-shadow:0 0 0 1.5px #E9E5DF">TS</span><b>theo.stirs</b><span class="dm">5h</span><span class="more"><i data-i="more" data-s="22"></i></span></div>
+      <div class="main"><h3>Espresso Martini</h3><div class="meta"><b class="tab">No. 004</b>Common</div></div>
+      <div class="sub"><span>Creamy and dessert · Martini glass</span><span style="display:flex;gap:4px;align-items:center;color:var(--bone)"><i data-i="check" data-s="15"></i>In your Dex</span></div>
+    </header>
+    <div class="ph"><img src="img/espresso-martini.webp" alt="theo.stirs's Espresso Martini"></div>
+  </article>
+  <div class="status light"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <nav class="tabbar" data-tab="home"></nav>
+  <div class="grain"></div><div class="homeind light"></div>
+</section>
+
+<!-- ===================================================== DEX -->
+<section class="phone" id="dex">
+  <div class="papertop">
+    <div class="dexhead">
+      <div class="big"><span class="n tab">112</span><span class="of">of 2,089<br>in your Dex</span></div>
+      <div class="icons"><div class="ib" aria-label="My Bar"><i data-i="bottle" data-s="26"></i></div><div class="ib" aria-label="Stats"><i data-i="stats" data-s="26"></i></div></div>
+    </div>
+  </div>
+  <div class="tally">
+    <div class="row">
+      <div><b class="tab">61</b> common</div>
+      <div><b class="tab">34</b> uncommon</div>
+      <div><b class="tab">13</b> rare</div>
+      <div class="lg"><b class="tab">4</b> legendary</div>
+    </div>
+    <div class="search"><i data-i="search" data-s="20" style="color:var(--ink)"></i>Search 2,089 drinks</div>
+    <div class="chips" style="margin-top:12px">
+      <span class="chip on">All</span><span class="chip">Cocktails <span class="n tab">899</span></span><span class="chip">Spirits <span class="n tab">1,190</span></span><span class="chip">Not yet</span>
+    </div>
+  </div>
+  <div class="chapter">
+    <div class="rule2"></div>
+    <div class="ln"><h4>Agave</h4><span class="ct tab">9 of 112</span></div>
+    <p>Tequila, mezcal and the drinks built on them</p>
+  </div>
+  <div class="grid">
+    <div class="dc" style="--seam:#F0DBCD;--deep:#563418">
+      <div class="face"><img src="img/menu/paloma.webp" alt=""></div>
+      <div class="pl"><div class="nm">Paloma</div><div class="mt"><span class="tab">No. 025</span><span>Common</span></div></div>
+    </div>
+    <div class="dc locked rare">
+      <div class="face"><img src="img/locked/division-bell.webp" alt=""><span class="corner"><i data-i="lock" data-s="14"></i></span></div>
+      <div class="pl"><div class="nm">Division Bell</div><div class="mt"><span class="tab">No. 043</span><span class="r">Rare</span></div></div>
+    </div>
+  </div>
+  <div class="feature" style="--deep:#612E00;--dmuted:#C4B3A2;--seam:#F7DABD;--seamFloor:#E8C8A6">
+    <div class="stage" data-glass="rocks" data-liq="#D3892A" data-size="118" data-crop="14 26 72 80"></div>
+    <div class="tx">
+      <div class="lg"><i data-i="sparkle" data-s="15"></i>Legendary, in your Dex</div>
+      <h3>Mezcal de Pechuga</h3>
+      <div class="mt"><span class="tab">No. 153</span> · Oaxaca, Mexico<br>One of 229 legendaries</div>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:8px">
+    <div class="dc locked leg" style="border-color:var(--gilt)">
+      <div class="face" style="background:linear-gradient(180deg,#E3DDD3,#D8D1C5)" data-ghost="rocks" data-liq="#612E00"><span class="corner"><i data-i="lock" data-s="14"></i></span></div>
+      <div class="pl"><div class="nm">Bacanora</div><div class="mt"><span class="tab">No. 151</span><span style="color:#715619;font-weight:500">Legendary</span></div></div>
+    </div>
+    <div class="dc" style="--seam:#F4DBBC;--deep:#5E3100">
+      <div class="face"><img src="img/menu/naked-and-famous.webp" alt=""></div>
+      <div class="pl"><div class="nm">Naked and Famous</div><div class="mt"><span class="tab">No. 052</span><span>Uncommon</span></div></div>
+    </div>
+  </div>
+  <div class="status dark"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <nav class="tabbar" data-tab="dex"></nav>
+  <div class="grain"></div><div class="homeind"></div>
+</section>
+
+<!-- ===================================================== DRINK -->
+<section class="phone" id="drink" style="--deep:#6B2011;--dmuted:#C9B1A8;--dink:#A53F2B">
+  <div class="hero"><img src="img/menu/negroni.webp" alt="Negroni, from the Dex"></div>
+  <div class="fab" style="left:16px" aria-label="Back"><i data-i="chevL" data-s="24"></i></div>
+  <div class="fab" style="right:68px" aria-label="Share"><i data-i="share" data-s="22"></i></div>
+  <div class="fab" style="right:16px" aria-label="Save"><i data-i="bookmark" data-s="22"></i></div>
+  <div class="nameband">
+    <div class="eb"><span><b class="tab">No. 127</b> · Cocktail · Spirit-forward</span><span class="tagd"><i data-i="check" data-s="13" style="margin-right:4px"></i>In your Dex since 12 Sep</span></div>
+    <h1>Negroni</h1>
+    <div class="dl">Florence, Italy, 1919</div>
+    <div class="facts">
+      <div><b class="tab">24%</b><span>strength</span></div>
+      <div><b>Rocks glass</b><span>glass</span></div>
+      <div><b>Common</b><span>rarity</span></div>
+    </div>
+  </div>
+  <div class="recipe">
+    <div class="rule2"></div>
+    <div class="hd"><h2>How it’s made</h2><span>Built · serves 1</span></div>
+    <div class="ing leader"><span>Gin</span><span class="dots"></span><span class="amt tab">1 oz<i>30 ml</i></span></div>
+    <div class="ing leader"><span>Campari</span><span class="dots"></span><span class="amt tab">1 oz<i>30 ml</i></span></div>
+    <div class="ing leader"><span>Sweet vermouth</span><span class="dots"></span><span class="amt tab">1 oz<i>30 ml</i></span></div>
+    <div class="ing leader"><span>Orange slice</span><span class="dots"></span><span class="amt">to garnish</span></div>
+    <div class="steps">
+      <div class="step"><span class="k tab">1</span><span>Fill a rocks glass with ice. One large cube melts slowest.</span></div>
+      <div class="step"><span class="k tab">2</span><span>Pour in the gin, Campari and sweet vermouth in equal measure.</span></div>
+    </div>
+  </div>
+  <div class="actionbar">
+    <div class="btn wine"><i data-i="plus" data-s="20" data-w="2.2"></i>Log a Negroni</div>
+  </div>
+  <div class="status dark"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <div class="grain"></div><div class="homeind"></div>
+</section>
+
+<!-- ===================================================== PROFILE -->
+<section class="phone" id="profile">
+  <div class="papertop">
+    <div class="topbar">
+      <div class="ib" aria-label="New post"><i data-i="plus" data-s="26"></i></div>
+      <div class="t" style="font-size:20px;font-weight:600;line-height:26px">camila.ortiz</div>
+      <div class="ib" aria-label="Settings"><i data-i="gear" data-s="26"></i></div>
+    </div>
+  </div>
+  <div class="prof">
+    <div class="r1">
+      <span class="av" style="width:88px;height:88px;font-size:32px;background:var(--wine)">CO</span>
+      <div class="counts">
+        <div><b class="tab">48</b><span>posts</span></div>
+        <div><b class="tab">112</b><span>in Dex</span></div>
+        <div><b class="tab">1,204</b><span>followers</span></div>
+        <div><b class="tab">310</b><span>following</span></div>
+      </div>
+    </div>
+    <div class="nm">Camila Ortiz</div>
+    <div class="bio">Daiquiri loyalist. Learning the classics one coupe at a time. San Juan.</div>
+    <div class="btns"><div class="btn outline sm">Edit profile</div><div class="btn outline sm">Share profile</div></div>
+  </div>
+  <div class="house" style="--deep:#3E4100;--dmuted:#BDBBA3">
+    <div class="f"><img src="img/menu/daiquiri.webp" alt=""></div>
+    <div class="tx">
+      <div class="k">House pour</div>
+      <h3>Daiquiri</h3>
+      <div class="mt">Poured 14 times since March · No. 100</div>
+    </div>
+  </div>
+  <div class="tabs"><div class="on">Posts</div><div>Reels</div><div>Dex</div></div>
+  <div class="pgrid">
+    <div class="t"><img src="img/daiquiri.webp" alt=""></div>
+    <div class="t"><img src="img/negroni.webp" alt=""><span class="mk tab">1/3</span></div>
+    <div class="t"><img src="img/zombie.webp" alt=""><span class="rl"></span></div>
+    <div class="t"><img src="img/bramble.webp" alt=""></div>
+    <div class="t"><img src="img/jungle-bird.webp" alt=""></div>
+    <div class="t"><img src="img/white-negroni.webp" alt=""></div>
+    <div class="t"><img src="img/paper-plane.webp" alt=""></div>
+    <div class="t"><img src="img/clover-club.webp" alt=""><span class="rr"></span></div>
+    <div class="t"><img src="img/espresso-martini.webp" alt=""></div>
+  </div>
+  <div class="status dark"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <nav class="tabbar" data-tab="profile"></nav>
+  <div class="grain"></div><div class="homeind"></div>
+</section>
+
+<!-- ===================================================== SIGN IN -->
+<section class="phone" id="signin" style="--deep:#6B1E1D;background:#F9D3CD">
+  <div class="cover-photo"><img src="img/menu/clover-club.webp" alt=""></div>
+  <div class="brand"><div class="wm">Sipply</div><div class="tl">Every drink you pour, collected.</div></div>
+  <div class="sheet" style="top:316px">
+    <div class="tb"><div class="x" aria-label="Close"><i data-i="x" data-s="22"></i></div><span class="barT">Sign in or join Sipply</span></div>
+    <div style="padding:16px 16px 0">
+      <div class="grp">
+        <div class="f"><span class="l">Country or region</span><span class="v">United States (+1)</span><span class="chev"><i data-i="chevD" data-s="22"></i></span></div>
+        <div class="f"><span class="ph">Phone number</span></div>
+      </div>
+      <div class="hint">We’ll text a 6-digit code to confirm it’s you. Message and data rates may apply.</div>
+      <div class="btn wine" style="margin-top:16px">Continue</div>
+      <div class="ordiv">or</div>
+      <div class="prov"><span class="ic"><i data-i="mail" data-s="22"></i></span>Continue with email</div>
+      <div class="prov"><span class="ic"><i data-i="apple" data-s="22"></i></span>Continue with Apple</div>
+      <div class="prov"><span class="ic"><i data-i="google" data-s="20"></i></span>Continue with Google</div>
+      <div class="prov"><span class="ic"><i data-i="facebook" data-s="22"></i></span>Continue with Facebook</div>
+      <div class="consent">By continuing, you agree to Sipply’s <u>Terms</u> and <u>Privacy Policy</u>.</div>
+    </div>
+  </div>
+  <div class="status dark"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <div class="grain"></div><div class="homeind"></div>
+</section>
+
+<!-- ===================================================== LOG -->
+<section class="phone" id="log" style="background:#0E0B0B">
+  <div class="behind"></div>
+  <div class="logsheet">
+    <div class="ltb"><div class="x" aria-label="Close"><i data-i="x" data-s="22"></i></div><span class="barT">Log a pour</span></div>
+    <div class="lsearch"><i data-i="search" data-s="20"></i><span>negr</span><span class="caret"></span><span style="margin-left:auto;color:var(--muted)"><i data-i="x" data-s="18"></i></span></div>
+    <div class="chips" style="padding:12px 16px 0"><span class="chip on">All</span><span class="chip">Cocktails</span><span class="chip">Spirits</span><span class="chip">Not in your Dex</span><span class="chip">On my shelf</span></div>
+    <div style="display:flex;justify-content:space-between;padding:14px 16px 10px;font-size:13px;color:var(--muted)"><span class="tab">8 drinks</span><span>Best match first</span></div>
+    <div class="best" style="--deep:#6B2011;--dmuted:#C9B1A8">
+      <div class="f"><img src="img/menu/negroni.webp" alt=""></div>
+      <div class="tx">
+        <span class="k">Best match</span>
+        <h3>Negroni</h3>
+        <span class="mt"><span class="tab">No. 127</span> · Common · in your Dex</span>
+        <div class="go"><i data-i="plus" data-s="18" data-w="2.2"></i>Log this pour</div>
+      </div>
+    </div>
+    <div style="height:6px"></div>
+    <div class="lrow" style="--seam:#E7DFC9">
+      <div class="th"><img src="img/menu/white-negroni.webp" alt=""></div>
+      <div class="bd"><div class="leader"><span class="nm">White Negroni</span><span class="dots"></span><span class="no tab">No. 059</span></div>
+        <div class="s2"><span class="tx">Modern classic · Rocks glass</span><span class="tagw">New</span></div></div>
+    </div>
+    <div class="lrow" style="--seam:#FFD4CB">
+      <div class="th"><img src="img/menu/negroni-sbagliato.webp" alt=""></div>
+      <div class="bd"><div class="leader"><span class="nm">Negroni Sbagliato</span><span class="dots"></span><span class="no tab">No. 119</span></div>
+        <div class="s2"><span class="tx">Sparkling · Rocks glass</span><span class="in"><i data-i="check" data-s="14"></i>In your Dex</span></div></div>
+    </div>
+    <div class="lrow" style="--seam:#EADCD2">
+      <div class="th" data-glass="highball" data-liq="#4E2711" data-size="50" data-crop="14 18 72 84"></div>
+      <div class="bd"><div class="leader"><span class="nm">Charro Negro</span><span class="dots"></span><span class="no tab">No. 636</span></div>
+        <div class="s2"><span class="tx">Highball · Salted rim</span><span class="tagw">New</span></div></div>
+    </div>
+    <div class="lrow" style="--seam:#FCD7C2">
+      <div class="th" data-glass="rocks" data-liq="#E8792B" data-size="50" data-crop="20 32 60 68"></div>
+      <div class="bd"><div class="leader"><span class="nm">Mezcal Negroni</span><span class="dots"></span><span class="no tab">No. 780</span></div>
+        <div class="s2"><span class="tx">Spirit-forward · Rocks glass</span><span class="tagw">New</span></div></div>
+    </div>
+    <div class="lrow" style="--seam:#FCD7C2">
+      <div class="th" data-glass="rocks" data-liq="#B4601F" data-size="50" data-crop="20 32 60 68"></div>
+      <div class="bd"><div class="leader"><span class="nm">Kingston Negroni</span><span class="dots"></span><span class="no tab">No. 779</span></div>
+        <div class="s2"><span class="tx">Spirit-forward · Rocks glass</span><span class="tagw">New</span></div></div>
+    </div>
+    <div class="lrow" style="--seam:#F0DBD0">
+      <div class="th" data-glass="rocks" data-liq="#59102A" data-size="50" data-crop="20 32 60 68"></div>
+      <div class="bd"><div class="leader"><span class="nm">Cynar Negroni</span><span class="dots"></span><span class="no tab">No. 2023</span></div>
+        <div class="s2"><span class="tx">Spirit-forward · Rocks glass</span><span class="tagw">New</span></div></div>
+    </div>
+    <div class="lrow" style="--seam:#ECDDCD">
+      <div class="th" data-glass="rocks" data-liq="#4E2711" data-size="50" data-crop="20 32 60 68"></div>
+      <div class="bd"><div class="leader"><span class="nm">Amaro Montenegro</span><span class="dots"></span><span class="no tab">No. 893</span></div>
+        <div class="s2"><span class="tx">Amaro · Rocks glass</span><span class="in"><i data-i="check" data-s="14"></i>In your Dex</span></div></div>
+    </div>
+  </div>
+  <div class="status light"><span>9:41</span><span class="island"></span><span class="sys" data-sys></span></div>
+  <div class="grain"></div><div class="homeind"></div>
+</section>
+
+<script>
+const P = {
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  heart:'<path d="M12 20.2s-7.6-4.6-7.6-10.4A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.6 2.4c0 5.8-7.6 10.4-7.6 10.4z"/>',
+  heartfill:'<path fill="currentColor" d="M12 20.2s-7.6-4.6-7.6-10.4A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.6 2.4c0 5.8-7.6 10.4-7.6 10.4z"/>',
+  share:'<path d="M12 3.5v11M8 7.2l4-3.7 4 3.7M5.5 12.5v7h13v-7"/>',
+  bookmark:'<path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/>',
+  more:'<circle cx="5.5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor" stroke="none"/>',
+  chevL:'<path d="M15 5l-7 7 7 7"/>',
+  chevD:'<path d="M6 9.5l6 6 6-6"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.3"/><path d="M15.6 15.6l4.6 4.6"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  gear:'<path d="M18.69 9.93 L21.46 10.38 L21.46 13.62 L18.69 14.07 L18.19 15.27 L19.84 17.54 L17.54 19.84 L15.27 18.19 L14.07 18.69 L13.62 21.46 L10.38 21.46 L9.93 18.69 L8.73 18.19 L6.46 19.84 L4.16 17.54 L5.81 15.27 L5.31 14.07 L2.54 13.62 L2.54 10.38 L5.31 9.93 L5.81 8.73 L4.16 6.46 L6.46 4.16 L8.73 5.81 L9.93 5.31 L10.38 2.54 L13.62 2.54 L14.07 5.31 L15.27 5.81 L17.54 4.16 L19.84 6.46 L18.19 8.73 Z"/><circle cx="12" cy="12" r="3"/>',
+  stats:'<path d="M5 20.5v-8M12 20.5v-16M19 20.5v-11"/>',
+  home:'<path d="M4 10.8l8-6.8 8 6.8V20h-5.2v-5.6H9.2V20H4z"/>',
+  homefill:'<path fill="currentColor" d="M4 10.8l8-6.8 8 6.8V20h-5.2v-5.6H9.2V20H4z"/>',
+  coupe:'<path d="M4.5 5h15c0 4.2-3.4 7-7.5 7s-7.5-2.8-7.5-7zM12 12v7.5M8 20h8"/>',
+  coupefill:'<path fill="currentColor" d="M4.5 5h15c0 4.2-3.4 7-7.5 7s-7.5-2.8-7.5-7z"/><path d="M12 12v7.5M8 20h8"/>',
+  lock:'<rect x="6" y="10.5" width="12" height="9.5" rx="2"/><path d="M9 10.5V8a3 3 0 0 1 6 0v2.5"/>',
+  sparkle:'<path fill="currentColor" stroke="none" d="M12 2.5c.7 5 2.8 7.2 8 8-5.2.8-7.3 3-8 8-.7-5-2.8-7.2-8-8 5.2-.8 7.3-3 8-8z"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  bottle:'<path d="M10 2.8h4v4.2l2.2 3.2V21H7.8V10.2L10 7z"/><path d="M7.8 13.5h8.4"/>',
+  mail:'<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/>',
+  apple:'<path fill="currentColor" stroke="none" d="M16.4 12.7c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.9-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/>',
+  google:'<g stroke="none"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></g>',
+  facebook:'<g stroke="none"><circle cx="12" cy="12" r="10.5" fill="#0866FF"/><path fill="#FFFFFF" d="M15.2 8.3h-1.7c-.6 0-.8.3-.8.9v1.4h2.5l-.4 2.6h-2.1v7.3H10v-7.3H8.3v-2.6H10V8.9c0-2.1 1.2-3.2 3.1-3.2.8 0 1.7.1 2.1.2z"/></g>',
+};
+function svg(name,size,w){return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w||1.7}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[name]}</svg>`}
+document.querySelectorAll('i[data-i]').forEach(el=>{el.outerHTML=svg(el.dataset.i,+el.dataset.s||24,el.dataset.w).replace('<svg ','<svg style="'+(el.getAttribute('style')||'')+'" ')});
+
+/* status bar system glyphs */
+const SYS='<svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="3" width="3.2" height="9" rx="1"/><rect x="15" y="0" width="3.2" height="12" rx="1"/></svg>'+
+ '<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.6 0 4.9 1 6.6 2.6l1.3-1.4A11.3 11.3 0 0 0 8.5.3 11.3 11.3 0 0 0 .6 3.4l1.3 1.4a9.4 9.4 0 0 1 6.6-2.6zm0 3.7c1.6 0 3 .6 4.1 1.6l1.3-1.4a7.8 7.8 0 0 0-10.8 0l1.3 1.4c1.1-1 2.5-1.6 4.1-1.6zm0 3.6c.6 0 1.1.2 1.6.6L8.5 11.9 6.9 10.1c.5-.4 1-.6 1.6-.6z"/></svg>'+
+ '<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".45"/></svg>';
+document.querySelectorAll('[data-sys]').forEach(el=>el.innerHTML=SYS);
+
+/* tab bar */
+document.querySelectorAll('nav.tabbar').forEach(nav=>{
+  const t=nav.dataset.tab;
+  nav.innerHTML=
+   `<div class="slot ${t==='home'?'on':''}">${svg(t==='home'?'homefill':'home',24)}${t==='home'?'<span>Home</span>':''}</div>`+
+   `<div class="slot ${t==='dex'?'on':''}">${svg(t==='dex'?'coupefill':'coupe',24)}${t==='dex'?'<span>Dex</span>':''}</div>`+
+   `<div class="slot"><span class="plusbtn" aria-label="Log a pour">${svg('plus',22,2.2)}</span></div>`+
+   `<div class="slot ${t==='profile'?'on':''}"><span class="me" style="${t==='profile'?'border-color:#FFFDF9':''}">CO</span>${t==='profile'?'<span>Profile</span>':''}</div>`;
+});
+
+/* vector glassware, on the 100x112 grid the app's artwork uses */
+const SHAPES={
+  rocks:{v:'M30 46 L31 93 Q31 96.5 34.5 96.5 H65.5 Q69 96.5 69 93 L70 46 Z',l:'M31.4 64 L31 93 Q31 94.5 34.5 94.5 H65.5 Q69 94.5 69 93 L68.6 64 Z',p:['M32.4 88 H67.6']},
+  highball:{v:'M35 24 L36.5 95 Q36.5 98.5 40 98.5 H60 Q63.5 98.5 63.5 95 L65 24 Z',l:'M36.3 38 L36.5 95 Q36.5 96.5 40 96.5 H60 Q63.5 96.5 63.5 95 L63.7 38 Z',p:[]},
+  glencairn:{v:'M38 32 Q35.5 44 38 55 Q41.5 69 50 71 Q58.5 69 62 55 Q64.5 44 62 32 Z',l:'M38.9 57.5 Q42 68 50 69.8 Q58 68 61.1 57.5 Q55.5 61 50 61 Q44.5 61 38.9 57.5 Z',p:['M44 71 V82','M56 71 V82','M35 85 Q50 81 65 85 Q50 89 35 85 Z']},
+};
+function glass(shape,liq,size,ghost,crop){
+  const s=SHAPES[shape]; const vb=crop||'0 0 100 112';
+  if(ghost){
+    return `<svg width="${size}" height="${size*1.12}" viewBox="0 0 100 112"><path d="${s.l}" fill="${liq}" opacity=".20"/><path d="${s.v}" fill="none" stroke="rgba(255,253,249,.75)" stroke-width="1.6" transform="translate(.8 1)"/><path d="${s.v}" fill="none" stroke="rgba(43,35,34,.32)" stroke-width="1.4"/>${(s.p||[]).map(p=>`<path d="${p}" fill="none" stroke="rgba(43,35,34,.32)" stroke-width="1.4"/>`).join('')}</svg>`;
+  }
+  return `<svg width="${size}" height="${size*1.12}" viewBox="${vb}"><path d="${s.l}" fill="${liq}"/><path d="M33 66 H67" stroke="rgba(255,253,249,.45)" stroke-width="1.2"/><path d="${s.v}" fill="rgba(255,253,249,.18)" stroke="#2B2322" stroke-width="1.5"/>${(s.p||[]).map(p=>`<path d="${p}" fill="none" stroke="#2B2322" stroke-width="1.5"/>`).join('')}<path d="M35 50 L35.6 84" stroke="rgba(255,253,249,.7)" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+}
+document.querySelectorAll('[data-glass]').forEach(el=>el.insertAdjacentHTML('afterbegin',glass(el.dataset.glass,el.dataset.liq,+el.dataset.size,false,el.dataset.crop)));
+document.querySelectorAll('[data-ghost]').forEach(el=>{el.style.display='flex';el.style.alignItems='center';el.style.justifyContent='center';el.insertAdjacentHTML('afterbegin',glass(el.dataset.ghost,el.dataset.liq,178,true))});
+
+/* #screen shows that screen alone, at 440x956 */
+function route(){
+  const id=location.hash.slice(1);
+  const el=id&&document.getElementById(id);
+  document.body.classList.toggle('solo',!!el);
+  document.querySelectorAll('.phone').forEach(p=>p.classList.toggle('on',p===el));
+}
+window.addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
