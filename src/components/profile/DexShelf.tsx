@@ -2,21 +2,14 @@ import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { deriveStats } from '@/components/CollectionStats';
+import { HeroFigure, RarityTally } from '@/components/cabinet';
 import { DexCard } from '@/components/DexCard';
-import { Button, Card } from '@/components/ui';
-import {
-  colors,
-  fonts,
-  layout,
-  RARITY_META,
-  RARITY_ORDER,
-  space,
-  stroke,
-  tabular,
-  textRole,
-} from '@/constants/theme';
+import { Grain } from '@/components/Grain';
+import { Button } from '@/components/ui';
+import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
+import { tierTally } from '@/lib/cabinet';
+import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useCollection } from '@/store/collection';
 import type { Drink, DrinkCategory, Post, Rarity } from '@/types';
 
@@ -29,6 +22,13 @@ import type { Drink, DrinkCategory, Post, Rarity } from '@/types';
 /* on its owner's phone and never reaches the server, so this is the     */
 /* honest substitute, and the summary says "shared", never "collected". */
 /* On your own profile, one button leads to the real thing, your Dex.   */
+/*                                                                      */
+/* In the cabinet's lining, like the Dex tray: every row is a stretch   */
+/* of grained lining with a shelf ledge under it, and each card is a    */
+/* collected mount seated there. The card's face is the person's OWN    */
+/* pour of that drink, the post's photo, because every drink on this    */
+/* tab came from a post: the stock photo exists for one drink in        */
+/* thirteen, and threw that pour away.                                  */
 /* ==================================================================== */
 
 /**
@@ -55,20 +55,39 @@ export function derivePostStats(posts: Post[]) {
   return { counted, byCategory, byRarity };
 }
 
-/**
- * The shared drinks, lowest Dex number first. A post is one drink (one
- * post per drink, migration 007), so there is nothing to de-duplicate.
- */
-export function drinksByDexNumber(posts: Post[]): Drink[] {
-  return posts
-    .map((p) => getDrink(p.drinkId))
-    .filter((d): d is Drink => !!d)
-    .sort((a, b) => a.dexNumber - b.dexNumber);
+/** A shared drink and the post it came from (its photo is the card's face). */
+export interface SharedDrink {
+  drink: Drink;
+  post: Post;
 }
 
 /**
- * The head of the Dex tab: how many drinks are shared, the rarity spread
- * as a four-cell strip, and on your own profile the way into your Dex.
+ * The shared drinks, lowest Dex number first, each with its post. A post
+ * is one drink (one post per drink, migration 007), so there is nothing to
+ * de-duplicate.
+ */
+export function sharedByDexNumber(posts: Post[]): SharedDrink[] {
+  return posts
+    .flatMap((post): SharedDrink[] => {
+      const drink = getDrink(post.drinkId);
+      return drink ? [{ drink, post }] : [];
+    })
+    .sort((a, b) => a.drink.dexNumber - b.drink.dexNumber);
+}
+
+/** Every catalogue drink in your collection: the figure the Dex tab and the Top shelf show. */
+export function useCollectedCount(): number {
+  const unlocks = useCollection((s) => s.unlocks);
+  return useMemo(() => {
+    const t = tierTally(unlocks);
+    return t.common + t.uncommon + t.rare + t.legendary;
+  }, [unlocks]);
+}
+
+/**
+ * The head of the Dex tab, on the lining: how many drinks are shared as a
+ * large figure, the tier tally under it, and on your own profile the way
+ * into your Dex.
  */
 export function DexSummary({
   posts,
@@ -82,130 +101,140 @@ export function DexSummary({
 }) {
   const router = useRouter();
   const { counted, byRarity } = useMemo(() => derivePostStats(posts), [posts]);
-  const unlocks = useCollection((s) => s.unlocks);
-  const { unlockedCount } = useMemo(() => deriveStats(unlocks), [unlocks]);
+  const collected = useCollectedCount();
 
   return (
-    <View style={styles.summary}>
-      <Text style={styles.headline}>
-        {formatCount(counted)} of {formatCount(TOTAL)} shared
-      </Text>
-      {/*
-        Past one page, "shared" is the latest page's spread, not everything,
-        and the line says so rather than pass a hundred off as the total.
-      */}
-      {pageOnly ? (
-        <Text style={styles.note}>
-          Based on {isOwn ? 'your' : 'their'} latest {formatCount(posts.length)} posts
-        </Text>
-      ) : null}
+    <View style={styles.lining}>
+      <Grain tone="lining" />
+      <View style={styles.summary}>
+        <HeroFigure value={counted} caption={`of ${formatCount(TOTAL)} shared`} tone="lining" />
+        {/*
+          Past one page, "shared" is the latest page's spread, not everything,
+          and the line says so rather than pass a hundred off as the total.
+        */}
+        {pageOnly ? (
+          <Text style={styles.note}>
+            Based on {isOwn ? 'your' : 'their'} latest {formatCount(posts.length)} posts
+          </Text>
+        ) : null}
+        <View style={styles.tally}>
+          <RarityTally counts={byRarity} tone="lining" />
+        </View>
 
-      {isOwn ? (
-        /*
-         * What other people see is above; what you have actually collected
-         * (most of it never posted) is one tap away, in the Dex tab, rather
-         * than a second figure in the header that only your profile could
-         * show.
-         */
-        <Button
-          label={`${formatCount(unlockedCount)} in your Dex`}
-          variant="text"
-          size="sm"
-          onPress={() => router.navigate('/dex')}
-          accessibilityHint="Opens your Dex"
-          style={styles.dexLink}
-        />
-      ) : null}
-
-      <Card style={styles.strip}>
-        {RARITY_ORDER.map((rarity, i) => (
-          <View
-            key={rarity}
-            accessible
-            accessibilityLabel={`${RARITY_META[rarity].label}, ${byRarity[rarity]}`}
-            style={[styles.cell, i > 0 && styles.cellRuled]}>
-            <Text style={styles.figure} maxFontSizeMultiplier={1.4}>
-              {formatCount(byRarity[rarity])}
-            </Text>
-            {/* The tier's text colour, audited on white; the name says it too. */}
-            <Text
-              style={[styles.tier, { color: RARITY_META[rarity].color }]}
-              maxFontSizeMultiplier={1.4}>
-              {RARITY_META[rarity].label}
-            </Text>
-          </View>
-        ))}
-      </Card>
+        {isOwn ? (
+          /*
+           * What other people see is above; what you have actually collected
+           * (most of it never posted) is one tap away, in the Dex tab, rather
+           * than a second figure in the header that only your profile could
+           * show.
+           */
+          <Button
+            label={`${formatCount(collected)} in your Dex`}
+            variant="onLiningText"
+            size="sm"
+            onPress={() => router.navigate('/dex')}
+            accessibilityHint="Opens your Dex"
+            style={styles.dexLink}
+          />
+        ) : null}
+      </View>
     </View>
   );
 }
 
 /**
- * Two Dex cards to a row, the Dex tab's own geometry: 2-up because three
+ * Two Dex cards to a row, the Dex tray's own geometry: 2-up because three
  * cards on a 375pt screen leave the drink's name a word or two wide (the
  * Dex tab's note), and the same card so a drink looks the same wherever
- * it is shown. Each is drawn collected, with the stock photograph: the
- * person's own pour photos are on the Posts tab.
+ * it is shown. Each is drawn collected and seated, with the person's own
+ * photo of that pour. A ledge runs under every row but the last, which
+ * ends on lining instead.
  */
-export function DexShelfRow({ drinks }: { drinks: Drink[] }) {
-  const router = useRouter();
+export function DexShelfRow({ entries, last }: { entries: SharedDrink[]; last: boolean }) {
   const { width } = useWindowDimensions();
   // Unrounded, like the Dex grid's: a rounded width leaves a sliver or wraps.
-  const cardWidth = (width - layout.gutter * 2 - space.sm) / 2;
-  const artSize = Math.round(cardWidth * 0.66);
+  const cardWidth = (width - layout.gutter * 2 - layout.dexGap) / 2;
 
   return (
-    <View style={styles.shelfRow}>
-      {drinks.map((drink) => (
-        <DexCard
-          key={drink.id}
-          drink={drink}
-          collected
-          userPhotoUri={null}
-          cardWidth={cardWidth}
-          artSize={artSize}
-          onPress={(id) => router.navigate({ pathname: '/drink/[id]', params: { id } })}
-        />
-      ))}
+    <View style={styles.lining}>
+      <Grain tone="lining" />
+      <View style={styles.shelfRow}>
+        {entries.map(({ drink, post }) => (
+          <SharedCard key={drink.id} drink={drink} post={post} cardWidth={cardWidth} />
+        ))}
+      </View>
+      {last ? <View style={styles.rowFoot} /> : <Ledge />}
+    </View>
+  );
+}
+
+/**
+ * One shared drink. Its own component so each card signs its own post's
+ * photo; usePostsByAuthor signed the whole list in one request already, so
+ * this is normally answered from the cache on the first render. Until it
+ * is (or if it will not sign) the card shows the drink's lit face, the
+ * catalogue photo or else the lit vector glass, as DexCard does for any
+ * missing photo.
+ */
+function SharedCard({ drink, post, cardWidth }: { drink: Drink; post: Post; cardWidth: number }) {
+  const router = useRouter();
+  const photo = useSignedPhoto(post.photoPath, post);
+  return (
+    <DexCard
+      drink={drink}
+      collected
+      onLining
+      userPhotoUri={photo ?? null}
+      cardWidth={cardWidth}
+      onPress={(id) => router.navigate({ pathname: '/drink/[id]', params: { id } })}
+    />
+  );
+}
+
+/**
+ * The shelf ledge between two rows of mounts, as in the Dex tray: a 5pt
+ * shadowed strip with a 1pt lip of light along its top. Decorative.
+ */
+function Ledge() {
+  return (
+    <View
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={styles.ledge}>
+      <View style={styles.ledgeStrip} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  lining: { backgroundColor: colors.lining },
   summary: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.lg,
-    paddingBottom: space.md,
+    paddingBottom: space.lg,
   },
-  headline: { ...textRole.sectionTitle, color: colors.text },
-  note: { ...textRole.helper, color: colors.textMuted, marginTop: 2 },
+  note: { ...textRole.helper, color: colors.onLiningMuted, marginTop: 2 },
+  tally: { marginTop: space.sm },
   // A text button sits on its own 44pt hit line; this keeps its label on the gutter.
-  dexLink: { alignSelf: 'flex-start', marginLeft: -space.sm },
-  strip: {
-    marginTop: space.md,
-    flexDirection: 'row',
-    overflow: 'hidden',
-  },
-  cell: {
-    flex: 1,
-    minHeight: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: space.sm,
-  },
-  cellRuled: { borderLeftWidth: stroke.hair, borderLeftColor: colors.line },
-  figure: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 16,
-    lineHeight: 22,
-    color: colors.text,
-    ...tabular,
-  },
-  tier: { fontFamily: fonts.bodyMedium, fontSize: 11, lineHeight: 14 },
+  dexLink: { alignSelf: 'flex-start', marginLeft: -space.sm, marginTop: space.xs },
   shelfRow: {
     flexDirection: 'row',
-    gap: space.sm,
+    alignItems: 'stretch',
+    gap: layout.dexGap,
     paddingHorizontal: layout.gutter,
-    marginBottom: space.sm,
   },
+  ledge: { height: layout.dexLedge },
+  ledgeStrip: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 5,
+    height: 5,
+    backgroundColor: colors.ledge,
+    borderTopWidth: stroke.edge,
+    borderTopColor: colors.liningLip,
+  },
+  // The last row ends on lining as deep as a ledge, so the tray does not stop at a card's edge.
+  rowFoot: { height: layout.dexLedge },
 });

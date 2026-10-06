@@ -1,24 +1,15 @@
 import { type ReactNode, useRef, useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  type Text,
-  type TextInput,
-  View,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, type Text, type TextInput, View } from 'react-native';
 
 import { AuthTitleBar, useStepTitleFocus } from '@/components/auth/AuthTitleBar';
+import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { Consent } from '@/components/auth/Consent';
 import { CountryPicker } from '@/components/auth/CountryPicker';
 import { AuthStoreMessages, EmailStep, PasswordStep, ResetStep } from '@/components/auth/EmailSteps';
 import { PhoneCodeStep } from '@/components/auth/PhoneCodeStep';
 import { ProviderRows, useMethods } from '@/components/auth/ProviderButton';
-import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Button, Field, FieldGroup, OrDivider, SelectField } from '@/components/ui';
-import { colors, layout, space } from '@/constants/theme';
+import { layout, space } from '@/constants/theme';
 import { PHONE_INVALID } from '@/store/auth';
 import {
   countryOf,
@@ -37,6 +28,12 @@ import {
 /* title bar with a close control, the form, and the ways in. A native  */
 /* modal would rise above the cold-start intro, and close already has   */
 /* an honest destination, the Dex, which works signed out.              */
+/*                                                                      */
+/* OVER THE CABINET. The sheet lies on the cabinet's lining             */
+/* (CabinetSheet, auth/CabinetBackdrop): on the first step the large    */
+/* wordmark and three mounted drinks show above it, on the others just  */
+/* the wordmark. The sheet's own layout is unchanged; its title bar     */
+/* sticks under the status bar while the form scrolls.                  */
 /*                                                                      */
 /* ONE FLOW, SHARED BY EVERY GATE. The step and everything typed live   */
 /* in the sign-in flow store (store/signInFlow), so Home and Profile    */
@@ -173,7 +170,6 @@ function PhoneEntry() {
  * step: the Dex from a tab, back out of a pushed or modal route.
  */
 export default function SignInScreen({ onClose }: { onClose: () => void }) {
-  const insets = useSafeAreaInsets();
   const step = useSignInFlow((s) => s.step);
   const emailStatus = useSignInFlow((s) => s.emailStatus);
   const back = useSignInFlow((s) => s.back);
@@ -217,38 +213,26 @@ export default function SignInScreen({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      {/* Outside the scroll view, so it stays put while the form scrolls under it. */}
-      <AuthTitleBar
-        title={titleOf(step, emailStatus)}
-        leading={entry ? 'close' : 'back'}
-        onLeading={entry ? onClose : back}
-        titleRef={titleRef}
-      />
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="interactive"
-        contentContainerStyle={[
-          styles.scroll,
-          /*
-           * TAB_BAR_CLEARANCE, not a bare inset: the tab bar floats OVER
-           * this screen, so the last provider row and the terms line need
-           * room to scroll out from under it.
-           */
-          { paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md },
-        ]}>
-        {/* Keyed on the step: each one mounts fresh, with nothing carried over but the store. */}
-        <View key={stepKey}>{body}</View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <CabinetSheet
+      backdrop={entry ? 'full' : 'compact'}
+      bar={
+        <AuthTitleBar
+          title={titleOf(step, emailStatus)}
+          leading={entry ? 'close' : 'back'}
+          onLeading={entry ? onClose : back}
+          titleRef={titleRef}
+          insetTop={false}
+        />
+      }
+      contentStyle={styles.body}>
+      {/* Keyed on the step: each one mounts fresh, with nothing carried over but the store. */}
+      <View key={stepKey}>{body}</View>
+    </CabinetSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
-  scroll: { paddingHorizontal: layout.gutter, paddingTop: space.xxl, flexGrow: 1 },
+  body: { paddingHorizontal: layout.gutter, paddingTop: space.xxl },
   primary: { marginTop: space.xl },
   or: { marginVertical: space.xl },
 });

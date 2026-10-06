@@ -1,7 +1,7 @@
 /**
  * Design-system guard.
  *
- * Twelve rules for mistakes that were made across the app before the
+ * Thirteen rules for mistakes that were made across the app before the
  * redesigns, or that the v3 cabinet depends on never making, and that
  * regress easily:
  *   1. No emoji used as UI. They render in the system font, so weight and
@@ -12,26 +12,29 @@
  *      FadeIn / ZoomIn / … builders behind them). See LAYOUT_ANIM.
  *   4. No ovals. Controls are rounded rectangles; only people (avatars)
  *      and round objects (a shutter, a dot) are circles. See SHAPE.
- *   5. No uppercase. Letterspaced caps headings were the habit that most
- *      made the interface look machine-designed. See CAPS.
+ *   5. No uppercase, and no Title Case by transform. Letterspaced caps
+ *      headings were the habit that most made the interface look
+ *      machine-designed. See CAPS.
  *   6. Playfair is the wordmark and the drink names, nothing else, and a
  *      drink name is drawn by DrinkName. See PLAYFAIR.
  *   7. Nothing under 11pt. See FLOOR.
- *   8. No tracked words, and no capitals typed into copy. See TRACKING.
+ *   8. No tracked words, no capitals typed into copy, and a drink's style
+ *      is shown in sentence case. See TRACKING.
  *   9. Every expo-image <Image> decodes at the size it is drawn. See IMAGE.
  *  10. A screen stands on one of the app's grounds. See GROUNDS.
  *  11. Nothing drawn over a photograph but `onMedia`. See MEDIA.
  *  12. Shadows come from `elevation`. See SHADOW.
+ *  13. A gradient stop states its own opacity. See STOP.
  *
  * Comments are stripped before any rule runs, block comments included,
  * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5 read
- * the code a line at a time; rules 6 to 12, and rule 3's builder imports,
- * read the TypeScript syntax tree (the project's own `typescript`), which
- * holds no comments at all. They
- * need it: a caps check on whole lines flags code such as `SIZE - STROKE`,
- * and an <Image> element or a style object runs across lines. The opt-out
- * markers (`round-ok:`, `tracking-ok:`, `full-size-ok:`) are comments, so
- * they are read from the raw line.
+ * the code a line at a time; rules 6 to 13, rule 3's builder imports and
+ * rule 5's Title Case read the TypeScript syntax tree (the project's own
+ * `typescript`), which holds no comments at all. They need it: a caps
+ * check on whole lines flags code such as `SIZE - STROKE`, and an <Image>
+ * element or a style object runs across lines. The opt-out markers
+ * (`round-ok:`, `tracking-ok:`, `full-size-ok:`) are comments, so they are
+ * read from the raw line.
  *
  * Run: node scripts/check-design.mjs
  */
@@ -107,18 +110,29 @@ const SHAPE_EXEMPT = [
 /*
  * 5. No uppercase. No exemptions: not even a section heading. The label
  *    is written in sentence case in the source, and that is how it shows.
+ *    `capitalize` is the same mistake in Title Case, the voice the judges
+ *    flagged on Log rows (there it came from the data; rule 8 covers that
+ *    way in), so the syntax-tree pass flags it, and either value on an
+ *    arm of a conditional.
  */
 const CAPS = /textTransform:\s*['"]uppercase['"]/;
+/** Banned transforms and their reason. uppercase reports as the line check does, so one site is one report. */
+const CAPS_TRANSFORM = {
+  uppercase: undefined,
+  capitalize: 'capitalize is Title Case: write the label in sentence case',
+};
 
 /*
  * 6. Playfair is the wordmark's face and the drink names', and nothing
  *    else's: not counts, not shelf headers, not sentences, not initials
  *    (specs/v3-cabinet.md section 6.2). So the display fonts are named in
  *    theme.ts only, and there only as the `fontFamily` of a name role;
- *    every other file sets Playfair through one of those roles. The
- *    `fonts` binding is followed through import aliases, and a family
- *    string typed in as a fontFamily counts too, so neither route gets
- *    round the rule.
+ *    every other file sets Playfair through one of those roles, whole. The
+ *    `fonts` binding is followed through import aliases; a family string
+ *    typed in anywhere counts (`const FACE = 'PlayfairDisplay…'` as much as
+ *    a fontFamily); and so does a name role's family lent to other text
+ *    (`fontFamily: textRole.nameLg.fontFamily` on a count), so none of
+ *    those routes gets round the rule.
  */
 const NAME_ROLES = [
   'wordmark',
@@ -135,6 +149,12 @@ const NAME_ROLES = [
   'nameInline',
 ];
 const THEME = 'constants/theme.ts';
+/**
+ * A display family's name as a string ('PlayfairDisplayLatin_700Bold'). A
+ * font file's path is not one, nor is the bare word a measuring helper
+ * might test a family against.
+ */
+const PLAYFAIR_FAMILY = /^PlayfairDisplay\w*_\d{3}\w*$/;
 /** Files rule 6 does not read, and why. */
 const PLAYFAIR_EXEMPT = {
   'components/SipplyIntro.tsx': 'the brand film sets its own lockup',
@@ -145,8 +165,9 @@ const PLAYFAIR_EXEMPT = {
  * "Ramos Gin ..." on a Today's tile (specs/v3-cabinet.md section 6.4). So
  * the drink-name roles reach a screen only as DrinkName's `role`. Used as
  * a `style`, spread into a style object or put in a StyleSheet they would
- * be a plain Text, free to take `numberOfLines`. Data that only carries a
- * role on to DrinkName (a table of roles) and member reads such as
+ * be a plain Text, free to take `numberOfLines`. `textRole['cardName']`
+ * counts as `textRole.cardName`. Data that only carries a role on to
+ * DrinkName (a table of roles) and member reads such as
  * `textRole.rowName.fontSize` pass. The wordmarks are not drink names, and
  * nameInline is the name inside an Inter sentence, a nested Text.
  */
@@ -157,8 +178,10 @@ const CABINET_MODULE = /(^|\/)components\/cabinet$/;
  * 7. Nothing under 11pt, the floor of `type` and the smallest size iOS
  *    treats as legible (specs/v3-cabinet.md section 6.3). Literal sizes
  *    only, either arm of a conditional included, and a file-level
- *    `const PLAQUE_TEXT = 12` counts as its literal (see fileConsts): a
- *    computed size (`Math.max(11, …)`) states its own floor.
+ *    `const PLAQUE_TEXT = 12` counts as its literal (see fileConsts), so
+ *    arithmetic on them is worked out too (`PLAQUE_TEXT - 2` is a 10). A
+ *    size computed from anything else (`Math.max(11, …)`, `fontSize *
+ *    scale`) states its own floor.
  */
 const FLOOR = 11;
 
@@ -178,10 +201,34 @@ const FLOOR = 11;
  *    when the capitals are typed into the string ("DISCOVER · SIP · SHARE").
  *    It reads string literals, template text and JSX text, never whole
  *    lines: code such as `SIZE - STROKE` (RarityDonut) would match.
+ *
+ *    And the catalogue stores a drink's style in Title Case
+ *    ("Spirit-Forward"), so a style reaches the screen only through
+ *    styleLabel() (lib/drinkLabels.ts; specs/v3-cabinet.md section 6.6).
+ *    A `.subcategory` read is flagged when it flows, through nothing but
+ *    string building (a template, `+`, `??`, an array joined with
+ *    `.filter().join()`), into a JSX child or a JSX prop that is shown.
+ *    Anything else it meets (a call such as styleLabel(), a comparison, a
+ *    variable) ends the search, and so does a prop that is never drawn:
+ *    VoiceOver's labels, a key, an input's own `value`. A form's error map
+ *    keyed by field (`errors.subcategory`) holds a message, not a style.
  */
 const TRACKING_MAX = 0.5;
 const TRACKING_OK = /tracking-ok:\s*\S/;
 const CAPS_TEXT = /\b[A-Z]{3,}\b[\s·.,/-]+\b[A-Z]{3,}\b/;
+const STYLE_FIELD = 'subcategory';
+const STRING_OPS = new Set(['filter', 'join', 'concat', 'trim', 'slice', 'toString']);
+const NOT_SHOWN = new Set([
+  'key',
+  'testID',
+  'nativeID',
+  'value',
+  'defaultValue',
+  'accessibilityLabel',
+  'accessibilityHint',
+  'accessibilityValue',
+]);
+const ERROR_MAP = /errors?$/i;
 
 /*
  * 9. expo-image decodes a picture at its source size unless it is told to
@@ -216,8 +263,18 @@ const GROUNDS_EXEMPT = {
  *     would be ink nobody measured, on a picture nobody chose. The import
  *     counts, so a destructured token cannot slip through either, and so
  *     does `theme.colors` through a namespace import.
+ *
+ *     RARITY_META and CATEGORY_META are `colors` tokens by another name
+ *     (the legendary word's `color`, giltInk, is 1.08:1 on scrimMid over a
+ *     white photo), and
+ *     media.tsx reads them for a tier's word and mark. So their colour
+ *     fields are flagged there too, read off the table, an entry of it
+ *     held in a const (`const meta = RARITY_META[rarity]`), or
+ *     destructured; `label` and `mark` stay free.
  */
 const MEDIA_FILE = 'components/media.tsx';
+const META_TABLES = ['RARITY_META', 'CATEGORY_META'];
+const META_COLOURS = new Set(['color', 'wash', 'edge', 'rule', 'onLining']);
 
 /*
  * 12. Shadows live in `elevation` (theme.ts), which says what may cast
@@ -233,6 +290,20 @@ const SHADOW_KEYS = new Set([
   'shadowRadius',
   'shadowOffset',
 ]);
+
+/*
+ * 13. react-native-svg's native gradients keep a stop's RGB and throw its
+ *     alpha away: the stop's opacity is `stopOpacity` alone, 1 when unset
+ *     (lib/extract/extractGradient.ts, `(color & 0x00ffffff) | (alpha << 24)`).
+ *     So an rgba token handed to `stopColor` paints opaque on iOS (a 0.62
+ *     scrim turns solid black, a clear stop turns solid), while the web,
+ *     which passes the string to the browser, draws it right and hides the
+ *     bug from every web render. Every <Stop> from react-native-svg either
+ *     spreads svgStop(color) (components/cabinet.tsx), which splits a token
+ *     into its RGB and its alpha, or sets `stopOpacity` itself next to an
+ *     opaque `stopColor`.
+ */
+const SVG_MODULE = /^react-native-svg$/;
 
 function walk(dir) {
   const out = [];
@@ -308,7 +379,7 @@ function quoted(line, from, at) {
 }
 
 /* ==================================================================== */
-/* Syntax-tree helpers (rules 6 to 12)                                  */
+/* Syntax-tree helpers (rules 6 to 12, and parts of 3 and 5)            */
 /* ==================================================================== */
 
 function parse(rel, text) {
@@ -341,9 +412,18 @@ function unwrap(expr) {
   return expr;
 }
 
+/** Arithmetic `literals` works out, so `PLAQUE_TEXT - 2` is read as the 10 it draws. */
+const FOLD = {
+  [ts.SyntaxKind.PlusToken]: (a, b) => a + b,
+  [ts.SyntaxKind.MinusToken]: (a, b) => a - b,
+  [ts.SyntaxKind.AsteriskToken]: (a, b) => a * b,
+  [ts.SyntaxKind.SlashToken]: (a, b) => a / b,
+};
+
 /**
  * The literal numbers an expression can be: `10`, `-0.3`, `"10"` (SVG),
- * either arm of `a ? 10 : 12`, and a name in `consts` (see fileConsts).
+ * either arm of `a ? 10 : 12`, a name in `consts` (see fileConsts), and
+ * `+ - * /` between any of those. Anything else is unknown and gives [].
  */
 function literals(expr, consts) {
   expr = unwrap(expr);
@@ -361,14 +441,19 @@ function literals(expr, consts) {
     return [...literals(expr.whenTrue, consts), ...literals(expr.whenFalse, consts)];
   }
   if (ts.isIdentifier(expr) && consts?.has(expr.text)) return [consts.get(expr.text)];
+  const fold = ts.isBinaryExpression(expr) && FOLD[expr.operatorToken.kind];
+  if (fold) {
+    const right = literals(expr.right, consts);
+    return literals(expr.left, consts).flatMap((a) => right.map((b) => fold(a, b)));
+  }
   return [];
 }
 
 /**
- * File-level `const NAME = 12` (or `-0.5`), by name: a size kept in a
- * named constant is still a literal, and media.tsx keeps its plaque type
- * that way. Only names the file declares once, so an inner variable that
- * shadows one is never read as it.
+ * File-level `const NAME = 12` (or `-0.5`, or `BASE - 1` after `BASE`), by
+ * name: a size kept in a named constant is still a literal, and media.tsx
+ * keeps its plaque type that way. Only names the file declares once, so an
+ * inner variable that shadows one is never read as it.
  */
 function fileConsts(sf) {
   const declared = new Map();
@@ -388,9 +473,8 @@ function fileConsts(sf) {
     for (const d of st.declarationList.declarations) {
       if (!ts.isIdentifier(d.name) || declared.get(d.name.text) !== 1) continue;
       const init = unwrap(d.initializer);
-      if (init && !ts.isConditionalExpression(init) && literals(init).length === 1) {
-        out.set(d.name.text, literals(init)[0]);
-      }
+      const values = init && !ts.isConditionalExpression(init) ? literals(init, out) : [];
+      if (values.length === 1) out.set(d.name.text, values[0]);
     }
   }
   return out;
@@ -442,6 +526,68 @@ const isName = (expr, names) =>
   !!expr &&
   (ts.isIdentifier(expr) || ts.isPropertyAccessExpression(expr)) &&
   names.has(expr.getText());
+
+/** The role a `textRole.x` or `textRole['x']` read names, or null. */
+function roleRead(expr, textRoles) {
+  if (!expr || !isName(expr.expression, textRoles)) return null;
+  if (ts.isPropertyAccessExpression(expr)) return expr.name.text;
+  if (ts.isElementAccessExpression(expr) && ts.isStringLiteralLike(expr.argumentExpression)) {
+    return expr.argumentExpression.text;
+  }
+  return null;
+}
+
+/**
+ * Where a `.subcategory` read is drawn as stored (rule 8): 'child' for a
+ * JSX child, the prop's name for a shown JSX prop, or null when anything
+ * but string building comes first (see STRING_OPS, NOT_SHOWN).
+ */
+function shownRaw(node) {
+  let from = node;
+  for (let p = node.parent; p; from = p, p = p.parent) {
+    if (
+      ts.isParenthesizedExpression(p) ||
+      ts.isAsExpression(p) ||
+      ts.isNonNullExpression(p) ||
+      ts.isTemplateSpan(p) ||
+      ts.isTemplateExpression(p) ||
+      ts.isArrayLiteralExpression(p)
+    ) {
+      continue;
+    }
+    if (ts.isBinaryExpression(p)) {
+      const op = p.operatorToken.kind;
+      if (op === ts.SyntaxKind.PlusToken || op === ts.SyntaxKind.QuestionQuestionToken || op === ts.SyntaxKind.BarBarToken) {
+        continue;
+      }
+      // `a && x` yields x; `x && …` only tests it.
+      if (op === ts.SyntaxKind.AmpersandAmpersandToken && p.right === from) continue;
+      return null;
+    }
+    if (ts.isConditionalExpression(p)) {
+      if (p.condition === from) return null;
+      continue;
+    }
+    // `[style, origin].filter(Boolean).join(' · ')`: the op, then its call.
+    if (ts.isPropertyAccessExpression(p) && p.expression === from && STRING_OPS.has(p.name.text)) continue;
+    if (
+      ts.isCallExpression(p) &&
+      p.expression === from &&
+      ts.isPropertyAccessExpression(from) &&
+      STRING_OPS.has(from.name.text)
+    ) {
+      continue;
+    }
+    if (ts.isJsxExpression(p)) {
+      const host = p.parent;
+      if (ts.isJsxElement(host) || ts.isJsxFragment(host)) return 'child';
+      if (ts.isJsxAttribute(host) && !NOT_SHOWN.has(keyOf(host))) return keyOf(host);
+      return null;
+    }
+    return null;
+  }
+  return null;
+}
 
 /** The `textRole` object literal in theme.ts, or null. */
 function textRoleObject(sf) {
@@ -504,7 +650,7 @@ function nameRoleAsStyle(site, sf, drinkNames) {
   return spread ? 'a drink-name role spread into a style: draw the name with DrinkName' : null;
 }
 
-/** Rules 6 to 12, and rule 3's builder imports, for one file, read from its syntax tree. */
+/** Rules 6 to 13, rule 3's builder imports and rule 5's transforms, for one file, read from its syntax tree. */
 function treeRules(rel, sf, lines, add) {
   const at = (node) => sf.getLineAndCharacterOfPosition(node.getStart(sf)).line;
   const marked = (re, i) => re.test(lines[i]) || (i > 0 && re.test(lines[i - 1]));
@@ -517,8 +663,28 @@ function treeRules(rel, sf, lines, add) {
   const drinkNames = new Set(['DrinkName', ...importedAs(sf, CABINET_MODULE, 'DrinkName')]);
   const labels = rel === THEME ? new Set() : importedAs(sf, themeModule, 'label');
   const images = importedAs(sf, /^expo-image$/, 'Image');
+  const stops = importedAs(sf, SVG_MODULE, 'Stop');
+  const svgStops = new Set(['svgStop', ...importedAs(sf, CABINET_MODULE, 'svgStop')]);
   const roles = rel === THEME ? textRoleObject(sf) : null;
   const consts = fileConsts(sf);
+
+  // 11. The tier and category tables in media.tsx, and consts holding one entry of them.
+  const metaTables = new Set(rel === MEDIA_FILE ? META_TABLES.flatMap((t) => [...fromTheme(t)]) : []);
+  const isMetaEntry = (expr) =>
+    !!expr &&
+    (ts.isElementAccessExpression(expr) || ts.isPropertyAccessExpression(expr)) &&
+    isName(expr.expression, metaTables);
+  const metaEntries = new Set();
+  if (metaTables.size) {
+    const entries = (node) => {
+      if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && isMetaEntry(unwrap(node.initializer))) {
+        metaEntries.add(node.name.text);
+      }
+      ts.forEachChild(node, entries);
+    };
+    entries(sf);
+  }
+  const metaEntry = (expr) => isMetaEntry(expr) || (!!expr && ts.isIdentifier(expr) && metaEntries.has(expr.text));
 
   // 9. `const AnimatedImage = Animated.createAnimatedComponent(Image)` draws an expo-image too.
   const wrapped = (node) => {
@@ -557,10 +723,10 @@ function treeRules(rel, sf, lines, add) {
   /** `colors.x`, or `theme.colors.x` through a namespace import. */
   const isColorsToken = (expr) => !!expr && ts.isPropertyAccessExpression(expr) && isName(expr.expression, colorsNames);
 
-  const playfair = (node) => {
+  const playfair = (node, why = 'set Playfair through a name role') => {
     if (PLAYFAIR_EXEMPT[rel]) return;
-    const why = rel === THEME ? playfairInTheme(node, roles) : 'set Playfair through a name role';
-    if (why) add('playfair', at(node), why);
+    const reason = rel === THEME ? playfairInTheme(node, roles) : why;
+    if (reason) add('playfair', at(node), reason);
   };
 
   const visit = (node) => {
@@ -585,14 +751,55 @@ function treeRules(rel, sf, lines, add) {
     }
 
     // 6. A drink-name role drawn as a plain style.
-    if (
-      rel !== THEME &&
-      ts.isPropertyAccessExpression(node) &&
-      isName(node.expression, textRoles) &&
-      DRINK_NAME_ROLES.includes(node.name.text)
-    ) {
+    if (rel !== THEME && DRINK_NAME_ROLES.includes(roleRead(node, textRoles))) {
       const why = nameRoleAsStyle(node, sf, drinkNames);
       if (why) add('name', at(node), why);
+    }
+
+    // 6. A display family typed in as a string, wherever it is kept. A key (a font map) only names a file to load.
+    if (
+      rel !== THEME &&
+      ts.isStringLiteralLike(node) &&
+      PLAYFAIR_FAMILY.test(node.text) &&
+      !(ts.isPropertyAssignment(node.parent) && node.parent.name === node)
+    ) {
+      playfair(node);
+    }
+
+    // 8. A drink's style drawn as the catalogue stores it.
+    if (
+      ts.isPropertyAccessExpression(node) &&
+      node.name.text === STYLE_FIELD &&
+      !ERROR_MAP.test(node.expression.getText(sf))
+    ) {
+      const where = shownRaw(node);
+      if (where) {
+        add(
+          'case',
+          at(node),
+          `a drink's style as stored (Title Case) ${where === 'child' ? 'on screen' : `in \`${where}\``}: pass it through styleLabel()`,
+        );
+      }
+    }
+
+    // 11. A tier's or a category's colour in media.tsx: `meta.color`, `RARITY_META.rare.onLining`, `{ color } = meta`.
+    if (
+      metaTables.size &&
+      ts.isPropertyAccessExpression(node) &&
+      META_COLOURS.has(node.name.text) &&
+      metaEntry(unwrap(node.expression))
+    ) {
+      add('media', at(node), `${node.name.text} is a colors token: only onMedia over a photograph`);
+    }
+    if (
+      metaTables.size &&
+      ts.isBindingElement(node) &&
+      META_COLOURS.has((node.propertyName ?? node.name).getText(sf)) &&
+      node.parent?.parent &&
+      ts.isVariableDeclaration(node.parent.parent) &&
+      metaEntry(unwrap(node.parent.parent.initializer))
+    ) {
+      add('media', at(node), 'a colors token destructured: only onMedia over a photograph');
     }
 
     // 8. The deprecated tagline's tracking, read outside theme.ts.
@@ -626,6 +833,28 @@ function treeRules(rel, sf, lines, add) {
       const str = unwrap(value);
       if (key === 'fontFamily' && str && ts.isStringLiteralLike(str) && /Playfair/.test(str.text)) {
         playfair(str);
+      }
+
+      // 6. A name role's family lent to other text: `fontFamily: textRole.nameLg.fontFamily`.
+      if (rel !== THEME && key === 'fontFamily') {
+        for (const v of arms(value)) {
+          if (
+            ts.isPropertyAccessExpression(v) &&
+            v.name.text === 'fontFamily' &&
+            NAME_ROLES.includes(roleRead(unwrap(v.expression), textRoles))
+          ) {
+            playfair(v, "a name role's family on other text: use the role whole, or an Inter role");
+          }
+        }
+      }
+
+      // 5. Uppercase and Title Case by transform, on either arm.
+      if (key === 'textTransform') {
+        for (const v of arms(value)) {
+          if (ts.isStringLiteralLike(v) && Object.hasOwn(CAPS_TRANSFORM, v.text)) {
+            add('caps', at(node), CAPS_TRANSFORM[v.text]);
+          }
+        }
       }
 
       // 7. The 11pt floor.
@@ -703,6 +932,24 @@ function treeRules(rel, sf, lines, add) {
       }
     }
 
+    // 13. Gradient stops.
+    if (
+      (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) &&
+      stops.has(node.tagName.getText(sf))
+    ) {
+      const props = node.attributes.properties;
+      const split = props.some(
+        (p) =>
+          ts.isJsxSpreadAttribute(p) &&
+          ts.isCallExpression(unwrap(p.expression) ?? p.expression) &&
+          svgStops.has((unwrap(p.expression) ?? p.expression).expression.getText(sf)),
+      );
+      const opacity = props.some((p) => ts.isJsxAttribute(p) && keyOf(p) === 'stopOpacity');
+      if (!split && !opacity) {
+        add('stop', at(node), 'spread svgStop(color), or set stopOpacity beside an opaque stopColor');
+      }
+    }
+
     // 11. Media ink: the binding itself, or `theme.colors` / `theme['colors']` off a namespace.
     if (
       rel === MEDIA_FILE &&
@@ -744,7 +991,7 @@ for (const [order, file] of files.entries()) {
     violations.push({ order, rel, n: i + 1, kind, why, line: (lines[i] ?? '').trim() });
   };
 
-  // Rules 6 to 12 read every file; each names its own exemptions.
+  // Rules 6 to 13 read every file; each names its own exemptions.
   treeRules(rel, parse(rel, text), lines, add);
 
   code.forEach((c, i) => {
@@ -774,9 +1021,10 @@ console.log('\n  Sipply design-system guard\n');
 
 if (violations.length === 0) {
   console.log(
-    '  No emoji-as-UI, hardcoded hex, layout animations, ovals, uppercase, stray Playfair,\n' +
-      '  drink names outside DrinkName, type under 11pt, tracking, full-size decodes,\n' +
-      '  off-ground screens, unaudited ink over media or stray shadows outside the allowlists.\n',
+    '  No emoji-as-UI, hardcoded hex, layout animations, ovals, uppercase or Title Case,\n' +
+      '  stray Playfair, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
+      '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
+      '  stray shadows or gradient stops without their opacity outside the allowlists.\n',
   );
   process.exit(0);
 }

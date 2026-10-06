@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
+import { Grain } from '@/components/Grain';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { EmptyState, Hold } from '@/components/ui';
@@ -64,8 +65,14 @@ function OwnProfile() {
    * stays, so Log a pour and Settings (and sign out) are reachable either
    * way, and the body says which of the two it is.
    */
+  /*
+   * Paper grain under it all, now that the app has no global grain; the
+   * Hold is the slot kind (no fill of its own), centred here, so the
+   * grained page shows behind the spinner instead of a flat cream sheet.
+   */
   return (
     <View style={styles.screen}>
+      <Grain />
       <ScreenTopBar size="lg" title="" left={left} right={right} showRule={false} />
       {profileError && !profileLoading ? (
         /*
@@ -83,7 +90,9 @@ function OwnProfile() {
           />
         </View>
       ) : (
-        <Hold slowMessage="Still loading your profile." />
+        <View style={styles.center}>
+          <Hold fill={false} slowMessage="Still loading your profile." />
+        </View>
       )}
     </View>
   );

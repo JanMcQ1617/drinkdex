@@ -153,7 +153,11 @@ function extendBounds(d: string, b: { minX: number; maxX: number; maxY: number }
 
   while (i < tokens.length) {
     if (/[A-Za-z]/.test(tokens[i])) cmd = tokens[i++].toUpperCase();
-    if (cmd === 'Z') continue;
+    if (cmd === 'Z') {
+      // A stray number after Z would otherwise never be consumed: a hang at render.
+      if (i < tokens.length && !/[A-Za-z]/.test(tokens[i])) i++;
+      continue;
+    }
     if (cmd === 'M' || cmd === 'L') {
       x = take();
       y = take();

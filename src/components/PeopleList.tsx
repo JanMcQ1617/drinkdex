@@ -41,12 +41,18 @@ export interface MatchEntry {
 /**
  * The in-row Follow / Following toggle, the one every list of people uses.
  *
- * Button's row size (`sm`: 36pt drawn, 44pt to the finger). Follow is the
- * primary, the action to take; Following is tonal, a quiet fill with no
- * check, because it is a state rather than a second call to action, and a
- * column of wine-and-check buttons down a list of people you already
- * follow made every row shout. A profile header draws its own Follow, the
- * same two skins at the header's width.
+ * Button's row size (`sm`: 36pt drawn, 44pt to the finger). Three skins:
+ *
+ *   Follow       secondary (white, 1pt ink edge). An offer, not the call:
+ *                a list of people ending in a column of filled wine
+ *                buttons made the buttons the loudest thing on the
+ *                screen, louder than the people and their pours.
+ *   Follow back  primary, wine. Someone already follows you (`back`), so
+ *                this is the one Follow worth the screen's wine.
+ *   Following    tonal, a quiet fill with no check: a state rather than a
+ *                second call to action.
+ *
+ * A profile header draws its own Follow at the header's width.
  *
  * It toggles at once, with no confirmation: lists of people are bulk
  * tools. Only the profile header asks before an unfollow.
@@ -57,19 +63,25 @@ export function FollowButton({
   following,
   name,
   onToggle,
+  back,
 }: {
   following: boolean;
   /** Who, for the spoken label: "Follow Maya Ortiz". */
   name: string;
   onToggle: () => void;
+  /** They already follow you: not following them is "Follow back", in wine. */
+  back?: boolean;
 }) {
+  const followBack = !following && !!back;
   return (
     <Button
-      label={following ? 'Following' : 'Follow'}
-      variant={following ? 'tonal' : 'primary'}
+      label={following ? 'Following' : followBack ? 'Follow back' : 'Follow'}
+      variant={following ? 'tonal' : followBack ? 'primary' : 'secondary'}
       onPress={onToggle}
       size="sm"
-      accessibilityLabel={`${following ? 'Unfollow' : 'Follow'} ${name}`}
+      accessibilityLabel={
+        following ? `Unfollow ${name}` : followBack ? `Follow ${name} back` : `Follow ${name}`
+      }
     />
   );
 }
@@ -109,11 +121,14 @@ export function PersonRow({
   hideFollow,
   gutter,
   separator,
+  followsYou,
 }: {
   person: UserProfile;
   note?: string;
   following: boolean;
   onToggle: () => void;
+  /** They follow you (a followers list): their Follow reads "Follow back". */
+  followsYou?: boolean;
   onOpen?: ((id: string) => void) | null;
   /** No Follow button: your own row in someone's followers. */
   hideFollow?: boolean;
@@ -173,7 +188,12 @@ export function PersonRow({
         <View style={styles.rowIdentity}>{identity}</View>
       )}
       {hideFollow ? null : (
-        <FollowButton following={following} name={person.displayName} onToggle={onToggle} />
+        <FollowButton
+          following={following}
+          name={person.displayName}
+          onToggle={onToggle}
+          back={followsYou}
+        />
       )}
       {separator ? (
         <View style={[styles.separator, { left: inset + ROW_AVATAR + space.md }]} />

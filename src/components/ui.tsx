@@ -620,8 +620,9 @@ export function Tag({ label, style }: { label: string; style?: StyleProp<ViewSty
  * label ('close' on a token that removes itself).
  *
  * 32pt tall with 6pt of hitSlop above and below, so the finger gets 44.
- * The Dex's filter row is not made of these: those are tabs with an
- * underline, not toggles.
+ * Since v3 the Dex's filter row is made of these too (All · Cocktails ·
+ * Spirits, then Collected · Not yet), one selection per axis, in place of
+ * the underlined tabs it had.
  */
 export function Chip({
   label,
@@ -2251,6 +2252,10 @@ const styles = StyleSheet.create({
   /* Buttons */
   button: {
     minHeight: layout.control,
+    /* Never wider than its container: in a wrapping row of buttons a label
+       at a large text size wraps inside its button (buttonLabel) instead of
+       pushing the button off the screen edge. */
+    maxWidth: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

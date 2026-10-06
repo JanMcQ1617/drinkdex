@@ -68,8 +68,10 @@ const unreadable = (why) => {
 /* someone to remember it.                                              */
 /*                                                                      */
 /* Only the plain `key: '#RRGGBB'` and `key: 'rgba(r, g, b, a)'`         */
-/* entries are picked up; a pair that needs a translucent colour        */
-/* composites it explicitly, over the ground it is drawn on.            */
+/* entries are picked up, from the code with its comments dropped (a    */
+/* note such as "was textMuted: '#9A8F85'" would otherwise be read as   */
+/* the token); a pair that needs a translucent colour composites it     */
+/* explicitly, over the ground it is drawn on.                          */
 /* ==================================================================== */
 
 const THEME = readFileSync(new URL('../src/constants/theme.ts', import.meta.url), 'utf8');
@@ -84,7 +86,7 @@ function section(start, end) {
 /** Source text with its comments removed, so a note that names a value is not read as one. */
 const uncommented = (src) => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
 
-const COLORS = section('export const colors = {', '} as const;');
+const COLORS = uncommented(section('export const colors = {', '} as const;'));
 
 const found = {};
 for (const [, key, value] of COLORS.matchAll(/(\w+):\s*'(#[0-9A-Fa-f]{6})'/g)) {
@@ -147,15 +149,6 @@ const R = new Proxy(foundRgba, {
  */
 const WHITE_FRAME = '#FFFFFF';
 const BLACK_FRAME = '#000000';
-
-/*
- * The log action's 1pt edge on the espresso tab bar (specs/v3-cabinet.md
- * section 9.1.1). theme.ts has no token for it, so this is the one colour
- * the app draws that the audit holds a copy of: if FloatingTabBar's value
- * changes, change it here, and once it has a token, read it from `colors`
- * like everything else and delete this.
- */
-const LOG_ACTION_EDGE = [233, 229, 223, 0.38];
 
 /*
  * Every category in CATEGORY_ORDER must have been parsed. A reordered or
@@ -663,7 +656,7 @@ const PAIRS = [
   [MEDIA.glyphGilt, MEDIA.markerFill, 3.0, 'legendary sparkle (glyphGilt) on a marker (glyph)'], // 4.31
 
   'v3 · 4.5 Tab bar, and design floors',
-  [over(LOG_ACTION_EDGE, C.reelBar), C.reelBar, 3.0, 'the log action\'s edge on the espresso bar'], // 3.02
+  [over(R.logActionEdge, C.reelBar), C.reelBar, 3.0, 'the log action\'s edge (logActionEdge) on the espresso bar'], // 3.02
   [C.textOnWine, C.wine, 4.5, 'plus glyph on the wine log action, every tab'], // 10.95
   // The unread dot keeps the dark skin's wineSoft (section 9.1.1), now on
   // every tab's bar rather than the reels ground above.

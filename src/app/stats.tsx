@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CollectionStats } from '@/components/CollectionStats';
+import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { colors, layout, space } from '@/constants/theme';
 
@@ -40,6 +41,8 @@ export default function StatsScreen() {
 
   return (
     <View style={styles.screen}>
+      {/* The page's own grain, under everything: there is no global grain any more. */}
+      <Grain />
       {/*
         The bar carries the title, so the page no longer prints its own
         "Stats" headline under it.

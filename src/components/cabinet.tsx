@@ -26,7 +26,7 @@ import {
   textRole,
 } from '@/constants/theme';
 import { formatCount, formatDexNumber } from '@/data';
-import { faceOf, fitScale } from '@/lib/textFit';
+import { faceOf, fitScale, textWidth } from '@/lib/textFit';
 import type { Rarity } from '@/types';
 
 /* ==================================================================== */
@@ -60,11 +60,35 @@ export function useSvgId(prefix: string): string {
 }
 
 /**
+ * A colour token as an SVG gradient stop: `rgba(14, 11, 11, 0.62)` becomes
+ * `rgb(14, 11, 11)` at stopOpacity 0.62 (times `opacity`).
+ *
+ * Every <Stop> with a translucent token must go through this.
+ * react-native-svg's native gradients throw away the alpha of an rgba (or
+ * 8-digit hex) stopColor and take stopOpacity alone, which defaults to 1:
+ * handed straight in, a 0.62 scrim paints solid black on iOS and a clear
+ * stop paints opaque. The web passes the string to the browser and draws
+ * it right, so a web render never shows the difference.
+ */
+export function svgStop(color: string, opacity = 1): { stopColor: string; stopOpacity: number } {
+  const rgba = /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+)\s*)?\)$/i.exec(color);
+  if (rgba) {
+    const alpha = rgba[4] == null ? 1 : Number(rgba[4]);
+    return { stopColor: `rgb(${rgba[1]}, ${rgba[2]}, ${rgba[3]})`, stopOpacity: alpha * opacity };
+  }
+  const hex8 = /^#([0-9a-f]{6})([0-9a-f]{2})$/i.exec(color);
+  if (hex8) return { stopColor: `#${hex8[1]}`, stopOpacity: (parseInt(hex8[2]!, 16) / 255) * opacity };
+  if (color === 'transparent') return { stopColor: 'rgb(0, 0, 0)', stopOpacity: 0 };
+  return { stopColor: color, stopOpacity: opacity };
+}
+
+/**
  * A vertical fade from `from` (top) to `to` (bottom) that fills the box
  * `style` gives it: the shade under a band, a photo's scrims and dissolves.
  * Light doing something physical, never a mood field behind text.
  * `toOpacity` fades the bottom stop out (0: clear), so a translucent token
- * can fade to nothing without a second "clear" token. Decorative and
+ * can fade to nothing without a second "clear" token. Both stops go through
+ * svgStop, so translucent tokens keep their alpha on iOS. Decorative and
  * untouchable.
  */
 export function VerticalFade({
@@ -89,8 +113,8 @@ export function VerticalFade({
       <Svg width="100%" height="100%">
         <Defs>
           <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" stopColor={from} />
-            <Stop offset="1" stopColor={to} stopOpacity={toOpacity} />
+            <Stop offset="0" {...svgStop(from)} />
+            <Stop offset="1" {...svgStop(to, toOpacity)} />
           </LinearGradient>
         </Defs>
         <Rect width="100%" height="100%" fill={`url(#${id})`} />
@@ -533,27 +557,49 @@ export function DexStatusTag({ inDex, selected }: { inDex: boolean; selected?: b
   if (inDex) {
     return (
       <View style={[styles.statusTag, styles.statusTagIn]}>
-        <Icon name="check" size={12} color={colors.textMuted} />
-        <Text maxFontSizeMultiplier={1.3} style={[styles.statusTagText, { color: colors.textMuted }]}>
-          In your Dex
+        <Icon name="check" size={TAG_ICON} color={colors.textMuted} />
+        <Text maxFontSizeMultiplier={TAG_CAP} style={[styles.statusTagText, { color: colors.textMuted }]}>
+          {tagLabel(true, selected)}
         </Text>
       </View>
     );
   }
   return (
     <View style={[styles.statusTag, styles.statusTagNew]}>
-      <Text maxFontSizeMultiplier={1.3} style={[styles.statusTagText, { color: colors.wine }]}>
-        {selected ? 'New to your Dex' : 'New'}
+      <Text maxFontSizeMultiplier={TAG_CAP} style={[styles.statusTagText, { color: colors.wine }]}>
+        {tagLabel(false, selected)}
       </Text>
     </View>
   );
+}
+
+const TAG_ICON = 12;
+const TAG_CAP = 1.3;
+
+function tagLabel(inDex: boolean, selected?: boolean): string {
+  if (inDex) return 'In your Dex';
+  return selected ? 'New to your Dex' : 'New';
+}
+
+/**
+ * The width a DexStatusTag takes at this text size, worked out rather than
+ * measured (lib/textFit.ts errs wide), so a row can subtract it when it
+ * gives DrinkName its measure. "New to your Dex" comes to about 130pt at
+ * the default size and 165 at the 1.3 cap, wider than a fixed 112pt
+ * trailing column.
+ */
+export function dexStatusTagWidth(inDex: boolean, selected: boolean | undefined, fontScale: number): number {
+  const size = textRole.tierWord.fontSize * Math.min(fontScale, TAG_CAP);
+  const icon = inDex ? TAG_ICON + space.xs : 0;
+  return stroke.edge * 2 + space.sm * 2 + icon + textWidth(tagLabel(inDex, selected), 'inter', size);
 }
 
 /**
  * A photograph lying loose in the lining: a friend's pour of a drink you
  * have not caught ("Not in your Dex yet"). Not a mount, because it is not
  * yours yet: a 4pt corner, a 1pt `printEdge`, and it clips the photo the
- * caller puts in it. The edge is drawn over the picture.
+ * caller puts in it. The photo is laid out inside the edge, so a full-bleed
+ * child never covers it.
  */
 export function LoosePrint({
   width,

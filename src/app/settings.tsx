@@ -2,13 +2,19 @@ import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { LiningBand } from '@/components/cabinet';
+import { Grain } from '@/components/Grain';
+import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { Avatar, ListGroup, ListRow, SectionHeader } from '@/components/ui';
-import { colors, layout, space, textRole } from '@/constants/theme';
+import { colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
+import { formatCount, TOTAL } from '@/data';
+import type { ProfileRow } from '@/lib/database.types';
 import { hasFacebookIdentity } from '@/lib/facebook';
+import { rankTitle } from '@/lib/milestones';
 import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
@@ -39,6 +45,11 @@ import { useSocial } from '@/store/social';
 /* No Accounts Centre row. That exists to span Instagram, Facebook and   */
 /* Threads. There is one account here, so the identity row goes straight */
 /* to editing it.                                                        */
+/*                                                                      */
+/* The identity row is a MEMBER CARD on the cabinet's lining (v3): the   */
+/* one personal thing on the screen, and the one place the collection   */
+/* the account exists for is named. Everything under it stays a quiet   */
+/* grouped list; a settings list should be quiet.                       */
 /* ==================================================================== */
 
 const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
@@ -71,12 +82,65 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+/** The member card's face: 56pt, inside its accent ring. */
+const MEMBER_AVATAR = 56;
+
+/**
+ * You, as a member of the cabinet: your face in its accent ring, your
+ * name and handle, and how much of the Dex you hold with the rank it
+ * earns (the same count and ladder the Dex and Stats show). One button to
+ * Edit profile, as the identity row was.
+ *
+ * Bone ink on the lining (13.32:1, muted 6.79:1); the chevron is a glyph,
+ * so onLiningFaint (4.93:1). Pressed, the panel takes the lining's held
+ * fill, as an outlined button on lining does. The avatar's own wine disc
+ * is 1.22:1 on the lining, and a wine or plum accent ring nearly as faint,
+ * so a 1pt bone hairline round the ring gives every face its outline.
+ */
+function MemberCard({ profile, collected }: { profile: ProfileRow; collected: number }) {
+  const router = useRouter();
+  const total = formatCount(TOTAL);
+  const rank = rankTitle(collected, TOTAL);
+  const tally = `${formatCount(collected)} of ${total} collected`;
+  return (
+    <LiningBand radius={12} style={styles.member}>
+      <Pressable
+        onPress={() => router.push('/edit-profile')}
+        accessibilityRole="button"
+        accessibilityLabel={`${profile.display_name}, @${profile.username}, ${tally}, ${rank}`}
+        accessibilityHint="Edits your profile"
+        style={({ pressed }) => [styles.memberRow, pressed && styles.memberPressed]}>
+        <View style={styles.memberFace}>
+          <Avatar
+            name={profile.display_name}
+            accent={profile.accent}
+            size={MEMBER_AVATAR}
+            ring
+            avatarPath={profile.avatar_path}
+          />
+        </View>
+        <View style={styles.memberText}>
+          <Text style={styles.memberName}>{profile.display_name}</Text>
+          <Text style={styles.memberHandle} numberOfLines={1}>
+            @{profile.username}
+          </Text>
+          <Text style={styles.memberTally}>
+            {tally} · {rank}
+          </Text>
+        </View>
+        <Icon name="chevronRight" size={18} color={colors.onLiningFaint} />
+      </Pressable>
+    </LiningBand>
+  );
+}
+
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [scrolled, onScroll] = useScrolledPast();
 
   const profile = useAuth((s) => s.profile);
+  const collected = useCollection((s) => Object.keys(s.unlocks).length);
   const facebookShown = useAuth(
     (s) => FACEBOOK_SIGN_IN_ENABLED || hasFacebookIdentity(s.session?.user),
   );
@@ -235,6 +299,8 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.screen}>
+      {/* The page's own grain, under everything: there is no global grain any more. */}
+      <Grain />
       <ScreenTopBar
         title="Settings"
         showRule={scrolled}
@@ -246,31 +312,8 @@ export default function SettingsScreen() {
         onScroll={onScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
-        {/* ---- Identity. Instagram's Accounts Centre slot. ---- */}
-        {profile ? (
-          <ListGroup style={styles.identity}>
-            <ListRow
-              title={profile.display_name}
-              subtitle={`@${profile.username}`}
-              emphasis
-              leading={{
-                node: (
-                  <Avatar
-                    name={profile.display_name}
-                    accent={profile.accent}
-                    size={40}
-                    ring
-                    avatarPath={profile.avatar_path}
-                  />
-                ),
-              }}
-              trailing="chevron"
-              onPress={() => router.push('/edit-profile')}
-              accessibilityLabel={`${profile.display_name}, @${profile.username}`}
-              accessibilityHint="Edits your profile"
-            />
-          </ListGroup>
-        ) : null}
+        {/* ---- Identity. Instagram's Accounts Centre slot, as a member card. ---- */}
+        {profile ? <MemberCard profile={profile} collected={collected} /> : null}
 
         {/*
           ---- What you keep and what came of it ----
@@ -342,8 +385,9 @@ export default function SettingsScreen() {
             trailing="chevron"
             onPress={() => open(SUPPORT_URL)}
           />
+          {/* The lock: the policy is what keeps your data shut away. */}
           <ListRow
-            leading={{ icon: 'eye' }}
+            leading={{ icon: 'lock' }}
             title="Privacy Policy"
             trailing="chevron"
             onPress={() => open(PRIVACY_URL)}
@@ -369,8 +413,9 @@ export default function SettingsScreen() {
           meanwhile, dimmed the way a disabled Button is.
         */}
         <Section title="Account">
+          {/* The Dex glyph: this row empties the Dex, and says so before the words do. */}
           <ListRow
-            leading={{ icon: 'flame' }}
+            leading={{ icon: 'dex' }}
             title="Reset collection"
             subtitle="Locks every entry again. Posts and account stay."
             onPress={confirmReset}
@@ -386,8 +431,9 @@ export default function SettingsScreen() {
             busy={pending === 'signout'}
             disabled={pending === 'delete'}
           />
+          {/* A warning, not a close: this one cannot be undone. */}
           <ListRow
-            leading={{ icon: 'close' }}
+            leading={{ icon: 'alert' }}
             title="Delete account"
             subtitle={
               pending === 'delete'
@@ -419,7 +465,24 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   content: { paddingHorizontal: layout.gutter, paddingTop: space.sm },
 
-  identity: { marginBottom: space.sm },
+  member: { marginBottom: space.sm },
+  memberRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    padding: space.lg,
+  },
+  memberPressed: { backgroundColor: colors.liningPressed },
+  memberFace: {
+    // round-ok: avatar
+    borderRadius: radius.round,
+    borderWidth: stroke.edge,
+    borderColor: colors.plateEdgeLining,
+  },
+  memberText: { flex: 1, gap: 2 },
+  memberName: { ...textRole.shelfTitle, color: colors.onLining },
+  memberHandle: { ...textRole.helper, color: colors.onLiningMuted },
+  memberTally: { ...textRole.helper, ...tabular, color: colors.onLiningMuted, marginTop: 2 },
   sectionHeader: { marginTop: space.xl, marginBottom: space.sm },
 
   version: {

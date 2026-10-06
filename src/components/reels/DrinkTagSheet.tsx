@@ -6,6 +6,7 @@ import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { haptic, SearchField, SectionHeader } from '@/components/ui';
 import { colors, dexNumber, fonts, layout, space, stroke } from '@/constants/theme';
 import { formatDexNumber, getDrink } from '@/data';
+import { styleLabel } from '@/lib/drinkLabels';
 import { MAX_RESULTS, searchCatalogue } from '@/lib/drinkSearch';
 import { useCollection } from '@/store/collection';
 import type { Drink } from '@/types';
@@ -123,7 +124,7 @@ function DrinkRow({ drink, onPress }: { drink: Drink; onPress: () => void }) {
         </View>
         {drink.subcategory ? (
           <Text style={styles.sub} numberOfLines={1}>
-            {drink.subcategory}
+            {styleLabel(drink.subcategory)}
           </Text>
         ) : null}
       </View>

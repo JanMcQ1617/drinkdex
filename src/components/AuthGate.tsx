@@ -1,13 +1,13 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { create } from 'zustand';
 
 import { AuthTitleBar } from '@/components/auth/AuthTitleBar';
+import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { AuthMessage, Consent } from '@/components/auth/Consent';
 import SignInScreen from '@/components/auth/SignInScreen';
-import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
+import { Grain } from '@/components/Grain';
 import { Button, Field, Hold } from '@/components/ui';
 import { WelcomeConnect } from '@/components/WelcomeConnect';
 import { colors, fonts, layout, space, type as typeScale } from '@/constants/theme';
@@ -157,6 +157,10 @@ const ROW_WAIT_MS = 4000;
  * Every state that is still deciding shows a Hold, never a plain page: a
  * featureless cream page is indistinguishable from a screen that failed to
  * load, which is how "switching tabs shows a blank screen" was reported.
+ *
+ * The sign-in, username and Welcome steps are one frame, the paper sheet
+ * over the cabinet (auth/CabinetBackdrop), so a new person walks through
+ * them without the ground changing under them.
  */
 export function AuthGate({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
   const router = useRouter();
@@ -206,7 +210,7 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
    * take up to a minute offline. The message says where to go meanwhile.
    */
   if (!ready) {
-    return <Hold slowMessage="Still connecting. The Dex and Stats work without a connection." />;
+    return <GateHold slowMessage="Still connecting. The Dex and Stats work without a connection." />;
   }
   if (!session || !userId) return <SignInScreen onClose={close} />;
   /*
@@ -219,10 +223,23 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
   }
   // A frame or two while AsyncStorage answers, or the bounded wait above.
   if (welcomeSeen === undefined || waitingForRow) {
-    return <Hold slowMessage="Still loading your account." />;
+    return <GateHold slowMessage="Still loading your account." />;
   }
   if (!welcomeSeen) return <WelcomeConnect onDone={() => dismissWelcome(userId)} />;
   return <>{children}</>;
+}
+
+/**
+ * The gate's Hold, on paper with its own grain: grain is no longer one
+ * overlay over the app, so each ground mounts its own, under the content.
+ */
+function GateHold({ slowMessage }: { slowMessage: string }) {
+  return (
+    <View style={styles.screen}>
+      <Grain />
+      <Hold slowMessage={slowMessage} fill={false} />
+    </View>
+  );
 }
 
 /* ==================================================================== */
@@ -245,9 +262,11 @@ type Refusal = { field: 'name' | 'username' | 'form'; message: string; value: st
  *
  * It is also where every account meets the age and terms statement a
  * second time, under Continue: this is the moment the account is taken up.
+ *
+ * Drawn on the sign-in sheet's frame with the compact backdrop, as the
+ * steps before it were.
  */
 function ChooseUsername({ profile }: { profile: ProfileRow }) {
-  const insets = useSafeAreaInsets();
   const user = useAuth((s) => s.session?.user);
   const busy = useAuth((s) => s.busy);
   const updateProfile = useAuth((s) => s.updateProfile);
@@ -320,102 +339,93 @@ function ChooseUsername({ profile }: { profile: ProfileRow }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.screen}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      {/* No leading control: there is no step before this one to go back to. */}
-      <AuthTitleBar title="Choose a username" leading="none" />
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="interactive"
-        contentContainerStyle={[
-          styles.scroll,
-          // The tab bar floats over this too; see SignInScreen.
-          { paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md },
-        ]}>
-        <Text style={styles.lede}>
-          It is how friends find you and how your pours are signed. You can change it later in Edit
-          profile.
-        </Text>
+    <CabinetSheet
+      backdrop="compact"
+      // No leading control: there is no step before this one to go back to.
+      bar={<AuthTitleBar title="Choose a username" leading="none" insetTop={false} />}
+      contentStyle={styles.body}>
+      <Text style={styles.lede}>
+        It is how friends find you and how your pours are signed. You can change it later in Edit
+        profile.
+      </Text>
 
-        <View style={styles.form}>
-          <Field
-            label="Display name"
-            hint="Optional. Leave it empty and your username is shown instead."
-            value={displayName}
-            onChangeText={setDisplayName}
-            placeholder="Your name"
-            autoComplete="name"
-            textContentType="name"
-            /* Names are typed with capitals; 'none' left them as
-               'jan mcqueeny' on every post. */
-            autoCapitalize="words"
-            maxLength={DISPLAY_NAME_MAX}
-            returnKeyType="next"
-            submitBehavior="submit"
-            onSubmitEditing={() => usernameRef.current?.focus()}
-            error={identity.nameError ?? nameRefused}
-          />
-          <Field
-            ref={usernameRef}
-            label="Username"
-            value={username}
-            onChangeText={setUsername}
-            placeholder="yourname"
-            /*
-             * Not the login. Sign-in is by email or phone, so this is tagged
-             * as a nickname: tagged "username", iOS would save the account's
-             * password under the handle and offer the handle back in the
-             * Email field at sign-in.
-             */
-            autoComplete="off"
-            textContentType="nickname"
-            maxLength={USERNAME_MAX}
-            returnKeyType="go"
-            submitBehavior="blurAndSubmit"
-            onSubmitEditing={() => void submit()}
-            hint={USERNAME_RULE}
-            error={identity.handleError ?? handleRefused}
-          />
+      <View style={styles.form}>
+        <Field
+          label="Display name"
+          hint="Optional. Leave it empty and your username is shown instead."
+          value={displayName}
+          onChangeText={setDisplayName}
+          placeholder="Your name"
+          autoComplete="name"
+          textContentType="name"
+          /* Names are typed with capitals; 'none' left them as
+             'jan mcqueeny' on every post. */
+          autoCapitalize="words"
+          maxLength={DISPLAY_NAME_MAX}
+          returnKeyType="next"
+          submitBehavior="submit"
+          onSubmitEditing={() => usernameRef.current?.focus()}
+          error={identity.nameError ?? nameRefused}
+        />
+        <Field
+          ref={usernameRef}
+          label="Username"
+          value={username}
+          onChangeText={setUsername}
+          placeholder="yourname"
+          /*
+           * Not the login. Sign-in is by email or phone, so this is tagged
+           * as a nickname: tagged "username", iOS would save the account's
+           * password under the handle and offer the handle back in the
+           * Email field at sign-in.
+           */
+          autoComplete="off"
+          textContentType="nickname"
+          maxLength={USERNAME_MAX}
+          returnKeyType="go"
+          submitBehavior="blurAndSubmit"
+          onSubmitEditing={() => void submit()}
+          hint={USERNAME_RULE}
+          error={identity.handleError ?? handleRefused}
+        />
 
-          {formError ? <AuthMessage tone="error">{formError}</AuthMessage> : null}
+        {formError ? <AuthMessage tone="error">{formError}</AuthMessage> : null}
 
-          <Button
-            label={busy && !leaving ? 'Saving…' : 'Continue'}
-            onPress={() => void submit()}
-            disabled={!canSubmit}
-            loading={busy && !leaving}
-            block
-            style={styles.submit}
-          />
+        <Button
+          label={busy && !leaving ? 'Saving…' : 'Continue'}
+          onPress={() => void submit()}
+          disabled={!canSubmit}
+          loading={busy && !leaving}
+          block
+          style={styles.submit}
+        />
 
-          {/* The form's gap spaces it; its own top margin is for the sign-in screen's foot. */}
-          <Consent lead="By continuing" style={styles.consent} />
+        {/* The form's gap spaces it; its own top margin is for the sign-in screen's foot. */}
+        <Consent lead="By continuing" style={styles.consent} />
 
-          {/*
-            A way back for the person who meant another account: Apple's
-            "Hide my email" makes a new, empty one even when an email account
-            already exists, and a phone number makes its own account apart
-            from an email one. While the sign-out runs, the spinner covers
-            the words and the spoken name says what is happening.
-          */}
-          <Button
-            label={leaving ? 'Signing out…' : 'Not your account? Sign out'}
-            variant="text"
-            size="sm"
-            onPress={leave}
-            loading={leaving}
-            style={styles.signOut}
-          />
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        {/*
+          A way back for the person who meant another account: Apple's
+          "Hide my email" makes a new, empty one even when an email account
+          already exists, and a phone number makes its own account apart
+          from an email one. While the sign-out runs, the spinner covers
+          the words and the spoken name says what is happening.
+        */}
+        <Button
+          label={leaving ? 'Signing out…' : 'Not your account? Sign out'}
+          variant="text"
+          size="sm"
+          onPress={leave}
+          loading={leaving}
+          style={styles.signOut}
+        />
+      </View>
+    </CabinetSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
-  scroll: { paddingHorizontal: layout.gutter, paddingTop: space.xxl, flexGrow: 1 },
+  screen: { flex: 1, justifyContent: 'center', backgroundColor: colors.bg },
+  body: { paddingHorizontal: layout.gutter, paddingTop: space.xxl },
 
   lede: {
     fontFamily: fonts.body,

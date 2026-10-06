@@ -375,14 +375,15 @@ export default function EditProfileScreen() {
   };
 
   /*
-   * Each return ends in its own Grain. This screen is presented natively,
-   * above the root layout's grain layer, so nothing drawn there reaches it.
+   * Each return mounts its own Grain as its first child, under the
+   * content, as every screen now does: there is no global grain, and grain
+   * laid over the form would also dust the avatar photo being previewed.
    */
   if (!profile) {
     return (
       <View style={[styles.screen, styles.centre]}>
-        <Text style={styles.blurb}>Sign in to edit your profile.</Text>
         <Grain />
+        <Text style={styles.blurb}>Sign in to edit your profile.</Text>
       </View>
     );
   }
@@ -407,6 +408,7 @@ export default function EditProfileScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheetH : 0}
       onLayout={(e) => setSheetH(e.nativeEvent.layout.height)}>
+      <Grain />
       {/*
         The sheet inset on iOS, not the status bar's: the page sheet starts
         below the status bar, and the root's inset added inside it left a
@@ -434,6 +436,8 @@ export default function EditProfileScreen() {
             accent={accent}
             size={96}
             ring
+            // 3pt, not the default 2: the accent being chosen is this ring.
+            ringWidth={3}
             avatarPath={removed ? null : profile.avatar_path}
             localUri={pickedPhoto}
           />
@@ -560,7 +564,6 @@ export default function EditProfileScreen() {
           style={styles.save}
         />
       </ScrollView>
-      <Grain />
     </KeyboardAvoidingView>
   );
 }

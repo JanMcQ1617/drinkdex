@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { Avatar, Button, EmptyState, Hold, ListGroup, ListRow, announce } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
@@ -155,6 +156,8 @@ export default function BlockedScreen() {
 
   return (
     <View style={styles.screen}>
+      {/* The page's own grain, under everything: there is no global grain any more. */}
+      <Grain />
       <ScreenTopBar
         title="Blocked accounts"
         showRule={scrolled}

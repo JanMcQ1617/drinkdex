@@ -11,8 +11,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
-import { VectorFace } from '@/components/artwork/VectorFace';
-import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate, TierWord } from '@/components/cabinet';
+import { FACE_FILL, VectorFace } from '@/components/artwork/VectorFace';
+import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate, svgStop, TierWord } from '@/components/cabinet';
 import { Icon } from '@/components/icons';
 import { haptic, PressableScale } from '@/components/ui';
 import { colors, fonts, foil, RARITY_META, stroke, textRole } from '@/constants/theme';
@@ -59,21 +59,13 @@ const CAP = 1.3;
 /** A locked card's name: Inter, so Playfair stays the mark of a drink you have. */
 const LOCKED_NAME: TextStyle = { fontFamily: fonts.bodyMedium, fontSize: 15, lineHeight: 20 };
 
-/**
- * Fills whatever frame the face is placed in. `auto` undoes the face's own
- * width and height, so the edges decide: a Dex window that grows when its
- * row stretches is filled to its new foot, not left with a band under the
- * picture.
+/*
+ * Every face here sits in a MountWindow, whose height is a minimum: a Dex
+ * window grows when its row stretches, so each face is given FACE_FILL and
+ * filled to the new foot rather than left with a band under the picture.
+ * Re-exported for DrinkFace callers with a frame that can grow.
  */
-const FILL: ViewStyle = {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  width: 'auto',
-  height: 'auto',
-};
+export { FACE_FILL };
 
 /* ==================================================================== */
 /* FoilSweep                                                            */
@@ -112,10 +104,14 @@ export function FoilSweep({ width, once = true }: { width: number; once?: boolea
       {/* Sized by attribute too: VectorFace says why. */}
       <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
         <Defs>
+          {/*
+            Through svgStop: native gradients drop an rgba stop's alpha, so
+            the foil's clear edges and 0.62 peak painted as one solid bar.
+          */}
           <LinearGradient id="dexFoil" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0" stopColor={foil.edge} />
-            <Stop offset="0.5" stopColor={foil.peak} />
-            <Stop offset="1" stopColor={foil.edge} />
+            <Stop offset="0" {...svgStop(foil.edge)} />
+            <Stop offset="0.5" {...svgStop(foil.peak)} />
+            <Stop offset="1" {...svgStop(foil.edge)} />
           </LinearGradient>
         </Defs>
         <Rect x="0" y="0" width="100%" height="100%" fill="url(#dexFoil)" />
@@ -139,7 +135,10 @@ export interface DrinkFaceProps {
   height: number;
   /** Passed to VectorFace (DrinkArt's size as a share of the height). */
   artScale?: number;
-  /** For a frame that can grow past `height`: an absolute fill (see FILL). */
+  /**
+   * For a frame that can grow past `height`: pass FACE_FILL (exported
+   * here). StyleSheet.absoluteFill keeps `width` x `height` and does not grow.
+   */
   style?: StyleProp<ViewStyle>;
 }
 
@@ -198,7 +197,7 @@ export const DrinkFace = React.memo(function DrinkFace({
           width={width}
           height={height}
           artScale={artScale}
-          style={FILL}
+          style={FACE_FILL}
         />
       )}
     </View>
@@ -316,7 +315,7 @@ export const DexCard = React.memo(function DexCard({
               photoUri={collected ? userPhotoUri : null}
               width={column}
               height={windowH}
-              style={FILL}
+              style={FACE_FILL}
             />
             {/* Last, so it paints over the picture; the window clips it. */}
             {legendary ? <FoilSweep width={column} /> : null}
@@ -370,7 +369,7 @@ export const DexThumb = React.memo(function DexThumb({
         onLining={size === 'mini'}
         style={dims}>
         <MountWindow height={h} state="mounted">
-          <DrinkFace drink={drink} mode="lit" photoUri={photoUri} width={w} height={h} style={FILL} />
+          <DrinkFace drink={drink} mode="lit" photoUri={photoUri} width={w} height={h} style={FACE_FILL} />
         </MountWindow>
       </Mount>
     </View>
@@ -423,7 +422,7 @@ export function EmptyArt({
         onLining={onLining}
         style={styles.feature}>
         <MountWindow height={h} state={state}>
-          <DrinkFace drink={drink} mode={mode} width={w} height={h} style={FILL} />
+          <DrinkFace drink={drink} mode={mode} width={w} height={h} style={FACE_FILL} />
         </MountWindow>
       </Mount>
     </View>

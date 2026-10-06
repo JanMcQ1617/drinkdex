@@ -15,7 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-import { colors, fonts, label as labelType } from '@/constants/theme';
+import { colors, fonts, layout, textRole } from '@/constants/theme';
 
 /**
  * Launch intro — the pour fills the screen and the wordmark rises out of it.
@@ -30,7 +30,7 @@ import { colors, fonts, label as labelType } from '@/constants/theme';
  *           90×2 taupe rule fades in above them; the tagline rises 28pt.
  *   HOLD    the whole lockup drifts 1.0 → 1.035, breathing, and stops.
  *
- * Two departures from the source, both deliberate:
+ * Three departures from the source, all deliberate:
  *
  *  - The tail is compressed. The source holds to 3.2s before it ends; a
  *    launch screen that outstays 3s is felt every single time the app is
@@ -40,6 +40,8 @@ import { colors, fonts, label as labelType } from '@/constants/theme';
  *    app's page is cream, so a cream disc opens from the centre and
  *    floods the frame — the app is simply what was underneath. Inherited
  *    from the intro this replaces, and the reason there is no visible seam.
+ *  - The tagline is "Discover, sip, share" in sentence case, untracked,
+ *    where the source spaced capitals half an em apart (see TAGLINE).
  *
  * Four rules this file learned the hard way and keeps:
  *  1. ONE shared value, set ONCE. Everything derives from a single master
@@ -80,7 +82,13 @@ const TOTAL = 3350;
 const FAILSAFE = 3800;
 
 const WORDMARK = 'Sipply';
-const TAGLINE = 'DISCOVER · SIP · SHARE';
+const WORDMARK_CAP = 1.2;
+/**
+ * Sentence case and untracked. The source set it in capitals spaced half
+ * an em apart, the letterspaced-caps habit the app no longer has anywhere
+ * (check-design rule 8), the intro included.
+ */
+const TAGLINE = 'Discover, sip, share';
 
 /* ---- Worklet easings --------------------------------------------------
  * Hand-written rather than Reanimated's `Easing.*` because every element
@@ -143,7 +151,10 @@ function Letter({
   });
 
   return (
+    // The wordmark's Dynamic Type cap (specs/v3-cabinet.md 6.5): uncapped, six
+    // letters at an accessibility size run past both edges of the screen.
     <Animated.Text
+      maxFontSizeMultiplier={WORDMARK_CAP}
       style={[
         styles.letter,
         { fontSize: size, lineHeight: size * 1.02 },
@@ -443,12 +454,14 @@ const styles = StyleSheet.create({
     /* The source pops each letter from its own foot, not its centre. */
     transformOrigin: '50% 80%',
   },
+  /* Inter Medium 13/18, taupe on wine (7.32:1); centred if a large text size wraps it. */
   tagline: {
-    fontFamily: fonts.label,
-    fontSize: labelType.tagline.fontSize,
-    lineHeight: labelType.tagline.lineHeight,
-    letterSpacing: labelType.tagline.letterSpacing,
+    fontFamily: fonts.bodyMedium,
+    fontSize: textRole.helper.fontSize,
+    lineHeight: textRole.helper.lineHeight,
     color: colors.taupe,
+    textAlign: 'center',
+    paddingHorizontal: layout.gutter,
   },
 });
 

@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Icon, type IconName } from '@/components/icons';
 import { Avatar, Button } from '@/components/ui';
-import { colors, fonts, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
+import { colors, layout, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
 import type { UserProfile } from '@/types';
 
@@ -14,9 +14,13 @@ import type { UserProfile } from '@/types';
 /* then a row of actions. The handle is not repeated here; it is the     */
 /* screen's title, in the top bar.                                       */
 /*                                                                      */
+/* The name (16pt) sits over 18pt figures and their 13pt muted words, so */
+/* the head has an order to read in. Before, name, figures, bio and      */
+/* buttons all sat between 14 and 16pt, and only the avatar stood out.   */
+/*                                                                      */
 /* Posts, followers, following. Not a Dex count: a collection never      */
 /* leaves its owner's phone, so it would be a dash on every profile but  */
-/* yours. Your own Dex is one tap from the Dex tab below.                */
+/* yours. Your own Dex count is on the Top shelf under this header.      */
 /* ==================================================================== */
 
 export type ProfileActions =
@@ -91,25 +95,27 @@ export function ProfileHeader({
         {actions.kind === 'own' ? (
           <>
             {/*
-              Two tonal buttons and a square: quiet fills, because none of
-              these is the screen's call to action, and the one wine thing
-              on this screen is not here (the tab bar's log button is).
+              Two outlined buttons and a square in the same skin: white with
+              a 1pt ink edge, because none of these is the screen's call to
+              action, and the one wine thing on this screen is not here (the
+              tab bar's log button is). The tonal fill they had was bone on
+              cream, a button you had to look for.
             */}
             <Button
               label="Edit profile"
-              variant="tonal"
+              variant="secondary"
               size="sm"
               onPress={actions.onEdit}
               style={styles.grow}
             />
             <Button
               label="Share profile"
-              variant="tonal"
+              variant="secondary"
               size="sm"
               onPress={actions.onShare}
               style={styles.grow}
             />
-            <TonalIconButton icon="addPerson" label="Find friends" onPress={actions.onFindFriends} />
+            <SquareIconButton icon="addPerson" label="Find friends" onPress={actions.onFindFriends} />
           </>
         ) : actions.following ? (
           /*
@@ -189,7 +195,7 @@ function Count({
   return (
     <Pressable
       onPress={onPress}
-      // 42pt of type; 4 above and below reach the 44pt touch floor.
+      // 40pt of type (22 + 18); 4 above and below clear the 44pt touch floor.
       hitSlop={{ top: 4, bottom: 4 }}
       accessibilityRole="button"
       accessibilityLabel={spoken}
@@ -201,11 +207,13 @@ function Count({
 }
 
 /**
- * The tonal button at its icon-only size: a 36pt square with a 1pt edge on
- * the sunk fill, so it sits in the actions row as the third of three
- * rectangles rather than a bare glyph. Private to this header, its only use.
+ * The secondary button at its icon-only size: a 36pt white square with the
+ * same 1pt ink edge as Edit and Share beside it, so it sits in the actions
+ * row as the third of three rectangles rather than a bare glyph. Held, it
+ * takes the sunk fill, as Button's secondary does. Private to this header,
+ * its only use.
  */
-function TonalIconButton({
+function SquareIconButton({
   icon,
   label,
   onPress,
@@ -229,37 +237,26 @@ function TonalIconButton({
 const styles = StyleSheet.create({
   header: { paddingHorizontal: layout.gutter, paddingTop: space.xs },
   identity: { flexDirection: 'row', alignItems: 'center' },
-  identityText: { flex: 1, marginLeft: 20, justifyContent: 'center' },
-  name: { ...textRole.groupTitle, color: colors.text },
+  identityText: { flex: 1, marginLeft: 18, justifyContent: 'center' },
+  // 16pt SemiBold, over the figures: the person comes first by place, the figures by size.
+  name: { ...textRole.sectionTitle, color: colors.text },
   counts: { flexDirection: 'row', marginTop: 6 },
   count: { flex: 1, alignItems: 'flex-start' },
   pressed: { opacity: 0.5 },
-  figure: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 16,
-    lineHeight: 22,
-    color: colors.text,
-    ...tabular,
-  },
-  word: { fontFamily: fonts.body, fontSize: 14, lineHeight: 20, color: colors.text },
-  bio: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    color: colors.text,
-    marginTop: space.md,
-  },
-  actions: { flexDirection: 'row', gap: 6, marginTop: space.lg },
+  figure: { ...textRole.count, color: colors.text },
+  word: { ...textRole.helper, color: colors.textMuted },
+  bio: { ...textRole.prose, color: colors.text, marginTop: space.md },
+  actions: { flexDirection: 'row', gap: space.sm, marginTop: 14 },
   grow: { flex: 1 },
   iconButton: {
     width: layout.controlSm,
     height: layout.controlSm,
     borderRadius: radius.control,
     borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.bgSunk,
+    borderColor: colors.lineInk,
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  iconButtonPressed: { backgroundColor: colors.slot },
+  iconButtonPressed: { backgroundColor: colors.bgSunk },
 });

@@ -25,24 +25,27 @@ import { useAuth } from '@/store/auth';
 /* to the bottom edge with a 1px top border: it cut the page off rather */
 /* than floating over it.                                               */
 /*                                                                      */
-/* AN OPAQUE, BORDERED RECTANGLE. 12pt corners, white, a 1pt `line`     */
-/* edge and a tight shadow. It was a frosted-glass stadium with a       */
-/* painted sheen: the fake-glass fallback was the most template-looking */
-/* surface in the app, and native Liquid Glass resolves to near-page on */
-/* cream, so the bar lost its own silhouette. A bar with a drawn edge   */
-/* reads as a made object.                                              */
+/* AN OPAQUE, BORDERED RECTANGLE. 12pt corners, a 1pt edge and a tight  */
+/* shadow. It was a frosted-glass stadium with a painted sheen: the     */
+/* fake-glass fallback was the most template-looking surface in the     */
+/* app, and native Liquid Glass resolves to near-page on cream, so the  */
+/* bar lost its own silhouette. A bar with a drawn edge reads as a made */
+/* object.                                                              */
 /*                                                                      */
-/* THE ACTIVE TAB IS ESPRESSO, NOT WINE: its glyph drawn solid and its  */
-/* label in SemiBold, so the state never rests on colour alone. The     */
-/* bar's one wine object is the log action, and a wine "where you are"  */
-/* competed with it. Nothing else moves: the page cuts, as iOS's own    */
-/* tab bar and Instagram's do ((tabs)/_layout.tsx, specs/06).           */
+/* ONE SKIN, ESPRESSO, ON EVERY TAB (v3). It was white on the paper     */
+/* tabs and espresso only on Reels. A white bar laid over Home's        */
+/* full-bleed photos read as a white box pasted onto the picture, and   */
+/* on cream it was a white rectangle on a cream one. The espresso bar   */
+/* is one dark, anchored object over every ground, the reel ground's    */
+/* own colours, so it also needs no switch when Reels comes back.       */
 /*                                                                      */
-/* DARK ON REELS. While the Reels tab is focused and someone is signed  */
-/* in, the bar takes the reel ground's colours; a cream bar over video  */
-/* reads as a light leak. Signed out, the Reels tab shows the cream     */
-/* sign-in screen, so the bar stays paper there. The skin switches with */
-/* the tab, instantly.                                                  */
+/* THE ACTIVE TAB IS BONE, NOT WINE, and says so three ways: its glyph  */
+/* drawn solid, its label in SemiBold, and a 2pt bone indicator on the  */
+/* bar's top edge over the slot, so the state never rests on colour     */
+/* alone. The bar's one wine object is the log action, and a wine       */
+/* "where you are" would compete with it. Nothing moves: the page cuts, */
+/* as iOS's own tab bar and Instagram's do ((tabs)/_layout.tsx,         */
+/* specs/06).                                                           */
 /* ==================================================================== */
 
 /**
@@ -62,24 +65,19 @@ const GLYPH = 24;
 const AVATAR = 24;
 
 /*
- * Two skins, one shape. Paper is every tab but Reels; dark is Reels while
- * signed in. Resting ink is textMuted on white (6.13:1) and reelInkDim on
- * reelBar (5.86:1); both clear the 4.5:1 an 11pt label needs.
+ * The bar's inks. Resting is reelInkDim on reelBar (5.86:1), above the
+ * 4.5:1 an 11pt label needs; active is reelInk (15.13:1).
  */
-const PAPER = {
-  active: colors.text,
-  rest: colors.textMuted,
-  ring: colors.lineInk,
-  badge: colors.wine,
-} as const;
-const DARK = {
+const INK = {
   active: colors.reelInk,
   rest: colors.reelInkDim,
-  ring: colors.reelInk,
   // Wine on the espresso bar is 1.12:1; the reel ground's liked-heart rose
   // is 3.15:1 there, enough for a dot that carries no words.
   badge: colors.wineSoft,
 } as const;
+
+/** The active slot's indicator: 2pt tall, as wide as the glyph box. */
+const INDICATOR_W = 28;
 
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
@@ -136,10 +134,12 @@ type FloatingTabBarProps = {
  * recording; a plain button press ticks nowhere in the app, and this one
  * opens a sheet, which is answer enough.
  *
- * On Reels it inverts to bone with a wine plus (13.53:1): wine on the
- * espresso bar would be 1.12:1 and vanish.
+ * Wine on the espresso bar is 1.12:1, so the fill alone would vanish into
+ * it: the 1pt bone edge (colors.logActionEdge, 3.02:1) is what draws the button's
+ * outline, and the bone plus on wine is 10.95:1. It used to invert to bone
+ * on Reels for the same reason; with one skin everywhere, the edge does it.
  */
-function CentreAction({ onPress, dark }: { onPress: () => void; dark: boolean }) {
+function CentreAction({ onPress }: { onPress: () => void }) {
   return (
     <View style={styles.fabSlot} pointerEvents="box-none">
       <Pressable
@@ -149,12 +149,8 @@ function CentreAction({ onPress, dark }: { onPress: () => void; dark: boolean })
         accessibilityHint="Take a photo and pick what you drank"
         // 36 tall; this reaches the 44pt target.
         hitSlop={{ top: 4, bottom: 4 }}
-        style={({ pressed }) => [
-          styles.fab,
-          dark && styles.fabDark,
-          pressed && (dark ? styles.fabDarkPressed : styles.fabPressed),
-        ]}>
-        <Icon name="plus" size={22} color={dark ? colors.wine : colors.textOnWine} filled />
+        style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
+        <Icon name="plus" size={22} color={colors.textOnWine} filled />
       </Pressable>
     </View>
   );
@@ -162,13 +158,15 @@ function CentreAction({ onPress, dark }: { onPress: () => void; dark: boolean })
 
 /**
  * Your own face in the Profile slot, in place of the person glyph: the
- * bar's one picture, and the tab you look for first. Focused, it takes a
- * 1.5pt ink ring, because an avatar has no outline and solid to swap
- * between; the label's weight changes with it.
+ * bar's one picture, and the tab you look for first. An avatar has no
+ * outline and solid to swap between, so its 1.5pt ring does the glyph's
+ * job: resting ink at rest, bone when focused, with the label's weight
+ * and the indicator changing beside it. The ring is also the face's
+ * silhouette at rest: the wine disc is 1.12:1 on the espresso bar.
  */
-function ProfileFace({ profile, focused, ring }: { profile: ProfileRow; focused: boolean; ring: string }) {
+function ProfileFace({ profile, focused }: { profile: ProfileRow; focused: boolean }) {
   return (
-    <View style={[styles.faceRing, focused && { borderColor: ring }]}>
+    <View style={[styles.faceRing, { borderColor: focused ? INK.active : INK.rest }]}>
       <Avatar
         name={profile.display_name || profile.username}
         accent={profile.accent}
@@ -182,7 +180,6 @@ function ProfileFace({ profile, focused, ring }: { profile: ProfileRow; focused:
 export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const signedIn = useAuth((s) => s.session != null);
   // The signed-in account's own row only: a stale row from a previous
   // account must never put someone else's face on this tab.
   const me = useAuth((s) =>
@@ -190,14 +187,6 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
   );
 
   const focusedKey = state.routes[state.index]?.key;
-  /*
-   * REELS_ENABLED as well: with the flag off the reels route is only ever
-   * a redirect home, and a dark bar flashed for that frame would be a
-   * glimpse of a feature that is switched off.
-   */
-  const dark =
-    REELS_ENABLED && state.routes[state.index]?.name === 'reels' && signedIn;
-  const skin = dark ? DARK : PAPER;
 
   /*
    * The reels route always exists (its file is the switched-off redirect),
@@ -216,7 +205,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
     <View
       pointerEvents="box-none"
       style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) + 2 }]}>
-      <View style={[styles.bar, dark ? styles.barDark : styles.barPaper]}>
+      <View style={styles.bar}>
         <View style={styles.row} accessibilityRole="tabbar">
           {visible.map((route, at) => {
             const options = descriptors[route.key]?.options ?? {};
@@ -225,7 +214,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
              * The glyph and its label are handed one ink, so a resting tab
              * is one grey, not a pale icon over a darker caption.
              */
-            const color = focused ? skin.active : skin.rest;
+            const color = focused ? INK.active : INK.rest;
             /*
              * Sentence case. These were UPPERCASE and letterspaced once,
              * the single most AI-looking habit this app had; a tab label is
@@ -249,7 +238,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
 
             const glyph =
               route.name === 'profile' && me ? (
-                <ProfileFace profile={me} focused={focused} ring={skin.ring} />
+                <ProfileFace profile={me} focused={focused} />
               ) : (
                 (options.tabBarIcon?.({ focused, color, size: GLYPH }) ?? (
                   <Icon name={route.name as TabName} filled={focused} color={color} size={GLYPH} />
@@ -260,7 +249,6 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
               <React.Fragment key={route.key}>
                 {at === fabAt ? (
                   <CentreAction
-                    dark={dark}
                     onPress={() => {
                       /*
                        * router, not navigation: `log` is a root-stack modal,
@@ -286,10 +274,16 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                   accessibilityState={{ selected: focused }}
                   hitSlop={4}
                   style={styles.item}>
+                  {/*
+                    The second cue for where you are, after the solid glyph
+                    and the label's weight: a 2pt bone rule laid over the
+                    bar's top edge above the slot. Static; the page cuts.
+                  */}
+                  {focused ? <View style={styles.indicator} /> : null}
                   <View style={styles.glyphBox}>
                     {glyph}
                     {options.tabBarBadge ? (
-                      <View style={[styles.badge, { backgroundColor: skin.badge }]} />
+                      <View style={styles.badge} />
                     ) : null}
                   </View>
                   <Text
@@ -329,27 +323,29 @@ const styles = StyleSheet.create({
    * A minimum, not a height: the row is 63pt at the default text size and
    * grows a little at the capped Larger Text sizes rather than clipping
    * its labels.
+   *
+   * The reel ground's espresso on every tab, with the reels' bone edge.
+   * barDark is the one shadow: the bar floats over cream and photos alike,
+   * and on cream a shadow is what says it is above the page, not in it.
    */
   bar: {
     minHeight: layout.tabBar,
-    justifyContent: 'center',
     borderRadius: radius.card,
     borderWidth: stroke.edge,
-  },
-  barPaper: {
-    backgroundColor: colors.surface,
-    borderColor: colors.line,
-    ...elevation.bar,
-  },
-  /* No shadow on the dark bar: a shadow on near-black ground is no lift. */
-  barDark: {
     backgroundColor: colors.reelBar,
     borderColor: colors.reelControlBorder,
+    ...elevation.barDark,
   },
+  /*
+   * The row fills the bar and every slot stretches to the row's full
+   * height, so a slot's top is always the bar's top edge (where its
+   * indicator sits) whatever the text size, and the whole height of the
+   * slot takes the tap.
+   */
   row: {
+    flexGrow: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 9,
+    alignItems: 'stretch',
     paddingHorizontal: BAR_PAD,
   },
   /*
@@ -360,7 +356,19 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 3,
+    paddingVertical: 9,
+  },
+  /* Over the 1pt edge (top −1), centred on the slot. */
+  indicator: {
+    position: 'absolute',
+    top: -stroke.edge,
+    left: '50%',
+    marginLeft: -INDICATOR_W / 2,
+    width: INDICATOR_W,
+    height: stroke.indicator,
+    backgroundColor: INK.active,
   },
   glyphBox: {
     width: GLYPH_BOX,
@@ -376,6 +384,7 @@ const styles = StyleSheet.create({
     height: 6,
     // round-ok: dot
     borderRadius: radius.round,
+    backgroundColor: INK.badge,
   },
   faceRing: {
     width: GLYPH_BOX,
@@ -383,7 +392,6 @@ const styles = StyleSheet.create({
     // round-ok: avatar
     borderRadius: radius.round,
     borderWidth: 1.5,
-    borderColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -406,14 +414,11 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: radius.control,
     borderWidth: stroke.edge,
-    borderColor: colors.wineDeep,
+    borderColor: colors.logActionEdge,
     backgroundColor: colors.wine,
     alignItems: 'center',
     justifyContent: 'center',
   },
   /* A fill change, not a scale: controls answer a press with their fill. */
   fabPressed: { backgroundColor: colors.wineDeep },
-  /* The edge takes the fill's colour: no visible edge on the dark bar. */
-  fabDark: { backgroundColor: colors.reelInk, borderColor: colors.reelInk },
-  fabDarkPressed: { backgroundColor: colors.reelInkMuted, borderColor: colors.reelInkMuted },
 });

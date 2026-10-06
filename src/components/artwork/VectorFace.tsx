@@ -17,8 +17,8 @@ import { artFootprint, DrinkArt } from './index';
 /*                                                                      */
 /*   lit     a radial pool of the category's light falling off to the   */
 /*           cellar, a bar counter across the foot, the glass standing  */
-/*           on its front edge with a floor shadow, the pour in its own */
-/*           colour (DrinkArt face="lit")                               */
+/*           on the counter's line with a floor shadow, the pour in its */
+/*           own colour (DrinkArt face="lit")                           */
 /*   deboss  the locked slot: flat cellar, the same glass blind-stamped */
 /*           in the drink's own hue (DrinkArt face="deboss")            */
 /*                                                                      */
@@ -41,6 +41,23 @@ const HALF_STROKE = 0.8;
 /** The floor shadow's core: plain black at 0.35, falling to nothing (spec §7.5). */
 const FLOOR = 'rgb(0, 0, 0)';
 
+/**
+ * The `style` for a face in a frame that may grow past the `height` it was
+ * given (a Dex window in a stretched row, a panel with a min height).
+ * `StyleSheet.absoluteFill` is not enough: it leaves the face's own width
+ * and height in force, so a grown frame shows a band under the picture.
+ * `auto` undoes them and the four edges decide.
+ */
+export const FACE_FILL: ViewStyle = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: 'auto',
+  height: 'auto',
+};
+
 export interface VectorFaceProps {
   drink: Drink;
   mode: 'lit' | 'deboss';
@@ -56,9 +73,9 @@ export interface VectorFaceProps {
   artScale?: number;
   /**
    * For a frame that may grow past `height` (a Dex window in a row that
-   * stretches): pass an absolute fill. The field stretches with the frame;
-   * the counter and the glass stay anchored to its foot at the size
-   * `height` gave them.
+   * stretches): pass FACE_FILL. The field stretches with the frame; the
+   * counter and the glass stay anchored to its foot at the size `height`
+   * gave them.
    */
   style?: StyleProp<ViewStyle>;
 }
@@ -131,14 +148,14 @@ export const VectorFace = React.memo(function VectorFace({
       <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
         <Defs>
           <RadialGradient id={fieldId} cx="50%" cy="40%" r="75%">
-            <Stop offset="0" stopColor={centre} />
-            <Stop offset="1" stopColor={colors.liningDeep} />
+            <Stop offset="0" stopColor={centre} stopOpacity={1} />
+            <Stop offset="1" stopColor={colors.liningDeep} stopOpacity={1} />
           </RadialGradient>
         </Defs>
         <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${fieldId})`} />
       </Svg>
 
-      {/* The counter: its top surface, with the 1pt front edge the glass stands on. */}
+      {/* The counter: a darker band across the foot, under the 1pt line the glass stands on. */}
       <View style={[styles.counter, { height: counterH }]} />
 
       <Svg

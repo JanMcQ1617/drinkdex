@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Linking, Share, StyleSheet, Text, View } from 'react-native';
 
+import { LiningBand } from '@/components/cabinet';
 import { FacebookFriends } from '@/components/FacebookFriends';
 import { Icon } from '@/components/icons';
 import { InstagramImport } from '@/components/InstagramImport';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
 import { Button, Card, Field, Notice, SearchField, SectionHeader, announce } from '@/components/ui';
-import { colors, space, textRole } from '@/constants/theme';
+import { colors, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
 import { hashPhone, normalizePhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
 import {
@@ -42,17 +43,21 @@ const SEARCH_FAILED = 'Search failed. Try again.';
 const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings, then try again.';
 
 /**
- * The discovery surface: your Facebook friends already here, match your
- * phone contacts, make yourself findable, invite a friend, search by
+ * The discovery surface: match your phone contacts, your Facebook friends
+ * already here, make yourself findable, invite a friend, search by
  * @username, or import your Instagram connections — in that order,
  * because the order is the recommendation. Rendered by the Find friends
- * screen and by the welcome step at signup, so both get Facebook first.
+ * screen and by the welcome step at signup, so both open on contacts.
  *
- * Facebook leads because, for an account signed in with it, it is the
- * only source that asks nothing more: the sign-in already said which of
- * its friends are here. <FacebookFriends> decides for itself whether it has
- * anything to show — the friends, a row to connect Facebook, or nothing —
- * so this only gives it the first slot.
+ * Contacts lead, on the cabinet's lining: the one source that works for
+ * every account, and the recommended path, so it is the focal panel of a
+ * stack of white cards and holds its one filled button (bone on lining).
+ * Six equal cards read as a wall of instructions with no way in.
+ *
+ * Facebook follows it because, for an account signed in with it, it asks
+ * nothing more: the sign-in already said which of its friends are here.
+ * <FacebookFriends> decides for itself whether it has anything to show —
+ * the friends, a row to connect Facebook, or nothing.
  *
  * Every list ends in <MatchResults>, which leads with "Follow all" —
  * finding forty people is worthless if acting on them is forty taps.
@@ -340,15 +345,19 @@ export function FindFriends() {
 
   return (
     <View style={styles.wrap}>
-      <FacebookFriends />
-
-      {/* Contacts — the recommended path, so it holds the card stack's filled button. */}
-      <Card style={styles.card}>
+      {/*
+        Contacts, the recommended path: a lining panel at the top of the
+        stack. Bone ink and bone controls on it (wine is 1.22:1 on lining).
+        The people it finds are listed on a white inset, as people are
+        everywhere else: their rows, avatars and Follow buttons are paper
+        components, and a face is never laid straight on the lining.
+      */}
+      <LiningBand radius={12} style={styles.panel}>
         <View style={styles.cardHead}>
-          <Icon name="users" size={20} color={colors.text} />
-          <SectionHeader title="Friends you already know" style={styles.cardTitle} />
+          <Icon name="users" size={20} color={colors.onLining} />
+          <SectionHeader title="Friends you already know" tone="lining" style={styles.cardTitle} />
         </View>
-        <Text style={styles.cardBody}>
+        <Text style={styles.panelBody}>
           The fastest way to find people. Sipply checks your contacts against everyone here, with
           nothing to set up on their side. Numbers are scrambled on your phone before they are
           compared, and your address book is never uploaded.
@@ -357,6 +366,7 @@ export function FindFriends() {
         {contactsState === 'idle' ? (
           <Button
             label="Find from contacts"
+            variant="onLining"
             icon="users"
             block
             onPress={findFromContacts}
@@ -366,17 +376,17 @@ export function FindFriends() {
 
         {contactsState === 'working' ? (
           <View style={styles.working}>
-            <ActivityIndicator color={colors.wine} />
-            <Text style={styles.hint}>Checking your contacts…</Text>
+            <ActivityIndicator color={colors.onLining} />
+            <Text style={styles.panelHint}>Checking your contacts…</Text>
           </View>
         ) : null}
 
         {contactsState === 'denied' ? (
           <View style={styles.deniedBox}>
-            <Text style={styles.cardBody}>{CONTACTS_OFF}</Text>
+            <Text style={styles.panelBody}>{CONTACTS_OFF}</Text>
             <Button
               label="Open Settings"
-              variant="secondary"
+              variant="onLiningOutline"
               block
               onPress={() => Linking.openSettings()}
               style={styles.cardCta}
@@ -384,12 +394,13 @@ export function FindFriends() {
           </View>
         ) : null}
 
+        {/* A Notice carries its own fill and edge, so it reads the same on lining as on a card. */}
         {contactsState === 'failed' ? (
           <View style={styles.deniedBox}>
             <Notice tone="error">{contactsNotice}</Notice>
             <Button
               label="Try again"
-              variant="secondary"
+              variant="onLiningOutline"
               block
               onPress={findFromContacts}
               style={styles.cardCta}
@@ -403,13 +414,18 @@ export function FindFriends() {
           <>
             {/* Only set when the quota ran out part way: what is listed is not everyone. */}
             {contactsNotice ? <Notice tone="error">{contactsNotice}</Notice> : null}
-            <MatchResults
-              entries={contactEntries}
-              emptyText={contactsNotice ? undefined : contactsEmptyText}
-            />
+            {contactEntries.length > 0 ? (
+              <View style={styles.found}>
+                <MatchResults entries={contactEntries} />
+              </View>
+            ) : contactsNotice ? null : (
+              <Text style={styles.panelBody}>{contactsEmptyText}</Text>
+            )}
           </>
         ) : null}
-      </Card>
+      </LiningBand>
+
+      <FacebookFriends />
 
       {/* Discoverability */}
       <Card style={styles.card}>
@@ -542,25 +558,43 @@ const styles = StyleSheet.create({
   wrap: { gap: space.lg, paddingTop: space.sm },
 
   card: { padding: space.lg, gap: space.md },
+  /* The contacts panel: a card's metrics, on lining. */
+  panel: { padding: space.lg, gap: space.md },
   /*
-   * Each card opens on its glyph and a heading, in ink: the cards are
-   * sections of one screen, and its wine is kept for what it asks you to
-   * do. Of the cards' own buttons only one is filled, "Find from
-   * contacts", the path this screen recommends; the rest are outlined or
-   * text. The Follow buttons on the people a card finds are wine as well
-   * (PeopleList), since following them is the point of finding them.
+   * Each card opens on its glyph and a heading, in ink (bone on the
+   * panel): the cards are sections of one screen, and its fill is kept for
+   * what it asks you to do. Of the cards' own buttons only one is filled,
+   * "Find from contacts" on the panel, the path this screen recommends;
+   * the rest are outlined or text. Among the people a card finds, "Follow
+   * all" and "Follow back" are wine and a plain Follow is outlined
+   * (PeopleList), so a list of strangers is not a column of wine buttons.
    */
   cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   cardTitle: { flex: 1 },
   cardBody: { ...textRole.helper, color: colors.textMuted },
+  // onLiningMuted: 6.79:1 on the lining, 5.77:1 on its brightest grain.
+  panelBody: { ...textRole.helper, color: colors.onLiningMuted },
+  /*
+   * The matched people on a white inset in the panel, at a list group's
+   * edge and a control's corner (inside the panel's 12).
+   */
+  found: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
+    paddingHorizontal: space.md,
+    paddingVertical: space.sm,
+  },
   cardCta: { marginTop: space.xs },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
   deniedBox: { gap: space.sm },
   /*
-   * textMuted, not textFaint: 13pt progress text on a white card is small
-   * text, which the palette holds to 4.5:1. No top padding either — the
-   * row centres it on its spinner, and padding pushed it 4pt below.
+   * onLiningMuted, not onLiningFaint: 13pt progress text is small text,
+   * which the palette holds to 4.5:1, and Faint is for glyphs and large
+   * type only. No top padding either — the row centres it on its spinner,
+   * and padding pushed it 4pt below.
    */
-  hint: { flex: 1, ...textRole.helper, color: colors.textMuted },
+  panelHint: { flex: 1, ...textRole.helper, color: colors.onLiningMuted },
 });

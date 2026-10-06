@@ -1,4 +1,5 @@
 import * as Linking from 'expo-linking';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import {
   AccessibilityInfo,
@@ -13,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthMessage } from '@/components/AuthGate';
+import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { Button, Field, haptic } from '@/components/ui';
 import { colors, fonts, layout, space, textRole, type as typeScale } from '@/constants/theme';
@@ -41,6 +43,16 @@ import { useAuth } from '@/store/auth';
 /* one outcome worth designing against. That holds for VoiceOver too:    */
 /* both steps are accessibilityViewIsModal, so the app underneath is not */
 /* in the swipe order, and focus starts on the step's title.             */
+/*                                                                      */
+/* It brings its own paper grain: grain is no longer one overlay over    */
+/* the app, and this sits above all of it. And its own dark status bar,  */
+/* a plain one: it is outside every route screen, where FocusedStatusBar */
+/* has no navigator to ask, and the screen under it may be a lining one  */
+/* (Home) whose light glyphs would vanish on this paper. Status bars     */
+/* merge in mount order, so this wins over a screen already mounted; a   */
+/* lining screen that mounts after it (AuthGate swapping the sign-in     */
+/* sheet for the app as the link signs in) still wins until the          */
+/* confirmation, which mounts its own.                                   */
 /* ==================================================================== */
 
 /**
@@ -126,6 +138,8 @@ function Confirmation({ onDismiss }: { onDismiss: () => void }) {
     <View
       style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       accessibilityViewIsModal>
+      <Grain />
+      <StatusBar style="dark" />
       <View style={styles.doneWrap}>
         {/* The check drawn bare, in wine: a glyph does not need a disc to be seen. */}
         <Icon name="check" size={40} color={colors.wine} />
@@ -191,13 +205,17 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       accessibilityViewIsModal>
+      <Grain />
+      <StatusBar style="dark" />
       <ScrollView
         contentContainerStyle={[
           styles.scroll,
           { paddingTop: insets.top + space.xxxl, paddingBottom: insets.bottom + space.xxl },
         ]}
         keyboardShouldPersistTaps="handled">
-        <Text style={styles.wordmark}>Sipply</Text>
+        <Text maxFontSizeMultiplier={1.2} style={styles.wordmark}>
+          Sipply
+        </Text>
         <Text ref={titleRef} style={styles.title} accessibilityRole="header">
           Choose a new password
         </Text>
@@ -291,13 +309,12 @@ const styles = StyleSheet.create({
   },
   scroll: { paddingHorizontal: layout.gutter, flexGrow: 1 },
 
-  /* The wordmark is the brand's voice, so it keeps the display face. */
-  wordmark: {
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.display.fontSize,
-    lineHeight: typeScale.display.lineHeight,
-    color: colors.wine,
-  },
+  /*
+   * The wordmark is the brand's voice, so it keeps the display face,
+   * through wordmarkLg: Playfair is set only by a name role (check-design
+   * rule 6), and this is the same large wordmark the sign-in backdrop uses.
+   */
+  wordmark: { ...textRole.wordmarkLg, color: colors.wine },
   /* A step's title is chrome: Inter, at the size every state title uses. */
   title: {
     ...textRole.emptyTitle,

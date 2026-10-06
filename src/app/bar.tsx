@@ -1,8 +1,11 @@
 import { useRouter } from 'expo-router';
 import { memo, useCallback, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { DexStatusTag, dexStatusTagWidth } from '@/components/cabinet';
+import { DexThumb } from '@/components/DexCard';
+import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import {
   Button,
@@ -37,6 +40,8 @@ import {
   type Ingredient,
 } from '@/lib/bar';
 import { useBar } from '@/store/bar';
+import { useIsUnlocked } from '@/store/collection';
+import type { Drink } from '@/types';
 import { confirmDestructive } from '@/utils/alerts';
 
 /* ==================================================================== */
@@ -109,21 +114,97 @@ const ShelfChip = memo(function ShelfChip({
   );
 });
 
+/*
+ * A drink you can make, or nearly: the mounted thumbnail, the name in
+ * Playfair (never truncated: ListRow's name role fits it to its column and
+ * lets it wrap), and whether it is in your Dex yet, because a drink you
+ * can pour tonight that you have never logged is the best reason to pour
+ * it. What a nearly-there drink is missing moves to the subtitle, where a
+ * long ingredient wraps instead of squeezing the name.
+ *
+ * Its own subscription to that one drink's status, so logging a drink
+ * re-renders its row and nothing else.
+ *
+ * `measure` is the title column before the tag: the tag's width depends
+ * on what it says, so the row takes it off here.
+ */
+const DrinkRow = memo(function DrinkRow({
+  drink,
+  need,
+  measure,
+  onOpen,
+}: {
+  drink: Drink;
+  /** "One thing short": what is missing, or null when it has no label. */
+  need?: string | null;
+  measure: number;
+  onOpen: (id: string) => void;
+}) {
+  const inDex = useIsUnlocked(drink.id);
+  const { fontScale } = useWindowDimensions();
+  const status = inDex ? 'in your Dex' : 'not in your Dex yet';
+  const missing = need === undefined ? null : (need ?? 'one more thing');
+  return (
+    <ListRow
+      titleRole="name"
+      titleMeasure={measure - dexStatusTagWidth(inDex, false, fontScale)}
+      title={drink.name}
+      subtitle={missing ? `Needs ${missing}` : undefined}
+      leading={{ node: <DexThumb drink={drink} /> }}
+      trailing={{ node: <DexStatusTag inDex={inDex} /> }}
+      onPress={() => onOpen(drink.id)}
+      accessibilityLabel={[drink.name, missing ? `needs ${missing}` : null, status].filter(Boolean).join(', ')}
+    />
+  );
+});
+
+/*
+ * The row's title column before its trailing tag: the screen less its
+ * gutters, the group's 1pt edges, the row's 16pt padding at both ends, the
+ * 44pt thumbnail and the 12pt after it, and the 12pt gap before the tag
+ * (ui.tsx's ListRow).
+ */
+const ROW_CHROME =
+  2 * layout.gutter + 2 * stroke.edge + 2 * space.lg + 44 + space.md + space.md;
+
 type Pane = 'shelf' | 'drinks';
 
 /*
- * Both drink lists stop at forty rows until asked. "One thing short" used
- * to stop there for good — the rest was a sentence, "…and 152 more", with
- * nothing to tap, on the list lib/bar.ts calls the useful half of the
- * feature — while "Pour tonight" had no limit and mounted every row, six
- * hundred on a well-stocked shelf. One rule for both, and a way through.
+ * Both drink lists show forty rows, and forty more a tap at a time. "One
+ * thing short" used to stop there for good — the rest was a sentence,
+ * "…and 152 more", with nothing to tap, on the list lib/bar.ts calls the
+ * useful half of the feature — while "Pour tonight" had no limit and
+ * mounted every row, six hundred on a well-stocked shelf. One rule for
+ * both, and a way through.
+ *
+ * In steps, not "Show all": every row now carries a mounted thumbnail (a
+ * photo decode, or a vector face of a dozen SVG nodes), and six hundred of
+ * them mounted in one ScrollView commit is a freeze on the tap that asked.
  */
 const LIST_PREVIEW = 40;
+
+/** The next page of a drink list, or nothing once it is all shown. */
+function ShowMore({ shown, total, onPress }: { shown: number; total: number; onPress: () => void }) {
+  const left = total - shown;
+  if (left <= 0) return null;
+  return (
+    <Button
+      label={`Show ${formatCount(Math.min(LIST_PREVIEW, left))} more`}
+      variant="secondary"
+      block
+      onPress={onPress}
+      accessibilityHint={`${formatCount(left)} not shown yet`}
+      style={styles.showAll}
+    />
+  );
+}
 
 export default function BarScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { width } = useWindowDimensions();
   const [scrolled, onScroll] = useScrolledPast();
+  const rowMeasure = width - ROW_CHROME;
 
   /* Back to the Dex, which opens it; with nothing under it, to the Dex anyway. */
   const back = useCallback(() => {
@@ -138,13 +219,14 @@ export default function BarScreen() {
 
   const [pane, setPane] = useState<Pane>('shelf');
   const [query, setQuery] = useState('');
-  const [allMakeable, setAllMakeable] = useState(false);
-  const [allNearly, setAllNearly] = useState(false);
+  const [makeableShown, setMakeableShown] = useState(LIST_PREVIEW);
+  const [nearlyShown, setNearlyShown] = useState(LIST_PREVIEW);
 
   /*
    * matchOwned remembers its answer for the store's `owned` object, so a
-   * keystroke in the search field re-runs nothing, and the Dex's count row
-   * underneath reuses this result instead of walking the index again.
+   * keystroke in the search field re-runs nothing, and the Dex underneath
+   * (its My Bar button speaks the count) reuses this result instead of
+   * walking the index again.
    */
   const result = matchOwned(owned);
 
@@ -183,6 +265,11 @@ export default function BarScreen() {
     [clear],
   );
 
+  const openDrink = useCallback(
+    (id: string) => router.navigate({ pathname: '/drink/[id]', params: { id } }),
+    [router],
+  );
+
   const shelf: Ingredient[] = useMemo(
     () =>
       Object.keys(owned)
@@ -194,6 +281,8 @@ export default function BarScreen() {
 
   return (
     <View style={styles.screen}>
+      {/* The page's own grain, under everything: there is no global grain any more. */}
+      <Grain />
       <ScreenTopBar
         title="My Bar"
         showRule={scrolled}
@@ -369,30 +458,15 @@ export default function BarScreen() {
                   <>
                     <SectionHeader title="Pour tonight" style={styles.sectionHeader} />
                     <ListGroup style={styles.list}>
-                      {(allMakeable
-                        ? result.makeable
-                        : result.makeable.slice(0, LIST_PREVIEW)
-                      ).map((m) => (
-                        <ListRow
-                          key={m.drink.id}
-                          title={m.drink.name}
-                          emphasis
-                          trailing="chevron"
-                          onPress={() =>
-                            router.navigate({ pathname: '/drink/[id]', params: { id: m.drink.id } })
-                          }
-                        />
+                      {result.makeable.slice(0, makeableShown).map((m) => (
+                        <DrinkRow key={m.drink.id} drink={m.drink} measure={rowMeasure} onOpen={openDrink} />
                       ))}
                     </ListGroup>
-                    {!allMakeable && result.makeable.length > LIST_PREVIEW ? (
-                      <Button
-                        label={`Show all ${formatCount(result.makeable.length)}`}
-                        variant="secondary"
-                        block
-                        onPress={() => setAllMakeable(true)}
-                        style={styles.showAll}
-                      />
-                    ) : null}
+                    <ShowMore
+                      shown={makeableShown}
+                      total={result.makeable.length}
+                      onPress={() => setMakeableShown((n) => n + LIST_PREVIEW)}
+                    />
                   </>
                 ) : (
                   /*
@@ -411,42 +485,21 @@ export default function BarScreen() {
                   <>
                     <SectionHeader title="One thing short" style={styles.sectionHeader} />
                     <ListGroup style={styles.list}>
-                      {(allNearly ? result.nearly : result.nearly.slice(0, LIST_PREVIEW)).map((m) => {
-                        const need = INGREDIENTS_BY_ID[m.missing[0]]?.label;
-                        return (
-                          <ListRow
-                            key={m.drink.id}
-                            title={m.drink.name}
-                            emphasis
-                            /*
-                              What is missing, at the row's end and held to
-                              one line, so a long ingredient never squeezes
-                              the drink's name.
-                            */
-                            trailing={{
-                              node: (
-                                <Text style={styles.rowNeed} numberOfLines={1}>
-                                  {need ?? '—'}
-                                </Text>
-                              ),
-                            }}
-                            onPress={() =>
-                              router.navigate({ pathname: '/drink/[id]', params: { id: m.drink.id } })
-                            }
-                            accessibilityLabel={`${m.drink.name}, needs ${need ?? 'one more thing'}`}
-                          />
-                        );
-                      })}
+                      {result.nearly.slice(0, nearlyShown).map((m) => (
+                        <DrinkRow
+                          key={m.drink.id}
+                          drink={m.drink}
+                          need={INGREDIENTS_BY_ID[m.missing[0]]?.label ?? null}
+                          measure={rowMeasure}
+                          onOpen={openDrink}
+                        />
+                      ))}
                     </ListGroup>
-                    {!allNearly && result.nearly.length > LIST_PREVIEW ? (
-                      <Button
-                        label={`Show all ${formatCount(result.nearly.length)}`}
-                        variant="secondary"
-                        block
-                        onPress={() => setAllNearly(true)}
-                        style={styles.showAll}
-                      />
-                    ) : null}
+                    <ShowMore
+                      shown={nearlyShown}
+                      total={result.nearly.length}
+                      onPress={() => setNearlyShown((n) => n + LIST_PREVIEW)}
+                    />
                   </>
                 ) : null}
               </>
@@ -525,10 +578,4 @@ const styles = StyleSheet.create({
 
   list: { marginTop: space.md },
   showAll: { marginTop: space.md },
-  rowNeed: {
-    ...textRole.rowSubtitle,
-    color: colors.textMuted,
-    maxWidth: '45%',
-    textAlign: 'right',
-  },
 });

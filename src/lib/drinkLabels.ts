@@ -156,12 +156,13 @@ const GLASS_NAMES: Record<GlassShape, LabelFact> = {
  * Glencairn, a punch bowl as a mug) and falls back to the category's glass
  * when it recognises nothing ("Copa glass", "Tankard", "Hollowed
  * pineapple"). A drawing can approximate; a label is a fact, and the shape
- * name would give 379 catalogue drinks a glass their glassware never
- * names, and show "Rocks glass" to anyone who picks "Copa glass" for their
- * own drink. So the shape's name is used only when the glassware names
- * that shape or a true synonym (a tumbler is a rocks glass, a tall glass a
- * highball); otherwise the label is the drink's own first-named vessel. A
- * Collins is not a highball here: add-drink offers both, side by side.
+ * name would give about 380 catalogue drinks a glass their glassware never
+ * names (a sherry's copita as "Rocks"), and show "Rocks glass" to anyone
+ * who picks "Copa glass" for their own drink. So a shape's name is used
+ * only when the glassware names that shape or a true synonym (a tumbler is
+ * a rocks glass, a tall glass a highball); otherwise the label is the
+ * drink's own first-named vessel. A Collins is not a highball here:
+ * add-drink offers both, side by side.
  */
 const NAMED_BY: Record<GlassShape, RegExp> = {
   coupe: /coupe/,
@@ -194,10 +195,27 @@ const NAMED_BY: Record<GlassShape, RegExp> = {
  */
 const AFTER_FIRST_VESSEL = /\s+or\s+|,|\s+with\s+|\s+in\s+a\s+|\s+dropped\s+|\s+over\s+/i;
 
+const SHAPES = Object.keys(NAMED_BY) as GlassShape[];
+
+/*
+ * How the glass is served, not which glass it is. The serve column says
+ * "Chilled" already, so "Small chilled glass" is "Small glass" here. A
+ * name that is nothing else ("Chilled glass", "Warmed glass") keeps it:
+ * it is all the catalogue says.
+ */
+const SERVE_WORDS = /\b(?:pre-chilled|chilled|frozen|frosted|iced|warmed)\s+/gi;
+
+/*
+ * Glasses named without the word: captioned 'glass' (a copita is not a
+ * "vessel"), and said alone in a phrase ("Copita", not "Copita glass").
+ */
+const SELF_NAMED_GLASS = /\b(?:copita|goblet|schooner|veladora|balón)$/i;
+
 /**
  * The label band's glass column: { value: 'Coupe', caption: 'glass' },
  * { value: 'Julep cup', caption: 'vessel' }; for glassware no shape names,
  * the drink's own words: "Copa glass" → { value: 'Copa', caption: 'glass' },
+ * "Copita or veladora" → { value: 'Copita', caption: 'glass' },
  * "Small ceramic cup" → { value: 'Small ceramic cup', caption: 'vessel' }.
  * A custom drink with no glassware → value ''.
  */
@@ -205,22 +223,29 @@ export function glassLabel(drink: Pick<Drink, 'category' | 'glassware' | 'subcat
   const glassware = tidy(drink.glassware);
   if (!glassware) return { value: '', caption: 'glass' };
   const shape = resolveShape(drink);
-  const own = glassware.split(AFTER_FIRST_VESSEL)[0]!.trim();
-  if (NAMED_BY[shape].test(glassware.toLowerCase()) || !own) return GLASS_NAMES[shape];
+  const first = glassware.split(AFTER_FIRST_VESSEL)[0]!.trim();
+  if (NAMED_BY[shape].test(glassware.toLowerCase()) || !first) return GLASS_NAMES[shape];
+  // resolveShape drew a later-named glass ("Highball or cordial glass" as a
+  // Glencairn); the label names the first, by its shape's name when it has one.
+  const firstShape = SHAPES.find((s) => NAMED_BY[s].test(first.toLowerCase()));
+  if (firstShape) return GLASS_NAMES[firstShape];
+  const stripped = first.replace(SERVE_WORDS, '').trim();
+  const own = /^glass(?:es)?$/i.test(stripped) || !stripped ? first : stripped;
   const glass = /^(.*\S)\s+glass(?:es)?$/i.exec(own);
-  return glass
-    ? { value: capitalise(glass[1]!), caption: 'glass' }
-    : { value: capitalise(own), caption: 'vessel' };
+  if (glass) return { value: capitalise(glass[1]!), caption: 'glass' };
+  if (SELF_NAMED_GLASS.test(own) || /^pony$/i.test(own)) return { value: capitalise(own), caption: 'glass' };
+  return { value: capitalise(own), caption: 'vessel' };
 }
 
 /**
- * For meta lines: "Highball glass", "Copa glass"; a vessel is named alone
- * ("Julep cup", "Tiki mug"), never "Julep cup vessel". '' with no glassware.
+ * For meta lines: "Highball glass", "Copa glass"; a vessel or a glass that
+ * names itself is said alone ("Julep cup", "Tiki mug", "Copita"), never
+ * "Julep cup vessel". '' with no glassware.
  */
 export function glassPhrase(drink: Pick<Drink, 'category' | 'glassware' | 'subcategory'>): string {
   const g = glassLabel(drink);
   if (!g.value) return '';
-  return g.caption === 'glass' ? `${g.value} glass` : g.value;
+  return g.caption === 'glass' && !SELF_NAMED_GLASS.test(g.value) ? `${g.value} glass` : g.value;
 }
 
 /* -------------------------------------------------------------------- */

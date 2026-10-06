@@ -4,38 +4,29 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DrinkArt } from '@/components/artwork';
+import { VectorFace } from '@/components/artwork/VectorFace';
+import { LiningBand } from '@/components/cabinet';
 import {
-  CompositionPanel,
-  DrinkTitle,
+  CellarPage,
+  CompositionCard,
+  DexSinceRow,
   FieldNotes,
-  MetaRow,
-  NotLoggedCard,
-  RecipePanel,
-  sentence,
-  ServePanel,
-  TastingNotes,
-  YourPour,
+  heroHeight,
+  HeroShade,
+  HeroTitle,
+  LabelBand,
+  PinnedLogBar,
+  pinnedBarEstimate,
+  ServeCard,
+  SpecCard,
+  TastesOf,
+  TriviaBand,
 } from '@/components/DrinkPanels';
-import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
-import {
-  Button,
-  Card,
-  CategoryTag,
-  EmptyState,
-  Hold,
-  MediaIconButton,
-} from '@/components/ui';
-import {
-  CATEGORY_META,
-  colors,
-  fonts,
-  layout,
-  space,
-  textRole,
-  type as typeScale,
-} from '@/constants/theme';
-import { catalogueTwin, formatAbv, isCustomId, syncStatusLine, toDrink } from '@/lib/customDrinks';
+import { Grain } from '@/components/Grain';
+import { FocusedStatusBar, ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
+import { Button, EmptyState, Hold, MediaIconButton } from '@/components/ui';
+import { colors, fonts, layout, space, textRole } from '@/constants/theme';
+import { catalogueTwin, isCustomId, syncStatusLine, toDrink } from '@/lib/customDrinks';
 import { customPhotoUri } from '@/lib/pour';
 import { adoptCustom, flushSubmissions } from '@/lib/submissions';
 import { useAuth } from '@/store/auth';
@@ -47,19 +38,20 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* A drink someone added                                                */
 /*                                                                      */
 /* The drink page's anatomy, for a drink that is not in the catalogue:  */
-/* the photograph, the name, the facts, the pour, the recipe or the     */
-/* bottle, drawn by the same panels (components/DrinkPanels) so the two */
-/* pages read as one app.                                               */
+/* the same cellar ground, hero dissolve, title block, label band, spec */
+/* card and pinned bar, drawn by the same panels (components/           */
+/* DrinkPanels) so the two pages read as one app.                       */
 /*                                                                      */
 /* What differs, and why:                                               */
 /*   - No dex number and no rarity. A custom drink has neither until    */
 /*     Sipply adds it, and inventing them would say it had joined the   */
-/*     Dex. The line above the name says whose it is instead.           */
-/*   - A status line under the tags: where the suggestion stands with   */
-/*     Sipply (lib/customDrinks' syncStatusLine), the only place a      */
+/*     Dex. The eyebrow's "Added by you" plate says whose it is instead. */
+/*   - A status line under the label band: where the suggestion stands  */
+/*     with Sipply (lib/customDrinks' syncStatusLine), the only place a */
 /*     refused or over-quota send is ever said.                         */
-/*   - No parallax. The hero is a fixed 4:3 band; the person's own photo */
-/*     or the drawn glass, nothing to slide behind.                     */
+/*   - No parallax. The page scrolls as one sheet over the hero; the    */
+/*     title block's own cellar ground (CellarPage) covers the photo as */
+/*     it rises, so nothing needs a slower layer behind it.             */
 /*   - Edit and delete at the foot, since the person owns the entry.    */
 /*                                                                      */
 /* The store is read with own keys only, so /custom/constructor is      */
@@ -87,6 +79,8 @@ export default function CustomDrinkScreen() {
   const [gone, setGone] = useState<{ drink: CustomDrink; pour: UnlockRecord | undefined } | null>(
     null,
   );
+  /* The pinned bar's measured height, as on the drink page. */
+  const [barH, setBarH] = useState(() => pinnedBarEstimate(insets.bottom));
   const drink = live ?? gone?.drink;
   const pour = live ? livePour : gone?.pour;
 
@@ -95,12 +89,18 @@ export default function CustomDrinkScreen() {
   if (!hydrated) {
     return (
       <View style={styles.screen}>
+        <Grain tone="lining" />
+        {/* The lining bar brings the light status bar with it. */}
         <ScreenTopBar
           title="Your drink"
           showRule={false}
+          tone="lining"
           left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
         />
-        <Hold slowMessage="Still loading your drinks." />
+        <View style={styles.holdSlot}>
+          {/* The dark hold: a bone spinner, since wine is 1.22:1 here. */}
+          <Hold slowMessage="Still loading your drinks." tone="dark" fill={false} />
+        </View>
       </View>
     );
   }
@@ -108,11 +108,14 @@ export default function CustomDrinkScreen() {
   if (!drink) {
     return (
       <View style={[styles.screen, styles.centered, { paddingTop: insets.top }]}>
+        <Grain tone="lining" />
+        <FocusedStatusBar style="light" />
         <EmptyState
           icon="search"
           title="Unknown entry"
           body="This drink isn't in your Dex."
           action={{ label: 'Back to the Dex', onPress: back }}
+          tone="lining"
         />
       </View>
     );
@@ -122,6 +125,7 @@ export default function CustomDrinkScreen() {
   const drawn = toDrink(drink);
   const photo = pour?.photoUri || customPhotoUri(drink.photoFile);
   const status = syncStatusLine(drink, signedIn);
+  const heroH = heroHeight(width);
   /*
    * The catalogue gained a drink of this name, and Sipply has not marked
    * the suggestion yet (when it does, the app moves the pour over on its
@@ -129,12 +133,7 @@ export default function CustomDrinkScreen() {
    */
   const twin = catalogueTwin(drink.name);
 
-  const facts = [
-    formatAbv(drink.abvLow, drink.abvHigh),
-    drink.origin,
-    cocktail && drink.glassware ? sentence(drink.glassware) : null,
-  ].filter((f): f is string => Boolean(f));
-
+  // The pinned bar's door, for a first pour and another one alike.
   const logIt = () => router.navigate({ pathname: '/log', params: { drink: drink.id } });
 
   const moveToDex = () => {
@@ -168,106 +167,97 @@ export default function CustomDrinkScreen() {
     !cocktail &&
     serve != null &&
     Boolean(serve.temp || serve.how || serve.glass || (serve.pair && serve.pair.length > 0));
+  const composition = drawn.composition;
+  const showComposition = !cocktail && composition != null && composition.components.length > 0;
 
   return (
     <View style={styles.screen}>
+      <Grain tone="lining" />
+      <FocusedStatusBar style="light" />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/*
-          Full bleed, up under the status bar, 4:3. Your pour's photo first,
-          then the one sent with the suggestion, then the drawn glass on the
-          category's wash.
+          Full bleed, up under the status bar, the drink page's height. Your
+          pour's photo first, then the one sent with the suggestion, then the
+          lit vector face. People's photographs are never graded, so the
+          dissolve at the foot (HeroShade) is what settles one into the
+          cellar.
         */}
         <View
-          style={[
-            styles.hero,
-            { height: Math.round(width * 0.75), backgroundColor: CATEGORY_META[drink.category].wash },
-            photo ? null : { paddingTop: insets.top + space.xl },
-          ]}
+          style={[styles.hero, { height: heroH }]}
           accessible
           accessibilityRole="image"
           accessibilityLabel={photo ? `Your photo of ${drink.name}` : `Illustration of ${drink.name}`}>
           {photo ? (
             <Image
               source={{ uri: photo }}
-              style={styles.heroPhoto}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               transition={160}
               accessible={false}
+              cachePolicy="disk"
+              enforceEarlyResizing
             />
           ) : (
-            <DrinkArt drink={drawn} size={150} />
+            <VectorFace
+              drink={drawn}
+              mode="lit"
+              width={width}
+              height={heroH}
+              // The glass at 60% of the width; artScale is a share of the height.
+              artScale={(0.6 * width) / heroH}
+            />
           )}
+          <HeroShade />
         </View>
 
-        <View
-          style={[styles.page, { paddingBottom: Math.max(insets.bottom, space.xl) + space.xxxl }]}>
-          <DrinkTitle eyebrow={`Added by you · ${drink.subcategory}`} name={drink.name} facts={facts} />
-          <MetaRow>
-            <CategoryTag category={drink.category} />
-          </MetaRow>
+        <CellarPage paddingBottom={barH + space.xl}>
+          <HeroTitle drink={drawn} inDex custom />
+          <LabelBand drink={drawn} />
 
           {status ? (
             <Text style={[styles.status, status.danger && styles.statusDanger]}>{status.text}</Text>
           ) : null}
 
           {twin ? (
-            <Card style={styles.twin}>
-              <Text style={styles.twinTitle}>{twin.name} is in the Dex now.</Text>
+            <LiningBand radius={12} style={styles.twin}>
+              <Text style={styles.twinTitle}>
+                <Text style={textRole.nameInline}>{twin.name}</Text> is in the Dex now.
+              </Text>
               <Text style={styles.twinBody}>Move your pour to the Dex entry and this copy goes.</Text>
-              <Button label="Move my pour there" variant="secondary" onPress={moveToDex} />
-            </Card>
+              <Button label="Move my pour there" variant="onLiningOutline" onPress={moveToDex} />
+            </LiningBand>
           ) : null}
 
-          {pour ? (
-            <YourPour record={pour} />
-          ) : (
-            <NotLoggedCard
-              title="Not logged yet"
-              body="Snap a photo when you have it, and the pour is kept with this drink."
-              onLog={logIt}
-              accessibilityLabel={`Log ${drink.name}`}
-            />
-          )}
+          {/* A custom drink is never posted (Log keeps its pour to the phone), so this row never opens a post. */}
+          {pour ? <DexSinceRow drink={drawn} record={pour} /> : null}
+          <TastesOf notes={drink.tastingNotes} />
 
-          <TastingNotes notes={drink.tastingNotes} />
-
-          {cocktail && drawn.recipe && drink.ingredients.length > 0 ? (
-            <RecipePanel recipe={drawn.recipe} />
+          {cocktail && drawn.recipe && drink.ingredients.length > 0 ? <SpecCard recipe={drawn.recipe} /> : null}
+          {showServe && serve ? <ServeCard serve={serve} /> : null}
+          {showComposition && composition ? (
+            <CompositionCard composition={composition} style={showServe ? styles.secondCard : undefined} />
           ) : null}
-          {!cocktail && drawn.composition && drawn.composition.components.length > 0 ? (
-            <CompositionPanel composition={drawn.composition} />
-          ) : null}
-          {showServe && serve ? <ServePanel serve={serve} /> : null}
 
-          <FieldNotes description={drink.description} funFact={drink.funFact} />
+          <FieldNotes description={drink.description} />
+          <TriviaBand drink={drawn} />
 
           <View style={styles.footer}>
-            {pour ? (
-              <Button
-                label="Update photo"
-                variant="secondary"
-                icon="camera"
-                block
-                onPress={logIt}
-                accessibilityLabel={`Update your photo of ${drink.name}`}
-              />
-            ) : null}
             <Button
               label="Edit details"
-              variant="secondary"
+              variant="onLiningOutline"
               block
               onPress={() => router.push({ pathname: '/add-drink', params: { edit: drink.id } })}
               accessibilityLabel={`Edit the details of ${drink.name}`}
             />
             <Button
               label="Delete this drink"
-              variant="dangerText"
+              variant="dangerOnLining"
               block
               onPress={confirmDelete}
               accessibilityLabel={`Delete ${drink.name}`}
             />
           </View>
-        </View>
+        </CellarPage>
       </ScrollView>
 
       {/*
@@ -280,27 +270,28 @@ export default function CustomDrinkScreen() {
         onPress={back}
         style={[styles.backButton, { top: insets.top + space.sm }]}
       />
+
+      {/*
+        The drink page's pinned bar, on this page's own log flow (the
+        centre-tab log screen with the drink chosen). It replaced the
+        "Not logged yet" card and "Update photo".
+      */}
+      <PinnedLogBar name={drink.name} collected={pour != null} onPress={logIt} onHeight={setBarH} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
+  /* The cellar, as on the drink page. */
+  screen: { flex: 1, backgroundColor: colors.liningDeep },
   centered: { justifyContent: 'center' },
+  holdSlot: { flex: 1, justifyContent: 'center' },
 
+  /* The cellar while the photo decodes; clips the dissolve. */
   hero: {
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
     overflow: 'hidden',
-  },
-  heroPhoto: { width: '100%', height: '100%' },
-
-  /* The drink page's page: opaque ground and the screen gutter. */
-  page: {
-    backgroundColor: colors.bg,
-    paddingHorizontal: layout.gutter,
-    paddingTop: space.xl,
+    backgroundColor: colors.liningDeep,
   },
 
   backButton: {
@@ -312,32 +303,39 @@ const styles = StyleSheet.create({
   /* Where the suggestion stands. Red only when the person has to act. */
   status: {
     ...textRole.helper,
-    color: colors.textMuted,
-    marginTop: space.md,
+    color: colors.onLiningMuted,
+    marginTop: 14,
+    paddingHorizontal: layout.gutter,
   },
-  statusDanger: { color: colors.danger },
+  statusDanger: { color: colors.dangerOnLining },
 
+  /* A panel of lining, raised off the cellar. */
   twin: {
     padding: space.lg,
     gap: space.sm,
-    marginTop: space.xl,
+    marginTop: space.lg,
+    marginHorizontal: layout.gutter,
   },
   twinTitle: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.onLining,
   },
   twinBody: {
     fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.onLiningMuted,
     marginBottom: space.xs,
   },
 
+  /* A spirit's second mat card, under "The pour". */
+  secondCard: { marginTop: space.lg },
+
   footer: {
     marginTop: space.xxl,
+    marginHorizontal: layout.gutter,
     gap: space.sm,
   },
 });

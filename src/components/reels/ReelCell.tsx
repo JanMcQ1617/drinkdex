@@ -25,6 +25,7 @@ import Animated, {
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { DrinkArt } from '@/components/artwork';
+import { svgStop } from '@/components/cabinet';
 import { Icon } from '@/components/icons';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
 import { ReelVideo } from '@/components/reels/ReelVideo';
@@ -61,6 +62,10 @@ export const TOP_SCRIM = [
  * A band of graded dark over video, so bone type on it reads over a white
  * frame (5.45:1 at the shallow end of the caption band, per check-contrast).
  * The only gradients v2 keeps: they do a job, which is legibility.
+ *
+ * The stops are translucent tokens, so they go through svgStop: native
+ * react-native-svg drops a stopColor's alpha and takes stopOpacity alone,
+ * which would paint the clear end of the band solid black on iOS.
  */
 export function Scrim({
   id,
@@ -78,7 +83,7 @@ export function Scrim({
         <Defs>
           <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
             {stops.map(([offset, color]) => (
-              <Stop key={offset} offset={offset} stopColor={color} />
+              <Stop key={offset} offset={offset} {...svgStop(color)} />
             ))}
           </LinearGradient>
         </Defs>
@@ -561,6 +566,7 @@ export function ReelCell({
           cachePolicy="memory-disk"
           contentFit={fit}
           transition={120}
+          enforceEarlyResizing
           style={StyleSheet.absoluteFill}
           accessible={false}
         />

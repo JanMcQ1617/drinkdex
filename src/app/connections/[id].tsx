@@ -4,6 +4,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { Grain } from '@/components/Grain';
 import { ACCOUNT_ID } from '@/components/PeerProfile';
 import { PersonRow } from '@/components/PeopleList';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
@@ -179,6 +180,8 @@ function Connections({
 
   return (
     <View style={styles.screen}>
+      {/* The page's own grain, under everything: there is no global grain any more. */}
+      <Grain />
       {/*
         No rule under the bar: the tab strip sits right below it and is
         fixed, so the list scrolls under the strip's own rule, never under
@@ -234,7 +237,8 @@ function Connections({
         onRefresh={wellFormed ? reload : undefined}
         initialNumToRender={12}
         windowSize={7}
-        style={styles.screen}
+        // Transparent, so the page's grain shows under the rows.
+        style={styles.list}
         contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
         showsVerticalScrollIndicator={false}
       />
@@ -244,6 +248,7 @@ function Connections({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
+  list: { flex: 1 },
   notice: { marginHorizontal: layout.gutter, marginTop: space.md, marginBottom: space.sm },
   footer: {
     ...textRole.helper,

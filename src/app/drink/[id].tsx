@@ -21,36 +21,28 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
-
-import { DrinkArt } from '@/components/artwork';
-import { drinkPhoto } from '@/data/drinkPhotos';
+import { VectorFace } from '@/components/artwork/VectorFace';
 import { FoilSweep } from '@/components/DexCard';
 import {
-  CompositionPanel,
-  DexNumber,
-  DrinkTitle,
+  CellarPage,
+  CompositionCard,
+  DexSinceRow,
   FieldNotes,
-  MetaRow,
-  NotLoggedCard,
-  RecipePanel,
-  sentence,
-  ServePanel,
-  TastingNotes,
-  YourPour,
+  heroHeight,
+  HeroShade,
+  HeroTitle,
+  LabelBand,
+  PinnedLogBar,
+  pinnedBarEstimate,
+  ServeCard,
+  SpecCard,
+  TastesOf,
+  TriviaBand,
 } from '@/components/DrinkPanels';
+import { Grain } from '@/components/Grain';
+import { FocusedStatusBar } from '@/components/ScreenTopBar';
+import { announce, Button, EmptyState, Field, haptic, MediaIconButton } from '@/components/ui';
 import {
-  announce,
-  Button,
-  CategoryTag,
-  EmptyState,
-  Field,
-  haptic,
-  MediaIconButton,
-  RarityBadge,
-} from '@/components/ui';
-import {
-  CATEGORY_META,
   colors,
   elevation,
   layout,
@@ -61,7 +53,8 @@ import {
   textRole,
   type as typeScale,
 } from '@/constants/theme';
-import { getDrink, formatDexNumber } from '@/data';
+import { getDrink } from '@/data';
+import { drinkPhoto } from '@/data/drinkPhotos';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import {
   NOTE_MAX,
@@ -78,10 +71,13 @@ import { useSocial } from '@/store/social';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
 /*
- * The panels under the photograph (recipe, composition, serve, the title
- * block, your pour) live in components/DrinkPanels, shared with the screen
- * for a drink someone added themselves (custom/[id].tsx), so the two are
- * drawn by one piece of code.
+ * The drink in the cellar (specs/v3-cabinet.md 9.8): the lit photograph
+ * dissolving into the dark ground, the name riding over its foot, and the
+ * reading under it on the same ground. The panels (title block, label
+ * band, your pour, the spec card, the trivia band, the pinned bar) live
+ * in components/DrinkPanels, shared with the screen for a drink someone
+ * added themselves (custom/[id].tsx), so the two are drawn by one piece
+ * of code.
  */
 
 /* ==================================================================== */
@@ -109,6 +105,22 @@ export default function DrinkDetailScreen() {
   const myId = useAuth((s) => s.session?.user.id);
   const addPost = useSocial((s) => s.addPost);
   const removePostsForDrink = useSocial((s) => s.removePostsForDrink);
+  /*
+   * Your post of this drink, when the feed store holds it: the "In your
+   * Dex since" row then says how many photos it shares and opens it. A
+   * find over the loaded feed (100 posts at most), no new query; the
+   * object itself is returned, so the selector is stable between renders.
+   */
+  const myPost = useSocial((s) =>
+    drink && myId ? s.feed.find((p) => p.drinkId === drink.id && (p.mine || p.authorId === myId)) : undefined,
+  );
+
+  /*
+   * The pinned bar's height, measured, so the page's foot always clears
+   * it: its label may wrap to two lines at a large text size. Starts at
+   * the bar's one-line height and is set again only when it changes.
+   */
+  const [barH, setBarH] = useState(() => pinnedBarEstimate(insets.bottom));
 
   // Modal / picker state
   const [modalVisible, setModalVisible] = useState(false);
@@ -136,11 +148,13 @@ export default function DrinkDetailScreen() {
    * fraction — far enough to register, near enough that the photograph
    * stays in view while the name and facts arrive over it.
    *
-   * That only works because the page is OPAQUE (styles.page). Without a
-   * ground of its own, the text below slid across the slower photograph
-   * from the first 46pt of scroll — the dex line, the name and then the
-   * recipe drawn straight over the picture, with no scrim, until the hero
-   * finally left the screen some 700pt later.
+   * That only works because the page is OPAQUE (DrinkPanels' CellarPage).
+   * Without a ground of its own, the text below slid across the slower
+   * photograph from the first 46pt of scroll — the dex line, the name and
+   * then the recipe drawn straight over the picture, with no scrim, until
+   * the hero finally left the screen some 700pt later. The title block
+   * now starts ON the hero's dissolved foot and carries that ground with
+   * it, so as it rides up no glyph ever lands on photo pixels.
    *
    * Pulling DOWN past the top stretches the hero instead of exposing the
    * ground behind it, which is the behaviour every photo header on iOS has
@@ -149,16 +163,16 @@ export default function DrinkDetailScreen() {
    * its top edge pinned: scale 1 + p/H about its centre, then shift up by
    * p/2 to put the top back where it was. Scaling about the centre alone
    * moved the top edge up by only half the pull, and the other half showed
-   * cream. H is measured, not assumed — a photograph and the vector art
-   * give the hero different heights.
+   * the ground. H is the hero's fixed height (heroHeight: the width times
+   * 1.14), the same for a photograph and the vector face.
    *
    * Reduce Motion gets a hero that simply scrolls with the page. The
    * identity transform is spelled out rather than returned as `{}`, so a
    * setting flipped mid-scroll cannot leave the last parallax offset
    * stuck on the native view.
    * ================================================================== */
+  const heroH = heroHeight(screenWidth);
   const scrollY = useSharedValue(0);
-  const heroH = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler((e) => {
     scrollY.value = e.contentOffset.y;
   });
@@ -167,8 +181,7 @@ export default function DrinkDetailScreen() {
     const y = scrollY.value;
     if (reduced) return { transform: [{ translateY: 0 }, { scale: 1 }] };
     if (y >= 0) return { transform: [{ translateY: y * 0.35 }, { scale: 1 }] };
-    const h = heroH.value;
-    return { transform: [{ translateY: y / 2 }, { scale: h > 0 ? 1 - y / h : 1 }] };
+    return { transform: [{ translateY: y / 2 }, { scale: 1 - y / heroH }] };
   });
 
   const openPicker = useCallback((mode: PickerMode) => {
@@ -228,10 +241,11 @@ export default function DrinkDetailScreen() {
    * centre-tab flow asked — the same act, private from one door and public
    * from the other. Both now ask, with the same two buttons.
    *
-   * Updating a photo asks too. "Save photo" keeps a post that already exists
-   * in step and never creates one, so an entry kept to the Dex stays there
-   * when its photo changes; "Save & post" is the explicit way to share an
-   * entry that was never posted, or whose post failed.
+   * Logging another pour of a collected drink (the 'update' sheet) asks
+   * too. "Save photo" keeps a post that already exists in step and never
+   * creates one, so an entry kept to the Dex stays there when its photo
+   * changes; "Save & post" is the explicit way to share an entry that was
+   * never posted, or whose post failed.
    */
   const handleConfirm = useCallback(
     async (alsoPost: boolean) => {
@@ -269,7 +283,7 @@ export default function DrinkDetailScreen() {
            * nothing, so an entry kept to the Dex stays there. Neither is
            * awaited, for the same reason as the log path below.
            *
-           * The caption is empty because Update photo has no note field: an
+           * The caption is empty because the update sheet has no note field: an
            * existing post keeps the words it was first shared with, and a
            * new one says nothing rather than a filler line. The note saved
            * with the entry is not sent either. A post the server refused
@@ -380,11 +394,14 @@ export default function DrinkDetailScreen() {
   if (!drink) {
     return (
       <View style={[styles.screen, styles.centered, { paddingTop: insets.top }]}>
+        <Grain tone="lining" />
+        <FocusedStatusBar style="light" />
         <EmptyState
           icon="search"
           title="Unknown entry"
           body="This drink is not in the Dex."
           action={{ label: 'Back to the Dex', onPress: () => router.back() }}
+          tone="lining"
         />
       </View>
     );
@@ -392,68 +409,43 @@ export default function DrinkDetailScreen() {
 
   const unlocked = Boolean(record);
   const rarityMeta = RARITY_META[drink.rarity];
-  const categoryMeta = CATEGORY_META[drink.category];
-  // Unique per entry+state: SVG <Defs> ids share one namespace on web.
-  const heroFieldId = `heroField-${drink.id}-${unlocked ? 'c' : 'e'}`;
-  // Your own pour outranks the stock photograph once you have logged one.
-  const ownPhoto = unlocked && record?.photoUri ? record.photoUri : null;
-  const heroPhoto = ownPhoto ? { uri: ownPhoto } : drinkPhoto(drink.id);
-  // Named for what is actually drawn: your photo, a stock photo, or the art.
-  const heroNoun = ownPhoto ? 'Your photo' : heroPhoto ? 'Photo' : 'Illustration';
-  const busy = saving !== null;
-
   /*
-   * Spirits state their glass in "Serve it right", so it is left out here
-   * rather than printed twice on the same screen. Cocktails have no serve
-   * guide, and for them this line is the only place the glass appears.
+   * The hero is the tungsten-lit catalogue photograph first, then your
+   * pour, then the lit vector face. It used to be your pour first; the
+   * bake is the immersive face of the drink now, and your own photo has a
+   * row of its own under the label band (DexSinceRow).
    */
-  const facts = [
-    drink.abv,
-    drink.origin,
-    drink.serve || !drink.glassware ? null : sentence(drink.glassware),
-  ].filter((f): f is string => Boolean(f));
+  const ownPhoto = record?.photoUri ?? null;
+  const stockPhoto = drinkPhoto(drink.id);
+  const heroPhoto = stockPhoto ?? (ownPhoto ? { uri: ownPhoto } : null);
+  // Named for what is actually drawn: a stock photo, your photo, or the art.
+  const heroNoun = stockPhoto ? 'Photo' : ownPhoto ? 'Your photo' : 'Illustration';
+  const busy = saving !== null;
+  const openPost = (postId: string) => router.push({ pathname: '/post/[id]', params: { id: postId } });
 
   return (
     <View style={styles.screen}>
+      {/* The cellar's own grain: under everything, and seen past the page's foot. */}
+      <Grain tone="lining" />
+      <FocusedStatusBar style="light" />
       <Animated.ScrollView
         onScroll={onScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         {/*
-          Always full color here, even before logging: you're on this
-          screen to make the drink, and the color tells you what you're
-          aiming for. The Dex grid keeps its silhouettes — that's the
-          collection board.
+          Always full colour here, even before logging: you're on this
+          screen to make the drink, and the picture tells you what you're
+          aiming for. The Dex keeps its ghosts; that's the collection board.
 
           FULL BLEED, and up under the status bar. The scroll content has no
-          gutter of its own — the page below carries it — so the photograph
-          runs to both screen edges and to the top of the glass.
-
-          It used to sit inset inside a 16pt-radius, 1pt-bordered white panel
-          on cream — a picture of a drink, framed and hung. Vivino, and every
-          app whose subject is a photograph, lets the image be the surface
-          instead of an object placed on one.
-
-          Same card language as the Dex grid otherwise: category field behind
-          the art, and a collected legendary gets the foil sweep it has in the
-          grid — the payoff should be BIGGER on the screen you open to look at
-          the thing, not smaller.
+          gutter of its own (the panels carry it), so the photograph runs to
+          both screen edges and to the top of the glass. Over it: the top
+          scrim for the status bar and the back button, the 200pt dissolve
+          into the cellar at its foot (HeroShade), and for a collected
+          legendary one foil pass, the payoff it has in the grid.
         */}
         <Animated.View
-          onLayout={(e) => heroH.set(e.nativeEvent.layout.height)}
-          style={[
-            styles.hero,
-            heroParallax,
-            /*
-             * A photograph defines the hero's height itself, so the padding
-             * that framed the 150pt vector would only band the image. The
-             * vector art keeps its breathing room, measured from below the
-             * status bar so the drawing never slides under it.
-             */
-            heroPhoto ? styles.heroPhotoMode : { paddingTop: insets.top + space.xl },
-            unlocked && styles.heroUnlocked,
-            !unlocked && styles.heroLocked,
-          ]}
+          style={[styles.hero, { height: heroH }, heroParallax]}
           accessible
           accessibilityRole="image"
           /*
@@ -467,30 +459,10 @@ export default function DrinkDetailScreen() {
               ? `${heroNoun} of ${drink.name}, ${rarityMeta.label}`
               : `${heroNoun} of ${drink.name}, not collected yet`
           }>
-          {unlocked ? (
-            <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
-              <Defs>
-                <LinearGradient id={heroFieldId} x1="0" y1="0" x2="0" y2="1">
-                  <Stop offset="0" stopColor={categoryMeta.fieldFrom} />
-                  <Stop offset="1" stopColor={categoryMeta.fieldTo} />
-                </LinearGradient>
-              </Defs>
-              <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${heroFieldId})`} />
-            </Svg>
-          ) : null}
-
-          {/*
-            The hero follows the same precedence as the Dex card: the pour you
-            logged, else the stock photograph, else the vector art. It is NOT
-            dimmed while locked, unlike the grid — the grid is the collection
-            board, where withholding creates the pull, but this is the screen
-            you open to decide whether to make the drink. Hiding what it looks
-            like here would work against the recipe sitting directly below it.
-          */}
           {/*
             Disk, not memory-disk, for the Dex card's reason (DexCard): the
             memory tier keeps the full decoded bitmap, so each entry opened
-            here left its 1024px stock photo (4 MB) or 2048px pour (12 MB)
+            here left its 1024px lit photo (4 MB) or 2048px pour (12 MB)
             resident after the page closed, one more per drink looked at, in
             the pool the feed and avatars share. The file is on the phone;
             the short fade covers the decode.
@@ -498,7 +470,7 @@ export default function DrinkDetailScreen() {
           {heroPhoto ? (
             <Image
               source={heroPhoto}
-              style={styles.heroPhoto}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               transition={160}
               accessible={false}
@@ -506,135 +478,75 @@ export default function DrinkDetailScreen() {
               enforceEarlyResizing
             />
           ) : (
-            <DrinkArt drink={drink} size={150} />
+            <VectorFace
+              drink={drink}
+              mode="lit"
+              width={screenWidth}
+              height={heroH}
+              // The glass at 60% of the width; artScale is a share of the height.
+              artScale={(0.6 * screenWidth) / heroH}
+            />
           )}
 
           {/*
-            LAST, so it paints over the photograph. Siblings draw in order and
-            absolute positioning does not lift anything, so the sweep used to
-            run underneath an opaque image — every collected legendary has
-            one, since logging requires a photo — and was never seen. Same
-            order as DexCard. The hero's overflow still clips it.
+            After the picture, so it paints over it (absolute positioning
+            lifts nothing; siblings draw in order), and before the shade, so
+            it fades with the photograph into the cellar. One pass, then it
+            rests off the frame; none under Reduce Motion. The hero clips it.
           */}
-          {unlocked && drink.rarity === 'legendary' && !reduced ? (
-            <FoilSweep width={screenWidth} />
-          ) : null}
+          {unlocked && drink.rarity === 'legendary' ? <FoilSweep width={screenWidth} /> : null}
+          <HeroShade />
         </Animated.View>
 
         {/*
-          The page: everything under the photograph, on a ground of its own so
-          it slides OVER the slower hero as you scroll (see Hero parallax).
+          The page: everything under the photograph, on an opaque cellar
+          ground that starts on the hero's dissolved foot, so it slides OVER
+          the slower hero as you scroll (see Hero parallax) and no glyph is
+          ever drawn on the picture. Its foot clears the pinned bar by the
+          bar's measured height.
 
-          The rarity tier is this page's top RULE. It was a border on all four
-          sides of the hero while the hero was an inset panel, then its bottom
-          edge once the photograph went full bleed — and then the opaque page
-          covered that edge from the first point of scroll. The seam between
-          photograph and page is where the tier belongs, and the page's top
-          edge is the one that stays there. Widths keep the existing ladder,
-          thickened so a 1pt hairline does not vanish against a photograph.
+          Everything is visible whether or not the entry is logged. The
+          point of the app is to send you off to make and try a drink, which
+          the recipe can't do from behind a lock. Logging is the record that
+          you did it, not the key to finding out how.
         */}
-        <View
-          style={[
-            styles.page,
-            { paddingBottom: Math.max(insets.bottom, space.xl) + space.xxxl },
-            unlocked && {
-              borderTopColor: rarityMeta.edge,
-              borderTopWidth: rarityMeta.edgeWidth + 2,
-            },
-          ]}>
-          {/*
-            The title block and the tags (DrinkPanels). The catalogue number
-            is the only tracked text on the page: it is a code made of
-            figures; the style beside it is a word and is set plainly.
-          */}
-          <DrinkTitle
-            eyebrow={
-              <>
-                <DexNumber>{formatDexNumber(drink.dexNumber)}</DexNumber>
-                {'  ·  '}
-                {drink.subcategory}
-              </>
-            }
-            name={drink.name}
-            facts={facts}
-          />
-          <MetaRow>
-            <CategoryTag category={drink.category} />
-            <RarityBadge rarity={drink.rarity} />
-          </MetaRow>
+        <CellarPage paddingBottom={barH + space.xl}>
+          <HeroTitle drink={drink} inDex={unlocked} />
+          <LabelBand drink={drink} />
+          {record ? (
+            <DexSinceRow drink={drink} record={record} post={myPost} onOpenPost={openPost} />
+          ) : null}
+          <TastesOf notes={drink.tastingNotes} />
 
-          {/*
-            Everything below is visible whether or not the entry is logged.
-            The point of the app is to send you off to make and try a drink,
-            which the recipe can't do from behind a lock. Logging is the
-            record that you did it, not the key to finding out how.
-          */}
-
-          {record ? <YourPour record={record} /> : null}
-
-          {!unlocked ? (
-            <NotLoggedCard
-              title="Not in your collection yet"
-              body="Everything you need to make it is right below. Snap a photo when you do and it joins your Dex."
-              onLog={() => openPicker('unlock')}
-              accessibilityLabel={`Log ${drink.name}`}
+          {/* How it's made: a spec card for cocktails; for spirits, how to pour it and what's in it. */}
+          {drink.recipe ? <SpecCard recipe={drink.recipe} /> : null}
+          {!drink.recipe && drink.serve ? <ServeCard serve={drink.serve} /> : null}
+          {!drink.recipe && drink.composition ? (
+            <CompositionCard
+              composition={drink.composition}
+              style={drink.serve ? styles.secondCard : undefined}
             />
           ) : null}
 
-          <TastingNotes notes={drink.tastingNotes} />
-
-          {/* How it's made — a recipe for cocktails, a composition for the rest */}
-          {drink.recipe ? <RecipePanel recipe={drink.recipe} /> : null}
-          {!drink.recipe && drink.composition ? (
-            <CompositionPanel composition={drink.composition} />
-          ) : null}
-
-          {drink.serve ? <ServePanel serve={drink.serve} /> : null}
-
-          <FieldNotes description={drink.description} funFact={drink.funFact} />
+          <FieldNotes description={drink.description} />
+          <TriviaBand drink={drink} />
 
           {/*
-            Footer actions.
-
-            Collected: change the photo, or take the entry back out.
-
-            Not collected: log it — the same action as the card up top, again
-            here because this is where the recipe ends. The locked card says
-            "everything you need is right below", so the moment you are ready
-            to log is the moment you have scrolled past all of it, glass in
-            hand, and the only button used to be a full recipe back up.
+            Taking the entry back out, at the foot: the bare destructive word
+            on the cellar (Button's `dangerOnLining`), quiet because it is
+            not what anyone comes here for. Logging lives in the pinned bar.
           */}
           {unlocked ? (
-            <>
-              <Button
-                label="Update photo"
-                variant="secondary"
-                icon="camera"
-                block
-                onPress={() => openPicker('update')}
-                accessibilityLabel={`Update your photo of ${drink.name}`}
-                style={styles.footerButton}
-              />
-              <Button
-                label="Remove from collection"
-                variant="dangerText"
-                block
-                onPress={handleRemove}
-                accessibilityLabel={`Remove ${drink.name} from collection`}
-                style={styles.removeButton}
-              />
-            </>
-          ) : (
             <Button
-              label="Log this drink"
-              icon="camera"
+              label="Remove from collection"
+              variant="dangerOnLining"
               block
-              onPress={() => openPicker('unlock')}
-              accessibilityLabel={`Log ${drink.name}`}
-              style={styles.footerButton}
+              onPress={handleRemove}
+              accessibilityLabel={`Remove ${drink.name} from collection`}
+              style={styles.removeButton}
             />
-          )}
-        </View>
+          ) : null}
+        </CellarPage>
       </Animated.ScrollView>
 
       {/*
@@ -656,7 +568,20 @@ export default function DrinkDetailScreen() {
         style={[styles.backButton, { top: insets.top + space.sm }]}
       />
 
-      {/* Unlock / update-photo modal */}
+      {/*
+        The page's one action, pinned: "Log this drink", then "Log another
+        <name>" once it is in your Dex. It replaced the mid-page "not in
+        your collection" card, "Update photo" and the end-of-page log
+        button, three doors to the same two sheets.
+      */}
+      <PinnedLogBar
+        name={drink.name}
+        collected={unlocked}
+        onPress={() => openPicker(unlocked ? 'update' : 'unlock')}
+        onHeight={setBarH}
+      />
+
+      {/* Log sheet: a first pour, or another one */}
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={closeModal}>
         <View style={styles.modalOverlay}>
           <Pressable
@@ -676,7 +601,13 @@ export default function DrinkDetailScreen() {
             */}
             <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, space.lg) + space.sm }]}>
               <Text style={styles.sheetTitle} accessibilityRole="header">
-                {pickerMode === 'update' ? 'Update photo' : `Log ${drink.name}`}
+                {pickerMode === 'update' ? (
+                  'Log another pour'
+                ) : (
+                  <>
+                    Log <Text style={textRole.nameInline}>{drink.name}</Text>
+                  </>
+                )}
               </Text>
               {/*
                 Logging says what the photo is for and that sharing is a
@@ -815,25 +746,13 @@ export default function DrinkDetailScreen() {
 /* ==================================================================== */
 
 const styles = StyleSheet.create({
+  /* The cellar: the ground a lit photograph settles into. */
   screen: {
     flex: 1,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.liningDeep,
   },
   centered: {
     justifyContent: 'center',
-  },
-
-  /*
-   * Everything below the photograph. Opaque on purpose: the parallax slides
-   * this page over the slower hero, and without a ground of its own the
-   * text would be drawn across the photograph. It also carries the screen
-   * gutter the scroll content does not have, so the hero above it can run
-   * edge to edge without cancelling a margin.
-   */
-  page: {
-    backgroundColor: colors.bg,
-    paddingHorizontal: layout.gutter,
-    paddingTop: space.lg,
   },
 
   /* Header */
@@ -848,65 +767,28 @@ const styles = StyleSheet.create({
 
   /* Hero */
   hero: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: space.sm,
-    paddingVertical: space.xl,
-    backgroundColor: colors.surface,
-    // Clips the category field and the legendary foil.
+    /*
+     * The cellar while the photo decodes, the colour its edges settle to,
+     * so the decode moment already matches. Clips the dissolve and the
+     * legendary foil.
+     */
+    backgroundColor: colors.liningDeep,
     overflow: 'hidden',
   },
-  heroUnlocked: {
-    /*
-     * No shadow and no rule. elevation.card lifted the hero off the page when
-     * it was a panel with corners; a block that runs to all three edges has
-     * nothing to cast onto. The rarity rule is drawn by the page's top edge
-     * (see the page at the call site).
-     */
-  },
-  /*
-   * Locked entries no longer get a dashed frame and a "NOT YET LOGGED" caps
-   * caption. The dashes read as a coupon, and the caption repeated what the
-   * card eight rows below already says in a full sentence — two elements
-   * announcing the same absence, in the loudest typography on the screen.
-   *
-   * Kept as an empty style so the call site's `!unlocked &&` branch stays
-   * legible next to `unlocked &&` rather than becoming a lone conditional.
-   */
-  heroLocked: {},
-  heroPhotoMode: {
-    /*
-     * Nothing under the photograph. The 8pt of bottom padding that used to
-     * sit here held a "Not yet logged" caption; the caption went and the
-     * padding stayed, as a white band under a locked photo and a strip of
-     * category field between a collected one and its rarity rule.
-     */
-    paddingVertical: 0,
-    gap: 0,
-  },
-  heroPhoto: {
-    /*
-     * Square, matching the source, so nothing is cropped — and it is a real
-     * laid-out child rather than an absolute fill, because the hero has no
-     * height of its own once the vector artwork stops providing it.
-     */
-    width: '100%',
-    aspectRatio: 1,
-  },
 
-  /* Footer actions */
-  footerButton: {
-    marginTop: space.xxl,
-  },
+  /* A spirit's second mat card, under "The pour". */
+  secondCard: { marginTop: space.lg },
+
+  /* Footer action */
   removeButton: {
     /*
-     * Spacing only; the look is Button's `dangerText` skin — red text, no
-     * fill, no edge. Red text is the iOS signal for an action that deletes;
-     * the grey it used to be looked like a harmless link, and a filled red
-     * button under "Update photo" would outweigh the action people come
-     * here for.
+     * Spacing only; the look is Button's `dangerOnLining` skin: the bare
+     * red word, no fill, no edge, 8.34:1 on the cellar. Red text is the
+     * iOS signal for an action that deletes, and a filled red button would
+     * outweigh the action people come here for.
      */
-    marginTop: space.xs,
+    marginTop: space.xl,
+    marginHorizontal: layout.gutter,
   },
 
   /* Modal sheet */

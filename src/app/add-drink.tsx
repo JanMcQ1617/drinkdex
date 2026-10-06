@@ -20,7 +20,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DrinkArt } from '@/components/artwork';
+import { DrinkName } from '@/components/cabinet';
+import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
@@ -47,7 +48,6 @@ import {
   textRole,
   type as typeScale,
 } from '@/constants/theme';
-import { drinkPhoto } from '@/data/drinkPhotos';
 import {
   catalogueTwin,
   type CustomDraft,
@@ -69,6 +69,7 @@ import {
   suggestedNotes,
   validateCustom,
 } from '@/lib/customDrinks';
+import { styleLabel } from '@/lib/drinkLabels';
 import { similarByName } from '@/lib/drinkSearch';
 import {
   customPhotoUri,
@@ -78,6 +79,7 @@ import {
   type PickResult,
 } from '@/lib/pour';
 import { flushSubmissions } from '@/lib/submissions';
+import { faceOf, fitScale, textWidth } from '@/lib/textFit';
 import { useCustomDrink, useCustomDrinks } from '@/store/customDrinks';
 import type { CustomDrink, Drink, DrinkCategory } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
@@ -354,57 +356,84 @@ function TokenField({
   );
 }
 
+/** The thumbnail's column in a similar row: DexThumb's 44pt and the row's 12pt gap. */
+const SIMILAR_THUMB_COLUMN = 44 + space.md;
+/** Dynamic Type cap on a row's name (specs/v3-cabinet.md 6.5). */
+const SIMILAR_NAME_CAP = 1.4;
+
 /**
  * "Already in the Dex?": up to three catalogue drinks whose names answer
  * the one being typed, so a drink the Dex has is one tap away instead of
  * being added twice. A drink with exactly this name comes first, and the
  * Name field says it is already in the Dex.
  *
- * List rows, with ListRow's metrics (64pt with a 40pt thumbnail, the
- * title in the row face with emphasis, the style under it) and a fill
- * that answers the press, run edge to edge like the log sheet's results
- * so the fill does not stop short of the screen. From the log sheet a row
- * picks that drink for the pour ("Use this"); from the Dex it opens it
- * ("Open").
+ * Rows of drinks, with the log sheet's result parts: the drink mounted
+ * as a lit thumbnail, its name in Playfair through DrinkName (it wraps and
+ * the row grows, never cut short), and its style in sentence case under
+ * it. Not a panel, as the log sheet's results are: three rows under a
+ * field are part of the form, so they run edge to edge with a fill that
+ * answers the press and does not stop short of the sheet. From the log
+ * sheet a row picks that drink for the pour ("Use this"); from the Dex it
+ * opens it ("Open").
+ *
+ * `width` is the sheet's: the name's measure is worked out from it, since
+ * DrinkName fits a long word to its column before layout.
  */
 function SimilarInDex({
   drinks,
   action,
+  width,
   onPick,
 }: {
   drinks: Drink[];
   action: 'Use this' | 'Open';
+  width: number;
   onPick: (id: string) => void;
 }) {
+  const { fontScale } = useWindowDimensions();
+  // The verb is uncapped body text, so it is measured at the reader's size.
+  const verb = space.md + textWidth(action, 'inter', textRole.buttonSm.fontSize * fontScale);
+  const below = width - 2 * layout.gutter - SIMILAR_THUMB_COLUMN;
+  const beside = below - verb;
+  /*
+   * At large text the verb grows wide enough to shrink a name beside it
+   * ("Use this" is about 200pt at the largest size). When it would shrink
+   * any of the names, the verb moves under the style line on every row,
+   * so the names keep their size and the verbs stay in one column.
+   */
+  const face = faceOf(textRole.rowName.fontFamily);
+  const nameSize = textRole.rowName.fontSize * Math.min(fontScale, SIMILAR_NAME_CAP);
+  const stacked = drinks.some(
+    (d) => fitScale(d.name, face, nameSize, beside) < fitScale(d.name, face, nameSize, below),
+  );
+  const measure = stacked ? below : beside;
   return (
     <View style={styles.similar}>
       <Text style={styles.similarLabel}>Already in the Dex?</Text>
       {drinks.map((d) => {
-        const photo = drinkPhoto(d.id);
+        const style = styleLabel(d.subcategory);
+        const verbText = <Text style={styles.similarAction}>{action}</Text>;
         return (
           <Pressable
             key={d.id}
             onPress={() => onPick(d.id)}
             accessibilityRole="button"
-            accessibilityLabel={`${d.name}, ${d.subcategory}`}
+            accessibilityLabel={[d.name, style].filter(Boolean).join(', ')}
             accessibilityHint={action === 'Use this' ? 'Logs this drink instead' : 'Opens it in the Dex'}
             style={({ pressed }) => [styles.similarRow, pressed && styles.similarPressed]}>
-            <View style={styles.similarThumb}>
-              {photo ? (
-                <Image source={photo} style={styles.fill} contentFit="cover" accessible={false} enforceEarlyResizing />
-              ) : (
-                <DrinkArt drink={d} size={28} flat />
-              )}
-            </View>
+            <DexThumb drink={d} />
             <View style={styles.similarText}>
-              <Text style={styles.similarName} numberOfLines={1}>
-                {d.name}
-              </Text>
-              <Text style={styles.similarMeta} numberOfLines={1}>
-                {d.subcategory}
-              </Text>
+              <DrinkName
+                name={d.name}
+                role={textRole.rowName}
+                measure={measure}
+                cap={SIMILAR_NAME_CAP}
+                color={colors.text}
+              />
+              {style ? <Text style={styles.similarMeta}>{style}</Text> : null}
+              {stacked ? <View style={styles.similarActionStacked}>{verbText}</View> : null}
             </View>
-            <Text style={styles.similarAction}>{action}</Text>
+            {stacked ? null : verbText}
           </Pressable>
         );
       })}
@@ -505,6 +534,8 @@ export default function AddDrinkScreen() {
   if (editParam && !(hydrated && editing)) {
     return (
       <View style={styles.screen}>
+        {/* The paper grain, first and under everything (see the form). */}
+        <Grain />
         <ScreenTopBar
           title="Edit drink"
           size="md"
@@ -522,7 +553,6 @@ export default function AddDrinkScreen() {
         ) : (
           <Hold slowMessage="Still loading your drinks." />
         )}
-        <Grain />
       </View>
     );
   }
@@ -845,9 +875,12 @@ function AddDrinkForm({
     if (leaving) router.back();
   }, [leaving, router]);
 
-  /* See the log sheet: the page sheet's offset, for the keyboard. */
-  const { height: windowH } = useWindowDimensions();
-  const [sheetH, setSheetH] = useState(windowH);
+  /*
+   * See the log sheet: the page sheet's offset, for the keyboard, and its
+   * width, which the "Already in the Dex?" names are fitted to.
+   */
+  const { width: windowW, height: windowH } = useWindowDimensions();
+  const [sheet, setSheet] = useState({ w: windowW, h: windowH });
 
   const styleOptions = subcategoriesFor(d.category);
   const glassOptions: readonly string[] = GLASSWARE[d.category];
@@ -931,8 +964,19 @@ function AddDrinkForm({
     <KeyboardAvoidingView
       style={styles.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheetH : 0}
-      onLayout={(e) => setSheetH(e.nativeEvent.layout.height)}>
+      keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheet.h : 0}
+      onLayout={(e) => {
+        const { width: w, height: h } = e.nativeEvent.layout;
+        setSheet((s) => (s.w === w && s.h === h ? s : { w, h }));
+      }}>
+      {/*
+        The paper grain, first, so everything on the page lies over it: the
+        photo and the thumbnails stay clean. A page sheet is presented above
+        the root layout, so no grain from anywhere else reaches it (see the
+        log sheet). It takes no touches.
+      */}
+      <Grain />
+
       <ScreenTopBar
         title={editing ? 'Edit drink' : 'Add a drink'}
         size="md"
@@ -974,6 +1018,7 @@ function AddDrinkForm({
               <SimilarInDex
                 drinks={similar}
                 action={from === 'log' ? 'Use this' : 'Open'}
+                width={sheet.w}
                 onPick={pickSimilar}
               />
             ) : null}
@@ -994,10 +1039,14 @@ function AddDrinkForm({
           <View onLayout={fieldAt('basics', 'subcategory')} style={styles.group}>
             <GroupLabel>Style</GroupLabel>
             <ChipWrap>
+              {/*
+                The catalogue's own strings are the values (they are what is
+                saved and sent); the chips show them in sentence case.
+              */}
               {styleOptions.map((s) => (
                 <Chip
                   key={s}
-                  label={s}
+                  label={styleLabel(s)}
                   selected={!d.subcategoryIsNew && d.subcategory === s}
                   onPress={() => choose({ subcategory: s, subcategoryIsNew: false })}
                 />
@@ -1364,9 +1413,10 @@ function AddDrinkForm({
           <SectionHeader title="Photo (optional)" style={styles.sectionHeader} />
           <View>
             {/*
-              The log sheet's frame: an inset photo, the panel corner and a
-              drawn edge on the sunk well. The photo goes with the
-              suggestion for reference only and is never published.
+              An inset photo: the panel corner and a drawn edge on the sunk
+              well. It stays a 4:3 frame here (the log sheet's is a print):
+              this photo goes with the suggestion for reference only, is
+              never published, and is seen whole before it is sent.
             */}
             <View style={styles.photoFrame}>
               {photoUri ? (
@@ -1451,12 +1501,6 @@ function AddDrinkForm({
         />
       </View>
 
-      {/*
-        The paper grain. A page sheet is presented above the root layout,
-        so the root's grain cannot reach it (see the log sheet). Last, and
-        it takes no touches.
-      */}
-      <Grain />
     </KeyboardAvoidingView>
   );
 }
@@ -1569,35 +1613,22 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginBottom: space.xs,
   },
-  /* ListRow's metrics, bled past the form's gutter so the pressed fill spans the sheet. */
+  /*
+   * The log sheet's result metrics (min 72, the 44x56 thumbnail), bled past
+   * the form's gutter so the pressed fill spans the sheet. It grows with
+   * the name.
+   */
   similarRow: {
-    minHeight: layout.rowTall,
+    minHeight: 72,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    paddingVertical: space.md,
+    paddingVertical: space.sm,
     paddingHorizontal: layout.gutter,
     marginHorizontal: -layout.gutter,
   },
   similarPressed: { backgroundColor: colors.bgSunk },
-  /* A thumbnail under 48pt: the badge corner and a drawn edge. */
-  similarThumb: {
-    width: 40,
-    height: 40,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.cardAlt,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  similarText: { flex: 1 },
-  similarName: {
-    ...textRole.rowTitle,
-    fontFamily: fonts.bodySemiBold,
-    color: colors.text,
-  },
+  similarText: { flex: 1, gap: 2 },
   similarMeta: {
     ...textRole.rowSubtitle,
     color: colors.textMuted,
@@ -1607,8 +1638,9 @@ const styles = StyleSheet.create({
     ...textRole.buttonSm,
     color: colors.wine,
   },
+  similarActionStacked: { flexDirection: 'row', marginTop: space.xs },
 
-  /* Photo: an inset photo, as on the log sheet */
+  /* Photo: an inset 4:3 photo on the sunk well */
   photoFrame: {
     aspectRatio: 4 / 3,
     borderRadius: radius.card,

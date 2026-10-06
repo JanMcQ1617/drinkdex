@@ -35,14 +35,18 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const arg = (flag, fallback) => {
-  const i = process.argv.indexOf(flag);
-  return i === -1 ? fallback : process.argv[i + 1];
-};
-
 const fail = (msg) => {
   console.error(`\n  build-drink-photos: ${msg}\n`);
   process.exit(1);
+};
+
+/** A flag's value. A flag with nothing after it is a mistake, not the default. */
+const arg = (flag, fallback) => {
+  const i = process.argv.indexOf(flag);
+  if (i === -1) return fallback;
+  const value = process.argv[i + 1];
+  if (value === undefined || value.startsWith('--')) fail(`${flag} needs a value.`);
+  return value;
 };
 
 /**
@@ -77,11 +81,15 @@ const sources = srcArg ? srcArg.split(',') : SOURCES;
  */
 const SIZE = Number(arg('--size', 1024));
 const QUALITY = Number(arg('--quality', 82));
+if (!Number.isInteger(SIZE) || SIZE < 64) fail(`--size takes a whole number of pixels (64 or more), not '${arg('--size')}'.`);
+if (!Number.isInteger(QUALITY) || QUALITY < 0 || QUALITY > 100) fail(`--quality takes 0 to 100, not '${arg('--quality')}'.`);
 const GHOST_SIZE = 256;
 const GHOST_QUALITY = 80;
 const OUT_DIR = path.join(ROOT, 'assets', 'drinks');
 /** The new set is encoded here and swapped in whole, so a failed bake leaves assets/drinks as it was. */
 const STAGE_DIR = path.join(ROOT, 'assets', '.drinks-next');
+/** The old set, moved aside for the moment of the swap. */
+const PREV_DIR = path.join(ROOT, 'assets', '.drinks-prev');
 const MAP_FILE = path.join(ROOT, 'src', 'data', 'drinkPhotos.ts');
 const TUNGSTEN = path.join(ROOT, 'scripts', 'lib', 'tungsten.py');
 /** Labels on the QA sheets, in the app's own face. */
@@ -121,8 +129,19 @@ function themeColors(keys) {
   const to = from < 0 ? -1 : theme.indexOf('} as const;', from);
   if (from < 0 || to < 0) fail('cannot find `export const colors = {` … `} as const;` in src/constants/theme.ts.');
   const found = {};
+  const seen = {};
   for (const [, key, value] of theme.slice(from, to).matchAll(/(\w+):\s*'(#[0-9A-Fa-f]{6})'/g)) {
     found[key] = value.toUpperCase();
+    seen[key] = (seen[key] ?? 0) + 1;
+  }
+  // The regex also matches a comment quoting a value ("was liningDeep: '#…'"),
+  // and the last match wins. Two candidates is a guess, so it stops too.
+  const twice = keys.filter((k) => seen[k] > 1);
+  if (twice.length) {
+    fail(
+      `${twice.map((k) => `colors.${k}`).join(' and ')} matched more than once in src/constants/theme.ts ` +
+        "(a comment quoting `key: '#RRGGBB'`?). Nothing was written.",
+    );
   }
   const missing = keys.filter((k) => !found[k]);
   if (missing.length) {
@@ -353,10 +372,13 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'drink-photos-'));
 process.on('exit', () => {
   fs.rmSync(tmp, { recursive: true, force: true });
   fs.rmSync(STAGE_DIR, { recursive: true, force: true });
+  // A swap stopped between its two renames: put the old set back.
+  if (fs.existsSync(PREV_DIR) && !fs.existsSync(OUT_DIR)) fs.renameSync(PREV_DIR, OUT_DIR);
+  fs.rmSync(PREV_DIR, { recursive: true, force: true });
 });
 // Without a listener, Ctrl-C kills node outright: no 'exit', so the staged set
-// was left inside assets/, and a press between removing assets/drinks and
-// renaming the new set in lost both. A listener only runs once the script's
+// was left inside assets/, and a press in the middle of the swap could leave
+// assets/drinks without either set. A listener only runs once the script's
 // synchronous code has returned, so the swap is never cut in half: Ctrl-C
 // fails the build through the child it reaches (python, cwebp), and a signal
 // node alone receives lands after the build has finished.
@@ -494,9 +516,21 @@ if (seamFailed.length) {
   );
 }
 
-/* ---- Swap the new set in whole (this also retires the old locked/ set) ---- */
-fs.rmSync(OUT_DIR, { recursive: true, force: true });
-fs.renameSync(STAGE_DIR, OUT_DIR);
+/*
+ * ---- Swap the new set in whole (this also retires the old locked/ set) ----
+ * Two renames, then the delete: removing 300-odd files first left a window
+ * in which neither set was in assets/. If the second rename fails, the old
+ * set goes back.
+ */
+fs.rmSync(PREV_DIR, { recursive: true, force: true });
+if (fs.existsSync(OUT_DIR)) fs.renameSync(OUT_DIR, PREV_DIR);
+try {
+  fs.renameSync(STAGE_DIR, OUT_DIR);
+} catch (err) {
+  if (fs.existsSync(PREV_DIR)) fs.renameSync(PREV_DIR, OUT_DIR);
+  fail(`could not move the new set into assets/drinks (${err.message}); the old set was put back.`);
+}
+fs.rmSync(PREV_DIR, { recursive: true, force: true });
 
 /* ---- Static require map (Metro cannot resolve a dynamic require) ---- */
 const lines = picks.map((p) => `  '${p.id}': require('../../assets/drinks/${p.id}.webp'),`).join('\n');

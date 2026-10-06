@@ -8,16 +8,18 @@ import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 /* The sign-in screen's title bar                                       */
 /*                                                                      */
 /* The app's one top bar (ScreenTopBar), set the way every sign-in step */
-/* uses it: md, the rule always drawn (the steps do not scroll far      */
-/* enough for "scrolled" to mean anything, and the rule is what tells   */
-/* the bar from the form), and at most one control, on the left: close  */
-/* on the first step, back on the others, none on the username step,    */
-/* which has nowhere to go back to.                                     */
+/* uses it: md, the rule always drawn (it is what tells the bar from    */
+/* the form, and at the head of the sheet it is the sheet's edge, at    */
+/* rest as much as scrolled), and at most one control, on the left:     */
+/* close on the first step, back on the others, none on the username    */
+/* step, which has nowhere to go back to.                               */
 /*                                                                      */
-/* The sign-in screen is drawn inline in the gated scene, not presented */
-/* as a native modal, so this bar is drawn by the screen itself, under  */
-/* the status bar. The country picker IS a native page sheet and passes */
-/* insetTop={false}: a sheet has no status bar to clear.                */
+/* Every caller passes insetTop={false}, because none has a status bar  */
+/* to clear: the country picker is a native page sheet, and the sign-in */
+/* and username steps put the bar at the head of the paper sheet over   */
+/* the cabinet (auth/CabinetBackdrop's CabinetSheet), whose lining      */
+/* clears the status bar above it. There the bar sticks while the form  */
+/* scrolls.                                                             */
 /* ==================================================================== */
 
 export function AuthTitleBar({
@@ -33,7 +35,7 @@ export function AuthTitleBar({
   onLeading?: () => void;
   /** The spoken name of the leading control: "Close" and "Back" by default. */
   leadingLabel?: string;
-  /** False inside an iOS page sheet. */
+  /** False inside a sheet: an iOS page sheet, or CabinetSheet, which clears the status bar itself. */
   insetTop?: boolean;
   /** So the screen can move VoiceOver to the title on each step (useStepTitleFocus). */
   titleRef?: Ref<Text>;

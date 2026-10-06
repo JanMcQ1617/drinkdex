@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Grain } from '@/components/Grain';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { EmptyState, haptic, Hold } from '@/components/ui';
@@ -237,6 +238,7 @@ export function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) 
   if (!person) {
     return (
       <View style={styles.screen}>
+        <Grain />
         <ScreenTopBar
           size="lg"
           title=""
@@ -244,7 +246,10 @@ export function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) 
           showRule={false}
         />
         {lookup === 'loading' ? (
-          <Hold slowMessage="Still loading this profile." />
+          // The slot Hold, centred: a filled one would paint flat cream over the grain.
+          <View style={styles.center}>
+            <Hold fill={false} slowMessage="Still loading this profile." />
+          </View>
         ) : (
           <View style={styles.center}>
             {lookup === 'failed' ? (

@@ -2,19 +2,22 @@ import { Image } from 'expo-image';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DrinkArt } from '@/components/artwork';
 import { AuthGate } from '@/components/AuthGate';
+import { DrinkName } from '@/components/cabinet';
+import { DrinkFace } from '@/components/DexCard';
 import { firstUnseenIndex, groupPours, type PourGroup } from '@/components/home/groupPours';
+import { DexStatusPlaque, MediaNumberPlate, MediaPlaque } from '@/components/media';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
 import { announce, Avatar, EmptyState, MediaIconButton } from '@/components/ui';
-import { colors, dexNumber, fonts, layout, space, stroke } from '@/constants/theme';
-import { formatDexNumber, getDrink } from '@/data';
+import { colors, fonts, layout, onMedia, RARITY_META, space, stroke, textRole } from '@/constants/theme';
+import { getDrink } from '@/data';
 import { primeSignedUrls, toProfile } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
+import { useCollection, useIsUnlocked } from '@/store/collection';
 import { useSeen } from '@/store/seen';
 import { useSocial } from '@/store/social';
 import type { Drink, Pour, UserProfile } from '@/types';
@@ -27,6 +30,11 @@ import type { Drink, Pour, UserProfile } from '@/types';
 /* too. A pour is a photograph to look at, not a five-second clip, so   */
 /* nothing here moves on by itself: a tap on the right goes forward, a  */
 /* tap on the left goes back, and each step is an instant cut.          */
+/*                                                                      */
+/* The photo is shown whole (contained), and the stage behind it takes  */
+/* the drink's own colour: the same photo, decoded tiny and blurred,    */
+/* scaled to cover. It stays inside the stage, so the header and the    */
+/* footer are always on the plain dark ground and never over the blur.  */
 /*                                                                      */
 /* SEEN STAYS ON THE PHONE. Each pour shown is marked in the seen store */
 /* (store/seen.ts), which only frames tiles on this device; nobody is   */
@@ -75,6 +83,7 @@ function PoursViewer({
 }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const pours = useSocial((s) => s.pours);
   const profiles = useSocial((s) => s.profiles);
   const ownRow = useAuth((s) => s.profile);
@@ -119,6 +128,13 @@ function PoursViewer({
   const group = seq.groups[pos.person];
   const pour = group?.pours[pos.pour];
   const drink = pour ? getDrink(pour.drinkId) : undefined;
+  /*
+   * Whether this pour's drink is in YOUR Dex, for the status plaque; no
+   * plaque until the collection has been read from disk, so a drink you
+   * have never shows "New to your Dex" for a moment.
+   */
+  const unlocked = useIsUnlocked(pour?.drinkId ?? '');
+  const collectionReady = useCollection((s) => s.hydrated);
   const who: UserProfile | undefined = group
     ? group.authorId === myId && ownRow?.id === myId
       ? toProfile(ownRow)
@@ -265,17 +281,43 @@ function PoursViewer({
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + space.md }]}>
         {drink ? (
-          <Pressable
-            onPress={() => openDrink(drink.id)}
-            hitSlop={{ top: 8, bottom: 8 }}
-            accessibilityRole="button"
-            accessibilityLabel={`${drink.name}, number ${drink.dexNumber}. Opens it in the Dex`}
-            style={({ pressed }) => [styles.drinkLink, pressed && styles.pressed]}>
-            <Text style={styles.drinkName} numberOfLines={2} maxFontSizeMultiplier={1.4}>
-              {drink.name}
-            </Text>
-            <Text style={[dexNumber, styles.drinkNumber]}>{formatDexNumber(drink.dexNumber)}</Text>
-          </Pressable>
+          <>
+            {/*
+              The name whole, never cut: DrinkName wraps it and fits a long
+              word to the line, and the footer grows while the stage gives
+              way. One button with its number and tier, as on the feed's
+              nameplate; the plates under it say the same to the eye.
+            */}
+            <Pressable
+              onPress={() => openDrink(drink.id)}
+              hitSlop={{ top: 8, bottom: 8 }}
+              accessibilityRole="button"
+              accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${RARITY_META[
+                drink.rarity
+              ].label.toLowerCase()}`}
+              accessibilityHint="Opens it in the Dex"
+              style={({ pressed }) => [styles.drinkLink, pressed && styles.pressed]}>
+              <DrinkName
+                name={drink.name}
+                role={textRole.nameLg}
+                measure={width - 2 * layout.gutter}
+                cap={1.3}
+                color={onMedia.ink}
+              />
+            </Pressable>
+            <View style={styles.plates}>
+              <View
+                style={styles.plateGroup}
+                accessibilityElementsHidden
+                importantForAccessibility="no-hide-descendants">
+                <MediaNumberPlate n={drink.dexNumber} />
+                <MediaPlaque rarity={drink.rarity} />
+              </View>
+              {collectionReady ? (
+                <DexStatusPlaque inDex={unlocked} name={drink.name} onPress={() => openDrink(drink.id)} />
+              ) : null}
+            </View>
+          </>
         ) : null}
         <Pressable
           onPress={() => openPost(pour.postId)}
@@ -293,15 +335,42 @@ function PoursViewer({
 }
 
 /**
+ * The blurred backdrop's box. Tiny on purpose: decoded at 55 x 73pt
+ * (about 165 x 220 pixels) and scaled up by a static transform to cover
+ * the stage, so the colour behind the photo costs almost nothing to hold.
+ * A blur of a picture that small is all colour and no detail.
+ */
+const BACKDROP = { w: 55, h: 73 } as const;
+const BACKDROP_BLUR = 24;
+
+/**
  * The photo, whole (contain, not cover: this is the one place a pour is
- * shown uncropped). Keyed by path by its parent, so a step never shows
- * the previous pour under the new name while the next one loads.
+ * shown uncropped), over a blurred copy of itself that fills the
+ * letterbox. Keyed by path by its parent, so a step never shows the
+ * previous pour under the new name while the next one loads.
  */
 function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefined; label: string }) {
   // The pour as the retry key, as on the tiles.
   const url = useSignedPhoto(pour.path, pour);
+  const { width, height } = useWindowDimensions();
+  // The window covers the stage, whatever the header and footer take.
+  const cover = Math.max(width / BACKDROP.w, height / BACKDROP.h);
   return (
     <View style={styles.photo} accessible accessibilityRole="image" accessibilityLabel={label}>
+      {url ? (
+        <View pointerEvents="none" style={styles.backdrop}>
+          <Image
+            source={{ uri: url, cacheKey: pour.path }}
+            cachePolicy="memory-disk"
+            // Decoded at the box's 55pt, before the scale: see BACKDROP.
+            enforceEarlyResizing
+            blurRadius={BACKDROP_BLUR}
+            contentFit="cover"
+            accessible={false}
+            style={[styles.backdropImage, { transform: [{ scale: cover }] }]}
+          />
+        </View>
+      ) : null}
       {url ? (
         <Image
           source={{ uri: url, cacheKey: pour.path }}
@@ -319,7 +388,8 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
           style={StyleSheet.absoluteFill}
         />
       ) : url === null && drink ? (
-        <DrinkArt drink={drink} size={160} />
+        // A photo that will not sign: the drink's own lit face, at the feed's 4:5.
+        <DrinkFace drink={drink} mode="lit" width={width} height={Math.round(width * 1.25)} />
       ) : null}
     </View>
   );
@@ -358,12 +428,23 @@ const styles = StyleSheet.create({
   },
   spacer: { flex: 1 },
 
-  stage: { flex: 1 },
+  /* Clips the backdrop's scaled blur to the stage. */
+  stage: { flex: 1, overflow: 'hidden' },
   photo: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  backdrop: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backdropImage: { width: BACKDROP.w, height: BACKDROP.h },
   zones: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, flexDirection: 'row' },
   zonePrevious: { width: '33%' },
   zoneNext: { flex: 1 },
@@ -373,15 +454,9 @@ const styles = StyleSheet.create({
     paddingTop: space.md,
     gap: space.sm,
   },
-  drinkLink: { flexDirection: 'row', alignItems: 'baseline', gap: space.sm, alignSelf: 'flex-start' },
-  drinkName: {
-    flexShrink: 1,
-    fontFamily: fonts.display,
-    fontSize: 22,
-    lineHeight: 28,
-    color: colors.reelInk,
-  },
-  drinkNumber: { color: colors.reelInkMuted },
+  drinkLink: { alignSelf: 'flex-start', maxWidth: '100%' },
+  plates: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  plateGroup: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 },
   postLink: { alignSelf: 'flex-start' },
   postLinkLabel: {
     fontFamily: fonts.bodySemiBold,

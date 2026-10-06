@@ -1,12 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, Text } from 'react-native';
 
+import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { FindFriends } from '@/components/FindFriends';
-import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
-import { ScreenTopBar, useScrolledPast } from '@/components/ScreenTopBar';
+import { ScreenTopBar } from '@/components/ScreenTopBar';
 import { Button } from '@/components/ui';
-import { colors, fonts, layout, space, stroke, type as typeScale } from '@/constants/theme';
+import { colors, fonts, layout, space, type as typeScale } from '@/constants/theme';
 
 /* ==================================================================== */
 /* Welcome — find your people                                           */
@@ -37,73 +36,54 @@ import { colors, fonts, layout, space, stroke, type as typeScale } from '@/const
 /* footer that is always in view, above the floating tab bar — AuthGate  */
 /* renders this inside the Home and Profile tab scenes, and the bar      */
 /* floats over their bottom edge, which is where the old button ended up */
-/* at full scroll. log.tsx pins its save the same way.                   */
+/* at full scroll. log.tsx pins its save the same way. CabinetSheet      */
+/* draws the footer and its clearance.                                   */
 /*                                                                      */
-/* THE TITLE IS THE BAR'S. The app's one top bar names the step, as it   */
-/* names the sign-in steps and the username step just before this one,  */
-/* so the three read as one flow; the bar's rule shows once the long     */
-/* list scrolls under it. The glyph under it is drawn bare, with no disc */
-/* behind it: an icon in a tinted circle is the most copied header there */
-/* is.                                                                   */
+/* ONE FRAME WITH SIGN-IN. The step is the paper sheet over the cabinet  */
+/* (auth/CabinetBackdrop) with the compact backdrop, as the sign-in and  */
+/* username steps just before it are, so the three read as one flow. The */
+/* title is the sheet's bar, which sticks while the long list scrolls    */
+/* and always draws its rule, the sheet's edge. The glyph under it is    */
+/* drawn bare, with no disc behind it: an icon in a tinted circle is the */
+/* most copied header there is.                                          */
 /* ==================================================================== */
 
 export function WelcomeConnect({ onDone }: { onDone: () => void }) {
-  const insets = useSafeAreaInsets();
-  const [scrolled, onScroll] = useScrolledPast();
-
+  /*
+   * Keyboard as on /find-friends: the same four fields live here. With a
+   * footer, CabinetSheet meets the keyboard with the scroll view's insets
+   * rather than a KeyboardAvoidingView, so the pinned footer stays put
+   * instead of riding up on the keyboard.
+   *
+   * "Skip" would be the honest word for the footer, but it frames the
+   * step as an obstacle. Every one of these controls is permanently in
+   * Settings, so this really is just "later" — and the lede already says
+   * so, which is why the footnote that repeated it is gone.
+   */
   return (
-    <View style={styles.screen}>
-      <ScreenTopBar title="Find your people" size="md" showRule={scrolled} />
-      {/*
-        Keyboard props as on /find-friends: the same four fields live here.
-        Insets rather than a KeyboardAvoidingView, so the pinned footer
-        stays put instead of riding up on the keyboard.
-      */}
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="interactive"
-        automaticallyAdjustKeyboardInsets
-        showsVerticalScrollIndicator={false}>
-        <Icon name="users" size={28} color={colors.text} />
+    <CabinetSheet
+      backdrop="compact"
+      bar={<ScreenTopBar title="Find your people" size="md" showRule inset="sheet" />}
+      footer={<Button label="Continue" onPress={onDone} block />}
+      contentStyle={styles.content}>
+      <Icon name="users" size={28} color={colors.text} />
 
-        <Text style={styles.lede}>
-          Sipply is better with the friends you already drink with. You can bring them
-          over now, or do it later from Settings — nothing here is one-time.
-        </Text>
-
-        {/*
-          FindFriends opens with <FacebookFriends />, so someone who has
-          just signed in with Facebook sees their friends first, right
-          under the lede. Not mounted here as well: it would draw twice.
-        */}
-        <FindFriends />
-      </ScrollView>
+      <Text style={styles.lede}>
+        Sipply is better with the friends you already drink with. You can bring them
+        over now, or do it later from Settings — nothing here is one-time.
+      </Text>
 
       {/*
-        "Skip" would be the honest word, but it frames the step as an
-        obstacle. Every one of these controls is permanently in Settings,
-        so this really is just "later" — and the lede above already says
-        so, which is why the footnote that repeated it is gone.
-
-        Bottom padding is the tab-screen clearance plus the space.md every
-        tab screen and the sign-in screen add. Without it the button cleared
-        a notchless phone's bar by 6pt, close enough to read as part of it.
+        FindFriends opens with <FacebookFriends />, so someone who has
+        just signed in with Facebook sees their friends first, right
+        under the lede. Not mounted here as well: it would draw twice.
       */}
-      <View
-        style={[styles.footer, { paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md }]}>
-        <Button label="Continue" onPress={onDone} block />
-      </View>
-    </View>
+      <FindFriends />
+    </CabinetSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.bg },
-  scroll: { flex: 1 },
   content: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.xl,
@@ -117,14 +97,5 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginTop: space.md,
     marginBottom: space.xl,
-  },
-
-  /* A drawn edge between the list and the pinned way out (01: every edge is drawn). */
-  footer: {
-    paddingHorizontal: layout.gutter,
-    paddingTop: space.md,
-    borderTopWidth: stroke.edge,
-    borderTopColor: colors.line,
-    backgroundColor: colors.bg,
   },
 });

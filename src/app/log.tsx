@@ -17,15 +17,15 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DrinkArt } from '@/components/artwork';
+import { DexStatusTag, dexStatusTagWidth, DrinkName, LiningBand } from '@/components/cabinet';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
+import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import {
   announce,
   Button,
-  CategoryTag,
   EmptyState,
   Field,
   haptic,
@@ -33,19 +33,20 @@ import {
   SectionHeader,
 } from '@/components/ui';
 import {
-  CATEGORY_META,
   colors,
   fonts,
   layout,
   radius,
+  RARITY_META,
   space,
   stroke,
+  tabular,
   textRole,
   type as typeScale,
 } from '@/constants/theme';
-import { formatCount, getDrink } from '@/data';
-import { drinkPhoto } from '@/data/drinkPhotos';
+import { formatCount, formatDexNumber, getDrink, TOTAL } from '@/data';
 import { catalogueTwin, isCustomId, ownTwin, shortQuery, toDrink } from '@/lib/customDrinks';
+import { styleLabel } from '@/lib/drinkLabels';
 import { fold, MAX_RESULTS, rank, rankCustom, SEARCH_INDEX } from '@/lib/drinkSearch';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import {
@@ -58,6 +59,7 @@ import {
   reportPostPhoto,
   type PickResult,
 } from '@/lib/pour';
+import { faceOf, fitScale } from '@/lib/textFit';
 import { useAuth } from '@/store/auth';
 import { useCelebrate } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
@@ -177,16 +179,45 @@ function search(query: string, own: Record<string, CustomDrink>): { rows: Result
 
 /* -------------------------------------------------------------------- */
 
+/*
+ * A result row's columns, for the name's measure (specs/v3-cabinet.md
+ * 6.4): 12pt of padding each side, the 44pt thumbnail and its 12pt gap,
+ * and at least 112pt for the tag at the end. DrinkName has to know the
+ * column before layout, because it shrinks a name with a long word to fit
+ * rather than letting iOS break the word.
+ */
+const ROW_PAD = space.md;
+const THUMB_COLUMN = 44 + space.md;
+const TRAILING_MIN = 112;
+/** Dynamic Type cap on a row's name (6.5), and on the preview's sentence that holds one. */
+const NAME_CAP = 1.4;
+/*
+ * Past this text size (XL and up) the tag leaves the end of the row and
+ * sits under the meta line, on every row. The tag grows with the text:
+ * "New to your Dex" is about 145pt wide at XL, and beside it a 375pt phone
+ * leaves the name some 100pt, which shrinks most names. Under the meta the
+ * name has the row.
+ */
+const STACK_SCALE = 1.1;
+
 /**
- * One result, as a list row: a 44pt thumbnail on the category's wash, the
- * name with its style and origin, and what the drink is to you at the end.
+ * One result, as a row of the grouped results list: the drink mounted as a
+ * lit thumbnail, its name in Playfair, its number, style and tier, and at
+ * the end what it is to you.
+ *
+ * Lit for every drink, collected or not: this is where you identify what
+ * you drank, and a ghost would hide the picture you are matching. The name
+ * goes through DrinkName, so it wraps and the row grows; nothing is cut
+ * short.
+ *
+ * The tag says "New" for a drink not yet in your Dex, "In your Dex" for one
+ * that is, and "Yours" for a drink this person added. Chosen, the row takes
+ * the wine wash and a 1.5pt wine edge, and a new drink's tag reads "New to
+ * your Dex": the choice is said by an edge and words as well as a colour.
  *
  * A fill answers the press, not a scale: a row is a control, not a
- * picture. The chosen row keeps the wine wash and gains a check, so the
- * choice is said by a shape as well as a colour (it was a check in a wine
- * disc, one of the app's nine icons in circles). The word at the end is
- * "Yours" for a drink this person added, "Collected" for one already in
- * the Dex, and the category tag otherwise.
+ * picture. Each row draws its own share of the group's edge (`first` and
+ * `last` take the corners), so a FlatList of rows reads as one panel.
  */
 function DrinkRow({
   drink,
@@ -194,6 +225,9 @@ function DrinkRow({
   collected,
   photoUri,
   badge,
+  rowWidth,
+  first,
+  last,
   onPress,
 }: {
   drink: Drink;
@@ -204,21 +238,62 @@ function DrinkRow({
   photoUri?: string | null;
   /** 'yours': a drink this person added, not one from the catalogue. */
   badge?: 'yours';
+  /** The row's width inside the group's 1pt edges. */
+  rowWidth: number;
+  first: boolean;
+  last: boolean;
   onPress: (d: Drink) => void;
 }) {
-  const photo = photoUri ? { uri: photoUri } : badge ? undefined : drinkPhoto(drink.id);
+  const { fontScale } = useWindowDimensions();
+  const trailing = Math.max(
+    TRAILING_MIN,
+    space.md + (badge ? 0 : dexStatusTagWidth(collected, selected, fontScale)),
+  );
+  const beside = rowWidth - 2 * ROW_PAD - THUMB_COLUMN - trailing;
+  const below = rowWidth - 2 * ROW_PAD - THUMB_COLUMN;
+  /*
+   * And at any size, a row whose name the tag beside it would shrink: a
+   * long word ("Feuerzangenbowle") on a small phone, or a chosen row whose
+   * tag has grown to "New to your Dex". The name keeps its size and the
+   * tag moves down a line, so choosing a drink never makes its name
+   * smaller. Worked out as DrinkName will, from the same estimate.
+   */
+  const face = faceOf(textRole.rowName.fontFamily);
+  const nameSize = textRole.rowName.fontSize * Math.min(fontScale, NAME_CAP);
+  const stacked =
+    fontScale > STACK_SCALE ||
+    fitScale(drink.name, face, nameSize, beside) < fitScale(drink.name, face, nameSize, below);
+  const measure = stacked ? below : beside;
+
+  const styleWord = styleLabel(drink.subcategory);
+  const tier = RARITY_META[drink.rarity];
   /*
    * Spoken as a plain number. The Dex prints it padded, "#0042", which
    * VoiceOver reads out zero by zero; the padding is for the eye, and
    * DexCard says it the same way. A drink someone added has no number, and
    * says whose it is instead.
    *
-   * "Collected" is the state's one word: the Dex filter, the profile stat
-   * and the celebration card all use it.
+   * The state in the tag's own words, so a VoiceOver user and a sighted
+   * one are told the same thing; the choice is accessibilityState.
    */
   const spoken = badge
-    ? `${drink.name}, ${drink.subcategory}, added by you${collected ? ', collected' : ''}`
-    : `${drink.name}, ${drink.subcategory}, number ${drink.dexNumber}${collected ? ', collected' : ''}`;
+    ? [drink.name, styleWord, 'added by you', collected ? 'collected' : null].filter(Boolean).join(', ')
+    : [
+        drink.name,
+        `number ${drink.dexNumber}`,
+        styleWord,
+        tier.label.toLowerCase(),
+        collected ? 'in your Dex' : 'new to your Dex',
+      ]
+        .filter(Boolean)
+        .join(', ');
+
+  const status = badge ? (
+    <Text style={styles.rowYours}>Yours</Text>
+  ) : (
+    <DexStatusTag inDex={collected} selected={selected} />
+  );
+
   return (
     <Pressable
       onPress={() => onPress(drink)}
@@ -227,34 +302,44 @@ function DrinkRow({
       accessibilityLabel={spoken}
       style={({ pressed }) => [
         styles.row,
+        first && styles.rowFirst,
+        last && styles.rowLast,
         selected ? styles.rowSelected : pressed ? styles.rowPressed : null,
       ]}>
-      <View style={[styles.rowArt, { backgroundColor: CATEGORY_META[drink.category].wash }]}>
-        {photo ? (
-          <Image source={photo} style={styles.rowPhoto} contentFit="cover" transition={120} enforceEarlyResizing />
-        ) : (
-          <DrinkArt drink={drink} size={34} flat />
-        )}
-      </View>
+      <DexThumb drink={drink} photoUri={photoUri} />
 
       <View style={styles.rowText}>
-        <Text style={styles.rowName} numberOfLines={1}>
-          {drink.name}
-        </Text>
-        <Text style={styles.rowMeta} numberOfLines={1}>
-          {[drink.subcategory, drink.origin].filter(Boolean).join(' · ')}
-        </Text>
+        <DrinkName name={drink.name} role={textRole.rowName} measure={measure} cap={NAME_CAP} color={colors.text} />
+        {/*
+          "#0127 · Spirit-forward · Common": the number in the plate's
+          taupe, the tier in its own ink. A drink someone added has neither,
+          so it keeps its style and where it is from.
+        */}
+        {badge ? (
+          <Text style={styles.rowMeta}>{[styleWord, drink.origin].filter(Boolean).join(' · ')}</Text>
+        ) : (
+          <Text style={styles.rowMeta}>
+            <Text style={styles.rowNumber}>{formatDexNumber(drink.dexNumber)}</Text>
+            {styleWord ? ` · ${styleWord}` : ''}
+            {' · '}
+            <Text style={{ color: tier.color }}>{tier.label}</Text>
+          </Text>
+        )}
+        {stacked ? <View style={styles.rowStatusStacked}>{status}</View> : null}
       </View>
 
+      {stacked ? null : status}
+
+      {/*
+        The chosen row's edge, inside the group's own: the wash alone was a
+        colour, and an edge is a shape. Last, so it lies over the fill.
+      */}
       {selected ? (
-        <Icon name="check" size={20} color={colors.wine} />
-      ) : badge ? (
-        <Text style={styles.rowYours}>Yours</Text>
-      ) : collected ? (
-        <Text style={styles.rowCollected}>Collected</Text>
-      ) : (
-        <CategoryTag category={drink.category} />
-      )}
+        <View
+          pointerEvents="none"
+          style={[styles.rowEdge, first && styles.rowEdgeFirst, last && styles.rowEdgeLast]}
+        />
+      ) : null}
     </Pressable>
   );
 }
@@ -278,6 +363,51 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
         accessibilityLabel={`Add ${query} to your Dex`}
       />
     </View>
+  );
+}
+
+/**
+ * What saving a new catch will do, said before it happens: the drink
+ * seated in the lining as the mount it is about to become, "Negroni joins
+ * your Dex", and the card it will be, "39 of 2,089 collected · #0127 ·
+ * Common". The collect moment's final state, drawn static: nothing here
+ * moves, so there is no state in which it is half shown.
+ *
+ * The thumbnail carries this pour's photo once there is one, since the Dex
+ * card will show your pour ahead of the catalogue's.
+ *
+ * Inter, with only the name in Playfair (nameInline): a sentence that
+ * names a drink is not a drink name. One VoiceOver element.
+ */
+function CollectPreview({
+  drink,
+  number,
+  photoUri,
+}: {
+  drink: Drink;
+  /** The count once this drink is in: the card number it will be. */
+  number: number;
+  photoUri: string | null;
+}) {
+  const tier = RARITY_META[drink.rarity].label;
+  const count = `${formatCount(number)} of ${formatCount(TOTAL)} collected`;
+  return (
+    <LiningBand radius={12} style={styles.preview}>
+      <View
+        accessible
+        accessibilityLabel={`${drink.name} joins your Dex. ${count}, number ${drink.dexNumber}, ${tier}.`}
+        style={styles.previewRow}>
+        <DexThumb drink={drink} photoUri={photoUri} size="mini" />
+        <View style={styles.previewText}>
+          <Text maxFontSizeMultiplier={NAME_CAP} style={styles.previewTitle}>
+            <Text style={textRole.nameInline}>{drink.name}</Text> joins your Dex
+          </Text>
+          <Text style={styles.previewMeta}>
+            {count} · {formatDexNumber(drink.dexNumber)} · {tier}
+          </Text>
+        </View>
+      </View>
+    </LiningBand>
   );
 }
 
@@ -308,6 +438,8 @@ export default function LogPourScreen() {
   const customPours = useCustomDrinks((s) => s.pours);
 
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  /** Where the photo came from, for the line beside the print and its camera button. */
+  const [photoFrom, setPhotoFrom] = useState<'camera' | 'library'>('camera');
   const [drink, setDrink] = useState<Drink | null>(() => resolveDrink(preselectId));
   const [query, setQuery] = useState('');
   const [note, setNote] = useState('');
@@ -384,14 +516,18 @@ export default function LogPourScreen() {
    */
   const takePhoto = useCallback(async () => {
     const r = await pickFromCamera();
-    if (r.ok) setPhotoUri(r.uri);
-    else if (r.reason !== 'cancelled') notice(r);
+    if (r.ok) {
+      setPhotoUri(r.uri);
+      setPhotoFrom('camera');
+    } else if (r.reason !== 'cancelled') notice(r);
   }, []);
 
   const choosePhoto = useCallback(async () => {
     const r = await pickFromLibrary();
-    if (r.ok) setPhotoUri(r.uri);
-    else if (r.reason !== 'cancelled') notice(r);
+    if (r.ok) {
+      setPhotoUri(r.uri);
+      setPhotoFrom('library');
+    } else if (r.reason !== 'cancelled') notice(r);
   }, []);
 
   const selectDrink = useCallback((d: Drink) => {
@@ -617,9 +753,14 @@ export default function LogPourScreen() {
    * sheet's. Measured from layout, not measureInWindow, which can read
    * the sheet mid-way through its presentation animation. 'padding' does
    * not change the view's own height, so this cannot feed back on itself.
+   *
+   * The width comes from the same layout: the result rows give their names
+   * a measure (DrinkName), and the sheet is what they sit in.
    */
-  const { height: windowH } = useWindowDimensions();
-  const [sheetH, setSheetH] = useState(windowH);
+  const { width: windowW, height: windowH } = useWindowDimensions();
+  const [sheet, setSheet] = useState({ w: windowW, h: windowH });
+  /** A result row's width: the sheet less the list's gutters and the group's 1pt edges. */
+  const rowWidth = sheet.w - 2 * layout.gutter - 2 * stroke.edge;
 
   /** A drink's own photo for its row: the pour's, else the one it was added with. */
   const customPhoto = (c: CustomDrink) =>
@@ -629,59 +770,123 @@ export default function LogPourScreen() {
 
   const selectedCustom = isCustom && drink ? (customDrinkById(drink.id) ?? null) : null;
 
+  /*
+   * The collect preview, for a new catch from the catalogue: a re-log has
+   * nothing to collect, and a drink someone added never moves the count.
+   * Its number is the count with this drink in it; once saved, the store
+   * already holds it.
+   */
+  const collectedCount = Object.keys(unlocks).length;
+  const preview =
+    drink != null && !isCustom && !relog ? (
+      <CollectPreview drink={drink} number={collectedCount + (saved ? 0 : 1)} photoUri={photoUri} />
+    ) : null;
+
+  /*
+   * The choice is drawn above the results when they do not hold it (see
+   * the Selected block), and the preview goes with it there, under the row
+   * it describes, instead of after up to 40 rows of another search or a
+   * "No match".
+   */
+  const selectedApart = drink != null && !results.rows.some((r) => r.drink.id === drink.id);
+
   const header = (
-    <View style={styles.gutter}>
+    <View>
       {/* ---- The photograph ---- */}
       {/*
-        The frame shows; the two buttons under it act.
+        The well shows; the buttons act.
 
         It used to be the frame itself that took a photo, with the library
         as a text link below — which made the camera the only obvious way
         in and hid the fact that a pour already in your roll works just as
         well. Half the time the drink was photographed before anyone
-        thought to open Sipply, so the two routes are peers now rather than
-        a button and a footnote.
+        thought to open Sipply, so the two routes are peers rather than a
+        button and a footnote.
 
-        An inset photo: the panel corner and a drawn edge on the sunk well.
-        Empty, it shows a bare camera and two lines; the wine disc the
-        camera sat in was one of the app's nine icons in circles.
+        Empty, it is a 96pt well, not a 4:3 frame: the frame held a 408x306
+        hole for a photo that did not exist yet and decoded 4.5 MB once it
+        did. Picked, the photo is a 90x120 print on bone mat, beside where
+        it came from and the two ways to replace it.
       */}
-      <View style={styles.photoFrame}>
-        {photoUri ? (
-          <Image source={{ uri: photoUri }} style={styles.photo} contentFit="cover" enforceEarlyResizing />
-        ) : (
-          <View style={styles.photoEmpty}>
-            <Icon name="camera" size={32} color={colors.text} />
-            <Text style={styles.photoEmptyTitle}>Add a photo</Text>
-            <Text style={styles.photoEmptyBody}>Take one now, or pick one you already took.</Text>
+      {photoUri ? (
+        <View style={styles.printRow}>
+          <View style={styles.print}>
+            <Image
+              source={{ uri: photoUri }}
+              style={styles.printPhoto}
+              contentFit="cover"
+              accessible={false}
+              enforceEarlyResizing
+            />
           </View>
-        )}
-      </View>
+          <View style={styles.printText}>
+            <View accessible>
+              <Text style={styles.photoTitle}>Your photo</Text>
+              <Text style={styles.photoBody}>
+                {photoFrom === 'camera' ? 'Taken just now' : 'From your library'}
+              </Text>
+            </View>
+            {/*
+              The camera route keeps its camera, and is "Retake" only after
+              a photo was taken: after a library pick, "Retake" would name
+              a photo nobody took. "Choose another" is the library's.
+              Small buttons that wrap, so a 375pt phone and large text keep
+              both labels whole.
+            */}
+            <View style={styles.printActions}>
+              <Button
+                label={photoFrom === 'camera' ? 'Retake' : 'Take photo'}
+                variant="secondary"
+                size="sm"
+                icon="camera"
+                onPress={() => void takePhoto()}
+                accessibilityLabel={photoFrom === 'camera' ? 'Retake photo' : 'Take a photo instead'}
+              />
+              <Button
+                label="Choose another"
+                variant="secondary"
+                size="sm"
+                onPress={() => void choosePhoto()}
+                accessibilityLabel="Choose another photo"
+              />
+            </View>
+          </View>
+        </View>
+      ) : (
+        <>
+          <View style={styles.well} accessible>
+            <View style={styles.wellTile}>
+              <Icon name="camera" size={26} color={colors.text} />
+            </View>
+            <View style={styles.wellText}>
+              <Text style={styles.photoTitle}>Add a photo</Text>
+              <Text style={styles.photoBody}>Take one now, or pick one you already took.</Text>
+            </View>
+          </View>
 
-      {/*
-        The drink card's two labels, Take photo and Choose photo, and one
-        label each in both states: the frame above already shows that a
-        photo has been chosen. "Retake" came up after a library pick too,
-        naming a photo that was never taken; "Choose another" did not fit a
-        half-width button; "Camera roll" was a third name for the library.
-        One app names the two routes once.
-      */}
-      <View style={styles.photoActions}>
-        <Button
-          label="Take photo"
-          variant="secondary"
-          icon="camera"
-          onPress={() => void takePhoto()}
-          style={styles.photoAction}
-        />
-        <Button
-          label="Choose photo"
-          variant="secondary"
-          icon="grid"
-          onPress={() => void choosePhoto()}
-          style={styles.photoAction}
-        />
-      </View>
+          {/*
+            The drink card's two labels, Take photo and Choose photo, as on
+            its Update photo sheet; "Camera roll" was a third name for the
+            library. One app names the two routes once.
+          */}
+          <View style={styles.photoActions}>
+            <Button
+              label="Take photo"
+              variant="secondary"
+              icon="camera"
+              onPress={() => void takePhoto()}
+              style={styles.photoAction}
+            />
+            <Button
+              label="Choose photo"
+              variant="secondary"
+              icon="grid"
+              onPress={() => void choosePhoto()}
+              style={styles.photoAction}
+            />
+          </View>
+        </>
+      )}
 
       {/* ---- What was it ---- */}
       <SectionHeader title="What was it?" style={styles.sectionTitle} />
@@ -706,31 +911,69 @@ export default function LogPourScreen() {
         while the search was empty, so searching again to compare hid the
         drink that Save would still log.
       */}
-      {drink && !results.rows.some((r) => r.drink.id === drink.id) ? (
+      {drink && selectedApart ? (
         <View style={styles.selectedBlock}>
           <Text style={styles.selectedLabel}>Selected</Text>
-          {/* Full-bleed like the rows below it, so the gutter is taken back. */}
-          <View style={styles.bleed}>
-            <DrinkRow
-              drink={drink}
-              selected
-              collected={isCustom ? inDex(customPours, drink.id) : inDex(unlocks, drink.id)}
-              photoUri={selectedCustom ? customPhoto(selectedCustom) : null}
-              badge={isCustom ? 'yours' : undefined}
-              onPress={selectDrink}
-            />
-          </View>
+          {/* A group of one, drawn like the results below it. */}
+          <DrinkRow
+            drink={drink}
+            selected
+            collected={isCustom ? inDex(customPours, drink.id) : inDex(unlocks, drink.id)}
+            photoUri={selectedCustom ? customPhoto(selectedCustom) : null}
+            badge={isCustom ? 'yours' : undefined}
+            rowWidth={rowWidth}
+            first
+            last
+            onPress={selectDrink}
+          />
+          {preview}
         </View>
       ) : null}
     </View>
   );
 
+  /*
+   * Under the results: how many were left out, the collect preview, then
+   * the way to add a drink the Dex does not have. The preview follows the
+   * list it was chosen from, in the scroll and not in the save bar, which
+   * stays as short as it was while the keyboard is up. A choice the
+   * results do not hold keeps its preview in the Selected block instead.
+   */
+  const more = results.rows.length > 0 && results.total > MAX_RESULTS;
+  const addUnder = results.rows.length > 0 && offerAdd;
+  const previewUnder = selectedApart ? null : preview;
+  const footer =
+    more || previewUnder || addUnder ? (
+      <View>
+        {more ? (
+          <Text style={styles.moreHint}>
+            Showing the best {MAX_RESULTS} of {formatCount(results.total)}. Keep typing to narrow
+            them down.
+          </Text>
+        ) : null}
+        {previewUnder}
+        {addUnder ? <NotTheOne query={trimmed} onAdd={openAdd} /> : null}
+      </View>
+    ) : null;
+
   return (
     <KeyboardAvoidingView
       style={styles.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheetH : 0}
-      onLayout={(e) => setSheetH(e.nativeEvent.layout.height)}>
+      keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheet.h : 0}
+      onLayout={(e) => {
+        const { width: w, height: h } = e.nativeEvent.layout;
+        setSheet((s) => (s.w === w && s.h === h ? s : { w, h }));
+      }}>
+      {/*
+        The paper grain, first, so everything on the page lies over it:
+        photographs and thumbnails stay clean, and the white panels are
+        stock on a grained page. iOS presents this sheet in its own view
+        controller above the React root, so no grain from anywhere else
+        reaches it. pointerEvents none, so it takes no taps.
+      */}
+      <Grain />
+
       {/*
         The app's one top bar. No status-bar inset on iOS: the page sheet
         starts below the status bar, and the root's inset added inside it
@@ -751,7 +994,7 @@ export default function LogPourScreen() {
       <FlatList
         data={results.rows}
         keyExtractor={(r) => r.drink.id}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <DrinkRow
             drink={item.drink}
             selected={drink?.id === item.drink.id}
@@ -760,6 +1003,9 @@ export default function LogPourScreen() {
             }
             photoUri={item.custom ? customPhoto(item.custom) : null}
             badge={item.custom ? 'yours' : undefined}
+            rowWidth={rowWidth}
+            first={index === 0}
+            last={index === results.rows.length - 1}
             onPress={selectDrink}
           />
         )}
@@ -794,19 +1040,7 @@ export default function LogPourScreen() {
             )
           ) : null
         }
-        ListFooterComponent={
-          results.rows.length > 0 && (results.total > MAX_RESULTS || offerAdd) ? (
-            <View style={styles.gutter}>
-              {results.total > MAX_RESULTS ? (
-                <Text style={styles.moreHint}>
-                  Showing the best {MAX_RESULTS} of {formatCount(results.total)}. Keep typing to
-                  narrow them down.
-                </Text>
-              ) : null}
-              {offerAdd ? <NotTheOne query={trimmed} onAdd={openAdd} /> : null}
-            </View>
-          ) : null
-        }
+        ListFooterComponent={footer}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
@@ -863,16 +1097,6 @@ export default function LogPourScreen() {
       </View>
 
       {/*
-        The paper grain, again. iOS presents this sheet in its own view
-        controller above the React root, so the root layout's Grain is
-        underneath it and this page would otherwise be the one flat fill in
-        the app. Above the content and below the celebration, the same
-        order as the root: the card stays clean stock on a grained page.
-        pointerEvents none, so it takes no taps.
-      */}
-      <Grain />
-
-      {/*
         Rendered here as well as at the root. While this sheet is up it is
         the only one that can be seen; once it closes, the root instance
         covers every other way a pour gets logged.
@@ -888,47 +1112,64 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
 
   /*
-   * The rows run edge to edge, as a system list's do, so their pressed and
-   * chosen fills reach both sides; everything else keeps the gutter, and a
-   * row's own padding puts its thumbnail on the same line.
+   * Everything keeps the gutter, the results included: they are one
+   * grouped panel on the page (white, a 1pt edge, the panel corner), not
+   * a system list run edge to edge.
    */
-  list: { paddingBottom: space.xxxl },
-  gutter: { paddingHorizontal: layout.gutter },
-  bleed: { marginHorizontal: -layout.gutter },
+  list: { paddingHorizontal: layout.gutter, paddingBottom: space.xxxl },
 
-  /* Photograph: an inset photo */
-  photoFrame: {
-    aspectRatio: 4 / 3,
-    borderRadius: radius.card,
-    overflow: 'hidden',
-    backgroundColor: colors.bgSunk,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
+  /* Photograph, empty: a 96pt well with a camera tile and two lines */
+  well: {
+    minHeight: 96,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.lg,
+    padding: space.lg,
     marginTop: space.sm,
+    backgroundColor: colors.surface,
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.lineControl,
   },
-  photo: { width: '100%', height: '100%' },
-  photoEmpty: {
-    flex: 1,
+  wellTile: {
+    width: 64,
+    height: 64,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: space.lg,
-    gap: space.xs,
+    backgroundColor: colors.bgSunk,
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
   },
-  photoEmptyTitle: {
-    marginTop: space.sm,
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
-    color: colors.text,
-  },
-  photoEmptyBody: {
-    ...textRole.helper,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
+  wellText: { flex: 1, gap: 2 },
+  photoTitle: { ...textRole.sectionTitle, color: colors.text },
+  photoBody: { ...textRole.helper, color: colors.textMuted },
 
   photoActions: { flexDirection: 'row', gap: space.md, marginTop: space.md },
   photoAction: { flex: 1 },
+
+  /*
+   * Photograph, picked: a print on bone mat, 90x120, beside its two lines
+   * and buttons. Flat on the paper: a card on paper casts no shadow.
+   */
+  printRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.lg,
+    marginTop: space.sm,
+  },
+  print: {
+    width: 90,
+    height: 120,
+    padding: space.xs,
+    backgroundColor: colors.mat,
+    borderRadius: 6,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
+  },
+  printPhoto: { flex: 1, borderRadius: 3 },
+  printText: { flex: 1 },
+  printActions: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm, marginTop: space.md },
 
   sectionTitle: {
     marginTop: space.xl,
@@ -937,45 +1178,49 @@ const styles = StyleSheet.create({
 
   search: { marginBottom: space.md },
 
-  /* Result row: ListRow's metrics, with its own trailing word */
+  /*
+   * A result row, and its share of the group's edge: every row draws the
+   * top rule (the first one's is the group's top edge, the others' the
+   * separator), the first takes the top corners and the last the bottom
+   * edge and corners. Min 72, and it grows with the name.
+   */
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    minHeight: layout.rowTall,
-    paddingVertical: space.md,
-    paddingHorizontal: layout.gutter,
+    minHeight: 72,
+    paddingVertical: space.sm,
+    paddingHorizontal: ROW_PAD,
+    backgroundColor: colors.surface,
+    borderColor: colors.line,
+    borderTopWidth: stroke.edge,
+    borderLeftWidth: stroke.edge,
+    borderRightWidth: stroke.edge,
+  },
+  rowFirst: { borderTopLeftRadius: radius.card, borderTopRightRadius: radius.card },
+  rowLast: {
+    borderBottomWidth: stroke.edge,
+    borderBottomLeftRadius: radius.card,
+    borderBottomRightRadius: radius.card,
   },
   rowPressed: { backgroundColor: colors.bgSunk },
   rowSelected: { backgroundColor: colors.wineWash },
-  /* A thumbnail under 48pt: the badge corner and a drawn edge. */
-  rowArt: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
+  /* The chosen row's 1.5pt wine edge, inside the group's 1pt one (corner 12 − 1). */
+  rowEdge: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderWidth: 1.5,
+    borderColor: colors.wine,
   },
-  rowPhoto: { width: '100%', height: '100%' },
-  rowText: { flex: 1 },
-  rowName: {
-    ...textRole.rowTitle,
-    fontFamily: fonts.bodySemiBold,
-    color: colors.text,
-  },
-  rowMeta: {
-    ...textRole.rowSubtitle,
-    color: colors.textMuted,
-  },
-  rowCollected: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
-    color: colors.textMuted,
-  },
+  rowEdgeFirst: { borderTopLeftRadius: radius.card - 1, borderTopRightRadius: radius.card - 1 },
+  rowEdgeLast: { borderBottomLeftRadius: radius.card - 1, borderBottomRightRadius: radius.card - 1 },
+  rowText: { flex: 1, gap: 2 },
+  rowMeta: { ...textRole.helper, color: colors.textMuted },
+  rowNumber: { color: colors.taupeInk, ...tabular },
+  rowStatusStacked: { flexDirection: 'row', marginTop: space.xs },
   /* taupeInk: "yours" is a provenance, not a state, so it is not the state's muted grey. */
   rowYours: {
     fontFamily: fonts.bodyMedium,
@@ -983,7 +1228,8 @@ const styles = StyleSheet.create({
     lineHeight: typeScale.caption.lineHeight,
     color: colors.taupeInk,
   },
-  selectedBlock: { marginBottom: space.sm },
+  /* 16 above the results, so the group of one and the results read as two panels. */
+  selectedBlock: { marginBottom: space.lg },
   selectedLabel: {
     fontFamily: fonts.bodyMedium,
     fontSize: typeScale.caption.fontSize,
@@ -998,6 +1244,18 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginTop: space.md,
   },
+
+  /* The collect preview: a lining panel 16pt under the results */
+  preview: { marginTop: space.lg, paddingVertical: space.md, paddingHorizontal: 14 },
+  previewRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  previewText: { flex: 1, gap: 2 },
+  previewTitle: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 17,
+    lineHeight: 22,
+    color: colors.onLining,
+  },
+  previewMeta: { ...textRole.helper, color: colors.onLiningMuted, ...tabular },
 
   /* "Not the one you meant?" under the results */
   notTheOne: {

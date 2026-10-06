@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FindFriends } from '@/components/FindFriends';
+import { Grain } from '@/components/Grain';
 import { PersonRow } from '@/components/PeopleList';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { EmptyState, Hold, ListGroup, SectionHeader } from '@/components/ui';
@@ -16,11 +17,12 @@ import { useSocial } from '@/store/social';
 /*                                                                      */
 /* A screen, not a settings row that expands.                           */
 /*                                                                      */
-/* FindFriends is a stack of cards — Facebook when it has something to   */
-/* show, contacts, being findable, invites, username search and the      */
-/* Instagram import — each with a heading and a body paragraph. Expanded */
-/* inside a settings group that is itself a card, it nested bordered     */
-/* boxes inside a bordered box and pushed "Sign out" screens down.       */
+/* FindFriends is a stack of cards — contacts (a lining panel, the one   */
+/* recommended path), Facebook when it has something to show, being     */
+/* findable, invites, username search and the Instagram import — each   */
+/* with a heading and a body paragraph. Expanded inside a settings      */
+/* group that is itself a card, it nested bordered boxes inside a        */
+/* bordered box and pushed "Sign out" screens down.                      */
 /* Instagram drills down for exactly this reason, and this is the one    */
 /* row here with enough behind it to deserve it.                         */
 /*                                                                      */
@@ -108,13 +110,15 @@ export default function FindFriendsScreen() {
 
   return (
     <View style={styles.screen}>
+      {/* The page's own grain, under everything: there is no global grain any more. */}
+      <Grain />
       <ScreenTopBar
         title="Find friends"
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={leave} />}
         showRule={scrolled}
       />
       <ScrollView
-        style={styles.screen}
+        style={styles.scroll}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl }]}
         onScroll={onScroll}
         scrollEventThrottle={16}
@@ -138,6 +142,8 @@ export default function FindFriendsScreen() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
+  /* Clear, so the screen's grain shows through. */
+  scroll: { flex: 1 },
   content: { paddingHorizontal: layout.gutter },
   section: { marginTop: space.xl, marginBottom: space.md },
 });

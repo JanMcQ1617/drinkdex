@@ -162,6 +162,13 @@ export function CountryPicker({
       animationType="slide"
       onRequestClose={close}>
       <View style={styles.sheet}>
+        {/*
+          A native sheet is presented above the React root, so it carries its
+          own paper grain: first, under the rows, like every other ground. The
+          title bar draws its own (ScreenTopBar), so grain laid over the whole
+          sheet would double it there.
+        */}
+        <Grain />
         <AuthTitleBar
           title="Country or region"
           leading="close"
@@ -202,8 +209,6 @@ export function CountryPicker({
           keyboardDismissMode="on-drag"
           contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
         />
-        {/* A native sheet sits above the root Grain, so it carries its own. */}
-        <Grain />
       </View>
     </Modal>
   );

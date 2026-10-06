@@ -1,25 +1,31 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { DrinkName, TierWord } from '@/components/cabinet';
+import { DexThumb } from '@/components/DexCard';
+import { Grain } from '@/components/Grain';
+import { Icon } from '@/components/icons';
 import { PostCard } from '@/components/PostCard';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { EmptyState, Hold } from '@/components/ui';
-import { colors, space } from '@/constants/theme';
+import { colors, layout, space, stroke, textRole } from '@/constants/theme';
+import { getDrink } from '@/data';
 import { fetchPost, fetchProfiles, toProfile } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { mergeProfiles, useSocial } from '@/store/social';
-import type { Post } from '@/types';
+import type { Drink, Post } from '@/types';
 
 /* ==================================================================== */
 /* One post                                                             */
 /*                                                                      */
 /* Where a profile grid tile, a saved post, an Activity row and the     */
-/* pours viewer's "View post" all land: one PostCard on its own screen. */
-/* Pushed over the tabs, so Back returns to whichever of those opened   */
-/* it.                                                                  */
+/* pours viewer's "View post" all land: one PostCard on its own screen, */
+/* and under it the drink as it stands in the Dex, one tap from its     */
+/* page. Pushed over the tabs, so Back returns to whichever of those    */
+/* opened it.                                                           */
 /*                                                                      */
 /* "Unavailable" is one state for three causes the screen cannot tell   */
 /* apart and should not try to: the post was deleted, you are blocked   */
@@ -145,8 +151,12 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
       (post.authorId === myId && ownRow?.id === myId ? toProfile(ownRow) : undefined))
     : undefined;
 
+  const drink = post ? getDrink(post.drinkId) : undefined;
+
   return (
     <View style={styles.screen}>
+      {/* The paper's grain, under the scroll view and the states. */}
+      <Grain />
       <ScreenTopBar
         title="Post"
         showRule={scrolled}
@@ -184,13 +194,64 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
             onBlocked={onBlocked}
             onDeleted={onBack}
           />
+          {drink ? <FromTheDex drink={drink} onOpen={() => openDrink(drink.id)} /> : null}
         </ScrollView>
       )}
     </View>
   );
 }
 
+/** The thumbnail (DexThumb's row size) and the chevron, for the name's column. */
+const THUMB_W = 44;
+const CHEVRON = 18;
+
+/**
+ * The post's drink as it stands in the Dex: its mounted thumbnail, its
+ * name and tier, and a chevron, all one button to the drink's page. The
+ * nameplate on the photo opens it too; this is the way in that reads as a
+ * row, under the caption, where a finished post ends.
+ */
+function FromTheDex({ drink, onOpen }: { drink: Drink; onOpen: () => void }) {
+  const { width } = useWindowDimensions();
+  // The text column: the row less its gutters, the thumbnail and the chevron, and the two gaps.
+  const measure = width - 2 * layout.gutter - THUMB_W - CHEVRON - 2 * space.md;
+  return (
+    <Pressable
+      onPress={onOpen}
+      accessibilityRole="button"
+      accessibilityLabel={`Open ${drink.name} in the Dex`}
+      style={({ pressed }) => [styles.dexRow, pressed && styles.dexRowPressed]}>
+      <DexThumb drink={drink} />
+      <View style={styles.dexText}>
+        <Text style={styles.dexEyebrow}>From the Dex</Text>
+        <DrinkName name={drink.name} role={textRole.rowName} measure={measure} cap={1.4} color={colors.text} />
+        <View style={styles.dexTier}>
+          <TierWord rarity={drink.rarity} tone="paper" size="sm" />
+        </View>
+      </View>
+      <Icon name="chevronRight" size={CHEVRON} color={colors.textFaint} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   scroll: { flex: 1 },
+
+  /* Ruled top and bottom on the paper; pressed, it fills like a list row. */
+  dexRow: {
+    minHeight: 80,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    paddingHorizontal: layout.gutter,
+    paddingVertical: space.md,
+    borderTopWidth: stroke.edge,
+    borderBottomWidth: stroke.edge,
+    borderColor: colors.line,
+  },
+  dexRowPressed: { backgroundColor: colors.bgSunk },
+  dexText: { flex: 1, gap: 2 },
+  dexEyebrow: { ...textRole.helper, color: colors.textMuted },
+  dexTier: { marginTop: 2, alignItems: 'flex-start' },
 });

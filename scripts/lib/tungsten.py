@@ -19,7 +19,8 @@ Run over all 162 masters, four of the spec's numbers did not hold, and each
 is corrected where it is defined, with what was measured: the settle curve
 (settle_weight), the stray trigger (STRAY_ONSET), and two places where
 grade.py's mask let the studio backdrop through as a pale disc behind the
-glass (backdrop_saturation, backdrop_sweep).
+glass (backdrop_saturation, backdrop_sweep). The ghost's edge also settles
+to the ground, as the lit photo's does (ghost says why).
 
 Run by scripts/build-drink-photos.mjs, not by hand. The node script owns
 every input (colours, sizes, per-photo overrides, gate thresholds) and
@@ -342,16 +343,30 @@ def ghost(lit_srgb, settle_s, hi_s, size):
     as a Negroni), gamma 1.1, a 1px emboss lit from the top left, then mapped
     from the ground colour to ghostHi and resampled to `size`. Drawn about 2x
     up in a Dex window; the softness is the point, an impression, not a photo.
+
+    The edge then settles to the ground like the lit photo's. Under dark
+    liquid (the ports, the darker sherries, the cola and coffee drinks) the
+    darkest 2% is darker than the ground, so the ground itself stretched
+    above black and the ghost's edge came out up to 11/255 lighter than the
+    slot around it. That lift is taken back out where the lit photo
+    settles: nothing changes where the ground is not darker than the 2nd
+    percentile (138 of 162), and the rest meet the slot within 1/255 before
+    encoding.
     """
+    h, w, _ = lit_srgb.shape
     y = lin_to_srgb(luminance(srgb_to_lin(lit_srgb)))
     lo, hi = np.percentile(y, [2.0, 99.5])
-    t = clip01((y - lo) / max(float(hi - lo), 1e-4)) ** 1.1
+    span = max(float(hi - lo), 1e-4)
+    t = clip01((y - lo) / span) ** 1.1
     b = blur(t.astype(F), 1)
     shifted = np.empty_like(b)  # b moved 1px down and right
     shifted[1:, 1:] = b[:-1, :-1]
     shifted[0, :] = b[0, :]
     shifted[:, 0] = b[:, 0]
     t = clip01(0.85 * t + 2.2 * (b - shifted))
+    ground = float(lin_to_srgb(luminance(srgb_to_lin(settle_s))))
+    lift = float(clip01((ground - lo) / span)) ** 1.1
+    t = clip01(t - settle_weight(edge_distance(*grid(h, w))) * lift)
     rgb = settle_s + (hi_s - settle_s) * t[..., None]
     return Image.fromarray(to8(rgb)).resize((size, size), Image.LANCZOS)
 

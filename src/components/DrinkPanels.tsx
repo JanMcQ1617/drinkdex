@@ -1,35 +1,84 @@
-import React from 'react';
-import { StyleSheet, Text, View, type ViewStyle } from 'react-native';
+import { Image } from 'expo-image';
+import React, { useState } from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
+import { DrinkName, LiningBand, NumberPlate, useSvgId } from '@/components/cabinet';
+import { DexThumb } from '@/components/DexCard';
+import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { Button, Card, Divider, SectionHeader, Tag } from '@/components/ui';
+import { DexStatusPlaque, MediaPlaque, TopScrim } from '@/components/media';
+import { Button, Card } from '@/components/ui';
 import {
   colors,
-  dexNumber,
+  elevation,
   fonts,
+  layout,
   radius,
+  RARITY_META,
   space,
   stroke,
   tabular,
   textRole,
-  type as typeScale,
 } from '@/constants/theme';
-import type { Composition, Recipe, ServeGuide, UnlockRecord } from '@/types';
+import {
+  abvLabel,
+  datelineOf,
+  dexSinceLabel,
+  glassLabel,
+  glassPhrase,
+  methodLabel,
+  originLabel,
+  splitAmount,
+  stylePhrase,
+  tastesOf,
+  type LabelFact,
+} from '@/lib/drinkLabels';
+import { widestRun } from '@/lib/textFit';
+import type { Composition, Drink, Post, Recipe, RecipeIngredient, ServeGuide, UnlockRecord } from '@/types';
 
 /* ==================================================================== */
 /* The drink page's panels                                              */
 /*                                                                      */
-/* Moved out of drink/[id].tsx so a drink someone added themselves      */
-/* (custom/[id].tsx) is drawn by the same code as a catalogue entry:    */
-/* the same recipe card, the same composition rows, the same serve      */
-/* tiles, the same title block. Two copies would drift, and the person  */
-/* comparing their entry with the one under it in the Dex would see two */
-/* different apps.                                                      */
+/* Shared by drink/[id].tsx and custom/[id].tsx, so a drink someone     */
+/* added is drawn by the same code as a catalogue entry: the same hero  */
+/* dissolve, title block, label band, spec card and pinned bar. Two     */
+/* copies would drift, and the person comparing their entry with the    */
+/* one under it in the Dex would see two different apps.                */
+/*                                                                      */
+/* THE CELLAR (specs/v3-cabinet.md 9.8). The page is a lit drink in the */
+/* cellar: the photograph dissolves into `liningDeep` (every lit photo  */
+/* already settles to that colour at its edges), the name rides over    */
+/* the dissolved foot, and the reading under it sits on the same dark   */
+/* ground, with the recipe as a paper spec card lying on it and the     */
+/* trivia as a raised band of lining.                                   */
+/*                                                                      */
+/* No glyph here ever sits on photo pixels. The title block is the top  */
+/* of CellarPage, an OPAQUE cellar ground with an 80pt fade above it,   */
+/* so the inks on it are the cellar pairs check-contrast measures       */
+/* (onLining 14.47:1, onLiningMuted 7.38:1), never the over-media pairs */
+/* those inks fail. The only things over the photograph are the media   */
+/* skins: the scrims, the back button and the eyebrow's plaques.        */
 /*                                                                      */
 /* Every panel copes with blanks, because a custom drink has them where */
-/* a catalogue entry never does (no composition summary, steps that are */
-/* optional, a serve guide with only a temperature). A blank part is    */
-/* left out rather than drawn empty.                                    */
+/* a catalogue entry never does (no composition summary, no steps, a    */
+/* serve guide with only a temperature, no ABV). A blank part is left   */
+/* out rather than drawn empty.                                         */
+/*                                                                      */
+/* Nothing here animates. Content must never depend on an animation     */
+/* finishing to be visible: Reanimated can stall after a cold start in  */
+/* Release builds and leave it at opacity 0 (specs/06-tab-switch-bug,   */
+/* cause 1). The only motion on the page is the route's hero parallax,  */
+/* which is the identity at rest.                                       */
 /* ==================================================================== */
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -45,271 +94,577 @@ export function formatLogDate(iso: string): string {
  * First letter up, the rest as written.
  *
  * The spirit data stores its serving facts the way they read mid-sentence
- * — "veladora", "room temp, never chilled", "shaken" — and the drink page
- * sets each one as a value on its own, where lowercase reads as a typo
- * beside a capitalised ABV and origin. Done here, at render, because these
- * panels are the only place those values are shown and drinks.json is
- * generated, never edited by hand.
+ * ("veladora", "room temp, never chilled") and the cards set each one as a
+ * value on its own, where lowercase reads as a typo. Done at render
+ * because drinks.json is generated, never edited by hand.
  */
 export function sentence(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 /* ==================================================================== */
-/* Title block                                                          */
+/* Geometry                                                             */
+/* ==================================================================== */
+
+/** The hero's height as a share of the window's width (500pt on a 440pt phone). */
+const HERO_ASPECT = 1.14;
+/** The hero's foot that dissolves into the cellar. */
+const HERO_DISSOLVE = 200;
+/**
+ * How far the title block rides up over the hero. With the dissolve, the
+ * photograph is already 44% gone where the block's ground begins (88 of
+ * the dissolve's 200pt lie above it).
+ */
+const TITLE_OVERLAP = 112;
+/** The fade above the title block's opaque ground. */
+const TITLE_FADE = 80;
+/** Strips the grain fades in over, across TITLE_FADE (see GrainRamp). */
+const RAMP_STEPS = 8;
+
+/** Dynamic Type caps (specs/v3-cabinet.md 6.5). */
+const HERO_NAME_CAP = 1.2;
+const BAND_CAP = 1.3;
+
+/**
+ * The label band's cell padding: the first column is flush left, and a
+ * value runs up to the next column's rule, as on a printed label. The
+ * width estimate errs wide, so a value it passes clears the rule anyway;
+ * a right pad of even 4pt sent a third of the catalogue to the 2 x 2 on a
+ * 393pt phone (measured over all 2,089 drinks), most of them for values
+ * that fit.
+ */
+const CELL_PAD_LEFT = 12;
+const CELL_PAD_RIGHT = 0;
+
+/** The spec card's amount column, the gap after it, and when it stops being a column. */
+const AMOUNT_COL = 84;
+const AMOUNT_GAP = space.sm;
+const STACK_ABOVE_SCALE = 1.3;
+
+/** The hero's height for a window this wide. */
+export function heroHeight(width: number): number {
+  return Math.round(width * HERO_ASPECT);
+}
+
+/** Hidden from VoiceOver and untouchable: a layer of light, not content. */
+const DECOR = {
+  pointerEvents: 'none' as const,
+  accessibilityElementsHidden: true,
+  importantForAccessibility: 'no-hide-descendants' as const,
+};
+
+/* ==================================================================== */
+/* Hero and the cellar ground                                           */
 /* ==================================================================== */
 
 /**
- * The words under the photograph: a line above the name, the name, and
- * the facts.
- *
- * Title UNDER the photograph, not above it. The name above a framed
- * picture is a caption layout — it makes the photo an illustration of the
- * heading. Under it, the photo is the subject and the name identifies it,
- * which is how Vivino, and every wine label, orders the same two elements.
- *
- * The line above is sentence case in plain Inter. It was a letterspaced
- * caps label, the habit that most made the app look machine-designed; a
- * catalogue number keeps its tracking because it is a code made of
- * figures (DexNumber), not a word. The name is Playfair: a drink's name
- * is the brand's voice, and the one place the display face stays.
- *
- * No entrance animation on any of it. Content must never depend on an
- * animation finishing to be visible: Reanimated can stall after a cold
- * start in Release builds and leave it at opacity 0 (specs/06-tab-switch-
- * bug.md, cause 1).
+ * Clear to the cellar, top to bottom, in one colour: the stops differ
+ * only in opacity. A gradient from `transparent` (clear black) would pass
+ * through a dark grey on its way, a band no photograph has.
  */
-export function DrinkTitle({
-  eyebrow,
-  name,
-  facts,
-}: {
-  eyebrow: React.ReactNode;
-  name: string;
-  facts: string[];
-}) {
+function Dissolve({ style }: { style: StyleProp<ViewStyle> }) {
+  const id = useSvgId('dissolve');
   return (
-    <View style={styles.titleBlock}>
-      <Text style={styles.eyebrow}>{eyebrow}</Text>
-      <Text style={styles.name} accessibilityRole="header">
-        {name}
-      </Text>
-      {facts.length > 0 ? <FactsLine facts={facts} /> : null}
+    <View {...DECOR} style={style}>
+      {/* Sized by attribute as well: an <svg> without one is 300x150 on web. */}
+      <Svg width="100%" height="100%">
+        <Defs>
+          <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={colors.liningDeep} stopOpacity={0} />
+            <Stop offset="1" stopColor={colors.liningDeep} stopOpacity={1} />
+          </LinearGradient>
+        </Defs>
+        <Rect width="100%" height="100%" fill={`url(#${id})`} />
+      </Svg>
     </View>
   );
 }
 
 /**
- * A catalogue number inside the eyebrow: wine, tabular, and tracked like
- * the Dex card's, because it is read as a code.
+ * What lies over the hero's picture: the top scrim under the status bar
+ * and the back button, and the 200pt dissolve at its foot into the
+ * cellar. Put it last inside the hero frame (after any foil), which clips
+ * it. A lit catalogue photo already settles to `liningDeep` at its edges,
+ * so the dissolve finishes what the bake began and there is no seam.
  */
-export function DexNumber({ children }: { children: string }) {
-  return <Text style={styles.dexNumber}>{children}</Text>;
-}
-
-/** The tags under the title: category, and rarity where there is one. */
-export function MetaRow({ children }: { children: React.ReactNode }) {
-  return <View style={styles.metaRow}>{children}</View>;
-}
-
-/*
- * The facts line — ABV, origin, glass — as one wrapping sentence rather than
- * three bordered cards.
- *
- * As cards they were three white panels with three letterspaced-caps labels,
- * and the third clipped its own content: "Highball glass with…". A container
- * that truncates the thing it exists to show is worse than no container, and
- * the label above each value was doing work the value already does — nobody
- * reads "8–10%" and wonders which field it is.
- *
- * Set as text it wraps instead of clipping, drops three borders and three
- * caps labels, and reads the way a wine app states a vintage.
- */
-export function FactsLine({ facts }: { facts: string[] }) {
-  return (
-    <Text style={styles.facts}>
-      {facts.map((f, i) => (
-        // By position: two facts can read the same ("Mexico" as origin and
-        // as glass is unlikely, but a key must not depend on it).
-        <Text key={`${i}-${f}`}>
-          {i > 0 ? <Text style={styles.factsDot}>{'   ·   '}</Text> : null}
-          {f}
-        </Text>
-      ))}
-    </Text>
-  );
-}
-
-/* ==================================================================== */
-/* Your pour, and the invitation to log one                             */
-/* ==================================================================== */
-
-/**
- * When you logged it, and what you said.
- *
- * The photograph is not repeated here. The hero at the top of the screen
- * already IS your photo once you have logged one, so a framed copy here
- * showed the same picture twice, one screen apart.
- */
-export function YourPour({ record }: { record: UnlockRecord }) {
+export function HeroShade() {
   return (
     <>
-      <SectionHeader title="Your pour" style={styles.section} />
-      <Text style={styles.logMeta}>Logged {formatLogDate(record.date)}</Text>
-      {record.note ? <Text style={styles.quote}>“{record.note}”</Text> : null}
+      <TopScrim />
+      <Dissolve style={styles.heroDissolve} />
     </>
   );
 }
 
 /**
- * Not logged yet: an invitation, sitting above the how-to.
- *
- * The lock is drawn bare, in muted ink. It sat in a wine disc, which made
- * the card's quietest element the loudest wine thing on the page, above
- * the one wine button that actually does something.
+ * The grain fades in across the title fade instead of starting at the
+ * opaque edge. Grain lifts the cellar's mean colour by up to ten levels
+ * (of 255), so a flat ground meeting a grained one draws a visible line;
+ * in eight strips, each a step stronger, the change is about a level a
+ * strip.
+ * Each strip shows its own slice of one continuous tile (the inner box
+ * is offset by the strip's top), so the strips do not repeat one another.
  */
-export function NotLoggedCard({
+function GrainRamp() {
+  const step = TITLE_FADE / RAMP_STEPS;
+  return (
+    <View {...DECOR} style={styles.ramp}>
+      {Array.from({ length: RAMP_STEPS }, (_, i) => (
+        <View key={i} style={[styles.rampStrip, { height: step, opacity: (i + 0.5) / RAMP_STEPS }]}>
+          <View style={[styles.rampTile, { top: -i * step }]}>
+            <Grain tone="lining" />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/**
+ * Everything under the hero, on its own opaque cellar ground.
+ *
+ * It rides up over the hero's dissolved foot (TITLE_OVERLAP), with an
+ * 80pt fade to the cellar hanging above it, so the title block it opens
+ * with never has a photograph under a glyph. Opaque all the way down for
+ * the parallax's sake: the hero scrolls at 0.35 of the page's speed, so
+ * it slides down BEHIND everything here, and a transparent stretch would
+ * show it again further down the page.
+ *
+ * Its gutter is its children's: the trivia band runs full bleed.
+ * `paddingBottom` clears the pinned bar (the route measures it).
+ */
+export function CellarPage({ children, paddingBottom }: { children: React.ReactNode; paddingBottom: number }) {
+  return (
+    <View style={[styles.page, { paddingBottom }]}>
+      <Grain tone="lining" />
+      <Dissolve style={styles.titleFade} />
+      <GrainRamp />
+      {children}
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* Title block                                                          */
+/* ==================================================================== */
+
+/** "Added by you": a custom drink's plate, where a catalogue drink has its number and tier. */
+function AddedPlate() {
+  return (
+    <View style={styles.addedPlate}>
+      <Text maxFontSizeMultiplier={BAND_CAP} style={[textRole.tierWord, styles.addedText]}>
+        Added by you
+      </Text>
+    </View>
+  );
+}
+
+/**
+ * The words that ride over the hero's foot: an eyebrow and the name.
+ *
+ * Eyebrow (wraps): the number plate, the tier as a solid plaque, whether
+ * it is in your Dex (a statement here, not a button: you are already on
+ * the drink), then the style phrase ("Spirit-forward cocktail", "American
+ * whiskey"). A custom drink has none of the three plates (inventing a
+ * number or a tier would say it had joined the Dex), so its eyebrow says
+ * whose it is instead. One VoiceOver element.
+ *
+ * The name is Playfair at 52 through DrinkName: no line limit, and shrunk
+ * only when its widest word would not fit the line ("Holunderbeergeist").
+ * "Three Dots and a Dash" wraps to three lines at the 1.2 cap and is
+ * never shrunk. A header, for the Headings rotor.
+ */
+export function HeroTitle({ drink, inDex, custom }: { drink: Drink; inDex: boolean; custom?: boolean }) {
+  const { width } = useWindowDimensions();
+  const phrase = stylePhrase(drink);
+  const tier = RARITY_META[drink.rarity].label.toLowerCase();
+  const spoken = custom
+    ? `Added by you. ${phrase}`
+    : `Number ${drink.dexNumber}, ${tier}, ${inDex ? 'in your Dex' : 'not in your Dex yet'}. ${phrase}`;
+
+  return (
+    <View style={styles.titleBlock}>
+      <View accessible accessibilityLabel={spoken} style={styles.eyebrow}>
+        {custom ? (
+          <AddedPlate />
+        ) : (
+          <>
+            <NumberPlate n={drink.dexNumber} tone="lining" />
+            <MediaPlaque rarity={drink.rarity} />
+            <DexStatusPlaque inDex={inDex} name={drink.name} />
+          </>
+        )}
+        <Text style={styles.eyebrowPhrase}>· {phrase}</Text>
+      </View>
+      <DrinkName
+        name={drink.name}
+        role={textRole.drinkHero}
+        measure={width - layout.gutter * 2}
+        cap={HERO_NAME_CAP}
+        color={colors.onLining}
+        accessibilityRole="header"
+        style={styles.heroName}
+      />
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* Label band                                                           */
+/* ==================================================================== */
+
+type BandFact = LabelFact & { kind: 'abv' | 'origin' | 'glass' | 'method' };
+
+function bandFacts(drink: Drink): BandFact[] {
+  const method = methodLabel(drink);
+  const facts: (BandFact | null)[] = [
+    { kind: 'abv', ...abvLabel(drink) },
+    { kind: 'origin', ...originLabel(drink.origin) },
+    { kind: 'glass', ...glassLabel(drink) },
+    method ? { kind: 'method', ...method } : null,
+  ];
+  // A custom drink may leave any of them blank.
+  return facts.filter((f): f is BandFact => f != null && f.value !== '');
+}
+
+/** The band said aloud: "28 percent, London, England, Coupe glass, stirred". */
+function spokenFact(f: BandFact, drink: Drink): string {
+  switch (f.kind) {
+    case 'abv':
+      return f.value.replace(/\s*–\s*/g, ' to ').replace(/%/g, ' percent');
+    case 'origin':
+      return f.caption === 'origin' ? f.value : `${f.value}, ${f.caption}`;
+    case 'glass':
+      return glassPhrase(drink);
+    case 'method':
+      return f.caption === 'method' ? f.value.toLowerCase() : `served ${f.value.toLowerCase()}`;
+  }
+}
+
+/**
+ * The bottle label under the name: strength, origin, glass, method (a
+ * spirit's serve), four equal columns between 1pt rules, each a value
+ * over a small caption ("28%" / "abv", "London" / "England"). It replaced
+ * a 13pt run-on facts line and two tags.
+ *
+ * The columns are equal from rule to rule, as on the label; a ruled
+ * cell's text is its share less the 12pt pad and the 1pt rule.
+ *
+ * FALLS BACK TO 2 x 2 rather than break a word. A quarter column holds
+ * about 73pt of text on a 375pt phone, and the catalogue has values wider
+ * than that ("20.5–28.5%", "Netherlands"). iOS would break those inside
+ * the word, so when any value's (or caption's) widest unbreakable run,
+ * estimated at this text size (lib/textFit.ts errs wide), would not fit
+ * its column, the band lays out as two rows of two. Three values leave
+ * the fourth cell empty; a custom drink with fewer facts gets fewer
+ * columns. At the 1.3 cap on a 375pt phone even a half column is too
+ * narrow for "Massachusetts", so past the 2 x 2 the band is one fact a
+ * row. Worked out, not measured, so the first frame is the final one.
+ *
+ * Values wrap (no line limit) and cap at 1.3. One VoiceOver element.
+ */
+export function LabelBand({ drink }: { drink: Drink }) {
+  const { width, fontScale } = useWindowDimensions();
+  const facts = bandFacts(drink);
+  if (facts.length === 0) return null;
+
+  const band = width - layout.gutter * 2;
+  const scale = Math.min(fontScale, BAND_CAP);
+  const valueSize = textRole.labelValue.fontSize * scale;
+  const captionSize = textRole.labelCaption.fontSize * scale;
+  const fitsIn = (cols: number) => {
+    // One column is flush left and unruled; otherwise the narrowest cell is a ruled one.
+    const text = cols === 1 ? band : band / cols - CELL_PAD_LEFT - stroke.edge - CELL_PAD_RIGHT;
+    return facts.every(
+      (f) => widestRun(f.value, 'inter', valueSize) <= text && widestRun(f.caption, 'inter', captionSize) <= text,
+    );
+  };
+  const n = facts.length;
+  const cols = fitsIn(n) ? n : n > 2 && fitsIn(2) ? 2 : 1;
+
+  const rows: (BandFact | null)[][] = [];
+  for (let i = 0; i < n; i += cols) {
+    const row: (BandFact | null)[] = facts.slice(i, i + cols);
+    // The 2 x 2 keeps its fourth cell (and its rule) when it has three facts.
+    while (row.length < cols) row.push(null);
+    rows.push(row);
+  }
+  const cellWidth = band / cols;
+
+  return (
+    <View
+      accessible
+      accessibilityLabel={facts.map((f) => spokenFact(f, drink)).join(', ')}
+      style={styles.band}>
+      {rows.map((row, r) => (
+        <View key={r} style={[styles.bandRow, r > 0 && styles.bandRowRuled]}>
+          {row.map((f, c) => (
+            <View
+              key={f ? f.kind : `empty-${c}`}
+              style={[styles.bandCell, { width: cellWidth }, c > 0 && styles.bandCellRuled]}>
+              {f ? (
+                <>
+                  <Text maxFontSizeMultiplier={BAND_CAP} style={styles.bandValue}>
+                    {f.value}
+                  </Text>
+                  <Text maxFontSizeMultiplier={BAND_CAP} style={styles.bandCaption}>
+                    {f.caption}
+                  </Text>
+                </>
+              ) : null}
+            </View>
+          ))}
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* In your Dex since                                                    */
+/* ==================================================================== */
+
+/** A post still uploading has only its local photo, so that counts as one. */
+function photoCount(post: Post): number {
+  return post.photoPaths?.length || (post.photoPath || post.photoUri ? 1 : 0);
+}
+
+/**
+ * Your pour, once you have one: the photo as a 44 x 52 print, "In your
+ * Dex since 14 September", and a second line that says only what is
+ * true. The collection keeps one record per drink on the phone, so there
+ * is no count of pours to give. "Shared · 3 photos" when your post of
+ * this drink is in the feed store (and the row opens it); otherwise "Only
+ * on this phone", which is where the collection lives.
+ *
+ * The hero is the lit catalogue photograph now, so this is where your own
+ * picture is seen. A photo whose file is gone shows the drink's mounted
+ * thumbnail rather than an empty frame: the `mini` mount, the one seated
+ * in the lining (matEdge and the seat; `row` is drawn for paper). The
+ * failure is remembered per file, so the next pour you log is shown.
+ * Your note, when you wrote one, is set under the row as reading text.
+ */
+export function DexSinceRow({
+  drink,
+  record,
+  post,
+  onOpenPost,
+}: {
+  drink: Drink;
+  record: UnlockRecord;
+  /** Your post of this drink, when the feed store holds it. */
+  post?: Post;
+  onOpenPost?: (postId: string) => void;
+}) {
+  const [lostUri, setLostUri] = useState<string | null>(null);
+  const uri = record.photoUri;
+  const since = dexSinceLabel(record.date);
+  const k = post ? photoCount(post) : 0;
+  const line2 = post ? (k > 0 ? `Shared · ${k} ${k === 1 ? 'photo' : 'photos'}` : 'Shared') : 'Only on this phone';
+  const open = post && onOpenPost ? () => onOpenPost(post.id) : null;
+
+  const body = (
+    <>
+      <View {...DECOR}>
+        {uri && uri !== lostUri ? (
+          <Image
+            source={{ uri }}
+            style={styles.sinceThumb}
+            contentFit="cover"
+            transition={140}
+            accessible={false}
+            enforceEarlyResizing
+            onError={() => setLostUri(uri)}
+          />
+        ) : (
+          <DexThumb drink={drink} size="mini" />
+        )}
+      </View>
+      <View style={styles.sinceText}>
+        <Text style={styles.sinceTitle}>{since}</Text>
+        <Text style={styles.sinceLine}>{line2}</Text>
+      </View>
+      {open ? <Icon name="chevronRight" size={18} color={colors.onLiningFaint} /> : null}
+    </>
+  );
+
+  return (
+    <View style={styles.since}>
+      {open ? (
+        <Pressable
+          onPress={open}
+          accessibilityRole="button"
+          accessibilityLabel={`${since}. ${line2.replace(' · ', ', ')}`}
+          accessibilityHint="Opens your post"
+          style={({ pressed }) => [styles.sinceRow, pressed && styles.pressed]}>
+          {body}
+        </Pressable>
+      ) : (
+        <View accessible accessibilityLabel={`${since}. ${line2.replace(' · ', ', ')}`} style={styles.sinceRow}>
+          {body}
+        </View>
+      )}
+      {record.note ? <Text style={styles.note}>“{record.note}”</Text> : null}
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* Tastes of                                                            */
+/* ==================================================================== */
+
+/** "Menthol, bitter herbs, juniper, cola spice" at 18pt, in place of the 11pt tags. Nothing when there are none. */
+export function TastesOf({ notes }: { notes: string[] }) {
+  const line = tastesOf(notes);
+  if (!line) return null;
+  return (
+    <View style={styles.tastes}>
+      <Text style={styles.kicker} accessibilityRole="header">
+        Tastes of
+      </Text>
+      <Text style={styles.tastesLine}>{line}</Text>
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* Mat cards                                                            */
+/* ==================================================================== */
+
+/**
+ * A paper card lying on the cellar: mat stock, a 1pt `line` edge, and
+ * `elevation.paper`, the one shadow a card casts off the lining. Ink
+ * inside is the paper set (text 14.50:1, textMuted 5.78:1, wine 12.96:1
+ * on mat). The head is 52pt with a rule under it.
+ */
+function MatCard({
   title,
-  body,
-  onLog,
-  accessibilityLabel,
+  aside,
+  style,
+  children,
 }: {
   title: string;
-  body: string;
-  onLog: () => void;
-  accessibilityLabel: string;
+  aside?: string;
+  style?: ViewStyle;
+  children: React.ReactNode;
 }) {
   return (
-    <Card style={styles.lockedCard}>
-      <Icon name="lock" size={28} color={colors.textMuted} />
-      <Text style={styles.lockedTitle}>{title}</Text>
-      <Text style={styles.lockedBody}>{body}</Text>
-      <Button
-        label="Log this drink"
-        icon="camera"
-        block
-        onPress={onLog}
-        accessibilityLabel={accessibilityLabel}
-        style={styles.lockedCta}
-      />
+    <Card surface="mat" style={[styles.matCard, style]}>
+      <View style={styles.matHead}>
+        <Text style={styles.matTitle} accessibilityRole="header">
+          {title}
+        </Text>
+        {aside ? <Text style={styles.matAside}>{aside}</Text> : null}
+      </View>
+      {children}
     </Card>
   );
 }
 
-/* ==================================================================== */
-/* Reading                                                              */
-/* ==================================================================== */
-
-/** The notes as tags. Nothing at all when there are none: a heading over nothing is a broken page. */
-export function TastingNotes({ notes }: { notes: string[] }) {
-  if (notes.length === 0) return null;
+/**
+ * A label over its detail, ruled above: method, garnish, the serve's
+ * parts, the composition's. `first` drops the rule for a row straight
+ * under the head, which already has one.
+ */
+function MatRow({ label, detail, first }: { label: string; detail: string; first?: boolean }) {
   return (
-    <>
-      <SectionHeader title="Tasting notes" style={styles.section} />
-      <View style={styles.tagRow}>
-        {notes.map((n, i) => (
-          <Tag key={`${i}-${n}`} label={n} />
-        ))}
-      </View>
-    </>
+    <View style={[styles.matRow, !first && styles.ruled]}>
+      <Text style={styles.matLabel}>{label}</Text>
+      <Text style={styles.matDetail}>{detail}</Text>
+    </View>
   );
 }
 
-/** The description, and the trivia when there is any. */
-export function FieldNotes({ description, funFact }: { description: string; funFact: string }) {
-  return (
-    <>
-      {description ? (
-        <>
-          <SectionHeader title="Field notes" style={styles.section} />
-          <Text style={styles.bodyText}>{description}</Text>
-        </>
-      ) : null}
-      {funFact ? (
-        <>
-          <SectionHeader title="Bar trivia" style={styles.section} />
-          <Text style={styles.bodyText}>{funFact}</Text>
-        </>
-      ) : null}
-    </>
-  );
-}
-
-/* ==================================================================== */
-/* Panels                                                               */
-/* ==================================================================== */
+/*
+ * A method the head can say in a word ("Shaken"). A custom drink's method
+ * is free text ("Shake hard, then double strain"), which gets a row of its
+ * own instead.
+ */
+const ONE_WORD = /^\S{1,16}$/;
 
 /**
- * Two-up fact tile. Used by ServePanel for Temp/Glass.
+ * One ingredient, amount first, the way a bartender reads a spec: the
+ * amount in tabular wine in an 84pt column, its metric under it, then the
+ * item with any note after it ("Soda water · to top").
  *
- * No line cap. The longest serving temperatures run to three lines at
- * this width ("Well chilled (38-45°F), served over plenty of ice"), and
- * an ellipsis there clipped the one thing the tile is for — the failure
- * the FactsLine note above gives as its reason for dropping cards. The
- * row stretches both tiles to the taller one, so the pair stays even.
+ * `stacked` puts the amount above the item in one column, for the card's
+ * every row at once so the column never half-holds: past 1.3x text an
+ * 84pt column would wrap "1.5 oz" a letter at a time, and an amount whose
+ * longest word is wider than the column's 76pt of text ("1 barspoon",
+ * "2–3 cherries") would break inside the word.
  */
-export function StatCard({ label, value }: { label: string; value: string }) {
+function IngredientRow({ ing, first, stacked }: { ing: RecipeIngredient; first: boolean; stacked: boolean }) {
+  const { amount, metric, note } = splitAmount(ing.amount);
+  const spoken = [amount, metric, ing.item, note].filter(Boolean).join(', ');
+  const hasAmount = Boolean(amount || metric);
   return (
-    <View style={styles.statCard}>
-      <Text style={styles.statLabel}>{label}</Text>
-      <Text style={styles.statValue}>{value}</Text>
+    <View
+      accessible
+      accessibilityLabel={spoken}
+      style={[styles.ingRow, !first && styles.ruled, stacked && styles.ingRowStacked]}>
+      {hasAmount || !stacked ? (
+        <View style={stacked ? null : styles.amountCol}>
+          {amount ? <Text style={styles.amount}>{amount}</Text> : null}
+          {metric ? <Text style={styles.metric}>{metric}</Text> : null}
+        </View>
+      ) : null}
+      <Text style={[styles.ingItem, !stacked && styles.ingItemBeside]}>
+        {ing.item}
+        {note ? <Text style={styles.ingNote}>{` · ${note}`}</Text> : null}
+      </Text>
     </View>
   );
 }
 
 /**
- * Cocktails — the make-at-home build.
+ * Cocktails: how to make it, as a bar's spec card. "The spec" with the
+ * method and the count; the ingredients amount first; the steps under a
+ * rule, numbered with bare tabular figures (no discs); then the garnish.
  *
- * Amounts are set in tabular figures and right-aligned so the numerals stack
- * into a column the eye can scan, the way a printed spec sheet reads. They
- * are in the muted ink, not gilt: gilt means legendary and nothing else, and
- * a recipe card on a common entry printed in the legendary metal was
- * spending that colour on every cocktail in the Dex.
- *
- * The step numbers are bare figures in a narrow column. They sat in tinted
- * discs, one of the nine icon-in-a-circle shapes the app was built from,
- * and a number does not need a container to be read as a number.
- *
- * Method and garnish sit in a label-and-detail card of their own, the row
- * CompositionPanel uses for a spirit's make-up. They were pill chips, which
- * are for tags — and a garnish is a sentence ("Celery stalk and lime wedge
- * on a celery-salt rim") that wrapped a pill into a two-line capsule. They
- * are a card of their own rather than more rows in the ingredient card,
- * whose rows are item-and-amount; two row shapes in one card would read as
- * one list that changed its mind halfway.
- *
- * A drink someone added may have no steps and no amounts (both are
- * optional on the form): the steps block is left out, and a missing amount
- * leaves its column empty rather than inventing one.
+ * The method is said once, in the head (the label band says it too, so a
+ * third "Shaken" in a row of its own would be one too many); only a
+ * method too long for the head gets a row. A drink someone added may have
+ * no steps and no amounts: the block is left out and a missing amount
+ * leaves its column empty rather than inventing one. Nothing at all when
+ * there is nothing to show.
  */
-export function RecipePanel({ recipe }: { recipe: Recipe }) {
-  const details = [
-    { label: 'Method', detail: recipe.method },
-    { label: 'Garnish', detail: recipe.garnish },
-  ].filter((d): d is { label: string; detail: string } => Boolean(d.detail));
+export function SpecCard({ recipe, style }: { recipe: Recipe; style?: ViewStyle }) {
+  const { fontScale } = useWindowDimensions();
+  const method = (recipe.method ?? '').trim();
+  const headMethod = ONE_WORD.test(method) ? sentence(method) : '';
+  const n = recipe.ingredients.length;
+  const steps = recipe.steps.filter((s) => s.trim());
+  const garnish = (recipe.garnish ?? '').trim();
+  if (n === 0 && steps.length === 0 && !garnish && !method) return null;
+
+  const aside = [headMethod, n > 0 ? `${n} ${n === 1 ? 'ingredient' : 'ingredients'}` : '']
+    .filter(Boolean)
+    .join(' · ');
+
+  // Body text is uncapped, so the amounts draw at the full fontScale.
+  const amountSize = textRole.specAmount.fontSize * fontScale;
+  const amountText = AMOUNT_COL - AMOUNT_GAP;
+  const stacked =
+    fontScale > STACK_ABOVE_SCALE ||
+    recipe.ingredients.some((ing) => {
+      const s = splitAmount(ing.amount);
+      return (
+        widestRun(s.amount, 'inter', amountSize) > amountText ||
+        widestRun(s.metric ?? '', 'inter', textRole.labelCaption.fontSize * fontScale) > amountText
+      );
+    });
 
   return (
-    <>
-      <SectionHeader title="How it's made" style={styles.section} />
+    <MatCard title="The spec" aside={aside} style={style}>
+      {recipe.ingredients.map((ing, i) => (
+        <IngredientRow key={`${i}-${ing.item}`} ing={ing} first={i === 0} stacked={stacked} />
+      ))}
 
-      {recipe.ingredients.length > 0 ? (
-        <Card style={styles.listCard}>
-          {recipe.ingredients.map((ing, i) => (
-            <View key={`${i}-${ing.item}`}>
-              {i > 0 ? <Divider /> : null}
-              <View style={styles.ingredientRow}>
-                <Text style={styles.ingredientItem}>{ing.item}</Text>
-                {ing.amount ? <Text style={styles.ingredientAmount}>{ing.amount}</Text> : null}
-              </View>
-            </View>
-          ))}
-        </Card>
-      ) : null}
-
-      {recipe.steps.length > 0 ? (
-        <View style={styles.steps}>
-          {recipe.steps.map((step, i) => (
-            <View key={`step-${i}`} style={styles.stepRow}>
+      {steps.length > 0 ? (
+        <View style={[styles.steps, n > 0 && styles.ruled]}>
+          {steps.map((step, i) => (
+            // One element per step, as the ingredient rows are: the bare figure alone says nothing.
+            <View key={`step-${i}`} accessible accessibilityLabel={`Step ${i + 1}. ${step}`} style={styles.stepRow}>
               <Text style={styles.stepNum}>{i + 1}</Text>
               <Text style={styles.stepText}>{step}</Text>
             </View>
@@ -317,338 +672,347 @@ export function RecipePanel({ recipe }: { recipe: Recipe }) {
         </View>
       ) : null}
 
-      {details.length > 0 ? (
-        <Card style={[styles.listCard, styles.detailCard]}>
-          {details.map((d, i) => (
-            <View key={d.label}>
-              {i > 0 ? <Divider /> : null}
-              <View style={styles.componentRow}>
-                <Text style={styles.componentLabel}>{d.label}</Text>
-                <Text style={styles.componentDetail}>{sentence(d.detail)}</Text>
-              </View>
-            </View>
-          ))}
-        </Card>
+      {method && !headMethod ? (
+        <MatRow label="Method" detail={sentence(method)} first={n === 0 && steps.length === 0} />
       ) : null}
-    </>
+      {garnish ? (
+        <MatRow
+          label="Garnish"
+          detail={sentence(garnish)}
+          first={n === 0 && steps.length === 0 && !(method && !headMethod)}
+        />
+      ) : null}
+    </MatCard>
   );
 }
 
 /**
- * Spirits — what the drink is made of.
- *
- * Deliberately not framed as a recipe: nobody builds these at the bar, so a
- * step list would be a lie. Labels come from the data rather than this file,
- * because they differ by what the bottle is — Base/Distillation/Aging for a
- * distilled spirit, Grapes/Region/Vinification for a sherry or a port.
- *
- * The process paragraph is plain prose under the card, set like Field
- * notes. It used to be a tinted callout with a wine stripe down its left
- * edge, which bent round the rounded corners and set a paragraph of
- * explanation in 13pt fine print.
- *
- * The summary is skipped when empty: a drink someone added has none (it is
- * editorial, written by Sipply when the drink joins the Dex).
+ * Spirits: how to pour it at home, on the same mat card. Each part only
+ * when it has something in it, since a drink someone added may know its
+ * temperature and nothing else.
  */
-export function CompositionPanel({ composition }: { composition: Composition }) {
+export function ServeCard({ serve, style }: { serve: ServeGuide; style?: ViewStyle }) {
+  const rows = [
+    { label: 'Temperature', detail: serve.temp },
+    { label: 'Glass', detail: serve.glass },
+    { label: 'How to serve it', detail: serve.how },
+    { label: 'Pairs with', detail: (serve.pair ?? []).filter(Boolean).join(', ') },
+  ].filter((r) => r.detail && r.detail.trim());
+  if (rows.length === 0) return null;
   return (
-    <>
-      <SectionHeader title="What's in it" style={styles.section} />
-
-      {composition.summary ? <Text style={styles.lead}>{composition.summary}</Text> : null}
-
-      {composition.components.length > 0 ? (
-        <Card style={styles.listCard}>
-          {composition.components.map((component, i) => (
-            <View key={`${i}-${component.label}`}>
-              {i > 0 ? <Divider /> : null}
-              <View style={styles.componentRow}>
-                <Text style={styles.componentLabel}>{component.label}</Text>
-                <Text style={styles.componentDetail}>{component.detail}</Text>
-              </View>
-            </View>
-          ))}
-        </Card>
-      ) : null}
-
-      {composition.process ? (
-        <Text style={[styles.bodyText, styles.process]}>{composition.process}</Text>
-      ) : null}
-    </>
+    <MatCard title="The pour" style={style}>
+      {rows.map((r, i) => (
+        <MatRow key={r.label} label={r.label} detail={sentence(r.detail.trim())} first={i === 0} />
+      ))}
+    </MatCard>
   );
 }
 
 /**
- * How to serve it at home — complements, never replaces, the composition.
- *
- * Each part is drawn only when it has something in it, since a drink
- * someone added may know its temperature and nothing else.
+ * Spirits: what the bottle is made of. Not a recipe: nobody builds these
+ * at the bar, so a step list would be a lie. The labels come from the
+ * data (Base/Distillation/Aging for a spirit, Grapes/Region/Vinification
+ * for a sherry or a port). The summary leads and the process closes; a
+ * drink someone added has no summary (it is editorial).
  */
-export function ServePanel({ serve }: { serve: ServeGuide }) {
-  const tiles = [
-    { label: 'Temp', value: serve.temp },
-    { label: 'Glass', value: serve.glass },
-  ].filter((t) => Boolean(t.value));
-
+export function CompositionCard({ composition, style }: { composition: Composition; style?: ViewStyle }) {
+  const parts = composition.components.filter((c) => c.detail.trim());
+  const summary = composition.summary.trim();
+  const process = composition.process.trim();
+  if (parts.length === 0 && !summary && !process) return null;
   return (
-    <>
-      <SectionHeader title="Serve it right" style={styles.section} />
-
-      {tiles.length > 0 ? (
-        <View style={styles.statRow}>
-          {tiles.map((t) => (
-            <StatCard key={t.label} label={t.label} value={sentence(t.value)} />
-          ))}
-        </View>
+    <MatCard title="What's in it" style={style}>
+      {summary ? <Text style={styles.matLead}>{summary}</Text> : null}
+      {parts.map((c, i) => (
+        <MatRow key={`${i}-${c.label}`} label={c.label} detail={c.detail} first={i === 0 && !summary} />
+      ))}
+      {process ? (
+        <Text style={[styles.matLead, (Boolean(summary) || parts.length > 0) && styles.ruled]}>{process}</Text>
       ) : null}
-
-      {serve.how ? (
-        <View style={styles.serveCard}>
-          <Text style={styles.bodyText}>{serve.how}</Text>
-        </View>
-      ) : null}
-
-      {serve.pair && serve.pair.length > 0 ? (
-        <View style={styles.pairWrap}>
-          <Text style={styles.miniLabel}>Pairs with</Text>
-          <View style={styles.tagRow}>
-            {serve.pair.map((p, i) => (
-              <Tag key={`${i}-${p}`} label={p} />
-            ))}
-          </View>
-        </View>
-      ) : null}
-    </>
+    </MatCard>
   );
 }
 
-/** Spacing a screen gives the first block under a panel: the drink page's section rhythm. */
-export const PANEL_SECTION: ViewStyle = { marginTop: space.xxl, marginBottom: space.md };
+/* ==================================================================== */
+/* Field notes and trivia                                               */
+/* ==================================================================== */
+
+/** The description, on the cellar ground. Nothing when there is none. */
+export function FieldNotes({ description }: { description: string }) {
+  if (!description.trim()) return null;
+  return (
+    <View style={styles.fieldNotes}>
+      <Text style={styles.fieldTitle} accessibilityRole="header">
+        Field notes
+      </Text>
+      <Text style={styles.fieldBody}>{description}</Text>
+    </View>
+  );
+}
+
+/**
+ * The fun fact as a pull quote on a full-bleed band of lining (lining on
+ * the cellar reads raised), ruled top and bottom, with its origin and
+ * year pulled out as a dateline ("London, England · 1903"). Nothing when
+ * there is no fact.
+ */
+export function TriviaBand({ drink }: { drink: Pick<Drink, 'origin' | 'funFact'> }) {
+  const fact = (drink.funFact ?? '').trim();
+  if (!fact) return null;
+  const dateline = datelineOf(drink);
+  return (
+    <LiningBand style={styles.trivia}>
+      <Text style={styles.triviaKicker} accessibilityRole="header">
+        Bar trivia
+      </Text>
+      {dateline ? <Text style={styles.triviaDateline}>{dateline}</Text> : null}
+      <Text style={styles.triviaText}>{fact}</Text>
+    </LiningBand>
+  );
+}
+
+/* ==================================================================== */
+/* Pinned bar                                                           */
+/* ==================================================================== */
+
+/** Past this many characters "Log another <name>" becomes "Log another pour". */
+const BAR_NAME_MAX = 22;
+const BAR_CAP = 1.3;
+
+/**
+ * The page's one action, pinned over the foot: "Log this drink" until it
+ * is in your Dex, then "Log another <name>" ("Log another pour" for a
+ * name too long to sit in a button). The bone button, because wine on
+ * lining is 1.22:1. Spoken "Log <name>" / "Log another pour of <name>".
+ *
+ * The label caps at 1.3 and may wrap to two lines; the bar grows with it.
+ * `onHeight` reports the bar's measured height so the route can pad its
+ * content by it, and nothing at the foot hides under a bar that grew.
+ */
+export function PinnedLogBar({
+  name,
+  collected,
+  onPress,
+  onHeight,
+}: {
+  name: string;
+  collected: boolean;
+  onPress: () => void;
+  onHeight?: (height: number) => void;
+}) {
+  const insets = useSafeAreaInsets();
+  const label = collected
+    ? name.length > BAR_NAME_MAX
+      ? 'Log another pour'
+      : `Log another ${name}`
+    : 'Log this drink';
+  return (
+    <View
+      onLayout={(e) => onHeight?.(Math.ceil(e.nativeEvent.layout.height))}
+      style={[styles.bar, { paddingBottom: Math.max(insets.bottom, space.md) }]}>
+      <Grain tone="lining" />
+      <Button
+        label={label}
+        variant="onLining"
+        icon="plus"
+        block
+        onPress={onPress}
+        accessibilityLabel={collected ? `Log another pour of ${name}` : `Log ${name}`}
+        maxFontSizeMultiplier={BAR_CAP}
+      />
+    </View>
+  );
+}
+
+/** The bar's height before it has been measured. */
+export function pinnedBarEstimate(bottomInset: number): number {
+  return layout.pinnedBar + bottomInset;
+}
 
 /* ==================================================================== */
 /* Styles                                                               */
 /* ==================================================================== */
 
-/*
- * The small labels inside the panels (Temp, Glass, Base, Pairs with): 11pt
- * Medium in taupe ink, with no tracking. They were letterspaced, and v2
- * tracks nothing but figures.
- */
-const smallLabel = {
-  fontFamily: fonts.bodyMedium,
-  fontSize: typeScale.tag.fontSize,
-  lineHeight: typeScale.tag.lineHeight,
-  color: colors.taupeInk,
-} as const;
-
 const styles = StyleSheet.create({
+  /* Hero and ground */
+  heroDissolve: { position: 'absolute', left: 0, right: 0, bottom: 0, height: HERO_DISSOLVE },
+  page: {
+    marginTop: -TITLE_OVERLAP,
+    backgroundColor: colors.liningDeep,
+  },
+  titleFade: { position: 'absolute', left: 0, right: 0, top: -TITLE_FADE, height: TITLE_FADE },
+  ramp: { position: 'absolute', left: 0, right: 0, top: -TITLE_FADE, height: TITLE_FADE },
+  rampStrip: { overflow: 'hidden' },
+  rampTile: { position: 'absolute', left: 0, right: 0, height: TITLE_FADE },
+
   /* Title block */
-  titleBlock: { marginBottom: space.lg },
+  titleBlock: { paddingHorizontal: layout.gutter },
   eyebrow: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    marginBottom: space.xs,
-  },
-  dexNumber: {
-    /*
-     * Wine, not gilt. Gilt means legendary and nothing else now, and a
-     * catalogue number printed in the legendary metal on every entry was
-     * spending the one colour the rarity ladder tops out at. Tracked as the
-     * Dex card tracks it: figures, so it is a code and not a word.
-     */
-    letterSpacing: dexNumber.letterSpacing,
-    color: colors.wine,
-    ...tabular,
-  },
-  name: {
-    /* Drink names are the handoff's Playfair 700 at 28. */
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    color: colors.text,
-    marginBottom: space.lg,
-  },
-  facts: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight + 2,
-    color: colors.textMuted,
-    marginTop: space.xs,
-  },
-  /* The separator sits lighter than the facts so the row reads as items
-     rather than as one run-on string. A glyph, not text: it carries no
-     information of its own. */
-  factsDot: { color: colors.textFaint },
-  metaRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: space.sm,
-  },
-
-  /* Sections */
-  section: PANEL_SECTION,
-  lead: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.bodyLg.fontSize,
-    lineHeight: typeScale.bodyLg.lineHeight,
-    color: colors.text,
-    marginBottom: space.lg,
-  },
-  bodyText: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
-  },
-  /* The composition's process paragraph, under its card. */
-  process: { marginTop: space.lg },
-  miniLabel: smallLabel,
-  tagRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: space.sm,
-  },
-
-  /* Your pour */
-  logMeta: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-  },
-  quote: {
-    /* Your own words about the drink — set as reading text, not fine print. */
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    fontStyle: 'italic',
-    color: colors.text,
-    marginTop: space.sm,
-  },
-
-  /* Not logged */
-  lockedCard: {
     alignItems: 'center',
-    padding: space.xl,
-    marginTop: space.xl,
+    columnGap: space.sm,
+    rowGap: 6,
   },
-  lockedTitle: {
-    /* Inter, as every state title is; Playfair is kept for drink names. */
-    ...textRole.emptyTitle,
-    color: colors.text,
-    textAlign: 'center',
-    marginTop: space.md,
-    marginBottom: space.sm,
+  eyebrowPhrase: {
+    fontFamily: fonts.bodyMedium,
+    fontSize: textRole.helper.fontSize,
+    lineHeight: textRole.helper.lineHeight,
+    color: colors.onLiningMuted,
   },
-  lockedBody: {
+  heroName: { marginTop: 6 },
+  addedPlate: {
+    minHeight: 24,
+    justifyContent: 'center',
+    paddingHorizontal: space.sm,
+    borderRadius: radius.badge,
+    borderWidth: stroke.edge,
+    borderColor: colors.plateEdgeLining,
+  },
+  addedText: { color: colors.onLiningMuted },
+
+  /* Label band */
+  band: {
+    marginTop: 14,
+    marginHorizontal: layout.gutter,
+    borderTopWidth: stroke.edge,
+    borderBottomWidth: stroke.edge,
+    borderColor: colors.liningLine,
+  },
+  bandRow: { flexDirection: 'row' },
+  bandRowRuled: { borderTopWidth: stroke.edge, borderTopColor: colors.liningLine },
+  /* Width from LabelBand: equal outer widths. flexBasis 0 would share out what
+     is left after each cell's pad and rule, and set the first rule 13pt early. */
+  bandCell: {
+    paddingTop: 10,
+    paddingBottom: space.md,
+    paddingRight: CELL_PAD_RIGHT,
+  },
+  bandCellRuled: {
+    paddingLeft: CELL_PAD_LEFT,
+    borderLeftWidth: stroke.edge,
+    borderLeftColor: colors.liningLine,
+  },
+  bandValue: { ...textRole.labelValue, color: colors.onLining },
+  bandCaption: { ...textRole.labelCaption, color: colors.onLiningMuted, marginTop: 2 },
+
+  /* In your Dex since */
+  since: { marginTop: 14, paddingHorizontal: layout.gutter },
+  sinceRow: { minHeight: 52, flexDirection: 'row', alignItems: 'center', gap: space.md },
+  sinceThumb: {
+    width: 44,
+    height: 52,
+    borderRadius: radius.badge,
+    borderWidth: stroke.edge,
+    borderColor: colors.liningLine,
+    backgroundColor: colors.lining,
+  },
+  sinceText: { flex: 1 },
+  sinceTitle: { fontFamily: fonts.bodyMedium, fontSize: 15, lineHeight: 20, color: colors.onLining },
+  sinceLine: { ...textRole.helper, color: colors.onLiningMuted },
+  pressed: { opacity: 0.6 },
+  /* Your own words about the drink: reading text, upright (the app has no italic cut). */
+  note: {
     fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    textAlign: 'center',
+    fontSize: 16,
+    lineHeight: 24,
+    color: colors.onLining,
+    marginTop: 10,
   },
-  lockedCta: { marginTop: space.xl },
 
-  /* Serve */
-  statRow: {
+  /* Tastes of */
+  tastes: { marginTop: 20, paddingHorizontal: layout.gutter },
+  kicker: { ...textRole.helper, color: colors.onLiningMuted },
+  tastesLine: { ...textRole.tastes, color: colors.onLining, marginTop: 2 },
+
+  /* Mat cards */
+  matCard: {
+    marginTop: space.xl,
+    marginHorizontal: layout.gutter,
+    paddingHorizontal: space.lg,
+    ...elevation.paper,
+  },
+  matHead: {
+    minHeight: 52,
     flexDirection: 'row',
-    gap: space.sm,
-    marginTop: space.md,
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    columnGap: space.md,
+    rowGap: 2,
+    paddingVertical: 10,
+    borderBottomWidth: stroke.edge,
+    borderBottomColor: colors.line,
   },
-  /* Two of these side by side read fine; three of them, one of which
-     clipped its value, did not. A panel: the card corner and a drawn edge. */
-  statCard: {
-    flex: 1,
-    backgroundColor: colors.surface,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    borderRadius: radius.card,
-    paddingVertical: space.md,
-    paddingHorizontal: space.md,
-    gap: space.xs,
-  },
-  statLabel: smallLabel,
-  statValue: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+  matTitle: { ...textRole.sectionTitle, fontSize: 17, color: colors.text },
+  matAside: { ...textRole.helper, color: colors.textMuted },
+  ruled: { borderTopWidth: stroke.edge, borderTopColor: colors.line },
+  matRow: { paddingVertical: space.md, gap: 2 },
+  matLabel: { ...textRole.fieldLabel, color: colors.textMuted },
+  matDetail: { fontFamily: fonts.body, fontSize: 15, lineHeight: 22, color: colors.text },
+  matLead: {
+    fontFamily: fonts.body,
+    fontSize: 15,
+    lineHeight: 22,
     color: colors.text,
-  },
-  serveCard: {
-    backgroundColor: colors.surface,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    borderRadius: radius.card,
-    padding: space.lg,
-    marginTop: space.md,
-  },
-  pairWrap: {
-    marginTop: space.lg,
-    gap: space.sm,
+    paddingVertical: space.md,
   },
 
-  /* Recipe + composition rows */
-  listCard: { paddingHorizontal: space.lg },
-  /* Method and garnish, under the steps. */
-  detailCard: { marginTop: space.lg },
-  ingredientRow: {
+  /* Ingredients */
+  ingRow: {
+    minHeight: 46,
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: space.md,
     paddingVertical: space.md,
   },
-  ingredientItem: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
-  },
-  ingredientAmount: {
-    maxWidth: '42%',
-    textAlign: 'right',
-    fontFamily: fonts.numeral,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    ...tabular,
-  },
-  steps: {
-    marginTop: space.lg,
-    gap: space.md,
-  },
-  stepRow: {
-    flexDirection: 'row',
-    gap: space.md,
-    alignItems: 'flex-start',
-  },
+  ingRowStacked: { flexDirection: 'column', alignItems: 'stretch', gap: 2 },
+  amountCol: { width: AMOUNT_COL, paddingRight: AMOUNT_GAP },
+  amount: { ...textRole.specAmount, color: colors.wine },
+  metric: { ...textRole.labelCaption, color: colors.textMuted, ...tabular },
+  ingItem: { fontFamily: fonts.body, fontSize: 16, lineHeight: 22, color: colors.text },
+  /* Beside the amount column it takes the rest of the row; stacked, its own height. */
+  ingItemBeside: { flex: 1 },
+  ingNote: { ...textRole.helper, color: colors.textMuted },
+
+  /* Steps */
+  steps: { paddingVertical: 14, gap: space.md },
+  stepRow: { flexDirection: 'row', alignItems: 'flex-start' },
   stepNum: {
-    /* A bare figure in a 20pt column, on the step text's first line. */
-    width: 20,
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.body.lineHeight,
+    width: 24,
+    ...textRole.labelValue,
+    lineHeight: 24,
     color: colors.textMuted,
     ...tabular,
   },
-  stepText: {
-    flex: 1,
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
+  stepText: { flex: 1, fontFamily: fonts.body, fontSize: 16, lineHeight: 24, color: colors.text },
+
+  /* Field notes */
+  fieldNotes: { marginTop: space.xxl, paddingHorizontal: layout.gutter },
+  fieldTitle: { ...textRole.sectionTitle, color: colors.onLining, marginBottom: space.sm },
+  fieldBody: { fontFamily: fonts.body, fontSize: 16, lineHeight: 24, color: colors.onLining },
+
+  /* Trivia */
+  trivia: {
+    marginTop: space.xxl,
+    padding: 20,
+    borderTopWidth: stroke.edge,
+    borderBottomWidth: stroke.edge,
+    borderColor: colors.liningLine,
   },
-  componentRow: {
-    paddingVertical: space.md,
-    gap: space.xs,
-  },
-  componentLabel: smallLabel,
-  componentDetail: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.text,
+  triviaKicker: { ...textRole.helper, fontFamily: fonts.bodySemiBold, color: colors.onLiningMuted },
+  triviaDateline: { ...textRole.helper, color: colors.onLiningMuted, ...tabular },
+  triviaText: { ...textRole.trivia, color: colors.onLining, marginTop: space.sm },
+
+  /* Pinned bar */
+  bar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingTop: space.md,
+    paddingHorizontal: layout.gutter,
+    backgroundColor: colors.lining,
+    borderTopWidth: stroke.edge,
+    borderTopColor: colors.liningLine,
   },
 });

@@ -2,9 +2,18 @@ import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
 import { useCallback, useRef, useState, type ReactNode } from 'react';
 import { ActionSheetIOS, Alert, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 
-import { DexShelfRow, DexSummary, drinksByDexNumber } from '@/components/profile/DexShelf';
+import { EmptyArt } from '@/components/DexCard';
+import { Grain } from '@/components/Grain';
+import {
+  DexShelfRow,
+  DexSummary,
+  sharedByDexNumber,
+  useCollectedCount,
+  type SharedDrink,
+} from '@/components/profile/DexShelf';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ProfileHeader, type ProfileActions } from '@/components/profile/ProfileHeader';
+import { TopShelf } from '@/components/profile/TopShelf';
 import { usePostsByAuthor } from '@/components/profile/usePostsByAuthor';
 import { useProfileCounts } from '@/components/profile/useProfileCounts';
 import { useProfileVideos, VideoGridRow } from '@/components/profile/VideoGrid';
@@ -24,7 +33,7 @@ import { shareProfile } from '@/lib/profileLink';
 import { fetchProfiles, isRenderablePost } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
-import type { Drink, Post, UserProfile } from '@/types';
+import type { Post, UserProfile } from '@/types';
 
 /* ==================================================================== */
 /* A profile: yours, or anyone's                                        */
@@ -39,10 +48,15 @@ import type { Drink, Post, UserProfile } from '@/types';
 /* ONE LIST, ONE COLUMN. Posts are 3-up tiles, reels 3-up portrait       */
 /* tiles, Dex cards 2-up. FlatList's numColumns cannot change on a       */
 /* mounted list, so each section hands the list pre-chunked rows and the */
-/* list itself never has more than one column. The header and the tab   */
-/* strip are the list's header, so they scroll away with it; a sticky    */
-/* strip would mean splitting the header into rows, which our post       */
-/* counts do not justify.                                                */
+/* list itself never has more than one column. The header, the Top      */
+/* shelf and the tab strip are the list's header, so they scroll away    */
+/* with it; a sticky strip would mean splitting the header into rows,    */
+/* which our post counts do not justify.                                 */
+/*                                                                      */
+/* TWO MATERIALS. You read a profile on paper (the head, the grid) and   */
+/* its drinks sit in the cabinet's lining: the Top shelf band under the  */
+/* actions, and the Dex tab's rows of mounted cards, which run on lining */
+/* to the end of the list.                                              */
 /*                                                                      */
 /* Each section says what an empty list means: still loading (a Hold),  */
 /* could not load (Try again), or nothing there yet. A failed refetch    */
@@ -55,7 +69,7 @@ type Row =
   | { key: string; kind: 'posts'; posts: Post[] }
   | { key: string; kind: 'videos'; videos: ProfileVideo[] }
   | { key: string; kind: 'dexSummary' }
-  | { key: string; kind: 'dex'; drinks: Drink[] }
+  | { key: string; kind: 'dex'; entries: SharedDrink[]; last: boolean }
   | { key: string; kind: 'state'; state: 'loading' | 'empty' | 'error' }
   | { key: string; kind: 'note'; text: string }
   | { key: string; kind: 'notice' };
@@ -64,13 +78,15 @@ type Row =
  * Reels appear only while the feature's flag is on. Off, a profile has
  * two sections and the strip draws two tabs, not a third that leads to
  * nothing.
+ *
+ * Words, not glyphs: three outline icons (a grid, a clapper, a glass) were
+ * Instagram's strip with Sipply's names spoken under them, and "Dex" says
+ * what the tab is where a glass did not.
  */
 const SECTIONS: readonly TabStripItem<Section>[] = [
-  { key: 'posts', icon: 'grid', label: 'Posts', fillActive: true },
-  ...(SHOW_PROFILE_VIDEOS
-    ? [{ key: 'videos' as const, icon: 'reels' as const, label: VIDEO_COPY.label, fillActive: true }]
-    : []),
-  { key: 'dex', icon: 'dex', label: 'Dex', fillActive: true },
+  { key: 'posts', label: 'Posts' },
+  ...(SHOW_PROFILE_VIDEOS ? [{ key: 'videos' as const, label: VIDEO_COPY.label }] : []),
+  { key: 'dex', label: 'Dex' },
 ];
 
 /** What a section's rows are, from what its fetch has said so far. */
@@ -139,6 +155,8 @@ export function ProfileView({
   const postsVersion = useSocial((s) => s.postsVersion);
   const posts = usePostsByAuthor(person.id, myId, isOwn ? String(postsVersion) : '');
   const counts = useProfileCounts(person.id, myId);
+  // Read on someone else's profile too (hooks run unconditionally); only yours shows it.
+  const collected = useCollectedCount();
   const videosVersion = useVideosVersion();
   const videos = useProfileVideos(
     person.id,
@@ -299,12 +317,22 @@ export function ProfileView({
               (r): Row => ({ key: `videos:${r[0]!.id}`, kind: 'videos', videos: r }),
             ),
           )
-        : sectionRows('dex', posts.status, drinksByDexNumber(shown), (items) => [
-            { key: 'dex:summary', kind: 'dexSummary' },
-            ...chunk(items, 2).map(
-              (r): Row => ({ key: `dex:${r[0]!.id}`, kind: 'dex', drinks: r }),
-            ),
-          ]);
+        : sectionRows('dex', posts.status, sharedByDexNumber(shown), (items) => {
+            const pairs = chunk(items, 2);
+            return [
+              { key: 'dex:summary', kind: 'dexSummary' },
+              ...pairs.map(
+                (r, i): Row => ({
+                  key: `dex:${r[0]!.drink.id}`,
+                  kind: 'dex',
+                  entries: r,
+                  last: i === pairs.length - 1,
+                }),
+              ),
+            ];
+          });
+  // The Dex tab's rows are lining; the list's foot carries it under the tab bar.
+  const liningFoot = rows.some((r) => r.kind === 'dex');
 
   const reloadSection = section === 'videos' ? videos.reload : posts.reload;
 
@@ -379,8 +407,12 @@ export function ProfileView({
      * posting, so that promise would be false for anyone who has used it.
      */
     return isOwn ? (
+      /*
+       * A real drink, mounted, where a first pour will go: the screen that
+       * should sell the habit showed a bare camera glyph.
+       */
       <EmptyState
-        icon="camera"
+        art={<EmptyArt drinkId="negroni" />}
         title="Log your first pour"
         body="Pours you share show up here."
         action={{ label: 'Log a pour', onPress: () => router.navigate('/log') }}
@@ -399,7 +431,7 @@ export function ProfileView({
       case 'dexSummary':
         return <DexSummary posts={shown} isOwn={isOwn} pageOnly={pageOnly} />;
       case 'dex':
-        return <DexShelfRow drinks={item.drinks} />;
+        return <DexShelfRow entries={item.entries} last={item.last} />;
       case 'note':
         return <Text style={styles.note}>{item.text}</Text>;
       case 'notice':
@@ -424,6 +456,12 @@ export function ProfileView({
     if (videosOpened) videos.reload();
   };
 
+  /*
+   * The Top shelf shows once there is a post to put on it, and the strip
+   * starts right under its shade; without it, the strip keeps its 16pt
+   * below the actions.
+   */
+  const shelf = shown.length > 0;
   const header = (
     <>
       <ProfileHeader
@@ -434,18 +472,21 @@ export function ProfileView({
         onOpenList={openList}
         actions={actions}
       />
+      {shelf ? (
+        <TopShelf posts={shown} isOwn={isOwn} collected={collected} pageOnly={pageOnly} />
+      ) : null}
       <TabStrip
         items={SECTIONS}
         value={section}
         onChange={selectSection}
-        iconOnly
-        style={styles.tabs}
+        style={shelf ? undefined : styles.tabs}
       />
     </>
   );
 
   return (
     <View style={styles.screen}>
+      <Grain />
       {/*
         The bare username, centred: no @, no lock and no chevron, because
         there is no account switcher for a chevron to promise. The display
@@ -467,19 +508,37 @@ export function ProfileView({
         keyExtractor={(row) => row.key}
         renderItem={renderRow}
         ListHeaderComponent={header}
+        /*
+         * Under the Dex tab's rows the lining runs on to the end: past the
+         * tab bar's clearance, and down to the screen's foot when a short
+         * Dex leaves room, rather than stopping at the last card's ledge.
+         */
+        ListFooterComponent={
+          liningFoot ? (
+            <View style={[styles.liningFoot, { minHeight: bottomInset }]}>
+              <Grain tone="lining" />
+            </View>
+          ) : null
+        }
+        ListFooterComponentStyle={liningFoot ? styles.grow : undefined}
         onScroll={onScroll}
         scrollEventThrottle={16}
         refreshing={posts.reloading || (section === 'videos' && videos.reloading)}
         onRefresh={onRefresh}
         /*
          * A row of tiles is a third of a screen tall, so six rows cover
-         * the first screen and its neighbour; no removeClippedSubviews,
-         * which can blank a whole list on iOS (specs/06).
+         * the first screen. Five screens mounted, not seven: each row of
+         * tiles holds about 2.3 MB of decoded pours, and the Top shelf
+         * added three mounted photos, so the two screens dropped (about 13
+         * rows, 30 MB) pay for it many times over (specs/v3-cabinet.md
+         * section 11). No removeClippedSubviews, which can blank a whole
+         * list on iOS (specs/06).
          */
         initialNumToRender={6}
-        windowSize={7}
-        style={styles.screen}
-        contentContainerStyle={{ paddingBottom: bottomInset }}
+        windowSize={5}
+        // Transparent, so the screen's grain shows through between tiles.
+        style={styles.list}
+        contentContainerStyle={liningFoot ? styles.grow : { paddingBottom: bottomInset }}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -488,8 +547,11 @@ export function ProfileView({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
+  list: { flex: 1 },
   // Full width, outside the gutters: the rule runs edge to edge under the header.
   tabs: { marginTop: space.lg },
+  liningFoot: { flexGrow: 1, backgroundColor: colors.lining },
+  grow: { flexGrow: 1 },
   note: {
     ...textRole.helper,
     color: colors.textMuted,

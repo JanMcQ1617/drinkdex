@@ -173,11 +173,16 @@ export function DexStatusPlaque({
  * the reel glyph, or (`gilt`) the legendary sparkle on a grid tile. 22pt,
  * the marker fill with a 1pt marker edge, onMedia.ink; the gilt sparkle is
  * a glyph only (4.31:1 against the 3:1 a glyph needs). It speaks through
- * the photo it sits on.
+ * the photo it sits on, so it is hidden from VoiceOver even when it is
+ * laid over the photo as a sibling ("1/3" read on its own says nothing).
  */
 export function MediaMarker({ icon, text, gilt }: { icon?: IconName; text?: string; gilt?: boolean }) {
   return (
-    <View pointerEvents="none" style={styles.marker}>
+    <View
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={styles.marker}>
       {gilt ? (
         <Icon name="sparkle" size={13} color={onMedia.glyphGilt} filled />
       ) : icon ? (

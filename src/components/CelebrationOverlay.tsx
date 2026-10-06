@@ -1,23 +1,24 @@
-import { Image } from 'expo-image';
 import React, { useCallback, useEffect } from 'react';
-import { AccessibilityInfo, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, {
-  FadeIn,
-  useAnimatedStyle,
-  useReducedMotion,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import {
+  AccessibilityInfo,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import Animated, { FadeIn, useReducedMotion } from 'react-native-reanimated';
 
-import { DrinkArt } from '@/components/artwork';
+import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate, TierWord } from '@/components/cabinet';
+import { DrinkFace, FACE_FILL, FoilSweep } from '@/components/DexCard';
+import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { Button, RarityBadge } from '@/components/ui';
+import { Button } from '@/components/ui';
 import {
   colors,
-  dexNumber,
   fonts,
   layout,
-  motion,
   radius,
   space,
   stroke,
@@ -25,8 +26,7 @@ import {
   textRole,
   type as typeScale,
 } from '@/constants/theme';
-import { getDrink, formatCount, formatDexNumber, TOTAL } from '@/data';
-import { drinkPhoto } from '@/data/drinkPhotos';
+import { formatCount, getDrink, TOTAL } from '@/data';
 import { useCelebrate, type Celebration } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
 
@@ -49,13 +49,26 @@ import { useCollection } from '@/store/collection';
 /* of their own good news turns it into an interruption.                */
 /* ==================================================================== */
 
-/** How long the card takes to settle. Kept under the 400ms ceiling. */
+/** How long the scrim takes to fade in. Kept under the 400ms ceiling. */
 const SETTLE = 380;
+
+/** The card's widest, and its body's padding: the name's measure comes from both. */
+const CARD_MAX = 340;
+const BODY_PAD = space.xl;
+/** The feature mount (spec §9.13.7), as EmptyArt draws it. */
+const FEATURE = { width: 120, height: 150 } as const;
+const FEATURE_INNER = 2 * (MOUNT.feature.padding + stroke.edge);
+const CAP = 1.3;
 
 /*
  * The card alone. The scrim and the dismiss layer belong to the overlay,
  * which mounts them once for the whole queue; each card is keyed on its
- * queue id, so the next one springs in fresh.
+ * queue id, so the next one is drawn fresh.
+ *
+ * AT REST FROM ITS FIRST FRAME. It sprang in from 0.86 and 18pt low,
+ * which a stalled frame loop left small and off-centre; now nothing about
+ * the card moves, and the only motion on it is a legendary's one foil
+ * pass, which rests off the picture (DexCard's FoilSweep).
  *
  * NO EXIT ANIMATION. The card that is done goes at once. An `exiting`
  * fade has two ways never to finish on this Reanimated (4.5.x): when
@@ -65,33 +78,19 @@ const SETTLE = 380;
  * layer behind it, stays over the app for the rest of the session with
  * nothing to tap.
  *
- * The spring itself is safe to keep: it is a transform on a card that is
- * fully opaque from its first frame, so a stalled spring leaves the card
- * a little small and low, never invisible.
+ * Paper, with its grain: the card is a sheet of the app's own ground laid
+ * over the dimmed screen, and the mount on it is card stock lying on paper.
  */
-function Card({ children }: { children: React.ReactNode }) {
-  const reduced = useReducedMotion();
-  const scale = useSharedValue(reduced ? 1 : 0.86);
-  const lift = useSharedValue(reduced ? 0 : 18);
-
-  useEffect(() => {
-    if (reduced) return;
-    scale.set(withSpring(1, motion.selection));
-    lift.set(withSpring(0, motion.selection));
-  }, [reduced, scale, lift]);
-
-  const style = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }, { translateY: lift.value }],
-  }));
-
+function CelebrationCard({ children }: { children: React.ReactNode }) {
   /*
     Absorbs its own touches without being a button, so a tap on the card
     does not fall through to the dismiss layer below it.
   */
   return (
-    <Animated.View style={[styles.card, style]} onStartShouldSetResponder={() => true}>
+    <View style={styles.card} onStartShouldSetResponder={() => true}>
+      <Grain />
       {children}
-    </Animated.View>
+    </View>
   );
 }
 
@@ -118,6 +117,8 @@ export function CelebrationOverlay() {
   const dismiss = useCelebrate((s) => s.dismiss);
   const unlocks = useCollection((s) => s.unlocks);
   const reduced = useReducedMotion();
+  const { width } = useWindowDimensions();
+  const measure = Math.min(CARD_MAX, width - 2 * layout.gutter) - 2 * stroke.edge - 2 * BODY_PAD;
 
   const onDismiss = useCallback(() => dismiss(), [dismiss]);
 
@@ -145,34 +146,54 @@ export function CelebrationOverlay() {
     const drink = getDrink(current.drinkId);
     if (!drink) return null;
 
-    const record = unlocks[current.drinkId];
-    const photo = record?.photoUri ? { uri: record.photoUri } : drinkPhoto(drink.id);
+    const record = Object.prototype.hasOwnProperty.call(unlocks, current.drinkId)
+      ? unlocks[current.drinkId]
+      : undefined;
     const legendary = drink.rarity === 'legendary';
     const collected = Object.keys(unlocks).length;
+    const faceW = FEATURE.width - FEATURE_INNER;
+    const faceH = FEATURE.height - FEATURE_INNER;
 
     card = (
       <View style={styles.body}>
         <Text style={styles.eyebrow}>Collected</Text>
 
         {/*
-          The pour as an inset photo: a rectangle with a drawn edge, as a
-          print would sit on the card. A legendary catch says so with a
-          gilt edge, the metal that means legendary everywhere else; the
-          rarity tag below says it in words.
+          The catch as the Dex will hold it: a feature mount, card stock
+          with the tier's rule printed inside its edge (a legendary's in
+          double gilt), lying on the paper card, so no seat. Your pour,
+          else the lit catalogue photo, else the lit vector face, decoded at
+          the window's size rather than the pour's 2048px.
         */}
-        <View style={[styles.art, legendary && styles.artLegendary]}>
-          {photo ? (
-            <Image source={photo} style={styles.artPhoto} contentFit="cover" />
-          ) : (
-            <DrinkArt drink={drink} size={104} flat />
-          )}
-        </View>
+        <Mount state="mounted" tier={drink.rarity} size="feature" onLining={false} style={styles.art}>
+          <MountWindow height={faceH} state="mounted">
+            <DrinkFace
+              drink={drink}
+              mode="lit"
+              photoUri={record?.photoUri}
+              width={faceW}
+              height={faceH}
+              style={FACE_FILL}
+            />
+            {/* One pass, then at rest off the picture; none under Reduce Motion. */}
+            {legendary ? <FoilSweep width={faceW} /> : null}
+          </MountWindow>
+        </Mount>
 
-        <Text style={styles.title}>{drink.name}</Text>
-        <Text style={styles.dex}>{formatDexNumber(drink.dexNumber)}</Text>
+        {/* Never truncated: a long name wraps, and the card grows with it. */}
+        <DrinkName
+          name={drink.name}
+          role={textRole.nameLg}
+          measure={measure}
+          cap={CAP}
+          color={colors.text}
+          align="center"
+          accessibilityRole="header"
+        />
 
-        <View style={styles.badgeRow}>
-          <RarityBadge rarity={drink.rarity} />
+        <View style={styles.plates}>
+          <NumberPlate n={drink.dexNumber} tone="paper" />
+          <TierWord rarity={drink.rarity} tone="paper" />
         </View>
 
         <Text style={styles.progress}>
@@ -192,7 +213,9 @@ export function CelebrationOverlay() {
           <Icon name="trophy" size={48} color={colors.wine} />
         </View>
 
-        <Text style={[styles.title, styles.rankTitle]}>{current.milestone.title}</Text>
+        <Text style={styles.rankTitle} accessibilityRole="header">
+          {current.milestone.title}
+        </Text>
         <Text style={styles.progress}>
           {formatCount(current.collected)} of {formatCount(TOTAL)} collected
         </Text>
@@ -244,7 +267,7 @@ export function CelebrationOverlay() {
         importantForAccessibility="no"
       />
 
-      <Card key={current.id}>{card}</Card>
+      <CelebrationCard key={current.id}>{card}</CelebrationCard>
     </View>
   );
 }
@@ -263,7 +286,7 @@ const styles = StyleSheet.create({
     padding: layout.gutter,
     zIndex: 30,
   },
-  /* Separate fill so the scrim can fade in while the card springs. */
+  /* Separate fill so the scrim alone fades in, under a card already at rest. */
   scrimFill: {
     position: 'absolute',
     top: 0,
@@ -272,17 +295,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: colors.scrim,
   },
-  /* A dialog: a panel with one drawn edge and no shadow. */
+  /* A dialog: a panel with one drawn edge and no shadow, on the paper ground. */
   card: {
     width: '100%',
-    maxWidth: 340,
-    backgroundColor: colors.surface,
+    maxWidth: CARD_MAX,
+    backgroundColor: colors.bg,
     borderRadius: radius.card,
     borderWidth: stroke.edge,
     borderColor: colors.line,
     overflow: 'hidden',
   },
-  body: { alignItems: 'center', padding: space.xl },
+  body: { alignItems: 'center', padding: BODY_PAD },
 
   /* Sentence case and untracked, in wine: the one word that names the moment. */
   eyebrow: {
@@ -293,39 +316,32 @@ const styles = StyleSheet.create({
     marginBottom: space.lg,
   },
 
-  art: {
-    width: 120,
-    height: 120,
-    borderRadius: radius.card,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.bgSunk,
-    marginBottom: space.lg,
-  },
-  artLegendary: { borderWidth: 2.5, borderColor: colors.gilt },
-  artPhoto: { width: '100%', height: '100%' },
+  art: { ...FEATURE, marginBottom: space.lg },
   rankMark: { marginBottom: space.lg },
 
-  /* The drink's name, in the display face: the drink is the subject here. */
-  title: {
-    fontFamily: fonts.displayBold,
+  /*
+   * A rank is a reading of the collection, not a drink, so it is Inter, as
+   * Stats sets it (Playfair is for drink names only). The size of the
+   * drink's name on the other card, so the two cards of one log hold the
+   * same shape.
+   */
+  rankTitle: {
+    fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.headline.fontSize,
     lineHeight: typeScale.headline.lineHeight,
     color: colors.text,
     textAlign: 'center',
   },
-  /*
-   * A rank is a reading of the collection, not a drink, so it is Inter, as
-   * Stats sets it. Same size as a drink's name, so the two cards of one
-   * log hold the same shape.
-   */
-  rankTitle: { fontFamily: fonts.bodySemiBold },
-  /* The catalogue number's one stamp, as on the entry's Dex card. taupeInk on white is 5.89:1. */
-  dex: { ...dexNumber, marginTop: space.xs },
-  badgeRow: { marginTop: space.md },
+  /* The catalogue number's stamp and the tier, as on the entry's Dex card. */
+  plates: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    columnGap: space.sm,
+    rowGap: space.xs,
+    marginTop: space.md,
+  },
   progress: {
     ...textRole.helper,
     ...tabular,

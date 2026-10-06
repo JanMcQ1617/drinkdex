@@ -326,6 +326,8 @@ export const colors = {
   liningControl: 'rgba(233, 229, 223, 0.42)',
   /** An outline button on lining, held. */
   liningPressed: 'rgba(233, 229, 223, 0.08)',
+  /** The tab bar's log action: its 1pt bone edge on the espresso bar, 3.02:1 composited (WCAG 1.4.11). */
+  logActionEdge: 'rgba(233, 229, 223, 0.38)',
   /** A mount's 1pt edge where it sits in the lining. */
   matEdge: 'rgba(14, 11, 11, 0.35)',
   /** The hairline inside a mount's window. */
@@ -756,9 +758,10 @@ export const motion = {
   spring: { damping: 18, stiffness: 220, mass: 0.9 },
   /**
    * How a SELECTION indicator answers: the thumb of SegmentedControl and
-   * the underline of TabStrip (components/), and the Dex filter rule. Each
-   * of them also shows its state without motion (a label colour, a filled
-   * glyph), so a spring that stalls never hides which option is on. Tab
+   * the underline of TabStrip (components/), and the Dex filter rule until
+   * v3's filter Chips replace it (Chips answer with a fill). Each of them
+   * also shows its state without motion (a label colour, a filled glyph),
+   * so a spring that stalls never hides which option is on. Tab
    * switches do not use it: they cut instantly, as iOS's own tab bar does.
    *
    * Faster than `spring`, which stays where it is because it drives other

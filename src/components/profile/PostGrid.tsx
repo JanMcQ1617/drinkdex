@@ -2,11 +2,11 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
-import { DrinkArt } from '@/components/artwork';
-import { Icon } from '@/components/icons';
+import { DrinkFace, FACE_FILL } from '@/components/DexCard';
+import { MediaMarker, RarityRule } from '@/components/media';
 import { timeAgoSpoken } from '@/components/PostCard';
 import { haptic, PressableScale } from '@/components/ui';
-import { CATEGORY_META, colors, layout, motion, radius } from '@/constants/theme';
+import { CATEGORY_META, layout, motion, radius, RARITY_META } from '@/constants/theme';
 import { getDrink } from '@/data';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import type { Post } from '@/types';
@@ -15,9 +15,15 @@ import type { Post } from '@/types';
 /* The posts grid: a profile's Posts tab, and Saved                     */
 /*                                                                      */
 /* Three square tiles to a row, full bleed, 2pt apart: the shape every   */
-/* photo grid has. A tile is the middle of the photo; the whole 3:4      */
-/* frame is one tap away, on the post's own screen. Media is square-     */
-/* cornered; only controls are rounded.                                  */
+/* photo grid has. A tile is the middle of the photo; the whole frame is */
+/* one tap away, on the post's own screen. Media is square-cornered;     */
+/* only controls are rounded.                                            */
+/*                                                                      */
+/* The tier shows on the photo the way the feed shows it: a rare pour    */
+/* carries a 2pt wine-soft rule along its foot, a legendary one a 3pt    */
+/* gilt rule and the gilt sparkle in a corner marker. Everything over    */
+/* the photo comes from media.tsx, the one file whose inks are measured  */
+/* over a blown-out white frame.                                         */
 /*                                                                      */
 /* Rows, not a three-column FlatList. The profile's list shows posts,    */
 /* reels and Dex cards (2-up) in one FlatList, and React Native throws  */
@@ -67,8 +73,9 @@ export function PostGridRow({
 }
 
 /**
- * One post as a square tile: its newest photo, or its drink's artwork on
- * the category wash when there is none.
+ * One post as a square tile: its newest photo, or the drink's lit face
+ * (the tungsten catalogue photo, else the lit vector glass) when there is
+ * none or it will not sign.
  */
 export function PostGridTile({
   post,
@@ -84,8 +91,8 @@ export function PostGridTile({
    * The post is the retry key, so a pull to refresh (which fetches fresh
    * post objects) re-asks for a photo that failed to sign. `undefined` is
    * "still signing": the tile holds its category wash, and only a photo
-   * that will not sign (`null`) falls back to the artwork. Drawing the
-   * artwork while waiting flashed an illustration that the photo replaced.
+   * that will not sign (`null`) falls back to the drink's lit face. Drawing
+   * the face while waiting flashed a picture that the photo replaced.
    */
   const photoUrl = useSignedPhoto(post.photoPath, post);
   const drink = getDrink(post.drinkId);
@@ -93,6 +100,7 @@ export function PostGridTile({
   if (!drink) return null;
 
   const photos = post.photoPaths?.length ?? (post.photoPath ? 1 : 0);
+  const legendary = drink.rarity === 'legendary';
   const open = () => {
     haptic.tap();
     if (onOpen) onOpen(post);
@@ -112,10 +120,13 @@ export function PostGridTile({
       unstable_pressDelay={120}
       onPress={open}
       accessibilityRole="button"
-      // Spoken, not the visual "3h": that reads as "3 h".
-      accessibilityLabel={`${drink.name}, posted ${timeAgoSpoken(post.createdAt)}${
-        photos > 1 ? `, ${photos} photos` : ''
-      }`}
+      /*
+       * Spoken, not the visual "3h": that reads as "3 h". The tier is said
+       * where the tile draws it, on rare and legendary pours.
+       */
+      accessibilityLabel={`${drink.name}${
+        drink.rarity === 'rare' || legendary ? `, ${RARITY_META[drink.rarity].label}` : ''
+      }, posted ${timeAgoSpoken(post.createdAt)}${photos > 1 ? `, ${photos} photos` : ''}`}
       style={[
         styles.tile,
         { width: size, height: size, backgroundColor: CATEGORY_META[drink.category].wash },
@@ -152,18 +163,22 @@ export function PostGridTile({
           transition={motion.fast}
         />
       ) : (
-        <DrinkArt drink={drink} size={size * 0.6} flat />
+        <DrinkFace drink={drink} mode="lit" width={size} height={size} style={FACE_FILL} />
       )}
-      {photos > 1 ? (
+      {legendary || photos > 1 ? (
         /*
-         * More than one photo on this post. A dark marker with bone ink,
-         * no edge: it has to hold over a white tablecloth as well as a
-         * dark bar (the pair is audited in check-contrast).
+         * Markers in the top corner: the legendary sparkle, then the stack
+         * when the post has more than one photo (the stack keeps the corner
+         * it always had). Dark marker fill with a 1pt edge, so they hold
+         * over a white tablecloth as well as a dark bar.
          */
-        <View style={styles.stack} pointerEvents="none">
-          <Icon name="stack" size={14} color={colors.reelInk} />
+        <View style={styles.markers} pointerEvents="none">
+          {legendary ? <MediaMarker gilt /> : null}
+          {photos > 1 ? <MediaMarker icon="stack" /> : null}
         </View>
       ) : null}
+      {/* Last, so it lies over the photo's foot; the tile clips it. */}
+      <RarityRule rarity={drink.rarity} />
     </PressableScale>
   );
 }
@@ -177,15 +192,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: { width: '100%', height: '100%' },
-  stack: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-    width: 22,
-    height: 22,
-    borderRadius: radius.badge,
-    backgroundColor: colors.reelScrim,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  markers: { position: 'absolute', top: 6, right: 6, flexDirection: 'row', gap: 4 },
 });
