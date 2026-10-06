@@ -185,6 +185,7 @@ function SharedCard({ drink, post, cardWidth }: { drink: Drink; post: Post; card
       collected
       onLining
       userPhotoUri={photo ?? null}
+      userPhotoCacheKey={post.photoPath ?? null}
       cardWidth={cardWidth}
       onPress={(id) => router.navigate({ pathname: '/drink/[id]', params: { id } })}
     />

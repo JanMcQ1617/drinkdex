@@ -130,6 +130,12 @@ export interface DrinkFaceProps {
   mode: 'lit' | 'ghost';
   /** Your pour. Lit only: a ghost face never shows a person's photo. */
   photoUri?: string | null;
+  /**
+   * The pour's storage path, when `photoUri` is a signed URL. Signed URLs
+   * carry a fresh token each time they are minted, so keyed on the URL a
+   * profile's Dex tab downloaded every photo again each session.
+   */
+  photoCacheKey?: string | null;
   /** The frame in points; sizes the vector glass when there is no photo. */
   width: number;
   height: number;
@@ -162,6 +168,7 @@ export const DrinkFace = React.memo(function DrinkFace({
   drink,
   mode,
   photoUri,
+  photoCacheKey,
   width,
   height,
   artScale,
@@ -170,7 +177,7 @@ export const DrinkFace = React.memo(function DrinkFace({
   const source =
     mode === 'lit'
       ? photoUri
-        ? { uri: photoUri }
+        ? { uri: photoUri, cacheKey: photoCacheKey ?? undefined }
         : drinkPhoto(drink.id)
       : drinkPhotoGhost(drink.id);
 
@@ -224,6 +231,8 @@ export interface DexCardProps {
   collected: boolean;
   /** The user's own pour photo, once they have logged one. */
   userPhotoUri?: string | null;
+  /** Its storage path when userPhotoUri is a signed URL (see DrinkFace). */
+  userPhotoCacheKey?: string | null;
   /**
    * Whether the card sits in the lining (the Dex tray, a profile's Dex
    * tab): a collected mount is seated with a contact shadow and a dark
@@ -238,6 +247,7 @@ export const DexCard = React.memo(function DexCard({
   cardWidth,
   collected,
   userPhotoUri,
+  userPhotoCacheKey,
   onLining = true,
   onPress,
 }: DexCardProps) {
@@ -313,6 +323,7 @@ export const DexCard = React.memo(function DexCard({
               drink={drink}
               mode={collected ? 'lit' : 'ghost'}
               photoUri={collected ? userPhotoUri : null}
+              photoCacheKey={collected ? userPhotoCacheKey : null}
               width={column}
               height={windowH}
               style={FACE_FILL}
