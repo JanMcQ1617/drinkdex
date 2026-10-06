@@ -26,6 +26,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { DrinkName } from '@/components/cabinet';
 import { Icon, type IconName } from '@/components/icons';
 import {
   CATEGORY_META,
@@ -62,8 +63,12 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 /*      for seconds after a cold start in a Release build, so every      */
 /*      state that matters (a floating field label, a selected segment)  */
 /*      is shown without motion too.                                     */
-/*   5. One wine thing per view. Wine fills the primary action; focus,   */
-/*      selection and secondary actions use ink.                        */
+/*   5. One wine action per view. Wine fills the primary action; focus,  */
+/*      selection and secondary actions use ink. Since v3 wine is also a */
+/*      material (the cabinet's lining), and wine on lining is 1.22:1,   */
+/*      so on lining the primary button is bone (`onLining`) instead.   */
+/*   6. Drink names go through DrinkName (components/cabinet.tsx): they  */
+/*      shrink to fit their column and never truncate.                   */
 /* ==================================================================== */
 
 /* ==================================================================== */
@@ -223,7 +228,11 @@ export type ButtonVariant =
   | 'danger'
   | 'dangerText'
   | 'onDark'
-  | 'onDarkText';
+  | 'onDarkText'
+  | 'onLining'
+  | 'onLiningOutline'
+  | 'onLiningText'
+  | 'dangerOnLining';
 
 /**
  * `md` is 48pt, the call to action. `sm` is 36pt for an action that sits
@@ -267,6 +276,12 @@ export interface ButtonProps {
    * is out passes `{ disabled: true }` and a no-op `onPress`.
    */
   accessibilityState?: AccessibilityState;
+  /**
+   * Caps the label's Dynamic Type growth, for a button pinned to a bar that
+   * must not grow without bound (the drink page's "Log another …", 1.3).
+   * Uncapped by default, like any body text. The label still wraps.
+   */
+  maxFontSizeMultiplier?: number;
 }
 
 type ButtonSkin = {
@@ -305,6 +320,12 @@ type ButtonSkin = {
  * Two for the dark reels ground, where wine is 1.12:1 and vanishes:
  * `onDark` is the bone button with an espresso-black label (19.3:1), and
  * `onDarkText` the bone text button for "Not now" and "Done".
+ *
+ * Four for the cabinet's lining, where wine is 1.22:1. `onLining` is the
+ * primary there: bone with a lining label (13.32:1), held at onLiningMuted
+ * (6.79:1). `onLiningOutline` is the secondary, bone text on a 3.27:1
+ * `liningControl` edge; `onLiningText` the quiet one; `dangerOnLining`
+ * the bare destructive word ("Remove from collection") on the cellar.
  *
  * No variant casts a shadow.
  */
@@ -346,10 +367,37 @@ const BUTTON_SKIN: Record<ButtonVariant, ButtonSkin> = {
     pressedOpacity: 0.5,
     bare: true,
   },
+  onLining: {
+    bg: colors.onLining,
+    fg: colors.lining,
+    edge: colors.onLining,
+    pressedBg: colors.onLiningMuted,
+    pressedEdge: colors.onLiningMuted,
+  },
+  onLiningOutline: {
+    bg: 'transparent',
+    fg: colors.onLining,
+    edge: colors.liningControl,
+    pressedBg: colors.liningPressed,
+  },
+  onLiningText: {
+    bg: 'transparent',
+    fg: colors.onLining,
+    edge: 'transparent',
+    pressedOpacity: 0.5,
+    bare: true,
+  },
+  dangerOnLining: {
+    bg: 'transparent',
+    fg: colors.dangerOnLining,
+    edge: 'transparent',
+    pressedOpacity: 0.5,
+    bare: true,
+  },
 };
 
 /** Variants whose `block` form pins the mark at the left (see Button). */
-const PINS_MARK: readonly ButtonVariant[] = ['secondary', 'tonal', 'onDark'];
+const PINS_MARK: readonly ButtonVariant[] = ['secondary', 'tonal', 'onDark', 'onLining', 'onLiningOutline'];
 
 /**
  * DISABLED AND LOADING ARE DIFFERENT STATES. Both ignore presses, but
@@ -367,10 +415,11 @@ const PINS_MARK: readonly ButtonVariant[] = ['secondary', 'tonal', 'onDark'];
  * beside "Update photo" in half of a 375pt screen wraps it onto a second
  * line mid-save.
  *
- * A STACK OF PROVIDER BUTTONS LINES UP. A `block` secondary, tonal or
- * onDark button with a mark pins the mark 16pt from its left edge and
- * centres the label across the full width, so a column of "Continue
- * with …" rows puts every mark in one column and every label on one axis.
+ * A STACK OF PROVIDER BUTTONS LINES UP. A `block` secondary, tonal,
+ * onDark, onLining or onLiningOutline button with a mark pins the mark
+ * 16pt from its left edge and centres the label across the full width, so
+ * a column of "Continue with …" rows puts every mark in one column and
+ * every label on one axis.
  * Anywhere else the mark sits inline before the label.
  */
 export function Button({
@@ -388,6 +437,7 @@ export function Button({
   accessibilityLabel,
   accessibilityHint,
   accessibilityState,
+  maxFontSizeMultiplier,
 }: ButtonProps) {
   const skin = BUTTON_SKIN[variant];
   const fg = muted && variant === 'text' ? colors.textMuted : skin.fg;
@@ -435,8 +485,10 @@ export function Button({
       ]}>
       {mark ?? (block ? spinner : null)}
       <Text
+        maxFontSizeMultiplier={maxFontSizeMultiplier}
         style={[
           sm ? textRole.buttonSm : textRole.button,
+          styles.buttonLabel,
           { color: fg },
           pinned && styles.buttonLabelPinned,
           coverLabel && styles.buttonLabelCovered,
@@ -683,11 +735,16 @@ function useAvatarUrl(path: string | null | undefined, localUri?: string | null)
  * a person is round, which is how a feed tells people from things at a
  * glance. The radii below carry `round-ok: avatar` for check-design.
  *
- * The handoff draws every avatar the same way — a solid wine circle with a
- * Playfair initial in bone — so the disc no longer takes the user's accent
- * as a wash. The accent survives as the RING, which keeps per-user colour
+ * The handoff draws every avatar the same way — a solid wine circle with
+ * a bone initial — so the disc no longer takes the user's accent as a
+ * wash. The accent survives as the RING, which keeps per-user colour
  * without asking bone type to stay readable on six different fills: brass
  * would have landed at 4.49:1, just under the bar this app holds.
+ *
+ * The initials are Inter SemiBold, not the handoff's Playfair: v3 keeps the
+ * display face for the wordmark and drink names (check-design rule 6). They
+ * are 40% of the disc and never under 11pt, the app's floor, so the 24pt
+ * tab-bar face reads "NV" at 11 rather than at 7.
  *
  * Deliberately not emoji: emoji render in the system font, so their weight
  * and colour can't be controlled by design tokens, and at avatar size they
@@ -698,14 +755,17 @@ export function Avatar({
   accent,
   size = 40,
   ring,
+  ringWidth = 2,
   avatarPath,
   localUri,
 }: {
   name: string;
   accent: string;
   size?: number;
-  /** Draws an unseen-story style ring. */
+  /** Draws the accent ring, with a 1pt gap inside it. */
   ring?: boolean;
+  /** The ring's stroke, 2 by default; edit profile draws 3 so the accent being chosen shows. */
+  ringWidth?: number;
   /** Object path from `profiles.avatar_path`. */
   avatarPath?: string | null;
   /** A just-picked local image, previewed before it is uploaded. */
@@ -720,7 +780,8 @@ export function Avatar({
     .map((w) => w[0]!.toUpperCase())
     .join('');
 
-  const inner = size - (ring ? 6 : 0);
+  // The ring and a 1pt gap on each side.
+  const inner = size - (ring ? ringWidth * 2 + 2 : 0);
 
   /*
    * Hidden from VoiceOver. Every call site either prints the name beside
@@ -737,7 +798,7 @@ export function Avatar({
         styles.avatarOuter,
         // round-ok: avatar
         { width: size, height: size, borderRadius: size / 2 },
-        ring ? { borderWidth: 2, borderColor: accent } : null,
+        ring ? { borderWidth: ringWidth, borderColor: accent } : null,
       ]}>
       <View
         style={[
@@ -778,7 +839,10 @@ export function Avatar({
             contentFit="cover"
           />
         ) : (
-          <Text style={[styles.avatarText, { fontSize: inner * 0.42, color: colors.textOnWine }]}>
+          <Text
+            // The disc is a fixed size, so its initials must not grow past it.
+            allowFontScaling={false}
+            style={[styles.avatarText, { fontSize: Math.max(11, Math.round(inner * 0.4)), color: colors.textOnWine }]}>
             {initials || '?'}
           </Text>
         )}
@@ -801,7 +865,12 @@ export function Avatar({
  *
  * `content` (16 SemiBold, ink) heads a part of a page: "How it's made".
  * `group` (14 SemiBold, muted, 16pt inset) names the ListGroup beneath it,
- * lined up with that group's row titles, as iOS Settings does.
+ * lined up with that group's row titles, as iOS Settings does. `strong`
+ * sets a group header in ink rather than muted, for the one group that
+ * matters most on its screen (Activity's "New").
+ *
+ * `tone="lining"` is for a header on the cabinet's lining: title and
+ * action in onLining (wine is 1.22:1 there), a group title onLiningMuted.
  *
  * The header role is what VoiceOver's Headings rotor jumps between. Long
  * screens (a drink's recipe, Settings, the shelves of My Bar) are built
@@ -814,18 +883,32 @@ export function SectionHeader({
   title,
   size = 'content',
   action,
+  tone = 'paper',
+  strong,
   style,
 }: {
   title: string;
   size?: 'content' | 'group';
   action?: { label: string; onPress: () => void };
+  tone?: 'paper' | 'lining';
+  /** A group header in ink rather than muted. */
+  strong?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
   const group = size === 'group';
+  const lining = tone === 'lining';
+  const muted = group && !strong;
+  const titleInk = lining
+    ? muted
+      ? colors.onLiningMuted
+      : colors.onLining
+    : muted
+      ? colors.textMuted
+      : colors.text;
   return (
     <View style={[styles.sectionHeader, group && styles.sectionHeaderGroup, style]}>
       <Text
-        style={[group ? textRole.groupTitle : textRole.sectionTitle, styles.sectionTitle, group && styles.sectionTitleGroup]}
+        style={[group ? textRole.groupTitle : textRole.sectionTitle, styles.sectionTitle, { color: titleInk }]}
         accessibilityRole="header">
         {title}
       </Text>
@@ -836,7 +919,7 @@ export function SectionHeader({
           accessibilityRole="button"
           accessibilityLabel={action.label}
           style={({ pressed }) => pressed && styles.textPressed}>
-          <Text style={styles.sectionAction}>{action.label}</Text>
+          <Text style={[styles.sectionAction, lining && { color: colors.onLining }]}>{action.label}</Text>
         </Pressable>
       ) : null}
     </View>
@@ -857,15 +940,22 @@ export function SectionHeader({
  *
  * Surfaces that genuinely float (the tab bar, sheets) carry their own
  * elevation and are not Cards.
+ *
+ * `surface="mat"` is bone card stock (colors.mat) instead of white: the
+ * drink page's spec card and the Stats tier plates, where the card is a
+ * printed object rather than a panel. The edge is the same `line`; the one
+ * mat card that lies on the cellar ground adds `elevation.paper` itself.
  */
 export function Card({
   children,
+  surface = 'white',
   style,
 }: {
   children: React.ReactNode;
+  surface?: 'white' | 'mat';
   style?: ViewStyle | (ViewStyle | false | undefined)[];
 }) {
-  return <View style={[styles.card, style]}>{children}</View>;
+  return <View style={[styles.card, surface === 'mat' && styles.cardMat, style]}>{children}</View>;
 }
 
 /** Where a ListRow sits in its ListGroup. Null outside a group. */
@@ -900,7 +990,7 @@ export function ListGroup({
   );
 }
 
-export interface ListRowProps {
+interface ListRowBaseProps {
   title: string;
   /** Up to two lines. */
   subtitle?: string;
@@ -919,6 +1009,26 @@ export interface ListRowProps {
   accessibilityHint?: string;
 }
 
+export type ListRowProps = ListRowBaseProps &
+  (
+    | { titleRole?: 'row'; titleMeasure?: undefined }
+    | {
+        /**
+         * The title is a drink's name: drawn through DrinkName in
+         * `textRole.rowName` (Playfair 18/22, Dynamic Type cap 1.4), with no
+         * line limit, fitted to `titleMeasure`.
+         */
+        titleRole: 'name';
+        /**
+         * The title column's width in points: window width less the gutters,
+         * the row's padding, the leading node and the trailing node. DrinkName
+         * shrinks a name with a long word to fit it instead of breaking the
+         * word, so it has to know the column without waiting for a layout.
+         */
+        titleMeasure: number;
+      }
+  );
+
 /**
  * One row of a list: Settings, a country picker, Activity, connections.
  *
@@ -930,6 +1040,9 @@ export interface ListRowProps {
  * The separator is a hairline that starts at the title's left edge and
  * runs to the row's right edge, as iOS's own lists do: the leading column
  * stays one unbroken strip. The last row of a group draws none.
+ *
+ * `titleRole="name"` is for a list of drinks (My Bar, Log, Add a drink):
+ * the title is the drink's name, set in Playfair and never truncated.
  */
 export function ListRow({
   title,
@@ -943,6 +1056,8 @@ export function ListRow({
   busy,
   accessibilityLabel,
   accessibilityHint,
+  titleRole,
+  titleMeasure,
 }: ListRowProps) {
   const slot = useContext(ListSlotContext);
   const tall = !!subtitle || (!!leading && 'node' in leading);
@@ -976,9 +1091,13 @@ export function ListRow({
       {lead ? <View style={styles.rowLeading}>{lead}</View> : null}
       <View style={styles.rowMain}>
         <View style={styles.rowText}>
-          <Text style={[textRole.rowTitle, { color: ink }, emphasis && styles.rowTitleEmphasis]}>
-            {title}
-          </Text>
+          {titleRole === 'name' ? (
+            <DrinkName name={title} role={textRole.rowName} measure={titleMeasure!} cap={1.4} color={ink} />
+          ) : (
+            <Text style={[textRole.rowTitle, { color: ink }, emphasis && styles.rowTitleEmphasis]}>
+              {title}
+            </Text>
+          )}
           {subtitle ? (
             <Text style={styles.rowSubtitle} numberOfLines={2}>
               {subtitle}
@@ -1052,7 +1171,9 @@ export function OrDivider({ label = 'or', style }: { label?: string; style?: Sty
 
 /**
  * A flat 4pt bar: square ends, a sunk track, a wine fill. It was an 8pt
- * capsule, which made a measurement look like a button.
+ * capsule, which made a measurement look like a button. On the lining
+ * (`tone="lining"`) the track is a `liningLine` rule and the fill bone,
+ * since wine on lining is 1.22:1.
  *
  * The fill eases to a new value, but its first frame is already the right
  * width (Reanimated resolves an animation in its first style pass to its
@@ -1064,19 +1185,23 @@ export function ProgressBar({
   value,
   max,
   /**
-   * Wine by default: a progress bar in this app measures collection, which
-   * is the affirmative colour's job. Callers pass a category colour only
-   * for the per-category breakdown, where the bar identifies a category,
-   * not progress.
+   * Wine by default (bone on lining): a progress bar in this app measures
+   * collection, which is the affirmative colour's job. Callers pass a
+   * category colour only for the per-category breakdown, where the bar
+   * identifies a category, not progress.
    */
-  color = colors.wine,
+  color,
   height = 4,
+  tone = 'paper',
 }: {
   value: number;
   max: number;
   color?: string;
   height?: number;
+  tone?: 'paper' | 'lining';
 }) {
+  const lining = tone === 'lining';
+  const fillColor = color ?? (lining ? colors.onLining : colors.wine);
   const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
   const reduced = useReducedMotion();
 
@@ -1086,10 +1211,10 @@ export function ProgressBar({
 
   return (
     <View
-      style={[styles.barTrack, { height }]}
+      style={[styles.barTrack, lining && styles.barTrackLining, { height }]}
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max, now: value }}>
-      <Animated.View style={[{ height, backgroundColor: color }, fill]} />
+      <Animated.View style={[{ height, backgroundColor: fillColor }, fill]} />
     </View>
   );
 }
@@ -1966,53 +2091,79 @@ export function SelectField({
 /* Empty state                                                          */
 /* ==================================================================== */
 
+/** Either the glyph or the art: one picture above the title, never none. */
+type EmptyStateArt = { icon: IconName; art?: React.ReactNode } | { icon?: IconName; art: React.ReactNode };
+
+const EMPTY_TONE = {
+  paper: { glyph: colors.text, title: colors.text, body: colors.textMuted, action: 'primary', secondary: 'text' },
+  dark: { glyph: colors.reelInk, title: colors.reelInk, body: colors.reelInkMuted, action: 'onDark', secondary: 'onDarkText' },
+  lining: { glyph: colors.onLining, title: colors.onLining, body: colors.onLiningMuted, action: 'onLining', secondary: 'onLiningText' },
+} as const satisfies Record<
+  string,
+  { glyph: string; title: string; body: string; action: ButtonVariant; secondary: ButtonVariant }
+>;
+
 /**
  * What a list says when it has nothing, or could not load.
  *
  * The glyph is drawn bare, with no disc behind it: an icon in a tinted
  * circle over a title is the most copied empty state there is. The title
- * is Inter, like the rest of the chrome; Playfair stays for the brand's
- * voice.
+ * is Inter, like the rest of the chrome; Playfair stays for the wordmark
+ * and drink names.
  *
  * Conventions: an empty list shows its subject's glyph and one primary
  * action. A failure shows `alert`, "Could not load …", "Check your
  * connection and try again.", and `actionVariant="secondary"` "Try again".
  *
  * `tone="dark"` is for the reels ground, where wine is invisible: bone
- * type, an `onDark` action and an `onDarkText` secondary.
+ * type, an `onDark` action and an `onDarkText` secondary. `tone="lining"`
+ * is the cabinet's (the Dex tray): onLining title, onLiningMuted body, an
+ * `onLining` action and an `onLiningText` secondary, and no fill of its
+ * own: the tray's grained lining shows through.
+ *
+ * `art` replaces the glyph with a picture of the thing that is missing:
+ * the Dex's EmptyArt, a mounted drink (DexCard.tsx). It is a plain node,
+ * not something this file looks up, so ui.tsx never imports DexCard.tsx
+ * (which imports this file), and it is hidden from VoiceOver: the title
+ * says what the picture shows. The art must be a real catalogue drink,
+ * never an invented person or post.
  */
 export function EmptyState({
   icon,
+  art,
   title,
   body,
   action,
   actionVariant,
   secondaryAction,
   tone = 'paper',
-}: {
-  icon: IconName;
+}: EmptyStateArt & {
   title: string;
   body: string;
   action?: { label: string; onPress: () => void };
-  /** Defaults to `primary` on paper and `onDark` on dark; `secondary` for a retry. */
+  /** Defaults to `primary` on paper, `onDark` on dark, `onLining` on lining; `secondary` for a retry. */
   actionVariant?: ButtonVariant;
   /** A quieter second way out, under the action: "Clear search". */
   secondaryAction?: { label: string; onPress: () => void };
-  tone?: 'paper' | 'dark';
+  tone?: 'paper' | 'dark' | 'lining';
 }) {
-  const dark = tone === 'dark';
+  const t = EMPTY_TONE[tone];
   return (
-    <View style={[styles.empty, dark && styles.emptyDark]}>
-      <Icon name={icon} size={36} color={dark ? colors.reelInk : colors.text} />
-      <Text style={[textRole.emptyTitle, styles.emptyTitle, dark && { color: colors.reelInk }]}>
-        {title}
-      </Text>
-      <Text style={[styles.emptyBody, dark && { color: colors.reelInkMuted }]}>{body}</Text>
+    <View style={[styles.empty, tone === 'dark' && styles.emptyDark]}>
+      {art ? (
+        <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+          {art}
+        </View>
+      ) : icon ? (
+        <Icon name={icon} size={36} color={t.glyph} />
+      ) : null}
+      <Text style={[textRole.emptyTitle, styles.emptyTitle, { color: t.title }]}>{title}</Text>
+      <Text style={[styles.emptyBody, { color: t.body }]}>{body}</Text>
       {action ? (
         <Button
           label={action.label}
           onPress={action.onPress}
-          variant={actionVariant ?? (dark ? 'onDark' : 'primary')}
+          variant={actionVariant ?? t.action}
           style={styles.emptyAction}
         />
       ) : null}
@@ -2020,7 +2171,7 @@ export function EmptyState({
         <Button
           label={secondaryAction.label}
           onPress={secondaryAction.onPress}
-          variant={dark ? 'onDarkText' : 'text'}
+          variant={t.secondary}
           size="sm"
           style={styles.emptySecondary}
         />
@@ -2115,6 +2266,9 @@ const styles = StyleSheet.create({
   buttonBareSm: { minHeight: layout.controlSm, paddingHorizontal: space.sm, borderRadius: radius.none },
   buttonBlock: { alignSelf: 'stretch' },
   buttonDisabled: { opacity: 0.42 },
+  /* At the largest text sizes a label wider than its button wraps inside it
+     instead of running out past the edge. */
+  buttonLabel: { flexShrink: 1, textAlign: 'center' },
   /* Loading: holds the mark's box so the spinner cannot widen the button. */
   buttonSlot: { alignItems: 'center', justifyContent: 'center' },
   /* A stack of provider rows: every mark in one column, 16pt in. */
@@ -2205,15 +2359,14 @@ const styles = StyleSheet.create({
     // inside a round border.
     overflow: 'hidden',
   },
-  avatarText: { fontFamily: fonts.displayBold },
+  avatarText: { fontFamily: fonts.bodySemiBold },
   /* Fills the inner circle, which already carries the radius and clips. */
   avatarPhoto: { width: '100%', height: '100%' },
 
   /* Section header */
   sectionHeader: { flexDirection: 'row', alignItems: 'baseline', gap: space.md },
   sectionHeaderGroup: { paddingHorizontal: space.lg },
-  sectionTitle: { flex: 1, color: colors.text },
-  sectionTitleGroup: { color: colors.textMuted },
+  sectionTitle: { flex: 1 },
   sectionAction: {
     fontFamily: fonts.bodySemiBold,
     fontSize: typeScale.bodySm.fontSize,
@@ -2228,6 +2381,7 @@ const styles = StyleSheet.create({
     borderWidth: stroke.edge,
     borderColor: colors.line,
   },
+  cardMat: { backgroundColor: colors.mat },
   listGroup: { overflow: 'hidden' },
   row: {
     minHeight: layout.row,
@@ -2280,6 +2434,7 @@ const styles = StyleSheet.create({
 
   /* Square ends: a measurement, not a capsule. */
   barTrack: { width: '100%', backgroundColor: colors.bgSunk, overflow: 'hidden', borderRadius: radius.none },
+  barTrackLining: { backgroundColor: colors.liningLine },
 
   /* Notice */
   notice: {
@@ -2466,12 +2621,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.gutter,
   },
   emptyDark: { backgroundColor: colors.reelGround },
-  emptyTitle: { color: colors.text, textAlign: 'center', marginTop: space.lg },
+  emptyTitle: { textAlign: 'center', marginTop: space.lg },
   emptyBody: {
     fontFamily: fonts.body,
     fontSize: typeScale.body.fontSize,
     lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
     textAlign: 'center',
     maxWidth: 300,
     marginTop: space.sm,

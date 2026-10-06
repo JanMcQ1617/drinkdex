@@ -1,16 +1,17 @@
-import { usePathname } from 'expo-router';
 import { Image, StyleSheet, View } from 'react-native';
 
+import { grain } from '@/constants/theme';
+
 /* ==================================================================== */
-/* Paper grain                                                          */
+/* Grain                                                                */
 /*                                                                      */
-/* A 128px tile of seeded gaussian noise, repeated across the whole app  */
-/* at low opacity.                                                      */
+/* A 128px tile of seeded gaussian noise, repeated across a ground at    */
+/* low opacity.                                                         */
 /*                                                                      */
-/* WHY. The palette is called Porcelain Speakeasy and the ground is a    */
-/* warm cream (#F7F2EA) meant to read as paper. Rendered as a flat fill  */
-/* it reads as a hex value instead — perfectly even, which no paper      */
-/* ever is. The grain is what makes a cream rectangle look like stock    */
+/* WHY. The grounds are materials: cream paper, and in v3 the wine       */
+/* lining of a cabinet, grained like baize. Rendered as a flat fill a    */
+/* ground reads as a hex value instead — perfectly even, which no paper  */
+/* or cloth ever is. The grain is what makes a rectangle look like stock */
 /* rather than a swatch, and it is the cheapest depth in the app: no     */
 /* motion, no layout, no per-frame cost.                                */
 /*                                                                      */
@@ -20,44 +21,45 @@ import { Image, StyleSheet, View } from 'react-native';
 /* move: it adds material rather than decoration, and it cannot be       */
 /* mistaken for a glow.                                                  */
 /*                                                                      */
+/* ONE PER GROUND, UNDER CONTENT. It used to be one global overlay over  */
+/* the whole app, which dusted every photograph with sensor noise. Now   */
+/* each ground mounts its own as its FIRST child, so whatever sits on    */
+/* the ground (photos included) is drawn above it. `tone` picks the      */
+/* strength from `grain` in theme.ts: paper ~3.6%, lining ~7.8%, which   */
+/* check-contrast composites under every text pair on those grounds.    */
+/* Never mount it over media.                                           */
+/*                                                                      */
 /* REACT NATIVE'S Image, NOT expo-image. Tiling is the entire point and  */
 /* only core Image has `resizeMode="repeat"`; expo-image has no repeat   */
 /* mode at all, so the same tile there would be stretched to full screen */
 /* — a grey blur instead of a texture. This is the one place in the app  */
 /* that must not use expo-image.                                        */
 /*                                                                      */
-/* pointerEvents="none" is load-bearing: this covers every pixel of the  */
-/* app and would otherwise swallow every tap in it.                     */
-/*                                                                      */
-/* NOT OVER VIDEO. The Reels tab and a person's reels (/reel/<id>) draw */
-/* nothing: paper grain over a moving picture reads as sensor noise,    */
-/* not as stock. The recorder is a native full-screen modal, above this */
-/* whole view, so it never had any.                                     */
+/* pointerEvents="none" is load-bearing: a sheet or an older screen      */
+/* still mounts this over its content, and there it would otherwise     */
+/* swallow every tap.                                                   */
 /*                                                                      */
 /* The tile is generated, not drawn — the seeded script is recorded in   */
 /* the commit that added assets/images/grain.png, so it can be made      */
 /* again rather than being a binary nobody can reproduce.                */
 /* ==================================================================== */
 
-export function Grain() {
-  const path = usePathname();
-  if (path === '/reels' || path.startsWith('/reel/')) return null;
+export function Grain({ tone = 'paper' }: { tone?: 'paper' | 'lining' }) {
   return (
-    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+    <View
+      style={StyleSheet.absoluteFill}
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants">
       <Image
         source={require('../../assets/images/grain.png')}
         resizeMode="repeat"
         /*
          * The tile ships at alpha 26/255; this is the second, tunable half
-         * of the strength. Together they land near 3.5% — visible as
-         * texture at arm's length, invisible as dots.
+         * of the strength (grain.paper, grain.lining).
          */
-        style={[StyleSheet.absoluteFill, styles.grain]}
+        style={[StyleSheet.absoluteFill, { opacity: grain[tone] }]}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  grain: { opacity: 0.35 },
-});

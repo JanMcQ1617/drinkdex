@@ -55,14 +55,31 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /* 4.5:1 for body text or under 3:1 for large text and UI glyphs. A      */
 /* mirror that still held OFF-WHITE is how the 2.84:1 above passed as    */
 /* 3.11.                                                                 */
+/*                                                                      */
+/* v3 GROUNDS (specs/v3-cabinet.md, section 2). Sipply is a collector's  */
+/* cabinet made of two materials, and every screen root stands on one of */
+/* five grounds (check-design rule 10). PAPER (`bg`) is what you read    */
+/* and write on: the feed, the Dex's front, profiles, sheets, settings.  */
+/* MAT (`mat`) is bone card stock, the face of a drink you have caught:  */
+/* a mounted Dex card, a Top shelf card, the spec card, a Today's tile.  */
+/* LINING (`lining`, the same value as wineDeep, named for its job) is   */
+/* the inside of the cabinet, grained like baize: Home's head band, the  */
+/* Dex tray, the Top shelf band, the sign-in backdrop. CELLAR            */
+/* (`liningDeep`) is a recess pressed into the lining and the ground a   */
+/* lit photograph settles into: empty slots, the drink page, the Latest  */
+/* catch panel, and the edge colour of every tungsten-lit photo. The     */
+/* REEL GROUND stays for video. Media is not a ground: anything drawn    */
+/* over a photograph uses `onMedia`, below. You read on paper, you       */
+/* collect in the lining, a lit drink sits in the cellar.               */
 /* ==================================================================== */
 
 export const colors = {
   /*
    * Surfaces. The page is warm cream and cards are WHITE, and every card
    * also draws a 1pt `line` edge: white on cream is 1.11:1, so the tint
-   * alone is never the separator. Cards cast no shadow (see Card in
-   * components/ui.tsx).
+   * alone is never the separator. Cards on paper cast no shadow (see Card
+   * in components/ui.tsx); the few things that do are listed at
+   * `elevation`.
    *
    * This inverts what was here before, where bg, surface and card were all
    * the same #FFFDF9 and a card existed only as a shadow. That reads as
@@ -115,8 +132,9 @@ export const colors = {
    * Large type (≥18pt, or ≥14pt bold) and non-text glyphs ONLY — never
    * small text, never a placeholder. The handoff's MUTED #9A8F85 walked to
    * hold 3:1 on the cream page (see 4. in the header): 3.51:1 on the page,
-   * 3.12:1 in a sunk well, 3.91:1 on white. Not on the Dex slot recess,
-   * where it drops to 2.90:1.
+   * 3.12:1 in a sunk well, 3.91:1 on white. Not on `slot` (the tonal
+   * button's pressed fill), where it drops to 2.90:1, and never on lining:
+   * that ground has its own inks (onLining*).
    */
   textFaint: '#8A7F74',
   textOnWine: '#E9E5DF',
@@ -171,17 +189,15 @@ export const colors = {
   lockInkSoft: '#4A3B38',
 
   /*
-   * The empty slot — a collected entry's absence.
-   *
-   * The Dex grid is a display case, so an uncollected entry is a RECESS,
-   * not a paler card. On the old white page these were a cool gray; here
-   * they are bone walked one and two steps darker, so a collected card
-   * lifts out of a linen tray. Deliberately not espresso-dark: with 460
-   * entries and a handful collected, a wall of near-black would swamp the
-   * light identity.
+   * Bone walked a step darker than bgSunk. Until v3 this was the Dex's
+   * light recess; the recess is now `liningDeep` pressed into the lining
+   * (see v3 below). It stays as a fill: the pressed state of the tonal
+   * Button (components/ui.tsx) and of ProfileHeader's icon button.
    */
   slot: '#E3DDD3',
+  /** @deprecated v2's light recess floor. Unused once the v3 DexCard lands; deleted in stage 3. */
   slotDeep: '#D8D1C5',
+  /** @deprecated v2's light recess edge. Unused once the v3 DexCard lands; deleted in stage 3. */
   slotBorder: '#CBBBA5',
 
   /* Emboss — the hairline pair that fakes a stamped plate. */
@@ -189,11 +205,11 @@ export const colors = {
   embossShadow: 'rgba(43, 35, 34, 0.14)',
 
   /*
-   * Reels. The one dark surface in the app: video needs a black-ish ground,
-   * and a cream frame around a moving picture reads as a web embed. Warm,
-   * not neutral, so it still belongs beside wine. Paper screens never touch
-   * these: they are for the Reels tab, the recorder, the reel viewer, and
-   * markers drawn over photographs.
+   * Reels. The dark surface for video: a moving picture needs a black-ish
+   * ground, and a cream frame around one reads as a web embed. Warm, not
+   * neutral, so it still belongs beside wine. They are for the Reels tab,
+   * the recorder, the reel viewer and the tab bar, and the scrim tokens
+   * serve every photograph, through `onMedia`.
    */
   reelGround: '#0E0B0B',
   /** Text and glyphs on reelGround and over video. 19.3:1 on the ground. */
@@ -263,6 +279,134 @@ export const colors = {
    * Re-sample it whenever the clip changes.
    */
   filmPaper: '#D6C4B1',
+
+  /*
+   * v3 Cabinet: the materials (see "v3 grounds" in the header). Ratios are
+   * WCAG 2.x, measured in specs/v3-cabinet.md section 4 and asserted by
+   * check-contrast; "worst grain" is the brightest tile pixel over the
+   * ground at grain.lining.
+   */
+  /** Bone card stock: a collected drink's face, the spec card, Today's tiles. */
+  mat: '#FBF8F2',
+  /** The cabinet interior. The same value as wineDeep, named for its job. */
+  lining: '#3E0A12',
+  /** The cellar: a recess in the lining, the drink page's ground, and the colour every lit photo settles to at its edges. */
+  liningDeep: '#2F070D',
+  /** A seen Today's tile: the mat dulled into the lining. Carries no text. */
+  matSeen: '#6B3A41',
+
+  /* Ink on lining and cellar. Wine is 1.22:1 on lining: never type or a button there. */
+  /** Titles and body on lining. 13.32:1 (11.31 worst grain); 14.47:1 in the cellar. */
+  onLining: '#E9E5DF',
+  /** Secondary text on lining, body-safe. 6.79:1 (5.77 worst grain). */
+  onLiningMuted: '#B8A09B',
+  /** Glyphs and >= 18pt only (3:1): the lock, a chevron. Never small text. 4.93:1, 4.19 worst grain. */
+  onLiningFaint: '#A7837F',
+  /** The word Legendary and its sparkle on lining. 7.11:1. Gilt stays legendary-only. */
+  giltOnLining: '#C9A458',
+  /** The word Rare and its dot on lining. 6.16:1. */
+  rareOnLining: '#D08A94',
+  /** "Remove from collection" on the cellar ground. 8.34:1 there. */
+  dangerOnLining: '#EE9A8F',
+
+  /* Vector faces: the lit back-bar window of a drink with no photograph. Carry no text. */
+  /** Centre of a cocktail's lit window (= merlot). */
+  faceCocktail: '#7E2330',
+  /** Centre of a spirit's lit window. */
+  faceSpirit: '#5A463F',
+  /** Highlight end of the ghost bake. Read by scripts/build-drink-photos.mjs, so keep it a plain hex. */
+  ghostHi: '#9C7F7A',
+
+  /* Edges and fills on lining. Translucent, so check-contrast composites them over the ground. */
+  /** Decorative rules on lining: panel edges, the label band, shelf progress tracks. */
+  liningLine: 'rgba(233, 229, 223, 0.16)',
+  /** The 1pt lip where a lining band meets paper below it. */
+  liningLip: 'rgba(233, 229, 223, 0.14)',
+  /** An outline button's edge on lining: 3.27:1 composited (WCAG 1.4.11). */
+  liningControl: 'rgba(233, 229, 223, 0.42)',
+  /** An outline button on lining, held. */
+  liningPressed: 'rgba(233, 229, 223, 0.08)',
+  /** A mount's 1pt edge where it sits in the lining. */
+  matEdge: 'rgba(14, 11, 11, 0.35)',
+  /** The hairline inside a mount's window. */
+  windowEdge: 'rgba(43, 35, 34, 0.16)',
+  /** An empty slot's 1pt edge. */
+  slotEdge: 'rgba(233, 229, 223, 0.10)',
+  /** An empty legendary slot's edge, so a locked legendary is visibly worth hunting. 2.52:1 over the cellar (design floor 2.0). */
+  slotEdgeLegendary: 'rgba(176, 138, 62, 0.55)',
+  /** The hairline inside an empty slot's window. */
+  slotWindowEdge: 'rgba(233, 229, 223, 0.07)',
+  /** A number plate's edge on lining or in a slot. */
+  plateEdgeLining: 'rgba(233, 229, 223, 0.24)',
+  /** A loose print's edge (a friend's pour shown in the lining). */
+  printEdge: 'rgba(233, 229, 223, 0.22)',
+  /** The shelf ledge between Dex rows. */
+  ledge: 'rgba(14, 11, 11, 0.30)',
+  /** Top stop of the 12pt shade under a lining band; clear at the bottom. */
+  shade: 'rgba(14, 11, 11, 0.22)',
+  /** The bar counter across the foot of a vector window. */
+  counterBand: 'rgba(14, 11, 11, 0.22)',
+  /** The 1pt highlight along the top of that counter. */
+  counterLine: 'rgba(255, 253, 249, 0.14)',
+  /** Locked vector glass, upper edge. 2.14:1 over the cellar (design floor 2.0). */
+  debossLight: 'rgba(233, 229, 223, 0.28)',
+  /** Locked vector glass, lower edge. */
+  debossShadow: 'rgba(0, 0, 0, 0.55)',
+  /** Foot of the nameplate scrim: 13.43:1 for onMedia.ink even over a white frame. */
+  scrimDeep: 'rgba(14, 11, 11, 0.86)',
+} as const;
+
+/**
+ * Everything drawn over a photograph or a video, and nothing else.
+ * check-contrast composites each text colour over the worst case, a blown-out
+ * white frame under the scrim stop it sits on, and fails if any token outside
+ * this object is ever added to it (specs/v3-cabinet.md section 4.4).
+ * components/media.tsx may reference no `colors.` key at all, only these
+ * (check-design rule 11).
+ *
+ * Over a photo, text only ever sits on scrim alpha >= 0.62 (`scrimMid`), and
+ * the only ink is `ink`. The lining inks fail there (onLining is 4.41:1 over
+ * 0.62-over-white, the rest far lower), which is why rarity over a photo is
+ * always a solid plaque and never a tinted word.
+ */
+export const onMedia = {
+  /** All text over media. 5.45:1 on scrimMid over white, 13.43:1 on scrimDeep. */
+  ink: colors.reelInk,
+  /** textShadowColor for that text. */
+  shadow: colors.reelTextShadow,
+  scrimClear: colors.reelScrimClear,
+  /** 0.62: the shallowest stop text may sit on. */
+  scrimMid: colors.reelScrimMid,
+  /** 0.86. */
+  scrimDeep: colors.scrimDeep,
+  /** 0.78: plates, markers, counts. 9.98:1 for `ink` over white. */
+  markerFill: colors.reelScrim,
+  markerEdge: colors.reelControlBorder,
+  /** The legendary sparkle on a marker: a GLYPH ONLY, 4.31:1 on markerFill over white. */
+  glyphGilt: colors.giltOnLining,
+  /** Solid tier plaques: 13.53:1 rare, 4.79:1 legendary, 9.98:1 neutral over white. */
+  plaque: {
+    neutral: { fill: colors.reelScrim, edge: colors.reelControlBorder, ink: colors.reelInk },
+    rare: { fill: colors.wine, edge: colors.wineSoft, ink: colors.reelInk },
+    legendary: { fill: colors.gilt, edge: colors.giltOnLining, ink: colors.text },
+  },
+  /** The tier's line along a photo's bottom edge. Decorative: the plaque says the tier. */
+  rule: { rare: colors.wineSoft, legendary: colors.gilt },
+} as const;
+
+/**
+ * The 128px noise tile (assets/images/grain.png): grey 32..232, alpha 26.
+ * check-contrast decodes the PNG and fails if these numbers drift from it,
+ * then composites the brightest and darkest tile pixel over each ground to
+ * get the worst real pixel under text (specs/v3-cabinet.md section 4).
+ * components/Grain.tsx reads the opacities.
+ */
+export const grain = {
+  tile: { min: 32, max: 232, alpha: 26 },
+  /** ~3.6% effective, as before v3. */
+  paper: 0.35,
+  /** ~7.8% effective (alpha 20/255): reads as baize. */
+  lining: 0.77,
 } as const;
 
 /* ==================================================================== */
@@ -289,7 +433,7 @@ export const fonts = {
   bodyMedium: 'InterLatin_500Medium',
   bodySemiBold: 'InterLatin_600SemiBold',
   bodyBold: 'InterLatin_600SemiBold',
-  /** The dex numbers, and the intro's letterspaced tagline. */
+  /** The dex numbers (and, until stage 3 deletes it, the deprecated `label.tagline`). */
   label: 'InterLatin_500Medium',
   /** Figures. Inter, with the `tabular` style for column alignment. */
   numeral: 'InterLatin_500Medium',
@@ -330,17 +474,29 @@ export const type = {
 } as const;
 
 /**
- * v2 text roles. Chrome is Inter; Playfair only where named.
+ * Text roles. Chrome is Inter; Playfair is for the wordmark and drink
+ * names, and nothing else.
  *
  * A role is a whole text style (family, size, line height) for one job, so
  * a top bar or a field label is set the same way on every screen instead
  * of being rebuilt from `fonts` and `type` at each call site, which is how
  * the app ended up with three bar-title sizes in two families. Colour is
- * left to the caller: the same role is ink on paper and reelInk on dark.
+ * left to the caller: the same role is ink on paper, onLining in the
+ * cabinet and onMedia.ink over a photo.
  *
- * 17 and 20 are the only sizes here that are not on `type`, and they are
- * bar titles only: 17 is iOS's navigation-title size and 20 is the profile
- * username. Every other role reuses a `type` size.
+ * PLAYFAIR DISCIPLINE (v3). The display face appears only in the name
+ * roles below (wordmark, wordmarkLg, drinkHero ... tileName, nameInline),
+ * and check-design rule 6 fails any other role, or any file but this one
+ * and the brand film, that reaches for it. Counts and figures are Inter
+ * tabular (`heroFigure`, `count`), shelf and section headers are Inter
+ * (`shelfTitle`, `sectionTitle`), and a sentence that names a drink is
+ * Inter with only the name in `nameInline`. A drink name is drawn through
+ * DrinkName (components/cabinet.tsx), which fits it to its column instead
+ * of truncating it.
+ *
+ * Chrome sizes reuse `type` where they can; the bar titles (17, 20) are
+ * iOS's, and the name roles are set per surface (specs/v3-cabinet.md
+ * section 6.4 gives each one's column and Dynamic Type cap).
  */
 export const textRole = {
   wordmark:     { fontFamily: fonts.displayBold, fontSize: 28, lineHeight: 34 },  // Home top bar
@@ -356,6 +512,32 @@ export const textRole = {
   fieldLabel:   { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
   fieldValue:   { fontFamily: fonts.body, fontSize: 16, lineHeight: 22 },
   helper:       { fontFamily: fonts.body, fontSize: 13, lineHeight: 18 },
+
+  /* ---- Playfair: the wordmark and drink names ONLY (check-design rule 6) ---- */
+  wordmarkLg:   { fontFamily: fonts.displayBold, fontSize: 44, lineHeight: 50 },  // sign-in backdrop, password reset
+  drinkHero:    { fontFamily: fonts.displayBold, fontSize: 52, lineHeight: 56, letterSpacing: -0.3 }, // drink page
+  nameplate:    { fontFamily: fonts.displayBold, fontSize: 34, lineHeight: 40 },  // over a feed photo
+  nameLg:       { fontFamily: fonts.displayBold, fontSize: 28, lineHeight: 34 },  // pours viewer, collect moment
+  shelfName:    { fontFamily: fonts.display, fontSize: 26, lineHeight: 30 },      // Latest catch
+  rowName:      { fontFamily: fonts.display, fontSize: 18, lineHeight: 22 },      // Log, My Bar, Add a drink rows
+  cardName:     { fontFamily: fonts.displayBold, fontSize: 17, lineHeight: 21 },  // a collected Dex card
+  printName:    { fontFamily: fonts.display, fontSize: 16, lineHeight: 20 },      // "Not in your Dex yet" prints
+  miniName:     { fontFamily: fonts.display, fontSize: 14, lineHeight: 18 },      // Top shelf, Added by you, Stats
+  tileName:     { fontFamily: fonts.display, fontSize: 13, lineHeight: 17 },      // Today's pours
+  nameInline:   { fontFamily: fonts.display },                                     // a name inside an Inter sentence
+
+  /* ---- Inter ---- */
+  heroFigure:   { fontFamily: fonts.bodySemiBold, fontSize: 36, lineHeight: 40, letterSpacing: -0.5, fontVariant: ['tabular-nums'] },
+  shelfTitle:   { fontFamily: fonts.bodySemiBold, fontSize: 20, lineHeight: 26 },  // "Fizz", "Top shelf", "Not in your Dex yet"
+  count:        { fontFamily: fonts.bodySemiBold, fontSize: 18, lineHeight: 22, fontVariant: ['tabular-nums'] },
+  username:     { fontFamily: fonts.bodySemiBold, fontSize: 15, lineHeight: 20 },
+  prose:        { fontFamily: fonts.body, fontSize: 15, lineHeight: 22 },
+  labelValue:   { fontFamily: fonts.bodySemiBold, fontSize: 15, lineHeight: 20 },  // drink page label band
+  labelCaption: { fontFamily: fonts.body, fontSize: 12, lineHeight: 16 },
+  specAmount:   { fontFamily: fonts.bodySemiBold, fontSize: 17, lineHeight: 22, fontVariant: ['tabular-nums'] },
+  tastes:       { fontFamily: fonts.body, fontSize: 18, lineHeight: 26 },
+  trivia:       { fontFamily: fonts.body, fontSize: 18, lineHeight: 27 },
+  tierWord:     { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
 } satisfies Record<string, TextStyle>;
 
 /**
@@ -363,14 +545,15 @@ export const textRole = {
  * these are pre-multiplied — keep them in step with `fontSize` if you
  * change one.
  *
- * `tagline` (0.5em) is the intro lockup's, and the intro is a brand film,
- * not interface. The app's own chrome sets no uppercase and no letterspaced
- * words (beyond the hair of optical tracking `type` gives its small sizes):
- * letterspaced caps headings were the habit that most made it look
- * machine-designed, and check-design bans `textTransform: 'uppercase'`.
+ * Nothing in the app sets letterspaced words any more (beyond the hair of
+ * optical tracking `type` gives its small sizes): letterspaced caps were
+ * the habit that most made it look machine-designed, and check-design bans
+ * uppercase and wide tracking (rule 8). The intro's tagline was the last
+ * reader, and v3 sets it in sentence case without tracking.
  */
 export const label = {
-  tagline: { fontSize: 12, lineHeight: 16, letterSpacing: 6 },
+  /** @deprecated The intro's 0.5em tracking. v3's SipplyIntro stops reading it; deleted in stage 3. */
+  tagline: { fontSize: 12, lineHeight: 16, letterSpacing: 6 }, // tracking-ok: deprecated, deleted in stage 3
 } as const;
 
 /**
@@ -395,16 +578,16 @@ export const tabular: TextStyle = { fontVariant: ['tabular-nums'] };
  * figures, not words, and four digits set tight read as a price or a count
  * rather than a catalogue stamp. Tabular so a column of them lines up.
  *
- * taupeInk: 5.89:1 on a white card, 5.28:1 on the page, 4.80:1 or better
- * on the category washes. NOT on the empty-slot recess, where it is
- * 4.36:1 — a number on an uncollected Dex card overrides `color` with
- * textMuted, as the entry name there does.
+ * taupeInk: 5.89:1 on a white card, 5.55:1 on the mat, 5.28:1 on the page,
+ * 4.80:1 or better on the category washes. Never on lining or in a slot:
+ * there the number plate (components/cabinet.tsx) overrides `color` with
+ * onLiningMuted, and over a photo with onMedia.ink.
  */
 export const dexNumber: TextStyle = {
   fontFamily: fonts.label,
   fontSize: 11,
   lineHeight: 14,
-  letterSpacing: 1.5,
+  letterSpacing: 1.5, // tracking-ok: a code of figures, not words (see above)
   color: colors.taupeInk,
   ...tabular,
 };
@@ -464,6 +647,12 @@ export const layout = {
   row: 52,          // ListRow, one line
   rowTall: 64,      // ListRow with a subtitle or a 40pt avatar
   gridGap: 2,       // between media grid tiles
+  feedPhotoAspect: 4 / 5, // a feed post's photo (was 3:4, inline in PostCard)
+  /** Today's pours: a 76x96 mat holding the photo inset 3pt; the label column is 84 wide, overhanging 4pt each side. */
+  tile: { w: 76, h: 96, inset: 3, label: 84 },
+  dexGap: 10,       // between Dex columns
+  dexLedge: 16,     // between Dex rows (the shelf ledge)
+  pinnedBar: 74,    // the drink page's pinned action bar, above the home indicator (a minimum: it grows)
 } as const;
 
 /**
@@ -502,18 +691,22 @@ export const radius = {
  * Espresso-tinted shadows. These were cool green (#334B48) for the white
  * page; on a warm cream page a cool shadow reads as a smudge.
  *
- * Two things cast one: the floating tab bar and the Dex scroll-to-top
- * (`bar`), and bottom sheets (`sheet`). Nothing else does — no buttons, no
- * cards, no dialogs. Panels separate from the page by a drawn edge (see
- * Card in components/ui.tsx); a shadow is for something that genuinely
- * floats over the page.
+ * Cards on paper still cast none: no buttons, no cards, no dialogs. Panels
+ * separate from the page by a drawn edge (see Card in components/ui.tsx).
+ * A shadow is for something that genuinely sits above what is under it,
+ * and v3 has exactly these: the tab bar (`barDark`, and `bar` until stage
+ * 3), bottom sheets (`sheet`), a mount SEATED in the lining (`seat`), an
+ * empty slot PRESSED into it (`recess`), and the paper spec card lying on
+ * the cellar ground (`paper`). check-design rule 12 keeps every shadow
+ * prop inside this object; call sites spread a token.
  */
 export const elevation = {
   /**
-   * The floating tab bar and the Dex scroll-to-top. Tight: lift, not
-   * smudge. The handoff's tab-bar shadow spread 30pt of blur under a bar
-   * that already has a drawn 1pt edge, which reads as a soft glow rather
-   * than an object resting above the page.
+   * The floating tab bar's paper skin and the Dex scroll-to-top, until
+   * stage 2 moves them to `barDark` and `seat`; deleted in stage 3. Tight:
+   * lift, not smudge. The handoff's tab-bar shadow spread 30pt of blur
+   * under a bar that already has a drawn 1pt edge, which reads as a soft
+   * glow rather than an object resting above the page.
    *
    * Written as a CSS box-shadow, not the legacy shadowColor/Offset/Opacity/
    * Radius props. Those draw on the view's own layer, and a view that
@@ -531,6 +724,14 @@ export const elevation = {
     shadowRadius: 24,
     elevation: 12,
   },
+  /** A mount seated in the lining: a contact line and a short drop. Only ever on lining. */
+  seat: { boxShadow: '0px 1px 0px rgba(14, 11, 11, 0.45), 0px 8px 18px rgba(14, 11, 11, 0.34)' },
+  /** An empty slot pressed into the lining: dark from above, a faint lit lower lip. */
+  recess: { boxShadow: 'inset 0px 2px 10px rgba(0, 0, 0, 0.55), inset 0px -1px 0px rgba(233, 229, 223, 0.06)' },
+  /** A paper card lying on the cellar ground (the drink page's spec card). */
+  paper: { boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.45)' },
+  /** The espresso tab bar, on every tab. */
+  barDark: { boxShadow: '0px 4px 14px rgba(14, 11, 11, 0.30)' },
 } as const;
 
 /**
@@ -652,25 +853,23 @@ export const RARITY_ORDER: Rarity[] = ['common', 'uncommon', 'rare', 'legendary'
  * the hue axis (see above); rarity owns the material axis, so a rare
  * cocktail is never asking one colour to say two things.
  *
- * `edge` and `edgeWidth` are the CARD treatment, not the badge. A
- * collected entry is framed in its tier, and the frame gets both more
- * saturated and physically thicker as the tier climbs — so rarity is
- * legible in peripheral vision while scrolling the Dex grid, at
- * thumbnail size, and without relying on colour alone.
+ * v3 says the tier four ways, and never by one alone: the WORD beside its
+ * MARK (`mark`: a hollow ring, a dot, the sparkle; components/cabinet.tsx
+ * TierWord), the RULE printed inside a collected mount (`rule`: thicker
+ * and, for legendary, doubled as the tier climbs, so rarity reads in
+ * peripheral vision while the Dex scrolls), and over a photograph a SOLID
+ * plaque (onMedia.plaque), because no tinted word survives a white frame.
+ * Gilt stays legendary-only: rare is wine.
  *
- * `color` stays the text/badge value and remains contrast-audited; `edge`
- * is decorative and is NEVER the sole carrier of meaning. The badge says
- * the tier in words, and the collected card's corner mark says it in
- * shape: a hollow ring for common, a filled taupeInk dot for uncommon, a
- * filled wine dot for rare, and the giltGlyph sparkle for legendary
- * (DexCard).
+ * `color` is the word and mark on paper and mat, and remains
+ * contrast-audited; `onLining` is the same pair on the lining and in a
+ * slot. `rule` is decorative and NEVER the sole carrier of meaning.
  *
  * `color` is a TEXT value, tuned for contrast against the page, and that
  * is what makes it wrong as a chart fill: common, uncommon and legendary
  * sit within 1.04:1 of each other in it (textMuted, taupeInk, giltInk), so
- * as adjacent arcs they read as one brown band. The rarity donut draws its
- * own chart colours instead (RarityDonut.tsx CHART: textMuted, taupe, wine,
- * giltGlyph), and its legend names every tier.
+ * as adjacent arcs they read as one brown band. A chart draws its own
+ * fills and names every tier in words.
  */
 export const RARITY_META: Record<
   Rarity,
@@ -679,10 +878,21 @@ export const RARITY_META: Record<
     color: string;
     wash: string;
     weight: number;
-    /** Card frame colour. Decorative. */
+    /** @deprecated v2's card frame colour; replaced by `rule`, deleted in stage 3 once tsc shows no reader. */
     edge: string;
-    /** Card frame thickness in points. Climbs with the tier. */
+    /** @deprecated v2's card frame thickness; replaced by `rule`, deleted in stage 3. */
     edgeWidth: number;
+    /**
+     * The inner rule printed on a mount, inset 4pt (3pt on a shelf card,
+     * none on a thumbnail). `double` adds a second 1pt hairline in the same
+     * colour, 3pt of clear mat inside the first rule, at 70% opacity.
+     * Decorative.
+     */
+    rule: { color: string; width: number; double: boolean };
+    /** The tier's mark beside its word. */
+    mark: 'ring' | 'dot' | 'sparkle';
+    /** Word and mark on lining or in a slot. */
+    onLining: { ink: string; mark: string };
   }
 > = {
   common: {
@@ -692,6 +902,9 @@ export const RARITY_META: Record<
     weight: 0,
     edge: colors.cardBorder,
     edgeWidth: 1,
+    rule: { color: colors.line, width: 1, double: false },
+    mark: 'ring',
+    onLining: { ink: colors.onLiningMuted, mark: colors.onLiningMuted },
   },
   uncommon: {
     label: 'Uncommon',
@@ -700,6 +913,10 @@ export const RARITY_META: Record<
     weight: 1,
     edge: colors.taupe,
     edgeWidth: 1.5,
+    rule: { color: colors.taupe, width: 1, double: false },
+    mark: 'dot',
+    // The word stays muted; taupe is a glyph on lining (8.90:1), the mark only.
+    onLining: { ink: colors.onLiningMuted, mark: colors.taupe },
   },
   rare: {
     label: 'Rare',
@@ -708,6 +925,9 @@ export const RARITY_META: Record<
     weight: 2,
     edge: colors.wineSoft,
     edgeWidth: 2,
+    rule: { color: colors.wine, width: 2, double: false },
+    mark: 'dot',
+    onLining: { ink: colors.rareOnLining, mark: colors.rareOnLining },
   },
   legendary: {
     label: 'Legendary',
@@ -716,6 +936,9 @@ export const RARITY_META: Record<
     weight: 3,
     edge: colors.gilt,
     edgeWidth: 2.5,
+    rule: { color: colors.gilt, width: 2, double: true },
+    mark: 'sparkle',
+    onLining: { ink: colors.giltOnLining, mark: colors.giltOnLining },
   },
 };
 
