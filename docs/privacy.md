@@ -262,7 +262,9 @@ deliver updates and shows us only totals, such as how many installs are on
 each version.
 
 **Apple**, if you use Sign in with Apple, confirms who you are and so knows
-that you use Sipply, under Apple's own privacy policy. If you are testing
+that you use Sipply, under Apple's own privacy policy. When you delete your
+account, our server asks Apple to end Sipply's access, as described under
+Deleting your account. If you are testing
 Sipply through TestFlight, Apple also receives standard crash and
 installation information. If you search for a song or see one on a story,
 Apple Music serves its cover art, and its preview when it plays, to your
@@ -321,13 +323,19 @@ removed — because the connection drops, say — the account stays and the
 app tells you, so you can try again. An account is never removed with its
 photos left behind. You do not have to email anyone to be deleted.
 
-Deleting your Sipply account does not change your Apple, Google or
-Facebook settings, which belong to Apple, Google and Meta:
+Deleting your Sipply account ends Sipply's access to your Apple Account,
+if you signed in with Apple, but does not change your Google or Facebook
+settings, which belong to Google and Meta:
 
-- **Apple.** Sipply stays listed under your Apple Account until you remove
-  it there. On your iPhone, open **Settings**, tap your name, then
-  **Sign-In & Security → Sign in with Apple**, choose Sipply, and stop
-  using it. The menu names shift a little between iOS versions.
+- **Apple.** Before anything is deleted, the app asks you to confirm with
+  Apple. Our server uses that confirmation to revoke Sipply's access with
+  Apple, which takes Sipply off the apps that use Sign in with Apple on
+  your Apple Account, and keeps nothing from it. If you close Apple's
+  confirmation, or your iPhone is signed in to a different Apple Account,
+  nothing is deleted and the app tells you why. If Sipply is still listed
+  afterwards, remove it there: on your iPhone, open **Settings**, tap your
+  name, then **Sign-In & Security → Sign in with Apple**, choose Sipply,
+  and stop using it. The menu names shift a little between iOS versions.
 - **Google.** Sipply stays listed under your Google Account until you
   remove it there, under **Security → Your connections to third-party
   apps & services**. [Deleting your data](data-deletion) walks through it.

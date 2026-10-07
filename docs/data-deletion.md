@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 1 October 2026**
+**Last updated: 7 October 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -79,11 +79,22 @@ itself, and the sign-in details listed above.
 
 ## If you used Sign in with Apple
 
-Deleting your account removes what Apple sent when you signed in. Sipply
-stays listed under your Apple Account until you remove it there: on your
-iPhone, open **Settings**, tap your name, then **Sign-In & Security → Sign
-in with Apple**, choose Sipply, and stop using it. The menu names shift a
-little between iOS versions.
+When you delete your account, the app first asks you to confirm with
+Apple. Our server uses that confirmation to revoke Sipply's access with
+Apple, which takes Sipply off the apps that use Sign in with Apple on your
+Apple Account, and keeps nothing from it. Only then is the account
+deleted, along with what Apple sent when you signed in. If you close
+Apple's confirmation, nothing is deleted and the app tells you why.
+
+The confirmation comes from the Apple Account your iPhone is signed in to.
+If that is not the one your Sipply account uses, the app says so and
+deletes nothing: delete the account on an iPhone signed in to the right
+Apple Account, or email us as described below.
+
+If Sipply is still listed under your Apple Account afterwards, remove it
+there: on your iPhone, open **Settings**, tap your name, then **Sign-In &
+Security → Sign in with Apple**, choose Sipply, and stop using it. The menu
+names shift a little between iOS versions.
 
 ## If you used Continue with Google
 
@@ -103,7 +114,9 @@ we know the request is yours. If you used Hide My Email with Sign in with
 Apple, you cannot write from that address, so give your Sipply username
 instead: before anything is deleted, we confirm by writing to that address,
 which Apple forwards to you. The account is deleted as described above, and
-you get a reply when it is done.
+you get a reply when it is done. Without Apple's confirmation from your
+iPhone we cannot take Sipply off your Apple Account for you, so if you
+used Sign in with Apple, remove it there yourself, as described above.
 
 If your account was made with a phone number, you can sign in with that
 number on any iPhone with Sipply and delete the account from Settings

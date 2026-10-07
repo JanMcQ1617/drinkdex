@@ -62,10 +62,11 @@ const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
  * profile, posts and their photos, reels, the drinks you added (the
  * suggestions sent with them go too), likes, saves and follows, and the
  * collection on this phone. A list that left one out would read as a
- * promise that it stays.
+ * promise that it stays. The Apple sentence warns of the second sheet
+ * (lib/appleRevoke), so it does not read as a fault.
  */
 const DELETE_CONFIRM =
-  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, and resets the collection on this phone. It cannot be undone.';
+  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, and resets the collection on this phone. It cannot be undone. If you use Sign in with Apple, Apple asks you to confirm next, so Sipply comes off your Apple Account too.';
 
 /*
  * A section: its heading, then its rows in one bordered group. The

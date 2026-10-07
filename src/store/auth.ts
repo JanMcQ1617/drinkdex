@@ -11,6 +11,7 @@ import { Platform } from 'react-native';
 import { create } from 'zustand';
 
 import { SIGNUP_ACCENTS } from '@/constants/theme';
+import { revokeAppleAccess } from '@/lib/appleRevoke';
 import { hashPhone } from '@/lib/contacts';
 import {
   clearDiscoveryCache,
@@ -186,9 +187,11 @@ interface AuthState {
    */
   failRecovery: (message: string) => void;
   /**
-   * Irreversible. Takes the account's reels off the feed, empties its
-   * folders in both storage buckets (photos, reels), then removes the auth
-   * user and every row that cascades from it.
+   * Irreversible. For an account that uses Sign in with Apple, first has
+   * the person confirm with Apple and revokes Sipply's Apple tokens
+   * (lib/appleRevoke). Then takes the account's reels off the feed, empties
+   * its folders in both storage buckets (photos, reels), and removes the
+   * auth user and every row that cascades from it.
    */
   deleteAccount: () => Promise<boolean>;
   refreshProfile: () => Promise<void>;
@@ -1360,7 +1363,14 @@ export const useAuth = create<AuthState>()((set, get) => ({
   /**
    * Deletes the signed-in account. Returns true on success.
    *
-   * Three steps, in this order. The account's reels come off the feed
+   * Apple comes before anything is removed. An account with an Apple ID is
+   * deleted only once its Apple tokens are revoked (App Review 5.1.1(v);
+   * lib/appleRevoke), and doing it first means closing Apple's sheet stops
+   * the deletion before a reel or photo is gone. If a later step fails
+   * after the revoke, the account still works (Supabase never used Apple's
+   * tokens) and the retry asks Apple again.
+   *
+   * Then three steps, in this order. The account's reels come off the feed
    * first, so nobody is left watching one whose file is about to vanish.
    * Then the client empties the account's folders in both buckets through
    * the Storage API (emptyAccountStorage above), and the server does the
@@ -1378,10 +1388,18 @@ export const useAuth = create<AuthState>()((set, get) => ({
    * failing.
    */
   deleteAccount: async () => {
-    const uid = get().session?.user.id;
-    if (!uid) return false;
+    const user = get().session?.user;
+    if (!user) return false;
+    const uid = user.id;
 
     set({ busy: true, error: null });
+
+    // Never throws; its message is the alert body, like the ones below.
+    const apple = await revokeAppleAccess(user);
+    if (!apple.ok) {
+      set({ busy: false, error: apple.message });
+      return false;
+    }
 
     try {
       /*
