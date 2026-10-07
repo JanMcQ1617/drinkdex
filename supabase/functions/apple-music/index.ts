@@ -11,8 +11,13 @@
  * isN-ssl.mzstatic.com host, and never an explicit song.
  *
  * DEPLOY (Supabase Dashboard, not the CLI): Edge Functions -> Deploy a new
- * function -> Via editor, name it `apple-music`, paste this file, keep
- * Verify JWT ON. Secrets (Edge Functions -> Secrets): MUSICKIT_KEY_P8 (the
+ * function -> Via editor, name it `apple-music`, paste this file, and turn
+ * OFF "Verify JWT with legacy secret" (function Settings tab). This project
+ * signs sessions with an ECC (P-256) key, so that switch, which accepts only
+ * the legacy HS256 secret, refuses every real user with a 401. The handler
+ * checks the session itself (auth.getUser below), which is what keeps
+ * strangers out.
+ * Secrets (Edge Functions -> Secrets): MUSICKIT_KEY_P8 (the
  * whole .p8 text, BEGIN/END lines included), MUSICKIT_KEY_ID, APPLE_TEAM_ID.
  * Supabase supplies SUPABASE_URL and the project's client key itself. The
  * .p8 never goes in the repo (*.p8 is gitignored).
@@ -392,8 +397,8 @@ export async function handle(req: Request): Promise<Response> {
   const config = readConfig();
   if (!config) return fail(503, 'not_configured');
 
-  // Verify JWT is on, so the gateway has already refused a missing or bad
-  // session; checking again here means the budget never rests on it alone.
+  // The gateway does not check the session (see DEPLOY above), so this is
+  // the check: a missing or bad session stops here, before any budget.
   const authorization = req.headers.get('Authorization') ?? '';
   const jwt = /^Bearer\s+(.+)$/i.exec(authorization)?.[1];
   if (!jwt) return fail(401, 'signed_out');

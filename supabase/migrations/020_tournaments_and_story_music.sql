@@ -59,8 +59,10 @@
 -- leaves 'off'
 --
 --   * Deploy supabase/functions/apple-music/index.ts: Edge Functions ->
---     Deploy a new function -> Via editor, name it apple-music, and keep
---     Verify JWT ON. Under Edge Functions -> Secrets add MUSICKIT_KEY_P8
+--     Deploy a new function -> Via editor, name it apple-music, then turn
+--     OFF "Verify JWT with legacy secret" in its Settings: this project's
+--     ECC-signed sessions fail that check, and the function checks the
+--     session itself. Under Edge Functions -> Secrets add MUSICKIT_KEY_P8
 --     (the whole .p8 text, BEGIN/END lines included), MUSICKIT_KEY_ID and
 --     APPLE_TEAM_ID. Supabase supplies SUPABASE_URL and the project's
 --     publishable key itself. The .p8 never goes in the repo.

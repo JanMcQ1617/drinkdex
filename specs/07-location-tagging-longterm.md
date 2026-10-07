@@ -861,7 +861,7 @@ No change: `_layout.tsx`, `+native-intent.tsx`, `AuthGate.tsx`, `FloatingTabBar.
    base64 -i ~/Downloads/AuthKey_*.p8 | pbcopy
    ```
 
-5. **Supabase → Edge Functions:** deploy `place-resolve` and `places-refresh` (dashboard editor, pasting each `index.ts` and the `_shared` file, or `supabase functions deploy`). Leave **Verify JWT** on for both.
+5. **Supabase → Edge Functions:** deploy `place-resolve` and `places-refresh` (dashboard editor, pasting each `index.ts` and the `_shared` file, or `supabase functions deploy`). **Check Verify JWT before relying on it:** this project signs sessions with an ECC key, and the Dashboard's "Verify JWT with legacy secret" refuses those. Either have each handler check `auth.getUser()` and turn the switch off (as `apple-revoke` does), or confirm the switch accepts the current key first.
 6. **Supabase → Integrations → Cron:** enable it, then create a job named `places-refresh` with schedule `0 9 * * 1` (Mondays 09:00 UTC), type **Supabase Edge Function**, function `places-refresh`, and the service-key auth header the dashboard offers from Vault.
 7. **Build:** the next native build (local `scripts/build-ios.sh`) carries the module. Run `scripts/check-native-links.sh` on the `.app`. Then set `EXPO_PUBLIC_PLACES=on` for that build, or ship it later as an EAS Update for that runtime.
 8. **App Store Connect:**

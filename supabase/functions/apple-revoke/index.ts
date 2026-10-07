@@ -26,8 +26,13 @@
  * and nothing about the person (no id, no email, no token) is logged.
  *
  * DEPLOY (Supabase Dashboard, not the CLI): Edge Functions -> Deploy a new
- * function -> Via editor, name it `apple-revoke`, paste this file, keep
- * Verify JWT ON. Secrets (Edge Functions -> Secrets):
+ * function -> Via editor, name it `apple-revoke`, paste this file, and turn
+ * OFF "Verify JWT with legacy secret" (function Settings tab). This project
+ * signs sessions with an ECC (P-256) key, so that switch, which accepts only
+ * the legacy HS256 secret, refuses every real user with a 401. The handler
+ * checks the session itself (auth.getUser below), which is what keeps
+ * strangers out.
+ * Secrets (Edge Functions -> Secrets):
  *   APPLE_SIWA_KEY_P8  the whole .p8 text of a key with Sign in with Apple
  *                      enabled for the primary App ID com.janmcqueeny.drinkdex,
  *                      BEGIN/END lines included
@@ -316,8 +321,9 @@ export async function handle(req: Request): Promise<Response> {
   const project = readProject();
   if (!project) return notConfigured('SUPABASE_URL or the client key is missing');
 
-  // Verify JWT is on, so the gateway has already refused a bad session;
-  // checking again here means the account read below is the caller's own.
+  // The gateway does not check the session (see DEPLOY above), so this is
+  // the check: a missing or bad session stops here, and the account read
+  // below is the caller's own.
   const authorization = req.headers.get('Authorization') ?? '';
   const jwt = /^Bearer\s+(.+)$/i.exec(authorization)?.[1];
   if (!jwt) return fail(401, 'signed_out');
