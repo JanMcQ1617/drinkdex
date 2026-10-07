@@ -1,16 +1,19 @@
 import { create } from 'zustand';
 
+import { methodsNow } from '@/components/auth/methods';
+import { noteSignInAttempt, type RememberedMethod } from '@/components/auth/rememberedAccount';
 import { COUNTRY_BY_ISO, DIALS, countryForDial, deviceRegion } from '@/data/countries';
 import { formatNational, matchDial, toE164, type Country } from '@/lib/phone';
+import { TASTES_TO_START } from '@/lib/tastes';
 import {
   CODE_WRONG,
   EMAIL_HAS_ACCOUNT,
   EMAIL_INVALID,
   PHONE_INVALID,
-  PHONE_SIGN_IN_ENABLED,
   WRONG_PASSWORD,
   useAuth,
 } from '@/store/auth';
+import { useCollection } from '@/store/collection';
 
 /* ==================================================================== */
 /* The sign-in flow                                                     */
@@ -22,7 +25,7 @@ import {
 /* different, empty form. Here both gates draw the same step, the same   */
 /* digits and the same resend countdown.                                */
 /*                                                                      */
-/* MEMORY ONLY. Never persisted, so a cold start begins at the entry     */
+/* MEMORY ONLY. Never persisted, so a cold start begins at the first     */
 /* step, and nothing typed (a phone number, an email, a password) is     */
 /* ever written to the device by this store.                            */
 /*                                                                      */
@@ -46,14 +49,26 @@ import {
 /* meanwhile). Each action notes `generation` when it starts and drops   */
 /* its answer if the flow has been reset since, so nothing lands on a    */
 /* fresh flow. Messages are dropped once the step has moved too, so a    */
-/* late "wrong code" never lands on the entry step. What a code request  */
+/* late "wrong code" never lands on the first step. What a code request  */
 /* did to the number itself (a new code sent, an attempt used up) is     */
 /* still recorded while that number is the live one: Change number and   */
 /* straight back returns to that code, and its countdown and lock must   */
 /* be the server's.                                                     */
+/*                                                                      */
+/* THE PICKS. 'tastes' is Home's first step, "What do you drink?"       */
+/* (auth/TastePicker); every other gate draws it as 'entry', the card   */
+/* of ways in. The drinks tapped there are held here, in memory, until  */
+/* an account exists: they survive Back, a tab switch and every reset   */
+/* below, and are put in the Dex exactly once, as the session arrives    */
+/* (applyPicks, at the foot of this file), then cleared.                 */
 /* ==================================================================== */
 
-export type SignInStep = 'entry' | 'code' | 'email' | 'password' | 'reset';
+/**
+ * 'tastes' the picker (Home only); 'entry' the card of ways in; 'phone' the
+ * country and number; then the code, the email address, the password and
+ * the reset request, as before.
+ */
+export type SignInStep = 'tastes' | 'entry' | 'phone' | 'code' | 'email' | 'password' | 'reset';
 
 /**
  * What the email lookup said (store/auth lookupEmail, migration 016):
@@ -100,6 +115,14 @@ export function enteredPhone(state: Pick<SignInFlowState, 'iso' | 'national'>): 
   return toE164(countryOf(state.iso), state.national);
 }
 
+/**
+ * Where the email address is typed: its own step, or the first step itself
+ * when email is the only way in this build offers (auth/methods).
+ */
+export function emailStep(): SignInStep {
+  return methodsNow().emailOnly ? 'entry' : 'email';
+}
+
 /** Seconds until another code may be asked for, 0 once it can. From the store's clock, so a tab switch never restarts it. */
 export function resendWait(sentAt: number | null, now: number = Date.now()): number {
   if (sentAt === null) return 0;
@@ -137,6 +160,27 @@ export interface SignInFlowState {
   providerError: string | null;
   /** "New code sent.", under the resend line. */
   notice: string | null;
+  /** The drinks picked on the 'tastes' step, in the order they were tapped. */
+  picks: string[];
+  /** Continue was pressed with enough picks: the card says "Join Sipply" over them. */
+  joined: boolean;
+  /** "Use another way" on Welcome back: the full card instead of the remembered method. */
+  anotherWay: boolean;
+
+  /** Adds a drink to the picks, or takes it back out. */
+  togglePick: (drinkId: string) => void;
+  /** The picker's Continue: on to the ways in, under the picks. Needs TASTES_TO_START. */
+  continueTastes: () => void;
+  /** The picker's "Sign in": the ways in, without joining on the picks. */
+  signInFromTastes: () => void;
+  /** Back from the ways in to the picker, picks kept. */
+  backToTastes: () => void;
+  /** Welcome back's "Use another way". */
+  chooseAnotherWay: () => void;
+  /** Back from the full card to Welcome back. */
+  returnToRemembered: () => void;
+  /** Welcome back's one button: the way in this phone used last time. */
+  continueRemembered: (method: RememberedMethod) => void;
 
   setCountry: (iso: string) => void;
   setNational: (text: string) => void;
@@ -151,9 +195,13 @@ export interface SignInFlowState {
    * move, the same nuance the old form's switchMode protected.
    */
   go: (step: SignInStep, opts?: { keepAuthNotice?: boolean }) => void;
-  /** code and email go to entry; password to email (entry with phone off); reset to password. */
+  /**
+   * phone and email go to entry; code to phone; password to email (entry
+   * when email is the only way in); reset to password. The first steps'
+   * own way back depends on the gate drawing them (SignInScreen).
+   */
   back: () => void;
-  /** Back to the entry step with nothing typed, keeping the chosen country. */
+  /** Back to the first step with nothing typed, keeping the chosen country and the picks. */
   reset: () => void;
   /**
    * The 'unknown' password step's "New to Sipply? Create an account": the
@@ -177,6 +225,13 @@ export interface SignInFlowState {
 
 type FlowValues = Omit<
   SignInFlowState,
+  | 'togglePick'
+  | 'continueTastes'
+  | 'signInFromTastes'
+  | 'backToTastes'
+  | 'chooseAnotherWay'
+  | 'returnToRemembered'
+  | 'continueRemembered'
   | 'setCountry'
   | 'setNational'
   | 'setCode'
@@ -195,9 +250,12 @@ type FlowValues = Omit<
   | 'continueWith'
 >;
 
-function initial(iso: string): FlowValues {
+function initial(iso: string, picks: string[]): FlowValues {
   return {
-    step: 'entry',
+    step: 'tastes',
+    picks,
+    joined: false,
+    anotherWay: false,
     iso,
     national: '',
     sentTo: null,
@@ -218,6 +276,16 @@ function initial(iso: string): FlowValues {
 /** Bumped by reset(); see LATE ANSWERS in the header. */
 let generation = 0;
 
+/*
+ * Each request that can sign someone in notes its way in first, so the
+ * remembered account (Welcome back) offers that one next time. One that
+ * ends without a session un-notes it, so a cancelled Apple sheet is not
+ * credited with a later sign-in by a reset link.
+ */
+function endAttempt() {
+  if (!useAuth.getState().session) noteSignInAttempt(null);
+}
+
 export const useSignInFlow = create<SignInFlowState>()((set, get) => {
   /** True while the answer to a request started at `gen` on `step` still belongs on screen. */
   const current = (gen: number, step: SignInStep) => generation === gen && get().step === step;
@@ -229,7 +297,60 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
   };
 
   return {
-    ...initial(deviceRegion() ?? 'US'),
+    ...initial(deviceRegion() ?? 'US', []),
+
+    togglePick: (drinkId) => {
+      const { picks } = get();
+      set({ picks: picks.includes(drinkId) ? picks.filter((id) => id !== drinkId) : [...picks, drinkId] });
+    },
+
+    continueTastes: () => {
+      if (get().picks.length < TASTES_TO_START) return;
+      set({ joined: true });
+      get().go('entry');
+    },
+
+    signInFromTastes: () => {
+      set({ joined: false });
+      get().go('entry');
+    },
+
+    backToTastes: () => {
+      set({ joined: false });
+      get().go('tastes');
+    },
+
+    chooseAnotherWay: () => {
+      set({ anotherWay: true });
+      get().go('entry');
+    },
+
+    returnToRemembered: () => {
+      set({ anotherWay: false });
+      get().go('entry');
+    },
+
+    /*
+     * Phone and email open their own step, whose Back returns to 'entry',
+     * which is Welcome back again while `anotherWay` is off. With email the
+     * only way in, its field IS the first step, so that card is shown.
+     */
+    continueRemembered: (method) => {
+      switch (method) {
+        case 'apple':
+        case 'google':
+        case 'facebook':
+          void get().continueWith(method);
+          return;
+        case 'phone':
+          get().go('phone');
+          return;
+        case 'email':
+          if (emailStep() === 'entry') get().chooseAnotherWay();
+          else get().go('email');
+          return;
+      }
+    },
 
     setCountry: (iso) => {
       const country = COUNTRY_BY_ISO[iso];
@@ -263,20 +384,22 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
 
     back: () => {
       switch (get().step) {
-        case 'code':
-          set({ code: '' });
-          get().go('entry');
-          return;
+        case 'phone':
         case 'email':
           get().go('entry');
           return;
+        case 'code':
+          // "Change number": back to the number, where the country and digits still are.
+          set({ code: '' });
+          get().go('phone');
+          return;
         case 'password':
-          // With phone off the entry step IS the email step.
-          get().go(PHONE_SIGN_IN_ENABLED ? 'email' : 'entry');
+          get().go(emailStep());
           return;
         case 'reset':
           get().go('password');
           return;
+        case 'tastes':
         case 'entry':
           return;
       }
@@ -284,7 +407,8 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
 
     reset: () => {
       generation += 1;
-      set(initial(get().iso));
+      // The picks outlive a reset: only applyPicks, once they are in the Dex, clears them.
+      set(initial(get().iso, get().picks));
     },
 
     signUpInstead: () => {
@@ -338,7 +462,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
       useAuth.getState().clearError();
       try {
         const failure = await useAuth.getState().sendPhoneCode(e164);
-        if (!current(gen, 'entry')) return;
+        if (!current(gen, 'phone')) return;
         if (failure) {
           set({ error: failure });
           return;
@@ -388,6 +512,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
       const gen = generation;
       const to = s.sentTo;
       set({ pending: 'code', error: null, notice: null });
+      noteSignInAttempt('phone');
       try {
         const failure = await useAuth.getState().verifyPhoneCode(to, s.code);
         // null is a session: the auth listener has already reset this flow.
@@ -404,6 +529,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
         if (onCodeStep) set({ error: failure });
       } finally {
         settle(gen);
+        endAttempt();
       }
     },
 
@@ -441,9 +567,11 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
       if (s.password.length < (s.emailStatus === 'new' ? MIN_NEW_PASSWORD : 1)) return;
       const gen = generation;
       const { email, password, emailStatus } = s;
+      noteSignInAttempt('email');
 
       if (emailStatus === 'new') {
         await auth.signUpEmail(email, password);
+        endAttempt();
         const after = useAuth.getState();
         if (after.session || !current(gen, 'password')) return;
         if (after.notice) {
@@ -465,6 +593,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
       }
 
       await auth.signIn(email, password);
+      endAttempt();
       const after = useAuth.getState();
       if (after.session || !current(gen, 'password')) return;
       /*
@@ -492,6 +621,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
       const gen = generation;
       set({ pending: provider, providerError: null });
       useAuth.getState().clearError();
+      noteSignInAttempt(provider);
       try {
         const auth = useAuth.getState();
         const message = await (provider === 'apple'
@@ -503,6 +633,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
         if (generation === gen) set({ providerError: message });
       } finally {
         settle(gen);
+        endAttempt();
       }
     },
   };
@@ -514,5 +645,25 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
  * changes nothing here.
  */
 useAuth.subscribe((state, prev) => {
-  if ((state.session === null) !== (prev.session === null)) useSignInFlow.getState().reset();
+  if ((state.session === null) === (prev.session === null)) return;
+  if (state.session) applyPicks();
+  useSignInFlow.getState().reset();
+});
+
+/*
+ * THE PICKS GO IN ONCE. Called as a session arrives (any way in, on any
+ * gate), and again if the collection finishes loading after that. The
+ * picks are cleared only once the collection has taken them, so a launch
+ * that could not read the Dex back keeps them rather than writing them
+ * where they would not be saved; addFromTastes also skips any drink the
+ * Dex already holds, so a second call can never add one twice.
+ */
+function applyPicks() {
+  const { picks } = useSignInFlow.getState();
+  if (picks.length === 0 || !useAuth.getState().session) return;
+  if (useCollection.getState().addFromTastes(picks) !== null) useSignInFlow.setState({ picks: [] });
+}
+
+useCollection.subscribe((state, prev) => {
+  if (state.hydrated && !prev.hydrated) applyPicks();
 });

@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Mount, MOUNT, MountWindow } from '@/components/cabinet';
-import { DrinkFace, FACE_FILL } from '@/components/DexCard';
+import { CatalogueFace } from '@/components/auth/CatalogueFace';
+import { DrinkName, Mount, MOUNT, MountWindow } from '@/components/cabinet';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Grain } from '@/components/Grain';
 import { FocusedStatusBar } from '@/components/ScreenTopBar';
-import { colors, elevation, layout, radius, space, stroke, textRole } from '@/constants/theme';
+import { colors, elevation, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
 
 /* ==================================================================== */
@@ -54,15 +54,12 @@ import { formatCount, getDrink, TOTAL } from '@/data';
 const WORDMARK_CAP = 1.2;
 
 /**
- * The three drinks in the cabinet behind the first step: real catalogue
- * drinks, all three photographed, each a collected mount (mat, edge and
- * seat, the same frame every collected card has). The middle one is raised.
+ * The three drinks in the cabinet behind the first step when the person
+ * has none of their own yet: real catalogue drinks, all three
+ * photographed, each a collected mount (mat, edge and seat, the same frame
+ * every collected card has). The middle one is raised.
  */
-const FEATURED = [
-  { id: 'negroni', raised: false },
-  { id: 'zombie', raised: true },
-  { id: 'last-word', raised: false },
-] as const;
+export const FEATURED: readonly string[] = ['negroni', 'zombie', 'last-word'];
 
 /** A feature mount at full size, before a narrow phone scales it down to fit three. */
 const CARD = { width: 116, height: 150 } as const;
@@ -74,6 +71,10 @@ const RAISE = 14;
  * shadow is not cut flat along its top. Taken out of the 24pt above them.
  */
 const SHADOW_ROOM = 12;
+/** The named cards over the picks (the "Your Dex has begun" sheet): the mockup's 8pt mat and 112pt window. */
+const NAMED = { padding: 8, window: 112, nameGap: 7 } as const;
+/** Every name on the backdrop caps here (spec 6.5, as a Dex card). */
+const NAME_CAP = 1.3;
 
 /**
  * Above this text size the first step uses the compact backdrop too:
@@ -106,12 +107,55 @@ function cardBand(height: number, fontScale: number): number | null {
  * on a short window or at an accessibility text size): the wordmark in a
  * band.
  *
+ * `drinks` are the three mounts: the person's own (their picks, or the
+ * latest in their Dex), else FEATURED. `begun` is the number of picks a
+ * new Dex has begun with: the heading becomes "Your Dex has begun" and
+ * its count, and on Plus and Pro Max heights the three cards show whole,
+ * named, the way the person just picked them (the 56pt peek elsewhere).
+ *
  * Decorative and untouchable: the sheet's title bar says where you are,
- * and a pan on the backdrop scrolls the form.
+ * and a pan on the backdrop scrolls the form. The one exception is the
+ * "Your Dex has begun" heading, which VoiceOver reads: it is news.
  */
-export function CabinetBackdrop({ variant }: { variant: 'full' | 'compact' }) {
+export function CabinetBackdrop({
+  variant,
+  drinks = FEATURED,
+  begun,
+}: {
+  variant: 'full' | 'compact';
+  drinks?: readonly string[];
+  begun?: number;
+}) {
   const { width, height, fontScale } = useWindowDimensions();
   const band = variant === 'full' ? cardBand(height, fontScale) : null;
+  const ids = drinks.length > 0 ? drinks.slice(0, 3) : FEATURED;
+
+  if (begun != null) {
+    const count = `${formatCount(begun)} of ${formatCount(TOTAL)} drinks`;
+    // The heading is news, so VoiceOver reads it (one element); the cards stay decorative.
+    return (
+      <View pointerEvents="none" style={band == null ? styles.compact : styles.full}>
+        <View accessible accessibilityLabel={`Your Dex has begun, ${count}`}>
+          <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.emptyTitle, styles.heading]}>
+            Your Dex has begun
+          </Text>
+          <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.prose, tabular, styles.lede]}>
+            {count}
+          </Text>
+        </View>
+        <View
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          style={styles.cardsSlot}>
+          {band == null ? null : band >= 96 ? (
+            <NamedCards ids={ids} windowWidth={width} />
+          ) : (
+            <FeatureCards ids={ids} band={band} windowWidth={width} />
+          )}
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -131,24 +175,29 @@ export function CabinetBackdrop({ variant }: { variant: 'full' | 'compact' }) {
           <Text style={[textRole.prose, styles.lede]}>
             {`${formatCount(TOTAL)} drinks. Start your Dex with the next one.`}
           </Text>
-          <FeatureCards band={band} windowWidth={width} />
+          <FeatureCards ids={ids} band={band} windowWidth={width} />
         </>
       )}
     </View>
   );
 }
 
+/** A card's width: three fit from a 408pt column; a narrower phone scales them down, keeping their shape. */
+function cardWidth(windowWidth: number): number {
+  const fit = Math.floor((windowWidth - 2 * layout.gutter - 2 * CARD_GAP) / 3);
+  return Math.min(CARD.width, fit);
+}
+
 /**
  * The three mounts, clipped at `band` so only their tops show: the sheet
  * begins exactly where they are cut, which reads as the sheet lying over
- * them. Three 116pt cards fit from a 408pt column; a narrower phone scales
- * them down, keeping their shape.
+ * them.
  *
- * Memory: three lit windows of about 90 x 124pt, decoded at that size.
+ * Memory: three lit windows of about 90 x 124pt, each decoded at that
+ * size under its own key (CatalogueFace).
  */
-function FeatureCards({ band, windowWidth }: { band: number; windowWidth: number }) {
-  const fit = Math.floor((windowWidth - 2 * layout.gutter - 2 * CARD_GAP) / 3);
-  const cardW = Math.min(CARD.width, fit);
+function FeatureCards({ ids, band, windowWidth }: { ids: readonly string[]; band: number; windowWidth: number }) {
+  const cardW = cardWidth(windowWidth);
   const cardH = Math.round((cardW * CARD.height) / CARD.width);
   const inset = 2 * (stroke.edge + MOUNT.feature.padding);
   const windowW = cardW - inset;
@@ -156,7 +205,7 @@ function FeatureCards({ band, windowWidth }: { band: number; windowWidth: number
 
   return (
     <View style={[styles.cards, { height: SHADOW_ROOM + band }]}>
-      {FEATURED.map(({ id, raised }) => {
+      {ids.map((id, i) => {
         const drink = getDrink(id);
         // A renamed drink drops out of the row rather than breaking the screen.
         if (!drink) return null;
@@ -166,10 +215,51 @@ function FeatureCards({ band, windowWidth }: { band: number; windowWidth: number
             state="mounted"
             size="feature"
             onLining
-            style={{ width: cardW, height: cardH, marginTop: raised ? 0 : RAISE }}>
+            style={{ width: cardW, height: cardH, marginTop: i === 1 ? 0 : RAISE }}>
             <MountWindow height={windowH} state="mounted">
-              <DrinkFace drink={drink} mode="lit" width={windowW} height={windowH} style={FACE_FILL} />
+              <CatalogueFace drink={drink} width={windowW} height={windowH} />
             </MountWindow>
+          </Mount>
+        );
+      })}
+    </View>
+  );
+}
+
+/**
+ * The picks whole, each named under its window: "Your Dex has begun" on a
+ * Plus or Pro Max height, where the sheet still clears the tab bar below.
+ * Every window decodes at 100 x 112pt, well under the 1024px photo at 3x.
+ */
+function NamedCards({ ids, windowWidth }: { ids: readonly string[]; windowWidth: number }) {
+  const cardW = cardWidth(windowWidth);
+  const inner = cardW - 2 * (stroke.edge + NAMED.padding);
+  const windowH = Math.round((NAMED.window * cardW) / CARD.width);
+
+  return (
+    <View style={styles.named}>
+      {ids.map((id, i) => {
+        const drink = getDrink(id);
+        if (!drink) return null;
+        return (
+          <Mount
+            key={id}
+            state="mounted"
+            size="feature"
+            onLining
+            style={{ width: cardW, padding: NAMED.padding, marginTop: i === 1 ? 0 : RAISE }}>
+            <MountWindow height={windowH} state="mounted">
+              <CatalogueFace drink={drink} width={inner} height={windowH} />
+            </MountWindow>
+            <DrinkName
+              name={drink.name}
+              role={textRole.miniName}
+              measure={inner}
+              cap={NAME_CAP}
+              color={colors.text}
+              align="center"
+              style={styles.namedName}
+            />
           </Mount>
         );
       })}
@@ -222,12 +312,18 @@ const OVERSCROLL = 1000;
  */
 export function CabinetSheet({
   backdrop,
+  backdropDrinks,
+  begun,
   bar,
   children,
   footer,
   contentStyle,
 }: {
   backdrop: 'full' | 'compact';
+  /** The backdrop's three mounts (CabinetBackdrop `drinks`). */
+  backdropDrinks?: readonly string[];
+  /** A Dex begun with this many picks (CabinetBackdrop `begun`). */
+  begun?: number;
   /** The step's title bar, set for a sheet (no status-bar inset of its own). */
   bar: ReactNode;
   children: ReactNode;
@@ -257,7 +353,7 @@ export function CabinetSheet({
         rounded corners need.
       */}
       <View>
-        <CabinetBackdrop variant={backdrop} />
+        <CabinetBackdrop variant={backdrop} drinks={backdropDrinks} begun={begun} />
         <View pointerEvents="none" style={styles.sheetShadow} />
       </View>
       {/* ScrollView moves a sticky child's style onto its own wrapper, clip included. */}
@@ -300,6 +396,8 @@ const styles = StyleSheet.create({
   full: { alignItems: 'center', paddingTop: space.xl },
   compact: { alignItems: 'center', paddingTop: space.md, paddingBottom: 18 },
   wordmark: { color: colors.onLining, textAlign: 'center' },
+  heading: { color: colors.onLining, textAlign: 'center', paddingHorizontal: layout.gutter },
+  cardsSlot: { alignSelf: 'stretch' },
   lede: {
     color: colors.onLiningMuted,
     textAlign: 'center',
@@ -316,6 +414,16 @@ const styles = StyleSheet.create({
     paddingTop: SHADOW_ROOM,
     overflow: 'hidden',
   },
+  named: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    columnGap: CARD_GAP,
+    marginTop: space.lg,
+    paddingBottom: space.xl,
+  },
+  namedName: { marginTop: NAMED.nameGap },
 
   /* CabinetSheet */
   screen: { flex: 1, backgroundColor: colors.lining },

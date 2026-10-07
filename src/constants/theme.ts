@@ -243,6 +243,22 @@ export const colors = {
   googleRed: '#EA4335',
 
   /*
+   * The sign-in rows' own colours (auth/ProviderButton), quotations like
+   * the two above. Sign in with Apple, black style: the HIG allows black
+   * or white only, never a tint, so this is true black, not reelGround;
+   * its title and apple.logo are `surface` on it.
+   */
+  appleFill: '#000000',
+  /*
+   * Google's light-theme button stroke, used on every outlined way in so
+   * the stack reads as one family rather than Google's row standing out.
+   * A control edge, measured on the button's white and on the paper sheet.
+   */
+  providerEdge: '#747775',
+  /** Google's light-theme label ink, on every outlined way in. */
+  providerInk: '#1F1F1F',
+
+  /*
    * The intro film's paper: frame 0 of assets/video/intro.mp4, sampled
    * across the top edge in BT.709. The paper darkens a step toward the
    * foot of the frame, so this is its lightest honest value, not an

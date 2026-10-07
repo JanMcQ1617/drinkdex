@@ -63,6 +63,7 @@ export type IconName =
   | 'reels'
   | 'alert'
   | 'mail'
+  | 'phone'
   | 'addPerson'
   | 'stack'
   | 'flip'
@@ -330,6 +331,13 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     <>
       <Path d="M4.4 5.6h15.2a1.6 1.6 0 0 1 1.6 1.6v9.6a1.6 1.6 0 0 1-1.6 1.6H4.4a1.6 1.6 0 0 1-1.6-1.6V7.2a1.6 1.6 0 0 1 1.6-1.6Z" />
       <Path d="m3.4 7.1 8.6 6.3 8.6-6.3" />
+    </>
+  ),
+  /* A handset seen face-on: "Continue with phone number". */
+  phone: (
+    <>
+      <Path d="M8.9 2.7h6.2a2.3 2.3 0 0 1 2.3 2.3v14a2.3 2.3 0 0 1-2.3 2.3H8.9a2.3 2.3 0 0 1-2.3-2.3V5a2.3 2.3 0 0 1 2.3-2.3Z" />
+      <Path d="M10.5 18.3h3" />
     </>
   ),
   /* A person with a plus: follow someone, find friends. */

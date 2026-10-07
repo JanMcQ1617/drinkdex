@@ -6,8 +6,8 @@ import { AuthMessage } from '@/components/auth/Consent';
 import { ProviderRows } from '@/components/auth/ProviderButton';
 import { Button, Field, FieldGroup } from '@/components/ui';
 import { colors, fonts, space, type as typeScale } from '@/constants/theme';
-import { PHONE_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
-import { looksLikeEmail, MIN_NEW_PASSWORD, useSignInFlow } from '@/store/signInFlow';
+import { useAuth } from '@/store/auth';
+import { emailStep, looksLikeEmail, MIN_NEW_PASSWORD, useSignInFlow } from '@/store/signInFlow';
 
 /* ==================================================================== */
 /* Email: the address, then the password                                */
@@ -67,11 +67,11 @@ export function AuthStoreMessages() {
 
 /**
  * Where "Change" on the read-only address goes: the step that types it.
- * With the phone number off, that is the first step itself.
+ * With email the only way in, that is the first step itself.
  */
 function useChangeEmail() {
   const go = useSignInFlow((s) => s.go);
-  return () => go(PHONE_SIGN_IN_ENABLED ? 'email' : 'entry');
+  return () => go(emailStep());
 }
 
 /**
@@ -105,9 +105,9 @@ function ReadOnlyEmail({ email, onChange }: { email: string; onChange: () => voi
 }
 
 /**
- * The address on its own: the first step when the phone number is off
- * (`focusOnShow` false: the keyboard stays down over the ways in below),
- * and "Continue with email" when it is on.
+ * The address on its own: "Continue with email", and the whole first step
+ * when email is the only way in (`focusOnShow` false there: the keyboard
+ * stays down over the age and terms line below it).
  */
 export function EmailStep({ focusOnShow }: { focusOnShow: boolean }) {
   const email = useSignInFlow((s) => s.email);
@@ -269,7 +269,8 @@ function OtherWayStep() {
   return (
     <View>
       <Text style={styles.lede}>{OTHER_LEDE}</Text>
-      <ProviderRows withEmail={false} />
+      {/* The email is what brought them here; the phone row is how a phone account gets back in. */}
+      <ProviderRows withPhone />
       <Button
         label="Or set a password by email"
         variant="text"

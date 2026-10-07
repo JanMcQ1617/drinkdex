@@ -1,14 +1,14 @@
-import { useRouter } from 'expo-router';
+import { useRoute, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { create } from 'zustand';
 
+import { AuthHold } from '@/components/auth/AuthHold';
 import { AuthTitleBar } from '@/components/auth/AuthTitleBar';
 import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { AuthMessage, Consent } from '@/components/auth/Consent';
 import SignInScreen from '@/components/auth/SignInScreen';
-import { Grain } from '@/components/Grain';
-import { Button, Field, Hold } from '@/components/ui';
+import { Button, Field } from '@/components/ui';
 import { WelcomeConnect } from '@/components/WelcomeConnect';
 import { colors, fonts, layout, space, type as typeScale } from '@/constants/theme';
 import type { ProfileRow } from '@/lib/database.types';
@@ -161,10 +161,17 @@ const ROW_WAIT_MS = 4000;
  * The sign-in, username and Welcome steps are one frame, the paper sheet
  * over the cabinet (auth/CabinetBackdrop), so a new person walks through
  * them without the ground changing under them.
+ *
+ * Signed out, the Home tab's gate is the one that asks "What do you
+ * drink?" first (auth/TastePicker); Profile and every gated pushed route
+ * open straight on the ways in. Home is told apart by its route's name,
+ * `index`, the tab navigator's own name for it, so no screen has to pass
+ * anything in.
  */
 export function AuthGate({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
   const router = useRouter();
   const close = onClose ?? (() => router.navigate('/dex'));
+  const home = useRoute().name === 'index';
 
   const session = useAuth((s) => s.session);
   const ready = useAuth((s) => s.ready);
@@ -210,9 +217,9 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
    * take up to a minute offline. The message says where to go meanwhile.
    */
   if (!ready) {
-    return <GateHold slowMessage="Still connecting. The Dex and Stats work without a connection." />;
+    return <AuthHold slowMessage="Still connecting. The Dex and Stats work without a connection." />;
   }
-  if (!session || !userId) return <SignInScreen onClose={close} />;
+  if (!session || !userId) return <SignInScreen onClose={close} home={home} />;
   /*
    * Whenever the handle is still the placeholder, whatever else is true:
    * the step can be left half-done by quitting the app, and the next launch
@@ -223,23 +230,10 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
   }
   // A frame or two while AsyncStorage answers, or the bounded wait above.
   if (welcomeSeen === undefined || waitingForRow) {
-    return <GateHold slowMessage="Still loading your account." />;
+    return <AuthHold slowMessage="Still loading your account." />;
   }
   if (!welcomeSeen) return <WelcomeConnect onDone={() => dismissWelcome(userId)} />;
   return <>{children}</>;
-}
-
-/**
- * The gate's Hold, on paper with its own grain: grain is no longer one
- * overlay over the app, so each ground mounts its own, under the content.
- */
-function GateHold({ slowMessage }: { slowMessage: string }) {
-  return (
-    <View style={styles.screen}>
-      <Grain />
-      <Hold slowMessage={slowMessage} fill={false} />
-    </View>
-  );
 }
 
 /* ==================================================================== */
@@ -424,7 +418,6 @@ function ChooseUsername({ profile }: { profile: ProfileRow }) {
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, justifyContent: 'center', backgroundColor: colors.bg },
   body: { paddingHorizontal: layout.gutter, paddingTop: space.xxl },
 
   lede: {

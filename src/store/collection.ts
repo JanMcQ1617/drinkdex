@@ -136,6 +136,14 @@ interface CollectionState {
    * later launch.
    */
   adopt: (drinkId: string, record: UnlockRecord) => boolean;
+  /**
+   * The drinks a new person picked on the signed-out Home ("What do you
+   * drink?"), entered once their account exists (store/signInFlow applies
+   * them as the session arrives). Returns how many were new, or null when
+   * this launch could not read the collection back, so nothing written now
+   * would be saved and the caller should keep the picks.
+   */
+  addFromTastes: (drinkIds: readonly string[]) => number | null;
   updatePhoto: (drinkId: string, photoUri: string) => void;
   relock: (drinkId: string) => void;
   resetAll: () => void;
@@ -258,6 +266,33 @@ export const useCollection = create<CollectionState>()(
           }
           enter({ ...record, drinkId, photoUri: record.photoUri ?? null });
           return true;
+        },
+        /*
+         * SILENT, unlike enter(). The picks land while the username step is
+         * on screen, and three "collected" cards plus a "First Sips" rank
+         * queued over it would bury the step. So no celebration, and the
+         * rung the picks reach is recorded as held, so the next real catch
+         * does not announce it late. Ids already in the Dex keep their
+         * record (signing in to an existing account only ever adds), and an
+         * unknown id is refused, as unlock() refuses one.
+         */
+        addFromTastes: (drinkIds) => {
+          if (!readBack) return null;
+          const { unlocks: prev, bestRung } = get();
+          const next = { ...prev };
+          const now = Date.now();
+          let added = 0;
+          drinkIds.forEach((id, i) => {
+            if (!getDrink(id) || recordFor(next, id)) return;
+            // A millisecond apart, so the Dex's newest-first order keeps the order they were picked in.
+            const date = new Date(now - (drinkIds.length - 1 - i)).toISOString();
+            next[id] = { drinkId: id, photoUri: null, date };
+            added += 1;
+          });
+          if (added > 0) {
+            set({ unlocks: next, bestRung: Math.max(bestRung, rungAt(Object.keys(next).length)) });
+          }
+          return added;
         },
         updatePhoto: (drinkId, photoUri) => {
           const { unlocks } = get();

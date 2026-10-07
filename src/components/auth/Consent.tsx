@@ -32,7 +32,9 @@ export const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
  * username step, which every new account passes through (phone, email,
  * Apple, Google or Facebook). terms.md opens "By creating an account you
  * agree to these terms", and its first eligibility rule is being 18 or
- * older and of legal drinking age where you live.
+ * older and of legal drinking age where you live. The sentence is Jan's
+ * v3.2 wording, which names the drinking age alone: 18 in Puerto Rico,
+ * where Sipply launches, and 21 in the rest of the US.
  *
  * "By continuing" is true on the first step because it covers both
  * cases: continuing there either makes an account or carries on with one,
@@ -50,15 +52,14 @@ export const PRIVACY_URL = 'https://janmcq1617.github.io/drinkdex/privacy';
 export function Consent({ lead, style }: { lead: string; style?: StyleProp<TextStyle> }) {
   return (
     <Text style={[styles.consent, style]}>
-      {lead} you confirm you are 18 or older and of legal drinking age where you live, and agree
-      to the{' '}
+      {lead} you confirm you’re of legal drinking age where you live, and agree to the{' '}
       <Text
         style={styles.consentLink}
         accessibilityRole="link"
         onPress={() => void WebBrowser.openBrowserAsync(TERMS_URL)}>
         Terms of Use
       </Text>{' '}
-      and the{' '}
+      and{' '}
       <Text
         style={styles.consentLink}
         accessibilityRole="link"

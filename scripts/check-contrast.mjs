@@ -651,6 +651,18 @@ const PAIRS = [
   // A tournament's standings: your own row is wineWash.
   [C.text, C.wineWash, 4.5, 'your leaderboard row: text on wineWash'], // 12.78
   [C.textMuted, C.wineWash, 4.5, 'your leaderboard row: muted text on wineWash'], // 5.10
+
+  /*
+   * The sign-in rows (auth/ProviderButton): Apple's black button, and the
+   * white outlined rows for Google, Facebook, phone and email, which press
+   * to bgSunk. The rows stand on the paper sheet, grain and all.
+   */
+  'v3.2 · Sign-in ways in',
+  [C.surface, C.appleFill, 4.5, 'Continue with Apple: title and apple.logo on black'], // 21.00
+  [C.providerInk, C.surface, 4.5, 'outlined way in: label and mark on white'], // 16.48
+  [C.providerInk, C.bgSunk, 4.5, 'outlined way in, pressed: label on bgSunk'], // 13.14
+  [C.providerEdge, C.surface, 3.0, 'outlined way in: its edge against its own white (UI)'], // 4.53
+  [C.providerEdge, WORST.paper, 3.0, 'outlined way in: its edge on the paper sheet, worst grain pixel (UI)'], // 3.81
 ];
 
 /*

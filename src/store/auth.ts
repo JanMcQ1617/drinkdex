@@ -657,6 +657,23 @@ async function forgetAccountOnDevice(): Promise<void> {
   ]);
 }
 
+/*
+ * Who to tell once an account has been deleted, for what is kept of it
+ * past a sign-out (auth/rememberedAccount's Welcome back record). A
+ * registry rather than an import: those modules import this one, and
+ * importing them back would run their module-level useAuth.subscribe
+ * before useAuth exists. A plain sign-out never calls these.
+ */
+const deletedListeners = new Set<(uid: string) => void>();
+
+/** Runs `listener` with the account's id after deleteAccount succeeds. Returns the unsubscribe. */
+export function onAccountDeleted(listener: (uid: string) => void): () => void {
+  deletedListeners.add(listener);
+  return () => {
+    deletedListeners.delete(listener);
+  };
+}
+
 /**
  * Turns what came back from the browser leg (lib/oauth) into a session.
  * Shared by Google and Facebook; only the provider token differs, and
@@ -1437,6 +1454,19 @@ export const useAuth = create<AuthState>()((set, get) => ({
       });
       return false;
     }
+
+    /*
+     * The account is gone. Told before signOut, whose auth event clears the
+     * session: told after, the first signed-out frame could still offer
+     * Welcome back to the deleted account.
+     */
+    deletedListeners.forEach((listener) => {
+      try {
+        listener(uid);
+      } catch {
+        /* One listener's failure must not stop the sign-out below. */
+      }
+    });
 
     try {
       await supabase.auth.signOut();
