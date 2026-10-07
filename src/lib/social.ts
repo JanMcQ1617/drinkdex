@@ -800,9 +800,10 @@ export async function putStrippedPhoto(
   localUri: string,
   path: string,
   maxEdge?: number,
+  options?: { square?: boolean },
 ): Promise<boolean> {
   if (!new File(localUri).exists) return false;
-  const clean = await stripMetadata(localUri, maxEdge);
+  const clean = await stripMetadata(localUri, maxEdge, options);
   try {
     const bytes = await new File(clean).arrayBuffer();
     const { error } = await supabase.storage
@@ -856,10 +857,15 @@ export async function uploadAvatar(myId: string, localUri: string): Promise<stri
     const path = `${myId}/avatar-${Date.now()}.jpg`;
     /*
      * 512px, not the 2048px pour photos get: an avatar is never drawn larger
-     * than the 86pt profile header (258px on a 3x screen), and every list of
-     * people downloads and decodes one per row.
+     * than the edit preview's 88pt disc (264px on a 3x screen), and every
+     * list of people downloads and decodes one per row. Square, the centre
+     * of the photo: a round avatar shows nothing else, and a square file is
+     * what lets a small face's early-resized decode cover its circle
+     * (expo-image fits that thumbnail inside the frame, so a 4:3 one fell a
+     * third short). 512 is nearly twice the largest disc, so there is no
+     * reason to send 1024 to every list of people.
      */
-    return (await putStrippedPhoto(localUri, path, AVATAR_MAX_EDGE)) ? path : null;
+    return (await putStrippedPhoto(localUri, path, AVATAR_MAX_EDGE, { square: true })) ? path : null;
   } catch {
     return null;
   }

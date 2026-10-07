@@ -613,7 +613,8 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
       {url ? (
         <View pointerEvents="none" style={styles.backdrop}>
           <Image
-            source={{ uri: url, cacheKey: pour.path }}
+            // Its own key: this 55pt backdrop decode must never reach the stage (Avatar in ui.tsx).
+            source={{ uri: url, cacheKey: `${pour.path}#backdrop` }}
             cachePolicy="memory-disk"
             // Decoded at the box's 55pt, before the scale: see BACKDROP.
             enforceEarlyResizing
@@ -626,7 +627,7 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
       ) : null}
       {url ? (
         <Image
-          source={{ uri: url, cacheKey: pour.path }}
+          source={{ uri: url, cacheKey: `${pour.path}#stage` }}
           cachePolicy="memory-disk"
           /*
            * Decoded at the stage's size rather than the full upload, so each

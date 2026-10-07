@@ -127,11 +127,25 @@ export function PostGridTile({
       ]}>
       {photoUrl !== null ? (
         <Image
-          source={photoUrl ? { uri: photoUrl, cacheKey: post.photoPath ?? undefined } : undefined}
+          source={
+            photoUrl
+              ? {
+                  uri: photoUrl,
+                  cacheKey: post.photoPath ? `${post.photoPath}#${Math.round(size)}` : undefined,
+                }
+              : undefined
+          }
           /*
            * Keyed on the storage path, as PostCard's photo is: a signed URL
            * carries a fresh token each time it is minted, so keyed on the URL
            * the disk cache never hit and every visit downloaded the grid again.
+           *
+           * And on the tile's size. expo-image's SDWebImage (5.21.6 and later)
+           * files an early-resized decode under the path's original key in
+           * memory and hands it to the next size that misses its own entry,
+           * so a tile's 440px decode could become the post page's photo (as
+           * the tab bar's face became the profile header's in build 15).
+           * A key per size keeps every decode with the frame it was made for.
            */
           cachePolicy="memory-disk"
           /*

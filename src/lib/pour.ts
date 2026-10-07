@@ -115,11 +115,20 @@ export type PickResult =
  * would otherwise download the original. 2048px is sharper than any
  * screen the app draws a photo on, at a fraction of the bytes.
  *
+ * `square` (avatars) keeps only the centre square, which is all a round
+ * avatar ever shows. A square file is also what lets a small avatar's
+ * early-resized decode cover its circle: expo-image fits that thumbnail
+ * INSIDE the frame, so a 4:3 photo came out a third short of filling it.
+ *
  * THROWS rather than handing back the original. A caller that got the
  * untouched uri back on failure would upload the exact metadata this
  * exists to remove, and never know it had.
  */
-export async function stripMetadata(uri: string, maxEdge = 2048): Promise<string> {
+export async function stripMetadata(
+  uri: string,
+  maxEdge = 2048,
+  { square = false }: { square?: boolean } = {},
+): Promise<string> {
   // Native images held by these are large (a 48 MP decode is ~190 MB), so
   // they are released as soon as the file is written rather than left for
   // the garbage collector to notice.
@@ -130,12 +139,26 @@ export async function stripMetadata(uri: string, maxEdge = 2048): Promise<string
     let image = await loading.renderAsync();
     held.push(image);
 
-    if (Math.max(image.width, image.height) > maxEdge) {
-      const resizing = ImageManipulator.manipulate(image).resize(
-        image.width >= image.height ? { width: maxEdge } : { height: maxEdge },
-      );
-      held.push(resizing);
-      image = await resizing.renderAsync();
+    // The manipulator has already turned the pixels upright, so width and
+    // height here are the photo as it is seen, and the crop is centred on that.
+    const side = Math.min(image.width, image.height);
+    const crop = square && image.width !== image.height;
+    const width = crop ? side : image.width;
+    const height = crop ? side : image.height;
+    const resize = Math.max(width, height) > maxEdge;
+    if (crop || resize) {
+      const editing = ImageManipulator.manipulate(image);
+      held.push(editing);
+      if (crop) {
+        editing.crop({
+          originX: Math.floor((image.width - side) / 2),
+          originY: Math.floor((image.height - side) / 2),
+          width: side,
+          height: side,
+        });
+      }
+      if (resize) editing.resize(width >= height ? { width: maxEdge } : { height: maxEdge });
+      image = await editing.renderAsync();
       held.push(image);
     }
 

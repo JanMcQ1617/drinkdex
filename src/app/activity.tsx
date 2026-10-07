@@ -559,7 +559,7 @@ function LikedThumb({
       style={mounted ? undefined : styles.thumb}>
       {url ? (
         <Image
-          source={{ uri: url, cacheKey: path ?? undefined }}
+          source={{ uri: url, cacheKey: path ? `${path}#thumb` : undefined }}
           cachePolicy="memory-disk"
           /*
            * A 44pt thumbnail of a photo stored at up to 2048px: decoded at

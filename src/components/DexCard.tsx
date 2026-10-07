@@ -99,7 +99,9 @@ export interface DrinkFaceProps {
  * bitmap (4 MB for a 1024px lit photo, 12 MB for a 2048px pour), so every
  * card scrolled past stayed resident in the one pool the feed and avatars
  * share. These files are on the phone already; a disk hit costs one
- * off-main-thread decode when a cell mounts and nothing once it leaves.
+ * off-main-thread decode when a cell mounts. (SDWebImage 5.21.6 still
+ * copies that decode into memory on every disk hit, whatever the policy,
+ * so what keeps the pool small is the next line, not this one.)
  * enforceEarlyResizing decodes at the frame's size, not the file's.
  */
 export const DrinkFace = React.memo(function DrinkFace({
@@ -112,10 +114,23 @@ export const DrinkFace = React.memo(function DrinkFace({
   artScale,
   style,
 }: DrinkFaceProps) {
+  /*
+   * A pour's key carries the frame's size. The same path is a grid tile and
+   * a full-width post too, and expo-image's SDWebImage (5.21.6 and later)
+   * files an early-resized decode under the path's original key in memory
+   * and hands it to the next size that misses its own entry (PostGridTile
+   * says how). This disk-only view is not exempt: a disk hit is written
+   * back to memory whatever the cache policy.
+   */
   const source =
     mode === 'lit'
       ? photoUri
-        ? { uri: photoUri, cacheKey: photoCacheKey ?? undefined }
+        ? {
+            uri: photoUri,
+            cacheKey: photoCacheKey
+              ? `${photoCacheKey}#${Math.round(width)}x${Math.round(height)}`
+              : undefined,
+          }
         : drinkPhoto(drink.id)
       : drinkPhotoGhost(drink.id);
 

@@ -715,6 +715,13 @@ function useAvatarUrl(path: string | null | undefined, localUri?: string | null)
 }
 
 /**
+ * The disc (in points, inside any ring) from which an avatar decodes its
+ * whole file rather than a circle-sized thumbnail: the 86pt profile header
+ * and the edit preview. Every list face (24-57pt) stays under it.
+ */
+const LARGE_AVATAR = 64;
+
+/**
  * Initials on a wine disc.
  *
  * THE SANCTIONED CIRCLE. Everything else in the interface is a rectangle;
@@ -770,6 +777,28 @@ export function Avatar({
   const inner = size - (ring ? ringWidth * 2 + 2 : 0);
 
   /*
+   * How the photo is decoded, and the cache key that goes with it.
+   *
+   * expo-image's SDWebImage (5.21.6 and later) files a downsized decode
+   * under the file's ORIGINAL key in memory, and any other size that misses
+   * its own entry is handed that bitmap as it is. With one key per face,
+   * the 24pt tab bar's 66px decode became the 86pt profile header's picture,
+   * stretched four times: build 15's soft face. So every decode size has a
+   * key of its own (`#<points>`), and no view can be given a picture made
+   * for another size.
+   *
+   * Large avatars (the profile header, the edit preview) decode the whole
+   * file and let expo-image shrink it after the load. An early resize fits
+   * the photo INSIDE the circle's box, so a 4:3 face came out a third short
+   * of covering it. A whole avatar is 512px since uploads were capped (older
+   * ones up to 2048px), and only one or two are on screen at a time. A
+   * just-picked photo is still camera-sized, so its preview decodes early.
+   */
+  const decodeEarly = inner < LARGE_AVATAR || !!localUri;
+  const cacheKey =
+    localUri || !avatarPath ? undefined : `${avatarPath}#${decodeEarly ? Math.round(inner) : 'full'}`;
+
+  /*
    * Hidden from VoiceOver. Every call site either prints the name beside
    * the avatar or labels the control that holds it, so the initials only
    * made each row say the name twice — "J M, Jan McQueeny". Hiding the
@@ -810,17 +839,17 @@ export function Avatar({
           not the object at avatarPath, and filed under its key it would
           show the OLD avatar — whatever the disk cache holds for that path.
         */}
-        {photo ? (
+        {photo ? ( // full-size-ok: only past LARGE_AVATAR, where the file is bounded (decodeEarly)
           <Image
-            source={{ uri: photo, cacheKey: localUri ? undefined : (avatarPath ?? undefined) }}
+            source={{ uri: photo, cacheKey }}
             cachePolicy="memory-disk"
             /*
-             * Decoded at the circle's size, not the file's. Avatars were
-             * stored at up to 2048px — about 16 MB each once decoded — and
-             * drawn at 24-40pt; a list of people filled the image cache in a
-             * screenful, which is the lag that built up until the app died.
+             * Small avatars decode at the circle's size, not the file's.
+             * Avatars were stored at up to 2048px — about 16 MB each once
+             * decoded — and a list of 24-57pt faces filled the image cache in
+             * a screenful, which is the lag that built up until the app died.
              */
-            enforceEarlyResizing
+            enforceEarlyResizing={decodeEarly}
             style={styles.avatarPhoto}
             contentFit="cover"
           />

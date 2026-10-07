@@ -362,7 +362,9 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
   if (url) {
     return (
       <Image
-        source={{ uri: url, cacheKey: pour.path }}
+        // One key per decode size: SDWebImage 5.21.6 can hand another size's
+        // thumbnail to a frame sharing the plain path key (see Avatar in ui.tsx).
+        source={{ uri: url, cacheKey: `${pour.path}#story` }}
         cachePolicy="memory-disk"
         /*
          * Decoded at the disc's 57pt, not the 2048px upload, so the circles

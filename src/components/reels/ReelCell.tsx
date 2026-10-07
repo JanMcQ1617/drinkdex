@@ -561,7 +561,7 @@ export function ReelCell({
     <View style={[styles.page, { height }]}>
       {posterUrl ? (
         <Image
-          source={{ uri: posterUrl, cacheKey: reel.posterPath }}
+          source={{ uri: posterUrl, cacheKey: `${reel.posterPath}#page` }}
           // Keyed on the path, as PostCard does: the disk copy survives each hour's new signed URL.
           cachePolicy="memory-disk"
           contentFit={fit}

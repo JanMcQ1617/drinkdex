@@ -142,8 +142,12 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
       */}
       {poster ? (
         <Image
-          source={{ uri: poster, cacheKey: video.posterPath }}
-          // Keyed on the path: a signed URL is new every hour, the poster never changes.
+          source={{ uri: poster, cacheKey: `${video.posterPath}#${Math.round(width)}` }}
+          /*
+           * Keyed on the path: a signed URL is new every hour, the poster
+           * never changes. And on the tile's width, so this tile-sized decode
+           * is never handed to the full-screen reel (PostGridTile says how).
+           */
           cachePolicy="memory-disk"
           /*
            * Decoded at the tile's size rather than the poster's full frame;

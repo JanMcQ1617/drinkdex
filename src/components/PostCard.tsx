@@ -728,13 +728,21 @@ export const PostCard = React.memo(function PostCard({
           style={StyleSheet.absoluteFill}>
           {showPhoto ? (
             <Image
-              source={photoUrl ? { uri: photoUrl, cacheKey: current } : undefined}
+              source={
+                photoUrl ? { uri: photoUrl, cacheKey: `${current}#${Math.round(width)}x${mediaH}` } : undefined
+              }
               /*
                * Keyed on the storage path, not the URL. A signed URL carries a
                * fresh token every time it is minted, so keyed on the URL every
                * photo downloaded again after each launch and every hour. A path
                * never changes content — each upload gets a new name — so it is
                * a safe key, and the memory tier spares a remount the decode.
+               *
+               * And on the frame's size: the same path is drawn as a grid tile,
+               * a Dex card and a story, and expo-image's SDWebImage hands a
+               * smaller frame's early-resized decode to the next size that
+               * misses its own entry (PostGridTile says how). This card's own
+               * key keeps it from ever drawing a tile's picture at full width.
                */
               cachePolicy="memory-disk"
               // Pour photos are stored at up to 2048px; decode at the card's width.

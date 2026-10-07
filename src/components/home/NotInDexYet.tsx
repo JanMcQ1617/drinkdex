@@ -205,7 +205,7 @@ function Print({
       <LoosePrint width={PRINT_W} height={PRINT_H}>
         {url && path ? (
           <Image
-            source={{ uri: url, cacheKey: path }}
+            source={{ uri: url, cacheKey: `${path}#print` }}
             cachePolicy="memory-disk"
             // A pour is stored at up to 2048px; decoded at the print's 136pt.
             enforceEarlyResizing
