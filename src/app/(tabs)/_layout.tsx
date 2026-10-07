@@ -1,16 +1,12 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { type ColorValue, Easing } from 'react-native';
-import { useReducedMotion } from 'react-native-reanimated';
+import { type ColorValue } from 'react-native';
 
 import { FloatingTabBar } from '@/components/FloatingTabBar';
 import { Icon, type IconName } from '@/components/icons';
 import { ScrollChromeProvider } from '@/components/ScrollChrome';
 import { colors } from '@/constants/theme';
 import { COPY } from '@/lib/reels';
-
-/** How far a page slides as tabs change, in points. Translate only. */
-const TAB_NUDGE = 24;
 
 /**
  * The top-level destinations: Home · Dex · + · My Bar · Profile, Reels
@@ -42,8 +38,6 @@ const TAB_NUDGE = 24;
  * (5.86:1 on the espresso bar).
  */
 export default function TabLayout() {
-  // A settings read, not a worklet: under Reduce Motion the nudge takes 0ms.
-  const reduceMotion = useReducedMotion();
   return (
     <ScrollChromeProvider>
       <Tabs
@@ -52,46 +46,15 @@ export default function TabLayout() {
           headerShown: false,
           sceneStyle: { backgroundColor: colors.bg },
           /*
-           * A 24pt slide, 180ms, translate ONLY. Opacity is what blanked tabs
-           * (specs/06 cause 2: a native progress value that came to rest away
-           * from 0 left a page at partial opacity, and the 'shift' and 'fade'
-           * presets both fade). Here a progress value that stalls anywhere
-           * leaves the page fully drawn, at most 24pt to one side; the
-           * clamp holds it to that even if the value overshoots.
-           *
-           * `animation` must stay unset: BottomTabView's hasAnimation() reads
-           * `animation` first and only falls back to `transitionSpec` when it
-           * is undefined, so animation: 'none' would switch this off.
-           *
-           * Both pages move the same way, by their places in the bar (a tab
-           * rests at +1 to the right of the focused one, −1 to its left):
-           * going right, the incoming page slides in 24pt from the right
-           * while the outgoing one slides 24pt off to the left, under it
-           * (the focused scene is drawn above the rest, and every scene has
-           * an opaque ground). Inline, so TypeScript infers the interpolator's
-           * argument: the vendored bottom-tabs has no public subpath for it.
-           *
-           * Known and accepted: with any transition configured, BottomTabView
-           * keeps the tabs to the LEFT of the focused one attached (activity
-           * state 1, specs/06 §2). They sit under the focused scene, and
-           * nothing reads their focus but useIsFocused, which is unaffected.
+           * Instant, on purpose. Build 15 tried a 24pt translate-only slide
+           * (transitionSpec + sceneStyleInterpolator) and on Jan's phone it
+           * stalled: the bar moved to My Bar while Dex stayed on screen for
+           * seconds, stuck a few points off to the side, and the new tab
+           * never came in. Any configured transition also makes BottomTabView
+           * keep the tabs left of the focused one attached (specs/06 §2).
+           * Instagram and iOS cut between tabs, and a cut cannot stall.
            */
-          transitionSpec: reduceMotion
-            ? { animation: 'timing', config: { duration: 0 } }
-            : { animation: 'timing', config: { duration: 180, easing: Easing.out(Easing.cubic) } },
-          sceneStyleInterpolator: ({ current }) => ({
-            sceneStyle: {
-              transform: [
-                {
-                  translateX: current.progress.interpolate({
-                    inputRange: [-1, 0, 1],
-                    outputRange: [-TAB_NUDGE, 0, TAB_NUDGE],
-                    extrapolate: 'clamp',
-                  }),
-                },
-              ],
-            },
-          }),
+          animation: 'none',
         }}>
         <Tabs.Screen
           name="index"
