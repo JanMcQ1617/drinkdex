@@ -219,7 +219,11 @@ it. If you connected Facebook, the Sipply profiles of your Facebook friends
 who are here are kept on the phone, with when they were checked, so the
 list is there next time; never a Facebook identifier. Signing out clears
 the Instagram list, the number, the username and the Facebook friends; your
-collection stays.
+collection stays. So the app can offer **Welcome back**, the phone keeps the
+last account's display name, profile photo and the way it signed in (Apple,
+Google, Facebook, phone or email; never the number, the address or a
+password) after you sign out. **Not you? Forget this account** on that
+screen clears it, and deleting the account clears it too.
 
 ## What Sipply does not do
 
