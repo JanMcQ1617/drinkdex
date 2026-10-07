@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply Pick Your Tastes</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* theme.ts tokens, by name */
+:root{
+  --bg:#F7F2EA; --surface:#FFFFFF; --bgSunk:#E9E5DF; --line:#D9CFC1; --lineInk:#2B2322;
+  --text:#2B2322; --textMuted:#6A6058;
+  --wine:#5B0F1A; --taupe:#CBBBA5; --taupeInk:#736247;
+  --mat:#FBF8F2; --lining:#3E0A12; --liningDeep:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --onLiningFaint:#A7837F;
+  --liningLine:rgba(233,229,223,.16); --liningLip:rgba(233,229,223,.14);
+  --matEdge:rgba(14,11,11,.35); --windowEdge:rgba(43,35,34,.16);
+  --slotEdge:rgba(233,229,223,.10); --printEdge:rgba(233,229,223,.22);
+  --reelBar:#2B2322; --reelInk:#FFFDF9; --reelInkDim:#A99E94; --logActionEdge:rgba(233,229,223,.38);
+  --facebook:#0866FF;
+  --seat:0 1px 0 rgba(14,11,11,.45),0 8px 18px rgba(14,11,11,.34);
+  --recess:inset 0 2px 10px rgba(0,0,0,.55),inset 0 -1px 0 rgba(233,229,223,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#161112}
+body{font-family:Inter,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+svg{display:block}
+.wall{display:flex;gap:40px;padding:40px;flex-wrap:wrap}
+body.solo .wall{padding:0;gap:0}
+body.solo .screen{display:none}
+body.solo .screen.on{display:block}
+
+.screen{position:relative;width:440px;height:956px;overflow:hidden;flex:none;
+  background:url(img/grain-lining.png) 0 0/128px 128px repeat,var(--lining)}
+.lining{background:url(img/grain-lining.png) 0 0/128px 128px repeat,var(--lining)}
+.paper{background:url(img/grain-paper.png) 0 0/128px 128px repeat,var(--bg)}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* hardware */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--reelInk)}
+.sb .t{position:absolute;left:46px;top:20px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:23px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--reelInk);z-index:60}
+.hi.ink{background:var(--text)}
+
+/* the pinned bar of the picker: wordmark, and Sign in for people who already have an account */
+.topbar{position:absolute;left:0;right:0;top:0;height:106px;padding-top:62px;z-index:30}
+.topbar.edge{box-shadow:inset 0 -1px 0 var(--liningLine)}
+.wm{position:absolute;left:0;right:0;top:67px;text-align:center;font:700 28px/34px Playfair;color:var(--onLining)}
+.txtbtn{position:absolute;right:6px;top:62px;height:44px;padding:0 10px;display:flex;align-items:center;font:600 16px/20px Inter;color:var(--onLining)}
+
+/* the scrolling picker */
+.content{position:absolute;left:0;right:0;top:0}
+.ask{position:absolute;left:16px;right:16px;top:118px;font:600 28px/34px Inter;color:var(--onLining);letter-spacing:-.3px}
+.asksub{position:absolute;left:16px;right:16px;top:156px;font:400 15px/22px Inter;color:var(--onLiningMuted)}
+
+.cell{position:absolute;width:198px;height:260px}
+/* not picked: a loose print lying in the lining (cabinet.tsx LoosePrint) */
+.print{width:198px;height:206px;border-radius:4px;border:1px solid var(--printEdge);overflow:hidden;background:var(--liningDeep)}
+.print{position:relative}
+.print img,.win img{width:100%;height:100%;object-fit:cover;display:block}
+.add{position:absolute;right:8px;top:8px;width:32px;height:32px;border-radius:4px;background:rgba(14,11,11,.78);border:1px solid rgba(255,253,249,.28);display:grid;place-items:center;color:var(--reelInk)}
+.add svg{width:18px;height:18px}
+.pn{margin-top:10px;font:600 16px/20px Playfair;color:var(--onLining)}
+.pm{margin-top:2px;font:400 12px/16px Inter;color:var(--onLiningMuted);white-space:nowrap}
+/* picked: the same drink mounted in bone card stock (cabinet.tsx Mount, mounted, onLining) */
+.mount{width:198px;height:260px;border-radius:8px;border:1px solid var(--matEdge);background:var(--mat);box-shadow:var(--seat);padding:9px}
+.mount .win{position:relative;height:180px;border-radius:3px;overflow:hidden;background:var(--liningDeep)}
+.mount .win::after{content:"";position:absolute;inset:0;border-radius:3px;box-shadow:inset 0 0 0 1px var(--windowEdge)}
+.mn{margin-top:8px;font:700 17px/21px Playfair;color:var(--text);white-space:nowrap}
+.plates{display:flex;gap:6px;align-items:center;margin-top:5px;height:26px}
+.no{height:20px;padding:0 5px;border:1px solid var(--taupe);border-radius:4px;color:var(--taupeInk);font:500 11px/18px Inter;letter-spacing:1.2px;font-variant-numeric:tabular-nums}
+.tag{height:26px;padding:0 8px;border:1px solid var(--line);border-radius:4px;display:inline-flex;align-items:center;gap:4px;font:500 12px/16px Inter;color:var(--textMuted);white-space:nowrap}
+.tag svg{width:12px;height:12px}
+
+/* the tray: your Dex, pinned above the tab bar */
+.tray{position:absolute;left:0;right:0;top:778px;bottom:0;z-index:35;
+  box-shadow:0 -1px 0 var(--liningLip),0 -4px 24px rgba(14,11,11,.42)}
+.tray .row{position:absolute;left:16px;right:16px;top:12px;height:56px;display:flex;align-items:center}
+.slots{display:flex;gap:8px;flex:none}
+.slot{width:42px;height:56px;border-radius:4px;background:var(--liningDeep);border:1px solid var(--slotEdge);box-shadow:var(--recess);display:grid;place-items:center;color:var(--onLiningFaint)}
+.slot svg{width:18px;height:18px}
+.mini{width:42px;height:56px;border-radius:4px;background:var(--mat);border:1px solid var(--matEdge);box-shadow:var(--seat);padding:3px}
+.mini .win{height:100%;border-radius:2px;overflow:hidden;position:relative}
+.mini .win::after{content:"";position:absolute;inset:0;border-radius:2px;box-shadow:inset 0 0 0 1px var(--windowEdge)}
+.tt{margin-left:14px}
+.tt b{display:block;font:600 16px/22px Inter;color:var(--onLining)}
+.tt span{display:block;font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.cta{margin-left:14px;flex:1;height:48px;border-radius:8px;background:var(--onLining);color:var(--lining);display:flex;align-items:center;justify-content:center;font:600 16px/20px Inter}
+
+/* floating tab bar (FloatingTabBar.tsx): espresso, Home focused */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:64px;background:var(--reelBar);border-radius:12px;
+  border:1px solid rgba(255,253,249,.12);box-shadow:0 4px 14px rgba(14,11,11,.30);display:flex;align-items:stretch;padding:0 6px;z-index:40}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--reelInkDim);font:500 11px/14px Inter;position:relative}
+.tb svg{width:24px;height:24px}
+.tb.on{color:var(--reelInk);font-weight:600}
+.tb.on::before{content:"";position:absolute;top:-1px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--reelInk)}
+.fab{flex:none;align-self:center;width:48px;height:36px;margin:0 4px;border-radius:8px;background:var(--wine);border:1px solid var(--logActionEdge);display:grid;place-items:center;color:var(--onLining)}
+.fab svg{width:22px;height:22px}
+
+/* ---------- the save step: CabinetSheet over the cabinet ---------- */
+.bd-title{position:absolute;left:16px;right:16px;top:84px;text-align:center;font:600 22px/28px Inter;color:var(--onLining)}
+.bd-sub{position:absolute;left:16px;right:16px;top:114px;text-align:center;font:400 15px/22px Inter;color:var(--onLiningMuted)}
+.feat{position:absolute;left:0;right:0;top:150px;display:flex;justify-content:center;align-items:flex-start;gap:14px}
+.fm{width:116px;border-radius:8px;border:1px solid var(--matEdge);background:var(--mat);box-shadow:var(--seat);padding:8px}
+.fm .win{position:relative;height:112px;border-radius:3px;overflow:hidden;background:var(--liningDeep)}
+.fm .win::after{content:"";position:absolute;inset:0;border-radius:3px;box-shadow:inset 0 0 0 1px var(--windowEdge)}
+.fm .n{margin-top:7px;margin-bottom:1px;font:700 15px/19px Playfair;color:var(--text);text-align:center}
+.sheet{position:absolute;left:0;right:0;top:340px;bottom:0;border-radius:12px 12px 0 0;box-shadow:0 -4px 24px rgba(43,35,34,.16);overflow:hidden}
+.stb{position:relative;height:52px;border-bottom:1px solid var(--line)}
+.stb .lead{position:absolute;left:6px;top:4px;width:44px;height:44px;display:grid;place-items:center;color:var(--text)}
+.stb .lead svg{width:24px;height:24px}
+.stb .title{position:absolute;left:0;right:0;top:15px;text-align:center;font:600 17px/22px Inter;color:var(--text)}
+.sbody{padding:18px 16px 0}
+.help{font:400 13px/18px Inter;color:var(--textMuted);text-align:center}
+.ways{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.way{position:relative;height:48px;border-radius:8px;background:var(--surface);border:1px solid var(--lineInk);display:flex;align-items:center;justify-content:center;font:600 16px/20px Inter;color:var(--text)}
+.way .mk{position:absolute;left:15px;top:13px;width:20px;height:20px;display:grid;place-items:center}
+.way .mk svg{width:20px;height:20px}
+/* Apple's black style: its own fill, its logo, its system font */
+.way.apple{background:#000;border-color:#000;color:#fff;font:600 17px/22px -apple-system,"SF Pro Text",system-ui,sans-serif;letter-spacing:-.2px}
+.consent{margin-top:20px;padding:0 8px;font:400 13px/18px Inter;color:var(--textMuted);text-align:center}
+.consent b{font-weight:600;color:var(--wine)}
+
+/* glyph strokes (icons.tsx: 1.75, round caps and joins) */
+.o{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.s{fill:currentColor}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- tab glyphs, copied from src/components/icons.tsx -->
+    <symbol id="i-home-solid" viewBox="0 0 24 24"><path class="s" fill-rule="evenodd" d="M12 2.7a1.4 1.4 0 0 1 .9.3l8.3 6.6a1.4 1.4 0 0 1 .5 1.1v8.7a2.2 2.2 0 0 1-2.2 2.2h-4.6v-5.7a1 1 0 0 0-1-1h-3.8a1 1 0 0 0-1 1v5.7H4.5a2.2 2.2 0 0 1-2.2-2.2v-8.7a1.4 1.4 0 0 1 .5-1.1l8.3-6.6a1.4 1.4 0 0 1 .9-.3z"/></symbol>
+    <symbol id="i-dex" viewBox="0 0 24 24"><g class="o"><path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/></g></symbol>
+    <symbol id="i-bottle" viewBox="0 0 24 24"><g class="o"><path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z"/><path d="M10.4 5.4h3.2"/><path d="M7.2 12.8h9.6"/><path d="M7.2 17h9.6"/></g></symbol>
+    <symbol id="i-profile" viewBox="0 0 24 24"><g class="o"><circle cx="12" cy="8.2" r="3.7"/><path d="M4.9 20.4a7.3 7.3 0 0 1 14.2 0"/></g></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><g class="o" style="stroke-width:2.2"><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path class="o" style="stroke-width:2.2" d="M5 12.6 9.8 17.4 19 6.9"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path class="o" d="M14.6 5.4 8 12l6.6 6.6"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><g class="o"><path d="M4.4 5.6h15.2a1.6 1.6 0 0 1 1.6 1.6v9.6a1.6 1.6 0 0 1-1.6 1.6H4.4a1.6 1.6 0 0 1-1.6-1.6V7.2a1.6 1.6 0 0 1 1.6-1.6Z"/><path d="m3.4 7.1 8.6 6.3 8.6-6.3"/></g></symbol>
+    <!-- new glyph: a handset seen face-on, for "Continue with phone number" -->
+    <symbol id="i-phone" viewBox="0 0 24 24"><g class="o"><rect x="6.6" y="2.7" width="10.8" height="18.6" rx="2.3"/><path d="M10.5 18.3h3"/></g></symbol>
+    <!-- Apple's logo, drawn for this mockup (on the phone it is the system's SF Symbol apple.logo) -->
+    <symbol id="m-apple" viewBox="0 0 100 120"><path fill="currentColor" d="M50 33C44 33 37 27 28 27 14 27 4 39 4 57c0 21 11 44 21 54 4 4 8 7 13 7 6 0 8-3 13-3s7 3 13 3c5 0 9-3 13-8 6-7 9-15 11-21C84 85 76 76 76 63c0-11 7-18 12-21-6-9-15-14-23-14-7 0-11 5-15 5z"/><path fill="currentColor" d="M50 25c-1-11 7-21 18-23 1 11-7 22-18 23z"/></symbol>
+    <!-- Google's "G" and Meta's Facebook mark: the paths the app already draws (icons.tsx GoogleMark, SOLID.facebook) -->
+    <symbol id="m-google" viewBox="0 0 48 48">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    </symbol>
+    <symbol id="m-facebook" viewBox="0 0 24 24"><path fill="#0866FF" d="M9.681 21.353v-6.384H7.702v-2.934h1.979v-1.264c0-3.268 1.478-4.782 4.686-4.782.321 0 .764.034 1.174.082a6.944 6.944 0 0 1 .913.156v2.66a6.898 6.898 0 0 0-.522-.029 21.444 21.444 0 0 0-.586-.007c-.566 0-1.007.077-1.34.247a1.349 1.349 0 0 0-.543.498c-.206.336-.299.796-.299 1.402v1.038h3.135l-.309 1.682-.23 1.251h-2.597v6.596C17.917 20.99 21.6 16.943 21.6 12.035c0-5.302-4.298-9.6-9.6-9.6s-9.6 4.298-9.6 9.6c0 4.502 3.099 8.28 7.281 9.318Z"/></symbol>
+  </defs>
+</svg>
+
+<div class="wall" id="wall"></div>
+
+<script>
+/* Real catalogue drinks (src/data/drinks.json): name, dexNumber, ingredients[0], origin's country. */
+const D = {
+  'pina-colada':      ['Piña Colada', 147, 'White rum', 'Puerto Rico'],
+  'margarita':        ['Margarita', 106, 'Tequila', 'Mexico'],
+  'espresso-martini': ['Espresso Martini', 4, 'Vodka', 'England'],
+  'mojito':           ['Mojito', 23, 'White rum', 'Cuba'],
+  'aperol-spritz':    ['Aperol Spritz', 113, 'Aperol', 'Italy'],
+  'old-fashioned':    ['Old Fashioned', 128, 'Bourbon or rye', 'USA'],
+  'negroni':          ['Negroni', 127, 'Gin', 'Italy'],
+  'paloma':           ['Paloma', 25, 'Tequila', 'Mexico'],
+  'cosmopolitan':     ['Cosmopolitan', 99, 'Citrus vodka', 'USA'],
+  'whiskey-sour':     ['Whiskey Sour', 112, 'Bourbon', 'USA'],
+  'moscow-mule':      ['Moscow Mule', 24, 'Vodka', 'USA'],
+  'daiquiri':         ['Daiquiri', 100, 'White rum', 'Cuba'],
+  'coquito':          ['Coquito', 67, 'White rum', 'Puerto Rico'],
+  'french-75':        ['French 75', 117, 'Gin', 'France'],
+};
+/* The picker's order: two per row. */
+const ORDER = ['pina-colada','margarita','espresso-martini','mojito','aperol-spritz','old-fashioned',
+  'negroni','paloma','cosmopolitan','whiskey-sour','moscow-mule','daiquiri','coquito','french-75'];
+const dex = (n) => '#' + String(n).padStart(4, '0');
+
+const STATUS = `<div class="sb"><span class="t">9:41</span><div class="island"></div>
+  <div class="r"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2l2.2-2.6a3.4 3.4 0 0 0-4.4 0z M2.6 5.6a8.2 8.2 0 0 1 10.8 0l-1.6 1.9a5.7 5.7 0 0 0-7.6 0z M0 2.6a12 12 0 0 1 16 0L14.4 4.5a9.5 9.5 0 0 0-12.8 0z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2.2" y="2.2" width="17" height="8.6" rx="2" fill="currentColor"/><path d="M25 4.5v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/></svg></div></div>`;
+
+const TABBAR = `<nav class="tabbar">
+  <div class="tb on"><svg><use href="#i-home-solid"/></svg>Home</div>
+  <div class="tb"><svg><use href="#i-dex"/></svg>Dex</div>
+  <div class="fab"><svg><use href="#i-plus"/></svg></div>
+  <div class="tb"><svg><use href="#i-bottle"/></svg>My Bar</div>
+  <div class="tb"><svg><use href="#i-profile"/></svg>Profile</div>
+</nav><div class="hi"></div>`;
+
+const COL = [16, 226], ROW0 = 194, PITCH = 274;
+
+function card(id, i, picked, offset) {
+  const [name, n, base, country] = D[id];
+  const x = COL[i % 2], y = ROW0 + Math.floor(i / 2) * PITCH - offset;
+  if (picked) {
+    return `<div class="cell" style="left:${x}px;top:${y}px"><div class="mount">
+      <div class="win"><img src="img/${id}.webp" alt=""></div>
+      <div class="mn">${name}</div>
+      <div class="plates"><span class="no">${dex(n)}</span><span class="tag"><svg><use href="#i-check"/></svg>In your Dex</span></div>
+    </div></div>`;
+  }
+  return `<div class="cell" style="left:${x}px;top:${y}px">
+    <div class="print"><img src="img/${id}.webp" alt=""><span class="add"><svg><use href="#i-plus"/></svg></span></div>
+    <div class="pn">${name}</div><div class="pm">${base} · ${country}</div>
+  </div>`;
+}
+
+function tray(picks) {
+  const slots = [0, 1, 2].map((k) => picks[k]
+    ? `<div class="mini"><div class="win"><img src="img/${picks[k]}.webp" alt=""></div></div>`
+    : `<div class="slot"><svg><use href="#i-dex"/></svg></div>`).join('');
+  const right = picks.length >= 3
+    ? `<div class="cta">Continue</div>`
+    : `<div class="tt"><b>Your Dex</b><span>${picks.length === 0 ? 'Pick three to start it' : `${picks.length} of 3 · one more`}</span></div>`;
+  return `<div class="tray lining"><div class="row"><div class="slots">${slots}</div>${right}</div></div>`;
+}
+
+function picker(id, picks, offset) {
+  const header = offset < 60
+    ? `<div class="ask" style="top:${118 - offset}px">What do you drink?</div>
+       <div class="asksub" style="top:${156 - offset}px">Tap three you’d order again. They start your Dex.</div>` : '';
+  const cards = ORDER.map((d, i) => card(d, i, picks.includes(d), offset)).join('');
+  return `<section class="screen" id="${id}">
+    ${STATUS}
+    <div class="content">${header}${cards}</div>
+    <div class="topbar lining${offset > 0 ? ' edge' : ''}"><div class="wm">Sipply</div><div class="txtbtn">Sign in</div></div>
+    ${tray(picks)}
+    ${TABBAR}
+  </section>`;
+}
+
+function save(id, picks) {
+  const feat = picks.map((d, k) => `<div class="fm" style="margin-top:${k === 1 ? 0 : 14}px">
+      <div class="win"><img src="img/${d}.webp" alt=""></div><div class="n">${D[d][0]}</div></div>`).join('');
+  const way = (cls, mark, label) =>
+    `<div class="way ${cls}"><span class="mk">${mark}</span>${label}</div>`;
+  return `<section class="screen" id="${id}">
+    ${STATUS}
+    <div class="bd-title">Your Dex has begun</div>
+    <div class="bd-sub tnum">3 of 2,089 drinks</div>
+    <div class="feat">${feat}</div>
+    <div class="sheet paper">
+      <div class="stb"><span class="lead"><svg><use href="#i-back"/></svg></span><div class="title">Join Sipply</div></div>
+      <div class="sbody">
+        <div class="help">Already on Sipply? The same buttons sign you in.</div>
+        <div class="ways">
+          ${way('apple', '<svg viewBox="0 0 100 120" style="width:17px;height:20px;color:#fff"><use href="#m-apple"/></svg>', 'Continue with Apple')}
+          ${way('', '<svg><use href="#m-google"/></svg>', 'Continue with Google')}
+          ${way('', '<svg><use href="#m-facebook"/></svg>', 'Continue with Facebook')}
+          ${way('', '<svg style="color:var(--text)"><use href="#i-phone"/></svg>', 'Continue with phone number')}
+          ${way('', '<svg style="color:var(--text)"><use href="#i-mail"/></svg>', 'Continue with email')}
+        </div>
+        <div class="consent">By continuing you confirm you are 18 or older and of legal drinking age where you live, and agree to the <b>Terms of Use</b> and the <b>Privacy Policy</b>.</div>
+      </div>
+    </div>
+    ${TABBAR.replace('<div class="hi"></div>', '<div class="hi ink"></div>')}
+  </section>`;
+}
+
+document.getElementById('wall').innerHTML =
+  picker('first', [], 0) +
+  picker('picking', ['pina-colada', 'mojito'], 0) +
+  picker('ready', ['pina-colada', 'mojito', 'negroni'], 624) +
+  save('save', ['pina-colada', 'mojito', 'negroni']);
+
+const h = location.hash.slice(1);
+if (h) { document.body.classList.add('solo'); const el = document.getElementById(h); if (el) el.classList.add('on'); }
+</script>
+</body>
+</html>

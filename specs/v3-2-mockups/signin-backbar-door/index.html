@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply door</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* theme.ts, the values this screen touches */
+:root{
+  --bg:#F7F2EA; --mat:#FBF8F2; --white:#FFFFFF;
+  --text:#2B2322; --muted:#6A6058; --faint:#8A7F74; --line:#D9CFC1; --lineControl:#8A7F74; --lineInk:#2B2322;
+  --wine:#5B0F1A; --textOnWine:#E9E5DF;
+  --lining:#3E0A12; --cellar:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --liningControl:rgba(233,229,223,.42);
+  --ink:#FFFDF9; --inkShadow:rgba(14,11,11,.6);
+  --scrimMid:rgba(14,11,11,.62); --scrimDeep:rgba(14,11,11,.86);
+  --printEdge:rgba(233,229,223,.22); --matEdge:rgba(14,11,11,.35);
+  --facebook:#0866FF; --googleEdge:#747775; --googleInk:#1F1F1F;
+  --sys:-apple-system,"SF Pro Text","SF Pro",system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#151012}
+body{font-family:Inter,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+
+/* ---------- the overview page (no hash): every frame, live ---------- */
+.board{display:flex;gap:28px;padding:32px;align-items:flex-start}
+.board .phone{border-radius:56px;box-shadow:0 0 0 1px rgba(233,229,223,.14)}
+.board figcaption{font:500 14px/18px Inter;color:#B8A09B;text-align:center;margin-top:12px}
+
+/* ---------- one iPhone 17 Pro Max frame, 440 x 956 pt ---------- */
+.phone{position:relative;width:440px;height:956px;overflow:hidden;background:var(--cellar)}
+body.shot{background:var(--cellar);width:440px;height:956px;overflow:hidden}
+body.shot .board{padding:0;gap:0}
+body.shot .board .phone{border-radius:0;box-shadow:none}
+body.shot figcaption{display:none}
+
+/* the wall: three columns of re-lit prints */
+.wall{position:absolute;inset:0;overflow:hidden}
+.col{position:absolute;top:0;width:148px;will-change:transform}
+.print{position:relative;width:148px;height:185px;margin-bottom:6px;border-radius:8px;overflow:hidden;
+  border:1px solid var(--printEdge);background:var(--cellar)}
+.print img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.print::after{content:"";position:absolute;inset:0;opacity:var(--names,1);
+  background:linear-gradient(to bottom,rgba(14,11,11,0) 52%,var(--scrimMid) 84%,rgba(14,11,11,.78) 100%)}
+.print b{opacity:var(--names,1);position:absolute;left:var(--nl,10px);right:10px;bottom:9px;z-index:1;font:600 14px/18px Playfair;color:var(--ink);
+  text-shadow:0 1px 2px var(--inkShadow)}
+.dim{position:absolute;inset:0;background:var(--cellar);pointer-events:none}
+.topscrim{position:absolute;left:0;right:0;top:0;height:170px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(47,7,13,.97) 0,rgba(47,7,13,.93) 58px,rgba(47,7,13,.66) 104px,rgba(47,7,13,.3) 136px,rgba(47,7,13,0) 172px)}
+
+/* the scroll view: clipped under the status bar + top row (106pt) */
+.scroll{position:absolute;left:0;right:0;top:106px;bottom:0;overflow:hidden}
+.content{position:absolute;left:0;right:0}
+.dissolve{position:absolute;left:0;right:0;height:330px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(47,7,13,0) 0,rgba(47,7,13,.42) 80px,rgba(47,7,13,.74) 135px,rgba(47,7,13,.9) 170px,rgba(47,7,13,.97) 225px,var(--cellar) 255px)}
+.title{position:absolute;left:16px;right:16px;text-align:center}
+.wordmark{font:700 88px/92px Playfair;letter-spacing:-.5px;color:var(--ink);text-shadow:0 1px 2px rgba(14,11,11,.45)}
+.lede{font:400 17px/24px Inter;color:var(--ink);margin-top:8px;text-shadow:0 1px 2px rgba(14,11,11,.45)}
+
+/* the bone card */
+.card{position:absolute;left:0;right:0;height:1200px;background:var(--mat);border-radius:12px 12px 0 0;
+  border-top:1px solid var(--matEdge);box-shadow:0 -10px 30px rgba(0,0,0,.45)}
+.grab{position:absolute;top:9px;left:50%;width:36px;height:4px;margin-left:-18px;border-radius:1px;background:#CBBBA5}
+.stack{position:absolute;left:16px;right:16px;top:28px}
+.btn{height:50px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;
+  font:600 16px/20px Inter;white-space:nowrap}
+.btn svg{flex:none}
+.apple{background:#000;color:#fff;font:500 19px/22px var(--sys);letter-spacing:-.2px;gap:7px}
+.google{background:#fff;color:var(--googleInk);border:1px solid var(--googleEdge)}
+.facebook{background:var(--facebook);color:#fff}
+.email{background:#fff;color:var(--text);border:1px solid var(--lineInk)}
+.more{height:44px;margin-top:-4px;display:flex;align-items:center;gap:12px;font:600 15px/20px Inter;color:var(--text)}
+.more i{flex:1;height:1px;background:var(--line)}
+.more span{display:flex;align-items:center;gap:6px}
+.group{margin-top:8px;border:1px solid var(--lineControl);border-radius:8px;background:#fff;position:relative}
+.row{height:56px;padding:0 16px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.row+.row{border-top:1px solid var(--line)}
+.row small{font:400 13px/18px Inter;color:var(--muted)}
+.row big{font:400 17px/22px Inter;color:var(--text)}
+.row .ph{font:400 17px/22px Inter;color:var(--faint)}
+.row .chev{position:absolute;right:14px;top:18px}
+.ring{position:absolute;left:-2px;right:-2px;top:-1px;bottom:-2px;border:2px solid var(--lineInk);border-radius:0 0 9px 9px;pointer-events:none}
+.caret{display:inline-block;width:2px;height:22px;background:var(--wine);vertical-align:-4px;margin-left:1px}
+.hint{font:400 13px/18px Inter;color:var(--muted);margin-top:8px}
+.primary{height:48px;margin-top:16px;border-radius:8px;background:var(--wine);color:var(--textOnWine);
+  display:flex;align-items:center;justify-content:center;font:600 16px/20px Inter}
+.primary.off{opacity:.42}
+.email{margin-top:12px}
+
+/* pinned consent */
+.foot{position:absolute;left:0;right:0;background:var(--mat);border-top:1px solid var(--line);padding:12px 24px 0}
+.foot p{font:400 13px/18px Inter;color:var(--muted);text-align:center}
+.foot a{font-weight:600;color:var(--wine);text-decoration:none}
+
+/* fixed chrome */
+.status{position:absolute;left:0;right:0;top:0;height:62px;color:#fff;z-index:20}
+.status .time{position:absolute;left:46px;top:19px;font:600 17px/22px var(--sys);letter-spacing:-.3px}
+.status .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.status .right{position:absolute;right:30px;top:21px;display:flex;gap:7px;align-items:center}
+.look{position:absolute;right:16px;top:67px;height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--liningControl);
+  background:rgba(47,7,13,.8);color:var(--onLining);font:600 15px/20px Inter;display:flex;align-items:center;z-index:20}
+.home{position:absolute;bottom:8px;left:50%;width:144px;height:5px;margin-left:-72px;border-radius:3px;background:var(--text);z-index:30}
+
+/* the gesture marker (mockup only) */
+.touch{position:absolute;z-index:25;width:46px;height:46px;border-radius:50%;margin:-23px 0 0 -23px;
+  background:rgba(255,253,249,.30);border:1.5px solid rgba(255,253,249,.85);box-shadow:0 2px 10px rgba(0,0,0,.35)}
+.trail{position:absolute;z-index:24;width:46px;margin-left:-23px;border-radius:23px;
+  background:linear-gradient(to bottom,rgba(255,253,249,.22),rgba(255,253,249,0))}
+
+/* the phone pad (iOS, light) */
+.kb{position:absolute;left:0;right:0;bottom:0;height:270px;background:#D1D4DA;border-radius:22px 22px 0 0;z-index:15}
+.keys{position:absolute;left:6px;right:6px;top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.key{height:47px;border-radius:8px;background:#FDFDFE;box-shadow:0 1px 0 rgba(0,0,0,.28);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font:400 26px/28px var(--sys);color:#000}
+.key em{font:600 10px/12px var(--sys);letter-spacing:1.6px;font-style:normal;margin-top:-1px}
+.key.flat{background:transparent;box-shadow:none;font-size:22px}
+
+/* live drift on the overview page only (screenshots stay still) */
+@keyframes up{from{transform:translateY(var(--y0))}to{transform:translateY(calc(var(--y0) - 1146px))}}
+@keyframes down{from{transform:translateY(calc(var(--y0) - 1146px))}to{transform:translateY(var(--y0))}}
+body.live .col.up{animation:up 96s linear infinite}
+body.live .col.down{animation:down 120s linear infinite}
+@media (prefers-reduced-motion:reduce){body.live .col{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="board" id="board"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Apple's logo, as Apple's native button draws it -->
+    <symbol id="apple" viewBox="0 0 24 24"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+    <!-- Google's G (icons.tsx GoogleMark) -->
+    <symbol id="google" viewBox="0 0 48 48">
+      <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+      <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+      <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+      <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    </symbol>
+    <!-- Facebook's mark (icons.tsx solid facebook): drawn white, the f is the button's blue -->
+    <symbol id="facebook" viewBox="0 0 24 24"><path fill="currentColor" d="M9.681 21.353v-6.384H7.702v-2.934h1.979v-1.264c0-3.268 1.478-4.782 4.686-4.782.321 0 .764.034 1.174.082a6.944 6.944 0 0 1 .913.156v2.66a6.898 6.898 0 0 0-.522-.029 21.444 21.444 0 0 0-.586-.007c-.566 0-1.007.077-1.34.247a1.349 1.349 0 0 0-.543.498c-.206.336-.299.796-.299 1.402v1.038h3.135l-.309 1.682-.23 1.251h-2.597v6.596C17.917 20.99 21.6 16.943 21.6 12.035c0-5.302-4.298-9.6-9.6-9.6s-9.6 4.298-9.6 9.6c0 4.502 3.099 8.28 7.281 9.318Z"/></symbol>
+    <!-- the app's own outline glyphs, 24 grid, 1.75 stroke -->
+    <symbol id="mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 5.6h15.2a1.6 1.6 0 0 1 1.6 1.6v9.6a1.6 1.6 0 0 1-1.6 1.6H4.4a1.6 1.6 0 0 1-1.6-1.6V7.2a1.6 1.6 0 0 1 1.6-1.6Z"/><path d="m3.4 7.1 8.6 6.3 8.6-6.3"/></g></symbol>
+    <symbol id="chev" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" d="M5.4 9.4 12 16l6.6-6.6"/></symbol>
+    <symbol id="del" viewBox="0 0 28 22"><g fill="none" stroke="#000" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M9 2h15a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H9L2 11z"/><path d="m13 7 7 8m0-8-7 8"/></g></symbol>
+  </defs>
+</svg>
+
+<script>
+/* ------------------------------------------------------------------ */
+/* Data: real catalogue drinks (src/data/drinks.json), real photos      */
+/* (assets/drinks, the tungsten re-light).                              */
+/* ------------------------------------------------------------------ */
+const NAMES = {
+  'negroni':'Negroni','zombie':'Zombie','last-word':'Last Word','paloma':'Paloma',
+  'espresso-martini':'Espresso Martini','mai-tai':'Mai Tai','aperol-spritz':'Aperol Spritz',
+  'french-75':'French 75','old-fashioned':'Old Fashioned','margarita':'Margarita',
+  'clover-club':'Clover Club','jungle-bird':'Jungle Bird','aviation':'Aviation','hurricane':'Hurricane'
+};
+/* Three columns, one print size (148 x 185, 4:5) so a repeat shares one decode. */
+const COLS = [
+  { x:-8,  y0:-40,  dir:'up',   k:.18, nl:24, ids:['aperol-spritz','negroni','jungle-bird','last-word','mai-tai','french-75'] },
+  { x:146, y0:-200, dir:'down', k:.34, ids:['espresso-martini','clover-club','zombie','aviation','margarita','hurricane'] },
+  { x:300, y0:-20,  dir:'up',   k:.25, ids:['paloma','old-fashioned','mai-tai','hurricane','french-75','margarita'] },
+];
+const PITCH = 191;            // 185 print + 6 gap
+const SET = PITCH * 6;        // 1146: one set; the column holds it twice for a seamless loop
+
+/* The card's geometry (relative to its top), in points */
+const REST_TOP = 596;         // card top at scroll offset 0 (Pro Max, default text size)
+const OPEN = 296;             // the open detent's offset
+const CLIP = 106;             // the scroll view starts under the status bar + top row
+
+const FRAMES = {
+  door:  { offset:0,   label:'1 · The door, at rest' },
+  swipe: { offset:150, label:'2 · One swipe anywhere', touch:{x:372,y:226,from:372} },
+  ways:  { offset:OPEN,label:'3 · Every way in' },
+  phone: { offset:472, label:'4 · Phone, keyboard up', kb:true },
+};
+
+function statusBar(){
+  return `<div class="status">
+    <div class="time">9:41</div><div class="island"></div>
+    <div class="right">
+      <svg width="19" height="12" viewBox="0 0 19 12"><g fill="#fff"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="3" width="3.2" height="9" rx="1"/><rect x="15" y="0" width="3.2" height="12" rx="1"/></g></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12"><g fill="#fff"><path d="M8.5 2.3c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.4 10.4 0 0 0 8.5.6 10.4 10.4 0 0 0 1.1 3.6l1.2 1.2a8.7 8.7 0 0 1 6.2-2.5z"/><path d="M8.5 5.6c1.5 0 2.9.6 3.9 1.6l1.2-1.2A7.2 7.2 0 0 0 8.5 3.9 7.2 7.2 0 0 0 3.4 6l1.2 1.2a5.5 5.5 0 0 1 3.9-1.6z"/><path d="M8.5 8.9c.6 0 1.2.2 1.6.7L8.5 11.3 6.9 9.6c.4-.5 1-.7 1.6-.7z"/></g></svg>
+      <svg width="28" height="13" viewBox="0 0 28 13"><rect x=".5" y=".5" width="24" height="12" rx="3.6" fill="none" stroke="rgba(255,255,255,.4)"/><rect x="2" y="2" width="21" height="9" rx="2.4" fill="#fff"/><path d="M26 4.4v4.2c.8-.3 1.4-1.2 1.4-2.1s-.6-1.8-1.4-2.1z" fill="rgba(255,255,255,.4)"/></svg>
+    </div></div>`;
+}
+
+function wall(offset){
+  const p = Math.min(offset, OPEN);
+  /* print names fade out over the first 40% of the swipe, so no name ever sits under the title */
+  const names = Math.max(0, 1 - offset / (OPEN * .4));
+  return `<div class="wall" aria-hidden="true" style="--names:${names.toFixed(3)}">` + COLS.map(c => {
+    const prints = [...c.ids, ...c.ids].map(id =>
+      `<div class="print"><img src="img/${id}.webp" alt=""><b>${NAMES[id]}</b></div>`).join('');
+    const y = c.y0 - c.k * p;           // scroll-linked parallax: identity at offset 0
+    return `<div class="col ${c.dir}" style="left:${c.x}px;${c.nl ? `--nl:${c.nl}px;` : ''}--y0:${y}px;transform:translateY(${y}px)">${prints}</div>`;
+  }).join('') + `</div>`;
+}
+
+function card(state){
+  const open = state === 'ways' || state === 'phone';
+  const typed = state === 'phone';
+  return `<div class="card" style="top:VAR_TOP">
+    <div class="grab"></div>
+    <div class="stack">
+      <div class="btn apple"><svg width="17" height="20"><use href="#apple"/></svg>Continue with Apple</div>
+      <div class="btn google"><svg width="20" height="20"><use href="#google"/></svg>Continue with Google</div>
+      <div class="btn facebook"><svg width="22" height="22" style="color:#fff"><use href="#facebook"/></svg>Continue with Facebook</div>
+      <div class="more"><i></i><span>Or use a phone number or email<svg width="18" height="18" style="transform:rotate(${open?0:180}deg)"><use href="#chev"/></svg></span><i></i></div>
+      <div class="group">
+        <div class="row"><small>Country or region</small><big>Puerto Rico (+1)</big><svg class="chev" width="20" height="20" style="color:#2B2322"><use href="#chev"/></svg></div>
+        <div class="row">${typed
+          ? `<small>Phone number</small><big>(787) 555-0142<span class="caret"></span></big><div class="ring"></div>`
+          : `<span class="ph">Phone number</span>`}</div>
+      </div>
+      <p class="hint">We’ll text a 6-digit code to confirm it’s you. Message and data rates may apply.</p>
+      <div class="primary ${typed ? '' : 'off'}">Continue</div>
+      <div class="btn email"><svg width="20" height="20"><use href="#mail"/></svg>Continue with email</div>
+    </div>
+  </div>`;
+}
+
+function keyboard(){
+  const k = [['1',''],['2','ABC'],['3','DEF'],['4','GHI'],['5','JKL'],['6','MNO'],['7','PQRS'],['8','TUV'],['9','WXYZ']];
+  return `<div class="kb" aria-hidden="true"><div class="keys">
+    ${k.map(([d,l]) => `<div class="key">${d}<em>${l || '&nbsp;'}</em></div>`).join('')}
+    <div class="key flat">+ * #</div><div class="key">0<em>&nbsp;</em></div>
+    <div class="key flat"><svg width="28" height="22"><use href="#del"/></svg></div>
+  </div></div>`;
+}
+
+function frame(name){
+  const f = FRAMES[name];
+  const top = REST_TOP - f.offset;                 // card top on screen
+  const p = Math.min(f.offset, OPEN) / OPEN;       // 0 at rest, 1 open
+  const kbH = f.kb ? 270 : 0;
+  const footH = 74 + (f.kb ? 0 : 30);              // consent block; +home-indicator room when no keyboard
+  const footTop = 956 - kbH - footH;
+  const titleTop = top - 172;
+  let html = `<div class="phone" data-frame="${name}">`;
+  html += wall(f.offset);
+  html += `<div class="dissolve" style="top:${REST_TOP - 330}px"></div>`;
+  /* scroll-linked dim: 0 at rest, scrimMid (.62) by half-way, held after */
+  html += `<div class="dim" style="opacity:${(.62 * Math.min(1, f.offset / (OPEN / 2))).toFixed(3)}"></div>`;
+  html += `<div class="topscrim"></div>`;
+  /* the scroll view: everything in it is in screen coordinates minus CLIP */
+  html += `<div class="scroll"><div class="content" style="top:${-CLIP}px">
+      <div class="title" style="top:${titleTop}px"><div class="wordmark">Sipply</div>
+        <p class="lede">2,089 drinks on the wall.<br>Start your Dex with the next one.</p></div>
+      ${card(name).replace('VAR_TOP', top + 'px')}
+    </div></div>`;
+  html += `<div class="foot" style="top:${footTop}px;height:${footH}px"><p>By continuing you confirm you are 18 or older and of legal drinking age where you live, and agree to the <a>Terms of Use</a> and the <a>Privacy Policy</a>.</p></div>`;
+  if (f.kb) html += keyboard();
+  html += statusBar();
+  html += `<div class="look">Look around first</div>`;
+  if (f.touch) {
+    html += `<div class="trail" style="left:${f.touch.x}px;top:${f.touch.y}px;height:${f.touch.from - f.touch.y + 23}px"></div>`;
+    html += `<div class="touch" style="left:${f.touch.x}px;top:${f.touch.y}px"></div>`;
+  }
+  html += `<div class="home" style="${f.kb ? 'background:#000' : ''}"></div>`;
+  html += `</div>`;
+  return html;
+}
+
+const want = location.hash.replace('#','');
+const board = document.getElementById('board');
+if (FRAMES[want]) {
+  document.body.classList.add('shot');
+  board.innerHTML = frame(want);
+} else {
+  document.body.classList.add('live');
+  board.innerHTML = Object.keys(FRAMES).map(n =>
+    `<figure>${frame(n)}<figcaption>${FRAMES[n].label}</figcaption></figure>`).join('');
+}
+</script>
+</body>
+</html>

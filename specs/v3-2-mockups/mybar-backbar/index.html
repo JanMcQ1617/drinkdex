@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Bar, Back bar</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+:root{
+  /* theme.ts, unchanged values */
+  --paper:#F7F2EA; --sunk:#E9E5DF; --surface:#FFFFFF; --line:#D9CFC1; --lineControl:#8A7F74; --lineInk:#2B2322;
+  --ink:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --wine:#5B0F1A; --wineDeep:#3E0A12; --merlot:#7E2330; --wineSoft:#A85A63; --wineWash:#F5E7E7;
+  --mat:#FBF8F2; --lining:#3E0A12; --liningDeep:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --onLiningFaint:#A7837F;
+  --liningLine:rgba(233,229,223,.16); --liningLip:rgba(233,229,223,.14); --liningControl:rgba(233,229,223,.42);
+  --matEdge:rgba(14,11,11,.35); --shade:rgba(14,11,11,.22); --counterLine:rgba(255,253,249,.14);
+  --reelInk:#FFFDF9; --reelInkDim:#A99E94; --reelBar:#2B2322; --reelControlBorder:rgba(255,253,249,.28);
+  --logActionEdge:rgba(233,229,223,.38);
+  /* proposed for the back bar (new tokens, carry no text) */
+  --plankTop:#5A4038;       /* the lit top face of a shelf */
+  --plankFace:#2B2322;      /* the shelf's front edge: the bar's espresso */
+  --backlight:rgba(206,128,82,.26); /* the strip at the back of a shelf, lighting the wall up from behind the bottles */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#151112}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block;overflow:visible}
+.wall{display:flex;gap:40px;padding:40px;align-items:flex-start}
+body.solo .wall{padding:0;gap:0}
+body.solo .screen{display:none}
+body.solo .screen.on{display:block}
+
+.screen{position:relative;width:440px;height:956px;overflow:hidden;flex:none;background:var(--paper);isolation:isolate}
+/* grain: assets/images/grain.png at the ground's opacity (theme.ts grain.paper .35, grain.lining .77) */
+.grain-paper::before,.grain-lining::before{content:"";position:absolute;inset:0;background:url(img/grain.png) 0 0/128px 128px repeat;pointer-events:none;z-index:0}
+.grain-paper::before{opacity:.35}
+.grain-lining::before{opacity:.77}
+.grain-paper>*,.grain-lining>*{position:relative;z-index:1}
+
+/* ---------- hardware ---------- */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--reelInk)}
+.sb.dark{color:var(--ink)}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--ink);z-index:60}
+
+/* ---------- top bar (ScreenTopBar size lg, tone lining) ---------- */
+.topbar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:30;color:var(--onLining)}
+.topbar.ground{background:var(--lining);top:0;height:106px;padding-top:62px}
+.topbar.ground .title{top:71px}
+.topbar.ground .gb{top:62px}
+.topbar.ruled{box-shadow:0 1px 0 var(--liningLine)}
+.topbar .title{position:absolute;left:54px;right:54px;top:9px;text-align:center;font:600 20px/26px Inter}
+.gb{position:absolute;top:0;width:44px;height:44px;display:grid;place-items:center;color:var(--onLining)}
+.gb svg{width:26px;height:26px}
+.gb.r{right:6px}
+
+/* ---------- floating tab bar ---------- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:64px;background:var(--reelBar);border-radius:12px;
+  border:1px solid var(--reelControlBorder);box-shadow:0 4px 14px rgba(14,11,11,.30);display:flex;padding:0 6px;z-index:40}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--reelInkDim);font:500 11px/14px Inter;position:relative}
+.tb .gl{width:28px;height:28px;display:grid;place-items:center}
+.tb svg{width:24px;height:24px}
+.tb.on{color:var(--reelInk);font-weight:600}
+.tb.on::before{content:"";position:absolute;top:-1px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--reelInk)}
+.fab{flex:1;display:grid;place-items:center}
+.fab .box{width:48px;height:36px;border-radius:8px;background:var(--wine);border:1px solid var(--logActionEdge);display:grid;place-items:center;color:var(--onLining)}
+.fab svg{width:22px;height:22px}
+.face{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--reelInkDim);display:grid;place-items:center}
+.face i{width:24px;height:24px;border-radius:50%;background:var(--merlot);color:var(--onLining);font:600 11px/24px Inter;font-style:normal;text-align:center}
+
+/* ---------- the back bar (a LiningBand) ---------- */
+.band{position:relative;background:var(--lining);padding-top:106px}
+.band .lip{position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--liningLip);z-index:3}
+.shadeStrip{height:12px;background:linear-gradient(var(--shade),rgba(14,11,11,0))}
+.intro{padding:6px 16px 4px}
+.intro h2{font:600 22px/28px Inter;color:var(--onLining)}
+.intro p{font:400 15px/22px Inter;color:var(--onLiningMuted);margin-top:4px}
+.intro p b{font-weight:600;color:var(--onLining)}
+
+.shelf{position:relative;padding:0 12px}
+.shelf .wash{position:absolute;left:0;right:0;bottom:var(--plankAt);height:72%;background:linear-gradient(to top,var(--backlight),rgba(206,128,82,0));pointer-events:none}
+.shelf.dark .wash{display:none}
+.bays{position:relative;display:flex;align-items:flex-start;justify-content:space-evenly}
+.bay{display:flex;flex-direction:column;align-items:center;min-width:52px;padding:0 1px;position:relative;flex:none}
+.bay .stand{height:var(--zone);display:flex;align-items:flex-end;justify-content:center;gap:2px}
+.bay .stand svg{margin-bottom:-3px}
+.bay .cap{margin-top:22px;min-height:20px;display:flex;flex-direction:column;align-items:center}
+.plank{position:absolute;left:0;right:0;top:calc(var(--zone) - 2px);z-index:0}
+.plank .ptop{height:6px;background:linear-gradient(var(--plankTop),#6A4C42)}
+.plank .pface{height:10px;background:var(--plankFace);box-shadow:inset 0 1px 0 var(--counterLine),0 1px 0 rgba(0,0,0,.35)}
+.plank .pshade{height:14px;background:linear-gradient(rgba(14,11,11,.34),rgba(14,11,11,0))}
+.bays{z-index:1}
+/* the shelf label: mat card stock, clipped on the shelf's edge (owned) */
+.tag{background:var(--mat);border:1px solid var(--matEdge);border-radius:3px;padding:1px 5px 1px;font:500 12px/16px Inter;color:var(--ink);text-align:center;
+  box-shadow:0 1px 0 rgba(14,11,11,.45);white-space:nowrap;margin-top:-12px}
+/* not on the shelf: no label, just the name on the wall, and what it would pour */
+.ghostname{font:500 12px/16px Inter;color:var(--onLiningMuted);text-align:center;max-width:104px;margin-top:-9px;white-space:nowrap}
+.ghostname b{display:block;font-weight:600;color:var(--onLining)}
+.shelfgap{height:12px}
+
+/* ---------- buttons ---------- */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:8px;font:600 16px/20px Inter;border:1px solid transparent}
+.btn.bone{background:var(--onLining);color:var(--lining);border-color:var(--onLining)}
+.btn.liningText{color:var(--onLining);height:44px}
+.btn.sm{height:36px;padding:0 12px;font-size:14px;line-height:18px}
+.btn.secondary{background:var(--surface);color:var(--ink);border-color:var(--lineInk)}
+.btn svg{width:18px;height:18px}
+.btn.sm svg{width:16px;height:16px}
+.btns{padding:4px 16px 14px}
+.btns.row2{display:flex;gap:10px}
+.btns.row2 .bone{flex:1}
+.btn.outline{color:var(--onLining);border-color:var(--liningControl);padding:0 16px}
+
+/* ---------- the counter (paper) ---------- */
+.counter{position:relative}
+.sec{padding:12px 16px 0;display:flex;align-items:baseline;gap:8px}
+.sec h3{font:600 20px/26px Inter;color:var(--ink)}
+.sec .n{font:600 20px/26px Inter;color:var(--muted);font-variant-numeric:tabular-nums}
+.sec .act{margin-left:auto;font:600 14px/20px Inter;color:var(--wine)}
+.sub{padding:2px 16px 0;font:400 13px/18px Inter;color:var(--muted)}
+.sub .nm,.nmi{font-family:Playfair;font-weight:600;color:var(--ink)}
+.strip{display:flex;gap:10px;padding:12px 16px 0;width:max-content;align-items:stretch}
+.mount{width:124px;background:var(--mat);border:1px solid var(--line);border-radius:6px;padding:11px;display:flex;flex-direction:column}
+.mount .win{width:100px;height:112px;border-radius:2px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(43,35,34,.16)}
+.mount .win img{width:100%;height:100%;object-fit:cover;display:block}
+.mount .name{font:600 16px/20px Playfair;color:var(--ink);margin-top:9px}
+.mount .st{margin-top:auto;padding-top:8px}
+.stag{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 7px;border-radius:4px;font:500 12px/16px Inter;border:1px solid}
+.stag.in{color:var(--muted);border-color:var(--line)}
+.stag.new{color:var(--wine);background:var(--wineWash);border-color:var(--wine)}
+.stag svg{width:12px;height:12px}
+
+/* ghost thumbs (a drink you cannot pour yet: its unlit face) */
+.thumbs{display:flex;gap:10px;padding:12px 16px 0}
+.thumb{width:84px}
+.thumb .m{width:84px;height:84px;background:var(--mat);border:1px solid var(--line);border-radius:4px;padding:3px}
+.thumb .m img{width:100%;height:100%;object-fit:cover;border-radius:2px;display:block}
+.thumb .nm{font:600 13px/17px Playfair;color:var(--ink);margin-top:6px}
+.thumbs.small .thumb{width:76px}
+.thumbs.small .thumb .m{width:76px;height:76px}
+.thumb.more .m{background:var(--sunk);display:grid;place-items:center;font:500 13px/18px Inter;color:var(--muted);text-align:center}
+
+/* one thing short */
+.card{margin:12px 16px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 14px 14px}
+.grow{display:flex;gap:12px;align-items:center}
+.bwin{width:44px;height:56px;border-radius:4px;background:var(--lining);border:1px solid rgba(14,11,11,.35);display:grid;place-items:end center;padding-bottom:5px;flex:none;overflow:hidden;position:relative}
+.bwin.sm{width:40px;height:52px}
+.gtext{flex:1;min-width:0}
+.gtext .t{font:600 16px/22px Inter;color:var(--ink)}
+.gtext .s{font:400 13px/18px Inter;color:var(--muted);margin-top:1px}
+.card .thumbs{padding:12px 0 0;gap:8px}
+.card .thumb{width:76px}
+.card .thumb .m{width:76px;height:76px}
+.group{margin:12px 16px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.group .row{display:flex;gap:12px;align-items:center;padding:10px 12px 10px 14px;min-height:72px;position:relative}
+.group .row+.row::before{content:"";position:absolute;top:0;left:66px;right:0;height:.5px;background:var(--line)}
+
+/* ---------- sheet ---------- */
+.scrim{position:absolute;inset:0;background:rgba(14,11,11,.45);z-index:45}
+.sheet{position:absolute;left:0;right:0;top:66px;bottom:0;background:var(--paper);border-radius:12px 12px 0 0;z-index:46;overflow:hidden;box-shadow:0 -4px 24px rgba(43,35,34,.16)}
+.sheet .bar{height:56px;position:relative}
+.sheet .bar .title{position:absolute;left:80px;right:80px;top:20px;text-align:center;font:600 17px/22px Inter}
+.sheet .bar .done{position:absolute;right:16px;top:20px;font:600 17px/22px Inter;color:var(--wine)}
+.search{margin:4px 16px 0;height:44px;border-radius:8px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;gap:8px;padding:0 12px;font:400 16px/22px Inter;color:var(--muted)}
+.search svg{width:20px;height:20px;color:var(--muted)}
+.chips{display:flex;gap:8px;padding:12px 16px 0;width:max-content}
+.chip{height:32px;display:flex;align-items:center;gap:6px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font:500 13px/18px Inter;color:var(--ink)}
+.chip.on{background:var(--wineWash);border-color:var(--wine);color:var(--wine);font-weight:600}
+.chip svg{width:14px;height:14px}
+.gtitle{padding:18px 16px 0;font:600 14px/20px Inter;color:var(--ink);display:flex;align-items:baseline;gap:6px}
+.gtitle span{font-weight:400;color:var(--muted)}
+.ghelp{padding:2px 16px 0;font:400 13px/18px Inter;color:var(--muted)}
+.list{margin:10px 16px 0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.list .row{display:flex;gap:12px;align-items:center;padding:8px 12px 8px 12px;min-height:68px;position:relative}
+.list .row+.row::before{content:"";position:absolute;top:0;left:64px;right:0;height:.5px;background:var(--line)}
+.onshelf{height:36px;display:flex;align-items:center;gap:6px;padding:0 12px;border-radius:8px;border:1px solid var(--wine);background:var(--wineWash);color:var(--wine);font:600 14px/18px Inter}
+.onshelf svg{width:16px;height:16px}
+</style>
+</head>
+<body>
+<div class="wall" id="wall"></div>
+
+<script>
+/* ====================================================================
+   Bottle art. One set of shapes for every state: LIT (on the shelf:
+   glass, liquid, label, cap, lit from the strip behind it) and GHOST
+   (not on the shelf: the same silhouette blind-stamped into the lining,
+   debossLight on the upper edge, debossShadow on the lower, as the
+   locked vector glasses do). In the app this is react-native-svg.
+   ==================================================================== */
+let SEQ = 0;
+const id = (p) => `${p}${++SEQ}`;
+
+/* Forms: w x h in points, cap, neck, shoulder, and its shoulder style. */
+const FORMS = {
+  tall:    { w: 34, h: 92, capW: 12, capH: 9,  neckW: 10, neckH: 14, sh: 13, style: 'round' },
+  slim:    { w: 30, h: 98, capW: 11, capH: 10, neckW: 9,  neckH: 24, sh: 16, style: 'round' },
+  square:  { w: 36, h: 86, capW: 14, capH: 9,  neckW: 12, neckH: 9,  sh: 5,  style: 'flat'  },
+  whiskey: { w: 40, h: 80, capW: 15, capH: 10, neckW: 12, neckH: 8,  sh: 5,  style: 'flat'  },
+  rye:     { w: 35, h: 86, capW: 13, capH: 10, neckW: 11, neckH: 13, sh: 6,  style: 'flat'  },
+  wine:    { w: 30, h: 96, capW: 9,  capH: 11, neckW: 8.5,neckH: 22, sh: 22, style: 'round' },
+  aperitif:{ w: 30, h: 90, capW: 10, capH: 9,  neckW: 9,  neckH: 20, sh: 20, style: 'round' },
+  squat:   { w: 36, h: 78, capW: 13, capH: 9,  neckW: 11, neckH: 8,  sh: 6,  style: 'flat'  },
+  agave:   { w: 36, h: 90, capW: 13, capH: 10, neckW: 11, neckH: 14, sh: 14, style: 'round' },
+  dasher:  { w: 22, h: 54, capW: 9,  capH: 8,  neckW: 7,  neckH: 5,  sh: 8,  style: 'round', r: 2 },
+  small:   { w: 26, h: 52, capW: 9,  capH: 8,  neckW: 8,  neckH: 6,  sh: 10, style: 'round', r: 2.5 },
+};
+
+function geom(name) {
+  const F = FORMS[name];
+  const { w, h, capW, capH, neckW, neckH, sh, style } = F;
+  const r = F.r ?? 3;
+  const cx = w / 2, x1 = cx - neckW / 2, x2 = cx + neckW / 2, yN = capH + neckH, yB = yN + sh;
+  const L = 0.5, R = w - 0.5;
+  let d;
+  if (style === 'flat') {
+    const k = 4;
+    d = `M${x1} ${capH}V${yN}Q${x1} ${yB} ${x1 - k} ${yB}H${L + k}Q${L} ${yB} ${L} ${yB + k}V${h - r}Q${L} ${h} ${L + r} ${h}H${R - r}Q${R} ${h} ${R} ${h - r}V${yB + k}Q${R} ${yB} ${R - k} ${yB}H${x2 + k}Q${x2} ${yB} ${x2} ${yN}V${capH}Z`;
+  } else {
+    d = `M${x1} ${capH}V${yN}C${x1} ${yN + sh * 0.55} ${L} ${yN + sh * 0.35} ${L} ${yB}V${h - r}Q${L} ${h} ${L + r} ${h}H${R - r}Q${R} ${h} ${R} ${h - r}V${yB}C${R} ${yN + sh * 0.35} ${x2} ${yN + sh * 0.55} ${x2} ${yN}V${capH}Z`;
+  }
+  const cap = { x: cx - capW / 2, y: 0, w: capW, h: capH + 0.6 };
+  return { w, h, d, cap, cx, yN, yB, x1, x2 };
+}
+
+/* Per-ingredient look: the form, the glass, the liquid (top, foot), how full, the label and the cap. */
+const ART = {
+  gin:       { form: 'square', glass: 'rgba(170,206,196,.22)', liq: ['rgba(222,238,230,.62)', 'rgba(176,206,196,.58)'], fill: .8,
+               label: { y: .22, h: .46, c: '#FBF8F2', band: '#3F5E57', lines: 2 }, cap: '#8F8A84' },
+  vodka:     { form: 'slim', glass: 'rgba(233,229,223,.22)', liq: ['rgba(240,238,232,.22)', 'rgba(220,218,212,.30)'], fill: .82,
+               label: { y: .30, h: .30, c: '#FBF8F2', band: null, lines: 2 }, cap: '#1E1716' },
+  'white-rum': { form: 'tall', glass: 'rgba(233,225,205,.20)', liq: ['rgba(246,240,224,.62)', 'rgba(222,210,184,.58)'], fill: .78,
+               label: { y: .26, h: .40, c: '#EFE4CF', band: '#2F5C6A', lines: 2 }, cap: '#2B2322' },
+  bourbon:   { form: 'whiskey', glass: 'rgba(233,225,205,.20)', liq: ['#C77A2E', '#7A3A10'], fill: .8,
+               label: { y: .30, h: .42, c: '#F1E7D3', band: '#2B2322', lines: 2 }, cap: '#6E1520', wax: true },
+  'rye-whiskey': { form: 'rye', glass: 'rgba(233,225,205,.20)', liq: ['#B85E2A', '#6A2A0E'], fill: .78,
+               label: { y: .24, h: .46, c: '#1E1716', band: '#C9B08A', lines: 2, dark: true }, cap: '#1E1716' },
+  tequila:   { form: 'agave', glass: 'rgba(233,225,205,.20)', liq: ['rgba(240,222,164,.66)', 'rgba(210,180,104,.66)'], fill: .8,
+               label: { y: .34, h: .34, c: '#FBF8F2', band: '#7A3A2A', lines: 1 }, cap: '#9C7A55', cork: true },
+  campari:   { form: 'aperitif', glass: 'rgba(233,225,205,.22)', liq: ['#C8202A', '#7E0A12'], fill: .82,
+               label: { y: .34, h: .30, c: '#FBF8F2', band: null, lines: 2 }, cap: '#1E1716' },
+  'sweet-vermouth': { form: 'wine', glass: 'rgba(48,20,16,.92)', liq: ['rgba(70,22,16,.9)', 'rgba(50,14,10,.95)'], fill: .9,
+               label: { y: .30, h: .48, c: '#EFE4CF', band: '#7E2330', lines: 2 }, cap: '#7E2330' },
+  'dry-vermouth': { form: 'wine', glass: 'rgba(140,160,104,.50)', liq: ['rgba(226,220,160,.50)', 'rgba(196,196,130,.62)'], fill: .82,
+               label: { y: .30, h: .48, c: '#FBF8F2', band: '#4F6A3A', lines: 2 }, cap: '#8F8A84' },
+  'triple-sec': { form: 'squat', glass: 'rgba(206,112,40,.62)', liq: ['rgba(232,150,70,.55)', 'rgba(170,80,24,.75)'], fill: .82,
+               label: { y: .40, h: .26, c: '#FBF8F2', band: null, lines: 1 }, cap: '#1E1716' },
+  'angostura-bitters': { form: 'dasher', glass: 'rgba(60,30,18,.85)', liq: ['#5A2A14', '#2E1208'], fill: .9,
+               label: { y: .02, h: .92, c: '#F1E7D3', band: null, lines: 3 }, cap: '#8A1A1A' },
+  'sugar-syrup': { form: 'small', glass: 'rgba(233,229,223,.20)', liq: ['rgba(250,244,228,.62)', 'rgba(226,214,186,.62)'], fill: .72,
+               label: { y: .36, h: .30, c: '#FBF8F2', band: null, lines: 1 }, cap: '#9C7A55', cork: true },
+  grenadine: { form: 'small', glass: 'rgba(233,229,223,.26)', liq: ['#B0182A', '#6A0812'], fill: .8,
+               label: { y: .36, h: .30, c: '#FBF8F2', band: null, lines: 1 }, cap: '#1E1716' },
+  'white-wine': { form: 'wine', glass: 'rgba(140,160,104,.50)', liq: ['rgba(232,220,150,.38)', 'rgba(200,190,110,.50)'], fill: .8,
+               label: { y: .32, h: .40, c: '#FBF8F2', band: null, lines: 2 }, cap: '#C9BFA9' },
+  absinthe:  { form: 'tall', glass: 'rgba(130,170,100,.40)', liq: ['rgba(150,190,100,.50)', 'rgba(90,130,60,.62)'], fill: .8,
+               label: { y: .26, h: .40, c: '#FBF8F2', band: null, lines: 2 }, cap: '#1E1716' },
+  'scotch-whisky': { form: 'whiskey', glass: 'rgba(233,225,205,.20)', liq: ['#C08A3A', '#7A4A14'], fill: .8,
+               label: { y: .30, h: .42, c: '#FBF8F2', band: '#2B2322', lines: 2 }, cap: '#1E1716' },
+  brandy:    { form: 'squat', glass: 'rgba(233,225,205,.20)', liq: ['#B5682A', '#6E3410'], fill: .8,
+               label: { y: .34, h: .34, c: '#F1E7D3', band: null, lines: 2 }, cap: '#2B2322' },
+  applejack: { form: 'tall', glass: 'rgba(233,225,205,.20)', liq: ['#C98A3E', '#80501A'], fill: .78,
+               label: { y: .28, h: .40, c: '#FBF8F2', band: '#6E1520', lines: 2 }, cap: '#2B2322' },
+  cognac:    { form: 'squat', glass: 'rgba(233,225,205,.20)', liq: ['#A85A22', '#5E2A0C'], fill: .8,
+               label: { y: .32, h: .34, c: '#1E1716', band: null, lines: 2, dark: true }, cap: '#1E1716' },
+};
+
+/* The silhouette and the paint of one bottle. */
+function bottleLit(key, s = 1) {
+  const a = ART[key], g = geom(a.form);
+  const { w, h, d, cap, cx, yB } = g;
+  const c = id('c'), lq = id('l'), cy = id('y'), hl = id('h'), bl = id('b'), fb = id('f');
+  const bodyH = h - yB;
+  const ly = yB + bodyH * (1 - a.fill);
+  const lab = a.label;
+  const labY = yB + bodyH * lab.y, labH = bodyH * lab.h, inset = a.form === 'dasher' ? 1.2 : 3;
+  let labelSvg = `<rect x="${inset}" y="${labY}" width="${w - inset * 2}" height="${labH}" rx="1" fill="${lab.c}"/>`;
+  if (lab.band) labelSvg += `<rect x="${inset}" y="${labY + labH * 0.62}" width="${w - inset * 2}" height="${Math.max(2.2, labH * 0.14)}" fill="${lab.band}"/>`;
+  /* A printed label with no words on it: an inner rule and a small device, so it
+     reads as a label at arm's length and never as placeholder text. */
+  const lineInk = lab.dark ? 'rgba(233,229,223,.55)' : 'rgba(43,35,34,.38)';
+  const lw = w - inset * 2;
+  if (labH > 9) labelSvg += `<rect x="${inset + 1.4}" y="${labY + 1.4}" width="${lw - 2.8}" height="${labH - 2.8}" rx=".6" fill="none" stroke="${lineInk}" stroke-width=".55"/>`;
+  const dy0 = labY + labH * (lab.band ? 0.34 : 0.5);
+  const r0 = Math.min(2.6, labH * 0.16);
+  labelSvg += `<path d="M${cx} ${dy0 - r0}L${cx + r0} ${dy0}L${cx} ${dy0 + r0}L${cx - r0} ${dy0}Z" fill="${lab.dark ? 'rgba(233,229,223,.7)' : (lab.band || '#7E2330')}" fill-opacity=".85"/>`;
+  if (lab.lines > 1 && labH > 14) labelSvg += `<rect x="${cx - lw * 0.22}" y="${dy0 + r0 + 2.2}" width="${lw * 0.44}" height=".7" fill="${lineInk}"/>`;
+  const capFill = a.cap;
+  let capSvg = `<rect x="${cap.x}" y="${cap.y}" width="${cap.w}" height="${cap.h}" rx="${a.cork ? 2 : 1.5}" fill="${capFill}"/>`
+    + `<rect x="${cap.x + 1.5}" y="1" width="1.2" height="${cap.h - 2}" fill="rgba(255,253,249,.22)"/>`;
+  if (a.wax) capSvg += `<path d="M${cap.x} ${cap.h - 1}h${cap.w}v2.2c-1.6 0-1.6 3.6-3.2 3.6s-1.2-2.4-2.8-2.4-1.4 4.4-3.1 4.4-1.4-3.2-2.9-3.2S${cap.x + 1.2} ${cap.h + 2.6} ${cap.x} ${cap.h + 2.6}z" fill="${capFill}"/>`;
+  const W = (w + 12) * s, H = (h + 5) * s;
+  return `<svg width="${W}" height="${H}" viewBox="-6 -1 ${w + 12} ${h + 6}" aria-hidden="true">
+  <defs>
+    <clipPath id="${c}"><path d="${d}"/></clipPath>
+    <linearGradient id="${lq}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a.liq[0]}"/><stop offset="1" stop-color="${a.liq[1]}"/></linearGradient>
+    <linearGradient id="${cy}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset=".24" stop-color="#000" stop-opacity="0"/><stop offset=".68" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".48"/></linearGradient>
+    <linearGradient id="${hl}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFDF9" stop-opacity=".55"/><stop offset="1" stop-color="#FFFDF9" stop-opacity="0"/></linearGradient>
+    <linearGradient id="${bl}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFC48A" stop-opacity=".30"/><stop offset="1" stop-color="#FFC48A" stop-opacity="0"/></linearGradient>
+    <filter id="${fb}" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="1.3"/></filter>
+  </defs>
+  <ellipse cx="${cx}" cy="${h + 0.6}" rx="${w * 0.56}" ry="2.2" fill="#000" fill-opacity=".55" filter="url(#${fb})"/>
+  <path d="${d}" fill="${a.glass}"/>
+  <g clip-path="url(#${c})">
+    <rect x="0" y="${ly}" width="${w}" height="${h - ly}" fill="url(#${lq})"/>
+    <rect x="0" y="${ly}" width="${w}" height="0.8" fill="rgba(255,253,249,.25)"/>
+    <rect x="0" y="${h - bodyH * 0.45}" width="${w}" height="${bodyH * 0.45}" fill="url(#${bl})"/>
+    ${labelSvg}
+    <rect x="0" y="0" width="${w}" height="${h}" fill="url(#${cy})"/>
+    <rect x="${w * 0.17}" y="${yB + 3}" width="2.2" height="${bodyH * 0.78}" rx="1.1" fill="url(#${hl})"/>
+    <rect x="${g.x1 + 1.2}" y="${cap.h + 1}" width="1.3" height="${g.yN - cap.h + 2}" fill="rgba(255,253,249,.30)"/>
+  </g>
+  <path d="${d}" fill="none" stroke="rgba(255,253,249,.34)" stroke-width=".8"/>
+  ${capSvg}
+</svg>`;
+}
+
+/* The same silhouette, blind-stamped into the lining. */
+function debossed(paths, w, h, s) {
+  const W = (w + 12) * s, H = (h + 5) * s;
+  const draw = (fill, stroke, dy) => paths.map((p) => `<path d="${p}" stroke-linecap="round" transform="translate(0 ${dy / s})" fill="${fill}" stroke="${stroke}" stroke-width="1" vector-effect="non-scaling-stroke"/>`).join('');
+  return `<svg width="${W}" height="${H}" viewBox="-6 -1 ${w + 12} ${h + 6}" aria-hidden="true">
+    ${draw('none', 'rgba(0,0,0,.55)', 0.9)}
+    ${draw('rgba(0,0,0,.16)', 'rgba(233,229,223,.28)', 0)}
+  </svg>`;
+}
+function bottleGhost(key, s = 1) {
+  const g = geom(ART[key].form);
+  const capD = `M${g.cap.x} ${g.cap.h}V1.5Q${g.cap.x} 0 ${g.cap.x + 1.5} 0H${g.cap.x + g.cap.w - 1.5}Q${g.cap.x + g.cap.w} 0 ${g.cap.x + g.cap.w} 1.5V${g.cap.h}Z`;
+  return debossed([g.d, capD], g.w, g.h, s);
+}
+
+/* Fresh things on the rail: fruit, a sprig in a glass, a soda siphon. */
+const FRESH = {
+  lemon: { w: 30, h: 22, paths: ['M1.5 12C1.5 6.5 7 2.5 15 2.5S28.5 6.5 28.5 12 23 21.5 15 21.5 1.5 17.5 1.5 12Z', 'M1.5 12H0M28.5 12H30'] },
+  lime: { w: 40, h: 22, paths: ['M2 12.5a9 9 0 1 0 18 0a9 9 0 1 0-18 0Z', 'M21.5 13a8.5 8.5 0 1 0 17 0a8.5 8.5 0 1 0-17 0Z'] },
+  orange: { w: 30, h: 28, paths: ['M2.5 15.5a12.5 12.5 0 1 0 25 0a12.5 12.5 0 1 0-25 0Z', 'M16.4 1.6c3-1.8 6.4-1.2 7.6.6-2.8 1.4-5.6 1.2-7.6-.6Z'] },
+  grapefruit: { w: 34, h: 30, paths: ['M2 16.5a15 13.5 0 1 0 30 0a15 13.5 0 1 0-30 0Z', 'M17 3c.4-1.4 1.2-2.2 2.2-2.6', 'M7.5 12.5c1.6-3 4.4-5 7.6-5.6'] },
+  mint: { w: 30, h: 50, paths: ['M4 24h22l-2 25.5H6Z', 'M15 24 12 6M15 24l5-16M15 24V9'] },
+  'soda-water': { w: 32, h: 70, paths: ['M5 24h20v44a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z', 'M6 24V16c0-5 4-9 9-9s9 4 9 9v8Z', 'M24 14h7v3.5h-7Z'] },
+};
+function freshLit(key, s = 1) {
+  const f = FRESH[key];
+  const gr = id('g'), hl = id('h'), fb = id('f'), cl = id('c');
+  const W = (f.w + 12) * s, H = (f.h + 5) * s;
+  const wrap = (inner, shadowW) => `<svg width="${W}" height="${H}" viewBox="-6 -1 ${f.w + 12} ${f.h + 6}" aria-hidden="true">
+    <defs><filter id="${fb}" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="1.3"/></filter></defs>
+    <ellipse cx="${f.w / 2}" cy="${f.h + 0.4}" rx="${shadowW}" ry="2" fill="#000" fill-opacity=".55" filter="url(#${fb})"/>${inner}</svg>`;
+  const fruit = (d, top, foot, extra = '') => `
+    <defs><linearGradient id="${gr}" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${foot}"/></linearGradient>
+    <radialGradient id="${hl}" cx=".32" cy=".28" r=".5"><stop offset="0" stop-color="#FFFDF9" stop-opacity=".42"/><stop offset="1" stop-color="#FFFDF9" stop-opacity="0"/></radialGradient></defs>
+    <path d="${d}" fill="url(#${gr})"/><path d="${d}" fill="url(#${hl})"/><path d="${d}" fill="none" stroke="rgba(14,11,11,.35)" stroke-width=".7"/>${extra}`;
+  if (key === 'lemon') return wrap(fruit(f.paths[0], '#E9C657', '#9E7A22', '<path d="M1.5 12l-1.4.4M28.5 12l1.4-.4" stroke="#B89332" stroke-width="2" stroke-linecap="round"/>'), 12);
+  if (key === 'orange') return wrap(fruit(f.paths[0], '#E59440', '#9A4E16', '<path d="M15 3.2c.3-1.6 1-2.6 2-3" stroke="#4A3A22" stroke-width="1.2" stroke-linecap="round" fill="none"/><path d="M16.4 1.6c3-1.8 6.4-1.2 7.6.6-2.8 1.4-5.6 1.2-7.6-.6Z" fill="#5B7A3A"/>'), 12);
+  if (key === 'lime') {
+    const g2 = id('g');
+    const seg = [0, 45, 90, 135].map((r) => `<path d="M30 7v12" transform="rotate(${r} 30 13)" stroke="rgba(255,253,249,.7)" stroke-width=".7"/>`).join('');
+    return wrap(`${fruit(f.paths[0], '#8FAE4E', '#4E6A26')}
+      <defs><radialGradient id="${g2}" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#E4E8B0"/><stop offset="1" stop-color="#AEBB62"/></radialGradient></defs>
+      <path d="${f.paths[1]}" fill="#557528" stroke="rgba(14,11,11,.35)" stroke-width=".7"/>
+      <circle cx="30" cy="13" r="6.9" fill="url(#${g2})"/>${seg}<circle cx="30" cy="13" r="1" fill="rgba(255,253,249,.8)"/>`, 17);
+  }
+  if (key === 'mint') {
+    const g2 = id('g');
+    /* A mint leaf: pointed, serrated only by its vein, drawn from the stem out. */
+    const leaf = (x, y, r, sc = 1) => `<g transform="translate(${x} ${y}) rotate(${r}) scale(${sc})">
+      <path d="M0 0C2.4-3.6 7.6-3.8 10.4 0C7.6 3.8 2.4 3.6 0 0Z" fill="#5E8C44" stroke="#2F4E22" stroke-width=".5"/>
+      <path d="M.6 0H9" stroke="rgba(214,232,190,.55)" stroke-width=".5"/></g>`;
+    return wrap(`<defs><linearGradient id="${g2}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgba(233,229,223,.10)"/><stop offset="1" stop-color="rgba(233,229,223,.26)"/></linearGradient></defs>
+      <path d="M15 26 12 7M15 26l5-17M15 26V10" stroke="#3E6A2C" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+      ${leaf(13, 15, -150)}${leaf(12.4, 10, -115, .95)}${leaf(14.6, 4.6, -95, .8)}
+      ${leaf(17, 15, -30)}${leaf(18.6, 9.6, -60, .95)}${leaf(15.4, 8, -80, .75)}${leaf(14.8, 20, 160, .85)}${leaf(15.4, 20.4, 20, .85)}
+      <path d="M4 24h22l-2 25.5H6Z" fill="url(#${g2})" stroke="rgba(255,253,249,.36)" stroke-width=".8"/>
+      <path d="M5.2 32h19.6l-1.3 17.5H6.5Z" fill="rgba(200,220,210,.16)"/>
+      <rect x="7.4" y="27" width="1.6" height="19" rx=".8" fill="rgba(255,253,249,.32)"/>`, 13);
+  }
+  if (key === 'soda-water') {
+    const m = id('m'), gl = id('g');
+    return wrap(`<defs>
+      <linearGradient id="${m}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6E6862"/><stop offset=".35" stop-color="#C9C2B9"/><stop offset="1" stop-color="#5E5853"/></linearGradient>
+      <linearGradient id="${gl}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="rgba(120,160,180,.55)"/><stop offset=".3" stop-color="rgba(160,196,210,.30)"/><stop offset="1" stop-color="rgba(90,130,150,.60)"/></linearGradient></defs>
+      <path d="M5 24h20v44a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z" fill="url(#${gl})" stroke="rgba(255,253,249,.34)" stroke-width=".8"/>
+      <path d="M5 30h20M5 38h20M5 46h20M5 54h20M5 62h20" stroke="rgba(14,11,11,.22)" stroke-width=".6"/>
+      <rect x="8.2" y="26" width="1.8" height="40" rx=".9" fill="rgba(255,253,249,.30)"/>
+      <path d="M6 24V16c0-5 4-9 9-9s9 4 9 9v8Z" fill="url(#${m})"/>
+      <path d="M24 14h7v3.5h-7Z" fill="url(#${m})"/><path d="M12 7.4 22 2.6l1 1.8-8.6 5.4Z" fill="#8F8984"/>
+      <rect x="4.2" y="22.6" width="21.6" height="2.6" rx="1" fill="#4A4440"/>`, 13);
+  }
+  if (key === 'grapefruit') return wrap(fruit(f.paths[0], '#E8925E', '#A04A2A'), 14);
+  return '';
+}
+function freshGhost(key, s = 1) { const f = FRESH[key]; return debossed(f.paths, f.w, f.h, s); }
+
+const isFresh = (k) => k in FRESH;
+const art = (k, mode, s = 1) => (isFresh(k) ? (mode === 'lit' ? freshLit(k, s) : freshGhost(k, s)) : (mode === 'lit' ? bottleLit(k, s) : bottleGhost(k, s)));
+
+/* ====================================================================
+   Glyphs, from src/components/icons.tsx (24 grid, 1.75 stroke)
+   ==================================================================== */
+const sv = (inner, filled) => `<svg viewBox="0 0 24 24" fill="${filled ? 'currentColor' : 'none'}" stroke="${filled ? 'none' : 'currentColor'}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+const G = {
+  home: sv('<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>'),
+  dex: sv('<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>'),
+  plus: sv('<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>'),
+  plusBold: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></svg>`,
+  bottleSolid: sv('<path fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/>', true),
+  search: sv('<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>'),
+  check: sv('<path d="M5 12.6 9.8 17.4 19 6.9"/>'),
+  checkBold: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6 9.8 17.4 19 6.9"/></svg>`,
+};
+
+/* ====================================================================
+   Chrome
+   ==================================================================== */
+const statusBar = (dark) => `<div class="sb${dark ? ' dark' : ''}"><div class="t">9:41</div><div class="island"></div>
+  <div class="r">
+    <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx=".8" fill="currentColor"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8" fill="currentColor"/><rect x="10" y="3" width="3.2" height="9" rx=".8" fill="currentColor"/><rect x="15" y="0" width="3.2" height="12" rx=".8" fill="currentColor"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.4c2.4 0 4.6.9 6.3 2.5l1.2-1.2C14 1.8 11.4.7 8.5.7S3 1.8 1 3.7l1.2 1.2C3.9 3.3 6.1 2.4 8.5 2.4Zm0 3.4c1.5 0 2.8.5 3.9 1.5l1.2-1.2C12.2 4.8 10.4 4.1 8.5 4.1S4.8 4.8 3.4 6.1l1.2 1.2c1.1-1 2.4-1.5 3.9-1.5Zm0 3.4c.6 0 1.1.2 1.5.6L8.5 11.3 7 9.8c.4-.4.9-.6 1.5-.6Z" fill="currentColor"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.4-1.1 1.4-2s-.6-1.7-1.4-2Z" fill="currentColor" fill-opacity=".45"/></svg>
+  </div></div>`;
+
+const tabBar = () => `<div class="tabbar" role="tablist">
+  <div class="tb"><div class="gl">${G.home}</div>Home</div>
+  <div class="tb"><div class="gl">${G.dex}</div>Dex</div>
+  <div class="fab"><div class="box">${G.plusBold}</div></div>
+  <div class="tb on"><div class="gl">${G.bottleSolid}</div>My Bar</div>
+  <div class="tb"><div class="gl"><div class="face"><i>J</i></div></div>Profile</div>
+</div>`;
+
+const topBar = ({ ground = false, ruled = false } = {}) => `<div class="topbar${ground ? ' ground grain-lining' : ''}${ruled ? ' ruled' : ''}">
+  <div class="title">My Bar</div>
+  <div class="gb r" aria-label="Add a bottle">${G.search}</div>
+</div>`;
+
+/* ====================================================================
+   The back bar
+   ==================================================================== */
+const LABEL = {
+  gin: 'Gin', vodka: 'Vodka', 'white-rum': 'White rum', bourbon: 'Bourbon', 'rye-whiskey': 'Rye whiskey', tequila: 'Tequila',
+  campari: 'Campari', 'sweet-vermouth': 'Sweet vermouth', 'dry-vermouth': 'Dry vermouth', 'triple-sec': 'Triple sec',
+  'angostura-bitters': 'Angostura bitters', 'sugar-syrup': 'Sugar syrup', 'soda-water': 'Soda water', lemon: 'Lemon', lime: 'Lime',
+  orange: 'Orange', mint: 'Mint', grenadine: 'Grenadine', 'white-wine': 'White wine', grapefruit: 'Grapefruit', absinthe: 'Absinthe',
+};
+
+/* One bay: the object standing on the shelf, and under the shelf's edge either its label (on the shelf) or its name and what it would pour (not). */
+function bay(key, { owned, pours } = {}) {
+  const name = LABEL[key];
+  /* Two words past ten letters take two lines, so a shelf label is never wider
+     than its bottle needs (the app works this out with lib/textFit.ts). */
+  const lines = name.length >= 10 && name.includes(' ') ? name.replace(' ', '<br>') : name;
+  const under = owned
+    ? `<div class="tag">${lines}</div>`
+    : `<div class="ghostname">${lines}${pours ? `<b>+${pours} drinks</b>` : ''}</div>`;
+  return `<div class="bay" role="button" aria-pressed="${!!owned}" aria-label="${name}, ${owned ? 'on your shelf' : 'not on your shelf'}${pours ? `, pours ${pours} more drinks` : ''}">
+    <div class="stand">${art(key, owned ? 'lit' : 'ghost')}</div><div class="cap">${under}</div></div>`;
+}
+
+function shelf(items, { zone = 100, dark = false, label } = {}) {
+  return `<div class="shelf${dark ? ' dark' : ''}" style="--zone:${zone}px;--plankAt:calc(100% - ${zone}px)" role="group" aria-label="${label}">
+    <div class="wash" style="top:0;bottom:auto;height:${zone}px"></div>
+    <div class="plank"><div class="ptop"></div><div class="pface"></div><div class="pshade"></div></div>
+    <div class="bays">${items.map(([k, o]) => bay(k, o)).join('')}</div>
+  </div><div class="shelfgap"></div>`;
+}
+
+const mount = (img, name, inDex) => `<div class="mount">
+  <div class="win"><img src="img/${img}.webp" alt=""></div>
+  <div class="name">${name}</div>
+  <div class="st">${inDex ? `<span class="stag in">${G.check}In your Dex</span>` : '<span class="stag new">New</span>'}</div>
+</div>`;
+
+/* A drink with no photograph (1,927 of the 2,089): VectorFace in deboss, the cellar
+   window with the rocks glass from artwork/glasses.ts blind-stamped into it. */
+const vectorThumb = (name) => `<div class="thumb"><div class="m"><svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;background:var(--liningDeep);border-radius:2px">
+  <g transform="translate(0 -6)">
+  <path d="M30 46 L31 93 Q31 96.5 34.5 96.5 H65.5 Q69 96.5 69 93 L70 46 Z M32.4 88 H67.6" transform="translate(0 1.4)" fill="none" stroke="rgba(0,0,0,.55)" stroke-width="2"/>
+  <path d="M30 46 L31 93 Q31 96.5 34.5 96.5 H65.5 Q69 96.5 69 93 L70 46 Z M32.4 88 H67.6" fill="none" stroke="rgba(233,229,223,.28)" stroke-width="2"/>
+  <path d="M31.4 64 L31 93 Q31 94.5 34.5 94.5 H65.5 Q69 94.5 69 93 L68.6 64 Z" fill="#7E2330" fill-opacity=".22"/></g>
+</svg></div><div class="nm">${name}</div></div>`;
+
+const ghostThumb = (img, name, cls = '') => `<div class="thumb ${cls}"><div class="m"><img src="img/ghost/${img}.webp" alt=""></div><div class="nm">${name}</div></div>`;
+
+/* ====================================================================
+   Frames
+   ==================================================================== */
+const FRAMES = {};
+
+/* 1. EMPTY: the first open. The bar's lights are off; the fourteen basics stand
+      stamped into the lining where they would go. Tap the ones you have. */
+FRAMES.empty = () => `
+  ${statusBar(false)}
+  ${topBar()}
+  <div class="band grain-lining">
+    <div class="intro">
+      <h2>What's on your shelf?</h2>
+      <p>Tap what you have. These 14 basics pour <b>47 drinks</b>.</p>
+    </div>
+    <div style="height:2px"></div>
+    ${shelf([['gin'], ['vodka'], ['white-rum'], ['bourbon']], { zone: 94, dark: true, label: 'Spirits' })}
+    ${shelf([['sweet-vermouth'], ['dry-vermouth'], ['triple-sec'], ['sugar-syrup']], { zone: 92, dark: true, label: 'Liqueurs, wine and syrups' })}
+    ${shelf([['angostura-bitters'], ['soda-water'], ['lemon'], ['lime'], ['orange'], ['mint']], { zone: 72, dark: true, label: 'The rail' })}
+    <div class="btns row2">
+      <div class="btn bone">Add all 14 basics</div>
+      <div class="btn outline">${G.search}Search</div>
+    </div>
+    <div class="lip"></div>
+  </div>
+  <div class="counter grain-paper">
+    <div class="shadeStrip"></div>
+    <div class="sec" style="padding-top:4px"><h3>Pour tonight</h3></div>
+    <div class="sub">Nothing yet. What you light comes up here, starting with these.</div>
+    <div class="thumbs small">
+      ${ghostThumb('daiquiri', 'Daiquiri')}${ghostThumb('martini', 'Martini')}${ghostThumb('old-fashioned', 'Old Fashioned')}${ghostThumb('mojito', 'Mojito')}
+    </div>
+  </div>
+  ${tabBar()}<div class="hi"></div>`;
+
+/* 2. STOCKED: sixteen things on the shelf, Campari just put up. The shelves are lit,
+      each bottle wears its label, the buys worth making next stand unlit at the end
+      of their shelf with what they would pour. The counter below already lists the
+      nine drinks Campari lit, first. */
+const stockedBand = () => `
+  <div class="band grain-lining">
+    <div style="height:10px"></div>
+    ${shelf([['gin', { owned: 1 }], ['bourbon', { owned: 1 }], ['rye-whiskey', { owned: 1 }], ['white-rum', { owned: 1 }], ['tequila', { owned: 1 }], ['vodka', { pours: 8 }]], { zone: 102, label: 'Spirits, 5 bottles' })}
+    ${shelf([['campari', { owned: 1 }], ['sweet-vermouth', { owned: 1 }], ['dry-vermouth', { owned: 1 }], ['triple-sec', { owned: 1 }], ['sugar-syrup', { owned: 1 }], ['grenadine', { pours: 9 }]], { zone: 100, label: 'Liqueurs, wine and syrups, 5 bottles' })}
+    ${shelf([['angostura-bitters', { owned: 1 }], ['soda-water', { owned: 1 }], ['lemon', { owned: 1 }], ['lime', { owned: 1 }], ['orange', { owned: 1 }], ['mint', { owned: 1 }], ['grapefruit', { pours: 7 }]], { zone: 72, label: 'The rail, 6 things' })}
+    <div style="height:2px"></div>
+    <div class="lip"></div>
+  </div>`;
+
+const stockedCounter = () => `
+  <div class="counter grain-paper">
+    <div class="shadeStrip"></div>
+    <div class="sec" style="padding-top:2px"><h3>Pour tonight</h3><span class="n">52</span><span class="act">See all</span></div>
+    <div class="sub">Campari lit 9: <span class="nm">Negroni</span>, <span class="nm">Boulevardier</span>, <span class="nm">Americano</span> and 6 more.</div>
+    <div class="strip">
+      ${mount('negroni', 'Negroni', true)}${mount('boulevardier', 'Boulevardier', false)}${mount('americano', 'Americano', false)}${mount('garibaldi', 'Garibaldi', false)}
+    </div>
+  </div>`;
+
+FRAMES.stocked = () => `
+  ${statusBar(false)}
+  ${topBar()}
+  ${stockedBand()}
+  ${stockedCounter()}
+  ${tabBar()}<div class="hi"></div>`;
+
+/* 3. TONIGHT: the same screen scrolled to the counter. What you can pour, lit, and
+      what is one thing short, grouped by the one thing, ranked by what it pours.
+      Each group's faces are the drinks' unlit ghosts: add the thing and they light. */
+FRAMES.tonight = () => `
+  ${statusBar(false)}
+  ${topBar({ ground: true, ruled: true })}
+  <div style="position:absolute;left:0;right:0;top:0;transform:translateY(var(--scroll,-489px))" id="tonightScroll">
+    ${stockedBand()}
+    <div class="counter grain-paper">
+      <div class="shadeStrip"></div>
+      <div class="sec" style="padding-top:2px"><h3>Pour tonight</h3><span class="n">52</span><span class="act">See all</span></div>
+      <div class="sub">New to your Dex first.</div>
+      <div class="strip">
+        ${mount('margarita', 'Margarita', false)}${mount('boulevardier', 'Boulevardier', false)}${mount('tom-collins', 'Tom Collins', false)}${mount('daiquiri', 'Daiquiri', true)}
+      </div>
+      <div class="sec" style="padding-top:26px"><h3>One thing short</h3><span class="n">214</span></div>
+      <div class="sub">By what you need, the one that pours most first.</div>
+      <div class="card">
+        <div class="grow">
+          <div class="bwin">${art('grenadine', 'ghost', 0.78)}</div>
+          <div class="gtext"><div class="t">Grenadine</div><div class="s">Pours 9 more drinks</div></div>
+          <div class="btn sm secondary">${G.plus}Add</div>
+        </div>
+        <div class="thumbs">
+          ${ghostThumb('tequila-sunrise', 'Tequila Sunrise')}${ghostThumb('ward-8', 'Ward 8')}${vectorThumb('Whiskey Daisy')}
+          <div class="thumb more"><div class="m">6 more</div></div>
+        </div>
+      </div>
+      <div class="group">
+        <div class="row"><div class="bwin sm">${art('vodka', 'ghost', 0.44)}</div>
+          <div class="gtext"><div class="t">Vodka</div><div class="s">Pours 8 more: <span class="nmi">Kamikaze</span>, <span class="nmi">Lemon Drop</span>, <span class="nmi">Screwdriver</span></div></div>
+          <div class="btn sm secondary">${G.plus}Add</div></div>
+        <div class="row"><div class="bwin sm">${art('grapefruit', 'ghost', 0.9)}</div>
+          <div class="gtext"><div class="t">Grapefruit</div><div class="s">Pours 7 more: <span class="nmi">Greyhound</span>, <span class="nmi">Salty Dog</span>, <span class="nmi">Palm Beach</span></div></div>
+          <div class="btn sm secondary">${G.plus}Add</div></div>
+        <div class="row"><div class="bwin sm">${art('absinthe', 'ghost', 0.46)}</div>
+          <div class="gtext"><div class="t">Absinthe</div><div class="s">Pours 7 more: <span class="nmi">Waldorf</span>, <span class="nmi">Duchess</span>, <span class="nmi">Earthquake</span></div></div>
+          <div class="btn sm secondary">${G.plus}Add</div></div>
+      </div>
+    </div>
+  </div>
+  ${tabBar()}<div class="hi"></div>`;
+
+/* 4. ADD A BOTTLE: the search glyph's sheet, for the 493 ingredients that are not
+      standing on a shelf. Rows, not a wall of chips, ranked by what each would pour
+      with the shelf you have. The old picker's Chip filters become the shelves. */
+const sheetRow = (key, title, sub, owned) => `<div class="row">
+  <div class="bwin sm">${art(key, owned ? 'lit' : 'ghost', isFresh(key) ? 0.9 : 0.5)}</div>
+  <div class="gtext"><div class="t" style="font-weight:400">${title}</div><div class="s">${sub}</div></div>
+  ${owned ? `<div class="onshelf">${G.checkBold}On shelf</div>` : `<div class="btn sm secondary">${G.plus}Add</div>`}
+</div>`;
+
+FRAMES.add = () => `
+  ${statusBar(false)}
+  ${topBar()}
+  ${stockedBand()}
+  ${stockedCounter()}
+  ${tabBar()}
+  <div class="scrim"></div>
+  <div class="sheet grain-paper">
+    <div class="bar"><div class="title">Add a bottle</div><div class="done">Done</div></div>
+    <div class="search">${G.search}Search 493 ingredients</div>
+    <div style="overflow:hidden"><div class="chips">
+      <div class="chip on">${G.checkBold}Spirits</div><div class="chip">Liqueurs</div><div class="chip">Wine &amp; beer</div><div class="chip">Bitters</div><div class="chip">Citrus</div><div class="chip">Syrups</div>
+    </div></div>
+    <div class="gtitle">Worth adding</div>
+    <div class="ghelp">With what is on your shelf now.</div>
+    <div class="list">
+      ${sheetRow('vodka', 'Vodka', 'Pours 8 more · in 62 drinks')}
+      ${sheetRow('absinthe', 'Absinthe', 'Pours 7 more · in 44 drinks')}
+      ${sheetRow('scotch-whisky', 'Scotch whisky', 'Pours 6 more · in 20 drinks')}
+      ${sheetRow('brandy', 'Brandy', 'Pours 5 more · in 49 drinks')}
+      ${sheetRow('applejack', 'Applejack', 'Pours 5 more · in 13 drinks')}
+      ${sheetRow('cognac', 'Cognac', 'Pours 4 more · in 23 drinks')}
+    </div>
+    <div class="gtitle">On your shelf <span>5</span></div>
+    <div class="list">
+      ${sheetRow('gin', 'Gin', 'In 167 drinks', true)}
+      ${sheetRow('white-rum', 'White rum', 'In 66 drinks', true)}
+    </div>
+  </div>
+  <div class="hi"></div>`;
+
+/* ==================================================================== */
+const ORDER = ['empty', 'stocked', 'tonight', 'add'];
+const wall = document.getElementById('wall');
+wall.innerHTML = ORDER.map((k) => `<section class="screen" id="${k}">${FRAMES[k]()}</section>`).join('');
+const pick = () => {
+  const h = location.hash.slice(1);
+  document.body.classList.toggle('solo', !!h);
+  document.querySelectorAll('.screen').forEach((s) => s.classList.toggle('on', s.id === h));
+};
+pick();
+addEventListener('hashchange', pick);
+/* Frame 3 is frame 2 scrolled: the back bar's foot sits just under the top bar. */
+const settle = () => {
+  const sc = document.getElementById('tonightScroll');
+  const c = sc.querySelector('.counter');
+  sc.style.setProperty('--scroll', `${-(c.offsetTop - 106)}px`);
+};
+settle();
+document.fonts && document.fonts.ready.then(settle);
+</script>
+</body>
+</html>

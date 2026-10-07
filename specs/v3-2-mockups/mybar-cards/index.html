@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Bar Cards</title>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:400}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* Tokens: src/constants/theme.ts, v3 Cabinet + v3.1 */
+:root{
+  --bg:#F7F2EA; --sunk:#E9E5DF; --surface:#FFFFFF; --line:#D9CFC1; --lineControl:#8A7F74; --lineInk:#2B2322;
+  --text:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --wine:#5B0F1A; --wineDeep:#3E0A12; --merlot:#7E2330; --wineSoft:#A85A63; --wineWash:#F5E7E7;
+  --taupe:#CBBBA5; --taupeInk:#736247; --amber:#D9A25C;
+  --mat:#FBF8F2; --lining:#3E0A12; --liningDeep:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --onLiningFaint:#A7837F;
+  --liningLine:rgba(233,229,223,.16); --liningLip:rgba(233,229,223,.14); --liningControl:rgba(233,229,223,.42); --liningPressed:rgba(233,229,223,.08);
+  --matEdge:rgba(14,11,11,.35); --windowEdge:rgba(43,35,34,.16); --slotEdge:rgba(233,229,223,.10);
+  --ledge:rgba(14,11,11,.30); --shade:rgba(14,11,11,.22); --counterBand:rgba(14,11,11,.22); --counterLine:rgba(255,253,249,.14);
+  --reelInk:#FFFDF9; --reelInkDim:#A99E94; --reelBar:#2B2322; --reelControlBorder:rgba(255,253,249,.28);
+  --reelScrim:rgba(14,11,11,.78); --reelScrimMid:rgba(14,11,11,.62); --scrimDeep:rgba(14,11,11,.86);
+  --logActionEdge:rgba(233,229,223,.38); --faceCocktail:#7E2330; --faceSpirit:#5A463F;
+  --seat:0px 1px 0px rgba(14,11,11,.45),0px 8px 18px rgba(14,11,11,.34);
+  --recess:inset 0px 2px 10px rgba(0,0,0,.55),inset 0px -1px 0px rgba(233,229,223,.06);
+  --barDark:0px 4px 14px rgba(14,11,11,.30);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#161112}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block;overflow:visible}
+.wall{display:flex;flex-wrap:wrap;gap:40px;padding:40px}
+body.solo .wall{padding:0;gap:0}
+body.solo .screen{display:none}
+body.solo .screen.on{display:block}
+
+.screen{position:relative;width:440px;height:956px;overflow:hidden;flex:none;background:var(--bg)}
+.screen.lining{background:var(--lining)}
+.abs{position:absolute;left:0;right:0}
+/* Grain: assets/images/grain.png (grey 32..232, alpha 26), 0.35 on paper, 0.77 on lining (theme.ts grain) */
+.grain{position:absolute;inset:0;background:url(img/grain.png) 0 0/128px 128px repeat;opacity:.35;pointer-events:none}
+.lining>.grain,.band>.grain{opacity:.77}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* status bar + home indicator (hardware) */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--text)}
+.sb.light{color:#fff}
+.sb .t{position:absolute;left:52px;top:19px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:22px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--text);z-index:60}
+.hi.light{background:#fff}
+
+/* ScreenTopBar lg: 44pt, 20/26 SemiBold centred, 44pt glyph buttons */
+.bar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:20}
+.bar .title{font:600 20px/26px Inter;position:absolute;left:0;right:0;top:9px;text-align:center}
+.bar.lining{background:transparent}
+.bar.lining .title{color:var(--onLining)}
+.bar.ruled{box-shadow:inset 0 -1px 0 var(--liningLip)}
+.gb{position:absolute;top:0;width:44px;height:44px;display:grid;place-items:center;color:var(--onLining)}
+.gb svg{width:26px;height:26px}
+.gb.right{right:6px}
+
+/* ---------- Floating tab bar (FloatingTabBar.tsx) ---------- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:65px;z-index:40}
+.tabbar .slab{position:absolute;left:0;right:0;bottom:0;height:65px;border-radius:12px;background:var(--reelBar);border:1px solid var(--reelControlBorder);box-shadow:var(--barDark)}
+.tabbar .row{position:absolute;inset:1px;display:flex;padding:0 6px}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:9px 0;position:relative;color:var(--reelInkDim);font:500 11px/14px Inter;letter-spacing:.2px}
+.tb .gl{width:28px;height:28px;display:grid;place-items:center}
+.tb svg{width:24px;height:24px}
+.tb.on{color:var(--reelInk);font-weight:600}
+.tb .ind{position:absolute;top:-1px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--reelInk)}
+.fabslot{flex:1;display:grid;place-items:center}
+.fab{width:48px;height:36px;border-radius:8px;background:var(--wine);border:1px solid var(--logActionEdge);display:grid;place-items:center;color:var(--onLining)}
+.fab svg{width:22px;height:22px}
+.face{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--reelInkDim);display:grid;place-items:center}
+.face i{width:24px;height:24px;border-radius:50%;background:var(--merlot);color:var(--onLining);font:600 11px/24px Inter;font-style:normal;text-align:center}
+/* compacted: 48pt slab, glyphs dropped by the label block (3 + 14), labels gone */
+.tabbar.compact .slab{height:48px}
+.tabbar.compact .tb{transform:translateY(17px)}
+.tabbar.compact .tb span{opacity:0}
+.tabbar.compact .fabslot{transform:translateY(8.5px)}
+
+/* ---------- Buttons (ui.tsx Button) ---------- */
+.btn{height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 16px/20px Inter;border:1px solid transparent;white-space:nowrap}
+.btn svg{width:20px;height:20px}
+.btn.sm{height:36px;font-size:14px;line-height:18px;padding:0 14px;gap:6px}
+.btn.sm svg{width:16px;height:16px}
+.btn.onLining{background:var(--onLining);color:var(--lining);border-color:var(--onLining)}
+.btn.onLining.held{background:var(--onLiningMuted);border-color:var(--onLiningMuted)}
+.btn.onLiningOutline{background:transparent;color:var(--onLining);border-color:var(--liningControl)}
+.btn.onLiningText{background:transparent;color:var(--onLining);height:44px;font-size:15px;padding:0 8px}
+.btn.secondary{background:var(--surface);color:var(--text);border-color:var(--lineInk)}
+.btn.text{background:transparent;color:var(--wine);height:44px;padding:0 4px;font-size:15px}
+
+/* ---------- Deck (frames: first, deck) ---------- */
+.intro{position:absolute;left:16px;right:16px;top:114px;z-index:5}
+.intro h2{font:600 22px/28px Inter;color:var(--onLining)}
+.intro p{font:400 15px/22px Inter;color:var(--onLiningMuted);margin-top:4px}
+.prog{position:absolute;left:16px;right:16px;top:206px;z-index:5}
+.prog .row{display:flex;justify-content:space-between;align-items:baseline;font:500 13px/18px Inter;color:var(--onLiningMuted)}
+.prog .row b{font-weight:600;color:var(--onLining)}
+.prog .track{height:2px;background:var(--liningLine);margin-top:8px;position:relative}
+.prog .track i{position:absolute;left:0;top:0;bottom:0;background:var(--onLining)}
+
+.deck{position:absolute;left:16px;right:16px;top:252px;height:452px}
+.dcard{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;background:var(--mat);border:1px solid var(--matEdge);border-radius:8px;padding:12px;box-shadow:var(--seat)}
+.dcard.b2{transform:translateY(24px) scale(.92);transform-origin:50% 100%}
+.dcard.b1{transform:translateY(12px) scale(.96);transform-origin:50% 100%}
+.win{position:relative;flex:1;min-height:160px;border-radius:3px;overflow:hidden;background:var(--liningDeep)}
+.win img{width:100%;height:100%;object-fit:cover;display:block}
+.win::after{content:"";position:absolute;inset:0;border-radius:3px;box-shadow:inset 0 0 0 1px var(--windowEdge);pointer-events:none}
+.win .pictured{position:absolute;left:10px;bottom:10px;height:26px;padding:0 9px;border-radius:4px;background:var(--reelScrim);border:1px solid var(--reelControlBorder);
+  color:var(--reelInk);display:flex;align-items:center;gap:6px;font:400 12px/16px Inter;white-space:nowrap}
+.win .pictured em{font:400 14px/18px Playfair;font-style:normal}
+.dcard .body{padding:14px 4px 6px;flex:none}
+.dcard h3{font:600 28px/34px Inter;color:var(--text);letter-spacing:-.2px}
+.dcard .in{font:400 15px/22px Inter;color:var(--muted);margin-top:4px}
+.dcard .in em,.nm{font-family:Playfair;font-style:normal;font-weight:400}
+.dcard .adds{font:400 15px/22px Inter;color:var(--text);margin-top:6px}
+.dcard .adds b{font-weight:600}
+.stamp{position:absolute;left:24px;top:26px;height:36px;padding:0 12px;border:2px solid var(--wine);border-radius:4px;color:var(--wine);
+  font:600 16px/20px Inter;display:flex;align-items:center;gap:6px;transform:rotate(-6deg);background:var(--mat)}
+.stamp svg{width:18px;height:18px}
+.answers{position:absolute;left:16px;right:16px;top:728px;display:flex;gap:12px}
+.answers .btn{flex:1}
+.foot{position:absolute;left:8px;right:8px;top:786px;display:flex;justify-content:space-between;align-items:center}
+.foot.center{justify-content:center}
+
+/* ---------- Shelf (frame: shelf) ---------- */
+.band{position:absolute;left:0;right:0;top:0;background:var(--lining);overflow:hidden}
+.band .lip{position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--liningLip)}
+.shade12{position:absolute;left:0;right:0;height:12px;background:linear-gradient(var(--shade),rgba(14,11,11,0));pointer-events:none;z-index:3}
+.shelfhead{position:absolute;left:16px;right:16px;top:116px;display:flex;justify-content:space-between;align-items:baseline}
+.shelfhead h2{font:600 20px/26px Inter;color:var(--onLining)}
+.shelfhead span{font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.ledge{position:absolute;left:0;right:0}
+.ledge .items{position:absolute;left:12px;top:0;display:flex;height:88px;align-items:flex-end}
+.ledge .it{width:62px;flex:none;display:flex;justify-content:center;align-items:flex-end;height:88px;overflow:hidden}
+.ledge .it svg{width:44px;height:88px;flex:none}
+.ledge .board{position:absolute;left:0;right:0;top:88px;height:7px;background:var(--ledge);border-top:1px solid var(--counterLine)}
+.ledge .board::after{content:"";position:absolute;left:0;right:0;top:7px;height:12px;background:linear-gradient(var(--shade),rgba(14,11,11,0))}
+.ledge .labels{position:absolute;left:12px;top:101px;display:flex}
+.ledge .labels span{width:62px;flex:none;text-align:center;font:500 12px/15px Inter;color:var(--onLining);padding:0 2px}
+.bandfoot{position:absolute;left:16px;right:16px;display:flex;gap:12px}
+.bandfoot .btn{flex:1}
+
+/* paper content */
+.hero{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hero b{font:600 36px/40px Inter;letter-spacing:-.5px;color:var(--wine);font-variant-numeric:tabular-nums}
+.hero span{font:400 13px/18px Inter;color:var(--muted)}
+.sechead{position:absolute;left:16px;right:8px;display:flex;justify-content:space-between;align-items:center}
+.styleh{position:absolute;left:16px;right:8px;display:flex;justify-content:space-between;align-items:center}
+.styleh h3{font:600 16px/22px Inter;color:var(--text)}
+.styleh h3 span{font-weight:400;color:var(--muted);margin-left:6px}
+.rail{position:absolute;left:0;right:0;display:flex;gap:12px;padding:0 16px;align-items:stretch}
+.rcard{width:148px;flex:none;background:var(--mat);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column}
+.rcard .w{height:150px;border-radius:2px;overflow:hidden;position:relative;background:var(--liningDeep)}
+.rcard .w img{width:100%;height:100%;object-fit:cover;display:block}
+.rcard .w::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--windowEdge);border-radius:2px}
+.rcard .n{font:700 17px/21px Playfair;color:var(--text);margin-top:10px}
+.rcard .tagrow{margin-top:auto;padding-top:8px}
+.tag{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 7px;border-radius:4px;font:500 12px/16px Inter;white-space:nowrap}
+.tag.new{background:var(--wineWash);color:var(--wine);border:1px solid var(--wine)}
+.tag.in{color:var(--muted);border:1px solid var(--line)}
+.tag svg{width:12px;height:12px}
+
+/* Worth buying next */
+.nextcard{position:absolute;left:16px;right:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.nextcard .hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 0}
+.nextcard .hd h4{font:600 20px/26px Inter;color:var(--text)}
+.nextcard .hd p{font:400 13px/18px Inter;color:var(--muted)}
+.thumbs{display:flex;gap:10px;padding:12px 16px 16px}
+.th{width:76px;flex:none}
+.th .m{width:76px;height:96px;background:var(--mat);border:1px solid var(--line);border-radius:4px;padding:3px}
+.th .m .w{width:100%;height:100%;border-radius:2px;overflow:hidden;position:relative;background:var(--liningDeep)}
+.th .m img{width:100%;height:100%;object-fit:cover;display:block}
+.th .n{font:400 13px/17px Playfair;color:var(--text);margin-top:6px}
+.subline{position:absolute;left:16px;right:16px;font:400 13px/18px Inter;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wall" id="wall"></div>
+
+<script>
+/* ---------------- glyphs (src/components/icons.tsx, 24 grid, 1.75 stroke) ---------------- */
+const S = 'fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"';
+const G = {
+  home: `<svg viewBox="0 0 24 24" ${S}><path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/></svg>`,
+  dex: `<svg viewBox="0 0 24 24" ${S}><path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></svg>`,
+  plusThin: `<svg viewBox="0 0 24 24" ${S}><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></svg>`,
+  bottleSolid: `<svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" ${S}><circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6 9.8 17.4 19 6.9"/></svg>`,
+  close: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M6.2 6.2 17.8 17.8"/><path d="M17.8 6.2 6.2 17.8"/></svg>`,
+  checkSm: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6 9.8 17.4 19 6.9"/></svg>`,
+};
+
+function statusBar(light){
+  return `<div class="sb ${light?'light':''}"><div class="t">9:41</div><div class="island"></div>
+  <div class="r">
+    <svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="3" width="3.2" height="9" rx="1"/><rect x="15" y="0" width="3.2" height="12" rx="1"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8.5.6 10.2 10.2 0 0 0 1.3 3.5l1.2 1.2a8.5 8.5 0 0 1 6-2.4Z"/><path d="M8.5 5.7c1.4 0 2.6.5 3.6 1.4l1.2-1.2a6.8 6.8 0 0 0-9.6 0l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Z"/><path d="M8.5 9.1c.5 0 .9.2 1.2.5L8.5 10.8 7.3 9.6c.3-.3.7-.5 1.2-.5Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="currentColor" opacity=".45"/></svg>
+  </div></div>`;
+}
+function tabBar(compact){
+  return `<div class="tabbar ${compact?'compact':''}"><div class="slab"></div><div class="row">
+    <div class="tb"><div class="gl">${G.home}</div><span>Home</span></div>
+    <div class="tb"><div class="gl">${G.dex}</div><span>Dex</span></div>
+    <div class="fabslot"><div class="fab">${G.plus}</div></div>
+    <div class="tb on"><i class="ind"></i><div class="gl">${G.bottleSolid}</div><span>My Bar</span></div>
+    <div class="tb"><div class="gl"><div class="face"><i>JM</i></div></div><span>Profile</span></div>
+  </div></div>`;
+}
+
+/* ---------------- shelf art: one silhouette per kind, liquid in its own colour (artwork/liquid.ts LIQUID) ---------------- */
+const L = { clear:'#E4E8E4', paleStraw:'#F0D785', straw:'#EFC757', gold:'#E3AE33', amber:'#D3892A', copper:'#B4601F', brown:'#8A4A1C',
+  darkBrown:'#4E2711', redWine:'#7B1E3A', deepRed:'#59102A', tomato:'#BF3A22', orange:'#E8792B', green:'#8FB93E', mint:'#7CC48C', cream:'#EBDCC0', milky:'#EDE6D6' };
+const GLASS = 'rgba(233,229,223,.62)', GLASSFILL = 'rgba(233,229,223,.07)', HL = 'rgba(255,253,249,.38)', MAT = '#FBF8F2';
+let uid = 0;
+function bottle(kind, o){
+  const id = 'b' + (uid++);
+  const shapes = {
+    spirit: { body:'M19 6H29V19C29 24 38 25 38 33V84Q38 88 34 88H14Q10 88 10 84V33C10 25 19 24 19 19Z', cap:[18,1,12,8], fill:40, label:[13,48,22,22], hl:[13.6,35,13.6,82] },
+    wine:   { body:'M20.6 4H27.4V22C27.4 30 37 32 37 42V84Q37 88 33 88H15Q11 88 11 84V42C11 32 20.6 30 20.6 22Z', cap:[20,2,8,16], fill:46, label:[14,56,20,20], hl:[14.6,44,14.6,82] },
+    slim:   { body:'M20.6 8H27.4V19C27.4 23 34 24 34 30V84Q34 88 30 88H18Q14 88 14 84V30C14 24 20.6 23 20.6 19Z', cap:[19.6,3,8.8,7], fill:36, label:[16,50,16,18], hl:[16.8,32,16.8,82] },
+    squat:  { body:'M19 30H29V38C29 42 40 43 40 50V82Q40 88 34 88H14Q8 88 8 82V50C8 43 19 42 19 38Z', cap:[18,24,12,7], fill:54, label:[11,58,26,18], hl:[11.6,52,11.6,82] },
+    bitters:{ body:'M20.6 44H27.4V50C27.4 53 34 54 34 58V85Q34 88 31 88H17Q14 88 14 85V58C14 54 20.6 53 20.6 50Z', cap:[19.6,37,8.8,8], fill:52, label:[14.5,57,19,31], hl:[0,0,0,0] },
+    syrup:  { body:'M20 50H28V56C28 59 34 60 34 64V85Q34 88 31 88H17Q14 88 14 85V64C14 60 20 59 20 56Z', cap:[18.5,44,11,6.5], fill:64, label:[0,0,0,0], hl:[16.6,64,16.6,82] },
+    mixer:  { body:'M21 38H27V46C27 51 33 52 33 58V85Q33 88 30 88H18Q15 88 15 85V58C15 52 21 51 21 46Z', cap:[20.4,34,7.2,4.6], fill:50, label:[15.6,64,16.8,14], hl:[17.2,58,17.2,82] },
+  };
+  const s = shapes[kind];
+  const glass = o.glass || GLASSFILL;
+  let out = `<svg viewBox="0 0 48 88"><defs><clipPath id="${id}"><path d="${s.body}"/></clipPath></defs><ellipse cx="24" cy="88" rx="13" ry="1.8" fill="rgba(14,11,11,.4)"/>`;
+  out += `<path d="${s.body}" fill="${glass}"/>`;
+  out += `<rect x="0" y="${s.fill}" width="48" height="60" fill="${o.liq}" opacity="${o.op ?? .9}" clip-path="url(#${id})"/>`;
+  if (s.label[2] && o.label !== false) {
+    const [x,y,w,h] = s.label;
+    out += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1" fill="${o.labelFill || MAT}" opacity=".94"/>`;
+    out += `<rect x="${x+3}" y="${y+h*0.32}" width="${w-6}" height="1.4" fill="${o.labelInk || '#2B2322'}" opacity=".55"/>`;
+    out += `<rect x="${x+5}" y="${y+h*0.58}" width="${w-10}" height="1" fill="${o.labelInk || '#2B2322'}" opacity=".3"/>`;
+  }
+  if (s.hl[3]) out += `<line x1="${s.hl[0]}" y1="${s.hl[1]}" x2="${s.hl[2]}" y2="${s.hl[3]}" stroke="${HL}" stroke-width="1.4" stroke-linecap="round"/>`;
+  out += `<path d="${s.body}" fill="none" stroke="${GLASS}" stroke-width="1.2"/>`;
+  const [cx,cy,cw,ch] = s.cap;
+  out += `<rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="${kind==='syrup'?3:1.4}" fill="${o.cap || '#2B2322'}" stroke="rgba(233,229,223,.35)" stroke-width=".8"/>`;
+  return out + '</svg>';
+}
+function wheel(rind, flesh){
+  let segs = '';
+  for (let i=0;i<8;i++){ const a = i*Math.PI/4; segs += `<line x1="24" y1="72" x2="${24+12*Math.cos(a)}" y2="${72+12*Math.sin(a)}" stroke="#F6EFDF" stroke-width="1.2"/>`; }
+  return `<svg viewBox="0 0 48 88"><ellipse cx="24" cy="88" rx="12" ry="1.6" fill="rgba(14,11,11,.4)"/><circle cx="24" cy="72" r="15.5" fill="${rind}"/><circle cx="24" cy="72" r="13.6" fill="#F6EFDF"/><circle cx="24" cy="72" r="12.4" fill="${flesh}"/>${segs}<circle cx="24" cy="72" r="1.6" fill="#F6EFDF"/></svg>`;
+}
+const mintArt = `<svg viewBox="0 0 48 88"><path d="M24 88C24 78 24.5 66 26 54" stroke="#5E8F4E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <g fill="${L.mint}"><ellipse cx="17" cy="70" rx="8" ry="4.6" transform="rotate(-28 17 70)"/><ellipse cx="32" cy="66" rx="8" ry="4.6" transform="rotate(26 32 66)"/>
+  <ellipse cx="18.5" cy="57" rx="7" ry="4.2" transform="rotate(-38 18.5 57)"/><ellipse cx="31.5" cy="53" rx="6.6" ry="4" transform="rotate(34 31.5 53)"/><ellipse cx="26" cy="46" rx="4" ry="6"/></g>
+  <g stroke="#4F8048" stroke-width=".8" fill="none"><path d="M11 73 23 67"/><path d="M38 62 26 68"/><path d="M13 61 24 55"/><path d="M37 49 27 55"/></g></svg>`;
+const eggArt = `<svg viewBox="0 0 48 88"><ellipse cx="24" cy="88" rx="11" ry="1.6" fill="rgba(14,11,11,.35)"/><path d="M24 54C31 54 36 64 36 73C36 81.5 30.6 87.4 24 87.4S12 81.5 12 73C12 64 17 54 24 54Z" fill="#F3EBDA"/><path d="M17.6 64C16.3 67 15.8 70 16 73" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" fill="none" opacity=".8"/></svg>`;
+
+const SHELF_BOTTLES = [
+  ['Gin', bottle('spirit',{liq:L.clear, op:.22, cap:'#2B2322'})],
+  ['White rum', bottle('spirit',{liq:L.clear, op:.16, cap:'#B8A09B', labelFill:'#E9E5DF'})],
+  ['Bourbon', bottle('squat',{liq:L.amber, op:.92, cap:'#2B2322'})],
+  ['Sweet vermouth', bottle('wine',{liq:L.redWine, op:1, cap:'#59102A'})],
+  ['Dry vermouth', bottle('wine',{liq:L.paleStraw, op:.75, cap:'#8A7F74'})],
+  ['Campari', bottle('slim',{liq:L.tomato, op:.95, cap:'#E9E5DF'})],
+  ['Triple sec', bottle('squat',{liq:L.clear, op:.2, cap:L.orange})],
+  ['Angostura bitters', bottle('bitters',{liq:L.darkBrown, op:1, glass:L.darkBrown, cap:'#D9A25C'})],
+  ['Sugar syrup', bottle('syrup',{liq:L.clear, op:.28, cap:'#E9E5DF'})],
+];
+const SHELF_FRESH = [
+  ['Lemon', wheel(L.straw, '#F6DE7A')],
+  ['Lime', wheel('#6E9A2E', '#B9D46A')],
+  ['Orange', wheel(L.orange, '#F4A452')],
+  ['Mint', mintArt],
+  ['Egg white', eggArt],
+  ['Soda water', bottle('mixer',{liq:L.clear, op:.16, cap:'#8A7F74', labelFill:'#E9E5DF'})],
+  ['Tonic water', bottle('mixer',{liq:L.clear, op:.24, cap:L.straw})],
+  ['Ginger beer', bottle('mixer',{liq:L.gold, op:.7, cap:L.copper})],
+];
+function ledge(items, top, h = 88){
+  return `<div class="ledge" style="top:${top}px">
+    <div class="items" style="height:${h}px">${items.map(([,art])=>`<div class="it" style="height:${h}px">${art}</div>`).join('')}</div>
+    <div class="board" style="top:${h}px"></div>
+    <div class="labels" style="top:${h+13}px">${items.map(([n])=>`<span>${n}</span>`).join('')}</div>
+  </div>`;
+}
+
+/* ---------------- vector faces for drinks with no photograph (artwork/VectorFace: lit field, counter, glass) ---------------- */
+function vface(glass, liq, spirit){
+  const c = spirit ? '#5A463F' : '#7E2330';
+  const id = 'vf' + (uid++);
+  let g = '';
+  if (glass === 'coupe') g = `<path d="M18 40H52C52 52 44 58 35 58C26 58 18 52 18 40Z" fill="${liq}" opacity=".9"/><path d="M16 38H54C54 52 45 60 35 60S16 52 16 38Z" fill="none" stroke="rgba(233,229,223,.75)" stroke-width="1.6"/><path d="M35 60V80" stroke="rgba(233,229,223,.75)" stroke-width="1.6"/><path d="M27 81H43" stroke="rgba(233,229,223,.75)" stroke-width="1.8" stroke-linecap="round"/>`;
+  if (glass === 'highball') g = `<rect x="25" y="34" width="20" height="46" rx="1.5" fill="none" stroke="rgba(233,229,223,.75)" stroke-width="1.6"/><rect x="26.4" y="44" width="17.2" height="34.6" fill="${liq}" opacity=".85"/><path d="M29 47V75" stroke="rgba(255,253,249,.4)" stroke-width="1.2"/>`;
+  if (glass === 'mug') g = `<path d="M22 44H44V76Q44 80 40 80H26Q22 80 22 76Z" fill="#B8A09B" stroke="rgba(233,229,223,.8)" stroke-width="1.4"/><path d="M44 50H48Q52 50 52 55V62Q52 67 48 67H44" fill="none" stroke="rgba(233,229,223,.8)" stroke-width="2"/><path d="M22 44H44" stroke="${liq}" stroke-width="2.4"/><path d="M26 50V74" stroke="rgba(255,253,249,.45)" stroke-width="1.4"/>`;
+  return `<svg viewBox="0 0 70 90" preserveAspectRatio="xMidYMax slice" style="width:100%;height:100%"><defs><radialGradient id="${id}" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="#2F070D"/></radialGradient></defs>
+    <rect width="70" height="90" fill="url(#${id})"/><rect y="80" width="70" height="10" fill="rgba(14,11,11,.22)"/><rect y="80" width="70" height="1" fill="rgba(255,253,249,.14)"/>
+    <ellipse cx="35" cy="81" rx="12" ry="1.6" fill="rgba(14,11,11,.35)"/>${g}</svg>`;
+}
+
+/* ---------------- frames ---------------- */
+const F = {};
+
+/* 1. FIRST OPEN: the shelf is empty, so the tab IS the deck */
+F.first = `<section class="screen lining" id="first">
+  <div class="grain"></div>${statusBar(true)}
+  <div class="bar lining"><div class="title">My Bar</div></div>
+  <div class="intro"><h2>What's on your shelf?</h2>
+    <p>Swipe right if you have it, left if you don't. Twenty-four cards, about a minute.</p></div>
+  <div class="prog"><div class="row"><span><b class="tnum">1</b> of 24</span><span>Nothing on your shelf yet</span></div><div class="track"><i style="width:0"></i></div></div>
+  <div class="deck">
+    <div class="dcard b2" style="height:430px"></div>
+    <div class="dcard b1" style="height:430px"></div>
+    <div class="dcard" style="height:430px">
+      <div class="win"><img src="img/gin-and-tonic.webp" style="object-position:50% 62%"><div class="pictured"><em>Gin and Tonic</em></div></div>
+      <div class="body"><h3>Gin</h3>
+        <p class="in">In 168 drinks, from the <em>Martini</em> to the <em>Negroni</em>.</p></div>
+    </div>
+  </div>
+  <div class="answers">
+    <div class="btn onLiningOutline">${G.close}Skip</div>
+    <div class="btn onLining">${G.check}Have it</div>
+  </div>
+  <div class="foot center"><div class="btn onLiningText">Search 493 ingredients instead</div></div>
+  ${tabBar(false)}<div class="hi light"></div>
+</section>`;
+
+/* 2. MID-DECK: card 7, dragged right past half the threshold. The stamp and the held fill follow the finger; at rest both are 0 */
+F.deck = `<section class="screen lining" id="deck">
+  <div class="grain"></div>${statusBar(true)}
+  <div class="bar lining"><div class="title">My Bar</div></div>
+  <div class="intro"><h2>What's on your shelf?</h2>
+    <p>Swipe right if you have it, left if you don't. Twenty-four cards, about a minute.</p></div>
+  <div class="prog"><div class="row"><span><b class="tnum">7</b> of 24</span><span><b class="tnum">5</b> on your shelf · <b class="tnum">4</b> drinks</span></div><div class="track"><i style="width:25%"></i></div></div>
+  <div class="deck">
+    <div class="dcard b1" style="height:430px"></div>
+    <div class="dcard" style="height:430px;transform:translateY(6px) scale(.975);transform-origin:50% 100%">
+      <div class="win"><img src="img/old-fashioned.webp" style="object-position:50% 58%"><div class="pictured"><em>Old Fashioned</em></div></div>
+      <div class="body"><h3>Angostura bitters</h3>
+        <p class="in">In 78 drinks, from the <em>Old Fashioned</em> to the <em>Manhattan</em>.</p></div>
+    </div>
+    <div class="dcard" style="height:430px;transform:translateX(38px) rotate(3.2deg);transform-origin:50% 150%">
+      <div class="win"><img src="img/sweet-vermouth.webp" style="object-position:50% 22%"></div>
+      <div class="stamp">${G.check}Have it</div>
+      <div class="body"><h3>Sweet vermouth</h3>
+        <p class="in">In 124 drinks, from the <em>Manhattan</em> to the <em>Negroni</em>.</p>
+        <p class="adds"><b>Adds 6</b> you can make now, like the <em class="nm">Gin and It</em>.</p></div>
+    </div>
+  </div>
+  <div class="answers">
+    <div class="btn onLiningOutline">${G.close}Skip</div>
+    <div class="btn onLining">${G.check}Have it</div>
+  </div>
+  <div class="foot"><div class="btn onLiningText">Undo White rum</div><div class="btn onLiningText">Done</div></div>
+  ${tabBar(false)}<div class="hi light"></div>
+</section>`;
+
+/* 3. STOCKED SHELF: the deck is finished; a compact back bar, then what it pours */
+const railSour = [
+  ['Daiquiri','img/daiquiri.webp','in','50% 60%'],
+  ['Whiskey Sour','img/whiskey-sour.webp','new','50% 60%'],
+  ['White Lady', vface('coupe', '#EDE6D6'),'new'],
+];
+const railSpirit = [
+  ['Boulevardier','img/boulevardier.webp','new','50% 60%'],
+  ['Martini','img/martini.webp','in','50% 55%'],
+  ['Negroni','img/negroni.webp','in','50% 60%'],
+];
+function rcard([n, src, st, pos]){
+  const face = src.startsWith('<svg') ? src : `<img src="${src}" style="object-position:${pos}">`;
+  const tag = st === 'new' ? `<span class="tag new">New</span>` : `<span class="tag in">${G.checkSm}In your Dex</span>`;
+  return `<div class="rcard"><div class="w">${face}</div><div class="n">${n}</div><div class="tagrow">${tag}</div></div>`;
+}
+F.shelf = `<section class="screen" id="shelf">
+  <div class="grain"></div>
+  <div class="band" style="height:512px"><div class="grain"></div>
+    ${statusBar(true)}
+    <div class="bar lining" style="background:transparent"><div class="title">My Bar</div><div class="gb right">${G.search}</div></div>
+    <div class="shelfhead"><h2>Your shelf</h2><span>17 things</span></div>
+    ${ledge(SHELF_BOTTLES, 156)}
+    ${ledge(SHELF_FRESH, 300, 58)}
+    <div class="subline" style="top:414px;color:var(--onLiningMuted)">Tap a bottle to take it off the shelf.</div>
+    <div class="bandfoot" style="top:444px"><div class="btn onLiningOutline">Deal more cards</div></div>
+    <div class="lip"></div>
+  </div>
+  <div class="shade12" style="top:512px"></div>
+  <div class="sechead" style="top:534px"><div class="hero"><b>53</b><span>drinks you can make tonight</span></div><div class="btn text">See all</div></div>
+  <div class="styleh" style="top:594px"><h3>Sour<span>17</span></h3></div>
+  <div class="rail" style="top:628px">${railSour.map(rcard).join('')}</div>
+  ${tabBar(false)}<div class="hi"></div>
+</section>`;
+
+/* 4. TONIGHT: scrolled down the same page. The bar stays on lining with its rule; the tab bar has compacted (v3.1 §3.3) */
+const vodka = [
+  ['Moscow Mule','img/moscow-mule.webp','50% 60%'],['Screwdriver','img/screwdriver.webp','50% 60%'],['Kamikaze','img/kamikaze.webp','50% 62%'],
+  ['Lemon Drop Shot','img/lemon-drop-shot.webp','50% 62%'],['Lemon Drop','img/lemon-drop.webp','50% 60%'],
+];
+const scotch = [
+  ['Blue Blazer', vface('mug','#D3892A', false)],['Rob Roy', vface('coupe','#B4601F')],['Affinity', vface('coupe','#D3892A')],
+  ['Mamie Taylor', vface('highball','#E3AE33')],['Remsen Cooler', vface('highball','#E4E8E4')],
+];
+function th([n, src, pos]){
+  const face = src.startsWith('<svg') ? src : `<img src="${src}" style="object-position:${pos}">`;
+  return `<div class="th"><div class="m"><div class="w">${face}</div></div><div class="n">${n}</div></div>`;
+}
+function nextcard(top, name, count, items){
+  return `<div class="nextcard" style="top:${top}px">
+    <div class="hd"><div><h4>${name}</h4><p>${count} more drinks you could make</p></div><div class="btn secondary sm">${G.plusThin}Add to shelf</div></div>
+    <div class="thumbs">${items.map(th).join('')}</div></div>`;
+}
+F.tonight = `<section class="screen" id="tonight">
+  <div class="grain"></div>
+  <div class="band" style="height:106px;z-index:20"><div class="grain"></div>${statusBar(true)}
+    <div class="bar lining ruled" style="background:transparent"><div class="title">My Bar</div><div class="gb right">${G.search}</div></div></div>
+  <div class="styleh" style="top:124px"><h3>Spirit-forward<span>12</span></h3></div>
+  <div class="rail" style="top:158px">${railSpirit.map(rcard).join('')}</div>
+  <div class="sechead" style="top:420px"><h2 style="font:600 20px/26px Inter">Worth buying next</h2></div>
+  <div class="subline" style="top:450px">205 drinks are one thing short. These open the most.</div>
+  ${nextcard(482, 'Vodka', 10, vodka)}
+  ${nextcard(716, 'Scotch whisky', 7, scotch)}
+  ${tabBar(true)}<div class="hi"></div>
+</section>`;
+
+const order = ['first','deck','shelf','tonight'];
+document.getElementById('wall').innerHTML = order.map(k => F[k]).join('');
+const h = location.hash.slice(1);
+if (F[h]) { document.body.classList.add('solo'); document.getElementById(h).classList.add('on'); }
+</script>
+</body>
+</html>

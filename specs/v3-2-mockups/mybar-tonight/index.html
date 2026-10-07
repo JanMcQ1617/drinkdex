@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Bar Tonight</title>
+<link rel="preload" href="fonts/InterLatin_400Regular.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/InterLatin_500Medium.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/InterLatin_600SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/PlayfairDisplayLatin_600SemiBold.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="fonts/PlayfairDisplayLatin_700Bold.ttf" as="font" type="font/ttf" crossorigin>
+<style>
+@font-face{font-family:Inter;src:url(fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* Tokens: src/constants/theme.ts, v3.1 */
+:root{
+  --paper:#F7F2EA; --sunk:#E9E5DF; --white:#FFFFFF; --line:#D9CFC1; --lineControl:#8A7F74;
+  --ink:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --wine:#5B0F1A; --wineWash:#F5E7E7; --onWine:#E9E5DF; --danger:#A83224;
+  --mat:#FBF8F2; --lining:#3E0A12; --liningDeep:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --onLiningFaint:#A7837F;
+  --liningLine:rgba(233,229,223,.16); --liningLip:rgba(233,229,223,.14); --liningControl:rgba(233,229,223,.42);
+  --reelInk:#FFFDF9; --reelInkDim:#A99E94; --reelBar:#2B2322; --reelEdge:rgba(255,253,249,.28);
+  --marker:rgba(14,11,11,.78); --taupeInk:#736247; --plateEdgeLining:rgba(233,229,223,.24);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#161112}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block}
+.wall{display:flex;flex-wrap:wrap;gap:40px;padding:40px}
+.screen{position:relative;width:440px;height:956px;overflow:hidden;flex:none;
+  background:url(img/grain-paper.png) 0 0/128px 128px repeat,var(--paper)}
+body.solo .wall{padding:0;gap:0}
+body.solo .screen{display:none}
+body.solo .screen.on{display:block}
+.lin{background:url(img/grain-lining.png) 0 0/128px 128px repeat,var(--lining)}
+.tnum{font-variant-numeric:tabular-nums}
+.pf{font-family:Playfair;font-weight:600}
+
+/* hardware: status bar and home indicator */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--ink)}
+.sb.light{color:var(--reelInk)}
+.sb .t{position:absolute;left:46px;top:20px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:23px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--ink);z-index:60}
+.hi.light{background:var(--reelInk)}
+
+/* top bar (ScreenTopBar size lg, tone lining) */
+.topbar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:30;display:flex;align-items:center;justify-content:flex-end;padding:0 6px}
+.topbar .title{position:absolute;left:0;right:0;text-align:center;font:600 20px/26px Inter;color:var(--onLining);pointer-events:none}
+.topbar.rule::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--liningLip)}
+.gb{width:44px;height:44px;display:grid;place-items:center;color:var(--onLining)}
+.gb svg{width:26px;height:26px}
+
+/* floating tab bar: espresso, My Bar active */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:64px;z-index:40;padding:0 6px;display:flex}
+.tabbar .slab{position:absolute;inset:0;background:var(--reelBar);border:1px solid var(--reelEdge);border-radius:12px;box-shadow:0 4px 14px rgba(14,11,11,.30)}
+.tb{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--reelInkDim);font:500 11px/14px Inter}
+.tb .gl{width:28px;height:28px;display:grid;place-items:center}
+.tb svg{width:24px;height:24px}
+.tb.on{color:var(--reelInk);font-weight:600}
+.tb.on::before{content:"";position:absolute;top:0;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--reelInk)}
+.fab{width:48px;height:36px;border-radius:8px;background:var(--wine);border:1px solid rgba(233,229,223,.38);display:grid;place-items:center;color:var(--onWine)}
+.fab svg{width:22px;height:22px}
+.face{width:24px;height:24px;border-radius:50%;background:var(--wine);color:var(--onLining);font:600 11px/24px Inter;text-align:center;box-shadow:0 0 0 1.5px var(--reelInkDim)}
+/* compacted (scrolled down): 48pt slab, glyphs only (ScrollChrome) */
+.tabbar.compact{height:48px}
+.tabbar.compact .tb span.lb{display:none}
+.tabbar.compact .tb.on::before{top:0}
+
+/* shared type */
+.h-shelf{font:600 20px/26px Inter;color:var(--ink)}
+.help{font:400 13px/18px Inter;color:var(--muted)}
+.sec{font:600 16px/22px Inter;color:var(--ink)}
+
+/* buttons: rounded rectangles, never pills */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 20px;border-radius:8px;font:600 16px/20px Inter;border:1px solid transparent;white-space:nowrap}
+.btn svg{width:20px;height:20px}
+.btn.sm{height:36px;padding:0 12px;font-size:14px;line-height:18px;gap:6px}
+.btn.sm svg{width:16px;height:16px}
+.btn.block{display:flex;width:100%}
+.btn.primary{background:var(--wine);color:var(--onWine);border-color:var(--wine)}
+.btn.onlining{background:var(--onLining);color:var(--lining);border-color:var(--onLining)}
+.btn.olo{color:var(--onLining);border-color:var(--liningControl)}
+.btn.tonal{background:var(--sunk);color:var(--ink);border-color:var(--line)}
+.btn.added{background:var(--wineWash);color:var(--wine);border-color:var(--wine)}
+.btn.text{padding:0 4px;color:var(--wine);height:36px;font-size:15px}
+
+/* chips on lining (new skin) and on paper (ui.tsx Chip) */
+.chips{display:flex;gap:8px;white-space:nowrap}
+.lchip,.chip{height:32px;padding:0 12px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;font:500 14px/20px Inter;flex:none}
+.lchip{border:1px solid var(--liningControl);color:var(--onLining)}
+.lchip .n{color:var(--onLiningMuted);font-variant-numeric:tabular-nums}
+.lchip.on{background:var(--onLining);border-color:var(--onLining);color:var(--lining);font-weight:600}
+.lchip.on .n{color:var(--lining);font-weight:500}
+.lchip svg,.chip svg{width:14px;height:14px}
+.chip{background:var(--white);border:1px solid var(--line);color:var(--ink)}
+.chip .n{color:var(--muted);font-variant-numeric:tabular-nums}
+.chip.on{background:var(--wineWash);border-color:var(--wine);color:var(--wine);font-weight:600}
+.chip.on .n{color:var(--wine);font-weight:500}
+
+/* plates over a photograph (media.tsx) */
+.plates{position:absolute;left:12px;top:12px;display:flex;gap:6px;z-index:2}
+.mk{height:24px;padding:0 8px;border-radius:4px;background:var(--marker);border:1px solid var(--reelEdge);color:var(--reelInk);
+  font:500 12px/22px Inter;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.mk svg{width:12px;height:12px}
+.mk.no{font:500 11px/22px Inter;letter-spacing:1.5px;font-variant-numeric:tabular-nums}
+.mk.new{border-color:var(--reelInk);font-weight:600}
+
+/* ---------- Tonight: hero cards in the cellar ---------- */
+.hero{display:flex;gap:12px;padding:0 16px}
+.hcard{width:280px;flex:none;background:var(--liningDeep);border:1px solid var(--liningLine);border-radius:12px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(14,11,11,.45),0 8px 18px rgba(14,11,11,.34);position:relative}
+.hcard .ph{width:278px;height:278px;position:relative}
+.hcard .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.hcard .foot{padding:2px 16px 16px}
+.hcard .nm{font:700 28px/34px Playfair;color:var(--onLining)}
+.hcard .ing{font:400 13px/18px Inter;color:var(--onLiningMuted);margin-top:2px}
+
+/* empty state: preview prints */
+.pcard{width:124px;flex:none;background:var(--liningDeep);border:1px solid var(--liningLine);border-radius:8px;overflow:hidden;box-shadow:0 1px 0 rgba(14,11,11,.45),0 8px 18px rgba(14,11,11,.34)}
+.pcard img{width:122px;height:122px;object-fit:cover;display:block}
+.pcard .pn{font:600 16px/20px Playfair;color:var(--onLining);padding:2px 10px 12px}
+.pcard.more{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 14px;height:auto}
+.pcard.more b{font:600 16px/22px Inter;color:var(--onLining)}
+.pcard.more span{font:400 13px/18px Inter;color:var(--onLiningMuted)}
+
+/* bottle tiles: the picker's photo grid */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);column-gap:10px;row-gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);column-gap:10px;row-gap:12px}
+.bt .win{position:relative;width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:var(--liningDeep)}
+.bt .win img{width:100%;height:100%;object-fit:cover;display:block}
+.bt .win::after{content:"";position:absolute;inset:0;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(43,35,34,.16)}
+.bt .badge{position:absolute;right:8px;top:8px;width:24px;height:24px;border-radius:4px;display:grid;place-items:center;
+  background:var(--marker);border:1px solid var(--reelEdge);color:var(--reelInk);z-index:2}
+.bt .badge svg{width:15px;height:15px}
+.bt.on .win{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--wine)}
+.bt.on .badge{background:var(--wine);border-color:rgba(233,229,223,.38);color:var(--onWine)}
+.bt .lb{font:600 15px/20px Inter;color:var(--ink);margin-top:10px}
+.bt .sub{font:400 13px/18px Inter;color:var(--muted)}
+.bt .sub.gain{font-weight:500;color:var(--ink)}
+.bt.on .lb,.bt.on .sub{color:var(--wine)}
+.bt.sm .lb{font:500 13px/18px Inter;margin-top:6px}
+.bt.sm .win{border-radius:6px}
+.bt.sm .win::after{border-radius:6px}
+
+/* paper list group (ListGroup) with one-thing-away rows */
+.group{background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.orow{display:flex;align-items:center;gap:12px;padding:10px 12px;min-height:76px;position:relative}
+.orow+.orow::before,.orow+.gfoot::before{content:"";position:absolute;top:0;left:80px;right:0;height:.5px;background:var(--line)}
+.orow+.gfoot::before{left:0}
+.thumb{width:56px;height:56px;flex:none;background:var(--mat);border:1px solid var(--line);border-radius:4px;padding:3px}
+.thumb>*{width:48px;height:48px;border-radius:2px;overflow:hidden;display:block}
+.thumb img{width:48px;height:48px;object-fit:cover;display:block}
+.orow .txt{flex:1;min-width:0}
+.orow .t1{font:600 16px/22px Inter;color:var(--ink)}
+.orow .t2{font:400 13px/18px Inter;color:var(--muted)}
+.orow .t2 .pf{color:var(--ink)}
+.orow.expanded{flex-wrap:wrap;align-items:flex-start;padding-bottom:14px}
+.orow.expanded .txt{padding-top:6px}
+.orow.expanded .btn{margin-top:10px}
+.added-strip{flex-basis:100%;display:flex;gap:10px;padding-left:68px}
+.mini{width:68px;flex:none}
+.mini .w{width:68px;height:68px;border-radius:4px;overflow:hidden;background:var(--liningDeep);border:3px solid var(--mat);box-shadow:0 0 0 1px var(--line)}
+.mini .w img,.mini .w svg{width:100%;height:100%;object-fit:cover;display:block}
+.mini .n{font:600 13px/17px Playfair;color:var(--ink);margin-top:6px}
+.mini.more .w{display:grid;place-items:center;background:var(--sunk);border-color:var(--sunk)}
+.mini.more .w span{font:600 15px/20px Inter;color:var(--ink)}
+.gfoot{position:relative;height:46px;display:flex;align-items:center;justify-content:center;font:600 15px/20px Inter;color:var(--wine)}
+
+/* sheet */
+.sheet{position:absolute;left:0;right:0;top:58px;bottom:0;border-radius:12px 12px 0 0;overflow:hidden;
+  background:url(img/grain-paper.png) 0 0/128px 128px repeat,var(--paper);z-index:20}
+.sheethead{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;position:relative}
+.sheethead .title{position:absolute;left:0;right:0;text-align:center;font:600 17px/22px Inter;pointer-events:none}
+.search{height:44px;border-radius:8px;background:var(--white);border:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px;
+  font:400 16px/22px Inter;color:var(--muted)}
+.search svg{width:20px;height:20px;color:var(--faint)}
+.sfoot{position:absolute;left:0;right:0;bottom:0;height:116px;z-index:5;border-top:1px solid var(--line);
+  background:url(img/grain-paper.png) 0 0/128px 128px repeat,var(--paper);padding:14px 16px 0;display:flex;gap:12px;align-items:flex-start}
+.sfoot .cnt{flex:1}
+.sfoot .cnt b{display:block;font:600 18px/22px Inter;color:var(--ink);font-variant-numeric:tabular-nums}
+.sfoot .cnt span{font:400 13px/18px Inter;color:var(--muted)}
+
+.lipline{position:absolute;left:0;right:0;height:1px;background:var(--liningLip)}
+.shade{position:absolute;left:0;right:0;height:12px;background:linear-gradient(rgba(14,11,11,.22),rgba(14,11,11,0))}
+.abs{position:absolute;left:0;right:0}
+.g16{padding:0 16px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- Glyphs: src/components/icons.tsx, 24 grid, 1.75 stroke, round caps and joins -->
+    <symbol id="i-home" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/></g></symbol>
+    <symbol id="i-dex" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/></g></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></g></symbol>
+    <symbol id="i-plus-thin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></g></symbol>
+    <symbol id="i-bottle-f" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/></symbol>
+    <symbol id="i-bottle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z"/><path d="M10.4 5.4h3.2"/><path d="M7.2 12.8h9.6"/><path d="M7.2 17h9.6"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.6 9.8 17.4 19 6.9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M6.2 6.2 17.8 17.8"/><path d="M17.8 6.2 6.2 17.8"/></g></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9.4 5.4 16 12l-6.6 6.6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="wall">
+
+<!-- ================================================================== -->
+<!-- 1. EMPTY: first open. The question, the one-tap basics, the tiles   -->
+<!-- ================================================================== -->
+<section class="screen" id="empty" data-label="First open: nothing on the shelf">
+  <div class="sb light" data-sb></div>
+  <div class="abs lin" style="top:0;height:560px"></div>
+  <div class="lipline" style="top:560px"></div>
+  <div class="shade" style="top:561px"></div>
+  <div class="topbar"><div class="title">My Bar</div></div>
+
+  <div class="abs" style="top:116px">
+    <div class="g16">
+      <h1 style="font:600 28px/34px Inter;color:var(--onLining)">What can I make tonight?</h1>
+      <p style="font:400 15px/22px Inter;color:var(--onLiningMuted);margin-top:6px">Tap what is on your shelf, and the drinks you can pour appear here as you go.</p>
+      <p style="font:500 13px/18px Inter;color:var(--onLining);margin-top:20px">The basics alone make 47, like these</p>
+    </div>
+    <div class="hero" style="gap:12px;margin-top:10px">
+      <div class="pcard"><img src="img/daiquiri.webp" alt=""><div class="pn">Daiquiri</div></div>
+      <div class="pcard"><img src="img/old-fashioned.webp" alt=""><div class="pn">Old Fashioned</div></div>
+      <div class="pcard"><img src="img/martini.webp" alt=""><div class="pn">Martini</div></div>
+      <div class="pcard more" style="height:164px"><b>44 more</b><span>from 14 things</span></div>
+    </div>
+    <div class="g16" style="margin-top:20px">
+      <div class="btn onlining block"><svg><use href="#i-plus-thin"/></svg>Add the basics</div>
+      <p style="font:400 13px/18px Inter;color:var(--onLiningMuted);margin-top:10px">Gin, vodka, white rum, bourbon, both vermouths, citrus, syrup, bitters, soda and mint. Take off anything you do not have.</p>
+    </div>
+  </div>
+
+  <div class="abs g16" style="top:592px">
+    <h2 class="h-shelf">Or tap your own bottles</h2>
+    <p class="help" style="margin-top:2px">Most used first. Fresh things and mixers come after.</p>
+    <div class="grid3" style="margin-top:14px" data-tiles="gin:Gin:martini:in 167 drinks,sweet-vermouth:Sweet vermouth:sweet-vermouth:in 72 drinks,white-rum:White rum:daiquiri:in 66 drinks,vodka:Vodka:moscow-mule:in 62 drinks,rye:Rye whiskey:manhattan:in 51 drinks,brandy:Brandy:suffering-bastard:in 49 drinks"></div>
+  </div>
+
+  <nav class="tabbar" data-tabs></nav>
+  <div class="hi"></div>
+</section>
+
+<!-- ================================================================== -->
+<!-- 2. PICKER: stocking the shelf. Photo tiles, +N per bottle, live count -->
+<!-- ================================================================== -->
+<section class="screen" id="picker" data-label="Stocking the shelf: the guided picker" style="background:#0B0809">
+  <div class="sb light" data-sb></div>
+  <!-- the presenting screen, receded behind the sheet -->
+  <div style="position:absolute;left:16px;right:16px;top:46px;height:40px;border-radius:12px 12px 0 0;opacity:.5" class="lin"></div>
+  <div class="sheet">
+    <div class="sheethead">
+      <div class="btn text" style="color:var(--danger);padding:0">Clear</div>
+      <div class="title">Your shelf</div>
+      <div class="gb" style="color:var(--ink)"><svg><use href="#i-close"/></svg></div>
+    </div>
+    <div class="g16"><div class="search"><svg><use href="#i-search"/></svg>Search 493 ingredients</div></div>
+    <div class="chips" style="padding:12px 16px 0;overflow:hidden">
+      <span class="chip on"><svg><use href="#i-check"/></svg>Bottles <span class="n">5</span></span>
+      <span class="chip">Fresh <span class="n">4</span></span>
+      <span class="chip">Syrups and bitters <span class="n">2</span></span>
+      <span class="chip">Mixers <span class="n">1</span></span>
+      <span class="chip">Everything else</span>
+    </div>
+    <div class="g16" style="margin-top:18px;display:flex;align-items:baseline;justify-content:space-between">
+      <h3 class="sec">Bottles</h3><span class="help">The number is what each one adds</span>
+    </div>
+    <div class="g16" style="margin-top:12px">
+      <div class="grid3" style="column-gap:14px" data-tiles="gin:Gin:martini:On your shelf:on,sweet-vermouth:Sweet vermouth:sweet-vermouth:On your shelf:on,white-rum:White rum:daiquiri:On your shelf:on,vodka:Vodka:moscow-mule:On your shelf:on,rye:Rye whiskey:manhattan:On your shelf:on,brandy:Brandy:suffering-bastard:+5 drinks:gain,maraschino:Maraschino liqueur:aviation:+4 drinks:gain,absinthe:Absinthe:death-in-the-afternoon:+5 drinks:gain,triple-sec:Triple sec:cosmopolitan:+6 drinks:gain"></div>
+    </div>
+    <div class="sfoot">
+      <div class="cnt"><b>36 drinks tonight</b><span>Rye whiskey added 5</span></div>
+      <div class="btn primary" style="width:132px">Show me</div>
+    </div>
+  </div>
+  <div class="hi"></div>
+</section>
+
+<!-- ================================================================== -->
+<!-- 3. TONIGHT: a stocked shelf opens on the answer                      -->
+<!-- ================================================================== -->
+<section class="screen" id="tonight" data-label="Stocked: what you can make tonight">
+  <div class="sb light" data-sb></div>
+  <div class="abs lin" style="top:0;height:612px"></div>
+  <div class="lipline" style="top:612px"></div>
+  <div class="shade" style="top:613px"></div>
+  <div class="topbar"><div class="title">My Bar</div><div class="gb"><svg><use href="#i-search"/></svg></div></div>
+
+  <div class="abs" style="top:110px">
+    <div class="g16">
+      <p style="font:500 15px/22px Inter;color:var(--onLiningMuted)">What can I make tonight?</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px">
+        <div style="display:flex;align-items:baseline;gap:8px;color:var(--onLining)">
+          <span class="tnum" style="font:600 36px/40px Inter;letter-spacing:-.5px">72</span><span style="font:600 20px/26px Inter">drinks</span>
+        </div>
+        <div class="btn olo sm"><svg><use href="#i-bottle"/></svg>Your shelf <span style="color:var(--onLiningMuted);font-weight:500" class="tnum">20</span></div>
+      </div>
+    </div>
+    <div class="chips" style="padding:14px 16px 0;overflow:hidden">
+      <span class="lchip on"><svg><use href="#i-check"/></svg>All <span class="n">72</span></span>
+      <span class="lchip">Sours <span class="n">25</span></span>
+      <span class="lchip">Spirit-forward <span class="n">16</span></span>
+      <span class="lchip">Highballs <span class="n">16</span></span>
+      <span class="lchip">Fizzes <span class="n">3</span></span>
+    </div>
+    <div class="hero" style="margin-top:16px">
+      <article class="hcard">
+        <div class="ph"><img src="img/negroni.webp" alt="">
+          <div class="plates"><span class="mk no">#0127</span><span class="mk new"><svg><use href="#i-plus-thin"/></svg>New to your Dex</span></div>
+        </div>
+        <div class="foot"><div class="nm">Negroni</div><div class="ing">Gin, Campari, sweet vermouth, orange</div></div>
+      </article>
+      <article class="hcard">
+        <div class="ph"><img src="img/whiskey-sour.webp" alt="">
+          <div class="plates"><span class="mk no">#0112</span><span class="mk"><svg><use href="#i-check"/></svg>In your Dex</span></div>
+        </div>
+        <div class="foot"><div class="nm">Whiskey Sour</div><div class="ing">Bourbon, lemon, sugar syrup, egg white</div></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="abs g16" style="top:632px">
+    <h2 class="h-shelf">One thing away</h2>
+    <p class="help" style="margin-top:2px">Add it and these are yours tonight.</p>
+    <div class="group" style="margin-top:12px">
+      <div class="orow">
+        <div class="thumb"><img src="img/tequila-sunrise.webp" alt=""></div>
+        <div class="txt"><div class="t1">Grenadine</div><div class="t2">10 more drinks, like <span class="pf">Tequila Sunrise</span></div></div>
+        <div class="btn tonal sm"><svg><use href="#i-plus-thin"/></svg>Add</div>
+      </div>
+      <div class="orow">
+        <div class="thumb"><span data-vf="coupe:#B5562F"></span></div>
+        <div class="txt"><div class="t1">Absinthe</div><div class="t2">8 more drinks, like <span class="pf">Waldorf</span></div></div>
+        <div class="btn tonal sm"><svg><use href="#i-plus-thin"/></svg>Add</div>
+      </div>
+      <div class="orow">
+        <div class="thumb"><img src="img/greyhound.webp" alt=""></div>
+        <div class="txt"><div class="t1">Grapefruit</div><div class="t2">8 more drinks, like <span class="pf">Greyhound</span></div></div>
+        <div class="btn tonal sm"><svg><use href="#i-plus-thin"/></svg>Add</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar" data-tabs></nav>
+  <div class="hi"></div>
+</section>
+
+<!-- ================================================================== -->
+<!-- 4. AWAY: scrolled, Grapefruit just added; the shelf below            -->
+<!-- ================================================================== -->
+<section class="screen" id="away" data-label="One tap: grapefruit added, eight more tonight">
+  <div class="sb light" data-sb></div>
+  <div class="abs lin" style="top:0;height:106px;z-index:25"></div>
+  <div class="shade" style="top:106px;z-index:24"></div>
+  <div class="topbar rule"><div class="title">My Bar</div><div class="gb"><svg><use href="#i-search"/></svg></div></div>
+
+  <div class="abs g16" style="top:122px">
+    <h2 class="h-shelf">One thing away</h2>
+    <p class="help" style="margin-top:2px">Add it and these are yours tonight.</p>
+    <div class="group" style="margin-top:12px">
+      <div class="orow">
+        <div class="thumb"><img src="img/tequila-sunrise.webp" alt=""></div>
+        <div class="txt"><div class="t1">Grenadine</div><div class="t2">10 more drinks, like <span class="pf">Tequila Sunrise</span></div></div>
+        <div class="btn tonal sm"><svg><use href="#i-plus-thin"/></svg>Add</div>
+      </div>
+      <div class="orow">
+        <div class="thumb"><span data-vf="coupe:#B5562F"></span></div>
+        <div class="txt"><div class="t1">Absinthe</div><div class="t2">8 more drinks, like <span class="pf">Waldorf</span></div></div>
+        <div class="btn tonal sm"><svg><use href="#i-plus-thin"/></svg>Add</div>
+      </div>
+      <div class="orow expanded">
+        <div class="thumb"><img src="img/greyhound.webp" alt=""></div>
+        <div class="txt"><div class="t1">Grapefruit</div><div class="t2" style="color:var(--wine)">On your shelf: 8 more tonight</div></div>
+        <div class="btn added sm"><svg><use href="#i-check"/></svg>Added</div>
+        <div class="added-strip">
+          <div class="mini"><div class="w"><img src="img/greyhound.webp" alt=""></div><div class="n">Greyhound</div></div>
+          <div class="mini"><div class="w" data-vf="highball:#F0C3A8"></div><div class="n">Salty Dog</div></div>
+          <div class="mini"><div class="w" data-vf="coupe:#E06A5F"></div><div class="n">Siesta</div></div>
+          <div class="mini more"><div class="w"><span>+5</span></div><div class="n" style="font:400 13px/17px Inter;color:var(--muted)">See all 8</div></div>
+        </div>
+      </div>
+      <div class="orow">
+        <div class="thumb"><span data-vf="highball:#D69A45"></span></div>
+        <div class="txt"><div class="t1">Ginger ale</div><div class="t2">7 more drinks, like <span class="pf">Horse's Neck</span></div></div>
+        <div class="btn tonal sm"><svg><use href="#i-plus-thin"/></svg>Add</div>
+      </div>
+      <div class="gfoot">Show 4 more</div>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:24px">
+      <h2 class="h-shelf">Your shelf</h2><div class="btn text">Edit</div>
+    </div>
+    <p class="help">21 things. Tap a bottle to see what it makes.</p>
+    <div class="grid4" style="margin-top:12px" data-tiles="gin:Gin:martini::sm,sweet-vermouth:Sweet vermouth:sweet-vermouth::sm,white-rum:White rum:daiquiri::sm,vodka:Vodka:moscow-mule::sm"></div>
+  </div>
+
+  <nav class="tabbar compact" data-tabs></nav>
+  <div class="hi"></div>
+</section>
+
+</div>
+
+<script>
+/* Status bar */
+const SB = '<span class="t">9:41</span><div class="island"></div><div class="r"><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.2l2.2-2.6a3.4 3.4 0 0 0-4.4 0z M2.6 5.6a8.2 8.2 0 0 1 10.8 0l-1.6 1.9a5.7 5.7 0 0 0-7.6 0z M0 2.6a12 12 0 0 1 16 0L14.4 4.5a9.5 9.5 0 0 0-12.8 0z" fill="currentColor"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2.2" y="2.2" width="17" height="8.6" rx="2" fill="currentColor"/><path d="M25 4.5v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".45"/></svg></div>';
+document.querySelectorAll('[data-sb]').forEach(el => el.innerHTML = SB);
+
+/* Tab bar: Home . Dex . + . My Bar . Profile, My Bar active (solid bottle, SemiBold, 2pt indicator) */
+const TABS = '<div class="slab"></div>' +
+  '<div class="tb"><span class="gl"><svg><use href="#i-home"/></svg></span><span class="lb">Home</span></div>' +
+  '<div class="tb"><span class="gl"><svg><use href="#i-dex"/></svg></span><span class="lb">Dex</span></div>' +
+  '<div class="tb"><span class="fab"><svg><use href="#i-plus"/></svg></span></div>' +
+  '<div class="tb on"><span class="gl"><svg><use href="#i-bottle-f"/></svg></span><span class="lb">My Bar</span></div>' +
+  '<div class="tb"><span class="gl"><span class="face">NV</span></span><span class="lb">Profile</span></div>';
+document.querySelectorAll('[data-tabs]').forEach(el => el.innerHTML = TABS);
+
+/* Vector face: the lit back-bar window of a drink with no photograph (VectorFace lit) */
+let vfN = 0;
+function glass(kind, liquid) {
+  const s = 'fill="none" stroke="rgba(255,253,249,.80)" stroke-width="1.3" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"';
+  if (kind === 'coupe') return `<path d="M26.5 36 C28 52 72 52 73.5 36 Z" fill="${liquid}"/>
+    <path d="M24 33 C25 55 75 55 76 33 Z" ${s}/><path d="M50 50 V78.6" ${s}/><path d="M38 79.3 Q50 76.6 62 79.3" ${s}/>`;
+  if (kind === 'highball') return `<path d="M36.9 36 L38.7 78.6 L61.3 78.6 L63.1 36 Z" fill="${liquid}"/>
+    <rect x="42" y="41" width="9" height="9" rx="1.5" fill="rgba(255,253,249,.30)"/><rect x="49" y="52" width="9" height="9" rx="1.5" fill="rgba(255,253,249,.22)"/>
+    <path d="M36 24 L38 79.3 L62 79.3 L64 24" ${s}/>`;
+  return '';
+}
+function vf(kind, liquid) {
+  const id = 'vf' + (vfN++);
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+    <defs><radialGradient id="${id}" cx="50%" cy="42%" r="68%"><stop offset="0" stop-color="#7E2330"/><stop offset="1" stop-color="#2F070D"/></radialGradient>
+    <filter id="${id}b"><feGaussianBlur stdDeviation="1.6"/></filter></defs>
+    <rect width="100" height="100" fill="url(#${id})"/>
+    <rect y="80" width="100" height="20" fill="rgba(14,11,11,.22)"/><rect y="80" width="100" height=".7" fill="rgba(255,253,249,.14)"/>
+    <ellipse cx="50" cy="80.2" rx="15" ry="2.2" fill="#000" opacity=".35" filter="url(#${id}b)"/>
+    ${glass(kind, liquid)}</svg>`;
+}
+document.querySelectorAll('[data-vf]').forEach(el => { const [k, c] = el.dataset.vf.split(':'); el.innerHTML = vf(k, c); });
+
+/* Bottle tiles: id:label:photo:sub:state */
+document.querySelectorAll('[data-tiles]').forEach(grid => {
+  grid.innerHTML = grid.dataset.tiles.split(',').map(t => {
+    const [id, label, photo, sub, state = ''] = t.split(':');
+    const on = state.startsWith('on');
+    const sm = state.endsWith('sm');
+    const cls = ['bt', on ? 'on' : '', sm ? 'sm' : ''].join(' ');
+    const badge = sm ? '' : `<span class="badge"><svg><use href="#${on ? 'i-check' : 'i-plus-thin'}"/></svg></span>`;
+    const subCls = state === 'gain' ? 'sub gain' : 'sub';
+    return `<div class="${cls}"><div class="win"><img src="img/${photo}.webp" alt="">${badge}</div>
+      <div class="lb">${label}</div>${sub ? `<div class="${subCls}">${sub}</div>` : ''}</div>`;
+  }).join('');
+});
+
+/* #frame shows one screen alone for the headless render */
+const h = location.hash.slice(1);
+if (h) { document.body.classList.add('solo'); const s = document.getElementById(h); if (s) s.classList.add('on'); }
+</script>
+</body>
+</html>
