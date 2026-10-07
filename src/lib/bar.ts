@@ -46,11 +46,11 @@ export const INGREDIENTS_BY_ID: Record<string, Ingredient> = Object.fromEntries(
 );
 
 /**
- * The picker's default view. Everything is searchable, but showing every
- * ingredient at rest — nearly five hundred — is a wall, and the tail is
- * genuinely obscure (Brennivín appears in two drinks). Anything named by
- * three or more cocktails earns a place in the browse list; the rest is
- * found by typing.
+ * Anything named by three or more cocktails. Everything is searchable, but
+ * showing every ingredient at rest (nearly five hundred) is a wall, and
+ * the tail is genuinely obscure (Brennivín appears in two drinks). My Bar's
+ * add sheet browses browseIngredients() below, which adds the family
+ * members this misses (Armagnac is named by none).
  */
 export const COMMON_INGREDIENTS: Ingredient[] = INGREDIENTS.filter((i) => i.uses >= 3);
 
@@ -80,6 +80,11 @@ export interface Match {
   drink: Drink;
   /** Ingredient ids you are missing — one per unmet slot. Empty means makeable. */
   missing: string[];
+  /**
+   * `nearly` only: every id that fills the one unmet slot. Rye fills
+   * "Whiskey" as well as the whiskey generic does, so it gets the credit too.
+   */
+  slot?: readonly string[];
 }
 
 export interface BarResult {
@@ -89,14 +94,24 @@ export interface BarResult {
   /** Missing exactly one thing. The useful half of the feature. */
   nearly: Match[];
   /**
-   * Ingredients ranked by how many `nearly` drinks each would unlock. This is
-   * the shopping list, and it is the reason `nearly` is computed at all: on a
-   * realistic fifteen-item bar it runs to about four times the makeable list.
+   * The shopping list, CANONICAL: one entry per missing[0] (the generic a
+   * list should name), ranked by how many nearly drinks name it, so every
+   * nearly drink belongs to exactly one entry and bourbon and rye never
+   * stand as two entries for the same drinks (shoppingList, below).
+   * `unlocks` is the full-slot gain, what adding it really pours. Every
+   * entry, not a top eight: My Bar takes one per shelf and pages the rest.
    */
   nextBest: { ingredient: Ingredient; unlocks: number }[];
+  /**
+   * FULL-SLOT GAINS: for any ingredient id, the nearly drinks that adding
+   * it would complete. Every id in the single missing slot is credited,
+   * not just slot[0], so a family member's number is true (Rye pours 5
+   * more, where the canonical tally said +0). Alphabetical, like `nearly`.
+   */
+  gains: ReadonlyMap<string, readonly Match[]>;
 }
 
-const EMPTY: BarResult = { makeable: [], nearly: [], nextBest: [] };
+const EMPTY: BarResult = { makeable: [], nearly: [], nextBest: [], gains: new Map() };
 
 /*
  * The recipes in drink-name order, sorted once on first use. matchBar walks
@@ -134,28 +149,128 @@ export function matchBar(owned: ReadonlySet<string>): BarResult {
 
   for (const { recipe, drink } of sortedRecipes()) {
     const missing: string[] = [];
+    let unmet: string[] | null = null;
     for (const slot of recipe.slots) {
       if (slot.some((id) => owned.has(id))) continue;
       // The first id is the canonical one — the others are family expansions,
       // so naming the generic is what a shopping list should say.
       missing.push(slot[0]);
+      unmet = slot;
       if (missing.length > 1) break; // past "nearly", stop counting
     }
 
     if (missing.length === 0) makeable.push({ drink, missing });
-    else if (missing.length === 1) nearly.push({ drink, missing });
+    else if (missing.length === 1) nearly.push({ drink, missing, slot: unmet ?? missing });
   }
 
-  const tally = new Map<string, number>();
-  for (const m of nearly) tally.set(m.missing[0], (tally.get(m.missing[0]) ?? 0) + 1);
+  // Every id in the missing slot is credited (see `gains`). A Set per slot,
+  // because a few slots name the same id twice.
+  const gains = new Map<string, Match[]>();
+  for (const m of nearly) {
+    for (const id of new Set(m.slot)) {
+      let list = gains.get(id);
+      if (!list) gains.set(id, (list = []));
+      list.push(m);
+    }
+  }
 
-  const nextBest = [...tally.entries()]
-    .map(([id, unlocks]) => ({ ingredient: INGREDIENTS_BY_ID[id], unlocks }))
-    .filter((x) => x.ingredient)
-    .sort((a, b) => b.unlocks - a.unlocks || a.ingredient.label.localeCompare(b.ingredient.label))
-    .slice(0, 8);
+  return { makeable, nearly, nextBest: shoppingList(nearly, gains), gains };
+}
 
-  return { makeable, nearly, nextBest };
+/*
+ * The shopping list stays CANONICAL (the v3.2 spec and both judges): one
+ * entry per missing[0], ranked by how many nearly drinks name it. Ranked
+ * by full-slot gains instead, a family member that also fills a generic
+ * slot outranks the staples: Applejack (+10, five of them the brandy
+ * slot's) stood first and at the spirits shelf's end ahead of Vodka +8
+ * and Grenadine +9, the buys the mockup and a bartender would name. Ties
+ * go to the larger full gain, then the name. `unlocks` is the full gain.
+ */
+function shoppingList(
+  nearly: Match[],
+  gains: ReadonlyMap<string, readonly Match[]>,
+): { ingredient: Ingredient; unlocks: number }[] {
+  const named = new Map<string, number>();
+  for (const m of nearly) named.set(m.missing[0]!, (named.get(m.missing[0]!) ?? 0) + 1);
+  return [...named.entries()]
+    .flatMap(([id, n]) => {
+      const ingredient = INGREDIENTS_BY_ID[id];
+      return ingredient ? [{ ingredient, n, unlocks: gains.get(id)?.length ?? n }] : [];
+    })
+    .sort((a, b) => b.n - a.n || b.unlocks - a.unlocks || a.ingredient.label.localeCompare(b.ingredient.label))
+    .map(({ ingredient, unlocks }) => ({ ingredient, unlocks }));
+}
+
+/** How many more drinks adding `id` would pour (full-slot, so family members count). */
+export function gainOf(result: BarResult, id: string): number {
+  return result.gains.get(id)?.length ?? 0;
+}
+
+/**
+ * The drinks that changed between two answers: what now pours that did
+ * not (`lit`), and what no longer does (`lost`). For the line under the
+ * shelves ("Campari lit 9") and the VoiceOver sentence that goes with it.
+ */
+export function diffMakeable(before: BarResult, after: BarResult): { lit: Drink[]; lost: Drink[] } {
+  const was = new Set(before.makeable.map((m) => m.drink.id));
+  const now = new Set(after.makeable.map((m) => m.drink.id));
+  return {
+    lit: after.makeable.filter((m) => !was.has(m.drink.id)).map((m) => m.drink),
+    lost: before.makeable.filter((m) => !now.has(m.drink.id)).map((m) => m.drink),
+  };
+}
+
+/**
+ * The fourteen basics: the starter bar, and what My Bar stands on its
+ * shelves before anything is yours.
+ */
+export const BASICS: readonly string[] = [
+  'gin', 'vodka', 'white-rum', 'bourbon', 'sweet-vermouth', 'dry-vermouth',
+  'lemon', 'lime', 'sugar-syrup', 'angostura-bitters', 'soda-water', 'orange',
+  'triple-sec', 'mint',
+];
+
+let basics: BarResult | null = null;
+
+/** What the basics alone pour ("47 drinks"), worked out once, on first ask. */
+export function basicsResult(): BarResult {
+  if (!basics) basics = matchBar(new Set(BASICS));
+  return basics;
+}
+
+let reachById: Map<string, number> | null = null;
+
+/**
+ * How many drinks an ingredient can go into at all: recipes with a slot it
+ * fills, family slots included. `uses` counts only the drinks that name it,
+ * which is 0 for Armagnac (recipes say "brandy"), so "in N drinks" is read
+ * from here.
+ */
+export function reachOf(id: string): number {
+  if (!reachById) {
+    reachById = new Map();
+    for (const { recipe } of sortedRecipes()) {
+      const ids = new Set(recipe.slots.flat());
+      for (const x of ids) reachById.set(x, (reachById.get(x) ?? 0) + 1);
+    }
+  }
+  return reachById.get(id) ?? 0;
+}
+
+let browse: Ingredient[] | null = null;
+
+/**
+ * The add sheet's browse list: COMMON_INGREDIENTS plus family members that
+ * only ever appear through a family slot (Armagnac and Añejo tequila
+ * have `uses` 0 and would vanish from browsing). Most reach first.
+ */
+export function browseIngredients(): Ingredient[] {
+  if (!browse) {
+    browse = INGREDIENTS.filter((i) => i.uses >= 3 || reachOf(i.id) >= 3).sort(
+      (a, b) => reachOf(b.id) - reachOf(a.id) || a.label.localeCompare(b.label),
+    );
+  }
+  return browse;
 }
 
 let lastOwned: Record<string, true> | null = null;
@@ -168,7 +283,9 @@ let lastResult: BarResult = EMPTY;
  * object on every change and the same one otherwise — so My Bar's
  * re-renders (a keystroke in its search field, a return to the tab) reuse
  * the answer instead of walking every recipe again. My Bar is the only
- * reader since v3.1: the Dex's count button that shared it is gone.
+ * reader since v3.1: the Dex's count button that shared it is gone. Its
+ * toggle handler calls this straight after the store changes, to diff the
+ * answer, and the render that follows reuses that same object.
  */
 export function matchOwned(owned: Record<string, true>): BarResult {
   if (owned !== lastOwned) {

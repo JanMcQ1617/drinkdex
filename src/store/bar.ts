@@ -44,6 +44,26 @@ const guardedStorage: StateStorage = {
   removeItem: (name) => AsyncStorage.removeItem(name),
 };
 
+/*
+ * Ids the bar index no longer has, and the bottle each one meant. Until
+ * build 16 the index stripped "dry" from "Dry vermouth", so every one of
+ * those 70 recipes asked for a generic "Vermouth", and that is the bottle
+ * a shelf saved. It meant dry vermouth, so it moves there and pours the
+ * same drinks it did. "Red vermouth" is sweet vermouth written another way.
+ */
+const RETIRED: Record<string, string> = {
+  vermouth: 'dry-vermouth',
+  'red-vermouth': 'sweet-vermouth',
+  'sweet-red-vermouth': 'sweet-vermouth',
+};
+
+function renameRetired(owned: Record<string, true>): Record<string, true> {
+  if (!Object.keys(RETIRED).some((id) => owned[id])) return owned;
+  const next: Record<string, true> = {};
+  for (const id of Object.keys(owned)) next[RETIRED[id] ?? id] = true;
+  return next;
+}
+
 interface BarState {
   /**
    * Ingredient ids you have on the shelf.
@@ -97,11 +117,15 @@ export const useBar = create<BarState>()(
        * applies merge's result with the store's raw setter, which does
        * notify, and does not write the shelf back.
        */
-      merge: (saved, current) => ({
-        ...current,
-        ...(saved as Partial<BarState> | undefined),
-        hydrated: true,
-      }),
+      merge: (saved, current) => {
+        const s = saved as Partial<BarState> | undefined;
+        return {
+          ...current,
+          ...s,
+          ...(s?.owned ? { owned: renameRetired(s.owned) } : null),
+          hydrated: true,
+        };
+      },
       onRehydrateStorage: () => (_state, error) => {
         // The failure path never reaches merge. This setState does write,
         // which guardedStorage refuses while nothing has been read back.

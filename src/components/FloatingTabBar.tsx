@@ -53,11 +53,11 @@ import { useAuth } from '@/store/auth';
 /* alone. The bar's one wine object is the post action, and a wine      */
 /* "where you are" would compete with it.                               */
 /*                                                                      */
-/* TWO MOTIONS, NEITHER A FADE OF THE PAGE. Changing tab slides the     */
-/* pages 24pt, translate only ((tabs)/_layout.tsx). Scrolling a list    */
-/* down compacts the bar to a 48pt glyph-only slab, and scrolling up,   */
-/* or reaching the top, restores it (ScrollChrome.tsx). Both rest on    */
-/* the full bar, and the compaction is moved by the finger through      */
+/* ONE MOTION, MOVED BY THE FINGER. Changing tab is a cut, with no      */
+/* transition ((tabs)/_layout.tsx says why: build 15's slide stalled    */
+/* halfway). Scrolling a list down compacts the bar to a 48pt           */
+/* glyph-only slab, and scrolling up, or reaching the top, restores it  */
+/* (ScrollChrome.tsx). It rests on the full bar, and is moved through   */
 /* native-driven transforms, so a stall can only leave a working bar    */
 /* with every glyph showing.                                            */
 /* ==================================================================== */

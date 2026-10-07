@@ -101,6 +101,8 @@ const VARIANT = {
   'clove': 'cloves',
   'orange liqueur': 'triple sec',
   'cointreau': 'triple sec',
+  'red vermouth': 'sweet vermouth',
+  'sweet red vermouth': 'sweet vermouth',
   'lemon-lime soda': 'lemonade',
   'lemon soda': 'lemonade',
 };
@@ -181,17 +183,66 @@ const categorise = (label) => {
   return 'other';
 };
 
+/*
+ * Where the substring rules file a thing wrongly, by id, over their answer.
+ * "gin" is inside "ginger" (ginger beer, ale and syrup came out spirits),
+ * the liqueur "maraschino" inside "maraschino cherry", and brand names
+ * carry no kind word at all, so they fell to 'other'. My Bar shelves and
+ * the add sheet's chips read the category as written here (src/data/
+ * barShelf.ts), so this is the one place to put a misfiling right.
+ */
+const CATEGORY_OVERRIDE = {
+  'ginger-beer': 'mixer',
+  'ginger-ale': 'mixer',
+  ginger: 'produce',
+  'ginger-syrup': 'syrup',
+  'honey-ginger-syrup': 'syrup',
+  'green-ginger-wine': 'wine',
+  'maraschino-cherry': 'produce',
+  watermelon: 'produce',
+  'jack-daniel-s': 'spirit',
+  'jim-beam': 'spirit',
+  'johnnie-walker': 'spirit',
+  'blended-scotch': 'spirit',
+  'islay-scotch-float': 'spirit',
+  plymouth: 'spirit',
+  jenever: 'spirit',
+  'jonge-jenever': 'spirit',
+  zubrowka: 'spirit',
+  orujo: 'spirit',
+  pitorro: 'spirit',
+  kahlua: 'liqueur',
+  frangelico: 'liqueur',
+  'southern-comfort': 'liqueur',
+  'vana-tallinn': 'liqueur',
+  // Carpano Antica and Gancia Americano are vermouths, which file as wine.
+  'carpano-antica': 'wine',
+  'gancia-americano': 'wine',
+  'select-aperitivo': 'liqueur',
+  // Beers file as wine ("Wine & beer").
+  pilsner: 'wine',
+  'berliner-weisse': 'wine',
+  umeshu: 'liqueur',
+  'sour-mix': 'mixer',
+};
+
 /* ------------------------------------------------------------------ */
 
 const slug = (s) =>
   s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-/** Strips qualifiers that describe preparation rather than the bottle. */
+/**
+ * Strips qualifiers that describe preparation rather than the bottle.
+ * "Dry" goes from "dry gin" and "dry white wine", but stays on vermouth:
+ * dry and sweet vermouth are different bottles, and stripping it sent all
+ * 70 "Dry vermouth" recipes (Martini, Bamboo, Bronx) to the generic slot,
+ * so sweet vermouth alone was said to pour a Martini.
+ */
 const clean = (raw) =>
   raw.toLowerCase().trim()
     .replace(/\s*\(.*?\)\s*/g, ' ')
-    .replace(/^(fresh|freshly squeezed|chilled|cold|good|quality|dry)\s+(?=\w)/, '')
+    .replace(/^(fresh|freshly squeezed|chilled|cold|good|quality|dry(?!\s+vermouth\b))\s+(?=\w)/, '')
     .replace(/\s+/g, ' ')
     .trim();
 
@@ -257,8 +308,20 @@ for (const [id, counts] of rawByFreq) {
 }
 
 const ingredients = [...labelOf.entries()]
-  .map(([id, label]) => ({ id, label, category: categorise(label), uses: useCount.get(id) ?? 0 }))
+  .map(([id, label]) => ({
+    id,
+    label,
+    category: CATEGORY_OVERRIDE[id] ?? categorise(label),
+    uses: useCount.get(id) ?? 0,
+  }))
   .sort((a, b) => b.uses - a.uses || a.label.localeCompare(b.label));
+
+// An override for an id the data no longer has is a fix that silently stopped applying.
+const stale = Object.keys(CATEGORY_OVERRIDE).filter((id) => !labelOf.has(id));
+if (stale.length) {
+  console.error(`  CATEGORY_OVERRIDE names ids the index no longer has: ${stale.join(', ')}`);
+  process.exit(1);
+}
 
 writeFileSync(
   OUT,
