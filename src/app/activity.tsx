@@ -23,7 +23,7 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* ==================================================================== */
 /* Activity                                                             */
 /*                                                                      */
-/* Where Home's heart goes: likes on your pours and new followers,      */
+/* Where Home's heart goes: likes on your posts and new followers,      */
 /* newest first, from the last 30 days. Built from the likes and        */
 /* follows tables as they are; nothing new is stored or fetched.        */
 /*                                                                      */
@@ -39,7 +39,8 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* so what was new stays under "New" while you read it and the heart's  */
 /* dot on Home goes out. New is said three ways: the group header in    */
 /* ink rather than muted, its place first, and a 2pt wine edge at each  */
-/* new row's leading side, the unseen mark Today's pours uses.          */
+/* new row's leading side (Home's stories say unseen with a ring; a row */
+/* has no circle to ring, so it takes the edge).                        */
 /* ==================================================================== */
 
 export default function ActivityScreen() {
@@ -303,7 +304,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
             <EmptyState
               icon="heart"
               title="No activity yet"
-              body="When someone likes your pour or follows you, it shows up here."
+              body="When someone likes your post or follows you, it shows up here."
             />
           )
         }
@@ -326,7 +327,7 @@ const FACE_OUTER = FACE + 2 * FACE_RING;
 const FACE_STEP = FACE - FACE_OVERLAP;
 const MAX_FACES = 3;
 const LEAD = FACE_OUTER + (MAX_FACES - 1) * FACE_STEP;
-/** A single person's face: a follow, or a pour only one person has liked. */
+/** A single person's face: a follow, or a post only one person has liked. */
 const AVATAR = 40;
 
 /**
@@ -381,10 +382,12 @@ function likersSpoken(people: readonly UserProfile[]): string {
 }
 
 /**
- * Every like on one of your pours, as one row: the faces (one person's
+ * Every like on one of your posts, as one row: the faces (one person's
  * opens them; a group's opens the post), the sentence (opens the post),
- * and the pour that was liked. The faces are hidden from VoiceOver,
- * because the sentence beside them names the same people.
+ * and the photo that was liked. The faces are hidden from VoiceOver,
+ * because the sentence beside them names the same people. With the drink
+ * gone from the catalogue the sentence ends "liked your post", the noun
+ * the rest of the app uses for the thing you shared (v3.1 §12).
  */
 function LikesRow({
   likes,
@@ -403,7 +406,7 @@ function LikesRow({
 }) {
   const newest = likes[0]!;
   const drink = getDrink(newest.drinkId);
-  const drinkName = drink?.name ?? 'pour';
+  const drinkName = drink?.name ?? 'post';
   const open = () => onOpenPost(newest.postId);
   const single = people.length === 1 ? people[0]! : null;
 
@@ -437,7 +440,7 @@ function LikesRow({
         <Text style={styles.sentence}>
           {likersShown(people)} liked your{' '}
           {/* The drink in Playfair, as a name inside an Inter sentence is set. */}
-          {drink ? <Text style={textRole.nameInline}>{drink.name}</Text> : 'pour'}.{' '}
+          {drink ? <Text style={textRole.nameInline}>{drink.name}</Text> : 'post'}.{' '}
           <Text style={styles.when}>{timeAgo(newest.at)}</Text>
         </Text>
       </Pressable>
@@ -525,7 +528,7 @@ function FollowRow({
 }
 
 /**
- * The pour that was liked, as a 44pt thumbnail of its photo. A pour with
+ * The post that was liked, as a 44pt thumbnail of its photo. A post with
  * no photo, or one that will not sign, shows its drink mounted instead
  * (DexThumb, lit), never an empty square; while it signs, the frame holds
  * its place.

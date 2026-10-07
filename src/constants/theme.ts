@@ -21,16 +21,15 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /* WHAT CHANGED IN THE APP, AND WHY                                     */
 /*                                                                      */
 /* 1. Green is gone. The old ONE PATINA RULE reserved a single verdigris */
-/*    for everything affirmative (collected / saved / success /          */
-/*    uncommon). Sipply has no green, and its own answer is that the     */
-/*    active state IS the brand: the handoff's "Saved to My Drinks"      */
-/*    button is wine. So affirmative = wine, and `patina*` is gone       */
-/*    rather than renamed — a token named after verdigris pointing at    */
-/*    oxblood is the kind of trap this repo keeps removing.              */
+/*    for everything affirmative (collected / saved / success). Sipply   */
+/*    has no green, and its own answer is that the active state IS the   */
+/*    brand: the handoff's "Saved to My Drinks" button is wine. So       */
+/*    affirmative = wine, and `patina*` is gone rather than renamed — a  */
+/*    token named after verdigris pointing at oxblood is the kind of     */
+/*    trap this repo keeps removing.                                     */
 /*                                                                      */
-/* 2. Gold became GILT. Legendary still needs a metal that nothing else  */
-/*    may use, but #C9A227 was mixed for a cool white page and glares    */
-/*    on off-white. Gilt is the same idea re-cut warm for this ground.   */
+/* 2. Gilt, the metal that once marked a drink's tier, left the palette  */
+/*    with rarity in v3.1 (specs/v3.1-changes.md section 2.1).           */
 /*                                                                      */
 /* 3. Two inks, not one. The handoff sets 12–13px secondary text in      */
 /*    MUTED #9A8F85, well short of the 4.5:1 this app has always held    */
@@ -47,8 +46,8 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /*    hex: it is the same hue walked to #8A7F74, which clears 3:1 on     */
 /*    every ground it lands on — 3.51 page, 3.12 sunk well, 3.91 white — */
 /*    and still sits a visible step above textMuted. OFF-WHITE survives  */
-/*    as reelInk (type on the dark reels ground), the Dex card's foil    */
-/*    and the emboss highlight.                                          */
+/*    as reelInk (type on the dark reels ground) and the emboss          */
+/*    highlight.                                                         */
 /*                                                                      */
 /* scripts/check-contrast.mjs reads this file directly — there is no     */
 /* hand-kept copy of the palette to drift — and fails on any pair under  */
@@ -61,10 +60,10 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /* five grounds (check-design rule 10). PAPER (`bg`) is what you read    */
 /* and write on: the feed, the Dex's front, profiles, sheets, settings.  */
 /* MAT (`mat`) is bone card stock, the face of a drink you have caught:  */
-/* a mounted Dex card, a Top shelf card, the spec card, a Today's tile.  */
+/* a mounted Dex card, a thumbnail mount, the spec card.                 */
 /* LINING (`lining`, the same value as wineDeep, named for its job) is   */
-/* the inside of the cabinet, grained like baize: Home's head band, the  */
-/* Dex tray, the Top shelf band, the sign-in backdrop. CELLAR            */
+/* the inside of the cabinet, grained like baize: Home's head band and   */
+/* its stories, the Dex tray, the sign-in backdrop. CELLAR               */
 /* (`liningDeep`) is a recess pressed into the lining and the ground a   */
 /* lit photograph settles into: empty slots, the drink page, the Latest  */
 /* catch panel, and the edge colour of every tungsten-lit photo. The     */
@@ -89,21 +88,17 @@ export const colors = {
    * so the tint does the work and shadows are kept for what genuinely
    * floats.
    *
-   * Cream stays warm rather than gray: it sits beside wine and gilt on
-   * every screen, and a neutral page turns both of those cold.
+   * Cream stays warm rather than gray: it sits beside wine on every
+   * screen, and a neutral page turns it cold.
    */
   bg: '#F7F2EA',
   bgSunk: '#E9E5DF',
   surface: '#FFFFFF',
   card: '#FFFFFF',
   cardAlt: '#E9E5DF',
-  /**
-   * A tint, no longer an edge: RARITY_META.common's wash (and the hairline
-   * that matches it) and the rarity donut's empty groove. Every other edge
-   * and rule in the app is drawn with `line`.
-   */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out. Its only job was the common tier's wash; every edge is `line`. */
   cardBorder: '#EFE9E0',
-  /** the "lit" border — legendary/selected only, so it stays metal */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out. Nothing reads it. */
   cardBorderLit: '#B08A3E',
   borderStrong: '#CBBBA5',
 
@@ -139,6 +134,7 @@ export const colors = {
   textFaint: '#8A7F74',
   textOnWine: '#E9E5DF',
   textOnEspresso: '#E9E5DF',
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   textOnGilt: '#2B2322',
 
   /* Wine — the brand's structural colour, and every affirmative state */
@@ -158,20 +154,24 @@ export const colors = {
    */
   taupe: '#CBBBA5',
   taupeInk: '#736247',
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out. The uncommon tier's wash; nothing else reads it. */
   taupeWash: '#F2ECE1',
 
   /*
-   * Gilt — LEGENDARY ONLY, inherited from the old gold rule.
-   *   gilt      DECORATIVE. Card edges, rules, the legendary shimmer.
-   *             Must never be the sole carrier of meaning.
-   *   giltGlyph Icons and strokes that convey meaning. 3.18:1 on the page.
-   *   giltInk   Text. 5.34:1 on the page.
+   * Gilt was the metal of the legendary tier, and left with rarity in
+   * v3.1. The values stay only so files not yet moved off them compile.
    */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   gilt: '#B08A3E',
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   giltGlyph: '#A8823A',
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   giltInk: '#7D5F1C',
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   giltDim: '#8E6F2C',
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   giltWash: '#F6EEDC',
+  /** A warm amber with no reader today. It sat beside the gilt but was never rarity's, so the close-out keeps it. */
   amber: '#D9A25C',
 
   /* Semantic — success is wine (see 1. in the header) */
@@ -192,7 +192,7 @@ export const colors = {
    * Bone walked a step darker than bgSunk. Until v3 this was the Dex's
    * light recess; the recess is now `liningDeep` pressed into the lining
    * (see v3 below). It stays as a fill: the pressed state of the tonal
-   * Button (components/ui.tsx) and of ProfileHeader's icon button.
+   * Button (components/ui.tsx).
    */
   slot: '#E3DDD3',
   /** @deprecated v2's light recess floor. Unused once the v3 DexCard lands; deleted in stage 3. */
@@ -286,7 +286,7 @@ export const colors = {
    * check-contrast; "worst grain" is the brightest tile pixel over the
    * ground at grain.lining.
    */
-  /** Bone card stock: a collected drink's face, the spec card, Today's tiles. */
+  /** Bone card stock: a collected drink's face, a thumbnail mount, the spec card. */
   mat: '#FBF8F2',
   /** The cabinet interior. The same value as wineDeep, named for its job. */
   lining: '#3E0A12',
@@ -302,9 +302,9 @@ export const colors = {
   onLiningMuted: '#B8A09B',
   /** Glyphs and >= 18pt only (3:1): the lock, a chevron. Never small text. 4.93:1, 4.19 worst grain. */
   onLiningFaint: '#A7837F',
-  /** The word Legendary and its sparkle on lining. 7.11:1. Gilt stays legendary-only. */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   giltOnLining: '#C9A458',
-  /** The word Rare and its dot on lining. 6.16:1. */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   rareOnLining: '#D08A94',
   /** "Remove from collection" on the cellar ground. 8.34:1 there. */
   dangerOnLining: '#EE9A8F',
@@ -332,9 +332,9 @@ export const colors = {
   matEdge: 'rgba(14, 11, 11, 0.35)',
   /** The hairline inside a mount's window. */
   windowEdge: 'rgba(43, 35, 34, 0.16)',
-  /** An empty slot's 1pt edge. */
+  /** An empty slot's 1pt edge, the same on every slot since v3.1. */
   slotEdge: 'rgba(233, 229, 223, 0.10)',
-  /** An empty legendary slot's edge, so a locked legendary is visibly worth hunting. 2.52:1 over the cellar (design floor 2.0). */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   slotEdgeLegendary: 'rgba(176, 138, 62, 0.55)',
   /** The hairline inside an empty slot's window. */
   slotWindowEdge: 'rgba(233, 229, 223, 0.07)',
@@ -356,6 +356,23 @@ export const colors = {
   debossShadow: 'rgba(0, 0, 0, 0.55)',
   /** Foot of the nameplate scrim: 13.43:1 for onMedia.ink even over a white frame. */
   scrimDeep: 'rgba(14, 11, 11, 0.86)',
+
+  /* ---- v3.1 (specs/v3.1-changes.md section 2.1) ---- */
+  /**
+   * An unseen story's 2.5pt ring on lining: lit wine, because wine itself
+   * is 1.22:1 there. 4.37:1 on lining, 3.71:1 on the worst grain pixel
+   * (a UI cue, 3:1).
+   */
+  storyRing: '#BC6B75',
+  /** A seen story's 1pt ring. Decorative: the unseen ring's colour AND weight carry the state. */
+  storyRingSeen: 'rgba(233, 229, 223, 0.30)',
+  /**
+   * Home's floating bar over the feed: the lining at the top of the bar ...
+   * onLining here is 11.53:1 even over a white photo.
+   */
+  homeBarTop: 'rgba(62, 10, 18, 0.94)',
+  /** ... and at its foot. onLining here is 5.60:1 even over a white photo, 5.91:1 over paper. */
+  homeBarFoot: 'rgba(62, 10, 18, 0.72)',
 } as const;
 
 /**
@@ -368,8 +385,8 @@ export const colors = {
  *
  * Over a photo, text only ever sits on scrim alpha >= 0.62 (`scrimMid`), and
  * the only ink is `ink`. The lining inks fail there (onLining is 4.41:1 over
- * 0.62-over-white, the rest far lower), which is why rarity over a photo is
- * always a solid plaque and never a tinted word.
+ * 0.62-over-white, the rest far lower), which is why a tinted word never
+ * sits over a photo.
  */
 export const onMedia = {
   /** All text over media. 5.45:1 on scrimMid over white, 13.43:1 on scrimDeep. */
@@ -384,15 +401,17 @@ export const onMedia = {
   /** 0.78: plates, markers, counts. 9.98:1 for `ink` over white. */
   markerFill: colors.reelScrim,
   markerEdge: colors.reelControlBorder,
-  /** The legendary sparkle on a marker: a GLYPH ONLY, 4.31:1 on markerFill over white. */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   glyphGilt: colors.giltOnLining,
-  /** Solid tier plaques: 13.53:1 rare, 4.79:1 legendary, 9.98:1 neutral over white. */
+  /** Solid plaques. `neutral` is DexStatusPlaque's: 9.98:1 for its ink over white. */
   plaque: {
     neutral: { fill: colors.reelScrim, edge: colors.reelControlBorder, ink: colors.reelInk },
+    /** @deprecated rarity, removed in v3.1; deleted at the close-out */
     rare: { fill: colors.wine, edge: colors.wineSoft, ink: colors.reelInk },
+    /** @deprecated rarity, removed in v3.1; deleted at the close-out */
     legendary: { fill: colors.gilt, edge: colors.giltOnLining, ink: colors.text },
   },
-  /** The tier's line along a photo's bottom edge. Decorative: the plaque says the tier. */
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
   rule: { rare: colors.wineSoft, legendary: colors.gilt },
 } as const;
 
@@ -454,7 +473,7 @@ export const fonts = {
  */
 export const type = {
   /**
-   * Tags and badges: the rarity and category tags, the tab bar label. The
+   * Tags and badges: the category tag, the tab bar label. The
    * floor of the scale — 11pt is the smallest size iOS treats as legible,
    * so nothing in the app goes below it.
    */
@@ -524,13 +543,13 @@ export const textRole = {
   rowName:      { fontFamily: fonts.display, fontSize: 18, lineHeight: 22 },      // Log, My Bar, Add a drink rows
   cardName:     { fontFamily: fonts.displayBold, fontSize: 17, lineHeight: 21 },  // a collected Dex card
   printName:    { fontFamily: fonts.display, fontSize: 16, lineHeight: 20 },      // "Not in your Dex yet" prints
-  miniName:     { fontFamily: fonts.display, fontSize: 14, lineHeight: 18 },      // Top shelf, Added by you, Stats
+  miniName:     { fontFamily: fonts.display, fontSize: 14, lineHeight: 18 },      // Added by you, Stats
   tileName:     { fontFamily: fonts.display, fontSize: 13, lineHeight: 17 },      // Today's pours
   nameInline:   { fontFamily: fonts.display },                                     // a name inside an Inter sentence
 
   /* ---- Inter ---- */
   heroFigure:   { fontFamily: fonts.bodySemiBold, fontSize: 36, lineHeight: 40, letterSpacing: -0.5, fontVariant: ['tabular-nums'] },
-  shelfTitle:   { fontFamily: fonts.bodySemiBold, fontSize: 20, lineHeight: 26 },  // "Fizz", "Top shelf", "Not in your Dex yet"
+  shelfTitle:   { fontFamily: fonts.bodySemiBold, fontSize: 20, lineHeight: 26 },  // "Fizz", "Not in your Dex yet"
   count:        { fontFamily: fonts.bodySemiBold, fontSize: 18, lineHeight: 22, fontVariant: ['tabular-nums'] },
   username:     { fontFamily: fonts.bodySemiBold, fontSize: 15, lineHeight: 20 },
   prose:        { fontFamily: fonts.body, fontSize: 15, lineHeight: 22 },
@@ -538,7 +557,13 @@ export const textRole = {
   labelCaption: { fontFamily: fonts.body, fontSize: 12, lineHeight: 16 },
   specAmount:   { fontFamily: fonts.bodySemiBold, fontSize: 17, lineHeight: 22, fontVariant: ['tabular-nums'] },
   tastes:       { fontFamily: fonts.body, fontSize: 18, lineHeight: 26 },
+  /** v3's Bar trivia band; Origin story (`story`) replaces it, and the close-out deletes it. */
   trivia:       { fontFamily: fonts.body, fontSize: 18, lineHeight: 27 },
+  /** The drink page's Origin story band. */
+  story:        { fontFamily: fonts.body, fontSize: 17, lineHeight: 26 },
+  /** The Dex status tag ("In your Dex", "New"), its width sum, and the "Added by you" word. */
+  statusWord:   { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
+  /** @deprecated rarity, removed in v3.1; deleted at the close-out. Same values as `statusWord`: read that. */
   tierWord:     { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
 } satisfies Record<string, TextStyle>;
 
@@ -650,11 +675,23 @@ export const layout = {
   rowTall: 64,      // ListRow with a subtitle or a 40pt avatar
   gridGap: 2,       // between media grid tiles
   feedPhotoAspect: 4 / 5, // a feed post's photo (was 3:4, inline in PostCard)
-  /** Today's pours: a 76x96 mat holding the photo inset 3pt; the label column is 84 wide, overhanging 4pt each side. */
+  /**
+   * v3's Today's tiles: a 76x96 mat holding the photo inset 3pt, the label column 84 wide.
+   * v3.1 draws stories as circles (`story`, below); this goes once TodaysPours stops reading it.
+   */
   tile: { w: 76, h: 96, inset: 3, label: 84 },
   dexGap: 10,       // between Dex columns
   dexLedge: 16,     // between Dex rows (the shelf ledge)
   pinnedBar: 74,    // the drink page's pinned action bar, above the home indicator (a minimum: it grows)
+  /**
+   * Home's stories (v3.1): the ring box, the unseen and seen strokes, the
+   * gap to the photo disc, the label column, the + badge and its ring.
+   * The disc is ring - 2 x (ringWidth + gap): 57.
+   */
+  story: { ring: 68, ringWidth: 2.5, ringWidthSeen: 1, gap: 3, label: 76, badge: 22, badgeRing: 2 },
+  /** Home's floating bar: the fade under the bar, and under the status strip. */
+  homeBarTail: 24,
+  homeStripTail: 16,
 } as const;
 
 /**
@@ -666,7 +703,8 @@ export const layout = {
  *            segmented control, notices, media icon buttons, Dex cards
  *   card     panels: Card, list groups, sheets' top corners, dialogs, the
  *            tab bar, inset photos
- *   round    ONLY avatars (with their rings and badges), the camera
+ *   round    ONLY avatars (with their rings and badges), Home's story
+ *            circles (ring, photo disc, + badge; v3.1), the camera
  *            shutter, dots ≤ 10pt. Lint-enforced (scripts/check-design.mjs).
  * A nested shape takes the concentric radius, outer − inset, computed at
  * the call site (the segmented thumb is `radius.control - 2`).
@@ -737,11 +775,8 @@ export const elevation = {
 } as const;
 
 /**
- * The Dex card's legendary foil sweep: off-white, clear at both edges of
- * the band and brightest in the middle. It used to borrow the glass sheen's
- * stops, and became its own token so the frosted glass layer could be
- * deleted (v2 draws opaque surfaces with a `line` edge) without taking the
- * one shimmer the app keeps: a collected legendary is the reward.
+ * @deprecated rarity, removed in v3.1; deleted at the close-out. The stops
+ * of a sweep across a card's picture; nothing in the app draws one now.
  */
 export const foil = {
   edge: 'rgba(255, 253, 249, 0)',
@@ -762,7 +797,8 @@ export const motion = {
    * v3's filter Chips replace it (Chips answer with a fill). Each of them
    * also shows its state without motion (a label colour, a filled glyph),
    * so a spring that stalls never hides which option is on. Tab
-   * switches do not use it: they cut instantly, as iOS's own tab bar does.
+   * switches do not use it: they take the navigator's own short,
+   * translate-only nudge ((tabs)/_layout.tsx), never a spring.
    *
    * Faster than `spring`, which stays where it is because it drives other
    * things (sheets, the media-tile press scale, the profile meter).
@@ -845,35 +881,21 @@ export const CATEGORY_META: Record<
 };
 
 /* ==================================================================== */
-/* Rarity                                                               */
+/* Rarity, removed in v3.1                                              */
+/*                                                                      */
+/* Jan took the whole tier system out of the app on 6 October 2026: no  */
+/* tier words, rules, plaques, foil, filters or tallies. A collected    */
+/* drink is mat, edge and seat; a slot is a recess. The catalogue keeps */
+/* its `rarity` field (generated data, src/data/drinks.json) and        */
+/* nothing in the app reads it. These two tables stay only until every  */
+/* screen has moved off them; the close-out deletes them, and           */
+/* check-design rule 14 fails any reader outside the shim files.        */
 /* ==================================================================== */
 
+/** @deprecated rarity, removed in v3.1; deleted at the close-out */
 export const RARITY_ORDER: Rarity[] = ['common', 'uncommon', 'rare', 'legendary'];
 
-/**
- * Rarity is the FRAME, not a hue: hairline → taupe → wine → gilt, which
- * reads as paper, then linen, then the brand, then metal. Categories own
- * the hue axis (see above); rarity owns the material axis, so a rare
- * cocktail is never asking one colour to say two things.
- *
- * v3 says the tier four ways, and never by one alone: the WORD beside its
- * MARK (`mark`: a hollow ring, a dot, the sparkle; components/cabinet.tsx
- * TierWord), the RULE printed inside a collected mount (`rule`: thicker
- * and, for legendary, doubled as the tier climbs, so rarity reads in
- * peripheral vision while the Dex scrolls), and over a photograph a SOLID
- * plaque (onMedia.plaque), because no tinted word survives a white frame.
- * Gilt stays legendary-only: rare is wine.
- *
- * `color` is the word and mark on paper and mat, and remains
- * contrast-audited; `onLining` is the same pair on the lining and in a
- * slot. `rule` is decorative and NEVER the sole carrier of meaning.
- *
- * `color` is a TEXT value, tuned for contrast against the page, and that
- * is what makes it wrong as a chart fill: common, uncommon and legendary
- * sit within 1.04:1 of each other in it (textMuted, taupeInk, giltInk), so
- * as adjacent arcs they read as one brown band. A chart draws its own
- * fills and names every tier in words.
- */
+/** @deprecated rarity, removed in v3.1; deleted at the close-out */
 export const RARITY_META: Record<
   Rarity,
   {
@@ -988,8 +1010,9 @@ const ACCENT_PLUM = '#5E2545';
 /**
  * Accents assigned to new accounts at signup.
  *
- * Drawn from the category and rarity palettes rather than authored
- * separately, so avatar tints always belong to the same colour system.
+ * Drawn from the category palette and the brand's inks rather than
+ * authored separately, so avatar tints always belong to the same colour
+ * system.
  */
 export const SIGNUP_ACCENTS: readonly string[] = [
   CATEGORY_META.cocktail.color,

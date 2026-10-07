@@ -11,6 +11,9 @@
  * argument to `never`.
  */
 
+/** Any JSON value, for a function that returns jsonb (tournament_board). */
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
 export type ProfileRow = {
   id: string;
   username: string;
@@ -87,6 +90,23 @@ export type ReportRow = {
   created_at: string;
 };
 
+/**
+ * The song added with a photo (migration 020). All seven are null, or every
+ * one but the artwork is set (post_photos_music_shape), with the preview,
+ * link and artwork on Apple's own hosts. On the photo row, not the post: a
+ * drink is one post, and a re-post with no song must not inherit the last
+ * one's. The title and artist go through the content filter on insert.
+ */
+export type PostPhotoMusicColumns = {
+  music_song_id: string | null;
+  music_title: string | null;
+  music_artist: string | null;
+  music_artwork_url: string | null;
+  music_preview_url: string | null;
+  music_url: string | null;
+  music_storefront: string | null;
+};
+
 export type PostPhotoRow = {
   id: string;
   post_id: string;
@@ -94,7 +114,17 @@ export type PostPhotoRow = {
   /** When the picture was taken. Orders the carousel, newest first. */
   taken_at: string;
   created_at: string;
-};
+} & PostPhotoMusicColumns;
+
+/**
+ * What a client may send for a new photo. The music columns are optional,
+ * not merely nullable: a client running ahead of migration 020 must not
+ * name them at all (PostgREST answers PGRST204 for an unknown column).
+ */
+export type PostPhotoInsert = Omit<PostPhotoRow, 'id' | 'taken_at' | 'created_at' | keyof PostPhotoMusicColumns> & {
+  id?: string;
+  taken_at?: string;
+} & Partial<PostPhotoMusicColumns>;
 
 export type FollowRow = {
   follower_id: string;
@@ -145,6 +175,18 @@ export type RecentPourRow = {
   drink_id: string;
   path: string;
   poured_at: string;
+  /*
+   * The photo's song (migration 020, which recreated the function with
+   * these). OPTIONAL, not merely nullable: before 020 the function returns
+   * the five columns above and these keys are absent. The storefront is not
+   * returned; lib/music reads it back from the Apple Music link.
+   */
+  music_song_id?: string | null;
+  music_title?: string | null;
+  music_artist?: string | null;
+  music_artwork_url?: string | null;
+  music_preview_url?: string | null;
+  music_url?: string | null;
 };
 
 /**
@@ -229,6 +271,69 @@ export type ReelQuotaRow = {
 };
 
 /**
+ * A tournament (migration 020). Readable by its host and by the people
+ * invited to it or in it, minus anyone the caller is blocked with; written
+ * only through the tournament RPCs, so no client role holds a write grant.
+ */
+export type TournamentRow = {
+  id: string;
+  host_id: string;
+  /** 1 to 40 characters, one line, through the content filter. */
+  name: string;
+  starts_at: string;
+  /** Exclusive. 1 to 31 days after starts_at. */
+  ends_at: string;
+  /** First to this many different drinks; null = most by the end. 2 to 100. */
+  target: number | null;
+  /** The host's IANA time zone, which decides the daily cap's calendar day. */
+  tz: string;
+  /** The host ended it early. */
+  ended_at: string | null;
+  /** When counting stopped; set when the results are frozen. */
+  finished_at: string | null;
+  winner_id: string | null;
+  /** Results frozen. Deleting a post after this changes nothing. */
+  finalized_at: string | null;
+  created_at: string;
+};
+
+/**
+ * Who is in a tournament (migration 020). The host has a row too, always
+ * 'accepted'. Someone who declined or left stays 'declined' and cannot be
+ * invited to that tournament again. The final_* columns are the frozen
+ * standings, set once by finalize_tournament.
+ */
+export type TournamentMemberRow = {
+  tournament_id: string;
+  user_id: string;
+  status: 'invited' | 'accepted' | 'declined';
+  invited_at: string;
+  responded_at: string | null;
+  final_distinct: number | null;
+  final_reached_at: string | null;
+  final_rank: number | null;
+};
+
+/** One row of my_tournaments() (migration 020). */
+export type MyTournamentRow = {
+  id: string;
+  name: string;
+  host_id: string;
+  starts_at: string;
+  ends_at: string;
+  target: number | null;
+  finished_at: string | null;
+  /** Null when there is none yet, nobody posted, or the winner is someone you are blocked with. */
+  winner_id: string | null;
+  winner_distinct: number | null;
+  state: 'upcoming' | 'live' | 'finished';
+  my_status: 'host' | 'invited' | 'accepted' | 'declined';
+  members: number;
+  my_rank: number | null;
+  my_distinct: number | null;
+};
+
+/**
  * What every friend matcher returns: the public profile columns of each
  * account it found, the same set PROFILE_COLS_FULL reads from profiles.
  * One declaration, so the three matchers cannot drift apart and each row
@@ -288,10 +393,7 @@ export type Database = {
       };
       post_photos: {
         Row: PostPhotoRow;
-        Insert: Omit<PostPhotoRow, 'id' | 'taken_at' | 'created_at'> & {
-          id?: string;
-          taken_at?: string;
-        };
+        Insert: PostPhotoInsert;
         Update: never;
         Relationships: [];
       };
@@ -405,6 +507,23 @@ export type Database = {
         Row: ReelLikeRow;
         /* Like likes: the two ids. created_at is its default's. */
         Insert: Omit<ReelLikeRow, 'created_at'>;
+        Update: never;
+        Relationships: [];
+      };
+      /*
+       * Migration 020. Select only: every write is an RPC (create, invite,
+       * respond, leave, end, delete), so the rules on dates, goals, seats
+       * and blocks cannot be skipped by writing the rows directly.
+       */
+      tournaments: {
+        Row: TournamentRow;
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      tournament_members: {
+        Row: TournamentMemberRow;
+        Insert: never;
         Update: never;
         Relationships: [];
       };
@@ -538,6 +657,74 @@ export type Database = {
       set_instagram_hash: {
         Args: { hash: string | null };
         Returns: undefined;
+      };
+      /*
+       * Tournaments (migration 020). Every one raises P0001 with one of
+       * not_found, not_allowed, finished, invalid_dates, invalid_goal,
+       * too_many_tournaments, no_invitees or objectionable_content (detail
+       * 'tournament_name'), which lib/tournaments maps for the screens.
+       */
+      /**
+       * The tournaments you host or are invited to or in, newest start
+       * first, at most 100. Volatile: it freezes any that have just
+       * finished, so it is called as a POST (supabase-js's default).
+       */
+      my_tournaments: {
+        Args: Record<string, never>;
+        Returns: MyTournamentRow[];
+      };
+      /**
+       * One tournament with its standings: an object of snake_case keys
+       * (id, name, host_id, starts_at, ends_at, target, ended_at,
+       * finished_at, state, daily_cap, winner_id, winner_hidden, my_status,
+       * standings [{user_id, distinct, today, reached_at, rank}], invited
+       * [user ids]). Shape-checked by lib/tournaments, not trusted.
+       */
+      tournament_board: {
+        Args: { t: string };
+        Returns: Json;
+      };
+      /** Returns the new tournament's id. The host joins it as 'accepted'. */
+      create_tournament: {
+        Args: {
+          p_name: string;
+          p_starts_at: string;
+          p_ends_at: string;
+          p_target: number | null;
+          p_tz: string;
+          p_invitees: string[];
+        };
+        Returns: string;
+      };
+      /** Host only, before it finishes. Returns how many were invited. */
+      invite_to_tournament: {
+        Args: { t: string; people: string[] };
+        Returns: number;
+      };
+      respond_to_tournament: {
+        Args: { t: string; accept: boolean };
+        Returns: undefined;
+      };
+      leave_tournament: {
+        Args: { t: string };
+        Returns: undefined;
+      };
+      end_tournament: {
+        Args: { t: string };
+        Returns: undefined;
+      };
+      delete_tournament: {
+        Args: { t: string };
+        Returns: undefined;
+      };
+      /**
+       * Charges one song search to the caller's hourly budget (120) and
+       * says whether it is within it. Called by the apple-music Edge
+       * Function as the user, never by the app. Migration 020.
+       */
+      charge_music_search: {
+        Args: Record<string, never>;
+        Returns: boolean;
       };
     };
     Enums: Record<never, never>;

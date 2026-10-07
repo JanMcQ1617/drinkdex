@@ -70,7 +70,10 @@ export type IconName =
   | 'flash'
   | 'volume'
   | 'volumeOff'
-  | 'play';
+  | 'play'
+  | 'pause'
+  | 'send'
+  | 'music';
 
 export interface IconProps {
   name: IconName;
@@ -390,6 +393,33 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
    * have one.
    */
   play: <Path d="M8.2 5.6v12.8a.8.8 0 0 0 1.22.68l10.2-6.4a.8.8 0 0 0 0-1.36L9.42 4.92A.8.8 0 0 0 8.2 5.6Z" />,
+  /* Two bars: a song preview is playing, and a tap stops it. */
+  pause: (
+    <>
+      <Path d="M8.8 5.6v12.8" />
+      <Path d="M15.2 5.6v12.8" />
+    </>
+  ),
+  /*
+   * Share a post: a paper dart seen from the side, rising to the right,
+   * the wing over the keel folded under it. Instagram's send glyph is a
+   * top-down triangle with a centre fold, and Apple's paperplane is the
+   * same view; this is neither.
+   */
+  send: (
+    <>
+      <Path d="M2.9 10.9 21.1 4.9 9.1 13.1z" />
+      <Path d="M9.1 13.1 21.1 4.9 12.6 19.1z" />
+    </>
+  ),
+  /* Two beamed quavers, for a song on a story: generic notation, not Apple Music's mark. */
+  music: (
+    <>
+      <Path d="M9.4 17V5.8l9.4-2.2v11" />
+      <Circle cx={7.2} cy={17.1} r={2.2} />
+      <Circle cx={16.6} cy={14.7} r={2.2} />
+    </>
+  ),
 };
 
 /**
@@ -497,6 +527,17 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
     />
   ),
   flash: <Path d="M13.4 2.8 5.8 13.3h5.5l-.9 7.9 7.8-10.6h-5.5z" />,
+  /*
+   * The My Bar tab, active: the outline bottle's silhouette grown by half a
+   * stroke, with the label band knocked out (evenodd), so the filled glyph
+   * still reads as a labelled bottle rather than a blob.
+   */
+  bottle: (
+    <Path
+      fillRule="evenodd"
+      d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"
+    />
+  ),
   play: (
     <Path d="M8.2 5.6v12.8a.8.8 0 0 0 1.22.68l10.2-6.4a.8.8 0 0 0 0-1.36L9.42 4.92A.8.8 0 0 0 8.2 5.6Z" />
   ),
@@ -579,10 +620,11 @@ export const GoogleMark = React.memo(function GoogleMark({ size = 20 }: { size?:
 });
 
 /**
- * The tab routes that have an icon. (tabs)/_layout.tsx and FloatingTabBar
- * draw them with <Icon filled={focused} /> in the colour the bar hands
- * them, so the glyph always matches its own label — outline at rest, solid
- * when active, the iOS convention, which reads as a state change without
- * relying on colour.
+ * The glyphs the tab bar draws: each has a SOLID form for its active state.
+ * Most are named after their route; My Bar's route is `bar` and its glyph
+ * is `bottle`. (tabs)/_layout.tsx and FloatingTabBar draw them with
+ * <Icon filled={focused} /> in the colour the bar hands them, so the glyph
+ * always matches its own label — outline at rest, solid when active, the
+ * iOS convention, which reads as a state change without relying on colour.
  */
-export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels';
+export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels' | 'bottle';

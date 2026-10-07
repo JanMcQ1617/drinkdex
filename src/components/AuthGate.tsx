@@ -345,7 +345,7 @@ function ChooseUsername({ profile }: { profile: ProfileRow }) {
       bar={<AuthTitleBar title="Choose a username" leading="none" insetTop={false} />}
       contentStyle={styles.body}>
       <Text style={styles.lede}>
-        It is how friends find you and how your pours are signed. You can change it later in Edit
+        It is how friends find you and how your posts are signed. You can change it later in Edit
         profile.
       </Text>
 

@@ -2,11 +2,11 @@ import React, { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
-import { DrinkName, HeroFigure, NumberPlate, svgStop, TierWord, useSvgId } from '@/components/cabinet';
+import { DrinkName, HeroFigure, NumberPlate, svgStop, useSvgId } from '@/components/cabinet';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Button, haptic, PressableScale } from '@/components/ui';
-import { colors, layout, radius, RARITY_META, space, stroke, tabular, textRole } from '@/constants/theme';
+import { colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, TOTAL } from '@/data';
 import { latestCatch, nextRank } from '@/lib/cabinet';
 import { catchDay } from '@/lib/drinkLabels';
@@ -67,13 +67,13 @@ function SideFade() {
 export function LatestCatch({
   width,
   onOpen,
-  onLog,
+  onPost,
 }: {
   /** The window's width: the panel sits on the screen's 16pt gutters. */
   width: number;
   onOpen: (id: string) => void;
-  /** The empty panel's way in: the log sheet. */
-  onLog: () => void;
+  /** The empty panel's way in: the post sheet (/log). */
+  onPost: () => void;
 }) {
   const unlocks = useCollection((s) => s.unlocks);
   const caught = useMemo(() => latestCatch(unlocks), [unlocks]);
@@ -110,15 +110,15 @@ export function LatestCatch({
             Nothing caught yet
           </Text>
           <Text maxFontSizeMultiplier={CAP} style={[textRole.helper, styles.muted, styles.emptyBody]}>
-            Log a pour and it lands here.
+            Post your first drink and it lands here.
           </Text>
           {figure}
           <Button
-            label="Log a pour"
+            label="Post a drink"
             variant="onLining"
             size="sm"
             icon="plus"
-            onPress={onLog}
+            onPress={onPost}
             style={styles.emptyAction}
           />
         </View>
@@ -127,7 +127,6 @@ export function LatestCatch({
   }
 
   const { drink, record } = caught;
-  const tier = RARITY_META[drink.rarity].label;
   const day = catchDay(record.date);
   const next = nextRank(collected);
   const nextLine = next ? `${formatCount(next.toGo)} to ${next.title}` : null;
@@ -146,7 +145,7 @@ export function LatestCatch({
       accessibilityRole="button"
       // The spoken number is unpadded: "#0107" is read digit by digit.
       accessibilityLabel={[
-        `Latest catch, ${drink.name}, number ${drink.dexNumber}, ${tier}${day ? `, ${day}` : ''}.`,
+        `Latest catch, ${drink.name}, number ${drink.dexNumber}${day ? `, ${day}` : ''}.`,
         `${formatCount(collected)} of ${formatCount(TOTAL)} collected.`,
         nextLine ? `${nextLine}.` : null,
       ]
@@ -184,7 +183,6 @@ export function LatestCatch({
         />
         <View style={styles.plates}>
           <NumberPlate n={drink.dexNumber} tone="lining" />
-          <TierWord rarity={drink.rarity} tone="lining" />
         </View>
         {figure}
         {nextLine ? (

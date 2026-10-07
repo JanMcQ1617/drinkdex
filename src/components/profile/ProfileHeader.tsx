@@ -1,8 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Icon, type IconName } from '@/components/icons';
 import { Avatar, Button } from '@/components/ui';
-import { colors, layout, radius, space, stroke, textRole } from '@/constants/theme';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
 import type { UserProfile } from '@/types';
 
@@ -20,7 +19,7 @@ import type { UserProfile } from '@/types';
 /*                                                                      */
 /* Posts, followers, following. Not a Dex count: a collection never      */
 /* leaves its owner's phone, so it would be a dash on every profile but  */
-/* yours. Your own Dex count is on the Top shelf under this header.      */
+/* yours. Your own Dex count is on the Dex tab, in the strip below.      */
 /* ==================================================================== */
 
 export type ProfileActions =
@@ -28,7 +27,6 @@ export type ProfileActions =
       kind: 'own';
       onEdit: () => void;
       onShare: () => void;
-      onFindFriends: () => void;
     }
   | {
       kind: 'peer';
@@ -95,11 +93,13 @@ export function ProfileHeader({
         {actions.kind === 'own' ? (
           <>
             {/*
-              Two outlined buttons and a square in the same skin: white with
-              a 1pt ink edge, because none of these is the screen's call to
-              action, and the one wine thing on this screen is not here (the
-              tab bar's log button is). The tonal fill they had was bone on
-              cream, a button you had to look for.
+              Two outlined buttons sharing the row: white with a 1pt ink
+              edge, because neither is the screen's call to action, and the
+              one wine thing on this screen is not here (the tab bar's post
+              button is). The tonal fill they had was bone on cream, a
+              button you had to look for. No Find friends square beside them
+              (v3.1): it is in Settings, on Home's stories rail and in every
+              empty state that offers it.
             */}
             <Button
               label="Edit profile"
@@ -115,7 +115,6 @@ export function ProfileHeader({
               onPress={actions.onShare}
               style={styles.grow}
             />
-            <SquareIconButton icon="addPerson" label="Find friends" onPress={actions.onFindFriends} />
           </>
         ) : actions.following ? (
           /*
@@ -206,34 +205,6 @@ function Count({
   );
 }
 
-/**
- * The secondary button at its icon-only size: a 36pt white square with the
- * same 1pt ink edge as Edit and Share beside it, so it sits in the actions
- * row as the third of three rectangles rather than a bare glyph. Held, it
- * takes the sunk fill, as Button's secondary does. Private to this header,
- * its only use.
- */
-function SquareIconButton({
-  icon,
-  label,
-  onPress,
-}: {
-  icon: IconName;
-  label: string;
-  onPress: () => void;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      hitSlop={4}
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      style={({ pressed }) => [styles.iconButton, pressed && styles.iconButtonPressed]}>
-      <Icon name={icon} size={18} color={colors.text} />
-    </Pressable>
-  );
-}
-
 const styles = StyleSheet.create({
   header: { paddingHorizontal: layout.gutter, paddingTop: space.xs },
   identity: { flexDirection: 'row', alignItems: 'center' },
@@ -248,15 +219,4 @@ const styles = StyleSheet.create({
   bio: { ...textRole.prose, color: colors.text, marginTop: space.md },
   actions: { flexDirection: 'row', gap: space.sm, marginTop: 14 },
   grow: { flex: 1 },
-  iconButton: {
-    width: layout.controlSm,
-    height: layout.controlSm,
-    borderRadius: radius.control,
-    borderWidth: stroke.edge,
-    borderColor: colors.lineInk,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconButtonPressed: { backgroundColor: colors.bgSunk },
 });

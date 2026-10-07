@@ -1,49 +1,71 @@
 import { Image } from 'expo-image';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useIsFocused, useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import React, { useCallback, useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from 'react';
+import {
+  ActionSheetIOS,
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { DrinkName } from '@/components/cabinet';
 import { DrinkFace } from '@/components/DexCard';
 import { firstUnseenIndex, groupPours, type PourGroup } from '@/components/home/groupPours';
-import { DexStatusPlaque, MediaNumberPlate, MediaPlaque } from '@/components/media';
+import { Icon } from '@/components/icons';
+import { DexStatusPlaque, MediaNumberPlate } from '@/components/media';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
-import { announce, Avatar, EmptyState, MediaIconButton } from '@/components/ui';
-import { colors, fonts, layout, onMedia, RARITY_META, space, stroke, textRole } from '@/constants/theme';
+import { AppleMusicCredit, SongArtwork, usePreviewPlayer } from '@/components/songs';
+import { announce, Avatar, EmptyState, haptic, MediaIconButton } from '@/components/ui';
+import { colors, fonts, layout, onMedia, space, stroke, textRole } from '@/constants/theme';
 import { getDrink } from '@/data';
+import { STORY_MUSIC } from '@/lib/music';
 import { primeSignedUrls, toProfile } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
 import { useCollection, useIsUnlocked } from '@/store/collection';
 import { useSeen } from '@/store/seen';
 import { useSocial } from '@/store/social';
-import type { Drink, Pour, UserProfile } from '@/types';
+import type { Drink, Pour, Song, UserProfile } from '@/types';
 
 /* ==================================================================== */
-/* Today's pours, one at a time                                         */
+/* Stories, one photo at a time                                         */
 /*                                                                      */
-/* Opened from a tile in Home's row: a modal sheet (root _layout), so   */
-/* the native swipe down closes it and VoiceOver's escape gesture does  */
-/* too. A pour is a photograph to look at, not a five-second clip, so   */
-/* nothing here moves on by itself: a tap on the right goes forward, a  */
-/* tap on the left goes back, and each step is an instant cut.          */
+/* Opened from a circle in Home's stories rail: a modal sheet (root     */
+/* _layout), so the native swipe down closes it and VoiceOver's escape  */
+/* gesture does too. A story is a photograph to look at, not a          */
+/* five-second clip, so nothing here moves on by itself: a tap on the   */
+/* right goes forward, a tap on the left goes back, and each step is an */
+/* instant cut.                                                         */
 /*                                                                      */
 /* The photo is shown whole (contained), and the stage behind it takes  */
 /* the drink's own colour: the same photo, decoded tiny and blurred,    */
 /* scaled to cover. It stays inside the stage, so the header and the    */
 /* footer are always on the plain dark ground and never over the blur.  */
 /*                                                                      */
-/* SEEN STAYS ON THE PHONE. Each pour shown is marked in the seen store */
-/* (store/seen.ts), which only frames tiles on this device; nobody is   */
-/* told you looked.                                                     */
+/* SEEN STAYS ON THE PHONE. Each photo shown is marked in the seen      */
+/* store (store/seen.ts), which only rings circles on this device;      */
+/* nobody is told you looked.                                           */
 /*                                                                      */
 /* THE ORDER IS FIXED ON OPEN. The people, and where each one starts,   */
-/* are taken once from the row as it stood when the tile was tapped.    */
-/* Marking pours seen while you watch reorders the row (seen people go  */
+/* are taken once from the row as it stood when the circle was tapped.  */
+/* Marking photos seen while you watch reorders the row (seen people go */
 /* last), and a sequence that re-sorted under you would skip someone.   */
+/* The one thing that changes it is deleting your own post (Story       */
+/* options): its photos leave the sequence, and nothing else moves.     */
+/*                                                                      */
+/* A SONG, WHEN THE FLAG IS ON. With EXPO_PUBLIC_STORY_MUSIC at 'tap'   */
+/* or 'autoplay' a photo posted with a song carries a song tag in the   */
+/* footer, never over the photo: its cover, title and artist, one       */
+/* control, and "Listen on Apple Music" beside it (App Review 5.2.5).   */
+/* With the flag off (the default) none of that is mounted and no       */
+/* player exists (StoryMusic).                                          */
 /* ==================================================================== */
 
 export default function PoursScreen() {
@@ -66,10 +88,61 @@ export default function PoursScreen() {
   return <PoursViewer key={`${myId}:${authorId}`} myId={myId} authorId={authorId} onClose={leave} />;
 }
 
-/** The people to step through, and the pour each one starts at. */
+/** The people to step through, and the photo each one starts at (by path, so a deletion cannot move it). */
 interface Sequence {
   groups: PourGroup[];
-  starts: number[];
+  starts: string[];
+}
+
+/** One person as the viewer steps through them now: their photos less any deleted post, and where to start. */
+interface Stop {
+  group: PourGroup;
+  start: number;
+}
+
+/** Where the viewer is, and the posts deleted while it has been open. */
+interface Nav {
+  person: number;
+  pour: number;
+  gone: ReadonlySet<string>;
+}
+
+/**
+ * The fixed sequence less the deleted posts: each person's photos without
+ * them, and a person left with none skipped. With nothing deleted it is
+ * the sequence itself, group for group.
+ */
+function visible(seq: Sequence, gone: ReadonlySet<string>): Stop[] {
+  const stops: Stop[] = [];
+  seq.groups.forEach((g, i) => {
+    const pours = gone.size === 0 ? g.pours : g.pours.filter((p) => !gone.has(p.postId));
+    if (pours.length === 0) return;
+    const at = pours.findIndex((p) => p.path === seq.starts[i]);
+    stops.push({ group: pours === g.pours ? g : { ...g, pours }, start: at < 0 ? 0 : at });
+  });
+  return stops;
+}
+
+/**
+ * Where the viewer goes once `postId` is deleted. A drink is one post, so
+ * every photo of it leaves at once. The same person, if they have photos
+ * left: the photo now at the same place, else their last. A person left
+ * with none is skipped: the next person, at their start, else the one
+ * before, at their last. With nobody left the viewer closes (PoursViewer).
+ */
+function dropPost(nav: Nav, seq: Sequence, postId: string): Nav {
+  const gone = new Set(nav.gone).add(postId);
+  const was = visible(seq, nav.gone)[nav.person];
+  const now = visible(seq, gone);
+  const same = was ? now.findIndex((s) => s.group.authorId === was.group.authorId) : -1;
+  if (same >= 0) {
+    return { person: same, pour: Math.min(nav.pour, now[same]!.group.pours.length - 1), gone };
+  }
+  const after = now[nav.person];
+  if (after) return { person: nav.person, pour: after.start, gone };
+  const before = now[now.length - 1];
+  if (before) return { person: now.length - 1, pour: before.group.pours.length - 1, gone };
+  return { person: 0, pour: 0, gone };
 }
 
 function PoursViewer({
@@ -89,12 +162,13 @@ function PoursViewer({
   const ownRow = useAuth((s) => s.profile);
   const seen = useSeen((s) => s.pours[myId]);
   const markPourSeen = useSeen((s) => s.markPourSeen);
+  const removePost = useSocial((s) => s.removePost);
 
   /*
-   * Your own tile opens your pours alone. Anyone else's opens the row from
-   * that person on, as it was ordered when tapped, and each person starts
-   * at their first pour you have not seen (oldest first), or at their
-   * first pour if you have seen them all.
+   * Your own circle opens your photos alone. Anyone else's opens the row
+   * from that person on, as it was ordered when tapped, and each person
+   * starts at their first photo you have not seen (oldest first), or at
+   * their first if you have seen them all.
    */
   const [seq] = useState<Sequence>(() => {
     const { mine, others } = groupPours(pours, myId, seen);
@@ -105,12 +179,16 @@ function PoursViewer({
       const at = others.findIndex((g) => g.authorId === authorId);
       groups = at < 0 ? [] : others.slice(at);
     }
-    const starts = groups.map((g) =>
-      g.authorId === myId ? 0 : firstUnseenIndex(g, seen?.[g.authorId]),
+    const starts = groups.map(
+      (g) => g.pours[g.authorId === myId ? 0 : firstUnseenIndex(g, seen?.[g.authorId])]?.path ?? '',
     );
     return { groups, starts };
   });
-  const [pos, setPos] = useState({ person: 0, pour: seq.starts[0] ?? 0 });
+  const [nav, setNav] = useState<Nav>(() => ({
+    person: 0,
+    pour: visible(seq, new Set())[0]?.start ?? 0,
+    gone: new Set(),
+  }));
 
   /*
    * Every photo in the sequence signed in one request, so each step paints
@@ -125,8 +203,9 @@ function PoursViewer({
     );
   }, [seq]);
 
-  const group = seq.groups[pos.person];
-  const pour = group?.pours[pos.pour];
+  const view = visible(seq, nav.gone);
+  const group = view[nav.person]?.group;
+  const pour = group?.pours[nav.pour];
   const drink = pour ? getDrink(pour.drinkId) : undefined;
   /*
    * Whether this pour's drink is in YOUR Dex, for the status plaque; no
@@ -143,19 +222,24 @@ function PoursViewer({
   const name = who?.displayName ?? 'Someone';
   const spoken =
     group && pour
-      ? `Photo of ${drink?.name ?? 'a drink'}, ${pos.pour + 1} of ${group.pours.length}, by ${name}`
+      ? `Photo of ${drink?.name ?? 'a drink'}, ${nav.pour + 1} of ${group.pours.length}, by ${name}`
       : '';
+  // Your own story is yours to delete; nobody else's sequence ever holds it (groupPours keeps it apart).
+  const mine = group?.authorId === myId;
 
   /*
-   * Each pour shown is marked seen (the store keeps the later mark, so
+   * Each photo shown is marked seen (the store keeps the later mark, so
    * stepping back to an older one changes nothing) and said aloud, because
-   * a cut from one photo to the next makes no sound of its own.
+   * a cut from one photo to the next makes no sound of its own. Keyed on
+   * the author and the photo, which keep their identity when a deletion
+   * rebuilds the person's list around them.
    */
+  const author = group?.authorId;
   useEffect(() => {
-    if (!group || !pour) return;
-    markPourSeen(myId, group.authorId, pour.at);
+    if (!author || !pour) return;
+    markPourSeen(myId, author, pour.at);
     announce(spoken);
-  }, [group, pour, myId, markPourSeen, spoken]);
+  }, [author, pour, myId, markPourSeen, spoken]);
 
   /*
    * One way out, taken once. The sheet stays mounted while it slides away,
@@ -170,12 +254,20 @@ function PoursViewer({
     onClose();
   };
 
+  // Every photo deleted: nothing is left to show, so the sheet goes.
+  const emptied = nav.gone.size > 0 && view.length === 0;
+  useEffect(() => {
+    if (!emptied || closed.current) return;
+    closed.current = true;
+    onClose();
+  }, [emptied, onClose]);
+
   const next = () => {
     if (!group) return;
-    if (pos.pour + 1 < group.pours.length) {
-      setPos({ person: pos.person, pour: pos.pour + 1 });
-    } else if (pos.person + 1 < seq.groups.length) {
-      setPos({ person: pos.person + 1, pour: seq.starts[pos.person + 1] ?? 0 });
+    if (nav.pour + 1 < group.pours.length) {
+      setNav({ ...nav, pour: nav.pour + 1 });
+    } else if (nav.person + 1 < view.length) {
+      setNav({ ...nav, person: nav.person + 1, pour: view[nav.person + 1]!.start });
     } else {
       close();
     }
@@ -183,13 +275,66 @@ function PoursViewer({
 
   const previous = () => {
     if (!group) return;
-    if (pos.pour > 0) {
-      setPos({ person: pos.person, pour: pos.pour - 1 });
-    } else if (pos.person > 0) {
-      const before = seq.groups[pos.person - 1]!;
-      setPos({ person: pos.person - 1, pour: before.pours.length - 1 });
+    if (nav.pour > 0) {
+      setNav({ ...nav, pour: nav.pour - 1 });
+    } else if (nav.person > 0) {
+      const before = view[nav.person - 1]!;
+      setNav({ ...nav, person: nav.person - 1, pour: before.group.pours.length - 1 });
     }
-    // At the very first pour there is nothing before it.
+    // At the very first photo there is nothing before it.
+  };
+
+  /*
+   * Delete, from your own story. The same confirmation as PostCard's Delete
+   * post, word for word: a drink is one post (migration 007), so this
+   * removes every photo of it, which "with its photos" already says. On
+   * success the store drops the post's pours and its feed row, so the rail
+   * and the feed behind the sheet update at once; here the post's photos
+   * leave the sequence fixed on open.
+   */
+  const confirmDelete = (postId: string) => {
+    // Permanent, so a two-way alert on every platform, as on PostCard.
+    Alert.alert(
+      'Delete this post?',
+      "It is removed from your profile and from everyone's feed, with its photos. This cannot be undone.",
+      [
+        { text: 'Cancel', style: 'cancel' as const },
+        {
+          text: 'Delete',
+          style: 'destructive' as const,
+          onPress: () => {
+            void removePost(myId, postId).then((ok) => {
+              if (!ok) {
+                Alert.alert('Could not delete', 'Check your connection and try again.');
+                return;
+              }
+              haptic.select();
+              announce('Post deleted');
+              setNav((n) => dropPost(n, seq, postId));
+            });
+          },
+        },
+      ],
+    );
+  };
+
+  /* Story options: one action so far, so Delete post and Cancel. */
+  const openOptions = () => {
+    if (!pour) return;
+    const postId = pour.postId;
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        { options: ['Delete post', 'Cancel'], destructiveButtonIndex: 0, cancelButtonIndex: 1 },
+        (i) => {
+          if (i === 0) confirmDelete(postId);
+        },
+      );
+      return;
+    }
+    Alert.alert('Story options', undefined, [
+      { text: 'Delete post', style: 'destructive' as const, onPress: () => confirmDelete(postId) },
+      { text: 'Cancel', style: 'cancel' as const },
+    ]);
   };
 
   // Close the sheet first, then push, so the drink or post opens over the
@@ -208,6 +353,15 @@ function PoursViewer({
 
   const top = Platform.OS === 'ios' ? space.sm : insets.top + space.sm;
 
+  // The last photo was just deleted and the sheet is on its way out: the bare ground, not an empty state.
+  if (emptied) {
+    return (
+      <View style={styles.screen}>
+        <StatusBar style="light" />
+      </View>
+    );
+  }
+
   if (!group || !pour) {
     return (
       <View style={[styles.screen, styles.emptyScreen, { paddingTop: top }]}>
@@ -216,7 +370,7 @@ function PoursViewer({
           tone="dark"
           icon="camera"
           title="Nothing new right now"
-          body="Pours stay here for a day after they are shared."
+          body="Posts stay here for a day after they are shared."
           secondaryAction={{ label: 'Close', onPress: close }}
         />
       </View>
@@ -227,7 +381,7 @@ function PoursViewer({
     <View style={[styles.screen, { paddingTop: top }]}>
       <StatusBar style="light" />
 
-      {/* One bar per pour from this person: the ones shown so far are bone. */}
+      {/* One bar per photo from this person: the ones shown so far are bone. */}
       <View
         style={styles.progress}
         accessibilityElementsHidden
@@ -235,7 +389,7 @@ function PoursViewer({
         {group.pours.map((p, i) => (
           <View
             key={p.path}
-            style={[styles.bar, { backgroundColor: i <= pos.pour ? colors.reelInk : colors.reelTrack }]}
+            style={[styles.bar, { backgroundColor: i <= nav.pour ? colors.reelInk : colors.reelTrack }]}
           />
         ))}
       </View>
@@ -257,6 +411,7 @@ function PoursViewer({
           {timeAgo(pour.at)}
         </Text>
         <View style={styles.spacer} />
+        {mine ? <MediaIconButton icon="more" label="Story options" onPress={openOptions} /> : null}
         <MediaIconButton icon="close" label="Close" onPress={close} />
       </View>
 
@@ -267,34 +422,38 @@ function PoursViewer({
           <Pressable
             onPress={previous}
             accessibilityRole="button"
-            accessibilityLabel="Previous pour"
+            accessibilityLabel="Previous photo"
             style={styles.zonePrevious}
           />
           <Pressable
             onPress={next}
             accessibilityRole="button"
-            accessibilityLabel="Next pour"
+            accessibilityLabel="Next photo"
             style={styles.zoneNext}
           />
         </View>
       </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + space.md }]}>
+        {/*
+          In this slot while the flag is on, song or not, so its one player
+          lives as long as the viewer and is stopped, not rebuilt, at each
+          step. With the flag off nothing is mounted here.
+        */}
+        {STORY_MUSIC !== 'off' ? <StoryMusic mode={STORY_MUSIC} step={pour.path} song={pour.music} /> : null}
         {drink ? (
           <>
             {/*
               The name whole, never cut: DrinkName wraps it and fits a long
               word to the line, and the footer grows while the stage gives
-              way. One button with its number and tier, as on the feed's
-              nameplate; the plates under it say the same to the eye.
+              way. One button with its number, as on the feed's nameplate;
+              the plates under it say the same to the eye.
             */}
             <Pressable
               onPress={() => openDrink(drink.id)}
               hitSlop={{ top: 8, bottom: 8 }}
               accessibilityRole="button"
-              accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${RARITY_META[
-                drink.rarity
-              ].label.toLowerCase()}`}
+              accessibilityLabel={`${drink.name}, number ${drink.dexNumber}`}
               accessibilityHint="Opens it in the Dex"
               style={({ pressed }) => [styles.drinkLink, pressed && styles.pressed]}>
               <DrinkName
@@ -311,7 +470,6 @@ function PoursViewer({
                 accessibilityElementsHidden
                 importantForAccessibility="no-hide-descendants">
                 <MediaNumberPlate n={drink.dexNumber} />
-                <MediaPlaque rarity={drink.rarity} />
               </View>
               {collectionReady ? (
                 <DexStatusPlaque inDex={unlocked} name={drink.name} onPress={() => openDrink(drink.id)} />
@@ -330,6 +488,101 @@ function PoursViewer({
           </Text>
         </Pressable>
       </View>
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* The song tag                                                         */
+/* ==================================================================== */
+
+/** Dynamic Type cap for the song tag: a fixed 32pt cover sits beside it. */
+const SONG_CAP = 1.3;
+
+/**
+ * A photo's song, in the footer on the reel ground (never over the photo,
+ * so it needs no scrim): the cover, the title and artist, one 44pt
+ * control, and "Listen on Apple Music" on its own line under them, the
+ * link App Review 5.2.5 asks for beside any playable preview.
+ *
+ * ONE PLAYER, mounted only while the flag is on. `step` is the photo on
+ * screen: each new one stops the last one's preview, and in 'autoplay'
+ * starts this one's. 'tap' plays nothing until the viewer taps play, and
+ * its control is play and pause; 'autoplay' plays while the photo is
+ * shown, and its control is mute (the choice holds for the session,
+ * useStoryAudio). A preview plays once (no loop), stops when the sheet
+ * loses focus, is released when it closes, and pauses in the background
+ * (expo-video, staysActiveInBackground off).
+ */
+function StoryMusic({ mode, step, song }: { mode: 'tap' | 'autoplay'; step: string; song: Song | null }) {
+  const preview = usePreviewPlayer();
+  const focused = useIsFocused();
+
+  /*
+   * Effect events: they read the player and the song as they are when the
+   * photo changes, without being reasons to re-run. With the player in the
+   * dependencies, every change of its state would stop and restart the song.
+   */
+  const onStep = useEffectEvent(() => {
+    preview.stop();
+    if (mode === 'autoplay' && song && focused) preview.play(song);
+  });
+  useEffect(() => {
+    onStep();
+  }, [step]);
+
+  // Leaving (Close, a swipe down, a push to the drink or the post): silent at once.
+  const onBlur = useEffectEvent(() => preview.stop());
+  useEffect(() => {
+    if (!focused) onBlur();
+  }, [focused]);
+
+  if (!song) return null;
+
+  const loaded = preview.songId === song.id;
+  const playing = loaded && (preview.state === 'playing' || preview.state === 'loading');
+  const control =
+    mode === 'tap'
+      ? {
+          icon: playing ? ('pause' as const) : ('play' as const),
+          label: playing ? 'Pause the preview' : `Play a preview of ${song.title} by ${song.artist}`,
+          onPress: () => (playing ? preview.pause() : preview.play(song)),
+          busy: loaded && preview.state === 'loading',
+        }
+      : {
+          icon: preview.muted ? ('volumeOff' as const) : ('volume' as const),
+          label: preview.muted ? 'Unmute' : 'Mute',
+          onPress: () => preview.setMuted(!preview.muted),
+          busy: false,
+        };
+
+  return (
+    <View style={styles.song}>
+      <View style={styles.songRow}>
+        <SongArtwork url={song.artworkUrl} size={32} />
+        <View style={styles.songText} accessible accessibilityLabel={`Music, ${song.title} by ${song.artist}`}>
+          <Text numberOfLines={1} maxFontSizeMultiplier={SONG_CAP} style={styles.songTitle}>
+            {song.title}
+          </Text>
+          <Text numberOfLines={1} maxFontSizeMultiplier={SONG_CAP} style={styles.songArtist}>
+            {song.artist}
+          </Text>
+        </View>
+        <Pressable
+          onPress={control.onPress}
+          accessibilityRole="button"
+          accessibilityLabel={control.label}
+          accessibilityState={{ busy: control.busy }}
+          style={({ pressed }) => [styles.songControl, pressed && styles.pressed]}>
+          <Icon name={control.icon} size={24} color={colors.reelInk} />
+        </Pressable>
+      </View>
+      <AppleMusicCredit
+        url={song.appleMusicUrl}
+        tone="dark"
+        accessibilityLabel={`Listen to ${song.title} on Apple Music`}
+        onOpen={preview.stop}
+      />
     </View>
   );
 }
@@ -465,4 +718,27 @@ const styles = StyleSheet.create({
     color: colors.reelInkMuted,
   },
   pressed: { opacity: 0.5 },
+
+  /* The song tag: a 48pt row, then the credit; the footer's own gap follows it. */
+  song: { gap: space.xs },
+  songRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: space.md },
+  songText: { flex: 1 },
+  songTitle: {
+    fontFamily: fonts.bodySemiBold,
+    fontSize: 14,
+    lineHeight: 18,
+    color: colors.reelInk,
+  },
+  songArtist: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    lineHeight: 18,
+    color: colors.reelInkMuted,
+  },
+  songControl: {
+    width: layout.hit,
+    height: layout.hit,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

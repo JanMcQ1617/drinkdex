@@ -1,5 +1,6 @@
 export type DrinkCategory = 'cocktail' | 'spirit';
 
+/** @deprecated rarity, removed in v3.1; deleted at the close-out. Nothing in src/ reads it. */
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'legendary';
 
 export interface RecipeIngredient {
@@ -54,12 +55,26 @@ export interface Drink {
   description: string;
   abv: string;
   origin: string;
+  /**
+   * @deprecated rarity, removed in v3.1. drinks.json keeps the field (the
+   * generators still write it), but nothing in src/ reads it; the close-out
+   * deletes it here, which makes tsc prove that.
+   */
   rarity: Rarity;
   tastingNotes: string[];
   glassware?: string;
   /** Core spec ingredients — cocktails only */
   ingredients?: string[];
   funFact: string;
+  /**
+   * Where and when the drink began, who is credited and how it got its name:
+   * one researched paragraph, written by the origin-story phase and merged by
+   * scripts/merge-origin-stories.mjs (spec v3.1 §18). Absent until then, and
+   * for any drink no defensible story could be written for; the drink page's
+   * Origin story band falls back to funFact. Once a drink has one, its
+   * funFact is no longer shown.
+   */
+  originStory?: string;
   /** Cocktails: how to build it. */
   recipe?: Recipe;
   /** Non-cocktails: how to serve it. */
@@ -117,6 +132,31 @@ export interface Post {
   mine?: boolean;
 }
 
+/**
+ * A song on a story: one Apple Music catalog song, as the apple-music Edge
+ * Function returns it (spec v3.1 §13.2). Defined here so the post and the
+ * pour can carry one; lib/music.ts re-exports it.
+ *
+ * Stored on the photo row (post_photos), not the post: a drink is one post,
+ * and a re-post with no song must not inherit last month's.
+ */
+export interface Song {
+  /** Apple Music catalog song id, digits. */
+  id: string;
+  title: string;
+  artist: string;
+  album: string | null;
+  /** https://isN-ssl.mzstatic.com/..., sized 300x300. Shown only beside a playable preview. */
+  artworkUrl: string | null;
+  /** The 30-second preview, https://audio-ssl.itunes.apple.com/... */
+  previewUrl: string;
+  /** The song in Apple Music, https://music.apple.com/... Always on screen beside a preview. */
+  appleMusicUrl: string;
+  durationMs: number | null;
+  /** The two-letter storefront it was found in ("us"). */
+  storefront: string;
+}
+
 /** One photo shared to a post in the last 24 hours (recent_pours). */
 export interface Pour {
   postId: string;
@@ -125,6 +165,80 @@ export interface Pour {
   path: string;
   /** ISO */
   at: string;
+  /**
+   * The song added with this photo (migration 020), or null: none was
+   * added, the server predates 020, or the row is missing any field a
+   * preview needs.
+   */
+  music: Song | null;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tournaments (migration 020)                                         */
+/*                                                                     */
+/* Friends compete to try the most DIFFERENT drinks: each distinct     */
+/* drink a member posts during the window counts once, at most three   */
+/* new ones a day. Standings are computed on the server from posts;     */
+/* nothing here is a count of how much anyone drinks.                  */
+/* ------------------------------------------------------------------ */
+
+/** 'finished' only once the results are frozen (finalize_tournament). */
+export type TournamentState = 'upcoming' | 'live' | 'finished';
+
+/** The caller's place in it. The host is always 'host', never 'accepted'. */
+export type TournamentRole = 'host' | 'invited' | 'accepted' | 'declined';
+
+/** One row of my_tournaments(): a tournament you host or were invited to. */
+export interface TournamentSummary {
+  id: string;
+  name: string;
+  hostId: string;
+  /** ISO */
+  startsAt: string;
+  /** ISO, exclusive: the last instant that counts is just before it. */
+  endsAt: string;
+  /** First to this many different drinks; null = most by the end. */
+  target: number | null;
+  /** When counting stopped (its end, the host ending it, or the goal); null until frozen. */
+  finishedAt: string | null;
+  /** Null when nobody posted, before it finishes, or when the winner is someone you are blocked with. */
+  winnerId: string | null;
+  winnerDistinct: number | null;
+  state: TournamentState;
+  myStatus: TournamentRole;
+  /** Accepted members, host included. */
+  members: number;
+  /** Your place and count; null while you have not joined. */
+  myRank: number | null;
+  myDistinct: number | null;
+}
+
+/** One accepted member's line in the standings. */
+export interface Standing {
+  userId: string;
+  /** Different drinks counted. */
+  distinct: number;
+  /** How many of those counted today (the tournament's day). 0 once frozen. */
+  today: number;
+  /** When they reached their current count: the tie-break, earlier first. */
+  reachedAt: string | null;
+  /** 1 is first. Gaps where someone you are blocked with is left out. */
+  rank: number;
+}
+
+/** tournament_board(): one tournament, as its page shows it. */
+export interface TournamentBoard
+  extends Omit<TournamentSummary, 'members' | 'myRank' | 'myDistinct' | 'winnerDistinct'> {
+  /** The host ended it early. */
+  endedAt: string | null;
+  /** New drinks that count per member per day (the server's constant, 3). */
+  dailyCap: number;
+  /** The winner is someone you are blocked with: say so, never who. */
+  winnerHidden: boolean;
+  /** In rank order; anyone you are blocked with is left out. */
+  standings: Standing[];
+  /** User ids still invited, oldest invitation first. */
+  invited: string[];
 }
 
 /**

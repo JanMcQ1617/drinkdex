@@ -1,9 +1,17 @@
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import {
+  Animated,
+  type LayoutChangeEvent,
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type TabName } from '@/components/icons';
+import { useTabBarCollapse } from '@/components/ScrollChrome';
 import { Avatar, haptic } from '@/components/ui';
 import type { ProfileRow } from '@/lib/database.types';
 import { REELS_ENABLED } from '@/lib/reels';
@@ -42,10 +50,16 @@ import { useAuth } from '@/store/auth';
 /* THE ACTIVE TAB IS BONE, NOT WINE, and says so three ways: its glyph  */
 /* drawn solid, its label in SemiBold, and a 2pt bone indicator on the  */
 /* bar's top edge over the slot, so the state never rests on colour     */
-/* alone. The bar's one wine object is the log action, and a wine       */
-/* "where you are" would compete with it. Nothing moves: the page cuts, */
-/* as iOS's own tab bar and Instagram's do ((tabs)/_layout.tsx,         */
-/* specs/06).                                                           */
+/* alone. The bar's one wine object is the post action, and a wine      */
+/* "where you are" would compete with it.                               */
+/*                                                                      */
+/* TWO MOTIONS, NEITHER A FADE OF THE PAGE. Changing tab slides the     */
+/* pages 24pt, translate only ((tabs)/_layout.tsx). Scrolling a list    */
+/* down compacts the bar to a 48pt glyph-only slab, and scrolling up,   */
+/* or reaching the top, restores it (ScrollChrome.tsx). Both rest on    */
+/* the full bar, and the compaction is moved by the finger through      */
+/* native-driven transforms, so a stall can only leave a working bar    */
+/* with every glyph showing.                                            */
 /* ==================================================================== */
 
 /**
@@ -78,6 +92,11 @@ const INK = {
 
 /** The active slot's indicator: 2pt tall, as wide as the glyph box. */
 const INDICATOR_W = 28;
+
+/** The gap between a glyph box and its label (styles.item's `gap`). */
+const LABEL_GAP = 3;
+/** Labels grow with Larger Text only so far (the label's maxFontSizeMultiplier). */
+const LABEL_SCALE_CAP = 1.3;
 
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
@@ -115,10 +134,11 @@ type FloatingTabBarProps = {
 };
 
 /**
- * The centre action: log a pour. A wine rectangle seated in the bar.
+ * The post action: post a drink. A wine rectangle seated in the bar,
+ * immediately before My Bar.
  *
  * It sits BETWEEN the tabs rather than being one of them. It is not a
- * route: logging a pour is a thing you do, not a place you are, and making
+ * route: posting a drink is a thing you do, not a place you are, and making
  * it a tab would put a permanently-unselectable item in a bar whose whole
  * job is showing where you are.
  *
@@ -128,7 +148,7 @@ type FloatingTabBarProps = {
  * a button hovering in a hole rather than one belonging to the bar.
  *
  * No label under it, unlike the tabs. A plus needs no gloss; the coupe and
- * the film gate beside it are Sipply's own glyphs and do.
+ * the bottle beside it are Sipply's own glyphs and do.
  *
  * No haptic. Haptics now answer a selection, a finished save, a like and
  * recording; a plain button press ticks nowhere in the app, and this one
@@ -139,20 +159,27 @@ type FloatingTabBarProps = {
  * outline, and the bone plus on wine is 10.95:1. It used to invert to bone
  * on Reels for the same reason; with one skin everywhere, the edge does it.
  */
-function CentreAction({ onPress }: { onPress: () => void }) {
+function CentreAction({
+  onPress,
+  motion,
+}: {
+  onPress: () => void;
+  /** Half the slots' drop: the + is centred on the full row, then on the compact slab. */
+  motion: Animated.WithAnimatedValue<{ transform: { translateY: number }[] }>;
+}) {
   return (
-    <View style={styles.fabSlot} pointerEvents="box-none">
+    <Animated.View style={[styles.fabSlot, motion]} pointerEvents="box-none">
       <Pressable
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel="Log a pour"
+        accessibilityLabel="Post a drink"
         accessibilityHint="Take a photo and pick what you drank"
         // 36 tall; this reaches the 44pt target.
         hitSlop={{ top: 4, bottom: 4 }}
         style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
         <Icon name="plus" size={22} color={colors.textOnWine} filled />
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -186,7 +213,52 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
     s.session && s.profile?.id === s.session.user.id ? s.profile : null,
   );
 
-  const focusedKey = state.routes[state.index]?.key;
+  const focusedRoute = state.routes[state.index];
+  const focusedKey = focusedRoute?.key;
+
+  /*
+   * Compaction, 0 (full) to 1 (compact), from the focused tab's list.
+   * Rebuilt on every change of tab, so a tab always arrives with the
+   * full bar; the constant 0 on Reels and while VoiceOver runs.
+   *
+   * labelBlock is what the compact bar gives up: the label's line at its
+   * capped size and the gap above it (17pt at the default size). Taking it
+   * off the bottom of the slab and dropping each slot by it centres every
+   * glyph in what is left: 48pt from the default text size up, a little
+   * more at the smaller sizes, where the bar's 64pt minimum holds it
+   * taller than its content. barH is the slab's laid-out height, so the
+   * scale is right at every size.
+   */
+  const c = useTabBarCollapse(focusedRoute?.name);
+  const { fontScale } = useWindowDimensions();
+  const labelBlock = LABEL_GAP + typeScale.tag.lineHeight * Math.min(fontScale, LABEL_SCALE_CAP);
+  const [barH, setBarH] = useState<number>(layout.tabBar);
+  const onBarLayout = (e: LayoutChangeEvent) => setBarH(e.nativeEvent.layout.height);
+  const motion = useMemo(() => {
+    const along = (to: number) =>
+      c.interpolate({ inputRange: [0, 1], outputRange: [0, to], extrapolate: 'clamp' });
+    return {
+      // Scaled from its foot (styles.slab's transformOrigin), so it shrinks downwards.
+      slab: {
+        transform: [
+          {
+            scaleY: c.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, Math.max(barH - labelBlock, 1) / Math.max(barH, 1)],
+              extrapolate: 'clamp',
+            }),
+          },
+        ],
+      },
+      // Each slot, its indicator with it: the indicator rides the slab's top edge.
+      slot: { transform: [{ translateY: along(labelBlock) }] },
+      // Gone before they reach the slab's foot.
+      label: {
+        opacity: c.interpolate({ inputRange: [0, 0.6], outputRange: [1, 0], extrapolate: 'clamp' }),
+      },
+      fab: { transform: [{ translateY: along(labelBlock / 2) }] },
+    };
+  }, [c, barH, labelBlock]);
 
   /*
    * The reels route always exists (its file is the switched-off redirect),
@@ -195,18 +267,25 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
    */
   const visible = state.routes.filter((r) => r.name !== 'reels' || REELS_ENABLED);
   /*
-   * The log action is drawn before the tab at this position, so it sits in
-   * the middle of whatever is shown: Home · Reels · + · Dex · Profile, or
-   * Home · Dex · + · Profile with Reels off.
+   * The post action is drawn immediately before My Bar, found by its route
+   * name rather than by counting: Home · Dex · + · My Bar · Profile with
+   * Reels off, Home · Reels · Dex · + · My Bar · Profile with it on. Were
+   * My Bar ever missing, it falls back to the middle of whatever is shown.
    */
-  const fabAt = Math.ceil(visible.length / 2);
+  const barAt = visible.findIndex((r) => r.name === 'bar');
+  const fabAt = barAt >= 0 ? barAt : Math.ceil(visible.length / 2);
 
   return (
     <View
       pointerEvents="box-none"
       style={[styles.wrap, { bottom: Math.max(insets.bottom, 12) + 2 }]}>
-      <View style={styles.bar}>
-        <View style={styles.row} accessibilityRole="tabbar">
+      {/*
+        box-none down to the slab and the buttons: once the bar compacts,
+        the strip above the slab is the page again and takes its own taps.
+      */}
+      <View style={styles.bar} onLayout={onBarLayout} pointerEvents="box-none">
+        <Animated.View style={[styles.slab, motion.slab]} />
+        <View style={styles.row} accessibilityRole="tabbar" pointerEvents="box-none">
           {visible.map((route, at) => {
             const options = descriptors[route.key]?.options ?? {};
             const focused = route.key === focusedKey;
@@ -249,6 +328,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
               <React.Fragment key={route.key}>
                 {at === fabAt ? (
                   <CentreAction
+                    motion={motion.fab}
                     onPress={() => {
                       /*
                        * router, not navigation: `log` is a root-stack modal,
@@ -267,43 +347,52 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                     }}
                   />
                 ) : null}
-                <Pressable
-                  onPress={onPress}
-                  accessibilityRole="button"
-                  accessibilityLabel={options.tabBarAccessibilityLabel ?? options.title ?? route.name}
-                  accessibilityState={{ selected: focused }}
-                  hitSlop={4}
-                  style={styles.item}>
-                  {/*
-                    The second cue for where you are, after the solid glyph
-                    and the label's weight: a 2pt bone rule laid over the
-                    bar's top edge above the slot. Static; the page cuts.
-                  */}
-                  {focused ? <View style={styles.indicator} /> : null}
-                  <View style={styles.glyphBox}>
-                    {glyph}
-                    {options.tabBarBadge ? (
-                      <View style={styles.badge} />
-                    ) : null}
-                  </View>
-                  <Text
-                    style={[
-                      styles.label,
-                      { color, fontFamily: focused ? fonts.bodySemiBold : fonts.bodyMedium },
-                    ]}
-                    numberOfLines={1}
-                    /*
-                     * Capped. UIKit's own tab bar keeps its labels a fixed
-                     * size; this one still grows with Larger Text, but only
-                     * so far — at the accessibility sizes (2.35x and up) an
-                     * 11pt label truncated to "Pr…" in a slot a fifth of
-                     * the bar wide. VoiceOver reads the full
-                     * accessibilityLabel whatever the cap.
-                     */
-                    maxFontSizeMultiplier={1.3}>
-                    {label}
-                  </Text>
-                </Pressable>
+                {/*
+                  The slot moves, not just what is drawn in it, so its tap
+                  area stays on the slab as the bar compacts (44pt and more
+                  either way).
+                */}
+                <Animated.View style={[styles.slot, motion.slot]} pointerEvents="box-none">
+                  <Pressable
+                    onPress={onPress}
+                    accessibilityRole="button"
+                    accessibilityLabel={options.tabBarAccessibilityLabel ?? options.title ?? route.name}
+                    accessibilityState={{ selected: focused }}
+                    hitSlop={4}
+                    style={styles.item}>
+                    {/*
+                      The second cue for where you are, after the solid glyph
+                      and the label's weight: a 2pt bone rule laid over the
+                      bar's top edge above the slot. Static between tabs; it
+                      rides the slab's top edge down as the bar compacts.
+                    */}
+                    {focused ? <View style={styles.indicator} /> : null}
+                    <View style={styles.glyphBox}>
+                      {glyph}
+                      {options.tabBarBadge ? (
+                        <View style={styles.badge} />
+                      ) : null}
+                    </View>
+                    <Animated.Text
+                      style={[
+                        styles.label,
+                        { color, fontFamily: focused ? fonts.bodySemiBold : fonts.bodyMedium },
+                        motion.label,
+                      ]}
+                      numberOfLines={1}
+                      /*
+                       * Capped. UIKit's own tab bar keeps its labels a fixed
+                       * size; this one still grows with Larger Text, but only
+                       * so far — at the accessibility sizes (2.35x and up) an
+                       * 11pt label truncated to "Pr…" in a slot a fifth of
+                       * the bar wide. VoiceOver reads the full
+                       * accessibilityLabel whatever the cap.
+                       */
+                      maxFontSizeMultiplier={LABEL_SCALE_CAP}>
+                      {label}
+                    </Animated.Text>
+                  </Pressable>
+                </Animated.View>
               </React.Fragment>
             );
           })}
@@ -322,14 +411,24 @@ const styles = StyleSheet.create({
   /*
    * A minimum, not a height: the row is 63pt at the default text size and
    * grows a little at the capped Larger Text sizes rather than clipping
-   * its labels.
-   *
-   * The reel ground's espresso on every tab, with the reels' bone edge.
-   * barDark is the one shadow: the bar floats over cream and photos alike,
-   * and on cream a shadow is what says it is above the page, not in it.
+   * its labels. The padding is the slab's 1pt edge, so the row sits inside
+   * it exactly as it did when the edge was this view's own border.
    */
   bar: {
     minHeight: layout.tabBar,
+    padding: stroke.edge,
+  },
+  /*
+   * The bar's skin, drawn behind the row so it can compact on its own:
+   * the reel ground's espresso on every tab, with the reels' bone edge.
+   * barDark is the one shadow: the bar floats over cream and photos alike,
+   * and on cream a shadow is what says it is above the page, not in it.
+   * Compacted, the 1pt edge draws at about 0.7pt top and bottom and the
+   * corners at 12 x 9: below what reads at arm's length.
+   */
+  slab: {
+    ...StyleSheet.absoluteFill,
+    transformOrigin: 'bottom',
     borderRadius: radius.card,
     borderWidth: stroke.edge,
     backgroundColor: colors.reelBar,
@@ -349,15 +448,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: BAR_PAD,
   },
   /*
-   * `flex: 1` for the tabs and the action alike: five equal slots (four
+   * `flex: 1` for the tabs and the action alike: six equal slots (five
    * with Reels off) are a property of the layout, not of a computed width
    * that could drift from it.
    */
+  slot: { flex: 1 },
   item: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 3,
+    gap: LABEL_GAP,
     paddingVertical: 9,
   },
   /* Over the 1pt edge (top −1), centred on the slot. */

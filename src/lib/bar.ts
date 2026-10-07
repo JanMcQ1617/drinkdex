@@ -83,8 +83,8 @@ export interface Match {
 }
 
 export interface BarResult {
-  /** Everything you can make right now, rarest-looking first is NOT the order —
-   *  these are sorted by name, because the list is browsed not ranked. */
+  /** Everything you can make right now, sorted by name, because the list is
+   *  browsed, not ranked. */
   makeable: Match[];
   /** Missing exactly one thing. The useful half of the feature. */
   nearly: Match[];
@@ -102,9 +102,9 @@ const EMPTY: BarResult = { makeable: [], nearly: [], nextBest: [] };
  * The recipes in drink-name order, sorted once on first use. matchBar walks
  * them in this order, so both of its lists come out alphabetical with no
  * sort of their own — it used to run two localeCompare sorts of up to ~800
- * rows on every tap of a shelf chip. Lazily rather than at module load:
- * the Dex imports this file, and a load-time sort would run at app start
- * for a screen most launches never open.
+ * rows on every tap of a shelf chip. Lazily rather than at module load,
+ * so importing this costs nothing until My Bar first asks: it is a tab
+ * most launches never open.
  */
 let recipesByName: { recipe: RawRecipe; drink: Drink }[] | null = null;
 
@@ -164,12 +164,11 @@ let lastResult: BarResult = EMPTY;
 /**
  * matchBar for the persisted shelf, remembered for the last shelf seen.
  *
- * Two screens want the same answer at the same moment: My Bar, and the Dex
- * row that shows its count, which stays mounted underneath while My Bar is
- * pushed. Keyed on the store's Record identity — the bar store hands out a
- * new object on every change and the same one otherwise — so whichever
- * screen asks second on a given tap gets the first one's result instead of
- * walking every recipe again.
+ * Keyed on the store's Record identity — the bar store hands out a new
+ * object on every change and the same one otherwise — so My Bar's
+ * re-renders (a keystroke in its search field, a return to the tab) reuse
+ * the answer instead of walking every recipe again. My Bar is the only
+ * reader since v3.1: the Dex's count button that shared it is gone.
  */
 export function matchOwned(owned: Record<string, true>): BarResult {
   if (owned !== lastOwned) {

@@ -471,16 +471,28 @@ export function splitAmount(amount: string | undefined): { amount: string; metri
 /* -------------------------------------------------------------------- */
 
 /*
- * The first year from 1500 to 2029 in the fun fact, with a decade's "s"
- * kept ("the 1970s" → "1970s"). 433 catalogue facts name one; checked
- * against every four-digit number in them, all are years.
+ * The first year from 1500 to 2029 in the text, with a decade's "s" kept
+ * ("the 1970s" → "1970s"). 433 catalogue fun facts name one; checked
+ * against every four-digit number in them, all are years. The origin-story
+ * writers put the origin year first for exactly this reason (spec v3.1
+ * §18.2 rule 3), and a year before 1500 ("since the 1300s") is not read.
  */
 const YEAR = /\b(1[5-9]\d\d|20[0-2]\d)(s?)\b/;
 
-/** "London, England · 1903": the origin and the first year in the fun fact; either alone if the other is missing. */
-export function datelineOf(drink: Pick<Drink, 'origin' | 'funFact'>): string {
+/**
+ * "London, England · 1903": the origin, and the first year in the text the
+ * Origin story band shows; either alone if the other is missing.
+ *
+ * That text is the origin story when the drink has one, and the year is
+ * taken from it ONLY: once a story exists the fun fact is no longer shown,
+ * so a year in the fun fact must not date the story (a story with no year
+ * gets no year). Without a story the band shows the fun fact, and the year
+ * comes from there, as it always has.
+ */
+export function datelineOf(drink: Pick<Drink, 'origin' | 'funFact' | 'originStory'>): string {
   const origin = tidy(drink.origin);
-  const m = YEAR.exec(drink.funFact ?? '');
+  const story = drink.originStory?.trim() ?? '';
+  const m = YEAR.exec(story || (drink.funFact ?? ''));
   const year = m ? `${m[1]}${m[2]}` : '';
   return [origin, year].filter(Boolean).join(' · ');
 }

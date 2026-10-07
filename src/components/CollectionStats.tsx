@@ -1,7 +1,8 @@
+import { useRouter } from 'expo-router';
 import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { DrinkName, HeroFigure, LiningBand, NumberPlate, TierWord } from '@/components/cabinet';
+import { DrinkName, HeroFigure, LiningBand } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
 import { Icon } from '@/components/icons';
 import { Button, Card, ProgressBar, SectionHeader } from '@/components/ui';
@@ -12,34 +13,35 @@ import {
   fonts,
   layout,
   radius,
-  RARITY_META,
-  RARITY_ORDER,
   space,
   stroke,
   tabular,
   textRole,
   type as typeScale,
 } from '@/constants/theme';
-import { COUNT_BY_CATEGORY, COUNT_BY_RARITY, formatCount, getDrink, TOTAL } from '@/data';
+import { COUNT_BY_CATEGORY, formatCount, getDrink, TOTAL } from '@/data';
 import { nextRank } from '@/lib/cabinet';
+import { dexSinceLabel } from '@/lib/drinkLabels';
 import { MILESTONES, rankTitle } from '@/lib/milestones';
 import { useCollection } from '@/store/collection';
-import type { Drink, DrinkCategory, Rarity, UnlockRecord } from '@/types';
+import type { Drink, DrinkCategory, UnlockRecord } from '@/types';
 
 /* ==================================================================== */
 /* Collection stats                                                     */
 /*                                                                      */
-/* The four blocks — Collection, Rarity, Milestones, Rarest entry —     */
+/* The three blocks — Collection, Milestones, First in your Dex —       */
 /* extracted from the profile so the Stats screen and any future        */
 /* surface render the identical thing. Reads the LOCAL collection; a    */
 /* peer's stats are a different, post-derived view (see PeerProfile).   */
 /*                                                                      */
 /* v3 (specs/v3-cabinet.md §9.13.4): the collection itself is a panel   */
-/* of the cabinet's lining with the count as an Inter hero figure; the  */
-/* tiers are four plates of card stock; the rarest entry is a mounted   */
-/* thumbnail with its name in Playfair, the one name on the screen.     */
+/* of the cabinet's lining with the count as an Inter hero figure. The  */
+/* first drink in your Dex is a mounted thumbnail with its name in      */
+/* Playfair, the one name on the screen. It took the old fourth block's */
+/* place in v3.1 (spec §7): the first drink is the one fact about a     */
+/* collection that never changes.                                       */
 /*                                                                      */
-/* NO ENTRANCE ANIMATION. The four blocks used to fade up in a stagger, */
+/* NO ENTRANCE ANIMATION. The blocks used to fade up in a stagger,      */
 /* and they are everything on the Stats screen under its title: a       */
 /* Reanimated entrance that stalled after a cold start (it can, in      */
 /* Release builds) left them at opacity 0, and the screen read as blank */
@@ -56,34 +58,37 @@ interface UnlockedEntry {
   record: UnlockRecord;
 }
 
+/** A record's time for ordering; an unreadable date sorts after every readable one. */
+function collectedAt(record: UnlockRecord): number {
+  const t = Date.parse(record.date);
+  return Number.isNaN(t) ? Infinity : t;
+}
+
 export function deriveStats(unlocks: Record<string, UnlockRecord>) {
   const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0 };
-  const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
+  let unlockedCount = 0;
+  /*
+   * The earliest entry still in the collection. A tie (two records saved
+   * in the same millisecond, or two unreadable dates) goes to the lower
+   * Dex number, so the answer does not depend on the store's key order.
+   */
+  let first: UnlockedEntry | null = null;
 
-  const entries: UnlockedEntry[] = [];
   for (const record of Object.values(unlocks)) {
     const drink = getDrink(record.drinkId);
     if (!drink) continue; // orphaned record — skip defensively
-    entries.push({ drink, record });
+    unlockedCount += 1;
     byCategory[drink.category] += 1;
-    byRarity[drink.rarity] += 1;
-  }
-
-  // Highest rarity wins; ties go to the most recent log.
-  let prize: UnlockedEntry | null = null;
-  for (const entry of entries) {
-    if (!prize) {
-      prize = entry;
-      continue;
-    }
-    const w = RARITY_META[entry.drink.rarity].weight;
-    const pw = RARITY_META[prize.drink.rarity].weight;
-    if (w > pw || (w === pw && Date.parse(entry.record.date) > Date.parse(prize.record.date))) {
-      prize = entry;
+    if (
+      !first ||
+      collectedAt(record) < collectedAt(first.record) ||
+      (collectedAt(record) === collectedAt(first.record) && drink.dexNumber < first.drink.dexNumber)
+    ) {
+      first = { drink, record };
     }
   }
 
-  return { unlockedCount: entries.length, byCategory, byRarity, prize };
+  return { unlockedCount, byCategory, first };
 }
 
 /*
@@ -100,9 +105,9 @@ const RUNG_AT: readonly number[] = MILESTONES.map((m) => {
   return at;
 });
 
-/** The rarest entry's mounted thumbnail width and its chevron, for the name's measure. */
-const PRIZE_THUMB = 44;
-const PRIZE_CHEVRON = 18;
+/** The first entry's mounted thumbnail width (DexThumb's row size) and its chevron, for the name's measure. */
+const FIRST_THUMB = 44;
+const FIRST_CHEVRON = 18;
 const CAP = 1.3;
 
 /* ==================================================================== */
@@ -111,19 +116,20 @@ const CAP = 1.3;
 
 export function CollectionStats({
   onOpenDrink,
-  onOpenDex,
 }: {
   onOpenDrink: (id: string) => void;
-  /** Where a collection with nothing in it is sent to start. */
+  /**
+   * @deprecated v3.1: ignored. An empty collection's way in is the post
+   * sheet now (spec v3.1 §8.2), which this block opens itself; Stats
+   * still passes its Back here.
+   */
   onOpenDex?: () => void;
 }) {
+  const router = useRouter();
   const unlocks = useCollection((s) => s.unlocks);
   const { width } = useWindowDimensions();
 
-  const { unlockedCount, byCategory, byRarity, prize } = useMemo(
-    () => deriveStats(unlocks),
-    [unlocks],
-  );
+  const { unlockedCount, byCategory, first } = useMemo(() => deriveStats(unlocks), [unlocks]);
   const pct = TOTAL > 0 ? Math.floor((unlockedCount / TOTAL) * 100) : 0;
   /*
    * Floored, so the first twenty entries of 2,089 all read 0% — "14 of
@@ -134,19 +140,18 @@ export function CollectionStats({
   const next = nextRank(unlockedCount);
 
   /*
-   * The rarest entry's name column: the window less the screen's gutters,
-   * the panel's padding and edges, the thumbnail, the chevron and the two
+   * The first entry's name column: the window less the screen's gutters,
+   * the row's padding and edges, the thumbnail, the chevron and the two
    * gaps between them. Worked out, so DrinkName fits a long name on the
    * first frame.
    */
-  const prizeRule = prize ? RARITY_META[prize.drink.rarity].rule : null;
-  const prizeMeasure =
+  const firstMeasure =
     width -
     2 * layout.gutter -
     2 * space.md -
-    2 * (prizeRule?.width ?? stroke.edge) -
-    PRIZE_THUMB -
-    PRIZE_CHEVRON -
+    2 * stroke.edge -
+    FIRST_THUMB -
+    FIRST_CHEVRON -
     2 * space.md;
 
   return (
@@ -181,17 +186,23 @@ export function CollectionStats({
           </View>
 
           {/*
-            With nothing logged, every number on this page is a zero and
-            none of them says how to change it. The rest of the page stays —
-            the plates and the ladder are what there is to aim for — but the
-            first block gets the way in.
+            With nothing collected, every number on this page is a zero and
+            none of them says how to change it. The rest of the page stays
+            (the ladder is what there is to aim for), but the first block
+            gets the way in: the post sheet, where any drink can be picked,
+            rather than a walk back to the Dex to find one.
           */}
-          {unlockedCount === 0 && onOpenDex ? (
+          {unlockedCount === 0 ? (
             <View style={styles.start}>
               <Text style={[textRole.helper, styles.onLiningMuted]}>
-                Open any entry in the Dex and tap Log this drink to start your collection.
+                Post your first drink to start your collection.
               </Text>
-              <Button variant="onLining" label="Open the Dex" onPress={onOpenDex} />
+              <Button
+                variant="onLining"
+                icon="plus"
+                label="Post a drink"
+                onPress={() => router.navigate('/log')}
+              />
             </View>
           ) : null}
 
@@ -229,42 +240,6 @@ export function CollectionStats({
             })}
           </View>
         </LiningBand>
-      </View>
-
-      {/* ---- Rarity ---- */}
-      <View>
-        <SectionHeader title="Rarity breakdown" style={styles.sectionHeader} />
-        {/*
-          Four plates, two by two: each tier's word and mark, then how many
-          of the index's entries in it you hold. The "of N" is the index,
-          the same for everyone; the figure is yours, the one number that
-          moves as you play. It replaces a donut whose ring was index shares
-          and whose centre "2,089" was set in Playfair.
-
-          Legendary's plate takes a gilt edge, the metal that means
-          legendary everywhere; the others the plain card edge.
-        */}
-        <View style={styles.plates}>
-          {RARITY_ORDER.map((rarity) => {
-            const have = byRarity[rarity];
-            const of = COUNT_BY_RARITY[rarity];
-            return (
-              <View
-                key={rarity}
-                style={styles.plateCell}
-                accessible
-                accessibilityLabel={`${RARITY_META[rarity].label}, ${formatCount(have)} of ${formatCount(of)} collected`}>
-                <Card surface="mat" style={[styles.plate, rarity === 'legendary' && styles.plateLegendary]}>
-                  <TierWord rarity={rarity} tone="paper" />
-                  <Text style={styles.plateFigure}>
-                    <Text style={[textRole.count, styles.plateCount]}>{formatCount(have)}</Text>
-                    <Text style={styles.plateOf}>{` of ${formatCount(of)}`}</Text>
-                  </Text>
-                </Card>
-              </View>
-            );
-          })}
-        </View>
       </View>
 
       {/* ---- Milestones ---- */}
@@ -306,42 +281,34 @@ export function CollectionStats({
         </Card>
       </View>
 
-      {/* ---- Rarest entry ---- */}
-      {prize && prizeRule ? (
+      {/* ---- First in your Dex ---- */}
+      {first ? (
         <View>
-          <SectionHeader title="Rarest entry" style={styles.sectionHeader} />
+          <SectionHeader title="First in your Dex" style={styles.sectionHeader} />
           <Pressable
-            onPress={() => onOpenDrink(prize.drink.id)}
+            onPress={() => onOpenDrink(first.drink.id)}
             accessibilityRole="button"
-            accessibilityLabel={`Open ${prize.drink.name}, your rarest entry, ${RARITY_META[prize.drink.rarity].label}`}
+            accessibilityLabel={`Open ${first.drink.name}, the first drink in your Dex`}
             /*
-             * Framed in the entry's own tier rule, as its mount is printed:
-             * wine for rare, gilt for legendary, the plain edge below that.
-             *
-             * A row you tap, so it answers with its fill, not a scale:
-             * shrinking is for media tiles.
+             * A white row with the card edge. A row you tap, so it answers
+             * with its fill, not a scale: shrinking is for media tiles.
              */
-            style={({ pressed }) => [
-              styles.prize,
-              { borderColor: prizeRule.color, borderWidth: prizeRule.width },
-              pressed && styles.prizePressed,
-            ]}>
-            {/* Your pour, else the lit catalogue photo, else the lit vector face, decoded at 44pt. */}
-            <DexThumb drink={prize.drink} photoUri={prize.record.photoUri} />
-            <View style={styles.prizeBody}>
+            style={({ pressed }) => [styles.first, pressed && styles.firstPressed]}>
+            {/* Your photo, else the lit catalogue photo, else the lit vector face, decoded at 44pt. */}
+            <DexThumb drink={first.drink} photoUri={first.record.photoUri} />
+            <View style={styles.firstBody}>
+              {/* No line limit: the row grows with a long name. */}
               <DrinkName
-                name={prize.drink.name}
+                name={first.drink.name}
                 role={textRole.miniName}
-                measure={prizeMeasure}
+                measure={firstMeasure}
                 cap={CAP}
                 color={colors.text}
               />
-              <View style={styles.prizePlates}>
-                <NumberPlate n={prize.drink.dexNumber} tone="paper" />
-                <TierWord rarity={prize.drink.rarity} tone="paper" />
-              </View>
+              {/* Uncapped: the row grows, and no measure depends on this line. */}
+              <Text style={styles.firstSince}>{dexSinceLabel(first.record.date)}</Text>
             </View>
-            <Icon name="chevronRight" size={PRIZE_CHEVRON} color={colors.textFaint} />
+            <Icon name="chevronRight" size={FIRST_CHEVRON} color={colors.textFaint} />
           </Pressable>
         </View>
       ) : null}
@@ -381,16 +348,6 @@ const styles = StyleSheet.create({
     lineHeight: typeScale.micro.lineHeight,
     ...tabular,
   },
-
-  /* Rarity plates, two by two */
-  plates: { flexDirection: 'row', flexWrap: 'wrap', gap: space.sm },
-  /* Two to a row: half the row less half the gap. */
-  plateCell: { flexBasis: '47%', flexGrow: 1 },
-  plate: { flexGrow: 1, paddingHorizontal: space.md, paddingVertical: 10, gap: space.xs },
-  plateLegendary: { borderColor: colors.gilt },
-  plateFigure: { ...tabular },
-  plateCount: { color: colors.text },
-  plateOf: { ...textRole.helper, color: colors.textMuted },
 
   /* Milestones */
   milestoneRow: {
@@ -436,22 +393,18 @@ const styles = StyleSheet.create({
     ...tabular,
   },
 
-  /* The frame is set per tier on the element. */
-  prize: {
+  /* First in your Dex: a white row on the card edge, as every Card. */
+  first: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
     padding: space.md,
     backgroundColor: colors.surface,
     borderRadius: radius.card,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
   },
-  prizePressed: { backgroundColor: colors.bgSunk },
-  prizeBody: { flex: 1, gap: space.sm },
-  prizePlates: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    columnGap: space.sm,
-    rowGap: space.xs,
-  },
+  firstPressed: { backgroundColor: colors.bgSunk },
+  firstBody: { flex: 1, gap: space.xs },
+  firstSince: { ...textRole.helper, color: colors.textMuted },
 });

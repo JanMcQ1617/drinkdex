@@ -24,12 +24,12 @@ const CAP = 1.3;
 /**
  * One drink someone added, on the Dex's "Added by you" shelf.
  *
- * Card stock lying on the cabinet front's paper: a shelf mount (mat, a
- * 1pt `line` edge, its plain inner rule) with no seat, because it is not
- * in the lining. It is NOT a Dex card: no number and no tier. Those mean
- * "the catalogue", and dressing a custom entry in them would say it had
- * joined the Dex when it has only been suggested; where a card prints its
- * tier, this one says "Added by you".
+ * Card stock lying on the cabinet front's paper: a shelf mount (mat and a
+ * 1pt `line` edge) with no seat, because it is not in the lining. It is
+ * NOT a Dex card: no number. A number means "the catalogue", and stamping
+ * one on a custom entry would say it had joined the Dex when it has only
+ * been suggested; where a card has its number plate, this one says "Added
+ * by you".
  *
  * The photo is the pour's when there is one, else the one sent with the
  * suggestion, else the lit vector face, through DexCard's DrinkFace, so it
@@ -40,7 +40,7 @@ const CAP = 1.3;
  * aligns its tiles to the top, so one long name makes its own tile taller
  * and leaves the others as they are.
  *
- * "Collected" is said when a pour is logged, whether or not its photo
+ * "Collected" is said once it is in your Dex, whether or not its photo
  * survived: the Dex's Collected filter counts the same thing, so the tile
  * and the filter above it never disagree. Without `collected`, a pour
  * photo is taken as the sign of one.
@@ -54,7 +54,7 @@ export function CustomDrinkTile({
 }: {
   drink: CustomDrink;
   pourPhotoUri: string | null;
-  /** A pour is logged against it. */
+  /** It is in your Dex (a photo was saved against it). */
   collected?: boolean;
   width?: number;
   onPress: (id: string) => void;
@@ -71,7 +71,7 @@ export function CustomDrinkTile({
       accessibilityLabel={`${drink.name}, ${meta.label.toLowerCase()} you added${poured ? ', collected' : ''}`}
       accessibilityHint="Opens your entry"
       style={{ width }}>
-      <Mount state="mounted" tier="common" size="shelf" onLining={false} style={styles.mount}>
+      <Mount state="mounted" size="shelf" onLining={false} style={styles.mount}>
         <MountWindow height={column} state="mounted">
           {/* toDrink returns the same object for the same record, so the face stays memoised. */}
           <DrinkFace
@@ -83,7 +83,7 @@ export function CustomDrinkTile({
             style={FACE_FILL}
           />
         </MountWindow>
-        <Text maxFontSizeMultiplier={CAP} style={[textRole.tierWord, styles.added]}>
+        <Text maxFontSizeMultiplier={CAP} style={[textRole.statusWord, styles.added]}>
           Added by you
         </Text>
         <DrinkName

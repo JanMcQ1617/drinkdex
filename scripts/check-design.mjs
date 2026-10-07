@@ -1,7 +1,7 @@
 /**
  * Design-system guard.
  *
- * Thirteen rules for mistakes that were made across the app before the
+ * Fifteen rules for mistakes that were made across the app before the
  * redesigns, or that the v3 cabinet depends on never making, and that
  * regress easily:
  *   1. No emoji used as UI. They render in the system font, so weight and
@@ -25,10 +25,13 @@
  *  11. Nothing drawn over a photograph but `onMedia`. See MEDIA.
  *  12. Shadows come from `elevation`. See SHADOW.
  *  13. A gradient stop states its own opacity. See STOP.
+ *  14. Nothing reads or says rarity, which v3.1 removed. See RARITY.
+ *  15. No timed React Native animation: chrome motion is scroll-linked.
+ *      See TIMED.
  *
  * Comments are stripped before any rule runs, block comments included,
  * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5 read
- * the code a line at a time; rules 6 to 13, rule 3's builder imports and
+ * the code a line at a time; rules 6 to 15, rule 3's builder imports and
  * rule 5's Title Case read the TypeScript syntax tree (the project's own
  * `typescript`), which holds no comments at all. They need it: a caps
  * check on whole lines flags code such as `SIZE - STROKE`, and an <Image>
@@ -200,7 +203,7 @@ const FLOOR = 11;
  *    CAPS_TEXT is two capitalised words in a row, which rule 5 cannot see
  *    when the capitals are typed into the string ("DISCOVER · SIP · SHARE").
  *    It reads string literals, template text and JSX text, never whole
- *    lines: code such as `SIZE - STROKE` (RarityDonut) would match.
+ *    lines: code such as `SIZE - STROKE` would match.
  *
  *    And the catalogue stores a drink's style in Title Case
  *    ("Spirit-Forward"), so a style reaches the screen only through
@@ -266,11 +269,11 @@ const GROUNDS_EXEMPT = {
  *
  *     RARITY_META and CATEGORY_META are `colors` tokens by another name
  *     (the legendary word's `color`, giltInk, is 1.08:1 on scrimMid over a
- *     white photo), and
- *     media.tsx reads them for a tier's word and mark. So their colour
- *     fields are flagged there too, read off the table, an entry of it
- *     held in a const (`const meta = RARITY_META[rarity]`), or
- *     destructured; `label` and `mark` stay free.
+ *     white photo). So their colour fields are flagged in media.tsx too,
+ *     read off the table, an entry of it held in a const (`const meta =
+ *     CATEGORY_META[category]`), or destructured; `label` and `mark` stay
+ *     free. media.tsx stopped reading RARITY_META in v3.1; the table
+ *     leaves this list at the close-out.
  */
 const MEDIA_FILE = 'components/media.tsx';
 const META_TABLES = ['RARITY_META', 'CATEGORY_META'];
@@ -304,6 +307,76 @@ const SHADOW_KEYS = new Set([
  *     opaque `stopColor`.
  */
 const SVG_MODULE = /^react-native-svg$/;
+
+/*
+ * 14. Rarity is gone (specs/v3.1-changes.md section 7): no tier words,
+ *     rules, plaques, foil, filters or tallies, and nothing in src/ reads
+ *     `drink.rarity`. The catalogue keeps the field (src/data/drinks.json
+ *     is generated, and JSON is not read here), so the field stays in the
+ *     data and out of the app. Flagged, from the syntax tree (so comments
+ *     are free to explain the history):
+ *       - the field: a `.rarity` or `['rarity']` read, an object, type or
+ *         JSX key `rarity`, and `rarity` destructured;
+ *       - RARITY_NAMES: the deprecated tables, primitives and selectors,
+ *         the `Rarity` type, the `tierWord` text role (read `statusWord`)
+ *         and the `slotEdgeLegendary` token, wherever the name appears;
+ *       - a tier word in copy: a string, template or JSX text matching
+ *         RARITY_WORDS. "rare" and "common" are ordinary words and pass.
+ *     A `tier=` prop on Mount is not matched by name: the close-out deletes
+ *     the prop, and tsc then finds any left.
+ *
+ *     RARITY_SHIM_FILES hold the deprecated shims that keep files not yet
+ *     moved off rarity compiling, and are exempt until the close-out,
+ *     which empties the list; the rule then has no exemptions.
+ */
+const RARITY_FIELD = 'rarity';
+const RARITY_NAMES = new Set([
+  'RARITY_META',
+  'RARITY_ORDER',
+  'TierWord',
+  'RarityTally',
+  'MediaPlaque',
+  'RarityRule',
+  'FoilSweep',
+  'tierTally',
+  'topShelf',
+  'COUNT_BY_RARITY',
+  'Rarity',
+  'tierWord',
+  'slotEdgeLegendary',
+]);
+const RARITY_WORDS = /\b(uncommon|legendary|rarity|rarest)\b/i;
+const RARITY_SHIM_FILES = [
+  'constants/theme.ts',
+  'components/cabinet.tsx',
+  'components/media.tsx',
+  'components/DexCard.tsx',
+  'lib/cabinet.ts',
+  'types.ts',
+  'data/index.ts',
+  'lib/customDrinks.ts',
+];
+
+/*
+ * 15. No timed animation from React Native's own `Animated`: no
+ *     `timing`, `spring`, `decay`, `loop`, `sequence`, `parallel` or
+ *     `stagger`, called or merely referenced, by name, by `['timing']`,
+ *     or destructured. v3.1's chrome motion (the tab bar compacting,
+ *     Home's bar sliding away) is scroll-linked: an `Animated.event` on
+ *     the list's onScroll, `diffClamp` and `interpolate` on the native
+ *     driver, moved by the finger and resting at identity at offset 0,
+ *     so a stalled clock can never leave chrome half drawn
+ *     (specs/v3.1-changes.md section 1.2.2). A timed animation is the
+ *     thing that can. The `Animated` binding is followed through import
+ *     aliases, a namespace import (`RN.Animated`), a deep import of RN's
+ *     Animated module, and `const A = Animated`. The tab nudge's timing is
+ *     navigator configuration (`transitionSpec`), not a call, and
+ *     Reanimated's withTiming is a different import: neither is this
+ *     rule's business.
+ */
+const RN_MODULE = /^react-native$/;
+const RN_ANIMATED_MODULE = /^react-native\/Libraries\/Animated\/Animated$/;
+const TIMED = new Set(['timing', 'spring', 'decay', 'loop', 'sequence', 'parallel', 'stagger']);
 
 function walk(dir) {
   const out = [];
@@ -650,7 +723,44 @@ function nameRoleAsStyle(site, sf, drinkNames) {
   return spread ? 'a drink-name role spread into a style: draw the name with DrinkName' : null;
 }
 
-/** Rules 6 to 13, rule 3's builder imports and rule 5's transforms, for one file, read from its syntax tree. */
+/**
+ * The local names a file binds to React Native's own `Animated` (rule 15):
+ * `{ Animated }` and `{ Animated as A }` from react-native, `RN.Animated`
+ * off a namespace import, a default import of RN's Animated module, and
+ * any `const X = <one of those>` after them.
+ */
+function rnAnimatedNames(sf) {
+  const names = importedAs(sf, RN_MODULE, 'Animated');
+  for (const st of sf.statements) {
+    if (!ts.isImportDeclaration(st) || !ts.isStringLiteral(st.moduleSpecifier)) continue;
+    if (!RN_ANIMATED_MODULE.test(st.moduleSpecifier.text)) continue;
+    const def = st.importClause?.name;
+    if (def) names.add(def.text);
+    const bindings = st.importClause?.namedBindings;
+    if (bindings && ts.isNamespaceImport(bindings)) names.add(`${bindings.name.text}.default`);
+  }
+  if (names.size === 0) return names;
+  // `const A = Animated`, wherever it is declared, until no new name turns up.
+  for (let grew = true; grew; ) {
+    grew = false;
+    const visit = (node) => {
+      if (
+        ts.isVariableDeclaration(node) &&
+        ts.isIdentifier(node.name) &&
+        !names.has(node.name.text) &&
+        isName(unwrap(node.initializer), names)
+      ) {
+        names.add(node.name.text);
+        grew = true;
+      }
+      ts.forEachChild(node, visit);
+    };
+    visit(sf);
+  }
+  return names;
+}
+
+/** Rules 6 to 15, rule 3's builder imports and rule 5's transforms, for one file, read from its syntax tree. */
 function treeRules(rel, sf, lines, add) {
   const at = (node) => sf.getLineAndCharacterOfPosition(node.getStart(sf)).line;
   const marked = (re, i) => re.test(lines[i]) || (i > 0 && re.test(lines[i - 1]));
@@ -667,6 +777,15 @@ function treeRules(rel, sf, lines, add) {
   const svgStops = new Set(['svgStop', ...importedAs(sf, CABINET_MODULE, 'svgStop')]);
   const roles = rel === THEME ? textRoleObject(sf) : null;
   const consts = fileConsts(sf);
+  const rarityExempt = RARITY_SHIM_FILES.includes(rel);
+  const rnAnimated = rnAnimatedNames(sf);
+  // 14. Gathered per line and reported once there: `<TierWord rarity={drink.rarity} />` is one fix.
+  const rarityLines = new Map();
+  const rarity = (node, what) => {
+    const i = at(node);
+    if (!rarityLines.has(i)) rarityLines.set(i, new Set());
+    rarityLines.get(i).add(what);
+  };
 
   // 11. The tier and category tables in media.tsx, and consts holding one entry of them.
   const metaTables = new Set(rel === MEDIA_FILE ? META_TABLES.flatMap((t) => [...fromTheme(t)]) : []);
@@ -950,6 +1069,73 @@ function treeRules(rel, sf, lines, add) {
       }
     }
 
+    // 14. Rarity: the field, the deprecated names, and tier words in copy.
+    if (!rarityExempt) {
+      const field = 'the rarity field';
+      if (ts.isIdentifier(node) && RARITY_NAMES.has(node.text)) rarity(node, node.text);
+      if (ts.isPropertyAccessExpression(node) && node.name.text === RARITY_FIELD) rarity(node, field);
+      if (
+        ts.isElementAccessExpression(node) &&
+        ts.isStringLiteralLike(node.argumentExpression) &&
+        node.argumentExpression.text === RARITY_FIELD
+      ) {
+        rarity(node, field);
+      }
+      if (
+        (ts.isPropertyAssignment(node) ||
+          ts.isShorthandPropertyAssignment(node) ||
+          ts.isPropertySignature(node) ||
+          ts.isPropertyDeclaration(node) ||
+          ts.isJsxAttribute(node)) &&
+        keyOf(node) === RARITY_FIELD
+      ) {
+        rarity(node, field);
+      }
+      if (
+        ts.isBindingElement(node) &&
+        ts.isObjectBindingPattern(node.parent) &&
+        (node.propertyName ?? node.name).getText(sf) === RARITY_FIELD
+      ) {
+        rarity(node, field);
+      }
+      if (
+        (ts.isStringLiteral(node) ||
+          ts.isNoSubstitutionTemplateLiteral(node) ||
+          ts.isTemplateHead(node) ||
+          ts.isTemplateMiddle(node) ||
+          ts.isTemplateTail(node) ||
+          ts.isJsxText(node)) &&
+        RARITY_WORDS.test(node.text)
+      ) {
+        rarity(node, 'a tier word in copy');
+      }
+    }
+
+    // 15. A timed animation on React Native's own Animated.
+    if (rnAnimated.size) {
+      const timed = 'a timed RN animation: chrome motion is scroll-linked (Animated.event, diffClamp, interpolate)';
+      if (ts.isPropertyAccessExpression(node) && TIMED.has(node.name.text) && isName(node.expression, rnAnimated)) {
+        add('timed', at(node), `Animated.${node.name.text}: ${timed}`);
+      }
+      if (
+        ts.isElementAccessExpression(node) &&
+        ts.isStringLiteralLike(node.argumentExpression) &&
+        TIMED.has(node.argumentExpression.text) &&
+        isName(node.expression, rnAnimated)
+      ) {
+        add('timed', at(node), `Animated.${node.argumentExpression.text}: ${timed}`);
+      }
+      if (
+        ts.isBindingElement(node) &&
+        TIMED.has((node.propertyName ?? node.name).getText(sf)) &&
+        node.parent?.parent &&
+        ts.isVariableDeclaration(node.parent.parent) &&
+        isName(unwrap(node.parent.parent.initializer), rnAnimated)
+      ) {
+        add('timed', at(node), `${(node.propertyName ?? node.name).getText(sf)} destructured: ${timed}`);
+      }
+    }
+
     // 11. Media ink: the binding itself, or `theme.colors` / `theme['colors']` off a namespace.
     if (
       rel === MEDIA_FILE &&
@@ -969,6 +1155,8 @@ function treeRules(rel, sf, lines, add) {
     ts.forEachChild(node, visit);
   };
   visit(sf);
+
+  for (const [i, what] of rarityLines) add('rarity', i, `${[...what].join(', ')}: rarity was removed in v3.1`);
 
   if (rel === THEME && !roles) add('playfair', 0, 'cannot find `textRole` in theme.ts');
 }
@@ -991,7 +1179,7 @@ for (const [order, file] of files.entries()) {
     violations.push({ order, rel, n: i + 1, kind, why, line: (lines[i] ?? '').trim() });
   };
 
-  // Rules 6 to 13 read every file; each names its own exemptions.
+  // Rules 6 to 15 read every file; each names its own exemptions.
   treeRules(rel, parse(rel, text), lines, add);
 
   code.forEach((c, i) => {
@@ -1024,7 +1212,8 @@ if (violations.length === 0) {
     '  No emoji-as-UI, hardcoded hex, layout animations, ovals, uppercase or Title Case,\n' +
       '  stray Playfair, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
-      '  stray shadows or gradient stops without their opacity outside the allowlists.\n',
+      '  stray shadows, gradient stops without their opacity, rarity readers or timed\n' +
+      '  React Native animations outside the allowlists.\n',
   );
   process.exit(0);
 }

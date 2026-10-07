@@ -7,10 +7,10 @@ import type { PostOutcome } from '@/store/social';
 import { showNotice } from '@/utils/alerts';
 
 /* ==================================================================== */
-/* Logging a pour — the shared half                                     */
+/* Posting a drink — the shared half                                    */
 /*                                                                      */
 /* Picking a photo and persisting it used to live inside drink/[id],    */
-/* which was fine while that screen was the only way to log anything.   */
+/* which was fine while that screen was the only way to post anything.  */
 /* The centre action in the tab bar is a second way in, and two copies  */
 /* of this would mean two answers to "where do pour photos live" — the  */
 /* kind of divergence that shows up months later as photos that survive */
@@ -18,8 +18,8 @@ import { showNotice } from '@/utils/alerts';
 /*                                                                      */
 /* The pickers and stripMetadata also serve the profile picture, so the */
 /* words they return must not assume a drink. reportPost and            */
-/* reportPostPhoto are the pour's alone, worded for either way of       */
-/* logging.                                                             */
+/* reportPostPhoto are the post's alone, worded for either way of       */
+/* posting.                                                             */
 /*                                                                      */
 /* The files on disk are this module's too: where they are written, how */
 /* a saved path is re-rooted after an update, and how they are deleted. */
@@ -69,7 +69,8 @@ const UNLOCKS = 'unlocks';
 const CUSTOM = 'custom';
 
 /**
- * The pour note's length cap, for both ways of logging.
+ * The caption's length cap, for both ways of posting (the state and this
+ * constant keep the name `note`, as the stored UnlockRecord field does).
  *
  * The note is the post caption, and the two screens that write it used to
  * disagree: 80 on a Dex card, uncapped on the centre-tab sheet. 280 leaves
@@ -385,7 +386,7 @@ export async function pickFromCamera(): Promise<PickResult> {
         ok: false,
         reason: 'denied',
         title: 'Camera access needed',
-        body: 'Sipply uses the camera to photograph a drink you are logging, or to take your profile picture. You can turn it on in Settings.',
+        body: 'Sipply uses the camera to photograph a drink you are posting, or to take your profile picture. You can turn it on in Settings.',
       };
     }
     return asset(await ImagePicker.launchCameraAsync(PICKER_OPTIONS));
@@ -402,16 +403,18 @@ export async function pickFromCamera(): Promise<PickResult> {
 /**
  * Says what became of a post once it is known.
  *
- * Posting is never awaited — the pour is saved the moment it is local, and
- * an upload on a bar's signal can take seconds — so a failure arrives after
- * the sheet has gone and is told as a notice. The refused-caption case is
- * nearly always caught before this, next to the note field, by the same
- * check addPost runs first; this covers the server's list catching what the
- * client's missed. Every retry goes through Update photo on the drink,
- * whose "Save & post" adds to the post if it went up and creates it if it
- * did not.
+ * Posting is never awaited — the drink is saved the moment it is local,
+ * and an upload on a bar's signal can take seconds — so a failure arrives
+ * after the sheet has gone and is told as a notice. The refused-caption
+ * case is nearly always caught before this, next to the caption field, by
+ * the same check addPost runs first; this covers the server's list
+ * catching what the client's missed. Every retry goes through the drink
+ * page's pinned button ("Post another <name>", or "Post it again" for a
+ * long name), whose sheet's "Save & post" adds to the post if it went up
+ * and creates it if it did not. The notices say "post it again" rather
+ * than either label, so they are right for both.
  *
- * Here rather than in each screen because both ways of logging post the
+ * Here rather than in each screen because both ways of posting post the
  * same way and should fail in the same words.
  */
 export function reportPost(outcome: PostOutcome): void {
@@ -419,17 +422,17 @@ export function reportPost(outcome: PostOutcome): void {
   if (outcome === 'no-photo') {
     showNotice(
       'Posted without the photo',
-      'The photo did not upload. Open the drink in your Dex and use Update photo to add it.',
+      'The photo did not upload. Open the drink in your Dex and post it again to add it.',
     );
   } else if (outcome === 'objectionable') {
     showNotice(
       'Not posted',
-      'Your note includes language Sipply does not allow. Your pour is saved in your Dex. To share it without the note, open the drink, use Update photo and choose Save & post.',
+      'Your caption includes language Sipply does not allow. The drink is saved in your Dex. To share it without the caption, open it in your Dex, post it again and choose Save & post.',
     );
   } else {
     showNotice(
       'Could not post',
-      'Your pour is saved in your Dex. To try again, open the drink, use Update photo and choose Save & post.',
+      'The drink is saved in your Dex. To try again, open it in your Dex, post it again and choose Save & post.',
     );
   }
 }
@@ -439,20 +442,21 @@ export function reportPost(outcome: PostOutcome): void {
  *
  * "Save photo" on an entry already collected keeps a post of it in step
  * and never creates one (the social store's addPhotoForDrink), and there
- * are two ways to press it: a Dex card's Update photo, and re-logging the
- * drink from the centre tab. `kept` is addPhotoForDrink's answer — true
- * when the post has the photo or there was no post to follow — so this
- * cannot claim a post exists, and says "if", as the sheet does.
+ * are two ways to press it: the sheet behind a drink page's pinned "Post
+ * another" button, and posting the drink again from the centre tab. `kept`
+ * is addPhotoForDrink's answer — true when the post has the photo or there
+ * was no post to follow — so this cannot claim a post exists, and says
+ * "if", as the sheet does.
  *
  * Beside reportPost so that one failure can have one wording from either
- * door. It names the way back as "open the drink" rather than assuming the
- * reader is on it: from the centre tab the sheet is gone by the time the
- * answer lands, and from a Dex card the sheet has closed as well.
+ * door. It names the way back as "open it in your Dex" rather than assuming
+ * the reader is on it: from the centre tab the sheet is gone by the time
+ * the answer lands, and from a drink page the sheet has closed as well.
  */
 export function reportPostPhoto(kept: boolean): void {
   if (kept) return;
   showNotice(
     'Post not updated',
-    'Your Dex has the new photo. If you shared this entry, the post still shows the old one. To try again, open the drink and use Update photo.',
+    'Your Dex has the new photo. If you shared this entry, the post still shows the old one. To try again, open it in your Dex and post it again.',
   );
 }

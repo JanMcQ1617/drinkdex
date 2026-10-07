@@ -215,8 +215,8 @@ export const useCustomDrinks = create<CustomDrinksState>()(
        * The collection's relog rules (store/collection.ts, unlock): a
        * second pour of the same drink is an edit that keeps its date, and
        * keeps its note unless a new one was written. No celebration: a
-       * custom drink has no dex number or rarity to celebrate, and it does
-       * not move the collection's count.
+       * custom drink has no dex number to celebrate, and it does not move
+       * the collection's count.
        */
       logPour: (id, photoUri, note) => {
         const { drinks, pours } = get();

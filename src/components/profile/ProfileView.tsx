@@ -1,6 +1,16 @@
 import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
-import { useCallback, useRef, useState, type ReactNode } from 'react';
-import { ActionSheetIOS, Alert, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useRef, useState, type ReactElement, type ReactNode } from 'react';
+import {
+  ActionSheetIOS,
+  Alert,
+  Animated,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { EmptyArt } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
@@ -8,12 +18,10 @@ import {
   DexShelfRow,
   DexSummary,
   sharedByDexNumber,
-  useCollectedCount,
   type SharedDrink,
 } from '@/components/profile/DexShelf';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ProfileHeader, type ProfileActions } from '@/components/profile/ProfileHeader';
-import { TopShelf } from '@/components/profile/TopShelf';
 import { usePostsByAuthor } from '@/components/profile/usePostsByAuthor';
 import { useProfileCounts } from '@/components/profile/useProfileCounts';
 import { useProfileVideos, VideoGridRow } from '@/components/profile/VideoGrid';
@@ -25,6 +33,7 @@ import {
   type ProfileVideo,
 } from '@/components/profile/videosSource';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { useTabScroll, type ChromeTab } from '@/components/ScrollChrome';
 import { TabStrip, type TabStripItem } from '@/components/TabStrip';
 import { EmptyState, Hold, Notice } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
@@ -48,15 +57,14 @@ import type { Post, UserProfile } from '@/types';
 /* ONE LIST, ONE COLUMN. Posts are 3-up tiles, reels 3-up portrait       */
 /* tiles, Dex cards 2-up. FlatList's numColumns cannot change on a       */
 /* mounted list, so each section hands the list pre-chunked rows and the */
-/* list itself never has more than one column. The header, the Top      */
-/* shelf and the tab strip are the list's header, so they scroll away    */
-/* with it; a sticky strip would mean splitting the header into rows,    */
-/* which our post counts do not justify.                                 */
+/* list itself never has more than one column. The header and the tab  */
+/* strip are the list's header, so they scroll away with it; a sticky    */
+/* strip would mean splitting the header into rows, which our post       */
+/* counts do not justify.                                                */
 /*                                                                      */
 /* TWO MATERIALS. You read a profile on paper (the head, the grid) and   */
-/* its drinks sit in the cabinet's lining: the Top shelf band under the  */
-/* actions, and the Dex tab's rows of mounted cards, which run on lining */
-/* to the end of the list.                                              */
+/* its drinks sit in the cabinet's lining: the Dex tab's rows of mounted */
+/* cards, which run on lining to the end of the list.                    */
 /*                                                                      */
 /* Each section says what an empty list means: still loading (a Hold),  */
 /* could not load (Try again), or nothing there yet. A failed refetch    */
@@ -89,6 +97,34 @@ const SECTIONS: readonly TabStripItem<Section>[] = [
   { key: 'dex', label: 'Dex' },
 ];
 
+/*
+ * The list's onScroll: the rule signal alone, or the tab's native event
+ * (typed `(...args: unknown[]) => void`, which this accepts as it is).
+ */
+type ScrollHandler = (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
+
+/*
+ * Your own profile is a tab, so its list is that tab's scroll source
+ * (ScrollChrome): scrolling down compacts the tab bar, and the top bar's
+ * rule signal rides along as the source's listener. Someone else's is
+ * pushed on the root stack, outside the ScrollChromeProvider, and keeps
+ * the rule signal alone. A component rather than a branch in ProfileView,
+ * because a hook cannot be called conditionally, and useTabScroll throws
+ * with no provider above it.
+ */
+function TabScroll({
+  tab,
+  listener,
+  children,
+}: {
+  tab: ChromeTab;
+  listener: ScrollHandler;
+  children: (onScroll: ScrollHandler) => ReactElement;
+}) {
+  const { onScroll } = useTabScroll(tab, listener);
+  return children(onScroll);
+}
+
 /** What a section's rows are, from what its fetch has said so far. */
 function sectionRows<T>(
   section: Section,
@@ -117,10 +153,11 @@ export function ProfileView({
   onBack,
   onBlocked,
   bottomInset,
+  chromeTab,
 }: {
   person: UserProfile;
   isOwn: boolean;
-  /** Your profile's left control (Log a pour). Someone else's gets Back from `onBack`. */
+  /** Your profile's left control (Post a drink). Someone else's gets Back from `onBack`. */
   left?: ReactNode;
   /** Settings on yours, the account menu on theirs. */
   right?: ReactNode;
@@ -129,6 +166,12 @@ export function ProfileView({
   onBlocked?: () => void;
   /** Clears the floating tab bar on yours, the home indicator on theirs. */
   bottomInset: number;
+  /**
+   * The tab this profile is the main list of (yours: 'profile'), so its
+   * scroll drives the tab bar. Left off for a pushed profile, which has no
+   * tab bar to drive and no ScrollChromeProvider above it.
+   */
+  chromeTab?: ChromeTab;
 }) {
   const router = useRouter();
   const myId = useAuth((s) => s.session?.user.id);
@@ -139,7 +182,7 @@ export function ProfileView({
    * your own profile is inside the tabs; someone else's is pushed on the
    * root stack, where this finds no tab navigator and does nothing.
    */
-  const listRef = useRef<FlatList<Row>>(null);
+  const listRef = useRef<Animated.FlatList<Row>>(null);
   useScrollToTop(listRef);
 
   const [section, setSection] = useState<Section>('posts');
@@ -149,14 +192,12 @@ export function ProfileView({
   /*
    * Your grid is fetched separately from the feed, so it has to be told
    * when one of your posts changes. The store bumps postsVersion on every
-   * write to your posts: a new pour, another photo on an existing one, a
+   * write to your posts: a new post, another photo on an existing one, a
    * removal. Someone else's posts change only when you pull.
    */
   const postsVersion = useSocial((s) => s.postsVersion);
   const posts = usePostsByAuthor(person.id, myId, isOwn ? String(postsVersion) : '');
   const counts = useProfileCounts(person.id, myId);
-  // Read on someone else's profile too (hooks run unconditionally); only yours shows it.
-  const collected = useCollectedCount();
   const videosVersion = useVideosVersion();
   const videos = useProfileVideos(
     person.id,
@@ -270,7 +311,6 @@ export function ProfileView({
         kind: 'own',
         onEdit: () => router.push('/edit-profile'),
         onShare: () => shareProfile(person),
-        onFindFriends: () => router.push('/find-friends'),
       }
     : {
         kind: 'peer',
@@ -392,7 +432,7 @@ export function ProfileView({
           icon="dex"
           title="Nothing shared yet"
           body="Drinks you share land here in Dex order."
-          action={{ label: 'Log a pour', onPress: () => router.navigate('/log') }}
+          action={{ label: 'Post a drink', onPress: () => router.navigate('/log') }}
         />
       ) : (
         <EmptyState
@@ -403,22 +443,23 @@ export function ProfileView({
       );
     }
     /*
-     * Not "every entry you log becomes a post": Save to Dex logs without
-     * posting, so that promise would be false for anyone who has used it.
+     * "Drinks you share", not "every drink you add": Save to Dex collects
+     * without posting, so that promise would be false for anyone who has
+     * used it.
      */
     return isOwn ? (
       /*
-       * A real drink, mounted, where a first pour will go: the screen that
+       * A real drink, mounted, where a first post will go: the screen that
        * should sell the habit showed a bare camera glyph.
        */
       <EmptyState
         art={<EmptyArt drinkId="negroni" />}
-        title="Log your first pour"
-        body="Pours you share show up here."
-        action={{ label: 'Log a pour', onPress: () => router.navigate('/log') }}
+        title="Post your first drink"
+        body="Drinks you share show up here."
+        action={{ label: 'Post a drink', onPress: () => router.navigate('/log') }}
       />
     ) : (
-      <EmptyState icon="camera" title="No pours yet" body={`${u} hasn't shared a pour yet.`} />
+      <EmptyState icon="camera" title="No posts yet" body={`${u} hasn't posted a drink yet.`} />
     );
   };
 
@@ -456,12 +497,7 @@ export function ProfileView({
     if (videosOpened) videos.reload();
   };
 
-  /*
-   * The Top shelf shows once there is a post to put on it, and the strip
-   * starts right under its shade; without it, the strip keeps its 16pt
-   * below the actions.
-   */
-  const shelf = shown.length > 0;
+  // The strip keeps its 16pt below the actions.
   const header = (
     <>
       <ProfileHeader
@@ -472,16 +508,49 @@ export function ProfileView({
         onOpenList={openList}
         actions={actions}
       />
-      {shelf ? (
-        <TopShelf posts={shown} isOwn={isOwn} collected={collected} pageOnly={pageOnly} />
-      ) : null}
-      <TabStrip
-        items={SECTIONS}
-        value={section}
-        onChange={selectSection}
-        style={shelf ? undefined : styles.tabs}
-      />
+      <TabStrip items={SECTIONS} value={section} onChange={selectSection} style={styles.tabs} />
     </>
+  );
+
+  const list = (scrollHandler: ScrollHandler) => (
+    <Animated.FlatList
+      ref={listRef}
+      data={rows}
+      keyExtractor={(row) => row.key}
+      renderItem={renderRow}
+      ListHeaderComponent={header}
+      /*
+       * Under the Dex tab's rows the lining runs on to the end: past the
+       * tab bar's clearance, and down to the screen's foot when a short
+       * Dex leaves room, rather than stopping at the last card's ledge.
+       */
+      ListFooterComponent={
+        liningFoot ? (
+          <View style={[styles.liningFoot, { minHeight: bottomInset }]}>
+            <Grain tone="lining" />
+          </View>
+        ) : null
+      }
+      ListFooterComponentStyle={liningFoot ? styles.grow : undefined}
+      onScroll={scrollHandler}
+      scrollEventThrottle={16}
+      refreshing={posts.reloading || (section === 'videos' && videos.reloading)}
+      onRefresh={onRefresh}
+      /*
+       * A row of tiles is a third of a screen tall, so six rows cover
+       * the first screen. Five screens mounted, not seven: each row of
+       * tiles holds about 2.3 MB of decoded photos, and the two screens
+       * dropped are about 13 rows, 30 MB (specs/v3-cabinet.md section
+       * 11). No removeClippedSubviews, which can blank a whole list on
+       * iOS (specs/06).
+       */
+      initialNumToRender={6}
+      windowSize={5}
+      // Transparent, so the screen's grain shows through between tiles.
+      style={styles.list}
+      contentContainerStyle={liningFoot ? styles.grow : { paddingBottom: bottomInset }}
+      showsVerticalScrollIndicator={false}
+    />
   );
 
   return (
@@ -502,45 +571,13 @@ export function ProfileView({
         right={right}
         showRule={scrolled}
       />
-      <FlatList
-        ref={listRef}
-        data={rows}
-        keyExtractor={(row) => row.key}
-        renderItem={renderRow}
-        ListHeaderComponent={header}
-        /*
-         * Under the Dex tab's rows the lining runs on to the end: past the
-         * tab bar's clearance, and down to the screen's foot when a short
-         * Dex leaves room, rather than stopping at the last card's ledge.
-         */
-        ListFooterComponent={
-          liningFoot ? (
-            <View style={[styles.liningFoot, { minHeight: bottomInset }]}>
-              <Grain tone="lining" />
-            </View>
-          ) : null
-        }
-        ListFooterComponentStyle={liningFoot ? styles.grow : undefined}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        refreshing={posts.reloading || (section === 'videos' && videos.reloading)}
-        onRefresh={onRefresh}
-        /*
-         * A row of tiles is a third of a screen tall, so six rows cover
-         * the first screen. Five screens mounted, not seven: each row of
-         * tiles holds about 2.3 MB of decoded pours, and the Top shelf
-         * added three mounted photos, so the two screens dropped (about 13
-         * rows, 30 MB) pay for it many times over (specs/v3-cabinet.md
-         * section 11). No removeClippedSubviews, which can blank a whole
-         * list on iOS (specs/06).
-         */
-        initialNumToRender={6}
-        windowSize={5}
-        // Transparent, so the screen's grain shows through between tiles.
-        style={styles.list}
-        contentContainerStyle={liningFoot ? styles.grow : { paddingBottom: bottomInset }}
-        showsVerticalScrollIndicator={false}
-      />
+      {chromeTab ? (
+        <TabScroll tab={chromeTab} listener={onScroll}>
+          {list}
+        </TabScroll>
+      ) : (
+        list(onScroll)
+      )}
     </View>
   );
 }

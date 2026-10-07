@@ -55,8 +55,8 @@ const WORDMARK_CAP = 1.2;
 
 /**
  * The three drinks in the cabinet behind the first step: real catalogue
- * drinks, all three photographed, each framed in its real tier (Zombie is
- * legendary, so its double gilt rule shows). The middle one is raised.
+ * drinks, all three photographed, each a collected mount (mat, edge and
+ * seat, the same frame every collected card has). The middle one is raised.
  */
 const FEATURED = [
   { id: 'negroni', raised: false },
@@ -164,7 +164,6 @@ function FeatureCards({ band, windowWidth }: { band: number; windowWidth: number
           <Mount
             key={id}
             state="mounted"
-            tier={drink.rarity}
             size="feature"
             onLining
             style={{ width: cardW, height: cardH, marginTop: raised ? 0 : RAISE }}>

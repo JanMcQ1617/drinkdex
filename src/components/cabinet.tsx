@@ -12,19 +12,7 @@ import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import {
-  colors,
-  dexNumber,
-  elevation,
-  fonts,
-  radius,
-  RARITY_META,
-  RARITY_ORDER,
-  space,
-  stroke,
-  tabular,
-  textRole,
-} from '@/constants/theme';
+import { colors, dexNumber, elevation, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, formatDexNumber } from '@/data';
 import { faceOf, fitScale, textWidth } from '@/lib/textFit';
 import type { Rarity } from '@/types';
@@ -35,11 +23,11 @@ import type { Rarity } from '@/types';
 /* The frames v3 is built from (specs/v3-cabinet.md, sections 2, 5 and  */
 /* 7.2). Sipply is a collector's cabinet in two materials: the LINING,  */
 /* wine grained like baize, is the inside of the cabinet, and a drink   */
-/* you have caught is a MOUNT, bone card stock with a printed rarity    */
-/* rule, seated in the lining with a contact shadow. A drink you have   */
-/* not caught is a SLOT, a recess pressed into the lining. Collecting   */
-/* moves a drink from one material to the other, which is why the two  */
-/* states differ by material and not by a tint.                         */
+/* you have caught is a MOUNT, bone card stock seated in the lining     */
+/* with a contact shadow. A drink you have not caught is a SLOT, a      */
+/* recess pressed into the lining. Collecting moves a drink from one    */
+/* material to the other, which is why the two states differ by         */
+/* material and not by a tint.                                          */
 /*                                                                      */
 /* Frames only. Nothing here loads an image: a caller puts the face     */
 /* (DexCard.tsx's DrinkFace, a signed photo) inside a MountWindow or a  */
@@ -276,9 +264,13 @@ export type MountSize = 'grid' | 'shelf' | 'feature' | 'thumb';
 /**
  * Each mount's geometry. `padding` is from the inside of the 1pt edge to
  * the content, so a grid card's text column is `cardWidth − 38` (1 + 18 on
- * each side: the 4pt rule inset, the rule, then 12pt of mat) and a shelf
- * card's `cardWidth − 26`. A caller with its own measure (CustomDrinkTile)
- * may override the padding through `style`.
+ * each side) and a shelf card's `cardWidth − 26`. The 18pt is clear mat:
+ * until v3.1 a tier rule was printed inside it, and the padding was kept
+ * exactly when the rule went, so every DrinkName measure in
+ * specs/v3-cabinet.md 6.4 still holds. A caller with its own measure
+ * (CustomDrinkTile) may override the padding through `style`.
+ *
+ * `ruleInset` is read by nothing since v3.1; the close-out deletes it.
  */
 export const MOUNT: Record<
   MountSize,
@@ -290,13 +282,6 @@ export const MOUNT: Record<
   thumb: { radius: 4, ruleInset: null, padding: 3, windowRadius: 2 },
 };
 
-/**
- * The clear mat between the legendary rule's inner edge and its second
- * hairline (the mockups' `inset: 3px` inside the 2px rule). Measured from
- * the outer edge it left 1pt, and the pair read as one thick band.
- */
-const DOUBLE_RULE_GAP = 3;
-
 /** Which mount a MountWindow sits in, for its corner. */
 const MountSizeContext = createContext<MountSize>('grid');
 
@@ -304,27 +289,28 @@ const MountSizeContext = createContext<MountSize>('grid');
  * A drink in the cabinet.
  *
  * `state="mounted"` (collected): `mat` card stock with a 1pt edge (`matEdge`
- * on lining, `line` on paper) and the tier's rule printed inside it
- * (RARITY_META.rule; legendary doubled), and on lining only the
- * `elevation.seat` contact shadow, the one place a card casts one.
+ * on lining, `line` on paper), and on lining only the `elevation.seat`
+ * contact shadow, the one place a card casts one.
  *
  * `state="slot"` (not yet): `liningDeep` pressed into the lining with
- * `elevation.recess`, a 1pt `slotEdge` (gilt-tinted for a legendary, so a
- * locked legendary is visibly worth hunting) and no rule.
+ * `elevation.recess` and a 1pt `slotEdge`, the same for every drink.
  *
- * A frame only: the rule and the edges are decorative and hidden from
- * VoiceOver; the card that holds the mount speaks for it.
+ * A frame only: the edges are decorative, and the card that holds the
+ * mount speaks for it.
+ *
+ * `tier` is ignored since v3.1 (rarity is gone) and kept only so callers
+ * not yet moved off it compile; the close-out deletes it.
  */
 export function Mount({
   state,
-  tier,
   size,
   onLining,
   children,
   style,
 }: {
   state: 'mounted' | 'slot';
-  tier: Rarity;
+  /** @deprecated rarity, removed in v3.1: ignored; deleted at the close-out. */
+  tier?: Rarity;
   size: MountSize;
   /** Seat shadow and matEdge when true. */
   onLining: boolean;
@@ -332,10 +318,7 @@ export function Mount({
   style?: StyleProp<ViewStyle>;
 }) {
   const geo = MOUNT[size];
-  const rule = RARITY_META[tier].rule;
   const mounted = state === 'mounted';
-  const ruleInset = geo.ruleInset;
-  const hairInset = ruleInset == null ? 0 : ruleInset + rule.width + DOUBLE_RULE_GAP;
 
   return (
     <View
@@ -344,53 +327,9 @@ export function Mount({
         { borderRadius: geo.radius, padding: geo.padding },
         mounted
           ? [styles.mountMat, { borderColor: onLining ? colors.matEdge : colors.line }, onLining && elevation.seat]
-          : [
-              styles.mountSlot,
-              { borderColor: tier === 'legendary' ? colors.slotEdgeLegendary : colors.slotEdge },
-              elevation.recess,
-            ],
+          : [styles.mountSlot, elevation.recess],
         style,
       ]}>
-      {mounted && ruleInset != null ? (
-        <>
-          <View
-            pointerEvents="none"
-            accessibilityElementsHidden
-            importantForAccessibility="no"
-            style={[
-              styles.rule,
-              {
-                top: ruleInset,
-                left: ruleInset,
-                right: ruleInset,
-                bottom: ruleInset,
-                borderRadius: geo.radius - ruleInset,
-                borderWidth: rule.width,
-                borderColor: rule.color,
-              },
-            ]}
-          />
-          {rule.double ? (
-            <View
-              pointerEvents="none"
-              accessibilityElementsHidden
-              importantForAccessibility="no"
-              style={[
-                styles.rule,
-                styles.ruleDouble,
-                {
-                  top: hairInset,
-                  left: hairInset,
-                  right: hairInset,
-                  bottom: hairInset,
-                  borderRadius: Math.max(0, geo.radius - hairInset),
-                  borderColor: rule.color,
-                },
-              ]}
-            />
-          ) : null}
-        </>
-      ) : null}
       <MountSizeContext.Provider value={size}>{children}</MountSizeContext.Provider>
     </View>
   );
@@ -435,7 +374,7 @@ export function MountWindow({
 }
 
 /* ==================================================================== */
-/* Plates, tiers and tallies                                            */
+/* Plates and tags                                                      */
 /* ==================================================================== */
 
 /**
@@ -462,87 +401,14 @@ export function NumberPlate({ n, tone }: { n: number; tone: 'mat' | 'paper' | 'l
   );
 }
 
-/** A tier's mark: an 8pt ring (common), an 8pt dot, or the 12pt sparkle (legendary). */
-function TierMark({ mark, color }: { mark: 'ring' | 'dot' | 'sparkle'; color: string }) {
-  if (mark === 'sparkle') return <Icon name="sparkle" size={12} color={color} filled />;
-  return (
-    <View
-      style={[
-        styles.mark,
-        mark === 'ring' ? { borderWidth: 1.5, borderColor: color } : { backgroundColor: color },
-      ]}
-    />
-  );
+/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
+export function TierWord(props: { rarity: Rarity; tone: 'paper' | 'lining'; size?: 'sm' | 'md' }): null {
+  return null;
 }
 
-/**
- * The tier said in words, beside its mark: "• Rare", "✦ Legendary".
- * Rarity is never said by a mark or a rule alone.
- *
- * Paper (and mat) takes RARITY_META's `color` (the sparkle in giltGlyph);
- * lining takes its `onLining` pair. `md` is 12pt, `sm` 11pt, the floor.
- */
-export function TierWord({
-  rarity,
-  tone,
-  size = 'md',
-}: {
-  rarity: Rarity;
-  tone: 'paper' | 'lining';
-  size?: 'sm' | 'md';
-}) {
-  const meta = RARITY_META[rarity];
-  const lining = tone === 'lining';
-  const ink = lining ? meta.onLining.ink : meta.color;
-  const markInk = lining ? meta.onLining.mark : rarity === 'legendary' ? colors.giltGlyph : meta.color;
-  return (
-    <View style={styles.tier}>
-      <TierMark mark={meta.mark} color={markInk} />
-      <Text
-        maxFontSizeMultiplier={1.3}
-        style={[textRole.tierWord, size === 'sm' && styles.tierWordSm, { color: ink }]}>
-        {meta.label}
-      </Text>
-    </View>
-  );
-}
-
-/**
- * "21 common | 11 uncommon | 5 rare | 1 legendary": the collection by tier,
- * on one ruled line that wraps when it must. Tabular counts in ink, each
- * word in its tier's ink, legendary with its sparkle, and 1 × 12pt rules
- * between (`line`, or `liningLine` on lining).
- *
- * One VoiceOver element: "21 common, 11 uncommon, 5 rare, 1 legendary".
- */
-export function RarityTally({ counts, tone }: { counts: Record<Rarity, number>; tone: 'paper' | 'lining' }) {
-  const lining = tone === 'lining';
-  const spoken = RARITY_ORDER.map((r) => `${formatCount(counts[r])} ${r}`).join(', ');
-  return (
-    <View accessible accessibilityLabel={spoken} style={styles.tally}>
-      {RARITY_ORDER.map((r, i) => {
-        const meta = RARITY_META[r];
-        return (
-          <React.Fragment key={r}>
-            {i > 0 ? (
-              <View style={[styles.tallyRule, { backgroundColor: lining ? colors.liningLine : colors.line }]} />
-            ) : null}
-            <View style={styles.tallyItem}>
-              {r === 'legendary' ? (
-                <Icon name="sparkle" size={12} color={lining ? colors.giltOnLining : colors.giltGlyph} filled />
-              ) : null}
-              <Text style={[styles.tallyCount, { color: lining ? colors.onLining : colors.text }]}>
-                {formatCount(counts[r])}
-              </Text>
-              <Text style={[textRole.helper, { color: lining ? meta.onLining.ink : meta.color }]}>
-                {meta.label.toLowerCase()}
-              </Text>
-            </View>
-          </React.Fragment>
-        );
-      })}
-    </View>
-  );
+/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
+export function RarityTally(props: { counts: Record<Rarity, number>; tone: 'paper' | 'lining' }): null {
+  return null;
 }
 
 /**
@@ -589,7 +455,7 @@ function tagLabel(inDex: boolean, selected?: boolean): string {
  * trailing column.
  */
 export function dexStatusTagWidth(inDex: boolean, selected: boolean | undefined, fontScale: number): number {
-  const size = textRole.tierWord.fontSize * Math.min(fontScale, TAG_CAP);
+  const size = textRole.statusWord.fontSize * Math.min(fontScale, TAG_CAP);
   const icon = inDex ? TAG_ICON + space.xs : 0;
   return stroke.edge * 2 + space.sm * 2 + icon + textWidth(tagLabel(inDex, selected), 'inter', size);
 }
@@ -672,9 +538,7 @@ const styles = StyleSheet.create({
   /* Mount */
   mount: { borderWidth: stroke.edge },
   mountMat: { backgroundColor: colors.mat },
-  mountSlot: { backgroundColor: colors.liningDeep },
-  rule: { position: 'absolute' },
-  ruleDouble: { borderWidth: stroke.edge, opacity: 0.7 },
+  mountSlot: { backgroundColor: colors.liningDeep, borderColor: colors.slotEdge },
   window: { flexGrow: 1, overflow: 'hidden', backgroundColor: colors.liningDeep },
   windowEdge: { borderWidth: stroke.edge },
 
@@ -686,18 +550,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.badge,
     borderWidth: stroke.edge,
   },
-
-  /* TierWord */
-  tier: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  // round-ok: dot
-  mark: { width: 8, height: 8, borderRadius: radius.round },
-  tierWordSm: { fontSize: 11, lineHeight: 14 },
-
-  /* RarityTally */
-  tally: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: space.xs },
-  tallyItem: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
-  tallyCount: { ...textRole.helper, fontFamily: fonts.bodySemiBold, ...tabular },
-  tallyRule: { width: stroke.edge, height: 12, marginHorizontal: 10 },
 
   /* DexStatusTag */
   statusTag: {
@@ -711,7 +563,7 @@ const styles = StyleSheet.create({
   },
   statusTagNew: { backgroundColor: colors.wineWash, borderColor: colors.wine },
   statusTagIn: { borderColor: colors.line },
-  statusTagText: textRole.tierWord,
+  statusTagText: textRole.statusWord,
 
   /* LoosePrint */
   print: {

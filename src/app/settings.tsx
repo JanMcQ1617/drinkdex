@@ -191,14 +191,16 @@ export default function SettingsScreen() {
   }, [router]);
 
   /*
-   * The drinks you added stay, unlogged, just as catalogue entries stay
-   * locked: a reset forgets what you poured, not what exists. So the copy
-   * is the same as before they existed.
+   * The drinks you added stay, uncollected, just as catalogue entries stay
+   * locked: a reset forgets what you had, not what exists. So the copy is
+   * the same as before they existed. "The photos in your Dex", not "the
+   * photos you logged": posting is the verb now (v3.1 §12), and these are
+   * the Dex's own copies, not the posts, which stay.
    */
   const confirmReset = useCallback(() => {
     Alert.alert(
       'Reset collection',
-      'Every entry goes back to locked, and the photos you logged are forgotten. Your posts and account stay.',
+      'Every entry goes back to locked, and the photos in your Dex are forgotten. Your posts and account stay.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -325,14 +327,14 @@ export default function SettingsScreen() {
           <ListRow
             leading={{ icon: 'bookmark' }}
             title="Saved"
-            subtitle="Pours you bookmarked. Only you can see them."
+            subtitle="Posts you saved. Only you can see them."
             trailing="chevron"
             onPress={() => router.push('/saved')}
           />
           <ListRow
             leading={{ icon: 'heart' }}
             title="Activity"
-            subtitle="Likes on your pours and new followers."
+            subtitle="Likes on your posts and new followers."
             trailing="chevron"
             onPress={() => router.push('/activity')}
           />

@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 30 September 2026**
+**Last updated: 6 October 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -107,7 +107,7 @@ one, here's a screenshot" is a good bug report.
 ## Things people ask
 
 **Where did my collection go?** Your collection lives only on the phone
-where you logged it. It is not backed up to Sipply, and signing in on a
+where you collected it. It is not backed up to Sipply, and signing in on a
 different phone does not bring it with you. Posts you shared are still on
 your profile.
 
@@ -125,11 +125,11 @@ Matching is limited to 3,000 phone numbers and Instagram handles per
 account in any 24 hours, counted together, so that it is hard to misuse for
 looking up strangers. Try again tomorrow.
 
-**It says my text includes language Sipply does not allow.** Captions,
-bios, display names and usernames are checked for slurs and explicit sexual
-terms when you save them. Drink names that only sound rude are fine. If it
-refused something innocent, email us the exact text and we will look at the
-list.
+**It says my text includes language Sipply does not allow.** Captions, bios,
+display names, usernames and tournament names are checked for slurs and
+explicit sexual terms when you save them. Drink names that only sound rude
+are fine. If it refused something innocent, email us the exact text and we
+will look at the list.
 
 **How long does an invite link last?** Thirty days. Anyone you send it to
 can use it until then, and once they accept it, the two of you follow each
@@ -137,6 +137,38 @@ other. Opening it while signed in accepts it; opening it before signing in
 asks once they have. The link only opens on a phone that already has Sipply.
 A link shared from an older version of the app still opens your profile,
 but no longer follows anyone.
+
+**How do tournaments work?** Tap the trophy at the top of Home, then **+**
+to host one: give it a name, choose when it starts and how long it runs,
+add a goal if you want one, and invite people you follow. Whoever has the
+most different drinks at the end wins or, with a goal, whoever reaches it
+first; a tie goes to whoever got there first. The rules are the same in
+every tournament, and every tournament screen shows them: "Each different
+drink you post counts once, up to 3 new drinks a day. It is about trying
+new things, never how much: a taste counts. No prizes, and Apple is not a
+sponsor. Please drink responsibly." The host can end a running tournament
+early from its **"..."** menu, and whoever is ahead then wins, or delete
+one that has not finished, and it disappears for everyone in it. Anyone
+else can leave from the same menu, but cannot rejoin.
+
+**Why didn't a drink count?** Usually one of these:
+
+- **Each drink counts once.** Posting it again, or adding another photo to
+  it, adds nothing.
+- **Three new drinks a day.** Only the first three new drinks you post each
+  day count, and a day runs midnight to midnight in the host's time zone. A
+  drink first posted after that day's three does not count in that
+  tournament later either, even if you post it again on another day.
+- **Only during the dates.** A drink counts when you post it between the
+  start and the end. One you had before the tournament counts if you post
+  it again while it is on.
+- **Only drinks in the Dex.** A drink you added yourself is not posted, so
+  it cannot count.
+- **Only once you have joined.** Joining late is fine: everything you
+  posted since the start counts.
+- **Deleted posts.** Deleting a post before the tournament ends takes that
+  drink out of the count. Once a finished tournament has shown its
+  results, they stay as they are.
 
 **Can you connect my Instagram automatically?** No — and not because it is
 unbuilt. No Meta API hands a third-party app your follower or following

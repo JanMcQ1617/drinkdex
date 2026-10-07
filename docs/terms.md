@@ -1,9 +1,9 @@
 # Terms of Use
 
-**Last updated: 1 October 2026**
+**Last updated: 6 October 2026**
 
-Sipply is a drinks field guide. You collect entries, log what you drink, and
-share it with people you follow. These are the rules for using it.
+Sipply is a drinks field guide. You collect entries, post what you drink,
+and share it with people you follow. These are the rules for using it.
 
 They are written to be read. Where a term matters, it is stated plainly
 rather than buried, and there is nothing here that is not actually enforced
@@ -50,10 +50,11 @@ Specifically, do not post or send:
 - Someone else's photos or personal information posted without their consent
 - Impersonation of another person or account
 
-Captions, bios, display names, usernames and the drinks you add are checked
-when you save them, and text containing a slur or an explicit sexual term is
-refused. That filter is a floor, not the rule: anything on the list above is
-removed when it is reported, whether or not the filter caught it.
+Captions, bios, display names, usernames, the drinks you add, tournament
+names and the songs added to posts are checked when you save them, and text
+containing a slur or an explicit sexual term is refused. That filter is a
+floor, not the rule: anything on the list above is removed when it is
+reported, whether or not the filter caught it.
 
 Do not try to break the app either: no scraping, no automated accounts, no
 attempts to reach data that is not yours, and no reverse-engineering of the
@@ -97,6 +98,10 @@ words. That entry stays in the Dex if you later delete your account. Photos
 you send with a suggestion are only used for reference and are never
 published.
 
+**Songs.** A song you add to a post belongs to its rights-holders, not to
+you or to Sipply. Its preview comes from Apple Music and plays as a preview
+of that song, with a link to it in Apple Music.
+
 **Treat anything you post as visible to everyone signed in to Sipply.**
 
 ## Drinking
@@ -109,6 +114,26 @@ service in your country — Sipply is not equipped to help with that and does
 not try to be.
 
 **Nothing in the app is medical, nutritional, or legal advice.**
+
+## Tournaments
+
+A tournament is a friendly challenge between people who follow each other:
+whoever tries the most different drinks while it runs wins. It counts
+different drinks, never how much. Each drink counts once, however often you
+post it, and **at most three new drinks count a day**, midnight to midnight
+in the host's time zone. A drink first posted after that day's three never
+counts in that tournament, even if you post it again on a later day. A
+taste counts.
+
+Drink responsibly, and only where you are of legal drinking age.
+
+**There are no prizes**, no entry fees and nothing of value to win.
+Tournaments are not sponsored by Apple, and Apple is not involved in them
+in any way.
+
+Hosts are responsible for the names they choose. A tournament name follows
+the same rules as everything else posted on Sipply, and the same filter
+checks it.
 
 ## The drink information itself
 
@@ -129,13 +154,13 @@ belong to their owners and appear for identification only.
 
 ## Ending it
 
-**You can delete your account at any time** from **Profile → Settings**
-(the gear, top right) **→ Delete account**. It removes your profile, posts,
-photos, likes, saves, follows and the drinks you added. It is immediate and
-cannot be undone. You do not need to ask us. If you signed in with Apple,
-Google or Facebook, removing Sipply from that account is done in Apple's,
-Google's or Facebook's settings; [Deleting your data](data-deletion)
-explains how.
+**You can delete your account at any time** from **Profile → Settings** (the
+gear, top right) **→ Delete account**. It removes your profile, posts,
+photos, likes, saves, follows, the drinks you added and the tournaments you
+host. It is immediate and cannot be undone. You do not need to ask us. If
+you signed in with Apple, Google or Facebook, removing Sipply from that
+account is done in Apple's, Google's or Facebook's settings;
+[Deleting your data](data-deletion) explains how.
 
 We may suspend or delete an account that breaks these terms. Where it is
 reasonable to do so we will say why, but conduct in the list above may be

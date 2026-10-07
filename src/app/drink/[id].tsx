@@ -22,7 +22,6 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { VectorFace } from '@/components/artwork/VectorFace';
-import { FoilSweep } from '@/components/DexCard';
 import {
   CellarPage,
   CompositionCard,
@@ -32,12 +31,12 @@ import {
   HeroShade,
   HeroTitle,
   LabelBand,
+  OriginStory,
   PinnedLogBar,
   pinnedBarEstimate,
   ServeCard,
   SpecCard,
   TastesOf,
-  TriviaBand,
 } from '@/components/DrinkPanels';
 import { Grain } from '@/components/Grain';
 import { FocusedStatusBar } from '@/components/ScreenTopBar';
@@ -47,7 +46,6 @@ import {
   elevation,
   layout,
   radius,
-  RARITY_META,
   space,
   stroke,
   textRole,
@@ -74,7 +72,7 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * The drink in the cellar (specs/v3-cabinet.md 9.8): the lit photograph
  * dissolving into the dark ground, the name riding over its foot, and the
  * reading under it on the same ground. The panels (title block, label
- * band, your pour, the spec card, the trivia band, the pinned bar) live
+ * band, your entry, the spec card, the origin story, the pinned bar) live
  * in components/DrinkPanels, shared with the screen for a drink someone
  * added themselves (custom/[id].tsx), so the two are drawn by one piece
  * of code.
@@ -324,8 +322,8 @@ export default function DrinkDetailScreen() {
           /*
            * The celebration is not raised here. collection.unlock() queues
            * it for the root CelebrationOverlay, the one surface every way of
-           * logging lands on. This screen used to run its own gilt-ringed
-           * "UNLOCKED" overlay as well, and both played at once.
+           * collecting lands on. This screen used to run its own "UNLOCKED"
+           * overlay as well, and both played at once.
            */
           haptic.success();
           closeModal();
@@ -364,8 +362,8 @@ export default function DrinkDetailScreen() {
     confirmDestructive(
       'Remove from collection?',
       myId
-        ? `${drink.name} goes back to locked, and your photo and note are deleted. Any post you shared of it comes off the feed too, with its photos and likes.`
-        : `${drink.name} goes back to locked, and your photo and note are deleted.`,
+        ? `${drink.name} goes back to locked, and your photo and caption are deleted. Any post you shared of it comes off the feed too, with its photos and likes.`
+        : `${drink.name} goes back to locked, and your photo and caption are deleted.`,
       'Remove',
       () => {
         relock(drink.id);
@@ -408,7 +406,6 @@ export default function DrinkDetailScreen() {
   }
 
   const unlocked = Boolean(record);
-  const rarityMeta = RARITY_META[drink.rarity];
   /*
    * The hero is the tungsten-lit catalogue photograph first, then your
    * pour, then the lit vector face. It used to be your pour first; the
@@ -433,16 +430,15 @@ export default function DrinkDetailScreen() {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         {/*
-          Always full colour here, even before logging: you're on this
+          Always full colour here, even before collecting: you're on this
           screen to make the drink, and the picture tells you what you're
           aiming for. The Dex keeps its ghosts; that's the collection board.
 
           FULL BLEED, and up under the status bar. The scroll content has no
           gutter of its own (the panels carry it), so the photograph runs to
           both screen edges and to the top of the glass. Over it: the top
-          scrim for the status bar and the back button, the 200pt dissolve
-          into the cellar at its foot (HeroShade), and for a collected
-          legendary one foil pass, the payoff it has in the grid.
+          scrim for the status bar and the back button, and the 200pt
+          dissolve into the cellar at its foot (HeroShade).
         */}
         <Animated.View
           style={[styles.hero, { height: heroH }, heroParallax]}
@@ -455,9 +451,7 @@ export default function DrinkDetailScreen() {
            * the grid cell and the page it opens.
            */
           accessibilityLabel={
-            unlocked
-              ? `${heroNoun} of ${drink.name}, ${rarityMeta.label}`
-              : `${heroNoun} of ${drink.name}, not collected yet`
+            unlocked ? `${heroNoun} of ${drink.name}` : `${heroNoun} of ${drink.name}, not collected yet`
           }>
           {/*
             Disk, not memory-disk, for the Dex card's reason (DexCard): the
@@ -487,14 +481,6 @@ export default function DrinkDetailScreen() {
               artScale={(0.6 * screenWidth) / heroH}
             />
           )}
-
-          {/*
-            After the picture, so it paints over it (absolute positioning
-            lifts nothing; siblings draw in order), and before the shade, so
-            it fades with the photograph into the cellar. One pass, then it
-            rests off the frame; none under Reduce Motion. The hero clips it.
-          */}
-          {unlocked && drink.rarity === 'legendary' ? <FoilSweep width={screenWidth} /> : null}
           <HeroShade />
         </Animated.View>
 
@@ -505,9 +491,9 @@ export default function DrinkDetailScreen() {
           ever drawn on the picture. Its foot clears the pinned bar by the
           bar's measured height.
 
-          Everything is visible whether or not the entry is logged. The
+          Everything is visible whether or not the entry is collected. The
           point of the app is to send you off to make and try a drink, which
-          the recipe can't do from behind a lock. Logging is the record that
+          the recipe can't do from behind a lock. Collecting is the record that
           you did it, not the key to finding out how.
         */}
         <CellarPage paddingBottom={barH + space.xl}>
@@ -529,12 +515,12 @@ export default function DrinkDetailScreen() {
           ) : null}
 
           <FieldNotes description={drink.description} />
-          <TriviaBand drink={drink} />
+          <OriginStory drink={drink} />
 
           {/*
             Taking the entry back out, at the foot: the bare destructive word
             on the cellar (Button's `dangerOnLining`), quiet because it is
-            not what anyone comes here for. Logging lives in the pinned bar.
+            not what anyone comes here for. Posting lives in the pinned bar.
           */}
           {unlocked ? (
             <Button
@@ -569,10 +555,10 @@ export default function DrinkDetailScreen() {
       />
 
       {/*
-        The page's one action, pinned: "Log this drink", then "Log another
-        <name>" once it is in your Dex. It replaced the mid-page "not in
-        your collection" card, "Update photo" and the end-of-page log
-        button, three doors to the same two sheets.
+        The page's one action, pinned: "Post this drink", then "Post
+        another <name>" once it is in your Dex. It replaced the mid-page
+        "not in your collection" card, "Update photo" and the end-of-page
+        log button, three doors to the same two sheets.
       */}
       <PinnedLogBar
         name={drink.name}
@@ -581,7 +567,7 @@ export default function DrinkDetailScreen() {
         onHeight={setBarH}
       />
 
-      {/* Log sheet: a first pour, or another one */}
+      {/* The post sheet: a first photo of the drink, or another one */}
       <Modal visible={modalVisible} transparent animationType="fade" onRequestClose={closeModal}>
         <View style={styles.modalOverlay}>
           <Pressable
@@ -602,18 +588,18 @@ export default function DrinkDetailScreen() {
             <View style={[styles.sheet, { paddingBottom: Math.max(insets.bottom, space.lg) + space.sm }]}>
               <Text style={styles.sheetTitle} accessibilityRole="header">
                 {pickerMode === 'update' ? (
-                  'Log another pour'
+                  'Post it again'
                 ) : (
                   <>
-                    Log <Text style={textRole.nameInline}>{drink.name}</Text>
+                    Post <Text style={textRole.nameInline}>{drink.name}</Text>
                   </>
                 )}
               </Text>
               {/*
-                Logging says what the photo is for and that sharing is a
-                choice. Updating says where the new photo goes — including the
-                post, if there is one — rather than repeating a rule the user
-                already met.
+                A first photo's sheet says what the photo is for and that
+                sharing is a choice. Another photo's says where it goes —
+                including the post, if there is one — rather than repeating a
+                rule the user already met.
               */}
               {pickerMode === 'unlock' ? (
                 <Text style={styles.sheetSubtitle}>
@@ -636,17 +622,17 @@ export default function DrinkDetailScreen() {
                       accessibilityLabel="Photo preview"
                     />
                     {/*
-                      Field, the app's one form input, so the note is drawn,
-                      labelled and announced like every other field, and like
-                      the note on the centre-tab log screen. Field links a
-                      refused caption to the input and speaks it when it
-                      appears; handleConfirm speaks it again on a repeat press,
-                      when nothing on screen changes. Prose, so capitals and
-                      autocorrect are on.
+                      Field, the app's one form input, so the caption (kept as
+                      the record's `note`) is drawn, labelled and announced like
+                      every other field, and like the caption on the centre-tab
+                      log screen. Field links a refused caption to the input
+                      and speaks it when it appears; handleConfirm speaks it
+                      again on a repeat press, when nothing on screen changes.
+                      Prose, so capitals and autocorrect are on.
                     */}
                     {pickerMode === 'unlock' ? (
                       <Field
-                        label="Note (optional)"
+                        label="Add a caption"
                         value={note}
                         onChangeText={onNoteChange}
                         placeholder="Where you had it, what you thought"
@@ -655,7 +641,7 @@ export default function DrinkDetailScreen() {
                         autoCorrect
                         returnKeyType="done"
                         error={noteError}
-                        accessibilityLabel="Note, optional"
+                        accessibilityLabel="Caption, optional"
                       />
                     ) : null}
 
@@ -769,8 +755,7 @@ const styles = StyleSheet.create({
   hero: {
     /*
      * The cellar while the photo decodes, the colour its edges settle to,
-     * so the decode moment already matches. Clips the dissolve and the
-     * legendary foil.
+     * so the decode moment already matches. Clips the dissolve.
      */
     backgroundColor: colors.liningDeep,
     overflow: 'hidden',

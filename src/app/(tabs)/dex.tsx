@@ -1,11 +1,11 @@
 import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
+  Animated,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
   Pressable,
   ScrollView,
-  SectionList,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { RarityTally } from '@/components/cabinet';
 import { CustomDrinkTile } from '@/components/CustomDrinkTile';
 import { DexCard, EmptyArt } from '@/components/DexCard';
 import { LatestCatch } from '@/components/dex/LatestCatch';
@@ -21,6 +20,7 @@ import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { useTabScroll } from '@/components/ScrollChrome';
 import { Button, Chip, EmptyState, haptic, ProgressBar, SearchField } from '@/components/ui';
 import {
   CATEGORY_META,
@@ -37,11 +37,9 @@ import {
   type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
-import { matchOwned } from '@/lib/bar';
-import { shelfKey, tierTally } from '@/lib/cabinet';
+import { shelfKey } from '@/lib/cabinet';
 import { catalogueTwin, ownTwin, shortQuery } from '@/lib/customDrinks';
 import { styleLabel } from '@/lib/drinkLabels';
-import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
 import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
@@ -52,9 +50,9 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /* A collector's cabinet (specs/v3-cabinet.md §9.7). Two materials:     */
 /*                                                                      */
 /*   THE FRONT   paper, the list header: the Latest catch panel with    */
-/*               the collection's figure, the tally by tier, search,    */
-/*               the filters and the drinks you added. Opaque, and it   */
-/*               scrolls away over the tray.                            */
+/*               the collection's figure, search, the filters and the   */
+/*               drinks you added. Opaque, and it scrolls away over     */
+/*               the tray.                                              */
 /*   THE TRAY    the lining, the screen's own ground: the catalogue on  */
 /*               shelves, one per style ("Fizz", "Scotch"), each with a */
 /*               sticky header, two cards to a row and a ledge between  */
@@ -344,9 +342,9 @@ function SectionGap() {
  * A shelf of its own and never cards in the tray. The tray, its chips
  * ("All 2,089") and every shelf count mean "the catalogue"; a custom card
  * among them would make every count on this screen wrong, and its absence
- * of a number and a rarity would look like a broken card. The shelf
- * follows the same filters (category, collected, the search) so it never
- * shows a drink the filters above it say is not there.
+ * of a number would look like a broken card. The shelf follows the same
+ * filters (category, collected, the search) so it never shows a drink the
+ * filters above it say is not there.
  *
  * Newest first: the one just added is the one being looked for. Tiles
  * align to the top, so one long name grows its own tile, not the row.
@@ -536,7 +534,7 @@ function GridEmpty({
         tone="lining"
         art={<EmptyArt drinkId="ramos-gin-fizz" mode="ghost" onLining />}
         title="Nothing collected yet"
-        body="Open any entry and log a pour to add it here."
+        body="Open any entry and post it to add it here."
         action={{ label: 'Show every entry', onPress: onShowAll }}
       />
     );
@@ -562,26 +560,12 @@ export default function DexScreen() {
   const { width } = useWindowDimensions();
 
   /*
-   * How many drinks the shelf can currently make, for the My Bar button.
-   *
-   * The selector returns the number, not the shelf, so ticking a bottle on
-   * My Bar re-renders this screen only when the count actually moves — this
-   * screen stays mounted under My Bar, and subscribing to `owned` itself
-   * re-rendered the whole tray on every tick. The count comes from
-   * matchOwned, which remembers its last answer keyed on the store's Record
-   * identity: My Bar and this button ask about the same shelf on the same
-   * tap, so whichever asks second reuses the first one's match instead of
-   * walking every recipe again.
-   */
-  const barCount = useBar((s) => matchOwned(s.owned).makeable.length);
-
-  /*
    * Membership size, not the map itself. Subscribing to `unlocks` here would
    * re-render the screen every time a photo is swapped on an entry already
    * collected; the count moves only when something is added or removed, which
-   * is the only change the tray's filtering, shelf counts and tally care
-   * about. (The Latest catch panel subscribes to the map itself: the photo
-   * swap there is the point.)
+   * is the only change the tray's filtering and shelf counts care about.
+   * (The Latest catch panel subscribes to the map itself: the photo swap
+   * there is the point.)
    *
    * A plain key count is honest here because the store keeps `unlocks` to
    * catalogue ids only: records for drinks that left the index are moved
@@ -615,14 +599,6 @@ export default function DexScreen() {
    * two cards and the gap past the row by a point and a half.
    */
   const column = (width - GRID_PAD * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS;
-
-  /* The collection by tier, for the tally. Moves only when the count does. */
-  const tally = useMemo(
-    () => tierTally(useCollection.getState().unlocks),
-    // `collected` is the invalidation key for the getState() read above.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [collected],
-  );
 
   /*
    * The tray, and whether the search finds anything in the catalogue at
@@ -694,12 +670,13 @@ export default function DexScreen() {
   const catalogueHasName = named && catalogueTwin(trimmed) !== undefined;
   const ownNamed = named && customReady ? ownTwin(trimmed, customDrinks) : undefined;
 
-  const listRef = useRef<SectionList<Drink[], ShelfSection>>(null);
+  const listRef = useRef<Animated.SectionList<Drink[], ShelfSection>>(null);
   /*
    * Tapping the Dex tab while already on it scrolls the tray home, the way
    * every iOS tab bar behaves (react-navigation reaches the SectionList's
-   * scroll view through getScrollResponder). The chip and shelf scrollers
-   * opt out of scrollsToTop so a status-bar tap reaches the tray, not them.
+   * scroll view through getScrollResponder; the Animated wrapper forwards
+   * its ref to the list). The chip and shelf scrollers opt out of
+   * scrollsToTop so a status-bar tap reaches the tray, not them.
    */
   useScrollToTop(listRef);
 
@@ -717,10 +694,16 @@ export default function DexScreen() {
    */
   const [scrolled, onScrollRule] = useScrolledPast();
   const [showScrollTop, onScrollTop] = useScrolledPast(SCROLL_TOP_SHOW_AT);
-  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onScrolledPast = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     onScrollRule(e);
     onScrollTop(e);
   };
+  /*
+   * The tray is the Dex tab's scroll source for the tab bar's compaction
+   * (ScrollChrome): a native-driven event, with the two signals above
+   * riding along as its JS listener.
+   */
+  const { onScroll } = useTabScroll('dex', onScrolledPast);
 
   const scrollToTop = useCallback(() => {
     listRef.current?.getScrollResponder()?.scrollTo({ x: 0, y: 0, animated: true });
@@ -740,7 +723,7 @@ export default function DexScreen() {
     [router],
   );
 
-  const openLog = useCallback(() => router.navigate('/log'), [router]);
+  const openPost = useCallback(() => router.navigate('/log'), [router]);
 
   /*
    * The add-a-drink form, named after the search when it came from one
@@ -809,17 +792,6 @@ export default function DexScreen() {
   }, []);
 
   /*
-   * My Bar, from the bar's left: a destination, not another way to slice
-   * this tray, so it is a bar button and no longer a row among the
-   * filters. The bottle is what My Bar holds; the label carries the live
-   * count that made the row worth a tap.
-   */
-  const barLabel =
-    barCount > 0
-      ? `My Bar, ${formatCount(barCount)} ${barCount === 1 ? 'drink' : 'drinks'} you can make now`
-      : 'My Bar, tick what you own to see what you can make';
-
-  /*
    * The cabinet front: paper over the lining, opaque, with its own grain
    * (the screen's grain under it is the lining's). A paper view above it
    * keeps a pull past the top paper, not wine.
@@ -831,11 +803,7 @@ export default function DexScreen() {
         <Grain />
       </View>
 
-      <LatestCatch width={width} onOpen={openDrink} onLog={openLog} />
-
-      <View style={styles.tally}>
-        <RarityTally counts={tally} tone="paper" />
-      </View>
+      <LatestCatch width={width} onOpen={openDrink} onPost={openPost} />
 
       {/*
         The app's one search field (components/ui). The placeholder names
@@ -908,22 +876,21 @@ export default function DexScreen() {
       <Grain tone="lining" />
 
       {/*
-        A fixed bar: My Bar on the left, the screen's name, and Stats on the
-        right, which left the tab bar to become a report on this collection.
-        Paper, like the front it sits on; its rule appears once the front
-        has moved under it.
+        A fixed bar: the screen's name, and Stats on the right, which left
+        the tab bar to become a report on this collection. My Bar, which
+        had the left, is a tab of its own since v3.1. Paper, like the front
+        it sits on; its rule appears once the front has moved under it.
       */}
       <ScreenTopBar
         size="lg"
         title="Dex"
         showRule={scrolled}
-        left={<TopBarButton icon="bottle" label={barLabel} onPress={() => router.push('/bar')} />}
         right={
           <TopBarButton icon="stats" label="Collection stats" onPress={() => router.push('/stats')} />
         }
       />
 
-      <SectionList
+      <Animated.SectionList
         ref={listRef}
         sections={sections}
         renderItem={renderItem}
@@ -1038,7 +1005,6 @@ const styles = StyleSheet.create({
     height: 1000,
     backgroundColor: colors.bg,
   },
-  tally: { marginTop: space.md },
   search: { marginTop: space.md },
 
   /* Chips. The scroller bleeds past the gutter so the row scrolls edge to edge. */

@@ -2,16 +2,16 @@ import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { HeroFigure, RarityTally } from '@/components/cabinet';
+import { HeroFigure } from '@/components/cabinet';
 import { DexCard } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Button } from '@/components/ui';
 import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
-import { tierTally } from '@/lib/cabinet';
+import { catalogueCount } from '@/lib/cabinet';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useCollection } from '@/store/collection';
-import type { Drink, DrinkCategory, Post, Rarity } from '@/types';
+import type { Drink, DrinkCategory, Post } from '@/types';
 
 /* ==================================================================== */
 /* A profile's Dex tab                                                  */
@@ -35,13 +35,12 @@ import type { Drink, DrinkCategory, Post, Rarity } from '@/types';
  * Stats for a profile, derived from its PUBLIC POSTS only.
  *
  * A peer's real collection lives on their device and never reaches the
- * server, so this is the honest substitute: the category and rarity spread
- * of the pours they've actually shared. `counted` skips posts whose drink
- * isn't in this build, so the figures sum to the drinks we can classify.
+ * server, so this is the honest substitute: the category spread of the
+ * drinks they've actually shared. `counted` skips posts whose drink isn't
+ * in this build, so the figures sum to the drinks we can classify.
  */
 export function derivePostStats(posts: Post[]) {
   const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0 };
-  const byRarity: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
 
   let counted = 0;
   for (const post of posts) {
@@ -49,10 +48,9 @@ export function derivePostStats(posts: Post[]) {
     if (!drink) continue;
     counted += 1;
     byCategory[drink.category] += 1;
-    byRarity[drink.rarity] += 1;
   }
 
-  return { counted, byCategory, byRarity };
+  return { counted, byCategory };
 }
 
 /** A shared drink and the post it came from (its photo is the card's face). */
@@ -75,19 +73,15 @@ export function sharedByDexNumber(posts: Post[]): SharedDrink[] {
     .sort((a, b) => a.drink.dexNumber - b.drink.dexNumber);
 }
 
-/** Every catalogue drink in your collection: the figure the Dex tab and the Top shelf show. */
+/** Every catalogue drink in your collection: the figure the Dex shows, and this tab's link to it. */
 export function useCollectedCount(): number {
   const unlocks = useCollection((s) => s.unlocks);
-  return useMemo(() => {
-    const t = tierTally(unlocks);
-    return t.common + t.uncommon + t.rare + t.legendary;
-  }, [unlocks]);
+  return useMemo(() => catalogueCount(unlocks), [unlocks]);
 }
 
 /**
  * The head of the Dex tab, on the lining: how many drinks are shared as a
- * large figure, the tier tally under it, and on your own profile the way
- * into your Dex.
+ * large figure, and on your own profile the way into your Dex.
  */
 export function DexSummary({
   posts,
@@ -100,7 +94,7 @@ export function DexSummary({
   pageOnly: boolean;
 }) {
   const router = useRouter();
-  const { counted, byRarity } = useMemo(() => derivePostStats(posts), [posts]);
+  const { counted } = useMemo(() => derivePostStats(posts), [posts]);
   const collected = useCollectedCount();
 
   return (
@@ -109,17 +103,14 @@ export function DexSummary({
       <View style={styles.summary}>
         <HeroFigure value={counted} caption={`of ${formatCount(TOTAL)} shared`} tone="lining" />
         {/*
-          Past one page, "shared" is the latest page's spread, not everything,
-          and the line says so rather than pass a hundred off as the total.
+          Past one page, "shared" counts the latest page, not everything, and
+          the line says so rather than pass a hundred off as the total.
         */}
         {pageOnly ? (
           <Text style={styles.note}>
             Based on {isOwn ? 'your' : 'their'} latest {formatCount(posts.length)} posts
           </Text>
         ) : null}
-        <View style={styles.tally}>
-          <RarityTally counts={byRarity} tone="lining" />
-        </View>
 
         {isOwn ? (
           /*
@@ -216,7 +207,6 @@ const styles = StyleSheet.create({
     paddingBottom: space.lg,
   },
   note: { ...textRole.helper, color: colors.onLiningMuted, marginTop: 2 },
-  tally: { marginTop: space.sm },
   // A text button sits on its own 44pt hit line; this keeps its label on the gutter.
   dexLink: { alignSelf: 'flex-start', marginLeft: -space.sm, marginTop: space.xs },
   shelfRow: {

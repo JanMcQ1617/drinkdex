@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import Animated, { FadeIn, useReducedMotion } from 'react-native-reanimated';
 
-import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate, TierWord } from '@/components/cabinet';
-import { DrinkFace, FACE_FILL, FoilSweep } from '@/components/DexCard';
+import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate } from '@/components/cabinet';
+import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { Button } from '@/components/ui';
@@ -33,16 +33,16 @@ import { useCollection } from '@/store/collection';
 /* ==================================================================== */
 /* Celebrations                                                         */
 /*                                                                      */
-/* The moment after you log a pour, and the moment you change rank.     */
+/* The moment a drink joins your Dex, and the moment you change rank.   */
 /*                                                                      */
 /* Mounted at the root beside the intro, for the same reason the        */
-/* password overlay is: an entry can be logged from a Dex card or from  */
-/* the tab bar's centre action, and a celebration that lived in either  */
-/* screen would either miss the other or have to be built twice.        */
+/* password overlay is: a drink can join your Dex from its own page or  */
+/* from the tab bar's centre action, and a celebration that lived in    */
+/* either screen would miss the other or have to be built twice.        */
 /*                                                                      */
-/* It reads from a QUEUE. Logging the pour that crosses a rung earns    */
-/* two of these at once, and they play in order rather than racing —    */
-/* the entry you just caught, then what it made you.                    */
+/* It reads from a QUEUE. Collecting the drink that crosses a rung      */
+/* earns two of these at once, and they play in order rather than       */
+/* racing: the entry you just caught, then what it made you.            */
 /*                                                                      */
 /* Dismissed by tapping anywhere, not only by the button. It is a       */
 /* reward, not a decision, and making someone find a target to get rid  */
@@ -66,9 +66,8 @@ const CAP = 1.3;
  * queue id, so the next one is drawn fresh.
  *
  * AT REST FROM ITS FIRST FRAME. It sprang in from 0.86 and 18pt low,
- * which a stalled frame loop left small and off-centre; now nothing about
- * the card moves, and the only motion on it is a legendary's one foil
- * pass, which rests off the picture (DexCard's FoilSweep).
+ * which a stalled frame loop left small and off-centre; now nothing on
+ * the card moves at all.
  *
  * NO EXIT ANIMATION. The card that is done goes at once. An `exiting`
  * fade has two ways never to finish on this Reanimated (4.5.x): when
@@ -124,7 +123,7 @@ export function CelebrationOverlay() {
 
   /*
    * The card has to be heard, not only seen. Without this a VoiceOver
-   * user logs a pour and gets the app's biggest moment in silence, with
+   * user collects a drink and gets the app's biggest moment in silence, with
    * focus still sitting on the button they pressed. Queued rather than
    * interrupting, so it follows the button's own feedback instead of
    * cutting it off.
@@ -149,7 +148,6 @@ export function CelebrationOverlay() {
     const record = Object.prototype.hasOwnProperty.call(unlocks, current.drinkId)
       ? unlocks[current.drinkId]
       : undefined;
-    const legendary = drink.rarity === 'legendary';
     const collected = Object.keys(unlocks).length;
     const faceW = FEATURE.width - FEATURE_INNER;
     const faceH = FEATURE.height - FEATURE_INNER;
@@ -160,12 +158,11 @@ export function CelebrationOverlay() {
 
         {/*
           The catch as the Dex will hold it: a feature mount, card stock
-          with the tier's rule printed inside its edge (a legendary's in
-          double gilt), lying on the paper card, so no seat. Your pour,
-          else the lit catalogue photo, else the lit vector face, decoded at
-          the window's size rather than the pour's 2048px.
+          lying on the paper card, so no seat. Your photo, else the lit
+          catalogue photo, else the lit vector face, decoded at the
+          window's size rather than the photo's 2048px.
         */}
-        <Mount state="mounted" tier={drink.rarity} size="feature" onLining={false} style={styles.art}>
+        <Mount state="mounted" size="feature" onLining={false} style={styles.art}>
           <MountWindow height={faceH} state="mounted">
             <DrinkFace
               drink={drink}
@@ -175,8 +172,6 @@ export function CelebrationOverlay() {
               height={faceH}
               style={FACE_FILL}
             />
-            {/* One pass, then at rest off the picture; none under Reduce Motion. */}
-            {legendary ? <FoilSweep width={faceW} /> : null}
           </MountWindow>
         </Mount>
 
@@ -193,7 +188,6 @@ export function CelebrationOverlay() {
 
         <View style={styles.plates}>
           <NumberPlate n={drink.dexNumber} tone="paper" />
-          <TierWord rarity={drink.rarity} tone="paper" />
         </View>
 
         <Text style={styles.progress}>
@@ -322,8 +316,8 @@ const styles = StyleSheet.create({
   /*
    * A rank is a reading of the collection, not a drink, so it is Inter, as
    * Stats sets it (Playfair is for drink names only). The size of the
-   * drink's name on the other card, so the two cards of one log hold the
-   * same shape.
+   * drink's name on the other card, so the two cards of one catch hold
+   * the same shape (a catch is saved to the Dex, posted or not).
    */
   rankTitle: {
     fontFamily: fonts.bodySemiBold,
@@ -332,7 +326,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     textAlign: 'center',
   },
-  /* The catalogue number's stamp and the tier, as on the entry's Dex card. */
+  /* The catalogue number's stamp, as on the entry's Dex card. */
   plates: {
     flexDirection: 'row',
     flexWrap: 'wrap',

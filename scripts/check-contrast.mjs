@@ -665,7 +665,28 @@ const PAIRS = [
   // pressed into the cellar, and a locked legendary as worth hunting.
   [over(R.debossLight, C.liningDeep), C.liningDeep, 2.0, 'design floor: deboss highlight in an empty slot'], // 2.14
   [over(R.slotEdgeLegendary, C.liningDeep), C.liningDeep, 2.0, 'design floor: an empty legendary slot\'s edge'], // 2.52
-  [C.onLining, C.lining, 3.0, 'design floor: the unseen Today\'s tile ring on lining'], // 13.32
+
+  /*
+   * v3.1, specs/v3.1-changes.md section 16.2. Home's stories sit on the
+   * grained lining, so the ring is measured on the worst grain pixel too.
+   * Home's bar floats over the feed with no slab of its own: its ground is
+   * a fade of translucent lining, so its ink is measured with that fade
+   * composited over the worst thing the feed can put under it, a white
+   * photo, and over paper.
+   */
+  'v3.1 · Stories, Home bar, tournaments',
+  // Unseen: lit wine, because wine itself is 1.22:1 on lining. A UI cue (WCAG 1.4.11); the seen ring is decorative.
+  [C.storyRing, C.lining, 3.0, 'unseen story ring (storyRing) on lining (UI)'], // 4.37
+  [C.storyRing, WORST.lining, 3.0, 'unseen story ring on lining, worst grain pixel (UI)'], // 3.71
+  // Your own story's + badge: a bone disc on the lining (v3's unseen tile ring was the same pair), and its wine plus.
+  [C.onLining, C.lining, 3.0, "the story + badge's bone disc on lining (UI)"], // 13.32
+  [C.wine, C.onLining, 3.0, 'the story + badge: its wine plus on the bone disc (glyph)'], // 10.95
+  [C.onLining, over(R.homeBarFoot, WHITE_FRAME), 4.5, "Home bar ink (onLining) at the bar's foot, over a white photo"], // 5.60
+  [C.onLining, over(R.homeBarFoot, C.bg), 4.5, "Home bar ink at the bar's foot, over paper"], // 5.91
+  [C.onLining, over(R.homeBarTop, WHITE_FRAME), 4.5, "Home bar ink at the bar's top, over a white photo"], // 11.53
+  // A tournament's standings: your own row is wineWash.
+  [C.text, C.wineWash, 4.5, 'your leaderboard row: text on wineWash'], // 12.78
+  [C.textMuted, C.wineWash, 4.5, 'your leaderboard row: muted text on wineWash'], // 5.10
 ];
 
 /*

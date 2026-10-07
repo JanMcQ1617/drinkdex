@@ -1,21 +1,12 @@
 import { Image } from 'expo-image';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useReducedMotion,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { FACE_FILL, VectorFace } from '@/components/artwork/VectorFace';
-import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate, svgStop, TierWord } from '@/components/cabinet';
+import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate } from '@/components/cabinet';
 import { Icon } from '@/components/icons';
 import { haptic, PressableScale } from '@/components/ui';
-import { colors, fonts, foil, RARITY_META, stroke, textRole } from '@/constants/theme';
+import { colors, fonts, stroke, textRole } from '@/constants/theme';
 import { getDrink } from '@/data';
 import { drinkPhoto, drinkPhotoGhost } from '@/data/drinkPhotos';
 import type { Drink } from '@/types';
@@ -26,10 +17,10 @@ import type { Drink } from '@/types';
 /* One cell of the cabinet (spec §7.4). Collecting moves a drink from   */
 /* one material to the other, so the two states are different objects: */
 /*                                                                      */
-/*   COLLECTED  a mount: bone card stock (mat) with the tier's rule     */
-/*              printed 4pt inside its edge, seated in the lining with  */
-/*              a contact shadow. The face is lit: your pour, else the  */
-/*              tungsten-lit catalogue photo, else the lit vector face. */
+/*   COLLECTED  a mount: bone card stock (mat) with a 1pt edge, seated  */
+/*              in the lining with a contact shadow. The face is lit:   */
+/*              your pour, else the tungsten-lit catalogue photo, else  */
+/*              the lit vector face.                                    */
 /*   LOCKED     a slot: a recess pressed into the lining. The face is   */
 /*              the 256px ghost of the photo, else the debossed vector  */
 /*              glass in the drink's own hue.                           */
@@ -49,8 +40,8 @@ import type { Drink } from '@/types';
 const WINDOW_ASPECT = 0.7;
 /**
  * The grid mount's content column: the card less its 1pt edges and the
- * mount's padding (the 4pt rule inset, the rule, then 12pt of mat), which
- * is cardWidth - 38. The name's measure and the window's width are both it.
+ * mount's 18pt of clear mat (MOUNT.grid.padding), which is cardWidth - 38.
+ * The name's measure and the window's width are both it.
  */
 const GRID_INSET = 2 * (stroke.edge + MOUNT.grid.padding);
 /** Dynamic Type cap for everything on the card (spec §6.5). */
@@ -71,53 +62,9 @@ export { FACE_FILL };
 /* FoilSweep                                                            */
 /* ==================================================================== */
 
-/**
- * The foil pass on a collected legendary.
- *
- * One pass when it mounts, then it rests off the card's right edge: a
- * loop was the only perpetual motion in a 2,089-cell grid, and a sweep
- * that ends lets the card sit still like every other one. Off under
- * Reduce Motion, here rather than at each caller, so no caller can forget.
- * If Reanimated stalls, the band never leaves its start, which is also
- * off the card (x = -1): nothing is ever left half across the picture.
- *
- * `once={false}` keeps the old loop for a surface that wants it; none does.
- */
-export function FoilSweep({ width, once = true }: { width: number; once?: boolean }) {
-  const reduced = useReducedMotion();
-  const x = useSharedValue(-1);
-
-  useEffect(() => {
-    if (reduced) return;
-    const pass = withTiming(1, { duration: once ? 1400 : 2600, easing: Easing.inOut(Easing.quad) });
-    x.set(once ? pass : withRepeat(pass, -1, false));
-  }, [x, once, reduced]);
-
-  const style = useAnimatedStyle(() => ({
-    transform: [{ translateX: x.value * width * 1.6 }, { rotate: '18deg' }],
-  }));
-
-  if (reduced) return null;
-
-  return (
-    <Animated.View pointerEvents="none" style={[styles.foil, { width: width * 0.5 }, style]}>
-      {/* Sized by attribute too: VectorFace says why. */}
-      <Svg width="100%" height="100%" style={StyleSheet.absoluteFill}>
-        <Defs>
-          {/*
-            Through svgStop: native gradients drop an rgba stop's alpha, so
-            the foil's clear edges and 0.62 peak painted as one solid bar.
-          */}
-          <LinearGradient id="dexFoil" x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0" {...svgStop(foil.edge)} />
-            <Stop offset="0.5" {...svgStop(foil.peak)} />
-            <Stop offset="1" {...svgStop(foil.edge)} />
-          </LinearGradient>
-        </Defs>
-        <Rect x="0" y="0" width="100%" height="100%" fill="url(#dexFoil)" />
-      </Svg>
-    </Animated.View>
-  );
+/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
+export function FoilSweep(props: { width: number; once?: boolean }): null {
+  return null;
 }
 
 /* ==================================================================== */
@@ -251,9 +198,6 @@ export const DexCard = React.memo(function DexCard({
   onLining = true,
   onPress,
 }: DexCardProps) {
-  const rarity = RARITY_META[drink.rarity];
-  const legendary = collected && drink.rarity === 'legendary';
-
   const column = cardWidth - GRID_INSET;
   const windowH = Math.round(cardWidth * WINDOW_ASPECT);
 
@@ -277,16 +221,11 @@ export const DexCard = React.memo(function DexCard({
       accessibilityRole="button"
       // The spoken number is unpadded: "#0042" is read digit by digit.
       accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${
-        rarity.label
-      }, ${collected ? 'collected' : 'not collected yet'}`}
+        collected ? 'collected' : 'not collected yet'
+      }`}
       // Flat, not nested: PressableScale takes a one-level style array.
       style={[styles.card, { width: cardWidth }]}>
-      <Mount
-        state={collected ? 'mounted' : 'slot'}
-        tier={drink.rarity}
-        size="grid"
-        onLining={onLining}
-        style={styles.mount}>
+      <Mount state={collected ? 'mounted' : 'slot'} size="grid" onLining={onLining} style={styles.mount}>
         {/* ---- Label, at the top ---- */}
         <DrinkName
           name={drink.name}
@@ -296,14 +235,12 @@ export const DexCard = React.memo(function DexCard({
           color={collected ? colors.text : colors.onLiningMuted}
         />
         {/*
-          The plate and the tier wrap as a pair when the column is narrow (a
-          375pt phone, large text); the lock keeps its corner on the first
-          line rather than dropping onto a line of its own.
+          The number plate, and on a locked card the lock, which keeps its
+          corner on the plate's line.
         */}
         <View style={styles.plates}>
           <View style={styles.plateGroup}>
             <NumberPlate n={drink.dexNumber} tone={collected ? 'mat' : 'slot'} />
-            <TierWord rarity={drink.rarity} tone={collected ? 'paper' : 'lining'} />
           </View>
           {collected ? null : (
             <View style={styles.lock}>
@@ -328,8 +265,6 @@ export const DexCard = React.memo(function DexCard({
               height={windowH}
               style={FACE_FILL}
             />
-            {/* Last, so it paints over the picture; the window clips it. */}
-            {legendary ? <FoilSweep width={column} /> : null}
           </MountWindow>
         </View>
       </Mount>
@@ -373,12 +308,7 @@ export const DexThumb = React.memo(function DexThumb({
       pointerEvents="none"
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants">
-      <Mount
-        state="mounted"
-        tier={drink.rarity}
-        size="thumb"
-        onLining={size === 'mini'}
-        style={dims}>
+      <Mount state="mounted" size="thumb" onLining={size === 'mini'} style={dims}>
         <MountWindow height={h} state="mounted">
           <DrinkFace drink={drink} mode="lit" photoUri={photoUri} width={w} height={h} style={FACE_FILL} />
         </MountWindow>
@@ -426,12 +356,7 @@ export function EmptyArt({
       pointerEvents="none"
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants">
-      <Mount
-        state={state}
-        tier={drink.rarity}
-        size="feature"
-        onLining={onLining}
-        style={styles.feature}>
+      <Mount state={state} size="feature" onLining={onLining} style={styles.feature}>
         <MountWindow height={h} state={state}>
           <DrinkFace drink={drink} mode={mode} width={w} height={h} style={FACE_FILL} />
         </MountWindow>
@@ -462,13 +387,6 @@ const styles = StyleSheet.create({
 
   /* The picture's ground while it decodes: the colour a lit photo settles to. */
   face: { overflow: 'hidden', backgroundColor: colors.liningDeep },
-
-  foil: {
-    position: 'absolute',
-    top: '-30%',
-    bottom: '-30%',
-    left: 0,
-  },
 
   feature: FEATURE,
 });

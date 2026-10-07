@@ -10,19 +10,24 @@ Facebook, shows only beside Apple. The parts that describe each sit under
 their own headings below; leave those out of a build made without the
 flag.
 
+Tournaments need no flag: they appear once migration 020 is applied on the
+server, and stay hidden until then. Until it is, leave out every line below
+that mentions them.
+
 ---
 
 ## Beta App Description
 
 Sipply is a field guide to cocktails and spirits. Every drink you try is an entry to collect: 2,089 of them, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
 
-Log what you are drinking and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Tell it what is on your shelf and My Bar works out what you can make tonight, and ranks the one bottle that unlocks the most.
+Post what you are drinking and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Tell it what is on your shelf and My Bar works out what you can make tonight, and ranks the one bottle that unlocks the most.
 
-This build reworks the interface throughout: Dex cells are photographs rather than framed thumbnails, the drink card runs full bleed, and the tab bar, filters and headings have been stripped back.
+This build adds tournaments with people you follow, turns the stories at the top of Home into circles, gives My Bar a tab of its own, and drops rarity: an entry is simply collected or not yet.
 
 Worth trying:
 - The Dex grid and its filters, and how locked entries read next to collected ones
-- Logging a pour end to end, with and without a photo
+- Posting a drink end to end, with and without a photo
+- A tournament with a friend who tests too: host it, join it, post, and check the standings
 - My Bar: tick a dozen bottles and check whether what it says you can make is right
 - Account deletion and password reset
 
@@ -39,8 +44,21 @@ Worth poking at:
 
 - **The Dex.** 2,089 entries. Filter by category, search, and open a few.
   Does it stay smooth when you scroll fast?
-- **Logging a drink.** Add a photo and a caption. Does it show up on your
+- **Posting a drink.** Add a photo and a caption. Does it show up on your
   profile and in the feed?
+- **Stories.** The circles at the top of Home are today's posts; a wine
+  ring means you haven't opened it yet. Open your own and use its "..."
+  menu to delete a post. Does it disappear from the circles and the feed?
+- **Tournaments.** Tap the trophy at the top of Home and host one with
+  someone you follow. Join it from their account, post a drink from each,
+  and check the standings. Each different drink counts once, up to 3 new
+  ones a day. Try ending one, and deleting one.
+- **My Bar.** It has its own tab now, next to the +. Tick what's on your
+  shelf and check what it says you can make.
+- **Scrolling.** Scroll down Home, the Dex, My Bar or your profile: the tab
+  bar shrinks to icons and Home's top bar slides away. Scroll up and both
+  come back. Tell me if either gets stuck halfway, or a tab ever shows up
+  blank or half drawn.
 - **Finding people.** Search a username, or match your contacts. Contacts
   are hashed on your device and never uploaded.
 - **Your Instagram list.** In Find friends, request your followers and
@@ -48,8 +66,8 @@ Worth poking at:
   unzipping it. Does it find the people you expected?
 - **Other people's profiles.** Open someone from the feed or a list. Their
   profile opens as its own page, with Report and Block in its "..." menu.
-- **The feed.** Follow someone and see whether their pours appear.
-- **Stats.** Your collection progress, rarity spread, and milestones.
+- **The feed.** Follow someone and see whether their posts appear.
+- **Stats.** Your collection progress and milestones.
 
 Please report:
 
@@ -122,6 +140,15 @@ personal information file when there is one, are unpacked; from that last
 file only the user's own username is read, and it is stored, as a hash,
 only if the user accepts it. The usernames are hashed and matched the same way as
 phone numbers, under the same limit.
+
+### Add for a build with tournaments, and for one with story music
+
+Tournaments (migration 020 applied): paste the **Tournaments** paragraph
+from the App Review notes in [appstore.md](appstore.md) into the notes
+above. Story music (`EXPO_PUBLIC_STORY_MUSIC=tap`): paste its **Songs on
+posts** paragraph too. Both are written once, there, so the two sets of
+notes cannot drift apart. This field has the same 4,000-character limit,
+and the measured budget beside those paragraphs applies here as well.
 
 ### Add for a build with phone sign-in
 

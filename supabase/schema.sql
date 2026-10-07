@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 019
+-- Sipply — the whole schema, as of migration 020
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-019 built on the live project, and records every one of
+-- migrations 002-020 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -144,8 +144,34 @@ create table if not exists public.post_photos (
   -- When the picture was TAKEN, which orders the carousel.
   taken_at   timestamptz not null default now(),
   created_at timestamptz not null default now(),
+  -- The song on this photo's story (020): on the photo, not the post, so a
+  -- re-post with no song does not inherit the last one's. All null, or all
+  -- but the artwork set, on Apple's own hosts only.
+  music_song_id     text,
+  music_title       text,
+  music_artist      text,
+  music_artwork_url text,
+  music_preview_url text,
+  music_url         text,
+  music_storefront  text,
   unique (post_id, path),
-  constraint post_photos_path_len check (char_length(path) <= 200)
+  constraint post_photos_path_len check (char_length(path) <= 200),
+  constraint post_photos_music_shape check (
+    num_nonnulls(music_song_id, music_title, music_artist, music_artwork_url,
+                 music_preview_url, music_url, music_storefront) = 0
+    or (
+      num_nonnulls(music_song_id, music_title, music_artist,
+                   music_preview_url, music_url, music_storefront) = 6
+      and music_song_id ~ '^[0-9]{1,20}$'
+      and char_length(music_title)  between 1 and 200
+      and char_length(music_artist) between 1 and 200
+      and char_length(music_preview_url) <= 500 and music_preview_url ~ '^https://audio-ssl\.itunes\.apple\.com/'
+      and char_length(music_url) <= 500         and music_url ~ '^https://music\.apple\.com/'
+      and (music_artwork_url is null
+           or (char_length(music_artwork_url) <= 500 and music_artwork_url ~ '^https://is[0-9]+-ssl\.mzstatic\.com/'))
+      and music_storefront ~ '^[a-z]{2}$'
+    )
+  )
 );
 
 create table if not exists public.likes (
@@ -339,6 +365,58 @@ create table if not exists private.submission_digests (
   checked_at   timestamptz
 );
 
+-- The song-search budget (020): the apple-music Edge Function charges each
+-- search to the account through charge_music_search, 120 an hour. Counts
+-- and hours only, never the terms. In `private`, revoked outright.
+create table if not exists private.music_search_usage (
+  user_id uuid not null references public.profiles on delete cascade,
+  hour    timestamptz not null,
+  count   integer not null default 0,
+  primary key (user_id, hour)
+);
+
+-- Tournaments (020): friends compete to try the most DIFFERENT drinks.
+-- ends_at is exclusive; target null = most by the end; tz is the host's
+-- IANA zone, the daily cap's calendar day. finished_at, winner_id and
+-- finalized_at are written once, by finalize_tournament. Select-only for
+-- clients: every write is an RPC.
+create table if not exists public.tournaments (
+  id           uuid primary key default gen_random_uuid(),
+  host_id      uuid not null references public.profiles on delete cascade,
+  name         text not null,
+  starts_at    timestamptz not null,
+  ends_at      timestamptz not null,
+  target       smallint,
+  tz           text not null default 'UTC',
+  ended_at     timestamptz,           -- the host ended it early
+  finished_at  timestamptz,           -- when counting stopped (end, early end or goal)
+  winner_id    uuid references public.profiles on delete set null,
+  finalized_at timestamptz,           -- results frozen
+  created_at   timestamptz not null default now(),
+  constraint tournaments_name_shape check (
+    name = btrim(name) and char_length(name) between 1 and 40 and name !~ '[\r\n\t]'),
+  constraint tournaments_window check (
+    ends_at - starts_at >= interval '1 day' and ends_at - starts_at <= interval '31 days'),
+  constraint tournaments_target check (target is null or target between 2 and 100),
+  constraint tournaments_tz_len check (char_length(tz) between 1 and 64)
+);
+
+-- The host has a row too, always 'accepted'. 'declined' covers declining,
+-- leaving and being taken out by a block, and is final for that
+-- tournament. The final_* columns are the frozen standings.
+create table if not exists public.tournament_members (
+  tournament_id    uuid not null references public.tournaments on delete cascade,
+  user_id          uuid not null references public.profiles on delete cascade,
+  status           text not null default 'invited'
+                   check (status in ('invited', 'accepted', 'declined')),
+  invited_at       timestamptz not null default now(),
+  responded_at     timestamptz,
+  final_distinct   smallint,
+  final_reached_at timestamptz,
+  final_rank       smallint,
+  primary key (tournament_id, user_id)
+);
+
 
 -- --------------------------------------------------------------------
 -- Indexes
@@ -390,6 +468,10 @@ create index if not exists reel_likes_user_idx           on public.reel_likes (u
 create index if not exists reports_reported_reel_idx     on public.reports (reported_reel_id);
 create unique index if not exists reports_once_per_reel  on public.reports (reporter_id, reported_reel_id)
   where reported_reel_id is not null;
+-- 020: a host's tournaments by creation (the hosting limits); "the ones
+-- I am in", by person and status.
+create index if not exists tournaments_host_idx          on public.tournaments (host_id, created_at desc);
+create index if not exists tournament_members_user_idx   on public.tournament_members (user_id, status);
 
 
 -- --------------------------------------------------------------------
@@ -1133,15 +1215,20 @@ $$;
 
 -- 017: every photo shared in the last 24 hours by the caller or anyone
 -- the caller follows. SECURITY INVOKER, so the tables' read policies,
--- blocks included, apply with nothing extra here.
+-- blocks included, apply with nothing extra here. 020 added the photo's
+-- song (callers read the columns by name, so build 14 ignores them).
 create or replace function public.recent_pours()
-returns table (post_id uuid, author_id uuid, drink_id text, path text, poured_at timestamptz)
+returns table (post_id uuid, author_id uuid, drink_id text, path text, poured_at timestamptz,
+               music_song_id text, music_title text, music_artist text,
+               music_artwork_url text, music_preview_url text, music_url text)
 language sql
 stable
 security invoker
 set search_path = ''
 as $$
-  select p.id, p.author_id, p.drink_id, ph.path, ph.created_at
+  select p.id, p.author_id, p.drink_id, ph.path, ph.created_at,
+         ph.music_song_id, ph.music_title, ph.music_artist,
+         ph.music_artwork_url, ph.music_preview_url, ph.music_url
   from public.post_photos ph
   join public.posts p on p.id = ph.post_id
   where ph.created_at >= now() - interval '24 hours'
@@ -1814,6 +1901,644 @@ as $$
     private.reel_live_limit();
 $$;
 
+-- 020: the 011 content filter on a story song's title and artist. The app
+-- retries a refused photo without its song (detail 'music').
+create or replace function public.reject_objectionable_music()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.music_title is not null
+     and (public.is_objectionable(new.music_title) or public.is_objectionable(new.music_artist)) then
+    raise exception 'objectionable_content' using errcode = 'P0001', detail = 'music';
+  end if;
+  return new;
+end;
+$$;
+
+-- 020: charges one song search to the caller, 120 per account per hour.
+-- Called by the apple-music Edge Function as the user. One upsert, so
+-- parallel searches each add one; a day of old rows is swept on the way.
+create or replace function public.charge_music_search()
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  uid uuid := auth.uid();
+  n   integer;
+begin
+  if uid is null then
+    return false;
+  end if;
+  delete from private.music_search_usage u
+  where u.user_id = uid and u.hour < now() - interval '1 day';
+  insert into private.music_search_usage as u (user_id, hour, count)
+  values (uid, date_trunc('hour', now()), 1)
+  on conflict (user_id, hour) do update set count = u.count + 1
+  returning u.count into n;
+  return n <= 120;
+end;
+$$;
+
+-- 020: the content filter on a tournament's name, on insert and rename.
+create or replace function public.reject_objectionable_tournament()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if (tg_op = 'INSERT' or new.name is distinct from old.name) and public.is_objectionable(new.name) then
+    raise exception 'objectionable_content' using errcode = 'P0001', detail = 'tournament_name';
+  end if;
+  return new;
+end;
+$$;
+
+-- 020: the tournaments the caller hosts or is invited to or in, for the
+-- read policies. A helper, not a join in the policy: the two tables'
+-- policies reading each other would recurse. Declined or left = gone.
+create or replace function private.my_tournament_ids()
+returns uuid[]
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select coalesce(array_agg(x.id), '{}'::uuid[])
+  from (
+    select t.id from public.tournaments t
+    where t.host_id = (select auth.uid())
+    union
+    select m.tournament_id from public.tournament_members m
+    where m.user_id = (select auth.uid())
+      and m.status in ('invited', 'accepted')
+  ) x;
+$$;
+
+-- 020: new drinks that count per member per calendar day (App Review
+-- 1.4.3). One constant, read by the scoring and the boards.
+create or replace function private.tournament_daily_cap()
+returns integer language sql immutable set search_path = '' as $$ select 3 $$;
+
+-- 020: every accepted member's standing, counting events before `upto`.
+-- An event is the member's post for a catalogue drink being created or a
+-- photo added to it; each drink counts at its FIRST event in the window,
+-- unless that day's cap is already used, so a drink past the cap never
+-- counts later. Not block-filtered: callers filter. Row order = rank:
+-- goal reached first, most different drinks, got there first, user id.
+create or replace function private.tournament_standings(t uuid, upto timestamptz)
+returns table (user_id uuid, distinct_drinks integer, today_counted integer,
+               reached_at timestamptz, target_at timestamptz, rank integer)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with tt as (
+    select x.starts_at, x.tz, x.target from public.tournaments x where x.id = t
+  ),
+  members as (
+    select m.user_id from public.tournament_members m
+    where m.tournament_id = t and m.status = 'accepted'
+  ),
+  events as (
+    select p.author_id, p.drink_id, p.created_at as ev_at
+    from public.posts p
+    join members m on m.user_id = p.author_id
+    cross join tt
+    where p.created_at >= tt.starts_at and p.created_at < upto and p.drink_id !~ '^u_'
+    union all
+    select p.author_id, p.drink_id, ph.created_at
+    from public.post_photos ph
+    join public.posts p on p.id = ph.post_id
+    join members m on m.user_id = p.author_id
+    cross join tt
+    where ph.created_at >= tt.starts_at and ph.created_at < upto and p.drink_id !~ '^u_'
+  ),
+  firsts as (
+    select e.author_id, e.drink_id, min(e.ev_at) as first_at
+    from events e
+    group by e.author_id, e.drink_id
+  ),
+  dayed as (
+    select f.author_id, f.drink_id, f.first_at,
+           (f.first_at at time zone tt.tz)::date as on_day,
+           row_number() over (partition by f.author_id, (f.first_at at time zone tt.tz)::date
+                              order by f.first_at, f.drink_id) as nth_that_day
+    from firsts f
+    cross join tt
+  ),
+  counted as (
+    select d.author_id, d.first_at, d.on_day,
+           row_number() over (partition by d.author_id order by d.first_at, d.drink_id) as nth
+    from dayed d
+    where d.nth_that_day <= private.tournament_daily_cap()
+  ),
+  per as (
+    select m.user_id,
+           count(c.first_at)::integer as distinct_drinks,
+           (count(c.first_at) filter (where c.on_day = (now() at time zone tt.tz)::date))::integer
+             as today_counted,
+           max(c.first_at) as reached_at,
+           min(c.first_at) filter (where tt.target is not null and c.nth = tt.target) as target_at
+    from members m
+    cross join tt
+    left join counted c on c.author_id = m.user_id
+    group by m.user_id, tt.tz, tt.target
+  )
+  select per.user_id, per.distinct_drinks, per.today_counted, per.reached_at, per.target_at,
+         (row_number() over (order by per.target_at asc nulls last, per.distinct_drinks desc,
+                                      per.reached_at asc nulls last, per.user_id))::integer
+  from per;
+$$;
+
+-- 020: when counting stops, or null while it runs. A goal reached stops
+-- it at that post (+ 1 microsecond, so the winning post counts).
+create or replace function private.tournament_finish_at(t uuid)
+returns timestamptz
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  r   public.tournaments;
+  hit timestamptz;
+begin
+  select * into r from public.tournaments x where x.id = t;
+  if not found then
+    return null;
+  end if;
+  if r.target is not null then
+    select min(s.target_at) into hit
+    from private.tournament_standings(t, least(r.ends_at, coalesce(r.ended_at, r.ends_at), now())) s;
+    if hit is not null then
+      return hit + interval '1 microsecond';
+    end if;
+  end if;
+  if r.ended_at is not null then
+    return least(r.ended_at, r.ends_at);
+  end if;
+  if now() >= r.ends_at then
+    return r.ends_at;
+  end if;
+  return null;
+end;
+$$;
+
+-- 020: freezes a finished tournament's results, once. The lock is the one
+-- every tournament write takes.
+create or replace function private.finalize_tournament(t uuid)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  fin timestamptz;
+  win uuid;
+begin
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  if exists (select 1 from public.tournaments x where x.id = t and x.finalized_at is not null) then
+    return;
+  end if;
+  fin := private.tournament_finish_at(t);
+  if fin is null then
+    return;
+  end if;
+  update public.tournament_members m
+     set final_distinct = s.distinct_drinks, final_reached_at = s.reached_at, final_rank = s.rank
+    from private.tournament_standings(t, fin) s
+   where m.tournament_id = t and m.user_id = s.user_id;
+  select s.user_id into win
+  from private.tournament_standings(t, fin) s
+  where s.rank = 1 and s.distinct_drinks > 0;
+  update public.tournaments x
+     set finished_at = fin, winner_id = win, finalized_at = now()
+   where x.id = t;
+end;
+$$;
+
+-- 020: 'finished' only once frozen.
+create or replace function private.tournament_state(r public.tournaments)
+returns text
+language sql
+stable
+set search_path = ''
+as $$
+  select case when r.finalized_at is not null then 'finished'
+              when now() < r.starts_at then 'upcoming'
+              else 'live' end;
+$$;
+
+-- 020: one tournament with its standings, frozen or live. Volatile: it
+-- freezes one that has just finished. Anyone the caller is blocked with is
+-- left out; a blocked winner is hidden, never named.
+create or replace function public.tournament_board(t uuid)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  r       public.tournaments;
+  me      uuid := auth.uid();
+  blocked uuid[] := private.my_block_set();
+begin
+  if me is null or not (t = any (private.my_tournament_ids())) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  perform private.finalize_tournament(t);
+  select * into r from public.tournaments x where x.id = t;
+  if not found or r.host_id = any (blocked) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  return jsonb_build_object(
+    'id', r.id, 'name', r.name, 'host_id', r.host_id,
+    'starts_at', r.starts_at, 'ends_at', r.ends_at, 'target', r.target,
+    'ended_at', r.ended_at, 'finished_at', r.finished_at,
+    'state', private.tournament_state(r), 'daily_cap', private.tournament_daily_cap(),
+    'winner_id', case when r.winner_id = any (blocked) then null else r.winner_id end,
+    'winner_hidden', coalesce(r.winner_id = any (blocked), false),
+    'my_status', case when r.host_id = me then 'host'
+                      else (select m.status from public.tournament_members m
+                            where m.tournament_id = t and m.user_id = me) end,
+    'standings', coalesce((
+      select jsonb_agg(jsonb_build_object('user_id', s.user_id, 'distinct', s.distinct_drinks,
+               'today', s.today_counted, 'reached_at', s.reached_at, 'rank', s.rank) order by s.rank)
+      from (
+        -- Frozen: the stored results.
+        select m.user_id, m.final_distinct::integer as distinct_drinks, 0 as today_counted,
+               m.final_reached_at as reached_at, m.final_rank::integer as rank
+        from public.tournament_members m
+        where r.finalized_at is not null and m.tournament_id = t and m.status = 'accepted'
+          and m.final_rank is not null
+        union all
+        -- Running (or not started: everyone at 0): live from the posts.
+        select x.user_id, x.distinct_drinks, x.today_counted, x.reached_at, x.rank
+        from private.tournament_standings(t, greatest(least(r.ends_at, now()), r.starts_at)) x
+        where r.finalized_at is null
+      ) s
+      where not (s.user_id = any (blocked))), '[]'::jsonb),
+    'invited', coalesce((
+      select jsonb_agg(m.user_id order by m.invited_at) from public.tournament_members m
+      where m.tournament_id = t and m.status = 'invited' and not (m.user_id = any (blocked))), '[]'::jsonb)
+  );
+end;
+$$;
+
+-- 020: every tournament the caller hosts or is invited to or in, newest
+-- start first, freezing any that have just finished (in id order, so two
+-- callers take the locks in the same order).
+create or replace function public.my_tournaments()
+returns table (id uuid, name text, host_id uuid, starts_at timestamptz, ends_at timestamptz,
+               target integer, finished_at timestamptz, winner_id uuid, winner_distinct integer,
+               state text, my_status text, members integer, my_rank integer, my_distinct integer)
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+#variable_conflict use_column
+declare
+  me      uuid := auth.uid();
+  tid     uuid;
+  blocked uuid[] := private.my_block_set();
+begin
+  if me is null then
+    return;
+  end if;
+  -- In id order: each freeze takes that tournament's lock, and two of
+  -- these running at once must take shared locks in the same order or
+  -- they can deadlock.
+  for tid in
+    select x.id from public.tournaments x
+    where x.id = any (private.my_tournament_ids()) and x.finalized_at is null
+    order by x.id
+  loop
+    perform private.finalize_tournament(tid);
+  end loop;
+  return query
+  select t.id, t.name, t.host_id, t.starts_at, t.ends_at, t.target::integer, t.finished_at,
+         case when t.winner_id = any (blocked) then null else t.winner_id end,
+         (select w.final_distinct::integer from public.tournament_members w
+          where w.tournament_id = t.id and w.user_id = t.winner_id),
+         private.tournament_state(t),
+         case when t.host_id = me then 'host' else m.status end,
+         (select count(*)::integer from public.tournament_members c
+          where c.tournament_id = t.id and c.status = 'accepted'),
+         coalesce(m.final_rank::integer, live.rank),
+         coalesce(m.final_distinct::integer, live.distinct_drinks)
+  from public.tournaments t
+  left join public.tournament_members m on m.tournament_id = t.id and m.user_id = me
+  left join lateral (
+    select s.rank, s.distinct_drinks
+    from private.tournament_standings(t.id, greatest(least(t.ends_at, now()), t.starts_at)) s
+    where s.user_id = me and t.finalized_at is null
+  ) live on true
+  where t.id = any (private.my_tournament_ids()) and not (t.host_id = any (blocked))
+  order by t.starts_at desc
+  limit 100;
+end;
+$$;
+
+-- 020: invites, as the host, people the host follows, not blocked either
+-- way and never in it before (declined stays declined); 50 seats with the
+-- host. Returns how many were invited.
+create or replace function private.add_invitees(t uuid, host uuid, people uuid[])
+returns integer
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  room  integer;
+  added integer;
+begin
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  room := 50 - (select count(*) from public.tournament_members m
+                where m.tournament_id = t and m.status in ('invited', 'accepted'));
+  insert into public.tournament_members (tournament_id, user_id)
+  select t, ok.person from (
+    select distinct u.person
+    from unnest(coalesce(people, '{}'::uuid[])) as u(person)
+    where u.person is not null
+      and u.person <> host
+      and exists (select 1 from public.follows f
+                  where f.follower_id = host and f.following_id = u.person)
+      and not public.blocked_with(u.person)
+      and not exists (select 1 from public.tournament_members m
+                      where m.tournament_id = t and m.user_id = u.person)
+    limit greatest(room, 0)
+  ) ok;
+  get diagnostics added = row_count;
+  return added;
+end;
+$$;
+
+-- 020: hosts a tournament. Errors are P0001: invalid_dates, invalid_goal,
+-- too_many_tournaments, no_invitees (rolls the call back), and the name
+-- filter's objectionable_content (detail 'tournament_name').
+create or replace function public.create_tournament(
+  p_name text, p_starts_at timestamptz, p_ends_at timestamptz,
+  p_target integer, p_tz text, p_invitees uuid[])
+returns uuid
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me  uuid := auth.uid();
+  tid uuid;
+begin
+  if me is null then
+    raise exception 'not signed in: create_tournament got no auth.uid()' using errcode = '28000';
+  end if;
+  if p_starts_at is null or p_ends_at is null
+     or p_starts_at < now() - interval '5 minutes' or p_starts_at > now() + interval '30 days'
+     or p_ends_at - p_starts_at < interval '1 day' or p_ends_at - p_starts_at > interval '31 days' then
+    raise exception 'invalid_dates' using errcode = 'P0001';
+  end if;
+  -- A goal the daily cap makes unreachable (First to 10 in 3 days) is refused.
+  if p_target is not null
+     and (p_target < 2 or p_target > 100
+          or p_target > private.tournament_daily_cap()
+                        * ceil(extract(epoch from (p_ends_at - p_starts_at)) / 86400.0)) then
+    raise exception 'invalid_goal' using errcode = 'P0001';
+  end if;
+
+  -- Serialises one host's creates, as charge_discovery does (011), so
+  -- parallel calls cannot all read 4 and pass.
+  perform pg_advisory_xact_lock(hashtextextended('tournaments:' || me::text, 0));
+  if (select count(*) from public.tournaments x
+      where x.host_id = me and x.finalized_at is null and x.ended_at is null and x.ends_at > now()) >= 5
+     or (select count(*) from public.tournaments x
+         where x.host_id = me and x.created_at > now() - interval '30 days') >= 10 then
+    raise exception 'too_many_tournaments' using errcode = 'P0001';
+  end if;
+
+  -- One line, single spaces: the name check's shape. The filter runs in
+  -- the insert trigger.
+  insert into public.tournaments (host_id, name, starts_at, ends_at, target, tz)
+  values (me, btrim(regexp_replace(coalesce(p_name, ''), '\s+', ' ', 'g')), p_starts_at, p_ends_at,
+          p_target,
+          coalesce((select z.name from pg_catalog.pg_timezone_names z where z.name = p_tz), 'UTC'))
+  returning id into tid;
+
+  insert into public.tournament_members (tournament_id, user_id, status, responded_at)
+  values (tid, me, 'accepted', now());
+
+  if private.add_invitees(tid, me, p_invitees) = 0 then
+    raise exception 'no_invitees' using errcode = 'P0001';     -- rolls the whole call back
+  end if;
+  return tid;
+end;
+$$;
+
+-- 020: host only, before it finishes (not_allowed, finished).
+create or replace function public.invite_to_tournament(t uuid, people uuid[])
+returns integer
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+  r  public.tournaments;
+begin
+  if me is null then
+    raise exception 'not signed in: invite_to_tournament got no auth.uid()' using errcode = '28000';
+  end if;
+  if not (t = any (private.my_tournament_ids())) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  select * into r from public.tournaments x where x.id = t;
+  if not found then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  if r.host_id <> me then
+    raise exception 'not_allowed' using errcode = 'P0001';
+  end if;
+  if r.finalized_at is not null or private.tournament_finish_at(t) is not null then
+    raise exception 'finished' using errcode = 'P0001';
+  end if;
+  return private.add_invitees(t, me, people);
+end;
+$$;
+
+-- 020: an invitee joins or declines; declining is final.
+create or replace function public.respond_to_tournament(t uuid, accept boolean)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+  r  public.tournaments;
+begin
+  if me is null then
+    raise exception 'not signed in: respond_to_tournament got no auth.uid()' using errcode = '28000';
+  end if;
+  if not (t = any (private.my_tournament_ids())) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  select * into r from public.tournaments x where x.id = t;
+  if not found or public.blocked_with(r.host_id) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  if accept is null or not exists (
+    select 1 from public.tournament_members m
+    where m.tournament_id = t and m.user_id = me and m.status = 'invited'
+  ) then
+    raise exception 'not_allowed' using errcode = 'P0001';
+  end if;
+  if r.finalized_at is not null or private.tournament_finish_at(t) is not null then
+    raise exception 'finished' using errcode = 'P0001';
+  end if;
+  update public.tournament_members m
+     set status = case when accept then 'accepted' else 'declined' end, responded_at = now()
+   where m.tournament_id = t and m.user_id = me;
+end;
+$$;
+
+-- 020: an accepted member who is not the host leaves, for good.
+create or replace function public.leave_tournament(t uuid)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+  r  public.tournaments;
+begin
+  if me is null then
+    raise exception 'not signed in: leave_tournament got no auth.uid()' using errcode = '28000';
+  end if;
+  if not (t = any (private.my_tournament_ids())) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  select * into r from public.tournaments x where x.id = t;
+  if not found then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  if r.host_id = me or not exists (
+    select 1 from public.tournament_members m
+    where m.tournament_id = t and m.user_id = me and m.status = 'accepted'
+  ) then
+    raise exception 'not_allowed' using errcode = 'P0001';
+  end if;
+  if r.finalized_at is not null or private.tournament_finish_at(t) is not null then
+    raise exception 'finished' using errcode = 'P0001';
+  end if;
+  update public.tournament_members m
+     set status = 'declined', responded_at = now()
+   where m.tournament_id = t and m.user_id = me;
+end;
+$$;
+
+-- 020: the host ends a live tournament now; an upcoming one is deleted.
+create or replace function public.end_tournament(t uuid)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+  r  public.tournaments;
+begin
+  if me is null then
+    raise exception 'not signed in: end_tournament got no auth.uid()' using errcode = '28000';
+  end if;
+  if not (t = any (private.my_tournament_ids())) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  select * into r from public.tournaments x where x.id = t;
+  if not found then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  if r.host_id <> me or now() < r.starts_at then
+    raise exception 'not_allowed' using errcode = 'P0001';
+  end if;
+  if r.finalized_at is not null then
+    raise exception 'finished' using errcode = 'P0001';
+  end if;
+  if private.tournament_finish_at(t) is null then
+    update public.tournaments x set ended_at = now() where x.id = t;
+  end if;
+  perform private.finalize_tournament(t);
+end;
+$$;
+
+-- 020: the host deletes it; members cascade.
+create or replace function public.delete_tournament(t uuid)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+  r  public.tournaments;
+begin
+  if me is null then
+    raise exception 'not signed in: delete_tournament got no auth.uid()' using errcode = '28000';
+  end if;
+  if not (t = any (private.my_tournament_ids())) then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  select * into r from public.tournaments x where x.id = t;
+  if not found then
+    raise exception 'not_found' using errcode = 'P0001';
+  end if;
+  if r.host_id <> me then
+    raise exception 'not_allowed' using errcode = 'P0001';
+  end if;
+  delete from public.tournaments x where x.id = t;
+end;
+$$;
+
+-- 020: a block between a host and a member takes the member out of every
+-- unfinished tournament (as drop_follows_on_block drops the follows).
+create or replace function private.drop_tournament_membership_on_block()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  update public.tournament_members m
+     set status = 'declined', responded_at = now()
+    from public.tournaments x
+   where x.id = m.tournament_id and x.finalized_at is null and m.status <> 'declined'
+     and ((x.host_id = new.blocker_id and m.user_id = new.blocked_id)
+       or (x.host_id = new.blocked_id and m.user_id = new.blocker_id));
+  return null;
+end;
+$$;
+
 
 -- --------------------------------------------------------------------
 -- Function privileges
@@ -1891,6 +2616,41 @@ grant execute on function public.follow_many(uuid[])            to authenticated
 grant execute on function public.accept_invite(uuid)            to authenticated;
 grant execute on function public.recent_pours()                 to authenticated;
 grant execute on function public.my_reel_quota()                to authenticated;
+
+-- 020. The trigger functions and the scoring helpers are reached only
+-- through the definer functions; my_tournament_ids is read by the
+-- tournament read policies as the querying role.
+revoke all on function public.reject_objectionable_music()                from public, anon, authenticated;
+revoke all on function public.reject_objectionable_tournament()           from public, anon, authenticated;
+revoke all on function private.drop_tournament_membership_on_block()      from public, anon, authenticated;
+revoke all on function private.tournament_daily_cap()                     from public, anon, authenticated;
+revoke all on function private.tournament_standings(uuid, timestamptz)    from public, anon, authenticated;
+revoke all on function private.tournament_finish_at(uuid)                 from public, anon, authenticated;
+revoke all on function private.finalize_tournament(uuid)                  from public, anon, authenticated;
+revoke all on function private.tournament_state(public.tournaments)       from public, anon, authenticated;
+revoke all on function private.add_invitees(uuid, uuid, uuid[])           from public, anon, authenticated;
+
+revoke all on function private.my_tournament_ids() from public, anon;
+grant execute on function private.my_tournament_ids() to authenticated;
+
+revoke all on function public.charge_music_search()                                          from public, anon;
+revoke all on function public.tournament_board(uuid)                                         from public, anon;
+revoke all on function public.my_tournaments()                                               from public, anon;
+revoke all on function public.create_tournament(text, timestamptz, timestamptz, integer, text, uuid[]) from public, anon;
+revoke all on function public.invite_to_tournament(uuid, uuid[])                             from public, anon;
+revoke all on function public.respond_to_tournament(uuid, boolean)                           from public, anon;
+revoke all on function public.leave_tournament(uuid)                                         from public, anon;
+revoke all on function public.end_tournament(uuid)                                           from public, anon;
+revoke all on function public.delete_tournament(uuid)                                        from public, anon;
+grant execute on function public.charge_music_search()                                       to authenticated;
+grant execute on function public.tournament_board(uuid)                                      to authenticated;
+grant execute on function public.my_tournaments()                                            to authenticated;
+grant execute on function public.create_tournament(text, timestamptz, timestamptz, integer, text, uuid[]) to authenticated;
+grant execute on function public.invite_to_tournament(uuid, uuid[])                          to authenticated;
+grant execute on function public.respond_to_tournament(uuid, boolean)                        to authenticated;
+grant execute on function public.leave_tournament(uuid)                                      to authenticated;
+grant execute on function public.end_tournament(uuid)                                        to authenticated;
+grant execute on function public.delete_tournament(uuid)                                     to authenticated;
 
 
 -- --------------------------------------------------------------------
@@ -1994,6 +2754,28 @@ create trigger reels_reject_objectionable
   before insert or update of caption on public.reels
   for each row execute function public.reject_objectionable_post();
 
+-- 020. post_photos takes inserts only; the update arm is there so a future
+-- update policy cannot route around the filter.
+drop trigger if exists post_photos_reject_objectionable on public.post_photos;
+create trigger post_photos_reject_objectionable
+  before insert or update of music_title, music_artist on public.post_photos
+  for each row execute function public.reject_objectionable_music();
+
+drop trigger if exists tournaments_reject_objectionable on public.tournaments;
+create trigger tournaments_reject_objectionable
+  before insert or update on public.tournaments
+  for each row execute function public.reject_objectionable_tournament();
+
+drop trigger if exists tournaments_pin_created_at on public.tournaments;
+create trigger tournaments_pin_created_at
+  before insert or update on public.tournaments
+  for each row execute function public.pin_created_at();
+
+drop trigger if exists blocks_drop_tournament_membership on public.blocks;
+create trigger blocks_drop_tournament_membership
+  after insert on public.blocks
+  for each row execute function private.drop_tournament_membership_on_block();
+
 
 -- --------------------------------------------------------------------
 -- Table privileges
@@ -2006,7 +2788,9 @@ create trigger reels_reject_objectionable
 -- server-made. saves (017) and drink_submissions (018) likewise grant
 -- only the columns a client may name; drink_submissions' review columns
 -- and clocks are never granted. Nobody edits a reel (019): no update
--- grant, on top of having no update policy.
+-- grant, on top of having no update policy. Tournaments (020) are
+-- select-only: every write is an RPC, so the rules on dates, goals, seats
+-- and blocks cannot be skipped by writing rows.
 -- --------------------------------------------------------------------
 
 grant select on public.profiles to anon, authenticated;
@@ -2041,6 +2825,10 @@ revoke update, truncate, references, trigger on public.reels      from authentic
 revoke update, truncate, references, trigger on public.reel_likes from authenticated;
 
 revoke all on private.submission_digests from public, anon, authenticated;
+revoke all on private.music_search_usage from public, anon, authenticated;
+
+revoke all on public.tournaments, public.tournament_members from anon, authenticated;
+grant select on public.tournaments, public.tournament_members to authenticated;
 
 
 -- --------------------------------------------------------------------
@@ -2069,6 +2857,9 @@ alter table public.drink_submissions enable row level security;
 alter table public.reels           enable row level security;
 alter table public.reel_likes      enable row level security;
 alter table private.submission_digests enable row level security;
+alter table private.music_search_usage enable row level security;
+alter table public.tournaments     enable row level security;
+alter table public.tournament_members enable row level security;
 
 -- Profiles: readable by any signed-in user not blocked either way (you
 -- must be able to find people to follow), writable only by their owner.
@@ -2285,9 +3076,29 @@ create policy reel_likes_insert_own on public.reel_likes
 create policy reel_likes_delete_own on public.reel_likes
   for delete to authenticated using (auth.uid() = user_id);
 
--- profile_secrets, discovery_usage, blocked_terms, sign_in_lookups and
--- private.submission_digests: RLS on and no policy at all, on top of the
--- revoked grants. Default-deny.
+-- Tournaments (020): the host and the people invited or in it, never a
+-- tournament hosted by someone you are blocked with, and never the row of
+-- a member you are blocked with. No write policies: RPCs only.
+drop policy if exists tournaments_read        on public.tournaments;
+drop policy if exists tournament_members_read on public.tournament_members;
+
+create policy tournaments_read on public.tournaments
+  for select to authenticated
+  using (
+    id = any ((select private.my_tournament_ids())::uuid[])
+    and not (host_id = any ((select private.my_block_set())::uuid[]))
+  );
+
+create policy tournament_members_read on public.tournament_members
+  for select to authenticated
+  using (
+    tournament_id = any ((select private.my_tournament_ids())::uuid[])
+    and not (user_id = any ((select private.my_block_set())::uuid[]))
+  );
+
+-- profile_secrets, discovery_usage, blocked_terms, sign_in_lookups,
+-- private.submission_digests and private.music_search_usage: RLS on and
+-- no policy at all, on top of the revoked grants. Default-deny.
 
 
 -- --------------------------------------------------------------------
@@ -2450,7 +3261,7 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 019'),
+  ('schema',                  'schema.sql, current as of 020'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -2468,5 +3279,6 @@ insert into public.schema_migrations (version, note) values
   ('016_sign_in_lookup',      'contained in schema.sql'),
   ('017_home_and_profile',    'contained in schema.sql'),
   ('018_drink_submissions',   'contained in schema.sql'),
-  ('019_reels',               'contained in schema.sql')
+  ('019_reels',               'contained in schema.sql'),
+  ('020_tournaments_and_story_music', 'contained in schema.sql')
 on conflict (version) do nothing;

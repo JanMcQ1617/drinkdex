@@ -15,12 +15,12 @@ import {
   HeroShade,
   HeroTitle,
   LabelBand,
+  OriginStory,
   PinnedLogBar,
   pinnedBarEstimate,
   ServeCard,
   SpecCard,
   TastesOf,
-  TriviaBand,
 } from '@/components/DrinkPanels';
 import { Grain } from '@/components/Grain';
 import { FocusedStatusBar, ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
@@ -43,9 +43,9 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* DrinkPanels) so the two pages read as one app.                       */
 /*                                                                      */
 /* What differs, and why:                                               */
-/*   - No dex number and no rarity. A custom drink has neither until    */
-/*     Sipply adds it, and inventing them would say it had joined the   */
-/*     Dex. The eyebrow's "Added by you" plate says whose it is instead. */
+/*   - No dex number. A custom drink has none until Sipply adds it, and */
+/*     inventing one would say it had joined the Dex. The eyebrow's     */
+/*     "Added by you" plate says whose it is instead.                   */
 /*   - A status line under the label band: where the suggestion stands  */
 /*     with Sipply (lib/customDrinks' syncStatusLine), the only place a */
 /*     refused or over-quota send is ever said.                         */
@@ -223,8 +223,8 @@ export default function CustomDrinkScreen() {
               <Text style={styles.twinTitle}>
                 <Text style={textRole.nameInline}>{twin.name}</Text> is in the Dex now.
               </Text>
-              <Text style={styles.twinBody}>Move your pour to the Dex entry and this copy goes.</Text>
-              <Button label="Move my pour there" variant="onLiningOutline" onPress={moveToDex} />
+              <Text style={styles.twinBody}>Move your photo to the Dex entry and this copy goes.</Text>
+              <Button label="Move my photo there" variant="onLiningOutline" onPress={moveToDex} />
             </LiningBand>
           ) : null}
 
@@ -239,7 +239,8 @@ export default function CustomDrinkScreen() {
           ) : null}
 
           <FieldNotes description={drink.description} />
-          <TriviaBand drink={drawn} />
+          {/* "The story" on the add-a-drink form is the drink's funFact, so it shows here. */}
+          <OriginStory drink={drawn} />
 
           <View style={styles.footer}>
             <Button

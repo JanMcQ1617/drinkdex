@@ -1,12 +1,14 @@
-import { useRouter } from 'expo-router';
-import { memo, useCallback, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useRouter, useScrollToTop } from 'expo-router';
+import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { Animated, type ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DexStatusTag, dexStatusTagWidth } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
+import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Grain } from '@/components/Grain';
-import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { ScreenTopBar, useScrolledPast } from '@/components/ScreenTopBar';
+import { useTabScroll } from '@/components/ScrollChrome';
 import {
   Button,
   Card,
@@ -46,6 +48,9 @@ import { confirmDestructive } from '@/utils/alerts';
 
 /* ==================================================================== */
 /* My Bar                                                               */
+/*                                                                      */
+/* A tab of its own, beside the post action: what you own, and what you */
+/* can make with it, is a place you come back to.                       */
 /*                                                                      */
 /* Two panes behind a segmented control, because owning things and       */
 /* making things are separate errands. You stock the shelf once, in a    */
@@ -118,11 +123,11 @@ const ShelfChip = memo(function ShelfChip({
  * A drink you can make, or nearly: the mounted thumbnail, the name in
  * Playfair (never truncated: ListRow's name role fits it to its column and
  * lets it wrap), and whether it is in your Dex yet, because a drink you
- * can pour tonight that you have never logged is the best reason to pour
+ * can pour tonight that you have never posted is the best reason to pour
  * it. What a nearly-there drink is missing moves to the subtitle, where a
  * long ingredient wraps instead of squeezing the name.
  *
- * Its own subscription to that one drink's status, so logging a drink
+ * Its own subscription to that one drink's status, so posting a drink
  * re-renders its row and nothing else.
  *
  * `measure` is the title column before the tag: the tag's width depends
@@ -203,14 +208,16 @@ export default function BarScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const [scrolled, onScroll] = useScrolledPast();
+  const [scrolled, onScrolledPast] = useScrolledPast();
+  /*
+   * The scroll that compacts the tab bar (ScrollChrome), with the rule
+   * signal riding along as its listener. Tapping My Bar again while here
+   * returns to the top.
+   */
+  const { onScroll } = useTabScroll('bar', onScrolledPast);
+  const scrollRef = useRef<ScrollView>(null);
+  useScrollToTop(scrollRef);
   const rowMeasure = width - ROW_CHROME;
-
-  /* Back to the Dex, which opens it; with nothing under it, to the Dex anyway. */
-  const back = useCallback(() => {
-    if (router.canGoBack()) router.back();
-    else router.replace('/dex');
-  }, [router]);
 
   const owned = useBar((s) => s.owned);
   const toggle = useBar((s) => s.toggle);
@@ -224,9 +231,8 @@ export default function BarScreen() {
 
   /*
    * matchOwned remembers its answer for the store's `owned` object, so a
-   * keystroke in the search field re-runs nothing, and the Dex underneath
-   * (its My Bar button speaks the count) reuses this result instead of
-   * walking the index again.
+   * keystroke in the search field, or coming back to this tab, re-runs
+   * nothing.
    */
   const result = matchOwned(owned);
 
@@ -283,11 +289,8 @@ export default function BarScreen() {
     <View style={styles.screen}>
       {/* The page's own grain, under everything: there is no global grain any more. */}
       <Grain />
-      <ScreenTopBar
-        title="My Bar"
-        showRule={scrolled}
-        left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
-      />
+      {/* A root screen's own name, and no Back: this is a tab now. */}
+      <ScreenTopBar size="lg" title="My Bar" showRule={scrolled} />
 
       <SegmentedControl
         items={[
@@ -299,16 +302,21 @@ export default function BarScreen() {
         style={styles.segments}
       />
 
-      <ScrollView
+      <Animated.ScrollView
+        ref={scrollRef}
         style={styles.flex}
-        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl * 2 }]}
+        contentContainerStyle={[
+          styles.content,
+          // The floating tab bar sits over the foot of the page (at rest, full).
+          { paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md },
+        ]}
         keyboardShouldPersistTaps="handled"
         onScroll={onScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         {pane === 'shelf' ? (
           <>
-            {/* The app's one search field, as on the Dex and Log. */}
+            {/* The app's one search field, as on the Dex and the post sheet. */}
             <SearchField
               value={query}
               onChangeText={setQuery}
@@ -397,11 +405,7 @@ export default function BarScreen() {
         ) : (
           <>
             {shelf.length === 0 ? (
-              /*
-                The bottle, which is what this screen holds. The sparkle it
-                once had is the legendary mark on every Dex card, and the
-                coupe after it is the Dex's own tab.
-              */
+              /* The bottle, which is what this screen holds. */
               <EmptyState
                 icon="bottle"
                 title="Nothing on the shelf yet"
@@ -471,8 +475,8 @@ export default function BarScreen() {
                 ) : (
                   /*
                     "Above" only when there is something above: a shelf of
-                    rarities can leave nothing one short either, and then the
-                    next step is the shelf itself.
+                    unusual bottles can leave nothing one short either, and
+                    then the next step is the shelf itself.
                   */
                   <Text style={[styles.hint, styles.hintAlone]}>
                     {result.nextBest.length
@@ -506,7 +510,7 @@ export default function BarScreen() {
             )}
           </>
         )}
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 }

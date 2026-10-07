@@ -53,7 +53,21 @@ export function latestCatch(
   return best ? { drink: best.drink, record: best.record } : null;
 }
 
-/** How many collected drinks sit in each tier: { common: 21, uncommon: 11, rare: 5, legendary: 1 }. */
+/**
+ * How many drinks in the collection are catalogue entries (getDrink hits):
+ * the figure the Dex and a profile's Dex tab show ("38 of 2,089"). An
+ * unlock of a drink you added yourself, or of an id the catalogue has
+ * since retired, is not one, so this can be less than the record count.
+ */
+export function catalogueCount(unlocks: Record<string, UnlockRecord>): number {
+  let n = 0;
+  for (const id of Object.keys(unlocks)) {
+    if (getDrink(id)) n += 1;
+  }
+  return n;
+}
+
+/** @deprecated rarity, removed in v3.1; deleted at the close-out. The collection by tier. */
 export function tierTally(unlocks: Record<string, UnlockRecord>): Record<Rarity, number> {
   const tally: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
   for (const id of Object.keys(unlocks)) {
@@ -86,10 +100,8 @@ export function nextRank(collected: number): { title: string; toGo: number } | n
 }
 
 /**
- * The distinct catalogue drinks in someone's posts, rarest first
- * (RARITY_META.weight), the drink posted most recently first within a tier,
- * each with its newest post (whose photo the Top shelf shows). `n` defaults
- * to 3. A post of a custom or retired drink is skipped: it has no tier.
+ * @deprecated rarity, removed in v3.1 (and the Top shelf with it); deleted
+ * at the close-out. Someone's distinct posted drinks, highest tier first.
  */
 export function topShelf(posts: readonly Post[], n = 3): { drink: Drink; post: Post }[] {
   const newest = new Map<string, { drink: Drink; post: Post; at: number }>();

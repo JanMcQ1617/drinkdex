@@ -22,7 +22,9 @@ import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
+import { MusicPicker } from '@/components/MusicPicker';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
+import { SongArtwork } from '@/components/songs';
 import {
   announce,
   Button,
@@ -37,7 +39,6 @@ import {
   fonts,
   layout,
   radius,
-  RARITY_META,
   space,
   stroke,
   tabular,
@@ -49,6 +50,7 @@ import { catalogueTwin, isCustomId, ownTwin, shortQuery, toDrink } from '@/lib/c
 import { styleLabel } from '@/lib/drinkLabels';
 import { fold, MAX_RESULTS, rank, rankCustom, SEARCH_INDEX } from '@/lib/drinkSearch';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
+import { STORY_MUSIC } from '@/lib/music';
 import {
   customPhotoUri,
   NOTE_MAX,
@@ -65,16 +67,16 @@ import { useCelebrate } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
 import { customDrinkById, useCustomDrinks } from '@/store/customDrinks';
 import { useSocial } from '@/store/social';
-import type { CustomDrink, Drink } from '@/types';
+import type { CustomDrink, Drink, Song } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
 /* ==================================================================== */
-/* Log a pour                                                           */
+/* Post a drink                                                         */
 /*                                                                      */
 /* The centre action's destination: photograph first, then say what it  */
 /* was.                                                                 */
 /*                                                                      */
-/* That order is the whole point of this screen existing. Logging from  */
+/* That order is the whole point of this screen existing. Posting from  */
 /* a Dex entry means you already know what you drank and have gone      */
 /* looking for it — fine at home, useless at a bar with a glass in      */
 /* front of you and no idea what the barman called it. Here the         */
@@ -89,10 +91,17 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* A drink the Dex does not have can be added from here (add-drink):    */
 /* the search offers it when nothing found has the name typed, the form */
 /* takes this sheet's photo along, and the drink comes back selected.   */
-/* A pour of a drink someone added is kept in their Dex, not posted:    */
+/* A photo of a drink someone added is kept in their Dex, not posted:   */
 /* followers' phones look drinks up in the catalogue, which does not    */
 /* have it until Sipply adds it.                                        */
+/*                                                                      */
+/* With story music on (EXPO_PUBLIC_STORY_MUSIC), a post can carry a    */
+/* song for its story: "Add music" in the save bar opens the picker     */
+/* (components/MusicPicker), and the song goes with Save & post only.   */
 /* ==================================================================== */
+
+/** Story music is on: "Add music" and its picker exist at all. */
+const MUSIC_ON = STORY_MUSIC !== 'off';
 
 /*
  * A denial is always the camera (the library needs no permission), and
@@ -202,8 +211,8 @@ const STACK_SCALE = 1.1;
 
 /**
  * One result, as a row of the grouped results list: the drink mounted as a
- * lit thumbnail, its name in Playfair, its number, style and tier, and at
- * the end what it is to you.
+ * lit thumbnail, its name in Playfair, its number and style, and at the
+ * end what it is to you.
  *
  * Lit for every drink, collected or not: this is where you identify what
  * you drank, and a ghost would hide the picture you are matching. The name
@@ -232,7 +241,7 @@ function DrinkRow({
 }: {
   drink: Drink;
   selected: boolean;
-  /** Already logged, so saving it again updates rather than adds. */
+  /** Already in the Dex, so saving it again updates rather than adds. */
   collected: boolean;
   /** The drink's own photo (a drink someone added), drawn ahead of any stock one. */
   photoUri?: string | null;
@@ -266,7 +275,6 @@ function DrinkRow({
   const measure = stacked ? below : beside;
 
   const styleWord = styleLabel(drink.subcategory);
-  const tier = RARITY_META[drink.rarity];
   /*
    * Spoken as a plain number. The Dex prints it padded, "#0042", which
    * VoiceOver reads out zero by zero; the padding is for the eye, and
@@ -282,7 +290,6 @@ function DrinkRow({
         drink.name,
         `number ${drink.dexNumber}`,
         styleWord,
-        tier.label.toLowerCase(),
         collected ? 'in your Dex' : 'new to your Dex',
       ]
         .filter(Boolean)
@@ -311,9 +318,9 @@ function DrinkRow({
       <View style={styles.rowText}>
         <DrinkName name={drink.name} role={textRole.rowName} measure={measure} cap={NAME_CAP} color={colors.text} />
         {/*
-          "#0127 · Spirit-forward · Common": the number in the plate's
-          taupe, the tier in its own ink. A drink someone added has neither,
-          so it keeps its style and where it is from.
+          "#0127 · Spirit-forward": the number in the plate's taupe. A drink
+          someone added has no number, so it keeps its style and where it
+          is from.
         */}
         {badge ? (
           <Text style={styles.rowMeta}>{[styleWord, drink.origin].filter(Boolean).join(' · ')}</Text>
@@ -321,8 +328,6 @@ function DrinkRow({
           <Text style={styles.rowMeta}>
             <Text style={styles.rowNumber}>{formatDexNumber(drink.dexNumber)}</Text>
             {styleWord ? ` · ${styleWord}` : ''}
-            {' · '}
-            <Text style={{ color: tier.color }}>{tier.label}</Text>
           </Text>
         )}
         {stacked ? <View style={styles.rowStatusStacked}>{status}</View> : null}
@@ -369,12 +374,12 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
 /**
  * What saving a new catch will do, said before it happens: the drink
  * seated in the lining as the mount it is about to become, "Negroni joins
- * your Dex", and the card it will be, "39 of 2,089 collected · #0127 ·
- * Common". The collect moment's final state, drawn static: nothing here
- * moves, so there is no state in which it is half shown.
+ * your Dex", and the card it will be, "39 of 2,089 collected · #0127".
+ * The collect moment's final state, drawn static: nothing here moves, so
+ * there is no state in which it is half shown.
  *
- * The thumbnail carries this pour's photo once there is one, since the Dex
- * card will show your pour ahead of the catalogue's.
+ * The thumbnail carries this photo once there is one, since the Dex card
+ * will show yours ahead of the catalogue's.
  *
  * Inter, with only the name in Playfair (nameInline): a sentence that
  * names a drink is not a drink name. One VoiceOver element.
@@ -389,13 +394,12 @@ function CollectPreview({
   number: number;
   photoUri: string | null;
 }) {
-  const tier = RARITY_META[drink.rarity].label;
   const count = `${formatCount(number)} of ${formatCount(TOTAL)} collected`;
   return (
     <LiningBand radius={12} style={styles.preview}>
       <View
         accessible
-        accessibilityLabel={`${drink.name} joins your Dex. ${count}, number ${drink.dexNumber}, ${tier}.`}
+        accessibilityLabel={`${drink.name} joins your Dex. ${count}, number ${drink.dexNumber}.`}
         style={styles.previewRow}>
         <DexThumb drink={drink} photoUri={photoUri} size="mini" />
         <View style={styles.previewText}>
@@ -403,7 +407,7 @@ function CollectPreview({
             <Text style={textRole.nameInline}>{drink.name}</Text> joins your Dex
           </Text>
           <Text style={styles.previewMeta}>
-            {count} · {formatDexNumber(drink.dexNumber)} · {tier}
+            {count} · {formatDexNumber(drink.dexNumber)}
           </Text>
         </View>
       </View>
@@ -413,16 +417,16 @@ function CollectPreview({
 
 /* -------------------------------------------------------------------- */
 
-export default function LogPourScreen() {
+export default function PostDrinkScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const navigation = useNavigation();
 
   /*
    * `/log?drink=<id>` opens with that drink chosen: a Dex entry's or a
-   * custom drink's "Log this drink" and "Update photo". Only the photo is
-   * left to do, so a drink chosen this way does not count as work to
-   * discard on the way out (see `dirty`).
+   * custom drink's pinned "Post this drink" or "Post another". Only the
+   * photo is left to do, so a drink chosen this way does not count as work
+   * to discard on the way out (see `dirty`).
    */
   const params = useLocalSearchParams<{ drink?: string }>();
   const preselectId = typeof params.drink === 'string' ? params.drink : null;
@@ -442,12 +446,16 @@ export default function LogPourScreen() {
   const [photoFrom, setPhotoFrom] = useState<'camera' | 'library'>('camera');
   const [drink, setDrink] = useState<Drink | null>(() => resolveDrink(preselectId));
   const [query, setQuery] = useState('');
+  /** The caption. Still `note` in code: the Dex entry's field (UnlockRecord.note) keeps that name. */
   const [note, setNote] = useState('');
-  /** Said under the note when the caption would be refused. */
+  /** Said under the caption when it would be refused. */
   const [noteError, setNoteError] = useState<string | null>(null);
+  /** The song for this photo's story, sent with Save & post only. Never set while music is off. */
+  const [song, setSong] = useState<Song | null>(null);
+  const [pickingMusic, setPickingMusic] = useState(false);
   /** Which button is saving, so only that one says so. */
   const [savingAs, setSavingAs] = useState<'dex' | 'post' | null>(null);
-  /** Once the pour is saved: whether it went in new or as a re-log. */
+  /** Once the photo is saved: whether it went in new or as a re-log. */
   const [saved, setSaved] = useState<'new' | 'relog' | null>(null);
   const busy = savingAs !== null;
   const trimmed = query.trim();
@@ -463,12 +471,12 @@ export default function LogPourScreen() {
    * "Save to Dex" used to read as adding.
    *
    * In the drink card's words, because it is the drink card's act: that
-   * card's Update photo sheet commits with "Save photo", and so does this
-   * button. It behaves the same way too — a post of the entry, if there is
+   * card's sheet for posting it again commits with "Save photo", and so
+   * does this button. It behaves the same way too — a post of the entry, if there is
    * one, takes the new photo, and none is created (see save()).
    *
    * After the save it is read from what the save was, not from the
-   * stores. By then every drink on this sheet has a pour, so re-reading
+   * stores. By then the drink just saved is in them, so re-reading
    * would flip a new entry's button to "Save photo", and its hint to a
    * re-log's, under its celebration.
    */
@@ -483,7 +491,7 @@ export default function LogPourScreen() {
   /*
    * This screen closes itself only once there is nothing left to show.
    *
-   * It used to call router.back() the instant the pour was saved, which
+   * It used to call router.back() the instant the photo was saved, which
    * put the celebration in an impossible position: this is a native-stack
    * MODAL, presented by iOS in its own view controller above the React
    * root, so the overlay mounted beside <Stack> renders underneath it and
@@ -493,7 +501,7 @@ export default function LogPourScreen() {
    * So the sheet stays, renders the celebration itself — same tree, no
    * cross-window layering to reason about — and leaves when the queue is
    * empty. Both this instance and the root one read the same queue, and a
-   * dismissal pops it once, so the card can never appear twice. A pour of
+   * dismissal pops it once, so the card can never appear twice. A photo of
    * a drink someone added raises no celebration, so it leaves at once.
    */
   const pending = useCelebrate((s) => s.queue.length);
@@ -538,7 +546,7 @@ export default function LogPourScreen() {
   /*
    * The add-a-drink form, named after the search. It takes this sheet's
    * photo along (setSeed), as a copy: the photo stays here too, ready to
-   * save as the pour once the drink comes back selected.
+   * save once the drink comes back selected.
    */
   const openAdd = useCallback(() => {
     Keyboard.dismiss();
@@ -565,6 +573,12 @@ export default function LogPourScreen() {
   );
 
   /*
+   * The music picker closes when this sheet loses focus, and its preview
+   * stops with it (MusicPicker stops on close and on blur).
+   */
+  useFocusEffect(useCallback(() => () => setPickingMusic(false), []));
+
+  /*
    * What `disabled` means on the two save buttons: nothing to save yet,
    * or already saved. A save in progress is not in it. That state is
    * the pressed button's spinner, and dimming its neighbour for the same
@@ -576,6 +590,18 @@ export default function LogPourScreen() {
    * celebration and the sheet takes a moment to slide away.
    */
   const canSave = photoUri != null && drink != null && !saved;
+  /** This sheet can post: a photo and a drink, signed in, a catalogue drink. */
+  const postable = photoUri != null && drink != null && !!myId && !isCustom;
+  /** Save & post can be pressed. */
+  const canPost = postable && !saved;
+  /*
+   * "Add music" shows wherever Save & post is enabled, and nowhere else:
+   * a song is only ever sent with a post, so it is never offered where the
+   * sheet cannot post (signed out, a drink you added). After the save it
+   * stays, dimmed with the two buttons, so the bar does not jump shorter
+   * while the sheet slides away.
+   */
+  const offerMusic = MUSIC_ON && postable;
 
   /*
    * One line under the buttons, once there is something to save, and only
@@ -587,7 +613,7 @@ export default function LogPourScreen() {
    * new photo goes, in the drink card's words for the same act, since
    * "Save photo" can change a post it does not name.
    */
-  const saveHint =
+  const reason =
     photoUri == null || drink == null
       ? null
       : isCustom
@@ -597,6 +623,13 @@ export default function LogPourScreen() {
           : relog
             ? 'If you shared this entry, the post gets the new photo too.'
             : null;
+  /*
+   * With a song chosen, and nothing above needing the line, it says how
+   * long the song lasts: it belongs to this photo's story, not the post.
+   * Said once, here, not again by the song row.
+   */
+  const saveHint =
+    reason ?? (offerMusic && song ? "Music plays with this photo's story for a day." : null);
 
   const onNoteChange = useCallback((text: string) => {
     setNote(text);
@@ -615,11 +648,11 @@ export default function LogPourScreen() {
       const trimmedNote = note.trim();
 
       /*
-       * A drink someone added: the pour goes to their own store, beside
+       * A drink someone added: the photo goes to their own store, beside
        * the drink, never into the collection. It does not move the Dex's
-       * count, and there is no number or rarity to celebrate, so nothing
-       * plays. It cannot be posted (the button is off), and the note is
-       * never a caption, so it is not checked as one.
+       * count, and there is no number to celebrate, so nothing plays. It
+       * cannot be posted (the button is off), so the caption is never
+       * shown to anyone and is not checked.
        */
       if (isCustom) {
         if (alsoPost) return;
@@ -638,10 +671,10 @@ export default function LogPourScreen() {
       }
 
       /*
-       * The note only becomes a caption when it is posted, so only a post
-       * is checked. The server has the final word — its trigger rejects the
-       * caption whatever this says — but catching it here keeps the message
-       * next to the field, before anything has been saved.
+       * The caption is only seen by others when it is posted, so only a
+       * post is checked. The server has the final word — its trigger
+       * rejects the caption whatever this says — but catching it here
+       * keeps the message next to the field, before anything is saved.
        */
       if (alsoPost && trimmedNote.length > 0 && containsObjectionable(trimmedNote)) {
         setNoteError(OBJECTIONABLE_MESSAGE);
@@ -664,7 +697,7 @@ export default function LogPourScreen() {
          * Only the sharing half needs an account. The collection is local,
          * so a signed-out user still gets their entry.
          *
-         * Not awaited. The pour is saved and celebrated the moment it is
+         * Not awaited. The drink is saved and celebrated the moment it is
          * local; uploading the photo can take seconds on a bar's signal,
          * and holding the sheet open on a spinning button for that long
          * after the card is dismissed made a finished task look stuck. What
@@ -672,18 +705,22 @@ export default function LogPourScreen() {
          * known.
          *
          * A re-log goes through the same call: addPost adds the photo to
-         * the post that already exists and keeps its caption, which a note
-         * only fills if it was blank. No note means no caption, not a
-         * filler line — the post already says what was logged.
+         * the post that already exists and keeps its caption, which this
+         * one only fills if it was blank. No caption typed means none, not
+         * a filler line — the post already says what was drunk.
+         *
+         * The song rides on Save & post alone: it goes on this photo's row
+         * (lib/social createPost), so the story plays it for a day. Save to
+         * Dex and Save photo never send one; a private entry has no story.
          *
          * A re-log kept off the feed ("Save photo") still keeps a post in
-         * step, as the drink card's Update photo does: a post left showing
+         * step, as the drink card's Save photo does: a post left showing
          * the replaced picture is the entry contradicting itself. It never
          * creates one, so an entry kept to the Dex stays there. Not awaited
          * either; a failure arrives as a notice, as a post's does.
          */
         if (alsoPost && myId) {
-          void addPost(myId, drink.id, trimmedNote, uri).then(reportPost);
+          void addPost(myId, drink.id, trimmedNote, uri, MUSIC_ON ? song : null).then(reportPost);
         } else if (relog && myId) {
           void addPhotoForDrink(myId, drink.id, uri).then(reportPostPhoto);
         }
@@ -703,6 +740,7 @@ export default function LogPourScreen() {
       relog,
       note,
       noteError,
+      song,
       unlock,
       myId,
       addPost,
@@ -721,7 +759,7 @@ export default function LogPourScreen() {
    * in the picker's cache until it is saved — one stray swipe down on the
    * list used to throw all of it away. An empty sheet still leaves on the
    * first swipe, which keeps the gesture meaning "never mind"; so does one
-   * that only holds the drink it was opened for.
+   * that only holds the drink it was opened for. A chosen song is work too.
    *
    * This catches the swipe and Cancel alike, since both go through the
    * navigator. The post-save close is not held up: `saved` is already
@@ -730,11 +768,14 @@ export default function LogPourScreen() {
    */
   const dirty =
     !saved &&
-    (photoUri != null || (drink != null && drink.id !== preselectId) || note.trim().length > 0);
+    (photoUri != null ||
+      (drink != null && drink.id !== preselectId) ||
+      note.trim().length > 0 ||
+      song != null);
   usePreventRemove(dirty, ({ data }) => {
     if (busy) return;
     confirmDestructive(
-      'Discard this pour?',
+      'Discard this post?',
       'Nothing on this screen has been saved yet.',
       'Discard',
       () => navigation.dispatch(data.action),
@@ -798,7 +839,7 @@ export default function LogPourScreen() {
 
         It used to be the frame itself that took a photo, with the library
         as a text link below — which made the camera the only obvious way
-        in and hid the fact that a pour already in your roll works just as
+        in and hid the fact that a photo already in your roll works just as
         well. Half the time the drink was photographed before anyone
         thought to open Sipply, so the two routes are peers rather than a
         button and a footnote.
@@ -866,8 +907,8 @@ export default function LogPourScreen() {
 
           {/*
             The drink card's two labels, Take photo and Choose photo, as on
-            its Update photo sheet; "Camera roll" was a third name for the
-            library. One app names the two routes once.
+            its sheet for posting it again; "Camera roll" was a third name
+            for the library. One app names the two routes once.
           */}
           <View style={styles.photoActions}>
             <Button
@@ -909,7 +950,7 @@ export default function LogPourScreen() {
       {/*
         The choice stays in view whatever is typed next. It used to show only
         while the search was empty, so searching again to compare hid the
-        drink that Save would still log.
+        drink that Save would still use.
       */}
       {drink && selectedApart ? (
         <View style={styles.selectedBlock}>
@@ -978,13 +1019,13 @@ export default function LogPourScreen() {
         The app's one top bar. No status-bar inset on iOS: the page sheet
         starts below the status bar, and the root's inset added inside it
         left a blank band above the bar. Android presents the modal full
-        screen and does need it. "Log", the word the tab bar and the drink
-        card use for this act. The rule is always drawn: a sheet's bar sits
-        over a list from the start. Save stays in the bottom bar, where the
-        thumb is.
+        screen and does need it. "Post a drink", the words the tab bar and
+        the home bar use for this act. The rule is always drawn: a sheet's
+        bar sits over a list from the start. Save stays in the bottom bar,
+        where the thumb is.
       */}
       <ScreenTopBar
-        title="Log a pour"
+        title="Post a drink"
         size="md"
         inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
         showRule
@@ -1049,16 +1090,76 @@ export default function LogPourScreen() {
       {/* ---- Save ---- */}
       <View style={[styles.saveBar, { paddingBottom: insets.bottom + space.md }]}>
         {/*
+          Music, above the caption, only where the sheet can post.
+          No song: one small button. A song: its cover, title and artist,
+          and Remove. No preview plays here; the picker is where a song is
+          auditioned, beside its Apple Music link.
+        */}
+        {offerMusic ? (
+          song ? (
+            <View style={styles.songRow}>
+              <View
+                accessible
+                accessibilityLabel={`Music, ${song.title} by ${song.artist}`}
+                style={styles.songInfo}>
+                <SongArtwork url={song.artworkUrl} size={32} />
+                {/*
+                  Uncapped, like the caption and buttons beside it: the bar
+                  is not a fixed frame. One line each keeps it bounded.
+                */}
+                <View style={styles.songText}>
+                  <Text numberOfLines={1} style={styles.songTitle}>
+                    {song.title}
+                  </Text>
+                  <Text numberOfLines={1} style={styles.songArtist}>
+                    {song.artist}
+                  </Text>
+                </View>
+              </View>
+              {/*
+                Not during a save: save() has already read the song, so a
+                Remove mid-save would say "removed" and post it anyway.
+              */}
+              <Button
+                label="Remove"
+                variant="text"
+                size="sm"
+                disabled={!!saved}
+                onPress={() => {
+                  if (busy || saved) return;
+                  setSong(null);
+                  announce('Music removed');
+                }}
+                accessibilityLabel={`Remove ${song.title}`}
+              />
+            </View>
+          ) : (
+            <Button
+              label="Add music"
+              variant="secondary"
+              size="sm"
+              icon="music"
+              disabled={!!saved}
+              onPress={() => {
+                if (busy || saved) return;
+                Keyboard.dismiss();
+                setPickingMusic(true);
+              }}
+              style={styles.addMusic}
+            />
+          )
+        ) : null}
+        {/*
           The app's one form input, with the same label, prompt, cap and
-          props as the note on the drink card's sheet, so the one note is
-          asked for one way from both doors. A visible label, not only a
-          placeholder: the placeholder is gone the moment anything is
-          typed, and with it the only sign that the note is optional. Field
-          links a refused caption to the input and speaks it when it
-          appears. Prose, so capitals and autocorrect are on.
+          props as the caption on the drink card's sheet, so the one
+          caption is asked for one way from both doors. A visible label,
+          not only a placeholder: the placeholder is gone the moment
+          anything is typed, and with it the only sign that the caption is
+          optional. Field links a refused caption to the input and speaks
+          it when it appears. Prose, so capitals and autocorrect are on.
         */}
         <Field
-          label="Note (optional)"
+          label="Add a caption"
           value={note}
           onChangeText={onNoteChange}
           placeholder="Where you had it, what you thought"
@@ -1067,14 +1168,14 @@ export default function LogPourScreen() {
           autoCorrect
           returnKeyType="done"
           error={noteError}
-          accessibilityLabel="Note, optional"
+          accessibilityLabel="Caption, optional"
         />
         {/*
           The same pair, in the same order, as the sheet on a Dex card.
           Only the pressed one shows it is working. The other keeps its
           look, and save() ignores it until the first has finished (see
-          canSave). A saved pour answers with the success haptic; buttons
-          do not tick.
+          canSave). A save answers with the success haptic; buttons do not
+          tick.
         */}
         <View style={styles.saveRow}>
           <Button
@@ -1088,7 +1189,7 @@ export default function LogPourScreen() {
           <Button
             label="Save & post"
             onPress={() => void save(true)}
-            disabled={!canSave || !myId || isCustom}
+            disabled={!canPost}
             loading={savingAs === 'post'}
             style={styles.saveBtn}
           />
@@ -1099,9 +1200,22 @@ export default function LogPourScreen() {
       {/*
         Rendered here as well as at the root. While this sheet is up it is
         the only one that can be seen; once it closes, the root instance
-        covers every other way a pour gets logged.
+        covers every other way a drink is collected.
       */}
       <CelebrationOverlay />
+
+      {/* Only while story music is on; it presents itself over this sheet. */}
+      {MUSIC_ON ? (
+        <MusicPicker
+          visible={pickingMusic}
+          onClose={() => setPickingMusic(false)}
+          onChoose={(picked) => {
+            setSong(picked);
+            setPickingMusic(false);
+            announce(`Music added, ${picked.title} by ${picked.artist}`);
+          }}
+        />
+      ) : null}
     </KeyboardAvoidingView>
   );
 }
@@ -1281,6 +1395,13 @@ const styles = StyleSheet.create({
     borderTopColor: colors.line,
     backgroundColor: colors.surface,
   },
+  /* Music: the button keeps its own width; a song is a 32pt cover, two lines and Remove. */
+  addMusic: { alignSelf: 'flex-start' },
+  songRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  songInfo: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md },
+  songText: { flex: 1 },
+  songTitle: { fontFamily: fonts.bodySemiBold, fontSize: 14, lineHeight: 18, color: colors.text },
+  songArtist: { ...textRole.helper, color: colors.textMuted },
   saveRow: { flexDirection: 'row', gap: space.md },
   saveBtn: { flex: 1 },
   saveHint: {

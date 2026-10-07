@@ -190,7 +190,7 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
       <EmptyState
         art={<EmptyArt drinkId="paper-plane" mode="ghost" />}
         title="Nothing saved yet"
-        body="Save a pour to hunt it down later."
+        body="Save a post to hunt the drink down later."
       />
     );
 

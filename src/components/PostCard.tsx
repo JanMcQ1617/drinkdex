@@ -28,10 +28,10 @@ import Animated, {
 
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Icon, type IconName } from '@/components/icons';
-import { MediaMarker, Nameplate, RarityRule } from '@/components/media';
+import { MediaMarker, Nameplate } from '@/components/media';
 import { Avatar, haptic } from '@/components/ui';
 import { colors, fonts, layout, motion, space, textRole } from '@/constants/theme';
-import { getDrink, formatDexNumber } from '@/data';
+import { getDrink } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { glassPhrase, styleLabel } from '@/lib/drinkLabels';
 import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
@@ -68,7 +68,7 @@ function elapsed(iso: string): { n: number; unit: 'minute' | 'hour' | 'day' | 'w
   return { n: Math.floor(d / 7), unit: 'week' };
 }
 
-/** "2h" / "3d" style relative timestamp, for tight spots: a post's author row, the pours viewer's header, Activity rows. */
+/** "2h" / "3d" style relative timestamp, for tight spots: a post's author row, the story viewer's header, Activity rows. */
 export function timeAgo(iso: string): string {
   const t = elapsed(iso);
   return t ? `${t.n}${t.unit[0]}` : 'now';
@@ -443,12 +443,15 @@ export const PostCard = React.memo(function PostCard({
     }, DOUBLE_TAP_MS);
   };
 
+  /*
+   * The paper airplane, and the menu's Share: the system share sheet with
+   * one line of text. It says the act ("posted"), not the Dex number: the
+   * number means something only inside the app.
+   */
   const share = useCallback(() => {
     if (!drink) return;
     Share.share({
-      message: `${who.displayName} logged ${drink.name} ${formatDexNumber(
-        drink.dexNumber,
-      )} on Sipply.`,
+      message: `${who.displayName} posted ${drink.name} on Sipply.`,
     }).catch(() => {
       /* dismissed, or unsupported off-device */
     });
@@ -642,9 +645,9 @@ export const PostCard = React.memo(function PostCard({
     <View style={styles.card}>
       {/*
         ---- Author row ----
-        Who poured it, and when. The drink is no longer named here: the
-        nameplate on the photo names it, in Playfair, with its number and
-        tier. The username opens their profile, with the avatar as a second
+        Who posted it, and when. The drink is no longer named here: the
+        nameplate on the photo names it, in Playfair, with its number. The
+        username opens their profile, with the avatar as a second
         way in that VoiceOver skips (the name beside it does the same
         thing). The short "· 2h" is for the eye; VoiceOver hears the time
         in words at the foot of the post.
@@ -704,18 +707,18 @@ export const PostCard = React.memo(function PostCard({
       </View>
 
       {/*
-        ---- The pour ----
+        ---- The photo ----
         Full bleed, square-cornered, 4:5. One Pressable covers it, for the
         page turn and the double-tap like; nothing else is nested in it, so
         VoiceOver reads it as one element: the photo, or on a gallery the
         button that turns the page. Liking is always the heart below as
         well; the double tap is a shortcut, never the only way.
 
-        The nameplate, the rarity rule and the gallery count are SIBLINGS
-        laid over it, outside that Pressable: the nameplate passes every tap
-        that misses its name and status plaque down to the photo (its frame
-        is box-none), and VoiceOver reads it after the photo, as its own
-        button and then the plaque.
+        The nameplate and the gallery count are SIBLINGS laid over it,
+        outside that Pressable: the nameplate passes every tap that misses
+        its name and status plaque down to the photo (its frame is
+        box-none), and VoiceOver reads it after the photo, as its own button
+        and then the plaque.
       */}
       <View style={styles.media}>
         <Pressable
@@ -756,13 +759,10 @@ export const PostCard = React.memo(function PostCard({
         <Nameplate
           name={drink.name}
           number={drink.dexNumber}
-          rarity={drink.rarity}
           meta={meta}
           inDex={inDex}
           onOpen={() => onOpenDrink(drink.id)}
         />
-        {/* Last, so the tier's line runs along the very foot, over the scrim. */}
-        <RarityRule rarity={drink.rarity} />
         {hasGallery ? (
           /*
            * Tap-to-advance rather than a swipe: this card already sits in a
@@ -782,8 +782,11 @@ export const PostCard = React.memo(function PostCard({
         ---- Actions ----
         Like and share on the left, save on the right, and nothing that only
         looks like a control: there is no comment glyph, because there is no
-        thread to open. The bookmark is real (the saves table and the Saved
-        screen behind it), so it shows only where the server has that table.
+        thread to open. Share is the paper airplane (`send`, Sipply's own
+        drawing): sending a post on, where the system's `share` glyph stays
+        for sharing a link (Find friends' invite). The bookmark is real (the
+        saves table and the Saved screen behind it), so it shows only where
+        the server has that table.
       */}
       <View style={styles.actions}>
         <IconButton
@@ -794,7 +797,7 @@ export const PostCard = React.memo(function PostCard({
           selected={liked}
           color={liked ? colors.wine : colors.text}
         />
-        <IconButton name="share" label="Share this pour" onPress={share} />
+        <IconButton name="send" label="Share this post" onPress={share} />
         <View style={styles.actionsSpacer} />
         {canSave ? (
           <IconButton

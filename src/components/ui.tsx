@@ -35,7 +35,6 @@ import {
   layout,
   motion,
   radius,
-  RARITY_META,
   space,
   stroke,
   tabular,
@@ -44,7 +43,7 @@ import {
 } from '@/constants/theme';
 import { formatCount } from '@/data';
 import { peekSignedPhoto, signedPhotoUrl } from '@/lib/social';
-import type { DrinkCategory, Rarity } from '@/types';
+import type { DrinkCategory } from '@/types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -278,7 +277,7 @@ export interface ButtonProps {
   accessibilityState?: AccessibilityState;
   /**
    * Caps the label's Dynamic Type growth, for a button pinned to a bar that
-   * must not grow without bound (the drink page's "Log another …", 1.3).
+   * must not grow without bound (the drink page's "Post another …", 1.3).
    * Uncapped by default, like any body text. The label still wraps.
    */
   maxFontSizeMultiplier?: number;
@@ -571,20 +570,6 @@ export function MediaIconButton({
  * in the tone at a third strength over its wash. The pills these replace
  * were the most repeated oval in the app.
  */
-
-export function RarityBadge({ rarity, compact }: { rarity: Rarity; compact?: boolean }) {
-  const meta = RARITY_META[rarity];
-  return (
-    <View style={[styles.tag, { backgroundColor: meta.wash, borderColor: meta.color + '55' }]}>
-      {rarity === 'legendary' && !compact ? (
-        <Icon name="sparkle" size={11} color={meta.color} filled />
-      ) : (
-        <View style={[styles.dot, { backgroundColor: meta.color }]} />
-      )}
-      {!compact && <Text style={[styles.tagText, { color: meta.color }]}>{meta.label}</Text>}
-    </View>
-  );
-}
 
 export function CategoryTag({ category }: { category: DrinkCategory }) {
   const meta = CATEGORY_META[category];
@@ -943,8 +928,8 @@ export function SectionHeader({
  * elevation and are not Cards.
  *
  * `surface="mat"` is bone card stock (colors.mat) instead of white: the
- * drink page's spec card and the Stats tier plates, where the card is a
- * printed object rather than a panel. The edge is the same `line`; the one
+ * drink page's spec card, where the card is a printed object rather than
+ * a panel. The edge is the same `line`; the one
  * mat card that lies on the cellar ground adds `elevation.paper` itself.
  */
 export function Card({
@@ -2322,8 +2307,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   tagNeutral: { backgroundColor: colors.cardAlt, borderColor: colors.line },
-  // round-ok: dot
-  dot: { width: 6, height: 6, borderRadius: radius.round },
   tagText: { fontFamily: fonts.bodyMedium, ...typeScale.tag },
 
   /* Chip */

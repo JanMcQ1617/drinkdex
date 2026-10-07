@@ -164,20 +164,21 @@ export default function RootLayout() {
         {/*
           Stats. It was a tab; it is a report on the Dex rather than a place
           visited every day, so it left the bar and pushes from the Dex's
-          top bar. Edge swipe only: its rarest-entry row and the Dex button
-          are tappable, and a full-width back gesture would fire on a
-          mistimed tap at either.
+          top bar. Edge swipe only: its rows and the Dex button are
+          tappable, and a full-width back gesture would fire on a mistimed
+          tap at either.
         */}
         <Stack.Screen name="stats" options={{ gestureDirection: 'horizontal' }} />
         {/*
           user/[id], a person's profile, is not listed on purpose: the stack
           defaults are all it needs — a push, so Back returns to whatever
           opened it, with the standard edge swipe. An entry here would only
-          repeat them. The same goes for activity, post/[id], saved and
-          connections/[id], which are plain pushes too.
+          repeat them. The same goes for activity, post/[id], saved,
+          connections/[id], tournaments/index and tournaments/[id], which
+          are plain pushes too.
         */}
         {/*
-          Logging a pour. A modal, not a push: it is a task you complete or
+          Posting a drink. A modal, not a push: it is a task you complete or
           abandon, and the sheet's downward dismiss is the gesture that
           matches "never mind" — a back-chevron would imply it is a place
           you can wander out of half-finished.
@@ -196,7 +197,7 @@ export default function RootLayout() {
           options={{ presentation: 'modal', gestureDirection: 'vertical' }}
         />
         {/*
-          Adding a drink the Dex does not have. A task, like logging, so a
+          Adding a drink the Dex does not have. A task, like posting, so a
           modal for the same reason: the downward dismiss means "never mind".
         */}
         <Stack.Screen
@@ -222,13 +223,11 @@ export default function RootLayout() {
         */}
         <Stack.Screen name="blocked" options={{ gestureDirection: 'horizontal' }} />
         <Stack.Screen name="find-friends" options={{ gestureDirection: 'horizontal' }} />
-        {/*
-          My Bar. Pushes for the same reason Settings does — somewhere you go
-          and come back from, and it pushes drink cards of its own. Edge-swipe
-          only rather than full-width: the shelf is rows of wrapped chips and
-          a full-width back gesture would fire on a mistimed tap at them.
-        */}
-        <Stack.Screen name="bar" options={{ gestureDirection: 'horizontal' }} />
+        {/* Hosting a tournament: a task, like posting, so a modal. */}
+        <Stack.Screen
+          name="tournaments/new"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
         {/*
           Editing, on the other hand, is a task — modal, so the downward
           dismiss reads as "never mind" and the Cancel in its bar means the
@@ -287,8 +286,8 @@ export default function RootLayout() {
       */}
       <PasswordResetOverlay />
       {/*
-        Celebrations. Above the Stack so a catch logged from the tab bar's
-        modal and one logged from a Dex card land on the same surface, and
+        Celebrations. Above the Stack so a catch posted from the tab bar's
+        modal and one posted from a Dex card land on the same surface, and
         below the intro so a cold start never stacks the two.
       */}
       <CelebrationOverlay />

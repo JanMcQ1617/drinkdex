@@ -89,7 +89,7 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*                                                                      */
 /* When a search finds nothing, the person can add the drink. It goes   */
 /* into their own Dex the moment they save (store/customDrinks), so a   */
-/* pour can be logged against it at once, and it goes to Sipply as a    */
+/* photo of it can be saved at once, and it goes to Sipply as a         */
 /* suggestion (lib/submissions), which reaches Jan once a month already */
 /* in the catalogue's entry shape.                                      */
 /*                                                                      */
@@ -373,7 +373,7 @@ const SIMILAR_NAME_CAP = 1.4;
  * it. Not a panel, as the log sheet's results are: three rows under a
  * field are part of the form, so they run edge to edge with a fill that
  * answers the press and does not stop short of the sheet. From the log
- * sheet a row picks that drink for the pour ("Use this"); from the Dex it
+ * sheet a row picks that drink for the photo ("Use this"); from the Dex it
  * opens it ("Open").
  *
  * `width` is the sheet's: the name's measure is worked out from it, since
@@ -419,7 +419,7 @@ function SimilarInDex({
             onPress={() => onPick(d.id)}
             accessibilityRole="button"
             accessibilityLabel={[d.name, style].filter(Boolean).join(', ')}
-            accessibilityHint={action === 'Use this' ? 'Logs this drink instead' : 'Opens it in the Dex'}
+            accessibilityHint={action === 'Use this' ? 'Uses this drink instead' : 'Opens it in the Dex'}
             style={({ pressed }) => [styles.similarRow, pressed && styles.similarPressed]}>
             <DexThumb drink={d} />
             <View style={styles.similarText}>
@@ -1438,7 +1438,7 @@ function AddDrinkForm({
               )}
             </View>
             {form.photo?.kind === 'new' && form.photo.seeded ? (
-              <Hint>Your pour photo. Remove it if you&apos;d rather not send it.</Hint>
+              <Hint>Your photo of it. Remove it if you&apos;d rather not send it.</Hint>
             ) : null}
             <View style={styles.photoActions}>
               <Button

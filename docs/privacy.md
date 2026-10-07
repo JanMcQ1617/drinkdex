@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 1 October 2026**
+**Last updated: 6 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -83,8 +83,39 @@ Each part is used for one thing:
 profile photo, and an accent colour. All of these are visible to anyone
 signed in to Sipply.
 
-**Posts.** When you log a drink you may share it as a post, with a caption
-and your photo. Posts are visible to anyone signed in to Sipply.
+**Posts.** When you add a drink to your Dex you may share it as a post,
+with a caption and your photo. Posts are visible to anyone signed in to
+Sipply.
+
+**Tournaments (only if you host or join one).** Its name, dates and goal,
+who hosts it, who was invited and whether they joined, and the standings,
+with the time zone of the host's phone, which decides when each day starts
+for the limit of three new drinks a day. Standings are worked out on our
+server from the posts members share during the tournament: each different
+drink counts once, never how much anyone drinks. The host, its members and
+the people invited to it can see its name, who is in it and the standings;
+nobody else can, and nobody you have blocked or who has blocked you is
+shown to you. Results are kept when it ends. Deleting your account deletes
+the tournaments you host and your place in others.
+
+**Music on a post (only if you add it).** The song you choose is stored
+with that photo: its title, artist and Apple Music catalogue number, which
+country's Apple Music it came from, the link to it in Apple Music, and the
+addresses of its cover art and preview. It is shown with your post's story
+to anyone who can see the post. When you search for a song, what you type
+goes to our server, with your phone's region so the results come from your
+country's catalogue, and the server asks Apple Music for matching songs
+under Sipply's developer key. Apple is not told who you are, and the search
+is not stored: the answer is held in the server's memory for ten minutes,
+with no account attached, so the same search is not asked twice. To hold
+each account to 120 searches an hour, the server counts how many you make
+in each hour, never what they were; a count stops mattering after its hour,
+and your next search a day or more later deletes it. When a song's cover
+art is shown, on a story or in search results, your phone loads it
+directly from Apple's servers, and the same goes for the 30-second preview
+when it plays, so Apple sees your IP address, like any web request.
+"Listen on Apple Music" opens Apple Music, under Apple's own privacy
+policy.
 
 **Photos.** Before a photo leaves your phone, whether for a post, for your
 profile or with a drink you add, it is re-encoded as a new image with no
@@ -101,7 +132,7 @@ suggestion: everything you filled in, the photo if you added one, and your
 username. Only you can see it in the app. On the 1st of each month the
 suggestions from the month before are emailed to the Sipply team so they
 can decide which to add to the Dex. The photo is stored in your photo
-folder like a pour photo, so the same people who can see your pour photos
+folder beside the photos you post, so the same people who can see those
 could see it. It is used only for reference and is never published.
 
 **Social graph.** Who you follow, which posts you have liked, and which
@@ -175,7 +206,7 @@ the hour it no longer counts, and the next check anyone makes deletes it.
 never on our servers, so the app works without a connection. The photos you
 take are kept on your phone too; a photo is uploaded only when you share it
 as a post, make it your profile photo or send it with a drink you add.
-Which of today's pours, and which likes and new followers, you have already
+Which of today's posts, and which likes and new followers, you have already
 seen is remembered on the phone only, so nobody is told that you looked.
 The phone number and Instagram username you give for finding friends are
 kept on the phone in readable form, because our servers hold only their
@@ -201,9 +232,10 @@ collection stays.
   Meta code.
 - **No profiling.** Nothing about you is scored or predicted. The one
   automatic check on what you write is a text filter: captions, bios,
-  display names, usernames and the drinks you add are checked when you
-  save them, and text containing a slur or an explicit sexual term is
-  refused. It refuses the text and does nothing else to your account.
+  display names, usernames, the drinks you add, tournament names and the
+  songs added to posts are checked when you save them, and text containing
+  a slur or an explicit sexual term is refused. It refuses the text and
+  does nothing else to your account.
 
 ## Who else can see it
 
@@ -231,7 +263,10 @@ each version.
 **Apple**, if you use Sign in with Apple, confirms who you are and so knows
 that you use Sipply, under Apple's own privacy policy. If you are testing
 Sipply through TestFlight, Apple also receives standard crash and
-installation information.
+installation information. If you search for a song or see one on a story,
+Apple Music serves its cover art, and its preview when you play it, to
+your phone, and our server asks Apple Music for search results, as
+described above.
 
 **Google**, if you use Continue with Google, confirms who you are and so
 knows that you use Sipply, under Google's own privacy policy. Sipply sends
@@ -263,9 +298,10 @@ Open **Profile → Settings** (the gear, top right) **→ Delete account**.
 This permanently deletes your profile and profile photo, every post you
 have made, every photo you have uploaded, your likes, your saved posts,
 your follows in both directions, your blocks, your invite links, the drinks
-you added and their photos, the hashes that make you findable, and the
-record kept for the matching limits. If you signed in with your phone
-number, it also deletes the number (Twilio keeps its own record of the
+you added and their photos, the hashes that make you findable, the
+records kept for the matching and song-search limits, and the tournaments
+you host, with your place in anyone else's. If you signed in with your
+phone number, it also deletes the number (Twilio keeps its own record of the
 texts it sent, under its own policy); if you signed in with Apple, Google or
 Facebook, it deletes the link to that account, with everything Apple,
 Google or Facebook sent when you signed in. On the phone you delete from,
@@ -323,10 +359,11 @@ correct it, or ask us to delete it. Deletion is built into the app; for
 anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
-service you asked for (your account, your posts, the drinks you add, and
-the sign-in and friend finding you choose to use) and our legitimate
-interest in keeping the app safe (reports, blocks, the text filter, the
-matching limits and the sign-in screen's limit).
+service you asked for (your account, your posts and the songs on them,
+the drinks you add, the tournaments you host or join, and the sign-in and
+friend finding you choose to use) and our legitimate interest in keeping
+the app safe (reports, blocks, the text filter, the matching limits, the
+song-search limit and the sign-in screen's limit).
 You may complain to your local data protection authority.
 
 If you are in California: we do not sell or share personal information,

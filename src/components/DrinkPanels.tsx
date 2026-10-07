@@ -16,7 +16,7 @@ import { DrinkName, LiningBand, NumberPlate, useSvgId } from '@/components/cabin
 import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { DexStatusPlaque, MediaPlaque, TopScrim } from '@/components/media';
+import { DexStatusPlaque, TopScrim } from '@/components/media';
 import { Button, Card } from '@/components/ui';
 import {
   colors,
@@ -24,7 +24,6 @@ import {
   fonts,
   layout,
   radius,
-  RARITY_META,
   space,
   stroke,
   tabular,
@@ -60,14 +59,14 @@ import type { Composition, Drink, Post, Recipe, RecipeIngredient, ServeGuide, Un
 /* already settles to that colour at its edges), the name rides over    */
 /* the dissolved foot, and the reading under it sits on the same dark   */
 /* ground, with the recipe as a paper spec card lying on it and the     */
-/* trivia as a raised band of lining.                                   */
+/* origin story as a raised band of lining.                             */
 /*                                                                      */
 /* No glyph here ever sits on photo pixels. The title block is the top  */
 /* of CellarPage, an OPAQUE cellar ground with an 80pt fade above it,   */
 /* so the inks on it are the cellar pairs check-contrast measures       */
 /* (onLining 14.47:1, onLiningMuted 7.38:1), never the over-media pairs */
 /* those inks fail. The only things over the photograph are the media   */
-/* skins: the scrims, the back button and the eyebrow's plaques.        */
+/* skins: the scrims, the back button and the eyebrow's plaque.         */
 /*                                                                      */
 /* Every panel copes with blanks, because a custom drink has them where */
 /* a catalogue entry never does (no composition summary, no steps, a    */
@@ -183,9 +182,9 @@ function Dissolve({ style }: { style: StyleProp<ViewStyle> }) {
 /**
  * What lies over the hero's picture: the top scrim under the status bar
  * and the back button, and the 200pt dissolve at its foot into the
- * cellar. Put it last inside the hero frame (after any foil), which clips
- * it. A lit catalogue photo already settles to `liningDeep` at its edges,
- * so the dissolve finishes what the bake began and there is no seam.
+ * cellar. Put it last inside the hero frame, which clips it. A lit
+ * catalogue photo already settles to `liningDeep` at its edges, so the
+ * dissolve finishes what the bake began and there is no seam.
  */
 export function HeroShade() {
   return (
@@ -230,7 +229,7 @@ function GrainRamp() {
  * it slides down BEHIND everything here, and a transparent stretch would
  * show it again further down the page.
  *
- * Its gutter is its children's: the trivia band runs full bleed.
+ * Its gutter is its children's: the origin story band runs full bleed.
  * `paddingBottom` clears the pinned bar (the route measures it).
  */
 export function CellarPage({ children, paddingBottom }: { children: React.ReactNode; paddingBottom: number }) {
@@ -248,11 +247,11 @@ export function CellarPage({ children, paddingBottom }: { children: React.ReactN
 /* Title block                                                          */
 /* ==================================================================== */
 
-/** "Added by you": a custom drink's plate, where a catalogue drink has its number and tier. */
+/** "Added by you": a custom drink's plate, where a catalogue drink has its number. */
 function AddedPlate() {
   return (
     <View style={styles.addedPlate}>
-      <Text maxFontSizeMultiplier={BAND_CAP} style={[textRole.tierWord, styles.addedText]}>
+      <Text maxFontSizeMultiplier={BAND_CAP} style={[textRole.statusWord, styles.addedText]}>
         Added by you
       </Text>
     </View>
@@ -262,12 +261,11 @@ function AddedPlate() {
 /**
  * The words that ride over the hero's foot: an eyebrow and the name.
  *
- * Eyebrow (wraps): the number plate, the tier as a solid plaque, whether
- * it is in your Dex (a statement here, not a button: you are already on
- * the drink), then the style phrase ("Spirit-forward cocktail", "American
- * whiskey"). A custom drink has none of the three plates (inventing a
- * number or a tier would say it had joined the Dex), so its eyebrow says
- * whose it is instead. One VoiceOver element.
+ * Eyebrow (wraps): the number plate, whether it is in your Dex (a
+ * statement here, not a button: you are already on the drink), then the
+ * style phrase ("Spirit-forward cocktail", "American whiskey"). A custom
+ * drink has neither plate (inventing a number would say it had joined the
+ * Dex), so its eyebrow says whose it is instead. One VoiceOver element.
  *
  * The name is Playfair at 52 through DrinkName: no line limit, and shrunk
  * only when its widest word would not fit the line ("Holunderbeergeist").
@@ -277,10 +275,9 @@ function AddedPlate() {
 export function HeroTitle({ drink, inDex, custom }: { drink: Drink; inDex: boolean; custom?: boolean }) {
   const { width } = useWindowDimensions();
   const phrase = stylePhrase(drink);
-  const tier = RARITY_META[drink.rarity].label.toLowerCase();
   const spoken = custom
     ? `Added by you. ${phrase}`
-    : `Number ${drink.dexNumber}, ${tier}, ${inDex ? 'in your Dex' : 'not in your Dex yet'}. ${phrase}`;
+    : `Number ${drink.dexNumber}, ${inDex ? 'in your Dex' : 'not in your Dex yet'}. ${phrase}`;
 
   return (
     <View style={styles.titleBlock}>
@@ -290,7 +287,6 @@ export function HeroTitle({ drink, inDex, custom }: { drink: Drink; inDex: boole
         ) : (
           <>
             <NumberPlate n={drink.dexNumber} tone="lining" />
-            <MediaPlaque rarity={drink.rarity} />
             <DexStatusPlaque inDex={inDex} name={drink.name} />
           </>
         )}
@@ -430,10 +426,10 @@ function photoCount(post: Post): number {
 }
 
 /**
- * Your pour, once you have one: the photo as a 44 x 52 print, "In your
+ * Your entry, once you have one: the photo as a 44 x 52 print, "In your
  * Dex since 14 September", and a second line that says only what is
  * true. The collection keeps one record per drink on the phone, so there
- * is no count of pours to give. "Shared · 3 photos" when your post of
+ * is no count of posts to give. "Shared · 3 photos" when your post of
  * this drink is in the feed store (and the row opens it); otherwise "Only
  * on this phone", which is where the collection lives.
  *
@@ -441,8 +437,9 @@ function photoCount(post: Post): number {
  * picture is seen. A photo whose file is gone shows the drink's mounted
  * thumbnail rather than an empty frame: the `mini` mount, the one seated
  * in the lining (matEdge and the seat; `row` is drawn for paper). The
- * failure is remembered per file, so the next pour you log is shown.
- * Your note, when you wrote one, is set under the row as reading text.
+ * failure is remembered per file, so the next photo you post is shown.
+ * Your caption, when you wrote one (the record's `note`), is set under
+ * the row as reading text.
  */
 export function DexSinceRow({
   drink,
@@ -734,7 +731,7 @@ export function CompositionCard({ composition, style }: { composition: Compositi
 }
 
 /* ==================================================================== */
-/* Field notes and trivia                                               */
+/* Field notes and the origin story                                     */
 /* ==================================================================== */
 
 /** The description, on the cellar ground. Nothing when there is none. */
@@ -751,22 +748,30 @@ export function FieldNotes({ description }: { description: string }) {
 }
 
 /**
- * The fun fact as a pull quote on a full-bleed band of lining (lining on
- * the cellar reads raised), ruled top and bottom, with its origin and
- * year pulled out as a dateline ("London, England · 1903"). Nothing when
- * there is no fact.
+ * Where the drink came from, as reading text on a full-bleed band of
+ * lining (lining on the cellar reads raised), ruled top and bottom, under
+ * a dateline of its origin and year ("Florence, Italy · 1919"). It took
+ * Bar trivia's place in v3.1.
+ *
+ * The text is the drink's researched origin story (generated into
+ * drinks.json by scripts/merge-origin-stories.mjs), else its fun fact, so
+ * a drink without a story yet still has the band trivia had. A story
+ * replaces the fun fact outright, because the writers fold a true one into
+ * it; datelineOf takes the year from the same text, for the same reason.
+ * Nothing when both are empty. No line limit: it is the page's one piece
+ * of prose.
  */
-export function TriviaBand({ drink }: { drink: Pick<Drink, 'origin' | 'funFact'> }) {
-  const fact = (drink.funFact ?? '').trim();
-  if (!fact) return null;
+export function OriginStory({ drink }: { drink: Pick<Drink, 'origin' | 'funFact' | 'originStory'> }) {
+  const text = drink.originStory?.trim() || drink.funFact?.trim();
+  if (!text) return null;
   const dateline = datelineOf(drink);
   return (
-    <LiningBand style={styles.trivia}>
-      <Text style={styles.triviaKicker} accessibilityRole="header">
-        Bar trivia
+    <LiningBand style={styles.story}>
+      <Text style={styles.storyKicker} accessibilityRole="header">
+        Origin story
       </Text>
-      {dateline ? <Text style={styles.triviaDateline}>{dateline}</Text> : null}
-      <Text style={styles.triviaText}>{fact}</Text>
+      {dateline ? <Text style={styles.storyDateline}>{dateline}</Text> : null}
+      <Text style={styles.storyText}>{text}</Text>
     </LiningBand>
   );
 }
@@ -775,15 +780,17 @@ export function TriviaBand({ drink }: { drink: Pick<Drink, 'origin' | 'funFact'>
 /* Pinned bar                                                           */
 /* ==================================================================== */
 
-/** Past this many characters "Log another <name>" becomes "Log another pour". */
+/** Past this many characters "Post another <name>" becomes "Post it again". */
 const BAR_NAME_MAX = 22;
 const BAR_CAP = 1.3;
 
 /**
- * The page's one action, pinned over the foot: "Log this drink" until it
- * is in your Dex, then "Log another <name>" ("Log another pour" for a
- * name too long to sit in a button). The bone button, because wine on
- * lining is 1.22:1. Spoken "Log <name>" / "Log another pour of <name>".
+ * The page's one action, pinned over the foot: "Post this drink" until it
+ * is in your Dex, then "Post another <name>" ("Post it again" for a name
+ * too long to sit in a button). The bone button, because wine on lining
+ * is 1.22:1. Spoken "Post <name>" / "Post another <name>", the full name
+ * either way. The export keeps its v3 name: renaming it would touch both
+ * callers for nothing a user sees.
  *
  * The label caps at 1.3 and may wrap to two lines; the bar grows with it.
  * `onHeight` reports the bar's measured height so the route can pad its
@@ -803,9 +810,9 @@ export function PinnedLogBar({
   const insets = useSafeAreaInsets();
   const label = collected
     ? name.length > BAR_NAME_MAX
-      ? 'Log another pour'
-      : `Log another ${name}`
-    : 'Log this drink';
+      ? 'Post it again'
+      : `Post another ${name}`
+    : 'Post this drink';
   return (
     <View
       onLayout={(e) => onHeight?.(Math.ceil(e.nativeEvent.layout.height))}
@@ -817,7 +824,7 @@ export function PinnedLogBar({
         icon="plus"
         block
         onPress={onPress}
-        accessibilityLabel={collected ? `Log another pour of ${name}` : `Log ${name}`}
+        accessibilityLabel={collected ? `Post another ${name}` : `Post ${name}`}
         maxFontSizeMultiplier={BAR_CAP}
       />
     </View>
@@ -991,17 +998,17 @@ const styles = StyleSheet.create({
   fieldTitle: { ...textRole.sectionTitle, color: colors.onLining, marginBottom: space.sm },
   fieldBody: { fontFamily: fonts.body, fontSize: 16, lineHeight: 24, color: colors.onLining },
 
-  /* Trivia */
-  trivia: {
+  /* Origin story */
+  story: {
     marginTop: space.xxl,
     padding: 20,
     borderTopWidth: stroke.edge,
     borderBottomWidth: stroke.edge,
     borderColor: colors.liningLine,
   },
-  triviaKicker: { ...textRole.helper, fontFamily: fonts.bodySemiBold, color: colors.onLiningMuted },
-  triviaDateline: { ...textRole.helper, color: colors.onLiningMuted, ...tabular },
-  triviaText: { ...textRole.trivia, color: colors.onLining, marginTop: space.sm },
+  storyKicker: { ...textRole.helper, fontFamily: fonts.bodySemiBold, color: colors.onLiningMuted },
+  storyDateline: { ...textRole.helper, color: colors.onLiningMuted, ...tabular },
+  storyText: { ...textRole.story, color: colors.onLining, marginTop: space.sm },
 
   /* Pinned bar */
   bar: {

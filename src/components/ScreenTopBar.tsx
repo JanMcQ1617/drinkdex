@@ -23,7 +23,8 @@ import { colors, fonts, layout, radius, space, stroke, textRole } from '@/consta
 /* title sizes, two fonts and two alignments, so moving between two     */
 /* screens changed the furniture as well as the content. This is the    */
 /* only one: a 44pt row on its ground, a centred Inter title, and at    */
-/* most one control per side.                                           */
+/* most one control per side (two on the right, `rightSlots={2}`, for   */
+/* Home's Tournaments and Activity).                                    */
 /*                                                                      */
 /* TWO GROUNDS. `tone="paper"` (the default) is the cream page with its */
 /* own paper Grain, since grain is no longer one overlay over the app   */
@@ -31,6 +32,11 @@ import { colors, fonts, layout, radius, space, stroke, textRole } from '@/consta
 /* page. `tone="lining"` is the cabinet's wine (Home's head band): the  */
 /* lining fill and grain, bone ink, and a light status bar while the    */
 /* screen is focused. Its glyph buttons learn the tone from context.    */
+/*                                                                      */
+/* `ground="clear"` keeps the tone's inks and drops the ground itself:  */
+/* no fill, no grain, no rule, for a bar that floats over a band its    */
+/* screen draws (Home's, which slides away on scroll). A clear lining   */
+/* bar still asks for the light status bar.                             */
 /*                                                                      */
 /* No blur, no glass, no Playfair. A caller may hand a wordmark in as   */
 /* `titleNode` (Home does); nothing else sets the title in the display  */
@@ -40,17 +46,21 @@ import { colors, fonts, layout, radius, space, stroke, textRole } from '@/consta
 /* (`line` on paper, `liningLip` on lining) says "content is scrolling  */
 /* under me". It switches instantly when the list crosses its threshold */
 /* (useScrolledPast), not on every frame and not through an animation,  */
-/* and it is always laid out (transparent at rest) so turning it on     */
-/* never moves the screen by a point.                                   */
+/* and on a solid bar it is always laid out (transparent at rest) so    */
+/* turning it on never moves the screen by a point. A clear bar has     */
+/* none.                                                                */
 /* ==================================================================== */
 
 /** Side slots: a 44pt glyph button with 4pt to the screen edge, and 4pt spare. */
 const SIDE = 52;
 /** A text button's side slot: its 72pt minimum plus the same margins. */
 const SIDE_WIDE = 80;
+/** Two glyph buttons side by side (`rightSlots={2}`): 96. */
+const SIDE_DOUBLE = 2 * layout.hit + 8;
 /** Title insets from each screen edge, so it never runs under a side control. */
 const TITLE_INSET = SIDE + 4;
 const TITLE_INSET_WIDE = SIDE_WIDE + 4;
+const TITLE_INSET_DOUBLE = SIDE_DOUBLE + 4;
 /** iOS page sheets draw their own grabber area; the bar starts just under it. */
 const SHEET_INSET = space.sm;
 
@@ -71,12 +81,16 @@ export interface ScreenTopBarProps {
   size?: 'md' | 'lg';
   left?: ReactNode;
   right?: ReactNode;
-  /** The 1pt rule along the bottom: on while content scrolls under the bar. */
+  /** The 1pt rule along the bottom: on while content scrolls under the bar. Ignored on a clear bar. */
   showRule: boolean;
   /** Drawn in place of the title text (Home's wordmark). `title` stays the spoken name. */
   titleNode?: ReactNode;
-  /** 'safe' (default): below the status bar. 'sheet': 8pt, inside an iOS page sheet. */
-  inset?: 'safe' | 'sheet';
+  /**
+   * 'safe' (default): below the status bar. 'sheet': 8pt, inside an iOS
+   * page sheet. 'none': no top padding, for a bar its screen places under
+   * a status strip of its own (Home).
+   */
+  inset?: 'safe' | 'sheet' | 'none';
   /**
    * So a multi-step screen can move VoiceOver focus to the title on each
    * step. It is attached to the title text, so it stays unset on a bar
@@ -88,6 +102,18 @@ export interface ScreenTopBarProps {
    * bone ink, the lining's grain and a light status bar while focused.
    */
   tone?: TopBarTone;
+  /**
+   * 'solid' (default): the bar's ground, grain and rule. 'clear': no
+   * ground, no grain, and `showRule` is ignored, for a bar that floats
+   * over its own band (Home). The tone still picks the inks.
+   */
+  ground?: 'solid' | 'clear';
+  /**
+   * 2: the right side holds two glyph buttons (Home: Tournaments and
+   * Activity), handed in together as `right`. The title's insets take the
+   * wider side, so the wordmark stays centred on the screen.
+   */
+  rightSlots?: 1 | 2;
 }
 
 function isTextButton(node: ReactNode) {
@@ -100,7 +126,8 @@ function isTextButton(node: ReactNode) {
  * The title is centred on the SCREEN, not between the controls: it is
  * laid over the row with equal insets from both edges, so a back chevron
  * on one side and nothing on the other cannot push it off centre. A text
- * control on either side ("Cancel") widens both insets alike.
+ * control on either side ("Cancel"), or two glyphs on the right, widens
+ * both insets alike.
  *
  * A pushed screen's back control is
  * `left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}`.
@@ -115,23 +142,35 @@ export function ScreenTopBar({
   inset = 'safe',
   titleRef,
   tone = 'paper',
+  ground = 'solid',
+  rightSlots = 1,
 }: ScreenTopBarProps) {
   const insets = useSafeAreaInsets();
   const wideLeft = isTextButton(left);
   const wideRight = isTextButton(right);
-  const titleInset = wideLeft || wideRight ? TITLE_INSET_WIDE : TITLE_INSET;
+  const doubleRight = rightSlots === 2;
+  const leftWidth = wideLeft ? SIDE_WIDE : SIDE;
+  // Two glyphs (96) are wider than a text button (80), so they set both insets.
+  const rightWidth = doubleRight ? SIDE_DOUBLE : wideRight ? SIDE_WIDE : SIDE;
+  const titleInset = doubleRight
+    ? TITLE_INSET_DOUBLE
+    : wideLeft || wideRight
+      ? TITLE_INSET_WIDE
+      : TITLE_INSET;
   const lining = tone === 'lining';
+  const clear = ground === 'clear';
+  const paddingTop = inset === 'safe' ? insets.top : inset === 'sheet' ? SHEET_INSET : 0;
 
   return (
     <View
       style={[
         styles.bar,
         lining && styles.barLining,
-        { paddingTop: inset === 'safe' ? insets.top : SHEET_INSET },
-        showRule && (lining ? styles.barRuledLining : styles.barRuled),
+        { paddingTop },
+        clear ? styles.barClear : showRule && (lining ? styles.barRuledLining : styles.barRuled),
       ]}>
-      {/* The ground's own grain, first, so everything in the bar sits on it. */}
-      <Grain tone={tone} />
+      {/* The ground's own grain, first, so everything in the bar sits on it. A clear bar has no ground to grain. */}
+      {clear ? null : <Grain tone={tone} />}
       {/*
         Only the lining bar asks for focus. A paper bar also draws inside
         sheets and pickers (AuthTitleBar) that sit outside any route screen,
@@ -140,10 +179,8 @@ export function ScreenTopBar({
       {lining ? <FocusedStatusBar style="light" /> : null}
       <TopBarToneContext.Provider value={tone}>
         <View style={styles.row}>
-          <View style={[styles.side, { width: wideLeft ? SIDE_WIDE : SIDE }]}>{left}</View>
-          <View style={[styles.side, styles.sideRight, { width: wideRight ? SIDE_WIDE : SIDE }]}>
-            {right}
-          </View>
+          <View style={[styles.side, { width: leftWidth }]}>{left}</View>
+          <View style={[styles.side, styles.sideRight, { width: rightWidth }]}>{right}</View>
           <View
             pointerEvents="box-none"
             style={[styles.titleSlot, { left: titleInset, right: titleInset }]}>
@@ -335,6 +372,8 @@ const styles = StyleSheet.create({
   barRuled: { borderBottomColor: colors.line },
   barLining: { backgroundColor: colors.lining },
   barRuledLining: { borderBottomColor: colors.liningLip },
+  /* No ground and no rule, so a clear bar is exactly its row's 44pt (plus its inset). */
+  barClear: { backgroundColor: 'transparent', borderBottomWidth: 0 },
   row: {
     height: layout.topBar,
     flexDirection: 'row',

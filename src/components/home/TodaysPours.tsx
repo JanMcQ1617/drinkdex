@@ -1,73 +1,64 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { DrinkName } from '@/components/cabinet';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { groupPours, POUR_WINDOW_MS, type PourGroup } from '@/components/home/groupPours';
-import { Icon, type IconName } from '@/components/icons';
-import { haptic, PressableScale } from '@/components/ui';
-import { colors, fonts, layout, motion, radius, stroke, textRole, type } from '@/constants/theme';
+import { Icon } from '@/components/icons';
+import { Avatar, haptic, PressableScale } from '@/components/ui';
+import { colors, fonts, layout, motion, radius, type } from '@/constants/theme';
 import { getDrink } from '@/data';
-import { latestCatch } from '@/lib/cabinet';
-import { primeSignedUrls } from '@/lib/social';
-import { faceOf, fitScale, textWidth, type Face } from '@/lib/textFit';
+import { primeSignedUrls, toProfile } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
-import { useCollection } from '@/store/collection';
+import { useAuth } from '@/store/auth';
 import { useSeen } from '@/store/seen';
-import type { Drink, Pour, UnlockRecord, UserProfile } from '@/types';
+import type { Drink, Pour, UserProfile } from '@/types';
 
 /* ==================================================================== */
-/* Today's pours                                                        */
+/* Today's pours: the stories                                           */
 /*                                                                      */
 /* The rail under Home's top bar, inside the head band's lining (the    */
-/* band itself is Home's list header). Each tile is one person's newest */
-/* pour from the last 24 hours, and tapping it opens the viewer. The    */
-/* POUR is the content, so a tile shows the drink, not the face: the    */
-/* photo inset in a bone mat, the person's name under it, and the       */
-/* drink's name under that. A gradient ring round a face is another     */
-/* app's mark, and is not borrowed.                                     */
+/* band itself is Home's list header). Each circle is one person's      */
+/* newest post from the last 24 hours, and tapping it opens the viewer. */
+/* The POST is the content, so a circle shows the photo, not the face,  */
+/* with the person's name under it on one line; the drink is in the     */
+/* picture and in the spoken label.                                     */
 /*                                                                      */
-/* NEW IS SAID TWICE. An unseen tile sits in a 2pt bone frame and its   */
-/* labels are bone; a seen one has no frame, its mat dulls into the     */
-/* lining (matSeen) and its labels go muted. The frame is the cue that  */
-/* does not depend on colour, and VoiceOver says ", new". Until the     */
-/* seen marks have been read from disk every tile is drawn seen, so     */
-/* nothing is framed at launch and then goes dull a moment later.       */
+/* CIRCLES, ON PURPOSE. This is the one place round shapes are wanted   */
+/* (Jan, 6 Oct 2026): a story is a circle with a ring, which is the     */
+/* structure people already read. The ring is flat, one colour, never a */
+/* gradient: a gradient ring is another app's mark.                     */
 /*                                                                      */
-/* NAMES ARE NEVER CUT. A drink name wraps under its tile (DrinkName,   */
-/* no line limit) and every tile's name slot is as tall as the tallest  */
-/* one in the rail, worked out before layout, so the rail is its final  */
-/* height on the first frame and does not grow when a later tile        */
+/* NEW IS SAID TWICE. An unseen story has a 2.5pt lit-wine ring         */
+/* (storyRing; plain wine is 1.22:1 on the lining) and a bone label; a  */
+/* seen one a 1pt faint ring and a muted label. The ring's weight is    */
+/* the cue that does not depend on colour, and VoiceOver says ", new".  */
+/* Until the seen marks have been read from disk every story is drawn   */
+/* seen, so nothing is ringed at launch and then goes dull a moment     */
+/* later.                                                               */
+/*                                                                      */
+/* ONE LINE, ONE HEIGHT. The label is a single capped line, so the rail */
+/* is 112pt at the default size and never grows when a later circle     */
 /* mounts.                                                              */
 /*                                                                      */
 /* NO PLACEHOLDERS. Before the first answer, or after a failed one, the */
-/* rail is your own tile alone: no skeleton tiles and no message,       */
+/* rail is your own circle alone: no skeleton circles and no message,   */
 /* because the feed below already says whether the connection is there. */
 /* ==================================================================== */
 
-const TILE = layout.tile;
-/** The photo's window inside the mat: the mat less its inset on each side. */
-const WINDOW_W = TILE.w - 2 * TILE.inset;
-const WINDOW_H = TILE.h - 2 * TILE.inset;
-/** The mat's corner; the window's is concentric with it. */
-const MAT_RADIUS = 6;
-/** An unseen tile's frame: 2pt of lining, then 2pt of bone, outside the mat. */
-const RING_GAP = 2;
-const RING = 2;
-const RING_OUT = RING_GAP + RING;
-/** The + badge on your own tile: a 24pt bone square in a 2pt lining ring. */
-const BADGE = 24;
-const BADGE_RING = 2;
-/** How far the badge's face hangs past the mat's corner. */
-const BADGE_OVERHANG = 7;
-/** Dynamic Type cap for the labels under a tile (spec §6.5). */
+const STORY = layout.story;
+/** The photo's disc inside the ring box: the box less the ring and its gap on each side (57). */
+const DISC = STORY.ring - 2 * (STORY.ringWidth + STORY.gap);
+/** Where the disc sits in the ring box, whatever the ring's weight (seen rings are thinner). */
+const DISC_INSET = (STORY.ring - DISC) / 2;
+/** The ring box, centred in the label's column. */
+const RING_INSET = (STORY.label - STORY.ring) / 2;
+/** The + badge's corner: 1pt past the ring box's right and bottom edges. */
+const BADGE_OUT = 1;
+/** Dynamic Type cap for the label: it sits under a fixed-size circle. */
 const LABEL_CAP = 1.3;
-/** The longest single wait for the next tile to expire; re-armed after. */
+/** The longest single wait for the next story to expire; re-armed after. */
 const MAX_TIMER_MS = 60 * 60 * 1000;
-
-/** "Log a pour" and "Find friends" under a tile: Inter, set to the drink name's metrics so rows line up. */
-const ACTION_LABEL = { fontFamily: fonts.bodyMedium, fontSize: 13, lineHeight: 17 } as const;
 
 export interface TodaysPoursProps {
   myId: string;
@@ -75,56 +66,10 @@ export interface TodaysPoursProps {
   status: 'idle' | 'ready' | 'error';
   profiles: Record<string, UserProfile>;
   seenHydrated: boolean;
-  onLog: () => void;
+  /** Opens the camera sheet: your circle's + badge, and your circle when you have not posted today. */
+  onPost: () => void;
   onOpen: (authorId: string) => void;
   onFindFriends: () => void;
-}
-
-/* ==================================================================== */
-/* How tall a name will be, before it is laid out                       */
-/* ==================================================================== */
-
-/** Lines `text` wraps to at `size` in a `measure`-wide column, by lib/textFit's (wide) widths. */
-function lineCount(text: string, face: Face, size: number, measure: number): number {
-  const gap = textWidth(' ', face, size);
-  let lines = 0;
-  let used = 0;
-  for (const word of text.split(/\s+/)) {
-    if (!word) continue;
-    const w = textWidth(word, face, size);
-    if (used > 0 && used + gap + w <= measure) {
-      used += gap + w;
-      continue;
-    }
-    // A new line; a word wider than the line breaks inside itself over as many as it needs.
-    const span = Math.max(1, Math.ceil(w / measure));
-    lines += span;
-    used = w - (span - 1) * measure;
-  }
-  return Math.max(1, lines);
-}
-
-/**
- * The height `text` takes in a column `measure` wide, worked out the way
- * DrinkName sizes a name (`fitted`: shrunk until its widest word fits) or
- * as plain wrapped text, at this Dynamic Type size and cap. lib/textFit
- * errs wide, so this errs tall: a rail laid out with it may keep a line
- * spare, but never grows after its first frame. Shared with NotInDexYet,
- * whose prints have the same problem.
- */
-export function wrappedHeight(
-  text: string,
-  role: { fontFamily: string; fontSize: number; lineHeight: number },
-  measure: number,
-  cap: number,
-  fontScale: number,
-  fitted = true,
-): number {
-  const face = faceOf(role.fontFamily);
-  const grow = Math.min(fontScale, cap);
-  const size = role.fontSize * grow;
-  const scale = fitted ? fitScale(text, face, size, measure) : 1;
-  return lineCount(text, face, size * scale, measure) * role.lineHeight * grow * scale;
 }
 
 /* ==================================================================== */
@@ -132,12 +77,12 @@ export function wrappedHeight(
 /* ==================================================================== */
 
 /**
- * The time the row is drawn against, moved on when the next pour reaches
- * 24 hours, so its tile leaves the row at that moment rather than at the
- * next refetch. One timer, aimed at the next expiry and capped at an hour
- * (long timers are re-armed rather than trusted), and re-aimed whenever
- * the pours change. A pour that ran out while nothing re-rendered is
- * caught at once: its expiry is already past, so the timer fires at 0.
+ * The time the row is drawn against, moved on when the next post reaches
+ * 24 hours, so its circle leaves the row at that moment rather than at
+ * the next refetch. One timer, aimed at the next expiry and capped at an
+ * hour (long timers are re-armed rather than trusted), and re-aimed
+ * whenever the pours change. A post that ran out while nothing re-rendered
+ * is caught at once: its expiry is already past, so the timer fires at 0.
  */
 function useExpiryClock(pours: Pour[]): number {
   const [now, setNow] = useState(() => Date.now());
@@ -155,12 +100,12 @@ function useExpiryClock(pours: Pour[]): number {
   return now;
 }
 
-/** One cell of the rail. */
+/** One circle of the rail. */
 type Item =
-  /** You poured today: your newest pour, which opens your pours. */
+  /** You posted today: your newest photo, which opens your posts. */
   | { kind: 'mine'; group: PourGroup }
-  /** You have not poured today: your latest catch (or a bare mat), which logs one. */
-  | { kind: 'you'; caught: { drink: Drink; record: UnlockRecord } | null }
+  /** You have not posted today: your avatar, which opens the camera sheet. */
+  | { kind: 'you' }
   | { kind: 'friend'; group: PourGroup; unseen: boolean }
   | { kind: 'find' };
 
@@ -170,19 +115,12 @@ function itemKey(item: Item): string {
 
 const newest = (g: PourGroup) => g.pours[g.pours.length - 1]!;
 
-/** What a tile prints under its name line, for the rail's shared name slot. */
-function secondLine(item: Item): { text: string; drinkName: boolean } | null {
-  if (item.kind === 'mine' || item.kind === 'friend') {
-    const drink = getDrink(newest(item.group).drinkId);
-    return drink ? { text: drink.name, drinkName: true } : null;
-  }
-  if (item.kind === 'you') return { text: 'Log a pour', drinkName: false };
-  return null;
-}
+/** "1 post today" / "3 posts today": what the rail says aloud, never a count of drinks. */
+const postsToday = (n: number) => `${n} ${n === 1 ? 'post' : 'posts'} today`;
 
-/** The rail's items scroll sideways with 12pt between tiles. */
-function TileGap() {
-  return <View style={styles.tileGap} />;
+/** The rail's circles scroll sideways with 10pt between their columns. */
+function StoryGap() {
+  return <View style={styles.storyGap} />;
 }
 
 export function TodaysPours({
@@ -191,28 +129,30 @@ export function TodaysPours({
   status,
   profiles,
   seenHydrated,
-  onLog,
+  onPost,
   onOpen,
   onFindFriends,
 }: TodaysPoursProps) {
   const seen = useSeen((s) => s.pours[myId]);
-  const unlocks = useCollection((s) => s.unlocks);
-  const { fontScale } = useWindowDimensions();
+  const ownRow = useAuth((s) => s.profile);
   const now = useExpiryClock(pours);
   const { mine, others } = groupPours(pours, myId, seen, now);
   const ready = status === 'ready';
   const shown = ready ? others : [];
 
+  // Your own row first (the social store may not hold your profile), for your avatar.
+  const me: UserProfile | undefined = ownRow?.id === myId ? toProfile(ownRow) : profiles[myId];
+
   /*
-   * One signing request for every tile in the row, rather than one per
-   * tile as each mounts. Keyed by the paths themselves, so a refetch that
-   * changes nothing signs nothing.
+   * One signing request for every circle in the row, rather than one per
+   * circle as each mounts. Keyed by the paths themselves, so a refetch
+   * that changes nothing signs nothing.
    *
    * A LAYOUT effect, on purpose. Passive effects run children first, so
-   * from a plain useEffect every tile's own signing (useSignedPhoto) had
+   * from a plain useEffect every circle's own signing (useSignedPhoto) had
    * already gone out by the time this ran, and the batch found nothing
    * left to sign. Layout effects all run before any passive one, so the
-   * batch is in the cache first and each tile waits on it instead.
+   * batch is in the cache first and each circle waits on it instead.
    */
   const newestPaths = [mine, ...shown].flatMap((g) => (g ? [newest(g).path] : []));
   const pathsKey = newestPaths.join('\n');
@@ -221,26 +161,10 @@ export function TodaysPours({
   }, [pathsKey]);
 
   const items: Item[] = [
-    mine ? { kind: 'mine', group: mine } : { kind: 'you', caught: latestCatch(unlocks) },
+    mine ? { kind: 'mine', group: mine } : { kind: 'you' },
     ...shown.map((g): Item => ({ kind: 'friend', group: g, unseen: seenHydrated && g.unseen })),
     ...(ready && others.length === 0 ? [{ kind: 'find' } as const] : []),
   ];
-
-  /*
-   * The name slot under every tile is as tall as the tallest name in the
-   * rail (see the header note): computed over all of them, not only the
-   * tiles the list has mounted so far.
-   */
-  let nameSlot = 0;
-  for (const item of items) {
-    const line = secondLine(item);
-    if (!line) continue;
-    const h = line.drinkName
-      ? wrappedHeight(line.text, textRole.tileName, TILE.label, LABEL_CAP, fontScale)
-      : wrappedHeight(line.text, ACTION_LABEL, TILE.label, LABEL_CAP, fontScale, false);
-    if (h > nameSlot) nameSlot = h;
-  }
-  nameSlot = Math.ceil(nameSlot);
 
   const renderItem = ({ item }: { item: Item }) => {
     switch (item.kind) {
@@ -249,59 +173,82 @@ export function TodaysPours({
         const drink = getDrink(pour.drinkId);
         const n = item.group.pours.length;
         return (
-          <PourTile
-            pour={pour}
-            drink={drink}
-            look="own"
-            top="Your pour"
-            nameSlot={nameSlot}
-            accessibilityLabel={`Your pours today, ${n}${drink ? `, latest ${drink.name}` : ''}`}
+          <Story
+            ring="seen"
+            label="You"
+            ink={colors.onLining}
+            accessibilityLabel={`Your posts today, ${n}${drink ? `, latest ${drink.name}` : ''}`}
+            accessibilityHint="Opens your posts from today"
             onPress={() => onOpen(myId)}
             badge={
               <Pressable
-                onPress={onLog}
-                hitSlop={(44 - BADGE - 2 * BADGE_RING) / 2}
+                onPress={onPost}
+                // 22 + 2 x 11: the 44pt touch floor, centred on the badge.
+                hitSlop={(layout.hit - STORY.badge) / 2}
                 accessibilityRole="button"
-                accessibilityLabel="Log a pour"
-                style={({ pressed }) => [styles.badge, pressed && styles.badgePressed]}>
-                <Icon name="plus" size={16} color={colors.wine} />
+                accessibilityLabel="Post a drink"
+                style={({ pressed }) => [styles.badge, styles.badgeButton, pressed && styles.badgePressed]}>
+                <Icon name="plus" size={14} color={colors.wine} />
               </Pressable>
-            }
-          />
+            }>
+            <PourFace pour={pour} drink={drink} />
+          </Story>
         );
       }
       case 'you':
-        return <YouTile caught={item.caught} nameSlot={nameSlot} onLog={onLog} />;
+        return (
+          <Story
+            ring="none"
+            label="You"
+            ink={colors.onLining}
+            accessibilityLabel="Post a drink"
+            onPress={onPost}
+            decorativeBadge>
+            <Avatar
+              name={me?.displayName ?? 'You'}
+              accent={me?.accent ?? colors.wineSoft}
+              size={DISC}
+              avatarPath={me?.avatarPath}
+            />
+          </Story>
+        );
       case 'friend': {
         const g = item.group;
         const pour = newest(g);
         const drink = getDrink(pour.drinkId);
         const who = profiles[g.authorId];
-        const n = g.pours.length;
         return (
-          <PourTile
-            pour={pour}
-            drink={drink}
-            look={item.unseen ? 'unseen' : 'seen'}
-            top={who?.username ?? 'someone'}
-            nameSlot={nameSlot}
-            accessibilityLabel={`${who?.displayName ?? 'Someone'}, ${n} ${n === 1 ? 'pour' : 'pours'} today${
+          <Story
+            ring={item.unseen ? 'unseen' : 'seen'}
+            label={who?.username ?? 'someone'}
+            ink={item.unseen ? colors.onLining : colors.onLiningMuted}
+            accessibilityLabel={`${who?.displayName ?? 'Someone'}, ${postsToday(g.pours.length)}${
               drink ? `, latest ${drink.name}` : ''
             }${item.unseen ? ', new' : ''}`}
-            accessibilityHint="Opens their pours"
-            onPress={() => onOpen(g.authorId)}
-          />
+            accessibilityHint="Opens their posts from today"
+            onPress={() => onOpen(g.authorId)}>
+            <PourFace pour={pour} drink={drink} />
+          </Story>
         );
       }
       case 'find':
         return (
-          <GlyphTile icon="users" top="Find friends" second={null} nameSlot={nameSlot} onPress={onFindFriends} />
+          <Story
+            ring="seen"
+            label="Find friends"
+            ink={colors.onLining}
+            accessibilityLabel="Find friends"
+            onPress={onFindFriends}>
+            <View style={styles.glyph}>
+              <Icon name="users" size={24} color={colors.onLining} />
+            </View>
+          </Story>
         );
     }
   };
 
   /*
-   * A FlatList, not a ScrollView: a ScrollView mounted every tile (up to
+   * A FlatList, not a ScrollView: a ScrollView mounted every circle (up to
    * 50) for as long as Home was, each holding its decoded photo.
    *
    * scrollsToTop off: UIKit honours a status-bar tap only when exactly one
@@ -315,7 +262,7 @@ export function TodaysPours({
       data={items}
       keyExtractor={itemKey}
       renderItem={renderItem}
-      ItemSeparatorComponent={TileGap}
+      ItemSeparatorComponent={StoryGap}
       initialNumToRender={6}
       windowSize={3}
       scrollsToTop={false}
@@ -326,110 +273,87 @@ export function TodaysPours({
 }
 
 /* ==================================================================== */
-/* Tiles                                                                */
+/* Circles                                                              */
 /* ==================================================================== */
 
-type Look = 'own' | 'unseen' | 'seen';
+/** 'unseen': 2.5pt lit wine. 'seen': 1pt faint (also your own, and Find friends). 'none': your bare avatar. */
+type Ring = 'unseen' | 'seen' | 'none';
 
 /**
- * The mat a tile's picture sits in: bone card stock with a 1pt edge, the
- * picture inset 3pt in a concentric window on the cellar ground (a lit
- * photo's own edge colour, so the moment before it decodes matches). A
- * seen tile's mat is dulled into the lining; an unseen one is framed.
- * `badge` is drawn over the mat's corner.
+ * One story: the ring box (the ring, and the 57pt disc that holds the
+ * picture on the cellar ground, a lit photo's own edge colour, so the
+ * moment before it decodes matches) and the label under it.
+ *
+ * It gives under the finger (PressableScale) and starts its press only
+ * after 120 ms, so a flick along the rail scrolls instead of opening. The
+ * tick plays on release.
+ *
+ * `badge` is a control of its own (your + when you have posted today),
+ * laid over the ring box's corner after the story's button so it takes
+ * its own taps and is read after it. `decorativeBadge` draws the same +
+ * as part of the picture, for the story that is itself "Post a drink".
  */
-function Mat({ look, children, badge }: { look: Look; children?: ReactNode; badge?: ReactNode }) {
+function Story({
+  ring,
+  label,
+  ink,
+  accessibilityLabel,
+  accessibilityHint,
+  onPress,
+  badge,
+  decorativeBadge,
+  children,
+}: {
+  ring: Ring;
+  label: string;
+  ink: string;
+  accessibilityLabel: string;
+  accessibilityHint?: string;
+  onPress: () => void;
+  badge?: ReactNode;
+  decorativeBadge?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <View style={styles.matSlot}>
-      {look === 'unseen' ? <View pointerEvents="none" style={styles.ring} /> : null}
-      <View style={[styles.mat, look === 'seen' && styles.matSeen]}>
-        <View style={styles.window}>{children}</View>
-      </View>
+    <View style={styles.item}>
+      <PressableScale
+        onPress={() => {
+          haptic.tap();
+          onPress();
+        }}
+        noHaptic
+        unstable_pressDelay={120}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityHint={accessibilityHint}>
+        <View style={styles.ringBox}>
+          {ring === 'none' ? null : (
+            <View pointerEvents="none" style={ring === 'unseen' ? styles.ringUnseen : styles.ringSeen} />
+          )}
+          <View style={styles.disc}>{children}</View>
+          {decorativeBadge ? (
+            <View
+              pointerEvents="none"
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+              style={[styles.badge, styles.badgeInBox]}>
+              <Icon name="plus" size={14} color={colors.wine} />
+            </View>
+          ) : null}
+        </View>
+        <Text numberOfLines={1} maxFontSizeMultiplier={LABEL_CAP} style={[styles.label, { color: ink }]}>
+          {label}
+        </Text>
+      </PressableScale>
       {badge}
     </View>
   );
 }
 
 /**
- * The two lines under a tile: who (Inter, one line) and the drink (its
- * name through DrinkName, never cut) or an action. 84pt wide, overhanging
- * the 76pt tile by 4pt on each side. The name slot is the rail's shared
- * height (TodaysPours), so every tile's labels end on one line.
- */
-function Labels({
-  top,
-  drink,
-  action,
-  ink,
-  nameSlot,
-}: {
-  top: string;
-  drink?: Drink;
-  action?: string;
-  ink: string;
-  nameSlot: number;
-}) {
-  return (
-    <View style={styles.labels}>
-      <Text numberOfLines={1} maxFontSizeMultiplier={LABEL_CAP} style={[styles.top, { color: ink }]}>
-        {top}
-      </Text>
-      <View style={{ minHeight: nameSlot }}>
-        {drink ? (
-          <DrinkName
-            name={drink.name}
-            role={textRole.tileName}
-            measure={TILE.label}
-            cap={LABEL_CAP}
-            color={ink}
-            align="center"
-          />
-        ) : action ? (
-          <Text maxFontSizeMultiplier={LABEL_CAP} style={[ACTION_LABEL, styles.centred, { color: ink }]}>
-            {action}
-          </Text>
-        ) : null}
-      </View>
-    </View>
-  );
-}
-
-/**
- * A media tile: it gives under the finger (PressableScale) and starts its
- * press only after 120 ms, so a flick along the rail scrolls instead of
- * opening. The tick plays on release.
- */
-function TilePress({
-  accessibilityLabel,
-  accessibilityHint,
-  onPress,
-  children,
-}: {
-  accessibilityLabel: string;
-  accessibilityHint?: string;
-  onPress: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <PressableScale
-      onPress={() => {
-        haptic.tap();
-        onPress();
-      }}
-      noHaptic
-      unstable_pressDelay={120}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityHint={accessibilityHint}>
-      {children}
-    </PressableScale>
-  );
-}
-
-/**
- * The photo of a pour in its window. While the URL is on its way the
- * window holds its place on the cellar ground; a photo that will not sign
- * (null) falls back to the drink's lit face, never to a blank.
+ * The newest photo in the disc. While the URL is on its way the disc holds
+ * its place on the cellar ground; a photo that will not sign (null) falls
+ * back to the drink's lit face, never to a blank.
  */
 function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
   // The pour as the retry key: a refetch hands over a new object, so a
@@ -441,8 +365,8 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
         source={{ uri: url, cacheKey: pour.path }}
         cachePolicy="memory-disk"
         /*
-         * Decoded at the window's 70pt size, not the 2048px upload, so the
-         * tiles the rail keeps mounted hold a few hundred KB between them.
+         * Decoded at the disc's 57pt, not the 2048px upload, so the circles
+         * the rail keeps mounted hold a few hundred KB between them.
          * PostGridTile (profile/PostGrid) has the whole reason.
          */
         enforceEarlyResizing
@@ -454,194 +378,84 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
     );
   }
   if (url === null && drink) {
-    return <DrinkFace drink={drink} mode="lit" width={WINDOW_W} height={WINDOW_H} style={FACE_FILL} />;
+    return <DrinkFace drink={drink} mode="lit" width={DISC} height={DISC} style={FACE_FILL} />;
   }
   return null;
 }
 
-/** A person's newest pour in its mat, with their name and the drink's under it. */
-function PourTile({
-  pour,
-  drink,
-  look,
-  top,
-  nameSlot,
-  accessibilityLabel,
-  accessibilityHint,
-  onPress,
-  badge,
-}: {
-  pour: Pour;
-  drink?: Drink;
-  look: Look;
-  top: string;
-  nameSlot: number;
-  accessibilityLabel: string;
-  accessibilityHint?: string;
-  onPress: () => void;
-  badge?: ReactNode;
-}) {
-  return (
-    <View style={styles.tile}>
-      <TilePress accessibilityLabel={accessibilityLabel} accessibilityHint={accessibilityHint} onPress={onPress}>
-        <Mat look={look}>
-          <PourFace pour={pour} drink={drink} />
-        </Mat>
-        <Labels
-          top={top}
-          drink={drink}
-          ink={look === 'seen' ? colors.onLiningMuted : colors.onLining}
-          nameSlot={nameSlot}
-        />
-      </TilePress>
-      {/* Its own button, after the tile's, over the mat's corner. */}
-      {badge ? <View style={styles.badgeSlot}>{badge}</View> : null}
-    </View>
-  );
-}
-
-/**
- * Your tile when you have not poured today. With a catch, its lit face
- * (your own photo of it first) and the + badge; with none yet, a bare mat
- * and a plus. Either way the whole tile is one button that logs a pour,
- * so the badge here is only a picture of the + it means.
- */
-function YouTile({
-  caught,
-  nameSlot,
-  onLog,
-}: {
-  caught: { drink: Drink; record: UnlockRecord } | null;
-  nameSlot: number;
-  onLog: () => void;
-}) {
-  if (!caught) {
-    return <GlyphTile icon="plus" top="You" second="Log a pour" nameSlot={nameSlot} onPress={onLog} />;
-  }
-  return (
-    <View style={styles.tile}>
-      <TilePress accessibilityLabel="Log a pour" onPress={onLog}>
-        <Mat
-          look="own"
-          badge={
-            <View
-              pointerEvents="none"
-              accessibilityElementsHidden
-              importantForAccessibility="no-hide-descendants"
-              style={[styles.badgeSlot, styles.badge]}>
-              <Icon name="plus" size={16} color={colors.wine} />
-            </View>
-          }>
-          <DrinkFace
-            drink={caught.drink}
-            mode="lit"
-            photoUri={caught.record.photoUri}
-            width={WINDOW_W}
-            height={WINDOW_H}
-            style={FACE_FILL}
-          />
-        </Mat>
-        <Labels top="You" action="Log a pour" ink={colors.onLining} nameSlot={nameSlot} />
-      </TilePress>
-    </View>
-  );
-}
-
-/** A bare mat with one glyph in ink: your first "Log a pour", and "Find friends". */
-function GlyphTile({
-  icon,
-  top,
-  second,
-  nameSlot,
-  onPress,
-}: {
-  icon: IconName;
-  top: string;
-  second: string | null;
-  nameSlot: number;
-  onPress: () => void;
-}) {
-  return (
-    <View style={styles.tile}>
-      <TilePress accessibilityLabel={second ?? top} onPress={onPress}>
-        <View style={styles.matSlot}>
-          <View style={[styles.mat, styles.matGlyph]}>
-            <Icon name={icon} size={22} color={colors.text} />
-          </View>
-        </View>
-        <Labels top={top} action={second ?? undefined} ink={colors.onLining} nameSlot={nameSlot} />
-      </TilePress>
-    </View>
-  );
-}
-
 /* ==================================================================== */
 
-const styles = StyleSheet.create({
-  /* 8 above (room for an unseen tile's frame), 12 below, the 16pt gutter at each end. */
-  rail: {
-    paddingTop: 8,
-    paddingBottom: 12,
-    paddingHorizontal: layout.gutter,
-  },
-  tileGap: { width: 12 },
-  tile: { width: TILE.w },
+/** The ring fills its box; its stroke is drawn inward from the box's edge. */
+const RING_FILL = { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 } as const;
 
-  /* The mat's box, so the frame and the badge are placed from its outer edge. */
-  matSlot: { width: TILE.w, height: TILE.h },
-  mat: {
-    width: TILE.w,
-    height: TILE.h,
-    padding: TILE.inset - stroke.edge,
-    borderRadius: MAT_RADIUS,
-    borderWidth: stroke.edge,
-    borderColor: colors.matEdge,
-    backgroundColor: colors.mat,
+const styles = StyleSheet.create({
+  /*
+   * 10 above, 12 below, 12 at each end: the first ring sits 4pt inside its
+   * 76pt column, so it lands on the 16pt gutter. 10 + 68 + 6 + 16 + 12 is
+   * the rail's 112pt at the default text size.
+   */
+  rail: {
+    paddingTop: 10,
+    paddingBottom: 12,
+    paddingHorizontal: 12,
   },
-  matSeen: { backgroundColor: colors.matSeen },
-  matGlyph: { alignItems: 'center', justifyContent: 'center' },
-  window: {
-    flex: 1,
-    borderRadius: MAT_RADIUS - TILE.inset,
+  storyGap: { width: 10 },
+  item: { width: STORY.label },
+
+  /* The ring box, so the ring, the disc and the badge are placed from its edge. */
+  ringBox: { width: STORY.ring, height: STORY.ring, marginLeft: RING_INSET },
+  ringUnseen: {
+    ...RING_FILL,
+    // round-ok: story
+    borderRadius: radius.round,
+    borderWidth: STORY.ringWidth,
+    borderColor: colors.storyRing,
+  },
+  ringSeen: {
+    ...RING_FILL,
+    // round-ok: story
+    borderRadius: radius.round,
+    borderWidth: STORY.ringWidthSeen,
+    borderColor: colors.storyRingSeen,
+  },
+  disc: {
+    position: 'absolute',
+    top: DISC_INSET,
+    left: DISC_INSET,
+    width: DISC,
+    height: DISC,
+    // round-ok: story
+    borderRadius: radius.round,
     overflow: 'hidden',
     backgroundColor: colors.liningDeep,
   },
-  /* Outside the mat with a 2pt lining gap; its inner corner is concentric with the mat's. */
-  ring: {
-    position: 'absolute',
-    top: -RING_OUT,
-    left: -RING_OUT,
-    right: -RING_OUT,
-    bottom: -RING_OUT,
-    borderRadius: MAT_RADIUS + RING_OUT,
-    borderWidth: RING,
-    borderColor: colors.onLining,
-  },
+  glyph: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
-  labels: { width: TILE.label, marginLeft: (TILE.w - TILE.label) / 2, marginTop: 10, alignItems: 'center' },
-  top: {
+  label: {
     ...type.micro,
     fontFamily: fonts.bodyMedium,
+    marginTop: 6,
     textAlign: 'center',
-    alignSelf: 'stretch',
   },
-  centred: { textAlign: 'center' },
 
-  /* The badge's ring is its border, so its face is BADGE and hangs BADGE_OVERHANG past the corner. */
-  badgeSlot: {
-    position: 'absolute',
-    left: TILE.w + BADGE_OVERHANG - BADGE - BADGE_RING,
-    top: TILE.h + BADGE_OVERHANG - BADGE - BADGE_RING,
-  },
+  /* The + badge: 22pt overall, its 2pt lining ring drawn as the border, 1pt past the box's corner. */
   badge: {
-    width: BADGE + 2 * BADGE_RING,
-    height: BADGE + 2 * BADGE_RING,
-    borderRadius: radius.badge + BADGE_RING,
-    borderWidth: BADGE_RING,
+    width: STORY.badge,
+    height: STORY.badge,
+    // round-ok: story
+    borderRadius: radius.round,
+    borderWidth: STORY.badgeRing,
     borderColor: colors.lining,
     backgroundColor: colors.onLining,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  badgeInBox: { position: 'absolute', right: -BADGE_OUT, bottom: -BADGE_OUT },
+  /* The same corner, placed from the item: the ring box starts RING_INSET in and at the item's top. */
+  badgeButton: {
+    position: 'absolute',
+    left: RING_INSET + STORY.ring + BADGE_OUT - STORY.badge,
+    top: STORY.ring + BADGE_OUT - STORY.badge,
   },
   badgePressed: { backgroundColor: colors.onLiningMuted },
 });

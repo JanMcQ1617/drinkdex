@@ -22,8 +22,13 @@ import { useAuth } from '@/store/auth';
 /*                                                                      */
 /* Settings is the gear, top right, as the docs describe it. Reset, sign */
 /* out, delete and the find-me controls live there; account deletion is  */
-/* still two taps from here, which is what Apple asks for. Everyone on    */
-/* Sipply moved to Find friends, the add-person button in the header.    */
+/* still two taps from here, which is what Apple asks for. Find friends  */
+/* is not in this header (v3.1 took the button beside Share profile      */
+/* away): it is in Settings, on Home's stories rail ("Find friends"),    */
+/* and in every empty state that offers it.                              */
+/*                                                                      */
+/* The list is the Profile tab's scroll source (chromeTab), so scrolling */
+/* it compacts the tab bar as Home, Dex and My Bar do.                   */
 /* ==================================================================== */
 
 function OwnProfile() {
@@ -36,8 +41,10 @@ function OwnProfile() {
   const profileError = useAuth((s) => s.profileError);
   const refreshProfile = useAuth((s) => s.refreshProfile);
 
-  // Logging is the most frequent action, so + goes straight to the sheet.
-  const left = <TopBarButton icon="plus" label="Log a pour" onPress={() => router.navigate('/log')} />;
+  // Posting is the most frequent action, so + goes straight to the sheet.
+  const left = (
+    <TopBarButton icon="plus" label="Post a drink" onPress={() => router.navigate('/log')} />
+  );
   const right = (
     <TopBarButton icon="settings" label="Settings" onPress={() => router.push('/settings')} />
   );
@@ -55,6 +62,7 @@ function OwnProfile() {
         left={left}
         right={right}
         bottomInset={insets.bottom + TAB_BAR_CLEARANCE + space.md}
+        chromeTab="profile"
       />
     );
   }
@@ -62,7 +70,7 @@ function OwnProfile() {
   /*
    * A signed-in user with no profile row used to render nothing at all,
    * which looked exactly like a screen that had failed to load. The bar
-   * stays, so Log a pour and Settings (and sign out) are reachable either
+   * stays, so Post a drink and Settings (and sign out) are reachable either
    * way, and the body says which of the two it is.
    */
   /*

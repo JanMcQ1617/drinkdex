@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } fr
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { DrinkName, TierWord } from '@/components/cabinet';
+import { DrinkName } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
@@ -22,7 +22,7 @@ import type { Drink, Post } from '@/types';
 /* One post                                                             */
 /*                                                                      */
 /* Where a profile grid tile, a saved post, an Activity row and the     */
-/* pours viewer's "View post" all land: one PostCard on its own screen, */
+/* story viewer's "View post" all land: one PostCard on its own screen, */
 /* and under it the drink as it stands in the Dex, one tap from its     */
 /* page. Pushed over the tabs, so Back returns to whichever of those    */
 /* opened it.                                                           */
@@ -207,9 +207,9 @@ const CHEVRON = 18;
 
 /**
  * The post's drink as it stands in the Dex: its mounted thumbnail, its
- * name and tier, and a chevron, all one button to the drink's page. The
- * nameplate on the photo opens it too; this is the way in that reads as a
- * row, under the caption, where a finished post ends.
+ * name, and a chevron, all one button to the drink's page. The nameplate
+ * on the photo opens it too; this is the way in that reads as a row,
+ * under the caption, where a finished post ends.
  */
 function FromTheDex({ drink, onOpen }: { drink: Drink; onOpen: () => void }) {
   const { width } = useWindowDimensions();
@@ -225,9 +225,6 @@ function FromTheDex({ drink, onOpen }: { drink: Drink; onOpen: () => void }) {
       <View style={styles.dexText}>
         <Text style={styles.dexEyebrow}>From the Dex</Text>
         <DrinkName name={drink.name} role={textRole.rowName} measure={measure} cap={1.4} color={colors.text} />
-        <View style={styles.dexTier}>
-          <TierWord rarity={drink.rarity} tone="paper" size="sm" />
-        </View>
       </View>
       <Icon name="chevronRight" size={CHEVRON} color={colors.textFaint} />
     </Pressable>
@@ -253,5 +250,4 @@ const styles = StyleSheet.create({
   dexRowPressed: { backgroundColor: colors.bgSunk },
   dexText: { flex: 1, gap: 2 },
   dexEyebrow: { ...textRole.helper, color: colors.textMuted },
-  dexTier: { marginTop: 2, alignItems: 'flex-start' },
 });

@@ -1,6 +1,6 @@
-import { useRouter, useScrollToTop } from 'expo-router';
+import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Animated, type FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
@@ -8,35 +8,44 @@ import { LiningBand } from '@/components/cabinet';
 import { EmptyArt } from '@/components/DexCard';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Grain } from '@/components/Grain';
+import { HomeChrome } from '@/components/home/HomeChrome';
 import { NotInDexYet, type NotInDexYetPick } from '@/components/home/NotInDexYet';
 import { TodaysPours } from '@/components/home/TodaysPours';
 import { PostCard } from '@/components/PostCard';
-import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { useTabScroll } from '@/components/ScrollChrome';
 import { Button, EmptyState, Hold, Notice } from '@/components/ui';
 import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 import { notInDexYet } from '@/lib/cabinet';
 import { isRenderablePost } from '@/lib/social';
+import { tournamentsHref } from '@/lib/tournaments';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { isLater, useSeen } from '@/store/seen';
 import { useSocial } from '@/store/social';
+import { useTournaments } from '@/store/tournaments';
 import type { Post } from '@/types';
 
 /* ==================================================================== */
 /* Home                                                                 */
 /*                                                                      */
-/* The feed: a top bar (log on the left, the wordmark, Activity on the  */
-/* right), the rail of today's pours, then the posts of the people you  */
-/* follow and your own, newest first, each running edge to edge.        */
+/* The feed: a top bar (post on the left, the wordmark, Tournaments and */
+/* Activity on the right), the stories rail, then the posts of the      */
+/* people you follow and your own, newest first, each edge to edge.     */
 /*                                                                      */
 /* ONE WINE BAND, THEN PAPER. The bar and the rail are the cabinet's    */
-/* lining, read as one band from the status bar down past the tiles;    */
+/* lining, read as one band from the status bar down past the circles;  */
 /* the feed under it is paper, because you read on paper. Where the     */
 /* band meets the first post it leaves a 1pt lip and a 12pt shade,      */
 /* hung over the post (the header is lifted above the cells for it).    */
 /* Pulled past the top, the overscroll is lining too, not a cream gap.  */
 /* Twice down the feed (after the 5th and the 15th post) a second band  */
-/* shows drinks your friends poured that are not in your Dex yet.       */
+/* shows drinks your friends posted that are not in your Dex yet.       */
+/*                                                                      */
+/* THE BAR FLOATS. The list runs from the top of the screen and its     */
+/* header holds the bar's place in the band; the bar itself is laid     */
+/* over the list (HomeChrome), so it can slide away on scroll down and  */
+/* come back on scroll up, moved by the list's own native scroll        */
+/* events (ScrollChrome), never by a timer.                             */
 /*                                                                      */
 /* NOTHING HERE ANIMATES IN. The first three posts used to fade up in a */
 /* stagger, and they were visible only once that entrance finished:     */
@@ -116,12 +125,31 @@ function HomeFeed() {
    */
   const visibleFeed = feed.filter(isRenderablePost);
 
+  const showTournaments = useTournaments((s) => s.supported);
+  const pendingInvites = useTournaments((s) => s.pendingInvites);
+
   const [refreshing, setRefreshing] = useState(false);
-  const [scrolled, onScroll] = useScrolledPast();
+  /*
+   * Home's list drives the chrome: the tab bar's compaction and this
+   * screen's own bar. One native event, made once (ScrollChrome).
+   */
+  const { onScroll, scrollY } = useTabScroll('index');
 
   // Tapping Home while already on it returns the feed to the top.
   const listRef = useRef<FlatList<Row>>(null);
   useScrollToTop(listRef);
+
+  /*
+   * The trophy's dot is an invitation. Asked again each time Home is
+   * focused, so one that arrived while you were elsewhere shows when you
+   * come back; the tournament screens refetch after their own actions.
+   * A server without migration 020 answers by switching the trophy off.
+   */
+  useFocusEffect(
+    useCallback(() => {
+      if (myId) void useTournaments.getState().load();
+    }, [myId]),
+  );
 
   // Re-runs when the signed-in user changes, so switching accounts doesn't
   // leave the previous person's feed on screen. `load` handles its own errors.
@@ -130,10 +158,12 @@ function HomeFeed() {
   }, [myId, load]);
 
   // After a failed load this is a full reload: refreshFeed checks feedError
-  // itself, so the follow list that never arrived is fetched again.
+  // itself, so the follow list that never arrived is fetched again. The
+  // trophy's dot is asked for again too; the spinner waits only for the feed.
   const onRefresh = useCallback(() => {
     if (!myId) return;
     setRefreshing(true);
+    void useTournaments.getState().load();
     void refreshFeed(myId).finally(() => setRefreshing(false));
   }, [myId, refreshFeed]);
 
@@ -143,6 +173,8 @@ function HomeFeed() {
   );
 
   const openLog = useCallback(() => router.navigate('/log'), [router]);
+
+  const openTournaments = useCallback(() => router.push(tournamentsHref()), [router]);
 
   const openFindFriends = useCallback(() => router.push('/find-friends'), [router]);
 
@@ -162,7 +194,7 @@ function HomeFeed() {
     [myId, router],
   );
 
-  /* A person's pours today, in the viewer: a modal over the tabs. */
+  /* A person's posts from today, in the story viewer: a modal over the tabs. */
   const openPours = useCallback(
     (authorId: string) => router.navigate({ pathname: '/pours/[authorId]', params: { authorId } }),
     [router],
@@ -176,7 +208,7 @@ function HomeFeed() {
           author={profiles[item.post.authorId]}
           onOpenDrink={openDrink}
           onOpenAuthor={openPerson}
-          // A block takes their posts and their pours tile off screen at
+          // A block takes their posts and their story off screen at
           // once; RLS keeps them off from the next fetch on.
           onBlocked={dropAuthor}
         />
@@ -201,7 +233,7 @@ function HomeFeed() {
   /*
    * "Not answered yet" covers the first frame too. The store starts with
    * loadingFeed false and sets it only once the load effect has run, so
-   * this screen's first render used to say "Nothing poured yet" for a frame
+   * this screen's first render used to say "Nothing posted yet" for a frame
    * before the spinner. poursStatus leaves 'idle' with the first answer
    * (and returns to it on an account switch), so it marks a feed that has
    * never come back.
@@ -244,13 +276,15 @@ function HomeFeed() {
         <Grain tone="lining" />
       </View>
       <LiningBand lip shade="overlay">
+        {/* The bar's place in the band: HomeChrome draws the bar over it. */}
+        <View style={{ height: insets.top + layout.topBar }} />
         <TodaysPours
           myId={myId}
           pours={pours}
           status={poursStatus}
           profiles={profiles}
           seenHydrated={seenHydrated}
-          onLog={openLog}
+          onPost={openLog}
           onOpen={openPours}
           onFindFriends={openFindFriends}
         />
@@ -276,9 +310,9 @@ function HomeFeed() {
     visibleFeed.length > 0 ? (
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          {feed.length >= FEED_CAP ? `That's the newest ${FEED_CAP} pours.` : "That's every pour so far."}
+          {feed.length >= FEED_CAP ? `That's the newest ${FEED_CAP} posts.` : "That's every post so far."}
         </Text>
-        <Button label="Log a pour" variant="secondary" size="sm" onPress={openLog} />
+        <Button label="Post a drink" variant="secondary" size="sm" onPress={openLog} />
       </View>
     ) : null;
 
@@ -286,27 +320,7 @@ function HomeFeed() {
     <View style={styles.screen}>
       {/* The paper's grain, under the list: posts are transparent and sit on it. */}
       <Grain />
-      {/*
-        The wordmark is the one place the brand name is set, so it is set
-        as the brand sets it: Playfair, here in bone on the lining. The
-        bar's own buttons take the lining's ink from the bar.
-      */}
-      <ScreenTopBar
-        title="Sipply"
-        tone="lining"
-        showRule={scrolled}
-        titleNode={
-          <Text
-            style={[textRole.wordmark, styles.wordmark]}
-            accessibilityRole="header"
-            maxFontSizeMultiplier={1.2}>
-            Sipply
-          </Text>
-        }
-        left={<TopBarButton icon="plus" label="Log a pour" onPress={openLog} />}
-        right={<TopBarButton icon="heart" label="Activity" badge={unread} onPress={openActivity} />}
-      />
-      <FlatList
+      <Animated.FlatList
         ref={listRef}
         data={rows}
         renderItem={renderItem}
@@ -334,7 +348,7 @@ function HomeFeed() {
         ListFooterComponent={footer}
         /*
          * Three states, never confused. A failed load used to fall through to
-         * "Nothing poured yet", which told someone offline with twenty follows
+         * "Nothing posted yet", which told someone offline with twenty follows
          * to go and find people. While a pull is already spinning, the body
          * stays empty rather than showing a second spinner.
          */
@@ -354,8 +368,8 @@ function HomeFeed() {
           ) : (
             <EmptyState
               art={<EmptyArt drinkId="negroni" />}
-              title="Nothing poured yet"
-              body="Follow friends and their pours land here. Yours will too."
+              title="Nothing posted yet"
+              body="Follow friends to see what others are drinking. Your posts land here too."
               action={{ label: 'Find friends', onPress: openFindFriends }}
             />
           )
@@ -366,15 +380,28 @@ function HomeFeed() {
            * lifted: UIKit keeps a scroll view's refresh control behind its
            * content, where the overscroll lining (part of the content) would
            * cover it. RN maps this zIndex onto the control's layer zPosition.
+           * Offset below the bar: the list starts at the top of the screen,
+           * so without it the spinner would turn under the status strip.
            */
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
             tintColor={colors.onLining}
+            progressViewOffset={insets.top + layout.topBar}
             style={styles.refresh}
           />
         }
         showsVerticalScrollIndicator={false}
+      />
+      {/* Over the list, last, so it draws on top and takes its own taps. */}
+      <HomeChrome
+        scrollY={scrollY}
+        unread={unread}
+        showTournaments={showTournaments}
+        pendingInvites={pendingInvites}
+        onPost={openLog}
+        onTournaments={openTournaments}
+        onActivity={openActivity}
       />
     </View>
   );
@@ -398,7 +425,6 @@ const styles = StyleSheet.create({
     height: OVERSCROLL,
     backgroundColor: colors.lining,
   },
-  wordmark: { color: colors.onLining },
   // 12pt down, so the band's shade falls on paper rather than across the notice.
   notice: { marginHorizontal: layout.gutter, marginTop: space.md },
   gap: {

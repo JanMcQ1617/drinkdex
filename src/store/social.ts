@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import * as api from '@/lib/social';
-import type { Post, Pour, UserProfile } from '@/types';
+import type { Post, Pour, Song, UserProfile } from '@/types';
 
 /**
  * What became of a post.
@@ -112,11 +112,18 @@ interface SocialState {
    * saves table (savesSupported), so the card can drop its optimistic state.
    */
   toggleSave: (myId: string, postId: string, wasSaved: boolean) => Promise<boolean>;
+  /**
+   * Shares a drink: its post (created on the first share) and this photo.
+   * `music` is the song for this photo's story, sent only with Save & post
+   * and only while EXPO_PUBLIC_STORY_MUSIC is on; a song the server will not
+   * take is dropped and the photo still goes up (lib/social createPost).
+   */
   addPost: (
     myId: string,
     drinkId: string,
     caption: string,
     photoUri: string | null,
+    music?: Song | null,
   ) => Promise<PostOutcome>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
   /** Deletes one of your posts and its photos. Resolves false when it failed. */
@@ -489,12 +496,12 @@ export const useSocial = create<SocialState>()((set, get) => ({
    * post was or was not written whoever is signed in now; only the store
    * writes and the follow-up refresh are skipped.
    */
-  addPost: async (myId, drinkId, caption, photoUri) => {
+  addPost: async (myId, drinkId, caption, photoUri, music) => {
     // Refused here without a round trip; the server holds the same line.
     if (containsObjectionable(caption)) return 'objectionable';
     const gen = get().gen;
     try {
-      const withPhoto = await api.createPost(myId, drinkId, caption, photoUri);
+      const withPhoto = await api.createPost(myId, drinkId, caption, photoUri, music);
       const outcome = withPhoto ? 'ok' : 'no-photo';
       if (get().gen !== gen) return outcome;
       set({ postsVersion: get().postsVersion + 1 });

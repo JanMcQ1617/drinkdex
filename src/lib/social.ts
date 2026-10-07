@@ -2,9 +2,10 @@ import { File } from 'expo-file-system';
 
 import { getDrink } from '@/data';
 import type { ProfileRow } from '@/lib/database.types';
+import { STORY_MUSIC, musicColumns, songFromRow } from '@/lib/music';
 import { stripMetadata } from '@/lib/pour';
 import { supabase } from '@/lib/supabase';
-import type { ActivityItem, Post, Pour, UserProfile } from '@/types';
+import type { ActivityItem, Post, Pour, Song, UserProfile } from '@/types';
 
 /** Splits a list into runs of at most `size`, for requests that carry ids in the URL. */
 function chunk<T>(items: T[], size: number): T[][] {
@@ -195,7 +196,8 @@ export function disableAvatarColumn(): void {
 /*                                                                      */
 /* The same problem one level up: a build can reach a phone before Jan  */
 /* runs the migration that adds a table or a function. Saves (017) and  */
-/* recent_pours (017) are the ones this file reads. A missing one is     */
+/* recent_pours (017) are the ones this file reads (lib/tournaments      */
+/* reads 020's functions the same way). A missing one is                 */
 /* read as "feature off", never as a failure: the save button hides and  */
 /* Today's pours shows only your own tile, while the feed itself, which  */
 /* needs neither, keeps working.                                         */
@@ -221,7 +223,7 @@ function isMissingRelation(e: { code?: string; message?: string } | null): boole
 }
 
 /** PostgREST's "no such function", or Postgres's undefined_function. */
-function isMissingFunction(e: { code?: string } | null): boolean {
+export function isMissingFunction(e: { code?: string } | null): boolean {
   return !!e && (e.code === 'PGRST202' || e.code === '42883');
 }
 
@@ -630,6 +632,10 @@ export async function fetchProfiles(ids: string[]): Promise<Record<string, UserP
  * Empty, not an error, when the function is missing (migration 017 not
  * applied): the row then shows only your own tile. Pours of drinks that
  * have left the Dex are dropped, as toPosts drops their posts.
+ *
+ * Each pour carries the song added with that photo (migration 020), or
+ * null; before 020 the function returns no music columns and every pour
+ * reads as having none.
  */
 export async function fetchRecentPours(): Promise<Pour[]> {
   const { data, error } = await supabase.rpc('recent_pours');
@@ -645,6 +651,7 @@ export async function fetchRecentPours(): Promise<Pour[]> {
       drinkId: r.drink_id,
       path: r.path,
       at: r.poured_at,
+      music: songFromRow(r),
     }));
 }
 
@@ -1053,12 +1060,20 @@ export function forgetSignedPhoto(path: string | null, bucket: Bucket = 'pours')
  * Resolves to false when the post is up but its photo is not on it, so the
  * caller can say so; throws when the post itself could not be written. The
  * server dates the post (created_at is never sent).
+ *
+ * `music` is the song for this photo's story (migration 020). It goes on
+ * the photo row, never the post, so a later re-post with no song does not
+ * inherit it, and only while EXPO_PUBLIC_STORY_MUSIC is on. If the server
+ * will not take the song (a column 020 has not added yet, the content
+ * filter, the shape check), the photo is written again without it: the
+ * photo matters more than the song.
  */
 export async function createPost(
   myId: string,
   drinkId: string,
   caption: string,
   localPhotoUri: string | null,
+  music?: Song | null,
 ): Promise<boolean> {
   /*
    * onConflict rather than a select-then-insert: two logs racing from the
@@ -1114,14 +1129,31 @@ export async function createPost(
    * failed upload rather than a throw that would call the whole post failed —
    * and the object just uploaded is removed, since nothing points at it.
    */
-  const { error: photoError } = await supabase
+  const song = music && STORY_MUSIC !== 'off' ? musicColumns(music) : {};
+  let { error: photoError } = await supabase
     .from('post_photos')
-    .insert({ post_id: postId, path });
+    .insert({ post_id: postId, path, ...song });
+  if (photoError && Object.keys(song).length > 0 && isMusicRefusal(photoError)) {
+    ({ error: photoError } = await supabase.from('post_photos').insert({ post_id: postId, path }));
+  }
   if (photoError) {
     await removeStoredPhoto(path);
     return false;
   }
   return true;
+}
+
+/**
+ * True when a photo insert failed because of its song and would go
+ * through without it: PGRST204 (PostgREST does not know a column, so 020
+ * is not applied yet), the content filter on the title or artist
+ * (objectionable_content, detail 'music'), or the music shape check.
+ * Anything else, a failed photo is a failed photo with or without a song.
+ */
+function isMusicRefusal(e: { code?: string; message?: string; details?: string | null }): boolean {
+  if (e.code === 'PGRST204') return true;
+  if (e.code === 'P0001' && /objectionable_content/.test(e.message ?? '') && e.details === 'music') return true;
+  return e.code === '23514' && /post_photos_music_shape/.test(e.message ?? '');
 }
 
 /**
@@ -1145,6 +1177,9 @@ export type PostPhotoOutcome = 'added' | 'no-post' | 'failed';
  * 'failed' lets the caller say the post still shows the old picture, and
  * 'no-post' lets it skip the refetch a changed post needs. Throws when the
  * lookup for the post itself did not go through.
+ *
+ * Never sends a song: music goes only with an explicit Save & post
+ * (createPost), and a photo kept in step with the Dex is not that.
  */
 export async function addPhotoForDrink(
   myId: string,

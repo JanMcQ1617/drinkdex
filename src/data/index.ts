@@ -49,6 +49,7 @@ export const COUNT_BY_CATEGORY: Record<DrinkCategory, number> = CATEGORY_ORDER.r
   {} as Record<DrinkCategory, number>
 );
 
+/** @deprecated rarity, removed in v3.1; nothing reads it, and the close-out deletes it. */
 export const COUNT_BY_RARITY: Record<Rarity, number> = DRINKS.reduce(
   (acc, d) => {
     acc[d.rarity] = (acc[d.rarity] ?? 0) + 1;
