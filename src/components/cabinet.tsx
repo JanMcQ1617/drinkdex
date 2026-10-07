@@ -15,7 +15,6 @@ import { Icon } from '@/components/icons';
 import { colors, dexNumber, elevation, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, formatDexNumber } from '@/data';
 import { faceOf, fitScale, textWidth } from '@/lib/textFit';
-import type { Rarity } from '@/types';
 
 /* ==================================================================== */
 /* The cabinet                                                          */
@@ -265,21 +264,16 @@ export type MountSize = 'grid' | 'shelf' | 'feature' | 'thumb';
  * Each mount's geometry. `padding` is from the inside of the 1pt edge to
  * the content, so a grid card's text column is `cardWidth − 38` (1 + 18 on
  * each side) and a shelf card's `cardWidth − 26`. The 18pt is clear mat:
- * until v3.1 a tier rule was printed inside it, and the padding was kept
- * exactly when the rule went, so every DrinkName measure in
- * specs/v3-cabinet.md 6.4 still holds. A caller with its own measure
- * (CustomDrinkTile) may override the padding through `style`.
- *
- * `ruleInset` is read by nothing since v3.1; the close-out deletes it.
+ * v3 printed a rule inside it, and v3.1 kept the padding exactly when the
+ * rule went, so every DrinkName measure in specs/v3-cabinet.md 6.4 still
+ * holds. A caller with its own measure (CustomDrinkTile) may override the
+ * padding through `style`.
  */
-export const MOUNT: Record<
-  MountSize,
-  { radius: number; ruleInset: number | null; padding: number; windowRadius: number }
-> = {
-  grid: { radius: 8, ruleInset: 4, padding: 18, windowRadius: 3 },
-  feature: { radius: 8, ruleInset: 4, padding: 12, windowRadius: 3 },
-  shelf: { radius: 6, ruleInset: 3, padding: 12, windowRadius: 2 },
-  thumb: { radius: 4, ruleInset: null, padding: 3, windowRadius: 2 },
+export const MOUNT: Record<MountSize, { radius: number; padding: number; windowRadius: number }> = {
+  grid: { radius: 8, padding: 18, windowRadius: 3 },
+  feature: { radius: 8, padding: 12, windowRadius: 3 },
+  shelf: { radius: 6, padding: 12, windowRadius: 2 },
+  thumb: { radius: 4, padding: 3, windowRadius: 2 },
 };
 
 /** Which mount a MountWindow sits in, for its corner. */
@@ -297,9 +291,6 @@ const MountSizeContext = createContext<MountSize>('grid');
  *
  * A frame only: the edges are decorative, and the card that holds the
  * mount speaks for it.
- *
- * `tier` is ignored since v3.1 (rarity is gone) and kept only so callers
- * not yet moved off it compile; the close-out deletes it.
  */
 export function Mount({
   state,
@@ -309,8 +300,6 @@ export function Mount({
   style,
 }: {
   state: 'mounted' | 'slot';
-  /** @deprecated rarity, removed in v3.1: ignored; deleted at the close-out. */
-  tier?: Rarity;
   size: MountSize;
   /** Seat shadow and matEdge when true. */
   onLining: boolean;
@@ -399,16 +388,6 @@ export function NumberPlate({ n, tone }: { n: number; tone: 'mat' | 'paper' | 'l
       </Text>
     </View>
   );
-}
-
-/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
-export function TierWord(props: { rarity: Rarity; tone: 'paper' | 'lining'; size?: 'sm' | 'md' }): null {
-  return null;
-}
-
-/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
-export function RarityTally(props: { counts: Record<Rarity, number>; tone: 'paper' | 'lining' }): null {
-  return null;
 }
 
 /**

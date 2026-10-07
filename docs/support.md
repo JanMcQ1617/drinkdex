@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 6 October 2026**
+**Last updated: 7 October 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -18,12 +18,12 @@ subject and it will be treated that way.
 
 **Delete your account.** Profile → **Settings** (the gear, top right) →
 **Delete account**. It removes your profile, every post, every photo, your
-likes, and your follows in both directions. It is immediate, it cannot be
-undone, and you do not need to email anyone first. If a photo cannot be
-removed, the account stays and the app tells you; try again once you have a
-signal. If you signed in with Apple or Facebook, removing Sipply from that
-account is done in Apple's or Facebook's settings:
-[Deleting your data](data-deletion) explains how.
+likes, your follows in both directions and the tournaments you host. It is
+immediate, it cannot be undone, and you do not need to email anyone first.
+If a photo cannot be removed, the account stays and the app tells you; try
+again once you have a signal. If you signed in with Apple or Facebook,
+removing Sipply from that account is done in Apple's or Facebook's
+settings: [Deleting your data](data-deletion) explains how.
 
 **Report a post or an account.** The **"..."** menu on any post or profile
 that is not yours → **Report**. Pick a reason. It comes straight to us.
@@ -140,16 +140,18 @@ but no longer follows anyone.
 
 **How do tournaments work?** Tap the trophy at the top of Home, then **+**
 to host one: give it a name, choose when it starts and how long it runs,
-add a goal if you want one, and invite people you follow. Whoever has the
-most different drinks at the end wins or, with a goal, whoever reaches it
-first; a tie goes to whoever got there first. The rules are the same in
+add a goal if you want one, and invite people you follow. With a goal,
+whoever reaches it first wins and the tournament ends there; otherwise, or
+if nobody reaches it, whoever has the most different drinks at the end
+wins, and a tie goes to whoever got there first. The rules are the same in
 every tournament, and every tournament screen shows them: "Each different
 drink you post counts once, up to 3 new drinks a day. It is about trying
 new things, never how much: a taste counts. No prizes, and Apple is not a
 sponsor. Please drink responsibly." The host can end a running tournament
 early from its **"..."** menu, and whoever is ahead then wins, or delete
 one that has not finished, and it disappears for everyone in it. Anyone
-else can leave from the same menu, but cannot rejoin.
+who has joined can leave from the same menu before it finishes, but cannot
+rejoin, and an invitation you decline cannot be sent to you again.
 
 **Why didn't a drink count?** Usually one of these:
 
@@ -161,10 +163,12 @@ else can leave from the same menu, but cannot rejoin.
   tournament later either, even if you post it again on another day.
 - **Only during the dates.** A drink counts when you post it between the
   start and the end. One you had before the tournament counts if you post
-  it again while it is on.
+  it again while it is on. Counting also stops early when the host ends
+  the tournament or someone reaches its goal.
 - **Only drinks in the Dex.** A drink you added yourself is not posted, so
   it cannot count.
-- **Only once you have joined.** Joining late is fine: everything you
+- **Only if you have joined.** Until you accept the invitation, nothing of
+  yours is counted. Joining late is fine: once you join, everything you
   posted since the start counts.
 - **Deleted posts.** Deleting a post before the tournament ends takes that
   drink out of the count. Once a finished tournament has shown its

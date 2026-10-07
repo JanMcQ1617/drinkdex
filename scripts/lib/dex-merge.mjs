@@ -26,7 +26,14 @@
  * `-usa-wn`, orphaning every collection record that points at them — and
  * because the new ids are unique too, no collision check catches it. It looks
  * like a clean run. Normalise the OUTPUT FIELD. Never the source variable.
+ *
+ * ORIGIN STORIES. `originStory` is not projected by any generator: it is
+ * written in scripts/origindata/ and attached here, by merge() and by
+ * merge-origin-stories.mjs, so a script that rebuilds whole rows from its own
+ * source files cannot drop it. See attachOriginStories.
  */
+
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 /* ------------------------------------------------------------------ */
 /* Keys                                                                */
@@ -298,6 +305,155 @@ export function validate({ drinks, incoming, category, owner }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Origin stories                                                      */
+/* ------------------------------------------------------------------ */
+
+/* Resolved from this module, never the working directory, so a merge run
+ * from anywhere finds the same files. */
+const ORIGIN_DIR = new URL('../origindata/', import.meta.url);
+
+/* Only the writers' story files. A sidecar `batch-NN.flags.json` holds
+ * notes for Jan and is never read. */
+const ORIGIN_FILE = /^batch-\d{2}\.json$/;
+
+/* 60, not the writers' original 300: a drink with no documented origin
+ * gets one honest sentence ("has no documented inventor or date"), and
+ * padding it to length would mean inventing history. */
+export const STORY_MIN = 60;
+export const STORY_MAX = 800;
+
+/* The band renders plain text: any of these would show up literally. */
+const STORY_FORBIDDEN = [
+  [/[\n\r]/, 'a line break'],
+  [/</, 'a "<" (markup)'],
+  [/\]\(/, 'a markdown link'],
+  [/http|www\./i, 'a URL'],
+  [/\p{Extended_Pictographic}/u, 'an emoji or pictograph'],
+];
+
+/* The same year drinkLabels.ts's datelineOf reads (decades included). */
+const STORY_YEAR = /\b(1[5-9]\d\d|20[0-2]\d)s?\b/;
+
+/**
+ * Reads scripts/origindata/batch-NN.json (only files matching
+ * /^batch-\d{2}\.json$/, in name order) and returns the rows with
+ * `originStory` as the LAST key of every row that has a valid story, and
+ * removed from every row that does not (never an empty string), so two runs,
+ * from any script, write the same bytes. Rows are copied, never mutated.
+ *
+ * strict (merge-origin-stories.mjs): a problem in the story files is an
+ * error, and the caller writes nothing. Otherwise (merge(), on behalf of the
+ * cocktail and spirit merges) it is a warning and only valid stories are
+ * attached: those scripts are bystanders to the stories and must not stop
+ * on them.
+ *
+ * Two checks the spec once listed are deliberately absent from `warnings`:
+ *  - the batch range. Files were refilled out of order (batch-15 holds
+ *    #501-600, batch-06 #751-900), so a dexNumber outside NN's nominal
+ *    hundred is normal, not misfiled. The id-in-two-files check is what
+ *    catches a real filing mistake.
+ *  - a story with no year. Two drinks in five have no documented origin
+ *    date, so it is the expected case; as a warning it would fill the
+ *    20-line cap on every merge and bury the warning that needs action.
+ *    It is counted in `report.noYear` instead, for the runner to print.
+ *
+ * No directory (or no batch file in it) outside strict mode: the rows come
+ * back unchanged, with nothing to report.
+ *
+ * @returns {{ out: object[], errors: string[], warnings: string[], report: null | {
+ *   files: { file: string, entries: number, attached: number, lo: number, hi: number }[],
+ *   attached: number, total: number, missing: string[], noYear: string[] } }}
+ */
+export function attachOriginStories(rows, { strict = false } = {}) {
+  const errors = [];
+  const warnings = [];
+  const problem = (msg) => (strict ? errors : warnings).push(msg);
+
+  const files = existsSync(ORIGIN_DIR)
+    ? readdirSync(ORIGIN_DIR).filter((f) => ORIGIN_FILE.test(f)).sort()
+    : [];
+  if (!files.length) {
+    if (strict) errors.push('no scripts/origindata/batch-NN.json files to merge');
+    return { out: rows, errors, warnings, report: null };
+  }
+
+  const byId = new Map(rows.map((r) => [r.id, r]));
+  const stories = new Map(); // id -> trimmed story
+  const fileOf = new Map(); // id -> the file it was first read from
+  const perFile = [];
+
+  for (const file of files) {
+    const stat = { file, entries: 0, attached: 0, lo: Infinity, hi: -Infinity };
+    perFile.push(stat);
+    let data;
+    try {
+      data = JSON.parse(readFileSync(new URL(file, ORIGIN_DIR), 'utf8'));
+    } catch (e) {
+      problem(`${file}: does not parse (${e.message}) — none of its stories attached`);
+      continue;
+    }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      problem(`${file}: must be one object of id -> story — none of its stories attached`);
+      continue;
+    }
+
+    for (const [id, value] of Object.entries(data)) {
+      stat.entries++;
+      const where = `${file} ${id}`;
+      const row = byId.get(id);
+      if (!row) {
+        // Usually a drink remove-drinks.mjs or prune-nonalcoholic.mjs took out:
+        // delete its entry from the batch file.
+        problem(`${where}: no drink has this id`);
+        continue;
+      }
+      if (fileOf.has(id)) {
+        // First file in name order keeps the id, so the outcome never
+        // depends on the order readdir returned.
+        problem(`${where}: already written in ${fileOf.get(id)}`);
+        continue;
+      }
+      // Claimed before the story is checked, so a second copy is reported in
+      // the same run even when the first copy is invalid too.
+      fileOf.set(id, file);
+      if (typeof value !== 'string') { problem(`${where}: story is not a string`); continue; }
+      const story = value.trim();
+      if (story.length < STORY_MIN || story.length > STORY_MAX) {
+        problem(`${where}: ${story.length} characters, outside ${STORY_MIN} to ${STORY_MAX}`);
+        continue;
+      }
+      const bad = STORY_FORBIDDEN.find(([re]) => re.test(story));
+      if (bad) { problem(`${where}: contains ${bad[1]}`); continue; }
+
+      stories.set(id, story);
+      stat.attached++;
+      stat.lo = Math.min(stat.lo, row.dexNumber);
+      stat.hi = Math.max(stat.hi, row.dexNumber);
+    }
+  }
+
+  // delete-then-set moves the key to the end, wherever a hand edit or an
+  // older run left it, so every writer serialises the row the same way.
+  const out = rows.map((row) => {
+    const next = { ...row };
+    delete next.originStory;
+    const story = stories.get(row.id);
+    if (story) next.originStory = story;
+    return next;
+  });
+
+  const missing = rows.filter((r) => !stories.has(r.id)).map((r) => r.id);
+  const noYear = rows.filter((r) => stories.has(r.id) && !STORY_YEAR.test(stories.get(r.id))).map((r) => r.id);
+
+  return {
+    out,
+    errors,
+    warnings,
+    report: { files: perFile, attached: stories.size, total: rows.length, missing, noYear },
+  };
+}
+
+/* ------------------------------------------------------------------ */
 /* Merge                                                               */
 /* ------------------------------------------------------------------ */
 
@@ -307,15 +463,23 @@ export function validate({ drinks, incoming, category, owner }) {
  * Never rebuilds drinks.json: several sessions write it, and a rebuild
  * discards whatever landed since this script last read the file. Numbers are
  * reused by id so a re-run is a true no-op rather than renumbering the Dex.
+ *
+ * `out` also carries the origin stories (attachOriginStories). The scripts
+ * project their rows without `originStory`, so without this every cocktail
+ * or spirit merge would strip the stories off the rows it rebuilds. The merge
+ * scripts gate (reportAndGate) before calling this, so story problems are
+ * printed here as warnings and never stop the write; `added` stays the
+ * script's own cards, without stories.
  */
 /**
  * KEY ORDER, for anyone porting an existing script onto this.
  *
- * `{ ...card, dexNumber }` appends dexNumber LAST. If your script projected
- * it mid-object, the straight swap reorders every key in every row: the data
- * is byte-identical and the diff is enormous — 882 insertions and 882
- * deletions on one 441-row category — and it reads in review exactly like
- * corruption.
+ * `{ ...card, dexNumber }` appends dexNumber after every projected field (an
+ * origin story, when there is one, is attached after it). If your script
+ * projected it mid-object, the straight swap reorders every key in every
+ * row: the data is byte-identical and the diff is enormous — 882 insertions
+ * and 882 deletions on one 441-row category — and it reads in review exactly
+ * like corruption.
  *
  * Carry a `dexNumber: 0` placeholder at the position you want in your
  * projection. A spread preserves the position of a key that already exists,
@@ -328,7 +492,10 @@ export function merge({ drinks, incoming }) {
   let next = Math.max(0, ...drinks.map((d) => d.dexNumber)) + 1;
 
   const added = incoming.map((c) => ({ ...c, dexNumber: existingDex.get(c.id) ?? next++ }));
-  const out = [...kept, ...added].sort((a, b) => a.dexNumber - b.dexNumber);
+  const merged = [...kept, ...added].sort((a, b) => a.dexNumber - b.dexNumber);
+  const { out, warnings } = attachOriginStories(merged);
+  for (const w of warnings.slice(0, 20)) console.warn(`  warn  origin story: ${w}`);
+  if (warnings.length > 20) console.warn(`  warn  …and ${warnings.length - 20} more origin-story warnings (run merge-origin-stories.mjs)`);
   const fresh = added.filter((c) => !existingDex.has(c.id)).length;
   return { out, added, fresh, refreshed: added.length - fresh };
 }

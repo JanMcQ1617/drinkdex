@@ -63,8 +63,10 @@ export default function TabLayout() {
            * `animation` first and only falls back to `transitionSpec` when it
            * is undefined, so animation: 'none' would switch this off.
            *
-           * The incoming page slides in from the side of the tab it came
-           * from while the outgoing one slides 24pt the other way, under it
+           * Both pages move the same way, by their places in the bar (a tab
+           * rests at +1 to the right of the focused one, −1 to its left):
+           * going right, the incoming page slides in 24pt from the right
+           * while the outgoing one slides 24pt off to the left, under it
            * (the focused scene is drawn above the rest, and every scene has
            * an opaque ground). Inline, so TypeScript infers the interpolator's
            * argument: the vendored bottom-tabs has no public subpath for it.

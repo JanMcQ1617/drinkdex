@@ -206,7 +206,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
   /*
    * Rows whose person is not in hand are left out: an account deleted, or
    * one you have just blocked (dropAuthor takes their profile away, so their
-   * rows go at once, with their posts and their pours tile).
+   * rows go at once, with their posts and their story circle on Home).
    */
   const visible = (items ?? []).filter((i) => profiles[i.actorId]);
   const isNew = (i: ActivityItem) => !seenAtOnOpen || isLater(i.at, seenAtOnOpen);

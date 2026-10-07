@@ -239,11 +239,11 @@ export default function DrinkDetailScreen() {
    * centre-tab flow asked — the same act, private from one door and public
    * from the other. Both now ask, with the same two buttons.
    *
-   * Logging another pour of a collected drink (the 'update' sheet) asks
-   * too. "Save photo" keeps a post that already exists in step and never
-   * creates one, so an entry kept to the Dex stays there when its photo
-   * changes; "Save & post" is the explicit way to share an entry that was
-   * never posted, or whose post failed.
+   * Posting a collected drink again (the 'update' sheet, "Post it again")
+   * asks too. "Save photo" keeps a post that already exists in step and
+   * never creates one, so an entry kept to the Dex stays there when its
+   * photo changes; "Save & post" is the explicit way to share an entry
+   * that was never posted, or whose post failed.
    */
   const handleConfirm = useCallback(
     async (alsoPost: boolean) => {
@@ -281,13 +281,13 @@ export default function DrinkDetailScreen() {
            * nothing, so an entry kept to the Dex stays there. Neither is
            * awaited, for the same reason as the log path below.
            *
-           * The caption is empty because the update sheet has no note field: an
-           * existing post keeps the words it was first shared with, and a
-           * new one says nothing rather than a filler line. The note saved
-           * with the entry is not sent either. A post the server refused
-           * for its note is retried from here, and reportPost promises that
-           * retry goes out without the note; sending it again would be
-           * refused again.
+           * The caption is empty because the update sheet has no caption
+           * field: an existing post keeps the words it was first shared
+           * with, and a new one says nothing rather than a filler line. The
+           * caption saved with the entry is not sent either. A post the
+           * server refused for its caption is retried from here, and
+           * reportPost promises that retry goes out without the caption;
+           * sending it again would be refused again.
            *
            * A failure is said once it is known, by lib/pour's reporters —
            * the centre-tab log screen's, so the same failure reads the same
@@ -649,7 +649,7 @@ export default function DrinkDetailScreen() {
                       The same pair, in the same order, as the centre-tab log
                       screen. Posting is the primary action because it is the
                       social half of the app, but it is never the only one: the
-                      first button keeps the pour on this phone. A saved pour
+                      first button keeps the photo on this phone. A saved photo
                       answers with the success haptic; buttons do not tick.
                     */}
                     <View style={styles.sheetActions}>

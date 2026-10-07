@@ -622,10 +622,10 @@ export async function fetchProfiles(ids: string[]): Promise<Record<string, UserP
 
 /**
  * Every photo shared in the last 24 hours by you or anyone you follow,
- * newest first, for the row of pour tiles on Home.
+ * newest first, for the row of story circles on Home.
  *
- * By photo, not by post: logging a drink again adds a photo to its old post
- * (one post per drink), and that photo is still today's pour. The function
+ * By photo, not by post: posting a drink again adds a photo to its old post
+ * (one post per drink), and that photo is still one of today's. The function
  * runs as the caller, so the tables' own read policies, blocks included,
  * decide what comes back.
  *

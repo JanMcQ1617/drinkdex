@@ -750,10 +750,9 @@ const drawn = new WeakMap<CustomDrink, Drink>();
 
 /**
  * A custom drink as a Drink, FOR DRAWING ONLY: DrinkArt, the shared drink
- * panels, the log sheet's row. dexNumber is 0 and rarity 'common' because
- * a custom drink has neither, and recipe, serve and composition are built
- * the way the monthly export builds them, so what the person sees is what
- * Jan receives.
+ * panels, the log sheet's row. dexNumber is 0 because a custom drink has
+ * none, and recipe, serve and composition are built the way the monthly
+ * export builds them, so what the person sees is what Jan receives.
  *
  * Never pass the result to useCollection, useSocial or anything else that
  * writes: those are catalogue ids only, and every count in the app relies
@@ -775,7 +774,6 @@ export function toDrink(c: CustomDrink): Drink {
     description: c.description,
     abv: formatAbv(c.abvLow, c.abvHigh),
     origin: c.origin,
-    rarity: 'common',
     tastingNotes: c.tastingNotes,
     glassware: c.glassware,
     ingredients: cocktail ? c.ingredients.map((i) => i.item).filter((i) => !ICE.test(i)) : undefined,

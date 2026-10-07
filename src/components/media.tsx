@@ -5,7 +5,6 @@ import { Icon, type IconName } from '@/components/icons';
 import { dexNumber, fonts, onMedia, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
 import { textWidth } from '@/lib/textFit';
-import type { Rarity } from '@/types';
 
 /* ==================================================================== */
 /* Over a photograph                                                    */
@@ -39,11 +38,6 @@ const STATUS_GAP = 5;
 /* ==================================================================== */
 /* Plates and plaques                                                   */
 /* ==================================================================== */
-
-/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
-export function MediaPlaque(props: { rarity: Rarity; size?: 'sm' | 'md' }): null {
-  return null;
-}
 
 /**
  * The number plate's media skin: "#0009" in `dexNumber` with onMedia.ink
@@ -140,20 +134,9 @@ export function DexStatusPlaque({
  * the reel glyph. 22pt, the marker fill with a 1pt marker edge, onMedia.ink.
  * It speaks through the photo it sits on, so it is hidden from VoiceOver
  * even when it is laid over the photo as a sibling ("1/3" read on its own
- * says nothing).
- *
- * `gilt` is ignored since v3.1 (it drew the legendary sparkle), so a marker
- * given only `gilt` draws nothing; the close-out deletes the prop.
+ * says nothing). Given neither an icon nor text, it draws nothing.
  */
-export function MediaMarker({
-  icon,
-  text,
-}: {
-  icon?: IconName;
-  text?: string;
-  /** @deprecated rarity, removed in v3.1: ignored; deleted at the close-out. */
-  gilt?: boolean;
-}) {
+export function MediaMarker({ icon, text }: { icon?: IconName; text?: string }) {
   if (!icon && !text) return null;
   return (
     <View
@@ -169,11 +152,6 @@ export function MediaMarker({
       ) : null}
     </View>
   );
-}
-
-/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
-export function RarityRule(props: { rarity: Rarity }): null {
-  return null;
 }
 
 /**
@@ -221,7 +199,6 @@ export function TopScrim({ height = 120 }: { height?: number }) {
  * second; the plates row keeps its width clear of it by arithmetic.
  *
  * `inDex` null (signed out, or not known yet) draws no status plaque.
- * `rarity` is ignored since v3.1; the close-out deletes it.
  */
 export function Nameplate({
   name,
@@ -232,8 +209,6 @@ export function Nameplate({
 }: {
   name: string;
   number: number;
-  /** @deprecated rarity, removed in v3.1: ignored; deleted at the close-out. */
-  rarity?: Rarity;
   meta: string;
   inDex: boolean | null;
   /** Opens /drink/[id]. */

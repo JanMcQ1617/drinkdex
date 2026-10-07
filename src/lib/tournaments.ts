@@ -199,6 +199,16 @@ function toSummary(r: MyTournamentRow): TournamentSummary | null {
   const s = state(r.state);
   const myStatus = role(r.my_status);
   if (!id || name === null || !hostId || !startsAt || !endsAt || !s || !myStatus) return null;
+  const winnerId = str(r.winner_id);
+  const winnerDistinct = num(r.winner_distinct);
+  /*
+   * my_tournaments() nulls winner_id for a winner you are blocked with but
+   * reads winner_distinct from the stored winner, so a finished row with a
+   * count and no winner is a hidden winner. (No winner at all, or a winner
+   * whose account is gone, leaves both null.) The count is dropped with
+   * the name, as tournament_board shows neither.
+   */
+  const winnerHidden = s === 'finished' && winnerId === null && winnerDistinct !== null;
   return {
     id,
     name,
@@ -207,8 +217,9 @@ function toSummary(r: MyTournamentRow): TournamentSummary | null {
     endsAt,
     target: num(r.target),
     finishedAt: str(r.finished_at),
-    winnerId: str(r.winner_id),
-    winnerDistinct: num(r.winner_distinct),
+    winnerId,
+    winnerDistinct: winnerId === null ? null : winnerDistinct,
+    winnerHidden,
     state: s,
     myStatus,
     members: num(r.members) ?? 0,

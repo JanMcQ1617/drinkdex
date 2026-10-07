@@ -190,27 +190,28 @@ for build 15 as pasted (bold marks gone, each paragraph's line breaks as
 spaces, a blank line between paragraphs): sign-in through Instagram is
 1,957; the third-party paragraph is 121 with no social sign-in, 709 with
 Apple and Facebook, 896 with Google as well; phone sign-in is 457 before
-its code line; tournaments 701; songs 574. Those six core paragraphs, the
-896 one and tournaments make 3,558, so adding phone sign-in or songs on top
+its code line; tournaments 654; songs 589. Those six core paragraphs, the
+896 one and tournaments make 3,511. Phone sign-in still fits on top: 3,977
+with its six-digit code on the line after it, 23 to spare. Songs on top
 runs over. When it does, shorten Contacts (508) and Instagram (480), the
 two longest, to their first two sentences: the privacy policy, linked from
-the listing, carries the rest. That saves 607, which fits either addition
-with room to spare and both with almost none, so count before pasting.
+the listing, carries the rest. That saves 607, which fits songs with room
+to spare, and songs with phone sign-in at 3,961, 39 to spare, so count
+before pasting.
 
 ### Tournaments — a server with migration 020 applied
 
-**Tournaments.** People who follow each other can hold a friendly
-tournament: whoever posts the most different drinks wins. Each drink counts
+**Tournaments.** Anyone can hold a friendly tournament with people they
+follow: whoever posts the most different drinks wins. Each drink counts
 once, and how much anyone drinks is never counted or shown. At most 3 new
 drinks a day count per person, and a drink first posted after the day's
 three never counts later, so nothing rewards trying a lot in one night. No
 prizes, no entry fees, no streaks, no meters, no push notifications. Every
 tournament screen shows the rules, ending "No prizes, and Apple is not a
-sponsor. Please drink responsibly." Only people the host follows can be
-invited, and names pass the caption filter. To try it, follow any account,
-then tap the trophy at the top of Home, then +.
+sponsor. Please drink responsibly." Names pass the caption filter. To try
+it, follow any account, then tap the trophy at the top of Home, then +.
 
-[701]
+[654]
 
 ### Songs on posts — a build with `EXPO_PUBLIC_STORY_MUSIC=tap`
 
@@ -220,15 +221,16 @@ do not submit it without written permission from Apple or the
 rights-holders (specs/v3.1-changes.md §0.1).
 
 **Songs on posts.** A person can add an Apple Music song to a photo,
-searched from our server through the Apple Music API under our MusicKit
+searched on our server through the Apple Music API with our MusicKit
 developer token; explicit songs are left out. On the story it is a tag
 below the photo, never over it: cover art, title, artist, a play button and
 Apple's "Listen on Apple Music" badge, which opens the song. The 30-second
 preview plays only when tapped, once, without looping, always beside that
-link (5.2.5); the song picker works the same way. Cover art and song
-details appear only there, with playback, never in share images (4.5.2).
+link (5.2.5); the picker works the same way. Cover art appears only with
+the song (the tag, the picker, the post being written), never in share
+images (4.5.2).
 
-[574]
+[589]
 
 ---
 

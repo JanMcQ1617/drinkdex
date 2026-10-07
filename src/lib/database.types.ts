@@ -325,6 +325,7 @@ export type MyTournamentRow = {
   finished_at: string | null;
   /** Null when there is none yet, nobody posted, or the winner is someone you are blocked with. */
   winner_id: string | null;
+  /** The stored winner's count, set even when winner_id is nulled for a block (lib/tournaments reads that as hidden). */
   winner_distinct: number | null;
   state: 'upcoming' | 'live' | 'finished';
   my_status: 'host' | 'invited' | 'accepted' | 'declined';

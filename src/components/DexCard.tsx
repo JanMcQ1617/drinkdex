@@ -59,15 +59,6 @@ const LOCKED_NAME: TextStyle = { fontFamily: fonts.bodyMedium, fontSize: 15, lin
 export { FACE_FILL };
 
 /* ==================================================================== */
-/* FoilSweep                                                            */
-/* ==================================================================== */
-
-/** @deprecated rarity, removed in v3.1: draws nothing; deleted at the close-out. */
-export function FoilSweep(props: { width: number; once?: boolean }): null {
-  return null;
-}
-
-/* ==================================================================== */
 /* DrinkFace                                                            */
 /* ==================================================================== */
 

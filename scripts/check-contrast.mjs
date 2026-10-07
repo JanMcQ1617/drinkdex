@@ -12,8 +12,8 @@
  * declares for it.
  *
  * Targets: 4.5:1 for body text, 3:1 for large text, glyphs and the edges
- * that identify a control (WCAG 1.4.11), and 2:1 for the two design floors
- * that are not WCAG at all but keep a locked drink from reading as empty.
+ * that identify a control (WCAG 1.4.11), and 2:1 for the design floor
+ * that is not WCAG at all but keeps a locked drink from reading as empty.
  */
 
 import { Buffer } from 'node:buffer';
@@ -141,11 +141,11 @@ const R = new Proxy(foundRgba, {
 
 /*
  * The worst case under anything drawn over a photograph or a video: a
- * blown-out white frame, for the light ink that is all of onMedia's text
- * but one. The legendary plaque's ink is dark, and for dark ink on a
- * translucent fill the worst frame is a black one, so a plaque is
- * measured over whichever of the two is worse (plaqueGround). Neither is
- * a token, because the app never paints them; the picture does.
+ * blown-out white frame, for the light ink that is all of onMedia's text.
+ * A dark ink on a translucent fill would be worst over a black frame, so a
+ * plaque is measured over whichever of the two is worse for its ink
+ * (plaqueGround), and a dark-inked plaque added later is measured right.
+ * Neither is a token, because the app never paints them; the picture does.
  */
 const WHITE_FRAME = '#FFFFFF';
 const BLACK_FRAME = '#000000';
@@ -342,19 +342,17 @@ const ON_MEDIA = parseBlock(section('export const onMedia = {', '} as const;'));
  * so a key added there must be one this audit measures or knows it need
  * not, or it would be drawn over a white photo unmeasured: text (`ink`, a
  * plaque's ink) is asserted on what it sits on, scrims and fills are the
- * grounds those pairs use, the sparkle is a glyph, and edges, rules and
- * the text shadow carry nothing alone (the plaque's word says the tier).
+ * grounds those pairs use, and edges and the text shadow carry nothing
+ * alone (the plaque's word says whether the drink is in your Dex).
  */
 const MEDIA_ROLES = [
   [/^ink$/, 'text'],
   [/^plaque\.\w+\.ink$/, 'text'],
-  [/^glyphGilt$/, 'glyph'],
   [/^scrim(Clear|Mid|Deep)$/, 'scrim'],
   [/^markerFill$/, 'fill'],
   [/^plaque\.\w+\.fill$/, 'fill'],
   [/^markerEdge$/, 'edge'],
   [/^plaque\.\w+\.edge$/, 'edge'],
-  [/^rule\.\w+$/, 'rule'],
   [/^shadow$/, 'text shadow'],
 ];
 const mediaPaths = (node, path = []) =>
@@ -365,7 +363,7 @@ const unclassed = mediaPaths(ON_MEDIA).filter((path) => !MEDIA_ROLES.some(([re])
 if (unclassed.length > 0) {
   unreadable(
     `${unclassed.map((path) => `onMedia.${path}`).join(', ')}: new over media. Say in MEDIA_ROLES ` +
-      'what it is (text, glyph, scrim, fill, edge, rule) and measure it before it reaches a photo.',
+      'what it is (text, scrim, fill, edge, or a new role) and measure it before it reaches a photo.',
   );
 }
 
@@ -403,35 +401,35 @@ function mediaInk(path) {
   return c.hex;
 }
 
+/*
+ * Every plaque in onMedia is measured, and `neutral` (DexStatusPlaque's)
+ * must be there: without it the audit would pass with no plaque pair at
+ * all while the feed still draws one.
+ */
 const PLAQUES = Object.keys(ON_MEDIA.plaque ?? {});
-for (const tier of ['neutral', 'rare', 'legendary']) {
-  if (!PLAQUES.includes(tier)) unreadable(`onMedia.plaque.${tier} is missing from theme.ts.`);
-}
+if (!PLAQUES.includes('neutral')) unreadable('onMedia.plaque.neutral is missing from theme.ts.');
 const MEDIA = {
   ink: mediaInk('ink'),
   scrimMid: onWhite(mediaColour('scrimMid')),
   scrimDeep: onWhite(mediaColour('scrimDeep')),
   markerFill: onWhite(mediaColour('markerFill')),
-  glyphGilt: mediaInk('glyphGilt'),
 };
 /** Every colour onMedia sets text in: `ink` and each plaque's ink. */
 const MEDIA_TEXT = [
   ['ink', MEDIA.ink],
-  ...PLAQUES.map((tier) => [`plaque.${tier}.ink`, mediaInk(`plaque.${tier}.ink`)]),
+  ...PLAQUES.map((plaque) => [`plaque.${plaque}.ink`, mediaInk(`plaque.${plaque}.ink`)]),
 ];
 
 /*
  * Never over media (specs/v3-cabinet.md section 4.4). Each of these is
  * legible on its own ground and fails 4.5:1 at the shallowest scrim stop
- * over a white photo, so none may ever be an onMedia text colour: rarity
- * over a photo is a solid plaque, and the only ink is onMedia's.
+ * over a white photo, so none may ever be an onMedia text colour: a
+ * tinted word never sits over a photo, and the only ink is onMedia's.
  */
 const FORBIDDEN_OVER_MEDIA = [
   'onLining',
   'onLiningMuted',
   'onLiningFaint',
-  'giltOnLining',
-  'rareOnLining',
   'taupe',
   'reelInkDim',
   'wineSoft',
@@ -470,26 +468,20 @@ const PAIRS = [
   [C.wine, C.bg, 4.5, 'wine text on page'],
   [C.wine, C.surface, 4.5, 'wine text on card'],
   [C.wine, C.bgSunk, 4.5, 'wine text on sunk well'],
-  [C.wine, C.wineWash, 4.5, 'wine text on its own wash'],
+  [C.wine, C.wineWash, 4.5, 'wine on wineWash: the New tag, selected chips, the trophy on your leaderboard row'],
   [C.merlot, C.bg, 4.5, 'merlot text on page'],
-  [C.giltInk, C.bg, 4.5, 'gilt text on page'],
-  [C.giltInk, C.surface, 4.5, 'gilt text on card'],
   [C.danger, C.bg, 4.5, 'danger text on page (dangerText button)'],
   [C.danger, C.surface, 4.5, 'danger text on a card (dangerText button)'],
   [C.danger, C.dangerWash, 4.5, 'danger text on its wash (danger button, form errors)'],
   [C.success, C.bg, 4.5, 'success text on page'],
   [C.textOnWine, C.wine, 4.5, 'text on wine button'],
-  [C.textOnGilt, C.gilt, 4.5, 'text on gilt button'],
-  [C.giltGlyph, C.bg, 3.0, 'gilt UI glyph on page'],
-  [C.giltGlyph, C.surface, 3.0, 'gilt UI glyph on card'],
   [C.textOnWine, C.lockInk, 4.5, 'text on locked artwork'],
   // Taupe. Decorative on light grounds (1.68:1 on page — deliberately
   // untested as type there); readable only on wine and espresso, where the
-  // intro sets its tagline, and a glyph on lining (section 4.1 below).
+  // intro sets its tagline.
   [C.taupe, C.wine, 4.5, 'tagline (taupe) on wine'],
   [C.taupe, C.lockInk, 4.5, 'tagline (taupe) on espresso'],
-  [C.taupeInk, C.bg, 4.5, 'taupe label on page'],
-  [C.taupeInk, C.taupeWash, 4.5, 'taupe label on its own wash'],
+  [C.taupeInk, C.bg, 4.5, 'number plate (taupeInk) on page'],
   // Intro: type on the wine ground of the pour.
   [C.textOnWine, C.wine, 4.5, 'intro wordmark (bone) on wine'],
   [C.textOnWine, C.wineDeep, 4.5, 'intro wordmark (bone) on wine-deep'],
@@ -511,15 +503,6 @@ const PAIRS = [
   // and fill the edit-profile swatches.
   [ACCENTS.ACCENT_AMBER, C.bg, 4.5, 'brass accent on page'],
   [ACCENTS.ACCENT_PLUM, C.bg, 4.5, 'plum accent on page'],
-  // Rarity is the frame material: hairline -> taupe -> wine -> gilt.
-  [C.textMuted, C.bg, 4.5, 'common label on page'],
-  [C.taupeInk, C.bg, 4.5, 'uncommon label on page'],
-  [C.wine, C.bg, 4.5, 'rare label on page'],
-  [C.giltInk, C.bg, 4.5, 'legendary label on page'],
-  [C.textMuted, C.cardBorder, 4.5, 'common label on its wash'],
-  [C.taupeInk, C.taupeWash, 4.5, 'uncommon label on its wash'],
-  [C.wine, C.wineWash, 4.5, 'rare label on its wash'],
-  [C.giltInk, C.giltWash, 4.5, 'legendary label on its wash'],
   // Dex grid — build 13's light empty slot. Its nameplate sits on
   // DexCard's `recessWash`, which is OPAQUE `slot` under every line of the
   // name and number, so `slot` is the exact ground here, not a stand-in.
@@ -554,8 +537,7 @@ const PAIRS = [
   [C.reelInk, C.reelBar, 4.5, 'active tab on the dark bar'], // 15.13
   [C.reelInkDim, C.reelBar, 4.5, 'resting tab label on the dark bar'], // 5.86
   // Build 13's dark log action: a wine plus on bone. v3 draws the plus the
-  // other way round, bone on wine (section 4.5 below); the same pair also
-  // holds the rare plaque's ink (section 4.4).
+  // other way round, bone on wine (section 4.5 below).
   [C.wine, C.reelInk, 4.5, 'plus glyph on the log action, dark bar'], // 13.53
 
   // Reels: the dark ground, and words and controls over video. Every rgba
@@ -585,8 +567,6 @@ const PAIRS = [
     ['onLining', 4.5, 'titles, body'],
     ['onLiningMuted', 4.5, 'secondary text'],
     ['onLiningFaint', 3.0, 'glyphs, the lock, 18pt and up only'],
-    ['giltOnLining', 4.5, 'the word Legendary'],
-    ['rareOnLining', 4.5, 'the word Rare'],
     ['dangerOnLining', 4.5, 'Remove from collection'],
   ].flatMap(([key, min, job]) => [
     [C[key], C.lining, min, `${key} on lining (${job})`],
@@ -594,11 +574,6 @@ const PAIRS = [
     [C[key], WORST.lining, min, `${key} on lining, worst grain pixel`],
     [C[key], WORST.cellar, min, `${key} on cellar, worst grain pixel`],
   ]),
-  // The uncommon dot. It sits on lining and in an empty slot, never on the
-  // drink page's grained cellar, so that one has no pair.
-  [C.taupe, C.lining, 3.0, 'uncommon dot (taupe) on lining (glyph)'],
-  [C.taupe, C.liningDeep, 3.0, 'uncommon dot (taupe) in an empty slot (glyph)'],
-  [C.taupe, WORST.lining, 3.0, 'uncommon dot (taupe) on lining, worst grain pixel (glyph)'],
   // The outline button's edge on lining identifies a control: 3:1, as the
   // edge composites over each ground it can stand on.
   ...LINING_GROUNDS.map(([where, ground]) => [
@@ -617,29 +592,20 @@ const PAIRS = [
   ]), // 11.18, 12.28, 9.27, 10.07
   [C.lining, C.onLining, 4.5, 'primary label on lining: the bone button (Button onLining)'], // 13.32
   [C.lining, C.onLiningMuted, 4.5, 'the bone button, pressed'], // 6.79
-  [C.onLining, C.wine, 4.5, 'bone plus glyph on wine; the rare plaque on paper'], // 10.95
+  [C.onLining, C.wine, 4.5, 'bone plus glyph on wine'], // 10.95
 
   'v3 · 4.2 Ink on mat (bone card stock)',
-  // gilt on mat (3.02) and line on mat (1.45) are decorative rules, the
-  // mount's tier rule and its paper edge, so they have no pair.
+  // line on mat (1.45) is the mount's paper edge, decorative, so it has no pair.
   [C.text, C.mat, 4.5, 'body text on mat'], // 14.50
   [C.textMuted, C.mat, 4.5, 'muted text on mat'], // 5.78
   [C.taupeInk, C.mat, 4.5, 'number plate on mat (taupeInk)'], // 5.55
-  [C.giltInk, C.mat, 4.5, 'the word Legendary on mat'], // 5.62
-  [C.wine, C.mat, 4.5, 'spec amounts and the word Rare on mat'], // 12.96
+  [C.wine, C.mat, 4.5, 'spec amounts on mat'], // 12.96
   [C.lineControl, C.mat, 3.0, 'control edge on mat'], // 3.69
-  [C.giltGlyph, C.mat, 3.0, 'legendary sparkle on mat (glyph)'], // 3.35
 
   'v3 · 4.3 Paper, worst grain pixel',
-  // giltGlyph has no grain pair: the sparkle is 2.98:1 over the tile's
-  // single darkest pixel (3.18 on the flat page, above). It is never the
-  // only cue, since the word Legendary always prints beside it, so the
-  // flat-page pair stands and a grain pair that fails on a few dark pixels
-  // is not added (specs/v3-cabinet.md section 4.3).
   [C.text, WORST.paper, 4.5, 'body text on page, worst grain pixel'],
   [C.textMuted, WORST.paper, 4.5, 'muted text on page, worst grain pixel'], // 5.15
-  [C.taupeInk, WORST.paper, 4.5, 'taupe label on page, worst grain pixel'], // 4.95
-  [C.giltInk, WORST.paper, 4.5, 'gilt text on page, worst grain pixel'], // 5.01
+  [C.taupeInk, WORST.paper, 4.5, 'number plate (taupeInk) on page, worst grain pixel'], // 4.95
   [C.wine, WORST.paper, 4.5, 'wine text on page, worst grain pixel'], // 11.56
   [C.textFaint, WORST.paper, 3.0, 'faint glyph / large text on page, worst grain pixel'], // 3.29
 
@@ -647,24 +613,22 @@ const PAIRS = [
   [MEDIA.ink, MEDIA.scrimMid, 4.5, 'onMedia.ink on scrimMid, the shallowest stop text may sit on'], // 5.45
   [MEDIA.ink, MEDIA.scrimDeep, 4.5, 'onMedia.ink on scrimDeep, the foot of the nameplate'], // 13.43
   [MEDIA.ink, MEDIA.markerFill, 4.5, 'onMedia.ink on markerFill (plates, markers, counts)'], // 9.98
-  ...PLAQUES.map((tier) => [
-    mediaInk(`plaque.${tier}.ink`),
-    plaqueGround(mediaInk(`plaque.${tier}.ink`), mediaColour(`plaque.${tier}.fill`)),
+  ...PLAQUES.map((plaque) => [
+    mediaInk(`plaque.${plaque}.ink`),
+    plaqueGround(mediaInk(`plaque.${plaque}.ink`), mediaColour(`plaque.${plaque}.fill`)),
     4.5,
-    `${tier} plaque: its ink on its fill`,
-  ]), // rare 13.53, legendary 4.79, neutral 9.98
-  [MEDIA.glyphGilt, MEDIA.markerFill, 3.0, 'legendary sparkle (glyphGilt) on a marker (glyph)'], // 4.31
+    `${plaque} plaque: its ink on its fill`,
+  ]), // neutral 9.98
 
-  'v3 · 4.5 Tab bar, and design floors',
+  'v3 · 4.5 Tab bar, and the design floor',
   [over(R.logActionEdge, C.reelBar), C.reelBar, 3.0, 'the log action\'s edge (logActionEdge) on the espresso bar'], // 3.02
   [C.textOnWine, C.wine, 4.5, 'plus glyph on the wine log action, every tab'], // 10.95
   // The unread dot keeps the dark skin's wineSoft (section 9.1.1), now on
   // every tab's bar rather than the reels ground above.
   [C.wineSoft, C.reelBar, 3.0, 'badge dot (wineSoft) on the espresso bar, every tab (glyph)'], // 3.15
-  // Design floors, not WCAG: a locked drink must still read as a glass
-  // pressed into the cellar, and a locked legendary as worth hunting.
+  // A design floor, not WCAG: a locked drink must still read as a glass
+  // pressed into the cellar.
   [over(R.debossLight, C.liningDeep), C.liningDeep, 2.0, 'design floor: deboss highlight in an empty slot'], // 2.14
-  [over(R.slotEdgeLegendary, C.liningDeep), C.liningDeep, 2.0, 'design floor: an empty legendary slot\'s edge'], // 2.52
 
   /*
    * v3.1, specs/v3.1-changes.md section 16.2. Home's stories sit on the

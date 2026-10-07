@@ -118,12 +118,6 @@ export function CollectionStats({
   onOpenDrink,
 }: {
   onOpenDrink: (id: string) => void;
-  /**
-   * @deprecated v3.1: ignored. An empty collection's way in is the post
-   * sheet now (spec v3.1 §8.2), which this block opens itself; Stats
-   * still passes its Back here.
-   */
-  onOpenDex?: () => void;
 }) {
   const router = useRouter();
   const unlocks = useCollection((s) => s.unlocks);

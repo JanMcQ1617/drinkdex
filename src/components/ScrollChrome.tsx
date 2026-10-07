@@ -25,7 +25,7 @@ import {
 /* (check-design rule 15).                                              */
 /*                                                                      */
 /* AT REST, FULL CHROME. Offset 0 maps to the identity everywhere, and  */
-/* each tab's chrome is rebuilt when the tab gains focus so that         */
+/* each tab's chrome is rebuilt when the tab gains focus so that        */
 /* arriving always shows it whole. While VoiceOver runs nothing moves:  */
 /* a bar slid under the status strip would still be focusable.          */
 /* ==================================================================== */

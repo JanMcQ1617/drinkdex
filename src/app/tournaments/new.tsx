@@ -33,6 +33,7 @@ import {
   TOURNAMENT_LIMITS,
   tournamentHref,
   tournamentsHref,
+  type TournamentError,
   type TournamentLength,
   type TournamentStart,
 } from '@/lib/tournaments';
@@ -77,6 +78,19 @@ const GOALS: readonly (number | null)[] = [null, ...TOURNAMENT_LIMITS.targetChoi
 const MAX_INVITEES = TOURNAMENT_LIMITS.maxMembers - 1;
 
 const CREATE_FAILED = 'Could not create the tournament. Check your connection and try again.';
+
+/*
+ * The refusals create_tournament can give, each with its own sentence.
+ * Anything else is the generic one: a not_found here means the server has
+ * no create_tournament yet (migration 020 missing), and "This tournament
+ * is no longer there" would be wrong for one that never existed.
+ */
+const CREATE_REASONS: readonly TournamentError[] = [
+  'invalid_dates',
+  'invalid_goal',
+  'too_many',
+  'no_invitees',
+];
 
 /** "Runs Mon 6 Oct to Sun 12 Oct": the end shown inclusive, the last day that counts. */
 function runsLine(start: TournamentStart, length: TournamentLength): string {
@@ -180,7 +194,8 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
     haptic.error();
     // The filter's refusal belongs under the field it is about; the rest above the button.
     if (r.reason === 'objectionable') setNameError(tournamentErrorText(r.reason, CREATE_FAILED));
-    else setError(tournamentErrorText(r.reason, CREATE_FAILED));
+    else if (CREATE_REASONS.includes(r.reason)) setError(tournamentErrorText(r.reason, CREATE_FAILED));
+    else setError(CREATE_FAILED);
   };
 
   return (

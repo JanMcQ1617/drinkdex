@@ -11,8 +11,8 @@ their own headings below; leave those out of a build made without the
 flag.
 
 Tournaments need no flag: they appear once migration 020 is applied on the
-server, and stay hidden until then. Until it is, leave out every line below
-that mentions them.
+server, and stay hidden until then. Until it is, leave out every line or
+sentence below that mentions them.
 
 ---
 
@@ -22,7 +22,7 @@ Sipply is a field guide to cocktails and spirits. Every drink you try is an entr
 
 Post what you are drinking and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Tell it what is on your shelf and My Bar works out what you can make tonight, and ranks the one bottle that unlocks the most.
 
-This build adds tournaments with people you follow, turns the stories at the top of Home into circles, gives My Bar a tab of its own, and drops rarity: an entry is simply collected or not yet.
+This build turns the stories at the top of Home into circles, gives My Bar a tab of its own, and drops rarity: an entry is simply collected or not yet. It also adds tournaments with people you follow.
 
 Worth trying:
 - The Dex grid and its filters, and how locked entries read next to collected ones

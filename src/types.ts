@@ -1,8 +1,5 @@
 export type DrinkCategory = 'cocktail' | 'spirit';
 
-/** @deprecated rarity, removed in v3.1; deleted at the close-out. Nothing in src/ reads it. */
-export type Rarity = 'common' | 'uncommon' | 'rare' | 'legendary';
-
 export interface RecipeIngredient {
   item: string;
   amount: string;
@@ -55,12 +52,6 @@ export interface Drink {
   description: string;
   abv: string;
   origin: string;
-  /**
-   * @deprecated rarity, removed in v3.1. drinks.json keeps the field (the
-   * generators still write it), but nothing in src/ reads it; the close-out
-   * deletes it here, which makes tsc prove that.
-   */
-  rarity: Rarity;
   tastingNotes: string[];
   glassware?: string;
   /** Core spec ingredients — cocktails only */
@@ -203,7 +194,15 @@ export interface TournamentSummary {
   finishedAt: string | null;
   /** Null when nobody posted, before it finishes, or when the winner is someone you are blocked with. */
   winnerId: string | null;
+  /** The winner's count; null whenever winnerId is (a hidden winner's count is not shown either). */
   winnerDistinct: number | null;
+  /**
+   * Finished, and won by someone you are blocked with: the list says the
+   * winner is hidden, as the tournament's page does, rather than "No
+   * winner". my_tournaments() has no column for it, so lib/tournaments
+   * reads it off the row (see toSummary there).
+   */
+  winnerHidden: boolean;
   state: TournamentState;
   myStatus: TournamentRole;
   /** Accepted members, host included. */

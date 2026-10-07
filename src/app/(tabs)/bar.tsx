@@ -52,16 +52,17 @@ import { confirmDestructive } from '@/utils/alerts';
 /* A tab of its own, beside the post action: what you own, and what you */
 /* can make with it, is a place you come back to.                       */
 /*                                                                      */
-/* Two panes behind a segmented control, because owning things and       */
-/* making things are separate errands. You stock the shelf once, in a    */
-/* burst; you come back to Drinks repeatedly and want it uncluttered by  */
-/* a picker of every ingredient in the index.                            */
+/* Two panes behind a segmented control, because owning things and      */
+/* making things are separate errands. You stock the shelf once, in a   */
+/* burst; you come back to Drinks repeatedly and want it uncluttered by */
+/* a picker of every ingredient in the index.                           */
 /*                                                                      */
-/* The counts live in the segmented control itself so the payoff is      */
-/* visible while you are still on the Shelf pane — ticking a bottle and  */
-/* watching "Drinks 48" tick up is the whole loop, and hiding it behind  */
-/* a tap would break it. The control is SegmentedControl from            */
-/* components/ui, so it draws and moves like every other one in the app. */
+/* The counts live in the segmented control itself so the payoff is     */
+/* visible while you are still on the Shelf pane — ticking a bottle and */
+/* watching "Drinks 48" tick up is the whole loop, and hiding it behind */
+/* a tap would break it. The control is SegmentedControl from           */
+/* components/ui, so it draws and moves like every other one in the     */
+/* app.                                                                 */
 /* ==================================================================== */
 
 const STARTER = [

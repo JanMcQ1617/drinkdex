@@ -267,17 +267,17 @@ const GROUNDS_EXEMPT = {
  *     counts, so a destructured token cannot slip through either, and so
  *     does `theme.colors` through a namespace import.
  *
- *     RARITY_META and CATEGORY_META are `colors` tokens by another name
- *     (the legendary word's `color`, giltInk, is 1.08:1 on scrimMid over a
- *     white photo). So their colour fields are flagged in media.tsx too,
- *     read off the table, an entry of it held in a const (`const meta =
- *     CATEGORY_META[category]`), or destructured; `label` and `mark` stay
- *     free. media.tsx stopped reading RARITY_META in v3.1; the table
- *     leaves this list at the close-out.
+ *     CATEGORY_META is `colors` tokens by another name: a category's
+ *     `color` is ink chosen for paper (the cocktail's merlot is 1.75:1 on
+ *     scrimMid over a white photo), and its wash and card fields are paper
+ *     tints. So its colour fields are flagged in media.tsx too, read off
+ *     the table, an entry of it held in a const (`const meta =
+ *     CATEGORY_META[category]`), or destructured; `label`, `plural` and
+ *     `blurb` stay free.
  */
 const MEDIA_FILE = 'components/media.tsx';
-const META_TABLES = ['RARITY_META', 'CATEGORY_META'];
-const META_COLOURS = new Set(['color', 'wash', 'edge', 'rule', 'onLining']);
+const META_TABLES = ['CATEGORY_META'];
+const META_COLOURS = new Set(['color', 'wash', 'fieldFrom', 'fieldTo']);
 
 /*
  * 12. Shadows live in `elevation` (theme.ts), which says what may cast
@@ -317,17 +317,18 @@ const SVG_MODULE = /^react-native-svg$/;
  *     are free to explain the history):
  *       - the field: a `.rarity` or `['rarity']` read, an object, type or
  *         JSX key `rarity`, and `rarity` destructured;
- *       - RARITY_NAMES: the deprecated tables, primitives and selectors,
- *         the `Rarity` type, the `tierWord` text role (read `statusWord`)
- *         and the `slotEdgeLegendary` token, wherever the name appears;
+ *       - RARITY_NAMES: the tables, primitives and selectors the close-out
+ *         deleted, the `Rarity` type, the `tierWord` text role (the
+ *         status tag reads `statusWord`) and the `slotEdgeLegendary`
+ *         token, wherever the name appears, so none comes back;
  *       - a tier word in copy: a string, template or JSX text matching
  *         RARITY_WORDS. "rare" and "common" are ordinary words and pass.
- *     A `tier=` prop on Mount is not matched by name: the close-out deletes
- *     the prop, and tsc then finds any left.
+ *     A `tier=` prop on Mount is not matched by name: the close-out deleted
+ *     the prop, so tsc refuses one.
  *
- *     RARITY_SHIM_FILES hold the deprecated shims that keep files not yet
- *     moved off rarity compiling, and are exempt until the close-out,
- *     which empties the list; the rule then has no exemptions.
+ *     RARITY_SHIM_FILES held the deprecated shims while the screens moved
+ *     off rarity. The close-out (7 Oct 2026) deleted the shims and emptied
+ *     the list: the rule has no exemptions, theme.ts included.
  */
 const RARITY_FIELD = 'rarity';
 const RARITY_NAMES = new Set([
@@ -346,16 +347,7 @@ const RARITY_NAMES = new Set([
   'slotEdgeLegendary',
 ]);
 const RARITY_WORDS = /\b(uncommon|legendary|rarity|rarest)\b/i;
-const RARITY_SHIM_FILES = [
-  'constants/theme.ts',
-  'components/cabinet.tsx',
-  'components/media.tsx',
-  'components/DexCard.tsx',
-  'lib/cabinet.ts',
-  'types.ts',
-  'data/index.ts',
-  'lib/customDrinks.ts',
-];
+const RARITY_SHIM_FILES = [];
 
 /*
  * 15. No timed animation from React Native's own `Animated`: no
@@ -787,7 +779,7 @@ function treeRules(rel, sf, lines, add) {
     rarityLines.get(i).add(what);
   };
 
-  // 11. The tier and category tables in media.tsx, and consts holding one entry of them.
+  // 11. The category table in media.tsx, and consts holding one entry of it.
   const metaTables = new Set(rel === MEDIA_FILE ? META_TABLES.flatMap((t) => [...fromTheme(t)]) : []);
   const isMetaEntry = (expr) =>
     !!expr &&
@@ -901,7 +893,7 @@ function treeRules(rel, sf, lines, add) {
       }
     }
 
-    // 11. A tier's or a category's colour in media.tsx: `meta.color`, `RARITY_META.rare.onLining`, `{ color } = meta`.
+    // 11. A category's colour in media.tsx: `meta.color`, `CATEGORY_META.spirit.wash`, `{ color } = meta`.
     if (
       metaTables.size &&
       ts.isPropertyAccessExpression(node) &&

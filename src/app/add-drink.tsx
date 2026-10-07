@@ -823,7 +823,7 @@ function AddDrinkForm({
     /*
      * The photo is copied in first, stripped of its location, under a name
      * that is the drink's: the log sheet's own file is left alone, since
-     * the sheet may still save it as the pour. A disk that refuses says
+     * the sheet may still save it as its photo. A disk that refuses says
      * so and the drink is saved anyway, keeping the photo it had.
      */
     let photoFile: string | null = form.photo?.kind === 'saved' ? form.photo.file : null;

@@ -2216,9 +2216,9 @@ begin
   if me is null then
     return;
   end if;
-  -- In id order: each freeze takes that tournament's lock, and two of
-  -- these running at once must take shared locks in the same order or
-  -- they can deadlock.
+  -- In id order: each freeze takes that tournament's lock and holds it to
+  -- the end of the call, so two of these running at once must take the
+  -- locks they have in common in the same order or they can deadlock.
   for tid in
     select x.id from public.tournaments x
     where x.id = any (private.my_tournament_ids()) and x.finalized_at is null
@@ -2229,6 +2229,9 @@ begin
   return query
   select t.id, t.name, t.host_id, t.starts_at, t.ends_at, t.target::integer, t.finished_at,
          case when t.winner_id = any (blocked) then null else t.winner_id end,
+         -- The STORED winner's count, even when the name is hidden: a count
+         -- with no winner_id is how the app knows the winner is hidden
+         -- (this signature has no winner_hidden column, unlike tournament_board).
          (select w.final_distinct::integer from public.tournament_members w
           where w.tournament_id = t.id and w.user_id = t.winner_id),
          private.tournament_state(t),

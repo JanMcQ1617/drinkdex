@@ -59,11 +59,8 @@ export default function StatsScreen() {
         onScroll={onScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
-        {/*
-          An empty collection's "Open the Dex" is the way back: the Dex is
-          where this screen is opened from.
-        */}
-        <CollectionStats onOpenDrink={openDrink} onOpenDex={leave} />
+        {/* An empty collection's way in is the post sheet, which the block opens itself. */}
+        <CollectionStats onOpenDrink={openDrink} />
       </ScrollView>
     </View>
   );

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 6 October 2026**
+**Last updated: 7 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -87,16 +87,17 @@ signed in to Sipply.
 with a caption and your photo. Posts are visible to anyone signed in to
 Sipply.
 
-**Tournaments (only if you host or join one).** Its name, dates and goal,
-who hosts it, who was invited and whether they joined, and the standings,
-with the time zone of the host's phone, which decides when each day starts
-for the limit of three new drinks a day. Standings are worked out on our
-server from the posts members share during the tournament: each different
-drink counts once, never how much anyone drinks. The host, its members and
-the people invited to it can see its name, who is in it and the standings;
-nobody else can, and nobody you have blocked or who has blocked you is
-shown to you. Results are kept when it ends. Deleting your account deletes
-the tournaments you host and your place in others.
+**Tournaments (only if you host one or are invited to one).** Its name,
+dates and goal, who hosts it, who was invited and whether they joined, and
+the standings, with the time zone of the host's phone, which decides when
+each day starts for the limit of three new drinks a day. Standings are
+worked out on our server from the posts members share during the
+tournament: each different drink counts once, never how much anyone
+drinks. The host, its members and the people invited to it can see its
+name, who is in it or still invited, and the standings; nobody else can,
+and nobody you have blocked or who has blocked you is shown to you.
+Results are kept when it ends. Deleting your account deletes the
+tournaments you host and your place in others.
 
 **Music on a post (only if you add it).** The song you choose is stored
 with that photo: its title, artist and Apple Music catalogue number, which
@@ -264,9 +265,9 @@ each version.
 that you use Sipply, under Apple's own privacy policy. If you are testing
 Sipply through TestFlight, Apple also receives standard crash and
 installation information. If you search for a song or see one on a story,
-Apple Music serves its cover art, and its preview when you play it, to
-your phone, and our server asks Apple Music for search results, as
-described above.
+Apple Music serves its cover art, and its preview when it plays, to your
+phone, and our server asks Apple Music for search results, as described
+above.
 
 **Google**, if you use Continue with Google, confirms who you are and so
 knows that you use Sipply, under Google's own privacy policy. Sipply sends

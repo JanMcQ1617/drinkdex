@@ -26,6 +26,9 @@ From our servers:
   your likes, your saved posts, your follows in both directions, and your
   blocks
 - the drinks you added and the photos you sent with them
+- the tournaments you host (with everyone's place in them), your place in
+  tournaments others host, and the song you added to any post
+- the count of song searches kept for the search limit
 - your invite links, the hashes that let people find you by phone number
   or Instagram username, and the record kept for the matching limits
 - your sign-in details: the phone number you signed in with, if you did,

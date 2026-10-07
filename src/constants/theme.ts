@@ -1,6 +1,6 @@
 import { StyleSheet, type TextStyle } from 'react-native';
 
-import type { Drink, DrinkCategory, Rarity } from '@/types';
+import type { Drink, DrinkCategory } from '@/types';
 
 /* ==================================================================== */
 /* Palette — "Sipply"                                                   */
@@ -14,9 +14,9 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /*   BONE     #E9E5DF — light ground, and text ON wine                  */
 /*   TAUPE    #CBBBA5 — borders, muted accents, letterspaced labels     */
 /*   ESPRESSO #2B2322 — dark ground, primary text                       */
-/*   OFF-WHITE#FFFDF9 — the app screen background (see 4. below)        */
+/*   OFF-WHITE#FFFDF9 — the app screen background (see 3. below)        */
 /*   HAIRLINE #EFE9E0 — dividers                                        */
-/*   MUTED    #9A8F85 — secondary text (see 3. and 4. below)            */
+/*   MUTED    #9A8F85 — secondary text (see 2. and 3. below)            */
 /*                                                                      */
 /* WHAT CHANGED IN THE APP, AND WHY                                     */
 /*                                                                      */
@@ -28,10 +28,7 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /*    token named after verdigris pointing at oxblood is the kind of     */
 /*    trap this repo keeps removing.                                     */
 /*                                                                      */
-/* 2. Gilt, the metal that once marked a drink's tier, left the palette  */
-/*    with rarity in v3.1 (specs/v3.1-changes.md section 2.1).           */
-/*                                                                      */
-/* 3. Two inks, not one. The handoff sets 12–13px secondary text in      */
+/* 2. Two inks, not one. The handoff sets 12–13px secondary text in      */
 /*    MUTED #9A8F85, well short of the 4.5:1 this app has always held    */
 /*    itself to for body copy. Rather than lower the bar or abandon the  */
 /*    colour, the warm gray is split in two: `textMuted` is the same hue */
@@ -39,7 +36,7 @@ import type { Drink, DrinkCategory, Rarity } from '@/types';
 /*    `textFaint` keeps the 3:1 job — large type and glyphs, never small */
 /*    text.                                                              */
 /*                                                                      */
-/* 4. The page went cream, and MUTED had to follow. The mockup rebuild   */
+/* 3. The page went cream, and MUTED had to follow. The mockup rebuild   */
 /*    moved the page from OFF-WHITE to cream #F7F2EA (see Surfaces), and */
 /*    #9A8F85 on cream is 2.84:1 — under even the 3:1 its job needs, and */
 /*    2.52:1 in a sunk well. So `textFaint` is no longer the handoff's   */
@@ -96,15 +93,12 @@ export const colors = {
   surface: '#FFFFFF',
   card: '#FFFFFF',
   cardAlt: '#E9E5DF',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out. Its only job was the common tier's wash; every edge is `line`. */
-  cardBorder: '#EFE9E0',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out. Nothing reads it. */
-  cardBorderLit: '#B08A3E',
   borderStrong: '#CBBBA5',
 
   /*
-   * v2 EDGES. cardBorder (#EFE9E0) is retired as an edge: it measured
-   * 1.08:1 on the page and 1.21:1 on white, which is invisible.
+   * v2 EDGES. The old cardBorder hairline (#EFE9E0) measured 1.08:1 on the
+   * page and 1.21:1 on white, which is invisible, so it is gone and these
+   * three draw every edge.
    */
   /** 1pt edges: cards, list groups, chips, tags, search, the tab bar, rules
    *  under bars; hairline row separators. Decorative: 1.54:1 white, 1.38:1 page. */
@@ -126,7 +120,7 @@ export const colors = {
   /**
    * Large type (≥18pt, or ≥14pt bold) and non-text glyphs ONLY — never
    * small text, never a placeholder. The handoff's MUTED #9A8F85 walked to
-   * hold 3:1 on the cream page (see 4. in the header): 3.51:1 on the page,
+   * hold 3:1 on the cream page (see 3. in the header): 3.51:1 on the page,
    * 3.12:1 in a sunk well, 3.91:1 on white. Not on `slot` (the tonal
    * button's pressed fill), where it drops to 2.90:1, and never on lining:
    * that ground has its own inks (onLining*).
@@ -134,8 +128,6 @@ export const colors = {
   textFaint: '#8A7F74',
   textOnWine: '#E9E5DF',
   textOnEspresso: '#E9E5DF',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  textOnGilt: '#2B2322',
 
   /* Wine — the brand's structural colour, and every affirmative state */
   wine: '#5B0F1A',
@@ -154,24 +146,8 @@ export const colors = {
    */
   taupe: '#CBBBA5',
   taupeInk: '#736247',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out. The uncommon tier's wash; nothing else reads it. */
-  taupeWash: '#F2ECE1',
 
-  /*
-   * Gilt was the metal of the legendary tier, and left with rarity in
-   * v3.1. The values stay only so files not yet moved off them compile.
-   */
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  gilt: '#B08A3E',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  giltGlyph: '#A8823A',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  giltInk: '#7D5F1C',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  giltDim: '#8E6F2C',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  giltWash: '#F6EEDC',
-  /** A warm amber with no reader today. It sat beside the gilt but was never rarity's, so the close-out keeps it. */
+  /** A warm amber with no reader today. */
   amber: '#D9A25C',
 
   /* Semantic — success is wine (see 1. in the header) */
@@ -292,8 +268,6 @@ export const colors = {
   lining: '#3E0A12',
   /** The cellar: a recess in the lining, the drink page's ground, and the colour every lit photo settles to at its edges. */
   liningDeep: '#2F070D',
-  /** A seen Today's tile: the mat dulled into the lining. Carries no text. */
-  matSeen: '#6B3A41',
 
   /* Ink on lining and cellar. Wine is 1.22:1 on lining: never type or a button there. */
   /** Titles and body on lining. 13.32:1 (11.31 worst grain); 14.47:1 in the cellar. */
@@ -302,10 +276,6 @@ export const colors = {
   onLiningMuted: '#B8A09B',
   /** Glyphs and >= 18pt only (3:1): the lock, a chevron. Never small text. 4.93:1, 4.19 worst grain. */
   onLiningFaint: '#A7837F',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  giltOnLining: '#C9A458',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  rareOnLining: '#D08A94',
   /** "Remove from collection" on the cellar ground. 8.34:1 there. */
   dangerOnLining: '#EE9A8F',
 
@@ -332,10 +302,8 @@ export const colors = {
   matEdge: 'rgba(14, 11, 11, 0.35)',
   /** The hairline inside a mount's window. */
   windowEdge: 'rgba(43, 35, 34, 0.16)',
-  /** An empty slot's 1pt edge, the same on every slot since v3.1. */
+  /** An empty slot's 1pt edge, the same on every slot. */
   slotEdge: 'rgba(233, 229, 223, 0.10)',
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  slotEdgeLegendary: 'rgba(176, 138, 62, 0.55)',
   /** The hairline inside an empty slot's window. */
   slotWindowEdge: 'rgba(233, 229, 223, 0.07)',
   /** A number plate's edge on lining or in a slot. */
@@ -401,18 +369,10 @@ export const onMedia = {
   /** 0.78: plates, markers, counts. 9.98:1 for `ink` over white. */
   markerFill: colors.reelScrim,
   markerEdge: colors.reelControlBorder,
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  glyphGilt: colors.giltOnLining,
   /** Solid plaques. `neutral` is DexStatusPlaque's: 9.98:1 for its ink over white. */
   plaque: {
     neutral: { fill: colors.reelScrim, edge: colors.reelControlBorder, ink: colors.reelInk },
-    /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-    rare: { fill: colors.wine, edge: colors.wineSoft, ink: colors.reelInk },
-    /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-    legendary: { fill: colors.gilt, edge: colors.giltOnLining, ink: colors.text },
   },
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out */
-  rule: { rare: colors.wineSoft, legendary: colors.gilt },
 } as const;
 
 /**
@@ -557,14 +517,10 @@ export const textRole = {
   labelCaption: { fontFamily: fonts.body, fontSize: 12, lineHeight: 16 },
   specAmount:   { fontFamily: fonts.bodySemiBold, fontSize: 17, lineHeight: 22, fontVariant: ['tabular-nums'] },
   tastes:       { fontFamily: fonts.body, fontSize: 18, lineHeight: 26 },
-  /** v3's Bar trivia band; Origin story (`story`) replaces it, and the close-out deletes it. */
-  trivia:       { fontFamily: fonts.body, fontSize: 18, lineHeight: 27 },
   /** The drink page's Origin story band. */
   story:        { fontFamily: fonts.body, fontSize: 17, lineHeight: 26 },
   /** The Dex status tag ("In your Dex", "New"), its width sum, and the "Added by you" word. */
   statusWord:   { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
-  /** @deprecated rarity, removed in v3.1; deleted at the close-out. Same values as `statusWord`: read that. */
-  tierWord:     { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
 } satisfies Record<string, TextStyle>;
 
 /**
@@ -675,11 +631,6 @@ export const layout = {
   rowTall: 64,      // ListRow with a subtitle or a 40pt avatar
   gridGap: 2,       // between media grid tiles
   feedPhotoAspect: 4 / 5, // a feed post's photo (was 3:4, inline in PostCard)
-  /**
-   * v3's Today's tiles: a 76x96 mat holding the photo inset 3pt, the label column 84 wide.
-   * v3.1 draws stories as circles (`story`, below); this goes once TodaysPours stops reading it.
-   */
-  tile: { w: 76, h: 96, inset: 3, label: 84 },
   dexGap: 10,       // between Dex columns
   dexLedge: 16,     // between Dex rows (the shelf ledge)
   pinnedBar: 74,    // the drink page's pinned action bar, above the home indicator (a minimum: it grows)
@@ -698,7 +649,7 @@ export const layout = {
  * v2 radius scale. Role-named, so a call site says what it is.
  *   none     full-bleed media, grid tiles, docked bars, progress bars, rules
  *   badge    things ≤ 24pt: tags and badges, markers on media (gallery count,
- *            duration, + badge on a pour tile), checkboxes, thumbnails ≤ 48pt
+ *            duration), checkboxes, thumbnails ≤ 48pt
  *   control  28–56pt interactive things: buttons, inputs, search, chips,
  *            segmented control, notices, media icon buttons, Dex cards
  *   card     panels: Card, list groups, sheets' top corners, dialogs, the
@@ -772,15 +723,6 @@ export const elevation = {
   paper: { boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.45)' },
   /** The espresso tab bar, on every tab. */
   barDark: { boxShadow: '0px 4px 14px rgba(14, 11, 11, 0.30)' },
-} as const;
-
-/**
- * @deprecated rarity, removed in v3.1; deleted at the close-out. The stops
- * of a sweep across a card's picture; nothing in the app draws one now.
- */
-export const foil = {
-  edge: 'rgba(255, 253, 249, 0)',
-  peak: 'rgba(255, 253, 249, 0.62)',
 } as const;
 
 /** Micro-interactions 150–300ms; springs over cubic curves. */
@@ -877,93 +819,6 @@ export const CATEGORY_META: Record<
     fieldTo: '#ECE7E3',
     emoji: '🥃',
     blurb: 'Distilled & bold',
-  },
-};
-
-/* ==================================================================== */
-/* Rarity, removed in v3.1                                              */
-/*                                                                      */
-/* Jan took the whole tier system out of the app on 6 October 2026: no  */
-/* tier words, rules, plaques, foil, filters or tallies. A collected    */
-/* drink is mat, edge and seat; a slot is a recess. The catalogue keeps */
-/* its `rarity` field (generated data, src/data/drinks.json) and        */
-/* nothing in the app reads it. These two tables stay only until every  */
-/* screen has moved off them; the close-out deletes them, and           */
-/* check-design rule 14 fails any reader outside the shim files.        */
-/* ==================================================================== */
-
-/** @deprecated rarity, removed in v3.1; deleted at the close-out */
-export const RARITY_ORDER: Rarity[] = ['common', 'uncommon', 'rare', 'legendary'];
-
-/** @deprecated rarity, removed in v3.1; deleted at the close-out */
-export const RARITY_META: Record<
-  Rarity,
-  {
-    label: string;
-    color: string;
-    wash: string;
-    weight: number;
-    /** @deprecated v2's card frame colour; replaced by `rule`, deleted in stage 3 once tsc shows no reader. */
-    edge: string;
-    /** @deprecated v2's card frame thickness; replaced by `rule`, deleted in stage 3. */
-    edgeWidth: number;
-    /**
-     * The inner rule printed on a mount, inset 4pt (3pt on a shelf card,
-     * none on a thumbnail). `double` adds a second 1pt hairline in the same
-     * colour, 3pt of clear mat inside the first rule, at 70% opacity.
-     * Decorative.
-     */
-    rule: { color: string; width: number; double: boolean };
-    /** The tier's mark beside its word. */
-    mark: 'ring' | 'dot' | 'sparkle';
-    /** Word and mark on lining or in a slot. */
-    onLining: { ink: string; mark: string };
-  }
-> = {
-  common: {
-    label: 'Common',
-    color: colors.textMuted,
-    wash: colors.cardBorder,
-    weight: 0,
-    edge: colors.cardBorder,
-    edgeWidth: 1,
-    rule: { color: colors.line, width: 1, double: false },
-    mark: 'ring',
-    onLining: { ink: colors.onLiningMuted, mark: colors.onLiningMuted },
-  },
-  uncommon: {
-    label: 'Uncommon',
-    color: colors.taupeInk,
-    wash: colors.taupeWash,
-    weight: 1,
-    edge: colors.taupe,
-    edgeWidth: 1.5,
-    rule: { color: colors.taupe, width: 1, double: false },
-    mark: 'dot',
-    // The word stays muted; taupe is a glyph on lining (8.90:1), the mark only.
-    onLining: { ink: colors.onLiningMuted, mark: colors.taupe },
-  },
-  rare: {
-    label: 'Rare',
-    color: colors.wine,
-    wash: colors.wineWash,
-    weight: 2,
-    edge: colors.wineSoft,
-    edgeWidth: 2,
-    rule: { color: colors.wine, width: 2, double: false },
-    mark: 'dot',
-    onLining: { ink: colors.rareOnLining, mark: colors.rareOnLining },
-  },
-  legendary: {
-    label: 'Legendary',
-    color: colors.giltInk,
-    wash: colors.giltWash,
-    weight: 3,
-    edge: colors.gilt,
-    edgeWidth: 2.5,
-    rule: { color: colors.gilt, width: 2, double: true },
-    mark: 'sparkle',
-    onLining: { ink: colors.giltOnLining, mark: colors.giltOnLining },
   },
 };
 

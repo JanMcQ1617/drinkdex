@@ -46,7 +46,7 @@ type Loaded = { status: 'ready'; people: UserProfile[] } | { status: 'failed' };
 
 /** Lowercase, accents folded: "José" is found by "jose". */
 function fold(s: string): string {
-  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
 
 export function InvitePicker({

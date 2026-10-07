@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 6 October 2026**
+**Last updated: 7 October 2026**
 
 Sipply is a drinks field guide. You collect entries, post what you drink,
 and share it with people you follow. These are the rules for using it.
@@ -117,7 +117,7 @@ not try to be.
 
 ## Tournaments
 
-A tournament is a friendly challenge between people who follow each other:
+A tournament is a friendly challenge between a host and people they follow:
 whoever tries the most different drinks while it runs wins. It counts
 different drinks, never how much. Each drink counts once, however often you
 post it, and **at most three new drinks count a day**, midnight to midnight

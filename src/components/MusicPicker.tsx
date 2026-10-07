@@ -73,6 +73,12 @@ export function MusicPicker({
   onChoose: (song: Song) => void;
 }) {
   if (STORY_MUSIC === 'off') return null;
+  /*
+   * No allowSwipeDismissal, on purpose: React Native 0.86 then keeps the
+   * sheet modalInPresentation, so a swipe down only asks (onRequestClose)
+   * and the sheet leaves when `visible` goes false. Cancel and the swipe
+   * take one path, and UIKit never drops a sheet React still shows.
+   */
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
       {/*

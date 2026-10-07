@@ -472,8 +472,8 @@ export default function PostDrinkScreen() {
    *
    * In the drink card's words, because it is the drink card's act: that
    * card's sheet for posting it again commits with "Save photo", and so
-   * does this button. It behaves the same way too — a post of the entry, if there is
-   * one, takes the new photo, and none is created (see save()).
+   * does this button. It behaves the same way too — a post of the entry,
+   * if there is one, takes the new photo, and none is created (see save()).
    *
    * After the save it is read from what the save was, not from the
    * stores. By then the drink just saved is in them, so re-reading
@@ -556,7 +556,7 @@ export default function PostDrinkScreen() {
 
   /*
    * Back from the form: the drink just added, or the catalogue drink one of
-   * its "Already in the Dex?" rows pointed at, chosen here. The note waits
+   * its "Already in the Dex?" rows pointed at, chosen here. The handoff waits
    * in the custom-drinks store and is taken on focus, so it is read once,
    * by this screen, after the form has gone; the choice is said aloud,
    * since nothing under the finger changed.
@@ -639,9 +639,9 @@ export default function PostDrinkScreen() {
   const save = useCallback(
     async (alsoPost: boolean) => {
       /*
-       * First, before the guard. Tapping Save does not blur the note or the
-       * search field, and a keyboard left up would sit over the lower half
-       * of the celebration card, Done button included.
+       * First, before the guard. Tapping Save does not blur the caption or
+       * the search field, and a keyboard left up would sit over the lower
+       * half of the celebration card, Done button included.
        */
       Keyboard.dismiss();
       if (!photoUri || !drink || busy || saved) return;
@@ -803,7 +803,7 @@ export default function PostDrinkScreen() {
   /** A result row's width: the sheet less the list's gutters and the group's 1pt edges. */
   const rowWidth = sheet.w - 2 * layout.gutter - 2 * stroke.edge;
 
-  /** A drink's own photo for its row: the pour's, else the one it was added with. */
+  /** A drink's own photo for its row: the one last saved of it, else the one it was added with. */
   const customPhoto = (c: CustomDrink) =>
     (inDex(customPours, c.id) ? customPours[c.id].photoUri : null) ||
     customPhotoUri(c.photoFile) ||

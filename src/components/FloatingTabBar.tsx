@@ -101,6 +101,14 @@ const LABEL_SCALE_CAP = 1.3;
 type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 /*
+ * The glyph a route falls back to when its screen sets no tabBarIcon (every
+ * screen sets one today). Two routes are not named after their glyph:
+ * Home's route is `index`, My Bar's is `bar`.
+ */
+const ROUTE_GLYPH: Readonly<Record<string, TabName>> = { index: 'home', bar: 'bottle' };
+const glyphFor = (route: string): TabName => ROUTE_GLYPH[route] ?? (route as TabName);
+
+/*
  * Structural typing on purpose: expo-router SDK 57 vendors bottom-tabs
  * with no public subpath for BottomTabBarProps, so we declare only the
  * shape we consume. Compatible with what <Tabs tabBar={…}> passes.
@@ -320,7 +328,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                 <ProfileFace profile={me} focused={focused} />
               ) : (
                 (options.tabBarIcon?.({ focused, color, size: GLYPH }) ?? (
-                  <Icon name={route.name as TabName} filled={focused} color={color} size={GLYPH} />
+                  <Icon name={glyphFor(route.name)} filled={focused} color={color} size={GLYPH} />
                 ))
               );
 

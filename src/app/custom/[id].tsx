@@ -128,13 +128,13 @@ export default function CustomDrinkScreen() {
   const heroH = heroHeight(width);
   /*
    * The catalogue gained a drink of this name, and Sipply has not marked
-   * the suggestion yet (when it does, the app moves the pour over on its
+   * the suggestion yet (when it does, the app moves your photo over on its
    * own: lib/submissions). The person can do it themselves meanwhile.
    */
   const twin = catalogueTwin(drink.name);
 
-  // The pinned bar's door, for a first pour and another one alike.
-  const logIt = () => router.navigate({ pathname: '/log', params: { drink: drink.id } });
+  // The pinned bar's door, for a first photo and another one alike.
+  const postIt = () => router.navigate({ pathname: '/log', params: { drink: drink.id } });
 
   const moveToDex = () => {
     if (!twin) return;
@@ -151,7 +151,7 @@ export default function CustomDrinkScreen() {
   const confirmDelete = () =>
     confirmDestructive(
       `Delete ${drink.name}?`,
-      'It leaves your Dex with its photos and notes. If you sent it to Sipply, the suggestion is withdrawn.',
+      'It leaves your Dex with its photos and captions. If you sent it to Sipply, the suggestion is withdrawn.',
       'Delete',
       () => {
         setGone({ drink, pour });
@@ -228,7 +228,7 @@ export default function CustomDrinkScreen() {
             </LiningBand>
           ) : null}
 
-          {/* A custom drink is never posted (Log keeps its pour to the phone), so this row never opens a post. */}
+          {/* A custom drink is never posted (the post sheet keeps it to the phone), so this row never opens a post. */}
           {pour ? <DexSinceRow drink={drawn} record={pour} /> : null}
           <TastesOf notes={drink.tastingNotes} />
 
@@ -277,7 +277,7 @@ export default function CustomDrinkScreen() {
         centre-tab log screen with the drink chosen). It replaced the
         "Not logged yet" card and "Update photo".
       */}
-      <PinnedLogBar name={drink.name} collected={pour != null} onPress={logIt} onHeight={setBarH} />
+      <PinnedLogBar name={drink.name} collected={pour != null} onPress={postIt} onHeight={setBarH} />
     </View>
   );
 }

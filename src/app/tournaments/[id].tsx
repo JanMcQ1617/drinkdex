@@ -99,7 +99,7 @@ async function fetchBoardWithPeople(id: string): Promise<Outcome> {
   if (!r.ok) return r.reason === 'not_found' ? 'gone' : 'failed';
   const b = r.value;
   try {
-    const people = await fetchProfiles([b.hostId, ...b.standings.map((s) => s.userId), ...b.invited]);
+    const people = await fetchProfiles(peopleOn(b));
     if (useSocial.getState().gen === gen) {
       useSocial.setState((s) => ({ profiles: mergeProfiles(s.profiles, people) }));
     }
@@ -111,6 +111,11 @@ async function fetchBoardWithPeople(id: string): Promise<Outcome> {
 
 function ownEntry<T>(map: Record<string, T>, key: string): T | undefined {
   return Object.prototype.hasOwnProperty.call(map, key) ? map[key] : undefined;
+}
+
+/** Everyone a board names: the host, the members in the standings, the people still invited. */
+function peopleOn(b: TournamentBoard): string[] {
+  return [b.hostId, ...b.standings.map((s) => s.userId), ...b.invited];
 }
 
 type Busy = 'join' | 'decline' | 'end' | 'delete' | 'leave';
@@ -158,9 +163,16 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
 
   const shown = board ?? leaving;
   const gone = !wellFormed || (outcome === 'gone' && !shown);
+  /*
+   * The store holds the board a round trip before the names on it. On a
+   * first visit the page waits for both, rather than drawing "Someone won"
+   * and rows of "Someone" for a moment. A board seen before has its names
+   * in hand already and draws at once; a failed name read draws it anyway.
+   */
+  const named = !!shown && peopleOn(shown).every((p) => ownEntry(profiles, p) !== undefined);
 
-  /* ---- Before there is a board to draw ---- */
-  if (!shown) {
+  /* ---- Before there is a board to draw, with its names ---- */
+  if (!shown || (outcome === null && !named)) {
     return (
       <View style={styles.screen}>
         <Grain />
@@ -325,12 +337,14 @@ function BoardView({
   /* ---- Who won ---- */
   const winnerStanding = board.winnerId ? board.standings.find((s) => s.userId === board.winnerId) : undefined;
   const winnerProfile = board.winnerId ? ownEntry(profiles, board.winnerId) : undefined;
+  const winnerName = board.winnerId === myId ? 'You' : winnerProfile ? `@${winnerProfile.username}` : 'Someone';
+  // The count is the winner's frozen row; without it the panel names the winner and claims no figure.
   const winnerLine = board.winnerHidden
     ? 'The winner is hidden.'
     : board.winnerId
-      ? `${
-          board.winnerId === myId ? 'You' : winnerProfile ? `@${winnerProfile.username}` : 'Someone'
-        } won with ${differentDrinks(winnerStanding?.distinct ?? 0)}`
+      ? winnerStanding
+        ? `${winnerName} won with ${differentDrinks(winnerStanding.distinct)}`
+        : `${winnerName} won`
       : 'Nobody posted a drink, so there is no winner.';
 
   /* ---- The options sheet ---- */
@@ -402,8 +416,10 @@ function BoardView({
    * to offer, no button.
    */
   const options: { label: string; destructive?: boolean; onPress: () => void }[] = [];
-  if (isHost && !finished) {
-    options.push({ label: 'Invite people', onPress: onInvite });
+  if (isHost) {
+    // A finished tournament can still be deleted (delete_tournament allows
+    // it in any state); inviting and ending only make sense before the end.
+    if (!finished) options.push({ label: 'Invite people', onPress: onInvite });
     if (live) options.push({ label: 'End tournament', onPress: confirmEnd });
     options.push({ label: 'Delete tournament', destructive: true, onPress: confirmDelete });
   } else if (!isHost && (member || invitedMe)) {

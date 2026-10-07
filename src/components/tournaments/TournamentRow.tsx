@@ -1,4 +1,12 @@
-import { Pressable, type StyleProp, StyleSheet, Text, type TextStyle, View } from 'react-native';
+import {
+  Pressable,
+  type StyleProp,
+  StyleSheet,
+  Text,
+  type TextStyle,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
 import { Icon } from '@/components/icons';
 import { Button } from '@/components/ui';
@@ -199,6 +207,14 @@ export function TournamentRules({
 /** Which section of the list a tournament belongs in, or null when it is not shown there. */
 export type RowKind = 'invite' | 'live' | 'upcoming' | 'finished';
 
+/*
+ * Above this text size an invitation's Join and Decline move under its
+ * name and line. Beside them, from the accessibility sizes up, the two
+ * buttons take most of the row and squeeze the name to a word a line.
+ * 1.3 is just under iOS's largest standard size (xxxLarge, 1.35).
+ */
+const STACK_SCALE = 1.3;
+
 export function rowKind(t: TournamentSummary): RowKind | null {
   if (t.myStatus === 'invited') return t.state === 'finished' ? null : 'invite';
   // Declined (or left): the server no longer lists these, but a stale row never shows.
@@ -215,6 +231,8 @@ function secondLine(
 ): string {
   const people = peopleCount(t.members);
   if (kind === 'finished') {
+    // Won by someone you are blocked with: said as the tournament's page says it, never who.
+    if (t.winnerHidden) return 'The winner is hidden';
     if (!t.winnerId) return 'No winner';
     const who = t.winnerId === myId ? 'you' : names.winner ? `@${names.winner}` : null;
     const k = t.winnerDistinct ?? 0;
@@ -274,6 +292,7 @@ export function TournamentRow({
   /** The hairline under the row; off on a group's last row. */
   separator: boolean;
 }) {
+  const { fontScale } = useWindowDimensions();
   const line = secondLine(t, kind, myId, { host: hostName, winner: winnerName });
   const place =
     kind === 'live' && t.myRank != null && (t.myDistinct ?? 0) > 0 ? `You're ${ordinal(t.myRank)}` : null;
@@ -287,17 +306,18 @@ export function TournamentRow({
   );
 
   if (kind === 'invite') {
+    const stacked = fontScale > STACK_SCALE;
     return (
-      <View style={styles.row}>
+      <View style={[styles.row, stacked && styles.rowStacked]}>
         <Pressable
           onPress={onOpen}
           accessibilityRole="button"
           accessibilityLabel={spoken}
           accessibilityHint="Opens the tournament"
-          style={({ pressed }) => [styles.identity, pressed && styles.pressed]}>
+          style={({ pressed }) => [styles.identity, stacked && styles.identityStacked, pressed && styles.pressed]}>
           {text}
         </Pressable>
-        <View style={styles.answers}>
+        <View style={[styles.answers, stacked && styles.answersStacked]}>
           <Button
             label="Join"
             size="sm"
@@ -360,6 +380,10 @@ const styles = StyleSheet.create({
   line: { ...textRole.helper, color: colors.textMuted },
   place: { ...textRole.labelValue, ...tabular, color: colors.text },
   answers: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
+  /* Large text: a column, the answers under the name, in line with its left edge. */
+  rowStacked: { flexDirection: 'column', alignItems: 'stretch', gap: 0, paddingRight: space.lg },
+  identityStacked: { flex: 0, paddingBottom: space.sm },
+  answersStacked: { flexWrap: 'wrap', paddingBottom: space.md },
   /* From the text's left edge to the row's right edge, as a ListRow's rule runs. */
   separator: {
     position: 'absolute',

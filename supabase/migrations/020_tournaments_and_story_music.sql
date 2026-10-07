@@ -43,14 +43,14 @@
 --
 -- ORDER
 --
--- After 019. Depends on 006 (blocked_with), 007 (post_photos), 011
--- (my_block_set, is_objectionable, pin_created_at) and 017
--- (recent_pours); section 0 stops the file if any is missing. Installed
--- builds notice nothing: build 14 reads recent_pours by column name and
--- ignores the new ones, never sends a music column, and never calls the
--- tournament functions. Builds from 15 on look for my_tournaments and
--- hide tournaments while it is missing, so this can be applied before or
--- after any build.
+-- After 019. Depends on 006 (blocked_with), 007 (post_photos), 009
+-- (schema_migrations), 011 (my_block_set, is_objectionable,
+-- pin_created_at) and 017 (recent_pours); section 0 stops the file if
+-- any is missing. Installed builds notice nothing: build 14 reads
+-- recent_pours by column name and ignores the new ones, never sends a
+-- music column, and never calls the tournament functions. Builds from 15
+-- on look for my_tournaments and hide tournaments while it is missing,
+-- so this can be applied before or after any build.
 --
 -- Account deletion needs nothing new: tournaments a person hosts, their
 -- memberships and their search counts all cascade from profiles.
@@ -97,7 +97,7 @@
 --      or (n.nspname = 'private' and p.proname in (
 --            'my_tournament_ids', 'tournament_standings', 'tournament_finish_at',
 --            'finalize_tournament', 'add_invitees'))
---   order by 1::text;
+--   order by p.oid::regprocedure::text;
 --
 --   -- Expect four: blocks_drop_tournament_membership,
 --   -- post_photos_reject_objectionable, tournaments_pin_created_at,
@@ -130,7 +130,7 @@
 
 
 -- --------------------------------------------------------------------
--- 0. Stop here unless 006, 007, 011 and 017 are applied
+-- 0. Stop here unless 006, 007, 009, 011 and 017 are applied
 -- --------------------------------------------------------------------
 
 do $$
@@ -142,7 +142,7 @@ begin
      or to_regprocedure('public.recent_pours()') is null
      or to_regclass('public.post_photos') is null
      or to_regclass('public.schema_migrations') is null then
-    raise exception '020 needs 006, 007, 011 and 017 applied first';
+    raise exception '020 needs 006, 007, 009, 011 and 017 applied first';
   end if;
 end;
 $$;
@@ -686,9 +686,9 @@ begin
   if me is null then
     return;
   end if;
-  -- In id order: each freeze takes that tournament's lock, and two of
-  -- these running at once must take shared locks in the same order or
-  -- they can deadlock.
+  -- In id order: each freeze takes that tournament's lock and holds it to
+  -- the end of the call, so two of these running at once must take the
+  -- locks they have in common in the same order or they can deadlock.
   for tid in
     select x.id from public.tournaments x
     where x.id = any (private.my_tournament_ids()) and x.finalized_at is null
@@ -699,6 +699,9 @@ begin
   return query
   select t.id, t.name, t.host_id, t.starts_at, t.ends_at, t.target::integer, t.finished_at,
          case when t.winner_id = any (blocked) then null else t.winner_id end,
+         -- The STORED winner's count, even when the name is hidden: a count
+         -- with no winner_id is how the app knows the winner is hidden
+         -- (this signature has no winner_hidden column, unlike tournament_board).
          (select w.final_distinct::integer from public.tournament_members w
           where w.tournament_id = t.id and w.user_id = t.winner_id),
          private.tournament_state(t),

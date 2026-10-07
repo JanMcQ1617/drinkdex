@@ -1,7 +1,6 @@
-import { RARITY_META } from '@/constants/theme';
 import { getDrink, TOTAL } from '@/data';
 import { MILESTONES, rankTitle } from '@/lib/milestones';
-import type { Drink, Post, Rarity, UnlockRecord } from '@/types';
+import type { Drink, Post, UnlockRecord } from '@/types';
 
 /* ==================================================================== */
 /* Collection selectors for the v3 cabinet                              */
@@ -67,16 +66,6 @@ export function catalogueCount(unlocks: Record<string, UnlockRecord>): number {
   return n;
 }
 
-/** @deprecated rarity, removed in v3.1; deleted at the close-out. The collection by tier. */
-export function tierTally(unlocks: Record<string, UnlockRecord>): Record<Rarity, number> {
-  const tally: Record<Rarity, number> = { common: 0, uncommon: 0, rare: 0, legendary: 0 };
-  for (const id of Object.keys(unlocks)) {
-    const drink = getDrink(id);
-    if (drink) tally[drink.rarity] += 1;
-  }
-  return tally;
-}
-
 /*
  * The fewest entries at which each rung is held, by rankTitle's own test
  * (pct >= rung), so "11 to Barfly in Training" lands exactly when the
@@ -97,29 +86,6 @@ export function nextRank(collected: number): { title: string; toGo: number } | n
     if (rung.at > collected) return { title: rung.title, toGo: rung.at - collected };
   }
   return null;
-}
-
-/**
- * @deprecated rarity, removed in v3.1 (and the Top shelf with it); deleted
- * at the close-out. Someone's distinct posted drinks, highest tier first.
- */
-export function topShelf(posts: readonly Post[], n = 3): { drink: Drink; post: Post }[] {
-  const newest = new Map<string, { drink: Drink; post: Post; at: number }>();
-  for (const post of posts) {
-    const drink = getDrink(post.drinkId);
-    if (!drink) continue;
-    const at = timeOf(post.createdAt);
-    const held = newest.get(drink.id);
-    if (!held || at > held.at) newest.set(drink.id, { drink, post, at });
-  }
-  return [...newest.values()]
-    .sort(
-      (a, b) =>
-        RARITY_META[b.drink.rarity].weight - RARITY_META[a.drink.rarity].weight ||
-        newestFirst(a.at, b.at),
-    )
-    .slice(0, Math.max(0, n))
-    .map(({ drink, post }) => ({ drink, post }));
 }
 
 /**

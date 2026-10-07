@@ -1,9 +1,14 @@
 import { CATEGORY_ORDER } from '@/constants/theme';
-import type { Drink, DrinkCategory, Rarity } from '@/types';
+import type { Drink, DrinkCategory } from '@/types';
 
 import raw from './drinks.json';
 
-/** Full index, sorted by dex number. */
+/**
+ * Full index, sorted by dex number. The rows also carry a field the app no
+ * longer uses, which the generators still write and validate
+ * (scripts/lib/dex-merge.mjs). The Drink type leaves it out on purpose, so
+ * nothing here can read it (check-design rule 14).
+ */
 export const DRINKS: Drink[] = (raw as unknown as Drink[])
   .slice()
   .sort((a, b) => a.dexNumber - b.dexNumber);
@@ -47,15 +52,6 @@ export const COUNT_BY_CATEGORY: Record<DrinkCategory, number> = CATEGORY_ORDER.r
     return acc;
   },
   {} as Record<DrinkCategory, number>
-);
-
-/** @deprecated rarity, removed in v3.1; nothing reads it, and the close-out deletes it. */
-export const COUNT_BY_RARITY: Record<Rarity, number> = DRINKS.reduce(
-  (acc, d) => {
-    acc[d.rarity] = (acc[d.rarity] ?? 0) + 1;
-    return acc;
-  },
-  { common: 0, uncommon: 0, rare: 0, legendary: 0 } as Record<Rarity, number>
 );
 
 /*
