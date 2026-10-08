@@ -1,7 +1,7 @@
 import { File } from 'expo-file-system';
 
 import { getDrink } from '@/data';
-import type { ProfileRow } from '@/lib/database.types';
+import type { PostLikerRow, ProfileRow } from '@/lib/database.types';
 import { STORY_MUSIC, musicColumns, songFromRow } from '@/lib/music';
 import { stripMetadata } from '@/lib/pour';
 import { supabase } from '@/lib/supabase';
@@ -108,6 +108,7 @@ function toPost(
   myId: string,
   myLikes: Set<string>,
   mySaves: Set<string>,
+  likers: Map<string, UserProfile> | null,
 ): Post {
   return {
     id: row.id,
@@ -125,6 +126,8 @@ function toPost(
     createdAt: row.created_at,
     likes: likeCount(row.likes),
     likedByMe: myLikes.has(row.id),
+    // No map: unknown, so the card shows the count. A post missing from it: nobody but you to name.
+    likedBy: likers ? (likers.get(row.id) ?? null) : undefined,
     savedByMe: mySaves.has(row.id),
     commentCount: 0,
     mine: row.author_id === myId,
@@ -195,22 +198,30 @@ export function disableAvatarColumn(): void {
 /* Feature presence                                                     */
 /*                                                                      */
 /* The same problem one level up: a build can reach a phone before Jan  */
-/* runs the migration that adds a table or a function. Saves (017) and  */
-/* recent_pours (017) are the ones this file reads (lib/tournaments      */
-/* reads 020's functions the same way). A missing one is                 */
-/* read as "feature off", never as a failure: the save button hides and  */
-/* Today's pours shows only your own tile, while the feed itself, which  */
-/* needs neither, keeps working.                                         */
+/* runs the migration that adds a table or a function. Saves (017),      */
+/* recent_pours (017) and the likers functions (021) are the ones this   */
+/* file reads (lib/tournaments reads 020's functions the same way). A    */
+/* missing one is read as "feature off", never as a failure: the save    */
+/* button hides, Today's pours shows only your own tile, and a post's    */
+/* likes line is the plain count, while the feed itself, which needs     */
+/* none of them, keeps working.                                          */
 /*                                                                      */
-/* Saves is remembered for the rest of the session once the server says  */
-/* the table is not there, as the avatar column is. A relaunch asks      */
-/* again, so applying the migration needs no new build.                  */
+/* Saves and the likers are remembered for the rest of the session once  */
+/* the server says they are not there, as the avatar column is, so a     */
+/* missing function costs the loads already in flight at launch one      */
+/* failed request each, and nothing after. A relaunch asks again, so     */
+/* applying the migration needs no new build.                            */
 /* ==================================================================== */
 
 let savesTablePresent = true;
 
 /** False once the server has said the saves table does not exist. */
 export const savesSupported = () => savesTablePresent;
+
+let likersFunctionsPresent = true;
+
+/** False once the server has said migration 021's likers functions do not exist. */
+export const likersSupported = () => likersFunctionsPresent;
 
 /** Postgres's undefined_table, or PostgREST's "not in the schema cache". */
 function isMissingRelation(e: { code?: string; message?: string } | null): boolean {
@@ -456,6 +467,62 @@ async function fetchMySaves(myId: string, postIds: string[]): Promise<Set<string
 }
 
 /**
+ * A liker row (migration 021) as a profile. joinedAt is '' because the
+ * functions do not return it: neither the "Liked by" line nor the likers
+ * list says when anyone joined, and nothing reads the field (PostCard's
+ * unknown author carries the same '').
+ */
+function likerToProfile(
+  r: Pick<PostLikerRow, 'user_id' | 'username' | 'display_name' | 'accent' | 'avatar_path'>,
+): UserProfile {
+  return {
+    id: r.user_id,
+    username: r.username,
+    displayName: r.display_name,
+    accent: r.accent,
+    avatarPath: r.avatar_path,
+    joinedAt: '',
+  };
+}
+
+/** Posts per post_like_summaries call: the server reads at most 100 and ignores the rest. */
+const SUMMARIES_PER_CALL = 100;
+
+/**
+ * The liker each of THESE posts' "Liked by" line names, by post id
+ * (migration 021). A post with nobody to name, no likes or only yours, is
+ * missing from the map, which toPost reads as null: known, nobody.
+ *
+ * Null means unknown: the functions are missing (which also switches the
+ * likers off for the session, as a missing saves table does) or a call
+ * failed. Never throws, like fetchMySaves: an unknown liker costs the line
+ * its name and the card falls back to the count, where a throw would cost
+ * the whole feed.
+ */
+async function fetchLikeSummaries(postIds: string[]): Promise<Map<string, UserProfile> | null> {
+  if (!likersFunctionsPresent) return null;
+  if (postIds.length === 0) return new Map();
+  try {
+    const pages = await Promise.all(
+      chunk(postIds, SUMMARIES_PER_CALL).map(async (part) => {
+        const { data, error } = await supabase.rpc('post_like_summaries', { p_post_ids: part });
+        if (error) {
+          if (isMissingFunction(error)) likersFunctionsPresent = false;
+          return null;
+        }
+        return data ?? [];
+      }),
+    );
+    // One failed chunk makes the whole answer unknown: a post in it would
+    // otherwise read as "nobody to name" when somebody is.
+    if (pages.some((page) => page === null)) return null;
+    return new Map(pages.flatMap((page) => page ?? []).map((r) => [r.post_id, likerToProfile(r)]));
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Rows to posts, minus any whose drink has left the Dex.
  *
  * posts.drink_id has no foreign key, and beer and wine were removed on
@@ -469,8 +536,12 @@ async function fetchMySaves(myId: string, postIds: string[]): Promise<Set<string
 async function toPosts(rows: PostQueryRow[], myId: string): Promise<Post[]> {
   const live = rows.filter((r) => getDrink(r.drink_id));
   const ids = live.map((r) => r.id);
-  const [myLikes, mySaves] = await Promise.all([fetchMyLikes(myId, ids), fetchMySaves(myId, ids)]);
-  return live.map((r) => toPost(r, myId, myLikes, mySaves));
+  const [myLikes, mySaves, likers] = await Promise.all([
+    fetchMyLikes(myId, ids),
+    fetchMySaves(myId, ids),
+    fetchLikeSummaries(ids),
+  ]);
+  return live.map((r) => toPost(r, myId, myLikes, mySaves, likers));
 }
 
 /**
@@ -772,6 +843,61 @@ export async function fetchLatestActivityAt(myId: string): Promise<string | null
   if (!a) return b;
   if (!b) return a;
   return a > b ? a : b;
+}
+
+/* ==================================================================== */
+/* Who liked a post (migration 021)                                     */
+/* ==================================================================== */
+
+/** People per page of a post's likers list. */
+export const LIKERS_PAGE = 50;
+
+/**
+ * Where the next page of likers starts: the last row's like time and id.
+ * `at` is the server's string, passed back untouched: a Date would drop
+ * the microseconds, and the next page would then repeat the row it
+ * started from.
+ */
+export type LikersCursor = { at: string; user: string };
+
+/** Someone in a post's likers list, and whether you followed them when the page loaded. */
+export type PostLiker = UserProfile & { followedByMe: boolean };
+
+/**
+ * Everyone who liked a post, newest first, LIKERS_PAGE at a time. You are
+ * listed like anyone; anyone blocked either way is not (the function's
+ * read policies, and its own block check). `next` is null on the last
+ * page.
+ *
+ * 'unsupported' when the server has no post_likers (021 not applied), so
+ * the sheet can say "soon" rather than "could not load": a phone ahead of
+ * its server is not a failure. Throws when the request itself failed.
+ */
+export async function fetchPostLikers(
+  postId: string,
+  cursor?: LikersCursor | null,
+): Promise<{ people: PostLiker[]; next: LikersCursor | null } | 'unsupported'> {
+  if (!likersFunctionsPresent) return 'unsupported';
+  const { data, error } = await supabase.rpc('post_likers', {
+    p_post_id: postId,
+    p_limit: LIKERS_PAGE,
+    p_before_at: cursor?.at ?? null,
+    p_before_user: cursor?.user ?? null,
+  });
+  if (error) {
+    if (isMissingFunction(error)) {
+      likersFunctionsPresent = false;
+      return 'unsupported';
+    }
+    throw error;
+  }
+  const rows = data ?? [];
+  const last = rows[rows.length - 1];
+  return {
+    people: rows.map((r) => ({ ...likerToProfile(r), followedByMe: r.followed_by_me })),
+    // A short page is the last one; a full one may be too, which costs one empty request.
+    next: last && rows.length === LIKERS_PAGE ? { at: last.liked_at, user: last.user_id } : null,
+  };
 }
 
 /* ==================================================================== */

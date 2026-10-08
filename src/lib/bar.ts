@@ -49,8 +49,8 @@ export const INGREDIENTS_BY_ID: Record<string, Ingredient> = Object.fromEntries(
  * Anything named by three or more cocktails. Everything is searchable, but
  * showing every ingredient at rest (nearly five hundred) is a wall, and
  * the tail is genuinely obscure (Brennivín appears in two drinks). My Bar's
- * add sheet browses browseIngredients() below, which adds the family
- * members this misses (Armagnac is named by none).
+ * picker lists browseIngredients() below, which adds the family members
+ * this misses (Armagnac is named by none).
  */
 export const COMMON_INGREDIENTS: Ingredient[] = INGREDIENTS.filter((i) => i.uses >= 3);
 
@@ -99,7 +99,7 @@ export interface BarResult {
    * nearly drink belongs to exactly one entry and bourbon and rye never
    * stand as two entries for the same drinks (shoppingList, below).
    * `unlocks` is the full-slot gain, what adding it really pours. Every
-   * entry, not a top eight: My Bar takes one per shelf and pages the rest.
+   * entry, not a top eight: My Bar's One ingredient away pages through them.
    */
   nextBest: { ingredient: Ingredient; unlocks: number }[];
   /**
@@ -208,8 +208,8 @@ export function gainOf(result: BarResult, id: string): number {
 
 /**
  * The drinks that changed between two answers: what now pours that did
- * not (`lit`), and what no longer does (`lost`). For the line under the
- * shelves ("Campari lit 9") and the VoiceOver sentence that goes with it.
+ * not (`lit`), and what no longer does (`lost`). For the line under "You
+ * can make" ("Campari unlocked 9") and the VoiceOver sentence with it.
  */
 export function diffMakeable(before: BarResult, after: BarResult): { lit: Drink[]; lost: Drink[] } {
   const was = new Set(before.makeable.map((m) => m.drink.id));
@@ -221,8 +221,8 @@ export function diffMakeable(before: BarResult, after: BarResult): { lit: Drink[
 }
 
 /**
- * The fourteen basics: the starter bar, and what My Bar stands on its
- * shelves before anything is yours.
+ * The fourteen basics: the starter bar, which My Bar's picker offers in
+ * one tap while nothing is yours.
  */
 export const BASICS: readonly string[] = [
   'gin', 'vodka', 'white-rum', 'bourbon', 'sweet-vermouth', 'dry-vermouth',
@@ -260,7 +260,7 @@ export function reachOf(id: string): number {
 let browse: Ingredient[] | null = null;
 
 /**
- * The add sheet's browse list: COMMON_INGREDIENTS plus family members that
+ * The picker's list at rest: COMMON_INGREDIENTS plus family members that
  * only ever appear through a family slot (Armagnac and Añejo tequila
  * have `uses` 0 and would vanish from browsing). Most reach first.
  */

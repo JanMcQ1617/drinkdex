@@ -14,7 +14,6 @@ import { Icon, type TabName } from '@/components/icons';
 import { useTabBarCollapse } from '@/components/ScrollChrome';
 import { Avatar, haptic } from '@/components/ui';
 import type { ProfileRow } from '@/lib/database.types';
-import { REELS_ENABLED } from '@/lib/reels';
 import {
   colors,
   elevation,
@@ -53,13 +52,18 @@ import { useAuth } from '@/store/auth';
 /* alone. The bar's one wine object is the post action, and a wine      */
 /* "where you are" would compete with it.                               */
 /*                                                                      */
-/* ONE MOTION, MOVED BY THE FINGER. Changing tab is a cut, with no      */
-/* transition ((tabs)/_layout.tsx says why: build 15's slide stalled    */
-/* halfway). Scrolling a list down compacts the bar to a 48pt           */
-/* glyph-only slab, and scrolling up, or reaching the top, restores it  */
-/* (ScrollChrome.tsx). It rests on the full bar, and is moved through   */
-/* native-driven transforms, so a stall can only leave a working bar    */
-/* with every glyph showing.                                            */
+/* MOVED BY THE FINGER OR BY UIKIT, NEVER BY A JS CLOCK. Changing tab   */
+/* is the pager's ((tabs)/_layout.tsx): a swipe carries the page under  */
+/* the finger, and a tap pages across natively (a cut under Reduce      */
+/* Motion). The indicator is one rule whose translateX the native       */
+/* driver interpolates from the pager's own position, so it glides with */
+/* the page through a swipe or a tap and rests exactly over its slot;   */
+/* the solid glyph and the label's weight switch once the page settles. */
+/* Scrolling a list down compacts the bar to a 48pt glyph-only slab,    */
+/* and scrolling up, or reaching the top, restores it                   */
+/* (ScrollChrome.tsx). None of it runs on a timer: each is a native     */
+/* interpolation of a scroll, the pager's or a list's, so a dropped     */
+/* frame can only leave a working bar with every glyph showing.         */
 /* ==================================================================== */
 
 /**
@@ -90,7 +94,7 @@ const INK = {
   badge: colors.wineSoft,
 } as const;
 
-/** The active slot's indicator: 2pt tall, as wide as the glyph box. */
+/** The active slot's indicator: 2pt tall (stroke.indicator), as wide as the glyph box. */
 const INDICATOR_W = 28;
 
 /** The gap between a glyph box and its label (styles.item's `gap`). */
@@ -109,9 +113,11 @@ const ROUTE_GLYPH: Readonly<Record<string, TabName>> = { index: 'home', bar: 'bo
 const glyphFor = (route: string): TabName => ROUTE_GLYPH[route] ?? (route as TabName);
 
 /*
- * Structural typing on purpose: expo-router SDK 57 vendors bottom-tabs
- * with no public subpath for BottomTabBarProps, so we declare only the
- * shape we consume. Compatible with what <Tabs tabBar={…}> passes.
+ * Structural typing on purpose: expo-router SDK 57 vendors material top
+ * tabs, which type their tab bar's props as `any` (react-native-tab-view's
+ * types are not bundled), so we declare only the shape we consume.
+ * Compatible with what <TopTabs tabBar={…}> passes, and with the bottom
+ * tabs' bar props too.
  */
 type FloatingTabBarProps = {
   state: {
@@ -125,8 +131,11 @@ type FloatingTabBarProps = {
         title?: string;
         tabBarAccessibilityLabel?: string;
         tabBarIcon?: (props: TabBarIconProps) => React.ReactNode;
-        /** Reserved: any truthy value draws a dot. Nothing sets it yet. */
-        tabBarBadge?: string | number;
+        /**
+         * Reserved: any truthy value draws a dot. Nothing sets it yet. Top
+         * tabs type it as a render function, bottom tabs as a value.
+         */
+        tabBarBadge?: string | number | (() => React.ReactElement);
       };
     }
   >;
@@ -139,6 +148,14 @@ type FloatingTabBarProps = {
     }): { defaultPrevented: boolean };
     navigate(name: string): void;
   };
+  /**
+   * Where the pager is, in pages: 0 to routes - 1, fractional mid-swipe.
+   * TabView hands it to its tab bar (react-native-tab-view's
+   * PagerViewAdapter: the pager's onPageScroll on the native driver).
+   * Optional, so the bar still draws, with a static indicator, without a
+   * pager. TabView's `layout` and `jumpTo` arrive too and are not read.
+   */
+  position?: Animated.AnimatedInterpolation<number>;
 };
 
 /**
@@ -160,7 +177,7 @@ type FloatingTabBarProps = {
  *
  * No haptic. Haptics now answer a selection, a finished save, a like and
  * recording; a plain button press ticks nowhere in the app, and this one
- * opens a sheet, which is answer enough.
+ * opens a full-screen window, which is answer enough.
  *
  * Wine on the espresso bar is 1.12:1, so the fill alone would vanish into
  * it: the 1pt bone edge (colors.logActionEdge, 3.02:1) is what draws the button's
@@ -212,7 +229,7 @@ function ProfileFace({ profile, focused }: { profile: ProfileRow; focused: boole
   );
 }
 
-export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBarProps) {
+export function FloatingTabBar({ state, descriptors, navigation, position }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   // The signed-in account's own row only: a stale row from a previous
@@ -241,7 +258,12 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
   const { fontScale } = useWindowDimensions();
   const labelBlock = LABEL_GAP + typeScale.tag.lineHeight * Math.min(fontScale, LABEL_SCALE_CAP);
   const [barH, setBarH] = useState<number>(layout.tabBar);
-  const onBarLayout = (e: LayoutChangeEvent) => setBarH(e.nativeEvent.layout.height);
+  // 0 until measured: the gliding indicator waits for it (see `glide`).
+  const [barW, setBarW] = useState(0);
+  const onBarLayout = (e: LayoutChangeEvent) => {
+    setBarH(e.nativeEvent.layout.height);
+    setBarW(e.nativeEvent.layout.width);
+  };
   const motion = useMemo(() => {
     const along = (to: number) =>
       c.interpolate({ inputRange: [0, 1], outputRange: [0, to], extrapolate: 'clamp' });
@@ -258,7 +280,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
           },
         ],
       },
-      // Each slot, its indicator with it: the indicator rides the slab's top edge.
+      // Each slot, and the indicator's track with them: the indicator rides the slab's top edge.
       slot: { transform: [{ translateY: along(labelBlock) }] },
       // Gone before they reach the slab's foot.
       label: {
@@ -269,11 +291,13 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
   }, [c, barH, labelBlock]);
 
   /*
-   * The reels route always exists (its file is the switched-off redirect),
-   * so with the flag off the bar skips it. A route's focus is still read by
-   * its key, never by its position here, which shifts when one is skipped.
+   * Every route in the navigator's state is a page of the pager and a slot
+   * here, in the same order. With Reels off it is not in the state at all
+   * ((tabs)/_layout.tsx guards it with TopTabs.Protected), so no page, no
+   * swipe and no slot. It used to be filtered out here, which in a pager
+   * would have left a page you could swipe to with no slot to show it.
    */
-  const visible = state.routes.filter((r) => r.name !== 'reels' || REELS_ENABLED);
+  const visible = state.routes;
   /*
    * The post action is drawn immediately before My Bar, found by its route
    * name rather than by counting: Home · Dex · + · My Bar · Profile with
@@ -282,6 +306,46 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
    */
   const barAt = visible.findIndex((r) => r.name === 'bar');
   const fabAt = barAt >= 0 ? barAt : Math.ceil(visible.length / 2);
+  const pages = visible.length;
+
+  /*
+   * The gliding indicator's x, from the pager's position: page i rests it
+   * centred over route i's slot, and a fraction puts it between the two.
+   * Slots are equal (styles.slot is flex 1): the tabs and the + make
+   * pages + 1 of them across the row, inside the slab's 1pt edge and the
+   * row's padding, and a route at or past the + sits one slot further on.
+   *
+   * Clamped, so the pager's rubber band (were overdrag ever on) cannot
+   * carry it off the end. Null until the bar is measured, or with no
+   * pager: each slot then draws its own static indicator, so a missed
+   * layout never loses the cue.
+   *
+   * Once drawn it stays mounted while the bar lives. The pager's native
+   * onPageScroll event writes to the position values by native tag, and a
+   * native value whose last child detaches is dropped and recreated under
+   * a new tag (ScrollChrome's keeper note), which would freeze it here.
+   *
+   * Built once, in practice: position is the pager's own memoised node,
+   * and barW goes from 0 to the window's width less the insets, which a
+   * portrait-only iPhone app never changes (app.json). A rebuild would
+   * keep the graph alive (React Native attaches the new node before it
+   * detaches the old one), but the new node's first frame comes from the
+   * JS side's copy of position, which the native driver leaves at the
+   * launch page, so the rule would sit there until the pager next moved.
+   * Give it a wake (as ScrollChrome's pulse does) before letting barW vary.
+   */
+  const glide = useMemo(() => {
+    if (!position || barW <= 0 || pages < 2) return null;
+    const slotW = (barW - 2 * stroke.edge - 2 * BAR_PAD) / (pages + 1);
+    const pageIndices = Array.from({ length: pages }, (_, i) => i);
+    return position.interpolate({
+      inputRange: pageIndices,
+      outputRange: pageIndices.map(
+        (i) => stroke.edge + BAR_PAD + (i < fabAt ? i : i + 1) * slotW + (slotW - INDICATOR_W) / 2,
+      ),
+      extrapolate: 'clamp',
+    });
+  }, [position, barW, pages, fabAt]);
 
   return (
     <View
@@ -293,6 +357,17 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
       */}
       <View style={styles.bar} onLayout={onBarLayout} pointerEvents="box-none">
         <Animated.View style={[styles.slab, motion.slab]} />
+        {/*
+          The second cue for where you are, after the solid glyph and the
+          label's weight: a 2pt bone rule laid over the slab's top edge.
+          It glides with the pager (see `glide`), and rides the slab's top
+          edge down with the slots as the bar compacts.
+        */}
+        {glide ? (
+          <Animated.View pointerEvents="none" style={[styles.indicatorTrack, motion.slot]}>
+            <Animated.View style={[styles.indicatorGlide, { transform: [{ translateX: glide }] }]} />
+          </Animated.View>
+        ) : null}
         <View style={styles.row} accessibilityRole="tabbar" pointerEvents="box-none">
           {visible.map((route, at) => {
             const options = descriptors[route.key]?.options ?? {};
@@ -369,12 +444,10 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                     hitSlop={4}
                     style={styles.item}>
                     {/*
-                      The second cue for where you are, after the solid glyph
-                      and the label's weight: a 2pt bone rule laid over the
-                      bar's top edge above the slot. Static between tabs; it
-                      rides the slab's top edge down as the bar compacts.
+                      The indicator's fallback, static over the focused
+                      slot: until the bar is measured, or with no pager.
                     */}
-                    {focused ? <View style={styles.indicator} /> : null}
+                    {!glide && focused ? <View style={styles.indicator} /> : null}
                     <View style={styles.glyphBox}>
                       {glyph}
                       {options.tabBarBadge ? (
@@ -468,7 +541,26 @@ const styles = StyleSheet.create({
     gap: LABEL_GAP,
     paddingVertical: 9,
   },
-  /* Over the 1pt edge (top −1), centred on the slot. */
+  /*
+   * The gliding indicator's track: the bar's full width along its top
+   * edge, so a translateX measured from the bar's left lands on the slab.
+   * Absolute children are placed from the padding box's outer edge (the
+   * slab's absoluteFill covers the bar's 1pt padding the same way), so
+   * top 0 is the slab's top edge, where the fallback below also sits.
+   */
+  indicatorTrack: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: stroke.indicator,
+  },
+  indicatorGlide: {
+    width: INDICATOR_W,
+    height: stroke.indicator,
+    backgroundColor: INK.active,
+  },
+  /* The fallback: over the 1pt edge (top −1 inside the padded row), centred on the slot. */
   indicator: {
     position: 'absolute',
     top: -stroke.edge,

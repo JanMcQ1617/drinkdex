@@ -4,6 +4,7 @@ import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import { useReducedMotion } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 
 import { VideoIntro } from '@/components/VideoIntro';
@@ -74,6 +75,8 @@ const SipplyTheme = {
 };
 
 export default function RootLayout() {
+  // For the log window's entrance. Above the splash gate's early return, like every hook here.
+  const reducedMotion = useReducedMotion();
   const [fontsLoaded, fontError] = useFonts({
     // Latin-only subsets — see assets/fonts/README.md. Each key must match
     // its `fonts.*` value in theme.ts byte-for-byte or it silently falls back.
@@ -178,14 +181,26 @@ export default function RootLayout() {
           are plain pushes too.
         */}
         {/*
-          Posting a drink. A modal, not a push: it is a task you complete or
-          abandon, and the sheet's downward dismiss is the gesture that
-          matches "never mind" — a back-chevron would imply it is a place
-          you can wander out of half-finished.
+          Posting a drink, from the bar's + and every other Post button. A
+          full-screen window that rises from the bottom (UIKit's cover
+          vertical; a fade under Reduce Motion), like Instagram's create
+          screen (Jan, build 17). It was a page sheet, a card with the app
+          showing above it; as the whole screen, its search and the results
+          under it have all the room the keyboard leaves (log.tsx).
+
+          Closed by its X, which asks before discarding a photo or a choice
+          (log.tsx's usePreventRemove). No swipe-down: a full-screen window
+          has no sheet to pull, and a drag through the results list must
+          never throw a half-made post away. Still a modal, not a push: it
+          is a task you finish or abandon, not a place you wander out of.
         */}
         <Stack.Screen
           name="log"
-          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+          options={{
+            presentation: 'fullScreenModal',
+            animation: reducedMotion ? 'fade' : 'default',
+            gestureEnabled: false,
+          }}
         />
         {/*
           Today's pours, one person after another, opened from Home's row

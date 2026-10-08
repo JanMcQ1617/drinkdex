@@ -21,7 +21,7 @@ import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { useTabScroll } from '@/components/ScrollChrome';
-import { Button, Chip, EmptyState, haptic, ProgressBar, SearchField } from '@/components/ui';
+import { Button, Chip, EmptyState, haptic, SearchField } from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
@@ -37,9 +37,7 @@ import {
   type as typeScale,
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
-import { shelfKey } from '@/lib/cabinet';
 import { catalogueTwin, ownTwin, shortQuery } from '@/lib/customDrinks';
-import { styleLabel } from '@/lib/drinkLabels';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
 import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
@@ -53,15 +51,18 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /*               the collection's figure, search, the filters and the   */
 /*               drinks you added. Opaque, and it scrolls away over     */
 /*               the tray.                                              */
-/*   THE TRAY    the lining, the screen's own ground: the catalogue on  */
-/*               shelves, one per style ("Fizz", "Scotch"), each with a */
-/*               sticky header, two cards to a row and a ledge between  */
-/*               rows. A collected drink is a mount seated in it, one   */
-/*               not yet caught a recess pressed into it.               */
+/*   THE TRAY    the lining, the screen's own ground: the whole         */
+/*               catalogue in Dex-number order, #0001 to #2089, under   */
+/*               one line that says so, two cards to a row and a ledge  */
+/*               between rows. A collected drink is a mount seated in   */
+/*               it, one not yet caught a recess pressed into it.       */
 /*                                                                      */
-/* Shelves break the 2,089 entries into places you can tell apart while */
-/* scrolling: in Dex-number order the catalogue was 150 cocktails and   */
-/* then 379 spirits in a row, a wall with no landmarks.                 */
+/* By number, not by shelf. v3 cut the tray into 47 style shelves with  */
+/* sticky headers ("Fizz", "Scotch") to give the scroll landmarks, and  */
+/* Jan, using build 17, asked for the drinks by number instead          */
+/* (specs/v3.3-changes.md section 5): a Dex is read in its own order,   */
+/* and every card already carries its number to steer by. Search and    */
+/* the filters narrow the tray without reordering it.                   */
 /* ==================================================================== */
 
 /* ------------------------------------------------------------------ */
@@ -81,8 +82,6 @@ const COLUMNS = 2;
 /** The screen gutter: 16, as on every screen. */
 const GRID_PAD = layout.gutter;
 const GRID_GAP = layout.dexGap;
-/** Shelf headers stick over the tray, so their text must not grow to cover it. */
-const SHELF_CAP = 1.3;
 /** Chips carry 6pt of slop above and below; the scroller makes room so it is not clipped. */
 const CHIP_SLOP = 6;
 /** From the front's last element to the tray. */
@@ -156,51 +155,8 @@ const has = (map: Record<string, unknown>, id: string) =>
   Object.prototype.hasOwnProperty.call(map, id);
 
 /* ------------------------------------------------------------------ */
-/* Shelves                                                             */
+/* The tray                                                            */
 /* ------------------------------------------------------------------ */
-
-interface ShelfDef {
-  key: string;
-  category: DrinkCategory;
-  /** The style in sentence case: "Spirit-forward", "American whiskey". */
-  title: string;
-  /** The whole catalogue shelf, in Dex-number order (DRINKS is sorted by it). */
-  drinks: Drink[];
-}
-
-/*
- * The catalogue's shelves, built once: one per category and style (lib/
- * cabinet's shelfKey, so a style both categories use is two shelves),
- * cocktails before spirits as everywhere else, then alphabetical by the
- * style as it is shown.
- */
-const SHELVES: readonly ShelfDef[] = (() => {
-  const byKey = new Map<string, ShelfDef>();
-  for (const drink of DRINKS) {
-    const key = shelfKey(drink);
-    let shelf = byKey.get(key);
-    if (!shelf) {
-      shelf = { key, category: drink.category, title: styleLabel(drink.subcategory), drinks: [] };
-      byKey.set(key, shelf);
-    }
-    shelf.drinks.push(drink);
-  }
-  return [...byKey.values()].sort(
-    (a, b) =>
-      CATEGORY_ORDER.indexOf(a.category) - CATEGORY_ORDER.indexOf(b.category) ||
-      a.title.localeCompare(b.title),
-  );
-})();
-
-/** A shelf as the list draws it: its header's figures, and the drinks it shows, two to a row. */
-interface ShelfSection {
-  key: string;
-  title: string;
-  /** Collected and total over the WHOLE shelf, so the header holds still under search and filters. */
-  collected: number;
-  total: number;
-  data: Drink[][];
-}
 
 /** Rows of two, made before the list sees them (as Profile's grid does). */
 function pairs(list: Drink[]): Drink[][] {
@@ -278,45 +234,30 @@ const DexRow = React.memo(function DexRow({
 });
 
 /**
- * A shelf's sticky header: "Fizz" on the left, "2 of 14 collected" on the
- * right (under it, when the two do not fit one line), and the shelf's
- * share as a 2pt bone rule. Inter, not Playfair: a shelf is a heading,
- * not a drink's name.
+ * The tray's head: one line on the lining, where the first shelf header
+ * used to be, saying what order the cards are in and how many there are.
+ * "In Dex order" on the left; on the right "312 shown" while a filter or
+ * the search is narrowing the tray, else "39 of 2,089 collected". It
+ * belongs to the list header and scrolls away with the front: a sticky
+ * line would only repeat what every card's number already says.
  *
- * Opaque lining with its own grain, since it sticks over the cards. Its
- * height comes from its text (a minimum of 52pt), capped at 1.3 so a
- * stuck header cannot grow to cover the tray.
- *
- * One VoiceOver heading, "Fizz, 2 of 14 collected", so the Headings rotor
- * walks the shelves.
+ * Inter helper text in the lining's muted ink, figures tabular so a count
+ * changing under a keystroke does not jitter. Uncapped: the line is not
+ * sticky, so at large text the count simply wraps under the words. One
+ * VoiceOver heading, read as a sentence.
  */
-const ShelfHeader = React.memo(function ShelfHeader({
-  title,
-  collected,
-  total,
-}: {
-  title: string;
-  collected: number;
-  total: number;
-}) {
-  const figure = `${formatCount(collected)} of ${formatCount(total)} collected`;
+function TrayHead({ figure }: { figure: string }) {
   return (
-    <View style={styles.shelfHeader} accessible accessibilityRole="header" accessibilityLabel={`${title}, ${figure}`}>
-      <Grain tone="lining" />
-      <View style={styles.shelfHeaderRow}>
-        <Text maxFontSizeMultiplier={SHELF_CAP} style={[textRole.shelfTitle, styles.shelfHeaderTitle]}>
-          {title}
-        </Text>
-        <Text maxFontSizeMultiplier={SHELF_CAP} style={[textRole.helper, styles.shelfHeaderCount]}>
-          {figure}
-        </Text>
-      </View>
-      <View style={styles.shelfHeaderBar}>
-        <ProgressBar value={collected} max={total} height={stroke.indicator} tone="lining" />
-      </View>
+    <View
+      style={styles.trayHead}
+      accessible
+      accessibilityRole="header"
+      accessibilityLabel={`In Dex order, ${figure}`}>
+      <Text style={styles.trayHeadText}>In Dex order</Text>
+      <Text style={styles.trayHeadText}>{figure}</Text>
     </View>
   );
-});
+}
 
 /**
  * The shelf ledge between two rows: a 5pt strip of shadow with a 1pt lit
@@ -331,20 +272,16 @@ function Ledge() {
   );
 }
 
-function SectionGap() {
-  return <View style={styles.sectionGap} />;
-}
-
 /**
  * "Added by you": the drinks this person added themselves, on the cabinet
  * front above the tray.
  *
  * A shelf of its own and never cards in the tray. The tray, its chips
- * ("All 2,089") and every shelf count mean "the catalogue"; a custom card
- * among them would make every count on this screen wrong, and its absence
- * of a number would look like a broken card. The shelf follows the same
- * filters (category, collected, the search) so it never shows a drink the
- * filters above it say is not there.
+ * ("All 2,089") and the tray's head mean "the catalogue"; a custom card
+ * among them would make every count on this screen wrong, and a card with
+ * no number would break the tray's Dex-number order. The shelf follows
+ * the same filters (category, collected, the search) so it never shows a
+ * drink the filters above it say is not there.
  *
  * Newest first: the one just added is the one being looked for. Tiles
  * align to the top, so one long name grows its own tile, not the row.
@@ -406,7 +343,7 @@ function AddedByYou({
  * Under a search that found things, none of them with the name typed:
  * "margarita" always matches something, so a full tray alone would hide
  * the way to add a drink the Dex does not have. On the lining, under the
- * last shelf.
+ * last row.
  */
 function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
   return (
@@ -563,7 +500,7 @@ export default function DexScreen() {
    * Membership size, not the map itself. Subscribing to `unlocks` here would
    * re-render the screen every time a photo is swapped on an entry already
    * collected; the count moves only when something is added or removed, which
-   * is the only change the tray's filtering and shelf counts care about.
+   * is the only change the tray's filtering and its head's count care about.
    * (The Latest catch panel subscribes to the map itself: the photo swap
    * there is the point.)
    *
@@ -604,46 +541,44 @@ export default function DexScreen() {
    * The tray, and whether the search finds anything in the catalogue at
    * all, under any filter: that is what tells "the filters hide it" apart
    * from "the Dex does not have it" when the tray comes back empty. One
-   * pass over the shelves for the sections, each shelf's whole-shelf count
-   * and the "found anywhere" flag. A plain loop rather than filter
-   * callbacks, so the flags are locals of this function and not variables
-   * a callback reassigns.
+   * pass over DRINKS, which is already in Dex-number order (data/index),
+   * so what survives the search, category and status tests is the tray in
+   * order, with no sort. A plain loop rather than filter callbacks, so the
+   * flag is a local of this function and not a variable a callback
+   * reassigns.
    */
-  const { sections, matched, matchesCatalogue } = useMemo(() => {
+  const { rows, matched, matchesCatalogue } = useMemo(() => {
     const q = fold(query.trim());
     // Read-not-subscribe: `collected` above is what invalidates this memo.
     const unlocks = useCollection.getState().unlocks;
-    const out: ShelfSection[] = [];
-    let shown = 0;
+    const picked: Drink[] = [];
     let anywhere = false;
 
-    for (const shelf of SHELVES) {
-      const picked: Drink[] = [];
-      let have = 0;
-      for (const drink of shelf.drinks) {
+    for (const drink of DRINKS) {
+      const hit = q.length === 0 || (SEARCH_KEY.get(drink.id) ?? '').includes(q);
+      if (!hit) continue;
+      anywhere = true;
+      if (category !== 'all' && drink.category !== category) continue;
+      if (status !== 'all') {
         const owned = has(unlocks, drink.id);
-        if (owned) have += 1;
-        const hit = q.length === 0 || (SEARCH_KEY.get(drink.id) ?? '').includes(q);
-        if (!hit) continue;
-        anywhere = true;
-        if (category !== 'all' && drink.category !== category) continue;
-        if (status !== 'all' && (status === 'unlocked' ? !owned : owned)) continue;
-        picked.push(drink);
+        if (status === 'unlocked' ? !owned : owned) continue;
       }
-      if (picked.length === 0) continue;
-      shown += picked.length;
-      out.push({
-        key: shelf.key,
-        title: shelf.title,
-        collected: have,
-        total: shelf.drinks.length,
-        data: pairs(picked),
-      });
+      picked.push(drink);
     }
-    return { sections: out, matched: shown, matchesCatalogue: anywhere };
+    return { rows: pairs(picked), matched: picked.length, matchesCatalogue: anywhere };
     // `collected` looks unused — it is the invalidation key for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collected, query, category, status]);
+
+  /*
+   * The tray head's figure: how many cards the tray holds while anything
+   * narrows it, so a search or a chip is answered with a number; else the
+   * collection's own, the figure the whole tray stands for.
+   */
+  const narrowed = trimmed.length > 0 || category !== 'all' || status !== 'all';
+  const trayFigure = narrowed
+    ? `${formatCount(matched)} shown`
+    : `${formatCount(collected)} of ${formatCount(TOTAL)} collected`;
 
   /* The drinks you added: the same three filters, newest first. */
   const added = useMemo(() => {
@@ -670,13 +605,13 @@ export default function DexScreen() {
   const catalogueHasName = named && catalogueTwin(trimmed) !== undefined;
   const ownNamed = named && customReady ? ownTwin(trimmed, customDrinks) : undefined;
 
-  const listRef = useRef<Animated.SectionList<Drink[], ShelfSection>>(null);
+  const listRef = useRef<Animated.FlatList<Drink[]>>(null);
   /*
    * Tapping the Dex tab while already on it scrolls the tray home, the way
-   * every iOS tab bar behaves (react-navigation reaches the SectionList's
-   * scroll view through getScrollResponder; the Animated wrapper forwards
-   * its ref to the list). The chip and shelf scrollers opt out of
-   * scrollsToTop so a status-bar tap reaches the tray, not them.
+   * every iOS tab bar behaves (react-navigation calls the FlatList's
+   * scrollToOffset; the Animated wrapper forwards its ref to the list). The
+   * chip and Added by you scrollers opt out of scrollsToTop so a
+   * status-bar tap reaches the tray, not them.
    */
   useScrollToTop(listRef);
 
@@ -706,7 +641,7 @@ export default function DexScreen() {
   const { onScroll } = useTabScroll('dex', onScrolledPast);
 
   const scrollToTop = useCallback(() => {
-    listRef.current?.getScrollResponder()?.scrollTo({ x: 0, y: 0, animated: true });
+    listRef.current?.scrollToOffset({ offset: 0, animated: true });
   }, []);
 
   const openDrink = useCallback(
@@ -765,13 +700,6 @@ export default function DexScreen() {
     [column, openDrink],
   );
 
-  const renderSectionHeader = useCallback(
-    ({ section }: { section: ShelfSection }) => (
-      <ShelfHeader title={section.title} collected={section.collected} total={section.total} />
-    ),
-    [],
-  );
-
   /* The empty tray's buttons are plain Buttons, so they tick here; the chips tick themselves. */
   const showAll = useCallback(() => {
     haptic.select();
@@ -795,78 +723,85 @@ export default function DexScreen() {
    * The cabinet front: paper over the lining, opaque, with its own grain
    * (the screen's grain under it is the lining's). A paper view above it
    * keeps a pull past the top paper, not wine.
+   *
+   * Then, on the lining, the tray's head. Only over cards: an empty tray's
+   * answer (GridEmpty) says what happened in words, and "0 shown" over it
+   * would say it twice.
    */
   const front = (
-    <View style={[styles.front, added.length === 0 && styles.frontEndsOnChips]}>
-      <Grain />
-      <View pointerEvents="none" style={styles.overscroll}>
+    <View>
+      <View style={[styles.front, added.length === 0 && styles.frontEndsOnChips]}>
         <Grain />
-      </View>
+        <View pointerEvents="none" style={styles.overscroll}>
+          <Grain />
+        </View>
 
-      <LatestCatch width={width} onOpen={openDrink} onPost={openPost} />
+        <LatestCatch width={width} onOpen={openDrink} onPost={openPost} />
 
-      {/*
-        The app's one search field (components/ui). The placeholder names
-        what it searches, country included: nothing else on screen says
-        the index can be browsed that way.
-      */}
-      <SearchField
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Name, style or country"
-        accessibilityLabel="Search drinks by name, style or country"
-        style={styles.search}
-      />
-
-      {/*
-        Two filter axes in one scroller, as the app's Chips: the category
-        (with its count), a rule, then collected or not. One selection per
-        axis. The rule is what tells the eye that "Spirits" and "Not yet"
-        are different questions rather than seven peers.
-      */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        scrollsToTop={false}
-        style={styles.chipScroll}
-        contentContainerStyle={styles.chipScrollContent}>
-        <Chip
-          label="All"
-          count={TOTAL}
-          selected={category === 'all'}
-          accessibilityLabel={`All drinks, ${formatCount(TOTAL)} entries`}
-          onPress={() => setCategory('all')}
+        {/*
+          The app's one search field (components/ui). The placeholder names
+          what it searches, country included: nothing else on screen says
+          the index can be browsed that way.
+        */}
+        <SearchField
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Name, style or country"
+          accessibilityLabel="Search drinks by name, style or country"
+          style={styles.search}
         />
-        {CATEGORY_ORDER.map((key) => {
-          const meta = CATEGORY_META[key];
-          const total = COUNT_BY_CATEGORY[key];
-          return (
-            <Chip
-              key={key}
-              label={meta.plural}
-              count={total}
-              selected={category === key}
-              accessibilityLabel={`${meta.plural}, ${formatCount(total)} entries`}
-              onPress={() => setCategory(key)}
-            />
-          );
-        })}
-        <View style={styles.axisRule} />
-        {STATUS_OPTIONS.map((option) => (
-          <Chip
-            key={option.key}
-            label={option.label}
-            selected={status === option.key}
-            accessibilityLabel={option.a11y}
-            onPress={() => setStatus(status === option.key ? 'all' : option.key)}
-          />
-        ))}
-      </ScrollView>
 
-      {added.length > 0 ? (
-        <AddedByYou drinks={added} pours={customPours} onOpen={openCustom} onAdd={() => openAdd('shelf')} />
-      ) : null}
+        {/*
+          Two filter axes in one scroller, as the app's Chips: the category
+          (with its count), a rule, then collected or not. One selection per
+          axis. The rule is what tells the eye that "Spirits" and "Not yet"
+          are different questions rather than seven peers.
+        */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          scrollsToTop={false}
+          style={styles.chipScroll}
+          contentContainerStyle={styles.chipScrollContent}>
+          <Chip
+            label="All"
+            count={TOTAL}
+            selected={category === 'all'}
+            accessibilityLabel={`All drinks, ${formatCount(TOTAL)} entries`}
+            onPress={() => setCategory('all')}
+          />
+          {CATEGORY_ORDER.map((key) => {
+            const meta = CATEGORY_META[key];
+            const total = COUNT_BY_CATEGORY[key];
+            return (
+              <Chip
+                key={key}
+                label={meta.plural}
+                count={total}
+                selected={category === key}
+                accessibilityLabel={`${meta.plural}, ${formatCount(total)} entries`}
+                onPress={() => setCategory(key)}
+              />
+            );
+          })}
+          <View style={styles.axisRule} />
+          {STATUS_OPTIONS.map((option) => (
+            <Chip
+              key={option.key}
+              label={option.label}
+              selected={status === option.key}
+              accessibilityLabel={option.a11y}
+              onPress={() => setStatus(status === option.key ? 'all' : option.key)}
+            />
+          ))}
+        </ScrollView>
+
+        {added.length > 0 ? (
+          <AddedByYou drinks={added} pours={customPours} onOpen={openCustom} onAdd={() => openAdd('shelf')} />
+        ) : null}
+      </View>
+      {matched > 0 ? <TrayHead figure={trayFigure} /> : null}
     </View>
   );
 
@@ -890,15 +825,12 @@ export default function DexScreen() {
         }
       />
 
-      <Animated.SectionList
+      <Animated.FlatList<Drink[]>
         ref={listRef}
-        sections={sections}
+        data={rows}
         renderItem={renderItem}
-        renderSectionHeader={renderSectionHeader}
         keyExtractor={(row) => row[0]!.id}
-        stickySectionHeadersEnabled
         ItemSeparatorComponent={Ledge}
-        SectionSeparatorComponent={SectionGap}
         style={styles.list}
         contentContainerStyle={{
           // Clears the floating tab bar: the last row would otherwise sit under it.
@@ -927,9 +859,9 @@ export default function DexScreen() {
         onScroll={onScroll}
         scrollEventThrottle={16}
         /*
-         * 2,089 entries on 47 shelves — keep the window tight. These counts
-         * are list ITEMS: a shelf header or a row of two cards each. Four
-         * fills the first screen under the front on the largest phone.
+         * 2,089 entries in 1,045 rows — keep the window tight. These counts
+         * are list items, a row of two cards each. Four fills the first
+         * screen under the front on the largest phone.
          *
          * No removeClippedSubviews: on iOS Fabric it puts the header and
          * cells on screen only during the scroll view's own remount pass,
@@ -995,7 +927,7 @@ const styles = StyleSheet.create({
     paddingTop: space.md,
     paddingBottom: FRONT_FOOT,
   },
-  /* Without the shelf the chip scroller ends the front, and its slop padding is already 6 of the 14. */
+  /* Without Added by you the chip scroller ends the front, and its slop padding is already 6 of the 14. */
   frontEndsOnChips: { paddingBottom: FRONT_FOOT - CHIP_SLOP },
   overscroll: {
     position: 'absolute',
@@ -1058,24 +990,22 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
 
-  /* The tray */
-  shelfHeader: {
-    minHeight: 52,
-    paddingTop: 14,
-    paddingBottom: space.xs,
-    paddingHorizontal: GRID_PAD,
-    backgroundColor: colors.lining,
-  },
-  shelfHeaderRow: {
+  /*
+   * The tray. Its head: the front's 14pt foot again above it, and 12 to
+   * the first row. Wrapping, so at large text the count drops under the
+   * words instead of either being cut.
+   */
+  trayHead: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'baseline',
     justifyContent: 'space-between',
     columnGap: space.md,
+    paddingTop: FRONT_FOOT,
+    paddingBottom: space.md,
+    paddingHorizontal: GRID_PAD,
   },
-  shelfHeaderTitle: { flexShrink: 1, color: colors.onLining },
-  shelfHeaderCount: { color: colors.onLiningMuted, ...tabular },
-  shelfHeaderBar: { marginTop: 9 },
+  trayHeadText: { ...textRole.helper, color: colors.onLiningMuted, ...tabular },
   row: {
     flexDirection: 'row',
     alignItems: 'stretch',
@@ -1093,7 +1023,6 @@ const styles = StyleSheet.create({
     borderTopWidth: stroke.edge,
     borderTopColor: colors.liningLip,
   },
-  sectionGap: { height: space.sm },
 
   /* "Not the one you meant?" under a search, on the lining */
   notTheOne: {

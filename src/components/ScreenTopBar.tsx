@@ -1,6 +1,14 @@
 import { useIsFocused } from 'expo-router';
 import { StatusBar, type StatusBarStyle } from 'expo-status-bar';
-import React, { createContext, isValidElement, useContext, useRef, useState, type ReactNode } from 'react';
+import React, {
+  createContext,
+  isValidElement,
+  useContext,
+  useRef,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from 'react';
 import {
   ActivityIndicator,
   type NativeScrollEvent,
@@ -8,6 +16,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -15,6 +24,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Grain } from '@/components/Grain';
 import { Icon, type IconName } from '@/components/icons';
 import { colors, fonts, layout, radius, space, stroke, textRole } from '@/constants/theme';
+import { textWidth } from '@/lib/textFit';
 
 /* ==================================================================== */
 /* The top bar                                                          */
@@ -53,14 +63,21 @@ import { colors, fonts, layout, radius, space, stroke, textRole } from '@/consta
 
 /** Side slots: a 44pt glyph button with 4pt to the screen edge, and 4pt spare. */
 const SIDE = 52;
-/** A text button's side slot: its 72pt minimum plus the same margins. */
+/** A text button's narrowest side slot: its 72pt minimum plus the same margins. */
 const SIDE_WIDE = 80;
 /** Two glyph buttons side by side (`rightSlots={2}`): 96. */
 const SIDE_DOUBLE = 2 * layout.hit + 8;
-/** Title insets from each screen edge, so it never runs under a side control. */
-const TITLE_INSET = SIDE + 4;
-const TITLE_INSET_WIDE = SIDE_WIDE + 4;
-const TITLE_INSET_DOUBLE = SIDE_DOUBLE + 4;
+/** The title keeps this clear of the wider side, so it never runs under a side control. */
+const TITLE_GAP = 4;
+/** A bar's words grow with Larger Text only so far (their maxFontSizeMultiplier). */
+const BAR_TEXT_SCALE_CAP = 1.3;
+/**
+ * Spare room for the strong (SemiBold) word, as the v3.3 spec sets it.
+ * textFit's Inter classes are already costed on SemiBold and run wide
+ * ("Cancel" estimates 61pt against 52.5 drawn), so this is margin on a
+ * margin; it costs a strong side ~4pt of title room at the default size.
+ */
+const SEMIBOLD_SET = 1.06;
 /** iOS page sheets draw their own grabber area; the bar starts just under it. */
 const SHEET_INSET = space.sm;
 
@@ -116,8 +133,25 @@ export interface ScreenTopBarProps {
   rightSlots?: 1 | 2;
 }
 
-function isTextButton(node: ReactNode) {
+function isTextButton(node: ReactNode): node is ReactElement<TopBarTextButtonProps> {
   return isValidElement(node) && node.type === TopBarTextButton;
+}
+
+/*
+ * A text side is as wide as its word, at the size it is drawn. It was a
+ * fixed 80pt: 4pt to the edge and the button's 12 + 12 padding left the
+ * label 52pt, and "Cancel" in Inter 16 is 52.5pt at the default text
+ * size and up to 1.3x that at Larger Text, so it cut to "Canc…" (Jan,
+ * build 17), in every Cancel and Done on a bar. Measured with textFit's
+ * conservative estimate at the label's capped size, with SEMIBOLD_SET's
+ * spare room when it is the strong (wine) action, +2 for rounding, and
+ * never narrower than the old 80, so a short word keeps the layout it had.
+ */
+function textSideWidth(button: ReactElement<TopBarTextButtonProps>, fontScale: number): number {
+  const { label, muted } = button.props;
+  const size = textRole.rowTitle.fontSize * Math.min(fontScale, BAR_TEXT_SCALE_CAP);
+  const word = Math.ceil(textWidth(label, 'inter', size) * (muted ? 1 : SEMIBOLD_SET));
+  return Math.max(SIDE_WIDE, space.xs + 2 * space.md + word + 2);
 }
 
 /**
@@ -146,17 +180,12 @@ export function ScreenTopBar({
   rightSlots = 1,
 }: ScreenTopBarProps) {
   const insets = useSafeAreaInsets();
-  const wideLeft = isTextButton(left);
-  const wideRight = isTextButton(right);
-  const doubleRight = rightSlots === 2;
-  const leftWidth = wideLeft ? SIDE_WIDE : SIDE;
-  // Two glyphs (96) are wider than a text button (80), so they set both insets.
-  const rightWidth = doubleRight ? SIDE_DOUBLE : wideRight ? SIDE_WIDE : SIDE;
-  const titleInset = doubleRight
-    ? TITLE_INSET_DOUBLE
-    : wideLeft || wideRight
-      ? TITLE_INSET_WIDE
-      : TITLE_INSET;
+  const { fontScale } = useWindowDimensions();
+  const leftWidth = isTextButton(left) ? textSideWidth(left, fontScale) : SIDE;
+  const rightWidth =
+    rightSlots === 2 ? SIDE_DOUBLE : isTextButton(right) ? textSideWidth(right, fontScale) : SIDE;
+  // Both insets take the wider side, so the title stays centred on the screen.
+  const titleInset = Math.max(leftWidth, rightWidth) + TITLE_GAP;
   const lining = tone === 'lining';
   const clear = ground === 'clear';
   const paddingTop = inset === 'safe' ? insets.top : inset === 'sheet' ? SHEET_INSET : 0;
@@ -194,7 +223,17 @@ export function ScreenTopBar({
               <Text
                 ref={titleRef}
                 numberOfLines={1}
-                maxFontSizeMultiplier={1.3}
+                /*
+                 * Wider sides leave a long title less room at Larger Text,
+                 * so it shrinks before it would cut. 0.7, not 0.8: "Host a
+                 * tournament" beside "Cancel" at the 1.3 cap on a 375pt
+                 * phone is 198pt of Inter SemiBold in 147, so it needs
+                 * 0.74 (measured from the bundled font). Every other title
+                 * beside a word needs 0.87 or more.
+                 */
+                adjustsFontSizeToFit
+                minimumFontScale={0.7}
+                maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP}
                 accessibilityRole="header"
                 style={[
                   size === 'lg' ? textRole.barTitleLg : textRole.barTitle,
@@ -275,29 +314,25 @@ export function TopBarButton({
   );
 }
 
-/**
- * A word for a bar side: "Cancel" on a modal sheet. Wine, SemiBold, for
- * an action; `muted` (textMuted, regular weight) for the one that backs
- * out. On a lining bar the two are onLining and onLiningMuted, since wine
- * there is 1.22:1. Its slot widens, and the title's insets with it
- * (ScreenTopBar).
- *
- * `loading` keeps the label's width and lays a spinner over it, so the
- * bar does not shift while the action runs.
- */
-export function TopBarTextButton({
-  label,
-  onPress,
-  muted,
-  disabled,
-  loading,
-}: {
+interface TopBarTextButtonProps {
   label: string;
   onPress: () => void;
   muted?: boolean;
   disabled?: boolean;
   loading?: boolean;
-}) {
+}
+
+/**
+ * A word for a bar side: "Cancel" on a modal sheet. Wine, SemiBold, for
+ * an action; `muted` (textMuted, regular weight) for the one that backs
+ * out. On a lining bar the two are onLining and onLiningMuted, since wine
+ * there is 1.22:1. Its slot is sized from the word (textSideWidth), and
+ * the title's insets with it (ScreenTopBar).
+ *
+ * `loading` keeps the label's width and lays a spinner over it, so the
+ * bar does not shift while the action runs.
+ */
+export function TopBarTextButton({ label, onPress, muted, disabled, loading }: TopBarTextButtonProps) {
   const inert = !!disabled || !!loading;
   const lining = useContext(TopBarToneContext) === 'lining';
   const color = lining
@@ -321,7 +356,13 @@ export function TopBarTextButton({
       ]}>
       <Text
         numberOfLines={1}
-        maxFontSizeMultiplier={1.3}
+        /*
+         * The backstop: the slot is sized from an estimate, so if it is
+         * ever short iOS shrinks the word a little rather than cutting it.
+         */
+        adjustsFontSizeToFit
+        minimumFontScale={0.85}
+        maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP}
         style={[
           textRole.rowTitle,
           { color },

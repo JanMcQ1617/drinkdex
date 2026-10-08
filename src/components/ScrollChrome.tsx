@@ -110,10 +110,11 @@ class ChromeStore {
    * flushes and updates after setAnimatedNodeValue; a plain connect does
    * not). A swapped-in graph can arrive with nothing moving: VoiceOver
    * starting or stopping, or Home's bar rebuilt on the focus event, which
-   * comes a commit after the tab change and can miss a Reduce Motion
-   * transition's single frame. Each would leave the chrome as the old graph
-   * drew it (compacted, or hidden) until the next scroll. Setting the
-   * pulse, queued after the swap's connects, makes it draw at once.
+   * comes a commit after the tab change, often once the pager has already
+   * settled (and always after a Reduce Motion cut). Each would leave the
+   * chrome as the old graph drew it (compacted, or hidden) until the next
+   * scroll. Setting the pulse, queued after the swap's connects, makes it
+   * draw at once.
    */
   wake() {
     this.pulse.setValue(0);
@@ -186,7 +187,7 @@ class ChromeStore {
   /*
    * Home's bar: 0..distance. Rebuilt each time the tab is focused; kept
    * as it was while the tab is out of focus, so the bar does not jump
-   * under the outgoing page's nudge.
+   * while Home is still sliding out of the pager.
    */
   hide(tab: ChromeTab, distance: number, focused: boolean): Chrome {
     const e = this.entry(tab);
@@ -231,7 +232,7 @@ function useWakeOnSwap(store: ChromeStore, graph: Chrome) {
   }, [store, graph]);
 }
 
-/** In (tabs)/_layout.tsx, around <Tabs>, so both the tab bar and every tab screen are inside it. */
+/** In (tabs)/_layout.tsx, around <TopTabs>, so both the tab bar and every tab screen are inside it. */
 export function ScrollChromeProvider({ children }: { children: React.ReactNode }) {
   const [store] = useState(() => new ChromeStore());
   const [screenReader, setScreenReader] = useState(false);
@@ -302,6 +303,11 @@ export function useTabScroll(
  * focused tab changes, so arriving at a tab always shows the full bar.
  * The constant 0 for a tab with no chrome list (Reels) and while
  * VoiceOver runs.
+ *
+ * Focus moves when the pager selects the new page, not while the finger
+ * drags, so a swipe away from a compacted list brings the full bar back
+ * at that moment, in one step: the swipe's own result, not a motion that
+ * could stall.
  */
 export function useTabBarCollapse(focusedRouteName: string | undefined): Chrome {
   const { store, screenReader } = useChrome();

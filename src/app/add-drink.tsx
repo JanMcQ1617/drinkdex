@@ -112,8 +112,10 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* leaves a handoff in the store saying where to go next, which the     */
 /* screen underneath takes when it gets focus back.                     */
 /*                                                                      */
-/* The frame is the log sheet's: a page sheet with Cancel on the left,  */
-/* the keyboard offset trick, a save bar that stays put, and the grain. */
+/* A page sheet with Cancel on the left, the keyboard offset trick, a   */
+/* save bar that stays put, and the grain. It was the log window's      */
+/* frame too until v3.3 made that a full-screen window with an X; this  */
+/* one stays a sheet, opened over whichever screen asked for it.        */
 /* ==================================================================== */
 
 type From = 'dex' | 'log' | 'shelf';
@@ -876,8 +878,9 @@ function AddDrinkForm({
   }, [leaving, router]);
 
   /*
-   * See the log sheet: the page sheet's offset, for the keyboard, and its
-   * width, which the "Already in the Dex?" names are fitted to.
+   * The page sheet's frame: its offset from the top, for the keyboard,
+   * and its width, which the "Already in the Dex?" names are fitted to.
+   * (The log window no longer needs this: it is full screen since v3.3.)
    */
   const { width: windowW, height: windowH } = useWindowDimensions();
   const [sheet, setSheet] = useState({ w: windowW, h: windowH });

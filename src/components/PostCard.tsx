@@ -28,10 +28,11 @@ import Animated, {
 
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Icon, type IconName } from '@/components/icons';
+import { LikersSheet } from '@/components/LikersSheet';
 import { MediaMarker, Nameplate } from '@/components/media';
 import { Avatar, haptic } from '@/components/ui';
 import { colors, fonts, layout, motion, space, textRole } from '@/constants/theme';
-import { getDrink } from '@/data';
+import { formatCount, getDrink } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { glassPhrase, styleLabel } from '@/lib/drinkLabels';
 import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
@@ -215,6 +216,92 @@ function HeartBurst() {
 }
 
 /* ==================================================================== */
+/* Liked by                                                             */
+/* ==================================================================== */
+
+/** The liker's face before the line: small enough to sit inside one line of prose. */
+const LIKED_FACE = 20;
+
+/**
+ * The likes line under the actions: "Liked by Maya Ortiz and 12 others",
+ * with Maya's face first, the way a feed of friends is read (migration
+ * 021 names her; Post.likedBy says how much is known).
+ *
+ *   no likes             nothing, as before: a new post has no "0 likes".
+ *   likedBy undefined    the server could not name anyone (021 missing,
+ *                        or the call failed): the plain count, not a
+ *                        button, since there is no list to open.
+ *   likedBy a person     "Liked by <name>", "... and 1 other", "... and
+ *                        N others". `likes` already carries your own
+ *                        like or unlike, so the others move with the heart.
+ *   likedBy null         nobody but you to name: "Liked by you" when the
+ *                        one like is yours, else the count.
+ *
+ * Tappable whenever there is a list to open. The name is the role's
+ * semibold, the rest prose ink, and the line wraps, never truncates.
+ */
+function LikedByLine({
+  likes,
+  liked,
+  likedBy,
+  onOpen,
+}: {
+  likes: number;
+  liked: boolean;
+  likedBy: UserProfile | null | undefined;
+  onOpen: () => void;
+}) {
+  const { fontScale } = useWindowDimensions();
+  if (likes <= 0) return null;
+
+  const count = `${formatCount(likes)} ${likes === 1 ? 'like' : 'likes'}`;
+  if (likedBy === undefined) return <Text style={[styles.likesCount, styles.likesInset]}>{count}</Text>;
+
+  const others = likes - 1;
+  const rest = others > 0 ? ` and ${formatCount(others)} ${others === 1 ? 'other' : 'others'}` : '';
+  // "you" only when the one like is yours, so `rest` is empty beside it.
+  const name = likedBy ? likedBy.displayName : liked && likes === 1 ? 'you' : null;
+  const sentence = name ? `Liked by ${name}${rest}` : count;
+  // The face centred on the first line, at any text size (line heights scale with the text).
+  const faceTop = Math.max(0, Math.round((textRole.prose.lineHeight * fontScale - LIKED_FACE) / 2));
+
+  return (
+    <Pressable
+      onPress={onOpen}
+      /*
+       * Slop below and to the right only. The actions row sits right above
+       * this line and is drawn under it, so slop above would take the
+       * bottom of the heart's own 44pt box, the most tapped control there is.
+       */
+      hitSlop={{ bottom: 8, right: 24 }}
+      accessibilityRole="button"
+      accessibilityLabel={sentence}
+      accessibilityHint="Shows who liked this"
+      style={({ pressed }) => [styles.likedBy, styles.likesInset, pressed && styles.textPressed]}>
+      {likedBy ? (
+        // round-ok: avatar. Avatar draws its own disc; the wrapper only centres it on the first line.
+        <View style={{ marginTop: faceTop }}>
+          <Avatar
+            name={likedBy.displayName}
+            accent={likedBy.accent}
+            size={LIKED_FACE}
+            avatarPath={likedBy.avatarPath}
+          />
+        </View>
+      ) : null}
+      {name ? (
+        <Text style={styles.likedText}>
+          Liked by <Text style={styles.likedName}>{name}</Text>
+          {rest}
+        </Text>
+      ) : (
+        <Text style={styles.likesCount}>{count}</Text>
+      )}
+    </Pressable>
+  );
+}
+
+/* ==================================================================== */
 /* PostCard                                                             */
 /* ==================================================================== */
 
@@ -316,6 +403,16 @@ export const PostCard = React.memo(function PostCard({
       if (!ok) setSaveFlip((f) => (f === next ? null : f));
     });
   }, [myId, post.id, saveKey, saved, toggleSave]);
+
+  /*
+   * Who liked it: null until the line is first tapped, then open or
+   * closed. The sheet mounts on that first tap and stays mounted, so a
+   * feed of a hundred cards holds no hundred Modals, and a close still
+   * gets UIKit's slide down and the sheet's after-dismiss navigation.
+   */
+  const [likersOpen, setLikersOpen] = useState<boolean | null>(null);
+  const openLikers = useCallback(() => setLikersOpen(true), []);
+  const closeLikers = useCallback(() => setLikersOpen(false), []);
 
   /*
    * A post can now carry several photos of the same drink, newest first
@@ -822,14 +919,11 @@ export const PostCard = React.memo(function PostCard({
         ---- Likes, caption, time ----
         Likes and caption only when there is something to say: a new post
         has no "0 likes" line, and an uncaptioned one no stock sentence. The
-        like figure is ink, not wine: the filled wine heart right above it
-        already says whether you liked it.
+        likes line is ink, not wine: the filled wine heart right above it
+        already says whether you liked it. `likes` and `liked` are the
+        card's own optimistic answer, so the line moves with the heart.
       */}
-      {likes > 0 ? (
-        <Text style={styles.likes}>
-          {likes} {likes === 1 ? 'like' : 'likes'}
-        </Text>
-      ) : null}
+      <LikedByLine likes={likes} liked={liked} likedBy={post.likedBy} onOpen={openLikers} />
       {showCaption ? (
         <View style={styles.captionBlock}>
           <Text style={styles.caption} numberOfLines={expanded ? undefined : 2}>
@@ -866,6 +960,9 @@ export const PostCard = React.memo(function PostCard({
         </View>
       ) : null}
       <Text style={styles.time}>{timeAgoSpoken(post.createdAt)}</Text>
+      {likersOpen === null ? null : (
+        <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} />
+      )}
     </View>
   );
 });
@@ -937,7 +1034,22 @@ const styles = StyleSheet.create({
   },
 
   /* Copy */
-  likes: { ...textRole.username, paddingHorizontal: layout.gutter, color: colors.text },
+  likesInset: { paddingHorizontal: layout.gutter },
+  /* The plain count, as the line has always read: the role's semibold, in ink. */
+  likesCount: { ...textRole.username, flexShrink: 1, color: colors.text },
+  /*
+   * Hugs its words, so the target is the line and not the empty width
+   * beside it; the text gives way and wraps rather than pushing past it.
+   */
+  likedBy: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: space.sm,
+    alignSelf: 'flex-start',
+    maxWidth: '100%',
+  },
+  likedText: { ...textRole.prose, flexShrink: 1, color: colors.text },
+  likedName: { fontFamily: textRole.username.fontFamily },
   captionBlock: { paddingHorizontal: layout.gutter, paddingTop: space.xs },
   caption: { ...textRole.prose, color: colors.text },
   /* Insets count from the block's padding edge, not its content, so the gutter and top are restated. */

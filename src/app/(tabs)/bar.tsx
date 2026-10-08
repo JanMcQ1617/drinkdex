@@ -1,20 +1,11 @@
 import { useNavigation, useRoute, useRouter, useScrollToTop } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  type LayoutChangeEvent,
-  Platform,
-  type ScrollView,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Animated, Platform, type ScrollView, StyleSheet, View } from 'react-native';
+import { useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { AddBottleSheet, type SheetChange } from '@/components/bar/AddBottleSheet';
-import { BackBar } from '@/components/bar/BackBar';
-import { OneThingShort, PourTonight, type PourNote, STRIP_MAX } from '@/components/bar/Counter';
-import { layoutShelves } from '@/components/bar/layout';
+import { BarPicker } from '@/components/bar/BarPicker';
+import { OneIngredientAway, type PourNote, STRIP_MAX, YouCanMake } from '@/components/bar/Counter';
 import {
   basicsExamples,
   groupsOf,
@@ -23,68 +14,63 @@ import {
   type Snapshot,
   stripOf,
   takeSnapshot,
-  withExtras,
 } from '@/components/bar/model';
 import { PourTonightSheet } from '@/components/bar/PourTonightSheet';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Grain } from '@/components/Grain';
-import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { ScreenTopBar, useScrolledPast } from '@/components/ScreenTopBar';
 import { useTabScroll } from '@/components/ScrollChrome';
 import { announce, haptic } from '@/components/ui';
 import { colors, space } from '@/constants/theme';
-import { BASICS, basicsResult, diffMakeable, gainOf, INGREDIENTS_BY_ID, matchOwned } from '@/lib/bar';
+import { BASICS, basicsResult, diffMakeable, INGREDIENTS_BY_ID, matchOwned } from '@/lib/bar';
 import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
 import type { Drink } from '@/types';
 
 /* ==================================================================== */
-/* My Bar: the back bar                                                 */
+/* My Bar: pick what you have, see what you can make                    */
 /*                                                                      */
-/* One screen, one scroll (v3.2, "Back bar", with the judges' grafts    */
-/* from "Tonight"). Your bottles stand on lit shelves in the cabinet's  */
-/* lining; under them, on paper, the counter shows what they pour. The  */
-/* payoff is always right under the bottle you just tapped, so there is */
-/* no Shelf/Drinks switch any more.                                     */
+/* One page, one scroll, on paper (v3.3). The back bar of vector        */
+/* bottles on lit shelves is gone: Jan asked for it off ("the shelf     */
+/* section for my bar, I want removed. and just let them choose what    */
+/* they have"), and its SVG bottles were the heaviest screen in the     */
+/* app, the one My Bar's first open stuttered on. Top to bottom:        */
 /*                                                                      */
-/*   EMPTY    the lights are off and the fourteen basics stand stamped  */
-/*            into the lining; tap what you have, or add them all. The  */
-/*            counter leads with the payoff: three lit drinks the       */
-/*            basics alone pour.                                        */
-/*   STOCKED  what you own stands lit with its label; at each shelf's   */
-/*            end the best next buy stands unlit with "+N drinks".      */
-/*   COUNTER  "Pour tonight N" (just lit, then new to your Dex, then A  */
-/*            to Z, all of it in "See all") and "One thing short N",    */
-/*            grouped by the one thing. Add there expands in place.     */
-/*   SHEET    the search glyph's "Add a bottle": every ingredient,      */
-/*            ranked by what it would pour, with a live tally.          */
+/*   PICKER   "What's in your bar?": a search field, the category       */
+/*            chips and a checklist, most useful first (BarPicker). An  */
+/*            empty bar offers the fourteen basics in one tap.          */
+/*   MAKE     "You can make N": the strip of lit mounts (just unlocked, */
+/*            then new to your Dex), "See all" for every one A to Z.    */
+/*   AWAY     "One ingredient away N", grouped by the one ingredient.   */
+/*            Add there expands in place with what it unlocked.         */
 /*                                                                      */
-/* STILLNESS. The bottles' order and the groups' order are a SNAPSHOT,  */
-/* taken when another tab takes the front (and when the shelf first     */
-/* loads; a drink page pushed over it is not leaving), so               */
-/* nothing moves under the finger while you tap: a bottle you take off  */
-/* goes ghost where it stands, and the same tap puts it back. No layout */
-/* animation and no timed animation run here (build 15's tab slide      */
-/* stalled halfway on Jan's phone): the only motion is the 2pt press    */
-/* lift and expo-image's native crossfade from a ghost to a lit photo,  */
-/* and both rest fully visible.                                         */
+/* STILLNESS. The checklist's order and the groups' order are a         */
+/* SNAPSHOT, taken when another tab takes the front (and when the bar   */
+/* first loads, and after Clear; a drink page pushed over it is not     */
+/* leaving), so nothing moves under the finger while you tick: a box    */
+/* you tick flips where it stands, and the same tap unticks it. No      */
+/* layout animation and no timed animation run here (v3.3 section 0):   */
+/* the motion is the native kind that rests fully drawn, a row's press  */
+/* fill, expo-image's crossfade from a ghost to a lit photo, the "See   */
+/* all" sheet's UIKit slide, the scroll that lifts the search field     */
+/* above the keyboard and the tab pager under the finger.               */
 /* ==================================================================== */
 
-/** What changed on this visit, for the line under "Pour tonight". */
+/** What changed on this visit, for the line under "You can make". */
 interface Change {
   id: string;
   label: string;
   on: boolean;
-  /** Lit (on) or lost (off). */
+  /** Unlocked (on) or lost (off). */
   drinks: readonly Drink[];
 }
 
-/** Groups on the counter, then this many more a tap at a time. */
+/** Groups under One ingredient away, then this many more a tap at a time. */
 const GROUP_PAGE = 6;
 
 export default function BarScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { width, fontScale } = useWindowDimensions();
   const [scrolled, onScrolledPast] = useScrolledPast();
   /*
    * The scroll that compacts the tab bar (ScrollChrome), with the rule
@@ -94,50 +80,50 @@ export default function BarScreen() {
   const { onScroll } = useTabScroll('bar', onScrolledPast);
   const scrollRef = useRef<ScrollView>(null);
   useScrollToTop(scrollRef);
-  const counterY = useRef(0);
   /** A drink to open once the See all sheet has finished leaving. */
   const pendingDrink = useRef<string | null>(null);
 
   const owned = useBar((s) => s.owned);
-  const shelfLoaded = useBar((s) => s.hydrated);
+  const barLoaded = useBar((s) => s.hydrated);
   const unlocks = useCollection((s) => s.unlocks);
   const dexReady = useCollection((s) => s.hydrated);
 
   const [snap, setSnap] = useState<Snapshot>(() => takeSnapshot(useBar.getState().owned));
-  /** Whether `snap` was taken from the shelf as loaded from disk, or the empty one before it. */
+  /** Whether `snap` was taken from the bar as loaded from disk, or the empty one before it. */
   const [snapLoaded, setSnapLoaded] = useState(() => useBar.getState().hydrated);
   /*
-   * The shelf loads from disk after the first render: take the order again
+   * The bar loads from disk after the first render: take the order again
    * once it has. Adjusted during render (React's pattern for state that
    * follows a value), not from a store subscription, which missed a load
    * landing between this screen's first render and its effect.
    */
-  if (shelfLoaded && !snapLoaded) {
+  if (barLoaded && !snapLoaded) {
     setSnapLoaded(true);
     setSnap(takeSnapshot(owned));
   }
   const [change, setChange] = useState<Change | null>(null);
-  /** What each thing put on the shelf this visit lit, for its Added row. */
+  /** What each thing added this visit unlocked, for its Added row. */
   const [litBy, setLitBy] = useState<Record<string, readonly Drink[]>>({});
   const [openGroups, setOpenGroups] = useState<Record<string, true>>({});
   const [groupsShown, setGroupsShown] = useState(GROUP_PAGE);
-  const [barOpen, setBarOpen] = useState(false);
-  const [sheet, setSheet] = useState<'add' | 'all' | null>(null);
+  const [allOpen, setAllOpen] = useState(false);
 
   /*
    * matchOwned remembers its answer for the store's `owned` object, so a
-   * re-render, or coming back to this tab, re-runs nothing.
+   * re-render (a keystroke in the picker's search), or coming back to this
+   * tab, re-runs nothing.
    */
   const result = matchOwned(owned);
 
   /*
-   * Another tab taking the front re-sorts the bar for next time and forgets
-   * this visit's changes. Read from the tab navigator's own state, not
-   * useFocusEffect: a blur also fires when a drink page (or Log) is pushed
-   * over the tabs, and swiping back from a drink opened on the counter
-   * found the shelves re-sorted, "Campari lit 9" gone and the open groups
+   * Another tab taking the front re-sorts the page for next time and
+   * forgets this visit's changes. Read from the tab navigator's own state,
+   * not useFocusEffect: a blur also fires when a drink page (or Log) is
+   * pushed over the tabs, and swiping back from a drink opened here found
+   * the rows re-sorted, "Campari unlocked 9" gone and the open groups
    * shut. This also catches a tab changed from a pushed page, which blurs
-   * nothing here.
+   * nothing here. The swipe pager (v3.3) keeps the TabRouter, so its
+   * state still says which tab is in front.
    */
   const navigation = useNavigation();
   const { key: routeKey } = useRoute();
@@ -161,11 +147,11 @@ export default function BarScreen() {
   }, [navigation, routeKey]);
 
   /**
-   * Puts a thing on the shelf or takes it off, and says what that changed:
-   * the line under the shelves ("Campari lit 9"), the Added row's drinks,
-   * the sheet's footer and VoiceOver all read this one diff.
+   * Adds a thing to your bar or takes it out, and says what that changed:
+   * the line under "You can make" ("Campari unlocked 9"), the Added row's
+   * drinks and VoiceOver all read this one diff.
    */
-  const apply = useCallback((id: string): SheetChange => {
+  const apply = useCallback((id: string) => {
     const state = useBar.getState();
     const before = matchOwned(state.owned);
     const wasOn = !!state.owned[id];
@@ -177,18 +163,17 @@ export default function BarScreen() {
     haptic.select();
     if (wasOn) {
       setChange({ id, label, on: false, drinks: lost });
-      announce(`${label} off the shelf. ${lost.length ? `${lost.length} fewer` : 'Nothing lost'}, ${total} in all.`);
-      return { label, on: false, count: lost.length };
+      announce(`${label} out of your bar. ${lost.length ? `${lost.length} fewer` : 'Nothing lost'}, ${total} in all.`);
+      return;
     }
     setChange({ id, label, on: true, drinks: lit });
     setLitBy((m) => ({ ...m, [id]: lit }));
     announce(
-      `${label} on the shelf. ${lit.length ? `${lit.length} more ${lit.length === 1 ? 'drink' : 'drinks'}` : 'Nothing new pours yet'}, ${total} in all.`,
+      `${label} in your bar. ${lit.length ? `${lit.length} more ${lit.length === 1 ? 'drink' : 'drinks'}` : 'Nothing new yet'}, ${total} in all.`,
     );
-    return { label, on: true, count: lit.length };
   }, []);
 
-  /** Add on a One thing short row: first freeze the rows' order, so none moves under the finger. */
+  /** Add on a One ingredient away row: first freeze the rows' order, so none moves under the finger. */
   const applyFromRow = useCallback(
     (id: string) => {
       const before = matchOwned(useBar.getState().owned);
@@ -205,22 +190,36 @@ export default function BarScreen() {
     const { lit } = diffMakeable(before, after);
     haptic.select();
     setChange({ id: 'basics', label: 'The basics', on: true, drinks: lit });
-    announce(`The basics are on the shelf. ${lit.length} more drinks, ${after.makeable.length} in all.`);
+    announce(`The basics are in your bar. ${lit.length} more drinks, ${after.makeable.length} in all.`);
   }, []);
 
-  const clearShelf = useCallback(() => {
+  const clearBar = useCallback(() => {
     useBar.getState().clear();
     setSnap(takeSnapshot({}));
     setChange(null);
     setLitBy({});
     setOpenGroups({});
     setGroupsShown(GROUP_PAGE);
-    announce('Your shelf is clear.');
+    announce('Your bar is clear.');
   }, []);
 
   const openDrink = useCallback(
     (id: string) => router.navigate({ pathname: '/drink/[id]', params: { id } }),
     [router],
+  );
+
+  /*
+   * The picker's search took focus: lift the field to just under the top
+   * bar, so what it finds lies between the field and the keyboard instead
+   * of under the keyboard (Jan, build 17: "people cant see the drink
+   * options available unless they close the keyboard"). UIScrollView's
+   * own animated offset, or a cut under Reduce Motion; the picker is the
+   * page's first child, so its y is the page's.
+   */
+  const reducedMotion = useReducedMotion();
+  const liftSearch = useCallback(
+    (y: number) => scrollRef.current?.scrollTo({ y: Math.max(0, y - space.sm), animated: !reducedMotion }),
+    [reducedMotion],
   );
 
   const toggleGroupOpen = useCallback(
@@ -234,23 +233,10 @@ export default function BarScreen() {
     [],
   );
 
-  /* ---- What the shelf shows ---- */
+  /* ---- What the page shows ---- */
 
   const inDex = (d: Drink) => dexReady && Object.prototype.hasOwnProperty.call(unlocks, d.id);
-  const ownedIds = Object.keys(owned).filter((id) => INGREDIENTS_BY_ID[id]);
-  const empty = ownedIds.length === 0;
-
-  const bar = layoutShelves({
-    order: withExtras(snap, owned),
-    suggestion: snap.suggestion,
-    owned,
-    pours: (id) => gainOf(result, id),
-    width,
-    fontScale,
-    // The fourteen basics always stand in full: the first open is the one place to see them all.
-    open: barOpen || snap.mode === 'empty',
-  });
-  const basicsLeft = BASICS.filter((id) => !owned[id]).length;
+  const empty = !Object.keys(owned).some((id) => INGREDIENTS_BY_ID[id]);
 
   const makeable = result.makeable.map((m) => m.drink);
   const strip = makeable.length
@@ -271,15 +257,11 @@ export default function BarScreen() {
 
   const short = shortGroups({ snap, result, owned, litBy, shown: groupsShown, inDex });
 
-  /* ---- Sheets ---- */
+  /* ---- See all ---- */
 
-  const showCounter = () => {
-    setSheet(null);
-    scrollRef.current?.scrollTo({ y: counterY.current, animated: true });
-  };
   const openFromSheet = (id: string) => {
     pendingDrink.current = id;
-    setSheet(null);
+    setAllOpen(false);
     // Only iOS reports the sheet's dismissal; elsewhere open the drink straight away.
     if (Platform.OS !== 'ios') {
       pendingDrink.current = null;
@@ -297,17 +279,10 @@ export default function BarScreen() {
       {/* The page's own grain, under everything: there is no global grain any more. */}
       <Grain />
       {/*
-        A root screen's own name on the cabinet's lining, so the bar runs
-        on into the back bar beneath it. Search opens "Add a bottle"; no
-        second "+", since the tab bar already has one.
+        A root screen's own name on paper, with no control on either side:
+        the search is on the page, and the tab bar already has the +.
       */}
-      <ScreenTopBar
-        size="lg"
-        title="My Bar"
-        tone="lining"
-        showRule={scrolled}
-        right={<TopBarButton icon="search" label="Add a bottle" onPress={() => setSheet('add')} />}
-      />
+      <ScreenTopBar size="lg" title="My Bar" showRule={scrolled} />
 
       <Animated.ScrollView
         ref={scrollRef}
@@ -315,63 +290,42 @@ export default function BarScreen() {
         contentContainerStyle={{ paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md }}
         onScroll={onScroll}
         scrollEventThrottle={16}
+        // A tick while the search keyboard is up lands first time; a drag puts the keyboard away.
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         showsVerticalScrollIndicator={false}>
-        {/* Lining above the top, so a pull past it shows the cabinet, not a strip of paper. */}
-        <View pointerEvents="none" style={styles.overscroll} />
-
-        <BackBar
-          mode={snap.mode}
-          shelves={bar.shelves}
-          ownedCount={ownedIds.length}
-          makeable={makeable.length}
-          basicsPour={basicsResult().makeable.length}
-          basicsLeft={basicsLeft}
-          hidden={bar.hidden}
-          folds={bar.folds}
-          open={barOpen}
+        <BarPicker
+          owned={owned}
+          result={result}
+          taken={snap.taken}
           onToggle={apply}
           onAddBasics={addBasics}
-          onSearch={() => setSheet('add')}
-          onFold={() => setBarOpen((o) => !o)}
+          onClear={clearBar}
+          onSearchFocus={liftSearch}
         />
-
-        <View
-          onLayout={(e: LayoutChangeEvent) => {
-            counterY.current = e.nativeEvent.layout.y;
-          }}>
-          <PourTonight
-            total={empty ? null : makeable.length}
-            strip={strip}
-            note={note}
-            onSeeAll={makeable.length ? () => setSheet('all') : undefined}
-            onOpen={openDrink}
-          />
-          <OneThingShort
-            total={result.nearly.length}
-            groups={short.groups}
-            more={short.more}
-            open={openGroups}
-            onToggle={applyFromRow}
-            onToggleOpen={toggleGroupOpen}
-            onShowMore={() => setGroupsShown((n) => n + GROUP_PAGE)}
-            onOpen={openDrink}
-          />
-        </View>
+        <YouCanMake
+          total={empty ? null : makeable.length}
+          strip={strip}
+          note={note}
+          onSeeAll={makeable.length ? () => setAllOpen(true) : undefined}
+          onOpen={openDrink}
+        />
+        <OneIngredientAway
+          total={result.nearly.length}
+          groups={short.groups}
+          more={short.more}
+          open={openGroups}
+          onToggle={applyFromRow}
+          onToggleOpen={toggleGroupOpen}
+          onShowMore={() => setGroupsShown((n) => n + GROUP_PAGE)}
+          onOpen={openDrink}
+        />
       </Animated.ScrollView>
 
-      <AddBottleSheet
-        visible={sheet === 'add'}
-        owned={owned}
-        result={result}
-        onToggle={apply}
-        onClear={clearShelf}
-        onClose={() => setSheet(null)}
-        onShowMe={showCounter}
-      />
       <PourTonightSheet
-        visible={sheet === 'all'}
+        visible={allOpen}
         drinks={makeable}
-        onClose={() => setSheet(null)}
+        onClose={() => setAllOpen(false)}
         onOpen={openFromSheet}
         onDismissed={afterSheet}
       />
@@ -382,12 +336,4 @@ export default function BarScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   flex: { flex: 1 },
-  overscroll: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: -1000,
-    height: 1000,
-    backgroundColor: colors.lining,
-  },
 });

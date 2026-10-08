@@ -2,11 +2,10 @@ import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { VerticalFade } from '@/components/cabinet';
 import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { useHideOnScroll } from '@/components/ScrollChrome';
-import { colors, layout, textRole } from '@/constants/theme';
+import { colors, layout, stroke, textRole } from '@/constants/theme';
 
 /* ==================================================================== */
 /* Home's top bar, floating                                             */
@@ -17,26 +16,29 @@ import { colors, layout, textRole } from '@/constants/theme';
 /* draws under it, so the wine runs unbroken from the status bar down   */
 /* through the stories.                                                 */
 /*                                                                      */
-/* Scroll down and the bar slides up under the status strip within      */
-/* 68pt (its 44 and its 24pt tail). Scroll up anywhere and it slides    */
-/* back, now over the feed, with no slab: the lining at 94% at its top, */
-/* 72% at its foot and to nothing 24pt below, so the feed shows through */
-/* its lower half while its glyphs hold AA over a white photo (5.60:1). */
-/* The status strip stays lining always, so the light status bar is     */
-/* always right, and a thin soft edge under it lets the feed run under. */
+/* Scroll down and the bar slides up under the status strip within 45pt */
+/* (its 44 and its 1pt foot). Scroll up anywhere and it slides back,    */
+/* now over the feed, on solid grained lining with a 1pt liningLip rule */
+/* along its foot: the "content is scrolling under me" signal every     */
+/* other top bar gives. It was a fade, the lining at 94% to 72% and on  */
+/* to nothing 24pt below, which let the feed show through its lower     */
+/* half; Jan liked everything about the scrolled look but that gradient */
+/* (build 17), so it is gone, and the strip's tail with it. The status  */
+/* strip stays lining always, so the light status bar is always right;  */
+/* once the bar is fully under it, the strip wears the same 1pt foot.   */
 /*                                                                      */
 /* MOVED BY THE FINGER. Every motion here is a native-driven            */
 /* interpolation of the list's own scroll (ScrollChrome): translateY    */
-/* and opacity only, no timer, no Reanimated, so nothing can stall      */
-/* half way. At offset 0 every value is the identity, so a stall, if    */
-/* one ever happened, would leave the bar fully drawn. While VoiceOver  */
-/* runs the bar never hides (useHideOnScroll is constant 0 then): a bar */
-/* slid under the strip would still be focusable.                       */
+/* and opacity only, no timer, no Reanimated, so nothing can stall half */
+/* way. At offset 0 every value is the identity, so a stall, if one     */
+/* ever happened, would leave the bar fully drawn. While VoiceOver runs */
+/* the bar never hides (useHideOnScroll is constant 0 then): a bar slid */
+/* under the strip would still be focusable.                            */
 /* ==================================================================== */
 
-/** How far the bar travels to hide: its own height and the tail under it. */
-const HIDE = layout.topBar + layout.homeBarTail;
-/** Scroll over which the bar's ground and the tails fade in from nothing. */
+/** How far the bar travels to hide: its own height and the 1pt foot under it. */
+const HIDE = layout.topBar + stroke.edge;
+/** Scroll over which the bar's ground and its foot fade in from nothing. */
 const FADE_IN = 24;
 
 export interface HomeChromeProps {
@@ -71,28 +73,39 @@ export function HomeChrome({
   const hide = useHideOnScroll('index', HIDE);
   const translateY = hide.interpolate({ inputRange: [0, HIDE], outputRange: [0, -HIDE] });
   /*
-   * At rest the bar's ground and both tails are off: the bar sits on the
-   * band's own lining (which looks identical), and the tails would tint the
-   * top of the story circles.
+   * At rest the bar's ground and its foot are off: the bar sits on the
+   * band's own lining (which looks identical), and a rule across the band
+   * would say the page had scrolled when it has not.
    */
   const fadeIn = scrollY.interpolate({ inputRange: [0, FADE_IN], outputRange: [0, 1], extrapolate: 'clamp' });
+  /*
+   * The strip's foot shows only once the bar is all the way under it.
+   * With the bar out, the strip sits on the bar's own lining, and a rule
+   * between them would be a seam across one top bar; as the bar's last
+   * point goes under, its foot is exactly where this one appears, so the
+   * rule hands over without moving.
+   */
+  const stripFoot = hide.interpolate({
+    inputRange: [HIDE - stroke.edge, HIDE],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
 
   return (
     <View
       pointerEvents="box-none"
-      style={[styles.root, { height: insets.top + layout.topBar + layout.homeBarTail }]}>
+      style={[styles.root, { height: insets.top + layout.topBar + stroke.edge }]}>
       {/* The bar: under the strip, so it slides away beneath it. */}
       <Animated.View pointerEvents="box-none" style={[styles.bar, { top: insets.top, transform: [{ translateY }] }]}>
-        <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity: fadeIn }]}>
-          <VerticalFade from={colors.homeBarTop} to={colors.homeBarFoot} style={StyleSheet.absoluteFill} />
-        </Animated.View>
-        <Animated.View pointerEvents="none" style={[styles.barTail, { opacity: fadeIn }]}>
-          <VerticalFade
-            from={colors.homeBarFoot}
-            to={colors.homeBarFoot}
-            toOpacity={0}
-            style={StyleSheet.absoluteFill}
-          />
+        {/*
+          Its scrolled ground: solid lining and the lining's grain, with the
+          1pt lip along the foot (liningLip over lining, as ScreenTopBar's
+          lining rule draws), so the bar reads as one opaque object over a
+          photo or paper alike: onLining on lining is 13.32:1.
+        */}
+        <Animated.View pointerEvents="none" style={[styles.ground, { opacity: fadeIn }]}>
+          <Grain tone="lining" />
+          <View style={styles.foot} />
         </Animated.View>
         {/*
           The wordmark is the one place the brand name is set, so it is set
@@ -132,14 +145,12 @@ export function HomeChrome({
 
       {/*
         The status strip: always lining, over the bar, and it takes the
-        touches in its band so a bar hidden beneath it takes none. Its soft
-        edge fades in with the scroll, like the bar's.
+        touches in its band so a bar hidden beneath it takes none. Its 1pt
+        foot appears as the bar's goes under it (stripFoot).
       */}
       <View pointerEvents="auto" style={[styles.strip, { height: insets.top }]}>
         <Grain tone="lining" />
-        <Animated.View pointerEvents="none" style={[styles.stripTail, { top: insets.top, opacity: fadeIn }]}>
-          <VerticalFade from={colors.lining} to={colors.lining} toOpacity={0} style={StyleSheet.absoluteFill} />
-        </Animated.View>
+        <Animated.View pointerEvents="none" style={[styles.foot, { opacity: stripFoot }]} />
       </View>
     </View>
   );
@@ -147,9 +158,18 @@ export function HomeChrome({
 
 const styles = StyleSheet.create({
   root: { position: 'absolute', top: 0, left: 0, right: 0 },
-  bar: { position: 'absolute', left: 0, right: 0, height: layout.topBar },
-  barTail: { position: 'absolute', left: 0, right: 0, top: layout.topBar, height: layout.homeBarTail },
+  /* The 44pt row and the 1pt foot under it; ScreenTopBar's clear bar is the row alone. */
+  bar: { position: 'absolute', left: 0, right: 0, height: layout.topBar + stroke.edge },
+  ground: { ...StyleSheet.absoluteFill, backgroundColor: colors.lining },
+  /* The lip along a lining bar's foot, drawn over that bar's own lining. */
+  foot: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: stroke.edge,
+    backgroundColor: colors.liningLip,
+  },
   strip: { position: 'absolute', top: 0, left: 0, right: 0, backgroundColor: colors.lining },
-  stripTail: { position: 'absolute', left: 0, right: 0, height: layout.homeStripTail },
   wordmark: { color: colors.onLining },
 });

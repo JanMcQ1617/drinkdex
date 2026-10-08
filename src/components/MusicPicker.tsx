@@ -25,18 +25,18 @@ import { searchSongs, STORY_MUSIC, type SearchResult, type Song } from '@/lib/mu
 /* ==================================================================== */
 /* Add music                                                            */
 /*                                                                      */
-/* The Log sheet's song picker (specs/v3.1-changes.md 10.2): search     */
+/* The Log window's song picker (specs/v3.1-changes.md 10.2): search    */
 /* Apple Music, audition a preview, tap a row to put the song on the    */
 /* post's story.                                                        */
 /*                                                                      */
 /* A React Native page-sheet Modal, so UIKit presents and dismisses it  */
-/* (no Reanimated, nothing on the frame loop), over the Log sheet that  */
+/* (no Reanimated, nothing on the frame loop), over the Log window that */
 /* opened it. It carries its own grain: a native sheet is presented     */
 /* above the React root.                                                */
 /*                                                                      */
 /* Previews are user-initiated only, one song at a time, and stop the   */
 /* moment the picker closes, a song is chosen, the search changes or    */
-/* the Log sheet loses focus. While one is loaded the foot carries the  */
+/* the Log window loses focus. While one is loaded the foot carries the */
 /* link to that song in Apple Music, the link App Review 5.2.5 asks     */
 /* for beside any preview.                                              */
 /* ==================================================================== */
@@ -145,11 +145,11 @@ function PickerBody({
   useEffect(() => {
     stopRef.current = player.stop;
   });
-  // Swiped closed, or closed by the Log sheet: silent at once, not after the dismiss.
+  // Swiped closed, or closed by the Log window: silent at once, not after the dismiss.
   useEffect(() => {
     if (!visible) stopRef.current();
   }, [visible]);
-  // The Log sheet losing focus takes the preview with it.
+  // The Log window losing focus takes the preview with it.
   useFocusEffect(useCallback(() => () => stopRef.current(), []));
 
   const close = () => {
@@ -224,8 +224,8 @@ function PickerBody({
   ) : null;
 
   /*
-   * The page sheet's offset from the top of the window, for the keyboard,
-   * as on the Log sheet: KeyboardAvoidingView compares a sheet-relative
+   * The page sheet's offset from the top of the window, for the keyboard
+   * (add-drink does the same): KeyboardAvoidingView compares a sheet-relative
    * frame with the keyboard's window position, so without it the foot
    * stays under the keyboard by the gap above the sheet.
    */

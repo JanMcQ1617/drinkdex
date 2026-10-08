@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 020
+-- Sipply — the whole schema, as of migration 021
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-020 built on the live project, and records every one of
+-- migrations 002-021 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -430,6 +430,9 @@ create index if not exists follows_following_idx         on public.follows (foll
 -- The primary key (post_id, user_id) serves lookups by post; this serves
 -- "which of these have I liked" and the delete cascade (014).
 create index if not exists likes_user_idx                on public.likes (user_id, post_id);
+-- 021: a post's likes, newest first, for the likers list's pages and the
+-- "Liked by" summary's tie-break.
+create index if not exists likes_post_recent_idx         on public.likes (post_id, created_at desc, user_id desc);
 create index if not exists profiles_created_idx          on public.profiles (created_at desc);
 create index if not exists profile_secrets_phone_idx     on public.profile_secrets (phone_hash);
 create index if not exists profile_secrets_instagram_idx on public.profile_secrets (instagram_hash);
@@ -1241,6 +1244,81 @@ as $$
     )
   order by ph.created_at desc
   limit 300;
+$$;
+
+-- 021: one liker to name on each of up to 100 posts' "Liked by" line:
+-- someone the caller follows if any liked it, else the newest. Never the
+-- caller, never anyone blocked either way, no row for a post the caller
+-- cannot see. SECURITY INVOKER, like recent_pours: the read policies
+-- decide visibility, and blocks are re-checked here as well. Every column
+-- is table-qualified, since the RETURNS TABLE names are column names too.
+create or replace function public.post_like_summaries(p_post_ids uuid[])
+returns table (post_id uuid, user_id uuid, username text, display_name text,
+               accent text, avatar_path text)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  with me as (
+    select (select auth.uid()) as id, (select private.my_block_set()) as blocked
+  ),
+  wanted as (
+    select distinct u.id from unnest(p_post_ids[1:100]) as u(id)
+  )
+  select p.id, f.user_id, f.username, f.display_name, f.accent, f.avatar_path
+  from me
+  cross join wanted w
+  join public.posts p on p.id = w.id
+  cross join lateral (
+    select pr.id as user_id, pr.username, pr.display_name, pr.accent, pr.avatar_path
+    from public.likes l
+    join public.profiles pr on pr.id = l.user_id
+    where l.post_id = p.id
+      and l.user_id <> me.id
+      and not (l.user_id = any (me.blocked))
+    order by exists (select 1 from public.follows fo
+                     where fo.follower_id = me.id and fo.following_id = l.user_id) desc,
+             l.created_at desc, l.user_id desc
+    limit 1
+  ) f
+  where me.id is not null
+    and not (p.author_id = any (me.blocked));
+$$;
+
+-- 021: everyone who liked one post, newest first, keyset-paged on the
+-- like's (created_at, user_id), 50 a page by default and 100 at most,
+-- with whether the caller follows each. The caller is listed too.
+create or replace function public.post_likers(
+  p_post_id uuid,
+  p_limit integer default 50,
+  p_before_at timestamptz default null,
+  p_before_user uuid default null)
+returns table (user_id uuid, username text, display_name text, accent text,
+               avatar_path text, liked_at timestamptz, followed_by_me boolean)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  with me as (
+    select (select auth.uid()) as id, (select private.my_block_set()) as blocked
+  )
+  select pr.id, pr.username, pr.display_name, pr.accent, pr.avatar_path, l.created_at,
+         exists (select 1 from public.follows fo
+                 where fo.follower_id = me.id and fo.following_id = pr.id)
+  from me
+  join public.posts p on p.id = p_post_id
+  join public.likes l on l.post_id = p.id
+  join public.profiles pr on pr.id = l.user_id
+  where me.id is not null
+    and not (p.author_id = any (me.blocked))
+    and not (l.user_id = any (me.blocked))
+    and (p_before_at is null
+         or (l.created_at, l.user_id)
+            < (p_before_at, coalesce(p_before_user, 'ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid)))
+  order by l.created_at desc, l.user_id desc
+  limit least(greatest(coalesce(p_limit, 50), 1), 100);
 $$;
 
 -- 018: a drink suggestion's prepare trigger. Normalises, checks shapes,
@@ -2608,6 +2686,8 @@ revoke all on function public.match_facebook_friends(text[])   from public, anon
 revoke all on function public.follow_many(uuid[])              from public, anon;
 revoke all on function public.accept_invite(uuid)              from public, anon;
 revoke all on function public.recent_pours()                   from public, anon;
+revoke all on function public.post_like_summaries(uuid[])      from public, anon;
+revoke all on function public.post_likers(uuid, integer, timestamptz, uuid) from public, anon;
 revoke all on function public.my_reel_quota()                  from public, anon;
 grant execute on function public.delete_own_account()           to authenticated;
 grant execute on function public.set_phone_hash(text)           to authenticated;
@@ -2618,6 +2698,8 @@ grant execute on function public.match_facebook_friends(text[]) to authenticated
 grant execute on function public.follow_many(uuid[])            to authenticated;
 grant execute on function public.accept_invite(uuid)            to authenticated;
 grant execute on function public.recent_pours()                 to authenticated;
+grant execute on function public.post_like_summaries(uuid[])    to authenticated;
+grant execute on function public.post_likers(uuid, integer, timestamptz, uuid) to authenticated;
 grant execute on function public.my_reel_quota()                to authenticated;
 
 -- 020. The trigger functions and the scoring helpers are reached only
@@ -3264,7 +3346,7 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 020'),
+  ('schema',                  'schema.sql, current as of 021'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -3283,5 +3365,6 @@ insert into public.schema_migrations (version, note) values
   ('017_home_and_profile',    'contained in schema.sql'),
   ('018_drink_submissions',   'contained in schema.sql'),
   ('019_reels',               'contained in schema.sql'),
-  ('020_tournaments_and_story_music', 'contained in schema.sql')
+  ('020_tournaments_and_story_music', 'contained in schema.sql'),
+  ('021_post_likers',         'contained in schema.sql')
 on conflict (version) do nothing;

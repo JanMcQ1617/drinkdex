@@ -511,7 +511,7 @@ function BoardView({
         {/* ---- On now, for someone in it: post. The cap is said only once it is reached. ---- */}
         {live && member ? (
           <View style={styles.actions}>
-            <Button label="Post a drink" icon="plus" block onPress={() => router.push('/log')} />
+            <Button label="Post a drink" icon="plus" block onPress={() => router.navigate('/log')} />
             {mine && mine.today >= board.dailyCap ? (
               <Text style={styles.line}>
                 {board.dailyCap} new drinks counted today. Drinks you post later today will not count in

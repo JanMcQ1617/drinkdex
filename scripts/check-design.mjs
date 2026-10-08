@@ -361,10 +361,12 @@ const RARITY_SHIM_FILES = [];
  *     (specs/v3.1-changes.md section 1.2.2). A timed animation is the
  *     thing that can. The `Animated` binding is followed through import
  *     aliases, a namespace import (`RN.Animated`), a deep import of RN's
- *     Animated module, and `const A = Animated`. The tab nudge's timing is
- *     navigator configuration (`transitionSpec`), not a call, and
- *     Reanimated's withTiming is a different import: neither is this
- *     rule's business.
+ *     Animated module, and `const A = Animated`. Changing tab is the
+ *     native pager's own paging (react-native-pager-view), and the tab
+ *     bar's indicator an interpolation of the pager's position, so
+ *     neither is a call; navigator configuration (`transitionSpec`) is
+ *     not one either, and Reanimated's withTiming is a different import:
+ *     none of them is this rule's business.
  */
 const RN_MODULE = /^react-native$/;
 const RN_ANIMATED_MODULE = /^react-native\/Libraries\/Animated\/Animated$/;

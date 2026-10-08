@@ -190,6 +190,38 @@ export type RecentPourRow = {
 };
 
 /**
+ * One row of post_like_summaries() (migration 021): the liker a post's
+ * "Liked by" line names. Someone the caller follows if any liked it, else
+ * the newest; never the caller, never anyone blocked either way. A post
+ * with no such liker has no row. No bio or created_at: the line shows a
+ * face and a name, nothing else.
+ */
+export type PostLikeSummaryRow = {
+  post_id: string;
+  user_id: string;
+  username: string;
+  display_name: string;
+  accent: string;
+  avatar_path: string | null;
+};
+
+/**
+ * One row of post_likers() (migration 021): someone who liked a post,
+ * newest first. liked_at and user_id are the keyset for the next page,
+ * passed back exactly as they came (the timestamp keeps its microseconds
+ * only as a string).
+ */
+export type PostLikerRow = {
+  user_id: string;
+  username: string;
+  display_name: string;
+  accent: string;
+  avatar_path: string | null;
+  liked_at: string;
+  followed_by_me: boolean;
+};
+
+/**
  * A drink someone added themselves, sent as a suggestion (migration 018).
  * Readable and writable by its submitter only. status, catalogue_id and
  * reviewed_at are Jan's columns: no client role is granted them, and the
@@ -568,6 +600,31 @@ export type Database = {
       recent_pours: {
         Args: Record<never, never>;
         Returns: RecentPourRow[];
+      };
+      /**
+       * One liker to name per post, for the cards' "Liked by" line. At most
+       * 100 posts per call (the server ignores the rest). Migration 021.
+       * SECURITY INVOKER: the read policies decide visibility, and blocks
+       * are checked again inside.
+       */
+      post_like_summaries: {
+        Args: { p_post_ids: string[] };
+        Returns: PostLikeSummaryRow[];
+      };
+      /**
+       * Everyone who liked one post, newest first, `p_limit` (default 50,
+       * at most 100) at a time. The next page passes the last row's
+       * liked_at and user_id as p_before_at and p_before_user. Migration
+       * 021, SECURITY INVOKER like post_like_summaries.
+       */
+      post_likers: {
+        Args: {
+          p_post_id: string;
+          p_limit?: number;
+          p_before_at?: string | null;
+          p_before_user?: string | null;
+        };
+        Returns: PostLikerRow[];
       };
       /**
        * The caller's reel counts and the server's limits, so the recorder

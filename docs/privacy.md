@@ -246,8 +246,10 @@ screen clears it, and deleting the account clears it too.
 
 **Other Sipply users** can see your profile, your posts, your photos, who
 you follow and who follows you, and which posts you have liked. When you
-like a post, its author can see that you liked it. Treat anything you post
-as public to everyone signed in.
+like a post, anyone who can see the post can see that you liked it: your
+name can appear in its "Liked by" line and in its list of likes. People you
+have blocked, and people who have blocked you, cannot. Treat anything you
+post as public to everyone signed in.
 
 **Supabase**, our hosting provider, stores the database and photos on our
 behalf, and runs sign-in, including phone sign-in, Sign in with Apple,

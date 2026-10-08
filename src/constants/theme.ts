@@ -350,13 +350,6 @@ export const colors = {
   storyRing: '#BC6B75',
   /** A seen story's 1pt ring. Decorative: the unseen ring's colour AND weight carry the state. */
   storyRingSeen: 'rgba(233, 229, 223, 0.30)',
-  /**
-   * Home's floating bar over the feed: the lining at the top of the bar ...
-   * onLining here is 11.53:1 even over a white photo.
-   */
-  homeBarTop: 'rgba(62, 10, 18, 0.94)',
-  /** ... and at its foot. onLining here is 5.60:1 even over a white photo, 5.91:1 over paper. */
-  homeBarFoot: 'rgba(62, 10, 18, 0.72)',
 } as const;
 
 /**
@@ -656,9 +649,6 @@ export const layout = {
    * The disc is ring - 2 x (ringWidth + gap): 57.
    */
   story: { ring: 68, ringWidth: 2.5, ringWidthSeen: 1, gap: 3, label: 76, badge: 22, badgeRing: 2 },
-  /** Home's floating bar: the fade under the bar, and under the status strip. */
-  homeBarTail: 24,
-  homeStripTail: 16,
 } as const;
 
 /**
@@ -755,8 +745,9 @@ export const motion = {
    * v3's filter Chips replace it (Chips answer with a fill). Each of them
    * also shows its state without motion (a label colour, a filled glyph),
    * so a spring that stalls never hides which option is on. Tab
-   * switches do not use it: they take the navigator's own short,
-   * translate-only nudge ((tabs)/_layout.tsx), never a spring.
+   * switches do not use it: the page moves with the native pager, and the
+   * tab bar's indicator follows the pager's own position
+   * ((tabs)/_layout.tsx, FloatingTabBar), never a spring.
    *
    * Faster than `spring`, which stays where it is because it drives other
    * things (sheets, the media-tile press scale, the profile meter).

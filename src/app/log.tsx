@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { usePreventRemove } from 'expo-router/react-navigation';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -10,8 +10,10 @@ import {
   Linking,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
+  type TextInput,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -23,7 +25,7 @@ import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { MusicPicker } from '@/components/MusicPicker';
-import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
+import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { SongArtwork } from '@/components/songs';
 import {
   announce,
@@ -61,6 +63,7 @@ import {
   reportPostPhoto,
   type PickResult,
 } from '@/lib/pour';
+import { latestDexIds } from '@/lib/tastes';
 import { faceOf, fitScale } from '@/lib/textFit';
 import { useAuth } from '@/store/auth';
 import { useCelebrate } from '@/store/celebrate';
@@ -73,8 +76,10 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* ==================================================================== */
 /* Post a drink                                                         */
 /*                                                                      */
-/* The centre action's destination: photograph first, then say what it  */
-/* was.                                                                 */
+/* The centre action's destination, and the + on Home's bar: a          */
+/* full-screen window that rises from the bottom (the root stack        */
+/* presents it as a fullScreenModal) and closes with its X.             */
+/* Photograph first, then say what it was.                              */
 /*                                                                      */
 /* That order is the whole point of this screen existing. Posting from  */
 /* a Dex entry means you already know what you drank and have gone      */
@@ -83,14 +88,28 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* photograph is the thing you can always take, and identifying it is a */
 /* second step you can do at leisure.                                   */
 /*                                                                      */
-/* One screen, not a wizard. The two steps are short enough that paging */
-/* between them would cost more than it organises, and keeping both     */
-/* visible means the photo stays on screen while you search — which is  */
-/* what you are looking at to work out what it was.                     */
+/* One screen, two modes, not a wizard. The search field is pinned      */
+/* under the top bar in both, with a small print of the photo at its    */
+/* left once there is one, so the photo stays in view while you search  */
+/* (it is what you are looking at to work out what it was).             */
+/*                                                                      */
+/*   COMPOSE  the photo and its buttons, "What was it?" with the drink  */
+/*            chosen and what saving will do, and the save bar.         */
+/*   FIND     while the field has focus or text: the results and        */
+/*            nothing else, from under the field down to the keyboard.  */
+/*                                                                      */
+/* Why pinned: the field used to sit in the list's header below the     */
+/* photo and the heading, so with the keyboard up those three filled    */
+/* what the keyboard left and every result was behind it. Jan could not */
+/* see the drinks without closing the keyboard (build 17). Now the      */
+/* first results always sit right under the field; choosing one lowers  */
+/* the keyboard and returns to compose with it. The modes swap in one   */
+/* commit with no animation (specs/v3.3-changes.md section 0): a        */
+/* stalled layout animation would leave rows drawn over each other.     */
 /*                                                                      */
 /* A drink the Dex does not have can be added from here (add-drink):    */
 /* the search offers it when nothing found has the name typed, the form */
-/* takes this sheet's photo along, and the drink comes back selected.   */
+/* takes this window's photo along, and the drink comes back selected.  */
 /* A photo of a drink someone added is kept in their Dex, not posted:   */
 /* followers' phones look drinks up in the catalogue, which does not    */
 /* have it until Sipply adds it.                                        */
@@ -149,9 +168,11 @@ type Result = { drink: Drink; custom: CustomDrink | null };
  * measure: lib/drinkSearch's rank, moved there from this file so the
  * add-a-drink form and a reel's drink tag search the same way.
  *
- * Nothing is listed until something is typed. The full index in dex
- * order is not a starting point, it is a wall — and the one thing the
- * user reliably knows here is roughly what the drink was called.
+ * Nothing from the index is listed until something is typed. The full
+ * index in dex order is not a starting point, it is a wall — and the one
+ * thing the user reliably knows here is roughly what the drink was
+ * called. An empty, focused field offers the latest drinks in their own
+ * Dex instead (see `recent`).
  *
  * Every entry is ranked and the best MAX_RESULTS kept, rather than
  * stopping at the first MAX_RESULTS in dex order. Stopping early was
@@ -185,6 +206,9 @@ function search(query: string, own: Record<string, CustomDrink>): { rows: Result
   );
   return { rows: hits.slice(0, MAX_RESULTS), total: hits.length };
 }
+
+/** How many of the Dex's latest catches an empty search offers. */
+const RECENT_MAX = 6;
 
 /* -------------------------------------------------------------------- */
 
@@ -238,6 +262,7 @@ function DrinkRow({
   first,
   last,
   onPress,
+  accessibilityHint,
 }: {
   drink: Drink;
   selected: boolean;
@@ -252,6 +277,8 @@ function DrinkRow({
   first: boolean;
   last: boolean;
   onPress: (d: Drink) => void;
+  /** What a press does, when it is not choosing this drink (the chosen row reopens the search). */
+  accessibilityHint?: string;
 }) {
   const { fontScale } = useWindowDimensions();
   const trailing = Math.max(
@@ -307,6 +334,7 @@ function DrinkRow({
       accessibilityRole="button"
       accessibilityState={{ selected }}
       accessibilityLabel={spoken}
+      accessibilityHint={accessibilityHint}
       style={({ pressed }) => [
         styles.row,
         first && styles.rowFirst,
@@ -368,6 +396,33 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
         accessibilityLabel={`Add ${query} to your Dex`}
       />
     </View>
+  );
+}
+
+/**
+ * Compose mode's place for the choice before there is one: a row in the
+ * results' own panel shape, under "What was it?", that says the next step
+ * and takes it, putting the cursor in the pinned field above (which is
+ * what turns the window to find mode). Without it the heading would stand
+ * over nothing, and the field at the top is easy to read as the page's
+ * own search rather than this step's. Wraps at any text size.
+ */
+function SearchPrompt({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel="Search for the drink"
+      accessibilityHint="Puts the cursor in the search field at the top"
+      style={({ pressed }) => [styles.prompt, pressed && styles.rowPressed]}>
+      <View style={styles.promptTile}>
+        <Icon name="search" size={20} color={colors.text} />
+      </View>
+      <View style={styles.rowText}>
+        <Text style={styles.promptTitle}>Search for the drink</Text>
+        <Text style={styles.rowMeta}>By name, style or country</Text>
+      </View>
+    </Pressable>
   );
 }
 
@@ -446,6 +501,8 @@ export default function PostDrinkScreen() {
   const [photoFrom, setPhotoFrom] = useState<'camera' | 'library'>('camera');
   const [drink, setDrink] = useState<Drink | null>(() => resolveDrink(preselectId));
   const [query, setQuery] = useState('');
+  /** The search field has the cursor (see `finding`). */
+  const [searchFocused, setSearchFocused] = useState(false);
   /** The caption. Still `note` in code: the Dex entry's field (UnlockRecord.note) keeps that name. */
   const [note, setNote] = useState('');
   /** Said under the caption when it would be refused. */
@@ -459,6 +516,29 @@ export default function PostDrinkScreen() {
   const [saved, setSaved] = useState<'new' | 'relog' | null>(null);
   const busy = savingAs !== null;
   const trimmed = query.trim();
+
+  /*
+   * Find mode: the field has the cursor, or still holds a search after the
+   * keyboard went down (dragging the results lowers it, and the results
+   * stay). The focus is SearchField's own onFocus/onBlur, held as state
+   * (searchFocused, above) because it decides what renders; the ref is
+   * how a pick or the "Search for the drink" row moves it.
+   */
+  const searchRef = useRef<TextInput>(null);
+  const finding = searchFocused || trimmed.length > 0;
+
+  /*
+   * Every keystroke puts the results back at their top. A FlatList keeps
+   * its offset when its rows change, so after scrolling down to see more
+   * (the drag lowers the keyboard), typing the next letter would leave
+   * the new best matches above the window, out of sight under the field.
+   * Instant: it is the same list answering a new question, not a move.
+   */
+  const findListRef = useRef<FlatList<Result>>(null);
+  const onQueryChange = useCallback((text: string) => {
+    setQuery(text);
+    findListRef.current?.scrollToOffset({ offset: 0, animated: false });
+  }, []);
 
   /** A drink this person added: kept in their Dex, never posted, never celebrated. */
   const isCustom = drink != null && isCustomId(drink.id);
@@ -498,15 +578,30 @@ export default function PostDrinkScreen() {
    * is never seen. Dismissing first and hoping the card catches up is a
    * race against an animation.
    *
-   * So the sheet stays, renders the celebration itself — same tree, no
-   * cross-window layering to reason about — and leaves when the queue is
-   * empty. Both this instance and the root one read the same queue, and a
-   * dismissal pops it once, so the card can never appear twice. A photo of
-   * a drink someone added raises no celebration, so it leaves at once.
+   * So the window stays, renders the celebration itself — same tree, no
+   * layering across view controllers to reason about — and leaves when the
+   * queue is empty. Both this instance and the root one read the same
+   * queue, and a dismissal pops it once, so the card can never appear
+   * twice. A photo of a drink someone added raises no celebration, so it
+   * leaves at once.
    */
   const pending = useCelebrate((s) => s.queue.length);
 
   const results = useMemo(() => search(query, customDrinks), [query, customDrinks]);
+
+  /*
+   * An empty search's rows: the newest catches in this Dex, newest first,
+   * catalogue drinks only (lib/tastes): posting a second round of
+   * something then takes one tap instead of typing its name again.
+   */
+  const recent = useMemo<Result[]>(
+    () =>
+      latestDexIds(unlocks, RECENT_MAX).flatMap((id) => {
+        const d = getDrink(id);
+        return d ? [{ drink: d, custom: null }] : [];
+      }),
+    [unlocks],
+  );
 
   /*
    * Whether to offer adding the drink typed: two characters at least, and
@@ -544,7 +639,31 @@ export default function PostDrinkScreen() {
   }, []);
 
   /*
-   * The add-a-drink form, named after the search. It takes this sheet's
+   * A result chosen: it becomes the drink, the search empties, the keyboard
+   * goes down and the field lets go, so the window is back in compose with
+   * the choice, its collect preview and the save bar. Focus is cleared
+   * here as well as by onBlur, which arrives a moment later: in between,
+   * an empty focused field would flash the recent rows. One tap does it:
+   * the list keeps taps while the keyboard is up (keyboardShouldPersistTaps).
+   * Said aloud, since the row under the finger is gone.
+   */
+  const pick = useCallback(
+    (d: Drink) => {
+      selectDrink(d);
+      setQuery('');
+      setSearchFocused(false);
+      Keyboard.dismiss();
+      searchRef.current?.blur();
+      announce(`Selected ${d.name}`);
+    },
+    [selectDrink],
+  );
+
+  /** Into find mode from compose: the prompt row, and the chosen drink's row (to change it). */
+  const focusSearch = useCallback(() => searchRef.current?.focus(), []);
+
+  /*
+   * The add-a-drink form, named after the search. It takes this window's
    * photo along (setSeed), as a copy: the photo stays here too, ready to
    * save once the drink comes back selected.
    */
@@ -559,7 +678,9 @@ export default function PostDrinkScreen() {
    * its "Already in the Dex?" rows pointed at, chosen here. The handoff waits
    * in the custom-drinks store and is taken on focus, so it is read once,
    * by this screen, after the form has gone; the choice is said aloud,
-   * since nothing under the finger changed.
+   * since nothing under the finger changed. The search that led to the
+   * form is done with, so it empties and the window shows compose, as a
+   * pick does. Back without adding, the search stays, results and all.
    */
   useFocusEffect(
     useCallback(() => {
@@ -568,12 +689,14 @@ export default function PostDrinkScreen() {
       const next = resolveDrink(h.id);
       if (!next) return;
       setDrink(next);
+      setQuery('');
+      setSearchFocused(false);
       announce(`Selected ${next.name}`);
     }, []),
   );
 
   /*
-   * The music picker closes when this sheet loses focus, and its preview
+   * The music picker closes when this window loses focus, and its preview
    * stops with it (MusicPicker stops on close and on blur).
    */
   useFocusEffect(useCallback(() => () => setPickingMusic(false), []));
@@ -586,20 +709,20 @@ export default function PostDrinkScreen() {
    * turns away a second tap on its own, so the neighbour needs no fade to
    * be safe.
    *
-   * `saved` stays: the celebration covers the sheet, but a re-log has no
-   * celebration and the sheet takes a moment to slide away.
+   * `saved` stays: the celebration covers the window, but a re-log has no
+   * celebration and the window takes a moment to slide away.
    */
   const canSave = photoUri != null && drink != null && !saved;
-  /** This sheet can post: a photo and a drink, signed in, a catalogue drink. */
+  /** This window can post: a photo and a drink, signed in, a catalogue drink. */
   const postable = photoUri != null && drink != null && !!myId && !isCustom;
   /** Save & post can be pressed. */
   const canPost = postable && !saved;
   /*
    * "Add music" shows wherever Save & post is enabled, and nowhere else:
    * a song is only ever sent with a post, so it is never offered where the
-   * sheet cannot post (signed out, a drink you added). After the save it
+   * window cannot post (signed out, a drink you added). After the save it
    * stays, dimmed with the two buttons, so the bar does not jump shorter
-   * while the sheet slides away.
+   * while the window slides away.
    */
   const offerMusic = MUSIC_ON && postable;
 
@@ -699,7 +822,7 @@ export default function PostDrinkScreen() {
          *
          * Not awaited. The drink is saved and celebrated the moment it is
          * local; uploading the photo can take seconds on a bar's signal,
-         * and holding the sheet open on a spinning button for that long
+         * and holding the window open on a spinning button for that long
          * after the card is dismissed made a finished task look stuck. What
          * became of the post still reaches the user, as a notice once it is
          * known.
@@ -754,17 +877,20 @@ export default function PostDrinkScreen() {
   }, [saved, pending, router]);
 
   /*
-   * Leaving with work on the sheet asks first. Someone at a bar may have
+   * Leaving with work in the window asks first. Someone at a bar may have
    * spent a minute photographing and searching, and the photo exists only
-   * in the picker's cache until it is saved — one stray swipe down on the
-   * list used to throw all of it away. An empty sheet still leaves on the
-   * first swipe, which keeps the gesture meaning "never mind"; so does one
-   * that only holds the drink it was opened for. A chosen song is work too.
+   * in the picker's cache until it is saved — when this was a page sheet,
+   * one stray swipe down on the list threw all of it away. An empty window
+   * still closes on the first tap of the X, which keeps it meaning "never
+   * mind"; so does one that only holds the drink it was opened for. A
+   * chosen song is work too.
    *
-   * This catches the swipe and Cancel alike, since both go through the
-   * navigator. The post-save close is not held up: `saved` is already
-   * set by the time it runs. Mid-save, the attempt is simply ignored
-   * rather than offering to discard a save that is already happening.
+   * The full-screen window has no swipe to close (gestureEnabled is off
+   * at the root), so this catches the X and Android's back, both of which
+   * go through the navigator. The post-save close is not held up: `saved`
+   * is already set by the time it runs. Mid-save, the attempt is simply
+   * ignored rather than offering to discard a save that is already
+   * happening.
    */
   const dirty =
     !saved &&
@@ -783,25 +909,15 @@ export default function PostDrinkScreen() {
   });
 
   /*
-   * The sheet's offset from the top of the window, for the keyboard.
-   *
-   * `presentation: 'modal'` is a page sheet on iPhone, starting some way
-   * below the status bar. KeyboardAvoidingView compares its own frame,
-   * which is sheet-relative, with the keyboard's top, which is in window
-   * coordinates — so without the offset it under-pads by exactly that gap
-   * and the bottom of the save bar stays under the keyboard. A page sheet
-   * is anchored to the bottom, so the gap is the window height minus the
-   * sheet's. Measured from layout, not measureInWindow, which can read
-   * the sheet mid-way through its presentation animation. 'padding' does
-   * not change the view's own height, so this cannot feed back on itself.
-   *
-   * The width comes from the same layout: the result rows give their names
-   * a measure (DrinkName), and the sheet is what they sit in.
+   * The window's width, from its own layout: the result rows give their
+   * names a measure (DrinkName), and this is what they sit in. The
+   * window's height needs no measuring: a full-screen modal's frame is the
+   * screen's, so the keyboard needs no offset either (see the return).
    */
-  const { width: windowW, height: windowH } = useWindowDimensions();
-  const [sheet, setSheet] = useState({ w: windowW, h: windowH });
-  /** A result row's width: the sheet less the list's gutters and the group's 1pt edges. */
-  const rowWidth = sheet.w - 2 * layout.gutter - 2 * stroke.edge;
+  const { width: windowW } = useWindowDimensions();
+  const [frameW, setFrameW] = useState(windowW);
+  /** A result row's width: the window less the list's gutters and the group's 1pt edges. */
+  const rowWidth = frameW - 2 * layout.gutter - 2 * stroke.edge;
 
   /** A drink's own photo for its row: the one last saved of it, else the one it was added with. */
   const customPhoto = (c: CustomDrink) =>
@@ -824,15 +940,11 @@ export default function PostDrinkScreen() {
     ) : null;
 
   /*
-   * The choice is drawn above the results when they do not hold it (see
-   * the Selected block), and the preview goes with it there, under the row
-   * it describes, instead of after up to 40 rows of another search or a
-   * "No match".
+   * Compose mode's body, in a ScrollView: the photograph, then "What was
+   * it?" with the choice. The save bar is pinned under it (see the return).
    */
-  const selectedApart = drink != null && !results.rows.some((r) => r.drink.id === drink.id);
-
-  const header = (
-    <View>
+  const composeBody = (
+    <>
       {/* ---- The photograph ---- */}
       {/*
         The well shows; the buttons act.
@@ -847,13 +959,15 @@ export default function PostDrinkScreen() {
         Empty, it is a 96pt well, not a 4:3 frame: the frame held a 408x306
         hole for a photo that did not exist yet and decoded 4.5 MB once it
         did. Picked, the photo is a 90x120 print on bone mat, beside where
-        it came from and the two ways to replace it.
+        it came from and the two ways to replace it. Keyed by size, since
+        the same file is the search row's 44pt print too, and a decode
+        resized for one must not be handed to the other.
       */}
       {photoUri ? (
         <View style={styles.printRow}>
           <View style={styles.print}>
             <Image
-              source={{ uri: photoUri }}
+              source={{ uri: photoUri, cacheKey: `${photoUri}#90x120` }}
               style={styles.printPhoto}
               contentFit="cover"
               accessible={false}
@@ -933,29 +1047,14 @@ export default function PostDrinkScreen() {
       <SectionHeader title="What was it?" style={styles.sectionTitle} />
 
       {/*
-        The app's one search field, so it is the Dex's field and not a
-        near-miss of it. It searches name, style and origin, so it takes
-        the Dex's placeholder: it names how to search rather than how much,
-        which is the help this screen exists for. Someone at a bar who never
-        heard the drink's name can still type "tiki" or "mexico".
+        The choice and what saving it will do, or the way to make one. The
+        choice is a group of one drawn like the results it came from, and
+        pressing it reopens the search to change it; the collect preview
+        sits under the row it describes.
       */}
-      <SearchField
-        value={query}
-        onChangeText={setQuery}
-        placeholder="Name, style or country"
-        accessibilityLabel="Search for the drink you had, by name, style or country"
-        style={styles.search}
-      />
-
-      {/*
-        The choice stays in view whatever is typed next. It used to show only
-        while the search was empty, so searching again to compare hid the
-        drink that Save would still use.
-      */}
-      {drink && selectedApart ? (
-        <View style={styles.selectedBlock}>
-          <Text style={styles.selectedLabel}>Selected</Text>
-          {/* A group of one, drawn like the results below it. */}
+      {drink ? (
+        <View>
+          <Text style={styles.groupLabel}>Selected</Text>
           <DrinkRow
             drink={drink}
             selected
@@ -965,26 +1064,28 @@ export default function PostDrinkScreen() {
             rowWidth={rowWidth}
             first
             last
-            onPress={selectDrink}
+            onPress={focusSearch}
+            accessibilityHint="Searches for a different drink"
           />
           {preview}
         </View>
-      ) : null}
-    </View>
+      ) : (
+        <SearchPrompt onPress={focusSearch} />
+      )}
+    </>
   );
 
   /*
-   * Under the results: how many were left out, the collect preview, then
-   * the way to add a drink the Dex does not have. The preview follows the
-   * list it was chosen from, in the scroll and not in the save bar, which
-   * stays as short as it was while the keyboard is up. A choice the
-   * results do not hold keeps its preview in the Selected block instead.
+   * Find mode's rows: the search's, or with nothing typed yet, the Dex's
+   * latest. Under the search's: how many were left out, then the way to
+   * add a drink the Dex does not have. (The collect preview lives in
+   * compose now, under the choice it describes.)
    */
+  const findRows = trimmed.length > 0 ? results.rows : recent;
   const more = results.rows.length > 0 && results.total > MAX_RESULTS;
   const addUnder = results.rows.length > 0 && offerAdd;
-  const previewUnder = selectedApart ? null : preview;
-  const footer =
-    more || previewUnder || addUnder ? (
+  const findFooter =
+    more || addUnder ? (
       <View>
         {more ? (
           <Text style={styles.moreHint}>
@@ -992,7 +1093,6 @@ export default function PostDrinkScreen() {
             them down.
           </Text>
         ) : null}
-        {previewUnder}
         {addUnder ? <NotTheOne query={trimmed} onAdd={openAdd} /> : null}
       </View>
     ) : null;
@@ -1001,210 +1101,301 @@ export default function PostDrinkScreen() {
     <KeyboardAvoidingView
       style={styles.screen}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheet.h : 0}
+      /*
+       * No offset: a full-screen modal's frame is the screen's, so this
+       * view's frame and the keyboard's top are in the same coordinates.
+       * (As a page sheet it had to add the sheet's gap from the top.)
+       */
+      keyboardVerticalOffset={0}
       onLayout={(e) => {
-        const { width: w, height: h } = e.nativeEvent.layout;
-        setSheet((s) => (s.w === w && s.h === h ? s : { w, h }));
+        const w = e.nativeEvent.layout.width;
+        setFrameW((prev) => (prev === w ? prev : w));
       }}>
       {/*
         The paper grain, first, so everything on the page lies over it:
         photographs and thumbnails stay clean, and the white panels are
-        stock on a grained page. iOS presents this sheet in its own view
+        stock on a grained page. iOS presents this window in its own view
         controller above the React root, so no grain from anywhere else
         reaches it. pointerEvents none, so it takes no taps.
       */}
       <Grain />
 
       {/*
-        The app's one top bar. No status-bar inset on iOS: the page sheet
-        starts below the status bar, and the root's inset added inside it
-        left a blank band above the bar. Android presents the modal full
-        screen and does need it. "Post a drink", the words the tab bar and
-        the home bar use for this act. The rule is always drawn: a sheet's
-        bar sits over a list from the start. Save stays in the bottom bar,
-        where the thumb is.
+        The app's one top bar, below the status bar on both platforms now
+        that the window is full screen. "Post a drink", the words the tab
+        bar and the home bar use for this act. The X replaces the old
+        "Cancel" (Jan saw it cut to "Canc…" on build 17), at top left as a
+        full-screen create window has it, and still asks before throwing
+        work away (usePreventRemove). The rule is always drawn: the search
+        and the list sit under the bar from the start. Save stays in the
+        bottom bar, where the thumb is.
       */}
       <ScreenTopBar
         title="Post a drink"
         size="md"
-        inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
+        inset="safe"
         showRule
-        left={<TopBarTextButton label="Cancel" muted onPress={() => router.back()} />}
-      />
-
-      <FlatList
-        data={results.rows}
-        keyExtractor={(r) => r.drink.id}
-        renderItem={({ item, index }) => (
-          <DrinkRow
-            drink={item.drink}
-            selected={drink?.id === item.drink.id}
-            collected={
-              item.custom ? inDex(customPours, item.drink.id) : inDex(unlocks, item.drink.id)
-            }
-            photoUri={item.custom ? customPhoto(item.custom) : null}
-            badge={item.custom ? 'yours' : undefined}
-            rowWidth={rowWidth}
-            first={index === 0}
-            last={index === results.rows.length - 1}
-            onPress={selectDrink}
+        left={
+          <TopBarButton
+            icon="close"
+            label="Close"
+            accessibilityHint="Asks first if there is anything to lose"
+            onPress={() => router.back()}
           />
-        )}
-        ListHeaderComponent={header}
-        /*
-          The Dex's empty search, in the Dex's words: the same field, so the
-          same miss reads the same way, with the same way out. It keeps
-          examples the Dex does not print, because this screen is where
-          someone has a drink and no name for it, and "tiki", "amaro" and
-          "mexico" each find dozens.
-
-          And, for a name of two characters or more, the way to add it: a
-          drink with no match may simply not be in the Dex yet.
-        */
-        ListEmptyComponent={
-          trimmed.length > 0 ? (
-            offerAdd ? (
-              <EmptyState
-                icon="search"
-                title={`No match for “${trimmed}”`}
-                body="Check the spelling, or search by style or country: “tiki”, “amaro” and “mexico” all work. Not in the Dex? Add it."
-                action={{ label: `Add “${shortQuery(trimmed)}”`, onPress: openAdd }}
-                secondaryAction={{ label: 'Clear search', onPress: () => setQuery('') }}
-              />
-            ) : (
-              <EmptyState
-                icon="search"
-                title={`No match for “${trimmed}”`}
-                body="Check the spelling, or search by style or country: “tiki”, “amaro” and “mexico” all work."
-                action={{ label: 'Clear search', onPress: () => setQuery('') }}
-              />
-            )
-          ) : null
         }
-        ListFooterComponent={footer}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
       />
-
-      {/* ---- Save ---- */}
-      <View style={[styles.saveBar, { paddingBottom: insets.bottom + space.md }]}>
-        {/*
-          Music, above the caption, only where the sheet can post.
-          No song: one small button. A song: its cover, title and artist,
-          and Remove. No preview plays here; the picker is where a song is
-          auditioned, beside its Apple Music link.
-        */}
-        {offerMusic ? (
-          song ? (
-            <View style={styles.songRow}>
-              <View
-                accessible
-                accessibilityLabel={`Music, ${song.title} by ${song.artist}`}
-                style={styles.songInfo}>
-                <SongArtwork url={song.artworkUrl} size={32} />
-                {/*
-                  Uncapped, like the caption and buttons beside it: the bar
-                  is not a fixed frame. One line each keeps it bounded.
-                */}
-                <View style={styles.songText}>
-                  <Text numberOfLines={1} style={styles.songTitle}>
-                    {song.title}
-                  </Text>
-                  <Text numberOfLines={1} style={styles.songArtist}>
-                    {song.artist}
-                  </Text>
-                </View>
-              </View>
-              {/*
-                Not during a save: save() has already read the song, so a
-                Remove mid-save would say "removed" and post it anyway.
-              */}
-              <Button
-                label="Remove"
-                variant="text"
-                size="sm"
-                disabled={!!saved}
-                onPress={() => {
-                  if (busy || saved) return;
-                  setSong(null);
-                  announce('Music removed');
-                }}
-                accessibilityLabel={`Remove ${song.title}`}
-              />
-            </View>
-          ) : (
-            <Button
-              label="Add music"
-              variant="secondary"
-              size="sm"
-              icon="music"
-              disabled={!!saved}
-              onPress={() => {
-                if (busy || saved) return;
-                Keyboard.dismiss();
-                setPickingMusic(true);
-              }}
-              style={styles.addMusic}
-            />
-          )
-        ) : null}
-        {/*
-          The app's one form input, with the same label, prompt, cap and
-          props as the caption on the drink card's sheet, so the one
-          caption is asked for one way from both doors. A visible label,
-          not only a placeholder: the placeholder is gone the moment
-          anything is typed, and with it the only sign that the caption is
-          optional. Field links a refused caption to the input and speaks
-          it when it appears. Prose, so capitals and autocorrect are on.
-        */}
-        <Field
-          label="Add a caption"
-          value={note}
-          onChangeText={onNoteChange}
-          placeholder="Where you had it, what you thought"
-          maxLength={NOTE_MAX}
-          autoCapitalize="sentences"
-          autoCorrect
-          returnKeyType="done"
-          error={noteError}
-          accessibilityLabel="Caption, optional"
-        />
-        {/*
-          The same pair, in the same order, as the sheet on a Dex card.
-          Only the pressed one shows it is working. The other keeps its
-          look, and save() ignores it until the first has finished (see
-          canSave). A save answers with the success haptic; buttons do not
-          tick.
-        */}
-        <View style={styles.saveRow}>
-          <Button
-            label={relog ? 'Save photo' : 'Save to Dex'}
-            variant="secondary"
-            onPress={() => void save(false)}
-            disabled={!canSave}
-            loading={savingAs === 'dex'}
-            style={styles.saveBtn}
-          />
-          <Button
-            label="Save & post"
-            onPress={() => void save(true)}
-            disabled={!canPost}
-            loading={savingAs === 'post'}
-            style={styles.saveBtn}
-          />
-        </View>
-        {saveHint ? <Text style={styles.saveHint}>{saveHint}</Text> : null}
-      </View>
 
       {/*
-        Rendered here as well as at the root. While this sheet is up it is
+        The search, pinned under the bar in both modes, so what it finds
+        always starts right under it and above the keyboard. The app's one
+        search field, so it is the Dex's field and not a near-miss of it.
+        It searches name, style and origin, so it takes the Dex's
+        placeholder: it names how to search rather than how much, which is
+        the help this screen exists for. Someone at a bar who never heard
+        the drink's name can still type "tiki" or "mexico".
+
+        With a photo picked, a 44pt print of it sits at the field's left,
+        so the photo stays in view while the results fill the window. It
+        is there in compose too, so the field never changes width under
+        the finger. Decorative: compose's print is the one described.
+      */}
+      <View style={styles.searchRow}>
+        {photoUri ? (
+          <View style={styles.searchPrint}>
+            <Image
+              source={{ uri: photoUri, cacheKey: `${photoUri}#44x44` }}
+              style={styles.printPhoto}
+              contentFit="cover"
+              accessible={false}
+              enforceEarlyResizing
+            />
+          </View>
+        ) : null}
+        <SearchField
+          ref={searchRef}
+          value={query}
+          onChangeText={onQueryChange}
+          onFocus={() => setSearchFocused(true)}
+          onBlur={() => setSearchFocused(false)}
+          placeholder="Name, style or country"
+          accessibilityLabel="Search for the drink you had, by name, style or country"
+          style={styles.searchField}
+        />
+      </View>
+
+      {finding ? (
+        /*
+         * Find: only the results, from under the field to the keyboard
+         * (the save bar is not drawn, so nothing else takes the room).
+         * Taps go through while the keyboard is up, so one tap on a row
+         * chooses it. Dragging typed results lowers the keyboard to show
+         * more of them, and they stay while the field holds text. The
+         * recent rows do not lower it: with nothing typed, a lowered
+         * keyboard ends find mode, and a drag to see the sixth row would
+         * throw the list away under the finger.
+         */
+        <FlatList
+          ref={findListRef}
+          data={findRows}
+          keyExtractor={(r) => r.drink.id}
+          renderItem={({ item, index }) => (
+            <DrinkRow
+              drink={item.drink}
+              selected={drink?.id === item.drink.id}
+              collected={
+                item.custom ? inDex(customPours, item.drink.id) : inDex(unlocks, item.drink.id)
+              }
+              photoUri={item.custom ? customPhoto(item.custom) : null}
+              badge={item.custom ? 'yours' : undefined}
+              rowWidth={rowWidth}
+              first={index === 0}
+              last={index === findRows.length - 1}
+              onPress={pick}
+            />
+          )}
+          ListHeaderComponent={
+            trimmed.length === 0 && recent.length > 0 ? (
+              <Text style={styles.groupLabel} accessibilityRole="header">
+                Recent in your Dex
+              </Text>
+            ) : null
+          }
+          /*
+            The Dex's empty search, in the Dex's words: the same field, so the
+            same miss reads the same way, with the same way out. It keeps
+            examples the Dex does not print, because this screen is where
+            someone has a drink and no name for it, and "tiki", "amaro" and
+            "mexico" each find dozens.
+
+            And, for a name of two characters or more, the way to add it: a
+            drink with no match may simply not be in the Dex yet. With
+            nothing typed and nothing in the Dex to offer, one line says
+            what to type.
+          */
+          ListEmptyComponent={
+            trimmed.length > 0 ? (
+              offerAdd ? (
+                <EmptyState
+                  icon="search"
+                  title={`No match for “${trimmed}”`}
+                  body="Check the spelling, or search by style or country: “tiki”, “amaro” and “mexico” all work. Not in the Dex? Add it."
+                  action={{ label: `Add “${shortQuery(trimmed)}”`, onPress: openAdd }}
+                  secondaryAction={{ label: 'Clear search', onPress: () => setQuery('') }}
+                />
+              ) : (
+                <EmptyState
+                  icon="search"
+                  title={`No match for “${trimmed}”`}
+                  body="Check the spelling, or search by style or country: “tiki”, “amaro” and “mexico” all work."
+                  action={{ label: 'Clear search', onPress: () => setQuery('') }}
+                />
+              )
+            ) : (
+              <Text style={styles.findHint}>Type a name, a style or a country.</Text>
+            )
+          }
+          ListFooterComponent={findFooter}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode={trimmed.length > 0 ? 'on-drag' : 'none'}
+          style={styles.body}
+          contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + space.xxxl }]}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <>
+          {/*
+            Compose: the photo and the choice scroll; the save bar stays
+            pinned under them. A drag lowers the caption's keyboard.
+          */}
+          <ScrollView
+            style={styles.body}
+            contentContainerStyle={styles.list}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+            showsVerticalScrollIndicator={false}>
+            {composeBody}
+          </ScrollView>
+
+          {/* ---- Save ---- */}
+          <View style={[styles.saveBar, { paddingBottom: insets.bottom + space.md }]}>
+            {/*
+              Music, above the caption, only where the window can post.
+              No song: one small button. A song: its cover, title and artist,
+              and Remove. No preview plays here; the picker is where a song is
+              auditioned, beside its Apple Music link.
+            */}
+            {offerMusic ? (
+              song ? (
+                <View style={styles.songRow}>
+                  <View
+                    accessible
+                    accessibilityLabel={`Music, ${song.title} by ${song.artist}`}
+                    style={styles.songInfo}>
+                    <SongArtwork url={song.artworkUrl} size={32} />
+                    {/*
+                      Uncapped, like the caption and buttons beside it: the bar
+                      is not a fixed frame. One line each keeps it bounded.
+                    */}
+                    <View style={styles.songText}>
+                      <Text numberOfLines={1} style={styles.songTitle}>
+                        {song.title}
+                      </Text>
+                      <Text numberOfLines={1} style={styles.songArtist}>
+                        {song.artist}
+                      </Text>
+                    </View>
+                  </View>
+                  {/*
+                    Not during a save: save() has already read the song, so a
+                    Remove mid-save would say "removed" and post it anyway.
+                  */}
+                  <Button
+                    label="Remove"
+                    variant="text"
+                    size="sm"
+                    disabled={!!saved}
+                    onPress={() => {
+                      if (busy || saved) return;
+                      setSong(null);
+                      announce('Music removed');
+                    }}
+                    accessibilityLabel={`Remove ${song.title}`}
+                  />
+                </View>
+              ) : (
+                <Button
+                  label="Add music"
+                  variant="secondary"
+                  size="sm"
+                  icon="music"
+                  disabled={!!saved}
+                  onPress={() => {
+                    if (busy || saved) return;
+                    Keyboard.dismiss();
+                    setPickingMusic(true);
+                  }}
+                  style={styles.addMusic}
+                />
+              )
+            ) : null}
+            {/*
+              The app's one form input, with the same label, prompt, cap and
+              props as the caption on the drink card's sheet, so the one
+              caption is asked for one way from both doors. A visible label,
+              not only a placeholder: the placeholder is gone the moment
+              anything is typed, and with it the only sign that the caption is
+              optional. Field links a refused caption to the input and speaks
+              it when it appears. Prose, so capitals and autocorrect are on.
+            */}
+            <Field
+              label="Add a caption"
+              value={note}
+              onChangeText={onNoteChange}
+              placeholder="Where you had it, what you thought"
+              maxLength={NOTE_MAX}
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="done"
+              error={noteError}
+              accessibilityLabel="Caption, optional"
+            />
+            {/*
+              The same pair, in the same order, as the sheet on a Dex card.
+              Only the pressed one shows it is working. The other keeps its
+              look, and save() ignores it until the first has finished (see
+              canSave). A save answers with the success haptic; buttons do not
+              tick.
+            */}
+            <View style={styles.saveRow}>
+              <Button
+                label={relog ? 'Save photo' : 'Save to Dex'}
+                variant="secondary"
+                onPress={() => void save(false)}
+                disabled={!canSave}
+                loading={savingAs === 'dex'}
+                style={styles.saveBtn}
+              />
+              <Button
+                label="Save & post"
+                onPress={() => void save(true)}
+                disabled={!canPost}
+                loading={savingAs === 'post'}
+                style={styles.saveBtn}
+              />
+            </View>
+            {saveHint ? <Text style={styles.saveHint}>{saveHint}</Text> : null}
+          </View>
+        </>
+      )}
+
+      {/*
+        Rendered here as well as at the root. While this window is up it is
         the only one that can be seen; once it closes, the root instance
         covers every other way a drink is collected.
       */}
       <CelebrationOverlay />
 
-      {/* Only while story music is on; it presents itself over this sheet. */}
+      {/* Only while story music is on; it presents itself over this window. */}
       {MUSIC_ON ? (
         <MusicPicker
           visible={pickingMusic}
@@ -1231,6 +1422,31 @@ const styles = StyleSheet.create({
    * a system list run edge to edge.
    */
   list: { paddingHorizontal: layout.gutter, paddingBottom: space.xxxl },
+  /* Either mode's body: whatever the bar, the search row and the save bar (or the keyboard) leave. */
+  body: { flex: 1 },
+
+  /*
+   * The pinned search row: the gutter, 8 above and below, and the photo's
+   * 44pt print at the left once there is one, as tall as the field. The
+   * print is the compose print in small: bone mat, 2pt of it, a 1pt edge.
+   */
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+    paddingHorizontal: layout.gutter,
+    paddingVertical: space.sm,
+  },
+  searchPrint: {
+    width: 44,
+    height: 44,
+    padding: 2,
+    backgroundColor: colors.mat,
+    borderRadius: 6,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
+  },
+  searchField: { flex: 1 },
 
   /* Photograph, empty: a 96pt well with a camera tile and two lines */
   well: {
@@ -1290,8 +1506,6 @@ const styles = StyleSheet.create({
     marginBottom: space.md,
   },
 
-  search: { marginBottom: space.md },
-
   /*
    * A result row, and its share of the group's edge: every row draws the
    * top rule (the first one's is the group's top edge, the others' the
@@ -1342,15 +1556,45 @@ const styles = StyleSheet.create({
     lineHeight: typeScale.caption.lineHeight,
     color: colors.taupeInk,
   },
-  /* 16 above the results, so the group of one and the results read as two panels. */
-  selectedBlock: { marginBottom: space.lg },
-  selectedLabel: {
+  /* A group's small label: "Selected" over the choice, "Recent in your Dex" over the recents. */
+  groupLabel: {
     fontFamily: fonts.bodyMedium,
     fontSize: typeScale.caption.fontSize,
     lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
     marginBottom: space.xs,
   },
+  /* An empty, focused search with nothing in the Dex to offer. */
+  findHint: { ...textRole.helper, color: colors.textMuted, paddingTop: space.xs },
+
+  /*
+   * "Search for the drink": one row in the results' panel shape (white, a
+   * 1pt edge, the panel corner), its 44pt tile where a result's thumbnail
+   * sits, so the row it stands in for keeps its place.
+   */
+  prompt: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.md,
+    minHeight: 72,
+    paddingVertical: space.sm,
+    paddingHorizontal: ROW_PAD,
+    backgroundColor: colors.surface,
+    borderRadius: radius.card,
+    borderWidth: stroke.edge,
+    borderColor: colors.lineControl,
+  },
+  promptTile: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.bgSunk,
+    borderRadius: radius.control,
+    borderWidth: stroke.edge,
+    borderColor: colors.line,
+  },
+  promptTitle: { ...textRole.sectionTitle, color: colors.text },
   moreHint: {
     fontFamily: fonts.body,
     fontSize: typeScale.caption.fontSize,

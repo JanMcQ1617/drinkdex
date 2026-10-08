@@ -116,6 +116,16 @@ export interface Post {
   createdAt: string;
   likes: number;
   likedByMe?: boolean;
+  /**
+   * The one liker the card names, "Liked by Maya and 12 others" (migration
+   * 021's post_like_summaries): someone you follow if any liked it, else
+   * the newest, never you and never anyone blocked either way.
+   *
+   * undefined = unknown (021 not applied, or the call failed): the card
+   * shows the plain count, not tappable. null = known, and there is nobody
+   * but you (or nobody) to name.
+   */
+  likedBy?: UserProfile | null;
   /** The signed-in user saved this post (saves table). */
   savedByMe?: boolean;
   commentCount?: number;

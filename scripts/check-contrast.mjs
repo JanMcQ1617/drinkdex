@@ -633,10 +633,9 @@ const PAIRS = [
   /*
    * v3.1, specs/v3.1-changes.md section 16.2. Home's stories sit on the
    * grained lining, so the ring is measured on the worst grain pixel too.
-   * Home's bar floats over the feed with no slab of its own: its ground is
-   * a fade of translucent lining, so its ink is measured with that fade
-   * composited over the worst thing the feed can put under it, a white
-   * photo, and over paper.
+   * Home's bar floats over the feed, and since v3.3 its scrolled ground is
+   * solid lining (it was a translucent fade, measured over a white photo):
+   * opaque, so nothing the feed puts under it reaches its ink.
    */
   'v3.1 · Stories, Home bar, tournaments',
   // Unseen: lit wine, because wine itself is 1.22:1 on lining. A UI cue (WCAG 1.4.11); the seen ring is decorative.
@@ -645,9 +644,7 @@ const PAIRS = [
   // Your own story's + badge: a bone disc on the lining (v3's unseen tile ring was the same pair), and its wine plus.
   [C.onLining, C.lining, 3.0, "the story + badge's bone disc on lining (UI)"], // 13.32
   [C.wine, C.onLining, 3.0, 'the story + badge: its wine plus on the bone disc (glyph)'], // 10.95
-  [C.onLining, over(R.homeBarFoot, WHITE_FRAME), 4.5, "Home bar ink (onLining) at the bar's foot, over a white photo"], // 5.60
-  [C.onLining, over(R.homeBarFoot, C.bg), 4.5, "Home bar ink at the bar's foot, over paper"], // 5.91
-  [C.onLining, over(R.homeBarTop, WHITE_FRAME), 4.5, "Home bar ink at the bar's top, over a white photo"], // 11.53
+  [C.onLining, C.lining, 4.5, 'Home bar ink on its solid scrolled ground'], // 13.32
   // A tournament's standings: your own row is wineWash.
   [C.text, C.wineWash, 4.5, 'your leaderboard row: text on wineWash'], // 12.78
   [C.textMuted, C.wineWash, 4.5, 'your leaderboard row: muted text on wineWash'], // 5.10

@@ -13,12 +13,13 @@ import type { Drink } from '@/types';
 import { BarFace } from './faces';
 
 /* ==================================================================== */
-/* Pour tonight, all of it                                              */
+/* You can make, all of it                                              */
 /*                                                                      */
-/* "See all" under the strip: every drink the shelf pours, as the rows  */
-/* today's My Bar listed them (a mounted thumbnail, the name in         */
-/* Playfair, whether it is in your Dex yet), forty at a time. A page    */
-/* sheet, presented by UIKit, so the counter stays where you left it.   */
+/* "See all" beside "You can make": every drink your bar makes, as rows */
+/* (a mounted thumbnail, the name in Playfair, whether it is in your    */
+/* Dex yet), forty at a time. A page sheet, presented and dismissed by  */
+/* UIKit (its own slide, interruptible by the grabber, nothing on the   */
+/* JS frame loop), so My Bar stays where you left it underneath.        */
 /* ==================================================================== */
 
 /** Rows per page: each row mounts a face, and six hundred in one commit is a freeze. */
@@ -113,13 +114,13 @@ function Body({
     <View style={styles.screen}>
       <Grain />
       <ScreenTopBar
-        title={`Pour tonight, ${formatCount(drinks.length)}`}
+        title={`You can make ${formatCount(drinks.length)}`}
         inset="sheet"
         right={<TopBarTextButton label="Done" onPress={onClose} />}
         showRule
       />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.help}>Everything your shelf pours, A to Z.</Text>
+        <Text style={styles.help}>Everything your bar makes, A to Z.</Text>
         <Card style={styles.list}>
           {drinks.slice(0, shown).map((d, i) => (
             <Row key={d.id} drink={d} first={i === 0} measure={width - ROW_CHROME} onOpen={onOpen} />

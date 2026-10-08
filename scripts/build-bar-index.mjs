@@ -187,9 +187,9 @@ const categorise = (label) => {
  * Where the substring rules file a thing wrongly, by id, over their answer.
  * "gin" is inside "ginger" (ginger beer, ale and syrup came out spirits),
  * the liqueur "maraschino" inside "maraschino cherry", and brand names
- * carry no kind word at all, so they fell to 'other'. My Bar shelves and
- * the add sheet's chips read the category as written here (src/data/
- * barShelf.ts), so this is the one place to put a misfiling right.
+ * carry no kind word at all, so they fell to 'other'. My Bar's picker
+ * chips (src/components/bar/BarPicker.tsx) read the category as written
+ * here, so this is the one place to put a misfiling right.
  */
 const CATEGORY_OVERRIDE = {
   'ginger-beer': 'mixer',

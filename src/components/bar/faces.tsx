@@ -12,15 +12,15 @@ import { useIsUnlocked } from '@/store/collection';
 import type { Drink } from '@/types';
 
 /* ==================================================================== */
-/* Drink faces on the counter                                           */
+/* Drink faces on My Bar                                                */
 /*                                                                      */
-/* A drink you can pour shows its lit catalogue photo, else the lit      */
-/* vector face; one thing short shows its ghost (the 256px unlit photo,  */
-/* else the debossed vector glass). Adding the missing thing swaps the   */
-/* source and expo-image's own native crossfade lights it: the "light    */
-/* up beneath" moment is an image transition, never a layout animation. */
-/* If the transition never runs the new picture simply appears, and a    */
-/* vector face flips at once.                                           */
+/* A drink you can make shows its lit catalogue photo, else the lit     */
+/* vector face; one ingredient away shows its ghost (the 256px unlit    */
+/* photo, else the debossed vector glass). Adding the missing thing     */
+/* swaps the source and expo-image's own native crossfade lights it:    */
+/* the "light up" moment is an image transition, never a layout         */
+/* animation. If the transition never runs the new picture simply       */
+/* appears, and a vector face flips at once.                            */
 /* ==================================================================== */
 
 /** Each bundled photo's resolved file, looked up once. */
@@ -117,8 +117,8 @@ export const POUR = { window: { width: 100, height: 112 }, cap: 1.3 } as const;
 export const POUR_WIDTH = POUR.window.width + 2 * (MOUNT.shelf.padding + stroke.edge);
 
 /**
- * A drink you can pour tonight: a mount on the counter, lit, with its name
- * in Playfair and whether it is in your Dex yet. `nameHeight` is the name
+ * A drink you can make now: a mount in the strip, lit, with its name in
+ * Playfair and whether it is in your Dex yet. `nameHeight` is the name
  * block every mount in the strip reserves (the tallest name's lines at
  * this text size), so a two-line name scrolling in never changes the
  * row's height mid-swipe.
@@ -174,8 +174,8 @@ export function useStripNameHeight(drinks: readonly Drink[]): number {
 /* ==================================================================== */
 
 /**
- * A drink as a small mount with its name under it: lit (it pours) or its
- * ghost (one thing short). Tapping opens the drink.
+ * A drink as a small mount with its name under it: lit (you can make it)
+ * or its ghost (one ingredient away). Tapping opens the drink.
  */
 export const DrinkThumb = React.memo(function DrinkThumb({
   drink,
@@ -195,7 +195,7 @@ export const DrinkThumb = React.memo(function DrinkThumb({
     <Pressable
       onPress={() => onOpen(drink.id)}
       accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, ${lit ? 'pours tonight' : 'one thing short'}`}
+      accessibilityLabel={`${drink.name}, ${lit ? 'you can make it' : 'one ingredient away'}`}
       style={({ pressed }) => [{ width: size }, pressed && styles.pressed]}>
       <Mount state="mounted" size="thumb" onLining={false} style={{ width: size, height: size }}>
         <MountWindow height={face} state="mounted">

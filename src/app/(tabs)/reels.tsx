@@ -17,14 +17,18 @@ import { useReels } from '@/store/reels';
 /* ==================================================================== */
 /* The Reels tab                                                        */
 /*                                                                      */
-/* Everyone's reels, newest first, one to a screen. Signed out it is the */
-/* sign-in screen, on paper, like Home and Profile; signed in it is the  */
-/* app's one dark surface, and the tab bar goes dark with it            */
-/* (FloatingTabBar).                                                    */
+/* Everyone's reels, newest first, one to a screen. Signed out it is    */
+/* the sign-in screen, on paper, like Home and Profile; signed in it is */
+/* the app's one dark surface, under the same espresso tab bar every    */
+/* tab has (FloatingTabBar).                                            */
 /*                                                                      */
-/* While EXPO_PUBLIC_REELS is off the tab is not in the bar, and this    */
-/* route sends anyone who reaches it some other way (a stale link, the  */
-/* typed path) back to Home. The flag is off until Jan turns it on.      */
+/* While EXPO_PUBLIC_REELS is off this tab is not in the navigator at   */
+/* all: (tabs)/_layout.tsx wraps it in TopTabs.Protected, so there is   */
+/* no page to swipe to and no slot in the bar. The route file stays so  */
+/* the typed path still compiles; with no such page in the navigator a  */
+/* stale link to it opens nothing, and the Redirect below is only a     */
+/* backstop should anything ever render this file with the flag off.    */
+/* The flag is off until Jan turns it on.                               */
 /* ==================================================================== */
 
 export default function ReelsTab() {

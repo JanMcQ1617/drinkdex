@@ -7,26 +7,29 @@ import { formatCount } from '@/data';
 import type { Ingredient } from '@/lib/bar';
 import type { Drink } from '@/types';
 
-import { BottleRow, LARGE_WINDOW, rowStyles, ShelfToggle, SMALL_WINDOW } from './controls';
+import { IngredientRow, ROW_LEFT, rowStyles, ShelfToggle } from './controls';
 import { DrinkThumb, MoreTile, PourMount, useStripNameHeight } from './faces';
 
 /* ==================================================================== */
-/* The counter                                                          */
+/* What your bar makes                                                  */
 /*                                                                      */
-/* The paper under the back bar: what the shelf pours tonight, lit, and */
-/* what is one thing short, grouped by the one thing. It sits right     */
-/* under the bottle you just tapped, so the payoff is always in reach.  */
+/* Under the picker: what you can make now, lit, and what is one        */
+/* ingredient away, grouped by the one ingredient. A tick above changes */
+/* both at once, so the payoff is one scroll from the box you ticked.   */
 /*                                                                      */
 /* Add on a row expands IN PLACE: the row becomes a selected "Added"    */
-/* toggle and grows the drinks it just lit right under it, in the same  */
-/* render. Nothing moves away from the finger: rows keep the screen's   */
-/* snapshot order until the tab loses focus, and no layout animation    */
-/* runs (a new row of thumbs simply appears).                           */
+/* toggle and grows the drinks it just unlocked right under it, in the  */
+/* same render. Nothing moves away from the finger: rows keep the       */
+/* screen's snapshot order until another tab takes the front, and no    */
+/* layout animation runs (a new row of thumbs simply appears; v3.3      */
+/* section 0: a stalled layout transition is a row drawn in the wrong   */
+/* place, which is not "resting fully visible").                        */
 /* ==================================================================== */
 
 /* ---- Section heads ---- */
 
-function Head({
+/** A section's title (a header to VoiceOver), its count, and an action at its end. */
+export function SectionHead({
   title,
   count,
   action,
@@ -73,10 +76,10 @@ export function NameList({ drinks, shown = 3 }: { drinks: readonly Drink[]; show
 }
 
 /* ==================================================================== */
-/* Pour tonight                                                         */
+/* You can make                                                         */
 /* ==================================================================== */
 
-/** What the line under "Pour tonight" says. */
+/** What the line under "You can make" says. */
 export type PourNote =
   | { kind: 'lit'; label: string; drinks: readonly Drink[] }
   | { kind: 'off'; label: string; lost: number; onUndo: () => void }
@@ -87,14 +90,14 @@ export type PourNote =
 /** At most this many mounts in the strip; "See all" has the rest. */
 export const STRIP_MAX = 12;
 
-export function PourTonight({
+export function YouCanMake({
   total,
   strip,
   note,
   onSeeAll,
   onOpen,
 }: {
-  /** Drinks you can pour; null before anything is on the shelf. */
+  /** Drinks you can make; null before anything is in your bar. */
   total: number | null;
   strip: readonly Drink[];
   note: PourNote;
@@ -104,12 +107,12 @@ export function PourTonight({
   const nameHeight = useStripNameHeight(strip);
   return (
     <View style={styles.section}>
-      <Head
-        title="Pour tonight"
+      <SectionHead
+        title="You can make"
         count={total ?? undefined}
         action={
           onSeeAll
-            ? { label: 'See all', onPress: onSeeAll, accessibilityLabel: `See all ${formatCount(total ?? 0)} drinks you can pour` }
+            ? { label: 'See all', onPress: onSeeAll, accessibilityLabel: `See all ${formatCount(total ?? 0)} drinks you can make` }
             : undefined
         }
       />
@@ -126,7 +129,7 @@ export function PourTonight({
           initialNumToRender={4}
           maxToRenderPerBatch={4}
           windowSize={3}
-          accessibilityLabel="Drinks you can pour tonight"
+          accessibilityLabel="Drinks you can make"
         />
       ) : null}
     </View>
@@ -144,10 +147,10 @@ function Note({ note }: { note: PourNote }) {
         <Text style={styles.note}>
           {note.drinks.length ? (
             <>
-              {note.label} lit {formatCount(note.drinks.length)}: <NameList drinks={note.drinks} />.
+              {note.label} unlocked {formatCount(note.drinks.length)}: <NameList drinks={note.drinks} />.
             </>
           ) : (
-            `${note.label} is on the shelf. Nothing new pours with it yet.`
+            `${note.label} is in your bar. Nothing new with it yet.`
           )}
         </Text>
       );
@@ -155,21 +158,21 @@ function Note({ note }: { note: PourNote }) {
       return (
         <View style={styles.noteRow}>
           <Text style={[styles.note, styles.noteGrow]}>
-            {note.label} off the shelf{note.lost ? `: ${formatCount(note.lost)} fewer.` : '.'}
+            {note.label} is out of your bar{note.lost ? `: ${formatCount(note.lost)} fewer.` : '.'}
           </Text>
           <Button
             label="Undo"
             variant="text"
             size="sm"
             onPress={note.onUndo}
-            accessibilityLabel={`Undo, put ${note.label} back on the shelf`}
+            accessibilityLabel={`Undo, put ${note.label} back in your bar`}
           />
         </View>
       );
     case 'basics':
       return (
         <Text style={styles.note}>
-          Nothing yet. The basics alone pour {formatCount(note.pour)}, like these.
+          Nothing yet. The basics alone make {formatCount(note.pour)}, like these.
         </Text>
       );
     case 'default':
@@ -178,22 +181,22 @@ function Note({ note }: { note: PourNote }) {
       return (
         <Text style={styles.note}>
           {note.short
-            ? 'Nothing pours yet. One thing short, below, is the shortest way there.'
-            : 'Nothing pours yet. A few of the basics, or a search, will start it.'}
+            ? 'Nothing yet. One ingredient away, below, is the shortest way there.'
+            : 'Nothing yet. A few of the basics, or a search, will start it.'}
         </Text>
       );
   }
 }
 
 /* ==================================================================== */
-/* One thing short                                                      */
+/* One ingredient away                                                  */
 /* ==================================================================== */
 
 export interface ShortGroup {
   ingredient: Ingredient;
-  /** On the shelf now (an Add, a tap on the back bar, the sheet). */
+  /** In your bar now (an Add here, or a tick in the picker). */
   added: boolean;
-  /** Not added: the drinks it would pour. Added: the drinks it lit. */
+  /** Not added: the drinks it would unlock. Added: the drinks it unlocked. */
   drinks: readonly Drink[];
 }
 
@@ -208,9 +211,9 @@ const ROW_THUMB = 68;
  */
 const THUMB_MIN = 66;
 const THUMB_GAP = space.sm;
-/** The card's inset, and a row's (its padding and the bottle window it hangs under). */
-const CARD_INSET = 2 * layout.gutter + 2 + 2 * 14;
-const ROW_INSET = 2 * layout.gutter + 2 + 14 + space.md + SMALL_WINDOW.width + space.md;
+/** Everything across the screen beside a row of thumbs: the gutters, the card's edges and the row's padding. */
+const CARD_INSET = 2 * layout.gutter + 2 + 2 * ROW_LEFT;
+const ROW_INSET = 2 * layout.gutter + 2 + ROW_LEFT + space.md;
 
 /**
  * How many tiles a row of thumbs holds, the "more" tile included, and
@@ -226,7 +229,7 @@ function useThumbFit(inset: number, max: number): { size: number; tiles: number 
 
 /**
  * A group's drinks: three thumbs and a "6 more" tile, or every drink once
- * opened. Lit when the group's thing is on the shelf, else their ghosts.
+ * opened. Lit when the group's thing is in your bar, else their ghosts.
  */
 function Thumbs({
   drinks,
@@ -279,15 +282,15 @@ function plural(n: number) {
 /** What a group's toggle says to VoiceOver: everything the row shows. */
 function spoken(g: ShortGroup): string {
   const n = g.drinks.length;
-  if (g.added) return `${g.ingredient.label}, on your shelf, ${formatCount(n)} more tonight`;
+  if (g.added) return `${g.ingredient.label}, in your bar, ${formatCount(n)} more ${plural(n)}`;
   const names = g.drinks
     .slice(0, THUMBS)
     .map((d) => d.name)
     .join(', ');
-  return `Add ${g.ingredient.label}, pours ${formatCount(n)} more ${plural(n)}${names ? `: ${names}` : ''}`;
+  return `Add ${g.ingredient.label}, unlocks ${formatCount(n)} more ${plural(n)}${names ? `: ${names}` : ''}`;
 }
 
-/** The top group: a card with the bottle, the toggle, and the drinks' faces. */
+/** The top group: a card with the ingredient, the toggle, and the drinks' faces. */
 function ShortCard({
   group,
   open,
@@ -305,25 +308,22 @@ function ShortCard({
   const n = drinks.length;
   return (
     <Card style={styles.card}>
-      <BottleRow
-        ingredient={ingredient}
-        lit={added}
+      <IngredientRow
         first
-        window={LARGE_WINDOW}
         style={styles.cardRow}
         title={ingredient.label}
         subtitle={
           added ? (
-            <Text style={rowStyles.subtitleOn}>On your shelf: {formatCount(n)} more tonight</Text>
+            <Text style={rowStyles.subtitleOn}>
+              In your bar: {formatCount(n)} more {plural(n)}
+            </Text>
           ) : (
             <Text style={rowStyles.subtitle}>
-              Pours {formatCount(n)} more {plural(n)}
+              Unlocks {formatCount(n)} more {plural(n)}
             </Text>
           )
         }
-        toggle={
-          <ShelfToggle on={added} onLabel="Added" onPress={() => onToggle(ingredient.id)} accessibilityLabel={spoken(group)} />
-        }
+        toggle={<ShelfToggle on={added} onPress={() => onToggle(ingredient.id)} accessibilityLabel={spoken(group)} />}
       />
       <View style={styles.cardThumbs}>
         <Thumbs
@@ -341,10 +341,10 @@ function ShortCard({
 }
 
 /**
- * Every other group: a row; an Add grows the drinks it lit under it.
- * Tapping the row's words shows the ghosts of every drink it would pour,
- * in place, so each drink one thing short still opens from My Bar, as
- * the old one-per-drink list let it (the row rests as the mockup drew it).
+ * Every other group: a row; an Add grows the drinks it unlocked under it.
+ * Tapping the row's words shows the ghosts of every drink it would
+ * unlock, in place, so each drink one ingredient away still opens from
+ * My Bar, as the old one-per-drink list let it.
  */
 const ShortRow = React.memo(function ShortRow({
   group,
@@ -364,20 +364,20 @@ const ShortRow = React.memo(function ShortRow({
   const { ingredient, added, drinks } = group;
   const n = drinks.length;
   return (
-    <BottleRow
-      ingredient={ingredient}
-      lit={added}
+    <IngredientRow
       first={first}
       title={ingredient.label}
       subtitle={
         added ? (
-          <Text style={rowStyles.subtitleOn}>On your shelf: {formatCount(n)} more tonight</Text>
+          <Text style={rowStyles.subtitleOn}>
+            In your bar: {formatCount(n)} more {plural(n)}
+          </Text>
         ) : n ? (
           <Text style={rowStyles.subtitle}>
-            Pours {formatCount(n)} more: <NameList drinks={drinks} />
+            Unlocks {formatCount(n)} more: <NameList drinks={drinks} />
           </Text>
         ) : (
-          <Text style={rowStyles.subtitle}>Pours nothing new with your shelf now.</Text>
+          <Text style={rowStyles.subtitle}>Unlocks nothing new with your bar now.</Text>
         )
       }
       reveal={
@@ -387,11 +387,11 @@ const ShortRow = React.memo(function ShortRow({
               open,
               onPress: () => onToggleOpen(ingredient.id),
               accessibilityLabel: open
-                ? `Hide the drinks ${ingredient.label} would pour`
-                : `Show the ${formatCount(n)} ${plural(n)} ${ingredient.label} would pour`,
+                ? `Hide the drinks ${ingredient.label} would unlock`
+                : `Show the ${formatCount(n)} ${plural(n)} ${ingredient.label} would unlock`,
             }
       }
-      toggle={<ShelfToggle on={added} onLabel="Added" onPress={() => onToggle(ingredient.id)} accessibilityLabel={spoken(group)} />}>
+      toggle={<ShelfToggle on={added} onPress={() => onToggle(ingredient.id)} accessibilityLabel={spoken(group)} />}>
       {added || open ? (
         <Thumbs
           drinks={drinks}
@@ -404,11 +404,11 @@ const ShortRow = React.memo(function ShortRow({
           closeLabel={added ? undefined : 'Hide'}
         />
       ) : null}
-    </BottleRow>
+    </IngredientRow>
   );
 });
 
-export function OneThingShort({
+export function OneIngredientAway({
   total,
   groups,
   more,
@@ -418,7 +418,7 @@ export function OneThingShort({
   onShowMore,
   onOpen,
 }: {
-  /** Drinks one thing short. */
+  /** Drinks one ingredient away. */
   total: number;
   groups: readonly ShortGroup[];
   /** Groups not shown yet. */
@@ -433,9 +433,9 @@ export function OneThingShort({
   if (!groups.length) return null;
   const [top, ...rest] = groups;
   return (
-    <View style={[styles.section, styles.sectionShort]}>
-      <Head title="One thing short" count={total} />
-      {/* Ranked by how many drinks name the thing (lib/bar.ts, nextBest), so "most-needed", not "pours most". */}
+    <View style={styles.section}>
+      <SectionHead title="One ingredient away" count={total} />
+      {/* Ranked by how many drinks name the thing (lib/bar.ts, nextBest), so "most-needed", not "unlocks most". */}
       <Text style={styles.note}>By what you need, the most-needed first.</Text>
       <ShortCard
         group={top!}
@@ -465,7 +465,7 @@ export function OneThingShort({
           variant="secondary"
           block
           onPress={onShowMore}
-          accessibilityHint={`${formatCount(more)} more things would each pour something new`}
+          accessibilityHint={`${formatCount(more)} more things would each unlock something new`}
           style={styles.showMore}
         />
       ) : null}
@@ -473,9 +473,16 @@ export function OneThingShort({
   );
 }
 
+/** Between one section and the head of the next. */
+const SECTION_GAP = 26;
+
+/** The line under a section's head, shared with the picker's. */
+export const sectionStyles = StyleSheet.create({
+  note: { ...textRole.helper, color: colors.textMuted, paddingHorizontal: layout.gutter, marginTop: 2 },
+});
+
 const styles = StyleSheet.create({
-  section: { paddingTop: space.xs },
-  sectionShort: { paddingTop: 26 },
+  section: { paddingTop: SECTION_GAP },
 
   head: {
     flexDirection: 'row',
@@ -489,7 +496,7 @@ const styles = StyleSheet.create({
   headActionText: { ...textRole.buttonSm, color: colors.wine },
   dim: { opacity: 0.5 },
 
-  note: { ...textRole.helper, color: colors.textMuted, paddingHorizontal: layout.gutter, marginTop: 2 },
+  note: sectionStyles.note,
   noteRow: { flexDirection: 'row', alignItems: 'center', paddingRight: space.sm },
   noteGrow: { flexShrink: 1 },
 
@@ -498,7 +505,7 @@ const styles = StyleSheet.create({
 
   card: { marginHorizontal: layout.gutter, marginTop: space.md, paddingBottom: 14 },
   cardRow: { paddingTop: 14, paddingBottom: 0 },
-  cardThumbs: { paddingHorizontal: 14 },
+  cardThumbs: { paddingHorizontal: ROW_LEFT },
   group: { marginHorizontal: layout.gutter, marginTop: space.md, overflow: 'hidden' },
   thumbs: { flexDirection: 'row', flexWrap: 'wrap', gap: THUMB_GAP, paddingTop: space.md },
   showMore: { marginHorizontal: layout.gutter, marginTop: space.md },
