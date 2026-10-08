@@ -1,0 +1,748 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply Menu Direction</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/*
+ * Tokens. Existing: src/constants/theme.ts (v3 Cabinet + v3.1).
+ * NEW for v3.3 "Menu" are marked +; every ratio is in spec.md section 2.
+ */
+:root{
+  --bg:#F7F2EA; --mat:#FBF8F2; --line:#D9CFC1; --lineControl:#8A7F74; --taupe:#CBBBA5;
+  --text:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --wine:#5B0F1A; --merlot:#7E2330; --wineSoft:#A85A63; --wineWash:#F5E7E7;
+  --lining:#3E0A12; --liningDeep:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --liningLine:rgba(233,229,223,.16); --liningLip:rgba(233,229,223,.14);
+  --storyRing:#BC6B75; --storyRingSeen:rgba(233,229,223,.30);
+  --reelInk:#FFFDF9; --reelInkDim:#A99E94; --reelBar:#2B2322; --reelControlBorder:rgba(255,253,249,.28);
+  --markerFill:rgba(14,11,11,.78); --logActionEdge:rgba(233,229,223,.38);
+  --overlay:rgba(43,35,34,.52);
+  --windowEdge:rgba(43,35,34,.16);
+  --barDark:0px 4px 14px rgba(14,11,11,.30);
+  /* + v3.3 Menu: the second ink, two paper stocks, two print rules */
+  --bottle:#24493A;      /* + second ink: Nº numerals, stamps, ticks, meters */
+  --bottleLit:#A9CDB8;   /* + the second ink on the wine lining */
+  --buff:#F2E8D6;        /* + ticket stock: stubs, the one-away ticket, counts strip */
+  --bottleWash:#E4ECE5;  /* + green plate: a ticked row, the selected Dex filter */
+  --bottleRule:#6F8F7E;  /* + decorative green rule */
+  --wineRule:#A85A63;    /* + ledger margin rule (= wineSoft) */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#161112}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block;overflow:visible}
+b{font-weight:600}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* ---------- contact sheet ---------- */
+.contact{padding:36px 60px 60px}
+.contact h1{font:600 22px/28px Inter;color:#E9E5DF;display:flex;align-items:baseline;gap:14px}
+.contact h1 em{font:400 15px/22px Inter;color:#B8A09B;font-style:normal}
+.contact .thesis{max-width:1500px;margin-top:8px;font:400 15px/23px Inter;color:#CFC3BD}
+.wall{display:flex;gap:44px;margin-top:26px}
+.frame .cap{height:64px}
+.frame .cap b{display:block;font:600 15px/20px Inter;color:#E9E5DF}
+.frame .cap span{display:block;font:400 13px/18px Inter;color:#B8A09B}
+.frame .screen{border-radius:16px;box-shadow:0 0 0 1px rgba(233,229,223,.14)}
+body.solo{background:var(--bg)}
+body.solo .contact{padding:0}
+body.solo .contact>h1,body.solo .contact>.thesis,body.solo .cap,body.solo .specimens{display:none}
+body.solo .wall{margin:0;gap:0}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+body.solo .frame .screen{border-radius:0;box-shadow:none}
+
+/* ---------- screen + hardware ---------- */
+.screen{position:relative;width:440px;height:956px;overflow:hidden;flex:none;background:var(--bg)}
+.grain{position:absolute;inset:0;background:url(../../../assets/images/grain.png) 0 0/128px 128px repeat;opacity:.35;pointer-events:none}
+.lin>.grain{opacity:.77}
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--text)}
+.sb.light{color:#fff}
+.sb .t{position:absolute;left:52px;top:19px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:22px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--text);z-index:60}
+
+/* ---------- top bars ---------- */
+.bar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:20}
+.bar .title{position:absolute;left:0;right:0;top:9px;text-align:center;font:600 20px/26px Inter}
+.bar .title.md{font:600 17px/22px Inter;top:11px}
+.gb{position:absolute;top:0;width:44px;height:44px;display:grid;place-items:center;color:var(--text)}
+.gb svg{width:26px;height:26px}
+.gb.l{left:6px}.gb.r{right:6px}.gb.r2{right:48px}
+.gb .dot{position:absolute;top:9px;right:8px;width:8px;height:8px;border-radius:50%;background:var(--storyRing);box-shadow:0 0 0 2px var(--lining)}
+
+/* ---------- print furniture ---------- */
+/* Oxford rule: a 2pt rule over a 1pt rule, 2pt apart */
+.oxford{height:5px;border-top:2px solid currentColor;border-bottom:1px solid currentColor;opacity:1}
+/* tracked lowercase label ("small caps via letter-spacing", sentence case) */
+.mh{font:500 12px/16px Inter;letter-spacing:1px}
+/* Nº numerals: dexNumber, recoloured to the second ink */
+.no{font:500 11px/14px Inter;letter-spacing:1.5px;font-variant-numeric:tabular-nums;color:var(--bottle);white-space:nowrap}
+.fn{font:400 12px/17px Inter;color:var(--muted)}
+.fnrule{width:28px;height:1px;background:var(--lineControl);margin:10px 0 6px}
+.leader{flex:1;min-width:12px;height:2px;align-self:flex-end;margin:0 6px 5px;background-image:radial-gradient(circle,var(--lineControl) .9px,transparent 1.1px);background-size:4.5px 2px;background-repeat:repeat-x;background-position:0 0}
+.sup{font:500 11px/1 Inter;vertical-align:super;margin-left:1px;color:var(--wine)}
+
+/* rubber stamp: double rule, tilted, worn */
+.stamp{position:relative;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;border:1.5px solid var(--bottle);border-radius:3px;padding:4px 9px 4px;color:var(--bottle);transform:rotate(-6deg);background:transparent}
+.stamp::before{content:"";position:absolute;inset:2px;border:.75px solid var(--bottle);border-radius:1.5px;pointer-events:none}
+.stamp .s1{font:600 12px/14px Inter;letter-spacing:.3px;white-space:nowrap}
+.stamp .s2{font:500 11px/13px Inter;letter-spacing:.2px;white-space:nowrap;margin-top:1px;font-variant-numeric:tabular-nums}
+.stamp::after{content:"";position:absolute;inset:-2px;background:var(--mat);-webkit-mask:url(img/wear.png) 0 0/64px 64px repeat;mask:url(img/wear.png) 0 0/64px 64px repeat;opacity:.6;pointer-events:none}
+.stamp.solid{background:var(--bottle);border-color:var(--bottle);color:var(--mat);padding:3px 7px}
+.stamp.solid::before{border-color:var(--mat);inset:2px;opacity:.9}
+.stamp.solid .s1{font-size:11px;line-height:13px}
+.stamp.solid::after{background:var(--bottleLit);opacity:.32}
+.stamp.wine{border-color:var(--wine);color:var(--wine)}
+.stamp.wine::before{border-color:var(--wine)}
+
+/* plate: a photo tipped into the card, with a plate mark 3pt outside it */
+.plate{border:1px solid var(--line);padding:3px;background:var(--mat)}
+.plate .win{position:relative;overflow:hidden;background:var(--liningDeep)}
+.plate .win::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--windowEdge);pointer-events:none}
+.plate img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* perforation between plate and stub; notches punched from both edges */
+.perf{position:relative;height:20px;margin:0 -1px}
+.perf .notch{position:absolute;top:3px;z-index:3;width:14px;height:14px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.perf .notch.l{left:-7px}.perf .notch.r{right:-7px}
+.perf .serial{position:absolute;left:50%;top:3px;transform:translateX(-50%);height:14px;padding:0 8px;background:var(--mat);z-index:2}
+.perf .holes{position:absolute;left:14px;right:14px;top:9px;height:2px;background-image:radial-gradient(circle,var(--taupe) 1px,transparent 1.2px);background-size:6px 2px;background-repeat:repeat-x}
+
+/* buttons, fields, chips (squared, 1pt) */
+.btn{height:36px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:600 14px/18px Inter;border:1px solid var(--lineControl);color:var(--text);background:var(--mat);padding:0 14px;white-space:nowrap}
+.btn svg{width:18px;height:18px}
+.btn.wine{background:var(--wine);border-color:var(--wine);color:var(--onLining)}
+.btn.quiet{color:var(--muted);border-color:var(--line)}
+.field{height:44px;border-radius:8px;border:1px solid var(--lineControl);background:var(--mat);display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--muted);font:400 16px/22px Inter}
+.field svg{width:20px;height:20px;color:var(--muted)}
+.chips{display:flex;gap:8px}
+.chip{height:32px;border-radius:8px;border:1px solid var(--line);background:var(--mat);display:flex;align-items:center;gap:6px;padding:0 11px;font:500 14px/18px Inter;color:var(--text);white-space:nowrap}
+.chip.on{background:var(--bottleWash);border-color:var(--bottle);color:var(--bottle);font-weight:600}
+.chip .c{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:500}
+
+/* avatars (round-ok) */
+.av{border-radius:50%;display:grid;place-items:center;color:var(--onLining);font-weight:600;flex:none;font-family:Inter}
+
+/* ---------- floating tab bar ---------- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:65px;z-index:40}
+.tabbar .slab{position:absolute;inset:0;border-radius:12px;background:var(--reelBar);border:1px solid var(--reelControlBorder);box-shadow:var(--barDark)}
+.tabbar .slab::after{content:"";position:absolute;inset:3px;border-radius:9px;border:1px solid rgba(255,253,249,.07)}
+.tabbar .row{position:absolute;inset:1px;display:flex;padding:0 6px}
+.tb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;color:var(--reelInkDim);font:500 11px/14px Inter;letter-spacing:.2px}
+.tb .gl{width:28px;height:28px;display:grid;place-items:center}
+.tb svg{width:24px;height:24px}
+.tb.on{color:var(--reelInk);font-weight:600}
+.tb .ind{position:absolute;top:-1px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--reelInk)}
+.fabslot{flex:1;display:grid;place-items:center}
+.fab{width:48px;height:36px;border-radius:8px;background:var(--wine);border:1px solid var(--logActionEdge);display:grid;place-items:center;color:var(--onLining)}
+.fab svg{width:22px;height:22px}
+.face{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--reelInkDim);display:grid;place-items:center}
+.tb.on .face{border-color:var(--reelInk)}
+.face i{width:23px;height:23px;border-radius:50%;background:var(--merlot);color:var(--onLining);font:600 11px/23px Inter;font-style:normal;text-align:center}
+
+/* ================= HOME ================= */
+.band{position:absolute;left:0;right:0;top:0;height:244px;background:var(--lining);z-index:2}
+.band .lattice{position:absolute;inset:0;width:100%;height:100%}
+.deckle{position:absolute;left:0;top:244px;z-index:3}
+.homebar{position:absolute;left:0;right:0;top:62px;height:44px;color:var(--onLining)}
+.homebar .gb{color:var(--onLining)}
+.mast{position:absolute;left:0;right:0;top:4px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--onLining)}
+.mast .w{font:700 28px/34px Playfair;letter-spacing:0;padding:0 2px}
+.mast .mr{width:34px;color:var(--liningLine)}
+.mast .mr .oxford{color:rgba(233,229,223,.38)!important}
+.mast .lz{width:5px;height:5px;transform:rotate(45deg);background:var(--bottleLit);flex:none}
+.dateline{position:absolute;left:0;right:0;top:110px;text-align:center;color:var(--onLiningMuted)}
+.dateline b{color:var(--bottleLit);font-weight:500}
+.stories{position:absolute;left:0;right:0;top:128px;height:112px;display:flex;gap:10px;padding:10px 12px 0 16px}
+.st{width:76px;flex:none;display:flex;flex-direction:column;align-items:center}
+.st .ring{position:relative;width:68px;height:68px;border-radius:50%;display:grid;place-items:center}
+.st .ring.un{box-shadow:inset 0 0 0 2.5px var(--storyRing)}
+.st .ring.seen{box-shadow:inset 0 0 0 1px var(--storyRingSeen)}
+.st .disc{width:57px;height:57px;border-radius:50%;overflow:hidden;background:var(--liningDeep)}
+.st .disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.25)}
+.st .badge{position:absolute;right:-1px;bottom:-1px;width:22px;height:22px;border-radius:50%;background:var(--onLining);box-shadow:0 0 0 2px var(--lining);display:grid;place-items:center;color:var(--wine)}
+.st .badge svg{width:14px;height:14px}
+.st .lb{margin-top:6px;font:500 12px/16px Inter;letter-spacing:.4px;color:var(--onLining);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:76px}
+.st .lb.seen{color:var(--onLiningMuted)}
+
+.feed{position:absolute;left:0;right:0;top:258px}
+.ticket{position:relative;margin:0 16px;background:var(--mat);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.ticket .grain{opacity:.35}
+.au{display:flex;align-items:center;gap:10px;height:48px;padding:0 6px 0 12px}
+.au .who{flex:1;font:600 15px/20px Inter}
+.au .who span{font-weight:400;color:var(--muted);font-size:13px}
+.au .gb{position:relative;color:var(--text)}
+.ticket .plate{margin:0 12px}
+.ticket .perf{background:var(--mat);margin:0;height:24px}
+.ticket .perf .notch{top:5px}
+.ticket .perf .holes{top:11px}
+.ticket .perf .serial{top:5px}
+.lower{position:relative;background:var(--buff)}
+.lower .grain{opacity:.35}
+.stub{position:relative;display:flex;align-items:center;gap:10px;padding:2px 14px 0 14px}
+.stub .l{flex:1;min-width:0}
+.stub .meta{display:flex;align-items:center;gap:7px;color:var(--muted);font:400 12px/16px Inter}
+.stub .meta svg{width:12px;height:14px;color:var(--taupe)}
+.stub .nm{font:700 30px/36px Playfair}
+.stub .stamp{margin-right:2px}
+.lower .stamp::after{background:var(--buff)}
+.acts{display:flex;align-items:center;height:44px;padding:0 4px}
+.acts .ic{width:44px;height:44px;display:grid;place-items:center;color:var(--text)}
+.acts .ic svg{width:26px;height:26px}
+.acts .gap{flex:1}
+.likes{display:flex;align-items:center;gap:8px;padding:0 14px;font:400 14px/20px Inter}
+.stack{display:flex}
+.stack .av{width:20px;height:20px;box-shadow:0 0 0 1.5px var(--buff)}
+.stack .av+.av{margin-left:-6px}
+.capt{padding:4px 14px 0;font:400 14px/20px Inter}
+.ticket .fnwrap{padding:0 14px 0}
+.when{padding:4px 14px 14px;font:400 12px/16px Inter;color:var(--muted)}
+
+/* ================= DEX ================= */
+.dexhead{position:absolute;left:16px;right:16px;top:112px}
+.catcard{position:relative;background:var(--buff);border:1px solid var(--line);border-radius:4px;padding:10px 14px 14px;overflow:hidden}
+.catcard .grain{opacity:.35}
+.catcard .ct{position:relative;display:flex;justify-content:space-between;align-items:center;color:var(--wine)}
+.catcard .ct .no{color:var(--wine)}
+.catcard .redline{position:relative;height:1px;background:var(--wineRule);margin:7px -14px 8px}
+.catcard .hole{position:absolute;left:50%;bottom:-5px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--bg);border:1px solid var(--line)}
+.hero{position:relative;display:flex;align-items:flex-end;gap:12px}
+.hero .fig{font:600 44px/46px Inter;letter-spacing:-.8px;color:var(--bottle);font-variant-numeric:tabular-nums}
+.hero .of{padding-bottom:3px;font:400 15px/20px Inter;color:var(--muted)}
+.hero .of b{color:var(--text)}
+.ruler{position:relative;margin-top:10px}
+.dexhead .field{margin-top:12px}
+.dexhead .chips{margin-top:10px}
+.dexhead .chip{padding:0 10px}
+.folio{display:flex;align-items:center;justify-content:space-between;margin-top:14px;color:var(--wine)}
+.folio .t{color:var(--muted);font:400 12px/16px Inter}
+.grid3{position:absolute;left:16px;right:16px;top:398px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px}
+.dc{position:relative;border-radius:4px;padding:7px 7px 7px;display:flex;flex-direction:column}
+.dc.have{background:var(--mat);border:1px solid var(--line)}
+.dc.have::before{content:"";position:absolute;inset:3px;border:1px solid var(--bottleRule);border-radius:2px;opacity:.55;pointer-events:none}
+.dc.not{border:1px dashed var(--lineControl);background:transparent}
+.dc .top{display:flex;align-items:center;justify-content:space-between;height:14px}
+.dc .top svg{width:11px;height:13px;color:var(--faint)}
+.dc .nm{font:600 15px/18px Playfair;min-height:36px;margin:4px 0 6px;color:var(--text)}
+.dc.not .nm{color:var(--muted)}
+.dc .win{position:relative;aspect-ratio:1;overflow:hidden;background:var(--liningDeep);border-radius:2px}
+.dc .win img{width:100%;height:100%;object-fit:cover;display:block}
+.dc .win::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--windowEdge);border-radius:2px}
+.dc .stamp{position:absolute;right:4px;bottom:13px;transform:rotate(-7deg);z-index:2}
+
+/* ================= MY BAR ================= */
+.barhead{position:absolute;left:16px;right:16px;top:114px;text-align:center}
+.fleur{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--wine)}
+.fleur .r{width:56px;height:1px;background:var(--wineRule)}
+.barhead h2{margin-top:8px;font:600 22px/28px Inter}
+.barhead p{margin-top:3px;font:400 14px/20px Inter;color:var(--muted)}
+.barhead .field{margin-top:12px;text-align:left}
+.pad{position:absolute;left:16px;right:16px;top:256px;background:var(--mat);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.pad .grain{opacity:.35}
+.pad .margin{position:absolute;top:0;bottom:0;left:11px;width:4px;border-left:1px solid var(--wineRule);border-right:1px solid var(--wineRule);opacity:.8}
+.pad .ph{position:relative;display:flex;justify-content:space-between;align-items:center;height:34px;padding:0 12px 0 26px;border-bottom:1px solid var(--line);color:var(--wine)}
+.pad .ph .r{font:500 12px/16px Inter;color:var(--bottle);font-variant-numeric:tabular-nums}
+.pad .rows{position:relative;display:grid;grid-template-columns:1fr 1fr}
+.ck{display:flex;align-items:center;height:40px;padding:0 10px 0 25px;border-bottom:1px solid var(--line);font:400 14px/18px Inter;color:var(--text);white-space:nowrap;min-width:0}
+.ck:nth-child(odd){border-right:1px solid var(--line)}
+.ck:nth-child(even){padding-left:11px}
+.ck .box{width:20px;height:20px;border-radius:3px;border:1px solid var(--lineControl);background:var(--mat);flex:none;margin-right:8px;display:grid;place-items:center;color:var(--mat)}
+.ck .box svg{width:15px;height:15px}
+.ck.on .box{background:var(--bottle);border-color:var(--bottle)}
+.ck.on{font-weight:500}
+.ck .nmx{flex:1;min-width:0;overflow:hidden}
+.ck .u{font:500 12px/16px Inter;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:6px}
+.ck.on .u{color:var(--bottle)}
+.pad .pf{position:relative;display:flex;align-items:center;justify-content:space-between;height:36px;padding:0 12px 0 26px}
+.pad .pf a{font:600 14px/18px Inter;color:var(--wine);display:flex;align-items:center;gap:2px;text-decoration:none}
+.pad .pf a svg{width:16px;height:16px}
+/* "You can make": a wine menu card */
+.menu{position:absolute;left:16px;right:16px;top:500px;background:var(--lining);border:1px solid var(--liningLine);border-radius:4px;overflow:hidden;color:var(--onLining);padding:10px 14px 0}
+.menu .grain{opacity:.77}
+.menu .lattice{position:absolute;inset:0;width:100%;height:100%}
+.menu .fleur{position:relative;color:var(--bottleLit)}
+.menu .fleur .r{background:var(--liningLine);width:72px}
+.menu .hd{position:relative;display:flex;align-items:baseline;justify-content:space-between;margin-top:4px}
+.menu .hd h3{font:600 20px/26px Inter}
+.menu .hd .n{font:600 20px/26px Inter;color:var(--bottleLit);font-variant-numeric:tabular-nums}
+.menu .hd .n span{font:400 14px/20px Inter;color:var(--onLiningMuted);margin-left:4px}
+.menu .oxford{position:relative;color:rgba(233,229,223,.34);margin-top:6px}
+.ml{position:relative;display:flex;gap:12px;padding:9px 0;border-bottom:1px solid var(--liningLine)}
+.ml .th{width:46px;height:46px;border:1px solid rgba(233,229,223,.22);padding:2px;flex:none}
+.ml .th img{width:100%;height:100%;object-fit:cover;display:block}
+.ml .tx{flex:1;min-width:0}
+.ml .l1{display:flex;align-items:baseline}
+.ml .l1 .nm{font:600 18px/22px Playfair;color:var(--onLining)}
+.ml .l1 .no{color:var(--bottleLit)}
+.ml .l2{font:400 13px/18px Inter;color:var(--onLiningMuted);margin-top:3px}
+.menu .leader{background-image:radial-gradient(circle,var(--onLiningMuted) .9px,transparent 1.1px)}
+.seeall{position:relative;display:flex;justify-content:flex-end;height:34px;font:600 14px/18px Inter;color:var(--onLining);gap:2px;align-items:center}
+.seeall svg{width:16px;height:16px}
+.away{position:absolute;left:16px;right:16px;top:736px;height:104px;display:flex;background:var(--buff);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.away .grain{opacity:.35}
+.away .stb{position:relative;width:76px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.away .stb .big{font:600 30px/34px Inter;color:var(--bottle);font-variant-numeric:tabular-nums;letter-spacing:-.5px}
+.away .stb .sm{font:400 12px/16px Inter;color:var(--muted)}
+.vperf{position:relative;width:0;flex:none}
+.vperf .holes{position:absolute;top:12px;bottom:12px;left:-1px;width:2px;background-image:radial-gradient(circle,var(--taupe) 1px,transparent 1.2px);background-size:2px 6px;background-repeat:repeat-y}
+.vperf .notch{position:absolute;left:-7px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:1px solid var(--line);z-index:2}
+.vperf .notch.t{top:-8px}.vperf .notch.b{bottom:-8px}
+.away .bd{position:relative;flex:1;padding:11px 12px 10px 14px}
+.away .h{display:flex;align-items:center;gap:8px;font:600 15px/20px Inter}
+.away .h svg{width:26px;height:14px;color:var(--wine);flex:none}
+.away .d{margin-top:3px;font:400 13px/18px Inter;color:var(--muted)}
+.away .d .pn{font-family:Playfair;font-weight:600;color:var(--text)}
+.away .btn{margin-top:8px;height:32px;font-size:13px;padding:0 10px;background:var(--mat)}
+
+/* ================= POST DETAIL ================= */
+.postpage{position:absolute;left:0;right:0;top:106px}
+.dim{position:absolute;inset:0;background:var(--overlay);z-index:30}
+.sheet{position:absolute;left:0;right:0;bottom:0;top:388px;background:var(--bg);border-radius:12px 12px 0 0;z-index:45;overflow:hidden;box-shadow:0 -4px 24px rgba(43,35,34,.16)}
+.sheet .grab{position:absolute;left:202px;top:8px;width:36px;height:4px;border-radius:1px;background:var(--line)}
+.sheet .tear{position:absolute;left:16px;right:16px;top:20px;height:2px;background-image:radial-gradient(circle,var(--taupe) 1px,transparent 1.2px);background-size:6px 2px;background-repeat:repeat-x}
+.sheet .shd{position:absolute;left:0;right:0;top:30px;height:44px}
+.sheet .shd .title{position:absolute;left:0;right:0;top:11px;text-align:center;font:600 17px/22px Inter}
+.sheet .shd .gb{color:var(--text)}
+.sheet .sub{position:absolute;left:16px;right:16px;top:76px}
+.sheet .sub .lead{display:flex;align-items:baseline;justify-content:space-between}
+.sheet .sub .lead .k{font:400 14px/20px Inter;color:var(--muted)}
+.sheet .sub .lead .k .pn{font:600 14px/20px Playfair;color:var(--text)}
+.sheet .sub .lead .k b{color:var(--bottle);font-variant-numeric:tabular-nums}
+.sheet .sub .oxford{margin-top:8px;color:var(--wine)}
+.guests{position:absolute;left:16px;right:16px;top:118px}
+.gr{display:flex;align-items:center;height:60px;border-bottom:1px solid var(--line);gap:12px}
+.gr .ix{width:22px;font:500 12px/16px Inter;letter-spacing:.5px;color:var(--bottle);font-variant-numeric:tabular-nums;flex:none}
+.gr .tx{flex:1;min-width:0}
+.gr .u{font:600 15px/20px Inter}
+.gr .n{font:400 13px/18px Inter;color:var(--muted)}
+.gr .btn{height:32px;font-size:13px;padding:0 12px;min-width:92px}
+
+/* ================= PROFILE ================= */
+.phead{position:absolute;left:16px;right:16px;top:118px}
+.prow{display:flex;align-items:center;gap:16px}
+.pav{position:relative;width:88px;height:88px;flex:none;border-radius:50%;box-shadow:inset 0 0 0 1px var(--bottle);display:grid;place-items:center}
+.pav .av{width:80px;height:80px;font-size:28px;background:var(--merlot)}
+.counts{flex:1;height:66px;display:flex;background:var(--buff);border:1px solid var(--line);border-radius:4px;overflow:hidden;position:relative}
+.counts .grain{opacity:.35}
+.counts .cl{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.counts .cl b{font:600 19px/24px Inter;font-variant-numeric:tabular-nums}
+.counts .cl span{font:400 12px/16px Inter;color:var(--muted)}
+.pname{margin-top:12px;font:600 15px/20px Inter}
+.pbio{margin-top:2px;font:400 14px/20px Inter}
+.pfn{margin-top:4px}
+.pbtns{display:flex;gap:8px;margin-top:12px}
+.pbtns .btn{flex:1}
+.dexcard{position:absolute;left:16px;right:16px;top:342px;height:122px;background:var(--lining);border:1px solid var(--liningLine);border-radius:4px;overflow:hidden;display:flex;color:var(--onLining)}
+.dexcard .grain{opacity:.77}
+.dexcard .lattice{position:absolute;inset:0;width:100%;height:100%}
+.dexcard .main{position:relative;flex:1;padding:11px 14px 0}
+.dexcard .lbl{color:var(--bottleLit)}
+.dexcard .fig{display:flex;align-items:baseline;gap:6px;margin-top:1px}
+.dexcard .fig b{font:600 34px/38px Inter;color:var(--bottleLit);letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.dexcard .fig span{font:400 14px/20px Inter;color:var(--onLiningMuted)}
+.dexcard .ruler{position:relative;margin-top:8px}
+.dexcard .vperf .holes{background-image:radial-gradient(circle,rgba(233,229,223,.34) 1px,transparent 1.2px)}
+.dexcard .vperf .notch{border-color:var(--liningLine)}
+.dexcard .stubp{position:relative;width:104px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+.dexcard .stubp .th{width:44px;height:44px;border:1px solid rgba(233,229,223,.22);padding:2px}
+.dexcard .stubp .th img{width:100%;height:100%;object-fit:cover;display:block}
+.dexcard .stubp .k{font:400 12px/14px Inter;color:var(--onLiningMuted)}
+.dexcard .stubp .pn{font:600 14px/16px Playfair;color:var(--onLining)}
+.dexcard .stubp .no{color:var(--bottleLit)}
+.tabs{position:absolute;left:0;right:0;top:476px;height:44px;display:flex;border-bottom:1px solid var(--line)}
+.tabs .t{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font:600 15px/20px Inter;color:var(--muted);position:relative}
+.tabs .t .c{font-weight:500;font-variant-numeric:tabular-nums}
+.tabs .t.on{color:var(--text)}
+.tabs .t.on::after{content:"";position:absolute;left:50%;bottom:-1px;width:64px;margin-left:-32px;height:2px;background:var(--text)}
+.pgrid{position:absolute;left:0;right:0;top:521px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.pgrid .tile{position:relative;aspect-ratio:1;overflow:hidden;background:var(--liningDeep)}
+.pgrid .tile img{width:100%;height:100%;object-fit:cover;display:block}
+.pgrid .pl{position:absolute;left:6px;bottom:6px;height:20px;padding:0 6px;border-radius:4px;background:var(--markerFill);border:1px solid var(--reelControlBorder);font:500 11px/18px Inter;letter-spacing:1.5px;color:var(--reelInk);font-variant-numeric:tabular-nums}
+
+/* ================= specimens ================= */
+.specimens{margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.sp{background:var(--bg);border-radius:10px;padding:18px 18px 18px;position:relative;overflow:hidden;color:var(--text)}
+.sp>.grain{opacity:.35}
+.sp h4{position:relative;font:600 15px/20px Inter;margin-bottom:12px}
+.sp .note{position:relative;font:400 12px/17px Inter;color:var(--muted);margin-top:8px}
+.sw{position:relative;display:grid;grid-template-columns:44px 1fr;gap:4px 10px;align-items:center;margin-bottom:8px}
+.sw i{width:44px;height:30px;border-radius:4px;border:1px solid var(--line);display:block}
+.sw div{font:400 12px/16px Inter;color:var(--muted)}
+.sw div b{color:var(--text);font-weight:600}
+.sprow{position:relative;display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.glassrow{display:flex;gap:16px;color:var(--taupe)}
+.glassrow figure{display:flex;flex-direction:column;align-items:center;gap:4px;font:400 11px/14px Inter;color:var(--muted)}
+.glassrow svg{width:16px;height:19px;color:var(--lineControl)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- the blind-stamped lattice on the lining: a 18pt diaper of lozenges, 6% bone -->
+    <pattern id="lat" width="18" height="18" patternUnits="userSpaceOnUse">
+      <path d="M9 5.6 12.4 9 9 12.4 5.6 9Z" fill="none" stroke="rgba(233,229,223,.06)" stroke-width="1"/>
+      <path d="M0 0 1.6 1.6M18 0 16.4 1.6M0 18 1.6 16.4M18 18 16.4 16.4" stroke="rgba(233,229,223,.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+</svg>
+
+<div class="contact">
+  <h1>Sipply v3.3, direction "Menu" <em>Menu card and print: the app as a printed cocktail list and the bar ephemera around it</em></h1>
+  <p class="thesis">Same Cabinet grounds (bone paper, wine lining), now printed in two inks: wine for headings, ornaments and the one action, plus a bottle-green second ink for everything that is yours (Nº numerals, the "In your Dex" stamp, ticks, meters). Three paper stocks instead of one cream: the page, bone card for tickets and cards, and a warmer buff for stubs. Posts are ticket stubs with a perforated tear line, the Dex is a numbered list (one-ink proofs for drinks not yet caught), My Bar is an order pad with a ledger margin and a menu with dotted leaders, likers are a numbered guest list. No gradient anywhere at the top of a screen. 440 x 956 frames, real catalogue photos and Dex numbers, counts from barIndex.json.</p>
+  <div class="wall" id="wall"></div>
+  <div class="specimens" id="specimens"></div>
+</div>
+
+<script>
+/* ---------------- assets ---------------- */
+const P = id => `../../../assets/drinks/${id}.webp`;
+const GH = id => `../../../assets/drinks/ghost/${id}.webp`;
+
+/* ---------------- glyphs (src/components/icons.tsx, 24 grid, 1.75 stroke) ---------------- */
+const S = 'fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"';
+const G = {
+  home: `<svg viewBox="0 0 24 24" ${S}><path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/></svg>`,
+  homeSolid: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.4 2.6a1 1 0 0 1 1.2 0l8.8 7a1 1 0 0 1-.6 1.8h-.7v8a2.4 2.4 0 0 1-2.4 2.4h-2.6v-6.2a.8.8 0 0 0-.8-.8h-4.6a.8.8 0 0 0-.8.8v6.2H6.3a2.4 2.4 0 0 1-2.4-2.4v-8h-.7a1 1 0 0 1-.6-1.8z"/></svg>`,
+  dex: `<svg viewBox="0 0 24 24" ${S}><path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/></svg>`,
+  dexSolid: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.9 4.5h16.2a.9.9 0 0 1 .64 1.53l-7.84 8.03v4.68h2.8a.9.9 0 0 1 0 1.8H8.3a.9.9 0 0 1 0-1.8h2.8v-4.68L3.26 6.03A.9.9 0 0 1 3.9 4.5z"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></svg>`,
+  plusThin: `<svg viewBox="0 0 24 24" ${S}><path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/></svg>`,
+  bottle: `<svg viewBox="0 0 24 24" ${S}><path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z"/><path d="M10.4 5.4h3.2"/><path d="M7.2 12.8h9.6"/><path d="M7.2 17h9.6"/></svg>`,
+  bottleSolid: `<svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" ${S}><circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/></svg>`,
+  heart: `<svg viewBox="0 0 24 24" ${S}><path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/></svg>`,
+  heartSolid: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z"/></svg>`,
+  comment: `<svg viewBox="0 0 24 24" ${S}><path d="M20.4 12.6a7.4 7.4 0 0 1-8 7.4 8.5 8.5 0 0 1-3-.6L4.2 20.4l1.1-4.9a7.4 7.4 0 0 1-.7-3.2 7.4 7.4 0 0 1 8-7.4 7.5 7.5 0 0 1 7.8 7.4z"/></svg>`,
+  send: `<svg viewBox="0 0 24 24" ${S}><path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/></svg>`,
+  bookmark: `<svg viewBox="0 0 24 24" ${S}><path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/></svg>`,
+  more: `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5.4" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.6" cy="12" r="1.5"/></svg>`,
+  trophy: `<svg viewBox="0 0 24 24" ${S}><path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z"/><path d="M7.4 5.9H5a1.4 1.4 0 0 0-1.4 1.4 3.6 3.6 0 0 0 3.6 3.6"/><path d="M16.6 5.9H19a1.4 1.4 0 0 1 1.4 1.4 3.6 3.6 0 0 1-3.6 3.6"/><path d="M12 14.1v3.4"/><path d="M8.4 20.2a3.6 3.6 0 0 1 7.2 0z"/></svg>`,
+  stats: `<svg viewBox="0 0 24 24" ${S}><path d="M5.2 20.2V13.6"/><path d="M12 20.2V8.4"/><path d="M18.8 20.2V4.6"/><path d="M3 20.2h18"/></svg>`,
+  settings: `<svg viewBox="0 0 24 24" ${S}><circle cx="12" cy="12" r="3.1"/><path d="M19.1 14.6a1.6 1.6 0 0 0 .3 1.7l.1.1a1.9 1.9 0 1 1-2.7 2.7l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.4v.2a1.9 1.9 0 1 1-3.8 0v-.1a1.6 1.6 0 0 0-1-1.4 1.6 1.6 0 0 0-1.7.3l-.1.1a1.9 1.9 0 1 1-2.7-2.7l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.4-1h-.2a1.9 1.9 0 1 1 0-3.8h.1a1.6 1.6 0 0 0 1.4-1 1.6 1.6 0 0 0-.3-1.7l-.1-.1a1.9 1.9 0 1 1 2.7-2.7l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.4v-.2a1.9 1.9 0 1 1 3.8 0v.1a1.6 1.6 0 0 0 1 1.4 1.6 1.6 0 0 0 1.7-.3l.1-.1a1.9 1.9 0 1 1 2.7 2.7l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1a1.6 1.6 0 0 0 1.4 1h.2a1.9 1.9 0 1 1 0 3.8h-.1a1.6 1.6 0 0 0-1.4 1z"/></svg>`,
+  chevronLeft: `<svg viewBox="0 0 24 24" ${S}><path d="M14.6 5.4 8 12l6.6 6.6"/></svg>`,
+  chevronRight: `<svg viewBox="0 0 24 24" ${S}><path d="M9.4 5.4 16 12l-6.6 6.6"/></svg>`,
+  close: `<svg viewBox="0 0 24 24" ${S}><path d="M6.2 6.2 17.8 17.8"/><path d="M17.8 6.2 6.2 17.8"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6 9.8 17.4 19 6.9"/></svg>`,
+  grid: `<svg viewBox="0 0 24 24" ${S}><path d="M4.4 4.4h6v6h-6z"/><path d="M13.6 4.4h6v6h-6z"/><path d="M4.4 13.6h6v6h-6z"/><path d="M13.6 13.6h6v6h-6z"/></svg>`,
+};
+
+/* ---------------- print ornaments (react-native-svg in the app) ---------------- */
+/* Fleuron: two citrus leaves either side of a lozenge, midribs knocked out in the ground colour */
+const fleuron = (ink = 'var(--wine)', ground = 'var(--bg)', w = 34) => `<svg width="${w}" height="12" viewBox="0 0 34 12" style="color:${ink}">
+  <path d="M17 2.4 20.6 6 17 9.6 13.4 6Z" fill="currentColor"/>
+  <path d="M12.2 6C9.2 2.6 4.6 2.3 1 6c3.6 3.7 8.2 3.4 11.2 0Z" fill="currentColor"/>
+  <path d="M21.8 6c3-3.4 7.6-3.7 11.2 0-3.6 3.7-8.2 3.4-11.2 0Z" fill="currentColor"/>
+  <path d="M11 6H3.4M23 6h7.6" stroke="${ground}" stroke-width=".7" stroke-linecap="round"/></svg>`;
+/* Manicule: the printer's pointing hand */
+const manicule = `<svg viewBox="0 0 30 16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round">
+  <rect x="1" y="3.6" width="4.2" height="10" rx=".8" fill="currentColor" stroke="none"/>
+  <path d="M5.2 4.8C7.6 4.8 9.5 3.6 11.9 3.6c1.5 0 2.6.7 3.4 1.6h11.8a1.45 1.45 0 0 1 0 2.9H16.6"/>
+  <path d="M16.6 8.1h1a1.3 1.3 0 0 1 0 2.6h-2.4"/>
+  <path d="M15.2 10.7a1.2 1.2 0 0 1 0 2.4h-2.2"/>
+  <path d="M13 13.1a1.1 1.1 0 0 1 0 2.2H8.7c-1.4 0-2.4-.8-3.5-1.5"/>
+  <path d="M9.6 6.6c1.6.3 3.1 1 3.9 2"/></svg>`;
+/* Glass marks: the glass a drink is served in, as old cocktail books print it */
+const GL = {
+  highball: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M3.6 1.5h6.8l-.7 13H4.3z"/><path d="M4 5.5h6"/></svg>`,
+  rocks: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M2.2 5h9.6l-.9 9.5H3.1z"/><path d="M2.6 8.6h8.8"/></svg>`,
+  coupe: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><path d="M1.4 3.4h11.2c0 3.1-2.5 4.8-5.6 4.8S1.4 6.5 1.4 3.4z"/><path d="M7 8.2v6"/><path d="M4.4 14.5h5.2"/></svg>`,
+  martini: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><path d="M1.2 2.2h11.6L7 8.4z"/><path d="M7 8.4v6"/><path d="M4.4 14.5h5.2"/></svg>`,
+  wine: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><path d="M3.4 1.6h7.2c.2 3.9-1.3 6.2-3.6 6.2S3.2 5.5 3.4 1.6z"/><path d="M7 7.8v6.6"/><path d="M4.4 14.5h5.2"/></svg>`,
+  flute: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"><path d="M5 1.4h4l-.4 6.6a1.6 1.6 0 0 1-3.2 0z"/><path d="M7 9.6v4.8"/><path d="M4.8 14.5h4.4"/></svg>`,
+  mug: `<svg viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M1.8 4h7.8v10.4H1.8z"/><path d="M9.6 6.2h1.6a1.2 1.2 0 0 1 1.2 1.2v3a1.2 1.2 0 0 1-1.2 1.2H9.6"/></svg>`,
+};
+const glassOf = g => { g = g.toLowerCase();
+  if (/highball|collins/.test(g)) return 'highball'; if (/rocks|old fashioned/.test(g)) return 'rocks';
+  if (/coupe/.test(g)) return 'coupe'; if (/martini|cocktail glass/.test(g)) return 'martini';
+  if (/flute|champagne/.test(g)) return 'flute'; if (/mug|copper|irish/.test(g)) return 'mug'; return 'wine'; };
+
+/* Deckled edge: one jittered path, made once per width from a seeded walk (RN: useMemo, same code) */
+function rng(seed){ let s = seed % 2147483647; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+function deckle(w, h, seed, fill){
+  const r = rng(seed); let y = h * .55, d = `M0 0H${w}V${(h*.55).toFixed(1)}`;
+  for (let x = w; x >= 0; x -= 2.5){ y += (r() - .5) * 1.5; y = y * .82 + (h * .55) * .18; const j = (r() - .5) * .9; d += `L${x.toFixed(1)} ${Math.max(.6, Math.min(h - .4, y + j)).toFixed(2)}`; }
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${d}Z" fill="${fill}"/></svg>`;
+}
+/* Printed scale: 2,089 numbers, a tick per 100, a long tick per 500, the caught share filled in the second ink */
+function ruler(w, have, total, ink='var(--bottle)', marks=[0,500,1000,1500]){
+  const x = n => (n / total) * w; let t = '';
+  for (let n = 0; n <= total; n += 100){ const big = n % 500 === 0; t += `<path d="M${x(n).toFixed(1)} ${big ? 0 : 3}V9" stroke="var(--lineControl)" stroke-width="1"/>`; }
+  t += `<path d="M${w} 0V9" stroke="var(--lineControl)" stroke-width="1"/>`;
+  const lab = marks.map(n => `<text x="${x(n)+3}" y="21" font-family="Inter" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">${n.toLocaleString('en-US')}</text>`).join('')
+    + `<text x="${w}" y="21" text-anchor="end" font-family="Inter" font-size="11" fill="var(--muted)" style="font-variant-numeric:tabular-nums">2,089</text>`;
+  return `<svg width="${w}" height="24" viewBox="0 0 ${w} 24"><path d="M0 9.5H${w}" stroke="var(--text)" stroke-width="1"/>${t}
+    <rect x="0" y="5" width="${Math.max(3, x(have)).toFixed(1)}" height="4.5" fill="${ink}"/>
+    <path d="M${x(have).toFixed(1)} -1V10" stroke="${ink}" stroke-width="1.5"/>${lab}</svg>`;
+}
+const oxford = (color='var(--wine)') => `<div class="oxford" style="color:${color}"></div>`;
+const stamp = (l1, l2, cls='') => `<span class="stamp ${cls}"><span class="s1">${l1}</span>${l2 ? `<span class="s2">${l2}</span>` : ''}</span>`;
+const no = n => 'Nº ' + String(n).padStart(4, '0');
+const av = (ini, bg, size, fs) => `<span class="av" style="width:${size}px;height:${size}px;background:${bg};font-size:${fs || Math.max(11, Math.round(size * .36))}px">${ini}</span>`;
+
+function statusBar(light){
+  return `<div class="sb ${light?'light':''}"><div class="t">9:41</div><div class="island"></div>
+  <div class="r">
+    <svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="3" width="3.2" height="9" rx="1"/><rect x="15" y="0" width="3.2" height="12" rx="1"/></svg>
+    <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.3c2.3 0 4.4.9 6 2.4l1.2-1.2A10.2 10.2 0 0 0 8.5.6 10.2 10.2 0 0 0 1.3 3.5l1.2 1.2a8.5 8.5 0 0 1 6-2.4Z"/><path d="M8.5 5.7c1.4 0 2.6.5 3.6 1.4l1.2-1.2a6.8 6.8 0 0 0-9.6 0l1.2 1.2c1-.9 2.2-1.4 3.6-1.4Z"/><path d="M8.5 9.1c.5 0 .9.2 1.2.5L8.5 10.8 7.3 9.6c.3-.3.7-.5 1.2-.5Z"/></svg>
+    <svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="currentColor" opacity=".45"/></svg>
+  </div></div>`;
+}
+function tabBar(active){
+  const t = (k, label, glyph, solid) => `<div class="tb ${active===k?'on':''}">${active===k?'<i class="ind"></i>':''}<div class="gl">${active===k?solid:glyph}</div><span>${label}</span></div>`;
+  return `<div class="tabbar"><div class="slab"></div><div class="row">
+    ${t('home','Home',G.home,G.homeSolid)}
+    ${t('dex','Dex',G.dex,G.dexSolid)}
+    <div class="fabslot"><div class="fab">${G.plus}</div></div>
+    ${t('bar','My Bar',G.bottle,G.bottleSolid)}
+    <div class="tb ${active==='profile'?'on':''}">${active==='profile'?'<i class="ind"></i>':''}<div class="gl"><div class="face"><i>NV</i></div></div><span>Profile</span></div>
+  </div></div>`;
+}
+
+/* ---------------- people ---------------- */
+const ppl = {
+  nico: ['NV', '#7E2330'], ines: ['IA', '#5E2545'], maya: ['MO', '#3A2E2C'], theo: ['TB', '#5B0F1A'],
+  ana: ['AR', '#7E2330'], dmitri: ['DK', '#5E2545'], sofi: ['SM', '#3A2E2C'], kenji: ['KM', '#5B0F1A'], rafa: ['RO', '#5E2545'],
+};
+
+/* ---------------- the post (used on Home and on the post page) ---------------- */
+function ticket(opts = {}){
+  return `<article class="ticket"><div class="grain"></div>
+    <div class="au">${av(...ppl.ines, 32, 12)}<div class="who">ines.ag <span>· 2h</span></div><div class="gb" style="position:relative">${G.more}</div></div>
+    <div class="plate"><div class="win" style="aspect-ratio:1/1"><img src="${P('negroni')}"></div></div>
+    <div class="perf"><i class="notch l"></i><i class="holes"></i><span class="serial no">${no(127)}</span><i class="notch r"></i></div>
+    <div class="lower"><div class="grain"></div>
+    <div class="stub">
+      <div class="l"><div class="nm">Negroni<span class="sup">†</span></div></div>
+      ${stamp('In your Dex', 'since 12 Sep')}
+    </div>
+    <div class="acts"><div class="ic" style="color:var(--wine)">${G.heartSolid}</div><div class="ic">${G.comment}</div><div class="ic">${G.send}</div><div class="gap"></div><div class="ic">${G.bookmark}</div></div>
+    <div class="likes"><span class="stack">${av('M','#3A2E2C',20,11)}${av('T','#5B0F1A',20,11)}${av('A','#7E2330',20,11)}</span><span>Liked by <b>maya.pours</b> and <b>12 others</b></span></div>
+    <div class="capt"><b>ines.ag</b> Stirred over one big cube, an orange coin, nothing else. Campari from the bottle Dad left behind.</div>
+    <div class="fnwrap"><div class="fnrule"></div><div class="fn">† Spirit-forward · rocks glass · Florence, Italy · 24%</div></div>
+    <div class="when">2 hours ago</div>
+    </div>
+  </article>`;
+}
+
+/* ================= 1. HOME ================= */
+function home(){
+  const story = (lbl, img, ring, own) => `<div class="st"><div class="ring ${ring}"><div class="disc">${img}</div>${own ? `<span class="badge">${G.plus}</span>` : ''}</div><div class="lb ${ring==='seen'&&!own?'seen':''}">${lbl}</div></div>`;
+  const ph = id => `<img src="${P(id)}">`;
+  return `<section class="screen" id="home">
+    <div class="grain"></div>
+    <div class="band lin"><div class="grain"></div><svg class="lattice"><rect width="100%" height="100%" fill="url(#lat)"/></svg>
+      <div class="homebar">
+        <div class="gb l">${G.plusThin}</div>
+        <div class="mast"><span class="lz"></span><span class="mr">${oxford()}</span><span class="w">Sipply</span><span class="mr">${oxford()}</span><span class="lz"></span></div>
+        <div class="gb r2">${G.trophy}</div>
+        <div class="gb r">${G.heart}<i class="dot"></i></div>
+      </div>
+      <div class="dateline mh">Tuesday, 7 October · <b>6</b> friends posted today</div>
+      <div class="stories">
+        ${story('You', `<span style="display:grid;place-items:center;width:100%;height:100%;background:#7E2330;color:#E9E5DF;font:600 20px/1 Inter">NV</span>`, 'seen', true)}
+        ${story('maya.pours', ph('paper-plane'), 'un')}
+        ${story('theo_stirs', ph('jungle-bird'), 'un')}
+        ${story('dmitri.k', ph('last-word'), 'un')}
+        ${story('ana.lucia', ph('clover-club'), 'seen')}
+      </div>
+    </div>
+    <div class="deckle">${deckle(440, 8, 11, 'var(--lining)')}</div>
+    <div class="feed">${ticket()}</div>
+    ${statusBar(true)}${tabBar('home')}<div class="hi"></div>
+  </section>`;
+}
+
+/* ================= 2. DEX ================= */
+const DEX = [
+  [1,'caesar','Caesar','Highball glass',0],[2,'greyhound','Greyhound','Highball glass',1],[3,'brandy-alexander','Brandy Alexander','Coupe',0],
+  [4,'espresso-martini','Espresso Martini','Martini glass',1],[5,'grasshopper','Grasshopper','Coupe',0],[6,'porto-flip','Porto Flip','Small wine glass',0],
+  [7,'white-russian','White Russian','Rocks glass',1],[8,'gin-fizz','Gin Fizz','Highball glass',1],[9,'ramos-gin-fizz','Ramos Gin Fizz','Collins glass',0],
+];
+function dex(){
+  const card = ([n, id, name, glass, have]) => `<div class="dc ${have?'have':'not'}">
+    <div class="top"><span class="no" style="${have?'':'color:var(--muted)'}">${no(n)}</span>${GL[glassOf(glass)]}</div>
+    <div class="nm">${name}</div>
+    <div class="win"><img src="${have ? P(id) : GH(id)}"></div>
+    ${have ? stamp('In your Dex', '', 'solid') : ''}
+  </div>`;
+  return `<section class="screen" id="dex">
+    <div class="grain"></div>
+    <div class="bar"><div class="title">Dex</div><div class="gb r">${G.stats}</div></div>
+    <div class="dexhead">
+      <div class="catcard"><div class="grain"></div>
+        <div class="ct"><span class="mh">The catalogue</span><span class="no">${no(1)} – 2089</span></div>
+        <div class="redline"></div>
+        <div class="hero"><span class="fig">38</span><span class="of">of <b>2,089</b> in your Dex · 1.8%<br>latest ${no(127)} <span style="font:600 15px/20px Playfair;color:var(--text)">Negroni</span></span></div>
+        <div class="ruler">${ruler(378, 38, 2089)}</div>
+        <i class="hole"></i>
+      </div>
+      <div class="field">${G.search}<span>Search by name or Nº</span></div>
+      <div class="chips"><span class="chip on">All</span><span class="chip">Cocktails</span><span class="chip">Spirits</span><span class="chip">In your Dex</span><span class="chip">Not yet</span></div>
+      <div class="folio"><span class="no" style="color:var(--wine)">${no(1)} – 0009</span><span class="t">4 of these 9 in your Dex</span></div>
+      <div style="margin-top:6px">${oxford()}</div>
+    </div>
+    <div class="grid3">${DEX.map(card).join('')}</div>
+    ${statusBar(false)}${tabBar('dex')}<div class="hi"></div>
+  </section>`;
+}
+
+/* ================= 3. MY BAR ================= */
+const ING = [['Lemon',173,1],['Gin',167,1],['Lime',163,1],['Soda water',83,1],['Orange',82,1],['Angostura bitters',76,1],['Sweet vermouth',76,1],['Dry vermouth',70,0]];
+function mybar(){
+  const ck = ([l,u,on]) => `<div class="ck ${on?'on':''}"><span class="box">${on?G.check:''}</span><span class="nmx">${l}</span><span class="u">${u}</span></div>`;
+  const ml = (id, n, name, ing) => `<div class="ml"><div class="th"><img src="${P(id)}"></div><div class="tx"><div class="l1"><span class="nm">${name}</span><span class="leader"></span><span class="no">${no(n)}</span></div><div class="l2">${ing}</div></div></div>`;
+  return `<section class="screen" id="bar">
+    <div class="grain"></div>
+    <div class="bar"><div class="title">My Bar</div></div>
+    <div class="barhead">
+      <div class="fleur"><span class="r"></span>${fleuron()}<span class="r"></span></div>
+      <h2>What's in your bar?</h2>
+      <p>Tick what you have. The most useful come first.</p>
+      <div class="field">${G.search}<span>Search 490 ingredients</span></div>
+    </div>
+    <div class="pad"><div class="grain"></div><i class="margin"></i>
+      <div class="ph"><span class="mh">Most useful first*</span><span class="r">12 ticked</span></div>
+      <div class="rows">${ING.map(ck).join('')}</div>
+      <div class="pf"><span class="fn">* in how many drinks</span><a>Show all 490 ${G.chevronRight}</a></div>
+    </div>
+    <div class="menu lin"><div class="grain"></div><svg class="lattice"><rect width="100%" height="100%" fill="url(#lat)"/></svg>
+      <div class="fleur"><span class="r"></span>${fleuron('var(--bottleLit)', 'var(--lining)')}<span class="r"></span></div>
+      <div class="hd"><h3>You can make</h3><span class="n">33<span>drinks</span></span></div>
+      ${oxford('rgba(233,229,223,.34)')}
+      ${ml('gin-fizz', 8, 'Gin Fizz', 'Gin, lemon juice, sugar, soda water')}
+      ${ml('americano', 13, 'Americano', 'Campari, sweet vermouth, soda water')}
+      <div class="seeall">See all 33 ${G.chevronRight}</div>
+    </div>
+    <div class="away"><div class="grain"></div>
+      <div class="stb"><span class="big">+10</span><span class="sm">drinks</span></div>
+      <div class="vperf"><i class="notch t"></i><i class="holes"></i><i class="notch b"></i></div>
+      <div class="bd">
+        <div class="h">${manicule}<span>One ingredient away</span></div>
+        <div class="d">Opens <span class="pn">Martini</span>, <span class="pn">Clarito</span>, <span class="pn">Bronx</span> and 7 more.</div>
+        <span class="btn">${G.plusThin}Add dry vermouth</span>
+      </div>
+    </div>
+    ${statusBar(false)}${tabBar('bar')}<div class="hi"></div>
+  </section>`;
+}
+
+/* ================= 4. POST DETAIL + LIKERS ================= */
+const LIKERS = [
+  ['maya.pours','Maya Ortiz','maya',1],['theo_stirs','Theo Brandt','theo',1],['ana.lucia','Ana Lucía Rivera','ana',0],
+  ['dmitri.k','Dmitri Kovalev','dmitri',0],['sofi.sips','Sofía Marrero','sofi',1],['kenji.bar','Kenji Morales','kenji',0],['rafa.rocks','Rafael Ortega','rafa',0],
+];
+function post(){
+  const gr = ([u, n, k, f], i) => `<div class="gr"><span class="ix">${String(i+1).padStart(2,'0')}</span>${av(...ppl[k], 40, 14)}<div class="tx"><div class="u">${u}</div><div class="n">${n}</div></div><span class="btn ${f?'quiet':''}">${f?'Following':'Follow'}</span></div>`;
+  return `<section class="screen" id="post">
+    <div class="grain"></div>
+    <div class="bar"><div class="gb l">${G.chevronLeft}</div><div class="title md">Post</div></div>
+    <div class="postpage">${ticket()}</div>
+    ${tabBar('home')}
+    <div class="dim"></div>
+    <div class="sheet"><div class="grain"></div>
+      <i class="grab"></i><i class="tear"></i>
+      <div class="shd"><div class="title">Liked by</div><div class="gb r">${G.close}</div></div>
+      <div class="sub"><div class="lead"><span class="k"><span class="pn">Negroni</span> by ines.ag</span><span class="k"><b>13</b> people</span></div>${oxford()}</div>
+      <div class="guests">${LIKERS.map(gr).join('')}</div>
+    </div>
+    ${statusBar(false)}<div class="hi"></div>
+  </section>`;
+}
+
+/* ================= 5. PROFILE ================= */
+const GRID = [['negroni',127],['martini',126],['daiquiri',100],['old-fashioned',128],['paper-plane',107],['last-word',104],['mai-tai',145],['aviation',92],['clover-club',97]];
+function profile(){
+  return `<section class="screen" id="profile">
+    <div class="grain"></div>
+    <div class="bar"><div class="gb l">${G.plusThin}</div><div class="title md">nico.pours</div><div class="gb r">${G.settings}</div></div>
+    <div class="phead">
+      <div class="prow">
+        <div class="pav">${av(...ppl.nico, 80, 28)}</div>
+        <div class="counts"><div class="grain"></div>
+          <div class="cl"><b>64</b><span>posts</span></div>
+          <div class="vperf"><i class="notch t"></i><i class="holes" style="top:8px;bottom:8px"></i><i class="notch b"></i></div>
+          <div class="cl"><b>212</b><span>followers</span></div>
+          <div class="vperf"><i class="notch t"></i><i class="holes" style="top:8px;bottom:8px"></i><i class="notch b"></i></div>
+          <div class="cl"><b>180</b><span>following</span></div>
+        </div>
+      </div>
+      <div class="pname">Nico Vargas</div>
+      <div class="pbio">Stirred, not shaken. Working through the classics one coupe at a time.</div>
+      <div class="pbtns"><span class="btn">Edit profile</span><span class="btn">Share profile</span></div>
+    </div>
+    <div class="dexcard lin"><div class="grain"></div><svg class="lattice"><rect width="100%" height="100%" fill="url(#lat)"/></svg>
+      <div class="main">
+        <div class="mh lbl">Member of the Dex</div>
+        <div class="fig"><b>38</b><span>of 2,089 · 1.8%</span></div>
+        <div class="ruler">${ruler(266, 38, 2089, 'var(--bottleLit)', [0,1000]).replaceAll('var(--lineControl)','rgba(233,229,223,.42)').replaceAll('var(--muted)','var(--onLiningMuted)').replace('stroke="var(--text)"','stroke="var(--onLiningMuted)"')}</div>
+      </div>
+      <div class="vperf"><i class="notch t"></i><i class="holes"></i><i class="notch b"></i></div>
+      <div class="stubp"><div class="k">Latest</div><div class="th"><img src="${P('negroni')}"></div><div class="pn">Negroni</div><div class="no">${no(127)}</div></div>
+    </div>
+    <div class="tabs"><div class="t on">Posts <span class="c">64</span></div><div class="t">Dex <span class="c">38</span></div></div>
+    <div class="pgrid">${GRID.map(([id,n]) => `<div class="tile"><img src="${P(id)}"><span class="pl">${no(n)}</span></div>`).join('')}</div>
+    ${statusBar(false)}${tabBar('profile')}<div class="hi"></div>
+  </section>`;
+}
+
+/* ---------------- wall ---------------- */
+const F = {
+  home: ['1 · Home', 'Wine masthead with a blind-stamped lattice and a dateline; deckled edge into paper; the post is a ticket.', home],
+  dex: ['2 · Dex', 'One numbered list from Nº 0001; printed scale; caught = stamped colour plate, not yet = one-ink proof.', dex],
+  bar: ['3 · My Bar', 'An order pad with a ledger margin; "You can make" set as a menu; the one-away ticket.', mybar],
+  post: ['4 · Post, likes open', 'Likers as a numbered guest list on a tear-off sheet. No gradient, a flat dim.', post],
+  profile: ['5 · Profile', 'Counts on a perforated ticket; the Dex as a member card with its scale; numbered contact grid.', profile],
+};
+document.getElementById('wall').innerHTML = Object.entries(F).map(([k,[t,s,fn]]) => `<div class="frame" data-k="${k}"><div class="cap"><b>${t}</b><span>${s}</span></div>${fn()}</div>`).join('');
+
+/* ---------------- specimens (contact sheet only) ---------------- */
+const SW = [
+  ['var(--bottle)', '#24493A bottle', 'second ink. 9.02 paper · 9.48 mat · 8.28 buff · 8.34 green plate · 8.45 worst grain'],
+  ['var(--bottleLit)', '#A9CDB8 bottle lit', 'second ink on lining. 9.64 lining · 10.47 cellar · 8.18 worst grain'],
+  ['var(--buff)', '#F2E8D6 buff', 'ticket stock. text 12.65 · muted 5.05 (4.73 grain) · wine 11.31'],
+  ['var(--bottleWash)', '#E4ECE5 green plate', 'ticked / selected. bottle 8.34 · muted 5.09 (4.77 grain)'],
+  ['var(--wine)', '#5B0F1A wine (kept)', 'first ink. 12.33 paper · 11.31 buff'],
+  ['var(--mat)', '#FBF8F2 mat on bottle', 'stamp and tick ink. 9.48'],
+];
+document.getElementById('specimens').innerHTML = `
+  <div class="sp"><div class="grain"></div><h4>Palette: two inks, three stocks</h4>
+    ${SW.map(([c,n,d]) => `<div class="sw"><i style="background:${c}"></i><div><b>${n}</b><br>${d}</div></div>`).join('')}
+    <div class="note">Rules (decorative, no text): bottle rule #6F8F7E, ledger margin #A85A63. Every pair above is WCAG AA for body text.</div></div>
+  <div class="sp"><div class="grain"></div><h4>Rules, fleurons, marks</h4>
+    <div class="sprow" style="width:100%"><div style="flex:1;color:var(--wine)">${oxford()}</div></div>
+    <div class="sprow"><div class="fleur"><span class="r"></span>${fleuron()}<span class="r"></span></div><span style="width:28px;color:var(--wine)">${manicule}</span></div>
+    <div class="sprow glassrow">${Object.keys(GL).map(k => `<figure>${GL[k]}<span>${k}</span></figure>`).join('')}</div>
+    <div class="sprow" style="gap:8px;width:100%"><span style="font:600 18px/22px Playfair">Negroni</span><span class="leader" style="margin-bottom:6px"></span><span class="no">${no(127)}</span></div>
+    <div class="sprow"><span class="mh" style="color:var(--wine)">Most useful first*</span><span class="fn">* tracked lowercase, 1pt</span></div>
+    <div class="note">Oxford rule (2pt over 1pt), the leaf fleuron, the manicule, glass marks, dotted leaders, Nº numerals.</div></div>
+  <div class="sp"><div class="grain"></div><h4>Stamps and tickets</h4>
+    <div class="sprow" style="background:var(--mat);padding:14px;border:1px solid var(--line);border-radius:4px">${stamp('In your Dex','since 12 Sep')}${stamp('New to you','','wine')}
+      <span style="position:relative;width:96px;height:64px;overflow:hidden;border-radius:2px"><img src="${P('negroni')}" style="width:100%;height:100%;object-fit:cover;display:block"><span style="position:absolute;right:4px;bottom:6px">${stamp('In your Dex','','solid')}</span></span></div>
+    <div class="ticket" style="margin:0;height:44px;background:var(--mat)"><div class="perf" style="margin-top:12px"><i class="notch l"></i><i class="holes"></i><i class="notch r"></i></div></div>
+    <div class="note">Outline stamp on paper (bottle ink, double rule, worn with a speckle tile in the ground colour); solid stamp wherever it touches a photo, so no tinted ink sits on media. Perforation: punched notches and a row of holes.</div></div>
+  <div class="sp" style="background:var(--lining)"><div class="grain" style="opacity:.77"></div><h4 style="color:var(--onLining)">Home bar, scrolled: no gradient</h4>
+    <div style="position:relative;height:178px;margin:0 -18px;background:var(--bg);overflow:hidden">
+      <div class="grain"></div>
+      <div style="position:absolute;left:34px;right:34px;top:30px;height:200px;border:1px solid var(--line);padding:3px;background:var(--mat)"><img src="${P('aviation')}" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+      <div class="lin" style="position:absolute;left:0;right:0;top:0;height:62px;background:var(--lining)"><div class="grain"></div><svg class="lattice" style="position:absolute;inset:0;width:100%;height:100%"><rect width="100%" height="100%" fill="url(#lat)"/></svg>
+        <div class="homebar" style="top:12px"><div class="gb l">${G.plusThin}</div><div class="mast"><span class="lz"></span><span class="mr">${oxford()}</span><span class="w">Sipply</span><span class="mr">${oxford()}</span><span class="lz"></span></div><div class="gb r2">${G.trophy}</div><div class="gb r">${G.heart}</div></div></div>
+      <div style="position:absolute;left:0;top:62px">${deckle(640, 8, 5, 'var(--lining)')}</div>
+    </div>
+    <div class="note" style="color:var(--onLiningMuted);margin-top:12px">When the feed scrolls, the bar comes back as a solid lining slab (status strip included) that ends in the same deckled edge as the band. The photo runs under a clean edge. The 94% to 72% fade and both tails (homeBarTail, homeStripTail) are deleted.</div></div></div>`;
+
+/* solo mode: index.html#home renders one 440 x 956 frame */
+const h = location.hash.slice(1);
+if (F[h]) { document.body.classList.add('solo'); document.querySelector(`.frame[data-k="${h}"]`).classList.add('on'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply Glow</title>
+<style>@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* v3.1 tokens (src/constants/theme.ts) + the v3.3 glow layer (spec.md section 2) */
+:root{
+  --paper:#F7F2EA; --mat:#FBF8F2; --line:#D9CFC1; --text:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --wine:#5B0F1A; --onWine:#E9E5DF; --lining:#3E0A12; --cellar:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --onLiningFaint:#A7837F;
+  --liningLine:rgba(233,229,223,.16); --liningControl:rgba(233,229,223,.42);
+  --reelInk:#FFFDF9; --reelInkDim:#A99E94; --taupeInk:#736247;
+  /* glow layer */
+  --tungsten:#E9B26A; --tungstenInk:#8A5A12; --ice:#A9DDEB; --iceInk:#1B5868; --rose:#D9848E;
+  --glassInkMuted:#C9BDB6;
+  --smoke:rgba(24,14,16,.84); --wineglass:rgba(47,7,13,.95); --marker:rgba(14,11,11,.78);
+  --glassHi:rgba(255,253,249,.16); --glassEdge:rgba(255,253,249,.22); --iceEdge:rgba(169,221,235,.38);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#120C0D}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block}
+img{display:block}
+.wallhead{padding:44px 40px 0;color:#E9E5DF}
+.wallhead h1{font:600 26px/32px Inter;letter-spacing:-.2px}
+.wallhead p{font:400 16px/24px Inter;color:#B8A09B;max-width:1100px;margin-top:6px}
+.wall{display:flex;gap:40px;padding:28px 40px 32px;align-items:flex-start}
+.frame{flex:none}
+.frame h2{font:600 15px/20px Inter;color:#E9E5DF;margin:0 0 12px 2px}
+.frame h2 span{color:#A99E94;font-weight:400;margin-left:6px}
+.screen{position:relative;width:440px;height:956px;overflow:hidden;flex:none;
+  background:url(img/grain-paper.png) 0 0/128px 128px,var(--paper)}
+body.solo .wallhead,body.solo .legend,body.solo .frame h2{display:none}
+body.solo .wall{padding:0;gap:0}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+.lin{background:url(img/grain-lining.png) 0 0/128px 128px,var(--lining)}
+.gr{position:absolute;inset:0;background:url(img/grain-lining.png) 0 0/128px 128px;pointer-events:none}
+.ic{flex:none}
+
+/* ---- numerals: "#0127", the padding zeros a step quieter than the figures ---- */
+.no{font:500 11px/14px Inter;letter-spacing:1.5px;font-variant-numeric:tabular-nums;color:var(--text);white-space:nowrap}
+.no .z{color:var(--taupeInk)}
+.no.onlining{color:var(--onLining)} .no.onlining .z{color:var(--onLiningMuted)}
+.no.onglass{color:var(--reelInk)} .no.onglass .z{color:var(--glassInkMuted)}
+.no.onice{color:var(--ice);letter-spacing:1px} .no.onice .z{color:var(--ice)}
+.nm{font-family:Playfair;font-style:normal;font-weight:600}
+
+/* ---- hardware ---- */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:60;color:var(--text)}
+.sb.light{color:var(--reelInk)}
+.sb .t{position:absolute;left:46px;top:20px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:23px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--text);z-index:70}
+.hi.light{background:var(--reelInk)}
+
+/* ---- top bars ---- */
+.topbar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:30;display:flex;align-items:center;padding:0 6px;color:var(--onLining)}
+.topbar .title{position:absolute;left:0;right:0;text-align:center;font:600 20px/26px Inter;color:var(--onLining);pointer-events:none}
+.topbar .right{margin-left:auto;display:flex}
+.gb{width:44px;height:44px;display:grid;place-items:center;position:relative;color:inherit}
+.gb.dim{color:var(--muted)}
+.gb .dot{position:absolute;right:9px;top:9px;width:9px;height:9px;border-radius:50%;background:var(--rose);box-shadow:0 0 0 2px var(--lining)}
+.wordmark{position:absolute;left:0;right:0;text-align:center;font:700 28px/34px Playfair;color:var(--onLining);pointer-events:none;letter-spacing:.1px}
+
+/* ---- lamp pools: static SVG radial gradients in RN (peak .12, spec 4.1) ---- */
+.pools-home{background:
+  radial-gradient(250px 175px at 24% -14px,rgba(233,178,106,.12),rgba(233,178,106,.05) 55%,rgba(233,178,106,0) 100%),
+  radial-gradient(250px 175px at 82% -14px,rgba(233,178,106,.10),rgba(233,178,106,.04) 55%,rgba(233,178,106,0) 100%),
+  url(img/grain-lining.png) 0 0/128px 128px,var(--lining)}
+.pools-dex{background:
+  radial-gradient(300px 190px at 26% 120px,rgba(233,178,106,.12),rgba(233,178,106,.05) 55%,rgba(233,178,106,0) 100%),
+  radial-gradient(420px 260px at 50% 560px,rgba(233,178,106,.06),rgba(233,178,106,0) 100%),
+  url(img/grain-lining.png) 0 0/128px 128px,var(--lining)}
+.pools-bar{background:
+  radial-gradient(280px 170px at 22% 120px,rgba(233,178,106,.12),rgba(233,178,106,.05) 55%,rgba(233,178,106,0) 100%),
+  radial-gradient(360px 150px at 50% 588px,rgba(233,178,106,.11),rgba(233,178,106,.04) 55%,rgba(233,178,106,0) 100%),
+  url(img/grain-lining.png) 0 0/128px 128px,var(--lining)}
+.pools-profile{background:
+  radial-gradient(240px 190px at 66px 150px,rgba(233,178,106,.12),rgba(233,178,106,.05) 55%,rgba(233,178,106,0) 100%),
+  url(img/grain-lining.png) 0 0/128px 128px,var(--lining)}
+
+/* ---- the glass shelf: edge-lit 1pt ice lip, a clear body, a dark foot ---- */
+.shelf{height:3px;border-top:1px solid var(--iceEdge);background:rgba(255,253,249,.05);border-bottom:1px solid rgba(0,0,0,.42)}
+
+/* ---- floating tab bar: smoked glass ---- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:34px;height:64px;z-index:40;display:flex;padding:0 6px;border-radius:12px;
+  background:var(--smoke);border:1px solid rgba(255,253,249,.14);
+  box-shadow:0 4px 14px rgba(14,11,11,.30),inset 0 1px 0 var(--glassHi)}
+.tabbar .gr{border-radius:12px}
+.tb{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--reelInkDim);font:500 11px/14px Inter;z-index:1}
+.tb .gl{width:28px;height:28px;display:grid;place-items:center}
+.tb.on{color:var(--reelInk);font-weight:600}
+.tb.on::before{content:"";position:absolute;top:-1px;left:50%;width:32px;margin-left:-16px;height:2px;border-radius:1px;background:var(--ice);box-shadow:0 0 8px 1px rgba(169,221,235,.55)}
+.fab{width:48px;height:36px;border-radius:8px;background:var(--wine);border:1px solid rgba(233,229,223,.38);display:grid;place-items:center;color:var(--onWine);
+  box-shadow:inset 0 1px 0 rgba(255,253,249,.20),0 0 16px rgba(217,132,142,.28)}
+.face{width:26px;height:26px;border-radius:50%;background:#5E2545;color:#E9E5DF;font:600 11px/26px Inter;text-align:center;box-shadow:0 0 0 1.5px var(--reelInkDim)}
+.face.on{box-shadow:0 0 0 1.5px var(--ice),0 0 9px 1px rgba(169,221,235,.45)}
+
+/* ---- avatars ---- */
+.av{display:inline-block;border-radius:50%;text-align:center;font-family:Inter;font-weight:600;flex:none;letter-spacing:.2px}
+
+/* ================= 1 HOME ================= */
+.home .band{position:relative;height:221px}
+.home .stories{position:absolute;top:106px;left:0;right:0;height:112px;display:flex;gap:10px;padding:10px 12px 12px}
+.st{width:76px;flex:none;display:flex;flex-direction:column;align-items:center}
+.ring{width:68px;height:68px;border-radius:50%;position:relative}
+.ring.unseen{border:2.5px solid var(--g);padding:3px;box-shadow:0 0 16px 1px color-mix(in srgb,var(--g) 42%,transparent)}
+.ring.seen{border:1px solid rgba(233,229,223,.30);padding:4.5px}
+.disc{width:57px;height:57px;border-radius:50%;overflow:hidden;background:var(--cellar)}
+.disc img{width:100%;height:100%;object-fit:cover;transform:scale(1.65);transform-origin:50% 50%}
+.badge{position:absolute;right:-1px;bottom:-1px;width:22px;height:22px;border-radius:50%;background:var(--onLining);border:2px solid var(--lining);display:grid;place-items:center;color:var(--wine)}
+.sl{margin-top:6px;font:500 12px/16px Inter;color:var(--onLining);max-width:76px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sl.dim{color:var(--onLiningMuted)}
+.home .band .shelf{position:absolute;left:0;right:0;bottom:0}
+
+.post{position:relative}
+.author{display:flex;align-items:center;gap:10px;height:50px;padding:0 10px 4px 34px}
+.an{display:flex;flex-direction:column}
+.an b{font:600 15px/20px Inter;color:var(--text)}
+.an span{font:400 13px/18px Inter;color:var(--muted)}
+.author .gb{margin-left:auto}
+.printwrap{position:relative;margin:0 auto}
+.print{position:relative;border-radius:12px;overflow:hidden;z-index:1;background:var(--cellar);
+  box-shadow:0 20px 40px -12px color-mix(in srgb,var(--g) 62%,transparent),0 0 30px -6px color-mix(in srgb,var(--g) 36%,transparent),0 1px 2px rgba(43,35,34,.18)}
+.print::after{content:"";position:absolute;inset:0;border-radius:12px;box-shadow:inset 0 0 0 1px rgba(43,35,34,.16),inset 0 1px 0 rgba(255,253,249,.10);pointer-events:none}
+.print img{width:100%;height:100%;object-fit:cover}
+.caustic{position:absolute;left:-10px;right:-10px;bottom:-30px;height:76px;z-index:0;background:var(--g);opacity:.55;
+  -webkit-mask:url(img/caustic-patch.png) center/100% 100% no-repeat;mask:url(img/caustic-patch.png) center/100% 100% no-repeat}
+.plate{position:absolute;height:26px;padding:0 8px;border-radius:4px;display:inline-flex;align-items:center;gap:5px;font:500 12px/16px Inter;color:var(--reelInk);z-index:2;white-space:nowrap}
+.glass{background:var(--marker);border:1px solid var(--glassEdge);box-shadow:inset 0 1px 0 rgba(255,253,249,.12)}
+.plate.tl{left:12px;top:12px}
+.plate.tr{right:12px;top:12px}
+.plate .ice,.ice{color:var(--ice)}
+.nameplate{position:absolute;left:12px;bottom:12px;max-width:340px;padding:9px 14px 10px;border-radius:8px;z-index:2}
+.pname{font:700 30px/34px Playfair;color:var(--reelInk)}
+.psub{font:400 13px/18px Inter;color:var(--glassInkMuted);margin-top:1px}
+.actions{display:flex;align-items:center;gap:18px;height:48px;padding:8px 32px 0;color:var(--text)}
+.act{display:flex;align-items:center;gap:6px}
+.act b{font:600 14px/18px Inter;font-variant-numeric:tabular-nums}
+.act.liked{color:var(--wine)}
+.act.liked b{color:var(--text)}
+.act.end{margin-left:auto}
+.likes{display:flex;align-items:center;gap:8px;padding:2px 34px 0;font:400 14px/20px Inter;color:var(--text)}
+.likes b{font-weight:600}
+.likes .u{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.stack{display:flex}
+.stack .av{box-shadow:0 0 0 2px var(--paper)}
+.stack .av+.av{margin-left:-6px}
+.stack .av:nth-child(1){z-index:3}.stack .av:nth-child(2){z-index:2}.stack .av{position:relative}
+.cap{padding:5px 34px 0;font:400 14px/20px Inter;color:var(--text)}
+.cap b{font-weight:600}
+.when{padding:4px 34px 0;font:400 12px/16px Inter;color:var(--muted)}
+
+/* home, scrolled: the bar returns as a pane with a hard edge, no tail */
+.pane{position:absolute;left:0;right:0;top:0;height:106px;z-index:50;overflow:hidden}
+.pane.wineglass{background:var(--wineglass);border-bottom:1px solid var(--glassHi)}
+.callout{position:absolute;right:16px;z-index:55;font:500 12px/16px Inter;color:var(--iceInk);background:#E3F0F2;border:1px solid rgba(27,88,104,.35);border-radius:4px;padding:4px 8px}
+
+/* ================= 2 DEX ================= */
+.topbar.lining .title{font:600 20px/26px Inter}
+.dexhead{position:absolute;top:112px;left:16px;right:18px}
+.figrow{display:flex;align-items:baseline;gap:8px}
+.fig{font:600 36px/40px Inter;letter-spacing:-.5px;font-variant-numeric:tabular-nums;color:var(--onLining)}
+.of{font:400 15px/20px Inter;color:var(--onLiningMuted)}
+.pct{margin-left:auto;font:600 15px/20px Inter;color:var(--tungsten);font-variant-numeric:tabular-nums}
+.spectrack{margin-top:10px;padding:1px;border-radius:3px;background:rgba(14,11,11,.40);border:1px solid var(--liningLine);box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}
+.spectrack svg{border-radius:2px}
+.specends{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.specends .mid{font:400 12px/16px Inter;color:var(--onLiningMuted)}
+.search{position:absolute;left:16px;right:16px;top:214px}
+.glass-field{display:flex;align-items:center;gap:10px;padding:0 14px;height:44px;border-radius:8px;background:rgba(14,11,11,.32);border:1px solid rgba(233,229,223,.24);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.28),0 1px 0 rgba(255,253,249,.05);color:var(--onLiningMuted);font:400 16px/22px Inter}
+.glass-field .ic{color:var(--onLiningMuted)}
+.chips{position:absolute;left:16px;top:270px;display:flex;gap:8px;white-space:nowrap;align-items:center}
+.lchip{height:32px;padding:0 12px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;font:500 14px/20px Inter;flex:none;border:1px solid var(--liningControl);color:var(--onLining)}
+.lchip .n{color:var(--onLiningMuted);font-variant-numeric:tabular-nums}
+.lchip.on{background:var(--onLining);border-color:var(--onLining);color:var(--lining);font-weight:600}
+.lchip.on .n{color:var(--lining);font-weight:500}
+.lchip.ice .ic{color:var(--ice)}
+.vr{width:1px;height:20px;background:var(--liningLine);flex:none}
+.dex .grid{position:absolute;left:16px;top:320px;width:368px}
+.drow{display:flex;gap:10px;align-items:stretch;position:relative;z-index:1}
+.dc{width:116px;position:relative;border-radius:8px;display:flex;flex-direction:column}
+.dc.have{background:var(--mat);border:1px solid rgba(14,11,11,.35);
+  box-shadow:0 1px 0 rgba(14,11,11,.45),0 16px 30px -8px color-mix(in srgb,var(--g) 78%,transparent),0 0 30px 0 color-mix(in srgb,var(--g) 34%,transparent),inset 0 1px 0 #fff}
+.dc:not(.have){background:var(--cellar);border:1px solid rgba(233,229,223,.10);box-shadow:inset 0 2px 10px rgba(0,0,0,.55),inset 0 -1px 0 rgba(233,229,223,.06)}
+.lab{position:relative;padding:7px 8px 7px;flex:1}
+.dn{font:700 15px/18px Playfair;color:var(--text);margin-top:3px;padding-right:2px}
+.dc:not(.have) .dn{font:500 14px/18px Inter;color:var(--onLiningMuted)}
+.lk{position:absolute;right:7px;top:7px;color:var(--onLiningFaint)}
+.win{margin:0 4px 4px;height:108px;border-radius:4px;overflow:hidden;background:var(--cellar);position:relative;flex:none}
+.win img{width:100%;height:100%;object-fit:cover;transform:scale(1.18)}
+.dc.have .win::after{content:"";position:absolute;inset:0;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(43,35,34,.16)}
+.dc:not(.have) .win{box-shadow:inset 0 2px 8px rgba(0,0,0,.5)}
+.dc:not(.have) .win img{opacity:.92}
+.spill{position:absolute;left:-18px;right:-18px;bottom:-26px;height:40px;background:var(--g);opacity:.95;z-index:-1;
+  -webkit-mask:url(img/caustic-patch.png) center/100% 100% no-repeat;mask:url(img/caustic-patch.png) center/100% 100% no-repeat}
+.dshelf{margin:9px 0 15px -16px;width:392px;box-shadow:0 7px 12px -3px rgba(0,0,0,.38)}
+.scrub{position:absolute;right:6px;top:328px;width:40px;height:520px;z-index:2}
+.scrub .track{position:absolute;right:4px;top:0;width:1px;height:504px;background:var(--liningLine)}
+.scrub .track i{position:absolute;right:0;width:5px;height:1px;background:var(--onLiningFaint);opacity:.75}
+.scrub .track i.long{width:9px;opacity:1}
+.slabels span{position:absolute;right:20px;font:500 11px/14px Inter;color:var(--onLiningMuted);font-variant-numeric:tabular-nums}
+.meniscus{position:absolute;right:0;top:-1px;width:14px;height:3px;border-radius:1px;background:var(--tungsten);box-shadow:0 0 9px 2px rgba(233,178,106,.55)}
+
+/* ================= 3 MY BAR ================= */
+.barhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.q{font:600 22px/28px Inter;color:var(--onLining)}
+.qs{font:400 14px/20px Inter;color:var(--onLiningMuted);margin-top:2px}
+.tally{flex:none;display:flex;flex-direction:column;align-items:center;padding:5px 10px 6px;border-radius:8px;border:1px solid var(--liningControl);background:rgba(14,11,11,.25)}
+.tally b{font:600 20px/24px Inter;color:var(--tungsten);font-variant-numeric:tabular-nums}
+.tally span{font:400 12px/14px Inter;color:var(--onLiningMuted)}
+.itile{display:flex;align-items:center;gap:8px;min-height:50px;padding:5px 8px 5px 5px;border-radius:8px;background:rgba(255,253,249,.035);border:1px solid rgba(233,229,223,.13);box-shadow:inset 0 1px 0 rgba(255,253,249,.05)}
+.itile.on{background:rgba(255,253,249,.06);border-color:rgba(233,229,223,.20)}
+.ig{width:30px;height:30px;display:grid;place-items:center;color:var(--onLiningFaint);position:relative;flex:none}
+.ig svg{position:relative;z-index:1}
+.ig.lit::before{content:"";position:absolute;left:6px;top:6px;width:18px;height:18px;border-radius:50%;box-shadow:0 0 16px 6px color-mix(in srgb,var(--c) 38%,transparent)}
+.it{min-width:0}
+.it b{display:block;font:600 14px/18px Inter;letter-spacing:-.1px;color:var(--onLining)}
+.it span{display:block;font:400 12px/16px Inter;color:var(--onLiningMuted);font-variant-numeric:tabular-nums}
+.cb{margin-left:auto;width:22px;height:22px;flex:none;border-radius:4px;border:1.5px solid var(--liningControl);display:grid;place-items:center}
+.cb.on{background:var(--onLining);border-color:var(--onLining);color:var(--lining)}
+.barbody{position:absolute;left:0;right:0;top:106px}
+.barbody .barhead{position:relative;top:auto;left:auto;right:auto;margin:6px 16px 0}
+.barbody .search{position:relative;top:auto;left:auto;right:auto;margin:14px 16px 0}
+.barbody .chips{position:relative;top:auto;left:16px;margin-top:12px}
+.checklist{margin:12px 16px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 8px}
+.showall{margin:12px 16px 0;display:flex;align-items:center;gap:6px;font:500 14px/20px Inter;color:var(--onLining)}
+.makehead{margin:18px 16px 0;display:flex;align-items:baseline;gap:8px}
+.makehead .h,.awayhead .h{font:600 20px/26px Inter;color:var(--onLining)}
+.makehead .big{font:600 28px/32px Inter;color:var(--tungsten);font-variant-numeric:tabular-nums;letter-spacing:-.4px}
+.makehead .h2{font:400 15px/20px Inter;color:var(--onLiningMuted)}
+.makehead .see{margin-left:auto;display:flex;align-items:center;gap:2px;font:500 14px/20px Inter;color:var(--onLining)}
+.makewrap{position:relative;margin-top:12px}
+.makerail{position:relative;margin-left:16px;display:flex;gap:12px;z-index:1}
+.mk{width:100px;flex:none}
+.mph{width:100px;height:100px;border-radius:8px;overflow:hidden;position:relative;
+  box-shadow:0 12px 22px -8px color-mix(in srgb,var(--g) 60%,transparent),0 0 18px -2px color-mix(in srgb,var(--g) 30%,transparent),inset 0 0 0 1px rgba(255,253,249,.08)}
+.mph img{width:100%;height:100%;object-fit:cover;transform:scale(1.2)}
+.mname{margin-top:13px;font:600 14px/18px Playfair;color:var(--onLining)}
+.mk .no{display:block;margin-top:1px}
+.mshelf{position:absolute;left:0;right:0;top:106px;box-shadow:0 7px 12px -3px rgba(0,0,0,.38);z-index:0}
+.awayhead{margin:16px 16px 0;display:flex;flex-direction:column}
+.awayhead .sub{font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.away{margin:10px 16px 0}
+.arow{display:flex;align-items:center;gap:12px;padding:8px 10px 8px 8px;border-radius:8px;background:rgba(14,11,11,.25);border:1px solid rgba(233,229,223,.13)}
+.ath{width:44px;height:44px;border-radius:4px;overflow:hidden;flex:none;box-shadow:inset 0 2px 6px rgba(0,0,0,.5)}
+.ath img{width:100%;height:100%;object-fit:cover;transform:scale(1.25)}
+.at{flex:1;min-width:0}
+.at b{display:block;font:600 15px/20px Inter;color:var(--onLining)}
+.at span{display:block;font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.at .nm{color:var(--onLining)}
+.addbtn{flex:none;display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--iceEdge);color:var(--ice);font:600 14px/18px Inter;background:rgba(169,221,235,.06)}
+
+/* ================= 4 POST + LIKERS ================= */
+.post-detail{background:var(--cellar)}
+.pd-photo{position:absolute;left:0;top:0;width:440px;height:550px}
+.pd-photo img{width:100%;height:100%;object-fit:cover}
+.pane.frost{border-bottom:1px solid var(--glassHi)}
+.frostimg{position:absolute;left:0;top:0;width:440px;height:550px;overflow:hidden}
+.frostimg img{width:100%;height:100%;object-fit:cover;filter:blur(22px);transform:scale(1.08)}
+.pane.frost .tint{position:absolute;inset:0;background:rgba(47,7,13,.74)}
+.pane .topbar{color:var(--onLining)}
+.pane .topbar .title{font:600 17px/22px Inter}
+.post-detail .dim{position:absolute;inset:0;background:rgba(14,11,11,.42);z-index:51}
+.sheet{position:absolute;left:0;right:0;top:390px;bottom:0;z-index:52;border-radius:12px 12px 0 0;overflow:hidden;background:var(--cellar);box-shadow:0 -6px 24px rgba(0,0,0,.40)}
+.sheet .frostimg{top:-390px}
+.sheet .tint{position:absolute;inset:0;background:rgba(30,12,16,.86)}
+.sheet .edge{position:absolute;left:0;right:0;top:0;height:1px;background:color-mix(in srgb,var(--g) 70%,transparent);z-index:3}
+.sheet>*:not(.frostimg):not(.tint):not(.gr):not(.edge){position:relative;z-index:2}
+.grab{width:36px;height:4px;border-radius:1px;background:rgba(233,229,223,.34);margin:8px auto 0}
+.shead{display:flex;align-items:center;height:40px;padding:0 16px;margin-top:2px}
+.shead .sp{width:44px}
+.stitle{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;font:600 17px/22px Inter;color:var(--onLining);font-variant-numeric:tabular-nums}
+.rose{color:var(--rose)}
+.done{width:44px;text-align:right;font:600 16px/22px Inter;color:var(--onLining)}
+.ssub{display:flex;align-items:center;justify-content:center;gap:6px;font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.ssub .nm{color:var(--onLining);font-size:14px}
+.sheet .search{position:relative;left:auto;right:auto;top:auto;margin:12px 16px 2px}
+.glass-field.sm{height:40px;font-size:15px}
+.lsect{display:flex;gap:6px;padding:14px 16px 4px;font:500 12px/16px Inter;letter-spacing:.4px;color:var(--onLiningMuted)}
+.lsect span{color:var(--onLining);font-variant-numeric:tabular-nums}
+.lrow{display:flex;align-items:center;gap:12px;padding:7px 16px;min-height:60px}
+.lt{flex:1;min-width:0}
+.lt b{display:block;font:600 15px/20px Inter;color:var(--onLining)}
+.lt>span{display:block;font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.itag{display:inline-flex !important;align-items:center;gap:4px;margin-top:4px;height:22px;padding:0 7px 0 5px;border-radius:4px;border:1px solid var(--iceEdge);background:rgba(169,221,235,.08);color:var(--ice) !important;font:500 12px/16px Inter !important}
+.fbtn{flex:none;height:32px;padding:0 14px;border-radius:8px;font:600 14px/30px Inter}
+.fbtn.out{border:1px solid var(--liningControl);color:var(--onLining)}
+.fbtn.bone{background:var(--onLining);border:1px solid var(--onLining);color:var(--lining)}
+
+/* ================= 5 PROFILE ================= */
+.pband{position:relative;height:458px}
+.pband::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:rgba(233,229,223,.14)}
+.phead{position:absolute;top:114px;left:16px;right:12px;display:flex;align-items:center;gap:18px}
+.halo{width:96px;height:96px;border-radius:50%;padding:4px;border:2px solid var(--g);flex:none;box-shadow:0 0 24px 2px color-mix(in srgb,var(--g) 40%,transparent)}
+.counts{flex:1;display:flex}
+.counts div{flex:1;text-align:center;border-left:1px solid var(--liningLine);padding:2px 0}
+.counts div:first-child{border-left:0}
+.counts b{display:block;font:600 18px/22px Inter;color:var(--onLining);font-variant-numeric:tabular-nums}
+.counts span{font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.pname2{position:absolute;top:222px;left:16px;font:600 17px/22px Inter;color:var(--onLining)}
+.bio{position:absolute;top:246px;left:16px;font:400 15px/22px Inter;color:var(--onLining)}
+.dexpanel{position:absolute;top:282px;left:16px;right:16px;padding:11px 14px 12px;border-radius:12px;background:rgba(14,11,11,.30);border:1px solid var(--liningLine);box-shadow:inset 0 1px 0 rgba(255,253,249,.06)}
+.dprow{display:flex;align-items:baseline;gap:6px}
+.dprow .lbl{font:500 12px/16px Inter;letter-spacing:.4px;color:var(--onLiningMuted);margin-right:4px}
+.dfig{font:600 24px/28px Inter;color:var(--onLining);font-variant-numeric:tabular-nums;letter-spacing:-.3px}
+.dof{font:400 14px/20px Inter;color:var(--onLiningMuted)}
+.dpct{margin-left:auto;font:600 14px/20px Inter;color:var(--tungsten);font-variant-numeric:tabular-nums}
+.spectrack.sm{margin-top:8px}
+.latest{display:flex;align-items:center;gap:8px;margin-top:10px;font:400 13px/18px Inter;color:var(--onLiningMuted)}
+.latest .nm{color:var(--onLining);font-size:14px}
+.lth{width:28px;height:28px;border-radius:4px;overflow:hidden;flex:none;box-shadow:0 0 12px 1px color-mix(in srgb,var(--g) 50%,transparent)}
+.lth img{width:100%;height:100%;object-fit:cover;transform:scale(1.4)}
+.latest .ago{margin-left:auto}
+.pbtns{position:absolute;top:408px;left:16px;right:16px;display:flex;gap:8px}
+.obtn{flex:1;height:36px;border-radius:8px;border:1px solid var(--liningControl);color:var(--onLining);font:600 14px/34px Inter;text-align:center}
+.tstrip{display:flex;height:44px;border-bottom:1px solid var(--line)}
+.ts{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font:500 14px/20px Inter;color:var(--muted)}
+.ts b{font-weight:600;font-variant-numeric:tabular-nums;color:var(--tungstenInk)}
+.ts.on{color:var(--text);font-weight:600;box-shadow:inset 0 -2px 0 var(--text)}
+.ts.on b{font-weight:600}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.gt{aspect-ratio:1/1;position:relative;overflow:hidden;background:var(--cellar)}
+.gt img{width:100%;height:100%;object-fit:cover;transform:scale(1.12)}
+.marker{position:absolute;left:6px;bottom:9px;height:20px;padding:0 6px;border-radius:4px;background:var(--marker);border:1px solid rgba(255,253,249,.28);display:flex;align-items:center}
+.key{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--g)}
+
+/* ================= legend ================= */
+.legend{display:flex;gap:56px;padding:4px 40px 48px;color:#E9E5DF}
+.legend h3{font:600 15px/20px Inter;margin-bottom:12px}
+.sws{display:grid;grid-template-columns:repeat(5,200px);gap:12px 16px}
+.sw{display:grid;grid-template-columns:36px 1fr;column-gap:10px;align-items:center}
+.sw i{grid-row:1/4;width:36px;height:36px;border-radius:4px;border:1px solid rgba(233,229,223,.25);background-image:none}
+.sw b{font:600 13px/16px Inter}
+.sw span{font:500 12px/16px Inter;color:#B8A09B;font-variant-numeric:tabular-nums}
+.sw em{font:400 12px/16px Inter;color:#A99E94;font-style:normal}
+.gls{display:grid;grid-template-columns:repeat(6,116px);gap:14px 14px}
+.gl1{display:flex;flex-direction:column;gap:2px}
+.gimg{width:56px;height:56px;border-radius:6px;overflow:hidden;box-shadow:0 8px 18px -6px color-mix(in srgb,var(--g) 70%,transparent),0 0 16px -2px color-mix(in srgb,var(--g) 40%,transparent);margin-bottom:6px}
+.gimg img{width:100%;height:100%;object-fit:cover;transform:scale(1.3)}
+.gl1 b{font:600 12px/16px Inter}
+.gl1 span{font:500 11px/14px Inter;color:#B8A09B;letter-spacing:.5px}
+
+/* the baked caustic on a catalogue photo's counter (spec 5.4): shown here as an overlay */
+.cau{position:absolute;left:-6%;right:-6%;bottom:-4%;height:42%;background:var(--g);opacity:.38;pointer-events:none;
+  -webkit-mask:url(img/caustic-patch.png) center/100% 100% no-repeat;mask:url(img/caustic-patch.png) center/100% 100% no-repeat}
+.lrow .sring{width:52px;height:52px;border-radius:50%;padding:2.5px;border:2px solid var(--g);flex:none;box-shadow:0 0 12px color-mix(in srgb,var(--g) 40%,transparent)}
+.lrow .sring .av{width:44px !important;height:44px !important;line-height:44px !important}
+.lrow .noring{width:52px;flex:none;display:grid;place-items:center}
+.mk .spillb{position:absolute;left:-14px;right:-14px;top:92px;height:34px;background:var(--g);opacity:.85;z-index:0;
+  -webkit-mask:url(img/caustic-patch.png) center/100% 100% no-repeat;mask:url(img/caustic-patch.png) center/100% 100% no-repeat}
+.mk{position:relative}
+.mph{z-index:1}
+</style></head>
+<body>
+<div class="wallhead"><h1>Sipply v3.3 · Lit glass and tungsten</h1><p>Light is the detail: every drink casts its own colour, lamps pool amber on the lining, chrome is smoked glass with a hard edge, and ice is the cool accent against wine and bone.</p></div>
+<div class="wall">
+<div class="frame" id="f-home"><h2>1 Home <span>the feed at rest</span></h2><div class="screen home">
+<div class="band lin pools-home">
+<div class="sb light"><span class="t">9:41</span><span class="island"></span>
+<span class="r"><svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx=".8"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8"/><rect x="10" y="3" width="3.2" height="9" rx=".8"/><rect x="15" y="0" width="3.2" height="12" rx=".8"/></svg>
+<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8.5.3 10.6 10.6 0 0 0 1 3.4l1.3 1.3a8.8 8.8 0 0 1 6.2-2.5zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A6.9 6.9 0 0 0 8.5 4a6.9 6.9 0 0 0-4.9 2l1.3 1.3a5.1 5.1 0 0 1 3.6-1.5zm0 3.6a1.6 1.6 0 0 0-1.2.5l1.2 1.2 1.2-1.2a1.6 1.6 0 0 0-1.2-.5z"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" fill-opacity=".45"/></svg></span></div>
+<div class="topbar">
+  <span class="gb"><svg class="ic " width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+  <span class="wordmark">Sipply</span>
+  <span class="right"><span class="gb"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4h9v4.2a4.5 4.5 0 0 1-9 0z"/><path d="M7.5 5.8H4.8a2.7 2.7 0 0 0 2.9 3.6M16.5 5.8h2.7a2.7 2.7 0 0 1-2.9 3.6"/><path d="M12 12.7v3.6"/><path d="M8.6 20.2h6.8l-.8-3.9H9.4z"/></svg></span><span class="gb"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.6 2.7c0 5.8-7.6 10.4-7.6 10.4z"/></svg><i class="dot"></i></span></span>
+</div>
+<div class="stories"><div class="st"><div class="ring seen own"><div class="disc"><span class="av " style="width:57px;height:57px;background:#5E2545;color:#E9E5DF;font-size:23px;line-height:57px">NV</span></div>
+<span class="badge"><svg class="ic " width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span></div><div class="sl">You</div></div><div class="st"><div class="ring unseen" style="--g:#ED5D2F"><div class="disc"><img src="../../../assets/drinks/negroni.webp" alt=""></div></div>
+<div class="sl ">marisol.r</div></div><div class="st"><div class="ring unseen" style="--g:#ED832F"><div class="disc"><img src="../../../assets/drinks/aperol-spritz.webp" alt=""></div></div>
+<div class="sl ">andres.v</div></div><div class="st"><div class="ring unseen" style="--g:#7AED77"><div class="disc"><img src="../../../assets/drinks/grasshopper.webp" alt=""></div></div>
+<div class="sl ">cami.lugo</div></div><div class="st"><div class="ring unseen" style="--g:#7788ED"><div class="disc"><img src="../../../assets/drinks/aviation.webp" alt=""></div></div>
+<div class="sl ">dlopez</div></div><div class="st"><div class="ring seen" style="--g:#E9B26A"><div class="disc"><img src="../../../assets/drinks/espresso-martini.webp" alt=""></div></div>
+<div class="sl dim">tomas.b</div></div></div>
+<div class="shelf"></div>
+</div>
+<div class="post">
+  <div class="author"><span class="av " style="width:34px;height:34px;background:#7E2330;color:#E9E5DF;font-size:14px;line-height:34px">MR</span><div class="an"><b>marisol.r</b><span>Poured at home</span></div><span class="gb dim"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/></svg></span></div>
+  <div class="printwrap " style="--g:#ED5D2F;width:372px">
+<div class="print" style="width:372px;height:465px"><img src="../../../assets/drinks/negroni.webp" alt="">
+<span class="plate glass tl"><span class="no onglass"><span class="z">#0</span>127</span></span><span class="plate glass tr"><svg class="ic ice" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg>In your Dex</span>
+<div class="nameplate glass"><div class="pname">Negroni</div><div class="psub">Spirit-forward · Florence, Italy</div></div>
+</div></div>
+  <div class="actions">
+    <span class="act liked"><svg class="ic " width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.6 2.7c0 5.8-7.6 10.4-7.6 10.4z"/></svg><b>13</b></span>
+    <span class="act"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 11.6a8.2 8.2 0 0 1-12 7.3L3.8 20l1.2-4.1a8.2 8.2 0 1 1 15.2-4.3z"/></svg><b>4</b></span>
+    <span class="act"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/></svg></span>
+    <span class="act end"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 3.6h10.8v16.8L12 16.6l-5.4 3.8z"/></svg></span>
+  </div>
+  <div class="likes"><span class="stack"><span class="av " style="width:24px;height:24px;background:#8A5F10;color:#FFFDF9;font-size:11px;line-height:24px">A</span><span class="av " style="width:24px;height:24px;background:#3A2E2C;color:#E9E5DF;font-size:11px;line-height:24px">C</span><span class="av " style="width:24px;height:24px;background:#736247;color:#FFFDF9;font-size:11px;line-height:24px">D</span></span>
+    <span>Liked by <b>andres.v</b> and <b class="u">12 others</b></span></div>
+  <div class="cap"><b>marisol.r</b> Saturday's first. Equal parts, stirred long over one big rock.</div>
+</div>
+<div class="tabbar"><i class="gr"></i>
+<div class="tb on"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 10.4 12 3.8l8.2 6.6V19a1.6 1.6 0 0 1-1.6 1.6h-4.1v-5.8h-5v5.8H5.4A1.6 1.6 0 0 1 3.8 19z"/></svg></span><span class="lb">Home</span></div><div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.5h15.6L12 12.6z"/><path d="M12 12.6v7.2"/><path d="M8.2 19.8h7.6"/></svg></span><span class="lb">Dex</span></div>
+<div class="tb fabslot"><span class="fab"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span></div>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.8h5v4.6c0 .7 3.2 1.4 3.2 3.8v8.2a2 2 0 0 1-2 2H8.3a2 2 0 0 1-2-2v-8.2c0-2.4 3.2-3.1 3.2-3.8z"/><path d="M6.4 13.2h11.2M6.4 16.8h11.2"/></svg></span><span class="lb">My Bar</span></div><div class="tb"><span class="gl"><span class="face">NV</span></span><span class="lb">Profile</span></div></div>
+<div class="hi "></div>
+</div></div><div class="frame" id="f-dex"><h2>2 Dex <span>one grid, by number</span></h2><div class="screen dex lin pools-dex">
+<div class="sb light"><span class="t">9:41</span><span class="island"></span>
+<span class="r"><svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx=".8"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8"/><rect x="10" y="3" width="3.2" height="9" rx=".8"/><rect x="15" y="0" width="3.2" height="12" rx=".8"/></svg>
+<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8.5.3 10.6 10.6 0 0 0 1 3.4l1.3 1.3a8.8 8.8 0 0 1 6.2-2.5zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A6.9 6.9 0 0 0 8.5 4a6.9 6.9 0 0 0-4.9 2l1.3 1.3a5.1 5.1 0 0 1 3.6-1.5zm0 3.6a1.6 1.6 0 0 0-1.2.5l1.2 1.2 1.2-1.2a1.6 1.6 0 0 0-1.2-.5z"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" fill-opacity=".45"/></svg></span></div>
+<div class="topbar lining"><span class="title">Dex</span><span class="right"><span class="gb"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19.5v-6M10 19.5V5.5M15 19.5v-9M20 19.5v-4"/></svg></span></span></div>
+<div class="dexhead">
+  <div class="figrow"><span class="fig">137</span><span class="of">of 2,089 in your Dex</span><span class="pct">6.6%</span></div>
+  <div class="spectrack"><svg class="spec " width="406" height="14" viewBox="0 0 406 14"><rect x="0.00" y="0" width="2" height="14" fill="#ED772F"/><rect x="0.58" y="0" width="2" height="14" fill="#E9B26A"/><rect x="0.78" y="0" width="2" height="14" fill="#7AED77"/><rect x="1.17" y="0" width="2" height="14" fill="#E9B26A"/><rect x="1.36" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="1.94" y="0" width="2" height="14" fill="#EDE36B"/><rect x="2.33" y="0" width="2" height="14" fill="#ED732F"/><rect x="2.92" y="0" width="2" height="14" fill="#ED8F2F"/><rect x="3.11" y="0" width="2" height="14" fill="#ED9138"/><rect x="3.69" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="4.28" y="0" width="2" height="14" fill="#DBED44"/><rect x="4.47" y="0" width="2" height="14" fill="#EDA14C"/><rect x="4.66" y="0" width="2" height="14" fill="#ED722F"/><rect x="6.22" y="0" width="2" height="14" fill="#ED8C40"/><rect x="6.61" y="0" width="2" height="14" fill="#ED8D2F"/><rect x="7.19" y="0" width="2" height="14" fill="#ED8F2F"/><rect x="7.39" y="0" width="2" height="14" fill="#ED8D2F"/><rect x="7.58" y="0" width="2" height="14" fill="#ED5578"/><rect x="7.97" y="0" width="2" height="14" fill="#4EED55"/><rect x="8.75" y="0" width="2" height="14" fill="#ED2F45"/><rect x="8.94" y="0" width="2" height="14" fill="#ED802F"/><rect x="9.52" y="0" width="2" height="14" fill="#EDA32F"/><rect x="9.72" y="0" width="2" height="14" fill="#ED8B2F"/><rect x="9.91" y="0" width="2" height="14" fill="#EDA82F"/><rect x="10.49" y="0" width="2" height="14" fill="#ED992F"/><rect x="10.88" y="0" width="2" height="14" fill="#EDE252"/><rect x="11.47" y="0" width="2" height="14" fill="#ED4A2F"/><rect x="13.80" y="0" width="2" height="14" fill="#EDAC50"/><rect x="15.16" y="0" width="2" height="14" fill="#ED972F"/><rect x="15.35" y="0" width="2" height="14" fill="#ED872F"/><rect x="15.74" y="0" width="2" height="14" fill="#ED9C2F"/><rect x="15.94" y="0" width="2" height="14" fill="#EDD56C"/><rect x="16.33" y="0" width="2" height="14" fill="#EDE049"/><rect x="16.52" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="17.69" y="0" width="2" height="14" fill="#7788ED"/><rect x="17.88" y="0" width="2" height="14" fill="#EDB52F"/><rect x="18.66" y="0" width="2" height="14" fill="#ED352F"/><rect x="19.05" y="0" width="2" height="14" fill="#ED3D2F"/><rect x="19.24" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="20.02" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="20.41" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="20.60" y="0" width="2" height="14" fill="#ED572F"/><rect x="20.80" y="0" width="2" height="14" fill="#EDA62F"/><rect x="21.18" y="0" width="2" height="14" fill="#ED932F"/><rect x="21.38" y="0" width="2" height="14" fill="#ED642F"/><rect x="21.57" y="0" width="2" height="14" fill="#ED972F"/><rect x="21.77" y="0" width="2" height="14" fill="#ED832F"/><rect x="21.96" y="0" width="2" height="14" fill="#EDA65E"/><rect x="22.16" y="0" width="2" height="14" fill="#EDC26F"/><rect x="22.54" y="0" width="2" height="14" fill="#EDB53F"/><rect x="22.74" y="0" width="2" height="14" fill="#EDAA2F"/><rect x="23.52" y="0" width="2" height="14" fill="#ED6E2F"/><rect x="23.91" y="0" width="2" height="14" fill="#ED612F"/><rect x="24.10" y="0" width="2" height="14" fill="#ED672F"/><rect x="24.29" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="24.49" y="0" width="2" height="14" fill="#ED5D2F"/><rect x="24.68" y="0" width="2" height="14" fill="#ED912F"/><rect x="24.88" y="0" width="2" height="14" fill="#ED7C2F"/><rect x="25.27" y="0" width="2" height="14" fill="#ED872F"/><rect x="25.46" y="0" width="2" height="14" fill="#EDE05A"/><rect x="25.85" y="0" width="2" height="14" fill="#ED842F"/><rect x="26.04" y="0" width="2" height="14" fill="#2FD5ED"/><rect x="26.43" y="0" width="2" height="14" fill="#ED692F"/><rect x="27.40" y="0" width="2" height="14" fill="#EDAC2F"/><rect x="27.99" y="0" width="2" height="14" fill="#EDA42F"/><rect x="28.57" y="0" width="2" height="14" fill="#ED8D2F"/><rect x="29.93" y="0" width="2" height="14" fill="#E8D48A"/><rect x="30.12" y="0" width="2" height="14" fill="#E8D48A"/><rect x="30.32" y="0" width="2" height="14" fill="#E8D48A"/><rect x="30.51" y="0" width="2" height="14" fill="#E8D48A"/><rect x="30.71" y="0" width="2" height="14" fill="#E8D48A"/><rect x="30.90" y="0" width="2" height="14" fill="#E8D48A"/><rect x="33.04" y="0" width="2" height="14" fill="#E08A35"/><rect x="33.62" y="0" width="2" height="14" fill="#E08A35"/><rect x="34.59" y="0" width="2" height="14" fill="#E08A35"/><rect x="35.37" y="0" width="2" height="14" fill="#D9EEF2"/><rect x="40.23" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="43.34" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="43.92" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="48.20" y="0" width="2" height="14" fill="#E39A3B"/><rect x="48.39" y="0" width="2" height="14" fill="#E3A24B"/><rect x="49.17" y="0" width="2" height="14" fill="#E3A24B"/><rect x="50.92" y="0" width="2" height="14" fill="#E9B26A"/><rect x="59.08" y="0" width="2" height="14" fill="#D0603A"/><rect x="59.86" y="0" width="2" height="14" fill="#D9813A"/><rect x="63.55" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="64.52" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="69.97" y="0" width="2" height="14" fill="#E8D9A8"/><rect x="70.94" y="0" width="2" height="14" fill="#A8D86A"/><rect x="72.49" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="75.80" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="75.99" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="77.16" y="0" width="2" height="14" fill="#E8D9A8"/><rect x="77.55" y="0" width="2" height="14" fill="#E8D9A8"/><rect x="88.82" y="0" width="2" height="14" fill="#E39A3B"/><rect x="94.07" y="0" width="2" height="14" fill="#A8D86A"/><rect x="97.95" y="0" width="2" height="14" fill="#A8D86A"/><rect x="99.31" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="102.81" y="0" width="2" height="14" fill="#ED7A45"/><rect x="103.78" y="0" width="2" height="14" fill="#E9B26A"/><rect x="104.76" y="0" width="2" height="14" fill="#ED7A45"/><rect x="108.64" y="0" width="2" height="14" fill="#ED7A45"/><rect x="110.00" y="0" width="2" height="14" fill="#ED7A45"/><rect x="110.20" y="0" width="2" height="14" fill="#ED7A45"/><rect x="110.39" y="0" width="2" height="14" fill="#ED7A45"/><rect x="118.17" y="0" width="2" height="14" fill="#ED7A45"/><rect x="118.75" y="0" width="2" height="14" fill="#ED7A45"/><rect x="123.02" y="0" width="2" height="14" fill="#E9B26A"/><rect x="123.41" y="0" width="2" height="14" fill="#E9B26A"/><rect x="124.00" y="0" width="2" height="14" fill="#E9B26A"/><rect x="125.55" y="0" width="2" height="14" fill="#E9B26A"/><rect x="134.49" y="0" width="2" height="14" fill="#E9B26A"/><rect x="140.13" y="0" width="2" height="14" fill="#ED7A45"/><rect x="144.40" y="0" width="2" height="14" fill="#ED7A45"/><rect x="144.99" y="0" width="2" height="14" fill="#E9B26A"/><rect x="145.18" y="0" width="2" height="14" fill="#ED7A45"/><rect x="149.46" y="0" width="2" height="14" fill="#ED7A45"/><rect x="150.23" y="0" width="2" height="14" fill="#ED7A45"/><rect x="158.20" y="0" width="2" height="14" fill="#ED7A45"/><rect x="167.73" y="0" width="2" height="14" fill="#E9B26A"/><rect x="170.64" y="0" width="2" height="14" fill="#E9B26A"/><rect x="204.85" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="210.29" y="0" width="2" height="14" fill="#E3A24B"/><rect x="214.95" y="0" width="2" height="14" fill="#E3A24B"/><rect x="223.50" y="0" width="2" height="14" fill="#E3A24B"/><rect x="248.38" y="0" width="2" height="14" fill="#E08A35"/><rect x="256.93" y="0" width="2" height="14" fill="#E3A24B"/><rect x="267.62" y="0" width="2" height="14" fill="#A9DDEB"/><rect x="290.36" y="0" width="2" height="14" fill="#E8D9A8"/><rect x="292.30" y="0" width="2" height="14" fill="#E8D48A"/><rect x="293.08" y="0" width="2" height="14" fill="#E8D48A"/><rect x="306.88" y="0" width="2" height="14" fill="#D9813A"/><rect x="314.07" y="0" width="2" height="14" fill="#ED8E4A"/><rect x="321.65" y="0" width="2" height="14" fill="#D9EEF2"/><rect x="328.84" y="0" width="2" height="14" fill="#ED7A45"/><rect x="371.99" y="0" width="2" height="14" fill="#E9B26A"/><rect x="384.23" y="0" width="2" height="14" fill="#E9B26A"/></svg></div>
+  <div class="specends"><span><span class="no onlining"><span class="z">#000</span>1</span></span><span class="mid">each mark is a drink you have, at its number</span><span><span class="no onlining"><span class="z">#</span>2089</span></span></div>
+</div>
+<div class="search glass-field"><svg class="ic " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 4.6 4.6"/></svg><span>Search by name, or type a number</span></div>
+<div class="chips">
+  <span class="lchip on">All <span class="n">2,089</span></span>
+  <span class="lchip">Cocktails <span class="n">899</span></span>
+  <span class="lchip">Spirits <span class="n">1,190</span></span>
+  <span class="vr"></span>
+  <span class="lchip ice"><svg class="ic " width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg>In your Dex <span class="n">137</span></span>
+  <span class="lchip">Not yet <span class="n">1,952</span></span>
+</div>
+<div class="grid"><div class="drow"><div class="dc have" style="--g:#ED772F">
+<div class="lab"><span class="no "><span class="z">#000</span>1</span><div class="dn">Caesar</div></div>
+<div class="win"><img src="../../../assets/drinks/caesar.webp" alt=""><i class="cau"></i></div>
+<div class="spill"></div></div><div class="dc">
+<div class="lab"><span class="no onlining"><span class="z">#000</span>2</span><span class="lk"><svg class="ic " width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="10.6" width="12.4" height="9.4" rx="2"/><path d="M8.6 10.6V8.2a3.4 3.4 0 0 1 6.8 0v2.4"/></svg></span><div class="dn">Greyhound</div></div>
+<div class="win"><img src="../../../assets/drinks/ghost/greyhound.webp" alt=""></div></div><div class="dc">
+<div class="lab"><span class="no onlining"><span class="z">#000</span>3</span><span class="lk"><svg class="ic " width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="10.6" width="12.4" height="9.4" rx="2"/><path d="M8.6 10.6V8.2a3.4 3.4 0 0 1 6.8 0v2.4"/></svg></span><div class="dn">Brandy Alexander</div></div>
+<div class="win"><img src="../../../assets/drinks/ghost/brandy-alexander.webp" alt=""></div></div></div><div class="shelf dshelf"></div><div class="drow"><div class="dc have" style="--g:#E9B26A">
+<div class="lab"><span class="no "><span class="z">#000</span>4</span><div class="dn">Espresso Martini</div></div>
+<div class="win"><img src="../../../assets/drinks/espresso-martini.webp" alt=""><i class="cau"></i></div>
+<div class="spill"></div></div><div class="dc have" style="--g:#7AED77">
+<div class="lab"><span class="no "><span class="z">#000</span>5</span><div class="dn">Grasshopper</div></div>
+<div class="win"><img src="../../../assets/drinks/grasshopper.webp" alt=""><i class="cau"></i></div>
+<div class="spill"></div></div><div class="dc">
+<div class="lab"><span class="no onlining"><span class="z">#000</span>6</span><span class="lk"><svg class="ic " width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="10.6" width="12.4" height="9.4" rx="2"/><path d="M8.6 10.6V8.2a3.4 3.4 0 0 1 6.8 0v2.4"/></svg></span><div class="dn">Porto Flip</div></div>
+<div class="win"><img src="../../../assets/drinks/ghost/porto-flip.webp" alt=""></div></div></div><div class="shelf dshelf"></div><div class="drow"><div class="dc have" style="--g:#E9B26A">
+<div class="lab"><span class="no "><span class="z">#000</span>7</span><div class="dn">White Russian</div></div>
+<div class="win"><img src="../../../assets/drinks/white-russian.webp" alt=""><i class="cau"></i></div>
+<div class="spill"></div></div><div class="dc have" style="--g:#A9DDEB">
+<div class="lab"><span class="no "><span class="z">#000</span>8</span><div class="dn">Gin Fizz</div></div>
+<div class="win"><img src="../../../assets/drinks/gin-fizz.webp" alt=""><i class="cau"></i></div>
+<div class="spill"></div></div><div class="dc">
+<div class="lab"><span class="no onlining"><span class="z">#000</span>9</span><span class="lk"><svg class="ic " width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="10.6" width="12.4" height="9.4" rx="2"/><path d="M8.6 10.6V8.2a3.4 3.4 0 0 1 6.8 0v2.4"/></svg></span><div class="dn">Ramos Gin Fizz</div></div>
+<div class="win"><img src="../../../assets/drinks/ghost/ramos-gin-fizz.webp" alt=""></div></div></div><div class="shelf dshelf"></div><div class="drow"><div class="dc">
+<div class="lab"><span class="no onlining"><span class="z">#00</span>10</span><span class="lk"><svg class="ic " width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="10.6" width="12.4" height="9.4" rx="2"/><path d="M8.6 10.6V8.2a3.4 3.4 0 0 1 6.8 0v2.4"/></svg></span><div class="dn">Bushwacker</div></div>
+<div class="win"><img src="../../../assets/drinks/ghost/bushwacker.webp" alt=""></div></div><div class="dc have" style="--g:#EDE36B">
+<div class="lab"><span class="no "><span class="z">#00</span>11</span><div class="dn">Frozen Margarita</div></div>
+<div class="win"><img src="../../../assets/drinks/frozen-margarita.webp" alt=""><i class="cau"></i></div>
+<div class="spill"></div></div><div class="dc">
+<div class="lab"><span class="no onlining"><span class="z">#00</span>12</span><span class="lk"><svg class="ic " width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5.8" y="10.6" width="12.4" height="9.4" rx="2"/><path d="M8.6 10.6V8.2a3.4 3.4 0 0 1 6.8 0v2.4"/></svg></span><div class="dn">Miami Vice</div></div>
+<div class="win"><img src="../../../assets/drinks/ghost/miami-vice.webp" alt=""></div></div></div><div class="shelf dshelf"></div></div>
+<div class="scrub"><div class="track"><i style="top:0px" class="long"></i><i style="top:12px" class=""></i><i style="top:24px" class=""></i><i style="top:36px" class=""></i><i style="top:48px" class=""></i><i style="top:60px" class="long"></i><i style="top:72px" class=""></i><i style="top:84px" class=""></i><i style="top:96px" class=""></i><i style="top:108px" class=""></i><i style="top:120px" class="long"></i><i style="top:132px" class=""></i><i style="top:144px" class=""></i><i style="top:156px" class=""></i><i style="top:168px" class=""></i><i style="top:180px" class="long"></i><i style="top:192px" class=""></i><i style="top:204px" class=""></i><i style="top:216px" class=""></i><i style="top:228px" class=""></i><i style="top:240px" class="long"></i><i style="top:252px" class=""></i><i style="top:264px" class=""></i><i style="top:276px" class=""></i><i style="top:288px" class=""></i><i style="top:300px" class="long"></i><i style="top:312px" class=""></i><i style="top:324px" class=""></i><i style="top:336px" class=""></i><i style="top:348px" class=""></i><i style="top:360px" class="long"></i><i style="top:372px" class=""></i><i style="top:384px" class=""></i><i style="top:396px" class=""></i><i style="top:408px" class=""></i><i style="top:420px" class="long"></i><i style="top:432px" class=""></i><i style="top:444px" class=""></i><i style="top:456px" class=""></i><i style="top:468px" class=""></i><i style="top:480px" class="long"></i><i style="top:492px" class=""></i><i style="top:504px" class=""></i></div><div class="slabels"><span style="top:-7px">1</span><span style="top:113px">500</span><span style="top:233px">1000</span><span style="top:353px">1500</span><span style="top:497px">2089</span></div><div class="meniscus"></div></div>
+<div class="tabbar"><i class="gr"></i>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 10.4 12 3.8l8.2 6.6V19a1.6 1.6 0 0 1-1.6 1.6h-4.1v-5.8h-5v5.8H5.4A1.6 1.6 0 0 1 3.8 19z"/></svg></span><span class="lb">Home</span></div><div class="tb on"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.5h15.6L12 12.6z"/><path d="M12 12.6v7.2"/><path d="M8.2 19.8h7.6"/></svg></span><span class="lb">Dex</span></div>
+<div class="tb fabslot"><span class="fab"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span></div>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.8h5v4.6c0 .7 3.2 1.4 3.2 3.8v8.2a2 2 0 0 1-2 2H8.3a2 2 0 0 1-2-2v-8.2c0-2.4 3.2-3.1 3.2-3.8z"/><path d="M6.4 13.2h11.2M6.4 16.8h11.2"/></svg></span><span class="lb">My Bar</span></div><div class="tb"><span class="gl"><span class="face">NV</span></span><span class="lb">Profile</span></div></div>
+<div class="hi light"></div>
+</div></div><div class="frame" id="f-bar"><h2>3 My Bar <span>what is in your bar</span></h2><div class="screen bar lin pools-bar">
+<div class="sb light"><span class="t">9:41</span><span class="island"></span>
+<span class="r"><svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx=".8"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8"/><rect x="10" y="3" width="3.2" height="9" rx=".8"/><rect x="15" y="0" width="3.2" height="12" rx=".8"/></svg>
+<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8.5.3 10.6 10.6 0 0 0 1 3.4l1.3 1.3a8.8 8.8 0 0 1 6.2-2.5zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A6.9 6.9 0 0 0 8.5 4a6.9 6.9 0 0 0-4.9 2l1.3 1.3a5.1 5.1 0 0 1 3.6-1.5zm0 3.6a1.6 1.6 0 0 0-1.2.5l1.2 1.2 1.2-1.2a1.6 1.6 0 0 0-1.2-.5z"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" fill-opacity=".45"/></svg></span></div>
+<div class="topbar lining"><span class="title">My Bar</span></div>
+<div class="barbody">
+<div class="barhead">
+  <div><div class="q">What's in your bar?</div><div class="qs">Tick what you have. The most useful come first.</div></div>
+  <div class="tally"><b>14</b><span>ticked</span></div>
+</div>
+<div class="search glass-field"><svg class="ic " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 4.6 4.6"/></svg><span>Search 490 ingredients</span></div>
+<div class="chips">
+  <span class="lchip on">Most useful</span><span class="lchip">Spirits</span><span class="lchip">Liqueurs</span>
+  <span class="lchip">Citrus</span><span class="lchip">Bitters</span><span class="lchip">Mixers</span>
+</div>
+<div class="checklist"><div class="itile on"><span class="ig lit" style="--c:#F2D14B"><svg width="26" height="26" viewBox="0 0 24 24" fill="#F2D14B" fill-opacity=".92" stroke="#F2D14B" stroke-width="1.4" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><path d="M12 5.6v12.8M5.6 12h12.8M7.5 7.5l9 9M16.5 7.5l-9 9" stroke-width="1.1"/></svg></span>
+<div class="it"><b>Lemon</b><span>in 173 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile on"><span class="ig lit" style="--c:#A9DDEB"><svg width="26" height="26" viewBox="0 0 24 24" fill="#A9DDEB" fill-opacity=".92" stroke="#A9DDEB" stroke-width="1.4" stroke-linejoin="round"><path d="M9.6 2.8h4.8v4.4c0 .7 3.1 1.4 3.1 3.8v8.3a1.9 1.9 0 0 1-1.9 1.9H8.4a1.9 1.9 0 0 1-1.9-1.9V11c0-2.4 3.1-3.1 3.1-3.8z"/></svg></span>
+<div class="it"><b>Gin</b><span>in 168 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile on"><span class="ig lit" style="--c:#A6D052"><svg width="26" height="26" viewBox="0 0 24 24" fill="#A6D052" fill-opacity=".92" stroke="#A6D052" stroke-width="1.4" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><path d="M12 5.6v12.8M5.6 12h12.8M7.5 7.5l9 9M16.5 7.5l-9 9" stroke-width="1.1"/></svg></span>
+<div class="it"><b>Lime</b><span>in 164 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile on"><span class="ig lit" style="--c:#CFEFF5"><svg width="26" height="26" viewBox="0 0 24 24" fill="#CFEFF5" fill-opacity=".92" stroke="#CFEFF5" stroke-width="1.4" stroke-linejoin="round"><path d="M6.8 4h10.4l-1.4 15.6a1.5 1.5 0 0 1-1.5 1.4H9.7a1.5 1.5 0 0 1-1.5-1.4z"/><circle cx="10.8" cy="14.6" r="1"/><circle cx="13.4" cy="10.8" r="1"/><circle cx="12.2" cy="17.6" r="1"/></svg></span>
+<div class="it"><b>Soda water</b><span>in 83 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile on"><span class="ig lit" style="--c:#F0922E"><svg width="26" height="26" viewBox="0 0 24 24" fill="#F0922E" fill-opacity=".92" stroke="#F0922E" stroke-width="1.4" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><path d="M12 5.6v12.8M5.6 12h12.8M7.5 7.5l9 9M16.5 7.5l-9 9" stroke-width="1.1"/></svg></span>
+<div class="it"><b>Orange</b><span>in 82 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile on"><span class="ig lit" style="--c:#D0553A"><svg width="26" height="26" viewBox="0 0 24 24" fill="#D0553A" fill-opacity=".92" stroke="#D0553A" stroke-width="1.4" stroke-linejoin="round"><path d="M10.6 2.6h2.8v2.8h-2.8z"/><path d="M9.6 5.4h4.8v2.1c2 .6 3.1 2.2 3.1 4.3v7.3a1.7 1.7 0 0 1-1.7 1.7H8.2a1.7 1.7 0 0 1-1.7-1.7v-7.3c0-2.1 1.1-3.7 3.1-4.3z"/></svg></span>
+<div class="it"><b>Angostura bitters</b><span>in 78 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile on"><span class="ig lit" style="--c:#D24A4A"><svg width="26" height="26" viewBox="0 0 24 24" fill="#D24A4A" fill-opacity=".92" stroke="#D24A4A" stroke-width="1.4" stroke-linejoin="round"><path d="M10.2 2.6h3.6v5.3c2.3.8 3.7 2.4 3.7 4.6v7.2a1.7 1.7 0 0 1-1.7 1.7H8.2a1.7 1.7 0 0 1-1.7-1.7v-7.2c0-2.2 1.4-3.8 3.7-4.6z"/></svg></span>
+<div class="it"><b>Sweet vermouth</b><span>in 76 drinks</span></div>
+<span class="cb on"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg></span></div><div class="itile"><span class="ig"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M10.2 2.6h3.6v5.3c2.3.8 3.7 2.4 3.7 4.6v7.2a1.7 1.7 0 0 1-1.7 1.7H8.2a1.7 1.7 0 0 1-1.7-1.7v-7.2c0-2.2 1.4-3.8 3.7-4.6z"/></svg></span>
+<div class="it"><b>Dry vermouth</b><span>in 70 drinks</span></div>
+<span class="cb"></span></div></div>
+<div class="showall">Show all 490 ingredients <svg class="ic " width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.2 9.2 12 16l6.8-6.8"/></svg></div>
+<div class="makehead"><span class="h">You can make</span><span class="big">44</span><span class="h2">drinks</span><span class="see">See all <svg class="ic " width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 5.2 16 12l-6.8 6.8"/></svg></span></div>
+<div class="makewrap"><div class="makerail"><div class="mk" style="--g:#ED5D2F"><i class="spillb"></i><div class="mph"><img src="../../../assets/drinks/negroni.webp" alt=""><i class="cau"></i></div>
+<div class="mname">Negroni</div><span class="no onlining"><span class="z">#0</span>127</span></div><div class="mk" style="--g:#ED912F"><i class="spillb"></i><div class="mph"><img src="../../../assets/drinks/old-fashioned.webp" alt=""><i class="cau"></i></div>
+<div class="mname">Old Fashioned</div><span class="no onlining"><span class="z">#0</span>128</span></div><div class="mk" style="--g:#ED6E2F"><i class="spillb"></i><div class="mph"><img src="../../../assets/drinks/boulevardier.webp" alt=""><i class="cau"></i></div>
+<div class="mname">Boulevardier</div><span class="no onlining"><span class="z">#0</span>122</span></div><div class="mk" style="--g:#ED732F"><i class="spillb"></i><div class="mph"><img src="../../../assets/drinks/americano.webp" alt=""><i class="cau"></i></div>
+<div class="mname">Americano</div><span class="no onlining"><span class="z">#00</span>13</span></div><div class="mk" style="--g:#DBED44"><i class="spillb"></i><div class="mph"><img src="../../../assets/drinks/mojito.webp" alt=""><i class="cau"></i></div>
+<div class="mname">Mojito</div><span class="no onlining"><span class="z">#00</span>23</span></div><div class="mk" style="--g:#A9DDEB"><i class="spillb"></i><div class="mph"><img src="../../../assets/drinks/daiquiri.webp" alt=""><i class="cau"></i></div>
+<div class="mname">Daiquiri</div><span class="no onlining"><span class="z">#0</span>100</span></div></div><div class="shelf mshelf"></div></div>
+<div class="awayhead"><span class="h">One ingredient away</span><span class="sub">Add one bottle and these pour too</span></div>
+<div class="away">
+  <div class="arow"><div class="ath"><img src="../../../assets/drinks/ghost/martini.webp" alt=""></div>
+    <div class="at"><b>Dry vermouth</b><span>pours 11 more, like <i class="nm">Martini</i> and <i class="nm">Bronx</i></span></div>
+    <span class="addbtn"><svg class="ic " width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg>Add</span></div>
+</div>
+</div>
+<div class="tabbar"><i class="gr"></i>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 10.4 12 3.8l8.2 6.6V19a1.6 1.6 0 0 1-1.6 1.6h-4.1v-5.8h-5v5.8H5.4A1.6 1.6 0 0 1 3.8 19z"/></svg></span><span class="lb">Home</span></div><div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.5h15.6L12 12.6z"/><path d="M12 12.6v7.2"/><path d="M8.2 19.8h7.6"/></svg></span><span class="lb">Dex</span></div>
+<div class="tb fabslot"><span class="fab"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span></div>
+<div class="tb on"><span class="gl"><svg class="ic" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/></svg></span><span class="lb">My Bar</span></div><div class="tb"><span class="gl"><span class="face">NV</span></span><span class="lb">Profile</span></div></div>
+<div class="hi light"></div>
+</div></div><div class="frame" id="f-post"><h2>4 Post <span>who liked it</span></h2><div class="screen post-detail" style="--g:#ED5D2F">
+<div class="pd-photo"><img src="../../../assets/drinks/negroni.webp" alt=""></div>
+<div class="pane frost" style="--g:#ED5D2F"><div class="frostimg"><img src="../../../assets/drinks/negroni.webp" alt=""></div><i class="tint"></i><i class="gr"></i>
+<div class="sb light"><span class="t">9:41</span><span class="island"></span>
+<span class="r"><svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx=".8"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8"/><rect x="10" y="3" width="3.2" height="9" rx=".8"/><rect x="15" y="0" width="3.2" height="12" rx=".8"/></svg>
+<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8.5.3 10.6 10.6 0 0 0 1 3.4l1.3 1.3a8.8 8.8 0 0 1 6.2-2.5zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A6.9 6.9 0 0 0 8.5 4a6.9 6.9 0 0 0-4.9 2l1.3 1.3a5.1 5.1 0 0 1 3.6-1.5zm0 3.6a1.6 1.6 0 0 0-1.2.5l1.2 1.2 1.2-1.2a1.6 1.6 0 0 0-1.2-.5z"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" fill-opacity=".45"/></svg></span></div>
+<div class="topbar"><span class="gb"><svg class="ic " width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.8 5.2 8 12l6.8 6.8"/></svg></span><span class="title">Post</span><span class="right"><span class="gb"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/></svg></span></span></div>
+</div>
+<span class="plate glass" style="position:absolute;left:16px;top:122px"><span class="no onglass"><span class="z">#0</span>127</span></span>
+<div class="dim"></div>
+<div class="sheet" style="--g:#ED5D2F">
+  <div class="frostimg"><img src="../../../assets/drinks/negroni.webp" alt=""></div><i class="tint"></i><i class="gr"></i><i class="edge"></i>
+  <div class="grab"></div>
+  <div class="shead"><span class="sp"></span><div class="stitle"><svg class="ic rose" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.6 2.7c0 5.8-7.6 10.4-7.6 10.4z"/></svg>Liked by 13</div><span class="done">Done</span></div>
+  <div class="ssub"><i class="nm">Negroni</i> <span class="no onlining"><span class="z">#0</span>127</span> · marisol.r's post</div>
+  <div class="search glass-field sm"><svg class="ic " width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 4.6 4.6"/></svg><span>Search 13 people</span></div>
+  <div class="lsect">People you follow <span>4</span></div><div class="lrow"><span class="sring" style="--g:#ED832F"><span class="av " style="width:44px;height:44px;background:#8A5F10;color:#FFFDF9;font-size:18px;line-height:44px">AV</span></span><div class="lt"><b>Andrés Vega</b><span>andres.v · liked 2h ago</span><span class="itag"><svg class="ic " width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg><span class="no onice"><span class="z">#0</span>127</span> in their Dex</span></div><span class="fbtn out">Following</span></div><div class="lrow"><span class="sring" style="--g:#7AED77"><span class="av " style="width:44px;height:44px;background:#3A2E2C;color:#E9E5DF;font-size:18px;line-height:44px">CL</span></span><div class="lt"><b>Camila Lugo</b><span>cami.lugo · liked 2h ago</span></div><span class="fbtn out">Following</span></div><div class="lrow"><span class="sring" style="--g:#7788ED"><span class="av " style="width:44px;height:44px;background:#736247;color:#FFFDF9;font-size:18px;line-height:44px">DL</span></span><div class="lt"><b>Diego López</b><span>dlopez · liked 1h ago</span><span class="itag"><svg class="ic " width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg><span class="no onice"><span class="z">#0</span>127</span> in their Dex</span></div><span class="fbtn out">Following</span></div><div class="lrow"><span class="noring"><span class="av " style="width:44px;height:44px;background:#5B0F1A;color:#E9E5DF;font-size:18px;line-height:44px">TB</span></span><div class="lt"><b>Tomás Báez</b><span>tomas.b · liked 48m ago</span></div><span class="fbtn out">Following</span></div><div class="lsect">Others <span>9</span></div><div class="lrow"><span class="noring"><span class="av " style="width:44px;height:44px;background:#7E2330;color:#E9E5DF;font-size:18px;line-height:44px">GO</span></span><div class="lt"><b>Gabriela Ortiz</b><span>gabi.ortiz · liked 1h ago</span><span class="itag"><svg class="ic " width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg><span class="no onice"><span class="z">#0</span>127</span> in their Dex</span></div><span class="fbtn bone">Follow</span></div><div class="lrow"><span class="noring"><span class="av " style="width:44px;height:44px;background:#5E2545;color:#E9E5DF;font-size:18px;line-height:44px">LM</span></span><div class="lt"><b>Lucía Mercado</b><span>lu.mercado · liked 33m ago</span></div><span class="fbtn bone">Follow</span></div><div class="lrow"><span class="noring"><span class="av " style="width:44px;height:44px;background:#3A2E2C;color:#E9E5DF;font-size:18px;line-height:44px">JC</span></span><div class="lt"><b>Javier Colón</b><span>javi.c · liked 20m ago</span><span class="itag"><svg class="ic " width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg><span class="no onice"><span class="z">#0</span>127</span> in their Dex</span></div><span class="fbtn bone">Follow</span></div>
+</div>
+<div class="hi light"></div>
+</div></div><div class="frame" id="f-profile"><h2>5 Profile <span>your Dex in colour</span></h2><div class="screen profile">
+<div class="pband lin pools-profile">
+<div class="sb light"><span class="t">9:41</span><span class="island"></span>
+<span class="r"><svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx=".8"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8"/><rect x="10" y="3" width="3.2" height="9" rx=".8"/><rect x="15" y="0" width="3.2" height="12" rx=".8"/></svg>
+<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8.5.3 10.6 10.6 0 0 0 1 3.4l1.3 1.3a8.8 8.8 0 0 1 6.2-2.5zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A6.9 6.9 0 0 0 8.5 4a6.9 6.9 0 0 0-4.9 2l1.3 1.3a5.1 5.1 0 0 1 3.6-1.5zm0 3.6a1.6 1.6 0 0 0-1.2.5l1.2 1.2 1.2-1.2a1.6 1.6 0 0 0-1.2-.5z"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" fill-opacity=".45"/></svg></span></div>
+<div class="topbar lining"><span class="title">nadia.v</span><span class="right"><span class="gb"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7.5h16M4 12h16M4 16.5h16"/></svg></span></span></div>
+<div class="phead">
+  <div class="halo" style="--g:#7788ED"><span class="av " style="width:84px;height:84px;background:#5E2545;color:#E9E5DF;font-size:34px;line-height:84px">NV</span></div>
+  <div class="counts">
+    <div><b>64</b><span>posts</span></div><div><b>312</b><span>followers</span></div><div><b>287</b><span>following</span></div>
+  </div>
+</div>
+<div class="pname2">Nadia Vélez</div>
+<div class="bio">Santurce. Amaro first, questions later.</div>
+<div class="dexpanel">
+  <div class="dprow"><span class="lbl">Dex</span><span class="dfig">137</span><span class="dof">of 2,089</span><span class="dpct">6.6%</span></div>
+  <div class="spectrack sm"><svg class="spec " width="374" height="12" viewBox="0 0 374 12"><rect x="0.00" y="0" width="2" height="12" fill="#ED772F"/><rect x="0.54" y="0" width="2" height="12" fill="#E9B26A"/><rect x="0.72" y="0" width="2" height="12" fill="#7AED77"/><rect x="1.07" y="0" width="2" height="12" fill="#E9B26A"/><rect x="1.25" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="1.79" y="0" width="2" height="12" fill="#EDE36B"/><rect x="2.15" y="0" width="2" height="12" fill="#ED732F"/><rect x="2.69" y="0" width="2" height="12" fill="#ED8F2F"/><rect x="2.86" y="0" width="2" height="12" fill="#ED9138"/><rect x="3.40" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="3.94" y="0" width="2" height="12" fill="#DBED44"/><rect x="4.12" y="0" width="2" height="12" fill="#EDA14C"/><rect x="4.30" y="0" width="2" height="12" fill="#ED722F"/><rect x="5.73" y="0" width="2" height="12" fill="#ED8C40"/><rect x="6.09" y="0" width="2" height="12" fill="#ED8D2F"/><rect x="6.62" y="0" width="2" height="12" fill="#ED8F2F"/><rect x="6.80" y="0" width="2" height="12" fill="#ED8D2F"/><rect x="6.98" y="0" width="2" height="12" fill="#ED5578"/><rect x="7.34" y="0" width="2" height="12" fill="#4EED55"/><rect x="8.06" y="0" width="2" height="12" fill="#ED2F45"/><rect x="8.24" y="0" width="2" height="12" fill="#ED802F"/><rect x="8.77" y="0" width="2" height="12" fill="#EDA32F"/><rect x="8.95" y="0" width="2" height="12" fill="#ED8B2F"/><rect x="9.13" y="0" width="2" height="12" fill="#EDA82F"/><rect x="9.67" y="0" width="2" height="12" fill="#ED992F"/><rect x="10.03" y="0" width="2" height="12" fill="#EDE252"/><rect x="10.56" y="0" width="2" height="12" fill="#ED4A2F"/><rect x="12.71" y="0" width="2" height="12" fill="#EDAC50"/><rect x="13.96" y="0" width="2" height="12" fill="#ED972F"/><rect x="14.14" y="0" width="2" height="12" fill="#ED872F"/><rect x="14.50" y="0" width="2" height="12" fill="#ED9C2F"/><rect x="14.68" y="0" width="2" height="12" fill="#EDD56C"/><rect x="15.04" y="0" width="2" height="12" fill="#EDE049"/><rect x="15.22" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="16.29" y="0" width="2" height="12" fill="#7788ED"/><rect x="16.47" y="0" width="2" height="12" fill="#EDB52F"/><rect x="17.19" y="0" width="2" height="12" fill="#ED352F"/><rect x="17.55" y="0" width="2" height="12" fill="#ED3D2F"/><rect x="17.72" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="18.44" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="18.80" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="18.98" y="0" width="2" height="12" fill="#ED572F"/><rect x="19.16" y="0" width="2" height="12" fill="#EDA62F"/><rect x="19.51" y="0" width="2" height="12" fill="#ED932F"/><rect x="19.69" y="0" width="2" height="12" fill="#ED642F"/><rect x="19.87" y="0" width="2" height="12" fill="#ED972F"/><rect x="20.05" y="0" width="2" height="12" fill="#ED832F"/><rect x="20.23" y="0" width="2" height="12" fill="#EDA65E"/><rect x="20.41" y="0" width="2" height="12" fill="#EDC26F"/><rect x="20.77" y="0" width="2" height="12" fill="#EDB53F"/><rect x="20.95" y="0" width="2" height="12" fill="#EDAA2F"/><rect x="21.66" y="0" width="2" height="12" fill="#ED6E2F"/><rect x="22.02" y="0" width="2" height="12" fill="#ED612F"/><rect x="22.20" y="0" width="2" height="12" fill="#ED672F"/><rect x="22.38" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="22.56" y="0" width="2" height="12" fill="#ED5D2F"/><rect x="22.74" y="0" width="2" height="12" fill="#ED912F"/><rect x="22.92" y="0" width="2" height="12" fill="#ED7C2F"/><rect x="23.27" y="0" width="2" height="12" fill="#ED872F"/><rect x="23.45" y="0" width="2" height="12" fill="#EDE05A"/><rect x="23.81" y="0" width="2" height="12" fill="#ED842F"/><rect x="23.99" y="0" width="2" height="12" fill="#2FD5ED"/><rect x="24.35" y="0" width="2" height="12" fill="#ED692F"/><rect x="25.24" y="0" width="2" height="12" fill="#EDAC2F"/><rect x="25.78" y="0" width="2" height="12" fill="#EDA42F"/><rect x="26.32" y="0" width="2" height="12" fill="#ED8D2F"/><rect x="27.57" y="0" width="2" height="12" fill="#E8D48A"/><rect x="27.75" y="0" width="2" height="12" fill="#E8D48A"/><rect x="27.93" y="0" width="2" height="12" fill="#E8D48A"/><rect x="28.11" y="0" width="2" height="12" fill="#E8D48A"/><rect x="28.29" y="0" width="2" height="12" fill="#E8D48A"/><rect x="28.47" y="0" width="2" height="12" fill="#E8D48A"/><rect x="30.44" y="0" width="2" height="12" fill="#E08A35"/><rect x="30.97" y="0" width="2" height="12" fill="#E08A35"/><rect x="31.87" y="0" width="2" height="12" fill="#E08A35"/><rect x="32.58" y="0" width="2" height="12" fill="#D9EEF2"/><rect x="37.06" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="39.92" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="40.46" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="44.40" y="0" width="2" height="12" fill="#E39A3B"/><rect x="44.58" y="0" width="2" height="12" fill="#E3A24B"/><rect x="45.30" y="0" width="2" height="12" fill="#E3A24B"/><rect x="46.91" y="0" width="2" height="12" fill="#E9B26A"/><rect x="54.43" y="0" width="2" height="12" fill="#D0603A"/><rect x="55.14" y="0" width="2" height="12" fill="#D9813A"/><rect x="58.54" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="59.44" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="64.45" y="0" width="2" height="12" fill="#E8D9A8"/><rect x="65.35" y="0" width="2" height="12" fill="#A8D86A"/><rect x="66.78" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="69.82" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="70.00" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="71.08" y="0" width="2" height="12" fill="#E8D9A8"/><rect x="71.43" y="0" width="2" height="12" fill="#E8D9A8"/><rect x="81.82" y="0" width="2" height="12" fill="#E39A3B"/><rect x="86.65" y="0" width="2" height="12" fill="#A8D86A"/><rect x="90.23" y="0" width="2" height="12" fill="#A8D86A"/><rect x="91.49" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="94.71" y="0" width="2" height="12" fill="#ED7A45"/><rect x="95.60" y="0" width="2" height="12" fill="#E9B26A"/><rect x="96.50" y="0" width="2" height="12" fill="#ED7A45"/><rect x="100.08" y="0" width="2" height="12" fill="#ED7A45"/><rect x="101.33" y="0" width="2" height="12" fill="#ED7A45"/><rect x="101.51" y="0" width="2" height="12" fill="#ED7A45"/><rect x="101.69" y="0" width="2" height="12" fill="#ED7A45"/><rect x="108.85" y="0" width="2" height="12" fill="#ED7A45"/><rect x="109.39" y="0" width="2" height="12" fill="#ED7A45"/><rect x="113.33" y="0" width="2" height="12" fill="#E9B26A"/><rect x="113.69" y="0" width="2" height="12" fill="#E9B26A"/><rect x="114.22" y="0" width="2" height="12" fill="#E9B26A"/><rect x="115.66" y="0" width="2" height="12" fill="#E9B26A"/><rect x="123.89" y="0" width="2" height="12" fill="#E9B26A"/><rect x="129.08" y="0" width="2" height="12" fill="#ED7A45"/><rect x="133.02" y="0" width="2" height="12" fill="#ED7A45"/><rect x="133.56" y="0" width="2" height="12" fill="#E9B26A"/><rect x="133.74" y="0" width="2" height="12" fill="#ED7A45"/><rect x="137.68" y="0" width="2" height="12" fill="#ED7A45"/><rect x="138.39" y="0" width="2" height="12" fill="#ED7A45"/><rect x="145.73" y="0" width="2" height="12" fill="#ED7A45"/><rect x="154.51" y="0" width="2" height="12" fill="#E9B26A"/><rect x="157.19" y="0" width="2" height="12" fill="#E9B26A"/><rect x="188.70" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="193.71" y="0" width="2" height="12" fill="#E3A24B"/><rect x="198.01" y="0" width="2" height="12" fill="#E3A24B"/><rect x="205.89" y="0" width="2" height="12" fill="#E3A24B"/><rect x="228.80" y="0" width="2" height="12" fill="#E08A35"/><rect x="236.68" y="0" width="2" height="12" fill="#E3A24B"/><rect x="246.53" y="0" width="2" height="12" fill="#A9DDEB"/><rect x="267.48" y="0" width="2" height="12" fill="#E8D9A8"/><rect x="269.27" y="0" width="2" height="12" fill="#E8D48A"/><rect x="269.98" y="0" width="2" height="12" fill="#E8D48A"/><rect x="282.69" y="0" width="2" height="12" fill="#D9813A"/><rect x="289.32" y="0" width="2" height="12" fill="#ED8E4A"/><rect x="296.30" y="0" width="2" height="12" fill="#D9EEF2"/><rect x="302.92" y="0" width="2" height="12" fill="#ED7A45"/><rect x="342.67" y="0" width="2" height="12" fill="#E9B26A"/><rect x="353.95" y="0" width="2" height="12" fill="#E9B26A"/></svg></div>
+  <div class="latest"><span class="lth" style="--g:#7788ED"><img src="../../../assets/drinks/aviation.webp" alt=""></span>
+    <span>Latest catch <i class="nm">Aviation</i> <span class="no onlining"><span class="z">#00</span>92</span></span><span class="ago">3 days ago</span></div>
+</div>
+<div class="pbtns"><span class="obtn">Edit profile</span><span class="obtn">Share profile</span></div>
+</div>
+<div class="tstrip"><span class="ts on"><svg class="ic " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M9.3 4v16M14.7 4v16M4 9.3h16M4 14.7h16"/></svg>Posts <b>64</b></span><span class="ts"><svg class="ic " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.5h15.6L12 12.6z"/><path d="M12 12.6v7.2"/><path d="M8.2 19.8h7.6"/></svg>Dex <b>137</b></span></div>
+<div class="pgrid"><div class="gt" style="--g:#7788ED"><img src="../../../assets/drinks/aviation.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#00</span>92</span></span><i class="key"></i></div><div class="gt" style="--g:#ED5D2F"><img src="../../../assets/drinks/negroni.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>127</span></span><i class="key"></i></div><div class="gt" style="--g:#ED832F"><img src="../../../assets/drinks/aperol-spritz.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>113</span></span><i class="key"></i></div><div class="gt" style="--g:#7AED77"><img src="../../../assets/drinks/grasshopper.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#000</span>5</span></span><i class="key"></i></div><div class="gt" style="--g:#ED572F"><img src="../../../assets/drinks/paper-plane.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>107</span></span><i class="key"></i></div><div class="gt" style="--g:#ED352F"><img src="../../../assets/drinks/clover-club.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#00</span>97</span></span><i class="key"></i></div><div class="gt" style="--g:#EDA42F"><img src="../../../assets/drinks/mai-tai.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>145</span></span><i class="key"></i></div><div class="gt" style="--g:#2FD5ED"><img src="../../../assets/drinks/blue-hawaii.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>135</span></span><i class="key"></i></div><div class="gt" style="--g:#EDB53F"><img src="../../../assets/drinks/french-75.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>117</span></span><i class="key"></i></div><div class="gt" style="--g:#A9DDEB"><img src="../../../assets/drinks/last-word.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>104</span></span><i class="key"></i></div><div class="gt" style="--g:#ED692F"><img src="../../../assets/drinks/jungle-bird.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#0</span>137</span></span><i class="key"></i></div><div class="gt" style="--g:#ED3D2F"><img src="../../../assets/drinks/cosmopolitan.webp" alt="">
+<span class="marker"><span class="no onglass"><span class="z">#00</span>99</span></span><i class="key"></i></div></div>
+<div class="tabbar"><i class="gr"></i>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 10.4 12 3.8l8.2 6.6V19a1.6 1.6 0 0 1-1.6 1.6h-4.1v-5.8h-5v5.8H5.4A1.6 1.6 0 0 1 3.8 19z"/></svg></span><span class="lb">Home</span></div><div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.5h15.6L12 12.6z"/><path d="M12 12.6v7.2"/><path d="M8.2 19.8h7.6"/></svg></span><span class="lb">Dex</span></div>
+<div class="tb fabslot"><span class="fab"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span></div>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.8h5v4.6c0 .7 3.2 1.4 3.2 3.8v8.2a2 2 0 0 1-2 2H8.3a2 2 0 0 1-2-2v-8.2c0-2.4 3.2-3.1 3.2-3.8z"/><path d="M6.4 13.2h11.2M6.4 16.8h11.2"/></svg></span><span class="lb">My Bar</span></div><div class="tb on"><span class="gl"><span class="face on">NV</span></span><span class="lb">Profile</span></div></div>
+<div class="hi "></div>
+</div></div><div class="frame" id="f-scrolled"><h2>Home, scrolled up <span>a hard-edged pane, no fade</span></h2><div class="screen home scrolled">
+<div class="post" style="padding-top:62px">
+  <div style="height:14px"></div>
+  <div class="printwrap " style="--g:#ED5D2F;width:372px">
+<div class="print" style="width:372px;height:465px"><img src="../../../assets/drinks/negroni.webp" alt="">
+<span class="plate glass tl"><span class="no onglass"><span class="z">#0</span>127</span></span><span class="plate glass tr"><svg class="ic ice" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg>In your Dex</span>
+<div class="nameplate glass"><div class="pname">Negroni</div><div class="psub">Spirit-forward · Florence, Italy</div></div>
+</div></div>
+  <div class="actions">
+    <span class="act liked"><svg class="ic " width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.6 2.7c0 5.8-7.6 10.4-7.6 10.4z"/></svg><b>13</b></span>
+    <span class="act"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 11.6a8.2 8.2 0 0 1-12 7.3L3.8 20l1.2-4.1a8.2 8.2 0 1 1 15.2-4.3z"/></svg><b>4</b></span>
+    <span class="act"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/></svg></span>
+    <span class="act end"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 3.6h10.8v16.8L12 16.6l-5.4 3.8z"/></svg></span>
+  </div>
+  <div class="likes"><span class="stack"><span class="av " style="width:24px;height:24px;background:#8A5F10;color:#FFFDF9;font-size:11px;line-height:24px">A</span><span class="av " style="width:24px;height:24px;background:#3A2E2C;color:#E9E5DF;font-size:11px;line-height:24px">C</span><span class="av " style="width:24px;height:24px;background:#736247;color:#FFFDF9;font-size:11px;line-height:24px">D</span></span>
+    <span>Liked by <b>andres.v</b> and <b class="u">12 others</b></span></div>
+  <div class="cap"><b>marisol.r</b> Saturday's first. Equal parts, stirred long over one big rock.</div>
+  <div class="when">2 hours ago</div>
+  <div class="author" style="margin-top:14px"><span class="av " style="width:34px;height:34px;background:#3A2E2C;color:#E9E5DF;font-size:14px;line-height:34px">CL</span><div class="an"><b>cami.lugo</b><span>Poured at La Penúltima</span></div><span class="gb dim"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18.5" cy="12" r="1.5"/></svg></span></div>
+  <div class="printwrap " style="--g:#7AED77;width:372px">
+<div class="print" style="width:372px;height:465px"><img src="../../../assets/drinks/grasshopper.webp" alt="">
+<span class="plate glass tl"><span class="no onglass"><span class="z">#000</span>5</span></span><span class="plate glass tr"><svg class="ic ice" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5.2 12.6 4.4 4.4 9.2-9.6"/></svg>In your Dex</span>
+<div class="nameplate glass"><div class="pname">Grasshopper</div><div class="psub">Creamy and dessert · New Orleans, USA</div></div>
+</div></div>
+</div>
+<div class="pane wineglass"><i class="gr"></i>
+<div class="sb light"><span class="t">9:41</span><span class="island"></span>
+<span class="r"><svg width="19" height="12" viewBox="0 0 19 12" fill="currentColor"><rect x="0" y="8" width="3.2" height="4" rx=".8"/><rect x="5" y="5.5" width="3.2" height="6.5" rx=".8"/><rect x="10" y="3" width="3.2" height="9" rx=".8"/><rect x="15" y="0" width="3.2" height="12" rx=".8"/></svg>
+<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8.5.3 10.6 10.6 0 0 0 1 3.4l1.3 1.3a8.8 8.8 0 0 1 6.2-2.5zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A6.9 6.9 0 0 0 8.5 4a6.9 6.9 0 0 0-4.9 2l1.3 1.3a5.1 5.1 0 0 1 3.6-1.5zm0 3.6a1.6 1.6 0 0 0-1.2.5l1.2 1.2 1.2-1.2a1.6 1.6 0 0 0-1.2-.5z"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" fill-opacity=".45"/></svg></span></div>
+<div class="topbar">
+  <span class="gb"><svg class="ic " width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span>
+  <span class="wordmark">Sipply</span>
+  <span class="right"><span class="gb"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4h9v4.2a4.5 4.5 0 0 1-9 0z"/><path d="M7.5 5.8H4.8a2.7 2.7 0 0 0 2.9 3.6M16.5 5.8h2.7a2.7 2.7 0 0 1-2.9 3.6"/><path d="M12 12.7v3.6"/><path d="M8.6 20.2h6.8l-.8-3.9H9.4z"/></svg></span><span class="gb"><svg class="ic " width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.6 2.7c0 5.8-7.6 10.4-7.6 10.4z"/></svg><i class="dot"></i></span></span>
+</div>
+</div>
+<div class="tabbar"><i class="gr"></i>
+<div class="tb on"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.8 10.4 12 3.8l8.2 6.6V19a1.6 1.6 0 0 1-1.6 1.6h-4.1v-5.8h-5v5.8H5.4A1.6 1.6 0 0 1 3.8 19z"/></svg></span><span class="lb">Home</span></div><div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 4.5h15.6L12 12.6z"/><path d="M12 12.6v7.2"/><path d="M8.2 19.8h7.6"/></svg></span><span class="lb">Dex</span></div>
+<div class="tb fabslot"><span class="fab"><svg class="ic " width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg></span></div>
+<div class="tb"><span class="gl"><svg class="ic " width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.8h5v4.6c0 .7 3.2 1.4 3.2 3.8v8.2a2 2 0 0 1-2 2H8.3a2 2 0 0 1-2-2v-8.2c0-2.4 3.2-3.1 3.2-3.8z"/><path d="M6.4 13.2h11.2M6.4 16.8h11.2"/></svg></span><span class="lb">My Bar</span></div><div class="tb"><span class="gl"><span class="face">NV</span></span><span class="lb">Profile</span></div></div>
+<div class="hi "></div>
+</div></div>
+</div>
+<div class="legend"><div class="lcol"><h3>The new inks</h3><div class="sws"><div class="sw"><i style="background:#F7F2EA"></i><b>Paper</b><span>#F7F2EA</span><em>ground, unchanged</em></div><div class="sw"><i style="background:#3E0A12"></i><b>Lining</b><span>#3E0A12</span><em>ground, unchanged</em></div><div class="sw"><i style="background:#2F070D"></i><b>Cellar</b><span>#2F070D</span><em>ground, unchanged</em></div><div class="sw"><i style="background:#E9B26A"></i><b>Tungsten</b><span>#E9B26A</span><em>8.78 on lining</em></div><div class="sw"><i style="background:#8A5A12"></i><b>Tungsten ink</b><span>#8A5A12</span><em>5.31 on paper</em></div><div class="sw"><i style="background:#A9DDEB"></i><b>Ice</b><span>#A9DDEB</span><em>11.32 on lining</em></div><div class="sw"><i style="background:#1B5868"></i><b>Ice ink</b><span>#1B5868</span><em>7.13 on paper</em></div><div class="sw"><i style="background:#D9848E"></i><b>Rose</b><span>#D9848E</span><em>glyph, 6.08 on lining</em></div><div class="sw"><i style="background:rgba(24,14,16,.84)"></i><b>Smoke glass</b><span>rgba(24,14,16,.84)</span><em>tab bar, plates</em></div><div class="sw"><i style="background:rgba(47,7,13,.95)"></i><b>Wine glass</b><span>rgba(47,7,13,.95)</span><em>bars when scrolled</em></div></div></div>
+<div class="lcol"><h3>Each drink's own light, sampled from its photo</h3><div class="gls"><div class="gl1" style="--g:#ED5D2F"><span class="gimg"><img src="../../../assets/drinks/negroni.webp" alt=""></span><b>Negroni</b><span>#ED5D2F</span></div><div class="gl1" style="--g:#ED832F"><span class="gimg"><img src="../../../assets/drinks/aperol-spritz.webp" alt=""></span><b>Aperol Spritz</b><span>#ED832F</span></div><div class="gl1" style="--g:#7AED77"><span class="gimg"><img src="../../../assets/drinks/grasshopper.webp" alt=""></span><b>Grasshopper</b><span>#7AED77</span></div><div class="gl1" style="--g:#7788ED"><span class="gimg"><img src="../../../assets/drinks/aviation.webp" alt=""></span><b>Aviation</b><span>#7788ED</span></div><div class="gl1" style="--g:#2FD5ED"><span class="gimg"><img src="../../../assets/drinks/blue-hawaii.webp" alt=""></span><b>Blue Hawaii</b><span>#2FD5ED</span></div><div class="gl1" style="--g:#DBED44"><span class="gimg"><img src="../../../assets/drinks/mojito.webp" alt=""></span><b>Mojito</b><span>#DBED44</span></div><div class="gl1" style="--g:#ED352F"><span class="gimg"><img src="../../../assets/drinks/clover-club.webp" alt=""></span><b>Clover Club</b><span>#ED352F</span></div><div class="gl1" style="--g:#EDB53F"><span class="gimg"><img src="../../../assets/drinks/french-75.webp" alt=""></span><b>French 75</b><span>#EDB53F</span></div><div class="gl1" style="--g:#A9DDEB"><span class="gimg"><img src="../../../assets/drinks/gin-fizz.webp" alt=""></span><b>Gin Fizz</b><span>#A9DDEB</span></div><div class="gl1" style="--g:#E9B26A"><span class="gimg"><img src="../../../assets/drinks/espresso-martini.webp" alt=""></span><b>Espresso Martini</b><span>#E9B26A</span></div><div class="gl1" style="--g:#A9DDEB"><span class="gimg"><img src="../../../assets/drinks/last-word.webp" alt=""></span><b>Last Word</b><span>#A9DDEB</span></div><div class="gl1" style="--g:#ED3D2F"><span class="gimg"><img src="../../../assets/drinks/cosmopolitan.webp" alt=""></span><b>Cosmopolitan</b><span>#ED3D2F</span></div></div></div></div>
+<script>
+(function(){var h=location.hash.slice(1);if(!h)return;document.body.classList.add('solo');var f=document.getElementById('f-'+h);if(f)f.classList.add('on');})();
+</script>
+</body></html>

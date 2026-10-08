@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply v3.3 Directions</title>
+<style>
+  :root {
+    --bg: #17110F; --panel: #221A18; --ink: #F1ECE4; --muted: #B9ADA2; --rule: #3A2E2A;
+    --pick: #C9A867; --pickInk: #17110F;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, "Inter", system-ui, sans-serif; }
+  header { padding: 32px 32px 8px; max-width: 1600px; }
+  h1 { font-size: 26px; margin: 0 0 6px; font-weight: 600; }
+  header p { color: var(--muted); margin: 0 0 6px; max-width: 980px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 20px 32px 32px; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .card.pick { border-color: var(--pick); box-shadow: inset 0 0 0 1px var(--pick); }
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .head h2 { font-size: 19px; margin: 0; font-weight: 600; }
+  .total { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .total small { font-size: 14px; color: var(--muted); font-weight: 400; }
+  .badge { display: inline-block; background: var(--pick); color: var(--pickInk); font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 3px; margin-left: 8px; vertical-align: 3px; }
+  .card > a img { width: 100%; height: auto; display: block; border-radius: 4px; border: 1px solid var(--rule); }
+  .line { color: var(--muted); margin: 0; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  td { padding: 5px 0; border-bottom: 1px solid var(--rule); }
+  td:last-child { text-align: right; font-weight: 600; width: 44px; }
+  .why { font-size: 14px; color: var(--ink); margin: 0; }
+  .links { font-size: 13px; color: var(--muted); }
+  .links a { color: var(--pick); }
+  section.verdict { margin: 0 32px 40px; background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 20px 24px; max-width: 1200px; }
+  section.verdict h2 { margin: 0 0 8px; font-size: 19px; }
+  section.verdict ol { margin: 8px 0 0; padding-left: 22px; }
+  section.verdict li { margin: 6px 0; }
+  .src { color: var(--muted); font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Sipply v3.3: three detail directions, judged</h1>
+  <p>Jan's note (7 Oct, build 17): the app is too simple, it is either burgundy or cream, add details to each page; keep the scrolled look but drop the top gradient. Each direction mocks Home, Dex, My Bar, the post with its likers sheet open, and Profile at 440×956. Click a sheet to open it at full size.</p>
+  <p>Scores are 1 to 10 on five criteria, averaged: does it fix "too simple" on every page, does it stay Sipply (Cabinet rules), legibility and WCAG AA, buildable in React Native without lag, and taste (premium, not costume).</p>
+</header>
+
+<div class="grid">
+  <div class="card pick">
+    <div class="head"><h2>Brass <span class="badge">Pick</span></h2><div class="total">8.4 <small>/ 10</small></div></div>
+    <a href="brass/contact.png"><img src="brass/contact.png" alt="Brass direction: five screens"></a>
+    <p class="line">Back-bar hardware: brass keylines and corner brackets, an engraved plate on every Dex number, walnut shelves the drinks stand on, bottle-label checklist.</p>
+    <table>
+      <tr><td>Fixes "too simple" on every page</td><td>8.5</td></tr>
+      <tr><td>Stays Sipply (Cabinet intact)</td><td>9</td></tr>
+      <tr><td>Legibility + AA</td><td>8.5</td></tr>
+      <tr><td>Buildable, no lag</td><td>8</td></tr>
+      <tr><td>Taste</td><td>8</td></tr>
+    </table>
+    <p class="why">Keeps every Cabinet idea (Dex on lining, caught = bone mount, not yet = recess) and adds a real third and fourth material, brass and walnut, that read on both grounds. Every page gets a signature piece. All static Views, a few memoised SVGs and one 10 KB texture.</p>
+    <p class="links"><a href="brass/index.html">mock</a> · <a href="brass/spec.md">spec</a></p>
+  </div>
+
+  <div class="card">
+    <div class="head"><h2>Menu card and print</h2><div class="total">7.9 <small>/ 10</small></div></div>
+    <a href="menu/contact.png"><img src="menu/contact.png" alt="Menu direction: five screens"></a>
+    <p class="line">Printed in two inks (wine plus bottle green for what is yours) on three paper stocks: posts are tickets, the Dex a numbered catalogue, My Bar an order pad and a menu.</p>
+    <table>
+      <tr><td>Fixes "too simple" on every page</td><td>8</td></tr>
+      <tr><td>Stays Sipply (Cabinet intact)</td><td>6.5</td></tr>
+      <tr><td>Legibility + AA</td><td>9</td></tr>
+      <tr><td>Buildable, no lag</td><td>8.5</td></tr>
+      <tr><td>Taste</td><td>7.5</td></tr>
+    </table>
+    <p class="why">The most readable and the cheapest to build, and bottle green is a classy second colour. But it moves the Dex onto paper with dashed proofs, so the mount/recess change is gone; it squares the feed photo and takes the name off it; the tilted worn stamps and the pointing hand drift toward costume.</p>
+    <p class="links"><a href="menu/index.html">mock</a> · <a href="menu/spec.md">spec</a></p>
+  </div>
+
+  <div class="card">
+    <div class="head"><h2>Lit glass and tungsten</h2><div class="total">6.7 <small>/ 10</small></div></div>
+    <a href="glow/contact.png"><img src="glow/contact.png" alt="Glow direction: six screens"></a>
+    <p class="line">Light is the detail: each drink casts its own colour (glows, spill, story rings), smoked-glass chrome, ice blue as the cool accent.</p>
+    <table>
+      <tr><td>Fixes "too simple" on every page</td><td>8.5</td></tr>
+      <tr><td>Stays Sipply (Cabinet intact)</td><td>5</td></tr>
+      <tr><td>Legibility + AA</td><td>7.5</td></tr>
+      <tr><td>Buildable, no lag</td><td>6</td></tr>
+      <tr><td>Taste</td><td>6.5</td></tr>
+    </table>
+    <p class="why">Adds the most colour, and its Dex spectrum bar, number rail and coloured ingredient icons are the best single ideas of the three. But it reverses Cabinet's "no glows, no glass" rule, puts My Bar and the Profile header on wine (more burgundy, not less), needs coloured shadows on every card, two scroll-synced blurred panes and a re-bake of the photos.</p>
+    <p class="links"><a href="glow/index.html">mock</a> · <a href="glow/spec.md">spec</a></p>
+  </div>
+</div>
+
+<section class="verdict">
+  <h2>Recommendation: build Brass, with these grafts</h2>
+  <ol>
+    <li>From Glow: the Dex gauge becomes a spectrum of marks, one per caught drink at its number (in brass on the gauge well, not rainbow), so 1.8% stops looking empty.</li>
+    <li>From Glow: a number rail on the Dex's right edge (0001 to 2089, ticks every 100) to jump by number. Jan asked for the Dex by number; 2,089 needs a scrubber.</li>
+    <li>From Glow: small ingredient glyphs in the My Bar checklist (citrus discs in their fruit colour, bottle silhouettes), drawn as tiny SVGs. This is where real colour beyond wine and bone comes in without glows.</li>
+    <li>From Glow: counts on the Dex filters (Cocktails 899, Spirits 1,190) and the likers sheet split into "People you follow 4" and "Others 9", each row with "liked 2h ago".</li>
+    <li>From Menu: Home's dateline under the wordmark ("Tuesday, 7 October · 6 friends posted today") in onLiningMuted.</li>
+    <li>From Menu: "One ingredient away" leads with the best single bottle to add ("+10 drinks · Add dry vermouth · opens Martini, Clarito, Bronx and 7 more") before the per-drink rows.</li>
+    <li>From Menu: the "See all" list of drinks you can make set as a menu, name, dotted leader, Nº right-aligned, ingredients underneath.</li>
+    <li>From Menu: numbered likers rows (01, 02, 03) and the Dex search placeholder "Search by name or Nº", plus a range head over each block of the grid ("Nº 0001 – 0009 · 4 of these 9 in your Dex").</li>
+    <li>Fix in Brass before building: the mock's Profile plaque says 64 in the Dex while the Dex header says 38; the plaque must read the Dex count, not posts.</li>
+    <li>Keep Brass's open fallback: if Jan wants the feed full-bleed, the brackets move to inset 12 on the full photo.</li>
+  </ol>
+  <p class="src">Sources: brass/, menu/, glow/ in this folder (contact.png, per-screen PNGs, spec.md each). Judged 7 Oct 2026.</p>
+</section>
+</body>
+</html>

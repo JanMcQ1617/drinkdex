@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-07",
+  "brief": "v3.3 detail layer for Jan's build-17 note: too simple, only burgundy or cream; no top gradient.",
+  "criteria": [
+    "fixes_too_simple",
+    "stays_sipply",
+    "legibility_aa",
+    "buildable_no_lag",
+    "taste"
+  ],
+  "directions": [
+    {
+      "slug": "brass",
+      "name": "Brass (back-bar hardware)",
+      "one_line": "Brass keylines and corner brackets, engraved Nº plates on every Dex number, walnut shelves, bottle-label checklist, bar-spoon rules; solid bars with a brass rail, no top gradient.",
+      "pngs": [
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/contact.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/home.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/dex.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/bar.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/post.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/profile.png"
+      ],
+      "spec_path": "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/brass/spec.md",
+      "scores": {
+        "fixes_too_simple": 8.5,
+        "stays_sipply": 9,
+        "legibility_aa": 8.5,
+        "buildable_no_lag": 8,
+        "taste": 8
+      },
+      "average": 8.4,
+      "verdict": "Pick. Keeps every Cabinet rule and the mount/recess change on a lining Dex; adds two real materials (brass, walnut) that work on both grounds; all static, cheap to draw.",
+      "issues": [
+        "Profile plaque shows 64 in the Dex while the Dex header shows 38",
+        "Feed photo becomes an inset print (fallback: brackets on full bleed)",
+        "Walnut shelf under every Dex row is the heaviest piece; drop texture first if it stutters",
+        "'In their Dex' on likers needs an RPC column"
+      ]
+    },
+    {
+      "slug": "menu",
+      "name": "Menu card and print",
+      "one_line": "Two inks (wine plus bottle green for what is yours) on three paper stocks; posts are perforated tickets, the Dex a numbered catalogue, My Bar an order pad and a menu, likers a numbered guest list.",
+      "pngs": [
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/contact.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/home.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/dex.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/bar.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/post.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/profile.png"
+      ],
+      "spec_path": "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/menu/spec.md",
+      "scores": {
+        "fixes_too_simple": 8,
+        "stays_sipply": 6.5,
+        "legibility_aa": 9,
+        "buildable_no_lag": 8.5,
+        "taste": 7.5
+      },
+      "average": 7.9,
+      "verdict": "Most legible and cheapest, bottle green is a strong second colour, but it moves the Dex to paper with dashed proofs (loses mount vs recess), squares the feed photo, takes the name off the photo, and the tilted worn stamps and manicule lean costume.",
+      "issues": [
+        "Dex on paper breaks Cabinet's core material change",
+        "Square feed plate and name off photo are structural changes",
+        "Stamp needs a first-collected date",
+        "Rotated speckled stamps over photos read as costume"
+      ]
+    },
+    {
+      "slug": "glow",
+      "name": "Lit glass and tungsten",
+      "one_line": "Each drink casts its own sampled colour (card glows, paper spill, story and liker rings), smoked-glass chrome and ice blue as the cool accent.",
+      "pngs": [
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/contact.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/home.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/dex.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/bar.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/post.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/profile.png",
+        "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/scrolled.png"
+      ],
+      "spec_path": "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/glow/spec.md",
+      "scores": {
+        "fixes_too_simple": 8.5,
+        "stays_sipply": 5,
+        "legibility_aa": 7.5,
+        "buildable_no_lag": 6,
+        "taste": 6.5
+      },
+      "average": 6.7,
+      "verdict": "Most colour and the best single ideas (Dex spectrum bar, number rail, coloured ingredient glyphs), but it reverses Cabinet's no-glow/no-glass rule, moves My Bar and the Profile header onto wine, and needs per-card coloured shadows, scroll-synced blurred panes and a photo re-bake.",
+      "issues": [
+        "Explicitly reverses v3 'no glows, no glass, no blur halos'",
+        "More burgundy overall, not less",
+        "Coloured shadows on every Dex card and blurRadius panes are the lag risks",
+        "Rainbow story rings read as a new tier system"
+      ]
+    }
+  ],
+  "judge": {
+    "recommend": "brass",
+    "ranking": [
+      {
+        "slug": "brass",
+        "score": 8.4
+      },
+      {
+        "slug": "menu",
+        "score": 7.9
+      },
+      {
+        "slug": "glow",
+        "score": 6.7
+      }
+    ],
+    "grafts": [
+      "Glow: Dex gauge as a spectrum of brass marks, one per caught drink at its number",
+      "Glow: number rail on the Dex's right edge (0001 to 2089) to jump by number",
+      "Glow: small coloured ingredient glyphs in the My Bar checklist (citrus discs, bottle silhouettes) as tiny SVGs",
+      "Glow: counts on Dex filters; likers split into 'People you follow' and 'Others' with 'liked 2h ago'",
+      "Menu: Home dateline under the wordmark ('Tuesday, 7 October · 6 friends posted today')",
+      "Menu: 'One ingredient away' leads with the best single bottle to add ('+10 drinks · Add dry vermouth')",
+      "Menu: 'See all' makeable list set as a menu with dotted leaders and right-aligned Nº",
+      "Menu: numbered likers rows, 'Search by name or Nº', range heads over grid blocks",
+      "Fix: Brass Profile plaque must read the Dex count (38), not posts (64)"
+    ]
+  },
+  "index_path": "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v3-3-mockups/index.html"
+}

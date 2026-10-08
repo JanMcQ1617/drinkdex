@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brass back bar</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+:root{
+  /* theme.ts today, unchanged */
+  --paper:#F7F2EA; --sunk:#E9E5DF; --white:#FFFFFF; --line:#D9CFC1; --lineControl:#8A7F74; --lineInk:#2B2322;
+  --ink:#2B2322; --muted:#6A6058; --faint:#8A7F74;
+  --wine:#5B0F1A; --merlot:#7E2330; --wineSoft:#A85A63;
+  --mat:#FBF8F2; --lining:#3E0A12; --cellar:#2F070D;
+  --onLining:#E9E5DF; --onLiningMuted:#B8A09B; --onLiningFaint:#A7837F;
+  --liningLine:rgba(233,229,223,.16); --liningControl:rgba(233,229,223,.42);
+  --matEdge:rgba(14,11,11,.35); --windowEdge:rgba(43,35,34,.16); --slotEdge:rgba(233,229,223,.10);
+  --storyRing:#BC6B75; --storyRingSeen:rgba(233,229,223,.30);
+  --reelInk:#FFFDF9; --reelInkDim:#A99E94; --reelBar:#2B2322; --reelControlBorder:rgba(255,253,249,.28);
+  --scrimMid:rgba(14,11,11,.62); --scrimDeep:rgba(14,11,11,.86); --markerFill:rgba(14,11,11,.78);
+  --overlay:rgba(43,35,34,.52);
+
+  /* NEW in v3.3 "brass": the back-bar hardware */
+  --brass:#B8924F;        /* rails, keylines, brackets, the gauge fill. UI 3:1 on every dark ground; decorative on paper */
+  --brassPlate:#C9A867;   /* the face of an engraved number plate */
+  --brassLit:#E8D3A2;     /* 1pt top highlight of a plate or rail */
+  --brassShade:#7D5F2C;   /* 1pt foot of a plate or rail; a label's outer edge */
+  --brassInk:#7A5820;     /* brass-coloured TEXT on paper, mat, label stock */
+  --brassOnDark:#D6B676;  /* brass-coloured TEXT on lining, cellar, walnut, espresso */
+  --walnut:#4A3328;       /* the wood: shelves, the counter, the Dex plaque (texture mean #4B372B) */
+  --walnutDeep:#2E1F19;   /* a plank's lower edge, the plaque's edge */
+  --walnutTop:#6A4C3B;    /* the lit top face of a shelf */
+  --onWalnutMuted:#C9B6A8;/* secondary text on walnut */
+  --label:#F3E9D2;        /* bottle-label stock */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#151112}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block;overflow:visible}
+
+.wall{display:flex;gap:36px;padding:96px 40px 48px;align-items:flex-start;position:relative}
+.wall h1{position:absolute;left:40px;top:28px;font:700 30px/36px Playfair;color:#E9E5DF}
+.wall h1 small{font:400 15px/20px Inter;color:#B8A09B;margin-left:14px}
+figure.cap{width:440px;flex:none}
+.legend{position:absolute;right:40px;top:30px;display:flex;gap:14px}
+.legend span{display:flex;align-items:center;gap:6px;font:500 12px/16px Inter;color:#B8A09B}
+.legend i{width:16px;height:16px;border-radius:3px;display:block;box-shadow:0 0 0 1px rgba(233,229,223,.2)}
+body.solo .legend{display:none}
+figure.cap figcaption{font:400 14px/19px Inter;color:#B8A09B;margin-top:14px;min-height:58px}
+figure.cap figcaption b{font-weight:600;color:#E9E5DF;margin-right:6px}
+body.solo .wall{padding:0;gap:0}
+body.solo .wall h1, body.solo figcaption{display:none}
+body.solo figure.cap{display:none}
+body.solo figure.cap.on{display:block}
+
+.screen{position:relative;width:440px;height:956px;overflow:hidden;background:var(--paper);isolation:isolate;border-radius:0}
+.abs,.screen .abs{position:absolute}
+
+/* grounds: grain pre-multiplied to theme.ts opacities (lining .77, paper .35) */
+.pap{background:url(img/grain-paper.png) 0 0/128px 128px repeat, var(--paper)}
+.lin{background:url(img/grain-lining.png) 0 0/128px 128px repeat, var(--lining)}
+.cel{background:url(img/grain-lining.png) 0 0/128px 128px repeat, var(--cellar)}
+.wood{background:url(img/walnut.webp) center/cover no-repeat, var(--walnut)}
+
+/* ---------- hardware ---------- */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--reelInk)}
+.sb.dark{color:var(--ink)}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--ink);z-index:60}
+.hi.light{background:var(--onLining)}
+
+/* ---------- top bar ---------- */
+.bar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:30;color:var(--onLining)}
+.bar.ink{color:var(--ink)}
+.bar .title{position:absolute;left:100px;right:100px;top:9px;text-align:center;font:600 20px/26px Inter}
+.bar .title.md{font:600 17px/22px Inter;top:11px}
+.bar .wordmark{position:absolute;left:100px;right:100px;top:4px;text-align:center;font:700 28px/34px Playfair;letter-spacing:.2px}
+.gb{position:absolute;top:0;width:44px;height:44px;display:grid;place-items:center}
+.gb .dot{position:absolute;right:9px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--storyRing);box-shadow:0 0 0 2px var(--lining)}
+/* the brass rail: the foot of a solid bar once content runs under it. Replaces the 24pt fade. */
+.rail{position:absolute;left:0;right:0;height:3px;z-index:31}
+.rail::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;background:var(--brassLit);opacity:.55}
+.rail::after{content:"";position:absolute;left:0;right:0;top:1px;height:1px;background:var(--brass)}
+.rail i{position:absolute;left:0;right:0;top:2px;height:1px;background:rgba(14,11,11,.45)}
+
+/* ---------- floating tab bar ---------- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:36px;height:64px;background:var(--reelBar);border-radius:12px;z-index:40;
+  box-shadow:0 4px 14px rgba(14,11,11,.30);border:1px solid rgba(255,253,249,.08);display:flex;align-items:center;padding:0 6px}
+.tabbar::before{content:"";position:absolute;inset:3px;border:1px solid rgba(184,146,79,.42);border-radius:9px;pointer-events:none}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--reelInkDim);font:500 11px/14px Inter;position:relative;height:100%;justify-content:center}
+.tab.on{color:var(--reelInk);font-weight:600}
+.tab.on::before{content:"";position:absolute;top:3px;left:50%;width:28px;margin-left:-14px;height:2px;background:var(--brassLit);border-radius:0 0 1px 1px}
+.tab .gbox{width:28px;height:28px;display:grid;place-items:center}
+.tab.post .pbtn{width:52px;height:38px;border-radius:8px;background:var(--wine);display:grid;place-items:center;border:1px solid var(--brass);
+  box-shadow:inset 0 1px 0 rgba(232,211,162,.25)}
+.tab .av{width:24px;height:24px;border-radius:50%;background:var(--merlot);color:var(--onLining);font:600 11px/24px Inter;text-align:center}
+.tab.on .av{box-shadow:0 0 0 1.5px var(--reelBar),0 0 0 2.5px var(--reelInk)}
+
+/* ---------- engraved number plate ---------- */
+.plate{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:2px;background:var(--brassPlate);
+  border-top:1px solid var(--brassLit);border-bottom:1px solid var(--brassShade);
+  box-shadow:0 1px 1.5px rgba(14,11,11,.35);
+  font:500 11px/14px Inter;letter-spacing:1.2px;color:var(--ink);text-shadow:0 1px 0 rgba(232,211,162,.85);
+  font-variant-numeric:tabular-nums;white-space:nowrap;position:relative}
+.plate .no{letter-spacing:.2px;margin-right:3px}
+.plate.lg{height:22px;padding:0 13px;font-size:12px}
+/* screws: only on plates 22pt and taller */
+.plate.lg::before,.plate.lg::after{content:"";position:absolute;top:50%;margin-top:-2px;width:4px;height:4px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#E8D3A2 0 30%,#8C6C36 70%)}
+.plate.lg::before{left:4px}.plate.lg::after{right:4px}
+/* a plate for a drink you have not caught: the holder is there, the brass is not yet polished */
+.plate.tarn{background:transparent;border:1px solid rgba(184,146,79,.72);color:var(--brassOnDark);text-shadow:none;box-shadow:none}
+
+/* ---------- bottle-label tags (chamfered; the SVG edge is drawn by script below) ---------- */
+.tag{position:relative;display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;font:500 12px/16px Inter;color:var(--ink);white-space:nowrap}
+.tag>svg.edge{position:absolute;left:0;top:0;z-index:-1}
+.tag.solid{color:var(--ink)}
+
+/* ---------- mounts (collected) and slots (not yet) ---------- */
+.mount{position:relative;background:var(--mat);border:1px solid var(--matEdge);border-radius:8px;
+  box-shadow:0 1px 0 rgba(14,11,11,.45),0 8px 18px rgba(14,11,11,.34)}
+.mount>.key{position:absolute;inset:3px;border:1px solid var(--brass);border-radius:5px;pointer-events:none;opacity:.95}
+.slot{position:relative;background:var(--cellar);border:1px solid var(--slotEdge);border-radius:8px;
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.55),inset 0 -1px 0 rgba(233,229,223,.06)}
+.win{position:relative;overflow:hidden;border-radius:3px;background:var(--cellar)}
+.win img{display:block;width:100%;height:100%;object-fit:cover}
+.win::after{content:"";position:absolute;inset:0;border:1px solid var(--windowEdge);border-radius:3px;pointer-events:none}
+/* bevel: the cut edge of a mat window, light from above */
+.win.bevel{box-shadow:0 -1px 0 rgba(14,11,11,.28),0 1px 0 rgba(255,253,249,.9)}
+
+/* ---------- walnut shelf with a brass front rail ---------- */
+.shelf{position:absolute;left:0;right:0;height:24px;z-index:2}
+.shelf .top{position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(var(--walnutTop),#5A4132)}
+.shelf .br{position:absolute;left:0;right:0;top:4px;height:2px;background:var(--brass);border-top:1px solid var(--brassLit)}
+.shelf .front{position:absolute;left:0;right:0;top:6px;height:17px;border-bottom:1px solid var(--walnutDeep)}
+.shelf .shade{position:absolute;left:0;right:0;top:24px;height:12px;background:linear-gradient(rgba(14,11,11,.30),rgba(14,11,11,0))}
+.shelf .holder{position:absolute;top:8px;height:14px;padding:0 6px;border-radius:1px;background:var(--brassPlate);border-top:1px solid var(--brassLit);
+  border-bottom:1px solid var(--brassShade);font:500 11px/12px Inter;letter-spacing:1px;color:var(--ink);font-variant-numeric:tabular-nums;
+  display:flex;align-items:center;text-shadow:0 1px 0 rgba(232,211,162,.85)}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;border-radius:8px;font:600 14px/18px Inter;white-space:nowrap}
+.btn.wine{background:var(--wine);color:var(--onLining)}
+.btn.out{border:1px solid var(--lineControl);color:var(--ink);background:var(--white)}
+.btn.outL{border:1px solid var(--liningControl);color:var(--onLining)}
+.btn.sm{height:32px;padding:0 11px;font-size:13px}
+.field{height:44px;border-radius:8px;display:flex;align-items:center;gap:8px;padding:0 12px;font:400 16px/22px Inter}
+.field.paper{background:var(--white);border:1px solid var(--line);color:var(--muted)}
+.field.well{background:var(--cellar);border:1px solid var(--liningControl);color:var(--onLiningMuted);box-shadow:inset 0 1px 4px rgba(0,0,0,.45)}
+.chip{height:32px;padding:0 12px;border-radius:8px;display:inline-flex;align-items:center;gap:6px;font:500 13px/18px Inter;white-space:nowrap}
+.chip.l{border:1px solid var(--liningControl);color:var(--onLining)}
+.chip.l.on{background:var(--onLining);color:var(--lining);border-color:var(--onLining)}
+
+/* ---------- people ---------- */
+.avatar{border-radius:50%;display:grid;place-items:center;color:var(--onLining);font-weight:600;flex:none}
+.u{font:600 15px/20px Inter}
+.m{color:var(--muted)}
+
+/* kicker: sentence case, a hair of tracking, never caps (label.kicker) */
+.kick{font:500 12px/16px Inter;letter-spacing:.6px;color:var(--brassInk)}
+.kick.d{color:var(--brassOnDark)}
+
+/* ---------- section header with a bar-spoon rule ---------- */
+.sect{display:flex;align-items:center;gap:10px}
+.sect h3{font:600 20px/26px Inter;white-space:nowrap}
+.sect .n{font:600 20px/26px Inter;color:var(--brassInk);font-variant-numeric:tabular-nums}
+.sect .spoon{flex:1 1 0;min-width:0;width:0;height:8px}
+
+.twoline{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+</style>
+</head>
+<body>
+<div class="wall">
+<div class="legend"><span><i style="background:#B8924F"></i>brass</span><span><i style="background:#C9A867"></i>plate</span><span><i style="background:#7A5820"></i>brassInk</span><span><i style="background:#D6B676"></i>brassOnDark</span><span><i style="background:url(img/walnut.webp) center/cover"></i>walnut</span><span><i style="background:#F3E9D2"></i>label</span></div>
+<h1>Brass <small>v3.3 detail layer: back-bar hardware. Brass keylines and brackets, engraved number plates, bottle labels, bar-spoon rules, walnut.</small></h1>
+
+<!-- =================================================================== -->
+<!-- 1 HOME                                                              -->
+<!-- =================================================================== -->
+<figure class="cap" id="f-home"><div class="screen pap" id="home">
+  <div class="sb"><span class="t">9:41</span><span class="island"></span><span class="r" data-sb></span></div>
+
+  <!-- head band: lining, runs from the status bar through the stories -->
+  <div class="abs lin" style="left:0;right:0;top:0;height:208px"></div>
+  <div class="bar">
+    <div class="gb" style="left:6px" data-ic="plus:26:var(--onLining)"></div>
+    <div class="wordmark">Sipply</div>
+    <div class="gb" style="right:50px" data-ic="trophy:26:var(--onLining)"></div>
+    <div class="gb" style="right:6px"><span data-ic="heart:26:var(--onLining)"></span><span class="dot"></span></div>
+  </div>
+
+  <!-- stories, standing on the back-bar shelf -->
+  <div class="abs" id="stories" style="left:12px;top:112px;display:flex;gap:10px"></div>
+  <div class="shelf" style="top:206px">
+    <div class="top"></div><div class="br"></div><div class="front wood"></div><div class="shade"></div>
+  </div>
+
+  <!-- post -->
+  <div class="abs" style="left:16px;right:16px;top:230px;height:42px;display:flex;align-items:center;gap:10px">
+    <div class="avatar" style="width:34px;height:34px;background:#5E2545;font-size:13px;box-shadow:0 0 0 1px var(--paper),0 0 0 2px var(--brass)">IA</div>
+    <div style="flex:1">
+      <div class="u">ines.ag <span class="m" style="font-weight:400;font-size:14px">· 2h</span></div>
+      <div style="font:400 13px/17px Inter;color:var(--muted)">La Factoría, Old San Juan</div>
+    </div>
+    <span data-ic="more:24:var(--ink)"></span>
+  </div>
+
+  <!-- the print: inset, framed, brass corner brackets -->
+  <div class="abs" style="left:24px;top:274px;width:392px;height:490px;border-radius:4px;overflow:hidden;background:var(--cellar);box-shadow:0 0 0 1px rgba(43,35,34,.22)">
+    <img src="../../../assets/drinks/negroni.webp" style="width:100%;height:100%;object-fit:cover;object-position:50% 40%">
+    <!-- nameplate: two scrims (functional, foot of the photo only), then the name -->
+    <div class="abs" style="left:0;right:0;bottom:0;height:200px;background:linear-gradient(rgba(14,11,11,0),rgba(14,11,11,.62) 48%,rgba(14,11,11,.86))"></div>
+    <div class="abs brackets" style="inset:8px;z-index:2"></div>
+    <div class="abs" style="left:18px;right:18px;bottom:22px;color:var(--reelInk)">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <span class="plate lg"><span class="no">Nº</span>0127</span>
+        <span class="tag solid" data-tag="label" style="height:22px"><span data-ic="check:13:var(--wine):2.4"></span>In your Dex</span>
+      </div>
+      <div style="font:700 34px/40px Playfair;text-shadow:0 1px 2px rgba(14,11,11,.6)">Negroni</div>
+      <div style="font:400 13px/18px Inter;margin-top:2px;text-shadow:0 1px 2px rgba(14,11,11,.6)">Spirit-forward · Rocks glass · Florence, Italy</div>
+    </div>
+  </div>
+
+  <!-- actions -->
+  <div class="abs" style="left:20px;right:20px;top:768px;height:34px;display:flex;align-items:center;gap:18px">
+    <span data-ic="heart:26:var(--wine):0:solid"></span>
+    <span data-ic="comment:25:var(--ink)"></span>
+    <span data-ic="send:25:var(--ink)"></span>
+    <span style="flex:1"></span>
+    <span data-ic="bookmark:25:var(--ink)"></span>
+  </div>
+  <div class="abs" style="left:24px;right:24px;top:804px;display:flex;align-items:center;gap:8px">
+    <div style="display:flex">
+      <div class="avatar" style="width:20px;height:20px;background:#8A5F10;font-size:11px;box-shadow:0 0 0 1.5px var(--paper)">M</div>
+      <div class="avatar" style="width:20px;height:20px;background:#3A2E2C;font-size:11px;margin-left:-6px;box-shadow:0 0 0 1.5px var(--paper)">T</div>
+      <div class="avatar" style="width:20px;height:20px;background:#736247;font-size:11px;margin-left:-6px;box-shadow:0 0 0 1.5px var(--paper)">D</div>
+    </div>
+    <div style="font:400 14px/20px Inter">Liked by <b style="font-weight:600">maya.pours</b> and <b style="font-weight:600">12 others</b></div>
+  </div>
+  <div class="abs" style="left:24px;right:24px;top:827px;font:400 14px/20px Inter;white-space:nowrap;overflow:hidden;text-overflow:clip"><b style="font-weight:600">ines.ag</b> Equal parts, stirred long. The orange does&hellip; <span style="color:var(--muted)">more</span></div>
+
+  <div class="tabbar" data-tabs="home"></div>
+  <div class="hi"></div>
+</div>
+<figcaption><b>1 Home</b>The stories stand on a walnut back-bar shelf with a brass front rail. The post is a print behind four brass corner brackets; its Dex number is an engraved plate, its status a bottle label. Liked by, with faces.</figcaption></figure>
+
+<!-- =================================================================== -->
+<!-- 2 DEX                                                               -->
+<!-- =================================================================== -->
+<figure class="cap" id="f-dex"><div class="screen lin" id="dex">
+  <div class="sb"><span class="t">9:41</span><span class="island"></span><span class="r" data-sb></span></div>
+  <div class="bar">
+    <div class="title">Dex</div>
+    <div class="gb" style="right:6px" data-ic="stats:24:var(--onLining)"></div>
+  </div>
+
+  <!-- hero figure + brass level gauge -->
+  <div class="abs" style="left:16px;right:16px;top:114px;display:flex;align-items:flex-end;gap:12px;color:var(--onLining)">
+    <div style="font:600 40px/42px Inter;letter-spacing:-.6px;font-variant-numeric:tabular-nums">38</div>
+    <div style="padding-bottom:3px">
+      <div style="font:500 15px/19px Inter">in your Dex</div>
+      <div style="font:400 13px/17px Inter;color:var(--onLiningMuted);font-variant-numeric:tabular-nums">of 2,089 · 1.8%</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="text-align:right;padding-bottom:3px">
+      <div class="kick d">latest catch</div>
+      <div style="font:600 15px/20px Playfair">Ramos Gin Fizz</div>
+    </div>
+  </div>
+  <div class="abs gauge" data-gauge="38:2089:dark" style="left:16px;right:16px;top:170px;height:30px"></div>
+
+  <div class="abs field well" style="left:16px;right:16px;top:210px"><span data-ic="search:20:var(--onLiningMuted)"></span>Search 2,089 drinks</div>
+  <div class="abs" style="left:16px;right:0;top:266px;display:flex;gap:8px;align-items:center">
+    <span class="chip l on">All</span><span class="chip l">Cocktails</span><span class="chip l">Spirits</span>
+    <span style="width:1px;height:20px;background:var(--liningLine);margin:0 2px"></span>
+    <span class="chip l">Collected</span><span class="chip l">Not yet</span>
+  </div>
+
+  <div id="dexgrid"></div>
+
+  <div class="tabbar" data-tabs="dex"></div>
+  <div class="hi light"></div>
+</div>
+<figcaption><b>2 Dex</b>One grid in number order. Each row stands on a walnut shelf whose brass label holder names its numbers. Caught drinks are brass-trimmed mounts with a polished plate; the rest are recesses with an empty plate holder.</figcaption></figure>
+
+<!-- =================================================================== -->
+<!-- 3 MY BAR                                                            -->
+<!-- =================================================================== -->
+<figure class="cap" id="f-bar"><div class="screen pap" id="bar">
+  <div class="sb"><span class="t">9:41</span><span class="island"></span><span class="r" data-sb></span></div>
+  <div class="abs lin" style="left:0;right:0;top:0;height:194px"></div>
+  <div class="bar"><div class="title">My Bar</div></div>
+  <div class="abs" style="left:16px;right:16px;top:114px;color:var(--onLining)">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font:600 22px/28px Inter">What's in your bar?</div>
+      <span class="plate lg" style="font-variant-numeric:tabular-nums">12 ticked</span>
+    </div>
+    <div style="font:400 14px/20px Inter;color:var(--onLiningMuted);margin-top:6px">Tick what you have. The ones that pour the most come first.</div>
+  </div>
+  <div class="rail" style="top:194px"><i></i></div>
+
+  <div class="abs field paper" style="left:16px;right:16px;top:210px"><span data-ic="search:20:var(--muted)"></span>Search 490 ingredients</div>
+
+  <div class="abs" id="labels" style="left:16px;right:16px;top:266px;display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+  <div class="abs" style="left:16px;right:16px;top:440px;display:flex;justify-content:space-between;align-items:center">
+    <span style="font:400 13px/18px Inter;color:var(--muted)">Sweet vermouth, Dry vermouth and 482 more</span>
+    <span style="font:600 14px/18px Inter;color:var(--wine)">Show all</span>
+  </div>
+
+  <div class="abs sect" style="left:16px;right:16px;top:474px">
+    <h3>You can make</h3><span class="n">30</span><svg class="spoon" data-spoon></svg>
+  </div>
+
+  <!-- the counter: walnut, brass rail, mounts standing on it -->
+  <div class="abs wood" style="left:0;right:0;top:512px;height:206px;border-top:2px solid var(--brass);box-shadow:inset 0 1px 0 var(--brassLit)">
+    <div class="abs" style="left:0;right:0;top:0;height:10px;background:linear-gradient(rgba(14,11,11,.32),rgba(14,11,11,0))"></div>
+    <div class="abs" id="canmake" style="left:16px;top:16px;display:flex;gap:10px"></div>
+  </div>
+  <div class="abs" style="left:0;right:0;top:718px;height:4px;background:var(--walnutDeep)"></div>
+  <div class="abs" style="left:0;right:0;top:722px;height:12px;background:linear-gradient(rgba(14,11,11,.22),rgba(14,11,11,0))"></div>
+
+  <div class="abs sect" style="left:16px;right:16px;top:740px">
+    <h3>One ingredient away</h3><span class="n">161</span><svg class="spoon" data-spoon></svg>
+  </div>
+  <div class="abs" style="left:16px;right:16px;top:778px;display:flex;align-items:center;gap:12px">
+    <div class="mount" style="width:56px;height:56px;padding:4px;box-shadow:none;border-color:var(--line)"><div class="key" style="inset:2px;border-radius:6px"></div><div class="win" style="width:46px;height:46px"><img src="../../../assets/drinks/negroni.webp"></div></div>
+    <div style="flex:1"><div style="display:flex;align-items:center;gap:8px"><span style="font:600 18px/22px Playfair">Negroni</span><span class="plate"><span class="no">Nº</span>0127</span></div><div style="font:400 13px/18px Inter;color:var(--muted);margin-top:3px">Needs orange · orange pours 5 more</div></div>
+    <span class="btn out sm"><span data-ic="plus:16:var(--ink)"></span>Orange</span>
+  </div>
+
+  <div class="tabbar" data-tabs="bar"></div>
+  <div class="hi"></div>
+</div>
+<figcaption><b>3 My Bar</b>No shelf, just a checklist: each ingredient is a bottle label, ranked by how many drinks it pours, ticked when you own it. What you can make stands on a walnut counter; what is one thing short sits under a bar-spoon rule.</figcaption></figure>
+
+<!-- =================================================================== -->
+<!-- 4 POST + LIKERS                                                     -->
+<!-- =================================================================== -->
+<figure class="cap" id="f-post"><div class="screen pap" id="post">
+  <div class="sb"><span class="t">9:41</span><span class="island"></span><span class="r" data-sb></span></div>
+  <div class="abs lin" style="left:0;right:0;top:0;height:106px;z-index:29"></div>
+  <div class="bar">
+    <div class="gb" style="left:6px" data-ic="chevronLeft:26:var(--onLining)"></div>
+    <div class="title md">Post</div>
+    <div class="gb" style="right:6px" data-ic="more:24:var(--onLining)"></div>
+  </div>
+  <div class="rail" style="top:106px"><i></i></div>
+
+  <div class="abs" style="left:16px;right:16px;top:118px;height:44px;display:flex;align-items:center;gap:10px">
+    <div class="avatar" style="width:34px;height:34px;background:#3A2E2C;font-size:13px;box-shadow:0 0 0 1px var(--paper),0 0 0 2px var(--brass)">TS</div>
+    <div style="flex:1"><div class="u">theo_stirs <span class="m" style="font-weight:400;font-size:14px">· 5h</span></div><div style="font:400 13px/17px Inter;color:var(--muted)">Home bar, Santurce</div></div>
+  </div>
+  <div class="abs" style="left:24px;top:168px;width:392px;height:490px;border-radius:4px;overflow:hidden;background:var(--cellar)">
+    <img src="../../../assets/drinks/paper-plane.webp" style="width:100%;height:100%;object-fit:cover">
+    <div class="abs" style="left:0;right:0;bottom:0;height:200px;background:linear-gradient(rgba(14,11,11,0),rgba(14,11,11,.62) 48%,rgba(14,11,11,.86))"></div>
+    <div class="abs brackets" style="inset:8px;z-index:2"></div>
+    <div class="abs" style="left:18px;right:18px;bottom:22px;color:var(--reelInk)">
+      <div style="display:flex;gap:8px;margin-bottom:8px"><span class="plate lg"><span class="no">Nº</span>0107</span></div>
+      <div style="font:700 34px/40px Playfair">Paper Plane</div>
+      <div style="font:400 13px/18px Inter;margin-top:2px">Sour · Coupe · Chicago, USA</div>
+    </div>
+  </div>
+  <div class="abs" style="left:18px;right:18px;top:666px;height:36px;display:flex;align-items:center;gap:18px">
+    <span data-ic="heart:26:var(--wine):0:solid"></span><span data-ic="comment:25:var(--ink)"></span><span data-ic="send:25:var(--ink)"></span>
+  </div>
+
+  <!-- dim -->
+  <div class="abs" style="inset:0;background:var(--overlay);z-index:35"></div>
+
+  <!-- the likers sheet -->
+  <div class="abs pap" style="left:0;right:0;top:404px;bottom:0;z-index:36;border-radius:12px 12px 0 0;box-shadow:0 -4px 24px rgba(43,35,34,.16);overflow:hidden">
+    <div class="abs" style="left:202px;top:8px;width:36px;height:4px;border-radius:1px;background:var(--brass);border-top:1px solid var(--brassLit)"></div>
+    <div class="abs" style="left:16px;right:16px;top:24px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font:600 17px/22px Inter">Liked by</div>
+        <div style="font:400 13px/18px Inter;color:var(--muted);margin-top:1px"><span style="font-variant-numeric:tabular-nums">24</span> people liked theo_stirs's <span style="font-family:Playfair;font-weight:600">Paper Plane</span></div>
+      </div>
+      <span class="plate lg"><span class="no">Nº</span>0107</span>
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:76px;height:3px"><div class="rail" style="position:relative"><i></i></div></div>
+    <div class="abs field paper" style="left:16px;right:16px;top:92px;height:40px"><span data-ic="search:18:var(--muted)"></span><span style="font-size:15px">Search</span></div>
+    <div class="abs" id="likers" style="left:16px;right:16px;top:142px"></div>
+  </div>
+  <div class="hi" style="z-index:61"></div>
+</div>
+<figcaption><b>4 Post, likes open</b>Tap "Liked by" and the sheet rises with a brass grabber and the drink's plate. Each liker is a face and a name, with a bottle label when the drink is in their Dex too. The top bar is solid with a brass rail at its foot: no fade.</figcaption></figure>
+
+<!-- =================================================================== -->
+<!-- 5 PROFILE                                                           -->
+<!-- =================================================================== -->
+<figure class="cap" id="f-profile"><div class="screen pap" id="profile">
+  <div class="sb dark"><span class="t">9:41</span><span class="island"></span><span class="r" data-sb="dark"></span></div>
+  <div class="bar ink">
+    <div class="gb" style="left:6px" data-ic="plus:26:var(--ink)"></div>
+    <div class="title md">nico.pours</div>
+    <div class="gb" style="right:6px" data-ic="settings:24:var(--ink)"></div>
+  </div>
+
+  <div class="abs" style="left:16px;right:16px;top:116px;display:flex;align-items:center;gap:22px">
+    <!-- the brass bezel -->
+    <div style="width:92px;height:92px;border-radius:50%;padding:4px;background:linear-gradient(135deg,#E8D3A2,#B8924F 45%,#7D5F2C);flex:none">
+      <div style="width:84px;height:84px;border-radius:50%;padding:2px;background:var(--paper)">
+        <div class="avatar" style="width:80px;height:80px;background:var(--merlot);font-size:28px">NV</div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;justify-content:space-between" id="counts"></div>
+  </div>
+  <div class="abs" style="left:16px;right:16px;top:220px">
+    <div class="u">Nico Vargas</div>
+    <div style="font:400 14px/20px Inter;margin-top:2px">Stirred, not shaken. Working through the classics one coupe at a time, San Juan.</div>
+  </div>
+  <div class="abs" style="left:16px;right:16px;top:290px;display:flex;gap:8px">
+    <span class="btn out" style="flex:1">Edit profile</span><span class="btn out" style="flex:1">Share profile</span>
+  </div>
+
+  <!-- the Dex plaque: walnut, brass keyline, the gauge inlaid -->
+  <div class="abs wood" style="left:16px;right:16px;top:340px;height:104px;border-radius:8px;border:1px solid var(--walnutDeep);box-shadow:0 1px 0 rgba(255,253,249,.6),0 6px 14px rgba(43,35,34,.18)">
+    <div class="abs" style="inset:3px;border:1px solid var(--brass);border-radius:5px;opacity:.9"></div>
+    <div class="abs" style="left:16px;right:16px;top:12px;display:flex;align-items:flex-end;justify-content:space-between;color:var(--onLining)">
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <span style="font:600 30px/34px Inter;letter-spacing:-.4px;font-variant-numeric:tabular-nums">64</span>
+        <span style="font:400 14px/18px Inter;color:var(--onWalnutMuted);font-variant-numeric:tabular-nums">of 2,089 in the Dex · 3.1%</span>
+      </div>
+      <span style="font:500 13px/18px Inter;color:var(--brassOnDark)">First Sips</span>
+    </div>
+    <div class="abs gauge" data-gauge="64:2089:wood" style="left:16px;right:16px;top:54px;height:30px"></div>
+  </div>
+  <div class="abs" style="left:16px;right:16px;top:450px;font:400 13px/18px Inter;color:var(--muted)"><span style="font-variant-numeric:tabular-nums">145</span> more to <b style="font-weight:600;color:var(--ink)">Barfly in Training</b>, at 209</div>
+
+  <!-- tab strip -->
+  <div class="abs" style="left:0;right:0;top:478px;height:44px;display:flex;border-bottom:1px solid var(--line)">
+    <div style="flex:1;display:grid;place-items:center;font:600 15px/20px Inter;position:relative">Posts<span class="abs" style="left:50%;margin-left:-28px;width:56px;bottom:-1px;height:2px;background:var(--lineInk)"></span></div>
+    <div style="flex:1;display:grid;place-items:center;font:500 15px/20px Inter;color:var(--muted)">Dex</div>
+  </div>
+  <div class="abs" id="pgrid" style="left:0;right:0;top:524px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px"></div>
+
+  <div class="tabbar" data-tabs="profile"></div>
+  <div class="hi"></div>
+</div>
+<figcaption><b>5 Profile</b>The avatar sits in a brass bezel; the counts are split by brass hairlines. The Dex progress is a walnut plaque with a brass gauge whose notches are the rank ladder. Every post in the grid carries its engraved plate.</figcaption></figure>
+
+</div>
+
+<script>
+/* ---------------- icons (src/components/icons.tsx, same paths) ---------------- */
+const OUT = {
+  home:'<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>',
+  dex:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  stats:'<path d="M5.2 20.2V13.6"/><path d="M12 20.2V8.4"/><path d="M18.8 20.2V4.6"/><path d="M3 20.2h18"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>',
+  lock:'<path d="M5.9 10.6h12.2a1.4 1.4 0 0 1 1.4 1.4v7.2a1.4 1.4 0 0 1-1.4 1.4H5.9a1.4 1.4 0 0 1-1.4-1.4V12a1.4 1.4 0 0 1 1.4-1.4z"/><path d="M8.1 10.4V7.6a3.9 3.9 0 0 1 7.8 0v2.8"/>',
+  heart:'<path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/>',
+  comment:'<path d="M20.4 12.6a7.4 7.4 0 0 1-8 7.4 8.5 8.5 0 0 1-3-.6L4.2 20.4l1.1-4.9a7.4 7.4 0 0 1-.7-3.2 7.4 7.4 0 0 1 8-7.4 7.5 7.5 0 0 1 7.8 7.4z"/>',
+  plus:'<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>',
+  check:'<path d="M5 12.6 9.8 17.4 19 6.9"/>',
+  more:'<circle cx="5.4" cy="12" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="18.6" cy="12" r="1.15"/>',
+  bookmark:'<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  bottle:'<path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z"/><path d="M10.4 5.4h3.2"/><path d="M7.2 12.8h9.6"/><path d="M7.2 17h9.6"/>',
+  trophy:'<path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z"/><path d="M7.4 5.9H5a1.4 1.4 0 0 0-1.4 1.4 3.6 3.6 0 0 0 3.6 3.6"/><path d="M16.6 5.9H19a1.4 1.4 0 0 1 1.4 1.4 3.6 3.6 0 0 1-3.6 3.6"/><path d="M12 14.1v3.4"/><path d="M8.4 20.2a3.6 3.6 0 0 1 7.2 0z"/>',
+  settings:'<circle cx="12" cy="12" r="3.1"/><path d="M19.1 14.6a1.6 1.6 0 0 0 .3 1.7l.1.1a1.9 1.9 0 1 1-2.7 2.7l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.4v.2a1.9 1.9 0 1 1-3.8 0v-.1a1.6 1.6 0 0 0-1-1.4 1.6 1.6 0 0 0-1.7.3l-.1.1a1.9 1.9 0 1 1-2.7-2.7l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.4-1h-.2a1.9 1.9 0 1 1 0-3.8h.1a1.6 1.6 0 0 0 1.4-1 1.6 1.6 0 0 0-.3-1.7l-.1-.1a1.9 1.9 0 1 1 2.7-2.7l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.4v-.2a1.9 1.9 0 1 1 3.8 0v.1a1.6 1.6 0 0 0 1 1.4 1.6 1.6 0 0 0 1.7-.3l.1-.1a1.9 1.9 0 1 1 2.7 2.7l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1a1.6 1.6 0 0 0 1.4 1h.2a1.9 1.9 0 1 1 0 3.8h-.1a1.6 1.6 0 0 0-1.4 1z"/>',
+  send:'<path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/>',
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  users:'<circle cx="9.4" cy="8.4" r="3.4"/><path d="M3.4 20.1a6.2 6.2 0 0 1 12 0"/><path d="M16.1 5.4a3.4 3.4 0 0 1 0 6.6"/><path d="M17.6 14.6a6.2 6.2 0 0 1 3 5.5"/>',
+};
+const SOLID = {
+  home:'<path fill-rule="evenodd" d="M12 2.7a1.4 1.4 0 0 1 .9.3l8.3 6.6a1.4 1.4 0 0 1 .5 1.1v8.7a2.2 2.2 0 0 1-2.2 2.2h-4.6v-5.7a1 1 0 0 0-1-1h-3.8a1 1 0 0 0-1 1v5.7H4.5a2.2 2.2 0 0 1-2.2-2.2v-8.7a1.4 1.4 0 0 1 .5-1.1l8.3-6.6a1.4 1.4 0 0 1 .9-.3z"/>',
+  dex:'<path d="M3.5 5.1a.5.5 0 0 0-.36.85l8.5 8.7a.5.5 0 0 0 .72 0l8.5-8.7a.5.5 0 0 0-.36-.85z"/><path d="M11.1 14.6h1.8v4.3h2.8a.9.9 0 0 1 0 1.8H8.3a.9.9 0 0 1 0-1.8h2.8z"/>',
+  heart:'<path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z"/>',
+  bottle:'<path fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/>',
+};
+function icon(name, size, color, sw, solid){
+  sw = sw || 1.75;
+  if (solid && SOLID[name]) return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">${SOLID[name]}</svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</svg>`;
+}
+function hydrateIcons(root){
+  root.querySelectorAll('[data-ic]').forEach(el=>{
+    const [n,s,c,sw,solid] = el.dataset.ic.split(':');
+    el.insertAdjacentHTML('afterbegin', icon(n, +s, c, +sw || 1.75, solid==='solid'));
+    if (!el.style.display) el.style.display = el.classList.contains('gb') ? 'grid' : 'inline-grid';
+  });
+}
+
+/* status bar */
+document.querySelectorAll('[data-sb]').forEach(el=>{
+  const c = el.dataset.sb==='dark' ? '#2B2322' : '#FFFDF9';
+  el.innerHTML = `<svg width="18" height="12" viewBox="0 0 18 12" fill="${c}"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="${c}"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.5 8.5 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.7 6.7 0 0 0 8 4c-1.8 0-3.4.7-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3ZM8 9.3l1.9-1.7a2.9 2.9 0 0 0-3.8 0Z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="${c}" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="${c}"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="${c}" fill-opacity=".45"/></svg>`;
+});
+
+/* tab bar */
+document.querySelectorAll('[data-tabs]').forEach(el=>{
+  const on = el.dataset.tabs;
+  const t = (id,label,g) => `<div class="tab ${on===id?'on':''}"><div class="gbox">${icon(g,24,on===id?'#FFFDF9':'#A99E94',1.75,on===id)}</div>${label}</div>`;
+  el.innerHTML = t('home','Home','home') + t('dex','Dex','dex') +
+    `<div class="tab post"><div class="pbtn">${icon('plus',22,'#E9E5DF',2.1)}</div></div>` +
+    t('bar','My Bar','bottle') +
+    `<div class="tab ${on==='profile'?'on':''}"><div class="gbox"><div class="av">NV</div></div>Profile</div>`;
+});
+
+/* ---------------- photos ---------------- */
+const P = id => `../../../assets/drinks/${id}.webp`;
+const GHOST = id => `../../../assets/drinks/ghost/${id}.webp`;
+
+/* stories */
+const stories = [
+  {u:'You', own:true},
+  {u:'maya.pours', img:'aperol-spritz'},
+  {u:'theo_stirs', img:'paper-plane'},
+  {u:'ines.ag', img:'negroni'},
+  {u:'dmitri.k', img:'martini', seen:true},
+  {u:'ana.lucia', img:'clover-club', seen:true},
+];
+document.getElementById('stories').innerHTML = stories.map(s=>{
+  const ring = s.own||s.seen ? `border:1px solid var(--storyRingSeen)` : `border:2.5px solid var(--storyRing)`;
+  const pad = s.own||s.seen ? 4.5 : 3;
+  const disc = s.own
+    ? `<div class="avatar" style="width:57px;height:57px;background:var(--merlot);font-size:20px">NV</div>`
+    : `<img src="${P(s.img)}" style="width:57px;height:57px;border-radius:50%;object-fit:cover;display:block">`;
+  const badge = s.own ? `<div style="position:absolute;right:-1px;bottom:-1px;width:22px;height:22px;border-radius:50%;background:var(--onLining);box-shadow:0 0 0 2px var(--lining);display:grid;place-items:center">${icon('plus',14,'#5B0F1A',2.4)}</div>` : '';
+  return `<div style="width:76px;display:flex;flex-direction:column;align-items:center">
+    <div style="position:relative;width:68px;height:68px;border-radius:50%;${ring};padding:${pad - (s.own||s.seen?1:2.5)}px;display:grid;place-items:center">${disc}${badge}</div>
+    <div style="margin-top:6px;font:500 12px/16px Inter;color:${s.seen?'var(--onLiningMuted)':'var(--onLining)'};white-space:nowrap">${s.u}</div></div>`;
+}).join('');
+
+/* ---------------- Dex grid: number order ---------------- */
+const dex = [
+  [1,'caesar','Caesar',1],[2,'greyhound','Greyhound',0],[3,'brandy-alexander','Brandy Alexander',1],
+  [4,'espresso-martini','Espresso Martini',1],[5,'grasshopper','Grasshopper',0],[6,'porto-flip','Porto Flip',0],
+  [7,'white-russian','White Russian',1],[8,'gin-fizz','Gin Fizz',1],[9,'ramos-gin-fizz','Ramos Gin Fizz',1],
+];
+(function(){
+  const g = document.getElementById('dexgrid');
+  const W = 129, GAP = 10, X0 = 16, Y0 = 314, CH = 196, PITCH = 228;
+  let html = '';
+  for (let r = 0; r < 3; r++) {
+    const y = Y0 + r * PITCH;
+    for (let c = 0; c < 3; c++) {
+      const d = dex[r*3+c]; if (!d) continue;
+      const [n,id,name,got] = d;
+      const x = X0 + c * (W + GAP);
+      const no = String(n).padStart(4,'0');
+      if (got) {
+        html += `<div class="abs mount" style="left:${x}px;top:${y}px;width:${W}px;height:${CH}px;padding:8px">
+          <div class="key"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;height:18px"><span class="plate"><span class="no">Nº</span>${no}</span>${icon('check',15,'#5B0F1A',2.4)}</div>
+          <div style="font:700 16px/20px Playfair;color:var(--ink);margin-top:6px;height:40px">${name}</div>
+          <div class="win bevel" style="width:111px;height:111px;margin-top:5px"><img src="${P(id)}"></div>
+        </div>`;
+      } else {
+        html += `<div class="abs slot" style="left:${x}px;top:${y}px;width:${W}px;height:${CH}px;padding:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;height:18px"><span class="plate tarn"><span class="no">Nº</span>${no}</span>${icon('lock',15,'#A7837F',1.75)}</div>
+          <div style="font:500 14px/18px Inter;color:var(--onLiningMuted);margin-top:7px;height:39px">${name}</div>
+          <div class="win" style="width:111px;height:111px;margin-top:5px;background:var(--cellar)"><img src="${GHOST(id)}" style="opacity:.9"></div>
+        </div>`;
+      }
+    }
+    const a = String(r*3+1).padStart(4,'0'), b = String(r*3+3).padStart(4,'0');
+    html += `<div class="shelf" style="top:${y+CH+2}px"><div class="top"></div><div class="br"></div><div class="front wood"></div><div class="shade"></div>
+      <div class="holder" style="left:16px">${a} – ${b}</div></div>`;
+  }
+  g.innerHTML = html;
+})();
+
+/* ---------------- My Bar labels ---------------- */
+const ings = [['Lemon',173,1],['Gin',167,1],['Lime',163,1],['Soda water',83,1],['Orange',82,0],['Angostura bitters',76,1]];
+document.getElementById('labels').innerHTML = ings.map(([n,u,on],i)=>`
+  <div class="tag ${on?'on':''}" data-tag="${on?'labelOn':'labelOff'}" style="height:50px;padding:0 12px 0 12px;gap:10px;display:flex;min-width:0;width:100%">
+    <span style="width:20px;height:20px;border-radius:3px;flex:none;display:grid;place-items:center;${on?'background:var(--wine)':'border:1px solid var(--lineControl);background:var(--white)'}">${on?icon('check',14,'#E9E5DF',2.6):''}</span>
+    <span style="flex:1;min-width:0"><span style="display:block;font:600 15px/19px Inter;color:var(--ink);white-space:nowrap">${n}</span><span style="display:flex;justify-content:space-between;font:400 12px/16px Inter;color:var(--muted)"><span>in <span style="font-variant-numeric:tabular-nums">${u}</span> drinks</span><span style="font:500 11px/16px Inter;letter-spacing:1px;color:var(--brassInk);font-variant-numeric:tabular-nums">${String(i+1).padStart(2,'0')}</span></span></span>
+  </div>`).join('');
+
+/* can make */
+const can = [['daiquiri','Daiquiri',100],['americano','Americano',13],['boulevardier','Boulevardier',122],['tom-collins','Tom Collins',33]];
+document.getElementById('canmake').innerHTML = can.map(([id,n,no])=>`
+  <div class="mount" style="width:112px;min-height:184px;padding:8px;flex:none">
+    <div class="key"></div>
+    <div class="win bevel" style="width:94px;height:94px"><img src="${P(id)}"></div>
+    <div style="margin-top:8px"><span class="plate"><span class="no">Nº</span>${String(no).padStart(4,'0')}</span></div>
+    <div style="font:700 15px/19px Playfair;margin-top:5px;color:var(--ink)">${n}</div>
+  </div>`).join('');
+
+/* likers */
+const likers = [
+  ['Maya Ortiz','maya.pours','#8A5F10','MO','Following',1],
+  ['Nico Vargas','nico.pours','#7E2330','NV',null,1],
+  ['Dmitri Kovač','dmitri.k','#736247','DK','Follow',0],
+  ['Ana Lucía Rivera','ana.lucia','#5E2545','AL','Following',1],
+  ['Sam Ortega','sam.ortega','#3A2E2C','SO','Follow',0],
+  ['Ines Aguilar','ines.ag','#5B0F1A','IA','Following',0],
+];
+document.getElementById('likers').innerHTML = likers.map(([name,u,c,i,f,inDex],k)=>`
+  <div style="display:flex;align-items:center;gap:12px;height:64px;${k?'border-top:1px solid var(--line)':''}">
+    <div class="avatar" style="width:44px;height:44px;background:${c};font-size:16px">${i}</div>
+    <div style="flex:1;min-width:0">
+      <div class="u" style="white-space:nowrap">${name}${u==='nico.pours'?' <span style="font-weight:400;color:var(--muted);font-size:14px">(you)</span>':''}</div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:2px"><span style="font:400 13px/18px Inter;color:var(--muted)">${u}</span>${inDex?'<span class="tag" data-tag="mini" style="height:18px;padding:0 6px;font-size:11px;line-height:14px;gap:3px">'+icon('check',10,'#5B0F1A',2.6)+(u==='nico.pours'?'In your Dex':'In their Dex')+'</span>':''}</div>
+    </div>
+    ${f==='Follow'?'<span class="btn wine sm" style="width:96px">Follow</span>':f?'<span class="btn out sm" style="width:96px">Following</span>':''}
+  </div>`).join('');
+
+/* profile counts */
+document.getElementById('counts').innerHTML = [['64','posts'],['212','followers'],['180','following']].map(([n,l],i)=>`
+  ${i?'<span style="width:1px;align-self:stretch;margin:6px 0;background:var(--brass);opacity:.6"></span>':''}
+  <div style="text-align:center;flex:1"><div style="font:600 19px/24px Inter;font-variant-numeric:tabular-nums">${n}</div><div style="font:400 13px/18px Inter;color:var(--muted)">${l}</div></div>`).join('');
+
+/* profile grid: every post carries its plate */
+const posts = [['negroni',127],['paper-plane',107],['daiquiri',100],['last-word',104],['old-fashioned',128],['aviation',92],['penicillin',108],['boulevardier',122],['margarita',106]];
+document.getElementById('pgrid').innerHTML = posts.map(([id,n])=>`
+  <div style="position:relative;aspect-ratio:4/5;background:var(--cellar);overflow:hidden">
+    <img src="${P(id)}" style="width:100%;height:100%;object-fit:cover;display:block">
+    <span class="plate" style="position:absolute;left:6px;bottom:6px"><span class="no">Nº</span>${String(n).padStart(4,'0')}</span>
+  </div>`).join('');
+
+/* ---------------- drawn hardware ---------------- */
+hydrateIcons(document);
+document.fonts.ready.then(()=>{
+
+/* corner brackets: four brass L plates with a screw in each corner */
+document.querySelectorAll('.brackets').forEach(el=>{
+  const w = el.offsetWidth, h = el.offsetHeight, A = 22, T = 3, S = 8;
+  const L = (x,y,sx,sy) => {
+    const p = `M0 0H${A}V${T}H${S}V${S}H${T}V${A}H0Z`;
+    return `<g transform="translate(${x} ${y}) scale(${sx} ${sy})">
+      <path d="${p}" fill="#B8924F" stroke="#7D5F2C" stroke-width=".75"/>
+      <path d="M.6 ${A-.6}V.6H${A-.6}" fill="none" stroke="#E8D3A2" stroke-width=".9" stroke-opacity=".9"/>
+      <circle cx="${S/2+.6}" cy="${S/2+.6}" r="1.9" fill="#7D5F2C"/><path d="M${S/2-.6} ${S/2+1.8} ${S/2+1.8} ${S/2-.6}" stroke="#E8D3A2" stroke-width=".7"/>
+    </g>`;
+  };
+  el.innerHTML = `<svg width="${w}" height="${h}" style="filter:drop-shadow(0 1px 1px rgba(14,11,11,.55))">${L(0,0,1,1)+L(w,0,-1,1)+L(0,h,1,-1)+L(w,h,-1,-1)}</svg>`;
+});
+
+/* bottle-label tags: chamfered corners, the big ones with an inner rule */
+function chamferPath(w,h,c,i){ const a=i+.5, b=c; return `M${a+b} ${a}H${w-a-b}L${w-a} ${a+b}V${h-a-b}L${w-a-b} ${h-a}H${a+b}L${a} ${h-a-b}V${a+b}Z`; }
+document.querySelectorAll('[data-tag]').forEach(el=>{
+  const w = el.offsetWidth, h = el.offsetHeight, kind = el.dataset.tag;
+  const S = {
+    label:{fill:'#F3E9D2',edge:'#7D5F2C',c:4,inner:false},
+    mini:{fill:'#F3E9D2',edge:'rgba(125,95,44,.7)',c:3,inner:false},
+    labelOn:{fill:'#F3E9D2',edge:'#7D5F2C',c:7,inner:'rgba(184,146,79,.85)'},
+    labelOff:{fill:'#FFFFFF',edge:'#D9CFC1',c:7,inner:false},
+  }[kind];
+  let s = `<svg class="edge" width="${w}" height="${h}"><path d="${chamferPath(w,h,S.c,0)}" fill="${S.fill}" stroke="${S.edge}"/>`;
+  if (S.inner) s += `<path d="${chamferPath(w,h,S.c-1.2,2.5)}" fill="none" stroke="${S.inner}" stroke-width=".8"/>`;
+  el.insertAdjacentHTML('afterbegin', s + '</svg>');
+  el.style.isolation = 'isolate';
+});
+
+/* bar-spoon twist rule: a twisted shaft between two discs */
+document.querySelectorAll('[data-spoon]').forEach(svg=>{
+  const w = svg.getBoundingClientRect().width, h = 8, cy = 4;
+  let d = '';
+  for (let x = 10; x < w - 16; x += 3.2) d += `M${x.toFixed(1)} ${cy+2.2}L${(x+2.6).toFixed(1)} ${cy-2.2}`;
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.innerHTML = `<path d="M6 ${cy}H${w-6}" stroke="#B8924F" stroke-width="1" opacity=".55"/>
+    <path d="${d}" stroke="#B8924F" stroke-width="1.1" stroke-linecap="round"/>
+    <circle cx="3" cy="${cy}" r="2.6" fill="#B8924F"/><circle cx="${w-4}" cy="${cy}" r="3.6" fill="#B8924F"/><circle cx="${w-4}" cy="${cy}" r="1.4" fill="#E8D3A2"/>`;
+});
+
+/* the brass gauge: a level tube, ticks every 10%, notches at the rank ladder */
+document.querySelectorAll('[data-gauge]').forEach(el=>{
+  const [n,total,tone] = el.dataset.gauge.split(':'); const w = el.offsetWidth;
+  const pct = +n / +total, H = 8, y = 2;
+  const ink = tone==='wood' ? '#C9B6A8' : '#B8A09B';
+  const well = tone==='wood' ? '#2E1F19' : '#2F070D';
+  let ticks = '';
+  for (let i = 0; i <= 20; i++) { const x = (w-1) * i/20 + .5; ticks += `<path d="M${x} ${y+H+2}V${y+H+(i%2?4:6)}" stroke="#B8924F" stroke-width="1" opacity="${i%2?.55:.9}"/>`; }
+  let notches = '';
+  if (tone==='wood') [.10,.25,.50,.75].forEach(p=>{ const x=(w-1)*p+.5; notches += `<path d="M${x-3.5} ${y-3.5}L${x} ${y}L${x+3.5} ${y-3.5}Z" fill="#D6B676"/>`; });
+  const labels = tone==='wood'
+    ? [[.10,'209'],[.25,'523'],[.50,'1,045'],[.75,'1,567'],[1,'2,089']]
+    : [[0,'0'],[.25,'500'],[.5,'1,000'],[.75,'1,500'],[1,'2,089']];
+  const lab = labels.map(([p,t])=>{ const x=(w-1)*p+.5; const anchor = p===0?'start':p===1?'end':'middle'; return `<text x="${x}" y="${y+H+18}" text-anchor="${anchor}" font-family="Inter" font-weight="500" font-size="11" fill="${ink}" style="font-variant-numeric:tabular-nums">${t}</text>`; }).join('');
+  el.innerHTML = `<svg width="${w}" height="30">
+    <rect x=".5" y="${y+.5}" width="${w-1}" height="${H-1}" rx="2" fill="${well}" stroke="#B8924F"/>
+    <rect x="2" y="${y+2}" width="${Math.max(3,(w-4)*pct)}" height="${H-4}" rx="1" fill="#C9A867"/>
+    <path d="M2 ${y+2.5}H${2+Math.max(3,(w-4)*pct)}" stroke="#E8D3A2" stroke-width="1"/>
+    ${notches}${ticks}${lab}</svg>`;
+});
+
+document.body.dataset.ready='1';
+});
+
+/* solo mode for per-screen renders: index.html#home etc. */
+if (location.hash) {
+  const id = location.hash.slice(1);
+  document.body.classList.add('solo');
+  const f = document.getElementById('f-' + id); if (f) f.classList.add('on');
+}
+</script>
+</body>
+</html>
