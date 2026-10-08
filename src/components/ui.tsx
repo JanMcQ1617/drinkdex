@@ -618,6 +618,7 @@ export function Chip({
   count,
   disabled,
   accessibilityLabel,
+  tone = 'paper',
 }: {
   label: string;
   selected: boolean;
@@ -627,8 +628,17 @@ export function Chip({
   count?: number;
   disabled?: boolean;
   accessibilityLabel?: string;
+  /**
+   * v3.3 Brass: 'lining' for a chip on the cabinet's wine (the Dex's
+   * filters). Resting, a clear chip on a liningControl edge (3.27:1) with
+   * bone words and an onLiningMuted count; selected, the bone fill with
+   * lining ink (13.32:1), the lining's own primary, since wine on lining
+   * is 1.22:1. The check still leads a selected chip.
+   */
+  tone?: 'paper' | 'lining';
 }) {
-  const ink = selected ? colors.wine : colors.text;
+  const lining = tone === 'lining';
+  const ink = lining ? (selected ? colors.lining : colors.onLining) : selected ? colors.wine : colors.text;
   const lead = icon ?? (selected ? 'check' : null);
   return (
     <Pressable
@@ -649,13 +659,23 @@ export function Chip({
       accessibilityState={{ selected, disabled: !!disabled }}
       style={({ pressed }) => [
         styles.chip,
-        selected && styles.chipSelected,
-        pressed && styles.chipPressed,
+        lining && styles.chipLining,
+        selected && (lining ? styles.chipLiningSelected : styles.chipSelected),
+        pressed && (lining ? (selected ? styles.chipLiningSelectedPressed : styles.chipLiningPressed) : styles.chipPressed),
         disabled && styles.buttonDisabled,
       ]}>
       {lead ? <Icon name={lead} size={14} color={ink} /> : null}
-      <Text style={[styles.chipLabel, selected && styles.chipLabelSelected]}>{label}</Text>
-      {count != null ? <Text style={[styles.chipCount, tabular]}>{formatCount(count)}</Text> : null}
+      <Text style={[styles.chipLabel, selected && styles.chipLabelSelected, { color: ink }]}>{label}</Text>
+      {count != null ? (
+        <Text
+          style={[
+            styles.chipCount,
+            tabular,
+            lining && { color: selected ? colors.textMuted : colors.onLiningMuted },
+          ]}>
+          {formatCount(count)}
+        </Text>
+      ) : null}
       {trailingIcon ? <Icon name={trailingIcon} size={12} color={ink} /> : null}
     </Pressable>
   );
@@ -1481,6 +1501,16 @@ export interface SearchFieldProps
   ref?: React.Ref<TextInput>;
   /** The box's outer placement: margins and width. The text inside is fixed. */
   style?: ViewStyle;
+  /**
+   * v3.3 Brass D20: 'lining' sinks the field into the cabinet as a well,
+   * the cellar's fill with an opaque onLiningFaint edge (4.19:1 against
+   * the grained lining around it; the translucent liningControl, laid
+   * over the cellar fill, came to 2.62:1 there), bone text and
+   * an onLiningMuted glyph and placeholder (6.79:1 on lining, more in the
+   * cellar). The mock's inset shadow is left out: the field scrolls with
+   * the Dex's header, and v3.3 casts no shadow from what scrolls.
+   */
+  tone?: 'paper' | 'lining';
 }
 
 /**
@@ -1519,13 +1549,22 @@ export function SearchField({
   style,
   onFocus,
   onBlur,
+  tone = 'paper',
   ...input
 }: SearchFieldProps) {
   const [focused, setFocused] = useState(false);
+  const lining = tone === 'lining';
+  const muted = lining ? colors.onLiningMuted : colors.textMuted;
   return (
     <View
-      style={[styles.search, onCard && styles.searchOnCard, focused && styles.searchFocused, style]}>
-      <Icon name="search" size={18} color={colors.textMuted} />
+      style={[
+        styles.search,
+        onCard && styles.searchOnCard,
+        lining && styles.searchLining,
+        focused && (lining ? styles.searchLiningFocused : styles.searchFocused),
+        style,
+      ]}>
+      <Icon name="search" size={18} color={muted} />
       <TextInput
         {...input}
         ref={ref}
@@ -1540,11 +1579,12 @@ export function SearchField({
           onBlur?.(e);
         }}
         placeholder={placeholder}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={muted}
         autoCorrect={false}
         autoCapitalize="none"
         returnKeyType={returnKeyType}
-        style={styles.searchInput}
+        keyboardAppearance={lining ? 'dark' : input.keyboardAppearance}
+        style={[styles.searchInput, lining && styles.searchInputLining]}
         accessibilityLabel={accessibilityLabel}
       />
       {trailing}
@@ -1555,7 +1595,7 @@ export function SearchField({
           accessibilityRole="button"
           accessibilityLabel="Clear search"
           style={({ pressed }) => [styles.searchClear, pressed && styles.glyphPressed]}>
-          <Icon name="close" size={16} color={colors.textMuted} />
+          <Icon name="close" size={16} color={muted} />
         </Pressable>
       ) : null}
     </View>
@@ -2352,6 +2392,10 @@ const styles = StyleSheet.create({
   },
   chipSelected: { backgroundColor: colors.wineWash, borderColor: colors.wine },
   chipPressed: { backgroundColor: colors.bgSunk },
+  chipLining: { backgroundColor: 'transparent', borderColor: colors.liningControl },
+  chipLiningSelected: { backgroundColor: colors.onLining, borderColor: colors.onLining },
+  chipLiningPressed: { backgroundColor: colors.liningPressed },
+  chipLiningSelectedPressed: { backgroundColor: colors.onLiningMuted, borderColor: colors.onLiningMuted },
   chipLabel: {
     fontFamily: fonts.bodyMedium,
     fontSize: typeScale.caption.fontSize,
@@ -2522,6 +2566,9 @@ const styles = StyleSheet.create({
   },
   searchOnCard: { backgroundColor: colors.bg },
   searchFocused: { borderColor: colors.lineControl },
+  searchLining: { backgroundColor: colors.liningDeep, borderColor: colors.onLiningFaint },
+  searchLiningFocused: { borderColor: colors.onLiningMuted },
+  searchInputLining: { color: colors.onLining },
   searchInput: {
     flex: 1,
     alignSelf: 'stretch',

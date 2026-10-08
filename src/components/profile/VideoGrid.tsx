@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
+import { MediaNumberPlate } from '@/components/media';
 import { timeAgoSpoken } from '@/components/PostCard';
 import { useGridTile } from '@/components/profile/PostGrid';
 import {
@@ -118,6 +119,8 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
   const router = useRouter();
   const poster = usePosterUrl(video.posterPath);
   const drink = getDrink(video.drinkId);
+  // A reel tagged with a catalogue drink carries its plate, as a post tile does.
+  const number = drink && drink.dexNumber > 0 ? drink.dexNumber : null;
 
   return (
     <PressableScale
@@ -132,7 +135,8 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
       accessibilityLabel={VIDEO_COPY.tileLabel({
         durationMs: video.durationMs,
         ago: timeAgoSpoken(video.createdAt),
-        drink: drink?.name,
+        // "tagged Negroni, number 127": the plate, said.
+        drink: drink ? `${drink.name}${number !== null ? `, number ${number}` : ''}` : undefined,
       })}
       style={[styles.tile, { width }]}>
       {/*
@@ -164,12 +168,23 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
         The length, bottom left, on a dark band rather than over the bare
         poster: bone type over a bright frame would vanish. The band is a
         flat scrim, no gradient, so the figures sit on a known ground.
+
+        The drink's brass plate (v3.3 Brass D1) stands just above the band,
+        6pt in, laid out in one column with it so the two never meet at any
+        text size. Solid brass, so it needs no scrim of its own.
       */}
-      <View style={styles.band} pointerEvents="none">
-        <Icon name="play" size={14} color={colors.reelInk} filled />
-        <Text style={styles.duration} maxFontSizeMultiplier={1.3}>
-          {formatVideoDuration(video.durationMs)}
-        </Text>
+      <View style={styles.foot} pointerEvents="none">
+        {number !== null ? (
+          <View style={styles.plate}>
+            <MediaNumberPlate n={number} size="sm" />
+          </View>
+        ) : null}
+        <View style={styles.band}>
+          <Icon name="play" size={14} color={colors.reelInk} filled />
+          <Text style={styles.duration} maxFontSizeMultiplier={1.3}>
+            {formatVideoDuration(video.durationMs)}
+          </Text>
+        </View>
       </View>
     </PressableScale>
   );
@@ -184,11 +199,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.reelGround,
   },
   poster: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
+  foot: { position: 'absolute', left: 0, right: 0, bottom: 0 },
+  plate: { marginLeft: 6, marginBottom: 6 },
   band: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
     minHeight: 32,
     flexDirection: 'row',
     alignItems: 'center',

@@ -16,8 +16,8 @@ import type { Drink } from '@/types';
 /* under its source's key and hands it to the next size that misses its */
 /* own entry, so a 42pt tray mini decoded first would be the picture in */
 /* a 198pt print, or in the Dex grid, soft (ui.tsx's Avatar tells the   */
-/* same story). DrinkFace keys a bundled photo by its file, so here the */
-/* asset is resolved to its URI and given `${id}#<w>x<h>`: every size    */
+/* same story). DrinkFace now adds its own size suffix too; this one    */
+/* keeps `${id}#<w>x<h>`, keyed by drink, not file: every size          */
 /* decodes for itself, and nothing here can reach another screen's      */
 /* frames.                                                              */
 /*                                                                      */

@@ -5,12 +5,12 @@ import { useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BarPicker } from '@/components/bar/BarPicker';
-import { OneIngredientAway, type PourNote, STRIP_MAX, YouCanMake } from '@/components/bar/Counter';
+import { AWAY_PAGE, OneIngredientAway, type PourNote, STRIP_MAX, YouCanMake } from '@/components/bar/Counter';
 import {
+  awayOf,
+  awayRows,
   basicsExamples,
-  groupsOf,
   rankDrinks,
-  shortGroups,
   type Snapshot,
   stripOf,
   takeSnapshot,
@@ -30,30 +30,38 @@ import type { Drink } from '@/types';
 /* ==================================================================== */
 /* My Bar: pick what you have, see what you can make                    */
 /*                                                                      */
-/* One page, one scroll, on paper (v3.3). The back bar of vector        */
-/* bottles on lit shelves is gone: Jan asked for it off ("the shelf     */
-/* section for my bar, I want removed. and just let them choose what    */
-/* they have"), and its SVG bottles were the heaviest screen in the     */
-/* app, the one My Bar's first open stuttered on. Top to bottom:        */
+/* One page, one scroll (v3.3). The back bar of vector bottles on lit   */
+/* shelves is gone: Jan asked for it off ("the shelf section for my     */
+/* bar, I want removed. and just let them choose what they have"), and  */
+/* its SVG bottles were the heaviest screen in the app, the one My      */
+/* Bar's first open stuttered on. Top to bottom:                        */
 /*                                                                      */
-/*   PICKER   "What's in your bar?": a search field, the category       */
-/*            chips and a checklist, most useful first (BarPicker). An  */
-/*            empty bar offers the fourteen basics in one tap.          */
-/*   MAKE     "You can make N": the strip of lit mounts (just unlocked, */
-/*            then new to your Dex), "See all" for every one A to Z.    */
-/*   AWAY     "One ingredient away N", grouped by the one ingredient.   */
-/*            Add there expands in place with what it unlocked.         */
+/*   PICKER   "What's in your bar?" on a lining band under the lining   */
+/*            top bar, its tally on a brass plate, then on paper a      */
+/*            search field, the category chips and the checklist as     */
+/*            bottle labels, most useful first (BarPicker). An empty    */
+/*            bar offers the fourteen basics in one tap.                */
+/*   MAKE     "You can make N": lit mounts standing on a walnut counter */
+/*            (just unlocked, then new to your Dex), "See all" for      */
+/*            every one A to Z, set as a menu.                          */
+/*   AWAY     "One ingredient away N": the best single bottle to add,   */
+/*            then a row per drink with a "+ Orange" of its own.        */
 /*                                                                      */
-/* STILLNESS. The checklist's order and the groups' order are a         */
-/* SNAPSHOT, taken when another tab takes the front (and when the bar   */
-/* first loads, and after Clear; a drink page pushed over it is not     */
-/* leaving), so nothing moves under the finger while you tick: a box    */
-/* you tick flips where it stands, and the same tap unticks it. No      */
-/* layout animation and no timed animation run here (v3.3 section 0):   */
-/* the motion is the native kind that rests fully drawn, a row's press  */
-/* fill, expo-image's crossfade from a ghost to a lit photo, the "See   */
-/* all" sheet's UIKit slide, the scroll that lifts the search field     */
-/* above the keyboard and the tab pager under the finger.               */
+/* BRASS (specs/v3-3-mockups/brass, screen 3): the head band ends in a  */
+/* brass rail, not a shade, and the top bar's own rail shows only once  */
+/* the band scrolls under it. No gradient at the top, anywhere.         */
+/*                                                                      */
+/* STILLNESS. The checklist's order and One ingredient away (its rows   */
+/* and its best bottle) are a SNAPSHOT, taken when another tab takes    */
+/* the front (and when the bar first loads, and after Clear; a drink    */
+/* page pushed over it is not leaving), so nothing moves under the      */
+/* finger while you tick: a label you tick flips where it stands, an    */
+/* Add flips its toggle where it stands, and the same tap undoes it.    */
+/* No layout animation and no timed animation run here (v3.3 section    */
+/* 0): the motion is the native kind that rests fully drawn, a press's  */
+/* fill or fade, expo-image's crossfade from a ghost to a lit photo,    */
+/* the "See all" sheet's UIKit slide, the scroll that lifts the search  */
+/* field above the keyboard and the tab pager under the finger.         */
 /* ==================================================================== */
 
 /** What changed on this visit, for the line under "You can make". */
@@ -65,8 +73,16 @@ interface Change {
   drinks: readonly Drink[];
 }
 
-/** Groups under One ingredient away, then this many more a tap at a time. */
-const GROUP_PAGE = 6;
+/**
+ * Whether a drink is in your Dex, read from the store as it is now, for
+ * a snapshot taken outside a render (the tab listener, an Add). It says
+ * no for every drink until the Dex has loaded, like the render's own
+ * test, so the order a snapshot takes at launch is the one it keeps.
+ */
+function dexTestNow(): (d: Drink) => boolean {
+  const { hydrated, unlocks } = useCollection.getState();
+  return (d) => hydrated && Object.prototype.hasOwnProperty.call(unlocks, d.id);
+}
 
 export default function BarScreen() {
   const insets = useSafeAreaInsets();
@@ -88,7 +104,9 @@ export default function BarScreen() {
   const unlocks = useCollection((s) => s.unlocks);
   const dexReady = useCollection((s) => s.hydrated);
 
-  const [snap, setSnap] = useState<Snapshot>(() => takeSnapshot(useBar.getState().owned));
+  const inDex = (d: Drink) => dexReady && Object.prototype.hasOwnProperty.call(unlocks, d.id);
+
+  const [snap, setSnap] = useState<Snapshot>(() => takeSnapshot(useBar.getState().owned, dexTestNow()));
   /** Whether `snap` was taken from the bar as loaded from disk, or the empty one before it. */
   const [snapLoaded, setSnapLoaded] = useState(() => useBar.getState().hydrated);
   /*
@@ -99,13 +117,10 @@ export default function BarScreen() {
    */
   if (barLoaded && !snapLoaded) {
     setSnapLoaded(true);
-    setSnap(takeSnapshot(owned));
+    setSnap(takeSnapshot(owned, inDex));
   }
   const [change, setChange] = useState<Change | null>(null);
-  /** What each thing added this visit unlocked, for its Added row. */
-  const [litBy, setLitBy] = useState<Record<string, readonly Drink[]>>({});
-  const [openGroups, setOpenGroups] = useState<Record<string, true>>({});
-  const [groupsShown, setGroupsShown] = useState(GROUP_PAGE);
+  const [awayShown, setAwayShown] = useState(AWAY_PAGE);
   const [allOpen, setAllOpen] = useState(false);
 
   /*
@@ -120,10 +135,10 @@ export default function BarScreen() {
    * forgets this visit's changes. Read from the tab navigator's own state,
    * not useFocusEffect: a blur also fires when a drink page (or Log) is
    * pushed over the tabs, and swiping back from a drink opened here found
-   * the rows re-sorted, "Campari unlocked 9" gone and the open groups
-   * shut. This also catches a tab changed from a pushed page, which blurs
-   * nothing here. The swipe pager (v3.3) keeps the TabRouter, so its
-   * state still says which tab is in front.
+   * the rows re-sorted and "Campari unlocked 9" gone. This also catches
+   * a tab changed from a pushed page, which blurs nothing here. The swipe
+   * pager (v3.3) keeps the TabRouter, so its state still says which tab
+   * is in front.
    */
   const navigation = useNavigation();
   const { key: routeKey } = useRoute();
@@ -138,18 +153,16 @@ export default function BarScreen() {
       }
       if (away) return;
       away = true;
-      setSnap(takeSnapshot(useBar.getState().owned));
+      setSnap(takeSnapshot(useBar.getState().owned, dexTestNow()));
       setChange(null);
-      setLitBy({});
-      setOpenGroups({});
-      setGroupsShown(GROUP_PAGE);
+      setAwayShown(AWAY_PAGE);
     });
   }, [navigation, routeKey]);
 
   /**
    * Adds a thing to your bar or takes it out, and says what that changed:
-   * the line under "You can make" ("Campari unlocked 9"), the Added row's
-   * drinks and VoiceOver all read this one diff.
+   * the line under "You can make" ("Campari unlocked 9") and VoiceOver
+   * both read this one diff.
    */
   const apply = useCallback((id: string) => {
     const state = useBar.getState();
@@ -167,17 +180,21 @@ export default function BarScreen() {
       return;
     }
     setChange({ id, label, on: true, drinks: lit });
-    setLitBy((m) => ({ ...m, [id]: lit }));
     announce(
       `${label} in your bar. ${lit.length ? `${lit.length} more ${lit.length === 1 ? 'drink' : 'drinks'}` : 'Nothing new yet'}, ${total} in all.`,
     );
   }, []);
 
-  /** Add on a One ingredient away row: first freeze the rows' order, so none moves under the finger. */
+  /**
+   * Add on a One ingredient away row or on its best bottle: first freeze
+   * the rows and the card as they stand, so none moves under the finger
+   * and the card does not swap to the next best bottle under it.
+   */
   const applyFromRow = useCallback(
     (id: string) => {
       const before = matchOwned(useBar.getState().owned);
-      setSnap((s) => (s.groups.length ? s : { ...s, ...groupsOf(before) }));
+      const test = dexTestNow();
+      setSnap((s) => (s.frozen ? s : { ...s, frozen: true, ...awayOf(before, test) }));
       apply(id);
     },
     [apply],
@@ -195,11 +212,9 @@ export default function BarScreen() {
 
   const clearBar = useCallback(() => {
     useBar.getState().clear();
-    setSnap(takeSnapshot({}));
+    setSnap(takeSnapshot({}, dexTestNow()));
     setChange(null);
-    setLitBy({});
-    setOpenGroups({});
-    setGroupsShown(GROUP_PAGE);
+    setAwayShown(AWAY_PAGE);
     announce('Your bar is clear.');
   }, []);
 
@@ -222,20 +237,8 @@ export default function BarScreen() {
     [reducedMotion],
   );
 
-  const toggleGroupOpen = useCallback(
-    (id: string) =>
-      setOpenGroups((m) => {
-        if (!m[id]) return { ...m, [id]: true };
-        const next = { ...m };
-        delete next[id];
-        return next;
-      }),
-    [],
-  );
-
   /* ---- What the page shows ---- */
 
-  const inDex = (d: Drink) => dexReady && Object.prototype.hasOwnProperty.call(unlocks, d.id);
   const empty = !Object.keys(owned).some((id) => INGREDIENTS_BY_ID[id]);
 
   const makeable = result.makeable.map((m) => m.drink);
@@ -255,7 +258,7 @@ export default function BarScreen() {
         ? { kind: 'default' }
         : { kind: 'none', short: result.nearly.length > 0 };
 
-  const short = shortGroups({ snap, result, owned, litBy, shown: groupsShown, inDex });
+  const oneAway = awayRows({ snap, result, owned, shown: awayShown, inDex });
 
   /* ---- See all ---- */
 
@@ -279,10 +282,12 @@ export default function BarScreen() {
       {/* The page's own grain, under everything: there is no global grain any more. */}
       <Grain />
       {/*
-        A root screen's own name on paper, with no control on either side:
-        the search is on the page, and the tab bar already has the +.
+        A root screen's own name on the lining, with no control on either
+        side: the search is on the page, and the tab bar already has the
+        +. At rest it runs straight into the picker's lining band; once the
+        band scrolls under it, its brass rail says so (Brass D10).
       */}
-      <ScreenTopBar size="lg" title="My Bar" showRule={scrolled} />
+      <ScreenTopBar size="lg" title="My Bar" tone="lining" showRule={scrolled} />
 
       <Animated.ScrollView
         ref={scrollRef}
@@ -312,12 +317,11 @@ export default function BarScreen() {
         />
         <OneIngredientAway
           total={result.nearly.length}
-          groups={short.groups}
-          more={short.more}
-          open={openGroups}
-          onToggle={applyFromRow}
-          onToggleOpen={toggleGroupOpen}
-          onShowMore={() => setGroupsShown((n) => n + GROUP_PAGE)}
+          best={oneAway.best}
+          rows={oneAway.rows}
+          more={oneAway.more}
+          onAdd={applyFromRow}
+          onShowMore={() => setAwayShown((n) => n + AWAY_PAGE)}
           onOpen={openDrink}
         />
       </Animated.ScrollView>

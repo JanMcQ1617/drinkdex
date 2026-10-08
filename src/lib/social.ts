@@ -38,6 +38,44 @@ export function isBlankCaption(caption: string | null | undefined): boolean {
 }
 
 /* ==================================================================== */
+/* How long ago                                                         */
+/*                                                                      */
+/* A post's "2h", a pour's, a like's. Here rather than in PostCard,     */
+/* which re-exports them, so the likers sheet PostCard opens can use    */
+/* them without the two files importing each other.                     */
+/* ==================================================================== */
+
+/** Whole units since `iso`, or null for "just now". */
+function elapsed(iso: string): { n: number; unit: 'minute' | 'hour' | 'day' | 'week' } | null {
+  const ms = Date.now() - Date.parse(iso);
+  if (Number.isNaN(ms) || ms < 0) return null;
+  const min = Math.floor(ms / 60000);
+  if (min < 1) return null;
+  if (min < 60) return { n: min, unit: 'minute' };
+  const h = Math.floor(min / 60);
+  if (h < 24) return { n: h, unit: 'hour' };
+  const d = Math.floor(h / 24);
+  if (d < 7) return { n: d, unit: 'day' };
+  return { n: Math.floor(d / 7), unit: 'week' };
+}
+
+/** "2h" / "3d" style relative timestamp, for tight spots: a post's author row, the story viewer's header, Activity rows. */
+export function timeAgo(iso: string): string {
+  const t = elapsed(iso);
+  return t ? `${t.n}${t.unit[0]}` : 'now';
+}
+
+/**
+ * The same timestamp in words: "2 hours ago". The card shows it this way
+ * too now, at the foot of the post, where there is room for the words;
+ * VoiceOver reads "2h" as "2 h" and "3w" as "3 w".
+ */
+export function timeAgoSpoken(iso: string): string {
+  const t = elapsed(iso);
+  return t ? `${t.n} ${t.unit}${t.n === 1 ? '' : 's'} ago` : 'just now';
+}
+
+/* ==================================================================== */
 /* Mapping                                                              */
 /* ==================================================================== */
 
@@ -555,6 +593,39 @@ export function isRenderablePost(post: Post): boolean {
   return getDrink(post.drinkId) !== undefined;
 }
 
+/**
+ * How many of the people you follow (never you) have a post in `feed`
+ * from today, by the phone's clock: Home's dateline ("6 friends posted
+ * today"). Distinct people, not posts. Read from the feed already on the
+ * phone, so it costs no request; the feed is the newest FEED_SIZE posts,
+ * which a day of friends' posts does not outrun in practice.
+ *
+ * `following` and not "every author but you": the feed can still hold
+ * someone you unfollowed a moment ago, until its next fetch.
+ */
+export function friendsPostedToday(
+  feed: readonly Post[],
+  following: readonly string[],
+  myId: string,
+  now: Date,
+): number {
+  const followed = new Set(following);
+  const who = new Set<string>();
+  for (const post of feed) {
+    if (post.authorId === myId || !followed.has(post.authorId) || who.has(post.authorId)) continue;
+    const at = new Date(post.createdAt);
+    // Local calendar day, not the last 24 hours: the line says "today" under today's date.
+    if (
+      at.getFullYear() === now.getFullYear() &&
+      at.getMonth() === now.getMonth() &&
+      at.getDate() === now.getDate()
+    ) {
+      who.add(post.authorId);
+    }
+  }
+  return who.size;
+}
+
 const FEED_SIZE = 100;
 
 const newestFirst = (a: PostQueryRow, b: PostQueryRow) =>
@@ -860,8 +931,12 @@ export const LIKERS_PAGE = 50;
  */
 export type LikersCursor = { at: string; user: string };
 
-/** Someone in a post's likers list, and whether you followed them when the page loaded. */
-export type PostLiker = UserProfile & { followedByMe: boolean };
+/**
+ * Someone in a post's likers list, whether you followed them when the page
+ * loaded, and when they liked it (the RPC's liked_at, the same string the
+ * cursor carries), for the sheet's "liked 2h ago".
+ */
+export type PostLiker = UserProfile & { followedByMe: boolean; likedAt: string };
 
 /**
  * Everyone who liked a post, newest first, LIKERS_PAGE at a time. You are
@@ -894,7 +969,7 @@ export async function fetchPostLikers(
   const rows = data ?? [];
   const last = rows[rows.length - 1];
   return {
-    people: rows.map((r) => ({ ...likerToProfile(r), followedByMe: r.followed_by_me })),
+    people: rows.map((r) => ({ ...likerToProfile(r), followedByMe: r.followed_by_me, likedAt: r.liked_at })),
     // A short page is the last one; a full one may be too, which costs one empty request.
     next: last && rows.length === LIKERS_PAGE ? { at: last.liked_at, user: last.user_id } : null,
   };

@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
+import { BrassPlate, formatPlateNumber, plateWidth, type PlateSize } from '@/components/brass/BrassPlate';
+import { LabelTag } from '@/components/brass/labels';
 import { DrinkName, VerticalFade } from '@/components/cabinet';
 import { Icon, type IconName } from '@/components/icons';
-import { dexNumber, fonts, onMedia, radius, space, stroke, tabular, textRole } from '@/constants/theme';
-import { formatDexNumber } from '@/data';
-import { textWidth } from '@/lib/textFit';
+import { fonts, onMedia, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 
 /* ==================================================================== */
 /* Over a photograph                                                    */
@@ -32,6 +32,13 @@ const PLAQUE_H = 24;
 const MEDIA_CAP = 1.3;
 /** A plaque's word: 12pt. */
 const PLAQUE_TEXT = 12;
+/*
+ * The nameplate's sides: 18 (was 16), so the brass corner bracket at
+ * inset 8 to 11 (Brass D4) ends 7pt short of the first glyph.
+ */
+const NAMEPLATE_SIDE = 18;
+/** Between the number plate and the status tag on the plates' row. */
+const PLATES_GAP = 6;
 const STATUS_ICON = 13;
 const STATUS_GAP = 5;
 
@@ -40,19 +47,16 @@ const STATUS_GAP = 5;
 /* ==================================================================== */
 
 /**
- * The number plate's media skin: "#0009" in `dexNumber` with onMedia.ink
- * on the marker fill (9.98:1 over a white frame), 24pt, 1pt marker edge.
+ * The number plate over a photograph. Since v3.3 Brass it is the solid
+ * engraved plate (components/brass/BrassPlate.tsx), whose skin is
+ * onMedia.plaque.brass: its ink is measured against the plate (6.79:1),
+ * so its contrast no longer depends on the picture, as the translucent
+ * marker's did. `lg` (default) on a nameplate, `sm` on a grid tile.
  * Not its own VoiceOver element: the nameplate (or the pours viewer's
  * footer) says "number 9".
  */
-export function MediaNumberPlate({ n }: { n: number }) {
-  return (
-    <View style={styles.numberPlate}>
-      <Text accessible={false} maxFontSizeMultiplier={MEDIA_CAP} style={[dexNumber, styles.numberText]}>
-        {formatDexNumber(n)}
-      </Text>
-    </View>
-  );
+export function MediaNumberPlate({ n, size = 'lg' }: { n: number; size?: PlateSize }) {
+  return <BrassPlate n={n} size={size} />;
 }
 
 type StatusSkin = { icon: IconName; label: string; strong: boolean };
@@ -62,17 +66,6 @@ function statusSkin(inDex: boolean, pressable: boolean): StatusSkin {
   return pressable
     ? { icon: 'plus', label: 'New to your Dex', strong: true }
     : { icon: 'lock', label: 'Not in your Dex yet', strong: false };
-}
-
-/**
- * The room a status plaque takes on its row, worked out rather than
- * measured (lib/textFit.ts errs wide), so the nameplate can keep its other
- * plates clear of it from the first frame.
- */
-function statusPlaqueWidth(inDex: boolean, pressable: boolean, fontScale: number): number {
-  const label = statusSkin(inDex, pressable).label;
-  const size = PLAQUE_TEXT * Math.min(fontScale, MEDIA_CAP);
-  return stroke.edge * 2 + space.sm * 2 + STATUS_ICON + STATUS_GAP + textWidth(label, 'inter', size);
 }
 
 /**
@@ -97,6 +90,26 @@ export function DexStatusPlaque({
   onPress?: () => void;
 }) {
   const skin = statusSkin(inDex, !!onPress);
+  /*
+   * v3.3 Brass D6: "In your Dex" is a bottle-label tag, label stock with a
+   * brassShade edge and a wine check, solid and audited as
+   * onMedia.plaque.label (12.73:1 against the label). The two "not yet"
+   * states keep the neutral plaque: the label means yours.
+   */
+  if (inDex) {
+    const tag = <LabelTag text={skin.label} size="md" />;
+    if (!onPress) return tag;
+    return (
+      <Pressable
+        onPress={onPress}
+        hitSlop={10}
+        accessibilityRole="button"
+        accessibilityLabel={`Open ${name} in the Dex`}
+        style={({ pressed }) => pressed && styles.pressed}>
+        {tag}
+      </Pressable>
+    );
+  }
   const body = (
     <>
       <Icon name={skin.icon} size={STATUS_ICON} color={onMedia.ink} />
@@ -206,6 +219,7 @@ export function Nameplate({
   meta,
   inDex,
   onOpen,
+  frameWidth,
 }: {
   name: string;
   number: number;
@@ -213,12 +227,24 @@ export function Nameplate({
   inDex: boolean | null;
   /** Opens /drink/[id]. */
   onOpen: () => void;
+  /**
+   * The photo's width, when it is not the screen's: v3.3's inset print
+   * (Brass D5) is 24pt in from each edge. The name's measure follows it.
+   */
+  frameWidth?: number;
 }) {
   const { width, fontScale } = useWindowDimensions();
   // The meta line's middle dots are for the eye; spoken, they are pauses.
   const spokenMeta = meta.split(/\s*·\s*/).filter(Boolean).join(', ');
   const spoken = `${name}, number ${number}.${spokenMeta ? ` ${spokenMeta}` : ''}`;
-  const reserve = inDex === null ? 0 : statusPlaqueWidth(inDex, true, fontScale) + space.sm;
+  /*
+   * The status tag sits right after the number plate (the Brass mock), on
+   * the plates' row: its left edge is worked out from the plate's width,
+   * so neither needs a layout pass. It is still drawn absolutely, after
+   * the name's group, so VoiceOver reads it second.
+   */
+  const tagLeft = NAMEPLATE_SIDE + plateWidth(formatPlateNumber(number), 'lg', fontScale) + PLATES_GAP;
+  const measure = (frameWidth ?? width) - NAMEPLATE_SIDE * 2;
 
   return (
     <View pointerEvents="box-none" style={styles.nameplate}>
@@ -237,14 +263,14 @@ export function Nameplate({
         accessibilityHint="Opens it in the Dex"
         onAccessibilityTap={onOpen}
         pointerEvents="box-none">
-        <View pointerEvents="none" style={[styles.plates, { paddingRight: reserve }]}>
+        <View pointerEvents="none" style={styles.plates}>
           <MediaNumberPlate n={number} />
         </View>
         <Pressable onPress={onOpen} hitSlop={8} style={styles.nameTap}>
           <DrinkName
             name={name}
             role={textRole.nameplate}
-            measure={width - space.lg * 2}
+            measure={measure}
             cap={MEDIA_CAP}
             color={onMedia.ink}
             style={styles.nameShadow}
@@ -260,7 +286,7 @@ export function Nameplate({
         ) : null}
       </View>
       {inDex !== null ? (
-        <View pointerEvents="box-none" style={styles.statusSlot}>
+        <View pointerEvents="box-none" style={[styles.statusSlot, { left: tagLeft }]}>
           <DexStatusPlaque inDex={inDex} name={name} onPress={onOpen} />
         </View>
       ) : null}
@@ -282,16 +308,6 @@ const styles = StyleSheet.create({
   plaqueText: { fontFamily: fonts.bodyMedium, fontSize: PLAQUE_TEXT, lineHeight: 16 },
   plaqueTextStrong: { fontFamily: fonts.bodySemiBold },
   pressed: { opacity: 0.8 },
-  numberPlate: {
-    minHeight: PLAQUE_H,
-    justifyContent: 'center',
-    paddingHorizontal: space.sm,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: onMedia.markerEdge,
-    backgroundColor: onMedia.markerFill,
-  },
-  numberText: { color: onMedia.ink },
 
   /* Marker */
   marker: {
@@ -318,10 +334,10 @@ const styles = StyleSheet.create({
   topScrim: { position: 'absolute', left: 0, right: 0, top: 0 },
 
   /* Nameplate */
-  nameplate: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: space.lg, paddingBottom: 18 },
+  nameplate: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: NAMEPLATE_SIDE, paddingBottom: 18 },
   nameplateFade: { position: 'absolute', left: 0, right: 0, top: -NAMEPLATE_FADE, height: NAMEPLATE_FADE },
-  plates: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 },
-  statusSlot: { position: 'absolute', top: 0, right: space.lg },
+  plates: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: PLATES_GAP },
+  statusSlot: { position: 'absolute', top: 0 },
   nameTap: { alignSelf: 'flex-start', marginTop: 10 },
   nameShadow: {
     textShadowColor: onMedia.shadow,

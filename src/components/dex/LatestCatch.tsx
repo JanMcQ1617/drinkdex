@@ -1,227 +1,245 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { DrinkName, HeroFigure, NumberPlate, svgStop, useSvgId } from '@/components/cabinet';
-import { DrinkFace, FACE_FILL } from '@/components/DexCard';
-import { Grain } from '@/components/Grain';
-import { Button, haptic, PressableScale } from '@/components/ui';
-import { colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
-import { formatCount, TOTAL } from '@/data';
-import { latestCatch, nextRank } from '@/lib/cabinet';
+import { BrassGauge } from '@/components/brass';
+import { DrinkName } from '@/components/cabinet';
+import { Button, haptic } from '@/components/ui';
+import { colors, fonts, layout, space, tabular, textRole } from '@/constants/theme';
+import { formatCount, getDrink, TOTAL } from '@/data';
+import { latestCatch } from '@/lib/cabinet';
 import { catchDay } from '@/lib/drinkLabels';
+import { textWidth } from '@/lib/textFit';
 import { useCollection } from '@/store/collection';
 
 /* ==================================================================== */
-/* Latest catch                                                         */
+/* The Dex head                                                         */
 /*                                                                      */
-/* The head of the Dex's cabinet front (spec §9.7.2): the drink most    */
-/* recently brought into the collection, lit, beside the one figure the */
-/* screen exists for, the number collected. It replaces a 2pt progress  */
-/* rule and a 13pt sentence, which made the collection's own count the  */
-/* smallest type on the screen.                                         */
+/* The top of the Dex, on the lining (v3.3 Brass, screen 2): the one    */
+/* figure the screen exists for, "38 in your Dex, of 2,089 · 1.8%", at  */
+/* the left; at the right a brass kicker, "latest catch", over the name */
+/* of the drink most recently brought in; under both, the brass gauge   */
+/* with a mark for every caught drink AT ITS DEX NUMBER (graft 1).      */
 /*                                                                      */
-/* The panel is the cellar (liningDeep), the ground every lit photo     */
-/* settles to at its edges, so the photo on the right meets it with no  */
-/* frame; a fade over the photo's left 40% dissolves it into the panel. */
-/* The text column is the panel's left 54% and never overlaps the       */
-/* picture, so its inks are the cellar pairs, never ink over media.     */
+/* It replaces the Latest catch panel (a cellar card with the photo),   */
+/* which put a second box and a second photograph above a grid that is  */
+/* nothing but boxes and photographs. The catch is a line of type now,  */
+/* and the gauge says what the panel could not: where in the book the   */
+/* catches are.                                                         */
 /*                                                                      */
 /* Its own subscription to the unlocks, not the screen's: the Dex       */
 /* subscribes to the count alone so a photo swapped on an entry does    */
-/* not re-render 2,089 cells, but the latest catch's photo IS that      */
-/* swap, and this panel is one component.                               */
+/* not re-render 2,089 cells; the gauge's marks need the whole set, and */
+/* this is one component.                                               */
 /*                                                                      */
-/* Static: no entrance, nothing that starts hidden.                     */
+/* Lining inks only: onLining figures and name, onLiningMuted caption,  */
+/* brassOnDark kicker (8.60:1). Static: no entrance, nothing hidden.    */
 /* ==================================================================== */
 
-const MIN_HEIGHT = 156;
-/** The text column's share of the panel; the photo takes the rest. */
-const COLUMN = 0.54;
-/** The fade's reach across the photo, from its left edge. */
-const FADE = 0.4;
-const PAD = space.lg;
 const CAP = 1.3;
+/** "in your Dex" beside the figure: the mock's Inter Medium 15/19, a step above the 13pt caption under it. */
+const IN_DEX = { fontFamily: fonts.bodyMedium, fontSize: 15, lineHeight: 19 } as const;
+const IN_DEX_WORDS = 'in your Dex';
+/** Figure to its caption, and the hero to the latest catch: the mock's 12. */
+const HERO_GAP = 12;
+/**
+ * Lifts the two caption lines (and the catch beside them) so their last
+ * baseline sits near the figure's: the figure's 40pt line carries about
+ * 9pt under its baseline, a 13/18 line about 4.
+ */
+const BASELINE_LIFT = 4;
+/** Below this the catch's name is too squeezed beside the figure, so it goes under it, full width. */
+const MIN_SIDE = 120;
+/** The empty head's "Post a drink" needs about this much beside the figure. */
+const MIN_SIDE_EMPTY = 150;
+/** From the head to the gauge: the mock's 14. */
+const GAUGE_GAP = 14;
 
 /**
- * The photo's left edge dissolving into the panel: opaque liningDeep at
- * the seam, clear 40% of the way in. Decorative and untouchable.
+ * "1.8%", and "under 0.1%" rather than a "0.0%" that reads as nothing.
+ * The Profile plaque's rule (brass/DexPlaque), so the two never disagree
+ * about the same collection.
  */
-function SideFade() {
-  const id = useSvgId('catchFade');
-  return (
-    <View pointerEvents="none" style={styles.fade}>
-      <Svg width="100%" height="100%">
-        <Defs>
-          <LinearGradient id={id} x1="0" y1="0" x2="1" y2="0">
-            <Stop offset="0" {...svgStop(colors.liningDeep)} />
-            <Stop offset="1" {...svgStop(colors.liningDeep, 0)} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill={`url(#${id})`} />
-      </Svg>
-    </View>
-  );
+function percent(count: number, total: number): string {
+  if (total <= 0 || count <= 0) return '0%';
+  const p = (count / total) * 100;
+  return p < 0.1 ? 'under 0.1%' : `${p.toFixed(1)}%`;
 }
 
-export function LatestCatch({
+export function DexHead({
   width,
   onOpen,
   onPost,
 }: {
-  /** The window's width: the panel sits on the screen's 16pt gutters. */
+  /** The window's width: the head sits on the screen's 16pt gutters. */
   width: number;
   onOpen: (id: string) => void;
-  /** The empty panel's way in: the post sheet (/log). */
+  /** The empty head's way in: the post window (/log). */
   onPost: () => void;
 }) {
+  const { fontScale } = useWindowDimensions();
   const unlocks = useCollection((s) => s.unlocks);
   const caught = useMemo(() => latestCatch(unlocks), [unlocks]);
-  const collected = Object.keys(unlocks).length;
+  /*
+   * The Dex numbers in the collection, catalogue drinks only (a drink
+   * someone added has no number): the gauge's marks, and their count is
+   * the figure, so the two cannot disagree. Rebuilt only when the unlocks
+   * object changes.
+   */
+  const numbers = useMemo(() => {
+    const out: number[] = [];
+    for (const id of Object.keys(unlocks)) {
+      const drink = getDrink(id);
+      if (drink) out.push(drink.dexNumber);
+    }
+    return out;
+  }, [unlocks]);
+
+  const count = numbers.length;
+  const figure = formatCount(count);
+  const caption = `of ${formatCount(TOTAL)} · ${percent(count, TOTAL)}`;
 
   /*
-   * Worked out from the window rather than measured, so DrinkName has its
-   * measure on the first frame (spec §6.4: (width − 32) × 0.54 − 32). The
-   * panel's 1pt edges come off first, because percentages of the panel
-   * would be of its inside.
+   * The catch's measure, worked out rather than measured so DrinkName has
+   * it on the first frame: the gutters' inside, less the hero's width at
+   * this text size (textFit errs wide, so this errs narrow), less the gap.
+   * Too narrow, and the catch goes under the hero at the full width.
    */
-  const inner = width - 2 * layout.gutter - 2 * stroke.edge;
-  const columnW = Math.floor(inner * COLUMN);
-  const photoW = inner - columnW;
-  const measure = columnW - 2 * PAD;
+  const s = Math.min(fontScale, CAP);
+  const inner = width - 2 * layout.gutter;
+  const heroW =
+    textWidth(figure, 'inter', textRole.heroFigure.fontSize * s) +
+    HERO_GAP +
+    Math.max(
+      textWidth(IN_DEX_WORDS, 'inter', IN_DEX.fontSize * s),
+      textWidth(caption, 'inter', textRole.helper.fontSize * s),
+    );
+  const side = inner - heroW - HERO_GAP;
+  const stacked = side < (caught ? MIN_SIDE : MIN_SIDE_EMPTY);
+  const measure = stacked ? inner : side;
 
-  const figure = (
-    <View style={styles.figure}>
-      <HeroFigure value={collected} caption={`of ${formatCount(TOTAL)} collected`} tone="lining" />
+  const hero = (
+    <View
+      accessible
+      accessibilityLabel={`${figure} ${IN_DEX_WORDS}, ${caption.replace(' · ', ', ')}`}
+      style={styles.hero}>
+      <Text maxFontSizeMultiplier={CAP} style={[textRole.heroFigure, styles.ink]}>
+        {figure}
+      </Text>
+      <View style={styles.heroCaption}>
+        <Text maxFontSizeMultiplier={CAP} style={[IN_DEX, styles.ink]}>
+          {IN_DEX_WORDS}
+        </Text>
+        <Text maxFontSizeMultiplier={CAP} style={[textRole.helper, styles.muted, tabular]}>
+          {caption}
+        </Text>
+      </View>
     </View>
   );
 
-  if (!caught) {
+  let catchBlock: React.ReactNode;
+  if (caught) {
+    const { drink, record } = caught;
+    const day = catchDay(record.date);
+    catchBlock = (
+      <Pressable
+        onPress={() => {
+          haptic.tap();
+          onOpen(drink.id);
+        }}
+        hitSlop={{ top: 4, bottom: 4 }}
+        accessibilityRole="button"
+        // The spoken number is unpadded: "#0009" is read digit by digit.
+        accessibilityLabel={`Latest catch, ${drink.name}, number ${drink.dexNumber}${day ? `, ${day}` : ''}`}
+        accessibilityHint="Opens it in the Dex"
+        style={({ pressed }) => [
+          styles.catch,
+          { width: measure },
+          stacked ? styles.catchStacked : styles.catchSide,
+          pressed && styles.pressed,
+        ]}>
+        <Text maxFontSizeMultiplier={CAP} style={[textRole.kicker, styles.kicker, !stacked && styles.right]}>
+          latest catch
+        </Text>
+        {/* No line limit: the head grows with a long name, and DrinkName shrinks only a word too wide for it. */}
+        <DrinkName
+          name={drink.name}
+          role={textRole.cardName}
+          measure={measure}
+          cap={CAP}
+          color={colors.onLining}
+          style={stacked ? undefined : styles.right}
+        />
+      </Pressable>
+    );
+  } else {
     /*
-     * Nothing collected: no photo, because a catch that did not happen
-     * must not be pictured. The figure still reads 0, and the panel offers
-     * the one thing that changes it.
+     * Nothing caught: no name, because a catch that did not happen must not
+     * be shown. The kicker says so and the one thing that changes it sits
+     * under it. Outline, not the bone primary: the head's figure already
+     * reads 0, and this is a way in, not the screen's call to action.
      */
-    return (
-      <View style={styles.panel}>
-        <Grain tone="lining" />
-        <View style={styles.emptyColumn}>
-          <Text maxFontSizeMultiplier={CAP} accessibilityRole="header" style={[textRole.shelfTitle, styles.ink]}>
-            Nothing caught yet
-          </Text>
-          <Text maxFontSizeMultiplier={CAP} style={[textRole.helper, styles.muted, styles.emptyBody]}>
-            Post your first drink and it lands here.
-          </Text>
-          {figure}
-          <Button
-            label="Post a drink"
-            variant="onLining"
-            size="sm"
-            icon="plus"
-            onPress={onPost}
-            style={styles.emptyAction}
-          />
-        </View>
+    catchBlock = (
+      <View style={[styles.catch, stacked ? styles.catchStacked : styles.catchSide]}>
+        <Text maxFontSizeMultiplier={CAP} style={[textRole.kicker, styles.kicker, !stacked && styles.right]}>
+          nothing caught yet
+        </Text>
+        <Button
+          label="Post a drink"
+          variant="onLiningOutline"
+          size="sm"
+          icon="plus"
+          onPress={onPost}
+          style={styles.emptyAction}
+        />
       </View>
     );
   }
 
-  const { drink, record } = caught;
-  const day = catchDay(record.date);
-  const next = nextRank(collected);
-  const nextLine = next ? `${formatCount(next.toGo)} to ${next.title}` : null;
-
   return (
-    <PressableScale
-      // A list's flick starts on this panel as often as not: no tick on
-      // touch-down, and a delay so a scroll never pulses it (as DexCard).
-      noHaptic
-      unstable_pressDelay={120}
-      scaleTo={0.98}
-      onPress={() => {
-        haptic.tap();
-        onOpen(drink.id);
-      }}
-      accessibilityRole="button"
-      // The spoken number is unpadded: "#0107" is read digit by digit.
-      accessibilityLabel={[
-        `Latest catch, ${drink.name}, number ${drink.dexNumber}${day ? `, ${day}` : ''}.`,
-        `${formatCount(collected)} of ${formatCount(TOTAL)} collected.`,
-        nextLine ? `${nextLine}.` : null,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      accessibilityHint="Opens it in the Dex"
-      style={styles.panel}>
-      <Grain tone="lining" />
-
-      {/* Under the column, never behind its text: the column ends where the photo starts. */}
-      <View style={[styles.photo, { width: photoW }]}>
-        <DrinkFace
-          drink={drink}
-          mode="lit"
-          photoUri={record.photoUri}
-          width={photoW}
-          height={MIN_HEIGHT}
-          style={FACE_FILL}
-        />
-        <SideFade />
+    <View>
+      <View style={[styles.head, stacked && styles.headStacked]}>
+        {hero}
+        {catchBlock}
       </View>
-
-      <View style={[styles.column, { width: columnW }]}>
-        <Text maxFontSizeMultiplier={CAP} style={[textRole.helper, styles.muted]}>
-          {day ? `Latest catch · ${day}` : 'Latest catch'}
-        </Text>
-        {/* No line limit: the panel's minimum height grows with the name. */}
-        <DrinkName
-          name={drink.name}
-          role={textRole.shelfName}
-          measure={measure}
-          cap={CAP}
-          color={colors.onLining}
-          style={styles.name}
-        />
-        <View style={styles.plates}>
-          <NumberPlate n={drink.dexNumber} tone="lining" />
-        </View>
-        {figure}
-        {nextLine ? (
-          <Text maxFontSizeMultiplier={CAP} style={[textRole.helper, styles.muted, tabular]}>
-            {nextLine}
-          </Text>
-        ) : null}
+      {/*
+        The gauge's own progressbar would say the hero's figure a second
+        time, one swipe later; the hero is the spoken one, the marks are
+        for the eye (they say where the catches are, which a value cannot).
+      */}
+      <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={styles.gauge}>
+        <BrassGauge caught={numbers} total={TOTAL} well="cellar" />
       </View>
-    </PressableScale>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  panel: {
-    minHeight: MIN_HEIGHT,
-    borderRadius: radius.card,
-    borderWidth: stroke.edge,
-    borderColor: colors.liningLine,
-    backgroundColor: colors.liningDeep,
-    overflow: 'hidden',
+  head: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    columnGap: HERO_GAP,
   },
-  photo: { position: 'absolute', top: 0, right: 0, bottom: 0 },
-  fade: { position: 'absolute', top: 0, bottom: 0, left: 0, width: `${FADE * 100}%` },
-  column: { padding: PAD },
-  emptyColumn: { padding: PAD, alignItems: 'flex-start' },
+  headStacked: { flexDirection: 'column', alignItems: 'flex-start', rowGap: space.sm },
+  // Wraps: at accessibility sizes the caption drops under the figure instead of squeezing it.
+  hero: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-end',
+    columnGap: HERO_GAP,
+    flexShrink: 1,
+  },
+  heroCaption: { paddingBottom: BASELINE_LIFT, flexShrink: 1 },
+  catch: { paddingBottom: BASELINE_LIFT },
+  catchSide: { alignItems: 'flex-end' },
+  catchStacked: { alignItems: 'flex-start', alignSelf: 'stretch' },
+  right: { textAlign: 'right' },
+  // Text dims while held, as the top bar's own words do: a fill behind a line of type would read as a button never drawn.
+  pressed: { opacity: 0.6 },
 
   ink: { color: colors.onLining },
   muted: { color: colors.onLiningMuted },
-  name: { marginTop: 2 },
-  plates: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    columnGap: space.sm,
-    rowGap: space.xs,
-    marginTop: 6,
-  },
-  figure: { marginTop: 10 },
-
-  emptyBody: { marginTop: space.xs },
-  emptyAction: { marginTop: space.md },
+  kicker: { color: colors.brassOnDark },
+  emptyAction: { marginTop: space.xs },
+  gauge: { marginTop: GAUGE_GAP },
 });

@@ -312,7 +312,7 @@ export const colors = {
   liningControl: 'rgba(233, 229, 223, 0.42)',
   /** An outline button on lining, held. */
   liningPressed: 'rgba(233, 229, 223, 0.08)',
-  /** The tab bar's log action: its 1pt bone edge on the espresso bar, 3.02:1 composited (WCAG 1.4.11). */
+  /** @deprecated v3.3 Brass edges the + in `brass` (5.32:1 on espresso). Was its 1pt bone edge, 3.02:1 composited; no reader left. */
   logActionEdge: 'rgba(233, 229, 223, 0.38)',
   /** A mount's 1pt edge where it sits in the lining. */
   matEdge: 'rgba(14, 11, 11, 0.35)',
@@ -350,6 +350,96 @@ export const colors = {
   storyRing: '#BC6B75',
   /** A seen story's 1pt ring. Decorative: the unseen ring's colour AND weight carry the state. */
   storyRingSeen: 'rgba(233, 229, 223, 0.30)',
+
+  /* ---- v3.3 brass (specs/v3-3-mockups/brass/spec.md section 1) ---- */
+  /*
+   * Brass and walnut are the fittings of a real back bar: keylines and
+   * corner brackets on what is framed, an engraved plate wherever a Dex
+   * number appears, walnut shelves the drinks stand on. Brass means
+   * "caught" (or "framed"), never a tier: one treatment on every drink.
+   * Only brassInk and brassOnDark are ever text (check-design rule 16);
+   * the other four are metal. Ratios are asserted by check-contrast.
+   */
+  /** Rails, keylines, brackets, gauge edges, spoon rules, the + button's edge. Never text. 5.78:1 on lining; decorative (2.59:1) on paper. */
+  brass: '#B8924F',
+  /** The face of an engraved plate, the shelf's label holder, the gauge marks. Carries `text` only (6.79:1). */
+  brassPlate: '#C9A867',
+  /** A plate's or rail's 1pt lit top, the engraving's lit edge, the active-tab marker. Never text. */
+  brassLit: '#E8D3A2',
+  /** A plate's or rail's 1pt foot, a bottle label's outer edge, screw heads. Never text. */
+  brassShade: '#7D5F2C',
+  /** Brass-coloured TEXT on paper, mat, white and label stock: section counts, rank numerals. 5.81:1 on paper. */
+  brassInk: '#7A5820',
+  /** Brass-coloured TEXT on lining, cellar, espresso and walnut: kickers, the rank word, an empty plate's number. */
+  brassOnDark: '#D6B676',
+  /** The 1pt edge of an empty plate holder in a slot: 3.80:1 composited on the cellar (UI). */
+  plateHolderEdge: 'rgba(184, 146, 79, 0.72)',
+  /** A brass rail's 1pt lit top (brassLit at 0.55). Decorative. */
+  railLit: 'rgba(232, 211, 162, 0.55)',
+  /** A brass rail's 1pt foot, the shadow it casts on what runs under it. Decorative. */
+  railShade: 'rgba(14, 11, 11, 0.45)',
+  /** The tab bar's inner keyline (brass at 0.42): decorative, 2.07:1 composited on espresso. */
+  tabKeyline: 'rgba(184, 146, 79, 0.42)',
+  /** A corner bracket's drop shadow, drawn as the same L 1pt lower (no SVG filter). */
+  bracketShadow: 'rgba(14, 11, 11, 0.55)',
+  /** A mount window's cut edge, lit from above: the dark lip over the window. */
+  bevelTop: 'rgba(14, 11, 11, 0.28)',
+  /** ... and the lit lip under it. */
+  bevelFoot: 'rgba(255, 253, 249, 0.90)',
+
+  /** The wood: the fill under the texture (walnutTile), so the frame before it decodes is already wood. */
+  walnut: '#4A3328',
+  /** A shelf's lit top face. Never text. */
+  walnutTop: '#6A4C3B',
+  /** A plank's lower edge, the plaque's edge, the gauge well on the plaque. */
+  walnutDeep: '#2E1F19',
+  /** Secondary text on walnut: onLiningMuted fails there (3.66:1 at the brightest pixel). */
+  onWalnutMuted: '#C9B6A8',
+
+  /** Bottle-label stock: a ticked ingredient, the "In your Dex" tag. Carries text (12.73:1), textMuted, wine. */
+  label: '#F3E9D2',
+} as const;
+
+/**
+ * The walnut texture (assets/images/walnut.webp), as decoded on a phone.
+ * Made by scripts/build-walnut.py, which prints this block; check-contrast
+ * hashes the file and stops if it no longer matches, then measures every
+ * ink on walnut against `brightest`, the worst pixel under text (lossy
+ * WebP decodes a step brighter than the #584233 it was drawn to).
+ */
+export const walnutTile = {
+  darkest: '#37241B',
+  brightest: '#594537',
+  mean: '#4B372A',
+  sha256: 'b43d511a8351710730cb4c4fa766a25e365c0a22a67e0fc2cc6747a8c5048677',
+} as const;
+
+/**
+ * The ingredient glyphs' tints (components/brass/IngredientGlyph): a citrus
+ * disc in its fruit's colour, a bottle in its liquid's. Decorative only:
+ * every glyph sits beside the ingredient's name and is hidden from
+ * VoiceOver, so none carries information and none has a contrast pair.
+ * Muted to sit on label stock and white without shouting.
+ */
+export const glyphTint = {
+  lemon: '#E2C04A',
+  lime: '#8FAE45',
+  orange: '#E08A3A',
+  grapefruit: '#DE7A68',
+  /** Clear spirits and their glass. */
+  glass: '#D8DDD6',
+  /** Aged spirits, amaro, vermouth rosso. */
+  amber: '#B87433',
+  /** Dry vermouth, white wine. */
+  straw: '#E6D8A0',
+  /** Grenadine, berry syrups, red bitters. */
+  berry: '#A63A4A',
+  /** Mint, basil, cucumber. */
+  leaf: '#5F8F45',
+  /** Cream, egg, milk. */
+  cream: '#F1E7D0',
+  /** Coffee, cacao, cola. */
+  dark: '#4E3426',
 } as const;
 
 /**
@@ -381,6 +471,15 @@ export const onMedia = {
   /** Solid plaques. `neutral` is DexStatusPlaque's: 9.98:1 for its ink over white. */
   plaque: {
     neutral: { fill: colors.reelScrim, edge: colors.reelControlBorder, ink: colors.reelInk },
+    /*
+     * v3.3 Brass. Both are SOLID plates, so their ink is measured against
+     * the plate and never against the picture: the engraved number plate
+     * (text 6.79:1 on brassPlate) and the bottle-label tag that says "In
+     * your Dex" (text 12.73:1 on label, its wine check 11.38:1). `lit` is
+     * the engraving's 1pt lit edge (a text shadow) and `mark` a glyph.
+     */
+    brass: { fill: colors.brassPlate, edge: colors.brassShade, ink: colors.text, lit: colors.brassLit },
+    label: { fill: colors.label, edge: colors.brassShade, ink: colors.text, mark: colors.wine },
   },
 } as const;
 
@@ -530,6 +629,19 @@ export const textRole = {
   story:        { fontFamily: fonts.body, fontSize: 17, lineHeight: 26 },
   /** The Dex status tag ("In your Dex", "New"), its width sum, and the "Added by you" word. */
   statusWord:   { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16 },
+
+  /* ---- v3.3 Brass (specs/v3-3-mockups/brass/spec.md section 4) ---- */
+  /* Engraved plates: "Nº 0127", digits only, so tracked like dexNumber. 1.2 (was 1.5): the plate's own box spaces it. */
+  plate:        { fontFamily: fonts.label, fontSize: 11, lineHeight: 14, letterSpacing: 1.2, fontVariant: ['tabular-nums'] }, // tracking-ok: a code of figures, not words
+  plateLg:      { fontFamily: fonts.label, fontSize: 13, lineHeight: 16, letterSpacing: 1.3, fontVariant: ['tabular-nums'] }, // tracking-ok: a code of figures, not words
+  /** A shelf's label holder: the row's range, "0001 – 0003". */
+  holder:       { fontFamily: fonts.bodyMedium, fontSize: 11, lineHeight: 14, letterSpacing: 1, fontVariant: ['tabular-nums'] }, // tracking-ok: figures and an en dash, not words
+  /** My Bar's rank numerals, "01", "02". */
+  rank:         { fontFamily: fonts.bodyMedium, fontSize: 11, lineHeight: 14, letterSpacing: 1, fontVariant: ['tabular-nums'] }, // tracking-ok: two-digit numerals, not words
+  /** "latest catch": lowercase, at most one per screen, brassInk or brassOnDark. */
+  kicker:       { fontFamily: fonts.bodyMedium, fontSize: 12, lineHeight: 16, letterSpacing: 0.6 }, // tracking-ok: sentence case, never caps
+  /** Home's dateline under the wordmark, "Tuesday, 7 October · 6 friends posted today". */
+  dateline:     { fontFamily: fonts.body, fontSize: 13, lineHeight: 18 },
 } satisfies Record<string, TextStyle>;
 
 /**
@@ -729,6 +841,14 @@ export const elevation = {
   paper: { boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.45)' },
   /** The espresso tab bar, on every tab. */
   barDark: { boxShadow: '0px 4px 14px rgba(14, 11, 11, 0.30)' },
+  /*
+   * No `plate` token, though the Brass mock drew a 1.5pt contact shadow
+   * under every plate: plates sit in the Dex's scrolling cells, and v3.3
+   * casts no shadow from a scrolling cell. The plate's 1pt brassShade foot
+   * is its contact line instead (components/brass/BrassPlate.tsx).
+   */
+  /** v3.3: the + button's lit top lip, an inset line rather than a drop shadow. Not in a scrolling cell. */
+  logAction: { boxShadow: 'inset 0px 1px 0px rgba(232, 211, 162, 0.25)' },
 } as const;
 
 /** Micro-interactions 150–300ms; springs over cubic curves. */

@@ -12,12 +12,15 @@ import {
   View,
 } from 'react-native';
 
+import { DexPlaque, rungCounts } from '@/components/brass';
 import { EmptyArt } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import {
   DexShelfRow,
   DexSummary,
   sharedByDexNumber,
+  sharedNumbers,
+  useCollectedNumbers,
   type SharedDrink,
 } from '@/components/profile/DexShelf';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
@@ -37,7 +40,8 @@ import { useTabScroll, type ChromeTab } from '@/components/ScrollChrome';
 import { TabStrip, type TabStripItem } from '@/components/TabStrip';
 import { EmptyState, Hold, Notice } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
-import { formatCount } from '@/data';
+import { formatCount, TOTAL } from '@/data';
+import { rankTitle } from '@/lib/milestones';
 import { shareProfile } from '@/lib/profileLink';
 import { fetchProfiles, isRenderablePost } from '@/lib/social';
 import { useAuth } from '@/store/auth';
@@ -69,6 +73,12 @@ import type { Post, UserProfile } from '@/types';
 /* Each section says what an empty list means: still loading (a Hold),  */
 /* could not load (Try again), or nothing there yet. A failed refetch    */
 /* over rows already shown keeps them and says so above them.           */
+/*                                                                      */
+/* THE DEX PLAQUE (v3.3 Brass D13). Between the buttons and the strip,  */
+/* walnut with a brass gauge: this person's Dex count, never the posts  */
+/* count (the mock's 64 against a Dex of 38, fix 10). Yours is your     */
+/* collection; a peer's is the drinks their Dex tab shows, from the     */
+/* posts already fetched, so it costs no request of its own.            */
 /* ==================================================================== */
 
 type Section = 'posts' | 'videos' | 'dex';
@@ -123,6 +133,28 @@ function TabScroll({
 }) {
   const { onScroll } = useTabScroll(tab, listener);
   return children(onScroll);
+}
+
+/** "1.8%", "under 0.1%" or "0%": the plaque's printed share, for its spoken label. */
+function sharePhrase(count: number): string {
+  if (count <= 0) return '0%';
+  const p = (count / TOTAL) * 100;
+  return p < 0.1 ? 'under 0.1%' : `${p.toFixed(1)}%`;
+}
+
+/*
+ * The plaque as ONE VoiceOver element, said the way it reads. Its parts
+ * speak "in your Dex" on their own, which is wrong on someone else's
+ * profile, where the drinks are the ones they have shared; one label over
+ * the whole says whose it is, and is one swipe instead of three.
+ */
+function plaqueLabel(count: number, isOwn: boolean, name: string): string {
+  const whose = isOwn ? 'Your Dex' : `${name}'s Dex, from the drinks they have shared`;
+  const next = count > 0 ? rungCounts(TOTAL).find((r) => r.count > count) : undefined;
+  const ahead = next
+    ? ` ${formatCount(next.count - count)} more to ${next.title}, at ${formatCount(next.count)}.`
+    : '';
+  return `${whose}: ${formatCount(count)} of ${formatCount(TOTAL)}, ${sharePhrase(count)}. Rank: ${rankTitle(count, TOTAL)}.${ahead}`;
 }
 
 /** What a section's rows are, from what its fetch has said so far. */
@@ -334,6 +366,18 @@ export function ProfileView({
   // Every list of posts drops the ones PostCard would draw as nothing.
   const shown = posts.posts.filter(isRenderablePost);
   const pageOnly = posts.total !== null && posts.total > posts.posts.length;
+  // The Dex tab's entries, worked out once for its rows and the plaque.
+  const shared = sharedByDexNumber(shown);
+
+  /*
+   * The plaque's Dex numbers. Yours are always known (the collection is
+   * on this phone, read before the splash lifts). A peer's are known once
+   * their posts have answered, or rows are held over a failed refetch;
+   * before that there is no plaque, rather than a 0 that then jumps.
+   */
+  const collectedNumbers = useCollectedNumbers();
+  const peerKnown = posts.status === 'ready' || shown.length > 0;
+  const plaqueNumbers = isOwn ? collectedNumbers : peerKnown ? sharedNumbers(shared) : null;
 
   const rows: Row[] =
     section === 'posts'
@@ -357,7 +401,7 @@ export function ProfileView({
               (r): Row => ({ key: `videos:${r[0]!.id}`, kind: 'videos', videos: r }),
             ),
           )
-        : sectionRows('dex', posts.status, sharedByDexNumber(shown), (items) => {
+        : sectionRows('dex', posts.status, shared, (items) => {
             const pairs = chunk(items, 2);
             return [
               { key: 'dex:summary', kind: 'dexSummary' },
@@ -497,7 +541,11 @@ export function ProfileView({
     if (videosOpened) videos.reload();
   };
 
-  // The strip keeps its 16pt below the actions.
+  /*
+   * The strip sits 12pt under the plaque's paper line (the mock's 10, on
+   * the scale), and keeps its 16pt below the actions while a peer's Dex
+   * is unknown: the line already carries air of its own, the buttons none.
+   */
   const header = (
     <>
       <ProfileHeader
@@ -508,7 +556,20 @@ export function ProfileView({
         onOpenList={openList}
         actions={actions}
       />
-      <TabStrip items={SECTIONS} value={section} onChange={selectSection} style={styles.tabs} />
+      {plaqueNumbers ? (
+        <View
+          accessible
+          accessibilityLabel={plaqueLabel(plaqueNumbers.length, isOwn, person.displayName)}
+          style={styles.plaque}>
+          <DexPlaque caught={plaqueNumbers} total={TOTAL} />
+        </View>
+      ) : null}
+      <TabStrip
+        items={SECTIONS}
+        value={section}
+        onChange={selectSection}
+        style={plaqueNumbers ? styles.tabsUnderPlaque : styles.tabs}
+      />
     </>
   );
 
@@ -585,8 +646,11 @@ export function ProfileView({
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
+  // In the header's gutters, 12pt under the buttons (the mock's spacing).
+  plaque: { marginHorizontal: layout.gutter, marginTop: space.md },
   // Full width, outside the gutters: the rule runs edge to edge under the header.
   tabs: { marginTop: space.lg },
+  tabsUnderPlaque: { marginTop: space.md },
   liningFoot: { flexGrow: 1, backgroundColor: colors.lining },
   grow: { flexGrow: 1 },
   note: {

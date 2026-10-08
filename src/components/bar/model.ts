@@ -2,6 +2,8 @@ import { drinkPhoto } from '@/data/drinkPhotos';
 import {
   type BarResult,
   basicsResult,
+  type BestBottle,
+  bestBottle,
   browseIngredients,
   gainOf,
   INGREDIENTS_BY_ID,
@@ -12,14 +14,25 @@ import {
 } from '@/lib/bar';
 import type { Drink } from '@/types';
 
-import type { ShortGroup } from './Counter';
-
 /* ==================================================================== */
 /* What My Bar shows, worked out from your bar                          */
 /*                                                                      */
 /* Pure functions of what you own and its match result, kept out of the */
 /* screen so the order rules sit in one place.                          */
 /* ==================================================================== */
+
+/** One row of One ingredient away: a drink, and the one thing it was short of when the rows were taken. */
+export interface AwayEntry {
+  drink: Drink;
+  /** The missing slot's canonical id (Match.missing[0]): the bottle the row's Add puts in your bar. */
+  need: string;
+}
+
+/** The best single bottle (graft 7) as the card shows it: the bottle, and the drinks it opens, named ones first. */
+export interface BestPick {
+  id: string;
+  drinks: readonly Drink[];
+}
 
 /**
  * The order the screen holds still while you tick. Taken when another
@@ -29,31 +42,75 @@ import type { ShortGroup } from './Counter';
 export interface Snapshot {
   /**
    * Which taking this is. The picker takes its own order again when it
-   * changes; a row's Add, which only fills in `groups`, keeps it, so
-   * adding from One ingredient away never reshuffles the checklist above.
+   * changes; a row's Add, which only freezes One ingredient away, keeps
+   * it, so adding from there never reshuffles the checklist above.
    */
   taken: number;
-  /** One ingredient away, in rank order; empty while it is still live. */
-  groups: string[];
-  /** What each group made when the order was taken, for a row that is Added since. */
-  pours: Record<string, readonly Drink[]>;
+  /**
+   * One ingredient away is held (its rows and its best bottle). False
+   * while it is still live: taken on an empty bar (or one with nothing
+   * one away), it follows the checklist's ticks until the first Add down
+   * there freezes it.
+   */
+  frozen: boolean;
+  /** One ingredient away's rows, in order, as they were when frozen. */
+  away: AwayEntry[];
+  /** The best single bottle when frozen; it keeps its words after its own Add. */
+  best: BestPick | null;
 }
 
 let taken = 0;
 
-/** One ingredient away's order and what each group makes, from a result. */
-export function groupsOf(result: BarResult): Pick<Snapshot, 'groups' | 'pours'> {
-  const groups = result.nextBest.map((n) => n.ingredient.id);
-  const pours: Record<string, readonly Drink[]> = {};
-  for (const id of groups) pours[id] = (result.gains.get(id) ?? []).map((m) => m.drink);
-  return { groups, pours };
+/**
+ * The drinks a best bottle opens: the ones that name it first (dry
+ * vermouth's Martini before a family slot's), then the house order.
+ */
+function bestDrinks(best: BestBottle, inDex: (d: Drink) => boolean): Drink[] {
+  const named = new Set(best.matches.filter((m) => m.missing[0] === best.ingredient.id).map((m) => m.drink.id));
+  const ranked = rankDrinks(
+    best.matches.map((m) => m.drink),
+    inDex,
+  );
+  return [...ranked.filter((d) => named.has(d.id)), ...ranked.filter((d) => !named.has(d.id))];
 }
 
-export function takeSnapshot(owned: Record<string, true>): Snapshot {
+/**
+ * One ingredient away worked out from a result: every nearly drink as a
+ * row, and the best single bottle.
+ *
+ * Rows go new to your Dex first, then the photographed (the classics,
+ * and a real ghost photo in the thumb), as the strip ranks them; then,
+ * WHY, by how many recipes name the bottle it needs, so a drink short of
+ * a common bottle comes before one short of "Fermented millet", which is
+ * no use to most bars; then the Dex's own order.
+ */
+export function awayOf(result: BarResult, inDex: (d: Drink) => boolean): Pick<Snapshot, 'away' | 'best'> {
+  const uses = (id: string) => INGREDIENTS_BY_ID[id]?.uses ?? 0;
+  const away = result.nearly
+    .map((m) => ({ drink: m.drink, need: m.missing[0]! }))
+    .sort(
+      (a, b) =>
+        Number(inDex(a.drink)) - Number(inDex(b.drink)) ||
+        Number(!drinkPhoto(a.drink.id)) - Number(!drinkPhoto(b.drink.id)) ||
+        uses(b.need) - uses(a.need) ||
+        a.drink.dexNumber - b.drink.dexNumber,
+    );
+  const best = bestBottle(result);
+  return { away, best: best ? { id: best.ingredient.id, drinks: bestDrinks(best, inDex) } : null };
+}
+
+/**
+ * `inDex` orders One ingredient away (new to your Dex first); pass one
+ * that says false until the Dex has loaded, so a snapshot taken at launch
+ * is the one the screen keeps.
+ */
+export function takeSnapshot(owned: Record<string, true>, inDex: (d: Drink) => boolean): Snapshot {
   taken += 1;
   const ids = Object.keys(owned).filter((id) => INGREDIENTS_BY_ID[id]);
-  if (!ids.length) return { taken, groups: [], pours: {} };
-  return { taken, ...groupsOf(matchOwned(owned)) };
+  if (!ids.length) return { taken, frozen: false, away: [], best: null };
+  const away = awayOf(matchOwned(owned), inDex);
+  // Nothing one away yet: stay live, so what the next ticks bring shows at once (there is nothing to hold still).
+  return { taken, frozen: away.away.length > 0, ...away };
 }
 
 /* ==================================================================== */
@@ -214,49 +271,68 @@ export function stripOf({
 /* One ingredient away                                                  */
 /* ==================================================================== */
 
+/** A One ingredient away row as drawn now: its frozen place, with live numbers. */
+export interface AwayRow {
+  drink: Drink;
+  need: Ingredient;
+  /** The need is in your bar now (its Add, or a tick above). */
+  owned: boolean;
+  /** You can make the drink now. */
+  made: boolean;
+  /** Still one away, and the need is what completes it (false once made, or two away since a tick above). */
+  short: boolean;
+  /** What adding the need pours now, this drink included (full-slot, gainOf). */
+  pours: number;
+}
+
+/** The best bottle's card as drawn now. */
+export interface BestCard {
+  ingredient: Ingredient;
+  drinks: readonly Drink[];
+  /** In your bar now: the card keeps its words and its place; its stock and its toggle's mark say so. */
+  owned: boolean;
+}
+
 /**
- * One ingredient away's groups as shown: the snapshot's order (or the
- * live one, before any row has been used), each with what it would make,
- * or, once it is in your bar, what it unlocked.
+ * One ingredient away as shown: the snapshot's rows and best bottle (or
+ * the live ones, before any Add down there has frozen them), each with
+ * live numbers. A row that is made since stays where it stood, lit, until
+ * the next snapshot; one that is new since joins on the next snapshot.
  */
-export function shortGroups({
+export function awayRows({
   snap,
   result,
   owned,
-  litBy,
   shown,
   inDex,
 }: {
   snap: Snapshot;
   result: BarResult;
   owned: Record<string, true>;
-  litBy: Readonly<Record<string, readonly Drink[]>>;
   shown: number;
   inDex: (d: Drink) => boolean;
-}): { groups: ShortGroup[]; more: number } {
-  const source = snap.groups.length ? snap : groupsOf(result);
+}): { rows: AwayRow[]; best: BestCard | null; more: number } {
+  const source = snap.frozen ? snap : awayOf(result, inDex);
   const can = new Set(result.makeable.map((m) => m.drink.id));
-  /*
-   * Each row names first the drinks that name its own thing (its canonical
-   * group: the Applejack Sour before the brandy slot's Brandy Smash),
-   * then the family-slot drinks it also makes, and last the ones a row
-   * above already showed. The count stays the full gain, what Add unlocks.
-   */
-  const seen = new Set<string>();
-  const groups = source.groups.slice(0, shown).flatMap((id) => {
-    const ingredient = INGREDIENTS_BY_ID[id];
+  const rows = source.away.slice(0, shown).flatMap(({ drink, need }) => {
+    const ingredient = INGREDIENTS_BY_ID[need];
     if (!ingredient) return [];
-    const added = !!owned[id];
-    const matches = added ? null : (result.gains.get(id) ?? []);
-    const drinks = matches
-      ? matches.map((m) => m.drink)
-      : (litBy[id] ?? (source.pours[id] ?? []).filter((d) => can.has(d.id)));
-    const named = new Set(matches?.filter((m) => m.missing[0] === id).map((m) => m.drink.id));
-    const ranked = rankDrinks(drinks, inDex);
-    const tier = (d: Drink) => (seen.has(d.id) ? 2 : named.has(d.id) || !matches ? 0 : 1);
-    const ordered = [0, 1, 2].flatMap((t) => ranked.filter((d) => tier(d) === t));
-    for (const d of drinks) seen.add(d.id);
-    return [{ ingredient, added, drinks: ordered }];
+    const completes = result.gains.get(need) ?? [];
+    return [
+      {
+        drink,
+        need: ingredient,
+        owned: !!owned[need],
+        made: can.has(drink.id),
+        short: completes.some((m) => m.drink.id === drink.id),
+        pours: completes.length,
+      },
+    ];
   });
-  return { groups, more: Math.max(0, source.groups.length - shown) };
+  const bestIngredient = source.best ? INGREDIENTS_BY_ID[source.best.id] : undefined;
+  const best =
+    source.best && bestIngredient
+      ? { ingredient: bestIngredient, drinks: source.best.drinks, owned: !!owned[source.best.id] }
+      : null;
+  return { rows, best, more: Math.max(0, source.away.length - shown) };
 }

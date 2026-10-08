@@ -286,7 +286,8 @@ export function HeroTitle({ drink, inDex, custom }: { drink: Drink; inDex: boole
           <AddedPlate />
         ) : (
           <>
-            <NumberPlate n={drink.dexNumber} tone="lining" />
+            {/* Brass when it is in your Dex, the empty holder when it is not (v3.3 D1, D2). */}
+            <NumberPlate n={drink.dexNumber} tone="lining" caught={inDex} />
             <DexStatusPlaque inDex={inDex} name={drink.name} />
           </>
         )}

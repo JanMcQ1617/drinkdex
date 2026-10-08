@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,7 +8,7 @@ import { DrinkName } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { PostCard } from '@/components/PostCard';
+import { PostCard, type PostCardHandle } from '@/components/PostCard';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { EmptyState, Hold } from '@/components/ui';
 import { colors, layout, space, stroke, textRole } from '@/constants/theme';
@@ -26,6 +26,11 @@ import type { Drink, Post } from '@/types';
 /* and under it the drink as it stands in the Dex, one tap from its     */
 /* page. Pushed over the tabs, so Back returns to whichever of those    */
 /* opened it.                                                           */
+/*                                                                      */
+/* BRASS (D10). The bar is the cabinet's lining, solid, with the post's */
+/* options at its right (the card leaves its own out here), and once    */
+/* the post runs under it a brass rail along its foot, never a fade.    */
+/* The post itself is the feed's framed print: brackets, plate, label.  */
 /*                                                                      */
 /* "Unavailable" is one state for three causes the screen cannot tell   */
 /* apart and should not try to: the post was deleted, you are blocked   */
@@ -91,6 +96,8 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
   const ownRow = useAuth((s) => s.profile);
   const dropAuthor = useSocial((s) => s.dropAuthor);
   const [scrolled, onScroll] = useScrolledPast();
+  // The card's options menu, which this screen's bar carries.
+  const card = useRef<PostCardHandle>(null);
 
   const valid = POST_ID.test(id);
   const [loaded, setLoaded] = useState<Loaded | null>(null);
@@ -159,8 +166,15 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
       <Grain />
       <ScreenTopBar
         title="Post"
+        tone="lining"
         showRule={scrolled}
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
+        // Only once there is a post to act on; a missing or failed one has no menu.
+        right={
+          post ? (
+            <TopBarButton icon="more" label="Post options" onPress={() => card.current?.openMenu()} />
+          ) : undefined
+        }
       />
       {status === 'loading' ? (
         <Hold slowMessage="Still loading this post." />
@@ -187,6 +201,8 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
           style={styles.scroll}
           contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}>
           <PostCard
+            ref={card}
+            menuInBar
             post={post}
             author={author}
             onOpenDrink={openDrink}

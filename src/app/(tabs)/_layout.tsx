@@ -87,7 +87,7 @@ export default function TabLayout() {
             title: 'Home',
             tabBarAccessibilityLabel: 'Home',
             tabBarIcon: tabIcon('home'),
-            lazyPlaceholder: () => <TabPlaceholder title="Home" ground="lining" />,
+            lazyPlaceholder: () => <TabPlaceholder title="Home" ground="lining" wordmark />,
           }}
         />
         <TopTabs.Protected guard={REELS_ENABLED}>
@@ -110,7 +110,7 @@ export default function TabLayout() {
             title: 'Dex',
             tabBarAccessibilityLabel: 'Dex, your collection',
             tabBarIcon: tabIcon('dex'),
-            lazyPlaceholder: () => <TabPlaceholder title="Dex" />,
+            lazyPlaceholder: () => <TabPlaceholder title="Dex" ground="lining" />,
           }}
         />
         <TopTabs.Screen
@@ -119,7 +119,7 @@ export default function TabLayout() {
             title: 'My Bar',
             tabBarAccessibilityLabel: 'My Bar, what you can make',
             tabBarIcon: tabIcon('bottle'),
-            lazyPlaceholder: () => <TabPlaceholder title="My Bar" />,
+            lazyPlaceholder: () => <TabPlaceholder title="My Bar" liningBar />,
           }}
         />
         <TopTabs.Screen

@@ -34,25 +34,45 @@ export interface TabPlaceholderProps {
   /** The tab's name, drawn where its top bar's title will be. */
   title: string;
   /**
-   * 'paper' (default): the Dex, My Bar and Profile. 'lining': Home's head
-   * band, with the wordmark where its bar draws it. 'reel': the Reels
-   * ground, which has no grain (nothing is grained under a video).
+   * 'paper' (default): Profile. 'lining': the wine page, as the Dex stands
+   * on it whole and Home's head band. 'reel': the Reels ground, which has
+   * no grain (nothing is grained under a video).
    */
   ground?: 'paper' | 'lining' | 'reel';
+  /**
+   * A paper page whose top bar is on the lining (My Bar: its lining bar
+   * runs into the picker's band). Only the title row is wine, so the page
+   * arrives as it will draw, not paper turning wine.
+   */
+  liningBar?: boolean;
+  /** Home's bar sets the Playfair wordmark, not the tab's name. */
+  wordmark?: boolean;
 }
 
-export function TabPlaceholder({ title, ground = 'paper' }: TabPlaceholderProps) {
+export function TabPlaceholder({
+  title,
+  ground = 'paper',
+  liningBar = false,
+  wordmark = false,
+}: TabPlaceholderProps) {
   const insets = useSafeAreaInsets();
   const lining = ground === 'lining';
   const reel = ground === 'reel';
+  const onWine = lining || liningBar;
   return (
     <View
       accessible
       accessibilityLabel={`${title}, loading`}
       style={[styles.root, lining && styles.rootLining, reel && styles.rootReel]}>
       {reel ? null : <Grain tone={lining ? 'lining' : 'paper'} />}
-      <View style={[styles.row, { paddingTop: insets.top, height: insets.top + layout.topBar }]}>
-        {lining ? (
+      <View
+        style={[
+          styles.row,
+          liningBar && !lining && styles.rowLining,
+          { paddingTop: insets.top, height: insets.top + layout.topBar },
+        ]}>
+        {liningBar && !lining ? <Grain tone="lining" /> : null}
+        {wordmark ? (
           // As Home's bar sets it (HomeChrome): Playfair, bone on the lining.
           <Text style={[textRole.wordmark, styles.wordmark]} maxFontSizeMultiplier={1.2}>
             Sipply
@@ -63,7 +83,12 @@ export function TabPlaceholder({ title, ground = 'paper' }: TabPlaceholderProps)
             adjustsFontSizeToFit
             minimumFontScale={0.8}
             maxFontSizeMultiplier={1.3}
-            style={[textRole.barTitleLg, styles.title, reel && styles.titleReel]}>
+            style={[
+              textRole.barTitleLg,
+              styles.title,
+              reel && styles.titleReel,
+              onWine && styles.titleLining,
+            ]}>
             {title}
           </Text>
         )}
@@ -82,7 +107,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: TITLE_INSET,
   },
+  /* Wine with its own grain, as ScreenTopBar's lining bar draws its ground. */
+  rowLining: { backgroundColor: colors.lining },
   title: { color: colors.text, textAlign: 'center' },
+  titleLining: { color: colors.onLining },
   titleReel: { color: colors.reelInk },
   wordmark: { color: colors.onLining },
 });

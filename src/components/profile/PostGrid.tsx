@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
-import { MediaMarker } from '@/components/media';
+import { MediaMarker, MediaNumberPlate } from '@/components/media';
 import { timeAgoSpoken } from '@/components/PostCard';
 import { haptic, PressableScale } from '@/components/ui';
 import { CATEGORY_META, layout, motion, radius } from '@/constants/theme';
@@ -19,9 +19,12 @@ import type { Post } from '@/types';
 /* one tap away, on the post's own screen. Media is square-cornered;     */
 /* only controls are rounded.                                            */
 /*                                                                      */
-/* Nothing over the photo but the stack marker, on a post with more     */
-/* than one photo; it comes from media.tsx, the one file whose inks are  */
-/* measured over a blown-out white frame.                                */
+/* Over the photo: the drink's brass number plate, bottom left (v3.3     */
+/* Brass D1), and the stack marker top right on a post with more than    */
+/* one photo. Both come from media.tsx, the one file whose inks are      */
+/* measured over a blown-out white frame: the plate is solid brass, read */
+/* against itself (6.79:1), so it holds over any picture. No shadow on   */
+/* either: the grid scrolls.                                             */
 /*                                                                      */
 /* Rows, not a three-column FlatList. The profile's list shows posts,    */
 /* reels and Dex cards (2-up) in one FlatList, and React Native throws  */
@@ -98,6 +101,8 @@ export function PostGridTile({
   if (!drink) return null;
 
   const photos = post.photoPaths?.length ?? (post.photoPath ? 1 : 0);
+  // Every catalogue drink has a number; a drink without one gets no plate rather than "Nº 0000".
+  const numbered = drink.dexNumber > 0;
   const open = () => {
     haptic.tap();
     if (onOpen) onOpen(post);
@@ -117,10 +122,10 @@ export function PostGridTile({
       unstable_pressDelay={120}
       onPress={open}
       accessibilityRole="button"
-      // Spoken, not the visual "3h": that reads as "3 h".
-      accessibilityLabel={`${drink.name}, posted ${timeAgoSpoken(post.createdAt)}${
-        photos > 1 ? `, ${photos} photos` : ''
-      }`}
+      // Spoken, not the visual "3h": that reads as "3 h". The plate is said as "number 127".
+      accessibilityLabel={`${drink.name}${
+        numbered ? `, number ${drink.dexNumber}` : ''
+      }, posted ${timeAgoSpoken(post.createdAt)}${photos > 1 ? `, ${photos} photos` : ''}`}
       style={[
         styles.tile,
         { width: size, height: size, backgroundColor: CATEGORY_META[drink.category].wash },
@@ -183,6 +188,12 @@ export function PostGridTile({
           <MediaMarker icon="stack" />
         </View>
       ) : null}
+      {numbered ? (
+        // 6pt in from the corner, as the stack marker is; decorative, the tile's label says the number.
+        <View style={styles.plate} pointerEvents="none">
+          <MediaNumberPlate n={drink.dexNumber} size="sm" />
+        </View>
+      ) : null}
     </PressableScale>
   );
 }
@@ -197,4 +208,5 @@ const styles = StyleSheet.create({
   },
   image: { width: '100%', height: '100%' },
   markers: { position: 'absolute', top: 6, right: 6, flexDirection: 'row', gap: 4 },
+  plate: { position: 'absolute', left: 6, bottom: 6 },
 });

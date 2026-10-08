@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import { Pressable, Image as RNImage, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Pressable, Image as RNImage, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 
 import { FACE_FILL, VectorFace } from '@/components/artwork/VectorFace';
-import { DexStatusTag, DrinkName, MOUNT, Mount, MountWindow } from '@/components/cabinet';
-import { colors, radius, space, stroke, textRole } from '@/constants/theme';
+import { BrassPlate } from '@/components/brass';
+import { DexStatusTag, DrinkName, Mount, MountWindow } from '@/components/cabinet';
+import { colors, space, stroke, textRole } from '@/constants/theme';
 import { drinkPhoto, drinkPhotoGhost } from '@/data/drinkPhotos';
 import { textWidth } from '@/lib/textFit';
 import { useIsUnlocked } from '@/store/collection';
@@ -112,16 +113,24 @@ export function nameLines(name: string, size: number, measure: number): number {
 /* The strip's mount                                                    */
 /* ==================================================================== */
 
-/** The strip's window and its mount (Mount size="shelf": 12pt of mat, 1pt edge). */
-export const POUR = { window: { width: 100, height: 112 }, cap: 1.3 } as const;
-export const POUR_WIDTH = POUR.window.width + 2 * (MOUNT.shelf.padding + stroke.edge);
+/**
+ * The strip's mount, as the Brass mock draws it on the walnut counter: a
+ * 94pt square window in 8pt of mat (112 across), the cabinet's 8pt card
+ * corner (Mount size="feature"), its padding taken down from 12 to the
+ * mock's 8 through `style`, as MOUNT allows a caller with its own measure.
+ */
+export const POUR = { window: 94, padding: 8, cap: 1.3 } as const;
+export const POUR_WIDTH = POUR.window + 2 * (POUR.padding + stroke.edge);
 
 /**
- * A drink you can make now: a mount in the strip, lit, with its name in
- * Playfair and whether it is in your Dex yet. `nameHeight` is the name
- * block every mount in the strip reserves (the tallest name's lines at
- * this text size), so a two-line name scrolling in never changes the
- * row's height mid-swipe.
+ * A drink you can make now: a mount standing on the counter, lit, with
+ * its brass plate, its name in Playfair, and whether it is in your Dex
+ * yet. `nameHeight` is the name block every mount in the strip reserves
+ * (the tallest name's lines at this text size), so a two-line name
+ * scrolling in never changes the row's height mid-swipe.
+ *
+ * No seat shadow (onLining={false}): it stands on wood, and v3.3 casts
+ * no shadow from a scrolling strip.
  */
 export const PourMount = React.memo(function PourMount({
   drink,
@@ -137,17 +146,20 @@ export const PourMount = React.memo(function PourMount({
     <Pressable
       onPress={() => onOpen(drink.id)}
       accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, ${inDex ? 'in your Dex' : 'not in your Dex yet'}`}
+      accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${inDex ? 'in your Dex' : 'not in your Dex yet'}`}
       style={({ pressed }) => [styles.pour, pressed && styles.pressed]}>
-      <Mount state="mounted" size="shelf" onLining={false} style={styles.pourMount}>
-        <MountWindow height={POUR.window.height} state="mounted">
-          <BarFace drink={drink} mode="lit" width={POUR.window.width} height={POUR.window.height} />
+      <Mount state="mounted" size="feature" onLining={false} style={styles.pourMount}>
+        <MountWindow height={POUR.window} state="mounted">
+          <BarFace drink={drink} mode="lit" width={POUR.window} height={POUR.window} />
         </MountWindow>
+        <View style={styles.pourPlate}>
+          <BrassPlate n={drink.dexNumber} />
+        </View>
         <View style={[styles.pourName, { minHeight: nameHeight }]}>
           <DrinkName
             name={drink.name}
             role={textRole.printName}
-            measure={POUR.window.width}
+            measure={POUR.window}
             cap={POUR.cap}
             color={colors.text}
           />
@@ -165,78 +177,8 @@ export function useStripNameHeight(drinks: readonly Drink[]): number {
   const { fontScale } = useWindowDimensions();
   const s = Math.min(fontScale, POUR.cap);
   const size = (textRole.printName.fontSize ?? 16) * s;
-  const lines = drinks.reduce((n, d) => Math.max(n, nameLines(d.name, size, POUR.window.width)), 1);
+  const lines = drinks.reduce((n, d) => Math.max(n, nameLines(d.name, size, POUR.window)), 1);
   return Math.ceil(lines * (textRole.printName.lineHeight ?? 20) * s);
-}
-
-/* ==================================================================== */
-/* Thumbs                                                               */
-/* ==================================================================== */
-
-/**
- * A drink as a small mount with its name under it: lit (you can make it)
- * or its ghost (one ingredient away). Tapping opens the drink.
- */
-export const DrinkThumb = React.memo(function DrinkThumb({
-  drink,
-  lit,
-  size,
-  onOpen,
-}: {
-  drink: Drink;
-  lit: boolean;
-  /** The mount's side in points (76 in the first group, 68 under a row). */
-  size: number;
-  onOpen: (id: string) => void;
-}) {
-  const inner = MOUNT.thumb.padding + stroke.edge;
-  const face = size - 2 * inner;
-  return (
-    <Pressable
-      onPress={() => onOpen(drink.id)}
-      accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, ${lit ? 'you can make it' : 'one ingredient away'}`}
-      style={({ pressed }) => [{ width: size }, pressed && styles.pressed]}>
-      <Mount state="mounted" size="thumb" onLining={false} style={{ width: size, height: size }}>
-        <MountWindow height={face} state="mounted">
-          <BarFace drink={drink} mode={lit ? 'lit' : 'ghost'} width={face} height={face} />
-        </MountWindow>
-      </Mount>
-      <DrinkName
-        name={drink.name}
-        role={textRole.tileName}
-        measure={size}
-        cap={1.3}
-        color={colors.text}
-        style={styles.thumbName}
-      />
-    </Pressable>
-  );
-});
-
-/** The tile after a group's thumbs: "6 more", or "Show fewer" once open. */
-export function MoreTile({
-  size,
-  label,
-  onPress,
-  accessibilityLabel,
-}: {
-  size: number;
-  label: string;
-  onPress: () => void;
-  accessibilityLabel: string;
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      style={({ pressed }) => [styles.more, { width: size, minHeight: size }, pressed && styles.morePressed]}>
-      <Text maxFontSizeMultiplier={1.3} style={styles.moreText}>
-        {label}
-      </Text>
-    </Pressable>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -245,21 +187,8 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.85 },
 
   pour: { width: POUR_WIDTH },
-  pourMount: { flexGrow: 1 },
-  pourName: { marginTop: 9 },
+  pourMount: { flexGrow: 1, padding: POUR.padding },
+  pourPlate: { marginTop: space.sm },
+  pourName: { marginTop: 5 },
   pourTag: { marginTop: 'auto', paddingTop: space.sm, alignItems: 'flex-start' },
-
-  thumbName: { marginTop: 6 },
-
-  more: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: space.xs,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.bgSunk,
-  },
-  morePressed: { backgroundColor: colors.slot },
-  moreText: { ...textRole.helper, color: colors.textMuted, textAlign: 'center' },
 });

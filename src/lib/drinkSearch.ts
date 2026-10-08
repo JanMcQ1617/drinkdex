@@ -28,6 +28,43 @@ export function fold(s: string): string {
 /** Letters and digits, including the folded Latin letters that have no ASCII base (ø, ß, ı). */
 export const WORD_CHAR = /[a-z0-9\u00c0-\u024f]/;
 
+/*
+ * A query that is only a Dex number: "127", "#127", "Nº 127", "no 127",
+ * "no. 127", "n127", "nr 127", "number 127", one to four digits. Matched
+ * on the folded query, so a capital N and the iOS keyboard's degree sign
+ * (the º most people can reach) both pass. The numero sign is never
+ * written here (check-design rule 16 keeps it out of src); a pasted one
+ * still passes, because NFKC spells it "No".
+ */
+const DEX_NUMBER_QUERY = /^(?:#|n(?:[º°o]|r|um(?:ber)?)?\.?)?\s*#?\s*(\d{1,4})$/;
+
+/**
+ * The Dex number a query asks for, or null when it is a name (or style,
+ * or place) search. Not range-checked: "3000" is 3000, so the caller can
+ * say the Dex stops short of it rather than treating it as a name.
+ *
+ * The Dex grid jumps to the number instead of filtering (v3.3 Brass graft
+ * 9): as a substring, "12" lists every twelve-year-old Scotch and never
+ * the drink numbered 12, which is the one that was meant.
+ */
+export function parseDexNumber(query: string): number | null {
+  const m = DEX_NUMBER_QUERY.exec(fold(query.trim().normalize('NFKC')));
+  return m ? Number.parseInt(m[1], 10) : null;
+}
+
+/** A number on its way in: the sign typed, the digits not yet. Never the start of a name. */
+const DEX_NUMBER_PREFIX = /^(?:#|n[º°]\.?)\s*#?$/;
+
+/**
+ * True for "#", "Nº" or "N°" with no digits after it yet. The Dex reads
+ * it as no query at all: searched as words, "Nº" matched nothing, and on
+ * the way to typing "Nº 127" the grid flashed "No match" and offered to
+ * add a drink called Nº. "no" stays a search: it is the start of names.
+ */
+export function isDexNumberPrefix(query: string): boolean {
+  return DEX_NUMBER_PREFIX.test(fold(query.trim()));
+}
+
 /** True when `q` occurs in `s` at the start of a word, not inside one. */
 export function atWordStart(s: string, q: string): boolean {
   for (let i = s.indexOf(q); i !== -1; i = s.indexOf(q, i + 1)) {

@@ -1,9 +1,10 @@
 import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, type FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Animated, AppState, type FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { Dateline, datelineText, WalnutShelf } from '@/components/brass';
 import { LiningBand } from '@/components/cabinet';
 import { EmptyArt } from '@/components/DexCard';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
@@ -16,7 +17,7 @@ import { useTabScroll } from '@/components/ScrollChrome';
 import { Button, EmptyState, Hold, Notice } from '@/components/ui';
 import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 import { notInDexYet } from '@/lib/cabinet';
-import { isRenderablePost } from '@/lib/social';
+import { friendsPostedToday, isRenderablePost } from '@/lib/social';
 import { tournamentsHref } from '@/lib/tournaments';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
@@ -30,13 +31,16 @@ import type { Post } from '@/types';
 /*                                                                      */
 /* The feed: a top bar (post on the left, the wordmark, Tournaments and */
 /* Activity on the right), the stories rail, then the posts of the      */
-/* people you follow and your own, newest first, each edge to edge.     */
+/* people you follow and your own, newest first, each a framed print.  */
 /*                                                                      */
-/* ONE WINE BAND, THEN PAPER. The bar and the rail are the cabinet's    */
-/* lining, read as one band from the status bar down past the circles;  */
-/* the feed under it is paper, because you read on paper. Where the     */
-/* band meets the first post it leaves a 1pt lip and a 12pt shade,      */
-/* hung over the post (the header is lifted above the cells for it).    */
+/* ONE WINE BAND, A SHELF, THEN PAPER. The bar and the rail are the     */
+/* cabinet's lining, read as one band from the status bar down past the */
+/* circles; the feed under it is paper, because you read on paper. The  */
+/* band ends in a walnut shelf with a brass rail (Brass D19), so the    */
+/* story circles stand on the back bar, and the shelf's 12pt shade      */
+/* hangs over the first post (the header is lifted above the cells for  */
+/* it). Under the wordmark's place, the dateline (graft 6): today's     */
+/* date, and how many friends have posted today.                        */
 /* Pulled past the top, the overscroll is lining too, not a cream gap.  */
 /* Twice down the feed (after the 5th and the 15th post) a second band  */
 /* shows drinks your friends posted that are not in your Dex yet.       */
@@ -85,6 +89,34 @@ function FeedGap({ leadingItem }: { leadingItem?: Row }) {
   return <View style={styles.gap} />;
 }
 
+/** Same calendar day on the phone's clock. */
+function sameDay(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
+/**
+ * Today, for the dateline. Home is a tab and stays mounted overnight, so
+ * "today" is read again whenever Home is focused or the app comes back to
+ * the front, and kept as the same object while the day has not changed,
+ * so nothing re-renders for it. No timer: the line only matters when
+ * someone is looking at it, which is one of those two moments.
+ */
+function useToday(): Date {
+  const [today, setToday] = useState(() => new Date());
+  const reread = useCallback(() => {
+    const now = new Date();
+    setToday((prev) => (sameDay(prev, now) ? prev : now));
+  }, []);
+  useFocusEffect(reread);
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') reread();
+    });
+    return () => sub.remove();
+  }, [reread]);
+  return today;
+}
+
 export default function HomeScreen() {
   return (
     <AuthGate>
@@ -100,6 +132,7 @@ function HomeFeed() {
   const myId = useAuth((s) => s.session?.user.id);
 
   const feed = useSocial((s) => s.feed);
+  const following = useSocial((s) => s.following);
   const profiles = useSocial((s) => s.profiles);
   const pours = useSocial((s) => s.pours);
   const poursStatus = useSocial((s) => s.poursStatus);
@@ -124,6 +157,8 @@ function HomeFeed() {
    * empty state follows what is actually on screen (specs/06, cause 3).
    */
   const visibleFeed = feed.filter(isRenderablePost);
+
+  const today = useToday();
 
   const showTournaments = useTournaments((s) => s.supported);
   const pendingInvites = useTournaments((s) => s.pendingInvites);
@@ -241,6 +276,15 @@ function HomeFeed() {
   const waiting = loadingFeed || (poursStatus === 'idle' && !feedError);
 
   /*
+   * The dateline's count: people you follow with a post today, from the
+   * posts on screen (no new request). Unknown while the feed has not come
+   * back, and after a failed load, so the line is then the date alone
+   * rather than a count of a feed it does not have.
+   */
+  const friendsPosted =
+    waiting || feedError ? undefined : friendsPostedToday(visibleFeed, following, myId, today);
+
+  /*
    * The feed's rows. The "Not in your Dex yet" picks are drinks other
    * people in this feed posted that are not in your collection (no new
    * query); the second band skips the first's drinks. Not before the
@@ -275,9 +319,20 @@ function HomeFeed() {
       <View pointerEvents="none" style={styles.overscroll}>
         <Grain tone="lining" />
       </View>
-      <LiningBand lip shade="overlay">
+      <LiningBand>
         {/* The bar's place in the band: HomeChrome draws the bar over it. */}
         <View style={{ height: insets.top + layout.topBar }} />
+        {/*
+          Graft 6: the dateline, set under the wordmark as a paper sets its
+          date under the masthead. It scrolls with the band, under the bar.
+        */}
+        <View
+          accessible
+          // The middle dot is for the eye; spoken, it is a pause (the nameplate's rule).
+          accessibilityLabel={datelineText(today, friendsPosted).split(/\s*·\s*/).join(', ')}
+          style={styles.dateline}>
+          <Dateline date={today} friendsPosted={friendsPosted} />
+        </View>
         <TodaysPours
           myId={myId}
           pours={pours}
@@ -289,6 +344,12 @@ function HomeFeed() {
           onFindFriends={openFindFriends}
         />
       </LiningBand>
+      {/*
+        D19: the band's foot is a walnut shelf the circles stand on. Its
+        12pt shade hangs below it over the first post; the header is lifted
+        (ListHeaderComponentStyle) so the shade lies across the cell.
+      */}
+      <WalnutShelf />
       {/*
         A refresh that fails over a feed already on screen says so here,
         on paper under the band. The posts stay: they are still the last
@@ -327,7 +388,7 @@ function HomeFeed() {
         keyExtractor={(row) => row.key}
         ItemSeparatorComponent={FeedGap}
         /*
-         * A post is about a screen tall — a full-width 4:5 photo plus its
+         * A post is about a screen tall — a 4:5 print plus its
          * author row, actions and caption — so the default window (10 items
          * up front, 21 screens kept mounted) held twenty-odd full-size photos
          * in memory to show one.
@@ -343,7 +404,7 @@ function HomeFeed() {
           paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
         }}
         ListHeaderComponent={header}
-        // Lifted over the first post, so the band's shade lies across it.
+        // Lifted over the first post, so the shelf's shade lies across it.
         ListHeaderComponentStyle={styles.header}
         ListFooterComponent={footer}
         /*
@@ -416,6 +477,8 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
   header: { zIndex: 1 },
+  /* Centred under the wordmark, at the gutters; the rail's own 10pt top keeps it off the circles. */
+  dateline: { paddingHorizontal: layout.gutter },
   refresh: { zIndex: 2 },
   overscroll: {
     position: 'absolute',
@@ -425,7 +488,7 @@ const styles = StyleSheet.create({
     height: OVERSCROLL,
     backgroundColor: colors.lining,
   },
-  // 12pt down, so the band's shade falls on paper rather than across the notice.
+  // 12pt down, so the shelf's shade falls on paper rather than across the notice.
   notice: { marginHorizontal: layout.gutter, marginTop: space.md },
   gap: {
     height: 12,

@@ -1,7 +1,7 @@
 /**
  * Design-system guard.
  *
- * Fifteen rules for mistakes that were made across the app before the
+ * Sixteen rules for mistakes that were made across the app before the
  * redesigns, or that the v3 cabinet depends on never making, and that
  * regress easily:
  *   1. No emoji used as UI. They render in the system font, so weight and
@@ -28,6 +28,8 @@
  *  14. Nothing reads or says rarity, which v3.1 removed. See RARITY.
  *  15. No timed React Native animation: chrome motion is scroll-linked.
  *      See TIMED.
+ *  16. Brass is metal, not ink: the four metal tokens are never a text
+ *      colour, and the Dex number's sign is U+00BA, never U+2116. See METAL.
  *
  * Comments are stripped before any rule runs, block comments included,
  * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5 read
@@ -371,6 +373,23 @@ const RARITY_SHIM_FILES = [];
 const RN_MODULE = /^react-native$/;
 const RN_ANIMATED_MODULE = /^react-native\/Libraries\/Animated\/Animated$/;
 const TIMED = new Set(['timing', 'spring', 'decay', 'loop', 'sequence', 'parallel', 'stagger']);
+
+/*
+ * 16. v3.3 Brass (specs/v3-3-mockups/brass/spec.md section 6). Brass is
+ *     metal: `brass`, `brassPlate`, `brassLit` and `brassShade` are rails,
+ *     plates, edges and glyphs, and brass as a word fails AA on paper
+ *     (2.59:1). Only `brassInk` (paper) and `brassOnDark` (dark grounds)
+ *     are text. So a `color:` in a style, or a `color=` handed to anything
+ *     but an <Icon> (DrinkName's colour is a name's ink), may not be one of
+ *     the four, on either arm. `textShadowColor: colors.brassLit` (the
+ *     engraving's lit edge) is a shadow, not ink, and passes.
+ *
+ *     And "Nº 0127" is N + U+00BA: the Inter latin subset has the
+ *     masculine ordinal and not U+2116 (the numero sign), which would draw
+ *     as a fallback glyph from the system font. Any U+2116 in src/ fails.
+ */
+const METAL = new Set(['brass', 'brassPlate', 'brassLit', 'brassShade']);
+const NUMERO = /\u2116/;
 
 function walk(dir) {
   const out = [];
@@ -993,6 +1012,19 @@ function treeRules(rel, sf, lines, add) {
       // 12. Shadows.
       if (rel !== THEME && SHADOW_KEYS.has(key)) add('shadow', at(node), 'spread elevation.*');
 
+      // 16. A metal token as ink.
+      if (key === 'color') {
+        const onIcon =
+          ts.isJsxAttribute(node) &&
+          ts.isJsxAttributes(node.parent) &&
+          node.parent.parent.tagName.getText(sf) === 'Icon';
+        for (const v of onIcon ? [] : arms(value)) {
+          if (isColorsToken(v) && METAL.has(v.name.text)) {
+            add('metal', at(node), `colors.${v.name.text} is metal, never text: use brassInk or brassOnDark`);
+          }
+        }
+      }
+
       // 10. Grounds.
       if (
         !GROUNDS_EXEMPT[rel] &&
@@ -1179,6 +1211,8 @@ for (const [order, file] of files.entries()) {
   code.forEach((c, i) => {
     // Rule 5 reads every file, the allowlist included.
     if (CAPS.test(c)) add('caps', i);
+    // Rule 16's numero sign, every file: it is wrong in a string as much as in a style.
+    if (NUMERO.test(c)) add('metal', i, 'U+2116 is not in the Inter subset: write N + U+00BA');
 
     if (ALLOW[rel]) return;
 
@@ -1207,7 +1241,7 @@ if (violations.length === 0) {
       '  stray Playfair, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
       '  stray shadows, gradient stops without their opacity, rarity readers or timed\n' +
-      '  React Native animations outside the allowlists.\n',
+      '  React Native animations, or brass set as text, outside the allowlists.\n',
   );
   process.exit(0);
 }

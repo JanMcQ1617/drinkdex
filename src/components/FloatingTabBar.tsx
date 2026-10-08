@@ -47,10 +47,16 @@ import { useAuth } from '@/store/auth';
 /* own colours, so it also needs no switch when Reels comes back.       */
 /*                                                                      */
 /* THE ACTIVE TAB IS BONE, NOT WINE, and says so three ways: its glyph  */
-/* drawn solid, its label in SemiBold, and a 2pt bone indicator on the  */
-/* bar's top edge over the slot, so the state never rests on colour     */
-/* alone. The bar's one wine object is the post action, and a wine      */
-/* "where you are" would compete with it.                               */
+/* drawn solid, its label in SemiBold, and a 2pt indicator over the     */
+/* slot, so the state never rests on colour alone. The bar's one wine   */
+/* object is the post action, and a wine "where you are" would compete  */
+/* with it.                                                             */
+/*                                                                      */
+/* BRASS HARDWARE (v3.3 Brass D11). A 1pt brass keyline inset 3 inside  */
+/* the slab (tabKeyline, decorative), the indicator in brassLit riding  */
+/* on that keyline (10.45:1 on espresso), and the + button edged in     */
+/* brass (4.75:1 against its own wine) with a lit top lip. Two Views    */
+/* and two colours; nothing new moves.                                  */
 /*                                                                      */
 /* MOVED BY THE FINGER OR BY UIKIT, NEVER BY A JS CLOCK. Changing tab   */
 /* is the pager's ((tabs)/_layout.tsx): a swipe carries the page under  */
@@ -96,6 +102,8 @@ const INK = {
 
 /** The active slot's indicator: 2pt tall (stroke.indicator), as wide as the glyph box. */
 const INDICATOR_W = 28;
+/** The brass keyline's inset inside the slab, and so the indicator's top (it rides on the keyline). */
+const KEYLINE_INSET = 3;
 
 /** The gap between a glyph box and its label (styles.item's `gap`). */
 const LABEL_GAP = 3;
@@ -180,9 +188,12 @@ type FloatingTabBarProps = {
  * opens a full-screen window, which is answer enough.
  *
  * Wine on the espresso bar is 1.12:1, so the fill alone would vanish into
- * it: the 1pt bone edge (colors.logActionEdge, 3.02:1) is what draws the button's
- * outline, and the bone plus on wine is 10.95:1. It used to invert to bone
- * on Reels for the same reason; with one skin everywhere, the edge does it.
+ * it: the 1pt edge is what draws the button's outline, brass since v3.3
+ * (5.32:1 on espresso, 4.75:1 against its own wine; it was bone,
+ * logActionEdge, 3.02:1), and the bone plus on wine is 10.95:1. It used to
+ * invert to bone on Reels for the same reason; with one skin everywhere,
+ * the edge does it. 52 x 38 (was 48 x 36): the Brass mock's size, with a
+ * lit inset lip along its top (elevation.logAction).
  */
 function CentreAction({
   onPress,
@@ -199,8 +210,8 @@ function CentreAction({
         accessibilityRole="button"
         accessibilityLabel="Post a drink"
         accessibilityHint="Take a photo and pick what you drank"
-        // 36 tall; this reaches the 44pt target.
-        hitSlop={{ top: 4, bottom: 4 }}
+        // 38 tall; this reaches the 44pt target.
+        hitSlop={{ top: 3, bottom: 3 }}
         style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
         <Icon name="plus" size={22} color={colors.textOnWine} filled />
       </Pressable>
@@ -356,12 +367,15 @@ export function FloatingTabBar({ state, descriptors, navigation, position }: Flo
         the strip above the slab is the page again and takes its own taps.
       */}
       <View style={styles.bar} onLayout={onBarLayout} pointerEvents="box-none">
-        <Animated.View style={[styles.slab, motion.slab]} />
+        <Animated.View style={[styles.slab, motion.slab]}>
+          {/* The brass keyline (D11): inside the slab, so it compacts with it. Decorative. */}
+          <View pointerEvents="none" style={styles.keyline} />
+        </Animated.View>
         {/*
           The second cue for where you are, after the solid glyph and the
-          label's weight: a 2pt bone rule laid over the slab's top edge.
-          It glides with the pager (see `glide`), and rides the slab's top
-          edge down with the slots as the bar compacts.
+          label's weight: a 2pt brassLit rule laid on the slab's brass
+          keyline. It glides with the pager (see `glide`), and rides the
+          slab's top edge down with the slots as the bar compacts.
         */}
         {glide ? (
           <Animated.View pointerEvents="none" style={[styles.indicatorTrack, motion.slot]}>
@@ -516,6 +530,17 @@ const styles = StyleSheet.create({
     borderColor: colors.reelControlBorder,
     ...elevation.barDark,
   },
+  /* Concentric with the slab's 12pt corners: 12 - 3. */
+  keyline: {
+    position: 'absolute',
+    top: KEYLINE_INSET - stroke.edge,
+    left: KEYLINE_INSET - stroke.edge,
+    right: KEYLINE_INSET - stroke.edge,
+    bottom: KEYLINE_INSET - stroke.edge,
+    borderRadius: radius.card - KEYLINE_INSET,
+    borderWidth: stroke.edge,
+    borderColor: colors.tabKeyline,
+  },
   /*
    * The row fills the bar and every slot stretches to the row's full
    * height, so a slot's top is always the bar's top edge (where its
@@ -550,7 +575,7 @@ const styles = StyleSheet.create({
    */
   indicatorTrack: {
     position: 'absolute',
-    top: 0,
+    top: KEYLINE_INSET,
     left: 0,
     right: 0,
     height: stroke.indicator,
@@ -558,17 +583,17 @@ const styles = StyleSheet.create({
   indicatorGlide: {
     width: INDICATOR_W,
     height: stroke.indicator,
-    backgroundColor: INK.active,
+    backgroundColor: colors.brassLit,
   },
-  /* The fallback: over the 1pt edge (top −1 inside the padded row), centred on the slot. */
+  /* The fallback: on the keyline (KEYLINE_INSET from the slab's outer top, inside the padded row), centred on the slot. */
   indicator: {
     position: 'absolute',
-    top: -stroke.edge,
+    top: KEYLINE_INSET - stroke.edge,
     left: '50%',
     marginLeft: -INDICATOR_W / 2,
     width: INDICATOR_W,
     height: stroke.indicator,
-    backgroundColor: INK.active,
+    backgroundColor: colors.brassLit,
   },
   glyphBox: {
     width: GLYPH_BOX,
@@ -610,14 +635,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   fab: {
-    width: 48,
-    height: 36,
+    width: 52,
+    height: 38,
     borderRadius: radius.control,
     borderWidth: stroke.edge,
-    borderColor: colors.logActionEdge,
+    borderColor: colors.brass,
     backgroundColor: colors.wine,
     alignItems: 'center',
     justifyContent: 'center',
+    ...elevation.logAction,
   },
   /* A fill change, not a scale: controls answer a press with their fill. */
   fabPressed: { backgroundColor: colors.wineDeep },

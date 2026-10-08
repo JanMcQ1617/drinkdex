@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { BrassBezel, CountSeparator } from '@/components/brass';
 import { Avatar, Button } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
@@ -9,18 +10,28 @@ import type { UserProfile } from '@/types';
 /* The head of a profile                                                */
 /*                                                                      */
 /* One layout for your profile and anyone else's, so the two read as one */
-/* screen: the picture, then the name over three counts, then the bio,   */
-/* then a row of actions. The handle is not repeated here; it is the     */
-/* screen's title, in the top bar.                                       */
+/* screen: the picture in its brass bezel beside three counts, then the  */
+/* name, the bio and a row of actions. The handle is not repeated here;  */
+/* it is the screen's title, in the top bar.                             */
 /*                                                                      */
-/* The name (16pt) sits over 18pt figures and their 13pt muted words, so */
-/* the head has an order to read in. Before, name, figures, bio and      */
-/* buttons all sat between 14 and 16pt, and only the avatar stood out.   */
+/* v3.3 Brass (screen 5): the avatar sits in the D14 bezel (80 in 92)    */
+/* and brass hairlines (D15) part the counts, each centred in its        */
+/* column. The name moved under that row, as the mock sets it, and got   */
+/* the full width with it: it wraps now, where beside the counts it was  */
+/* one line cut short.                                                   */
 /*                                                                      */
-/* Posts, followers, following. Not a Dex count: a collection never      */
-/* leaves its owner's phone, so it would be a dash on every profile but  */
-/* yours. Your own Dex count is on the Dex tab, in the strip below.      */
+/* Posts, followers, following. The Dex count is not a fourth figure:   */
+/* it is the walnut plaque under the buttons (ProfileView), with its     */
+/* gauge and rank, so it is never confused with the posts figure here.   */
 /* ==================================================================== */
+
+/** The avatar inside the bezel: the mock's 80, so the bezel is 92, 6pt more than the old 86 face. */
+const AVATAR = 80;
+/** Between the bezel and the counts: the 18 the old face had, so the three columns keep their room. */
+const IDENTITY_GAP = 18;
+/** The counts sit in fixed thirds beside the bezel; past this they shrink to fit rather than break a word. */
+const COUNT_CAP = 1.4;
+const COUNT_MIN_SCALE = 0.7;
 
 export type ProfileActions =
   | {
@@ -58,35 +69,40 @@ export function ProfileHeader({
   return (
     <View style={styles.header}>
       <View style={styles.identity}>
-        {/* Hidden from VoiceOver by Avatar itself: the name beside it speaks. */}
-        <Avatar
-          name={person.displayName}
-          accent={person.accent}
-          size={86}
-          avatarPath={person.avatarPath}
-        />
-        <View style={styles.identityText}>
-          <Text style={styles.name} numberOfLines={1}>
-            {person.displayName}
-          </Text>
-          <View style={styles.counts}>
-            <Count value={posts} one="post" many="posts" />
-            <Count
-              value={followers}
-              one="follower"
-              many="followers"
-              onPress={() => onOpenList('followers')}
-            />
-            <Count
-              value={following}
-              one="following"
-              many="following"
-              onPress={() => onOpenList('following')}
-            />
-          </View>
+        {/*
+          Hidden from VoiceOver by Avatar itself, and the bezel is
+          decorative: the name under them speaks. Own and peer alike; the
+          feed's and the likers' faces stay plain.
+        */}
+        <BrassBezel size={AVATAR}>
+          <Avatar
+            name={person.displayName}
+            accent={person.accent}
+            size={AVATAR}
+            avatarPath={person.avatarPath}
+          />
+        </BrassBezel>
+        <View style={styles.counts}>
+          <Count value={posts} one="post" many="posts" />
+          <CountSeparator />
+          <Count
+            value={followers}
+            one="follower"
+            many="followers"
+            onPress={() => onOpenList('followers')}
+          />
+          <CountSeparator />
+          <Count
+            value={following}
+            one="following"
+            many="following"
+            onPress={() => onOpenList('following')}
+          />
         </View>
       </View>
 
+      {/* No line limit: a long name wraps at a space, it is never cut. */}
+      <Text style={styles.name}>{person.displayName}</Text>
       {person.bio ? <Text style={styles.bio}>{person.bio}</Text> : null}
 
       <View style={styles.actions}>
@@ -173,12 +189,28 @@ function Count({
     value === null
       ? `${many[0]!.toUpperCase()}${many.slice(1)}, not loaded yet`
       : `${formatCount(value)} ${word}`;
+  /*
+   * A column is a third of what the bezel leaves, about 80pt, and
+   * "followers" at 13pt x 1.4 is about that on a 375pt phone. iOS shrinks
+   * the word (or a long figure) to fit rather than wrap it inside itself;
+   * at the default size nothing shrinks.
+   */
   const body = (
     <>
-      <Text style={styles.figure} maxFontSizeMultiplier={1.4}>
+      <Text
+        style={styles.figure}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={COUNT_MIN_SCALE}
+        maxFontSizeMultiplier={COUNT_CAP}>
         {value === null ? '–' : formatCount(value)}
       </Text>
-      <Text style={styles.word} maxFontSizeMultiplier={1.4}>
+      <Text
+        style={styles.word}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={COUNT_MIN_SCALE}
+        maxFontSizeMultiplier={COUNT_CAP}>
         {word}
       </Text>
     </>
@@ -207,16 +239,16 @@ function Count({
 
 const styles = StyleSheet.create({
   header: { paddingHorizontal: layout.gutter, paddingTop: space.xs },
-  identity: { flexDirection: 'row', alignItems: 'center' },
-  identityText: { flex: 1, marginLeft: 18, justifyContent: 'center' },
-  // 16pt SemiBold, over the figures: the person comes first by place, the figures by size.
-  name: { ...textRole.sectionTitle, color: colors.text },
-  counts: { flexDirection: 'row', marginTop: 6 },
-  count: { flex: 1, alignItems: 'flex-start' },
+  identity: { flexDirection: 'row', alignItems: 'center', gap: IDENTITY_GAP },
+  // The separators stretch to the row's height and stop 6pt short at each end (D15).
+  counts: { flex: 1, flexDirection: 'row' },
+  count: { flex: 1, alignItems: 'center' },
   pressed: { opacity: 0.5 },
-  figure: { ...textRole.count, color: colors.text },
-  word: { ...textRole.helper, color: colors.textMuted },
-  bio: { ...textRole.prose, color: colors.text, marginTop: space.md },
+  figure: { ...textRole.count, color: colors.text, textAlign: 'center' },
+  word: { ...textRole.helper, color: colors.textMuted, textAlign: 'center' },
+  // 16pt SemiBold under the bezel row (the mock's 12pt below it), the bio straight after.
+  name: { ...textRole.sectionTitle, color: colors.text, marginTop: space.md },
+  bio: { ...textRole.prose, color: colors.text, marginTop: 2 },
   actions: { flexDirection: 'row', gap: space.sm, marginTop: 14 },
   grow: { flex: 1 },
 });

@@ -79,6 +79,34 @@ export function useCollectedCount(): number {
   return useMemo(() => catalogueCount(unlocks), [unlocks]);
 }
 
+/*
+ * The Dex numbers behind the Profile plaque (Brass D13, fix 10). The
+ * plaque counts what it is handed, so it is handed DEX entries, never
+ * posts: yours from the collection, a peer's from the drinks this tab
+ * already shows. Both are catalogue drinks only (getDrink hits), the
+ * test catalogueCount and the Dex header use, so on your profile the
+ * plaque, the "38 in your Dex" button below and the Dex tab's header
+ * are one number, and on a peer's it is this tab's "shared" figure.
+ */
+
+/** The Dex numbers of every catalogue drink in your collection, rebuilt only when it changes. */
+export function useCollectedNumbers(): number[] {
+  const unlocks = useCollection((s) => s.unlocks);
+  return useMemo(
+    () =>
+      Object.keys(unlocks).flatMap((id) => {
+        const drink = getDrink(id);
+        return drink ? [drink.dexNumber] : [];
+      }),
+    [unlocks],
+  );
+}
+
+/** The Dex numbers of a profile's shared drinks: this tab's own entries, so no second request. */
+export function sharedNumbers(shared: readonly SharedDrink[]): number[] {
+  return shared.map((s) => s.drink.dexNumber);
+}
+
 /**
  * The head of the Dex tab, on the lining: how many drinks are shared as a
  * large figure, and on your own profile the way into your Dex.

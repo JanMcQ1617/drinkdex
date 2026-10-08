@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
   ActionSheetIOS,
   Alert,
@@ -26,17 +26,25 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { BRACKET_INSET, BrassHairline, CornerBrackets } from '@/components/brass';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
 import { MediaMarker, Nameplate } from '@/components/media';
 import { Avatar, haptic } from '@/components/ui';
-import { colors, fonts, layout, motion, space, textRole } from '@/constants/theme';
+import { colors, fonts, layout, motion, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
 import { drinkPhoto } from '@/data/drinkPhotos';
 import { glassPhrase, styleLabel } from '@/lib/drinkLabels';
 import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
-import { isBlankCaption, isRenderablePost, savesSupported, signedPhotoUrl } from '@/lib/social';
+import {
+  isBlankCaption,
+  isRenderablePost,
+  savesSupported,
+  signedPhotoUrl,
+  timeAgo,
+  timeAgoSpoken,
+} from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
 import { useCollection, useIsUnlocked } from '@/store/collection';
@@ -50,40 +58,11 @@ import type { Post, UserProfile } from '@/types';
  * this component's file to do it.
  */
 export { useSignedPhoto };
-
-/* ==================================================================== */
-/* Helpers                                                              */
-/* ==================================================================== */
-
-/** Whole units since `iso`, or null for "just now". */
-function elapsed(iso: string): { n: number; unit: 'minute' | 'hour' | 'day' | 'week' } | null {
-  const ms = Date.now() - Date.parse(iso);
-  if (Number.isNaN(ms) || ms < 0) return null;
-  const min = Math.floor(ms / 60000);
-  if (min < 1) return null;
-  if (min < 60) return { n: min, unit: 'minute' };
-  const h = Math.floor(min / 60);
-  if (h < 24) return { n: h, unit: 'hour' };
-  const d = Math.floor(h / 24);
-  if (d < 7) return { n: d, unit: 'day' };
-  return { n: Math.floor(d / 7), unit: 'week' };
-}
-
-/** "2h" / "3d" style relative timestamp, for tight spots: a post's author row, the story viewer's header, Activity rows. */
-export function timeAgo(iso: string): string {
-  const t = elapsed(iso);
-  return t ? `${t.n}${t.unit[0]}` : 'now';
-}
-
-/**
- * The same timestamp in words: "2 hours ago". The card shows it this way
- * too now, at the foot of the post, where there is room for the words;
- * VoiceOver reads "2h" as "2 h" and "3w" as "3 w".
+/*
+ * The same for the time helpers, which live in lib/social now: the likers
+ * sheet this card opens uses them too, and it cannot import this file.
  */
-export function timeAgoSpoken(iso: string): string {
-  const t = elapsed(iso);
-  return t ? `${t.n} ${t.unit}${t.n === 1 ? '' : 's'} ago` : 'just now';
-}
+export { timeAgo, timeAgoSpoken };
 
 /* ==================================================================== */
 /* Icon control                                                         */
@@ -103,7 +82,7 @@ export function timeAgoSpoken(iso: string): string {
  * pop that never runs leaves the glyph exactly where it should be.
  *
  * A full 44pt box with no slop: the actions row is 44 tall and laid out on
- * that grid, so the glyphs land near the page's 16pt gutter (see `actions`).
+ * that grid, so the glyphs land on the print's 24pt edges (see `actions`).
  * Pressed, it dims to half, the plain glyph rule; the pop is the real
  * feedback.
  */
@@ -305,6 +284,29 @@ function LikedByLine({
 /* PostCard                                                             */
 /* ==================================================================== */
 
+/**
+ * The print (Brass D5): the photo sits this far in from each screen edge,
+ * so the brass corner brackets read as a frame around a picture rather
+ * than as marks on a full-bleed screen. The likes, caption and time line
+ * up with the print's edges below it, as the mock sets them.
+ */
+const PRINT_INSET = 24;
+/** The author's avatar inside its brass hairline (D16), which adds 4. */
+const AUTHOR_AVATAR = 32;
+/** The action glyphs are 24pt in 44pt boxes: this inset puts the glyphs on the print's edges. */
+const ACTIONS_INSET = PRINT_INSET - (layout.hit - 24) / 2;
+/**
+ * The gallery count's corner: inside the top-right bracket's 8pt corner
+ * plate (BRACKET_INSET + 8) with a 2pt gap, so the marker never sits on
+ * the brass.
+ */
+const COUNT_INSET = BRACKET_INSET + 10;
+
+/** What the post page reaches into a card for: its options menu, which the page's own bar carries. */
+export interface PostCardHandle {
+  openMenu: () => void;
+}
+
 export interface PostCardProps {
   post: Post;
   /** The author's profile, from `useSocial().profiles`. */
@@ -326,6 +328,13 @@ export interface PostCardProps {
    * can leave. Lists need nothing: the store drops the post from the feed.
    */
   onDeleted?: (postId: string) => void;
+  /**
+   * The post page carries the options button in its own top bar (the Brass
+   * mock), so the card leaves its header's one out and the page calls
+   * `openMenu` through `ref`.
+   */
+  menuInBar?: boolean;
+  ref?: React.Ref<PostCardHandle>;
 }
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -338,6 +347,8 @@ export const PostCard = React.memo(function PostCard({
   photoPath,
   onBlocked,
   onDeleted,
+  menuInBar,
+  ref,
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
@@ -696,6 +707,8 @@ export const PostCard = React.memo(function PostCard({
     ]);
   }, [drink, onOpenDrink, share, who.id, who.username, myId, openReport, confirmBlock, confirmDelete]);
 
+  useImperativeHandle(ref, () => ({ openMenu }), [openMenu]);
+
   /*
    * One rule for "draws nothing", shared with every list of posts
    * (isRenderablePost, lib/social): a list filters these out before they
@@ -713,7 +726,9 @@ export const PostCard = React.memo(function PostCard({
    * lit vector window, in the same 4:5 frame, never a coloured square.
    */
   const showPhoto = !!current && photoUrl !== null;
-  const mediaH = Math.round(width / layout.feedPhotoAspect);
+  // The print's size: the screen less its two insets, at 4:5 (D5). The decode, the brackets and the name's measure all follow it.
+  const printW = Math.round(width - 2 * PRINT_INSET);
+  const mediaH = Math.round(printW / layout.feedPhotoAspect);
   const mediaLabel = hasGallery
     ? `Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`
     : showPhoto
@@ -724,8 +739,11 @@ export const PostCard = React.memo(function PostCard({
   // "Fizz · Highball glass · New Orleans, USA": sentence-case style, the glass said once.
   const meta = [styleLabel(drink.subcategory), glassPhrase(drink), drink.origin].filter(Boolean).join(' · ');
 
+  // D16: the author's face in a 1pt brass hairline, the print's own trim.
   const avatar = (
-    <Avatar name={who.displayName} accent={who.accent} size={32} avatarPath={who.avatarPath} />
+    <BrassHairline size={AUTHOR_AVATAR}>
+      <Avatar name={who.displayName} accent={who.accent} size={AUTHOR_AVATAR} avatarPath={who.avatarPath} />
+    </BrassHairline>
   );
   const captionText = (
     <>
@@ -794,18 +812,22 @@ export const PostCard = React.memo(function PostCard({
             · {timeAgo(post.createdAt)}
           </Text>
         </View>
-        <IconButton
-          name="more"
-          label="Post options"
-          onPress={openMenu}
-          color={colors.textMuted}
-          style={styles.moreButton}
-        />
+        {menuInBar ? null : (
+          <IconButton
+            name="more"
+            label="Post options"
+            onPress={openMenu}
+            color={colors.textMuted}
+            style={styles.moreButton}
+          />
+        )}
       </View>
 
       {/*
         ---- The photo ----
-        Full bleed, square-cornered, 4:5. One Pressable covers it, for the
+        A print (Brass D5): 24pt in from each edge, radius 4, a 1pt edge,
+        4:5, with brass corner brackets (D4) laid over it after the
+        nameplate so they stay bright. One Pressable covers it, for the
         page turn and the double-tap like; nothing else is nested in it, so
         VoiceOver reads it as one element: the photo, or on a gallery the
         button that turns the page. Liking is always the heart below as
@@ -817,7 +839,7 @@ export const PostCard = React.memo(function PostCard({
         box-none), and VoiceOver reads it after the photo, as its own button
         and then the plaque.
       */}
-      <View style={styles.media}>
+      <View style={[styles.media, { width: printW, height: mediaH }]}>
         <Pressable
           onPress={onMediaPress}
           accessibilityRole={hasGallery ? 'button' : 'image'}
@@ -826,7 +848,7 @@ export const PostCard = React.memo(function PostCard({
           {showPhoto ? (
             <Image
               source={
-                photoUrl ? { uri: photoUrl, cacheKey: `${current}#${Math.round(width)}x${mediaH}` } : undefined
+                photoUrl ? { uri: photoUrl, cacheKey: `${current}#${printW}x${mediaH}` } : undefined
               }
               /*
                * Keyed on the storage path, not the URL. A signed URL carries a
@@ -842,7 +864,7 @@ export const PostCard = React.memo(function PostCard({
                * key keeps it from ever drawing a tile's picture at full width.
                */
               cachePolicy="memory-disk"
-              // Pour photos are stored at up to 2048px; decode at the card's width.
+              // Pour photos are stored at up to 2048px; decode at the print's width.
               enforceEarlyResizing
               style={StyleSheet.absoluteFill}
               contentFit="cover"
@@ -852,7 +874,7 @@ export const PostCard = React.memo(function PostCard({
             <DrinkFace
               drink={drink}
               mode="lit"
-              width={width}
+              width={printW}
               height={mediaH}
               // The glass at 0.56 of the frame's width; VectorFace takes it as a share of the height.
               artScale={0.56 * layout.feedPhotoAspect}
@@ -867,7 +889,9 @@ export const PostCard = React.memo(function PostCard({
           meta={meta}
           inDex={inDex}
           onOpen={() => onOpenDrink(drink.id)}
+          frameWidth={printW}
         />
+        <CornerBrackets width={printW} height={mediaH} />
         {hasGallery ? (
           /*
            * Tap-to-advance rather than a swipe: this card already sits in a
@@ -881,6 +905,13 @@ export const PostCard = React.memo(function PostCard({
             <MediaMarker text={`${index + 1}/${gallery.length}`} />
           </View>
         ) : null}
+        {/* The print's 1pt edge, laid over the photo so the picture fills the whole frame under it. */}
+        <View
+          pointerEvents="none"
+          accessibilityElementsHidden
+          importantForAccessibility="no"
+          style={styles.printEdge}
+        />
       </View>
 
       {/*
@@ -961,7 +992,15 @@ export const PostCard = React.memo(function PostCard({
       ) : null}
       <Text style={styles.time}>{timeAgoSpoken(post.createdAt)}</Text>
       {likersOpen === null ? null : (
-        <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} />
+        <LikersSheet
+          postId={post.id}
+          visible={likersOpen}
+          onClose={closeLikers}
+          drink={drink}
+          likes={likes}
+          authorId={who.id}
+          authorUsername={who.username}
+        />
       )}
     </View>
   );
@@ -972,8 +1011,8 @@ export const PostCard = React.memo(function PostCard({
 const styles = StyleSheet.create({
   /*
    * No card chrome and no fill: the post sits straight on the paper (its
-   * grain shows through), its photo running edge to edge, the way a feed
-   * of pictures is read. Home puts a 12pt sunk gap between two posts.
+   * grain shows through), its photo a framed print inset from the edges.
+   * Home puts a 12pt sunk gap between two posts.
    */
   card: { paddingBottom: space.lg },
   pressed: { opacity: 0.5 },
@@ -995,19 +1034,25 @@ const styles = StyleSheet.create({
   username: { ...textRole.username, color: colors.text },
   when: { ...textRole.prose, flexShrink: 0, color: colors.textMuted },
   /*
-   * Pulled out to the actions row's 8pt inset, so its glyph stands on the
-   * same vertical line as the bookmark's below it rather than 8pt inside.
+   * Pulled out to the actions row's inset, so its glyph stands on the
+   * same vertical line as the bookmark's below it (the print's edge).
    */
-  moreButton: { marginRight: space.sm - layout.gutter },
+  moreButton: { marginRight: ACTIONS_INSET - layout.gutter },
 
-  /* Media: the 4:5 frame, sunk while a photo is on its way. */
+  /* Media: the print, sized inline; sunk while a photo is on its way. */
   media: {
-    width: '100%',
-    aspectRatio: layout.feedPhotoAspect,
+    alignSelf: 'center',
+    borderRadius: radius.badge,
     overflow: 'hidden',
     backgroundColor: colors.bgSunk,
   },
-  galleryCount: { position: 'absolute', top: space.md, right: space.md },
+  printEdge: {
+    ...StyleSheet.absoluteFill,
+    borderRadius: radius.badge,
+    borderWidth: stroke.edge,
+    borderColor: colors.windowEdge,
+  },
+  galleryCount: { position: 'absolute', top: COUNT_INSET, right: COUNT_INSET },
   burstLayer: {
     position: 'absolute',
     top: 0,
@@ -1018,12 +1063,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  /* Actions: 8pt in, so each 24pt glyph in its 44pt box sits near the 16pt gutter. */
+  /* Actions: each 24pt glyph in its 44pt box lands on the print's edges. */
   actions: {
     height: layout.hit,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: space.sm,
+    paddingHorizontal: ACTIONS_INSET,
   },
   actionsSpacer: { flex: 1 },
   iconBtn: {
@@ -1034,7 +1079,7 @@ const styles = StyleSheet.create({
   },
 
   /* Copy */
-  likesInset: { paddingHorizontal: layout.gutter },
+  likesInset: { paddingHorizontal: PRINT_INSET },
   /* The plain count, as the line has always read: the role's semibold, in ink. */
   likesCount: { ...textRole.username, flexShrink: 1, color: colors.text },
   /*
@@ -1050,21 +1095,21 @@ const styles = StyleSheet.create({
   },
   likedText: { ...textRole.prose, flexShrink: 1, color: colors.text },
   likedName: { fontFamily: textRole.username.fontFamily },
-  captionBlock: { paddingHorizontal: layout.gutter, paddingTop: space.xs },
+  captionBlock: { paddingHorizontal: PRINT_INSET, paddingTop: space.xs },
   caption: { ...textRole.prose, color: colors.text },
   /* Insets count from the block's padding edge, not its content, so the gutter and top are restated. */
   captionMeasure: {
     position: 'absolute',
     top: space.xs,
-    left: layout.gutter,
-    right: layout.gutter,
+    left: PRINT_INSET,
+    right: PRINT_INSET,
     opacity: 0,
   },
   captionAuthor: { fontFamily: fonts.bodySemiBold },
   more: { ...textRole.prose, fontFamily: fonts.bodyMedium, color: colors.textMuted },
   time: {
     ...textRole.helper,
-    paddingHorizontal: layout.gutter,
+    paddingHorizontal: PRINT_INSET,
     paddingTop: space.xs,
     color: colors.textMuted,
   },

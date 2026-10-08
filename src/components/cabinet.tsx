@@ -10,10 +10,12 @@ import {
 } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
+import { BrassPlate } from '@/components/brass/BrassPlate';
+import { MountKeyline, WindowBevel } from '@/components/brass/frames';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { colors, dexNumber, elevation, radius, space, stroke, textRole } from '@/constants/theme';
-import { formatCount, formatDexNumber } from '@/data';
+import { colors, elevation, radius, space, stroke, textRole } from '@/constants/theme';
+import { formatCount } from '@/data';
 import { faceOf, fitScale, textWidth } from '@/lib/textFit';
 
 /* ==================================================================== */
@@ -319,6 +321,12 @@ export function Mount({
           : [styles.mountSlot, elevation.recess],
         style,
       ]}>
+      {/*
+        v3.3 Brass D3: a caught card's brass keyline, under its content.
+        One weight and one colour on every mount (it means "caught", never
+        a tier). A thumb's mat is 3pt, so its keyline sits 1pt in.
+      */}
+      {mounted ? <MountKeyline outerRadius={geo.radius} inset={size === 'thumb' ? 1 : 3} /> : null}
       <MountSizeContext.Provider value={size}>{children}</MountSizeContext.Provider>
     </View>
   );
@@ -344,8 +352,9 @@ export function MountWindow({
   state: 'mounted' | 'slot';
   children: React.ReactNode;
 }) {
-  const r = MOUNT[useContext(MountSizeContext)].windowRadius;
-  return (
+  const size = useContext(MountSizeContext);
+  const r = MOUNT[size].windowRadius;
+  const window = (
     <View style={[styles.window, { minHeight: height, borderRadius: r }]}>
       {children}
       <View
@@ -360,6 +369,20 @@ export function MountWindow({
       />
     </View>
   );
+  /*
+   * v3.3 Brass D17: a mounted window's bevel, the mat's cut edge lit from
+   * above, hung 1pt outside the window so its size does not move. The
+   * window clips its photo, so the bevel sits beside it in a wrapper that
+   * takes the window's place in the column (and its slack). Not on slots
+   * (a recess has no mat to cut) or thumbs (3pt of mat is too little).
+   */
+  if (state === 'slot' || size === 'thumb') return window;
+  return (
+    <View style={styles.windowWrap}>
+      {window}
+      <WindowBevel />
+    </View>
+  );
 }
 
 /* ==================================================================== */
@@ -367,27 +390,30 @@ export function MountWindow({
 /* ==================================================================== */
 
 /**
- * The catalogue number, stamped: "#0009" in `dexNumber` (11pt, tracked,
- * tabular) on a 20pt plate with a 1pt edge. On mat and paper it is taupe
- * with taupeInk (5.55:1 on mat); on lining and in a slot the edge is
- * `plateEdgeLining` and the ink onLiningMuted (6.79:1). Over a photograph
- * use media.tsx's MediaNumberPlate instead.
+ * The catalogue number, engraved: since v3.3 Brass, every Dex number is a
+ * brass plate ("Nº 0009", components/brass/BrassPlate.tsx). A caught drink
+ * (on mat, on paper, on lining) gets polished brass; a slot, or a drink
+ * shown on lining that is not caught (`caught={false}`, the drink page),
+ * gets the empty holder. `tone` stays the ground it sits on, so callers
+ * from before Brass keep working; only the slot and `caught` decide the
+ * metal. Over a photograph media.tsx's MediaNumberPlate draws the same
+ * plate.
  *
  * Not its own VoiceOver element: the card or row that holds it says
  * "number 9".
  */
-export function NumberPlate({ n, tone }: { n: number; tone: 'mat' | 'paper' | 'lining' | 'slot' }) {
-  const dark = tone === 'lining' || tone === 'slot';
-  return (
-    <View style={[styles.plate, { borderColor: dark ? colors.plateEdgeLining : colors.taupe }]}>
-      <Text
-        accessible={false}
-        maxFontSizeMultiplier={1.3}
-        style={[dexNumber, { color: dark ? colors.onLiningMuted : colors.taupeInk }]}>
-        {formatDexNumber(n)}
-      </Text>
-    </View>
-  );
+export function NumberPlate({
+  n,
+  tone,
+  caught,
+}: {
+  n: number;
+  tone: 'mat' | 'paper' | 'lining' | 'slot';
+  /** Default: caught unless `tone` is 'slot'. */
+  caught?: boolean;
+}) {
+  const brass = caught ?? tone !== 'slot';
+  return <BrassPlate n={n} tone={brass ? 'brass' : 'holder'} />;
 }
 
 /**
@@ -519,16 +545,8 @@ const styles = StyleSheet.create({
   mountMat: { backgroundColor: colors.mat },
   mountSlot: { backgroundColor: colors.liningDeep, borderColor: colors.slotEdge },
   window: { flexGrow: 1, overflow: 'hidden', backgroundColor: colors.liningDeep },
+  windowWrap: { flexGrow: 1 },
   windowEdge: { borderWidth: stroke.edge },
-
-  /* NumberPlate */
-  plate: {
-    minHeight: 20,
-    paddingHorizontal: 5,
-    justifyContent: 'center',
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-  },
 
   /* DexStatusTag */
   statusTag: {

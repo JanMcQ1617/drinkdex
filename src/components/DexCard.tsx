@@ -1,6 +1,14 @@
 import { Image } from 'expo-image';
 import React from 'react';
-import { StyleSheet, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
+import {
+  Image as RNImage,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  type StyleProp,
+  type TextStyle,
+  type ViewStyle,
+} from 'react-native';
 
 import { FACE_FILL, VectorFace } from '@/components/artwork/VectorFace';
 import { DrinkName, MOUNT, Mount, MountWindow, NumberPlate } from '@/components/cabinet';
@@ -17,38 +25,72 @@ import type { Drink } from '@/types';
 /* One cell of the cabinet (spec §7.4). Collecting moves a drink from   */
 /* one material to the other, so the two states are different objects: */
 /*                                                                      */
-/*   COLLECTED  a mount: bone card stock (mat) with a 1pt edge, seated  */
-/*              in the lining with a contact shadow. The face is lit:   */
-/*              your pour, else the tungsten-lit catalogue photo, else  */
-/*              the lit vector face.                                    */
-/*   LOCKED     a slot: a recess pressed into the lining. The face is   */
-/*              the 256px ghost of the photo, else the debossed vector  */
+/*   COLLECTED  a mount: bone card stock (mat) with a 1pt edge and the  */
+/*              brass keyline (Brass D3), seated in the lining. Its     */
+/*              plate is polished brass with a wine check beside it;    */
+/*              the face is lit: your pour, else the tungsten-lit       */
+/*              catalogue photo, else the lit vector face.              */
+/*   LOCKED     a slot: a recess pressed into the lining, an EMPTY      */
+/*              plate holder and a lock (Brass D2). The face is the     */
+/*              256px ghost of the photo, else the debossed vector      */
 /*              glass in the drink's own hue.                           */
 /*                                                                      */
-/* The label sits at the TOP, above the window, so a row half hidden    */
-/* under the floating tab bar still names both of its drinks. The name  */
+/* Top to bottom, as the Brass mock draws it: the plate row, the name,  */
+/* then a square window. The label sits ABOVE the window, so a row half */
+/* hidden under the floating tab bar still names its drinks. The name   */
 /* is never clipped: DrinkName shrinks only a word too wide for the     */
-/* column, and the card grows with the name. A Dex row stretches both   */
-/* cards to the taller, and the window takes the extra height, so the   */
-/* two windows always end on one line.                                  */
+/* column, and the card grows with the name. A Dex row stretches its    */
+/* cards to the tallest, and the window takes the extra height, so the  */
+/* windows in a row always end on one line.                             */
 /*                                                                      */
 /* Never a user photo or a lit photo on a locked card: a lit face on a  */
 /* slot reads as collected.                                             */
 /* ==================================================================== */
 
-/** Window height as a share of the card's width (139pt on a 440pt phone). */
-const WINDOW_ASPECT = 0.7;
 /**
- * The grid mount's content column: the card less its 1pt edges and the
- * mount's 18pt of clear mat (MOUNT.grid.padding), which is cardWidth - 38.
- * The name's measure and the window's width are both it.
+ * The clear mat inside the card's 1pt edge: the Brass mock's 8. It was
+ * the grid mount's 18 (MOUNT.grid.padding) when the Dex had two columns;
+ * at three, 18 left a 75pt name column on a 393pt phone, where any word
+ * of seven letters or more ("Alexander", "Margarita") had to shrink. The
+ * brass keyline sits 3pt in, in that mat.
  */
-const GRID_INSET = 2 * (stroke.edge + MOUNT.grid.padding);
+const CARD_PAD = 8;
+/**
+ * The card's content column: the card less its 1pt edges and the mat,
+ * cardWidth - 18 (111pt of a 129pt card on a 440pt phone). The name's
+ * measure, the window's width and (square) its height are all it.
+ */
+const GRID_INSET = 2 * (stroke.edge + CARD_PAD);
 /** Dynamic Type cap for everything on the card (spec §6.5). */
 const CAP = 1.3;
+/** Plate row to name, name to window: the mock's 6 and 5. */
+const NAME_GAP = 6;
+const WINDOW_GAP = 5;
+/**
+ * The name keeps two lines of room even when it needs one, as the mock
+ * sets it, so the windows in a row (and in neighbouring rows) start on
+ * one line and the rows come out one height: the number rail's jumps
+ * land closer for it. A name that needs three lines still gets them.
+ */
+const NAME_LINES = 2;
+/** The check and the lock: the mock's 15, centred on the plate's line. */
+const MARK = 15;
 
-/** A locked card's name: Inter, so Playfair stays the mark of a drink you have. */
-const LOCKED_NAME: TextStyle = { fontFamily: fonts.bodyMedium, fontSize: 15, lineHeight: 20 };
+/** A locked card's name: Inter, so Playfair stays the mark of a drink you have. The mock's 14/18. */
+const LOCKED_NAME: TextStyle = { fontFamily: fonts.bodyMedium, fontSize: 14, lineHeight: 18 };
+/** The plate row's height: the sm plate's 20pt minimum. */
+const PLATE_ROW = 20;
+
+/**
+ * About how tall a collected card is at this width and text size, with a
+ * one- or two-line name: edges, mat, plate row, two name lines, window.
+ * An estimate for a list that must guess where an unmeasured row is (the
+ * Dex's jump by number); the card itself is laid out, never sized by this.
+ */
+export function dexCardHeight(cardWidth: number, fontScale: number): number {
+  const lines = NAME_LINES * (textRole.cardName.lineHeight ?? 0) * Math.min(fontScale, CAP);
+  return GRID_INSET + PLATE_ROW + NAME_GAP + lines + WINDOW_GAP + Math.round(cardWidth - GRID_INSET);
+}
 
 /*
  * Every face here sits in a MountWindow, whose height is a minimum: a Dex
@@ -57,6 +99,17 @@ const LOCKED_NAME: TextStyle = { fontFamily: fonts.bodyMedium, fontSize: 15, lin
  * Re-exported for DrinkFace callers with a frame that can grow.
  */
 export { FACE_FILL };
+
+/** Each bundled photo's file, resolved once: the stem of its per-size cache key. */
+const assetUris = new Map<number, string | null>();
+function assetUri(asset: number): string | null {
+  let uri = assetUris.get(asset);
+  if (uri === undefined) {
+    uri = RNImage.resolveAssetSource(asset)?.uri ?? null;
+    assetUris.set(asset, uri);
+  }
+  return uri;
+}
 
 /* ==================================================================== */
 /* DrinkFace                                                            */
@@ -115,24 +168,28 @@ export const DrinkFace = React.memo(function DrinkFace({
   style,
 }: DrinkFaceProps) {
   /*
-   * A pour's key carries the frame's size. The same path is a grid tile and
-   * a full-width post too, and expo-image's SDWebImage (5.21.6 and later)
-   * files an early-resized decode under the path's original key in memory
-   * and hands it to the next size that misses its own entry (PostGridTile
-   * says how). This disk-only view is not exempt: a disk hit is written
-   * back to memory whatever the cache policy.
+   * Every key carries the frame's size. The same file is a 96pt Dex window,
+   * a full-width post and the drink page's hero, and expo-image's
+   * SDWebImage (5.21.6 and later) files an early-resized decode under the
+   * key it was asked for and hands it to the next view that misses its own
+   * entry (PostGridTile says how). Keyed by the bare file, a Dex window
+   * decoded first could be handed to the drink page it opens as its hero,
+   * soft: the catalogue photo, or, for the 1,927 drinks without one, your
+   * pour (the hero asks for both by the bare file, full size).
+   * So the pour (by its storage path, else its file, which is new for
+   * every photo) and the bundled photo (by its resolved file, as My Bar's
+   * BarFace does) are both filed per size. This disk-only view is not
+   * exempt: a disk hit is written back to memory whatever the cache policy.
    */
-  const source =
-    mode === 'lit'
-      ? photoUri
-        ? {
-            uri: photoUri,
-            cacheKey: photoCacheKey
-              ? `${photoCacheKey}#${Math.round(width)}x${Math.round(height)}`
-              : undefined,
-          }
-        : drinkPhoto(drink.id)
-      : drinkPhotoGhost(drink.id);
+  const sizeKey = `#${Math.round(width)}x${Math.round(height)}`;
+  let source: { uri: string; cacheKey: string } | number | undefined;
+  if (mode === 'lit' && photoUri) {
+    source = { uri: photoUri, cacheKey: `${photoCacheKey ?? photoUri}${sizeKey}` };
+  } else {
+    const asset = mode === 'lit' ? drinkPhoto(drink.id) : drinkPhotoGhost(drink.id);
+    const uri = asset === undefined ? null : assetUri(asset);
+    source = uri ? { uri, cacheKey: `${uri}${sizeKey}` } : asset;
+  }
 
   return (
     <View
@@ -204,8 +261,13 @@ export const DexCard = React.memo(function DexCard({
   onLining = true,
   onPress,
 }: DexCardProps) {
+  const { fontScale } = useWindowDimensions();
   const column = cardWidth - GRID_INSET;
-  const windowH = Math.round(cardWidth * WINDOW_ASPECT);
+  // Square, as the mock frames it: at a third of the screen a 0.7 window was too shallow to tell a coupe from a flute.
+  const windowH = Math.round(column);
+  const role = collected ? textRole.cardName : LOCKED_NAME;
+  // The collected name's lines on both states, so a slot's window starts level with a mount's beside it.
+  const nameMin = NAME_LINES * (textRole.cardName.lineHeight ?? 0) * Math.min(fontScale, CAP);
 
   return (
     <PressableScale
@@ -232,27 +294,32 @@ export const DexCard = React.memo(function DexCard({
       // Flat, not nested: PressableScale takes a one-level style array.
       style={[styles.card, { width: cardWidth }]}>
       <Mount state={collected ? 'mounted' : 'slot'} size="grid" onLining={onLining} style={styles.mount}>
-        {/* ---- Label, at the top ---- */}
-        <DrinkName
-          name={drink.name}
-          role={collected ? textRole.cardName : LOCKED_NAME}
-          measure={column}
-          cap={CAP}
-          color={collected ? colors.text : colors.onLiningMuted}
-        />
         {/*
-          The number plate, and on a locked card the lock, which keeps its
-          corner on the plate's line.
+          The plate row: polished brass and a wine check on a mount, the
+          empty holder and the lock in a slot. Two cues besides the metal,
+          and the card's spoken label says it in words. It wraps at large
+          text, the mark dropping under the plate rather than over it.
         */}
         <View style={styles.plates}>
-          <View style={styles.plateGroup}>
-            <NumberPlate n={drink.dexNumber} tone={collected ? 'mat' : 'slot'} />
+          <NumberPlate n={drink.dexNumber} tone={collected ? 'mat' : 'slot'} />
+          <View style={styles.mark}>
+            {collected ? (
+              <Icon name="check" size={MARK} color={colors.wine} />
+            ) : (
+              <Icon name="lock" size={MARK} color={colors.onLiningFaint} />
+            )}
           </View>
-          {collected ? null : (
-            <View style={styles.lock}>
-              <Icon name="lock" size={14} color={colors.onLiningFaint} />
-            </View>
-          )}
+        </View>
+
+        {/* ---- The name, under the plate ---- */}
+        <View style={[styles.name, { minHeight: nameMin }]}>
+          <DrinkName
+            name={drink.name}
+            role={role}
+            measure={column}
+            cap={CAP}
+            color={collected ? colors.text : colors.onLiningMuted}
+          />
         </View>
 
         {/* ---- Window ---- */}
@@ -376,20 +443,13 @@ export function EmptyArt({
 const styles = StyleSheet.create({
   /* Width comes from the `cardWidth` prop (see DexCardProps); height from the content. */
   card: {},
-  /* Fills the card when the row stretches it to its taller neighbour. */
-  mount: { flexGrow: 1 },
-  plates: { flexDirection: 'row', alignItems: 'flex-start', marginTop: 8 },
-  plateGroup: {
-    flexShrink: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    columnGap: 6,
-    rowGap: 4,
-  },
-  /* As tall as the plate, so the glyph centres on the first line. */
-  lock: { marginLeft: 'auto', paddingLeft: 6, minHeight: 20, justifyContent: 'center' },
-  windowSlot: { flexGrow: 1, marginTop: 10 },
+  /* Fills the card when the row stretches it to its taller neighbour; the Brass mat in place of the grid mount's 18. */
+  mount: { flexGrow: 1, padding: CARD_PAD },
+  plates: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 4 },
+  /* As tall as the plate, so the glyph centres on its line; pushed to the far corner. */
+  mark: { marginLeft: 'auto', paddingLeft: 4, minHeight: PLATE_ROW, justifyContent: 'center' },
+  name: { marginTop: NAME_GAP },
+  windowSlot: { flexGrow: 1, marginTop: WINDOW_GAP },
 
   /* The picture's ground while it decodes: the colour a lit photo settles to. */
   face: { overflow: 'hidden', backgroundColor: colors.liningDeep },

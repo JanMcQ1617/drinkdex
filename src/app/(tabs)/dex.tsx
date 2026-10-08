@@ -1,7 +1,17 @@
 import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import {
   Animated,
+  type LayoutChangeEvent,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
   Pressable,
@@ -10,18 +20,20 @@ import {
   Text,
   useWindowDimensions,
   View,
+  type ViewToken,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { formatPlateNumber, formatRange, NumberRail, SHELF_HEIGHT, WalnutShelf } from '@/components/brass';
 import { CustomDrinkTile } from '@/components/CustomDrinkTile';
-import { DexCard, EmptyArt } from '@/components/DexCard';
-import { LatestCatch } from '@/components/dex/LatestCatch';
+import { DexCard, dexCardHeight, EmptyArt } from '@/components/DexCard';
+import { DexHead } from '@/components/dex/LatestCatch';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { useTabScroll } from '@/components/ScrollChrome';
-import { Button, Chip, EmptyState, haptic, SearchField } from '@/components/ui';
+import { announce, Button, Chip, EmptyState, haptic, SearchField } from '@/components/ui';
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
@@ -38,6 +50,7 @@ import {
 } from '@/constants/theme';
 import { COUNT_BY_CATEGORY, DRINKS, formatCount, TOTAL } from '@/data';
 import { catalogueTwin, ownTwin, shortQuery } from '@/lib/customDrinks';
+import { isDexNumberPrefix, parseDexNumber } from '@/lib/drinkSearch';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
 import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
@@ -45,24 +58,29 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /* ==================================================================== */
 /* The Dex                                                              */
 /*                                                                      */
-/* A collector's cabinet (specs/v3-cabinet.md §9.7). Two materials:     */
+/* A collector's cabinet (specs/v3-cabinet.md §9.7), fitted out as a    */
+/* back bar (v3.3 Brass, specs/v3-3-mockups/brass, screen 2). The whole */
+/* screen stands on the lining:                                         */
 /*                                                                      */
-/*   THE FRONT   paper, the list header: the Latest catch panel with    */
-/*               the collection's figure, search, the filters and the   */
-/*               drinks you added. Opaque, and it scrolls away over     */
-/*               the tray.                                              */
-/*   THE TRAY    the lining, the screen's own ground: the whole         */
-/*               catalogue in Dex-number order, #0001 to #2089, under   */
-/*               one line that says so, two cards to a row and a ledge  */
-/*               between rows. A collected drink is a mount seated in   */
-/*               it, one not yet caught a recess pressed into it.       */
+/*   THE HEAD   the figure ("38 in your Dex, of 2,089 · 1.8%"), the     */
+/*              latest catch, the brass gauge with a mark for every     */
+/*              caught drink at its number, the search well, the        */
+/*              filter chips with their counts, the drinks you added.   */
+/*              It scrolls away with the list.                          */
+/*   THE GRID   the whole catalogue in Dex-number order, Nº 0001 to     */
+/*              Nº 2089, three to a row, every row standing on a walnut */
+/*              shelf whose brass holder names its numbers              */
+/*              ("0001 – 0003"). A collected drink is a mount seated in */
+/*              the lining, one not yet caught a recess pressed into    */
+/*              it.                                                     */
 /*                                                                      */
-/* By number, not by shelf. v3 cut the tray into 47 style shelves with  */
-/* sticky headers ("Fizz", "Scotch") to give the scroll landmarks, and  */
-/* Jan, using build 17, asked for the drinks by number instead          */
-/* (specs/v3.3-changes.md section 5): a Dex is read in its own order,   */
-/* and every card already carries its number to steer by. Search and    */
-/* the filters narrow the tray without reordering it.                   */
+/* By number, not by shelf. v3 cut the grid into 47 style shelves with  */
+/* sticky headers ("Fizz", "Scotch"), and Jan, using build 17, asked    */
+/* for the drinks by number instead (specs/v3.3-changes.md section 5):  */
+/* a Dex is read in its own order. Search and the filters narrow the    */
+/* grid without reordering it; a number typed into the search jumps to  */
+/* it, and the brass rail down the right edge jumps by number as you    */
+/* drag (grafts 9 and 2), because 697 rows is a long way to flick.      */
 /* ==================================================================== */
 
 /* ------------------------------------------------------------------ */
@@ -70,22 +88,29 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /* ------------------------------------------------------------------ */
 
 /*
- * Two columns, not three.
- *
- * Three fit more entries per screen and made every one of them a thumbnail
- * — at a third of the width minus gutters the photograph is too small to
- * tell a coupe from a martini glass, which is the one thing the grid has
- * to do. Two gives the card enough width for the drink to be legible and
- * for the name to sit on one line in most cases.
+ * Three columns, as the Brass mock sets the grid. Two made every card a
+ * fair photograph, but 2,089 entries at two to a row was 1,045 rows and a
+ * screen held five drinks. With the mat cut to 8pt (DexCard) and a square
+ * window, a third of the width still frames a glass well enough to tell
+ * a coupe from a flute.
  */
-const COLUMNS = 2;
-/** The screen gutter: 16, as on every screen. */
+const COLUMNS = 3;
+/** The screen gutter: 16, as on every screen. The number rail lives in the right one. */
 const GRID_PAD = layout.gutter;
 const GRID_GAP = layout.dexGap;
 /** Chips carry 6pt of slop above and below; the scroller makes room so it is not clipped. */
 const CHIP_SLOP = 6;
-/** From the front's last element to the tray. */
-const FRONT_FOOT = 14;
+/** From the head's last element to the first row: the mock's 16. */
+const FRONT_FOOT = 16;
+/** From the top bar to the head's figure: the mock's 8. */
+const FRONT_TOP = 8;
+/**
+ * A row stands on its shelf: 2pt of lining between the cards' feet and
+ * the shelf's top face, and 6pt under the shelf before the next row's
+ * tops, where the shelf's shade falls (the mock's pitch: 196 + 2 + 24 + 6).
+ */
+const SHELF_ABOVE = 2;
+const SHELF_BELOW = 6;
 
 /* ------------------------------------------------------------------ */
 /* Filters                                                             */
@@ -123,7 +148,9 @@ const STATUS_OPTIONS: { key: Exclude<StatusFilter, 'all'>; label: string; a11y: 
  *
  * This is the Dex's own search, broader than the log sheet's
  * (lib/drinkSearch): a substring over name, style and origin, for
- * browsing, not ranked for picking one drink.
+ * browsing, not ranked for picking one drink. A query that is only a
+ * number is not searched at all: lib/drinkSearch's parseDexNumber reads
+ * it, and the grid jumps there instead.
  */
 const fold = (s: string) =>
   s
@@ -154,16 +181,85 @@ const customKey = (c: CustomDrink) => [c.name, c.subcategory, c.origin].map(fold
 const has = (map: Record<string, unknown>, id: string) =>
   Object.prototype.hasOwnProperty.call(map, id);
 
+/** Every catalogue drink by its number, for a typed number and the rail. */
+const BY_NUMBER = new Map(DRINKS.map((d) => [d.dexNumber, d]));
+/** The rail's foot and the end of the book: the highest number, which can differ from TOTAL if the numbering ever has a gap. */
+const LAST_NUMBER = DRINKS[DRINKS.length - 1]?.dexNumber ?? TOTAL;
+
+/**
+ * A typed number waits this long for the next digit before the grid
+ * jumps, so "127" is one jump and not three (to 1, 12 and 127). The
+ * keyboard's Search key goes at once.
+ */
+const NUMBER_SETTLE_MS = 450;
+
 /* ------------------------------------------------------------------ */
-/* The tray                                                            */
+/* The grid                                                            */
 /* ------------------------------------------------------------------ */
 
-/** Rows of two, made before the list sees them (as Profile's grid does). */
-function pairs(list: Drink[]): Drink[][] {
+/** Rows of three, made before the list sees them (as Profile's grid does). */
+function rowsOf(list: Drink[]): Drink[][] {
   const rows: Drink[][] = [];
   for (let i = 0; i < list.length; i += COLUMNS) rows.push(list.slice(i, i + COLUMNS));
   return rows;
 }
+
+/**
+ * The row holding Dex number `n`, by binary search (rows are in number
+ * order). With `exact` false, the first row at or after `n` (the last row
+ * when `n` is past the end): where the rail lands in a filtered grid that
+ * skips `n`. -1 when there are no rows, or `exact` and no row holds it.
+ */
+function rowFor(rows: Drink[][], n: number, exact: boolean): number {
+  let lo = 0;
+  let hi = rows.length - 1;
+  let found = -1;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    const row = rows[mid]!;
+    if (row[row.length - 1]!.dexNumber >= n) {
+      found = mid;
+      hi = mid - 1;
+    } else {
+      lo = mid + 1;
+    }
+  }
+  if (found < 0) return exact ? -1 : rows.length - 1;
+  if (exact && !rows[found]!.some((d) => d.dexNumber === n)) return -1;
+  return found;
+}
+
+/**
+ * The Dex number at the top of the grid, for the rail's VoiceOver value.
+ * A tiny store rather than screen state: it changes every time a row
+ * passes under the bar, and as state it would re-render the whole screen
+ * (head, chips, list) on each one. Only the rail subscribes.
+ */
+function createTopNumber() {
+  let value = 1;
+  const listeners = new Set<() => void>();
+  return {
+    get: () => value,
+    set(n: number) {
+      if (n === value) return;
+      value = n;
+      for (const listener of listeners) listener();
+    },
+    subscribe(listener: () => void) {
+      listeners.add(listener);
+      return () => {
+        listeners.delete(listener);
+      };
+    },
+  };
+}
+type TopNumber = ReturnType<typeof createTopNumber>;
+
+/** A row counts as on screen once half of it is. */
+const VIEWABILITY = { itemVisiblePercentThreshold: 50 };
+
+/** A jump retries on the row itself once the list has drawn and measured it. */
+const JUMP_RETRIES_MS = [100, 250, 500];
 
 /* ------------------------------------------------------------------ */
 /* Subcomponents                                                       */
@@ -171,7 +267,7 @@ function pairs(list: Drink[]): Drink[][] {
 
 /**
  * Scroll depth at which the back-to-top button appears: about one screen
- * of cards below the header, where getting back up starts to take more
+ * of cards below the head, where getting back up starts to take more
  * than a flick.
  */
 const SCROLL_TOP_SHOW_AT = 320;
@@ -210,10 +306,10 @@ const GridCell = React.memo(function GridCell({
 });
 
 /**
- * One row of the tray: two cards, stretched to the taller, so a name that
- * wraps to two lines beside one that does not still ends both windows on
- * one line (DexCard's window takes the slack). An odd last card keeps its
- * column's width: DexCard's width is explicit.
+ * One row of the grid: three cards, stretched to the tallest, so a name
+ * that wraps to three lines beside two that do not still ends every
+ * window on one line (DexCard's window takes the slack). A short last row
+ * keeps its columns' widths: DexCard's width is explicit.
  */
 const DexRow = React.memo(function DexRow({
   row,
@@ -234,22 +330,44 @@ const DexRow = React.memo(function DexRow({
 });
 
 /**
- * The tray's head: one line on the lining, where the first shelf header
- * used to be, saying what order the cards are in and how many there are.
- * "In Dex order" on the left; on the right "312 shown" while a filter or
- * the search is narrowing the tray, else "39 of 2,089 collected". It
- * belongs to the list header and scrolls away with the front: a sticky
- * line would only repeat what every card's number already says.
+ * The walnut shelf a row stands on (Brass D9), drawn as the list's
+ * separator so its holder can name the row above from `leadingItem` with
+ * no bookkeeping: "0001 – 0003", or, while a filter is on, that row's
+ * first and last number ("0004 – 0011"), so a fast scroll still says
+ * where in the book you are. One strip of shared walnut per row, never
+ * an image per card. The seed is the row's place in the unfiltered grid,
+ * so a shelf keeps its grain when a filter moves it.
+ *
+ * Decorative: each card says its own number.
+ */
+function Shelf({ leadingItem }: { leadingItem?: Drink[] }) {
+  const first = leadingItem?.[0];
+  const last = leadingItem?.[leadingItem.length - 1];
+  if (!first || !last) return null;
+  return (
+    <WalnutShelf
+      seed={Math.floor((first.dexNumber - 1) / COLUMNS)}
+      range={formatRange(first.dexNumber, last.dexNumber)}
+      style={styles.shelf}
+    />
+  );
+}
+
+/**
+ * One line at the foot of the head while a filter or the search narrows
+ * the grid: "In Dex order" on the left, "312 shown" on the right, so a
+ * search or a chip is answered with a number. Unnarrowed it is not drawn:
+ * the figure above already says "38 in your Dex, of 2,089", and the
+ * Brass mock runs the chips straight into the grid.
  *
  * Inter helper text in the lining's muted ink, figures tabular so a count
- * changing under a keystroke does not jitter. Uncapped: the line is not
- * sticky, so at large text the count simply wraps under the words. One
- * VoiceOver heading, read as a sentence.
+ * changing under a keystroke does not jitter. Wrapping, so at large text
+ * the count drops under the words. One VoiceOver heading.
  */
-function TrayHead({ figure }: { figure: string }) {
+function TrayHead({ figure, afterChips }: { figure: string; afterChips: boolean }) {
   return (
     <View
-      style={styles.trayHead}
+      style={[styles.trayHead, afterChips && styles.trayHeadAfterChips]}
       accessible
       accessibilityRole="header"
       accessibilityLabel={`In Dex order, ${figure}`}>
@@ -260,31 +378,39 @@ function TrayHead({ figure }: { figure: string }) {
 }
 
 /**
- * The shelf ledge between two rows: a 5pt strip of shadow with a 1pt lit
- * lip along its top, so a row reads as standing on a shelf rather than
- * floating in the lining. Decorative.
+ * A typed number the Dex does not reach ("3000", "0"): said in the head's
+ * foot line rather than searched as a name, which would answer "No match"
+ * and offer to add a drink called 3000. Spoken once the typing settles
+ * (goToNumber), so it is not read on every digit.
  */
-function Ledge() {
+function NumberMiss({ n, afterChips }: { n: number; afterChips: boolean }) {
   return (
-    <View style={styles.ledge}>
-      <View style={styles.ledgeStrip} />
+    <View
+      style={[styles.trayHead, afterChips && styles.trayHeadAfterChips]}
+      accessible
+      // In words, as the announcement says it: "Nº 3000" is the plate's spelling, for the eye.
+      accessibilityLabel={`There is no number ${n}. The Dex runs from 1 to ${formatCount(LAST_NUMBER)}.`}>
+      <Text style={styles.trayHeadText}>
+        {`There is no ${formatPlateNumber(n)}. The Dex runs from ${formatPlateNumber(1)} to ${formatPlateNumber(LAST_NUMBER)}.`}
+      </Text>
     </View>
   );
 }
 
 /**
- * "Added by you": the drinks this person added themselves, on the cabinet
- * front above the tray.
+ * "Added by you": the drinks this person added themselves, in the head
+ * above the grid.
  *
- * A shelf of its own and never cards in the tray. The tray, its chips
- * ("All 2,089") and the tray's head mean "the catalogue"; a custom card
- * among them would make every count on this screen wrong, and a card with
- * no number would break the tray's Dex-number order. The shelf follows
- * the same filters (category, collected, the search) so it never shows a
+ * A shelf of its own and never cards in the grid. The grid, its chips
+ * ("All 2,089") and the figure mean "the catalogue"; a custom card among
+ * them would make every count on this screen wrong, and a card with no
+ * number would break the grid's Dex-number order. The shelf follows the
+ * same filters (category, collected, the search) so it never shows a
  * drink the filters above it say is not there.
  *
  * Newest first: the one just added is the one being looked for. Tiles
  * align to the top, so one long name grows its own tile, not the row.
+ * On the lining since v3.3: bone title, muted count, the bone text link.
  */
 function AddedByYou({
   drinks,
@@ -310,7 +436,7 @@ function AddedByYou({
         </Text>
         <Button
           label="Add a drink"
-          variant="text"
+          variant="onLiningText"
           size="sm"
           icon="plus"
           onPress={onAdd}
@@ -321,7 +447,7 @@ function AddedByYou({
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        // A status-bar tap scrolls the tray home, not this row.
+        // A status-bar tap scrolls the grid home, not this row.
         scrollsToTop={false}
         style={styles.addedScroll}
         contentContainerStyle={styles.addedScrollContent}>
@@ -341,9 +467,9 @@ function AddedByYou({
 
 /**
  * Under a search that found things, none of them with the name typed:
- * "margarita" always matches something, so a full tray alone would hide
+ * "margarita" always matches something, so a full grid alone would hide
  * the way to add a drink the Dex does not have. On the lining, under the
- * last row.
+ * last shelf.
  */
 function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
   return (
@@ -362,7 +488,7 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
 }
 
 /**
- * The empty tray, which has several causes and gets an answer for each.
+ * The empty grid, which has several causes and gets an answer for each.
  *
  * It was one message for all of them — "widen the search" — so a new user
  * tapping Collected was told to widen a search they had never run, and
@@ -381,7 +507,7 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
  * added themselves that the filters keep off the shelf, rather than
  * offering to add it a second time.
  *
- * Every answer is drawn on the lining, the tray it stands in for.
+ * Every answer is drawn on the lining, the grid it stands in for.
  */
 function GridEmpty({
   query,
@@ -487,6 +613,34 @@ function GridEmpty({
   );
 }
 
+/**
+ * The number rail (graft 2), pinned in the right gutter between the top
+ * bar and the tab bar. Its own subscription to the top number, so a row
+ * passing under the bar re-renders the rail and nothing else.
+ *
+ * The dock is exactly the 16pt gutter and is never flattened away, so the
+ * rail's touch area stops at the gutter: on iOS a view whose children all
+ * sit inside it rejects touches outside its bounds, and the rail's own
+ * hitSlop would otherwise reach 12pt into the third column, where a tap
+ * meant for a card would jump the grid instead.
+ */
+const JumpRail = React.memo(function JumpRail({
+  top,
+  onJump,
+  bottom,
+}: {
+  top: TopNumber;
+  onJump: (n: number) => void;
+  bottom: number;
+}) {
+  const current = useSyncExternalStore(top.subscribe, top.get);
+  return (
+    <View collapsable={false} pointerEvents="box-none" style={[styles.railDock, { bottom }]}>
+      <NumberRail total={LAST_NUMBER} current={current} onJump={onJump} style={styles.rail} />
+    </View>
+  );
+});
+
 /* ------------------------------------------------------------------ */
 /* Screen                                                              */
 /* ------------------------------------------------------------------ */
@@ -494,15 +648,14 @@ function GridEmpty({
 export default function DexScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { width } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
 
   /*
    * Membership size, not the map itself. Subscribing to `unlocks` here would
    * re-render the screen every time a photo is swapped on an entry already
    * collected; the count moves only when something is added or removed, which
-   * is the only change the tray's filtering and its head's count care about.
-   * (The Latest catch panel subscribes to the map itself: the photo swap
-   * there is the point.)
+   * is the only change the grid's filtering and its head's count care about.
+   * (The head subscribes to the map itself: its gauge marks every number.)
    *
    * A plain key count is honest here because the store keeps `unlocks` to
    * catalogue ids only: records for drinks that left the index are moved
@@ -530,25 +683,34 @@ export default function DexScreen() {
   const [status, setStatus] = useState<StatusFilter>('all');
   const [query, setQuery] = useState('');
   const trimmed = query.trim();
+  /*
+   * A query that is only a number ("127", "Nº 127") is a place to go, not
+   * words to match: it leaves the grid whole and jumps to that row. Every
+   * test below reads `textQuery`, which is empty while a number is typed,
+   * and while only its sign is ("Nº", "#"), so the grid does not flash
+   * "No match" on the way to the digits.
+   */
+  const dexQuery = parseDexNumber(trimmed);
+  const textQuery = dexQuery === null && !isDexNumberPrefix(trimmed) ? trimmed : '';
 
   /*
    * The card width is the exact column, unrounded: rounding it could push
-   * two cards and the gap past the row by a point and a half.
+   * three cards and the gaps past the row by a point or two.
    */
   const column = (width - GRID_PAD * 2 - GRID_GAP * (COLUMNS - 1)) / COLUMNS;
 
   /*
-   * The tray, and whether the search finds anything in the catalogue at
+   * The grid, and whether the search finds anything in the catalogue at
    * all, under any filter: that is what tells "the filters hide it" apart
-   * from "the Dex does not have it" when the tray comes back empty. One
+   * from "the Dex does not have it" when the grid comes back empty. One
    * pass over DRINKS, which is already in Dex-number order (data/index),
-   * so what survives the search, category and status tests is the tray in
+   * so what survives the search, category and status tests is the grid in
    * order, with no sort. A plain loop rather than filter callbacks, so the
    * flag is a local of this function and not a variable a callback
    * reassigns.
    */
   const { rows, matched, matchesCatalogue } = useMemo(() => {
-    const q = fold(query.trim());
+    const q = fold(textQuery);
     // Read-not-subscribe: `collected` above is what invalidates this memo.
     const unlocks = useCollection.getState().unlocks;
     const picked: Drink[] = [];
@@ -565,25 +727,17 @@ export default function DexScreen() {
       }
       picked.push(drink);
     }
-    return { rows: pairs(picked), matched: picked.length, matchesCatalogue: anywhere };
+    return { rows: rowsOf(picked), matched: picked.length, matchesCatalogue: anywhere };
     // `collected` looks unused — it is the invalidation key for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collected, query, category, status]);
+  }, [collected, textQuery, category, status]);
 
-  /*
-   * The tray head's figure: how many cards the tray holds while anything
-   * narrows it, so a search or a chip is answered with a number; else the
-   * collection's own, the figure the whole tray stands for.
-   */
-  const narrowed = trimmed.length > 0 || category !== 'all' || status !== 'all';
-  const trayFigure = narrowed
-    ? `${formatCount(matched)} shown`
-    : `${formatCount(collected)} of ${formatCount(TOTAL)} collected`;
+  const narrowed = textQuery.length > 0 || category !== 'all' || status !== 'all';
 
   /* The drinks you added: the same three filters, newest first. */
   const added = useMemo(() => {
     if (!customReady) return [];
-    const q = fold(query.trim());
+    const q = fold(textQuery);
     return Object.values(customDrinks)
       .filter((c) => {
         if (category !== 'all' && c.category !== category) return false;
@@ -594,31 +748,197 @@ export default function DexScreen() {
         return q.length === 0 || customKey(c).includes(q);
       })
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  }, [customReady, customDrinks, customPours, query, category, status]);
+  }, [customReady, customDrinks, customPours, textQuery, category, status]);
 
   /*
    * Whether the search is a name the Dex or this person already has,
    * folded the way the form and the server compare names. Two characters
    * at least: one letter is not a name anybody means.
    */
-  const named = trimmed.length >= 2;
-  const catalogueHasName = named && catalogueTwin(trimmed) !== undefined;
-  const ownNamed = named && customReady ? ownTwin(trimmed, customDrinks) : undefined;
+  const named = textQuery.length >= 2;
+  const catalogueHasName = named && catalogueTwin(textQuery) !== undefined;
+  const ownNamed = named && customReady ? ownTwin(textQuery, customDrinks) : undefined;
 
   const listRef = useRef<Animated.FlatList<Drink[]>>(null);
   /*
-   * Tapping the Dex tab while already on it scrolls the tray home, the way
+   * Tapping the Dex tab while already on it scrolls the grid home, the way
    * every iOS tab bar behaves (react-navigation calls the FlatList's
    * scrollToOffset; the Animated wrapper forwards its ref to the list). The
    * chip and Added by you scrollers opt out of scrollsToTop so a
-   * status-bar tap reaches the tray, not them.
+   * status-bar tap reaches the grid, not them.
    */
   useScrollToTop(listRef);
 
+  /* ---------------- Jumping to a number ---------------- */
+
   /*
-   * The bar's rule, once the front has moved under it; and the back-to-top
+   * The head's height, from its own layout: row 0 starts there, and an
+   * estimated jump counts from it. Read in handlers, never in render.
+   */
+  const headH = useRef(0);
+  const onHeadLayout = (e: LayoutChangeEvent) => {
+    headH.current = e.nativeEvent.layout.height;
+  };
+
+  /*
+   * A row's height before any is measured: the card and the shelf under
+   * it. Only a jump made before the list has laid out a row uses it; after
+   * that the list's own average does.
+   */
+  const rowEstimate = dexCardHeight(column, fontScale) + SHELF_ABOVE + SHELF_HEIGHT + SHELF_BELOW;
+
+  /*
+   * Rows vary in height (a long name takes a third line), and most of the
+   * 697 have never been laid out, so the list cannot know where row 400
+   * is. The first scrollToIndex falls back to an estimate (the head plus
+   * the average row), the window draws the rows around it, and the retries
+   * land on the row itself, now measured. A new jump, or a finger on the
+   * list, cancels the retries, so nothing yanks the grid back afterwards.
+   */
+  const jump = useRef<{ index: number; timers: ReturnType<typeof setTimeout>[] } | null>(null);
+  const cancelJump = useCallback(() => {
+    const j = jump.current;
+    if (j) for (const t of j.timers) clearTimeout(t);
+    jump.current = null;
+  }, []);
+  useEffect(() => cancelJump, [cancelJump]);
+
+  /*
+   * The rows the list holds now, set in the commit itself (a layout
+   * effect runs before any timer can), so a retry can tell that a chip or
+   * a keystroke has changed the grid under it. Its row index would then
+   * mean another row, or be past the end, where scrollToIndex throws.
+   */
+  const committedRows = useRef(rows);
+  useLayoutEffect(() => {
+    committedRows.current = rows;
+  }, [rows]);
+
+  const scrollToRow = useCallback(
+    (index: number) => {
+      cancelJump();
+      const forRows = committedRows.current;
+      if (index < 0 || index >= forRows.length) return;
+      const j = { index, timers: [] as ReturnType<typeof setTimeout>[] };
+      const go = () => {
+        if (committedRows.current !== forRows) {
+          if (jump.current === j) cancelJump();
+          return;
+        }
+        listRef.current?.scrollToIndex({ index, animated: false });
+      };
+      jump.current = j;
+      go();
+      for (const ms of JUMP_RETRIES_MS) {
+        j.timers.push(
+          setTimeout(() => {
+            if (jump.current === j) go();
+          }, ms),
+        );
+      }
+    },
+    [cancelJump],
+  );
+
+  const onScrollToIndexFailed = useCallback(
+    (info: { index: number; averageItemLength: number }) => {
+      const row = info.averageItemLength > 0 ? info.averageItemLength : rowEstimate;
+      listRef.current?.scrollToOffset({ offset: headH.current + row * info.index, animated: false });
+    },
+    [rowEstimate],
+  );
+
+  /** The rail: the row holding `n`, or the next one a filter left in. */
+  const jumpByRail = useCallback(
+    (n: number) => {
+      const index = rowFor(rows, n, false);
+      if (index >= 0) scrollToRow(index);
+    },
+    [rows, scrollToRow],
+  );
+
+  /*
+   * A number typed into the search. In the grid: go, and say where. Hidden
+   * by a filter: clear the category and status (a typed number means that
+   * drink, whatever the chips say) and go once the grid holds it. Past the
+   * end: say how far the Dex runs.
+   */
+  const pendingJump = useRef<number | null>(null);
+  const goToNumber = (n: number) => {
+    const drink = BY_NUMBER.get(n);
+    if (!drink) {
+      announce(`There is no number ${n}. The Dex runs from 1 to ${formatCount(LAST_NUMBER)}.`);
+      return;
+    }
+    const index = rowFor(rows, n, true);
+    if (index >= 0) {
+      scrollToRow(index);
+      announce(`Number ${n}, ${drink.name}`);
+      return;
+    }
+    if (category === 'all' && status === 'all') return;
+    pendingJump.current = n;
+    setCategory('all');
+    setStatus('all');
+  };
+
+  const settlePendingJump = useEffectEvent(() => {
+    const n = pendingJump.current;
+    if (n === null) return;
+    const index = rowFor(rows, n, true);
+    if (index < 0) return;
+    pendingJump.current = null;
+    scrollToRow(index);
+    announce(`Number ${n}, ${BY_NUMBER.get(n)?.name ?? ''}`);
+  });
+  // The filters were cleared for a typed number: jump once the grid has the rows that hold it.
+  useEffect(() => {
+    settlePendingJump();
+  }, [rows]);
+
+  const numberSettled = useEffectEvent((n: number) => goToNumber(n));
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (dexQuery === null) return;
+    const t = setTimeout(() => numberSettled(dexQuery), NUMBER_SETTLE_MS);
+    searchTimer.current = t;
+    return () => clearTimeout(t);
+  }, [dexQuery]);
+
+  /* The keyboard's Search key: a typed number goes at once, without the settle. */
+  const onSubmitSearch = () => {
+    if (dexQuery === null) return;
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    goToNumber(dexQuery);
+  };
+
+  /*
+   * The number at the top of the grid, for the rail. A stable callback:
+   * FlatList refuses an onViewableItemsChanged that changes identity.
+   */
+  const [topNumber] = useState(createTopNumber);
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken<Drink[]>[] }) => {
+      let first: ViewToken<Drink[]> | undefined;
+      for (const v of viewableItems) {
+        if (v.isViewable && v.index != null && (first?.index == null || v.index < first.index)) first = v;
+      }
+      const lead = first?.item?.[0];
+      if (lead) topNumber.set(lead.dexNumber);
+    },
+    [topNumber],
+  );
+
+  /* ---------------- Scroll signals ---------------- */
+
+  /*
+   * The bar's rail, once the head has moved under it; the back-to-top
    * button, which mounts on a state flag rather than on an animated
-   * opacity, so a hidden button cannot swallow taps over the tray.
+   * opacity, so a hidden button cannot swallow taps over the grid; and the
+   * number rail, which appears once the grid itself has reached the bar.
+   * Not before: at rest the right gutter belongs to the gauge, the search
+   * well and the chip row's scroll, and a rail there would take a swipe
+   * meant for the chips.
    *
    * useScrolledPast compares each scroll event with where the list last
    * was on either side of the line, not with the event before it, so a
@@ -629,20 +949,31 @@ export default function DexScreen() {
    */
   const [scrolled, onScrollRule] = useScrolledPast();
   const [showScrollTop, onScrollTop] = useScrolledPast(SCROLL_TOP_SHOW_AT);
+  const [railOn, setRailOn] = useState(false);
+  const railOnRef = useRef(false);
   const onScrolledPast = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     onScrollRule(e);
     onScrollTop(e);
+    // A point of slack: a jump to row 0 lands on the head's measured height, give or take rounding.
+    const past = headH.current > 0 && e.nativeEvent.contentOffset.y >= headH.current - 1;
+    if (past !== railOnRef.current) {
+      railOnRef.current = past;
+      setRailOn(past);
+    }
   };
   /*
-   * The tray is the Dex tab's scroll source for the tab bar's compaction
-   * (ScrollChrome): a native-driven event, with the two signals above
-   * riding along as its JS listener.
+   * The grid is the Dex tab's scroll source for the tab bar's compaction
+   * (ScrollChrome): a native-driven event, with the signals above riding
+   * along as its JS listener.
    */
   const { onScroll } = useTabScroll('dex', onScrolledPast);
 
   const scrollToTop = useCallback(() => {
+    cancelJump();
     listRef.current?.scrollToOffset({ offset: 0, animated: true });
-  }, []);
+  }, [cancelJump]);
+
+  /* ---------------- Navigation ---------------- */
 
   const openDrink = useCallback(
     (id: string) => {
@@ -700,7 +1031,7 @@ export default function DexScreen() {
     [column, openDrink],
   );
 
-  /* The empty tray's buttons are plain Buttons, so they tick here; the chips tick themselves. */
+  /* The empty grid's buttons are plain Buttons, so they tick here; the chips tick themselves. */
   const showAll = useCallback(() => {
     haptic.select();
     setStatus('all');
@@ -720,104 +1051,123 @@ export default function DexScreen() {
   }, []);
 
   /*
-   * The cabinet front: paper over the lining, opaque, with its own grain
-   * (the screen's grain under it is the lining's). A paper view above it
-   * keeps a pull past the top paper, not wine.
-   *
-   * Then, on the lining, the tray's head. Only over cards: an empty tray's
+   * The head's foot line: the count while anything narrows the grid, or a
+   * typed number the Dex does not reach. Only over cards: an empty grid's
    * answer (GridEmpty) says what happened in words, and "0 shown" over it
    * would say it twice.
    */
+  const afterChips = added.length === 0;
+  const footLine =
+    dexQuery !== null && !BY_NUMBER.has(dexQuery) ? (
+      <NumberMiss n={dexQuery} afterChips={afterChips} />
+    ) : narrowed && matched > 0 ? (
+      <TrayHead figure={`${formatCount(matched)} shown`} afterChips={afterChips} />
+    ) : null;
+
+  /*
+   * The head, on the lining like the rest of the screen: no paper front
+   * any more, so a pull past the top shows more lining, which is right.
+   */
   const front = (
-    <View>
-      <View style={[styles.front, added.length === 0 && styles.frontEndsOnChips]}>
-        <Grain />
-        <View pointerEvents="none" style={styles.overscroll}>
-          <Grain />
-        </View>
+    <View onLayout={onHeadLayout} style={[styles.front, afterChips && !footLine && styles.frontEndsOnChips]}>
+      <DexHead width={width} onOpen={openDrink} onPost={openPost} />
 
-        <LatestCatch width={width} onOpen={openDrink} onPost={openPost} />
+      {/*
+        The app's one search field (components/ui), as the cabinet's well
+        (Brass D20). The placeholder names the two things it takes; style
+        and country still match, for browsing.
+      */}
+      <SearchField
+        tone="lining"
+        value={query}
+        onChangeText={setQuery}
+        onSubmitEditing={onSubmitSearch}
+        placeholder="Search by name or Nº"
+        accessibilityLabel="Search drinks by name or number"
+        style={styles.search}
+      />
 
-        {/*
-          The app's one search field (components/ui). The placeholder names
-          what it searches, country included: nothing else on screen says
-          the index can be browsed that way.
-        */}
-        <SearchField
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Name, style or country"
-          accessibilityLabel="Search drinks by name, style or country"
-          style={styles.search}
+      {/*
+        Two filter axes in one scroller, as the app's Chips on the lining:
+        the category with its count (graft 4, counted from the data, never
+        typed), a rule, then collected or not. One selection per axis. The
+        rule is what tells the eye that "Spirits" and "Not yet" are
+        different questions rather than five peers.
+      */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        scrollsToTop={false}
+        style={styles.chipScroll}
+        contentContainerStyle={styles.chipScrollContent}>
+        <Chip
+          tone="lining"
+          label="All"
+          count={TOTAL}
+          selected={category === 'all'}
+          accessibilityLabel={`All drinks, ${formatCount(TOTAL)} entries`}
+          onPress={() => setCategory('all')}
         />
-
-        {/*
-          Two filter axes in one scroller, as the app's Chips: the category
-          (with its count), a rule, then collected or not. One selection per
-          axis. The rule is what tells the eye that "Spirits" and "Not yet"
-          are different questions rather than seven peers.
-        */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          scrollsToTop={false}
-          style={styles.chipScroll}
-          contentContainerStyle={styles.chipScrollContent}>
-          <Chip
-            label="All"
-            count={TOTAL}
-            selected={category === 'all'}
-            accessibilityLabel={`All drinks, ${formatCount(TOTAL)} entries`}
-            onPress={() => setCategory('all')}
-          />
-          {CATEGORY_ORDER.map((key) => {
-            const meta = CATEGORY_META[key];
-            const total = COUNT_BY_CATEGORY[key];
-            return (
-              <Chip
-                key={key}
-                label={meta.plural}
-                count={total}
-                selected={category === key}
-                accessibilityLabel={`${meta.plural}, ${formatCount(total)} entries`}
-                onPress={() => setCategory(key)}
-              />
-            );
-          })}
-          <View style={styles.axisRule} />
-          {STATUS_OPTIONS.map((option) => (
+        {CATEGORY_ORDER.map((key) => {
+          const meta = CATEGORY_META[key];
+          const total = COUNT_BY_CATEGORY[key];
+          return (
             <Chip
-              key={option.key}
-              label={option.label}
-              selected={status === option.key}
-              accessibilityLabel={option.a11y}
-              onPress={() => setStatus(status === option.key ? 'all' : option.key)}
+              key={key}
+              tone="lining"
+              label={meta.plural}
+              count={total}
+              selected={category === key}
+              accessibilityLabel={`${meta.plural}, ${formatCount(total)} entries`}
+              onPress={() => setCategory(key)}
             />
-          ))}
-        </ScrollView>
+          );
+        })}
+        <View style={styles.axisRule} />
+        {STATUS_OPTIONS.map((option) => (
+          <Chip
+            key={option.key}
+            tone="lining"
+            label={option.label}
+            selected={status === option.key}
+            accessibilityLabel={option.a11y}
+            onPress={() => setStatus(status === option.key ? 'all' : option.key)}
+          />
+        ))}
+      </ScrollView>
 
-        {added.length > 0 ? (
-          <AddedByYou drinks={added} pours={customPours} onOpen={openCustom} onAdd={() => openAdd('shelf')} />
-        ) : null}
-      </View>
-      {matched > 0 ? <TrayHead figure={trayFigure} /> : null}
+      {added.length > 0 ? (
+        <AddedByYou drinks={added} pours={customPours} onOpen={openCustom} onAdd={() => openAdd('shelf')} />
+      ) : null}
+      {footLine}
     </View>
+  );
+
+  /* The last row stands on a shelf too; the list draws separators only between rows. */
+  const lastRow = rows.length > 0 ? rows[rows.length - 1] : undefined;
+  const footer = (
+    <>
+      {lastRow ? <Shelf leadingItem={lastRow} /> : null}
+      {matched > 0 && named && !catalogueHasName && !ownNamed ? (
+        <NotTheOne query={textQuery} onAdd={() => openAdd('dex', textQuery)} />
+      ) : null}
+    </>
   );
 
   return (
     <View style={styles.screen}>
-      {/* The tray's lining, under everything: the list is transparent. */}
+      {/* The lining, under everything: the list is transparent. */}
       <Grain tone="lining" />
 
       {/*
-        A fixed bar: the screen's name, and Stats on the right, which left
-        the tab bar to become a report on this collection. My Bar, which
-        had the left, is a tab of its own since v3.1. Paper, like the front
-        it sits on; its rule appears once the front has moved under it.
+        A fixed bar on the lining: the screen's name, and Stats on the
+        right. Its brass rail (D10) appears once the head has moved under
+        it, drawn by the bar itself; no fade, anywhere.
       */}
       <ScreenTopBar
         size="lg"
+        tone="lining"
         title="Dex"
         showRule={scrolled}
         right={
@@ -825,69 +1175,78 @@ export default function DexScreen() {
         }
       />
 
-      <Animated.FlatList<Drink[]>
-        ref={listRef}
-        data={rows}
-        renderItem={renderItem}
-        keyExtractor={(row) => row[0]!.id}
-        ItemSeparatorComponent={Ledge}
-        style={styles.list}
-        contentContainerStyle={{
-          // Clears the floating tab bar: the last row would otherwise sit under it.
-          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
-        }}
-        ListHeaderComponent={front}
-        ListEmptyComponent={
-          <GridEmpty
-            query={trimmed}
-            matchesCatalogue={matchesCatalogue}
-            onShelf={ownNamed !== undefined && added.includes(ownNamed)}
-            ownHidden={ownNamed !== undefined && !added.includes(ownNamed) ? ownNamed.name : null}
-            nothingCollected={status === 'unlocked' && collected === 0}
-            onClearSearch={() => setQuery('')}
-            onAdd={() => openAdd('dex', trimmed)}
-            onClearFilters={clearFilters}
-            onShowAll={showAll}
-            onReset={resetFilters}
-          />
-        }
-        ListFooterComponent={
-          matched > 0 && named && !catalogueHasName && !ownNamed ? (
-            <NotTheOne query={trimmed} onAdd={() => openAdd('dex', trimmed)} />
-          ) : null
-        }
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        /*
-         * 2,089 entries in 1,045 rows — keep the window tight. These counts
-         * are list items, a row of two cards each. Four fills the first
-         * screen under the front on the largest phone.
-         *
-         * No removeClippedSubviews: on iOS Fabric it puts the header and
-         * cells on screen only during the scroll view's own remount pass,
-         * and a missed pass blanked the whole tab (specs/06, cause 4). The
-         * window below already caps what is mounted.
-         */
-        initialNumToRender={4}
-        maxToRenderPerBatch={4}
-        updateCellsBatchingPeriod={50}
-        windowSize={5}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-      />
+      <View style={styles.body}>
+        <Animated.FlatList<Drink[]>
+          ref={listRef}
+          data={rows}
+          renderItem={renderItem}
+          keyExtractor={(row) => row[0]!.id}
+          ItemSeparatorComponent={Shelf}
+          style={styles.list}
+          contentContainerStyle={{
+            // Clears the floating tab bar: the last row would otherwise sit under it.
+            paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+          }}
+          ListHeaderComponent={front}
+          ListEmptyComponent={
+            <GridEmpty
+              query={textQuery}
+              matchesCatalogue={matchesCatalogue}
+              onShelf={ownNamed !== undefined && added.includes(ownNamed)}
+              ownHidden={ownNamed !== undefined && !added.includes(ownNamed) ? ownNamed.name : null}
+              nothingCollected={status === 'unlocked' && collected === 0}
+              onClearSearch={() => setQuery('')}
+              onAdd={() => openAdd('dex', textQuery)}
+              onClearFilters={clearFilters}
+              onShowAll={showAll}
+              onReset={resetFilters}
+            />
+          }
+          ListFooterComponent={footer}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          onScrollBeginDrag={cancelJump}
+          onScrollToIndexFailed={onScrollToIndexFailed}
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={VIEWABILITY}
+          /*
+           * 2,089 entries in 697 rows of three — keep the window tight. These
+           * counts are list items, a row of three cards each, so a batch of
+           * three is the nine cards a batch of four two-card rows nearly was.
+           * Four rows fill the first screen under the head on the largest
+           * phone. The window is four screens, not five: a third more cards
+           * per row, about the same number of cards mounted.
+           *
+           * No removeClippedSubviews: on iOS Fabric it puts the header and
+           * cells on screen only during the scroll view's own remount pass,
+           * and a missed pass blanked the whole tab (specs/06, cause 4). The
+           * window below already caps what is mounted.
+           */
+          initialNumToRender={4}
+          maxToRenderPerBatch={3}
+          updateCellsBatchingPeriod={50}
+          windowSize={4}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        />
+
+        {railOn && rows.length > 0 ? (
+          <JumpRail top={topNumber} onJump={jumpByRail} bottom={insets.bottom + TAB_BAR_CLEARANCE} />
+        ) : null}
+      </View>
 
       {showScrollTop ? (
         /*
          * Appears and disappears without a layout animation: an exit that
-         * never finishes leaves a ghost button over the tray (specs/06,
+         * never finishes leaves a ghost button over the grid (specs/06,
          * 3.8). Card stock seated in the lining like a mount, so it casts
          * the seat's shadow; pressed to the sunk fill, as every control
          * answers.
          *
          * A sized, absolutely placed box with an explicit zIndex, so it
-         * hit-tests above the tray rather than letting a tap through to the
-         * card underneath.
+         * hit-tests above the grid rather than letting a tap through to the
+         * card underneath. It sits just inside the rail's gutter, clear of it.
          */
         <Pressable
           onPress={scrollToTop}
@@ -913,36 +1272,33 @@ export default function DexScreen() {
 /* ------------------------------------------------------------------ */
 
 const styles = StyleSheet.create({
-  /* The lining is the screen's ground; the front and the bar are paper on it. */
+  /* The lining is the screen's ground, top bar to tab bar. */
   screen: {
     flex: 1,
     backgroundColor: colors.lining,
   },
+  body: { flex: 1 },
   list: { flex: 1 },
 
-  /* The cabinet front */
+  /* The head */
   front: {
-    backgroundColor: colors.bg,
     paddingHorizontal: GRID_PAD,
-    paddingTop: space.md,
+    paddingTop: FRONT_TOP,
     paddingBottom: FRONT_FOOT,
   },
-  /* Without Added by you the chip scroller ends the front, and its slop padding is already 6 of the 14. */
+  /* When the chip scroller ends the head, its slop padding is already 6 of the 16. */
   frontEndsOnChips: { paddingBottom: FRONT_FOOT - CHIP_SLOP },
-  overscroll: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: -1000,
-    height: 1000,
-    backgroundColor: colors.bg,
-  },
-  search: { marginTop: space.md },
+  /*
+   * The gauge's figures sit in a box sized for the capped text size, so at
+   * the default size its foot is already about 7pt of clear lining: 4 more
+   * gives the mock's 10 between the figures and the well.
+   */
+  search: { marginTop: 4 },
 
   /* Chips. The scroller bleeds past the gutter so the row scrolls edge to edge. */
   chipScroll: {
     marginHorizontal: -GRID_PAD,
-    marginTop: 10 - CHIP_SLOP,
+    marginTop: space.md - CHIP_SLOP,
   },
   chipScrollContent: {
     paddingHorizontal: GRID_PAD,
@@ -950,15 +1306,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: space.sm,
   },
-  /* Separates the two filter axes sharing the scroller. */
+  /* Separates the two filter axes sharing the scroller: the mock's 1 x 20 in the lining's own rule. */
   axisRule: {
     width: stroke.edge,
-    height: 16,
-    marginHorizontal: space.xs,
-    backgroundColor: colors.line,
+    height: 20,
+    marginHorizontal: 2,
+    backgroundColor: colors.liningLine,
   },
 
-  /* Added by you */
+  /* Added by you, on the lining */
   added: { marginTop: space.lg - CHIP_SLOP },
   addedHead: {
     flexDirection: 'row',
@@ -969,12 +1325,12 @@ const styles = StyleSheet.create({
   addedTitle: {
     ...textRole.sectionTitle,
     flexShrink: 1,
-    color: colors.text,
+    color: colors.onLining,
   },
   addedCount: {
     fontFamily: fonts.numeral,
     fontSize: typeScale.caption.fontSize,
-    color: colors.textMuted,
+    color: colors.onLiningMuted,
     ...tabular,
   },
   /* The text button's own inset, taken back so its words end on the gutter. */
@@ -991,9 +1347,8 @@ const styles = StyleSheet.create({
   },
 
   /*
-   * The tray. Its head: the front's 14pt foot again above it, and 12 to
-   * the first row. Wrapping, so at large text the count drops under the
-   * words instead of either being cut.
+   * The head's foot line. Wrapping, so at large text the count drops under
+   * the words instead of either being cut.
    */
   trayHead: {
     flexDirection: 'row',
@@ -1001,28 +1356,32 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     justifyContent: 'space-between',
     columnGap: space.md,
-    paddingTop: FRONT_FOOT,
-    paddingBottom: space.md,
-    paddingHorizontal: GRID_PAD,
+    marginTop: space.md,
   },
+  trayHeadAfterChips: { marginTop: space.md - CHIP_SLOP },
   trayHeadText: { ...textRole.helper, color: colors.onLiningMuted, ...tabular },
+
+  /* The grid */
   row: {
     flexDirection: 'row',
     alignItems: 'stretch',
     gap: GRID_GAP,
     paddingHorizontal: GRID_PAD,
   },
-  ledge: { height: layout.dexLedge },
-  ledgeStrip: {
+  shelf: { marginTop: SHELF_ABOVE, marginBottom: SHELF_BELOW },
+
+  /*
+   * The number rail's dock: the right gutter, from under the top bar to
+   * the tab bar's clearance. The rail is cut to the gutter's width; its
+   * ticks and line sit in the outer 10pt, clear of the cards.
+   */
+  railDock: {
     position: 'absolute',
-    left: 0,
+    top: 0,
     right: 0,
-    top: 5,
-    height: 5,
-    backgroundColor: colors.ledge,
-    borderTopWidth: stroke.edge,
-    borderTopColor: colors.liningLip,
+    width: GRID_PAD,
   },
+  rail: { width: GRID_PAD, flex: 1 },
 
   /* "Not the one you meant?" under a search, on the lining */
   notTheOne: {

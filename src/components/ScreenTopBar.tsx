@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { BrassRail } from '@/components/brass/rules';
 import { Grain } from '@/components/Grain';
 import { Icon, type IconName } from '@/components/icons';
 import { colors, fonts, layout, radius, space, stroke, textRole } from '@/constants/theme';
@@ -59,6 +60,11 @@ import { textWidth } from '@/lib/textFit';
 /* and on a solid bar it is always laid out (transparent at rest) so    */
 /* turning it on never moves the screen by a point. A clear bar has     */
 /* none.                                                                */
+/*                                                                      */
+/* ON LINING THE RULE IS BRASS (v3.3 Brass D10): a 3pt rail of lit      */
+/* brass, brass and shade over the 1pt border and the row's last 2pt    */
+/* (where nothing is drawn), so it too moves nothing when it appears.   */
+/* Paper keeps its 1pt `line`.                                          */
 /* ==================================================================== */
 
 /** Side slots: a 44pt glyph button with 4pt to the screen edge, and 4pt spare. */
@@ -196,7 +202,7 @@ export function ScreenTopBar({
         styles.bar,
         lining && styles.barLining,
         { paddingTop },
-        clear ? styles.barClear : showRule && (lining ? styles.barRuledLining : styles.barRuled),
+        clear ? styles.barClear : showRule && !lining && styles.barRuled,
       ]}>
       {/* The ground's own grain, first, so everything in the bar sits on it. A clear bar has no ground to grain. */}
       {clear ? null : <Grain tone={tone} />}
@@ -206,6 +212,7 @@ export function ScreenTopBar({
         where useIsFocused has no navigator to ask.
       */}
       {lining ? <FocusedStatusBar style="light" /> : null}
+      {lining && !clear && showRule ? <BrassRail style={styles.railOverBorder} /> : null}
       <TopBarToneContext.Provider value={tone}>
         <View style={styles.row}>
           <View style={[styles.side, { width: leftWidth }]}>{left}</View>
@@ -412,7 +419,8 @@ const styles = StyleSheet.create({
   },
   barRuled: { borderBottomColor: colors.line },
   barLining: { backgroundColor: colors.lining },
-  barRuledLining: { borderBottomColor: colors.liningLip },
+  /* Down over the 1pt border: absolute children are placed inside it. */
+  railOverBorder: { bottom: -stroke.edge },
   /* No ground and no rule, so a clear bar is exactly its row's 44pt (plus its inset). */
   barClear: { backgroundColor: 'transparent', borderBottomWidth: 0 },
   row: {

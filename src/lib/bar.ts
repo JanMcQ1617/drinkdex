@@ -206,6 +206,47 @@ export function gainOf(result: BarResult, id: string): number {
   return result.gains.get(id)?.length ?? 0;
 }
 
+/** The one bottle that would pour the most, and the drinks it would complete. */
+export interface BestBottle {
+  ingredient: Ingredient;
+  /** Every nearly drink it completes, alphabetical like `nearly`. */
+  matches: readonly Match[];
+}
+
+/* Keyed on the answer's identity: matchOwned hands back the same object until the bar changes. */
+const bestByResult = new WeakMap<BarResult, BestBottle | null>();
+
+/**
+ * v3.3 graft 7: the best single bottle to add, the card that opens My
+ * Bar's One ingredient away ("+10 drinks · opens Martini, Clarito, Bronx
+ * and 7 more").
+ *
+ * WHY FULL-SLOT GAINS, where the shopping list (nextBest) stays
+ * canonical: the card promises a number and its Add must pour exactly
+ * that many, so it ranks by what adding the thing really completes
+ * (`gains`, family slots credited). Ties go to the one more recipes name
+ * (`uses`), the bottle a bartender would reach for, then the label.
+ * Nothing one away gives null, and the card hides.
+ */
+export function bestBottle(result: BarResult): BestBottle | null {
+  const known = bestByResult.get(result);
+  if (known !== undefined) return known;
+  // Negative when `a` is the better buy.
+  const rank = (a: BestBottle, b: BestBottle) =>
+    b.matches.length - a.matches.length ||
+    b.ingredient.uses - a.ingredient.uses ||
+    a.ingredient.label.localeCompare(b.ingredient.label);
+  let best: BestBottle | null = null;
+  for (const [id, matches] of result.gains) {
+    const ingredient = INGREDIENTS_BY_ID[id];
+    if (!ingredient || !matches.length) continue;
+    const candidate = { ingredient, matches };
+    if (!best || rank(candidate, best) < 0) best = candidate;
+  }
+  bestByResult.set(result, best);
+  return best;
+}
+
 /**
  * The drinks that changed between two answers: what now pours that did
  * not (`lit`), and what no longer does (`lost`). For the line under "You

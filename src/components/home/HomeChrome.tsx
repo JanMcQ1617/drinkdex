@@ -2,6 +2,7 @@ import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { BrassRail, RAIL } from '@/components/brass/rules';
 import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { useHideOnScroll } from '@/components/ScrollChrome';
@@ -25,7 +26,12 @@ import { colors, layout, stroke, textRole } from '@/constants/theme';
 /* half; Jan liked everything about the scrolled look but that gradient */
 /* (build 17), so it is gone, and the strip's tail with it. The status  */
 /* strip stays lining always, so the light status bar is always right;  */
-/* once the bar is fully under it, the strip wears the same 1pt foot.   */
+/* once the bar is fully under it, the strip wears the same foot.       */
+/*                                                                      */
+/* THE FOOT IS A BRASS RAIL (v3.3 Brass D10): 3pt of lit brass, brass   */
+/* and shade where the 1pt liningLip was, the back bar's own trim. It   */
+/* rides with the bar, inside the bar's 45pt (over the row's last 2pt,  */
+/* where nothing is drawn), so nothing moves by a point when it shows.  */
 /*                                                                      */
 /* MOVED BY THE FINGER. Every motion here is a native-driven            */
 /* interpolation of the list's own scroll (ScrollChrome): translateY    */
@@ -85,8 +91,14 @@ export function HomeChrome({
    * point goes under, its foot is exactly where this one appears, so the
    * rule hands over without moving.
    */
+  /*
+   * The strip's rail hangs just below the strip, exactly where the bar's
+   * rail is when the bar has RAIL left to travel; from there on the bar's
+   * rail runs under the strip and this one carries on. Faded in over the
+   * last point before that handover, so the two never show as a pair.
+   */
   const stripFoot = hide.interpolate({
-    inputRange: [HIDE - stroke.edge, HIDE],
+    inputRange: [HIDE - RAIL - stroke.edge, HIDE - RAIL],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
@@ -99,13 +111,13 @@ export function HomeChrome({
       <Animated.View pointerEvents="box-none" style={[styles.bar, { top: insets.top, transform: [{ translateY }] }]}>
         {/*
           Its scrolled ground: solid lining and the lining's grain, with the
-          1pt lip along the foot (liningLip over lining, as ScreenTopBar's
-          lining rule draws), so the bar reads as one opaque object over a
-          photo or paper alike: onLining on lining is 13.32:1.
+          brass rail along the foot (as ScreenTopBar's lining bar draws once
+          content runs under it), so the bar reads as one opaque object over
+          a photo or paper alike: onLining on lining is 13.32:1.
         */}
         <Animated.View pointerEvents="none" style={[styles.ground, { opacity: fadeIn }]}>
           <Grain tone="lining" />
-          <View style={styles.foot} />
+          <BrassRail />
         </Animated.View>
         {/*
           The wordmark is the one place the brand name is set, so it is set
@@ -145,12 +157,14 @@ export function HomeChrome({
 
       {/*
         The status strip: always lining, over the bar, and it takes the
-        touches in its band so a bar hidden beneath it takes none. Its 1pt
-        foot appears as the bar's goes under it (stripFoot).
+        touches in its band so a bar hidden beneath it takes none. Its
+        rail appears, hung under it, as the bar's goes under it (stripFoot).
       */}
       <View pointerEvents="auto" style={[styles.strip, { height: insets.top }]}>
         <Grain tone="lining" />
-        <Animated.View pointerEvents="none" style={[styles.foot, { opacity: stripFoot }]} />
+        <Animated.View pointerEvents="none" style={[styles.stripRail, { opacity: stripFoot }]}>
+          <BrassRail inFlow />
+        </Animated.View>
       </View>
     </View>
   );
@@ -161,15 +175,8 @@ const styles = StyleSheet.create({
   /* The 44pt row and the 1pt foot under it; ScreenTopBar's clear bar is the row alone. */
   bar: { position: 'absolute', left: 0, right: 0, height: layout.topBar + stroke.edge },
   ground: { ...StyleSheet.absoluteFill, backgroundColor: colors.lining },
-  /* The lip along a lining bar's foot, drawn over that bar's own lining. */
-  foot: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: stroke.edge,
-    backgroundColor: colors.liningLip,
-  },
+  /* Hung just under the strip, over the top of the feed (or of the hidden bar). */
+  stripRail: { position: 'absolute', left: 0, right: 0, top: '100%' },
   strip: { position: 'absolute', top: 0, left: 0, right: 0, backgroundColor: colors.lining },
   wordmark: { color: colors.onLining },
 });

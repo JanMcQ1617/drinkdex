@@ -64,7 +64,7 @@ import {
   type PickResult,
 } from '@/lib/pour';
 import { latestDexIds } from '@/lib/tastes';
-import { faceOf, fitScale } from '@/lib/textFit';
+import { faceOf, fitScale, textWidth } from '@/lib/textFit';
 import { useAuth } from '@/store/auth';
 import { useCelebrate } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
@@ -232,6 +232,29 @@ const NAME_CAP = 1.4;
  * name has the row.
  */
 const STACK_SCALE = 1.1;
+
+/*
+ * The find field's Cancel (v3.3 graft 11): iOS's own search Cancel, a
+ * wine word beside the field while it has the cursor. Its box is the
+ * WHOLE word at the capped text size, worked out the way ScreenTopBar
+ * sizes a text side rather than measured, so it is never cut ("Canc…"
+ * was Jan's build-17 bug) and the field gives up exactly that much, in
+ * the same commit as the focus, from the first frame.
+ */
+const CANCEL_LABEL = 'Cancel';
+/** Bar words cap at 1.3 (ScreenTopBar); the box grows with the word up to there. */
+const CANCEL_CAP = 1.3;
+/** Each side of the word inside its box, so the press area runs past the glyphs. */
+const CANCEL_PAD = space.xs;
+/** The touch floor: the box is never narrower than it is tall. */
+const CANCEL_MIN = 44;
+
+/** The Cancel box's width: textFit's wide-side estimate of the word, +2 for rounding, and its padding. */
+function cancelWidth(fontScale: number): number {
+  const size = textRole.rowTitle.fontSize * Math.min(fontScale, CANCEL_CAP);
+  const word = Math.ceil(textWidth(CANCEL_LABEL, 'inter', size));
+  return Math.max(CANCEL_MIN, word + 2 * CANCEL_PAD + 2);
+}
 
 /**
  * One result, as a row of the grouped results list: the drink mounted as a
@@ -663,6 +686,19 @@ export default function PostDrinkScreen() {
   const focusSearch = useCallback(() => searchRef.current?.focus(), []);
 
   /*
+   * Cancel: what a pick does, choosing nothing. The search empties and the
+   * field lets go, so the window is back in compose with the drink it had
+   * (or none). Focus is cleared here as well as by onBlur, for pick's
+   * reason: in between, an empty focused field would flash the recent rows.
+   */
+  const cancelSearch = useCallback(() => {
+    setQuery('');
+    setSearchFocused(false);
+    Keyboard.dismiss();
+    searchRef.current?.blur();
+  }, []);
+
+  /*
    * The add-a-drink form, named after the search. It takes this window's
    * photo along (setSeed), as a copy: the photo stays here too, ready to
    * save once the drink comes back selected.
@@ -914,7 +950,7 @@ export default function PostDrinkScreen() {
    * window's height needs no measuring: a full-screen modal's frame is the
    * screen's, so the keyboard needs no offset either (see the return).
    */
-  const { width: windowW } = useWindowDimensions();
+  const { width: windowW, fontScale } = useWindowDimensions();
   const [frameW, setFrameW] = useState(windowW);
   /** A result row's width: the window less the list's gutters and the group's 1pt edges. */
   const rowWidth = frameW - 2 * layout.gutter - 2 * stroke.edge;
@@ -1156,8 +1192,15 @@ export default function PostDrinkScreen() {
 
         With a photo picked, a 44pt print of it sits at the field's left,
         so the photo stays in view while the results fill the window. It
-        is there in compose too, so the field never changes width under
-        the finger. Decorative: compose's print is the one described.
+        is there in compose too, so the print never comes and goes with
+        the mode. Decorative: compose's print is the one described.
+
+        While the field has the cursor, Cancel stands at its right and the
+        field narrows by Cancel's width, as iOS's own search does. Both in
+        the same commit as the focus, no animation (section 0 of the v3.3
+        spec). Cancel goes when the cursor does, so a drag that lowers the
+        keyboard over typed results keeps find mode exactly as before: the
+        results stay, and the field's clear button empties them.
       */}
       <View style={styles.searchRow}>
         {photoUri ? (
@@ -1181,6 +1224,29 @@ export default function PostDrinkScreen() {
           accessibilityLabel="Search for the drink you had, by name, style or country"
           style={styles.searchField}
         />
+        {searchFocused ? (
+          <Pressable
+            onPress={cancelSearch}
+            accessibilityRole="button"
+            accessibilityLabel="Cancel search"
+            accessibilityHint="Clears the search and closes the keyboard"
+            style={({ pressed }) => [
+              styles.searchCancel,
+              { width: cancelWidth(fontScale) },
+              pressed && styles.searchCancelPressed,
+            ]}>
+            <Text
+              numberOfLines={1}
+              // The backstop, as on a bar's text side: if the estimate is ever
+              // short, iOS shrinks the word a little rather than cutting it.
+              adjustsFontSizeToFit
+              minimumFontScale={0.85}
+              maxFontSizeMultiplier={CANCEL_CAP}
+              style={styles.searchCancelText}>
+              {CANCEL_LABEL}
+            </Text>
+          </Pressable>
+        ) : null}
       </View>
 
       {finding ? (
@@ -1447,6 +1513,19 @@ const styles = StyleSheet.create({
     borderColor: colors.line,
   },
   searchField: { flex: 1 },
+  /*
+   * A squared 44pt press area, its word centred: Inter 16 in wine on the
+   * paper, the bar's text-button ink. The box hangs CANCEL_PAD into the
+   * gutter, so the word itself sits on the gutter, in line with the field.
+   */
+  searchCancel: {
+    height: CANCEL_MIN,
+    marginRight: -CANCEL_PAD,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  searchCancelPressed: { opacity: 0.5 },
+  searchCancelText: { ...textRole.rowTitle, color: colors.wine, textAlign: 'center' },
 
   /* Photograph, empty: a 96pt well with a camera tile and two lines */
   well: {

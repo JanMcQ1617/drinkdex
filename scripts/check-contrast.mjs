@@ -17,7 +17,8 @@
  */
 
 import { Buffer } from 'node:buffer';
-import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { readFileSync, statSync } from 'node:fs';
 import { inflateSync } from 'node:zlib';
 
 const hex = (h) => {
@@ -308,6 +309,44 @@ const WORST = {
 };
 
 /* ==================================================================== */
+/* The walnut, measured by its maker                                    */
+/*                                                                      */
+/* v3.3 Brass's wood is a lossy WebP (assets/images/walnut.webp), which */
+/* plain Node cannot decode. So scripts/build-walnut.py decodes it as a */
+/* phone does and prints its darkest and brightest pixel and its        */
+/* sha256 into theme.ts's `walnutTile`. This audit hashes the file and  */
+/* stops if it is not the tile those numbers describe: a regenerated or */
+/* swapped texture cannot ship with text measured against the old one.  */
+/* Text on walnut is measured against `brightest`.                      */
+/* ==================================================================== */
+
+const WALNUT_SRC = uncommented(section('export const walnutTile = {', '} as const;'));
+const walnutField = (key, re) => {
+  const m = new RegExp(`\\b${key}:\\s*'(${re})'`).exec(WALNUT_SRC);
+  if (!m) unreadable(`cannot read walnutTile.${key} in theme.ts.`);
+  return m[1];
+};
+const WALNUT = {
+  darkest: walnutField('darkest', '#[0-9A-Fa-f]{6}').toUpperCase(),
+  brightest: walnutField('brightest', '#[0-9A-Fa-f]{6}').toUpperCase(),
+  mean: walnutField('mean', '#[0-9A-Fa-f]{6}').toUpperCase(),
+  sha256: walnutField('sha256', '[0-9a-f]{64}'),
+};
+{
+  const url = new URL('../assets/images/walnut.webp', import.meta.url);
+  const bytes = readFileSync(url);
+  const digest = createHash('sha256').update(bytes).digest('hex');
+  if (digest !== WALNUT.sha256) {
+    unreadable(
+      `assets/images/walnut.webp hashes to ${digest}, not the ${WALNUT.sha256} theme.ts's walnutTile ` +
+        'describes. Run python3 scripts/build-walnut.py and paste the block it prints.',
+    );
+  }
+  // The texture budget (v3.3): one tile, at most 12 KB.
+  if (statSync(url).size > 12 * 1024) unreadable(`assets/images/walnut.webp is ${statSync(url).size} bytes, over 12 KB.`);
+}
+
+/* ==================================================================== */
 /* onMedia, read as the app reads it                                    */
 /*                                                                      */
 /* Everything drawn over a photograph comes from this one object, and    */
@@ -354,6 +393,9 @@ const MEDIA_ROLES = [
   [/^markerEdge$/, 'edge'],
   [/^plaque\.\w+\.edge$/, 'edge'],
   [/^shadow$/, 'text shadow'],
+  // v3.3 Brass: a plate's engraving is a text shadow; a label's check is a glyph, measured on its fill (3:1).
+  [/^plaque\.\w+\.lit$/, 'text shadow'],
+  [/^plaque\.\w+\.mark$/, 'glyph'],
 ];
 const mediaPaths = (node, path = []) =>
   typeof node === 'string'
@@ -433,6 +475,13 @@ const FORBIDDEN_OVER_MEDIA = [
   'taupe',
   'reelInkDim',
   'wineSoft',
+  // v3.3 Brass: over a photo brass is only ever a solid plate or a bracket, never a word.
+  'brass',
+  'brassPlate',
+  'brassLit',
+  'brassShade',
+  'brassInk',
+  'brassOnDark',
 ];
 
 /* ==================================================================== */
@@ -618,7 +667,14 @@ const PAIRS = [
     plaqueGround(mediaInk(`plaque.${plaque}.ink`), mediaColour(`plaque.${plaque}.fill`)),
     4.5,
     `${plaque} plaque: its ink on its fill`,
-  ]), // neutral 9.98
+  ]), // neutral 9.98, brass 6.79, label 12.73
+  // A plaque's glyph (the label tag's check), on that plaque's fill: 3:1.
+  ...PLAQUES.filter((plaque) => ON_MEDIA.plaque[plaque].mark).map((plaque) => [
+    mediaInk(`plaque.${plaque}.mark`),
+    plaqueGround(mediaInk(`plaque.${plaque}.mark`), mediaColour(`plaque.${plaque}.fill`)),
+    3.0,
+    `${plaque} plaque: its mark (glyph) on its fill`,
+  ]), // label 11.38
 
   'v3 · 4.5 Tab bar, and the design floor',
   [over(R.logActionEdge, C.reelBar), C.reelBar, 3.0, 'the log action\'s edge (logActionEdge) on the espresso bar'], // 3.02
@@ -660,6 +716,85 @@ const PAIRS = [
   [C.providerInk, C.bgSunk, 4.5, 'outlined way in, pressed: label on bgSunk'], // 13.14
   [C.providerEdge, C.surface, 3.0, 'outlined way in: its edge against its own white (UI)'], // 4.53
   [C.providerEdge, WORST.paper, 3.0, 'outlined way in: its edge on the paper sheet, worst grain pixel (UI)'], // 3.81
+
+  /*
+   * v3.3 Brass, specs/v3-3-mockups/brass/spec.md section 1.2. Walnut's
+   * worst pixel is the decoded tile's brightest (walnutTile, above);
+   * lining and cellar are measured flat and at their worst grain pixel.
+   */
+  'v3.3 · Brass: text',
+  [C.text, C.brassPlate, 4.5, 'plate digits, shelf holder range: text on brassPlate'], // 6.79
+  [C.text, C.label, 4.5, 'bottle-label words: text on label stock'], // 12.73
+  [C.textMuted, C.label, 4.5, '"in 173 drinks" on a ticked label: textMuted on label'], // 5.08
+  [C.wine, C.label, 4.5, 'wine on label stock'], // 11.38
+  ...[
+    ['page', C.bg],
+    ['page, worst grain pixel', WORST.paper],
+    ['mat', C.mat],
+    ['white', C.surface],
+    ['label stock', C.label],
+  ].map(([where, ground]) => [C.brassInk, ground, 4.5, `brassInk (counts, rank numerals) on ${where}`]),
+  ...[
+    ...LINING_GROUNDS,
+    ['espresso', C.reelBar],
+    ['walnut, texture mean', WALNUT.mean],
+    ['walnut, brightest decoded pixel', WALNUT.brightest],
+  ].map(([where, ground]) => [C.brassOnDark, ground, 4.5, `brassOnDark (kickers, rank word, holder number) on ${where}`]),
+  [C.onLining, WALNUT.brightest, 4.5, 'figures and titles on walnut (onLining), brightest pixel'], // 7.18
+  [C.onWalnutMuted, WALNUT.mean, 4.5, 'secondary text on walnut (onWalnutMuted), texture mean'],
+  [C.onWalnutMuted, WALNUT.brightest, 4.5, 'secondary text on walnut (onWalnutMuted), brightest pixel'], // 4.61
+  [C.onWalnutMuted, C.walnut, 4.5, 'secondary text on walnut (onWalnutMuted), the fill before the tile decodes'],
+
+  'v3.3 · Brass: marks and edges (UI, 3:1)',
+  ...[...LINING_GROUNDS, ['espresso', C.reelBar]].map(([where, ground]) => [
+    C.brass,
+    ground,
+    3.0,
+    `brass rail, keyline, gauge edge, number rail on ${where} (UI)`,
+  ]),
+  [C.brass, WALNUT.brightest, 3.0, 'brass rail and gauge edge on walnut, brightest pixel (UI)'], // 3.12
+  [C.brass, C.walnutDeep, 3.0, 'brass gauge edge on the walnutDeep well (UI)'],
+  [C.brass, C.wine, 3.0, "the + button's brass edge against its own wine (UI)"], // 4.75
+  [C.brassLit, C.reelBar, 3.0, 'active-tab marker (brassLit) on the espresso bar (UI)'], // 10.45
+  [C.brassPlate, C.liningDeep, 3.0, 'gauge marks (brassPlate) in the cellar well (UI)'], // 8.02
+  [C.brassPlate, C.walnutDeep, 3.0, 'gauge marks (brassPlate) in the walnutDeep well (UI)'], // 7.00
+  [C.brassOnDark, WALNUT.brightest, 3.0, 'rank notches (brassOnDark) on walnut, brightest pixel (UI)'],
+  [over(R.plateHolderEdge, C.liningDeep), C.liningDeep, 3.0, 'empty plate holder edge (plateHolderEdge) on the cellar (UI)'], // 3.80
+  [over(R.plateHolderEdge, WORST.cellar), WORST.cellar, 3.0, 'empty plate holder edge on the cellar, worst grain pixel (UI)'],
+  [C.wine, C.label, 3.0, 'ticked checkbox (wine) on label stock (UI)'], // 11.38
+  [C.brassShade, C.bg, 3.0, "a bottle label's brassShade edge on the page (UI)"], // 5.32
+  [C.brassShade, WORST.paper, 3.0, "a bottle label's brassShade edge on the page, worst grain pixel (UI)"],
+  [C.brassShade, C.label, 3.0, "a bottle label's brassShade edge against its own stock (UI)"], // 4.91
+
+  // ui.tsx's lining tone: the Dex's filter chips and its search well (D20).
+  'v3.3 · Chips and search on lining',
+  [C.lining, C.onLining, 4.5, 'selected chip on lining: lining ink on the bone fill'], // 13.32
+  [C.textMuted, C.onLining, 4.5, "selected chip on lining: its count (textMuted) on the bone fill"], // 4.88
+  [C.lining, C.onLiningMuted, 4.5, 'selected chip on lining, held: lining ink on onLiningMuted'], // 6.79
+  [C.onLiningMuted, C.liningDeep, 4.5, 'search well: placeholder and glyph (onLiningMuted) in the cellar fill'],
+  [C.onLining, C.liningDeep, 4.5, 'search well: typed text (onLining) in the cellar fill'],
+  // The well's edge is opaque onLiningFaint: the translucent liningControl, laid over the cellar fill, was 2.62:1 against the grained lining around it.
+  [C.onLiningFaint, C.liningDeep, 3.0, 'search well: its onLiningFaint edge against its own cellar fill (UI)'],
+  [C.onLiningFaint, WORST.lining, 3.0, 'search well: its edge against the grained lining around it (UI)'],
+  [C.onLiningMuted, C.liningDeep, 3.0, 'search well, focused: its onLiningMuted edge (UI)'],
+];
+
+/*
+ * v3.3 Brass: pairs that must FAIL 4.5:1, so nobody later sets text in
+ * them (spec section 1.2, "Never"). If one ever passes, take it off this
+ * list on purpose rather than by accident. Brass as TEXT on lining clears
+ * 4.5 numerically (5.78) and is still never text: check-design rule 16
+ * keeps the four metal tokens out of every Text's colour.
+ */
+const NEVER = [
+  [C.onLiningMuted, WALNUT.brightest, 'onLiningMuted on walnut: use onWalnutMuted'],
+  [C.brass, C.bg, 'brass as text on paper'],
+  [C.brass, C.mat, 'brass as text on mat'],
+  [C.brass, C.label, 'brass as text on label stock'],
+  [C.brassInk, C.lining, 'brassInk on lining: brassOnDark is the dark-ground cut'],
+  [C.brassInk, C.liningDeep, 'brassInk on the cellar'],
+  [C.brassInk, C.reelBar, 'brassInk on espresso'],
+  [C.brassInk, WALNUT.mean, 'brassInk on walnut'],
 ];
 
 /*
@@ -668,6 +803,10 @@ const PAIRS = [
  */
 const NOTES = [
   [C.wine, C.lining, 'wine on lining: why the primary button on lining is bone, never wine'], // 1.22
+  // v3.3 Brass, decorative only: mount keylines, the avatar bezel, count separators, spoon rules and leaders on paper, the sheet grabber.
+  [C.brass, C.bg, 'brass on paper: decorative only (keylines, bezel, separators, spoon rules)'], // 2.59
+  [C.brass, C.mat, 'brass on mat: decorative only (the mount keyline)'], // 2.73
+  [over(R.tabKeyline, C.reelBar), C.reelBar, "the tab bar's inner keyline (tabKeyline) on espresso: decorative"], // 2.07
 ];
 
 let failed = 0;
@@ -698,6 +837,18 @@ for (const [fg, bg, label] of NOTES) {
   console.log(`  NOTE  ${ratio(fg, bg).toFixed(2).padStart(5)}:1  (not a pair)  ${label}   ${fg} on ${bg}`);
 }
 
+console.log('\n  v3.3 · Brass: never text, asserted below 4.5:1\n');
+let neverFailed = 0;
+for (const [fg, bg, label] of NEVER) {
+  const r = ratio(fg, bg);
+  const ok = r < 4.5;
+  if (!ok) neverFailed++;
+  console.log(
+    `  ${ok ? 'PASS' : 'FAIL'}  ${r.toFixed(2).padStart(5)}:1  (must stay under 4.5)  ${label}` +
+      `${ok ? '' : ': now readable; take it off NEVER deliberately'}   ${fg} on ${bg}`,
+  );
+}
+
 /*
  * Each never-over-media colour, against the shallowest scrim over a white
  * photo. Two things must hold: it fails 4.5:1 there (if one ever passed,
@@ -721,10 +872,12 @@ for (const key of FORBIDDEN_OVER_MEDIA) {
   );
 }
 
-const total = failed + forbiddenFailed;
+const total = failed + forbiddenFailed + neverFailed;
 console.log(
   total === 0
-    ? `\n  All ${measuredPairs} pairs pass, and all ${FORBIDDEN_OVER_MEDIA.length} never-over-media colours stay off media.\n`
-    : `\n  ${failed} of ${measuredPairs} pairs FAIL; ${forbiddenFailed} of ${FORBIDDEN_OVER_MEDIA.length} never-over-media checks FAIL.\n`,
+    ? `\n  All ${measuredPairs} pairs pass, all ${NEVER.length} never-text pairs stay unreadable, and all ` +
+        `${FORBIDDEN_OVER_MEDIA.length} never-over-media colours stay off media.\n`
+    : `\n  ${failed} of ${measuredPairs} pairs FAIL; ${neverFailed} of ${NEVER.length} never-text checks FAIL; ` +
+        `${forbiddenFailed} of ${FORBIDDEN_OVER_MEDIA.length} never-over-media checks FAIL.\n`,
 );
 process.exit(total === 0 ? 0 : 1);

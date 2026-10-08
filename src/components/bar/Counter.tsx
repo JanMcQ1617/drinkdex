@@ -1,34 +1,43 @@
 import React from 'react';
 import { FlatList, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { Button, Card } from '@/components/ui';
-import { colors, layout, space, tabular, textRole } from '@/constants/theme';
+import { BottleLabel, BrassPlate, IngredientGlyph, SpoonRule, WalnutFill } from '@/components/brass';
+import { DrinkName, MOUNT, Mount, MountWindow, VerticalFade } from '@/components/cabinet';
+import { Button } from '@/components/ui';
+import { colors, layout, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
-import type { Ingredient } from '@/lib/bar';
 import type { Drink } from '@/types';
 
-import { IngredientRow, ROW_LEFT, rowStyles, ShelfToggle } from './controls';
-import { DrinkThumb, MoreTile, PourMount, useStripNameHeight } from './faces';
+import { rowStyles, ShelfToggle, shelfToggleWidth } from './controls';
+import { BarFace, PourMount, useStripNameHeight } from './faces';
+import type { AwayRow, BestCard } from './model';
 
 /* ==================================================================== */
 /* What your bar makes                                                  */
 /*                                                                      */
-/* Under the picker: what you can make now, lit, and what is one        */
-/* ingredient away, grouped by the one ingredient. A tick above changes */
-/* both at once, so the payoff is one scroll from the box you ticked.   */
+/* Under the picker: what you can make now, standing on a walnut        */
+/* counter, and what is one ingredient away. A tick above changes both  */
+/* at once, so the payoff is one scroll from the box you ticked.        */
 /*                                                                      */
-/* Add on a row expands IN PLACE: the row becomes a selected "Added"    */
-/* toggle and grows the drinks it just unlocked right under it, in the  */
-/* same render. Nothing moves away from the finger: rows keep the       */
-/* screen's snapshot order until another tab takes the front, and no    */
-/* layout animation runs (a new row of thumbs simply appears; v3.3      */
-/* section 0: a stalled layout transition is a row drawn in the wrong   */
-/* place, which is not "resting fully visible").                        */
+/* One ingredient away opens with the best single bottle to add (graft  */
+/* 7), then one row per drink: its thumb, its name and plate, what it   */
+/* needs and how far that bottle goes, and a squared "+ Orange".        */
+/*                                                                      */
+/* STILLNESS. The rows and the card are the screen's snapshot: an Add   */
+/* flips its toggle to "✓ Orange" where it stands and lights the        */
+/* drink's thumb (expo-image's own crossfade); nothing joins, leaves or */
+/* moves until another tab takes the front. No layout animation runs    */
+/* (v3.3 section 0): a stalled layout transition is a row drawn in the  */
+/* wrong place, which is not "resting fully visible".                   */
 /* ==================================================================== */
 
 /* ---- Section heads ---- */
 
-/** A section's title (a header to VoiceOver), its count, and an action at its end. */
+/**
+ * A section's title (a header to VoiceOver) with its count in brassInk
+ * SemiBold at the head's own size, a bar-spoon rule filling the rest of
+ * the row (Brass D7), and an action at its end.
+ */
 export function SectionHead({
   title,
   count,
@@ -44,6 +53,7 @@ export function SectionHead({
         {title}
         {count != null ? <Text style={[styles.headCount, tabular]}>{`  ${formatCount(count)}`}</Text> : null}
       </Text>
+      <SpoonRule />
       {action ? (
         <Pressable
           onPress={action.onPress}
@@ -75,6 +85,19 @@ export function NameList({ drinks, shown = 3 }: { drinks: readonly Drink[]; show
   );
 }
 
+/** The same list, as VoiceOver hears it. */
+function nameListSpoken(drinks: readonly Drink[], shown = 3): string {
+  const head = drinks.slice(0, shown).map((d) => d.name);
+  const rest = drinks.length - head.length;
+  if (rest > 0) return `${head.join(', ')} and ${formatCount(rest)} more`;
+  if (head.length < 2) return head.join('');
+  return `${head.slice(0, -1).join(', ')} and ${head[head.length - 1]}`;
+}
+
+function plural(n: number) {
+  return n === 1 ? 'drink' : 'drinks';
+}
+
 /* ==================================================================== */
 /* You can make                                                         */
 /* ==================================================================== */
@@ -89,6 +112,17 @@ export type PourNote =
 
 /** At most this many mounts in the strip; "See all" has the rest. */
 export const STRIP_MAX = 12;
+
+/*
+ * The counter (Brass D8, D9): the Dex shelf's fittings at its top edge,
+ * the walnut top face and the brass rail with its lit top, then the wood
+ * the mounts stand on, and the mock's 4pt walnutDeep plank edge at its
+ * foot, with the cabinet's 12pt `shade` hung under it onto the paper (the
+ * light a ledge really casts, not a scroll fade). ONE WalnutFill for the
+ * whole counter, never one per card: one image view over the shared
+ * bitmap. The seed only picks which window of the grain shows.
+ */
+const COUNTER = { top: 4, rail: 2, foot: 4, shade: 12, seed: 3 } as const;
 
 export function YouCanMake({
   total,
@@ -118,19 +152,28 @@ export function YouCanMake({
       />
       <Note note={note} />
       {strip.length ? (
-        <FlatList
-          horizontal
-          data={strip}
-          keyExtractor={(d) => d.id}
-          renderItem={({ item }) => <PourMount drink={item} nameHeight={nameHeight} onOpen={onOpen} />}
-          ItemSeparatorComponent={StripGap}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.strip}
-          initialNumToRender={4}
-          maxToRenderPerBatch={4}
-          windowSize={3}
-          accessibilityLabel="Drinks you can make"
-        />
+        <View style={styles.counterWrap}>
+          <View style={styles.counter}>
+            <WalnutFill seed={COUNTER.seed} />
+            <View style={styles.counterTop} />
+            <View style={styles.counterRail} />
+            <FlatList
+              horizontal
+              data={strip}
+              keyExtractor={(d) => d.id}
+              renderItem={({ item }) => <PourMount drink={item} nameHeight={nameHeight} onOpen={onOpen} />}
+              ItemSeparatorComponent={StripGap}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.strip}
+              initialNumToRender={4}
+              maxToRenderPerBatch={4}
+              windowSize={3}
+              accessibilityLabel="Drinks you can make"
+            />
+            <View style={styles.counterFoot} />
+          </View>
+          <VerticalFade from={colors.shade} to={colors.shade} toOpacity={0} style={styles.counterShade} />
+        </View>
       ) : null}
     </View>
   );
@@ -192,280 +235,203 @@ function Note({ note }: { note: PourNote }) {
 /* One ingredient away                                                  */
 /* ==================================================================== */
 
-export interface ShortGroup {
-  ingredient: Ingredient;
-  /** In your bar now (an Add here, or a tick in the picker). */
-  added: boolean;
-  /** Not added: the drinks it would unlock. Added: the drinks it unlocked. */
-  drinks: readonly Drink[];
-}
-
-/** Thumbs named in a row's subtitle and spoken by its toggle. */
-const THUMBS = 3;
-const CARD_THUMB = 76;
-const ROW_THUMB = 68;
 /**
- * The smallest thumb: under this a Playfair name such as "Greyhound" no
- * longer fits its tile even at the 11pt floor, and would break inside the
- * word. A narrow phone shows fewer thumbs instead of smaller ones.
+ * The stub's figure is 36pt already, and the line beside it says the same
+ * number in words that grow freely, so it grows only so far (a plate's cap).
  */
-const THUMB_MIN = 66;
-const THUMB_GAP = space.sm;
-/** Everything across the screen beside a row of thumbs: the gutters, the card's edges and the row's padding. */
-const CARD_INSET = 2 * layout.gutter + 2 + 2 * ROW_LEFT;
-const ROW_INSET = 2 * layout.gutter + 2 + ROW_LEFT + space.md;
+const STUB_CAP = 1.3;
 
 /**
- * How many tiles a row of thumbs holds, the "more" tile included, and
- * their size: as many as fit at THUMB_MIN or larger, never past `max`.
+ * Graft 7 · the best single bottle to add, before the rows: "+10 drinks"
+ * on the stub, then "Opens Martini, Clarito, Bronx and 7 more." and a
+ * squared "+ Dry vermouth" that ticks it by the rows' own path. A bottle
+ * label (D6) like the checklist's: white while it is not yours, label
+ * stock with the inner brass rule once it is, so the card says "in your
+ * bar" the way the label above it does.
+ *
+ * The bottle is named on its button, never inside a sentence: the index
+ * labels carry no mark for a proper name, so a lowercased "campari" or
+ * "angostura bitters" would misspell the brand.
+ *
+ * Its words are the snapshot's, so its own Add changes only the label's
+ * stock and the toggle's mark: nothing in it reflows under the finger.
  */
-function useThumbFit(inset: number, max: number): { size: number; tiles: number } {
-  const { width } = useWindowDimensions();
-  const room = width - inset;
-  const tiles = Math.max(2, Math.min(4, Math.floor((room + THUMB_GAP) / (THUMB_MIN + THUMB_GAP))));
-  const size = Math.min(max, Math.floor((room - (tiles - 1) * THUMB_GAP) / tiles));
-  return { size, tiles };
-}
-
-/**
- * A group's drinks: three thumbs and a "6 more" tile, or every drink once
- * opened. Lit when the group's thing is in your bar, else their ghosts.
- */
-function Thumbs({
-  drinks,
-  lit,
-  inset,
-  max,
-  open,
-  onToggleOpen,
-  onOpen,
-  closeLabel = 'Show fewer',
-}: {
-  drinks: readonly Drink[];
-  lit: boolean;
-  /** Everything across the screen that is not the row of thumbs. */
-  inset: number;
-  max: number;
-  open: boolean;
-  onToggleOpen: () => void;
-  onOpen: (id: string) => void;
-  /** The last tile once open: "Show fewer", or "Hide" where closing hides them all. */
-  closeLabel?: string;
-}) {
-  const { size, tiles } = useThumbFit(inset, max);
-  if (!drinks.length) return null;
-  // All of them when they fit; else one tile fewer, for "N more".
-  const fits = drinks.length <= tiles ? drinks.length : tiles - 1;
-  const shown = open ? drinks : drinks.slice(0, fits);
-  const rest = drinks.length - fits;
-  return (
-    <View style={styles.thumbs}>
-      {shown.map((d) => (
-        <DrinkThumb key={d.id} drink={d} lit={lit} size={size} onOpen={onOpen} />
-      ))}
-      {rest > 0 ? (
-        <MoreTile
-          size={size}
-          label={open ? closeLabel : lit ? `+${formatCount(rest)}\nSee all ${formatCount(drinks.length)}` : `${formatCount(rest)} more`}
-          onPress={onToggleOpen}
-          accessibilityLabel={open ? `${closeLabel} drinks` : `Show all ${formatCount(drinks.length)} drinks`}
-        />
-      ) : null}
-    </View>
-  );
-}
-
-function plural(n: number) {
-  return n === 1 ? 'drink' : 'drinks';
-}
-
-/** What a group's toggle says to VoiceOver: everything the row shows. */
-function spoken(g: ShortGroup): string {
-  const n = g.drinks.length;
-  if (g.added) return `${g.ingredient.label}, in your bar, ${formatCount(n)} more ${plural(n)}`;
-  const names = g.drinks
-    .slice(0, THUMBS)
-    .map((d) => d.name)
-    .join(', ');
-  return `Add ${g.ingredient.label}, unlocks ${formatCount(n)} more ${plural(n)}${names ? `: ${names}` : ''}`;
-}
-
-/** The top group: a card with the ingredient, the toggle, and the drinks' faces. */
-function ShortCard({
-  group,
-  open,
-  onToggle,
-  onToggleOpen,
-  onOpen,
-}: {
-  group: ShortGroup;
-  open: boolean;
-  onToggle: (id: string) => void;
-  onToggleOpen: (id: string) => void;
-  onOpen: (id: string) => void;
-}) {
-  const { ingredient, added, drinks } = group;
+function BestBottleCard({ best, onAdd }: { best: BestCard; onAdd: (id: string) => void }) {
+  const { ingredient, drinks, owned } = best;
   const n = drinks.length;
   return (
-    <Card style={styles.card}>
-      <IngredientRow
-        first
-        style={styles.cardRow}
-        title={ingredient.label}
-        subtitle={
-          added ? (
-            <Text style={rowStyles.subtitleOn}>
-              In your bar: {formatCount(n)} more {plural(n)}
-            </Text>
-          ) : (
-            <Text style={rowStyles.subtitle}>
-              Unlocks {formatCount(n)} more {plural(n)}
-            </Text>
-          )
-        }
-        toggle={<ShelfToggle on={added} onPress={() => onToggle(ingredient.id)} accessibilityLabel={spoken(group)} />}
-      />
-      <View style={styles.cardThumbs}>
-        <Thumbs
-          drinks={drinks}
-          lit={added}
-          inset={CARD_INSET}
-          max={CARD_THUMB}
-          open={open}
-          onToggleOpen={() => onToggleOpen(ingredient.id)}
-          onOpen={onOpen}
-        />
-      </View>
-    </Card>
-  );
-}
-
-/**
- * Every other group: a row; an Add grows the drinks it unlocked under it.
- * Tapping the row's words shows the ghosts of every drink it would
- * unlock, in place, so each drink one ingredient away still opens from
- * My Bar, as the old one-per-drink list let it.
- */
-const ShortRow = React.memo(function ShortRow({
-  group,
-  first,
-  open,
-  onToggle,
-  onToggleOpen,
-  onOpen,
-}: {
-  group: ShortGroup;
-  first: boolean;
-  open: boolean;
-  onToggle: (id: string) => void;
-  onToggleOpen: (id: string) => void;
-  onOpen: (id: string) => void;
-}) {
-  const { ingredient, added, drinks } = group;
-  const n = drinks.length;
-  return (
-    <IngredientRow
-      first={first}
-      title={ingredient.label}
-      subtitle={
-        added ? (
-          <Text style={rowStyles.subtitleOn}>
-            In your bar: {formatCount(n)} more {plural(n)}
+    <BottleLabel ticked={owned} style={styles.best}>
+      <View style={styles.bestRow}>
+        {/* The stub is said in the line's own label, so VoiceOver reads the card as one sentence and then its toggle. */}
+        <View style={styles.bestStub} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+          <Text maxFontSizeMultiplier={STUB_CAP} style={[textRole.heroFigure, styles.bestFigure]}>
+            {`+${formatCount(n)}`}
           </Text>
-        ) : n ? (
-          <Text style={rowStyles.subtitle}>
-            Unlocks {formatCount(n)} more: <NameList drinks={drinks} />
+          <Text maxFontSizeMultiplier={STUB_CAP} style={styles.bestUnit}>
+            {plural(n)}
           </Text>
-        ) : (
-          <Text style={rowStyles.subtitle}>Unlocks nothing new with your bar now.</Text>
-        )
-      }
-      reveal={
-        added || !n
-          ? undefined
-          : {
-              open,
-              onPress: () => onToggleOpen(ingredient.id),
-              accessibilityLabel: open
-                ? `Hide the drinks ${ingredient.label} would unlock`
-                : `Show the ${formatCount(n)} ${plural(n)} ${ingredient.label} would unlock`,
+        </View>
+        <View style={styles.bestBody}>
+          {/* The Menu ticket's words (graft 7's source): "Opens …" here, the bottle named on the button under it. */}
+          <Text
+            style={styles.bestLine}
+            accessibilityLabel={`The best bottle to add, ${ingredient.label}: ${formatCount(n)} more ${plural(n)}. Opens ${nameListSpoken(drinks)}.`}>
+            Opens <NameList drinks={drinks} />.
+          </Text>
+          <ShelfToggle
+            on={owned}
+            label={ingredient.label}
+            onPress={() => onAdd(ingredient.id)}
+            accessibilityLabel={
+              owned ? `${ingredient.label}, in your bar` : `Add ${ingredient.label}, ${formatCount(n)} more ${plural(n)}`
             }
+            style={styles.bestToggle}
+          />
+        </View>
+        {/* Top right, where the checklist's labels carry it. */}
+        <View style={styles.bestGlyph}>
+          <IngredientGlyph ingredient={ingredient} />
+        </View>
+      </View>
+    </BottleLabel>
+  );
+}
+
+/** A row's thumb: Mount size="thumb", 3pt of mat and a 1pt edge around a 48pt window. */
+const THUMB = 56;
+const THUMB_FACE = THUMB - 2 * (MOUNT.thumb.padding + stroke.edge);
+/** The narrowest the name and its line may get beside the toggle before the toggle goes under them. */
+const TEXT_MIN = 150;
+const ROW_GAP = space.md;
+
+/** What a row says under its name, every case worded so the bottle's name starts its clause (see BestBottleCard). */
+function awayLine(r: AwayRow): string {
+  const label = r.need.label;
+  if (r.made) return r.owned ? `${label} added · you can make it` : 'You can make it now';
+  if (r.owned) return `${label} added · it needs more now`;
+  if (!r.short) return `Needs: ${label} and more now`;
+  return r.pours > 1 ? `Needs: ${label} · it pours ${formatCount(r.pours)} more` : `Needs: ${label}`;
+}
+
+/** What VoiceOver says for a line drawn with middle dots. */
+const spoken = (s: string) => s.split(' · ').join(', ');
+
+/**
+ * One drink one ingredient away: the thumb, name and plate open the
+ * drink (one button, its full label read aloud); the toggle beside them
+ * adds what it needs. The toggle sits beside the words where both fit,
+ * and under them where its name is long ("+ Maraschino liqueur") or the
+ * text is large, decided from worked-out widths, so the row is laid out
+ * once. Ghost thumb while one away; the lit photo once you can make it.
+ */
+const AwayRowView = React.memo(function AwayRowView({
+  row,
+  first,
+  onAdd,
+  onOpen,
+}: {
+  row: AwayRow;
+  first: boolean;
+  onAdd: (id: string) => void;
+  onOpen: (id: string) => void;
+}) {
+  const { width, fontScale } = useWindowDimensions();
+  const { drink, need, owned, made, pours } = row;
+  const room = width - 2 * layout.gutter;
+  const toggleW = shelfToggleWidth(need.label, fontScale);
+  const beside = THUMB + ROW_GAP + TEXT_MIN + ROW_GAP + toggleW <= room;
+  const textW = room - THUMB - ROW_GAP - (beside ? ROW_GAP + toggleW : 0);
+  const line = awayLine(row);
+  const toggle = (
+    <ShelfToggle
+      on={owned}
+      label={need.label}
+      onPress={() => onAdd(need.id)}
+      accessibilityLabel={
+        owned
+          ? `${need.label}, in your bar`
+          : `Add ${need.label}${pours > 1 ? `, pours ${formatCount(pours)} more ${plural(pours)}` : ''}`
       }
-      toggle={<ShelfToggle on={added} onPress={() => onToggle(ingredient.id)} accessibilityLabel={spoken(group)} />}>
-      {added || open ? (
-        <Thumbs
-          drinks={drinks}
-          lit={added}
-          inset={ROW_INSET}
-          max={ROW_THUMB}
-          open={open}
-          onToggleOpen={() => onToggleOpen(ingredient.id)}
-          onOpen={onOpen}
-          closeLabel={added ? undefined : 'Hide'}
-        />
-      ) : null}
-    </IngredientRow>
+      style={beside ? undefined : styles.awayToggleUnder}
+    />
+  );
+  return (
+    <View style={[styles.awayRow, beside && styles.awayRowBeside]}>
+      {first ? null : <View style={[rowStyles.rule, styles.awayRule]} />}
+      <Pressable
+        onPress={() => onOpen(drink.id)}
+        accessibilityRole="button"
+        accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${spoken(line)}`}
+        style={({ pressed }) => [styles.awayMain, beside && styles.awayMainBeside, pressed && styles.dim]}>
+        <Mount state="mounted" size="thumb" onLining={false} style={styles.thumb}>
+          <MountWindow height={THUMB_FACE} state="mounted">
+            <BarFace drink={drink} mode={made ? 'lit' : 'ghost'} width={THUMB_FACE} height={THUMB_FACE} />
+          </MountWindow>
+        </Mount>
+        <View style={styles.awayText}>
+          <View style={styles.awayName}>
+            <DrinkName
+              name={drink.name}
+              role={textRole.rowName}
+              // The plate wraps under a name that leaves it no room, so the name always has the column.
+              measure={textW}
+              cap={1.4}
+              color={colors.text}
+              style={styles.awayNameText}
+            />
+            {/* A slot, so the row centres it on the name: the plate sets its own alignSelf (flex-start, for columns). */}
+            <View>
+              <BrassPlate n={drink.dexNumber} />
+            </View>
+          </View>
+          <Text style={rowStyles.subtitle}>{line}</Text>
+        </View>
+      </Pressable>
+      {toggle}
+    </View>
   );
 });
 
+/** Rows under One ingredient away at first, then this many more a tap (the screen pages by it too). */
+export const AWAY_PAGE = 6;
+
 export function OneIngredientAway({
   total,
-  groups,
+  best,
+  rows,
   more,
-  open,
-  onToggle,
-  onToggleOpen,
+  onAdd,
   onShowMore,
   onOpen,
 }: {
-  /** Drinks one ingredient away. */
+  /** Drinks one ingredient away now. */
   total: number;
-  groups: readonly ShortGroup[];
-  /** Groups not shown yet. */
+  best: BestCard | null;
+  rows: readonly AwayRow[];
+  /** Rows not shown yet. */
   more: number;
-  /** Groups whose drinks are all showing. */
-  open: Readonly<Record<string, true>>;
-  onToggle: (id: string) => void;
-  onToggleOpen: (id: string) => void;
+  /** Puts the thing in your bar, or takes it out (the screen freezes the rows first). */
+  onAdd: (id: string) => void;
   onShowMore: () => void;
   onOpen: (id: string) => void;
 }) {
-  if (!groups.length) return null;
-  const [top, ...rest] = groups;
+  if (!rows.length) return null;
   return (
     <View style={styles.section}>
       <SectionHead title="One ingredient away" count={total} />
-      {/* Ranked by how many drinks name the thing (lib/bar.ts, nextBest), so "most-needed", not "unlocks most". */}
-      <Text style={styles.note}>By what you need, the most-needed first.</Text>
-      <ShortCard
-        group={top!}
-        open={!!open[top!.ingredient.id]}
-        onToggle={onToggle}
-        onToggleOpen={onToggleOpen}
-        onOpen={onOpen}
-      />
-      {rest.length ? (
-        <Card style={styles.group}>
-          {rest.map((g, i) => (
-            <ShortRow
-              key={g.ingredient.id}
-              group={g}
-              first={i === 0}
-              open={!!open[g.ingredient.id]}
-              onToggle={onToggle}
-              onToggleOpen={onToggleOpen}
-              onOpen={onOpen}
-            />
-          ))}
-        </Card>
-      ) : null}
+      {best ? <BestBottleCard best={best} onAdd={onAdd} /> : null}
+      <View style={styles.awayList}>
+        {rows.map((r, i) => (
+          <AwayRowView key={r.drink.id} row={r} first={i === 0} onAdd={onAdd} onOpen={onOpen} />
+        ))}
+      </View>
       {more > 0 ? (
         <Button
-          label={`Show ${formatCount(Math.min(more, 6))} more`}
+          label={`Show ${formatCount(Math.min(more, AWAY_PAGE))} more`}
           variant="secondary"
           block
           onPress={onShowMore}
-          accessibilityHint={`${formatCount(more)} more things would each unlock something new`}
+          accessibilityHint={`${formatCount(more)} more drinks are one ingredient away`}
           style={styles.showMore}
         />
       ) : null}
@@ -476,37 +442,64 @@ export function OneIngredientAway({
 /** Between one section and the head of the next. */
 const SECTION_GAP = 26;
 
-/** The line under a section's head, shared with the picker's. */
-export const sectionStyles = StyleSheet.create({
-  note: { ...textRole.helper, color: colors.textMuted, paddingHorizontal: layout.gutter, marginTop: 2 },
-});
-
 const styles = StyleSheet.create({
   section: { paddingTop: SECTION_GAP },
 
   head: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     gap: space.sm,
     paddingHorizontal: layout.gutter,
   },
   headTitle: { ...textRole.shelfTitle, color: colors.text, flexShrink: 1 },
-  headCount: { color: colors.textMuted },
-  headAction: { marginLeft: 'auto' },
+  headCount: { color: colors.brassInk },
+  headAction: { marginLeft: space.xs },
   headActionText: { ...textRole.buttonSm, color: colors.wine },
   dim: { opacity: 0.5 },
 
-  note: sectionStyles.note,
+  note: { ...textRole.helper, color: colors.textMuted, paddingHorizontal: layout.gutter, marginTop: 2 },
   noteRow: { flexDirection: 'row', alignItems: 'center', paddingRight: space.sm },
   noteGrow: { flexShrink: 1 },
 
-  strip: { paddingHorizontal: layout.gutter, paddingTop: space.md, alignItems: 'stretch' },
+  /* The counter. Its own box clips the wood; the shade hangs under it, outside the clip. */
+  counterWrap: { marginTop: space.md },
+  counter: { overflow: 'hidden', backgroundColor: colors.walnut },
+  counterTop: { height: COUNTER.top, backgroundColor: colors.walnutTop },
+  counterRail: {
+    height: COUNTER.rail,
+    backgroundColor: colors.brass,
+    borderTopWidth: stroke.edge,
+    borderTopColor: colors.brassLit,
+  },
+  counterFoot: { height: COUNTER.foot, backgroundColor: colors.walnutDeep },
+  counterShade: { position: 'absolute', left: 0, right: 0, top: '100%', height: COUNTER.shade },
+  strip: { paddingHorizontal: layout.gutter, paddingVertical: space.lg, alignItems: 'stretch' },
   stripGap: { width: 10 },
 
-  card: { marginHorizontal: layout.gutter, marginTop: space.md, paddingBottom: 14 },
-  cardRow: { paddingTop: 14, paddingBottom: 0 },
-  cardThumbs: { paddingHorizontal: ROW_LEFT },
-  group: { marginHorizontal: layout.gutter, marginTop: space.md, overflow: 'hidden' },
-  thumbs: { flexDirection: 'row', flexWrap: 'wrap', gap: THUMB_GAP, paddingTop: space.md },
+  /* The best bottle's card: a checklist label at the column's full width. */
+  best: { marginHorizontal: layout.gutter, marginTop: space.md, paddingVertical: space.md },
+  bestRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
+  /* The stub keeps a two-figure "+10" wide at the least, so a "+8" does not pull the words left of where a "+10" starts them. */
+  bestStub: { alignItems: 'center', minWidth: 56 },
+  bestFigure: { color: colors.brassInk },
+  bestUnit: { ...textRole.labelCaption, color: colors.textMuted },
+  bestBody: { flex: 1, gap: space.sm },
+  bestLine: { ...textRole.helper, color: colors.textMuted },
+  bestToggle: { alignSelf: 'flex-start' },
+  bestGlyph: { alignSelf: 'flex-start' },
+
+  awayList: { marginTop: space.sm },
+  awayRow: { paddingHorizontal: layout.gutter, paddingVertical: space.md, gap: space.sm },
+  awayRowBeside: { flexDirection: 'row', alignItems: 'center', gap: ROW_GAP },
+  /* The rule starts at the words, not the thumb, like every row with a leading picture. */
+  awayRule: { left: layout.gutter + THUMB + ROW_GAP, right: layout.gutter },
+  awayMain: { flexDirection: 'row', alignItems: 'center', gap: ROW_GAP },
+  awayMainBeside: { flex: 1 },
+  thumb: { width: THUMB, height: THUMB },
+  awayText: { flex: 1 },
+  awayName: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: space.sm, rowGap: 2 },
+  awayNameText: { flexShrink: 1 },
+  /* Under the words: in line with them, past the thumb. */
+  awayToggleUnder: { alignSelf: 'flex-start', marginLeft: THUMB + ROW_GAP },
   showMore: { marginHorizontal: layout.gutter, marginTop: space.md },
 });
