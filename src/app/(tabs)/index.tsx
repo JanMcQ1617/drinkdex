@@ -1,24 +1,20 @@
 import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, AppState, type FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Animated, type FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { Dateline, datelineText, WalnutShelf } from '@/components/brass';
-import { LiningBand } from '@/components/cabinet';
 import { EmptyArt } from '@/components/DexCard';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
-import { Grain } from '@/components/Grain';
-import { HomeChrome } from '@/components/home/HomeChrome';
+import { HOME_BAR_HEIGHT, HomeChrome } from '@/components/home/HomeChrome';
 import { NotInDexYet, type NotInDexYetPick } from '@/components/home/NotInDexYet';
 import { TodaysPours } from '@/components/home/TodaysPours';
 import { PostCard } from '@/components/PostCard';
 import { useTabScroll } from '@/components/ScrollChrome';
 import { Button, EmptyState, Hold, Notice } from '@/components/ui';
-import { colors, layout, space, stroke, textRole } from '@/constants/theme';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import { notInDexYet } from '@/lib/cabinet';
-import { friendsPostedToday, isRenderablePost } from '@/lib/social';
-import { tournamentsHref } from '@/lib/tournaments';
+import { isRenderablePost } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { isLater, useSeen } from '@/store/seen';
@@ -29,27 +25,24 @@ import type { Post } from '@/types';
 /* ==================================================================== */
 /* Home                                                                 */
 /*                                                                      */
-/* The feed: a top bar (post on the left, the wordmark, Tournaments and */
-/* Activity on the right), the stories rail, then the posts of the      */
-/* people you follow and your own, newest first, each a framed print.  */
+/* The feed (layout spec 5.1; Jan: "I want less stuff"): the wordmark   */
+/* and the Activity bell, the stories, then the posts of the people you */
+/* follow and your own, newest first. 27 elements at rest: the bar 2,   */
+/* five whole story rings and their names 10 (a sixth peeking in the    */
+/* margin 2), a post 7 (print, name, author, heart, count, save, •••),  */
+/* the next print's top 1 and the tab bar 5.                            */
 /*                                                                      */
-/* ONE WINE BAND, A SHELF, THEN PAPER. The bar and the rail are the     */
-/* cabinet's lining, read as one band from the status bar down past the */
-/* circles; the feed under it is paper, because you read on paper. The  */
-/* band ends in a walnut shelf with a brass rail (Brass D19), so the    */
-/* story circles stand on the back bar, and the shelf's 12pt shade      */
-/* hangs over the first post (the header is lifted above the cells for  */
-/* it). Under the wordmark's place, the dateline (graft 6): today's     */
-/* date, and how many friends have posted today.                        */
-/* Pulled past the top, the overscroll is lining too, not a cream gap.  */
-/* Twice down the feed (after the 5th and the 15th post) a second band  */
-/* shows drinks your friends posted that are not in your Dex yet.       */
+/* ALL PAGE, SEPARATED BY SPACE. No band, no shelf, no sunk gaps: the   */
+/* bar, the stories and the posts stand on the one white page, and two  */
+/* posts are set apart by 32 points of air (layout principle 3). Twice  */
+/* down the feed (after the 5th and the 15th post) a row shows drinks   */
+/* your friends posted that are not in your Dex yet.                    */
 /*                                                                      */
 /* THE BAR FLOATS. The list runs from the top of the screen and its     */
-/* header holds the bar's place in the band; the bar itself is laid     */
-/* over the list (HomeChrome), so it can slide away on scroll down and  */
-/* come back on scroll up, moved by the list's own native scroll        */
-/* events (ScrollChrome), never by a timer.                             */
+/* header holds the bar's place; the bar itself is laid over the list   */
+/* (HomeChrome), so it can slide away on scroll down and come back on   */
+/* scroll up, moved by the list's own native scroll events              */
+/* (ScrollChrome), never by a timer.                                    */
 /*                                                                      */
 /* NOTHING HERE ANIMATES IN. The first three posts used to fade up in a */
 /* stagger, and they were visible only once that entrance finished:     */
@@ -65,57 +58,12 @@ import type { Post } from '@/types';
  * never sent, so its footer says "the newest", not "every".
  */
 const FEED_CAP = 100;
-/** The interleaved bands follow these posts (1-based), and show only with two picks or more. */
+/** The "Not in your Dex yet" rows follow these posts (1-based), and show only with two picks or more. */
 const MODULE_AFTER: readonly number[] = [5, 15];
 const MODULE_MIN = 2;
 
-/** One row of the feed: a post, or a "Not in your Dex yet" band. */
-type Row =
-  | {
-      kind: 'post';
-      key: string;
-      post: Post;
-      /** A band follows: no sunk gap after this post, the band's own edge separates them. */
-      beforeModule: boolean;
-    }
-  | { kind: 'notYet'; key: string; picks: NotInDexYetPick[] };
-
-/**
- * The 12pt sunk gap between two posts, ruled top and bottom. Not next to
- * a band: the lining's own edge and shade do that job.
- */
-function FeedGap({ leadingItem }: { leadingItem?: Row }) {
-  if (!leadingItem || leadingItem.kind === 'notYet' || leadingItem.beforeModule) return null;
-  return <View style={styles.gap} />;
-}
-
-/** Same calendar day on the phone's clock. */
-function sameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-}
-
-/**
- * Today, for the dateline. Home is a tab and stays mounted overnight, so
- * "today" is read again whenever Home is focused or the app comes back to
- * the front, and kept as the same object while the day has not changed,
- * so nothing re-renders for it. No timer: the line only matters when
- * someone is looking at it, which is one of those two moments.
- */
-function useToday(): Date {
-  const [today, setToday] = useState(() => new Date());
-  const reread = useCallback(() => {
-    const now = new Date();
-    setToday((prev) => (sameDay(prev, now) ? prev : now));
-  }, []);
-  useFocusEffect(reread);
-  useEffect(() => {
-    const sub = AppState.addEventListener('change', (state) => {
-      if (state === 'active') reread();
-    });
-    return () => sub.remove();
-  }, [reread]);
-  return today;
-}
+/** One row of the feed: a post, or a "Not in your Dex yet" row. Each carries its own space below. */
+type Row = { kind: 'post'; key: string; post: Post } | { kind: 'notYet'; key: string; picks: NotInDexYetPick[] };
 
 export default function HomeScreen() {
   return (
@@ -132,7 +80,6 @@ function HomeFeed() {
   const myId = useAuth((s) => s.session?.user.id);
 
   const feed = useSocial((s) => s.feed);
-  const following = useSocial((s) => s.following);
   const profiles = useSocial((s) => s.profiles);
   const pours = useSocial((s) => s.pours);
   const poursStatus = useSocial((s) => s.poursStatus);
@@ -158,15 +105,11 @@ function HomeFeed() {
    */
   const visibleFeed = feed.filter(isRenderablePost);
 
-  const today = useToday();
-
-  const showTournaments = useTournaments((s) => s.supported);
-  const pendingInvites = useTournaments((s) => s.pendingInvites);
-
   const [refreshing, setRefreshing] = useState(false);
   /*
-   * Home's list drives the chrome: the tab bar's compaction and this
-   * screen's own bar. One native event, made once (ScrollChrome).
+   * Home's list drives this screen's own bar (it hides on scroll down and
+   * draws its rule once the feed runs under it). One native event, made
+   * once (ScrollChrome).
    */
   const { onScroll, scrollY } = useTabScroll('index');
 
@@ -175,10 +118,12 @@ function HomeFeed() {
   useScrollToTop(listRef);
 
   /*
-   * The trophy's dot is an invitation. Asked again each time Home is
-   * focused, so one that arrived while you were elsewhere shows when you
-   * come back; the tournament screens refetch after their own actions.
-   * A server without migration 020 answers by switching the trophy off.
+   * Tournament invitations, asked for each time Home is focused. The
+   * trophy left Home's bar (Profile's ••• carries Tournaments and the
+   * pending count now), but Home is the screen that opens with the app,
+   * so this keeps the store warm for that sheet and for Activity; the
+   * tournament screens refetch after their own actions. A server without
+   * migration 020 answers by switching tournaments off.
    */
   useFocusEffect(
     useCallback(() => {
@@ -194,7 +139,7 @@ function HomeFeed() {
 
   // After a failed load this is a full reload: refreshFeed checks feedError
   // itself, so the follow list that never arrived is fetched again. The
-  // trophy's dot is asked for again too; the spinner waits only for the feed.
+  // invitations are asked for again too; the spinner waits only for the feed.
   const onRefresh = useCallback(() => {
     if (!myId) return;
     setRefreshing(true);
@@ -208,8 +153,6 @@ function HomeFeed() {
   );
 
   const openLog = useCallback(() => router.navigate('/log'), [router]);
-
-  const openTournaments = useCallback(() => router.push(tournamentsHref()), [router]);
 
   const openFindFriends = useCallback(() => router.push('/find-friends'), [router]);
 
@@ -256,7 +199,7 @@ function HomeFeed() {
   if (!myId) return null;
 
   /*
-   * The heart's dot: a like or a follow newer than the last time Activity
+   * The bell's dot: a like or a follow newer than the last time Activity
    * was opened. Not before the seen marks have been read, so it never
    * shows for a moment at launch and then goes out.
    */
@@ -276,20 +219,11 @@ function HomeFeed() {
   const waiting = loadingFeed || (poursStatus === 'idle' && !feedError);
 
   /*
-   * The dateline's count: people you follow with a post today, from the
-   * posts on screen (no new request). Unknown while the feed has not come
-   * back, and after a failed load, so the line is then the date alone
-   * rather than a count of a feed it does not have.
-   */
-  const friendsPosted =
-    waiting || feedError ? undefined : friendsPostedToday(visibleFeed, following, myId, today);
-
-  /*
    * The feed's rows. The "Not in your Dex yet" picks are drinks other
    * people in this feed posted that are not in your collection (no new
-   * query); the second band skips the first's drinks. Not before the
-   * collection has been read from disk, or the first band would offer
-   * drinks you already have. Keys are by position, so a band stays the
+   * query); the second row skips the first's drinks. Not before the
+   * collection has been read from disk, or the first row would offer
+   * drinks you already have. Keys are by position, so a row stays the
    * same cell across refreshes.
    */
   const picks: NotInDexYetPick[][] = [];
@@ -305,55 +239,27 @@ function HomeFeed() {
     const slot = MODULE_AFTER.indexOf(i + 1);
     const chosen = slot >= 0 ? picks[slot] : undefined;
     const module = chosen && chosen.length >= MODULE_MIN ? chosen : null;
-    rows.push({ kind: 'post', key: post.id, post, beforeModule: !!module });
+    rows.push({ kind: 'post', key: post.id, post });
     if (module) rows.push({ kind: 'notYet', key: `notYet:${slot}`, picks: module });
   });
 
   const header = (
-    <View>
-      {/*
-        The overscroll above the band: a pull past the top shows lining,
-        not a cream gap above a wine band. Hung above the header's top edge,
-        outside the content, so it only shows when pulled.
-      */}
-      <View pointerEvents="none" style={styles.overscroll}>
-        <Grain tone="lining" />
-      </View>
-      <LiningBand>
-        {/* The bar's place in the band: HomeChrome draws the bar over it. */}
-        <View style={{ height: insets.top + layout.topBar }} />
-        {/*
-          Graft 6: the dateline, set under the wordmark as a paper sets its
-          date under the masthead. It scrolls with the band, under the bar.
-        */}
-        <View
-          accessible
-          // The middle dot is for the eye; spoken, it is a pause (the nameplate's rule).
-          accessibilityLabel={datelineText(today, friendsPosted).split(/\s*·\s*/).join(', ')}
-          style={styles.dateline}>
-          <Dateline date={today} friendsPosted={friendsPosted} />
-        </View>
-        <TodaysPours
-          myId={myId}
-          pours={pours}
-          status={poursStatus}
-          profiles={profiles}
-          seenHydrated={seenHydrated}
-          onPost={openLog}
-          onOpen={openPours}
-          onFindFriends={openFindFriends}
-        />
-      </LiningBand>
-      {/*
-        D19: the band's foot is a walnut shelf the circles stand on. Its
-        12pt shade hangs below it over the first post; the header is lifted
-        (ListHeaderComponentStyle) so the shade lies across the cell.
-      */}
-      <WalnutShelf />
+    <View style={styles.header}>
+      {/* The bar's place: HomeChrome draws the bar over it. */}
+      <View style={{ height: insets.top + HOME_BAR_HEIGHT }} />
+      <TodaysPours
+        myId={myId}
+        pours={pours}
+        status={poursStatus}
+        profiles={profiles}
+        seenHydrated={seenHydrated}
+        onPost={openLog}
+        onOpen={openPours}
+        onFindFriends={openFindFriends}
+      />
       {/*
         A refresh that fails over a feed already on screen says so here,
-        on paper under the band. The posts stay: they are still the last
-        good copy.
+        under the stories. The posts stay: they are still the last good copy.
       */}
       {feedError && visibleFeed.length > 0 ? (
         <Notice tone="error" style={styles.notice}>
@@ -379,19 +285,16 @@ function HomeFeed() {
 
   return (
     <View style={styles.screen}>
-      {/* The paper's grain, under the list: posts are transparent and sit on it. */}
-      <Grain />
       <Animated.FlatList
         ref={listRef}
         data={rows}
         renderItem={renderItem}
         keyExtractor={(row) => row.key}
-        ItemSeparatorComponent={FeedGap}
         /*
-         * A post is about a screen tall — a 4:5 print plus its
-         * author row, actions and caption — so the default window (10 items
-         * up front, 21 screens kept mounted) held twenty-odd full-size photos
-         * in memory to show one.
+         * A post is most of a screen tall — a 4:5 print plus its name line
+         * and actions — so the default window (10 items up front, 21
+         * screens kept mounted) held twenty-odd full-size photos in memory
+         * to show one.
          */
         initialNumToRender={2}
         maxToRenderPerBatch={2}
@@ -400,12 +303,10 @@ function HomeFeed() {
         scrollEventThrottle={16}
         style={styles.list}
         contentContainerStyle={{
-          // The tab bar floats over the feed, so the last post has to clear it.
+          // The tab bar is docked over the foot of the feed, so the last post has to clear it.
           paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
         }}
         ListHeaderComponent={header}
-        // Lifted over the first post, so the shelf's shade lies across it.
-        ListHeaderComponentStyle={styles.header}
         ListFooterComponent={footer}
         /*
          * Three states, never confused. A failed load used to fall through to
@@ -437,19 +338,15 @@ function HomeFeed() {
         }
         refreshControl={
           /*
-           * Bone, so the spinner reads on the lining it is pulled over. And
-           * lifted: UIKit keeps a scroll view's refresh control behind its
-           * content, where the overscroll lining (part of the content) would
-           * cover it. RN maps this zIndex onto the control's layer zPosition.
-           * Offset below the bar: the list starts at the top of the screen,
-           * so without it the spinner would turn under the status strip.
+           * Ink on the page. Offset below the bar: the list starts at the
+           * top of the screen, so without it the spinner would turn under
+           * the status strip and the bar laid over it.
            */
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor={colors.onLining}
-            progressViewOffset={insets.top + layout.topBar}
-            style={styles.refresh}
+            tintColor={colors.text}
+            progressViewOffset={insets.top + HOME_BAR_HEIGHT}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -458,10 +355,6 @@ function HomeFeed() {
       <HomeChrome
         scrollY={scrollY}
         unread={unread}
-        showTournaments={showTournaments}
-        pendingInvites={pendingInvites}
-        onPost={openLog}
-        onTournaments={openTournaments}
         onActivity={openActivity}
       />
     </View>
@@ -470,38 +363,18 @@ function HomeFeed() {
 
 /* ------------------------------------------------------------------ */
 
-/** How far above the band the overscroll lining reaches: past any pull. */
-const OVERSCROLL = 1000;
-
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
-  header: { zIndex: 1 },
-  /* Centred under the wordmark, at the gutters; the rail's own 10pt top keeps it off the circles. */
-  dateline: { paddingHorizontal: layout.gutter },
-  refresh: { zIndex: 2 },
-  overscroll: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: -OVERSCROLL,
-    height: OVERSCROLL,
-    backgroundColor: colors.lining,
-  },
-  // 12pt down, so the shelf's shade falls on paper rather than across the notice.
-  notice: { marginHorizontal: layout.gutter, marginTop: space.md },
-  gap: {
-    height: 12,
-    backgroundColor: colors.bgSunk,
-    borderTopWidth: stroke.edge,
-    borderBottomWidth: stroke.edge,
-    borderColor: colors.line,
-  },
+  // 24 from the story names to the first print (layout spec 5.1).
+  header: { paddingBottom: layout.group },
+  notice: { marginHorizontal: layout.gutter, marginTop: layout.group },
+  // The last post ends in its own space; the foot adds a little more before its words.
   footer: {
-    paddingTop: space.xxl,
+    paddingTop: space.sm,
     paddingHorizontal: layout.gutter,
     alignItems: 'center',
     gap: space.md,
   },
-  footerText: { ...textRole.prose, color: colors.textMuted, textAlign: 'center' },
+  footerText: { ...textRole.small, color: colors.textMuted, textAlign: 'center' },
 });

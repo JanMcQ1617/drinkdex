@@ -1,153 +1,31 @@
-import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { BrassPlate, formatPlateNumber, plateWidth, type PlateSize } from '@/components/brass/BrassPlate';
-import { LabelTag } from '@/components/brass/labels';
-import { DrinkName, VerticalFade } from '@/components/cabinet';
 import { Icon, type IconName } from '@/components/icons';
-import { fonts, onMedia, radius, space, stroke, tabular, textRole } from '@/constants/theme';
+import { fonts, onMedia, radius, stroke, tabular } from '@/constants/theme';
 
 /* ==================================================================== */
 /* Over a photograph                                                    */
 /*                                                                      */
-/* Everything v3 draws on top of a picture: the feed's nameplate, the   */
-/* number and status plates, the markers on grid tiles and the scrim    */
-/* under a status bar.                                                  */
+/* WHY SO LITTLE. Daylight puts no words on a picture: a drink's name   */
+/* hangs under its print as a wall label, so the nameplate, its two     */
+/* scrims, the status plaque and the top scrim are gone (white spec     */
+/* D5). What still sits on a photo is a mark that belongs to the photo  */
+/* itself: a gallery count or the video glyph, on a solid ink plate    */
+/* with onInk on it, measured against the plate (19.80:1), never        */
+/* against the picture, with a 1pt white ring for the dark ones.        */
 /*                                                                      */
-/* ONE INK, ON A SCRIM OR A SOLID PLAQUE. A photograph can be a blown   */
-/* out white tablecloth, so nothing here is drawn in a colour chosen    */
-/* for a ground. Text is onMedia.ink, only ever on scrim alpha >= 0.62  */
-/* (5.45:1 even over white) or on a solid plaque, because every tinted  */
-/* word fails there. This file may reference no `colors.` key, only     */
-/* `onMedia` (check-design rule 11), and check-contrast composites each */
-/* onMedia text colour over the white worst case.                       */
-/*                                                                      */
-/* Over Dynamic Type every label here caps at 1.3: they sit on media    */
-/* whose size does not grow with the text.                             */
+/* This file may reference no `colors.` key, only `onMedia` (check-     */
+/* design rule 11). Every label here caps at 1.3: it sits on media      */
+/* whose size does not grow with the text.                              */
 /* ==================================================================== */
 
-/** Height of the clear-to-scrimMid fade above a nameplate's content. */
-const NAMEPLATE_FADE = 96;
-/** The number plate and the status plaque: one row height. */
-const PLAQUE_H = 24;
 const MEDIA_CAP = 1.3;
-/** A plaque's word: 12pt. */
-const PLAQUE_TEXT = 12;
-/*
- * The nameplate's sides: 18 (was 16), so the brass corner bracket at
- * inset 8 to 11 (Brass D4) ends 7pt short of the first glyph.
- */
-const NAMEPLATE_SIDE = 18;
-/** Between the number plate and the status tag on the plates' row. */
-const PLATES_GAP = 6;
-const STATUS_ICON = 13;
-const STATUS_GAP = 5;
-
-/* ==================================================================== */
-/* Plates and plaques                                                   */
-/* ==================================================================== */
-
-/**
- * The number plate over a photograph. Since v3.3 Brass it is the solid
- * engraved plate (components/brass/BrassPlate.tsx), whose skin is
- * onMedia.plaque.brass: its ink is measured against the plate (6.79:1),
- * so its contrast no longer depends on the picture, as the translucent
- * marker's did. `lg` (default) on a nameplate, `sm` on a grid tile.
- * Not its own VoiceOver element: the nameplate (or the pours viewer's
- * footer) says "number 9".
- */
-export function MediaNumberPlate({ n, size = 'lg' }: { n: number; size?: PlateSize }) {
-  return <BrassPlate n={n} size={size} />;
-}
-
-type StatusSkin = { icon: IconName; label: string; strong: boolean };
-
-function statusSkin(inDex: boolean, pressable: boolean): StatusSkin {
-  if (inDex) return { icon: 'check', label: 'In your Dex', strong: false };
-  return pressable
-    ? { icon: 'plus', label: 'New to your Dex', strong: true }
-    : { icon: 'lock', label: 'Not in your Dex yet', strong: false };
-}
-
-/**
- * Whether this drink is in your Dex, on the neutral plaque.
- *
- * With `onPress` (the feed) it is a button: in, a check and "In your Dex";
- * not in, a plus and "New to your Dex" in SemiBold on a 1pt ink edge, the
- * one plaque that asks to be tapped. Spoken "Open <name> in the Dex", with
- * the hint "Not in your Dex yet" when it is not. 24pt with 10pt of hitSlop,
- * so 44 to the finger.
- *
- * Without `onPress` (the drink page's eyebrow) it is a statement: a check
- * and "In your Dex", or a lock and "Not in your Dex yet".
- */
-export function DexStatusPlaque({
-  inDex,
-  name,
-  onPress,
-}: {
-  inDex: boolean;
-  name: string;
-  onPress?: () => void;
-}) {
-  const skin = statusSkin(inDex, !!onPress);
-  /*
-   * v3.3 Brass D6: "In your Dex" is a bottle-label tag, label stock with a
-   * brassShade edge and a wine check, solid and audited as
-   * onMedia.plaque.label (12.73:1 against the label). The two "not yet"
-   * states keep the neutral plaque: the label means yours.
-   */
-  if (inDex) {
-    const tag = <LabelTag text={skin.label} size="md" />;
-    if (!onPress) return tag;
-    return (
-      <Pressable
-        onPress={onPress}
-        hitSlop={10}
-        accessibilityRole="button"
-        accessibilityLabel={`Open ${name} in the Dex`}
-        style={({ pressed }) => pressed && styles.pressed}>
-        {tag}
-      </Pressable>
-    );
-  }
-  const body = (
-    <>
-      <Icon name={skin.icon} size={STATUS_ICON} color={onMedia.ink} />
-      <Text
-        maxFontSizeMultiplier={MEDIA_CAP}
-        style={[styles.plaqueText, skin.strong ? styles.plaqueTextStrong : null, { color: onMedia.ink }]}>
-        {skin.label}
-      </Text>
-    </>
-  );
-  const box = [
-    styles.plaque,
-    {
-      backgroundColor: onMedia.plaque.neutral.fill,
-      borderColor: skin.strong ? onMedia.ink : onMedia.plaque.neutral.edge,
-    },
-  ];
-
-  if (!onPress) return <View style={box}>{body}</View>;
-  return (
-    <Pressable
-      onPress={onPress}
-      hitSlop={10}
-      accessibilityRole="button"
-      accessibilityLabel={`Open ${name} in the Dex`}
-      accessibilityHint={inDex ? undefined : 'Not in your Dex yet'}
-      style={({ pressed }) => [box, pressed && styles.pressed]}>
-      {body}
-    </Pressable>
-  );
-}
 
 /**
  * A small marker on a photo: a gallery count ("1/3"), the stack glyph or
- * the reel glyph. 22pt, the marker fill with a 1pt marker edge, onMedia.ink.
- * It speaks through the photo it sits on, so it is hidden from VoiceOver
- * even when it is laid over the photo as a sibling ("1/3" read on its own
- * says nothing). Given neither an icon nor text, it draws nothing.
+ * the reel glyph. 22pt, solid ink with a 1pt white ring. It speaks through
+ * the photo it sits on, so it is hidden from VoiceOver. Given neither an
+ * icon nor text, it draws nothing.
  */
 export function MediaMarker({ icon, text }: { icon?: IconName; text?: string }) {
   if (!icon && !text) return null;
@@ -167,149 +45,7 @@ export function MediaMarker({ icon, text }: { icon?: IconName; text?: string }) 
   );
 }
 
-/**
- * The scrim under a status bar and a back button over a photo: scrimMid at
- * the top fading to clear over `height` (default 120). Absolute, at the
- * top of the photo's frame.
- */
-export function TopScrim({ height = 120 }: { height?: number }) {
-  return (
-    <VerticalFade
-      from={onMedia.scrimMid}
-      to={onMedia.scrimClear}
-      style={[styles.topScrim, { height }]}
-    />
-  );
-}
-
-/* ==================================================================== */
-/* Nameplate                                                            */
-/* ==================================================================== */
-
-/**
- * A drink named on its photo: the feed post's label (specs/v3-cabinet.md
- * 7.3). Absolute, along the photo's foot, full width.
- *
- * Bottom up, inside 16pt sides and 18pt below: the meta line ("Fizz ·
- * Highball glass · New Orleans, USA"), the name in Playfair through
- * DrinkName (no line limit; it fits a long word to the line), then the
- * plates: the number, and at the right the status plaque.
- *
- * THE SCRIM NEEDS NO MEASUREMENT. A fixed 96pt fade (clear to scrimMid)
- * sits ABOVE the content, and the content box carries its own scrimMid to
- * scrimDeep gradient as an absolute-fill background, so however tall the
- * name grows (Dynamic Type, three lines) every glyph is on >= 0.62 from
- * the first frame. A single gradient sized to the content would need its
- * height first, and a mid stop placed for one line lands under the name
- * once it wraps.
- *
- * Taps outside its controls fall through to the photo (page turn, double
- * tap to like): the frame is `box-none`, and only the name and the status
- * plaque take a press. For VoiceOver the name, number and meta are one
- * button ("Ramos Gin Fizz, number 9. Fizz, Highball glass, New Orleans,
- * USA"), followed by the status plaque as its own button. The
- * status plaque is drawn absolutely, after that group, so it is read
- * second; the plates row keeps its width clear of it by arithmetic.
- *
- * `inDex` null (signed out, or not known yet) draws no status plaque.
- */
-export function Nameplate({
-  name,
-  number,
-  meta,
-  inDex,
-  onOpen,
-  frameWidth,
-}: {
-  name: string;
-  number: number;
-  meta: string;
-  inDex: boolean | null;
-  /** Opens /drink/[id]. */
-  onOpen: () => void;
-  /**
-   * The photo's width, when it is not the screen's: v3.3's inset print
-   * (Brass D5) is 24pt in from each edge. The name's measure follows it.
-   */
-  frameWidth?: number;
-}) {
-  const { width, fontScale } = useWindowDimensions();
-  // The meta line's middle dots are for the eye; spoken, they are pauses.
-  const spokenMeta = meta.split(/\s*·\s*/).filter(Boolean).join(', ');
-  const spoken = `${name}, number ${number}.${spokenMeta ? ` ${spokenMeta}` : ''}`;
-  /*
-   * The status tag sits right after the number plate (the Brass mock), on
-   * the plates' row: its left edge is worked out from the plate's width,
-   * so neither needs a layout pass. It is still drawn absolutely, after
-   * the name's group, so VoiceOver reads it second.
-   */
-  const tagLeft = NAMEPLATE_SIDE + plateWidth(formatPlateNumber(number), 'lg', fontScale) + PLATES_GAP;
-  const measure = (frameWidth ?? width) - NAMEPLATE_SIDE * 2;
-
-  return (
-    <View pointerEvents="box-none" style={styles.nameplate}>
-      {/*
-        The fade hangs from the body's top edge rather than stacking above it
-        in flow, so the two gradients meet on one shared edge at any pixel
-        offset (two edges laid out separately can leave a hairline of photo
-        between them on a fractional position).
-      */}
-      <VerticalFade from={onMedia.scrimClear} to={onMedia.scrimMid} style={styles.nameplateFade} />
-      <VerticalFade from={onMedia.scrimMid} to={onMedia.scrimDeep} style={StyleSheet.absoluteFill} />
-      <View
-        accessible
-        accessibilityRole="button"
-        accessibilityLabel={spoken}
-        accessibilityHint="Opens it in the Dex"
-        onAccessibilityTap={onOpen}
-        pointerEvents="box-none">
-        <View pointerEvents="none" style={styles.plates}>
-          <MediaNumberPlate n={number} />
-        </View>
-        <Pressable onPress={onOpen} hitSlop={8} style={styles.nameTap}>
-          <DrinkName
-            name={name}
-            role={textRole.nameplate}
-            measure={measure}
-            cap={MEDIA_CAP}
-            color={onMedia.ink}
-            style={styles.nameShadow}
-          />
-        </Pressable>
-        {meta ? (
-          // Wrapped so a tap on the words still reaches the photo beneath.
-          <View pointerEvents="none">
-            <Text maxFontSizeMultiplier={MEDIA_CAP} style={styles.meta}>
-              {meta}
-            </Text>
-          </View>
-        ) : null}
-      </View>
-      {inDex !== null ? (
-        <View pointerEvents="box-none" style={[styles.statusSlot, { left: tagLeft }]}>
-          <DexStatusPlaque inDex={inDex} name={name} onPress={onOpen} />
-        </View>
-      ) : null}
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  /* Plaques and plates */
-  plaque: {
-    minHeight: PLAQUE_H,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: STATUS_GAP,
-    paddingHorizontal: space.sm,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-  },
-  plaqueText: { fontFamily: fonts.bodyMedium, fontSize: PLAQUE_TEXT, lineHeight: 16 },
-  plaqueTextStrong: { fontFamily: fonts.bodySemiBold },
-  pressed: { opacity: 0.8 },
-
-  /* Marker */
   marker: {
     minWidth: 22,
     height: 22,
@@ -320,8 +56,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderRadius: radius.badge,
     borderWidth: stroke.edge,
-    borderColor: onMedia.markerEdge,
-    backgroundColor: onMedia.markerFill,
+    borderColor: onMedia.ring,
+    backgroundColor: onMedia.fill,
   },
   markerText: {
     fontFamily: fonts.bodyMedium,
@@ -329,29 +65,5 @@ const styles = StyleSheet.create({
     lineHeight: 14,
     color: onMedia.ink,
     ...tabular,
-  },
-
-  topScrim: { position: 'absolute', left: 0, right: 0, top: 0 },
-
-  /* Nameplate */
-  nameplate: { position: 'absolute', left: 0, right: 0, bottom: 0, paddingHorizontal: NAMEPLATE_SIDE, paddingBottom: 18 },
-  nameplateFade: { position: 'absolute', left: 0, right: 0, top: -NAMEPLATE_FADE, height: NAMEPLATE_FADE },
-  plates: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: PLATES_GAP },
-  statusSlot: { position: 'absolute', top: 0 },
-  nameTap: { alignSelf: 'flex-start', marginTop: 10 },
-  nameShadow: {
-    textShadowColor: onMedia.shadow,
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 10,
-  },
-  meta: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    lineHeight: 20,
-    marginTop: 2,
-    color: onMedia.ink,
-    textShadowColor: onMedia.shadow,
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 6,
   },
 });

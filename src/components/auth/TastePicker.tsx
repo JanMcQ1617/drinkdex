@@ -4,27 +4,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useStepTitleFocus } from '@/components/auth/AuthTitleBar';
 import { CatalogueFace } from '@/components/auth/CatalogueFace';
-import { DexStatusTag, dexStatusTagWidth, DrinkName, Mount, MOUNT, MountWindow, NumberPlate } from '@/components/cabinet';
+import { DrinkName, Print } from '@/components/cabinet';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { ScreenTopBar, TopBarTextButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { useScrollEdges } from '@/components/log/scrollEdges';
+import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { announce, Button, haptic } from '@/components/ui';
-import {
-  colors,
-  elevation,
-  fonts,
-  layout,
-  onMedia,
-  radius,
-  space,
-  stroke,
-  textRole,
-  type as typeScale,
-} from '@/constants/theme';
-import { formatDexNumber, getDrink } from '@/data';
-import { faceOf, fitScale, type Face, textWidth } from '@/lib/textFit';
-import { FIRST_TASTES, TASTES_TO_START, tasteMeta, tasteMetaSpoken } from '@/lib/tastes';
+import { colors, layout, onMedia, radius, space, stroke, textRole } from '@/constants/theme';
+import { getDrink } from '@/data';
+import { FIRST_TASTES, TASTES_TO_START, tasteMetaSpoken } from '@/lib/tastes';
 import { useSignInFlow } from '@/store/signInFlow';
 import type { Drink } from '@/types';
 
@@ -32,184 +20,66 @@ import type { Drink } from '@/types';
 /* What do you drink?                                                   */
 /*                                                                      */
 /* The signed-out Home's first step (specs/v3-2-mockups/signin-tastes): */
-/* a question, not a form. 24 re-lit catalogue photos lie loose in the  */
-/* lining; a tap mounts one in bone card stock with its number plate    */
-/* and "In your Dex", and a mini of it drops into the tray pinned above */
-/* the tab bar. Three picks turn the tray's words into Continue, which  */
+/* a question, not a form. 24 catalogue photos in the Dex's own grid    */
+/* (two columns, 24 apart, a square print and the name under it); a tap */
+/* picks one, and a print of it drops into the tray pinned above the    */
+/* tab bar. Three picks turn the tray's words into Continue, which      */
 /* leads to the ways in under the person's own three drinks. "Sign in"  */
 /* top right is every way in from the first frame, for anyone who has   */
 /* an account or would rather not pick.                                 */
 /*                                                                      */
+/* LESS STUFF (v4). The v3 card mounted a pick in card stock with its   */
+/* number plate and "In your Dex", and every print carried a + marker.  */
+/* Now a pick is said by one thing drawn over the print: a 2pt ink      */
+/* outline and an ink check plate in its corner (shape, not colour, as  */
+/* the Dex's number jump outlines a tile). The base-and-country line    */
+/* is spoken, not printed.                                              */
+/*                                                                      */
 /* The picks are only held (store/signInFlow) until the account exists, */
 /* and are put in the Dex as it does.                                   */
 /*                                                                      */
-/* NOTHING ANIMATES. A pick is a state change drawn in the same frame:  */
-/* the print becomes a mount and a slot becomes a mini. The photo's     */
-/* Image stays mounted through it, at one size, so the swap cannot      */
-/* reload or soften it (TasteCard). Each row has one height, worked out */
-/* from its names at this text size, never measured, so a pick never   */
-/* reflows the grid and the first frame is the final one.              */
-/* The tray swaps its words for Continue inside a fixed-height row.     */
-/* Press feedback is Pressable's own dim. The only thing that moves is  */
-/* native scrolling, and this list does NOT report to ScrollChrome: the */
-/* tab bar stays full, so the tray, placed for the full bar, never      */
-/* floats over a compacted one.                                         */
+/* NOTHING ANIMATES, AND NOTHING MOVES. A pick only lays the outline    */
+/* and the check over the print, so it never changes a cell's size and  */
+/* the grid never reflows; the photo's Image stays mounted at one size, */
+/* so it never reloads. The tray swaps its words for Continue inside a  */
+/* fixed-height row. Press feedback is Pressable's own dim.             */
 /*                                                                      */
-/* Memory: prints decode at about 198 x 206pt (594 x 618px from a 1024px*/
+/* Memory: prints decode at about 184pt square (552px from a 1024px     */
 /* photo), and the list mounts about a dozen at a time. The picker only */
 /* exists on Home and is unmounted while another tab is in front        */
 /* (SignInScreen), so it never sits behind that tab's photos.           */
 /* ==================================================================== */
 
-/** Every card's text caps here (spec 6.5, as a Dex card), which keeps two columns at every size. */
+/** Every card's name caps here (spec 6.5, as a Dex card), which keeps two columns at every size. */
 const CAP = 1.3;
-const COL_GAP = 12;
-const ROW_GAP = 14;
-/** The mockup's print, 198 x 206 at a 440pt width. */
-const PRINT_ASPECT = 206 / 198;
-/** The mount's clear mat around its window (mockup: 9pt, a step inside MOUNT.feature's 12). */
-const MOUNT_PAD = 9;
-/** The window is this much shorter than the print, which makes room for the plates in the same cell. */
-const WINDOW_CUT = 26;
-const PRINT_NAME_GAP = 10;
-const META_GAP = 2;
-const MOUNT_NAME_GAP = 8;
-const PLATES_GAP = 5;
-const PLATE_GAP = 6;
-/** DexStatusTag's and NumberPlate's own minimum heights (cabinet.tsx). */
-const TAG_H = 26;
-const PLATE_H = 20;
-const MARKER = 32;
+/** The Dex grid's own spacing (layout spec 5.2): 24 between columns and between rows. */
+const COL_GAP = layout.dexGap;
+const ROW_GAP = layout.dexLedge;
+const NAME_GAP = space.sm;
+/** The picked check's plate, inset 8 from the print's corner. */
+const CHECK = 28;
+/** The outline sits just outside the print, so it covers nothing of the photo. */
+const OUTLINE = stroke.ring;
 
-/** The tray: its row, and the slots in it (the mockup's 42 x 56 minis). */
+/** The tray: its row, and the square prints in it (DexThumb's mini). */
 const TRAY_PAD = 12;
 const TRAY_ROW = 56;
-const SLOT = { width: 42, height: 56 } as const;
+const SLOT = 44;
 const SLOT_GAP = 8;
 
-/* -------------------------------------------------------------------- */
-/* Cell geometry                                                         */
-/* -------------------------------------------------------------------- */
-
-/** Lines `text` takes at `size` in a `measure`-wide column, worked out word by word (textFit errs wide). */
-function lineCount(text: string, face: Face, size: number, measure: number): number {
-  const space = textWidth(' ', face, size);
-  let lines = 1;
-  let run = 0;
-  for (const word of text.split(/\s+/).filter(Boolean)) {
-    const w = textWidth(word, face, size);
-    if (run === 0) run = w;
-    else if (run + space + w <= measure) run += space + w;
-    else {
-      lines += 1;
-      run = w;
-    }
-  }
-  return lines;
-}
-
-/** A drink name's height as DrinkName draws it: its role, fitted to the measure, at the capped text size. */
-function nameHeight(name: string, role: { fontFamily: string; fontSize: number; lineHeight: number }, measure: number, s: number) {
-  const face = faceOf(role.fontFamily);
-  const fit = fitScale(name, face, role.fontSize * s, measure);
-  return lineCount(name, face, role.fontSize * s * fit, measure) * role.lineHeight * s * fit;
-}
-
-/**
- * textFit errs wide by about a fifth on these short Inter labels (the
- * mockup, set in the real face, fits "#0147" and "In your Dex" side by
- * side in a 178pt mount at 1x, where the estimate says 183). Taken back
- * here for the plates alone, so a 440pt phone does not reserve a second
- * plates row it never draws. If a phone ever disagrees, the row wraps and
- * the cell grows (cells take a minimum height), never overflows.
- */
-const PLATES_ESTIMATE = 0.85;
-
-/** The plates row under a mounted name: one row, or two when the number and the tag do not fit side by side. */
-function platesHeight(drink: Drink, measure: number, s: number, fontScale: number) {
-  const number = formatDexNumber(drink.dexNumber);
-  const plateW = 2 * stroke.edge + 10 + textWidth(number, 'inter', 11 * s) + 1.5 * number.length;
-  const both = plateW + PLATE_GAP + dexStatusTagWidth(true, false, fontScale);
-  return both * PLATES_ESTIMATE <= measure ? TAG_H : PLATE_H + PLATE_GAP + TAG_H;
-}
-
-interface CellMetrics {
-  width: number;
-  photoH: number;
-  windowW: number;
-  windowH: number;
-  /**
-   * Each row's one height: the taller of the print and the mount for both
-   * of its drinks, so a pick never reflows a row. Per row rather than one
-   * for the grid, so one long name does not pad every cell.
-   */
-  rowHeights: number[];
-}
-
-/** The cells' geometry at this window and text size. */
-function cellMetrics(windowWidth: number, fontScale: number): CellMetrics {
-  const s = Math.min(fontScale, CAP);
-  const width = Math.floor((windowWidth - 2 * layout.gutter - COL_GAP) / 2);
-  const photoH = Math.round(width * PRINT_ASPECT);
-  const windowW = width - 2 * (stroke.edge + MOUNT_PAD);
-  const windowH = photoH - WINDOW_CUT;
-
-  const cellHeight = (drink: Drink) => {
-    const meta = lineCount(tasteMeta(drink), 'inter', textRole.labelCaption.fontSize * s, width);
-    const print =
-      photoH +
-      PRINT_NAME_GAP +
-      nameHeight(drink.name, textRole.printName, width, s) +
-      META_GAP +
-      meta * textRole.labelCaption.lineHeight * s;
-    const mount =
-      2 * (stroke.edge + MOUNT_PAD) +
-      windowH +
-      MOUNT_NAME_GAP +
-      nameHeight(drink.name, textRole.cardName, windowW, s) +
-      PLATES_GAP +
-      platesHeight(drink, windowW, s, fontScale);
-    return Math.max(print, mount);
-  };
-
-  const rowHeights: number[] = [];
-  FIRST_TASTES.forEach((drink, i) => {
-    const row = Math.floor(i / 2);
-    rowHeights[row] = Math.ceil(Math.max(rowHeights[row] ?? 0, cellHeight(drink)));
-  });
-  return { width, photoH, windowW, windowH, rowHeights };
+/** A cell's width: two across the gutters, 24 apart, the Dex's 184 at 440. */
+function cellWidth(windowWidth: number): number {
+  return Math.floor((windowWidth - 2 * layout.gutter - COL_GAP) / 2);
 }
 
 /* -------------------------------------------------------------------- */
 /* A drink to pick                                                       */
 /* -------------------------------------------------------------------- */
 
-/** The + in a print's corner: the media marker's fill and edge, at the mockup's 32pt. Decorative. */
-function PlusMarker() {
-  return (
-    <View
-      pointerEvents="none"
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
-      style={styles.marker}>
-      <Icon name="plus" size={18} color={onMedia.ink} />
-    </View>
-  );
-}
-
 /**
- * One drink. Unpicked, a loose print in the lining (cabinet.tsx
- * LoosePrint's 4pt corner and printEdge) with its name in Playfair and its
- * base and country under it; picked, the same drink mounted (Mount's mat,
- * matEdge and seat) with the photo in a window, its number plate and "In
- * your Dex".
- *
- * Built from the cabinet's tokens rather than LoosePrint and Mount
- * themselves, ON PURPOSE: those are two different components, and a swap
- * between them would remount the photo, which reloads it. Here the frame,
- * the photo box and its Image are the same views in both states; only
- * their styles change. The Image keeps one size (the print's) and the
- * window crops it at its centre, so it never decodes again.
+ * One drink: its square print and its name. Picked, an ink outline round
+ * the print and an ink check plate in its corner; nothing else changes,
+ * so the photo never reloads and the row never reflows.
  *
  * One VoiceOver button: "Piña Colada, White rum, Puerto Rico", selected
  * when picked.
@@ -217,23 +87,14 @@ function PlusMarker() {
 const TasteCard = React.memo(function TasteCard({
   drink,
   picked,
-  m,
-  height,
+  side,
   onToggle,
 }: {
   drink: Drink;
   picked: boolean;
-  m: CellMetrics;
-  /**
-   * Its row's height (CellMetrics.rowHeights), as a minimum: the worked-out
-   * height holds both states, and a minimum means text that ever comes out
-   * wider than worked out grows the row rather than spilling out of it.
-   */
-  height: number;
+  side: number;
   onToggle: (drink: Drink) => void;
 }) {
-  const dx = (m.width - m.windowW) / 2;
-  const dy = (m.photoH - m.windowH) / 2;
   return (
     <Pressable
       onPress={() => onToggle(drink)}
@@ -241,54 +102,32 @@ const TasteCard = React.memo(function TasteCard({
       accessibilityLabel={`${drink.name}, ${tasteMetaSpoken(drink)}`}
       accessibilityState={{ selected: picked }}
       accessibilityHint={picked ? 'Takes it out of your Dex' : 'Adds it to your Dex'}
-      style={({ pressed }) => [{ width: m.width, minHeight: height }, pressed && styles.pressed]}>
-      <View style={[styles.frame, picked && [styles.mounted, elevation.seat]]}>
-        <View
-          style={[
-            styles.photo,
-            picked
-              ? { width: m.windowW, height: m.windowH, borderRadius: MOUNT.feature.windowRadius, borderColor: colors.windowEdge }
-              : { width: m.width, height: m.photoH },
-          ]}>
-          <CatalogueFace
-            drink={drink}
-            width={m.width}
-            height={m.photoH}
-            style={picked ? { position: 'absolute', left: -dx, top: -dy } : undefined}
-          />
-          {picked ? null : <PlusMarker />}
-        </View>
+      style={({ pressed }) => [{ width: side }, pressed && styles.pressed]}>
+      <View>
+        <Print width={side} height={side}>
+          <CatalogueFace drink={drink} width={side} height={side} />
+        </Print>
         {picked ? (
           <>
-            <DrinkName
-              name={drink.name}
-              role={textRole.cardName}
-              measure={m.windowW}
-              cap={CAP}
-              color={colors.text}
-              style={styles.mountName}
-            />
-            <View style={styles.plates}>
-              <NumberPlate n={drink.dexNumber} tone="mat" />
-              <DexStatusTag inDex />
+            <View pointerEvents="none" style={styles.outline} />
+            <View
+              pointerEvents="none"
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+              style={styles.check}>
+              <Icon name="check" size={18} color={onMedia.ink} />
             </View>
           </>
-        ) : (
-          <>
-            <DrinkName
-              name={drink.name}
-              role={textRole.printName}
-              measure={m.width}
-              cap={CAP}
-              color={colors.onLining}
-              style={styles.printName}
-            />
-            <Text maxFontSizeMultiplier={CAP} style={[textRole.labelCaption, styles.meta]}>
-              {tasteMeta(drink)}
-            </Text>
-          </>
-        )}
+        ) : null}
       </View>
+      <DrinkName
+        name={drink.name}
+        role={textRole.name}
+        measure={side}
+        cap={CAP}
+        color={colors.text}
+        style={styles.name}
+      />
     </Pressable>
   );
 });
@@ -302,23 +141,14 @@ function trayWords(n: number): string {
   return `${n} of ${TASTES_TO_START} · ${TASTES_TO_START - n === 1 ? 'one more' : 'two more'}`;
 }
 
-/** A slot in the tray: a mini of a picked drink, or the Dex's coupe pressed into the lining. */
+/** A slot in the tray: a print of a picked drink, or the wash square it will fill. */
 function TraySlot({ drinkId }: { drinkId?: string }) {
   const drink = getDrink(drinkId);
-  if (!drink) {
-    return (
-      <Mount state="slot" size="thumb" onLining style={styles.slot}>
-        <Icon name="dex" size={18} color={colors.onLiningFaint} />
-      </Mount>
-    );
-  }
-  const inset = 2 * (stroke.edge + MOUNT.thumb.padding);
+  if (!drink) return <View style={styles.slot} />;
   return (
-    <Mount state="mounted" size="thumb" onLining style={styles.slotMounted}>
-      <MountWindow height={SLOT.height - inset} state="mounted">
-        <CatalogueFace drink={drink} width={SLOT.width - inset} height={SLOT.height - inset} />
-      </MountWindow>
-    </Mount>
+    <Print width={SLOT} height={SLOT}>
+      <CatalogueFace drink={drink} width={SLOT} height={SLOT} />
+    </Print>
   );
 }
 
@@ -328,7 +158,18 @@ function TraySlot({ drinkId }: { drinkId?: string }) {
  * of one fixed height. Past three it shows the latest three and a "+2".
  * Text caps at 1.3 so the row never grows.
  */
-function TasteTray({ picks, bottom, onContinue }: { picks: readonly string[]; bottom: number; onContinue: () => void }) {
+function TasteTray({
+  picks,
+  bottom,
+  ruled,
+  onContinue,
+}: {
+  picks: readonly string[];
+  bottom: number;
+  /** The grid runs on under the tray: its 1pt rule. */
+  ruled: boolean;
+  onContinue: () => void;
+}) {
   const n = picks.length;
   const ready = n >= TASTES_TO_START;
   const shown = n > TASTES_TO_START ? picks.slice(-TASTES_TO_START) : picks;
@@ -341,8 +182,7 @@ function TasteTray({ picks, bottom, onContinue }: { picks: readonly string[]; bo
         : `Your Dex, ${n} of ${TASTES_TO_START} picked`;
 
   return (
-    <View style={[styles.tray, { paddingBottom: bottom }]}>
-      <Grain tone="lining" />
+    <View style={[styles.tray, ruled && styles.trayRuled, { paddingBottom: bottom }]}>
       <View style={styles.trayRow}>
         <View accessible accessibilityLabel={spoken} style={styles.trayLead}>
           <View style={styles.slots}>
@@ -350,19 +190,17 @@ function TasteTray({ picks, bottom, onContinue }: { picks: readonly string[]; bo
               <TraySlot key={shown[k] ?? `empty-${k}`} drinkId={shown[k]} />
             ))}
             {extra > 0 ? (
-              <View style={styles.extra}>
-                <Text maxFontSizeMultiplier={CAP} style={[textRole.statusWord, styles.extraText]}>
-                  {`+${extra}`}
-                </Text>
-              </View>
+              <Text maxFontSizeMultiplier={CAP} style={[textRole.small, styles.muted]}>
+                {`+${extra}`}
+              </Text>
             ) : null}
           </View>
           {ready ? null : (
             <View style={styles.trayWords}>
-              <Text maxFontSizeMultiplier={CAP} style={[textRole.sectionTitle, styles.trayTitle]}>
+              <Text maxFontSizeMultiplier={CAP} style={[textRole.bodyStrong, styles.ink]}>
                 Your Dex
               </Text>
-              <Text maxFontSizeMultiplier={CAP} style={[textRole.helper, styles.traySub]}>
+              <Text maxFontSizeMultiplier={CAP} style={[textRole.small, styles.muted]}>
                 {trayWords(n)}
               </Text>
             </View>
@@ -371,7 +209,7 @@ function TasteTray({ picks, bottom, onContinue }: { picks: readonly string[]; bo
         {ready ? (
           <Button
             label="Continue"
-            variant="onLining"
+            variant="primary"
             onPress={onContinue}
             accessibilityHint="Choose how to join Sipply"
             maxFontSizeMultiplier={CAP}
@@ -417,27 +255,31 @@ function toggle(drink: Drink) {
 
 export function TastePicker() {
   const insets = useSafeAreaInsets();
-  const { width, fontScale } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const picks = useSignInFlow((s) => s.picks);
   const continueTastes = useSignInFlow((s) => s.continueTastes);
   const signInFromTastes = useSignInFlow((s) => s.signInFromTastes);
-  const [scrolled, onScroll] = useScrolledPast();
+  /* The tray lies over the list, whose foot pads for it: the grid's end sits 24 above the tray. */
+  const edges = useScrollEdges(space.xl);
   const askRef = useRef<Text>(null);
   // Coming back from the ways in, VoiceOver lands on the question, not a control that has gone.
   useStepTitleFocus(askRef, 'tastes');
 
-  const m = cellMetrics(width, fontScale);
-  // The tray's words sit just above the full tab bar; the same sum pads the list's foot.
+  const side = cellWidth(width);
+  // The tray's words sit just above the tab bar; the same sum pads the list's foot.
   const trayBottom = insets.bottom + TAB_BAR_CLEARANCE;
   const trayHeight = TRAY_PAD + TRAY_ROW + trayBottom;
 
   return (
     <View style={styles.screen}>
-      <Grain tone="lining" />
+      {/*
+        Home's own bar, signed out: the wordmark set left at the gutter (as
+        HomeChrome sets it) and the one control right, here "Sign in".
+      */}
       <ScreenTopBar
         title="Sipply"
-        tone="lining"
-        showRule={scrolled}
+        size="lg"
+        showRule={edges.under}
         titleNode={
           <Text maxFontSizeMultiplier={1.2} style={[textRole.wordmark, styles.wordmark]}>
             Sipply
@@ -450,23 +292,17 @@ export function TastePicker() {
         keyExtractor={(d) => d.id}
         numColumns={2}
         extraData={picks}
-        renderItem={({ item, index }) => (
-          <TasteCard
-            drink={item}
-            picked={picks.includes(item.id)}
-            m={m}
-            height={m.rowHeights[Math.floor(index / 2)] ?? 0}
-            onToggle={toggle}
-          />
+        renderItem={({ item }) => (
+          <TasteCard drink={item} picked={picks.includes(item.id)} side={side} onToggle={toggle} />
         )}
         columnWrapperStyle={styles.columns}
         ItemSeparatorComponent={RowGap}
         ListHeaderComponent={
           <View style={styles.question}>
-            <Text ref={askRef} accessibilityRole="header" style={styles.ask}>
+            <Text ref={askRef} accessibilityRole="header" style={[textRole.title, styles.ink]}>
               What do you drink?
             </Text>
-            <Text style={[textRole.prose, styles.askSub]}>
+            <Text style={[textRole.body, styles.muted, styles.askSub]}>
               Tap three you’d order again. They start your Dex.
             </Text>
           </View>
@@ -476,74 +312,58 @@ export function TastePicker() {
         maxToRenderPerBatch={4}
         windowSize={5}
         removeClippedSubviews
-        onScroll={onScroll}
+        onScroll={edges.onScroll}
+        onLayout={edges.onLayout}
+        onContentSizeChange={edges.onContentSizeChange}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       />
-      <TasteTray picks={picks} bottom={trayBottom} onContinue={continueTastes} />
+      <TasteTray picks={picks} bottom={trayBottom} ruled={edges.moreBelow} onContinue={continueTastes} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.lining },
-  wordmark: { color: colors.onLining, textAlign: 'center' },
+  screen: { flex: 1, backgroundColor: colors.bg },
+  wordmark: { color: colors.text },
+  ink: { color: colors.text },
+  muted: { color: colors.textMuted },
 
-  question: { paddingHorizontal: layout.gutter, paddingTop: space.md, paddingBottom: space.lg },
-  ask: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.headline.fontSize,
-    lineHeight: typeScale.headline.lineHeight,
-    letterSpacing: -0.3,
-    color: colors.onLining,
-  },
-  askSub: { color: colors.onLiningMuted, marginTop: space.xs },
+  question: { paddingHorizontal: layout.gutter, paddingTop: space.sm, paddingBottom: space.xl },
+  askSub: { marginTop: space.xs },
 
   columns: { paddingHorizontal: layout.gutter, columnGap: COL_GAP },
   rowGap: { height: ROW_GAP },
   pressed: { opacity: 0.85 },
 
   /* TasteCard */
-  frame: { flex: 1, borderRadius: MOUNT.feature.radius },
-  // The edge and mat only when mounted: unpicked, the print runs to the cell's own edge.
-  mounted: {
-    backgroundColor: colors.mat,
-    borderWidth: stroke.edge,
-    borderColor: colors.matEdge,
-    padding: MOUNT_PAD,
+  name: { marginTop: NAME_GAP },
+  /* Drawn just outside the print's own edge, so it covers none of the photo. */
+  outline: {
+    position: 'absolute',
+    top: -OUTLINE,
+    left: -OUTLINE,
+    right: -OUTLINE,
+    bottom: -OUTLINE,
+    borderWidth: OUTLINE,
+    borderColor: colors.text,
   },
-  photo: {
-    overflow: 'hidden',
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.printEdge,
-    backgroundColor: colors.liningDeep,
-  },
-  marker: {
+  /* The solid ink plate, the one thing Daylight lays on a photo (onMedia), with its ring for a dark print. */
+  check: {
     position: 'absolute',
     top: space.sm,
     right: space.sm,
-    width: MARKER,
-    height: MARKER,
+    width: CHECK,
+    height: CHECK,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.badge,
     borderWidth: stroke.edge,
-    borderColor: onMedia.markerEdge,
-    backgroundColor: onMedia.markerFill,
-  },
-  printName: { marginTop: PRINT_NAME_GAP },
-  meta: { color: colors.onLiningMuted, marginTop: META_GAP },
-  mountName: { marginTop: MOUNT_NAME_GAP },
-  plates: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: PLATE_GAP,
-    marginTop: PLATES_GAP,
+    borderColor: onMedia.ring,
+    backgroundColor: onMedia.fill,
   },
 
-  /* TasteTray */
+  /* TasteTray: a bar at the foot, ruled only while the grid runs on under it. */
   tray: {
     position: 'absolute',
     left: 0,
@@ -551,27 +371,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     paddingTop: TRAY_PAD,
     paddingHorizontal: layout.gutter,
-    backgroundColor: colors.lining,
+    backgroundColor: colors.bg,
     borderTopWidth: stroke.edge,
-    borderTopColor: colors.liningLip,
-    ...elevation.sheet,
+    borderTopColor: 'transparent',
   },
-  trayRow: { height: TRAY_ROW, flexDirection: 'row', alignItems: 'center', columnGap: 14 },
-  trayLead: { flexDirection: 'row', alignItems: 'center', columnGap: 14, flexShrink: 1 },
+  trayRuled: { borderTopColor: colors.line },
+  trayRow: { height: TRAY_ROW, flexDirection: 'row', alignItems: 'center', columnGap: space.lg },
+  trayLead: { flexDirection: 'row', alignItems: 'center', columnGap: space.lg, flexShrink: 1 },
   slots: { flexDirection: 'row', alignItems: 'center', columnGap: SLOT_GAP },
-  slot: { width: SLOT.width, height: SLOT.height, alignItems: 'center', justifyContent: 'center' },
-  slotMounted: { width: SLOT.width, height: SLOT.height },
-  extra: {
-    minHeight: PLATE_H,
-    justifyContent: 'center',
-    paddingHorizontal: 5,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.plateEdgeLining,
-  },
-  extraText: { color: colors.onLiningMuted },
+  slot: { width: SLOT, height: SLOT, backgroundColor: colors.bgSunk },
   trayWords: { flexShrink: 1 },
-  trayTitle: { color: colors.onLining },
-  traySub: { color: colors.onLiningMuted },
   continue: { flex: 1 },
 });

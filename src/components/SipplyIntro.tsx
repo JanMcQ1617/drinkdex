@@ -23,11 +23,12 @@ import { colors, fonts, layout, textRole } from '@/constants/theme';
  * A port of the Sipply brand intro (`Sipp Brand Intro.dc.html` +
  * `sipp-video.jsx`), which authors three beats over 3.2s:
  *
- *   POUR    two circles — merlot behind, wine in front — swell from ~68%
- *           down-screen until they flood the bone ground. easeInOutSine.
+ *   POUR    two ink circles, one behind and one in front (the source's
+ *           two reds, both ink since v4 Daylight), swell from ~68%
+ *           down-screen until they flood the wash ground. easeInOutSine.
  *   REVEAL  the letters of "Sipply" pop in one at a time, 90ms apart,
  *           0.55 → 1 on an easeOutBack overshoot from a 50%/80% origin; a
- *           90×2 taupe rule fades in above them; the tagline rises 28pt.
+ *           90×2 rule fades in above them; the tagline rises 28pt.
  *   HOLD    the whole lockup drifts 1.0 → 1.035, breathing, and stops.
  *
  * Three departures from the source, all deliberate:
@@ -36,8 +37,8 @@ import { colors, fonts, layout, textRole } from '@/constants/theme';
  *    launch screen that outstays 3s is felt every single time the app is
  *    opened, so the rule and tagline land by 2.4s and the hold runs to 2.9s.
  *    The beats keep their proportions and their easings.
- *  - It exits by flooding, not by cutting. The source ends on wine and the
- *    app's page is cream, so a cream disc opens from the centre and
+ *  - It exits by flooding, not by cutting. The pour ends on ink and the
+ *    app's page is white, so a page-white disc opens from the centre and
  *    floods the frame — the app is simply what was underneath. Inherited
  *    from the intro this replaces, and the reason there is no visible seam.
  *  - The tagline is "Discover, sip, share" in sentence case, untracked,
@@ -65,8 +66,8 @@ import { colors, fonts, layout, textRole } from '@/constants/theme';
 
 /* ---- Timeline, in milliseconds ---------------------------------------- */
 const T = {
-  merlotIn: [150, 850],
-  wineIn: [400, 1050],
+  backIn: [150, 850],
+  frontIn: [400, 1050],
   glowIn: [900, 1400],
   /** First letter starts here; each subsequent one 90ms later. */
   letterFrom: 1000,
@@ -170,9 +171,9 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
   const reduced = useReducedMotion();
   const [gone, setGone] = useState(false);
   /*
-   * No status bar over the wine: the app's dark glyphs measure 1.53:1 on
-   * it. It comes back as the page starts to open rather than after, so on
-   * a home-button iPhone — where a hidden bar gives the page its 20pt
+   * No status bar over the pour: the app's dark glyphs vanish on its
+   * ink. It comes back as the page starts to open rather than after, so
+   * on a home-button iPhone — where a hidden bar gives the page its 20pt
    * back — the re-layout happens under the dissolve, not in plain sight.
    */
   const [opening, setOpening] = useState(false);
@@ -204,13 +205,13 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
 
     /*
      * The pour landing is the one moment worth feeling — it is where the
-     * wine circle finishes covering the frame.
+     * front circle finishes covering the frame.
      */
     let pourTimer: ReturnType<typeof setTimeout> | undefined;
     if (Platform.OS !== 'web' && !reduced) {
       pourTimer = setTimeout(() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-      }, T.wineIn[1]);
+      }, T.frontIn[1]);
     }
 
     const openTimer = setTimeout(() => setOpening(true), T.floodIn[0]);
@@ -240,12 +241,12 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
    * animating width/height would re-layout every frame.
    */
   const cx = W / 2;
-  const merlotCY = H * 0.68;
-  const wineCY = H * 0.7;
+  const backCY = H * 0.68;
+  const frontCY = H * 0.7;
   const reach = (cy: number) =>
     Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) * 2 * 1.04;
-  const merlotD = reach(merlotCY);
-  const wineD = reach(wineCY);
+  const backD = reach(backCY);
+  const frontD = reach(frontCY);
 
   /** The flood disc opens from the centre of the lockup. */
   const floodD = Math.hypot(cx, H / 2) * 2 * 1.04;
@@ -254,14 +255,14 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
 
   const rootStyle = useAnimatedStyle(() => ({ opacity: rootO.value }));
 
-  const merlotStyle = useAnimatedStyle(() => ({
+  const backStyle = useAnimatedStyle(() => ({
     transform: [
-      { scale: reduced ? 1 : sineInOut(seg(clock.value, T.merlotIn[0], T.merlotIn[1])) },
+      { scale: reduced ? 1 : sineInOut(seg(clock.value, T.backIn[0], T.backIn[1])) },
     ],
   }));
 
-  const wineStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: reduced ? 1 : sineInOut(seg(clock.value, T.wineIn[0], T.wineIn[1])) }],
+  const frontStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: reduced ? 1 : sineInOut(seg(clock.value, T.frontIn[0], T.frontIn[1])) }],
   }));
 
   const glowStyle = useAnimatedStyle(() => ({
@@ -322,14 +323,14 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
         style={[
           styles.circle,
           {
-            width: merlotD,
-            height: merlotD,
-            borderRadius: merlotD / 2,
-            left: cx - merlotD / 2,
-            top: merlotCY - merlotD / 2,
-            backgroundColor: colors.merlot,
+            width: backD,
+            height: backD,
+            borderRadius: backD / 2,
+            left: cx - backD / 2,
+            top: backCY - backD / 2,
+            backgroundColor: colors.text,
           },
-          merlotStyle,
+          backStyle,
         ]}
       />
       <Animated.View
@@ -337,14 +338,14 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
         style={[
           styles.circle,
           {
-            width: wineD,
-            height: wineD,
-            borderRadius: wineD / 2,
-            left: cx - wineD / 2,
-            top: wineCY - wineD / 2,
-            backgroundColor: colors.wine,
+            width: frontD,
+            height: frontD,
+            borderRadius: frontD / 2,
+            left: cx - frontD / 2,
+            top: frontCY - frontD / 2,
+            backgroundColor: colors.text,
           },
-          wineStyle,
+          frontStyle,
         ]}
       />
 
@@ -353,8 +354,8 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
         <Svg width="100%" height="100%">
           <Defs>
             <RadialGradient id="sipplyBloom" cx="50%" cy="35%" rx="120%" ry="90%">
-              <Stop offset="0" stopColor={colors.merlot} stopOpacity="0.35" />
-              <Stop offset="0.6" stopColor={colors.wine} stopOpacity="0" />
+              <Stop offset="0" stopColor={colors.text} stopOpacity="0.35" />
+              <Stop offset="0.6" stopColor={colors.text} stopOpacity="0" />
             </RadialGradient>
           </Defs>
           <Rect x="0" y="0" width="100%" height="100%" fill="url(#sipplyBloom)" />
@@ -388,8 +389,8 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
         <Svg width="100%" height="100%">
           <Defs>
             <RadialGradient id="sipplyVignette" cx="50%" cy="45%" rx="120%" ry="100%">
-              <Stop offset="0.62" stopColor={colors.lockInk} stopOpacity="0" />
-              <Stop offset="1" stopColor={colors.lockInk} stopOpacity="0.28" />
+              <Stop offset="0.62" stopColor={colors.text} stopOpacity="0" />
+              <Stop offset="1" stopColor={colors.text} stopOpacity="0.28" />
             </RadialGradient>
           </Defs>
           <Rect x="0" y="0" width="100%" height="100%" fill="url(#sipplyVignette)" />
@@ -426,7 +427,7 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
 
 const styles = StyleSheet.create({
   root: {
-    /* Bone — the ground the pour lands on. */
+    /* The wash: the ground the pour lands on. */
     backgroundColor: colors.bgSunk,
     overflow: 'hidden',
   },
@@ -445,21 +446,21 @@ const styles = StyleSheet.create({
   rule: {
     width: 90,
     height: 2,
-    backgroundColor: colors.taupe,
+    backgroundColor: colors.line,
   },
   word: { flexDirection: 'row', alignItems: 'baseline' },
   letter: {
     fontFamily: fonts.displayBold,
-    color: colors.textOnWine,
+    color: colors.onInk,
     /* The source pops each letter from its own foot, not its centre. */
     transformOrigin: '50% 80%',
   },
-  /* Inter Medium 13/18, taupe on wine (7.32:1); centred if a large text size wraps it. */
+  /* Inter Medium 13/18, onInkMuted on ink (7.85:1); centred if a large text size wraps it. */
   tagline: {
     fontFamily: fonts.bodyMedium,
     fontSize: textRole.helper.fontSize,
     lineHeight: textRole.helper.lineHeight,
-    color: colors.taupe,
+    color: colors.onInkMuted,
     textAlign: 'center',
     paddingHorizontal: layout.gutter,
   },

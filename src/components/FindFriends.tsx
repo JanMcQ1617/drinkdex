@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Linking, Share, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Linking, Share, StyleSheet, View } from 'react-native';
 
-import { LiningBand } from '@/components/cabinet';
 import { FacebookFriends } from '@/components/FacebookFriends';
-import { Icon } from '@/components/icons';
 import { InstagramImport } from '@/components/InstagramImport';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
-import { Button, Card, Field, Notice, SearchField, SectionHeader, announce } from '@/components/ui';
-import { colors, radius, space, stroke, textRole } from '@/constants/theme';
+import { FindNote, FindSection } from '@/components/profile/FindSection';
+import { Button, Field, Notice, SearchField, announce } from '@/components/ui';
+import { colors, layout, space } from '@/constants/theme';
 import { formatCount } from '@/data';
 import { hashPhone, normalizePhone, readContactHashes, requestContactsPermission } from '@/lib/contacts';
 import {
@@ -49,10 +48,10 @@ const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings,
  * because the order is the recommendation. Rendered by the Find friends
  * screen and by the welcome step at signup, so both open on contacts.
  *
- * Contacts lead, on the cabinet's lining: the one source that works for
- * every account, and the recommended path, so it is the focal panel of a
- * stack of white cards and holds its one filled button (bone on lining).
- * Six equal cards read as a wall of instructions with no way in.
+ * Contacts lead: the one source that works for every account, and the
+ * recommended path, so its key is the one ink key in the column and every
+ * other section's is the wash key. Six equal sections with six equal keys
+ * read as a wall of instructions with no way in.
  *
  * Facebook follows it because, for an account signed in with it, it asks
  * nothing more: the sign-in already said which of its friends are here.
@@ -213,7 +212,7 @@ export function FindFriends() {
   /* ---- discoverability ---- */
   /*
    * The saved number, not a boolean. Signup now collects this, so most
-   * accounts arrive already findable and this card's job is to SHOW that
+   * accounts arrive already findable and this section's job is to SHOW that
    * rather than ask again — which needs the value, and the server hash
    * cannot be read back.
    */
@@ -225,7 +224,7 @@ export function FindFriends() {
    * Shown, not swallowed. This used to be an empty catch commented
    * "surfaced by the store elsewhere", which was simply untrue —
    * setPhoneHash is a direct call and nothing was surfacing it. A failed
-   * save left the card looking exactly like an untouched one, so the only
+   * save left the section looking exactly like an untouched one, so the only
    * way to discover it had not worked was to query the database by hand.
    * Rendered in both states, because turning it OFF can fail too.
    */
@@ -259,7 +258,7 @@ export function FindFriends() {
           return value;
         })
         .catch(() => {
-          /* Unreadable storage reads as not saved; the card asks, which is safe. */
+          /* Unreadable storage reads as not saved; the section asks, which is safe. */
           return null;
         });
     void read().then(async (saved) => {
@@ -309,7 +308,7 @@ export function FindFriends() {
   /*
    * The privacy direction, so it gets the same care as saving: a busy
    * state against a second tap, and a failure said out loud. It used to
-   * have neither — an offline tap was an unhandled rejection and the card
+   * have neither — an offline tap was an unhandled rejection and the section
    * went on saying "You're findable" as if nothing had been asked.
    */
   const stopDiscoverable = useCallback(async () => {
@@ -346,66 +345,43 @@ export function FindFriends() {
   return (
     <View style={styles.wrap}>
       {/*
-        Contacts, the recommended path: a lining panel at the top of the
-        stack. Bone ink and bone controls on it (wine is 1.22:1 on lining).
-        The people it finds are listed on a white inset, as people are
-        everywhere else: their rows, avatars and Follow buttons are paper
-        components, and a face is never laid straight on the lining.
+        Contacts, the recommended path, first, with the column's one ink
+        key. The people it finds are listed straight under it, as rows of
+        people are everywhere else.
       */}
-      <LiningBand radius={12} style={styles.panel}>
-        <View style={styles.cardHead}>
-          <Icon name="users" size={20} color={colors.onLining} />
-          <SectionHeader title="Friends you already know" tone="lining" style={styles.cardTitle} />
-        </View>
-        <Text style={styles.panelBody}>
-          The fastest way to find people. Sipply checks your contacts against everyone here, with
-          nothing to set up on their side. Numbers are scrambled on your phone before they are
-          compared, and your address book is never uploaded.
-        </Text>
-
+      <FindSection
+        title="Friends you already know"
+        body="The fastest way to find people. Numbers are scrambled on your phone before they are compared, and your address book is never uploaded.">
         {contactsState === 'idle' ? (
-          <Button
-            label="Find from contacts"
-            variant="onLining"
-            icon="users"
-            block
-            onPress={findFromContacts}
-            style={styles.cardCta}
-          />
+          <Button label="Find from contacts" variant="primary" block onPress={findFromContacts} />
         ) : null}
 
         {contactsState === 'working' ? (
           <View style={styles.working}>
-            <ActivityIndicator color={colors.onLining} />
-            <Text style={styles.panelHint}>Checking your contacts…</Text>
+            <ActivityIndicator color={colors.text} />
+            <View style={styles.flex}>
+              <FindNote>Checking your contacts…</FindNote>
+            </View>
           </View>
         ) : null}
 
         {contactsState === 'denied' ? (
-          <View style={styles.deniedBox}>
-            <Text style={styles.panelBody}>{CONTACTS_OFF}</Text>
+          <>
+            <FindNote>{CONTACTS_OFF}</FindNote>
             <Button
               label="Open Settings"
-              variant="onLiningOutline"
+              variant="secondary"
               block
               onPress={() => Linking.openSettings()}
-              style={styles.cardCta}
             />
-          </View>
+          </>
         ) : null}
 
-        {/* A Notice carries its own fill and edge, so it reads the same on lining as on a card. */}
         {contactsState === 'failed' ? (
-          <View style={styles.deniedBox}>
+          <>
             <Notice tone="error">{contactsNotice}</Notice>
-            <Button
-              label="Try again"
-              variant="onLiningOutline"
-              block
-              onPress={findFromContacts}
-              style={styles.cardCta}
-            />
-          </View>
+            <Button label="Try again" variant="secondary" block onPress={findFromContacts} />
+          </>
         ) : null}
 
         {contactsState === 'limited' ? <Notice tone="error">{contactsNotice}</Notice> : null}
@@ -415,186 +391,115 @@ export function FindFriends() {
             {/* Only set when the quota ran out part way: what is listed is not everyone. */}
             {contactsNotice ? <Notice tone="error">{contactsNotice}</Notice> : null}
             {contactEntries.length > 0 ? (
-              <View style={styles.found}>
-                <MatchResults entries={contactEntries} />
-              </View>
+              <MatchResults entries={contactEntries} />
             ) : contactsNotice ? null : (
-              <Text style={styles.panelBody}>{contactsEmptyText}</Text>
+              <FindNote>{contactsEmptyText}</FindNote>
             )}
           </>
         ) : null}
-      </LiningBand>
+      </FindSection>
 
       <FacebookFriends />
 
-      {/* Discoverability */}
-      <Card style={styles.card}>
-        <View style={styles.cardHead}>
-          {/* The check is earned: it appears once the user actually is findable. */}
-          <Icon name={savedPhone ? 'check' : 'eye'} size={20} color={colors.text} />
-          <SectionHeader title="Let friends find you" style={styles.cardTitle} />
-        </View>
-        {savedPhone ? (
-          <>
-            <Text style={styles.cardBody}>
-              You’re findable by contacts. Your number is stored scrambled and never shown to
-              anyone.
-            </Text>
-            {phoneError ? <Notice tone="error">{phoneError}</Notice> : null}
-            {/* The way back out of being findable: a quiet text button, muted. */}
-            <Button
-              label="Stop being findable"
-              variant="text"
-              muted
-              block
-              loading={stoppingPhone}
-              onPress={stopDiscoverable}
-              style={styles.cardCta}
-            />
-          </>
-        ) : (
-          <>
-            <Text style={styles.cardBody}>
-              Add your number so friends who already have it can find you here. It is stored
-              scrambled and never shown to anyone.
-            </Text>
-            {/* A visible label, not a placeholder standing in for one; see Field. */}
-            <Field
-              label="Your phone number"
-              value={phone}
-              onChangeText={setPhone}
-              inputMode="tel"
-              autoComplete="tel"
-              textContentType="telephoneNumber"
-              accessibilityLabel="Your phone number, to be findable by contacts"
-            />
-            {phoneError ? <Notice tone="error">{phoneError}</Notice> : null}
-            <Button
-              label="Make me findable"
-              variant="secondary"
-              block
-              loading={savingPhone}
-              disabled={phone.replace(/\D/g, '').length < 7}
-              onPress={saveDiscoverable}
-              style={styles.cardCta}
-            />
-          </>
-        )}
-      </Card>
+      {/* Discoverability. Whether you are findable is said in words, not by a glyph. */}
+      {savedPhone ? (
+        <FindSection
+          title="Let friends find you"
+          body="You’re findable by contacts. Your number is stored scrambled and never shown to anyone.">
+          {phoneError ? <Notice tone="error">{phoneError}</Notice> : null}
+          {/* The way back out of being findable: a quiet text key, muted. */}
+          <Button
+            label="Stop being findable"
+            variant="text"
+            muted
+            block
+            loading={stoppingPhone}
+            onPress={stopDiscoverable}
+          />
+        </FindSection>
+      ) : (
+        <FindSection
+          title="Let friends find you"
+          body="Add your number so friends who already have it can find you here. It is stored scrambled and never shown to anyone.">
+          {/* A visible label, not a placeholder standing in for one; see Field. */}
+          <Field
+            label="Your phone number"
+            value={phone}
+            onChangeText={setPhone}
+            inputMode="tel"
+            autoComplete="tel"
+            textContentType="telephoneNumber"
+            accessibilityLabel="Your phone number, to be findable by contacts"
+          />
+          {phoneError ? <Notice tone="error">{phoneError}</Notice> : null}
+          <Button
+            label="Make me findable"
+            variant="secondary"
+            block
+            loading={savingPhone}
+            disabled={phone.replace(/\D/g, '').length < 7}
+            onPress={saveDiscoverable}
+          />
+        </FindSection>
+      )}
 
       {/*
         Invite. The link is a custom-scheme deep link (see lib/invite.ts), so
-        it only works on a phone that already has Sipply. The card says
+        it only works on a phone that already has Sipply. The line says
         exactly that rather than promising a follow to someone the link
         cannot reach; the shared message carries the username to search.
       */}
-      <Card style={styles.card}>
-        <View style={styles.cardHead}>
-          <Icon name="share" size={20} color={colors.text} />
-          <SectionHeader title="Invite a friend" style={styles.cardTitle} />
-        </View>
-        <Text style={styles.cardBody}>
-          Share your link. If they already have Sipply, opening it makes you follow each other.
-        </Text>
+      <FindSection
+        title="Invite a friend"
+        body="Share your link. If they already have Sipply, opening it makes you follow each other.">
         {inviteError ? <Notice tone="error">{inviteError}</Notice> : null}
         <Button
           label="Share invite link"
-          icon="share"
           variant="secondary"
           block
           loading={inviting}
           disabled={!profile}
           onPress={invite}
-          style={styles.cardCta}
         />
-      </Card>
+      </FindSection>
 
-      {/* Search */}
-      <Card style={styles.card}>
-        <View style={styles.cardHead}>
-          <Icon name="search" size={20} color={colors.text} />
-          <SectionHeader title="Find by username" style={styles.cardTitle} />
-        </View>
-        {/* The app's one search field, on the card's cream so its edge shows. */}
+      {/* Search. The app's one search field, wash on the page. */}
+      <FindSection title="Find by username">
         <SearchField
           value={term}
           onChangeText={setTerm}
           placeholder="Search @username or name"
           accessibilityLabel="Search for people by username"
-          onCard
           trailing={
-            showSearch && searching ? (
-              <ActivityIndicator size="small" color={colors.wineSoft} />
-            ) : null
+            showSearch && searching ? <ActivityIndicator size="small" color={colors.text} /> : null
           }
         />
         {searchFailed ? (
-          <View style={styles.deniedBox}>
+          <>
             <Notice tone="error">{SEARCH_FAILED}</Notice>
             <Button
               label="Try again"
               variant="secondary"
               block
               onPress={() => setAttempt((n) => n + 1)}
-              style={styles.cardCta}
             />
-          </View>
+          </>
         ) : showSearch ? (
           <MatchResults
             entries={searchEntries}
             emptyText={searching ? undefined : 'No one by that name yet.'}
           />
         ) : null}
-      </Card>
+      </FindSection>
 
-      {/* Instagram */}
       <InstagramImport />
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: space.lg, paddingTop: space.sm },
-
-  card: { padding: space.lg, gap: space.md },
-  /* The contacts panel: a card's metrics, on lining. */
-  panel: { padding: space.lg, gap: space.md },
-  /*
-   * Each card opens on its glyph and a heading, in ink (bone on the
-   * panel): the cards are sections of one screen, and its fill is kept for
-   * what it asks you to do. Of the cards' own buttons only one is filled,
-   * "Find from contacts" on the panel, the path this screen recommends;
-   * the rest are outlined or text. Among the people a card finds, "Follow
-   * all" and "Follow back" are wine and a plain Follow is outlined
-   * (PeopleList), so a list of strangers is not a column of wine buttons.
-   */
-  cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  cardTitle: { flex: 1 },
-  cardBody: { ...textRole.helper, color: colors.textMuted },
-  // onLiningMuted: 6.79:1 on the lining, 5.77:1 on its brightest grain.
-  panelBody: { ...textRole.helper, color: colors.onLiningMuted },
-  /*
-   * The matched people on a white inset in the panel, at a list group's
-   * edge and a control's corner (inside the panel's 12).
-   */
-  found: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.control,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    paddingHorizontal: space.md,
-    paddingVertical: space.sm,
-  },
-  cardCta: { marginTop: space.xs },
-
+  // Sections parted by space alone (layout.section, 32), never by cards or rules.
+  wrap: { gap: layout.section, paddingTop: space.lg },
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
-  deniedBox: { gap: space.sm },
-  /*
-   * onLiningMuted, not onLiningFaint: 13pt progress text is small text,
-   * which the palette holds to 4.5:1, and Faint is for glyphs and large
-   * type only. No top padding either — the row centres it on its spinner,
-   * and padding pushed it 4pt below.
-   */
-  panelHint: { flex: 1, ...textRole.helper, color: colors.onLiningMuted },
+  flex: { flex: 1 },
 });

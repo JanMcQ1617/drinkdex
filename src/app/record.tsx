@@ -54,7 +54,7 @@ function RecordFlow({ onClose }: { onClose: () => void }) {
   const myId = useAuth((s) => s.session?.user.id);
   const [clip, setClip] = useState<RecordedClip | null>(null);
 
-  // Light glyphs on the dark camera, only once signed in (the sign-in screen is paper).
+  // Light glyphs on the dark camera, only once signed in (the sign-in screen is the white page).
   useFocusEffect(
     useCallback(() => {
       setStatusBarStyle('light');

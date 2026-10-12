@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from '@/components/icons';
-import { MediaNumberPlate } from '@/components/media';
-import { timeAgoSpoken } from '@/components/PostCard';
 import { useGridTile } from '@/components/profile/PostGrid';
 import {
   fetchProfileVideos,
@@ -18,6 +16,7 @@ import {
 import { haptic, PressableScale } from '@/components/ui';
 import { colors, fonts, layout, motion, radius, space, tabular } from '@/constants/theme';
 import { getDrink } from '@/data';
+import { timeAgoSpoken } from '@/lib/social';
 
 /* ==================================================================== */
 /* A profile's Reels tab                                                */
@@ -25,7 +24,11 @@ import { getDrink } from '@/data';
 /* Three portrait tiles to a row, the posts grid's width and gap, at the */
 /* 9:16 a reel is filmed in, so a poster is never cropped to a square   */
 /* that hides what was filmed. Everything it knows about reels comes     */
-/* through videosSource.                                                 */
+/* through videosSource. Reels are flagged off (REELS_ENABLED); this    */
+/* still compiles and draws on the reel ground for when they return.   */
+/*                                                                      */
+/* v4: no Nº plate on the poster, as on the posts grid (layout spec    */
+/* 5.5). The length stays: it is what says the tile is a video.        */
 /* ==================================================================== */
 
 const NO_VIDEOS: ProfileVideo[] = [];
@@ -119,8 +122,6 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
   const router = useRouter();
   const poster = usePosterUrl(video.posterPath);
   const drink = getDrink(video.drinkId);
-  // A reel tagged with a catalogue drink carries its plate, as a post tile does.
-  const number = drink && drink.dexNumber > 0 ? drink.dexNumber : null;
 
   return (
     <PressableScale
@@ -135,8 +136,7 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
       accessibilityLabel={VIDEO_COPY.tileLabel({
         durationMs: video.durationMs,
         ago: timeAgoSpoken(video.createdAt),
-        // "tagged Negroni, number 127": the plate, said.
-        drink: drink ? `${drink.name}${number !== null ? `, number ${number}` : ''}` : undefined,
+        drink: drink?.name,
       })}
       style={[styles.tile, { width }]}>
       {/*
@@ -146,6 +146,7 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
       */}
       {poster ? (
         <Image
+          accessibilityIgnoresInvertColors
           source={{ uri: poster, cacheKey: `${video.posterPath}#${Math.round(width)}` }}
           /*
            * Keyed on the path: a signed URL is new every hour, the poster
@@ -166,19 +167,10 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
       ) : null}
       {/*
         The length, bottom left, on a dark band rather than over the bare
-        poster: bone type over a bright frame would vanish. The band is a
+        poster: white type over a bright frame would vanish. The band is a
         flat scrim, no gradient, so the figures sit on a known ground.
-
-        The drink's brass plate (v3.3 Brass D1) stands just above the band,
-        6pt in, laid out in one column with it so the two never meet at any
-        text size. Solid brass, so it needs no scrim of its own.
       */}
       <View style={styles.foot} pointerEvents="none">
-        {number !== null ? (
-          <View style={styles.plate}>
-            <MediaNumberPlate n={number} size="sm" />
-          </View>
-        ) : null}
         <View style={styles.band}>
           <Icon name="play" size={14} color={colors.reelInk} filled />
           <Text style={styles.duration} maxFontSizeMultiplier={1.3}>
@@ -191,7 +183,12 @@ function VideoGridTile({ video, width }: { video: ProfileVideo; width: number })
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', gap: layout.gridGap, marginTop: layout.gridGap },
+  row: {
+    flexDirection: 'row',
+    gap: layout.gridGap,
+    marginTop: layout.gridGap,
+    paddingHorizontal: layout.gutter,
+  },
   tile: {
     aspectRatio: 9 / 16,
     borderRadius: radius.none,
@@ -200,7 +197,6 @@ const styles = StyleSheet.create({
   },
   poster: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
   foot: { position: 'absolute', left: 0, right: 0, bottom: 0 },
-  plate: { marginLeft: 6, marginBottom: 6 },
   band: {
     minHeight: 32,
     flexDirection: 'row',

@@ -1,35 +1,46 @@
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
-import { Grain } from '@/components/Grain';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
+import { ActionSheet, type SheetAction } from '@/components/Sheet';
 import { EmptyState, Hold } from '@/components/ui';
 import { colors, space } from '@/constants/theme';
+import { formatCount } from '@/data';
+import { shareProfile } from '@/lib/profileLink';
 import { toProfile } from '@/lib/social';
+import { tournamentsHref } from '@/lib/tournaments';
 import { useAuth } from '@/store/auth';
+import { useTournaments } from '@/store/tournaments';
 
 /* ==================================================================== */
 /* Your profile                                                         */
 /*                                                                      */
 /* Always you. Someone else's profile is its own screen, app/user/[id],  */
-/* pushed over the tabs; it used to be a `user` param on this tab, which */
-/* lit Profile in the tab bar while another person was on screen. Both   */
-/* now draw the same ProfileView, so yours shows what other people see.  */
+/* pushed over the tabs. Both draw the same ProfileView, so yours shows  */
+/* what other people see.                                                */
 /*                                                                      */
-/* Settings is the gear, top right, as the docs describe it. Reset, sign */
-/* out, delete and the find-me controls live there; account deletion is  */
-/* still two taps from here, which is what Apple asks for. Find friends  */
-/* is not in this header (v3.1 took the button beside Share profile      */
-/* away): it is in Settings, on Home's stories rail ("Find friends"),    */
-/* and in every empty state that offers it.                              */
+/* v4: the bar holds the handle and one •••, nothing else (layout spec   */
+/* 5.5). Posting is the + tab; the gear and Share profile are rows of    */
+/* the •••: Share profile, Settings, Tournaments while the server has    */
+/* them, About. Account deletion is still two taps from here (•••,       */
+/* Settings, then the row), which is what Apple asks for, and its flow   */
+/* in Settings is unchanged.                                             */
 /*                                                                      */
-/* The list is the Profile tab's scroll source (chromeTab), so scrolling */
-/* it compacts the tab bar as Home, Dex and My Bar do.                   */
+/* Tournaments moved here from Home's bar (and Activity's invitations    */
+/* still lead to them), so this screen asks the server on focus, as     */
+/* Home did: a server without migration 020 answers by switching the    */
+/* row off, and pending invitations show as its detail line.            */
+/*                                                                      */
+/* The list is the Profile tab's scroll source (chromeTab).              */
 /* ==================================================================== */
+
+/** "1 invitation", "2 invitations". */
+const invitations = (n: number) => `${formatCount(n)} ${n === 1 ? 'invitation' : 'invitations'}`;
 
 function OwnProfile() {
   const insets = useSafeAreaInsets();
@@ -40,14 +51,26 @@ function OwnProfile() {
   const profileLoading = useAuth((s) => s.profileLoading);
   const profileError = useAuth((s) => s.profileError);
   const refreshProfile = useAuth((s) => s.refreshProfile);
+  const tournaments = useTournaments((s) => s.supported);
+  const pendingInvites = useTournaments((s) => s.pendingInvites);
+  const [fallbackMenu, setFallbackMenu] = useState(false);
 
-  // Posting is the most frequent action, so + goes straight to the sheet.
-  const left = (
-    <TopBarButton icon="plus" label="Post a drink" onPress={() => router.navigate('/log')} />
+  useFocusEffect(
+    useCallback(() => {
+      if (myId) void useTournaments.getState().load();
+    }, [myId]),
   );
-  const right = (
-    <TopBarButton icon="settings" label="Settings" onPress={() => router.push('/settings')} />
-  );
+
+  const settings: SheetAction = { label: 'Settings', onPress: () => router.push('/settings') };
+  const tournamentsRow: SheetAction[] = tournaments
+    ? [
+        {
+          label: 'Tournaments',
+          detail: pendingInvites > 0 ? invitations(pendingInvites) : undefined,
+          onPress: () => router.push(tournamentsHref()),
+        },
+      ]
+    : [];
 
   /*
    * A profile already on screen stays there while it refreshes (an edit,
@@ -55,12 +78,17 @@ function OwnProfile() {
    * against the session, so the previous account's row never stands in.
    */
   if (profile && profile.id === myId) {
+    const person = toProfile(profile);
     return (
       <ProfileView
-        person={toProfile(profile)}
+        person={person}
         isOwn
-        left={left}
-        right={right}
+        menu={(about) => [
+          { label: 'Share profile', onPress: () => shareProfile(person) },
+          settings,
+          ...tournamentsRow,
+          about,
+        ]}
         bottomInset={insets.bottom + TAB_BAR_CLEARANCE + space.md}
         chromeTab="profile"
       />
@@ -70,18 +98,17 @@ function OwnProfile() {
   /*
    * A signed-in user with no profile row used to render nothing at all,
    * which looked exactly like a screen that had failed to load. The bar
-   * stays, so Post a drink and Settings (and sign out) are reachable either
-   * way, and the body says which of the two it is.
-   */
-  /*
-   * Paper grain under it all, now that the app has no global grain; the
-   * Hold is the slot kind (no fill of its own), centred here, so the
-   * grained page shows behind the spinner instead of a flat cream sheet.
+   * stays, with its ••• holding Settings (and so sign out) either way, and
+   * the body says which of the two it is.
    */
   return (
     <View style={styles.screen}>
-      <Grain />
-      <ScreenTopBar size="lg" title="" left={left} right={right} showRule={false} />
+      <ScreenTopBar
+        size="lg"
+        title=""
+        right={<TopBarButton icon="more" label="Profile options" onPress={() => setFallbackMenu(true)} />}
+        showRule={false}
+      />
       {profileError && !profileLoading ? (
         /*
          * Not "check your connection": after three attempts a missing row
@@ -102,6 +129,11 @@ function OwnProfile() {
           <Hold fill={false} slowMessage="Still loading your profile." />
         </View>
       )}
+      <ActionSheet
+        visible={fallbackMenu}
+        onClose={() => setFallbackMenu(false)}
+        actions={[settings, ...tournamentsRow]}
+      />
     </View>
   );
 }

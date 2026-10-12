@@ -30,7 +30,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
-import { ABV_FLOOR, abvBelowFloor } from './lib/dex-merge.mjs';
+import { abvBelowFloor } from './lib/dex-merge.mjs';
 
 const DRINKS = new URL('../src/data/drinks.json', import.meta.url);
 const dry = process.argv.includes('--dry');

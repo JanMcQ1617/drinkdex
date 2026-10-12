@@ -10,7 +10,7 @@ import Animated, {
 
 import { Icon, type IconName } from '@/components/icons';
 import { haptic } from '@/components/ui';
-import { colors, fonts, layout, motion, stroke, type as typeScale } from '@/constants/theme';
+import { colors, fonts, layout, motion, stroke, textRole } from '@/constants/theme';
 
 export interface TabStripItem<K extends string> {
   key: K;
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
   itemPressed: { opacity: 0.6 },
   label: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
+    fontSize: textRole.body.fontSize,
+    lineHeight: textRole.body.lineHeight,
   },
   // Laid over the rule, so the active tab's 2pt line replaces 1pt of it.
   underline: {

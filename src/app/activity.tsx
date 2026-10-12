@@ -5,25 +5,28 @@ import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { Print } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
-import { Grain } from '@/components/Grain';
+import { Icon } from '@/components/icons';
 import { FollowButton } from '@/components/PeopleList';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { Avatar, EmptyState, haptic, Hold, Notice, PressableScale, SectionHeader } from '@/components/ui';
-import { colors, fonts, layout, motion, radius, space, stroke, textRole } from '@/constants/theme';
-import { getDrink } from '@/data';
+import { colors, fonts, layout, motion, radius, space, textRole } from '@/constants/theme';
+import { formatCount, getDrink } from '@/data';
 import { fetchActivity, fetchProfiles } from '@/lib/social';
+import { tournamentsHref } from '@/lib/tournaments';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
 import { isLater, laterOf, useSeen } from '@/store/seen';
 import { mergeProfiles, useSocial } from '@/store/social';
+import { useTournaments } from '@/store/tournaments';
 import type { ActivityItem, UserProfile } from '@/types';
 
 /* ==================================================================== */
 /* Activity                                                             */
 /*                                                                      */
-/* Where Home's heart goes: likes on your posts and new followers,      */
+/* Where Home's bell goes: likes on your posts and new followers,       */
 /* newest first, from the last 30 days. Built from the likes and        */
 /* follows tables as they are; nothing new is stored or fetched.        */
 /*                                                                      */
@@ -36,11 +39,17 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* "New" is everything since you last opened this screen, by the mark   */
 /* in the seen store, which lives on this phone only. The mark is taken */
 /* once, as the screen opens, and moved on once the rows have loaded,   */
-/* so what was new stays under "New" while you read it and the heart's  */
-/* dot on Home goes out. New is said three ways: the group header in    */
-/* ink rather than muted, its place first, and a 2pt wine edge at each  */
-/* new row's leading side (Home's stories say unseen with a ring; a row */
-/* has no circle to ring, so it takes the edge).                        */
+/* so what was new stays under "New" while you read it and the bell's   */
+/* dot on Home goes out. New is said by its group header, in ink rather */
+/* than muted, and by its place first.                                  */
+/*                                                                      */
+/* TOURNAMENT INVITATIONS. Home's trophy went with v4's less-stuff      */
+/* layout, so an open invitation is news here: one row at the top,      */
+/* "2 tournament invitations", that opens the Tournaments list (as      */
+/* Profile's ••• does). Only while the server has tournaments at all.   */
+/*                                                                      */
+/* DAYLIGHT. Rows 64 on the page, separated by space, not rules: faces, */
+/* the sentence in body, the liked photo as a square print.             */
 /* ==================================================================== */
 
 export default function ActivityScreen() {
@@ -72,7 +81,8 @@ type Entry = { kind: 'likes'; likes: LikeItem[] } | { kind: 'follow'; item: Foll
 
 type Row =
   | { kind: 'header'; key: string; title: string; strong: boolean }
-  | (Entry & { key: string; first: boolean; fresh: boolean });
+  | { kind: 'invites'; key: string; count: number }
+  | (Entry & { key: string });
 
 /**
  * A section's items as rows: every like on one post folded into one entry,
@@ -133,6 +143,9 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
   const toggleFollow = useSocial((s) => s.toggleFollow);
   const activityLatestAt = useSocial((s) => s.activityLatestAt);
   const markActivitySeen = useSeen((s) => s.markActivitySeen);
+  const tournamentsOn = useTournaments((s) => s.supported);
+  const pendingInvites = useTournaments((s) => s.pendingInvites);
+  const loadTournaments = useTournaments((s) => s.load);
 
   // The mark as it stood when the screen opened: it decides "New" for this visit.
   const [seenAtOnOpen] = useState(() => useSeen.getState().activity[myId]);
@@ -176,7 +189,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
   /*
    * Opened means seen: once the rows are in, the mark moves to the newest
    * of them (or to the newest the Home badge knew of, if that is later),
-   * which puts the dot on Home's heart out. On focus, so coming back here
+   * which puts the dot on Home's bell out. On focus, so coming back here
    * from a post marks anything that arrived meanwhile.
    */
   useFocusEffect(
@@ -187,6 +200,13 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
     }, [items, activityLatestAt, markActivitySeen, myId]),
   );
 
+  // The invitations row's count, fresh each time the screen comes into view (answering one comes back here).
+  useFocusEffect(
+    useCallback(() => {
+      void loadTournaments();
+    }, [loadTournaments]),
+  );
+
   const retry = () => {
     setLoaded(null);
     setAttempt((a) => a + 1);
@@ -195,6 +215,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
   const onRefresh = () => {
     setReloading(true);
     setAttempt((a) => a + 1);
+    void loadTournaments();
   };
 
   const openPerson = (id: string) => {
@@ -213,20 +234,24 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
   const fresh = visible.filter(isNew);
   const earlier = visible.filter((i) => !isNew(i));
   const rows: Row[] = [];
+  if (tournamentsOn && pendingInvites > 0) rows.push({ kind: 'invites', key: 'invites', count: pendingInvites });
   const section = (title: string, list: ActivityItem[], isFresh: boolean) => {
     if (list.length === 0) return;
     rows.push({ kind: 'header', key: `header:${title}`, title, strong: isFresh });
-    groupByPost(list).forEach((entry, n) => {
+    groupByPost(list).forEach((entry) => {
       // A post can have likes in both sections, so its key carries the section.
       const key =
         entry.kind === 'likes' ? `likes:${title}:${entry.likes[0]!.postId}` : entry.item.key;
-      rows.push({ ...entry, key, first: n === 0, fresh: isFresh });
+      rows.push({ ...entry, key });
     });
   };
   section('New', fresh, true);
   section('Earlier', earlier, false);
 
   const renderItem = ({ item: row }: { item: Row }) => {
+    if (row.kind === 'invites') {
+      return <InvitesRow count={row.count} onPress={() => router.push(tournamentsHref())} />;
+    }
     if (row.kind === 'header') {
       return (
         <SectionHeader
@@ -242,8 +267,6 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
         <LikesRow
           likes={row.likes}
           people={row.likes.map((l) => profiles[l.actorId]!)}
-          first={row.first}
-          fresh={row.fresh}
           onOpenPerson={openPerson}
           onOpenPost={openPost}
         />
@@ -254,8 +277,6 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
       <FollowRow
         item={row.item}
         person={person}
-        first={row.first}
-        fresh={row.fresh}
         following={following.includes(person.id)}
         onToggleFollow={() => void toggleFollow(myId, person.id)}
         onOpenPerson={openPerson}
@@ -263,10 +284,30 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
     );
   };
 
+  /* What the list says when there is no activity to show: loading, failed, or none yet. */
+  const empty =
+    loaded === null ? (
+      reloading ? null : (
+        <Hold fill={false} slowMessage="Still loading activity." />
+      )
+    ) : loaded.status === 'failed' ? (
+      <EmptyState
+        icon="alert"
+        title="Could not load activity"
+        body="Check your connection and try again."
+        actionVariant="secondary"
+        action={{ label: 'Try again', onPress: retry }}
+      />
+    ) : (
+      <EmptyState
+        icon="heart"
+        title="No activity yet"
+        body="When someone likes your post or follows you, it shows up here."
+      />
+    );
+
   return (
     <View style={styles.screen}>
-      {/* The page's own grain, under everything: there is no global grain any more. */}
-      <Grain />
       <ScreenTopBar
         title="Activity"
         showRule={scrolled}
@@ -287,27 +328,9 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
             </Notice>
           ) : null
         }
-        ListEmptyComponent={
-          loaded === null ? (
-            reloading ? null : (
-              <Hold fill={false} slowMessage="Still loading activity." />
-            )
-          ) : loaded.status === 'failed' ? (
-            <EmptyState
-              icon="alert"
-              title="Could not load activity"
-              body="Check your connection and try again."
-              actionVariant="secondary"
-              action={{ label: 'Try again', onPress: retry }}
-            />
-          ) : (
-            <EmptyState
-              icon="heart"
-              title="No activity yet"
-              body="When someone likes your post or follows you, it shows up here."
-            />
-          )
-        }
+        ListEmptyComponent={empty}
+        // With only the invitations row the list is not empty, but the activity is: said under it.
+        ListFooterComponent={rows.length > 0 && visible.length === 0 ? empty : null}
         refreshing={reloading}
         onRefresh={onRefresh}
       />
@@ -330,27 +353,33 @@ const LEAD = FACE_OUTER + (MAX_FACES - 1) * FACE_STEP;
 /** A single person's face: a follow, or a post only one person has liked. */
 const AVATAR = 40;
 
+/** A row: 64 at least, on the page, and set apart from the next by its own padding, not a rule. */
+function RowFrame({ children }: { children: React.ReactNode }) {
+  return <View style={styles.row}>{children}</View>;
+}
+
 /**
- * What a row is drawn on, before its content: the separator from the text
- * to the right edge (none on a section's first row), and on a new row the
- * 2pt wine edge at its leading side.
+ * Open tournament invitations, one row at the top: the trophy where the
+ * faces sit, the count in words, a chevron. Opens the Tournaments list,
+ * where each invitation is answered.
  */
-function RowFrame({
-  first,
-  fresh,
-  children,
-}: {
-  first: boolean;
-  fresh: boolean;
-  children: React.ReactNode;
-}) {
+function InvitesRow({ count, onPress }: { count: number; onPress: () => void }) {
+  const words = `${formatCount(count)} tournament ${count === 1 ? 'invitation' : 'invitations'}`;
   return (
-    <View style={styles.row}>
-      {/* Between rows of one section, inset to the text, as a list row's rule is. */}
-      {first ? null : <View style={styles.separator} />}
-      {fresh ? <View style={styles.freshEdge} /> : null}
-      {children}
-    </View>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={words}
+      accessibilityHint="Opens your tournaments"
+      style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
+      <View style={styles.lead}>
+        <View style={styles.trophy}>
+          <Icon name="trophy" size={22} color={colors.text} />
+        </View>
+      </View>
+      <Text style={[textRole.bodyMedium, styles.ink, styles.rowText]}>{words}</Text>
+      <Icon name="chevronRight" size={20} color={colors.textMuted} />
+    </Pressable>
   );
 }
 
@@ -392,15 +421,11 @@ function likersSpoken(people: readonly UserProfile[]): string {
 function LikesRow({
   likes,
   people,
-  first,
-  fresh,
   onOpenPerson,
   onOpenPost,
 }: {
   likes: LikeItem[];
   people: UserProfile[];
-  first: boolean;
-  fresh: boolean;
   onOpenPerson: (id: string) => void;
   onOpenPost: (id: string) => void;
 }) {
@@ -411,7 +436,7 @@ function LikesRow({
   const single = people.length === 1 ? people[0]! : null;
 
   return (
-    <RowFrame first={first} fresh={fresh}>
+    <RowFrame>
       <Pressable
         onPress={single ? () => onOpenPerson(single.id) : open}
         hitSlop={2}
@@ -451,7 +476,7 @@ function LikesRow({
 
 /**
  * Up to three faces, the newest first and on top, each cut out of the
- * page by a 2pt paper ring so the overlap reads as one face in front of
+ * page by a 2pt page ring so the overlap reads as one face in front of
  * the next.
  */
 function FaceStack({ people }: { people: UserProfile[] }) {
@@ -476,22 +501,18 @@ function FaceStack({ people }: { people: UserProfile[] }) {
 function FollowRow({
   item,
   person,
-  first,
-  fresh,
   following,
   onToggleFollow,
   onOpenPerson,
 }: {
   item: FollowItem;
   person: UserProfile;
-  first: boolean;
-  fresh: boolean;
   following: boolean;
   onToggleFollow: () => void;
   onOpenPerson: (id: string) => void;
 }) {
   return (
-    <RowFrame first={first} fresh={fresh}>
+    <RowFrame>
       <Pressable
         onPress={() => onOpenPerson(person.id)}
         hitSlop={2}
@@ -528,10 +549,10 @@ function FollowRow({
 }
 
 /**
- * The post that was liked, as a 44pt thumbnail of its photo. A post with
- * no photo, or one that will not sign, shows its drink mounted instead
- * (DexThumb, lit), never an empty square; while it signs, the frame holds
- * its place.
+ * The post that was liked, as a 44pt square print of its photo. A post
+ * with no photo, or one that will not sign, shows its drink's print
+ * instead (DexThumb), never an empty square; while it signs, the wash
+ * holds its place.
  */
 function LikedThumb({
   path,
@@ -555,41 +576,46 @@ function LikedThumb({
       noHaptic
       unstable_pressDelay={120}
       accessibilityRole="button"
-      accessibilityLabel="Open the post"
-      style={mounted ? undefined : styles.thumb}>
-      {url ? (
-        <Image
-          source={{ uri: url, cacheKey: path ? `${path}#thumb` : undefined }}
-          cachePolicy="memory-disk"
-          /*
-           * A 44pt thumbnail of a photo stored at up to 2048px: decoded at
-           * the frame's size, or every row would hold a full-size decode and
-           * redraw it on the main thread as it scrolls in (PostGridTile, in
-           * profile/PostGrid, has the whole reason).
-           */
-          enforceEarlyResizing
-          contentFit="cover"
-          transition={motion.fast}
-          style={StyleSheet.absoluteFill}
-        />
-      ) : mounted ? (
-        <DexThumb drink={mounted} />
-      ) : null}
+      accessibilityLabel="Open the post">
+      {mounted ? (
+        <DexThumb drink={mounted} size="mini" />
+      ) : (
+        <Print width={THUMB} height={THUMB}>
+          {url ? (
+            <Image
+              accessibilityIgnoresInvertColors
+              source={{ uri: url, cacheKey: path ? `${path}#${THUMB}x${THUMB}` : undefined }}
+              cachePolicy="disk"
+              /*
+               * A 44pt print of a photo stored at up to 2048px: decoded at
+               * the frame's size, or every row would hold a full-size decode
+               * and redraw it on the main thread as it scrolls in
+               * (PostGridTile, in profile/PostGrid, has the whole reason).
+               */
+              enforceEarlyResizing
+              contentFit="cover"
+              transition={motion.fast}
+              style={StyleSheet.absoluteFill}
+            />
+          ) : null}
+        </Print>
+      )}
     </PressableScale>
   );
 }
 
 /* ==================================================================== */
 
-/** Where a row's text starts: the gutter, the leading column and the gap after it. */
-const TEXT_INSET = layout.gutter + LEAD + space.md;
+/** The liked photo's square print (DexThumb's mini). */
+const THUMB = 44;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  /* Clear, so the screen's grain shows through. */
   list: { flex: 1 },
+  ink: { color: colors.text },
   notice: { marginHorizontal: layout.gutter, marginTop: space.sm },
-  sectionHeader: { marginTop: space.lg, marginBottom: space.sm },
+  /* A group head insets its own 16 (it was drawn for a panel), so this lands its words on the gutter. */
+  sectionHeader: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: layout.gutter - space.lg },
 
   row: {
     minHeight: layout.rowTall,
@@ -599,26 +625,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.gutter,
     paddingVertical: space.md,
   },
-  separator: {
-    position: 'absolute',
-    top: 0,
-    left: TEXT_INSET,
-    right: 0,
-    height: stroke.hair,
-    backgroundColor: colors.line,
-  },
-  /*
-   * At the screen's leading edge, inset 8pt top and bottom so a run of new
-   * rows reads as marks on each row rather than one bar down the section.
-   */
-  freshEdge: {
-    position: 'absolute',
-    left: 0,
-    top: space.sm,
-    bottom: space.sm,
-    width: stroke.indicator,
-    backgroundColor: colors.wine,
-  },
+  rowPressed: { backgroundColor: colors.press },
   /*
    * One width for every row's faces, the widest stack's, so every sentence
    * starts on one line down the list; a single face sits at its left.
@@ -626,6 +633,15 @@ const styles = StyleSheet.create({
    * and the row's 40pt content plus the 2pt slop makes 44.
    */
   lead: { width: LEAD, alignSelf: 'stretch', alignItems: 'flex-start', justifyContent: 'center' },
+  /* The invitations row's glyph, on the wash in the faces' 40pt place. */
+  trophy: {
+    width: AVATAR,
+    height: AVATAR,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.control,
+    backgroundColor: colors.bgSunk,
+  },
   faces: { flexDirection: 'row' },
   faceRing: {
     width: FACE_OUTER,
@@ -640,18 +656,7 @@ const styles = StyleSheet.create({
   faceBehind: { marginLeft: FACE_STEP - FACE_OUTER },
   rowText: { flex: 1 },
   pressed: { opacity: 0.5 },
-  sentence: { ...textRole.prose, color: colors.text },
+  sentence: { ...textRole.body, color: colors.text },
   strong: { fontFamily: fonts.bodySemiBold },
   when: { color: colors.textMuted },
-  thumb: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.bgSunk,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
 });

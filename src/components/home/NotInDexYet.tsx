@@ -2,10 +2,10 @@ import { Image } from 'expo-image';
 import React, { useLayoutEffect } from 'react';
 import { FlatList, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { DrinkName, LiningBand, LoosePrint } from '@/components/cabinet';
+import { DrinkName, Print } from '@/components/cabinet';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { haptic, PressableScale } from '@/components/ui';
-import { colors, fonts, layout, motion, stroke, textRole, type } from '@/constants/theme';
+import { colors, layout, motion, space, textRole } from '@/constants/theme';
 import { primeSignedUrls } from '@/lib/social';
 import { faceOf, fitScale, textWidth, type Face } from '@/lib/textFit';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
@@ -14,27 +14,27 @@ import type { Drink, Post, UserProfile } from '@/types';
 /* ==================================================================== */
 /* Not in your Dex yet                                                  */
 /*                                                                      */
-/* A band of the cabinet's lining set into the feed (after the 5th post */
-/* and the 15th): drinks people you follow have posted that you have    */
-/* not caught. Each is a LOOSE PRINT, their photo lying in the lining   */
-/* rather than mounted, because it is not yours yet. The picks come     */
-/* from lib/cabinet's notInDexYet over the feed already on the phone:   */
-/* no new query, and only drinks friends really posted.                 */
+/* A row set into the feed (after the 5th post and the 15th): drinks    */
+/* people you follow have posted that you have not caught. Each is the  */
+/* friend's photo as a small print on the page, its name in Playfair    */
+/* under it and who posted it under that. The picks come from           */
+/* lib/cabinet's notInDexYet over the feed already on the phone: no new */
+/* query, and only drinks friends really posted.                        */
 /*                                                                      */
-/* It is a list ITEM, so its shade is in flow (LiningBand's default):   */
-/* an absolute child of one FlatList cell is painted over by the next   */
-/* cell whatever its zIndex (specs/v3-cabinet.md 5.4).                  */
+/* DAYLIGHT. No band, no ground of its own: a heading and the prints,   */
+/* set apart from the posts round it by space alone (layout principle   */
+/* 3), the same 32 that separates two posts.                            */
 /*                                                                      */
 /* Names are never cut, and every print's name slot is as tall as the   */
-/* tallest name in the band, worked out before layout (wrappedHeight,   */
-/* below), so the band does not grow when a later print mounts.         */
+/* tallest name in the row, worked out before layout (wrappedHeight,    */
+/* below), so the row does not grow when a later print mounts.          */
 /* ==================================================================== */
 
 export type NotInDexYetPick = { drink: Drink; post: Post };
 
-/** A print: 136 x 164, its photo inside the 1pt edge. */
+/** A print: 136 wide at the feed's 4:5, since it is the friend's post photo. */
 const PRINT_W = 136;
-const PRINT_H = 164;
+const PRINT_H = Math.round(PRINT_W / layout.feedPhotoAspect);
 /** Dynamic Type cap for a print's labels (spec §6.5). */
 const CAP = 1.3;
 
@@ -75,9 +75,8 @@ function lineCount(text: string, face: Face, size: number, measure: number): num
  * The height `text` takes in a column `measure` wide, worked out the way
  * DrinkName sizes a name (shrunk until its widest word fits), at this
  * Dynamic Type size and cap. lib/textFit errs wide, so this errs tall: a
- * band laid out with it may keep a line spare, but never grows after its
- * first frame. (It lived in TodaysPours until the stories lost their
- * name line; this band is its only reader now.)
+ * row laid out with it may keep a line spare, but never grows after its
+ * first frame.
  */
 function wrappedHeight(
   text: string,
@@ -94,7 +93,7 @@ function wrappedHeight(
 }
 
 /* ==================================================================== */
-/* The band                                                             */
+/* The row                                                              */
 /* ==================================================================== */
 
 function PrintGap() {
@@ -113,10 +112,10 @@ export function NotInDexYet({
   const { fontScale } = useWindowDimensions();
 
   /*
-   * One signing request for the band's photos, in a layout effect so it
-   * is out before each print's own useSignedPhoto (TodaysPours says why).
-   * The posts further down the feed have not been drawn yet, so nothing
-   * else has signed them.
+   * One signing request for the row's photos, in a layout effect so it is
+   * out before each print's own useSignedPhoto (TodaysPours says why). The
+   * posts further down the feed have not been drawn yet, so nothing else
+   * has signed them.
    */
   const pathsKey = picks.flatMap((p) => photoOf(p.post) ?? []).join('\n');
   useLayoutEffect(() => {
@@ -125,29 +124,26 @@ export function NotInDexYet({
 
   let nameSlot = 0;
   for (const p of picks) {
-    nameSlot = Math.max(nameSlot, wrappedHeight(p.drink.name, textRole.printName, PRINT_W, CAP, fontScale));
+    nameSlot = Math.max(nameSlot, wrappedHeight(p.drink.name, textRole.name, PRINT_W, CAP, fontScale));
   }
   nameSlot = Math.ceil(nameSlot);
 
   return (
-    <LiningBand lip style={styles.band}>
-      <View style={styles.head}>
-        <Text accessibilityRole="header" style={[textRole.shelfTitle, { color: colors.onLining }]}>
-          Not in your Dex yet
-        </Text>
-        <Text style={[textRole.helper, { color: colors.onLiningMuted }]}>Posted by people you follow</Text>
-      </View>
+    <View style={styles.band}>
+      <Text accessibilityRole="header" style={styles.head}>
+        Not in your Dex yet
+      </Text>
       {/*
         initialNumToRender 3 is what one screen shows: the first items are
         never unmounted, so the default 10 would hold every print's decoded
-        photo for as long as the band is in the feed's window.
+        photo for as long as the row is in the feed's window.
       */}
       <FlatList
         horizontal
         data={picks}
         keyExtractor={(p) => p.drink.id}
         renderItem={({ item }) => (
-          <Print
+          <Pick
             drink={item.drink}
             post={item.post}
             username={profiles[item.post.authorId]?.username ?? 'someone'}
@@ -162,17 +158,17 @@ export function NotInDexYet({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.rail}
       />
-    </LiningBand>
+    </View>
   );
 }
 
 /**
- * One drink: the friend's photo as a loose print (signed, decoded at the
- * print's size), else the drink's lit face; under it the name and who
+ * One drink: the friend's photo as a print (signed, decoded at the print's
+ * size), else the drink's own daylight print; under it the name and who
  * posted it. A media tile, so it gives under the finger and waits 120 ms
- * before its press, letting a flick scroll the band.
+ * before its press, letting a flick scroll the row.
  */
-function Print({
+function Pick({
   drink,
   post,
   username,
@@ -188,7 +184,6 @@ function Print({
   const path = photoOf(post);
   // The post as the retry key, as on the feed: a refetch hands over a new object.
   const url = useSignedPhoto(path, post);
-  const inner = { w: PRINT_W - 2 * stroke.edge, h: PRINT_H - 2 * stroke.edge };
 
   return (
     <PressableScale
@@ -200,12 +195,13 @@ function Print({
       unstable_pressDelay={120}
       accessibilityRole="button"
       accessibilityLabel={`${drink.name}, posted by ${username}. Not in your Dex yet`}
-      accessibilityHint="Opens it in the Dex"
+      accessibilityHint="Opens the drink"
       style={styles.card}>
-      <LoosePrint width={PRINT_W} height={PRINT_H}>
+      <Print width={PRINT_W} height={PRINT_H}>
         {url && path ? (
           <Image
-            source={{ uri: url, cacheKey: `${path}#print` }}
+            accessibilityIgnoresInvertColors
+            source={{ uri: url, cacheKey: `${path}#${PRINT_W}x${PRINT_H}` }}
             cachePolicy="memory-disk"
             // A pour is stored at up to 2048px; decoded at the print's 136pt.
             enforceEarlyResizing
@@ -215,11 +211,11 @@ function Print({
             style={StyleSheet.absoluteFill}
           />
         ) : url === null ? (
-          <DrinkFace drink={drink} mode="lit" width={inner.w} height={inner.h} style={FACE_FILL} />
+          <DrinkFace drink={drink} mode="photo" width={PRINT_W} height={PRINT_H} style={FACE_FILL} />
         ) : null}
-      </LoosePrint>
+      </Print>
       <View style={[styles.name, { minHeight: nameSlot }]}>
-        <DrinkName name={drink.name} role={textRole.printName} measure={PRINT_W} cap={CAP} color={colors.onLining} />
+        <DrinkName name={drink.name} role={textRole.name} measure={PRINT_W} cap={CAP} color={colors.text} />
       </View>
       <Text numberOfLines={1} maxFontSizeMultiplier={CAP} style={styles.username}>
         {username}
@@ -229,16 +225,13 @@ function Print({
 }
 
 const styles = StyleSheet.create({
-  band: { paddingTop: 18, paddingBottom: 20 },
-  head: { paddingHorizontal: layout.gutter, gap: 2 },
-  rail: { paddingHorizontal: layout.gutter, paddingTop: 14 },
-  printGap: { width: 12 },
+  // Nothing above (the post before ends in its own 32); the 32 under it is the gap to the next post.
+  band: { paddingBottom: layout.section },
+  head: { ...textRole.bodyStrong, color: colors.text, paddingHorizontal: layout.gutter },
+  rail: { paddingHorizontal: layout.gutter, paddingTop: space.md },
+  printGap: { width: space.md },
   card: { width: PRINT_W },
-  name: { marginTop: 9 },
-  username: {
-    ...type.micro,
-    fontFamily: fonts.body,
-    marginTop: 3,
-    color: colors.onLiningMuted,
-  },
+  // The Dex's 8 between a print and its name.
+  name: { marginTop: space.sm },
+  username: { ...textRole.small, color: colors.textMuted },
 });

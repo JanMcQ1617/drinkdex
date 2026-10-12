@@ -3,9 +3,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Grain } from '@/components/Grain';
+import { PersonRow } from '@/components/PeopleList';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
-import { Avatar, Button, EmptyState, Hold, ListGroup, ListRow, announce } from '@/components/ui';
+import { Button, EmptyState, Hold, announce } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
 import { fetchBlocked, unblockUser } from '@/lib/moderation';
 import { fetchProfiles } from '@/lib/social';
@@ -27,12 +27,11 @@ import type { UserProfile } from '@/types';
 /* ==================================================================== */
 
 /*
- * A list row like every other list of people: 40pt avatar, the name and
- * handle, and one action at the end, the 36pt `sm` button, which keeps the
- * row at 64 rather than stretching it to a call to action's height. A
- * static row, so VoiceOver reads the person and then reaches the button
- * on its own. The button's spoken label names the person, or VoiceOver's
- * rotor lists a column of identical "Unblock" buttons.
+ * A row like every other list of people (PersonRow: a 44pt face, the name
+ * and handle, the key at the far gutter), with Unblock, the wash key, in
+ * Follow's place. Not openable: a blocked account's profile is hidden
+ * from you by the block itself. The key's spoken label names the person,
+ * or VoiceOver's rotor lists a column of identical "Unblock" keys.
  */
 function BlockedRow({
   person,
@@ -44,32 +43,21 @@ function BlockedRow({
   busy: boolean;
 }) {
   return (
-    <ListRow
-      title={person.displayName}
-      subtitle={`@${person.username}`}
-      emphasis
-      leading={{
-        node: (
-          <Avatar
-            name={person.displayName}
-            accent={person.accent}
-            size={40}
-            avatarPath={person.avatarPath}
-          />
-        ),
-      }}
-      trailing={{
-        node: (
-          <Button
-            label="Unblock"
-            variant="secondary"
-            size="sm"
-            loading={busy}
-            onPress={onUnblock}
-            accessibilityLabel={`Unblock ${person.displayName}`}
-          />
-        ),
-      }}
+    <PersonRow
+      person={person}
+      following={false}
+      onToggle={onUnblock}
+      onOpen={null}
+      trailing={
+        <Button
+          label="Unblock"
+          variant="secondary"
+          size="sm"
+          loading={busy}
+          onPress={onUnblock}
+          accessibilityLabel={`Unblock ${person.displayName}`}
+        />
+      }
     />
   );
 }
@@ -156,8 +144,6 @@ export default function BlockedScreen() {
 
   return (
     <View style={styles.screen}>
-      {/* The page's own grain, under everything: there is no global grain any more. */}
-      <Grain />
       <ScreenTopBar
         title="Blocked accounts"
         showRule={scrolled}
@@ -193,16 +179,15 @@ export default function BlockedScreen() {
             body="You can block someone from the menu on their profile or on any of their posts. They will not be told."
           />
         ) : (
-          <ListGroup>
-            {people.map((p) => (
-              <BlockedRow
-                key={p.id}
-                person={p}
-                busy={working === p.id}
-                onUnblock={() => confirmUnblock(p)}
-              />
-            ))}
-          </ListGroup>
+          // On the page at a 64pt pitch, as every list of people is: no panel, no hairlines.
+          people.map((p) => (
+            <BlockedRow
+              key={p.id}
+              person={p}
+              busy={working === p.id}
+              onUnblock={() => confirmUnblock(p)}
+            />
+          ))
         )}
       </ScrollView>
     </View>

@@ -4,7 +4,6 @@ import { Alert, RefreshControl, ScrollView, StyleSheet, View } from 'react-nativ
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import {
   rowKind,
@@ -13,7 +12,7 @@ import {
   tournamentErrorText,
   type RowKind,
 } from '@/components/tournaments/TournamentRow';
-import { announce, EmptyState, haptic, Hold, ListGroup, Notice, SectionHeader } from '@/components/ui';
+import { announce, Button, EmptyState, haptic, Hold, Notice, SectionHeader } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
 import { fetchProfiles } from '@/lib/social';
 import { newTournamentHref, respond, tournamentHref } from '@/lib/tournaments';
@@ -25,14 +24,20 @@ import type { TournamentSummary } from '@/types';
 /* ==================================================================== */
 /* Tournaments (spec v3.1 §11.3)                                        */
 /*                                                                      */
-/* Opened from the trophy on Home. Every tournament you host, are in or  */
-/* are invited to, in four groups shown only when they hold something:   */
+/* Opened from Profile's ••• and from Activity's invitations row. Every  */
+/* tournament you host, are in or are invited to, in four groups shown   */
+/* only when they hold something:                                        */
 /* Invitations (answered right here), On now, Coming up, and the last    */
 /* 20 Finished. A tournament counts the different drinks its members     */
 /* post while it runs; how much anyone drinks is never counted.          */
 /*                                                                      */
-/* The list is the tournaments store's, so Home's badge and this screen  */
-/* agree: refetched on every focus and pull, and after every answer.     */
+/* The list is the tournaments store's, so Profile's and Activity's      */
+/* invitation counts and this screen agree: refetched on every focus and */
+/* pull, and after every answer.                                         */
+/*                                                                      */
+/* Daylight: rows on the page under small group heads, no panels, and   */
+/* the bar holds only Back (layout principle 8), so "Host a tournament" */
+/* is a key under the list.                                             */
 /* ==================================================================== */
 
 const FINISHED_SHOWN = 20;
@@ -41,7 +46,7 @@ export default function TournamentsScreen() {
   const router = useRouter();
   const myId = useAuth((s) => s.session?.user.id);
 
-  /* Back is the stack's back; opened cold, Home, where the trophy is. */
+  /* Back is the stack's back; opened cold, Home. */
   const leave = useCallback(() => {
     if (router.canGoBack()) router.back();
     else router.replace('/');
@@ -89,7 +94,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
   /*
    * True once this screen's own first load has answered. Until then an
    * empty list is "not asked yet", never "No tournaments yet"; a list
-   * Home already loaded shows at once.
+   * already loaded (Profile, Activity) shows at once.
    */
   const [settled, setSettled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -186,8 +191,9 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
 
   const body = !supported ? (
     /*
-     * The server has no tournaments yet (migration 020 not applied). Home
-     * hides the trophy then, so only an old link lands here.
+     * The server has no tournaments yet (migration 020 not applied).
+     * Profile and Activity hide their ways here then, so only an old link
+     * lands here.
      */
     <EmptyState
       icon="trophy"
@@ -204,8 +210,8 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
       {sections.map((s, n) => (
         <View key={s.key}>
           <SectionHeader title={s.title} size="group" style={n === 0 ? styles.firstHeader : styles.header} />
-          <ListGroup>
-            {s.rows.map((t, i) => (
+          <View>
+            {s.rows.map((t) => (
               <TournamentRow
                 key={t.id}
                 tournament={t}
@@ -217,12 +223,12 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
                 onJoin={() => void answer(t, true)}
                 onDecline={() => decline(t)}
                 answering={answering?.id === t.id ? (answering.join ? 'join' : 'decline') : null}
-                separator={i < s.rows.length - 1}
               />
             ))}
-          </ListGroup>
+          </View>
         </View>
       ))}
+      <Button label="Host a tournament" variant="secondary" icon="plus" block onPress={host} style={styles.host} />
     </>
   ) : !settled ? (
     <Hold fill={false} slowMessage="Still loading your tournaments." />
@@ -245,19 +251,16 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
 
   return (
     <View style={styles.screen}>
-      {/* The page's own grain, under everything. */}
-      <Grain />
       <ScreenTopBar
         title="Tournaments"
         showRule={scrolled}
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
-        right={supported ? <TopBarButton icon="plus" label="Host a tournament" onPress={host} /> : null}
       />
       <ScrollView
         onScroll={onScroll}
         scrollEventThrottle={16}
         style={styles.scroll}
-        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxl }]}
+        contentContainerStyle={{ paddingBottom: insets.bottom + space.xxl }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => void refresh()} tintColor={colors.textMuted} />
         }
@@ -270,13 +273,17 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
   );
 }
 
+/** SectionHeader's group size pads 16 each side; this puts its words at x 24. */
+const HEAD_INSET = layout.gutter - space.lg;
+
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  /* Clear, so the screen's grain shows through. */
   scroll: { flex: 1 },
-  content: { paddingHorizontal: layout.gutter },
-  notice: { marginTop: space.lg },
-  firstHeader: { marginTop: space.lg, marginBottom: space.sm },
-  header: { marginTop: space.xl, marginBottom: space.sm },
-  rules: { marginTop: space.xl },
+  /* The rows run edge to edge (their press fills the row); everything else keeps the gutter. */
+  notice: { marginTop: space.lg, marginHorizontal: layout.gutter },
+  /* A group head insets its own 16 (it was drawn for a panel), so this lands its words on the gutter. */
+  firstHeader: { marginTop: space.lg, marginBottom: space.xs, marginHorizontal: HEAD_INSET },
+  header: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: HEAD_INSET },
+  host: { marginTop: space.xl, marginHorizontal: layout.gutter },
+  rules: { marginTop: space.xl, marginHorizontal: layout.gutter },
 });

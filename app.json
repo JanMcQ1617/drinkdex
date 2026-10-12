@@ -14,7 +14,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "drinkdex",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F7F2EA",
+    "backgroundColor": "#FFFFFF",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
       "buildNumber": "19",
@@ -105,7 +105,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#F8EBDE",
+        "backgroundColor": "#FFFFFF",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -121,7 +121,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#E9E5DF",
+          "backgroundColor": "#FFFFFF",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 220
         }

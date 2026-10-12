@@ -1,5 +1,5 @@
 import { getDrink } from '@/data';
-import { drinkPhoto } from '@/data/drinkPhotos';
+import { photoFor } from '@/data/drinkPhotos';
 import type { Drink, UnlockRecord } from '@/types';
 
 /* ==================================================================== */
@@ -46,7 +46,7 @@ const IDS = [
 
 /** The picker's drinks, in order, each with a photograph. */
 export const FIRST_TASTES: readonly Drink[] = IDS.map((id) => getDrink(id)).filter(
-  (d): d is Drink => d !== undefined && drinkPhoto(d.id) !== undefined,
+  (d): d is Drink => d !== undefined && photoFor(d.id) !== undefined,
 );
 
 /** How many picks start a Dex. Three is the minimum; there is no maximum. */

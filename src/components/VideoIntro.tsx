@@ -19,8 +19,9 @@ import { colors } from '@/constants/theme';
 /* Launch intro — the film                                              */
 /*                                                                      */
 /* A 5s 1080x1920 H.264 clip generated from the app icon: the wax seal   */
-/* on tan paper (colors.filmPaper, a step darker than the splash's      */
-/* bone), merlot flooding up and settling.                              */
+/* on grey paper (colors.filmPaper), black wax flooding up and settling. */
+/* Re-graded to black and white for v4 (Jan, 12 Oct 2026) with          */
+/* hue=s=0 and a levels curve, same 24 fps and bitrate as the original. */
 /*                                                                      */
 /* EVERY COLD START (Jan, 30 Sep 2026; confirmed 1 Oct 2026). It used   */
 /* to play once per install, remembered in AsyncStorage, because iOS    */
@@ -45,7 +46,7 @@ import { colors } from '@/constants/theme';
 /* first decoded frame — one more ground between splash and film. What  */
 /* sits under the video is the film's own paper (colors.filmPaper), so  */
 /* if the splash does go first it still lands on the film's colour, not */
-/* on the cream page. A short timer is the guarantee here as well: a    */
+/* on the white page. A short timer is the guarantee here as well: a    */
 /* clip that never draws a frame must not be able to hold the splash    */
 /* up. The seal still jumps from the splash's size to the film's; only  */
 /* a re-cut of the clip's opening can remove that.                      */
@@ -66,7 +67,7 @@ import { colors } from '@/constants/theme';
 /* welcome into a toll.                                                 */
 /*                                                                      */
 /* IT DISSOLVES OUT, it does not cut. The clip ends on merlot and the   */
-/* app's page is cream, so unmounting on the last frame flashed from    */
+/* app's page is white, so unmounting on the last frame flashed from    */
 /* one to the other in a single frame. A short fade to what is          */
 /* underneath is the film's version of SipplyIntro's flood.             */
 /*                                                                      */
@@ -225,7 +226,7 @@ function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void
         /*
          * cover, not contain: the clip is 9:16 and phones are not, so
          * `contain` would letterbox the launch screen in black — on an
-         * app whose whole ground is warm bone.
+         * app whose whole ground is white.
          */
         contentFit="cover"
         allowsPictureInPicture={false}
@@ -249,10 +250,9 @@ const styles = StyleSheet.create({
   /*
    * The ground shows before the first video frame lands, and is what the
    * splash dissolves onto if its fallback lifts it first. The film's own
-   * paper rather than the page's cream: cream there was a bright flash
-   * between the bone splash and the tan film, a third ground in half a
-   * second. On the dissolve out it fades with the film, so the page is
-   * all that is left.
+   * paper rather than the page: the first frame then lands on its own
+   * colour, with no extra change of ground in half a second. On the
+   * dissolve out it fades with the film, so the page is all that is left.
    */
   fill: {
     position: 'absolute',

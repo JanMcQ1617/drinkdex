@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Grain } from '@/components/Grain';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
+import type { SheetAction } from '@/components/Sheet';
 import { EmptyState, haptic, Hold } from '@/components/ui';
 import { colors, space } from '@/constants/theme';
 import { blockUser, REPORT_REASONS, reportUser, type ReportReason } from '@/lib/moderation';
@@ -27,6 +27,10 @@ import type { UserProfile } from '@/types';
 /* This file is the part only someone else's profile has: finding the    */
 /* account from an id, and the menu that reports or blocks it. The body  */
 /* is the same ProfileView your own profile draws (components/profile).  */
+/*                                                                      */
+/* v4: the bar is back and the handle, nothing else (a pushed screen's  */
+/* bar holds one control); the account menu is the ••• beside Follow,   */
+/* drawn as Profile's own ••• sheet (the kit's ActionSheet).            */
 /* ==================================================================== */
 
 /*
@@ -58,7 +62,7 @@ export function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) 
    * The lookup is normally already warm — you get here from the feed or a
    * list of people, which put the row in the store. A cold deep link, or a
    * match from Find friends (those rows are not merged into the store), is
-   * the exception, so fetch the one row rather than show a nameless card.
+   * the exception, so fetch the one row rather than show a nameless profile.
    *
    * Keyed by id and attempt like every other async state in this file, so a
    * different person never borrows the last one's answer, and the fetch in
@@ -201,35 +205,21 @@ export function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) 
 
   /*
    * Share first: it is the everyday choice, and the two moderation actions
-   * below it are the ones to reach on purpose. Sharing sends the profile's
-   * link only; it never invites or follows anyone (lib/profileLink).
+   * at the foot are the ones to reach on purpose. Sharing sends the
+   * profile's link only; it never invites or follows anyone
+   * (lib/profileLink). About is the whole bio the profile cuts to a line.
+   * Each row runs once the sheet has gone (ActionSheet), so Report's own
+   * sheet of reasons and Block's confirm never meet a sheet still leaving.
    */
-  const openAccountMenu = () => {
-    if (!person) return;
-    const block = `Block @${person.username}`;
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          title: person.displayName,
-          options: ['Share profile', 'Report account', block, 'Cancel'],
-          cancelButtonIndex: 3,
-          destructiveButtonIndex: 2,
-        },
-        (i) => {
-          if (i === 0) shareProfile(person);
-          else if (i === 1) openReport();
-          else if (i === 2) confirmBlock();
-        },
-      );
-      return;
-    }
-    Alert.alert(person.displayName, undefined, [
-      { text: 'Share profile', onPress: () => shareProfile(person) },
-      { text: 'Report account', onPress: openReport },
-      { text: block, style: 'destructive' as const, onPress: confirmBlock },
-      { text: 'Cancel', style: 'cancel' as const },
-    ]);
-  };
+  const accountMenu = (about: SheetAction): SheetAction[] =>
+    person
+      ? [
+          { label: 'Share profile', onPress: () => shareProfile(person) },
+          about,
+          { label: 'Report account', onPress: openReport },
+          { label: `Block @${person.username}`, destructive: true, onPress: confirmBlock },
+        ]
+      : [];
 
   /*
    * Before the account is known: the same bar, so Back is where it will
@@ -238,15 +228,14 @@ export function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) 
   if (!person) {
     return (
       <View style={styles.screen}>
-        <Grain />
         <ScreenTopBar
-          size="lg"
-          title=""
+          title="Profile"
+          titleVisible={false}
           left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
           showRule={false}
         />
         {lookup === 'loading' ? (
-          // The slot Hold, centred: a filled one would paint flat cream over the grain.
+          // The slot Hold, centred, on the page.
           <View style={styles.center}>
             <Hold fill={false} slowMessage="Still loading this profile." />
           </View>
@@ -284,15 +273,9 @@ export function PeerProfile({ id, onBack }: { id: string; onBack: () => void }) 
       person={person}
       isOwn={false}
       onBack={onBack}
-      right={
-        myId ? (
-          <TopBarButton
-            icon="more"
-            label={`Options for @${person.username}`}
-            onPress={openAccountMenu}
-          />
-        ) : undefined
-      }
+      // Signed out there is no one to report or block as, so no •••.
+      menu={myId ? accountMenu : undefined}
+      menuHeader={person.displayName}
       onBlocked={afterBlock}
       bottomInset={insets.bottom + space.xl}
     />

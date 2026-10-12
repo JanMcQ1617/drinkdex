@@ -18,9 +18,9 @@ import { useReels } from '@/store/reels';
 /* The Reels tab                                                        */
 /*                                                                      */
 /* Everyone's reels, newest first, one to a screen. Signed out it is    */
-/* the sign-in screen, on paper, like Home and Profile; signed in it is */
-/* the app's one dark surface, under the same espresso tab bar every    */
-/* tab has (FloatingTabBar).                                            */
+/* the sign-in screen, on the page, like Home and Profile; signed in    */
+/* it is the app's one dark surface (reelGround), over the same tab bar */
+/* every tab has (FloatingTabBar).                                      */
 /*                                                                      */
 /* While EXPO_PUBLIC_REELS is off this tab is not in the navigator at   */
 /* all: (tabs)/_layout.tsx wraps it in TopTabs.Protected, so there is   */
@@ -71,7 +71,7 @@ function ReelsFeed() {
 
   /*
    * Light status bar while this feed is on screen. In the gated feed, not
-   * the route, so the signed-out sign-in screen keeps dark glyphs on paper.
+   * the route, so the signed-out sign-in screen keeps dark glyphs on the page.
    * A focus effect rather than a <StatusBar> element: tab screens stay
    * mounted when you leave them, and an element would keep winning there.
    */
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   titleSlot: { flexShrink: 1 },
   title: {
-    ...textRole.barTitleLg,
+    ...textRole.title,
     color: colors.reelInk,
     textShadowColor: colors.reelTextShadow,
     textShadowOffset: { width: 0, height: 1 },

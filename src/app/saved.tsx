@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { EmptyArt } from '@/components/DexCard';
-import { Grain } from '@/components/Grain';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { EmptyState, Hold, Notice, SectionHeader } from '@/components/ui';
@@ -21,9 +20,9 @@ import type { Post } from '@/types';
 /* Saved                                                                */
 /*                                                                      */
 /* The posts you bookmarked, most recently saved first, as the profile's */
-/* grid. Private: the saves table is readable by its owner only, and the */
-/* first line says so, because a bookmark that might be public is one    */
-/* nobody uses.                                                          */
+/* grid (plain square prints in the gutters, no plates). Private: the    */
+/* saves table is readable by its owner only, and the first line says    */
+/* so, because a bookmark that might be public is one nobody uses.       */
 /*                                                                      */
 /* It refetches when you come back to it after a save or unsave made     */
 /* elsewhere (the social store counts them in savesVersion), so a post   */
@@ -184,11 +183,11 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
       />
     ) : (
       /*
-       * A drink still to catch, as a recess in the cabinet: what this list
-       * is for, drawn rather than told with a bookmark glyph.
+       * A drink still to catch, as its grey proof: what this list is for,
+       * drawn rather than told with a bookmark glyph.
        */
       <EmptyState
-        art={<EmptyArt drinkId="paper-plane" mode="ghost" />}
+        art={<EmptyArt drinkId="paper-plane" mode="proof" />}
         title="Nothing saved yet"
         body="Save a post to hunt the drink down later."
       />
@@ -196,7 +195,6 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
 
   return (
     <View style={styles.screen}>
-      <Grain />
       <ScreenTopBar
         title="Saved"
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
@@ -223,7 +221,6 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
         onRefresh={reload}
         initialNumToRender={6}
         windowSize={7}
-        // Transparent, so the page's grain shows between the tiles.
         style={styles.list}
         contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
         showsVerticalScrollIndicator={false}
@@ -235,19 +232,20 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
+  // A section head, then its prints; 32 above every head but the first (layout.section).
   head: {
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: space.md,
     paddingHorizontal: layout.gutter,
-    paddingTop: space.xl,
-    paddingBottom: space.sm,
+    paddingTop: layout.section,
+    paddingBottom: space.xs,
   },
-  headFirst: { paddingTop: space.sm },
+  headFirst: { paddingTop: space.lg },
   headTitle: { flex: 1 },
-  headCount: { ...textRole.helper, ...tabular, color: colors.textMuted },
+  headCount: { ...textRole.small, ...tabular, color: colors.textMuted },
   privacy: {
-    ...textRole.helper,
+    ...textRole.small,
     color: colors.textMuted,
     paddingHorizontal: layout.gutter,
     paddingVertical: space.sm,

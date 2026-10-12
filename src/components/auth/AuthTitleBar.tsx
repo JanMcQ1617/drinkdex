@@ -2,23 +2,23 @@ import { useFocusEffect, useNavigation } from 'expo-router';
 import { useCallback, useEffect, type Ref, type RefObject } from 'react';
 import { AccessibilityInfo, type Text, type TextInput } from 'react-native';
 
+import { useAuthPageScrolled } from '@/components/auth/CabinetBackdrop';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 
 /* ==================================================================== */
 /* The sign-in screen's title bar                                       */
 /*                                                                      */
 /* The app's one top bar (ScreenTopBar), set the way every sign-in step */
-/* uses it: md, the rule always drawn (it is what tells the bar from    */
-/* the form, and at the head of the sheet it is the sheet's edge, at    */
-/* rest as much as scrolled), and at most one control, on the left:     */
-/* close on the first step, back on the others, none on the username    */
-/* step, which has nowhere to go back to.                               */
+/* uses it: md, the title centred, and at most one control, on the      */
+/* left: close on the first step, back on the others, none on the       */
+/* username step, which has nowhere to go back to.                      */
 /*                                                                      */
-/* Every caller passes insetTop={false}, because none has a status bar  */
-/* to clear: the country picker is a native page sheet, and the sign-in */
-/* and username steps put the bar at the head of the paper sheet over   */
-/* the cabinet (auth/CabinetBackdrop's CabinetSheet), whose lining      */
-/* clears the status bar above it. There the bar sticks while the form  */
+/* On the sign-in page (auth/CabinetBackdrop's CabinetSheet) the bar    */
+/* sits under the status bar the page already clears, and its 1pt rule  */
+/* shows only once the form scrolls under it, as on every v4 bar: the   */
+/* page tells it (useAuthPageScrolled). In a page sheet (the country    */
+/* picker) it keeps the sheet's 8pt inset; the sheet says when its rule */
+/* shows (`showRule`), since its search sits between the bar and what   */
 /* scrolls.                                                             */
 /* ==================================================================== */
 
@@ -28,6 +28,7 @@ export function AuthTitleBar({
   onLeading,
   leadingLabel,
   insetTop = true,
+  showRule,
   titleRef,
 }: {
   title: string;
@@ -35,11 +36,14 @@ export function AuthTitleBar({
   onLeading?: () => void;
   /** The spoken name of the leading control: "Close" and "Back" by default. */
   leadingLabel?: string;
-  /** False inside a sheet: an iOS page sheet, or CabinetSheet, which clears the status bar itself. */
+  /** False inside a sheet: an iOS page sheet, or the sign-in page, which clears the status bar itself. */
   insetTop?: boolean;
+  /** Off the sign-in page: whether the rule shows (a sheet's own scroll signal). */
+  showRule?: boolean;
   /** So the screen can move VoiceOver to the title on each step (useStepTitleFocus). */
   titleRef?: Ref<Text>;
 }) {
+  const onPage = useAuthPageScrolled();
   const left =
     leading === 'none' || !onLeading ? undefined : (
       <TopBarButton
@@ -53,8 +57,8 @@ export function AuthTitleBar({
     <ScreenTopBar
       title={title}
       size="md"
-      showRule
-      inset={insetTop ? 'safe' : 'sheet'}
+      showRule={onPage ?? showRule ?? true}
+      inset={onPage != null ? 'none' : insetTop ? 'safe' : 'sheet'}
       titleRef={titleRef}
       left={left}
     />

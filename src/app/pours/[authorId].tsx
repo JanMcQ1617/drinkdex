@@ -2,16 +2,7 @@ import { Image } from 'expo-image';
 import { useIsFocused, useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useEffectEvent, useLayoutEffect, useRef, useState } from 'react';
-import {
-  ActionSheetIOS,
-  Alert,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { Alert, Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
@@ -19,17 +10,16 @@ import { DrinkName } from '@/components/cabinet';
 import { DrinkFace } from '@/components/DexCard';
 import { firstUnseenIndex, groupPours, type PourGroup } from '@/components/home/groupPours';
 import { Icon } from '@/components/icons';
-import { DexStatusPlaque, MediaNumberPlate } from '@/components/media';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
+import { ActionSheet } from '@/components/Sheet';
 import { AppleMusicCredit, SongArtwork, usePreviewPlayer } from '@/components/songs';
 import { announce, Avatar, EmptyState, haptic, MediaIconButton } from '@/components/ui';
-import { colors, fonts, layout, onMedia, space, stroke, textRole } from '@/constants/theme';
+import { colors, fonts, layout, space, stroke, textRole } from '@/constants/theme';
 import { getDrink } from '@/data';
 import { STORY_MUSIC } from '@/lib/music';
 import { primeSignedUrls, toProfile } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
-import { useCollection, useIsUnlocked } from '@/store/collection';
 import { useSeen } from '@/store/seen';
 import { useSocial } from '@/store/social';
 import type { Drink, Pour, Song, UserProfile } from '@/types';
@@ -47,7 +37,14 @@ import type { Drink, Pour, Song, UserProfile } from '@/types';
 /* The photo is shown whole (contained), and the stage behind it takes  */
 /* the drink's own colour: the same photo, decoded tiny and blurred,    */
 /* scaled to cover. It stays inside the stage, so the header and the    */
-/* footer are always on the plain dark ground and never over the blur.  */
+/* footer are always on the plain ink ground and never over the blur.   */
+/*                                                                      */
+/* INK AND WHITE (Daylight). The one dark screen outside Reels: a photo */
+/* is looked at on black, with white words and the light status bar.    */
+/* Nothing is written on the photo; the drink's name is under it, in    */
+/* the footer, and opens the drink page (where its Nº is). On your own  */
+/* story the header carries the + that Home's ring no longer has        */
+/* (layout spec 5.1: "Add" lives in the viewer) and the Story options.  */
 /*                                                                      */
 /* SEEN STAYS ON THE PHONE. Each photo shown is marked in the seen      */
 /* store (store/seen.ts), which only rings circles on this device;      */
@@ -207,13 +204,6 @@ function PoursViewer({
   const group = view[nav.person]?.group;
   const pour = group?.pours[nav.pour];
   const drink = pour ? getDrink(pour.drinkId) : undefined;
-  /*
-   * Whether this pour's drink is in YOUR Dex, for the status plaque; no
-   * plaque until the collection has been read from disk, so a drink you
-   * have never shows "New to your Dex" for a moment.
-   */
-  const unlocked = useIsUnlocked(pour?.drinkId ?? '');
-  const collectionReady = useCollection((s) => s.hydrated);
   const who: UserProfile | undefined = group
     ? group.authorId === myId && ownRow?.id === myId
       ? toProfile(ownRow)
@@ -318,24 +308,29 @@ function PoursViewer({
     );
   };
 
-  /* Story options: one action so far, so Delete post and Cancel. */
+  /*
+   * Story options: one action so far, Delete, in the post's ••• sheet
+   * (ink words, no red; the system confirm that follows is iOS's own). The
+   * post is fixed when the sheet opens, so a step behind it cannot change
+   * which post Delete removes. Mounted from the first open on.
+   */
+  const [options, setOptions] = useState<{
+    open: boolean;
+    postId: string;
+    header: string;
+    headerLabel: string;
+  } | null>(null);
   const openOptions = () => {
     if (!pour) return;
-    const postId = pour.postId;
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        { options: ['Delete post', 'Cancel'], destructiveButtonIndex: 0, cancelButtonIndex: 1 },
-        (i) => {
-          if (i === 0) confirmDelete(postId);
-        },
-      );
-      return;
-    }
-    Alert.alert('Story options', undefined, [
-      { text: 'Delete post', style: 'destructive' as const, onPress: () => confirmDelete(postId) },
-      { text: 'Cancel', style: 'cancel' as const },
-    ]);
+    const handle = who?.username ?? 'You';
+    setOptions({
+      open: true,
+      postId: pour.postId,
+      header: `${handle} · ${timeAgo(pour.at)}`,
+      headerLabel: `${handle}, ${timeAgoSpoken(pour.at)}`,
+    });
   };
+  const closeOptions = () => setOptions((o) => (o ? { ...o, open: false } : o));
 
   // Close the sheet first, then push, so the drink or post opens over the
   // tabs as a normal push (with Back to Home) rather than on top of a sheet
@@ -349,6 +344,12 @@ function PoursViewer({
     if (closed.current) return;
     close();
     router.navigate({ pathname: '/post/[id]', params: { id } });
+  };
+  // Your own story's +: another drink, in the + window, with this sheet out of the way.
+  const openLog = () => {
+    if (closed.current) return;
+    close();
+    router.navigate('/log');
   };
 
   const top = Platform.OS === 'ios' ? space.sm : insets.top + space.sm;
@@ -381,7 +382,7 @@ function PoursViewer({
     <View style={[styles.screen, { paddingTop: top }]}>
       <StatusBar style="light" />
 
-      {/* One bar per photo from this person: the ones shown so far are bone. */}
+      {/* One bar per photo from this person: the ones shown so far are white. */}
       <View
         style={styles.progress}
         accessibilityElementsHidden
@@ -397,7 +398,7 @@ function PoursViewer({
       <View style={styles.header}>
         <Avatar
           name={name}
-          accent={who?.accent ?? colors.wineSoft}
+          accent={who?.accent ?? colors.reelInk}
           size={32}
           avatarPath={who?.avatarPath}
         />
@@ -411,7 +412,12 @@ function PoursViewer({
           {timeAgo(pour.at)}
         </Text>
         <View style={styles.spacer} />
-        {mine ? <MediaIconButton icon="more" label="Story options" onPress={openOptions} /> : null}
+        {mine ? (
+          <>
+            <MediaIconButton icon="plus" label="Post another drink" onPress={openLog} />
+            <MediaIconButton icon="more" label="Story options" onPress={openOptions} />
+          </>
+        ) : null}
         <MediaIconButton icon="close" label="Close" onPress={close} />
       </View>
 
@@ -444,37 +450,26 @@ function PoursViewer({
         {drink ? (
           <>
             {/*
-              The name whole, never cut: DrinkName wraps it and fits a long
-              word to the line, and the footer grows while the stage gives
-              way. One button with its number, as on the feed's nameplate;
-              the plates under it say the same to the eye.
+              The name whole, never cut, and under the photo, never on it:
+              DrinkName wraps it and fits a long word to the line, and the
+              footer grows while the stage gives way. Its Nº is on the drink
+              page it opens.
             */}
             <Pressable
               onPress={() => openDrink(drink.id)}
               hitSlop={{ top: 8, bottom: 8 }}
               accessibilityRole="button"
-              accessibilityLabel={`${drink.name}, number ${drink.dexNumber}`}
-              accessibilityHint="Opens it in the Dex"
+              accessibilityLabel={drink.name}
+              accessibilityHint="Opens the drink"
               style={({ pressed }) => [styles.drinkLink, pressed && styles.pressed]}>
               <DrinkName
                 name={drink.name}
                 role={textRole.nameLg}
                 measure={width - 2 * layout.gutter}
                 cap={1.3}
-                color={onMedia.ink}
+                color={colors.reelInk}
               />
             </Pressable>
-            <View style={styles.plates}>
-              <View
-                style={styles.plateGroup}
-                accessibilityElementsHidden
-                importantForAccessibility="no-hide-descendants">
-                <MediaNumberPlate n={drink.dexNumber} />
-              </View>
-              {collectionReady ? (
-                <DexStatusPlaque inDex={unlocked} name={drink.name} onPress={() => openDrink(drink.id)} />
-              ) : null}
-            </View>
           </>
         ) : null}
         <Pressable
@@ -488,6 +483,15 @@ function PoursViewer({
           </Text>
         </Pressable>
       </View>
+      {options ? (
+        <ActionSheet
+          visible={options.open}
+          onClose={closeOptions}
+          header={options.header}
+          headerLabel={options.headerLabel}
+          actions={[{ label: 'Delete', destructive: true, onPress: () => confirmDelete(options.postId) }]}
+        />
+      ) : null}
     </View>
   );
 }
@@ -613,6 +617,7 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
       {url ? (
         <View pointerEvents="none" style={styles.backdrop}>
           <Image
+            accessibilityIgnoresInvertColors
             // Its own key: this 55pt backdrop decode must never reach the stage (Avatar in ui.tsx).
             source={{ uri: url, cacheKey: `${pour.path}#backdrop` }}
             cachePolicy="memory-disk"
@@ -627,6 +632,7 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
       ) : null}
       {url ? (
         <Image
+          accessibilityIgnoresInvertColors
           source={{ uri: url, cacheKey: `${pour.path}#stage` }}
           cachePolicy="memory-disk"
           /*
@@ -642,8 +648,8 @@ function PourPhoto({ pour, drink, label }: { pour: Pour; drink: Drink | undefine
           style={StyleSheet.absoluteFill}
         />
       ) : url === null && drink ? (
-        // A photo that will not sign: the drink's own lit face, at the feed's 4:5.
-        <DrinkFace drink={drink} mode="lit" width={width} height={Math.round(width * 1.25)} />
+        // A photo that will not sign: the drink's own print, at the feed's 4:5.
+        <DrinkFace drink={drink} mode="photo" width={width} height={Math.round(width * 1.25)} />
       ) : null}
     </View>
   );
@@ -667,19 +673,8 @@ const styles = StyleSheet.create({
     gap: space.sm,
     paddingHorizontal: layout.gutter,
   },
-  username: {
-    flexShrink: 1,
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    lineHeight: 18,
-    color: colors.reelInk,
-  },
-  when: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.reelInkMuted,
-  },
+  username: { ...textRole.small, fontFamily: fonts.bodySemiBold, flexShrink: 1, color: colors.reelInk },
+  when: { ...textRole.small, color: colors.reelInkMuted },
   spacer: { flex: 1 },
 
   /* Clips the backdrop's scaled blur to the stage. */
@@ -709,33 +704,16 @@ const styles = StyleSheet.create({
     gap: space.sm,
   },
   drinkLink: { alignSelf: 'flex-start', maxWidth: '100%' },
-  plates: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  plateGroup: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 6 },
   postLink: { alignSelf: 'flex-start' },
-  postLinkLabel: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    lineHeight: 18,
-    color: colors.reelInkMuted,
-  },
+  postLinkLabel: { ...textRole.small, fontFamily: fonts.bodySemiBold, color: colors.reelInkMuted },
   pressed: { opacity: 0.5 },
 
   /* The song tag: a 48pt row, then the credit; the footer's own gap follows it. */
   song: { gap: space.xs },
   songRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: space.md },
   songText: { flex: 1 },
-  songTitle: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: 14,
-    lineHeight: 18,
-    color: colors.reelInk,
-  },
-  songArtist: {
-    fontFamily: fonts.body,
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.reelInkMuted,
-  },
+  songTitle: { ...textRole.small, fontFamily: fonts.bodySemiBold, color: colors.reelInk },
+  songArtist: { ...textRole.small, color: colors.reelInkMuted },
   songControl: {
     width: layout.hit,
     height: layout.hit,

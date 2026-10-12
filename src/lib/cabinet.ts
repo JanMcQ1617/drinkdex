@@ -1,11 +1,10 @@
-import { getDrink, TOTAL } from '@/data';
-import { MILESTONES, rankTitle } from '@/lib/milestones';
+import { getDrink } from '@/data';
 import type { Drink, Post, UnlockRecord } from '@/types';
 
 /* ==================================================================== */
-/* Collection selectors for the v3 cabinet                              */
+/* Collection selectors                                                 */
 /*                                                                      */
-/* What the cabinet screens show about a collection, worked out from    */
+/* What the Dex and Home show about a collection, worked out from       */
 /* data the phone already holds: the local unlocks (store/collection)   */
 /* and posts already fetched (store/social, a profile's own posts). No  */
 /* new query, and nothing invented: every drink returned is a real      */
@@ -66,28 +65,6 @@ export function catalogueCount(unlocks: Record<string, UnlockRecord>): number {
   return n;
 }
 
-/*
- * The fewest entries at which each rung is held, by rankTitle's own test
- * (pct >= rung), so "11 to Barfly in Training" lands exactly when the
- * title changes. Found by asking rankTitle rather than by dividing, because
- * 10% of 2,089 is 208.9 and floating point decides which side 209 falls.
- * The first rung needs one entry: at 0 the rank is "Not started".
- */
-const RUNG_AT: readonly { title: string; at: number }[] = MILESTONES.map((m) => {
-  let at = Math.max(1, Math.ceil((m.pct / 100) * TOTAL));
-  while (at > 1 && rankTitle(at - 1, TOTAL) === m.title) at -= 1;
-  while (at < TOTAL && rankTitle(at, TOTAL) !== m.title) at += 1;
-  return { title: m.title, at };
-});
-
-/** The next rank and how many entries away it is ("11 to Barfly in Training"); null at the top rank. */
-export function nextRank(collected: number): { title: string; toGo: number } | null {
-  for (const rung of RUNG_AT) {
-    if (rung.at > collected) return { title: rung.title, toGo: rung.at - collected };
-  }
-  return null;
-}
-
 /**
  * Drinks other people in the feed have posted that are not in your Dex,
  * newest first, each drink once, with the newest post of it: Home's "Not
@@ -121,7 +98,3 @@ export function notInDexYet(
   return picks;
 }
 
-/** The Dex shelf a drink sits on: `${category}:${subcategory}`, so a style shared by both categories is two shelves. */
-export function shelfKey(d: Pick<Drink, 'category' | 'subcategory'>): string {
-  return `${d.category}:${d.subcategory}`;
-}

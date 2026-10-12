@@ -4,18 +4,9 @@ import { ActivityIndicator, AppState, Linking, StyleSheet, Text, View } from 're
 
 import { Icon } from '@/components/icons';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
-import { Button, Card, Divider, Field, Notice, SectionHeader, announce } from '@/components/ui';
-import {
-  colors,
-  fonts,
-  layout,
-  radius,
-  space,
-  stroke,
-  tabular,
-  textRole,
-  type as typeScale,
-} from '@/constants/theme';
+import { FindEm, FindNote, FindSection } from '@/components/profile/FindSection';
+import { Button, Field, Notice, announce } from '@/components/ui';
+import { colors, layout, radius, space, tabular, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
 import {
   IG_CONNECTIONS_KEY,
@@ -62,15 +53,15 @@ import { confirmDestructive } from '@/utils/alerts';
 /* handle -> hash map stays local, which is why this file can label a    */
 /* matched row "@sarah.g" while the server cannot.                       */
 /*                                                                      */
-/* FOUR STEPS, NOT SEVEN, AND ONE CARD, NOT TWO. It was: open the page   */
-/* in the in-app browser, sign in to Instagram again there, pick the     */
-/* list, pick JSON, request it, unzip the download in Files, choose two  */
-/* files out of it by name — then, in a separate card above, type your   */
-/* own handle. Now: request (in Safari or the Instagram app, already     */
-/* signed in), pick "Followers and following" for all time in any        */
-/* format, choose the .zip as it arrived, and confirm the username the   */
-/* download itself names. None of it can be one step: the list only      */
-/* exists as that download, and Instagram takes its time making it.      */
+/* FOUR STEPS, NOT SEVEN, AND ONE SECTION, NOT TWO. It was: open the    */
+/* page in the in-app browser, sign in to Instagram again there, pick   */
+/* the list, pick JSON, request it, unzip the download in Files, choose */
+/* two files out of it by name — then, in a separate card above, type  */
+/* your own handle. Now: request (in Safari or the Instagram app,       */
+/* already signed in), pick "Followers and following" for all time in   */
+/* any format, choose the .zip as it arrived, and confirm the username  */
+/* the download itself names. None of it can be one step: the list     */
+/* exists only as that download, and Instagram takes its time.        */
 /* ==================================================================== */
 
 /*
@@ -113,10 +104,10 @@ function sinceLabel(ms: number): string {
 const USUALLY_READY_MS = 30 * 60_000;
 
 /*
- * A step's marker: its numeral, or a check once the step is done. Drawn as
- * a tag (22pt, a 4pt corner, a 1pt edge on bone, a muted label), because a
- * numbered marker is a label, and the disc it used to be was one more oval
- * on a screen of them.
+ * A step's marker: its numeral, or a check once the step is done. A 22pt
+ * wash square with a 2pt corner and the figure in muted ink, no edge
+ * (Daylight separates by fill): a numbered marker is a label, and the disc
+ * it used to be was one more oval on a screen of them.
  *
  * A View around the numeral, not a border on the Text. It was one Text at
  * a fixed 24 x 24 with a 22pt line height, so Larger Text grew the glyph
@@ -128,7 +119,7 @@ function StepMarker({ step }: { step: number | 'done' }) {
   return (
     <View style={styles.stepMarker}>
       {step === 'done' ? (
-        <Icon name="check" size={14} color={colors.textMuted} />
+        <Icon name="check" size={14} color={colors.text} />
       ) : (
         <Text style={styles.stepNum} maxFontSizeMultiplier={1.5}>
           {step}
@@ -187,7 +178,7 @@ export function InstagramImport() {
           if (alive) setRequest(at === null ? null : { at, seenAt: Date.now() });
         })
         .catch(() => {
-          /* Unreadable storage reads as not requested; the card offers step one, which is safe. */
+          /* Unreadable storage reads as not requested; the section offers step one, which is safe. */
         });
     };
     read();
@@ -384,10 +375,11 @@ export function InstagramImport() {
    * visible list. Nothing server-side to delete — the handles were never
    * sent, only their hashes, and those were never stored.
    *
-   * Confirmed first, and drawn in danger red (Button's dangerText). It used
-   * to be a quiet grey, the same as "Check my connections again" just above
-   * it, and getting the list back means finding the download again — or, if
-   * it is gone, another request and another wait.
+   * Confirmed first, and drawn destructive (Button's dangerText: ink
+   * SemiBold, underlined). It used to be quiet, the same as "Check my
+   * connections again" just above it, and getting the list back means
+   * finding the download again — or, if it is gone, another request and
+   * another wait.
    */
   const forget = useCallback(async () => {
     try {
@@ -477,22 +469,16 @@ export function InstagramImport() {
   const waited = request ? request.seenAt - request.at : 0;
 
   return (
-    <Card style={styles.card}>
-      <View style={styles.cardHead}>
-        <Icon name="instagram" size={20} color={colors.text} />
-        <SectionHeader title="Bring your Instagram friends" style={styles.cardTitle} />
-      </View>
-
+    <FindSection title="Bring your Instagram friends">
       {showSteps ? (
         <>
           {/* For deciding whether to start, so it goes once the list has been asked for. */}
           {connections.length === 0 && !request ? (
-            <Text style={styles.cardBody}>
-              Instagram doesn’t let any app read your follower list — that’s a Meta rule, not a
-              Sipply limitation. It will give you a copy of your own, though. Hand it to Sipply and
-              see who from it is already here. It is read on this phone, and the usernames are
-              scrambled before anything is compared.
-            </Text>
+            <FindNote>
+              Instagram doesn’t let any app read your follower list, but it will give you a copy of
+              your own. Hand it to Sipply to see who from it is already here. It is read on this
+              phone, and the usernames are scrambled before anything is compared.
+            </FindNote>
           ) : null}
 
           {/*
@@ -516,18 +502,17 @@ export function InstagramImport() {
               <StepMarker step={1} />
               <View style={styles.stepBody}>
                 <Text style={styles.stepTitle}>Ask Instagram for your list</Text>
-                <Text style={styles.cardBody}>
-                  On Instagram’s page, choose <Text style={styles.em}>Followers and following</Text>{' '}
-                  only, and set the date range to <Text style={styles.em}>All time</Text>. Any format
-                  works.
-                </Text>
+                <FindNote>
+                  On Instagram’s page, choose <FindEm>Followers and following</FindEm> only, and set
+                  the date range to <FindEm>All time</FindEm>. Any format works.
+                </FindNote>
                 <Button
                   label="Request your list"
                   variant="secondary"
                   block
                   onPress={() => void openDownloadPage(true)}
                   accessibilityHint="Opens Instagram’s download page"
-                  style={styles.cardCta}
+                  style={styles.stepKey}
                 />
               </View>
             </View>
@@ -537,21 +522,20 @@ export function InstagramImport() {
             <StepMarker step={2} />
             <View style={styles.stepBody}>
               <Text style={styles.stepTitle}>When it arrives</Text>
-              <Text style={styles.cardBody}>
+              <FindNote>
                 {!request
                   ? 'It usually arrives within half an hour. Choose the .zip Instagram sends you, as it is. There is no need to unzip it.'
                   : waited < USUALLY_READY_MS
                     ? 'It usually arrives within half an hour. Download it from Instagram’s page, then choose the .zip here, as it is.'
                     : 'It is usually ready by now. Download it from Instagram’s page or the email Instagram sent, then choose the .zip here, as it is.'}
-              </Text>
+              </FindNote>
               <Button
                 label="Choose the download"
-                icon="plus"
                 variant="secondary"
                 block
                 disabled={working}
                 onPress={importFiles}
-                style={styles.cardCta}
+                style={styles.stepKey}
               />
               {request ? (
                 <Button
@@ -570,21 +554,23 @@ export function InstagramImport() {
 
       {working ? (
         <View style={styles.working}>
-          <ActivityIndicator color={colors.wine} />
-          <Text style={styles.hint}>
-            {phase === 'matching'
-              ? 'Checking who’s already on Sipply…'
-              : progress
-                ? `Reading your list… ${formatCount(progress.done)} of ${formatCount(progress.total)}`
-                : 'Reading your list…'}
-          </Text>
+          <ActivityIndicator color={colors.text} />
+          <View style={styles.flex}>
+            <FindNote>
+              {phase === 'matching'
+                ? 'Checking who’s already on Sipply…'
+                : progress
+                  ? `Reading your list… ${formatCount(progress.done)} of ${formatCount(progress.total)}`
+                  : 'Reading your list…'}
+            </FindNote>
+          </View>
         </View>
       ) : null}
 
       {/*
-        Every notice on this card is a failure or a refusal: an unreadable
+        Every notice in this section is a failure or a refusal: an unreadable
         file, nothing found in it, a download too big, a dropped connection,
-        the day's quota. An error Notice, as on every card of Find friends,
+        the day's quota. An error Notice, as in every section of Find friends,
         so a failure looks like one wherever it lands. The Notice speaks it
         as it appears; each handler also announces it, for a failure that
         repeats while its Notice is still up, and announce drops the same
@@ -611,7 +597,7 @@ export function InstagramImport() {
             placeholder="@one, @two, instagram.com/three…"
             multiline
           />
-          {/* Secondary, like every boxed button on this card: of the cards' own buttons, only contacts' is filled. */}
+          {/* The wash key, like every key here but contacts' (the column's one ink key). */}
           <Button
             label="Find these people"
             variant="secondary"
@@ -632,7 +618,7 @@ export function InstagramImport() {
       */}
       {phase === 'done' && !working ? (
         <View style={styles.results}>
-          <Text style={styles.resultHead}>
+          <Text style={[textRole.bodyStrong, styles.ink]}>
             {partial
               ? `${formatCount(matchedConnections)} ${
                   matchedConnections === 1 ? 'person' : 'people'
@@ -679,7 +665,7 @@ export function InstagramImport() {
       ) : null}
 
       <Findable myId={myId} offer={ownHandle} />
-    </Card>
+    </FindSection>
   );
 }
 
@@ -720,7 +706,7 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
 
   /*
    * Re-read on every change, and pick up a claim parked at signup — the
-   * same signup race FindFriends' phone card handles; see
+   * same signup race FindFriends' phone section handles; see
    * subscribeDiscovery.
    */
   useEffect(() => {
@@ -808,26 +794,23 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
 
   if (saved === undefined) return null;
 
-  /* Set off from the import by a rule: it is the other half of the same errand, not another card. */
-  const section = (children: React.ReactNode) => (
-    <>
-      <Divider />
-      <View style={styles.findable}>{children}</View>
-    </>
-  );
+  /*
+   * Set off from the import by space (no rule in Daylight): it is the other
+   * half of the same errand, not another section, so it has no heading.
+   */
+  const section = (children: React.ReactNode) => <View style={styles.findable}>{children}</View>;
 
   const errorBox = error ? <Notice tone="error">{error}</Notice> : null;
 
   if (saved) {
     return section(
       <>
-        <Text style={styles.cardBody}>
-          Friends who import their Instagram list find you as{' '}
-          <Text style={styles.em}>@{saved}</Text>. It is stored scrambled and never shown on your
-          profile.
-        </Text>
+        <FindNote>
+          Friends who import their Instagram list find you as <FindEm>@{saved}</FindEm>. It is
+          stored scrambled and never shown on your profile.
+        </FindNote>
         {errorBox}
-        {/* The way back out of being findable, as on the phone card: a quiet text button, muted. */}
+        {/* The way back out of being findable, as for the phone number: a quiet text key, muted. */}
         <Button
           label="Stop being findable"
           variant="text"
@@ -875,10 +858,10 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
   if (suggestion) {
     return section(
       <>
-        <Text style={styles.cardBody}>
+        <FindNote>
           Friends who import their list only find you if Sipply knows your username. It is stored
           scrambled and never shown on your profile.
-        </Text>
+        </FindNote>
         {errorBox}
         <Button
           label={`Let friends find you as @${suggestion}`}
@@ -912,57 +895,45 @@ function Findable({ myId, offer }: { myId: string; offer: string | null }) {
   );
 }
 
-/*
- * Find friends' card styles, so this card reads as one of them: the glyph
- * and a sentence-case heading in ink, 13pt muted body. Of the cards' own
- * buttons only contacts' is filled wine.
- */
 const styles = StyleSheet.create({
-  card: { padding: space.lg, gap: space.md },
-  cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  cardTitle: { flex: 1 },
-  cardBody: { ...textRole.helper, color: colors.textMuted },
-  cardCta: { marginTop: space.xs },
-  /* A quiet second action under a step, sized to its words rather than the card. */
+  ink: { color: colors.text },
+  flex: { flex: 1 },
+  /* A step's key, a little under its line. */
+  stepKey: { marginTop: space.xs },
+  /* A quiet second action under a step, sized to its words rather than the column. */
   inlineAction: { alignSelf: 'flex-start', paddingHorizontal: 0 },
-  em: { fontFamily: fonts.bodySemiBold, color: colors.text },
 
   /* Numbered steps — the download is a two-visit errand, and a wall of
      prose loses people between the two halves. The marker's 22pt matches
-     the title's line, so the two share a top edge. */
+     the title's first line, so the two share a top edge. */
   step: { flexDirection: 'row', gap: space.md, alignItems: 'flex-start' },
   /* A step already done: the check and one line beside it, centred on each other. */
   stepFolded: { alignItems: 'center' },
-  /* The tag anatomy (ui.tsx's Tag), with minimums so it grows; see StepMarker. */
+  /* With minimums so it grows with its figure; see StepMarker. */
   stepMarker: {
     minWidth: layout.tag,
     minHeight: layout.tag,
     paddingHorizontal: 6,
     borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.cardAlt,
+    backgroundColor: colors.bgSunk,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  /* Set as a tag's label is; a figure, so tabular. textMuted on bone is 4.5:1 or better. */
+  /* A figure, so tabular. textMuted on the wash is 6.13:1. */
   stepNum: {
-    fontFamily: fonts.bodyMedium,
-    ...typeScale.tag,
+    ...textRole.small,
     ...tabular,
     color: colors.textMuted,
     textAlign: 'center',
   },
   stepBody: { flex: 1, gap: space.xs },
-  stepTitle: { ...textRole.sectionTitle, color: colors.text },
+  stepTitle: { ...textRole.bodyStrong, color: colors.text },
 
   pasteBox: { gap: space.sm },
-  findable: { gap: space.sm },
+  /* The 24 between groups sets the claim off from the import above it. */
+  findable: { gap: space.sm, marginTop: space.md },
 
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
-  /* Small text on a white card: textMuted, which holds 4.5:1 there. */
-  hint: { flex: 1, ...textRole.helper, color: colors.textMuted },
 
   results: { gap: space.sm },
-  resultHead: { ...textRole.sectionTitle, color: colors.text },
 });

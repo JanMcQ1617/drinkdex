@@ -2,19 +2,14 @@ import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { LiningBand } from '@/components/cabinet';
-import { Grain } from '@/components/Grain';
-import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { Avatar, ListGroup, ListRow, SectionHeader } from '@/components/ui';
-import { colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
-import { formatCount, TOTAL } from '@/data';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import type { ProfileRow } from '@/lib/database.types';
 import { hasFacebookIdentity } from '@/lib/facebook';
-import { rankTitle } from '@/lib/milestones';
 import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
@@ -46,10 +41,15 @@ import { useSocial } from '@/store/social';
 /* Threads. There is one account here, so the identity row goes straight */
 /* to editing it.                                                        */
 /*                                                                      */
-/* The identity row is a MEMBER CARD on the cabinet's lining (v3): the   */
-/* one personal thing on the screen, and the one place the collection   */
-/* the account exists for is named. Everything under it stays a quiet   */
-/* grouped list; a settings list should be quiet.                       */
+/* v4 Daylight, less stuff. Every section is a wash group on the page   */
+/* with no edge (layout spec principle 3), its heading small and muted  */
+/* above it, the groups parted by space. The identity row is the first  */
+/* group: your face, name and handle, opening Edit profile. Rows are    */
+/* their words and a chevron: the glyphs and the one-line explanations  */
+/* went, except on the three account rows, where the line says what is  */
+/* kept or lost before the confirm does. Those three are destructive    */
+/* rows (ink SemiBold, underlined; no red), each followed by the        */
+/* system's confirm, and their flows are exactly v3.3's.                */
 /* ==================================================================== */
 
 const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
@@ -69,10 +69,10 @@ const DELETE_CONFIRM =
   'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, and resets the collection on this phone. It cannot be undone. If you use Sign in with Apple, Apple asks you to confirm next, so Sipply comes off your Apple Account too.';
 
 /*
- * A section: its heading, then its rows in one bordered group. The
- * heading is the group size (14pt, muted), inset 16pt so it starts where
- * the rows' icons do. Rows are passed straight in, so the group can tell
- * the last one to drop its separator.
+ * A section: its heading, then its rows in one wash group. The heading is
+ * the group size (13pt SemiBold, muted), inset 16pt so it starts where the
+ * rows' words do. Rows are passed straight in, so the group can tell the
+ * last one to drop its separator.
  */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -83,57 +83,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-/** The member card's face: 56pt, inside its accent ring. */
-const MEMBER_AVATAR = 56;
-
-/**
- * You, as a member of the cabinet: your face in its accent ring, your
- * name and handle, and how much of the Dex you hold with the rank it
- * earns (the same count and ladder the Dex and Stats show). One button to
- * Edit profile, as the identity row was.
- *
- * Bone ink on the lining (13.32:1, muted 6.79:1); the chevron is a glyph,
- * so onLiningFaint (4.93:1). Pressed, the panel takes the lining's held
- * fill, as an outlined button on lining does. The avatar's own wine disc
- * is 1.22:1 on the lining, and a wine or plum accent ring nearly as faint,
- * so a 1pt bone hairline round the ring gives every face its outline.
- */
-function MemberCard({ profile, collected }: { profile: ProfileRow; collected: number }) {
-  const router = useRouter();
-  const total = formatCount(TOTAL);
-  const rank = rankTitle(collected, TOTAL);
-  const tally = `${formatCount(collected)} of ${total} collected`;
-  return (
-    <LiningBand radius={12} style={styles.member}>
-      <Pressable
-        onPress={() => router.push('/edit-profile')}
-        accessibilityRole="button"
-        accessibilityLabel={`${profile.display_name}, @${profile.username}, ${tally}, ${rank}`}
-        accessibilityHint="Edits your profile"
-        style={({ pressed }) => [styles.memberRow, pressed && styles.memberPressed]}>
-        <View style={styles.memberFace}>
-          <Avatar
-            name={profile.display_name}
-            accent={profile.accent}
-            size={MEMBER_AVATAR}
-            ring
-            avatarPath={profile.avatar_path}
-          />
-        </View>
-        <View style={styles.memberText}>
-          <Text style={styles.memberName}>{profile.display_name}</Text>
-          <Text style={styles.memberHandle} numberOfLines={1}>
-            @{profile.username}
-          </Text>
-          <Text style={styles.memberTally}>
-            {tally} · {rank}
-          </Text>
-        </View>
-        <Icon name="chevronRight" size={18} color={colors.onLiningFaint} />
-      </Pressable>
-    </LiningBand>
-  );
-}
+/** The identity row's face: the likers sheet's 44. */
+const MEMBER_AVATAR = 44;
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
@@ -141,7 +92,6 @@ export default function SettingsScreen() {
   const [scrolled, onScroll] = useScrolledPast();
 
   const profile = useAuth((s) => s.profile);
-  const collected = useCollection((s) => Object.keys(s.unlocks).length);
   const facebookShown = useAuth(
     (s) => FACEBOOK_SIGN_IN_ENABLED || hasFacebookIdentity(s.session?.user),
   );
@@ -302,8 +252,6 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.screen}>
-      {/* The page's own grain, under everything: there is no global grain any more. */}
-      <Grain />
       <ScreenTopBar
         title="Settings"
         showRule={scrolled}
@@ -315,110 +263,67 @@ export default function SettingsScreen() {
         onScroll={onScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
-        {/* ---- Identity. Instagram's Accounts Centre slot, as a member card. ---- */}
-        {profile ? <MemberCard profile={profile} collected={collected} /> : null}
+        {/* ---- Identity: Instagram's Accounts Centre slot, straight to editing it. ---- */}
+        {profile ? <IdentityRow profile={profile} /> : null}
 
         {/*
           ---- What you keep and what came of it ----
           Straight after the identity row: the two things about your own
           account people come back for. Saved has no other door, and the
-          heart on Home is Activity's only other one.
+          bell on Home is Activity's only other one.
         */}
         <Section title="Your activity">
-          <ListRow
-            leading={{ icon: 'bookmark' }}
-            title="Saved"
-            subtitle="Posts you saved. Only you can see them."
-            trailing="chevron"
-            onPress={() => router.push('/saved')}
-          />
-          <ListRow
-            leading={{ icon: 'heart' }}
-            title="Activity"
-            subtitle="Likes on your posts and new followers."
-            trailing="chevron"
-            onPress={() => router.push('/activity')}
-          />
+          <ListRow title="Saved" trailing="chevron" onPress={() => router.push('/saved')} />
+          <ListRow title="Activity" trailing="chevron" onPress={() => router.push('/activity')} />
         </Section>
 
         {/*
           ---- How people find you ----
-          The detail lists what the screen behind it holds, in its order.
-          Facebook only when the Facebook card there has something to draw,
-          by the card's own rule: the account already has Facebook, or
-          Facebook sign-in is switched on and it can be connected. Otherwise
-          the card draws nothing, and naming it here would promise a row
-          that is not there.
+          The spoken hint lists what the screen behind it holds, in its
+          order. Facebook only when the Facebook section there has something
+          to draw, by its own rule: the account already has Facebook, or
+          Facebook sign-in is switched on and it can be connected.
         */}
         <Section title="How people find you">
           <ListRow
-            leading={{ icon: 'users' }}
             title="Find friends"
-            subtitle={
-              facebookShown
-                ? 'Facebook, contacts, invites, search and Instagram.'
-                : 'Contacts, invites, search and Instagram.'
-            }
             trailing="chevron"
             onPress={() => router.push('/find-friends')}
+            accessibilityHint={
+              facebookShown
+                ? 'Facebook, contacts, invites, search and Instagram'
+                : 'Contacts, invites, search and Instagram'
+            }
           />
         </Section>
 
         {/* ---- Who you have shut out ---- */}
         <Section title="Who can reach you">
-          {/*
-            eyeOff, not lock: the lock is the Dex's "not collected yet", and
-            blocking is two people hidden from each other.
-          */}
-          <ListRow
-            leading={{ icon: 'eyeOff' }}
-            title="Blocked accounts"
-            subtitle="See who you have blocked, and undo it."
-            trailing="chevron"
-            onPress={() => router.push('/blocked')}
-          />
+          <ListRow title="Blocked accounts" trailing="chevron" onPress={() => router.push('/blocked')} />
         </Section>
 
         {/* ---- Instagram's "Help" and "About", merged. ---- */}
         <Section title="About">
-          <ListRow
-            leading={{ icon: 'comment' }}
-            title="Help and support"
-            subtitle="Answers, and an email one person reads."
-            trailing="chevron"
-            onPress={() => open(SUPPORT_URL)}
-          />
-          {/* The lock: the policy is what keeps your data shut away. */}
-          <ListRow
-            leading={{ icon: 'lock' }}
-            title="Privacy Policy"
-            trailing="chevron"
-            onPress={() => open(PRIVACY_URL)}
-          />
-          {/* The page, not the bookmark: the bookmark is "save a post" on every card in the feed. */}
-          <ListRow
-            leading={{ icon: 'document' }}
-            title="Terms of Use"
-            trailing="chevron"
-            onPress={() => open(TERMS_URL)}
-          />
+          <ListRow title="Help and support" trailing="chevron" onPress={() => open(SUPPORT_URL)} />
+          <ListRow title="Privacy Policy" trailing="chevron" onPress={() => open(PRIVACY_URL)} />
+          <ListRow title="Terms of Use" trailing="chevron" onPress={() => open(TERMS_URL)} />
         </Section>
 
         {/*
           Instagram parks Log Out at the very bottom under its own "Login"
           heading, far from anything routine. The three irreversible actions
-          get the same treatment, ordered by how much they destroy, and drawn
-          in danger with no chevron: they act rather than navigate.
+          get the same treatment, ordered by how much they destroy, drawn
+          destructive (ink SemiBold, underlined) with no chevron: they act
+          rather than navigate. Each keeps its one line, which says what is
+          kept and what goes before the confirm does.
 
-          `busy` is the row whose action is running: a spinner in the icon
-          slot, and the row stops taking taps so a second confirm cannot
-          start a second run. `disabled` is every other account row
+          `busy` is the row whose action is running: a spinner in the
+          leading slot, and the row stops taking taps so a second confirm
+          cannot start a second run. `disabled` is every other account row
           meanwhile, dimmed the way a disabled Button is.
         */}
         <Section title="Account">
-          {/* The Dex glyph: this row empties the Dex, and says so before the words do. */}
           <ListRow
-            leading={{ icon: 'dex' }}
             title="Reset collection"
             subtitle="Locks every entry again. Posts and account stay."
             onPress={confirmReset}
@@ -426,7 +331,6 @@ export default function SettingsScreen() {
             disabled={pending !== null}
           />
           <ListRow
-            leading={{ icon: 'profile' }}
             title="Sign out"
             subtitle={pending === 'signout' ? 'Signing out…' : 'Your collection stays on this phone.'}
             onPress={confirmSignOut}
@@ -434,9 +338,7 @@ export default function SettingsScreen() {
             busy={pending === 'signout'}
             disabled={pending === 'delete'}
           />
-          {/* A warning, not a close: this one cannot be undone. */}
           <ListRow
-            leading={{ icon: 'alert' }}
             title="Delete account"
             subtitle={
               pending === 'delete'
@@ -463,39 +365,54 @@ export default function SettingsScreen() {
   );
 }
 
+/**
+ * You, at the top: your face, your name and handle, in a group of one
+ * that opens Edit profile. The Dex tally and rank it carried in v3 live on
+ * Dex progress now (Profile › "38 drinks in your Dex").
+ */
+function IdentityRow({ profile }: { profile: ProfileRow }) {
+  const router = useRouter();
+  return (
+    <ListGroup style={styles.identity}>
+      <ListRow
+        title={profile.display_name}
+        subtitle={`@${profile.username}`}
+        emphasis
+        leading={{
+          node: (
+            <Avatar
+              name={profile.display_name}
+              accent={profile.accent}
+              size={MEMBER_AVATAR}
+              avatarPath={profile.avatar_path}
+            />
+          ),
+        }}
+        trailing="chevron"
+        onPress={() => router.push('/edit-profile')}
+        accessibilityLabel={`${profile.display_name}, @${profile.username}`}
+        accessibilityHint="Edits your profile"
+      />
+    </ListGroup>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   scroll: { flex: 1 },
   content: { paddingHorizontal: layout.gutter, paddingTop: space.sm },
 
-  member: { marginBottom: space.sm },
-  memberRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    padding: space.lg,
-  },
-  memberPressed: { backgroundColor: colors.liningPressed },
-  memberFace: {
-    // round-ok: avatar
-    borderRadius: radius.round,
-    borderWidth: stroke.edge,
-    borderColor: colors.plateEdgeLining,
-  },
-  memberText: { flex: 1, gap: 2 },
-  memberName: { ...textRole.shelfTitle, color: colors.onLining },
-  memberHandle: { ...textRole.helper, color: colors.onLiningMuted },
-  memberTally: { ...textRole.helper, ...tabular, color: colors.onLiningMuted, marginTop: 2 },
-  sectionHeader: { marginTop: space.xl, marginBottom: space.sm },
+  identity: { marginBottom: space.sm },
+  // 24 above each heading (layout.group), 8 between it and its group.
+  sectionHeader: { marginTop: layout.group, marginBottom: space.sm },
 
   version: {
-    ...textRole.helper,
+    ...textRole.small,
     /*
      * textMuted, not textFaint. This is caption-sized, which WCAG holds to
-     * 4.5:1, and textFaint measures 3.51:1 on the page: enough for large
-     * type and glyphs, which is its job, and short of what a caption needs.
-     * Quiet is a job for size and placement; it is not a licence to make
-     * the text unreadable. 5.50:1 here.
+     * 4.5:1, and textFaint is for large type and glyphs only (3.45:1 on
+     * the page). Quiet is a job for size and placement, not a licence to
+     * make the text unreadable. 6.69:1 here.
      */
     color: colors.textMuted,
     textAlign: 'center',

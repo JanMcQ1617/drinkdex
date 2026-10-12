@@ -20,7 +20,7 @@ import { useCollection } from '@/store/collection';
 SplashScreen.preventAutoHideAsync();
 /*
  * Fade the native splash out rather than cutting it. iOS defaults to no
- * fade, so the bone launch screen vanished in one frame and the film (or,
+ * fade, so the launch screen vanished in one frame and the film (or,
  * under Reduce Motion, the drawn intro) was simply there — a hard cut at
  * the one moment the app is making its first impression. A quarter-second
  * dissolve covers the change of ground instead.
@@ -62,8 +62,8 @@ const SipplyTheme = {
     text: colors.text,
     // The v2 edge. cardBorder measured 1.08:1 on the page: an edge nobody saw.
     border: colors.line,
-    primary: colors.wine,
-    notification: colors.danger,
+    primary: colors.text,
+    notification: colors.text,
   },
   fonts: {
     ...DefaultTheme.fonts,
@@ -124,12 +124,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={SipplyTheme}>
       {/*
-        Dark glyphs, the default: most screens stand on cream paper. A
-        screen on a dark ground (Home's lining bar, the drink page, the
-        sign-in shell) asks for light glyphs while it is focused
-        (ScreenTopBar's FocusedStatusBar), and this takes over again the
-        moment it leaves. The intros hide the bar while they play and hand
-        it back as they leave (see VideoIntro).
+        Dark glyphs on every screen: Daylight has no dark ground but video.
+        The intros hide the bar while they play and hand it back as they
+        leave (see VideoIntro).
       */}
       <StatusBar style="dark" />
       <Stack
@@ -273,13 +270,6 @@ export default function RootLayout() {
         */}
         <Stack.Screen name="reel/[id]" options={{ gestureDirection: 'horizontal' }} />
       </Stack>
-      {/*
-        No grain here. It used to be one paper overlay over the whole app,
-        which dusted every photograph with noise and could not tell paper
-        from the cabinet's lining. Each screen's root now mounts its own
-        Grain as its first child, under its content, in its ground's tone
-        (Grain.tsx), as the natively presented modals always had to.
-      */}
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
       {/*

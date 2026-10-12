@@ -1,39 +1,34 @@
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useMemo } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FindFriends } from '@/components/FindFriends';
-import { Grain } from '@/components/Grain';
 import { PersonRow } from '@/components/PeopleList';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
-import { EmptyState, Hold, ListGroup, SectionHeader } from '@/components/ui';
+import { EmptyState, Hold, SectionHeader } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
+import type { UserProfile } from '@/types';
 
 /* ==================================================================== */
 /* Find friends                                                         */
 /*                                                                      */
 /* A screen, not a settings row that expands.                           */
 /*                                                                      */
-/* FindFriends is a stack of cards — contacts (a lining panel, the one   */
-/* recommended path), Facebook when it has something to show, being     */
-/* findable, invites, username search and the Instagram import — each   */
-/* with a heading and a body paragraph. Expanded inside a settings      */
-/* group that is itself a card, it nested bordered boxes inside a        */
-/* bordered box and pushed "Sign out" screens down.                      */
-/* Instagram drills down for exactly this reason, and this is the one    */
-/* row here with enough behind it to deserve it.                         */
+/* FindFriends is a column of sections on the page, parted by space:    */
+/* contacts (the one recommended path, the one ink key), Facebook when  */
+/* it has something to show, being findable, invites, username search  */
+/* and the Instagram import, each a heading, a line and a key. v4 took  */
+/* away the cards and the lining panel (layout spec principle 3).       */
 /*                                                                      */
 /* The same component is rendered full-width by WelcomeConnect at        */
 /* signup, so the thing offered on day one and the thing reachable from  */
 /* Settings are one implementation rather than two that drift.           */
 /*                                                                      */
-/* Under it, everyone on Sipply: the browsing list that used to be your  */
-/* profile's Accounts tab. It belongs with the other ways of finding     */
-/* people, and the profile's add-person button leads here. Each row      */
-/* opens that person's profile, where Report and Block live.             */
+/* Under it, everyone on Sipply, as rows of people. Each row opens that  */
+/* person's profile, where Report and Block live.                       */
 /*                                                                      */
 /* Up to four text fields live in that stack (the number, the search,    */
 /* and the Instagram username and pasted list once opened), so the       */
@@ -51,6 +46,8 @@ export default function FindFriendsScreen() {
   const myId = useAuth((s) => s.session?.user.id);
   const people = useSocial((s) => s.people);
   const following = useSocial((s) => s.following);
+  // A set, so each row's "do I follow them" is one lookup, not a scan of everyone you follow.
+  const followingSet = useMemo(() => new Set(following), [following]);
   const loadingPeople = useSocial((s) => s.loadingPeople);
   const peopleError = useSocial((s) => s.peopleError);
   const loadPeople = useSocial((s) => s.loadPeople);
@@ -67,9 +64,10 @@ export default function FindFriendsScreen() {
   /*
    * Failure and empty say different things. The empty line used to show
    * when the list failed to load too, so a dropped request read as "you're
-   * early". Empty has no button: the invite card is on this same screen.
+   * early". Empty has no key: the invite section is on this same screen.
+   * Only the rows are the list's data; these stand in for them.
    */
-  const everyone =
+  const everyoneState =
     loadingPeople && people.length === 0 ? (
       <Hold fill={false} slowMessage="Still loading accounts." />
     ) : peopleError && people.length === 0 ? (
@@ -85,39 +83,59 @@ export default function FindFriendsScreen() {
         }}
         actionVariant="secondary"
       />
-    ) : people.length > 0 ? (
-      <ListGroup>
-        {people.map((p, i) => (
-          <PersonRow
-            key={p.id}
-            person={p}
-            following={following.includes(p.id)}
-            onToggle={() => {
-              if (myId) void toggleFollow(myId, p.id);
-            }}
-            gutter
-            separator={i < people.length - 1}
-          />
-        ))}
-      </ListGroup>
-    ) : (
+    ) : people.length === 0 ? (
       <EmptyState
         icon="users"
         title="No one else here yet"
         body="Send a friend an invite from this screen. When they join, you’ll follow each other."
       />
-    );
+    ) : null;
+
+  /*
+   * ONE VIRTUALISED LIST. Everyone on Sipply is up to two hundred rows,
+   * each with a face to decode, under a column that is already two screens
+   * tall. Mapped into a ScrollView, every row and its picture mounted at
+   * once on opening; as the list's data, only the rows near the screen are
+   * drawn. FindFriends and the heading ride in the list's header, so the
+   * whole page still scrolls as one, its fields included.
+   */
+  const rows: readonly UserProfile[] = myId ? people : [];
+
+  const renderPerson = ({ item }: { item: UserProfile }) => (
+    <PersonRow
+      person={item}
+      following={followingSet.has(item.id)}
+      onToggle={() => {
+        if (myId) void toggleFollow(myId, item.id);
+      }}
+    />
+  );
 
   return (
     <View style={styles.screen}>
-      {/* The page's own grain, under everything: there is no global grain any more. */}
-      <Grain />
       <ScreenTopBar
         title="Find friends"
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={leave} />}
         showRule={scrolled}
       />
-      <ScrollView
+      <FlatList
+        data={rows}
+        keyExtractor={(p) => p.id}
+        renderItem={renderPerson}
+        // A follow changes no row's data, only its key: repaint the rows on screen for it.
+        extraData={followingSet}
+        ListHeaderComponent={
+          <>
+            <FindFriends />
+            {/* Signed out, FindFriends draws nothing either: there is no one to follow as. */}
+            {myId ? (
+              <>
+                <SectionHeader title="Everyone on Sipply" style={styles.section} />
+                {everyoneState}
+              </>
+            ) : null}
+          </>
+        }
         style={styles.scroll}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl }]}
         onScroll={onScroll}
@@ -125,25 +143,18 @@ export default function FindFriendsScreen() {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
         automaticallyAdjustKeyboardInsets
-        showsVerticalScrollIndicator={false}>
-        <FindFriends />
-
-        {/* Signed out, FindFriends draws nothing either: there is no one to follow as. */}
-        {myId ? (
-          <>
-            <SectionHeader title="Everyone on Sipply" style={styles.section} />
-            {everyone}
-          </>
-        ) : null}
-      </ScrollView>
+        initialNumToRender={8}
+        windowSize={7}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  /* Clear, so the screen's grain shows through. */
   scroll: { flex: 1 },
   content: { paddingHorizontal: layout.gutter },
-  section: { marginTop: space.xl, marginBottom: space.md },
+  // The 32 that parts every section of FindFriends above it (layout.section).
+  section: { marginTop: layout.section, marginBottom: space.sm },
 });

@@ -1,53 +1,61 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { BrassBezel, CountSeparator } from '@/components/brass';
+import { Icon } from '@/components/icons';
 import { Avatar, Button } from '@/components/ui';
-import { colors, layout, space, textRole } from '@/constants/theme';
+import { colors, fonts, layout, radius, space, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
 import type { UserProfile } from '@/types';
 
 /* ==================================================================== */
 /* The head of a profile                                                */
 /*                                                                      */
-/* One layout for your profile and anyone else's, so the two read as one */
-/* screen: the picture in its brass bezel beside three counts, then the  */
-/* name, the bio and a row of actions. The handle is not repeated here;  */
-/* it is the screen's title, in the top bar.                             */
+/* v4, less stuff (layout spec 5.5, white-min/profile.png). From the    */
+/* top: the 80pt face at the gutter with the name beside it and the bio */
+/* under the name on ONE line (the whole bio is in ••• › About and Edit */
+/* profile); the three counts on one line; ONE key; on your own profile */
+/* the quiet "38 drinks in your Dex ›" that opens Dex progress.         */
 /*                                                                      */
-/* v3.3 Brass (screen 5): the avatar sits in the D14 bezel (80 in 92)    */
-/* and brass hairlines (D15) part the counts, each centred in its        */
-/* column. The name moved under that row, as the mock sets it, and got   */
-/* the full width with it: it wraps now, where beside the counts it was  */
-/* one line cut short.                                                   */
+/* One layout for yours and anyone else's, so the two read as one       */
+/* screen. Yours has Edit profile in the key's slot; theirs has Follow  */
+/* (ink) or Following (wash), and beside it the ••• that holds Share,   */
+/* About, Report and Block. That ••• lives here, not in the bar, because */
+/* a pushed screen's bar holds the back chevron and nothing else        */
+/* (layout principle 8, as the post detail moved its ••• into the row). */
 /*                                                                      */
-/* Posts, followers, following. The Dex count is not a fourth figure:   */
-/* it is the walnut plaque under the buttons (ProfileView), with its     */
-/* gauge and rank, so it is never confused with the posts figure here.   */
+/* The handle is not repeated here: it is the screen's title. The Dex   */
+/* panel, its ruler and the rank ladder moved to Dex progress (/stats), */
+/* and Share profile into the •••.                                      */
 /* ==================================================================== */
 
-/** The avatar inside the bezel: the mock's 80, so the bezel is 92, 6pt more than the old 86 face. */
+/** The face, ring included (layout spec 5.5: 80 at x 24). */
 const AVATAR = 80;
-/** Between the bezel and the counts: the 18 the old face had, so the three columns keep their room. */
-const IDENTITY_GAP = 18;
-/** The counts sit in fixed thirds beside the bezel; past this they shrink to fit rather than break a word. */
-const COUNT_CAP = 1.4;
-const COUNT_MIN_SCALE = 0.7;
+/** Face to name: the name starts at x 124. */
+const IDENTITY_GAP = 20;
+/** Between the three counts (layout spec 5.5). */
+const COUNT_GAP = 28;
+/** The Dex line's chevron. */
+const CHEVRON = 16;
 
 export type ProfileActions =
   | {
       kind: 'own';
       onEdit: () => void;
-      onShare: () => void;
+      /** Your Dex count, the same figure the Dex tab and Dex progress show. */
+      dexCount: number;
+      /** Opens Dex progress. */
+      onOpenDex: () => void;
     }
   | {
       kind: 'peer';
       /** You follow them (the social store's optimistic list). */
       following: boolean;
-      /** They follow you: the button offers "Follow back". */
+      /** They follow you: the key offers "Follow back". */
       followsMe: boolean;
       onFollow: () => void;
       /** Asks first; see ProfileView. */
       onUnfollow: () => void;
+      /** Their account menu. Absent signed out, where there is nothing to report or block as. */
+      onMore?: () => void;
     };
 
 export function ProfileHeader({
@@ -66,112 +74,119 @@ export function ProfileHeader({
   onOpenList: (list: 'followers' | 'following') => void;
   actions: ProfileActions;
 }) {
+  const bio = person.bio?.trim();
   return (
     <View style={styles.header}>
       <View style={styles.identity}>
         {/*
-          Hidden from VoiceOver by Avatar itself, and the bezel is
-          decorative: the name under them speaks. Own and peer alike; the
-          feed's and the likers' faces stay plain.
+          Hidden from VoiceOver by Avatar itself: the name beside it speaks.
+          The 1pt ink ring with its 3pt gap is the face's frame (white
+          spec 5.14), the same ring the tab bar's face takes when Profile
+          is the tab you are on.
         */}
-        <BrassBezel size={AVATAR}>
-          <Avatar
-            name={person.displayName}
-            accent={person.accent}
-            size={AVATAR}
-            avatarPath={person.avatarPath}
-          />
-        </BrassBezel>
-        <View style={styles.counts}>
-          <Count value={posts} one="post" many="posts" />
-          <CountSeparator />
-          <Count
-            value={followers}
-            one="follower"
-            many="followers"
-            onPress={() => onOpenList('followers')}
-          />
-          <CountSeparator />
-          <Count
-            value={following}
-            one="following"
-            many="following"
-            onPress={() => onOpenList('following')}
-          />
+        <Avatar
+          name={person.displayName}
+          accent={person.accent}
+          size={AVATAR}
+          ring
+          avatarPath={person.avatarPath}
+        />
+        <View style={styles.identityText}>
+          {/* No line limit: a long name wraps at a space, it is never cut. */}
+          <Text style={[textRole.bodyStrong, styles.ink]}>{person.displayName}</Text>
+          {bio ? (
+            /*
+             * One line, with an ellipsis: the one place the layout allows a
+             * cut (spec 5.5), because the whole bio is a tap away in •••
+             * › About and in Edit profile. VoiceOver reads it whole.
+             */
+            <Text
+              numberOfLines={1}
+              accessibilityLabel={bio}
+              style={[textRole.small, styles.muted, styles.bio]}>
+              {bio}
+            </Text>
+          ) : null}
         </View>
       </View>
 
-      {/* No line limit: a long name wraps at a space, it is never cut. */}
-      <Text style={styles.name}>{person.displayName}</Text>
-      {person.bio ? <Text style={styles.bio}>{person.bio}</Text> : null}
+      {/*
+        One line of counts, 28 apart; at Larger Text the line wraps between
+        two counts, never inside one.
+      */}
+      <View style={styles.counts}>
+        <Count value={posts} one="post" many="posts" />
+        <Count value={followers} one="follower" many="followers" onPress={() => onOpenList('followers')} />
+        <Count value={following} one="following" many="following" onPress={() => onOpenList('following')} />
+      </View>
 
-      <View style={styles.actions}>
+      <View style={styles.keys}>
         {actions.kind === 'own' ? (
-          <>
-            {/*
-              Two outlined buttons sharing the row: white with a 1pt ink
-              edge, because neither is the screen's call to action, and the
-              one wine thing on this screen is not here (the tab bar's post
-              button is). The tonal fill they had was bone on cream, a
-              button you had to look for. No Find friends square beside them
-              (v3.1): it is in Settings, on Home's stories rail and in every
-              empty state that offers it.
-            */}
-            <Button
-              label="Edit profile"
-              variant="secondary"
-              size="sm"
-              onPress={actions.onEdit}
-              style={styles.grow}
-            />
-            <Button
-              label="Share profile"
-              variant="secondary"
-              size="sm"
-              onPress={actions.onShare}
-              style={styles.grow}
-            />
-          </>
+          // The screen's one key (layout principle 6), the wash key: nothing here is a call to action.
+          <Button label="Edit profile" variant="secondary" onPress={actions.onEdit} style={styles.key} />
         ) : actions.following ? (
           /*
-           * Tonal, no check: following is a state, not an action to take.
+           * The wash key: following is a state, not an action to take.
            * Pressing it asks before unfollowing, because an unfollow from
            * here is the costly mistake; the list rows still toggle straight
            * away, as bulk tools do.
            */
           <Button
             label="Following"
-            variant="tonal"
-            size="sm"
+            variant="secondary"
             onPress={actions.onUnfollow}
             accessibilityLabel={`Unfollow ${person.displayName}`}
             accessibilityHint="Asks before unfollowing"
-            style={styles.grow}
+            style={styles.key}
           />
         ) : (
           <Button
             label={actions.followsMe ? 'Follow back' : 'Follow'}
             variant="primary"
-            size="sm"
             onPress={actions.onFollow}
             // "back" is spoken too: that they follow you is said by the label alone.
             accessibilityLabel={
               actions.followsMe ? `Follow ${person.displayName} back` : `Follow ${person.displayName}`
             }
-            style={styles.grow}
+            style={styles.key}
           />
         )}
+        {actions.kind === 'peer' && actions.onMore ? (
+          <Pressable
+            onPress={actions.onMore}
+            accessibilityRole="button"
+            accessibilityLabel={`Options for @${person.username}`}
+            style={({ pressed }) => [styles.more, pressed && styles.morePressed]}>
+            <Icon name="more" size={22} color={colors.text} />
+          </Pressable>
+        ) : null}
       </View>
+
+      {actions.kind === 'own' ? (
+        <Pressable
+          onPress={actions.onOpenDex}
+          accessibilityRole="button"
+          accessibilityLabel={dexLine(actions.dexCount)}
+          accessibilityHint="Opens Dex progress"
+          style={({ pressed }) => [styles.dexLine, pressed && styles.dimmed]}>
+          <Text style={[textRole.small, styles.muted, styles.dexText]}>{dexLine(actions.dexCount)}</Text>
+          <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
+        </Pressable>
+      ) : null}
     </View>
   );
 }
 
+/** "38 drinks in your Dex", "1 drink in your Dex". */
+function dexLine(n: number): string {
+  return `${formatCount(n)} ${n === 1 ? 'drink' : 'drinks'} in your Dex`;
+}
+
 /**
- * One figure over its word. Followers and following open their lists;
- * posts does not (the grid below is the list), so it is a plain element
- * read as one: "12 posts". `accessible` is what makes the label count:
- * RN only speaks a View's accessibilityLabel when the View is itself an
- * accessibility element.
+ * One count, figure then word, read as one: "212 followers". Followers and
+ * following open their lists; posts does not (the grid below is the list).
+ * `accessible` is what makes the label count: RN only speaks a View's
+ * accessibilityLabel when the View is itself an accessibility element.
  */
 function Count({
   value,
@@ -189,36 +204,15 @@ function Count({
     value === null
       ? `${many[0]!.toUpperCase()}${many.slice(1)}, not loaded yet`
       : `${formatCount(value)} ${word}`;
-  /*
-   * A column is a third of what the bezel leaves, about 80pt, and
-   * "followers" at 13pt x 1.4 is about that on a 375pt phone. iOS shrinks
-   * the word (or a long figure) to fit rather than wrap it inside itself;
-   * at the default size nothing shrinks.
-   */
   const body = (
-    <>
-      <Text
-        style={styles.figure}
-        numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={COUNT_MIN_SCALE}
-        maxFontSizeMultiplier={COUNT_CAP}>
-        {value === null ? '–' : formatCount(value)}
-      </Text>
-      <Text
-        style={styles.word}
-        numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={COUNT_MIN_SCALE}
-        maxFontSizeMultiplier={COUNT_CAP}>
-        {word}
-      </Text>
-    </>
+    <Text style={[textRole.body, styles.muted]}>
+      <Text style={styles.figure}>{value === null ? '–' : formatCount(value)}</Text> {word}
+    </Text>
   );
 
   if (!onPress) {
     return (
-      <View style={styles.count} accessible accessibilityLabel={spoken}>
+      <View accessible accessibilityLabel={spoken}>
         {body}
       </View>
     );
@@ -226,29 +220,53 @@ function Count({
   return (
     <Pressable
       onPress={onPress}
-      // 40pt of type (22 + 18); 4 above and below clear the 44pt touch floor.
-      hitSlop={{ top: 4, bottom: 4 }}
+      // A 24pt line; 10 above and below reach the 44pt touch floor.
+      hitSlop={{ top: 10, bottom: 10, left: 6, right: 6 }}
       accessibilityRole="button"
       accessibilityLabel={spoken}
       accessibilityHint="Shows the list"
-      style={({ pressed }) => [styles.count, pressed && styles.pressed]}>
+      style={({ pressed }) => pressed && styles.dimmed}>
       {body}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: layout.gutter, paddingTop: space.xs },
+  // The bar ends at y 114 and the face starts at 130 (layout spec 5.5).
+  header: { paddingHorizontal: layout.gutter, paddingTop: space.lg },
   identity: { flexDirection: 'row', alignItems: 'center', gap: IDENTITY_GAP },
-  // The separators stretch to the row's height and stop 6pt short at each end (D15).
-  counts: { flex: 1, flexDirection: 'row' },
-  count: { flex: 1, alignItems: 'center' },
-  pressed: { opacity: 0.5 },
-  figure: { ...textRole.count, color: colors.text, textAlign: 'center' },
-  word: { ...textRole.helper, color: colors.textMuted, textAlign: 'center' },
-  // 16pt SemiBold under the bezel row (the mock's 12pt below it), the bio straight after.
-  name: { ...textRole.sectionTitle, color: colors.text, marginTop: space.md },
-  bio: { ...textRole.prose, color: colors.text, marginTop: 2 },
-  actions: { flexDirection: 'row', gap: space.sm, marginTop: 14 },
-  grow: { flex: 1 },
+  identityText: { flex: 1 },
+  bio: { marginTop: space.xs },
+  ink: { color: colors.text },
+  muted: { color: colors.textMuted },
+  counts: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    columnGap: COUNT_GAP,
+    rowGap: space.xs,
+    marginTop: space.xl,
+  },
+  figure: { fontFamily: fonts.bodySemiBold, color: colors.text, fontVariant: ['tabular-nums'] },
+  dimmed: { opacity: 0.5 },
+  keys: { flexDirection: 'row', gap: space.sm, marginTop: space.xl },
+  // 392 x 44 (layout spec 5.5), under the block key's 52.
+  key: { flex: 1, minHeight: layout.hit },
+  more: {
+    width: layout.hit,
+    height: layout.hit,
+    borderRadius: radius.control,
+    backgroundColor: colors.bgSunk,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  morePressed: { backgroundColor: colors.press },
+  // A 44pt row whose 18pt line sits 18 under the key (y 344 at 440).
+  dexLine: {
+    minHeight: layout.hit,
+    marginTop: space.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: space.sm,
+  },
+  dexText: { flex: 1 },
 });

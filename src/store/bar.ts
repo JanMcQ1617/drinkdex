@@ -50,11 +50,47 @@ const guardedStorage: StateStorage = {
  * those 70 recipes asked for a generic "Vermouth", and that is the bottle
  * a shelf saved. It meant dry vermouth, so it moves there and pours the
  * same drinks it did. "Red vermouth" is sweet vermouth written another way.
+ *
+ * v4 (scripts/build-bar-index.mjs, VARIANT and REWRITE): one bottle the
+ * data wrote as two is now one id, so a bar that saved the old spelling
+ * keeps the bottle under the id the index uses. Every id that build
+ * merges away belongs here.
  */
 const RETIRED: Record<string, string> = {
   vermouth: 'dry-vermouth',
   'red-vermouth': 'sweet-vermouth',
   'sweet-red-vermouth': 'sweet-vermouth',
+  angostura: 'angostura-bitters',
+  'lime-disc': 'lime',
+  'lime-zest': 'lime',
+  'orange-slices': 'orange',
+  'orgeat-syrup': 'orgeat',
+  'golden-rum': 'gold-rum',
+  kahlua: 'coffee-liqueur',
+  'agave-nectar': 'agave-syrup',
+  egg: 'whole-egg',
+  eggs: 'whole-egg',
+  'whole-eggs': 'whole-egg',
+  'passion-fruit-syrup': 'passionfruit-syrup',
+  olives: 'olive',
+  strawberry: 'strawberries',
+  peach: 'peaches',
+  'sweetened-condensed-milk': 'condensed-milk',
+  midori: 'melon-liqueur',
+  'midori-melon-liqueur': 'melon-liqueur',
+  'absinthe-rinse': 'absinthe',
+  'galliano-float': 'galliano',
+  'irish-cream-float': 'irish-cream',
+  'amontillado-sherry-float': 'amontillado-sherry',
+  'irish-whiskey-shot': 'irish-whiskey',
+  'beer-chaser': 'beer',
+  rye: 'rye-whiskey',
+  'navy-gin': 'navy-strength-gin',
+  amarula: 'amarula-cream-liqueur',
+  fernet: 'fernet-branca',
+  // Parse leftovers: the bare halves of "Red or white wine" and "Manzanilla or fino sherry".
+  red: 'red-wine',
+  manzanilla: 'manzanilla-sherry',
 };
 
 function renameRetired(owned: Record<string, true>): Record<string, true> {
@@ -94,7 +130,7 @@ export const useBar = create<BarState>()(
           return { owned: next };
         }),
 
-      /** Used by the starter-bar shortcut, which adds a dozen at once. */
+      /** The basics sheet's Add (what you left ticked), and Undo after Clear my bar. */
       add: (ids) =>
         set((s) => {
           const next = { ...s.owned };

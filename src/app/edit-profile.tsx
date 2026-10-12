@@ -15,21 +15,17 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Grain } from '@/components/Grain';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { Avatar, Button, Field, Notice, haptic } from '@/components/ui';
 import {
-  CATEGORY_META,
+  ACCENT_NAMES,
+  avatarTone,
   colors,
-  fonts,
   layout,
-  radius,
   SIGNUP_ACCENTS,
   space,
-  stroke,
   tabular,
   textRole,
-  type as typeScale,
 } from '@/constants/theme';
 import {
   containsObjectionable,
@@ -47,7 +43,7 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*                                                                      */
 /* Everything about you that other people see, in one place: the name    */
 /* on your posts, the handle they find you by, the line under it, and    */
-/* the colour of your avatar.                                           */
+/* the tone of your initials disc.                                      */
 /*                                                                      */
 /* None of it was editable before. Display name and username were set    */
 /* once at signup and there was no way to write a bio at all, so the     */
@@ -66,20 +62,17 @@ const BIO_MAX = 300;
 const HANDLE_MAX = 24;
 
 /*
- * What VoiceOver calls each swatch. It used to read the hex, "Accent colour,
- * number 7 E 2 3 3 0", and six of those cannot be told apart by ear. Keyed
- * by the same tokens SIGNUP_ACCENTS is built from; the amber and the plum
- * have no token of their own (theme.ts keeps them as literals), so they are
- * keyed by their place in that list.
+ * The avatar tone picker (white spec 5.15): the four greys an initials disc
+ * can take, each drawn as the disc it makes and named under it (Graphite,
+ * Charcoal, Slate, Mist, from theme.ts's ACCENT_NAMES), because four greys
+ * cannot be told apart by fill alone, by eye or by ear. Keyed by
+ * SIGNUP_ACCENTS' stored hexes; CATEGORY_META's colours are both ink now
+ * and no longer name anything.
  */
-const ACCENT_NAMES: Record<string, string> = {
-  [CATEGORY_META.cocktail.color]: 'Merlot',
-  [SIGNUP_ACCENTS[1]!]: 'Amber',
-  [SIGNUP_ACCENTS[2]!]: 'Plum',
-  [CATEGORY_META.spirit.color]: 'Espresso',
-  [colors.wine]: 'Wine',
-  [colors.taupeInk]: 'Taupe',
-};
+/** The disc in a tone swatch, and the ring's box around it (2pt ring, 4pt gap). */
+const TONE_DISC = 48;
+const TONE_RING = 2;
+const TONE_BOX = TONE_DISC + 2 * (TONE_RING + 4);
 
 /** The three fields the content filter reads. */
 type TextField = 'name' | 'handle' | 'bio';
@@ -142,6 +135,13 @@ export default function EditProfileScreen() {
   const [username, setUsername] = useState(profile?.username ?? '');
   const [bio, setBio] = useState(profile?.bio ?? '');
   const [accent, setAccent] = useState(profile?.accent ?? SIGNUP_ACCENTS[0]!);
+  /*
+   * The tone the disc shows now. A profile can still carry a wine-era
+   * accent; avatarTone maps it to one of the four, and that one reads as
+   * chosen. Choosing it again keeps the stored hex, so opening this sheet
+   * and saving nothing is not an edit.
+   */
+  const shownTone = avatarTone(accent).fill;
   /* A form-level failure, shown in a Notice above Save, which also speaks it. */
   const [error, setError] = useState<string | null>(null);
 
@@ -374,16 +374,10 @@ export default function EditProfileScreen() {
     setCommitted(true);
   };
 
-  /*
-   * Each return mounts its own Grain as its first child, under the
-   * content, as every screen now does: there is no global grain, and grain
-   * laid over the form would also dust the avatar photo being previewed.
-   */
   if (!profile) {
     return (
       <View style={[styles.screen, styles.centre]}>
-        <Grain />
-        <Text style={styles.blurb}>Sign in to edit your profile.</Text>
+        <Text style={[textRole.body, styles.blurb]}>Sign in to edit your profile.</Text>
       </View>
     );
   }
@@ -408,7 +402,6 @@ export default function EditProfileScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? windowH - sheetH : 0}
       onLayout={(e) => setSheetH(e.nativeEvent.layout.height)}>
-      <Grain />
       {/*
         The sheet inset on iOS, not the status bar's: the page sheet starts
         below the status bar, and the root's inset added inside it left a
@@ -428,56 +421,45 @@ export default function EditProfileScreen() {
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xxxl }]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}>
-        {/* Live preview — the accent is the only thing here you cannot
-            picture from its label, so it gets shown rather than described. */}
+        {/* Live preview: the face as the profile draws it, ring and all. */}
         <View style={styles.preview}>
           <Avatar
             name={displayName || profile.display_name}
             accent={accent}
             size={96}
             ring
-            // 3pt, not the default 2: the accent being chosen is this ring.
-            ringWidth={3}
             avatarPath={removed ? null : profile.avatar_path}
             localUri={pickedPhoto}
           />
           <View style={styles.photoActions}>
-            {/* The same two verbs as the pour screen, library first. */}
-            <Button
-              label="Choose photo"
-              variant="secondary"
-              icon="grid"
-              onPress={() => void choosePhoto()}
-            />
-            <Button
-              label="Take photo"
-              variant="secondary"
-              icon="camera"
-              onPress={() => void takePhoto()}
-            />
+            {/* The same two verbs as the pour screen, library first; two wash keys, words only. */}
+            <Button label="Choose photo" variant="secondary" onPress={() => void choosePhoto()} />
+            <Button label="Take photo" variant="secondary" onPress={() => void takePhoto()} />
           </View>
           {(profile.avatar_path && !removed) || pickedPhoto ? (
             /*
-             * Red text, no fill: a quiet destructive action under the two
-             * buttons that are this block's point. Row-sized, so it keeps a
-             * 44pt target without standing as tall as they do. No tick, like
-             * theirs: a press does not tick, and nothing is removed until Save.
+             * The destructive words, ink and underlined (no red in Daylight):
+             * a quiet action under the two keys that are this block's point.
+             * Row-sized, so it keeps a 44pt target without standing as tall
+             * as they do. No tick, like theirs: a press does not tick, and
+             * nothing is removed until Save.
              */
             <Button label="Remove photo" variant="dangerText" size="sm" onPress={removePhoto} />
           ) : null}
         </View>
 
-        <Text style={styles.label}>Accent</Text>
+        <Text style={styles.label}>Avatar tone</Text>
+        <Text style={styles.toneHint}>Behind your initials when there is no photo.</Text>
         {/*
-          Six squares of colour, the selected one ringed in ink. The ring is
-          the mark, not a check drawn on the colour: a bone check measured
-          under 2:1 on the amber, and the ring is the same strong edge on
-          every one of them. It sits 2pt outside the swatch, so it reads as
-          a frame around the colour rather than a darker rim of it.
+          Each tone as the disc it makes, its name under it. The chosen one
+          is ringed in ink, 2pt, 4pt clear of the disc, and its name turns
+          ink: two cues, neither of them a fill. The ring is drawn in a box
+          every swatch keeps, so choosing one moves nothing.
         */}
-        <View style={styles.swatches}>
+        <View style={styles.tones}>
           {SIGNUP_ACCENTS.map((c) => {
-            const selected = c === accent;
+            const selected = c === shownTone;
+            const name = ACCENT_NAMES[c] ?? 'Custom';
             return (
               <Pressable
                 key={c}
@@ -490,15 +472,25 @@ export default function EditProfileScreen() {
                 // "Selected" comes from the state; saying it in the label too
                 // made VoiceOver announce it twice.
                 accessibilityState={{ selected }}
-                accessibilityLabel={`${ACCENT_NAMES[c] ?? 'Custom'} accent`}
-                // A swatch's fill IS the choice, so it dims while held
-                // rather than changing colour.
-                style={({ pressed }) => [
-                  styles.swatch,
-                  { backgroundColor: c },
-                  pressed && styles.swatchPressed,
-                ]}>
-                {selected ? <View pointerEvents="none" style={styles.swatchRing} /> : null}
+                accessibilityLabel={`${name} tone`}
+                // The disc IS the choice, so it dims while held rather than changing fill.
+                style={({ pressed }) => [styles.tone, pressed && styles.tonePressed]}>
+                <View style={styles.toneBox}>
+                  <Avatar name={displayName || profile.display_name} accent={c} size={TONE_DISC} />
+                  {selected ? <View pointerEvents="none" style={styles.toneRing} /> : null}
+                </View>
+                {/*
+                  One word in a quarter of the form: past 1.3x it shrinks to
+                  fit its column rather than break inside the word.
+                */}
+                <Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.8}
+                  maxFontSizeMultiplier={1.3}
+                  style={[textRole.small, selected ? styles.toneNameOn : styles.toneName]}>
+                  {name}
+                </Text>
               </Pressable>
             );
           })}
@@ -574,50 +566,38 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: layout.gutter },
 
   preview: { alignItems: 'center', paddingVertical: space.lg, gap: space.lg },
-  photoActions: { flexDirection: 'row', gap: space.md },
+  photoActions: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: space.sm },
 
   /*
-   * The swatches' label, set as Field sets its own, so the one label that
-   * is not a Field's reads as one of them.
+   * The tones' label, set as Field sets its own, so the one label that is
+   * not a Field's reads as one of them.
    */
   label: {
     ...textRole.fieldLabel,
     color: colors.textMuted,
-    marginTop: space.lg,
-    marginBottom: space.md,
+    marginTop: space.xl,
   },
+  toneHint: { ...textRole.small, color: colors.textMuted, marginTop: space.xs, marginBottom: space.md },
 
-  /* 12 between swatches leaves room for two rings (4pt each) without touching. */
-  swatches: { flexDirection: 'row', gap: space.md, flexWrap: 'wrap' },
-  swatch: {
-    width: layout.hit,
-    height: layout.hit,
-    borderRadius: radius.control,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-  },
-  swatchPressed: { opacity: 0.7 },
-  /*
-   * The selection ring: 2pt of ink, 2pt clear of the swatch's own edge, so
-   * it is drawn over the gap and never resizes the swatch. Its corner is
-   * the swatch's plus the 4pt it stands out, so the two curves stay
-   * concentric.
-   */
-  swatchRing: {
-    position: 'absolute',
-    top: -(stroke.edge + 4),
-    left: -(stroke.edge + 4),
-    right: -(stroke.edge + 4),
-    bottom: -(stroke.edge + 4),
-    borderRadius: radius.control + 4,
-    borderWidth: stroke.ring,
+  /* Four columns across the form, each a disc in its ring box over its name. */
+  tones: { flexDirection: 'row', justifyContent: 'space-between' },
+  tone: { flex: 1, alignItems: 'center', gap: space.xs, paddingVertical: space.xs },
+  tonePressed: { opacity: 0.6 },
+  toneBox: { width: TONE_BOX, height: TONE_BOX, alignItems: 'center', justifyContent: 'center' },
+  toneRing: {
+    ...StyleSheet.absoluteFill,
+    // round-ok: the ring round an avatar disc
+    borderRadius: TONE_BOX / 2,
+    borderWidth: TONE_RING,
     borderColor: colors.lineInk,
   },
+  toneName: { color: colors.textMuted, textAlign: 'center' },
+  toneNameOn: { color: colors.text, textAlign: 'center' },
 
   field: { marginTop: space.lg },
   counter: {
     alignSelf: 'flex-end',
-    ...textRole.helper,
+    ...textRole.small,
     ...tabular,
     color: colors.textMuted,
     marginTop: space.sm,
@@ -626,9 +606,5 @@ const styles = StyleSheet.create({
   notice: { marginTop: space.lg },
 
   save: { marginTop: space.xl },
-  blurb: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    color: colors.textMuted,
-  },
+  blurb: { color: colors.textMuted },
 });

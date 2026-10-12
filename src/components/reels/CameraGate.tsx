@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Icon, type IconName } from '@/components/icons';
 import { Button, Hold, MediaIconButton } from '@/components/ui';
-import { colors, fonts, layout, space, textRole, type as typeScale } from '@/constants/theme';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import { pruneCameraCache } from '@/lib/reelMedia';
 import { COPY, fetchMyReelQuota, sweepOrphanReelFiles, type ReelQuotaRow } from '@/lib/reels';
 
@@ -179,7 +179,7 @@ export function CameraGate({
 
 /**
  * One of the gate's stops: a glyph, a title, a sentence, and the way on.
- * Bone on the reels ground, as the camera that follows it is dark; Inter,
+ * White on the reels ground, as the camera that follows it is dark; Inter,
  * because a primer is chrome, not the brand's voice.
  */
 function GateScreen({
@@ -222,9 +222,7 @@ const styles = StyleSheet.create({
   screen: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: layout.gutter },
   title: { color: colors.reelInk, textAlign: 'center', marginTop: space.lg },
   body: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
+    ...textRole.body,
     color: colors.reelInkMuted,
     textAlign: 'center',
     marginTop: space.sm,

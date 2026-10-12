@@ -4,7 +4,7 @@ import { StyleSheet, type Text, type TextInput, View } from 'react-native';
 
 import { AuthHold } from '@/components/auth/AuthHold';
 import { AuthTitleBar, useInputFocusOnShow, useStepTitleFocus } from '@/components/auth/AuthTitleBar';
-import { CabinetSheet, FEATURED } from '@/components/auth/CabinetBackdrop';
+import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { CountryPicker } from '@/components/auth/CountryPicker';
 import { AuthStoreMessages, EmailStep, PasswordStep, ResetStep } from '@/components/auth/EmailSteps';
 import { PhoneCodeStep } from '@/components/auth/PhoneCodeStep';
@@ -12,10 +12,9 @@ import { useRemembered } from '@/components/auth/rememberedAccount';
 import { TastePicker } from '@/components/auth/TastePicker';
 import { WaysIn } from '@/components/auth/WaysIn';
 import { WelcomeBack } from '@/components/auth/WelcomeBack';
-import { Grain } from '@/components/Grain';
 import { Button, Field, FieldGroup, SelectField } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
-import { latestDexIds, TASTES_TO_START } from '@/lib/tastes';
+import { TASTES_TO_START } from '@/lib/tastes';
 import { PHONE_INVALID, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import {
@@ -31,7 +30,7 @@ import {
 /*                                                                      */
 /* INLINE, NOT A MODAL ROUTE. AuthGate draws this in place inside the   */
 /* gated scene (Home, Profile, someone's profile, and the routes that   */
-/* wrap themselves in a gate), so the floating tab bar stays, and with  */
+/* wrap themselves in a gate), so the tab bar stays, and with           */
 /* it the Dex, which works signed out. A native modal would rise above  */
 /* the cold-start intro.                                                */
 /*                                                                      */
@@ -47,10 +46,10 @@ import {
 /* After the picker's Continue the card sits under the person's own     */
 /* picks, "Your Dex has begun", titled "Join Sipply".                   */
 /*                                                                      */
-/* OVER THE CABINET. Every step but the picker is a paper sheet on the  */
-/* cabinet's lining (CabinetSheet, auth/CabinetBackdrop): the first     */
-/* step's backdrop shows three mounted drinks above it, the others just */
-/* the wordmark. The sheet's title bar sticks while the form scrolls.   */
+/* ONE WHITE PAGE. Every step but the picker stands on the sign-in page */
+/* (CabinetSheet, auth/CabinetBackdrop): the step's bar at the top, the */
+/* large wordmark over the first step, the person's three picks once a  */
+/* Dex has begun, and the form. Nothing lies behind it.                 */
 /*                                                                      */
 /* ONE FLOW, SHARED BY EVERY GATE. The step, the picks and everything   */
 /* typed live in the sign-in flow store (store/signInFlow), so Home and */
@@ -254,27 +253,17 @@ export default function SignInScreen({ onClose, home }: { onClose: () => void; h
   // A frame or two at launch while the remembered account and the Dex are read.
   if (!primed || (home && !dexReady)) return <AuthHold slowMessage="Still loading." />;
 
-  // The person's own drinks behind the first step: their picks, else their latest, else the cabinet's three.
-  const latest = latestDexIds(unlocks, 3);
-  const own = latest.length > 0 ? latest : FEATURED;
-
   if (welcome) {
-    return <WelcomeBack account={welcome} drinks={own} onClose={onClose} titleRef={titleRef} />;
+    return <WelcomeBack account={welcome} onClose={onClose} titleRef={titleRef} />;
   }
 
   if (tastes) {
     /*
      * Unmounted while another tab is in front, so its photo grid never sits
      * in memory behind that tab's (the tab-switch lag). The picks are the
-     * flow's, so nothing is lost; the lining stands in meanwhile.
+     * flow's, so nothing is lost; the bare page stands in meanwhile.
      */
-    if (awayOnTab) {
-      return (
-        <View style={styles.ground}>
-          <Grain tone="lining" />
-        </View>
-      );
-    }
+    if (awayOnTab) return <View style={styles.ground} />;
     return <TastePicker />;
   }
 
@@ -316,7 +305,8 @@ export default function SignInScreen({ onClose, home }: { onClose: () => void; h
   return (
     <CabinetSheet
       backdrop={entry ? 'full' : 'compact'}
-      backdropDrinks={joining ? picks : own}
+      // A begun Dex shows the person's own picks (the page falls back to the featured three).
+      backdropDrinks={picks}
       begun={entry && joining ? picks.length : undefined}
       bar={
         <AuthTitleBar
@@ -335,7 +325,7 @@ export default function SignInScreen({ onClose, home }: { onClose: () => void; h
 }
 
 const styles = StyleSheet.create({
-  ground: { flex: 1, backgroundColor: colors.lining },
+  ground: { flex: 1, backgroundColor: colors.bg },
   body: { paddingHorizontal: layout.gutter, paddingTop: space.xl },
   primary: { marginTop: space.xl },
 });

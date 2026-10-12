@@ -1,20 +1,6 @@
 import { Image } from 'expo-image';
-import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import {
-  ActionSheetIOS,
-  Alert,
-  Platform,
-  Pressable,
-  Share,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-  type NativeSyntheticEvent,
-  type StyleProp,
-  type TextLayoutEventData,
-  type ViewStyle,
-} from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Pressable, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -26,16 +12,17 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { BRACKET_INSET, BrassHairline, CornerBrackets } from '@/components/brass';
+import { DrinkName, Print } from '@/components/cabinet';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
-import { MediaMarker, Nameplate } from '@/components/media';
-import { Avatar, haptic } from '@/components/ui';
-import { colors, fonts, layout, motion, radius, space, stroke, textRole } from '@/constants/theme';
+import { ActionSheet, type SheetAction } from '@/components/Sheet';
+import { MediaMarker } from '@/components/media';
+import { formatPlateNumber } from '@/components/plate';
+import { announce, Avatar, haptic } from '@/components/ui';
+import { colors, layout, motion, onMedia, space, tabular, textRole } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
-import { drinkPhoto } from '@/data/drinkPhotos';
-import { glassPhrase, styleLabel } from '@/lib/drinkLabels';
+import { photoFor } from '@/data/drinkPhotos';
 import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
 import {
   isBlankCaption,
@@ -47,22 +34,37 @@ import {
 } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
-import { useCollection, useIsUnlocked } from '@/store/collection';
 import { useSocial } from '@/store/social';
 import type { Post, UserProfile } from '@/types';
 
 /*
- * Re-exported so the screens that imported it from here keep working. It
- * lives in lib/useSignedPhoto now: Home, the profile grids, Activity and
- * the reel tiles all sign these photos, and none of them should depend on
- * this component's file to do it.
- */
-export { useSignedPhoto };
-/*
- * The same for the time helpers, which live in lib/social now: the likers
- * sheet this card opens uses them too, and it cannot import this file.
+ * Re-exported so the screens that import the time helpers from here
+ * (Activity, the reel cells, the profile grids, the story viewer) keep
+ * working. They live in lib/social, where the likers sheet reads them too.
  */
 export { timeAgo, timeAgoSpoken };
+
+/* ==================================================================== */
+/* A post                                                               */
+/*                                                                      */
+/* LESS STUFF (layout spec 5.1 and 5.4; Jan: "I want less stuff"). The  */
+/* photo and the drink's name are the post; everything else is quieter  */
+/* or one tap away.                                                     */
+/*                                                                      */
+/*   feed    the print (4:5, square corners, the photo edge), one line  */
+/*           with the name in Playfair on the left and the author small */
+/*           and muted on the right, on one baseline, then the heart,   */
+/*           the like count, the bookmark and •••. Seven elements.      */
+/*   detail  the post page: the author row (face, name, •••) above the  */
+/*           print, the name, the whole caption, the heart and count.   */
+/*                                                                      */
+/* What left the feed, and where it went: the time and the place to the */
+/* ••• sheet's header; the Nº, "In your Dex", style and origin to the   */
+/* drink page (tap the name); the liked-by faces to the likers sheet    */
+/* (tap the count); the caption to the post page; Share to •••.         */
+/*                                                                      */
+/* No red anywhere: a liked heart is the solid ink heart.               */
+/* ==================================================================== */
 
 /* ==================================================================== */
 /* Icon control                                                         */
@@ -79,10 +81,10 @@ export { timeAgo, timeAgoSpoken };
  * Driven by the VALUE changing, never by mount. The feed is a virtualised
  * list, so a mount-triggered animation would set off a wave of popping hearts
  * every time a card scrolled back into view. The resting scale is 1, so a
- * pop that never runs leaves the glyph exactly where it should be.
+ * pop that never runs leaves the glyph exactly where it should be. It runs
+ * on the UI thread (Reanimated), never on a JS clock.
  *
- * A full 44pt box with no slop: the actions row is 44 tall and laid out on
- * that grid, so the glyphs land on the print's 24pt edges (see `actions`).
+ * A full 44pt box with no slop, so the rows can be laid out on that grid.
  * Pressed, it dims to half, the plain glyph rule; the pop is the real
  * feedback.
  */
@@ -90,18 +92,18 @@ function IconButton({
   name,
   label,
   onPress,
-  color = colors.text,
+  size = GLYPH,
   filled,
   selected,
-  style,
+  accessibilityHint,
 }: {
   name: IconName;
   label: string;
   onPress: () => void;
-  color?: string;
+  size?: number;
   filled?: boolean;
   selected?: boolean;
-  style?: StyleProp<ViewStyle>;
+  accessibilityHint?: string;
 }) {
   const reduced = useReducedMotion();
   const scale = useSharedValue(1);
@@ -118,10 +120,7 @@ function IconButton({
             withTiming(0.8, { duration: 90, easing: Easing.in(Easing.quad) }),
             withSpring(1, { damping: 8, stiffness: 420, mass: 0.7 }),
           )
-        : withSequence(
-            withTiming(0.9, { duration: 90 }),
-            withSpring(1, { damping: 14, stiffness: 300 }),
-          ),
+        : withSequence(withTiming(0.9, { duration: 90 }), withSpring(1, { damping: 14, stiffness: 300 })),
     );
   }, [selected, reduced, scale]);
 
@@ -132,10 +131,11 @@ function IconButton({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityHint={accessibilityHint}
       accessibilityState={selected === undefined ? undefined : { selected }}
-      style={({ pressed }) => [styles.iconBtn, pressed && styles.pressed, style]}>
+      style={({ pressed }) => [styles.iconBtn, pressed && styles.pressed]}>
       <Animated.View style={animated}>
-        <Icon name={name} size={24} color={color} filled={filled} />
+        <Icon name={name} size={size} color={colors.text} filled={filled} />
       </Animated.View>
     </Pressable>
   );
@@ -156,10 +156,16 @@ const BURST_MS = 900;
  */
 const BURST_FADE_AT = BURST_MS - motion.base;
 
+/** The burst's heart, and the white ring round it. */
+const BURST = 88;
+const BURST_RING = 3;
+
 /**
  * The heart that answers a double tap on the photo. It answers a touch,
- * which is the motion v2 allows, and it is skipped under Reduce Motion
- * (the action row's heart still fills).
+ * and it is skipped under Reduce Motion (the action row's heart still
+ * fills). Drawn as the plates over a photo are (onMedia): solid ink with
+ * a white ring, a white heart a little larger laid under the ink one, so
+ * it holds on a pale daylight print and on a dark bar photo alike.
  *
  * ITS RESTING STATE IS "NOT MOUNTED". The card unmounts it on a JS timer
  * after BURST_MS rather than when its fade finishes: after a cold start in
@@ -187,96 +193,13 @@ function HeartBurst() {
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
       style={styles.burstLayer}>
-      <Animated.View style={animated}>
-        <Icon name="heart" size={88} color={colors.textOnWine} filled />
+      <Animated.View style={[styles.burst, animated]}>
+        <Icon name="heart" size={BURST + 2 * BURST_RING} color={onMedia.ring} filled />
+        <View style={styles.burstInk}>
+          <Icon name="heart" size={BURST} color={onMedia.fill} filled />
+        </View>
       </Animated.View>
     </View>
-  );
-}
-
-/* ==================================================================== */
-/* Liked by                                                             */
-/* ==================================================================== */
-
-/** The liker's face before the line: small enough to sit inside one line of prose. */
-const LIKED_FACE = 20;
-
-/**
- * The likes line under the actions: "Liked by Maya Ortiz and 12 others",
- * with Maya's face first, the way a feed of friends is read (migration
- * 021 names her; Post.likedBy says how much is known).
- *
- *   no likes             nothing, as before: a new post has no "0 likes".
- *   likedBy undefined    the server could not name anyone (021 missing,
- *                        or the call failed): the plain count, not a
- *                        button, since there is no list to open.
- *   likedBy a person     "Liked by <name>", "... and 1 other", "... and
- *                        N others". `likes` already carries your own
- *                        like or unlike, so the others move with the heart.
- *   likedBy null         nobody but you to name: "Liked by you" when the
- *                        one like is yours, else the count.
- *
- * Tappable whenever there is a list to open. The name is the role's
- * semibold, the rest prose ink, and the line wraps, never truncates.
- */
-function LikedByLine({
-  likes,
-  liked,
-  likedBy,
-  onOpen,
-}: {
-  likes: number;
-  liked: boolean;
-  likedBy: UserProfile | null | undefined;
-  onOpen: () => void;
-}) {
-  const { fontScale } = useWindowDimensions();
-  if (likes <= 0) return null;
-
-  const count = `${formatCount(likes)} ${likes === 1 ? 'like' : 'likes'}`;
-  if (likedBy === undefined) return <Text style={[styles.likesCount, styles.likesInset]}>{count}</Text>;
-
-  const others = likes - 1;
-  const rest = others > 0 ? ` and ${formatCount(others)} ${others === 1 ? 'other' : 'others'}` : '';
-  // "you" only when the one like is yours, so `rest` is empty beside it.
-  const name = likedBy ? likedBy.displayName : liked && likes === 1 ? 'you' : null;
-  const sentence = name ? `Liked by ${name}${rest}` : count;
-  // The face centred on the first line, at any text size (line heights scale with the text).
-  const faceTop = Math.max(0, Math.round((textRole.prose.lineHeight * fontScale - LIKED_FACE) / 2));
-
-  return (
-    <Pressable
-      onPress={onOpen}
-      /*
-       * Slop below and to the right only. The actions row sits right above
-       * this line and is drawn under it, so slop above would take the
-       * bottom of the heart's own 44pt box, the most tapped control there is.
-       */
-      hitSlop={{ bottom: 8, right: 24 }}
-      accessibilityRole="button"
-      accessibilityLabel={sentence}
-      accessibilityHint="Shows who liked this"
-      style={({ pressed }) => [styles.likedBy, styles.likesInset, pressed && styles.textPressed]}>
-      {likedBy ? (
-        // round-ok: avatar. Avatar draws its own disc; the wrapper only centres it on the first line.
-        <View style={{ marginTop: faceTop }}>
-          <Avatar
-            name={likedBy.displayName}
-            accent={likedBy.accent}
-            size={LIKED_FACE}
-            avatarPath={likedBy.avatarPath}
-          />
-        </View>
-      ) : null}
-      {name ? (
-        <Text style={styles.likedText}>
-          Liked by <Text style={styles.likedName}>{name}</Text>
-          {rest}
-        </Text>
-      ) : (
-        <Text style={styles.likesCount}>{count}</Text>
-      )}
-    </Pressable>
   );
 }
 
@@ -284,38 +207,36 @@ function LikedByLine({
 /* PostCard                                                             */
 /* ==================================================================== */
 
+/** The heart is 28 (layout spec 5.1); the bookmark and ••• are 24. */
+const HEART = 28;
+const GLYPH = 24;
 /**
- * The print (Brass D5): the photo sits this far in from each screen edge,
- * so the brass corner brackets read as a frame around a picture rather
- * than as marks on a full-bleed screen. The likes, caption and time line
- * up with the print's edges below it, as the mock sets them.
+ * The actions row is inset so a 24pt glyph in its 44pt box ends on the
+ * print's edge (••• at x 392 to 416 on a 440 screen), and so the heart's
+ * box starts 14 in, which puts the 28pt heart at x 22 and the count at 58.
  */
-const PRINT_INSET = 24;
-/** The author's avatar inside its brass hairline (D16), which adds 4. */
+const ACTIONS_INSET = layout.gutter - (layout.hit - GLYPH) / 2;
+/** The actions' visible band (the 28pt heart, with a point either side), 14 under the name line. */
+const ACTIONS_BAND = 30;
+const BAND_SLACK = (layout.hit - ACTIONS_BAND) / 2;
+/** The author's face on the post page. */
 const AUTHOR_AVATAR = 32;
-/** The action glyphs are 24pt in 44pt boxes: this inset puts the glyphs on the print's edges. */
-const ACTIONS_INSET = PRINT_INSET - (layout.hit - 24) / 2;
-/**
- * The gallery count's corner: inside the top-right bracket's 8pt corner
- * plate (BRACKET_INSET + 8) with a 2pt gap, so the marker never sits on
- * the brass.
- */
-const COUNT_INSET = BRACKET_INSET + 10;
-
-/** What the post page reaches into a card for: its options menu, which the page's own bar carries. */
-export interface PostCardHandle {
-  openMenu: () => void;
-}
+const AUTHOR_SLACK = (layout.hit - AUTHOR_AVATAR) / 2;
+/** The gallery count's corner, inside the print. */
+const COUNT_INSET = space.sm;
+/** Dynamic Type cap for the Playfair name under the print (spec 6.5). */
+const NAME_CAP = 1.3;
+/** The name's one line (nameLg, 34) less the 44pt target, split above and below it. */
+const NAME_SLACK = Math.max(0, (layout.hit - textRole.nameLg.lineHeight) / 2);
+const NAME_SLOP = { top: NAME_SLACK, bottom: NAME_SLACK };
 
 export interface PostCardProps {
   post: Post;
   /** The author's profile, from `useSocial().profiles`. */
   author?: UserProfile;
   onOpenDrink: (drinkId: string) => void;
-  /** Omitted on a profile screen, where you're already looking at the author. */
+  /** Omitted where you are already looking at the author. */
   onOpenAuthor?: (authorId: string) => void;
-  /** Overrides `post.photoPath` — only needed when the caller resolved it elsewhere. */
-  photoPath?: string | null;
   /**
    * Called after a successful block, so the list can drop this author's cards
    * without waiting for a refetch. RLS already hides them from the NEXT query;
@@ -328,13 +249,8 @@ export interface PostCardProps {
    * can leave. Lists need nothing: the store drops the post from the feed.
    */
   onDeleted?: (postId: string) => void;
-  /**
-   * The post page carries the options button in its own top bar (the Brass
-   * mock), so the card leaves its header's one out and the page calls
-   * `openMenu` through `ref`.
-   */
-  menuInBar?: boolean;
-  ref?: React.Ref<PostCardHandle>;
+  /** 'feed' (Home) or 'detail' (the post page). See the header note. */
+  variant?: 'feed' | 'detail';
 }
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -344,11 +260,9 @@ export const PostCard = React.memo(function PostCard({
   author,
   onOpenDrink,
   onOpenAuthor,
-  photoPath,
   onBlocked,
   onDeleted,
-  menuInBar,
-  ref,
+  variant = 'feed',
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
@@ -356,22 +270,14 @@ export const PostCard = React.memo(function PostCard({
   const toggleSave = useSocial((s) => s.toggleSave);
   const reduced = useReducedMotion();
   const { width } = useWindowDimensions();
-  /*
-   * Whether the drink is in YOUR Dex, for the nameplate's status plaque.
-   * Unknown (null, no plaque) while signed out or before the collection
-   * has been read from disk, so a drink you have never shows "New to your
-   * Dex" for a moment at launch.
-   */
-  const unlocked = useIsUnlocked(post.drinkId);
-  const collectionReady = useCollection((s) => s.hydrated);
-  const inDex = myId && collectionReady ? unlocked : null;
+  const detail = variant === 'detail';
 
   /*
    * Optimistic overlay on the server's like state. The store only patches
-   * the feed's copy of a post, so on a profile — which holds its own list —
-   * a tap would otherwise look like it did nothing. Keyed by the server's
-   * answer: once that catches up the overlay stops matching and quietly
-   * drops out.
+   * the feed's copy of a post, so on the post page — which holds its own
+   * copy — a tap would otherwise look like it did nothing. Keyed by the
+   * server's answer: once that catches up the overlay stops matching and
+   * quietly drops out.
    *
    * A failed write clears the overlay. Without that, the store's rollback
    * restored the very key the overlay was stamped with, so the card went on
@@ -416,7 +322,7 @@ export const PostCard = React.memo(function PostCard({
   }, [myId, post.id, saveKey, saved, toggleSave]);
 
   /*
-   * Who liked it: null until the line is first tapped, then open or
+   * Who liked it: null until the count is first tapped, then open or
    * closed. The sheet mounts on that first tap and stays mounted, so a
    * feed of a hundred cards holds no hundred Modals, and a close still
    * gets UIKit's slide down and the sheet's after-dismiss navigation.
@@ -426,29 +332,32 @@ export const PostCard = React.memo(function PostCard({
   const closeLikers = useCallback(() => setLikersOpen(false), []);
 
   /*
-   * A post can now carry several photos of the same drink, newest first
+   * The ••• sheet: null until first opened (then mounted for good, as the
+   * likers), and which page it shows: the post's menu, or Report's reasons
+   * (the same sheet, its page turned). The page outlives a close, so the
+   * sheet fades out showing what it showed.
+   */
+  const [menu, setMenu] = useState<{ open: boolean; page: 'post' | 'report' } | null>(null);
+  const openMenu = useCallback(() => setMenu({ open: true, page: 'post' }), []);
+  const closeMenu = useCallback(() => setMenu((m) => (m ? { ...m, open: false } : m)), []);
+
+  /*
+   * A post can carry several photos of the same drink, newest first
    * (migration 007). `index` is which one is on screen; it resets when the
    * post's photo set changes so a card recycled by the virtualised list
    * cannot open on someone else's third picture.
+   *
+   * The page carries the photo set it belongs to, exactly as `flip` above
+   * carries its like key, so the reset is a derivation rather than an
+   * effect (React Compiler rejects the setState-in-effect version, which
+   * painted one frame of the wrong photo first).
    */
   const gallery = post.photoPaths?.length ? post.photoPaths : [];
   const galleryKey = gallery.join('|');
-  /*
-   * The page carries the photo set it belongs to, exactly as `flip` above
-   * carries its like key, and for the same reason: the reset is then a
-   * derivation rather than an effect.
-   *
-   * This was `useState(0)` plus `useEffect(() => setIndex(0), [galleryKey])`,
-   * which React Compiler rejects — setting state synchronously inside an
-   * effect renders the card once with the WRONG photo and then again with the
-   * right one. In a virtualised feed that stale first frame is the recycling
-   * bug the reset exists to prevent, so the effect was reintroducing on paint
-   * the very thing it fixed on the next tick.
-   */
   const [paged, setPaged] = useState<{ key: string; index: number } | null>(null);
   const index = paged?.key === galleryKey ? paged.index : 0;
 
-  const current = gallery[index] ?? photoPath ?? post.photoPath;
+  const current = gallery[index] ?? post.photoPath;
   // `post` as the retry key: every refetch hands over a new object, so a
   // photo that failed to sign gets another try on pull-to-refresh.
   const photoUrl = useSignedPhoto(current, post);
@@ -464,32 +373,14 @@ export const PostCard = React.memo(function PostCard({
     for (const path of galleryKey.split('|')) void signedPhotoUrl(path);
   }, [galleryKey]);
 
-  /*
-   * The caption's "more". `expandedFor` names the post it was opened on,
-   * so a card the list recycles for another post starts clamped again.
-   * Whether the caption runs past two lines is read from a hidden,
-   * unclamped copy of it (below), keyed by what it measured: a changed
-   * caption reads as "not measured yet" rather than keeping the old answer.
-   */
-  const [expandedFor, setExpandedFor] = useState<string | null>(null);
-  const expanded = expandedFor === post.id;
-
   const drink = getDrink(post.drinkId);
   // A post can outrun its author's profile row; render it rather than crash.
   const who = author ?? {
     id: post.authorId,
     username: 'someone',
     displayName: 'Someone',
-    accent: colors.wineSoft,
+    accent: colors.tone2,
     joinedAt: '',
-  };
-
-  const captionKey = `${post.id}|${who.username}|${post.caption}`;
-  const [measured, setMeasured] = useState<{ key: string; over: boolean } | null>(null);
-  const overflows = measured?.key === captionKey && measured.over;
-  const onMeasure = (e: NativeSyntheticEvent<TextLayoutEventData>) => {
-    const over = e.nativeEvent.lines.length > 2;
-    setMeasured((m) => (m && m.key === captionKey && m.over === over ? m : { key: captionKey, over }));
   };
 
   /*
@@ -552,9 +443,9 @@ export const PostCard = React.memo(function PostCard({
   };
 
   /*
-   * The paper airplane, and the menu's Share: the system share sheet with
-   * one line of text. It says the act ("posted"), not the Dex number: the
-   * number means something only inside the app.
+   * The menu's Share: the system share sheet with one line of text. It
+   * says the act ("posted"), not the Dex number: the number means
+   * something only inside the app.
    */
   const share = useCallback(() => {
     if (!drink) return;
@@ -568,42 +459,20 @@ export const PostCard = React.memo(function PostCard({
   /*
    * Reason first, then file. A free-text-only report is unactionable at
    * review time, and a one-tap "report" with no reason is the shape that
-   * gets abused as a downvote button.
+   * gets abused as a downvote button. The reasons are the menu's second
+   * page (`report`); a reason runs once the sheet has gone.
    */
-  const openReport = useCallback(() => {
-    if (!myId) return;
-    const file = (reason: ReportReason) => {
+  const fileReport = useCallback(
+    (reason: ReportReason) => {
+      if (!myId) return;
       void reportPost(myId, post.id, reason)
         .then(() =>
           Alert.alert('Thanks', 'This post has been reported. You can also block this person from the post menu.'),
         )
         .catch(() => Alert.alert('Could not report', 'Check your connection and try again.'));
-    };
-    const title = 'Report this post';
-    const message =
-      'What is wrong with it? Reports are reviewed privately; the poster is not told who reported them.';
-
-    // A choice among six is an action sheet on iOS; an alert is for a yes or no.
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          title,
-          message,
-          options: [...REPORT_REASONS.map((r) => r.label), 'Cancel'],
-          cancelButtonIndex: REPORT_REASONS.length,
-        },
-        (i) => {
-          const reason = REPORT_REASONS[i];
-          if (reason) file(reason.key);
-        },
-      );
-      return;
-    }
-    Alert.alert(title, message, [
-      ...REPORT_REASONS.map((r) => ({ text: r.label, onPress: () => file(r.key) })),
-      { text: 'Cancel', style: 'cancel' as const },
-    ]);
-  }, [myId, post.id]);
+    },
+    [myId, post.id],
+  );
 
   const confirmBlock = useCallback(() => {
     if (!myId) return;
@@ -634,7 +503,7 @@ export const PostCard = React.memo(function PostCard({
     // Permanent, so a two-way alert on every platform, like Block.
     Alert.alert(
       'Delete this post?',
-      'It is removed from your profile and from everyone\'s feed, with its photos. This cannot be undone.',
+      "It is removed from your profile and from everyone's feed, with its photos. This cannot be undone.",
       [
         { text: 'Cancel', style: 'cancel' as const },
         {
@@ -655,60 +524,6 @@ export const PostCard = React.memo(function PostCard({
     );
   }, [myId, post.id, removePost, onDeleted]);
 
-  const openMenu = useCallback(() => {
-    if (!drink) return;
-    // Alert.alert is a no-op on web; go straight to the primary action there.
-    if (Platform.OS === 'web') {
-      onOpenDrink(drink.id);
-      return;
-    }
-    /*
-     * Moderation actions are offered only on OTHER people's posts. Offering
-     * to report or block yourself is nonsense, and the server would reject
-     * the block anyway (no_self_block).
-     *
-     * Report is not styled destructive: filing a report removes nothing.
-     * Block is, because it takes a person out of your feed. On your own post
-     * the destructive action is Delete.
-     */
-    const mine = who.id === myId;
-    const actions: { text: string; onPress: () => void; destructive?: boolean }[] = [
-      { text: 'Open in the Dex', onPress: () => onOpenDrink(drink.id) },
-      { text: 'Share', onPress: share },
-      ...(mine
-        ? [{ text: 'Delete post', onPress: confirmDelete, destructive: true }]
-        : [
-            { text: 'Report post', onPress: openReport },
-            { text: `Block @${who.username}`, onPress: confirmBlock, destructive: true },
-          ]),
-    ];
-
-    // An overflow menu is an action sheet on iOS, anchored to the thumb.
-    if (Platform.OS === 'ios') {
-      const blockIndex = actions.findIndex((a) => a.destructive);
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          title: drink.name,
-          options: [...actions.map((a) => a.text), 'Cancel'],
-          cancelButtonIndex: actions.length,
-          destructiveButtonIndex: blockIndex >= 0 ? blockIndex : undefined,
-        },
-        (i) => actions[i]?.onPress(),
-      );
-      return;
-    }
-    Alert.alert(drink.name, undefined, [
-      ...actions.map((a) => ({
-        text: a.text,
-        onPress: a.onPress,
-        style: a.destructive ? ('destructive' as const) : ('default' as const),
-      })),
-      { text: 'Cancel', style: 'cancel' as const },
-    ]);
-  }, [drink, onOpenDrink, share, who.id, who.username, myId, openReport, confirmBlock, confirmDelete]);
-
-  useImperativeHandle(ref, () => ({ openMenu }), [openMenu]);
-
   /*
    * One rule for "draws nothing", shared with every list of posts
    * (isRenderablePost, lib/social): a list filters these out before they
@@ -717,341 +532,344 @@ export const PostCard = React.memo(function PostCard({
    */
   if (!isRenderablePost(post) || !drink) return null;
 
-  const showCaption = !isBlankCaption(post.caption);
+  // Saving needs migration 017's table. The flag is settled by the fetch
+  // that produced this post (toPosts asks about saves before it returns
+  // any post), so it is known before any card renders.
+  const canSave = !!myId && savesSupported();
+  const mine = !!myId && who.id === myId;
+
+  /*
+   * Everything the old menu did, and Save, in the order the layout spec
+   * gives (Comment and Edit are left out: neither exists on the server).
+   * Moderation is offered only on OTHER people's posts: reporting or
+   * blocking yourself is nonsense, and the server rejects a self-block
+   * (no_self_block). Delete, Report and Block are the destructive words,
+   * ink and underlined; Delete and Block go on to the system's confirm.
+   */
+  const menuActions: SheetAction[] = [
+    { label: 'Share', onPress: share },
+    ...(canSave ? [{ label: saved ? 'Remove from saved' : 'Save', onPress: onSave }] : []),
+    { label: 'View drink', detail: formatPlateNumber(drink.dexNumber), onPress: () => onOpenDrink(drink.id) },
+    ...(mine
+      ? [{ label: 'Delete', destructive: true, onPress: confirmDelete }]
+      : myId
+        ? [
+            {
+              label: 'Report',
+              destructive: true,
+              stay: true,
+              onPress: () => {
+                setMenu({ open: true, page: 'report' });
+                announce('Report this post. What is wrong with it?');
+              },
+            },
+            { label: `Block @${who.username}`, destructive: true, onPress: confirmBlock },
+          ]
+        : []),
+  ];
+  const reasonActions: SheetAction[] = REPORT_REASONS.map((r) => ({
+    label: r.label,
+    onPress: () => fileReport(r.key),
+  }));
+
   /*
    * The photo's frame is chosen from the PATH, not the signed URL. While the
-   * URL is on its way (`undefined`) the frame holds its place on the sunk
-   * ground; only a post with no photo, or one that would not sign (`null`),
-   * falls back to the drink's own face: its lit catalogue photo, else the
-   * lit vector window, in the same 4:5 frame, never a coloured square.
+   * URL is on its way (`undefined`) the frame holds its place on the wash;
+   * only a post with no photo, or one that would not sign (`null`), falls
+   * back to the drink's own face: its daylight print, else the no-photo
+   * face, in the same 4:5 frame.
    */
   const showPhoto = !!current && photoUrl !== null;
-  // The print's size: the screen less its two insets, at 4:5 (D5). The decode, the brackets and the name's measure all follow it.
-  const printW = Math.round(width - 2 * PRINT_INSET);
+  // The print column: the screen less its two gutters (392 at 440), at 4:5 (490).
+  const printW = Math.round(width - 2 * layout.gutter);
   const mediaH = Math.round(printW / layout.feedPhotoAspect);
   const mediaLabel = hasGallery
     ? `Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`
     : showPhoto
       ? `Photo of ${drink.name}`
-      : drinkPhoto(drink.id)
+      : photoFor(drink.id)
         ? `Dex photo of ${drink.name}`
         : `Illustration of ${drink.name}`;
-  // "Fizz · Highball glass · New Orleans, USA": sentence-case style, the glass said once.
-  const meta = [styleLabel(drink.subcategory), glassPhrase(drink), drink.origin].filter(Boolean).join(' · ');
 
-  // D16: the author's face in a 1pt brass hairline, the print's own trim.
-  const avatar = (
-    <BrassHairline size={AUTHOR_AVATAR}>
-      <Avatar name={who.displayName} accent={who.accent} size={AUTHOR_AVATAR} avatarPath={who.avatarPath} />
-    </BrassHairline>
+  const when = timeAgoSpoken(post.createdAt);
+  const likesSpoken = `${formatCount(likes)} ${likes === 1 ? 'like' : 'likes'}`;
+  /*
+   * The count opens the likers sheet once the server can name them
+   * (migration 021: Post.likedBy is defined). Before that it is the plain
+   * count, not a button, since there is no list to open.
+   */
+  const listable = likes > 0 && post.likedBy !== undefined;
+
+  const more = <IconButton name="more" label="Post options" onPress={openMenu} />;
+
+  const heart = (
+    <IconButton
+      name="heart"
+      label="Like"
+      onPress={onLike}
+      size={HEART}
+      filled={liked}
+      selected={liked}
+    />
   );
-  const captionText = (
+
+  const count =
+    likes <= 0 ? null : listable ? (
+      <Pressable
+        onPress={openLikers}
+        // The row is 44 tall; slop to the right reaches past the figure's few points.
+        hitSlop={{ right: space.lg }}
+        accessibilityRole="button"
+        accessibilityLabel={likesSpoken}
+        accessibilityHint="Shows who liked this"
+        style={({ pressed }) => [styles.count, pressed && styles.pressed]}>
+        <Text style={styles.countText}>{formatCount(likes)}</Text>
+      </Pressable>
+    ) : (
+      <View style={styles.count}>
+        <Text style={styles.countText} accessibilityLabel={likesSpoken}>
+          {formatCount(likes)}
+        </Text>
+      </View>
+    );
+
+  /*
+   * The print. One Pressable covers it, for the page turn and the double-tap
+   * like; nothing else is nested in it, so VoiceOver reads it as one
+   * element: the photo, or on a gallery the button that turns the page.
+   * Liking is always the heart below as well; the double tap is a shortcut,
+   * never the only way. No words on the photo (white spec D5): the gallery
+   * count is a solid ink marker, and the name hangs under the print.
+   */
+  const print = (
+    <Print width={printW} height={mediaH} style={detail ? styles.printDetail : styles.printFeed}>
+      <Pressable
+        onPress={onMediaPress}
+        accessibilityRole={hasGallery ? 'button' : 'image'}
+        accessibilityLabel={mediaLabel}
+        style={StyleSheet.absoluteFill}>
+        {showPhoto ? (
+          <Image
+            accessibilityIgnoresInvertColors
+            source={photoUrl ? { uri: photoUrl, cacheKey: `${current}#${printW}x${mediaH}` } : undefined}
+            /*
+             * Keyed on the storage path, not the URL. A signed URL carries a
+             * fresh token every time it is minted, so keyed on the URL every
+             * photo downloaded again after each launch and every hour. A path
+             * never changes content — each upload gets a new name — so it is
+             * a safe key, and the memory tier spares a remount the decode.
+             *
+             * And on the frame's size: the same path is drawn as a grid tile,
+             * a Dex card and a story, and expo-image's SDWebImage hands a
+             * smaller frame's early-resized decode to the next size that
+             * misses its own entry (PostGridTile says how). This card's own
+             * key keeps it from ever drawing a tile's picture at full width.
+             */
+            cachePolicy="memory-disk"
+            // Pour photos are stored at up to 2048px; decode at the print's width.
+            enforceEarlyResizing
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+            transition={reduced ? 0 : motion.fast}
+          />
+        ) : (
+          <DrinkFace
+            drink={drink}
+            mode="photo"
+            width={printW}
+            height={mediaH}
+            // The glass at 0.56 of the frame's width; VectorFace takes it as a share of the height.
+            artScale={0.56 * layout.feedPhotoAspect}
+            style={FACE_FILL}
+          />
+        )}
+        {burst ? <HeartBurst key={burst} /> : null}
+      </Pressable>
+      {hasGallery ? (
+        /*
+         * Tap-to-advance rather than a swipe: this card already sits in a
+         * vertically scrolling feed, and a horizontal pan inside it fights
+         * the list for the gesture on every drag that is not perfectly
+         * sideways. VoiceOver hears the count in the photo's own label.
+         */
+        <View pointerEvents="none" style={styles.galleryCount}>
+          <MediaMarker text={`${index + 1}/${gallery.length}`} />
+        </View>
+      ) : null}
+    </Print>
+  );
+
+  // The name under the print: a wall label, opening the drink page, where its Nº, state, style and origin went.
+  const name = (
+    <Pressable
+      onPress={() => onOpenDrink(drink.id)}
+      hitSlop={NAME_SLOP}
+      accessibilityRole="button"
+      accessibilityLabel={drink.name}
+      accessibilityHint="Opens the drink"
+      style={({ pressed }) => [styles.nameTarget, pressed && styles.pressed]}>
+      <DrinkName name={drink.name} role={textRole.nameLg} measure={printW} cap={NAME_CAP} color={colors.text} />
+    </Pressable>
+  );
+
+  const sheets = (
     <>
-      <Text style={styles.captionAuthor}>{who.username} </Text>
-      {post.caption}
+      {likersOpen === null ? null : (
+        <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} likes={likes} />
+      )}
+      {menu === null ? null : (
+        <ActionSheet
+          visible={menu.open}
+          onClose={closeMenu}
+          title={menu.page === 'report' ? 'Report this post' : undefined}
+          header={
+            menu.page === 'report'
+              ? 'What is wrong with it? Reports are reviewed privately; the poster is not told who reported them.'
+              : `${who.username} · ${timeAgo(post.createdAt)}`
+          }
+          // "2h" is read as "2 h"; the spoken line says the time in words.
+          headerLabel={menu.page === 'report' ? undefined : `${who.username}, ${when}`}
+          actions={menu.page === 'report' ? reasonActions : menuActions}
+        />
+      )}
     </>
   );
-  // Saving needs migration 017's table. The flag is settled by the fetch
-  // that produced this post (toPosts asks about saves before it returns
-  // any post), so it is known before any card renders.
-  const canSave = savesSupported();
+
+  if (detail) {
+    /*
+     * The post page (layout spec 5.4): nine elements at rest. The ••• moved
+     * from the bar to the end of the author row; Save lives in it here,
+     * where the feed keeps its bookmark.
+     */
+    return (
+      <View style={styles.cardDetail}>
+        <View style={styles.authorRow}>
+          <AuthorIdentity who={who} when={when} onOpenAuthor={onOpenAuthor} />
+          {more}
+        </View>
+        {print}
+        <View style={styles.detailName}>{name}</View>
+        {isBlankCaption(post.caption) ? null : <Text style={styles.caption}>{post.caption}</Text>}
+        <View style={[styles.actions, styles.actionsDetail]}>
+          {heart}
+          {count}
+        </View>
+        {sheets}
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.card}>
+    <View style={styles.cardFeed}>
+      {print}
       {/*
-        ---- Author row ----
-        Who posted it, and when. The drink is no longer named here: the
-        nameplate on the photo names it, in Playfair, with its number. The
-        username opens their profile, with the avatar as a second
-        way in that VoiceOver skips (the name beside it does the same
-        thing). The short "· 2h" is for the eye; VoiceOver hears the time
-        in words at the foot of the post.
-
-        Without onOpenAuthor (a profile, where you are already looking at
-        the author) the identity is plain text, read as one element: a
-        disabled button there made VoiceOver call the name "dimmed".
+        One line under the print: the name left, the author right, on one
+        baseline. The name wraps (never cut); if name and author will not
+        share the line, the author drops under it.
       */}
-      <View style={styles.author}>
+      <View style={styles.line}>
+        {name}
         {onOpenAuthor ? (
           <Pressable
             onPress={() => onOpenAuthor(who.id)}
-            hitSlop={6}
-            accessible={false}
-            accessibilityElementsHidden
-            importantForAccessibility="no-hide-descendants">
-            {avatar}
-          </Pressable>
-        ) : (
-          avatar
-        )}
-        <View style={styles.authorText}>
-          {onOpenAuthor ? (
-            <Pressable
-              onPress={() => onOpenAuthor(who.id)}
-              hitSlop={{ top: 12, bottom: 12, right: 8 }}
-              accessibilityRole="button"
-              accessibilityLabel={`Open ${who.displayName}'s profile`}
-              style={({ pressed }) => [styles.nameTarget, pressed && styles.textPressed]}>
-              <Text style={styles.username} numberOfLines={1}>
-                {who.username}
-              </Text>
-            </Pressable>
-          ) : (
-            <Text
-              style={[styles.username, styles.nameTarget]}
-              numberOfLines={1}
-              accessibilityLabel={`${who.displayName}, @${who.username}`}>
+            hitSlop={{ top: 13, bottom: 13, left: 8, right: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel={`${who.username}, ${when}`}
+            accessibilityHint="Opens their profile"
+            style={({ pressed }) => [styles.byline, pressed && styles.pressed]}>
+            <Text numberOfLines={1} style={styles.bylineText}>
               {who.username}
             </Text>
-          )}
-          <Text
-            style={styles.when}
-            numberOfLines={1}
-            accessibilityElementsHidden
-            importantForAccessibility="no">
-            · {timeAgo(post.createdAt)}
+          </Pressable>
+        ) : (
+          <Text numberOfLines={1} accessibilityLabel={`${who.username}, ${when}`} style={[styles.byline, styles.bylineText]}>
+            {who.username}
           </Text>
-        </View>
-        {menuInBar ? null : (
-          <IconButton
-            name="more"
-            label="Post options"
-            onPress={openMenu}
-            color={colors.textMuted}
-            style={styles.moreButton}
-          />
         )}
       </View>
-
       {/*
-        ---- The photo ----
-        A print (Brass D5): 24pt in from each edge, radius 4, a 1pt edge,
-        4:5, with brass corner brackets (D4) laid over it after the
-        nameplate so they stay bright. One Pressable covers it, for the
-        page turn and the double-tap like; nothing else is nested in it, so
-        VoiceOver reads it as one element: the photo, or on a gallery the
-        button that turns the page. Liking is always the heart below as
-        well; the double tap is a shortcut, never the only way.
-
-        The nameplate and the gallery count are SIBLINGS laid over it,
-        outside that Pressable: the nameplate passes every tap that misses
-        its name and status plaque down to the photo (its frame is
-        box-none), and VoiceOver reads it after the photo, as its own button
-        and then the plaque.
+        Heart and count on the left; the bookmark (only where the server has
+        saves) and ••• on the right. No comment or share glyph: there is no
+        thread to open, and Share is in •••.
       */}
-      <View style={[styles.media, { width: printW, height: mediaH }]}>
-        <Pressable
-          onPress={onMediaPress}
-          accessibilityRole={hasGallery ? 'button' : 'image'}
-          accessibilityLabel={mediaLabel}
-          style={StyleSheet.absoluteFill}>
-          {showPhoto ? (
-            <Image
-              source={
-                photoUrl ? { uri: photoUrl, cacheKey: `${current}#${printW}x${mediaH}` } : undefined
-              }
-              /*
-               * Keyed on the storage path, not the URL. A signed URL carries a
-               * fresh token every time it is minted, so keyed on the URL every
-               * photo downloaded again after each launch and every hour. A path
-               * never changes content — each upload gets a new name — so it is
-               * a safe key, and the memory tier spares a remount the decode.
-               *
-               * And on the frame's size: the same path is drawn as a grid tile,
-               * a Dex card and a story, and expo-image's SDWebImage hands a
-               * smaller frame's early-resized decode to the next size that
-               * misses its own entry (PostGridTile says how). This card's own
-               * key keeps it from ever drawing a tile's picture at full width.
-               */
-              cachePolicy="memory-disk"
-              // Pour photos are stored at up to 2048px; decode at the print's width.
-              enforceEarlyResizing
-              style={StyleSheet.absoluteFill}
-              contentFit="cover"
-              transition={motion.fast}
-            />
-          ) : (
-            <DrinkFace
-              drink={drink}
-              mode="lit"
-              width={printW}
-              height={mediaH}
-              // The glass at 0.56 of the frame's width; VectorFace takes it as a share of the height.
-              artScale={0.56 * layout.feedPhotoAspect}
-              style={FACE_FILL}
-            />
-          )}
-          {burst ? <HeartBurst key={burst} /> : null}
-        </Pressable>
-        <Nameplate
-          name={drink.name}
-          number={drink.dexNumber}
-          meta={meta}
-          inDex={inDex}
-          onOpen={() => onOpenDrink(drink.id)}
-          frameWidth={printW}
-        />
-        <CornerBrackets width={printW} height={mediaH} />
-        {hasGallery ? (
-          /*
-           * Tap-to-advance rather than a swipe: this card already sits in a
-           * vertically scrolling feed, and a horizontal pan inside it fights
-           * the list for the gesture on every drag that is not perfectly
-           * sideways. The count is a marker on the photo, scrim and bone, so
-           * it holds over a white frame as well as a dark one; VoiceOver
-           * hears it in the photo's own label.
-           */
-          <View pointerEvents="none" style={styles.galleryCount}>
-            <MediaMarker text={`${index + 1}/${gallery.length}`} />
-          </View>
-        ) : null}
-        {/* The print's 1pt edge, laid over the photo so the picture fills the whole frame under it. */}
-        <View
-          pointerEvents="none"
-          accessibilityElementsHidden
-          importantForAccessibility="no"
-          style={styles.printEdge}
-        />
-      </View>
-
-      {/*
-        ---- Actions ----
-        Like and share on the left, save on the right, and nothing that only
-        looks like a control: there is no comment glyph, because there is no
-        thread to open. Share is the paper airplane (`send`, Sipply's own
-        drawing): sending a post on, where the system's `share` glyph stays
-        for sharing a link (Find friends' invite). The bookmark is real (the
-        saves table and the Saved screen behind it), so it shows only where
-        the server has that table.
-      */}
-      <View style={styles.actions}>
-        <IconButton
-          name="heart"
-          label={liked ? 'Unlike' : 'Like'}
-          onPress={onLike}
-          filled={liked}
-          selected={liked}
-          color={liked ? colors.wine : colors.text}
-        />
-        <IconButton name="send" label="Share this post" onPress={share} />
-        <View style={styles.actionsSpacer} />
+      <View style={[styles.actions, styles.actionsFeed]}>
+        {heart}
+        {count}
+        <View style={styles.spacer} />
         {canSave ? (
           <IconButton
             name="bookmark"
-            label={saved ? 'Remove from saved' : 'Save'}
+            label="Save"
             onPress={onSave}
             filled={saved}
             selected={saved}
           />
         ) : null}
+        {more}
       </View>
-
-      {/*
-        ---- Likes, caption, time ----
-        Likes and caption only when there is something to say: a new post
-        has no "0 likes" line, and an uncaptioned one no stock sentence. The
-        likes line is ink, not wine: the filled wine heart right above it
-        already says whether you liked it. `likes` and `liked` are the
-        card's own optimistic answer, so the line moves with the heart.
-      */}
-      <LikedByLine likes={likes} liked={liked} likedBy={post.likedBy} onOpen={openLikers} />
-      {showCaption ? (
-        <View style={styles.captionBlock}>
-          <Text style={styles.caption} numberOfLines={expanded ? undefined : 2}>
-            {captionText}
-          </Text>
-          {expanded ? null : (
-            /*
-             * The measuring copy: unclamped, invisible and unreachable, laid
-             * over the real one at the same width, so its line count says
-             * whether the clamp is hiding anything.
-             */
-            <View
-              pointerEvents="none"
-              accessibilityElementsHidden
-              importantForAccessibility="no-hide-descendants"
-              style={styles.captionMeasure}>
-              <Text style={styles.caption} onTextLayout={onMeasure}>
-                {captionText}
-              </Text>
-            </View>
-          )}
-          {!expanded && overflows ? (
-            <Pressable
-              onPress={() => setExpandedFor(post.id)}
-              // 12 above and below a 22pt line: the 44pt touch floor, near enough.
-              hitSlop={{ top: 12, bottom: 12, right: 24 }}
-              accessibilityRole="button"
-              accessibilityLabel="More"
-              accessibilityHint="Shows the whole caption"
-              style={({ pressed }) => [styles.textTarget, pressed && styles.textPressed]}>
-              <Text style={styles.more}>more</Text>
-            </Pressable>
-          ) : null}
-        </View>
-      ) : null}
-      <Text style={styles.time}>{timeAgoSpoken(post.createdAt)}</Text>
-      {likersOpen === null ? null : (
-        <LikersSheet
-          postId={post.id}
-          visible={likersOpen}
-          onClose={closeLikers}
-          drink={drink}
-          likes={likes}
-          authorId={who.id}
-          authorUsername={who.username}
-        />
-      )}
+      {sheets}
     </View>
   );
 });
+
+/**
+ * The post page's author: the face and the name, one button to their
+ * profile, spoken with the time ("ines.ag, 2 hours ago"). Without
+ * onOpenAuthor it is plain, read as one element: a disabled button made
+ * VoiceOver call the name "dimmed".
+ */
+function AuthorIdentity({
+  who,
+  when,
+  onOpenAuthor,
+}: {
+  who: UserProfile;
+  when: string;
+  onOpenAuthor?: (authorId: string) => void;
+}) {
+  const body = (
+    <>
+      <Avatar name={who.displayName} accent={who.accent} size={AUTHOR_AVATAR} avatarPath={who.avatarPath} />
+      <Text numberOfLines={1} style={styles.authorName}>
+        {who.username}
+      </Text>
+    </>
+  );
+  if (!onOpenAuthor) {
+    return (
+      <View accessible accessibilityLabel={`${who.username}, ${when}`} style={styles.identity}>
+        {body}
+      </View>
+    );
+  }
+  return (
+    <Pressable
+      onPress={() => onOpenAuthor(who.id)}
+      accessibilityRole="button"
+      accessibilityLabel={`${who.username}, ${when}`}
+      accessibilityHint="Opens their profile"
+      style={({ pressed }) => [styles.identity, pressed && styles.pressed]}>
+      {body}
+    </Pressable>
+  );
+}
 
 /* ==================================================================== */
 
 const styles = StyleSheet.create({
   /*
-   * No card chrome and no fill: the post sits straight on the paper (its
-   * grain shows through), its photo a framed print inset from the edges.
-   * Home puts a 12pt sunk gap between two posts.
+   * No card chrome and no fill: the post stands on the page, and posts are
+   * set apart by space alone (layout principle 3): 32 from the actions' band
+   * to the next print, less the row's slack under the band.
    */
-  card: { paddingBottom: space.lg },
+  cardFeed: { paddingBottom: layout.section - BAND_SLACK },
+  cardDetail: { paddingBottom: space.xl },
   pressed: { opacity: 0.5 },
 
-  /* Author: a 52pt row; the more button reaches the row's right edge. */
-  author: {
-    minHeight: 52,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: layout.gutter,
-    gap: 10,
-  },
-  authorText: { flex: 1, flexDirection: 'row', alignItems: 'baseline', gap: space.xs },
-  /* Gives way to the time beside it, which never wraps: the name ellipsizes instead. */
-  nameTarget: { flexShrink: 1 },
-  /* Hugs its text, so the target is the words and not the empty row beside them. */
-  textTarget: { alignSelf: 'flex-start', maxWidth: '100%' },
-  textPressed: { opacity: 0.5 },
-  username: { ...textRole.username, color: colors.text },
-  when: { ...textRole.prose, flexShrink: 0, color: colors.textMuted },
-  /*
-   * Pulled out to the actions row's inset, so its glyph stands on the
-   * same vertical line as the bookmark's below it (the print's edge).
-   */
-  moreButton: { marginRight: ACTIONS_INSET - layout.gutter },
-
-  /* Media: the print, sized inline; sunk while a photo is on its way. */
-  media: {
-    alignSelf: 'center',
-    borderRadius: radius.badge,
-    overflow: 'hidden',
-    backgroundColor: colors.bgSunk,
-  },
-  printEdge: {
-    ...StyleSheet.absoluteFill,
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.windowEdge,
-  },
+  /* The print, centred in the 392 column (Print draws the wash and the photo edge). */
+  printFeed: { alignSelf: 'center' },
+  /* 16 under the author row's 32pt face, less the row's slack. */
+  printDetail: { alignSelf: 'center', marginTop: space.lg - AUTHOR_SLACK },
   galleryCount: { position: 'absolute', top: COUNT_INSET, right: COUNT_INSET },
   burstLayer: {
     position: 'absolute',
@@ -1062,56 +880,71 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  burst: { alignItems: 'center', justifyContent: 'center' },
+  burstInk: { position: 'absolute' },
 
-  /* Actions: each 24pt glyph in its 44pt box lands on the print's edges. */
+  /*
+   * The feed's line: 16 under the print. Wraps, so a long name keeps its
+   * whole column and the author drops under it; baseline-aligned, so the
+   * small author sits on the Playfair name's first baseline.
+   */
+  line: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    columnGap: space.md,
+    rowGap: space.xs,
+    marginTop: space.lg,
+    paddingHorizontal: layout.gutter,
+  },
+  /* Hugs the name, so the target is the words and not the empty row beside them. */
+  nameTarget: { flexShrink: 1, maxWidth: '100%' },
+  byline: { flexShrink: 0, maxWidth: '100%' },
+  bylineText: { ...textRole.small, color: colors.textMuted },
+
+  /*
+   * Actions: each glyph in its 44pt box; the band is 14 under the line.
+   * A floor, not a height, so the count at the largest text sizes pushes
+   * the row taller instead of running over the next print.
+   */
   actions: {
-    height: layout.hit,
+    minHeight: layout.hit,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: ACTIONS_INSET,
   },
-  actionsSpacer: { flex: 1 },
+  actionsFeed: { marginTop: 14 - BAND_SLACK },
+  /* 16 under the caption, less the heart box's slack around the 28pt glyph. */
+  actionsDetail: { marginTop: space.lg - (layout.hit - HEART) / 2 },
+  spacer: { flex: 1 },
   iconBtn: {
     width: layout.hit,
     height: layout.hit,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  count: { minHeight: layout.hit, justifyContent: 'center' },
+  countText: { ...textRole.body, ...tabular, color: colors.text },
 
-  /* Copy */
-  likesInset: { paddingHorizontal: PRINT_INSET },
-  /* The plain count, as the line has always read: the role's semibold, in ink. */
-  likesCount: { ...textRole.username, flexShrink: 1, color: colors.text },
-  /*
-   * Hugs its words, so the target is the line and not the empty width
-   * beside it; the text gives way and wraps rather than pushing past it.
-   */
-  likedBy: {
+  /* The post page's author row: 32 face at the gutter, the name 12 after it, ••• on the far edge. */
+  authorRow: {
+    minHeight: layout.hit,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: space.sm,
-    alignSelf: 'flex-start',
-    maxWidth: '100%',
+    alignItems: 'center',
+    marginTop: space.sm - AUTHOR_SLACK,
+    paddingLeft: layout.gutter,
+    paddingRight: ACTIONS_INSET,
   },
-  likedText: { ...textRole.prose, flexShrink: 1, color: colors.text },
-  likedName: { fontFamily: textRole.username.fontFamily },
-  captionBlock: { paddingHorizontal: PRINT_INSET, paddingTop: space.xs },
-  caption: { ...textRole.prose, color: colors.text },
-  /* Insets count from the block's padding edge, not its content, so the gutter and top are restated. */
-  captionMeasure: {
-    position: 'absolute',
-    top: space.xs,
-    left: PRINT_INSET,
-    right: PRINT_INSET,
-    opacity: 0,
-  },
-  captionAuthor: { fontFamily: fonts.bodySemiBold },
-  more: { ...textRole.prose, fontFamily: fonts.bodyMedium, color: colors.textMuted },
-  time: {
-    ...textRole.helper,
-    paddingHorizontal: PRINT_INSET,
-    paddingTop: space.xs,
-    color: colors.textMuted,
+  identity: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md, minHeight: layout.hit },
+  authorName: { ...textRole.bodyStrong, flexShrink: 1, color: colors.text },
+  /* 24 under the print, then the caption 8 under the name. */
+  detailName: { marginTop: space.xl, paddingHorizontal: layout.gutter, alignItems: 'flex-start' },
+  caption: {
+    ...textRole.body,
+    marginTop: space.sm,
+    paddingHorizontal: layout.gutter,
+    color: colors.text,
   },
 });
 

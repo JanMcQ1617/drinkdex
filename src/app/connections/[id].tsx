@@ -1,10 +1,9 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { Grain } from '@/components/Grain';
 import { ACCOUNT_ID } from '@/components/PeerProfile';
 import { PersonRow } from '@/components/PeopleList';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
@@ -30,6 +29,9 @@ import type { UserProfile } from '@/types';
 /*                                                                      */
 /* Rows toggle Follow at once, with no confirmation: a list of people is */
 /* a bulk tool. Only a profile's own header asks before an unfollow.     */
+/*                                                                      */
+/* v4: the likers sheet's rows on the page (PersonRow), parted by space, */
+/* with Follow in ink and Following the wash key.                        */
 /* ==================================================================== */
 
 type List = 'followers' | 'following';
@@ -86,6 +88,8 @@ function Connections({
   const cached = useSocial((s) => ownEntry(s.profiles, id));
   const me = useAuth((s) => s.profile);
   const following = useSocial((s) => s.following);
+  // A set, so each row's "do I follow them" is one lookup, not a scan of everyone you follow.
+  const followingSet = useMemo(() => new Set(following), [following]);
   const toggleFollow = useSocial((s) => s.toggleFollow);
 
   const username = cached?.username ?? (isSelf && me ? me.username : undefined);
@@ -180,8 +184,6 @@ function Connections({
 
   return (
     <View style={styles.screen}>
-      {/* The page's own grain, under everything: there is no global grain any more. */}
-      <Grain />
       {/*
         No rule under the bar: the tab strip sits right below it and is
         fixed, so the list scrolls under the strip's own rule, never under
@@ -202,18 +204,17 @@ function Connections({
       <FlatList
         data={people}
         keyExtractor={(p) => p.id}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           const self = item.id === myId;
           return (
             <PersonRow
               person={item}
-              following={following.includes(item.id)}
+              following={followingSet.has(item.id)}
               onToggle={() => void toggleFollow(myId, item.id)}
               // You, in someone's list: no Follow, and your name opens your own tab.
               hideFollow={self}
               onOpen={self ? () => router.navigate('/profile') : undefined}
               gutter
-              separator={index < people.length - 1}
             />
           );
         }}
@@ -237,9 +238,8 @@ function Connections({
         onRefresh={wellFormed ? reload : undefined}
         initialNumToRender={12}
         windowSize={7}
-        // Transparent, so the page's grain shows under the rows.
         style={styles.list}
-        contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
+        contentContainerStyle={{ paddingTop: space.sm, paddingBottom: insets.bottom + space.xl }}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   list: { flex: 1 },
   notice: { marginHorizontal: layout.gutter, marginTop: space.md, marginBottom: space.sm },
   footer: {
-    ...textRole.helper,
+    ...textRole.small,
     color: colors.textMuted,
     paddingHorizontal: layout.gutter,
     paddingTop: space.lg,

@@ -26,7 +26,7 @@ import { type Method, useSignInFlow } from '@/store/signInFlow';
 /* Facebook full width, in that order, then phone and email side by     */
 /* side as one row of two half-width buttons, then the age and terms    */
 /* line. Two half rows instead of two full ones keep the consent above  */
-/* the floating tab bar on a 6.1-inch phone. At a text size where       */
+/* the tab bar on a 6.1-inch phone. At a text size where                */
 /* "Phone number" would wrap in half a row, the pair stacks instead.    */
 /* Any subset holds: a flag that is off drops its button (auth/methods),*/
 /* the pair becomes one full email row without phone, and with nothing  */
@@ -64,7 +64,8 @@ const APPLE_LABEL: TextStyle = { fontSize: 17, lineHeight: 22, fontWeight: '600'
 
 const OUTLINE: Skin = {
   bg: colors.surface,
-  pressedBg: colors.bgSunk,
+  // The kit's held fill for a white control (press, #EBEBEB): the wash barely shows on white.
+  pressedBg: colors.press,
   edge: colors.providerEdge,
   ink: colors.providerInk,
   label: textRole.button,

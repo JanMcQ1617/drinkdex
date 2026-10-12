@@ -11,8 +11,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthTitleBar } from '@/components/auth/AuthTitleBar';
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
+import { WithScrollEdges } from '@/components/log/scrollEdges';
 import { haptic, SearchField, SectionHeader } from '@/components/ui';
 import { colors, fonts, layout, space, stroke, tabular, textRole } from '@/constants/theme';
 import { COUNTRIES, COUNTRY_BY_ISO, deviceRegion, SUGGESTED_ISOS } from '@/data/countries';
@@ -93,11 +93,6 @@ function sectionsFor(query: string): SectionListData<Country, Section>[] {
   ];
 }
 
-/** A hairline from the name's left edge, as iOS's own lists draw them. */
-function RowSeparator() {
-  return <View style={styles.separator} />;
-}
-
 function CountryRow({
   country,
   selected,
@@ -118,7 +113,7 @@ function CountryRow({
       <Text style={[styles.dial, tabular]}>+{country.dial}</Text>
       {/* The tick's slot is always there, so the dial column never moves. */}
       <View style={styles.tick}>
-        {selected ? <Icon name="check" size={18} color={colors.wine} /> : null}
+        {selected ? <Icon name="check" size={18} color={colors.text} /> : null}
       </View>
     </Pressable>
   );
@@ -161,63 +156,73 @@ export function CountryPicker({
       presentationStyle="pageSheet"
       animationType="slide"
       onRequestClose={close}>
-      <View style={styles.sheet}>
-        {/*
-          A native sheet is presented above the React root, so it carries its
-          own paper grain: first, under the rows, like every other ground. The
-          title bar draws its own (ScreenTopBar), so grain laid over the whole
-          sheet would double it there.
-        */}
-        <Grain />
-        <AuthTitleBar
-          title="Country or region"
-          leading="close"
-          leadingLabel="Close"
-          onLeading={close}
-          insetTop={false}
-        />
-        <SearchField
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Name or code"
-          accessibilityLabel="Search countries and regions"
-          returnKeyType="search"
-          style={styles.search}
-        />
-        <SectionList
-          sections={sectionsFor(query)}
-          keyExtractor={(country) => country.iso}
-          renderItem={({ item }) => (
-            <CountryRow
-              country={item}
-              selected={item.iso === selected}
-              onPress={() => choose(item.iso)}
+      {/* Inside the Modal, so each opening starts at the top with its rule off. */}
+      <WithScrollEdges>
+        {(edges) => (
+          <View style={styles.sheet}>
+            <AuthTitleBar
+              title="Country or region"
+              leading="close"
+              leadingLabel="Close"
+              onLeading={close}
+              insetTop={false}
+              showRule={false}
             />
-          )}
-          renderSectionHeader={({ section }) =>
-            section.title ? (
-              <SectionHeader title={section.title} size="group" style={styles.sectionHeader} />
-            ) : null
-          }
-          ItemSeparatorComponent={RowSeparator}
-          ListEmptyComponent={
-            <Text style={styles.empty}>No country or region matches “{query.trim()}”.</Text>
-          }
-          // A floating header over the rows would need a fill of its own; these scroll away.
-          stickySectionHeadersEnabled={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
-        />
-      </View>
+            {/*
+              The search is the sheet's head with the bar: the 1pt rule sits
+              under it, and only once the list scrolls under it (no dividers in
+              Daylight; the rows are set apart by space, not hairlines).
+            */}
+            <View style={[styles.head, edges.under && styles.headRuled]}>
+              <SearchField
+                value={query}
+                onChangeText={setQuery}
+                placeholder="Name or code"
+                accessibilityLabel="Search countries and regions"
+                style={styles.search}
+              />
+            </View>
+            <SectionList
+              sections={sectionsFor(query)}
+              keyExtractor={(country) => country.iso}
+              renderItem={({ item }) => (
+                <CountryRow
+                  country={item}
+                  selected={item.iso === selected}
+                  onPress={() => choose(item.iso)}
+                />
+              )}
+              renderSectionHeader={({ section }) =>
+                section.title ? (
+                  <SectionHeader title={section.title} size="group" style={styles.sectionHeader} />
+                ) : null
+              }
+              ListEmptyComponent={
+                <Text style={styles.empty}>No country or region matches “{query.trim()}”.</Text>
+              }
+              // A floating header over the rows would need a fill of its own; these scroll away.
+              stickySectionHeadersEnabled={false}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              onScroll={edges.onScroll}
+              scrollEventThrottle={16}
+              contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
+            />
+          </View>
+        )}
+      </WithScrollEdges>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   sheet: { flex: 1, backgroundColor: colors.bg },
+  /* Always laid out, transparent at rest, so the rule moves nothing when it shows. */
+  head: { borderBottomWidth: stroke.edge, borderBottomColor: 'transparent' },
+  headRuled: { borderBottomColor: colors.line },
   search: { marginHorizontal: layout.gutter, marginVertical: space.md },
-  sectionHeader: { paddingTop: space.lg, paddingBottom: space.sm },
+  /* A group head insets its own 16 (it was drawn for a panel); this puts its words on the gutter, over the names. */
+  sectionHeader: { paddingTop: space.lg, paddingBottom: space.sm, marginHorizontal: layout.gutter - space.lg },
   row: {
     minHeight: layout.row,
     flexDirection: 'row',
@@ -227,11 +232,10 @@ const styles = StyleSheet.create({
     paddingVertical: space.sm,
   },
   /* A fill, not a scale: rows answer a press the way every control does. */
-  rowPressed: { backgroundColor: colors.bgSunk },
+  rowPressed: { backgroundColor: colors.press },
   name: { ...textRole.rowTitle, flex: 1, color: colors.text },
   dial: { ...textRole.rowTitle, color: colors.textMuted },
   tick: { width: 18, alignItems: 'center' },
-  separator: { height: stroke.hair, backgroundColor: colors.line, marginLeft: layout.gutter },
   empty: {
     fontFamily: fonts.body,
     fontSize: textRole.rowTitle.fontSize,

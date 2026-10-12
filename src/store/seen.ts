@@ -6,9 +6,9 @@ import { createJSONStorage, persist, type StateStorage } from 'zustand/middlewar
 /* What you have already looked at                                      */
 /*                                                                      */
 /* Two marks, both kept on this phone and nowhere else: the newest pour */
-/* you have viewed from each person (so Today's pours can frame what is */
-/* new in wine), and the newest Activity you have opened (so Home's     */
-/* heart can say there is something new). Nobody is told you looked:    */
+/* you have viewed from each person (so Today's pours can ring what is  */
+/* new in ink), and the newest Activity you have opened (so Home's bell */
+/* can say there is something new). Nobody is told you looked:          */
 /* there are no view receipts, so nothing can leak and no table is      */
 /* needed.                                                              */
 /*                                                                      */

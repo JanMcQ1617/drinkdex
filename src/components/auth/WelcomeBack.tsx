@@ -27,9 +27,9 @@ import { useSignInFlow } from '@/store/signInFlow';
 /* for a shared phone. It takes the place of the taste picker, which is */
 /* a question for someone new, and of the full card on every gate.      */
 /*                                                                      */
-/* No big photograph: the backdrop's three mounts are the person's own   */
-/* latest catches when this phone's Dex has any, each decoded at 90 x    */
-/* 124pt (never wider than 220pt, so the 1024px photos stay sharp).      */
+/* On the white sign-in page under the large wordmark, as the first     */
+/* step for anyone new is: the person's face and name are the only      */
+/* picture here.                                                        */
 /*                                                                      */
 /* When the remembered way in is no longer offered (its flag turned off, */
 /* or Apple unavailable on this device), the card shows every way in    */
@@ -69,13 +69,10 @@ function ForgetAccount() {
 
 export function WelcomeBack({
   account,
-  drinks,
   onClose,
   titleRef,
 }: {
   account: RememberedAccount;
-  /** The backdrop's three mounts. */
-  drinks: readonly string[];
   onClose: () => void;
   titleRef: Ref<Text>;
 }) {
@@ -97,7 +94,6 @@ export function WelcomeBack({
   return (
     <CabinetSheet
       backdrop="full"
-      backdropDrinks={drinks}
       bar={
         <AuthTitleBar
           title="Welcome back"
@@ -114,8 +110,8 @@ export function WelcomeBack({
         style={styles.who}>
         <Avatar name={account.name} accent={account.accent} avatarPath={account.avatarPath} size={52} />
         <View style={styles.whoText}>
-          <Text style={[textRole.shelfTitle, styles.name]}>{account.name}</Text>
-          {lastTime ? <Text style={[textRole.helper, styles.lastTime]}>{lastTime}</Text> : null}
+          <Text style={[textRole.bodyStrong, styles.name]}>{account.name}</Text>
+          {lastTime ? <Text style={[textRole.small, styles.lastTime]}>{lastTime}</Text> : null}
         </View>
       </View>
 
@@ -154,6 +150,6 @@ const styles = StyleSheet.create({
   stack: { gap: space.sm },
   forget: { alignSelf: 'center', marginTop: space.lg, paddingVertical: space.xs },
   pressed: { opacity: 0.5 },
-  forgetText: { ...textRole.helper, color: colors.textMuted, textAlign: 'center' },
-  forgetLink: { fontFamily: fonts.bodySemiBold, color: colors.wine },
+  forgetText: { ...textRole.small, color: colors.textMuted, textAlign: 'center' },
+  forgetLink: { fontFamily: fonts.bodySemiBold, color: colors.text },
 });

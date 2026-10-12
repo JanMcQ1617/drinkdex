@@ -11,7 +11,7 @@ import { colors, fonts, radius } from '@/constants/theme';
 /* ==================================================================== */
 /* A song on a story                                                    */
 /*                                                                      */
-/* The pieces the story viewer and the Log sheet's music picker share   */
+/* The pieces the story viewer and the + window's music picker share    */
 /* (specs/v3.1-changes.md section 2.9): one audio-only preview player,  */
 /* the session's mute choice, the cover art, and the Apple Music        */
 /* credit that must sit beside any preview that can play (App Review    */
@@ -24,11 +24,11 @@ import { colors, fonts, radius } from '@/constants/theme';
 /* false, nativeControls false, pointerEvents none) beside the control  */
 /* that plays it.                                                       */
 /*                                                                      */
-/* Cover art and song names are shown only with playback: on the tag   */
+/* Cover art and song names are shown only with playback: on the tag    */
 /* and the picker rows, never in a share image or a thumbnail (App      */
 /* Review 4.5.2). Nothing here sits over a photograph, so nothing here  */
 /* needs `onMedia`: on the viewer's dark footer the inks are reelInk    */
-/* and reelInkMuted, on paper text and textMuted.                       */
+/* and reelInkMuted, on the page text and textMuted.                    */
 /*                                                                      */
 /* This file imports nothing from lib/music: `SongLike` is structural,  */
 /* and the `Song` that file defines satisfies it.                       */
@@ -265,7 +265,10 @@ export function usePreviewPlayer(): PreviewPlayer {
 
 /**
  * A song's cover: 32pt on the story's song tag, 48pt on a picker row, at
- * the badge corner (4pt), decoded at that size (enforceEarlyResizing).
+ * the badge corner (4pt), decoded at that size (enforceEarlyResizing)
+ * and keyed by it: one song at both sizes would otherwise hand the first
+ * size's decode to the second (SDWebImage files an early-resized decode
+ * under the key it was asked for), soft on the picker.
  * The music glyph on bgSunk is drawn underneath, so it is what shows
  * while the art loads, when it fails, and when a song has none.
  * Decorative: the row or tag beside it names the song.
@@ -280,7 +283,8 @@ export function SongArtwork({ url, size }: { url: string | null; size: 32 | 48 }
       <Icon name="music" size={size === 32 ? 18 : 24} color={colors.textFaint} />
       {url ? (
         <Image
-          source={{ uri: url }}
+          accessibilityIgnoresInvertColors
+          source={{ uri: url, cacheKey: `${url}#${size}x${size}` }}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
           cachePolicy="memory-disk"

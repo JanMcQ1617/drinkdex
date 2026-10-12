@@ -13,7 +13,6 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { InviteSheet } from '@/components/tournaments/InvitePicker';
@@ -50,9 +49,9 @@ import type { TournamentBoard, UserProfile } from '@/types';
 /*                                                                      */
 /* The head (name, when, the goal, who hosts), then what you can do     */
 /* about it (post a drink while it is on, or answer an invitation), the */
-/* standings, who is still invited, and the rules. Options in the bar:  */
-/* the host invites, ends or deletes; a member leaves or reports the     */
-/* host.                                                                */
+/* standings, who is still invited, and the rules. Options sit beside  */
+/* the name (the bar holds only the back chevron): the host invites,    */
+/* ends or deletes; a member leaves or reports the host.                */
 /*                                                                      */
 /* NO DAILY COUNTER. A "1 of 3 today" meter is a quota to fill, which is */
 /* the shape App Review 1.4.3 reads as encouraging drinking. The one     */
@@ -175,7 +174,6 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
   if (!shown || (outcome === null && !named)) {
     return (
       <View style={styles.screen}>
-        <Grain />
         <ScreenTopBar
           title="Tournament"
           showRule={false}
@@ -322,17 +320,19 @@ function BoardView({
   const mine = board.standings.find((s) => s.userId === myId);
   const hostLabel = host ? `@${host.username}` : null;
 
-  /* ---- The head's three lines ---- */
+  /* ---- The head's two lines ---- */
   const status = live
     ? `On now · ends ${dayLong(lastMoment(board.endsAt))}`
     : finished
       ? `Finished ${dateLong(lastMoment(board.finishedAt ?? board.endsAt))}`
       : `Starts ${dayLong(new Date(board.startsAt))}`;
-  const goalLine =
+  const goal =
     board.target === null
       ? 'Most different drinks by the end wins'
       : `First to ${differentDrinks(board.target)} wins`;
-  const hostedLine = isHost ? 'Hosted by you' : hostLabel ? `Hosted by ${hostLabel}` : 'Hosted by another member';
+  const hosted = isHost ? 'hosted by you' : hostLabel ? `hosted by ${hostLabel}` : 'hosted by another member';
+  // The goal and the host share a line (less stuff): two quiet lines under the name, not three.
+  const goalLine = `${goal} · ${hosted}`;
 
   /* ---- Who won ---- */
   const winnerStanding = board.winnerId ? board.standings.find((s) => s.userId === board.winnerId) : undefined;
@@ -393,6 +393,9 @@ function BoardView({
         {
           title,
           message,
+          // In ink, as the options sheet is: the system's default tint is the one blue in the app.
+          tintColor: colors.text,
+          userInterfaceStyle: 'light',
           options: [...REPORT_REASONS.map((r) => r.label), 'Cancel'],
           cancelButtonIndex: REPORT_REASONS.length,
         },
@@ -432,6 +435,9 @@ function BoardView({
       ActionSheetIOS.showActionSheetWithOptions(
         {
           title: board.name,
+          // The system's sheet, in ink: its default tint is the one blue in a black-and-white app.
+          tintColor: colors.text,
+          userInterfaceStyle: 'light',
           options: [...options.map((o) => o.label), 'Cancel'],
           cancelButtonIndex: options.length,
           destructiveButtonIndex: options.flatMap((o, i) => (o.destructive ? [i] : [])),
@@ -461,17 +467,17 @@ function BoardView({
 
   return (
     <View style={styles.screen}>
-      <Grain />
-      {/* The name in the bar is one line and truncates: it is a tournament's name, not a drink's. */}
+      {/*
+        A pushed screen's bar holds Back and nothing else (layout principle
+        8). The name is the head's, not the bar's (a name appears once), and
+        the bar still speaks it as its header; the options sit beside the
+        name, as a post's ••• sits in its author row.
+      */}
       <ScreenTopBar
         title={board.name}
+        titleVisible={false}
         showRule={scrolled}
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
-        right={
-          options.length > 0 ? (
-            <TopBarButton icon="more" label="Tournament options" onPress={openOptions} />
-          ) : null
-        }
       />
       <ScrollView
         onScroll={onScroll}
@@ -488,12 +494,18 @@ function BoardView({
 
         {/* ---- Head ---- */}
         <View style={styles.head}>
-          <Text style={styles.name} accessibilityRole="header">
-            {board.name}
-          </Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name} accessibilityRole="header">
+              {board.name}
+            </Text>
+            {options.length > 0 ? (
+              <View style={styles.more}>
+                <TopBarButton icon="more" label="Tournament options" onPress={openOptions} />
+              </View>
+            ) : null}
+          </View>
           <Text style={styles.line}>{status}</Text>
           <Text style={styles.line}>{goalLine}</Text>
-          <Text style={styles.line}>{hostedLine}</Text>
         </View>
 
         {/* ---- Finished: who won ---- */}
@@ -501,7 +513,7 @@ function BoardView({
           <Card style={styles.winner}>
             <View style={styles.winnerRow} accessible accessibilityLabel={winnerLine}>
               {board.winnerId || board.winnerHidden ? (
-                <Icon name="trophy" size={28} color={colors.wine} />
+                <Icon name="trophy" size={28} color={colors.text} />
               ) : null}
               <Text style={styles.winnerText}>{winnerLine}</Text>
             </View>
@@ -589,26 +601,38 @@ function BoardView({
   );
 }
 
+/** TopBarButton's glyph, for the ••• beside the name. */
+const MORE_GLYPH = 26;
+
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  /* Clear, so the screen's grain shows through. */
   scroll: { flex: 1 },
   content: { paddingHorizontal: layout.gutter },
   center: { flex: 1, justifyContent: 'center' },
   notice: { marginTop: space.lg },
 
   head: { paddingTop: space.lg, gap: space.xs },
-  name: { ...textRole.emptyTitle, color: colors.text, marginBottom: space.xs },
-  line: { ...textRole.helper, color: colors.textMuted },
+  nameRow: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm, marginBottom: space.xs },
+  name: { ...textRole.title, flex: 1, color: colors.text },
+  /*
+   * The ••• glyph's right edge on the gutter (its 44 box overhangs by the
+   * glyph's slack), centred on the name's first line.
+   */
+  more: {
+    marginRight: -(layout.hit - MORE_GLYPH) / 2,
+    marginTop: ((textRole.title.lineHeight ?? layout.hit) - layout.hit) / 2,
+  },
+  line: { ...textRole.small, color: colors.textMuted },
 
   winner: { marginTop: space.xl, padding: space.lg },
   winnerRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
-  winnerText: { ...textRole.sectionTitle, flex: 1, color: colors.text },
+  winnerText: { ...textRole.bodyStrong, flex: 1, color: colors.text },
 
   actions: { marginTop: space.xl, gap: space.md },
 
-  header: { marginTop: space.xl, marginBottom: space.sm },
+  /* A group head insets its own 16 (it was drawn for a panel); this puts its words on the gutter. */
+  header: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: -space.lg },
   /* Under a group header, in line with it and with the rows below. */
-  groupNote: { paddingHorizontal: space.lg, marginBottom: space.sm },
+  groupNote: { marginBottom: space.sm },
   rules: { marginTop: space.xl },
 });

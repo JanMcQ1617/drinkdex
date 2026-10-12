@@ -13,9 +13,10 @@ import {
 /*                                                                      */
 /* ONE SCROLL SOURCE PER TAB. Each tab's main list reports its offset   */
 /* into one native Animated.Value (useTabScroll), and the chrome that   */
-/* answers scrolling reads it: the floating tab bar compacts            */
-/* (useTabBarCollapse) and Home's top bar slides away                   */
-/* (useHideOnScroll), specs/v3.1-changes.md §3.3 to §4.1.               */
+/* answers scrolling reads it: Home's top bar slides away               */
+/* (useHideOnScroll, specs/v3.1-changes.md §4.1). The tab bar no longer */
+/* compacts: v4 docked it with no labels, so there is nothing to give   */
+/* up (layout spec 4).                                                  */
 /*                                                                      */
 /* MOVED BY THE FINGER, NEVER BY A CLOCK. Everything here is an         */
 /* Animated.event with the native driver feeding diffClamp and          */
@@ -34,11 +35,6 @@ import {
 export type ChromeTab = 'index' | 'dex' | 'bar' | 'profile';
 
 const CHROME_TABS: readonly ChromeTab[] = ['index', 'dex', 'bar', 'profile'];
-
-export const CHROME = {
-  /** Points of downward scroll that take the tab bar from full to compact. */
-  collapse: 48,
-} as const;
 
 type ScrollListener = (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
 type Chrome = Animated.AnimatedInterpolation<number>;
@@ -82,7 +78,7 @@ class ChromeStore {
    * them. A native value whose last child detaches is DROPPED and later
    * recreated under a new tag, but a list's native scroll event keeps
    * writing to the tag it was attached with: without this, the first tab
-   * switch (the bar's graph moving to another tab) would cut that tab's
+   * switch (a graph moving to another tab) would cut that tab's
    * list off from its chrome for good.
    */
   readonly keeper: { transform: { translateX: Chrome }[] };
@@ -173,17 +169,6 @@ class ChromeStore {
     return Animated.diffClamp(Animated.subtract(clampTop, Math.max(0, e.lastY)), 0, range);
   }
 
-  /** The tab bar's 0..1, from the moment `tab` gained focus. */
-  collapse(tab: ChromeTab): Chrome {
-    // Clamped here too: iOS's diffclamp node starts from its first input
-    // unclamped (RCTDiffClampAnimatedNode's onAttachedToNode).
-    return this.travel(tab, CHROME.collapse).interpolate({
-      inputRange: [0, CHROME.collapse],
-      outputRange: [0, 1],
-      extrapolate: 'clamp',
-    });
-  }
-
   /*
    * Home's bar: 0..distance. Rebuilt each time the tab is focused; kept
    * as it was while the tab is out of focus, so the bar does not jump
@@ -214,10 +199,6 @@ function useChrome(): ChromeContext {
   const ctx = useContext(Ctx);
   if (!ctx) throw new Error('ScrollChrome hooks need a ScrollChromeProvider above them');
   return ctx;
-}
-
-function asChromeTab(name: string | undefined): ChromeTab | null {
-  return CHROME_TABS.find((tab) => tab === name) ?? null;
 }
 
 /*
@@ -296,28 +277,6 @@ export function useTabScroll(
     });
     return { onScroll, scrollY };
   }, [store, tab]);
-}
-
-/**
- * FloatingTabBar only: 0 (full) to 1 (compact). Rebuilt whenever the
- * focused tab changes, so arriving at a tab always shows the full bar.
- * The constant 0 for a tab with no chrome list (Reels) and while
- * VoiceOver runs.
- *
- * Focus moves when the pager selects the new page, not while the finger
- * drags, so a swipe away from a compacted list brings the full bar back
- * at that moment, in one step: the swipe's own result, not a motion that
- * could stall.
- */
-export function useTabBarCollapse(focusedRouteName: string | undefined): Chrome {
-  const { store, screenReader } = useChrome();
-  const tab = asChromeTab(focusedRouteName);
-  const graph = useMemo(
-    () => (tab && !screenReader ? store.collapse(tab) : store.rest),
-    [store, tab, screenReader],
-  );
-  useWakeOnSwap(store, graph);
-  return graph;
 }
 
 /**

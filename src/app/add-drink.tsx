@@ -22,8 +22,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DrinkName } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
+import { useScrollEdges } from '@/components/log/scrollEdges';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import {
   announce,
@@ -46,7 +46,6 @@ import {
   stroke,
   tabular,
   textRole,
-  type as typeScale,
 } from '@/constants/theme';
 import {
   catalogueTwin,
@@ -107,15 +106,16 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* themselves as they are left.                                         */
 /*                                                                      */
 /* Opened from the Dex (`from=dex`, named after the search), the Dex's  */
-/* shelf (`from=shelf`, blank), the log sheet (`from=log`, with the     */
-/* sheet's photo), or a custom drink's Edit details (`edit=<id>`). It   */
+/* shelf (`from=shelf`, blank), the + window (`from=log`, with the      */
+/* window's photo), or a custom drink's Edit details (`edit=<id>`). It  */
 /* leaves a handoff in the store saying where to go next, which the     */
 /* screen underneath takes when it gets focus back.                     */
 /*                                                                      */
-/* A page sheet with Cancel on the left, the keyboard offset trick, a   */
-/* save bar that stays put, and the grain. It was the log window's      */
-/* frame too until v3.3 made that a full-screen window with an X; this  */
-/* one stays a sheet, opened over whichever screen asked for it.        */
+/* A page sheet with Cancel on the left, the keyboard offset trick and  */
+/* a save bar that stays put. It was the log window's frame too until   */
+/* v3.3 made that a full-screen window with an X; this one stays a      */
+/* sheet, opened over whichever screen asked for it. Daylight: the      */
+/* page, wash fields, ink keys, three type sizes.                       */
 /* ==================================================================== */
 
 type From = 'dex' | 'log' | 'shelf';
@@ -126,7 +126,7 @@ type StepRow = { key: number; text: string };
 
 /**
  * The photo on the form: one already saved with the drink (by file name),
- * one picked here, or one handed over by the log sheet (`seeded`), which
+ * one picked here, or one handed over by the + window (`seeded`), which
  * is a new one as far as saving goes.
  */
 type Photo = { kind: 'saved'; file: string } | { kind: 'new'; uri: string; seeded: boolean } | null;
@@ -249,7 +249,7 @@ function GroupError({ message, nodeRef }: { message: string; nodeRef?: (n: unkno
       accessibilityLabel={message}
       accessibilityLiveRegion="polite"
       style={styles.groupError}>
-      <Icon name="alert" size={14} color={colors.danger} />
+      <Icon name="alert" size={14} color={colors.text} />
       <Text style={styles.groupErrorText}>{message}</Text>
     </View>
   );
@@ -358,8 +358,8 @@ function TokenField({
   );
 }
 
-/** The thumbnail's column in a similar row: DexThumb's 44pt and the row's 12pt gap. */
-const SIMILAR_THUMB_COLUMN = 44 + space.md;
+/** The thumbnail's column in a similar row: DexThumb's 52pt (its `row` size) and the row's 12pt gap. */
+const SIMILAR_THUMB_COLUMN = 52 + space.md;
 /** Dynamic Type cap on a row's name (specs/v3-cabinet.md 6.5). */
 const SIMILAR_NAME_CAP = 1.4;
 
@@ -369,14 +369,14 @@ const SIMILAR_NAME_CAP = 1.4;
  * being added twice. A drink with exactly this name comes first, and the
  * Name field says it is already in the Dex.
  *
- * Rows of drinks, with the log sheet's result parts: the drink mounted
- * as a lit thumbnail, its name in Playfair through DrinkName (it wraps and
- * the row grows, never cut short), and its style in sentence case under
- * it. Not a panel, as the log sheet's results are: three rows under a
- * field are part of the form, so they run edge to edge with a fill that
- * answers the press and does not stop short of the sheet. From the log
- * sheet a row picks that drink for the photo ("Use this"); from the Dex it
- * opens it ("Open").
+ * Rows of drinks, with the + window's result parts: the drink's square
+ * print, its name in Playfair through DrinkName (it wraps and the row
+ * grows, never cut short), and its style in sentence case under it, the
+ * one thing these rows say that the + window's do not: here it tells a
+ * near-twin from the drink being typed. Three rows under a field are part
+ * of the form, so they run edge to edge with a fill that answers the press
+ * and does not stop short of the sheet. From the + window a row picks that
+ * drink for the photo ("Use this"); from the Dex it opens it ("Open").
  *
  * `width` is the sheet's: the name's measure is worked out from it, since
  * DrinkName fits a long word to its column before layout.
@@ -403,8 +403,8 @@ function SimilarInDex({
    * any of the names, the verb moves under the style line on every row,
    * so the names keep their size and the verbs stay in one column.
    */
-  const face = faceOf(textRole.rowName.fontFamily);
-  const nameSize = textRole.rowName.fontSize * Math.min(fontScale, SIMILAR_NAME_CAP);
+  const face = faceOf(textRole.name.fontFamily);
+  const nameSize = textRole.name.fontSize * Math.min(fontScale, SIMILAR_NAME_CAP);
   const stacked = drinks.some(
     (d) => fitScale(d.name, face, nameSize, beside) < fitScale(d.name, face, nameSize, below),
   );
@@ -427,7 +427,7 @@ function SimilarInDex({
             <View style={styles.similarText}>
               <DrinkName
                 name={d.name}
-                role={textRole.rowName}
+                role={textRole.name}
                 measure={measure}
                 cap={SIMILAR_NAME_CAP}
                 color={colors.text}
@@ -443,7 +443,7 @@ function SimilarInDex({
   );
 }
 
-/** A denied camera goes to Settings, as on the log sheet; a cancelled pick says nothing. */
+/** A denied camera goes to Settings, as in the + window; a cancelled pick says nothing. */
 function pickProblem(r: Extract<PickResult, { ok: false }>) {
   if (r.reason === 'cancelled') return;
   if (r.reason === 'denied' && Platform.OS !== 'web') {
@@ -536,13 +536,11 @@ export default function AddDrinkScreen() {
   if (editParam && !(hydrated && editing)) {
     return (
       <View style={styles.screen}>
-        {/* The paper grain, first and under everything (see the form). */}
-        <Grain />
         <ScreenTopBar
           title="Edit drink"
           size="md"
           inset={BAR_INSET}
-          showRule
+          showRule={false}
           left={<TopBarTextButton label="Cancel" muted onPress={() => router.back()} />}
         />
         {hydrated || !editId ? (
@@ -592,8 +590,8 @@ function AddDrinkForm({
   const editingId = editing?.id ?? null;
 
   /*
-   * The starting answers, and what they would save as, made once. The log
-   * sheet's photo (its "seed") is read here, from the log sheet only, and
+   * The starting answers, and what they would save as, made once. The +
+   * window's photo (its "seed") is read here, from the + window only, and
    * cleared from the store just after (below), so a form opened later from
    * somewhere else never finds it.
    */
@@ -824,8 +822,8 @@ function AddDrinkForm({
     const id = editing?.id ?? newCustomId();
     /*
      * The photo is copied in first, stripped of its location, under a name
-     * that is the drink's: the log sheet's own file is left alone, since
-     * the sheet may still save it as its photo. A disk that refuses says
+     * that is the drink's: the + window's own file is left alone, since
+     * the window may still save it as its photo. A disk that refuses says
      * so and the drink is saved anyway, keeping the photo it had.
      */
     let photoFile: string | null = form.photo?.kind === 'saved' ? form.photo.file : null;
@@ -859,7 +857,7 @@ function AddDrinkForm({
   /* ---- Leaving ----------------------------------------------------- */
 
   /*
-   * Leaving with answers on the form asks first, as the log sheet does.
+   * Leaving with answers on the form asks first, as the + window does.
    * This catches the swipe and Cancel alike. Saving, or choosing a
    * "Similar" row, clears the guard first and leaves from an effect, once
    * the guard has seen that render.
@@ -884,6 +882,13 @@ function AddDrinkForm({
    */
   const { width: windowW, height: windowH } = useWindowDimensions();
   const [sheet, setSheet] = useState({ w: windowW, h: windowH });
+  /* The bar's rule once the form scrolls under it; the save bar's while the form runs on under it. */
+  const edges = useScrollEdges();
+  /** The photo's 4:3 frame across the column, for its decode's key. */
+  const photoFrame = {
+    w: Math.round(sheet.w - 2 * layout.gutter),
+    h: Math.round(((sheet.w - 2 * layout.gutter) * 3) / 4),
+  };
 
   const styleOptions = subcategoriesFor(d.category);
   const glassOptions: readonly string[] = GLASSWARE[d.category];
@@ -972,24 +977,20 @@ function AddDrinkForm({
         const { width: w, height: h } = e.nativeEvent.layout;
         setSheet((s) => (s.w === w && s.h === h ? s : { w, h }));
       }}>
-      {/*
-        The paper grain, first, so everything on the page lies over it: the
-        photo and the thumbnails stay clean. A page sheet is presented above
-        the root layout, so no grain from anywhere else reaches it (see the
-        log sheet). It takes no touches.
-      */}
-      <Grain />
-
       <ScreenTopBar
         title={editing ? 'Edit drink' : 'Add a drink'}
         size="md"
         inset={BAR_INSET}
-        showRule
+        showRule={edges.under}
         left={<TopBarTextButton label="Cancel" muted onPress={() => router.back()} />}
       />
 
       <ScrollView
         ref={scrollRef}
+        onScroll={edges.onScroll}
+        onLayout={edges.onLayout}
+        onContentSizeChange={edges.onContentSizeChange}
+        scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
         contentContainerStyle={styles.body}
@@ -1416,15 +1417,17 @@ function AddDrinkForm({
           <SectionHeader title="Photo (optional)" style={styles.sectionHeader} />
           <View>
             {/*
-              An inset photo: the panel corner and a drawn edge on the sunk
-              well. It stays a 4:3 frame here (the log sheet's is a print):
-              this photo goes with the suggestion for reference only, is
-              never published, and is seen whole before it is sent.
+              A 4:3 print on the wash, square corners and the print's faint
+              edge. 4:3 here, not the + window's 4:5: this photo goes with
+              the suggestion for reference only, is never published, and is
+              seen whole before it is sent.
             */}
             <View style={styles.photoFrame}>
               {photoUri ? (
                 <Image
-                  source={{ uri: photoUri }}
+                  accessibilityIgnoresInvertColors
+                  // Keyed by its frame: the same file is the + window's 4:5 photo too.
+                  source={{ uri: photoUri, cacheKey: `${photoUri}#${photoFrame.w}x${photoFrame.h}` }}
                   style={styles.fill}
                   contentFit="cover"
                   enforceEarlyResizing
@@ -1487,11 +1490,11 @@ function AddDrinkForm({
       </ScrollView>
 
       {/*
-        The save bar stays put under the form, as the log sheet's does: the
+        The save bar stays put under the form, as the + window's does: the
         consent line says, before anything is sent, who gets the suggestion
         and what is done with the photo.
       */}
-      <View style={[styles.saveBar, { paddingBottom: insets.bottom + space.md }]}>
+      <View style={[styles.saveBar, edges.moreBelow && styles.saveBarRuled, { paddingBottom: insets.bottom + space.md }]}>
         <Text style={styles.consent}>
           Suggestions go to the Sipply team, who may add the drink to the Dex in their own words.
           Photos are only used for reference.
@@ -1503,7 +1506,6 @@ function AddDrinkForm({
           onPress={() => void save()}
         />
       </View>
-
     </KeyboardAvoidingView>
   );
 }
@@ -1517,7 +1519,7 @@ const styles = StyleSheet.create({
     paddingBottom: space.xxxl,
   },
   intro: {
-    ...textRole.helper,
+    ...textRole.small,
     color: colors.textMuted,
     marginTop: space.sm,
   },
@@ -1531,14 +1533,9 @@ const styles = StyleSheet.create({
   sectionHeader: { marginBottom: space.md - space.lg },
 
   group: { gap: space.sm },
-  groupLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-  },
+  groupLabel: { ...textRole.small, fontFamily: fonts.bodyMedium, color: colors.textMuted },
   hint: {
-    ...textRole.helper,
+    ...textRole.small,
     color: colors.textMuted,
     marginTop: space.xs,
   },
@@ -1548,9 +1545,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   groupErrorText: {
-    ...textRole.helper,
+    ...textRole.small,
     flex: 1,
-    color: colors.danger,
+    color: colors.text,
   },
   chipWrap: {
     flexDirection: 'row',
@@ -1565,12 +1562,7 @@ const styles = StyleSheet.create({
 
   /* Rows of inputs: ingredients and steps */
   columnHeads: { flexDirection: 'row', gap: space.sm },
-  columnHead: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-  },
+  columnHead: { ...textRole.small, color: colors.textMuted },
   amountColumn: { width: 96 },
   rows: { gap: space.sm },
   inputRow: {
@@ -1582,9 +1574,8 @@ const styles = StyleSheet.create({
   stepNumber: {
     width: 24,
     paddingTop: 14,
+    ...textRole.small,
     fontFamily: fonts.numeral,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
     color: colors.textMuted,
     ...tabular,
   },
@@ -1609,20 +1600,14 @@ const styles = StyleSheet.create({
 
   /* Similar in the Dex */
   similar: { marginTop: space.sm },
-  similarLabel: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    marginBottom: space.xs,
-  },
+  similarLabel: { ...textRole.small, color: colors.textMuted, marginBottom: space.xs },
   /*
-   * The log sheet's result metrics (min 72, the 44x56 thumbnail), bled past
-   * the form's gutter so the pressed fill spans the sheet. It grows with
-   * the name.
+   * A result row as the + window draws one (a square thumb and the name),
+   * bled past the form's gutter so the pressed fill spans the sheet. It
+   * grows with the name.
    */
   similarRow: {
-    minHeight: 72,
+    minHeight: 68,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
@@ -1630,27 +1615,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.gutter,
     marginHorizontal: -layout.gutter,
   },
-  similarPressed: { backgroundColor: colors.bgSunk },
+  similarPressed: { backgroundColor: colors.press },
   similarText: { flex: 1, gap: 2 },
   similarMeta: {
-    ...textRole.rowSubtitle,
+    ...textRole.small,
     color: colors.textMuted,
   },
   /* The row's verb, in the link ink: what a tap does here. */
   similarAction: {
     ...textRole.buttonSm,
-    color: colors.wine,
+    color: colors.text,
   },
   similarActionStacked: { flexDirection: 'row', marginTop: space.xs },
 
-  /* Photo: an inset 4:3 photo on the sunk well */
+  /* Photo: a 4:3 print on the wash, square corners, the print's own faint edge (Print's photoEdge). */
   photoFrame: {
     aspectRatio: 4 / 3,
-    borderRadius: radius.card,
+    borderRadius: radius.none,
     overflow: 'hidden',
     backgroundColor: colors.bgSunk,
     borderWidth: stroke.edge,
-    borderColor: colors.line,
+    borderColor: colors.photoEdge,
   },
   fill: { width: '100%', height: '100%' },
   photoEmpty: {
@@ -1660,34 +1645,23 @@ const styles = StyleSheet.create({
     padding: space.lg,
     gap: space.xs,
   },
-  photoEmptyTitle: {
-    marginTop: space.sm,
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
-    color: colors.text,
-  },
+  photoEmptyTitle: { ...textRole.bodyStrong, marginTop: space.sm, color: colors.text },
   photoEmptyBody: {
-    ...textRole.helper,
+    ...textRole.small,
     color: colors.textMuted,
     textAlign: 'center',
   },
   photoActions: { flexDirection: 'row', gap: space.md, marginTop: space.md },
 
-  /* Save bar */
+  /* Save bar: its rule always laid out, transparent until the form runs under it, so showing it moves nothing. */
   saveBar: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.md,
     gap: space.sm,
     borderTopWidth: stroke.edge,
-    borderTopColor: colors.line,
-    backgroundColor: colors.surface,
+    borderTopColor: 'transparent',
+    backgroundColor: colors.bg,
   },
-  consent: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.micro.fontSize,
-    lineHeight: typeScale.micro.lineHeight,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
+  saveBarRuled: { borderTopColor: colors.line },
+  consent: { ...textRole.small, color: colors.textMuted, textAlign: 'center' },
 });

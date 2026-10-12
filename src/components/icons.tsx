@@ -7,8 +7,8 @@ import { colors } from '@/constants/theme';
 /* Icon system                                                          */
 /*                                                                      */
 /* Hand-drawn on a 24×24 grid. One visual language throughout:          */
-/*   • 1.75 stroke, round caps and joins (echoes Playfair Display's     */
-/*     bracketed serifs — a hairline or a miter join would fight it)    */
+/*   • 1.6 stroke (v4 Daylight; was 1.75), round caps and joins         */
+/*     (echoes Playfair Display's bracketed serifs)                     */
 /*   • outline for resting state, filled for active state               */
 /*   • geometry sits on half-pixel centers so strokes stay crisp        */
 /*                                                                      */
@@ -26,7 +26,7 @@ import { colors } from '@/constants/theme';
 /* which are Instagram's.                                               */
 /* ==================================================================== */
 
-const STROKE = 1.75;
+const STROKE = 1.6;
 
 export type IconName =
   | 'home'
@@ -73,7 +73,10 @@ export type IconName =
   | 'play'
   | 'pause'
   | 'send'
-  | 'music';
+  | 'music'
+  | 'bell'
+  | 'sliders'
+  | 'arrowRight';
 
 export interface IconProps {
   name: IconName;
@@ -245,6 +248,31 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
       <Path d="M3.8 6.4h16.4" />
       <Path d="M6.6 12h10.8" />
       <Path d="M9.8 17.6h4.4" />
+    </>
+  ),
+  // v4: Home's one bar glyph (Activity), in place of the heart that also meant "like".
+  bell: (
+    <>
+      <Path d="M6.3 16.6V11a5.7 5.7 0 0 1 11.4 0v5.6l1.7 2.2H4.6z" />
+      <Path d="M10 21a2.3 2.3 0 0 0 4 0" />
+    </>
+  ),
+  // v4: the Dex field's filter key (layout spec 5.2).
+  sliders: (
+    <>
+      <Path d="M4 7.5h9.2" />
+      <Path d="M17.8 7.5H20" />
+      <Path d="M4 16.5h2.7" />
+      <Path d="M11.3 16.5H20" />
+      <Circle cx={15.5} cy={7.5} r={2.3} />
+      <Circle cx={9} cy={16.5} r={2.3} />
+    </>
+  ),
+  // v4: My Bar's next-bottle line ("Add dry vermouth → 10 more drinks").
+  arrowRight: (
+    <>
+      <Path d="M4.5 12h14.5" />
+      <Path d="M13.5 6.5 19 12l-5.5 5.5" />
     </>
   ),
   bookmark: <Path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z" />,
@@ -535,6 +563,20 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
   ),
   play: (
     <Path d="M8.2 5.6v12.8a.8.8 0 0 0 1.22.68l10.2-6.4a.8.8 0 0 0 0-1.36L9.42 4.92A.8.8 0 0 0 8.2 5.6Z" />
+  ),
+  bell: (
+    <>
+      <Path d="M12 4.5a6.5 6.5 0 0 0-6.5 6.5v5.3l-1.6 2.1a.9.9 0 0 0 .7 1.4h14.8a.9.9 0 0 0 .7-1.4l-1.6-2.1V11A6.5 6.5 0 0 0 12 4.5z" />
+      <Path d="M9.4 20.6h5.2a2.7 2.7 0 0 1-5.2 0z" />
+    </>
+  ),
+  /* A filter that is on: the same rails, knobs solid (the Dex field's filter key). */
+  sliders: (
+    <>
+      <Path d="M3.2 6.7h10.6v1.6H3.2zM17.6 6.7h3.2v1.6h-3.2zM3.2 15.7h3.9v1.6H3.2zM10.9 15.7h9.9v1.6h-9.9z" />
+      <Circle cx={15.5} cy={7.5} r={3.1} />
+      <Circle cx={9} cy={16.5} r={3.1} />
+    </>
   ),
 };
 

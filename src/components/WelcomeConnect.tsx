@@ -2,10 +2,9 @@ import { StyleSheet, Text } from 'react-native';
 
 import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { FindFriends } from '@/components/FindFriends';
-import { Icon } from '@/components/icons';
 import { ScreenTopBar } from '@/components/ScreenTopBar';
 import { Button } from '@/components/ui';
-import { colors, fonts, layout, space, type as typeScale } from '@/constants/theme';
+import { colors, layout, space, textRole } from '@/constants/theme';
 
 /* ==================================================================== */
 /* Welcome — find your people                                           */
@@ -33,19 +32,18 @@ import { colors, fonts, layout, space, type as typeScale } from '@/constants/the
 /* THE WAY OUT IS PINNED. Continue used to sit after the six cards of    */
 /* FindFriends, about two screens down, so a skippable step arrived with */
 /* its only exit off-screen and read as mandatory. It now sits in a      */
-/* footer that is always in view, above the floating tab bar — AuthGate  */
-/* renders this inside the Home and Profile tab scenes, and the bar      */
-/* floats over their bottom edge, which is where the old button ended up */
-/* at full scroll. log.tsx pins its save the same way. CabinetSheet      */
+/* footer that is always in view, above the tab bar — AuthGate renders  */
+/* this inside the Home and Profile tab scenes, and the bar sits over   */
+/* their bottom edge, which is where the old button ended up at full    */
+/* scroll. log.tsx pins its save the same way. CabinetSheet             */
 /* draws the footer and its clearance.                                   */
 /*                                                                      */
-/* ONE FRAME WITH SIGN-IN. The step is the paper sheet over the cabinet  */
-/* (auth/CabinetBackdrop) with the compact backdrop, as the sign-in and  */
-/* username steps just before it are, so the three read as one flow. The */
-/* title is the sheet's bar, which sticks while the long list scrolls    */
-/* and always draws its rule, the sheet's edge. The glyph under it is    */
-/* drawn bare, with no disc behind it: an icon in a tinted circle is the */
-/* most copied header there is.                                          */
+/* ONE FRAME WITH SIGN-IN. The step is drawn in auth/CabinetBackdrop's  */
+/* sheet with the compact backdrop, as the sign-in and username steps    */
+/* just before it are, so the three read as one flow. The title is the   */
+/* sheet's bar, which sticks while the long list scrolls and always     */
+/* draws its rule. v4 dropped the glyph under it: the title and the lede */
+/* say what the step is (less stuff).                                    */
 /* ==================================================================== */
 
 export function WelcomeConnect({ onDone }: { onDone: () => void }) {
@@ -66,17 +64,16 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
       bar={<ScreenTopBar title="Find your people" size="md" showRule inset="sheet" />}
       footer={<Button label="Continue" onPress={onDone} block />}
       contentStyle={styles.content}>
-      <Icon name="users" size={28} color={colors.text} />
-
-      <Text style={styles.lede}>
+      <Text style={[textRole.body, styles.lede]}>
         Sipply is better with the friends you already drink with. You can bring them
         over now, or do it later from Settings — nothing here is one-time.
       </Text>
 
       {/*
-        FindFriends opens with <FacebookFriends />, so someone who has
-        just signed in with Facebook sees their friends first, right
-        under the lede. Not mounted here as well: it would draw twice.
+        FindFriends draws <FacebookFriends /> straight after contacts, so
+        someone who has just signed in with Facebook sees their friends in
+        the second section without asking for anything. Not mounted here
+        as well: it would draw twice.
       */}
       <FindFriends />
     </CabinetSheet>
@@ -90,12 +87,6 @@ const styles = StyleSheet.create({
     paddingBottom: space.xl,
   },
 
-  lede: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    marginTop: space.md,
-    marginBottom: space.xl,
-  },
+  // With FindFriends' own 16 on top: the 32 between groups.
+  lede: { color: colors.textMuted, marginBottom: space.lg },
 });

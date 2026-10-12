@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { createContext, type ReactNode, useContext } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -13,306 +13,171 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CatalogueFace } from '@/components/auth/CatalogueFace';
-import { DrinkName, Mount, MOUNT, MountWindow } from '@/components/cabinet';
+import { Print } from '@/components/cabinet';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
-import { Grain } from '@/components/Grain';
-import { FocusedStatusBar } from '@/components/ScreenTopBar';
-import { colors, elevation, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
+import { useScrollEdges } from '@/components/log/scrollEdges';
+import { colors, layout, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
 
 /* ==================================================================== */
-/* The sign-in sheet over the cabinet                                   */
+/* The sign-in page                                                     */
 /*                                                                      */
-/* The three steps a new person walks through (sign-in, the username,   */
-/* Welcome) share one frame (specs/v3-cabinet.md 9.11): the cabinet's   */
-/* wine lining behind, and Jan's paper sheet laid over it, its title    */
-/* bar sticking under the status bar while the form scrolls. The sheet's */
-/* own layout is the step's and is not touched here; this file only      */
-/* decides what lies behind it.                                          */
+/* Every step a new person walks through (sign-in, the username, Find   */
+/* your people, Welcome back) stands on one frame. In v3 it was a paper */
+/* sheet over the cabinet's wine lining, with three mounted drinks      */
+/* peeking above it. In v4 it is a plain white page (white spec,        */
+/* "Sign-in"; specs/v4-changes.md 7): the step's bar at the top, the    */
+/* large Playfair wordmark on the first step, the form, and nothing     */
+/* behind it. Jan: "make everything look sleek".                        */
 /*                                                                      */
-/* WHY ONE SHELL, AND THE STATUS BAR. The lining runs from the top of    */
-/* the screen, so the status bar is light, and the strip above the       */
-/* sticky bar is always lining (the shell's own padding, outside the     */
-/* scroll view), so light glyphs never land on the paper bar. Putting    */
-/* the backdrop inside a paper screen under its bar, as a first draft    */
-/* did for the username and Welcome steps, would have.                   */
+/* The names are the v3 ones (CabinetSheet, CabinetBackdrop's file) so  */
+/* every step that draws on this frame kept its import; the cabinet     */
+/* itself is gone.                                                      */
 /*                                                                      */
-/* ONE GRAIN UNDER THE LINING. The shell's ground carries the lining     */
-/* grain, and the backdrop draws on it with no fill of its own: a second */
-/* grain layer would double the texture over the backdrop and seam it    */
-/* against the status-bar strip above.                                   */
+/* THE BAR. Fixed at the top, under the status bar, on the page. Its    */
+/* 1pt rule shows once the form scrolls under it, as on every v4 bar.   */
+/* AuthTitleBar reads that from this frame (AuthPageScrolled), so the   */
+/* steps pass their bar unchanged. A pinned footer's rule shows only    */
+/* while the form runs on under it.                                     */
 /*                                                                      */
-/* STATIC. The backdrop is a choice made from the window, never an       */
-/* animation, and nothing here starts invisible.                         */
+/* STATIC. Nothing here starts invisible or animates.                   */
 /* ==================================================================== */
 
-/* ==================================================================== */
-/* CabinetBackdrop                                                      */
-/* ==================================================================== */
+/**
+ * Whether the page's form has scrolled under its bar, for the bar's rule.
+ * Null outside the sign-in page (a page sheet's own bar keeps its rule).
+ */
+const AuthPageScrolled = createContext<boolean | null>(null);
+export function useAuthPageScrolled(): boolean | null {
+  return useContext(AuthPageScrolled);
+}
 
-/** The wordmark roles' Dynamic Type cap (spec 6.5). */
+/** The wordmark's Dynamic Type cap (spec 6.5). */
 const WORDMARK_CAP = 1.2;
-
-/**
- * The three drinks in the cabinet behind the first step when the person
- * has none of their own yet: real catalogue drinks, all three
- * photographed, each a collected mount (mat, edge and seat, the same frame
- * every collected card has). The middle one is raised.
- */
-export const FEATURED: readonly string[] = ['negroni', 'zombie', 'last-word'];
-
-/** A feature mount at full size, before a narrow phone scales it down to fit three. */
-const CARD = { width: 116, height: 150 } as const;
-const CARD_GAP = 14;
-/** How much higher the middle card sits. */
-const RAISE = 14;
-/**
- * Room above the cards inside their clip, so the raised card's seat
- * shadow is not cut flat along its top. Taken out of the 24pt above them.
- */
-const SHADOW_ROOM = 12;
-/** The named cards over the picks (the "Your Dex has begun" sheet): the mockup's 8pt mat and 112pt window. */
-const NAMED = { padding: 8, window: 112, nameGap: 7 } as const;
-/** Every name on the backdrop caps here (spec 6.5, as a Dex card). */
+/** The picks' prints and the heading over them cap here, as a Dex card's name does. */
 const NAME_CAP = 1.3;
 
 /**
- * Above this text size the first step uses the compact backdrop too:
- * xxxLarge (1.35) is the largest size short of the accessibility sizes,
- * where the lede alone wraps to four lines and would push the form off
- * the first screen, which is the thing this choice exists to prevent.
+ * The three drinks a begun Dex shows when the person picked none (a
+ * renamed pick drops out): real catalogue drinks, all three photographed.
+ */
+const FEATURED: readonly string[] = ['negroni', 'zombie', 'last-word'];
+
+/**
+ * Above this text size, or below this height (the SE class), the first
+ * step leaves the wordmark out: the lede alone wraps to four lines at the
+ * accessibility sizes and would push the ways in under the tab bar, which
+ * is the thing the first step must never do.
  */
 const FULL_MAX_FONT_SCALE = 1.4;
+const FULL_MIN_HEIGHT = 740;
+
+/** The picks' prints: three across, never wider than 96 (a 288px decode at 3x). */
+const PICK = 96;
+const PICK_GAP = space.sm;
 
 /**
- * How much of the cards shows above the sheet: the raised card shows all
- * of it, the other two this less RAISE. Chosen so the sign-in controls
- * stay above the floating tab bar at rest: 96pt on Pro Max and Plus
- * heights (900pt and up), 56pt on 6.1-inch phones, so Continue and the
- * first two ways in stay clear of the bar. Null (the compact backdrop)
- * below 740pt, the SE class, where no card fits.
+ * What sits above the form.
+ *
+ *   full     the first step: "Sipply" in wordmarkLg and the catalogue's
+ *            size as the invitation. On a short window or at an
+ *            accessibility text size, nothing (the bar says the step).
+ *   compact  every other step: nothing. The bar's title is the step.
+ *   begun    after the taste picker: "Your Dex has begun", its count, and
+ *            the picks as three colour prints (the only colour on the
+ *            page, and the person's own). VoiceOver reads the heading; it
+ *            is news. The prints are decorative.
  */
-function cardBand(height: number, fontScale: number): number | null {
-  if (height < 740 || fontScale > FULL_MAX_FONT_SCALE) return null;
-  return height >= 900 ? 96 : 56;
-}
-
-/**
- * What lies behind the sheet, drawn on the lining it is placed on.
- *
- * `full` (the first step of sign-in, where the window has room): the
- * large wordmark, the catalogue's size as an invitation, and three mounted
- * drinks whose tops show above the sheet, so the cabinet is the first
- * thing a new person sees. `compact` (every other step, and the first one
- * on a short window or at an accessibility text size): the wordmark in a
- * band.
- *
- * `drinks` are the three mounts: the person's own (their picks, or the
- * latest in their Dex), else FEATURED. `begun` is the number of picks a
- * new Dex has begun with: the heading becomes "Your Dex has begun" and
- * its count, and on Plus and Pro Max heights the three cards show whole,
- * named, the way the person just picked them (the 56pt peek elsewhere).
- *
- * Decorative and untouchable: the sheet's title bar says where you are,
- * and a pan on the backdrop scrolls the form. The one exception is the
- * "Your Dex has begun" heading, which VoiceOver reads: it is news.
- */
-export function CabinetBackdrop({
+function Backdrop({
   variant,
-  drinks = FEATURED,
+  drinks,
   begun,
 }: {
   variant: 'full' | 'compact';
-  drinks?: readonly string[];
+  drinks: readonly string[];
   begun?: number;
 }) {
   const { width, height, fontScale } = useWindowDimensions();
-  const band = variant === 'full' ? cardBand(height, fontScale) : null;
-  const ids = drinks.length > 0 ? drinks.slice(0, 3) : FEATURED;
+  const roomy = height >= FULL_MIN_HEIGHT && fontScale <= FULL_MAX_FONT_SCALE;
 
   if (begun != null) {
     const count = `${formatCount(begun)} of ${formatCount(TOTAL)} drinks`;
-    // The heading is news, so VoiceOver reads it (one element); the cards stay decorative.
+    const side = Math.min(PICK, Math.floor((width - 2 * layout.gutter - 2 * PICK_GAP) / 3));
+    const ids = drinks.length > 0 ? drinks.slice(0, 3) : FEATURED;
     return (
-      <View pointerEvents="none" style={band == null ? styles.compact : styles.full}>
+      <View style={styles.head}>
         <View accessible accessibilityLabel={`Your Dex has begun, ${count}`}>
-          <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.emptyTitle, styles.heading]}>
+          <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.bodyStrong, styles.ink, styles.centre]}>
             Your Dex has begun
           </Text>
-          <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.prose, tabular, styles.lede]}>
+          <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.small, tabular, styles.muted, styles.centre]}>
             {count}
           </Text>
         </View>
-        <View
-          accessibilityElementsHidden
-          importantForAccessibility="no-hide-descendants"
-          style={styles.cardsSlot}>
-          {band == null ? null : band >= 96 ? (
-            <NamedCards ids={ids} windowWidth={width} />
-          ) : (
-            <FeatureCards ids={ids} band={band} windowWidth={width} />
-          )}
-        </View>
+        {roomy ? (
+          <View
+            pointerEvents="none"
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            style={styles.picks}>
+            {ids.map((id) => {
+              const drink = getDrink(id);
+              // A renamed drink drops out of the row rather than breaking the screen.
+              if (!drink) return null;
+              return (
+                <Print key={id} width={side} height={side}>
+                  <CatalogueFace drink={drink} width={side} height={side} />
+                </Print>
+              );
+            })}
+          </View>
+        ) : null}
       </View>
     );
   }
+
+  if (variant === 'compact' || !roomy) return null;
 
   return (
     <View
       pointerEvents="none"
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
-      style={band == null ? styles.compact : styles.full}>
-      {band == null ? (
-        <Text maxFontSizeMultiplier={WORDMARK_CAP} style={[textRole.wordmark, styles.wordmark]}>
-          Sipply
-        </Text>
-      ) : (
-        <>
-          <Text maxFontSizeMultiplier={WORDMARK_CAP} style={[textRole.wordmarkLg, styles.wordmark]}>
-            Sipply
-          </Text>
-          <Text style={[textRole.prose, styles.lede]}>
-            {`${formatCount(TOTAL)} drinks. Start your Dex with the next one.`}
-          </Text>
-          <FeatureCards ids={ids} band={band} windowWidth={width} />
-        </>
-      )}
-    </View>
-  );
-}
-
-/** A card's width: three fit from a 408pt column; a narrower phone scales them down, keeping their shape. */
-function cardWidth(windowWidth: number): number {
-  const fit = Math.floor((windowWidth - 2 * layout.gutter - 2 * CARD_GAP) / 3);
-  return Math.min(CARD.width, fit);
-}
-
-/**
- * The three mounts, clipped at `band` so only their tops show: the sheet
- * begins exactly where they are cut, which reads as the sheet lying over
- * them.
- *
- * Memory: three lit windows of about 90 x 124pt, each decoded at that
- * size under its own key (CatalogueFace).
- */
-function FeatureCards({ ids, band, windowWidth }: { ids: readonly string[]; band: number; windowWidth: number }) {
-  const cardW = cardWidth(windowWidth);
-  const cardH = Math.round((cardW * CARD.height) / CARD.width);
-  const inset = 2 * (stroke.edge + MOUNT.feature.padding);
-  const windowW = cardW - inset;
-  const windowH = cardH - inset;
-
-  return (
-    <View style={[styles.cards, { height: SHADOW_ROOM + band }]}>
-      {ids.map((id, i) => {
-        const drink = getDrink(id);
-        // A renamed drink drops out of the row rather than breaking the screen.
-        if (!drink) return null;
-        return (
-          <Mount
-            key={id}
-            state="mounted"
-            size="feature"
-            onLining
-            style={{ width: cardW, height: cardH, marginTop: i === 1 ? 0 : RAISE }}>
-            <MountWindow height={windowH} state="mounted">
-              <CatalogueFace drink={drink} width={windowW} height={windowH} />
-            </MountWindow>
-          </Mount>
-        );
-      })}
+      style={styles.head}>
+      <Text maxFontSizeMultiplier={WORDMARK_CAP} style={[textRole.wordmarkLg, styles.ink, styles.centre]}>
+        Sipply
+      </Text>
+      <Text style={[textRole.body, styles.muted, styles.centre, styles.lede]}>
+        {`${formatCount(TOTAL)} drinks. Start your Dex with the next one.`}
+      </Text>
     </View>
   );
 }
 
 /**
- * The picks whole, each named under its window: "Your Dex has begun" on a
- * Plus or Pro Max height, where the sheet still clears the tab bar below.
- * Every window decodes at 100 x 112pt, well under the 1024px photo at 3x.
- */
-function NamedCards({ ids, windowWidth }: { ids: readonly string[]; windowWidth: number }) {
-  const cardW = cardWidth(windowWidth);
-  const inner = cardW - 2 * (stroke.edge + NAMED.padding);
-  const windowH = Math.round((NAMED.window * cardW) / CARD.width);
-
-  return (
-    <View style={styles.named}>
-      {ids.map((id, i) => {
-        const drink = getDrink(id);
-        if (!drink) return null;
-        return (
-          <Mount
-            key={id}
-            state="mounted"
-            size="feature"
-            onLining
-            style={{ width: cardW, padding: NAMED.padding, marginTop: i === 1 ? 0 : RAISE }}>
-            <MountWindow height={windowH} state="mounted">
-              <CatalogueFace drink={drink} width={inner} height={windowH} />
-            </MountWindow>
-            <DrinkName
-              name={drink.name}
-              role={textRole.miniName}
-              measure={inner}
-              cap={NAME_CAP}
-              color={colors.text}
-              align="center"
-              style={styles.namedName}
-            />
-          </Mount>
-        );
-      })}
-    </View>
-  );
-}
-
-/* ==================================================================== */
-/* CabinetSheet                                                         */
-/* ==================================================================== */
-
-/** The sheet's top, the scroll view's second child, sticks. */
-const STICKY = [1];
-/**
- * How far the sheet's paper runs past the foot of the form, so a bounce
- * at the bottom shows paper and not the lining behind. Taken back out by
- * a negative margin, so it never adds scroll.
- */
-const OVERSCROLL = 1000;
-
-/**
- * A step of sign-in or onboarding, as a paper sheet over the cabinet.
+ * A step of sign-in or onboarding, on the white page.
  *
- *   ground   lining, with the lining grain, from the top of the screen;
- *            the status bar light while the screen is focused
- *   [0]      CabinetBackdrop, `full` or `compact`
- *   [1]      the sheet's top: the step's own bar (AuthTitleBar with
- *            insetTop={false}, or ScreenTopBar inset="sheet"), clipped to
- *            12pt top corners; it sticks under the status bar while the
- *            form scrolls
- *   [2]      the sheet's body: paper and its grain, growing to the foot
- *            of a short step, holding the step as it was
+ *   bar      the step's own bar (AuthTitleBar, or a ScreenTopBar), fixed
+ *            at the top under the status bar
+ *   head     the wordmark on the first step, the picks once a Dex has
+ *            begun (Backdrop, above)
+ *   body     the step, as it was
  *
- * The bar's own paper and grain are the sheet top's: a ScreenTopBar draws
- * both, so the top adds no grain of its own.
- *
- * Bottom clearance: the tab bar floats over every screen this is drawn in
+ * Bottom clearance: the tab bar sits under every screen this is drawn in
  * (AuthGate renders it in the Home and Profile scenes), so the body ends
  * TAB_BAR_CLEARANCE above the home indicator, plus the space.md every tab
  * screen adds, and the last row can scroll out from under the bar.
- * Without the space.md a pinned footer's button cleared a notchless
- * phone's bar by 6pt, close enough to read as part of it.
  *
- * `footer` (Welcome's Continue) is pinned under the scroll view on paper,
+ * `footer` (Find your people's Continue) is pinned under the scroll view
  * with the same clearance, so the step's way out is always in view; the
  * keyboard is then met by the scroll view's own insets instead of a
  * KeyboardAvoidingView, so the footer stays put rather than riding up.
  *
- * Route screens only: the status bar follows the screen's focus.
+ * `backdrop`, `backdropDrinks` and `begun` choose the head (Backdrop).
  */
 export function CabinetSheet({
   backdrop,
-  backdropDrinks,
+  backdropDrinks = FEATURED,
   begun,
   bar,
   children,
@@ -320,11 +185,11 @@ export function CabinetSheet({
   contentStyle,
 }: {
   backdrop: 'full' | 'compact';
-  /** The backdrop's three mounts (CabinetBackdrop `drinks`). */
+  /** The picks a begun Dex shows. */
   backdropDrinks?: readonly string[];
-  /** A Dex begun with this many picks (CabinetBackdrop `begun`). */
+  /** A Dex begun with this many picks: the head says so, over the picks. */
   begun?: number;
-  /** The step's title bar, set for a sheet (no status-bar inset of its own). */
+  /** The step's title bar. */
   bar: ReactNode;
   children: ReactNode;
   /** Pinned under the form, always in view. */
@@ -334,46 +199,34 @@ export function CabinetSheet({
 }) {
   const insets = useSafeAreaInsets();
   const clearance = insets.bottom + TAB_BAR_CLEARANCE + space.md;
+  const edges = useScrollEdges();
 
   const scroll = (
     <ScrollView
       style={styles.scroll}
-      contentContainerStyle={styles.scrollContent}
-      stickyHeaderIndices={STICKY}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: footer == null ? clearance : space.xl }]}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="interactive"
       automaticallyAdjustKeyboardInsets={footer != null}
+      onScroll={edges.onScroll}
+      onLayout={edges.onLayout}
+      onContentSizeChange={edges.onContentSizeChange}
+      scrollEventThrottle={16}
       showsVerticalScrollIndicator={footer == null}>
-      {/*
-        The backdrop also casts the sheet's shadow: a strip of paper the
-        sheet's top lies exactly over, casting upward onto the cards. On
-        the sticky top itself the shadow would spread down over the form
-        too (a sticky header is lifted over the content below it), and
-        iOS takes a shadow away from a view that clips, which the top's
-        rounded corners need.
-      */}
-      <View>
-        <CabinetBackdrop variant={backdrop} drinks={backdropDrinks} begun={begun} />
-        <View pointerEvents="none" style={styles.sheetShadow} />
-      </View>
-      {/* ScrollView moves a sticky child's style onto its own wrapper, clip included. */}
-      <View style={styles.sheetTop}>{bar}</View>
-      <View style={[styles.body, { paddingBottom: OVERSCROLL + (footer == null ? clearance : 0) }]}>
-        <Grain />
-        <View style={contentStyle}>{children}</View>
-      </View>
+      <Backdrop variant={backdrop} drinks={backdropDrinks} begun={begun} />
+      <View style={contentStyle}>{children}</View>
     </ScrollView>
   );
+
+  const head = <AuthPageScrolled.Provider value={edges.under}>{bar}</AuthPageScrolled.Provider>;
 
   if (footer != null) {
     return (
       <View style={[styles.screen, { paddingTop: insets.top }]}>
-        <Grain tone="lining" />
-        <FocusedStatusBar style="light" />
+        {head}
         {scroll}
-        {/* A drawn edge between the form and the pinned way out (01: every edge is drawn). */}
-        <View style={[styles.footer, { paddingBottom: clearance }]}>
-          <Grain />
+        {/* The pinned way out: a bar at the foot, ruled only while the form runs on under it. */}
+        <View style={[styles.footer, edges.moreBelow && styles.footerRuled, { paddingBottom: clearance }]}>
           {footer}
         </View>
       </View>
@@ -384,74 +237,32 @@ export function CabinetSheet({
     <KeyboardAvoidingView
       style={[styles.screen, { paddingTop: insets.top }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Grain tone="lining" />
-      <FocusedStatusBar style="light" />
+      {head}
       {scroll}
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  /* CabinetBackdrop */
-  full: { alignItems: 'center', paddingTop: space.xl },
-  compact: { alignItems: 'center', paddingTop: space.md, paddingBottom: 18 },
-  wordmark: { color: colors.onLining, textAlign: 'center' },
-  heading: { color: colors.onLining, textAlign: 'center', paddingHorizontal: layout.gutter },
-  cardsSlot: { alignSelf: 'stretch' },
-  lede: {
-    color: colors.onLiningMuted,
-    textAlign: 'center',
-    marginTop: 6,
-    paddingHorizontal: layout.gutter,
-  },
-  cards: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    columnGap: CARD_GAP,
-    marginTop: space.xl - SHADOW_ROOM,
-    paddingTop: SHADOW_ROOM,
-    overflow: 'hidden',
-  },
-  named: {
-    alignSelf: 'stretch',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    columnGap: CARD_GAP,
-    marginTop: space.lg,
-    paddingBottom: space.xl,
-  },
-  namedName: { marginTop: NAMED.nameGap },
-
-  /* CabinetSheet */
-  screen: { flex: 1, backgroundColor: colors.lining },
+  screen: { flex: 1, backgroundColor: colors.bg },
   scroll: { flex: 1 },
   scrollContent: { flexGrow: 1 },
-  sheetShadow: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    height: 2 * radius.card,
-    backgroundColor: colors.bg,
-    borderTopLeftRadius: radius.card,
-    borderTopRightRadius: radius.card,
-    ...elevation.sheet,
-  },
-  sheetTop: {
-    backgroundColor: colors.bg,
-    borderTopLeftRadius: radius.card,
-    borderTopRightRadius: radius.card,
-    overflow: 'hidden',
-  },
-  body: { flexGrow: 1, backgroundColor: colors.bg, marginBottom: -OVERSCROLL },
+  ink: { color: colors.text },
+  muted: { color: colors.textMuted },
+  centre: { textAlign: 'center' },
+
+  /* The head: 32 under the bar, and the body's own top padding under it. */
+  head: { alignItems: 'center', paddingTop: space.xxl, paddingHorizontal: layout.gutter, gap: space.xs },
+  lede: { marginTop: space.sm },
+  picks: { flexDirection: 'row', justifyContent: 'center', gap: PICK_GAP, marginTop: space.xl },
+
   footer: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.md,
+    // Always laid out, transparent until the form runs under it, so showing it moves nothing.
     borderTopWidth: stroke.edge,
-    borderTopColor: colors.line,
+    borderTopColor: 'transparent',
     backgroundColor: colors.bg,
   },
+  footerRuled: { borderTopColor: colors.line },
 });

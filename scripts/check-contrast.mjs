@@ -1,25 +1,21 @@
 /**
- * WCAG contrast audit for the Sipply palette.
+ * WCAG contrast audit for the Sipply palette (v4 "Daylight").
  *
  * Run: node scripts/check-contrast.mjs
  *
- * Exits 1 if any declared pair fails its target ratio, or if a colour that
- * must never be drawn over a photograph could be (see FORBIDDEN_OVER_MEDIA).
- * Exits 2 if something it measures can no longer be read: a colour missing
- * from src/constants/theme.ts, an `onMedia` entry it cannot resolve or has
- * not been told how to measure (MEDIA_ROLES), or a grain tile
- * (assets/images/grain.png) that no longer matches the numbers theme.ts
- * declares for it.
+ * Exits 1 if any declared pair fails its target ratio, if a pair that must
+ * stay unreadable has become readable (NEVER), or if a hue has crept into
+ * the palette (NEUTRAL). Exits 2 if something it measures can no longer be
+ * read: a colour missing from src/constants/theme.ts, or an `onMedia` entry
+ * it has not been told how to measure (MEDIA_ROLES).
  *
  * Targets: 4.5:1 for body text, 3:1 for large text, glyphs and the edges
- * that identify a control (WCAG 1.4.11), and 2:1 for the design floor
- * that is not WCAG at all but keeps a locked drink from reading as empty.
+ * that identify a control (WCAG 1.4.11). The pairs are
+ * specs/v4-mockups/white/spec.md section 1.2, read against the values the
+ * app draws: this file holds no copy of the palette.
  */
 
-import { Buffer } from 'node:buffer';
-import { createHash } from 'node:crypto';
-import { readFileSync, statSync } from 'node:fs';
-import { inflateSync } from 'node:zlib';
+import { readFileSync } from 'node:fs';
 
 const hex = (h) => {
   const n = parseInt(h.replace('#', ''), 16);
@@ -61,18 +57,10 @@ const unreadable = (why) => {
 /* ==================================================================== */
 /* The palette, read from theme.ts                                      */
 /*                                                                      */
-/* This used to be a hand-kept mirror ("change there, change here").    */
-/* The page moved from #FFFDF9 to cream #F7F2EA and the mirror did not, */
-/* so every "on page" pair was measured against a colour the app no     */
-/* longer drew, and textFaint passed at 3.11:1 while shipping at        */
-/* 2.84:1. Reading the source removes the second copy instead of asking */
-/* someone to remember it.                                              */
-/*                                                                      */
 /* Only the plain `key: '#RRGGBB'` and `key: 'rgba(r, g, b, a)'`         */
 /* entries are picked up, from the code with its comments dropped (a    */
 /* note such as "was textMuted: '#9A8F85'" would otherwise be read as   */
-/* the token); a pair that needs a translucent colour composites it     */
-/* explicitly, over the ground it is drawn on.                          */
+/* the token).                                                          */
 /* ==================================================================== */
 
 const THEME = readFileSync(new URL('../src/constants/theme.ts', import.meta.url), 'utf8');
@@ -93,18 +81,26 @@ const found = {};
 for (const [, key, value] of COLORS.matchAll(/(\w+):\s*'(#[0-9A-Fa-f]{6})'/g)) {
   found[key] = value.toUpperCase();
 }
-
-/*
- * The translucent colours in `colors` (the scrims, the edges and fills on
- * lining), read the same way, so a pair that composites one over a ground
- * uses the value the app draws rather than a copy of its numbers.
- */
 const foundRgba = {};
 for (const [, key, r, g, b, a] of COLORS.matchAll(
   /(\w+):\s*'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)'/g,
 )) {
   foundRgba[key] = [Number(r), Number(g), Number(b), Number(a)];
 }
+
+/** A misspelt or deleted token stops the audit rather than quietly testing `undefined`. */
+const C = new Proxy(found, {
+  get(target, key) {
+    if (typeof key === 'string' && !(key in target)) unreadable(`colors.${key} is not defined in theme.ts.`);
+    return target[key];
+  },
+});
+const R = new Proxy(foundRgba, {
+  get(target, key) {
+    if (typeof key === 'string' && !(key in target)) unreadable(`colors.${key} is not an rgba value in theme.ts.`);
+    return target[key];
+  },
+});
 
 /*
  * Categories are derived, not listed, so a category added to theme.ts is
@@ -114,249 +110,52 @@ const CATEGORIES = [
   ...section('export const CATEGORY_META', '\n};').matchAll(
     /(\w+):\s*\{\s*label:[^}]*?\bcolor:\s*'(#[0-9A-Fa-f]{6})',\s*wash:\s*'(#[0-9A-Fa-f]{6})'/g,
   ),
-].map(([, key, color, wash]) => ({ key, color, wash }));
-
-/*
- * A misspelt or deleted token must fail the audit, not quietly test
- * `undefined` — so C exits with code 2 on any key theme.ts no longer
- * defines.
- */
-const C = new Proxy(found, {
-  get(target, key) {
-    if (typeof key === 'string' && !(key in target)) {
-      unreadable(`colors.${key} is not defined in theme.ts.`);
-    }
-    return target[key];
-  },
-});
-
-/** The same guard for the rgba entries of `colors`. */
-const R = new Proxy(foundRgba, {
-  get(target, key) {
-    if (typeof key === 'string' && !(key in target)) {
-      unreadable(`colors.${key} is not an rgba value in theme.ts.`);
-    }
-    return target[key];
-  },
-});
-
-/*
- * The worst case under anything drawn over a photograph or a video: a
- * blown-out white frame, for the light ink that is all of onMedia's text.
- * A dark ink on a translucent fill would be worst over a black frame, so a
- * plaque is measured over whichever of the two is worse for its ink
- * (plaqueGround), and a dark-inked plaque added later is measured right.
- * Neither is a token, because the app never paints them; the picture does.
- */
-const WHITE_FRAME = '#FFFFFF';
-const BLACK_FRAME = '#000000';
-
-/*
- * Every category in CATEGORY_ORDER must have been parsed. A reordered or
- * reformatted CATEGORY_META entry would otherwise drop out of the audit
- * silently, which is the drift this file exists to prevent.
- */
+].map(([, key, color, wash]) => ({ key, color: color.toUpperCase(), wash: wash.toUpperCase() }));
 const ORDER = [
-  ...(/export const CATEGORY_ORDER[^=]*=\s*\[([^\]]*)\]/.exec(THEME)?.[1] ?? '').matchAll(
-    /'(\w+)'/g,
-  ),
+  ...(/export const CATEGORY_ORDER[^=]*=\s*\[([^\]]*)\]/.exec(THEME)?.[1] ?? '').matchAll(/'(\w+)'/g),
 ].map(([, key]) => key);
 const unparsed = ORDER.filter((key) => !CATEGORIES.some((c) => c.key === key));
 if (ORDER.length === 0) unreadable('cannot read CATEGORY_ORDER in theme.ts.');
 if (unparsed.length > 0) unreadable(`no color/wash parsed for ${unparsed.join(', ')} in CATEGORY_META.`);
 
-/*
- * The two signup accents with no token of their own (see SIGNUP_ACCENTS).
- * Read from their named constants in theme.ts, for the same reason the
- * palette is: this list used to hold its own copy of the two hex values.
- */
-const ACCENTS = {};
-for (const [, key, value] of THEME.matchAll(/^const (ACCENT_\w+) = '(#[0-9A-Fa-f]{6})';$/gm)) {
-  ACCENTS[key] = value.toUpperCase();
-}
-for (const key of ['ACCENT_AMBER', 'ACCENT_PLUM']) {
-  if (!ACCENTS[key]) unreadable(`${key} is not defined in theme.ts.`);
-}
-
 /* ==================================================================== */
-/* The grain, measured                                                  */
+/* No hue                                                               */
 /*                                                                      */
-/* Every ground in v3 is grained, and grain is a real pixel under the   */
-/* text: on the lining (7.8% of a 232 grey) it lifts the ground enough  */
-/* to cost onLining two points of contrast. So the audit decodes the    */
-/* tile itself rather than trusting the numbers theme.ts writes about   */
-/* it, stops if the two disagree, and measures each ink against the     */
-/* worst pixel the tile can put under it: the brightest over a dark     */
-/* ground, the darkest over paper.                                      */
+/* Daylight is black and white: every value R = G = B. The exceptions   */
+/* are quotations of someone else's mark (Facebook's blue, Google's     */
+/* four colours and its outline grey) and the intro film's sampled      */
+/* paper, which carry no text of ours. A hue anywhere else fails.       */
 /* ==================================================================== */
 
-const GRAIN_SRC = uncommented(section('export const grain = {', '} as const;'));
-const grainNumber = (src, key, what) => {
-  const m = new RegExp(`\\b${key}:\\s*([\\d.]+)`).exec(src);
-  if (!m) unreadable(`cannot read ${what} in theme.ts's \`grain\`.`);
-  return Number(m[1]);
-};
-const TILE_SRC = /\btile:\s*\{([^}]*)\}/.exec(GRAIN_SRC)?.[1];
-if (!TILE_SRC) unreadable("cannot read grain.tile in theme.ts's `grain`.");
-const GRAIN = {
-  tile: {
-    min: grainNumber(TILE_SRC, 'min', 'grain.tile.min'),
-    max: grainNumber(TILE_SRC, 'max', 'grain.tile.max'),
-    alpha: grainNumber(TILE_SRC, 'alpha', 'grain.tile.alpha'),
-  },
-  paper: grainNumber(GRAIN_SRC.replace(TILE_SRC, ''), 'paper', 'grain.paper'),
-  lining: grainNumber(GRAIN_SRC.replace(TILE_SRC, ''), 'lining', 'grain.lining'),
-};
-// An opacity outside 0..1 is clamped by React Native, so what it measured would not be what draws.
-for (const key of ['paper', 'lining']) {
-  if (!(GRAIN[key] > 0 && GRAIN[key] <= 1)) unreadable(`grain.${key} is ${GRAIN[key]}, not an opacity in (0, 1].`);
-}
-
-/**
- * The pixels of a PNG in the one format the grain tile is saved in: 8-bit
- * RGBA, not interlaced, scanline filters 0 to 4. Anything else is not the
- * file theme.ts describes, so it stops the audit rather than being guessed.
- */
-function readRgbaPng(url) {
-  const file = readFileSync(url);
-  const name = url.pathname.split('/').slice(-3).join('/');
-  if (file.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') unreadable(`${name} is not a PNG.`);
-  let header = null;
-  const data = [];
-  for (let at = 8; at + 8 <= file.length; ) {
-    const length = file.readUInt32BE(at);
-    const type = file.toString('latin1', at + 4, at + 8);
-    const body = file.subarray(at + 8, at + 8 + length);
-    if (type === 'IHDR') {
-      header = {
-        width: body.readUInt32BE(0),
-        height: body.readUInt32BE(4),
-        depth: body[8],
-        colorType: body[9],
-        interlace: body[12],
-      };
-    } else if (type === 'IDAT') data.push(body);
-    else if (type === 'IEND') break;
-    at += 12 + length; // length, type, body, CRC
-  }
-  if (!header || header.depth !== 8 || header.colorType !== 6 || header.interlace !== 0) {
-    unreadable(`${name} is not an 8-bit, non-interlaced RGBA PNG.`);
-  }
-  const { width, height } = header;
-  const stride = width * 4;
-  const raw = inflateSync(Buffer.concat(data));
-  if (raw.length !== height * (stride + 1)) unreadable(`${name}: image data is ${raw.length} bytes, not ${height * (stride + 1)}.`);
-  const px = Buffer.alloc(height * stride);
-  for (let y = 0; y < height; y++) {
-    const filter = raw[y * (stride + 1)];
-    const line = raw.subarray(y * (stride + 1) + 1, (y + 1) * (stride + 1));
-    const row = y * stride;
-    for (let x = 0; x < stride; x++) {
-      const left = x >= 4 ? px[row + x - 4] : 0;
-      const up = y > 0 ? px[row - stride + x] : 0;
-      const corner = x >= 4 && y > 0 ? px[row - stride + x - 4] : 0;
-      let predict;
-      if (filter === 0) predict = 0;
-      else if (filter === 1) predict = left;
-      else if (filter === 2) predict = up;
-      else if (filter === 3) predict = (left + up) >> 1;
-      else if (filter === 4) {
-        const p = left + up - corner;
-        const [pa, pb, pc] = [Math.abs(p - left), Math.abs(p - up), Math.abs(p - corner)];
-        predict = pa <= pb && pa <= pc ? left : pb <= pc ? up : corner;
-      } else unreadable(`${name}: unknown scanline filter ${filter} on row ${y}.`);
-      px[row + x] = (line[x] + predict) & 255;
-    }
-  }
-  return { width, height, px };
-}
-
-const tile = readRgbaPng(new URL('../assets/images/grain.png', import.meta.url));
-const measured = { min: 255, max: 0, alphaMin: 255, alphaMax: 0, grey: true };
-for (let i = 0; i < tile.px.length; i += 4) {
-  const [r, g, b, a] = tile.px.subarray(i, i + 4);
-  if (r !== g || g !== b) measured.grey = false;
-  measured.min = Math.min(measured.min, r);
-  measured.max = Math.max(measured.max, r);
-  measured.alphaMin = Math.min(measured.alphaMin, a);
-  measured.alphaMax = Math.max(measured.alphaMax, a);
-}
-if (
-  !measured.grey ||
-  measured.alphaMin !== measured.alphaMax ||
-  measured.min !== GRAIN.tile.min ||
-  measured.max !== GRAIN.tile.max ||
-  measured.alphaMin !== GRAIN.tile.alpha
-) {
-  unreadable(
-    `assets/images/grain.png measures ${measured.grey ? 'grey' : 'NOT grey'} ` +
-      `${measured.min}..${measured.max}, alpha ${measured.alphaMin}` +
-      `${measured.alphaMax === measured.alphaMin ? '' : `..${measured.alphaMax}`}; ` +
-      `theme.ts's grain.tile says grey ${GRAIN.tile.min}..${GRAIN.tile.max}, alpha ${GRAIN.tile.alpha}. ` +
-      'Make them agree before measuring anything over grain.',
-  );
-}
-
-/** The worst grain pixel over a ground: the tile's alpha times the ground's opacity. */
-const grained = (grey, opacity, ground) =>
-  over([grey, grey, grey, (measured.alphaMin / 255) * opacity], ground);
-const WORST = {
-  // Dark grounds: the brightest pixel lifts them toward light ink.
-  lining: grained(measured.max, GRAIN.lining, C.lining),
-  cellar: grained(measured.max, GRAIN.lining, C.liningDeep),
-  // Paper: the darkest pixel sinks it toward dark ink.
-  paper: grained(measured.min, GRAIN.paper, C.bg),
-};
-
-/* ==================================================================== */
-/* The walnut, measured by its maker                                    */
-/*                                                                      */
-/* v3.3 Brass's wood is a lossy WebP (assets/images/walnut.webp), which */
-/* plain Node cannot decode. So scripts/build-walnut.py decodes it as a */
-/* phone does and prints its darkest and brightest pixel and its        */
-/* sha256 into theme.ts's `walnutTile`. This audit hashes the file and  */
-/* stops if it is not the tile those numbers describe: a regenerated or */
-/* swapped texture cannot ship with text measured against the old one.  */
-/* Text on walnut is measured against `brightest`.                      */
-/* ==================================================================== */
-
-const WALNUT_SRC = uncommented(section('export const walnutTile = {', '} as const;'));
-const walnutField = (key, re) => {
-  const m = new RegExp(`\\b${key}:\\s*'(${re})'`).exec(WALNUT_SRC);
-  if (!m) unreadable(`cannot read walnutTile.${key} in theme.ts.`);
-  return m[1];
-};
-const WALNUT = {
-  darkest: walnutField('darkest', '#[0-9A-Fa-f]{6}').toUpperCase(),
-  brightest: walnutField('brightest', '#[0-9A-Fa-f]{6}').toUpperCase(),
-  mean: walnutField('mean', '#[0-9A-Fa-f]{6}').toUpperCase(),
-  sha256: walnutField('sha256', '[0-9a-f]{64}'),
-};
-{
-  const url = new URL('../assets/images/walnut.webp', import.meta.url);
-  const bytes = readFileSync(url);
-  const digest = createHash('sha256').update(bytes).digest('hex');
-  if (digest !== WALNUT.sha256) {
-    unreadable(
-      `assets/images/walnut.webp hashes to ${digest}, not the ${WALNUT.sha256} theme.ts's walnutTile ` +
-        'describes. Run python3 scripts/build-walnut.py and paste the block it prints.',
-    );
-  }
-  // The texture budget (v3.3): one tile, at most 12 KB.
-  if (statSync(url).size > 12 * 1024) unreadable(`assets/images/walnut.webp is ${statSync(url).size} bytes, over 12 KB.`);
-}
+const QUOTATIONS = new Set([
+  'facebook',
+  'googleBlue',
+  'googleGreen',
+  'googleYellow',
+  'googleRed',
+  'providerEdge',
+  'filmPaper',
+]);
+const tinted = [
+  ...Object.entries(found)
+    .filter(([key]) => !QUOTATIONS.has(key))
+    .filter(([, value]) => new Set(hex(value)).size > 1)
+    .map(([key, value]) => `colors.${key} ${value}`),
+  ...Object.entries(foundRgba)
+    .filter(([, [r, g, b]]) => r !== g || g !== b)
+    .map(([key, v]) => `colors.${key} rgba(${v.join(', ')})`),
+  ...CATEGORIES.flatMap(({ key, color, wash }) =>
+    [color, wash].filter((v) => new Set(hex(v)).size > 1).map((v) => `CATEGORY_META.${key} ${v}`),
+  ),
+];
 
 /* ==================================================================== */
 /* onMedia, read as the app reads it                                    */
 /*                                                                      */
-/* Everything drawn over a photograph comes from this one object, and    */
-/* for its light ink the worst photograph is a white one. Each text     */
-/* colour in it is measured over the worst frame under the scrim or     */
-/* plaque it sits on, every entry must be one the audit knows, and the  */
-/* lining inks, which fail there, are asserted to stay out.             */
+/* Over a photograph Daylight sets only a solid ink plate with onInk on */
+/* it. Each entry must be one this audit knows how to measure.          */
 /* ==================================================================== */
 
-/** `{ key: value, … }` where a value is a nested block, a `colors.x` reference or a colour literal. */
 function parseBlock(src) {
   const tokens = uncommented(src).match(/[{}:,]|'[^']*'|[\w$.]+/g) ?? [];
   let k = tokens.indexOf('{') + 1;
@@ -375,449 +174,126 @@ function parseBlock(src) {
 }
 
 const ON_MEDIA = parseBlock(section('export const onMedia = {', '} as const;'));
-
-/*
- * What each onMedia entry is. Everything in onMedia reaches a photograph,
- * so a key added there must be one this audit measures or knows it need
- * not, or it would be drawn over a white photo unmeasured: text (`ink`, a
- * plaque's ink) is asserted on what it sits on, scrims and fills are the
- * grounds those pairs use, and edges and the text shadow carry nothing
- * alone (the plaque's word says whether the drink is in your Dex).
- */
-const MEDIA_ROLES = [
-  [/^ink$/, 'text'],
-  [/^plaque\.\w+\.ink$/, 'text'],
-  [/^scrim(Clear|Mid|Deep)$/, 'scrim'],
-  [/^markerFill$/, 'fill'],
-  [/^plaque\.\w+\.fill$/, 'fill'],
-  [/^markerEdge$/, 'edge'],
-  [/^plaque\.\w+\.edge$/, 'edge'],
-  [/^shadow$/, 'text shadow'],
-  // v3.3 Brass: a plate's engraving is a text shadow; a label's check is a glyph, measured on its fill (3:1).
-  [/^plaque\.\w+\.lit$/, 'text shadow'],
-  [/^plaque\.\w+\.mark$/, 'glyph'],
-];
-const mediaPaths = (node, path = []) =>
-  typeof node === 'string'
-    ? [path.join('.')]
-    : Object.entries(node).flatMap(([key, child]) => mediaPaths(child, [...path, key]));
-const unclassed = mediaPaths(ON_MEDIA).filter((path) => !MEDIA_ROLES.some(([re]) => re.test(path)));
+const MEDIA_ROLES = { ink: 'text', fill: 'plate', ring: 'ring', edge: 'decorative edge' };
+const unclassed = Object.keys(ON_MEDIA).filter((key) => !(key in MEDIA_ROLES));
 if (unclassed.length > 0) {
   unreadable(
-    `${unclassed.map((path) => `onMedia.${path}`).join(', ')}: new over media. Say in MEDIA_ROLES ` +
-      'what it is (text, scrim, fill, edge, or a new role) and measure it before it reaches a photo.',
+    `${unclassed.map((key) => `onMedia.${key}`).join(', ')}: new over media. Say in MEDIA_ROLES what it is ` +
+      'and measure it before it reaches a photo.',
   );
 }
-
-/** An onMedia entry as a colour: `{ hex }` or `{ rgba }`, from `colors` or a literal. */
-function mediaColour(path) {
-  const ref = path.split('.').reduce((node, key) => node?.[key], ON_MEDIA);
-  if (typeof ref !== 'string') unreadable(`onMedia.${path} is missing from theme.ts.`);
-  let m = /^colors\.(\w+)$/.exec(ref);
-  if (m) {
-    if (m[1] in found) return { hex: found[m[1]], name: `colors.${m[1]}` };
-    if (m[1] in foundRgba) return { rgba: foundRgba[m[1]], name: `colors.${m[1]}` };
-    unreadable(`onMedia.${path} points at colors.${m[1]}, which theme.ts does not define.`);
-  }
-  if ((m = /^'(#[0-9A-Fa-f]{6})'$/.exec(ref))) return { hex: m[1].toUpperCase(), name: m[1] };
-  if ((m = /^'rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)'$/.exec(ref))) {
-    return { rgba: m.slice(1).map(Number), name: ref };
-  }
-  return unreadable(`onMedia.${path} is \`${ref}\`, which this audit cannot read.`);
+function mediaHex(key) {
+  const m = /^colors\.(\w+)$/.exec(ON_MEDIA[key] ?? '');
+  if (!m) unreadable(`onMedia.${key} is \`${ON_MEDIA[key]}\`, not a colors token.`);
+  if (!(m[1] in found)) unreadable(`onMedia.${key} must be an opaque colour (colors.${m[1]}).`);
+  return found[m[1]];
 }
-
-/** A colour drawn over media, as it lands on a white frame. */
-const onWhite = (c) => c.hex ?? over(c.rgba, WHITE_FRAME);
-
-/** A plaque's fill under its ink, over the frame (white or black) that is worse for that ink. */
-const plaqueGround = (ink, fill) =>
-  fill.hex ??
-  [over(fill.rgba, WHITE_FRAME), over(fill.rgba, BLACK_FRAME)].reduce((a, b) =>
-    ratio(ink, a) <= ratio(ink, b) ? a : b,
-  );
-
-/** Text over media is opaque: a translucent ink would take the picture's colour. */
-function mediaInk(path) {
-  const c = mediaColour(path);
-  if (!c.hex) unreadable(`onMedia.${path} is translucent; text over media must be opaque.`);
-  return c.hex;
-}
+const MEDIA = { ink: mediaHex('ink'), fill: mediaHex('fill'), ring: mediaHex('ring') };
 
 /*
- * Every plaque in onMedia is measured, and `neutral` (DexStatusPlaque's)
- * must be there: without it the audit would pass with no plaque pair at
- * all while the feed still draws one.
+ * The photographs' own extremes, measured on the daylight bake (white spec
+ * 1.2): the lightest wall a plate sits on (rum-runner's #EAEAEA; the 162
+ * walls run #ABABAB to #EAEAEA, the bake keeps each master's brightness),
+ * and the darkest table pixel a plate's white ring has to hold against.
+ * Pictures, not tokens.
  */
-const PLAQUES = Object.keys(ON_MEDIA.plaque ?? {});
-if (!PLAQUES.includes('neutral')) unreadable('onMedia.plaque.neutral is missing from theme.ts.');
-const MEDIA = {
-  ink: mediaInk('ink'),
-  scrimMid: onWhite(mediaColour('scrimMid')),
-  scrimDeep: onWhite(mediaColour('scrimDeep')),
-  markerFill: onWhite(mediaColour('markerFill')),
-};
-/** Every colour onMedia sets text in: `ink` and each plaque's ink. */
-const MEDIA_TEXT = [
-  ['ink', MEDIA.ink],
-  ...PLAQUES.map((plaque) => [`plaque.${plaque}.ink`, mediaInk(`plaque.${plaque}.ink`)]),
-];
-
-/*
- * Never over media (specs/v3-cabinet.md section 4.4). Each of these is
- * legible on its own ground and fails 4.5:1 at the shallowest scrim stop
- * over a white photo, so none may ever be an onMedia text colour: a
- * tinted word never sits over a photo, and the only ink is onMedia's.
- */
-const FORBIDDEN_OVER_MEDIA = [
-  'onLining',
-  'onLiningMuted',
-  'onLiningFaint',
-  'taupe',
-  'reelInkDim',
-  'wineSoft',
-  // v3.3 Brass: over a photo brass is only ever a solid plate or a bracket, never a word.
-  'brass',
-  'brassPlate',
-  'brassLit',
-  'brassShade',
-  'brassInk',
-  'brassOnDark',
-];
+const LIGHT_WALL = '#EAEAEA';
+const DARK_TABLE = '#3A3A3A';
+const WHITE_FRAME = '#FFFFFF';
 
 /* ==================================================================== */
 /* The pairs                                                            */
 /* ==================================================================== */
 
-/** The grounds an ink on lining stands on: flat, and at the worst grain pixel. */
-const LINING_GROUNDS = [
-  ['lining', C.lining],
-  ['cellar', C.liningDeep],
-  ['lining, worst grain pixel', WORST.lining],
-  ['cellar, worst grain pixel', WORST.cellar],
-];
-
 // [foreground, background, minimum, label], or a heading string.
 const PAIRS = [
-  [C.text, C.bg, 4.5, 'body text on page'],
-  [C.text, C.surface, 4.5, 'body text on card'],
-  [C.text, C.card, 4.5, 'body text on Card'],
-  [C.text, C.cardAlt, 4.5, 'body text on alt card'],
-  [C.text, C.bgSunk, 4.5, 'body text on sunk well'],
-  [C.textMuted, C.bg, 4.5, 'muted text on page'],
-  [C.textMuted, C.surface, 4.5, 'muted text on card'],
-  [C.textMuted, C.bgSunk, 4.5, 'muted text on sunk well'],
-  [C.textMuted, C.wineWash, 4.5, 'muted text on a wine-wash note card'],
-  // textFaint is large type and glyphs only (≥3:1). It is tested on every
-  // ground theme.ts allows it on, down to the sunk well, the darkest of
-  // them. The Dex slot recess is darker still and is off limits to it
-  // (2.90:1), so it has no pair here.
-  [C.textFaint, C.bg, 3.0, 'faint glyph / large text on page'],
-  [C.textFaint, C.surface, 3.0, 'faint glyph / large text on card'],
-  [C.textFaint, C.bgSunk, 3.0, 'faint glyph on sunk well'],
-  [C.wine, C.bg, 4.5, 'wine text on page'],
-  [C.wine, C.surface, 4.5, 'wine text on card'],
-  [C.wine, C.bgSunk, 4.5, 'wine text on sunk well'],
-  [C.wine, C.wineWash, 4.5, 'wine on wineWash: the New tag, selected chips, the trophy on your leaderboard row'],
-  [C.merlot, C.bg, 4.5, 'merlot text on page'],
-  [C.danger, C.bg, 4.5, 'danger text on page (dangerText button)'],
-  [C.danger, C.surface, 4.5, 'danger text on a card (dangerText button)'],
-  [C.danger, C.dangerWash, 4.5, 'danger text on its wash (danger button, form errors)'],
-  [C.success, C.bg, 4.5, 'success text on page'],
-  [C.textOnWine, C.wine, 4.5, 'text on wine button'],
-  [C.textOnWine, C.lockInk, 4.5, 'text on locked artwork'],
-  // Taupe. Decorative on light grounds (1.68:1 on page — deliberately
-  // untested as type there); readable only on wine and espresso, where the
-  // intro sets its tagline.
-  [C.taupe, C.wine, 4.5, 'tagline (taupe) on wine'],
-  [C.taupe, C.lockInk, 4.5, 'tagline (taupe) on espresso'],
-  [C.taupeInk, C.bg, 4.5, 'number plate (taupeInk) on page'],
-  // Intro: type on the wine ground of the pour.
-  [C.textOnWine, C.wine, 4.5, 'intro wordmark (bone) on wine'],
-  [C.textOnWine, C.wineDeep, 4.5, 'intro wordmark (bone) on wine-deep'],
-  // Categories must be readable as chip/label text, and the card name sits
-  // on a near-opaque plate over the category field, whose darkest stop is
-  // the wash — so the wash is the honest backdrop for it.
+  'Text on the grounds (4.5:1)',
+  [C.text, C.bg, 4.5, 'ink on page: all primary text'], // 19.80
+  [C.text, C.surface, 4.5, 'ink on a sheet'],
+  [C.text, C.bgSunk, 4.5, 'ink on wash: typed text, tile labels, the wash key'], // 18.16
+  [C.text, C.press, 4.5, 'ink on press: a held row or key'], // 16.61
+  [C.textMuted, C.bg, 4.5, 'muted on page: meta, counts, "+ Add"'], // 6.69
+  [C.textMuted, C.surface, 4.5, 'muted on a sheet'],
+  [C.textMuted, C.bgSunk, 4.5, 'muted on wash: placeholders'], // 6.13
+  [C.textMuted, C.press, 4.5, 'muted on press: a meta line in a held row'], // 5.61
+  [C.textFaint, C.bg, 3.0, 'textFaint on page: 18pt and up only'], // 3.45
+  [C.textFaint, C.bgSunk, 3.0, 'textFaint on wash: 18pt and up only'], // 3.17
+
+  'Text on ink',
+  [C.onInk, C.text, 4.5, 'onInk on ink: keys, ticked tiles, plate digits, the toast'], // 19.80
+  [C.onInk, C.inkPressed, 4.5, 'onInk on inkPressed: a held key'], // 12.63
+  [C.onInkMuted, C.text, 4.5, 'onInkMuted on ink: a count inside an on chip'], // 7.85
+
+  'Avatar initials',
+  [C.onInk, C.tone1, 4.5, 'initials on tone1 (Graphite)'], // 15.13
+  [C.onInk, C.tone2, 4.5, 'initials on tone2 (Charcoal)'], // 10.86
+  [C.onInk, C.tone3, 4.5, 'initials on tone3 (Slate)'], // 6.69
+  [C.text, C.tone4, 4.5, 'initials on tone4 (Mist)'], // 15.43
+
+  'Marks that carry state (UI, 3:1)',
+  [C.lineControl, C.bg, 3.0, 'control edge on page: an empty plate, an unticked box, resting tab glyphs'], // 3.45
+  [C.lineControl, C.bgSunk, 3.0, 'control edge on wash: the no-photo glass'], // 3.17
+  [C.lineInk, C.bg, 3.0, 'ink edge on page: the focus ring, a danger key, the unseen story ring'], // 19.80
+  [C.lineInk, C.bgSunk, 3.0, 'ink ring on a focused field'],
+  [C.text, C.bgSunk, 3.0, 'a ticked box or the active filter glyph on wash'],
+
+  'Over a photograph: the ink plate',
+  [MEDIA.ink, MEDIA.fill, 4.5, 'onMedia.ink on the plate (measured on the plate, never the picture)'], // 19.80
+  [MEDIA.fill, LIGHT_WALL, 3.0, 'the plate against the lightest daylight wall'], // 16.46
+  [MEDIA.ring, DARK_TABLE, 3.0, "the plate's white ring against the darkest table"], // 11.37
+
+  'Categories (no hue: the word says it)',
   ...CATEGORIES.flatMap(({ key, color, wash }) => [
     [color, C.bg, 4.5, `${key} label on page`],
     [color, wash, 4.5, `${key} label on its wash`],
-    [C.text, wash, 4.5, `card name over ${key} field`],
-    [C.taupeInk, wash, 4.5, `dex number over ${key} field`],
   ]),
-  // The `dexNumber` style (theme.ts): taupeInk at 11pt, on a white card in
-  // the feed and on the page elsewhere. Not on the empty-slot recess, where
-  // it is 4.36:1 and the number takes textMuted instead.
-  [C.taupeInk, C.surface, 4.5, 'dex number on a card'],
-  // Two signup accents that outlived the beer and wine categories (see
-  // SIGNUP_ACCENTS). Profiles store them as hex, so they still ring avatars
-  // and fill the edit-profile swatches.
-  [ACCENTS.ACCENT_AMBER, C.bg, 4.5, 'brass accent on page'],
-  [ACCENTS.ACCENT_PLUM, C.bg, 4.5, 'plum accent on page'],
-  // Dex grid — build 13's light empty slot. Its nameplate sits on
-  // DexCard's `recessWash`, which is OPAQUE `slot` under every line of the
-  // name and number, so `slot` is the exact ground here, not a stand-in.
-  // No text lands on bare slotDeep. v3's slot is the cellar (section 4.1
-  // below) and puts no text on `slot`; these three leave in stage 3.
-  [C.textMuted, C.slot, 4.5, 'entry name on empty slot'],
-  [C.textMuted, C.cardAlt, 4.5, 'entry name on the bone nameplate'],
-  [C.textMuted, C.cardAlt, 3.0, 'dex number on the bone plate (secondary)'],
-  [C.text, C.slot, 4.5, 'body text on empty slot'],
-  [C.wine, C.slot, 4.5, 'progress count on the empty-slot recess'],
-  // Continue with Facebook: a Button-sized label, 16pt semibold, which is
-  // not large text, so it needs 4.5:1 — the reason colors.facebook is the
-  // 2023 blue and not #1877F2 (4.23:1). The solid mark on the button is
-  // the same white on the same blue.
-  [C.onFacebook, C.facebook, 4.5, 'Continue with Facebook label on Facebook blue'],
-  // The outline mark, if a Connect Facebook row draws it in Facebook blue.
-  [C.facebook, C.bg, 3.0, 'Facebook mark on page'],
-  [C.facebook, C.surface, 3.0, 'Facebook mark on a card'],
-  // colors.filmPaper has no pair: it is the intro film's ground, and
-  // nothing is written on it (theme.ts says why). Nor do the four google*
-  // colours: they fill the G and carry no text.
 
-  // v2 edges. `line` is decorative (cards, chips, rules) and never the only
-  // thing that identifies a control, so it has no pair. Input edges and the
-  // ink outline are non-text UI that identifies a control: 3:1 (WCAG 1.4.11).
-  [C.lineControl, C.surface, 3.0, 'input edge on its white fill'], // 3.91
-  [C.lineControl, C.bg, 3.0, 'input edge against the page'], // 3.51
-  [C.lineInk, C.surface, 3.0, 'secondary button edge / focus ring'], // 15.37
-  [C.textOnWine, C.wineDeep, 4.5, 'primary button label, pressed'], // 13.32
-
-  // The espresso tab bar: Reels' skin in build 13, every tab's in v3.
-  [C.reelInk, C.reelBar, 4.5, 'active tab on the dark bar'], // 15.13
-  [C.reelInkDim, C.reelBar, 4.5, 'resting tab label on the dark bar'], // 5.86
-  // Build 13's dark log action: a wine plus on bone. v3 draws the plus the
-  // other way round, bone on wine (section 4.5 below).
-  [C.wine, C.reelInk, 4.5, 'plus glyph on the log action, dark bar'], // 13.53
-
-  // Reels: the dark ground, and words and controls over video. Every rgba
-  // is composited over a blown-out white frame, the worst case under it.
+  'Reels (flagged off): white on the ink ground, and over video',
   [C.reelInk, C.reelGround, 4.5, 'text on the reels ground'],
   [C.reelInkMuted, C.reelGround, 4.5, 'secondary text on the reels ground'],
-  [C.record, C.reelGround, 3.0, 'record core glyph on the reels ground'],
-  [C.wineSoft, C.reelGround, 3.0, 'liked heart and heart burst on the reels ground'], // 4.02
-  [C.reelGround, C.reelInk, 4.5, 'onDark button label (and a selected media control)'], // 19.29
-  [C.reelGround, C.reelInkMuted, 4.5, 'onDark button label, pressed'],
-  [C.reelInk, over(R.reelControlFill, WHITE_FRAME), 3.0, 'control glyph on its chip over a white frame'], // 4.27
-  [C.reelInk, over(R.reelScrimMid, WHITE_FRAME), 4.5, 'caption at the shallow end of the scrim over a white frame'], // 5.45
-  // Markers on photographs (gallery count, stack, duration) sit on
-  // reelScrim with reelInk. The paper `scrim` with bone type failed 4.5:1
-  // over a bright photo.
-  [C.reelInk, over(R.reelScrim, WHITE_FRAME), 4.5, 'marker text on media over a white frame'], // 9.98
+  [C.record, C.reelGround, 3.0, 'the record dot on the reels ground'],
+  [C.reelGround, C.reelInk, 4.5, 'onDark key label'],
+  [C.reelGround, C.reelInkMuted, 4.5, 'onDark key label, pressed'],
+  [C.reelInk, over(R.reelControlFill, WHITE_FRAME), 3.0, 'control glyph on its chip over a white frame'],
+  [C.reelInk, over(R.reelScrimMid, WHITE_FRAME), 4.5, 'caption at the shallow end of the scrim over a white frame'],
+  [C.reelInk, over(R.reelScrim, WHITE_FRAME), 4.5, 'marker text on media over a white frame'],
 
-  /*
-   * v3 Cabinet, specs/v3-cabinet.md section 4. "Worst grain" is the tile's
-   * worst pixel over the ground (WORST, above), which is where the text
-   * really lands on a grained surface. The cellar's flat value is the
-   * recess, an opaque view with no grain on it; its grained value is the
-   * drink page's ground.
-   */
-  'v3 · 4.1 Ink on lining and cellar',
-  ...[
-    ['onLining', 4.5, 'titles, body'],
-    ['onLiningMuted', 4.5, 'secondary text'],
-    ['onLiningFaint', 3.0, 'glyphs, the lock, 18pt and up only'],
-    ['dangerOnLining', 4.5, 'Remove from collection'],
-  ].flatMap(([key, min, job]) => [
-    [C[key], C.lining, min, `${key} on lining (${job})`],
-    [C[key], C.liningDeep, min, `${key} on cellar`],
-    [C[key], WORST.lining, min, `${key} on lining, worst grain pixel`],
-    [C[key], WORST.cellar, min, `${key} on cellar, worst grain pixel`],
-  ]),
-  // The outline button's edge on lining identifies a control: 3:1, as the
-  // edge composites over each ground it can stand on.
-  ...LINING_GROUNDS.map(([where, ground]) => [
-    over(R.liningControl, ground),
-    ground,
-    3.0,
-    `outline-button edge (liningControl) on ${where}`,
-  ]),
-  // Held, the same button lays liningPressed over that ground, under its
-  // label (section 7.1.1). Not in section 4's tables; measured all the same.
-  ...LINING_GROUNDS.map(([where, ground]) => [
-    C.onLining,
-    over(R.liningPressed, ground),
-    4.5,
-    `outline button held: onLining on liningPressed over ${where}`,
-  ]), // 11.18, 12.28, 9.27, 10.07
-  [C.lining, C.onLining, 4.5, 'primary label on lining: the bone button (Button onLining)'], // 13.32
-  [C.lining, C.onLiningMuted, 4.5, 'the bone button, pressed'], // 6.79
-  [C.onLining, C.wine, 4.5, 'bone plus glyph on wine'], // 10.95
-
-  'v3 · 4.2 Ink on mat (bone card stock)',
-  // line on mat (1.45) is the mount's paper edge, decorative, so it has no pair.
-  [C.text, C.mat, 4.5, 'body text on mat'], // 14.50
-  [C.textMuted, C.mat, 4.5, 'muted text on mat'], // 5.78
-  [C.taupeInk, C.mat, 4.5, 'number plate on mat (taupeInk)'], // 5.55
-  [C.wine, C.mat, 4.5, 'spec amounts on mat'], // 12.96
-  [C.lineControl, C.mat, 3.0, 'control edge on mat'], // 3.69
-
-  'v3 · 4.3 Paper, worst grain pixel',
-  [C.text, WORST.paper, 4.5, 'body text on page, worst grain pixel'],
-  [C.textMuted, WORST.paper, 4.5, 'muted text on page, worst grain pixel'], // 5.15
-  [C.taupeInk, WORST.paper, 4.5, 'number plate (taupeInk) on page, worst grain pixel'], // 4.95
-  [C.wine, WORST.paper, 4.5, 'wine text on page, worst grain pixel'], // 11.56
-  [C.textFaint, WORST.paper, 3.0, 'faint glyph / large text on page, worst grain pixel'], // 3.29
-
-  'v3 · 4.4 Over media (onMedia), worst case a white photo',
-  [MEDIA.ink, MEDIA.scrimMid, 4.5, 'onMedia.ink on scrimMid, the shallowest stop text may sit on'], // 5.45
-  [MEDIA.ink, MEDIA.scrimDeep, 4.5, 'onMedia.ink on scrimDeep, the foot of the nameplate'], // 13.43
-  [MEDIA.ink, MEDIA.markerFill, 4.5, 'onMedia.ink on markerFill (plates, markers, counts)'], // 9.98
-  ...PLAQUES.map((plaque) => [
-    mediaInk(`plaque.${plaque}.ink`),
-    plaqueGround(mediaInk(`plaque.${plaque}.ink`), mediaColour(`plaque.${plaque}.fill`)),
-    4.5,
-    `${plaque} plaque: its ink on its fill`,
-  ]), // neutral 9.98, brass 6.79, label 12.73
-  // A plaque's glyph (the label tag's check), on that plaque's fill: 3:1.
-  ...PLAQUES.filter((plaque) => ON_MEDIA.plaque[plaque].mark).map((plaque) => [
-    mediaInk(`plaque.${plaque}.mark`),
-    plaqueGround(mediaInk(`plaque.${plaque}.mark`), mediaColour(`plaque.${plaque}.fill`)),
-    3.0,
-    `${plaque} plaque: its mark (glyph) on its fill`,
-  ]), // label 11.38
-
-  'v3 · 4.5 Tab bar, and the design floor',
-  [over(R.logActionEdge, C.reelBar), C.reelBar, 3.0, 'the log action\'s edge (logActionEdge) on the espresso bar'], // 3.02
-  [C.textOnWine, C.wine, 4.5, 'plus glyph on the wine log action, every tab'], // 10.95
-  // The unread dot keeps the dark skin's wineSoft (section 9.1.1), now on
-  // every tab's bar rather than the reels ground above.
-  [C.wineSoft, C.reelBar, 3.0, 'badge dot (wineSoft) on the espresso bar, every tab (glyph)'], // 3.15
-  // A design floor, not WCAG: a locked drink must still read as a glass
-  // pressed into the cellar.
-  [over(R.debossLight, C.liningDeep), C.liningDeep, 2.0, 'design floor: deboss highlight in an empty slot'], // 2.14
-
-  /*
-   * v3.1, specs/v3.1-changes.md section 16.2. Home's stories sit on the
-   * grained lining, so the ring is measured on the worst grain pixel too.
-   * Home's bar floats over the feed, and since v3.3 its scrolled ground is
-   * solid lining (it was a translucent fade, measured over a white photo):
-   * opaque, so nothing the feed puts under it reaches its ink.
-   */
-  'v3.1 · Stories, Home bar, tournaments',
-  // Unseen: lit wine, because wine itself is 1.22:1 on lining. A UI cue (WCAG 1.4.11); the seen ring is decorative.
-  [C.storyRing, C.lining, 3.0, 'unseen story ring (storyRing) on lining (UI)'], // 4.37
-  [C.storyRing, WORST.lining, 3.0, 'unseen story ring on lining, worst grain pixel (UI)'], // 3.71
-  // Your own story's + badge: a bone disc on the lining (v3's unseen tile ring was the same pair), and its wine plus.
-  [C.onLining, C.lining, 3.0, "the story + badge's bone disc on lining (UI)"], // 13.32
-  [C.wine, C.onLining, 3.0, 'the story + badge: its wine plus on the bone disc (glyph)'], // 10.95
-  [C.onLining, C.lining, 4.5, 'Home bar ink on its solid scrolled ground'], // 13.32
-  // A tournament's standings: your own row is wineWash.
-  [C.text, C.wineWash, 4.5, 'your leaderboard row: text on wineWash'], // 12.78
-  [C.textMuted, C.wineWash, 4.5, 'your leaderboard row: muted text on wineWash'], // 5.10
-
-  /*
-   * The sign-in rows (auth/ProviderButton): Apple's black button, and the
-   * white outlined rows for Google, Facebook, phone and email, which press
-   * to bgSunk. The rows stand on the paper sheet, grain and all.
-   */
-  'v3.2 · Sign-in ways in',
-  [C.surface, C.appleFill, 4.5, 'Continue with Apple: title and apple.logo on black'], // 21.00
-  [C.providerInk, C.surface, 4.5, 'outlined way in: label and mark on white'], // 16.48
-  [C.providerInk, C.bgSunk, 4.5, 'outlined way in, pressed: label on bgSunk'], // 13.14
-  [C.providerEdge, C.surface, 3.0, 'outlined way in: its edge against its own white (UI)'], // 4.53
-  [C.providerEdge, WORST.paper, 3.0, 'outlined way in: its edge on the paper sheet, worst grain pixel (UI)'], // 3.81
-
-  /*
-   * v3.3 Brass, specs/v3-3-mockups/brass/spec.md section 1.2. Walnut's
-   * worst pixel is the decoded tile's brightest (walnutTile, above);
-   * lining and cellar are measured flat and at their worst grain pixel.
-   */
-  'v3.3 · Brass: text',
-  [C.text, C.brassPlate, 4.5, 'plate digits, shelf holder range: text on brassPlate'], // 6.79
-  [C.text, C.label, 4.5, 'bottle-label words: text on label stock'], // 12.73
-  [C.textMuted, C.label, 4.5, '"in 173 drinks" on a ticked label: textMuted on label'], // 5.08
-  [C.wine, C.label, 4.5, 'wine on label stock'], // 11.38
-  ...[
-    ['page', C.bg],
-    ['page, worst grain pixel', WORST.paper],
-    ['mat', C.mat],
-    ['white', C.surface],
-    ['label stock', C.label],
-  ].map(([where, ground]) => [C.brassInk, ground, 4.5, `brassInk (counts, rank numerals) on ${where}`]),
-  ...[
-    ...LINING_GROUNDS,
-    ['espresso', C.reelBar],
-    ['walnut, texture mean', WALNUT.mean],
-    ['walnut, brightest decoded pixel', WALNUT.brightest],
-  ].map(([where, ground]) => [C.brassOnDark, ground, 4.5, `brassOnDark (kickers, rank word, holder number) on ${where}`]),
-  [C.onLining, WALNUT.brightest, 4.5, 'figures and titles on walnut (onLining), brightest pixel'], // 7.18
-  [C.onWalnutMuted, WALNUT.mean, 4.5, 'secondary text on walnut (onWalnutMuted), texture mean'],
-  [C.onWalnutMuted, WALNUT.brightest, 4.5, 'secondary text on walnut (onWalnutMuted), brightest pixel'], // 4.61
-  [C.onWalnutMuted, C.walnut, 4.5, 'secondary text on walnut (onWalnutMuted), the fill before the tile decodes'],
-
-  'v3.3 · Brass: marks and edges (UI, 3:1)',
-  ...[...LINING_GROUNDS, ['espresso', C.reelBar]].map(([where, ground]) => [
-    C.brass,
-    ground,
-    3.0,
-    `brass rail, keyline, gauge edge, number rail on ${where} (UI)`,
-  ]),
-  [C.brass, WALNUT.brightest, 3.0, 'brass rail and gauge edge on walnut, brightest pixel (UI)'], // 3.12
-  [C.brass, C.walnutDeep, 3.0, 'brass gauge edge on the walnutDeep well (UI)'],
-  [C.brass, C.wine, 3.0, "the + button's brass edge against its own wine (UI)"], // 4.75
-  [C.brassLit, C.reelBar, 3.0, 'active-tab marker (brassLit) on the espresso bar (UI)'], // 10.45
-  [C.brassPlate, C.liningDeep, 3.0, 'gauge marks (brassPlate) in the cellar well (UI)'], // 8.02
-  [C.brassPlate, C.walnutDeep, 3.0, 'gauge marks (brassPlate) in the walnutDeep well (UI)'], // 7.00
-  [C.brassOnDark, WALNUT.brightest, 3.0, 'rank notches (brassOnDark) on walnut, brightest pixel (UI)'],
-  [over(R.plateHolderEdge, C.liningDeep), C.liningDeep, 3.0, 'empty plate holder edge (plateHolderEdge) on the cellar (UI)'], // 3.80
-  [over(R.plateHolderEdge, WORST.cellar), WORST.cellar, 3.0, 'empty plate holder edge on the cellar, worst grain pixel (UI)'],
-  [C.wine, C.label, 3.0, 'ticked checkbox (wine) on label stock (UI)'], // 11.38
-  [C.brassShade, C.bg, 3.0, "a bottle label's brassShade edge on the page (UI)"], // 5.32
-  [C.brassShade, WORST.paper, 3.0, "a bottle label's brassShade edge on the page, worst grain pixel (UI)"],
-  [C.brassShade, C.label, 3.0, "a bottle label's brassShade edge against its own stock (UI)"], // 4.91
-
-  // ui.tsx's lining tone: the Dex's filter chips and its search well (D20).
-  'v3.3 · Chips and search on lining',
-  [C.lining, C.onLining, 4.5, 'selected chip on lining: lining ink on the bone fill'], // 13.32
-  [C.textMuted, C.onLining, 4.5, "selected chip on lining: its count (textMuted) on the bone fill"], // 4.88
-  [C.lining, C.onLiningMuted, 4.5, 'selected chip on lining, held: lining ink on onLiningMuted'], // 6.79
-  [C.onLiningMuted, C.liningDeep, 4.5, 'search well: placeholder and glyph (onLiningMuted) in the cellar fill'],
-  [C.onLining, C.liningDeep, 4.5, 'search well: typed text (onLining) in the cellar fill'],
-  // The well's edge is opaque onLiningFaint: the translucent liningControl, laid over the cellar fill, was 2.62:1 against the grained lining around it.
-  [C.onLiningFaint, C.liningDeep, 3.0, 'search well: its onLiningFaint edge against its own cellar fill (UI)'],
-  [C.onLiningFaint, WORST.lining, 3.0, 'search well: its edge against the grained lining around it (UI)'],
-  [C.onLiningMuted, C.liningDeep, 3.0, 'search well, focused: its onLiningMuted edge (UI)'],
+  'Quotations: the sign-in rows',
+  [C.onFacebook, C.facebook, 4.5, 'Continue with Facebook label on Facebook blue'], // 4.82
+  [C.facebook, C.bg, 3.0, 'Facebook mark on page'],
+  [C.surface, C.appleFill, 4.5, 'Continue with Apple: title and apple.logo on black'],
+  [C.providerInk, C.surface, 4.5, 'outlined way in: label and mark on white'],
+  [C.providerInk, C.press, 4.5, 'outlined way in, pressed'],
+  [C.providerEdge, C.surface, 3.0, 'outlined way in: its edge (UI)'],
 ];
 
 /*
- * v3.3 Brass: pairs that must FAIL 4.5:1, so nobody later sets text in
- * them (spec section 1.2, "Never"). If one ever passes, take it off this
- * list on purpose rather than by accident. Brass as TEXT on lining clears
- * 4.5 numerically (5.78) and is still never text: check-design rule 16
- * keeps the four metal tokens out of every Text's colour.
+ * Pairs that must stay UNREADABLE (white spec 1.2, "Never"), so nobody
+ * later sets text in them. Each is asserted under its threshold; if one
+ * ever clears it, take it off this list on purpose rather than by accident.
  */
 const NEVER = [
-  [C.onLiningMuted, WALNUT.brightest, 'onLiningMuted on walnut: use onWalnutMuted'],
-  [C.brass, C.bg, 'brass as text on paper'],
-  [C.brass, C.mat, 'brass as text on mat'],
-  [C.brass, C.label, 'brass as text on label stock'],
-  [C.brassInk, C.lining, 'brassInk on lining: brassOnDark is the dark-ground cut'],
-  [C.brassInk, C.liningDeep, 'brassInk on the cellar'],
-  [C.brassInk, C.reelBar, 'brassInk on espresso'],
-  [C.brassInk, WALNUT.mean, 'brassInk on walnut'],
+  [C.lineControl, C.bg, 4.5, 'control grey as text under 18pt (check-design rule 16 keeps it off Text)'], // 3.45
+  [C.lineControl, C.press, 3.0, 'control edge on press: a held outline key turns its edge ink instead'], // 2.90
+  [C.rule, C.bg, 3.0, 'rule as text'], // 1.74
+  [C.hair, C.bg, 3.0, 'hair as text'], // 1.45
+  [C.line, C.bg, 3.0, 'line as text'], // 1.28
+  [C.line, C.bgSunk, 3.0, 'line on wash'], // 1.18
 ];
 
-/*
- * Pairs printed for the record and never asserted: they explain a rule
- * rather than meet a target.
- */
+/* Decorative only, printed for the record: none may carry text. */
 const NOTES = [
-  [C.wine, C.lining, 'wine on lining: why the primary button on lining is bone, never wine'], // 1.22
-  // v3.3 Brass, decorative only: mount keylines, the avatar bezel, count separators, spoon rules and leaders on paper, the sheet grabber.
-  [C.brass, C.bg, 'brass on paper: decorative only (keylines, bezel, separators, spoon rules)'], // 2.59
-  [C.brass, C.mat, 'brass on mat: decorative only (the mount keyline)'], // 2.73
-  [over(R.tabKeyline, C.reelBar), C.reelBar, "the tab bar's inner keyline (tabKeyline) on espresso: decorative"], // 2.07
+  [C.bgSunk, C.bg, 'wash against page: a field reads by its fill, glyph and placeholder, not an edge'], // 1.09
+  [C.hair, C.bgSunk, 'hair on wash'],
+  [C.rule, C.bgSunk, 'rule on wash: the sheet grabber'],
+  [over(R.photoEdge, WHITE_FRAME), WHITE_FRAME, "photoEdge over a blown-out white photo: the print's edge"],
+  [over(R.scrim, C.bg), C.bg, 'the scrim over the page'],
 ];
 
 let failed = 0;
-let measuredPairs = 0;
-console.log('\n  Sipply palette — WCAG contrast audit\n');
-console.log(`  page ${C.bg}   card ${C.surface}   mat ${C.mat}   reels ${C.reelGround}`);
-console.log(`  lining ${C.lining}   cellar ${C.liningDeep}`);
-console.log(
-  `  grain.png grey ${measured.min}..${measured.max}, alpha ${measured.alphaMin}: worst pixel ` +
-    `paper ${WORST.paper}, lining ${WORST.lining}, cellar ${WORST.cellar}\n`,
-);
+let measured = 0;
+console.log('\n  Sipply palette (v4 Daylight) — WCAG contrast audit\n');
+console.log(`  page ${C.bg}   wash ${C.bgSunk}   ink ${C.text}   muted ${C.textMuted}   control ${C.lineControl}`);
 for (const pair of PAIRS) {
   if (typeof pair === 'string') {
     console.log(`\n  ${pair}\n`);
@@ -826,58 +302,37 @@ for (const pair of PAIRS) {
   const [fg, bg, min, label] = pair;
   const r = ratio(fg, bg);
   const ok = r >= min;
-  measuredPairs++;
+  measured++;
   if (!ok) failed++;
-  console.log(
-    `  ${ok ? 'PASS' : 'FAIL'}  ${r.toFixed(2).padStart(5)}:1  (min ${min})  ${label}   ${fg} on ${bg}`,
-  );
+  console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${r.toFixed(2).padStart(5)}:1  (min ${min})  ${label}   ${fg} on ${bg}`);
 }
 
-for (const [fg, bg, label] of NOTES) {
-  console.log(`  NOTE  ${ratio(fg, bg).toFixed(2).padStart(5)}:1  (not a pair)  ${label}   ${fg} on ${bg}`);
-}
-
-console.log('\n  v3.3 · Brass: never text, asserted below 4.5:1\n');
+console.log('\n  Never readable, asserted under their threshold\n');
 let neverFailed = 0;
-for (const [fg, bg, label] of NEVER) {
+for (const [fg, bg, max, label] of NEVER) {
   const r = ratio(fg, bg);
-  const ok = r < 4.5;
+  const ok = r < max;
   if (!ok) neverFailed++;
   console.log(
-    `  ${ok ? 'PASS' : 'FAIL'}  ${r.toFixed(2).padStart(5)}:1  (must stay under 4.5)  ${label}` +
+    `  ${ok ? 'PASS' : 'FAIL'}  ${r.toFixed(2).padStart(5)}:1  (must stay under ${max})  ${label}` +
       `${ok ? '' : ': now readable; take it off NEVER deliberately'}   ${fg} on ${bg}`,
   );
 }
 
-/*
- * Each never-over-media colour, against the shallowest scrim over a white
- * photo. Two things must hold: it fails 4.5:1 there (if one ever passed,
- * its place on this list should be reconsidered on purpose, not kept by
- * habit), and onMedia sets no text in it.
- */
-console.log('\n  v3 · 4.4 Never over media: below 4.5:1 on scrimMid over white, and no onMedia text colour\n');
-let forbiddenFailed = 0;
-for (const key of FORBIDDEN_OVER_MEDIA) {
-  const value = C[key];
-  const r = ratio(value, MEDIA.scrimMid);
-  const usedAs = MEDIA_TEXT.filter(([, ink]) => ink === value).map(([path]) => `onMedia.${path}`);
-  const problems = [
-    ...(r >= 4.5 ? ['now clears 4.5:1 over media; take it off the list deliberately'] : []),
-    ...(usedAs.length ? [`is the value of ${usedAs.join(', ')}`] : []),
-  ];
-  if (problems.length) forbiddenFailed++;
-  console.log(
-    `  ${problems.length ? 'FAIL' : 'PASS'}  FORBIDDEN over media (${r.toFixed(2)}:1)  ${key}` +
-      `${problems.length ? `: ${problems.join('; ')}` : ''}   ${value} on ${MEDIA.scrimMid}`,
-  );
+console.log('\n  Decorative, not pairs\n');
+for (const [fg, bg, label] of NOTES) {
+  console.log(`  NOTE  ${ratio(fg, bg).toFixed(2).padStart(5)}:1  ${label}   ${fg} on ${bg}`);
 }
 
-const total = failed + forbiddenFailed + neverFailed;
+console.log('\n  No hue: every value R = G = B but the quotations\n');
+for (const t of tinted) console.log(`  FAIL  tinted  ${t}`);
+if (tinted.length === 0) console.log(`  PASS  ${Object.keys(found).length - QUOTATIONS.size} neutral colours, ${QUOTATIONS.size} quotations`);
+
+const total = failed + neverFailed + tinted.length;
 console.log(
   total === 0
-    ? `\n  All ${measuredPairs} pairs pass, all ${NEVER.length} never-text pairs stay unreadable, and all ` +
-        `${FORBIDDEN_OVER_MEDIA.length} never-over-media colours stay off media.\n`
-    : `\n  ${failed} of ${measuredPairs} pairs FAIL; ${neverFailed} of ${NEVER.length} never-text checks FAIL; ` +
-        `${forbiddenFailed} of ${FORBIDDEN_OVER_MEDIA.length} never-over-media checks FAIL.\n`,
+    ? `\n  All ${measured} pairs pass, all ${NEVER.length} never-text pairs stay unreadable, and the palette has no hue.\n`
+    : `\n  ${failed} of ${measured} pairs FAIL; ${neverFailed} of ${NEVER.length} never-text checks FAIL; ` +
+        `${tinted.length} tinted value(s).\n`,
 );
 process.exit(total === 0 ? 0 : 1);

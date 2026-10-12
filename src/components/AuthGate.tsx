@@ -10,7 +10,7 @@ import { AuthMessage, Consent } from '@/components/auth/Consent';
 import SignInScreen from '@/components/auth/SignInScreen';
 import { Button, Field } from '@/components/ui';
 import { WelcomeConnect } from '@/components/WelcomeConnect';
-import { colors, fonts, layout, space, type as typeScale } from '@/constants/theme';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import type { ProfileRow } from '@/lib/database.types';
 import { containsObjectionable, isObjectionableError, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import { hasSeenWelcome, markWelcomeSeen } from '@/lib/onboarding';
@@ -155,12 +155,12 @@ const ROW_WAIT_MS = 4000;
  * behind a tab.
  *
  * Every state that is still deciding shows a Hold, never a plain page: a
- * featureless cream page is indistinguishable from a screen that failed to
+ * featureless page is indistinguishable from a screen that failed to
  * load, which is how "switching tabs shows a blank screen" was reported.
  *
- * The sign-in, username and Welcome steps are one frame, the paper sheet
- * over the cabinet (auth/CabinetBackdrop), so a new person walks through
- * them without the ground changing under them.
+ * The sign-in, username and Welcome steps are one frame, the white
+ * sign-in page (auth/CabinetBackdrop's CabinetSheet), so a new person
+ * walks through them without the ground changing under them.
  *
  * Signed out, the Home tab's gate is the one that asks "What do you
  * drink?" first (auth/TastePicker); Profile and every gated pushed route
@@ -420,14 +420,7 @@ function ChooseUsername({ profile }: { profile: ProfileRow }) {
 const styles = StyleSheet.create({
   body: { paddingHorizontal: layout.gutter, paddingTop: space.xxl },
 
-  lede: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
-    color: colors.textMuted,
-    marginBottom: space.xl,
-    maxWidth: 320,
-  },
+  lede: { ...textRole.body, color: colors.textMuted, marginBottom: space.xl },
 
   form: { gap: space.lg },
   submit: { marginTop: space.sm },

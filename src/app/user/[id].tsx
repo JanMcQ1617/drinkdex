@@ -3,7 +3,6 @@ import { useCallback, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { AuthGate } from '@/components/AuthGate';
-import { Grain } from '@/components/Grain';
 import { PeerProfile } from '@/components/PeerProfile';
 import { Hold } from '@/components/ui';
 import { colors } from '@/constants/theme';
@@ -71,13 +70,12 @@ export default function UserScreen() {
   if (!myId) return <AuthGate onClose={leave}>{null}</AuthGate>;
   /*
    * The frame or two while dismissTo runs. A Hold, not a bare page: a
-   * featureless cream screen is what a failed load looks like, and if the
+   * featureless white screen is what a failed load looks like, and if the
    * hop stalls the Hold says what it is doing.
    */
   if (isSelf) {
     return (
       <View style={styles.screen}>
-        <Grain />
         <View style={styles.center}>
           <Hold fill={false} slowMessage="Opening your profile." />
         </View>

@@ -30,7 +30,7 @@ const CORE_RECORDING = 30;
 const STOP_CORNER = 6;
 
 /**
- * The shutter: a red disc in a bone ring that becomes a red stop square
+ * The shutter: a white disc in a white ring that becomes a white stop square
  * while recording, with the ring filling clockwise from twelve o'clock over
  * the 30 seconds a reel may last.
  *

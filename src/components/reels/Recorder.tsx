@@ -9,7 +9,7 @@ import { Icon } from '@/components/icons';
 import { RECORD_HIT, RecordButton } from '@/components/reels/RecordButton';
 import { useAppActive } from '@/components/reels/ReelVideo';
 import { announce, Button, haptic, MediaIconButton } from '@/components/ui';
-import { colors, fonts, layout, radius, space, stroke, tabular, textRole, type as typeScale } from '@/constants/theme';
+import { colors, fonts, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { pickCodec, type ReelCodec } from '@/lib/reelMedia';
 import { REEL_MAX_BYTES, REEL_MAX_SECONDS, REEL_MIN_MS, REEL_VIDEO_BITRATE, reelSeconds } from '@/lib/reels';
 
@@ -436,9 +436,7 @@ const styles = StyleSheet.create({
   failed: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: layout.gutter },
   failedTitle: { color: colors.reelInk, textAlign: 'center', marginTop: space.lg },
   failedBody: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
+    ...textRole.body,
     color: colors.reelInkMuted,
     textAlign: 'center',
     marginTop: space.sm,

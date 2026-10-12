@@ -5,7 +5,7 @@ import { useInputFocusOnShow } from '@/components/auth/AuthTitleBar';
 import { AuthMessage } from '@/components/auth/Consent';
 import { ProviderRows } from '@/components/auth/ProviderButton';
 import { Button, Field, FieldGroup } from '@/components/ui';
-import { colors, fonts, space, type as typeScale } from '@/constants/theme';
+import { colors, fonts, space, textRole } from '@/constants/theme';
 import { useAuth } from '@/store/auth';
 import { emailStep, looksLikeEmail, MIN_NEW_PASSWORD, useSignInFlow } from '@/store/signInFlow';
 
@@ -315,9 +315,7 @@ const styles = StyleSheet.create({
   primary: { marginTop: space.xl },
   message: { marginTop: space.md },
   lede: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
+    ...textRole.body,
     color: colors.textMuted,
     marginBottom: space.lg,
   },
@@ -330,10 +328,5 @@ const styles = StyleSheet.create({
     it never moves.
   */
   pressed: { opacity: 0.5 },
-  change: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.wine,
-  },
+  change: { ...textRole.small, fontFamily: fonts.bodySemiBold, color: colors.text },
 });

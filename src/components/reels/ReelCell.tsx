@@ -30,7 +30,7 @@ import { Icon } from '@/components/icons';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
 import { ReelVideo } from '@/components/reels/ReelVideo';
 import { announce, Avatar, Button, haptic, PressableScale } from '@/components/ui';
-import { colors, dexNumber, fonts, layout, motion, radius, space, stroke, tabular, type as typeScale } from '@/constants/theme';
+import { colors, dexNumber, fonts, layout, motion, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, formatDexNumber, getDrink } from '@/data';
 import { blockUser, REPORT_REASONS, reportReel, type ReportReason } from '@/lib/moderation';
 import { COPY, deleteReel, type Reel } from '@/lib/reels';
@@ -59,7 +59,7 @@ export const TOP_SCRIM = [
 ] as const;
 
 /**
- * A band of graded dark over video, so bone type on it reads over a white
+ * A band of graded dark over video, so white type on it reads over a white
  * frame (5.45:1 at the shallow end of the caption band, per check-contrast).
  * The only gradients v2 keeps: they do a job, which is legibility.
  *
@@ -146,7 +146,7 @@ function HeartBurst({ x, y }: { x: number; y: number }) {
     <Animated.View
       pointerEvents="none"
       style={[styles.burst, { left: x - BURST / 2, top: y - BURST / 2 }, style]}>
-      <Icon name="heart" size={BURST} color={colors.wineSoft} filled />
+      <Icon name="heart" size={BURST} color={colors.reelInk} filled />
     </Animated.View>
   );
 }
@@ -242,7 +242,7 @@ export interface ReelCellProps {
  * Hiding the overlays on a hold is instant, not a fade: they must be back
  * the moment the finger lifts, whatever the animation loop is doing.
  *
- * Text over video is bone with a soft dark shadow, never a lowered-opacity
+ * Text over video is white with a soft dark shadow, never a lowered-opacity
  * grey, which fails over a bright frame. Overlay text stops growing at
  * 1.4x so it stays on the page at the largest sizes.
  */
@@ -329,7 +329,7 @@ export function ReelCell({
     id: reel.authorId,
     username: 'someone',
     displayName: 'Someone',
-    accent: colors.wineSoft,
+    accent: colors.reelInk,
     joinedAt: '',
   };
   const followed = following.includes(reel.authorId);
@@ -561,6 +561,7 @@ export function ReelCell({
     <View style={[styles.page, { height }]}>
       {posterUrl ? (
         <Image
+          accessibilityIgnoresInvertColors
           source={{ uri: posterUrl, cacheKey: `${reel.posterPath}#page` }}
           // Keyed on the path, as PostCard does: the disk copy survives each hour's new signed URL.
           cachePolicy="memory-disk"
@@ -686,7 +687,7 @@ export function ReelCell({
               accessibilityState={{ selected: liked }}
               style={({ pressed }) => [styles.railItem, pressed && styles.pressed]}>
               <View style={styles.railGlyph}>
-                <Icon name="heart" size={28} color={liked ? colors.wineSoft : colors.reelInk} filled={liked} />
+                <Icon name="heart" size={28} color={colors.reelInk} filled={liked} />
               </View>
               {likes > 0 ? (
                 <Text style={styles.count} maxFontSizeMultiplier={1.4}>
@@ -756,10 +757,9 @@ const styles = StyleSheet.create({
   authorRow: { minHeight: 32, flexDirection: 'row', alignItems: 'center', gap: space.sm },
   identity: { flexShrink: 1, flexDirection: 'row', alignItems: 'center', gap: space.sm, minHeight: layout.hit },
   handle: {
+    ...textRole.small,
     flexShrink: 1,
     fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
     color: colors.reelInk,
     ...shadow,
   },
@@ -775,9 +775,7 @@ const styles = StyleSheet.create({
   followText: { fontFamily: fonts.bodySemiBold, fontSize: 13, lineHeight: 18, color: colors.reelInk, ...shadow },
 
   caption: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
+    ...textRole.small,
     color: colors.reelInk,
     ...shadow,
   },
@@ -799,7 +797,7 @@ const styles = StyleSheet.create({
   },
   /*
    * Shadowed like all type over video: the chip's translucent fill alone
-   * leaves 13pt bone at 4.27:1 over a white frame.
+   * leaves 13pt white at 4.27:1 over a white frame.
    */
   drinkName: {
     flexShrink: 1,

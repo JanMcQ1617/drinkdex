@@ -1,5 +1,6 @@
 import { getDrink } from '@/data';
 import rawIndex from '@/data/barIndex.json';
+import { photoFor } from '@/data/drinkPhotos';
 import type { Drink } from '@/types';
 
 /* ====================================================================== */
@@ -17,18 +18,42 @@ import type { Drink } from '@/types';
 /* requirement is a one-element slot, "Vodka or gin" is a two-element      */
 /* slot, and "Rum" is a slot listing every rum. Matching never needs to    */
 /* know which of the three it is looking at.                              */
+/*                                                                        */
+/* v4 SHELVES (specs/v4-changes.md 6, specs/v4-mockups/mybar/shelves).     */
+/* What you have is one inventory in seven shelves, always in one order,   */
+/* A to Z inside each; a shelf's picker lists its bottles in a fixed order */
+/* taken from the data (how many recipes name each), the same for everyone */
+/* on every visit. Nothing on the screen is ranked by what you own, so      */
+/* nothing moves under a finger. The one ranked list left is Next bottle   */
+/* (nextBottles), and its sheet freezes its order while it is open.        */
 /* ====================================================================== */
 
 export type IngredientCategory =
   | 'spirit' | 'liqueur' | 'wine' | 'bitters' | 'citrus' | 'juice'
   | 'syrup' | 'mixer' | 'dairy' | 'produce' | 'spice' | 'savoury' | 'other';
 
+/** The seven shelves, in SHELF_ORDER. */
+export type Shelf = 'spirits' | 'liqueurs' | 'mixers' | 'fresh' | 'syrups' | 'bitters' | 'other';
+
+/** A spirit's family: the Spirits picker's groups and the Make list's sections. */
+export type Family = 'gin' | 'rum' | 'whiskey' | 'brandy' | 'tequila' | 'vodka' | 'other';
+
 export interface Ingredient {
   id: string;
   label: string;
   category: IngredientCategory;
-  /** How many cocktails name it. Drives the picker's default order. */
+  shelf: Shelf;
+  /** How many cocktails name it. A picker's fixed order. */
   uses: number;
+  /** Spirits only. */
+  family?: Family;
+  /** Every other name that finds it: the spellings the index folds into it, and brands. */
+  aliases?: readonly string[];
+  /** The brand names among `aliases`, said with `kind`: "Cointreau is a triple sec". */
+  brands?: readonly string[];
+  kind?: string;
+  /** The label opens on a proper noun, so a sentence keeps its capital ("Add Campari"). */
+  proper?: boolean;
 }
 
 interface RawRecipe {
@@ -37,7 +62,12 @@ interface RawRecipe {
   slots: string[][];
 }
 
-const index = rawIndex as unknown as { ingredients: Ingredient[]; recipes: RawRecipe[] };
+const index = rawIndex as unknown as {
+  ingredients: Ingredient[];
+  recipes: RawRecipe[];
+  /** Each generic and the family members that satisfy it ("rum": white rum, dark rum …). */
+  expands: Record<string, string[]>;
+};
 
 export const INGREDIENTS: Ingredient[] = index.ingredients;
 
@@ -45,36 +75,159 @@ export const INGREDIENTS_BY_ID: Record<string, Ingredient> = Object.fromEntries(
   INGREDIENTS.map((i) => [i.id, i]),
 );
 
-/**
- * Anything named by three or more cocktails. Everything is searchable, but
- * showing every ingredient at rest (nearly five hundred) is a wall, and
- * the tail is genuinely obscure (Brennivín appears in two drinks). My Bar's
- * picker lists browseIngredients() below, which adds the family members
- * this misses (Armagnac is named by none).
- */
-export const COMMON_INGREDIENTS: Ingredient[] = INGREDIENTS.filter((i) => i.uses >= 3);
+/* ==================================================================== */
+/* Shelves and families                                                 */
+/* ==================================================================== */
 
-export const CATEGORY_LABEL: Record<IngredientCategory, string> = {
-  spirit: 'Spirits',
-  liqueur: 'Liqueurs',
-  wine: 'Wine & beer',
+/*
+ * The order a bar is stocked and a recipe is read: spirit, modifier,
+ * lengthener, fresh, sweet, dashes, the rest. All seven always show, so a
+ * shelf is in the same place on day one and on day three hundred.
+ */
+export const SHELF_ORDER: readonly Shelf[] = ['spirits', 'liqueurs', 'mixers', 'fresh', 'syrups', 'bitters', 'other'];
+
+export const SHELF_LABEL: Record<Shelf, string> = {
+  spirits: 'Spirits',
+  liqueurs: 'Liqueurs & vermouth',
+  mixers: 'Mixers',
+  fresh: 'Fresh',
+  syrups: 'Syrups & sugar',
   bitters: 'Bitters',
-  citrus: 'Citrus',
-  juice: 'Juices',
-  syrup: 'Syrups & sweeteners',
-  mixer: 'Mixers',
-  dairy: 'Dairy & eggs',
-  produce: 'Fresh',
-  spice: 'Spices',
-  savoury: 'Savoury',
-  other: 'Everything else',
+  other: 'Other',
 };
 
-/** Display order for the picker's sections. */
-export const CATEGORY_ORDER: IngredientCategory[] = [
-  'spirit', 'liqueur', 'wine', 'bitters', 'citrus', 'juice',
-  'syrup', 'mixer', 'dairy', 'produce', 'spice', 'savoury', 'other',
-];
+/** An empty shelf's one quiet line: what lives there. */
+export const SHELF_EXAMPLE: Record<Shelf, string> = {
+  spirits: 'Gin, rum, whiskey, tequila, vodka, brandy',
+  liqueurs: 'Vermouth, Campari, triple sec, amaro, sherry',
+  mixers: 'Soda, tonic, ginger beer, juice, sparkling wine',
+  fresh: 'Lemons, limes, mint, eggs, cream',
+  syrups: 'Sugar syrup, honey, grenadine, orgeat',
+  bitters: "Angostura, orange, Peychaud's",
+  other: 'Nutmeg, cinnamon, cloves, hot sauce',
+};
+
+export const FAMILY_ORDER: readonly Family[] = ['gin', 'rum', 'whiskey', 'brandy', 'tequila', 'vodka', 'other'];
+
+export const FAMILY_LABEL: Record<Family, string> = {
+  gin: 'Gin',
+  rum: 'Rum',
+  whiskey: 'Whiskey',
+  brandy: 'Brandy',
+  tequila: 'Tequila & mezcal',
+  vodka: 'Vodka',
+  other: 'More spirits',
+};
+
+/** Lowercase with the accents taken off, so "creme" and "Crème" compare equal. */
+const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+/* Each label folded once, on the first sort or search that reaches it. */
+const foldedLabels = new Map<string, string>();
+function foldedLabel(i: Ingredient): string {
+  let folded = foldedLabels.get(i.id);
+  if (folded === undefined) {
+    folded = fold(i.label);
+    foldedLabels.set(i.id, folded);
+  }
+  return folded;
+}
+
+/** A to Z, case- and accent-folded, so Crème de cacao sorts among the Cs. */
+const aToZ = (a: Ingredient, b: Ingredient) => foldedLabel(a).localeCompare(foldedLabel(b));
+/** A picker's fixed order: how many recipes name it, then A to Z. Static data, never your bar. */
+const byUses = (a: Ingredient, b: Ingredient) => b.uses - a.uses || aToZ(a, b);
+
+/**
+ * The label inside a sentence: "Add dry vermouth", "covered by your
+ * bourbon", but "Add Campari" (the index marks the labels that open on a
+ * proper noun).
+ */
+export function inSentence(i: Ingredient): string {
+  return i.proper ? i.label : i.label.charAt(0).toLowerCase() + i.label.slice(1);
+}
+
+/**
+ * The screen: what you own, by shelf, A to Z. Every shelf, empty ones too,
+ * so a shelf never moves. An id the index no longer has is not drawn (it
+ * stays in the store).
+ */
+export function inventory(owned: Readonly<Record<string, unknown>>): { shelf: Shelf; items: Ingredient[] }[] {
+  const by = new Map<Shelf, Ingredient[]>(SHELF_ORDER.map((s) => [s, []]));
+  for (const id of Object.keys(owned)) {
+    const i = INGREDIENTS_BY_ID[id];
+    if (i) by.get(i.shelf)!.push(i);
+  }
+  return SHELF_ORDER.map((shelf) => ({ shelf, items: by.get(shelf)!.sort(aToZ) }));
+}
+
+export interface ShelfGroup {
+  /** Spirits only: the family these rows belong to (a small muted head). */
+  family?: Family;
+  items: readonly Ingredient[];
+}
+
+const shelfLists = new Map<Shelf, ShelfGroup[]>();
+
+/**
+ * A shelf picker's rows, worked out once per shelf: by uses then A to Z.
+ * Spirits are grouped by family in FAMILY_ORDER with each family's generic
+ * first ("Rum", then White rum, Dark rum …), so a family's bottles sit
+ * together. Nothing in this order depends on what you own: ticking fills
+ * a box where it stands.
+ */
+export function shelfList(shelf: Shelf): readonly ShelfGroup[] {
+  const known = shelfLists.get(shelf);
+  if (known) return known;
+  const items = INGREDIENTS.filter((i) => i.shelf === shelf).sort(byUses);
+  let groups: ShelfGroup[];
+  if (shelf !== 'spirits') {
+    groups = [{ items }];
+  } else {
+    groups = FAMILY_ORDER.map((family) => ({
+      family,
+      items: items
+        .filter((i) => (i.family ?? 'other') === family)
+        .sort((a, b) => Number(!isGeneric(a.id)) - Number(!isGeneric(b.id)) || byUses(a, b)),
+    })).filter((g) => g.items.length > 0);
+  }
+  shelfLists.set(shelf, groups);
+  return groups;
+}
+
+/* ==================================================================== */
+/* Generics and their families                                          */
+/* ==================================================================== */
+
+/** "Rum", "Whiskey", "Bitters": a generic a recipe asks for, met by any of its family. */
+export function isGeneric(id: string): boolean {
+  return Object.prototype.hasOwnProperty.call(index.expands, id);
+}
+
+/**
+ * The owned family member that already satisfies this generic, or null:
+ * owning bourbon, "Whiskey" (any) adds nothing ("Any whiskey · covered by
+ * your bourbon"). A specific never covers itself.
+ */
+export function coveredBy(id: string, owned: Readonly<Record<string, unknown>>): Ingredient | null {
+  if (!isGeneric(id)) return null;
+  for (const member of index.expands[id]!) {
+    if (owned[member] && INGREDIENTS_BY_ID[member]) return INGREDIENTS_BY_ID[member];
+  }
+  return null;
+}
+
+/** The generic a member counts as (white rum → Rum), or null. */
+export function genericOf(id: string): Ingredient | null {
+  for (const [g, members] of Object.entries(index.expands)) {
+    if (members.includes(id)) return INGREDIENTS_BY_ID[g] ?? null;
+  }
+  return null;
+}
+
+/* ==================================================================== */
+/* Matching                                                             */
+/* ==================================================================== */
 
 export interface Match {
   drink: Drink;
@@ -88,20 +241,18 @@ export interface Match {
 }
 
 export interface BarResult {
-  /** Everything you can make right now, sorted by name, because the list is
-   *  browsed, not ranked. */
+  /** Everything you can make right now, sorted by name. */
   makeable: Match[];
-  /** Missing exactly one thing. The useful half of the feature. */
+  /** Missing exactly one thing. */
   nearly: Match[];
   /**
    * The shopping list, CANONICAL: one entry per missing[0] (the generic a
-   * list should name), ranked by how many nearly drinks name it, so every
-   * nearly drink belongs to exactly one entry and bourbon and rye never
-   * stand as two entries for the same drinks (shoppingList, below).
-   * `unlocks` is the full-slot gain, what adding it really pours. Every
-   * entry, not a top eight: My Bar's One ingredient away pages through them.
+   * list should name), so every nearly drink belongs to exactly one entry
+   * and bourbon and rye never stand as two entries for the same drinks.
+   * `named` is how many nearly drinks name it; `unlocks` is the full-slot
+   * gain, what adding it really pours. Ranked in nextBottles' order.
    */
-  nextBest: { ingredient: Ingredient; unlocks: number }[];
+  nextBest: { ingredient: Ingredient; named: number; unlocks: number }[];
   /**
    * FULL-SLOT GAINS: for any ingredient id, the nearly drinks that adding
    * it would complete. Every id in the single missing slot is credited,
@@ -116,10 +267,9 @@ const EMPTY: BarResult = { makeable: [], nearly: [], nextBest: [], gains: new Ma
 /*
  * The recipes in drink-name order, sorted once on first use. matchBar walks
  * them in this order, so both of its lists come out alphabetical with no
- * sort of their own — it used to run two localeCompare sorts of up to ~800
- * rows on every tap of a shelf chip. Lazily rather than at module load,
- * so importing this costs nothing until My Bar first asks: it is a tab
- * most launches never open.
+ * sort of their own. Lazily rather than at module load, so importing this
+ * costs nothing until My Bar first asks: it is a tab most launches never
+ * open.
  */
 let recipesByName: { recipe: RawRecipe; drink: Drink }[] | null = null;
 
@@ -135,11 +285,17 @@ function sortedRecipes(): { recipe: RawRecipe; drink: Drink }[] {
   return recipesByName;
 }
 
+let recipesById: Map<string, RawRecipe> | null = null;
+function recipeOf(drinkId: string): RawRecipe | undefined {
+  if (!recipesById) recipesById = new Map(sortedRecipes().map(({ recipe }) => [recipe.id, recipe]));
+  return recipesById.get(drinkId);
+}
+
 /**
  * Walks every spec in the index. Cheap enough to run on every change — the
  * whole index is a few thousand slots — but callers should still memoise
  * on `owned`, because the screen re-renders on every keystroke in the
- * search field. matchOwned below does that for the persisted shelf.
+ * add field. matchOwned below does that for the persisted bar.
  */
 export function matchBar(owned: ReadonlySet<string>): BarResult {
   if (owned.size === 0) return EMPTY;
@@ -178,27 +334,32 @@ export function matchBar(owned: ReadonlySet<string>): BarResult {
 }
 
 /*
- * The shopping list stays CANONICAL (the v3.2 spec and both judges): one
- * entry per missing[0], ranked by how many nearly drinks name it. Ranked
- * by full-slot gains instead, a family member that also fills a generic
- * slot outranks the staples: Applejack (+10, five of them the brandy
- * slot's) stood first and at the spirits shelf's end ahead of Vodka +8
- * and Grenadine +9, the buys the mockup and a bartender would name. Ties
- * go to the larger full gain, then the name. `unlocks` is the full gain.
+ * The shopping list stays CANONICAL (the judges' graft): ranked by how
+ * many one-away drinks NAME the bottle, so the top suggestion is the one a
+ * bartender would name, Dry vermouth or Bourbon. Ranked by full-slot gains
+ * instead, a family member that also fills a generic slot outranks the
+ * staples (Applejack, five of its eight the brandy slot's). Ties go to the
+ * larger full gain, then the bottle more recipes name, then A to Z. The
+ * number a row shows is still the full gain, what its Add really pours.
  */
 function shoppingList(
   nearly: Match[],
   gains: ReadonlyMap<string, readonly Match[]>,
-): { ingredient: Ingredient; unlocks: number }[] {
+): BarResult['nextBest'] {
   const named = new Map<string, number>();
   for (const m of nearly) named.set(m.missing[0]!, (named.get(m.missing[0]!) ?? 0) + 1);
   return [...named.entries()]
     .flatMap(([id, n]) => {
       const ingredient = INGREDIENTS_BY_ID[id];
-      return ingredient ? [{ ingredient, n, unlocks: gains.get(id)?.length ?? n }] : [];
+      return ingredient ? [{ ingredient, named: n, unlocks: gains.get(id)?.length ?? n }] : [];
     })
-    .sort((a, b) => b.n - a.n || b.unlocks - a.unlocks || a.ingredient.label.localeCompare(b.ingredient.label))
-    .map(({ ingredient, unlocks }) => ({ ingredient, unlocks }));
+    .sort(
+      (a, b) =>
+        b.named - a.named ||
+        b.unlocks - a.unlocks ||
+        b.ingredient.uses - a.ingredient.uses ||
+        aToZ(a.ingredient, b.ingredient),
+    );
 }
 
 /** How many more drinks adding `id` would pour (full-slot, so family members count). */
@@ -206,127 +367,18 @@ export function gainOf(result: BarResult, id: string): number {
   return result.gains.get(id)?.length ?? 0;
 }
 
-/** The one bottle that would pour the most, and the drinks it would complete. */
-export interface BestBottle {
-  ingredient: Ingredient;
-  /** Every nearly drink it completes, alphabetical like `nearly`. */
-  matches: readonly Match[];
-}
-
-/* Keyed on the answer's identity: matchOwned hands back the same object until the bar changes. */
-const bestByResult = new WeakMap<BarResult, BestBottle | null>();
-
-/**
- * v3.3 graft 7: the best single bottle to add, the card that opens My
- * Bar's One ingredient away ("+10 drinks · opens Martini, Clarito, Bronx
- * and 7 more").
- *
- * WHY FULL-SLOT GAINS, where the shopping list (nextBest) stays
- * canonical: the card promises a number and its Add must pour exactly
- * that many, so it ranks by what adding the thing really completes
- * (`gains`, family slots credited). Ties go to the one more recipes name
- * (`uses`), the bottle a bartender would reach for, then the label.
- * Nothing one away gives null, and the card hides.
- */
-export function bestBottle(result: BarResult): BestBottle | null {
-  const known = bestByResult.get(result);
-  if (known !== undefined) return known;
-  // Negative when `a` is the better buy.
-  const rank = (a: BestBottle, b: BestBottle) =>
-    b.matches.length - a.matches.length ||
-    b.ingredient.uses - a.ingredient.uses ||
-    a.ingredient.label.localeCompare(b.ingredient.label);
-  let best: BestBottle | null = null;
-  for (const [id, matches] of result.gains) {
-    const ingredient = INGREDIENTS_BY_ID[id];
-    if (!ingredient || !matches.length) continue;
-    const candidate = { ingredient, matches };
-    if (!best || rank(candidate, best) < 0) best = candidate;
-  }
-  bestByResult.set(result, best);
-  return best;
-}
-
-/**
- * The drinks that changed between two answers: what now pours that did
- * not (`lit`), and what no longer does (`lost`). For the line under "You
- * can make" ("Campari unlocked 9") and the VoiceOver sentence with it.
- */
-export function diffMakeable(before: BarResult, after: BarResult): { lit: Drink[]; lost: Drink[] } {
-  const was = new Set(before.makeable.map((m) => m.drink.id));
-  const now = new Set(after.makeable.map((m) => m.drink.id));
-  return {
-    lit: after.makeable.filter((m) => !was.has(m.drink.id)).map((m) => m.drink),
-    lost: before.makeable.filter((m) => !now.has(m.drink.id)).map((m) => m.drink),
-  };
-}
-
-/**
- * The fourteen basics: the starter bar, which My Bar's picker offers in
- * one tap while nothing is yours.
- */
-export const BASICS: readonly string[] = [
-  'gin', 'vodka', 'white-rum', 'bourbon', 'sweet-vermouth', 'dry-vermouth',
-  'lemon', 'lime', 'sugar-syrup', 'angostura-bitters', 'soda-water', 'orange',
-  'triple-sec', 'mint',
-];
-
-let basics: BarResult | null = null;
-
-/** What the basics alone pour ("47 drinks"), worked out once, on first ask. */
-export function basicsResult(): BarResult {
-  if (!basics) basics = matchBar(new Set(BASICS));
-  return basics;
-}
-
-let reachById: Map<string, number> | null = null;
-
-/**
- * How many drinks an ingredient can go into at all: recipes with a slot it
- * fills, family slots included. `uses` counts only the drinks that name it,
- * which is 0 for Armagnac (recipes say "brandy"), so "in N drinks" is read
- * from here.
- */
-export function reachOf(id: string): number {
-  if (!reachById) {
-    reachById = new Map();
-    for (const { recipe } of sortedRecipes()) {
-      const ids = new Set(recipe.slots.flat());
-      for (const x of ids) reachById.set(x, (reachById.get(x) ?? 0) + 1);
-    }
-  }
-  return reachById.get(id) ?? 0;
-}
-
-let browse: Ingredient[] | null = null;
-
-/**
- * The picker's list at rest: COMMON_INGREDIENTS plus family members that
- * only ever appear through a family slot (Armagnac and Añejo tequila
- * have `uses` 0 and would vanish from browsing). Most reach first.
- */
-export function browseIngredients(): Ingredient[] {
-  if (!browse) {
-    browse = INGREDIENTS.filter((i) => i.uses >= 3 || reachOf(i.id) >= 3).sort(
-      (a, b) => reachOf(b.id) - reachOf(a.id) || a.label.localeCompare(b.label),
-    );
-  }
-  return browse;
-}
-
 let lastOwned: Record<string, true> | null = null;
 let lastResult: BarResult = EMPTY;
 
 /**
- * matchBar for the persisted shelf, remembered for the last shelf seen.
+ * matchBar for the persisted bar, remembered for the last bar seen.
  *
  * Keyed on the store's Record identity — the bar store hands out a new
  * object on every change and the same one otherwise — so My Bar's
- * re-renders (a keystroke in its search field, a return to the tab) reuse
- * the answer instead of walking every recipe again. My Bar is the only
- * reader since v3.1: the Dex's count button that shared it is gone. Its
- * toggle handler calls this straight after the store changes, to diff the
- * answer, and the render that follows reuses that same object.
+ * re-renders (a keystroke in its add field, a return to the tab) reuse
+ * the answer instead of walking every recipe again. The screen's toggle
+ * calls this straight after the store changes, to diff the answer, and
+ * the render that follows reuses that same object.
  */
 export function matchOwned(owned: Record<string, true>): BarResult {
   if (owned !== lastOwned) {
@@ -336,36 +388,223 @@ export function matchOwned(owned: Record<string, true>): BarResult {
   return lastResult;
 }
 
-/** Lowercase with the accents taken off, so "creme" and "Crème" compare equal. */
-const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+/* ==================================================================== */
+/* Next bottle                                                          */
+/* ==================================================================== */
 
-/* Each label folded once, on the first search that reaches it. */
-const foldedLabels = new Map<string, string>();
-function foldedLabel(i: Ingredient): string {
-  let folded = foldedLabels.get(i.id);
-  if (folded === undefined) {
-    folded = fold(i.label);
-    foldedLabels.set(i.id, folded);
-  }
-  return folded;
+export interface NextBottle {
+  ingredient: Ingredient;
+  /** Every nearly drink it completes (its full gain), alphabetical like `nearly`. */
+  matches: readonly Match[];
 }
 
-/** Case- and accent-insensitive contains, so "creme" finds "Crème de cacao". */
-export function searchIngredients(query: string): Ingredient[] {
+const nextByResult = new WeakMap<BarResult, NextBottle[]>();
+
+/**
+ * What to buy next, in the canonical order (shoppingList), each with the
+ * drinks its Add really pours. `skip` leaves out the bottles taken out on
+ * this visit: their struck tile already holds the way back.
+ */
+export function nextBottles(result: BarResult, skip?: ReadonlySet<string>): readonly NextBottle[] {
+  let all = nextByResult.get(result);
+  if (!all) {
+    all = result.nextBest.flatMap(({ ingredient }) => {
+      const matches = result.gains.get(ingredient.id) ?? [];
+      return matches.length ? [{ ingredient, matches }] : [];
+    });
+    nextByResult.set(result, all);
+  }
+  return skip?.size ? all.filter((n) => !skip.has(n.ingredient.id)) : all;
+}
+
+/** The next line on the screen: row 1 of Next bottle, or null when nothing is one bottle away. */
+export function bestBottle(result: BarResult, skip?: ReadonlySet<string>): NextBottle | null {
+  return nextBottles(result, skip)[0] ?? null;
+}
+
+/* ==================================================================== */
+/* You can make                                                         */
+/* ==================================================================== */
+
+/**
+ * Familiar first (the judges' graft): photographed, then by Dex number,
+ * then A to Z, so a Negroni sits above an Artillery.
+ */
+export function familiar(a: Drink, b: Drink): number {
+  return (
+    Number(photoFor(a.id) === undefined) - Number(photoFor(b.id) === undefined) ||
+    a.dexNumber - b.dexNumber ||
+    a.name.localeCompare(b.name)
+  );
+}
+
+const baseById = new Map<string, Family | 'none'>();
+
+/**
+ * A drink's base: the family of the first slot in its recipe that holds a
+ * Spirits-shelf bottle, so a Boulevardier is Whiskey and Between the Sheets
+ * Brandy. A recipe with no spirit (Americano, Garibaldi) is 'none'.
+ */
+export function baseSpirit(drinkId: string): Family | 'none' {
+  let base = baseById.get(drinkId);
+  if (base === undefined) {
+    base = 'none';
+    for (const slot of recipeOf(drinkId)?.slots ?? []) {
+      const spirit = slot.map((id) => INGREDIENTS_BY_ID[id]).find((i) => i?.shelf === 'spirits');
+      if (spirit) {
+        base = spirit.family ?? 'other';
+        break;
+      }
+    }
+    baseById.set(drinkId, base);
+  }
+  return base;
+}
+
+/** True when any slot of the drink's recipe names this bottle. */
+function uses(drinkId: string, ingredientId: string): boolean {
+  return !!recipeOf(drinkId)?.slots.some((slot) => slot.includes(ingredientId));
+}
+
+/** The drinks you can make that use this bottle, familiar first ("In 5 of the 31 you can make"). */
+export function usedIn(result: BarResult, ingredientId: string): Drink[] {
+  return result.makeable
+    .map((m) => m.drink)
+    .filter((d) => uses(d.id, ingredientId))
+    .sort(familiar);
+}
+
+export interface MakeSection {
+  key: Family | 'none';
+  title: string;
+  drinks: Drink[];
+}
+
+/**
+ * The Make list: what you can make by base spirit, in the Spirits picker's
+ * family order, then Without a spirit; familiar drinks first inside each.
+ * `using` narrows it to the drinks that use one bottle ("Show its drinks").
+ */
+export function makeList(result: BarResult, using?: string): MakeSection[] {
+  const by = new Map<Family | 'none', Drink[]>();
+  for (const { drink } of result.makeable) {
+    if (using && !uses(drink.id, using)) continue;
+    const base = baseSpirit(drink.id);
+    let list = by.get(base);
+    if (!list) by.set(base, (list = []));
+    list.push(drink);
+  }
+  return [...FAMILY_ORDER, 'none' as const].flatMap((key) => {
+    const drinks = by.get(key);
+    if (!drinks?.length) return [];
+    return [{ key, title: key === 'none' ? 'Without a spirit' : FAMILY_LABEL[key], drinks: drinks.sort(familiar) }];
+  });
+}
+
+/* ==================================================================== */
+/* The basics                                                           */
+/* ==================================================================== */
+
+/**
+ * The fourteen basics, in shelf order (the basics sheet's order): Gin,
+ * Vodka, White rum, Bourbon · Sweet and Dry vermouth, Triple sec · Soda
+ * water · Lemon, Lime, Orange, Mint · Sugar syrup · Angostura bitters.
+ */
+export const BASICS: readonly string[] = [
+  'gin', 'vodka', 'white-rum', 'bourbon',
+  'sweet-vermouth', 'dry-vermouth', 'triple-sec',
+  'soda-water',
+  'lemon', 'lime', 'orange', 'mint',
+  'sugar-syrup',
+  'angostura-bitters',
+];
+
+/* ==================================================================== */
+/* Search                                                               */
+/* ==================================================================== */
+
+export interface IngredientHit {
+  ingredient: Ingredient;
+  /** The alias or brand the query matched, when the label itself did not start with it. */
+  alias?: string;
+}
+
+/*
+ * Family words: "whisk" lists the whiskeys (Bourbon has no "whisk" in its
+ * name), "rum" the rums. A query reaches one when it starts the word.
+ */
+const FAMILY_WORDS: readonly [string, Family][] = [
+  ['gin', 'gin'], ['rum', 'rum'], ['rhum', 'rum'], ['whiskey', 'whiskey'], ['whisky', 'whiskey'],
+  ['brandy', 'brandy'], ['tequila', 'tequila'], ['mezcal', 'tequila'], ['vodka', 'vodka'],
+];
+
+/* Shelf and kind words: "citrus" lists the citrus, "syrup" the Syrups shelf, "wine" every wine. */
+const SHELF_WORDS: readonly [string, (i: Ingredient) => boolean][] = [
+  ['citrus', (i) => i.category === 'citrus' && i.shelf === 'fresh'],
+  ['juice', (i) => i.category === 'juice'],
+  ['syrup', (i) => i.shelf === 'syrups'],
+  ['sugar', (i) => i.shelf === 'syrups'],
+  ['bitters', (i) => i.shelf === 'bitters'],
+  ['vermouth', (i) => foldedLabel(i).includes('vermouth')],
+  ['wine', (i) => i.category === 'wine'],
+  ['liqueur', (i) => i.shelf === 'liqueurs'],
+  ['spirit', (i) => i.shelf === 'spirits'],
+  ['mixer', (i) => i.shelf === 'mixers'],
+  ['fresh', (i) => i.shelf === 'fresh'],
+  ['fruit', (i) => i.shelf === 'fresh' && i.category === 'produce'],
+];
+
+/** The shortest query that may reach a family or shelf word ("rum", "gin"). */
+const WORD_MIN = 3;
+/** Rows a search shows at most. */
+const SEARCH_CAP = 40;
+
+/* Each ingredient's aliases folded once, on the first search. */
+let foldedAliases: Map<string, [folded: string, name: string][]> | null = null;
+function aliasesOf(i: Ingredient): [string, string][] {
+  if (!foldedAliases) {
+    foldedAliases = new Map(INGREDIENTS.map((x) => [x.id, (x.aliases ?? []).map((a) => [fold(a), a])]));
+  }
+  return foldedAliases.get(i.id) ?? [];
+}
+
+/**
+ * Every ingredient the words find, in the order of shelves spec 4.4: the
+ * label starts with them, then an alias or brand does ("cointreau" → Triple
+ * sec), then a family or shelf word ("whisk" → Bourbon, "citrus" → Lime),
+ * then the label or an alias contains them. Ties go to `uses`, then A to Z.
+ * The order depends only on the words and the data, never on your bar, so
+ * a row you tick stays where it is while the field holds the same text.
+ */
+export function searchIngredients(query: string): IngredientHit[] {
   const q = fold(query.trim());
   if (!q) return [];
-  const hits = INGREDIENTS.filter((i) => foldedLabel(i).includes(q));
-  /*
-   * Prefix matches first — typing "gin" should not bury Gin under Ginger
-   * ale. Folded on both sides, like the filter: comparing a folded query to
-   * an unfolded label put "Rosé wine" under Prosecco for "rose", and every
-   * Crème below a mid-word hit for "creme".
-   */
-  return hits
-    .sort((a, b) => {
-      const ap = foldedLabel(a).startsWith(q) ? 0 : 1;
-      const bp = foldedLabel(b).startsWith(q) ? 0 : 1;
-      return ap - bp || b.uses - a.uses || a.label.localeCompare(b.label);
-    })
-    .slice(0, 40);
+  const families = q.length >= WORD_MIN ? new Set(FAMILY_WORDS.filter(([w]) => w.startsWith(q)).map(([, f]) => f)) : null;
+  const shelves = q.length >= WORD_MIN ? SHELF_WORDS.filter(([w]) => w.startsWith(q)).map(([, test]) => test) : [];
+
+  const tiers: IngredientHit[][] = [[], [], [], []];
+  for (const i of INGREDIENTS) {
+    const label = foldedLabel(i);
+    if (label.startsWith(q)) {
+      tiers[0]!.push({ ingredient: i });
+      continue;
+    }
+    const aliases = aliasesOf(i);
+    const aliasStart = aliases.find(([a]) => a.startsWith(q));
+    if (aliasStart) {
+      tiers[1]!.push({ ingredient: i, alias: aliasStart[1] });
+      continue;
+    }
+    if ((i.family && families?.has(i.family)) || shelves.some((test) => test(i))) {
+      tiers[2]!.push({ ingredient: i });
+      continue;
+    }
+    if (label.includes(q)) {
+      tiers[3]!.push({ ingredient: i });
+      continue;
+    }
+    const aliasIn = aliases.find(([a]) => a.includes(q));
+    if (aliasIn) tiers[3]!.push({ ingredient: i, alias: aliasIn[1] });
+  }
+  return tiers.flatMap((tier) => tier.sort((a, b) => byUses(a.ingredient, b.ingredient))).slice(0, SEARCH_CAP);
 }

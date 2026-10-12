@@ -10,7 +10,7 @@ import {
 
 import { Icon } from '@/components/icons';
 import { Button } from '@/components/ui';
-import { colors, layout, space, stroke, tabular, textRole } from '@/constants/theme';
+import { colors, layout, space, tabular, textRole } from '@/constants/theme';
 import { TOURNAMENT_LIMITS, type TournamentError } from '@/lib/tournaments';
 import type { TournamentSummary } from '@/types';
 
@@ -254,7 +254,8 @@ function secondLine(
 }
 
 /**
- * One tournament in the list, min 64: its name (Inter, never Playfair:
+ * One tournament in the list, min 64, on the page at the gutter (rows
+ * are set apart by space, not rules): its name (Inter, never Playfair:
  * it is not a drink's name), the line under it, and at the end your
  * place (on now), Join and Decline (an invitation), or a chevron.
  *
@@ -277,7 +278,6 @@ export function TournamentRow({
   onJoin,
   onDecline,
   answering,
-  separator,
 }: {
   tournament: TournamentSummary;
   kind: RowKind;
@@ -289,8 +289,6 @@ export function TournamentRow({
   onDecline?: () => void;
   /** An answer to this invitation is on its way: which one. */
   answering?: 'join' | 'decline' | null;
-  /** The hairline under the row; off on a group's last row. */
-  separator: boolean;
 }) {
   const { fontScale } = useWindowDimensions();
   const line = secondLine(t, kind, myId, { host: hostName, winner: winnerName });
@@ -337,7 +335,6 @@ export function TournamentRow({
             accessibilityLabel={`Decline ${t.name}`}
           />
         </View>
-        {separator ? <View style={styles.separator} /> : null}
       </View>
     );
   }
@@ -353,44 +350,34 @@ export function TournamentRow({
       {place ? (
         <Text style={styles.place}>{place}</Text>
       ) : (
-        <Icon name="chevronRight" size={18} color={colors.textFaint} />
+        <Icon name="chevronRight" size={20} color={colors.textMuted} />
       )}
-      {separator ? <View style={styles.separator} /> : null}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  rules: { ...textRole.helper, color: colors.textMuted },
+  rules: { ...textRole.small, color: colors.textMuted },
 
-  /* ListRow's metrics: 16pt in from the group's edge, 12pt between the parts. */
+  /* On the page: the gutter each side, 12pt between the parts, the press filling the row edge to edge. */
   row: {
     minHeight: layout.rowTall,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    paddingLeft: space.lg,
-    paddingRight: space.md,
+    paddingLeft: layout.gutter,
+    paddingRight: layout.gutter - space.sm,
   },
-  rowButton: { paddingVertical: space.md, paddingRight: space.lg },
+  rowButton: { paddingVertical: space.md, paddingRight: layout.gutter },
   identity: { flex: 1, alignSelf: 'stretch', justifyContent: 'center', paddingVertical: space.md },
-  pressed: { backgroundColor: colors.bgSunk },
+  pressed: { backgroundColor: colors.press },
   text: { flex: 1, gap: 2 },
-  name: { ...textRole.sectionTitle, color: colors.text },
-  line: { ...textRole.helper, color: colors.textMuted },
-  place: { ...textRole.labelValue, ...tabular, color: colors.text },
+  name: { ...textRole.bodyStrong, color: colors.text },
+  line: { ...textRole.small, color: colors.textMuted },
+  place: { ...textRole.bodyStrong, ...tabular, color: colors.text },
   answers: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
   /* Large text: a column, the answers under the name, in line with its left edge. */
-  rowStacked: { flexDirection: 'column', alignItems: 'stretch', gap: 0, paddingRight: space.lg },
+  rowStacked: { flexDirection: 'column', alignItems: 'stretch', gap: 0, paddingRight: layout.gutter },
   identityStacked: { flex: 0, paddingBottom: space.sm },
   answersStacked: { flexWrap: 'wrap', paddingBottom: space.md },
-  /* From the text's left edge to the row's right edge, as a ListRow's rule runs. */
-  separator: {
-    position: 'absolute',
-    left: space.lg,
-    right: 0,
-    bottom: 0,
-    height: stroke.hair,
-    backgroundColor: colors.line,
-  },
 });

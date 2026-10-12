@@ -12,12 +12,12 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
+import { useScrollEdges } from '@/components/log/scrollEdges';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { NO_INVITEES, tournamentErrorText } from '@/components/tournaments/TournamentRow';
-import { Avatar, Button, EmptyState, haptic, Hold, ListGroup, Notice, SearchField } from '@/components/ui';
-import { colors, fonts, layout, radius, space, stroke, textRole } from '@/constants/theme';
+import { Avatar, Button, EmptyState, haptic, Hold, Notice, SearchField } from '@/components/ui';
+import { colors, layout, radius, space, stroke, textRole } from '@/constants/theme';
 import { fetchConnections } from '@/lib/social';
 import { invite } from '@/lib/tournaments';
 import type { UserProfile } from '@/types';
@@ -39,8 +39,8 @@ import type { UserProfile } from '@/types';
 const SEARCH_FROM = 12;
 const BOX = 22;
 const FACE = 40;
-/** Where a row's name starts: its 16pt inset, the checkbox, the face and the gaps between. */
-const TEXT_INSET = space.lg + BOX + space.md + FACE + space.md;
+/** How far a row reaches past the column each side, so its press has a margin round the words. */
+const BLEED = space.sm;
 
 type Loaded = { status: 'ready'; people: UserProfile[] } | { status: 'failed' };
 
@@ -156,18 +156,17 @@ export function InvitePicker({
       {shown.length === 0 ? (
         <Text style={styles.note}>No one you follow matches “{query.trim()}”.</Text>
       ) : (
-        <ListGroup>
-          {shown.map((p, i) => (
+        <View>
+          {shown.map((p) => (
             <InviteRow
               key={p.id}
               person={p}
               checked={picked.has(p.id)}
               disabled={full && !picked.has(p.id)}
               onPress={() => toggle(p.id)}
-              separator={i < shown.length - 1}
             />
           ))}
-        </ListGroup>
+        </View>
       )}
     </View>
   );
@@ -175,22 +174,21 @@ export function InvitePicker({
 
 /**
  * Someone you follow, as a checkbox: the box, their face, name over
- * handle. The whole 64pt row is the control. Checked is said by the box's
- * wine check on its wash (a Chip's selected look), and by the checkbox
- * role's state, never by colour alone.
+ * handle. The whole 64pt row is the control, on the page, set apart from
+ * the next by space. Checked is the box filled in ink with a white check
+ * (My Bar's ticked look): a fill and a glyph, and the checkbox role's
+ * state, never a colour.
  */
 function InviteRow({
   person,
   checked,
   disabled,
   onPress,
-  separator,
 }: {
   person: UserProfile;
   checked: boolean;
   disabled: boolean;
   onPress: () => void;
-  separator: boolean;
 }) {
   return (
     <Pressable
@@ -201,7 +199,7 @@ function InviteRow({
       accessibilityState={{ checked, disabled }}
       style={({ pressed }) => [styles.row, pressed && styles.rowPressed, disabled && styles.disabled]}>
       <View style={[styles.box, checked && styles.boxChecked]}>
-        {checked ? <Icon name="check" size={16} color={colors.wine} /> : null}
+        {checked ? <Icon name="check" size={16} color={colors.onInk} /> : null}
       </View>
       <Avatar name={person.displayName} accent={person.accent} size={FACE} avatarPath={person.avatarPath} />
       <View style={styles.rowText}>
@@ -212,7 +210,6 @@ function InviteRow({
           @{person.username}
         </Text>
       </View>
-      {separator ? <View style={styles.separator} /> : null}
     </Pressable>
   );
 }
@@ -277,6 +274,8 @@ function InviteSheetBody({
   const [selected, setSelected] = useState<string[]>([]);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /* The bar's rule once the list scrolls under it; the foot's while the list runs on under it. */
+  const edges = useScrollEdges();
 
   /*
    * The keyboard offset, as log.tsx works it out: a page sheet starts some
@@ -316,17 +315,19 @@ function InviteSheetBody({
         const h = e.nativeEvent.layout.height;
         setSheetH((prev) => (prev === h ? prev : h));
       }}>
-      {/* A native sheet sits above the React root, so it carries its own paper grain, first. */}
-      <Grain />
       <ScreenTopBar
         title="Invite people"
         inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
-        showRule
+        showRule={edges.under}
         left={<TopBarTextButton label="Cancel" muted onPress={onClose} />}
       />
       <ScrollView
         style={styles.sheetScroll}
         contentContainerStyle={styles.sheetContent}
+        onScroll={edges.onScroll}
+        onLayout={edges.onLayout}
+        onContentSizeChange={edges.onContentSizeChange}
+        scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         showsVerticalScrollIndicator={false}>
@@ -342,8 +343,7 @@ function InviteSheetBody({
           onFindFriends={onFindFriends}
         />
       </ScrollView>
-      <View style={[styles.footer, { paddingBottom: insets.bottom + space.md }]}>
-        <Grain />
+      <View style={[styles.footer, edges.moreBelow && styles.footerRuled, { paddingBottom: insets.bottom + space.md }]}>
         {error ? <Notice tone="error">{error}</Notice> : null}
         <Button
           label={selected.length > 1 ? `Invite ${selected.length} people` : 'Invite'}
@@ -359,21 +359,23 @@ function InviteSheetBody({
 
 const styles = StyleSheet.create({
   picker: { gap: space.md },
-  counter: { ...textRole.helper, color: colors.textMuted },
-  note: { ...textRole.helper, color: colors.textMuted, paddingVertical: space.sm },
+  counter: { ...textRole.small, color: colors.textMuted },
+  note: { ...textRole.small, color: colors.textMuted, paddingVertical: space.sm },
 
-  /* ListRow's metrics: 64pt with a 40pt face, 16pt in from the group's edge. */
+  /* 64pt with a 40pt face, its content on the gutter and its press 8pt past it. */
   row: {
     minHeight: layout.rowTall,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.md,
-    paddingHorizontal: space.lg,
+    marginHorizontal: -BLEED,
+    paddingHorizontal: BLEED,
     paddingVertical: space.md,
+    borderRadius: radius.control,
   },
-  rowPressed: { backgroundColor: colors.bgSunk },
+  rowPressed: { backgroundColor: colors.press },
   disabled: { opacity: 0.42 },
-  /* A checkbox is a square, at the badge radius: lineControl is its 3:1 edge. */
+  /* A checkbox is a square, at the badge radius: lineControl is its 3:1 edge until it is ticked. */
   box: {
     width: BOX,
     height: BOX,
@@ -384,29 +386,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  boxChecked: { backgroundColor: colors.wineWash, borderColor: colors.wine },
+  boxChecked: { backgroundColor: colors.text, borderColor: colors.text },
   rowText: { flex: 1 },
-  rowName: { ...textRole.rowTitle, fontFamily: fonts.bodySemiBold, color: colors.text },
-  rowHandle: { ...textRole.rowSubtitle, color: colors.textMuted },
-  separator: {
-    position: 'absolute',
-    left: TEXT_INSET,
-    right: 0,
-    bottom: 0,
-    height: stroke.hair,
-    backgroundColor: colors.line,
-  },
+  rowName: { ...textRole.bodyStrong, color: colors.text },
+  rowHandle: { ...textRole.small, color: colors.textMuted },
 
   sheet: { flex: 1, backgroundColor: colors.bg },
   sheetScroll: { flex: 1 },
   sheetContent: { paddingHorizontal: layout.gutter, paddingTop: space.lg, paddingBottom: space.xl },
-  /* Paper and its grain under the button, with a 1pt edge where the list scrolls under it. */
+  /* The button's bar at the foot, ruled only while the list runs on under it (laid out, transparent, until then). */
   footer: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.md,
     gap: space.md,
     borderTopWidth: stroke.edge,
-    borderTopColor: colors.line,
+    borderTopColor: 'transparent',
     backgroundColor: colors.bg,
   },
+  footerRuled: { borderTopColor: colors.line },
 });

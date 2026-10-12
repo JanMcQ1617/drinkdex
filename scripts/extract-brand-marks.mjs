@@ -142,7 +142,7 @@ const MARKS = [
 
 /** @param {typeof MARKS[number]} m */
 function page(m) {
-  const [rx, ry, rw, rh] = m.rect;
+  const [, , rw, rh] = m.rect;
   const [ow, oh] = [rw, rh];
   return `<!doctype html><html><head><meta charset="utf-8"><style>
 html,body{margin:0;padding:0;width:${ow}px;height:${oh}px;overflow:hidden;background:transparent}

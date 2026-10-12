@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useId } from 'react';
+import React from 'react';
 import {
   type StyleProp,
   StyleSheet,
@@ -8,45 +8,21 @@ import {
   View,
   type ViewStyle,
 } from 'react-native';
-import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
-import { BrassPlate } from '@/components/brass/BrassPlate';
-import { MountKeyline, WindowBevel } from '@/components/brass/frames';
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
-import { colors, elevation, radius, space, stroke, textRole } from '@/constants/theme';
-import { formatCount } from '@/data';
-import { faceOf, fitScale, textWidth } from '@/lib/textFit';
+import { colors, radius, space, stroke, textRole } from '@/constants/theme';
+import { faceOf, fitScale } from '@/lib/textFit';
 
 /* ==================================================================== */
-/* The cabinet                                                          */
+/* Shared drawing pieces                                                */
 /*                                                                      */
-/* The frames v3 is built from (specs/v3-cabinet.md, sections 2, 5 and  */
-/* 7.2). Sipply is a collector's cabinet in two materials: the LINING,  */
-/* wine grained like baize, is the inside of the cabinet, and a drink   */
-/* you have caught is a MOUNT, bone card stock seated in the lining     */
-/* with a contact shadow. A drink you have not caught is a SLOT, a      */
-/* recess pressed into the lining. Collecting moves a drink from one    */
-/* material to the other, which is why the two states differ by         */
-/* material and not by a tint.                                          */
+/* DrinkName (the only way a drink's name is drawn), Print (a photo     */
+/* hung like a print), the in-Dex tag and the SVG stop helper. The v3   */
+/* cabinet's materials are gone (white spec section 4): a photo is      */
+/* framed by Print, and groups are separated by space.                  */
 /*                                                                      */
-/* Frames only. Nothing here loads an image: a caller puts the face     */
-/* (DexCard.tsx's DrinkFace, a signed photo) inside a MountWindow or a  */
-/* LoosePrint, so this file decides no decode size and holds no memory. */
-/*                                                                      */
-/* Everything is static: Views, drawn edges, `elevation` tokens and SVG */
-/* gradients. Nothing animates, so nothing can stall half drawn.        */
+/* Nothing here loads an image or animates.                             */
 /* ==================================================================== */
-
-/**
- * An SVG gradient id that is unique to this instance. Web shares one id
- * namespace across every <Svg> on the page, so two bands with the same id
- * would paint each other's gradient; React's ids carry punctuation that
- * does not survive `url(#…)`, hence the strip.
- */
-export function useSvgId(prefix: string): string {
-  return prefix + useId().replace(/[^A-Za-z0-9]/g, '');
-}
 
 /**
  * A colour token as an SVG gradient stop: `rgba(14, 11, 11, 0.62)` becomes
@@ -69,124 +45,6 @@ export function svgStop(color: string, opacity = 1): { stopColor: string; stopOp
   if (hex8) return { stopColor: `#${hex8[1]}`, stopOpacity: (parseInt(hex8[2]!, 16) / 255) * opacity };
   if (color === 'transparent') return { stopColor: 'rgb(0, 0, 0)', stopOpacity: 0 };
   return { stopColor: color, stopOpacity: opacity };
-}
-
-/**
- * A vertical fade from `from` (top) to `to` (bottom) that fills the box
- * `style` gives it: the shade under a band, a photo's scrims and dissolves.
- * Light doing something physical, never a mood field behind text.
- * `toOpacity` fades the bottom stop out (0: clear), so a translucent token
- * can fade to nothing without a second "clear" token. Both stops go through
- * svgStop, so translucent tokens keep their alpha on iOS. Decorative and
- * untouchable.
- */
-export function VerticalFade({
-  from,
-  to,
-  toOpacity = 1,
-  style,
-}: {
-  from: string;
-  to: string;
-  toOpacity?: number;
-  style: StyleProp<ViewStyle>;
-}) {
-  const id = useSvgId('fade');
-  /*
-   * The box is a View and the Svg fills it at 100% x 100%. An Svg placed
-   * by absolute insets alone sizes itself on iOS, but an <svg> on the web
-   * is a replaced element that keeps its 300px default width there.
-   */
-  return (
-    <View pointerEvents="none" style={style}>
-      <Svg width="100%" height="100%">
-        <Defs>
-          <LinearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0" {...svgStop(from)} />
-            <Stop offset="1" {...svgStop(to, toOpacity)} />
-          </LinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill={`url(#${id})`} />
-      </Svg>
-    </View>
-  );
-}
-
-/* ==================================================================== */
-/* LiningBand                                                           */
-/* ==================================================================== */
-
-/** The shade under a band that meets paper: 12pt, `shade` fading to clear. */
-const SHADE = 12;
-
-/**
- * A stretch of the cabinet's lining: the wine fill with its grain under
- * the children.
- *
- * `radius={0}` (default) is a full-bleed band; `radius={12}` an inset
- * panel (the Settings member card, Stats' collection panel), which draws a
- * 1pt `liningLine` edge and clips its children to its corners.
- *
- * `lip` is where a full-bleed band meets paper below it: a 1pt `liningLip`
- * along the band's foot, and under it a 12pt shade (`shade` to clear), the
- * band's thickness rather than a drop shadow. Two placements, because a
- * list cell cannot paint over the next cell: `shade="overlay"` hangs the
- * shade absolutely over whatever follows, which only works for a list
- * HEADER lifted with `ListHeaderComponentStyle={{ zIndex: 1 }}` (Home's
- * head band); `shade="inFlow"` (default) makes the band's own last 12pt a
- * paper strip, with paper grain, that carries the shade. A panel ignores
- * `lip`: it is framed by its edge, and a shade under a floating panel would
- * be a drop shadow.
- *
- * `style` styles the lining itself (padding, height), not the paper strip.
- */
-export function LiningBand({
-  children,
-  lip,
-  shade = 'inFlow',
-  radius: r = 0,
-  style,
-}: {
-  children: React.ReactNode;
-  /** 1pt liningLip + 12pt shade below. Full-bleed bands only. */
-  lip?: boolean;
-  /** Default 'inFlow'; 'overlay' only for a lifted list header (Home). */
-  shade?: 'overlay' | 'inFlow';
-  /** 0 a full-bleed band, 12 an inset panel (1pt liningLine edge, overflow hidden). */
-  radius?: 0 | 12;
-  style?: StyleProp<ViewStyle>;
-}) {
-  if (r === 12) {
-    return (
-      <View style={[styles.panel, style]}>
-        <Grain tone="lining" />
-        {children}
-      </View>
-    );
-  }
-
-  const band = (
-    <View style={[styles.band, style]}>
-      <Grain tone="lining" />
-      {children}
-      {lip ? <View pointerEvents="none" style={styles.lip} /> : null}
-      {lip && shade === 'overlay' ? (
-        <VerticalFade from={colors.shade} to={colors.shade} toOpacity={0} style={styles.shadeOverlay} />
-      ) : null}
-    </View>
-  );
-
-  if (!lip || shade === 'overlay') return band;
-
-  return (
-    <View>
-      {band}
-      <View pointerEvents="none" style={styles.shadeStrip}>
-        <Grain />
-        <VerticalFade from={colors.shade} to={colors.shade} toOpacity={0} style={StyleSheet.absoluteFill} />
-      </View>
-    </View>
-  );
 }
 
 /* ==================================================================== */
@@ -237,7 +95,7 @@ export function DrinkName({
   style?: StyleProp<TextStyle>;
 }) {
   const { fontScale } = useWindowDimensions();
-  const fontSize = role.fontSize ?? textRole.rowName.fontSize;
+  const fontSize = role.fontSize ?? textRole.name.fontSize;
   const lineHeight = role.lineHeight ?? Math.round(fontSize * 1.25);
   const scale = fitScale(name, faceOf(role.fontFamily), fontSize * Math.min(fontScale, cap), measure);
   return (
@@ -257,188 +115,46 @@ export function DrinkName({
 }
 
 /* ==================================================================== */
-/* Mount and slot                                                       */
+/* Print                                                                */
 /* ==================================================================== */
 
-export type MountSize = 'grid' | 'shelf' | 'feature' | 'thumb';
-
 /**
- * Each mount's geometry. `padding` is from the inside of the 1pt edge to
- * the content, so a grid card's text column is `cardWidth − 38` (1 + 18 on
- * each side) and a shelf card's `cardWidth − 26`. The 18pt is clear mat:
- * v3 printed a rule inside it, and v3.1 kept the padding exactly when the
- * rule went, so every DrinkName measure in specs/v3-cabinet.md 6.4 still
- * holds. A caller with its own measure (CustomDrinkTile) may override the
- * padding through `style`.
+ * A photograph hung like a print (white spec D5): square corners, the wash
+ * ground until it decodes, and a 1pt `photoEdge` drawn over the picture, so
+ * a blown-out user photo still has an edge on white. Clips its child (a
+ * DrinkFace or a signed photo); draws no image itself, so it decides no
+ * decode size. Decorative: the row or post that holds it speaks.
  */
-export const MOUNT: Record<MountSize, { radius: number; padding: number; windowRadius: number }> = {
-  grid: { radius: 8, padding: 18, windowRadius: 3 },
-  feature: { radius: 8, padding: 12, windowRadius: 3 },
-  shelf: { radius: 6, padding: 12, windowRadius: 2 },
-  thumb: { radius: 4, padding: 3, windowRadius: 2 },
-};
-
-/** Which mount a MountWindow sits in, for its corner. */
-const MountSizeContext = createContext<MountSize>('grid');
-
-/**
- * A drink in the cabinet.
- *
- * `state="mounted"` (collected): `mat` card stock with a 1pt edge (`matEdge`
- * on lining, `line` on paper), and on lining only the `elevation.seat`
- * contact shadow, the one place a card casts one.
- *
- * `state="slot"` (not yet): `liningDeep` pressed into the lining with
- * `elevation.recess` and a 1pt `slotEdge`, the same for every drink.
- *
- * A frame only: the edges are decorative, and the card that holds the
- * mount speaks for it.
- */
-export function Mount({
-  state,
-  size,
-  onLining,
+export function Print({
+  width,
+  height,
   children,
   style,
 }: {
-  state: 'mounted' | 'slot';
-  size: MountSize;
-  /** Seat shadow and matEdge when true. */
-  onLining: boolean;
+  width: number | `${number}%`;
+  height: number;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }) {
-  const geo = MOUNT[size];
-  const mounted = state === 'mounted';
-
   return (
-    <View
-      style={[
-        styles.mount,
-        { borderRadius: geo.radius, padding: geo.padding },
-        mounted
-          ? [styles.mountMat, { borderColor: onLining ? colors.matEdge : colors.line }, onLining && elevation.seat]
-          : [styles.mountSlot, elevation.recess],
-        style,
-      ]}>
-      {/*
-        v3.3 Brass D3: a caught card's brass keyline, under its content.
-        One weight and one colour on every mount (it means "caught", never
-        a tier). A thumb's mat is 3pt, so its keyline sits 1pt in.
-      */}
-      {mounted ? <MountKeyline outerRadius={geo.radius} inset={size === 'thumb' ? 1 : 3} /> : null}
-      <MountSizeContext.Provider value={size}>{children}</MountSizeContext.Provider>
-    </View>
-  );
-}
-
-/**
- * The window a mount shows its drink through: clipped at the mount's
- * window corner (3pt, 2pt on shelf and thumb), on a `liningDeep` fill (a
- * lit photo's own edge colour, so the moment before it decodes already
- * matches), with a 1pt hairline drawn over the picture (`windowEdge`, or
- * `slotWindowEdge` in a slot).
- *
- * `height` is a minimum: in a row that stretches its cards to the tallest
- * one the window takes up the slack, so two cards' windows always line up
- * whatever their names wrap to.
- */
-export function MountWindow({
-  height,
-  state,
-  children,
-}: {
-  height: number;
-  state: 'mounted' | 'slot';
-  children: React.ReactNode;
-}) {
-  const size = useContext(MountSizeContext);
-  const r = MOUNT[size].windowRadius;
-  const window = (
-    <View style={[styles.window, { minHeight: height, borderRadius: r }]}>
+    <View style={[styles.print, { width, height }, style]}>
       {children}
-      <View
-        pointerEvents="none"
-        accessibilityElementsHidden
-        importantForAccessibility="no"
-        style={[
-          StyleSheet.absoluteFill,
-          styles.windowEdge,
-          { borderRadius: r, borderColor: state === 'slot' ? colors.slotWindowEdge : colors.windowEdge },
-        ]}
-      />
-    </View>
-  );
-  /*
-   * v3.3 Brass D17: a mounted window's bevel, the mat's cut edge lit from
-   * above, hung 1pt outside the window so its size does not move. The
-   * window clips its photo, so the bevel sits beside it in a wrapper that
-   * takes the window's place in the column (and its slack). Not on slots
-   * (a recess has no mat to cut) or thumbs (3pt of mat is too little).
-   */
-  if (state === 'slot' || size === 'thumb') return window;
-  return (
-    <View style={styles.windowWrap}>
-      {window}
-      <WindowBevel />
+      <View pointerEvents="none" style={styles.printEdge} />
     </View>
   );
 }
 
-/* ==================================================================== */
-/* Plates and tags                                                      */
-/* ==================================================================== */
-
 /**
- * The catalogue number, engraved: since v3.3 Brass, every Dex number is a
- * brass plate ("Nº 0009", components/brass/BrassPlate.tsx). A caught drink
- * (on mat, on paper, on lining) gets polished brass; a slot, or a drink
- * shown on lining that is not caught (`caught={false}`, the drink page),
- * gets the empty holder. `tone` stays the ground it sits on, so callers
- * from before Brass keep working; only the slot and `caught` decide the
- * metal. Over a photograph media.tsx's MediaNumberPlate draws the same
- * plate.
- *
- * Not its own VoiceOver element: the card or row that holds it says
- * "number 9".
+ * "In your Dex": a check and the words, muted on a 1pt hair edge (the drink
+ * page, beside the plate). The not-yet state has its own quieter tag where
+ * it is drawn (DrinkPanels' NotYetTag); v4 lists carry no tags at all.
  */
-export function NumberPlate({
-  n,
-  tone,
-  caught,
-}: {
-  n: number;
-  tone: 'mat' | 'paper' | 'lining' | 'slot';
-  /** Default: caught unless `tone` is 'slot'. */
-  caught?: boolean;
-}) {
-  const brass = caught ?? tone !== 'slot';
-  return <BrassPlate n={n} tone={brass ? 'brass' : 'holder'} />;
-}
-
-/**
- * Whether a drink in a paper list (Log, My Bar) is in your Dex yet.
- *
- * Not in: "New" (selected: "New to your Dex"), wine on its wash with a 1pt
- * wine edge, because a new catch is the thing those lists exist to find.
- * In: a check and "In your Dex", muted on a 1pt `line` edge. The words
- * carry the state; the colour only repeats it.
- */
-export function DexStatusTag({ inDex, selected }: { inDex: boolean; selected?: boolean }) {
-  if (inDex) {
-    return (
-      <View style={[styles.statusTag, styles.statusTagIn]}>
-        <Icon name="check" size={TAG_ICON} color={colors.textMuted} />
-        <Text maxFontSizeMultiplier={TAG_CAP} style={[styles.statusTagText, { color: colors.textMuted }]}>
-          {tagLabel(true, selected)}
-        </Text>
-      </View>
-    );
-  }
+export function DexStatusTag() {
   return (
-    <View style={[styles.statusTag, styles.statusTagNew]}>
-      <Text maxFontSizeMultiplier={TAG_CAP} style={[styles.statusTagText, { color: colors.wine }]}>
-        {tagLabel(false, selected)}
+    <View style={styles.statusTag}>
+      <Icon name="check" size={TAG_ICON} color={colors.textMuted} />
+      <Text maxFontSizeMultiplier={TAG_CAP} style={[styles.statusTagText, { color: colors.textMuted }]}>
+        In your Dex
       </Text>
     </View>
   );
@@ -447,106 +163,10 @@ export function DexStatusTag({ inDex, selected }: { inDex: boolean; selected?: b
 const TAG_ICON = 12;
 const TAG_CAP = 1.3;
 
-function tagLabel(inDex: boolean, selected?: boolean): string {
-  if (inDex) return 'In your Dex';
-  return selected ? 'New to your Dex' : 'New';
-}
-
-/**
- * The width a DexStatusTag takes at this text size, worked out rather than
- * measured (lib/textFit.ts errs wide), so a row can subtract it when it
- * gives DrinkName its measure. "New to your Dex" comes to about 130pt at
- * the default size and 165 at the 1.3 cap, wider than a fixed 112pt
- * trailing column.
- */
-export function dexStatusTagWidth(inDex: boolean, selected: boolean | undefined, fontScale: number): number {
-  const size = textRole.statusWord.fontSize * Math.min(fontScale, TAG_CAP);
-  const icon = inDex ? TAG_ICON + space.xs : 0;
-  return stroke.edge * 2 + space.sm * 2 + icon + textWidth(tagLabel(inDex, selected), 'inter', size);
-}
-
-/**
- * A photograph lying loose in the lining: a friend's pour of a drink you
- * have not caught ("Not in your Dex yet"). Not a mount, because it is not
- * yours yet: a 4pt corner, a 1pt `printEdge`, and it clips the photo the
- * caller puts in it. The photo is laid out inside the edge, so a full-bleed
- * child never covers it.
- */
-export function LoosePrint({
-  width,
-  height,
-  children,
-}: {
-  width: number;
-  height: number;
-  children: React.ReactNode;
-}) {
-  return <View style={[styles.print, { width, height }]}>{children}</View>;
-}
-
-/**
- * A count set large: "38" and its caption ("of 2,089 collected"). Inter
- * tabular, not Playfair: a figure is not a name (check-design rule 6). Wine
- * on paper, bone on lining; the caption in the ground's muted ink.
- *
- * Baseline-aligned in a wrapping row, so in a narrow column (the Latest
- * catch panel on a 375pt phone, accessibility text sizes) the caption drops
- * under the figure instead of squeezing it. Both cap at 1.3. One VoiceOver
- * element: "38 of 2,089 collected".
- */
-export function HeroFigure({
-  value,
-  caption,
-  tone,
-}: {
-  value: number;
-  caption: string;
-  tone: 'paper' | 'lining';
-}) {
-  const lining = tone === 'lining';
-  const figure = formatCount(value);
-  return (
-    <View accessible accessibilityLabel={`${figure} ${caption}`} style={styles.hero}>
-      <Text maxFontSizeMultiplier={1.3} style={[textRole.heroFigure, { color: lining ? colors.onLining : colors.wine }]}>
-        {figure}
-      </Text>
-      <Text
-        maxFontSizeMultiplier={1.3}
-        style={[textRole.helper, { color: lining ? colors.onLiningMuted : colors.textMuted }]}>
-        {caption}
-      </Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  /* LiningBand */
-  band: { backgroundColor: colors.lining },
-  panel: {
-    backgroundColor: colors.lining,
-    borderRadius: radius.card,
-    borderWidth: stroke.edge,
-    borderColor: colors.liningLine,
-    overflow: 'hidden',
-  },
-  lip: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: stroke.edge,
-    backgroundColor: colors.liningLip,
-  },
-  shadeOverlay: { position: 'absolute', left: 0, right: 0, top: '100%', height: SHADE },
-  shadeStrip: { height: SHADE, backgroundColor: colors.bg },
-
-  /* Mount */
-  mount: { borderWidth: stroke.edge },
-  mountMat: { backgroundColor: colors.mat },
-  mountSlot: { backgroundColor: colors.liningDeep, borderColor: colors.slotEdge },
-  window: { flexGrow: 1, overflow: 'hidden', backgroundColor: colors.liningDeep },
-  windowWrap: { flexGrow: 1 },
-  windowEdge: { borderWidth: stroke.edge },
+  /* Print */
+  print: { overflow: 'hidden', backgroundColor: colors.bgSunk, borderRadius: radius.none },
+  printEdge: { ...StyleSheet.absoluteFill, borderWidth: stroke.edge, borderColor: colors.photoEdge },
 
   /* DexStatusTag */
   statusTag: {
@@ -557,20 +177,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.sm,
     borderRadius: radius.badge,
     borderWidth: stroke.edge,
+    borderColor: colors.hair,
   },
-  statusTagNew: { backgroundColor: colors.wineWash, borderColor: colors.wine },
-  statusTagIn: { borderColor: colors.line },
   statusTagText: textRole.statusWord,
-
-  /* LoosePrint */
-  print: {
-    borderRadius: radius.badge,
-    borderWidth: stroke.edge,
-    borderColor: colors.printEdge,
-    overflow: 'hidden',
-    backgroundColor: colors.liningDeep,
-  },
-
-  /* HeroFigure */
-  hero: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'baseline', columnGap: space.sm },
 });

@@ -14,10 +14,9 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthMessage } from '@/components/AuthGate';
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
 import { Button, Field, haptic } from '@/components/ui';
-import { colors, fonts, layout, space, textRole, type as typeScale } from '@/constants/theme';
+import { colors, layout, space, textRole } from '@/constants/theme';
 import { parseRecoveryUrl } from '@/lib/recovery';
 import { useAuth } from '@/store/auth';
 
@@ -44,15 +43,10 @@ import { useAuth } from '@/store/auth';
 /* both steps are accessibilityViewIsModal, so the app underneath is not */
 /* in the swipe order, and focus starts on the step's title.             */
 /*                                                                      */
-/* It brings its own paper grain: grain is no longer one overlay over    */
-/* the app, and this sits above all of it. And its own dark status bar,  */
-/* a plain one: it is outside every route screen, where FocusedStatusBar */
-/* has no navigator to ask, and the screen under it may be a lining one  */
-/* (Home) whose light glyphs would vanish on this paper. Status bars     */
-/* merge in mount order, so this wins over a screen already mounted; a   */
-/* lining screen that mounts after it (AuthGate swapping the sign-in     */
-/* sheet for the app as the link signs in) still wins until the          */
-/* confirmation, which mounts its own.                                   */
+/* It mounts its own dark status bar, a plain one: it sits outside      */
+/* every route screen. Daylight is dark-glyphed everywhere, so this     */
+/* only restates the root's choice; it is kept so a screen that ever    */
+/* mounts a light bar under it cannot put white glyphs on this page.    */
 /* ==================================================================== */
 
 /**
@@ -138,11 +132,10 @@ function Confirmation({ onDismiss }: { onDismiss: () => void }) {
     <View
       style={[styles.root, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
       accessibilityViewIsModal>
-      <Grain />
       <StatusBar style="dark" />
       <View style={styles.doneWrap}>
-        {/* The check drawn bare, in wine: a glyph does not need a disc to be seen. */}
-        <Icon name="check" size={40} color={colors.wine} />
+        {/* The check drawn bare, in ink: a glyph does not need a disc to be seen. */}
+        <Icon name="check" size={40} color={colors.text} />
         <Text ref={titleRef} style={styles.title} accessibilityRole="header">
           Password changed
         </Text>
@@ -205,7 +198,6 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       accessibilityViewIsModal>
-      <Grain />
       <StatusBar style="dark" />
       <ScrollView
         contentContainerStyle={[
@@ -314,7 +306,7 @@ const styles = StyleSheet.create({
    * through wordmarkLg: Playfair is set only by a name role (check-design
    * rule 6), and this is the same large wordmark the sign-in backdrop uses.
    */
-  wordmark: { ...textRole.wordmarkLg, color: colors.wine },
+  wordmark: { ...textRole.wordmarkLg, color: colors.text },
   /* A step's title is chrome: Inter, at the size every state title uses. */
   title: {
     ...textRole.emptyTitle,
@@ -322,9 +314,7 @@ const styles = StyleSheet.create({
     marginTop: space.lg,
   },
   blurb: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
+    ...textRole.body,
     color: colors.textMuted,
     marginTop: space.sm,
     marginBottom: space.xxl,

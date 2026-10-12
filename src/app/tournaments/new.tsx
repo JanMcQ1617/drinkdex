@@ -13,8 +13,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { Grain } from '@/components/Grain';
-import { ScreenTopBar, TopBarTextButton, useScrolledPast } from '@/components/ScreenTopBar';
+import { useScrollEdges } from '@/components/log/scrollEdges';
+import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { InvitePicker } from '@/components/tournaments/InvitePicker';
 import {
   lastMoment,
@@ -117,7 +117,7 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const loadList = useTournaments((s) => s.load);
-  const [scrolled, onScroll] = useScrolledPast();
+  const edges = useScrollEdges();
 
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
@@ -207,18 +207,18 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
         const h = e.nativeEvent.layout.height;
         setSheetH((prev) => (prev === h ? prev : h));
       }}>
-      {/* iOS presents the sheet above the React root, so it carries its own paper grain, first. */}
-      <Grain />
       <ScreenTopBar
         title="Host a tournament"
         inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
-        showRule={scrolled}
+        showRule={edges.under}
         left={<TopBarTextButton label="Cancel" muted onPress={onClose} />}
       />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
-        onScroll={onScroll}
+        onScroll={edges.onScroll}
+        onLayout={edges.onLayout}
+        onContentSizeChange={edges.onContentSizeChange}
         scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
@@ -305,9 +305,8 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
         <TournamentRules style={styles.rules} />
       </ScrollView>
 
-      {/* 7. The footer: paper and its grain, outside the scroll, where the thumb is. */}
-      <View style={[styles.footer, { paddingBottom: insets.bottom + space.md }]}>
-        <Grain />
+      {/* 7. The footer, outside the scroll, where the thumb is: a bar at the foot, ruled only while the form runs under it. */}
+      <View style={[styles.footer, edges.moreBelow && styles.footerRuled, { paddingBottom: insets.bottom + space.md }]}>
         {error ? <Notice tone="error">{error}</Notice> : null}
         <Button
           label="Create and invite"
@@ -336,14 +335,16 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: 0, marginTop: space.xl, marginBottom: space.sm },
   /* 12pt between wrapped rows, so each chip's 6pt slop above and below never overlaps the next row's. */
   chips: { flexDirection: 'row', flexWrap: 'wrap', columnGap: space.sm, rowGap: space.md },
-  helper: { ...textRole.helper, color: colors.textMuted, marginTop: space.sm },
+  helper: { ...textRole.small, color: colors.textMuted, marginTop: space.sm },
   rules: { marginTop: space.xl },
   footer: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.md,
     gap: space.md,
+    // Always laid out, transparent until the form runs under it, so showing it moves nothing.
     borderTopWidth: stroke.edge,
-    borderTopColor: colors.line,
+    borderTopColor: 'transparent',
     backgroundColor: colors.bg,
   },
+  footerRuled: { borderTopColor: colors.line },
 });

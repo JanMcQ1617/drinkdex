@@ -1,18 +1,19 @@
 /**
  * Maps the catalogue photographs onto dex entries and bakes the two faces
- * the app shows of each (specs/v3-cabinet.md §8):
+ * the app shows of each (specs/v4-mockups/white/spec.md §6):
  *
- *   assets/drinks/<id>.webp        the tungsten re-light, 1024px q82
- *   assets/drinks/ghost/<id>.webp  the ghost a locked Dex slot shows, 256px q80
+ *   assets/drinks/<id>.webp        the daylight print, 1024px q82
+ *   assets/drinks/proof/<id>.webp  the "not yet" proof a Dex cell shows, 256px q80
  *
  * plus src/data/drinkPhotos.ts, the static require map for both.
  *
- * The bake is scripts/lib/tungsten.py (numpy + Pillow), run once for every
- * photo. This script owns every input the bake takes: the two theme colours,
- * sizes, per-photo overrides and the QA gates, so the Python has no
- * defaults of its own to drift. It writes lossless PNG; this script
- * encodes the WebP with cwebp and only replaces assets/drinks once every
- * photo has passed the seam gate.
+ * The bake is scripts/lib/daylight.py (numpy + Pillow), run once for every
+ * photo: the wall neutralised, the drink left exactly as shot. This script
+ * owns the sizes, the qualities and the gates and passes them in; the bake's
+ * own numbers live in daylight.py, and its sha256 goes into the header of
+ * drinkPhotos.ts, so a photo set always says which bake made it. The Python
+ * writes lossless PNG; this script encodes the WebP with cwebp and only
+ * replaces assets/drinks once every photo has passed the gates.
  *
  * The source folders are named after the generation PROMPT, not the drink, so
  * the drink has to be parsed back out of the prompt text. ALIASES covers the
@@ -22,12 +23,17 @@
  *
  *   node scripts/build-drink-photos.mjs [--src <dir>] [--qa <dir>] [--manifest <file>] [--size 1024] [--quality 82]
  *   node scripts/build-drink-photos.mjs --grade off --qa <dir>
+ *   node scripts/build-drink-photos.mjs --check
  *
- *   --qa <dir>     also write lit.png and ghost.png (contact sheets) and flags.json
- *   --grade off    skip the re-light and sheet the masters as they are, for a
- *                  before/after comparison. QA only: assets/ and src/ are not touched.
+ *   --qa <dir>     also write prints.png and proofs.png (contact sheets) and flags.json
+ *   --grade off    skip the bake and sheet the masters as they are, to compare
+ *                  with the default, --grade daylight. QA only: assets/ and src/
+ *                  are not touched.
+ *   --check        bake nothing: fail if drinkPhotos.ts was made by another
+ *                  daylight.py than the repo's, or a file it requires is missing.
  */
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -49,13 +55,42 @@ const arg = (flag, fallback) => {
   return value;
 };
 
-/**
- * Where the generated photographs live. Later sources are newer batches.
- *
- * Two folder shapes are in play and both are supported: the Desktop set nests
- * prompt folders inside batch folders, the Downloads set puts them at the top
- * level. Either way the leaf holding `screen.png` is the prompt folder.
+const OUT_DIR = path.join(ROOT, 'assets', 'drinks');
+/** The new set is encoded here and swapped in whole, so a failed bake leaves assets/drinks as it was. */
+const STAGE_DIR = path.join(ROOT, 'assets', '.drinks-next');
+/** The old set, moved aside for the moment of the swap. */
+const PREV_DIR = path.join(ROOT, 'assets', '.drinks-prev');
+const MAP_FILE = path.join(ROOT, 'src', 'data', 'drinkPhotos.ts');
+const DAYLIGHT = path.join(ROOT, 'scripts', 'lib', 'daylight.py');
+/** Labels on the QA sheets, in the app's own face. */
+const QA_FONT = path.join(ROOT, 'assets', 'fonts', 'InterLatin_500Medium.ttf');
+
+if (!fs.existsSync(DAYLIGHT)) fail(`${path.relative(ROOT, DAYLIGHT)} is missing: it is the bake.`);
+/** The bake script's sha256, as the generated header records it. */
+const bakeHash = () => createHash('sha256').update(fs.readFileSync(DAYLIGHT)).digest('hex');
+
+/*
+ * ---- --check: is the shipped set this daylight.py's bake? ----
+ * The header's hash is how the photos and the bake stay in step: an edit to
+ * daylight.py changes nothing on screen until the photos are rebuilt, so
+ * without this a stale set would look current.
  */
+if (process.argv.includes('--check')) {
+  const map = fs.existsSync(MAP_FILE) ? fs.readFileSync(MAP_FILE, 'utf8') : '';
+  const baked = /daylight\.py sha256 ([0-9a-f]{64})/.exec(map)?.[1];
+  const now = bakeHash();
+  const rebuild = 'Run node scripts/build-drink-photos.mjs.';
+  if (!baked) fail(`src/data/drinkPhotos.ts names no daylight.py sha256, so it predates the daylight bake. ${rebuild}`);
+  if (baked !== now) {
+    fail(`the photos were baked by daylight.py ${baked.slice(0, 12)}, and the repo's is ${now.slice(0, 12)}. ${rebuild}`);
+  }
+  const required = [...map.matchAll(/require\('\.\.\/\.\.\/(assets\/drinks\/[^']+)'\)/g)].map((m) => m[1]);
+  const missing = required.filter((f) => !fs.existsSync(path.join(ROOT, f)));
+  if (missing.length) fail(`${missing.length} of the ${required.length} files drinkPhotos.ts requires are missing (${missing[0]}…). ${rebuild}`);
+  console.log(`drink photos: daylight.py ${now.slice(0, 12)}'s bake, all ${required.length} files present`);
+  process.exit(0);
+}
+
 /**
  * The photograph masters: one 1024px PNG per dex entry, named by its id.
  *
@@ -63,127 +98,71 @@ const arg = (flag, fallback) => {
  * across the Desktop and several Downloads batches, carrying every duplicate
  * take. Those were consolidated to one master per drink, so the prompt-name
  * parsing below now only matters if a fresh generator export is added back as
- * an extra source.
+ * an extra source. Both folder shapes are still supported: the Desktop set
+ * nested prompt folders inside batch folders, the Downloads set put them at
+ * the top level, and either way the leaf holding `screen.png` is the prompt.
  */
 const SOURCES = [path.join(process.env.HOME, 'Desktop', 'CLINK DEX PHOTOS')];
 
 const srcArg = arg('--src', null);
 const sources = srcArg ? srcArg.split(',') : SOURCES;
 /**
- * The lit face is 1024, the masters' own size, so it is re-encoded but never
+ * The print is 1024, the masters' own size, so it is re-encoded but never
  * resampled: the drink page's full-bleed hero is about 1,179px wide at 3x,
  * and anything smaller is upscaled there.
  *
- * The ghost is 256. It is an impression, drawn about 2x up in a Dex window,
- * where the softness is intended, and a sixteenth of the pixels is what
- * keeps a screen of locked slots cheap to decode (spec §11: 0.26 MB each
- * against 4 MB for a 1024px face).
+ * The proof is 256, as the ghost it replaces was (white spec 6.3). A Dex cell
+ * draws it about 2x up, where the softness reads as a print still waiting for
+ * its colour, and a sixteenth of the pixels keeps a screen of not-yet cells
+ * cheap to decode (0.26 MB each against 4 MB for a 1024px print).
  */
 const SIZE = Number(arg('--size', 1024));
 const QUALITY = Number(arg('--quality', 82));
 if (!Number.isInteger(SIZE) || SIZE < 64) fail(`--size takes a whole number of pixels (64 or more), not '${arg('--size')}'.`);
 if (!Number.isInteger(QUALITY) || QUALITY < 0 || QUALITY > 100) fail(`--quality takes 0 to 100, not '${arg('--quality')}'.`);
-const GHOST_SIZE = 256;
-const GHOST_QUALITY = 80;
-const OUT_DIR = path.join(ROOT, 'assets', 'drinks');
-/** The new set is encoded here and swapped in whole, so a failed bake leaves assets/drinks as it was. */
-const STAGE_DIR = path.join(ROOT, 'assets', '.drinks-next');
-/** The old set, moved aside for the moment of the swap. */
-const PREV_DIR = path.join(ROOT, 'assets', '.drinks-prev');
-const MAP_FILE = path.join(ROOT, 'src', 'data', 'drinkPhotos.ts');
-const TUNGSTEN = path.join(ROOT, 'scripts', 'lib', 'tungsten.py');
-/** Labels on the QA sheets, in the app's own face. */
-const QA_FONT = path.join(ROOT, 'assets', 'fonts', 'InterLatin_500Medium.ttf');
+const PROOF_SIZE = 256;
+const PROOF_QUALITY = 80;
 
-const GRADE = arg('--grade', 'on');
-if (GRADE !== 'on' && GRADE !== 'off') fail(`--grade takes on or off, not '${GRADE}'.`);
+const GRADE = arg('--grade', 'daylight');
+if (GRADE !== 'daylight' && GRADE !== 'off') fail(`--grade takes daylight or off, not '${GRADE}'.`);
 const QA_DIR = arg('--qa', null) ? path.resolve(arg('--qa', null)) : null;
 if (GRADE === 'off' && !QA_DIR) {
   fail('--grade off is a QA comparison, never a build: it needs --qa <dir> and writes nothing else.');
 }
 
-/* ---- The light ---- */
+/* ---- The gates (white spec §9) ---- */
 
 /**
- * The tungsten pool: the warm wall colour at the centre of the light, behind
- * the glass (grade.py's value). Not a theme token, because nothing in the app
- * draws it; it exists only inside the photographs.
+ * Measured by daylight.py on the 8-bit PNG of every photo, before encoding:
+ *   tintLeft    the most chroma (max − min channel, of 255) left on any wall
+ *               pixel, one the master has under chroma 14. FAILS over 0: a
+ *               tinted wall is a hue coming back onto a page that has none.
+ *   drinkShift  the largest change in HSV saturation on any drink pixel, one
+ *               the master has at chroma 40 or over. FAILS over 0: the drink
+ *               is the one thing the bake must not touch.
+ *   wallRange   the wall at the top (median of the top eighth) as a grey
+ *               level, against the spec's #C4 to #E2. Reported, never a
+ *               flag: the bake keeps each master's own brightness by design,
+ *               and the masters run #A9 to #E9, so a third of the set would
+ *               be marked for something no bake setting changes.
+ *
+ * And on the encoded WebP, which is what ships:
+ *   proofTint   chroma anywhere in a decoded proof. FAILS over 1: libwebp's
+ *               fixed-point YUV to RGB decodes a grey pixel with its channels
+ *               up to 1 apart (measured on every proof), so 1 is grey and 2 is
+ *               a tint.
+ *   wallTint    chroma of the decoded print's wall at the top. Flags over 1
+ *               for review: a warm seamless whose chroma sits on the ramp
+ *               (carajillo's measures 18) keeps a sliver of its tint by design,
+ *               and the gate shows where. A median, because 4:2:0 chroma lets
+ *               a drink's colour bleed a pixel or two into the wall beside it,
+ *               which is the encoder's and no tint at all.
  */
-const POOL = '#7C5642';
-/** Where the light pool sits, as a fraction of the frame. Every master centres its glass about here. */
-const POOL_CENTRE = { cx: 0.5, cy: 0.46 };
-
-/**
- * The two colours the bake must match, read from theme.ts with the regex
- * check-contrast.mjs uses:
- *   SETTLE   colors.liningDeep, the colour every lit photo meets at its
- *            edges, so the drink page's hero dissolves into its own ground
- *            with no seam;
- *   GHOST_HI colors.ghostHi, the highlight end of the ghost.
- * No fallback values: a guessed colour would bake the wrong edge into every
- * file and pass every check, so a missing token stops the build instead.
- */
-function themeColors(keys) {
-  const theme = fs.readFileSync(path.join(ROOT, 'src', 'constants', 'theme.ts'), 'utf8');
-  const from = theme.indexOf('export const colors = {');
-  const to = from < 0 ? -1 : theme.indexOf('} as const;', from);
-  if (from < 0 || to < 0) fail('cannot find `export const colors = {` … `} as const;` in src/constants/theme.ts.');
-  const found = {};
-  const seen = {};
-  for (const [, key, value] of theme.slice(from, to).matchAll(/(\w+):\s*'(#[0-9A-Fa-f]{6})'/g)) {
-    found[key] = value.toUpperCase();
-    seen[key] = (seen[key] ?? 0) + 1;
-  }
-  // The regex also matches a comment quoting a value ("was liningDeep: '#…'"),
-  // and the last match wins. Two candidates is a guess, so it stops too.
-  const twice = keys.filter((k) => seen[k] > 1);
-  if (twice.length) {
-    fail(
-      `${twice.map((k) => `colors.${k}`).join(' and ')} matched more than once in src/constants/theme.ts ` +
-        "(a comment quoting `key: '#RRGGBB'`?). Nothing was written.",
-    );
-  }
-  const missing = keys.filter((k) => !found[k]);
-  if (missing.length) {
-    fail(
-      `${missing.map((k) => `colors.${k}`).join(' and ')} not found as a plain '#RRGGBB' in src/constants/theme.ts.\n` +
-        '  The bake settles every photo to colors.liningDeep and maps each ghost up to colors.ghostHi;\n' +
-        '  both arrive with the v3 tokens. Nothing was written.',
-    );
-  }
-  return found;
-}
-
-const THEME_COLORS = themeColors(['liningDeep', 'ghostHi']);
-const SETTLE = THEME_COLORS.liningDeep;
-const GHOST_HI = THEME_COLORS.ghostHi;
-
-/**
- * The QA gates (spec §8.3), measured by tungsten.py on every photo.
- *   seam     max per-channel difference from SETTLE over the outer 1% ring,
- *            out of 255. The only gate that FAILS the build: the drink page's
- *            dissolve depends on it. Checked on the PNG and again on the
- *            encoded WebP, which is what ships.
- *   stray    share of the frame away from the light (pool < 0.25) brighter
- *            than twice the wall there: a patch still glowing.
- *   subject  p99 linear luminance inside the light's core: below it the
- *            drink has been crushed into the wall.
- *   ghost    luminance spread inside the core of the ghost: below it the
- *            impression is too faint to read.
- * The last three only flag a photo for review.
- */
-const GATES = { seam: 6, stray: 0.004, subject: 0.2, ghost: 0.05 };
-
-/**
- * Per-photo corrections to the bake, for a photo the QA review says is
- * wrong:
- *   cx, cy  move the light pool (fractions of the frame) onto a glass that
- *           does not stand at the centre;
- *   mode    'wash' for a photo whose backdrop mask fails: the mask-free
- *           wash alone, which can never leave a patch but dims clear glass.
- * Empty until a review names one.
- */
-const GRADE_OVERRIDES = {};
+const GATES = { tintLeft: 0, drinkShift: 0, wallRange: [0xc4, 0xe2], proofTint: 1, wallTint: 1 };
+/** The gates that stop the build. The rest only flag a photo for review. */
+const FAILS = new Set(['wall tint', 'drink saturation', 'proof tint']);
+/** "The wall at the top" is the median of the top 1/TOP of the frame, as daylight.py measures it. */
+const TOP = 8;
 
 /**
  * Where several takes exist, the default pick is the largest file. These are
@@ -354,18 +333,6 @@ for (const [id, list] of perDrink) {
 picks.sort((a, b) => a.drink.dexNumber - b.drink.dexNumber);
 if (picks.length === 0) fail('no photograph matched a dex entry; nothing to bake.');
 
-/* ---- Grade overrides: only real photos, only known knobs ---- */
-const picked = new Set(picks.map((p) => p.id));
-for (const [id, o] of Object.entries(GRADE_OVERRIDES)) {
-  if (!picked.has(id)) console.warn(`  ! GRADE_OVERRIDES['${id}'] names no photographed entry; ignored`);
-  for (const [k, v] of Object.entries(o)) {
-    const ok =
-      ((k === 'cx' || k === 'cy') && typeof v === 'number' && v >= 0 && v <= 1) ||
-      (k === 'mode' && (v === 'masked' || v === 'wash'));
-    if (!ok) fail(`GRADE_OVERRIDES['${id}'].${k} = ${JSON.stringify(v)}: cx and cy take 0..1, mode 'masked' or 'wash'.`);
-  }
-}
-
 /* ---- Bake: one Python run for every photo ---- */
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'drink-photos-'));
 // Runs on every exit, failures included, so neither scratch area outlives the build.
@@ -383,23 +350,22 @@ process.on('exit', () => {
 // fails the build through the child it reaches (python, cwebp), and a signal
 // node alone receives lands after the build has finished.
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => process.exit(130));
-fs.mkdirSync(path.join(tmp, 'lit'));
-fs.mkdirSync(path.join(tmp, 'ghost'));
+fs.mkdirSync(path.join(tmp, 'print'));
+fs.mkdirSync(path.join(tmp, 'proof'));
 
+// Hashed before the run, so the header names the file that actually baked.
+const BAKE_SHA = bakeHash();
 const job = {
-  colors: { settle: SETTLE, ghostHi: GHOST_HI, pool: POOL },
+  grade: GRADE,
   size: SIZE,
-  ghostSize: GHOST_SIZE,
-  grade: GRADE === 'on',
-  pool: POOL_CENTRE,
-  gates: GATES,
+  proofSize: PROOF_SIZE,
+  gates: { tintLeft: GATES.tintLeft, drinkShift: GATES.drinkShift },
   qa: QA_DIR ? { dir: QA_DIR, font: QA_FONT } : null,
   photos: picks.map((p) => ({
     id: p.id,
     master: p.png,
-    lit: path.join(tmp, 'lit', `${p.id}.png`),
-    ghost: path.join(tmp, 'ghost', `${p.id}.png`),
-    override: Object.prototype.hasOwnProperty.call(GRADE_OVERRIDES, p.id) ? GRADE_OVERRIDES[p.id] : null,
+    print: path.join(tmp, 'print', `${p.id}.png`),
+    proof: path.join(tmp, 'proof', `${p.id}.png`),
   })),
 };
 const jobFile = path.join(tmp, 'job.json');
@@ -407,13 +373,13 @@ fs.writeFileSync(jobFile, JSON.stringify(job, null, 1));
 
 const startedAt = Date.now();
 console.log(`baking ${picks.length} photographs${GRADE === 'off' ? ' (--grade off: masters as they are)' : ''}`);
-const run = spawnSync('python3', [TUNGSTEN, '--job', jobFile, '--out', tmp], { stdio: 'inherit' });
-if (run.status !== 0) fail(`scripts/lib/tungsten.py exited with ${run.status ?? run.signal}. Nothing was written.`);
-const metrics = JSON.parse(fs.readFileSync(path.join(tmp, 'metrics.json'), 'utf8'));
+const run = spawnSync('python3', [DAYLIGHT, '--job', jobFile, '--out', tmp], { stdio: 'inherit' });
+if (run.status !== 0) fail(`scripts/lib/daylight.py exited with ${run.status ?? run.signal}. Nothing was written.`);
+const { bake, photos: metrics } = JSON.parse(fs.readFileSync(path.join(tmp, 'metrics.json'), 'utf8'));
 
 /**
  * flags.json beside the contact sheets: every gate result, so the review can
- * see why a tile is amber and how close the rest came.
+ * see why a tile is flagged and how close the rest came.
  */
 function writeFlags() {
   if (!QA_DIR) return;
@@ -423,21 +389,14 @@ function writeFlags() {
   fs.writeFileSync(
     path.join(QA_DIR, 'flags.json'),
     JSON.stringify(
-      {
-        grade: GRADE === 'on' ? 'tungsten' : 'off',
-        colors: { settle: SETTLE, ghostHi: GHOST_HI, pool: POOL },
-        gates: GATES,
-        photos: picks.length,
-        flagged,
-        metrics,
-      },
+      { grade: GRADE, bake, daylightSha256: BAKE_SHA, gates: GATES, photos: picks.length, flagged, wallOutsideRange: outsideRange(), metrics },
       null,
       1,
     ),
   );
 }
 
-/** "3 of 162  (stray light 2, ghost 1)", from the metrics as they stand. */
+/** "3 of 162  (wall tint (webp) 2, proof tint 1)", from the metrics as they stand. */
 function flagSummary() {
   const counts = {};
   for (const m of Object.values(metrics)) for (const f of m.flags) counts[f] = (counts[f] ?? 0) + 1;
@@ -445,79 +404,124 @@ function flagSummary() {
   return `${n} of ${picks.length}` + (n ? `  (${Object.entries(counts).map(([k, c]) => `${k} ${c}`).join(', ')})` : '');
 }
 
+const hex2 = (n) => n.toString(16).toUpperCase().padStart(2, '0');
+/** Each photo whose wall at the top falls outside GATES.wallRange, darkest first: "saturn #A9A9A9". */
+function outsideRange() {
+  const [lo, hi] = GATES.wallRange;
+  return picks
+    .filter((p) => metrics[p.id].wallLevel < lo || metrics[p.id].wallLevel > hi)
+    .sort((a, b) => metrics[a.id].wallLevel - metrics[b.id].wallLevel)
+    .map((p) => `${p.id} ${metrics[p.id].wall}`);
+}
+/** "#A9 to #E9, 58 outside #C4 to #E2", the walls at the top as they stand. */
+function wallSummary() {
+  const levels = picks.map((p) => metrics[p.id].wallLevel);
+  const [lo, hi] = GATES.wallRange;
+  return `#${hex2(Math.min(...levels))} to #${hex2(Math.max(...levels))}, ${outsideRange().length} outside #${hex2(lo)} to #${hex2(hi)}`;
+}
+
+const worst = (key) => Math.max(...picks.map((p) => metrics[p.id][key]));
+const failing = () => picks.filter((p) => metrics[p.id].flags.some((f) => FAILS.has(f)));
+
 if (GRADE === 'off') {
   writeFlags();
-  console.log(`QA sheets          ${QA_DIR}  (ungraded masters; assets/ and src/ untouched)`);
+  console.log(`QA sheets          ${QA_DIR}  (masters as they are; assets/ and src/ untouched)`);
+  console.log(`wall at the top    ${wallSummary()}, tint up to ${worst('wallTint')}`);
+  console.log(`would fail         ${failing().length} of ${picks.length}  (most tint on a wall pixel ${worst('tintLeft')})`);
   console.log(`would be flagged   ${flagSummary()}`);
   process.exit(0);
 }
 
-/* ---- Encode, then check the seam on what ships ---- */
-fs.rmSync(STAGE_DIR, { recursive: true, force: true });
-fs.mkdirSync(path.join(STAGE_DIR, 'ghost'), { recursive: true });
+/** One photo per line under a failure, with the numbers that failed it. */
+const failLines = (list) =>
+  list
+    .map((p) => {
+      const m = metrics[p.id];
+      return `    ${p.id}  ${m.flags.filter((f) => FAILS.has(f)).join(', ')}  (tint left ${m.tintLeft}, drink shift ${m.drinkShift}${m.proofTintWebp === undefined ? '' : `, proof tint ${m.proofTintWebp}`})`;
+    })
+    .join('\n');
+const leftAsWas = '\n  assets/drinks and drinkPhotos.ts were left as they were.' + (QA_DIR ? `\n  See ${path.join(QA_DIR, 'flags.json')}.` : '');
 
-const settleRgb = [1, 3, 5].map((i) => parseInt(SETTLE.slice(i, i + 2), 16));
-
-/**
- * The seam gate's measure on an encoded WebP: the largest per-channel
- * difference from SETTLE over the outer 1% ring. Lossy encoding can move a
- * flat edge by a level or two, so the PNG passing is not enough on its own.
- * PAM is the interchange because dwebp speaks it and it needs no image
- * library: a text header, then raw samples.
- */
-function webpSeam(file) {
-  const pam = path.join(tmp, 'seam.pam');
-  execFileSync('dwebp', ['-quiet', file, '-pam', '-o', pam]);
-  const buf = fs.readFileSync(pam);
-  const end = buf.indexOf('ENDHDR\n') + 'ENDHDR\n'.length;
-  const head = buf.subarray(0, end).toString('latin1');
-  const field = (k) => Number(new RegExp(`^${k} (\\d+)$`, 'm').exec(head)[1]);
-  const [w, h, depth] = [field('WIDTH'), field('HEIGHT'), field('DEPTH')];
-  // The ring by pixel centres, as tungsten.py measures it: whole rows at the
-  // top and bottom, the side columns in between.
-  const inRing = (i, n) => Math.min((i + 0.5) / n, 1 - (i + 0.5) / n) < 0.01;
-  const sideCols = [];
-  for (let x = 0; x < w; x++) if (inRing(x, w)) sideCols.push(x);
-  let worst = 0;
-  for (let y = 0; y < h; y++) {
-    const cols = inRing(y, h) ? null : sideCols;
-    for (let k = 0, n = cols ? cols.length : w; k < n; k++) {
-      const i = end + (y * w + (cols ? cols[k] : k)) * depth;
-      for (let c = 0; c < 3; c++) worst = Math.max(worst, Math.abs(buf[i + c] - settleRgb[c]));
-    }
-  }
-  return worst;
+const bakeFailed = failing();
+if (bakeFailed.length) {
+  writeFlags();
+  fail(`${bakeFailed.length} photo(s) failed the bake's gates (wall tint ≤ ${GATES.tintLeft}, drink saturation shift ≤ ${GATES.drinkShift}):\n${failLines(bakeFailed)}${leftAsWas}`);
 }
 
-let litBytes = 0;
-let ghostBytes = 0;
-let worstSeam = 0;
+/* ---- Encode, then check what ships ---- */
+fs.rmSync(STAGE_DIR, { recursive: true, force: true });
+fs.mkdirSync(path.join(STAGE_DIR, 'proof'), { recursive: true });
+
+/**
+ * A decoded WebP's pixels. PAM is the interchange because dwebp speaks it and
+ * it needs no image library: a text header, then raw samples.
+ */
+function decode(file) {
+  const pam = path.join(tmp, 'check.pam');
+  execFileSync('dwebp', ['-quiet', file, '-pam', '-o', pam]);
+  const buf = fs.readFileSync(pam);
+  const start = buf.indexOf('ENDHDR\n') + 'ENDHDR\n'.length;
+  const head = buf.subarray(0, start).toString('latin1');
+  const field = (k) => Number(new RegExp(`^${k} (\\d+)$`, 'm').exec(head)[1]);
+  return { buf, start, w: field('WIDTH'), h: field('HEIGHT'), depth: field('DEPTH') };
+}
+
+/** The most chroma on any pixel. */
+function maxChroma({ buf, start, w, h, depth }) {
+  let most = 0;
+  for (let i = start, end = start + w * h * depth; i < end; i += depth) {
+    const r = buf[i];
+    const g = buf[i + 1];
+    const b = buf[i + 2];
+    most = Math.max(most, Math.max(r, g, b) - Math.min(r, g, b));
+  }
+  return most;
+}
+
+/**
+ * The wall at the top: each channel's median over the top 1/TOP of the
+ * frame, by histogram, averaging the two middle samples and rounding half
+ * up as numpy's median and daylight.py's rounding do, so the PNG's figure
+ * and the WebP's compare like for like.
+ */
+function topWall({ buf, start, w, h, depth }) {
+  const n = w * Math.max(1, Math.floor(h / TOP));
+  const hist = [new Uint32Array(256), new Uint32Array(256), new Uint32Array(256)];
+  for (let k = 0; k < n; k++) for (let c = 0; c < 3; c++) hist[c][buf[start + k * depth + c]]++;
+  const nth = (hh, rank) => {
+    for (let v = 0, seen = 0; v < 256; v++) if ((seen += hh[v]) > rank) return v;
+    return 255;
+  };
+  const med = hist.map((hh) => Math.floor((nth(hh, (n - 1) >> 1) + nth(hh, n >> 1)) / 2 + 0.5));
+  return { hex: `#${med.map(hex2).join('')}`, tint: Math.max(...med) - Math.min(...med) };
+}
+
+let printBytes = 0;
+let proofBytes = 0;
 for (const p of picks) {
-  const lit = path.join(STAGE_DIR, `${p.id}.webp`);
-  const ghost = path.join(STAGE_DIR, 'ghost', `${p.id}.webp`);
-  execFileSync('cwebp', ['-quiet', '-q', String(QUALITY), path.join(tmp, 'lit', `${p.id}.png`), '-o', lit]);
-  execFileSync('cwebp', ['-quiet', '-q', String(GHOST_QUALITY), path.join(tmp, 'ghost', `${p.id}.png`), '-o', ghost]);
-  litBytes += fs.statSync(lit).size;
-  ghostBytes += fs.statSync(ghost).size;
+  const print = path.join(STAGE_DIR, `${p.id}.webp`);
+  const proof = path.join(STAGE_DIR, 'proof', `${p.id}.webp`);
+  execFileSync('cwebp', ['-quiet', '-q', String(QUALITY), path.join(tmp, 'print', `${p.id}.png`), '-o', print]);
+  execFileSync('cwebp', ['-quiet', '-q', String(PROOF_QUALITY), path.join(tmp, 'proof', `${p.id}.png`), '-o', proof]);
+  printBytes += fs.statSync(print).size;
+  proofBytes += fs.statSync(proof).size;
   const m = metrics[p.id];
-  m.seamWebp = webpSeam(lit);
-  if (m.seamWebp > GATES.seam && !m.flags.includes('seam')) m.flags.push('seam');
-  worstSeam = Math.max(worstSeam, m.seam, m.seamWebp);
+  const wall = topWall(decode(print));
+  m.wallWebp = wall.hex;
+  m.wallTintWebp = wall.tint;
+  m.proofTintWebp = maxChroma(decode(proof));
+  if (m.wallTintWebp > GATES.wallTint) m.flags.push('wall tint (webp)');
+  if (m.proofTintWebp > GATES.proofTint) m.flags.push('proof tint');
 }
 writeFlags();
 
-const seamFailed = picks.filter((p) => metrics[p.id].flags.includes('seam'));
-if (seamFailed.length) {
-  fail(
-    `${seamFailed.length} photo(s) do not settle to ${SETTLE} at the edge (seam gate: ≤ ${GATES.seam}/255):\n` +
-      seamFailed.map((p) => `    ${p.id}  png ${metrics[p.id].seam}, webp ${metrics[p.id].seamWebp}`).join('\n') +
-      '\n  assets/drinks and drinkPhotos.ts were left as they were.' +
-      (QA_DIR ? `\n  See ${path.join(QA_DIR, 'flags.json')}.` : ''),
-  );
+const shipFailed = failing();
+if (shipFailed.length) {
+  fail(`${shipFailed.length} encoded proof(s) are not grey (proof tint ≤ ${GATES.proofTint}):\n${failLines(shipFailed)}${leftAsWas}`);
 }
 
 /*
- * ---- Swap the new set in whole (this also retires the old locked/ set) ----
+ * ---- Swap the new set in whole (anything it lacks, such as v3's ghost/, goes with the old) ----
  * Two renames, then the delete: removing 300-odd files first left a window
  * in which neither set was in assets/. If the second rename fails, the old
  * set goes back.
@@ -534,8 +538,8 @@ fs.rmSync(PREV_DIR, { recursive: true, force: true });
 
 /* ---- Static require map (Metro cannot resolve a dynamic require) ---- */
 const lines = picks.map((p) => `  '${p.id}': require('../../assets/drinks/${p.id}.webp'),`).join('\n');
-const ghostLines = picks
-  .map((p) => `  '${p.id}': require('../../assets/drinks/ghost/${p.id}.webp'),`)
+const proofLines = picks
+  .map((p) => `  '${p.id}': require('../../assets/drinks/proof/${p.id}.webp'),`)
   .join('\n');
 fs.writeFileSync(
   MAP_FILE,
@@ -543,14 +547,21 @@ fs.writeFileSync(
  * Photographs for dex entries that have one.
  *
  * GENERATED by scripts/build-drink-photos.mjs — do not edit by hand.
- * Coverage is partial (${picks.length} of ${drinks.length} entries); everything else falls
- * back to the procedural artwork in components/artwork.
+ * Coverage is partial (${picks.length} of ${drinks.length} entries); everything else shows the
+ * no-photo face (components/artwork/VectorFace).
  *
- * Every photograph is the tungsten re-light (specs/v3-cabinet.md §8): the
- * studio master re-lit as a drink in one warm pool of light, against a wall
- * that settles at every edge to colors.liningDeep (${SETTLE} when baked), so
- * a photo meets the cellar ground with no seam. If liningDeep changes, run
- * the script again: the edge colour is in the pixels.
+ * Every photograph is the daylight bake (specs/v4-mockups/white/spec.md §6):
+ * the studio master as shot, with only the wall neutralised. A pixel under
+ * chroma ${bake.onset} (the seamless, stone, glass, ice) keeps its luminance and loses
+ * its tint; one at ${bake.onset + bake.span} or over (the drink, the garnish) is the master's own
+ * pixel; a smoothstep runs between. So no wall brings a hue onto the page.
+ * The bake reads chroma, not place: a wooden counter is as coloured as a
+ * drink, so the dozen masters shot on wood keep their brown.
+ *
+ * The bake that made them (node scripts/build-drink-photos.mjs --check
+ * compares it with the repo's scripts/lib/daylight.py):
+ *   daylight.py sha256 ${BAKE_SHA}
+ * If that file changes, run the script again: the bake is in the pixels.
  *
  * The requires are written out one per line because Metro resolves them
  * statically at build time — a computed require path returns undefined.
@@ -560,31 +571,25 @@ ${lines}
 };
 
 /**
- * The ghost of each photograph: what a locked Dex slot shows. Baked from the
- * lit photo as an embossed impression running from liningDeep up to
- * colors.ghostHi (${GHOST_HI}), at ${GHOST_SIZE}px. Baked, not drawn at runtime,
- * because iOS does not run CSS filters on images.
+ * The "not yet" proof of each photograph, what a Dex cell shows before the
+ * catch: the same frame in black and white, lifted toward the wash
+ * (out = ${bake.proof.ceil} − (255 − Y) × ${bake.proof.gain}), at ${PROOF_SIZE}px. Baked, not drawn at
+ * runtime, because iOS does not run CSS filters on images.
  */
-const GHOST: Record<string, number> = {
-${ghostLines}
+const PROOFS: Record<string, number> = {
+${proofLines}
 };
 
-/** The lit photograph for a drink, or undefined when it has none. */
-export function drinkPhoto(id: string): number | undefined {
+/** The daylight print for a drink, or undefined when it has none. */
+export function photoFor(id: string): number | undefined {
   // Own keys only: a hostile id like 'constructor' must not resolve.
   return Object.prototype.hasOwnProperty.call(PHOTOS, id) ? PHOTOS[id] : undefined;
 }
 
-/** The ghost of drinkPhoto(id), for a locked slot, or undefined when there is no photograph. */
-export function drinkPhotoGhost(id: string): number | undefined {
-  return Object.prototype.hasOwnProperty.call(GHOST, id) ? GHOST[id] : undefined;
+/** The ${PROOF_SIZE}px "not yet" proof of photoFor(id), or undefined when there is no photograph. */
+export function proofFor(id: string): number | undefined {
+  return Object.prototype.hasOwnProperty.call(PROOFS, id) ? PROOFS[id] : undefined;
 }
-
-/**
- * @deprecated The locked face is now the ghost: use drinkPhotoGhost. Kept so
- * build 13's callers compile until they move over; removed in v3 stage 3.
- */
-export const drinkPhotoLocked = drinkPhotoGhost;
 
 /** How many entries ship with a photograph. */
 export const PHOTO_COUNT = ${picks.length};
@@ -622,14 +627,14 @@ if (manifestPath) {
 const mb = (n) => `${(n / 1024 / 1024).toFixed(1)} MB`;
 const covered = new Set(picks.map((p) => p.id));
 const cocktails = drinks.filter((d) => d.category === 'cocktail');
-const overridden = Object.keys(GRADE_OVERRIDES).filter((id) => picked.has(id));
 
 console.log(`source images      ${candidates.length}  (${mb(candidates.reduce((s, c) => s + c.bytes, 0))})`);
-console.log(`lit                ${picks.length} webp @ ${SIZE}px q${QUALITY}  (${mb(litBytes)})`);
-console.log(`ghost              ${picks.length} webp @ ${GHOST_SIZE}px q${GHOST_QUALITY}  (${mb(ghostBytes)})`);
-console.log(`settle             ${SETTLE} (colors.liningDeep)  worst seam ${worstSeam}/255, gate ${GATES.seam}`);
+console.log(`prints             ${picks.length} webp @ ${SIZE}px q${QUALITY}  (${mb(printBytes)})`);
+console.log(`proofs             ${picks.length} webp @ ${PROOF_SIZE}px q${PROOF_QUALITY}  (${mb(proofBytes)})`);
+console.log(`wall at the top    ${wallSummary()}; shipped tint up to ${worst('wallTintWebp')}`);
+console.log(`gates              tint left on a wall ${worst('tintLeft')}, drink saturation shift ${worst('drinkShift')}, proof tint ${worst('proofTintWebp')}`);
 console.log(`flagged            ${flagSummary()}${QA_DIR ? `  → ${path.join(QA_DIR, 'flags.json')}` : ''}`);
-if (overridden.length) console.log(`grade overrides    ${overridden.join(', ')}`);
+console.log(`daylight.py        sha256 ${BAKE_SHA}`);
 console.log(`duplicates dropped ${duplicatesDropped}`);
 if (overridesUsed.length) console.log(`overrides applied  ${overridesUsed.join(', ')}`);
 console.log(`cocktail coverage  ${cocktails.filter((c) => covered.has(c.id)).length} / ${cocktails.length}`);

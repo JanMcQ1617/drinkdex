@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter, useScrollToTop } from 'expo-router';
-import { useCallback, useRef, useState, type ReactElement, type ReactNode } from 'react';
+import { useCallback, useRef, useState, type ReactElement } from 'react';
 import {
   ActionSheetIOS,
   Alert,
@@ -12,19 +12,10 @@ import {
   View,
 } from 'react-native';
 
-import { DexPlaque, rungCounts } from '@/components/brass';
 import { EmptyArt } from '@/components/DexCard';
-import { Grain } from '@/components/Grain';
-import {
-  DexShelfRow,
-  DexSummary,
-  sharedByDexNumber,
-  sharedNumbers,
-  useCollectedNumbers,
-  type SharedDrink,
-} from '@/components/profile/DexShelf';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ProfileHeader, type ProfileActions } from '@/components/profile/ProfileHeader';
+import { AboutSheet } from '@/components/profile/AboutSheet';
 import { usePostsByAuthor } from '@/components/profile/usePostsByAuthor';
 import { useProfileCounts } from '@/components/profile/useProfileCounts';
 import { useProfileVideos, VideoGridRow } from '@/components/profile/VideoGrid';
@@ -37,74 +28,69 @@ import {
 } from '@/components/profile/videosSource';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { useTabScroll, type ChromeTab } from '@/components/ScrollChrome';
+import { ActionSheet, type SheetAction } from '@/components/Sheet';
 import { TabStrip, type TabStripItem } from '@/components/TabStrip';
 import { EmptyState, Hold, Notice } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
-import { formatCount, TOTAL } from '@/data';
-import { rankTitle } from '@/lib/milestones';
-import { shareProfile } from '@/lib/profileLink';
+import { formatCount } from '@/data';
+import { catalogueCount } from '@/lib/cabinet';
 import { fetchProfiles, isRenderablePost } from '@/lib/social';
 import { useAuth } from '@/store/auth';
+import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
 import type { Post, UserProfile } from '@/types';
 
 /* ==================================================================== */
 /* A profile: yours, or anyone's                                        */
 /*                                                                      */
-/* ONE BODY FOR BOTH. Your own profile shows what other people see when  */
-/* they open it, with your controls in place of theirs: Edit and Share   */
-/* where they have Follow, Settings where they have the account menu.    */
-/* Your private collection is not here; it is the Dex tab, one tap away  */
-/* from the Dex section below. Two screens drawn two ways had drifted    */
-/* into two designs (a grid on yours, full post cards on theirs).        */
+/* v4, less stuff (layout spec 5.5; 50 elements down to 31 at rest).    */
+/* Yours: the handle as the tab root's title with one ••• beside it,    */
+/* the face, name and one line of bio, the counts on one line, ONE key  */
+/* (Edit profile), "38 drinks in your Dex ›", then your posts as a grid */
+/* of plain square prints. Theirs (pushed): back in the bar, the same   */
+/* body with Follow in the key's slot and their ••• beside it.          */
 /*                                                                      */
-/* ONE LIST, ONE COLUMN. Posts are 3-up tiles, reels 3-up portrait       */
-/* tiles, Dex cards 2-up. FlatList's numColumns cannot change on a       */
-/* mounted list, so each section hands the list pre-chunked rows and the */
-/* list itself never has more than one column. The header and the tab  */
-/* strip are the list's header, so they scroll away with it; a sticky    */
-/* strip would mean splitting the header into rows, which our post       */
-/* counts do not justify.                                                */
+/* What went, and where (nothing is lost, it just isn't on screen):     */
+/*   + in the bar           the + tab                                   */
+/*   the gear               ••• › Settings                              */
+/*   Share profile          ••• › Share profile                         */
+/*   the Dex panel, ruler,  "38 drinks in your Dex ›" opens Dex         */
+/*   rank and ladder        progress (/stats), the Dex tab's count's    */
+/*                          page, with the same figure                  */
+/*   Posts | Dex strip      the grid is the posts; your caught drinks   */
+/*                          are on Dex progress › See your 38           */
+/*   plates on the grid     the post, and the drink page                */
+/*   the bio's 2nd line     ••• › About, and Edit profile               */
 /*                                                                      */
-/* TWO MATERIALS. You read a profile on paper (the head, the grid) and   */
-/* its drinks sit in the cabinet's lining: the Dex tab's rows of mounted */
-/* cards, which run on lining to the end of the list.                    */
+/* A peer's Dex line is not drawn. Their collection lives on their      */
+/* phone and never reaches the server, so the only honest figure is    */
+/* the drinks they have posted, one post per drink (migration 007):     */
+/* the posts count, already on screen (layout principle 7).             */
+/*                                                                      */
+/* ONE LIST, ONE COLUMN. Posts are 3-up rows handed to a one-column     */
+/* FlatList, with the header as its header, so everything scrolls as    */
+/* one. While Reels are flagged on, a Posts | Reels strip sits under    */
+/* the header (FlatList's numColumns cannot change on a mounted list,   */
+/* so each section hands the list pre-chunked rows).                    */
 /*                                                                      */
 /* Each section says what an empty list means: still loading (a Hold),  */
-/* could not load (Try again), or nothing there yet. A failed refetch    */
+/* could not load (Try again), or nothing there yet. A failed refetch   */
 /* over rows already shown keeps them and says so above them.           */
-/*                                                                      */
-/* THE DEX PLAQUE (v3.3 Brass D13). Between the buttons and the strip,  */
-/* walnut with a brass gauge: this person's Dex count, never the posts  */
-/* count (the mock's 64 against a Dex of 38, fix 10). Yours is your     */
-/* collection; a peer's is the drinks their Dex tab shows, from the     */
-/* posts already fetched, so it costs no request of its own.            */
 /* ==================================================================== */
 
-type Section = 'posts' | 'videos' | 'dex';
+type Section = 'posts' | 'videos';
 
 type Row =
   | { key: string; kind: 'posts'; posts: Post[] }
   | { key: string; kind: 'videos'; videos: ProfileVideo[] }
-  | { key: string; kind: 'dexSummary' }
-  | { key: string; kind: 'dex'; entries: SharedDrink[]; last: boolean }
   | { key: string; kind: 'state'; state: 'loading' | 'empty' | 'error' }
   | { key: string; kind: 'note'; text: string }
   | { key: string; kind: 'notice' };
 
-/*
- * Reels appear only while the feature's flag is on. Off, a profile has
- * two sections and the strip draws two tabs, not a third that leads to
- * nothing.
- *
- * Words, not glyphs: three outline icons (a grid, a clapper, a glass) were
- * Instagram's strip with Sipply's names spoken under them, and "Dex" says
- * what the tab is where a glass did not.
- */
+/* Only while Reels are on; off, there is one section and no strip at all. */
 const SECTIONS: readonly TabStripItem<Section>[] = [
   { key: 'posts', label: 'Posts' },
-  ...(SHOW_PROFILE_VIDEOS ? [{ key: 'videos' as const, label: VIDEO_COPY.label }] : []),
-  { key: 'dex', label: 'Dex' },
+  { key: 'videos', label: VIDEO_COPY.label },
 ];
 
 /*
@@ -115,12 +101,11 @@ type ScrollHandler = (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
 
 /*
  * Your own profile is a tab, so its list is that tab's scroll source
- * (ScrollChrome): scrolling down compacts the tab bar, and the top bar's
- * rule signal rides along as the source's listener. Someone else's is
- * pushed on the root stack, outside the ScrollChromeProvider, and keeps
- * the rule signal alone. A component rather than a branch in ProfileView,
- * because a hook cannot be called conditionally, and useTabScroll throws
- * with no provider above it.
+ * (ScrollChrome), and the top bar's rule signal rides along as the
+ * source's listener. Someone else's is pushed on the root stack, outside
+ * the ScrollChromeProvider, and keeps the rule signal alone. A component
+ * rather than a branch in ProfileView, because a hook cannot be called
+ * conditionally, and useTabScroll throws with no provider above it.
  */
 function TabScroll({
   tab,
@@ -133,28 +118,6 @@ function TabScroll({
 }) {
   const { onScroll } = useTabScroll(tab, listener);
   return children(onScroll);
-}
-
-/** "1.8%", "under 0.1%" or "0%": the plaque's printed share, for its spoken label. */
-function sharePhrase(count: number): string {
-  if (count <= 0) return '0%';
-  const p = (count / TOTAL) * 100;
-  return p < 0.1 ? 'under 0.1%' : `${p.toFixed(1)}%`;
-}
-
-/*
- * The plaque as ONE VoiceOver element, said the way it reads. Its parts
- * speak "in your Dex" on their own, which is wrong on someone else's
- * profile, where the drinks are the ones they have shared; one label over
- * the whole says whose it is, and is one swipe instead of three.
- */
-function plaqueLabel(count: number, isOwn: boolean, name: string): string {
-  const whose = isOwn ? 'Your Dex' : `${name}'s Dex, from the drinks they have shared`;
-  const next = count > 0 ? rungCounts(TOTAL).find((r) => r.count > count) : undefined;
-  const ahead = next
-    ? ` ${formatCount(next.count - count)} more to ${next.title}, at ${formatCount(next.count)}.`
-    : '';
-  return `${whose}: ${formatCount(count)} of ${formatCount(TOTAL)}, ${sharePhrase(count)}. Rank: ${rankTitle(count, TOTAL)}.${ahead}`;
 }
 
 /** What a section's rows are, from what its fetch has said so far. */
@@ -177,11 +140,24 @@ function sectionRows<T>(
   return [...notice, ...toRows(items)];
 }
 
+/**
+ * Every catalogue drink in your collection: the figure the Dex tab's count
+ * and Dex progress show, so "38 drinks in your Dex" opens a page that says
+ * 38 too. catalogueCount skips an id this build no longer has.
+ *
+ * The count is the selector, not the map: a pour's photo or note changing
+ * leaves the number as it was, so the whole profile list does not
+ * re-render for it (the Dex tab subscribes the same way).
+ */
+function useDexCount(): number {
+  return useCollection((s) => catalogueCount(s.unlocks));
+}
+
 export function ProfileView({
   person,
   isOwn,
-  left,
-  right,
+  menu,
+  menuHeader,
   onBack,
   onBlocked,
   bottomInset,
@@ -189,25 +165,31 @@ export function ProfileView({
 }: {
   person: UserProfile;
   isOwn: boolean;
-  /** Your profile's left control (Post a drink). Someone else's gets Back from `onBack`. */
-  left?: ReactNode;
-  /** Settings on yours, the account menu on theirs. */
-  right?: ReactNode;
+  /**
+   * The ••• sheet's rows. Handed the About row, so each caller places it:
+   * yours ends with it (Share, Settings, Tournaments, About), theirs keeps
+   * it beside Share, above Report and Block. Absent: no ••• (signed out).
+   */
+  menu?: (about: SheetAction) => SheetAction[];
+  /** The sheet's small header line (theirs: the display name). */
+  menuHeader?: string;
+  /** Someone else's profile: the bar's back chevron. */
   onBack?: () => void;
   /** Someone else's profile: they were blocked from a screen pushed over this one. */
   onBlocked?: () => void;
-  /** Clears the floating tab bar on yours, the home indicator on theirs. */
+  /** Clears the tab bar on yours, the home indicator on theirs. */
   bottomInset: number;
   /**
-   * The tab this profile is the main list of (yours: 'profile'), so its
-   * scroll drives the tab bar. Left off for a pushed profile, which has no
-   * tab bar to drive and no ScrollChromeProvider above it.
+   * The tab this profile is the main list of (yours: 'profile'). Left off
+   * for a pushed profile, which has no ScrollChromeProvider above it.
    */
   chromeTab?: ChromeTab;
 }) {
   const router = useRouter();
   const myId = useAuth((s) => s.session?.user.id);
   const [scrolled, onScroll] = useScrolledPast();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   /*
    * Tapping the Profile tab while on it returns the list to the top. Only
@@ -237,6 +219,7 @@ export function ProfileView({
     SHOW_PROFILE_VIDEOS && videosOpened,
     String(videosVersion),
   );
+  const dexCount = useDexCount();
 
   const followingIds = useSocial((s) => s.following);
   const loadingFeed = useSocial((s) => s.loadingFeed);
@@ -287,11 +270,7 @@ export function ProfileView({
   const followers =
     counts.followers === null || isOwn || counts.followedAtCount === null
       ? counts.followers
-      : Math.max(
-          0,
-          counts.followers +
-            (iFollow === counts.followedAtCount ? 0 : iFollow ? 1 : -1),
-        );
+      : Math.max(0, counts.followers + (iFollow === counts.followedAtCount ? 0 : iFollow ? 1 : -1));
 
   /*
    * Your own following is the store's list, which every follow and
@@ -338,11 +317,15 @@ export function ProfileView({
     ]);
   };
 
+  const menuActions = menu ? menu({ label: 'About', onPress: () => setAboutOpen(true) }) : null;
+  const openMenu = menuActions ? () => setMenuOpen(true) : undefined;
+
   const actions: ProfileActions = isOwn
     ? {
         kind: 'own',
         onEdit: () => router.push('/edit-profile'),
-        onShare: () => shareProfile(person),
+        dexCount,
+        onOpenDex: () => router.push('/stats'),
       }
     : {
         kind: 'peer',
@@ -354,6 +337,7 @@ export function ProfileView({
           }
         },
         onUnfollow: confirmUnfollow,
+        onMore: openMenu,
       };
 
   const selectSection = (next: Section) => {
@@ -363,28 +347,17 @@ export function ProfileView({
 
   /* ---- Rows ---- */
 
-  // Every list of posts drops the ones PostCard would draw as nothing.
+  // Every list of posts drops the ones the post screen would draw as nothing.
   const shown = posts.posts.filter(isRenderablePost);
   const pageOnly = posts.total !== null && posts.total > posts.posts.length;
-  // The Dex tab's entries, worked out once for its rows and the plaque.
-  const shared = sharedByDexNumber(shown);
-
-  /*
-   * The plaque's Dex numbers. Yours are always known (the collection is
-   * on this phone, read before the splash lifts). A peer's are known once
-   * their posts have answered, or rows are held over a failed refetch;
-   * before that there is no plaque, rather than a 0 that then jumps.
-   */
-  const collectedNumbers = useCollectedNumbers();
-  const peerKnown = posts.status === 'ready' || shown.length > 0;
-  const plaqueNumbers = isOwn ? collectedNumbers : peerKnown ? sharedNumbers(shared) : null;
 
   const rows: Row[] =
-    section === 'posts'
-      ? sectionRows('posts', posts.status, shown, (items) => [
-          ...chunk(items, 3).map(
-            (r): Row => ({ key: `posts:${r[0]!.id}`, kind: 'posts', posts: r }),
-          ),
+    section === 'videos'
+      ? sectionRows('videos', videos.status, videos.videos, (items) =>
+          chunk(items, 3).map((r): Row => ({ key: `videos:${r[0]!.id}`, kind: 'videos', videos: r })),
+        )
+      : sectionRows('posts', posts.status, shown, (items) => [
+          ...chunk(items, 3).map((r): Row => ({ key: `posts:${r[0]!.id}`, kind: 'posts', posts: r })),
           ...(pageOnly && posts.total !== null
             ? [
                 {
@@ -394,29 +367,7 @@ export function ProfileView({
                 },
               ]
             : []),
-        ])
-      : section === 'videos'
-        ? sectionRows('videos', videos.status, videos.videos, (items) =>
-            chunk(items, 3).map(
-              (r): Row => ({ key: `videos:${r[0]!.id}`, kind: 'videos', videos: r }),
-            ),
-          )
-        : sectionRows('dex', posts.status, shared, (items) => {
-            const pairs = chunk(items, 2);
-            return [
-              { key: 'dex:summary', kind: 'dexSummary' },
-              ...pairs.map(
-                (r, i): Row => ({
-                  key: `dex:${r[0]!.drink.id}`,
-                  kind: 'dex',
-                  entries: r,
-                  last: i === pairs.length - 1,
-                }),
-              ),
-            ];
-          });
-  // The Dex tab's rows are lining; the list's foot carries it under the tab bar.
-  const liningFoot = rows.some((r) => r.kind === 'dex');
+        ]);
 
   const reloadSection = section === 'videos' ? videos.reload : posts.reload;
 
@@ -425,13 +376,7 @@ export function ProfileView({
       return (
         <Hold
           fill={false}
-          slowMessage={
-            section === 'videos'
-              ? VIDEO_COPY.loadingSlow
-              : section === 'dex'
-                ? 'Still loading this Dex.'
-                : 'Still loading posts.'
-          }
+          slowMessage={section === 'videos' ? VIDEO_COPY.loadingSlow : 'Still loading posts.'}
         />
       );
     }
@@ -439,13 +384,7 @@ export function ProfileView({
       return (
         <EmptyState
           icon="alert"
-          title={
-            section === 'videos'
-              ? VIDEO_COPY.profileErrorTitle
-              : section === 'dex'
-                ? 'Could not load this Dex'
-                : 'Could not load posts'
-          }
+          title={section === 'videos' ? VIDEO_COPY.profileErrorTitle : 'Could not load posts'}
           body="Check your connection and try again."
           action={{ label: 'Try again', onPress: reloadSection }}
           actionVariant="secondary"
@@ -454,7 +393,7 @@ export function ProfileView({
     }
     /*
      * Empty. On someone else's profile there is no action: the next step
-     * is the Follow already in the header, so a second button would be a
+     * is the Follow already in the header, so a second key would be a
      * second control for one decision.
      */
     const u = `@${person.username}`;
@@ -470,32 +409,13 @@ export function ProfileView({
         <EmptyState icon="reels" title={VIDEO_COPY.emptyTitle} body={VIDEO_COPY.profileEmptyPeerBody} />
       );
     }
-    if (section === 'dex') {
-      return isOwn ? (
-        <EmptyState
-          icon="dex"
-          title="Nothing shared yet"
-          body="Drinks you share land here in Dex order."
-          action={{ label: 'Post a drink', onPress: () => router.navigate('/log') }}
-        />
-      ) : (
-        <EmptyState
-          icon="dex"
-          title="Nothing in their Dex yet"
-          body={`Drinks ${u} shares land here in Dex order.`}
-        />
-      );
-    }
     /*
      * "Drinks you share", not "every drink you add": Save to Dex collects
      * without posting, so that promise would be false for anyone who has
-     * used it.
+     * used it. A real drink's print where a first post will go: the
+     * screen that should sell the habit showed a bare camera glyph.
      */
     return isOwn ? (
-      /*
-       * A real drink, mounted, where a first post will go: the screen that
-       * should sell the habit showed a bare camera glyph.
-       */
       <EmptyState
         art={<EmptyArt drinkId="negroni" />}
         title="Post your first drink"
@@ -513,10 +433,6 @@ export function ProfileView({
         return <PostGridRow posts={item.posts} />;
       case 'videos':
         return <VideoGridRow videos={item.videos} />;
-      case 'dexSummary':
-        return <DexSummary posts={shown} isOwn={isOwn} pageOnly={pageOnly} />;
-      case 'dex':
-        return <DexShelfRow entries={item.entries} last={item.last} />;
       case 'note':
         return <Text style={styles.note}>{item.text}</Text>;
       case 'notice':
@@ -531,9 +447,9 @@ export function ProfileView({
   };
 
   /*
-   * A pull reloads everything the screen shows: the posts (which the Dex
-   * section is drawn from), the counts, and the reels once they have been
-   * opened. The posts are the spinner; the others show their own states.
+   * A pull reloads everything the screen shows: the posts, the counts, and
+   * the reels once they have been opened. The posts are the spinner; the
+   * others show their own states.
    */
   const onRefresh = () => {
     posts.reload();
@@ -542,12 +458,12 @@ export function ProfileView({
   };
 
   /*
-   * The strip sits 12pt under the plaque's paper line (the mock's 10, on
-   * the scale), and keeps its 16pt below the actions while a peer's Dex
-   * is unknown: the line already carries air of its own, the buttons none.
+   * Under the header: 12 from the Dex line's 44pt row to the first row of
+   * prints on yours (the grid at y 386), 24 from the key on theirs, where
+   * the key is the header's last thing.
    */
   const header = (
-    <>
+    <View style={isOwn ? styles.headOwn : styles.headPeer}>
       <ProfileHeader
         person={person}
         posts={postsCount}
@@ -556,21 +472,10 @@ export function ProfileView({
         onOpenList={openList}
         actions={actions}
       />
-      {plaqueNumbers ? (
-        <View
-          accessible
-          accessibilityLabel={plaqueLabel(plaqueNumbers.length, isOwn, person.displayName)}
-          style={styles.plaque}>
-          <DexPlaque caught={plaqueNumbers} total={TOTAL} />
-        </View>
+      {SHOW_PROFILE_VIDEOS ? (
+        <TabStrip items={SECTIONS} value={section} onChange={selectSection} style={styles.tabs} />
       ) : null}
-      <TabStrip
-        items={SECTIONS}
-        value={section}
-        onChange={selectSection}
-        style={plaqueNumbers ? styles.tabsUnderPlaque : styles.tabs}
-      />
-    </>
+    </View>
   );
 
   const list = (scrollHandler: ScrollHandler) => (
@@ -580,58 +485,50 @@ export function ProfileView({
       keyExtractor={(row) => row.key}
       renderItem={renderRow}
       ListHeaderComponent={header}
-      /*
-       * Under the Dex tab's rows the lining runs on to the end: past the
-       * tab bar's clearance, and down to the screen's foot when a short
-       * Dex leaves room, rather than stopping at the last card's ledge.
-       */
-      ListFooterComponent={
-        liningFoot ? (
-          <View style={[styles.liningFoot, { minHeight: bottomInset }]}>
-            <Grain tone="lining" />
-          </View>
-        ) : null
-      }
-      ListFooterComponentStyle={liningFoot ? styles.grow : undefined}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       refreshing={posts.reloading || (section === 'videos' && videos.reloading)}
       onRefresh={onRefresh}
       /*
-       * A row of tiles is a third of a screen tall, so six rows cover
-       * the first screen. Five screens mounted, not seven: each row of
-       * tiles holds about 2.3 MB of decoded photos, and the two screens
-       * dropped are about 13 rows, 30 MB (specs/v3-cabinet.md section
-       * 11). No removeClippedSubviews, which can blank a whole list on
-       * iOS (specs/06).
+       * A row of tiles is about a third of a screen's width tall, so six
+       * rows cover the first screen. Five screens mounted: each row of
+       * tiles holds decoded photos, and the screens dropped are the
+       * memory saved (specs/v3-cabinet.md section 11). No
+       * removeClippedSubviews, which can blank a whole list on iOS
+       * (specs/06).
        */
       initialNumToRender={6}
       windowSize={5}
-      // Transparent, so the screen's grain shows through between tiles.
       style={styles.list}
-      contentContainerStyle={liningFoot ? styles.grow : { paddingBottom: bottomInset }}
+      contentContainerStyle={{ paddingBottom: bottomInset }}
       showsVerticalScrollIndicator={false}
     />
   );
 
   return (
     <View style={styles.screen}>
-      <Grain />
       {/*
-        The bare username, centred: no @, no lock and no chevron, because
-        there is no account switcher for a chevron to promise. The display
-        name is in the header below.
+        The bare username: no @, no lock and no chevron, because there is
+        no account switcher for a chevron to promise. Yours is a tab root,
+        the title set left with the ••• at the far gutter; theirs is
+        pushed, back and a centred title, its ••• in the body.
       */}
-      <ScreenTopBar
-        size="lg"
-        title={person.username}
-        left={
-          left ??
-          (onBack ? <TopBarButton icon="chevronLeft" label="Back" onPress={onBack} /> : undefined)
-        }
-        right={right}
-        showRule={scrolled}
-      />
+      {isOwn ? (
+        <ScreenTopBar
+          size="lg"
+          title={person.username}
+          right={
+            openMenu ? <TopBarButton icon="more" label="Profile options" onPress={openMenu} /> : undefined
+          }
+          showRule={scrolled}
+        />
+      ) : (
+        <ScreenTopBar
+          title={person.username}
+          left={onBack ? <TopBarButton icon="chevronLeft" label="Back" onPress={onBack} /> : undefined}
+          showRule={scrolled}
+        />
+      )}
       {chromeTab ? (
         <TabScroll tab={chromeTab} listener={onScroll}>
           {list}
@@ -639,6 +536,15 @@ export function ProfileView({
       ) : (
         list(onScroll)
       )}
+      {menuActions ? (
+        <ActionSheet
+          visible={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          header={menuHeader}
+          actions={menuActions}
+        />
+      ) : null}
+      <AboutSheet person={person} visible={aboutOpen} onClose={() => setAboutOpen(false)} />
     </View>
   );
 }
@@ -646,15 +552,13 @@ export function ProfileView({
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
-  // In the header's gutters, 12pt under the buttons (the mock's spacing).
-  plaque: { marginHorizontal: layout.gutter, marginTop: space.md },
-  // Full width, outside the gutters: the rule runs edge to edge under the header.
-  tabs: { marginTop: space.lg },
-  tabsUnderPlaque: { marginTop: space.md },
-  liningFoot: { flexGrow: 1, backgroundColor: colors.lining },
-  grow: { flexGrow: 1 },
+  // With PostGridRow's own 8 above each row: 12 on yours, 24 on theirs.
+  headOwn: { paddingBottom: space.xs },
+  headPeer: { paddingBottom: space.lg },
+  // Full width, outside the gutters: the strip's rule runs edge to edge.
+  tabs: { marginTop: space.md },
   note: {
-    ...textRole.helper,
+    ...textRole.small,
     color: colors.textMuted,
     paddingHorizontal: layout.gutter,
     paddingTop: space.lg,

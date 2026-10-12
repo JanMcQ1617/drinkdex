@@ -218,89 +218,39 @@ export function artFootprint(drink: Drink): ArtFootprint {
 /* DrinkArt                                                             */
 /* ==================================================================== */
 
-/**
- * Which ground the glass is drawn for.
- *
- *   paper   ink strokes for a light ground: the drawing every surface had
- *           before v3, and still the default
- *   lit     the glass in a lit back-bar window on the lining (VectorFace):
- *           bone strokes, the pour in its own colour
- *   deboss  a locked slot: the same glass blind-stamped into the recess, in
- *           the drink's own hue at a fraction of its strength, so the 1,927
- *           unphotographed slots are not one ink in 21 outlines
- */
-export type ArtFace = 'paper' | 'lit' | 'deboss';
-
 export interface DrinkArtProps {
   drink: Drink;
   size?: number;
-  /** Default `paper`. */
-  face?: ArtFace;
-  /**
-   * Paper face only: the vessel as a black-ink silhouette, form readable,
-   * colour withheld. The old "not yet collected" state.
-   *
-   * @deprecated Use `face="deboss"`. Kept until stage 3 deletes it.
-   */
-  locked?: boolean;
-  /** Hides the soft radial ground shadow (paper face only; the others never draw it). */
+  /** Hides the soft radial ground shadow. */
   flat?: boolean;
 }
 
-/*
- * Lit and deboss strokes are specified in screen points, so they convert to
- * viewBox units per size: the viewBox is 100 wide, drawn `size` points wide.
- * A fixed viewBox width, as the paper face uses, thins to a hairline in a
- * 44pt thumbnail and thickens on a drink hero. Under 48pt of art the
- * points scale down by STROKE_SMALL: a 1.6pt line on a glass 10pt wide is
- * most of the glass.
- */
-const STROKE_SMALL = 0.625;
-const SMALL_ART = 48;
-
-/** Bone, for the lit glass: the mockup's stroke on the lining. */
-const LIT_STROKE = 'rgba(255, 253, 249, 0.82)';
 /**
- * The empty part of a lit glass. Without a body tint the glass above the
- * pour is a bare outline on a dark field and reads as a drawing of a glass
- * rather than a glass (After hours' lit face carries the same 6%).
+ * A drawn glass with its pour, in ink strokes for a light ground: the reel
+ * viewer's and tag sheet's small drink marks (Reels is flagged off). The
+ * Dex's no-photo face is GlassOutline, below, which has no pour: in
+ * Daylight a photograph is the only colour a drink earns.
  */
-const LIT_BODY = 'rgba(255, 253, 249, 0.06)';
-
-export const DrinkArt = React.memo(function DrinkArt({
-  drink,
-  size = 96,
-  face = 'paper',
-  locked = false,
-  flat = false,
-}: DrinkArtProps) {
+export const DrinkArt = React.memo(function DrinkArt({ drink, size = 96, flat = false }: DrinkArtProps) {
   const shape = resolveShape(drink);
   const def = SHAPES[shape];
-
-  if (face === 'lit' || face === 'deboss') {
-    return <ShadedArt drink={drink} def={def} size={size} face={face} />;
-  }
 
   /*
    * Keyed by drink, not by glass. The pour colour is per drink, and on web
    * every SVG id shares one document namespace, so an id per shape let
-   * every collected coupe on screen resolve to whichever pour mounted
-   * first — an Aviation and a Daiquiri both violet. Two sizes of the same
-   * drink sharing an id is harmless: the gradient is in bounding-box units
-   * and the colour is the same.
+   * every coupe on screen resolve to whichever pour mounted first.
    */
-  const gradId = `g-${drink.id}-${locked ? 'l' : 'u'}`;
-
-  const pour = locked ? colors.lockInkSoft : liquidColor(drink);
-  const glassStroke = locked ? colors.lockInk : 'rgba(43, 35, 34, 0.55)';
-  const garnish = locked ? null : resolveGarnish(drink);
+  const gradId = `g-${drink.id}`;
+  const pour = liquidColor(drink);
+  const glassStroke = 'rgba(10, 10, 10, 0.55)';
+  const garnish = resolveGarnish(drink);
 
   return (
     <Svg width={size} height={size * (112 / 100)} viewBox="0 0 100 112" fill="none">
       <Defs>
         {/* Depth in the pour — flat fill reads as clip art. */}
         <LinearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor={pour} stopOpacity={locked ? 0.92 : 0.82} />
+          <Stop offset="0" stopColor={pour} stopOpacity={0.82} />
           <Stop offset="1" stopColor={pour} stopOpacity={1} />
         </LinearGradient>
       </Defs>
@@ -309,14 +259,7 @@ export const DrinkArt = React.memo(function DrinkArt({
 
       <Path d={def.liquid} fill={`url(#${gradId})`} />
 
-      <Path
-        d={def.vessel}
-        stroke={glassStroke}
-        strokeWidth={2.2}
-        strokeLinejoin="round"
-        fill={locked ? colors.lockInk : 'none'}
-        fillOpacity={locked ? 0.18 : 0}
-      />
+      <Path d={def.vessel} stroke={glassStroke} strokeWidth={2.2} strokeLinejoin="round" fill="none" />
 
       {def.parts?.map((d, i) => (
         <Path
@@ -326,21 +269,12 @@ export const DrinkArt = React.memo(function DrinkArt({
           strokeWidth={2.2}
           strokeLinecap="round"
           strokeLinejoin="round"
-          fill={locked ? colors.lockInk : 'none'}
-          fillOpacity={locked ? 0.18 : 0}
+          fill="none"
         />
       ))}
 
       {/* Specular highlight — the single detail that sells it as glass. */}
-      {!locked && (
-        <Path
-          d={def.vessel}
-          stroke="rgba(255,255,255,0.75)"
-          strokeWidth={0.9}
-          fill="none"
-          opacity={0.5}
-        />
-      )}
+      <Path d={def.vessel} stroke="rgba(255,255,255,0.75)" strokeWidth={0.9} fill="none" opacity={0.5} />
 
       {garnish && def.garnishAt && (
         <Garnish kind={garnish} x={def.garnishAt.x} y={def.garnishAt.y} tint={pour} />
@@ -350,96 +284,33 @@ export const DrinkArt = React.memo(function DrinkArt({
 });
 
 /**
- * The lit and deboss faces. One component for both because they share the
- * point-to-unit conversion and the vessel-plus-parts loop; what differs is
- * which strokes each pass draws.
+ * The no-photo face's glass (white spec 6.3): the drink's own glassware as
+ * an outline, `stroke` points wide whatever its size, in one colour (the
+ * caller passes colors.lineControl), with no pour, no garnish and no
+ * light. 1,927 drinks have no photograph; caught and not yet share this
+ * face, and the name style beside it tells them apart.
  */
-function ShadedArt({
+export const GlassOutline = React.memo(function GlassOutline({
   drink,
-  def,
   size,
-  face,
+  color,
+  stroke = 1.4,
 }: {
   drink: Drink;
-  def: (typeof SHAPES)[GlassShape];
   size: number;
-  face: 'lit' | 'deboss';
+  color: string;
+  stroke?: number;
 }) {
-  const pour = liquidColor(drink);
-  const k = size < SMALL_ART ? STROKE_SMALL : 1;
-  /** viewBox units for `pt` screen points at this size. */
-  const u = (pt: number) => (pt * k * 100) / size;
-  const outlines = [def.vessel, ...(def.parts ?? [])];
-  const round = { strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
-
-  if (face === 'deboss') {
-    /*
-     * Blind-stamped: a shadow under the lower edge, the outline in the
-     * drink's own hue at 30%, and a light catch on the upper edge, the way
-     * a pressed impression catches a raking light. No garnish and no
-     * specular: an impression has neither. The pour at 22% gives every
-     * locked slot its own colour (debossLight's floor over the cellar is
-     * asserted in check-contrast so the stamp never vanishes).
-     */
-    return (
-      <Svg width={size} height={size * (112 / 100)} viewBox="0 0 100 112" fill="none">
-        <Path d={def.liquid} fill={pour} fillOpacity={0.22} />
-        <G transform={`translate(0 ${u(1)})`}>
-          {outlines.map((d, i) => (
-            <Path key={i} d={d} stroke={colors.debossShadow} strokeWidth={u(1.6)} {...round} />
-          ))}
-        </G>
-        {outlines.map((d, i) => (
-          <Path
-            key={i}
-            d={d}
-            stroke={pour}
-            strokeOpacity={0.3}
-            strokeWidth={u(1.2)}
-            {...round}
-          />
-        ))}
-        <G transform={`translate(0 ${-u(0.5)})`}>
-          {outlines.map((d, i) => (
-            <Path key={i} d={d} stroke={colors.debossLight} strokeWidth={u(1.4)} {...round} />
-          ))}
-        </G>
-      </Svg>
-    );
-  }
-
-  /* Same per-drink id rule as the paper face, with the face in the key. */
-  const gradId = `g-${drink.id}-lit`;
-  const garnish = resolveGarnish(drink);
-
+  const def = SHAPES[resolveShape(drink)];
+  // viewBox units for `stroke` screen points at this size: the viewBox is 100 wide, drawn `size` wide.
+  const w = (stroke * 100) / Math.max(size, 1);
   return (
     <Svg width={size} height={size * (112 / 100)} viewBox="0 0 100 112" fill="none">
-      <Defs>
-        <LinearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor={pour} stopOpacity={0.82} />
-          <Stop offset="1" stopColor={pour} stopOpacity={1} />
-        </LinearGradient>
-      </Defs>
-
-      <Path d={def.vessel} fill={LIT_BODY} />
-      <Path d={def.liquid} fill={`url(#${gradId})`} />
-
-      {outlines.map((d, i) => (
-        <Path key={i} d={d} stroke={LIT_STROKE} strokeWidth={u(1.6)} {...round} />
-      ))}
-
-      {/* The paper face's specular, kept: it is the detail that sells glass. */}
-      <Path
-        d={def.vessel}
-        stroke="rgba(255,255,255,0.75)"
-        strokeWidth={0.9}
-        fill="none"
-        opacity={0.5}
-      />
-
-      {garnish && def.garnishAt && (
-        <Garnish kind={garnish} x={def.garnishAt.x} y={def.garnishAt.y} tint={pour} />
-      )}
+      <G stroke={color} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" fill="none">
+        {[def.vessel, ...(def.parts ?? [])].map((d, i) => (
+          <Path key={i} d={d} />
+        ))}
+      </G>
     </Svg>
   );
-}
+});

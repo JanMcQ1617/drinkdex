@@ -2,7 +2,7 @@
  * Design-system guard.
  *
  * Sixteen rules for mistakes that were made across the app before the
- * redesigns, or that the v3 cabinet depends on never making, and that
+ * redesigns, or that v4 Daylight depends on never making, and that
  * regress easily:
  *   1. No emoji used as UI. They render in the system font, so weight and
  *      color can't be themed, and they read as placeholder art.
@@ -20,16 +20,18 @@
  *   7. Nothing under 11pt. See FLOOR.
  *   8. No tracked words, no capitals typed into copy, and a drink's style
  *      is shown in sentence case. See TRACKING.
- *   9. Every expo-image <Image> decodes at the size it is drawn. See IMAGE.
- *  10. A screen stands on one of the app's grounds. See GROUNDS.
+ *   9. Every expo-image <Image> decodes at the size it is drawn, and is
+ *      left alone by Smart Invert. See IMAGE.
+ *  10. A screen stands on the page (or the reel ground). See GROUNDS.
  *  11. Nothing drawn over a photograph but `onMedia`. See MEDIA.
  *  12. Shadows come from `elevation`. See SHADOW.
  *  13. A gradient stop states its own opacity. See STOP.
  *  14. Nothing reads or says rarity, which v3.1 removed. See RARITY.
  *  15. No timed React Native animation: chrome motion is scroll-linked.
  *      See TIMED.
- *  16. Brass is metal, not ink: the four metal tokens are never a text
- *      colour, and the Dex number's sign is U+00BA, never U+2116. See METAL.
+ *  16. Edges are not ink: the decorative greys are never a text colour,
+ *      the control grey is a glyph's or an edge's, and the Dex number's
+ *      sign is U+00BA, never U+2116. See EDGE_INK.
  *
  * Comments are stripped before any rule runs, block comments included,
  * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5 read
@@ -53,7 +55,7 @@ const ROOT = new URL('../src/', import.meta.url).pathname;
 
 /** Files allowed to define raw color values or emoji, and why. */
 const ALLOW = {
-  'constants/theme.ts': 'defines the palette itself; drinkGlyph is deprecated',
+  'constants/theme.ts': 'defines the palette itself',
   'components/artwork/liquid.ts': 'defines the LIQUID pour palette',
   'components/artwork/index.tsx': 'defines garnish tints (olive, cherry, citrus)',
   'components/SipplyIntro.tsx': 'exact port of the brand intro timeline',
@@ -139,20 +141,7 @@ const CAPS_TRANSFORM = {
  *    (`fontFamily: textRole.nameLg.fontFamily` on a count), so none of
  *    those routes gets round the rule.
  */
-const NAME_ROLES = [
-  'wordmark',
-  'wordmarkLg',
-  'drinkHero',
-  'nameplate',
-  'nameLg',
-  'shelfName',
-  'rowName',
-  'cardName',
-  'printName',
-  'miniName',
-  'tileName',
-  'nameInline',
-];
+const NAME_ROLES = ['wordmark', 'wordmarkLg', 'drinkHero', 'nameLg', 'name', 'nameInline'];
 const THEME = 'constants/theme.ts';
 /**
  * A display family's name as a string ('PlayfairDisplayLatin_700Bold'). A
@@ -241,24 +230,30 @@ const ERROR_MAP = /errors?$/i;
  *    decoded memory under a 256 MB cache cap. Every <Image> imported from
  *    expo-image carries `enforceEarlyResizing` (and not `={false}`), or
  *    says why it needs the full decode with `full-size-ok: <reason>` on its
- *    line or the line above. React Native's own Image (Grain's repeat tile)
- *    is a different component, so the rule follows the import, not the tag,
- *    through `createAnimatedComponent(Image)` too. A spread (`{...props}`)
+ *    line or the line above. React Native's own Image is a different
+ *    component, so the rule follows the import, not the tag, through
+ *    `createAnimatedComponent(Image)` too. A spread (`{...props}`)
  *    is not read through: say it on the element.
+ *
+ *    And every one carries `accessibilityIgnoresInvertColors` (not
+ *    `={false}`): a photograph under Smart Invert turns into its own
+ *    negative, and in Daylight the photographs are the only colour there
+ *    is. No opt-out marker: there is no picture that should invert.
  */
 const FULL_SIZE_OK = /full-size-ok:\s*\S/;
 
 /*
- * 10. Five grounds (specs/v3-cabinet.md section 2): paper, lining, cellar
- *     and the reel ground stand under a screen; mat is the face of a card,
- *     never of a screen. A style keyed `screen` or `root` whose
- *     backgroundColor is a `colors.` token, on either arm of a conditional,
- *     must use one of these four.
+ * 10. One ground (specs/v4-changes.md): every screen stands on the page,
+ *     `bg` (or a sheet's `surface`, the page's value), and video on the
+ *     reel ground. The wash is a well inside a screen, never the screen.
+ *     A style keyed `screen` or `root` whose backgroundColor is a
+ *     `colors.` token, on either arm of a conditional, must use one of
+ *     these.
  */
-const GROUNDS = ['bg', 'lining', 'liningDeep', 'reelGround'];
+const GROUNDS = ['bg', 'surface', 'reelGround'];
 /** Files rule 10 does not read, and why. */
 const GROUNDS_EXEMPT = {
-  'components/SipplyIntro.tsx': "the brand film's root is bgSunk, the bone the pour lands on",
+  'components/SipplyIntro.tsx': "the brand film's root is bgSunk, the wash the pour lands on",
 };
 
 /*
@@ -270,9 +265,8 @@ const GROUNDS_EXEMPT = {
  *     does `theme.colors` through a namespace import.
  *
  *     CATEGORY_META is `colors` tokens by another name: a category's
- *     `color` is ink chosen for paper (the cocktail's merlot is 1.75:1 on
- *     scrimMid over a white photo), and its wash and card fields are paper
- *     tints. So its colour fields are flagged in media.tsx too, read off
+ *     `color` is ink chosen for the page, never measured over a photo, and
+ *     its wash and field fields are page tints. So its colour fields are flagged in media.tsx too, read off
  *     the table, an entry of it held in a const (`const meta =
  *     CATEGORY_META[category]`), or destructured; `label`, `plural` and
  *     `blurb` stay free.
@@ -325,8 +319,6 @@ const SVG_MODULE = /^react-native-svg$/;
  *         token, wherever the name appears, so none comes back;
  *       - a tier word in copy: a string, template or JSX text matching
  *         RARITY_WORDS. "rare" and "common" are ordinary words and pass.
- *     A `tier=` prop on Mount is not matched by name: the close-out deleted
- *     the prop, so tsc refuses one.
  *
  *     RARITY_SHIM_FILES held the deprecated shims while the screens moved
  *     off rarity. The close-out (7 Oct 2026) deleted the shims and emptied
@@ -375,20 +367,24 @@ const RN_ANIMATED_MODULE = /^react-native\/Libraries\/Animated\/Animated$/;
 const TIMED = new Set(['timing', 'spring', 'decay', 'loop', 'sequence', 'parallel', 'stagger']);
 
 /*
- * 16. v3.3 Brass (specs/v3-3-mockups/brass/spec.md section 6). Brass is
- *     metal: `brass`, `brassPlate`, `brassLit` and `brassShade` are rails,
- *     plates, edges and glyphs, and brass as a word fails AA on paper
- *     (2.59:1). Only `brassInk` (paper) and `brassOnDark` (dark grounds)
- *     are text. So a `color:` in a style, or a `color=` handed to anything
- *     but an <Icon> (DrinkName's colour is a name's ink), may not be one of
- *     the four, on either arm. `textShadowColor: colors.brassLit` (the
- *     engraving's lit edge) is a shadow, not ink, and passes.
+ * 16. Edges are not ink (white spec section 9). `line`, `hair`, `rule`,
+ *     `press`, `photoEdge` and `scrim` are rules, fills and dims, 1.3 to
+ *     1.7:1 on the page: never text. `lineControl` is the control grey,
+ *     an edge's and a glyph's (3.45:1, UI only); large text that wants
+ *     that grey says so with `textFaint`, and a style that sets
+ *     `textFaint` with a literal fontSize under 18 fails too. So a
+ *     `color:` in a style, or a `color=` handed to anything but an <Icon>
+ *     (or a spinner or GlassOutline, which are glyphs), may not be one of the edge tokens,
+ *     on either arm.
  *
  *     And "Nº 0127" is N + U+00BA: the Inter latin subset has the
  *     masculine ordinal and not U+2116 (the numero sign), which would draw
  *     as a fallback glyph from the system font. Any U+2116 in src/ fails.
  */
-const METAL = new Set(['brass', 'brassPlate', 'brassLit', 'brassShade']);
+const EDGE_INK = new Set(['line', 'hair', 'rule', 'press', 'photoEdge', 'scrim', 'lineControl']);
+const LARGE_ONLY = 'textFaint';
+const LARGE_MIN = 18;
+const GLYPH_TAGS = new Set(['Icon', 'ActivityIndicator', 'GlassOutline']);
 const NUMERO = /\u2116/;
 
 function walk(dir) {
@@ -1012,15 +1008,22 @@ function treeRules(rel, sf, lines, add) {
       // 12. Shadows.
       if (rel !== THEME && SHADOW_KEYS.has(key)) add('shadow', at(node), 'spread elevation.*');
 
-      // 16. A metal token as ink.
+      // 16. An edge token as ink.
       if (key === 'color') {
-        const onIcon =
+        const onGlyph =
           ts.isJsxAttribute(node) &&
           ts.isJsxAttributes(node.parent) &&
-          node.parent.parent.tagName.getText(sf) === 'Icon';
-        for (const v of onIcon ? [] : arms(value)) {
-          if (isColorsToken(v) && METAL.has(v.name.text)) {
-            add('metal', at(node), `colors.${v.name.text} is metal, never text: use brassInk or brassOnDark`);
+          GLYPH_TAGS.has(node.parent.parent.tagName.getText(sf));
+        for (const v of onGlyph ? [] : arms(value)) {
+          if (isColorsToken(v) && EDGE_INK.has(v.name.text)) {
+            add('edge', at(node), `colors.${v.name.text} is an edge or a fill, never text`);
+          }
+          // textFaint with a small literal size beside it, in the same style object.
+          if (isColorsToken(v) && v.name.text === LARGE_ONLY && ts.isPropertyAssignment(node) && ts.isObjectLiteralExpression(node.parent)) {
+            const size = node.parent.properties.find((q) => ts.isPropertyAssignment(q) && keyOf(q) === 'fontSize');
+            if (size && literals(size.initializer, consts).some((n) => n < LARGE_MIN)) {
+              add('edge', at(node), `colors.textFaint is for ${LARGE_MIN}pt and up: use textMuted`);
+            }
           }
         }
       }
@@ -1074,6 +1077,12 @@ function treeRules(rel, sf, lines, add) {
         unwrap(early.initializer)?.kind === ts.SyntaxKind.FalseKeyword;
       if ((!early || off) && !marked(FULL_SIZE_OK, at(node))) {
         add('image', at(node), off ? 'enforceEarlyResizing={false}' : 'no enforceEarlyResizing');
+      }
+      const invert = node.attributes.properties.find(
+        (p) => ts.isJsxAttribute(p) && keyOf(p) === 'accessibilityIgnoresInvertColors',
+      );
+      if (!invert || (invert.initializer && unwrap(invert.initializer)?.kind === ts.SyntaxKind.FalseKeyword)) {
+        add('image', at(node), 'no accessibilityIgnoresInvertColors: a photo must not invert');
       }
     }
 
@@ -1212,7 +1221,7 @@ for (const [order, file] of files.entries()) {
     // Rule 5 reads every file, the allowlist included.
     if (CAPS.test(c)) add('caps', i);
     // Rule 16's numero sign, every file: it is wrong in a string as much as in a style.
-    if (NUMERO.test(c)) add('metal', i, 'U+2116 is not in the Inter subset: write N + U+00BA');
+    if (NUMERO.test(c)) add('edge', i, 'U+2116 is not in the Inter subset: write N + U+00BA');
 
     if (ALLOW[rel]) return;
 
@@ -1240,8 +1249,9 @@ if (violations.length === 0) {
     '  No emoji-as-UI, hardcoded hex, layout animations, ovals, uppercase or Title Case,\n' +
       '  stray Playfair, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
-      '  stray shadows, gradient stops without their opacity, rarity readers or timed\n' +
-      '  React Native animations, or brass set as text, outside the allowlists.\n',
+      '  stray shadows, gradient stops without their opacity, rarity readers, timed\n' +
+      '  React Native animations, inverting photos, or edge greys set as text, outside\n' +
+      '  the allowlists.\n',
   );
   process.exit(0);
 }

@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Modal, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { DrinkArt } from '@/components/artwork';
+import { ResultRow } from '@/components/log/ResultRow';
+import { WithScrollEdges } from '@/components/log/scrollEdges';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { haptic, SearchField, SectionHeader } from '@/components/ui';
-import { colors, dexNumber, fonts, layout, space, stroke } from '@/constants/theme';
-import { formatDexNumber, getDrink } from '@/data';
-import { styleLabel } from '@/lib/drinkLabels';
+import { colors, layout, space, stroke, textRole } from '@/constants/theme';
+import { getDrink } from '@/data';
 import { MAX_RESULTS, searchCatalogue } from '@/lib/drinkSearch';
 import { useCollection } from '@/store/collection';
 import type { Drink } from '@/types';
@@ -19,7 +19,7 @@ const RECENT = 20;
  *
  * Before anything is typed it offers your twenty most recent unlocks: the
  * drink you are filming is most likely one you just logged. Typing
- * searches the whole Dex with the log sheet's own ranking (lib/drinkSearch),
+ * searches the whole Dex with the + window's own ranking (lib/drinkSearch),
  * so a name finds the same drink here as there.
  *
  * Dex drinks only. A drink someone added themselves lives on their phone
@@ -27,8 +27,10 @@ const RECENT = 20;
  * has would show everyone else no chip at all, so the no-match line says
  * so rather than leaving the person to wonder.
  *
- * A page sheet, on paper: it is a list to read, laid over the dark
- * review screen, and it swipes down to close like every other sheet.
+ * A page sheet, on the page: it is a list to read, laid over the dark
+ * review screen, and it swipes down to close like every other sheet. Its
+ * rows are the + window's (log/ResultRow): a print and the name, which
+ * wraps and is never cut; the number and style live on the drink page.
  */
 export function DrinkTagSheet({
   visible,
@@ -41,6 +43,7 @@ export function DrinkTagSheet({
 }) {
   const [query, setQuery] = useState('');
   const unlocks = useCollection((s) => s.unlocks);
+  const { width } = useWindowDimensions();
 
   const typed = query.trim().length > 0;
   const rows: Drink[] = typed
@@ -66,96 +69,75 @@ export function DrinkTagSheet({
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={close}>
-      <View style={styles.sheet}>
-        <ScreenTopBar
-          title="Tag a drink"
-          inset="sheet"
-          left={<TopBarTextButton label="Cancel" muted onPress={close} />}
-          showRule
-        />
-        <SearchField
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Name, style or country"
-          accessibilityLabel="Search the Dex"
-          autoFocus
-          style={styles.search}
-        />
-        <FlatList
-          data={rows}
-          keyExtractor={(d) => d.id}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          contentContainerStyle={styles.list}
-          ListHeaderComponent={
-            !typed && rows.length > 0 ? (
-              <SectionHeader title="From your Dex" size="group" style={styles.groupHeader} />
-            ) : null
-          }
-          ListEmptyComponent={
-            <Text style={styles.empty}>
-              {typed
-                ? `No drink called “${query.trim()}” in the Dex. Only Dex drinks can be tagged for now.`
-                : 'Search the Dex for the drink in your reel.'}
-            </Text>
-          }
-          renderItem={({ item }) => <DrinkRow drink={item} onPress={() => pick(item)} />}
-        />
-      </View>
+      {/* Inside the Modal, so each opening starts at the top with its rule off. */}
+      <WithScrollEdges>
+        {(edges) => (
+          <View style={styles.sheet}>
+            <ScreenTopBar
+              title="Tag a drink"
+              inset="sheet"
+              left={<TopBarTextButton label="Cancel" muted onPress={close} />}
+              showRule={false}
+            />
+            {/* The search heads the list with the bar; its rule shows once the rows scroll under it. */}
+            <View style={[styles.head, edges.under && styles.headRuled]}>
+              <SearchField
+                value={query}
+                onChangeText={setQuery}
+                placeholder="Name, style or country"
+                accessibilityLabel="Search the Dex"
+                autoFocus
+                style={styles.search}
+              />
+            </View>
+            <FlatList
+              data={rows}
+              keyExtractor={(d) => d.id}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              onScroll={edges.onScroll}
+              scrollEventThrottle={16}
+              contentContainerStyle={styles.list}
+              ListHeaderComponent={
+                !typed && rows.length > 0 ? (
+                  <SectionHeader title="From your Dex" size="group" style={styles.groupHeader} />
+                ) : null
+              }
+              ListEmptyComponent={
+                <Text style={styles.empty}>
+                  {typed
+                    ? `No drink called “${query.trim()}” in the Dex. Only Dex drinks can be tagged for now.`
+                    : 'Search the Dex for the drink in your reel.'}
+                </Text>
+              }
+              renderItem={({ item }) => (
+                <ResultRow
+                  drink={item}
+                  chosen={false}
+                  width={width}
+                  spoken={`${item.name}, number ${item.dexNumber}`}
+                  onPress={pick}
+                />
+              )}
+            />
+          </View>
+        )}
+      </WithScrollEdges>
     </Modal>
-  );
-}
-
-function DrinkRow({ drink, onPress }: { drink: Drink; onPress: () => void }) {
-  const number = formatDexNumber(drink.dexNumber);
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, number ${drink.dexNumber}${drink.subcategory ? `, ${drink.subcategory}` : ''}`}
-      style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
-      <DrinkArt drink={drink} size={32} flat />
-      <View style={styles.rowText}>
-        <View style={styles.rowTop}>
-          <Text style={styles.name} numberOfLines={1}>
-            {drink.name}
-          </Text>
-          <Text style={dexNumber}>{number}</Text>
-        </View>
-        {drink.subcategory ? (
-          <Text style={styles.sub} numberOfLines={1}>
-            {styleLabel(drink.subcategory)}
-          </Text>
-        ) : null}
-      </View>
-    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   sheet: { flex: 1, backgroundColor: colors.bg },
+  /* Always laid out, transparent at rest, so the rule moves nothing when it shows. */
+  head: { borderBottomWidth: stroke.edge, borderBottomColor: 'transparent' },
+  headRuled: { borderBottomColor: colors.line },
   search: { marginHorizontal: layout.gutter, marginTop: space.md, marginBottom: space.sm },
   list: { paddingBottom: space.xxxl },
-  groupHeader: { marginTop: space.md, marginBottom: space.xs },
-  row: {
-    minHeight: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: space.md,
-    paddingHorizontal: layout.gutter,
-    paddingVertical: space.xs,
-    borderBottomWidth: stroke.hair,
-    borderBottomColor: colors.line,
-  },
-  rowPressed: { backgroundColor: colors.bgSunk },
-  rowText: { flex: 1, gap: 2 },
-  rowTop: { flexDirection: 'row', alignItems: 'baseline', gap: space.sm },
-  name: { flexShrink: 1, fontFamily: fonts.bodySemiBold, fontSize: 15, lineHeight: 20, color: colors.text },
-  sub: { fontFamily: fonts.body, fontSize: 13, lineHeight: 18, color: colors.textMuted },
+  /* A group head insets its own 16 (it was drawn for a panel), so this lands its words on the gutter, over the thumbs. */
+  groupHeader: { marginTop: space.md, marginBottom: space.xs, marginHorizontal: layout.gutter - space.lg },
   empty: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    lineHeight: 22,
+    ...textRole.body,
     color: colors.textMuted,
     paddingHorizontal: layout.gutter,
     paddingTop: space.xl,

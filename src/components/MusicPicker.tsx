@@ -14,12 +14,12 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Grain } from '@/components/Grain';
 import { Icon } from '@/components/icons';
+import { useScrollEdges } from '@/components/log/scrollEdges';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { AppleMusicCredit, SongArtwork, usePreviewPlayer, type PreviewPlayer } from '@/components/songs';
 import { Button, EmptyState, haptic, Hold, SearchField, useAnnounce } from '@/components/ui';
-import { colors, fonts, layout, space, stroke, textRole } from '@/constants/theme';
+import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 import { searchSongs, STORY_MUSIC, type SearchResult, type Song } from '@/lib/music';
 
 /* ==================================================================== */
@@ -31,8 +31,9 @@ import { searchSongs, STORY_MUSIC, type SearchResult, type Song } from '@/lib/mu
 /*                                                                      */
 /* A React Native page-sheet Modal, so UIKit presents and dismisses it  */
 /* (no Reanimated, nothing on the frame loop), over the Log window that */
-/* opened it. It carries its own grain: a native sheet is presented     */
-/* above the React root.                                                */
+/* opened it. Daylight: rows 64 on the page, set apart by space; a 1pt  */
+/* rule under the search once songs scroll under it, and over the foot  */
+/* while songs run on under it.                                         */
 /*                                                                      */
 /* Previews are user-initiated only, one song at a time, and stop the   */
 /* moment the picker closes, a song is chosen, the search changes or    */
@@ -231,6 +232,7 @@ function PickerBody({
    */
   const { height: windowH } = useWindowDimensions();
   const [sheetH, setSheetH] = useState(windowH);
+  const edges = useScrollEdges();
 
   return (
     <KeyboardAvoidingView
@@ -241,7 +243,6 @@ function PickerBody({
         const h = e.nativeEvent.layout.height;
         setSheetH((prev) => (prev === h ? prev : h));
       }}>
-      <Grain />
       {/*
         No status-bar inset on iOS: the page sheet starts below it. Android
         presents a Modal full screen and needs it.
@@ -249,22 +250,25 @@ function PickerBody({
       <ScreenTopBar
         title="Add music"
         inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
-        showRule
+        showRule={false}
         left={<TopBarTextButton label="Cancel" muted onPress={close} />}
       />
-      <SearchField
-        value={query}
-        onChangeText={onChangeText}
-        placeholder="Search songs or artists"
-        accessibilityLabel="Search Apple Music"
-        autoFocus
-        trailing={
-          stale ? (
-            <ActivityIndicator size="small" color={colors.textMuted} accessibilityLabel="Searching" />
-          ) : null
-        }
-        style={styles.search}
-      />
+      {/* The search heads the list with the bar, so the rule goes under it. */}
+      <View style={[styles.head, edges.under && styles.ruledBottom]}>
+        <SearchField
+          value={query}
+          onChangeText={onChangeText}
+          placeholder="Search songs or artists"
+          accessibilityLabel="Search Apple Music"
+          autoFocus
+          trailing={
+            stale ? (
+              <ActivityIndicator size="small" color={colors.textMuted} accessibilityLabel="Searching" />
+            ) : null
+          }
+          style={styles.search}
+        />
+      </View>
       <FlatList
         data={songs}
         keyExtractor={(s) => s.id}
@@ -276,6 +280,10 @@ function PickerBody({
         ListEmptyComponent={empty}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        onScroll={edges.onScroll}
+        onLayout={edges.onLayout}
+        onContentSizeChange={edges.onContentSizeChange}
+        scrollEventThrottle={16}
         contentContainerStyle={styles.list}
       />
 
@@ -284,7 +292,7 @@ function PickerBody({
         link to that song in Apple Music. Apple's badge replaces the text
         link once Jan adds it (songs.tsx, AppleMusicCredit).
       */}
-      <View style={[styles.foot, { paddingBottom: insets.bottom + space.sm }]}>
+      <View style={[styles.foot, edges.moreBelow && styles.ruledTop, { paddingBottom: insets.bottom + space.sm }]}>
         <Text style={styles.footText}>Previews from Apple Music</Text>
         {playing ? (
           <AppleMusicCredit
@@ -354,16 +362,15 @@ function SongRow({
 
 const styles = StyleSheet.create({
   sheet: { flex: 1, backgroundColor: colors.bg },
+  /* Both rules always laid out, transparent until something scrolls under them, so showing one moves nothing. */
+  head: { borderBottomWidth: stroke.edge, borderBottomColor: 'transparent' },
+  ruledBottom: { borderBottomColor: colors.line },
+  ruledTop: { borderTopColor: colors.line },
   search: { marginHorizontal: layout.gutter, marginTop: space.md, marginBottom: space.sm },
   list: { flexGrow: 1, paddingBottom: space.lg },
 
-  /* A song: edge to edge, a hairline under it, min 64, growing with the text. */
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: stroke.hair,
-    borderBottomColor: colors.line,
-  },
+  /* A song: edge to edge, min 64, growing with the text; space, not a rule, between songs. */
+  row: { flexDirection: 'row', alignItems: 'center' },
   rowChoose: {
     flex: 1,
     minHeight: 64,
@@ -374,10 +381,10 @@ const styles = StyleSheet.create({
     paddingRight: space.sm,
     paddingVertical: space.sm,
   },
-  rowPressed: { backgroundColor: colors.bgSunk },
+  rowPressed: { backgroundColor: colors.press },
   rowText: { flex: 1, gap: 2 },
-  rowTitle: { fontFamily: fonts.bodySemiBold, fontSize: 16, lineHeight: 22, color: colors.text },
-  rowMeta: { ...textRole.helper, color: colors.textMuted },
+  rowTitle: { ...textRole.bodyStrong, color: colors.text },
+  rowMeta: { ...textRole.small, color: colors.textMuted },
   /* 44 square; its 24pt glyph's right edge lands on the gutter. */
   preview: {
     width: layout.hit,
@@ -395,7 +402,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.gutter,
     paddingTop: space.xl,
   },
-  messageText: { ...textRole.prose, color: colors.textMuted, textAlign: 'center' },
+  messageText: { ...textRole.body, color: colors.textMuted, textAlign: 'center' },
 
   foot: {
     flexDirection: 'row',
@@ -407,7 +414,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.gutter,
     paddingTop: space.sm,
     borderTopWidth: stroke.edge,
-    borderTopColor: colors.line,
+    borderTopColor: 'transparent',
   },
-  footText: { ...textRole.helper, color: colors.textMuted },
+  footText: { ...textRole.small, color: colors.textMuted },
 });

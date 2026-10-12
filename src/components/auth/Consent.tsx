@@ -2,7 +2,7 @@ import * as WebBrowser from 'expo-web-browser';
 import { type StyleProp, StyleSheet, Text, type TextStyle, type ViewStyle } from 'react-native';
 
 import { Notice, useAnnounce } from '@/components/ui';
-import { colors, fonts, space, type as typeScale } from '@/constants/theme';
+import { colors, fonts, space, textRole } from '@/constants/theme';
 
 /* ==================================================================== */
 /* The sign-in screens' small print                                     */
@@ -102,9 +102,7 @@ export function AuthMessage({
 
 const styles = StyleSheet.create({
   consent: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    ...textRole.small,
     color: colors.textMuted,
     textAlign: 'center',
     marginTop: space.xl,
@@ -112,7 +110,7 @@ const styles = StyleSheet.create({
        on a small handset. */
     paddingHorizontal: space.sm,
   },
-  /* Wine words, not a wine object: the screen's links are all this colour,
-     so "this is tappable" reads the same everywhere on it. */
-  consentLink: { fontFamily: fonts.bodySemiBold, color: colors.wine },
+  /* Ink SemiBold in the muted sentence: every link on the sign-in page is
+     drawn this way, so "this is tappable" reads the same everywhere on it. */
+  consentLink: { fontFamily: fonts.bodySemiBold, color: colors.text },
 });

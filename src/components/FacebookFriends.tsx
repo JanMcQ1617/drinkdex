@@ -1,10 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { Icon } from '@/components/icons';
 import { MatchResults } from '@/components/PeopleList';
-import { Button, Card, Notice, SectionHeader } from '@/components/ui';
-import { colors, space, textRole } from '@/constants/theme';
+import { FindNote, FindSection } from '@/components/profile/FindSection';
+import { Button, Notice } from '@/components/ui';
+import { colors, space } from '@/constants/theme';
 import {
   canCheckWithoutFacebook,
   hasFacebookIdentity,
@@ -30,8 +30,8 @@ import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 /*     checks straight after;                                            */
 /*   • otherwise nothing.                                                */
 /*                                                                      */
-/* A card of its own, like each section of Find friends it opens, so it  */
-/* belongs in a stack of cards and never inside one.                     */
+/* A section of its own (FindSection), like every section of Find       */
+/* friends, on the page.                                                 */
 /*                                                                      */
 /* What it can find is honest about its limit: Facebook lists only the   */
 /* friends who ALSO connected Sipply, never everyone (lib/facebook). The */
@@ -62,11 +62,11 @@ export function FacebookFriends() {
 
   if (!myId) return null;
   if (!linked && !FACEBOOK_SIGN_IN_ENABLED) return null;
-  /* Storage answers within a frame; an empty card for that frame would
+  /* Storage answers within a frame; an empty section for that frame would
      only flash. A check or a failure already running shows at once, and so
      does a connect still finishing: Connect Facebook's session lands (and
      makes the account linked) a moment before the check it starts, and
-     returning nothing in between made the card blink out mid-connect. */
+     returning nothing in between made the section blink out mid-connect. */
   if (linked && list === undefined && !checking && !connecting && !error) return null;
 
   const connect = async () => {
@@ -99,34 +99,29 @@ export function FacebookFriends() {
 
   if (!linked) {
     body = (
-      <Text style={styles.cardBody}>
+      <FindNote>
         Connect Facebook to see which of your Facebook friends are already here. Facebook only
         shows Sipply the friends who connected it too, and Sipply never posts anything there.
-      </Text>
+      </FindNote>
     );
     action = (
-      <Button
-        label="Connect Facebook"
-        variant="secondary"
-        block
-        loading={busy}
-        onPress={() => void connect()}
-        style={styles.cardCta}
-      />
+      <Button label="Connect Facebook" variant="secondary" block loading={busy} onPress={() => void connect()} />
     );
   } else if (checking) {
     body = (
       <View style={styles.working}>
-        <ActivityIndicator color={colors.wine} />
-        <Text style={styles.hint}>Checking your Facebook friends…</Text>
+        <ActivityIndicator color={colors.text} />
+        <View style={styles.flex}>
+          <FindNote>Checking your Facebook friends…</FindNote>
+        </View>
       </View>
     );
   } else if (!list) {
     body = (
-      <Text style={styles.cardBody}>
+      <FindNote>
         See which of your Facebook friends are already on Sipply. Facebook only shows the friends
         who connected Sipply too.
-      </Text>
+      </FindNote>
     );
     action = (
       <Button
@@ -135,13 +130,12 @@ export function FacebookFriends() {
         block
         loading={busy}
         onPress={checkAgain}
-        style={styles.cardCta}
       />
     );
   } else {
     body =
       list.friends.length === 0 ? (
-        <Text style={styles.hint}>None of your Facebook friends have connected Sipply yet.</Text>
+        <FindNote>None of your Facebook friends have connected Sipply yet.</FindNote>
       ) : (
         <MatchResults entries={list.friends.map((profile) => ({ profile }))} />
       );
@@ -167,35 +161,15 @@ export function FacebookFriends() {
   }
 
   return (
-    <Card style={styles.card}>
-      <View style={styles.cardHead}>
-        <Icon name="facebook" size={20} color={colors.text} />
-        <SectionHeader title="Friends from Facebook" style={styles.cardTitle} />
-      </View>
-
+    <FindSection title="Friends from Facebook">
       {body}
-
       {error ? <Notice tone="error">{error}</Notice> : null}
-
       {action}
-    </Card>
+    </FindSection>
   );
 }
 
-/*
- * The section styles Find friends' other cards use, so this one reads as
- * one of them: the glyph and a sentence-case heading in ink (of the
- * cards' own buttons only contacts' is filled wine), 13pt muted body, and
- * failures in an error Notice.
- */
 const styles = StyleSheet.create({
-  card: { padding: space.lg, gap: space.md },
-  cardHead: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
-  cardTitle: { flex: 1 },
-  cardBody: { ...textRole.helper, color: colors.textMuted },
-  cardCta: { marginTop: space.xs },
-
   working: { flexDirection: 'row', alignItems: 'center', gap: space.md, paddingVertical: space.sm },
-  /* textMuted: 13pt on a white card is small text, held to 4.5:1. */
-  hint: { flex: 1, ...textRole.helper, color: colors.textMuted },
+  flex: { flex: 1 },
 });

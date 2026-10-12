@@ -207,7 +207,7 @@ export function ReelReview({
   const me = (): UserProfile =>
     profile && profile.id === myId
       ? toProfile(profile)
-      : { id: myId, username: 'you', displayName: 'You', accent: colors.wineSoft, joinedAt: '' };
+      : { id: myId, username: 'you', displayName: 'You', accent: colors.reelInk, joinedAt: '' };
 
   const post = async () => {
     if (!poster || posting || capped) return;

@@ -39,7 +39,7 @@ import { COPY, REELS_ENABLED } from '@/lib/reels';
  * towards it starts, then stays mounted, so a cold start builds Home
  * alone: preloading the neighbours would mount the Dex grid at launch,
  * the cost the build 13 lag fix took out. Until it mounts, a page shows
- * its TabPlaceholder: its ground, grain and title, never a blank page,
+ * its TabPlaceholder: its ground and title, never a blank page,
  * since a tap three slots away slides past the pages between.
  *
  * Reels while off is not in the navigator at all (TopTabs.Protected
@@ -47,20 +47,21 @@ import { COPY, REELS_ENABLED } from '@/lib/reels';
  * slot in the bar. The flag is fixed for a build, and it must be: the
  * pager rebuilds itself when its page count changes.
  *
- * Stats is not a tab. It is a report on the Dex rather than a place
- * visited every day, so it pushes from the Dex's top bar (app/stats.tsx).
+ * Dex progress (app/stats.tsx) is not a tab. It is a report on the Dex
+ * rather than a place visited every day, so it pushes from the Dex's
+ * "38 / 2,089" and Profile's "38 drinks in your Dex ›".
  * My Bar is one: what you own and what you can make with it is somewhere
  * you come back to.
  *
- * ScrollChromeProvider sits around the navigator so the bar and every tab
- * screen share one scroll source per tab: the bar compacts as the focused
- * tab's list scrolls down (components/ScrollChrome.tsx).
+ * ScrollChromeProvider sits around the navigator so every tab screen has
+ * one scroll source: Home's top bar slides away on it
+ * (components/ScrollChrome.tsx).
  *
  * Icons are vector (components/icons.tsx) and change between outline and
  * solid, so the active tab reads without relying on colour alone. They are
- * drawn at the size and in the colour the bar hands them, so a tab's glyph
- * and its label are always one ink: bone when active, reelInkDim at rest
- * (5.86:1 on the espresso bar).
+ * drawn at the size and in the colour the bar hands them: ink when active,
+ * muted at rest. The bar shows no labels; each tab's name is its
+ * accessibilityLabel.
  */
 export default function TabLayout() {
   const reducedMotion = useReducedMotion();
@@ -87,7 +88,7 @@ export default function TabLayout() {
             title: 'Home',
             tabBarAccessibilityLabel: 'Home',
             tabBarIcon: tabIcon('home'),
-            lazyPlaceholder: () => <TabPlaceholder title="Home" ground="lining" wordmark />,
+            lazyPlaceholder: () => <TabPlaceholder title="Home" wordmark />,
           }}
         />
         <TopTabs.Protected guard={REELS_ENABLED}>
@@ -98,7 +99,7 @@ export default function TabLayout() {
               tabBarAccessibilityLabel: COPY.label,
               tabBarIcon: tabIcon('reels'),
               // The page's own ground is dark, so a swipe never shows a
-              // cream frame before the first video frame.
+              // white frame before the first video frame.
               sceneStyle: { backgroundColor: colors.reelGround },
               lazyPlaceholder: () => <TabPlaceholder title={COPY.label} ground="reel" />,
             }}
@@ -110,7 +111,7 @@ export default function TabLayout() {
             title: 'Dex',
             tabBarAccessibilityLabel: 'Dex, your collection',
             tabBarIcon: tabIcon('dex'),
-            lazyPlaceholder: () => <TabPlaceholder title="Dex" ground="lining" />,
+            lazyPlaceholder: () => <TabPlaceholder title="Dex" />,
           }}
         />
         <TopTabs.Screen
@@ -119,7 +120,7 @@ export default function TabLayout() {
             title: 'My Bar',
             tabBarAccessibilityLabel: 'My Bar, what you can make',
             tabBarIcon: tabIcon('bottle'),
-            lazyPlaceholder: () => <TabPlaceholder title="My Bar" liningBar />,
+            lazyPlaceholder: () => <TabPlaceholder title="My Bar" />,
           }}
         />
         <TopTabs.Screen

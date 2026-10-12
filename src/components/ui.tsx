@@ -29,7 +29,7 @@ import Animated, {
 import { DrinkName } from '@/components/cabinet';
 import { Icon, type IconName } from '@/components/icons';
 import {
-  CATEGORY_META,
+  avatarTone,
   colors,
   fonts,
   layout,
@@ -39,33 +39,29 @@ import {
   stroke,
   tabular,
   textRole,
-  type as typeScale,
 } from '@/constants/theme';
 import { formatCount } from '@/data';
 import { peekSignedPhoto, signedPhotoUrl } from '@/lib/social';
-import type { DrinkCategory } from '@/types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 /* ==================================================================== */
-/* The v2 rules every primitive here follows                            */
+/* The v4 rules every primitive here follows (specs/v4-changes.md)      */
 /*                                                                      */
-/*   1. Rectangles, not ovals. Controls are 8pt rounded rectangles       */
-/*      (radius.control), panels 12pt (radius.card), media square.      */
-/*      Only people and round objects are circles.                      */
-/*   2. Every edge is drawn. A container has a visible 1pt edge; an      */
-/*      input a 3:1 edge (lineControl); a secondary button an ink edge.  */
-/*   3. Chrome is Inter, through theme.ts's textRole.                   */
+/*   1. Squared, not round. Keys, fields, chips and tiles are 4pt        */
+/*      rectangles (radius.control), panels 8pt, prints square. Only     */
+/*      people, story rings and dots are circles.                        */
+/*   2. Separated by fill and space, not by edges. A field or a wash key */
+/*      is its `bgSunk` fill; a rule appears only where content scrolls  */
+/*      under a bar. A state that must read (a focused field, an error)  */
+/*      takes a 2pt ink ring overlay, so nothing moves.                 */
+/*   3. Chrome is Inter, through theme.ts's textRole, at three sizes.    */
 /*   4. Nothing performs. Controls answer a press with a FILL change,    */
-/*      never a scale; only media tiles keep PressableScale. Nothing     */
-/*      waits on an animation to become visible: Reanimated can stall    */
-/*      for seconds after a cold start in a Release build, so every      */
-/*      state that matters (a floating field label, a selected segment)  */
-/*      is shown without motion too.                                     */
-/*   5. One wine action per view. Wine fills the primary action; focus,  */
-/*      selection and secondary actions use ink. Since v3 wine is also a */
-/*      material (the cabinet's lining), and wine on lining is 1.22:1,   */
-/*      so on lining the primary button is bone (`onLining`) instead.   */
+/*      never a scale; only media tiles keep PressableScale. Every state */
+/*      that matters is shown without motion too: Reanimated can stall   */
+/*      after a cold start in a Release build.                           */
+/*   5. One solid ink action per view. Ink fills the primary key; the    */
+/*      secondary is a wash key; nothing else is filled.                 */
 /*   6. Drink names go through DrinkName (components/cabinet.tsx): they  */
 /*      shrink to fit their column and never truncate.                   */
 /* ==================================================================== */
@@ -219,19 +215,7 @@ export function PressableScale({
 /* Buttons                                                              */
 /* ==================================================================== */
 
-export type ButtonVariant =
-  | 'primary'
-  | 'secondary'
-  | 'tonal'
-  | 'text'
-  | 'danger'
-  | 'dangerText'
-  | 'onDark'
-  | 'onDarkText'
-  | 'onLining'
-  | 'onLiningOutline'
-  | 'onLiningText'
-  | 'dangerOnLining';
+export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'danger' | 'dangerText' | 'onDark' | 'onDarkText';
 
 /**
  * `md` is 48pt, the call to action. `sm` is 36pt for an action that sits
@@ -253,7 +237,7 @@ export interface ButtonProps {
    * that one row's request is out.
    */
   leading?: React.ReactNode;
-  /** `text` only: the label in textMuted rather than wine (Cancel, Not now). */
+  /** `text` only: the label in textMuted rather than ink (Cancel, Not now). */
   muted?: boolean;
   /** The action can't be taken yet — an incomplete form. Dims the button. */
   disabled?: boolean;
@@ -294,63 +278,46 @@ type ButtonSkin = {
   pressedOpacity?: number;
   /** No fill, no edge, no corner: a text button. */
   bare?: boolean;
+  /** The label underlined: the destructive words, which have no red in Daylight. */
+  underline?: boolean;
 };
 
 /*
- * Every skin is a rectangle with a drawn edge, or bare text. The handoff's
- * pills went because a screen where every control is a stadium is the
- * plainest sign that nothing was decided.
+ * Daylight's keys (layout spec 4; white spec 5.4). No hue anywhere, so a
+ * key says what it is by fill and weight:
  *
- * ONE WINE THING. Only `primary` is wine. `secondary` is white with a 1pt
- * espresso outline and an espresso label (a taupe outline was 1.68:1 on the
- * page, an edge you had to look for); `tonal` is the quiet fill for a
- * second action that should not compete (Following). `text` stays wine
- * because a wine word is not a wine object, and `muted` drops it to
- * textMuted for the action that backs out (Cancel, Not now).
- *
- * Two destructive skins, for two weights of consequence. `danger` is the
- * washed button, for the one irreversible action a screen exists to offer.
- * `dangerText` is the same red with no fill and no edge, for a quiet
- * destructive action at the foot of a screen about something else —
- * "Remove from collection", "Remove photo" — where a red button would
- * outshout the screen's real call to action. `danger` text is 5.99:1 on
- * the page and above that on a white card.
- *
- * Two for the dark reels ground, where wine is 1.12:1 and vanishes:
- * `onDark` is the bone button with an espresso-black label (19.3:1), and
- * `onDarkText` the bone text button for "Not now" and "Done".
- *
- * Four for the cabinet's lining, where wine is 1.22:1. `onLining` is the
- * primary there: bone with a lining label (13.32:1), held at onLiningMuted
- * (6.79:1). `onLiningOutline` is the secondary, bone text on a 3.27:1
- * `liningControl` edge; `onLiningText` the quiet one; `dangerOnLining`
- * the bare destructive word ("Remove from collection") on the cellar.
+ *   primary     ink, onInk label, inkPressed while held: the one solid
+ *               action on a view ("Post", "Follow", "Start with the basics")
+ *   secondary   the wash key, ink label, `press` while held ("Edit
+ *               profile", "Following", "Remove from my bar")
+ *   text        an ink word ("See all"); `muted` for the one that backs out
+ *   danger      the irreversible action a screen exists to offer: an ink
+ *               outline key with an underlined label, always followed by
+ *               the system's destructive confirm, which iOS colours itself
+ *   dangerText  the same words bare, for a quiet destructive action at the
+ *               foot of a screen ("Clear my bar")
+ *   onDark      the reels ground's white key, and its bare word
  *
  * No variant casts a shadow.
  */
 const BUTTON_SKIN: Record<ButtonVariant, ButtonSkin> = {
   primary: {
-    bg: colors.wine,
-    fg: colors.textOnWine,
-    edge: colors.wine,
-    pressedBg: colors.wineDeep,
-    pressedEdge: colors.wineDeep,
+    bg: colors.text,
+    fg: colors.onInk,
+    edge: colors.text,
+    pressedBg: colors.inkPressed,
+    pressedEdge: colors.inkPressed,
   },
-  secondary: {
-    bg: colors.surface,
-    fg: colors.text,
-    edge: colors.lineInk,
-    pressedBg: colors.bgSunk,
-  },
-  tonal: { bg: colors.bgSunk, fg: colors.text, edge: colors.line, pressedBg: colors.slot },
-  text: { bg: 'transparent', fg: colors.wine, edge: 'transparent', pressedOpacity: 0.5, bare: true },
-  danger: { bg: colors.dangerWash, fg: colors.danger, edge: colors.danger, pressedOpacity: 0.8 },
+  secondary: { bg: colors.bgSunk, fg: colors.text, edge: colors.bgSunk, pressedBg: colors.press, pressedEdge: colors.press },
+  text: { bg: 'transparent', fg: colors.text, edge: 'transparent', pressedOpacity: 0.5, bare: true },
+  danger: { bg: colors.bg, fg: colors.text, edge: colors.lineInk, pressedBg: colors.press, underline: true },
   dangerText: {
     bg: 'transparent',
-    fg: colors.danger,
+    fg: colors.text,
     edge: 'transparent',
     pressedOpacity: 0.5,
     bare: true,
+    underline: true,
   },
   onDark: {
     bg: colors.reelInk,
@@ -366,37 +333,10 @@ const BUTTON_SKIN: Record<ButtonVariant, ButtonSkin> = {
     pressedOpacity: 0.5,
     bare: true,
   },
-  onLining: {
-    bg: colors.onLining,
-    fg: colors.lining,
-    edge: colors.onLining,
-    pressedBg: colors.onLiningMuted,
-    pressedEdge: colors.onLiningMuted,
-  },
-  onLiningOutline: {
-    bg: 'transparent',
-    fg: colors.onLining,
-    edge: colors.liningControl,
-    pressedBg: colors.liningPressed,
-  },
-  onLiningText: {
-    bg: 'transparent',
-    fg: colors.onLining,
-    edge: 'transparent',
-    pressedOpacity: 0.5,
-    bare: true,
-  },
-  dangerOnLining: {
-    bg: 'transparent',
-    fg: colors.dangerOnLining,
-    edge: 'transparent',
-    pressedOpacity: 0.5,
-    bare: true,
-  },
 };
 
 /** Variants whose `block` form pins the mark at the left (see Button). */
-const PINS_MARK: readonly ButtonVariant[] = ['secondary', 'tonal', 'onDark', 'onLining', 'onLiningOutline'];
+const PINS_MARK: readonly ButtonVariant[] = ['secondary', 'onDark'];
 
 /**
  * DISABLED AND LOADING ARE DIFFERENT STATES. Both ignore presses, but
@@ -414,8 +354,8 @@ const PINS_MARK: readonly ButtonVariant[] = ['secondary', 'tonal', 'onDark', 'on
  * beside "Update photo" in half of a 375pt screen wraps it onto a second
  * line mid-save.
  *
- * A STACK OF PROVIDER BUTTONS LINES UP. A `block` secondary, tonal,
- * onDark, onLining or onLiningOutline button with a mark pins the mark
+ * A STACK OF PROVIDER BUTTONS LINES UP. A `block` secondary or onDark
+ * button with a mark pins the mark
  * 16pt from its left edge and centres the label across the full width, so
  * a column of "Continue with …" rows puts every mark in one column and
  * every label on one axis.
@@ -491,6 +431,7 @@ export function Button({
           { color: fg },
           pinned && styles.buttonLabelPinned,
           coverLabel && styles.buttonLabelCovered,
+          skin.underline && styles.buttonLabelUnderline,
         ]}>
         {label}
       </Text>
@@ -508,10 +449,10 @@ export function Button({
  * preview: the drink page's back button, the recorder's close, flip and
  * torch, the Reels header's record.
  *
- * A dark translucent square with a faint bone edge, so it holds on a white
+ * A dark translucent square with a faint white edge, so it holds on a white
  * frame (4.27:1 for the glyph, composited) and on a black one alike. It
  * replaces the glass circle, which was a frosted disc with a painted
- * sheen. Selected (the torch on) inverts it: a bone fill and a dark glyph,
+ * sheen. Selected (the torch on) inverts it: a white fill and a dark glyph,
  * drawn solid where the glyph has a solid form.
  *
  * Dims while held rather than changing fill: over moving footage a fill
@@ -565,24 +506,10 @@ export function MediaIconButton({
 /* Tags                                                                 */
 /* ==================================================================== */
 
-/*
- * One anatomy for every tag: 22pt, a 4pt corner (radius.badge), a 1pt edge
- * in the tone at a third strength over its wash. The pills these replace
- * were the most repeated oval in the app.
- */
-
-export function CategoryTag({ category }: { category: DrinkCategory }) {
-  const meta = CATEGORY_META[category];
-  return (
-    <View style={[styles.tag, { backgroundColor: meta.wash, borderColor: meta.color + '55' }]}>
-      <Text style={[styles.tagText, { color: meta.color }]}>{meta.label}</Text>
-    </View>
-  );
-}
-
 /**
  * A neutral tag: a word that describes, not a state or a category — an
- * ingredient, a tasting note. Bone fill, `line` edge, muted label.
+ * ingredient, a tasting note. 22pt, a 2pt corner (radius.badge), wash
+ * fill, muted label.
  */
 export function Tag({ label, style }: { label: string; style?: StyleProp<ViewStyle> }) {
   return (
@@ -597,17 +524,15 @@ export function Tag({ label, style }: { label: string; style?: StyleProp<ViewSty
 /* ==================================================================== */
 
 /**
- * A toggle: the My Bar shelf, the custom-drink pickers, a removable token.
+ * A toggle: a filter, a custom-drink picker, a removable token.
  *
- * Selected is wine on its wash with a wine edge AND a leading check, so
- * the state does not rest on colour alone. `icon` replaces the check (a
- * "+ suggestion" chip), and `trailingIcon` adds a small glyph after the
- * label ('close' on a token that removes itself).
+ * Off is the page with a 1pt hair edge and an ink label (the label, not the
+ * edge, identifies it); on is ink with an onInk label and any count in
+ * onInkMuted (white spec 5.5), so the state reads by fill as well as tone.
+ * `icon` leads the label (a "+ suggestion" chip), and `trailingIcon` adds a
+ * small glyph after it ('close' on a token that removes itself).
  *
  * 32pt tall with 6pt of hitSlop above and below, so the finger gets 44.
- * Since v3 the Dex's filter row is made of these too (All · Cocktails ·
- * Spirits, then Collected · Not yet), one selection per axis, in place of
- * the underlined tabs it had.
  */
 export function Chip({
   label,
@@ -618,7 +543,6 @@ export function Chip({
   count,
   disabled,
   accessibilityLabel,
-  tone = 'paper',
 }: {
   label: string;
   selected: boolean;
@@ -628,18 +552,8 @@ export function Chip({
   count?: number;
   disabled?: boolean;
   accessibilityLabel?: string;
-  /**
-   * v3.3 Brass: 'lining' for a chip on the cabinet's wine (the Dex's
-   * filters). Resting, a clear chip on a liningControl edge (3.27:1) with
-   * bone words and an onLiningMuted count; selected, the bone fill with
-   * lining ink (13.32:1), the lining's own primary, since wine on lining
-   * is 1.22:1. The check still leads a selected chip.
-   */
-  tone?: 'paper' | 'lining';
 }) {
-  const lining = tone === 'lining';
-  const ink = lining ? (selected ? colors.lining : colors.onLining) : selected ? colors.wine : colors.text;
-  const lead = icon ?? (selected ? 'check' : null);
+  const ink = selected ? colors.onInk : colors.text;
   return (
     <Pressable
       onPress={
@@ -659,20 +573,14 @@ export function Chip({
       accessibilityState={{ selected, disabled: !!disabled }}
       style={({ pressed }) => [
         styles.chip,
-        lining && styles.chipLining,
-        selected && (lining ? styles.chipLiningSelected : styles.chipSelected),
-        pressed && (lining ? (selected ? styles.chipLiningSelectedPressed : styles.chipLiningPressed) : styles.chipPressed),
+        selected && styles.chipSelected,
+        pressed && (selected ? styles.chipSelectedPressed : styles.chipPressed),
         disabled && styles.buttonDisabled,
       ]}>
-      {lead ? <Icon name={lead} size={14} color={ink} /> : null}
-      <Text style={[styles.chipLabel, selected && styles.chipLabelSelected, { color: ink }]}>{label}</Text>
+      {icon ? <Icon name={icon} size={14} color={ink} /> : null}
+      <Text style={[styles.chipLabel, { color: ink }]}>{label}</Text>
       {count != null ? (
-        <Text
-          style={[
-            styles.chipCount,
-            tabular,
-            lining && { color: selected ? colors.textMuted : colors.onLiningMuted },
-          ]}>
+        <Text style={[styles.chipCount, tabular, selected && { color: colors.onInkMuted }]}>
           {formatCount(count)}
         </Text>
       ) : null}
@@ -742,22 +650,19 @@ function useAvatarUrl(path: string | null | undefined, localUri?: string | null)
 const LARGE_AVATAR = 64;
 
 /**
- * Initials on a wine disc.
+ * Initials on a grey disc.
  *
  * THE SANCTIONED CIRCLE. Everything else in the interface is a rectangle;
  * a person is round, which is how a feed tells people from things at a
  * glance. The radii below carry `round-ok: avatar` for check-design.
  *
- * The handoff draws every avatar the same way — a solid wine circle with
- * a bone initial — so the disc no longer takes the user's accent as a
- * wash. The accent survives as the RING, which keeps per-user colour
- * without asking bone type to stay readable on six different fills: brass
- * would have landed at 4.49:1, just under the bar this app holds.
+ * The disc takes the person's stored accent as one of four grey tones
+ * (avatarTone in theme.ts maps every wine-era hex too), white initials on
+ * the three dark ones and ink on the light one. The ring, when asked for,
+ * is ink: the profile header's 1pt ring with a gap (white spec D14).
  *
- * The initials are Inter SemiBold, not the handoff's Playfair: v3 keeps the
- * display face for the wordmark and drink names (check-design rule 6). They
- * are 40% of the disc and never under 11pt, the app's floor, so the 24pt
- * tab-bar face reads "NV" at 11 rather than at 7.
+ * The initials are Inter SemiBold (check-design rule 6), 40% of the disc
+ * and never under 11pt, the app's floor.
  *
  * Deliberately not emoji: emoji render in the system font, so their weight
  * and colour can't be controlled by design tokens, and at avatar size they
@@ -768,16 +673,16 @@ export function Avatar({
   accent,
   size = 40,
   ring,
-  ringWidth = 2,
+  ringWidth = 1,
   avatarPath,
   localUri,
 }: {
   name: string;
   accent: string;
   size?: number;
-  /** Draws the accent ring, with a 1pt gap inside it. */
+  /** Draws an ink ring, with a gap inside it. */
   ring?: boolean;
-  /** The ring's stroke, 2 by default; edit profile draws 3 so the accent being chosen shows. */
+  /** The ring's stroke, 1 by default. */
   ringWidth?: number;
   /** Object path from `profiles.avatar_path`. */
   avatarPath?: string | null;
@@ -793,8 +698,9 @@ export function Avatar({
     .map((w) => w[0]!.toUpperCase())
     .join('');
 
-  // The ring and a 1pt gap on each side.
-  const inner = size - (ring ? ringWidth * 2 + 2 : 0);
+  // The ring and a 3pt gap on each side.
+  const inner = size - (ring ? ringWidth * 2 + 6 : 0);
+  const tone = avatarTone(accent);
 
   /*
    * How the photo is decoded, and the cache key that goes with it.
@@ -833,7 +739,7 @@ export function Avatar({
         styles.avatarOuter,
         // round-ok: avatar
         { width: size, height: size, borderRadius: size / 2 },
-        ring ? { borderWidth: ringWidth, borderColor: accent } : null,
+        ring ? { borderWidth: ringWidth, borderColor: colors.text } : null,
       ]}>
       <View
         style={[
@@ -843,8 +749,8 @@ export function Avatar({
             height: inner,
             // round-ok: avatar
             borderRadius: inner / 2,
-            backgroundColor: colors.wine,
-            borderColor: colors.wine,
+            backgroundColor: tone.fill,
+            borderColor: tone.fill,
           },
         ]}>
         {/*
@@ -861,6 +767,7 @@ export function Avatar({
         */}
         {photo ? ( // full-size-ok: only past LARGE_AVATAR, where the file is bounded (decodeEarly)
           <Image
+            accessibilityIgnoresInvertColors
             source={{ uri: photo, cacheKey }}
             cachePolicy="memory-disk"
             /*
@@ -877,7 +784,7 @@ export function Avatar({
           <Text
             // The disc is a fixed size, so its initials must not grow past it.
             allowFontScaling={false}
-            style={[styles.avatarText, { fontSize: Math.max(11, Math.round(inner * 0.4)), color: colors.textOnWine }]}>
+            style={[styles.avatarText, { fontSize: Math.max(11, Math.round(inner * 0.4)), color: tone.ink }]}>
             {initials || '?'}
           </Text>
         )}
@@ -904,9 +811,6 @@ export function Avatar({
  * sets a group header in ink rather than muted, for the one group that
  * matters most on its screen (Activity's "New").
  *
- * `tone="lining"` is for a header on the cabinet's lining: title and
- * action in onLining (wine is 1.22:1 there), a group title onLiningMuted.
- *
  * The header role is what VoiceOver's Headings rotor jumps between. Long
  * screens (a drink's recipe, Settings, the shelves of My Bar) are built
  * from these, and without the role the only way to "Delete account" or
@@ -918,28 +822,19 @@ export function SectionHeader({
   title,
   size = 'content',
   action,
-  tone = 'paper',
   strong,
   style,
 }: {
   title: string;
   size?: 'content' | 'group';
   action?: { label: string; onPress: () => void };
-  tone?: 'paper' | 'lining';
   /** A group header in ink rather than muted. */
   strong?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
   const group = size === 'group';
-  const lining = tone === 'lining';
   const muted = group && !strong;
-  const titleInk = lining
-    ? muted
-      ? colors.onLiningMuted
-      : colors.onLining
-    : muted
-      ? colors.textMuted
-      : colors.text;
+  const titleInk = muted ? colors.textMuted : colors.text;
   return (
     <View style={[styles.sectionHeader, group && styles.sectionHeaderGroup, style]}>
       <Text
@@ -954,7 +849,7 @@ export function SectionHeader({
           accessibilityRole="button"
           accessibilityLabel={action.label}
           style={({ pressed }) => pressed && styles.textPressed}>
-          <Text style={[styles.sectionAction, lining && { color: colors.onLining }]}>{action.label}</Text>
+          <Text style={styles.sectionAction}>{action.label}</Text>
         </Pressable>
       ) : null}
     </View>
@@ -962,35 +857,20 @@ export function SectionHeader({
 }
 
 /**
- * A panel on the page.
- *
- * ONE EDGE, DRAWN ONCE: a 1pt `line` around white, no shadow. Measured
- * against this palette, white on cream is 1.11:1, the old `cardBorder`
- * hairline added only 1.21:1 against the card face, and the shadow that
- * used to sit under it was doing the tint's job twice — the same
- * separation smeared over 8pt of blur instead of landing on a boundary.
- * `line` is an edge you can see without hunting for it, and soft drop
- * shadows under everything are the most reliable tell that nobody decided
- * where the light was coming from.
- *
- * Surfaces that genuinely float (the tab bar, sheets) carry their own
+ * A panel on the page: a wash fill with an 8pt corner and no edge, no
+ * shadow. Daylight separates by fill and space (layout spec principle 3);
+ * a white card with a drawn edge on a white page would be a box for the
+ * sake of a box. Surfaces that genuinely float (sheets) carry their own
  * elevation and are not Cards.
- *
- * `surface="mat"` is bone card stock (colors.mat) instead of white: the
- * drink page's spec card, where the card is a printed object rather than
- * a panel. The edge is the same `line`; the one
- * mat card that lies on the cellar ground adds `elevation.paper` itself.
  */
 export function Card({
   children,
-  surface = 'white',
   style,
 }: {
   children: React.ReactNode;
-  surface?: 'white' | 'mat';
   style?: ViewStyle | (ViewStyle | false | undefined)[];
 }) {
-  return <View style={[styles.card, surface === 'mat' && styles.cardMat, style]}>{children}</View>;
+  return <View style={[styles.card, style]}>{children}</View>;
 }
 
 /** Where a ListRow sits in its ListGroup. Null outside a group. */
@@ -1035,7 +915,7 @@ interface ListRowBaseProps {
   onPress?: () => void;
   /** SemiBold title: people's names, drink names in a list. */
   emphasis?: boolean;
-  /** Title and icon in danger, and never a chevron. */
+  /** Title SemiBold and underlined (no red in Daylight), and never a chevron. */
   destructive?: boolean;
   disabled?: boolean;
   /** A spinner in place of the leading icon while the row's action runs. */
@@ -1050,7 +930,7 @@ export type ListRowProps = ListRowBaseProps &
     | {
         /**
          * The title is a drink's name: drawn through DrinkName in
-         * `textRole.rowName` (Playfair 18/22, Dynamic Type cap 1.4), with no
+         * `textRole.name` (Playfair 17/24, Dynamic Type cap 1.4), with no
          * line limit, fitted to `titleMeasure`.
          */
         titleRole: 'name';
@@ -1068,8 +948,8 @@ export type ListRowProps = ListRowBaseProps &
  * One row of a list: Settings, a country picker, Activity, connections.
  *
  * 52pt for one line, 64pt with a subtitle or a leading node (an avatar or
- * a drink thumbnail). Pressed, it fills `bgSunk` — a fill, not a scale.
- * Its own fill is clear, so in a ListGroup it shows the group's white and
+ * a drink thumbnail). Pressed, it fills `press` — a fill, not a scale.
+ * Its own fill is clear, so in a ListGroup it shows the group's wash and
  * on the page it shows the page.
  *
  * The separator is a hairline that starts at the title's left edge and
@@ -1096,7 +976,7 @@ export function ListRow({
 }: ListRowProps) {
   const slot = useContext(ListSlotContext);
   const tall = !!subtitle || (!!leading && 'node' in leading);
-  const ink = destructive ? colors.danger : colors.text;
+  const ink = colors.text;
   const trailingText = trailing && typeof trailing === 'object' && 'text' in trailing ? trailing.text : null;
   const spoken = accessibilityLabel ?? [title, subtitle, trailingText].filter(Boolean).join(', ');
 
@@ -1104,7 +984,7 @@ export function ListRow({
     <ActivityIndicator size="small" color={ink} />
   ) : leading ? (
     'icon' in leading ? (
-      <Icon name={leading.icon} size={22} color={destructive ? colors.danger : (leading.color ?? colors.text)} />
+      <Icon name={leading.icon} size={22} color={leading.color ?? colors.text} />
     ) : (
       leading.node
     )
@@ -1127,9 +1007,15 @@ export function ListRow({
       <View style={styles.rowMain}>
         <View style={styles.rowText}>
           {titleRole === 'name' ? (
-            <DrinkName name={title} role={textRole.rowName} measure={titleMeasure!} cap={1.4} color={ink} />
+            <DrinkName name={title} role={textRole.name} measure={titleMeasure!} cap={1.4} color={ink} />
           ) : (
-            <Text style={[textRole.rowTitle, { color: ink }, emphasis && styles.rowTitleEmphasis]}>
+            <Text
+              style={[
+                textRole.rowTitle,
+                { color: ink },
+                (emphasis || destructive) && styles.rowTitleEmphasis,
+                destructive && styles.rowTitleDestructive,
+              ]}>
               {title}
             </Text>
           )}
@@ -1184,31 +1070,9 @@ export function ListRow({
   );
 }
 
-/** A hairline rule in `line`. `inset` starts it that far from the left. */
-export function Divider({ style, inset }: { style?: ViewStyle; inset?: number }) {
-  return <View style={[styles.divider, inset ? { marginLeft: inset } : null, style]} />;
-}
-
 /**
- * "or" between two ways of doing one thing: a rule, the word, a rule.
- * No margins of its own. The rules are decoration and hidden from
- * VoiceOver; the word is read.
- */
-export function OrDivider({ label = 'or', style }: { label?: string; style?: StyleProp<ViewStyle> }) {
-  return (
-    <View style={[styles.orRow, style]}>
-      <View style={styles.orRule} accessibilityElementsHidden importantForAccessibility="no" />
-      <Text style={styles.orLabel}>{label}</Text>
-      <View style={styles.orRule} accessibilityElementsHidden importantForAccessibility="no" />
-    </View>
-  );
-}
-
-/**
- * A flat 4pt bar: square ends, a sunk track, a wine fill. It was an 8pt
- * capsule, which made a measurement look like a button. On the lining
- * (`tone="lining"`) the track is a `liningLine` rule and the fill bone,
- * since wine on lining is 1.22:1.
+ * A flat 4pt bar: square ends, a wash track, an ink fill. A measurement,
+ * not a capsule.
  *
  * The fill eases to a new value, but its first frame is already the right
  * width (Reanimated resolves an animation in its first style pass to its
@@ -1219,24 +1083,16 @@ export function OrDivider({ label = 'or', style }: { label?: string; style?: Sty
 export function ProgressBar({
   value,
   max,
-  /**
-   * Wine by default (bone on lining): a progress bar in this app measures
-   * collection, which is the affirmative colour's job. Callers pass a
-   * category colour only for the per-category breakdown, where the bar
-   * identifies a category, not progress.
-   */
+  /** Ink by default. */
   color,
   height = 4,
-  tone = 'paper',
 }: {
   value: number;
   max: number;
   color?: string;
   height?: number;
-  tone?: 'paper' | 'lining';
 }) {
-  const lining = tone === 'lining';
-  const fillColor = color ?? (lining ? colors.onLining : colors.wine);
+  const fillColor = color ?? colors.text;
   const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0;
   const reduced = useReducedMotion();
 
@@ -1246,7 +1102,7 @@ export function ProgressBar({
 
   return (
     <View
-      style={[styles.barTrack, lining && styles.barTrackLining, { height }]}
+      style={[styles.barTrack, { height }]}
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max, now: value }}>
       <Animated.View style={[{ height, backgroundColor: fillColor }, fill]} />
@@ -1258,10 +1114,14 @@ export function ProgressBar({
 /* Notice                                                               */
 /* ==================================================================== */
 
+/*
+ * No red and no green: the glyph and the words carry the tone. An error
+ * takes the 1pt ink edge, so it reads as the strongest of the three.
+ */
 const NOTICE_TONE = {
-  error: { edge: colors.danger + '55', bg: colors.dangerWash, fg: colors.danger, icon: 'alert' },
-  success: { edge: colors.wine + '55', bg: colors.wineWash, fg: colors.wine, icon: 'check' },
-  info: { edge: colors.line, bg: colors.surface, fg: colors.textMuted, icon: 'alert' },
+  error: { edge: colors.lineInk, bg: colors.bgSunk, fg: colors.text, icon: 'alert' },
+  success: { edge: colors.bgSunk, bg: colors.bgSunk, fg: colors.text, icon: 'check' },
+  info: { edge: colors.bgSunk, bg: colors.bgSunk, fg: colors.textMuted, icon: 'alert' },
 } as const satisfies Record<string, { edge: string; bg: string; fg: string; icon: IconName }>;
 
 /**
@@ -1269,8 +1129,7 @@ const NOTICE_TONE = {
  * feed that is still shown, a sent email, a form-level error.
  *
  * It replaces six private copies (an errorBox here, a noticeBox there)
- * that each picked their own radius, padding and red. The glyph says the
- * tone as well as the colour does.
+ * that each picked their own radius and padding. The glyph says the tone.
  *
  * Errors are announced (iOS has no live regions); the live region stays
  * for Android.
@@ -1336,9 +1195,9 @@ const SEG_PAD = 2;
  * the other; that is how they had already drifted apart on the role their
  * segments announced. They share this now.
  *
- * A rectangle in a rectangle: a sunk 36pt track with a 1pt edge, and a
- * white thumb with its own edge at the concentric radius (control − 2).
- * The active label is INK, not wine: selection is not the call to action.
+ * A rectangle in a rectangle: a wash 36pt track, and a white thumb with a
+ * hair edge at the concentric radius (control − 2). The active label is
+ * ink, the rest muted.
  *
  * The white thumb used to be a background swapped onto whichever segment
  * was active — two things blinking rather than one thing moving. A
@@ -1489,50 +1348,34 @@ export interface SearchFieldProps
   placeholder: string;
   /** What VoiceOver calls the field. Required: the placeholder is not a label. */
   accessibilityLabel: string;
-  /**
-   * The field sits on a white card rather than on the page. A white field
-   * on a white card has only its edge to separate it, so it takes the
-   * page's cream instead.
-   */
+  /** The field sits on a wash panel rather than the page, so it takes the page's white instead. */
   onCard?: boolean;
   /** A slot after the text and before the clear button, e.g. a spinner. */
   trailing?: React.ReactNode;
+  /**
+   * A key at the field's far end, after the clear ×, so it never moves
+   * when the × comes in with the first letter (the Dex's filter key).
+   */
+  end?: React.ReactNode;
   /** A plain prop under React 19; lets a screen focus the field. */
   ref?: React.Ref<TextInput>;
   /** The box's outer placement: margins and width. The text inside is fixed. */
   style?: ViewStyle;
-  /**
-   * v3.3 Brass D20: 'lining' sinks the field into the cabinet as a well,
-   * the cellar's fill with an opaque onLiningFaint edge (4.19:1 against
-   * the grained lining around it; the translucent liningControl, laid
-   * over the cellar fill, came to 2.62:1 there), bone text and
-   * an onLiningMuted glyph and placeholder (6.79:1 on lining, more in the
-   * cellar). The mock's inset shadow is left out: the field scrolls with
-   * the Dex's header, and v3.3 casts no shadow from what scrolls.
-   */
-  tone?: 'paper' | 'lining';
 }
 
 /**
- * The app's one search input.
+ * The app's one search input (white spec 5.6, layout spec 5.2).
  *
- * There were four — the Dex, Log, My Bar and Find friends — each built by
- * hand, and they had drifted on glyph size, clear-button reach and return
- * key. This is the Dex's, which the others had been measured against: a
- * white box on a 1pt `line` edge, 44pt tall (the touch floor, on the 4pt
- * grid) with 16pt text so iOS never zooms the screen on focus.
+ * A wash box, 44pt tall, 4pt corners, no edge: it reads by its fill, its
+ * glyph and its placeholder. Focused, it turns white with a 2pt ink ring
+ * drawn as an overlay, so focusing moves nothing, and its glyph goes ink.
+ * Placeholder and glyph share textMuted (6.13:1 on wash).
  *
- * Focus darkens the edge to `lineControl` and nothing more. A search field
- * is not a form input: it has no label to float and no error to ring.
+ * The clear control is a plain × in muted, in a 28pt box with 8pt of slop
+ * to 44. No haptic: clearing is a text edit.
  *
- * The glyph and the placeholder share textMuted, so the glyph never sits
- * fainter than the words beside it — at textFaint both were 2.5:1 in a sunk
- * well.
- *
- * The clear button appears only when there is something to clear. It is a
- * 28pt box plus 8pt of slop on every side, so 44pt to the finger; the bare
- * 16pt glyph it replaced was 31. No haptic: clearing is a text edit, like
- * the system's own clear button, not an action.
+ * `returnKeyType` defaults to 'default' ("return"): 'search' paints the
+ * system keyboard's blue key into a black-and-white frame.
  *
  * Search, not autocorrect: names like "Negroni" and "Ardbeg" are exactly
  * what iOS "corrects", and a query is not a sentence to capitalise.
@@ -1544,27 +1387,20 @@ export function SearchField({
   accessibilityLabel,
   onCard,
   trailing,
-  returnKeyType = 'search',
+  end,
+  returnKeyType = 'default',
   ref,
   style,
   onFocus,
   onBlur,
-  tone = 'paper',
   ...input
 }: SearchFieldProps) {
   const [focused, setFocused] = useState(false);
-  const lining = tone === 'lining';
-  const muted = lining ? colors.onLiningMuted : colors.textMuted;
+  const muted = colors.textMuted;
   return (
-    <View
-      style={[
-        styles.search,
-        onCard && styles.searchOnCard,
-        lining && styles.searchLining,
-        focused && (lining ? styles.searchLiningFocused : styles.searchFocused),
-        style,
-      ]}>
-      <Icon name="search" size={18} color={muted} />
+    <View style={[styles.search, (onCard || focused) && styles.searchWhite, style]}>
+      {focused ? <View pointerEvents="none" style={styles.searchRing} /> : null}
+      <Icon name="search" size={20} color={focused ? colors.text : muted} />
       <TextInput
         {...input}
         ref={ref}
@@ -1583,8 +1419,8 @@ export function SearchField({
         autoCorrect={false}
         autoCapitalize="none"
         returnKeyType={returnKeyType}
-        keyboardAppearance={lining ? 'dark' : input.keyboardAppearance}
-        style={[styles.searchInput, lining && styles.searchInputLining]}
+        keyboardAppearance={input.keyboardAppearance ?? 'light'}
+        style={styles.searchInput}
         accessibilityLabel={accessibilityLabel}
       />
       {trailing}
@@ -1598,6 +1434,7 @@ export function SearchField({
           <Icon name="close" size={16} color={muted} />
         </Pressable>
       ) : null}
+      {end}
     </View>
   );
 }
@@ -1644,7 +1481,7 @@ const REST_LABEL: TextStyle = { transformOrigin: 'left center', transform: [{ sc
  */
 function useRestingLabel(resting: boolean, multiline: boolean) {
   const [boxH, setBoxH] = useState<number>(layout.field);
-  const [label, setLabel] = useState({
+  const [label, setLabel] = useState<{ y: number; h: number }>({
     y: FIELD_PAD_V,
     h: textRole.fieldLabel.lineHeight,
   });
@@ -1695,8 +1532,8 @@ function slotCorners(position: GroupSlot['position'], r: number): ViewStyle {
 }
 
 /**
- * The box every field row draws: 56pt (112 multiline), an 8pt corner, a
- * 1pt `lineControl` edge on white. Inside a FieldGroup the group draws the
+ * The box every field row draws: 56pt (88 multiline), a 4pt corner, the
+ * wash fill (its 1pt edge drawn in the same wash, so the box is its fill). Inside a FieldGroup the group draws the
  * edge, and the row draws none: it sits inside that edge, rounded only
  * where it meets the group's corners, at the radius concentric with the
  * edge's inner side (`control` less the edge). The group does not clip its
@@ -1741,7 +1578,7 @@ function FieldRing({ color, slot }: { color: string; slot: GroupSlot | null }) {
 function FieldNote({ text, error, gap }: { text: string; error: boolean; gap: number }) {
   return (
     <View style={[styles.fieldNote, { marginTop: gap }]}>
-      {error ? <Icon name="alert" size={14} color={colors.danger} /> : null}
+      {error ? <Icon name="alert" size={14} color={colors.text} /> : null}
       <Text
         style={[textRole.helper, styles.fieldNoteText, error && styles.fieldNoteError]}
         accessibilityLiveRegion={error ? 'polite' : 'none'}>
@@ -1849,10 +1686,9 @@ export type FieldProps = FieldBaseProps &
  * field one way. Three password fields that behaved subtly differently
  * would be worse than any coupling this creates.
  *
- * FOCUS IS INK, ERROR IS RED, AND NEITHER MOVES ANYTHING. A 2pt ring is
- * drawn over the edge (FieldRing): `lineInk` while focused, `danger` while
- * in error. Focus used to turn the edge wine, which made the field compete
- * with the one wine button on the screen.
+ * FOCUS AND ERROR ARE AN INK RING, AND NEITHER MOVES ANYTHING. A 2pt
+ * ring is drawn over the box (FieldRing). An error adds the alert glyph
+ * and its message in ink: words and a glyph carry it, red used to.
  *
  * AN ERROR REPLACES THE HINT; IT DOES NOT STACK UNDER IT. The line below
  * the field shows one thing: the error while there is one, the hint
@@ -1912,7 +1748,8 @@ export function Field(props: FieldProps) {
   const noteIsError = !slot && (!!error || (!!hint && !!hintIsError));
   // `invalid` rings without a message of its own; the group says why.
   const inError = !!error || !!invalid || (!!hint && !!hintIsError);
-  const ringColor = inError ? colors.danger : focused ? colors.lineInk : null;
+  // Ink for both: an error says so in its glyph and its words, not in red (white spec 5.20).
+  const ringColor = inError || focused ? colors.lineInk : null;
   const disabled = editable === false;
 
   // An error is news; the same hint as help is not.
@@ -2152,7 +1989,6 @@ type EmptyStateArt = { icon: IconName; art?: React.ReactNode } | { icon?: IconNa
 const EMPTY_TONE = {
   paper: { glyph: colors.text, title: colors.text, body: colors.textMuted, action: 'primary', secondary: 'text' },
   dark: { glyph: colors.reelInk, title: colors.reelInk, body: colors.reelInkMuted, action: 'onDark', secondary: 'onDarkText' },
-  lining: { glyph: colors.onLining, title: colors.onLining, body: colors.onLiningMuted, action: 'onLining', secondary: 'onLiningText' },
 } as const satisfies Record<
   string,
   { glyph: string; title: string; body: string; action: ButtonVariant; secondary: ButtonVariant }
@@ -2170,14 +2006,11 @@ const EMPTY_TONE = {
  * action. A failure shows `alert`, "Could not load …", "Check your
  * connection and try again.", and `actionVariant="secondary"` "Try again".
  *
- * `tone="dark"` is for the reels ground, where wine is invisible: bone
- * type, an `onDark` action and an `onDarkText` secondary. `tone="lining"`
- * is the cabinet's (the Dex tray): onLining title, onLiningMuted body, an
- * `onLining` action and an `onLiningText` secondary, and no fill of its
- * own: the tray's grained lining shows through.
+ * `tone="dark"` is for the reels ground: white type, an `onDark` action
+ * and an `onDarkText` secondary.
  *
  * `art` replaces the glyph with a picture of the thing that is missing:
- * the Dex's EmptyArt, a mounted drink (DexCard.tsx). It is a plain node,
+ * the Dex's EmptyArt, a drink's print (DexCard.tsx). It is a plain node,
  * not something this file looks up, so ui.tsx never imports DexCard.tsx
  * (which imports this file), and it is hidden from VoiceOver: the title
  * says what the picture shows. The art must be a real catalogue drink,
@@ -2196,11 +2029,11 @@ export function EmptyState({
   title: string;
   body: string;
   action?: { label: string; onPress: () => void };
-  /** Defaults to `primary` on paper, `onDark` on dark, `onLining` on lining; `secondary` for a retry. */
+  /** Defaults to `primary` on paper, `onDark` on dark; `secondary` for a retry. */
   actionVariant?: ButtonVariant;
   /** A quieter second way out, under the action: "Clear search". */
   secondaryAction?: { label: string; onPress: () => void };
-  tone?: 'paper' | 'dark' | 'lining';
+  tone?: 'paper' | 'dark';
 }) {
   const t = EMPTY_TONE[tone];
   return (
@@ -2248,7 +2081,7 @@ export const HOLD_SLOW_MS = 8000;
  * What a screen shows while it cannot draw its content yet: a first load,
  * a gate deciding, a permission being read.
  *
- * NEVER A FEATURELESS PAGE. A plain cream (or black) page is
+ * NEVER A FEATURELESS PAGE. A plain white (or black) page is
  * indistinguishable from a screen that failed to load, which is exactly
  * how "switching tabs shows a blank screen" was reported. So: the ground
  * alone for HOLD_QUIET_MS, then a spinner, then at HOLD_SLOW_MS the
@@ -2261,7 +2094,7 @@ export const HOLD_SLOW_MS = 8000;
  *
  * `fill` (default) centres it in the whole screen on the ground colour;
  * `fill={false}` is for the empty slot of a list under its header.
- * `tone="dark"` is the reels ground: a bone spinner and bone-muted text.
+ * `tone="dark"` is the reels ground: a white spinner and muted white text.
  */
 export function Hold({
   slowMessage,
@@ -2291,7 +2124,7 @@ export function Hold({
         fill && { backgroundColor: dark ? colors.reelGround : colors.bg },
       ]}>
       {phase >= 1 ? (
-        <ActivityIndicator color={dark ? colors.reelInk : colors.wine} accessibilityLabel="Loading" />
+        <ActivityIndicator color={dark ? colors.reelInk : colors.text} accessibilityLabel="Loading" />
       ) : null}
       {phase === 2 ? (
         <Text style={[styles.holdText, dark && { color: colors.reelInkMuted }]}>{slowMessage}</Text>
@@ -2337,6 +2170,7 @@ const styles = StyleSheet.create({
   buttonLabelPinned: { flexShrink: 1, textAlign: 'center', paddingHorizontal: 28 },
   /* Loading, inline and mark-less: the label keeps its width, unseen. */
   buttonLabelCovered: { opacity: 0 },
+  buttonLabelUnderline: { fontFamily: fonts.bodySemiBold, textDecorationLine: 'underline' },
   buttonCover: {
     position: 'absolute',
     top: 0,
@@ -2375,8 +2209,8 @@ const styles = StyleSheet.create({
     borderWidth: stroke.edge,
     alignSelf: 'flex-start',
   },
-  tagNeutral: { backgroundColor: colors.cardAlt, borderColor: colors.line },
-  tagText: { fontFamily: fonts.bodyMedium, ...typeScale.tag },
+  tagNeutral: { backgroundColor: colors.bgSunk, borderColor: colors.bgSunk },
+  tagText: textRole.statusWord,
 
   /* Chip */
   chip: {
@@ -2387,26 +2221,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: space.md,
     borderRadius: radius.control,
     borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.surface,
+    borderColor: colors.hair,
+    backgroundColor: colors.bg,
   },
-  chipSelected: { backgroundColor: colors.wineWash, borderColor: colors.wine },
-  chipPressed: { backgroundColor: colors.bgSunk },
-  chipLining: { backgroundColor: 'transparent', borderColor: colors.liningControl },
-  chipLiningSelected: { backgroundColor: colors.onLining, borderColor: colors.onLining },
-  chipLiningPressed: { backgroundColor: colors.liningPressed },
-  chipLiningSelectedPressed: { backgroundColor: colors.onLiningMuted, borderColor: colors.onLiningMuted },
+  chipSelected: { backgroundColor: colors.text, borderColor: colors.text },
+  chipPressed: { backgroundColor: colors.press },
+  chipSelectedPressed: { backgroundColor: colors.inkPressed, borderColor: colors.inkPressed },
   chipLabel: {
     fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
     color: colors.text,
   },
-  chipLabelSelected: { fontFamily: fonts.bodySemiBold, color: colors.wine },
   chipCount: {
     fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
     color: colors.textMuted,
   },
 
@@ -2430,19 +2260,13 @@ const styles = StyleSheet.create({
   sectionTitle: { flex: 1 },
   sectionAction: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
-    color: colors.wine,
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
+    color: colors.text,
   },
 
   /* Card and list */
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: radius.card,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-  },
-  cardMat: { backgroundColor: colors.mat },
+  card: { backgroundColor: colors.bgSunk, borderRadius: radius.card },
   listGroup: { overflow: 'hidden' },
   row: {
     minHeight: layout.row,
@@ -2451,7 +2275,7 @@ const styles = StyleSheet.create({
     paddingLeft: space.lg,
   },
   rowTall: { minHeight: layout.rowTall },
-  rowPressed: { backgroundColor: colors.bgSunk },
+  rowPressed: { backgroundColor: colors.press },
   rowLeading: { justifyContent: 'center', marginRight: space.md, paddingVertical: space.md },
   rowMain: {
     flex: 1,
@@ -2463,11 +2287,12 @@ const styles = StyleSheet.create({
   },
   rowText: { flex: 1 },
   rowTitleEmphasis: { fontFamily: fonts.bodySemiBold },
+  rowTitleDestructive: { textDecorationLine: 'underline' },
   rowSubtitle: { ...textRole.rowSubtitle, color: colors.textMuted },
   rowTrailingText: {
     fontFamily: fonts.body,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
     color: colors.textMuted,
   },
   /* Starts at the title's left edge (the start of rowMain), runs to the
@@ -2478,24 +2303,11 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     height: stroke.hair,
-    backgroundColor: colors.line,
-  },
-
-  divider: { height: stroke.hair, backgroundColor: colors.line },
-
-  orRow: { flexDirection: 'row', alignItems: 'center' },
-  orRule: { flex: 1, height: stroke.edge, backgroundColor: colors.line },
-  orLabel: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    paddingHorizontal: space.md,
+    backgroundColor: colors.hair,
   },
 
   /* Square ends: a measurement, not a capsule. */
   barTrack: { width: '100%', backgroundColor: colors.bgSunk, overflow: 'hidden', borderRadius: radius.none },
-  barTrackLining: { backgroundColor: colors.liningLine },
 
   /* Notice */
   notice: {
@@ -2509,8 +2321,8 @@ const styles = StyleSheet.create({
   noticeText: { flex: 1 },
   noticeAction: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
   },
 
   /* Segmented control */
@@ -2521,7 +2333,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgSunk,
     borderRadius: radius.control,
     borderWidth: stroke.edge,
-    borderColor: colors.line,
+    borderColor: colors.bgSunk,
   },
   segment: {
     flex: 1,
@@ -2537,17 +2349,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: SEG_PAD,
     bottom: SEG_PAD,
-    borderRadius: radius.control - SEG_PAD,
+    borderRadius: Math.max(0, radius.control - SEG_PAD),
     borderWidth: stroke.edge,
-    borderColor: colors.line,
+    borderColor: colors.hair,
     backgroundColor: colors.surface,
   },
   // 13pt, and the only name an inactive segment has: textMuted, not
   // textFaint. Selection reads as ink on the white thumb.
   segmentLabel: {
     fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
     color: colors.textMuted,
   },
   segmentLabelActive: { color: colors.text },
@@ -2560,20 +2372,21 @@ const styles = StyleSheet.create({
     minHeight: layout.search,
     paddingHorizontal: space.md,
     borderRadius: radius.control,
-    borderWidth: stroke.edge,
-    borderColor: colors.line,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.bgSunk,
   },
-  searchOnCard: { backgroundColor: colors.bg },
-  searchFocused: { borderColor: colors.lineControl },
-  searchLining: { backgroundColor: colors.liningDeep, borderColor: colors.onLiningFaint },
-  searchLiningFocused: { borderColor: colors.onLiningMuted },
-  searchInputLining: { color: colors.onLining },
+  searchWhite: { backgroundColor: colors.bg },
+  /* The focus ring, over the box's own corners, so focusing moves nothing. */
+  searchRing: {
+    ...StyleSheet.absoluteFill,
+    borderRadius: radius.control,
+    borderWidth: stroke.ring,
+    borderColor: colors.lineInk,
+  },
   searchInput: {
     flex: 1,
     alignSelf: 'stretch',
-    fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
+    fontFamily: textRole.body.fontFamily,
+    fontSize: textRole.body.fontSize,
     color: colors.text,
   },
   searchClear: {
@@ -2592,22 +2405,21 @@ const styles = StyleSheet.create({
     paddingVertical: FIELD_PAD_V - stroke.edge,
     borderRadius: radius.control,
     /*
-     * lineControl: a non-text use at 3.91:1 against the white fill and
-     * 3.51:1 against the page. The old cardBorder hairline was 1.21:1, and
-     * the white fill itself is 1.11:1 on the cream page, so a form's main
-     * controls were close to invisible to anyone with low vision. A
-     * control's edge is not a card's edge.
+     * The wash fill is what says "a field": its edge is drawn in the same
+     * wash, kept so a FieldGroup's rows measure the same as a lone field.
+     * The label and the focus ring identify it; an edge would be one more
+     * outline (layout spec principle 3).
      */
     borderWidth: stroke.edge,
-    borderColor: colors.lineControl,
-    backgroundColor: colors.surface,
+    borderColor: colors.bgSunk,
+    backgroundColor: colors.bgSunk,
     // Clips a resting label that, drawn a third larger, would run past
     // the box at the largest text sizes.
     overflow: 'hidden',
   },
   fieldBoxMultiline: { minHeight: layout.fieldMultiline, justifyContent: 'flex-start' },
   fieldBoxInGroup: { borderWidth: 0, borderRadius: radius.none, paddingVertical: FIELD_PAD_V },
-  fieldBoxSunk: { backgroundColor: colors.bgSunk },
+  fieldBoxSunk: { backgroundColor: colors.press },
   fieldBoxCentred: { justifyContent: 'center' },
   fieldLabel: { color: colors.textMuted },
   fieldValueRow: { flexDirection: 'row', alignItems: 'center' },
@@ -2658,7 +2470,7 @@ const styles = StyleSheet.create({
   fieldNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 6 },
   /* textMuted, not textFaint: 13pt text a person has to read. */
   fieldNoteText: { flex: 1, color: colors.textMuted },
-  fieldNoteError: { color: colors.danger },
+  fieldNoteError: { color: colors.text },
   /*
    * Deliberately NOT overflow: 'hidden'. On iOS a clipping view's border is
    * drawn by Core Animation IN FRONT of its children (React Native only
@@ -2670,11 +2482,11 @@ const styles = StyleSheet.create({
   fieldGroup: {
     borderRadius: radius.control,
     borderWidth: stroke.edge,
-    borderColor: colors.lineControl,
-    backgroundColor: colors.surface,
+    borderColor: colors.bgSunk,
+    backgroundColor: colors.bgSunk,
   },
   /* Full width, as the system's grouped fields draw it. */
-  fieldGroupRule: { height: stroke.edge, backgroundColor: colors.lineControl },
+  fieldGroupRule: { height: stroke.hair, backgroundColor: colors.hair },
   selectBox: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   selectText: { flex: 1, justifyContent: 'center' },
 
@@ -2688,8 +2500,8 @@ const styles = StyleSheet.create({
   emptyTitle: { textAlign: 'center', marginTop: space.lg },
   emptyBody: {
     fontFamily: fonts.body,
-    fontSize: typeScale.body.fontSize,
-    lineHeight: typeScale.body.lineHeight,
+    fontSize: textRole.body.fontSize,
+    lineHeight: textRole.body.lineHeight,
     textAlign: 'center',
     maxWidth: 300,
     marginTop: space.sm,
@@ -2714,9 +2526,9 @@ const styles = StyleSheet.create({
   },
   holdText: {
     fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted, // 4.5:1+ on the page; textFaint is not
+    fontSize: textRole.small.fontSize,
+    lineHeight: textRole.small.lineHeight,
+    color: colors.textMuted, // 6.69:1 on the page; textFaint is not text
     textAlign: 'center',
     maxWidth: 280,
   },

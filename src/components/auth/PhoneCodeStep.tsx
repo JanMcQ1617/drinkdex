@@ -6,17 +6,7 @@ import { useInputFocusOnShow } from '@/components/auth/AuthTitleBar';
 import { AuthMessage } from '@/components/auth/Consent';
 import { Icon } from '@/components/icons';
 import { Button, haptic, useAnnounce } from '@/components/ui';
-import {
-  colors,
-  fonts,
-  layout,
-  radius,
-  space,
-  stroke,
-  tabular,
-  textRole,
-  type as typeScale,
-} from '@/constants/theme';
+import { colors, fonts, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { DIALS } from '@/data/countries';
 import { displayPhone } from '@/lib/phone';
 import { CODE_WRONG } from '@/store/auth';
@@ -110,9 +100,10 @@ export function PhoneCodeStep() {
   useAnnounce(error);
 
   /*
-   * Red cells say "this code", so only a wrong code (and the lock it leads
-   * to) turns them red. No connection, or a failed resend, is said in the
-   * same line but leaves the code alone.
+   * Ringed cells say "this code", so only a wrong code (and the lock it
+   * leads to) rings all six in ink, with the alert glyph and the words
+   * under them (no red in Daylight). No connection, or a failed resend, is
+   * said in the same line but leaves the code alone.
    */
   const cellsInError = locked || error === CODE_WRONG || error === TOO_MANY_WRONG_CODES;
   // The cell the next digit goes into; with all six typed, the last.
@@ -136,7 +127,7 @@ export function PhoneCodeStep() {
           accessibilityElementsHidden
           importantForAccessibility="no-hide-descendants">
           {Array.from({ length: OTP_LENGTH }, (_, i) => {
-            const ring = cellsInError ? colors.danger : focused && i === nextCell ? colors.lineInk : null;
+            const ring = cellsInError ? colors.text : focused && i === nextCell ? colors.lineInk : null;
             return (
               <View key={i} style={styles.cell}>
                 <Text style={styles.digit} maxFontSizeMultiplier={1.4}>
@@ -170,8 +161,8 @@ export function PhoneCodeStep() {
 
       {error ? (
         <View style={styles.errorLine}>
-          <Icon name="alert" size={14} color={colors.danger} />
-          <Text style={[textRole.helper, styles.errorText]}>{error}</Text>
+          <Icon name="alert" size={14} color={colors.text} />
+          <Text style={[textRole.small, styles.errorText]}>{error}</Text>
         </View>
       ) : null}
 
@@ -225,28 +216,21 @@ export function PhoneCodeStep() {
 const CELL_HEIGHT = 56;
 
 const styles = StyleSheet.create({
-  lede: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.bodySm.fontSize,
-    lineHeight: typeScale.bodySm.lineHeight,
-    color: colors.textMuted,
-    marginBottom: space.lg,
-  },
-  ledeLink: { fontFamily: fonts.bodySemiBold, color: colors.wine },
+  lede: { ...textRole.body, color: colors.textMuted, marginBottom: space.lg },
+  ledeLink: { fontFamily: fonts.bodySemiBold, color: colors.text },
 
   codeRow: { height: CELL_HEIGHT },
   cells: { flexDirection: 'row', gap: space.sm, height: CELL_HEIGHT },
+  /* The kit's field: a wash box with no edge (white spec 5.6); the ring says focus and error. */
   cell: {
     flex: 1,
     height: CELL_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radius.control,
-    borderWidth: stroke.edge,
-    borderColor: colors.lineControl,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.bgSunk,
   },
-  /* 1pt outside, 1pt in: covers the edge, concentric with the cell's corner. */
+  /* 1pt outside the box, concentric with its corner, as Field's ring is. */
   cellRing: {
     position: 'absolute',
     top: -stroke.edge,
@@ -256,14 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.control + stroke.edge,
     borderWidth: stroke.ring,
   },
-  digit: {
-    fontFamily: fonts.bodySemiBold,
-    fontSize: typeScale.title.fontSize,
-    lineHeight: typeScale.title.lineHeight,
-    color: colors.text,
-    textAlign: 'center',
-    fontVariant: ['tabular-nums'],
-  },
+  digit: { ...textRole.title, color: colors.text, textAlign: 'center', fontVariant: ['tabular-nums'] },
   /* The real input: the whole row, drawing nothing of its own. */
   codeInput: {
     position: 'absolute',
@@ -272,11 +249,11 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     color: 'transparent',
-    fontSize: typeScale.body.fontSize,
+    fontSize: textRole.body.fontSize,
   },
 
   errorLine: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, marginTop: space.sm },
-  errorText: { flex: 1, color: colors.danger },
+  errorText: { flex: 1, color: colors.text },
 
   primary: { marginTop: space.xl },
 
@@ -284,12 +261,6 @@ const styles = StyleSheet.create({
   /* The link's own height (a small text button, 44 to the finger with its slop),
      held while it counts down, so nothing jumps when the line becomes the link. */
   countdownBox: { minHeight: layout.controlSm, justifyContent: 'center' },
-  countdown: {
-    fontFamily: fonts.body,
-    fontSize: typeScale.caption.fontSize,
-    lineHeight: typeScale.caption.lineHeight,
-    color: colors.textMuted,
-    textAlign: 'center',
-  },
+  countdown: { ...textRole.small, color: colors.textMuted, textAlign: 'center' },
   notice: { marginTop: space.md },
 });
