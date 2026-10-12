@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 021
+-- Sipply — the whole schema, as of migration 022
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-021 built on the live project, and records every one of
+-- migrations 002-022 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -417,6 +417,33 @@ create table if not exists public.tournament_members (
   primary key (tournament_id, user_id)
 );
 
+-- Your tastes (022): the onboarding answers, one row per account, owner
+-- only. `answers` is the app's TasteAnswers object, or {} once cleared;
+-- the server checks its shape and size and reads nothing in it.
+create table if not exists public.taste_profiles (
+  user_id    uuid primary key references public.profiles on delete cascade,
+  answers    jsonb not null default '{}'::jsonb,
+  heard_from text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint taste_profiles_answers_shape
+    check (jsonb_typeof(answers) = 'object' and pg_column_size(answers) <= 4096),
+  constraint taste_profiles_heard_from
+    check (heard_from in ('friend', 'instagram', 'tiktok', 'app-store', 'facebook', 'google', 'other'))
+);
+
+-- Drinks saved to try (022): catalogue ids, owner only, at most 200 per
+-- account (want_to_try_cap). Not the Dex, which is on the phone.
+-- clock_timestamp(), not now(): one insert carries a phone's whole list,
+-- oldest first, and now() would give every row of it the same time.
+create table if not exists public.want_to_try (
+  user_id    uuid not null references public.profiles on delete cascade,
+  drink_id   text not null,
+  created_at timestamptz not null default clock_timestamp(),
+  primary key (user_id, drink_id),
+  constraint want_to_try_drink_id_shape check (drink_id ~ '^[a-z0-9][a-z0-9-]{0,79}$')
+);
+
 
 -- --------------------------------------------------------------------
 -- Indexes
@@ -475,6 +502,8 @@ create unique index if not exists reports_once_per_reel  on public.reports (repo
 -- I am in", by person and status.
 create index if not exists tournaments_host_idx          on public.tournaments (host_id, created_at desc);
 create index if not exists tournament_members_user_idx   on public.tournament_members (user_id, status);
+-- 022: the want-to-try list, newest first, for the first sync's read.
+create index if not exists want_to_try_user_created_idx on public.want_to_try (user_id, created_at desc);
 
 
 -- --------------------------------------------------------------------
@@ -582,6 +611,51 @@ begin
     new.created_at := now();
   elsif new.created_at is distinct from old.created_at then
     raise exception 'created_at is set by the server and cannot be changed' using errcode = '42501';
+  end if;
+  return new;
+end;
+$$;
+
+-- 022: taste_profiles' clocks: created_at stays the insert's, every update
+-- stamps updated_at.
+create or replace function public.touch_taste_profile()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  new.created_at := old.created_at;
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+-- 022: at most 200 drinks to try per account, serialised per account as
+-- 019's reel quota is. Runs as the caller, so it counts the caller's own
+-- rows; a drink already on the list passes, so ON CONFLICT DO NOTHING
+-- skips it rather than meeting the cap.
+create or replace function public.guard_want_to_try_insert()
+returns trigger
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+declare
+  saved integer;
+begin
+  perform pg_advisory_xact_lock(hashtextextended('want_to_try:' || new.user_id::text, 0));
+
+  if exists (select 1 from public.want_to_try w
+             where w.user_id = new.user_id and w.drink_id = new.drink_id) then
+    return new;
+  end if;
+
+  select count(*) into saved from public.want_to_try w where w.user_id = new.user_id;
+  if saved >= 200 then
+    raise exception 'want_to_try_full'
+      using errcode = 'P0001',
+            detail  = format('%s drinks saved to try; the limit is 200', saved),
+            hint    = 'Remove one to save another.';
   end if;
   return new;
 end;
@@ -830,7 +904,8 @@ $$;
 -- storage.objects: Supabase refuses that, and it would orphan the files if
 -- it did not. Removing auth.users cascades to profiles, and from there to
 -- posts, follows, likes, saves (017), drink_submissions (018), reels and
--- reel_likes (019). Any later replacement must keep 'reels'.
+-- reel_likes (019), taste_profiles and want_to_try (022). Any later
+-- replacement must keep 'reels'.
 create or replace function public.delete_own_account()
 returns void
 language plpgsql
@@ -2642,6 +2717,8 @@ revoke all on function private.report_evidence(uuid, uuid, uuid) from public, an
 revoke all on function private.charge_discovery(text, integer) from public, anon, authenticated;
 revoke all on function public.prepare_drink_submission()     from public, anon, authenticated;
 revoke all on function public.guard_reel_insert()            from public, anon, authenticated;
+revoke all on function public.touch_taste_profile()          from public, anon, authenticated;
+revoke all on function public.guard_want_to_try_insert()     from public, anon, authenticated;
 revoke all on function private.reel_day_limit()              from public, anon, authenticated;
 revoke all on function private.reel_live_limit()             from public, anon, authenticated;
 
@@ -2861,6 +2938,17 @@ create trigger blocks_drop_tournament_membership
   after insert on public.blocks
   for each row execute function private.drop_tournament_membership_on_block();
 
+-- 022.
+drop trigger if exists taste_profiles_touch on public.taste_profiles;
+create trigger taste_profiles_touch
+  before update on public.taste_profiles
+  for each row execute function public.touch_taste_profile();
+
+drop trigger if exists want_to_try_cap on public.want_to_try;
+create trigger want_to_try_cap
+  before insert on public.want_to_try
+  for each row execute function public.guard_want_to_try_insert();
+
 
 -- --------------------------------------------------------------------
 -- Table privileges
@@ -2875,7 +2963,9 @@ create trigger blocks_drop_tournament_membership
 -- and clocks are never granted. Nobody edits a reel (019): no update
 -- grant, on top of having no update policy. Tournaments (020) are
 -- select-only: every write is an RPC, so the rules on dates, goals, seats
--- and blocks cannot be skipped by writing rows.
+-- and blocks cannot be skipped by writing rows. Your tastes and drinks to
+-- try (022) are owner-only and grant only the columns a client may name;
+-- taste_profiles updates only its two answers, never user_id.
 -- --------------------------------------------------------------------
 
 grant select on public.profiles to anon, authenticated;
@@ -2915,6 +3005,15 @@ revoke all on private.music_search_usage from public, anon, authenticated;
 revoke all on public.tournaments, public.tournament_members from anon, authenticated;
 grant select on public.tournaments, public.tournament_members to authenticated;
 
+revoke all on public.taste_profiles from anon, authenticated;
+grant select, delete on public.taste_profiles to authenticated;
+grant insert (user_id, answers, heard_from) on public.taste_profiles to authenticated;
+grant update (answers, heard_from) on public.taste_profiles to authenticated;
+
+revoke all on public.want_to_try from anon, authenticated;
+grant select, delete on public.want_to_try to authenticated;
+grant insert (user_id, drink_id) on public.want_to_try to authenticated;
+
 
 -- --------------------------------------------------------------------
 -- Row Level Security
@@ -2945,6 +3044,8 @@ alter table private.submission_digests enable row level security;
 alter table private.music_search_usage enable row level security;
 alter table public.tournaments     enable row level security;
 alter table public.tournament_members enable row level security;
+alter table public.taste_profiles  enable row level security;
+alter table public.want_to_try     enable row level security;
 
 -- Profiles: readable by any signed-in user not blocked either way (you
 -- must be able to find people to follow), writable only by their owner.
@@ -3100,6 +3201,38 @@ create policy saves_insert_own on public.saves
   );
 
 create policy saves_delete_own on public.saves
+  for delete to authenticated using (auth.uid() = user_id);
+
+-- Your tastes and drinks to try (022): owner only, both ways; nobody else
+-- reads either, followers included.
+drop policy if exists taste_profiles_read_own   on public.taste_profiles;
+drop policy if exists taste_profiles_insert_own on public.taste_profiles;
+drop policy if exists taste_profiles_update_own on public.taste_profiles;
+drop policy if exists taste_profiles_delete_own on public.taste_profiles;
+
+create policy taste_profiles_read_own on public.taste_profiles
+  for select to authenticated using (auth.uid() = user_id);
+
+create policy taste_profiles_insert_own on public.taste_profiles
+  for insert to authenticated with check (auth.uid() = user_id);
+
+create policy taste_profiles_update_own on public.taste_profiles
+  for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create policy taste_profiles_delete_own on public.taste_profiles
+  for delete to authenticated using (auth.uid() = user_id);
+
+drop policy if exists want_to_try_read_own   on public.want_to_try;
+drop policy if exists want_to_try_insert_own on public.want_to_try;
+drop policy if exists want_to_try_delete_own on public.want_to_try;
+
+create policy want_to_try_read_own on public.want_to_try
+  for select to authenticated using (auth.uid() = user_id);
+
+create policy want_to_try_insert_own on public.want_to_try
+  for insert to authenticated with check (auth.uid() = user_id);
+
+create policy want_to_try_delete_own on public.want_to_try
   for delete to authenticated using (auth.uid() = user_id);
 
 -- Drink suggestions (018): own rows only, and nobody else reads. Editable
@@ -3346,7 +3479,7 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 021'),
+  ('schema',                  'schema.sql, current as of 022'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -3366,5 +3499,6 @@ insert into public.schema_migrations (version, note) values
   ('018_drink_submissions',   'contained in schema.sql'),
   ('019_reels',               'contained in schema.sql'),
   ('020_tournaments_and_story_music', 'contained in schema.sql'),
-  ('021_post_likers',         'contained in schema.sql')
+  ('021_post_likers',         'contained in schema.sql'),
+  ('022_taste_profiles',      'contained in schema.sql')
 on conflict (version) do nothing;

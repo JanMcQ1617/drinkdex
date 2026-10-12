@@ -8,6 +8,7 @@ import { useReducedMotion } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 
 import { VideoIntro } from '@/components/VideoIntro';
+import { FirstRun } from '@/components/FirstRun';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
@@ -270,6 +271,13 @@ export default function RootLayout() {
         */}
         <Stack.Screen name="reel/[id]" options={{ gestureDirection: 'horizontal' }} />
       </Stack>
+      {/*
+        The first run: the questions, the picks and the ways in, over the
+        whole app while a signed-out phone has not finished it (FirstRun
+        says when). Straight after the Stack so the overlays below, and
+        the film, draw above it.
+      */}
+      <FirstRun />
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
       {/*

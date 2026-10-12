@@ -2,9 +2,11 @@ import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { Avatar, ListGroup, ListRow, SectionHeader } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
@@ -14,6 +16,8 @@ import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
 import { useSocial } from '@/store/social';
+import { hasAnswers, tasteSummary, useTaste } from '@/store/taste';
+import { confirmDestructive } from '@/utils/alerts';
 
 /* ==================================================================== */
 /* Settings                                                             */
@@ -50,6 +54,12 @@ import { useSocial } from '@/store/social';
 /* kept or lost before the confirm does. Those three are destructive    */
 /* rows (ink SemiBold, underlined; no red), each followed by the        */
 /* system's confirm, and their flows are exactly v3.3's.                */
+/*                                                                      */
+/* v4.1: Your tastes. The onboarding's questions again, for anyone,     */
+/* including accounts that never saw them: the retake path (no welcome, */
+/* no age question, no sign-in), full screen in a Modal rather than a   */
+/* route, so no new route file. Clear your tastes sits under it only    */
+/* while there is something to clear.                                   */
 /* ==================================================================== */
 
 const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
@@ -66,7 +76,11 @@ const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
  * (lib/appleRevoke), so it does not read as a fault.
  */
 const DELETE_CONFIRM =
-  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, and resets the collection on this phone. It cannot be undone. If you use Sign in with Apple, Apple asks you to confirm next, so Sipply comes off your Apple Account too.';
+  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, your tastes and the drinks you saved to try, and resets the collection on this phone. It cannot be undone. If you use Sign in with Apple, Apple asks you to confirm next, so Sipply comes off your Apple Account too.';
+
+/* What Clear your tastes removes, and what it keeps (v4.1 §3.5). */
+const CLEAR_TASTES_CONFIRM =
+  'Your answers are removed from this phone and your account. Drinks you saved to try stay.';
 
 /*
  * A section: its heading, then its rows in one wash group. The heading is
@@ -106,6 +120,21 @@ export default function SettingsScreen() {
   const clearCustomPours = useCustomDrinks((s) => s.clearPours);
   const resetCustomDrinks = useCustomDrinks((s) => s.resetAll);
   const resetSocial = useSocial((s) => s.reset);
+
+  /*
+   * Your tastes: the summary under the row, and the retake. The answers
+   * are written as each step is left, so closing midway keeps the steps
+   * already passed, as the first run does.
+   */
+  const answers = useTaste((s) => s.answers);
+  const reduceMotion = useReducedMotion();
+  const [tastesOpen, setTastesOpen] = useState(false);
+  const closeTastes = useCallback(() => setTastesOpen(false), []);
+  const confirmClearTastes = useCallback(() => {
+    confirmDestructive('Clear your tastes?', CLEAR_TASTES_CONFIRM, 'Clear', () =>
+      useTaste.getState().clearAnswers(),
+    );
+  }, []);
 
   /* Which account action is running, if any. Set from the confirm's tap. */
   const [pending, setPending] = useState<'signout' | 'delete' | null>(null);
@@ -275,6 +304,16 @@ export default function SettingsScreen() {
         <Section title="Your activity">
           <ListRow title="Saved" trailing="chevron" onPress={() => router.push('/saved')} />
           <ListRow title="Activity" trailing="chevron" onPress={() => router.push('/activity')} />
+          <ListRow
+            title="Your tastes"
+            subtitle={tasteSummary(answers) ?? 'A few questions for drink picks'}
+            trailing="chevron"
+            onPress={() => setTastesOpen(true)}
+            accessibilityHint="Opens the questions behind your drink picks"
+          />
+          {hasAnswers(answers) ? (
+            <ListRow title="Clear your tastes" onPress={confirmClearTastes} destructive />
+          ) : null}
         </Section>
 
         {/*
@@ -361,6 +400,20 @@ export default function SettingsScreen() {
           {build ? ` (${build})` : ''}
         </Text>
       </ScrollView>
+
+      {/*
+        The retake (v4.1 §1.3): the stored answers pre-selected, Close on
+        the first step, Done on the picks. Full screen, so nothing of
+        Settings shows round it; the flow lays out its own safe area.
+      */}
+      <Modal
+        visible={tastesOpen}
+        presentationStyle="fullScreen"
+        animationType={reduceMotion ? 'fade' : 'slide'}
+        onRequestClose={closeTastes}>
+        {/* Mounted only while the Modal is up (and through its dismissal), so each opening starts at the first step. */}
+        <OnboardingFlow mode="retake" onExit={closeTastes} />
+      </Modal>
     </View>
   );
 }

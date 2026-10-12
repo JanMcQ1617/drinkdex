@@ -6,9 +6,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AuthGate } from '@/components/AuthGate';
 import { EmptyArt } from '@/components/DexCard';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
+import { groupPours, storyMap } from '@/components/home/groupPours';
 import { HOME_BAR_HEIGHT, HomeChrome } from '@/components/home/HomeChrome';
 import { NotInDexYet, type NotInDexYetPick } from '@/components/home/NotInDexYet';
-import { TodaysPours } from '@/components/home/TodaysPours';
+import { TodaysPours, useExpiryClock } from '@/components/home/TodaysPours';
 import { PostCard } from '@/components/PostCard';
 import { useTabScroll } from '@/components/ScrollChrome';
 import { Button, EmptyState, Hold, Notice } from '@/components/ui';
@@ -25,18 +26,21 @@ import type { Post } from '@/types';
 /* ==================================================================== */
 /* Home                                                                 */
 /*                                                                      */
-/* The feed (layout spec 5.1; Jan: "I want less stuff"): the wordmark   */
-/* and the Activity bell, the stories, then the posts of the people you */
-/* follow and your own, newest first. 27 elements at rest: the bar 2,   */
-/* five whole story rings and their names 10 (a sixth peeking in the    */
-/* margin 2), a post 7 (print, name, author, heart, count, save, •••),  */
-/* the next print's top 1 and the tab bar 5.                            */
+/* Laid out like Instagram's feed (v4.1; Jan: "you changed the home     */
+/* section can you make it look the same as instagram"; specs/v4-       */
+/* mockups/home-ig). The 44pt bar (the wordmark; create and the         */
+/* Activity heart), the stories tray, then the posts of the people you  */
+/* follow and your own, newest first, each with Instagram's anatomy     */
+/* (PostCard): header, a full-bleed square photo, heart · share · save, */
+/* liked by, the caption and the time. At rest on a 440 x 956 phone:    */
+/* the bar, the tray with its sixth ring cut by the edge, post 1 whole  */
+/* and post 2's header above the tab bar.                               */
 /*                                                                      */
-/* ALL PAGE, SEPARATED BY SPACE. No band, no shelf, no sunk gaps: the   */
-/* bar, the stories and the posts stand on the one white page, and two  */
-/* posts are set apart by 32 points of air (layout principle 3). Twice  */
-/* down the feed (after the 5th and the 15th post) a row shows drinks   */
-/* your friends posted that are not in your Dex yet.                    */
+/* ALL PAGE, SEPARATED BY SPACE. No band, no shelf, no sunk gaps, no    */
+/* rules: the bar, the stories and the posts stand on the one white     */
+/* page, and a post ends in 14 points of air. Twice down the feed       */
+/* (after the 5th and the 15th post) a row shows drinks your friends    */
+/* posted that are not in your Dex yet.                                 */
 /*                                                                      */
 /* THE BAR FLOATS. The list runs from the top of the screen and its     */
 /* header holds the bar's place; the bar itself is laid over the list   */
@@ -95,6 +99,21 @@ function HomeFeed() {
 
   const seenHydrated = useSeen((s) => s.hydrated);
   const activitySeenAt = useSeen((s) => (myId ? s.activity[myId] : undefined));
+  const seenPours = useSeen((s) => (myId ? s.pours[myId] : undefined));
+
+  /*
+   * Who has a story today, for the rings on the post headers: read off
+   * the same groups the tray draws, against the same clock, so a header
+   * and its circle never disagree and both expire at the same moment.
+   * Others count once the row has its answer, as in the tray; nobody is
+   * ringed until the seen marks have been read.
+   */
+  const now = useExpiryClock(pours);
+  const groups = groupPours(pours, myId ?? '', seenPours, now);
+  const story = storyMap(
+    { mine: groups.mine, others: poursStatus === 'ready' ? groups.others : [] },
+    seenHydrated,
+  );
 
   /*
    * What the list draws. PostCard draws nothing for a drink that is not in
@@ -189,17 +208,19 @@ function HomeFeed() {
           // A block takes their posts and their story off screen at
           // once; RLS keeps them off from the next fetch on.
           onBlocked={dropAuthor}
+          story={story[item.post.authorId]}
+          onOpenStory={openPours}
         />
       ) : (
         <NotInDexYet picks={item.picks} profiles={profiles} onOpenDrink={openDrink} />
       ),
-    [dropAuthor, openDrink, openPerson, profiles],
+    [dropAuthor, openDrink, openPerson, openPours, profiles, story],
   );
 
   if (!myId) return null;
 
   /*
-   * The bell's dot: a like or a follow newer than the last time Activity
+   * The heart's dot: a like or a follow newer than the last time Activity
    * was opened. Not before the seen marks have been read, so it never
    * shows for a moment at launch and then goes out.
    */
@@ -250,6 +271,7 @@ function HomeFeed() {
       <TodaysPours
         myId={myId}
         pours={pours}
+        now={now}
         status={poursStatus}
         profiles={profiles}
         seenHydrated={seenHydrated}
@@ -291,10 +313,11 @@ function HomeFeed() {
         renderItem={renderItem}
         keyExtractor={(row) => row.key}
         /*
-         * A post is most of a screen tall — a 4:5 print plus its name line
-         * and actions — so the default window (10 items up front, 21
-         * screens kept mounted) held twenty-odd full-size photos in memory
-         * to show one.
+         * A post is most of a screen tall (616 to 634: the header, a
+         * square photo the screen's width, the actions, liked by, the
+         * caption and the time), so the default window (10 items up front,
+         * 21 screens kept mounted) held twenty-odd full-size photos in
+         * memory to show one.
          */
         initialNumToRender={2}
         maxToRenderPerBatch={2}
@@ -352,11 +375,7 @@ function HomeFeed() {
         showsVerticalScrollIndicator={false}
       />
       {/* Over the list, last, so it draws on top and takes its own taps. */}
-      <HomeChrome
-        scrollY={scrollY}
-        unread={unread}
-        onActivity={openActivity}
-      />
+      <HomeChrome scrollY={scrollY} unread={unread} onActivity={openActivity} onPost={openLog} />
     </View>
   );
 }
@@ -366,9 +385,10 @@ function HomeFeed() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
-  // 24 from the story names to the first print (layout spec 5.1).
-  header: { paddingBottom: layout.group },
-  notice: { marginHorizontal: layout.gutter, marginTop: layout.group },
+  // Nothing under the tray: it ends in its own 8pt foot, and the first post's header follows it (home-ig 5.2).
+  header: { paddingBottom: 0 },
+  // A failed refresh's line, between the tray's foot and the first header, on Home's column.
+  notice: { marginHorizontal: layout.feedGutter, marginTop: space.sm, marginBottom: space.sm },
   // The last post ends in its own space; the foot adds a little more before its words.
   footer: {
     paddingTop: space.sm,

@@ -1,12 +1,12 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
-import { FlatList, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { groupPours, POUR_WINDOW_MS, type PourGroup } from '@/components/home/groupPours';
 import { Icon } from '@/components/icons';
 import { Avatar, haptic, PressableScale } from '@/components/ui';
-import { colors, layout, motion, radius, space, stroke, textRole } from '@/constants/theme';
+import { colors, layout, motion, radius, space, textRole } from '@/constants/theme';
 import { getDrink } from '@/data';
 import { primeSignedUrls, toProfile } from '@/lib/social';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
@@ -23,22 +23,21 @@ import type { Drink, Pour, UserProfile } from '@/types';
 /* person's name under it on one line; the drink is in the picture and  */
 /* in the spoken label.                                                 */
 /*                                                                      */
-/* FIVE WHOLE RINGS (the judges' fix to the less-stuff layout). Each    */
-/* circle owns a fifth of the gutter-to-gutter column, so five whole    */
-/* rings fit any width, the first at the gutter, and the sixth starts   */
-/* exactly at the far gutter: it peeks into the margin to say the row   */
-/* scrolls, and is never cut mid-ring on screen.                        */
+/* INSTAGRAM'S TRAY (v4.1, home-ig 2.3). Fixed 80pt slots, the first    */
+/* 66pt ring box 12 in, so at 440 the sixth ring is cut by the screen's */
+/* edge: the cut is what says the row scrolls.                          */
 /*                                                                      */
-/* NEW IS THE RING. An unseen story has a 2pt ink ring and an ink name; */
-/* a seen one has NO ring and a muted name, so the row quiets down as   */
-/* you watch it. The ring's presence is the cue, not a colour, and      */
-/* VoiceOver says ", new". Until the seen marks have been read from     */
-/* disk every story is drawn seen, so nothing is ringed at launch and   */
-/* then goes quiet a moment later.                                      */
+/* NEW IS THE RING'S WEIGHT. An unseen story has a 2pt ink ring and an  */
+/* ink name; a seen one a 1pt `rule` ring and a muted name, so the row  */
+/* quiets down as you watch it. The weight and the name's tone are the  */
+/* cue (the grey ring is decorative), and VoiceOver says ", new". Until */
+/* the seen marks have been read from disk every story is drawn seen,   */
+/* so nothing is ringed in ink at launch and then goes quiet.           */
 /*                                                                      */
-/* YOU, FIRST, WITH NO BADGE. Your circle is named "You". With no story */
-/* today it is your face and opens the + window; with one it is your    */
-/* newest photo and plays it, and the viewer has the way to add more.   */
+/* YOU, FIRST: "Your story". With no story today it is your face with   */
+/* the + badge, and opens the + window; with one it is your newest      */
+/* photo in the 1pt ring, no badge, and plays it, and the viewer has    */
+/* the way to add more.                                                 */
 /*                                                                      */
 /* ONE LINE, ONE HEIGHT. A username is a single capped line, so the    */
 /* row never grows when a later circle mounts. "Find friends" is words, */
@@ -51,23 +50,52 @@ import type { Drink, Pour, UserProfile } from '@/types';
 /* ==================================================================== */
 
 const STORY = layout.story;
-/** The photo's disc inside the ring box: the box less the ring and its gap on each side (52). */
+/** The photo's disc inside the ring box: the box less the ring and its gap on each side (56). */
 const DISC = STORY.ring - 2 * (STORY.ringWidth + STORY.gap);
-/** Where the disc sits in the ring box. */
+/** Where the disc sits in the ring box (5). */
 const DISC_INSET = (STORY.ring - DISC) / 2;
+/**
+ * The rail's ends: the first ring box at x 12, the slot's slack (7 each
+ * side) taken off, so 5. The header's story ring on each post sits at 12
+ * too, round the 32pt face at the 16pt column.
+ */
+const RING_LEFT = 12;
+const RAIL_END = RING_LEFT - (STORY.slot - STORY.ring) / 2;
+/**
+ * The rings start 8 under the bar's foot (y 115 at 440 x 956; Home's
+ * spacer is HOME_BAR_HEIGHT, which counts the foot), and the tray ends 8
+ * under the names (211). Half of each is inside the slot, so every story
+ * is an 80 x 96 target (home-ig 3).
+ */
+const RAIL_PAD = space.sm / 2;
+const SLOT_PAD = space.sm - RAIL_PAD;
+/** The name, 4 under the ring box. */
+const LABEL_GAP = space.xs;
 /** Dynamic Type cap for the name: it sits under a fixed-size circle. */
 const LABEL_CAP = 1.3;
 /**
- * The rings start 8 under the bar's 52pt row (layout spec 5.1: y 122).
- * Home's spacer is HOME_BAR_HEIGHT, which already counts the bar's 1pt foot.
+ * The + badge on "Your story" (no post today): a 22pt ink disc in a 3pt
+ * page ring, 28 outer, its corner on the ring box's corner (38, 38). The
+ * plus is 14pt at a 2.4 stroke, heavier than the set's, so it holds at
+ * that size on ink.
  */
-const RAIL_TOP = space.sm - stroke.edge;
+const BADGE_RING = 3;
+const BADGE = 22 + 2 * BADGE_RING;
+const BADGE_AT = STORY.ring - BADGE;
+const BADGE_PLUS = 14;
+const BADGE_STROKE = 2.4;
 /** The longest single wait for the next story to expire; re-armed after. */
 const MAX_TIMER_MS = 60 * 60 * 1000;
 
 export interface TodaysPoursProps {
   myId: string;
   pours: Pour[];
+  /**
+   * The time the row is drawn against, from useExpiryClock(pours). Home
+   * holds the clock, so the rings on its post headers expire with the
+   * circles here, at the same moment.
+   */
+  now: number;
   status: 'idle' | 'ready' | 'error';
   profiles: Record<string, UserProfile>;
   seenHydrated: boolean;
@@ -88,8 +116,11 @@ export interface TodaysPoursProps {
  * hour (long timers are re-armed rather than trusted), and re-aimed
  * whenever the pours change. A post that ran out while nothing re-rendered
  * is caught at once: its expiry is already past, so the timer fires at 0.
+ *
+ * Held by Home (v4.1), which passes it to the row and reads the same
+ * groups for its post headers' rings.
  */
-function useExpiryClock(pours: Pour[]): number {
+export function useExpiryClock(pours: Pour[]): number {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     let next = Infinity;
@@ -126,6 +157,7 @@ const postsToday = (n: number) => `${n} ${n === 1 ? 'post' : 'posts'} today`;
 export function TodaysPours({
   myId,
   pours,
+  now,
   status,
   profiles,
   seenHydrated,
@@ -133,21 +165,11 @@ export function TodaysPours({
   onOpen,
   onFindFriends,
 }: TodaysPoursProps) {
-  const { width } = useWindowDimensions();
   const seen = useSeen((s) => s.pours[myId]);
   const ownRow = useAuth((s) => s.profile);
-  const now = useExpiryClock(pours);
   const { mine, others } = groupPours(pours, myId, seen, now);
   const ready = status === 'ready';
   const shown = ready ? others : [];
-
-  /*
-   * A fifth of the column per circle (78.4 at 440, 69 at 393), the ring
-   * centred in it; the row's ends are pulled in by the slot's slack, so the
-   * first ring lands on the gutter.
-   */
-  const slot = (width - 2 * layout.gutter) / STORY.perRow;
-  const end = layout.gutter - (slot - STORY.ring) / 2;
 
   // Your own row first (the social store may not hold your profile), for your face.
   const me: UserProfile | undefined = ownRow?.id === myId ? toProfile(ownRow) : profiles[myId];
@@ -183,10 +205,9 @@ export function TodaysPours({
         const n = item.group.pours.length;
         return (
           <Story
-            width={slot}
-            unseen={false}
-            label="You"
-            ink={colors.text}
+            ring="seen"
+            label="Your story"
+            ink={colors.textMuted}
             accessibilityLabel={`Your story, ${postsToday(n)}${drink ? `, latest ${drink.name}` : ''}`}
             accessibilityHint="Plays your posts from today"
             onPress={() => onOpen(myId)}>
@@ -197,11 +218,11 @@ export function TodaysPours({
       case 'you':
         return (
           <Story
-            width={slot}
-            unseen={false}
-            label="You"
-            ink={colors.text}
-            accessibilityLabel="You, post a drink"
+            ring="none"
+            badge
+            label="Your story"
+            ink={colors.textMuted}
+            accessibilityLabel="Your story, post a drink"
             accessibilityHint="Opens the camera"
             onPress={onPost}>
             <Avatar
@@ -219,8 +240,7 @@ export function TodaysPours({
         const who = profiles[g.authorId];
         return (
           <Story
-            width={slot}
-            unseen={item.unseen}
+            ring={item.unseen ? 'unseen' : 'seen'}
             label={who?.username ?? 'someone'}
             ink={item.unseen ? colors.text : colors.textMuted}
             accessibilityLabel={`${who?.displayName ?? 'Someone'}, ${postsToday(g.pours.length)}${
@@ -235,8 +255,7 @@ export function TodaysPours({
       case 'find':
         return (
           <Story
-            width={slot}
-            unseen={false}
+            ring="none"
             label="Find friends"
             lines={2}
             ink={colors.text}
@@ -269,7 +288,7 @@ export function TodaysPours({
       windowSize={3}
       scrollsToTop={false}
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={[styles.rail, { paddingHorizontal: end }]}
+      contentContainerStyle={styles.rail}
     />
   );
 }
@@ -279,17 +298,19 @@ export function TodaysPours({
 /* ==================================================================== */
 
 /**
- * One story: its slot, the ring box (the ring when unseen, and the 52pt
- * disc that holds the picture on the wash, so the moment before it
- * decodes is the same grey as a print's) and the name under it.
+ * One story: its 80pt slot, the ring box (the ring, 2pt ink when unseen
+ * and 1pt `rule` when seen; the 56pt disc that holds the picture on the
+ * wash, so the moment before it decodes is the same grey as a print's;
+ * the + badge on your own circle with no post today) and the name under
+ * it.
  *
  * It gives under the finger (PressableScale) and starts its press only
  * after 120 ms, so a flick along the row scrolls instead of opening. The
  * tick plays on release.
  */
 function Story({
-  width,
-  unseen,
+  ring,
+  badge,
   label,
   lines = 1,
   ink,
@@ -298,8 +319,9 @@ function Story({
   onPress,
   children,
 }: {
-  width: number;
-  unseen: boolean;
+  ring: 'unseen' | 'seen' | 'none';
+  /** The + badge: your own circle when you have not posted today. */
+  badge?: boolean;
   label: string;
   /** 1 for a username (ellipsis allowed); 2 for words that must not be cut. */
   lines?: 1 | 2;
@@ -320,10 +342,17 @@ function Story({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
-      style={[styles.item, { width }]}>
+      style={styles.item}>
       <View style={styles.ringBox}>
-        {unseen ? <View pointerEvents="none" style={styles.ring} /> : null}
+        {ring === 'none' ? null : (
+          <View pointerEvents="none" style={[styles.ring, ring === 'seen' && styles.ringSeen]} />
+        )}
         <View style={styles.disc}>{children}</View>
+        {badge ? (
+          <View pointerEvents="none" style={styles.badge}>
+            <Icon name="plus" size={BADGE_PLUS} color={colors.onInk} strokeWidth={BADGE_STROKE} />
+          </View>
+        ) : null}
       </View>
       <Text numberOfLines={lines} maxFontSizeMultiplier={LABEL_CAP} style={[styles.label, { color: ink }]}>
         {label}
@@ -333,7 +362,7 @@ function Story({
 }
 
 /**
- * The newest photo in the disc. While the URL is on its way the disc holds
+ * The newest photo in the 56pt disc. While the URL is on its way the disc holds
  * its place on the wash; a photo that will not sign (null) falls back to
  * the drink's own print, never to a blank.
  */
@@ -350,7 +379,7 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
         source={{ uri: url, cacheKey: `${pour.path}#${DISC}x${DISC}` }}
         cachePolicy="memory-disk"
         /*
-         * Decoded at the disc's 52pt, not the 2048px upload, so the circles
+         * Decoded at the disc's 56pt, not the 2048px upload, so the circles
          * the row keeps mounted hold a few hundred KB between them.
          * PostGridTile (profile/PostGrid) has the whole reason.
          */
@@ -371,8 +400,8 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
 /* ==================================================================== */
 
 const styles = StyleSheet.create({
-  rail: { paddingTop: RAIL_TOP },
-  item: { alignItems: 'center' },
+  rail: { paddingHorizontal: RAIL_END, paddingVertical: RAIL_PAD },
+  item: { width: STORY.slot, alignItems: 'center', paddingVertical: SLOT_PAD },
 
   /* The ring box, so the ring and the disc are placed from its edge. */
   ringBox: { width: STORY.ring, height: STORY.ring },
@@ -383,6 +412,8 @@ const styles = StyleSheet.create({
     borderWidth: STORY.ringWidth,
     borderColor: colors.text,
   },
+  /* Seen: the 1pt rule ring, decorative (1.74:1); the weight and the muted name carry the state. */
+  ringSeen: { borderWidth: STORY.seenWidth, borderColor: colors.rule },
   disc: {
     position: 'absolute',
     top: DISC_INSET,
@@ -394,13 +425,28 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: colors.bgSunk,
   },
+  /* Its border is the page ring: the ink fills under it, so the ink disc shows 22 across. */
+  badge: {
+    position: 'absolute',
+    top: BADGE_AT,
+    left: BADGE_AT,
+    width: BADGE,
+    height: BADGE,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // round-ok: badge
+    borderRadius: radius.round,
+    borderWidth: BADGE_RING,
+    borderColor: colors.bg,
+    backgroundColor: colors.text,
+  },
   glyph: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
-  /* 8 under the ring (layout spec 5.1), centred in the slot. */
+  /* 4 under the ring box (home-ig 2.3), centred in the slot, one line. */
   label: {
     ...textRole.small,
     alignSelf: 'stretch',
-    marginTop: space.sm,
+    marginTop: LABEL_GAP,
     textAlign: 'center',
   },
 });

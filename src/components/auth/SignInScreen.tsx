@@ -1,5 +1,4 @@
-import { useNavigation, useRoute } from 'expo-router';
-import { type ReactNode, useCallback, useRef, useState, useSyncExternalStore } from 'react';
+import { type ReactNode, useRef, useState } from 'react';
 import { StyleSheet, type Text, type TextInput, View } from 'react-native';
 
 import { AuthHold } from '@/components/auth/AuthHold';
@@ -9,14 +8,11 @@ import { CountryPicker } from '@/components/auth/CountryPicker';
 import { AuthStoreMessages, EmailStep, PasswordStep, ResetStep } from '@/components/auth/EmailSteps';
 import { PhoneCodeStep } from '@/components/auth/PhoneCodeStep';
 import { useRemembered } from '@/components/auth/rememberedAccount';
-import { TastePicker } from '@/components/auth/TastePicker';
 import { WaysIn } from '@/components/auth/WaysIn';
 import { WelcomeBack } from '@/components/auth/WelcomeBack';
 import { Button, Field, FieldGroup, SelectField } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
-import { TASTES_TO_START } from '@/lib/tastes';
-import { PHONE_INVALID, useAuth } from '@/store/auth';
-import { useCollection } from '@/store/collection';
+import { PHONE_INVALID } from '@/store/auth';
 import {
   countryOf,
   type EmailStatus,
@@ -24,6 +20,7 @@ import {
   type SignInStep,
   useSignInFlow,
 } from '@/store/signInFlow';
+import { useTaste } from '@/store/taste';
 
 /* ==================================================================== */
 /* Sign in or join                                                      */
@@ -34,31 +31,32 @@ import {
 /* it the Dex, which works signed out. A native modal would rise above  */
 /* the cold-start intro.                                                */
 /*                                                                      */
-/* THE FIRST STEP DEPENDS ON THE GATE AND THE PHONE (v3.2, Jan's        */
-/* "Pick your tastes" with the judges' grafts from "First pour"):       */
+/* NO QUESTIONS HERE (v4.1). A signed-out phone that has not finished  */
+/* the first run meets the questions and its picks before any of this,  */
+/* in the overlay over the whole app (components/FirstRun). Its sign-in */
+/* step draws WaysIn on the same flow store, so choosing email or phone */
+/* there lands on Home's gate at that step.                             */
+/*                                                                      */
+/* THE FIRST STEP DEPENDS ON THE PHONE AND THE GATE:                    */
 /*   - a phone that has signed in before: Welcome back, on every gate   */
 /*     (auth/WelcomeBack), until "Use another way";                     */
-/*   - Home, with an empty Dex: "What do you drink?" (auth/TastePicker),*/
-/*     with "Sign in" top right to every way in from its first frame;   */
-/*   - anywhere else (Profile, a gated pushed route, a Dex already      */
-/*     begun): straight to the card of ways in, so nobody who taps      */
-/*     Profile gets a quiz.                                             */
-/* After the picker's Continue the card sits under the person's own     */
-/* picks, "Your Dex has begun", titled "Join Sipply".                   */
+/*   - Home, while the phone holds picks or drinks saved to try (after  */
+/*     the first run's "Not now"): the card of ways in under "Your      */
+/*     picks", titled "Keep your picks" (specs/v4.1-changes.md 1.6);    */
+/*   - anywhere else: the card of ways in.                              */
 /*                                                                      */
-/* ONE WHITE PAGE. Every step but the picker stands on the sign-in page */
-/* (CabinetSheet, auth/CabinetBackdrop): the step's bar at the top, the */
-/* large wordmark over the first step, the person's three picks once a  */
-/* Dex has begun, and the form. Nothing lies behind it.                 */
+/* ONE WHITE PAGE. Every step stands on the sign-in page (CabinetSheet, */
+/* auth/CabinetBackdrop): the step's bar at the top, the large wordmark */
+/* over the first step (or the person's picks), and the form. Nothing   */
+/* lies behind it.                                                      */
 /*                                                                      */
-/* ONE FLOW, SHARED BY EVERY GATE. The step, the picks and everything   */
-/* typed live in the sign-in flow store (store/signInFlow), so Home and */
-/* Profile show the same step with the same digits. This file is the    */
-/* step router and the phone step; the others are TastePicker,          */
-/* WelcomeBack, WaysIn, PhoneCodeStep and EmailSteps. Every sign-in     */
-/* path underneath (the code, the email password and reset, Apple,      */
-/* Google, Facebook) is as it was; phone moved off the first step onto  */
-/* its own, behind "Phone number".                                      */
+/* ONE FLOW, SHARED BY EVERY GATE. The step and everything typed live   */
+/* in the sign-in flow store (store/signInFlow), so Home and Profile    */
+/* show the same step with the same digits. This file is the step       */
+/* router and the phone step; the others are WelcomeBack, WaysIn,       */
+/* PhoneCodeStep and EmailSteps. Every sign-in path underneath (the     */
+/* code, the email password and reset, Apple, Google, Facebook) is as   */
+/* it was; phone is its own step, behind "Phone number".                */
 /*                                                                      */
 /* STEPS SWAP INSTANTLY. No fade between them: a layout animation can   */
 /* stall for seconds after a cold start in a Release build, and an exit */
@@ -69,15 +67,13 @@ import {
 
 /** The phone field's promise, and its accessibility hint. */
 const PHONE_HINT = 'We’ll text a 6-digit code to confirm it’s you. Message and data rates may apply.';
-/** After the picker's sheet has started to close, so the keyboard does not fight it. */
+/** After the country picker's sheet has started to close, so the keyboard does not fight it. */
 const PICKER_FOCUS_DELAY_MS = 300;
-const JOIN_LEAD = 'Already on Sipply? The same buttons sign you in.';
 
-function titleOf(step: SignInStep, emailStatus: EmailStatus | null, joining: boolean): string {
+function titleOf(step: SignInStep, emailStatus: EmailStatus | null, keepPicks: boolean): string {
   switch (step) {
-    case 'tastes':
     case 'entry':
-      return joining ? 'Join Sipply' : 'Sign in or join Sipply';
+      return keepPicks ? 'Keep your picks' : 'Sign in or join Sipply';
     case 'phone':
       return 'Continue with phone number';
     case 'code':
@@ -184,106 +180,74 @@ function PhoneEntry() {
 }
 
 /**
- * Whether another tab is in front of this gate's own (Home's), read from
- * the tab navigator's state rather than the URL. The URL only names the
- * route on top: a drink page pushed from the Dex tab would read as "not on
- * another tab" and mount the picker's photo grid again behind it, mid-push.
- * The tab navigator still knows the Dex is in front there, and that Home is
- * under a sheet such as Log, where the picker stays in view behind it.
- * Not useIsFocused, which is false in both cases. False off Home.
- */
-function useOtherTabInFront(home: boolean): boolean {
-  const navigation = useNavigation();
-  const { key } = useRoute();
-  const subscribe = useCallback(
-    (onChange: () => void) => navigation.addListener('state', onChange),
-    [navigation],
-  );
-  const read = () => {
-    if (!home) return false;
-    const tabs = navigation.getState();
-    return tabs?.type === 'tab' && tabs.routes[tabs.index]?.key !== key;
-  };
-  return useSyncExternalStore(subscribe, read, read);
-}
-
-/**
  * The signed-out screen. `onClose` is the close control on a first step:
  * the Dex from a tab, back out of a pushed or modal route. `home` is the
- * Home tab's gate, the one place the taste picker is offered.
+ * Home tab's gate, the one place the person's picks head the first step.
  */
 export default function SignInScreen({ onClose, home }: { onClose: () => void; home: boolean }) {
   const step = useSignInFlow((s) => s.step);
   const emailStatus = useSignInFlow((s) => s.emailStatus);
-  const picks = useSignInFlow((s) => s.picks);
-  const joined = useSignInFlow((s) => s.joined);
   const anotherWay = useSignInFlow((s) => s.anotherWay);
   const back = useSignInFlow((s) => s.back);
-  const backToTastes = useSignInFlow((s) => s.backToTastes);
   const returnToRemembered = useSignInFlow((s) => s.returnToRemembered);
 
-  // A message from the auth store (a dead reset link) needs the card to sit under, not the picker.
-  const authMessage = useAuth((s) => s.error ?? s.notice);
   const remembered = useRemembered((s) => s.account);
   const primed = useRemembered((s) => s.primed);
-  const dexReady = useCollection((s) => s.hydrated);
-  const unlocks = useCollection((s) => s.unlocks);
-  const awayOnTab = useOtherTabInFront(home);
-
-  const first = step === 'tastes' || step === 'entry';
-  const welcome = first && !anotherWay ? remembered : null;
+  const tasteReady = useTaste((s) => s.hydrated);
+  const picks = useTaste((s) => s.picks);
+  const saved = useTaste((s) => s.saved);
   /*
-   * The picker is a question for someone new: Home only, and only while the
-   * Dex is empty, or while picks are held. Someone mid-pick who logs a drink
-   * from the Dex keeps the picker, so the picks they made stay in view and
-   * can still be taken back out.
+   * Whether the first-run overlay is up over this gate: components/FirstRun's
+   * test, less the two (auth ready, signed out) that are why this screen is
+   * drawn at all. Meanwhile the gate keeps its step but draws a bare page,
+   * so its title never takes VoiceOver focus from the overlay: the overlay's
+   * accessibilityViewIsModal scopes where VoiceOver goes, not the focus this
+   * screen sends.
    */
-  const picker = home && (Object.keys(unlocks).length === 0 || picks.length > 0);
-  const tastes = !welcome && step === 'tastes' && picker && !authMessage;
-  // Every other gate draws the picker's step as the card of ways in.
-  const sheetStep: Exclude<SignInStep, 'tastes'> = step === 'tastes' ? 'entry' : step;
-  const joining = joined && picks.length >= TASTES_TO_START;
-  const view = welcome ? 'welcome' : tastes ? 'tastes' : sheetStep;
+  const underFirstRun = useTaste((s) => s.hydrated && !s.done && !s.signInFirst);
+
+  const entry = step === 'entry';
+  const welcome = entry && !anotherWay ? remembered : null;
+  /*
+   * Home's first step, re-headed for someone who answered the questions
+   * and chose "Not now": what they picked or saved is on this phone only,
+   * and this card is where it gets an account to go to. Never over Welcome
+   * back, which is the way in for a phone that already has one.
+   */
+  const keepPicks = home && entry && !welcome && (picks.length > 0 || saved.length > 0);
+  const view = welcome ? 'welcome' : step;
 
   const titleRef = useRef<Text>(null);
-  // A different variant is a different step to the person, with its own title.
-  const stepKey = `${view}:${emailStatus ?? ''}:${joining ? 'join' : ''}`;
+  /*
+   * A different variant is a different step to the person, with its own
+   * title, and so is the overlay leaving: focus lands on this title then.
+   */
+  const variant = `${keepPicks ? 'picks' : ''}:${underFirstRun ? 'under' : ''}`;
+  const stepKey = `${view}:${emailStatus ?? ''}:${variant}`;
   useStepTitleFocus(titleRef, stepKey);
 
-  // A frame or two at launch while the remembered account and the Dex are read.
-  if (!primed || (home && !dexReady)) return <AuthHold slowMessage="Still loading." />;
+  // A frame or two at launch while the remembered account (and, on Home, the picks) are read.
+  if (!primed || (home && !tasteReady)) return <AuthHold slowMessage="Still loading." />;
+  if (underFirstRun) return <View style={styles.ground} />;
 
   if (welcome) {
     return <WelcomeBack account={welcome} onClose={onClose} titleRef={titleRef} />;
   }
 
-  if (tastes) {
-    /*
-     * Unmounted while another tab is in front, so its photo grid never sits
-     * in memory behind that tab's (the tab-switch lag). The picks are the
-     * flow's, so nothing is lost; the bare page stands in meanwhile.
-     */
-    if (awayOnTab) return <View style={styles.ground} />;
-    return <TastePicker />;
-  }
-
-  const entry = sheetStep === 'entry';
   /*
-   * The first step's way back: to Welcome back after "Use another way", to
-   * the picks on Home, otherwise out (the Dex, or back down the stack).
+   * The first step's way back: to Welcome back after "Use another way",
+   * otherwise out (the Dex, or back down the stack).
    */
   const leading: { kind: 'close' | 'back'; onPress: () => void } = !entry
     ? { kind: 'back', onPress: back }
     : remembered && anotherWay
       ? { kind: 'back', onPress: returnToRemembered }
-      : picker
-        ? { kind: 'back', onPress: backToTastes }
-        : { kind: 'close', onPress: onClose };
+      : { kind: 'close', onPress: onClose };
 
   let body: ReactNode;
-  switch (sheetStep) {
+  switch (step) {
     case 'entry':
-      body = <WaysIn lead={joining ? JOIN_LEAD : undefined} />;
+      body = <WaysIn />;
       break;
     case 'phone':
       body = <PhoneEntry />;
@@ -305,12 +269,10 @@ export default function SignInScreen({ onClose, home }: { onClose: () => void; h
   return (
     <CabinetSheet
       backdrop={entry ? 'full' : 'compact'}
-      // A begun Dex shows the person's own picks (the page falls back to the featured three).
-      backdropDrinks={picks}
-      begun={entry && joining ? picks.length : undefined}
+      picks={keepPicks ? { saved, picks } : undefined}
       bar={
         <AuthTitleBar
-          title={titleOf(step, emailStatus, joining)}
+          title={titleOf(step, emailStatus, keepPicks)}
           leading={leading.kind}
           onLeading={leading.onPress}
           titleRef={titleRef}

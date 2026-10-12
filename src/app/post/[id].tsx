@@ -22,12 +22,13 @@ import type { Post } from '@/types';
 /* Pushed over the tabs, so Back returns to whichever of those opened   */
 /* it.                                                                  */
 /*                                                                      */
-/* NINE AT REST (layout spec 5.4): the back chevron alone in the bar    */
-/* (no title, no icon: the drink's name is the page's title), then the  */
-/* card's detail form: the author row with its •••, the print, the     */
-/* name, the whole caption, the heart and the count. The drink's own    */
-/* row went: its name already opens the drink page. The bar's 1pt rule  */
-/* shows once the post runs under it.                                   */
+/* THE FEED'S POST, WHOLE (v4.1, home-ig 5.1): the back chevron alone   */
+/* in the bar (no title, no icon: the drink's name is the page's        */
+/* title), then the same card Home draws, Instagram's anatomy: the      */
+/* header (face, username over the drink, •••), the square photo, heart */
+/* · share · save, liked by, the caption opened in full (no "more") and */
+/* the time. The drink in the header opens the drink page. The bar's    */
+/* 1pt rule shows once the post runs under it.                          */
 /*                                                                      */
 /* "Unavailable" is one state for three causes the screen cannot tell   */
 /* apart and should not try to: the post was deleted, you are blocked   */

@@ -7,7 +7,7 @@ import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { haptic, PressableScale } from '@/components/ui';
 import { colors, layout, motion, space, textRole } from '@/constants/theme';
 import { primeSignedUrls } from '@/lib/social';
-import { faceOf, fitScale, textWidth, type Face } from '@/lib/textFit';
+import { faceOf, fitScale, lineCount } from '@/lib/textFit';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import type { Drink, Post, UserProfile } from '@/types';
 
@@ -23,7 +23,9 @@ import type { Drink, Post, UserProfile } from '@/types';
 /*                                                                      */
 /* DAYLIGHT. No band, no ground of its own: a heading and the prints,   */
 /* set apart from the posts round it by space alone (layout principle   */
-/* 3), the same 32 that separates two posts.                            */
+/* 3). On v4.1's Instagram Home (home-ig) it keeps its slots and its    */
+/* portrait prints, sits on Home's 16pt text column like the captions,  */
+/* and leaves the same 24 of air above and below that two posts do.     */
 /*                                                                      */
 /* Names are never cut, and every print's name slot is as tall as the   */
 /* tallest name in the row, worked out before layout (wrappedHeight,    */
@@ -32,11 +34,21 @@ import type { Drink, Post, UserProfile } from '@/types';
 
 export type NotInDexYetPick = { drink: Drink; post: Post };
 
-/** A print: 136 wide at the feed's 4:5, since it is the friend's post photo. */
+/**
+ * A print: 136 wide at 4:5 (170 tall). Pinned here rather than read from
+ * the feed's aspect: the feed went square in v4.1 (home-ig 5.5), and this
+ * row keeps its portrait prints, as Instagram's suggestions row does.
+ */
 const PRINT_W = 136;
-const PRINT_H = Math.round(PRINT_W / layout.feedPhotoAspect);
+const PRINT_ASPECT = 4 / 5;
+const PRINT_H = Math.round(PRINT_W / PRINT_ASPECT);
 /** Dynamic Type cap for a print's labels (spec §6.5). */
 const CAP = 1.3;
+/**
+ * A Home post ends in its own 14pt foot, and the next one's face sits 10
+ * into its header (PostCard): 24 of air. The row matches it both ways.
+ */
+const POST_FOOT = 14;
 
 /**
  * The print's photo: the post's newest, the one its feed card opens on.
@@ -50,26 +62,6 @@ function photoOf(post: Post): string | null {
 /* ==================================================================== */
 /* How tall a name will be, before it is laid out                       */
 /* ==================================================================== */
-
-/** Lines `text` wraps to at `size` in a `measure`-wide column, by lib/textFit's (wide) widths. */
-function lineCount(text: string, face: Face, size: number, measure: number): number {
-  const gap = textWidth(' ', face, size);
-  let lines = 0;
-  let used = 0;
-  for (const word of text.split(/\s+/)) {
-    if (!word) continue;
-    const w = textWidth(word, face, size);
-    if (used > 0 && used + gap + w <= measure) {
-      used += gap + w;
-      continue;
-    }
-    // A new line; a word wider than the line breaks inside itself over as many as it needs.
-    const span = Math.max(1, Math.ceil(w / measure));
-    lines += span;
-    used = w - (span - 1) * measure;
-  }
-  return Math.max(1, lines);
-}
 
 /**
  * The height `text` takes in a column `measure` wide, worked out the way
@@ -225,10 +217,10 @@ function Pick({
 }
 
 const styles = StyleSheet.create({
-  // Nothing above (the post before ends in its own 32); the 32 under it is the gap to the next post.
-  band: { paddingBottom: layout.section },
-  head: { ...textRole.bodyStrong, color: colors.text, paddingHorizontal: layout.gutter },
-  rail: { paddingHorizontal: layout.gutter, paddingTop: space.md },
+  // The post before ends in its 14 foot, so 10 more makes 24; the 14 under it and the next face's 10 make 24 again.
+  band: { paddingTop: layout.group - POST_FOOT, paddingBottom: POST_FOOT },
+  head: { ...textRole.bodyStrong, color: colors.text, paddingHorizontal: layout.feedGutter },
+  rail: { paddingHorizontal: layout.feedGutter, paddingTop: space.md },
   printGap: { width: space.md },
   card: { width: PRINT_W },
   // The Dex's 8 between a print and its name.

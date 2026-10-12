@@ -18,6 +18,7 @@ import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { useScrollEdges } from '@/components/log/scrollEdges';
 import { colors, layout, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
+import type { Drink } from '@/types';
 
 /* ==================================================================== */
 /* The sign-in page                                                     */
@@ -54,14 +55,8 @@ export function useAuthPageScrolled(): boolean | null {
 
 /** The wordmark's Dynamic Type cap (spec 6.5). */
 const WORDMARK_CAP = 1.2;
-/** The picks' prints and the heading over them cap here, as a Dex card's name does. */
+/** The picks' heading and its line cap here, as a Dex card's name does. */
 const NAME_CAP = 1.3;
-
-/**
- * The three drinks a begun Dex shows when the person picked none (a
- * renamed pick drops out): real catalogue drinks, all three photographed.
- */
-const FEATURED: readonly string[] = ['negroni', 'zombie', 'last-word'];
 
 /**
  * Above this text size, or below this height (the SE class), the first
@@ -75,6 +70,33 @@ const FULL_MIN_HEIGHT = 740;
 /** The picks' prints: three across, never wider than 96 (a 288px decode at 3x). */
 const PICK = 96;
 const PICK_GAP = space.sm;
+const PICKS_SHOWN = 3;
+
+/**
+ * What the picks head shows, from the taste store (store/taste): the
+ * drinks saved to try, newest first, and the six the onboarding picked,
+ * in their order.
+ */
+export interface PicksHead {
+  saved: readonly string[];
+  picks: readonly string[];
+}
+
+/**
+ * The three prints: saved first, then the picks, each drink once. Only
+ * drinks the catalogue still knows, so a renamed one drops out of the row
+ * rather than leaving a gap; fewer than three is drawn as it is, never
+ * padded with drinks the person did not choose.
+ */
+function picksShown({ saved, picks }: PicksHead): Drink[] {
+  const shown: Drink[] = [];
+  for (const id of [...saved, ...picks]) {
+    if (shown.length === PICKS_SHOWN) break;
+    const drink = getDrink(id);
+    if (drink && !shown.some((d) => d.id === drink.id)) shown.push(drink);
+  }
+  return shown;
+}
 
 /**
  * What sits above the form.
@@ -83,53 +105,44 @@ const PICK_GAP = space.sm;
  *            size as the invitation. On a short window or at an
  *            accessibility text size, nothing (the bar says the step).
  *   compact  every other step: nothing. The bar's title is the step.
- *   begun    after the taste picker: "Your Dex has begun", its count, and
- *            the picks as three colour prints (the only colour on the
- *            page, and the person's own). VoiceOver reads the heading; it
- *            is news. The prints are decorative.
+ *   picks    Home's first step after the onboarding's "Not now" (specs/
+ *            v4.1-changes.md 1.6): "Your picks", how many are saved to try
+ *            (or that they wait on this phone), and three of them as
+ *            colour prints, the only colour on the page and the person's
+ *            own. VoiceOver reads the heading and its line as one; the
+ *            prints are decorative.
  */
-function Backdrop({
-  variant,
-  drinks,
-  begun,
-}: {
-  variant: 'full' | 'compact';
-  drinks: readonly string[];
-  begun?: number;
-}) {
+function Backdrop({ variant, picks }: { variant: 'full' | 'compact'; picks?: PicksHead }) {
   const { width, height, fontScale } = useWindowDimensions();
   const roomy = height >= FULL_MIN_HEIGHT && fontScale <= FULL_MAX_FONT_SCALE;
 
-  if (begun != null) {
-    const count = `${formatCount(begun)} of ${formatCount(TOTAL)} drinks`;
-    const side = Math.min(PICK, Math.floor((width - 2 * layout.gutter - 2 * PICK_GAP) / 3));
-    const ids = drinks.length > 0 ? drinks.slice(0, 3) : FEATURED;
+  if (picks) {
+    const n = picks.saved.length;
+    const line = n >= 1 ? `${formatCount(n)} saved to try` : 'Kept on this phone until you sign in';
+    const across = width - 2 * layout.gutter - (PICKS_SHOWN - 1) * PICK_GAP;
+    const side = Math.min(PICK, Math.floor(across / PICKS_SHOWN));
+    const shown = picksShown(picks);
     return (
       <View style={styles.head}>
-        <View accessible accessibilityLabel={`Your Dex has begun, ${count}`}>
+        <View accessible accessibilityLabel={`Your picks, ${line}`}>
           <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.bodyStrong, styles.ink, styles.centre]}>
-            Your Dex has begun
+            Your picks
           </Text>
           <Text maxFontSizeMultiplier={NAME_CAP} style={[textRole.small, tabular, styles.muted, styles.centre]}>
-            {count}
+            {line}
           </Text>
         </View>
-        {roomy ? (
+        {roomy && shown.length > 0 ? (
           <View
             pointerEvents="none"
             accessibilityElementsHidden
             importantForAccessibility="no-hide-descendants"
             style={styles.picks}>
-            {ids.map((id) => {
-              const drink = getDrink(id);
-              // A renamed drink drops out of the row rather than breaking the screen.
-              if (!drink) return null;
-              return (
-                <Print key={id} width={side} height={side}>
-                  <CatalogueFace drink={drink} width={side} height={side} />
-                </Print>
-              );
-            })}
+            {shown.map((drink) => (
+              <Print key={drink.id} width={side} height={side}>
+                <CatalogueFace drink={drink} width={side} height={side} />
+              </Print>
+            ))}
           </View>
         ) : null}
       </View>
@@ -159,8 +172,8 @@ function Backdrop({
  *
  *   bar      the step's own bar (AuthTitleBar, or a ScreenTopBar), fixed
  *            at the top under the status bar
- *   head     the wordmark on the first step, the picks once a Dex has
- *            begun (Backdrop, above)
+ *   head     the wordmark on the first step, or the person's picks
+ *            (Backdrop, above)
  *   body     the step, as it was
  *
  * Bottom clearance: the tab bar sits under every screen this is drawn in
@@ -173,22 +186,19 @@ function Backdrop({
  * keyboard is then met by the scroll view's own insets instead of a
  * KeyboardAvoidingView, so the footer stays put rather than riding up.
  *
- * `backdrop`, `backdropDrinks` and `begun` choose the head (Backdrop).
+ * `backdrop` and `picks` choose the head (Backdrop).
  */
 export function CabinetSheet({
   backdrop,
-  backdropDrinks = FEATURED,
-  begun,
+  picks,
   bar,
   children,
   footer,
   contentStyle,
 }: {
   backdrop: 'full' | 'compact';
-  /** The picks a begun Dex shows. */
-  backdropDrinks?: readonly string[];
-  /** A Dex begun with this many picks: the head says so, over the picks. */
-  begun?: number;
+  /** The person's picks and drinks saved to try: the head shows them in place of the wordmark. */
+  picks?: PicksHead;
   /** The step's title bar. */
   bar: ReactNode;
   children: ReactNode;
@@ -213,7 +223,7 @@ export function CabinetSheet({
       onContentSizeChange={edges.onContentSizeChange}
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={footer == null}>
-      <Backdrop variant={backdrop} drinks={backdropDrinks} begun={begun} />
+      <Backdrop variant={backdrop} picks={picks} />
       <View style={contentStyle}>{children}</View>
     </ScrollView>
   );

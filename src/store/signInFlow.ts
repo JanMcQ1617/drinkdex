@@ -4,7 +4,6 @@ import { methodsNow } from '@/components/auth/methods';
 import { noteSignInAttempt, type RememberedMethod } from '@/components/auth/rememberedAccount';
 import { COUNTRY_BY_ISO, DIALS, countryForDial, deviceRegion } from '@/data/countries';
 import { formatNational, matchDial, toE164, type Country } from '@/lib/phone';
-import { TASTES_TO_START } from '@/lib/tastes';
 import {
   CODE_WRONG,
   EMAIL_HAS_ACCOUNT,
@@ -13,7 +12,6 @@ import {
   WRONG_PASSWORD,
   useAuth,
 } from '@/store/auth';
-import { useCollection } from '@/store/collection';
 
 /* ==================================================================== */
 /* The sign-in flow                                                     */
@@ -55,20 +53,22 @@ import { useCollection } from '@/store/collection';
 /* straight back returns to that code, and its countdown and lock must   */
 /* be the server's.                                                     */
 /*                                                                      */
-/* THE PICKS. 'tastes' is Home's first step, "What do you drink?"       */
-/* (auth/TastePicker); every other gate draws it as 'entry', the card   */
-/* of ways in. The drinks tapped there are held here, in memory, until  */
-/* an account exists: they survive Back, a tab switch and every reset   */
-/* below, and are put in the Dex exactly once, as the session arrives    */
-/* (applyPicks, at the foot of this file), then cleared.                 */
+/* ONE FIRST STEP, 'entry', on every gate (v4.1). The questions come    */
+/* before it now, in the first-run overlay (components/FirstRun and     */
+/* components/onboarding), whose answers and drinks saved to try live   */
+/* in store/taste, not here. Its sign-in step draws the same ways in    */
+/* (auth/WaysIn) on this same flow, so "Continue with email" or "Phone  */
+/* number" there moves this store off 'entry', and Home's gate, already */
+/* on that step, carries on once the overlay steps aside. Nothing here  */
+/* seeds the Dex any more: the Dex holds only drinks someone has had.   */
 /* ==================================================================== */
 
 /**
- * 'tastes' the picker (Home only); 'entry' the card of ways in; 'phone' the
- * country and number; then the code, the email address, the password and
- * the reset request, as before.
+ * 'entry' the card of ways in (or Welcome back, on a phone that remembers
+ * an account); 'phone' the country and number; then the code, the email
+ * address, the password and the reset request, as before.
  */
-export type SignInStep = 'tastes' | 'entry' | 'phone' | 'code' | 'email' | 'password' | 'reset';
+export type SignInStep = 'entry' | 'phone' | 'code' | 'email' | 'password' | 'reset';
 
 /**
  * What the email lookup said (store/auth lookupEmail, migration 016):
@@ -160,21 +160,9 @@ export interface SignInFlowState {
   providerError: string | null;
   /** "New code sent.", under the resend line. */
   notice: string | null;
-  /** The drinks picked on the 'tastes' step, in the order they were tapped. */
-  picks: string[];
-  /** Continue was pressed with enough picks: the card says "Join Sipply" over them. */
-  joined: boolean;
   /** "Use another way" on Welcome back: the full card instead of the remembered method. */
   anotherWay: boolean;
 
-  /** Adds a drink to the picks, or takes it back out. */
-  togglePick: (drinkId: string) => void;
-  /** The picker's Continue: on to the ways in, under the picks. Needs TASTES_TO_START. */
-  continueTastes: () => void;
-  /** The picker's "Sign in": the ways in, without joining on the picks. */
-  signInFromTastes: () => void;
-  /** Back from the ways in to the picker, picks kept. */
-  backToTastes: () => void;
   /** Welcome back's "Use another way". */
   chooseAnotherWay: () => void;
   /** Back from the full card to Welcome back. */
@@ -197,11 +185,11 @@ export interface SignInFlowState {
   go: (step: SignInStep, opts?: { keepAuthNotice?: boolean }) => void;
   /**
    * phone and email go to entry; code to phone; password to email (entry
-   * when email is the only way in); reset to password. The first steps'
-   * own way back depends on the gate drawing them (SignInScreen).
+   * when email is the only way in); reset to password. The first step's
+   * own way back depends on the gate drawing it (SignInScreen).
    */
   back: () => void;
-  /** Back to the first step with nothing typed, keeping the chosen country and the picks. */
+  /** Back to the first step with nothing typed, keeping the chosen country. */
   reset: () => void;
   /**
    * The 'unknown' password step's "New to Sipply? Create an account": the
@@ -225,10 +213,6 @@ export interface SignInFlowState {
 
 type FlowValues = Omit<
   SignInFlowState,
-  | 'togglePick'
-  | 'continueTastes'
-  | 'signInFromTastes'
-  | 'backToTastes'
   | 'chooseAnotherWay'
   | 'returnToRemembered'
   | 'continueRemembered'
@@ -250,11 +234,9 @@ type FlowValues = Omit<
   | 'continueWith'
 >;
 
-function initial(iso: string, picks: string[]): FlowValues {
+function initial(iso: string): FlowValues {
   return {
-    step: 'tastes',
-    picks,
-    joined: false,
+    step: 'entry',
     anotherWay: false,
     iso,
     national: '',
@@ -297,28 +279,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
   };
 
   return {
-    ...initial(deviceRegion() ?? 'US', []),
-
-    togglePick: (drinkId) => {
-      const { picks } = get();
-      set({ picks: picks.includes(drinkId) ? picks.filter((id) => id !== drinkId) : [...picks, drinkId] });
-    },
-
-    continueTastes: () => {
-      if (get().picks.length < TASTES_TO_START) return;
-      set({ joined: true });
-      get().go('entry');
-    },
-
-    signInFromTastes: () => {
-      set({ joined: false });
-      get().go('entry');
-    },
-
-    backToTastes: () => {
-      set({ joined: false });
-      get().go('tastes');
-    },
+    ...initial(deviceRegion() ?? 'US'),
 
     chooseAnotherWay: () => {
       set({ anotherWay: true });
@@ -399,7 +360,6 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
         case 'reset':
           get().go('password');
           return;
-        case 'tastes':
         case 'entry':
           return;
       }
@@ -407,8 +367,7 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
 
     reset: () => {
       generation += 1;
-      // The picks outlive a reset: only applyPicks, once they are in the Dex, clears them.
-      set(initial(get().iso, get().picks));
+      set(initial(get().iso));
     },
 
     signUpInstead: () => {
@@ -646,24 +605,5 @@ export const useSignInFlow = create<SignInFlowState>()((set, get) => {
  */
 useAuth.subscribe((state, prev) => {
   if ((state.session === null) === (prev.session === null)) return;
-  if (state.session) applyPicks();
   useSignInFlow.getState().reset();
-});
-
-/*
- * THE PICKS GO IN ONCE. Called as a session arrives (any way in, on any
- * gate), and again if the collection finishes loading after that. The
- * picks are cleared only once the collection has taken them, so a launch
- * that could not read the Dex back keeps them rather than writing them
- * where they would not be saved; addFromTastes also skips any drink the
- * Dex already holds, so a second call can never add one twice.
- */
-function applyPicks() {
-  const { picks } = useSignInFlow.getState();
-  if (picks.length === 0 || !useAuth.getState().session) return;
-  if (useCollection.getState().addFromTastes(picks) !== null) useSignInFlow.setState({ picks: [] });
-}
-
-useCollection.subscribe((state, prev) => {
-  if (state.hydrated && !prev.hydrated) applyPicks();
 });

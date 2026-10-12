@@ -8,6 +8,7 @@ import { AuthTitleBar } from '@/components/auth/AuthTitleBar';
 import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { AuthMessage, Consent } from '@/components/auth/Consent';
 import SignInScreen from '@/components/auth/SignInScreen';
+import { UnderAgeStop } from '@/components/onboarding/UnderAgeStop';
 import { Button, Field } from '@/components/ui';
 import { WelcomeConnect } from '@/components/WelcomeConnect';
 import { colors, layout, space, textRole } from '@/constants/theme';
@@ -26,6 +27,7 @@ import {
   useAuth,
   usernameObjectionable,
 } from '@/store/auth';
+import { underAgeActive, useTaste } from '@/store/taste';
 
 /*
  * The message box every auth surface shows near its button. It lives in
@@ -162,11 +164,16 @@ const ROW_WAIT_MS = 4000;
  * sign-in page (auth/CabinetBackdrop's CabinetSheet), so a new person
  * walks through them without the ground changing under them.
  *
- * Signed out, the Home tab's gate is the one that asks "What do you
- * drink?" first (auth/TastePicker); Profile and every gated pushed route
- * open straight on the ways in. Home is told apart by its route's name,
- * `index`, the tab navigator's own name for it, so no screen has to pass
- * anything in.
+ * Signed out, every gate opens on the ways in (or Welcome back). The
+ * questions and picks come before any gate, in the first-run overlay
+ * (components/FirstRun); the Home tab's gate is the one that heads the
+ * ways in with the picks a "Not now" left on the phone. Home is told
+ * apart by its route's name, `index`, the tab navigator's own name for
+ * it, so no screen has to pass anything in.
+ *
+ * A brand-new account made while the phone's under-age answer still
+ * stands (specs/v4.1-changes.md 1.5) is not let through to its username:
+ * it meets the stop screen instead, whose one key deletes it again.
  */
 export function AuthGate({ children, onClose }: { children: React.ReactNode; onClose?: () => void }) {
   const router = useRouter();
@@ -178,6 +185,14 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
   const profile = useAuth((s) => s.profile);
   const profileError = useAuth((s) => s.profileError);
   const userId = session?.user.id;
+
+  /*
+   * Read through the store so the gate re-renders when the answer or the
+   * lock changes, and re-evaluated on every render, so a lock that has run
+   * out lets the next render through.
+   */
+  const tasteReady = useTaste((s) => s.hydrated);
+  const underAge = useTaste(() => underAgeActive());
 
   const welcomeSeen = useWelcome((s) => (userId ? s.seen[userId] : undefined));
   const rowWaitOver = useWelcome((s) => (userId ? s.rowWaitOver[userId] === true : false));
@@ -226,6 +241,13 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
    * has to bring it back rather than let the account in as pour_1a2b3c4d.
    */
   if (ownProfile && isPlaceholderUsername(ownProfile.username)) {
+    /*
+     * The phone's age answer decides which step this is, so it is read
+     * before either is drawn: a username field shown for a frame before
+     * the lock is known would be the bypass the stop closes.
+     */
+    if (!tasteReady) return <AuthHold slowMessage="Still loading your account." />;
+    if (underAge) return <UnderAgeAccount key={userId} />;
     return <ChooseUsername key={userId} profile={ownProfile} />;
   }
   // A frame or two while AsyncStorage answers, or the bounded wait above.
@@ -234,6 +256,54 @@ export function AuthGate({ children, onClose }: { children: React.ReactNode; onC
   }
   if (!welcomeSeen) return <WelcomeConnect onDone={() => dismissWelcome(userId)} />;
   return <>{children}</>;
+}
+
+/* ==================================================================== */
+/* Under age                                                            */
+/* ==================================================================== */
+
+/**
+ * A new account made through "I already have an account" while the phone
+ * still holds "No, not yet" (store/taste's 24 hour lock, spec 1.5). It
+ * is not kept: the onboarding's stop screen, on the sign-in page's frame
+ * in place of the username step, and its "Back to start" deletes the
+ * account it has just made. Deleting is what store/auth's deleteAccount
+ * does for Settings, Apple's revoke included, which is why it runs from
+ * this tap: Apple's sheet needs a person's gesture.
+ *
+ * If the deletion does not finish (Apple's sheet closed, or offline), the
+ * account is signed out instead. Either way the phone is left signed out,
+ * where the first run shows its welcome and Get started shows the stop
+ * again. A placeholder account left behind meets this screen on every
+ * sign-in until the lock ends, then reaches the username step as normal.
+ */
+function UnderAgeAccount() {
+  const authBusy = useAuth((s) => s.busy);
+  const [leaving, setLeaving] = useState(false);
+
+  const back = async () => {
+    if (leaving) return;
+    setLeaving(true);
+    try {
+      const deleted = await useAuth.getState().deleteAccount();
+      if (!deleted) await useAuth.getState().signOut();
+      /*
+       * The session's arrival marked the first run done (store/taste). A
+       * deletion resets that with the rest of the store; a sign-out keeps
+       * the store as it is, so the run is reopened here, and the welcome,
+       * not the ways in, is what the phone shows next.
+       */
+      if (!useAuth.getState().session) useTaste.setState({ done: false });
+    } finally {
+      setLeaving(false);
+    }
+  };
+
+  return (
+    <CabinetSheet backdrop="compact" bar={null} contentStyle={styles.stop}>
+      <UnderAgeStop busy={leaving || authBusy} onBack={() => void back()} />
+    </CabinetSheet>
+  );
 }
 
 /* ==================================================================== */
@@ -419,6 +489,8 @@ function ChooseUsername({ profile }: { profile: ProfileRow }) {
 
 const styles = StyleSheet.create({
   body: { paddingHorizontal: layout.gutter, paddingTop: space.xxl },
+  /* The stop lays itself out on the whole page, its key at the foot. */
+  stop: { flex: 1 },
 
   lede: { ...textRole.body, color: colors.textMuted, marginBottom: space.xl },
 

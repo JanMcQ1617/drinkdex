@@ -141,7 +141,7 @@ const CAPS_TRANSFORM = {
  *    (`fontFamily: textRole.nameLg.fontFamily` on a count), so none of
  *    those routes gets round the rule.
  */
-const NAME_ROLES = ['wordmark', 'wordmarkLg', 'drinkHero', 'nameLg', 'name', 'nameInline'];
+const NAME_ROLES = ['wordmark', 'wordmarkLg', 'drinkHero', 'nameLg', 'name', 'nameSm', 'nameInline'];
 const THEME = 'constants/theme.ts';
 /**
  * A display family's name as a string ('PlayfairDisplayLatin_700Bold'). A

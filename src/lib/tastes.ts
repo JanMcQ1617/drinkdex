@@ -5,16 +5,21 @@ import type { Drink, UnlockRecord } from '@/types';
 /* ==================================================================== */
 /* First tastes                                                         */
 /*                                                                      */
-/* The drinks the signed-out Home asks about ("What do you drink?"): 24 */
-/* classics a new person is likely to have ordered, across rum, tequila,*/
-/* vodka, gin, whiskey, aperitifs and sparkling, so nearly anyone finds */
-/* three. Piña Colada and Coquito lead on purpose: Sipply launches in   */
-/* Puerto Rico.                                                         */
+/* 24 classics a new person is likely to have ordered, across rum,      */
+/* tequila, vodka, gin, whiskey, aperitifs and sparkling. Piña Colada   */
+/* and Coquito lead on purpose: Sipply launches in Puerto Rico.         */
+/*                                                                      */
+/* Since v4.1 they are the onboarding's welcome wall (FIRST_TASTES),    */
+/* and the recommender's "well known" signal and tie-break, in this     */
+/* order (FIRST_TASTE_IDS, read by lib/recommend). The reference        */
+/* recommender (specs/v4-onboarding/tools/recommend.mjs) reads the id   */
+/* list below straight out of this file by a regular expression, so     */
+/* keep it one literal list of quoted ids, as it is.                    */
 /*                                                                      */
 /* PHOTOGRAPHED ONLY. Every id here has a re-lit catalogue photograph   */
-/* (data/drinkPhotos), so the grid never sets a vector face beside a    */
+/* (data/drinkPhotos), so the wall never sets a vector face beside a    */
 /* photo. FIRST_TASTES drops any id that loses its drink or its photo,  */
-/* so a catalogue edit thins the grid instead of breaking it.           */
+/* so a catalogue edit thins the wall instead of breaking it.           */
 /* ==================================================================== */
 
 const IDS = [
@@ -44,13 +49,16 @@ const IDS = [
   'pisco-sour',
 ] as const;
 
-/** The picker's drinks, in order, each with a photograph. */
+/**
+ * Every curated id, in order, unfiltered: the recommender's known list
+ * (spec §5.3, K and the tie-break), exactly as the reference reads it.
+ */
+export const FIRST_TASTE_IDS: readonly string[] = IDS;
+
+/** The curated drinks, in order, each with a photograph. */
 export const FIRST_TASTES: readonly Drink[] = IDS.map((id) => getDrink(id)).filter(
   (d): d is Drink => d !== undefined && photoFor(d.id) !== undefined,
 );
-
-/** How many picks start a Dex. Three is the minimum; there is no maximum. */
-export const TASTES_TO_START = 3;
 
 /**
  * The line under a picked-from drink's name: its base and where it is

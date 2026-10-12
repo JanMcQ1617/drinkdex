@@ -180,6 +180,10 @@ export const fonts = {
  * want less stuff". Title 28/34, body 17/24 and small 13/18, plus
  * Playfair at the title and body sizes for drink names. Weight (400, 500,
  * 600) carries emphasis instead of a fourth size.
+ *
+ * One exception, agreed with Jan for v4.1 (specs/v4.1-changes.md 0.3):
+ * `prompt`, Inter 500 22/28, the onboarding guide's question in its
+ * bubble, which is the only place it is drawn.
  */
 const TITLE = { fontSize: 28, lineHeight: 34, letterSpacing: -0.4 } as const;
 const BODY = { fontSize: 17, lineHeight: 24, letterSpacing: -0.2 } as const;
@@ -191,7 +195,7 @@ const SMALL = { fontSize: 13, lineHeight: 18, letterSpacing: 0 } as const;
  * text is, the size comes from the three above.
  *
  * PLAYFAIR DISCIPLINE. The display face appears only in the name roles
- * (wordmark, wordmarkLg, drinkHero, nameLg, name, nameInline), and
+ * (wordmark, wordmarkLg, drinkHero, nameLg, name, nameSm, nameInline), and
  * check-design rule 6 fails any other route to it. A drink name is drawn
  * through DrinkName (components/cabinet.tsx), which fits it to its column
  * instead of truncating it.
@@ -231,6 +235,8 @@ export const textRole = {
   statusWord:   { fontFamily: fonts.bodyMedium, ...SMALL },
   /** The Dex number, "Nº 0127": four figures, so tracked like a code. Small size. */
   plate:        { fontFamily: fonts.label, fontSize: 13, lineHeight: 18, letterSpacing: 1.0, fontVariant: ['tabular-nums'] }, // tracking-ok: a code of figures, not words
+  /** The onboarding guide's question in its bubble (v4.1, the one size outside the three; see above). */
+  prompt:       { fontFamily: fonts.bodyMedium, fontSize: 22, lineHeight: 28, letterSpacing: -0.3 },
 
   /* ---- Playfair: the wordmark and drink names ONLY (check-design rule 6) ---- */
   wordmark:     { fontFamily: fonts.displayBold, ...TITLE, letterSpacing: -0.2 }, // Home's bar, set left
@@ -240,6 +246,8 @@ export const textRole = {
   nameLg:       { fontFamily: fonts.displayBold, ...TITLE, letterSpacing: -0.2 },
   /** A drink at body size: grids, lists, picker rows. */
   name:         { fontFamily: fonts.displayBold, ...BODY, letterSpacing: 0 },
+  /** A drink at small size: the second line of a Home post's header, where Instagram puts a place (home-ig 2.4). */
+  nameSm:       { fontFamily: fonts.displayBold, ...SMALL, letterSpacing: 0 },
   /** A name inside an Inter sentence ("theo_stirs's Paper Plane"), a nested Text. */
   nameInline:   { fontFamily: fonts.displayBold },
 } satisfies Record<string, TextStyle>;
@@ -285,7 +293,7 @@ export const stroke = {
  * are minimums; anything under `hit` reaches 44 with hitSlop.
  */
 export const layout = {
-  /** ONE side margin: every edge on every screen sits at x 24 (layout spec principle 4). */
+  /** ONE side margin: every edge on every screen sits at x 24 (layout spec principle 4); Home's feed alone uses `feedGutter`. */
   gutter: 24,
   hit: 44,
   /** The top bar's row, under the status bar: 62 to 114. */
@@ -307,7 +315,16 @@ export const layout = {
   rowTall: 64,
   /** Between profile grid tiles. */
   gridGap: 8,
-  feedPhotoAspect: 4 / 5,
+  /**
+   * Home's post photo, full bleed: 1:1, as Instagram's feed (home-ig 6).
+   * At 4:5 a post was 110pt taller and only one showed at rest.
+   */
+  feedPhotoAspect: 1,
+  /**
+   * Home's text column: 16 to 424 at 440 (home-ig 2), Instagram's inset.
+   * Home only; every other screen keeps `gutter`.
+   */
+  feedGutter: 16,
   /** Between the Dex's two columns. */
   dexGap: 24,
   /** Between Dex rows. */
@@ -317,11 +334,12 @@ export const layout = {
   section: 32,
   group: 24,
   /**
-   * Home's stories: 62pt rings, five whole ones across the gutter-to-gutter
-   * column (the judges' "five whole rings"), a 2pt ink ring when unseen and
-   * NO ring once seen.
+   * Home's stories (home-ig 2.3): a 66pt ring box in a fixed 80pt slot, so
+   * the sixth ring is cut by the screen's edge, as on Instagram. A 2pt ink
+   * ring when unseen, a 1pt `rule` ring once seen, and a 3pt gap to the
+   * 56pt disc (66 less the 2pt ring and the gap on each side).
    */
-  story: { ring: 62, ringWidth: 2, gap: 3, perRow: 5 },
+  story: { ring: 66, ringWidth: 2, seenWidth: 1, gap: 3, slot: 80 },
 } as const;
 
 /**

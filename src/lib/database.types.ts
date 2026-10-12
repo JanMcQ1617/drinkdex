@@ -164,6 +164,36 @@ export type SaveRow = {
 };
 
 /**
+ * Your tastes (migration 022): the onboarding answers, one row per
+ * account, readable and writable by its owner only. `answers` is the
+ * store's TasteAnswers object (store/taste), or {} once cleared; the
+ * server checks only that it is an object of at most 4 KB. The clocks are
+ * the server's. Insert names user_id, answers and heard_from; update only
+ * the last two, which is why the app writes by update-then-insert and
+ * never by PostgREST's upsert (that would set user_id too).
+ */
+export type TasteProfileRow = {
+  user_id: string;
+  answers: Json;
+  /** 'friend', 'instagram', 'tiktok', 'app-store', 'facebook', 'google' or 'other'; null unless asked. */
+  heard_from: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/**
+ * A drink saved to try (migration 022): a catalogue id on the account's
+ * want-to-try list, owner only, at most 200 per account (a trigger
+ * refuses the 201st with 'want_to_try_full'). Not the Dex: the Dex is on
+ * the phone. Insert names the two ids; created_at is the server's.
+ */
+export type WantToTryRow = {
+  user_id: string;
+  drink_id: string;
+  created_at: string;
+};
+
+/**
  * One row of recent_pours() (migration 017): a photo shared in the last
  * 24 hours by the caller or someone the caller follows. poured_at is the
  * photo's created_at, not the post's: logging a drink again adds a photo to
@@ -490,6 +520,20 @@ export type Database = {
       saves: {
         Row: SaveRow;
         Insert: { user_id: string; post_id: string };
+        Update: never;
+        Relationships: [];
+      };
+      /* Migration 022. Owner only, both. */
+      taste_profiles: {
+        Row: TasteProfileRow;
+        Insert: { user_id: string; answers?: Json; heard_from?: string | null };
+        Update: { answers?: Json; heard_from?: string | null };
+        Relationships: [];
+      };
+      want_to_try: {
+        Row: WantToTryRow;
+        Insert: { user_id: string; drink_id: string };
+        /* No update grant: delete and insert again. */
         Update: never;
         Relationships: [];
       };

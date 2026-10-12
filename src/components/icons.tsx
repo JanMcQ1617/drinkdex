@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Circle, G, Path } from 'react-native-svg';
+import Svg, { Circle, G, Path, Rect } from 'react-native-svg';
 
 import { colors } from '@/constants/theme';
 
@@ -76,7 +76,8 @@ export type IconName =
   | 'music'
   | 'bell'
   | 'sliders'
-  | 'arrowRight';
+  | 'arrowRight'
+  | 'create';
 
 export interface IconProps {
   name: IconName;
@@ -85,6 +86,13 @@ export interface IconProps {
   /** Solid weight — used for active nav and engaged toggles, and for the
    *  Facebook mark on the sign-in button. */
   filled?: boolean;
+  /**
+   * An outline's stroke on the 24-unit grid, in place of the set's 1.6 (or
+   * the heavier `filled` stroke of a glyph with no solid form). Only for a
+   * glyph drawn small on a solid disc, where 1.6 thins out: the story
+   * tray's + badge is 2.4 (home-ig 2.3). Ignored by a solid form.
+   */
+  strokeWidth?: number;
 }
 
 /* ------------------------------------------------------------------ */
@@ -250,7 +258,11 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
       <Path d="M9.8 17.6h4.4" />
     </>
   ),
-  // v4: Home's one bar glyph (Activity), in place of the heart that also meant "like".
+  /*
+   * v4 drew Activity as the bell, so a heart meant only "like". v4.1's
+   * Instagram Home (home-ig 6) gives Activity the heart again, so nothing
+   * draws the bell now; it stays in the set for a screen that wants it.
+   */
   bell: (
     <>
       <Path d="M6.3 16.6V11a5.7 5.7 0 0 1 11.4 0v5.6l1.7 2.2H4.6z" />
@@ -276,6 +288,18 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     </>
   ),
   bookmark: <Path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z" />,
+  /*
+   * v4.1: Home's create key (home-ig 5.5), beside the Activity heart: a
+   * squared frame (rx 4, the keys' radius on this grid) with the plus in
+   * it. It opens the + window, as the tab bar's + does.
+   */
+  create: (
+    <>
+      <Rect x={3.6} y={3.6} width={16.8} height={16.8} rx={4} />
+      <Path d="M12 8v8" />
+      <Path d="M8 12h8" />
+    </>
+  ),
   /*
    * A page with a turned corner — a document to read (Terms of Use). The
    * bookmark stood in for it and already means "save a post"; one glyph
@@ -495,6 +519,11 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
   heart: (
     <Path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z" />
   ),
+  /*
+   * Saved: the outline's shape, filled to its outer edge (half a stroke
+   * wider all round). Home's saved post and, in v4.1, the drink page's
+   * "Saved to try" key. The shape carries the state; no colour does.
+   */
   bookmark: <Path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z" />,
   /*
    * Facebook's published mark: a disc with the f cut out of it, the f's
@@ -595,6 +624,7 @@ export const Icon = React.memo(function Icon({
   size = 24,
   color = colors.text,
   filled = false,
+  strokeWidth,
 }: IconProps) {
   const solid = filled ? SOLID[name] : undefined;
 
@@ -610,7 +640,7 @@ export const Icon = React.memo(function Icon({
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <G
         stroke={color}
-        strokeWidth={filled ? STROKE + 0.55 : STROKE}
+        strokeWidth={strokeWidth ?? (filled ? STROKE + 0.55 : STROKE)}
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none">

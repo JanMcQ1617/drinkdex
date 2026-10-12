@@ -83,6 +83,10 @@ export const haptic = {
   tap: () => {
     if (Platform.OS !== 'web') Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   },
+  /** A heavier beat, for a moment that lands (the onboarding's reveal, m20). */
+  medium: () => {
+    if (Platform.OS !== 'web') Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  },
   select: () => {
     if (Platform.OS !== 'web') Haptics.selectionAsync();
   },

@@ -1,6 +1,16 @@
 import { Image } from 'expo-image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Pressable, Share, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import {
+  type AccessibilityActionEvent,
+  type AccessibilityActionInfo,
+  Alert,
+  Pressable,
+  Share,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -20,7 +30,7 @@ import { ActionSheet, type SheetAction } from '@/components/Sheet';
 import { MediaMarker } from '@/components/media';
 import { formatPlateNumber } from '@/components/plate';
 import { announce, Avatar, haptic } from '@/components/ui';
-import { colors, layout, motion, onMedia, space, tabular, textRole } from '@/constants/theme';
+import { colors, fonts, layout, motion, onMedia, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
 import { photoFor } from '@/data/drinkPhotos';
 import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
@@ -32,6 +42,7 @@ import {
   timeAgo,
   timeAgoSpoken,
 } from '@/lib/social';
+import { clampToLines, textWidth } from '@/lib/textFit';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
@@ -47,24 +58,40 @@ export { timeAgo, timeAgoSpoken };
 /* ==================================================================== */
 /* A post                                                               */
 /*                                                                      */
-/* LESS STUFF (layout spec 5.1 and 5.4; Jan: "I want less stuff"). The  */
-/* photo and the drink's name are the post; everything else is quieter  */
-/* or one tap away.                                                     */
+/* INSTAGRAM'S ANATOMY in Daylight's black and white (v4.1; Jan: "make  */
+/* it look the same as instagram"; specs/v4-mockups/home-ig). Top to    */
+/* bottom, at 440 wide:                                                 */
 /*                                                                      */
-/*   feed    the print (4:5, square corners, the photo edge), one line  */
-/*           with the name in Playfair on the left and the author small */
-/*           and muted on the right, on one baseline, then the heart,   */
-/*           the like count, the bookmark and •••. Seven elements.      */
-/*   detail  the post page: the author row (face, name, •••) above the  */
-/*           print, the name, the whole caption, the heart and count.   */
+/*   header    52: the face (in a 2pt ink ring when they have a story   */
+/*             you have not seen), the username over the drink in       */
+/*             Playfair, where Instagram puts a place, and •••.         */
+/*   photo     440 x 440, full bleed, square corners, the photo edge.   */
+/*   actions   44: heart, share · · · bookmark. The gallery's dots sit  */
+/*             in the middle.                                           */
+/*   liked by  22: one face (migration 021 names one liker) and         */
+/*             "Liked by maya.pours and 23 others".                     */
+/*   caption   the username in 600, then the words: two lines and       */
+/*             "… more", cut before layout (lib/textFit), opened in     */
+/*             place by a tap.                                          */
+/*   time      "2 hours ago", muted. Then a 14pt foot.                  */
 /*                                                                      */
-/* What left the feed, and where it went: the time and the place to the */
-/* ••• sheet's header; the Nº, "In your Dex", style and origin to the   */
-/* drink page (tap the name); the liked-by faces to the likers sheet    */
-/* (tap the count); the caption to the post page; Share to •••.         */
+/* 616 tall with a one-line caption, 634 with two. The post page        */
+/* (variant 'detail') is the same card with its caption opened.         */
+/*                                                                      */
+/* NO COMMENTS YET. There is no comments table and no thread (home-ig   */
+/* 5.6), so while COMMENTS_ENABLED is false there is no comment glyph   */
+/* and no "View all N comments": no dead control.                       */
 /*                                                                      */
 /* No red anywhere: a liked heart is the solid ink heart.               */
 /* ==================================================================== */
+
+/**
+ * Comments are not built (home-ig 5.6). Until they are, the actions row is
+ * heart · share · · · bookmark and no comments line draws. When true, the
+ * glyph sits second (51 to 95) and the line shows under a caption once a
+ * post has comments, for a screen that passes `onOpenComments`.
+ */
+const COMMENTS_ENABLED: boolean = false;
 
 /* ==================================================================== */
 /* Icon control                                                         */
@@ -204,31 +231,59 @@ function HeartBurst() {
 }
 
 /* ==================================================================== */
-/* PostCard                                                             */
+/* Measures (home-ig 2.4, at 440 wide)                                  */
 /* ==================================================================== */
 
-/** The heart is 28 (layout spec 5.1); the bookmark and ••• are 24. */
-const HEART = 28;
-const GLYPH = 24;
-/**
- * The actions row is inset so a 24pt glyph in its 44pt box ends on the
- * print's edge (••• at x 392 to 416 on a 440 screen), and so the heart's
- * box starts 14 in, which puts the 28pt heart at x 22 and the count at 58.
- */
-const ACTIONS_INSET = layout.gutter - (layout.hit - GLYPH) / 2;
-/** The actions' visible band (the 28pt heart, with a point either side), 14 under the name line. */
-const ACTIONS_BAND = 30;
-const BAND_SLACK = (layout.hit - ACTIONS_BAND) / 2;
-/** The author's face on the post page. */
-const AUTHOR_AVATAR = 32;
-const AUTHOR_SLACK = (layout.hit - AUTHOR_AVATAR) / 2;
-/** The gallery count's corner, inside the print. */
-const COUNT_INSET = space.sm;
-/** Dynamic Type cap for the Playfair name under the print (spec 6.5). */
-const NAME_CAP = 1.3;
-/** The name's one line (nameLg, 34) less the 44pt target, split above and below it. */
-const NAME_SLACK = Math.max(0, (layout.hit - textRole.nameLg.lineHeight) / 2);
-const NAME_SLOP = { top: NAME_SLACK, bottom: NAME_SLACK };
+/** Home's text column: 16 to 424. */
+const GUTTER = layout.feedGutter;
+/** All four action glyphs are 26 (heart, comment, share, bookmark); the header's ••• is 24. */
+const GLYPH = 26;
+const MORE_GLYPH = 24;
+/** The actions' 44pt boxes start 7 in, so the heart's glyph starts on the column (16) and the bookmark's ends on it (424). */
+const ACTIONS_INSET = GUTTER - (layout.hit - GLYPH) / 2;
+/** The header's ••• box ends 6 in, so its 24pt glyph ends on the column too. */
+const MORE_INSET = GUTTER - (layout.hit - MORE_GLYPH) / 2;
+
+/** The header row, the face and the story ring round it: 2pt ink, a 2pt gap, 40 outer at x 12, y 6. */
+const HEADER_H = 52;
+const HEADER_AVATAR = 32;
+const STORY_RING_GAP = 2;
+const STORY_RING = HEADER_AVATAR + 2 * (stroke.ring + STORY_RING_GAP);
+const STORY_RING_AT = -(stroke.ring + STORY_RING_GAP);
+/** The 32pt face reaches a 44pt target. */
+const AVATAR_SLOP = (layout.hit - HEADER_AVATAR) / 2;
+/** The header's two 18pt lines take the row's spare 8 above the name and 8 under the drink. */
+const LINE_SLOP = (HEADER_H - 2 * textRole.small.lineHeight) / 2;
+/** Dynamic Type cap for the header's two lines: they sit beside a fixed-size face (specs/v3-cabinet.md 6.5). */
+const HEADER_CAP = 1.3;
+
+/** The gallery's "1/3" marker, 12 in from the photo's top right corner. */
+const COUNT_INSET = 12;
+/** The gallery's dots, centred on the actions row: 6pt, 4 apart. Decorative. */
+const DOT = 6;
+const DOT_GAP = 4;
+
+/** Liked by: up to three 18pt faces, each in a 2pt page ring (22), 14 apart, so each overlaps the one before by 8. */
+const FACE = 18;
+const FACE_RING = 2;
+const FACE_OUTER = FACE + 2 * FACE_RING;
+const FACE_STRIDE = 14;
+const MAX_FACES = 3;
+/** The liked-by line reaches 44 with 11 of slop above and below its 22. */
+const LIKED_SLOP = (layout.hit - FACE_OUTER) / 2;
+
+/** The caption's two lines, and the words the cut ends in ("… " then "more" in muted). */
+const CAPTION_LINES = 2;
+const CUT_MARK = '… ';
+const MORE_WORD = 'more';
+/** Between the liked-by row's foot, the caption, the comments line and the time. */
+const LINE_GAP = space.xs;
+/** A post's foot: space only, then the next header. */
+const FOOT = 14;
+
+/* ==================================================================== */
+/* PostCard                                                             */
+/* ==================================================================== */
 
 export interface PostCardProps {
   post: Post;
@@ -249,8 +304,18 @@ export interface PostCardProps {
    * can leave. Lists need nothing: the store drops the post from the feed.
    */
   onDeleted?: (postId: string) => void;
-  /** 'feed' (Home) or 'detail' (the post page). See the header note. */
+  /** 'feed' (Home) or 'detail' (the post page): the same card, the detail's caption opened. */
   variant?: 'feed' | 'detail';
+  /**
+   * Whether the author has a story in Home's row today (groupPours'
+   * storyMap): 'unseen' rings their face in ink, and either makes the face
+   * open the story rather than the profile. Omitted: no story.
+   */
+  story?: 'unseen' | 'seen';
+  /** Opens the author's story (the viewer); used when `story` is set. */
+  onOpenStory?: (authorId: string) => void;
+  /** The comment thread, once comments exist; read only while COMMENTS_ENABLED. */
+  onOpenComments?: (postId: string) => void;
 }
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -263,13 +328,16 @@ export const PostCard = React.memo(function PostCard({
   onBlocked,
   onDeleted,
   variant = 'feed',
+  story,
+  onOpenStory,
+  onOpenComments,
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
   const removePost = useSocial((s) => s.removePost);
   const toggleSave = useSocial((s) => s.toggleSave);
   const reduced = useReducedMotion();
-  const { width } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
   const detail = variant === 'detail';
 
   /*
@@ -322,8 +390,8 @@ export const PostCard = React.memo(function PostCard({
   }, [myId, post.id, saveKey, saved, toggleSave]);
 
   /*
-   * Who liked it: null until the count is first tapped, then open or
-   * closed. The sheet mounts on that first tap and stays mounted, so a
+   * Who liked it: null until the liked-by line is first tapped, then open
+   * or closed. The sheet mounts on that first tap and stays mounted, so a
    * feed of a hundred cards holds no hundred Modals, and a close still
    * gets UIKit's slide down and the sheet's after-dismiss navigation.
    */
@@ -340,6 +408,13 @@ export const PostCard = React.memo(function PostCard({
   const [menu, setMenu] = useState<{ open: boolean; page: 'post' | 'report' } | null>(null);
   const openMenu = useCallback(() => setMenu({ open: true, page: 'post' }), []);
   const closeMenu = useCallback(() => setMenu((m) => (m ? { ...m, open: false } : m)), []);
+
+  /*
+   * The caption, opened in place by a tap on it. Keyed by the post, as the
+   * like's `flip` is, so a cell the virtualised list recycles for another
+   * post cannot open on someone else's caption.
+   */
+  const [openedFor, setOpenedFor] = useState<string | null>(null);
 
   /*
    * A post can carry several photos of the same drink, newest first
@@ -443,7 +518,7 @@ export const PostCard = React.memo(function PostCard({
   };
 
   /*
-   * The menu's Share: the system share sheet with one line of text. It
+   * The share glyph: the system share sheet with one line of text. It
    * says the act ("posted"), not the Dex number: the number means
    * something only inside the app.
    */
@@ -537,17 +612,18 @@ export const PostCard = React.memo(function PostCard({
   // any post), so it is known before any card renders.
   const canSave = !!myId && savesSupported();
   const mine = !!myId && who.id === myId;
+  const comments = COMMENTS_ENABLED && onOpenComments ? onOpenComments : null;
 
   /*
    * Everything the old menu did, and Save, in the order the layout spec
-   * gives (Comment and Edit are left out: neither exists on the server).
-   * Moderation is offered only on OTHER people's posts: reporting or
-   * blocking yourself is nonsense, and the server rejects a self-block
-   * (no_self_block). Delete, Report and Block are the destructive words,
-   * ink and underlined; Delete and Block go on to the system's confirm.
+   * gives (Comment and Edit are left out: neither exists on the server;
+   * Share left for the glyph in the actions row). Moderation is offered
+   * only on OTHER people's posts: reporting or blocking yourself is
+   * nonsense, and the server rejects a self-block (no_self_block).
+   * Delete, Report and Block are the destructive words, ink and
+   * underlined; Delete and Block go on to the system's confirm.
    */
   const menuActions: SheetAction[] = [
-    { label: 'Share', onPress: share },
     ...(canSave ? [{ label: saved ? 'Remove from saved' : 'Save', onPress: onSave }] : []),
     { label: 'View drink', detail: formatPlateNumber(drink.dexNumber), onPress: () => onOpenDrink(drink.id) },
     ...(mine
@@ -577,11 +653,11 @@ export const PostCard = React.memo(function PostCard({
    * URL is on its way (`undefined`) the frame holds its place on the wash;
    * only a post with no photo, or one that would not sign (`null`), falls
    * back to the drink's own face: its daylight print, else the no-photo
-   * face, in the same 4:5 frame.
+   * face, in the same square frame.
    */
   const showPhoto = !!current && photoUrl !== null;
-  // The print column: the screen less its two gutters (392 at 440), at 4:5 (490).
-  const printW = Math.round(width - 2 * layout.gutter);
+  // Full bleed: the screen's width, square (440 x 440).
+  const printW = Math.round(width);
   const mediaH = Math.round(printW / layout.feedPhotoAspect);
   const mediaLabel = hasGallery
     ? `Next photo of ${drink.name}, ${index + 1} of ${gallery.length}`
@@ -592,46 +668,38 @@ export const PostCard = React.memo(function PostCard({
         : `Illustration of ${drink.name}`;
 
   const when = timeAgoSpoken(post.createdAt);
-  const likesSpoken = `${formatCount(likes)} ${likes === 1 ? 'like' : 'likes'}`;
   /*
-   * The count opens the likers sheet once the server can name them
-   * (migration 021: Post.likedBy is defined). Before that it is the plain
-   * count, not a button, since there is no list to open.
+   * The liked-by line opens the likers sheet once the server can name
+   * them (migration 021: Post.likedBy is defined). Before that it is the
+   * plain count, not a button, since there is no list to open.
    */
   const listable = likes > 0 && post.likedBy !== undefined;
+  // 021 names one liker; LikedBy draws up to three, for a later migration to fill.
+  const likers = post.likedBy ? [post.likedBy] : [];
 
-  const more = <IconButton name="more" label="Post options" onPress={openMenu} />;
-
-  const heart = (
-    <IconButton
-      name="heart"
-      label="Like"
-      onPress={onLike}
-      size={HEART}
-      filled={liked}
-      selected={liked}
-    />
-  );
-
-  const count =
-    likes <= 0 ? null : listable ? (
-      <Pressable
-        onPress={openLikers}
-        // The row is 44 tall; slop to the right reaches past the figure's few points.
-        hitSlop={{ right: space.lg }}
-        accessibilityRole="button"
-        accessibilityLabel={likesSpoken}
-        accessibilityHint="Shows who liked this"
-        style={({ pressed }) => [styles.count, pressed && styles.pressed]}>
-        <Text style={styles.countText}>{formatCount(likes)}</Text>
-      </Pressable>
-    ) : (
-      <View style={styles.count}>
-        <Text style={styles.countText} accessibilityLabel={likesSpoken}>
-          {formatCount(likes)}
-        </Text>
-      </View>
-    );
+  /*
+   * The caption: the username, then the words. On the feed it is cut to
+   * two lines ending "… more", worked out here before layout from Inter's
+   * own advances (lib/textFit, set a little wide, so the kept words always
+   * fit), so the cell is its final height on its first frame, at any text
+   * size. Opened, or on the post page, it is whole.
+   */
+  const captionText = isBlankCaption(post.caption) ? null : post.caption.trim();
+  const opened = detail || openedFor === post.id;
+  const captionSize = textRole.small.fontSize * fontScale;
+  const cut =
+    captionText && !opened
+      ? clampToLines(
+          captionText,
+          'inter400',
+          captionSize,
+          width - 2 * GUTTER,
+          CAPTION_LINES,
+          CUT_MARK + MORE_WORD,
+          // The username before it is SemiBold.
+          textWidth(who.username, 'inter600', captionSize),
+        )
+      : null;
 
   /*
    * The print. One Pressable covers it, for the page turn and the double-tap
@@ -639,10 +707,10 @@ export const PostCard = React.memo(function PostCard({
    * element: the photo, or on a gallery the button that turns the page.
    * Liking is always the heart below as well; the double tap is a shortcut,
    * never the only way. No words on the photo (white spec D5): the gallery
-   * count is a solid ink marker, and the name hangs under the print.
+   * count is a solid ink marker.
    */
   const print = (
-    <Print width={printW} height={mediaH} style={detail ? styles.printDetail : styles.printFeed}>
+    <Print width={printW} height={mediaH}>
       <Pressable
         onPress={onMediaPress}
         accessibilityRole={hasGallery ? 'button' : 'image'}
@@ -699,21 +767,69 @@ export const PostCard = React.memo(function PostCard({
     </Print>
   );
 
-  // The name under the print: a wall label, opening the drink page, where its Nº, state, style and origin went.
-  const name = (
-    <Pressable
-      onPress={() => onOpenDrink(drink.id)}
-      hitSlop={NAME_SLOP}
-      accessibilityRole="button"
-      accessibilityLabel={drink.name}
-      accessibilityHint="Opens the drink"
-      style={({ pressed }) => [styles.nameTarget, pressed && styles.pressed]}>
-      <DrinkName name={drink.name} role={textRole.nameLg} measure={printW} cap={NAME_CAP} color={colors.text} />
-    </Pressable>
+  /*
+   * Heart, share, then the bookmark at the far end (only where the server
+   * has saves). The row is above the liked-by line in the touch order
+   * (zIndex), so that line's slop never takes a tap meant for a glyph,
+   * and passes every touch that misses a glyph through to it (box-none).
+   */
+  const actions = (
+    <View pointerEvents="box-none" style={styles.actions}>
+      {hasGallery ? <GalleryDots count={gallery.length} index={index} /> : null}
+      <IconButton name="heart" label="Like" onPress={onLike} filled={liked} selected={liked} />
+      {comments ? <IconButton name="comment" label="Comment" onPress={() => comments(post.id)} /> : null}
+      <IconButton name="send" label="Share" onPress={share} />
+      <View pointerEvents="none" style={styles.spacer} />
+      {canSave ? <IconButton name="bookmark" label="Save" onPress={onSave} filled={saved} selected={saved} /> : null}
+    </View>
   );
 
-  const sheets = (
-    <>
+  const commentCount = post.commentCount ?? 0;
+
+  return (
+    <View style={styles.card}>
+      <PostHeader
+        who={who}
+        drinkId={drink.id}
+        drinkName={drink.name}
+        when={when}
+        story={story && onOpenStory ? story : undefined}
+        width={width}
+        onOpenAuthor={onOpenAuthor}
+        onOpenStory={onOpenStory}
+        onOpenDrink={onOpenDrink}
+        onMore={openMenu}
+      />
+      {print}
+      {actions}
+      <LikedBy likes={likes} likers={likers} listable={listable} onPress={openLikers} />
+      {captionText ? (
+        <Caption
+          username={who.username}
+          text={captionText}
+          cut={cut}
+          onOpen={() => setOpenedFor(post.id)}
+          onOpenAuthor={onOpenAuthor ? () => onOpenAuthor(who.id) : undefined}
+        />
+      ) : null}
+      {comments && commentCount > 0 ? (
+        <Pressable
+          onPress={() => comments(post.id)}
+          accessibilityRole="button"
+          style={({ pressed }) => [styles.quietRow, pressed && styles.pressed]}>
+          <Text style={styles.quiet}>
+            {commentCount === 1 ? 'View 1 comment' : `View all ${formatCount(commentCount)} comments`}
+          </Text>
+        </Pressable>
+      ) : null}
+      {/* The header already says the time to VoiceOver ("ines.ag, Negroni, 2 hours ago"). */}
+      <Text
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        style={[styles.quiet, styles.quietRow]}>
+        {when}
+      </Text>
+
       {likersOpen === null ? null : (
         <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} likes={likes} />
       )}
@@ -722,134 +838,301 @@ export const PostCard = React.memo(function PostCard({
           visible={menu.open}
           onClose={closeMenu}
           title={menu.page === 'report' ? 'Report this post' : undefined}
+          // The time is on the card now; the sheet names whose post it is.
           header={
             menu.page === 'report'
               ? 'What is wrong with it? Reports are reviewed privately; the poster is not told who reported them.'
-              : `${who.username} · ${timeAgo(post.createdAt)}`
+              : who.username
           }
-          // "2h" is read as "2 h"; the spoken line says the time in words.
-          headerLabel={menu.page === 'report' ? undefined : `${who.username}, ${when}`}
           actions={menu.page === 'report' ? reasonActions : menuActions}
         />
       )}
-    </>
-  );
-
-  if (detail) {
-    /*
-     * The post page (layout spec 5.4): nine elements at rest. The ••• moved
-     * from the bar to the end of the author row; Save lives in it here,
-     * where the feed keeps its bookmark.
-     */
-    return (
-      <View style={styles.cardDetail}>
-        <View style={styles.authorRow}>
-          <AuthorIdentity who={who} when={when} onOpenAuthor={onOpenAuthor} />
-          {more}
-        </View>
-        {print}
-        <View style={styles.detailName}>{name}</View>
-        {isBlankCaption(post.caption) ? null : <Text style={styles.caption}>{post.caption}</Text>}
-        <View style={[styles.actions, styles.actionsDetail]}>
-          {heart}
-          {count}
-        </View>
-        {sheets}
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.cardFeed}>
-      {print}
-      {/*
-        One line under the print: the name left, the author right, on one
-        baseline. The name wraps (never cut); if name and author will not
-        share the line, the author drops under it.
-      */}
-      <View style={styles.line}>
-        {name}
-        {onOpenAuthor ? (
-          <Pressable
-            onPress={() => onOpenAuthor(who.id)}
-            hitSlop={{ top: 13, bottom: 13, left: 8, right: 8 }}
-            accessibilityRole="button"
-            accessibilityLabel={`${who.username}, ${when}`}
-            accessibilityHint="Opens their profile"
-            style={({ pressed }) => [styles.byline, pressed && styles.pressed]}>
-            <Text numberOfLines={1} style={styles.bylineText}>
-              {who.username}
-            </Text>
-          </Pressable>
-        ) : (
-          <Text numberOfLines={1} accessibilityLabel={`${who.username}, ${when}`} style={[styles.byline, styles.bylineText]}>
-            {who.username}
-          </Text>
-        )}
-      </View>
-      {/*
-        Heart and count on the left; the bookmark (only where the server has
-        saves) and ••• on the right. No comment or share glyph: there is no
-        thread to open, and Share is in •••.
-      */}
-      <View style={[styles.actions, styles.actionsFeed]}>
-        {heart}
-        {count}
-        <View style={styles.spacer} />
-        {canSave ? (
-          <IconButton
-            name="bookmark"
-            label="Save"
-            onPress={onSave}
-            filled={saved}
-            selected={saved}
-          />
-        ) : null}
-        {more}
-      </View>
-      {sheets}
     </View>
   );
 });
 
+/* ==================================================================== */
+/* The header                                                           */
+/* ==================================================================== */
+
 /**
- * The post page's author: the face and the name, one button to their
- * profile, spoken with the time ("ines.ag, 2 hours ago"). Without
- * onOpenAuthor it is plain, read as one element: a disabled button made
- * VoiceOver call the name "dimmed".
+ * The post's header (home-ig 5.1): the face, the username over the drink,
+ * and •••. Each is its own tap: the face opens their story when they have
+ * one today, else their profile; the username opens the profile; the
+ * drink opens the drink page.
+ *
+ * VoiceOver hears the face and the two lines as one element, "ines.ag,
+ * Negroni, 2 hours ago": activating it opens the profile, and the drink
+ * and the story are its actions. The ••• is its own button.
  */
-function AuthorIdentity({
+function PostHeader({
   who,
+  drinkId,
+  drinkName,
   when,
+  story,
+  width,
   onOpenAuthor,
+  onOpenStory,
+  onOpenDrink,
+  onMore,
 }: {
   who: UserProfile;
+  drinkId: string;
+  drinkName: string;
   when: string;
+  /** Set only when the story can be opened. */
+  story?: 'unseen' | 'seen';
+  width: number;
   onOpenAuthor?: (authorId: string) => void;
+  onOpenStory?: (authorId: string) => void;
+  onOpenDrink: (drinkId: string) => void;
+  onMore: () => void;
 }) {
+  const openProfile = onOpenAuthor ? () => onOpenAuthor(who.id) : undefined;
+  const openStory = story && onOpenStory ? () => onOpenStory(who.id) : undefined;
+  const openDrink = () => onOpenDrink(drinkId);
+  const onAvatar = openStory ?? openProfile;
+
+  // The drink's column: from the text's start (60) to 8 short of the •••'s box (390).
+  const measure = width - (GUTTER + HEADER_AVATAR + space.md) - (MORE_INSET + layout.hit) - space.sm;
+
+  const a11yActions: AccessibilityActionInfo[] = [
+    ...(openProfile ? [{ name: 'activate' }] : []),
+    ...(openStory ? [{ name: 'story', label: 'View story' }] : []),
+    { name: 'drink', label: `Open ${drinkName}` },
+  ];
+  const onA11yAction = (e: AccessibilityActionEvent) => {
+    switch (e.nativeEvent.actionName) {
+      case 'activate':
+        openProfile?.();
+        break;
+      case 'story':
+        openStory?.();
+        break;
+      case 'drink':
+        openDrink();
+        break;
+    }
+  };
+
+  return (
+    <View style={styles.header}>
+      <View
+        accessible
+        accessibilityRole={openProfile ? 'button' : undefined}
+        accessibilityLabel={`${who.username}, ${drinkName}, ${when}${story === 'unseen' ? ', new story' : ''}`}
+        accessibilityHint={openProfile ? 'Opens their profile' : undefined}
+        accessibilityActions={a11yActions}
+        onAccessibilityAction={onA11yAction}
+        style={styles.identity}>
+        <Pressable
+          onPress={onAvatar}
+          disabled={!onAvatar}
+          hitSlop={AVATAR_SLOP}
+          style={({ pressed }) => [styles.headAvatar, pressed && styles.pressed]}>
+          {story === 'unseen' ? <View pointerEvents="none" style={styles.storyRing} /> : null}
+          <Avatar name={who.displayName} accent={who.accent} size={HEADER_AVATAR} avatarPath={who.avatarPath} />
+        </Pressable>
+        <View style={styles.headText}>
+          <Pressable
+            onPress={openProfile}
+            disabled={!openProfile}
+            hitSlop={{ top: LINE_SLOP, right: space.sm }}
+            style={({ pressed }) => [styles.hug, pressed && styles.pressed]}>
+            <Text numberOfLines={1} maxFontSizeMultiplier={HEADER_CAP} style={styles.username}>
+              {who.username}
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={openDrink}
+            hitSlop={{ bottom: LINE_SLOP, right: space.sm }}
+            style={({ pressed }) => [styles.hug, pressed && styles.pressed]}>
+            <DrinkName name={drinkName} role={textRole.nameSm} measure={measure} cap={HEADER_CAP} color={colors.text} />
+          </Pressable>
+        </View>
+      </View>
+      <IconButton name="more" label="Post options" onPress={onMore} size={MORE_GLYPH} />
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* The actions row's gallery dots                                       */
+/* ==================================================================== */
+
+/** Which photo of a gallery is showing, as dots: decorative, so hidden from VoiceOver (the photo's label says it). */
+function GalleryDots({ count, index }: { count: number; index: number }) {
+  return (
+    <View
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={styles.dots}>
+      {Array.from({ length: count }, (_, i) => (
+        <View key={i} style={[styles.dot, i === index && styles.dotOn]} />
+      ))}
+    </View>
+  );
+}
+
+/* ==================================================================== */
+/* Liked by                                                             */
+/* ==================================================================== */
+
+/**
+ * "Liked by maya.pours and 23 others", after up to three faces (home-ig
+ * 5.1). Migration 021 names one liker, so one face shows; more are drawn
+ * the moment the server sends them. With no name to show it is "24
+ * likes"; at no likes there is no row. The whole line opens the likers
+ * sheet once the server can list them.
+ */
+function LikedBy({
+  likes,
+  likers,
+  listable,
+  onPress,
+}: {
+  likes: number;
+  likers: readonly UserProfile[];
+  listable: boolean;
+  onPress: () => void;
+}) {
+  if (likes <= 0) return null;
+  const faces = likers.slice(0, MAX_FACES);
+  const name = faces[0]?.username;
+  const othersWord = likes - 1 === 1 ? '1 other' : `${formatCount(likes - 1)} others`;
+  const countWord = `${formatCount(likes)} ${likes === 1 ? 'like' : 'likes'}`;
+  const spoken = !name ? countWord : likes === 1 ? `Liked by ${name}` : `Liked by ${name} and ${othersWord}`;
+
   const body = (
     <>
-      <Avatar name={who.displayName} accent={who.accent} size={AUTHOR_AVATAR} avatarPath={who.avatarPath} />
-      <Text numberOfLines={1} style={styles.authorName}>
-        {who.username}
+      {faces.length > 0 ? (
+        <View style={[styles.faces, { width: FACE_OUTER + (faces.length - 1) * FACE_STRIDE }]}>
+          {faces.map((p, i) => (
+            <View key={p.id} style={[styles.face, { left: i * FACE_STRIDE }]}>
+              <Avatar name={p.displayName} accent={p.accent} size={FACE} avatarPath={p.avatarPath} />
+            </View>
+          ))}
+        </View>
+      ) : null}
+      <Text style={styles.likedText}>
+        {name ? (
+          <>
+            {'Liked by '}
+            <Text style={styles.strong}>{name}</Text>
+            {likes > 1 ? (
+              <>
+                {' and '}
+                <Text style={styles.strong}>{othersWord}</Text>
+              </>
+            ) : null}
+          </>
+        ) : (
+          <Text style={styles.strong}>{countWord}</Text>
+        )}
       </Text>
     </>
   );
-  if (!onOpenAuthor) {
+
+  if (!listable) {
     return (
-      <View accessible accessibilityLabel={`${who.username}, ${when}`} style={styles.identity}>
+      <View accessible accessibilityLabel={spoken} style={styles.liked}>
         {body}
       </View>
     );
   }
   return (
     <Pressable
-      onPress={() => onOpenAuthor(who.id)}
+      onPress={onPress}
+      hitSlop={{ top: LIKED_SLOP, bottom: LIKED_SLOP }}
       accessibilityRole="button"
-      accessibilityLabel={`${who.username}, ${when}`}
-      accessibilityHint="Opens their profile"
-      style={({ pressed }) => [styles.identity, pressed && styles.pressed]}>
+      accessibilityLabel={spoken}
+      accessibilityHint="Shows who liked this"
+      style={({ pressed }) => [styles.liked, pressed && styles.pressed]}>
       {body}
+    </Pressable>
+  );
+}
+
+/* ==================================================================== */
+/* Caption                                                              */
+/* ==================================================================== */
+
+/**
+ * The username in 600, then the caption (home-ig 5.1). `cut` is the part
+ * that fits two lines with "… more" after it (PostCard works it out before
+ * layout), or null when the caption is shown whole. Cut, the whole
+ * caption is one target that opens it in place; the username inside it is
+ * a target of its own, for the profile.
+ *
+ * VoiceOver reads the whole caption either way ("ines.ag, Stirred long
+ * over one big cube"), with the profile as an action.
+ */
+function Caption({
+  username,
+  text,
+  cut,
+  onOpen,
+  onOpenAuthor,
+}: {
+  username: string;
+  text: string;
+  cut: string | null;
+  onOpen: () => void;
+  onOpenAuthor?: () => void;
+}) {
+  const spoken = `${username}, ${text}`;
+  const a11yActions: AccessibilityActionInfo[] | undefined = onOpenAuthor
+    ? [{ name: 'profile', label: `Open ${username}'s profile` }]
+    : undefined;
+  const onA11yAction = (e: AccessibilityActionEvent) => {
+    if (e.nativeEvent.actionName === 'profile') onOpenAuthor?.();
+  };
+
+  const words = (
+    <Text numberOfLines={cut === null ? undefined : CAPTION_LINES} style={styles.captionText}>
+      <Text style={styles.strong} onPress={onOpenAuthor} suppressHighlighting>
+        {username}
+      </Text>
+      {' '}
+      {cut === null ? (
+        text
+      ) : (
+        <>
+          {cut}
+          {CUT_MARK}
+          <Text style={styles.moreWord}>{MORE_WORD}</Text>
+        </>
+      )}
+    </Text>
+  );
+
+  if (cut === null) {
+    return (
+      <View
+        accessible
+        accessibilityLabel={spoken}
+        accessibilityActions={a11yActions}
+        onAccessibilityAction={onA11yAction}
+        style={styles.caption}>
+        {words}
+      </View>
+    );
+  }
+  return (
+    <Pressable
+      onPress={onOpen}
+      accessibilityRole="button"
+      accessibilityLabel={spoken}
+      accessibilityHint="Shows the whole caption"
+      accessibilityActions={a11yActions ? [{ name: 'activate' }, ...a11yActions] : undefined}
+      onAccessibilityAction={(e) => {
+        if (e.nativeEvent.actionName === 'activate') onOpen();
+        else onA11yAction(e);
+      }}
+      style={({ pressed }) => [styles.caption, pressed && styles.pressed]}>
+      {words}
     </Pressable>
   );
 }
@@ -857,19 +1140,36 @@ function AuthorIdentity({
 /* ==================================================================== */
 
 const styles = StyleSheet.create({
-  /*
-   * No card chrome and no fill: the post stands on the page, and posts are
-   * set apart by space alone (layout principle 3): 32 from the actions' band
-   * to the next print, less the row's slack under the band.
-   */
-  cardFeed: { paddingBottom: layout.section - BAND_SLACK },
-  cardDetail: { paddingBottom: space.xl },
+  /* No card chrome and no fill: the post stands on the page, and a 14pt foot of space ends it. */
+  card: { paddingBottom: FOOT },
   pressed: { opacity: 0.5 },
 
-  /* The print, centred in the 392 column (Print draws the wash and the photo edge). */
-  printFeed: { alignSelf: 'center' },
-  /* 16 under the author row's 32pt face, less the row's slack. */
-  printDetail: { alignSelf: 'center', marginTop: space.lg - AUTHOR_SLACK },
+  /* The header: 52, the face at 16, the text 12 after it (60), ••• ending at 424. */
+  header: {
+    minHeight: HEADER_H,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: GUTTER,
+    paddingRight: MORE_INSET,
+  },
+  identity: { flex: 1, flexDirection: 'row', alignItems: 'center', minHeight: HEADER_H },
+  headAvatar: { width: HEADER_AVATAR, height: HEADER_AVATAR },
+  storyRing: {
+    position: 'absolute',
+    top: STORY_RING_AT,
+    left: STORY_RING_AT,
+    width: STORY_RING,
+    height: STORY_RING,
+    // round-ok: story
+    borderRadius: radius.round,
+    borderWidth: stroke.ring,
+    borderColor: colors.text,
+  },
+  headText: { flex: 1, marginLeft: space.md, marginRight: space.sm, alignItems: 'flex-start' },
+  /* Hugs its words, so a line's target is the words and not the empty row beside them. */
+  hug: { maxWidth: '100%' },
+  username: { ...textRole.small, fontFamily: fonts.bodySemiBold, color: colors.text },
+
   galleryCount: { position: 'absolute', top: COUNT_INSET, right: COUNT_INSET },
   burstLayer: {
     position: 'absolute',
@@ -884,39 +1184,17 @@ const styles = StyleSheet.create({
   burstInk: { position: 'absolute' },
 
   /*
-   * The feed's line: 16 under the print. Wraps, so a long name keeps its
-   * whole column and the author drops under it; baseline-aligned, so the
-   * small author sits on the Playfair name's first baseline.
-   */
-  line: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'baseline',
-    justifyContent: 'space-between',
-    columnGap: space.md,
-    rowGap: space.xs,
-    marginTop: space.lg,
-    paddingHorizontal: layout.gutter,
-  },
-  /* Hugs the name, so the target is the words and not the empty row beside them. */
-  nameTarget: { flexShrink: 1, maxWidth: '100%' },
-  byline: { flexShrink: 0, maxWidth: '100%' },
-  bylineText: { ...textRole.small, color: colors.textMuted },
-
-  /*
-   * Actions: each glyph in its 44pt box; the band is 14 under the line.
-   * A floor, not a height, so the count at the largest text sizes pushes
-   * the row taller instead of running over the next print.
+   * Actions: 44 tall, each glyph in its 44pt box, the three on the left
+   * abutting at 7 · 51 · 95, the bookmark's box 389 to 433. A floor, not a
+   * height. Above the liked-by line for touches (see the card).
    */
   actions: {
     minHeight: layout.hit,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: ACTIONS_INSET,
+    zIndex: 1,
   },
-  actionsFeed: { marginTop: 14 - BAND_SLACK },
-  /* 16 under the caption, less the heart box's slack around the 28pt glyph. */
-  actionsDetail: { marginTop: space.lg - (layout.hit - HEART) / 2 },
   spacer: { flex: 1 },
   iconBtn: {
     width: layout.hit,
@@ -924,28 +1202,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  count: { minHeight: layout.hit, justifyContent: 'center' },
-  countText: { ...textRole.body, ...tabular, color: colors.text },
-
-  /* The post page's author row: 32 face at the gutter, the name 12 after it, ••• on the far edge. */
-  authorRow: {
-    minHeight: layout.hit,
+  dots: {
+    ...StyleSheet.absoluteFill,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: space.sm - AUTHOR_SLACK,
-    paddingLeft: layout.gutter,
-    paddingRight: ACTIONS_INSET,
+    justifyContent: 'center',
+    gap: DOT_GAP,
   },
-  identity: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md, minHeight: layout.hit },
-  authorName: { ...textRole.bodyStrong, flexShrink: 1, color: colors.text },
-  /* 24 under the print, then the caption 8 under the name. */
-  detailName: { marginTop: space.xl, paddingHorizontal: layout.gutter, alignItems: 'flex-start' },
-  caption: {
-    ...textRole.body,
-    marginTop: space.sm,
-    paddingHorizontal: layout.gutter,
-    color: colors.text,
+  dot: {
+    width: DOT,
+    height: DOT,
+    // round-ok: dot
+    borderRadius: radius.round,
+    backgroundColor: colors.rule,
   },
+  dotOn: { backgroundColor: colors.text },
+
+  /* Liked by: 22 tall at the column, the faces then the line 8 after them. */
+  liked: {
+    minHeight: FACE_OUTER,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    maxWidth: '100%',
+    paddingHorizontal: GUTTER,
+  },
+  faces: { height: FACE_OUTER, marginRight: space.sm },
+  face: {
+    position: 'absolute',
+    top: 0,
+    width: FACE_OUTER,
+    height: FACE_OUTER,
+    padding: FACE_RING,
+    // round-ok: avatar
+    borderRadius: radius.round,
+    backgroundColor: colors.bg,
+  },
+  likedText: { ...textRole.small, flexShrink: 1, color: colors.text },
+  strong: { fontFamily: fonts.bodySemiBold },
+
+  /* The caption, 4 under the liked-by row, across the column (16 to 424). */
+  caption: { marginTop: LINE_GAP, paddingHorizontal: GUTTER },
+  captionText: { ...textRole.small, color: colors.text },
+  moreWord: { color: colors.textMuted },
+
+  /* The comments line and the time: muted, 4 under what is above them. */
+  quietRow: { marginTop: LINE_GAP, paddingHorizontal: GUTTER },
+  quiet: { ...textRole.small, color: colors.textMuted },
 });
 
 export default PostCard;

@@ -1,0 +1,367 @@
+/**
+ * The recommender's unit test (the app has no Jest).
+ *
+ * src/lib/recommendCore.ts is a line-for-line port of the reference,
+ * specs/v4-onboarding/tools/recommend.mjs (spec.md §5, v4.1 §2). This
+ * proves the port gives the reference's answers, to the bit:
+ *
+ *   1. It transpiles recommendCore.ts with the project's own `typescript`
+ *      (ts.transpileModule, ESM out), refuses it if anything but types is
+ *      imported, and loads it from a data: URL.
+ *   2. It binds it to the same JSON and photo set the reference reads
+ *      (drinks.json, barIndex.json, the drinkPhotos ids, lib/tastes' id
+ *      list), plus the classics signal from src/data/classics.json, which
+ *      it first checks is in step with the catalogue.
+ *   3. Runs A to D (spec.md §5.6): the reference's ids, order, why lines,
+ *      makeNow and scores, v4.1 §2.3's picks, matchingCount 574, 149, 2073
+ *      and 378, and the reference's barRows and makeableCount.
+ *   4. A 2,000-case sweep: a seeded LCG over every answer (goal fixed to
+ *      null and to each value in turn, exclusions, a few pick counts),
+ *      diffing the port against the reference on recommend, matchingCount,
+ *      barRows, makeableCount and the collage. Every mismatch is printed.
+ *
+ * It also prints what lib/bar's matchBar (the bar step's on-screen count,
+ * v4.1 §2.2) gives for the runs' bars beside the reference's makeableCount,
+ * by transpiling src/lib/bar.ts with its three data imports stubbed.
+ *
+ * WHY classics.json. The classics weight (spec §5.3, step 5) is worked out
+ * from the catalogue's tier field, which nothing under src/ may read
+ * (check-design rule 14: the tier is never shown). This script is outside
+ * src/, so it reads the field here and writes the weight alone, per id:
+ *
+ *   node scripts/check-recommend.mjs --write   # regenerate src/data/classics.json, then check
+ *
+ * Run after any catalogue change (drinks.json is generated): the check
+ * fails while the file is out of step.
+ *
+ * Run: node scripts/check-recommend.mjs
+ * Exits 1 on any difference.
+ */
+
+import { Buffer } from 'node:buffer';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
+import ts from 'typescript';
+
+import * as ref from '../specs/v4-onboarding/tools/recommend.mjs';
+
+const ROOT = fileURLToPath(new URL('../', import.meta.url));
+const at = (p) => `${ROOT}${p}`;
+const read = (p) => readFileSync(at(p), 'utf8');
+
+const failures = [];
+const fail = (msg) => failures.push(msg);
+
+/* ------------------------------------------------------------------ */
+/* The data, read exactly as the reference reads it                    */
+/* ------------------------------------------------------------------ */
+
+const RAW = JSON.parse(read('src/data/drinks.json'));
+// @/data sorts by Dex number; the file is already in that order, and the reference reads it as it is.
+const DRINKS = RAW.slice().sort((a, b) => a.dexNumber - b.dexNumber);
+if (DRINKS.some((d, i) => d !== RAW[i])) fail('drinks.json is not in Dex order: the app and the reference would pool differently');
+const BAR = JSON.parse(read('src/data/barIndex.json'));
+const PHOTO_SRC = read('src/data/drinkPhotos.ts');
+const PHOTOS = new Set([...PHOTO_SRC.matchAll(/'([a-z0-9-]+)': require/g)].map((m) => m[1]));
+const KNOWN_ORDER = [
+  ...(read('src/lib/tastes.ts').match(/const IDS = \[([\s\S]*?)\]/)?.[1] ?? '').matchAll(/'([a-z0-9-]+)'/g),
+].map((m) => m[1]);
+if (PHOTOS.size === 0) fail('read 0 photo ids out of drinkPhotos.ts: the require format changed');
+if (KNOWN_ORDER.length === 0) fail('read 0 ids out of lib/tastes: the IDS literal changed shape');
+
+/*
+ * lib/recommend's photo set is the catalogue ids photoFor() resolves, read
+ * from the PHOTOS map alone; the reference's regex reads the PROOFS map as
+ * well. They must name the same catalogue drinks.
+ */
+{
+  const start = PHOTO_SRC.indexOf('const PHOTOS');
+  const end = PHOTO_SRC.indexOf('};', start);
+  const photoFor = new Set([...PHOTO_SRC.slice(start, end).matchAll(/'([a-z0-9-]+)': require/g)].map((m) => m[1]));
+  const inCatalogue = (set) => [...set].filter((id) => DRINKS.some((d) => d.id === id)).sort().join(',');
+  if (start < 0 || inCatalogue(photoFor) !== inCatalogue(PHOTOS)) {
+    fail("photoFor()'s ids and the reference's photo set differ on the catalogue");
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* The classics signal, kept beside the catalogue                      */
+/* ------------------------------------------------------------------ */
+
+/** The reference's CLASSIC table: the catalogue tier, as the weight C. */
+const TIER_WEIGHT = { common: 1, uncommon: 0.6, rare: 0.25, legendary: 0 };
+const CLASSICS_PATH = 'src/data/classics.json';
+
+function classicsFromCatalogue() {
+  const groups = {};
+  for (const d of DRINKS) {
+    const w = TIER_WEIGHT[d.rarity] ?? 0;
+    if (w === 0) continue;
+    (groups[String(w)] ??= []).push(d.id);
+  }
+  return {
+    about:
+      'GENERATED by node scripts/check-recommend.mjs --write. The onboarding recommender\'s classics weight (specs/v4-onboarding/spec.md 5.3, step 5) per catalogue id, in Dex order; an id not listed weighs 0. A hidden ranking weight: never shown.',
+    classic: Object.fromEntries(Object.entries(groups).sort((a, b) => Number(b[0]) - Number(a[0]))),
+  };
+}
+
+if (process.argv.includes('--write')) {
+  writeFileSync(at(CLASSICS_PATH), `${JSON.stringify(classicsFromCatalogue(), null, 1)}\n`);
+  console.log(`  wrote ${CLASSICS_PATH}`);
+}
+
+let CLASSICS_FILE;
+try {
+  CLASSICS_FILE = JSON.parse(read(CLASSICS_PATH));
+} catch {
+  fail(`${CLASSICS_PATH} is missing or unreadable: run node scripts/check-recommend.mjs --write`);
+  CLASSICS_FILE = { classic: {} };
+}
+if (JSON.stringify(CLASSICS_FILE) !== JSON.stringify(classicsFromCatalogue())) {
+  fail(`${CLASSICS_PATH} is out of step with drinks.json: run node scripts/check-recommend.mjs --write`);
+}
+/** The weights as lib/recommend builds them from the file. */
+const CLASSICS = Object.create(null);
+for (const [w, ids] of Object.entries(CLASSICS_FILE.classic ?? {})) for (const id of ids) CLASSICS[id] = Number(w);
+
+/* ------------------------------------------------------------------ */
+/* The port, transpiled and loaded                                     */
+/* ------------------------------------------------------------------ */
+
+const toEsm = (source, fileName) =>
+  ts.transpileModule(source, {
+    fileName,
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022, verbatimModuleSyntax: false },
+  }).outputText;
+
+const dataUrl = (code) => `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`;
+
+const coreJs = toEsm(read('src/lib/recommendCore.ts'), 'recommendCore.ts');
+if (/^\s*import\s/m.test(coreJs) || /\brequire\(/.test(coreJs)) {
+  console.error('  FAIL  src/lib/recommendCore.ts imports something at runtime: type imports only');
+  process.exit(1);
+}
+const core = await import(dataUrl(coreJs));
+
+const port = core.createRecommender({
+  drinks: DRINKS,
+  ingredients: BAR.ingredients,
+  recipes: BAR.recipes,
+  photoIds: PHOTOS,
+  knownIds: KNOWN_ORDER,
+  classics: CLASSICS,
+});
+
+for (const [name, mine, theirs] of [
+  ['SPIRITS', core.SPIRITS, ref.SPIRITS],
+  ['FLAVOURS', core.FLAVOURS, ref.FLAVOURS],
+]) {
+  if (JSON.stringify(mine) !== JSON.stringify(theirs)) fail(`${name} differs from the reference's`);
+}
+{
+  const shape = (S) =>
+    JSON.stringify(Object.fromEntries(Object.entries(S).map(([k, v]) => [k, Object.fromEntries(Object.entries(v).map(([s, x]) => [s, [x.label, x.ids, String(x.spirit)]]))])));
+  if (shape(core.STYLES) !== shape(ref.STYLES)) fail('STYLES differs from the reference\'s (labels, ids or a spirit test)');
+}
+if (core.PICKS !== ref.PICKS) fail(`PICKS is ${core.PICKS}, the reference's ${ref.PICKS}`);
+
+/* ------------------------------------------------------------------ */
+/* lib/bar's matchBar, for the figures on screen                       */
+/* ------------------------------------------------------------------ */
+
+const barJs = toEsm(read('src/lib/bar.ts'), 'bar.ts')
+  .replace(
+    /from ['"]@\/data['"]/,
+    `from '${dataUrl(
+      `import { readFileSync } from 'node:fs'; const D = JSON.parse(readFileSync(${JSON.stringify(at('src/data/drinks.json'))}, 'utf8')); const BY = new Map(D.map((d) => [d.id, d])); export function getDrink(id) { return typeof id === 'string' ? BY.get(id) : undefined; }`,
+    )}'`,
+  )
+  .replace(/from ['"]@\/data\/barIndex\.json['"]/, `from '${dataUrl(`export default ${JSON.stringify(BAR)};`)}'`)
+  .replace(/from ['"]@\/data\/drinkPhotos['"]/, `from '${dataUrl('export function photoFor() { return undefined; }')}'`);
+if (/from ['"]@\//.test(barJs)) fail('lib/bar.ts imports something this script does not stub');
+const lib = await import(dataUrl(barJs));
+const matchBarCount = (ids) => lib.matchBar(new Set(ids)).makeable.length;
+
+/* ------------------------------------------------------------------ */
+/* Helpers                                                             */
+/* ------------------------------------------------------------------ */
+
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+/** The reference CLI's collage (photographed, from the scored pool, best first), topped up from the known list. */
+function refCollage(answers, n) {
+  const a = { ...answers, exclude: new Set(answers.exclude ?? []) };
+  const ids = DRINKS.map((d) => ref.score(d, a, new Set(a.bar ?? [])))
+    .filter((r) => r && r.photo)
+    .sort((x, y) => y.total - x.total)
+    .slice(0, n)
+    .map((r) => r.d.id);
+  for (const id of KNOWN_ORDER) {
+    if (ids.length >= n) break;
+    if (!ids.includes(id) && PHOTOS.has(id) && DRINKS.some((d) => d.id === id)) ids.push(id);
+  }
+  return ids;
+}
+
+function diff(label, mine, theirs) {
+  if (same(mine, theirs)) return true;
+  fail(`${label}\n      port:      ${JSON.stringify(mine)}\n      reference: ${JSON.stringify(theirs)}`);
+  return false;
+}
+
+/* ------------------------------------------------------------------ */
+/* Runs A to D (spec.md §5.6), the reference's own answers              */
+/* ------------------------------------------------------------------ */
+
+const RUNS = {
+  A: {
+    answers: {
+      goal: 'discover', drinks: 'both', spirits: ['gin', 'whiskey'], styleOf: 'whiskey', styles: ['bourbon'],
+      flavours: ['bitter', 'strong'], home: 'sometimes',
+      bar: ['gin', 'bourbon', 'lime', 'lemon', 'sugar-syrup', 'soda-water', 'campari', 'sweet-vermouth'],
+    },
+    ids: ['boulevardier', 'old-fashioned', 'negroni', 'french-75', 'bottled-in-bond-bourbon', 'contemporary-gin'],
+    matching: 574,
+  },
+  B: {
+    answers: { goal: 'friends', drinks: 'cocktails', spirits: ['rum', 'agave'], styleOf: 'rum', styles: ['white'], flavours: ['refreshing', 'sour'], home: 'never', bar: [] },
+    names: ['Mojito', 'Cuba Libre', 'Daiquiri', 'Paloma', 'Margarita', 'Frozen Margarita'],
+    matching: 149,
+  },
+  C: {
+    answers: { goal: null, drinks: null, spirits: [], flavours: [], home: null, bar: [] },
+    names: ['Piña Colada', 'Margarita', 'Espresso Martini', 'Mojito', 'Aperol Spritz', 'Old Fashioned'],
+    why: 'A classic to start with',
+    matching: 2073,
+  },
+  D: {
+    answers: { goal: 'track', drinks: 'spirits', spirits: ['whiskey'], styleOf: 'whiskey', styles: ['scotch'], flavours: ['strong'], home: 'never', bar: [] },
+    names: ['Old Fashioned', 'Manhattan', 'Blended Malt Scotch', 'Glenlivet Nàdurra', 'Bottled-in-Bond Bourbon', 'Irish Blended Whiskey'],
+    matching: 378,
+  },
+};
+
+const figures = [];
+for (const [k, run] of Object.entries(RUNS)) {
+  const mine = port.recommend(run.answers);
+  const theirs = ref.recommend(run.answers);
+  diff(`run ${k}: recommend`, mine, theirs);
+  if (run.ids && !same(mine.map((p) => p.id), run.ids)) fail(`run ${k}: picks ${mine.map((p) => p.id).join(', ')}, v4.1 §2.3 says ${run.ids.join(', ')}`);
+  if (run.names && !same(mine.map((p) => p.name), run.names)) fail(`run ${k}: picks ${mine.map((p) => p.name).join(', ')}, v4.1 §2.3 says ${run.names.join(', ')}`);
+  if (run.why && mine.some((p) => p.why !== run.why)) fail(`run ${k}: a why line is not "${run.why}"`);
+  const matching = port.matchingCount(run.answers);
+  diff(`run ${k}: matchingCount`, matching, ref.matchingCount(run.answers));
+  if (matching !== run.matching) fail(`run ${k}: matchingCount ${matching}, expected ${run.matching}`);
+  const rows = port.barRows(run.answers);
+  diff(`run ${k}: barRows`, rows, ref.barRows(run.answers));
+  const ticked = rows.filter((r) => r.ticked).map((r) => r.id);
+  const bar = run.answers.bar ?? [];
+  diff(`run ${k}: makeableCount(bar)`, port.makeableCount(bar), ref.makeableCount(bar));
+  diff(`run ${k}: makeableCount(pre-ticked)`, port.makeableCount(ticked), ref.makeableCount(ticked));
+  diff(`run ${k}: collage`, port.collage(run.answers, 18), refCollage(run.answers, 18));
+  figures.push({
+    run: k,
+    bar: bar.length ? `${ref.makeableCount(bar)} / ${matchBarCount(bar)}` : '0 / 0 (no bar)',
+    ticked: `${ref.makeableCount(ticked)} / ${matchBarCount(ticked)}`,
+  });
+}
+
+/* The CLI's own collage for run A (its 18, exactly as it computes them). */
+{
+  const a = { ...RUNS.A.answers, exclude: new Set() };
+  const cli = DRINKS.map((d) => ref.score(d, a, new Set(a.bar)))
+    .filter((r) => r && r.photo)
+    .sort((x, y) => y.total - x.total)
+    .slice(0, 18)
+    .map((r) => r.d.id);
+  diff('run A: the CLI collage', port.collage(RUNS.A.answers, 18), cli);
+}
+
+/* ------------------------------------------------------------------ */
+/* The sweep                                                            */
+/* ------------------------------------------------------------------ */
+
+/** Numerical Recipes' LCG: deterministic, so a failure reproduces from its case number. */
+function lcg(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+const GOALS = [null, 'discover', 'track', 'home', 'friends'];
+const KINDS = [null, 'cocktails', 'spirits', 'both'];
+const SPIRIT_KEYS = Object.keys(ref.SPIRITS);
+const FLAVOUR_KEYS = Object.keys(ref.FLAVOURS);
+const HOMES = [null, 'never', 'sometimes', 'often'];
+const ING_IDS = BAR.ingredients.map((i) => i.id);
+const DRINK_IDS = DRINKS.map((d) => d.id);
+const CASES = 2000;
+
+const one = (r, list) => list[Math.floor(r() * list.length)];
+/** Up to `max` of `list`, in a shuffled (tap) order. */
+function some(r, list, max) {
+  const pool = [...list];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(r() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, Math.floor(r() * (Math.min(max, pool.length) + 1)));
+}
+
+let diffs = 0;
+const sweepStart = Date.now();
+for (let i = 0; i < CASES; i++) {
+  const r = lcg(0x5eed + i * 7919);
+  const spirits = some(r, SPIRIT_KEYS, 5);
+  const firstStyle = spirits.find((s) => s === 'whiskey' || s === 'rum' || s === 'agave') ?? null;
+  // Mostly the store's rule (the first of whiskey, rum, agave); sometimes none, as a skipped follow-up leaves it.
+  const styleOf = r() < 0.85 ? firstStyle : null;
+  const answers = {
+    goal: GOALS[i % GOALS.length],
+    drinks: one(r, KINDS),
+    spirits,
+    styleOf,
+    styles: styleOf ? some(r, Object.keys(ref.STYLES[styleOf]), 5) : [],
+    flavours: some(r, FLAVOUR_KEYS, 3),
+    home: one(r, HOMES),
+    bar: [],
+  };
+  const mode = r();
+  if (mode < 0.3) answers.bar = [];
+  else if (mode < 0.6) answers.bar = ref.barRows(answers).filter((x) => x.ticked || r() < 0.4).map((x) => x.id);
+  else answers.bar = some(r, ING_IDS, 14);
+  if (r() < 0.25) answers.exclude = some(r, DRINK_IDS.slice(0, 400), 40);
+  const n = r() < 0.85 ? 6 : one(r, [1, 2, 3, 4, 5, 7, 8, 10]);
+
+  const label = `sweep case ${i} (${JSON.stringify(answers)}, n ${n})`;
+  let ok = diff(`${label}: recommend`, port.recommend(answers, n), ref.recommend(answers, n));
+  ok = diff(`${label}: matchingCount`, port.matchingCount(answers), ref.matchingCount(answers)) && ok;
+  ok = diff(`${label}: barRows`, port.barRows(answers), ref.barRows(answers)) && ok;
+  ok = diff(`${label}: makeableCount`, port.makeableCount(answers.bar), ref.makeableCount(answers.bar)) && ok;
+  if (i % 4 === 0) ok = diff(`${label}: collage`, port.collage(answers, 12), refCollage(answers, 12)) && ok;
+  if (!ok) diffs++;
+}
+const sweepMs = Date.now() - sweepStart;
+
+/* ------------------------------------------------------------------ */
+/* Report                                                               */
+/* ------------------------------------------------------------------ */
+
+console.log('\n  Sipply recommender port check\n');
+console.log('  Bar figures, reference makeableCount / lib/bar matchBar (makeable):');
+for (const f of figures) console.log(`    run ${f.run}: its bar ${f.bar}   the pre-ticked rows ${f.ticked}`);
+console.log('');
+
+if (failures.length) {
+  for (const f of failures.slice(0, 60)) console.log(`  FAIL  ${f}`);
+  if (failures.length > 60) console.log(`  … and ${failures.length - 60} more`);
+  console.log(`\n  ${failures.length} failure${failures.length === 1 ? '' : 's'}; ${diffs} of ${CASES} sweep cases differ.\n`);
+  process.exit(1);
+}
+console.log(`  PASS  runs A to D match the reference and v4.1 §2.3 (matching 574, 149, 2073, 378)`);
+console.log(`  PASS  ${CASES.toLocaleString('en-US')}-case sweep: 0 diffs (${(sweepMs / 1000).toFixed(1)} s)`);
+console.log(`  PASS  ${CLASSICS_PATH} is in step with the catalogue\n`);

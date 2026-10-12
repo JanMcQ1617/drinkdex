@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 7 October 2026**
+**Last updated: 12 October 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -26,6 +26,7 @@ From our servers:
   your likes, your saved posts, your follows in both directions, and your
   blocks
 - the drinks you added and the photos you sent with them
+- your taste answers and the drinks you saved to try
 - the tournaments you host (with everyone's place in them), your place in
   tournaments others host, and the song you added to any post
 - the count of song searches kept for the search limit
@@ -40,8 +41,9 @@ From the phone you delete from:
 
 - the list of your Facebook friends who are on Sipply, and Facebook's
   access key if it is still in memory
-- your collection, the drinks you added, the photos kept for them, and
-  what Sipply remembered there for finding friends
+- your collection, the drinks you added, the photos kept for them, your
+  taste answers and the drinks you saved to try, and what Sipply
+  remembered there for finding friends
 
 Your Facebook friends list was never on our servers to begin with. It is
 matched each time you connect or check it and never kept, and the

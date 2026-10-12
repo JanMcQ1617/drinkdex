@@ -10,9 +10,9 @@ import type { Drink } from '@/types';
 /* ==================================================================== */
 /* A catalogue photograph at one size, under a key of its own           */
 /*                                                                      */
-/* The sign-in screens draw the same bundled photos at three sizes: the */
-/* picker's prints, the tray's, and a begun Dex's picks on the sign-in  */
-/* page. SDWebImage (5.21.6) files an early-resized decode              */
+/* The sign-in screens draw bundled photos at their own sizes (the     */
+/* person's picks on Home's sign-in page, auth/CabinetBackdrop).        */
+/* SDWebImage (5.21.6) files an early-resized decode                    */
 /* under its source's key and hands it to the next size that misses its */
 /* own entry, so a 44pt tray print decoded first would be the picture   */
 /* in a 184pt print, or in the Dex grid, soft (ui.tsx Avatar tells the  */
@@ -57,7 +57,7 @@ export const CatalogueFace = React.memo(function CatalogueFace({
         source={source}
         style={{ width, height }}
         contentFit="cover"
-        // A cut, never a fade: a pick swaps the frame in the same frame (TastePicker).
+        // A cut, never a fade: a print that changes drink swaps in the same frame.
         transition={0}
         cachePolicy="disk"
         enforceEarlyResizing

@@ -34,7 +34,7 @@ export interface ScrollEdges {
 
 /**
  * `footInset`: the part of the content's end that is only padding for a
- * foot laid over the list (the taste picker's tray), so reaching it is the
+ * foot laid over the list (a tray along the bottom), so reaching it is the
  * end of the content.
  */
 export function useScrollEdges(footInset = 0): ScrollEdges {

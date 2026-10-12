@@ -6,7 +6,8 @@ import type { Pour } from '@/types';
 /*                                                                      */
 /* One pure function, shared by the row of tiles on Home and the viewer */
 /* it opens, so the two can never disagree about who comes first or     */
-/* which pour is new.                                                   */
+/* which pour is new. storyMap, at the foot, reads the same groups for  */
+/* the rings on Home's post headers (v4.1).                             */
 /* ==================================================================== */
 
 /** How long a pour stays in the row. */
@@ -83,4 +84,26 @@ export function firstUnseenIndex(group: PourGroup, mark: string | undefined): nu
   if (!mark) return 0;
   const i = group.pours.findIndex((p) => isLater(p.at, mark));
   return i < 0 ? 0 : i;
+}
+
+/** Whether a post's author has a story today, and whether it is new to you. */
+export type StoryState = 'unseen' | 'seen';
+
+/**
+ * Who has a story in the row, keyed by author, for Home's post headers
+ * (home-ig 4): 'unseen' draws the 2pt ink ring round their face, and
+ * either state makes the face open their story. Read off the same groups
+ * the row draws, so a header and its circle never disagree. Your own
+ * story is never new to you. Pass `marksRead` false until the seen marks
+ * have been read from disk, and nobody is ringed, as in the row.
+ */
+export function storyMap(
+  groups: { mine: PourGroup | null; others: PourGroup[] },
+  marksRead = true,
+): Record<string, StoryState> {
+  // Null-prototype: keys are author ids off the server, and a lookup must never find a builtin.
+  const out = Object.create(null) as Record<string, StoryState>;
+  if (groups.mine) out[groups.mine.authorId] = 'seen';
+  for (const g of groups.others) out[g.authorId] = marksRead && g.unseen ? 'unseen' : 'seen';
+  return out;
 }

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 7 October 2026**
+**Last updated: 12 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -82,6 +82,23 @@ Each part is used for one thing:
 **Profile.** Your username, display name, an optional bio, an optional
 profile photo, and an accent colour. All of these are visible to anyone
 signed in to Sipply.
+
+**Your tastes (only if you answer).** Before you make an account, Sipply
+asks a few questions: what you usually drink, which spirits and flavours
+you like, whether you make drinks at home and what is in your bar. You can
+skip any of them. The answers are kept on your phone and used on your
+phone to choose drinks to suggest, using the same rules for everyone; the
+drinks you save to try are kept with them. When you make an account, the
+answers and your saved drinks are stored with it so they follow you to a
+new phone. Only you can see them: they are not on your profile and no
+other user, follower or not, can read them. They are never used for
+advertising, never shared and never sold. You can change them in
+**Settings → Your tastes**, and deleting your account deletes them.
+
+**Your age answer.** The first question asks whether you are of legal
+drinking age where you live. If you answer no, Sipply asks nothing else,
+keeps nothing about you, and remembers only that answer on your phone for
+24 hours.
 
 **Posts.** When you add a drink to your Dex you may share it as a post,
 with a caption and your photo. Posts are visible to anyone signed in to
@@ -235,8 +252,11 @@ screen clears it, and deleting the account clears it too.
 - **Nothing is posted anywhere on your behalf.** Sipply never posts to
   Facebook or Instagram, and the app contains no Facebook, Instagram or
   Meta code.
-- **No profiling.** Nothing about you is scored or predicted. The one
-  automatic check on what you write is a text filter: captions, bios,
+- **No profiling.** Nothing about you is scored or predicted. Drink
+  suggestions are worked out on your phone from the answers you gave and
+  the drinks in your Dex and bar, by the same rules for everyone; they
+  rank drinks, not people, and nothing is sent anywhere to make them. The
+  one automatic check on what you write is a text filter: captions, bios,
   display names, usernames, the drinks you add, tournament names and the
   songs added to posts are checked when you save them, and text containing
   a slur or an explicit sexual term is refused. It refuses the text and
@@ -306,7 +326,8 @@ Open **Profile → Settings** (the gear, top right) **→ Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
 have made, every photo you have uploaded, your likes, your saved posts,
-your follows in both directions, your blocks, your invite links, the drinks
+your taste answers and drinks saved to try, your follows in both
+directions, your blocks, your invite links, the drinks
 you added and their photos, the hashes that make you findable, the
 records kept for the matching and song-search limits, and the tournaments
 you host, with your place in anyone else's. If you signed in with your
@@ -315,9 +336,10 @@ texts it sent, under its own policy); if you signed in with Apple, Google or
 Facebook, it deletes the link to that account, with everything Apple,
 Google or Facebook sent when you signed in. On the phone you delete from,
 the collection and the drinks you added are reset and the photos Sipply
-kept for them are removed, and what Sipply remembered there for finding
-friends (your number, your Instagram username, an imported Instagram list,
-your Facebook friends) is forgotten. It cannot be undone, and your username
+kept for them are removed, your taste answers and drinks saved to try are
+cleared, and what Sipply remembered there for finding friends (your
+number, your Instagram username, an imported Instagram list, your Facebook
+friends) is forgotten. It cannot be undone, and your username
 becomes available to someone else.
 
 A suggestion already included in a monthly email stays in that email. A
@@ -364,6 +386,10 @@ drink where they live. It is rated 18+. It is not for children, and we do
 not knowingly collect anything from anyone under 13. If you believe a
 child has an account, contact us and it will be removed.
 
+Sipply asks whether you are of legal drinking age before anything else,
+and stops if you are not. Every account confirms it again, with the Terms
+of Use, when it is made.
+
 The [Terms of Use](terms) set out who may use Sipply and what is not
 allowed on it.
 
@@ -375,7 +401,8 @@ anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
 service you asked for (your account, your posts and the songs on them,
-the drinks you add, the tournaments you host or join, and the sign-in and
+the drinks you add, your tastes and the drinks you save to try, the
+tournaments you host or join, and the sign-in and
 friend finding you choose to use) and our legitimate interest in keeping
 the app safe (reports, blocks, the text filter, the matching limits, the
 song-search limit and the sign-in screen's limit).

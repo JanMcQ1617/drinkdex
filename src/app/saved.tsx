@@ -1,20 +1,23 @@
 import { useIsFocused, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
-import { EmptyArt } from '@/components/DexCard';
+import { DrinkName, Print } from '@/components/cabinet';
+import { DrinkFace, EmptyArt } from '@/components/DexCard';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { EmptyState, Hold, Notice, SectionHeader } from '@/components/ui';
 import { colors, layout, space, tabular, textRole } from '@/constants/theme';
-import { formatCount } from '@/data';
+import { formatCount, getDrink } from '@/data';
+import { stylePhrase } from '@/lib/drinkLabels';
 import { fetchSavedPosts, isRenderablePost, primeSignedUrls, savesSupported } from '@/lib/social';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useSocial } from '@/store/social';
-import type { Post } from '@/types';
+import { useTaste } from '@/store/taste';
+import type { Drink, Post } from '@/types';
 
 /* ==================================================================== */
 /* Saved                                                                */
@@ -34,19 +37,36 @@ import type { Post } from '@/types';
 /* Dex yet first, then the ones already in it. Worked out on the phone,  */
 /* from each post's drink against your own collection: no new fetch, and */
 /* nothing about your collection leaves the phone.                       */
+/*                                                                      */
+/* DRINKS TO TRY (v4.1 §1.4) come first, when there are any: the drinks  */
+/* saved with "Save to try" on the first picks or a drink's page, newest */
+/* first, as rows of a print, the name and what kind of drink it is. A   */
+/* tap opens the drink. They are not the Dex, and never a drink already  */
+/* in it (store/taste prunes the list as drinks are caught; the filter   */
+/* here covers the frames before it has). Kept on the phone and with the */
+/* account, owner only, so the private line above covers them too.      */
 /* ==================================================================== */
 
 const NO_POSTS: Post[] = [];
 
 type Row =
-  | { key: string; kind: 'head'; title: string; count: number; first: boolean }
-  | { key: string; kind: 'posts'; posts: Post[] };
+  | { key: string; kind: 'head'; title: string; count: number; first: boolean; noun: 'post' | 'drink' }
+  | { key: string; kind: 'posts'; posts: Post[] }
+  | { key: string; kind: 'try'; drink: Drink };
+
+/** A drink to try's print, and the space to its name: print at x 24, name at x 96. */
+const TRY_PRINT = 56;
+const TRY_GAP = space.lg;
+/** 8 above and below the print: a 72pt pitch. */
+const TRY_PAD_V = space.sm;
+/** Dynamic Type cap on a row's name, as the + window's results. */
+const TRY_NAME_CAP = 1.4;
 
 /** One section's rows: its header, then its posts three to a row. Nothing for an empty section. */
 function sectionRows(key: string, title: string, posts: Post[], first: boolean): Row[] {
   if (posts.length === 0) return [];
   return [
-    { key: `${key}:head`, kind: 'head', title, count: posts.length, first },
+    { key: `${key}:head`, kind: 'head', title, count: posts.length, first, noun: 'post' },
     ...chunk(posts, 3).map((r): Row => ({ key: `${key}:${r[0]!.id}`, kind: 'posts', posts: r })),
   ];
 }
@@ -139,26 +159,68 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
   const hunting = posts.filter((p) => !inDex(p));
   const caught = posts.filter(inDex);
   const waiting = status === 'loading' || (posts.length > 0 && !collectionReady);
+
+  /* Drinks to try: catalogue drinks only, none in the Dex, newest first as the store keeps them. */
+  const savedIds = useTaste((s) => s.saved);
+  const toTry = collectionReady
+    ? savedIds.flatMap((id) => {
+        const drink = getDrink(id);
+        return drink && !Object.prototype.hasOwnProperty.call(unlocks, id) ? [drink] : [];
+      })
+    : [];
+  const tryRows: Row[] =
+    toTry.length > 0
+      ? [
+          { key: 'try:head', kind: 'head', title: 'Drinks to try', count: toTry.length, first: true, noun: 'drink' },
+          ...toTry.map((drink): Row => ({ key: `try:${drink.id}`, kind: 'try', drink })),
+        ]
+      : [];
+
   const rows: Row[] = collectionReady
     ? [
-        ...sectionRows('hunting', 'Not in your Dex yet', hunting, true),
-        ...sectionRows('caught', 'Already in your Dex', caught, hunting.length === 0),
+        ...tryRows,
+        ...sectionRows('hunting', 'Not in your Dex yet', hunting, tryRows.length === 0),
+        ...sectionRows('caught', 'Already in your Dex', caught, tryRows.length === 0 && hunting.length === 0),
       ]
     : [];
+
+  const router = useRouter();
+  const { width } = useWindowDimensions();
+  const openDrink = (id: string) => router.push({ pathname: '/drink/[id]', params: { id } });
 
   const renderRow = ({ item }: { item: Row }) =>
     item.kind === 'posts' ? (
       <PostGridRow posts={item.posts} />
+    ) : item.kind === 'try' ? (
+      <TryRow drink={item.drink} width={width} onPress={openDrink} />
     ) : (
       <View style={[styles.head, item.first && styles.headFirst]}>
         <SectionHeader title={item.title} style={styles.headTitle} />
         <Text
           style={styles.headCount}
-          accessibilityLabel={`${formatCount(item.count)} ${item.count === 1 ? 'post' : 'posts'}`}>
+          accessibilityLabel={`${formatCount(item.count)} ${item.count === 1 ? item.noun : `${item.noun}s`}`}>
           {formatCount(item.count)}
         </Text>
       </View>
     );
+
+  /*
+   * With drinks to try on screen, the posts' part says only what is
+   * worth saying under them: that it is still loading, or that it could
+   * not load. "Nothing saved yet" would contradict the list above it.
+   */
+  const postsFooter =
+    tryRows.length === 0 || posts.length > 0 ? null : waiting ? (
+      <Hold fill={false} slowMessage="Still loading your saved posts." />
+    ) : status === 'error' ? (
+      <EmptyState
+        icon="alert"
+        title="Could not load saved posts"
+        body="Check your connection and try again."
+        action={{ label: 'Try again', onPress: reload }}
+        actionVariant="secondary"
+      />
+    ) : null;
 
   const empty =
     waiting ? (
@@ -215,6 +277,7 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
           </>
         }
         ListEmptyComponent={empty}
+        ListFooterComponent={postsFooter}
         onScroll={onScroll}
         scrollEventThrottle={16}
         refreshing={reloading}
@@ -226,6 +289,38 @@ function Saved({ myId, onBack }: { myId: string; onBack: () => void }) {
         showsVerticalScrollIndicator={false}
       />
     </View>
+  );
+}
+
+/**
+ * One drink to try: its colour print (a row of drinks is where you
+ * recognise one), its name and what kind of drink it is. The row is one
+ * button, opening the drink's page.
+ */
+function TryRow({ drink, width, onPress }: { drink: Drink; width: number; onPress: (id: string) => void }) {
+  const kind = stylePhrase(drink);
+  return (
+    <Pressable
+      onPress={() => onPress(drink.id)}
+      accessibilityRole="button"
+      accessibilityLabel={`${drink.name}, ${kind}`}
+      accessibilityHint="Opens the drink"
+      style={({ pressed }) => [styles.tryRow, pressed && styles.tryPressed]}>
+      <Print width={TRY_PRINT} height={TRY_PRINT}>
+        {/* DrinkFace decodes at the 56pt frame (enforceEarlyResizing, a per-size cacheKey) and is left alone by Smart Invert. */}
+        <DrinkFace drink={drink} mode="photo" width={TRY_PRINT} height={TRY_PRINT} />
+      </Print>
+      <View style={styles.tryText}>
+        <DrinkName
+          name={drink.name}
+          role={textRole.name}
+          measure={width - 2 * layout.gutter - TRY_PRINT - TRY_GAP}
+          cap={TRY_NAME_CAP}
+          color={colors.text}
+        />
+        <Text style={styles.tryMeta}>{kind}</Text>
+      </View>
+    </Pressable>
   );
 }
 
@@ -251,4 +346,15 @@ const styles = StyleSheet.create({
     paddingVertical: space.sm,
   },
   notice: { marginHorizontal: layout.gutter, marginBottom: space.sm },
+  tryRow: {
+    minHeight: TRY_PRINT + 2 * TRY_PAD_V,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: TRY_GAP,
+    paddingVertical: TRY_PAD_V,
+    paddingHorizontal: layout.gutter,
+  },
+  tryPressed: { backgroundColor: colors.press },
+  tryText: { flex: 1 },
+  tryMeta: { ...textRole.small, color: colors.textMuted },
 });

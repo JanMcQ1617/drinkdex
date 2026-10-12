@@ -24,8 +24,8 @@ import { useSignInFlow } from '@/store/signInFlow';
 /* specs/v3-2-mockups/signin-pour, frame 4): the remembered account's   */
 /* face and name, ONE button for the way in it used last time, "Use     */
 /* another way" for the full card, and "Not you? Forget this account"   */
-/* for a shared phone. It takes the place of the taste picker, which is */
-/* a question for someone new, and of the full card on every gate.      */
+/* for a shared phone. It takes the place of the full card on every    */
+/* gate (the questions for someone new come before, in FirstRun).       */
 /*                                                                      */
 /* On the white sign-in page under the large wordmark, as the first     */
 /* step for anyone new is: the person's face and name are the only      */
@@ -46,11 +46,11 @@ const LAST_TIME: Record<RememberedMethod, string> = {
 
 /** "Not you? Forget this account": the remembered record goes, and the screen becomes the first-run one. */
 function ForgetAccount() {
-  const backToTastes = useSignInFlow((s) => s.backToTastes);
+  const go = useSignInFlow((s) => s.go);
   const forget = () => {
     forgetRememberedAccount();
-    // Home's first-run step is the picker; every other gate draws it as the ways in.
-    backToTastes();
+    // The first step again, now the ways in on every gate, with Welcome back's messages cleared.
+    go('entry');
   };
   return (
     <Pressable

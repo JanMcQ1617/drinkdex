@@ -288,14 +288,19 @@ twice; if that cache ever grows longer or is written anywhere, declare
 Search History.
 Crash reports Apple gathers itself, through TestFlight or the App Store,
 are Apple's to declare, not the app's.
+The onboarding's taste answers and the drinks saved to try are kept on
+the phone until an account exists, and only then with the account
+(migration 022): that is when they become collected, and they are
+declared below.
 
 **Do you or your third-party partners collect data from this app?** Yes.
 
 **Tracking.** No, for every type below. Nothing is combined with other
 companies' data, and nothing goes to a data broker.
 
-Declare these eight, each **linked to the user** unless the table says
-otherwise, and each for **App Functionality** only:
+Declare these nine, each **linked to the user** unless the table says
+otherwise, and each for **App Functionality** only unless the table says
+otherwise:
 
 | Category → data type | Linked | What it actually is |
 | --- | --- | --- |
@@ -307,10 +312,15 @@ otherwise, and each for **App Functionality** only:
 | Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
 | Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
 | Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
+| Other Data → Other Data Types | Yes | Taste answers and drinks saved to try: what the person usually drinks, which spirits and flavours they like, whether they make drinks at home and what was in their bar, and the drinks they saved to try, kept with the account so they follow it to a new phone. Owner only, never on the profile. Purposes **App Functionality** and **Product Personalization** (the answers choose the drinks suggested, on the phone, by the same rules for everyone) |
 
-App Functionality covers the last one: Apple's definition of the purpose
-includes preventing fraud and implementing security measures, which is what
-the matching limit, the song-search limit and the sign-in meter are. Device
+App Functionality covers Other Usage Data: Apple's definition of the
+purpose includes preventing fraud and implementing security measures, which
+is what the matching limit, the song-search limit and the sign-in meter
+are. Product Personalization is Apple's purpose for customising what a
+person sees, recommendations included, which is what the taste answers
+do; it is not tracking, because nothing is combined with
+other companies' data or shared. Device
 ID stays App Functionality only as long as Expo's install counts are used
 for checking rollouts; if they start informing product decisions, add
 Analytics to it.
@@ -318,14 +328,15 @@ Analytics to it.
 Everything else is **Not collected**: Contacts, Location (photos are
 re-encoded without it), Search History (the Dex is searched on the
 phone), Browsing History, Health, Financial Info, Purchases, Sensitive
-Info, Product Interaction, Advertising Data, Diagnostics and Other Data.
+Info, Product Interaction, Advertising Data and Diagnostics.
 Tournaments and songs add no new type: they are user content, and the
 song-search count is usage data, both declared above.
 
 The same types belong in the app's privacy manifest,
 `ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. It lists
-all eight, Device ID with `NSPrivacyCollectedDataTypeLinked` false, and a
-ninth, Audio Data, for the microphone the Reels recorder uses. The
+all nine, Device ID with `NSPrivacyCollectedDataTypeLinked` false and Other
+Data Types with both its purposes, and a tenth, Audio Data, for the
+microphone the Reels recorder uses. The
 manifest ships inside the binary, and the recorder is in every build from
 the one after 11 even while Reels is switched off, so the manifest
 declares it from that build on. The questionnaire above adds Audio Data
