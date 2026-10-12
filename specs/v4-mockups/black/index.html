@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Night</title>
+<style>
+/* Families: Playfair Display (display: wordmark, drink names), Inter (body), JetBrains Mono (data: catalogue figures). */
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+@font-face{font-family:Mono;src:url(fonts/JetBrainsMonoLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Mono;src:url(fonts/JetBrainsMonoLatin_500Medium.ttf);font-weight:500}
+
+:root{
+  /* v4 "Night": the whole palette. Black, white, one grey ramp. No hue anywhere in the UI. */
+  --night:#000000;      /* every screen's ground; the colour every photo settles to */
+  --surface:#0E0E0E;    /* level 1: panels, list groups, unticked tiles, fields on night */
+  --raised:#171717;     /* level 2: tab bar, sheets, ticked tiles, tonal buttons */
+  --raisedHi:#222222;   /* level 3: a field or avatar inside a sheet */
+  --pressed:#2C2C2C;    /* held state of anything raised */
+  --rule:#1F1F1F;       /* hairlines, separators, panel edges on night (decorative) */
+  --edge:#2E2E2E;       /* 1pt edge of raised things: tab bar, sheet lip, chips, fields (decorative) */
+  --edgeStrong:#474747; /* outline plate and tag edges, seen story ring, grabber (decorative) */
+  --lineControl:#737373;/* checkbox and outline-button edges: 3:1 on night..raisedHi */
+  --ink:#F5F5F5;        /* titles and body */
+  --muted:#A3A3A3;      /* secondary, body-safe on every ground */
+  --faint:#7E7E7E;      /* glyphs, large type; small text on night and surface only */
+  --white:#FFFFFF;      /* primary button, plate, ticked box, unseen ring, active marks */
+  --tabDim:#8C8C8C;     /* resting tab glyph + label on the raised bar */
+  --scrimMid:rgba(0,0,0,.62); --scrimDeep:rgba(0,0,0,.86);
+  --marker:rgba(0,0,0,.72); --markerEdge:rgba(255,255,255,.28);
+  --overlay:rgba(0,0,0,.48);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#161616}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased;font-feature-settings:"kern"}
+svg{display:block;overflow:visible}
+.mono{font-family:Mono,ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.pf{font-family:Playfair,Georgia,serif}
+
+.wall{display:flex;gap:36px;padding:104px 40px 40px;align-items:flex-start;position:relative}
+.wall h1{position:absolute;left:40px;top:30px;font:700 32px/38px Playfair;color:var(--ink);letter-spacing:.2px}
+.wall h1 small{font:400 15px/20px Inter;color:var(--muted);margin-left:16px;letter-spacing:0}
+.legend{position:absolute;right:40px;top:40px;display:flex;gap:16px}
+.legend span{display:flex;align-items:center;gap:7px;font:500 12px/16px Inter;color:var(--muted)}
+.legend i{width:16px;height:16px;border-radius:2px;display:block;box-shadow:0 0 0 1px #3a3a3a}
+figure.cap{width:440px;flex:none}
+figure.cap figcaption{font:400 14px/20px Inter;color:var(--muted);margin-top:16px;min-height:60px}
+figure.cap figcaption b{font-weight:600;color:var(--ink);margin-right:6px}
+body.solo{background:#000}
+body.solo .wall{padding:0;gap:0}
+body.solo .wall h1, body.solo figcaption, body.solo .legend{display:none}
+body.solo figure.cap{display:none}
+body.solo figure.cap.on{display:block}
+
+.screen{position:relative;width:440px;height:956px;overflow:hidden;background:var(--night);isolation:isolate;outline:1px solid #2a2a2a}
+body.solo .screen{outline:none}
+.abs{position:absolute}
+
+/* ---------- system ---------- */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:50;color:var(--white)}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+.hi{position:absolute;bottom:8px;left:153px;width:134px;height:5px;border-radius:3px;background:var(--white);z-index:60}
+
+/* ---------- top bar: solid night; a 1pt rule at its foot once content runs under it. No fade. ---------- */
+.bar{position:absolute;left:0;right:0;top:62px;height:44px;z-index:30;color:var(--ink);background:var(--night)}
+.bar.ruled{border-bottom:1px solid var(--rule);height:45px}
+.bar .title{position:absolute;left:96px;right:96px;top:11px;text-align:center;font:600 17px/22px Inter;letter-spacing:-.2px}
+.bar .wordmark{position:absolute;left:96px;right:96px;top:4px;text-align:center;font:700 28px/34px Playfair;letter-spacing:.2px;color:var(--white)}
+.gb{position:absolute;top:0;width:44px;height:44px;display:grid;place-items:center;color:var(--ink)}
+.gb .dot{position:absolute;right:9px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--white);box-shadow:0 0 0 2px var(--night)}
+.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ic.s20{width:20px;height:20px}
+.ic.s18{width:18px;height:18px}
+.ic.fill{fill:currentColor}
+
+/* ---------- floating tab bar ---------- */
+.tabbar{position:absolute;left:12px;right:12px;bottom:34px;height:64px;background:var(--raised);border-radius:14px;z-index:40;
+  border:1px solid var(--edge);display:flex;align-items:center;padding:0 6px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--tabDim);font:500 11px/14px Inter;position:relative;height:100%;justify-content:center}
+.tab.on{color:var(--white);font-weight:600}
+.tab.on::before{content:"";position:absolute;top:-1px;left:50%;width:20px;margin-left:-10px;height:2px;background:var(--white)}
+.tab .gbox{width:26px;height:26px;display:grid;place-items:center}
+.tab.post .pbtn{width:52px;height:38px;border-radius:6px;background:var(--white);display:grid;place-items:center;color:#000}
+.tab .av{width:24px;height:24px;border-radius:50%;background:#3A3A3A;color:var(--white);font:600 11px/24px Inter;text-align:center}
+.tab.on .av{box-shadow:0 0 0 1.5px var(--raised),0 0 0 2.5px var(--white)}
+
+/* ---------- Nº plate: solid white = in your Dex; outline = not yet ---------- */
+.plate{display:inline-flex;align-items:center;height:18px;padding:0 5px;border-radius:2px;background:var(--white);color:#000;
+  font:500 11px/14px Mono;letter-spacing:.2px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.plate .n{font-family:Inter;font-weight:500;letter-spacing:0;margin-right:4px}
+.plate.lg{height:22px;padding:0 7px;font-size:12px}
+.plate.out{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 1px var(--edgeStrong)}
+
+/* ---------- marker over a photo (solid, so its ink never depends on the picture) ---------- */
+.marker{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px 0 6px;border-radius:2px;background:var(--marker);
+  box-shadow:inset 0 0 0 1px var(--markerEdge);font:500 12px/16px Inter;color:var(--white);white-space:nowrap}
+/* outline tag on a ground ("In their Dex") */
+.tag{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 6px 0 4px;border-radius:2px;box-shadow:inset 0 0 0 1px var(--edgeStrong);
+  font:500 11px/14px Inter;color:var(--muted);white-space:nowrap}
+
+/* ---------- avatars (round-ok) ---------- */
+.av{border-radius:50%;background:#2E2E2E;color:var(--ink);display:grid;place-items:center;font-weight:600;flex:none}
+
+/* ---------- fields, chips, buttons ---------- */
+.field{position:absolute;height:44px;border-radius:6px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--edge);
+  display:flex;align-items:center;gap:10px;padding:0 12px;color:var(--muted);font:400 16px/22px Inter}
+.chips{position:absolute;left:16px;display:flex;gap:8px;align-items:center;white-space:nowrap}
+.chip{height:32px;padding:0 12px;border-radius:6px;box-shadow:inset 0 0 0 1px var(--edge);display:flex;align-items:center;gap:6px;
+  font:500 14px/18px Inter;color:var(--muted);flex:none}
+.chip.on{background:var(--white);color:#000;box-shadow:none}
+.chip .c{font:500 12px/16px Mono;color:var(--faint)}
+.chip.on .c{color:#000}
+.chipdiv{width:1px;height:20px;background:var(--edge);flex:none}
+.btn{height:36px;padding:0 14px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:600 14px/18px Inter;white-space:nowrap}
+.btn.primary{background:var(--white);color:#000}
+.btn.secondary{box-shadow:inset 0 0 0 1px var(--lineControl);color:var(--ink)}
+.btn.tonal{background:var(--raised);box-shadow:inset 0 0 0 1px var(--edge);color:var(--ink)}
+.btn.sm{height:32px;padding:0 12px;font-size:14px}
+
+/* ---------- photos ---------- */
+.ph{position:absolute;overflow:hidden;background:var(--night)}
+.ph img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- Dex cells: the photo is the work, the label sits under it ---------- */
+.cell{position:absolute;width:130.67px}
+.cell .win{position:relative;width:130.67px;height:156px;border-radius:6px;overflow:hidden;background:var(--night);box-shadow:inset 0 0 0 1px var(--rule)}
+.cell .win img{width:100%;height:100%;object-fit:cover;display:block}
+.cell .win::after{content:"";position:absolute;inset:0;border-radius:6px;box-shadow:inset 0 0 0 1px var(--rule);pointer-events:none}
+.cell .lab{padding-top:8px}
+.cell .nm{margin-top:6px;font:700 15px/18px Playfair;color:var(--ink)}
+.cell.not .nm{font-weight:600;color:var(--muted)}
+
+/* ---------- sections ---------- */
+.sec{position:absolute;left:16px;right:16px;display:flex;align-items:baseline;gap:8px}
+.sec h3{font:600 20px/26px Inter;letter-spacing:-.3px;color:var(--ink)}
+.sec .c{font:400 13px/16px Mono;color:var(--muted)}
+.sec .more{margin-left:auto;font:500 14px/18px Inter;color:var(--muted)}
+
+/* gauge: an instrument scale, not a progress pill */
+.gauge{position:absolute}
+.gauge .track{position:absolute;left:0;right:0;top:0;height:2px;background:#2A2A2A}
+.gauge .fill{position:absolute;left:0;top:0;height:2px;background:var(--white)}
+.gauge .tk{position:absolute;top:5px;width:1px;height:4px;background:#3A3A3A}
+.gauge .tk.q{height:7px;background:#5A5A5A}
+.gauge .notch{position:absolute;top:-4px;width:1px;height:14px;background:var(--muted)}
+.gauge .notch.next{background:var(--white)}
+.gauge .lbl{position:absolute;top:16px;font:400 11px/14px Mono;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* keyboard (system, dark appearance) */
+.kb{position:absolute;left:0;right:0;bottom:0;height:366px;background:#1C1C1C;border-top:1px solid #262626}
+.kb .sugg{position:absolute;left:0;right:0;top:0;height:44px;display:flex;align-items:center}
+.kb .sugg span{flex:1;text-align:center;font:400 16px/22px Inter;color:#E6E6E6;position:relative}
+.kb .sugg span+span::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:1px;background:#3A3A3A}
+.kb .row{position:absolute;left:0;right:0;display:flex;justify-content:center;gap:6px}
+.kb .k{width:37px;height:45px;border-radius:6px;background:#4A4A4A;color:#FFF;font:400 22px/45px Inter;text-align:center}
+.kb .k.sp{background:#2F2F2F;font-size:15px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 10.2 12 4l8 6.2V20H14.6v-5.6H9.4V20H4z"/></symbol>
+    <symbol id="i-dex" viewBox="0 0 24 24"><path d="M4.5 4.5h15L12 12.6zM12 12.6v7M8 19.6h8"/></symbol>
+    <symbol id="i-dexf" viewBox="0 0 24 24"><path d="M4.5 4.5h15L12 12.6z" fill="currentColor"/><path d="M12 12.6v7M8 19.6h8"/></symbol>
+    <symbol id="i-bar" viewBox="0 0 24 24"><path d="M10 3.5h4v3.8c0 .6.3 1.1.8 1.5A4 4 0 0 1 16.5 12v7.8a.7.7 0 0 1-.7.7H8.2a.7.7 0 0 1-.7-.7V12a4 4 0 0 1 1.7-3.2c.5-.4.8-.9.8-1.5z"/><path d="M7.5 13.5h9"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 19.6s-7.6-4.5-7.6-10.1A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.6 2.5c0 5.6-7.6 10.1-7.6 10.1z"/></symbol>
+    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M19.8 11.6a7.8 7.8 0 0 1-11.3 7L4.2 19.8l1.3-4A7.8 7.8 0 1 1 19.8 11.6z"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M20.5 3.5 10.2 13.8M20.5 3.5 14 20.5l-3.8-6.7L3.5 10z"/></symbol>
+    <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6.5 3.8h11v16.4L12 16l-5.5 4.2z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m20 20-4.6-4.6"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.4" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" stroke-width="2.6" stroke-dasharray="2.6 3.84" stroke-linecap="butt"/><circle cx="12" cy="12" r="6.4"/><circle cx="12" cy="12" r="2.4"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4.2h8V9a4 4 0 0 1-8 0zM8 6H5.2v1.2A3 3 0 0 0 8 10.2M16 6h2.8v1.2a3 3 0 0 1-2.8 3M12 13v3.6M9 20h6M10 16.6h4V20h-4z"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M6 19.5v-6M10 19.5V9M14 19.5v-8M18 19.5V5M3.8 19.5h16.4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.3 4.3L19 7.2"/></symbol>
+    <symbol id="i-xcirc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" stroke="none"/><path d="m9 9 6 6M15 9l-6 6" stroke="#0E0E0E" stroke-width="1.7"/></symbol>
+    <symbol id="i-rocks" viewBox="0 0 24 24"><path d="M6 6.5h12l-1.1 12.6a1 1 0 0 1-1 .9H8.1a1 1 0 0 1-1-.9zM6.5 11.5h11"/></symbol>
+    <symbol id="i-sig" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="currentColor" stroke="none"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="currentColor" stroke="none"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="currentColor" stroke="none"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-wifi" viewBox="0 0 16 12"><path d="M1 4.2a10 10 0 0 1 14 0M3.4 6.8a6.6 6.6 0 0 1 9.2 0M5.8 9.3a3.2 3.2 0 0 1 4.4 0" stroke-width="1.7"/><circle cx="8" cy="11.2" r=".9" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.8 5.2 3.8 8.5s-1.2 6.1-3.8 8.5c-2.6-2.4-3.8-5.2-3.8-8.5S9.4 5.9 12 3.5z"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M6 11.5a6 6 0 0 0 12 0M12 17.5v3"/></symbol>
+    <symbol id="i-shift" viewBox="0 0 24 24"><path d="M12 4.5 4.5 12.5h4v6.5h7v-6.5h4z"/></symbol>
+    <symbol id="i-del" viewBox="0 0 24 24"><path d="M9 5.5h11a.8.8 0 0 1 .8.8v11.4a.8.8 0 0 1-.8.8H9l-6-6.5z"/><path d="m11.5 9.5 5 5M16.5 9.5l-5 5"/></symbol>
+  </defs>
+</svg>
+
+<div class="wall" id="wall">
+  <h1>Night <small>v4 · black-led monochrome. True black grounds, white ink, one grey ramp; the drink photographs are the only colour.</small></h1>
+  <div class="legend">
+    <span><i style="background:#000"></i>night</span>
+    <span><i style="background:#0E0E0E"></i>surface</span>
+    <span><i style="background:#171717"></i>raised</span>
+    <span><i style="background:#222222"></i>raisedHi</span>
+    <span><i style="background:#2E2E2E"></i>edge</span>
+    <span><i style="background:#737373"></i>lineControl</span>
+    <span><i style="background:#7E7E7E"></i>faint</span>
+    <span><i style="background:#A3A3A3"></i>muted</span>
+    <span><i style="background:#F5F5F5"></i>ink</span>
+  </div>
+</div>
+
+<script>
+const P = (id) => `img/${id}.webp`;
+const G = (id) => `img/ghost/${id}.webp`;
+const I = (id, cls = '') => `<svg class="ic ${cls}"><use href="#i-${id}"/></svg>`;
+const plate = (n, { out = false, lg = false } = {}) =>
+  `<span class="plate${out ? ' out' : ''}${lg ? ' lg' : ''}"><span class="n">Nº</span>${String(n).padStart(4, '0')}</span>`;
+
+const sb = () => `<div class="sb"><div class="t">9:41</div><div class="island"></div>
+  <div class="r"><svg width="18" height="12" style="color:#fff"><use href="#i-sig"/></svg>
+  <svg width="16" height="12" class="" style="fill:none;stroke:#fff;stroke-linecap:round"><use href="#i-wifi"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#fff" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#fff"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="#fff" fill-opacity=".45"/></svg></div></div>`;
+
+const tabbar = (on) => {
+  const t = (key, label, glyph, glyphOn) => `<div class="tab${on === key ? ' on' : ''}"><div class="gbox">${
+    on === key ? glyphOn : glyph}</div><span>${label}</span></div>`;
+  return `<div class="tabbar">
+    ${t('home', 'Home', I('home'), I('home', 'fill'))}
+    ${t('dex', 'Dex', I('dex'), `<svg class="ic"><use href="#i-dexf"/></svg>`)}
+    <div class="tab post"><div class="pbtn"><svg class="ic" style="stroke-width:2"><use href="#i-plus"/></svg></div></div>
+    ${t('bar', 'My Bar', I('bar'), I('bar', 'fill'))}
+    ${t('profile', 'Profile', '<div class="av">NV</div>', '<div class="av">NV</div>')}
+  </div>`;
+};
+
+const screens = [];
+
+/* ================= 1 HOME ================= */
+{
+  const story = (x, { img, label, seen = false, you = false }) => {
+    const ring = 62;
+    const border = you ? 'none' : seen ? '1px solid #474747' : '2px solid #FFFFFF';
+    const disc = you
+      ? `<div class="av" style="width:54px;height:54px;font:600 17px/1 Inter;background:#2E2E2E">NV</div>`
+      : `<div style="width:54px;height:54px;border-radius:50%;overflow:hidden;background:#000"><img src="${P(img)}" style="width:100%;height:100%;object-fit:cover;transform:scale(1.5);transform-origin:50% 48%"></div>`;
+    const badge = you
+      ? `<div class="abs" style="right:-1px;bottom:-1px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #000;display:grid;place-items:center;color:#000"><svg class="ic" style="width:14px;height:14px;stroke-width:2.2"><use href="#i-plus"/></svg></div>`
+      : '';
+    return `<div class="abs" style="left:${x}px;top:110px;width:76px;display:flex;flex-direction:column;align-items:center">
+      <div style="position:relative;width:${ring}px;height:${ring}px;border-radius:50%;border:${border};display:grid;place-items:center">${disc}${badge}</div>
+      <div style="margin-top:5px;font:400 12px/16px Inter;color:${seen ? 'var(--muted)' : 'var(--ink)'}">${label}</div></div>`;
+  };
+  screens.push({ id: 'home', cap: '<b>1 Home</b> The wordmark and stories on true black; unseen stories carry a white ring, seen ones a grey hairline. The post is full bleed and its photograph settles to the page\'s own black, so the drink glows out of the dark with no frame. The Nº plate is solid white over the picture; liking is a filled white heart.', html: `
+    ${sb()}
+    <div class="bar">
+      <div class="gb" style="left:6px">${I('plus')}</div>
+      <div class="wordmark">Sipply</div>
+      <div class="gb" style="right:48px">${I('trophy')}</div>
+      <div class="gb" style="right:6px">${I('heart')}<i class="dot"></i></div>
+    </div>
+    ${story(9, { you: true, label: 'You' })}
+    ${story(91, { img: 'aperol-spritz', label: 'maya.pours' })}
+    ${story(173, { img: 'paper-plane', label: 'theo_stirs' })}
+    ${story(255, { img: 'margarita', label: 'ines.ag' })}
+    ${story(337, { img: 'old-fashioned', label: 'dmitri.k', seen: true })}
+
+    <div class="abs" style="left:16px;right:16px;top:196px;height:40px;display:flex;align-items:center;gap:10px">
+      <div class="av" style="width:32px;height:32px;font:600 12px/1 Inter;box-shadow:inset 0 0 0 1px #474747">IA</div>
+      <div style="flex:1">
+        <div style="font:600 14px/18px Inter">ines.ag <span style="font-weight:400;color:var(--muted)">· 2h</span></div>
+        <div style="font:400 12px/16px Inter;color:var(--muted)">La Factoría, Old San Juan</div>
+      </div>
+      <div style="color:var(--ink)">${I('more')}</div>
+    </div>
+
+    <div class="ph" style="left:0;top:238px;width:440px;height:550px">
+      <img src="${P('negroni')}" style="object-position:50% 46%">
+      <div class="abs" style="left:0;right:0;bottom:0;height:200px;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,.62) 45%,rgba(0,0,0,.86) 100%)"></div>
+      <div class="abs" style="left:16px;bottom:94px;display:flex;gap:6px">${plate(127, { lg: true })}
+        <span class="marker"><svg class="ic" style="width:14px;height:14px;stroke-width:2"><use href="#i-check"/></svg>In your Dex</span></div>
+      <div class="abs pf" style="left:16px;bottom:40px;font:700 38px/44px Playfair;color:#fff;letter-spacing:-.2px">Negroni</div>
+      <div class="abs" style="left:16px;bottom:16px;font:400 13px/18px Inter;color:#fff">Spirit-forward · Rocks glass · Florence, Italy</div>
+    </div>
+
+    <div class="abs" style="left:10px;right:10px;top:790px;height:36px;display:flex;align-items:center;gap:4px;color:var(--ink)">
+      <div class="gb" style="position:static;width:40px;height:38px">${I('heart', 'fill')}</div>
+      <div class="gb" style="position:static;width:40px;height:38px">${I('comment')}</div>
+      <div class="gb" style="position:static;width:40px;height:38px">${I('send')}</div>
+      <div class="gb" style="position:static;width:40px;height:38px;margin-left:auto">${I('bookmark')}</div>
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:828px;height:22px;display:flex;align-items:center;gap:8px">
+      <div style="display:flex">
+        <div class="av" style="width:22px;height:22px;font:600 11px/1 Inter;background:#3A3A3A;box-shadow:0 0 0 2px #000">M</div>
+        <div class="av" style="width:22px;height:22px;font:600 11px/1 Inter;background:#2E2E2E;box-shadow:0 0 0 2px #000;margin-left:-4px">T</div>
+        <div class="av" style="width:22px;height:22px;font:600 11px/1 Inter;background:#474747;box-shadow:0 0 0 2px #000;margin-left:-4px">D</div>
+      </div>
+      <div style="font:400 13px/18px Inter;color:var(--muted)">Liked by <b style="font-weight:600;color:var(--ink)">maya.pours</b> and <b style="font-weight:600;color:var(--ink)">12 others</b></div>
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:866px;font:400 13px/18px Inter;color:var(--muted)"><b style="font-weight:600;color:var(--ink)">ines.ag</b> Equal parts, stirred long. The orange does…</div>
+    ${tabbar('home')}
+    <div class="hi"></div>` });
+}
+
+/* ================= 2 DEX ================= */
+{
+  const dex = [
+    [1, 'caesar', 'Caesar', 1], [2, 'greyhound', 'Greyhound', 0], [3, 'brandy-alexander', 'Brandy Alexander', 1],
+    [4, 'espresso-martini', 'Espresso Martini', 1], [5, 'grasshopper', 'Grasshopper', 0], [6, 'porto-flip', 'Porto Flip', 0],
+    [7, 'white-russian', 'White Russian', 1], [8, 'gin-fizz', 'Gin Fizz', 1], [9, 'ramos-gin-fizz', 'Ramos Gin Fizz', 1],
+  ];
+  const xs = [16, 154.67, 293.33];
+  const ys = [326, 566, 806];
+  const cells = dex.map(([n, id, name, got], i) => `
+    <div class="cell${got ? '' : ' not'}" style="left:${xs[i % 3]}px;top:${ys[Math.floor(i / 3)]}px">
+      <div class="win"><img src="${got ? P(id) : G(id)}" style="object-position:50% 46%"></div>
+      <div class="lab">${plate(n, { out: !got })}<div class="nm">${name}</div></div>
+    </div>`).join('');
+  const pct = 38 / 2089;
+  const W = 408;
+  let ticks = '';
+  for (let p = 0; p <= 100; p += 5) ticks += `<i class="tk${p % 25 === 0 ? ' q' : ''}" style="left:${Math.min(W - 1, W * p / 100)}px"></i>`;
+  const lbl = (v, txt, align) => `<span class="lbl" style="${align === 'r' ? `right:0` : align === 'l' ? 'left:0' : `left:${W * v / 2089}px;transform:translateX(-50%)`}">${txt}</span>`;
+  screens.push({ id: 'dex', cap: '<b>2 Dex</b> One grid in number order, laid out like a catalogue: the photograph is the work and the label sits under it. A drink in your Dex is lit in full colour with a solid white Nº plate; one you have not caught is a grey impression with an outline plate. The progress is an instrument scale, not a bar.', html: `
+    ${sb()}
+    <div class="bar">
+      <div class="title">Dex</div>
+      <div class="gb" style="right:6px">${I('chart')}</div>
+    </div>
+    <div class="abs" style="left:16px;top:116px;display:flex;align-items:flex-end;gap:10px">
+      <div class="mono" style="font:400 46px/46px Mono;letter-spacing:-1.5px;color:var(--white)">38</div>
+      <div style="padding-bottom:3px">
+        <div style="font:500 15px/20px Inter;color:var(--ink)">in your Dex</div>
+        <div class="mono" style="font:400 12px/16px Mono;color:var(--muted)">of 2,089 · 1.8%</div>
+      </div>
+    </div>
+    <div class="abs" style="right:16px;top:119px;text-align:right">
+      <div style="font:500 12px/16px Inter;letter-spacing:.6px;color:var(--muted)">latest catch</div>
+      <div style="font:700 16px/22px Playfair;color:var(--ink);margin-top:2px">Ramos Gin Fizz</div>
+    </div>
+    <div class="gauge" style="left:16px;top:180px;width:${W}px;height:32px">
+      <div class="track"></div><div class="fill" style="width:${Math.max(3, W * pct)}px"></div>${ticks}
+      ${lbl(0, '0', 'l')}${lbl(500, '500')}${lbl(1000, '1,000')}${lbl(1500, '1,500')}${lbl(2089, '2,089', 'r')}
+    </div>
+    <div class="field" style="left:16px;right:16px;top:222px">${I('search', 's20')}<span>Search 2,089 drinks</span></div>
+    <div class="chips" style="top:278px">
+      <span class="chip on">All</span><span class="chip">Cocktails</span><span class="chip">Spirits</span>
+      <span class="chipdiv"></span><span class="chip">Collected</span><span class="chip">Not yet</span>
+    </div>
+    ${cells}
+    ${tabbar('dex')}
+    <div class="hi"></div>` });
+}
+
+/* ================= 3 MY BAR ================= */
+{
+  const items = [
+    ['Lemon', 173, 1, 1], ['Gin', 167, 2, 1], ['Lime', 163, 3, 1],
+    ['Soda water', 83, 4, 1], ['Orange', 82, 5, 0], ['Angostura bitters', 76, 6, 1],
+  ];
+  const tile = ([name, uses, rank, on], i) => {
+    const x = i % 2 ? 224 : 16, y = 286 + Math.floor(i / 2) * 60;
+    const box = on
+      ? `<div style="width:20px;height:20px;border-radius:2px;background:#fff;display:grid;place-items:center;color:#000;flex:none"><svg class="ic" style="width:15px;height:15px;stroke-width:2.4"><use href="#i-check"/></svg></div>`
+      : `<div style="width:20px;height:20px;border-radius:2px;box-shadow:inset 0 0 0 1.5px var(--lineControl);flex:none"></div>`;
+    return `<div class="abs" style="left:${x}px;top:${y}px;width:200px;height:52px;border-radius:8px;background:${on ? 'var(--raised)' : 'var(--surface)'};
+      box-shadow:inset 0 0 0 1px ${on ? 'var(--edge)' : 'var(--rule)'};display:flex;align-items:center;gap:12px;padding:0 12px">
+      ${box}<div style="flex:1;min-width:0"><div style="font:500 15px/19px Inter;color:var(--ink);white-space:nowrap">${name}</div>
+      <div style="font:400 12px/16px Inter;color:var(--muted)">in ${uses} drinks</div></div>
+      <div class="mono" style="font:400 11px/14px Mono;color:var(--muted);align-self:flex-start;margin-top:9px">${String(rank).padStart(2, '0')}</div></div>`;
+  };
+  const make = [[100, 'daiquiri', 'Daiquiri', 1], [13, 'americano', 'Americano', 0], [122, 'boulevardier', 'Boulevardier', 1], [33, 'tom-collins', 'Tom Collins', 0]];
+  const strip = make.map(([n, id, name, got], i) => `
+    <div class="abs" style="left:${16 + i * 128}px;top:550px;width:118px">
+      <div style="width:118px;height:126px;border-radius:6px;overflow:hidden;background:#000;box-shadow:inset 0 0 0 1px var(--rule)"><img src="${P(id)}" style="width:100%;height:100%;object-fit:cover;object-position:50% 46%;display:block"></div>
+      <div style="margin-top:8px">${plate(n, { out: !got })}</div>
+      <div style="margin-top:5px;font:700 15px/18px Playfair;color:var(--ink)">${name}</div>
+    </div>`).join('');
+  screens.push({ id: 'bar', cap: '<b>3 My Bar</b> A checklist with no shelf: each ingredient is a tile ranked by how many drinks it pours, ticked with a solid white box. What you can make sits in a strip of lit photographs, then what one ingredient would unlock, with the ingredient as a squared outline button.', html: `
+    ${sb()}
+    <div class="bar"><div class="title">My Bar</div></div>
+    <div class="abs" style="left:16px;right:16px;top:116px;font:600 26px/32px Inter;letter-spacing:-.5px;color:var(--white)">What's in your bar?</div>
+    <div class="abs" style="left:16px;right:16px;top:152px;font:400 14px/20px Inter;color:var(--muted)"><b style="font-weight:600;color:var(--ink)">12</b> in your bar · makes <b style="font-weight:600;color:var(--ink)">30</b> drinks</div>
+    <div class="field" style="left:16px;right:16px;top:184px">${I('search', 's20')}<span>Search 490 ingredients</span></div>
+    <div class="chips" style="top:240px">
+      <span class="chip on">All</span><span class="chip">In your bar <span class="c">12</span></span><span class="chip">Citrus</span><span class="chip">Spirits</span><span class="chip">Bitters</span><span class="chip">Syrups</span>
+    </div>
+    ${items.map(tile).join('')}
+    <div class="abs" style="left:16px;right:16px;top:470px;display:flex;font:400 13px/18px Inter;color:var(--muted)">Sweet vermouth, Dry vermouth and 482 more<span style="margin-left:auto;font-weight:600;color:var(--ink)">Show all</span></div>
+    <div class="sec" style="top:512px"><h3>You can make</h3><span class="c">30</span><span class="more">See all</span></div>
+    ${strip}
+    <div class="sec" style="top:754px"><h3>One ingredient away</h3><span class="c">161</span><span class="more">See all</span></div>
+    <div class="abs" style="left:16px;right:16px;top:792px;height:56px;display:flex;align-items:center;gap:12px">
+      <div style="width:56px;height:56px;border-radius:6px;overflow:hidden;background:#000;flex:none"><img src="${P('negroni')}" style="width:100%;height:100%;object-fit:cover;object-position:50% 48%;transform:scale(1.35)"></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font:700 18px/22px Playfair">Negroni</span>${plate(127)}</div>
+        <div style="font:400 13px/18px Inter;color:var(--muted);margin-top:3px">Needs orange · pours 5 more</div>
+      </div>
+      <span class="btn secondary sm">${I('plus', 's18')}Orange</span>
+    </div>
+    ${tabbar('bar')}
+    <div class="hi"></div>` });
+}
+
+/* ================= 4 POST + LIKERS ================= */
+{
+  const likers = [
+    ['MO', 'Maya Ortiz', 'maya.pours', 'their', 'Following'],
+    ['NV', 'Nico Vargas', 'nico.pours', 'your', null, true],
+    ['DK', 'Dmitri Kovač', 'dmitri.k', null, 'Follow'],
+    ['AL', 'Ana Lucía Rivera', 'ana.lucia', 'their', 'Following'],
+    ['SO', 'Sam Ortega', 'sam.ortega', null, 'Follow'],
+    ['IA', 'Ines Aguilar', 'ines.ag', 'their', 'Following'],
+    ['TR', 'Tomás Rivera', 'tomas.r', null, 'Follow'],
+  ];
+  const rows = likers.map(([ini, name, user, dex, btn, you], i) => `
+    <div class="abs" style="left:16px;right:16px;top:${484 + i * 62}px;height:62px;display:flex;align-items:center;gap:12px;${i ? 'border-top:1px solid var(--edge)' : ''}">
+      <div class="av" style="width:44px;height:44px;font:600 15px/1 Inter;background:${you ? '#3A3A3A' : 'var(--raisedHi)'};box-shadow:inset 0 0 0 1px var(--edge)">${ini}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font:600 15px/20px Inter;color:var(--ink)">${name}${you ? ' <span style="font-weight:400;color:var(--muted)">(you)</span>' : ''}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:2px"><span style="font:400 13px/18px Inter;color:var(--muted)">${user}</span>
+        ${dex ? `<span class="tag"><svg class="ic" style="width:12px;height:12px;stroke-width:2"><use href="#i-check"/></svg>In ${dex} Dex</span>` : ''}</div>
+      </div>
+      ${btn ? `<span class="btn sm ${btn === 'Follow' ? 'primary' : 'secondary'}" style="width:96px">${btn}</span>` : ''}
+    </div>`).join('');
+  screens.push({ id: 'post', cap: '<b>4 Post, likes open</b> "Liked by" raises a sheet one step up the grey ramp. Each liker is a face, a name and, when the drink is in their Dex, an outline tag. Follow is the sheet\'s one white action; Following is an outline. The top bar stays solid black with a hairline at its foot: no fade.', html: `
+    ${sb()}
+    <div class="bar ruled" style="z-index:30">
+      <div class="gb" style="left:6px">${I('back')}</div>
+      <div class="title">Post</div>
+      <div class="gb" style="right:6px">${I('more')}</div>
+    </div>
+    <div class="abs" style="left:0;right:0;top:0;height:62px;background:var(--night);z-index:29"></div>
+    <div class="ph" style="left:0;top:-58px;width:440px;height:550px;z-index:1"><img src="${P('paper-plane')}" style="object-position:50% 44%"></div>
+    <div class="abs" style="inset:0;background:var(--overlay);z-index:31"></div>
+
+    <div class="abs" style="left:0;right:0;top:330px;bottom:0;background:var(--raised);border-radius:12px 12px 0 0;box-shadow:inset 0 1px 0 var(--edge);z-index:32">
+      <div class="abs" style="left:202px;top:8px;width:36px;height:4px;border-radius:1px;background:var(--edgeStrong)"></div>
+      <div class="abs" style="left:16px;right:16px;top:28px;display:flex;align-items:flex-start">
+        <div style="flex:1"><div style="font:600 20px/26px Inter;letter-spacing:-.3px">Liked by</div>
+          <div style="font:400 13px/18px Inter;color:var(--muted);margin-top:2px">24 people liked theo_stirs's <span style="font:600 14px/18px Playfair;color:var(--ink)">Paper Plane</span></div></div>
+        <div style="margin-top:3px">${plate(107, { lg: true })}</div>
+      </div>
+      <div class="abs" style="left:16px;right:16px;top:90px;height:40px;border-radius:6px;background:var(--raisedHi);display:flex;align-items:center;gap:10px;padding:0 12px;color:var(--muted);font:400 16px/22px Inter">${I('search', 's18')}Search</div>
+    </div>
+    <div class="abs" style="left:0;right:0;top:0;bottom:0;z-index:33;pointer-events:none">${rows}</div>
+    <div class="hi" style="z-index:61"></div>` });
+}
+
+/* ================= 5 PROFILE ================= */
+{
+  const grid = [[127, 'negroni'], [107, 'paper-plane'], [100, 'daiquiri'], [92, 'aviation'], [128, 'old-fashioned'], [104, 'last-word'], [106, 'margarita'], [126, 'martini'], [117, 'french-75']];
+  const tw = (440 - 4) / 3;
+  const tiles = grid.map(([n, id], i) => `
+    <div class="ph" style="left:${(i % 3) * (tw + 2)}px;top:${574 + Math.floor(i / 3) * (tw + 2)}px;width:${tw}px;height:${tw}px">
+      <img src="${P(id)}" style="object-position:50% 50%;transform:scale(1.18)">
+      <div class="abs" style="left:6px;bottom:6px">${plate(n)}</div>
+    </div>`).join('');
+  const W = 376, pct = 64 / 2089;
+  let ticks = '';
+  for (let p = 0; p <= 100; p += 5) ticks += `<i class="tk${p % 25 === 0 ? ' q' : ''}" style="left:${Math.min(W - 1, W * p / 100)}px"></i>`;
+  const notch = (v, next) => `<i class="notch${next ? ' next' : ''}" style="left:${W * v / 2089}px"></i>`;
+  const nl = (v, t, next, align) => `<span class="lbl" style="${align === 'r' ? 'right:0' : `left:${W * v / 2089}px;transform:translateX(-50%)`};${next ? 'color:var(--ink)' : ''}">${t}</span>`;
+  screens.push({ id: 'profile', cap: '<b>5 Profile</b> Counts on black, two tonal buttons, then the Dex panel: one step up the ramp, the count in the catalogue face, and a scale notched at the rank ladder, the next rank lit white. Every post in the grid carries its white Nº plate, legible over any photograph.', html: `
+    ${sb()}
+    <div class="bar">
+      <div class="gb" style="left:6px">${I('plus')}</div>
+      <div class="title">nico.pours</div>
+      <div class="gb" style="right:6px">${I('gear')}</div>
+    </div>
+    <div class="abs" style="left:16px;top:116px"><div class="av" style="width:84px;height:84px;font:600 28px/1 Inter;background:#2E2E2E;box-shadow:0 0 0 1px #474747">NV</div></div>
+    <div class="abs" style="left:116px;right:8px;top:132px;display:flex">
+      ${[['64', 'posts'], ['212', 'followers'], ['180', 'following']].map(([v, l]) => `<div style="flex:1;text-align:center"><div style="font:600 20px/24px Inter;letter-spacing:-.3px">${v}</div><div style="font:400 13px/18px Inter;color:var(--muted);margin-top:2px">${l}</div></div>`).join('')}
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:212px">
+      <div style="font:600 15px/20px Inter">Nico Vargas</div>
+      <div style="font:400 14px/20px Inter;color:var(--muted);margin-top:2px">Stirred, not shaken. Working through the classics one coupe at a time, San Juan.</div>
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:280px;display:flex;gap:8px">
+      <span class="btn tonal" style="flex:1">Edit profile</span><span class="btn tonal" style="flex:1">Share profile</span>
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:330px;height:136px;border-radius:8px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--rule)">
+      <div class="abs" style="left:16px;top:14px;display:flex;align-items:flex-end;gap:10px">
+        <div style="font:400 44px/44px Mono;letter-spacing:-1.5px;color:var(--white)">64</div>
+        <div style="padding-bottom:2px"><div style="font:500 14px/18px Inter">in your Dex</div><div style="font:400 12px/16px Mono;color:var(--muted)">of 2,089 · 3.1%</div></div>
+      </div>
+      <div class="abs" style="right:16px;top:16px;text-align:right">
+        <div style="font:500 12px/16px Inter;letter-spacing:.6px;color:var(--muted)">rank</div>
+        <div style="font:600 15px/20px Inter;margin-top:2px">First Sips</div>
+      </div>
+      <div class="gauge" style="left:16px;top:84px;width:${W}px;height:32px">
+        <div class="track"></div><div class="fill" style="width:${Math.max(3, W * pct)}px"></div>${ticks}
+        ${notch(209, 1)}${notch(523)}${notch(1045)}${notch(1567)}
+        ${nl(209, '209', 1)}${nl(523, '523')}${nl(1045, '1,045')}${nl(1567, '1,567')}${nl(2089, '2,089', 0, 'r')}
+      </div>
+    </div>
+    <div class="abs" style="left:16px;right:16px;top:476px;font:400 13px/18px Inter;color:var(--muted)">145 more to <b style="font-weight:600;color:var(--ink)">Barfly in Training</b>, at 209</div>
+    <div class="abs" style="left:0;right:0;top:512px;height:56px;display:flex;border-bottom:1px solid var(--rule)">
+      <div style="flex:1;display:grid;place-items:center;font:600 15px/20px Inter;position:relative">Posts<i class="abs" style="left:50%;margin-left:-32px;bottom:-1px;width:64px;height:2px;background:#fff"></i></div>
+      <div style="flex:1;display:grid;place-items:center;font:500 15px/20px Inter;color:var(--muted)">Dex</div>
+    </div>
+    ${tiles}
+    ${tabbar('profile')}
+    <div class="hi"></div>` });
+}
+
+/* ================= 6 + WINDOW ================= */
+{
+  const res = [
+    [127, 'negroni', ['Neg', 'roni'], 'Spirit-forward · Florence, Italy', 1],
+    [119, 'negroni-sbagliato', ['Neg', 'roni Sbagliato'], 'Sparkling · Milan, Italy', 0],
+    [59, 'white-negroni', ['White ', 'Neg', 'roni'], 'Modern classic · Bordeaux, France', 0],
+    [779, null, ['Kingston ', 'Neg', 'roni'], 'Spirit-forward · New York City, USA', 0],
+    [780, null, ['Mezcal ', 'Neg', 'roni'], 'Spirit-forward · USA', 0],
+    [2023, null, ['Cynar ', 'Neg', 'roni'], 'Spirit-forward · New York City, USA', 0],
+  ];
+  const nameHtml = (parts) => parts.map((p) => p.toLowerCase() === 'neg'
+    ? `<span style="color:var(--white);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px">${p}</span>`
+    : `<span>${p}</span>`).join('');
+  const rows = res.map(([n, id, parts, meta, got], i) => `
+    <div class="abs" style="left:16px;right:16px;top:${172 + i * 62}px;height:62px;display:flex;align-items:center;gap:12px;${i ? 'border-top:1px solid var(--rule)' : ''}">
+      <div style="width:46px;height:46px;border-radius:4px;overflow:hidden;background:var(--surface);box-shadow:inset 0 0 0 1px var(--rule);display:grid;place-items:center;flex:none;color:#5E5E5E">
+        ${id ? `<img src="${P(id)}" style="width:100%;height:100%;object-fit:cover;transform:scale(1.4);transform-origin:50% 50%">` : `<svg class="ic" style="width:26px;height:26px;stroke-width:1.25"><use href="#i-rocks"/></svg>`}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font:600 18px/22px Playfair;color:var(--muted)">${nameHtml(parts)}</div>
+        <div style="font:400 13px/18px Inter;color:var(--muted);margin-top:2px">${meta}</div>
+      </div>
+      ${plate(n, { out: !got })}
+    </div>`).join('');
+  const keys = (row, top, pad = 0) => `<div class="row" style="top:${top}px;padding:0 ${pad}px">${row.split('').map((k) => `<div class="k">${k}</div>`).join('')}</div>`;
+  screens.push({ id: 'log', cap: '<b>6 Post a drink, mid-search</b> The + opens a full-screen window. The search is pinned under the bar with the photo you took beside it, so the results fill the space above the keyboard. The typed match is underlined in white; the Nº plate says at a glance which ones are already in your Dex.', html: `
+    ${sb()}
+    <div class="bar ruled">
+      <div class="gb" style="left:6px">${I('close')}</div>
+      <div class="title">Post a drink</div>
+    </div>
+    <div class="abs" style="left:16px;top:116px;width:44px;height:44px;border-radius:4px;overflow:hidden;background:#000;box-shadow:inset 0 0 0 1px var(--edge)"><img src="${P('negroni')}" style="width:100%;height:100%;object-fit:cover;transform:scale(1.6);transform-origin:50% 46%"></div>
+    <div class="field" style="left:68px;right:16px;top:116px;box-shadow:inset 0 0 0 1px var(--ink)">${I('search', 's20')}
+      <span style="color:var(--ink)">neg</span><i style="display:block;width:2px;height:22px;background:#fff;margin-left:-9px"></i>
+      <span style="margin-left:auto;color:var(--faint)"><svg class="ic s18"><use href="#i-xcirc"/></svg></span></div>
+    ${rows}
+    <div class="abs" style="left:16px;right:16px;top:550px;display:flex;align-items:center;font:400 13px/18px Inter;color:var(--muted)">Showing the best 6 of 9<span style="margin-left:auto;font-weight:600;color:var(--ink)">Not the one? Add “neg”</span></div>
+    <div class="kb">
+      <div class="sugg"><span>“neg”</span><span>negroni</span><span>negative</span></div>
+      ${keys('qwertyuiop', 52)}
+      ${keys('asdfghjkl', 109)}
+      <div class="row" style="top:166px;gap:6px"><div class="k sp" style="width:46px;display:grid;place-items:center"><svg class="ic" style="width:22px;height:22px;stroke:#fff"><use href="#i-shift"/></svg></div><div style="width:8px"></div>${'zxcvbnm'.split('').map((k) => `<div class="k">${k}</div>`).join('')}<div style="width:8px"></div><div class="k sp" style="width:46px;display:grid;place-items:center"><svg class="ic" style="width:22px;height:22px;stroke:#fff"><use href="#i-del"/></svg></div></div>
+      <div class="row" style="top:223px;gap:6px"><div class="k sp" style="width:96px">123</div><div class="k" style="width:188px;font-size:16px">space</div><div class="k sp" style="width:96px">done</div></div>
+      <div class="abs" style="left:28px;top:296px;color:#E6E6E6"><svg class="ic" style="width:26px;height:26px"><use href="#i-globe"/></svg></div>
+      <div class="abs" style="right:28px;top:296px;color:#E6E6E6"><svg class="ic" style="width:26px;height:26px"><use href="#i-mic"/></svg></div>
+    </div>
+    <div class="hi"></div>` });
+}
+
+const wall = document.getElementById('wall');
+for (const s of screens) {
+  const f = document.createElement('figure');
+  f.className = 'cap';
+  f.id = 'f-' + s.id;
+  f.innerHTML = `<div class="screen">${s.html}</div><figcaption>${s.cap}</figcaption>`;
+  wall.appendChild(f);
+}
+/* solo mode for per-screen renders: index.html#home, #dex, #bar, #post, #profile, #log */
+if (location.hash) {
+  const id = location.hash.slice(1);
+  document.body.classList.add('solo');
+  const f = document.getElementById('f-' + id);
+  if (f) f.classList.add('on');
+}
+</script>
+</body>
+</html>

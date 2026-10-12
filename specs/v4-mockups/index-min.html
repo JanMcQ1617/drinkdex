@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply Less Stuff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --muted:#5C5C5C; --ink:#0A0A0A; --onInk:#FFFFFF; --edge:rgba(10,10,10,.08);
+  --sans:"Inter",-apple-system,system-ui,sans-serif; --serif:"Playfair Display",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --page:#000000; --wash:#1A1A1A; --muted:#A3A3A3; --ink:#F5F5F5; --onInk:#000000; --edge:rgba(255,255,255,.10); }
+}
+:root[data-theme="dark"]{ --page:#000000; --wash:#1A1A1A; --muted:#A3A3A3; --ink:#F5F5F5; --onInk:#000000; --edge:rgba(255,255,255,.10); }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--page);color:var(--ink)}
+body{font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+main{max-width:1180px;margin:0 auto;padding:56px 24px 96px}
+h1{font:700 44px/1.08 var(--serif);letter-spacing:-.4px;margin:0 0 12px}
+h2{font:700 30px/1.15 var(--serif);letter-spacing:-.2px;margin:0}
+h3{font:600 16px/1.3 var(--sans);margin:0 0 8px}
+p{margin:0 0 12px;max-width:68ch}
+.lede{color:var(--muted);font-size:17px}
+.verdict{margin:40px 0 64px;display:grid;gap:24px;grid-template-columns:1fr}
+@media (min-width:860px){.verdict{grid-template-columns:1.2fr 1fr}}
+.pick{background:var(--ink);color:var(--onInk);padding:28px;border-radius:4px}
+.pick h2{color:var(--onInk)}
+.pick p{color:var(--onInk);opacity:.92}
+.lines{background:var(--wash);padding:28px;border-radius:4px}
+.lines p{margin:0 0 8px}
+section.dir{margin:0 0 72px}
+.head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.score{font:700 30px/1 var(--serif);font-variant-numeric:tabular-nums}
+.score small{font:400 14px var(--sans);color:var(--muted);margin-left:6px}
+.sheet{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:4px;background:var(--wash);margin:0 0 20px}
+.sheet img{display:block;height:auto;width:100%;min-width:900px}
+.cols{display:grid;gap:24px;grid-template-columns:1fr}
+@media (min-width:760px){.cols{grid-template-columns:1fr 1fr 1fr}}
+ul{margin:0;padding-left:18px}
+li{margin:0 0 6px}
+.muted{color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:15px}
+.tablewrap{overflow-x:auto;margin:0 0 20px}
+th,td{text-align:left;padding:8px 12px 8px 0;vertical-align:top}
+th{font-weight:600}
+td.n{text-align:right;padding-right:0}
+.before{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:760px){.before{grid-template-columns:1fr 1fr 1fr}}
+.before figure{margin:0}
+.before img{width:100%;height:auto;display:block;border-radius:4px;border:1px solid var(--edge)}
+.before figcaption{font-size:14px;color:var(--muted);margin-top:8px}
+.fixes li{margin-bottom:10px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Sipply v4, less stuff</h1>
+  <p class="lede">Jan's note: "I want less stuff. it looks really clumped up and a lot of information". The stripped layout (layout/spec.md) rendered in the three black-and-white palettes, judged 9 Oct 2026. The clumped versions Jan turned down are at the bottom for comparison.</p>
+
+  <div class="verdict">
+    <div class="pick">
+      <h2>Pick: Daylight, less stuff</h2>
+      <p style="margin-top:12px">The layout works: every screen lost a third to over half of its elements and now breathes. Daylight carries it best because the colour photos sit cleanly on white with a hairline print edge, the grey proofs still read, and nothing new has to be baked.</p>
+      <p>Before building, fix the one screen that still feels heavy (My Bar) and copy the post-detail heart state into the others.</p>
+    </div>
+    <div class="lines">
+      <h3>In three lines</h3>
+      <p><strong>Daylight 8.8:</strong> clean, calm and airy. The photos look their best and every screen has room.</p>
+      <p><strong>Night 7.6:</strong> moody and sleek on true black, but the darkened photos have a pasted-on halo and My Bar turns into a wall of glowing white blocks.</p>
+      <p><strong>Split 7.4:</strong> same layout with heavy black bands top and bottom; the not-yet drinks fade almost to white and disappear.</p>
+    </div>
+  </div>
+
+  <section class="dir" id="white-min">
+    <div class="head"><h2>Daylight, less stuff</h2><span class="score">8.8<small>/ 10</small></span></div>
+    <div class="sheet"><img src="white-min/contact.png" alt="Daylight less-stuff contact sheet, eight screens"></div>
+    <div class="cols">
+      <div><h3>Works</h3><ul>
+        <li>Each screen reads in one glance: photo, Playfair name, one action.</li>
+        <li>Prints keep a 7% hairline edge so pale walls don't melt into the page.</li>
+        <li>Grey proofs come from the baked files and still read as drinks.</li>
+        <li>The only frame with the post-detail heart in the right state, and the only one that draws the compose step.</li>
+      </ul></div>
+      <div><h3>Still busy</h3><ul>
+        <li>My Bar: 12 solid ink slabs plus 6 wash tiles is the heaviest block on any screen.</li>
+        <li>Home: the stories row (6 rings, 6 names) is now the busiest strip on the feed.</li>
+      </ul></div>
+      <div><h3>Scores</h3><ul class="muted">
+        <li>Breathes 9 · sleek 8 · black and white 9</li>
+        <li>AA 9 · findable 8 · buildable 9</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="dir" id="black-min">
+    <div class="head"><h2>Night, less stuff</h2><span class="score">7.6<small>/ 10</small></span></div>
+    <div class="sheet"><img src="black-min/contact.png" alt="Night less-stuff contact sheet, seven screens"></div>
+    <div class="cols">
+      <div><h3>Works</h3><ul>
+        <li>The most dramatic of the three; the feed print fades into true black.</li>
+        <li>Muted #A3A3A3 is 8.6 on black, so the quiet text stays easy to read.</li>
+      </ul></div>
+      <div><h3>Still busy or broken</h3><ul>
+        <li>The dark re-bake leaves a soft cut-out halo round every glass, plus a ghost copy of the Paper Plane's plane. It looks pasted on.</li>
+        <li>My Bar: 12 white ticked tiles on black glare and read as one bright slab.</li>
+        <li>Post detail heart is an outline though nico.pours liked it.</li>
+      </ul></div>
+      <div><h3>Scores</h3><ul class="muted">
+        <li>Breathes 8 · sleek 7 · black and white 9</li>
+        <li>AA 9 · findable 8 · buildable 6 (needs a clean dark bake of every photo)</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="dir" id="split-min">
+    <div class="head"><h2>Split, less stuff</h2><span class="score">7.4<small>/ 10</small></span></div>
+    <div class="sheet"><img src="split-min/contact.png" alt="Split less-stuff contact sheet, seven screens"></div>
+    <div class="cols">
+      <div><h3>Works</h3><ul>
+        <li>Clear frame: black chrome, white pages, colour photos in the middle.</li>
+        <li>Muted g4 #5E5E5E holds 6.5 on white and 5.9 on wash.</li>
+      </ul></div>
+      <div><h3>Still busy or broken</h3><ul>
+        <li>The black top bar and tab bar are two heavy bands on every screen; on Post detail the black bar holds only a back chevron.</li>
+        <li>Not-yet proofs are washed nearly white and vanish into the page (Greyhound and the third Dex row).</li>
+        <li>The likers sheet gets a black head band; the + field has an outline ring. Both are things the layout removed.</li>
+        <li>Post detail heart is an outline though nico.pours liked it.</li>
+      </ul></div>
+      <div><h3>Scores</h3><ul class="muted">
+        <li>Breathes 7 · sleek 7 · black and white 9</li>
+        <li>AA 8 · findable 8 · buildable 8</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="dir">
+    <h2 style="margin-bottom:16px">Visible elements at rest</h2>
+    <p class="muted">Before is the clumped Daylight board; after is Daylight, less stuff. Night and Split are within a few elements of these.</p>
+    <div class="tablewrap"><table>
+      <tr><th>Screen</th><th style="text-align:right">Before</th><th style="text-align:right">After</th><th style="padding-left:16px">What went</th></tr>
+      <tr><td>Home</td><td class="n">44</td><td class="n">27</td><td style="padding-left:16px">Post block 17 → 7: location, plate, tag, dateline, comment, share, faces</td></tr>
+      <tr><td>Dex</td><td class="n">58</td><td class="n">25</td><td style="padding-left:16px">Gauge, latest catch, chips, range headers, plates</td></tr>
+      <tr><td>My Bar</td><td class="n">71</td><td class="n">31</td><td style="padding-left:16px">Chips, counts, rank numerals, strip, one-away list</td></tr>
+      <tr><td>Post + likers</td><td class="n">42</td><td class="n">25</td><td style="padding-left:16px">Sheet search, handles, tags, plate, sub-line</td></tr>
+      <tr><td>Profile</td><td class="n">50</td><td class="n">31</td><td style="padding-left:16px">Dex panel, ruler, rank line, share key, tab strip, plates</td></tr>
+      <tr><td>+ window</td><td class="n">35</td><td class="n">18</td><td style="padding-left:16px">Title, photo, counts, plates, subtitles</td></tr>
+    </table></div>
+  </section>
+
+  <section class="dir">
+    <h2 style="margin-bottom:16px">Fixes before building</h2>
+    <ol class="fixes">
+      <li><strong>My Bar, all palettes:</strong> lighten the tile wall. Tiles 52 → 48 tall with a 16 gutter both ways, and move "Add orange → 5 more drinks" under "You can make 30" as its second line in muted, not a separate row. The screen then reads title, one row, field, tiles.</li>
+      <li><strong>Home:</strong> show five whole story rings instead of six with one cut off, and give seen stories no ring at all (just the photo), so the row is quieter than the post.</li>
+      <li><strong>Night and Split post detail:</strong> fill the heart, as Daylight does, because nico.pours is in the likers list.</li>
+      <li><strong>Night photos:</strong> drop the cut-out re-bake. It leaves halos and a ghost Paper Plane. Use the studio masters on a #0E0E0E print mat instead.</li>
+      <li><strong>Split proofs:</strong> use Daylight's baked proofs (white/img/bw) with the 7% print edge. The current ones disappear on white.</li>
+      <li><strong>Split chrome:</strong> pushed screens and the likers sheet use a page-colour bar, not black; the + field drops its outline ring.</li>
+      <li><strong>Dex:</strong> keep the Nº rail strictly scroll-only and test that searching "127" jumps and outlines the tile; that is now the only way to reach a number at rest.</li>
+    </ol>
+  </section>
+
+  <section class="dir">
+    <h2 style="margin-bottom:16px">The clumped versions, for comparison</h2>
+    <div class="before">
+      <figure><img src="white/contact.png" alt="Clumped Daylight board" loading="lazy"><figcaption>Daylight, clumped</figcaption></figure>
+      <figure><img src="black/contact.png" alt="Clumped Night board" loading="lazy"><figcaption>Night, clumped</figcaption></figure>
+      <figure><img src="split/contact.png" alt="Clumped Split board" loading="lazy"><figcaption>Split, clumped</figcaption></figure>
+    </div>
+  </section>
+</main>
+</body>
+</html>

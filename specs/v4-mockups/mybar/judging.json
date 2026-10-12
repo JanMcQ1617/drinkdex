@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-09",
+  "brief": "Jan: \"make my bar section way more organized, its difficult for me to use and I created it with you, so make it more easy to use\" + earlier \"I want less stuff\".",
+  "weights": {"organised_easy": 0.35, "less_stuff": 0.2, "payoff_visible": 0.15, "zero_and_hundred": 0.15, "buildable_today": 0.15},
+  "verified_numbers": {
+    "method": "Re-ran shelves/tools/match.py (matchBar port with the sloe gin / fruit brandy family fix) on each model's stocked bar.",
+    "shelves": "12-item bar 31; without lime 26; with dry vermouth 41; the 10 basics 22; next-bottle order dry vermouth 10, applejack 8, vodka 7, mint 6, cognac 6. All match the frames.",
+    "tabs": "12-item bar 31; +orange 37; +bourbon 38 (+7); without lime 23. All match the frames.",
+    "setup": "12-item bar 30; without lime 24; +soda water 41 (+11); +orange 38 (+8). All match the frames.",
+    "data": "Campari is 6th by uses among liqueurs + vermouth (76, 70, 44, 39, 36, 26), as the shelves picker shows. 'cointreau' -> 'triple sec' already exists in scripts/build-bar-index.mjs VARIANT map (line 103), so aliases are a real, cheap emit."
+  },
+  "tasks": [
+    {"n": 1, "task": "First run: put in 10 of the 14 basics", "today": "1 (adds all 14, 4 wrong) or ~12 to fix", "shelves": 12, "tabs": 11, "setup": 15,
+     "notes": "Shelves: Start, 10 ticks, Add. Tabs: opens on Add, 10 ticks, 1 scroll. Setup: Set up, 10 ticks, Next x3, Done (the 10 span all 4 steps)."},
+    {"n": 2, "task": "Add Campari you just bought", "today": "3-4", "shelves": 3, "tabs": 4, "setup": 4,
+     "notes": "Shelves: + Add on Liqueurs, tick (6th row, fixed), Done; a swipe-down is still a step, so not 2. Tabs: Campari is not in Liqueurs & bitters' top four, so Add, field, type, tick (or Add, scroll, All 41, tick). Setup: field, type, +, X to close the full-screen window (spec counts 3 by skipping the close)."},
+    {"n": 3, "task": "Add a brand bottle (Cointreau)", "today": "fails", "shelves": 4, "tabs": 4, "setup": 4,
+     "notes": "All three: open search, type, tick Triple sec via alias, close/stay. Tabs needs no close but needs the Add tab."},
+    {"n": 4, "task": "Check whether Campari is in my bar", "today": "2+ (and can be stale)", "shelves": 0, "tabs": 0, "setup": 0,
+     "notes": "At 12 items all three show it at rest. At 100: shelves and tabs are grouped (scan one shelf); setup is a flat 100-row A to Z list."},
+    {"n": 5, "task": "Remove lime (ran out)", "today": "2-4", "shelves": 2, "tabs": 1, "setup": 1,
+     "notes": "Shelves: tile, then Remove (deliberately 2). Tabs: tap the row or its x. Setup: the x."},
+    {"n": 6, "task": "Undo that removal", "today": "2", "shelves": 1, "tabs": 1, "setup": 1,
+     "notes": "Shelves: toast Undo (6s, dies on scroll). Tabs and setup: Undo in the row's own slot, lasts the visit."},
+    {"n": 7, "task": "See what I can make and open a famous one", "today": "3-4", "shelves": 3, "tabs": 2, "setup": 2,
+     "notes": "Shelves sorts A to Z inside each spirit, so Negroni sits below Maiden's Prayer, under the fold: make row, scroll, tap. Tabs (Dex order) and setup (familiar first) put the classics at the top of the section."},
+    {"n": 8, "task": "Find the best next bottle and add it", "today": "2-3, three different answers", "shelves": 2, "tabs": 2, "setup": 2,
+     "notes": "Shelves: next line, Add. Tabs: Add tab, tick Bourbon under Best next. Setup: Next buy line, Add. Shelves and setup also show the answer at rest (0 steps to know it)."}
+  ],
+  "task_totals": {"shelves": 27, "tabs": 25, "setup": 29},
+  "elements_at_rest": {"today": 71, "white_min_mock": 31, "shelves": 34, "tabs": 41, "tabs_add_mode": 43, "setup": 36},
+  "scores": {
+    "shelves": {"organised_easy": 9, "less_stuff": 8, "payoff_visible": 7, "zero_and_hundred": 9, "buildable_today": 6, "total": 8.0},
+    "tabs":    {"organised_easy": 7.5, "less_stuff": 6, "payoff_visible": 9, "zero_and_hundred": 8, "buildable_today": 8, "total": 7.5},
+    "setup":   {"organised_easy": 6.5, "less_stuff": 8, "payoff_visible": 8, "zero_and_hundred": 6, "buildable_today": 7, "total": 7.0}
+  },
+  "ranking": [
+    {"slug": "shelves", "score": 8.0},
+    {"slug": "tabs", "score": 7.5},
+    {"slug": "setup", "score": 7.0}
+  ],
+  "recommend": "shelves",
+  "grafts": [
+    "From tabs: undo in place instead of a toast. After Remove, leave the tile on its shelf, struck and muted, reading 'Lime · Undo', until another tab takes the front. Nothing reflows while you look, the undo lasts the whole visit, and no Toast component has to be built.",
+    "From tabs: the payoff as an ink key (392 x 52) with the last change beside the chevron ('You can make 26  −5 ›'), held in a fixed head that does not scroll. At 100 items the payoff stays in view, and the toast's 'fewer drinks' line is no longer needed.",
+    "From tabs and setup: inside each Make section, put familiar drinks first (Dex order or rarity) instead of A to Z, so Negroni and Martini come above Artillery and Bennett. Task 7 drops from 3 steps to 2.",
+    "From tabs: rank the next line and the Next bottle sheet with the canonical nextBest (how many one-away drinks name the bottle, then full gain), so the top suggestion reads Bourbon or Dry vermouth, not Applejack. Show the true full gain on each row.",
+    "From tabs and setup: the merged-duplicate list (angostura, lime-disc/zest, orange-slices, orgeat-syrup, golden-rum, kahlua, agave-nectar, egg variants) added to RETIRED in src/store/bar.ts, plus setup's refile of the 80 'other' items so the Other shelf holds only the odd ones.",
+    "From setup: the alias line copy 'Cointreau is a triple sec' under the hit, and a quiet 'Brand names work too, like Cointreau' line in the empty search, so people learn the alias search exists.",
+    "From setup: the ingredient sheet's 'Show its drinks', which pushes the Make list filtered to that bottle in place of the inline list of 5, so the sheet stays short.",
+    "Shared data fix that all three found: take sloe gin out of the gin family, and apricot and peach brandy out of the brandy family, in scripts/build-bar-index.mjs. Today sloe gin 'makes' a Martini."
+  ],
+  "risks_for_the_pick": [
+    "Most new infrastructure of the three: short sheets need a transparent Modal with a scrim (the app has no detent library), and about 30 per-id shelf overrides need upkeep whenever an ingredient is added. Taking the in-place undo graft removes the Toast.",
+    "Seven '+ Add' controls repeat down the page. If Jan still finds it busy, drop them and keep only the top-bar search, which opens a picker with the shelves as rows (frame 5 already has that empty state).",
+    "Removal takes 2 taps on purpose. If Jan wants it faster, tabs' 1-tap remove with in-place Undo is the fallback, since nothing moves either way.",
+    "At 100 items the shelves run about 500pt tall and scroll away from the payoff unless the fixed-key graft is taken."
+  ],
+  "index_html": "/Users/janmcqueeny/Projects/drinkdex-worktrees/polish/specs/v4-mockups/mybar/index.html"
+}

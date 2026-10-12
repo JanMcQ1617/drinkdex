@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Bar, guided setup</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* v4 "Daylight" values in the layout's roles (layout/spec.md §3), as white-min uses them. No hue. */
+:root{
+  --page:#FFFFFF;     /* ground, bars, the sheet */
+  --wash:#F5F5F5;     /* fields, unticked tiles, secondary keys, a print before it decodes */
+  --rule:#C4C4C4;     /* sheet grabber. Decorative */
+  --control:#8A8A8A;  /* resting tab glyphs, the remove x, the no-photo glass. UI 3:1 (3.45 page, 3.17 wash), never text */
+  --muted:#5C5C5C;    /* quiet text: 6.69 on page, 6.13 on wash */
+  --ink:#0A0A0A;      /* text, ticked tiles, the primary key, active glyphs: 19.80 page, 18.16 wash */
+  --onInk:#FFFFFF;    /* text on ink: 19.80 */
+  --scrim:rgba(10,10,10,.36);
+  --photoEdge:rgba(10,10,10,.07);
+  --t3:#5C5C5C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E6E6E6}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+
+/* three sizes, plus Playfair for drink names */
+.title{font:600 28px/34px Inter;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.small{font:400 13px/18px Inter}
+.pf-body{font:700 17px/24px Playfair}
+.muted{color:var(--muted)}
+.b5{font-weight:500}.b6{font-weight:600}
+.tn{font-variant-numeric:tabular-nums}
+
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none;isolation:isolate}
+.row{position:absolute;display:flex;align-items:baseline;justify-content:space-between}
+.field{position:absolute;height:44px;background:var(--wash);border-radius:4px;display:flex;align-items:center;padding:0 12px;gap:10px}
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.circle{border-radius:50%}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.print{position:absolute;overflow:hidden;background:var(--wash)}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);pointer-events:none}
+.nophoto{display:flex;align-items:center;justify-content:center}
+.av{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* status bar (system) */
+.sb{position:absolute;top:0;left:0;right:0;height:62px;color:var(--ink)}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+
+/* system keyboard */
+.kb{position:absolute;left:0;right:0;background:#D4D5D8}
+.kb .k{position:absolute;height:44px;border-radius:6px;background:#FFFFFF;box-shadow:0 1px 0 #8E9093;display:flex;align-items:center;justify-content:center;font:400 22px/1 Inter;color:var(--ink)}
+.kb .k.f{background:#ABAEB4;font-size:16px}
+
+/* the wall: two rows of five */
+.wall{display:flex;flex-wrap:wrap;gap:56px 36px;width:2432px;padding:112px 44px 48px;align-items:flex-start;position:relative}
+.wall>h1{position:absolute;left:44px;top:34px;font:600 30px/36px Inter;letter-spacing:-.6px}
+.wall>h1 small{font:400 15px/20px Inter;letter-spacing:0;color:var(--muted);margin-left:16px}
+.frame{display:flex;flex-direction:column;gap:16px;width:440px;flex:none}
+.frame .phone{box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.cap{font:400 13px/19px Inter;color:#4A4A4A;min-height:95px}
+.cap .cnt{display:block;font:600 15px/22px Inter;color:var(--ink);margin-bottom:4px}
+body.solo{background:var(--page)}
+body.solo .wall{padding:0;display:block;width:auto}
+body.solo .wall>h1,body.solo .cap{display:none}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+body.solo .frame .phone{box-shadow:none}
+</style>
+</head>
+<body>
+<div class="wall" id="wall">
+  <h1>My Bar: guided setup, then a simple bar<small>Model "setup". First run is four short steps; after that My Bar is a calm summary: what you can make, the next buy, and your bottles A to Z. Daylight palette, 440 × 956. Every number is real (bar index, 899 recipes).</small></h1>
+</div>
+<script>
+/* ---------- icons: the Daylight hand (src/components/icons.tsx), stroke 1.6 at 24 ---------- */
+const OUT = {
+  home:'<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>',
+  dex:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>',
+  plus:'<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>',
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  chevronRight:'<path d="M9.4 5.4 16 12l-6.6 6.6"/>',
+  close:'<path d="M6 6l12 12"/><path d="M18 6 6 18"/>',
+  check:'<path d="M5 12.6l4.4 4.4L19 7.4"/>',
+  /* no-photo glasses, chosen from the drink's glassware */
+  rocks:'<path d="M6.2 7.2h11.6l-1.1 11.3a1.6 1.6 0 0 1-1.6 1.4H8.9a1.6 1.6 0 0 1-1.6-1.4z"/><path d="M6.8 12.4h10.4"/>',
+  martini:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  coupe:'<path d="M4.6 6.6h14.8c0 4.3-3.3 7.2-7.4 7.2S4.6 10.9 4.6 6.6z"/><path d="M12 13.8v5.6"/><path d="M8.4 19.8h7.2"/>',
+  shot:'<path d="M7.8 6.4h8.4l-1.2 12.5a1.2 1.2 0 0 1-1.2 1.1h-3.6a1.2 1.2 0 0 1-1.2-1.1z"/>',
+  mug:'<path d="M5.8 6.2h9.4v12.4a1.6 1.6 0 0 1-1.6 1.6H7.4a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M15.2 9.2h1.6a2.1 2.1 0 0 1 2.1 2.1v2.4a2.1 2.1 0 0 1-2.1 2.1h-1.6"/>',
+  bottle:'<path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z"/><path d="M10.4 5.4h3.2"/><path d="M7.2 12.8h9.6"/><path d="M7.2 17h9.6"/>',
+};
+const SOLID = {
+  bottle:'<path fill-rule="evenodd" d="M9.5 2.3h5v4.9c0 .5 3.2 1.2 3.2 3.6v8.6a2.3 2.3 0 0 1-2.3 2.3H8.6a2.3 2.3 0 0 1-2.3-2.3v-8.6c0-2.4 3.2-3.1 3.2-3.6zM8.1 13.4v3.2h7.8v-3.2z"/>',
+};
+const ic = (name, size=24, color='var(--ink)', sw=1.6, solid=false) => {
+  if (name === 'more') return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><circle cx="5.4" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18.6" cy="12" r="1.6"/></svg>`;
+  if (solid && SOLID[name]) return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">${SOLID[name]}</svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</svg>`;
+};
+const at = (x, y, inner) => `<div class="a" style="left:${x}px;top:${y}px">${inner}</div>`;
+const P = n => `../../white/img/${n}.webp`;
+const print = (src, x, y, w, h, pos='50% 50%') => `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><img src="${src}" style="object-position:${pos}"></div>`;
+
+const PERSON = '<circle cx="12" cy="9" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6z"/>';
+const av = (x, y, d) => `<div class="av" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:var(--t3);align-items:flex-end"><svg width="${Math.round(d*.86)}" height="${Math.round(d*.86)}" viewBox="0 0 24 24" fill="#FFFFFF">${PERSON}</svg></div>`;
+
+const status = () => `<div class="sb"><span class="t">9:41</span><span class="island"></span><span class="r">
+  <svg width="18" height="12" viewBox="0 0 18 12" fill="#0A0A0A"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="#0A0A0A"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.5 8.5 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.7 6.7 0 0 0 8 4c-1.8 0-3.4.7-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3ZM8 9.3l1.9-1.7a2.9 2.9 0 0 0-3.8 0Z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#0A0A0A" stroke-opacity=".35"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#0A0A0A"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="#0A0A0A" fill-opacity=".4"/></svg></span></div>`;
+const homeInd = () => `<div class="a" style="left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:var(--ink)"></div>`;
+
+/* tab bar: five glyphs, no labels; My Bar active (the solid bottle in ink) */
+function tabs(){
+  const xs = [44,132,220,308,396], cy = 897;
+  let h = `<div class="a" style="left:0;top:873px;width:440px;height:83px;background:var(--page)"></div>`;
+  h += at(xs[0]-13, cy-13, ic('home',26,'var(--control)'));
+  h += at(xs[1]-13, cy-13, ic('dex',26,'var(--control)'));
+  h += `<div class="key" style="left:${xs[2]-26}px;top:${cy-19}px;width:52px;height:38px;background:var(--ink)">${ic('plus',22,'#FFFFFF',2)}</div>`;
+  h += at(xs[3]-13, cy-13, ic('bottle',26,'var(--ink)',1.6,true));
+  h += av(xs[4]-13, cy-13, 26);
+  return h + homeInd();
+}
+const topbar = (left, right='') => `<div class="row" style="left:24px;top:71px;width:392px;height:34px;align-items:center">${left}${right}</div>`;
+
+/* the system keyboard, as the + window draws it */
+function keyboard(top, sugg){
+  let k = `<div class="kb" style="top:${top}px;height:${956-top}px">`;
+  sugg.forEach((s,i)=>{
+    k += `<div class="a body" style="left:${i*146.67}px;top:10px;width:146.67px;text-align:center">${s}</div>`;
+    if (i) k += `<div class="a" style="left:${i*146.67}px;top:12px;width:1px;height:22px;background:#B4B6BA"></div>`;
+  });
+  const kw = 37.8, gap = 6;
+  const key = (x,y,w,t,f=false,fs) => `<div class="k ${f?'f':''}" style="left:${x}px;top:${y}px;width:${w}px${fs?`;font-size:${fs}px`:''}">${t}</div>`;
+  let y = 54;
+  [...'qwertyuiop'].forEach((c,i)=> k += key(4+i*(kw+gap), y, kw, c));
+  y += 56; [...'asdfghjkl'].forEach((c,i)=> k += key(4+(kw+gap)/2+i*(kw+gap), y, kw, c));
+  y += 56; k += key(4, y, 50, '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"><path d="M12 4 4 12.5h4.5V20h7v-7.5H20z"/></svg>', true);
+  [...'zxcvbnm'].forEach((c,i)=> k += key(4+50+12.5+i*(kw+gap), y, kw, c));
+  k += key(386, y, 50, '<svg width="22" height="18" viewBox="0 0 26 20" fill="none" stroke="#0A0A0A" stroke-width="1.6" stroke-linejoin="round"><path d="M8 2h15a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 23 18H8l-6.5-8z"/><path d="M12 6.5l7 7M19 6.5l-7 7" stroke-linecap="round"/></svg>', true);
+  y += 56; k += key(4, y, 96, '123', true, 16) + key(106, y, 228, 'space', false, 16) + key(340, y, 96, 'done', true, 16);
+  k += `<div class="a" style="left:28px;top:${y+60}px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3D3D3D" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg></div>`;
+  k += `<div class="a" style="left:386px;top:${y+60}px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3D3D3D" stroke-width="1.5" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></div>`;
+  return k + `</div>`;
+}
+const caret = `<span style="display:inline-block;width:2px;height:21px;background:var(--ink);vertical-align:-4px;margin-left:1px"></span>`;
+
+/* ================= data (from src/data/barIndex.json + 899 recipes, worked out in matchBar) ================= */
+/* Bar "A": the 12 bottles below make exactly 30 drinks with 161 one away (the numbers the v4 mock used). */
+const BAR = ['Angostura bitters','Bourbon','Campari','Dry vermouth','Gin','Lemon','Lime','Sugar syrup','Sweet vermouth','Triple sec','Vodka','White rum'];
+
+/* The four setup steps: fixed, curated lists (lib/bar.ts SETUP), never re-sorted. */
+const STEPS = [
+  { title:'Spirits', items:['Gin','Vodka','White rum','Dark rum','Aged rum','Bourbon','Rye whiskey','Scotch whisky','Irish whiskey','Silver tequila','Reposado tequila','Mezcal','Brandy','Cognac','Pisco','Cachaça','Absinthe','Applejack'] },
+  { title:'Liqueurs & vermouth', items:['Sweet vermouth','Dry vermouth','Campari','Aperol','Triple sec','Orange curaçao','Maraschino liqueur','Bénédictine','Green chartreuse','Coffee liqueur','Amaretto','Crème de cacao','Crème de cassis','Elderflower liqueur','Lillet blanc','Irish cream','Champagne','Prosecco'] },
+  { title:'Mixers & fresh', items:['Lemon','Lime','Orange','Grapefruit','Mint','Soda water','Tonic water','Ginger beer','Ginger ale','Cola','Pineapple juice','Cranberry juice','Egg white','Whole egg','Cream','Milk','Coconut cream','Coffee'] },
+  { title:'Bitters & syrups', items:['Angostura bitters','Orange bitters',"Peychaud’s bitters",'Sugar syrup','Grenadine','Honey','Honey syrup','Orgeat','Agave syrup','Maple syrup','Raspberry syrup','Passionfruit syrup','Demerara syrup','Brown sugar','Nutmeg','Cinnamon','Cloves','Hot sauce'] },
+];
+
+/* ================= pieces ================= */
+const tile = (x, y, label, on) =>
+  `<div class="key body" style="left:${x}px;top:${y}px;width:190px;height:52px;justify-content:space-between;padding:0 12px 0 16px;gap:8px;background:${on?'var(--ink)':'var(--wash)'};color:${on?'var(--onInk)':'var(--ink)'}"><span class="ell" style="flex:1;min-width:0">${label}</span>${on?ic('check',16,'#FFFFFF',2):''}</div>`;
+
+/* the add window's top row: X, then the field in the bar's own row (as the + window) */
+const winTop = (text) => {
+  let h = status() + at(22, 76, ic('close',24,'var(--ink)',1.9));
+  h += text
+    ? `<div class="field" style="left:64px;top:66px;width:352px">${ic('search',20,'var(--muted)')}<span class="body" style="flex:1">${text}${caret}</span>${ic('close',18,'var(--muted)',1.8)}</div>`
+    : `<div class="field" style="left:64px;top:66px;width:352px">${ic('search',20,'var(--muted)')}<span class="body muted" style="flex:1;display:flex;align-items:center">${caret.replace('margin-left:1px','margin-left:0;margin-right:1px')}Search 490 ingredients</span></div>`;
+  return h;
+};
+/* a result row: name (and an optional matched-name line), what a tick does, the toggle key */
+function resRow(y, name, {sub='', right='', on=false} = {}){
+  let h = `<div class="a body ell" style="left:24px;top:${y+(sub?9:20)}px;width:${on||right?230:300}px">${name}</div>`;
+  if (sub) h += `<div class="a small muted ell" style="left:24px;top:${y+35}px;width:230px">${sub}</div>`;
+  if (right) h += `<div class="a body muted tn" style="right:${440-364}px;top:${y+20}px;text-align:right">${right}</div>`;
+  h += `<div class="key" style="left:380px;top:${y+14}px;width:36px;height:36px;background:${on?'var(--ink)':'var(--wash)'}">${on?ic('check',20,'#FFFFFF',2):ic('plus',20,'var(--ink)',1.8)}</div>`;
+  return h;
+}
+
+/* ================= 1 Empty, first run ================= */
+function empty(){
+  let h = status();
+  h += topbar(`<span class="title">My Bar</span>`);
+  h += print(P('daiquiri'), 24, 122, 392, 300, '50% 52%');
+  h += `<div class="row" style="left:24px;top:438px;width:392px"><span class="pf-body">Daiquiri</span><span class="small muted">White rum, lime, sugar syrup</span></div>`;
+  h += `<div class="a body" style="left:24px;top:486px;width:392px">Tick what’s in your bar,<br>and see every drink it can make.</div>`;
+  h += `<div class="key body b5" style="left:24px;top:566px;width:392px;height:52px;background:var(--ink);color:var(--onInk)">Set up my bar</div>`;
+  h += `<div class="a small muted" style="left:24px;top:630px">Four short steps: spirits, liqueurs, mixers, bitters.</div>`;
+  h += `<div class="field" style="left:24px;top:680px;width:392px">${ic('search',20,'var(--muted)')}<span class="body muted">Or add one bottle</span></div>`;
+  return h + tabs();
+}
+
+/* ================= 2–3 Setup steps ================= */
+function setup(step, on, makes, keyLabel){
+  let h = status();
+  h += step === 0 ? at(22, 76, ic('close',24,'var(--ink)',1.9)) : at(20, 76, ic('chevronLeft',24,'var(--ink)',1.8));
+  const S = STEPS[step];
+  h += `<div class="row" style="left:24px;top:122px;width:392px"><span class="title">${S.title}</span><span class="small muted tn">${step+1} of 4</span></div>`;
+  h += `<div class="a body muted" style="left:24px;top:166px">Tap the ones you have.</div>`;
+  S.items.forEach((n,i)=>{ h += tile(24 + (i%2)*202, 214 + Math.floor(i/2)*64, n, on.includes(n)); });
+  h += `<div class="a body" style="left:24px;top:802px">You can already make <span class="b6 tn">${makes}</span> ${makes===1?'drink':'drinks'}</div>`;
+  h += `<div class="key body b5" style="left:24px;top:846px;width:392px;height:52px;background:var(--ink);color:var(--onInk)">${keyLabel}</div>`;
+  return h + homeInd();
+}
+const setup1 = () => setup(0, ['Gin','Vodka','White rum','Bourbon'], 2, 'Next');
+const setup4 = () => setup(3, ['Angostura bitters','Sugar syrup'], 30, 'Done');
+
+/* ================= 4 My Bar at rest (and 8, just after a removal) ================= */
+function barScreen({make=30, next='Soda water', gain=11, removed=null} = {}){
+  let h = status();
+  h += topbar(`<span class="title">My Bar</span>`, ic('more',26));
+  /* the one primary action: the payoff, first under the title */
+  h += `<div class="key" style="left:24px;top:122px;width:392px;height:64px;background:var(--ink);color:var(--onInk);justify-content:space-between;padding:0 14px 0 20px"><span class="body b6 tn">You can make ${make}</span>${ic('chevronRight',22,'#FFFFFF',1.8)}</div>`;
+  h += `<div class="row" style="left:24px;top:202px;width:392px;height:44px;align-items:center"><span class="body"><span class="muted">Next buy:</span> <span class="b5">${next}</span></span><span class="body muted tn" style="display:flex;align-items:center;gap:4px">+${gain} drinks ${ic('chevronRight',16,'var(--muted)',2)}</span></div>`;
+  const count = BAR.length - (removed ? 1 : 0);
+  h += `<div class="a body" style="left:24px;top:278px"><span class="b6">In your bar</span>&nbsp;&nbsp;<span class="muted tn">${count}</span></div>`;
+  h += `<div class="field" style="left:24px;top:314px;width:392px">${ic('search',20,'var(--muted)')}<span class="body muted">Add a bottle</span></div>`;
+  BAR.forEach((n,i)=>{
+    const y = 370 + i*56;
+    if (removed && removed.name === n) {
+      h += `<div class="row" style="left:24px;top:${y}px;width:392px;height:56px;align-items:center"><span class="body muted">${n} removed · ${removed.lost} fewer drinks</span><span class="body b6">Undo</span></div>`;
+    } else {
+      h += `<div class="row" style="left:24px;top:${y}px;width:392px;height:56px;align-items:center"><span class="body ell">${n}</span><span style="margin-right:-1px">${ic('close',18,'var(--control)',1.8)}</span></div>`;
+    }
+  });
+  return h + tabs();
+}
+const bar = () => barScreen();
+const removed = () => barScreen({make:24, next:'Soda water', gain:9, removed:{name:'Lime', lost:6}});
+
+/* ================= 5 Adding: search, keyboard up (Orange just added) ================= */
+function add(){
+  let h = winTop('orange');
+  h += `<div class="a body" style="left:24px;top:126px"><span class="b6 tn">You can make 38</span> <span class="muted">· 8 more with orange</span></div>`;
+  const r = [
+    ['Orange', {right:'In your bar', on:true}],
+    ['Orange bitters', {right:'+3 drinks'}],
+    ['Orange curaçao', {right:'+4 drinks'}],
+    ['Orange flower water', {}],
+    ['Orange marmalade', {right:'+2 drinks'}],
+    ['Icelandic orange soda', {}],
+  ];
+  r.forEach(([n,o],i)=> h += resRow(166 + i*64, n, o));
+  h += keyboard(610, ['“orange”','oranges','Orange']);
+  return h + homeInd();
+}
+
+/* ================= 6 Adding: browse by shelf (field just tapped) ================= */
+function browse(){
+  let h = winTop('');
+  h += `<div class="a body" style="left:24px;top:126px"><span class="b6 tn">You can make 30</span></div>`;
+  const s = [['Spirits',4,103],['Liqueurs & vermouth',4,133],['Mixers & fresh',2,109],['Bitters & syrups',2,65],['Everything else',0,80]];
+  s.forEach(([n,have,all],i)=>{
+    const y = 166 + i*64;
+    h += `<div class="row" style="left:24px;top:${y}px;width:392px;height:64px;align-items:center"><span class="body">${n}</span><span class="body muted tn" style="display:flex;align-items:center;gap:6px">${have} of ${all} ${ic('chevronRight',16,'var(--muted)',2)}</span></div>`;
+  });
+  h += `<div class="a small muted" style="left:24px;top:500px">Brand names work too, like Cointreau or Tanqueray.</div>`;
+  h += keyboard(610, ['','','']);
+  return h + homeInd();
+}
+
+/* ================= 7 Adding: a brand name finds the bottle recipes call for ================= */
+function alias(){
+  let h = winTop('cointreau');
+  h += `<div class="a body" style="left:24px;top:126px"><span class="b6 tn">You can make 30</span></div>`;
+  h += resRow(166, 'Triple sec', {sub:'Cointreau is a triple sec', right:'In your bar', on:true});
+  h += keyboard(610, ['“cointreau”','Cointreau','']);
+  return h + homeInd();
+}
+
+/* ================= 9 You can make ================= */
+const thumb = (x, y, img, glass) => img
+  ? print(P(img), x, y, 52, 52)
+  : `<div class="a nophoto" style="left:${x}px;top:${y}px;width:52px;height:52px;background:var(--wash)">${ic(glass,24,'var(--control)',1.4)}</div>`;
+function make(){
+  let h = status();
+  h += at(20, 76, ic('chevronLeft',24,'var(--ink)',1.8));
+  h += `<div class="row" style="left:24px;top:122px;width:392px"><span class="title">You can make</span><span class="small muted tn">30</span></div>`;
+  /* the jump line: the families on this list, in their fixed order; a tap scrolls to that section (it never filters) */
+  h += `<div class="a body muted" style="left:24px;top:170px;width:392px">Gin · Vodka · Rum · Whiskey · No spirit</div>`;
+  /* Gin is the first family; inside it, familiar first (rarity), then A to Z */
+  const rows = [['martini','Martini','martini'],[null,'Cardinale','rocks'],[null,'Connaught Martini','martini'],[null,'Dukes Martini','martini'],[null,'Fifty-Fifty','martini'],
+                [null,'Fitzgerald','coupe'],[null,'Gin and It','coupe'],[null,'Gin Sour','coupe'],[null,'Artillery','coupe'],[null,'Bennett','coupe']];
+  h += `<div class="a body" style="left:24px;top:230px"><span class="b6">Gin</span>&nbsp;&nbsp;<span class="muted tn">17</span></div>`;
+  rows.forEach(([img,dn,glass],i)=>{
+    const y = 266 + i*64;
+    h += thumb(24, y+6, img, glass);
+    h += `<div class="a pf-body ell" style="left:92px;top:${y+20}px;width:324px">${dn}</div>`;
+  });
+  return h + homeInd();
+}
+
+/* ================= 10 Next buys (sheet over My Bar) ================= */
+function next(){
+  let h = barScreen();
+  h += `<div class="a" style="left:0;top:0;width:440px;height:956px;background:var(--scrim)"></div>`;
+  h += `<div class="a" style="left:0;top:380px;width:440px;height:576px;background:var(--page);border-radius:12px 12px 0 0"></div>`;
+  h += `<div class="a" style="left:202px;top:388px;width:36px;height:4px;border-radius:1px;background:var(--rule)"></div>`;
+  h += `<div class="a body b6" style="left:24px;top:412px">Next buys</div>`;
+  const r = [
+    ['Soda water', '11 more, like Tom Collins and Whisky Highball'],
+    ['Orange', '8 more, like Negroni and Old Fashioned'],
+    ['Absinthe', '6 more, like Joy Division and Duchess'],
+    ['Grapefruit', '5 more, like Greyhound and Salty Dog'],
+    ['Scotch whisky', '5 more, like Rob Roy and Affinity'],
+    ['Applejack', '5 more, like Applejack Sour and Brandy Toddy'],
+  ];
+  r.forEach(([n,s],i)=>{
+    const y = 452 + i*76;
+    h += `<div class="a body b5" style="left:24px;top:${y+8}px">${n}</div>`;
+    h += `<div class="a small muted ell" style="left:24px;top:${y+34}px;width:300px">${s}</div>`;
+    h += `<div class="key body b5" style="left:344px;top:${y+12}px;width:72px;height:40px;background:var(--wash)">Add</div>`;
+  });
+  return h + homeInd();
+}
+
+/* ---------- the wall ---------- */
+const screens = [
+  ['empty', empty, '1 Empty, first run', '15 visible elements', 'One key starts setup. The print says what the feature does in one example (three bottles make a Daiquiri), and is not headed “You can make”. The field is for someone who only wants one bottle.'],
+  ['setup-1', setup1, '2 Setup, step 1 of 4', '24 visible elements', 'A fixed grid of the 18 spirits most bars hold, ticked in ink with a check. The line above the key counts the whole bar, live, on every tap. With nothing ticked the key reads “Skip”; X leaves setup and keeps what you ticked.'],
+  ['setup-4', setup4, '3 Setup, step 4 of 4', '24 visible elements', 'Bitters & syrups. Twelve taps across the four steps built this bar: 30 drinks. Back goes to step 3. “Done” lands on My Bar with the same 30 at the top.'],
+  ['bar', bar, '4 My Bar at rest, 12 in your bar', '36 visible elements (71 today)', 'The payoff first: “You can make 30 ›” is the screen’s one key. One line says the next buy. Then your bottles only, A to Z, each with its remove x. The field adds anything from the 490. Nothing on this screen is ranked, so nothing moves.'],
+  ['add', add, '5 Adding: search, keyboard up', '24 visible elements', 'Typed “orange”, tapped Orange: its key turned to a check where it stood and the live line went 30 → 38. The other rows show what a tick would do for you now (+4, +3, +2). Order is by match, then how many recipes name it, never by what you own.'],
+  ['browse', browse, '6 Adding: browse by shelf', '22 visible elements', 'The field before you type: five shelves, each opening its whole shelf (the setup grid, then every item A to Z). All 490 are now reachable without typing, in two taps.'],
+  ['alias', alias, '7 Adding: brand names', '11 visible elements', '“cointreau” finds Triple sec, the bottle recipes call for, and says why. It is already in this bar, so the row says so. Aliases live in the bar index (build-bar-index.mjs).'],
+  ['removed', removed, '8 Just removed, with undo', '36 visible elements', 'Tapped the x on Lime. The row stays where it was and becomes “Lime removed · 6 fewer drinks · Undo”; the count says 11 and the key says 24, both on screen. The row folds away when you leave My Bar.'],
+  ['make', make, '9 You can make', '30 visible elements', 'Grouped by the spirit family each drink is built on, in a fixed order (Gin, Vodka, Rum, Whiskey, Tequila & mezcal, Brandy, Other spirits, No spirit); familiar drinks first inside each. The jump line scrolls to a family, it never filters. A drink with no photo shows its glass.'],
+  ['next', next, '10 Next buys', '20 visible elements in the sheet', 'Tapping “Next buy” opens one ranked list, by one rule: how many more drinks the bottle would pour. Add flips to a check in place; the list holds still while the sheet is open.'],
+];
+const wall = document.getElementById('wall');
+screens.forEach(([id,fn,name,cnt,txt])=>{
+  const f = document.createElement('div'); f.className='frame'; f.id='f-'+id;
+  f.innerHTML = `<div class="phone">${fn()}</div><div class="cap"><span class="cnt">${name} · ${cnt}</span>${txt}</div>`;
+  wall.appendChild(f);
+});
+const hash = location.hash.slice(1);
+if (hash) { document.body.classList.add('solo'); const f = document.getElementById('f-'+hash); if (f) f.classList.add('on'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply layout wireframes</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* Palette-neutral wireframe greys. Each maps to a role token, so Daylight,
+   Night or Split drop in by swapping these five values. */
+:root{
+  --page:#FFFFFF;   /* page, bars, sheet */
+  --wash:#F2F2F2;   /* fields, unticked tiles, secondary key, empty photo */
+  --muted:#6B6B6B;  /* quiet text: 5.33 on page, 4.76 on wash */
+  --ink:#111111;    /* text, ticked tiles, primary key, active icon */
+  --onInk:#FFFFFF;
+  --tone1:#BDBDBD; --tone2:#9E9E9E; --tone3:#D6D6D6; /* avatar placeholders */
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E9E9E9}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block}
+
+/* the three sizes, plus Playfair for drink names */
+.title{font:600 28px/34px Inter;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.small{font:400 13px/18px Inter}
+.pf-title{font:700 28px/34px Playfair;letter-spacing:-.2px}
+.pf-body{font:700 17px/24px Playfair}
+.muted{color:var(--muted)}
+.b5{font-weight:500}.b6{font-weight:600}
+.tn{font-variant-numeric:tabular-nums}
+
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none}
+.photo{position:absolute;object-fit:cover;border-radius:2px;background:var(--wash)}
+.proof{filter:grayscale(1) contrast(.82) brightness(1.08);opacity:.92}
+.row{position:absolute;display:flex;align-items:baseline;justify-content:space-between}
+.field{position:absolute;height:44px;background:var(--wash);border-radius:4px;display:flex;align-items:center;padding:0 12px;gap:10px}
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.circle{border-radius:50%}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the wall */
+.wall{display:flex;gap:36px;padding:112px 44px 40px;align-items:flex-start;position:relative}
+.wall>h1{position:absolute;left:44px;top:34px;font:600 30px/36px Inter;letter-spacing:-.6px}
+.wall>h1 small{font:400 15px/20px Inter;letter-spacing:0;color:var(--muted);margin-left:16px}
+.frame{display:flex;flex-direction:column;gap:16px;width:440px}
+.frame .phone{box-shadow:0 0 0 1px #D4D4D4}
+.cap{font:400 13px/19px Inter;color:#4A4A4A}
+.cap b{font-weight:600;color:var(--ink)}
+.cap .cnt{display:block;font:600 15px/22px Inter;color:var(--ink);margin-bottom:4px}
+body.solo{background:var(--page)}
+body.solo .wall{padding:0;display:block}
+body.solo .wall>h1,body.solo .cap{display:none}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+body.solo .frame .phone{box-shadow:none}
+</style>
+</head>
+<body>
+<div class="wall" id="wall">
+  <h1>Layout<small>v4, less stuff. Palette-neutral wireframes at 440 × 956. The drink photographs stay in colour; everything else is the five role tokens.</small></h1>
+</div>
+<script>
+const IMG = n => `../white/img/${n}.webp`;
+const S = (w, inner, sw=1.75, extra='') => `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" ${extra}>${inner}</svg>`;
+const I = {
+  bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>',
+  heart: '<path d="M12 20.3s-7.6-4.6-9.3-9.2C1.6 7.9 3.6 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.4 0 5.4 3.4 4.3 6.6-1.7 4.6-9.3 9.2-9.3 9.2z"/>',
+  bookmark: '<path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/>',
+  more: '<circle cx="5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.3" fill="currentColor" stroke="none"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',
+  sliders: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  chevR: '<path d="M9 5l7 7-7 7"/>',
+  back: '<path d="M15 4l-8 8 8 8"/>',
+  x: '<path d="M5 5l14 14M19 5L5 19"/>',
+  clear: '<path d="M7 7l10 10M17 7L7 17"/>',
+  glass: '<path d="M6 6h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8z"/><path d="M6.6 12h10.8"/>',
+  person: '<circle cx="12" cy="9" r="4" fill="currentColor" stroke="none"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6z" fill="currentColor" stroke="none"/>',
+  home: '<path d="M3.5 10.5L12 3.5l8.5 7V20.5h-5.5v-6h-6v6H3.5z"/>',
+  dex: '<path d="M4 4.5h16l-8 9z"/><path d="M12 13.5v6.5M8 20h8"/>',
+  bar: '<path d="M10 2.5h4v3.6l1.6 2.6V20.5a1 1 0 0 1-1 1H9.4a1 1 0 0 1-1-1V8.7L10 6.1z"/><path d="M8.4 12h7.2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+};
+const ic = (name, w=24, sw=1.75) => S(w, I[name], sw);
+const icFill = (name, w=26) => `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round">${I[name]}</svg>`;
+
+/* status bar and home indicator: system, not counted */
+const status = (dim=false) => `
+  <div class="a b6" style="left:44px;top:21px;font:600 17px/22px Inter">9:41</div>
+  <div class="a" style="left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000"></div>
+  <svg class="a" style="left:330px;top:24px" width="76" height="14" viewBox="0 0 76 14"><g fill="#111"><rect x="0" y="9" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1"/><path d="M33 3.2a9 9 0 0 1 12 0l-1.5 1.6a7 7 0 0 0-9 0zM35.6 6a5.3 5.3 0 0 1 6.8 0L41 7.6a3.2 3.2 0 0 0-4 0zM39 9.2l1.6 1.6L39 12.4l-1.6-1.6z"/><rect x="51" y="1" width="22" height="11" rx="3" fill="none" stroke="#111" stroke-width="1" opacity=".45"/><rect x="53" y="3" width="17" height="7" rx="1.5"/><rect x="74" y="4.5" width="1.5" height="4" rx=".7" opacity=".45"/></g></svg>`;
+const homeInd = (c='#111') => `<div class="a" style="left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:${c}"></div>`;
+
+/* tab bar: 5 icons, no labels, active icon is filled, + is the only filled key */
+function tabs(active){
+  const xs = [44,132,220,308,396], cy = 897;
+  let h = `<div class="a" style="left:0;top:873px;width:440px;height:83px;background:var(--page)"></div>`;
+  const draw = (k,i) => {
+    const x = xs[i];
+    if(k==='plus') return `<div class="key" style="left:${x-26}px;top:${cy-19}px;width:52px;height:38px;background:var(--ink);color:var(--onInk)">${ic('plus',22,2)}</div>`;
+    if(k==='profile'){
+      const ring = active==='profile' ? 'box-shadow:0 0 0 2px var(--page),0 0 0 3.5px var(--ink);' : '';
+      return `<div class="a circle" style="left:${x-13}px;top:${cy-13}px;width:26px;height:26px;background:var(--tone2);color:#fff;${ring}display:flex;align-items:flex-end;justify-content:center;overflow:hidden">${S(22,I.person)}</div>`;
+    }
+    const on = active===k;
+    return `<div class="a" style="left:${x-13}px;top:${cy-13}px;color:${on?'var(--ink)':'var(--muted)'}">${on?icFill(k,26):ic(k,26)}</div>`;
+  };
+  ['home','dex','plus','bar','profile'].forEach((k,i)=> h += draw(k,i));
+  return h + homeInd();
+}
+/* top bar: a title (or wordmark) and at most one icon; 62–114 */
+const topbar = (left, right='') => `<div class="row" style="left:24px;top:71px;width:392px;align-items:center;height:34px">${left}${right}</div>`;
+
+const avatar = (x,y,d,tone='var(--tone1)') => `<div class="a circle" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:${tone};color:#fff;display:flex;align-items:flex-end;justify-content:center;overflow:hidden">${S(Math.round(d*.86),I.person)}</div>`;
+
+/* ---------------- 1 Home ---------------- */
+function home(){
+  let h = status();
+  h += topbar(`<span class="pf-title">Sipply</span>`, `<span style="color:var(--ink)">${ic('bell',26)}</span>`);
+  const st = [['You',null,false],['maya.pours','aperol-spritz',true],['theo_stirs','paper-plane',true],['ines.ag','negroni',false],['dmitri.k','martini',true],['ana.lucia','margarita',true]];
+  st.forEach(([n,img,unseen],i)=>{
+    const x = 24 + i*78, y = 122;
+    const ring = unseen ? 'box-shadow:0 0 0 2px var(--ink)' : (img ? 'box-shadow:0 0 0 1px #C9C9C9' : '');
+    h += img
+      ? `<div class="a circle" style="left:${x+1}px;top:${y+1}px;width:60px;height:60px;${ring}"><img class="a circle" src="${IMG(img)}" style="left:3px;top:3px;width:54px;height:54px;object-fit:cover"></div>`
+      : avatar(x+4,y+4,54,'var(--tone2)');
+    h += `<div class="a small ell" style="left:${x-8}px;top:192px;width:78px;text-align:center">${n}</div>`;
+  });
+  h += `<img class="photo" src="${IMG('negroni')}" style="left:24px;top:232px;width:392px;height:490px">`;
+  h += `<div class="row" style="left:24px;top:738px;width:392px"><span class="pf-title">Negroni</span><span class="small muted">ines.ag</span></div>`;
+  h += `<div class="a" style="left:22px;top:786px">${ic('heart',28)}</div><div class="a body tn" style="left:58px;top:788px">24</div>`;
+  h += `<div class="a" style="left:348px;top:788px">${ic('bookmark',24)}</div><div class="a" style="left:392px;top:788px">${ic('more',24)}</div>`;
+  h += `<img class="photo" src="${IMG('paper-plane')}" style="left:24px;top:848px;width:392px;height:490px">`;
+  return h + tabs('home');
+}
+
+/* ---------------- 2 Dex ---------------- */
+function dex(){
+  let h = status();
+  h += `<div class="row" style="left:24px;top:71px;width:392px"><span class="title">Dex</span><span class="small muted tn">38 / 2,089</span></div>`;
+  h += `<div class="field" style="left:24px;top:122px;width:392px"><span class="muted">${ic('search',20)}</span><span class="body muted" style="flex:1">Search a name or number</span><span>${ic('sliders',22)}</span></div>`;
+  const d = [['caesar','Caesar',1],['greyhound','Greyhound',0],['brandy-alexander','Brandy Alexander',1],['espresso-martini','Espresso Martini',1],['grasshopper','Grasshopper',0],['porto-flip','Porto Flip',0],['americano','Americano',0],['aviation','Aviation',1]];
+  d.forEach(([img,n,c],i)=>{
+    const x = 24 + (i%2)*208, y = 190 + Math.floor(i/2)*246;
+    h += `<img class="photo ${c?'':'proof'}" src="${IMG(img)}" style="left:${x}px;top:${y}px;width:184px;height:184px">`;
+    h += `<div class="a pf-body ell ${c?'':'muted'}" style="left:${x}px;top:${y+192}px;width:184px">${n}</div>`;
+  });
+  return h + tabs('dex');
+}
+
+/* ---------------- 3 My Bar ---------------- */
+function bar(){
+  let h = status();
+  h += `<div class="row" style="left:24px;top:71px;width:392px"><span class="title">My Bar</span><span class="small muted tn">12 in your bar</span></div>`;
+  h += `<div class="row" style="left:24px;top:134px;width:392px;align-items:center"><span class="body b6">You can make 30</span><span>${ic('chevR',22,2)}</span></div>`;
+  h += `<div class="a body" style="left:24px;top:174px"><span class="b5">Add orange</span><span class="muted"> → 5 more drinks</span></div>`;
+  h += `<div class="field" style="left:24px;top:230px;width:392px"><span class="muted">${ic('search',20)}</span><span class="body muted">Search ingredients</span></div>`;
+  const t = [['Gin',1],['Lemon',1],['Lime',1],['Sweet vermouth',1],['Campari',1],['Angostura bitters',1],['Soda water',1],['Simple syrup',1],['Rye whiskey',1],['White rum',1],['Mint',1],['Sugar',1],['Orange',0],['Cointreau',0],['Dry vermouth',0],['Tequila',0],['Egg white',0],['Bourbon',0]];
+  t.forEach(([n,on],i)=>{
+    const x = 24 + (i%2)*202, y = 298 + Math.floor(i/2)*64;
+    h += `<div class="key body" style="left:${x}px;top:${y}px;width:190px;height:52px;justify-content:flex-start;padding:0 16px;background:${on?'var(--ink)':'var(--wash)'};color:${on?'var(--onInk)':'var(--ink)'}">${n}</div>`;
+  });
+  return h + tabs('bar');
+}
+
+/* ---------------- 4 Post detail (+ likers sheet) ---------------- */
+function postBody(){
+  let h = status();
+  h += `<div class="a" style="left:20px;top:76px">${ic('back',24,2)}</div>`;
+  h += avatar(24,122,32,'var(--tone2)');
+  h += `<div class="row" style="left:68px;top:126px;width:348px;align-items:center"><span class="body b6">theo_stirs</span><span>${ic('more',24)}</span></div>`;
+  h += `<img class="photo" src="${IMG('paper-plane')}" style="left:24px;top:170px;width:392px;height:490px">`;
+  h += `<div class="a pf-title" style="left:24px;top:684px">Paper Plane</div>`;
+  h += `<div class="a body" style="left:24px;top:726px;width:392px">Equal parts, hard shake, and the bourbon still shows up. Best one this week.</div>`;
+  h += `<div class="a" style="left:22px;top:790px">${ic('heart',28)}</div><div class="a body tn" style="left:58px;top:792px">24</div>`;
+  return h;
+}
+function postRest(){ return postBody() + homeInd(); }
+function post(){
+  let h = postBody();
+  h += `<div class="a" style="left:0;top:0;width:440px;height:956px;background:rgba(17,17,17,.38)"></div>`;
+  h += `<div class="a" style="left:0;top:436px;width:440px;height:520px;background:var(--page);border-radius:12px 12px 0 0"></div>`;
+  h += `<div class="a" style="left:202px;top:444px;width:36px;height:5px;border-radius:3px;background:#C9C9C9"></div>`;
+  h += `<div class="a body b6" style="left:24px;top:468px">Liked by</div>`;
+  const L = [['Maya Ortiz','Following','var(--tone1)'],['Nico Vargas','','var(--tone2)'],['Dmitri Kovač','Follow','var(--tone3)'],['Ana Lucía Rivera','Following','var(--tone2)'],['Sam Ortega','Follow','var(--tone1)'],['Ines Aguilar','Following','var(--tone3)']];
+  L.forEach(([n,k,tone],i)=>{
+    const y = 516 + i*64;
+    h += avatar(24,y+4,44,tone);
+    h += `<div class="a body ell" style="left:84px;top:${y+14}px;width:200px">${n}${k?'':' <span class="muted">(you)</span>'}</div>`;
+    if(k) h += `<div class="key body b5" style="left:300px;top:${y+8}px;width:116px;height:36px;${k==='Follow'?'background:var(--ink);color:var(--onInk)':'background:var(--wash)'}">${k}</div>`;
+  });
+  return h + homeInd();
+}
+
+/* ---------------- 5 Profile ---------------- */
+function profile(){
+  let h = status();
+  h += topbar(`<span class="title">nico.pours</span>`, `<span>${ic('more',26)}</span>`);
+  h += avatar(24,130,80,'var(--tone2)');
+  h += `<div class="a body b6" style="left:124px;top:146px">Nico Vargas</div>`;
+  h += `<div class="a small muted ell" style="left:124px;top:174px;width:292px">Stirred, not shaken. One coupe at a time.</div>`;
+  h += `<div class="a body tn" style="left:24px;top:234px"><span class="b6">64</span> <span class="muted">posts</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="b6">212</span> <span class="muted">followers</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="b6">180</span> <span class="muted">following</span></div>`;
+  h += `<div class="key body b5" style="left:24px;top:282px;width:392px;height:44px;background:var(--wash)">Edit profile</div>`;
+  h += `<div class="row" style="left:24px;top:344px;width:392px;align-items:center"><span class="small muted">38 drinks in your Dex</span><span class="muted">${ic('chevR',16,2)}</span></div>`;
+  const g = ['negroni','paper-plane','aviation','old-fashioned','clover-club','martini','last-word','margarita','sidecar','penicillin','tom-collins','daiquiri'];
+  g.forEach((img,i)=>{
+    const x = 24 + (i%3)*133.33, y = 386 + Math.floor(i/3)*133.33;
+    h += `<img class="photo" src="${IMG(img)}" style="left:${x}px;top:${y}px;width:125.33px;height:125.33px">`;
+  });
+  return h + tabs('profile');
+}
+
+/* ---------------- 6 + window, mid-search ---------------- */
+function plus(){
+  let h = status();
+  h += `<div class="a" style="left:22px;top:76px">${ic('x',24,2)}</div>`;
+  h += `<div class="field" style="left:64px;top:66px;width:352px"><span class="muted">${ic('search',20)}</span><span class="body" style="flex:1">neg<span style="display:inline-block;width:2px;height:21px;background:var(--ink);vertical-align:-4px;margin-left:1px"></span></span><span class="muted">${ic('clear',18,2)}</span></div>`;
+  const r = [['negroni','Negroni'],['negroni-sbagliato','Negroni Sbagliato'],['white-negroni','White Negroni'],[null,'Kingston Negroni'],[null,'Mezcal Negroni'],[null,'Cynar Negroni']];
+  r.forEach(([img,n],i)=>{
+    const y = 130 + i*68;
+    h += img ? `<img class="photo" src="${IMG(img)}" style="left:24px;top:${y+8}px;width:52px;height:52px">`
+             : `<div class="a" style="left:24px;top:${y+8}px;width:52px;height:52px;border-radius:2px;background:var(--wash);color:#8C8C8C;display:flex;align-items:center;justify-content:center">${ic('glass',24,1.5)}</div>`;
+    h += `<div class="a pf-body" style="left:92px;top:${y+22}px">${n}</div>`;
+  });
+  /* keyboard (system) */
+  const kb = 610;
+  h += `<div class="a" style="left:0;top:${kb}px;width:440px;height:${956-kb}px;background:#D3D3D3"></div>`;
+  ['“neg”','negroni','negative'].forEach((s,i)=>{
+    h += `<div class="a body" style="left:${i*146.67}px;top:${kb+10}px;width:146.67px;text-align:center;color:#111">${s}</div>`;
+    if(i) h += `<div class="a" style="left:${i*146.67}px;top:${kb+12}px;width:1px;height:22px;background:#B5B5B5"></div>`;
+  });
+  const key = (x,y,w,t,dark=false,fs=22) => `<div class="key" style="left:${x}px;top:${y}px;width:${w}px;height:44px;border-radius:5px;background:${dark?'#ADADAD':'#FFFFFF'};box-shadow:0 1px 0 #8E8E8E;font:400 ${fs}px/1 Inter;color:#111">${t}</div>`;
+  const rows = ['qwertyuiop','asdfghjkl','zxcvbnm'];
+  const kw = 37.8, gap = 6;
+  let y = kb + 54;
+  [...rows[0]].forEach((c,i)=> h += key(4+i*(kw+gap), y, kw, c));
+  y += 56; [...rows[1]].forEach((c,i)=> h += key(4+(kw+gap)/2+i*(kw+gap), y, kw, c));
+  y += 56; h += key(4, y, 50, S(20,'<path d="M12 4l7 8h-4v7H9v-7H5z"/>',1.6), true);
+  [...rows[2]].forEach((c,i)=> h += key(4+50+12.5+i*(kw+gap), y, kw, c));
+  h += key(440-4-50, y, 50, S(22,'<path d="M8 6h12v12H8l-5-6z"/><path d="M11.5 9.5l5 5M16.5 9.5l-5 5"/>',1.6), true);
+  y += 56; h += key(4, y, 96, '123', true, 17); h += key(106, y, 228, 'space', false, 17); h += key(340, y, 96, 'search', true, 17);
+  h += `<div class="a" style="left:28px;top:${y+60}px;color:#555">${S(26,'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',1.5)}</div>`;
+  h += `<div class="a" style="left:386px;top:${y+60}px;color:#555">${S(26,'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',1.5)}</div>`;
+  return h + homeInd();
+}
+
+const screens = [
+  ['home', home, '1 Home', '44 → 27', 'The wordmark and one icon (activity). A small stories row, then posts: the photo, one line (drink name in Playfair, author quiet on the right) and one action row (heart + count, save, •••). Location, dateline, plate, "In your Dex", comment and share live in the post’s •••.'],
+  ['dex', dex, '2 Dex', '58 → 25', 'Title and a quiet 38 / 2,089. One search field; filters sit behind the icon inside it, and typing a number jumps. Two big prints a row, name only: caught in colour, not yet as a grey proof. The Nº rail shows only while scrolling.'],
+  ['bar', bar, '3 My Bar', '71 → 31', 'Title and a quiet "12 in your bar". One row "You can make 30 ›" opens the list; one line suggests the next bottle. Then the search and the tiles, name only, ticked in solid ink. The tiles are the screen’s point, so they get the room: the chrome around them went 47 → 13.'],
+  ['post', post, '4 Post, likers sheet', '42 → 25', 'Tapping the like count raises the sheet: avatar, name, one Follow / Following key. No search, no tags, no numbering.'],
+  ['profile', profile, '5 Profile', '50 → 31', 'Avatar, name, one-line bio, the three counts on one line, one key (Edit profile; Share and Settings are in •••). One quiet line "38 drinks in your Dex ›" opens progress and rank. Then the posts, no plates.'],
+  ['plus', plus, '6 + window, mid-search', '35 → 18', 'X, the search field, results as thumb + name, the keyboard. A drink with no photo yet shows a glass on wash. Nothing else.'],
+  ['post-rest', postRest, '4b Post detail at rest', '9', 'Back, author + •••, the photo, the drink name, the whole caption, heart + count. Comment, share, save and the drink page are in •••.'],
+];
+const wall = document.getElementById('wall');
+screens.forEach(([id,fn,name,cnt,txt])=>{
+  const f = document.createElement('div'); f.className='frame'; f.id='f-'+id;
+  f.innerHTML = `<div class="phone">${fn()}</div><div class="cap"><span class="cnt">${name} · ${cnt.includes('→')?cnt+' visible elements':cnt+' visible elements (new frame)'}</span>${txt}</div>`;
+  wall.appendChild(f);
+});
+const hash = location.hash.slice(1);
+if(hash){ document.body.classList.add('solo'); const f=document.getElementById('f-'+hash); if(f) f.classList.add('on'); }
+</script>
+</body>
+</html>

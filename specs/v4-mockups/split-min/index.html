@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply Split, less stuff</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf);font-weight:600}
+
+/* Split ramp (../split/spec.md section 1.1). Every colour on screen is one of these. */
+:root{
+  --g0:#000000;  /* chrome ground; ink on the page */
+  --g1:#121212;  /* field on chrome (+ window) */
+  --g3:#2E2E2E;  /* avatar disc; vector-face edge on chrome */
+  --g4:#5E5E5E;  /* muted text on the page: 6.48 on g10, 5.90 on g9 */
+  --g5:#6E6E6E;  /* control edge on chrome, grabber: never text */
+  --g6:#858585;  /* resting tab glyph on chrome 5.69; field glyph on g9 3.35 */
+  --g7:#A3A3A3;  /* muted text on chrome: 8.33 on g0, 7.43 on g1 */
+  --g9:#F4F4F4;  /* wash: fields, unticked tiles, secondary key, proof ground */
+  --g10:#FFFFFF; /* the page; ink on chrome */
+  --scrim:rgba(0,0,0,.5);
+  /* the layout's five roles, Split values dropped in */
+  --page:var(--g10); --wash:var(--g9); --muted:var(--g4); --ink:var(--g0); --onInk:var(--g10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E6E6E6}
+body{font-family:Inter,-apple-system,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block}
+
+/* three sizes, plus Playfair for drink names */
+.title{font:600 28px/34px Inter,-apple-system,sans-serif;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter,-apple-system,sans-serif;letter-spacing:-.2px}
+.small{font:400 13px/18px Inter,-apple-system,sans-serif;letter-spacing:0}
+.pf-title{font:700 28px/34px Playfair,serif;letter-spacing:-.4px}
+.pf-body{font:700 17px/24px Playfair,serif;letter-spacing:-.1px}
+.pf-not{font-weight:600;color:var(--g4)}
+.muted{color:var(--muted)}
+.cmuted{color:var(--g7)}
+.b5{font-weight:500}.b6{font-weight:600}
+.tn{font-variant-numeric:tabular-nums}
+
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none}
+.photo{position:absolute;object-fit:cover;border-radius:0;background:var(--wash)}
+.row{position:absolute;display:flex;align-items:baseline;justify-content:space-between}
+.field{position:absolute;height:44px;background:var(--wash);border-radius:2px;display:flex;align-items:center;padding:0 12px;gap:10px}
+.key{position:absolute;border-radius:2px;display:flex;align-items:center;justify-content:center}
+.circle{border-radius:50%}
+.av{position:absolute;border-radius:50%;color:var(--g10);font-family:Inter,sans-serif;font-weight:600;display:flex;align-items:center;justify-content:center;letter-spacing:0}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the wall */
+.wall{display:flex;gap:36px;padding:112px 44px 40px;align-items:flex-start;position:relative}
+.wall>h1{position:absolute;left:44px;top:32px;font:700 32px/38px Playfair,serif;letter-spacing:-.5px}
+.wall>h1 small{font:400 15px/20px Inter,sans-serif;letter-spacing:0;color:#3A3A3A;margin-left:18px;vertical-align:4px}
+.frame{display:flex;flex-direction:column;gap:16px;width:440px}
+.cap{font:400 13px/19px Inter,sans-serif;color:#2A2A2A}
+.cap .cnt{display:block;font:600 15px/22px Inter,sans-serif;color:#000;margin-bottom:4px}
+body.solo{background:var(--page);width:440px;height:956px;overflow:hidden}
+body.solo .wall{padding:0;display:block}
+body.solo .wall>h1,body.solo .cap{display:none}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+</style>
+</head>
+<body>
+<div class="wall" id="wall">
+  <h1>Split, less stuff<small>The v4 layout in the Split palette, 440 × 956. Black bars, black tab bar, white pages, a black + window. The photographs are the only colour.</small></h1>
+</div>
+<script>
+const IMG = n => `img/${n}.jpg`;
+const PROOF = n => `img/proof/${n}.jpg`;
+const S = (w, inner, sw=1.75, extra='') => `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" ${extra}>${inner}</svg>`;
+const I = {
+  bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>',
+  heart: '<path d="M12 20.3s-7.6-4.6-9.3-9.2C1.6 7.9 3.6 4.5 7 4.5c2.1 0 3.6 1.2 5 3 1.4-1.8 2.9-3 5-3 3.4 0 5.4 3.4 4.3 6.6-1.7 4.6-9.3 9.2-9.3 9.2z"/>',
+  bookmark: '<path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/>',
+  more: '<circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',
+  sliders: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  chevR: '<path d="M9 5l7 7-7 7"/>',
+  back: '<path d="M15 4l-8 8 8 8"/>',
+  x: '<path d="M5 5l14 14M19 5L5 19"/>',
+  glass: '<path d="M6 6h12l-1.2 13.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8z"/><path d="M6.6 12h10.8"/>',
+  home: '<path d="M3.5 10.5L12 3.5l8.5 7V20.5h-5.5v-6h-6v6H3.5z"/>',
+  dex: '<path d="M4 4.5h16l-8 9z"/><path d="M12 13.5v6.5M8 20h8"/>',
+  bar: '<path d="M10 2.5h4v3.6l1.6 2.6V20.5a1 1 0 0 1-1 1H9.4a1 1 0 0 1-1-1V8.7L10 6.1z"/><path d="M8.4 12h7.2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  person: '<circle cx="12" cy="9" r="4" fill="currentColor" stroke="none"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6z" fill="currentColor" stroke="none"/>',
+};
+const ic = (name, w=24, sw=1.75) => S(w, I[name], sw);
+const icFill = (name, w=26) => `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" stroke-linecap="round">${I[name]}</svg>`;
+
+/* Split avatar disc in g0, g3 or g4 (by a stable hash of the user id) with a white
+   silhouette standing in for the photo: no initials, so no capitals and no fourth size. */
+const av = (x,y,d,tone='var(--g3)') => `<div class="av" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:${tone};align-items:flex-end;overflow:hidden">${S(Math.round(d*.86),I.person)}</div>`;
+
+/* status bar: always on chrome, so always light content (not counted) */
+const status = () => `
+  <div class="a" style="left:44px;top:21px;font:600 17px/22px Inter;color:#fff">9:41</div>
+  <div class="a" style="left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000"></div>
+  <svg class="a" style="left:330px;top:24px" width="76" height="14" viewBox="0 0 76 14"><g fill="#fff"><rect x="0" y="9" width="3" height="4" rx="1"/><rect x="5" y="6" width="3" height="7" rx="1"/><rect x="10" y="3" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1"/><path d="M33 3.2a9 9 0 0 1 12 0l-1.5 1.6a7 7 0 0 0-9 0zM35.6 6a5.3 5.3 0 0 1 6.8 0L41 7.6a3.2 3.2 0 0 0-4 0zM39 9.2l1.6 1.6L39 12.4l-1.6-1.6z"/><rect x="51" y="1" width="22" height="11" rx="3" fill="none" stroke="#fff" stroke-width="1" opacity=".5"/><rect x="53" y="3" width="17" height="7" rx="1.5"/><rect x="74" y="4.5" width="1.5" height="4" rx=".7" opacity=".5"/></g></svg>`;
+/* the black chrome above every page: status bar + top bar, 0 to 114 */
+const chrome = () => `<div class="a" style="left:0;top:0;width:440px;height:114px;background:var(--g0)"></div>` + status();
+const homeInd = (c='#fff') => `<div class="a" style="left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:${c}"></div>`;
+
+/* tab bar: docked black foot. Five glyphs, no labels; the active glyph is filled white,
+   resting glyphs are g6 outlines; the + is the bar's one white key. */
+function tabs(active){
+  const xs = [44,132,220,308,396], cy = 897;
+  let h = `<div class="a" style="left:0;top:873px;width:440px;height:83px;background:var(--g0)"></div>`;
+  const draw = (k,i) => {
+    const x = xs[i];
+    if(k==='plus') return `<div class="key" style="left:${x-26}px;top:${cy-19}px;width:52px;height:38px;background:var(--g10);color:var(--g0)">${ic('plus',22,2)}</div>`;
+    if(k==='profile'){
+      const ring = active==='profile' ? 'box-shadow:0 0 0 1.5px var(--g0),0 0 0 3px var(--g10);' : '';
+      return `<div class="av" style="left:${x-13}px;top:${cy-13}px;width:26px;height:26px;background:var(--g3);align-items:flex-end;overflow:hidden;${ring}">${S(22,I.person)}</div>`;
+    }
+    const on = active===k;
+    return `<div class="a" style="left:${x-13}px;top:${cy-13}px;color:${on?'var(--g10)':'var(--g6)'}">${on?icFill(k,26):ic(k,26)}</div>`;
+  };
+  ['home','dex','plus','bar','profile'].forEach((k,i)=> h += draw(k,i));
+  return h + homeInd('#fff');
+}
+/* top bar row on the chrome: a title (or the wordmark) and at most one icon */
+const topbar = (left, right='') => `<div class="row" style="left:24px;top:71px;width:392px;align-items:center;height:34px;color:var(--g10)">${left}${right}</div>`;
+
+/* ---------------- 1 Home ---------------- */
+function home(){
+  let h = chrome();
+  h += topbar(`<span class="pf-title">Sipply</span>`, `<span>${ic('bell',26)}</span>`);
+  const st = [['You',null,false],['maya.pours','aperol-spritz',true],['theo_stirs','paper-plane',true],['ines.ag','negroni',false],['dmitri.k','martini',true],['ana.lucia','margarita',true]];
+  st.forEach(([n,img,unseen],i)=>{
+    const x = 24 + i*78, y = 122;
+    const ring = unseen ? 'box-shadow:0 0 0 2px var(--g0)' : 'box-shadow:0 0 0 1px var(--g6)';
+    h += img
+      ? `<div class="a circle" style="left:${x+1}px;top:${y+1}px;width:60px;height:60px;${ring}"><img class="a circle" src="${IMG(img)}" style="left:3px;top:3px;width:54px;height:54px;object-fit:cover"></div>`
+      : av(x+4,y+4,54,'var(--g3)');
+    const seen = img && !unseen;
+    h += `<div class="a small ell" style="left:${x-8}px;top:192px;width:78px;text-align:center;color:${seen?'var(--g4)':'var(--g0)'}">${n}</div>`;
+  });
+  h += `<img class="photo" src="${IMG('negroni')}" style="left:24px;top:232px;width:392px;height:490px">`;
+  h += `<div class="row" style="left:24px;top:738px;width:392px"><span class="pf-title">Negroni</span><span class="small muted">ines.ag</span></div>`;
+  h += `<div class="a" style="left:22px;top:786px">${ic('heart',28)}</div><div class="a body tn" style="left:58px;top:788px">24</div>`;
+  h += `<div class="a" style="left:348px;top:788px">${ic('bookmark',24)}</div><div class="a" style="left:392px;top:788px">${ic('more',24)}</div>`;
+  h += `<img class="photo" src="${IMG('paper-plane')}" style="left:24px;top:848px;width:392px;height:490px">`;
+  return h + tabs('home');
+}
+
+/* ---------------- 2 Dex ---------------- */
+function dex(){
+  let h = chrome();
+  h += `<div class="row" style="left:24px;top:71px;width:392px;color:var(--g10)"><span class="title">Dex</span><span class="small cmuted tn">38 / 2,089</span></div>`;
+  h += `<div class="field" style="left:24px;top:122px;width:392px"><span style="color:var(--g6)">${ic('search',20)}</span><span class="body muted" style="flex:1">Search a name or number</span><span>${ic('sliders',22)}</span></div>`;
+  const d = [['caesar','Caesar',1],['greyhound','Greyhound',0],['brandy-alexander','Brandy Alexander',1],['espresso-martini','Espresso Martini',1],['grasshopper','Grasshopper',0],['porto-flip','Porto Flip',0],['americano','Americano',0],['aviation','Aviation',1]];
+  d.forEach(([img,n,c],i)=>{
+    const x = 24 + (i%2)*208, y = 190 + Math.floor(i/2)*246;
+    h += `<img class="photo" src="${c?IMG(img):PROOF(img)}" style="left:${x}px;top:${y}px;width:184px;height:184px">`;
+    h += `<div class="a pf-body ell ${c?'':'pf-not'}" style="left:${x}px;top:${y+192}px;width:184px">${n}</div>`;
+  });
+  return h + tabs('dex');
+}
+
+/* ---------------- 3 My Bar ---------------- */
+function bar(){
+  let h = chrome();
+  h += `<div class="row" style="left:24px;top:71px;width:392px;color:var(--g10)"><span class="title">My Bar</span><span class="small cmuted tn">12 in your bar</span></div>`;
+  h += `<div class="row" style="left:24px;top:134px;width:392px;align-items:center"><span class="body b6">You can make 30</span><span>${ic('chevR',22,2)}</span></div>`;
+  h += `<div class="a body" style="left:24px;top:174px"><span class="b5">Add orange</span><span class="muted"> → 5 more drinks</span></div>`;
+  h += `<div class="field" style="left:24px;top:230px;width:392px"><span style="color:var(--g6)">${ic('search',20)}</span><span class="body muted">Search ingredients</span></div>`;
+  const t = [['Gin',1],['Lemon',1],['Lime',1],['Sweet vermouth',1],['Campari',1],['Angostura bitters',1],['Soda water',1],['Simple syrup',1],['Rye whiskey',1],['White rum',1],['Mint',1],['Sugar',1],['Orange',0],['Cointreau',0],['Dry vermouth',0],['Tequila',0],['Egg white',0],['Bourbon',0]];
+  t.forEach(([n,on],i)=>{
+    const x = 24 + (i%2)*202, y = 298 + Math.floor(i/2)*64;
+    h += `<div class="key body" style="left:${x}px;top:${y}px;width:190px;height:52px;justify-content:flex-start;padding:0 16px;background:${on?'var(--g0)':'var(--g9)'};color:${on?'var(--g10)':'var(--g0)'}">${n}</div>`;
+  });
+  return h + tabs('bar');
+}
+
+/* ---------------- 4 Post detail (+ likers sheet) ---------------- */
+function postBody(){
+  let h = chrome();
+  h += `<div class="a" style="left:20px;top:76px;color:var(--g10)">${ic('back',24,2)}</div>`;
+  h += av(24,122,32,'var(--g4)');
+  h += `<div class="row" style="left:68px;top:126px;width:348px;align-items:center"><span class="body b6">theo_stirs</span><span>${ic('more',24)}</span></div>`;
+  h += `<img class="photo" src="${IMG('paper-plane')}" style="left:24px;top:170px;width:392px;height:490px">`;
+  h += `<div class="a pf-title" style="left:24px;top:684px">Paper Plane</div>`;
+  h += `<div class="a body" style="left:24px;top:726px;width:392px">Equal parts, hard shake, and the bourbon still shows up. Best one this week.</div>`;
+  h += `<div class="a" style="left:22px;top:790px">${ic('heart',28)}</div><div class="a body tn" style="left:58px;top:792px">24</div>`;
+  return h;
+}
+function postRest(){ return postBody() + homeInd('#000'); }
+function post(){
+  let h = postBody();
+  h += `<div class="a" style="left:0;top:0;width:440px;height:956px;background:var(--scrim)"></div>`;
+  /* the sheet: Split's black head, white list, 10pt top corners */
+  h += `<div class="a" style="left:0;top:436px;width:440px;height:520px;background:var(--g10);border-radius:10px 10px 0 0;overflow:hidden"><div style="height:68px;background:var(--g0)"></div></div>`;
+  h += `<div class="a" style="left:202px;top:444px;width:36px;height:4px;border-radius:1px;background:var(--g5)"></div>`;
+  h += `<div class="a body b6" style="left:24px;top:468px;color:var(--g10)">Liked by</div>`;
+  const L = [['Maya Ortiz','Following','var(--g4)'],['Nico Vargas','','var(--g3)'],['Dmitri Kovač','Follow','var(--g0)'],['Ana Lucía Rivera','Following','var(--g3)'],['Sam Ortega','Follow','var(--g4)'],['Ines Aguilar','Following','var(--g0)']];
+  L.forEach(([n,k,tone],i)=>{
+    const y = 516 + i*64;
+    h += av(24,y+4,44,tone);
+    h += `<div class="a body ell" style="left:84px;top:${y+14}px;width:200px">${n}${k?'':' <span class="muted">(you)</span>'}</div>`;
+    if(k) h += `<div class="key body b5" style="left:300px;top:${y+8}px;width:116px;height:36px;${k==='Follow'?'background:var(--g0);color:var(--g10)':'background:var(--g9);color:var(--g0)'}">${k}</div>`;
+  });
+  return h + homeInd('#000');
+}
+
+/* ---------------- 5 Profile ---------------- */
+function profile(){
+  let h = chrome();
+  h += topbar(`<span class="title">nico.pours</span>`, `<span>${ic('more',26)}</span>`);
+  h += av(24,130,80,'var(--g3)');
+  h += `<div class="a body b6" style="left:124px;top:146px">Nico Vargas</div>`;
+  h += `<div class="a small muted ell" style="left:124px;top:174px;width:292px">Stirred, not shaken. One coupe at a time.</div>`;
+  h += `<div class="a body tn" style="left:24px;top:234px;white-space:nowrap"><span class="b6">64</span> <span class="muted">posts</span><span style="display:inline-block;width:28px"></span><span class="b6">212</span> <span class="muted">followers</span><span style="display:inline-block;width:28px"></span><span class="b6">180</span> <span class="muted">following</span></div>`;
+  h += `<div class="key body b5" style="left:24px;top:282px;width:392px;height:44px;background:var(--g9)">Edit profile</div>`;
+  h += `<div class="row" style="left:24px;top:344px;width:392px;align-items:center"><span class="small muted">38 drinks in your Dex</span><span class="muted">${ic('chevR',16,2)}</span></div>`;
+  const g = ['negroni','paper-plane','aviation','old-fashioned','clover-club','martini','last-word','margarita','sidecar','penicillin','tom-collins','daiquiri'];
+  g.forEach((img,i)=>{
+    const x = 24 + (i%3)*133.33, y = 386 + Math.floor(i/3)*133.33;
+    h += `<img class="photo" src="${IMG(img)}" style="left:${x}px;top:${y}px;width:125.33px;height:125.33px">`;
+  });
+  return h + tabs('profile');
+}
+
+/* ---------------- 6 + window, mid-search: the whole window is chrome ---------------- */
+function plus(){
+  let h = `<div class="a" style="left:0;top:0;width:440px;height:956px;background:var(--g0)"></div>` + status();
+  h += `<div class="a" style="left:22px;top:76px;color:var(--g10)">${ic('x',24,2)}</div>`;
+  h += `<div class="field" style="left:64px;top:66px;width:352px;background:var(--g1);box-shadow:inset 0 0 0 1px var(--g5)"><span style="color:var(--g6)">${ic('search',20)}</span><span class="body" style="flex:1;color:var(--g10)">neg<span style="display:inline-block;width:2px;height:21px;background:var(--g10);vertical-align:-4px;margin-left:1px"></span></span><span class="circle" style="width:18px;height:18px;background:var(--g5);color:var(--g0);display:flex;align-items:center;justify-content:center">${S(12,'<path d="M7 7l10 10M17 7L7 17"/>',2.6)}</span></div>`;
+  const r = [['negroni','Negroni'],['negroni-sbagliato','Negroni Sbagliato'],['white-negroni','White Negroni'],[null,'Kingston Negroni'],[null,'Mezcal Negroni'],[null,'Cynar Negroni']];
+  r.forEach(([img,n],i)=>{
+    const y = 130 + i*68;
+    h += img ? `<img class="photo" src="${IMG(img)}" style="left:24px;top:${y+8}px;width:52px;height:52px;background:var(--g1)">`
+             : `<div class="a" style="left:24px;top:${y+8}px;width:52px;height:52px;background:var(--g1);box-shadow:inset 0 0 0 1px var(--g3);color:var(--g6);display:flex;align-items:center;justify-content:center">${ic('glass',24,1.5)}</div>`;
+    h += `<div class="a pf-body" style="left:92px;top:${y+22}px;color:var(--g10)">${n}</div>`;
+  });
+  /* system keyboard, dark appearance (drawn, not ours; Split spec 4.8) */
+  const kb = 610;
+  h += `<div class="a" style="left:0;top:${kb}px;width:440px;height:${956-kb}px;background:#262626"></div>`;
+  ['“neg”','negroni','negative'].forEach((s,i)=>{
+    h += `<div class="a body" style="left:${i*146.67}px;top:${kb+10}px;width:146.67px;text-align:center;color:#fff">${s}</div>`;
+    if(i) h += `<div class="a" style="left:${i*146.67}px;top:${kb+12}px;width:1px;height:22px;background:#4A4A4A"></div>`;
+  });
+  const key = (x,y,w,t,dark=false,fs=22) => `<div class="key" style="left:${x}px;top:${y}px;width:${w}px;height:44px;border-radius:5px;background:${dark?'#3A3A3A':'#5C5C5C'};font:400 ${fs}px/1 -apple-system,Inter;color:#fff">${t}</div>`;
+  const rows = ['qwertyuiop','asdfghjkl','zxcvbnm'];
+  const kw = 37.8, gap = 6;
+  let y = kb + 54;
+  [...rows[0]].forEach((c,i)=> h += key(4+i*(kw+gap), y, kw, c));
+  y += 56; [...rows[1]].forEach((c,i)=> h += key(4+(kw+gap)/2+i*(kw+gap), y, kw, c));
+  y += 56; h += key(4, y, 50, S(20,'<path d="M12 4l7 8h-4v7H9v-7H5z"/>',1.6), true);
+  [...rows[2]].forEach((c,i)=> h += key(4+50+12.5+i*(kw+gap), y, kw, c));
+  h += key(440-4-50, y, 50, S(22,'<path d="M8 6h12v12H8l-5-6z"/><path d="M11.5 9.5l5 5M16.5 9.5l-5 5"/>',1.6), true);
+  y += 56; h += key(4, y, 96, '123', true, 17); h += key(106, y, 228, 'space', false, 17); h += key(340, y, 96, 'return', true, 17);
+  h += `<div class="a" style="left:28px;top:${y+60}px;color:#D0D0D0">${S(26,'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',1.5)}</div>`;
+  h += `<div class="a" style="left:386px;top:${y+60}px;color:#D0D0D0">${S(26,'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',1.5)}</div>`;
+  return h + homeInd('#fff');
+}
+
+/* [id, draw, name, before (Split board), after, caption] */
+const screens = [
+  ['home', home, '1 Home', 43, 27, 'The wordmark and the bell on the black bar. Stories on the white page, then each post: the print, one line (Negroni, ines.ag quiet on the right) and one action row (heart 24, save, •••). The + and trophy, dateline, You badge, post head, location, split plate, comment, share, liker faces and the tab labels and marker are gone from rest.'],
+  ['dex', dex, '2 Dex', 68, 21, 'Title and a quiet 38 / 2,089 on the bar. One field: the filter sits behind its icon, and typing a number jumps. Two big prints a row with the name only: caught in colour, not yet as a grey proof with its name in g4. Gauge, latest catch, tray head, chips, range rules, plates and the rail (it shows only while scrolling) are gone.'],
+  ['bar', bar, '3 My Bar', 78, 31, 'Title and a quiet "12 in your bar". One row "You can make 30 ›" opens the list; one line suggests the next bottle and opens the one-away list. Then the field and the tiles, name only: ticked is solid black. Heading, plate, chips, checkboxes, per-ingredient counts, ranks, the strip and the one-away list are gone.'],
+  ['post', post, '4 Post, likers sheet', 42, 25, 'Tapping the like count raises the sheet: Split\'s black head with only "Liked by", then the white list. Avatar, name, one Follow / Following key. No sub-line, plate, search, handles or tags.'],
+  ['profile', profile, '5 Profile', 53, 31, 'nico.pours and ••• (Share, Settings) on the bar. Avatar, name, one-line bio, the three counts on one line, one key: Edit profile. One quiet line "38 drinks in your Dex ›" opens progress and rank. Then the posts, no plates. Meter, ruler, rank, rules and the tab strip are gone.'],
+  ['plus', plus, '6 + window, mid-search', 45, 18, 'The whole window is black. X, the field, results as thumb + name, the dark keyboard. A drink with no photo yet shows a line glass. Title, your photo, kicker, subtitles, plates, status words, row rules and the footer are gone.'],
+  ['post-rest', postRest, '4b Post detail at rest', null, 9, 'Back on the black bar; then the author and •••, the print, the drink name, the whole caption, heart + count. Comment, share, save and the drink page live in •••.'],
+];
+const wall = document.getElementById('wall');
+screens.forEach(([id,fn,name,before,after,txt])=>{
+  const f = document.createElement('div'); f.className='frame'; f.id='f-'+id;
+  const cnt = before ? `${name} · ${before} → ${after} visible elements` : `${name} · ${after} visible elements (new frame)`;
+  f.innerHTML = `<div class="phone">${fn()}</div><div class="cap"><span class="cnt">${cnt}</span>${txt}</div>`;
+  wall.appendChild(f);
+});
+const hash = location.hash.slice(1);
+if(hash){ document.body.classList.add('solo'); const f=document.getElementById('f-'+hash); if(f) f.classList.add('on'); }
+</script>
+</body>
+</html>

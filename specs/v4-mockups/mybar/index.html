@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Bar judging</title>
+<style>
+  :root { --page:#FFFFFF; --ink:#0A0A0A; --muted:#5C5C5C; --wash:#F5F5F5; --rule:#E4E4E4; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --page:#0E0E0E; --ink:#F2F2F2; --muted:#A8A8A8; --wash:#1C1C1C; --rule:#2C2C2C; } }
+  :root[data-theme="dark"] { --page:#0E0E0E; --ink:#F2F2F2; --muted:#A8A8A8; --wash:#1C1C1C; --rule:#2C2C2C; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--page); color:var(--ink); font:16px/1.5 Inter, -apple-system, system-ui, sans-serif; }
+  main { max-width:1180px; margin:0 auto; padding:40px 16px 80px; }
+  h1 { font-size:28px; line-height:34px; font-weight:600; margin:0 0 8px; }
+  h2 { font-size:20px; font-weight:600; margin:56px 0 4px; }
+  p { margin:0 0 12px; max-width:760px; }
+  .muted { color:var(--muted); }
+  .pick { background:var(--ink); color:var(--page); padding:16px 20px; border-radius:4px; margin:24px 0; max-width:760px; }
+  .score { font-variant-numeric:tabular-nums; font-weight:600; }
+  .sheet { margin-top:16px; background:var(--wash); border-radius:4px; overflow:hidden; }
+  .sheet img { display:block; width:100%; height:auto; }
+  .wrap { overflow-x:auto; margin-top:16px; }
+  table { border-collapse:collapse; width:100%; min-width:640px; font-size:14px; }
+  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--rule); vertical-align:top; }
+  th { font-weight:600; }
+  td.n { font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+  tr.total td { font-weight:600; }
+  ul { padding-left:20px; max-width:760px; }
+  li { margin-bottom:8px; }
+  .bars { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:16px; }
+  .bar { background:var(--wash); border-radius:4px; padding:16px; }
+  .bar h3 { margin:0 0 8px; font-size:16px; }
+  .bar dl { display:grid; grid-template-columns:1fr auto; gap:4px 12px; margin:0; font-size:14px; }
+  .bar dd { margin:0; font-variant-numeric:tabular-nums; text-align:right; }
+</style>
+</head>
+<body>
+<main>
+  <h1>My Bar: three models, judged</h1>
+  <p class="muted">9 Oct 2026. For Jan's notes "make my bar section way more organized … make it more easy to use" and "I want less stuff". I re-ran every drink count with <code>shelves/tools/match.py</code>, and all three boards are accurate. Step counts are my own walk of the frames, one step per tap, typed word or scroll.</p>
+
+  <div class="pick"><strong>Pick: shelves (8.0).</strong> Your bar sits on seven shelves that never change order, A to Z inside each one, so the screen itself is the inventory. Adding happens in fixed-order pickers. Five changes come from the other two models: undo in place, a payoff key that stays in view, classics first in the Make list, the canonical next-bottle rank, and the duplicate merges.</div>
+
+  <div class="bars">
+    <div class="bar"><h3>Shelves <span class="score">8.0</span></h3><dl>
+      <dt>Organised, easy</dt><dd>9</dd><dt>Less stuff</dt><dd>8</dd><dt>Payoff visible</dt><dd>7</dd><dt>At 0 and 100</dt><dd>9</dd><dt>Buildable today</dt><dd>6</dd></dl></div>
+    <div class="bar"><h3>Two modes <span class="score">7.5</span></h3><dl>
+      <dt>Organised, easy</dt><dd>7.5</dd><dt>Less stuff</dt><dd>6</dd><dt>Payoff visible</dt><dd>9</dd><dt>At 0 and 100</dt><dd>8</dd><dt>Buildable today</dt><dd>8</dd></dl></div>
+    <div class="bar"><h3>Setup <span class="score">7.0</span></h3><dl>
+      <dt>Organised, easy</dt><dd>6.5</dd><dt>Less stuff</dt><dd>8</dd><dt>Payoff visible</dt><dd>8</dd><dt>At 0 and 100</dt><dd>6</dd><dt>Buildable today</dt><dd>7</dd></dl></div>
+  </div>
+  <p class="muted" style="margin-top:12px">Weights: organised and easy 35%, less stuff 20%, payoff visible 15%, works at 0 and at 100 items 15%, buildable on today's data 15%.</p>
+
+  <h2>1. Shelves · 8.0</h2>
+  <p>The seven shelves sit in a fixed order, and each holds its items A to Z. Nothing is ranked, so nothing moves. "You can make 31 ›" sits at the top with one next-bottle line under it. Each shelf's "+ Add" opens a picker in a fixed order with a live "+N" on every row. To remove something, tap its tile, then Remove, then use the toast's Undo. At rest the screen holds 34 elements (white-min has 31).</p>
+  <p class="muted">Strongest on Jan's word "organized". The screen answers "what's in my bar" without a tap, at 12 items and at 100. Weaker on two counts. Its payoff scrolls away on a big bar. It also needs the most new parts: short sheets, a toast and about 30 shelf overrides.</p>
+  <div class="sheet"><img src="shelves/contact.png" alt="Shelves model, nine frames: empty, basics, stocked, picker, search, ingredient sheet, removed with toast, next bottle, you can make"></div>
+
+  <h2>2. Two modes · 7.5</h2>
+  <p>A fixed ink key, "You can make 31 drinks ›", shows the change from each tap (+6, −8). Two tabs sit under it. "In my bar" lists what you own, in groups. "Add" puts search first, then Best next, then the four most-used items in each group. You remove an item with one tap, and Undo appears where its × was.</p>
+  <p class="muted">It has the best payoff and the fewest steps (25), and it is the easiest to build. But the mode switch is one more thing to learn, and both modes are the busiest screens of the three (41 and 43 elements, with an × on every row). It also keeps vermouth grouped with wine.</p>
+  <div class="sheet"><img src="tabs/contact.png" alt="Two-modes model, seven frames: first run, in my bar, add, searching, removed, you can make, spirits group"></div>
+
+  <h2>3. Setup · 7.0</h2>
+  <p>You set up once in four steps of 18 tiles each. After that, My Bar is a calm summary: a make key, a Next buy line, and your bottles as one A to Z list with an add field. You remove an item with its ×, and Undo appears in the same slot.</p>
+  <p class="muted">It has the best first run and a calm summary. But after setup, the bar is a single flat A to Z list with no groups. That is fine at 12 items and disorganised at 100, which works against the word Jan used. Adding means a full-screen window you have to close. It also takes the most steps (29).</p>
+  <div class="sheet"><img src="setup/contact.png" alt="Setup model, ten frames: empty, setup step 1, setup step 4, my bar, search, shelves, brand search, removed, you can make, next buys"></div>
+
+  <h2>Eight tasks, steps verified</h2>
+  <div class="wrap"><table>
+    <thead><tr><th>#</th><th>Task</th><th>Today</th><th class="n">Shelves</th><th class="n">Two modes</th><th class="n">Setup</th><th>How I counted</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>First run, 10 of the 14 basics</td><td>1 tap that adds all 14 (4 wrong)</td><td class="n">12</td><td class="n">11</td><td class="n">15</td><td>Setup spreads the 10 over 4 steps (3 Nexts and a Done)</td></tr>
+      <tr><td>2</td><td>Add Campari</td><td>3–4</td><td class="n">3</td><td class="n">4</td><td class="n">4</td><td>Campari is not in two modes' top four. Setup's window needs closing</td></tr>
+      <tr><td>3</td><td>Add Cointreau (brand)</td><td>fails</td><td class="n">4</td><td class="n">4</td><td class="n">4</td><td>All three use aliases. "cointreau → triple sec" is already in the build script</td></tr>
+      <tr><td>4</td><td>Is Campari in my bar?</td><td>2+, can be stale</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>At 100 items, only setup leaves you scanning one flat list</td></tr>
+      <tr><td>5</td><td>Remove lime</td><td>2–4</td><td class="n">2</td><td class="n">1</td><td class="n">1</td><td>Shelves makes it 2 on purpose (tile, then Remove)</td></tr>
+      <tr><td>6</td><td>Undo it</td><td>2</td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td>Shelves' toast lasts 6s. The others last the whole visit</td></tr>
+      <tr><td>7</td><td>Open a famous drink you can make</td><td>3–4</td><td class="n">3</td><td class="n">2</td><td class="n">2</td><td>In shelves' A to Z, Negroni falls below the fold</td></tr>
+      <tr><td>8</td><td>Best next bottle, add it</td><td>2–3, three answers</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td>Shelves and setup also show the answer at rest</td></tr>
+      <tr class="total"><td></td><td>Total</td><td>16–22, plus one fail</td><td class="n">27</td><td class="n">25</td><td class="n">29</td><td>Task 1 costs more than today's 1 tap in every model, because that tap was the lie</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="margin-top:12px">Visible elements at rest: today 71, white-min mock 31, shelves 34, two modes 41 (43 in Add), setup 36.</p>
+
+  <h2>Changes to bring into shelves</h2>
+  <ul>
+    <li><strong>Undo in place, not a toast</strong> (from two modes). The removed tile stays on its shelf, struck through, reading "Lime · Undo", until you leave the tab. Nothing reflows, and there is no Toast to build.</li>
+    <li><strong>A fixed payoff key</strong> (from two modes). "You can make 26 −5 ›" sits in an ink key that never scrolls, so a big bar still shows it.</li>
+    <li><strong>Classics first in the Make list</strong> (from two modes and setup). Inside each spirit, drinks go in Dex or familiarity order, not A to Z. Task 7 drops from 3 steps to 2.</li>
+    <li><strong>Canonical next-bottle rank</strong> (from two modes). The top suggestion reads Dry vermouth or Bourbon, not Applejack.</li>
+    <li><strong>Merge the duplicates and refile "other"</strong> (from two modes and setup). Add each merged id to RETIRED so a saved bar keeps pouring the same drinks.</li>
+    <li><strong>Alias copy</strong> (from setup). "Cointreau is a triple sec" under the hit, and "Brand names work too" in the empty search.</li>
+    <li><strong>Data fix all three found.</strong> Sloe gin comes out of the gin family, and apricot and peach brandy out of the brandy family (scripts/build-bar-index.mjs).</li>
+  </ul>
+</main>
+</body>
+</html>

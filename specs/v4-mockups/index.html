@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply v4 Directions</title>
+<style>
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --line:#E3E3E3; --muted:#5C5C5C; --ink:#0A0A0A; --onInk:#FFFFFF;
+  --sans:-apple-system,"Inter",system-ui,"Segoe UI",sans-serif;
+  --serif:"Playfair Display",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --page:#000000; --wash:#121212; --line:#2E2E2E; --muted:#A3A3A3; --ink:#F5F5F5; --onInk:#000000; }
+}
+:root[data-theme="dark"]{ --page:#000000; --wash:#121212; --line:#2E2E2E; --muted:#A3A3A3; --ink:#F5F5F5; --onInk:#000000; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+main{max-width:1480px;margin:0 auto;padding:40px 32px 80px}
+h1{font:700 40px/1.1 var(--serif);margin:0 0 6px;letter-spacing:-.4px}
+h2{font:700 28px/1.15 var(--serif);margin:0;letter-spacing:-.2px}
+h3{font:600 15px/1.3 var(--sans);margin:18px 0 6px}
+p{margin:0 0 10px}
+.lede{color:var(--muted);max-width:820px}
+.pick{margin:28px 0 36px;padding:20px 22px;border:1px solid var(--ink);border-radius:2px}
+.pick strong{font-weight:600}
+.kicker{font-size:12px;letter-spacing:.6px;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto;margin:0 0 48px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;font-size:13px}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr.total td{font-weight:600;border-bottom:1px solid var(--ink)}
+.plate{display:inline-block;background:var(--ink);color:var(--onInk);font:500 12px/1 var(--sans);letter-spacing:1.2px;padding:5px 7px;border-radius:2px;font-variant-numeric:tabular-nums}
+.plate.empty{background:transparent;color:var(--muted);border:1px solid var(--muted)}
+section.dir{border-top:2px solid var(--ink);padding-top:22px;margin-top:44px}
+.head{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:baseline;justify-content:space-between}
+.score{font:600 44px/1 var(--sans);letter-spacing:-1.6px;font-variant-numeric:tabular-nums}
+.score small{font-size:15px;letter-spacing:0;color:var(--muted);font-weight:400}
+.sheet{display:block;width:100%;height:auto;margin:16px 0 8px;border:1px solid var(--line)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:8px 40px}
+ul{margin:0;padding-left:18px}
+li{margin:0 0 5px}
+.links a{color:var(--ink)}
+.links{font-size:13px;color:var(--muted)}
+ol.grafts li{margin-bottom:8px}
+@media (max-width:760px){
+  main{padding:24px 16px 60px}
+  h1{font-size:30px}
+  .cols{grid-template-columns:1fr}
+  .score{font-size:34px}
+}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">sipply v4 · 9 october 2026 · three monochrome directions, judged</p>
+  <h1>Black and white, three ways</h1>
+  <p class="lede">Jan asked for the whole app to go black and white and look sleek. Three directions were mocked at 440 × 956 across the same six screens: Home, Dex, My Bar, Post with likers, Profile and the + window mid-search. All use real drink names and numbers, and the drink photos are the only colour in each. Every ratio quoted in the specs was re-computed here and holds.</p>
+
+  <div class="pick">
+    <p class="kicker">the pick</p>
+    <p><strong>Daylight (white), 8.8.</strong> It is the calmest of the three and the photos look best in it. Catching a drink turns its print from a black-and-white proof to colour, which tells the app's story without a single hue in the interface. Split came very close (8.7) and should give it four of its moves. Night is the most dramatic, but its re-lit photos show a cut-out halo at full size, and it locks the app into dark only.</p>
+  </div>
+
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Criterion (1–10)</th><th class="n">Daylight</th><th class="n">Split</th><th class="n">Night</th></tr></thead>
+    <tbody>
+      <tr><td>Sleek and good-looking</td><td class="n">8</td><td class="n">9</td><td class="n">8</td></tr>
+      <tr><td>Truly black and white</td><td class="n">9</td><td class="n">10</td><td class="n">9</td></tr>
+      <tr><td>Legibility + WCAG AA</td><td class="n">9</td><td class="n">9</td><td class="n">8</td></tr>
+      <tr><td>Keeps every feature legible</td><td class="n">9</td><td class="n">8</td><td class="n">7</td></tr>
+      <tr><td>Buildable in RN without lag</td><td class="n">9</td><td class="n">9</td><td class="n">8</td></tr>
+      <tr><td>How the colour photos sit</td><td class="n">9</td><td class="n">7</td><td class="n">6</td></tr>
+      <tr class="total"><td>Overall (mean)</td><td class="n">8.8</td><td class="n">8.7</td><td class="n">7.7</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <section class="dir" id="white">
+    <div class="head">
+      <div><span class="plate">Nº 1</span> <h2 style="display:inline">Daylight</h2> <span class="kicker">&nbsp;white-led</span></div>
+      <div class="score">8.8 <small>/ 10 · recommended</small></div>
+    </div>
+    <p class="lede" style="margin-top:8px">Black ink on gallery white, a nine-step grey ramp and 1pt rules. The photos get a neutral daylight re-bake, and a drink you have not caught yet shows as a faded black-and-white proof.</p>
+    <img class="sheet" src="white/contact.png" alt="Daylight: six screens on white">
+    <div class="cols">
+      <div><h3>Works</h3><ul>
+        <li>The Dex is the clearest of the three. A colour print with a solid plate and a Playfair name means caught; a grey proof with an empty plate and an Inter name means not yet. That is three cues, none of them colour.</li>
+        <li>The feed print plus the wall label under it (name, Nº plate, "In your Dex") removes every word on a photo and both scrims.</li>
+        <li>The index rule (0001 – 0003), the ruler gauge with rank notches, and the wash Dex panel on Profile keep Brass's function without the costume.</li>
+        <li>No new font. Shadows only on the tab bar and sheet, neither of which scrolls.</li>
+      </ul></div>
+      <div><h3>Weak</h3><ul>
+        <li>The calmest direction can read as plain iOS light. The character comes from the proofs and Playfair, so neither can be cut.</li>
+        <li>Ticked vs unticked ingredient tiles differ only by edge weight and the box itself.</li>
+        <li>Americano sits in "You can make" as a faded proof, which looks like "unavailable".</li>
+        <li>The + window has no way out when the search misses ("Add "neg"").</li>
+        <li>Needs a new daylight bake script for the 162 photos (proven in the mock).</li>
+      </ul></div>
+    </div>
+    <p class="links"><a href="white/spec.md">spec.md</a> · <a href="white/index.html">index.html</a></p>
+  </section>
+
+  <section class="dir" id="split">
+    <div class="head">
+      <div><span class="plate">Nº 2</span> <h2 style="display:inline">Split</h2> <span class="kicker">&nbsp;black chrome, white pages</span></div>
+      <div class="score">8.7 <small>/ 10</small></div>
+    </div>
+    <p class="lede" style="margin-top:8px">Each white page is held between black chrome: the bars, every tab's head, the docked tab bar, the sheet heads and the whole + window. Emphasis is always the inverse. The photos are the studio masters, used as they are.</p>
+    <img class="sheet" src="split/contact.png" alt="Split: six screens, black chrome over white pages">
+    <div class="cols">
+      <div><h3>Works</h3><ul>
+        <li>The most editorial and the most purely black and white: an 11-step R = G = B ramp and only two inks.</li>
+        <li>Ticked ingredients become solid black cells, the strongest tick reading of the three.</li>
+        <li>Plates cut flush into the tile corners, the number rail on the Dex, and chip counts.</li>
+        <li>The simplest photo pipeline (no re-light), no shadows at all, no new font.</li>
+      </ul></div>
+      <div><h3>Weak</h3><ul>
+        <li>The black heads take a third to half of each tab (about 330pt on the Dex) before any content.</li>
+        <li>Not-yet proofs nearly vanish on white (Grasshopper, Porto Flip).</li>
+        <li>Bright studio thumbnails glare on the black + window.</li>
+        <li>Docks the floating tab bar (a structure change) and drops the style · origin line under the feed name.</li>
+      </ul></div>
+    </div>
+    <p class="links"><a href="split/spec.md">spec.md</a> · <a href="split/index.html">index.html</a></p>
+  </section>
+
+  <section class="dir" id="black">
+    <div class="head">
+      <div><span class="plate">Nº 3</span> <h2 style="display:inline">Night</h2> <span class="kicker">&nbsp;black-led</span></div>
+      <div class="score">7.7 <small>/ 10</small></div>
+    </div>
+    <p class="lede" style="margin-top:8px">True black grounds, white text and one grey ramp. Each photo is re-lit so it fades to exactly #000000 and the drink glows out of the page. Each view has one white object, and it is the thing to press.</p>
+    <img class="sheet" src="black/contact.png" alt="Night: six screens on true black">
+    <div class="cols">
+      <div><h3>Works</h3><ul>
+        <li>The most atmospheric: a full-bleed feed and the bar at night. On OLED most pixels are off.</li>
+        <li>JetBrains Mono for Dex figures gives the numbers an instrument feel.</li>
+        <li>The + window is the most finished: matched text underlined, and "Showing the best 6 of 9 · Not the one? Add".</li>
+        <li>The most thorough spec on Increase Contrast, Smart Invert and the dark keyboard.</li>
+      </ul></div>
+      <div><h3>Weak</h3><ul>
+        <li>At hero size the re-lit photos show a pale matte halo around the glass (Negroni, Paper Plane). The drink looks pasted on.</li>
+        <li>Not-yet ghosts go almost black (Porto Flip). Elevation steps (#0E0E0E vs #171717) are close to invisible.</li>
+        <li>Drops the Dex index rule. Profile shows 64 in the Dex while the Dex screen says 38.</li>
+        <li>Dark only, for good: the photo bake rules out a light mode. Adds a third font (+120 KB).</li>
+      </ul></div>
+    </div>
+    <p class="links"><a href="black/spec.md">spec.md</a> · <a href="black/index.html">index.html</a></p>
+  </section>
+
+  <section class="dir" id="grafts">
+    <h2>Grafts onto Daylight</h2>
+    <ol class="grafts">
+      <li><strong>From Split</strong>: ticked My Bar tiles fill solid ink (#0A0A0A) with a white tick box. Unticked tiles stay white with a 1pt hair edge.</li>
+      <li><strong>From Split</strong>: the Dex number rail on the right edge (a 1pt hair rule with control ticks) for jumping to the back of the book.</li>
+      <li><strong>From Split</strong>: muted counts in the filter chips ("Cocktails 899", "Spirits 1,190", "Collected 38").</li>
+      <li><strong>From Split</strong>: try <code>--grade studio</code> (the masters as they are) against <code>--grade daylight</code> on the QA sheet. If the walls already measure neutral, skip the new daylight.py.</li>
+      <li><strong>From Split + Night</strong>: under the + window results, add "Showing the best 6 of 9 · Not the one? Add "neg"". Not-yet rows get a right-aligned "New catch" caption to mirror "In your Dex".</li>
+      <li><strong>From Night</strong>: in "You can make" and "One ingredient away", show the photo in colour and let the empty plate alone say "not caught". Proofs stay a Dex-grid idea.</li>
+      <li><strong>From Night</strong>: put <code>accessibilityIgnoresInvertColors</code> on every photo, and add Increase Contrast steps (muted #5C5C5C → #404040, control #8A8A8A → #6B6B6B).</li>
+      <li><strong>From Night</strong>: keep its token set as Daylight's documented dark twin (night #000000, surface #0E0E0E, raised #171717, ink #F5F5F5, muted #A3A3A3), so a later dark mode starts from a ramp already checked for AA.</li>
+    </ol>
+  </section>
+</main>
+</body>
+</html>

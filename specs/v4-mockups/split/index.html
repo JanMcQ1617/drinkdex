@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply Split</title>
+<style>
+@font-face { font-family: 'Inter'; font-weight: 400; src: url('../../../assets/fonts/InterLatin_400Regular.ttf'); }
+@font-face { font-family: 'Inter'; font-weight: 500; src: url('../../../assets/fonts/InterLatin_500Medium.ttf'); }
+@font-face { font-family: 'Inter'; font-weight: 600; src: url('../../../assets/fonts/InterLatin_600SemiBold.ttf'); }
+@font-face { font-family: 'Playfair'; font-weight: 700; src: url('../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf'); }
+@font-face { font-family: 'Playfair'; font-weight: 600; src: url('../../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf'); }
+
+/* ---- v4 Split tokens (spec.md section 1) ---- */
+:root {
+  --g0: #000000;  /* chrome ground; ink on page */
+  --g1: #121212;  /* field / well on chrome */
+  --g2: #1F1F1F;  /* pressed on chrome; meter track */
+  --g3: #2E2E2E;  /* hairline on chrome (decorative); avatar disc */
+  --g4: #5E5E5E;  /* muted text on page / tint */
+  --g5: #6E6E6E;  /* control edge on chrome */
+  --g6: #858585;  /* control edge + glyphs on page; inactive tab on chrome */
+  --g7: #A3A3A3;  /* muted text on chrome */
+  --g8: #EBEBEB;  /* hairline on page (decorative) */
+  --g9: #F4F4F4;  /* tint: proof tiles, pressed rows */
+  --g10: #FFFFFF; /* page ground; ink on chrome */
+  --scrim: rgba(0, 0, 0, 0.5);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #E6E6E6; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--g0);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' 0;
+  width: 2936px;
+}
+.tab { font-variant-numeric: tabular-nums; }
+.pf { font-family: 'Playfair', serif; font-weight: 700; }
+
+/* ---- the wall ---- */
+.wall-head { height: 150px; padding: 36px 48px 0; }
+.wall-head h1 { font: 700 40px/44px 'Playfair'; letter-spacing: -0.6px; color: #000; }
+.wall-head p { font: 400 15px/22px 'Inter'; color: #3A3A3A; margin-top: 4px; max-width: 1100px; }
+.wall-head .left { display: flex; gap: 22px; align-items: baseline; }
+.legend { display: flex; gap: 18px; margin-top: 18px; font: 500 12px/16px 'Inter'; color: #3A3A3A; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; display: inline-block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.25); }
+.row { display: flex; gap: 40px; padding: 0 48px; }
+.cell { width: 440px; }
+.cap { margin-top: 18px; font: 400 13px/19px 'Inter'; color: #2A2A2A; }
+.cap b { font-weight: 600; color: #000; }
+
+/* ---- a phone screen ---- */
+.screen { position: relative; width: 440px; height: 956px; overflow: hidden; background: var(--g10); }
+.abs { position: absolute; }
+.chrome { background: var(--g0); color: var(--g10); }
+
+/* status bar: always on chrome, so always light content */
+.sb { position: absolute; left: 0; top: 0; width: 440px; height: 59px; color: #fff; z-index: 30; }
+.sb .time { position: absolute; left: 52px; top: 19px; font: 600 17px/22px 'Inter'; letter-spacing: -0.2px; }
+.sb .island { position: absolute; left: 157px; top: 11px; width: 126px; height: 37px; border-radius: 19px; background: #000; }
+.sb .icons { position: absolute; right: 30px; top: 22px; display: flex; gap: 6px; align-items: center; }
+
+.bar { position: absolute; left: 0; top: 59px; width: 440px; height: 44px; display: flex; align-items: center; justify-content: center; color: #fff; z-index: 20; }
+.bar .title { font: 600 17px/22px 'Inter'; letter-spacing: -0.2px; }
+.bar .l { position: absolute; left: 12px; top: 0; height: 44px; width: 44px; display: flex; align-items: center; justify-content: center; }
+.bar .r { position: absolute; right: 12px; top: 0; height: 44px; display: flex; align-items: center; }
+.bar .r .ib { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative; }
+
+svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; display: block; }
+svg.i.s20 { width: 20px; height: 20px; }
+svg.i.s18 { width: 18px; height: 18px; }
+svg.i.s16 { width: 16px; height: 16px; }
+svg.i.fill { fill: currentColor; }
+
+/* docked tab bar: the black foot of every page */
+.tabbar { position: absolute; left: 0; top: 858px; width: 440px; height: 98px; background: var(--g0); z-index: 25; }
+.tabbar .items { display: flex; height: 64px; }
+.tabbar .t { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--g6); font: 500 11px/14px 'Inter'; letter-spacing: 0.2px; position: relative; }
+.tabbar .t.on { color: #fff; font-weight: 600; }
+.tabbar .t.on::before { content: ''; position: absolute; top: 4px; left: 50%; width: 20px; margin-left: -10px; height: 2px; background: #fff; }
+.tabbar .plus { width: 52px; height: 38px; background: #fff; color: #000; border-radius: 2px; display: flex; align-items: center; justify-content: center; }
+.tabbar .me { width: 26px; height: 26px; border-radius: 50%; background: var(--g3); color: #fff; font: 600 10px/26px 'Inter'; text-align: center; letter-spacing: 0.2px; }
+.tabbar .t.on .me { box-shadow: 0 0 0 1.5px #000, 0 0 0 3px #fff; }
+.hi { position: absolute; left: 153px; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; background: #fff; z-index: 40; }
+.hi.dark { background: #000; }
+
+/* plates: the Dex number, an inverse slab */
+.plate { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; border-radius: 2px; font: 500 11px/14px 'Inter'; letter-spacing: 1.2px; font-variant-numeric: tabular-nums; background: #000; color: #fff; white-space: nowrap; }
+.plate.out { background: #fff; color: var(--g4); box-shadow: inset 0 0 0 1px var(--g6); }
+.plate.inv { background: #fff; color: #000; }
+.plate.outd { background: transparent; color: var(--g7); box-shadow: inset 0 0 0 1px var(--g5); }
+.plate.lg { height: 24px; padding: 0 8px; font-size: 12px; line-height: 16px; letter-spacing: 1.3px; }
+/* the split plate: number cell + status cell */
+.split { display: inline-flex; height: 24px; }
+.split .n { display: inline-flex; align-items: center; padding: 0 8px; background: #000; color: #fff; font: 500 12px/16px 'Inter'; letter-spacing: 1.3px; font-variant-numeric: tabular-nums; border-radius: 2px 0 0 2px; }
+.split .s { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px 0 6px; background: #fff; color: #000; box-shadow: inset 0 0 0 1px #000; font: 500 12px/16px 'Inter'; border-radius: 0 2px 2px 0; }
+.split.ondark .n { background: #fff; color: #000; }
+.split.ondark .s { background: #000; color: #fff; box-shadow: inset 0 0 0 1px #fff; }
+
+/* chips */
+.chips { display: flex; gap: 8px; align-items: center; white-space: nowrap; }
+.chip { height: 32px; padding: 0 12px; border-radius: 2px; display: inline-flex; align-items: center; gap: 6px; font: 500 13px/16px 'Inter'; color: #fff; box-shadow: inset 0 0 0 1px var(--g5); }
+.chip .c { color: var(--g7); font-variant-numeric: tabular-nums; }
+.chip.on { background: #fff; color: #000; box-shadow: none; }
+.chip.on .c { color: var(--g4); }
+.vsep { width: 1px; height: 20px; background: var(--g3); flex: none; }
+
+/* fields on chrome */
+.field { height: 44px; border-radius: 2px; background: var(--g1); box-shadow: inset 0 0 0 1px var(--g5); display: flex; align-items: center; gap: 10px; padding: 0 12px; color: var(--g7); font: 400 16px/22px 'Inter'; }
+.field svg { color: var(--g6); }
+.field.focus { box-shadow: inset 0 0 0 1px #fff, 0 0 0 1px #fff; }
+
+/* avatars */
+.av { border-radius: 50%; background: var(--g3); color: #fff; font-weight: 600; display: flex; align-items: center; justify-content: center; flex: none; letter-spacing: 0.2px; }
+.av.a0 { background: #000; }
+.av.a3 { background: var(--g3); }
+.av.a4 { background: var(--g4); }
+
+/* buttons: squared */
+.btn { height: 32px; padding: 0 14px; border-radius: 2px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: 600 14px/18px 'Inter'; }
+.btn.ink { background: #000; color: #fff; }
+.btn.line { background: #fff; color: #000; box-shadow: inset 0 0 0 1px #000; }
+.btn.linedark { color: #fff; box-shadow: inset 0 0 0 1px var(--g5); }
+
+.k { font: 500 12px/16px 'Inter'; letter-spacing: 0.6px; }
+
+/* index rule: "0001 – 0003" then a hairline */
+.idx { display: flex; align-items: center; gap: 10px; font: 500 11px/14px 'Inter'; letter-spacing: 1px; color: var(--g4); font-variant-numeric: tabular-nums; }
+.idx::after { content: ''; flex: 1; height: 1px; background: var(--g8); }
+
+/* section head on page: 2pt black rule over a big Inter head */
+.sect { border-top: 2px solid #000; padding-top: 10px; display: flex; align-items: baseline; justify-content: space-between; }
+.sect h3 { font: 600 20px/24px 'Inter'; letter-spacing: -0.3px; }
+.sect h3 .c { color: var(--g4); margin-left: 6px; font-variant-numeric: tabular-nums; }
+.sect a { font: 600 13px/16px 'Inter'; color: #000; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+img.ph { display: block; object-fit: cover; }
+
+/* ---------------- single-screen mode (index.html#home etc.) ---------------- */
+body.single { width: 440px; background: #fff; }
+body.single .wall-head, body.single .cap { display: none; }
+body.single .row { padding: 0; gap: 0; }
+body.single .cell { display: none; }
+body.single .cell.show { display: block; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="plus" viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15"/></symbol>
+    <symbol id="trophy" viewBox="0 0 24 24"><path d="M8 4h8v5.5a4 4 0 0 1-8 0z"/><path d="M8 6H5.2a3.2 3.2 0 0 0 3.3 4.4"/><path d="M16 6h2.8a3.2 3.2 0 0 1-3.3 4.4"/><path d="M12 13.5V17"/><path d="M8.5 20h7"/><path d="M10 17h4v3h-4z"/></symbol>
+    <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20.2s-7.6-4.6-7.6-10.4A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.6 2.6c0 5.8-7.6 10.4-7.6 10.4z"/></symbol>
+    <symbol id="comment" viewBox="0 0 24 24"><path d="M20.2 11.6a8.2 8.2 0 0 1-12 7.3L3.8 20.2l1.4-4.2a8.2 8.2 0 1 1 15-4.4z"/></symbol>
+    <symbol id="send" viewBox="0 0 24 24"><path d="M21 3.5 10.5 13.6"/><path d="M21 3.5 14.4 21l-3.9-7.4L3 9.9z"/></symbol>
+    <symbol id="bookmark" viewBox="0 0 24 24"><path d="M6.5 3.5h11v17l-5.5-4-5.5 4z"/></symbol>
+    <symbol id="back" viewBox="0 0 24 24"><path d="M15 4.5 7.5 12l7.5 7.5"/></symbol>
+    <symbol id="close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 4.6 4.6"/></symbol>
+    <symbol id="stats" viewBox="0 0 24 24"><path d="M5 20V13M10 20V5M15 20v-9M20 20V8"/></symbol>
+    <symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3 5.5 5.5"/><circle cx="12" cy="12" r="6.6"/></symbol>
+    <symbol id="home" viewBox="0 0 24 24"><path d="M4 10.4 12 4l8 6.4V20h-5.4v-5.6H9.4V20H4z"/></symbol>
+    <symbol id="glass" viewBox="0 0 24 24"><path d="M4.5 4.5h15L12 12.6z"/><path d="M12 12.6V19.5M8 19.8h8"/></symbol>
+    <symbol id="bottle" viewBox="0 0 24 24"><path d="M10 2.8h4V7l1.8 2.6c.3.4.4.8.4 1.3v8.8a1.3 1.3 0 0 1-1.3 1.3H9.1a1.3 1.3 0 0 1-1.3-1.3v-8.8c0-.5.1-.9.4-1.3L10 7z"/><path d="M7.8 12.5h8.4v4.5H7.8z"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12.6 4.4 4.4L19 7.4"/></symbol>
+    <symbol id="lock" viewBox="0 0 24 24"><rect x="5.5" y="10.5" width="13" height="9.5" rx="1"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+    <symbol id="chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="up" viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></symbol>
+    <symbol id="rocks" viewBox="0 0 24 24"><path d="M6 8h12l-1.2 11.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8z"/><path d="M7.2 12.5h9.6"/><path d="M10 15.5h3.4v2.8H10z"/></symbol>
+    <symbol id="globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.6 5.2 3.6 8.5s-1 6.1-3.6 8.5c-2.6-2.4-3.6-5.2-3.6-8.5s1-6.1 3.6-8.5z"/></symbol>
+    <symbol id="mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.8 11.5a6.2 6.2 0 0 0 12.4 0M12 17.7V20.5"/></symbol>
+    <symbol id="shift" viewBox="0 0 24 24"><path d="M12 4 4.5 12H9v7h6v-7h4.5z"/></symbol>
+    <symbol id="del" viewBox="0 0 24 24"><path d="M9 5.5h10.5a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9L3.5 12z"/><path d="m11.5 9.5 5 5M16.5 9.5l-5 5"/></symbol>
+  </defs>
+</svg>
+
+<div class="wall-head">
+  <div>
+    <div class="left"><h1>Split</h1><p>v4 black and white. Black chrome holds every white page: top bars, heads, the tab bar, sheet heads and the + window are black; what you read, browse and tick is white. Emphasis is the inverse. The only colour left in the app is a drink you have caught.</p></div>
+    <div class="legend">
+      <span><i style="background:#000"></i>g0 #000000</span>
+      <span><i style="background:#121212"></i>g1 #121212</span>
+      <span><i style="background:#1F1F1F"></i>g2 #1F1F1F</span>
+      <span><i style="background:#2E2E2E"></i>g3 #2E2E2E</span>
+      <span><i style="background:#5E5E5E"></i>g4 #5E5E5E</span>
+      <span><i style="background:#6E6E6E"></i>g5 #6E6E6E</span>
+      <span><i style="background:#858585"></i>g6 #858585</span>
+      <span><i style="background:#A3A3A3"></i>g7 #A3A3A3</span>
+      <span><i style="background:#EBEBEB"></i>g8 #EBEBEB</span>
+      <span><i style="background:#F4F4F4"></i>g9 #F4F4F4</span>
+      <span><i style="background:#FFFFFF"></i>g10 #FFFFFF</span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+<!-- ======================= 1 HOME ======================= -->
+<div class="cell" id="c-home">
+<div class="screen">
+  <div class="abs chrome" style="left:0;top:0;width:440px;height:215px"></div>
+  <div class="sb"><div class="time">9:41</div><div class="island"></div>
+    <div class="icons">
+      <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3" height="4" rx=".7" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx=".7" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx=".7" fill="#fff"/></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.4l1.2-1.3A10.6 10.6 0 0 0 8.5.4 10.6 10.6 0 0 0 1.1 3.3l1.2 1.3a8.8 8.8 0 0 1 6.2-2.4zm0 3.6c1.4 0 2.7.5 3.7 1.4l1.2-1.3a7.2 7.2 0 0 0-9.8 0l1.2 1.3c1-.9 2.3-1.4 3.7-1.4zm0 3.6c.5 0 1 .2 1.3.5L8.5 11.3 7.2 9.9c.3-.3.8-.5 1.3-.5z" fill="#fff"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke="#fff" stroke-opacity=".4" fill="none"/><rect x="2" y="2" width="20" height="9" rx="2.2" fill="#fff"/><path d="M25 4.5v4a2 2 0 0 0 0-4z" fill="#fff" fill-opacity=".4"/></svg>
+    </div></div>
+  <!-- masthead -->
+  <div class="abs" style="left:12px;top:63px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff"><svg class="i"><use href="#plus"/></svg></div>
+  <div class="abs pf" style="left:0;top:60px;width:440px;text-align:center;color:#fff;font-size:27px;line-height:32px;letter-spacing:-0.3px">Sipply</div>
+  <div class="abs" style="left:0;top:95px;width:440px;text-align:center;color:var(--g7);font:400 12px/16px Inter">Friday, 9 October · 6 friends posted today</div>
+  <div class="abs" style="right:56px;top:63px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff"><svg class="i"><use href="#trophy"/></svg></div>
+  <div class="abs" style="right:12px;top:63px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff"><svg class="i"><use href="#heart"/></svg><span style="position:absolute;right:9px;top:10px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #000"></span></div>
+  <!-- stories on chrome -->
+  <div class="abs" style="left:4px;top:122px;display:flex">
+    <div style="width:86px;text-align:center">
+      <div style="width:62px;height:62px;margin:0 auto;position:relative;border-radius:50%;box-shadow:inset 0 0 0 1px var(--g5)">
+        <div class="av a3" style="position:absolute;left:5px;top:5px;width:52px;height:52px;font-size:17px">NV</div>
+        <div style="position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;border-radius:50%;background:#fff;color:#000;box-shadow:0 0 0 2px #000;display:flex;align-items:center;justify-content:center"><svg class="i s16" style="stroke-width:2.2"><use href="#plus"/></svg></div>
+      </div>
+      <div style="margin-top:6px;font:400 12px/16px Inter;color:#fff">You</div>
+    </div>
+    <div style="width:86px;text-align:center">
+      <div style="width:62px;height:62px;margin:0 auto;border-radius:50%;box-shadow:inset 0 0 0 2px #fff;position:relative"><img class="ph" src="img/aperol-spritz.jpg" style="position:absolute;left:5px;top:5px;width:52px;height:52px;border-radius:50%"></div>
+      <div style="margin-top:6px;font:400 12px/16px Inter;color:#fff">maya.pours</div>
+    </div>
+    <div style="width:86px;text-align:center">
+      <div style="width:62px;height:62px;margin:0 auto;border-radius:50%;box-shadow:inset 0 0 0 2px #fff;position:relative"><img class="ph" src="img/paper-plane.jpg" style="position:absolute;left:5px;top:5px;width:52px;height:52px;border-radius:50%"></div>
+      <div style="margin-top:6px;font:400 12px/16px Inter;color:#fff">theo_stirs</div>
+    </div>
+    <div style="width:86px;text-align:center">
+      <div style="width:62px;height:62px;margin:0 auto;border-radius:50%;box-shadow:inset 0 0 0 2px #fff;position:relative"><img class="ph" src="img/negroni.jpg" style="position:absolute;left:5px;top:5px;width:52px;height:52px;border-radius:50%"></div>
+      <div style="margin-top:6px;font:400 12px/16px Inter;color:#fff">ines.ag</div>
+    </div>
+    <div style="width:86px;text-align:center">
+      <div style="width:62px;height:62px;margin:0 auto;border-radius:50%;box-shadow:inset 0 0 0 1px var(--g5);position:relative"><img class="ph" src="img/martini.jpg" style="position:absolute;left:5px;top:5px;width:52px;height:52px;border-radius:50%"></div>
+      <div style="margin-top:6px;font:400 12px/16px Inter;color:var(--g7)">dmitri.k</div>
+    </div>
+  </div>
+
+  <!-- the page -->
+  <div class="abs" style="left:24px;top:222px;width:392px;height:40px;display:flex;align-items:center;gap:10px">
+    <div class="av a0" style="width:32px;height:32px;font-size:12px">IA</div>
+    <div style="flex:1">
+      <div style="font:600 14px/18px Inter">ines.ag <span style="font-weight:400;color:var(--g4)">· 2h</span></div>
+      <div style="font:400 12px/16px Inter;color:var(--g4)">La Factoría, Old San Juan</div>
+    </div>
+    <svg class="i s20" style="fill:#000;stroke:none" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>
+  </div>
+  <img class="ph abs" src="img/negroni.jpg" style="left:24px;top:268px;width:392px;height:490px">
+  <div class="abs" style="left:24px;top:764px;width:392px;display:flex;align-items:center;justify-content:space-between">
+    <div class="pf" style="font-size:30px;line-height:34px;letter-spacing:-0.4px">Negroni</div>
+    <div class="split"><span class="n">Nº 0127</span><span class="s"><svg class="i s16" style="stroke-width:2"><use href="#check"/></svg>In your Dex</span></div>
+  </div>
+  <div class="abs" style="left:20px;top:802px;width:400px;display:flex;align-items:center;gap:12px">
+    <svg class="i fill" style="color:#000"><use href="#heart"/></svg>
+    <svg class="i"><use href="#comment"/></svg>
+    <svg class="i"><use href="#send"/></svg>
+    <div style="flex:1"></div>
+    <svg class="i"><use href="#bookmark"/></svg>
+  </div>
+  <div class="abs" style="left:24px;top:832px;display:flex;align-items:center;gap:8px;font:400 14px/18px Inter">
+    <div style="display:flex">
+      <div class="av a0" style="width:18px;height:18px;font-size:8px;box-shadow:0 0 0 1.5px #fff">M</div>
+      <div class="av a3" style="width:18px;height:18px;font-size:8px;margin-left:-5px;box-shadow:0 0 0 1.5px #fff">T</div>
+      <div class="av a4" style="width:18px;height:18px;font-size:8px;margin-left:-5px;box-shadow:0 0 0 1.5px #fff">D</div>
+    </div>
+    <div>Liked by <b style="font-weight:600">maya.pours</b> and <b style="font-weight:600">12 others</b></div>
+  </div>
+
+  <div class="tabbar"><div class="items">
+    <div class="t on"><svg class="i fill"><use href="#home"/></svg>Home</div>
+    <div class="t"><svg class="i"><use href="#glass"/></svg>Dex</div>
+    <div class="t"><div class="plus"><svg class="i" style="stroke-width:2"><use href="#plus"/></svg></div></div>
+    <div class="t"><svg class="i"><use href="#bottle"/></svg>My Bar</div>
+    <div class="t"><div class="me">NV</div>Profile</div>
+  </div></div>
+  <div class="hi"></div>
+</div>
+<p class="cap"><b>1 Home.</b> The masthead, dateline and stories sit on the black; the feed is a white page. The post reads like a magazine spread: the print, then the drink's name in Playfair under it, set against a split plate: the number on black, "In your Dex" on white. No scrim, no type on the photo. The liked heart is filled black, a shape and not a colour. The tab bar is a black foot and the + is its one white key.</p>
+</div>
+
+<!-- ======================= 2 DEX ======================= -->
+<div class="cell" id="c-dex">
+<div class="screen">
+  <div class="abs chrome" style="left:0;top:0;width:440px;height:331px"></div>
+  <div class="sb"><div class="time">9:41</div><div class="island"></div><div class="icons sbi"></div></div>
+  <div class="bar"><div class="title">Dex</div><div class="r"><div class="ib"><svg class="i"><use href="#stats"/></svg></div></div></div>
+  <!-- hero -->
+  <div class="abs" style="left:16px;top:112px;display:flex;align-items:flex-end;gap:12px;color:#fff">
+    <div class="tab" style="font:600 52px/50px Inter;letter-spacing:-2px">38</div>
+    <div style="padding-bottom:3px">
+      <div style="font:500 15px/19px Inter">in your Dex</div>
+      <div class="tab" style="font:400 13px/17px Inter;color:var(--g7)">of 2,089 · 1.8%</div>
+    </div>
+  </div>
+  <div class="abs" style="right:16px;top:116px;text-align:right">
+    <div class="k" style="color:var(--g7)">latest catch</div>
+    <div class="pf" style="color:#fff;font-size:17px;line-height:22px;margin-top:2px">Ramos Gin Fizz</div>
+  </div>
+  <!-- the map gauge -->
+  <div class="abs gauge-map" style="left:16px;top:180px;width:408px;height:40px"></div>
+  <div class="abs" style="left:16px;top:229px;width:408px"><div class="field"><svg class="i s20"><use href="#search"/></svg>Search 2,089 drinks</div></div>
+  <div class="abs chips" style="left:16px;top:285px">
+    <div class="chip on">All</div>
+    <div class="chip">Cocktails <span class="c">899</span></div>
+    <div class="chip">Spirits <span class="c">1,190</span></div>
+    <div class="vsep"></div>
+    <div class="chip">Collected <span class="c">38</span></div>
+    <div class="chip">Not yet</div>
+  </div>
+
+  <!-- the page: one grid in number order -->
+  <div class="abs" style="left:16px;top:343px;width:400px;display:flex;justify-content:space-between;font:400 13px/18px Inter;color:var(--g4)"><span>In Dex order</span><span class="tab">38 of 2,089 collected</span></div>
+  <div class="abs" id="dexgrid" style="left:16px;top:373px;width:400px"></div>
+  <!-- number rail -->
+  <div class="abs" style="left:428px;top:373px;width:1px;height:478px;background:var(--g8)"></div>
+  <div class="abs rail-ticks" style="left:425px;top:373px;width:8px;height:478px"></div>
+  <div class="abs" style="left:426px;top:373px;width:5px;height:16px;background:#000"></div>
+
+  <div class="tabbar"><div class="items">
+    <div class="t"><svg class="i"><use href="#home"/></svg>Home</div>
+    <div class="t on"><svg class="i fill"><use href="#glass"/></svg>Dex</div>
+    <div class="t"><div class="plus"><svg class="i" style="stroke-width:2"><use href="#plus"/></svg></div></div>
+    <div class="t"><svg class="i"><use href="#bottle"/></svg>My Bar</div>
+    <div class="t"><div class="me">NV</div>Profile</div>
+  </div></div>
+  <div class="hi"></div>
+</div>
+<p class="cap"><b>2 Dex.</b> One grid from Nº 0001. Caught drinks are printed in colour with a black plate cut into the corner; the rest are grey proofs of the same frame behind an outlined plate. Each row opens on an index rule ("0001 – 0003") and a number rail runs down the right edge. The gauge on the black is a map: one white mark at the number of every drink you hold.</p>
+</div>
+
+<!-- ======================= 3 MY BAR ======================= -->
+<div class="cell" id="c-bar">
+<div class="screen">
+  <div class="abs chrome" style="left:0;top:0;width:440px;height:285px"></div>
+  <div class="sb"><div class="time">9:41</div><div class="island"></div><div class="icons sbi"></div></div>
+  <div class="bar"><div class="title">My Bar</div></div>
+  <div class="abs" style="left:16px;top:113px;width:408px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font:600 26px/32px Inter;letter-spacing:-0.6px;color:#fff">What's in your bar?</div>
+    <span class="plate inv lg tab">12 ticked</span>
+  </div>
+  <div class="abs tab" style="left:16px;top:148px;font:400 14px/20px Inter;color:var(--g7)">12 in your bar · makes <span style="color:#fff;font-weight:600">30</span> drinks</div>
+  <div class="abs" style="left:16px;top:181px;width:408px"><div class="field"><svg class="i s20"><use href="#search"/></svg>Search 490 ingredients</div></div>
+  <div class="abs chips" style="left:16px;top:237px">
+    <div class="chip on">All</div>
+    <div class="chip">In your bar <span class="c">12</span></div>
+    <div class="chip">Spirits</div>
+    <div class="chip">Citrus</div>
+    <div class="chip">Liqueurs</div>
+    <div class="chip">Bitters</div>
+  </div>
+
+  <!-- checklist: ticked = inverse -->
+  <div class="abs" id="checklist" style="left:16px;top:301px;width:408px;display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+  <div class="abs" style="left:16px;top:485px;width:408px;display:flex;justify-content:space-between;align-items:center;font:400 13px/18px Inter;color:var(--g4)">
+    <span>Sweet vermouth, Dry vermouth and 482 more</span>
+    <span style="font-weight:600;color:#000;display:flex;align-items:center;gap:2px">Show 20 more<svg class="i s16" style="stroke-width:2"><use href="#chev"/></svg></span>
+  </div>
+
+  <div class="abs sect" style="left:16px;top:521px;width:408px"><h3>You can make<span class="c">30</span></h3><a>See all</a></div>
+  <div class="abs" style="left:16px;top:567px;width:440px;display:flex;gap:10px" id="canmake"></div>
+
+  <div class="abs sect" style="left:16px;top:735px;width:408px"><h3>One ingredient away<span class="c">161</span></h3></div>
+  <div class="abs" style="left:16px;top:781px;width:408px;display:flex;gap:12px;align-items:center">
+    <div style="position:relative;width:56px;height:56px;flex:none"><img class="ph" src="img/negroni.jpg" style="width:56px;height:56px"></div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:8px"><span class="pf" style="font-size:18px;line-height:22px">Negroni</span><span class="plate">Nº 0127</span></div>
+      <div style="font:400 13px/18px Inter;color:var(--g4);margin-top:3px">Needs orange · orange pours 5 more</div>
+    </div>
+    <div class="btn line"><svg class="i s16" style="stroke-width:2"><use href="#plus"/></svg>Orange</div>
+  </div>
+
+  <div class="tabbar"><div class="items">
+    <div class="t"><svg class="i"><use href="#home"/></svg>Home</div>
+    <div class="t"><svg class="i"><use href="#glass"/></svg>Dex</div>
+    <div class="t"><div class="plus"><svg class="i" style="stroke-width:2"><use href="#plus"/></svg></div></div>
+    <div class="t on"><svg class="i fill"><use href="#bottle"/></svg>My Bar</div>
+    <div class="t"><div class="me">NV</div>Profile</div>
+  </div></div>
+  <div class="hi"></div>
+</div>
+<p class="cap"><b>3 My Bar.</b> No shelf: a checklist ranked by how many drinks each thing pours. A ticked ingredient turns over to black, its box white with a black tick; an unticked one is a white card with an outlined box. "You can make 30" and "One ingredient away 161" open on a 2pt black rule, the way a magazine opens a section.</p>
+</div>
+
+<!-- ======================= 4 POST + LIKERS ======================= -->
+<div class="cell" id="c-post">
+<div class="screen">
+  <div class="abs chrome" style="left:0;top:0;width:440px;height:103px"></div>
+  <div class="sb"><div class="time">9:41</div><div class="island"></div><div class="icons sbi"></div></div>
+  <div class="bar"><div class="l"><svg class="i"><use href="#back"/></svg></div><div class="title">Post</div><div class="r"><div class="ib"><svg class="i s20" style="fill:#fff;stroke:none" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></div></div></div>
+  <div class="abs" style="left:24px;top:111px;width:392px;height:40px;display:flex;align-items:center;gap:10px">
+    <div class="av a3" style="width:32px;height:32px;font-size:12px">TS</div>
+    <div style="flex:1">
+      <div style="font:600 14px/18px Inter">theo_stirs <span style="font-weight:400;color:var(--g4)">· 5h</span></div>
+      <div style="font:400 12px/16px Inter;color:var(--g4)">Home bar, Santurce</div>
+    </div>
+  </div>
+  <img class="ph abs" src="img/paper-plane.jpg" style="left:24px;top:157px;width:392px;height:490px">
+  <!-- dim -->
+  <div class="abs" style="left:0;top:0;width:440px;height:956px;background:var(--scrim);z-index:31"></div>
+  <!-- the sheet -->
+  <div class="abs" style="left:0;top:446px;width:440px;height:510px;background:#fff;border-radius:10px 10px 0 0;overflow:hidden;z-index:32">
+    <div style="background:#000;color:#fff;padding:8px 16px 14px">
+      <div style="width:36px;height:4px;border-radius:1px;background:var(--g5);margin:0 auto"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:14px">
+        <div>
+          <div style="font:600 20px/24px Inter;letter-spacing:-0.3px">Liked by</div>
+          <div style="font:400 13px/18px Inter;color:var(--g7);margin-top:2px">24 people liked theo_stirs's <span class="pf" style="color:#fff;font-size:14px">Paper Plane</span></div>
+        </div>
+        <span class="plate inv lg tab" style="margin-top:2px">Nº 0107</span>
+      </div>
+      <div class="field" style="height:40px;margin-top:14px;font-size:15px"><svg class="i s18"><use href="#search"/></svg>Search</div>
+    </div>
+    <div id="likers"></div>
+  </div>
+  <div class="hi dark" style="z-index:40"></div>
+</div>
+<p class="cap"><b>4 Post, likes open.</b> Tap "Liked by" and the sheet rises with a black head: grabber, "Liked by", the drink's plate turned white, a search well. The people are on white. "In their Dex" is a small outlined tag with a tick; Follow is a black key, Following an outlined one. Your own row carries no button.</p>
+</div>
+
+<!-- ======================= 5 PROFILE ======================= -->
+<div class="cell" id="c-profile">
+<div class="screen">
+  <div class="abs chrome" style="left:0;top:0;width:440px;height:487px"></div>
+  <div class="sb"><div class="time">9:41</div><div class="island"></div><div class="icons sbi"></div></div>
+  <div class="bar"><div class="l"><svg class="i"><use href="#plus"/></svg></div><div class="title">nico.pours</div><div class="r"><div class="ib"><svg class="i"><use href="#gear"/></svg></div></div></div>
+  <div class="abs" style="left:16px;top:115px;width:408px;display:flex;align-items:center;gap:20px;color:#fff">
+    <div style="width:86px;height:86px;border-radius:50%;box-shadow:inset 0 0 0 1px #fff;position:relative;flex:none">
+      <div class="av a3" style="position:absolute;left:5px;top:5px;width:76px;height:76px;font-size:26px">NV</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:stretch">
+      <div style="flex:1;text-align:center"><div class="tab" style="font:600 21px/26px Inter;letter-spacing:-0.3px">64</div><div style="font:400 13px/17px Inter;color:var(--g7)">posts</div></div>
+      <div style="width:1px;background:var(--g3);margin:6px 0"></div>
+      <div style="flex:1;text-align:center"><div class="tab" style="font:600 21px/26px Inter;letter-spacing:-0.3px">212</div><div style="font:400 13px/17px Inter;color:var(--g7)">followers</div></div>
+      <div style="width:1px;background:var(--g3);margin:6px 0"></div>
+      <div style="flex:1;text-align:center"><div class="tab" style="font:600 21px/26px Inter;letter-spacing:-0.3px">180</div><div style="font:400 13px/17px Inter;color:var(--g7)">following</div></div>
+    </div>
+  </div>
+  <div class="abs" style="left:16px;top:213px;width:408px;color:#fff">
+    <div style="font:600 16px/22px Inter">Nico Vargas</div>
+    <div style="font:400 14px/20px Inter;color:var(--g7);margin-top:2px">Stirred, not shaken. Working through the classics one coupe at a time, San Juan.</div>
+  </div>
+  <div class="abs" style="left:16px;top:281px;width:408px;display:flex;gap:8px">
+    <div class="btn linedark" style="flex:1;height:36px">Edit profile</div>
+    <div class="btn linedark" style="flex:1;height:36px">Share profile</div>
+  </div>
+  <!-- Dex progress -->
+  <div class="abs" style="left:16px;top:333px;width:408px;height:1px;background:var(--g3)"></div>
+  <div class="abs" style="left:16px;top:347px;width:408px;display:flex;align-items:flex-end;justify-content:space-between;color:#fff">
+    <div style="display:flex;align-items:flex-end;gap:10px">
+      <div class="tab" style="font:600 44px/44px Inter;letter-spacing:-1.6px">38</div>
+      <div class="tab" style="font:400 13px/17px Inter;color:var(--g7);padding-bottom:4px">of 2,089 in the Dex · 1.8%</div>
+    </div>
+    <div style="text-align:right;padding-bottom:3px">
+      <div class="k" style="color:var(--g7)">rank</div>
+      <div style="font:600 15px/19px Inter">First Sips</div>
+    </div>
+  </div>
+  <div class="abs gauge-meter" style="left:16px;top:404px;width:408px;height:40px"></div>
+  <div class="abs" style="left:16px;top:452px;font:400 13px/18px Inter;color:var(--g7)"><span class="tab">171</span> more to <span style="color:#fff;font-weight:600">Barfly in Training</span>, at <span class="tab">209</span></div>
+
+  <!-- the page -->
+  <div class="abs" style="left:0;top:487px;width:440px;height:44px;display:flex;border-bottom:1px solid var(--g8)">
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;font:600 15px/20px Inter;position:relative">Posts<span style="position:absolute;bottom:-1px;left:50%;margin-left:-28px;width:56px;height:2px;background:#000"></span></div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;font:500 15px/20px Inter;color:var(--g4)">Dex</div>
+  </div>
+  <div class="abs" id="pgrid" style="left:0;top:532px;width:440px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px"></div>
+
+  <div class="tabbar"><div class="items">
+    <div class="t"><svg class="i"><use href="#home"/></svg>Home</div>
+    <div class="t"><svg class="i"><use href="#glass"/></svg>Dex</div>
+    <div class="t"><div class="plus"><svg class="i" style="stroke-width:2"><use href="#plus"/></svg></div></div>
+    <div class="t"><svg class="i"><use href="#bottle"/></svg>My Bar</div>
+    <div class="t on"><div class="me">NV</div>Profile</div>
+  </div></div>
+  <div class="hi"></div>
+</div>
+<p class="cap"><b>5 Profile.</b> The head is a black masthead: a hairline ring round the avatar, counts split by hairlines, two outlined keys. Below them the Dex at a glance: the count, the rank, and a meter filled to 38 with a tick at every rung of the ladder (209, 523, 1,045, 1,567). The posts are a white page; every tile carries its plate, cut flush into the corner.</p>
+</div>
+
+<!-- ======================= 6 + WINDOW ======================= -->
+<div class="cell" id="c-log">
+<div class="screen" style="background:#000">
+  <div class="sb"><div class="time">9:41</div><div class="island"></div><div class="icons sbi"></div></div>
+  <div class="bar"><div class="l"><svg class="i"><use href="#close"/></svg></div><div class="title">Post a drink</div></div>
+  <div class="abs" style="left:16px;top:111px;width:408px;display:flex;gap:10px;align-items:center">
+    <img class="ph" src="img/negroni.jpg" style="width:44px;height:44px;flex:none">
+    <div class="field focus" style="flex:1;color:#fff"><svg class="i s20"><use href="#search"/></svg><span>neg<span style="display:inline-block;width:2px;height:20px;background:#fff;vertical-align:-4px;margin-left:1px"></span></span><span style="flex:1"></span><span style="width:18px;height:18px;border-radius:50%;background:var(--g5);display:flex;align-items:center;justify-content:center;color:#000"><svg class="i" style="width:12px;height:12px;stroke-width:2.6"><use href="#close"/></svg></span></div>
+  </div>
+  <div class="abs k" style="left:16px;top:169px;color:var(--g7)">best matches</div>
+  <div class="abs" style="left:16px;top:578px;width:408px;font:400 13px/18px Inter;color:var(--g7)">Showing the best 6 of 9. Not the one? <span style="color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:3px">Add “neg”</span></div>
+  <div class="abs" id="results" style="left:0;top:189px;width:440px"></div>
+
+  <!-- system keyboard, dark -->
+  <div class="abs" id="kbd" style="left:0;top:610px;width:440px;height:346px;background:#262626"></div>
+  <div class="hi" style="z-index:41"></div>
+</div>
+<p class="cap"><b>6 The + window, mid-search.</b> The whole window is chrome: it rises over the app as one black sheet. The search is pinned under the bar with the photo you took beside it, and the results fill the space above the keyboard. Colour still means caught: Negroni is in your Dex, so it shows its photo and a white plate. The rest are grey proofs (or a line glass where no photo exists) with outlined plates, and each says "New catch".</p>
+</div>
+
+</div>
+
+<script>
+/* Status icons: one copy, cloned into every bar. */
+(function () {
+  var src = document.querySelector('#c-home .sb .icons');
+  document.querySelectorAll('.sbi').forEach(function (el) { el.innerHTML = src.innerHTML; });
+})();
+
+/* Real Dex numbers, from src/data/drinks.json. Caught = the 38 below. */
+var CAUGHT = [1,3,4,7,8,9,11,13,14,16,18,21,23,26,29,33,36,41,47,52,63,71,88,92,97,100,101,104,106,107,112,113,117,122,126,127,128,1544];
+var TOTAL = 2089;
+function nº(n) { return 'Nº ' + String(n).padStart(4, '0'); }
+function fmt(n) { return n.toLocaleString('en-US'); }
+
+/* Dex grid: rows of three, each opened by an index rule. */
+(function () {
+  var D = [
+    [1, 'Caesar', 'caesar'], [2, 'Greyhound', 'greyhound'], [3, 'Brandy Alexander', 'brandy-alexander'],
+    [4, 'Espresso Martini', 'espresso-martini'], [5, 'Grasshopper', 'grasshopper'], [6, 'Porto Flip', 'porto-flip'],
+    [7, 'White Russian', 'white-russian'], [8, 'Gin Fizz', 'gin-fizz'], [9, 'Ramos Gin Fizz', 'ramos-gin-fizz'],
+  ];
+  var g = document.getElementById('dexgrid');
+  var html = '';
+  for (var r = 0; r < 3; r++) {
+    var row = D.slice(r * 3, r * 3 + 3);
+    html += '<div class="idx" style="margin:' + (r ? 14 : 0) + 'px 0 8px">' + String(row[0][0]).padStart(4, '0') + ' – ' + String(row[2][0]).padStart(4, '0') + '</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">';
+    row.forEach(function (d) {
+      var caught = CAUGHT.indexOf(d[0]) >= 0;
+      html += '<div>' +
+        '<div style="position:relative;width:128px;height:128px;background:var(--g9)">' +
+        '<img class="ph" src="img/' + (caught ? '' : 'proof/') + d[2] + '.jpg" style="width:128px;height:128px">' +
+        '<span class="plate ' + (caught ? '' : 'out') + '" style="position:absolute;left:0;top:0;border-radius:0">' + nº(d[0]) + '</span>' +
+        '</div>' +
+        '<div class="pf" style="margin-top:7px;font-size:16px;line-height:19px;letter-spacing:-0.1px;' + (caught ? '' : 'color:var(--g4);font-weight:600') + '">' + d[1] + '</div>' +
+        '</div>';
+    });
+    html += '</div>';
+  }
+  g.innerHTML = html;
+})();
+
+/* Number rail ticks: every 100, every 500 longer. */
+(function () {
+  var el = document.querySelector('.rail-ticks'); var h = 478; var s = '';
+  for (var n = 100; n < TOTAL; n += 100) {
+    var y = Math.round((n - 1) / (TOTAL - 1) * h);
+    var long = n % 500 === 0;
+    s += '<span style="position:absolute;top:' + y + 'px;left:' + (long ? 0 : 2) + 'px;width:' + (long ? 8 : 4) + 'px;height:1px;background:var(--g6)"></span>';
+  }
+  el.innerHTML = s;
+})();
+
+/* Gauge, the Dex's map: a well, a white mark at the number of every caught drink, ticks every 5% (10% longer), figures under it. */
+(function () {
+  var el = document.querySelector('.gauge-map'); var W = 408; var s = '';
+  s += '<div style="position:absolute;left:0;top:0;width:' + W + 'px;height:12px;background:var(--g1);box-shadow:inset 0 0 0 1px var(--g5)"></div>';
+  var used = {};
+  CAUGHT.forEach(function (n) {
+    var x = Math.round((n - 1) / (TOTAL - 1) * (W - 4)) + 2;
+    if (used[x]) return; used[x] = 1;
+    s += '<span style="position:absolute;left:' + x + 'px;top:2px;width:1px;height:8px;background:#fff"></span>';
+  });
+  for (var p = 5; p < 100; p += 5) {
+    var tx = Math.round(p / 100 * W);
+    s += '<span style="position:absolute;left:' + tx + 'px;top:13px;width:1px;height:' + (p % 10 ? 3 : 5) + 'px;background:var(--g5)"></span>';
+  }
+  [[0, '0'], [500, '500'], [1000, '1,000'], [1500, '1,500'], [2089, '2,089']].forEach(function (t, i, a) {
+    var x = t[0] / TOTAL * W;
+    var align = i === 0 ? 'left:0' : (i === a.length - 1 ? 'right:0' : 'left:' + (x - 30) + 'px;width:60px;text-align:center');
+    s += '<span class="tab" style="position:absolute;top:21px;' + align + ';font:400 11px/14px Inter;color:var(--g7)">' + t[1] + '</span>';
+  });
+  el.innerHTML = s;
+})();
+
+/* Gauge, the Profile's meter: filled to the count, a tick at every rung of the rank ladder. */
+(function () {
+  var el = document.querySelector('.gauge-meter'); var W = 408; var s = '';
+  var count = CAUGHT.length;
+  s += '<div style="position:absolute;left:0;top:5px;width:' + W + 'px;height:4px;background:var(--g2)"></div>';
+  s += '<div style="position:absolute;left:0;top:5px;width:' + Math.max(3, Math.round(count / TOTAL * W)) + 'px;height:4px;background:#fff"></div>';
+  [[209, '209'], [523, '523'], [1045, '1,045'], [1567, '1,567']].forEach(function (t) {
+    var x = Math.round(t[0] / TOTAL * W);
+    s += '<span style="position:absolute;left:' + x + 'px;top:0;width:1px;height:14px;background:var(--g7)"></span>';
+    s += '<span class="tab" style="position:absolute;left:' + (x - 30) + 'px;width:60px;text-align:center;top:18px;font:400 11px/14px Inter;color:var(--g7)">' + t[1] + '</span>';
+  });
+  s += '<span style="position:absolute;right:0;top:0;width:1px;height:14px;background:var(--g7)"></span>';
+  s += '<span class="tab" style="position:absolute;right:0;top:18px;font:400 11px/14px Inter;color:var(--g7)">2,089</span>';
+  el.innerHTML = s;
+})();
+
+/* My Bar checklist: ranked by uses (src/data/barIndex.json). */
+(function () {
+  var L = [
+    ['Lemon', 173, 1], ['Gin', 167, 1], ['Lime', 163, 1],
+    ['Soda water', 83, 1], ['Orange', 82, 0], ['Angostura bitters', 76, 1],
+  ];
+  var s = '';
+  L.forEach(function (it, i) {
+    var on = it[2];
+    s += '<div style="min-height:52px;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 12px;border-radius:2px;position:relative;' +
+      (on ? 'background:#000;color:#fff' : 'background:#fff;color:#000;box-shadow:inset 0 0 0 1px var(--g8)') + '">' +
+      '<span style="width:20px;height:20px;flex:none;border-radius:2px;display:flex;align-items:center;justify-content:center;' +
+      (on ? 'background:#fff;color:#000' : 'box-shadow:inset 0 0 0 1px var(--g6)') + '">' +
+      (on ? '<svg class="i s16" style="stroke-width:2.4"><use href="#check"/></svg>' : '') + '</span>' +
+      '<span style="flex:1;min-width:0;padding-right:18px"><span style="display:block;font:500 15px/19px Inter">' + it[0] + '</span>' +
+      '<span class="tab" style="display:block;font:400 12px/16px Inter;color:' + (on ? 'var(--g7)' : 'var(--g4)') + '">in ' + it[1] + ' drinks</span></span>' +
+      '<span class="tab" style="position:absolute;right:10px;top:9px;font:500 11px/14px Inter;letter-spacing:1px;color:' + (on ? 'var(--g7)' : 'var(--g4)') + '">' + String(i + 1).padStart(2, '0') + '</span>' +
+      '</div>';
+  });
+  document.getElementById('checklist').innerHTML = s;
+})();
+
+/* You can make: the strip. */
+(function () {
+  var M = [[100, 'Daiquiri', 'daiquiri'], [13, 'Americano', 'americano'], [122, 'Boulevardier', 'boulevardier'], [33, 'Tom Collins', 'tom-collins']];
+  var s = '';
+  M.forEach(function (d) {
+    var caught = CAUGHT.indexOf(d[0]) >= 0;
+    s += '<div style="width:112px;flex:none">' +
+      '<div style="position:relative;width:112px;height:112px;background:var(--g9)"><img class="ph" src="img/' + d[2] + '.jpg" style="width:112px;height:112px">' +
+      '<span class="plate ' + (caught ? '' : 'out') + '" style="position:absolute;left:0;top:0;border-radius:0">' + nº(d[0]) + '</span></div>' +
+      '<div class="pf" style="margin-top:7px;font-size:16px;line-height:19px">' + d[1] + '</div></div>';
+  });
+  document.getElementById('canmake').innerHTML = s;
+})();
+
+/* Likers. */
+(function () {
+  var P = [
+    ['MO', 'a0', 'Maya Ortiz', 'maya.pours', 'their', 'Following'],
+    ['NV', 'a3', 'Nico Vargas <span style="font-weight:400;color:var(--g4)">(you)</span>', 'nico.pours', 'your', ''],
+    ['DK', 'a4', 'Dmitri Kovač', 'dmitri.k', '', 'Follow'],
+    ['AL', 'a0', 'Ana Lucía Rivera', 'ana.lucia', 'their', 'Following'],
+    ['SO', 'a3', 'Sam Ortega', 'sam.ortega', '', 'Follow'],
+    ['IA', 'a0', 'Ines Aguilar', 'ines.ag', 'their', 'Following'],
+  ];
+  var s = '';
+  P.forEach(function (p, i) {
+    s += '<div style="height:60px;margin:0 16px;display:flex;align-items:center;gap:12px;' + (i ? 'border-top:1px solid var(--g8)' : '') + '">' +
+      '<div class="av ' + p[1] + '" style="width:40px;height:40px;font-size:14px">' + p[0] + '</div>' +
+      '<div style="flex:1;min-width:0"><div style="font:600 15px/20px Inter">' + p[2] + '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-top:1px"><span style="font:400 13px/18px Inter;color:var(--g4)">' + p[3] + '</span>' +
+      (p[4] ? '<span style="display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 6px 0 4px;border-radius:2px;box-shadow:inset 0 0 0 1px #000;font:500 11px/14px Inter"><svg class="i" style="width:12px;height:12px;stroke-width:2.4"><use href="#check"/></svg>In ' + p[4] + ' Dex</span>' : '') +
+      '</div></div>' +
+      (p[5] === 'Follow' ? '<div class="btn ink" style="width:96px">Follow</div>' : p[5] ? '<div class="btn line" style="width:96px">Following</div>' : '') +
+      '</div>';
+  });
+  document.getElementById('likers').innerHTML = s;
+})();
+
+/* Profile grid. */
+(function () {
+  var G = [[127, 'negroni'], [107, 'paper-plane'], [100, 'daiquiri'], [92, 'aviation'], [128, 'old-fashioned'], [97, 'clover-club']];
+  var s = '';
+  G.forEach(function (d) {
+    s += '<div style="position:relative;height:182px;background:var(--g9)"><img class="ph" src="img/' + d[1] + '.jpg" style="width:100%;height:182px">' +
+      '<span class="plate" style="position:absolute;left:0;bottom:0;border-radius:0">' + nº(d[0]) + '</span></div>';
+  });
+  document.getElementById('pgrid').innerHTML = s;
+})();
+
+/* + window results. */
+(function () {
+  var R = [
+    [127, 'Negroni', 'Spirit-forward · Florence, Italy', 'negroni', 'photo'],
+    [119, 'Negroni Sbagliato', 'Sparkling · Milan, Italy', 'negroni-sbagliato', 'proof'],
+    [59, 'White Negroni', 'Modern classic · Bordeaux, France', 'white-negroni', 'proof'],
+    [779, 'Kingston Negroni', 'Spirit-forward · New York City, USA', '', 'face'],
+    [780, 'Mezcal Negroni', 'Spirit-forward · USA', '', 'face'],
+    [2023, 'Cynar Negroni', 'Spirit-forward · New York City, USA', '', 'face'],
+  ];
+  var s = '';
+  R.forEach(function (d, i) {
+    var caught = CAUGHT.indexOf(d[0]) >= 0;
+    var thumb = d[4] === 'face'
+      ? '<div style="width:48px;height:48px;flex:none;background:var(--g1);box-shadow:inset 0 0 0 1px var(--g3);display:flex;align-items:center;justify-content:center;color:var(--g6)"><svg class="i" style="stroke-width:1.3"><use href="#rocks"/></svg></div>'
+      : '<img class="ph" src="img/' + (d[4] === 'proof' ? 'proof/' : '') + d[3] + '.jpg" style="width:48px;height:48px;flex:none">';
+    s += '<div style="height:64px;margin:0 16px;display:flex;align-items:center;gap:12px;' + (i ? 'border-top:1px solid var(--g3)' : '') + '">' + thumb +
+      '<div style="flex:1;min-width:0"><div class="pf" style="color:#fff;font-size:18px;line-height:22px">' + d[1] + '</div>' +
+      '<div style="font:400 13px/18px Inter;color:var(--g7);margin-top:1px">' + d[2] + '</div></div>' +
+      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">' +
+      '<span class="plate ' + (caught ? 'inv' : 'outd') + '">' + nº(d[0]) + '</span>' +
+      '<span style="font:400 11px/14px Inter;color:var(--g7)">' + (caught ? 'In your Dex' : 'New catch') + '</span></div>' +
+      '</div>';
+  });
+  document.getElementById('results').innerHTML = s;
+})();
+
+/* The system keyboard, dark appearance (drawn, not ours: spec section 4.8). */
+(function () {
+  var k = document.getElementById('kbd');
+  var KEY = 'position:absolute;height:44px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;';
+  var s = '';
+  // predictive bar
+  ['“neg”', 'negroni', 'negative'].forEach(function (w, i) {
+    s += '<div style="position:absolute;top:10px;left:' + (i * 146.7) + 'px;width:146.7px;text-align:center;font:400 16px/24px Inter;color:#fff">' + w + '</div>';
+    if (i) s += '<div style="position:absolute;top:12px;left:' + (i * 146.7) + 'px;width:1px;height:20px;background:#4A4A4A"></div>';
+  });
+  var rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  var kw = 37.6, gap = 6, top0 = 52, rh = 56;
+  rows.forEach(function (r, ri) {
+    var n = r.length;
+    var total = n * kw + (n - 1) * gap;
+    var x0 = (440 - total) / 2;
+    for (var i = 0; i < n; i++) {
+      s += '<div style="' + KEY + 'left:' + (x0 + i * (kw + gap)) + 'px;top:' + (top0 + ri * rh) + 'px;width:' + kw + 'px;background:#5C5C5C;font:400 23px/24px -apple-system,Inter">' + r[i] + '</div>';
+    }
+  });
+  // shift + delete
+  s += '<div style="' + KEY + 'left:4px;top:' + (top0 + 2 * rh) + 'px;width:48px;background:#3A3A3A"><svg class="i s20" style="stroke-width:1.4"><use href="#shift"/></svg></div>';
+  s += '<div style="' + KEY + 'right:4px;top:' + (top0 + 2 * rh) + 'px;width:48px;background:#3A3A3A"><svg class="i s20" style="stroke-width:1.4"><use href="#del"/></svg></div>';
+  // bottom row
+  var by = top0 + 3 * rh;
+  s += '<div style="' + KEY + 'left:4px;top:' + by + 'px;width:96px;background:#3A3A3A;font:400 16px/20px Inter">123</div>';
+  s += '<div style="' + KEY + 'left:106px;top:' + by + 'px;width:228px;background:#5C5C5C;font:400 16px/20px Inter">space</div>';
+  s += '<div style="' + KEY + 'right:4px;top:' + by + 'px;width:96px;background:#3A3A3A;font:400 16px/20px Inter">return</div>';
+  // globe + mic
+  s += '<div style="position:absolute;left:26px;top:' + (by + 64) + 'px;color:#D0D0D0"><svg class="i" style="width:26px;height:26px;stroke-width:1.4"><use href="#globe"/></svg></div>';
+  s += '<div style="position:absolute;right:26px;top:' + (by + 64) + 'px;color:#D0D0D0"><svg class="i" style="width:26px;height:26px;stroke-width:1.4"><use href="#mic"/></svg></div>';
+  k.innerHTML = s;
+})();
+
+/* index.html#home (or #dex, #bar, #post, #profile, #log) shows one screen at 440 x 956. */
+(function () {
+  var map = { home: 'c-home', dex: 'c-dex', bar: 'c-bar', post: 'c-post', profile: 'c-profile', log: 'c-log' };
+  var h = (location.hash || '').slice(1);
+  if (map[h]) { document.body.classList.add('single'); document.getElementById(map[h]).classList.add('show'); }
+})();
+</script>
+</body>
+</html>
