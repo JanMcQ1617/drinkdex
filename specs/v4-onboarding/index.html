@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply onboarding</title>
+<style>
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* v4 Daylight tokens (specs/v4-mockups/white/spec.md §1). No hue: the drink photographs are the only colour. */
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --press:#EBEBEB; --line:#E3E3E3; --hair:#D6D6D6; --rule:#C4C4C4;
+  --control:#8A8A8A; --muted:#5C5C5C; --ink:#0A0A0A; --inkPressed:#333333; --onInk:#FFFFFF; --onInkMuted:#A3A3A3;
+  --photoEdge:rgba(10,10,10,.07);
+  --t1:#262626; --t2:#3D3D3D; --t3:#5C5C5C; --t4:#E3E3E3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E6E6E6}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+b{font-weight:600}
+
+/* type: the v4 three (title 28, body 17, small 13), Playfair for drink names and the wordmark,
+   and ONE onboarding role, prompt 22/28 500 (Imprint's bubble is 23 medium). spec.md §4.1 */
+.prompt{font:500 22px/28px Inter;letter-spacing:-.3px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.small{font:400 13px/18px Inter}
+.pf{font:700 17px/22px Playfair;letter-spacing:-.1px}
+.muted{color:var(--muted)}
+.tn{font-variant-numeric:tabular-nums}
+
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none;isolation:isolate}
+.sb{position:absolute;top:0;left:0;right:0;height:62px;color:var(--ink);z-index:20}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+.homeInd{position:absolute;left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:var(--ink);z-index:20}
+
+/* prints: square, photoEdge inset (white spec §5) */
+.print{position:absolute;overflow:hidden;background:var(--wash)}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);pointer-events:none}
+
+/* the guide: Sipply's wax seal (assets/images/icon.png). Round is allowed: it is the guide mark */
+.seal{position:absolute;background:url(../../assets/images/icon.png) center/156% no-repeat;border-radius:50%}
+.ring{position:absolute;border-radius:50%;pointer-events:none}
+
+/* speech bubble: wash, 4pt corners, the corner that points at the seal is square */
+.bubble{position:absolute;background:var(--wash);border-radius:4px}
+.bubble.q{border-top-left-radius:0;padding:19px 21px 19px 21px}
+.bubble.n{padding:18px 24px;text-align:center}
+.bubble.c{padding:15px 24px;text-align:center}
+.bubble .sub{margin-top:8px}
+.tail{position:absolute;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:9px solid var(--wash)}
+
+/* keys: squared, 4pt (house rule). Primary ink, disabled wash + muted label (6.13:1) */
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center;white-space:nowrap;font:500 17px/24px Inter;letter-spacing:-.2px;gap:10px}
+.key.ink{background:var(--ink);color:var(--onInk)}
+.key.off{background:var(--wash);color:var(--muted)}
+.key.wash{background:var(--wash);color:var(--ink)}
+.key.edge{background:var(--page);color:var(--ink);box-shadow:inset 0 0 0 1px var(--control)}
+.link{position:absolute;font:500 17px/24px Inter;letter-spacing:-.2px;text-align:center;color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+
+/* options */
+.opt{position:absolute;background:var(--wash);border-radius:4px;display:flex;align-items:center;justify-content:center;font:400 17px/24px Inter;letter-spacing:-.2px;color:var(--ink)}
+.opt.on{background:var(--ink);color:var(--onInk);font-weight:500}
+.opt.left{justify-content:flex-start;padding-left:54px}
+.box{position:absolute;left:18px;top:50%;margin-top:-11px;width:22px;height:22px;border-radius:2px;box-shadow:inset 0 0 0 1.5px var(--control);background:var(--page)}
+.opt.on .box{box-shadow:none;background:var(--page)}
+.tile{position:absolute;background:var(--wash);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;font:400 17px/22px Inter;letter-spacing:-.2px}
+.tile.on{background:var(--ink);color:var(--onInk);font-weight:500}
+
+.fb{position:absolute;left:24px;width:392px;top:719px;height:105px;background:var(--wash);border-radius:4px;display:flex;align-items:center;gap:16px;padding:0 20px}
+.hairline{position:absolute;left:0;right:0;top:820px;height:1px;background:var(--line)}
+.fade{position:absolute;left:0;right:0;top:821px;bottom:0;background:var(--page)}
+.av{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font:600 13px/1 Inter}
+
+/* the wall */
+.wall{display:flex;flex-wrap:wrap;gap:56px 36px;padding:120px 44px 60px;align-items:flex-start;position:relative;width:2950px}
+.wall>h1{position:absolute;left:44px;top:34px;font:600 30px/36px Inter;letter-spacing:-.6px}
+.wall>h1 small{display:block;font:400 15px/22px Inter;letter-spacing:0;color:var(--muted);margin-top:6px;max-width:1700px}
+.frame{display:flex;flex-direction:column;gap:14px;width:440px;flex:none}
+.frame .phone{box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.cap{font:400 13px/19px Inter;color:#4A4A4A}
+.cap .cnt{display:block;font:600 15px/22px Inter;color:var(--ink);margin-bottom:4px}
+body.solo{background:var(--page)}
+body.solo .wall{padding:0;display:block;width:auto}
+body.solo .wall>h1,body.solo .cap{display:none}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+body.solo .frame .phone{box-shadow:none}
+</style>
+</head>
+<body>
+<div class="wall" id="wall">
+  <h1>Sipply onboarding, Imprint's structure in Daylight<small>Every step of the new first run at 440 × 956, then four mid-transition frames. Same layout, keys and motion as the Imprint recording (study/study.md), in ink, greys and white; the drink photographs are the only colour. The answers and the picks are real output of tools/recommend.mjs over src/data (run A in spec.md §5.6: gin and bourbon, bitter and strong).</small></h1>
+</div>
+<script src="data/example.js"></script>
+<script>
+const EX = window.EXAMPLE;
+const A = EX.A;
+const IMG = id => `../../assets/drinks/${id}.webp`;
+const PROOF = id => `../../assets/drinks/proof/${id}.webp`;
+const NAMES = {}; // filled from picks for captions
+
+/* ---------- icons (src/components/icons.tsx hand, 1.6 stroke at 24) ---------- */
+const OUT = {
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  bookmark:'<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>',
+  dex:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  bottle:'<path d="M10.4 3.2v4c0 1.4-3.2 1.8-3.2 3.6v8.6a1.4 1.4 0 0 0 1.4 1.4h6.8a1.4 1.4 0 0 0 1.4-1.4v-8.6c0-1.8-3.2-2.2-3.2-3.6v-4z"/><path d="M10.4 5.4h3.2"/><path d="M7.2 12.8h9.6"/><path d="M7.2 17h9.6"/>',
+  people:'<circle cx="9" cy="8.6" r="3.4"/><path d="M2.8 19.6c.6-3.4 3.1-5.4 6.2-5.4s5.6 2 6.2 5.4"/><path d="M15.2 5.6a3.2 3.2 0 0 1 0 6.2"/><path d="M17.6 14.6c1.9.7 3.2 2.4 3.6 5"/>',
+  check:'<path d="M5.4 12.4 10 17l8.6-9.6"/>',
+  mail:'<rect x="3.4" y="5.6" width="17.2" height="12.8" rx="1.6"/><path d="m3.8 6.6 8.2 6.4 8.2-6.4"/>',
+};
+const ic = (name, size=24, color='var(--ink)', sw=1.6, fill='none') =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill}" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</svg>`;
+const at = (x, y, inner, z='') => `<div class="a" style="left:${x}px;top:${y}px;${z}">${inner}</div>`;
+
+function statusBar(){
+  return `<div class="sb"><div class="t">9:41</div><div class="island"></div><div class="r">
+  <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="9" rx="1" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+  <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.5 10.5 0 0 0 8.5.5 10.5 10.5 0 0 0 1.1 3.5l1.2 1.2A8.8 8.8 0 0 1 8.5 2.2zm0 3.4c1.5 0 2.9.6 3.9 1.6l1.2-1.2a7.2 7.2 0 0 0-10.2 0l1.2 1.2c1-1 2.4-1.6 3.9-1.6zm0 3.4c.6 0 1.1.2 1.5.6L8.5 11 7 9.6c.4-.4.9-.6 1.5-.6z" fill="currentColor"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" fill="currentColor" opacity=".5"/></svg>
+  </div></div>`;
+}
+const homeInd = () => `<div class="homeInd"></div>`;
+
+/* ---------- fixed chrome: back chevron (32,82), progress 69-356 × y80-84, Skip in the sound key's slot ---------- */
+const TOTAL = 14;
+function topBar(step, {skip=true, back=true, progressOpacity=1, partial=0} = {}){
+  const w = 287;
+  const fill = Math.min(w, Math.round(w * (step + partial) / TOTAL));
+  return (back ? at(20, 70, ic('chevronLeft', 24, 'var(--ink)', 1.8)) : '') +
+    `<div class="a" style="left:69px;top:80px;width:${w}px;height:4px;border-radius:1px;background:var(--line);opacity:${progressOpacity}"></div>` +
+    `<div class="a" style="left:69px;top:80px;width:${fill}px;height:4px;border-radius:1px;background:var(--ink);opacity:${progressOpacity}"></div>` +
+    (skip ? `<div class="a body muted" style="right:24px;top:70px;width:52px;text-align:right">Skip</div>` : '');
+}
+
+/* ---------- the guide in its three places ---------- */
+function sealCorner(o=1, dx=0){ return `<div class="seal" style="left:${40+dx}px;top:118px;width:32px;height:32px;opacity:${o}"></div>`; }
+function sealTop(o=1, dx=0){ return `<div class="seal" style="left:${200+dx}px;top:118px;width:40px;height:40px;opacity:${o}"></div>`; }
+function sealStage(o=1, dx=0, size=200, cy=356){
+  const x = 220 - size/2 + dx, y = cy - size/2;
+  return `<div class="ring" style="left:${220-130+dx}px;top:${cy-130}px;width:260px;height:260px;box-shadow:inset 0 0 0 1px var(--line);opacity:${o}"></div>
+          <div class="ring" style="left:${220-114+dx}px;top:${cy-114}px;width:228px;height:228px;box-shadow:inset 0 0 0 1px var(--rule);opacity:${o}"></div>
+          <div class="seal" style="left:${x}px;top:${y}px;width:${size}px;height:${size}px;opacity:${o}"></div>`;
+}
+
+/* question bubble (mode C): x82-400 from y118 */
+function qBubble(text, sub, o=1, dx=0){
+  return `<div class="bubble q" style="left:${82+dx}px;top:118px;width:318px;opacity:${o}"><div class="prompt">${text}</div>${sub?`<div class="small muted sub">${sub}</div>`:''}</div>`;
+}
+/* narration bubble (mode B): x40-400 from y170 */
+function nBubble(text, sub, o=1, dx=0){
+  return `<div class="bubble n" style="left:${40+dx}px;top:170px;width:360px;opacity:${o}"><div class="prompt">${text}</div>${sub?`<div class="small muted sub">${sub}</div>`:''}</div>`;
+}
+/* centre-stage bubble (mode A): x24-416, top 489, tail up at the seal */
+function cBubble(text, o=1, dx=0){
+  return `<div class="tail" style="left:${210+dx}px;top:480px;opacity:${o}"></div><div class="bubble c" style="left:${24+dx}px;top:489px;width:392px;opacity:${o}"><div class="prompt">${text}</div></div>`;
+}
+
+/* footer key: x24-416 × y841-892 */
+function footer(label='Continue', state='ink', y=841, extra=''){
+  return `<div class="key ${state}" style="left:24px;top:${y}px;width:392px;height:51px;${extra}">${label}</div>`;
+}
+
+/* rows: 360 × 64 at x40, 76 pitch */
+function rows(items, top, {left=false, check=false, dx=0, o=1} = {}){
+  return items.map((it, i) => {
+    const on = it.on;
+    const box = check ? `<div class="box">${on ? `<div style="position:absolute;left:1px;top:1px">${ic('check', 20, 'var(--ink)', 2.2)}</div>` : ''}</div>` : '';
+    return `<div class="opt ${on?'on':''} ${left?'left':''}" style="left:${40+dx}px;top:${top + i*76}px;width:360px;height:64px;opacity:${o}">${box}${it.label}</div>`;
+  }).join('');
+}
+
+/* ---------- frames ---------- */
+const frames = [];
+function frame(id, title, cap, body){ frames.push({id, title, cap, body}); }
+
+/* 01 Welcome: the photo wall drifts in alternating rows; Playfair wordmark; two keys */
+function welcome({mid=false} = {}){
+  const R = [
+    ['negroni','pina-colada','espresso-martini','paloma','margarita','aperol-spritz'],
+    ['old-fashioned','mojito','daiquiri','french-75','cosmopolitan','manhattan'],
+    ['mai-tai','martini','gin-and-tonic','whiskey-sour','boulevardier','paper-plane'],
+    ['moscow-mule','caipirinha','dark-n-stormy','pisco-sour','bloody-mary','mimosa'],
+  ];
+  const off = [-46, -118, -22, -96];
+  const o = mid ? .45 : 1;
+  let wall = '';
+  R.forEach((row, r) => row.forEach((id, c) => {
+    wall += `<div class="print" style="left:${off[r] + c*154 + (mid ? (r%2?-4:5) : 0)}px;top:${r*154}px;width:146px;height:146px;opacity:${o}"><img src="${IMG(id)}"></div>`;
+  }));
+  const wordO = mid ? .45 : 1;
+  const keyY = mid ? 821 : 800;
+  const label = mid
+    ? `<span style="position:absolute;opacity:.5">Get started</span><span style="position:absolute;opacity:.5">Continue</span>`
+    : 'Get started';
+  return wall +
+    `<div class="a" style="left:0;right:0;top:640px;text-align:center;font:700 44px/52px Playfair;letter-spacing:-.4px;opacity:${wordO}">Sipply</div>` +
+    `<div class="a body muted" style="left:0;right:0;top:704px;text-align:center;opacity:${wordO}">Find the drinks you’ll love.</div>` +
+    `<div class="a small muted" style="left:60px;right:60px;top:744px;text-align:center;opacity:${wordO}">By continuing you agree to the <u>Terms of Use</u> and <u>Privacy Policy</u>.</div>` +
+    `<div class="key ink" style="left:24px;top:${keyY}px;width:392px;height:${mid?51:52}px">${label}</div>` +
+    `<div class="key wash" style="left:24px;top:869px;width:392px;height:52px;opacity:${mid?.4:1}">I already have an account</div>` +
+    (mid ? sealStage(.5, 5) + cBubble('Welcome! Let’s find your drinks.', .5, 5) + topBar(1, {progressOpacity:.5}) : '');
+}
+frame('welcome', '01 Welcome', 'A wall of 24 catalogue photographs in four rows that drift sideways (rows 1 and 3 right at 60 pt/s, 2 and 4 left at 50). Playfair wordmark, one line, the terms line. Get started → the guide. I already have an account → the existing sign-in (WelcomeBack / WaysIn), no questions.', welcome());
+
+frame('hello', '02 Guide: hello', 'Centre stage (mode A): the seal at 200 pt in two breathing rings, a one-line bubble with its tail. Nothing is asked or kept yet. Continue is enabled.',
+  topBar(1) + sealStage() + cBubble('Welcome! Let’s find your drinks.') + footer());
+
+frame('age', '03 Legal drinking age', 'The first question, before anything is kept. Shown at rest: nothing is pre-picked and Continue stays grey, as on Imprint 05 (it never needs pressing). Single choice, auto-advance 180 ms after the tap. No Skip on this one. Yes → the questions; No → the stop screen. Under VoiceOver the auto-advance is off and Continue takes over.',
+  topBar(2, {skip:false}) + sealCorner() + qBubble('Are you of legal drinking age where you live?') +
+  rows([{label:'Yes, I am'},{label:'No, not yet'}], 240) + footer('Continue', 'off'));
+
+frame('underage', '03b Under age: stop', 'Ends the flow. No answers are asked or kept; the device remembers only “not yet” for 24 hours, so Get started comes straight back here. The way back is to the welcome, where an existing account can still sign in; a brand-new account made there during the 24 hours lands back on this screen and is not kept (spec §11). The copy does not say how to get round it.',
+  sealStage() + cBubble('Sipply is for people of legal drinking age.') +
+  `<div class="a body muted" style="left:56px;right:56px;top:580px;text-align:center">See you when you are.</div>` +
+  footer('Back to start', 'wash'));
+
+function tilesQ({mid=false} = {}){
+  const T = [
+    {label:'Discover new<br>drinks', icon:'search', on:!mid},
+    {label:'Keep track of<br>what I drink', icon:'dex'},
+    {label:'Make cocktails<br>at home', icon:'bottle'},
+    {label:'See what friends<br>drink', icon:'people'},
+  ];
+  const pos = [[40,246],[226,246],[40,390],[226,390]];
+  return T.map((t,i) => {
+    const midFill = mid && i===0;
+    const bg = midFill ? 'background:#8A8A8A;color:#fff' : '';
+    const col = t.on || midFill ? '#FFFFFF' : 'var(--ink)';
+    return `<div class="tile ${t.on?'on':''}" style="left:${pos[i][0]}px;top:${pos[i][1]}px;width:174px;height:131px;${bg}">${ic(t.icon, 30, col, 1.6)}<div>${t.label}</div></div>`;
+  }).join('');
+}
+frame('brings', '04 What brings you', '2×2 tiles, 174 × 131, 12 / 13 pt gaps (Imprint 03). Single choice; the pick fills ink in 300 ms and Continue enables in the same frames. Each answer changes something: discover lowers the classics weight, track raises it, home skips “Do you make drinks at home?” as “often”, friends puts Find friends first after sign-up.',
+  topBar(3) + sealCorner() + qBubble('What brings you to Sipply?') + tilesQ() + footer());
+
+frame('heard', '04x How did you hear (off by default)', 'Optional, behind ASK_HEARD_FROM (off). It changes no recommendation; it is one text value kept with the account, never sent before sign-up, read by hand in SQL. The privacy policy says “no analytics” today, so turning it on means the §8 policy edit ships with it.',
+  topBar(3) + sealCorner() + qBubble('How did you hear about Sipply?') +
+  rows([{label:'A friend'},{label:'Instagram'},{label:'TikTok'},{label:'The App Store', on:true},{label:'Facebook'},{label:'Google'},{label:'Something else'}], 246) +
+  `<div class="hairline"></div><div class="fade"></div>` + footer());
+
+function dexGrid({o=1} = {}){
+  const ids = ['negroni','margarita','espresso-martini','mojito','old-fashioned','paloma','daiquiri','aperol-spritz','whiskey-sour'];
+  const caught = new Set(['negroni','mojito','old-fashioned','daiquiri']);
+  const nums = {negroni:127, margarita:106, 'espresso-martini':4, mojito:23, 'old-fashioned':128, paloma:25, daiquiri:100, 'aperol-spritz':113, 'whiskey-sour':112};
+  return ids.map((id,i) => {
+    const x = 40 + (i%3)*124, y = 300 + Math.floor(i/3)*150;
+    const c = caught.has(id);
+    return `<div class="print" style="left:${x}px;top:${y}px;width:112px;height:112px;opacity:${o}"><img src="${c ? IMG(id) : PROOF(id)}"></div>` +
+      `<div class="a small tn ${c?'':'muted'}" style="left:${x}px;top:${y+118}px;opacity:${o};letter-spacing:.4px">Nº ${String(nums[id]).padStart(4,'0')}</div>`;
+  }).join('');
+}
+frame('dexintro', '05 Narration: your Dex', 'Mode B: the seal at the top centre, a centred bubble, no key. Nine grey proofs; one by one they print in colour with their Dex number (crossfade 300 ms, 350 ms apart, from +400 ms). Advances by itself 1.8 s after the last.',
+  topBar(4) + sealTop() + nBubble('Every drink you try goes in your Dex.') + dexGrid());
+
+frame('usually', '06 What do you usually drink', 'Single choice, auto-advance (Imprint 06); Continue stays grey. Cocktails keeps the picks to cocktails; spirits to bottles and stirred, spirit-forward cocktails; both keeps at least two of each.',
+  topBar(5) + sealCorner() + qBubble('What do you usually drink?') +
+  rows([{label:'Cocktails'},{label:'Spirits, neat or on ice'},{label:'Both', on:true}], 240) + footer('Continue','off'));
+
+function spiritsQ({dx=0, o=1} = {}){
+  return sealCorner(o, dx) + qBubble('Which spirits do you like?', 'Pick up to 5. You can change them later.', o, dx) +
+    rows([{label:'Gin', on:true},{label:'Rum'},{label:'Tequila and mezcal'},{label:'Whiskey', on:true},{label:'Vodka'},{label:'Brandy and cognac'},{label:'Liqueurs and amaro'}], 240, {left:true, check:true, dx, o});
+}
+frame('spirits', '07 Which spirits', 'Checklist, up to 5 (Imprint 14). Continue enables at one tick. A drink must contain a picked spirit to be picked at all; the base spirit counts 1, one used further down 0.6.',
+  topBar(6) + spiritsQ() + footer());
+
+function followQ({dx=0, o=1} = {}){
+  return sealCorner(o, dx) + qBubble('Which <b>whiskey</b> do you reach for?', null, o, dx) +
+    rows([{label:'Bourbon', on:true},{label:'Rye'},{label:'Scotch'},{label:'Irish whiskey'},{label:'Japanese whisky'}], 240, {left:true, check:true, dx, o});
+}
+frame('followup', '08 Follow-up', 'Asked for the first of whiskey, rum or tequila picked, with that word in bold (Imprint 15). Skipped when none of the three was picked, and the bar shortens by one step. A style match adds 0.25.',
+  topBar(7) + followQ() + footer());
+
+function flavourTiles(){
+  const F = [['Refreshing'],['Sour and citrusy'],['Sweet'],['Bitter', true],['Strong and stirred', true],['Creamy']];
+  return F.map(([l,on],i) => `<div class="opt ${on?'on':''}" style="left:${i%2?226:40}px;top:${270 + Math.floor(i/2)*76}px;width:174px;height:64px">${l}</div>`).join('');
+}
+frame('flavours', '09 How do you like it', 'Up to 3, in a 2 × 3 grid of 174 × 64 keys. The card in the feedback slot (17 pt above the key, Imprint 18) counts live from the catalogue and crossfades on every pick. Here, gin or whiskey, bitter or strong: 574 drinks.',
+  topBar(8) + sealCorner() + qBubble('How do you like your drinks?', 'Pick up to 3.') + flavourTiles() +
+  `<div class="fb"><div class="print" style="position:relative;width:56px;height:56px;flex:none"><img src="${IMG('negroni')}"></div><div class="body">That’s <b class="tn">${A.matching}</b> drinks in the Dex that match.</div></div>` + footer());
+
+frame('home', '10 Do you make drinks at home', 'Single choice, auto-advance; Continue stays grey (Imprint 06). Answering Never leaves the bar step out. Sometimes and often turn on the “you can make it” boost (+0.08 / +0.15) and ask what is in the bar.',
+  topBar(9) + sealCorner() + qBubble('Do you make drinks at home?') +
+  rows([{label:'Never'},{label:'Sometimes', on:true},{label:'Often'}], 240) + footer('Continue','off'));
+
+function barQ(){
+  const rowsB = A.barRows.map(r => ({...r, ticked:true}));
+  return rowsB.map((r,i) => {
+    const x = i%2 ? 226 : 40, y = 252 + Math.floor(i/2)*68;
+    return `<div class="opt left ${r.ticked?'on':''}" style="left:${x}px;top:${y}px;width:174px;height:56px;padding-left:50px"><div class="box" style="left:16px">${r.ticked?`<div style="position:absolute;left:1px;top:1px">${ic('check',20,'var(--ink)',2.2)}</div>`:''}</div>${r.label}</div>`;
+  }).join('');
+}
+frame('bar', '11 What’s in your bar', 'The interstitial and the question in one: the six basics tick themselves as the screen arrives (one every 120 ms) while the count rises, then the person changes what they like. Spirits come from step 7, the two extras from step 9 (bitter → Campari, strong → sweet vermouth). Feeds My Bar on Continue. Here all eight are ticked: 17 drinks (13 with the six basics alone).',
+  topBar(10) + sealCorner() + qBubble('Tick what’s in your bar.', 'I’ll show you what you can make. You can add the rest in My Bar.') + barQ() +
+  `<div class="fb"><div class="print" style="position:relative;width:56px;height:56px;flex:none"><img src="${IMG('boulevardier')}"></div><div class="body">You can make <b class="tn">${A.barMakes}</b> drinks with this.</div></div>` + footer());
+
+function friendsRows(){
+  const R = [
+    {side:'l', av:'M', tone:'--t1', text:'Maya caught a Negroni', id:'negroni'},
+    {side:'r', av:'T', tone:'--t2', text:'Theo saved a Paloma', id:'paloma'},
+    {side:'l', av:'I', tone:'--t3', text:'Ines made a Daiquiri', id:'daiquiri'},
+    {side:'r', av:'D', tone:'--t1', text:'Dmitri caught a Martini', id:'martini'},
+    {side:'l', av:'L', tone:'--t2', text:'Lu saved a Mai Tai', id:'mai-tai'},
+    {side:'r', av:'S', tone:'--t3', text:'Sam made a Margarita', id:'margarita'},
+  ];
+  return R.map((r,i) => {
+    const y = 300 + i*76, w = 300, x = r.side==='l' ? 24 : 416 - w;
+    return `<div class="a" style="left:${x}px;top:${y}px;width:${w}px;height:60px;background:var(--wash);border-radius:4px"></div>` +
+      `<div class="av" style="left:${x+12}px;top:${y+14}px;width:32px;height:32px;background:var(${r.tone})">${r.av}</div>` +
+      `<div class="a body" style="left:${x+56}px;top:${y+18}px">${r.text}</div>` +
+      `<div class="print" style="left:${x+w-52}px;top:${y+8}px;width:44px;height:44px"><img src="${IMG(r.id)}"></div>`;
+  }).join('');
+}
+frame('friends', '12 Narration: friends', 'Mode B, no key. Six lines alternate left and right like Imprint’s chat chips (10), rising 28 pt and fading in 230 ms, 365 ms apart from +410 ms. A demonstration with plain first names and no counts: Sipply has no social proof to show and invents none.',
+  topBar(11) + sealTop() + nBubble('See what your friends are drinking.') + friendsRows());
+
+/* pouring collage: 13 photographed drinks from the scored pool, around the seal */
+const POOL = EX.collage;
+const COLLAGE = [
+  [  40, 300, 120], [ 172, 268, 96], [ 280, 300, 120],
+  [  12, 432, 104], [ 316, 432, 112],
+  [  40, 548, 120], [ 172, 612, 96], [ 280, 556, 124],
+  [ 132, 720, 88], [ 236, 716, 104], [  24, 680, 96], [ 344, 692, 84],
+];
+function pour({burst=false} = {}){
+  const s = burst ? 1.14 : 1;
+  let h = '';
+  COLLAGE.forEach(([x,y,w],i) => {
+    const id = POOL[i % POOL.length];
+    const cx = x + w/2 - 220, cy = y + w/2 - 520;
+    const nx = 220 + cx*s - w*s/2, ny = 520 + cy*s - w*s/2;
+    h += `<div class="print" style="left:${nx}px;top:${ny}px;width:${w*s}px;height:${w*s}px;opacity:${burst && i>8 ? .55 : 1}"><img src="${IMG(id)}"></div>`;
+  });
+  return h + `<div class="seal" style="left:${220-48}px;top:${520-48}px;width:96px;height:96px;box-shadow:0 0 0 8px var(--page)"></div>`;
+}
+frame('pour', '13 Pouring your picks', 'Imprint’s plan building (22) with the drinks it is weighing: photographs from the top of the scored pool pop from a dot (250 ms, slight overshoot, 70 ms apart) round the seal, the group pulls back, then bursts. No key. 3.2 s, then it resolves into the results without a push (frame t4).',
+  topBar(12, {skip:false}) + sealTop(0) + nBubble('Let me pour your first picks…') + pour());
+
+function resultRows({settle=false} = {}){
+  const P = A.picks;
+  return P.map((p,i) => {
+    const y = 276 + i*88;
+    const saved = i === 0 || i === 2;
+    const face = p.photo
+      ? `<div class="print" style="left:40px;top:${y}px;width:72px;height:72px"><img src="${IMG(p.id)}"></div>`
+      : `<div class="print" style="left:40px;top:${y}px;width:72px;height:72px;display:flex;align-items:center;justify-content:center">${ic('dex', 30, 'var(--control)', 1.4)}</div>`;
+    if (settle) return '';
+    const why = p.makeNow ? `${p.why}. You can make it.` : p.why;
+    return face +
+      `<div class="a pf" style="left:128px;top:${y+12}px;width:196px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>` +
+      `<div class="a small muted" style="left:128px;top:${y+38}px;width:200px">${why}</div>` +
+      `<div class="key ${saved?'ink':'wash'}" style="left:332px;top:${y+18}px;width:68px;height:36px;font:500 15px/20px Inter;gap:4px">${saved?'Saved':'Save'}</div>`;
+  }).join('');
+}
+const made = A.picks.filter(p => p.makeNow).length;
+frame('results', '14 Your first picks', `Six picks from recommend(): photographed first, Playfair names, one “why” line, a squared Save each. The bubble’s sub line counts what the bar can make (${made} here). Rows scroll under the footer. Continue → All set.`,
+  topBar(13, {skip:false}) + sealTop() + nBubble('Your first picks.', `You can make ${made} of these now.`) + resultRows() + `<div class="fade" style="top:830px"></div>` + footer());
+
+frame('allset', '15 All set', 'Centre stage again: the seal stamps down (1.12 → 1, 260 ms) and one ring ripples out. Continue → the sign-in, which keeps the answers and the picks.',
+  topBar(14, {skip:false}) + sealStage() + cBubble('All set! Let’s keep your picks.') + footer());
+
+function provider(y, kind){
+  const apple = `<svg width="18" height="22" viewBox="0 0 17 20"><path fill="#fff" d="M14.1 10.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9C3.6 4.8 2 5.8 1 7.4c-1.9 3.3-.5 8.2 1.4 10.9.9 1.3 2 2.8 3.4 2.7 1.4-.1 1.9-.9 3.5-.9s2.1.9 3.5.9c1.5 0 2.4-1.3 3.3-2.7 1-1.5 1.5-3 1.5-3.1-.1 0-2.9-1.1-2.9-4.3zM11.4 3c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.2 1.1.1 2.3-.6 3-1.5z"/></svg>`;
+  const g = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.6 13.2l7.9 6.2C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.8c4.3-4 6.9-9.9 6.9-17.2z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C1 16.6 0 20.2 0 24s1 7.4 2.6 10.8l7.9-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.8c-2.1 1.4-4.8 2.3-8.5 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.2C6.6 42.6 14.6 48 24 48z"/></svg>`;
+  const f = `<svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#0866FF"/><path fill="#fff" d="M13.4 24v-8.5h2.9l.4-3.4h-3.3V10c0-1 .3-1.6 1.7-1.6h1.8v-3a24 24 0 0 0-2.6-.1c-2.6 0-4.3 1.6-4.3 4.4v2.4H7v3.4h3v8.5z"/></svg>`;
+  const K = {
+    apple: ['ink', apple, 'Continue with Apple'],
+    google: ['edge', g, 'Continue with Google'],
+    facebook: ['edge', f, 'Continue with Facebook'],
+    email: ['wash', ic('mail', 22, 'var(--ink)', 1.6), 'Continue with email'],
+  }[kind];
+  return `<div class="key ${K[0]}" style="left:24px;top:${y}px;width:392px;height:51px">${K[1]}${K[2]}</div>`;
+}
+frame('signin', '16 Keep your picks: sign in', 'Mode C over the existing ways in (Apple black, Google and Facebook outlined, email), unchanged in order and behaviour. The username step still carries the age-and-terms sentence. Not now enters the app signed out with the picks on Home and the answers on the phone.',
+  topBar(14, {skip:false}) + sealCorner() + qBubble('Where should I keep your picks?', 'Make an account and your picks and bar come with you.') +
+  provider(290, 'apple') + provider(353, 'google') + provider(416, 'facebook') + provider(479, 'email') +
+  `<div class="a small muted" style="left:40px;right:40px;top:550px;text-align:center">By continuing you confirm you’re of legal drinking age where you live, and agree to the <u>Terms of Use</u> and <u>Privacy Policy</u>.</div>` +
+  `<div class="link" style="left:0;right:0;top:870px">Not now</div>`);
+
+/* ---------- mid-transition frames ---------- */
+frame('t1-welcome', 't1 Welcome → hello, at 95 ms of 190', 'Get started slides 42 pt down into the footer slot (here half way) while its label crossfades to Continue. The wall, wordmark and secondary key fade; the seal and bubble fade in from +10 pt.',
+  welcome({mid:true}));
+
+frame('t2-push', 't2 The push, at 90 ms of 180', 'Every handover: the outgoing seal, bubble and options slide 10 pt left and fade in 140 ms (linear); the incoming come from +10 pt, ease-out cubic, 180 ms. The top bar and key stay put; the progress fill steps (here half a step).',
+  topBar(6, {partial:.5}) + spiritsQ({dx:-6, o:.3}) + followQ({dx:5, o:.6}) + footer());
+
+frame('t3-burst', 't3 Pouring: the burst, at 2.2 s', 'The collage pulls back, then bursts outward (×1.14 over 270 ms); the last tiles are still popping in from scale 0. The seal holds the centre with an 8 pt page-coloured collar so no print crosses it.',
+  topBar(12, {skip:false}) + nBubble('Let me pour your first picks…') + pour({burst:true}));
+
+function settle(){
+  // k = 0.75 of the 360 ms spring: the photographed picks fly from their collage cells to their rows,
+  // a pick with no photo fades in at its row, the rest of the collage flies outward and fades.
+  const P = A.picks, k = .75;
+  const pickIds = new Set(P.map(p => p.id));
+  let h = '';
+  COLLAGE.forEach(([x,y,w],i) => {
+    const id = POOL[i % POOL.length];
+    if (pickIds.has(id)) return;
+    const cx = x + w/2 - 220, cy = y + w/2 - 520, s = 1 + .5*k;
+    const ny = 520 + cy*s - w/2;
+    if (ny < 262) return; // the ones flying up have already faded: nothing crosses the bubble
+    h += `<div class="print" style="left:${220 + cx*s - w/2}px;top:${ny}px;width:${w}px;height:${w}px;opacity:${(1-k)*.8}"><img src="${IMG(id)}"></div>`;
+  });
+  P.forEach((p,i) => {
+    const to = [40, 276 + i*88, 72];
+    const ci = POOL.indexOf(p.id);
+    if (p.photo && ci >= 0 && ci < COLLAGE.length) {
+      const from = COLLAGE[ci];
+      const x = from[0] + (to[0]-from[0])*k, y = from[1] + (to[1]-from[1])*k, w = from[2] + (to[2]-from[2])*k;
+      h += `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${w}px"><img src="${IMG(p.id)}"></div>`;
+    } else if (p.photo) {
+      h += `<div class="print" style="left:${to[0]}px;top:${to[1]}px;width:72px;height:72px;opacity:${k}"><img src="${IMG(p.id)}"></div>`;
+    } else {
+      h += `<div class="print" style="left:${to[0]}px;top:${to[1]}px;width:72px;height:72px;display:flex;align-items:center;justify-content:center;opacity:${k*.8}">${ic('dex', 30, 'var(--control)', 1.4)}</div>`;
+    }
+  });
+  return h;
+}
+frame('t4-settle', 't4 Pouring → picks, at 270 ms of 360', 'No push: the photographed picks fly from their cells in the collage into their rows (spring, 360 ms), a pick with no photo fades in where its row will be, the rest of the collage flies outward and fades, and the seal has already ridden back up to the narration slot (240 ms, so it lands first). The bubble text has already crossfaded (its first 120 ms). Names, why lines and Save keys then fade up 60 ms apart.',
+  topBar(13, {skip:false}) + settle() + sealTop() + nBubble('Your first picks.', `You can make ${made} of these now.`));
+
+/* ---------- mount ---------- */
+const wall = document.getElementById('wall');
+const hash = location.hash.slice(1);
+if (hash) document.body.classList.add('solo');
+frames.forEach((f, i) => {
+  const el = document.createElement('div');
+  el.className = 'frame' + (f.id === hash ? ' on' : '');
+  el.innerHTML = `<div class="phone">${statusBar()}${f.body}${homeInd()}</div><div class="cap"><span class="cnt">${f.title}</span>${f.cap}</div>`;
+  wall.appendChild(el);
+});
+</script>
+</body>
+</html>
