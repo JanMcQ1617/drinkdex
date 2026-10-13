@@ -195,6 +195,40 @@ export type WantToTryRow = {
 };
 
 /**
+ * A saved collection (migration 023): a named group of things in All
+ * saved, owner only, at most 50 per account ('collections_full'). Private
+ * until shared: visibility is 'link' exactly when share_id is set, and
+ * both move only through share_collection / unshare_collection. Insert
+ * names owner_id and name; update only name (refused with
+ * 'collection_name_objectionable' while shared, for a name the filter
+ * catches). The clocks are the server's.
+ */
+export type CollectionRow = {
+  id: string;
+  owner_id: string;
+  name: string;
+  visibility: 'private' | 'link';
+  share_id: string | null;
+  shared_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+/**
+ * One thing in a collection (migration 023): a catalogue drink or a post,
+ * once each per collection (a repeat is 23505), at most 200 per collection
+ * ('collection_full'). Added or removed, never changed.
+ */
+export type CollectionItemRow = {
+  id: number;
+  collection_id: string;
+  kind: 'drink' | 'post';
+  drink_id: string | null;
+  post_id: string | null;
+  created_at: string;
+};
+
+/**
  * One row of recent_pours() (migration 017): a photo shared in the last
  * 24 hours by the caller or someone the caller follows. poured_at is the
  * photo's created_at, not the post's: logging a drink again adds a photo to
@@ -538,6 +572,24 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      /* Migration 023. The grants are columns: a name, and nothing else. */
+      collections: {
+        Row: CollectionRow;
+        Insert: { owner_id: string; name: string };
+        Update: { name?: string };
+        Relationships: [];
+      };
+      collection_items: {
+        Row: CollectionItemRow;
+        Insert: {
+          collection_id: string;
+          kind: 'drink' | 'post';
+          drink_id?: string | null;
+          post_id?: string | null;
+        };
+        Update: never;
+        Relationships: [];
+      };
       drink_submissions: {
         Row: DrinkSubmissionRow;
         /*
@@ -828,6 +880,33 @@ export type Database = {
       charge_music_search: {
         Args: Record<string, never>;
         Returns: boolean;
+      };
+      /*
+       * Saved collections (migration 023). share_collection turns a
+       * collection's link on and returns its share id (P0002
+       * collection_not_found, P0001 collection_name_objectionable);
+       * unshare_collection turns it off for good. get_shared_collection is
+       * anon's too (the web page): an object (name, owner, mine,
+       * collection_id when mine, drinks, posts, items [{kind, drink_id,
+       * post_id, at}]) or null, shape-checked by lib/collections.
+       * copy_shared_collection makes the caller's private copy and returns
+       * its id (P0001 collections_full).
+       */
+      share_collection: {
+        Args: { p_collection: string };
+        Returns: string;
+      };
+      unshare_collection: {
+        Args: { p_collection: string };
+        Returns: undefined;
+      };
+      get_shared_collection: {
+        Args: { p_share: string };
+        Returns: Json;
+      };
+      copy_shared_collection: {
+        Args: { p_share: string };
+        Returns: string;
       };
     };
     Enums: Record<never, never>;

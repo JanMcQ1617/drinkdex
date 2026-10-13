@@ -33,6 +33,12 @@ import { RECOVERY_PATH } from '@/lib/recovery';
 /* The old drinkdex://u/<uuid> invite, which named a user rather than    */
 /* carrying a token, opens that person's profile (the /user/[id] screen) */
 /* and follows nobody.                                                  */
+/*                                                                      */
+/* drinkdex://collection/<share id>, a shared collection's Open in       */
+/* Sipply (v4.2 §4.7: the web page's key, a QR code, a pasted link),     */
+/* opens app/collection/[share] with the id lower-cased, as stored. A    */
+/* malformed id still goes there, where it reads as a link that is not  */
+/* shared any more rather than as Unmatched Route.                      */
 /* Anything else is passed through untouched.                           */
 /*                                                                      */
 /* Must never throw: an exception here is raised inside the router's     */
@@ -68,6 +74,11 @@ export function redirectSystemPath({
     if (`${first}/${second}` === AUTH_CALLBACK_PATH) return initial ? '/' : null;
 
     if (first === 'u' && UUID.test(second)) return `/user/${second.toLowerCase()}`;
+
+    // Even with the id missing (a link cut short): the screen reads that as not shared, never Unmatched Route.
+    if (first === 'collection') {
+      return `/collection/${UUID.test(second) ? second.toLowerCase() : encodeURIComponent(second || '-')}`;
+    }
 
     return path;
   } catch {

@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 022
+-- Sipply — the whole schema, as of migration 023
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-022 built on the live project, and records every one of
+-- migrations 002-023 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -444,6 +444,46 @@ create table if not exists public.want_to_try (
   constraint want_to_try_drink_id_shape check (drink_id ~ '^[a-z0-9][a-z0-9-]{0,79}$')
 );
 
+-- Saved collections (023): a named group of things in All saved, owned by
+-- one account, private until shared by link. At most 50 per account
+-- (collections_cap). visibility = 'link' exactly when share_id is set;
+-- both move only through share_collection / unshare_collection. updated_at
+-- moves with renames and every item added, so the Saved tab can put the
+-- collection saved to last first.
+create table if not exists public.collections (
+  id          uuid primary key default gen_random_uuid(),
+  owner_id    uuid not null references public.profiles on delete cascade,
+  name        text not null,
+  visibility  text not null default 'private',
+  share_id    uuid unique,
+  shared_at   timestamptz,
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
+  constraint collections_name_shape
+    check (name = btrim(name) and char_length(name) between 1 and 40),
+  constraint collections_visibility
+    check (visibility in ('private', 'link')),
+  constraint collections_link_has_id
+    check ((visibility = 'link') = (share_id is not null))
+);
+
+-- What is in a collection (023): a saved drink (catalogue id) or a saved
+-- post, once each, at most 200 per collection (collection_items_cap). Goes
+-- with its collection, and a post item with its post.
+create table if not exists public.collection_items (
+  id            bigint generated always as identity primary key,
+  collection_id uuid not null references public.collections on delete cascade,
+  kind          text not null,
+  drink_id      text,
+  post_id       uuid references public.posts on delete cascade,
+  created_at    timestamptz not null default clock_timestamp(),
+  constraint collection_items_shape check (
+    (kind = 'drink' and drink_id is not null and post_id is null
+       and drink_id ~ '^[a-z0-9][a-z0-9-]{0,79}$')
+    or (kind = 'post' and post_id is not null and drink_id is null)
+  )
+);
+
 
 -- --------------------------------------------------------------------
 -- Indexes
@@ -504,6 +544,18 @@ create index if not exists tournaments_host_idx          on public.tournaments (
 create index if not exists tournament_members_user_idx   on public.tournament_members (user_id, status);
 -- 022: the want-to-try list, newest first, for the first sync's read.
 create index if not exists want_to_try_user_created_idx on public.want_to_try (user_id, created_at desc);
+-- 023: a person's collections, last saved to first; each item once per
+-- collection (the app reads 23505 as "already in"); a collection's items
+-- newest first; and the post cascade.
+create index if not exists collections_owner_updated_idx on public.collections (owner_id, updated_at desc);
+create unique index if not exists collection_items_drink_uniq
+  on public.collection_items (collection_id, drink_id) where kind = 'drink';
+create unique index if not exists collection_items_post_uniq
+  on public.collection_items (collection_id, post_id) where kind = 'post';
+create index if not exists collection_items_collection_created_idx
+  on public.collection_items (collection_id, created_at desc);
+create index if not exists collection_items_post_idx
+  on public.collection_items (post_id) where post_id is not null;
 
 
 -- --------------------------------------------------------------------
@@ -2695,6 +2747,254 @@ begin
 end;
 $$;
 
+-- 023: collections' clocks, and no objectionable name on a shared link:
+-- share_collection checks the name once, so a rename after sharing is
+-- checked here.
+create or replace function public.touch_collection()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  if new.share_id is not null and new.name is distinct from old.name
+     and public.is_objectionable(new.name) then
+    raise exception 'collection_name_objectionable' using errcode = 'P0001',
+      hint = 'Stop sharing it, or choose another name.';
+  end if;
+  new.created_at := old.created_at;
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+-- 023: at most 50 collections per account, serialised per account as
+-- want_to_try's cap is.
+create or replace function public.guard_collection_insert()
+returns trigger
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+declare
+  have integer;
+begin
+  perform pg_advisory_xact_lock(hashtextextended('collections:' || new.owner_id::text, 0));
+  select count(*) into have from public.collections c where c.owner_id = new.owner_id;
+  if have >= 50 then
+    raise exception 'collections_full'
+      using errcode = 'P0001',
+            detail  = format('%s collections; the limit is 50', have),
+            hint    = 'Delete one to make another.';
+  end if;
+  return new;
+end;
+$$;
+
+-- 023: at most 200 items per collection.
+create or replace function public.guard_collection_item_insert()
+returns trigger
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+declare
+  have integer;
+begin
+  perform pg_advisory_xact_lock(hashtextextended('collection_items:' || new.collection_id::text, 0));
+  select count(*) into have from public.collection_items i where i.collection_id = new.collection_id;
+  if have >= 200 then
+    raise exception 'collection_full'
+      using errcode = 'P0001',
+            detail  = format('%s items; the limit is 200', have),
+            hint    = 'Remove one to add another.';
+  end if;
+  return new;
+end;
+$$;
+
+-- 023: an item added moves its collection's updated_at. The owner may
+-- update only `name`, so this runs as the definer.
+create or replace function public.touch_collection_on_item()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  update public.collections set updated_at = now() where id = new.collection_id;
+  return null;
+end;
+$$;
+
+-- 023: sharing, only through these four; the tables stay owner-only, so
+-- nothing can list shared collections. share_collection turns the link on
+-- (idempotent; refuses an objectionable name) and returns its share id, a
+-- random uuid that is not the collection's id.
+create or replace function public.share_collection(p_collection uuid)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_owner uuid;
+  v_name  text;
+  v_share uuid;
+begin
+  select c.owner_id, c.name, c.share_id into v_owner, v_name, v_share
+  from public.collections c where c.id = p_collection
+  for update;
+  if v_owner is null or v_owner is distinct from auth.uid() then
+    raise exception 'collection_not_found' using errcode = 'P0002';
+  end if;
+  if v_share is not null then return v_share; end if;
+  if public.is_objectionable(v_name) then
+    raise exception 'collection_name_objectionable' using errcode = 'P0001',
+      hint = 'Rename the collection to share it.';
+  end if;
+  v_share := gen_random_uuid();
+  update public.collections
+     set share_id = v_share, visibility = 'link', shared_at = now()
+   where id = p_collection;
+  return v_share;
+end;
+$$;
+
+-- 023: turns the link off. The share id is thrown away, so an old link
+-- never answers again; sharing again mints a new one.
+create or replace function public.unshare_collection(p_collection uuid)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  update public.collections
+     set share_id = null, visibility = 'private', shared_at = null
+   where id = p_collection and owner_id = auth.uid();
+  if not found then
+    raise exception 'collection_not_found' using errcode = 'P0002';
+  end if;
+end;
+$$;
+
+-- 023: what a link shows, or null (unknown or switched-off id, or a
+-- signed-in caller blocked with the owner either way). For anon (the web
+-- page) and signed in (the app).
+--   { name, owner, mine, collection_id (only when mine), drinks, posts,
+--     items: [{ kind, drink_id, post_id (signed in, not blocked), at }] }
+-- A post item's drink_id is the drink the post shows.
+create or replace function public.get_shared_collection(p_share uuid)
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with c as (
+    select c.id, c.owner_id, c.name, p.username
+    from public.collections c
+    join public.profiles p on p.id = c.owner_id
+    where c.share_id = p_share and c.visibility = 'link'
+      and (auth.uid() is null
+           or not (c.owner_id = any ((select private.my_block_set())::uuid[])))
+  ),
+  it as (
+    select i.kind, i.created_at,
+           coalesce(i.drink_id, po.drink_id) as drink_id,
+           case when i.kind = 'post' and auth.uid() is not null
+                     and not (po.author_id = any ((select private.my_block_set())::uuid[]))
+                then i.post_id end as post_id
+    from c
+    join public.collection_items i on i.collection_id = c.id
+    left join public.posts po on po.id = i.post_id
+    where i.kind = 'drink' or po.id is not null
+    order by i.created_at desc
+    limit 200
+  )
+  select case when not exists (select 1 from c) then null else jsonb_build_object(
+    'name',  (select name from c),
+    'owner', (select username from c),
+    'mine',  coalesce((select owner_id from c) = auth.uid(), false),
+    'collection_id', case when (select owner_id from c) = auth.uid() then (select id from c) end,
+    'drinks', (select count(*) from it where kind = 'drink'),
+    'posts',  (select count(*) from it where kind = 'post'),
+    'items', coalesce((select jsonb_agg(jsonb_build_object(
+                 'kind', kind, 'drink_id', drink_id, 'post_id', post_id, 'at', created_at)
+               order by created_at desc) from it), '[]'::jsonb)
+  ) end;
+$$;
+
+-- 023: "Save collection": a private copy for the caller (same name, the
+-- drinks, the posts the caller can see), under the usual caps. Returns
+-- the copy's id; the app then saves each item into the caller's All saved.
+create or replace function public.copy_shared_collection(p_share uuid)
+returns uuid
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_src  record;
+  v_new  uuid;
+  v_me   uuid := auth.uid();
+begin
+  if v_me is null then
+    raise exception 'not_signed_in' using errcode = '42501';
+  end if;
+  select c.id, c.owner_id, c.name into v_src
+  from public.collections c
+  where c.share_id = p_share and c.visibility = 'link'
+    and not (c.owner_id = any ((select private.my_block_set())::uuid[]));
+  if not found then
+    raise exception 'collection_not_found' using errcode = 'P0002';
+  end if;
+  insert into public.collections (owner_id, name) values (v_me, v_src.name) returning id into v_new;
+  insert into public.collection_items (collection_id, kind, drink_id, post_id, created_at)
+  select v_new, i.kind, i.drink_id, i.post_id, i.created_at
+  from public.collection_items i
+  left join public.posts po on po.id = i.post_id
+  where i.collection_id = v_src.id
+    and (i.kind = 'drink'
+         or (po.id is not null and not (po.author_id = any ((select private.my_block_set())::uuid[]))))
+  order by i.created_at;
+  return v_new;
+end;
+$$;
+
+-- 023: unsaving a post (saves) or a drink (want_to_try) takes it out of
+-- the owner's collections too, so a collection only ever holds things in
+-- All saved, whichever phone unsaved it.
+create or replace function public.leave_collections_on_unsave_post()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  delete from public.collection_items i
+  using public.collections c
+  where c.id = i.collection_id and c.owner_id = old.user_id
+    and i.kind = 'post' and i.post_id = old.post_id;
+  return null;
+end;
+$$;
+
+create or replace function public.leave_collections_on_unsave_drink()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  delete from public.collection_items i
+  using public.collections c
+  where c.id = i.collection_id and c.owner_id = old.user_id
+    and i.kind = 'drink' and i.drink_id = old.drink_id;
+  return null;
+end;
+$$;
+
 
 -- --------------------------------------------------------------------
 -- Function privileges
@@ -2719,6 +3019,12 @@ revoke all on function public.prepare_drink_submission()     from public, anon, 
 revoke all on function public.guard_reel_insert()            from public, anon, authenticated;
 revoke all on function public.touch_taste_profile()          from public, anon, authenticated;
 revoke all on function public.guard_want_to_try_insert()     from public, anon, authenticated;
+revoke all on function public.touch_collection()              from public, anon, authenticated;
+revoke all on function public.guard_collection_insert()       from public, anon, authenticated;
+revoke all on function public.guard_collection_item_insert()  from public, anon, authenticated;
+revoke all on function public.touch_collection_on_item()      from public, anon, authenticated;
+revoke all on function public.leave_collections_on_unsave_post()  from public, anon, authenticated;
+revoke all on function public.leave_collections_on_unsave_drink() from public, anon, authenticated;
 revoke all on function private.reel_day_limit()              from public, anon, authenticated;
 revoke all on function private.reel_live_limit()             from public, anon, authenticated;
 
@@ -2813,6 +3119,17 @@ grant execute on function public.respond_to_tournament(uuid, boolean)           
 grant execute on function public.leave_tournament(uuid)                                      to authenticated;
 grant execute on function public.end_tournament(uuid)                                        to authenticated;
 grant execute on function public.delete_tournament(uuid)                                     to authenticated;
+
+-- 023. A link is readable signed out too (the web page), so
+-- get_shared_collection is anon's as well; the rest need an account.
+revoke all on function public.share_collection(uuid)       from public, anon;
+revoke all on function public.unshare_collection(uuid)     from public, anon;
+revoke all on function public.copy_shared_collection(uuid) from public, anon;
+revoke all on function public.get_shared_collection(uuid)  from public;
+grant execute on function public.share_collection(uuid)       to authenticated;
+grant execute on function public.unshare_collection(uuid)     to authenticated;
+grant execute on function public.copy_shared_collection(uuid) to authenticated;
+grant execute on function public.get_shared_collection(uuid)  to anon, authenticated;
 
 
 -- --------------------------------------------------------------------
@@ -2949,6 +3266,37 @@ create trigger want_to_try_cap
   before insert on public.want_to_try
   for each row execute function public.guard_want_to_try_insert();
 
+-- 023.
+drop trigger if exists collections_touch on public.collections;
+create trigger collections_touch
+  before update on public.collections
+  for each row execute function public.touch_collection();
+
+drop trigger if exists collections_cap on public.collections;
+create trigger collections_cap
+  before insert on public.collections
+  for each row execute function public.guard_collection_insert();
+
+drop trigger if exists collection_items_cap on public.collection_items;
+create trigger collection_items_cap
+  before insert on public.collection_items
+  for each row execute function public.guard_collection_item_insert();
+
+drop trigger if exists collection_items_touch on public.collection_items;
+create trigger collection_items_touch
+  after insert on public.collection_items
+  for each row execute function public.touch_collection_on_item();
+
+drop trigger if exists saves_leave_collections on public.saves;
+create trigger saves_leave_collections
+  after delete on public.saves
+  for each row execute function public.leave_collections_on_unsave_post();
+
+drop trigger if exists want_to_try_leave_collections on public.want_to_try;
+create trigger want_to_try_leave_collections
+  after delete on public.want_to_try
+  for each row execute function public.leave_collections_on_unsave_drink();
+
 
 -- --------------------------------------------------------------------
 -- Table privileges
@@ -2965,7 +3313,10 @@ create trigger want_to_try_cap
 -- select-only: every write is an RPC, so the rules on dates, goals, seats
 -- and blocks cannot be skipped by writing rows. Your tastes and drinks to
 -- try (022) are owner-only and grant only the columns a client may name;
--- taste_profiles updates only its two answers, never user_id.
+-- taste_profiles updates only its two answers, never user_id. Collections
+-- (023) likewise: a client names a collection and nothing else
+-- (visibility, share_id and shared_at move only through the sharing
+-- functions), and an item is added or removed, never changed.
 -- --------------------------------------------------------------------
 
 grant select on public.profiles to anon, authenticated;
@@ -3014,6 +3365,15 @@ revoke all on public.want_to_try from anon, authenticated;
 grant select, delete on public.want_to_try to authenticated;
 grant insert (user_id, drink_id) on public.want_to_try to authenticated;
 
+revoke all on public.collections from anon, authenticated;
+grant select, delete on public.collections to authenticated;
+grant insert (owner_id, name) on public.collections to authenticated;
+grant update (name) on public.collections to authenticated;
+
+revoke all on public.collection_items from anon, authenticated;
+grant select, delete on public.collection_items to authenticated;
+grant insert (collection_id, kind, drink_id, post_id) on public.collection_items to authenticated;
+
 
 -- --------------------------------------------------------------------
 -- Row Level Security
@@ -3046,6 +3406,8 @@ alter table public.tournaments     enable row level security;
 alter table public.tournament_members enable row level security;
 alter table public.taste_profiles  enable row level security;
 alter table public.want_to_try     enable row level security;
+alter table public.collections     enable row level security;
+alter table public.collection_items enable row level security;
 
 -- Profiles: readable by any signed-in user not blocked either way (you
 -- must be able to find people to follow), writable only by their owner.
@@ -3234,6 +3596,46 @@ create policy want_to_try_insert_own on public.want_to_try
 
 create policy want_to_try_delete_own on public.want_to_try
   for delete to authenticated using (auth.uid() = user_id);
+
+-- Collections (023): owner only, every way. Nobody else reads the tables;
+-- a shared link is answered by get_shared_collection alone, so nothing
+-- can be listed. A post goes into a collection only if you can see it
+-- (posts_read already hides anyone you are blocked with, either way).
+drop policy if exists collections_read_own   on public.collections;
+drop policy if exists collections_insert_own on public.collections;
+drop policy if exists collections_update_own on public.collections;
+drop policy if exists collections_delete_own on public.collections;
+
+create policy collections_read_own on public.collections
+  for select to authenticated using (auth.uid() = owner_id);
+
+create policy collections_insert_own on public.collections
+  for insert to authenticated with check (auth.uid() = owner_id);
+
+create policy collections_update_own on public.collections
+  for update to authenticated using (auth.uid() = owner_id) with check (auth.uid() = owner_id);
+
+create policy collections_delete_own on public.collections
+  for delete to authenticated using (auth.uid() = owner_id);
+
+drop policy if exists collection_items_read_own   on public.collection_items;
+drop policy if exists collection_items_insert_own on public.collection_items;
+drop policy if exists collection_items_delete_own on public.collection_items;
+
+create policy collection_items_read_own on public.collection_items
+  for select to authenticated
+  using (exists (select 1 from public.collections c where c.id = collection_id and c.owner_id = auth.uid()));
+
+create policy collection_items_insert_own on public.collection_items
+  for insert to authenticated
+  with check (
+    exists (select 1 from public.collections c where c.id = collection_id and c.owner_id = auth.uid())
+    and (kind = 'drink' or exists (select 1 from public.posts p where p.id = post_id))
+  );
+
+create policy collection_items_delete_own on public.collection_items
+  for delete to authenticated
+  using (exists (select 1 from public.collections c where c.id = collection_id and c.owner_id = auth.uid()));
 
 -- Drink suggestions (018): own rows only, and nobody else reads. Editable
 -- only until Jan has reviewed it; withdrawing is always allowed.
@@ -3479,7 +3881,7 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 022'),
+  ('schema',                  'schema.sql, current as of 023'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -3500,5 +3902,6 @@ insert into public.schema_migrations (version, note) values
   ('019_reels',               'contained in schema.sql'),
   ('020_tournaments_and_story_music', 'contained in schema.sql'),
   ('021_post_likers',         'contained in schema.sql'),
-  ('022_taste_profiles',      'contained in schema.sql')
+  ('022_taste_profiles',      'contained in schema.sql'),
+  ('023_collections',         'contained in schema.sql')
 on conflict (version) do nothing;

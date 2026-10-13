@@ -8,6 +8,7 @@ import { useReducedMotion } from 'react-native-reanimated';
 import { StatusBar } from 'expo-status-bar';
 
 import { VideoIntro } from '@/components/VideoIntro';
+import { CollectionsHost } from '@/components/collections/CollectionsHost';
 import { FirstRun } from '@/components/FirstRun';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
@@ -176,7 +177,9 @@ export default function RootLayout() {
           opened it, with the standard edge swipe. An entry here would only
           repeat them. The same goes for activity, post/[id],
           connections/[id], tournaments/index and tournaments/[id], which
-          are plain pushes too. Saved is a tab, in (tabs).
+          are plain pushes too, and so are saved/all, saved/[id] and
+          collection/[share] (v4.2 §4.5 to §4.8). Saved itself is a tab,
+          in (tabs).
         */}
         {/*
           Posting a drink, from the bar's + and every other Post button. A
@@ -278,6 +281,11 @@ export default function RootLayout() {
         the film, draw above it.
       */}
       <FirstRun />
+      {/*
+        Saved collections' bar and sheet (v4.2 §4.2), for a bookmark
+        anywhere in the app. Nothing while collections are off.
+      */}
+      <CollectionsHost />
       {/* Redeems invite deep links; renders nothing. */}
       <InviteLinkHandler />
       {/*

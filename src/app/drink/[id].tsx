@@ -12,6 +12,12 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import {
+  confirmUnsave,
+  ensureDrinkSaved,
+  onSaveToCollectionAction,
+  SAVE_TO_COLLECTION,
+} from '@/components/collections/bookmark';
 import { PostSheet, type PostSaving, type PostSheetMode } from '@/components/dex/PostSheet';
 import {
   CompositionSection,
@@ -45,6 +51,7 @@ import {
 } from '@/lib/pour';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
+import { collectionsOn, useCollections, useCollectionsOn } from '@/store/collections';
 import { useSocial } from '@/store/social';
 import { useTaste, WANT_TO_TRY_MAX } from '@/store/taste';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
@@ -105,16 +112,40 @@ export default function DrinkDetailScreen() {
    * label that changes under the focus by itself.
    */
   const saved = useTaste((s) => (drink ? s.saved.includes(drink.id) : false));
+  /*
+   * v4.2 §4: with an account and collections there, a save raises the
+   * save bar (whose own announcement says "Saved"), holding the bookmark
+   * opens Save to collection, and an unsave asks first when the drink is
+   * in a collection, which it then leaves (components/collections/bookmark).
+   */
+  const canCollect = useCollectionsOn();
   const toggleSaved = useCallback(() => {
     if (!drink) return;
-    const wasSaved = useTaste.getState().saved.includes(drink.id);
-    const now = useTaste.getState().toggleSaved(drink.id);
-    if (!wasSaved && !now) {
+    const id = drink.id;
+    if (useTaste.getState().saved.includes(id)) {
+      confirmUnsave({ kind: 'drink', id }, () => {
+        useTaste.getState().setSaved(id, false);
+        haptic.tap();
+        announce('Removed from Saved');
+      });
+      return;
+    }
+    if (!useTaste.getState().toggleSaved(id)) {
       showNotice('Saved is full', `It holds ${WANT_TO_TRY_MAX} drinks. Take one out to save another.`);
       return;
     }
     haptic.tap();
-    announce(now ? 'Saved' : 'Removed from Saved');
+    if (collectionsOn()) useCollections.getState().showBar({ kind: 'drink', id });
+    else announce('Saved');
+  }, [drink]);
+  const saveToCollection = useCallback(() => {
+    if (!drink || !collectionsOn()) return;
+    if (!ensureDrinkSaved(drink.id)) {
+      showNotice('Saved is full', `It holds ${WANT_TO_TRY_MAX} drinks. Take one out to save another.`);
+      return;
+    }
+    haptic.tap();
+    useCollections.getState().openSheet({ kind: 'drink', id: drink.id });
   }, [drink]);
 
   /*
@@ -341,6 +372,9 @@ export default function DrinkDetailScreen() {
           label={saved ? 'Saved' : 'Save'}
           accessibilityHint={saved ? 'Takes it out of Saved' : 'Keeps it in Saved'}
           onPress={toggleSaved}
+          onLongPress={canCollect ? saveToCollection : undefined}
+          accessibilityActions={canCollect ? SAVE_TO_COLLECTION : undefined}
+          onAccessibilityAction={canCollect ? onSaveToCollectionAction(saveToCollection) : undefined}
         />,
       )}
 

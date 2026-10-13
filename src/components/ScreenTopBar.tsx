@@ -1,5 +1,7 @@
 import React, { isValidElement, useRef, useState, type ReactElement, type ReactNode } from 'react';
 import {
+  type AccessibilityActionEvent,
+  type AccessibilityActionInfo,
   ActivityIndicator,
   type NativeScrollEvent,
   type NativeSyntheticEvent,
@@ -213,6 +215,9 @@ export function TopBarButton({
   icon,
   label,
   onPress,
+  onLongPress,
+  accessibilityActions,
+  onAccessibilityAction,
   filled,
   badge,
   accessibilityHint,
@@ -221,6 +226,11 @@ export function TopBarButton({
   icon: IconName;
   label: string;
   onPress: () => void;
+  /** A second way in, held for 500ms (the drink page's bookmark: Save to collection, v4.2 §4.2). */
+  onLongPress?: () => void;
+  /** VoiceOver's way to the same second action, as a custom action. */
+  accessibilityActions?: readonly AccessibilityActionInfo[];
+  onAccessibilityAction?: (e: AccessibilityActionEvent) => void;
   filled?: boolean;
   badge?: boolean;
   /** Where the button goes, when its label alone does not say (sign-in's Close). */
@@ -230,6 +240,10 @@ export function TopBarButton({
   return (
     <Pressable
       onPress={onPress}
+      onLongPress={onLongPress}
+      delayLongPress={onLongPress ? 500 : undefined}
+      accessibilityActions={accessibilityActions}
+      onAccessibilityAction={onAccessibilityAction}
       accessibilityRole="button"
       accessibilityLabel={badge ? `${label}, new` : label}
       accessibilityHint={accessibilityHint}

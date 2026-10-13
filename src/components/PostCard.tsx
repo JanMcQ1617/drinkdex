@@ -23,6 +23,11 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { DrinkName, Print } from '@/components/cabinet';
+import {
+  confirmUnsave,
+  onSaveToCollectionAction,
+  SAVE_TO_COLLECTION,
+} from '@/components/collections/bookmark';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
@@ -45,6 +50,7 @@ import {
 import { clampToLines, textWidth } from '@/lib/textFit';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
+import { collectionsOn, type SavedThing, useCollections, useCollectionsOn } from '@/store/collections';
 import { useSocial } from '@/store/social';
 import type { Post, UserProfile } from '@/types';
 
@@ -119,6 +125,9 @@ function IconButton({
   name,
   label,
   onPress,
+  onLongPress,
+  accessibilityActions,
+  onAccessibilityAction,
   size = GLYPH,
   filled,
   selected,
@@ -127,6 +136,11 @@ function IconButton({
   name: IconName;
   label: string;
   onPress: () => void;
+  /** The bookmark's hold, 500ms: Save to collection (v4.2 §4.2). */
+  onLongPress?: () => void;
+  /** VoiceOver's way to the hold's action. */
+  accessibilityActions?: readonly AccessibilityActionInfo[];
+  onAccessibilityAction?: (e: AccessibilityActionEvent) => void;
   size?: number;
   filled?: boolean;
   selected?: boolean;
@@ -156,6 +170,10 @@ function IconButton({
   return (
     <Pressable
       onPress={onPress}
+      onLongPress={onLongPress}
+      delayLongPress={onLongPress ? 500 : undefined}
+      accessibilityActions={accessibilityActions}
+      onAccessibilityAction={onAccessibilityAction}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}
@@ -379,15 +397,70 @@ export const PostCard = React.memo(function PostCard({
   const saveKey = `${post.id}|${serverSaved ? 1 : 0}`;
   const saved = saveFlip?.key === saveKey ? saveFlip.on : serverSaved;
 
+  /*
+   * v4.2 §4, while collections are on (an account, and 023 there): a save
+   * raises the save bar, holding the bookmark saves and opens Save to
+   * collection, and an unsave asks first when the post is in a collection,
+   * which it then leaves (components/collections/bookmark). Off, all three
+   * are build 23's tap.
+   */
+  const canCollect = useCollectionsOn();
+  const savedThing = useCallback(
+    (): SavedThing => ({
+      kind: 'post',
+      id: post.id,
+      drinkId: post.drinkId,
+      photoPath: post.photoPath ?? null,
+      author: author?.username ?? 'someone',
+      authorId: post.authorId,
+      postedAt: post.createdAt,
+    }),
+    [author?.username, post.authorId, post.createdAt, post.drinkId, post.id, post.photoPath],
+  );
+
+  /** Writes the save or unsave, on the like's terms; resolves to whether it held. */
+  const writeSave = useCallback(
+    (on: boolean) => {
+      if (!myId) return Promise.resolve(false);
+      const next = { key: saveKey, on };
+      setSaveFlip(next);
+      return toggleSave(myId, post.id, !on).then((ok) => {
+        if (!ok) setSaveFlip((f) => (f === next ? null : f));
+        return ok;
+      });
+    },
+    [myId, post.id, saveKey, toggleSave],
+  );
+
   const onSave = useCallback(() => {
     if (!myId) return;
     haptic.select();
-    const next = { key: saveKey, on: !saved };
-    setSaveFlip(next);
-    void toggleSave(myId, post.id, saved).then((ok) => {
-      if (!ok) setSaveFlip((f) => (f === next ? null : f));
+    if (saved) {
+      confirmUnsave({ kind: 'post', id: post.id }, () => writeSave(false));
+      return;
+    }
+    const bar = collectionsOn();
+    if (bar) useCollections.getState().showBar(savedThing());
+    void writeSave(true).then((ok) => {
+      // A save that did not hold takes its bar with it.
+      if (!ok && bar) {
+        const shown = useCollections.getState().bar;
+        if (shown?.thing.id === post.id) useCollections.getState().hideBar(shown.n);
+      }
     });
-  }, [myId, post.id, saveKey, saved, toggleSave]);
+  }, [myId, post.id, saved, savedThing, writeSave]);
+
+  /* Held: saved first if it is not, then the sheet, no bar. */
+  const onSaveToCollection = useCallback(() => {
+    if (!myId || !collectionsOn()) return;
+    haptic.tap();
+    const open = () => useCollections.getState().openSheet(savedThing());
+    if (saved) open();
+    else
+      void writeSave(true).then((ok) => {
+        if (ok) open();
+      });
+  }, [myId, saved, savedThing, writeSave]);
 
   /*
    * Who liked it: null until the liked-by line is first tapped, then open
@@ -780,7 +853,18 @@ export const PostCard = React.memo(function PostCard({
       {comments ? <IconButton name="comment" label="Comment" onPress={() => comments(post.id)} /> : null}
       <IconButton name="send" label="Share" onPress={share} />
       <View pointerEvents="none" style={styles.spacer} />
-      {canSave ? <IconButton name="bookmark" label="Save" onPress={onSave} filled={saved} selected={saved} /> : null}
+      {canSave ? (
+        <IconButton
+          name="bookmark"
+          label="Save"
+          onPress={onSave}
+          onLongPress={canCollect ? onSaveToCollection : undefined}
+          accessibilityActions={canCollect ? SAVE_TO_COLLECTION : undefined}
+          onAccessibilityAction={canCollect ? onSaveToCollectionAction(onSaveToCollection) : undefined}
+          filled={saved}
+          selected={saved}
+        />
+      ) : null}
     </View>
   );
 

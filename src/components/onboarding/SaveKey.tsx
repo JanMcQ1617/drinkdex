@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 
+import {
+  confirmUnsave,
+  ensureDrinkSaved,
+  onSaveToCollectionAction,
+  SAVE_TO_COLLECTION,
+} from '@/components/collections/bookmark';
+import { SaveSheet } from '@/components/collections/SaveSheet';
 import { announce, haptic } from '@/components/ui';
 import { colors, radius, textRole } from '@/constants/theme';
+import { collectionsOn, type SavedThing, useCollectionsOn } from '@/store/collections';
 import { WANT_TO_TRY_MAX, useTaste } from '@/store/taste';
 
 import { SAVE_H, SAVE_W } from './metrics';
@@ -51,38 +59,79 @@ export function SaveKey({ id, name }: { id: string; name: string }) {
   const reduce = useReducedMotion();
   const old = useFadingPrevious(saved, reduce ? 0 : T.pick + T.settle);
 
+  /*
+   * v4.2 §4. An unsave asks first when the drink is in a collection, which
+   * it then leaves (components/collections/bookmark), and holding the key
+   * opens Save to collection. No save bar here: the key's own word and
+   * fill already say "Saved", and the only time collections are on for a
+   * pick (signed in, so Settings' Your tastes) the picks are a full-screen
+   * Modal with their own key at the foot, where a bar would cover it. For
+   * the same Modal the sheet is drawn here, inside it, not by the app's
+   * host: a Modal presents only over the Modal it is in.
+   */
+  const canCollect = useCollectionsOn();
+  const [sheet, setSheet] = useState<{ thing: SavedThing; open: boolean } | null>(null);
+
+  const refuse = () => {
+    // The store refused the add, and a pick is always a catalogue drink, so the list is full: say so, since nothing changed.
+    haptic.error();
+    announce(`You can save up to ${WANT_TO_TRY_MAX} drinks. Take one out to save ${name}.`);
+  };
+
   const press = () => {
     const taste = useTaste.getState();
-    const was = taste.saved.includes(id);
-    const now = taste.toggleSaved(id);
-    if (!was && !now) {
-      // The store refused the add, and a pick is always a catalogue drink, so the list is full: say so, since nothing changed.
-      haptic.error();
-      announce(`You can save up to ${WANT_TO_TRY_MAX} drinks. Take one out to save ${name}.`);
+    if (taste.saved.includes(id)) {
+      confirmUnsave({ kind: 'drink', id }, () => {
+        useTaste.getState().setSaved(id, false);
+        haptic.tap();
+      });
+      return;
+    }
+    if (!taste.toggleSaved(id)) {
+      refuse();
       return;
     }
     haptic.tap();
   };
 
+  const hold = () => {
+    if (!collectionsOn()) return;
+    if (!ensureDrinkSaved(id)) {
+      refuse();
+      return;
+    }
+    haptic.tap();
+    setSheet({ thing: { kind: 'drink', id }, open: true });
+  };
+
   return (
-    <Pressable
-      onPress={press}
-      hitSlop={{ top: SLOP, bottom: SLOP }}
-      accessibilityRole="button"
-      accessibilityLabel={saved ? `Saved ${name} to try` : `Save ${name} to try`}
-      accessibilityState={{ selected: saved }}
-      style={styles.key}>
-      {({ pressed }) => (
-        <>
-          <Face on={saved} pressed={pressed} />
-          {old !== undefined && !reduce ? (
-            <FadeOut duration={T.pick}>
-              <Face on={old} pressed={false} />
-            </FadeOut>
-          ) : null}
-        </>
-      )}
-    </Pressable>
+    <>
+      <Pressable
+        onPress={press}
+        onLongPress={canCollect ? hold : undefined}
+        delayLongPress={canCollect ? 500 : undefined}
+        accessibilityActions={canCollect ? SAVE_TO_COLLECTION : undefined}
+        onAccessibilityAction={canCollect ? onSaveToCollectionAction(hold) : undefined}
+        hitSlop={{ top: SLOP, bottom: SLOP }}
+        accessibilityRole="button"
+        accessibilityLabel={saved ? `Saved ${name} to try` : `Save ${name} to try`}
+        accessibilityState={{ selected: saved }}
+        style={styles.key}>
+        {({ pressed }) => (
+          <>
+            <Face on={saved} pressed={pressed} />
+            {old !== undefined && !reduce ? (
+              <FadeOut duration={T.pick}>
+                <Face on={old} pressed={false} />
+              </FadeOut>
+            ) : null}
+          </>
+        )}
+      </Pressable>
+      {sheet ? (
+        <SaveSheet thing={sheet.thing} visible={sheet.open} onClose={() => setSheet({ ...sheet, open: false })} />
+      ) : null}
+    </>
   );
 }
 
