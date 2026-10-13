@@ -40,9 +40,9 @@ import { useTaste } from '@/store/taste';
 /* THE FIRST STEP DEPENDS ON THE PHONE AND THE GATE:                    */
 /*   - a phone that has signed in before: Welcome back, on every gate   */
 /*     (auth/WelcomeBack), until "Use another way";                     */
-/*   - Home, while the phone holds picks or drinks saved to try (after  */
-/*     the first run's "Not now"): the card of ways in under "Your      */
-/*     picks", titled "Keep your picks" (specs/v4.1-changes.md 1.6);    */
+/*   - Home, while the phone holds picks or saved drinks (after the     */
+/*     first run's "Not now"): the card of ways in under "Your picks",  */
+/*     titled "Keep your picks" (specs/v4.1-changes.md 1.6);            */
 /*   - anywhere else: the card of ways in.                              */
 /*                                                                      */
 /* ONE WHITE PAGE. Every step stands on the sign-in page (CabinetSheet, */

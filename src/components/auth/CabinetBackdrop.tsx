@@ -74,8 +74,8 @@ const PICKS_SHOWN = 3;
 
 /**
  * What the picks head shows, from the taste store (store/taste): the
- * drinks saved to try, newest first, and the six the onboarding picked,
- * in their order.
+ * saved drinks, newest first, and the six the onboarding picked, in
+ * their order.
  */
 export interface PicksHead {
   saved: readonly string[];
@@ -106,7 +106,7 @@ function picksShown({ saved, picks }: PicksHead): Drink[] {
  *            accessibility text size, nothing (the bar says the step).
  *   compact  every other step: nothing. The bar's title is the step.
  *   picks    Home's first step after the onboarding's "Not now" (specs/
- *            v4.1-changes.md 1.6): "Your picks", how many are saved to try
+ *            v4.1-changes.md 1.6): "Your picks", how many drinks are saved
  *            (or that they wait on this phone), and three of them as
  *            colour prints, the only colour on the page and the person's
  *            own. VoiceOver reads the heading and its line as one; the
@@ -118,7 +118,8 @@ function Backdrop({ variant, picks }: { variant: 'full' | 'compact'; picks?: Pic
 
   if (picks) {
     const n = picks.saved.length;
-    const line = n >= 1 ? `${formatCount(n)} saved to try` : 'Kept on this phone until you sign in';
+    // "saved", not "saved to try": the count is every saved drink, and a drink page's bookmark saves caught ones too.
+    const line = n >= 1 ? `${formatCount(n)} saved` : 'Kept on this phone until you sign in';
     const across = width - 2 * layout.gutter - (PICKS_SHOWN - 1) * PICK_GAP;
     const side = Math.min(PICK, Math.floor(across / PICKS_SHOWN));
     const shown = picksShown(picks);
@@ -197,7 +198,7 @@ export function CabinetSheet({
   contentStyle,
 }: {
   backdrop: 'full' | 'compact';
-  /** The person's picks and drinks saved to try: the head shows them in place of the wordmark. */
+  /** The person's picks and saved drinks: the head shows them in place of the wordmark. */
   picks?: PicksHead;
   /** The step's title bar. */
   bar: ReactNode;

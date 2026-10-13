@@ -6,17 +6,18 @@ import type { Json } from '@/lib/database.types';
 import { createGuardedStorage } from '@/lib/guardedStorage';
 import { supabase } from '@/lib/supabase';
 import { isPlaceholderUsername, onAccountDeleted, useAuth } from '@/store/auth';
-import { useCollection } from '@/store/collection';
 
 /* ==================================================================== */
-/* Your tastes: the onboarding answers, the picks, and drinks to try    */
+/* Your tastes: the onboarding answers, the picks, and saved drinks     */
 /*                                                                      */
 /* specs/v4.1-changes.md §3. One store for what the first run asks and  */
 /* what it gives back: the answers (they drive lib/recommend), the six  */
-/* picks the results step showed, and the want-to-try list its "Save to */
-/* try" key fills. The want-to-try list is NOT the Dex: the Dex stays   */
-/* only drinks you have had, and a drink that enters the Dex leaves     */
-/* this list (pruning, at the foot).                                    */
+/* picks the results step showed, and the saved drinks, which its "Save */
+/* to try" key and the bookmark on every drink's page fill, and the     */
+/* Saved tab shows. Saved drinks are NOT the Dex: the Dex is the drinks */
+/* you have had. They are bookmarks, any drink, caught or not; catching */
+/* one leaves it saved (Jan, 13 Oct 2026: saving drinks to find them    */
+/* quickly, where it had been a want-to-try list the Dex pruned).       */
 /*                                                                      */
 /* THE PHONE'S FIRST, THE ACCOUNT'S WHEN THERE IS ONE. Everything here  */
 /* works signed out and is kept on the phone (createGuardedStorage, so  */
@@ -87,7 +88,7 @@ export interface TasteState {
   ageOk: boolean;
   underAgeUntil: number | null;
   picks: string[]; // the six shown on results, in order
-  saved: string[]; // want-to-try, NEWEST FIRST, ≤ 200, catalogue ids only
+  saved: string[]; // saved drinks (bookmarks), NEWEST FIRST, ≤ 200, catalogue ids only, caught or not
   heardFrom: HeardFrom | null;
   done: boolean; // first-run finished (allset passed, Not now, or signed in)
   syncedFor: string | null; // account the local copy belongs to
@@ -263,8 +264,6 @@ type Persisted = Pick<
   'answers' | 'step' | 'ageOk' | 'underAgeUntil' | 'picks' | 'saved' | 'heardFrom' | 'done' | 'syncedFor'
 >;
 
-const inDex = (id: string) => Object.prototype.hasOwnProperty.call(useCollection.getState().unlocks, id);
-
 export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>()(
   persist(
     (set, get): TasteState => ({
@@ -300,8 +299,8 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
       confirmAge: () => set({ ageOk: true }),
 
       /*
-       * "No, not yet": nothing is kept but the lock (spec §11). The list of
-       * drinks to try stays, because it was made before this run.
+       * "No, not yet": nothing is kept but the lock (spec §11). The saved
+       * drinks stay, because they were saved before this run.
        */
       refuseAge: (now = Date.now()) =>
         set({
@@ -319,8 +318,9 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
 
       /*
        * Newest first. An add is refused (false) for an id the catalogue
-       * does not know, a drink already in the Dex (the two lists never hold
-       * the same drink), and at the cap.
+       * does not know, and at the cap. A drink already in the Dex is saved
+       * like any other: these are bookmarks, and the server's table has no
+       * Dex rule either (the Dex is on the phone).
        */
       toggleSaved: (id) => {
         const { saved } = get();
@@ -328,7 +328,7 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
           set({ saved: saved.filter((x) => x !== id) });
           return false;
         }
-        if (getDrink(id) === undefined || inDex(id) || saved.length >= WANT_TO_TRY_MAX) return false;
+        if (getDrink(id) === undefined || saved.length >= WANT_TO_TRY_MAX) return false;
         set({ saved: [id, ...saved] });
         return true;
       },
@@ -344,7 +344,7 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
       /*
        * Settings → Clear your tastes. The answers and the picks they made
        * go, and so does "How did you hear", which is an answer too; the
-       * drinks saved to try stay, as the confirm says. The sync then writes
+       * saved drinks stay, as the confirm says. The sync then writes
        * the account's answers as {}.
        */
       clearAnswers: () => set({ answers: EMPTY_ANSWERS, picks: [], heardFrom: null }),
@@ -571,13 +571,13 @@ async function firstSync(uid: string) {
   }
   if (!current(uid)) return;
 
-  /* ---- Drinks to try ---- */
+  /* ---- Saved drinks ---- */
   const onServer = (list.data ?? []).map((r) => r.drink_id);
   const known = new Set(onServer);
-  /** The server's order first, then the phone's own; catalogue drinks not in the Dex, 200 at most. */
+  /** The server's order first, then the phone's own; catalogue drinks, caught or not, 200 at most. */
   const union = (phone: readonly string[]) =>
     [...onServer, ...phone.filter((id) => !known.has(id))]
-      .filter((id, i, all) => all.indexOf(id) === i && getDrink(id) !== undefined && !inDex(id))
+      .filter((id, i, all) => all.indexOf(id) === i && getDrink(id) !== undefined)
       .slice(0, WANT_TO_TRY_MAX);
   const kept = new Set(union(useTaste.getState().saved));
   const toSend = useTaste.getState().saved.filter((id) => !known.has(id) && kept.has(id));
@@ -587,8 +587,8 @@ async function firstSync(uid: string) {
   // Read again: a drink saved or taken off while the request was out is kept, and the push sends it.
   useTaste.setState({ saved: union(useTaste.getState().saved), syncedFor: uid });
   /*
-   * A drink on the server that this phone's Dex already holds (or the
-   * catalogue lost) was left out above; the push removes it there too.
+   * A drink on the server that the catalogue lost was left out above;
+   * the push removes it there too.
    */
   schedulePush();
 }
@@ -689,9 +689,8 @@ function sessionArrived(uid: string) {
   maybeFirstSync();
 }
 
-/** The store has loaded: prune against the Dex, and take a session that arrived before it. */
+/** The store has loaded: take a session that arrived before it. */
 function afterHydrate() {
-  pruneDex();
   const uid = sessionUid();
   if (uid) sessionArrived(uid);
 }
@@ -720,22 +719,11 @@ useTaste.subscribe((state, prev) => {
 });
 
 /*
- * PRUNING. A drink that enters the Dex (any unlock, and the Dex loading
- * from disk) leaves the list: the Dex and the list never hold the same
- * drink. The whole list is checked rather than only the newest unlock,
- * which costs nothing at 200 and also covers the Dex loading after this
- * store.
+ * NO PRUNING. Until 13 Oct 2026 a drink that entered the Dex left this
+ * list, which made it a want-to-try list. Saved drinks are bookmarks now
+ * (the Saved tab), so catching one leaves it saved, and nothing here
+ * watches the Dex.
  */
-function pruneDex() {
-  const { saved, hydrated } = useTaste.getState();
-  if (!hydrated || !useCollection.getState().hydrated || saved.length === 0) return;
-  const kept = saved.filter((id) => !inDex(id));
-  if (kept.length !== saved.length) useTaste.setState({ saved: kept });
-}
-
-useCollection.subscribe((state, prev) => {
-  if (state.unlocks !== prev.unlocks || state.hydrated !== prev.hydrated) pruneDex();
-});
 
 /*
  * Account deletion: back to a new phone's store, so the welcome shows

@@ -39,7 +39,9 @@ import { confirmDestructive } from '@/utils/alerts';
 /* No drill-down for its own sake. Instagram pushes almost every row to  */
 /* a sub-screen; most of ours would be a sub-screen holding one switch.  */
 /* A row pushes only when a real screen is behind it: your profile,      */
-/* Saved, Activity, Find friends and Blocked accounts.                   */
+/* Activity, Find friends and Blocked accounts. Saved was one until it   */
+/* became a tab (13 Oct 2026); a row here as well would be a second door */
+/* to a place the bar already holds.                                     */
 /*                                                                      */
 /* No Accounts Centre row. That exists to span Instagram, Facebook and   */
 /* Threads. There is one account here, so the identity row goes straight */
@@ -76,11 +78,11 @@ const TERMS_URL = 'https://janmcq1617.github.io/drinkdex/terms';
  * (lib/appleRevoke), so it does not read as a fault.
  */
 const DELETE_CONFIRM =
-  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, your tastes and the drinks you saved to try, and resets the collection on this phone. It cannot be undone. If you use Sign in with Apple, Apple asks you to confirm next, so Sipply comes off your Apple Account too.';
+  'This removes your profile, every post, every photo and reel you uploaded, the drinks you added, your likes, saves and follows, your tastes and the drinks you saved, and resets the collection on this phone. It cannot be undone. If you use Sign in with Apple, Apple asks you to confirm next, so Sipply comes off your Apple Account too.';
 
 /* What Clear your tastes removes, and what it keeps (v4.1 §3.5). */
 const CLEAR_TASTES_CONFIRM =
-  'Your answers are removed from this phone and your account. Drinks you saved to try stay.';
+  'Your answers are removed from this phone and your account. Your saved drinks stay.';
 
 /*
  * A section: its heading, then its rows in one wash group. The heading is
@@ -296,13 +298,12 @@ export default function SettingsScreen() {
         {profile ? <IdentityRow profile={profile} /> : null}
 
         {/*
-          ---- What you keep and what came of it ----
-          Straight after the identity row: the two things about your own
-          account people come back for. Saved has no other door, and the
-          bell on Home is Activity's only other one.
+          ---- What came of it ----
+          Straight after the identity row: what people come back for about
+          their own account. The bell on Home is Activity's only other door.
+          Saved is not here: it is a tab now.
         */}
         <Section title="Your activity">
-          <ListRow title="Saved" trailing="chevron" onPress={() => router.push('/saved')} />
           <ListRow title="Activity" trailing="chevron" onPress={() => router.push('/activity')} />
           <ListRow
             title="Your tastes"

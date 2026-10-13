@@ -32,9 +32,9 @@ import {
 /* ==================================================================== */
 
 /** The tabs whose list drives the chrome. Reels has no list of this kind. */
-export type ChromeTab = 'index' | 'dex' | 'bar' | 'profile';
+export type ChromeTab = 'index' | 'dex' | 'saved' | 'bar' | 'profile';
 
-const CHROME_TABS: readonly ChromeTab[] = ['index', 'dex', 'bar', 'profile'];
+const CHROME_TABS: readonly ChromeTab[] = ['index', 'dex', 'saved', 'bar', 'profile'];
 
 type ScrollListener = (e: NativeSyntheticEvent<NativeScrollEvent>) => void;
 type Chrome = Animated.AnimatedInterpolation<number>;

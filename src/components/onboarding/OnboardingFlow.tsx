@@ -118,8 +118,8 @@ import { BACK_TO_START } from './UnderAgeStop';
 /* JS timers; every animation has a JS end state (motion.tsx). Under    */
 /* VoiceOver nothing moves on by itself: Continue is there instead.      */
 /*                                                                      */
-/* Nothing here writes the Dex: no unlock, no collection call. "Save to  */
-/* try" is the want-to-try list (store/taste).                          */
+/* Nothing here writes the Dex: no unlock, no collection call. "Save to */
+/* try" keeps a pick in the saved drinks (store/taste, the Saved tab).  */
 /* ==================================================================== */
 
 export type OnboardingExit = 'signin' | 'handoff' | 'not-now' | 'closed' | 'done';

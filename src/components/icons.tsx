@@ -521,8 +521,9 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
   ),
   /*
    * Saved: the outline's shape, filled to its outer edge (half a stroke
-   * wider all round). Home's saved post and, in v4.1, the drink page's
-   * "Saved to try" key. The shape carries the state; no colour does.
+   * wider all round). Home's saved post, the drink page's Saved key, and
+   * the Saved tab while it is the one in front. The shape carries the
+   * state; no colour does.
    */
   bookmark: <Path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z" />,
   /*
@@ -688,10 +689,11 @@ export const GoogleMark = React.memo(function GoogleMark({ size = 20 }: { size?:
 
 /**
  * The glyphs the tab bar draws: each has a SOLID form for its active state.
- * Most are named after their route; My Bar's route is `bar` and its glyph
- * is `bottle`. (tabs)/_layout.tsx and FloatingTabBar draw them with
+ * Most are named after their route; Saved's route is `saved` and its glyph
+ * is `bookmark`, My Bar's route is `bar` and its glyph is `bottle`.
+ * (tabs)/_layout.tsx and FloatingTabBar draw them with
  * <Icon filled={focused} /> in the colour the bar hands them, so the glyph
  * always matches its own label — outline at rest, solid when active, the
  * iOS convention, which reads as a state change without relying on colour.
  */
-export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels' | 'bottle';
+export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels' | 'bookmark' | 'bottle';

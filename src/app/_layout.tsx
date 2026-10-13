@@ -174,9 +174,9 @@ export default function RootLayout() {
           user/[id], a person's profile, is not listed on purpose: the stack
           defaults are all it needs — a push, so Back returns to whatever
           opened it, with the standard edge swipe. An entry here would only
-          repeat them. The same goes for activity, post/[id], saved,
+          repeat them. The same goes for activity, post/[id],
           connections/[id], tournaments/index and tournaments/[id], which
-          are plain pushes too.
+          are plain pushes too. Saved is a tab, in (tabs).
         */}
         {/*
           Posting a drink, from the bar's + and every other Post button. A

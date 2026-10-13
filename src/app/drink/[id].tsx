@@ -66,12 +66,12 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * drink someone added (custom/[id].tsx), so the two are drawn by one piece
  * of code.
  *
- * SAVE TO TRY (v4.1 §1.4). The bar's right slot holds a bookmark while
- * the drink is not in your Dex: it puts the drink on your drinks to try
- * (store/taste), solid when it is there. It works signed out, since the
- * list is the phone's first. It goes once the drink is caught, because
- * the Dex and the list never hold the same drink (catching one takes it
- * off the list).
+ * SAVE. The bar's right slot holds a bookmark on every drink, caught or
+ * not, so it is there without scrolling: it keeps the drink in Saved (the
+ * tab, and store/taste), solid while it is there, and a second tap takes
+ * it out. It works signed out, since saved drinks are the phone's first.
+ * Saved is bookmarks, not a list of drinks still to catch, so catching a
+ * drink leaves it saved (Jan, 13 Oct 2026).
  */
 
 export default function DrinkDetailScreen() {
@@ -100,21 +100,21 @@ export default function DrinkDetailScreen() {
   );
 
   /*
-   * On your drinks to try. A refused add is the full list (200), said in
-   * words; the key's own label change is spoken too, since VoiceOver does
-   * not read a label that changes under the focus by itself.
+   * In Saved. A refused add is the full list (200), said in words; the
+   * key's own label change is spoken too, since VoiceOver does not read a
+   * label that changes under the focus by itself.
    */
-  const savedToTry = useTaste((s) => (drink ? s.saved.includes(drink.id) : false));
-  const toggleToTry = useCallback(() => {
+  const saved = useTaste((s) => (drink ? s.saved.includes(drink.id) : false));
+  const toggleSaved = useCallback(() => {
     if (!drink) return;
     const wasSaved = useTaste.getState().saved.includes(drink.id);
     const now = useTaste.getState().toggleSaved(drink.id);
     if (!wasSaved && !now) {
-      showNotice('Drinks to try is full', `It holds ${WANT_TO_TRY_MAX} drinks. Take one off to save another.`);
+      showNotice('Saved is full', `It holds ${WANT_TO_TRY_MAX} drinks. Take one out to save another.`);
       return;
     }
     haptic.tap();
-    announce(now ? 'Saved to try' : 'Taken off your drinks to try');
+    announce(now ? 'Saved' : 'Removed from Saved');
   }, [drink]);
 
   /*
@@ -335,15 +335,13 @@ export default function DrinkDetailScreen() {
       {/* No visible title: the name under the print is the page's title. The bar still speaks it. */}
       {bar(
         drink.name,
-        unlocked ? undefined : (
-          <TopBarButton
-            icon="bookmark"
-            filled={savedToTry}
-            label={savedToTry ? 'Saved to try' : 'Save to try'}
-            accessibilityHint={savedToTry ? 'Takes it off your drinks to try' : 'Adds it to your drinks to try'}
-            onPress={toggleToTry}
-          />
-        ),
+        <TopBarButton
+          icon="bookmark"
+          filled={saved}
+          label={saved ? 'Saved' : 'Save'}
+          accessibilityHint={saved ? 'Takes it out of Saved' : 'Keeps it in Saved'}
+          onPress={toggleSaved}
+        />,
       )}
 
       <ScrollView

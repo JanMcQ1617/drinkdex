@@ -182,10 +182,11 @@ export type TasteProfileRow = {
 };
 
 /**
- * A drink saved to try (migration 022): a catalogue id on the account's
- * want-to-try list, owner only, at most 200 per account (a trigger
- * refuses the 201st with 'want_to_try_full'). Not the Dex: the Dex is on
- * the phone. Insert names the two ids; created_at is the server's.
+ * A saved drink (migration 022; the table keeps its first name from when
+ * the list was drinks to try): a catalogue id in the account's Saved,
+ * caught or not, owner only, at most 200 per account (a trigger refuses
+ * the 201st with 'want_to_try_full'). Not the Dex: the Dex is on the
+ * phone. Insert names the two ids; created_at is the server's.
  */
 export type WantToTryRow = {
   user_id: string;

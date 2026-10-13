@@ -12,10 +12,12 @@ import { MY_BAR_ENABLED } from '@/lib/myBar';
 import { COPY, REELS_ENABLED } from '@/lib/reels';
 
 /**
- * The top-level destinations: Home · Dex · + · My Bar · Profile, with
+ * The top-level destinations: Home · Dex · + · Saved · Profile, with
  * Reels between Home and the Dex while it is switched on
- * (EXPO_PUBLIC_REELS). The post action is seated in the bar immediately
- * before My Bar (FloatingTabBar); it opens a window, it is not a page.
+ * (EXPO_PUBLIC_REELS), and My Bar after Saved while it is
+ * (EXPO_PUBLIC_MY_BAR; off since build 22). The post action is seated in
+ * the bar immediately before Saved (FloatingTabBar); it opens a window,
+ * it is not a page.
  *
  * PAGES YOU CAN SWIPE BETWEEN, like Instagram (Jan, build 17). The tabs
  * are expo-router's material top tabs: react-native-tab-view's TabView
@@ -45,14 +47,16 @@ import { COPY, REELS_ENABLED } from '@/lib/reels';
  *
  * Reels while off is not in the navigator at all (TopTabs.Protected
  * leaves it out of the state), so there is no page to swipe to and no
- * slot in the bar. The flag is fixed for a build, and it must be: the
- * pager rebuilds itself when its page count changes.
+ * slot in the bar; My Bar the same. Each flag is fixed for a build, and
+ * it must be: the pager rebuilds itself when its page count changes.
  *
  * Dex progress (app/stats.tsx) is not a tab. It is a report on the Dex
  * rather than a place visited every day, so it pushes from the Dex's
  * "38 / 2,089" and Profile's "38 drinks in your Dex ›".
- * My Bar is one: what you own and what you can make with it is somewhere
- * you come back to.
+ * Saved is one, in My Bar's old slot (Jan, 13 Oct 2026): the drinks you
+ * bookmarked, kept a tap away rather than behind Settings. My Bar is one
+ * too, while it is on: what you own and what you can make with it is
+ * somewhere you come back to.
  *
  * ScrollChromeProvider sits around the navigator so every tab screen has
  * one scroll source: Home's top bar slides away on it
@@ -113,6 +117,15 @@ export default function TabLayout() {
             tabBarAccessibilityLabel: 'Dex, your collection',
             tabBarIcon: tabIcon('dex'),
             lazyPlaceholder: () => <TabPlaceholder title="Dex" />,
+          }}
+        />
+        <TopTabs.Screen
+          name="saved"
+          options={{
+            title: 'Saved',
+            tabBarAccessibilityLabel: 'Saved',
+            tabBarIcon: tabIcon('bookmark'),
+            lazyPlaceholder: () => <TabPlaceholder title="Saved" />,
           }}
         />
         {/* Hidden while EXPO_PUBLIC_MY_BAR is off (lib/myBar.ts): no page, no slot. */}

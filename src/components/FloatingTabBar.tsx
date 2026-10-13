@@ -13,7 +13,7 @@ import { useAuth } from '@/store/auth';
 /* The tab bar                                                          */
 /*                                                                      */
 /* Five glyphs and nothing else (layout spec 4: "10 → 5 elements").     */
-/* Home · Dex · + · My Bar · Profile, on an opaque page slab docked to  */
+/* Home · Dex · + · Saved · Profile, on an opaque page slab docked to   */
 /* the foot, with no rule, no shadow and no floating card. The name     */
 /* kept its file: it is still the bar TopTabs draws.                    */
 /*                                                                      */
@@ -51,10 +51,10 @@ type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 /*
  * The glyph a route falls back to when its screen sets no tabBarIcon (every
- * screen sets one today). Two routes are not named after their glyph:
- * Home's route is `index`, My Bar's is `bar`.
+ * screen sets one today). Three routes are not named after their glyph:
+ * Home's route is `index`, Saved's is `saved`, My Bar's is `bar`.
  */
-const ROUTE_GLYPH: Readonly<Record<string, TabName>> = { index: 'home', bar: 'bottle' };
+const ROUTE_GLYPH: Readonly<Record<string, TabName>> = { index: 'home', saved: 'bookmark', bar: 'bottle' };
 const glyphFor = (route: string): TabName => ROUTE_GLYPH[route] ?? (route as TabName);
 
 /*
@@ -92,7 +92,7 @@ type FloatingTabBarProps = {
 };
 
 /**
- * The post action: an ink rectangle seated in the bar before My Bar. Not a
+ * The post action: an ink rectangle seated in the bar before Saved. Not a
  * route: posting a drink is a thing you do, and a tab for it would be a
  * permanently unselectable item in a bar whose job is where you are. 52 x
  * 38 with 3pt of hitSlop to 44. No haptic: it opens a full-screen window,
@@ -142,13 +142,16 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
   const focusedKey = state.routes[state.index]?.key;
   /*
    * Every route in the navigator's state is a page of the pager and a slot
-   * here, in the same order (Reels is not in the state while it is off).
-   * The + is drawn immediately before My Bar, found by name; were My Bar
-   * ever missing, it falls back to the middle.
+   * here, in the same order (Reels and My Bar are not in the state while
+   * they are off). The + is drawn immediately before Saved, found by name,
+   * so it keeps its place beside the Dex if My Bar comes back after Saved;
+   * else before My Bar, else in the middle. Home · Dex · Saved · Profile
+   * is Home · Dex · + · Saved · Profile either way.
    */
   const visible = state.routes;
+  const savedAt = visible.findIndex((r) => r.name === 'saved');
   const barAt = visible.findIndex((r) => r.name === 'bar');
-  const fabAt = barAt >= 0 ? barAt : Math.ceil(visible.length / 2);
+  const fabAt = savedAt >= 0 ? savedAt : barAt >= 0 ? barAt : Math.ceil(visible.length / 2);
 
   return (
     <View style={[styles.bar, { paddingBottom: insets.bottom }]}>

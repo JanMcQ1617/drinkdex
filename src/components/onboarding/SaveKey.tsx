@@ -12,10 +12,12 @@ import { FadeOut, T, useFadingPrevious } from './motion';
 /* ==================================================================== */
 /* Save to try                                                          */
 /*                                                                      */
-/* A pick's key (specs/v4.1-changes.md 1.4): it keeps the drink on the  */
-/* want-to-try list (store/taste `saved`), and never puts it in the     */
-/* Dex, which holds only drinks you have had. 112 x 36 drawn, 44 to the */
-/* finger; the width is fixed so nothing moves when its word changes.   */
+/* A pick's key (specs/v4.1-changes.md 1.4): it keeps the drink in the  */
+/* saved drinks (store/taste `saved`, the Saved tab), and never puts it */
+/* in the Dex, which holds only drinks you have had. "Save to try" here */
+/* because a first pick is one you have not had; the drink page's key   */
+/* is the plain bookmark. 112 x 36 drawn, 44 to the finger; the width   */
+/* is fixed so nothing moves when its word changes.                     */
 /*                                                                      */
 /*   off  "Save to try"  wash, ink label (18.16:1)                      */
 /*   on   "Saved"        ink, onInk label (19.80:1)                     */
@@ -54,13 +56,9 @@ export function SaveKey({ id, name }: { id: string; name: string }) {
     const was = taste.saved.includes(id);
     const now = taste.toggleSaved(id);
     if (!was && !now) {
-      // The store refused the add (the list is full, or the drink is in the Dex): say so, since nothing changed.
+      // The store refused the add, and a pick is always a catalogue drink, so the list is full: say so, since nothing changed.
       haptic.error();
-      announce(
-        taste.saved.length >= WANT_TO_TRY_MAX
-          ? `You can keep up to ${WANT_TO_TRY_MAX} drinks to try. Take one off to save ${name}.`
-          : `${name} is already in your Dex.`,
-      );
+      announce(`You can save up to ${WANT_TO_TRY_MAX} drinks. Take one out to save ${name}.`);
       return;
     }
     haptic.tap();

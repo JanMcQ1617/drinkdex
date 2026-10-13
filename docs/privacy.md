@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 12 October 2026**
+**Last updated: 13 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -88,7 +88,7 @@ asks a few questions: what you usually drink, which spirits and flavours
 you like, whether you make drinks at home and what is in your bar. You can
 skip any of them. The answers are kept on your phone and used on your
 phone to choose drinks to suggest, using the same rules for everyone; the
-drinks you save to try are kept with them. When you make an account, the
+drinks you save are kept with them. When you make an account, the
 answers and your saved drinks are stored with it so they follow you to a
 new phone. Only you can see them: they are not on your profile and no
 other user, follower or not, can read them. They are never used for
@@ -326,7 +326,7 @@ Open **Profile → Settings** (the gear, top right) **→ Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
 have made, every photo you have uploaded, your likes, your saved posts,
-your taste answers and drinks saved to try, your follows in both
+your taste answers and saved drinks, your follows in both
 directions, your blocks, your invite links, the drinks
 you added and their photos, the hashes that make you findable, the
 records kept for the matching and song-search limits, and the tournaments
@@ -336,7 +336,7 @@ texts it sent, under its own policy); if you signed in with Apple, Google or
 Facebook, it deletes the link to that account, with everything Apple,
 Google or Facebook sent when you signed in. On the phone you delete from,
 the collection and the drinks you added are reset and the photos Sipply
-kept for them are removed, your taste answers and drinks saved to try are
+kept for them are removed, your taste answers and saved drinks are
 cleared, and what Sipply remembered there for finding friends (your
 number, your Instagram username, an imported Instagram list, your Facebook
 friends) is forgotten. It cannot be undone, and your username
@@ -401,7 +401,7 @@ anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
 service you asked for (your account, your posts and the songs on them,
-the drinks you add, your tastes and the drinks you save to try, the
+the drinks you add, your tastes and the drinks you save, the
 tournaments you host or join, and the sign-in and
 friend finding you choose to use) and our legitimate interest in keeping
 the app safe (reports, blocks, the text filter, the matching limits, the
