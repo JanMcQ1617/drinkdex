@@ -29,6 +29,18 @@ import {
 /* each tab's chrome is rebuilt when the tab gains focus so that        */
 /* arriving always shows it whole. While VoiceOver runs nothing moves:  */
 /* a bar slid under the status strip would still be focusable.          */
+/*                                                                      */
+/* PINNED AND HELD (v4.2 §3.1). The Dex's header, the field and its     */
+/* chip row, hides the same way, and some moments must not move it: a   */
+/* focused field or an open sheet PIN it shown (the constant 0), and a  */
+/* finger on the Nº rail HOLDS it where it is (a constant at its        */
+/* current value), because the rail rides the same graph and a header   */
+/* popping back would slide the rail out from under that finger. The    */
+/* native diffClamp cannot be read synchronously, so each tab keeps a   */
+/* JS twin of it, stepped by the same scroll events in the listener     */
+/* that is already there. When the pin or the hold lets go, the next    */
+/* graph starts from the twin's value: the next finger scroll moves     */
+/* the header from where it is, never from a jump.                      */
 /* ==================================================================== */
 
 /** The tabs whose list drives the chrome. Reels has no list of this kind. */
@@ -54,13 +66,27 @@ interface TabEntry {
   hide: Map<number, Chrome>;
   /** The screen's own scroll handler, read at event time. */
   listener: ScrollListener | undefined;
+  /**
+   * The JS twin of the tab's hide graph: 0 (shown) to `range` (hidden),
+   * the value the native diffClamp holds now. Stepped by every scroll
+   * event the JS side receives while `live` (the moving graph is the one
+   * drawn); frozen while the chrome is pinned (at 0) or held (where it
+   * was). It can only drift from the native value at a clamp, and only
+   * when a busy JS thread coalesced events the native side saw one by one.
+   */
+  twin: { range: number; value: number; live: boolean };
+  /** The constant a hold draws, kept per value so a re-render reuses the node. */
+  holdNode: { value: number; node: Chrome } | null;
+  /** Whether the last hide() was for a focused tab: a false-to-true step is an arrival, which starts shown. */
+  wasFocused: boolean;
 }
 
 /*
  * The provider's mutable side. A class behind one stable instance, so the
- * hooks reach it only through methods. Render builds nodes and writes one
- * thing, Home's hide cache (an idempotent set); every other write happens
- * in scroll listeners and effects.
+ * hooks reach it only through methods. Render builds nodes and writes
+ * only the graph's own bookkeeping, in useHideOnScroll's memo: the hide
+ * cache, the twin's start and freeze, the hold's constant. Every other
+ * write happens in scroll listeners and effects.
  */
 class ChromeStore {
   private entries = new Map<ChromeTab, TabEntry>();
@@ -90,6 +116,9 @@ class ChromeStore {
         lastY: 0,
         hide: new Map(),
         listener: undefined,
+        twin: { range: 0, value: 0, live: false },
+        holdNode: null,
+        wasFocused: false,
       });
     }
     const held = [...CHROME_TABS.map((tab) => this.entry(tab).scrollY), this.pulse];
@@ -122,10 +151,20 @@ class ChromeStore {
     return e;
   }
 
-  /** The JS side of a scroll event: the offset, then the screen's handler. */
+  /*
+   * The JS side of a scroll event: the twin, the offset, then the
+   * screen's handler. The twin steps as the native node does: by the
+   * change in the offset clamped at the top (travel's clampTop), held
+   * between 0 and its range.
+   */
   scrolled(tab: ChromeTab, e: NativeSyntheticEvent<NativeScrollEvent>) {
     const entry = this.entry(tab);
-    entry.lastY = e.nativeEvent.contentOffset.y;
+    const y = e.nativeEvent.contentOffset.y;
+    const t = entry.twin;
+    if (t.live) {
+      t.value = Math.min(t.range, Math.max(0, t.value + Math.max(0, y) - Math.max(0, entry.lastY)));
+    }
+    entry.lastY = y;
     entry.listener?.(e);
   }
 
@@ -157,8 +196,14 @@ class ChromeStore {
    * shows), and subtracting that would start the input at +60: a bar
    * arriving hidden at the top of the list, where there is no upward
    * scroll to bring it back.
+   *
+   * `start` is where the chrome already is (a held header let go), so
+   * the first input is that and not 0. hide() never passes more than the
+   * offset now: a hold can end at the top (the rail dragged to 0001), and
+   * a header resumed half hidden there would have no upward scroll left
+   * to bring it back.
    */
-  private travel(tab: ChromeTab, range: number) {
+  private travel(tab: ChromeTab, range: number, start: number) {
     const e = this.entry(tab);
     const clampTop = e.scrollY.interpolate({
       inputRange: [0, 1],
@@ -166,25 +211,61 @@ class ChromeStore {
       extrapolateLeft: 'clamp',
       extrapolateRight: 'extend',
     });
-    return Animated.diffClamp(Animated.subtract(clampTop, Math.max(0, e.lastY)), 0, range);
+    const moved = Animated.subtract(clampTop, Math.max(0, e.lastY));
+    return Animated.diffClamp(start > 0 ? Animated.add(moved, start) : moved, 0, range);
   }
 
   /*
-   * Home's bar: 0..distance. Rebuilt each time the tab is focused; kept
-   * as it was while the tab is out of focus, so the bar does not jump
-   * while Home is still sliding out of the pager.
+   * The hide graph: 0..distance. Rebuilt each time the tab is focused;
+   * kept as it was while the tab is out of focus, so Home's bar does not
+   * jump while Home is still sliding out of the pager. A focus rebuild
+   * starts shown; one that follows a pin starts shown too (the twin was
+   * frozen at 0), and one that follows a hold starts where the hold was,
+   * unless the tab left focus in between: arriving is always shown, even
+   * when a hold was let go while the tab was away.
    */
   hide(tab: ChromeTab, distance: number, focused: boolean): Chrome {
     const e = this.entry(tab);
+    const arriving = focused && !e.wasFocused;
+    e.wasFocused = focused;
     const kept = e.hide.get(distance);
     if (kept && !focused) return kept;
-    const next = this.travel(tab, distance).interpolate({
+    const start = e.twin.live || arriving ? 0 : Math.min(distance, e.twin.value, Math.max(0, e.lastY));
+    const next = this.travel(tab, distance, start).interpolate({
       inputRange: [0, distance],
       outputRange: [0, distance],
       extrapolate: 'clamp',
     });
     e.hide.set(distance, next);
+    e.twin = { range: distance, value: start, live: true };
     return next;
+  }
+
+  /** Pinned shown: the constant 0, and the twin frozen there, so letting go starts shown. */
+  pin(tab: ChromeTab): Chrome {
+    const t = this.entry(tab).twin;
+    t.live = false;
+    t.value = 0;
+    return this.rest;
+  }
+
+  /*
+   * Held where it is: a native constant at the twin's value, which stops
+   * stepping until the hold lets go. Native from birth, as every node
+   * here is, and one node per value, so the re-renders a hold causes
+   * reuse it rather than swap the graph.
+   */
+  hold(tab: ChromeTab): Chrome {
+    const e = this.entry(tab);
+    e.twin.live = false;
+    const value = e.twin.value;
+    if (e.holdNode && e.holdNode.value === value) return e.holdNode.node;
+    const node = new Animated.Value(value, { useNativeDriver: true }).interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+    });
+    e.holdNode = { value, node };
+    return node;
   }
 }
 
@@ -279,21 +360,43 @@ export function useTabScroll(
   }, [store, tab]);
 }
 
+export interface HideOptions {
+  /**
+   * Always shown, nothing moves (v4.2 §3.1): the Dex's field has focus,
+   * or its filter or order sheet is open. The constant 0; letting go
+   * rebuilds the graph shown, from the offset of that moment.
+   */
+  pinned?: boolean;
+  /**
+   * Held where it is, nothing moves: a finger on the Dex's Nº rail, which
+   * rides this graph, so the rail stays under the finger while the grid
+   * jumps beneath it. Letting go resumes from the held value.
+   */
+  held?: boolean;
+}
+
 /**
- * Home's bar (§4.1): 0 (shown) to `distance` (hidden). Rebuilt each time
- * `tab` regains focus, so coming back always shows the bar (a bar hidden
- * when you left would otherwise still be hidden over a scrolled feed).
- * The constant 0 while VoiceOver runs. Call it from inside the tab's own
- * screen (focus is that screen's), in the component that renders the bar
- * or one above it, so the swap is drawn at once (useWakeOnSwap).
+ * Chrome that hides as the list scrolls down and returns from the first
+ * upward movement: Home's bar (§4.1), the Dex's header (v4.2 §3). 0
+ * (shown) to `distance` (hidden). Rebuilt each time `tab` regains focus,
+ * so coming back always shows it (a bar hidden when you left would
+ * otherwise still be hidden over a scrolled feed). The constant 0 while
+ * VoiceOver runs, and while `pinned`; a constant where it is while
+ * `held` (HideOptions). Call it from inside the tab's own screen (focus
+ * is that screen's), in the component that renders the chrome or one
+ * above it, so the swap is drawn at once (useWakeOnSwap). `distance`
+ * must be more than 0.
  */
-export function useHideOnScroll(tab: ChromeTab, distance: number): Chrome {
+export function useHideOnScroll(tab: ChromeTab, distance: number, options?: HideOptions): Chrome {
   const { store, screenReader } = useChrome();
   const focused = useIsFocused();
-  const graph = useMemo(
-    () => (screenReader ? store.rest : store.hide(tab, distance, focused)),
-    [store, tab, distance, focused, screenReader],
-  );
+  const pinned = screenReader || !!options?.pinned;
+  const held = !!options?.held;
+  const graph = useMemo(() => {
+    if (pinned) return store.pin(tab);
+    if (held) return store.hold(tab);
+    return store.hide(tab, distance, focused);
+  }, [store, tab, distance, focused, pinned, held]);
   useWakeOnSwap(store, graph);
   return graph;
 }

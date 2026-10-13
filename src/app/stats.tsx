@@ -63,7 +63,7 @@ export default function StatsScreen() {
 
   /* The Dex filtered to Caught: a note it takes on focus (dexFilter says why it is not a param). */
   const seeCaught = useCallback(() => {
-    requestDexFilter({ category: 'all', status: 'unlocked' });
+    requestDexFilter({ status: 'unlocked' });
     router.navigate('/dex');
   }, [router]);
 
