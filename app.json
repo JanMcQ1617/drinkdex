@@ -17,7 +17,7 @@
     "backgroundColor": "#FFFFFF",
     "ios": {
       "bundleIdentifier": "com.janmcqueeny.drinkdex",
-      "buildNumber": "23",
+      "buildNumber": "24",
       "usesAppleSignIn": true,
       "associatedDomains": [
         "webcredentials:janmcq1617.github.io"
