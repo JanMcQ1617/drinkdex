@@ -8,6 +8,7 @@ import { Icon, type IconName } from '@/components/icons';
 import { ScrollChromeProvider } from '@/components/ScrollChrome';
 import { TabPlaceholder } from '@/components/TabPlaceholder';
 import { colors } from '@/constants/theme';
+import { MY_BAR_ENABLED } from '@/lib/myBar';
 import { COPY, REELS_ENABLED } from '@/lib/reels';
 
 /**
@@ -114,15 +115,18 @@ export default function TabLayout() {
             lazyPlaceholder: () => <TabPlaceholder title="Dex" />,
           }}
         />
-        <TopTabs.Screen
-          name="bar"
-          options={{
-            title: 'My Bar',
-            tabBarAccessibilityLabel: 'My Bar, what you can make',
-            tabBarIcon: tabIcon('bottle'),
-            lazyPlaceholder: () => <TabPlaceholder title="My Bar" />,
-          }}
-        />
+        {/* Hidden while EXPO_PUBLIC_MY_BAR is off (lib/myBar.ts): no page, no slot. */}
+        <TopTabs.Protected guard={MY_BAR_ENABLED}>
+          <TopTabs.Screen
+            name="bar"
+            options={{
+              title: 'My Bar',
+              tabBarAccessibilityLabel: 'My Bar, what you can make',
+              tabBarIcon: tabIcon('bottle'),
+              lazyPlaceholder: () => <TabPlaceholder title="My Bar" />,
+            }}
+          />
+        </TopTabs.Protected>
         <TopTabs.Screen
           name="profile"
           options={{

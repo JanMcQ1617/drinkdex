@@ -1,4 +1,4 @@
-import { useNavigation, useRoute, useRouter, useScrollToTop } from 'expo-router';
+import { Redirect, useNavigation, useRoute, useRouter, useScrollToTop } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -40,6 +40,7 @@ import {
   type Shelf,
   usedIn,
 } from '@/lib/bar';
+import { MY_BAR_ENABLED } from '@/lib/myBar';
 import { useBar } from '@/store/bar';
 
 /* ==================================================================== */
@@ -73,7 +74,18 @@ import { useBar } from '@/store/bar';
 /** The head's air: 8 under the top bar, 12 between the key and the field, 12 under it. */
 const HEAD_GAP = space.md;
 
-export default function BarScreen() {
+/*
+ * Hidden while EXPO_PUBLIC_MY_BAR is off (lib/myBar.ts). (tabs)/_layout.tsx
+ * keeps the tab out of the navigator, so nothing should render this; the
+ * Redirect is the backstop for a stale link, kept outside BarScreen so the
+ * screen's hooks still run in the same order every time.
+ */
+export default function BarTab() {
+  if (!MY_BAR_ENABLED) return <Redirect href="/" />;
+  return <BarScreen />;
+}
+
+function BarScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [scrolled, onScrolledPast] = useScrolledPast();

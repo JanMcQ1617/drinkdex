@@ -14,6 +14,7 @@ import {
   type RecRecipe,
 } from '@/lib/recommendCore';
 import { FIRST_TASTE_IDS } from '@/lib/tastes';
+import { MY_BAR_ENABLED } from '@/lib/myBar';
 import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
 import { useTaste, type StyleOf, type TasteAnswers } from '@/store/taste';
@@ -155,9 +156,13 @@ function forYou(
  * bottle added or taken out since changes what "you can make it" says
  * (spec §5.7). A drink caught since drops out of the picks.
  */
+const NO_BAR: Record<string, true> = {};
+
 export function useRecommendations(): Pick[] {
   const answers = useTaste((s) => s.answers);
   const owned = useBar((s) => s.owned);
   const unlocks = useCollection((s) => s.unlocks);
-  return forYou(answers, owned, unlocks);
+  // With My Bar hidden there is no bar to make anything from, so no pick
+  // says "You can make it" (lib/myBar.ts).
+  return forYou(answers, MY_BAR_ENABLED ? owned : NO_BAR, unlocks);
 }

@@ -1,3 +1,4 @@
+import { MY_BAR_ENABLED } from '@/lib/myBar';
 import type { HomeAnswer, OnboardingStep, Spirit, StyleOf, TasteAnswers } from '@/store/taste';
 
 /* ==================================================================== */
@@ -13,7 +14,9 @@ import type { HomeAnswer, OnboardingStep, Spirit, StyleOf, TasteAnswers } from '
 /*              pour, results                                           */
 /*                                                                      */
 /* So 12 on the longest first run and 10 on the shortest (one more with */
-/* ASK_HEARD_FROM). The welcome, the stop and the sign-in sit outside    */
+/* ASK_HEARD_FROM). While My Bar is hidden (lib/myBar.ts) home and bar  */
+/* are not asked, which makes it 10 and 9. The welcome, the stop and    */
+/* the sign-in sit outside                                              */
 /* the count: the welcome and the stop show no bar, and the sign-in     */
 /* shows it full.                                                       */
 /* ==================================================================== */
@@ -50,8 +53,12 @@ export function stepPath(
   }
   out.push('usually', 'spirits');
   if (styleOfSpirits(answers.spirits) !== null) out.push('followup');
-  out.push('flavours', 'home');
-  if (asksBar(answers.home)) out.push('bar');
+  out.push('flavours');
+  // Both feed My Bar, so neither is asked while it is hidden.
+  if (MY_BAR_ENABLED) {
+    out.push('home');
+    if (asksBar(answers.home)) out.push('bar');
+  }
   out.push('pour', 'results');
   if (mode === 'first-run') out.push('allset');
   return out;
