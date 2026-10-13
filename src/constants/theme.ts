@@ -284,7 +284,7 @@ export const stroke = {
   edge: 1,
   /** Focus and error rings, the unseen story ring. */
   ring: 2,
-  /** The TabStrip underline. */
+  /** The TabStrip underline, and the tab bar's line under the active tab (v4.2 decided 6). */
   indicator: 2,
 } as const;
 

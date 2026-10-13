@@ -32,11 +32,13 @@ import { COPY, REELS_ENABLED } from '@/lib/reels';
  * whole.
  *
  * The bar is drawn at the bottom of the TabView, after the pager, so it
- * lies over the pages (`tabBarPosition`); it is ours, an opaque, bordered
- * rectangle floating clear of the bottom edge, which compacts while a list
- * scrolls down (components/FloatingTabBar.tsx). Screens must reserve
- * `TAB_BAR_CLEARANCE` at the bottom, for the full bar, since it floats
- * over content instead of pushing it up.
+ * lies over the pages (`tabBarPosition`); it is ours, an opaque page slab
+ * docked to the foot, with no rule and no shadow, and a short ink line
+ * under the active tab that rides this pager's own position
+ * (components/FloatingTabBar.tsx). It receives the TabView's `position`
+ * and `layout` through TopTabs' props, so nothing here passes them on.
+ * Screens must reserve `TAB_BAR_CLEARANCE` at the bottom, since the bar
+ * lies over content instead of pushing it up.
  *
  * LAZY, AS BEFORE. A page mounts the first time it is focused or a drag
  * towards it starts, then stays mounted, so a cold start builds Home
