@@ -308,7 +308,7 @@ otherwise:
 | Contact Info → Email Address | Yes | The sign-in address; for Sign in with Apple it may be a Hide My Email relay |
 | Contact Info → Phone Number | Yes | The sign-in number for anyone who signs in by phone, kept by the authentication provider; otherwise only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
 | User Content → Photos or Videos | Yes | Post photos, the profile photo, and the photo sent with a drink suggestion. Also covers the link to a Google or Facebook profile picture that Supabase keeps from sign-in, which the app never shows or copies |
-| User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps; tournaments (name, dates, goal, invitations, standings and the host's time zone); the song added to a post |
+| User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps; tournaments (name, dates, goal, invitations, standings and the host's time zone); the song added to a post; collections (their names and what is in them, and a share link when you make one) |
 | Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
 | Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
 | Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
@@ -329,8 +329,8 @@ Everything else is **Not collected**: Contacts, Location (photos are
 re-encoded without it), Search History (the Dex is searched on the
 phone), Browsing History, Health, Financial Info, Purchases, Sensitive
 Info, Product Interaction, Advertising Data and Diagnostics.
-Tournaments and songs add no new type: they are user content, and the
-song-search count is usage data, both declared above.
+Tournaments, songs and collections add no new type: they are user
+content, and the song-search count is usage data, both declared above.
 
 The same types belong in the app's privacy manifest,
 `ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. It lists

@@ -154,7 +154,19 @@ folder beside the photos you post, so the same people who can see those
 could see it. It is used only for reference and is never published.
 
 **Social graph.** Who you follow, which posts you have liked, and which
-posts you have saved. Saved posts are visible only to you.
+posts you have saved. Saved posts are visible only to you, unless you put
+one in a collection you share.
+
+**Collections.** You can group your saved posts and drinks into collections
+you name. A collection is private: only you can see it, until you share it.
+Sharing makes a link. Anyone with the link, signed in to Sipply or not, can
+see the collection's name, your username, and the drinks in it by name and
+number, in the app or on a web page; for a post in it, they see only which
+drink it shows, and only people signed in to Sipply can open the post
+itself, if they are allowed to see it anyway. **Stop sharing** turns the
+link off at once, and sharing again makes a new link, so the old one never
+works again. Someone who saved a copy of your shared collection before you
+stopped sharing keeps their copy. Collections are kept with your account.
 
 **Invite links.** When you share an invite, Sipply creates a random link
 that stops working after 30 days. Anyone who accepts it in that time
@@ -258,7 +270,8 @@ screen clears it, and deleting the account clears it too.
   rank drinks, not people, and nothing is sent anywhere to make them. The
   one automatic check on what you write is a text filter: captions, bios,
   display names, usernames, the drinks you add, tournament names and the
-  songs added to posts are checked when you save them, and text containing
+  songs added to posts are checked when you save them, and a collection's
+  name when you share it or rename it while it is shared. Text containing
   a slur or an explicit sexual term is refused. It refuses the text and
   does nothing else to your account.
 
@@ -270,6 +283,11 @@ like a post, anyone who can see the post can see that you liked it: your
 name can appear in its "Liked by" line and in its list of likes. People you
 have blocked, and people who have blocked you, cannot. Treat anything you
 post as public to everyone signed in.
+
+**Anyone you share a collection with** can see what that collection's link
+shows (above), until you stop sharing it. The web page for a link is served
+by GitHub Pages, which we use to host this site; the link's code is in the
+part of the address that browsers never send to it.
 
 **Supabase**, our hosting provider, stores the database and photos on our
 behalf, and runs sign-in, including phone sign-in, Sign in with Apple,
@@ -326,8 +344,9 @@ Open **Profile → Settings** (the gear, top right) **→ Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
 have made, every photo you have uploaded, your likes, your saved posts,
-your taste answers and saved drinks, your follows in both
-directions, your blocks, your invite links, the drinks
+your collections (any link to one stops working), your taste answers and
+saved drinks, your follows in both directions, your blocks, your invite
+links, the drinks
 you added and their photos, the hashes that make you findable, the
 records kept for the matching and song-search limits, and the tournaments
 you host, with your place in anyone else's. If you signed in with your
@@ -401,8 +420,8 @@ anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
 service you asked for (your account, your posts and the songs on them,
-the drinks you add, your tastes and the drinks you save, the
-tournaments you host or join, and the sign-in and
+the drinks you add, your tastes and the drinks you save, your
+collections, the tournaments you host or join, and the sign-in and
 friend finding you choose to use) and our legitimate interest in keeping
 the app safe (reports, blocks, the text filter, the matching limits, the
 song-search limit and the sign-in screen's limit).
