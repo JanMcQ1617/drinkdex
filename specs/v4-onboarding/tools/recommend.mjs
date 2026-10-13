@@ -2,12 +2,22 @@
 /*
  * Reference implementation of the onboarding recommender (spec.md §5).
  *
+ * v4.2 (specs/v4.2/spec.md §1.2 and Decided 5). The v4-onboarding reference plus: the seventh
+ * flavour, `fruity` (FLAVOURS, LIKE, barRows' extras); the `noteAbvMax` strength cap, on fruity
+ * and on sour (above 30% abv only the family counts); and `flavourHit` / `spiritHits` exported
+ * for the Dex's taste filters and its For-you order (tools/dex-order.mjs). Nothing else differs.
+ * Runs A, C and D give the v4-onboarding output; run B's flavour card reads 147 where it read
+ * 149 (La Bandera and Bandera, 40% tequila shots that only say lime, left sour), with the same
+ * six picks. This file REPLACED specs/v4-onboarding/tools/recommend.mjs: the two are the same
+ * file, byte for byte, and scripts/check-recommend.mjs fails if they part.
+ *
  * Plain JS over the repo's own data, so the example runs in spec.md are the
  * real output, not invented. src/lib/recommend.ts ports this line for line
  * (it reads the same files through @/data, @/data/drinkPhotos and @/lib/bar).
  *
- *   node specs/v4-onboarding/tools/recommend.mjs            # prints the example runs
- *   node specs/v4-onboarding/tools/recommend.mjs --write    # also writes ../data/example.js for the mockups
+ *   node specs/v4.2/tools/recommend.mjs                    # prints the example runs
+ *   node specs/v4-onboarding/tools/recommend.mjs --write   # also writes ../data/example.js beside
+ *                                                          # the copy run (v4-onboarding's mockups)
  *
  * DETERMINISTIC: no randomness, no clock. Ties go to the lower Dex number.
  */
@@ -71,7 +81,7 @@ export const STYLES = {
   },
 };
 
-/** The six flavour choices: the style families that ARE it, and the note words that SAY it. */
+/** The seven flavour choices: the style families that ARE it, and the note words that SAY it. */
 export const FLAVOURS = {
   refreshing: {
     label: 'refreshing',
@@ -79,10 +89,28 @@ export const FLAVOURS = {
     notes: ['mint', 'cucumber', 'soda', 'tonic', 'quinine', 'ginger', 'effervescence', 'sparkling', 'crisp', 'refreshing', 'prosecco', 'grapefruit', 'light citrus', 'clean'],
     abvMax: 15,
   },
+  // v4.2 Decided 5 (Jan, 13 Oct 2026): the strength cap fruity has. Above 30% only the family
+  // (Sour) says it, so a bare 40% bottle whose notes say "citrus" or "lemon" (Tequila Blanco,
+  // Ouzo, Cognac VS, White Rum) is not a sour, while a Daiquiri is (its family) and a Paloma or
+  // a 20% Ginjinha still are (their notes).
   sour: {
     label: 'sour',
     subcats: ['Sour'],
     notes: ['lime', 'lemon', 'citrus', 'tart', 'sour', 'grapefruit', 'yuzu', 'sour cherry', 'passionfruit'],
+    noteAbvMax: 30,
+  },
+  // v4.2 (Jan, 13 Oct 2026: "fruity or sour"). Fruit that is not citrus: citrus is sour's. The
+  // fruit-led families, the fresh-fruit note words (never the dried and sherried notes a whisky
+  // carries, nor the maraschino cherry on every Manhattan) and the fruit juices, purees and fruit
+  // liqueurs a recipe names. noteAbvMax 30: above 30% only the family counts, so a 40% bottle
+  // that only SAYS fruit ("orchard fruit" on a Speyside) is 0, while a fruit brandy or a 16%
+  // Chambord is fruity (v4.2 spec §1.2).
+  fruity: {
+    label: 'fruity',
+    subcats: ['Tiki & Tropical', 'Punch & Cobbler', 'Fruit Brandy'],
+    notes: ['apple', 'pineapple', 'banana', 'peach', 'pear', 'apricot', 'raspberry', 'strawberry', 'cranberry', 'blackcurrant', 'pomegranate', 'passionfruit', 'passion fruit', 'mango', 'berry', 'red fruit', 'red berry', 'stone fruit', 'tropical fruit', 'green apple', 'melon', 'plum', 'lychee', 'sour cherry', 'tart berry', 'tart plum', 'ripe pear', 'ripe banana', 'orchard fruit', 'baked apple', 'cider', 'sloe', 'watermelon', 'guava', 'jam', 'juicy', 'blackberry', 'bramble jam', 'berries', 'red berries', 'tart fruit', 'tart red fruit', 'sloe berry', 'ripe peach', 'white peach', 'muskmelon', 'honeydew melon', 'guavaberry', 'cloudberry', 'tropical'],
+    ids: ['pineapple-juice', 'cranberry-juice', 'apple-juice', 'cloudy-apple-juice', 'passionfruit-juice', 'passion-fruit-puree', 'passionfruit-syrup', 'strawberries', 'strawberry-puree', 'pineapple', 'banana', 'peaches', 'white-peach-puree', 'raspberry-syrup', 'raspberry-cordial', 'creme-de-cassis', 'chambord', 'creme-de-mure', 'blackberry-liqueur', 'peach-schnapps', 'peach-liqueur', 'apricot-liqueur', 'pear-liqueur', 'melon-liqueur', 'banana-liqueur', 'creme-de-banana', 'cherry-liqueur', 'cherry-heering', 'passion-fruit-liqueur', 'sloe-gin', 'sour-apple-schnapps', 'mango-juice', 'guava-juice', 'papaya-juice', 'pomegranate-juice', 'blackcurrant-juice', 'blackcurrant-cordial', 'watermelon', 'papaya', 'mixed-fruit', 'seasonal-fruit', 'seasonal-berries', 'chopped-fruit', 'green-grapes'],
+    noteAbvMax: 30,
   },
   sweet: {
     label: 'sweet',
@@ -135,7 +163,7 @@ export function baseSpirit(d) {
 }
 
 /** Which spirit choices a drink is, and whether it is the drink's base or only in it. */
-function spiritHits(d) {
+export function spiritHits(d) {
   const hits = new Map(); // choice → 1 (base / the bottle itself) | 0.6 (in it)
   if (d.category === 'spirit') {
     for (const [k, s] of Object.entries(SPIRITS)) if (s.subcats.includes(d.subcategory)) hits.set(k, 1);
@@ -153,11 +181,12 @@ function spiritHits(d) {
 }
 
 /** 0, 0.5 or 1: how plainly a drink is this flavour. */
-function flavourHit(d, f) {
+export function flavourHit(d, f) {
   const F = FLAVOURS[f];
   const abv = abvOf(d);
   if (F.subcats.includes(d.subcategory)) return 1;
   if (F.abvMin && abv !== null && abv >= F.abvMin) return 1; // every spirit is strong; so is a stirred 28% cocktail
+  if (F.noteAbvMax && abv !== null && abv > F.noteAbvMax) return 0; // v4.2 (fruity, sour): past this, only the family says it
   const notes = (d.tastingNotes ?? []).map((n) => n.toLowerCase());
   const said = notes.filter((n) => F.notes.includes(n)).length;
   const ids = idsOf(d);
@@ -195,7 +224,7 @@ export function barRows(answers) {
   const spirits = picked.length ? picked.slice(0, 3) : ['white-rum', 'tequila', 'gin'];
   const basics = ['lime', 'lemon', 'sugar-syrup', 'soda-water'];
   // The two extra rows follow the flavours: bitter → Campari, strong → sweet vermouth and bitters, and so on.
-  const byFlavour = { bitter: ['campari'], strong: ['sweet-vermouth', 'angostura-bitters'], sour: ['triple-sec'], refreshing: ['ginger-beer'], sweet: ['grenadine'], creamy: ['coffee-liqueur'] };
+  const byFlavour = { bitter: ['campari'], strong: ['sweet-vermouth', 'angostura-bitters'], sour: ['triple-sec'], fruity: ['pineapple-juice'], refreshing: ['ginger-beer'], sweet: ['grenadine'], creamy: ['coffee-liqueur'] };
   const extras = [...new Set([...(answers.flavours ?? []).flatMap((f) => byFlavour[f]), 'angostura-bitters', 'sweet-vermouth', 'triple-sec', 'ginger-beer'])].filter((id) => !spirits.includes(id));
   const rows = [...spirits, ...basics, ...extras].slice(0, 8);
   const ticked = new Set([...spirits, ...basics]);
@@ -284,7 +313,7 @@ function shareKey(d) {
 }
 
 /** The "why" line under a pick's name. */
-const LIKE = { refreshing: 'something refreshing', sour: 'sours', sweet: 'sweet drinks', bitter: 'bitter', strong: 'strong drinks', creamy: 'creamy drinks' };
+const LIKE = { refreshing: 'something refreshing', sour: 'sours', fruity: 'fruity drinks', sweet: 'sweet drinks', bitter: 'bitter', strong: 'strong drinks', creamy: 'creamy drinks' };
 
 function whyLine(r, a) {
   const [spirit, flavour] = r.why;

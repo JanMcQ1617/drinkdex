@@ -1,8 +1,10 @@
 /* ==================================================================== */
 /* The onboarding recommender, data in, picks out                       */
 /*                                                                      */
-/* A line-for-line port of specs/v4-onboarding/tools/recommend.mjs (the */
-/* reference, spec §5), so the picks on a phone are the picks in the    */
+/* A line-for-line port of specs/v4.2/tools/recommend.mjs (the          */
+/* reference, v4-onboarding spec §5 with v4.2 §1.2's fruity and the     */
+/* strength cap of Decided 5; specs/v4-onboarding/tools/recommend.mjs   */
+/* is the same file), so the picks on a phone are the picks in the      */
 /* spec's example runs. Every function below keeps the reference's name,*/
 /* order of operations and arithmetic order: the scores are compared to */
 /* the reference's to the bit by scripts/check-recommend.mjs, which     */
@@ -180,9 +182,11 @@ export interface FlavourChoice {
   abvMax?: number;
   abvMin?: number;
   ids?: readonly string[];
+  /** Above this abv only the family says it: the notes and the recipe count for nothing (v4.2). */
+  noteAbvMax?: number;
 }
 
-/** The six flavour choices: the style families that ARE it, and the note words that SAY it. */
+/** The seven flavour choices: the style families that ARE it, and the note words that SAY it. */
 export const FLAVOURS: Record<Flavour, FlavourChoice> = {
   refreshing: {
     label: 'refreshing',
@@ -190,10 +194,27 @@ export const FLAVOURS: Record<Flavour, FlavourChoice> = {
     notes: ['mint', 'cucumber', 'soda', 'tonic', 'quinine', 'ginger', 'effervescence', 'sparkling', 'crisp', 'refreshing', 'prosecco', 'grapefruit', 'light citrus', 'clean'],
     abvMax: 15,
   },
+  // v4.2 Decided 5: the strength cap fruity has. Above 30% only the family (Sour) says it, so
+  // a bare 40% bottle whose notes say "citrus" or "lemon" (Tequila Blanco, Ouzo, Cognac VS) is
+  // not a sour, while a Daiquiri is (its family) and a Paloma still is (its notes).
   sour: {
     label: 'sour',
     subcats: ['Sour'],
     notes: ['lime', 'lemon', 'citrus', 'tart', 'sour', 'grapefruit', 'yuzu', 'sour cherry', 'passionfruit'],
+    noteAbvMax: 30,
+  },
+  // v4.2 §1.2 (Jan: "fruity or sour"). Fruit that is not citrus, which is sour's: the fruit-led
+  // families, the fresh-fruit note words (never the dried and sherried notes a whisky carries,
+  // nor plain "cherry", the maraschino on every Manhattan) and the fruit juices, purees, syrups
+  // and liqueurs a recipe names (never grenadine, maraschino liqueur or the orange liqueurs).
+  // noteAbvMax 30: a 40% Speyside that says "orchard fruit, pear" is not fruity, a fruit brandy
+  // is (its family), and so is a 16.5% Chambord (its notes).
+  fruity: {
+    label: 'fruity',
+    subcats: ['Tiki & Tropical', 'Punch & Cobbler', 'Fruit Brandy'],
+    notes: ['apple', 'pineapple', 'banana', 'peach', 'pear', 'apricot', 'raspberry', 'strawberry', 'cranberry', 'blackcurrant', 'pomegranate', 'passionfruit', 'passion fruit', 'mango', 'berry', 'red fruit', 'red berry', 'stone fruit', 'tropical fruit', 'green apple', 'melon', 'plum', 'lychee', 'sour cherry', 'tart berry', 'tart plum', 'ripe pear', 'ripe banana', 'orchard fruit', 'baked apple', 'cider', 'sloe', 'watermelon', 'guava', 'jam', 'juicy', 'blackberry', 'bramble jam', 'berries', 'red berries', 'tart fruit', 'tart red fruit', 'sloe berry', 'ripe peach', 'white peach', 'muskmelon', 'honeydew melon', 'guavaberry', 'cloudberry', 'tropical'],
+    ids: ['pineapple-juice', 'cranberry-juice', 'apple-juice', 'cloudy-apple-juice', 'passionfruit-juice', 'passion-fruit-puree', 'passionfruit-syrup', 'strawberries', 'strawberry-puree', 'pineapple', 'banana', 'peaches', 'white-peach-puree', 'raspberry-syrup', 'raspberry-cordial', 'creme-de-cassis', 'chambord', 'creme-de-mure', 'blackberry-liqueur', 'peach-schnapps', 'peach-liqueur', 'apricot-liqueur', 'pear-liqueur', 'melon-liqueur', 'banana-liqueur', 'creme-de-banana', 'cherry-liqueur', 'cherry-heering', 'passion-fruit-liqueur', 'sloe-gin', 'sour-apple-schnapps', 'mango-juice', 'guava-juice', 'papaya-juice', 'pomegranate-juice', 'blackcurrant-juice', 'blackcurrant-cordial', 'watermelon', 'papaya', 'mixed-fruit', 'seasonal-fruit', 'seasonal-berries', 'chopped-fruit', 'green-grapes'],
+    noteAbvMax: 30,
   },
   sweet: {
     label: 'sweet',
@@ -240,6 +261,7 @@ export function abvOf(d: Pick<RecDrink, 'abv'>): number | null {
 const LIKE: Record<Flavour, string> = {
   refreshing: 'something refreshing',
   sour: 'sours',
+  fruity: 'fruity drinks',
   sweet: 'sweet drinks',
   bitter: 'bitter',
   strong: 'strong drinks',
@@ -264,6 +286,7 @@ const BAR_BY_FLAVOUR: Record<Flavour, readonly string[]> = {
   bitter: ['campari'],
   strong: ['sweet-vermouth', 'angostura-bitters'],
   sour: ['triple-sec'],
+  fruity: ['pineapple-juice'],
   refreshing: ['ginger-beer'],
   sweet: ['grenadine'],
   creamy: ['coffee-liqueur'],
@@ -332,6 +355,7 @@ export function createRecommender(data: RecommenderData) {
     const abv = abvOf(d);
     if (F.subcats.includes(d.subcategory)) return 1;
     if (F.abvMin && abv !== null && abv >= F.abvMin) return 1; // every spirit is strong; so is a stirred 28% cocktail
+    if (F.noteAbvMax && abv !== null && abv > F.noteAbvMax) return 0; // v4.2 (fruity, sour): past this, only the family says it
     const notes = (d.tastingNotes ?? []).map((n) => n.toLowerCase());
     const said = notes.filter((n) => F.notes.includes(n)).length;
     const ids = idsOf(d);

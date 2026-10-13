@@ -16,7 +16,10 @@ import { Shell } from './Shell';
 /*               what you usually drink, whether you make drinks at home */
 /*   MultiStep   a checklist (checkbox): the spirits, the follow-up      */
 /*   GridStep    two columns of keys: the flavours (no box) and the bar */
-/*               (boxed tiles), one column at the two largest sizes     */
+/*               (boxed tiles), one column at the two largest sizes.    */
+/*               An odd count leaves the last key alone on the left at  */
+/*               the same width (the seven flavours' Creamy, v4.2 1.2): */
+/*               a full-width key would read as a different answer.     */
 /*                                                                      */
 /* Presentational: the flow holds the answers and says what a tap does. */
 /* ==================================================================== */

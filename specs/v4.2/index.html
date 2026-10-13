@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply v4.2 mockups</title>
+<style>
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/* v4 "Daylight" tokens (src/constants/theme.ts). No hue: the drink photos are the only colour. */
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --press:#EBEBEB; --line:#E3E3E3; --hair:#D6D6D6; --rule:#C4C4C4;
+  --control:#8A8A8A; --muted:#5C5C5C; --ink:#0A0A0A; --inkPressed:#333333; --onInk:#FFFFFF; --onInkMuted:#A3A3A3;
+  --scrim:rgba(10,10,10,.36); --photoEdge:rgba(10,10,10,.07);
+  --t1:#262626; --t2:#3D3D3D; --t3:#5C5C5C;
+  /* iOS system sheet (the share sheet is Apple's, not ours): its own neutral greys */
+  --sys:#F2F2F7; --sysRow:#FFFFFF; --sysSep:#C6C6C8; --sysLabel:#3C3C43;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E6E6E6}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+b{font-weight:600}
+
+/* the three sizes (title 28/34, body 17/24, small 13/18), Playfair for drink names; prompt 22/28 is onboarding's own */
+.title{font:600 28px/34px Inter;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.b5{font-weight:500}.b6{font-weight:600}
+.small{font:400 13px/18px Inter}
+.pf{font:700 17px/24px Playfair;letter-spacing:-.2px}
+.pf28{font:700 28px/34px Playfair;letter-spacing:-.2px}
+.prompt{font:500 22px/28px Inter;letter-spacing:-.3px}
+.plate{font:500 13px/18px Inter;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .tn{font-variant-numeric:tabular-nums}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.two{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none;isolation:isolate}
+.circle{border-radius:50%}
+.sb{position:absolute;top:0;left:0;right:0;height:62px;color:var(--ink);background:var(--page);z-index:30}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+.homeInd{position:absolute;left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:var(--ink);z-index:40}
+
+/* prints: square corners (radius 2, layout spec), photoEdge inset (white spec §5) */
+.print{position:absolute;overflow:hidden;background:var(--wash);border-radius:2px}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);border-radius:2px;pointer-events:none}
+.print.mosaic{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;background:var(--page)}
+.print.mosaic>div{position:relative;overflow:hidden;background:var(--wash)}
+.print.mosaic img{position:absolute;inset:0}
+
+/* keys and chips: squared (4pt). Chips 32 tall, hair edge off, ink on (ui.tsx Chip) */
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center;white-space:nowrap;font:500 17px/24px Inter;letter-spacing:-.2px;gap:8px}
+.key.ink{background:var(--ink);color:var(--onInk)}
+.key.wash{background:var(--wash);color:var(--ink)}
+.key.off{background:var(--wash);color:var(--muted)}
+.chips{display:flex;gap:8px;align-items:center}
+.chips.wrap{flex-wrap:wrap}
+.chip{height:32px;flex:none;display:flex;align-items:center;gap:6px;padding:0 12px;border-radius:4px;box-shadow:inset 0 0 0 1px var(--hair);font:500 13px/18px Inter;color:var(--ink);white-space:nowrap;background:var(--page)}
+.chip .n{color:var(--muted);font-variant-numeric:tabular-nums}
+.chip.on{background:var(--ink);color:var(--onInk);box-shadow:none}
+.chip.on .n{color:var(--onInkMuted)}
+.chip.sort{background:var(--wash);box-shadow:none;padding:0 10px 0 12px;gap:4px}
+
+.field{position:absolute;left:24px;width:392px;height:44px;border-radius:4px;background:var(--wash)}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--page);border-radius:12px 12px 0 0;box-shadow:0 -8px 30px rgba(10,10,10,.12);z-index:35}
+.grab{position:absolute;left:202px;top:8px;width:36px;height:4px;border-radius:1px;background:var(--rule)}
+.scrim{position:absolute;inset:0;background:var(--scrim);z-index:34}
+.box{width:22px;height:22px;border-radius:2px;box-shadow:inset 0 0 0 1.5px var(--control);background:var(--page);flex:none;display:flex;align-items:center;justify-content:center}
+.box.on{background:var(--ink);box-shadow:none}
+.opt{position:absolute;background:var(--wash);border-radius:4px;display:flex;align-items:center;justify-content:center;font:400 17px/24px Inter;letter-spacing:-.2px;color:var(--ink)}
+.opt.on{background:var(--ink);color:var(--onInk);font-weight:500}
+.bubble{position:absolute;background:var(--wash);border-radius:4px}
+.bubble.q{border-top-left-radius:0;padding:19px 21px}
+.bubble .sub{margin-top:8px}
+.seal{position:absolute;background:url(../../assets/images/icon.png) center/156% no-repeat;border-radius:50%}
+.fb{position:absolute;left:24px;width:392px;top:719px;height:105px;background:var(--wash);border-radius:4px;display:flex;align-items:center;gap:16px;padding:0 20px}
+.kb{position:absolute;left:0;right:0;bottom:0;height:346px;background:#D4D5D8;z-index:36}
+.kb .k{position:absolute;height:42px;border-radius:5px;background:#FFFFFF;box-shadow:0 1px 0 #898A8D;font:400 22px/42px Inter;text-align:center;color:#000}
+.kb .k.g{background:#ABAFB6;font-size:15px}
+
+/* the wall */
+.wall{display:flex;flex-wrap:wrap;gap:72px 36px;padding:120px 44px 60px;width:2908px;position:relative}
+.wall>h1{position:absolute;left:44px;top:34px;font:600 30px/36px Inter;letter-spacing:-.6px}
+.wall>h1 small{display:block;font:400 15px/22px Inter;letter-spacing:0;color:var(--muted);margin-top:6px}
+.frame{display:flex;flex-direction:column;gap:14px;width:440px;flex:none}
+.frame .phone{box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.cap{font:400 13px/19px Inter;color:#4A4A4A}
+.cap .cnt{display:block;font:600 15px/22px Inter;color:var(--ink);margin-bottom:4px}
+body.solo{background:var(--page)}
+body.solo .wall{padding:0;display:block;width:auto}
+body.solo .wall>h1,body.solo .cap{display:none}
+body.solo .frame{display:none}
+body.solo .frame.on{display:block}
+body.solo .frame .phone{box-shadow:none}
+</style>
+</head>
+<body>
+<div class="wall" id="wall">
+  <h1>Sipply v4.2: taste filters, For you, scroll-up search, saved collections
+    <small>Daylight tokens at 440 × 956. Every drink, count and section is real output of tools/dex-order.mjs over src/data (persona E: rum and tequila, sour and fruity). Photos are the only colour; a grey proof is a drink not caught yet.</small></h1>
+</div>
+<script src="data/dex.js"></script>
+<script>
+const X = window.DEX;
+const IMG = id => `../../assets/drinks/${id}.webp`;
+const PROOF = id => `../../assets/drinks/proof/${id}.webp`;
+const fmt = n => n.toLocaleString('en-US');
+const plateNo = n => 'Nº ' + String(n).padStart(4, '0');
+
+/* ---------- glyphs: src/components/icons.tsx paths ---------- */
+const OUT = {
+  home:'<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>',
+  dex:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>',
+  sliders:'<path d="M4 7.5h9.2"/><path d="M17.8 7.5H20"/><path d="M4 16.5h2.7"/><path d="M11.3 16.5H20"/><circle cx="15.5" cy="7.5" r="2.3"/><circle cx="9" cy="16.5" r="2.3"/>',
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  chevronRight:'<path d="M9.4 5.4 16 12l-6.6 6.6"/>',
+  chevronDown:'<path d="M5.4 9.4 12 16l6.6-6.6"/>',
+  close:'<path d="M6.2 6.2 17.8 17.8"/><path d="M17.8 6.2 6.2 17.8"/>',
+  plus:'<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>',
+  check:'<path d="M5 12.6 9.8 17.4 19 6.9"/>',
+  share:'<path d="M12 15.4V3.9"/><path d="M8.2 7.5 12 3.7l3.8 3.8"/><path d="M5.4 13.2v5.9a1.5 1.5 0 0 0 1.5 1.5h10.2a1.5 1.5 0 0 0 1.5-1.5v-5.9"/>',
+  heart:'<path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/>',
+  comment:'<path d="M20.4 12.6a7.4 7.4 0 0 1-8 7.4 8.5 8.5 0 0 1-3-.6L4.2 20.4l1.1-4.9a7.4 7.4 0 0 1-.7-3.2 7.4 7.4 0 0 1 8-7.4 7.5 7.5 0 0 1 7.8 7.4z"/>',
+  send:'<path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/>',
+  bookmark:'<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  create:'<rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4"/><path d="M12 8v8"/><path d="M8 12h8"/>',
+  copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="1.6"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  pencil:'<path d="M15.6 4.8 19.2 8.4 8.7 18.9 4.6 19.4 5.1 15.3z"/><path d="M13.6 6.8l3.6 3.6"/>',
+  trash:'<path d="M4.8 6.8h14.4"/><path d="M9.4 6.6V4.9h5.2v1.7"/><path d="M6.6 6.8l.9 12.3a1.4 1.4 0 0 0 1.4 1.3h6.2a1.4 1.4 0 0 0 1.4-1.3l.9-12.3"/>',
+  minus:'<circle cx="12" cy="12" r="8.2"/><path d="M8.4 12h7.2"/>',
+  lock:'<path d="M5.9 10.6h12.2a1.4 1.4 0 0 1 1.4 1.4v7.2a1.4 1.4 0 0 1-1.4 1.4H5.9a1.4 1.4 0 0 1-1.4-1.4V12a1.4 1.4 0 0 1 1.4-1.4z"/><path d="M8.1 10.4V7.6a3.9 3.9 0 0 1 7.8 0v2.8"/>',
+  stop:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/><path d="M4.5 4.5 19.5 19.5"/>',
+};
+const SOLID = {
+  home:'<path fill-rule="evenodd" d="M12 2.7a1.4 1.4 0 0 1 .9.3l8.3 6.6a1.4 1.4 0 0 1 .5 1.1v8.7a2.2 2.2 0 0 1-2.2 2.2h-4.6v-5.7a1 1 0 0 0-1-1h-3.8a1 1 0 0 0-1 1v5.7H4.5a2.2 2.2 0 0 1-2.2-2.2v-8.7a1.4 1.4 0 0 1 .5-1.1l8.3-6.6a1.4 1.4 0 0 1 .9-.3z"/>',
+  dex:'<path d="M3.5 5.1a.5.5 0 0 0-.36.85l8.5 8.7a.5.5 0 0 0 .72 0l8.5-8.7a.5.5 0 0 0-.36-.85z"/><path d="M11.1 14.6h1.8v4.3h2.8a.9.9 0 0 1 0 1.8H8.3a.9.9 0 0 1 0-1.8h2.8z"/>',
+  sliders:'<path d="M3.2 6.7h10.6v1.6H3.2zM17.6 6.7h3.2v1.6h-3.2zM3.2 15.7h3.9v1.6H3.2zM10.9 15.7h9.9v1.6h-9.9z"/><circle cx="15.5" cy="7.5" r="3.1"/><circle cx="9" cy="16.5" r="3.1"/>',
+  bookmark:'<path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z"/>',
+  heart:'<path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z"/>',
+};
+const ic = (name, size=24, color='var(--ink)', sw=1.6, solid=false) => {
+  if (name === 'more') return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><circle cx="5.4" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.6" cy="12" r="1.7"/></svg>`;
+  if (solid && SOLID[name]) return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">${SOLID[name]}</svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</svg>`;
+};
+const at = (x, y, inner, st='') => `<div class="a" style="left:${x}px;top:${y}px;${st}">${inner}</div>`;
+const PERSON = '<circle cx="12" cy="9" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6z"/>';
+const av = (x, y, d, tone) => `<div class="a circle" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:var(--${tone});display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="${Math.round(d*.86)}" height="${Math.round(d*.86)}" viewBox="0 0 24 24" fill="#FFFFFF">${PERSON}</svg></div>`;
+
+/* ---------- system chrome ---------- */
+const statusBar = (bg='var(--page)') => `<div class="sb" style="background:${bg}"><span class="t">9:41</span><span class="island"></span><span class="r">
+  <svg width="18" height="12" viewBox="0 0 18 12" fill="#0A0A0A"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="#0A0A0A"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.5 8.5 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.7 6.7 0 0 0 8 4c-1.8 0-3.4.7-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3ZM8 9.3l1.9-1.7a2.9 2.9 0 0 0-3.8 0Z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#0A0A0A" stroke-opacity=".35"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#0A0A0A"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="#0A0A0A" fill-opacity=".4"/></svg></span></div>`;
+const homeInd = () => `<div class="homeInd"></div>`;
+
+/* the tab bar as built: Home · Dex · + · Saved · Profile, 49pt row on an opaque page slab */
+function tabBar(active){
+  const xs = [44,132,220,308,396], cy = 897.5;
+  let h = `<div class="a" style="left:0;top:873px;width:440px;height:83px;background:var(--page);z-index:32"></div>`;
+  const g = (name, i) => at(xs[i]-13, cy-13, ic(name, 26, active===name?'var(--ink)':'var(--muted)', 1.6, active===name), 'z-index:33');
+  h += g('home',0) + g('dex',1);
+  h += `<div class="a" style="left:${xs[2]-26}px;top:${cy-19}px;width:52px;height:38px;border-radius:4px;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:33">${ic('plus',22,'#FFFFFF',2)}</div>`;
+  h += g('bookmark',3);
+  h += `<div class="a" style="z-index:33">${av(xs[4]-13, cy-13, 26, 't3')}</div>`;
+  return h + homeInd();
+}
+
+/* ---------- a drink as the Dex draws it: print (colour caught, proof not yet, face no photo) + Playfair name ---------- */
+function face(w){
+  const s = Math.round(w*.34);
+  return `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="var(--control)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5h15l-7.5 7.6z"/><path d="M12 12.6v6.2"/><path d="M8.4 19.4h7.2"/></svg></div>`;
+}
+function printOf(it, x, y, w, h=w){
+  const inner = !it.photo ? face(w) : `<img src="${it.caught ? IMG(it.id) : PROOF(it.id)}" onerror="this.src='${IMG(it.id)}';this.style.filter='grayscale(1) contrast(.7) brightness(1.15)'">`;
+  return `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">${inner}</div>`;
+}
+function card(it, x, y, w=184){
+  return printOf(it, x, y, w) + `<div class="a pf two" style="left:${x}px;top:${y+w+8}px;width:${w}px;color:${it.caught?'var(--ink)':'var(--muted)'}">${it.name}</div>`;
+}
+const ROW = 264;   /* 184 print + 8 + two 24pt name lines + 24 ledge */
+
+/* ---------- the Dex ---------- */
+const QUICK_E = [['sour','Sour and citrusy'],['fruity','Fruity'],['rum','Rum'],['agave','Tequila and mezcal']];
+function dexTop(count, rule){
+  return `<div class="a" style="left:0;top:62px;width:440px;height:52px;background:var(--page);z-index:28;${rule?'box-shadow:inset 0 -1px 0 var(--line)':''}"></div>
+    ${at(24, 71, '<span class="title">Dex</span>', 'z-index:29')}
+    ${at(240, 83, `<span class="small muted tn">${count}</span>`, 'z-index:29;width:176px;text-align:right')}`;
+}
+/* The header that hides: field + chip row, 112 tall from y 114, clipped under the bar. t = translateY (0 shown, -112 hidden) */
+function dexHeader({t=0, sort='For you', chips=QUICK_E.map(([k,l])=>({l})), filterOn=false, placeholder='Search a name or number', rule=false}={}){
+  const H = 112, gone = Math.min(1, Math.max(0, -t/H)), o = gone <= 0.4 ? 1 : (1 - gone) / 0.6; // spec §3.1: 1 until 40% gone, then to 0
+  const sortChip = sort ? `<span class="chip sort">${sort}${ic('chevronDown',14,'var(--ink)',1.8)}</span>` : '';
+  const row = chips.map(c => `<span class="chip ${c.on?'on':''}">${c.l}${c.n!=null?`<span class="n">${fmt(c.n)}</span>`:''}</span>`).join('');
+  return `<div class="a" style="left:0;top:114px;width:440px;height:${H}px;overflow:hidden;z-index:27;pointer-events:none">
+    <div class="a" style="left:0;top:0;width:440px;height:${H}px;background:var(--page);transform:translateY(${t}px);${rule?'box-shadow:inset 0 -1px 0 var(--line)':''}">
+     <div class="a" style="inset:0;opacity:${o.toFixed(2)}">
+      <div class="field" style="top:8px">${at(12,12,ic('search',20,'var(--muted)'))}${at(42,10,`<span class="body muted">${placeholder}</span>`)}${at(354,11,ic('sliders',22,'var(--ink)',1.6,filterOn))}</div>
+      <div class="a chips" style="left:24px;top:64px;width:416px;overflow:hidden">${sortChip}${row}</div>
+     </div>
+    </div></div>`;
+}
+function sectionHead(y, label, right, link=true){
+  return at(24, y, `<span class="body b6">${label}</span>`) +
+    at(216, y, `<div style="width:200px;display:flex;justify-content:flex-end;align-items:center;gap:2px"><span class="small ${link?'':'muted'}" style="${link?'font-weight:500':''}">${right}</span>${link?ic('chevronRight',16,'var(--ink)',1.8):''}</div>`, 'top:'+(y+3)+'px');
+}
+/* For-you content: sections (head 24 + 12, six rows), 8 more before the next head, then Everything else by number */
+function forYouContent(scroll){
+  let h = '', y = 234;
+  X.sections.forEach(s => {
+    h += sectionHead(y - scroll, s.label, `See all ${fmt(s.all)}`);
+    y += 36;
+    for (let r = 0; r < s.items.length; r += 2) {
+      [0,1].forEach(c => { const it = s.items[r+c]; if (it) h += card(it, c ? 232 : 24, y - scroll); });
+      y += ROW;
+    }
+    y += 8;
+  });
+  h += sectionHead(y - scroll, 'Everything else', 'by number', false);
+  y += 36;
+  const rest = X.restHead;
+  for (let r = 0; r < rest.length; r += 2) {
+    [0,1].forEach(c => { const it = rest[r+c]; if (it) h += card(it, c ? 232 : 24, y - scroll); });
+    y += ROW;
+  }
+  return `<div class="a" style="left:0;top:0;width:440px;height:956px">${h}</div>`;
+}
+function numberContent(top, items){
+  let h = '';
+  for (let r = 0; r < items.length; r += 2) {
+    [0,1].forEach(c => { const it = items[r+c]; if (it) h += card(it, c ? 232 : 24, top + (r/2)*ROW); });
+  }
+  return h;
+}
+/* The rail while scrolling, in For-you mode: one stop per section at its head, then Nº for Everything else */
+function rail(top, thumbLabel, thumbY){
+  const bottom = 865, x = 412;
+  let h = `<div class="a" style="left:${x}px;top:${top}px;width:24px;height:${bottom-top}px;z-index:26">
+    <svg class="a" style="left:0;top:0" width="24" height="${bottom-top}"><path d="M19.5 ${44*2+12}V${bottom-top}" stroke="var(--rule)" stroke-width="1"/>
+    <path d="M12.5 22H19.5M12.5 66H19.5" stroke="var(--control)" stroke-width="1.5"/>`;
+  for (let v = 100; v < 2089; v += 100) { const yy = 100 + ((v-1)/2088)*(bottom-top-101); h += `<path d="M${v%500?15.5:12.5} ${yy.toFixed(1)}H19.5" stroke="var(--rule)" stroke-width="1"/>`; }
+  h += `</svg></div>`;
+  const w = Math.max(48, Math.round(thumbLabel.length*7.2 + 24));
+  h += `<div class="a" style="left:${436-w}px;top:${thumbY}px;width:${w}px;height:44px;border-radius:2px;background:var(--ink);color:var(--onInk);display:flex;align-items:center;justify-content:center;z-index:27"><span class="small b5">${thumbLabel}</span></div>`;
+  return h;
+}
+
+/* ---------- frames ---------- */
+const frames = [];
+const frame = (id, title, cap, body) => frames.push({id, title, cap, body});
+
+const caught = `${X.caughtCount} / ${fmt(X.total)}`;
+
+/* 1 For you at rest */
+frame('foryou', '1 Dex · For you, at rest',
+  `The person answered sour and fruity, rum and tequila. The Dex opens on their answers in their order: “Sour and citrusy”, then “Fruity”, each its scorer’s best 12 (photographed first), then “Everything else” by number. The sort key says the order; their own answers sit beside it as quick filters. “See all 445” turns that filter on.`,
+  forYouContent(0) + statusBar() + dexTop(caught) + dexHeader() + tabBar('dex'));
+
+/* 2 By number (switched, with answers) */
+frame('bynumber', '2 Dex · By number',
+  `The same person, after the sort key → By number: the v4 Dex exactly, every drink in Nº order, no section heads. The quick chips stay (they are filters, not the order). Chosen once, kept on the phone.`,
+  numberContent(234, X.byNumber.slice(0, 8)) + statusBar() + dexTop(caught) + dexHeader({sort:'By number'}) + tabBar('dex'));
+
+/* 3 No answers yet */
+frame('notaste', '3 Dex · no answers yet',
+  `Someone who skipped the questions (or an account from before v4.1). By number is the only order, so there is no sort key. One quiet line opens the questions (Settings → Your tastes, the same flow). The quick chips are the kinds and Not yet.`,
+  at(24, 234, `<div style="display:flex;align-items:center;gap:2px"><span class="small muted">Tell us your taste, and your kind of drinks come first</span>${ic('chevronRight',16,'var(--muted)',1.8)}</div>`) +
+  numberContent(270, X.byNumber.slice(0, 8).map(i => ({...i, caught:false}))) + statusBar() + dexTop(`0 / ${fmt(X.total)}`) +
+  dexHeader({sort:null, chips:[{l:'Cocktails'},{l:'Spirits'},{l:'Not yet'},{l:'Refreshing'},{l:'Sour and citrusy'}]}) + tabBar('dex'));
+
+/* 4 Scrolled down: header hidden, rail on */
+frame('hidden', '4 Scrolled down · search hidden',
+  `Scrolling down slides the field and the chips up under the bar (UI thread, translate + opacity) and gives the grid the whole screen. The rail shows while the grid moves: in For you its top two stops are the sections, the rest is Nº for Everything else. Here the thumb is at “Fruity”.`,
+  forYouContent(1442) + statusBar() + dexTop(caught, true) + dexHeader({t:-112}) + rail(122, 'Fruity', 144) + tabBar('dex'));
+
+/* 5 Mid scroll-up: revealing */
+frame('revealing', '5 Scrolling up · search coming back',
+  `From the first point of upward movement the header slides back down from under the bar, 1:1 with the finger (native-driver diffClamp, no clock), chips first, the field after; fully back after 112 pt and kept until you scroll down. Here at 64%: Fruity’s last row above, “Everything else” starting by number.`,
+  forYouContent(3020) + statusBar() + dexTop(caught, true) + dexHeader({t:-40}) + tabBar('dex'));
+
+/* 6 Filter sheet */
+function filterSheet(){
+  const S = X.sheet, c = S.counts, W = X.words;
+  const grp = (title, chips) => `<div style="margin-top:24px"><div class="small b6 muted" style="margin-bottom:8px">${title}</div><div class="chips wrap">${chips}</div></div>`;
+  const chip = (l, n, on) => `<span class="chip ${on?'on':''}">${l}<span class="n">${fmt(n)}</span></span>`;
+  const fl = W.flavourOrder.map(k => chip(W.flavours[k], c.flavours[k], S.filter.flavours.includes(k))).join('');
+  const sp = W.spiritOrder.map(k => chip(W.spirits[k], c.spirits[k], false)).join('');
+  const kd = chip('Cocktails', c.kind.cocktail, true) + chip('Spirits', c.kind.spirit, false);
+  const st = chip('Caught', c.status.unlocked, false) + chip('Not yet', c.status.locked, true);
+  return `<div class="scrim"></div><div class="sheet" style="height:654px"><div class="grab"></div>
+    <div style="position:absolute;left:24px;right:24px;top:28px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><span class="body b6">Filter</span><span class="body b5" style="text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">Clear</span></div>
+      ${grp('Flavour', fl)}${grp('Spirit', sp)}${grp('Kind', kd)}${grp('In your Dex', st)}
+    </div>
+    <div class="key ink" style="left:24px;top:${654-34-8-52}px;width:392px;height:52px">Show ${fmt(c.total)} drinks</div></div>`;
+}
+const flatItems = X.sections[0].items.concat(X.sections[1].items).filter(i => !i.caught && i.cat === 'cocktail');
+frame('filter', '6 The filter sheet',
+  `The sliders key opens the first run’s own words: seven flavours (Fruity is new), the seven spirits, kind, and caught or not yet. OR inside a group, AND across. Each chip counts what the grid would hold with it on. Chips apply at once; the key closes the sheet. Nothing is pre-picked from the answers.`,
+  numberContent(234, flatItems.slice(0, 4)) + statusBar() + dexTop(`10 / ${fmt(X.sheet.counts.status.unlocked + X.sheet.counts.status.locked)}`) +
+  dexHeader({filterOn:true, chips:[{l:'Sour and citrusy',on:true},{l:'Fruity',on:true},{l:'Cocktails',on:true},{l:'Not yet',on:true},{l:'Rum'}]}) + filterSheet() + homeInd());
+
+/* 7 First run: flavours with Fruity */
+function flavourTiles(){
+  const F = [['Refreshing'],['Sour and citrusy',true],['Fruity',true],['Sweet'],['Bitter'],['Strong and stirred'],['Creamy']];
+  return F.map(([l,on],i) => `<div class="opt ${on?'on':''}" style="left:${i%2?226:40}px;top:${270 + Math.floor(i/2)*76}px;width:174px;height:64px">${l}</div>`).join('');
+}
+frame('flavours', '7 First run · Fruity joins the flavour question',
+  `The same step (v4.1 §1.2, step 7), one key more: Fruity after Sour and citrusy, in a 2 × 4 grid with Creamy alone on the last row (keys keep one size). Still up to 3. The card counts as before: rum or tequila, sour or fruity, 161 drinks.`,
+  statusBar() +
+  at(20, 70, ic('chevronLeft', 24, 'var(--ink)', 1.8)) +
+  `<div class="a" style="left:69px;top:80px;width:287px;height:4px;border-radius:1px;background:var(--line)"></div><div class="a" style="left:69px;top:80px;width:164px;height:4px;border-radius:1px;background:var(--ink)"></div>` +
+  `<div class="a body muted" style="right:24px;top:70px;width:52px;text-align:right">Skip</div>` +
+  `<div class="seal" style="left:40px;top:118px;width:32px;height:32px"></div>` +
+  `<div class="bubble q" style="left:82px;top:118px;width:318px"><div class="prompt">How do you like your drinks?</div><div class="small muted sub">Pick up to 3.</div></div>` +
+  flavourTiles() +
+  `<div class="fb"><div class="print" style="position:relative;width:56px;height:56px;flex:none"><img src="${IMG('pina-colada')}"></div><div class="body">That’s <b class="tn">161</b> drinks in the Dex that match.</div></div>` +
+  `<div class="key ink" style="left:24px;top:841px;width:392px;height:51px">Continue</div>` + homeInd());
+
+/* ---------- Home post (Instagram layout, as built) for the save frames ---------- */
+function homeTop(){
+  return `<div class="a" style="left:0;top:62px;width:440px;height:45px;background:var(--page);z-index:28"></div>` +
+    at(16, 67, '<span style="font:700 28px/34px Playfair;letter-spacing:-.2px">Sipply</span>', 'z-index:29') +
+    at(354, 71, ic('create',26), 'z-index:29') + at(398, 71, ic('heart',26), 'z-index:29');
+}
+function homePost(saved){
+  let h = '';
+  const y0 = 107;
+  h += av(16, y0+10, 32, 't1');
+  h += at(60, y0+8, '<span class="small b6">maya.pours</span>') + at(60, y0+26, '<span style="font:700 13px/18px Playfair">Hemingway Daiquiri</span>') + at(400, y0+14, ic('more',24));
+  h += `<div class="print" style="left:0;top:${y0+52}px;width:440px;height:440px;border-radius:0"><img src="${IMG('hemingway-daiquiri')}" style="transform:scale(1.12)"></div>`;
+  const ay = y0+52+440;
+  h += at(16, ay+9, ic('heart',26)) + at(60, ay+9, ic('comment',26)) + at(104, ay+9, ic('send',26)) + at(398, ay+9, ic('bookmark',26,'var(--ink)',1.6,saved));
+  h += at(16, ay+48, '<span class="small">Liked by <b>ines.ag</b> and <b>16 others</b></span>');
+  h += `<div class="a small" style="left:16px;top:${ay+70}px;width:408px"><b>maya.pours</b> Grapefruit and maraschino, no sugar. Papa’s way, shaken hard.</div>`;
+  h += at(16, ay+110, '<span class="small muted">3 hours ago</span>');
+  h += av(16, ay+146, 32, 't2') + at(60, ay+144, '<span class="small b6">ines.ag</span>') + at(60, ay+162, '<span style="font:700 13px/18px Playfair">Cantarito</span>');
+  h += `<div class="print" style="left:0;top:${ay+188}px;width:440px;height:440px;border-radius:0"><img src="${IMG('cantarito')}"></div>`;
+  return h;
+}
+
+/* 8 Just saved: the bar */
+frame('savebar', '8 Just saved · “Save to collection”',
+  `Tapping the bookmark saves to All saved, exactly as now. A bar rises above the tab bar for 4 seconds: the print, “Saved”, and “Save to collection”. It is ink, the screen’s one solid object while it shows. Long-press any bookmark to open the sheet directly.`,
+  homePost(true) + statusBar() + homeTop() +
+  `<div class="a" style="left:24px;top:801px;width:392px;height:60px;border-radius:4px;background:var(--ink);z-index:31;display:flex;align-items:center;padding:0 16px 0 10px;gap:12px">
+     <div class="print" style="position:relative;width:40px;height:40px;flex:none"><img src="${IMG('hemingway-daiquiri')}"></div>
+     <span class="body b5" style="color:var(--onInk);flex:1">Saved</span>
+     <span class="body b5" style="color:var(--onInk);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px">Save to collection</span></div>` +
+  tabBar('home'));
+
+/* ---------- collections (stand-ins for the person's own; every drink real) ---------- */
+const D = id => ({id, photo:true, caught:['daiquiri','mojito','margarita','pina-colada','cuba-libre','paloma','mai-tai','aperol-spritz','negroni','old-fashioned','espresso-martini','cosmopolitan','tequila-sunrise','whiskey-sour'].includes(id)});
+const COLS = [
+  {name:'All saved', items:['daiquiri','pina-colada','paper-plane','margarita'], meta:'14 drinks · 6 posts', all:true},
+  {name:'Sunday sours', items:['hemingway-daiquiri','margarita','caipirinha','pisco-sour'], meta:'9 drinks · 2 posts · Shared'},
+  {name:'Fruity', items:['pina-colada','mai-tai','hurricane','miami-vice'], meta:'6 drinks'},
+  {name:'For the party', items:['frozen-margarita','aperol-spritz','mojito','sangria'], meta:'5 drinks · 1 post'},
+  {name:'Strong ones', items:['old-fashioned'], meta:'2 drinks'},
+];
+function cover(c, x, y, w){
+  if (c.items.length >= 4) return `<div class="print mosaic" style="left:${x}px;top:${y}px;width:${w}px;height:${w}px">${c.items.slice(0,4).map(id=>`<div><img src="${IMG(id)}"></div>`).join('')}</div>`;
+  if (c.items.length) return `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${w}px"><img src="${IMG(c.items[0])}"></div>`;
+  return `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${w}px"></div>`;
+}
+
+/* 9 Save-to-collection sheet */
+function saveSheet(){
+  const rows = COLS.slice(1).map((c, i) => {
+    const on = i === 0;
+    return `<div style="height:64px;display:flex;align-items:center;gap:16px">
+      <div style="position:relative;width:48px;height:48px;flex:none">${cover(c,0,0,48)}</div>
+      <div style="flex:1;min-width:0"><div class="body ell">${c.name}</div></div>
+      <div class="box ${on?'on':''}">${on?ic('check',18,'#FFFFFF',2.2):''}</div></div>`;
+  }).join('');
+  return `<div class="scrim"></div><div class="sheet" style="height:560px"><div class="grab"></div>
+    <div style="position:absolute;left:24px;right:24px;top:28px">
+      <div style="text-align:center" class="body b6">Save to collection</div>
+      <div class="small muted" style="text-align:center;margin-top:4px">maya.pours’s post is in All saved</div>
+      <div style="margin-top:20px;height:64px;display:flex;align-items:center;gap:16px">
+        <div style="width:48px;height:48px;border-radius:2px;background:var(--wash);display:flex;align-items:center;justify-content:center">${ic('plus',24,'var(--ink)',1.8)}</div>
+        <span class="body b5">New collection</span></div>
+      ${rows}
+    </div>
+    <div class="key ink" style="left:24px;top:${560-34-8-52}px;width:392px;height:52px">Done</div></div>`;
+}
+frame('sheet', '9 The save-to-collection sheet',
+  `“New collection” first, then every collection with its cover and a box. A tap puts the post in (or takes it out) at once; several at a time is fine. Done closes. Collections hold saved posts and saved drinks alike; the same sheet opens from a drink page’s bookmark.`,
+  homePost(true) + statusBar() + homeTop() + tabBar('home') + saveSheet());
+
+/* 10 New collection */
+function keyboard(){
+  const rowsK = ['qwertyuiop','asdfghjkl','zxcvbnm'];
+  let h = '<div class="kb">';
+  rowsK.forEach((r, ri) => {
+    const kw = 37, gap = 6, total = r.length*kw + (r.length-1)*gap;
+    let x0 = (440 - total)/2;
+    [...r].forEach((ch, i) => { h += `<div class="k" style="left:${x0 + i*(kw+gap)}px;top:${10 + ri*54}px;width:${kw}px">${ch}</div>`; });
+  });
+  h += `<div class="k g" style="left:6px;top:118px;width:48px">⇧</div><div class="k g" style="left:386px;top:118px;width:48px">⌫</div>`;
+  h += `<div class="k g" style="left:6px;top:172px;width:94px">123</div><div class="k" style="left:106px;top:172px;width:228px;font-size:15px">space</div><div class="k g" style="left:340px;top:172px;width:94px;background:#0A0A0A;color:#fff">done</div>`;
+  return h + '</div>';
+}
+frame('new', '10 New collection',
+  `From the sheet’s first row. The post being saved is the cover. One field, 40 characters, then Create (ink, grey until there is a name). It says who can see it. Made from the Saved tab instead, the next step ticks items from All saved.`,
+  homePost(true) + statusBar() + homeTop() + `<div class="scrim"></div>` +
+  `<div class="sheet" style="height:820px"><div class="grab"></div>
+    ${at(16, 22, ic('chevronLeft',24,'var(--ink)',1.8))}
+    <div class="a body b6" style="left:0;right:0;top:22px;text-align:center">New collection</div>
+    <div class="print" style="left:160px;top:76px;width:120px;height:120px"><img src="${IMG('hemingway-daiquiri')}"></div>
+    <div class="a" style="left:24px;top:220px;width:392px;height:56px;border-radius:4px;background:var(--wash);box-shadow:inset 0 0 0 1.5px var(--ink)">
+      <div class="a body" style="left:16px;top:16px">Sunday sours<span style="display:inline-block;width:2px;height:22px;background:var(--ink);vertical-align:-5px;margin-left:1px"></span></div>
+      <div class="a small muted tn" style="right:16px;top:19px">12 / 40</div></div>
+    <div class="a small muted" style="left:24px;top:288px;width:392px">Only you can see it. You can share a link to it later.</div>
+    <div class="key ink" style="left:24px;top:322px;width:392px;height:52px">Create</div>
+  </div>` + keyboard() + homeInd());
+
+/* 11 Saved tab with collections */
+function savedTab(){
+  let h = at(24, 122, '<span class="small muted">Only you can see what you save, until you share a collection.</span>');
+  const tiles = [...COLS, {name:'New collection', items:[], add:true}];
+  tiles.forEach((c, i) => {
+    const x = i%2 ? 232 : 24, y = 156 + Math.floor(i/2)*258;
+    if (c.add) {
+      h += `<div class="a" style="left:${x}px;top:${y}px;width:184px;height:184px;border-radius:2px;background:var(--wash);display:flex;align-items:center;justify-content:center">${ic('plus',32,'var(--ink)',1.6)}</div>`;
+      h += at(x, y+192, '<span class="body b5">New collection</span>');
+      return;
+    }
+    h += cover(c, x, y, 184);
+    h += at(x, y+192, `<span class="body b5 ell" style="display:block;width:184px">${c.name}</span>`);
+    h += at(x, y+216, `<span class="small muted">${c.meta}</span>`);
+  });
+  return h;
+}
+frame('saved', '11 Saved · All saved, then collections',
+  `Instagram’s Saved, on the Dex’s grid: All saved first (what the tab showed until now, one tap in), then each collection as a cover of its first four items, its name and what is in it. “Shared” is said in words. The last tile makes a new one.`,
+  savedTab() + statusBar() +
+  `<div class="a" style="left:0;top:62px;width:440px;height:52px;background:var(--page);z-index:28"></div>` + at(24, 71, '<span class="title">Saved</span>', 'z-index:29') + tabBar('bookmark'));
+
+/* ---------- a collection page ---------- */
+const SOURS = ['hemingway-daiquiri','margarita','caipirinha','pisco-sour','daiquiri','tommys-margarita','clover-club','whiskey-sour','paloma'];
+const NAMES = {'hemingway-daiquiri':'Hemingway Daiquiri','margarita':'Margarita','caipirinha':'Caipirinha','pisco-sour':'Pisco Sour','daiquiri':'Daiquiri','tommys-margarita':"Tommy's Margarita",'clover-club':'Clover Club','whiskey-sour':'Whiskey Sour','paloma':'Paloma'};
+const NUMS = {'hemingway-daiquiri':102,'margarita':106,'caipirinha':96,'pisco-sour':109,'daiquiri':100,'tommys-margarita':57,'clover-club':97,'whiskey-sour':112,'paloma':25};
+const SUBS = {'hemingway-daiquiri':'Sour','margarita':'Sour','caipirinha':'Sour','pisco-sour':'Sour','daiquiri':'Sour','tommys-margarita':'Modern Classic','clover-club':'Sour','whiskey-sour':'Sour','paloma':'Highball'};
+function collectionPage({meta='9 drinks · 2 posts · Private', owner=null, viewerCaught=null, scroll=0, more=true}={}){
+  let h = '';
+  h += at(20, 76, ic('chevronLeft',24,'var(--ink)',1.8), 'z-index:29');
+  h += `<div class="a" style="left:0;top:62px;width:440px;height:52px;background:var(--page);z-index:28"></div>`;
+  const y = 122 - scroll;
+  h += at(24, y, '<span class="title">Sunday sours</span>');
+  if (more) h += at(392, y+5, ic('more',24));
+  let my = y + 42;
+  if (owner) { h += av(24, my, 24, 't3') + at(56, my+3, `<span class="small"><b>${owner}</b> <span class="muted">· ${meta}</span></span>`); }
+  else h += at(24, my, `<span class="small muted">${meta}</span>`);
+  const gy = my + 40;
+  SOURS.slice(0, 6).forEach((id, i) => {
+    const it = {id, name:NAMES[id], photo:true, caught: viewerCaught ? viewerCaught.includes(id) : D(id).caught};
+    h += card(it, i%2 ? 232 : 24, gy + Math.floor(i/2)*ROW);
+  });
+  return h;
+}
+frame('collection', '12 A collection',
+  `Your own collection, pushed from its tile. The name is the page’s title, ••• beside it (the bar keeps only the back chevron). One quiet line says what is in it and who can see it. Drinks first as the Dex draws them (colour if caught), then its posts three to a row, newest first.`,
+  collectionPage() + statusBar());
+
+/* 13 ••• sheet */
+frame('more', '13 The collection’s •••',
+  `Rename, Share, Remove items (tick tiles, then “Remove 2”), and Delete collection, which asks first and says the posts and drinks stay in All saved. Once shared, Share becomes Share link and Stop sharing joins it.`,
+  collectionPage() + statusBar() + `<div class="scrim"></div>
+  <div class="sheet" style="height:372px"><div class="grab"></div>
+    <div style="position:absolute;left:24px;right:24px;top:28px">
+      <div class="small muted" style="text-align:center">Sunday sours · 9 drinks · 2 posts · Private</div>
+      ${[['pencil','Rename'],['share','Share'],['minus','Remove items'],['trash','Delete collection']].map(([g,l]) => `<div style="height:56px;display:flex;align-items:center;gap:16px;margin-top:4px">${ic(g,24,'var(--ink)',1.6)}<span class="body">${l}</span></div>`).join('')}
+    </div></div>` + homeInd());
+
+/* 14 Share moment: Sipply's one-line confirm, then the iOS share sheet */
+frame('share', '14 Sharing · the link and the iOS share sheet',
+  `Share turns the link on (the meta line now says “Shared by link”) and opens the system share sheet with “My Sunday sours collection on Sipply” and the web link. The first time, one line above the sheet says what the link shows: the name, its drinks and your username.`,
+  collectionPage({meta:'9 drinks · 2 posts · Shared by link'}) + statusBar() + `<div class="scrim" style="background:rgba(0,0,0,.2)"></div>
+  <div class="a" style="left:24px;top:444px;width:392px;height:60px;border-radius:4px;background:var(--ink);z-index:35;display:flex;align-items:center;padding:0 16px">
+    <span class="small" style="color:var(--onInk)">Anyone with the link sees the name, its drinks and your username. Stop sharing any time in •••.</span></div>
+  <div class="a" style="left:0;top:520px;width:440px;height:436px;border-radius:14px 14px 0 0;background:var(--sys);z-index:36">
+    <div class="a" style="left:16px;top:16px;width:408px;height:72px;display:flex;align-items:center;gap:12px">
+      <div style="width:52px;height:52px;border-radius:12px;overflow:hidden;background:url(../../assets/images/icon.png) center/cover"></div>
+      <div style="flex:1;min-width:0"><div style="font:600 15px/20px Inter;color:#000">My Sunday sours collection on Sipply</div><div style="font:400 13px/18px Inter;color:var(--sysLabel);opacity:.6">janmcq1617.github.io</div></div>
+      <div class="circle" style="width:30px;height:30px;background:#E3E3E8;display:flex;align-items:center;justify-content:center">${ic('close',16,'#7A7A80',2.2)}</div></div>
+    <div class="a" style="left:0;top:96px;width:440px;height:1px;background:var(--sysSep);opacity:.5"></div>
+    <div class="a" style="left:16px;top:112px;width:408px;display:flex;justify-content:space-between">
+      ${['Messages','Mail','Notes','Reminders','More'].map(l => `<div style="width:70px;text-align:center"><div style="width:62px;height:62px;margin:0 auto;border-radius:14px;background:#D1D1D6"></div><div style="font:400 12px/16px Inter;color:#000;margin-top:6px">${l}</div></div>`).join('')}</div>
+    <div class="a" style="left:16px;top:216px;width:408px;border-radius:10px;background:var(--sysRow)">
+      ${[['copy','Copy'],['link','Add to Reading List']].map(([g,l],i) => `<div style="height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;${i?'border-top:1px solid #E5E5EA':''}"><span style="font:400 17px/22px Inter;color:#000">${l}</span>${ic(g,22,'#000',1.6)}</div>`).join('')}</div>
+  </div>` + homeInd());
+
+/* 15 Shared view in the app */
+frame('shared', '15 Someone opens the link in the app',
+  `drinkdex://collection/… (or “Open in Sipply” on the web page) pushes a read-only copy: the owner’s name, what is in it, the drinks drawn against the VIEWER’s own Dex. No •••. One key: Save collection, which copies it into their own collections (and its items into their All saved).`,
+  collectionPage({owner:'nico.pours', meta:'9 drinks · 2 posts', viewerCaught:['margarita','daiquiri','whiskey-sour'], more:false}) + statusBar() +
+  `<div class="a" style="left:0;top:836px;width:440px;height:120px;background:var(--page);box-shadow:inset 0 1px 0 var(--line);z-index:30"></div>
+   <div class="key ink" style="left:24px;top:850px;width:392px;height:52px;z-index:31">Save collection</div>` + homeInd());
+
+/* 16 The web page */
+function webPage(){
+  let h = '';
+  h += at(24, 76, '<span class="pf28">Sipply</span>');
+  h += at(24, 136, '<span class="title">Sunday sours</span>');
+  h += at(24, 176, '<span class="small muted">A collection by <b style="color:var(--ink)">nico.pours</b> · 9 drinks · 2 posts</span>');
+  const drinks = SOURS.map(id => ({id, n:NUMS[id], name:NAMES[id], sub:SUBS[id]}));
+  // Newest first, posts among the drinks: a post row is its drink's number and name, "From a post".
+  const list = [...drinks.slice(0, 2), {n:65, name:'Cantarito', sub:'From a post'}, ...drinks.slice(2, 5), {n:100, name:'Daiquiri', sub:'From a post'}, ...drinks.slice(5)];
+  list.slice(0, 10).forEach((d, i) => {
+    const y = 220 + i*64;
+    h += at(24, y+20, `<span class="plate muted" style="display:inline-block;width:76px">${plateNo(d.n)}</span>`);
+    h += at(100, y+8, `<span class="pf">${d.name}</span>`);
+    h += at(100, y+32, `<span class="small muted">${d.sub}</span>`);
+  });
+  return h;
+}
+frame('web', '16 The web page for a shared link',
+  `janmcq1617.github.io/drinkdex/c/#… on GitHub Pages: names and numbers only, read through one database function with the publishable key, so only link-shared collections answer and nothing can be listed. Get Sipply and Open in Sipply. Not indexed. Posts show as their drink, never the photo.`,
+  statusBar() + webPage() +
+  `<div class="a" style="left:0;top:790px;width:440px;height:166px;background:var(--page);box-shadow:inset 0 1px 0 var(--line);z-index:30"></div>
+   <div class="key ink" style="left:24px;top:804px;width:190px;height:52px;z-index:31">Get Sipply</div>
+   <div class="key wash" style="left:226px;top:804px;width:190px;height:52px;z-index:31">Open in Sipply</div>
+   ${at(24, 866, '<span class="small muted">Sipply is for people of legal drinking age.</span>', 'z-index:31;width:392px;text-align:center')}
+   <div class="a" style="left:110px;top:904px;width:220px;height:32px;border-radius:16px;background:#EDEDF0;display:flex;align-items:center;justify-content:center;gap:6px;z-index:31">${ic('lock',12,'#3C3C43',1.8)}<span style="font:400 13px/16px Inter;color:#3C3C43">janmcq1617.github.io</span></div>` + homeInd());
+
+/* ---------- mount ---------- */
+const wall = document.getElementById('wall');
+frames.forEach(f => {
+  const el = document.createElement('div'); el.className = 'frame'; el.id = 'f-' + f.id;
+  el.innerHTML = `<div class="phone" data-frame="${f.id}">${f.body}</div><div class="cap"><span class="cnt">${f.title}</span>${f.cap}</div>`;
+  wall.appendChild(el);
+});
+const hash = location.hash.slice(1);
+if (hash) { document.body.classList.add('solo'); const f = document.getElementById('f-' + hash); if (f) f.classList.add('on'); }
+</script>
+</body>
+</html>

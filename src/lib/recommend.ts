@@ -13,17 +13,19 @@ import {
   type RecIngredient,
   type RecRecipe,
 } from '@/lib/recommendCore';
+import { computeDexFronts, frontsKey } from '@/lib/dexOrder';
 import { FIRST_TASTE_IDS } from '@/lib/tastes';
 import { MY_BAR_ENABLED } from '@/lib/myBar';
 import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
-import { useTaste, type StyleOf, type TasteAnswers } from '@/store/taste';
+import { provideDexFronts, useTaste, type StyleOf, type TasteAnswers } from '@/store/taste';
 import type { UnlockRecord } from '@/types';
 
 /* ==================================================================== */
 /* Drink picks, on the phone                                            */
 /*                                                                      */
-/* lib/recommendCore (the port of the reference recommender, spec §5)   */
+/* lib/recommendCore (the port of the reference recommender, spec §5;   */
+/* specs/v4.2/tools/recommend.mjs since v4.2's fruity and sour cap)     */
 /* bound to the app's own data: the catalogue in Dex order (@/data, the */
 /* reference's pool order), the bar index's ingredients and recipes,    */
 /* the drinks photoFor() has a print for, and lib/tastes' curated ids   */
@@ -43,6 +45,11 @@ import type { UnlockRecord } from '@/types';
 /* The two agree on every example run (check-recommend prints them):    */
 /*   run A's bar: 17 and 17; its pre-ticked rows alone: 13 and 13;      */
 /*   the pre-ticked rows of B, C and D: 3, 8 and 5, both ways.          */
+/*                                                                      */
+/* THE DEX'S FRONTS (v4.2 §2.2) are this recommender too: each For-you  */
+/* section opens on recommend(answers, 12) inside the section. This     */
+/* module hands store/taste the worker at its foot (provideDexFronts),  */
+/* because the store cannot import this module: this one imports it.    */
 /* ==================================================================== */
 
 export type { Flavour, Goal, HeardFrom, HomeAnswer, OnboardingStep, Spirit, StyleOf, TasteAnswers } from '@/store/taste';
@@ -66,11 +73,13 @@ for (const [weight, ids] of Object.entries((classicsFile as { classic: Record<st
   for (const id of ids) CLASSICS[id] = Number(weight);
 }
 
+const PHOTO_IDS: ReadonlySet<string> = new Set(DRINKS.filter((d) => photoFor(d.id) !== undefined).map((d) => d.id));
+
 const core = createRecommender({
   drinks: DRINKS,
   ingredients: index.ingredients,
   recipes: index.recipes,
-  photoIds: new Set(DRINKS.filter((d) => photoFor(d.id) !== undefined).map((d) => d.id)),
+  photoIds: PHOTO_IDS,
   knownIds: FIRST_TASTE_IDS,
   classics: CLASSICS,
 });
@@ -166,3 +175,32 @@ export function useRecommendations(): Pick[] {
   // says "You can make it" (lib/myBar.ts).
   return forYou(answers, MY_BAR_ENABLED ? owned : NO_BAR, unlocks);
 }
+
+/* ==================================================================== */
+/* The Dex's fronts, worked by this recommender (v4.2 §2.2)             */
+/* ==================================================================== */
+
+/*
+ * What the fronts read that tasteTags' stamp cannot see: which drinks
+ * have a photograph (the openers are photographed) and lib/tastes'
+ * curated ids, in order (the well-known signal and its tie-break).
+ * classics.json needs nothing here: it is worked from drinks.json, which
+ * the stamp hashes. FNV-1a over both lists, worked once: a build that
+ * adds photographs works every phone's fronts out again, and two phones
+ * on one build agree.
+ */
+const DATA_STAMP = (() => {
+  const text = `${[...PHOTO_IDS].sort().join(',')}|${FIRST_TASTE_IDS.join(',')}`;
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 0x01000193) >>> 0;
+  return h.toString(16).padStart(8, '0');
+})();
+
+/*
+ * core.recommend, not this module's remembered recommend(): the fronts'
+ * six calls would otherwise push the results step's picks out of it.
+ */
+provideDexFronts({
+  key: (answers) => frontsKey(answers, DATA_STAMP),
+  compute: (answers) => computeDexFronts(answers, core.recommend, frontsKey(answers, DATA_STAMP)),
+});

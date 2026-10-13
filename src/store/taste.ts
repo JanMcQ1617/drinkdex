@@ -42,11 +42,25 @@ import { isPlaceholderUsername, onAccountDeleted, useAuth } from '@/store/auth';
 /* underAgeUntil, for 24 hours (spec §11). Account deletion resets the  */
 /* store to new except that field, so deleting a just-made account is   */
 /* not a way round the lock.                                            */
+/*                                                                      */
+/* THE DEX'S FRONTS (v4.2 §2.2). The For-you Dex opens each section on  */
+/* the recommender's best 12 for these answers. That is up to six       */
+/* recommend() runs (budgeted at 120 ms on an iPhone 12), so they are   */
+/* worked when the answers change, never when the Dex draws, and kept   */
+/* here as `dexFronts`, stamped with the answers and the catalogue they */
+/* were worked for. lib/recommend provides the worker                   */
+/* (provideDexFronts): this module cannot import it, because it imports */
+/* this one. They are worked in the persist migrate, once, for answers  */
+/* from before v4.2; beside the picks at the first run's pour and at a  */
+/* retake's (setPicks); and by the subscriber, at an idle moment, when  */
+/* the answers change after the first run (Settings, another phone's    */
+/* answers through firstSync). Answers with no flavour and no spirit    */
+/* (Clear your tastes) drop them at once. Never inside a render.        */
 /* ==================================================================== */
 
 export type Goal = 'discover' | 'track' | 'home' | 'friends';
 export type Spirit = 'gin' | 'rum' | 'agave' | 'whiskey' | 'vodka' | 'brandy' | 'liqueur';
-export type Flavour = 'refreshing' | 'sour' | 'sweet' | 'bitter' | 'strong' | 'creamy';
+export type Flavour = 'refreshing' | 'sour' | 'fruity' | 'sweet' | 'bitter' | 'strong' | 'creamy';
 export type StyleOf = 'whiskey' | 'rum' | 'agave';
 export type HomeAnswer = 'never' | 'sometimes' | 'often';
 export type HeardFrom = 'friend' | 'instagram' | 'tiktok' | 'app-store' | 'facebook' | 'google' | 'other';
@@ -81,6 +95,23 @@ export const EMPTY_ANSWERS: TasteAnswers = {
 export const WANT_TO_TRY_MAX = 200;
 export const UNDER_AGE_LOCK_MS = 24 * 60 * 60 * 1000;
 
+/** One For-you section's front: its key and the recommender's best drinks for it, in order. */
+export type DexFrontSection =
+  | { kind: 'flavour'; key: Flavour; ids: string[] }
+  | { kind: 'spirit'; key: Spirit; ids: string[] };
+
+/**
+ * The For-you Dex's section fronts (v4.2 §2.2), as lib/dexOrder's
+ * computeDexFronts works them out. `forAnswers` is the stable key of
+ * what they were worked for (the answers, tasteTags' catalogue and scorer
+ * stamp, and the photo set): when it is no longer the key of the current
+ * answers, they are worked out again.
+ */
+export interface DexFronts {
+  forAnswers: string;
+  sections: DexFrontSection[];
+}
+
 export interface TasteState {
   hydrated: boolean;
   answers: TasteAnswers;
@@ -92,6 +123,7 @@ export interface TasteState {
   heardFrom: HeardFrom | null;
   done: boolean; // first-run finished (allset passed, Not now, or signed in)
   syncedFor: string | null; // account the local copy belongs to
+  dexFronts: DexFronts | null; // the For-you Dex's section fronts; null without a flavour or a spirit
   signInFirst: boolean; // NOT persisted: "I already have an account" this runtime
 
   setAnswers: (patch: Partial<Omit<TasteAnswers, 'v'>>) => void;
@@ -120,7 +152,7 @@ export interface TasteState {
 const GOALS: readonly Goal[] = ['discover', 'track', 'home', 'friends'];
 const DRINK_KINDS: readonly NonNullable<TasteAnswers['drinks']>[] = ['cocktails', 'spirits', 'both'];
 const SPIRIT_KEYS: readonly Spirit[] = ['gin', 'rum', 'agave', 'whiskey', 'vodka', 'brandy', 'liqueur'];
-const FLAVOUR_KEYS: readonly Flavour[] = ['refreshing', 'sour', 'sweet', 'bitter', 'strong', 'creamy'];
+const FLAVOUR_KEYS: readonly Flavour[] = ['refreshing', 'sour', 'fruity', 'sweet', 'bitter', 'strong', 'creamy'];
 const HOME_ANSWERS: readonly HomeAnswer[] = ['never', 'sometimes', 'often'];
 const HEARD: readonly HeardFrom[] = ['friend', 'instagram', 'tiktok', 'app-store', 'facebook', 'google', 'other'];
 /** The follow-up's keys, as lib/recommendCore's STYLES has them. */
@@ -205,6 +237,7 @@ const SPIRIT_WORD: Record<Spirit, string> = {
 const FLAVOUR_WORD: Record<Flavour, string> = {
   refreshing: 'refreshing',
   sour: 'sour',
+  fruity: 'fruity',
   sweet: 'sweet',
   bitter: 'bitter',
   strong: 'strong',
@@ -257,12 +290,140 @@ const FRESH = {
   done: false,
   syncedFor: null as string | null,
   signInFirst: false,
+  dexFronts: null as DexFronts | null,
 };
 
 type Persisted = Pick<
   TasteState,
-  'answers' | 'step' | 'ageOk' | 'underAgeUntil' | 'picks' | 'saved' | 'heardFrom' | 'done' | 'syncedFor'
+  'answers' | 'step' | 'ageOk' | 'underAgeUntil' | 'picks' | 'saved' | 'heardFrom' | 'done' | 'syncedFor' | 'dexFronts'
 >;
+
+/* ==================================================================== */
+/* The Dex's fronts: the worker, and when it runs                       */
+/* ==================================================================== */
+
+/**
+ * What lib/recommend hands this store at its module foot (provideDexFronts):
+ * the key the fronts for some answers would carry, cheap, and the fronts
+ * themselves, which cost up to six recommend() runs.
+ */
+export interface DexFrontsWorker {
+  key: (answers: TasteAnswers) => string;
+  compute: (answers: TasteAnswers) => DexFronts | null;
+}
+
+let frontsWorker: DexFrontsWorker | null = null;
+
+/**
+ * Whether these answers make a For-you Dex at all: a flavour or a spirit
+ * (v4.2 §2.1; lib/dexOrder's sectionKeys reads them the same way).
+ * Without one there are no fronts, and nothing to work out.
+ */
+const asksForYou = (a: TasteAnswers) => a.flavours.length > 0 || a.spirits.length > 0;
+
+/** The key these answers' fronts would carry, or null when they make none (or no worker has come yet). */
+function frontsKeyFor(a: TasteAnswers): string | null {
+  return frontsWorker && asksForYou(a) ? frontsWorker.key(a) : null;
+}
+
+/**
+ * The fronts for these answers, or null. A worker that throws leaves null
+ * rather than breaking what called it (a hydration, an idle task): the Dex
+ * is then By number, and the next change of answers tries again.
+ */
+function frontsFor(a: TasteAnswers): DexFronts | null {
+  if (!frontsWorker || !asksForYou(a)) return null;
+  try {
+    return frontsWorker.compute(a);
+  } catch {
+    return null;
+  }
+}
+
+/** A section's front is at most this long: lib/dexOrder's FRONT, six rows of two (check-recommend compares them). */
+const FRONT_MAX = 12;
+
+/** Stored fronts, checked: all flavour or all spirit sections, once each; catalogue ids, once each, FRONT_MAX at most. */
+function parseFronts(raw: unknown): DexFronts | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as { forAnswers?: unknown; sections?: unknown };
+  if (typeof r.forAnswers !== 'string' || !Array.isArray(r.sections)) return null;
+  const sections: DexFrontSection[] = [];
+  for (const x of r.sections.slice(0, SPIRITS_MAX)) {
+    if (!x || typeof x !== 'object') continue;
+    const { kind, key, ids } = x as { kind?: unknown; key?: unknown; ids?: unknown };
+    // The sections are all flavours or all spirits, once each (lib/dexOrder sectionKeys).
+    if (sections.length > 0 && sections[0]!.kind !== kind) continue;
+    if (sections.some((s) => s.key === key)) continue;
+    const list = drinkIds(ids, FRONT_MAX);
+    const f = kind === 'flavour' ? oneOf(FLAVOUR_KEYS, key) : null;
+    const sp = kind === 'spirit' ? oneOf(SPIRIT_KEYS, key) : null;
+    if (f) sections.push({ kind: 'flavour', key: f, ids: list });
+    else if (sp) sections.push({ kind: 'spirit', key: sp, ids: list });
+  }
+  return { forAnswers: r.forAnswers, sections };
+}
+
+/** True while the stored fronts were worked for other answers, or another catalogue. */
+function frontsStale(s: Pick<TasteState, 'answers' | 'dexFronts'>): boolean {
+  if (!frontsWorker) return false;
+  return (s.dexFronts?.forAnswers ?? null) !== frontsKeyFor(s.answers);
+}
+
+/** Works the fronts out now if they are stale. Synchronous: only ever called from a timer or an idle task. */
+function refreshDexFronts() {
+  const s = useTaste.getState();
+  if (!s.hydrated || !frontsStale(s)) return;
+  useTaste.setState({ dexFronts: frontsFor(s.answers) });
+}
+
+/*
+ * The answers settle before the fronts are worked: a retake writes its
+ * answers step by step, and only the last of them matters. Then an idle
+ * moment, so the 120 ms never lands on a tap, a push or a scroll.
+ */
+const FRONTS_SETTLE_MS = 1200;
+const FRONTS_IDLE_TIMEOUT_MS = 2000;
+let frontsTimer: ReturnType<typeof setTimeout> | null = null;
+let frontsIdle: number | null = null;
+
+function cancelFronts() {
+  if (frontsTimer) clearTimeout(frontsTimer);
+  frontsTimer = null;
+  if (frontsIdle !== null && typeof cancelIdleCallback === 'function') cancelIdleCallback(frontsIdle);
+  frontsIdle = null;
+}
+
+function scheduleFronts(settleMs: number) {
+  cancelFronts();
+  frontsTimer = setTimeout(() => {
+    frontsTimer = null;
+    // `expo export` runs this module in Node, which has no idle callbacks.
+    if (typeof requestIdleCallback !== 'function') {
+      refreshDexFronts();
+      return;
+    }
+    frontsIdle = requestIdleCallback(
+      () => {
+        frontsIdle = null;
+        refreshDexFronts();
+      },
+      { timeout: FRONTS_IDLE_TIMEOUT_MS },
+    );
+  }, settleMs);
+}
+
+/**
+ * lib/recommend's worker, handed over at its module foot. That module is
+ * reached from the root layout (FirstRun, then the flow), so it is here
+ * before the saved copy has been read, and the migrate can use it. If it
+ * ever came later, the fronts are worked as soon as it does.
+ */
+export function provideDexFronts(worker: DexFrontsWorker): void {
+  frontsWorker = worker;
+  const s = useTaste.getState();
+  if (s.hydrated && frontsStale(s)) scheduleFronts(0);
+}
 
 export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>()(
   persist(
@@ -310,6 +471,7 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
           picks: [],
           heardFrom: null,
           step: 'welcome',
+          dexFronts: null,
         }),
 
       setHeardFrom: (v) => set({ heardFrom: v === null ? null : oneOf(HEARD, v) }),
@@ -347,11 +509,20 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
        * saved drinks stay, as the confirm says. The sync then writes
        * the account's answers as {}.
        */
-      clearAnswers: () => set({ answers: EMPTY_ANSWERS, picks: [], heardFrom: null }),
+      clearAnswers: () => set({ answers: EMPTY_ANSWERS, picks: [], heardFrom: null, dexFronts: null }),
     }),
     {
       name: 'sipply-taste.v1',
       storage: createJSONStorage(createGuardedStorage),
+      /*
+       * 2 since v4.2 (the fronts). Every blob before it was written at
+       * persist's default version, 0, because the store named none: the
+       * shape the name calls v1. A build from before v4.2 has no migrate,
+       * so it reads a version-2 blob as nothing (a TestFlight downgrade
+       * starts the phone's copy over; an account's answers and saved
+       * drinks come back from the server at its first sync).
+       */
+      version: 2,
       partialize: (s): Persisted => ({
         answers: s.answers,
         step: s.step,
@@ -362,7 +533,18 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
         heardFrom: s.heardFrom,
         done: s.done,
         syncedFor: s.syncedFor,
+        dexFronts: s.dexFronts,
       }),
+      /*
+       * v1 → v2 (v4.2 §2.2): answers given before the Dex had a For-you
+       * order get their fronts here, once, while the splash is up, so the
+       * first Dex after the update already opens on them. Everything else
+       * in the blob is left for merge to check, as before.
+       */
+      migrate: (saved) => {
+        const s = (saved && typeof saved === 'object' ? saved : {}) as Record<string, unknown>;
+        return { ...s, dexFronts: frontsFor(parseAnswers(s.answers)) };
+      },
       /*
        * `hydrated` is set here, as store/bar does, so marking it costs no
        * write. Every field is read through its check: a blob from a future
@@ -393,6 +575,7 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
           heardFrom: oneOf(HEARD, s.heardFrom),
           done: s.done === true,
           syncedFor: typeof s.syncedFor === 'string' ? s.syncedFor : null,
+          dexFronts: parseFronts(s.dexFronts),
           hydrated: true,
         };
       },
@@ -400,6 +583,12 @@ export const useTaste: UseBoundStore<StoreApi<TasteState>> = create<TasteState>(
         // The failure path never reaches merge. This write is refused by the guarded storage.
         if (error) useTaste.setState({ hydrated: true });
         afterHydrate();
+        /*
+         * Fronts from a build with another catalogue or scorer (the stamp
+         * in their key moved): worked again at the first idle moment. The
+         * Dex draws the stored ones until then, skipping what is gone.
+         */
+        if (frontsStale(useTaste.getState())) scheduleFronts(0);
       },
     },
   ),
@@ -716,7 +905,27 @@ useTaste.subscribe((state, prev) => {
   if (state.answers !== prev.answers || state.heardFrom !== prev.heardFrom || state.saved !== prev.saved) {
     schedulePush();
   }
+  if (state.answers !== prev.answers || state.picks !== prev.picks || state.done !== prev.done) {
+    answersMoved(state, prev);
+  }
 });
+
+/*
+ * The fronts follow the answers. Answers with no flavour and no spirit
+ * have none, at once (Clear your tastes, another account's arrival). The
+ * first run works them out beside its picks, at the pour, and not at
+ * each step on the way there; after it, any change of answers (a retake,
+ * the server's answers in firstSync) is worked once they settle.
+ */
+function answersMoved(state: TasteState, prev: TasteState) {
+  if (!asksForYou(state.answers)) {
+    cancelFronts();
+    if (state.dexFronts !== null) useTaste.setState({ dexFronts: null });
+    return;
+  }
+  if (state.picks !== prev.picks) scheduleFronts(0);
+  else if (state.done) scheduleFronts(FRONTS_SETTLE_MS);
+}
 
 /*
  * NO PRUNING. Until 13 Oct 2026 a drink that entered the Dex left this
@@ -731,6 +940,7 @@ useTaste.subscribe((state, prev) => {
  */
 onAccountDeleted(() => {
   forgetSync();
+  cancelFronts();
   const { underAgeUntil } = useTaste.getState();
   useTaste.setState({ ...FRESH, underAgeUntil });
 });

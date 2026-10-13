@@ -61,9 +61,16 @@ export const SPIRIT_OPTIONS: readonly Option<Spirit>[] = [
   { key: 'liqueur', label: 'Liqueurs and amaro' },
 ];
 
+/*
+ * Seven keys since v4.2 (§1.2): Fruity after Sour and citrusy, in a 2 x 4
+ * grid with Creamy alone on the last row, every key one size. The same
+ * words, in the same order, are the Dex's flavour chips (lib/dexOrder
+ * FLAVOUR_WORDS; scripts/check-recommend.mjs compares the two).
+ */
 export const FLAVOUR_OPTIONS: readonly Option<Flavour>[] = [
   { key: 'refreshing', label: 'Refreshing' },
   { key: 'sour', label: 'Sour and citrusy' },
+  { key: 'fruity', label: 'Fruity' },
   { key: 'sweet', label: 'Sweet' },
   { key: 'bitter', label: 'Bitter' },
   { key: 'strong', label: 'Strong and stirred' },
