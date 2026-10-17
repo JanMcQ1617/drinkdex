@@ -37,6 +37,7 @@ import {
   REEL_LIVE_LIMIT,
 } from '@/lib/reels';
 import { toProfile } from '@/lib/social';
+import { applyMuted } from '@/lib/videoAudio';
 import { useAuth } from '@/store/auth';
 import { useReels } from '@/store/reels';
 import type { UserProfile } from '@/types';
@@ -44,13 +45,18 @@ import type { UserProfile } from '@/types';
 /** The caption's character count shows from here on. */
 const COUNT_FROM = 250;
 
-/* Player writes live outside the component; see the note in ReelVideo. */
+/*
+ * Player writes live outside the component; see the note in ReelVideo.
+ *
+ * The take starts with its sound, so it is set to duck other audio before
+ * its first play() rather than left at expo-video's doNotMix, which would
+ * stop whatever the person had playing; muting it on review turns it back
+ * to mixing, through the same applyMuted (lib/videoAudio).
+ */
 function setLooping(player: VideoPlayer) {
   player.loop = true;
+  applyMuted(player, false);
   player.play();
-}
-function applyMuted(player: VideoPlayer, muted: boolean) {
-  player.muted = muted;
 }
 
 type Poster = { uri: string; landscape: boolean };

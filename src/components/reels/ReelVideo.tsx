@@ -5,6 +5,7 @@ import { ActivityIndicator, AppState, StyleSheet, View } from 'react-native';
 import type { SharedValue } from 'react-native-reanimated';
 
 import { colors } from '@/constants/theme';
+import { applyMuted } from '@/lib/videoAudio';
 
 /*
  * One reel's player. The pager mounts it only for the reel on screen and
@@ -19,10 +20,6 @@ import { colors } from '@/constants/theme';
  * that takes the player is the same write without the false alarm (the
  * same move PressableScale made to `.set()`).
  */
-
-function applyMuted(player: VideoPlayer, muted: boolean) {
-  player.muted = muted;
-}
 
 /** Off screen: stopped at the start, and no progress events. */
 function rest(player: VideoPlayer) {
@@ -88,9 +85,15 @@ export function ReelVideo({
 }) {
   const player = useVideoPlayer({ uri, useCaching: true }, (p) => {
     p.loop = true;
-    p.muted = muted;
-    // Another app's audio keeps playing while a reel is muted, and ducks while it is not.
-    p.audioMixingMode = 'auto';
+    /*
+     * Another app's audio keeps playing under a muted reel and is ducked,
+     * not stopped, under one with sound. The 'auto' this used to set only
+     * looked like that: with sound on it takes the audio session outright
+     * and pauses the music for good. applyMuted sets the mode with the mute,
+     * here before anything plays and in the effect below on every toggle;
+     * lib/videoAudio has the why.
+     */
+    applyMuted(p, muted);
     // Only the reel on screen reports its time; the two preloads stay quiet.
     p.timeUpdateEventInterval = 0;
   });

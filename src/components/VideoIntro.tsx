@@ -14,6 +14,7 @@ import Animated, {
 
 import { SipplyIntro } from '@/components/SipplyIntro';
 import { colors } from '@/constants/theme';
+import { applyMuted } from '@/lib/videoAudio';
 
 /* ==================================================================== */
 /* Launch intro — the film                                              */
@@ -152,7 +153,16 @@ function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void
     require('../../assets/video/intro.mp4'),
     (p) => {
       p.loop = false;
-      p.muted = true;
+      /*
+       * Muted AND mixing, before play(). This is the player that stopped
+       * people's Spotify or Apple Music on every cold start: expo-video
+       * starts a player at doNotMix, which activates a non-mixable audio
+       * session the moment it plays, even for a muted clip with no audio
+       * track (this one has none). applyMuted makes it 'mixWithOthers', so
+       * the film plays and the music goes on as if Sipply were not there.
+       * lib/videoAudio holds the whole of why.
+       */
+      applyMuted(p, true);
       p.play();
     },
   );

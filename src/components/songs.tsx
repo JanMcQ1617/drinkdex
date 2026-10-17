@@ -7,6 +7,7 @@ import { create, type StoreApi, type UseBoundStore } from 'zustand';
 
 import { Icon } from '@/components/icons';
 import { colors, fonts, radius } from '@/constants/theme';
+import { applyMuted } from '@/lib/videoAudio';
 
 /* ==================================================================== */
 /* A song on a story                                                    */
@@ -89,19 +90,22 @@ export interface PreviewPlayer {
  */
 
 /**
- * One play per tap (no loop); other apps' audio is left alone while muted;
- * nothing plays on in the background, and nothing reaches the lock screen.
+ * One play per tap (no loop); nothing plays on in the background, and
+ * nothing reaches the lock screen.
+ *
+ * Whatever the person was already listening to plays on under a muted
+ * preview and is ducked, not stopped, under one with sound: applyMuted
+ * sets the mixing mode with the mute, here before the first play() and in
+ * the effect below on every change (lib/videoAudio). This used to be
+ * 'auto', which mixes only while silent: with sound on it took the audio
+ * session outright and paused Spotify or Apple Music, and they stayed
+ * paused after the 30 seconds were up.
  */
 function configure(player: VideoPlayer) {
   player.loop = false;
-  player.audioMixingMode = 'auto';
   player.staysActiveInBackground = false;
   player.showNowPlayingNotification = false;
-  player.muted = useStoryAudio.getState().muted;
-}
-
-function applyMuted(player: VideoPlayer, muted: boolean) {
-  player.muted = muted;
+  applyMuted(player, useStoryAudio.getState().muted);
 }
 
 function rewind(player: VideoPlayer) {
