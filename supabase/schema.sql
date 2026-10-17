@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 023
+-- Sipply — the whole schema, as of migration 024
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-023 built on the live project, and records every one of
+-- migrations 002-024 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -484,6 +484,29 @@ create table if not exists public.collection_items (
   )
 );
 
+-- Tags (024): who a post's author was with, one row per post and person,
+-- at most 10 per post (post_tags_cap). Only the author tags, only someone
+-- they follow, never themselves, never anyone blocked either way, never
+-- someone who removed themselves from that post. Cascades from both sides,
+-- so account deletion needs no extra step. The clock is the server's (the
+-- column grant leaves created_at out).
+create table if not exists public.post_tags (
+  post_id    uuid not null references public.posts    on delete cascade,
+  tagged_id  uuid not null references public.profiles on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (post_id, tagged_id)
+);
+
+-- 024: a person who removed themselves from a post cannot be tagged on it
+-- again. Written by post_tags_refuse_again, read by private.tag_refused();
+-- no grants and no policies.
+create table if not exists public.post_tag_refusals (
+  post_id    uuid not null references public.posts    on delete cascade,
+  tagged_id  uuid not null references public.profiles on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (post_id, tagged_id)
+);
+
 
 -- --------------------------------------------------------------------
 -- Indexes
@@ -556,6 +579,11 @@ create index if not exists collection_items_collection_created_idx
   on public.collection_items (collection_id, created_at desc);
 create index if not exists collection_items_post_idx
   on public.collection_items (post_id) where post_id is not null;
+-- 024: "posts that tag me, newest first", for Activity and the dot on
+-- Home's heart (the primary key serves a post's own tags and the cap's
+-- count); the refusals' profile cascade deletes by tagged_id.
+create index if not exists post_tags_tagged_recent_idx  on public.post_tags (tagged_id, created_at desc);
+create index if not exists post_tag_refusals_tagged_idx on public.post_tag_refusals (tagged_id);
 
 
 -- --------------------------------------------------------------------
@@ -2995,6 +3023,87 @@ begin
 end;
 $$;
 
+-- 024: whether this person removed themselves from this post. In
+-- `private`, out of PostgREST's reach: as an RPC it would say who left
+-- which post. Read by post_tags_insert_author as the querying role.
+create or replace function private.tag_refused(p_post uuid, p_tagged uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.post_tag_refusals r
+    where r.post_id = p_post and r.tagged_id = p_tagged
+  );
+$$;
+
+-- 024: removing yourself sticks. When the TAGGED person deletes their own
+-- row, a refusal is kept for that post; the author deleting a tag keeps
+-- none. Only while the post and the person both still exist, so an
+-- account deletion's cascade never trips the refusal's foreign key.
+create or replace function public.refuse_tag_again()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if old.tagged_id = auth.uid()
+     and exists (select 1 from public.posts p where p.id = old.post_id)
+     and exists (select 1 from public.profiles pr where pr.id = old.tagged_id) then
+    insert into public.post_tag_refusals (post_id, tagged_id)
+    values (old.post_id, old.tagged_id)
+    on conflict do nothing;
+  end if;
+  return null;
+end;
+$$;
+
+-- 024: at most ten per post, serialised per post. Definer, so the count is
+-- every tag on the post and never only the ones this caller may read.
+create or replace function public.guard_post_tag_insert()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  have integer;
+begin
+  perform pg_advisory_xact_lock(hashtextextended('post_tags:' || new.post_id::text, 0));
+  select count(*) into have from public.post_tags t where t.post_id = new.post_id;
+  if have >= 10 then
+    raise exception 'post_tags_full'
+      using errcode = 'P0001',
+            detail  = format('%s people tagged; the limit is 10', have),
+            hint    = 'Remove someone to tag someone else.';
+  end if;
+  return new;
+end;
+$$;
+
+-- 024: a block takes the tags between the two people away, both ways, as
+-- drop_follows_on_block takes the follows. Definer, because posts_read
+-- already hides the other person's posts from the blocker. Unblocking
+-- brings nothing back.
+create or replace function public.drop_tags_on_block()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  delete from public.post_tags t
+  using public.posts p
+  where p.id = t.post_id
+    and ((p.author_id = new.blocker_id and t.tagged_id = new.blocked_id)
+      or (p.author_id = new.blocked_id and t.tagged_id = new.blocker_id));
+  return null;
+end;
+$$;
+
 
 -- --------------------------------------------------------------------
 -- Function privileges
@@ -3025,6 +3134,9 @@ revoke all on function public.guard_collection_item_insert()  from public, anon,
 revoke all on function public.touch_collection_on_item()      from public, anon, authenticated;
 revoke all on function public.leave_collections_on_unsave_post()  from public, anon, authenticated;
 revoke all on function public.leave_collections_on_unsave_drink() from public, anon, authenticated;
+revoke all on function public.refuse_tag_again()              from public, anon, authenticated;
+revoke all on function public.guard_post_tag_insert()         from public, anon, authenticated;
+revoke all on function public.drop_tags_on_block()            from public, anon, authenticated;
 revoke all on function private.reel_day_limit()              from public, anon, authenticated;
 revoke all on function private.reel_live_limit()             from public, anon, authenticated;
 
@@ -3051,6 +3163,10 @@ grant execute on function private.reel_upload_allowed() to authenticated;
 
 revoke all on function public.blocked_with(uuid) from public, anon;
 grant execute on function public.blocked_with(uuid) to authenticated;
+
+-- Read by post_tags_insert_author, which runs as the querying role (024).
+revoke all on function private.tag_refused(uuid, uuid) from public, anon;
+grant execute on function private.tag_refused(uuid, uuid) to authenticated;
 
 -- anon too: signup asks before creating the account (011).
 revoke all on function public.is_objectionable(text, boolean) from public;
@@ -3297,6 +3413,22 @@ create trigger want_to_try_leave_collections
   after delete on public.want_to_try
   for each row execute function public.leave_collections_on_unsave_drink();
 
+-- 024.
+drop trigger if exists post_tags_cap on public.post_tags;
+create trigger post_tags_cap
+  before insert on public.post_tags
+  for each row execute function public.guard_post_tag_insert();
+
+drop trigger if exists post_tags_refuse_again on public.post_tags;
+create trigger post_tags_refuse_again
+  after delete on public.post_tags
+  for each row execute function public.refuse_tag_again();
+
+drop trigger if exists blocks_drop_tags on public.blocks;
+create trigger blocks_drop_tags
+  after insert on public.blocks
+  for each row execute function public.drop_tags_on_block();
+
 
 -- --------------------------------------------------------------------
 -- Table privileges
@@ -3316,7 +3448,9 @@ create trigger want_to_try_leave_collections
 -- taste_profiles updates only its two answers, never user_id. Collections
 -- (023) likewise: a client names a collection and nothing else
 -- (visibility, share_id and shared_at move only through the sharing
--- functions), and an item is added or removed, never changed.
+-- functions), and an item is added or removed, never changed. Tags (024)
+-- are inserted naming the two ids, so the clock is the server's, and never
+-- updated (remove and tag again); their refusals are unreachable.
 -- --------------------------------------------------------------------
 
 grant select on public.profiles to anon, authenticated;
@@ -3374,6 +3508,12 @@ revoke all on public.collection_items from anon, authenticated;
 grant select, delete on public.collection_items to authenticated;
 grant insert (collection_id, kind, drink_id, post_id) on public.collection_items to authenticated;
 
+revoke all on public.post_tags from anon, authenticated;
+grant select, delete on public.post_tags to authenticated;
+grant insert (post_id, tagged_id) on public.post_tags to authenticated;
+
+revoke all on public.post_tag_refusals from anon, authenticated;
+
 
 -- --------------------------------------------------------------------
 -- Row Level Security
@@ -3408,6 +3548,8 @@ alter table public.taste_profiles  enable row level security;
 alter table public.want_to_try     enable row level security;
 alter table public.collections     enable row level security;
 alter table public.collection_items enable row level security;
+alter table public.post_tags       enable row level security;
+alter table public.post_tag_refusals enable row level security;
 
 -- Profiles: readable by any signed-in user not blocked either way (you
 -- must be able to find people to follow), writable only by their owner.
@@ -3637,6 +3779,43 @@ create policy collection_items_delete_own on public.collection_items
   for delete to authenticated
   using (exists (select 1 from public.collections c where c.id = collection_id and c.owner_id = auth.uid()));
 
+-- Tags (024): exactly as visible as the post (posts_read runs inside the
+-- subquery), minus a tagged person you are blocked with, whose name never
+-- reaches you on anyone's post. Only the author tags: someone they follow
+-- (under follows_read), never themselves, never anyone blocked either way,
+-- never someone who removed themselves from this post. The tagged person
+-- removes themselves; the author removes anyone.
+drop policy if exists post_tags_read          on public.post_tags;
+drop policy if exists post_tags_insert_author on public.post_tags;
+drop policy if exists post_tags_delete        on public.post_tags;
+
+create policy post_tags_read on public.post_tags
+  for select to authenticated
+  using (
+    exists (select 1 from public.posts p where p.id = post_id)
+    and not (tagged_id = any ((select private.my_block_set())::uuid[]))
+  );
+
+create policy post_tags_insert_author on public.post_tags
+  for insert to authenticated
+  with check (
+    tagged_id <> (select auth.uid())
+    and exists (select 1 from public.posts p
+                where p.id = post_id and p.author_id = (select auth.uid()))
+    and exists (select 1 from public.follows f
+                where f.follower_id = (select auth.uid()) and f.following_id = tagged_id)
+    and not public.blocked_with(tagged_id)
+    and not private.tag_refused(post_id, tagged_id)
+  );
+
+create policy post_tags_delete on public.post_tags
+  for delete to authenticated
+  using (
+    tagged_id = (select auth.uid())
+    or exists (select 1 from public.posts p
+               where p.id = post_id and p.author_id = (select auth.uid()))
+  );
+
 -- Drink suggestions (018): own rows only, and nobody else reads. Editable
 -- only until Jan has reviewed it; withdrawing is always allowed.
 drop policy if exists drink_submissions_read_own   on public.drink_submissions;
@@ -3717,8 +3896,9 @@ create policy tournament_members_read on public.tournament_members
   );
 
 -- profile_secrets, discovery_usage, blocked_terms, sign_in_lookups,
--- private.submission_digests and private.music_search_usage: RLS on and
--- no policy at all, on top of the revoked grants. Default-deny.
+-- post_tag_refusals, private.submission_digests and
+-- private.music_search_usage: RLS on and no policy at all, on top of the
+-- revoked grants. Default-deny.
 
 
 -- --------------------------------------------------------------------
@@ -3881,7 +4061,7 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 023'),
+  ('schema',                  'schema.sql, current as of 024'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -3903,5 +4083,6 @@ insert into public.schema_migrations (version, note) values
   ('020_tournaments_and_story_music', 'contained in schema.sql'),
   ('021_post_likers',         'contained in schema.sql'),
   ('022_taste_profiles',      'contained in schema.sql'),
-  ('023_collections',         'contained in schema.sql')
+  ('023_collections',         'contained in schema.sql'),
+  ('024_post_tags',           'contained in schema.sql')
 on conflict (version) do nothing;

@@ -439,6 +439,10 @@ export async function pickFromCamera(): Promise<PickResult> {
  *
  * Here rather than in each screen because both ways of posting post the
  * same way and should fail in the same words.
+ *
+ * 'untagged' (v4.3 §2.3) is a post that is up but missed some of its
+ * tags. It points at the post's own ••• rather than at posting again:
+ * Tag people there writes the tags and nothing else.
  */
 export function reportPost(outcome: PostOutcome): void {
   if (outcome === 'ok') return;
@@ -447,6 +451,8 @@ export function reportPost(outcome: PostOutcome): void {
       'Posted without the photo',
       'The photo did not upload. Open the drink in your Dex and post it again to add it.',
     );
+  } else if (outcome === 'untagged') {
+    showNotice('Posted', "Some tags didn't save. Open the post's ••• and choose Tag people to try again.");
   } else if (outcome === 'objectionable') {
     showNotice(
       'Not posted',

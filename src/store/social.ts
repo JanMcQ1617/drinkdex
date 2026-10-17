@@ -2,21 +2,35 @@ import { create } from 'zustand';
 
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import * as api from '@/lib/social';
+import { whoShort } from '@/lib/tags';
 import type { Post, Pour, Song, UserProfile } from '@/types';
+import { showNotice } from '@/utils/alerts';
 
 /**
  * What became of a post.
  *
  *   'ok'            — the post is up, with its photo if there was one.
  *   'no-photo'      — the post is up but the photo did not upload.
+ *   'untagged'      — the post is up, with its photo, but some of the tags
+ *                     picked with it (v4.3) did not save: refused by the
+ *                     server, or the request failed.
  *   'objectionable' — the caption was refused; show OBJECTIONABLE_MESSAGE
  *                     next to the field. Nothing was written.
  *   'failed'        — nothing reached the server.
  *
- * A string rather than a boolean because the first three want different
+ * A string rather than a boolean because the first four want different
  * words from the caller, and a boolean would fold them into one "failed".
+ * A missing photo outranks missing tags: the way back for both is posting
+ * the drink again, and that compose starts from the post's tags as they
+ * are.
  */
-export type PostOutcome = 'ok' | 'no-photo' | 'objectionable' | 'failed';
+export type PostOutcome = 'ok' | 'no-photo' | 'untagged' | 'objectionable' | 'failed';
+
+/** The tags to write with a post (v4.3 §1.2): who is picked, and who the post had when the picking began. */
+export interface PostTags {
+  next: string[];
+  prev: string[];
+}
 
 /**
  * What became of an invite link.
@@ -51,6 +65,14 @@ interface SocialState {
   activityLatestAt: string | null;
   /** Bumped on every successful save/unsave, so Saved refetches on focus. */
   savesVersion: number;
+  /**
+   * Bumped after every write of tags (v4.3): Tag people from a post's •••,
+   * Remove me, and the tags sent with a post, whatever the server
+   * answered. This store patches only the feed's copy of a post, so a
+   * screen holding its own (the post page, Activity) reads it again when
+   * this moves.
+   */
+  tagsVersion: number;
 
   loadingFeed: boolean;
   loadingPeople: boolean;
@@ -117,6 +139,9 @@ interface SocialState {
    * `music` is the song for this photo's story, sent only with Save & post
    * and only while EXPO_PUBLIC_STORY_MUSIC is on; a song the server will not
    * take is dropped and the photo still goes up (lib/social createPost).
+   * `tags`, from the compose row (v4.3 §1.2), is written once the post is
+   * up: the difference between `prev` and `next`. A tag that does not
+   * save never fails the post; it is 'untagged'.
    */
   addPost: (
     myId: string,
@@ -124,7 +149,23 @@ interface SocialState {
     caption: string,
     photoUri: string | null,
     music?: Song | null,
+    tags?: PostTags,
   ) => Promise<PostOutcome>;
+  /**
+   * Your own post's Tag people, on Done (v4.3 §1.5): writes the difference
+   * between `prev` and `next`. The feed's copy changes at once and settles
+   * on what the server took; anyone it refused is named in one notice.
+   * Resolves to true when everything asked for was written, so the card
+   * can keep its optimistic line, and false otherwise, so it drops it and
+   * shows this store's copy.
+   */
+  setTags: (myId: string, postId: string, next: readonly string[], prev: readonly string[]) => Promise<boolean>;
+  /**
+   * Takes you off someone else's post (v4.3 §1.5). The feed's copy drops
+   * you at once and puts you back when the write fails. Resolves false
+   * then, and says nothing: the card that asked has its own words.
+   */
+  removeMyTag: (myId: string, postId: string) => Promise<boolean>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
   /** Deletes one of your posts and its photos. Resolves false when it failed. */
   removePost: (myId: string, postId: string) => Promise<boolean>;
@@ -160,6 +201,7 @@ const EMPTY = {
   poursStatus: 'idle' as 'idle' | 'ready' | 'error',
   activityLatestAt: null as string | null,
   savesVersion: 0,
+  tagsVersion: 0,
   loadingFeed: false,
   loadingPeople: false,
   feedError: null as string | null,
@@ -221,6 +263,90 @@ export function mergeProfiles(
  * not a failure at all; it resolves empty (lib/social).
  */
 const fetchPoursOrNull = () => api.fetchRecentPours().catch(() => null);
+
+/* ==================================================================== */
+/* Tags (v4.3 §1.5): the feed's copy of a post's people                 */
+/* ==================================================================== */
+
+/*
+ * The feed with one post's tags rewritten, or the same feed when the post
+ * is not in it or its tags were never read (024 not answered, or the read
+ * failed: Post.tagged undefined). A patch never draws a line on a post
+ * whose tags nobody knows.
+ */
+function withTagged(feed: Post[], postId: string, f: (tagged: UserProfile[]) => UserProfile[]): Post[] {
+  const i = feed.findIndex((p) => p.id === postId && p.tagged);
+  if (i < 0) return feed;
+  const post = feed[i]!;
+  const next = [...feed];
+  next[i] = { ...post, tagged: f(post.tagged!) };
+  return next;
+}
+
+/*
+ * What the server holds after a write: the people the post had, in their
+ * order, less those removed, then those added in pick order (setPostTags
+ * adds them one at a time, so the server's clock keeps that order, and
+ * fetchPostTags reads it back). Someone this store has no profile for is
+ * left out until the next read rather than drawn without a name.
+ */
+function settledTags(
+  had: readonly UserProfile[],
+  removed: readonly string[],
+  added: readonly string[],
+  profiles: Record<string, UserProfile>,
+): UserProfile[] {
+  const gone = new Set(removed);
+  const kept = had.filter((p) => !gone.has(p.id));
+  const held = new Set(kept.map((p) => p.id));
+  const joined = added.filter((id) => !held.has(id)).map((id) => profiles[id]);
+  return [...kept, ...joined.filter((p): p is UserProfile => p !== undefined)];
+}
+
+/** "leo", "leo and ana", "leo and 2 others", or a count when a profile is not on the phone. */
+function namesOf(ids: readonly string[], profiles: Record<string, UserProfile>): string {
+  const people = ids.map((id) => profiles[id]).filter((p): p is UserProfile => p !== undefined);
+  if (people.length === ids.length) return whoShort(people);
+  return ids.length === 1 ? '1 person' : `${ids.length} people`;
+}
+
+/*
+ * One notice for a Tag people write that did not all go through (§1.5),
+ * naming who. The server does not say which rule refused someone, on
+ * purpose (a block must not be discoverable), so 'not-allowed' names
+ * every rule a person can see for themselves. A refusal outranks an
+ * untag that failed; both are rare enough that one notice says enough.
+ */
+function reportTags(
+  refused: readonly { id: string; why: api.TagRefusal }[],
+  unremoved: readonly string[],
+  profiles: Record<string, UserProfile>,
+): void {
+  if (refused.length > 0) {
+    const title = `Couldn't tag ${namesOf(
+      refused.map((r) => r.id),
+      profiles,
+    )}`;
+    if (refused.some((r) => r.why === 'not-allowed')) {
+      showNotice(title, "You can only tag people you follow who haven't removed themselves.");
+    } else if (refused.some((r) => r.why === 'full')) {
+      showNotice(title, "That's 10 already.");
+    } else {
+      showNotice(title, 'Check your connection and try again.');
+    }
+    return;
+  }
+  if (unremoved.length > 0) {
+    showNotice(`Couldn't untag ${namesOf(unremoved, profiles)}`, 'Check your connection and try again.');
+  }
+}
+
+/** Who `prev` had that `next` drops, and the delete did not take off. */
+function unremovedOf(next: readonly string[], prev: readonly string[], removed: readonly string[]): string[] {
+  const keep = new Set(next);
+  const took = new Set(removed);
+  return prev.filter((id) => !keep.has(id) && !took.has(id));
+}
 
 /*
  * The feed refresh under way, if any, for one account (`gen`).
@@ -495,23 +621,118 @@ export const useSocial = create<SocialState>()((set, get) => ({
    * The outcome is still returned after an account change, because the
    * post was or was not written whoever is signed in now; only the store
    * writes and the follow-up refresh are skipped.
+   *
+   * Tags (v4.3 §1.2) go on once the post exists, with its id: the post
+   * never waits on them and a refused tag never fails it. If the server
+   * turned out to have no tags at all (024 not applied, learned since the
+   * compose row was drawn), there were never tags to save, and the post
+   * reports 'ok' as build 24 would.
+   *
+   * postsVersion is bumped in a write of its own, never in one that
+   * replaces `feed`: components/notifications/NotificationsHost reads a
+   * version bump with the feed untouched as a post made, and one with the
+   * feed replaced as a post removed.
    */
-  addPost: async (myId, drinkId, caption, photoUri, music) => {
+  addPost: async (myId, drinkId, caption, photoUri, music, tags) => {
     // Refused here without a round trip; the server holds the same line.
     if (containsObjectionable(caption)) return 'objectionable';
     const gen = get().gen;
+    let posted: { withPhoto: boolean; postId: string };
     try {
-      const withPhoto = await api.createPost(myId, drinkId, caption, photoUri, music);
-      const outcome = withPhoto ? 'ok' : 'no-photo';
-      if (get().gen !== gen) return outcome;
-      set({ postsVersion: get().postsVersion + 1 });
-      await get().refreshFeed(myId);
-      return outcome;
+      posted = await api.createPost(myId, drinkId, caption, photoUri, music);
     } catch (e) {
       const outcome = isObjectionableError(e) ? 'objectionable' : 'failed';
       if (get().gen !== gen) return outcome;
       set({ error: (e as Error).message });
       return outcome;
+    }
+
+    let tagsSaved = true;
+    const tagging = !!tags && api.tagsSupported();
+    if (tags && tagging) {
+      const r = await api.setPostTags(myId, posted.postId, tags.next, tags.prev);
+      const unremoved = unremovedOf(tags.next, tags.prev, r.removed);
+      tagsSaved = !api.tagsSupported() || (r.refused.length === 0 && unremoved.length === 0);
+    }
+    const outcome: PostOutcome = !posted.withPhoto ? 'no-photo' : tagsSaved ? 'ok' : 'untagged';
+
+    if (get().gen !== gen) return outcome;
+    set({ postsVersion: get().postsVersion + 1 });
+    if (tagging) set({ tagsVersion: get().tagsVersion + 1 });
+    await get().refreshFeed(myId);
+    return outcome;
+  },
+
+  /*
+   * Optimistic, then settled on the server's answer rather than rolled
+   * back whole: a write can partly go through (one person refused, the
+   * rest tagged), so the feed's copy ends as what the server holds. The
+   * post page and Activity hold their own copies and read them again on
+   * tagsVersion, which moves whatever the answer was.
+   */
+  setTags: async (myId, postId, next, prev) => {
+    if (!api.tagsSupported()) return false;
+    const gen = get().gen;
+    const before = get().feed.find((p) => p.id === postId)?.tagged;
+    const nextIds = new Set(next);
+    const prevIds = new Set(prev);
+    const patch = (feed: Post[]) => {
+      if (feed !== get().feed) set({ feed });
+    };
+
+    // The card's own overlay draws the same: the people kept, then the new ones in pick order.
+    patch(
+      withTagged(get().feed, postId, (t) =>
+        settledTags(
+          t,
+          prev.filter((id) => !nextIds.has(id)),
+          next.filter((id) => !prevIds.has(id)),
+          get().profiles,
+        ),
+      ),
+    );
+
+    const r = await api.setPostTags(myId, postId, next, prev);
+    if (get().gen !== gen) return false;
+
+    // Someone the picker found by searching the server may have no profile here yet: to draw, or to name.
+    const missing = [...r.added, ...r.refused.map((x) => x.id)].filter((id) => !get().profiles[id]);
+    if (missing.length > 0) {
+      try {
+        const fetched = await api.fetchProfiles(missing);
+        if (get().gen !== gen) return false;
+        set({ profiles: mergeProfiles(get().profiles, fetched) });
+      } catch {
+        // Drawn without them until the next read; the server has them.
+      }
+    }
+    if (before) patch(withTagged(get().feed, postId, () => settledTags(before, r.removed, r.added, get().profiles)));
+    set({ tagsVersion: get().tagsVersion + 1 });
+
+    const unremoved = unremovedOf(next, prev, r.removed);
+    if (r.refused.length === 0 && unremoved.length === 0) return true;
+    reportTags(r.refused, unremoved, get().profiles);
+    return false;
+  },
+
+  removeMyTag: async (myId, postId) => {
+    if (!api.tagsSupported()) return false;
+    const gen = get().gen;
+    const before = get().feed.find((p) => p.id === postId)?.tagged;
+    const patch = (feed: Post[]) => {
+      if (feed !== get().feed) set({ feed });
+    };
+    patch(withTagged(get().feed, postId, (t) => t.filter((p) => p.id !== myId)));
+    try {
+      await api.removeMyTag(myId, postId);
+      if (get().gen === gen) set({ tagsVersion: get().tagsVersion + 1 });
+      return true;
+    } catch (e) {
+      if (get().gen !== gen) return false;
+      // Back as it was, unless a refresh meanwhile already holds the server's answer.
+      if (before) patch(withTagged(get().feed, postId, (t) => (t.some((p) => p.id === myId) ? t : before)));
+      set({ error: (e as Error).message });
+      return false;
     }
   },
 
@@ -599,7 +820,16 @@ export const useSocial = create<SocialState>()((set, get) => ({
     const { [authorId]: _dropped, ...profiles } = get().profiles;
     set({
       profiles,
-      feed: get().feed.filter((p) => p.authorId !== authorId),
+      /*
+       * Their tags on other people's posts go too: the server's block
+       * trigger has already removed them (024 blocks_drop_tags), and a
+       * "with" line naming them would outlive the block until a refresh.
+       */
+      feed: get()
+        .feed.filter((p) => p.authorId !== authorId)
+        .map((p) =>
+          p.tagged?.some((t) => t.id === authorId) ? { ...p, tagged: p.tagged.filter((t) => t.id !== authorId) } : p,
+        ),
       pours: get().pours.filter((p) => p.authorId !== authorId),
       // The server trigger has already removed the follow edges both ways.
       following: get().following.filter((id) => id !== authorId),

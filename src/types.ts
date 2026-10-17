@@ -128,6 +128,15 @@ export interface Post {
   likedBy?: UserProfile | null;
   /** The signed-in user saved this post (saves table). */
   savedByMe?: boolean;
+  /**
+   * Who the author was with (migration 024's post_tags), in the order they
+   * were tagged, minus anyone you are blocked with (the server leaves them
+   * out). The header reads "maya.pours with ana and leo".
+   *
+   * undefined = unknown (024 not applied, or the read failed): no "with"
+   * line at all. [] = known, and nobody is tagged.
+   */
+  tagged?: UserProfile[];
   commentCount?: number;
   /** True when authored by the signed-in user. */
   mine?: boolean;
@@ -251,9 +260,11 @@ export interface TournamentBoard
 }
 
 /**
- * One row of Activity: a like on one of your posts, or a new follower.
- * `key` is unique across both kinds (`like:<post>:<user>`, `follow:<user>`),
- * so a list can key on it directly.
+ * One row of Activity: a like on one of your posts, a new follower, or
+ * someone tagging you in their post (migration 024). `key` is unique across
+ * all three kinds (`like:<post>:<user>`, `follow:<user>`, `tag:<post>`), so
+ * a list can key on it directly. A post tags you once, so its id alone
+ * keys a tag.
  */
 export type ActivityItem =
   | {
@@ -265,7 +276,18 @@ export type ActivityItem =
       photoPath: string | null;
       at: string;
     }
-  | { kind: 'follow'; key: string; actorId: string; at: string };
+  | { kind: 'follow'; key: string; actorId: string; at: string }
+  | {
+      kind: 'tag';
+      key: string;
+      /** The post's author: the person who tagged you. */
+      actorId: string;
+      postId: string;
+      drinkId: string;
+      photoPath: string | null;
+      /** When you were tagged, not when the post was made. */
+      at: string;
+    };
 
 /** Directed edge — mirrors a `follows` table. */
 export interface Follow {

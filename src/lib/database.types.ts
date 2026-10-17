@@ -229,6 +229,27 @@ export type CollectionItemRow = {
 };
 
 /**
+ * Someone the post's author was with (migration 024): one row per post and
+ * person, at most 10 per post (a trigger refuses the 11th with
+ * 'post_tags_full'). Only the author inserts, naming someone they follow
+ * who is not blocked either way and has not removed themselves from this
+ * post (42501 otherwise); a repeat is 23505, except that the cap trigger
+ * and the policy run before the primary key, so a repeat at ten is
+ * 'post_tags_full' and a repeat after an unfollow is 42501. Removed by the
+ * tagged person or the author, never changed. Readable exactly as the post
+ * is, minus anyone the reader is blocked with. created_at is the server's.
+ *
+ * Its refusals table (post_tag_refusals) is not declared: no client role
+ * holds any grant on it, and only 024's trigger and its private check
+ * ever touch it.
+ */
+export type PostTagRow = {
+  post_id: string;
+  tagged_id: string;
+  created_at: string;
+};
+
+/**
  * One row of recent_pours() (migration 017): a photo shared in the last
  * 24 hours by the caller or someone the caller follows. poured_at is the
  * photo's created_at, not the post's: logging a drink again adds a photo to
@@ -587,6 +608,16 @@ export type Database = {
           drink_id?: string | null;
           post_id?: string | null;
         };
+        Update: never;
+        Relationships: [];
+      };
+      /*
+       * Migration 024. Insert names the two ids, matching the column grant;
+       * no update grant: remove the tag and tag again.
+       */
+      post_tags: {
+        Row: PostTagRow;
+        Insert: { post_id: string; tagged_id: string };
         Update: never;
         Relationships: [];
       };

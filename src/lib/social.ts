@@ -147,6 +147,7 @@ function toPost(
   myLikes: Set<string>,
   mySaves: Set<string>,
   likers: Map<string, UserProfile> | null,
+  tags: Map<string, UserProfile[]> | null,
 ): Post {
   return {
     id: row.id,
@@ -167,6 +168,8 @@ function toPost(
     // No map: unknown, so the card shows the count. A post missing from it: nobody but you to name.
     likedBy: likers ? (likers.get(row.id) ?? null) : undefined,
     savedByMe: mySaves.has(row.id),
+    // No map: unknown, so the header draws no "with" line. A post missing from it: nobody tagged.
+    tagged: tags ? (tags.get(row.id) ?? []) : undefined,
     commentCount: 0,
     mine: row.author_id === myId,
   };
@@ -237,16 +240,17 @@ export function disableAvatarColumn(): void {
 /*                                                                      */
 /* The same problem one level up: a build can reach a phone before Jan  */
 /* runs the migration that adds a table or a function. Saves (017),      */
-/* recent_pours (017) and the likers functions (021) are the ones this   */
-/* file reads (lib/tournaments reads 020's functions the same way). A    */
-/* missing one is read as "feature off", never as a failure: the save    */
-/* button hides, Today's pours shows only your own tile, and a post's    */
-/* likes line is the plain count, while the feed itself, which needs     */
-/* none of them, keeps working.                                          */
+/* recent_pours (017), the likers functions (021) and tags (024) are the */
+/* ones this file reads (lib/tournaments reads 020's functions the same  */
+/* way). A missing one is read as "feature off", never as a failure: the */
+/* save button hides, Today's pours shows only your own tile, a post's   */
+/* likes line is the plain count, and there is no Tag people row, no     */
+/* "with" line and no tag in Activity, while the feed itself, which      */
+/* needs none of them, keeps working.                                    */
 /*                                                                      */
-/* Saves and the likers are remembered for the rest of the session once  */
-/* the server says they are not there, as the avatar column is, so a     */
-/* missing function costs the loads already in flight at launch one      */
+/* Saves, the likers and tags are remembered for the rest of the session */
+/* once the server says they are not there, as the avatar column is, so  */
+/* a missing function costs the loads already in flight at launch one    */
 /* failed request each, and nothing after. A relaunch asks again, so     */
 /* applying the migration needs no new build.                            */
 /* ==================================================================== */
@@ -261,6 +265,22 @@ let likersFunctionsPresent = true;
 /** False once the server has said migration 021's likers functions do not exist. */
 export const likersSupported = () => likersFunctionsPresent;
 
+let tagsTablePresent = true;
+/* True once a read of post_tags has come back this session: 024 is there, not merely not yet refused. */
+let tagsTableAnswered = false;
+
+/** False once the server has said migration 024's post_tags does not exist. */
+export const tagsSupported = () => tagsTablePresent;
+
+/**
+ * True once the server has answered a read of post_tags this session, so
+ * 024 is known to be there. tagsSupported() is true until the server says
+ * otherwise, which is right for drawing (a row that hides itself on the
+ * first answer); words that promise tags exist, such as a daily idea
+ * scheduled a fortnight ahead, wait for this instead.
+ */
+export const tagsConfirmed = () => tagsTablePresent && tagsTableAnswered;
+
 /** Postgres's undefined_table, or PostgREST's "not in the schema cache". */
 function isMissingRelation(e: { code?: string; message?: string } | null): boolean {
   return (
@@ -274,6 +294,16 @@ function isMissingRelation(e: { code?: string; message?: string } | null): boole
 /** PostgREST's "no such function", or Postgres's undefined_function. */
 export function isMissingFunction(e: { code?: string } | null): boolean {
   return !!e && (e.code === 'PGRST202' || e.code === '42883');
+}
+
+/**
+ * 024 is not applied: no post_tags (PGRST205, 42P01), or an embed from it
+ * PostgREST cannot place (PGRST200, its schema cache has no such table).
+ * Never the avatar column's 42703, whose "does not exist" would otherwise
+ * read as tags missing and switch them off for the session.
+ */
+function isMissingTags(e: { code?: string; message?: string } | null): boolean {
+  return !!e && !isMissingAvatarColumn(e) && (isMissingRelation(e) || e.code === 'PGRST200');
 }
 
 /* ==================================================================== */
@@ -560,6 +590,75 @@ async function fetchLikeSummaries(postIds: string[]): Promise<Map<string, UserPr
   }
 }
 
+/*
+ * Posts per post_tags read. A request returns at most the API's row cap
+ * (1,000 on hosted Supabase) without saying it stopped, and a post holds
+ * up to POST_TAGS_MAX tags, so 100 posts is the most one request can
+ * carry whole. IDS_PER_REQUEST's 150 could come back cut short.
+ */
+const TAGGED_POSTS_PER_REQUEST = 100;
+
+/*
+ * A tag with its person embedded. Typed loosely like every embed here
+ * (database.types.ts declares no relationships) and cast, not trusted:
+ * `person` is null when profiles_read hides them, which post_tags_read
+ * has already done for anyone you are blocked with, so null is rare.
+ */
+interface TagQueryRow {
+  post_id: string;
+  created_at: string;
+  person: ProfileRow | null;
+}
+
+/**
+ * Who is tagged on THESE posts (migration 024), by post id, each post's
+ * people oldest tag first: the author's pick order, since setPostTags
+ * writes them one at a time. A post with nobody tagged is missing from the
+ * map, which toPost reads as [].
+ *
+ * Null means unknown: the table is missing (which also switches tags off
+ * for the session) or a read failed. Never throws, like fetchLikeSummaries.
+ * A read of its own rather than an embed in POST_SELECT: PostgREST fails a
+ * whole select whose embed it does not know (PGRST200), and a post read
+ * must never fail because of its tags.
+ */
+async function fetchPostTags(postIds: string[]): Promise<Map<string, UserProfile[]> | null> {
+  if (!tagsTablePresent) return null;
+  if (postIds.length === 0) return new Map();
+  try {
+    const pages = await Promise.all(
+      chunk(postIds, TAGGED_POSTS_PER_REQUEST).map(async (part) => {
+        const { data, error } = await supabase
+          .from('post_tags')
+          .select(`post_id, created_at, person:profiles(${profileCols()})`)
+          .in('post_id', part)
+          .order('created_at')
+          .order('tagged_id');
+        if (error) {
+          if (isMissingTags(error)) tagsTablePresent = false;
+          return null;
+        }
+        tagsTableAnswered = true;
+        return (data ?? []) as unknown as TagQueryRow[];
+      }),
+    );
+    // One failed chunk makes the whole answer unknown, as for the likers:
+    // a post in it would otherwise read as "nobody tagged" when somebody is.
+    if (pages.some((page) => page === null)) return null;
+    const out = new Map<string, UserProfile[]>();
+    for (const row of pages.flatMap((page) => page ?? [])) {
+      if (!row.person) continue;
+      const person = toProfile(row.person);
+      const people = out.get(row.post_id);
+      if (people) people.push(person);
+      else out.set(row.post_id, [person]);
+    }
+    return out;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Rows to posts, minus any whose drink has left the Dex.
  *
@@ -574,12 +673,13 @@ async function fetchLikeSummaries(postIds: string[]): Promise<Map<string, UserPr
 async function toPosts(rows: PostQueryRow[], myId: string): Promise<Post[]> {
   const live = rows.filter((r) => getDrink(r.drink_id));
   const ids = live.map((r) => r.id);
-  const [myLikes, mySaves, likers] = await Promise.all([
+  const [myLikes, mySaves, likers, tags] = await Promise.all([
     fetchMyLikes(myId, ids),
     fetchMySaves(myId, ids),
     fetchLikeSummaries(ids),
+    fetchPostTags(ids),
   ]);
-  return live.map((r) => toPost(r, myId, myLikes, mySaves, likers));
+  return live.map((r) => toPost(r, myId, myLikes, mySaves, likers, tags));
 }
 
 /**
@@ -829,17 +929,71 @@ function likedPost(raw: unknown): LikedPost | null {
 
 const newestAtFirst = (a: { at: string }, b: { at: string }) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0);
 
+/*
+ * The tags side of Activity (migration 024): tags of you, each with the
+ * post it is on. !inner like the likes side, so a post posts_read hides
+ * takes its tag row with it; post_tags_read already requires the post be
+ * visible, so in practice nothing is dropped by it.
+ */
+interface TagActivityRow {
+  post_id: string;
+  created_at: string;
+  posts?: unknown;
+}
+
+/** The post a tag is on: who wrote it, its drink and its preview photo. */
+type TaggingPost = { author_id: string; drink_id: string; photo_path: string | null };
+
+function taggingPost(raw: unknown): TaggingPost | null {
+  const one = Array.isArray(raw) ? raw[0] : raw;
+  if (typeof one !== 'object' || one === null) return null;
+  const p = one as { author_id?: unknown; drink_id?: unknown; photo_path?: unknown };
+  if (typeof p.author_id !== 'string' || typeof p.drink_id !== 'string') return null;
+  return {
+    author_id: p.author_id,
+    drink_id: p.drink_id,
+    photo_path: typeof p.photo_path === 'string' ? p.photo_path : null,
+  };
+}
+
 /**
- * Likes on your posts and new followers, newest first: one row per event,
- * at most 60, from the last 30 days. Built from the likes and follows
- * tables as they are; nothing new is stored. Your own likes of your own
- * posts are not activity. Likes on a drink that has left the Dex are
- * dropped, since the row would point at a post nobody can open.
+ * Tags of you since `since`, newest first, at most ACTIVITY_LIMIT. Empty,
+ * not an error, before 024 (and tags go off for the session); throws when
+ * the read itself failed, as the likes and follows reads do.
+ */
+async function fetchTagsOfMe(myId: string, since: string): Promise<TagActivityRow[]> {
+  if (!tagsTablePresent) return [];
+  const { data, error } = await supabase
+    .from('post_tags')
+    .select('post_id, created_at, posts!inner(id, author_id, drink_id, photo_path)')
+    .eq('tagged_id', myId)
+    .gte('created_at', since)
+    .order('created_at', { ascending: false })
+    .limit(ACTIVITY_LIMIT);
+  if (error) {
+    if (isMissingTags(error)) {
+      tagsTablePresent = false;
+      return [];
+    }
+    throw error;
+  }
+  tagsTableAnswered = true;
+  return (data ?? []) as unknown as TagActivityRow[];
+}
+
+/**
+ * Likes on your posts, new followers and people tagging you in their posts
+ * (024), newest first: one row per event, at most 60, from the last 30
+ * days. Built from the likes, follows and post_tags tables as they are;
+ * nothing new is stored, so a tag removed (by you, its author or a block)
+ * takes its row with it. Your own likes of your own posts are not
+ * activity. Likes and tags on a drink that has left the Dex are dropped,
+ * since the row would point at a post nobody can open.
  */
 export async function fetchActivity(myId: string): Promise<ActivityItem[]> {
   const since = new Date(Date.now() - ACTIVITY_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
-  const [likes, follows] = await Promise.all([
+  const [likes, follows, tags] = await Promise.all([
     supabase
       .from('likes')
       .select('post_id, user_id, created_at, posts!inner(id, author_id, drink_id, photo_path)')
@@ -855,6 +1009,7 @@ export async function fetchActivity(myId: string): Promise<ActivityItem[]> {
       .gte('created_at', since)
       .order('created_at', { ascending: false })
       .limit(ACTIVITY_LIMIT),
+    fetchTagsOfMe(myId, since),
   ]);
   if (likes.error) throw likes.error;
   if (follows.error) throw follows.error;
@@ -881,17 +1036,55 @@ export async function fetchActivity(myId: string): Promise<ActivityItem[]> {
       at: row.created_at,
     });
   }
+  for (const row of tags) {
+    const post = taggingPost(row.posts);
+    if (!post || !getDrink(post.drink_id)) continue;
+    items.push({
+      kind: 'tag',
+      key: `tag:${row.post_id}`,
+      actorId: post.author_id,
+      postId: row.post_id,
+      drinkId: post.drink_id,
+      photoPath: post.photo_path,
+      at: row.created_at,
+    });
+  }
   return items.sort(newestAtFirst).slice(0, ACTIVITY_LIMIT);
 }
 
 /**
- * When the newest like on one of your posts or the newest follow of you
- * happened, whichever is later; null when there is neither. Feeds the dot
- * on Home's heart, so it has no time floor: a like from five weeks ago is
- * still unseen if Activity was never opened. Two one-row reads.
+ * When you were last tagged (024), or null: never, or before 024 (tags go
+ * off for the session). Throws when the read itself failed. No join:
+ * post_tags_read already shows only tags on posts you can see.
+ */
+async function fetchLatestTagAt(myId: string): Promise<string | null> {
+  if (!tagsTablePresent) return null;
+  const { data, error } = await supabase
+    .from('post_tags')
+    .select('created_at')
+    .eq('tagged_id', myId)
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (error) {
+    if (isMissingTags(error)) {
+      tagsTablePresent = false;
+      return null;
+    }
+    throw error;
+  }
+  tagsTableAnswered = true;
+  return data?.[0]?.created_at ?? null;
+}
+
+/**
+ * When the newest like on one of your posts, the newest follow of you or
+ * the newest tag of you (024) happened, whichever is latest; null when
+ * there is none. Feeds the dot on Home's heart, so it has no time floor: a
+ * like from five weeks ago is still unseen if Activity was never opened.
+ * Three one-row reads; before 024 the tag read answers null.
  */
 export async function fetchLatestActivityAt(myId: string): Promise<string | null> {
-  const [like, follow] = await Promise.all([
+  const [like, follow, tag] = await Promise.all([
     supabase
       .from('likes')
       .select('created_at, posts!inner(author_id)')
@@ -905,15 +1098,15 @@ export async function fetchLatestActivityAt(myId: string): Promise<string | null
       .eq('following_id', myId)
       .order('created_at', { ascending: false })
       .limit(1),
+    fetchLatestTagAt(myId),
   ]);
   if (like.error) throw like.error;
   if (follow.error) throw follow.error;
 
   const a = (like.data?.[0] as { created_at?: string } | undefined)?.created_at ?? null;
   const b = follow.data?.[0]?.created_at ?? null;
-  if (!a) return b;
-  if (!b) return a;
-  return a > b ? a : b;
+  // The server's own timestamptz strings, one format, so they compare as text.
+  return [a, b, tag].reduce<string | null>((latest, t) => (t && (!latest || t > latest) ? t : latest), null);
 }
 
 /* ==================================================================== */
@@ -973,6 +1166,218 @@ export async function fetchPostLikers(
     // A short page is the last one; a full one may be too, which costs one empty request.
     next: last && rows.length === LIKERS_PAGE ? { at: last.liked_at, user: last.user_id } : null,
   };
+}
+
+/* ==================================================================== */
+/* Tags (migration 024; specs/v4.3/spec.md §1, §2)                      */
+/*                                                                      */
+/* The people a post's author was with: up to ten people they follow,   */
+/* on the post rather than a photo (a post is one drink, 007). Only the */
+/* author tags; the tagged person can remove themselves, and that       */
+/* sticks for the post; a block removes the tags between two people     */
+/* both ways. The server holds every one of those rules (024's policies */
+/* and triggers); nothing here pre-checks more than it needs to explain */
+/* a refusal. Read beside the likes and saves in toPosts, and in        */
+/* Activity, all gated on tagsSupported() like saves on savesSupported. */
+/* ==================================================================== */
+
+/** At most this many people on one post (024's post_tags_full). */
+export const POST_TAGS_MAX = 10;
+
+/**
+ * The tags on YOUR post of this drink, for a re-post's compose row (spec
+ * §1.2): the post's id, null when there is no post yet, and who is on it,
+ * oldest tag first.
+ *
+ * Never throws. Tags off (024 not applied) or a failed post read come back
+ * as no post and nobody; a failed tags read, as the post with nobody. The
+ * row then starts empty and Post only adds, which is safe: tagging someone
+ * already tagged counts as done (setPostTags). A tags read that found 024
+ * missing has switched tags off by the time this resolves, so the caller
+ * asks tagsSupported() again before drawing the row.
+ *
+ * With no post yet there are no tags to read, so while no read of
+ * post_tags has answered this session (the + window opened straight after
+ * a cold start, before Home's feed), one one-row read asks whether 024 is
+ * there at all: before it, the row would otherwise stand on a server that
+ * has no tags until its first tap.
+ */
+export async function fetchMyPostTags(
+  myId: string,
+  drinkId: string,
+): Promise<{ postId: string | null; people: UserProfile[] }> {
+  if (!tagsTablePresent) return { postId: null, people: [] };
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('id')
+      .eq('author_id', myId)
+      .eq('drink_id', drinkId)
+      .maybeSingle();
+    if (error) return { postId: null, people: [] };
+    if (!data) {
+      if (!tagsTableAnswered) await probeTags(myId);
+      return { postId: null, people: [] };
+    }
+    const tags = await fetchPostTags([data.id]);
+    return { postId: data.id, people: tags?.get(data.id) ?? [] };
+  } catch {
+    return { postId: null, people: [] };
+  }
+}
+
+/** One row of your own tags, read only to learn whether 024 is there. Never throws. */
+async function probeTags(myId: string): Promise<void> {
+  try {
+    const { error } = await supabase.from('post_tags').select('post_id').eq('tagged_id', myId).limit(1);
+    if (!error) tagsTableAnswered = true;
+    else if (isMissingTags(error)) tagsTablePresent = false;
+  } catch {
+    // Unknown still; the next read of post_tags settles it.
+  }
+}
+
+/**
+ * Why one person could not be tagged:
+ *
+ *   not-allowed  024's insert policy said no (42501): you do not follow
+ *                them (any more), they removed themselves from this post,
+ *                a block either way, or yourself. Also an account deleted
+ *                meanwhile (23503).
+ *   full         ten on the post already (post_tags_full, P0001)
+ *   failed       anything else: offline, a timeout, the server, or 024
+ *                not applied
+ */
+export type TagRefusal = 'not-allowed' | 'full' | 'failed';
+
+/** Tags one person; null when they are tagged now (a repeat is 23505, already done). Never throws. */
+async function tagOne(postId: string, taggedId: string): Promise<TagRefusal | null> {
+  try {
+    const { error } = await supabase.from('post_tags').insert({ post_id: postId, tagged_id: taggedId });
+    if (!error || error.code === '23505') return null;
+    if (error.code === '42501' || error.code === '23503') return 'not-allowed';
+    if (error.code === 'P0001' && /post_tags_full/.test(error.message ?? '')) return 'full';
+    if (isMissingTags(error)) tagsTablePresent = false;
+    return 'failed';
+  } catch {
+    return 'failed';
+  }
+}
+
+/** Who is on this post now, by id, or null when the read failed. Never throws. */
+async function taggedIdsOn(postId: string): Promise<Set<string> | null> {
+  try {
+    const { data, error } = await supabase.from('post_tags').select('tagged_id').eq('post_id', postId);
+    if (error) return null;
+    return new Set((data ?? []).map((r) => r.tagged_id));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Writes the difference between `prev` (who the post had when the person
+ * started) and `next` (who they picked) on your post.
+ *
+ * Removals first, in one delete, so swapping someone at ten frees the
+ * place before it is taken. Then one insert per new person, in pick order
+ * and one at a time: one refusal never drops the rest, and the server's
+ * clock keeps the pick order, which is the order fetchPostTags reads back
+ * and the "with" line names them in.
+ *
+ *   added    tagged now, including anyone who already was
+ *   removed  untagged now: all of `prev` not in `next`, or [] when the
+ *            delete failed (or tags are off) and nobody was
+ *   refused  everyone in `next` but not `prev` who is not on the post,
+ *            and why; after the first 'full' the rest are 'full' with no
+ *            request
+ *
+ * Someone in both lists is left alone, so a person who removed themselves
+ * while the author was choosing is never put back. Never throws: the
+ * caller patches its copy of the post from the answer.
+ */
+export async function setPostTags(
+  myId: string,
+  postId: string,
+  next: readonly string[],
+  prev: readonly string[],
+): Promise<{ added: string[]; removed: string[]; refused: { id: string; why: TagRefusal }[] }> {
+  const had = new Set(prev);
+  const keep = new Set(next);
+  const toAdd = [...keep].filter((id) => !had.has(id));
+  const toRemove = [...had].filter((id) => !keep.has(id));
+
+  const added: string[] = [];
+  const refused: { id: string; why: TagRefusal }[] = [];
+  let removed: string[] = [];
+
+  if (toRemove.length > 0 && tagsTablePresent) {
+    try {
+      const { error } = await supabase
+        .from('post_tags')
+        .delete()
+        .eq('post_id', postId)
+        .in('tagged_id', toRemove);
+      if (!error) removed = toRemove;
+      else if (isMissingTags(error)) tagsTablePresent = false;
+    } catch {
+      // Nobody was removed; `removed` stays empty and the caller puts them back.
+    }
+  }
+
+  let full = false;
+  const refusals = new Map<string, TagRefusal>();
+  for (const id of toAdd) {
+    let why: TagRefusal | null;
+    if (!tagsTablePresent) why = 'failed';
+    else if (id === myId) why = 'not-allowed';
+    else if (full) why = 'full';
+    else why = await tagOne(postId, id);
+
+    if (why !== null) refusals.set(id, why);
+    if (why === 'full') full = true;
+  }
+
+  /*
+   * A refusal can name someone who is on the post already. Postgres runs
+   * 024's cap trigger, then its insert policy, and only then the primary
+   * key, so a repeat comes back post_tags_full at ten, or 42501 when you
+   * have unfollowed them since, never the 23505 that means done. That
+   * happens whenever `prev` was short: the re-post's tags read failed
+   * (fetchMyPostTags), or the copy of the post was stale. So any refusal
+   * reads the post's tags once, and whoever is on it counts as added; if
+   * that read fails too, the refusals stand.
+   */
+  if (refusals.size > 0 && tagsTablePresent) {
+    const onPost = await taggedIdsOn(postId);
+    for (const id of [...refusals.keys()]) {
+      if (onPost?.has(id)) refusals.delete(id);
+    }
+  }
+  for (const id of toAdd) {
+    const why = refusals.get(id);
+    if (why) refused.push({ id, why });
+    else added.push(id);
+  }
+  return { added, removed, refused };
+}
+
+/**
+ * Takes you off someone's post (spec §1.5). It sticks: 024 keeps a
+ * refusal, so its author cannot tag you on that post again, and they are
+ * not told. A tag already gone (the author untagged you, the post was
+ * deleted) is the state asked for. Throws when the request failed, so the
+ * caller can put you back.
+ */
+export async function removeMyTag(myId: string, postId: string): Promise<void> {
+  const { error } = await supabase
+    .from('post_tags')
+    .delete()
+    .eq('post_id', postId)
+    .eq('tagged_id', myId);
+  if (!error) return;
+  if (isMissingTags(error)) tagsTablePresent = false;
+  throw error;
 }
 
 /* ==================================================================== */
@@ -1264,8 +1669,10 @@ export function forgetSignedPhoto(path: string | null, bucket: Bucket = 'pours')
  * filled with duplicates of one entry — it now adds a photo to the post that
  * already exists, and the trigger promotes the newest to the preview.
  *
- * Resolves to false when the post is up but its photo is not on it, so the
- * caller can say so; throws when the post itself could not be written. The
+ * Resolves to the post's id, new or existing, so the caller can write its
+ * tags (setPostTags), and `withPhoto`: false only when the post is up but
+ * the photo meant for it is not on it, so the caller can say so (true with
+ * no photo to send). Throws when the post itself could not be written. The
  * server dates the post (created_at is never sent).
  *
  * `music` is the song for this photo's story (migration 020). It goes on
@@ -1281,7 +1688,7 @@ export async function createPost(
   caption: string,
   localPhotoUri: string | null,
   music?: Song | null,
-): Promise<boolean> {
+): Promise<{ withPhoto: boolean; postId: string }> {
   /*
    * onConflict rather than a select-then-insert: two logs racing from the
    * same account would both see "no post" and the second insert would fail
@@ -1325,10 +1732,10 @@ export async function createPost(
     }
   }
 
-  if (!localPhotoUri) return true;
+  if (!localPhotoUri) return { withPhoto: true, postId };
 
   const path = await uploadPhoto(myId, localPhotoUri);
-  if (!path) return false;
+  if (!path) return { withPhoto: false, postId };
 
   /*
    * The trigger repoints posts.photo_path at the newest photo. If the row
@@ -1345,9 +1752,9 @@ export async function createPost(
   }
   if (photoError) {
     await removeStoredPhoto(path);
-    return false;
+    return { withPhoto: false, postId };
   }
-  return true;
+  return { withPhoto: true, postId };
 }
 
 /**
