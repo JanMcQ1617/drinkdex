@@ -116,11 +116,17 @@ Blocks can be undone from Profile → Settings → Blocked accounts. Captions,
 bios, display names and usernames pass a server-side filter that refuses
 slurs and explicit sexual terms before they are saved.
 
+**Tags.** A post can tag up to 10 people its author follows, never anyone
+they are blocked with either way. Anyone tagged can remove themselves from
+the post's "..." menu, and a post with tags is reported like any other.
+
 **Account deletion.** Profile → Settings (the gear, top right) → Delete
 account. Deletes the account, all posts, all photos and all follows. No
 email or support request needed.
 
-**Age rating.** 18+. The app is about alcoholic drinks and includes
+**Age rating.** 18+. Sipply is for people of legal drinking age where
+they live: its first screens ask, and stop anyone who answers no, and every
+new account confirms it. The app is about alcoholic drinks and includes
 references to alcohol throughout. It does not sell alcohol, does not
 facilitate purchase, and contains no commerce of any kind.
 
@@ -141,14 +147,29 @@ file only the user's own username is read, and it is stored, as a hash,
 only if the user accepts it. The usernames are hashed and matched the same way as
 phone numbers, under the same limit.
 
-### Add for a build with tournaments, and for one with story music
+### Add Daily ideas to every build from 25, and tournaments and story music when it has them
 
-Tournaments (migration 020 applied): paste the **Tournaments** paragraph
-from the App Review notes in [appstore.md](appstore.md) into the notes
-above. Story music (`EXPO_PUBLIC_STORY_MUSIC=tap`): paste its **Songs on
-posts** paragraph too. Both are written once, there, so the two sets of
-notes cannot drift apart. This field has the same 4,000-character limit,
-and the measured budget beside those paragraphs applies here as well.
+Every build from 25: paste the **Daily ideas** paragraph from the App
+Review notes in [appstore.md](appstore.md) into the notes above.
+Tournaments (migration 020 applied): paste its **Tournaments** paragraph
+too. Story music (`EXPO_PUBLIC_STORY_MUSIC=tap`): paste its **Songs on
+posts** paragraph as well. Each is written once, there, so the two sets of
+notes cannot drift apart.
+
+This field has the same 4,000-character limit, measured the way
+appstore.md measures it: bold marks gone, each paragraph's line breaks as
+spaces, a blank line between paragraphs. Sign-in through Instagram is
+2,325 now, with Tags and the age rating's second sentence (1,957 before).
+Build 25 has Apple, Google and Facebook sign-in, tournaments and Daily
+ideas, and no phone sign-in or songs. With the 896 third-party paragraph,
+Tournaments and Daily ideas, that is 4,374, 374 over. Shorten Contacts
+and Instagram to their first two sentences, as appstore.md does, and it is
+3,767, 233 to spare. A build with phone sign-in as well comes to 4,233
+with its code line; take Contacts and Instagram down to their first
+sentence too and it is 3,987, 13 to spare. Songs in place of phone sign-in
+need that cut and the third-party paragraph's two sentences about the
+Facebook friends list and access token dropped as well: 3,881, 119 to
+spare. Songs and phone sign-in together do not fit. Count before pasting.
 
 ### Add for a build with phone sign-in
 

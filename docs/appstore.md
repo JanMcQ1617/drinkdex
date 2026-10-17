@@ -152,32 +152,60 @@ when you submit, delete that paragraph, and the count drops by 139.
 ## What's New — 4000 max
 
 Not required for a first release. Version 1.0.0 is not on the App Store
-yet, so if build 15 is the first build submitted for review, App Store
-Connect will not ask for this; keep it for the first update. If an earlier
-build reaches the App Store first, paste this with build 15:
+yet, so if build 25 is the first build submitted for review, App Store
+Connect will not ask for this; keep it for the first update.
+
+Written for build 25 against build 15, the last build this section
+described, so it covers every round from v3.2 to v4.3. If the build
+already on the App Store is 24, paste only the first two paragraphs: they
+are build 25's.
 
 ```
-Stories at the top of Home are circles now. A wine ring marks one you have not opened yet, and you can delete your own.
+Tag people on a post. When you post a drink, tap Tag people and choose up to 10 people you follow who were there. The post shows who you were with, and each person you tag sees it in Activity. Anyone you tag can remove themselves.
 
-My Bar has a tab of its own, next to the +.
+Daily ideas, only if you want them: one notification a day, at a time you choose, with a drink to read about, a recipe to write down or something new in the Dex. Sipply asks before any arrive. Change the time or turn them off in Settings, under Notifications.
 
-Tournaments: host one with people you follow, and whoever tries the most different drinks wins. Each drink counts once, never how much.
+Saved has a tab of its own. Save any drink or post, sort them into collections, and share a collection by link. Stop sharing whenever you like.
 
-Drink pages tell each drink's origin story: where it began, who is credited, and how it got its name.
+The Dex can follow your tastes. For you puts the drinks that match what you like first, and By number is one tap away. The filters use the same words as the taste questions, Fruity included.
 
-No more rarity. An entry is simply collected or not yet.
+Scroll up in the Dex and the search field and filters come back.
 
-The tab bar shrinks while you scroll, and Home's top bar slides out of the way.
+783 of the 899 cocktails now have a photograph.
 
-"Log" is now "Post", and a note is now a caption.
+Home looks like the feed you know: the full photo, then like, share and save, and who liked it.
+
+New to Sipply? A few questions about your tastes come before you sign in.
+
+Sign in with Apple, Google or Facebook.
+
+Swipe between tabs, and a line under the active tab shows where you are.
+
+Black and white throughout, with less on every screen, so the drink photographs are the only colour.
 ```
 
-[594]
+[1,332]
 
-The tournament paragraph needs migration 020 applied, like the one in the
-description. The origin story paragraph needs the origin story merge in
-`src/data/drinks.json`; without it the band shows each drink's fun fact,
-so delete that paragraph.
+Guideline 1.4.3 reads this field like the rest of the listing, so every
+line is about the catalogue, recipes, what you have posted or friends,
+and none asks anyone to drink. Daily ideas says "a recipe to write down",
+as the review notes do, rather than the in-app ask's "a recipe to create".
+
+"In Settings, under Notifications" is the in-app ask's own wording.
+Settings opens from the ••• on the Profile tab.
+
+The Tag people paragraph needs migration 024 (applied 17 Oct 2026), and
+collections need 023 (applied 13 Oct 2026). Without 024 the build shows no
+Tag people row, so delete that paragraph.
+
+The photo count was counted out of `src/data/drinkPhotos.ts` against
+`src/data/drinks.json`: 795 of the 2,089 entries have one, 783 cocktails
+and 12 spirits. Recount after any photo import.
+
+"Apple, Google or Facebook" describes a build with all three sign-in flags
+on, as build 25 has. Facebook also needs the Meta app to be Live: in
+development mode only the app's own roles can use it, so until then make
+the line "Sign in with Apple or Google." (the count drops by 10).
 
 ---
 
@@ -185,10 +213,10 @@ so delete that paragraph.
 
 App Store Connect → the version → **App Review Information → Notes**.
 Start from the Test Information notes in [testflight.md](testflight.md):
-sign-in, user-generated content, account deletion, age rating, contacts,
-Instagram, and the third-party paragraph that matches the build. They hold
-for App Review as they do for Beta App Review. Then add the paragraphs
-below that match the build.
+sign-in, user-generated content, tags, account deletion, age rating,
+contacts, Instagram, and the third-party paragraph that matches the build.
+They hold for App Review as they do for Beta App Review. Then add the
+paragraphs below that match the build.
 
 The field takes 4,000 characters, and the full set does not fit. Measured
 for build 15 as pasted (bold marks gone, each paragraph's line breaks as
@@ -204,14 +232,17 @@ the listing, carries the rest. That saves 607, which fits songs with room
 to spare, and songs with phone sign-in at 3,961, 39 to spare, so count
 before pasting.
 
-From build 25, Daily ideas (493) goes in every time, and so does that cut:
-with the 896 paragraph and tournaments, the uncut set is 4,006, 6 over.
-Cut, it is 3,399; phone sign-in on top makes 3,865, and songs instead
-3,990, 10 to spare. Songs and phone sign-in together run 456 over. Then
-also take Contacts and Instagram down to their first sentence, and drop
-the two sentences of the third-party paragraph about the Facebook friends
-list and access token (the privacy policy carries both): 3,979, 21 to
-spare.
+From build 25, Daily ideas (493) goes in every time, and so does that cut.
+The Test Information notes grew too: Tags (216) is new and the age rating
+(341) gained a sentence, so sign-in through Instagram is 2,325. With the
+896 paragraph and tournaments, the uncut set is 4,374, 374 over. Cut, it
+is 3,767, 233 to spare. Phone sign-in on top makes 4,233 with its code
+line; take Contacts and Instagram down to their first sentence as well and
+it is 3,987, 13 to spare. Songs instead of phone sign-in need that cut
+and the two sentences of the third-party paragraph about the Facebook
+friends list and access token dropped (the privacy policy carries both):
+3,881, 119 to spare. Songs and phone sign-in together do not fit, so
+count before pasting.
 
 ### Tournaments — a server with migration 020 applied
 
