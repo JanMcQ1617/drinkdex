@@ -11,6 +11,7 @@ import { VideoIntro } from '@/components/VideoIntro';
 import { CollectionsHost } from '@/components/collections/CollectionsHost';
 import { FirstRun } from '@/components/FirstRun';
 import { InviteLinkHandler } from '@/components/InviteLinkHandler';
+import { NotificationsHost } from '@/components/notifications/NotificationsHost';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
 import { SubmissionSync } from '@/components/SubmissionSync';
@@ -295,6 +296,14 @@ export default function RootLayout() {
         splash waited on would be one more way to hold a blank page.
       */}
       <SubmissionSync />
+      {/*
+        Daily ideas (v4.3 §3): replans the fortnight of local notifications
+        at launch, on return to the app and after a change, opens what a
+        tapped notification points at (a cold start's tap included, once
+        the navigator is ready), and puts up the ask at a calm moment.
+        Draws nothing but that sheet.
+      */}
+      <NotificationsHost />
       {/*
         Password-recovery deep links. Renders nothing until one arrives,
         then covers the app with the "choose a new password" step — it has

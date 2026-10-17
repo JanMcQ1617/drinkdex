@@ -1,20 +1,27 @@
 import Constants from 'expo-constants';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useState } from 'react';
-import { Alert, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Modal, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Box } from '@/components/collections/Box';
+import { Icon } from '@/components/icons';
+import { allowDailyIdeas, declineDailyIdeas, IdeasOptIn } from '@/components/notifications/IdeasOptIn';
+import { TimeSheet } from '@/components/notifications/TimeSheet';
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
-import { Avatar, ListGroup, ListRow, SectionHeader } from '@/components/ui';
+import { announce, Avatar, haptic, ListGroup, ListRow, SectionHeader } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
+import type { PlannedIdea } from '@/lib/dailyIdeas';
 import type { ProfileRow } from '@/lib/database.types';
 import { hasFacebookIdentity } from '@/lib/facebook';
+import { formatIdeaTime, notificationsStatus, previewIdea, rescheduleDailyIdeas } from '@/lib/notifications';
 import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
+import { useNotificationPrefs } from '@/store/notificationPrefs';
 import { useSocial } from '@/store/social';
 import { hasAnswers, tasteSummary, useTaste } from '@/store/taste';
 import { confirmDestructive } from '@/utils/alerts';
@@ -62,6 +69,11 @@ import { confirmDestructive } from '@/utils/alerts';
 /* no age question, no sign-in), full screen in a Modal rather than a   */
 /* route, so no new route file. Clear your tastes sits under it only    */
 /* while there is something to clear.                                   */
+/*                                                                      */
+/* v4.3: Notifications, after Your activity: Daily ideas and its Time.  */
+/* A daily idea about your tastes opens /settings?open=tastes, and the  */
+/* screen opens Your tastes once as it arrives (spec §3.7), the way     */
+/* Saved's ?add=1 opens its sheet: still no new route.                  */
 /* ==================================================================== */
 
 const SUPPORT_URL = 'https://janmcq1617.github.io/drinkdex/support';
@@ -130,7 +142,9 @@ export default function SettingsScreen() {
    */
   const answers = useTaste((s) => s.answers);
   const reduceMotion = useReducedMotion();
-  const [tastesOpen, setTastesOpen] = useState(false);
+  // Opened by a daily idea's tap (lib/notifications): once, as the screen arrives.
+  const { open: openParam } = useLocalSearchParams<{ open?: string }>();
+  const [tastesOpen, setTastesOpen] = useState(openParam === 'tastes');
   const closeTastes = useCallback(() => setTastesOpen(false), []);
   const confirmClearTastes = useCallback(() => {
     confirmDestructive('Clear your tastes?', CLEAR_TASTES_CONFIRM, 'Clear', () =>
@@ -317,6 +331,9 @@ export default function SettingsScreen() {
           ) : null}
         </Section>
 
+        {/* ---- Daily ideas (v4.3 §3.3). Nothing to schedule on the web. ---- */}
+        {Platform.OS === 'web' ? null : <NotificationsSection />}
+
         {/*
           ---- How people find you ----
           The spoken hint lists what the screen behind it holds, in its
@@ -419,6 +436,150 @@ export default function SettingsScreen() {
   );
 }
 
+/*
+ * Where the phone keeps its notification switch, in this platform's words.
+ * Sipply ships on iOS; Android names its own settings.
+ */
+const OS_SETTINGS = Platform.OS === 'ios' ? 'iOS Settings' : 'your phone’s settings';
+
+/**
+ * Notifications (v4.3 §3.3, frames `settings` and `time`): Daily ideas,
+ * on or off, and while on, Time. A squared box, never a pill switch (the
+ * house has no ovals), read by VoiceOver as a switch.
+ *
+ * Ticking it asks iOS only through the ask's plain words (App Store
+ * 4.5.4): granted already, it is simply on and planned at once; never
+ * asked, the ask sheet comes up here, whatever the app's own ask count,
+ * since the person asked for it; refused in iOS, an alert says where to
+ * turn them back on. Unticking cancels every pending idea at once; what
+ * was sent is kept, so turning it on again does not repeat the last 60
+ * days. A phone setting, not the account's (store/notificationPrefs).
+ */
+function NotificationsSection() {
+  const enabled = useNotificationPrefs((s) => s.enabled);
+  const hour = useNotificationPrefs((s) => s.hour);
+  const minute = useNotificationPrefs((s) => s.minute);
+  const permission = useNotificationPrefs((s) => s.permission);
+  const [asking, setAsking] = useState(false);
+  const [preview, setPreview] = useState<PlannedIdea | null>(null);
+  const [timeOpen, setTimeOpen] = useState(false);
+  const time = formatIdeaTime(hour, minute);
+  // On, but switched off for Sipply in iOS: nothing can arrive, and the row says why.
+  const blocked = enabled && permission !== null && permission !== 'granted';
+
+  // iOS's answer can change in iOS Settings while Sipply is away: read it whenever Settings shows.
+  useFocusEffect(
+    useCallback(() => {
+      void notificationsStatus();
+    }, []),
+  );
+
+  const toggle = useCallback(async () => {
+    const prefs = useNotificationPrefs.getState();
+    if (prefs.enabled) {
+      haptic.select();
+      prefs.setEnabled(false);
+      // Off cancels every pending idea in the replan; history stays.
+      void rescheduleDailyIdeas('off');
+      announce('Daily ideas off');
+      return;
+    }
+    const status = await notificationsStatus();
+    if (status === 'granted') {
+      haptic.select();
+      prefs.setEnabled(true);
+      void rescheduleDailyIdeas('on');
+      announce(`Daily ideas on, at ${formatIdeaTime(prefs.hour, prefs.minute)}`);
+    } else if (status === 'denied') {
+      Alert.alert('Notifications are off for Sipply', `Turn them on in ${OS_SETTINGS}, then come back here.`, [
+        { text: 'Not now', style: 'cancel' },
+        { text: 'Open Settings', onPress: () => void Linking.openSettings().catch(() => {}) },
+      ]);
+    } else {
+      // The example, if the plan is ready in time; the ask never waits long on it.
+      setPreview(await previewIdea());
+      setAsking(true);
+    }
+  }, []);
+
+  const saveTime = useCallback((h: number, m: number) => {
+    setTimeOpen(false);
+    const prefs = useNotificationPrefs.getState();
+    if (h === prefs.hour && m === prefs.minute) return;
+    prefs.setTime(h, m);
+    void rescheduleDailyIdeas('time');
+    announce(`Daily ideas at ${formatIdeaTime(h, m)}`);
+  }, []);
+
+  return (
+    <>
+      <Section title="Notifications">
+        {/*
+          ListRow is always a button to VoiceOver, so the row is wrapped in
+          one switch element: "Daily ideas, on". The wrapper is the only
+          element VoiceOver sees; its activation runs the same toggle.
+        */}
+        <View
+          accessible
+          accessibilityRole="switch"
+          accessibilityLabel="Daily ideas"
+          accessibilityState={{ checked: enabled }}
+          accessibilityHint={blocked ? `Off in ${OS_SETTINGS}` : 'One notification a day'}
+          onAccessibilityTap={() => void toggle()}>
+          <ListRow
+            title="Daily ideas"
+            subtitle={
+              blocked
+                ? `Off in ${OS_SETTINGS}`
+                : enabled
+                  ? 'One a day from Sipply'
+                  : 'One idea a day, at a time you choose'
+            }
+            trailing={{ node: <Box on={enabled} /> }}
+            onPress={() => void toggle()}
+          />
+        </View>
+        {enabled ? (
+          <ListRow
+            title="Time"
+            trailing={{
+              node: (
+                <View style={styles.timeTrailing}>
+                  <Text style={styles.timeText}>{time}</Text>
+                  <Icon name="chevronRight" size={18} color={colors.textFaint} />
+                </View>
+              ),
+            }}
+            onPress={() => setTimeOpen(true)}
+            accessibilityLabel={`Time, ${time}`}
+            accessibilityHint="Changes when your daily idea comes"
+          />
+        ) : null}
+      </Section>
+      <IdeasOptIn
+        visible={asking}
+        preview={preview}
+        permission={permission}
+        onAllow={async () => {
+          await allowDailyIdeas(false);
+          setAsking(false);
+        }}
+        onNotNow={() => {
+          declineDailyIdeas(false);
+          setAsking(false);
+        }}
+      />
+      <TimeSheet
+        visible={timeOpen}
+        hour={hour}
+        minute={minute}
+        onDone={saveTime}
+        onClose={() => setTimeOpen(false)}
+      />
+    </>
+  );
+}
+
 /**
  * You, at the top: your face, your name and handle, in a group of one
  * that opens Edit profile. The Dex tally and rank it carried in v3 live on
@@ -457,6 +618,9 @@ const styles = StyleSheet.create({
   content: { paddingHorizontal: layout.gutter, paddingTop: space.sm },
 
   identity: { marginBottom: space.sm },
+  // The Time row's "6:00 PM ›": ListRow's own trailing text and chevron, side by side.
+  timeTrailing: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
+  timeText: { ...textRole.small, color: colors.textMuted },
   // 24 above each heading (layout.group), 8 between it and its group.
   sectionHeader: { marginTop: layout.group, marginBottom: space.sm },
 
