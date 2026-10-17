@@ -1286,8 +1286,9 @@ export default function DexScreen() {
         right={
           <TopBarCount
             // The caught figure in the accent (v4.4), the "/ 2,089" muted as before.
-            figure={formatCount(scopeCaught)}
-            text={` / ${formatCount(scopeTotal)}`}
+            // A zero stays muted: a red 0 on a new account reads as an error, not a catch.
+            figure={scopeCaught > 0 ? formatCount(scopeCaught) : undefined}
+            text={scopeCaught > 0 ? ` / ${formatCount(scopeTotal)}` : `0 / ${formatCount(scopeTotal)}`}
             onPress={() => router.push('/stats')}
             accessibilityLabel={`${formatCount(scopeCaught)} of ${formatCount(scopeTotal)} ${scopeWords}`}
             accessibilityHint="Opens Dex progress"

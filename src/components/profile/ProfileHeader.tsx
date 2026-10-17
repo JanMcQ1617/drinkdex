@@ -197,7 +197,8 @@ export function ProfileHeader({
           accessibilityHint="Opens Dex progress"
           style={({ pressed }) => [styles.line, styles.dexLine, pressed && styles.dimmed]}>
           <Text style={[textRole.small, styles.muted, styles.dexText]}>
-            <Text style={styles.dexFigure}>{formatCount(actions.dexCount)}</Text>
+            {/* The accent only once there is something caught: a red 0 reads as an error. */}
+            <Text style={actions.dexCount > 0 ? styles.dexFigure : undefined}>{formatCount(actions.dexCount)}</Text>
             {dexWords(actions.dexCount)}
           </Text>
           <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
