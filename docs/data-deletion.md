@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 13 October 2026**
+**Last updated: 16 October 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -25,6 +25,8 @@ From our servers:
 - your profile and profile photo, every post and every photo you uploaded,
   your likes, your saved posts, your follows in both directions, and your
   blocks
+- tags on your posts, and tags of you on other people's posts, with the
+  notes that stop someone being tagged again on a post they left
 - the drinks you added and the photos you sent with them
 - your taste answers and the drinks you saved
 - your collections, and the links to any you shared
@@ -49,6 +51,15 @@ From the phone you delete from:
 Your Facebook friends list was never on our servers to begin with. It is
 matched each time you connect or check it and never kept, and the
 [Privacy Policy](privacy) explains how.
+
+Daily ideas, if you turned them on, were never on our servers either:
+your phone schedules them, and none come while you are signed out, so
+deleting your account stops them. The choice stays on the phone, so they
+start again if you sign in to another account there. To turn them off for
+good, untick them in **Profile → Settings → Notifications** before you
+delete the account, or at any time in your iPhone's **Settings →
+Notifications → Sipply**. Deleting Sipply from your phone removes them
+too.
 
 A few things outlast the account. A report someone filed about you, or
 about a post of yours, keeps its own copy of what it was about, your

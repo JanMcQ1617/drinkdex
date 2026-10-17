@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 13 October 2026**
+**Last updated: 16 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -168,6 +168,21 @@ link off at once, and sharing again makes a new link, so the old one never
 works again. Someone who saved a copy of your shared collection before you
 stopped sharing keeps their copy. Collections are kept with your account.
 
+**Tags.** When you post, or later on a post of yours, you can tag up to
+10 people you follow who were with you, never yourself and never anyone
+you have blocked or who has blocked you. A tag holds only who is tagged
+on which post, and when. Anyone who can see the post can see who is
+tagged in it, except that nobody is shown to someone they have blocked or
+who has blocked them. Each person you tag sees the post in their
+Activity. You can remove anyone you tagged. Someone you tag can remove
+themselves at any time, and you are not told; you cannot tag them on that
+post again. To hold to that, Sipply keeps a note of the post, the person
+and when, which nobody can see in the app, the person included. The same
+note is kept when someone you tagged blocks you. Blocking someone, either
+way, removes the tags between you, and unblocking does not bring them
+back. Tags, and those notes, are kept with the post, and go when the post
+or either account is deleted.
+
 **Invite links.** When you share an invite, Sipply creates a random link
 that stops working after 30 days. Anyone who accepts it in that time
 follows you, and you follow them back, unless one of you has blocked the
@@ -236,8 +251,9 @@ the hour it no longer counts, and the next check anyone makes deletes it.
 never on our servers, so the app works without a connection. The photos you
 take are kept on your phone too; a photo is uploaded only when you share it
 as a post, make it your profile photo or send it with a drink you add.
-Which of today's posts, and which likes and new followers, you have already
-seen is remembered on the phone only, so nobody is told that you looked.
+Which of today's posts, and which likes, new followers and tags, you have
+already seen is remembered on the phone only, so nobody is told that you
+looked.
 The phone number and Instagram username you give for finding friends are
 kept on the phone in readable form, because our servers hold only their
 hashes and the app would otherwise ask for them again; **Stop being
@@ -254,6 +270,25 @@ Google, Facebook, phone or email; never the number, the address or a
 password) after you sign out. **Not you? Forget this account** on that
 screen clears it, and deleting the account clears it too.
 
+**Daily ideas (only if you allow them).** If you turn on daily ideas,
+Sipply schedules at most one notification a day on your phone, at the
+time you choose. They are written and scheduled on the phone from what is
+already there, such as your Dex, your tastes, what you have saved and
+whether you have posted yet. To choose them, the phone keeps the time you
+chose, the ideas planned for the next two weeks, the ones it has shown in
+the last 90 days (so that none comes twice within 60 days), and a random
+number made on the phone, so that phones do not all get the same idea on
+the same evening. So that it does not keep asking, it also
+remembers when it offered you daily ideas and what you answered. Nothing
+about them is sent to us or to anyone else, and no push notification
+service is involved: Sipply does not ask for the address a server would
+need to send your phone a notification. They are a setting of the phone,
+not of your account: signing out keeps your choice, but none come while
+you are signed out, and they start again when you sign in. Turn them off in
+**Profile → Settings → Notifications**, or at any time in your iPhone's
+**Settings → Notifications → Sipply**. Deleting Sipply from your phone
+removes them too.
+
 ## What Sipply does not do
 
 - **No analytics, no tracking, no advertising.** The app contains no
@@ -267,7 +302,8 @@ screen clears it, and deleting the account clears it too.
 - **No profiling.** Nothing about you is scored or predicted. Drink
   suggestions are worked out on your phone from the answers you gave and
   the drinks in your Dex and bar, by the same rules for everyone; they
-  rank drinks, not people, and nothing is sent anywhere to make them. The
+  rank drinks, not people, and nothing is sent anywhere to make them.
+  Daily ideas, if you turn them on, are chosen the same way. The
   one automatic check on what you write is a text filter: captions, bios,
   display names, usernames, the drinks you add, tournament names and the
   songs added to posts are checked when you save them, and a collection's
@@ -280,9 +316,10 @@ screen clears it, and deleting the account clears it too.
 **Other Sipply users** can see your profile, your posts, your photos, who
 you follow and who follows you, and which posts you have liked. When you
 like a post, anyone who can see the post can see that you liked it: your
-name can appear in its "Liked by" line and in its list of likes. People you
-have blocked, and people who have blocked you, cannot. Treat anything you
-post as public to everyone signed in.
+name can appear in its "Liked by" line and in its list of likes. If someone
+tags you, anyone who can see their post can see your username on it.
+People you have blocked, and people who have blocked you, cannot see any
+of this. Treat anything you post as public to everyone signed in.
 
 **Anyone you share a collection with** can see what that collection's link
 shows (above), until you stop sharing it. The web page for a link is served
@@ -343,7 +380,9 @@ That is the complete list.
 Open **Profile → Settings** (the gear, top right) **→ Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
-have made, every photo you have uploaded, your likes, your saved posts,
+have made, the tags on your posts and the tags of you on other people's
+posts (with the notes that stop a tag being made again), every photo you
+have uploaded, your likes, your saved posts,
 your collections (any link to one stops working), your taste answers and
 saved drinks, your follows in both directions, your blocks, your invite
 links, the drinks
@@ -419,11 +458,12 @@ correct it, or ask us to delete it. Deletion is built into the app; for
 anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
-service you asked for (your account, your posts and the songs on them,
-the drinks you add, your tastes and the drinks you save, your
+service you asked for (your account, your posts with the songs and tags
+on them, the drinks you add, your tastes and the drinks you save, your
 collections, the tournaments you host or join, and the sign-in and
 friend finding you choose to use) and our legitimate interest in keeping
-the app safe (reports, blocks, the text filter, the matching limits, the
+the app safe (reports, blocks, the notes that stop someone being tagged
+again on a post they left, the text filter, the matching limits, the
 song-search limit and the sign-in screen's limit).
 You may complain to your local data protection authority.
 
