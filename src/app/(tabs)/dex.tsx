@@ -337,7 +337,7 @@ function FilterKey({ on, onPress }: { on: boolean; onPress: () => void }) {
       hitSlop={{ left: space.sm, right: space.sm }}
       accessibilityRole="button"
       accessibilityLabel={on ? 'Filter, on' : 'Filter'}
-      accessibilityHint="Choose flavours, spirits, the kind of drink, caught or not yet"
+      accessibilityHint="Choose flavours, spirits, the kind of drink, logged or not yet"
       style={({ pressed }) => [styles.filterKey, pressed && styles.pressed]}>
       <Icon name="sliders" size={22} color={colors.text} filled={on} />
     </Pressable>
@@ -454,8 +454,8 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
  * The empty grid, which has several causes and gets an answer for each.
  *
  * A search miss repeats the query and clears only the query, so a typo
- * made inside Spirits does not also throw away Spirits. An empty Caught
- * says how things get caught, over the proof of a drink it could be.
+ * made inside Spirits does not also throw away Spirits. An empty Logged
+ * says how things get logged, over the proof of a drink it could be.
  * Anything else is a filter combination with nothing in it, and resets
  * the filters; it names the chips that are on ("Sour and citrusy,
  * Fruity, Cocktails"), so it is plain which ones to loosen.
@@ -543,7 +543,7 @@ function GridEmpty({
     return (
       <EmptyState
         art={<EmptyArt drinkId="ramos-gin-fizz" mode="proof" />}
-        title="Nothing caught yet"
+        title="Nothing logged yet"
         body="Open any drink and post it to add it here."
         action={{ label: 'Show every drink', onPress: onShowAll }}
       />
@@ -659,7 +659,7 @@ export default function DexScreen() {
    * caught; these move only when a drink is caught or let go, which is the
    * only change the grid's filtering and the bar's count care about.
    * Catalogue drinks only (getDrink), so the count here, Dex progress's
-   * and Profile's "38 drinks in your Dex" are the same 38.
+   * and Profile's "38 entries in your Dex" are the same 38.
    */
   const caughtCocktails = useCollection((s) => caughtOf(s.unlocks, 'cocktail'));
   const caughtSpirits = useCollection((s) => caughtOf(s.unlocks, 'spirit'));
@@ -1240,7 +1240,7 @@ export default function DexScreen() {
   /*
    * The bar's quiet count: caught of all, or of what the filters hold
    * ("10 / 535" under Sour and citrusy, Fruity, Cocktails and Not yet;
-   * "12 / 1,190" under Cocktails). Caught or Not yet narrows the tiles,
+   * "12 / 1,190" under Cocktails). Logged or Not yet narrows the tiles,
    * not the fraction: "0 / 2,051" under Not yet would read as a
    * collection lost, so the count ignores that group (lib/dexOrder's
    * facetCounts works it with the other groups only).

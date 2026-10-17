@@ -54,7 +54,7 @@ import { COPY, REELS_ENABLED } from '@/lib/reels';
  *
  * Dex progress (app/stats.tsx) is not a tab. It is a report on the Dex
  * rather than a place visited every day, so it pushes from the Dex's
- * "38 / 2,089" and Profile's "38 drinks in your Dex ›".
+ * "38 / 2,089" and Profile's "38 entries in your Dex ›".
  * Saved is one, in My Bar's old slot (Jan, 13 Oct 2026): the drinks you
  * bookmarked, kept a tap away rather than behind Settings. My Bar is one
  * too, while it is on: what you own and what you can make with it is

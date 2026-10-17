@@ -215,7 +215,7 @@ export const DexCard = React.memo(function DexCard({
       accessibilityRole="button"
       // The spoken number is unpadded: "#0042" is read digit by digit.
       accessibilityLabel={`${drink.name}, number ${drink.dexNumber}, ${
-        collected ? 'caught' : 'not caught yet'
+        collected ? 'logged' : 'not logged yet'
       }`}
       style={[styles.card, { width: cardWidth }]}>
       <View>

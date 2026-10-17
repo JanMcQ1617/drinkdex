@@ -125,7 +125,7 @@ export const DEX_TOP = 38;
 export const DEX_LABEL_GAP = 6;
 export const DEX_ROW_GAP = 14;
 
-/** Result rows: a 72pt print, the name 16 after it, Save to try 112 x 36 at the right, rows 16 apart. */
+/** Result rows: a 72pt print, the name 16 after it, Save 112 x 36 at the right, rows 16 apart. */
 export const RESULTS_GAP = 16;
 export const RESULT_PRINT = 72;
 export const RESULT_TEXT_GAP = 16;

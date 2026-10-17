@@ -226,7 +226,7 @@ function BarScreen() {
     haptic.select();
     const what =
       delta > 0
-        ? `${formatCount(delta)} more ${delta === 1 ? 'drink' : 'drinks'}`
+        ? `${formatCount(delta)} more ${delta === 1 ? 'recipe' : 'recipes'}`
         : delta < 0
           ? `${formatCount(-delta)} fewer`
           : 'No change';

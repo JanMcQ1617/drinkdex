@@ -53,7 +53,7 @@ export function WelcomeStep({ geo, onHaveAccount }: { geo: Geometry; onHaveAccou
         <Text maxFontSizeMultiplier={WORDMARK_CAP} accessibilityRole="header" style={styles.wordmark}>
           Sipply
         </Text>
-        <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>Find the drinks you’ll love.</Text>
+        <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>A field guide to cocktails and spirits.</Text>
         <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.legal}>
           By continuing you agree to the{' '}
           <Text

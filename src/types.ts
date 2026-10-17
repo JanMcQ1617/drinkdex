@@ -186,10 +186,10 @@ export interface Pour {
 /* ------------------------------------------------------------------ */
 /* Tournaments (migration 020)                                         */
 /*                                                                     */
-/* Friends compete to try the most DIFFERENT drinks: each distinct     */
-/* drink a member posts during the window counts once, at most three   */
-/* new ones a day. Standings are computed on the server from posts;     */
-/* nothing here is a count of how much anyone drinks.                  */
+/* A shared log of DIFFERENT Dex entries: each distinct drink a        */
+/* member posts during the window counts once, as one entry, at most   */
+/* three a day. Standings are computed on the server from posts;       */
+/* nothing here is a count of amounts.                                 */
 /* ------------------------------------------------------------------ */
 
 /** 'finished' only once the results are frozen (finalize_tournament). */

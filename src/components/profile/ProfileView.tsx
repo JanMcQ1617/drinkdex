@@ -46,15 +46,15 @@ import type { Post, UserProfile } from '@/types';
 /* v4, less stuff (layout spec 5.5; 50 elements down to 31 at rest).    */
 /* Yours: the handle as the tab root's title with one ••• beside it,    */
 /* the face, name and one line of bio, the counts on one line, ONE key  */
-/* (Edit profile), "38 drinks in your Dex ›", then your posts as a grid */
-/* of plain square prints. Theirs (pushed): back in the bar, the same   */
-/* body with Follow in the key's slot and their ••• beside it.          */
+/* (Edit profile), "38 entries in your Dex ›", then your posts as a     */
+/* grid of plain square prints. Theirs (pushed): back in the bar, the   */
+/* same body with Follow in the key's slot and their ••• beside it.     */
 /*                                                                      */
 /* What went, and where (nothing is lost, it just isn't on screen):     */
 /*   + in the bar           the + tab                                   */
 /*   the gear               ••• › Settings                              */
 /*   Share profile          ••• › Share profile                         */
-/*   the Dex panel, ruler,  "38 drinks in your Dex ›" opens Dex         */
+/*   the Dex panel, ruler,  "38 entries in your Dex ›" opens Dex        */
 /*   rank and ladder        progress (/stats), the Dex tab's count's    */
 /*                          page, with the same figure                  */
 /*   Posts | Dex strip      the grid is the posts; your caught drinks   */
@@ -142,7 +142,7 @@ function sectionRows<T>(
 
 /**
  * Every catalogue drink in your collection: the figure the Dex tab's count
- * and Dex progress show, so "38 drinks in your Dex" opens a page that says
+ * and Dex progress show, so "38 entries in your Dex" opens a page that says
  * 38 too. catalogueCount skips an id this build no longer has.
  *
  * The count is the selector, not the map: a pour's photo or note changing

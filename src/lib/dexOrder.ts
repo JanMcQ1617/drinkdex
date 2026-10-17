@@ -70,11 +70,11 @@ export const SPIRIT_WORDS: Readonly<Record<Spirit, string>> = {
 };
 
 export type KindFilter = DrinkCategory | 'all';
-/** `unlocked` is Caught and `locked` Not yet, as the Dex's filters have always said it. */
+/** `unlocked` is Logged and `locked` Not yet (Caught through build 25: game language for a drink you had). */
 export type StatusFilter = 'all' | 'unlocked' | 'locked';
 
 export const KIND_WORDS: Readonly<Record<DrinkCategory, string>> = { cocktail: 'Cocktails', spirit: 'Spirits' };
-export const STATUS_WORDS: Readonly<Record<Exclude<StatusFilter, 'all'>, string>> = { unlocked: 'Caught', locked: 'Not yet' };
+export const STATUS_WORDS: Readonly<Record<Exclude<StatusFilter, 'all'>, string>> = { unlocked: 'Logged', locked: 'Not yet' };
 
 /**
  * What the chips hold (spec §1.3): OR inside a group, AND across groups.
@@ -285,9 +285,9 @@ export interface FacetCounts {
   spirits: Record<Spirit, number>;
   kind: Record<DrinkCategory, number>;
   /**
-   * Caught and Not yet with the other groups as they are. Their sum is
+   * Logged and Not yet with the other groups as they are. Their sum is
    * the bar's "total" and `unlocked` its "caught" (§2.4: the bar's count
-   * ignores Caught / Not yet).
+   * ignores Logged / Not yet).
    */
   status: Record<Exclude<StatusFilter, 'all'>, number>;
   /** What the grid holds now: "Show 525 drinks". */

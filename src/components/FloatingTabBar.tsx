@@ -147,7 +147,7 @@ function CentreAction({ onPress }: { onPress: () => void }) {
           onPress={onPress}
           accessibilityRole="button"
           accessibilityLabel="Post a drink"
-          accessibilityHint="Take a photo and pick what you drank"
+          accessibilityHint="Take a photo and pick the drink you had"
           hitSlop={{ top: 3, bottom: 3 }}
           style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
           <Icon name="plus" size={22} color={colors.onInk} filled />

@@ -26,8 +26,11 @@ import type { Drink, UnlockRecord } from '@/types';
 /* ==================================================================== */
 /* Celebrations                                                         */
 /*                                                                      */
-/* The moment a drink joins your Dex (the catch), and the moment you    */
-/* change rank.                                                         */
+/* The moment a drink joins your Dex (the catch), and the moment the    */
+/* Dex reaches a new title (lib/milestones). Neither is worded as a     */
+/* rank, a score or a prize: the title card says what the Dex now       */
+/* holds, and its mark is the Dex glyph, not a trophy (App Review       */
+/* 1.4.3).                                                              */
 /*                                                                      */
 /* THE CATCH (white spec 5.21, Daylight's one signature moment). The    */
 /* card opens on the drink's grey proof, the picture the Dex showed     */
@@ -170,10 +173,10 @@ let lastAnnounced = 0;
 
 function announcement(c: Celebration, collected: number): string {
   if (c.kind === 'milestone') {
-    return `New rank: ${c.milestone.title}. ${formatCount(c.collected)} of ${formatCount(TOTAL)} in your Dex.`;
+    return `${c.milestone.title}. Your Dex now holds ${formatCount(c.collected)} of ${formatCount(TOTAL)} entries.`;
   }
   const name = getDrink(c.drinkId)?.name ?? 'New drink';
-  return `${name} caught. ${formatCount(collected)} of ${formatCount(TOTAL)} in your Dex.`;
+  return `${name} logged. ${formatCount(collected)} of ${formatCount(TOTAL)} in your Dex.`;
 }
 
 export function CelebrationOverlay() {
@@ -226,20 +229,20 @@ export function CelebrationOverlay() {
     card = (
       <View style={styles.body}>
         {/*
-          The trophy drawn bare, in ink: a glyph does not need a disc to be
-          seen. No "New rank" kicker over it (layout spec, no kickers): the
-          line under the title says it.
+          The Dex glyph drawn bare, in ink: a glyph does not need a disc to
+          be seen. No kicker over it (layout spec, no kickers): the line
+          under the title says it.
         */}
         <View style={styles.rankMark}>
-          <Icon name="trophy" size={48} color={colors.text} />
+          <Icon name="dex" size={48} color={colors.text} />
         </View>
 
-        {/* A rank is a reading of the collection, not a drink, so it is Inter (Playfair is for drink names only). */}
+        {/* A title is a reading of the collection, not a drink, so it is Inter (Playfair is for drink names only). */}
         <Text style={[textRole.title, styles.ink, styles.centred]} accessibilityRole="header">
           {current.milestone.title}
         </Text>
         <Text style={[textRole.small, styles.muted, styles.progress, tabular]}>
-          A new rank, at {formatCount(current.collected)} of {formatCount(TOTAL)} in your Dex
+          Your Dex now holds {formatCount(current.collected)} of {formatCount(TOTAL)} entries
         </Text>
 
         <Button label="Done" onPress={onDismiss} block style={styles.cta} />

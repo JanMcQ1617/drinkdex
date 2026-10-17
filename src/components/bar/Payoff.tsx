@@ -124,14 +124,14 @@ export function NextLine({
   }
   if (!best) return null;
   const { ingredient: i, matches } = best;
-  const more = `${formatCount(matches.length)} more ${matches.length === 1 ? 'drink' : 'drinks'}`;
+  const more = `${formatCount(matches.length)} more ${matches.length === 1 ? 'recipe' : 'recipes'}`;
   return (
     <View style={styles.line}>
       <Pressable
         onPress={onOpen}
         accessibilityRole="button"
         accessibilityLabel={`Add ${inSentence(i)}, ${more}`}
-        accessibilityHint="Opens Next bottle, the ten bottles that would pour the most"
+        accessibilityHint="Opens Next bottle, the ten bottles that open up the most recipes"
         style={({ pressed }) => [styles.words, styles.wrap, pressed && styles.pressed]}>
         <Text style={[textRole.bodyMedium, styles.ink, styles.shrink]}>Add {inSentence(i)}</Text>
         <Icon name="arrowRight" size={16} color={colors.textMuted} />

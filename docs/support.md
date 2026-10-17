@@ -220,26 +220,27 @@ but no longer follows anyone.
 **How do tournaments work?** Open Profile → **"..."** (top right) →
 **Tournaments**, then tap **Host a tournament**: give it a name, choose
 when it starts and how long it runs, add a goal if you want one, and invite
-people you follow. With a goal, whoever reaches it first wins and the
-tournament ends there; otherwise, or if nobody reaches it, whoever has the
-most different drinks at the end wins, and a tie goes to whoever got there
-first. The rules are the same in every tournament, and every tournament
-screen shows them: "Each different drink you post counts once, up to 3 new
-drinks a day. It is about trying new things, never how much: a taste
-counts. No prizes, and Apple is not a sponsor. Please drink responsibly."
-The host can end a running tournament early from its **"..."** menu, and
-whoever is ahead then wins, or delete one that has not finished, and it
-disappears for everyone in it. Anyone who has joined can leave from the
-same menu before it finishes, but cannot rejoin, and an invitation you
-decline cannot be sent to you again.
+people you follow. A tournament is a shared log: each different drink
+someone posts while it runs adds one entry. With a goal, whoever reaches
+that many entries first wins and the tournament ends there; otherwise, or
+if nobody reaches it, whoever has the most entries at the end wins, and a
+tie goes to whoever got there first. The rules are the same in every
+tournament, and every tournament screen shows them: "Each different drink
+you post while it runs adds one entry, up to 3 a day. Entries are
+counted, never amounts. No prizes, and Apple is not a sponsor. Please
+drink responsibly." The host can end a running tournament early from its
+**"..."** menu, and whoever has the most entries then wins, or delete one
+that has not finished, and it disappears for everyone in it. Anyone who
+has joined can leave from the same menu before it finishes, but cannot
+rejoin, and an invitation you decline cannot be sent to you again.
 
 **Why didn't a drink count?** Usually one of these:
 
 - **Each drink counts once.** Posting it again, or adding another photo to
   it, adds nothing.
-- **Three new drinks a day.** Only the first three new drinks you post each
-  day count, and a day runs midnight to midnight in the host's time zone. A
-  drink first posted after that day's three does not count in that
+- **Three entries a day.** Only the first three different drinks you post
+  each day count, and a day runs midnight to midnight in the host's time
+  zone. A drink first posted after that day's three does not count in that
   tournament later either, even if you post it again on another day.
 - **Only during the dates.** A drink counts when you post it between the
   start and the end. One you had before the tournament counts if you post

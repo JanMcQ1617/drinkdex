@@ -17,13 +17,13 @@ import type { DrinkCategory, UnlockRecord } from '@/types';
 /*                                                                      */
 /* Everything the less-stuff layout took off the Dex and Profile (spec  */
 /* 5.2 and 5.5), one tap from the Dex's "38 / 2,089" and Profile's "38  */
-/* drinks in your Dex ›", top to bottom:                                */
+/* entries in your Dex ›", top to bottom:                               */
 /*                                                                      */
-/*   the Dex panel   the figure, "of 2,089 in the Dex · 1.8%", the rank */
-/*                   and the ladder ruler (Ruler.tsx), then "171 more   */
-/*                   to Barfly in Training, at 209"                     */
-/*   latest catch    its print and name; opens the drink                */
-/*   See your 38     the Dex, filtered to Caught                        */
+/*   the Dex panel   the figure, "of 2,089 in the Dex · 1.8%", the      */
+/*                   title and the ladder ruler (Ruler.tsx), then       */
+/*                   "Next: Cataloguer, at 209 entries"                 */
+/*   latest entry    its print and name; opens the drink                */
+/*   See your 38     the Dex, filtered to Logged                        */
 /*   by kind         cocktails and spirits, each counted with its bar   */
 /*   added by you    the drinks you added yourself, which have no Dex   */
 /*                   number and so no place in the grid                 */
@@ -66,7 +66,7 @@ export function CollectionStats({
 }: {
   onOpenDrink: (id: string) => void;
   onOpenCustom: (id: string) => void;
-  /** The Dex, filtered to Caught. */
+  /** The Dex, filtered to Logged. */
   onSeeCaught: () => void;
   /** An empty collection's way in: the + window. */
   onPost: () => void;
@@ -108,7 +108,7 @@ export function CollectionStats({
       {latest ? (
         <View style={styles.section}>
           <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.head]}>
-            Latest catch
+            Latest entry
           </Text>
           <LatestCatch drink={latest.drink} record={latest.record} onOpen={onOpenDrink} />
           <Button
@@ -116,8 +116,8 @@ export function CollectionStats({
             variant="secondary"
             block
             onPress={onSeeCaught}
-            accessibilityLabel={`See the ${formatCount(unlockedCount)} drinks in your Dex`}
-            accessibilityHint="Opens the Dex showing only what you have caught"
+            accessibilityLabel={`See the ${formatCount(unlockedCount)} entries in your Dex`}
+            accessibilityHint="Opens the Dex showing only what you have logged"
             style={styles.key}
           />
         </View>

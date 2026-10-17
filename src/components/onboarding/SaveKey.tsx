@@ -18,16 +18,17 @@ import { SAVE_H, SAVE_W } from './metrics';
 import { FadeOut, T, useFadingPrevious } from './motion';
 
 /* ==================================================================== */
-/* Save to try                                                          */
+/* Save                                                                 */
 /*                                                                      */
 /* A pick's key (specs/v4.1-changes.md 1.4): it keeps the drink in the  */
 /* saved drinks (store/taste `saved`, the Saved tab), and never puts it */
-/* in the Dex, which holds only drinks you have had. "Save to try" here */
-/* because a first pick is one you have not had; the drink page's key   */
-/* is the plain bookmark. 112 x 36 drawn, 44 to the finger; the width   */
-/* is fixed so nothing moves when its word changes.                     */
+/* in the Dex, which holds only drinks you have had. Plain "Save", as   */
+/* the drink page's bookmark is: it said "Save to try" through build    */
+/* 25, which turned a pick into something to go and have (App Review    */
+/* 1.4.3). 112 x 36 drawn, 44 to the finger; the width is fixed so      */
+/* nothing moves when its word changes.                                 */
 /*                                                                      */
-/*   off  "Save to try"  wash, ink label (18.16:1)                      */
+/*   off  "Save"         wash, ink label (18.16:1)                      */
 /*   on   "Saved"        ink, onInk label (19.80:1)                     */
 /*                                                                      */
 /* Its word changes as well as its fill, so the state never rests on    */
@@ -48,7 +49,7 @@ function Face({ on, pressed }: { on: boolean; pressed: boolean }) {
         adjustsFontSizeToFit
         minimumFontScale={0.8}
         style={[styles.label, { color: on ? colors.onInk : colors.text }]}>
-        {on ? 'Saved' : 'Save to try'}
+        {on ? 'Saved' : 'Save'}
       </Text>
     </View>
   );
@@ -114,7 +115,7 @@ export function SaveKey({ id, name }: { id: string; name: string }) {
         onAccessibilityAction={canCollect ? onSaveToCollectionAction(hold) : undefined}
         hitSlop={{ top: SLOP, bottom: SLOP }}
         accessibilityRole="button"
-        accessibilityLabel={saved ? `Saved ${name} to try` : `Save ${name} to try`}
+        accessibilityLabel={saved ? `Saved ${name}` : `Save ${name}`}
         accessibilityState={{ selected: saved }}
         style={styles.key}>
         {({ pressed }) => (

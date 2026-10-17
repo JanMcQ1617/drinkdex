@@ -10,7 +10,7 @@ import { Shell } from './Shell';
 /* ==================================================================== */
 /* The guide speaks (mode A; Imprint 02 and 23)                         */
 /*                                                                      */
-/*   hello   "Welcome! Let's find your drinks."  Continue, enabled      */
+/*   hello   "Welcome! Let's set up your field guide."  Continue        */
 /*   allset  "All set! Let's keep your picks."   the seal stamps (m21)   */
 /*   stop    the under-age screen's body (UnderAgeStop)                 */
 /* ==================================================================== */

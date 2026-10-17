@@ -14,7 +14,7 @@ import { Shell } from './Shell';
 /* ==================================================================== */
 /* Your first picks (mode B; results.png, t4-settle.png)                */
 /*                                                                      */
-/* Six PickRows, photographed first, each with Save to try. The sub     */
+/* Six PickRows, photographed first, each with Save. The sub            */
 /* line counts what the bar makes now, and only when it makes one.      */
 /*                                                                      */
 /* THE REVEAL (m20). Arriving from the pour, this screen is already the */

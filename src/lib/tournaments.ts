@@ -15,11 +15,12 @@ import type {
 /* ==================================================================== */
 /* Tournaments (spec v3.1 §11, migration 020)                           */
 /*                                                                      */
-/* Friends compete to try the most DIFFERENT drinks. Each different      */
-/* drink a member posts during the tournament counts once, at most three */
-/* new ones a day; how much anyone drinks is never counted (App Review   */
-/* 1.4.3). The server owns every rule and every figure: this file calls  */
-/* its functions and maps their errors for the screens.                  */
+/* A shared log of who posts the most DIFFERENT Dex entries between two */
+/* dates. Each different drink a member posts during the tournament     */
+/* counts once, as one entry, at most three a day; amounts are never    */
+/* counted (App Review 1.4.3). The server owns every rule and every     */
+/* figure: this file calls its functions and maps their errors for the  */
+/* screens.                                                             */
 /*                                                                      */
 /* No flag. When migration 020 is missing the functions are too, and     */
 /* fetchMyTournaments says so with null, which switches the feature off. */
@@ -32,7 +33,7 @@ export const TOURNAMENT_LIMITS = {
   /** Host included, so a host can invite 49. */
   maxMembers: 50,
   targetChoices: [5, 10, 20],
-  /** New drinks that count per member per day (private.tournament_daily_cap()). */
+  /** Entries that count per member per day (private.tournament_daily_cap()). */
   dailyCap: 3,
 } as const;
 

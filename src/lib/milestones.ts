@@ -1,5 +1,5 @@
 /* ==================================================================== */
-/* The rank ladder                                                      */
+/* The title ladder                                                     */
 /*                                                                      */
 /* Lives here rather than in CollectionStats, which is where it grew    */
 /* up. It is data, and it is now read by two things that have no        */
@@ -21,14 +21,22 @@ export interface Milestone {
  * everywhere else in the app, and "shelf" already means something exact on
  * My Bar — the bottles you own — so borrowing it for the collection made
  * one word name two things one tap apart.
+ *
+ * Titles name someone keeping a field guide, never someone drinking (App
+ * Review 1.4.3): note taker up to keeper, each a reading of the share of
+ * the catalogue logged. Through build 25 the rungs named a drinking career
+ * instead. Only the words changed: the percentages are the same, and the
+ * saved bestRung is an index, so nothing stored moves. Keep the six unique
+ * and never "Not started": milestoneCrossed() below and store/collection's
+ * rungAt() find a rung by its title.
  */
 export const MILESTONES: Milestone[] = [
-  { pct: 0, title: 'First Sips' },
-  { pct: 10, title: 'Barfly in Training' },
-  { pct: 25, title: 'The Regular' },
-  { pct: 50, title: 'Connoisseur' },
-  { pct: 75, title: 'Master of the Dex' },
-  { pct: 100, title: 'Living Legend' },
+  { pct: 0, title: 'Note taker' },
+  { pct: 10, title: 'Cataloguer' },
+  { pct: 25, title: 'Archivist' },
+  { pct: 50, title: 'Scholar' },
+  { pct: 75, title: 'Curator' },
+  { pct: 100, title: 'Keeper of the Dex' },
 ];
 
 export function rankTitle(unlocked: number, total: number): string {
@@ -50,9 +58,9 @@ export function rankTitle(unlocked: number, total: number): string {
  * rung without any integer landing exactly on it — asking "did the rank
  * change" is the only phrasing that cannot miss one.
  *
- * The first rung is never announced. Every first pour crosses it, and the
- * "Collected" card for that pour already carries the same count, so a
- * second card saying "First Sips" was two taps to get past one piece of
+ * The first rung is never announced. Every first entry crosses it, and the
+ * "Collected" card for that entry already carries the same count, so a
+ * second card saying "Note taker" was two taps to get past one piece of
  * news. Stats still lists it as reached.
  */
 export function milestoneCrossed(

@@ -321,7 +321,7 @@ function whyLine(r, a) {
   if (spirit && f) return `Because you like ${spirit} and ${f}`;
   if (spirit) return `Because you like ${spirit}`;
   if (f) return `Because you like ${f}`;
-  return a.goal === 'discover' ? 'One to try first' : 'A classic to start with';
+  return a.goal === 'discover' ? 'A good place to start' : 'A classic to start with';
 }
 
 export const PICKS = 6;

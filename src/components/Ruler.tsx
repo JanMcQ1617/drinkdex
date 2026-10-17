@@ -14,10 +14,10 @@ import { MILESTONES, rankTitle } from '@/lib/milestones';
 /* ticks every 5% with longer ones every 25%. One small static SVG; the */
 /* figures under it are RN Text placed by percent, so they take Dynamic */
 /* Type. It lives on Dex progress (app/stats.tsx), reached from the     */
-/* Dex's "38 / 2,089" and Profile's "38 drinks in your Dex ›": the      */
+/* Dex's "38 / 2,089" and Profile's "38 entries in your Dex ›": the     */
 /* less-stuff layout took it off both tab screens.                      */
 /*                                                                      */
-/* `ladder` (the Dex panel) labels the rank rungs instead of the        */
+/* `ladder` (the Dex panel) labels the title rungs instead of the       */
 /* hundreds, with a notch over the baseline at each rung.               */
 /* ==================================================================== */
 
@@ -145,9 +145,13 @@ export const Ruler = React.memo(function Ruler({
 
 /**
  * The Dex panel (white spec 5.14, Brass's walnut plaque made flat): a wash
- * panel with the figure, "of 2,089 in the Dex · 1.8%", the rank word and
- * the ladder ruler, then "171 more to Barfly in Training, at 209" under it.
- * Dex progress's head. One VoiceOver element for the figure and the rank.
+ * panel with the figure, "of 2,089 in the Dex · 1.8%", the title word and
+ * the ladder ruler, then "Next: Cataloguer, at 209 entries" under it.
+ * Dex progress's head. One VoiceOver element for the figure and the title.
+ *
+ * The line under it names the next rung and where it starts, never how
+ * many more it takes: a countdown is a target to post toward (App Review
+ * 1.4.3). Which rung is next is worked out exactly as before.
  */
 export const DexPanel = React.memo(function DexPanel({
   count,
@@ -168,7 +172,7 @@ export const DexPanel = React.memo(function DexPanel({
       <View style={styles.panel}>
         <View
           accessible
-          accessibilityLabel={`${formatCount(count)} ${caption}. Rank: ${rank}`}
+          accessibilityLabel={`${formatCount(count)} ${caption}. Dex title: ${rank}`}
           style={styles.head}>
           <View style={styles.figureCol}>
             <Text maxFontSizeMultiplier={FIGURE_CAP} style={[textRole.heroFigure, styles.ink]}>
@@ -186,8 +190,7 @@ export const DexPanel = React.memo(function DexPanel({
       </View>
       {next ? (
         <Text style={[textRole.small, styles.next]}>
-          <Text style={styles.strong}>{formatCount(next.count - count)}</Text> more to{' '}
-          <Text style={styles.strong}>{next.title}</Text>, at {formatCount(next.count)}
+          Next: <Text style={styles.strong}>{next.title}</Text>, at {formatCount(next.count)} entries
         </Text>
       ) : null}
     </View>

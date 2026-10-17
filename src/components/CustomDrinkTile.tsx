@@ -34,7 +34,7 @@ const CAP = 1.3;
  * tiles to the top, so one long name makes its own tile taller.
  *
  * "Collected" is said once it is in your Dex, whether or not its photo
- * survived: the Dex's Caught filter counts the same thing. Without
+ * survived: the Dex's Logged filter counts the same thing. Without
  * `collected`, a pour photo is taken as the sign of one.
  */
 export function CustomDrinkTile({

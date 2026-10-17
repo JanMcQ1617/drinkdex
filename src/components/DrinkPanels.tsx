@@ -585,7 +585,7 @@ export function ServeSection({
   ].filter((r) => r.detail && r.detail.trim());
   if (rows.length === 0) return null;
   return (
-    <Section title="The pour">
+    <Section title="Serving">
       {rows.map((r) => (
         <Detail key={r.label} label={r.label} detail={sentence(r.detail.trim())} />
       ))}
@@ -652,7 +652,7 @@ export function OriginStory({ drink }: { drink: Pick<Drink, 'funFact' | 'originS
 }
 
 /* ==================================================================== */
-/* Friends who caught it                                                */
+/* Friends who logged it                                                */
 /* ==================================================================== */
 
 /** Rows shown before "and N more". */
@@ -697,13 +697,13 @@ export function FriendsWhoCaught({ drinkId, onOpenPost }: { drinkId: string; onO
   const more = friends.length - shown.length;
 
   return (
-    <Section title="Friends who caught it">
+    <Section title="Friends who logged it">
       {shown.map(({ post, person }) => (
         <Pressable
           key={person.id}
           onPress={() => onOpenPost(post.id)}
           accessibilityRole="button"
-          accessibilityLabel={`${person.username} caught it`}
+          accessibilityLabel={`${person.username} logged it`}
           accessibilityHint="Opens their post"
           style={({ pressed }) => [styles.friendRow, pressed && styles.pressed]}>
           <Avatar
@@ -730,15 +730,16 @@ export function FriendsWhoCaught({ drinkId, onOpenPost }: { drinkId: string; onO
 /* Pinned bar                                                           */
 /* ==================================================================== */
 
-/** Past this many characters "Post another <name>" becomes "Post it again". */
+/** Past this many characters "Post <name> again" becomes "Post it again". */
 const BAR_NAME_MAX = 22;
 const BAR_CAP = 1.3;
 
 /**
  * The page's one action, pinned to the foot on the page's white: "Post
- * this drink" until it is in your Dex, then "Post another <name>" ("Post
- * it again" for a name too long to sit in a key). The ink key. Spoken
- * "Post <name>" / "Post another <name>", the full name either way.
+ * this drink" until it is in your Dex, then "Post <name> again" ("Post it
+ * again" for a name too long to sit in a key). The ink key. Spoken "Post
+ * <name>" / "Post <name> again", the full name either way. Never "Post
+ * another <name>", which reads as having another (App Review 1.4.3).
  *
  * The 1pt rule over it shows only while the page has more under the bar
  * (`ruled`, the route's scroll signal), as a top bar's rule does: at the
@@ -762,7 +763,7 @@ export function PinnedPostBar({
   onHeight?: (height: number) => void;
 }) {
   const insets = useSafeAreaInsets();
-  const label = collected ? (name.length > BAR_NAME_MAX ? 'Post it again' : `Post another ${name}`) : 'Post this drink';
+  const label = collected ? (name.length > BAR_NAME_MAX ? 'Post it again' : `Post ${name} again`) : 'Post this drink';
   return (
     <View
       onLayout={(e) => onHeight?.(Math.ceil(e.nativeEvent.layout.height))}
@@ -773,7 +774,7 @@ export function PinnedPostBar({
         icon="plus"
         block
         onPress={onPress}
-        accessibilityLabel={collected ? `Post another ${name}` : `Post ${name}`}
+        accessibilityLabel={collected ? `Post ${name} again` : `Post ${name}`}
         maxFontSizeMultiplier={BAR_CAP}
       />
     </View>
@@ -905,7 +906,7 @@ const styles = StyleSheet.create({
   stepNum: { width: 28 },
   stepText: { flex: 1 },
 
-  /* Friends who caught it */
+  /* Friends who logged it */
   friendRow: { minHeight: layout.hit, flexDirection: 'row', alignItems: 'center', gap: space.md },
   friendName: { flex: 1 },
 

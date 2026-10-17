@@ -432,7 +432,7 @@ export async function pickFromCamera(): Promise<PickResult> {
  * case is nearly always caught before this, next to the caption field, by
  * the same check addPost runs first; this covers the server's list
  * catching what the client's missed. Every retry goes through the drink
- * page's pinned button ("Post another <name>", or "Post it again" for a
+ * page's pinned button ("Post <name> again", or "Post it again" for a
  * long name), whose sheet's "Save & post" adds to the post if it went up
  * and creates it if it did not. The notices say "post it again" rather
  * than either label, so they are right for both.

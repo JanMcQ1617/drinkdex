@@ -338,7 +338,7 @@ export default function PostDrinkScreen() {
 
   /*
    * An empty search's rows: the newest catches in this Dex, newest first,
-   * catalogue drinks only (lib/tastes), so a second round of something is
+   * catalogue drinks only (lib/tastes), so posting something again is
    * one tap instead of typing its name again.
    */
   const recent = useMemo<Result[]>(

@@ -62,11 +62,11 @@ import type { Post } from '@/types';
  * never sent, so its footer says "the newest", not "every".
  */
 const FEED_CAP = 100;
-/** The "Not in your Dex yet" rows follow these posts (1-based), and show only with two picks or more. */
+/** The NotInDexYet rows ("From people you follow") follow these posts (1-based), and show only with two picks or more. */
 const MODULE_AFTER: readonly number[] = [5, 15];
 const MODULE_MIN = 2;
 
-/** One row of the feed: a post, or a "Not in your Dex yet" row. Each carries its own space below. */
+/** One row of the feed: a post, or a NotInDexYet row. Each carries its own space below. */
 type Row = { kind: 'post'; key: string; post: Post } | { kind: 'notYet'; key: string; picks: NotInDexYetPick[] };
 
 export default function HomeScreen() {
@@ -240,7 +240,7 @@ function HomeFeed() {
   const waiting = loadingFeed || (poursStatus === 'idle' && !feedError);
 
   /*
-   * The feed's rows. The "Not in your Dex yet" picks are drinks other
+   * The feed's rows. The NotInDexYet picks are drinks other
    * people in this feed posted that are not in your collection (no new
    * query); the second row skips the first's drinks. Not before the
    * collection has been read from disk, or the first row would offer
@@ -354,7 +354,7 @@ function HomeFeed() {
             <EmptyState
               art={<EmptyArt drinkId="negroni" />}
               title="Nothing posted yet"
-              body="Follow friends to see what others are drinking. Your posts land here too."
+              body="Follow friends to see their photos and Dex entries. Your posts land here too."
               action={{ label: 'Find friends', onPress: openFindFriends }}
             />
           )

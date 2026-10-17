@@ -12,8 +12,8 @@ import { isPlaceholderUsername, onAccountDeleted, useAuth } from '@/store/auth';
 /*                                                                      */
 /* specs/v4.1-changes.md §3. One store for what the first run asks and  */
 /* what it gives back: the answers (they drive lib/recommend), the six  */
-/* picks the results step showed, and the saved drinks, which its "Save */
-/* to try" key and the bookmark on every drink's page fill, and the     */
+/* picks the results step showed, and the saved drinks, which its       */
+/* "Save" key and the bookmark on every drink's page fill, and the      */
 /* Saved tab shows. Saved drinks are NOT the Dex: the Dex is the drinks */
 /* you have had. They are bookmarks, any drink, caught or not; catching */
 /* one leaves it saved (Jan, 13 Oct 2026: saving drinks to find them    */

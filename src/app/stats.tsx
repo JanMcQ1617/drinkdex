@@ -10,10 +10,10 @@ import { colors, layout, space } from '@/constants/theme';
 import { useCustomDrinks } from '@/store/customDrinks';
 
 /**
- * Dex progress (layout spec 5.2 and 7): the ruler, the rank, the latest
- * catch and "See your 38", which the less-stuff layout took off the Dex
+ * Dex progress (layout spec 5.2 and 7): the ruler, the title, the latest
+ * entry and "See your 38", which the less-stuff layout took off the Dex
  * and Profile and put one tap away. Pushed from the Dex's "38 / 2,089"
- * and Profile's "38 drinks in your Dex ›". The route keeps its old path,
+ * and Profile's "38 entries in your Dex ›". The route keeps its old path,
  * /stats: a new route file would need Metro to regenerate the typed routes.
  *
  * A pushed screen's bar holds the back chevron and nothing else (layout
@@ -61,7 +61,7 @@ export default function StatsScreen() {
     }, [router]),
   );
 
-  /* The Dex filtered to Caught: a note it takes on focus (dexFilter says why it is not a param). */
+  /* The Dex filtered to Logged: a note it takes on focus (dexFilter says why it is not a param). */
   const seeCaught = useCallback(() => {
     requestDexFilter({ status: 'unlocked' });
     router.navigate('/dex');

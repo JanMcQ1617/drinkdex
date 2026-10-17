@@ -265,7 +265,7 @@ export interface ButtonProps {
   accessibilityState?: AccessibilityState;
   /**
    * Caps the label's Dynamic Type growth, for a button pinned to a bar that
-   * must not grow without bound (the drink page's "Post another …", 1.3).
+   * must not grow without bound (the drink page's "Post … again", 1.3).
    * Uncapped by default, like any body text. The label still wraps.
    */
   maxFontSizeMultiplier?: number;

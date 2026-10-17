@@ -13,7 +13,7 @@ import type { UserProfile } from '@/types';
 /* top: the 80pt face at the gutter with the name beside it and the bio */
 /* under the name on ONE line (the whole bio is in ••• › About and Edit */
 /* profile); the three counts on one line; ONE key; on your own profile */
-/* the quiet "38 drinks in your Dex ›" that opens Dex progress.         */
+/* the quiet "38 entries in your Dex ›" that opens Dex progress.        */
 /*                                                                      */
 /* One layout for yours and anyone else's, so the two read as one       */
 /* screen. Yours has Edit profile in the key's slot; theirs has Follow  */
@@ -177,9 +177,9 @@ export function ProfileHeader({
   );
 }
 
-/** "38 drinks in your Dex", "1 drink in your Dex". */
+/** "38 entries in your Dex", "1 entry in your Dex": the catalogue's word, not a count of drinks had. */
 function dexLine(n: number): string {
-  return `${formatCount(n)} ${n === 1 ? 'drink' : 'drinks'} in your Dex`;
+  return `${formatCount(n)} ${n === 1 ? 'entry' : 'entries'} in your Dex`;
 }
 
 /**

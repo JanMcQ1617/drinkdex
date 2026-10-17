@@ -23,20 +23,26 @@ import type { TournamentSummary } from '@/types';
 /* sentences are said one way on the list, the host sheet and a         */
 /* tournament's page.                                                   */
 /*                                                                      */
-/* COPY RULES (App Review 1.4.3). Always "different drinks", "try",     */
-/* "new to you". Never "more drinks", rounds, shots, volume, streaks or  */
-/* speed, and never a count of anything but different drinks. No meter  */
-/* or progress bar toward the daily cap or a goal: the standings are the */
-/* only figures.                                                        */
+/* COPY RULES (App Review 1.4.3). A tournament is a shared log, and its */
+/* unit is the entry: "5 entries", "most entries", "first to 10         */
+/* entries". Never "drinks" as a score, "try", "more drinks", rounds,   */
+/* shots, volume, streaks or speed, and never a count of anything but   */
+/* entries. No meter or progress bar toward the daily cap or a goal:    */
+/* the standings are the only figures.                                  */
 /* ==================================================================== */
 
 /* -------------------------------------------------------------------- */
 /* Words                                                                */
 /* -------------------------------------------------------------------- */
 
-/** "1 different drink", "5 different drinks". */
+/**
+ * "1 entry", "5 entries": every tournament figure (the standings, the
+ * winner, a goal). Named for what the server counts, the different drinks
+ * a member posted while it ran, which is unchanged; only the word shown
+ * is the catalogue's.
+ */
 export function differentDrinks(k: number): string {
-  return `${k} different ${k === 1 ? 'drink' : 'drinks'}`;
+  return `${k} ${k === 1 ? 'entry' : 'entries'}`;
 }
 
 /** "1 person", "4 people". */
@@ -193,9 +199,8 @@ export function TournamentRules({
 }) {
   return (
     <Text style={[styles.rules, style]}>
-      Each different drink you post counts once, up to {cap} new drinks a day. It is about trying
-      new things, never how much: a taste counts. No prizes, and Apple is not a sponsor. Please
-      drink responsibly.
+      Each different drink you post while it runs adds one entry, up to {cap} a day. Entries are
+      counted, never amounts. No prizes, and Apple is not a sponsor. Please drink responsibly.
     </Text>
   );
 }
@@ -264,7 +269,7 @@ function secondLine(
  * reach all three (a pressable row is one element to it). Every other
  * row is one button, chevron and place included.
  *
- * Your place shows only once you have a drink counted: at nought every
+ * Your place shows only once you have an entry counted: at nought every
  * rank is the server's tie-break, and "You're 1st" with nothing posted
  * would be a claim the standings do not make.
  */

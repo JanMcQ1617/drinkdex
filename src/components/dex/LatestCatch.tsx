@@ -10,10 +10,10 @@ import { catchDay } from '@/lib/drinkLabels';
 import type { Drink, UnlockRecord } from '@/types';
 
 /* ==================================================================== */
-/* The latest catch                                                     */
+/* The latest entry                                                     */
 /*                                                                      */
 /* The drink most recently brought into the Dex, on Dex progress        */
-/* (app/stats.tsx): its print and its name, and the day it was caught.  */
+/* (app/stats.tsx): its print and its name, and the day it was logged.  */
 /* It used to be a kicker and a name in the Dex's head, beside the      */
 /* gauge; the less-stuff layout (spec 5.2) took both off the Dex and    */
 /* put them one tap away, here.                                         */
@@ -50,7 +50,7 @@ export function LatestCatch({
       }}
       accessibilityRole="button"
       // The spoken number is unpadded: "#0009" is read digit by digit.
-      accessibilityLabel={`Latest catch, ${drink.name}, number ${drink.dexNumber}${day ? `, ${day}` : ''}`}
+      accessibilityLabel={`Latest entry, ${drink.name}, number ${drink.dexNumber}${day ? `, ${day}` : ''}`}
       accessibilityHint="Opens the drink"
       style={({ pressed }) => [styles.row, pressed && styles.pressed]}>
       <Print width={PRINT} height={PRINT}>
@@ -59,7 +59,7 @@ export function LatestCatch({
       <View style={styles.text}>
         {/* No line limit: the row grows with a long name. */}
         <DrinkName name={drink.name} role={textRole.name} measure={measure} cap={CAP} color={colors.text} />
-        {day ? <Text style={[textRole.small, styles.muted]}>{`Caught ${day === 'Today' || day === 'Yesterday' ? day.toLowerCase() : day}`}</Text> : null}
+        {day ? <Text style={[textRole.small, styles.muted]}>{`Logged ${day === 'Today' || day === 'Yesterday' ? day.toLowerCase() : day}`}</Text> : null}
       </View>
       <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
     </Pressable>

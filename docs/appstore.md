@@ -189,10 +189,12 @@ tournament is described as the people in it see it, one shared log of
 their posts; the Tournaments paragraph in the review notes below keeps the
 rules in full for App Review.
 
-Dex progress (Stats) is left out on purpose. Its rank ladder and the
-line under it ("171 more to Barfly in Training", for someone with 38) are
-the part of the app most likely to read as a score, so the listing does
-not point anyone at them.
+Dex progress (Stats) is left out on purpose. Its title ladder (Note
+taker, Cataloguer, Archivist, Scholar, Curator, Keeper of the Dex) and
+the line under it ("Next: Cataloguer, at 209 entries", for someone with
+38) were reworded after build 25 to read as a catalogue, not a drinking
+score, but they are still the nearest thing in the app to one, so the
+listing does not point anyone at them.
 
 The Facebook paragraph under PEOPLE describes a build made with
 `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on`. If the build you submit has it off,
@@ -312,13 +314,13 @@ phone sign-in together do not fit, so count before pasting.
 ### Tournaments — a server with migration 020 applied
 
 **Tournaments.** Anyone can hold a friendly tournament with people they
-follow: whoever posts the most different drinks wins. Each drink counts
-once, and how much anyone drinks is never counted or shown. At most 3 new
-drinks a day count per person, and a drink first posted after the day's
-three never counts later, so nothing rewards trying a lot in one night. No
-prizes, no entry fees, no streaks, no meters, no notifications. Every
+follow: a shared log, and whoever posts the most different Dex entries
+wins. Each drink counts once, and amounts are never counted or shown.
+Only 3 entries a day count per person, and a drink first posted after the
+day's three never counts later, so nothing rewards posting a lot at once.
+No prizes, no entry fees, no streaks, no meters, no notifications. Every
 tournament screen shows the rules, ending "No prizes, and Apple is not a
-sponsor. Please drink responsibly." Names pass the caption filter. To try
+sponsor. Please drink responsibly." Names pass the caption filter. To find
 it, follow anyone, then Profile → "..." → Tournaments → Host a tournament.
 
 [652]
@@ -539,9 +541,9 @@ through. Lead with the two that carry the scale and the payoff:
 4. **The feed**, with a few different people in it.
 5. **Saved**, with a few collections you have named.
 
-Not Dex progress: its rank ladder is the part of the app most likely to
-read as a score, which the description leaves out for guideline 1.4.3,
-so the screenshots leave it out too.
+Not Dex progress: its title ladder, even reworded after build 25, is the
+part of the app most likely to read as a score, which the description
+leaves out for guideline 1.4.3, so the screenshots leave it out too.
 
 Populate the account first. Screenshots of an empty state read as an empty
 app, and this one is the opposite of empty.

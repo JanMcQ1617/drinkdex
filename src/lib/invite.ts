@@ -65,7 +65,7 @@ export async function createInviteUrl(): Promise<string> {
  * display name where the username belongs fails to compile.
  */
 export function buildInviteMessage({ username, url }: { username: string; url: string }): string {
-  return `Follow me on Sipply, a field guide to the drinks you try. Once you have the app, open this link and we will follow each other, or search for @${username}.\n${url}`;
+  return `Follow me on Sipply, a field guide to cocktails and spirits. Once you have the app, open this link and we will follow each other, or search for @${username}.\n${url}`;
 }
 
 /**

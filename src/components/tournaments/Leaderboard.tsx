@@ -11,7 +11,7 @@ import type { Standing, TournamentState, UserProfile } from '@/types';
 /* (spec v3.1 §11.3)                                                    */
 /*                                                                      */
 /* One row per accepted member, in the server's rank order: rank,       */
-/* face, username, "{k} different drinks". The only figures on a         */
+/* face, username, "{k} entries". The only figures on a                  */
 /* tournament's page are these: no meter, no progress toward a goal or   */
 /* the daily cap (App Review 1.4.3).                                     */
 /*                                                                      */

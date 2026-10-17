@@ -9,7 +9,7 @@ import type { Option } from './Choices';
 /* An option's label is the same text VoiceOver reads.                  */
 /* ==================================================================== */
 
-export const HELLO = 'Welcome! Let’s find your drinks.';
+export const HELLO = 'Welcome! Let’s set up your field guide.';
 export const AGE = 'Are you of legal drinking age where you live?';
 export const HEARD = 'How did you hear about Sipply?';
 export const USUALLY = 'What do you usually drink?';
@@ -119,9 +119,13 @@ export function matchWords(n: number, formatted: string) {
     : { before: 'That’s ', figure: formatted, after: ' drinks in the Dex that match.' };
 }
 
-/** "You can make 17 drinks with this.", or the line for a bar that makes nothing yet. */
+/**
+ * "You can make 17 drinks with this.", or the line for a bar that makes
+ * nothing yet. That line states the fact and stops: it once said one more
+ * bottle would open up more, a nudge to buy (App Review 1.4.3).
+ */
 export function makeWords(n: number, formatted: string) {
-  if (n === 0) return { before: 'Nothing yet. One more bottle opens up more.' };
+  if (n === 0) return { before: 'Nothing to make with these yet.' };
   return n === 1
     ? { before: 'You can make ', figure: formatted, after: ' drink with this.' }
     : { before: 'You can make ', figure: formatted, after: ' drinks with this.' };

@@ -171,7 +171,7 @@ function Connections({
       <EmptyState
         icon="users"
         title="Not following anyone yet"
-        body="Follow friends to see what they are drinking on Home."
+        body="Follow friends to see their posts on Home."
         action={{ label: 'Find friends', onPress: () => router.push('/find-friends') }}
       />
     ) : (

@@ -28,8 +28,8 @@ import type { TournamentSummary } from '@/types';
 /* tournament you host, are in or are invited to, in four groups shown   */
 /* only when they hold something:                                        */
 /* Invitations (answered right here), On now, Coming up, and the last    */
-/* 20 Finished. A tournament counts the different drinks its members     */
-/* post while it runs; how much anyone drinks is never counted.          */
+/* 20 Finished. A tournament counts the different Dex entries its       */
+/* members post while it runs; amounts are never counted.               */
 /*                                                                      */
 /* The list is the tournaments store's, so Profile's and Activity's      */
 /* invitation counts and this screen agree: refetched on every focus and */
@@ -244,7 +244,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
     <EmptyState
       icon="trophy"
       title="No tournaments yet"
-      body="Host one and invite people you follow. Whoever tries the most different drinks wins."
+      body="Host one and invite people you follow to keep a shared log of Dex entries. Whoever posts the most entries wins."
       action={{ label: 'Host a tournament', onPress: host }}
     />
   );

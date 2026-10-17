@@ -13,7 +13,7 @@ import { Shell } from './Shell';
 /* flow's clock). Under VoiceOver there is a Continue instead.          */
 /* ==================================================================== */
 
-export const DEX_PROMPT = 'Every drink you try goes in your Dex.';
+export const DEX_PROMPT = 'Every drink you log goes in your Dex.';
 
 export function DexIntroStep({ geo, focus, keyed }: { geo: Geometry; focus: boolean; keyed: boolean }) {
   return (

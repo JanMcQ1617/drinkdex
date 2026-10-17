@@ -53,9 +53,9 @@ import { confirmDestructive } from '@/utils/alerts';
 /* length of 3 days to 30. The server checks again (create_tournament). */
 /*                                                                      */
 /* A goal the daily cap makes unreachable is greyed out, not refused    */
-/* after the fact: three new drinks count a day, so "First to 10" needs */
-/* four days. A length that rules out the goal already chosen moves it  */
-/* back to "Most by the end".                                           */
+/* after the fact: three entries count a day, so "First to 10 entries"  */
+/* needs four days. A length that rules out the goal already chosen     */
+/* moves it back to "Most entries by the end".                          */
 /* ==================================================================== */
 
 const STARTS: readonly { key: TournamentStart; label: string }[] = [
@@ -71,7 +71,7 @@ const LENGTHS: readonly { key: TournamentLength; label: string }[] = [
   { key: '30d', label: '30 days' },
 ];
 
-/** null is "Most by the end": the most different drinks when it ends wins. */
+/** null is "Most entries by the end": the most different entries when it ends wins. */
 const GOALS: readonly (number | null)[] = [null, ...TOURNAMENT_LIMITS.targetChoices];
 
 /** The host plus 49. */
@@ -231,7 +231,7 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
             setName(v);
             setNameError(null);
           }}
-          placeholder="September tasting"
+          placeholder="September field notes"
           maxLength={TOURNAMENT_LIMITS.nameMax}
           autoCapitalize="sentences"
           autoCorrect
@@ -270,7 +270,7 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
           {GOALS.map((g) => (
             <Chip
               key={g ?? 'most'}
-              label={g === null ? 'Most by the end' : `First to ${g}`}
+              label={g === null ? 'Most entries by the end' : `First to ${g} entries`}
               selected={goal === g}
               disabled={g !== null && g > maxGoal}
               onPress={() => {
@@ -282,7 +282,7 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
         </View>
         {someGoalOff ? (
           <Text style={styles.helper}>
-            Up to {TOURNAMENT_LIMITS.dailyCap} new drinks count a day, so longer goals need a longer
+            Up to {TOURNAMENT_LIMITS.dailyCap} entries count each day, so bigger goals need a longer
             tournament.
           </Text>
         ) : null}

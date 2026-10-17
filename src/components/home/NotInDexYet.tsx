@@ -12,10 +12,12 @@ import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import type { Drink, Post, UserProfile } from '@/types';
 
 /* ==================================================================== */
-/* Not in your Dex yet                                                  */
+/* Not in your Dex yet, headed "From people you follow"                 */
 /*                                                                      */
 /* A row set into the feed (after the 5th post and the 15th): drinks    */
-/* people you follow have posted that you have not caught. Each is the  */
+/* people you follow have posted that you have not logged. The heading  */
+/* says whose they are, not that they are missing from your Dex: a gap  */
+/* to fill is a nudge to have them (App Review 1.4.3). Each is the      */
 /* friend's photo as a small print on the page, its name in Playfair    */
 /* under it and who posted it under that. The picks come from           */
 /* lib/cabinet's notInDexYet over the feed already on the phone: no new */
@@ -123,7 +125,7 @@ export function NotInDexYet({
   return (
     <View style={styles.band}>
       <Text accessibilityRole="header" style={styles.head}>
-        Not in your Dex yet
+        From people you follow
       </Text>
       {/*
         initialNumToRender 3 is what one screen shows: the first items are
@@ -186,7 +188,7 @@ function Pick({
       noHaptic
       unstable_pressDelay={120}
       accessibilityRole="button"
-      accessibilityLabel={`${drink.name}, posted by ${username}. Not in your Dex yet`}
+      accessibilityLabel={`${drink.name}, posted by ${username}`}
       accessibilityHint="Opens the drink"
       style={styles.card}>
       <Print width={PRINT_W} height={PRINT_H}>

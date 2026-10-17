@@ -187,7 +187,7 @@ const DrinkCell = React.memo(function DrinkCell({
   const picked = picking && selection.picked.has(pickKey('drink', drink.id));
   const press = (id: string) => (picking ? selection.toggle('drink', id) : onOpen(id));
   // DexCard's own words: the tile is spoken the same here as in the Dex.
-  const label = `${drink.name}, number ${drink.dexNumber}, ${record ? 'caught' : 'not caught yet'}`;
+  const label = `${drink.name}, number ${drink.dexNumber}, ${record ? 'logged' : 'not logged yet'}`;
   return (
     <View {...tileAccessibility('drink', drink.id, label, () => onOpen(drink.id), selection, removal)}>
       <DexCard drink={drink} cardWidth={column} collected={!!record} userPhotoUri={record?.photoUri} onPress={press} />

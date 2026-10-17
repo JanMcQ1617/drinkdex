@@ -328,7 +328,7 @@ function BoardView({
       : `Starts ${dayLong(new Date(board.startsAt))}`;
   const goal =
     board.target === null
-      ? 'Most different drinks by the end wins'
+      ? 'Most entries by the end wins'
       : `First to ${differentDrinks(board.target)} wins`;
   const hosted = isHost ? 'hosted by you' : hostLabel ? `hosted by ${hostLabel}` : 'hosted by another member';
   // The goal and the host share a line (less stuff): two quiet lines under the name, not three.
@@ -345,7 +345,7 @@ function BoardView({
       ? winnerStanding
         ? `${winnerName} won with ${differentDrinks(winnerStanding.distinct)}`
         : `${winnerName} won`
-      : 'Nobody posted a drink, so there is no winner.';
+      : 'Nobody posted an entry, so there is no winner.';
 
   /* ---- The options sheet ---- */
   const confirm = (title: string, body: string, action: string, onConfirm: () => void) =>
@@ -355,7 +355,7 @@ function BoardView({
     ]);
 
   const confirmEnd = () =>
-    confirm(`End ${board.name} now?`, 'Standings freeze and whoever is ahead wins.', 'End', () =>
+    confirm(`End ${board.name} now?`, 'Standings freeze now, and whoever has the most entries wins.', 'End', () =>
       void run('end', () => endTournament(board.id), 'Could not end the tournament'),
     );
   const confirmDelete = () =>
@@ -363,7 +363,7 @@ function BoardView({
       void run('delete', () => deleteTournament(board.id), 'Could not delete the tournament'),
     );
   const confirmLeave = () =>
-    confirm(`Leave ${board.name}?`, 'Your drinks stop counting and you cannot rejoin.', 'Leave', () =>
+    confirm(`Leave ${board.name}?`, 'Your entries stop counting and you cannot rejoin.', 'Leave', () =>
       void run('leave', () => leave(board.id), 'Could not leave the tournament'),
     );
   /* Declining is final for this tournament, so it asks first, as Leave does. */
@@ -523,10 +523,10 @@ function BoardView({
         {/* ---- On now, for someone in it: post. The cap is said only once it is reached. ---- */}
         {live && member ? (
           <View style={styles.actions}>
-            <Button label="Post a drink" icon="plus" block onPress={() => router.navigate('/log')} />
+            <Button label="Post a drink you've had" icon="plus" block onPress={() => router.navigate('/log')} />
             {mine && mine.today >= board.dailyCap ? (
               <Text style={styles.line}>
-                {board.dailyCap} new drinks counted today. Drinks you post later today will not count in
+                {board.dailyCap} entries counted today. Entries you post later today will not count in
                 this tournament.
               </Text>
             ) : null}
@@ -560,7 +560,7 @@ function BoardView({
             <SectionHeader title="Standings" size="group" style={styles.header} />
             {board.state === 'upcoming' ? (
               <Text style={[styles.line, styles.groupNote]}>
-                Coming up: drinks count from {dayLong(new Date(board.startsAt))}
+                Coming up: entries count from {dayLong(new Date(board.startsAt))}
               </Text>
             ) : null}
             <Leaderboard

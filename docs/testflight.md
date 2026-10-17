@@ -41,8 +41,8 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,036 as pasted, counted for build 25 the same way; 3,426
-with the two sign-in items below added to the list.]
+[4,000 max. 3,038 as pasted, recounted after build 25 the same way;
+3,428 with the two sign-in items below added to the list.]
 
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
@@ -75,8 +75,8 @@ Worth poking at:
   profile and in the feed?
 - **Tournaments.** Open Profile → "..." → Tournaments and host one with
   someone you follow. Join it from their account, post a drink from each,
-  and check the standings. Each different drink counts once, up to 3 new
-  ones a day. Try ending one, and deleting one.
+  and check the standings. Each different drink posted adds one entry, up
+  to 3 a day. Try ending one, and deleting one.
 - **Finding people.** Search a username, or match your contacts. Contacts
   are hashed on your device and never uploaded.
 - **Your Instagram list.** In Find friends, request your followers and
@@ -86,7 +86,7 @@ Worth poking at:
   profile opens as its own page, with Report account and Block in its "..."
   menu.
 - **The feed.** Follow someone and see whether their posts appear.
-- **Dex progress.** Tap the count at the top of the Dex, or "drinks in your
+- **Dex progress.** Tap the count at the top of the Dex, or "entries in your
   Dex" on your profile.
 
 Please report:

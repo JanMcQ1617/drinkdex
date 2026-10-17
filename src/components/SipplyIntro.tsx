@@ -41,7 +41,7 @@ import { colors, fonts, layout, textRole } from '@/constants/theme';
  *    app's page is white, so a page-white disc opens from the centre and
  *    floods the frame — the app is simply what was underneath. Inherited
  *    from the intro this replaces, and the reason there is no visible seam.
- *  - The tagline is "Discover, sip, share" in sentence case, untracked,
+ *  - The tagline is "Discover, log, share" in sentence case, untracked,
  *    where the source spaced capitals half an em apart (see TAGLINE).
  *
  * Four rules this file learned the hard way and keeps:
@@ -89,7 +89,7 @@ const WORDMARK_CAP = 1.2;
  * an em apart, the letterspaced-caps habit the app no longer has anywhere
  * (check-design rule 8), the intro included.
  */
-const TAGLINE = 'Discover, sip, share';
+const TAGLINE = 'Discover, log, share';
 
 /* ---- Worklet easings --------------------------------------------------
  * Hand-written rather than Reanimated's `Easing.*` because every element

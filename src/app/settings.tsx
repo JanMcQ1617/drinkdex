@@ -583,7 +583,7 @@ function NotificationsSection() {
 /**
  * You, at the top: your face, your name and handle, in a group of one
  * that opens Edit profile. The Dex tally and rank it carried in v3 live on
- * Dex progress now (Profile › "38 drinks in your Dex").
+ * Dex progress now (Profile › "38 entries in your Dex").
  */
 function IdentityRow({ profile }: { profile: ProfileRow }) {
   const router = useRouter();

@@ -414,7 +414,7 @@ function PoursViewer({
         <View style={styles.spacer} />
         {mine ? (
           <>
-            <MediaIconButton icon="plus" label="Post another drink" onPress={openLog} />
+            <MediaIconButton icon="plus" label="Add to your story" onPress={openLog} />
             <MediaIconButton icon="more" label="Story options" onPress={openOptions} />
           </>
         ) : null}

@@ -16,7 +16,7 @@ import { PourCollage } from '../PourCollage';
 /* words give way to the results' in 120ms.                             */
 /* ==================================================================== */
 
-export const POUR_PROMPT = 'Let me pour your first picks…';
+export const POUR_PROMPT = 'Let me pull up your first picks…';
 const WORDS_OUT_MS = 120;
 
 export function PourStep({

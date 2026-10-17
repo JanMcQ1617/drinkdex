@@ -65,8 +65,8 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
       footer={<Button label="Continue" onPress={onDone} block />}
       contentStyle={styles.content}>
       <Text style={[textRole.body, styles.lede]}>
-        Sipply is better with the friends you already drink with. You can bring them
-        over now, or do it later from Settings — nothing here is one-time.
+        Sipply is better with friends. You can bring them over now, or later from
+        Settings. Nothing here is one-time.
       </Text>
 
       {/*
