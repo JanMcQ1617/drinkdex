@@ -301,14 +301,14 @@ before pasting.
 From build 25, Daily ideas (498) goes in every time, and so does that cut.
 The Test Information notes grew too: Tags (216) is new, the age rating
 (341) gained a sentence, and three Settings paths gained the "..." step,
-so sign-in through Instagram is 2,339. Tournaments is 652, now that it
+so sign-in through Instagram is 2,339. Tournaments is 644, now that it
 starts from the Profile tab. With the 896 paragraph and tournaments, the
-uncut set is 4,391, 391 over. Cut, it is 3,776, 224 to spare. Phone
-sign-in on top makes 4,242 with its code line; take Contacts and Instagram
-down to their first sentence as well and it is 3,996, 4 to spare. Songs
+uncut set is 4,383, 383 over. Cut, it is 3,768, 232 to spare. Phone
+sign-in on top makes 4,234 with its code line; take Contacts and Instagram
+down to their first sentence as well and it is 3,988, 12 to spare. Songs
 instead of phone sign-in need that cut and the two sentences of the
 third-party paragraph about the Facebook friends list and access token
-dropped (the privacy policy carries both): 3,890, 110 to spare. Songs and
+dropped (the privacy policy carries both): 3,882, 118 to spare. Songs and
 phone sign-in together do not fit, so count before pasting.
 
 ### Tournaments — a server with migration 020 applied
@@ -321,9 +321,9 @@ day's three never counts later, so nothing rewards posting a lot at once.
 No prizes, no entry fees, no streaks, no meters, no notifications. Every
 tournament screen shows the rules, ending "No prizes, and Apple is not a
 sponsor. Please drink responsibly." Names pass the caption filter. To find
-it, follow anyone, then Profile → "..." → Tournaments → Host a tournament.
+it, follow anyone, then Profile → Tournaments → Host a tournament.
 
-[652]
+[644]
 
 ### Songs on posts — a build with `EXPO_PUBLIC_STORY_MUSIC=tap`
 

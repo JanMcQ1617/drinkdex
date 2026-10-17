@@ -32,7 +32,8 @@ Worth trying:
 - Daily ideas: turn them on in Settings, set the time a few minutes ahead, and check that one arrives (none comes on a day you have posted or added a drink)
 - A collection: make one, add to it, share its link, then stop sharing
 - The Dex in For you and By number, with the taste filters
-- A tournament with a friend who tests too: host it from the "..." menu on your profile, join it, post, and check the standings
+- A tournament with a friend who tests too: host it from Tournaments on your profile, join it, post, and check the standings
+- Music from Spotify or Apple Music: it should keep playing when you open Sipply
 - Account deletion and password reset
 
 Anything that looks broken, slow or wrong on your screen is worth reporting.
@@ -41,8 +42,8 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,038 as pasted, recounted after build 25 the same way;
-3,428 with the two sign-in items below added to the list.]
+[4,000 max. 3,455 as pasted, recounted for build 27 the same way;
+3,845 with the two sign-in items below added to the list.]
 
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
@@ -73,8 +74,8 @@ Worth poking at:
   or half drawn.
 - **Posting a drink.** Add a photo and a caption. Does it show up on your
   profile and in the feed?
-- **Tournaments.** Open Profile → "..." → Tournaments and host one with
-  someone you follow. Join it from their account, post a drink from each,
+- **Tournaments.** On your profile, tap Tournaments under the Dex line (it's
+  in Profile → "..." too) and host one with someone you follow. Join it from their account, post a drink from each,
   and check the standings. Each different drink posted adds one entry, up
   to 3 a day. Try ending one, and deleting one.
 - **Finding people.** Search a username, or match your contacts. Contacts
@@ -88,6 +89,12 @@ Worth poking at:
 - **The feed.** Follow someone and see whether their posts appear.
 - **Dex progress.** Tap the count at the top of the Dex, or "entries in your
   Dex" on your profile.
+- **Your music.** Play something in Spotify or Apple Music, then open
+  Sipply. It should keep playing through the opening film and the feed.
+  Turning a video's sound on should lower your music, not stop it.
+- **The red.** One colour now marks the + key, the Post keys and your Dex
+  count. Tell me if it turns up anywhere else, or if a pale Post key ever
+  looks like it should work.
 
 Please report:
 
@@ -183,14 +190,14 @@ spaces, a blank line between paragraphs. Sign-in through Instagram is
 2,339 now, with Tags, the age rating's second sentence and the "..." step
 in three Settings paths (1,957 before). Build 25 has Apple, Google and
 Facebook sign-in, tournaments and Daily ideas, and no phone sign-in or
-songs. With the 896 third-party paragraph, Tournaments (652) and Daily
-ideas (498), that is 4,391, 391 over. Shorten Contacts and Instagram to
-their first two sentences, as appstore.md does, and it is 3,776, 224 to
-spare. A build with phone sign-in as well comes to 4,242 with its code
+songs. With the 896 third-party paragraph, Tournaments (644) and Daily
+ideas (498), that is 4,383, 383 over. Shorten Contacts and Instagram to
+their first two sentences, as appstore.md does, and it is 3,768, 232 to
+spare. A build with phone sign-in as well comes to 4,234 with its code
 line; take Contacts and Instagram down to their first sentence too and it
-is 3,996, 4 to spare. Songs in place of phone sign-in need that cut and
+is 3,988, 12 to spare. Songs in place of phone sign-in need that cut and
 the third-party paragraph's two sentences about the Facebook friends list
-and access token dropped as well: 3,890, 110 to spare. Songs and phone
+and access token dropped as well: 3,882, 118 to spare. Songs and phone
 sign-in together do not fit. Count before pasting.
 
 ### Add for a build with phone sign-in
