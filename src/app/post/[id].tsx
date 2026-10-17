@@ -30,6 +30,11 @@ import type { Post } from '@/types';
 /* the time. The drink in the header opens the drink page. The bar's    */
 /* 1pt rule shows once the post runs under it.                          */
 /*                                                                      */
+/* Tags (v4.3) are the one part of the post this page fetches again on  */
+/* its own: the store does not patch this copy, so when tags change     */
+/* anywhere (the ••• Tag people, Remove me) its tagsVersion moves and   */
+/* the post is read again quietly, the card's "with" line with it.      */
+/*                                                                      */
 /* "Unavailable" is one state for three causes the screen cannot tell   */
 /* apart and should not try to: the post was deleted, you are blocked   */
 /* with its author either way, or its drink has left the Dex. A failed  */
@@ -93,6 +98,7 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
   const profiles = useSocial((s) => s.profiles);
   const ownRow = useAuth((s) => s.profile);
   const dropAuthor = useSocial((s) => s.dropAuthor);
+  const tagsVersion = useSocial((s) => s.tagsVersion);
   const [scrolled, onScroll] = useScrolledPast();
 
   const valid = POST_ID.test(id);
@@ -114,6 +120,27 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
       alive = false;
     };
   }, [id, myId, valid, attempt]);
+
+  /*
+   * A tag change since this page opened: the post again, quietly. Only a
+   * post that comes back replaces the one shown; a failure or a post now
+   * missing leaves it, and the card's own overlay already shows the
+   * change, or has put it back when the write failed.
+   */
+  const [tagsVersionOnOpen] = useState(tagsVersion);
+  useEffect(() => {
+    if (!valid || tagsVersion === tagsVersionOnOpen) return;
+    let alive = true;
+    fetchPost(id, myId).then(
+      (post) => {
+        if (alive && post) setLoaded({ status: 'ready', post });
+      },
+      () => {},
+    );
+    return () => {
+      alive = false;
+    };
+  }, [id, myId, valid, tagsVersion, tagsVersionOnOpen]);
 
   const status = valid ? (loaded?.status ?? 'loading') : 'missing';
 

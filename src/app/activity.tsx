@@ -26,15 +26,19 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* ==================================================================== */
 /* Activity                                                             */
 /*                                                                      */
-/* Where Home's bell goes: likes on your posts and new followers,       */
-/* newest first, from the last 30 days. Built from the likes and        */
-/* follows tables as they are; nothing new is stored or fetched.        */
+/* Where Home's bell goes: likes on your posts, new followers and the   */
+/* posts you are tagged in (v4.3), newest first, from the last 30 days. */
+/* Built from the likes, follows and post_tags tables as they are;      */
+/* nothing new is stored, so a tag removed (by you, its author or a     */
+/* block) takes its row with it.                                        */
 /*                                                                      */
 /* LIKES ARE GROUPED BY POST, within each section: ten likes on one     */
 /* Negroni are one row, "ana, leo and 8 others liked your Negroni",     */
 /* with up to three faces overlapping, placed where its newest like     */
 /* falls. Ten identical rows were a list of the same news. Follows stay */
 /* one row each: each is a different person and a decision about them.  */
+/* So do tags: a post tags you once, and two tags are two posts by      */
+/* people you know, "ana tagged you in their Negroni".                  */
 /*                                                                      */
 /* "New" is everything since you last opened this screen, by the mark   */
 /* in the seen store, which lives on this phone only. The mark is taken */
@@ -49,7 +53,7 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* Profile's ••• does). Only while the server has tournaments at all.   */
 /*                                                                      */
 /* DAYLIGHT. Rows 64 on the page, separated by space, not rules: faces, */
-/* the sentence in body, the liked photo as a square print.             */
+/* the sentence in body, the post as a square print.                    */
 /* ==================================================================== */
 
 export default function ActivityScreen() {
@@ -75,9 +79,13 @@ type Loaded =
 
 type LikeItem = Extract<ActivityItem, { kind: 'like' }>;
 type FollowItem = Extract<ActivityItem, { kind: 'follow' }>;
+type TagItem = Extract<ActivityItem, { kind: 'tag' }>;
 
 /** One row's event, before it knows where in its section it sits. */
-type Entry = { kind: 'likes'; likes: LikeItem[] } | { kind: 'follow'; item: FollowItem };
+type Entry =
+  | { kind: 'likes'; likes: LikeItem[] }
+  | { kind: 'follow'; item: FollowItem }
+  | { kind: 'tag'; item: TagItem };
 
 type Row =
   | { kind: 'header'; key: string; title: string; strong: boolean }
@@ -88,7 +96,8 @@ type Row =
  * A section's items as rows: every like on one post folded into one entry,
  * at the place of that post's newest like. `list` is newest first (as
  * fetchActivity sorts it), so each group's likes are too, and its first
- * like is the one whose time and face lead the row.
+ * like is the one whose time and face lead the row. Follows and tags pass
+ * through as rows of their own, never grouped.
  */
 function groupByPost(list: readonly ActivityItem[]): Entry[] {
   const entries: Entry[] = [];
@@ -96,6 +105,10 @@ function groupByPost(list: readonly ActivityItem[]): Entry[] {
   for (const item of list) {
     if (item.kind === 'follow') {
       entries.push({ kind: 'follow', item });
+      continue;
+    }
+    if (item.kind === 'tag') {
+      entries.push({ kind: 'tag', item });
       continue;
     }
     const group = byPost.get(item.postId);
@@ -142,6 +155,8 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
   const following = useSocial((s) => s.following);
   const toggleFollow = useSocial((s) => s.toggleFollow);
   const activityLatestAt = useSocial((s) => s.activityLatestAt);
+  // Moves when tags change anywhere on this phone (store/social): a tag row may be gone.
+  const tagsVersion = useSocial((s) => s.tagsVersion);
   const markActivitySeen = useSeen((s) => s.markActivitySeen);
   const tournamentsOn = useTournaments((s) => s.supported);
   const pendingInvites = useTournaments((s) => s.pendingInvites);
@@ -159,6 +174,9 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
    * One fetch per attempt. A failure over rows already on screen keeps the
    * rows and says so in a notice; with nothing held (no answer yet, or an
    * empty one) it is the error state, never "No activity yet".
+   *
+   * And one per tag change: removing yourself from a post opened from its
+   * row here takes the row away by the time you are back (v4.3 §1.6).
    */
   useEffect(() => {
     let alive = true;
@@ -182,7 +200,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
     return () => {
       alive = false;
     };
-  }, [myId, attempt]);
+  }, [myId, attempt, tagsVersion]);
 
   const items = loaded?.status === 'ready' ? loaded.items : null;
 
@@ -272,6 +290,16 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
         />
       );
     }
+    if (row.kind === 'tag') {
+      return (
+        <TagRow
+          item={row.item}
+          person={profiles[row.item.actorId]!}
+          onOpenPerson={openPerson}
+          onOpenPost={openPost}
+        />
+      );
+    }
     const person = profiles[row.item.actorId]!;
     return (
       <FollowRow
@@ -302,7 +330,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
       <EmptyState
         icon="heart"
         title="No activity yet"
-        body="When someone likes your post or follows you, it shows up here."
+        body="When someone likes your post, follows you or tags you, it shows up here."
       />
     );
 
@@ -469,7 +497,72 @@ function LikesRow({
           <Text style={styles.when}>{timeAgo(newest.at)}</Text>
         </Text>
       </Pressable>
-      <LikedThumb path={newest.photoPath} drinkId={newest.drinkId} onPress={open} />
+      <PostThumb path={newest.photoPath} drinkId={newest.drinkId} onPress={open} />
+    </RowFrame>
+  );
+}
+
+/**
+ * Someone tagged you in their post (v4.3 §1.6): their face (opens them),
+ * the sentence "ana tagged you in their Negroni." (opens the post), and
+ * the post's print (opens the post). The face is hidden from VoiceOver,
+ * because the sentence beside it names the same person. With the drink
+ * gone from the catalogue between the read and this render (an
+ * over-the-air catalogue update), it ends "tagged you in a post."
+ */
+function TagRow({
+  item,
+  person,
+  onOpenPerson,
+  onOpenPost,
+}: {
+  item: TagItem;
+  person: UserProfile;
+  onOpenPerson: (id: string) => void;
+  onOpenPost: (id: string) => void;
+}) {
+  const drink = getDrink(item.drinkId);
+  const open = () => onOpenPost(item.postId);
+  const what = drink ? `in their ${drink.name}` : 'in a post';
+
+  return (
+    <RowFrame>
+      <Pressable
+        onPress={() => onOpenPerson(person.id)}
+        hitSlop={2}
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+        style={styles.lead}>
+        <Avatar
+          name={person.displayName}
+          accent={person.accent}
+          size={AVATAR}
+          avatarPath={person.avatarPath}
+        />
+      </Pressable>
+      <Pressable
+        onPress={open}
+        hitSlop={{ top: space.md, bottom: space.md }}
+        accessibilityRole="button"
+        accessibilityLabel={`${person.displayName} tagged you ${what}, ${timeAgoSpoken(item.at)}`}
+        accessibilityHint="Opens the post"
+        style={({ pressed }) => [styles.rowText, pressed && styles.pressed]}>
+        <Text style={styles.sentence}>
+          <Text style={styles.strong}>{person.username}</Text> tagged you{' '}
+          {/* The drink in Playfair, as a name inside an Inter sentence is set. */}
+          {drink ? (
+            <>
+              in their <Text style={textRole.nameInline}>{drink.name}</Text>
+            </>
+          ) : (
+            'in a post'
+          )}
+          .{' '}
+          <Text style={styles.when}>{timeAgo(item.at)}</Text>
+        </Text>
+      </Pressable>
+      <PostThumb path={item.photoPath} drinkId={item.drinkId} onPress={open} />
     </RowFrame>
   );
 }
@@ -549,12 +642,12 @@ function FollowRow({
 }
 
 /**
- * The post that was liked, as a 44pt square print of its photo. A post
- * with no photo, or one that will not sign, shows its drink's print
- * instead (DexThumb), never an empty square; while it signs, the wash
- * holds its place.
+ * The post a row is about (the one liked, or the one you are tagged in),
+ * as a 44pt square print of its photo. A post with no photo, or one that
+ * will not sign, shows its drink's print instead (DexThumb), never an
+ * empty square; while it signs, the wash holds its place.
  */
-function LikedThumb({
+function PostThumb({
   path,
   drinkId,
   onPress,
@@ -606,7 +699,7 @@ function LikedThumb({
 
 /* ==================================================================== */
 
-/** The liked photo's square print (DexThumb's mini). */
+/** The post's square print (DexThumb's mini). */
 const THUMB = 44;
 
 const styles = StyleSheet.create({

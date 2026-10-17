@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   type AccessibilityActionEvent,
@@ -34,6 +35,8 @@ import { LikersSheet } from '@/components/LikersSheet';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
 import { MediaMarker } from '@/components/media';
 import { formatPlateNumber } from '@/components/plate';
+import { TaggedSheet } from '@/components/tags/TaggedSheet';
+import { TagPeopleSheet } from '@/components/tags/TagPeopleSheet';
 import { announce, Avatar, haptic } from '@/components/ui';
 import { colors, fonts, layout, motion, onMedia, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
@@ -47,6 +50,7 @@ import {
   timeAgo,
   timeAgoSpoken,
 } from '@/lib/social';
+import { type WithLine, withLine } from '@/lib/tags';
 import { clampToLines, textWidth } from '@/lib/textFit';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
@@ -70,7 +74,9 @@ export { timeAgo, timeAgoSpoken };
 /*                                                                      */
 /*   header    52: the face (in a 2pt ink ring when they have a story   */
 /*             you have not seen), the username over the drink in       */
-/*             Playfair, where Instagram puts a place, and •••.         */
+/*             Playfair, where Instagram puts a place, and •••. With    */
+/*             tags (v4.3), the username's line goes on: "maya.pours    */
+/*             with ana and leo".                                       */
 /*   photo     440 x 440, full bleed, square corners, the photo edge.   */
 /*   actions   44: heart, share · · · bookmark. The gallery's dots sit  */
 /*             in the middle.                                           */
@@ -354,6 +360,9 @@ export const PostCard = React.memo(function PostCard({
   const toggleLike = useSocial((s) => s.toggleLike);
   const removePost = useSocial((s) => s.removePost);
   const toggleSave = useSocial((s) => s.toggleSave);
+  const setTags = useSocial((s) => s.setTags);
+  const removeMyTag = useSocial((s) => s.removeMyTag);
+  const router = useRouter();
   const reduced = useReducedMotion();
   const { width, fontScale } = useWindowDimensions();
   const detail = variant === 'detail';
@@ -461,6 +470,111 @@ export const PostCard = React.memo(function PostCard({
         if (ok) open();
       });
   }, [myId, saved, savedThing, writeSave]);
+
+  /*
+   * Who the author was with (v4.3 §1), on the like's terms: an overlay on
+   * the server's tags, stamped with the answer it was laid over, so it
+   * drops out once the store's copy (or the post page's refetch, by
+   * tagsVersion) moves, and is cleared when the write fails. A post page
+   * holds its own copy of the post, which the store does not patch, so
+   * without it a tag change there would look like it did nothing.
+   *
+   * undefined is "unknown" (024 not applied, or the read failed): no line,
+   * and no ••• rows for tags.
+   */
+  const [tagFlip, setTagFlip] = useState<{ key: string; tagged: UserProfile[] } | null>(null);
+  const tagKey = `${post.id}|${post.tagged ? post.tagged.map((p) => p.id).join(',') : '?'}`;
+  const tagged = tagFlip?.key === tagKey ? tagFlip.tagged : post.tagged;
+  const taggedMe = !!myId && !!tagged?.some((p) => p.id === myId);
+
+  /*
+   * Which of the tagged you follow, as one string: the line names them
+   * before the rest. A string so this card wakes only when a follow of
+   * someone on it changes, not on every follow anywhere.
+   */
+  const followedTagged = useSocial((s) =>
+    tagged && tagged.length > 1
+      ? tagged
+          .filter((p) => s.following.includes(p.id))
+          .map((p) => p.id)
+          .join(',')
+      : '',
+  );
+
+  /* In this post and the Tag people picker: null until first opened, then mounted for good, as the likers. */
+  const [taggedOpen, setTaggedOpen] = useState<boolean | null>(null);
+  const [tagging, setTagging] = useState<boolean | null>(null);
+  // Nobody left to list (you removed yourself from a post of two): the sheet goes.
+  if (taggedOpen && !(tagged && tagged.length > 0)) setTaggedOpen(false);
+
+  /* A tagged person: your own name is the Profile tab, anyone else their screen, as the author's name. */
+  const openTagged = useCallback(
+    (id: string) => {
+      if (id === myId) router.navigate('/profile');
+      else router.navigate({ pathname: '/user/[id]', params: { id } });
+    },
+    [myId, router],
+  );
+
+  /*
+   * Your own post's Tag people, on Done (§1.5): the difference is written
+   * at once and the line changes first. The overlay is what the server
+   * will hold: the people kept, in the order they were tagged, then the
+   * new ones in pick order (setPostTags adds them one at a time). Anyone
+   * the server refuses comes back as it was when the store's answer lands;
+   * the store says who and why.
+   */
+  const onTagsDone = useCallback(
+    (picked: UserProfile[]) => {
+      if (!myId || !tagged) return;
+      const before = new Set(tagged.map((p) => p.id));
+      const after = new Set(picked.map((p) => p.id));
+      if (before.size === after.size && [...after].every((id) => before.has(id))) return;
+      const stamp = {
+        key: tagKey,
+        tagged: [...tagged.filter((p) => after.has(p.id)), ...picked.filter((p) => !before.has(p.id))],
+      };
+      setTagFlip(stamp);
+      void setTags(myId, post.id, [...after], [...before]).then((ok) => {
+        if (!ok) setTagFlip((f) => (f === stamp ? null : f));
+      });
+    },
+    [myId, post.id, setTags, tagKey, tagged],
+  );
+
+  /*
+   * Takes you off someone else's post, asking first (§1.5). It sticks, and
+   * its author is not told, so the confirm says both. The line drops you
+   * at once; a failure puts you back and says so.
+   */
+  const authorName = author?.username ?? 'someone';
+  const confirmRemoveMe = useCallback(() => {
+    if (!myId || !tagged) return;
+    Alert.alert(
+      'Remove yourself from this post?',
+      `${authorName} isn't told. They can't tag you on this post again.`,
+      [
+        { text: 'Cancel', style: 'cancel' as const },
+        {
+          text: 'Remove',
+          style: 'destructive' as const,
+          onPress: () => {
+            const stamp = { key: tagKey, tagged: tagged.filter((p) => p.id !== myId) };
+            setTagFlip(stamp);
+            void removeMyTag(myId, post.id).then((ok) => {
+              if (ok) {
+                haptic.select();
+                announce('Removed from this post');
+              } else {
+                setTagFlip((f) => (f === stamp ? null : f));
+                Alert.alert('Could not remove you', 'Check your connection and try again.');
+              }
+            });
+          },
+        },
+      ],
+    );
+  }, [authorName, myId, post.id, removeMyTag, tagKey, tagged]);
 
   /*
    * Who liked it: null until the liked-by line is first tapped, then open
@@ -695,14 +809,30 @@ export const PostCard = React.memo(function PostCard({
    * nonsense, and the server rejects a self-block (no_self_block).
    * Delete, Report and Block are the destructive words, ink and
    * underlined; Delete and Block go on to the system's confirm.
+   *
+   * Tags (v4.3 §1.5), only once the server has them (`tagged` known): your
+   * own post's Tag people, before View drink, with how many are on it; on
+   * someone else's post that tags you, Remove me from this post, after
+   * View drink and before Report. Plain, not destructive: it removes
+   * nothing of theirs.
    */
   const menuActions: SheetAction[] = [
     ...(canSave ? [{ label: saved ? 'Remove from saved' : 'Save', onPress: onSave }] : []),
+    ...(mine && tagged
+      ? [
+          {
+            label: 'Tag people',
+            detail: tagged.length > 0 ? String(tagged.length) : undefined,
+            onPress: () => setTagging(true),
+          },
+        ]
+      : []),
     { label: 'View drink', detail: formatPlateNumber(drink.dexNumber), onPress: () => onOpenDrink(drink.id) },
     ...(mine
       ? [{ label: 'Delete', destructive: true, onPress: confirmDelete }]
       : myId
         ? [
+            ...(taggedMe ? [{ label: 'Remove me from this post', onPress: confirmRemoveMe }] : []),
             {
               label: 'Report',
               destructive: true,
@@ -741,6 +871,29 @@ export const PostCard = React.memo(function PostCard({
         : `Illustration of ${drink.name}`;
 
   const when = timeAgoSpoken(post.createdAt);
+
+  /*
+   * The header's "with …" (v4.3 §1.4), fitted to the header's measure at
+   * its capped text size before layout, so the header is its final height
+   * on its first frame. One person opens their profile; two or more open
+   * In this post.
+   */
+  const line = withLine(who, tagged, {
+    myId,
+    following: followedTagged ? followedTagged.split(',') : [],
+    measure: headerMeasure(width),
+    fontScale: Math.min(fontScale, HEADER_CAP),
+  });
+  const onePerson = line?.opens === 'person' ? tagged?.find((p) => p.id === line.personId) : undefined;
+  const withTarget: WithTarget | undefined = !line
+    ? undefined
+    : onePerson
+      ? {
+          line,
+          label: onePerson.id === myId ? 'Open your profile' : `Open ${onePerson.username}'s profile`,
+          onPress: () => openTagged(onePerson.id),
+        }
+      : { line, label: 'People in this post', onPress: () => setTaggedOpen(true) };
   /*
    * The liked-by line opens the likers sheet once the server can name
    * them (migration 021: Post.likedBy is defined). Before that it is the
@@ -879,6 +1032,7 @@ export const PostCard = React.memo(function PostCard({
         when={when}
         story={story && onOpenStory ? story : undefined}
         width={width}
+        withTarget={withTarget}
         onOpenAuthor={onOpenAuthor}
         onOpenStory={onOpenStory}
         onOpenDrink={onOpenDrink}
@@ -917,6 +1071,23 @@ export const PostCard = React.memo(function PostCard({
       {likersOpen === null ? null : (
         <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} likes={likes} />
       )}
+      {taggedOpen === null || !tagged ? null : (
+        <TaggedSheet
+          visible={taggedOpen}
+          post={tagged === post.tagged ? post : { ...post, tagged }}
+          author={who}
+          onClose={() => setTaggedOpen(false)}
+          onRemoveMe={confirmRemoveMe}
+        />
+      )}
+      {tagging === null || !tagged ? null : (
+        <TagPeopleSheet
+          visible={tagging}
+          initial={tagged}
+          onDone={onTagsDone}
+          onClose={() => setTagging(false)}
+        />
+      )}
       {menu === null ? null : (
         <ActionSheet
           visible={menu.open}
@@ -940,14 +1111,37 @@ export const PostCard = React.memo(function PostCard({
 /* ==================================================================== */
 
 /**
+ * The header's text column: from the text's start (60) to 8 short of the
+ * •••'s box. The drink's name is fitted to it, and so is the first line's
+ * "with …" (withLine).
+ */
+function headerMeasure(width: number): number {
+  return width - (GUTTER + HEADER_AVATAR + space.md) - (MORE_INSET + layout.hit) - space.sm;
+}
+
+/** The first line's "with …", its one target, and that target's VoiceOver action. */
+interface WithTarget {
+  line: WithLine;
+  /** "People in this post", or "Open ana's profile". */
+  label: string;
+  onPress: () => void;
+}
+
+/**
  * The post's header (home-ig 5.1): the face, the username over the drink,
  * and •••. Each is its own tap: the face opens their story when they have
  * one today, else their profile; the username opens the profile; the
  * drink opens the drink page.
  *
- * VoiceOver hears the face and the two lines as one element, "ines.ag,
- * Negroni, 2 hours ago": activating it opens the profile, and the drink
- * and the story are its actions. The ••• is its own button.
+ * With tags (v4.3 §1.4) the username's line goes on, "maya.pours with ana
+ * and leo": the names and counts in 600, "with" and "and" in 400, all
+ * ink. Everything after the username is one target: one person's profile,
+ * or In this post. Nothing else moves, so the header keeps its two lines.
+ *
+ * VoiceOver hears the face and the two lines as one element, "maya.pours,
+ * with ana and leo, Negroni, 2 hours ago": activating it opens the
+ * profile, and the drink, the story and the tagged are its actions. The
+ * ••• is its own button.
  */
 function PostHeader({
   who,
@@ -956,6 +1150,7 @@ function PostHeader({
   when,
   story,
   width,
+  withTarget,
   onOpenAuthor,
   onOpenStory,
   onOpenDrink,
@@ -968,6 +1163,8 @@ function PostHeader({
   /** Set only when the story can be opened. */
   story?: 'unseen' | 'seen';
   width: number;
+  /** Who the author was with; absent, the first line is the username alone. */
+  withTarget?: WithTarget;
   onOpenAuthor?: (authorId: string) => void;
   onOpenStory?: (authorId: string) => void;
   onOpenDrink: (drinkId: string) => void;
@@ -978,13 +1175,13 @@ function PostHeader({
   const openDrink = () => onOpenDrink(drinkId);
   const onAvatar = openStory ?? openProfile;
 
-  // The drink's column: from the text's start (60) to 8 short of the •••'s box (390).
-  const measure = width - (GUTTER + HEADER_AVATAR + space.md) - (MORE_INSET + layout.hit) - space.sm;
+  const measure = headerMeasure(width);
 
   const a11yActions: AccessibilityActionInfo[] = [
     ...(openProfile ? [{ name: 'activate' }] : []),
     ...(openStory ? [{ name: 'story', label: 'View story' }] : []),
     { name: 'drink', label: `Open ${drinkName}` },
+    ...(withTarget ? [{ name: 'with', label: withTarget.label }] : []),
   ];
   const onA11yAction = (e: AccessibilityActionEvent) => {
     switch (e.nativeEvent.actionName) {
@@ -997,15 +1194,20 @@ function PostHeader({
       case 'drink':
         openDrink();
         break;
+      case 'with':
+        withTarget?.onPress();
+        break;
     }
   };
+
+  const spoken = [who.username, withTarget?.line.spoken, drinkName, when].filter(Boolean).join(', ');
 
   return (
     <View style={styles.header}>
       <View
         accessible
         accessibilityRole={openProfile ? 'button' : undefined}
-        accessibilityLabel={`${who.username}, ${drinkName}, ${when}${story === 'unseen' ? ', new story' : ''}`}
+        accessibilityLabel={`${spoken}${story === 'unseen' ? ', new story' : ''}`}
         accessibilityHint={openProfile ? 'Opens their profile' : undefined}
         accessibilityActions={a11yActions}
         onAccessibilityAction={onA11yAction}
@@ -1019,15 +1221,37 @@ function PostHeader({
           <Avatar name={who.displayName} accent={who.accent} size={HEADER_AVATAR} avatarPath={who.avatarPath} />
         </Pressable>
         <View style={styles.headText}>
-          <Pressable
-            onPress={openProfile}
-            disabled={!openProfile}
-            hitSlop={{ top: LINE_SLOP, right: space.sm }}
-            style={({ pressed }) => [styles.hug, pressed && styles.pressed]}>
-            <Text numberOfLines={1} maxFontSizeMultiplier={HEADER_CAP} style={styles.username}>
-              {who.username}
-            </Text>
-          </Pressable>
+          {/*
+            The first line. With a "with …" after the username, the username
+            gives up its slop on the right to it: the two targets abut, and
+            the words are already fitted to the line (withLine), so the
+            ellipsis on the "with …" is only the last resort.
+          */}
+          <View style={styles.firstLine}>
+            <Pressable
+              onPress={openProfile}
+              disabled={!openProfile}
+              hitSlop={{ top: LINE_SLOP, right: withTarget ? 0 : space.sm }}
+              style={({ pressed }) => [styles.hug, pressed && styles.pressed]}>
+              <Text numberOfLines={1} maxFontSizeMultiplier={HEADER_CAP} style={styles.username}>
+                {who.username}
+              </Text>
+            </Pressable>
+            {withTarget ? (
+              <Pressable
+                onPress={withTarget.onPress}
+                hitSlop={{ top: LINE_SLOP, right: space.sm }}
+                style={({ pressed }) => [styles.withHug, pressed && styles.pressed]}>
+                <Text numberOfLines={1} maxFontSizeMultiplier={HEADER_CAP} style={styles.withWords}>
+                  {withTarget.line.parts.map((part, i) => (
+                    <Text key={i} style={part.strong ? styles.strong : undefined}>
+                      {part.text}
+                    </Text>
+                  ))}
+                </Text>
+              </Pressable>
+            ) : null}
+          </View>
           <Pressable
             onPress={openDrink}
             hitSlop={{ bottom: LINE_SLOP, right: space.sm }}
@@ -1253,6 +1477,10 @@ const styles = StyleSheet.create({
   /* Hugs its words, so a line's target is the words and not the empty row beside them. */
   hug: { maxWidth: '100%' },
   username: { ...textRole.small, fontFamily: fonts.bodySemiBold, color: colors.text },
+  /* The username, then the "with …": the username keeps its width, the "with …" gives way. */
+  firstLine: { flexDirection: 'row', maxWidth: '100%' },
+  withHug: { flexShrink: 1, minWidth: 0 },
+  withWords: { ...textRole.small, color: colors.text },
 
   galleryCount: { position: 'absolute', top: COUNT_INSET, right: COUNT_INSET },
   burstLayer: {

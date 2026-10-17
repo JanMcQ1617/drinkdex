@@ -25,8 +25,10 @@ import { ComposeBar } from '@/components/log/ComposeBar';
 import { PhotoSlot, PhotoSourceSheet, type PhotoSource } from '@/components/log/PhotoSource';
 import { AddNewRow, ResultRow } from '@/components/log/ResultRow';
 import { WithScrollEdges } from '@/components/log/scrollEdges';
+import { TagPeopleRow } from '@/components/log/TagPeopleRow';
 import { MusicPicker } from '@/components/MusicPicker';
 import { SongArtwork } from '@/components/songs';
+import { TagPeopleSheet } from '@/components/tags/TagPeopleSheet';
 import { announce, Button, Field, haptic, SearchField } from '@/components/ui';
 import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
@@ -45,13 +47,14 @@ import {
   reportPostPhoto,
   type PickResult,
 } from '@/lib/pour';
+import { fetchMyPostTags, tagsSupported } from '@/lib/social';
 import { latestDexIds } from '@/lib/tastes';
 import { useAuth } from '@/store/auth';
 import { useCelebrate } from '@/store/celebrate';
 import { useCollection } from '@/store/collection';
 import { customDrinkById, useCustomDrinks } from '@/store/customDrinks';
 import { useSocial } from '@/store/social';
-import type { CustomDrink, Drink, Song } from '@/types';
+import type { CustomDrink, Drink, Song, UserProfile } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
 /* ==================================================================== */
@@ -92,6 +95,14 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*                                                                      */
 /* With story music on (EXPO_PUBLIC_STORY_MUSIC), compose offers "Add   */
 /* music" under the caption, and the song goes with Post only.          */
+/*                                                                      */
+/* TAG PEOPLE (v4.3 §1.2). Straight under the caption, one row names    */
+/* who was with you and opens the picker (TagPeopleSheet). Only where   */
+/* Post exists and the server has tags (migration 024): signed in, a    */
+/* catalogue drink. The tags go with Post only, like the song; "Save to */
+/* Dex only" keeps the drink and drops them, with no confirm, since not */
+/* posting is the decision. A re-post starts from the post's own tags,  */
+/* and Post writes the difference.                                      */
 /* ==================================================================== */
 
 /** Story music is on: "Add music" and its picker exist at all. */
@@ -129,6 +140,16 @@ function resolveDrink(id: string | null | undefined): Drink | null {
     return c ? toDrink(c) : null;
   }
   return getDrink(id) ?? null;
+}
+
+/** Nobody tagged: one array, so "nobody" is the same value from render to render. */
+const NOBODY: UserProfile[] = [];
+
+/** The same people, whatever the order: a tag set changed or not. */
+function samePeople(a: readonly UserProfile[], b: readonly UserProfile[]): boolean {
+  if (a.length !== b.length) return false;
+  const ids = new Set(a.map((p) => p.id));
+  return b.every((p) => ids.has(p.id));
 }
 
 /* -------------------------------------------------------------------- */
@@ -242,6 +263,28 @@ export default function PostDrinkScreen() {
   /** The song for this photo's story, sent with Post only. Never set while music is off. */
   const [song, setSong] = useState<Song | null>(null);
   const [pickingMusic, setPickingMusic] = useState(false);
+  /*
+   * Who was with you (v4.3 §1.2), per drink, since a re-post starts from
+   * that post's own tags. `tagBase` is what the server holds on your post
+   * of the drink (read once as compose opens it; nobody when there is no
+   * post yet, or the read failed). `tagPick` is the person's choice, with
+   * the base they saw when they made it (`prev`): Post writes the
+   * difference between the two, so a base that arrives after a pick was
+   * made is never removed by it, only left as it is.
+   */
+  const [tagBase, setTagBase] = useState<{ drinkId: string; people: UserProfile[] } | null>(null);
+  const [tagPick, setTagPick] = useState<{
+    drinkId: string;
+    people: UserProfile[];
+    prev: UserProfile[];
+  } | null>(null);
+  const [pickingTags, setPickingTags] = useState(false);
+  /*
+   * Whether the server has tags, as state: lib/social learns it from the
+   * first read of post_tags, which may land after this window opened, and
+   * a read in render would not wake it. Asked again after each read here.
+   */
+  const [tagsOn, setTagsOn] = useState(tagsSupported);
   /** Which key is saving, so only that one says so. */
   const [savingAs, setSavingAs] = useState<'dex' | 'post' | null>(null);
   /** Once the photo is saved: whether it went in new or as a re-log. */
@@ -436,6 +479,53 @@ export default function PostDrinkScreen() {
   const offerMusic = MUSIC_ON && posts && photoUri != null;
 
   /*
+   * Tag people shows exactly where Post exists and the server has tags
+   * (§1.2), with or without a photo yet. The people shown are the pick,
+   * else the post's own tags (none while they load: the row still opens).
+   *
+   * A pick made before the post's tags arrived never saw them. They stay
+   * on the post (Post removes only people the person unticked), so as
+   * they land they join the pick on screen and in the picker, and join
+   * `taggedBefore`, every tag the person has been shown, which is what
+   * Post writes the difference from. Without that, opening the picker
+   * while the read was out hid the post's tags from the row for good.
+   */
+  const offerTags = posts && tagsOn;
+  const drinkId = drink?.id ?? null;
+  // Memoised: save() depends on both, and a fresh array each render would remake it each render.
+  const { tagged, taggedBefore } = useMemo(() => {
+    const pickNow = drinkId && tagPick?.drinkId === drinkId ? tagPick : null;
+    const baseNow = drinkId && tagBase?.drinkId === drinkId ? tagBase.people : NOBODY;
+    if (!pickNow) return { tagged: baseNow, taggedBefore: baseNow };
+    const seen = new Set(pickNow.prev.map((p) => p.id));
+    const picked = new Set(pickNow.people.map((p) => p.id));
+    const unseen = baseNow.filter((p) => !seen.has(p.id));
+    return {
+      tagged: [...pickNow.people, ...unseen.filter((p) => !picked.has(p.id))],
+      taggedBefore: [...pickNow.prev, ...unseen],
+    };
+  }, [drinkId, tagPick, tagBase]);
+  const tagsChanged = offerTags && !samePeople(tagged, taggedBefore);
+
+  /*
+   * A re-post's starting tags: read once per drink as compose opens it.
+   * The read also tells lib/social whether 024 is there, so the flag is
+   * asked again once it lands.
+   */
+  useEffect(() => {
+    if (!posts || !myId || !drinkId || !tagsSupported()) return;
+    let alive = true;
+    void fetchMyPostTags(myId, drinkId).then((r) => {
+      if (!alive) return;
+      setTagBase({ drinkId, people: r.people });
+      setTagsOn(tagsSupported());
+    });
+    return () => {
+      alive = false;
+    };
+  }, [posts, myId, drinkId]);
+
+  /*
    * One small line under the caption, only when a key needs explaining:
    * why a drink someone added cannot be posted, why signed out there is
    * no Post, where a re-log's new photo goes. With a song chosen and
@@ -521,7 +611,11 @@ export default function PostDrinkScreen() {
          * step, as the drink card's Save photo does; it never creates one.
          */
         if (alsoPost && myId) {
-          void addPost(myId, drink.id, trimmedNote, uri, MUSIC_ON ? song : null).then(reportPost);
+          // The tags ride with Post like the song, and only when they changed.
+          const tags = tagsChanged
+            ? { next: tagged.map((p) => p.id), prev: taggedBefore.map((p) => p.id) }
+            : undefined;
+          void addPost(myId, drink.id, trimmedNote, uri, MUSIC_ON ? song : null, tags).then(reportPost);
         } else if (relog && myId) {
           void addPhotoForDrink(myId, drink.id, uri).then(reportPostPhoto);
         }
@@ -542,6 +636,9 @@ export default function PostDrinkScreen() {
       note,
       noteError,
       song,
+      tagsChanged,
+      tagged,
+      taggedBefore,
       unlock,
       myId,
       addPost,
@@ -558,17 +655,18 @@ export default function PostDrinkScreen() {
    * Leaving with work in the window asks first: the photo exists only in
    * the picker's cache until it is saved. An empty window still closes on
    * the first tap of the X, and so does one that only holds the drink it
-   * was opened for. A chosen song is work too. The full-screen window has
-   * no swipe to close, so this catches the X and Android's back; mid-save
-   * the attempt is ignored rather than offering to discard a save already
-   * happening.
+   * was opened for. A chosen song is work too, and so is a tag set that
+   * differs from where it started. The full-screen window has no swipe to
+   * close, so this catches the X and Android's back; mid-save the attempt
+   * is ignored rather than offering to discard a save already happening.
    */
   const dirty =
     !saved &&
     (photoUri != null ||
       (drink != null && drink.id !== preselectId) ||
       note.trim().length > 0 ||
-      song != null);
+      song != null ||
+      tagsChanged);
   usePreventRemove(dirty, ({ data }) => {
     if (busy) return;
     confirmDestructive(
@@ -802,6 +900,30 @@ export default function PostDrinkScreen() {
             />
 
             {/*
+              Tag people, 16 under the caption and before the music: who was
+              with you, and the way to the picker. Not during a save: save()
+              has already read the tags.
+            */}
+            {offerTags ? (
+              <View style={styles.tagRow}>
+                <TagPeopleRow
+                  people={tagged}
+                  disabled={!!saved}
+                  onPress={() => {
+                    if (busy || saved) return;
+                    Keyboard.dismiss();
+                    // Learned since this window opened: 024 is not there after all.
+                    if (!tagsSupported()) {
+                      setTagsOn(false);
+                      return;
+                    }
+                    setPickingTags(true);
+                  }}
+                />
+              </View>
+            ) : null}
+
+            {/*
               Music, only where Post can send it. No song: one small key. A
               song: its cover, title and artist, and Remove. Auditioning is the
               picker's, beside its Apple Music link.
@@ -925,6 +1047,20 @@ export default function PostDrinkScreen() {
         onChoose={(source) => void fromSource(source)}
       />
 
+      {/*
+        The picker hands back who was picked; nothing is written until Post.
+        It keeps the base the person saw, so Post removes only people they
+        unticked.
+      */}
+      {offerTags && drinkId ? (
+        <TagPeopleSheet
+          visible={pickingTags}
+          initial={tagged}
+          onDone={(picked) => setTagPick({ drinkId, people: picked, prev: taggedBefore })}
+          onClose={() => setPickingTags(false)}
+        />
+      ) : null}
+
       {/* Only while story music is on; it presents itself over this window. */}
       {MUSIC_ON ? (
         <MusicPicker
@@ -976,6 +1112,7 @@ const styles = StyleSheet.create({
   /* Compose: the photo 8 under the bar, the caption 24 under the photo. */
   compose: { paddingHorizontal: layout.gutter, paddingTop: space.sm, paddingBottom: space.xl },
   caption: { marginTop: space.xl },
+  tagRow: { marginTop: space.lg },
   addMusic: { alignSelf: 'flex-start', marginTop: space.lg },
   songRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm, marginTop: space.lg },
   songInfo: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.md },
