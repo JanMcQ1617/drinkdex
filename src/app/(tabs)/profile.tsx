@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
+import type { TournamentsLine } from '@/components/profile/ProfileHeader';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
@@ -34,13 +35,23 @@ import { useTournaments } from '@/store/tournaments';
 /* Tournaments moved here from Home's bar (and Activity's invitations    */
 /* still lead to them), so this screen asks the server on focus, as     */
 /* Home did: a server without migration 020 answers by switching the    */
-/* row off, and pending invitations show as its detail line.            */
+/* row off, and pending invitations show as its detail line. The same   */
+/* gate draws the Tournaments line under the Dex line (17 Oct 2026:     */
+/* the ••• row alone was too hard to find), which says "1 running"      */
+/* first, since a tournament on now is the one to look at.              */
 /*                                                                      */
 /* The list is the Profile tab's scroll source (chromeTab).              */
 /* ==================================================================== */
 
 /** "1 invitation", "2 invitations". */
 const invitations = (n: number) => `${formatCount(n)} ${n === 1 ? 'invitation' : 'invitations'}`;
+
+/*
+ * The Tournaments line's state: what is on before what is asked of you,
+ * and nothing at all when neither (the line is then just the word).
+ */
+const lineDetail = (running: number, pending: number) =>
+  running > 0 ? `${formatCount(running)} running` : pending > 0 ? invitations(pending) : undefined;
 
 function OwnProfile() {
   const insets = useSafeAreaInsets();
@@ -53,6 +64,7 @@ function OwnProfile() {
   const refreshProfile = useAuth((s) => s.refreshProfile);
   const tournaments = useTournaments((s) => s.supported);
   const pendingInvites = useTournaments((s) => s.pendingInvites);
+  const running = useTournaments((s) => s.running);
   const [fallbackMenu, setFallbackMenu] = useState(false);
 
   useFocusEffect(
@@ -71,6 +83,11 @@ function OwnProfile() {
         },
       ]
     : [];
+  // Signed out there is no profile to draw; checked anyway, as the store's load is.
+  const tournamentsLine: TournamentsLine | undefined =
+    tournaments && myId
+      ? { detail: lineDetail(running, pendingInvites), onOpen: () => router.push(tournamentsHref()) }
+      : undefined;
 
   /*
    * A profile already on screen stays there while it refreshes (an edit,
@@ -89,6 +106,7 @@ function OwnProfile() {
           ...tournamentsRow,
           about,
         ]}
+        tournaments={tournamentsLine}
         bottomInset={insets.bottom + TAB_BAR_CLEARANCE + space.md}
         chromeTab="profile"
       />

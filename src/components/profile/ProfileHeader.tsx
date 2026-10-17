@@ -13,7 +13,15 @@ import type { UserProfile } from '@/types';
 /* top: the 80pt face at the gutter with the name beside it and the bio */
 /* under the name on ONE line (the whole bio is in ••• › About and Edit */
 /* profile); the three counts on one line; ONE key; on your own profile */
-/* the quiet "38 entries in your Dex ›" that opens Dex progress.        */
+/* the quiet "38 entries in your Dex ›" that opens Dex progress, and    */
+/* under it "Tournaments ›".                                            */
+/*                                                                      */
+/* The Tournaments line is there because the ••• row alone was too hard */
+/* to find (Jan, 17 Oct 2026). It says what is waiting, in the same     */
+/* quiet type: "1 running" while one of yours is on, else               */
+/* "2 invitations", else nothing beside the word. Not a badge (layout   */
+/* principle 9): the state is words at the line's end, as a settings    */
+/* row's value is. Yours only, as the Dex line is.                      */
 /*                                                                      */
 /* One layout for yours and anyone else's, so the two read as one       */
 /* screen. Yours has Edit profile in the key's slot; theirs has Follow  */
@@ -33,8 +41,15 @@ const AVATAR = 80;
 const IDENTITY_GAP = 20;
 /** Between the three counts (layout spec 5.5). */
 const COUNT_GAP = 28;
-/** The Dex line's chevron. */
+/** The quiet lines' chevron (Dex, Tournaments). */
 const CHEVRON = 16;
+
+export type TournamentsLine = {
+  /** "1 running", else "2 invitations"; absent when neither, and the line is just the word. */
+  detail?: string;
+  /** Opens the Tournaments list, as the ••• row does. */
+  onOpen: () => void;
+};
 
 export type ProfileActions =
   | {
@@ -44,6 +59,11 @@ export type ProfileActions =
       dexCount: number;
       /** Opens Dex progress. */
       onOpenDex: () => void;
+      /**
+       * The Tournaments line under the Dex line. Absent while the server
+       * has no tournaments, the gate the ••• row uses too.
+       */
+      tournaments?: TournamentsLine;
     }
   | {
       kind: 'peer';
@@ -168,8 +188,32 @@ export function ProfileHeader({
           accessibilityRole="button"
           accessibilityLabel={dexLine(actions.dexCount)}
           accessibilityHint="Opens Dex progress"
-          style={({ pressed }) => [styles.dexLine, pressed && styles.dimmed]}>
+          style={({ pressed }) => [styles.line, styles.dexLine, pressed && styles.dimmed]}>
           <Text style={[textRole.small, styles.muted, styles.dexText]}>{dexLine(actions.dexCount)}</Text>
+          <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
+        </Pressable>
+      ) : null}
+
+      {actions.kind === 'own' && actions.tournaments ? (
+        /*
+         * Straight under the Dex line, each its own 44pt row, so the two
+         * quiet lines read as one short list. One button to VoiceOver,
+         * word and state together: "Tournaments, 1 running".
+         */
+        <Pressable
+          onPress={actions.tournaments.onOpen}
+          accessibilityRole="button"
+          accessibilityLabel={
+            actions.tournaments.detail ? `Tournaments, ${actions.tournaments.detail}` : 'Tournaments'
+          }
+          accessibilityHint="Opens your tournaments"
+          style={({ pressed }) => [styles.line, pressed && styles.dimmed]}>
+          <View style={styles.lineText}>
+            <Text style={[textRole.small, styles.muted, styles.lineWord]}>Tournaments</Text>
+            {actions.tournaments.detail ? (
+              <Text style={[textRole.small, styles.muted, styles.lineWord]}>{actions.tournaments.detail}</Text>
+            ) : null}
+          </View>
           <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
         </Pressable>
       ) : null}
@@ -260,13 +304,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   morePressed: { backgroundColor: colors.press },
-  // A 44pt row whose 18pt line sits 18 under the key (y 344 at 440).
-  dexLine: {
+  // The quiet lines: a 44pt row each, an 18pt line of small type and a chevron at the gutter.
+  line: {
     minHeight: layout.hit,
-    marginTop: space.xs,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.sm,
   },
+  // The first sits 18 under the key (its line at y 344 at 440).
+  dexLine: { marginTop: space.xs },
   dexText: { flex: 1 },
+  /*
+   * At rest the word sits at the left and the state at the chevron. When
+   * Larger Text leaves no room for both, the state drops to a line of its
+   * own under the word, as a settings row's value does and as the counts
+   * wrap between two counts: the line breaks between the two, never inside
+   * "Tournaments". Two items shrinking side by side split the word at the
+   * accessibility sizes. Each still shrinks, so a state wider than the row
+   * wraps at its own space.
+   */
+  lineText: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    columnGap: space.sm,
+  },
+  lineWord: { flexShrink: 1 },
 });

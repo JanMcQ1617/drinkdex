@@ -25,6 +25,8 @@ interface TournamentsState {
   list: TournamentSummary[];
   /** Invitations still open (not finished): the dot on Home's trophy. */
   pendingInvites: number;
+  /** Tournaments you are in that are on now: the "1 running" on your profile's Tournaments line. */
+  running: number;
   /** A load is in flight. The list keeps what it had meanwhile. */
   loading: boolean;
   /** The last load failed (offline, or the server refused); the list is what it was before. */
@@ -54,6 +56,7 @@ const EMPTY: Data = {
   supported: true,
   list: [],
   pendingInvites: 0,
+  running: 0,
   loading: false,
   failed: false,
   boards: {},
@@ -62,6 +65,15 @@ const EMPTY: Data = {
 /** Open invitations: yours to answer, in a tournament that has not finished. */
 const pendingIn = (list: TournamentSummary[]) =>
   list.filter((t) => t.myStatus === 'invited' && t.state !== 'finished').length;
+
+/*
+ * On now, in one you host or joined: the Tournaments list's "On now"
+ * group (rowKind 'live'). An invitation to one that is on is still an
+ * invitation, counted by pendingIn, so the two figures never count the
+ * same tournament twice.
+ */
+const runningIn = (list: TournamentSummary[]) =>
+  list.filter((t) => t.state === 'live' && (t.myStatus === 'host' || t.myStatus === 'accepted')).length;
 
 /*
  * Loads that overlap (a focus refetch racing a pull to refresh) are
@@ -84,10 +96,17 @@ export const useTournaments = create<TournamentsState>((set, get) => ({
       const list = await api.fetchMyTournaments();
       if (get().gen !== gen || seq !== loadSeq) return;
       if (list === null) {
-        set({ supported: false, list: [], pendingInvites: 0, loading: false, failed: false });
+        set({ supported: false, list: [], pendingInvites: 0, running: 0, loading: false, failed: false });
         return;
       }
-      set({ supported: true, list, pendingInvites: pendingIn(list), loading: false, failed: false });
+      set({
+        supported: true,
+        list,
+        pendingInvites: pendingIn(list),
+        running: runningIn(list),
+        loading: false,
+        failed: false,
+      });
     } catch {
       if (get().gen !== gen || seq !== loadSeq) return;
       set({ loading: false, failed: true });
@@ -110,7 +129,7 @@ export const useTournaments = create<TournamentsState>((set, get) => ({
   forget: (id) => {
     const list = get().list.filter((t) => t.id !== id);
     const { [id]: _gone, ...boards } = get().boards;
-    set({ list, boards, pendingInvites: pendingIn(list) });
+    set({ list, boards, pendingInvites: pendingIn(list), running: runningIn(list) });
   },
 
   reset: () => {

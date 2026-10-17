@@ -24,9 +24,9 @@ import type { TournamentSummary } from '@/types';
 /* ==================================================================== */
 /* Tournaments (spec v3.1 §11.3)                                        */
 /*                                                                      */
-/* Opened from Profile's ••• and from Activity's invitations row. Every  */
-/* tournament you host, are in or are invited to, in four groups shown   */
-/* only when they hold something:                                        */
+/* Opened from Profile's Tournaments line and its •••, and from         */
+/* Activity's invitations row. Every tournament you host, are in or are */
+/* invited to, in four groups shown only when they hold something:      */
 /* Invitations (answered right here), On now, Coming up, and the last    */
 /* 20 Finished. A tournament counts the different Dex entries its       */
 /* members post while it runs; amounts are never counted.               */
