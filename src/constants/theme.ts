@@ -89,7 +89,8 @@ export const colors = {
    *
    *   1  the + key in the tab bar           fill, onAccent glyph
    *   2  the post key: the drink page's     fill, onAccent label
-   *      pinned key, the + window's Post
+   *      pinned key, the + window's Post,
+   *      the post sheet's "Save & post"
    *   3  the caught Nº plate                fill, onAccent figures
    *   4  the caught figure, the number      text, Inter 600
    *      only: "14" in "14 / 2,089" and

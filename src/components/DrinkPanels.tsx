@@ -740,7 +740,7 @@ const BAR_CAP = 1.3;
  * this drink" until it is in your Dex, then "Post <name> again" ("Post it
  * again" for a name too long to sit in a key). The post key: the accent
  * fill with a white label (v4.4, one of its five places; the + window's
- * Post is the other key in it). Spoken "Post <name>" / "Post <name>
+ * Post and the post sheet's "Save & post" are the other keys in it). Spoken "Post <name>" / "Post <name>
  * again", the full name either way. Never "Post another <name>", which
  * reads as having another (App Review 1.4.3).
  *

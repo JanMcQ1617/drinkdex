@@ -145,11 +145,12 @@ export function PostSheet({
 
               {/*
                 The same pair, in the same order, as the + window. Posting is
-                the ink key because it is the social half of the app, but it
-                is never the only one: the first keeps the photo on this phone.
-                Ink, not the accent the + window's Post wears (v4.4): the
-                accent has exactly five places (theme.ts) and this key is not
-                one of them. A sixth is Jan's call (check-design rule 17).
+                the strong key because it is the social half of the app, but
+                it is never the only one: the first keeps the photo on this
+                phone. "Save & post" is the post key, so it wears the accent
+                like the + window's Post (v4.4, place 2 in theme.ts; Jan, 17
+                Oct 2026). Signed out it is disabled, and the line under it
+                says why.
               */}
               <View style={styles.actions}>
                 <Button
@@ -162,6 +163,7 @@ export function PostSheet({
                 />
                 <Button
                   label="Save & post"
+                  variant="post"
                   onPress={() => onConfirm(true)}
                   disabled={!signedIn || (busy && saving !== 'post')}
                   loading={saving === 'post'}

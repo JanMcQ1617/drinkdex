@@ -455,6 +455,7 @@ const ACCENT_PROPS = [
     files: {
       'components/DrinkPanels.tsx': "the drink page's pinned Post key (2)",
       'app/log.tsx': "the + window's Post (2)",
+      'components/dex/PostSheet.tsx': 'the post sheet\'s "Save & post" (2)',
     },
   },
   { tag: 'TopBarButton', prop: 'badge', files: { 'components/home/HomeChrome.tsx': "the Activity dot on Home's heart (5)" } },

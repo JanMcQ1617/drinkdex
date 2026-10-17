@@ -132,7 +132,7 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 **Exactly five places:**
 
 1. **The + key** in the tab bar: accent fill, `accentPressed` held, a white +, its 4pt squared corners kept.
-2. **The post key:** the drink page's pinned "Post …" key and the + window's Post. Accent fill, white label, `accentPressed` held. The same + window key stays ink when it saves without posting ("Save to Dex", "Save photo"), and so does the pinned key on a drink someone added (custom/[id]), whose + window can only save it. The drink page's post sheet keeps its ink "Save & post"; making it a sixth place is Jan's call.
+2. **The post key:** the drink page's pinned "Post …" key, the + window's Post, and the post sheet's "Save & post" (Jan, 17 Oct 2026). Accent fill, white label, `accentPressed` held. The same + window key stays ink when it saves without posting ("Save to Dex", "Save photo"), and so does the pinned key on a drink someone added (custom/[id]), whose + window can only save it. The post sheet's other key, "Save to Dex" or "Save photo", stays secondary.
 3. **The caught Nº plate** (the drink page and the catch card): accent fill, white figures. The not-caught plate is unchanged. The likers sheet no longer draws a plate (layout spec 5.4).
 4. **The caught figure:** the number only, Inter 600, as accent text. That is the "14" in the Dex bar's "14 / 2,089" and the "14" in Profile's "14 entries in your Dex". The rest of each line stays muted.
 5. **Home's Activity dot:** the 8pt dot on the heart.
