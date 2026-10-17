@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 16 October 2026**
+**Last updated: 17 October 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -10,7 +10,7 @@ them.
 
 ## Delete your Sipply account
 
-In the app, open **Profile → Settings** (the gear, top right) **→ Delete
+In the app, open **Profile → "..."** (top right) **→ Settings → Delete
 account**, and confirm.
 
 It happens straight away, it cannot be undone, and you do not need to email
@@ -56,8 +56,8 @@ Daily ideas, if you turned them on, were never on our servers either:
 your phone schedules them, and none come while you are signed out, so
 deleting your account stops them. The choice stays on the phone, so they
 start again if you sign in to another account there. To turn them off for
-good, untick them in **Profile → Settings → Notifications** before you
-delete the account, or at any time in your iPhone's **Settings →
+good, untick them in **Profile → "..." → Settings → Notifications** before
+you delete the account, or at any time in your iPhone's **Settings →
 Notifications → Sipply**. Deleting Sipply from your phone removes them
 too.
 
@@ -133,8 +133,8 @@ iPhone we cannot take Sipply off your Apple Account for you, so if you
 used Sign in with Apple, remove it there yourself, as described above.
 
 If your account was made with a phone number, you can sign in with that
-number on any iPhone with Sipply and delete the account from Settings
-there.
+number on any iPhone with Sipply and delete the account there, from
+**Profile → "..." → Settings**.
 
 ---
 

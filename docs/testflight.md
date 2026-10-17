@@ -18,17 +18,21 @@ sentence below that mentions them.
 
 ## Beta App Description
 
-Sipply is a field guide to cocktails and spirits. Every drink you try is an entry to collect: 2,089 of them, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
+[4,000 max. 1,451 as pasted, counted for build 25 the way appstore.md
+counts: bold marks gone, a paragraph's line breaks as spaces.]
 
-Post what you are drinking and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Tell it what is on your shelf and My Bar works out what you can make tonight, and ranks the one bottle that unlocks the most.
+Sipply is a field guide to cocktails and spirits. Its Dex holds 2,089 entries, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
 
-This build turns the stories at the top of Home into circles, gives My Bar a tab of its own, and drops rarity: an entry is simply collected or not yet. It also adds tournaments with people you follow.
+Post a drink you have had and it joins your Dex. Add a photo and your own shot replaces the stock artwork on that card from then on. Answer a few questions about what you like, and the Dex opens For you, with the drinks that fit you first.
+
+This build lets you tag the people you were with on a post, and adds Daily ideas: one notification a day at most, at a time you choose, and only if you turn them on. The Saved tab now holds collections you name and can share by link. The Dex has taste filters, Fruity among them, and its search comes back as soon as you scroll up.
 
 Worth trying:
-- The Dex grid and its filters, and how locked entries read next to collected ones
-- Posting a drink end to end, with and without a photo
-- A tournament with a friend who tests too: host it, join it, post, and check the standings
-- My Bar: tick a dozen bottles and check whether what it says you can make is right
+- Tagging someone you follow on a post, and removing yourself from a post that tags you
+- Daily ideas: turn them on in Settings, set the time a few minutes ahead, and check that one arrives (none comes on a day you have posted or added a drink)
+- A collection: make one, add to it, share its link, then stop sharing
+- The Dex in For you and By number, with the taste filters
+- A tournament with a friend who tests too: host it from the "..." menu on your profile, join it, post, and check the standings
 - Account deletion and password reset
 
 Anything that looks broken, slow or wrong on your screen is worth reporting.
@@ -37,37 +41,53 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
+[4,000 max. 3,036 as pasted, counted for build 25 the same way; 3,426
+with the two sign-in items below added to the list.]
+
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
 
 Worth poking at:
 
-- **The Dex.** 2,089 entries. Filter by category, search, and open a few.
-  Does it stay smooth when you scroll fast?
+- **Tagging people.** Post a drink and tap Tag people under the caption to
+  tag someone you follow, up to 10. On a post you already shared, its "..."
+  menu has Tag people too. From the tagged account, check the post is in
+  Activity (the heart on Home), then use the post's "..." menu to remove
+  yourself.
+- **Daily ideas.** Sipply offers them after you post or save something;
+  you can also turn them on in Profile → "..." (top right) → Settings →
+  Notifications. Set Time a few minutes ahead and wait. Try it on a day you
+  haven't posted or added a drink yet: on a day you have, no idea comes.
+  Turn them off and check nothing more arrives.
+- **Saved collections.** On the Saved tab, tap New collection. Hold a
+  bookmark to save something straight into it. In the collection's "..."
+  menu, share its link, open the link on another phone, then Stop sharing
+  and check the link no longer works.
+- **The Dex.** 2,089 entries. With taste answers it opens For you, your
+  kinds of drinks first; switch to By number for the plain order. Try the
+  filters (the sliders at the end of the search field), Fruity among them,
+  search, and open a few. Does it stay smooth when you scroll fast?
+- **Scrolling.** Scroll down the Dex and the search field and filters slide
+  away; scroll up a little and they come back. Home's top bar does the
+  same. Tell me if either gets stuck halfway, or a tab ever shows up blank
+  or half drawn.
 - **Posting a drink.** Add a photo and a caption. Does it show up on your
   profile and in the feed?
-- **Stories.** The circles at the top of Home are today's posts; a wine
-  ring means you haven't opened it yet. Open your own and use its "..."
-  menu to delete a post. Does it disappear from the circles and the feed?
-- **Tournaments.** Tap the trophy at the top of Home and host one with
+- **Tournaments.** Open Profile → "..." → Tournaments and host one with
   someone you follow. Join it from their account, post a drink from each,
   and check the standings. Each different drink counts once, up to 3 new
   ones a day. Try ending one, and deleting one.
-- **My Bar.** It has its own tab now, next to the +. Tick what's on your
-  shelf and check what it says you can make.
-- **Scrolling.** Scroll down Home, the Dex, My Bar or your profile: the tab
-  bar shrinks to icons and Home's top bar slides away. Scroll up and both
-  come back. Tell me if either gets stuck halfway, or a tab ever shows up
-  blank or half drawn.
 - **Finding people.** Search a username, or match your contacts. Contacts
   are hashed on your device and never uploaded.
 - **Your Instagram list.** In Find friends, request your followers and
   following from Instagram, then choose the .zip it sends, without
   unzipping it. Does it find the people you expected?
 - **Other people's profiles.** Open someone from the feed or a list. Their
-  profile opens as its own page, with Report and Block in its "..." menu.
+  profile opens as its own page, with Report account and Block in its "..."
+  menu.
 - **The feed.** Follow someone and see whether their posts appear.
-- **Stats.** Your collection progress and milestones.
+- **Dex progress.** Tap the count at the top of the Dex, or "drinks in your
+  Dex" on your profile.
 
 Please report:
 
@@ -80,8 +100,8 @@ Two things I already know about: the app is 18+ and alcohol-focused by
 design, and your collection lives on your device — signing in elsewhere
 won't bring it with you.
 
-You can delete your account any time from **Profile → Settings** (the gear,
-top right) **→ Delete account**. It removes everything, including your
+You can delete your account any time from **Profile → "..."** (top right)
+**→ Settings → Delete account**. It removes everything, including your
 photos.
 
 ### Add for a build with Apple and Facebook sign-in
@@ -89,7 +109,8 @@ photos.
 Paste these two items into the "Worth poking at" list above:
 
 - **Signing in with Apple or Facebook.** Make an account with either
-  button. You'll be asked to choose a username before anything else.
+  button, or with Google in a build that has it. You'll be asked to choose
+  a username before anything else.
 - **Friends from Facebook.** After continuing with Facebook, Find friends
   shows which of your Facebook friends are on Sipply. Facebook only lists
   friends who connected Sipply too, so it helps if one of them tests with
@@ -112,15 +133,15 @@ there is no invite code or gate.
 other users. Reporting and blocking are both available from the "..." menu
 on any post or profile that isn't yours: report offers a reason, block is
 immediate and symmetric, and removes any follow between the two accounts.
-Blocks can be undone from Profile → Settings → Blocked accounts. Captions,
-bios, display names and usernames pass a server-side filter that refuses
-slurs and explicit sexual terms before they are saved.
+Blocks can be undone from Profile → "..." → Settings → Blocked accounts.
+Captions, bios, display names and usernames pass a server-side filter that
+refuses slurs and explicit sexual terms before they are saved.
 
 **Tags.** A post can tag up to 10 people its author follows, never anyone
 they are blocked with either way. Anyone tagged can remove themselves from
 the post's "..." menu, and a post with tags is reported like any other.
 
-**Account deletion.** Profile → Settings (the gear, top right) → Delete
+**Account deletion.** Profile → "..." (top right) → Settings → Delete
 account. Deletes the account, all posts, all photos and all follows. No
 email or support request needed.
 
@@ -136,8 +157,8 @@ hashes are sent as query arguments, at most 500 per call, to a matching
 function that stores none of them. It records only a count per account, to
 enforce a limit of 3,000 hashes per rolling 24 hours. The only value
 retained is the user's own phone hash, which is what makes them findable,
-and it is cleared by "Stop being findable" in Profile → Settings → Find
-friends.
+and it is cleared by "Stop being findable" in Profile → "..." → Settings →
+Find friends.
 
 **Instagram.** There is no Instagram login and no Instagram API. The user
 picks their own Instagram data download (the .zip Instagram sends). It is
@@ -159,17 +180,18 @@ notes cannot drift apart.
 This field has the same 4,000-character limit, measured the way
 appstore.md measures it: bold marks gone, each paragraph's line breaks as
 spaces, a blank line between paragraphs. Sign-in through Instagram is
-2,325 now, with Tags and the age rating's second sentence (1,957 before).
-Build 25 has Apple, Google and Facebook sign-in, tournaments and Daily
-ideas, and no phone sign-in or songs. With the 896 third-party paragraph,
-Tournaments and Daily ideas, that is 4,374, 374 over. Shorten Contacts
-and Instagram to their first two sentences, as appstore.md does, and it is
-3,767, 233 to spare. A build with phone sign-in as well comes to 4,233
-with its code line; take Contacts and Instagram down to their first
-sentence too and it is 3,987, 13 to spare. Songs in place of phone sign-in
-need that cut and the third-party paragraph's two sentences about the
-Facebook friends list and access token dropped as well: 3,881, 119 to
-spare. Songs and phone sign-in together do not fit. Count before pasting.
+2,339 now, with Tags, the age rating's second sentence and the "..." step
+in three Settings paths (1,957 before). Build 25 has Apple, Google and
+Facebook sign-in, tournaments and Daily ideas, and no phone sign-in or
+songs. With the 896 third-party paragraph, Tournaments (652) and Daily
+ideas (498), that is 4,391, 391 over. Shorten Contacts and Instagram to
+their first two sentences, as appstore.md does, and it is 3,776, 224 to
+spare. A build with phone sign-in as well comes to 4,242 with its code
+line; take Contacts and Instagram down to their first sentence too and it
+is 3,996, 4 to spare. Songs in place of phone sign-in need that cut and
+the third-party paragraph's two sentences about the Facebook friends list
+and access token dropped as well: 3,890, 110 to spare. Songs and phone
+sign-in together do not fit. Count before pasting.
 
 ### Add for a build with phone sign-in
 

@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 7 October 2026**
+**Last updated: 17 October 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -16,7 +16,7 @@ subject and it will be treated that way.
 
 ## Things you can do yourself, right now
 
-**Delete your account.** Profile → **Settings** (the gear, top right) →
+**Delete your account.** Profile → **"..."** (top right) → **Settings** →
 **Delete account**. It removes your profile, every post, every photo, your
 likes, your follows in both directions and the tournaments you host. It is
 immediate, it cannot be undone, and you do not need to email anyone first.
@@ -26,26 +26,29 @@ removing Sipply from that account is done in Apple's or Facebook's
 settings: [Deleting your data](data-deletion) explains how.
 
 **Report a post or an account.** The **"..."** menu on any post or profile
-that is not yours → **Report**. Pick a reason. It comes straight to us.
+that is not yours → **Report** (**Report account** on a profile). Pick a
+reason. It comes straight to us.
 
 **Block someone.** Same **"..."** menu → **Block**. It takes effect
 immediately, it works in both directions, it drops any follow between you,
 and the other person is not told.
 
-**Unblock someone.** Profile → **Settings** → **Blocked accounts** →
-**Unblock**. Follows the block dropped do not come back on their own.
+**Unblock someone.** Profile → **"..."** → **Settings** → **Blocked
+accounts** → **Unblock**. Follows the block dropped do not come back on
+their own.
 
-**Stop being findable by your phone number.** Profile → **Settings** →
-**Find friends** → **Stop being findable**. This clears the stored hash on
-the server, not just on your phone.
+**Stop being findable by your phone number.** Profile → **"..."** →
+**Settings** → **Find friends** → **Stop being findable**. This clears the
+stored hash on the server, not just on your phone.
 
-**Forget an imported Instagram list.** Profile → **Settings** → **Find
-friends** → **Forget my imported list**. Clears the cached list and the
-matches. Your own handle can be cleared separately in the same place.
+**Forget an imported Instagram list.** Profile → **"..."** → **Settings** →
+**Find friends** → **Forget my imported list**. Clears the cached list and
+the matches. Your own handle can be cleared separately in the same place.
 
-**Start your collection over.** Profile → **Settings** → **Reset
-collection**. This clears your collected entries and the photos saved with
-them on this phone. It does not delete your account or your posts.
+**Start your collection over.** Profile → **"..."** → **Settings** →
+**Reset collection**. This clears your collected entries and the photos
+saved with them on this phone. It does not delete your account or your
+posts.
 
 ## If you have forgotten your password
 
@@ -90,6 +93,82 @@ signed in. The reset flow above is the only route, and it works fine for
 this — request a link and set the new password from there.
 
 This is a gap, not a policy, and it is on the list.
+
+## Daily ideas
+
+**What they are.** One notification a day at most, at a time you choose:
+a drink to read about, a recipe to write down, or something new in the
+Dex. They are off until you say yes. Your phone writes and schedules them
+itself, and nothing about them is sent to us.
+
+**Turn them on or off.** Once you have done something in the app, such as
+posting or saving a drink, Sipply offers them with an example of what you
+would get, and it asks by itself twice at most. Tap **Allow daily ideas**,
+then allow notifications when iOS asks. You can also tick or untick them at
+any time in Profile → **"..."** → **Settings** → **Notifications** →
+**Daily ideas**. Unticking cancels every idea already planned.
+
+**Change the time.** They come at 6:00 PM unless you change it. With Daily
+ideas ticked, tap **Time** under it, pick a new time, and tap **Done**.
+
+**Why didn't one arrive?** Usually one of these:
+
+- **Notifications are off for Sipply in iOS.** Sipply's Settings then says
+  "Off in iOS Settings" under Daily ideas. Turn them back on in your iPhone's
+  **Settings → Notifications → Sipply**.
+- **You are signed out.** Daily ideas only come while you are signed in.
+  Your choice is kept, and they start again when you sign in.
+- **None were planned.** Each time you open Sipply, your phone plans the
+  next two weeks. If you have not opened it for about two weeks, that plan
+  runs out and nothing more comes until you open it again. That is on
+  purpose, so Sipply never keeps nudging someone who has stopped using it.
+- **You had already posted or added a drink that day.** That day's idea is
+  skipped, since it would only ask for what you just did.
+
+## Tagging people on a post
+
+**Tag someone.** When you post a drink, tap **Tag people** under the
+caption, tick who was with you, and tap **Done**. To change the tags on a
+post you already shared, open its **"..."** menu → **Tag people**, where
+unticking someone removes their tag.
+
+**Who you can tag.** People you follow, up to 10 on a post. Never yourself,
+and never anyone you have blocked or who has blocked you. Each person you
+tag sees the post in their Activity.
+
+**Remove yourself.** On a post that tags you, open its **"..."** menu →
+**Remove me from this post**. The person who posted it is not told, and
+they cannot tag you on that post again.
+
+**Blocks remove tags.** Blocking someone, either way, removes the tags
+between you, and unblocking does not bring them back.
+
+## Saved collections
+
+Collections need an account. Unlike your Dex, they are kept with it, so
+they follow you to a new phone.
+
+**Make one.** On the **Saved** tab, tap **New collection**, give it a name
+and tap **Create**. Pick things from All saved to add, or tap **Skip** to
+leave it empty for now.
+
+**Add to it.** Hold any bookmark: the drink or post is saved, and your
+collections open, so you can tick the ones it belongs in. Right after you
+tap a bookmark, the bar that says **Saved** has **Save to collection**,
+which does the same. A collection holds up to 200 things.
+
+**Share it by link.** Open the collection, tap **"..."** beside its name →
+**Share**, and send the link. Anyone with the link can see the
+collection's name, your username and the drinks in it, even without
+Sipply. **Share link** in the same menu sends the same link again.
+
+**Stop sharing.** Same **"..."** menu → **Stop sharing**. The link stops
+working at once. Sharing again makes a new link, so the old one never
+works again. Someone who saved a copy before you stopped keeps their copy.
+
+**Delete one.** Same **"..."** menu → **Delete collection**. Everything in
+it stays in All saved, and a shared link stops working. To take out only
+some things, use **Remove items** instead.
 
 ## Reporting a bug
 
@@ -138,20 +217,21 @@ asks once they have. The link only opens on a phone that already has Sipply.
 A link shared from an older version of the app still opens your profile,
 but no longer follows anyone.
 
-**How do tournaments work?** Tap the trophy at the top of Home, then **+**
-to host one: give it a name, choose when it starts and how long it runs,
-add a goal if you want one, and invite people you follow. With a goal,
-whoever reaches it first wins and the tournament ends there; otherwise, or
-if nobody reaches it, whoever has the most different drinks at the end
-wins, and a tie goes to whoever got there first. The rules are the same in
-every tournament, and every tournament screen shows them: "Each different
-drink you post counts once, up to 3 new drinks a day. It is about trying
-new things, never how much: a taste counts. No prizes, and Apple is not a
-sponsor. Please drink responsibly." The host can end a running tournament
-early from its **"..."** menu, and whoever is ahead then wins, or delete
-one that has not finished, and it disappears for everyone in it. Anyone
-who has joined can leave from the same menu before it finishes, but cannot
-rejoin, and an invitation you decline cannot be sent to you again.
+**How do tournaments work?** Open Profile → **"..."** (top right) →
+**Tournaments**, then tap **Host a tournament**: give it a name, choose
+when it starts and how long it runs, add a goal if you want one, and invite
+people you follow. With a goal, whoever reaches it first wins and the
+tournament ends there; otherwise, or if nobody reaches it, whoever has the
+most different drinks at the end wins, and a tie goes to whoever got there
+first. The rules are the same in every tournament, and every tournament
+screen shows them: "Each different drink you post counts once, up to 3 new
+drinks a day. It is about trying new things, never how much: a taste
+counts. No prizes, and Apple is not a sponsor. Please drink responsibly."
+The host can end a running tournament early from its **"..."** menu, and
+whoever is ahead then wins, or delete one that has not finished, and it
+disappears for everyone in it. Anyone who has joined can leave from the
+same menu before it finishes, but cannot rejoin, and an invitation you
+decline cannot be sent to you again.
 
 **Why didn't a drink count?** Usually one of these:
 

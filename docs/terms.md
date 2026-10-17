@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 7 October 2026**
+**Last updated: 17 October 2026**
 
 Sipply is a drinks field guide. You collect entries, post what you drink,
 and share it with people you follow. These are the rules for using it.
@@ -73,8 +73,8 @@ the account is suspended or deleted depending on what it did.
 you cannot see them, any follow between you is dropped in both directions,
 and they are not told. Neither of you can follow the other while the block
 stands, not even through an invite link. You do not need our involvement to
-block someone, and you can undo it yourself from **Profile → Settings →
-Blocked accounts**.
+block someone, and you can undo it yourself from **Profile → "..." →
+Settings → Blocked accounts**.
 
 If something is urgent, email **mcqueeny1617@gmail.com** rather than waiting.
 
@@ -154,8 +154,8 @@ belong to their owners and appear for identification only.
 
 ## Ending it
 
-**You can delete your account at any time** from **Profile → Settings** (the
-gear, top right) **→ Delete account**. It removes your profile, posts,
+**You can delete your account at any time** from **Profile → "..."** (top
+right) **→ Settings → Delete account**. It removes your profile, posts,
 photos, likes, saves, follows, the drinks you added and the tournaments you
 host. It is immediate and cannot be undone. You do not need to ask us. If
 you signed in with Apple, Google or Facebook, removing Sipply from that
@@ -189,8 +189,8 @@ own copies of photos you care about.** Do not treat the app as a backup.
 When these terms change, the date at the top changes with it, and the new
 version applies from that date. The app does not announce changes itself:
 the current terms are always the ones at this address, which **Profile →
-Settings → Terms of Use** opens. Continuing to use Sipply after a change
-means you accept the new version.
+"..." → Settings → Terms of Use** opens. Continuing to use Sipply after a
+change means you accept the new version.
 
 ## Governing law
 

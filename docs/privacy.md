@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 16 October 2026**
+**Last updated: 17 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -93,7 +93,8 @@ answers and your saved drinks are stored with it so they follow you to a
 new phone. Only you can see them: they are not on your profile and no
 other user, follower or not, can read them. They are never used for
 advertising, never shared and never sold. You can change them in
-**Settings → Your tastes**, and deleting your account deletes them.
+**Profile → "..." → Settings → Your tastes**, and deleting your account
+deletes them.
 
 **Your age answer.** The first question asks whether you are of legal
 drinking age where you live. If you answer no, Sipply asks nothing else,
@@ -198,8 +199,8 @@ blocked is not told.
 **Your phone number for finding friends (optional).** If you give it under
 Find friends, it is stored as a salted hash rather than as the number, so
 that people who already have your number can find you. It is never shown
-to anyone. **Stop being findable** in Profile → Settings → Find friends
-clears it from our servers.
+to anyone. **Stop being findable** in Profile → "..." → Settings → Find
+friends clears it from our servers.
 
 **Contact matching (only if you use it).** If you ask Sipply to find friends
 from your contacts, phone numbers are converted on your device into salted
@@ -229,8 +230,8 @@ only those hashes are sent for comparison, the same way contacts are.
 **Your Instagram list is never uploaded**, and the hashes are not stored.
 Your own handle, if you choose to add one so friends can find you, is
 stored only as a hash, never in readable form, and is never shown to other
-users. **Stop being findable** in Profile → Settings → Find friends clears
-it.
+users. **Stop being findable** in Profile → "..." → Settings → Find
+friends clears it.
 
 **Matching limits.** To make matching hard to misuse for looking up
 strangers, each account can check at most 3,000 phone numbers and
@@ -259,16 +260,17 @@ kept on the phone in readable form, because our servers hold only their
 hashes and the app would otherwise ask for them again; **Stop being
 findable** removes them here as well. The Instagram list you import is
 cached on the phone too, so re-checking it does not need another download,
-and **Forget my imported list** in Profile → Settings → Find friends clears
-it. If you connected Facebook, the Sipply profiles of your Facebook friends
-who are here are kept on the phone, with when they were checked, so the
-list is there next time; never a Facebook identifier. Signing out clears
-the Instagram list, the number, the username and the Facebook friends; your
-collection stays. So the app can offer **Welcome back**, the phone keeps the
-last account's display name, profile photo and the way it signed in (Apple,
-Google, Facebook, phone or email; never the number, the address or a
-password) after you sign out. **Not you? Forget this account** on that
-screen clears it, and deleting the account clears it too.
+and **Forget my imported list** in Profile → "..." → Settings → Find
+friends clears it. If you connected Facebook, the Sipply profiles of your
+Facebook friends who are here are kept on the phone, with when they were
+checked, so the list is there next time; never a Facebook identifier.
+Signing out clears the Instagram list, the number, the username and the
+Facebook friends; your collection stays. So the app can offer **Welcome
+back**, the phone keeps the last account's display name, profile photo and
+the way it signed in (Apple, Google, Facebook, phone or email; never the
+number, the address or a password) after you sign out. **Not you? Forget
+this account** on that screen clears it, and deleting the account clears it
+too.
 
 **Daily ideas (only if you allow them).** If you turn on daily ideas,
 Sipply schedules at most one notification a day on your phone, at the
@@ -285,9 +287,9 @@ service is involved: Sipply does not ask for the address a server would
 need to send your phone a notification. They are a setting of the phone,
 not of your account: signing out keeps your choice, but none come while
 you are signed out, and they start again when you sign in. Turn them off in
-**Profile → Settings → Notifications**, or at any time in your iPhone's
-**Settings → Notifications → Sipply**. Deleting Sipply from your phone
-removes them too.
+**Profile → "..." → Settings → Notifications**, or at any time in your
+iPhone's **Settings → Notifications → Sipply**. Deleting Sipply from your
+phone removes them too.
 
 ## What Sipply does not do
 
@@ -377,7 +379,7 @@ That is the complete list.
 
 ## Deleting your account
 
-Open **Profile → Settings** (the gear, top right) **→ Delete account**.
+Open **Profile → "..."** (top right) **→ Settings → Delete account**.
 
 This permanently deletes your profile and profile photo, every post you
 have made, the tags on your posts and the tags of you on other people's
@@ -484,7 +486,7 @@ be harmed by if it became public.
 
 When this policy changes, the date at the top changes with it. The app does
 not announce changes itself: the current policy is always the one at this
-address, which **Profile → Settings → Privacy Policy** opens.
+address, which **Profile → "..." → Settings → Privacy Policy** opens.
 
 ## Contact
 

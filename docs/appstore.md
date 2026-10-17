@@ -26,54 +26,80 @@ it, and recount the bracketed lengths after any edit.
 ## App Name — 30 max
 
 ```
-Sipply
+Sipply: Drinkdex
 ```
 
-[6] Keeping the name bare leaves "drinks", "field guide" and "collect"
-free to use in the subtitle and keywords, where they do the same search
-work without spending name characters. If you would rather the name carry
-its own descriptor, `Sipply: Drinks Field Guide` [26] fits — but then drop
-"guide" from the keywords, because repeats there are wasted.
+[16] The bare name "Sipply" is taken on the App Store, so the listing
+name is "Sipply: Drinkdex". If App Store Connect still shows an older
+name, replace it with this one. Only the App Store shows it: the name
+under the icon on the home screen stays "Sipply", which comes from
+`expo.name` in `app.json`.
+
+Apple indexes the name for search, so "sipply" and "drinkdex" stay out of
+the keywords.
 
 ---
 
 ## Subtitle — 30 max
 
 ```
-Collect every drink you try
+Cocktail recipes and spirits
 ```
 
-[27]
+[28]
 
 Alternatives, same length class:
 
 ```
-A field guide to drinking
+A field guide to 2,089 drinks
 ```
-[25]
+[29]
 
 ```
-2,089 drinks. Collect them.
+A drink diary and recipe guide
 ```
-[27]
+[30]
+
+The subtitle is the line people read in search results, so it names what
+the app holds and never a drink to go and have. Build 25 dropped "Collect
+every drink you try" and "2,089 drinks. Collect them." for guideline 1.4.3:
+both read as a list to drink through. "A field guide to drinking" went
+with them, because it can read as a guide to drinking itself.
+
+The subtitle changes only with a new version, so the field guide
+alternative's 2,089 has to be right on the day you submit. Recount first.
 
 ---
 
 ## Keywords — 100 max, comma-separated, NO spaces
 
 ```
-cocktail,whisky,whiskey,spirits,bar,recipes,tasting,journal,mixology,pour,gin,rum,tequila,amaro
+whisky,whiskey,scotch,bourbon,gin,rum,tequila,mezcal,vodka,brandy,amaro,liqueur,mixology,journal
 ```
 
-[95]
+[96]
 
 Two rules this already follows, both easy to get wrong: **no spaces after
 the commas** (a space costs a character and buys nothing), and **nothing
-repeated from the name or subtitle** — Apple already indexes those, so
-"sipply", "collect", "drink" and "every" would be dead weight here.
+repeated from the name or subtitle**. Apple already indexes those, so
+"sipply", "drinkdex", "cocktail", "recipes" and "spirits" would be dead
+weight here.
 
 Singular and plural are indexed together, so there is no point spending
 characters on both.
+
+Build 25 dropped "bar", "pour" and "tasting" for guideline 1.4.3: each
+reads as going out for a drink or having one. Every word left names a
+kind of drink in the Dex, the craft of mixing them, or the journal.
+
+With either alternative subtitle, "cocktail" is no longer in the subtitle,
+so swap it in for "mezcal":
+
+```
+cocktail,whisky,whiskey,scotch,bourbon,gin,rum,tequila,vodka,brandy,amaro,liqueur,mixology,journal
+```
+
+[98]
 
 ---
 
@@ -83,10 +109,16 @@ Updatable any time without shipping a build, so this is the line to change
 when the Dex grows or something is worth announcing.
 
 ```
-2,089 drinks waiting to be found: 1,190 spirits and 899 cocktails with real recipes. Post what you drink, keep the photo, and see what your friends are drinking.
+A field guide to 2,089 drinks: 899 cocktails with real recipes and 1,190 spirits. Log the ones you have had, keep your own photo of each, and follow friends.
 ```
 
-[161]
+[157]
+
+Build 25 took out "2,089 drinks waiting to be found" and "see what your
+friends are drinking" for guideline 1.4.3: the first made the Dex a list
+to drink through, and the second made other people's drinking the draw.
+If you take the field guide subtitle, this opens with the same words, so
+change the start here; it needs no build.
 
 ---
 
@@ -95,29 +127,39 @@ when the Dex grows or something is worth announcing.
 ```
 Sipply is a field guide to drinks, and a record of the ones you have had.
 
-Every cocktail and every bottle is an entry to find. There are 2,089 of them — 899 cocktails and 1,190 spirits — and each one tells you the glass it belongs in and where it comes from. Every cocktail carries its real recipe, the proper measures, and the story behind it.
+The Dex holds 2,089 entries (899 cocktails and 1,190 spirits), and each one tells you the glass it belongs in and where it comes from. Every cocktail carries its real recipe, the proper measures, and the story behind it.
 
 Entries start locked. Post one you have had, with a photo and a caption, and the card turns over and joins your collection.
 
 THE DEX
 
-Search it, filter it by category, or just scroll and find something you have never heard of. Some entries are everywhere — a Margarita, a Negroni. Others are genuinely obscure: a 1930s Mexico City sour the world forgot for seventy years, a whisky forgotten in a warehouse for two decades, a Mallorcan bitter sold against malaria that outlived the malaria.
+Search it, filter it by flavour, spirit or kind, or just scroll and find something you have never heard of. Some entries are everywhere — a Margarita, a Negroni. Others are genuinely obscure: a 1930s Mexico City sour the world forgot for seventy years, a whisky forgotten in a warehouse for two decades, a Mallorcan bitter sold against malaria that outlived the malaria.
+
+Answer a few questions about your tastes and For you puts the entries closest to them first. By number is one tap away.
 
 YOUR SHELF
 
-Post a drink and it lands on your profile with your own photograph of it — not a stock picture of someone else's glass. Your collection, your captions, your camera roll.
+Each drink you post lands on your profile with your own photograph of it, not a stock picture of someone else's glass. Your collection, your captions, your camera roll.
 
-Stats show you what you have covered and what you have not: progress by category, and the milestones you are closing in on.
+Write down a drink the Dex does not have, recipe and all, and it gets a page of its own.
+
+SAVED
+
+Save any drink or post to come back to, and sort them into collections. Share a collection by link, and stop sharing whenever you like.
 
 PEOPLE
 
-Follow other collectors and see what they have been drinking. Find friends by username, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
+Follow friends and see the drinks they post, with their photos and captions. Tag the people you were with on a post, and they see it in Activity. Find friends by username, or match your contacts — phone numbers are scrambled on your phone before they are compared, and your address book is never uploaded.
 
-Host a tournament with people you follow: whoever tries the most different drinks in a week wins. Each drink counts once, never how much.
+Host a tournament with people you follow: one shared log of the drinks each of you posts between the dates you pick. No prizes, and how much anyone drinks is never counted or shown.
 
 Continue with Facebook and see which of your Facebook friends are already here. Facebook only shows Sipply the friends who connected it too, and Sipply never posts anything there.
 
 If you would rather bring your Instagram circle, ask Instagram for a copy of your followers and following and hand Sipply the .zip it sends. Sipply never connects to your Instagram account: the file is read on your phone, and the usernames in it are scrambled there before they are compared.
+
+DAILY IDEAS
+
+Only if you want them: at most one notification a day, at a time you choose, with a drink to read about, a recipe to write down or something new in the Dex. Sipply asks before any arrive. Change the time or turn them off in Settings, under Notifications.
 
 WHAT SIPPLY DOES NOT DO
 
@@ -125,19 +167,32 @@ No ads. No analytics. No trackers. No advertising identifier. Nothing is sold or
 
 Sipply does not sell alcohol and cannot be used to order it. It is a reference and a diary, nothing more.
 
-You can delete your account from Settings inside the app, without emailing anyone. It takes your posts and your photos with it.
+You can delete your account in Settings, which opens from your profile, without emailing anyone. It takes your posts and your photos with it.
 
 —
 
 Sipply is for people old enough to drink where they live. Please drink responsibly, and never drive after drinking.
 ```
 
-[2,515, recounted for build 25 — comfortably inside 4000, with room if you want to add a line]
+[3,120, recounted for build 25, comfortably inside 4000, with room if you want to add a line]
 
-Build 25 reworded one line for guideline 1.4.3, which the daily ideas
-bring under closer reading: "You collect one by drinking it" became "Post
-one you have had". The Dex is a record of drinks already had, never a
-list to drink through.
+Build 25 rewrote this for guideline 1.4.3 (apps must not encourage
+drinking or excessive drinking), which the daily ideas bring under closer
+reading. Every line is about the catalogue, recipes, what you have posted,
+what you have saved, or friends, and none invites anyone to drink, to try
+more drinks, or to treat drinking as a score. What went: "You collect one
+by drinking it" (now "Post one you have had"), "Every cocktail and every
+bottle is an entry to find", "see what they have been drinking", the
+Stats line about "the milestones you are closing in on", and a tournament
+won by "whoever tries the most different drinks in a week". The
+tournament is described as the people in it see it, one shared log of
+their posts; the Tournaments paragraph in the review notes below keeps the
+rules in full for App Review.
+
+Dex progress (Stats) is left out on purpose. Its rank ladder and the
+line under it ("171 more to Barfly in Training", for someone with 38) are
+the part of the app most likely to read as a score, so the listing does
+not point anyone at them.
 
 The Facebook paragraph under PEOPLE describes a build made with
 `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on`. If the build you submit has it off,
@@ -145,7 +200,16 @@ delete that paragraph, and the count drops by 181.
 
 The tournament paragraph under PEOPLE describes a server with migration
 020 applied, which is what makes tournaments appear. If it is not applied
-when you submit, delete that paragraph, and the count drops by 139.
+when you submit, delete that paragraph, and the count drops by 183.
+
+The Tag sentence under PEOPLE needs migration 024 (applied 17 Oct 2026)
+and SAVED's collections need 023 (applied 13 Oct 2026). Without 024,
+delete the sentence that starts "Tag the people", and the count drops
+by 69.
+
+DAILY IDEAS is true of build 25 and every build after it. Settings opens
+from the ••• on the Profile tab, which is what "Settings, which opens from
+your profile" means in the account line.
 
 ---
 
@@ -232,17 +296,18 @@ the listing, carries the rest. That saves 607, which fits songs with room
 to spare, and songs with phone sign-in at 3,961, 39 to spare, so count
 before pasting.
 
-From build 25, Daily ideas (493) goes in every time, and so does that cut.
-The Test Information notes grew too: Tags (216) is new and the age rating
-(341) gained a sentence, so sign-in through Instagram is 2,325. With the
-896 paragraph and tournaments, the uncut set is 4,374, 374 over. Cut, it
-is 3,767, 233 to spare. Phone sign-in on top makes 4,233 with its code
-line; take Contacts and Instagram down to their first sentence as well and
-it is 3,987, 13 to spare. Songs instead of phone sign-in need that cut
-and the two sentences of the third-party paragraph about the Facebook
-friends list and access token dropped (the privacy policy carries both):
-3,881, 119 to spare. Songs and phone sign-in together do not fit, so
-count before pasting.
+From build 25, Daily ideas (498) goes in every time, and so does that cut.
+The Test Information notes grew too: Tags (216) is new, the age rating
+(341) gained a sentence, and three Settings paths gained the "..." step,
+so sign-in through Instagram is 2,339. Tournaments is 652, now that it
+starts from the Profile tab. With the 896 paragraph and tournaments, the
+uncut set is 4,391, 391 over. Cut, it is 3,776, 224 to spare. Phone
+sign-in on top makes 4,242 with its code line; take Contacts and Instagram
+down to their first sentence as well and it is 3,996, 4 to spare. Songs
+instead of phone sign-in need that cut and the two sentences of the
+third-party paragraph about the Facebook friends list and access token
+dropped (the privacy policy carries both): 3,890, 110 to spare. Songs and
+phone sign-in together do not fit, so count before pasting.
 
 ### Tournaments — a server with migration 020 applied
 
@@ -251,12 +316,12 @@ follow: whoever posts the most different drinks wins. Each drink counts
 once, and how much anyone drinks is never counted or shown. At most 3 new
 drinks a day count per person, and a drink first posted after the day's
 three never counts later, so nothing rewards trying a lot in one night. No
-prizes, no entry fees, no streaks, no meters, no push notifications. Every
+prizes, no entry fees, no streaks, no meters, no notifications. Every
 tournament screen shows the rules, ending "No prizes, and Apple is not a
 sponsor. Please drink responsibly." Names pass the caption filter. To try
-it, follow any account, then tap the trophy at the top of Home, then +.
+it, follow anyone, then Profile → "..." → Tournaments → Host a tournament.
 
-[654]
+[652]
 
 ### Songs on posts — a build with `EXPO_PUBLIC_STORY_MUSIC=tap`
 
@@ -286,15 +351,15 @@ what 1.4.3 would look at. Spec v4.3 §3 is the source for every claim in
 it, so check them on the build before pasting.
 
 **Daily ideas.** Optional local notifications, at most one a day, at a
-time the person picks (6:00 PM by default). An in-app screen offers them
+time the person picks (6 PM by default). An in-app screen offers them
 only after a first logged or added drink, post, save or follow; it shows
-an example, and iOS asks only after Allow. On or off in Profile →
+an example, and iOS asks only after Allow. On or off in Profile → "..." →
 Settings → Notifications. Messages invite logging drinks already had,
 writing down recipes, reading about and saving drinks; none suggests
 drinking, a time to drink or drinking more. To see the offer, post a
 drink.
 
-[493]
+[498]
 
 "Writing down recipes" rather than "making": a drink of your own is an
 entry typed into the Dex, and "making recipes" reads to 1.4.3 as mixing
@@ -304,9 +369,9 @@ offer comes once the catch card's Done is tapped. "On or off" because
 Settings also turns them on, which shows the same offer.
 
 Not for pasting, for whoever tests it on a phone: to watch one arrive, set
-Profile → Settings → Notifications → Time a few minutes ahead and lock the
-phone. Not on a day that phone has logged or posted, though: that day's
-idea is skipped, because it would only ask for what was just done, so
+Profile → "..." → Settings → Notifications → Time a few minutes ahead and
+lock the phone. Not on a day that phone has logged or posted, though: that
+day's idea is skipped, because it would only ask for what was just done, so
 after the post that brings up the offer, the first idea comes the next day.
 Turning Daily ideas on in Settings, without logging anything, shows the
 same offer and leaves today in the plan.
@@ -453,10 +518,12 @@ inside its pod's own `ExpoNotifications_privacy` bundle.
 
 ## Screenshots — the bit that is actually missing
 
-Retake the whole set on build 15 or later: the current screenshots show the
-old pill buttons and the glass tab bar, and every build before 15 shows
-rarity on the cards and has no My Bar tab. Stats is no longer a tab; it
-opens from the Dex top bar.
+Retake the whole set on build 25: the current screenshots show the old
+pill buttons and the glass tab bar, and older builds show rarity on the
+cards and colour throughout, where build 25 is black and white with the
+drink photographs as the only colour. Build 25 hides My Bar, so leave it
+out. Dex progress is not a tab; it opens from the count at the top of the
+Dex.
 
 Required: **6.9" iPhone**, 1320 × 2868 or 1290 × 2796. Apple scales that
 set down to the smaller sizes, so one set is enough.
@@ -470,7 +537,11 @@ through. Lead with the two that carry the scale and the payoff:
 2. **An open drink card** with its origin story.
 3. **Posting a drink**, with a real photograph attached.
 4. **The feed**, with a few different people in it.
-5. **Stats**, showing collection progress and milestones.
+5. **Saved**, with a few collections you have named.
+
+Not Dex progress: its rank ladder is the part of the app most likely to
+read as a score, which the description leaves out for guideline 1.4.3,
+so the screenshots leave it out too.
 
 Populate the account first. Screenshots of an empty state read as an empty
 app, and this one is the opposite of empty.
