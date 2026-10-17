@@ -208,8 +208,13 @@ export function ScreenTopBar({
 /**
  * A glyph-only control for a bar: back, close, the bell, a •••. 44 x 44
  * with a 26pt glyph in ink, dimming while held as iOS's own bar buttons
- * do. `badge` puts an 8pt ink dot with a 2pt page ring at the glyph's top
+ * do. `badge` puts an 8pt dot with a 2pt page ring at the glyph's top
  * right and says ", new" after the label.
+ *
+ * The dot is the accent (v4.4): it is the Activity dot on Home's heart,
+ * one of the accent's five places (theme.ts), and that is its only
+ * caller. Not a general badge: check-design rule 17 fails `badge` passed
+ * anywhere else, so red never becomes the app's way of saying "count".
  */
 export function TopBarButton({
   icon,
@@ -261,13 +266,21 @@ export function TopBarButton({
  * The quiet count on a tab root's bar, on the title's baseline: the Dex's
  * "38 / 2,089". Small, muted, tabular. With `onPress` it is a button (the
  * Dex's opens Dex progress), and `accessibilityLabel` says it in words.
+ *
+ * `figure` is the caught figure, drawn before `text` in Inter 600 and the
+ * accent (v4.4, one of its five places): the "38" of "38 / 2,089", the
+ * number only, with the rest still the quiet muted count. 600 so the hue
+ * reads at 13pt (5.54:1 on the page). Spoken as part of the label, never
+ * on its own.
  */
 export function TopBarCount({
+  figure,
   text,
   onPress,
   accessibilityLabel,
   accessibilityHint,
 }: {
+  figure?: string;
   text: string;
   onPress?: () => void;
   accessibilityLabel: string;
@@ -275,6 +288,7 @@ export function TopBarCount({
 }) {
   const body = (
     <Text maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP} style={[textRole.small, styles.count]}>
+      {figure ? <Text style={styles.figure}>{figure}</Text> : null}
       {text}
     </Text>
   );
@@ -422,7 +436,11 @@ const styles = StyleSheet.create({
   },
   glyphPressed: { opacity: 0.6 },
   glyphBox: { width: GLYPH, height: GLYPH },
-  /* 8pt ink with a 2pt page ring, drawn as the border: the dot's outer size is 12. */
+  /*
+   * 8pt accent with a 2pt page ring, drawn as the border: the dot's outer
+   * size is 12. The accent against the page is 5.54:1, so the dot clears
+   * 3:1 as a mark; the label's ", new" says it to VoiceOver.
+   */
   badge: {
     position: 'absolute',
     top: -2,
@@ -433,7 +451,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.round,
     borderWidth: 2,
     borderColor: colors.bg,
-    backgroundColor: colors.text,
+    backgroundColor: colors.accent,
   },
 
   /* The quiet count: on the title's baseline, right-aligned to the far gutter. */
@@ -444,6 +462,8 @@ const styles = StyleSheet.create({
     paddingRight: GLYPH_SLACK,
   },
   count: { color: colors.textMuted, fontVariant: ['tabular-nums'] },
+  /* The caught figure: nested in the count, so it keeps the count's size, line and tabular figures. */
+  figure: { fontFamily: fonts.bodySemiBold, color: colors.accent },
 
   textButton: {
     minWidth: 72,

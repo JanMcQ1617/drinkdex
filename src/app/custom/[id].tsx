@@ -45,6 +45,9 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*     Sipply (lib/customDrinks' syncStatusLine), the only place a      */
 /*     refused or over-quota send is ever said.                         */
 /*   - Edit and delete at the foot, since the person owns the entry.    */
+/*   - The pinned key is ink, not the accent (v4.4): the + window it    */
+/*     opens can only save a drink someone added, never post it, and    */
+/*     the accent says post.                                            */
 /*                                                                      */
 /* The store is read with own keys only, so /custom/constructor is      */
 /* nothing; until the store has loaded the page is a Hold, never a bare */
@@ -237,6 +240,7 @@ export default function CustomDrinkScreen() {
         name={drink.name}
         collected={pour != null}
         ruled={below.moreBelow}
+        postable={false}
         onPress={postIt}
         onHeight={setBarH}
       />

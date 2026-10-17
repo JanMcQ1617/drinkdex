@@ -23,6 +23,13 @@ import type { UserProfile } from '@/types';
 /* principle 9): the state is words at the line's end, as a settings    */
 /* row's value is. Yours only, as the Dex line is.                      */
 /*                                                                      */
+/* THE CAUGHT FIGURE IS THE ACCENT (v4.4, one of its five places; see   */
+/* theme.ts). In "38 entries in your Dex" the number alone is Campari   */
+/* at 600; the words stay muted. Nothing else here takes it: the        */
+/* Tournaments state, the counts, followers and posts stay ink or       */
+/* muted: a red "1 running" or "2 invitations" would read as a badge,   */
+/* and the app has one red dot, Home's Activity dot.                    */
+/*                                                                      */
 /* One layout for yours and anyone else's, so the two read as one       */
 /* screen. Yours has Edit profile in the key's slot; theirs has Follow  */
 /* (ink) or Following (wash), and beside it the ••• that holds Share,   */
@@ -189,7 +196,10 @@ export function ProfileHeader({
           accessibilityLabel={dexLine(actions.dexCount)}
           accessibilityHint="Opens Dex progress"
           style={({ pressed }) => [styles.line, styles.dexLine, pressed && styles.dimmed]}>
-          <Text style={[textRole.small, styles.muted, styles.dexText]}>{dexLine(actions.dexCount)}</Text>
+          <Text style={[textRole.small, styles.muted, styles.dexText]}>
+            <Text style={styles.dexFigure}>{formatCount(actions.dexCount)}</Text>
+            {dexWords(actions.dexCount)}
+          </Text>
           <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
         </Pressable>
       ) : null}
@@ -223,7 +233,12 @@ export function ProfileHeader({
 
 /** "38 entries in your Dex", "1 entry in your Dex": the catalogue's word, not a count of drinks had. */
 function dexLine(n: number): string {
-  return `${formatCount(n)} ${n === 1 ? 'entry' : 'entries'} in your Dex`;
+  return `${formatCount(n)}${dexWords(n)}`;
+}
+
+/** The line after its figure (" entries in your Dex"), which is drawn on its own in the accent. */
+function dexWords(n: number): string {
+  return ` ${n === 1 ? 'entry' : 'entries'} in your Dex`;
 }
 
 /**
@@ -314,6 +329,8 @@ const styles = StyleSheet.create({
   // The first sits 18 under the key (its line at y 344 at 440).
   dexLine: { marginTop: space.xs },
   dexText: { flex: 1 },
+  /* The caught figure: the accent at 600 so the hue reads at 13pt (5.54:1 on the page), tabular like every count. */
+  dexFigure: { fontFamily: fonts.bodySemiBold, color: colors.accent, fontVariant: ['tabular-nums'] },
   /*
    * At rest the word sits at the left and the state at the chevron. When
    * Larger Text leaves no room for both, the state drops to a line of its

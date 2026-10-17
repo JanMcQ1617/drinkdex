@@ -1285,7 +1285,9 @@ export default function DexScreen() {
         showRule={scrolled}
         right={
           <TopBarCount
-            text={`${formatCount(scopeCaught)} / ${formatCount(scopeTotal)}`}
+            // The caught figure in the accent (v4.4), the "/ 2,089" muted as before.
+            figure={formatCount(scopeCaught)}
+            text={` / ${formatCount(scopeTotal)}`}
             onPress={() => router.push('/stats')}
             accessibilityLabel={`${formatCount(scopeCaught)} of ${formatCount(scopeTotal)} ${scopeWords}`}
             accessibilityHint="Opens Dex progress"

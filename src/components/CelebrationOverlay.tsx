@@ -37,9 +37,10 @@ import type { Drink, UnlockRecord } from '@/types';
 /* while it was not yet yours, and the colour print comes into it: a    */
 /* native crossfade, expo-image's own `transition` from the proof       */
 /* source to the photo source (DrinkFace), on no JS clock and no        */
-/* Reanimated. The Nº plate fills with ink at the same moment, a state  */
-/* change and not an animation. Under Reduce Motion the card opens on   */
-/* the colour print, filled plate and all: no cut from grey to colour.  */
+/* Reanimated. The Nº plate fills with the accent (Campari, v4.4) at    */
+/* the same moment, a state change and not an animation. Under Reduce   */
+/* Motion the card opens on the colour print, filled plate and all: no  */
+/* cut from grey to colour.                                             */
 /*                                                                      */
 /* Mounted at the root beside the intro, for the same reason the        */
 /* password overlay is: a drink can join your Dex from its own page or  */
@@ -147,7 +148,7 @@ function CatchBody({
         style={styles.name}
       />
 
-      {/* Empty while it shows the proof, ink once the colour has come: the plate the drink page will show. */}
+      {/* Empty while it shows the proof, the accent once the colour has come: the plate the drink page will show. */}
       <View style={styles.plate}>
         <NumberPlate n={drink.dexNumber} tone={caught ? 'caught' : 'notYet'} size="lg" />
       </View>

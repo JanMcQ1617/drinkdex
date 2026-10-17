@@ -9,14 +9,15 @@ import type { DrinkCategory } from '@/types';
 /* specs/v4-mockups/white/spec.md section 1). Jan: "remake the whole    */
 /* colorscheme of the app to black and white … make everything look     */
 /* sleek". Black ink on gallery white, and the drink photographs are    */
-/* the only colour in the app.                                          */
+/* the colour in the app, with one accent beside them (v4.4, below).    */
 /*                                                                      */
 /* WHY NEUTRAL GREYS ONLY. Every value below is R = G = B, apart from   */
+/* the accent family (Campari: accent, accentPressed, onAccent),        */
 /* third-party quotations (Facebook, Google, the sign-in rows) and the  */
-/* intro film's sampled paper. check-contrast asserts it, so a hue that */
-/* sneaks back into the palette fails the build. Wine, merlot, bone,    */
-/* cream, brass, walnut, label stock, taupe, the lining and the story   */
-/* pink all retired with v4 (they were v3 and v3.3 Brass).              */
+/* intro film's sampled paper. check-contrast asserts it, so any other  */
+/* hue that sneaks into the palette fails the build. Wine, merlot,      */
+/* bone, cream, brass, walnut, label stock, taupe, the lining and the   */
+/* story pink all retired with v4 (they were v3 and v3.3 Brass).        */
 /*                                                                      */
 /* WHY THE OLD NAMES. A token keeps its name where its job is the same  */
 /* (`bg` is still every screen's ground, `text` still the ink), so most */
@@ -31,6 +32,7 @@ import type { DrinkCategory } from '@/types';
 /*   control    lineControl    #8A8A8A   control edges, resting glyphs  */
 /*   muted      textMuted      #5C5C5C   quiet text                     */
 /*   ink        text, lineInk  #0A0A0A   text, keys, active glyphs      */
+/*   accent     accent         #D0102C   the five places (v4.4, below)  */
 /*                                                                      */
 /* Daylight is light only (app.json keeps userInterfaceStyle light).    */
 /* The roles are named so a dark twin is a second map of the same keys. */
@@ -63,18 +65,59 @@ export const colors = {
   lineInk: '#0A0A0A',
 
   /* Ink */
-  /** All primary text, solid keys, the +, ticked tiles, active glyphs. 19.80:1 page, 18.16:1 wash. */
+  /** All primary text, solid keys, ticked tiles, active glyphs, the active tab's line. 19.80:1 page, 18.16:1 wash. */
   text: '#0A0A0A',
   /** Secondary text: meta lines, counts beside titles, placeholders. 6.69:1 page, 6.13:1 wash. */
   textMuted: '#5C5C5C',
   /** Large type (18pt and up) and glyphs only, never small text: the control grey. 3.45:1 page. */
   textFaint: '#8A8A8A',
-  /** A solid key or the + while held. Carries onInk at 12.63:1. */
+  /** A solid ink key while held. Carries onInk at 12.63:1. */
   inkPressed: '#333333',
   /** Text and glyphs on ink. 19.80:1. */
   onInk: '#FFFFFF',
   /** A count inside an ink key ("In your bar 12"). 7.85:1 on ink. */
   onInkMuted: '#A3A3A3',
+
+  /*
+   * The accent: Campari (v4.4, specs/v4.4-accent; white spec 1.3). Jan
+   * picked it from four single hues: the red of the bitter in a Negroni,
+   * bright enough to read as red on a 13pt figure and an 8pt dot, where
+   * the old merlot leaned toward ink. Daylight stays black and white
+   * everywhere else. The accent marks the two things the app is for,
+   * posting a drink and catching one, and the one dot that says something
+   * new has come, in EXACTLY five places:
+   *
+   *   1  the + key in the tab bar           fill, onAccent glyph
+   *   2  the post key: the drink page's     fill, onAccent label
+   *      pinned key, the + window's Post
+   *   3  the caught Nº plate                fill, onAccent figures
+   *   4  the caught figure, the number      text, Inter 600
+   *      only: "14" in "14 / 2,089" and
+   *      in "14 entries in your Dex"
+   *   5  Home's Activity dot                the 8pt dot
+   *
+   * WHY ONLY THERE. A colour that turns up everywhere stops meaning
+   * anything. Red never says delete or error here: destructive words stay
+   * ink and underlined, there are no red badges, and every other count,
+   * line and state stays ink or muted, the active tab's line included.
+   * check-design (rule 17) keeps these tokens to the code that draws the
+   * five, and the raw hex to this file; check-contrast fails any other
+   * hue, and an accent that drifts off Campari's.
+   *
+   * ON INK it is a fill only: 3.58:1 against ink clears 3:1 for a key or
+   * a plate, and words on ink stay onInk, never red (as text on ink it is
+   * under 4.5:1, and check-contrast keeps it there). No on-ink twin.
+   *
+   * Not a profile's `accent`: that is the colour stored on an account,
+   * drawn only as one of the four grey avatar tones (avatarTone, below),
+   * and never this red.
+   */
+  /** The five places' fill, and the caught figure as text. 5.54:1 page, 5.08:1 wash, 4.64:1 press; 3.58:1 against ink. */
+  accent: '#D0102C',
+  /** The + or the post key while held. Carries onAccent at 7.66:1. */
+  accentPressed: '#A80C23',
+  /** The glyph, label or figures on an accent fill. 5.54:1 on accent. */
+  onAccent: '#FFFFFF',
 
   /** The dim behind a sheet: composites to #A7A7A7 over white. Never under text that must be read. */
   scrim: 'rgba(10, 10, 10, 0.36)',

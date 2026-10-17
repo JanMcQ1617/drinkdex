@@ -1,7 +1,7 @@
 /**
  * Design-system guard.
  *
- * Sixteen rules for mistakes that were made across the app before the
+ * Seventeen rules for mistakes that were made across the app before the
  * redesigns, or that v4 Daylight depends on never making, and that
  * regress easily:
  *   1. No emoji used as UI. They render in the system font, so weight and
@@ -32,16 +32,19 @@
  *  16. Edges are not ink: the decorative greys are never a text colour,
  *      the control grey is a glyph's or an edge's, and the Dex number's
  *      sign is U+00BA, never U+2116. See EDGE_INK.
+ *  17. One accent, through its tokens, in its five places: the hex only
+ *      in theme.ts, the tokens and the props that draw it only where
+ *      theme.ts lists. See ACCENT_FILES and ACCENT_PROPS.
  *
  * Comments are stripped before any rule runs, block comments included,
- * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5 read
- * the code a line at a time; rules 6 to 15, rule 3's builder imports and
- * rule 5's Title Case read the TypeScript syntax tree (the project's own
- * `typescript`), which holds no comments at all. They need it: a caps
- * check on whole lines flags code such as `SIZE - STROKE`, and an <Image>
- * element or a style object runs across lines. The opt-out markers
- * (`round-ok:`, `tracking-ok:`, `full-size-ok:`) are comments, so they are
- * read from the raw line.
+ * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5
+ * and rule 17's hex read the code a line at a time; rules 6 to 17, rule
+ * 3's builder imports and rule 5's Title Case read the TypeScript syntax
+ * tree (the project's own `typescript`), which holds no comments at all.
+ * They need it: a caps check on whole lines flags code such as `SIZE -
+ * STROKE`, and an <Image> element or a style object runs across lines.
+ * The opt-out markers (`round-ok:`, `tracking-ok:`, `full-size-ok:`) are
+ * comments, so they are read from the raw line.
  *
  * Run: node scripts/check-design.mjs
  */
@@ -386,6 +389,95 @@ const LARGE_ONLY = 'textFaint';
 const LARGE_MIN = 18;
 const GLYPH_TAGS = new Set(['Icon', 'ActivityIndicator', 'GlassOutline']);
 const NUMERO = /\u2116/;
+
+/*
+ * 17. One accent, through its tokens, in its five places (v4.4; theme.ts
+ *     lists them, white spec 1.3). Campari is the palette's one hue and it
+ *     means "post", "caught" or, as Home's one dot, "new". A red that
+ *     turned up on another badge, a count or a delete key would blur all
+ *     three, so each way it could spread fails:
+ *
+ *       - its hex, or its rgb()/rgba(), in code anywhere but theme.ts.
+ *         Rule 2 already fails a hex outside ALLOW; this reads every file,
+ *         ALLOW included (the artwork's tints and the intro film may not
+ *         borrow it), catches the rgb forms rule 2 does not, and takes the
+ *         values from theme.ts, so a retuned accent needs no edit here;
+ *       - a token (`colors.accent`, `accentPressed`, `onAccent`) named
+ *         anywhere but the code that draws the five places (ACCENT_FILES):
+ *         the right file is not enough, since ui.tsx and ScreenTopBar.tsx
+ *         draw most of the app's controls, so each file lists the style
+ *         keys and functions the tokens may sit inside (`within`);
+ *       - a prop that draws it, passed outside its place (ACCENT_PROPS):
+ *         Button's `post` variant, TopBarButton's `badge` (the Activity
+ *         dot) and TopBarCount's `figure` (the caught figure).
+ *
+ *     A sixth place is Jan's decision, not a fix for this rule: add it to
+ *     theme.ts's list and here, with its reason.
+ */
+const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
+/**
+ * The files that draw the five places, and where in each. A `within` entry
+ * names what the token must sit inside: a function, a variable or an
+ * object key; `styles.fab` means both, the `fab` key of `styles`.
+ */
+const ACCENT_FILES = {
+  'components/FloatingTabBar.tsx': {
+    why: 'the + key (1)',
+    within: ['CentreAction', 'styles.fab', 'styles.fabPressed'],
+  },
+  'components/ui.tsx': { why: "the post key's skin, Button's `post` variant (2)", within: ['BUTTON_SKIN.post'] },
+  'components/plate.tsx': { why: 'the caught Nº plate (3)', within: ['NumberPlate', 'styles.caught'] },
+  'components/ScreenTopBar.tsx': {
+    why: "TopBarCount's caught figure (4) and TopBarButton's dot, the Activity dot (5)",
+    within: ['styles.figure', 'styles.badge'],
+  },
+  'components/profile/ProfileHeader.tsx': {
+    why: 'the caught figure in "14 entries in your Dex" (4)',
+    within: ['styles.dexFigure'],
+  },
+};
+/** The functions, variables and object keys a node sits inside, innermost first. */
+function enclosingNames(node) {
+  const names = [];
+  for (let p = node.parent; p; p = p.parent) {
+    if ((ts.isFunctionDeclaration(p) || ts.isFunctionExpression(p)) && p.name) names.push(p.name.text);
+    else if (ts.isVariableDeclaration(p) && ts.isIdentifier(p.name)) names.push(p.name.text);
+    else if (ts.isPropertyAssignment(p) && keyOf(p)) names.push(keyOf(p));
+  }
+  return names;
+}
+/** Props that draw the accent, on which element, and the files that may pass them. `value`: only that string draws it. */
+const ACCENT_PROPS = [
+  {
+    tag: 'Button',
+    prop: 'variant',
+    value: 'post',
+    files: {
+      'components/DrinkPanels.tsx': "the drink page's pinned Post key (2)",
+      'app/log.tsx': "the + window's Post (2)",
+    },
+  },
+  { tag: 'TopBarButton', prop: 'badge', files: { 'components/home/HomeChrome.tsx': "the Activity dot on Home's heart (5)" } },
+  { tag: 'TopBarCount', prop: 'figure', files: { 'app/(tabs)/dex.tsx': 'the caught figure in "14 / 2,089" (4)' } },
+];
+/** The accent family's hues, read from theme.ts (onAccent is white, which is not the accent's to own). */
+function accentHexes() {
+  const theme = readFileSync(join(ROOT, THEME), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+  const found = [...theme.matchAll(/\b(accent|accentPressed):\s*'#([0-9A-Fa-f]{6})'/g)].map(([, , h]) => h);
+  if (found.length !== 2) {
+    console.error('\n  check-design: cannot read colors.accent and colors.accentPressed in theme.ts (rule 17).\n');
+    process.exit(2);
+  }
+  // `#RRGGBB` in either case, with an alpha pair after it, or as `0xRRGGBB`: the hue typed any way.
+  const hexes = found.map((h) => new RegExp(`(?:#|0x)${h}`, 'i'));
+  // And as `rgb(r, g, b)` / `rgba(r, g, b, a)`, which rule 2's hex match never sees.
+  const rgbs = found.map((h) => {
+    const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+    return new RegExp(`rgba?\\(\\s*${r}\\s*,\\s*${g}\\s*,\\s*${b}\\b`, 'i');
+  });
+  return [...hexes, ...rgbs];
+}
+const ACCENT_HEX = accentHexes();
 
 function walk(dir) {
   const out = [];
@@ -769,7 +861,7 @@ function rnAnimatedNames(sf) {
   return names;
 }
 
-/** Rules 6 to 15, rule 3's builder imports and rule 5's transforms, for one file, read from its syntax tree. */
+/** Rules 6 to 17, rule 3's builder imports and rule 5's transforms, for one file, read from its syntax tree. */
 function treeRules(rel, sf, lines, add) {
   const at = (node) => sf.getLineAndCharacterOfPosition(node.getStart(sf)).line;
   const marked = (re, i) => re.test(lines[i]) || (i > 0 && re.test(lines[i - 1]));
@@ -1171,6 +1263,44 @@ function treeRules(rel, sf, lines, add) {
       }
     }
 
+    // 17. An accent token outside the code that draws the five places: the wrong file, or the wrong spot in the right one.
+    if (rel !== THEME) {
+      const token =
+        ts.isPropertyAccessExpression(node) && isColorsToken(node)
+          ? node.name.text
+          : ts.isElementAccessExpression(node) &&
+              isName(node.expression, colorsNames) &&
+              ts.isStringLiteralLike(node.argumentExpression)
+            ? node.argumentExpression.text
+            : ts.isBindingElement(node) &&
+                node.parent?.parent &&
+                ts.isVariableDeclaration(node.parent.parent) &&
+                isName(unwrap(node.parent.parent.initializer), colorsNames)
+              ? (node.propertyName ?? node.name).getText(sf)
+              : null;
+      if (token && ACCENT_TOKENS.has(token)) {
+        const place = ACCENT_FILES[rel];
+        const names = place ? enclosingNames(node) : [];
+        if (!place) {
+          add('accent', at(node), `colors.${token} outside the accent's five places (ACCENT_FILES)`);
+        } else if (!place.within.some((spot) => spot.split('.').every((name) => names.includes(name)))) {
+          add('accent', at(node), `colors.${token} outside ${place.within.join(', ')}, where this file draws ${place.why}`);
+        }
+      }
+    }
+
+    // 17. A prop that draws the accent, passed outside its place.
+    if (ts.isJsxAttribute(node) && ts.isJsxAttributes(node.parent)) {
+      const tag = node.parent.parent.tagName.getText(sf);
+      for (const { tag: on, prop, value, files } of ACCENT_PROPS) {
+        if (tag !== on || keyOf(node) !== prop || files[rel]) continue;
+        const draws = value
+          ? arms(node.initializer).some((v) => ts.isStringLiteralLike(v) && v.text === value)
+          : true;
+        if (draws) add('accent', at(node), `<${on} ${prop}${value ? `="${value}"` : ''}> draws the accent outside its place (ACCENT_PROPS)`);
+      }
+    }
+
     // 11. Media ink: the binding itself, or `theme.colors` / `theme['colors']` off a namespace.
     if (
       rel === MEDIA_FILE &&
@@ -1214,7 +1344,7 @@ for (const [order, file] of files.entries()) {
     violations.push({ order, rel, n: i + 1, kind, why, line: (lines[i] ?? '').trim() });
   };
 
-  // Rules 6 to 15 read every file; each names its own exemptions.
+  // Rules 6 to 17 read every file; each names its own exemptions.
   treeRules(rel, parse(rel, text), lines, add);
 
   code.forEach((c, i) => {
@@ -1222,6 +1352,8 @@ for (const [order, file] of files.entries()) {
     if (CAPS.test(c)) add('caps', i);
     // Rule 16's numero sign, every file: it is wrong in a string as much as in a style.
     if (NUMERO.test(c)) add('edge', i, 'U+2116 is not in the Inter subset: write N + U+00BA');
+    // Rule 17's typed-out accent (hex or rgb), every file but theme.ts, the allowlist included.
+    if (rel !== THEME && ACCENT_HEX.some((re) => re.test(c))) add('accent', i, "the accent typed out (hex or rgb): use its tokens");
 
     if (ALLOW[rel]) return;
 
@@ -1250,8 +1382,8 @@ if (violations.length === 0) {
       '  stray Playfair, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
       '  stray shadows, gradient stops without their opacity, rarity readers, timed\n' +
-      '  React Native animations, inverting photos, or edge greys set as text, outside\n' +
-      '  the allowlists.\n',
+      '  React Native animations, inverting photos, edge greys set as text, or the\n' +
+      '  accent outside its five places, outside the allowlists.\n',
   );
   process.exit(0);
 }

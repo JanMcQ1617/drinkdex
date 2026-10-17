@@ -4,10 +4,11 @@
  * Run: node scripts/check-contrast.mjs
  *
  * Exits 1 if any declared pair fails its target ratio, if a pair that must
- * stay unreadable has become readable (NEVER), or if a hue has crept into
- * the palette (NEUTRAL). Exits 2 if something it measures can no longer be
- * read: a colour missing from src/constants/theme.ts, or an `onMedia` entry
- * it has not been told how to measure (MEDIA_ROLES).
+ * stay unreadable has become readable (NEVER), or if a hue other than the
+ * one accent has crept into the palette (ONE HUE). Exits 2 if something it
+ * measures can no longer be read: a colour missing from
+ * src/constants/theme.ts, or an `onMedia` entry it has not been told how
+ * to measure (MEDIA_ROLES).
  *
  * Targets: 4.5:1 for body text, 3:1 for large text, glyphs and the edges
  * that identify a control (WCAG 1.4.11). The pairs are
@@ -33,6 +34,16 @@ const lum = (h) => {
 const ratio = (a, b) => {
   const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
   return (x + 0.05) / (y + 0.05);
+};
+
+/** The hue angle in degrees (HSL), or null for a grey. */
+const hue = (h) => {
+  const [r, g, b] = hex(h).map((v) => v / 255);
+  const max = Math.max(r, g, b);
+  const d = max - Math.min(r, g, b);
+  if (d === 0) return null;
+  const h6 = max === r ? ((g - b) / d + 6) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return h6 * 60;
 };
 
 /** An rgba fill composited over an opaque ground, as the eye sees it. */
@@ -119,13 +130,32 @@ if (ORDER.length === 0) unreadable('cannot read CATEGORY_ORDER in theme.ts.');
 if (unparsed.length > 0) unreadable(`no color/wash parsed for ${unparsed.join(', ')} in CATEGORY_META.`);
 
 /* ==================================================================== */
-/* No hue                                                               */
+/* One hue                                                              */
 /*                                                                      */
-/* Daylight is black and white: every value R = G = B. The exceptions   */
-/* are quotations of someone else's mark (Facebook's blue, Google's     */
-/* four colours and its outline grey) and the intro film's sampled      */
-/* paper, which carry no text of ours. A hue anywhere else fails.       */
+/* Daylight is black and white: every value R = G = B, with ONE accent  */
+/* (v4.4, Campari: `accent` and its held fill `accentPressed`, one hue  */
+/* at two depths; `onAccent` is white and is held to neutral like any   */
+/* other value). The other exceptions are quotations of someone else's  */
+/* mark (Facebook's blue, Google's four colours and its outline grey)   */
+/* and the intro film's sampled paper, which carry no text of ours. A   */
+/* hue anywhere else fails, and so does an accent that is no longer     */
+/* Campari: either depth more than ACCENT_DRIFT from CAMPARI_HUE. So    */
+/* the family stays one hue, and the one Jan picked. Retuning a depth   */
+/* is a palette edit; swapping the hue (a blue would pass every pair)   */
+/* is a new accent, his call, made here with theme.ts and white spec    */
+/* 1.3 together.                                                        */
 /* ==================================================================== */
+
+const ACCENT = ['accent', 'accentPressed'];
+/** Campari's hue in degrees (HSL): accent sits at 351.3, accentPressed at 351.2. The family, not a copy of a value. */
+const CAMPARI_HUE = 351;
+/** How far, in degrees, either depth may sit from CAMPARI_HUE and still be Campari. */
+const ACCENT_DRIFT = 2;
+/** Degrees round the wheel from CAMPARI_HUE; a grey is no hue at all. */
+const offHue = (h) =>
+  h == null ? Infinity : Math.min(Math.abs(h - CAMPARI_HUE), 360 - Math.abs(h - CAMPARI_HUE));
+const [accentHue, pressedHue] = ACCENT.map((key) => hue(C[key]));
+const oneHue = offHue(accentHue) <= ACCENT_DRIFT && offHue(pressedHue) <= ACCENT_DRIFT;
 
 const QUOTATIONS = new Set([
   'facebook',
@@ -138,7 +168,7 @@ const QUOTATIONS = new Set([
 ]);
 const tinted = [
   ...Object.entries(found)
-    .filter(([key]) => !QUOTATIONS.has(key))
+    .filter(([key]) => !QUOTATIONS.has(key) && !ACCENT.includes(key))
     .filter(([, value]) => new Set(hex(value)).size > 1)
     .map(([key, value]) => `colors.${key} ${value}`),
   ...Object.entries(foundRgba)
@@ -258,6 +288,15 @@ const PAIRS = [
   [C.reelInk, over(R.reelScrimMid, WHITE_FRAME), 4.5, 'caption at the shallow end of the scrim over a white frame'],
   [C.reelInk, over(R.reelScrim, WHITE_FRAME), 4.5, 'marker text on media over a white frame'],
 
+  'The accent (v4.4, Campari): the five places, and only those',
+  [C.accent, C.bg, 4.5, 'accent as text on page: the caught figure ("14 / 2,089", "14 entries")'], // 5.54
+  [C.accent, C.bgSunk, 4.5, 'accent as text on wash'], // 5.08
+  [C.accent, C.press, 4.5, 'accent as text on press'], // 4.64
+  [C.onAccent, C.accent, 4.5, 'onAccent on accent: the + glyph, the post key label, caught plate figures'], // 5.54
+  [C.onAccent, C.accentPressed, 4.5, 'onAccent on accentPressed: the + or the post key held'], // 7.66
+  [C.accent, C.bg, 3.0, 'accent fill on page (UI): the + key, the post key, the plate, the Activity dot'], // 5.54
+  [C.accent, C.text, 3.0, 'accent fill against ink (UI): a key or plate on an ink ground keeps the fill'], // 3.58
+
   'Quotations: the sign-in rows',
   [C.onFacebook, C.facebook, 4.5, 'Continue with Facebook label on Facebook blue'], // 4.82
   [C.facebook, C.bg, 3.0, 'Facebook mark on page'],
@@ -279,6 +318,7 @@ const NEVER = [
   [C.hair, C.bg, 3.0, 'hair as text'], // 1.45
   [C.line, C.bg, 3.0, 'line as text'], // 1.28
   [C.line, C.bgSunk, 3.0, 'line on wash'], // 1.18
+  [C.accent, C.text, 4.5, 'accent as text on ink: on ink it is a fill, its words stay onInk'], // 3.58
 ];
 
 /* Decorative only, printed for the record: none may carry text. */
@@ -324,15 +364,25 @@ for (const [fg, bg, label] of NOTES) {
   console.log(`  NOTE  ${ratio(fg, bg).toFixed(2).padStart(5)}:1  ${label}   ${fg} on ${bg}`);
 }
 
-console.log('\n  No hue: every value R = G = B but the quotations\n');
+console.log('\n  One hue: every value R = G = B but the accent and the quotations\n');
 for (const t of tinted) console.log(`  FAIL  tinted  ${t}`);
-if (tinted.length === 0) console.log(`  PASS  ${Object.keys(found).length - QUOTATIONS.size} neutral colours, ${QUOTATIONS.size} quotations`);
+console.log(
+  `  ${oneHue ? 'PASS' : 'FAIL'}  the accent is Campari's one hue: accent ${C.accent} at ` +
+    `${accentHue == null ? 'grey' : `${accentHue.toFixed(1)}°`}, accentPressed ${C.accentPressed} at ` +
+    `${pressedHue == null ? 'grey' : `${pressedHue.toFixed(1)}°`} (each within ${ACCENT_DRIFT}° of ${CAMPARI_HUE}°)`,
+);
+if (tinted.length === 0) {
+  console.log(
+    `  PASS  ${Object.keys(found).length - QUOTATIONS.size - ACCENT.length} neutral colours, ` +
+      `${ACCENT.length} accent, ${QUOTATIONS.size} quotations`,
+  );
+}
 
-const total = failed + neverFailed + tinted.length;
+const total = failed + neverFailed + tinted.length + (oneHue ? 0 : 1);
 console.log(
   total === 0
-    ? `\n  All ${measured} pairs pass, all ${NEVER.length} never-text pairs stay unreadable, and the palette has no hue.\n`
+    ? `\n  All ${measured} pairs pass, all ${NEVER.length} never-text pairs stay unreadable, and the palette's one hue is the accent.\n`
     : `\n  ${failed} of ${measured} pairs FAIL; ${neverFailed} of ${NEVER.length} never-text checks FAIL; ` +
-        `${tinted.length} tinted value(s).\n`,
+        `${tinted.length} tinted value(s)${oneHue ? '' : "; the accent is not Campari's one hue"}.\n`,
 );
 process.exit(total === 0 ? 0 : 1);

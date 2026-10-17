@@ -60,7 +60,8 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * A drink, on the page's white (white spec "not mocked, same kit"; layout
  * spec section 4): a back chevron in a plain bar, the square print full
  * width, the name, the Nº plate and its state, the facts, the spec, the
- * story, the friends who caught it, and one ink key pinned to the foot.
+ * story, the friends who caught it, and one key pinned to the foot (the
+ * post key, in the accent since v4.4).
  * Everything the feed and the grids stopped stamping on a drink lives
  * here now.
  *

@@ -219,7 +219,15 @@ export function PressableScale({
 /* Buttons                                                              */
 /* ==================================================================== */
 
-export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'danger' | 'dangerText' | 'onDark' | 'onDarkText';
+export type ButtonVariant =
+  | 'primary'
+  | 'post'
+  | 'secondary'
+  | 'text'
+  | 'danger'
+  | 'dangerText'
+  | 'onDark'
+  | 'onDarkText';
 
 /**
  * `md` is 48pt, the call to action. `sm` is 36pt for an action that sits
@@ -282,16 +290,21 @@ type ButtonSkin = {
   pressedOpacity?: number;
   /** No fill, no edge, no corner: a text button. */
   bare?: boolean;
-  /** The label underlined: the destructive words, which have no red in Daylight. */
+  /** The label underlined: the destructive words, which are never red (the accent means post, not delete). */
   underline?: boolean;
 };
 
 /*
- * Daylight's keys (layout spec 4; white spec 5.4). No hue anywhere, so a
- * key says what it is by fill and weight:
+ * Daylight's keys (layout spec 4; white spec 5.4). One hue, on one kind
+ * of key, so a key says what it is by fill and weight:
  *
  *   primary     ink, onInk label, inkPressed while held: the one solid
- *               action on a view ("Post", "Follow", "Start with the basics")
+ *               action on a view ("Follow", "Start with the basics")
+ *   post        the same key in the accent (v4.4, theme.ts): onAccent
+ *               label, accentPressed while held. Posting a drink only:
+ *               the drink page's pinned "Post …" and the + window's Post.
+ *               Not a louder primary: check-design rule 17 keeps it to
+ *               those two, so red keeps meaning "post this"
  *   secondary   the wash key, ink label, `press` while held ("Edit
  *               profile", "Following", "Remove from my bar")
  *   text        an ink word ("See all"); `muted` for the one that backs out
@@ -311,6 +324,13 @@ const BUTTON_SKIN: Record<ButtonVariant, ButtonSkin> = {
     edge: colors.text,
     pressedBg: colors.inkPressed,
     pressedEdge: colors.inkPressed,
+  },
+  post: {
+    bg: colors.accent,
+    fg: colors.onAccent,
+    edge: colors.accent,
+    pressedBg: colors.accentPressed,
+    pressedEdge: colors.accentPressed,
   },
   secondary: { bg: colors.bgSunk, fg: colors.text, edge: colors.bgSunk, pressedBg: colors.press, pressedEdge: colors.press },
   text: { bg: 'transparent', fg: colors.text, edge: 'transparent', pressedOpacity: 0.5, bare: true },

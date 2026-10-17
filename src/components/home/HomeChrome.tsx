@@ -11,6 +11,7 @@ import { colors, layout, stroke, textRole } from '@/constants/theme';
 /*                                                                      */
 /* Instagram's bar (v4.1, home-ig 2.2): the wordmark set left, then     */
 /* create (+, the + window) and the Activity heart with its unread dot  */
+/* (the accent since v4.4, the dot's only place; TopBarButton's badge)  */
 /* on the right. 44pt tall, as Instagram's is, where every other tab's  */
 /* bar is 52: Home draws its own row rather than ScreenTopBar's lg row, */
 /* which is fixed at 52 with a 24 gutter. Home's column is 16 in.       */

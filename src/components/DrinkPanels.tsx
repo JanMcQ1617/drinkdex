@@ -174,12 +174,13 @@ function NotYetTag() {
  * only when its widest word would not fit the line ("Holunderbeergeist").
  * A header, for the Headings rotor.
  *
- * The plate is solid ink once the drink is in your Dex and an empty plate
- * before (white spec 5.7), beside the tag that says it in words ("In your
- * Dex", "Not in your Dex yet"): the shape, the fill and the word, so no
- * state rests on one cue. A custom drink has no number (inventing one
- * would say it had joined the Dex), so its plate says whose it is instead.
- * One VoiceOver element.
+ * The plate is solid Campari, the accent, once the drink is in your Dex
+ * (v4.4) and an empty plate before (white spec 5.7), beside the tag that
+ * says it in words ("In your Dex", "Not in your Dex yet"): the shape, the
+ * fill and the word, so no state rests on one cue, the colour least of
+ * all. A custom drink has no number (inventing one would say it had
+ * joined the Dex), so its plate says whose it is instead. One VoiceOver
+ * element.
  */
 export function HeroTitle({ drink, inDex, custom }: { drink: Drink; inDex: boolean; custom?: boolean }) {
   const { width } = useWindowDimensions();
@@ -737,9 +738,16 @@ const BAR_CAP = 1.3;
 /**
  * The page's one action, pinned to the foot on the page's white: "Post
  * this drink" until it is in your Dex, then "Post <name> again" ("Post it
- * again" for a name too long to sit in a key). The ink key. Spoken "Post
- * <name>" / "Post <name> again", the full name either way. Never "Post
- * another <name>", which reads as having another (App Review 1.4.3).
+ * again" for a name too long to sit in a key). The post key: the accent
+ * fill with a white label (v4.4, one of its five places; the + window's
+ * Post is the other key in it). Spoken "Post <name>" / "Post <name>
+ * again", the full name either way. Never "Post another <name>", which
+ * reads as having another (App Review 1.4.3).
+ *
+ * `postable={false}` keeps it ink: a drink someone added (custom/[id])
+ * opens the + window, which can only save such a drink to the Dex, and
+ * the accent says post. A red key whose window posts nothing would be a
+ * sixth place, and a wrong one.
  *
  * The 1pt rule over it shows only while the page has more under the bar
  * (`ruled`, the route's scroll signal), as a top bar's rule does: at the
@@ -753,12 +761,15 @@ export function PinnedPostBar({
   name,
   collected,
   ruled,
+  postable = true,
   onPress,
   onHeight,
 }: {
   name: string;
   collected: boolean;
   ruled: boolean;
+  /** False where the key's window cannot post (a drink someone added): the key stays ink. */
+  postable?: boolean;
   onPress: () => void;
   onHeight?: (height: number) => void;
 }) {
@@ -770,7 +781,7 @@ export function PinnedPostBar({
       style={[styles.bar, ruled && styles.barRuled, { paddingBottom: Math.max(insets.bottom, space.md) }]}>
       <Button
         label={label}
-        variant="primary"
+        variant={postable ? 'post' : 'primary'}
         icon="plus"
         block
         onPress={onPress}

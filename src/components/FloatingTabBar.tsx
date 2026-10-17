@@ -30,9 +30,11 @@ import { useAuth } from '@/store/auth';
 /* TabName), and your face, which has none, takes a ring instead. And   */
 /* an 18 x 2 ink line with square ends sits under the active one (Jan,  */
 /* 13 Oct 2026: "add an affect to know in which tab i am in the         */
-/* bottom"). The + is the bar's only filled key, an ink rectangle, so   */
-/* it reads as a different KIND of control: posting is a thing you do,  */
-/* not a place you are. The line never rests under it.                  */
+/* bottom"). The + is the bar's only filled key, a Campari rectangle    */
+/* (the accent, v4.4), so it reads as a different KIND of control:      */
+/* posting is a thing you do, not a place you are. The line never rests */
+/* under it, and the line stays ink: where you are is not the accent's  */
+/* to say (theme.ts names its five places).                             */
 /*                                                                      */
 /* MOVED BY THE PAGER, NEVER BY A JS CLOCK. Changing tab is the pager's */
 /* ((tabs)/_layout.tsx): a swipe carries the page under the finger and  */
@@ -128,7 +130,8 @@ type FloatingTabBarProps = {
 };
 
 /**
- * The post action: an ink rectangle seated in the bar before Saved. Not a
+ * The post action: an accent rectangle seated in the bar before Saved,
+ * 4pt corners like every key, its + white (onAccent, 5.54:1). Not a
  * route: posting a drink is a thing you do, and a tab for it would be a
  * permanently unselectable item in a bar whose job is where you are. 52 x
  * 38 with 3pt of hitSlop to 44. No haptic: it opens a full-screen window,
@@ -150,7 +153,7 @@ function CentreAction({ onPress }: { onPress: () => void }) {
           accessibilityHint="Take a photo and pick the drink you had"
           hitSlop={{ top: 3, bottom: 3 }}
           style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
-          <Icon name="plus" size={22} color={colors.onInk} filled />
+          <Icon name="plus" size={22} color={colors.onAccent} filled />
         </Pressable>
       </View>
     </View>
@@ -390,7 +393,10 @@ const styles = StyleSheet.create({
     height: stroke.indicator,
     backgroundColor: colors.text,
   },
-  /* 8pt ink with a 2pt page ring. */
+  /*
+   * 8pt ink with a 2pt page ring. Ink, not the accent: Home's Activity dot
+   * is the accent's one dot (theme.ts), and there are no red badges.
+   */
   badge: {
     position: 'absolute',
     top: 0,
@@ -426,10 +432,10 @@ const styles = StyleSheet.create({
     width: FAB_W,
     height: FAB_H,
     borderRadius: radius.control,
-    backgroundColor: colors.text,
+    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   /* A fill change, not a scale: controls answer a press with their fill. */
-  fabPressed: { backgroundColor: colors.inkPressed },
+  fabPressed: { backgroundColor: colors.accentPressed },
 });

@@ -51,7 +51,7 @@ Nothing here changes a feature. It changes surfaces, type, spacing, iconography 
 
 ### 1.1 Tokens (they replace `colors` in theme.ts)
 
-Every value is a neutral grey (R = G = B). Role names replace material names, so a later dark map can use the same keys (§9).
+Every value is a neutral grey (R = G = B). Role names replace material names, so a later dark map can use the same keys (§9). v4.4 adds one accent, Campari, in five places only (§1.3).
 
 | Token | Hex | Job | Text? |
 |---|---|---|---|
@@ -63,8 +63,8 @@ Every value is a neutral grey (R = G = B). Role names replace material names, so
 | `rule` | `#C4C4C4` | The ring of a seen story or your own story, the ruler's baseline and minor ticks, the sheet grabber | Decorative |
 | `control` | `#8A8A8A` | Control edges (outline buttons, an empty plate, an unticked checkbox, the "In their Dex" tag), resting tab glyphs, the ruler's major ticks, the no-photo glass | UI (3:1). As text only at 18pt or larger |
 | `muted` | `#5C5C5C` | Secondary text: meta lines, usernames, counts beside heads, placeholders, inactive tab labels, ruler labels | Yes, body-safe |
-| `ink` | `#0A0A0A` | Text, solid buttons, plates, the +, ticked boxes, the active tab, the unseen story ring, focus rings | Yes |
-| `inkPressed` | `#333333` | A solid button or the + while held | Ground for `onInk` |
+| `ink` | `#0A0A0A` | Text, solid buttons, plates over a photo, ticked boxes, the active tab, the unseen story ring, focus rings. The +, the post key and the caught plate are the accent since v4.4 (§1.3) | Yes |
+| `inkPressed` | `#333333` | A solid ink button while held (the + and the post key take `accentPressed`, §1.3) | Ground for `onInk` |
 | `onInk` | `#FFFFFF` | Text and glyphs on ink | Yes |
 | `onInkMuted` | `#A3A3A3` | The count inside an "on" chip ("In your bar 12") | Yes |
 | `scrim` | `rgba(10,10,10,0.36)` | The dim behind a sheet (composites to `#A7A7A7` over white) | Never under text that must be read |
@@ -116,6 +116,47 @@ Decorative only. check-contrast should list these so that nobody later puts text
 - any text over a photograph except on a solid plate.
 
 Over a photo there is only ever a solid `ink` plate with `onInk` digits, measured against the plate (19.80) and never against the picture.
+
+### 1.3 Accent (v4.4)
+
+Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/index.html`; the critic's final set is `specs/v4.4-accent/stress/campari-tweaked-*.png`). It is the red of the bitter in a Negroni. Daylight stays black and white everywhere else.
+
+**Three tokens, no more** (`colors` in theme.ts). There is no on-ink twin.
+
+| Token | Hex | Job |
+|---|---|---|
+| `accent` | `#D0102C` | The fill in the five places, and the caught figure as text |
+| `accentPressed` | `#A80C23` | The + or the post key while held |
+| `onAccent` | `#FFFFFF` | The glyph, label or figures on an accent fill |
+
+**Exactly five places:**
+
+1. **The + key** in the tab bar: accent fill, `accentPressed` held, a white +, its 4pt squared corners kept.
+2. **The post key:** the drink page's pinned "Post …" key and the + window's Post. Accent fill, white label, `accentPressed` held. The same + window key stays ink when it saves without posting ("Save to Dex", "Save photo"), and so does the pinned key on a drink someone added (custom/[id]), whose + window can only save it. The drink page's post sheet keeps its ink "Save & post"; making it a sixth place is Jan's call.
+3. **The caught Nº plate** (the drink page and the catch card): accent fill, white figures. The not-caught plate is unchanged. The likers sheet no longer draws a plate (layout spec 5.4).
+4. **The caught figure:** the number only, Inter 600, as accent text. That is the "14" in the Dex bar's "14 / 2,089" and the "14" in Profile's "14 entries in your Dex". The rest of each line stays muted.
+5. **Home's Activity dot:** the 8pt dot on the heart.
+
+**Rules:**
+
+- The active tab's line stays ink. The accent never says where you are.
+- Red never means delete or error. Destructive words stay ink and underlined. No red badges.
+- Profile's Tournaments state ("1 running", "N invitations"), followers, posts, "See all" and chip counts stay ink or muted.
+- On an ink ground the accent is a fill only (3.58:1 against ink clears 3:1 for a key or a plate). Text on ink stays white, never red.
+
+**Contrast** (check-contrast asserts each one):
+
+| Pair | Ratio | Target |
+|---|---|---|
+| `accent` text on page `#FFFFFF` | **5.54** | 4.5 |
+| `accent` text on wash `#F5F5F5` | **5.08** | 4.5 |
+| `accent` text on press `#EBEBEB` | **4.64** | 4.5 |
+| `onAccent` on `accent` | **5.54** | 4.5 |
+| `onAccent` on `accentPressed` | **7.66** | 4.5 |
+| `accent` fill against ink | **3.58** | 3 (non-text) |
+| `accent` as text on ink | 3.58 | **Never**: asserted under 4.5 |
+
+**Guards.** check-contrast allows exactly this one family: `accent` and `accentPressed` must each sit within 2° of Campari's hue (351°), `onAccent` must stay neutral, and any other hue still fails, a swap to another accent hue included. check-design rule 17 fails the accent typed out (hex, rgb or rgba) anywhere in `src/` but theme.ts, the three tokens anywhere but the style keys and functions that draw the five places, and the props that draw it (Button's `post` variant, TopBarButton's `badge`, TopBarCount's `figure`) outside their place. A sixth place is Jan's decision, made in theme.ts and rule 17 together.
 
 ---
 
@@ -279,7 +320,7 @@ Micro-typography:
 
    | Tone | Height | Fill | Edge | Text |
    |---|---|---|---|---|
-   | `caught` | 18 (`sm`) / 22 (`lg`) | `ink` | none | `onInk`, "Nº " + 4 tabular digits |
+   | `caught` | 18 (`sm`) / 22 (`lg`) | `accent` (v4.4, §1.3; `ink` before) | none | `onAccent`, "Nº " + 4 tabular digits |
    | `notYet` | same | none | 1pt `control` | `muted` |
    | `media` | as `caught` | `ink` | adds a 1pt white outer ring | for plates over a photo (profile grid) |
 

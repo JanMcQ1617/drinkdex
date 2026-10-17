@@ -986,6 +986,10 @@ export default function PostDrinkScreen() {
             Dex and the line above says why. Only the pressed key shows it is
             working; a save answers with the success haptic.
 
+            Post is the post key, in the accent (v4.4), as the drink page's
+            pinned key is. The same key saving instead ("Save to Dex", "Save
+            photo") stays ink: the accent says post, and nothing is posted.
+
             While the caption's keyboard is up the foot is Post alone, 16 above
             the keys (layout spec 5.6): someone typing a caption is about to
             post it, and the quiet key is back the moment the keyboard goes
@@ -999,6 +1003,7 @@ export default function PostDrinkScreen() {
             ]}>
             <Button
               label={posts ? 'Post' : relog ? 'Save photo' : 'Save to Dex'}
+              variant={posts ? 'post' : 'primary'}
               onPress={() => void save(posts)}
               disabled={!canSave}
               loading={savingAs === (posts ? 'post' : 'dex')}
