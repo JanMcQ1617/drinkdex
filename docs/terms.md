@@ -117,13 +117,14 @@ not try to be.
 
 ## Tournaments
 
-A tournament is a friendly challenge between a host and people they follow:
-whoever tries the most different drinks while it runs wins. It counts
-different drinks, never how much. Each drink counts once, however often you
-post it, and **at most three new drinks count a day**, midnight to midnight
-in the host's time zone. A drink first posted after that day's three never
-counts in that tournament, even if you post it again on a later day. A
-taste counts.
+A tournament is a shared log between a host and people they follow: each
+different drink someone posts while it runs adds one entry, and whoever has
+the most entries at the end wins (or, with a goal, whoever reaches it
+first). Entries are counted, never amounts. Each drink counts once, however
+often you post it, and **at most three entries count a day**, midnight to
+midnight in the host's time zone. A drink first posted after that day's
+three never counts in that tournament, even if you post it again on a later
+day.
 
 Drink responsibly, and only where you are of legal drinking age.
 

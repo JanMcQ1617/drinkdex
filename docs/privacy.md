@@ -108,10 +108,10 @@ Sipply.
 **Tournaments (only if you host one or are invited to one).** Its name,
 dates and goal, who hosts it, who was invited and whether they joined, and
 the standings, with the time zone of the host's phone, which decides when
-each day starts for the limit of three new drinks a day. Standings are
+each day starts for the limit of three entries a day. Standings are
 worked out on our server from the posts members share during the
-tournament: each different drink counts once, never how much anyone
-drinks. The host, its members and the people invited to it can see its
+tournament: each different drink posted adds one entry, and entries are
+counted, never amounts. The host, its members and the people invited to it can see its
 name, who is in it or still invited, and the standings; nobody else can,
 and nobody you have blocked or who has blocked you is shown to you.
 Results are kept when it ends. Deleting your account deletes the
