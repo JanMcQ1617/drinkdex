@@ -3,6 +3,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PRIVACY_URL, TERMS_URL } from '@/components/auth/Consent';
+import { Wordmark, WORDMARK_LG } from '@/components/brand/Wordmark';
 import { colors, radius, space, textRole } from '@/constants/theme';
 
 import {
@@ -20,17 +21,17 @@ import { WelcomeWall } from '../WelcomeWall';
 /* ==================================================================== */
 /* The welcome (welcome.png; Imprint 01)                                */
 /*                                                                      */
-/* The wall of prints drifting in rows, the wordmark in Playfair, one   */
-/* line, the terms line, and two keys: Get started (the flow's footer   */
-/* key, drawn 41 higher, which slides home into the footer on the way   */
-/* in, m2) and I already have an account, the wash key, which leaves    */
-/* for the existing sign-in with no questions asked.                    */
+/* The wall of prints drifting in rows, the wordmark (the tagged one,   */
+/* in Campari, since v4.5; brand/Wordmark), one line, the terms line,   */
+/* and two keys: Get started (the flow's footer key, drawn 41 higher,   */
+/* which slides home into the footer on the way in, m2) and I already   */
+/* have an account, the wash key, which leaves for the existing sign-in */
+/* with no questions asked.                                             */
 /*                                                                      */
 /* The terms' two links open as auth/Consent's do, in the in-app        */
 /* browser, at the same published URLs.                                 */
 /* ==================================================================== */
 
-const WORDMARK_CAP = 1.2;
 const LABEL_CAP = 1.3;
 /*
  * The strapline and the terms line grow to 2x and no further: the wall
@@ -50,9 +51,7 @@ export function WelcomeStep({ geo, onHaveAccount }: { geo: Geometry; onHaveAccou
     <View style={StyleSheet.absoluteFill}>
       <View style={[styles.column, { paddingBottom: geo.height - primaryTop + WELCOME_TEXT_FOOT }]}>
         <WelcomeWall style={styles.wall} />
-        <Text maxFontSizeMultiplier={WORDMARK_CAP} accessibilityRole="header" style={styles.wordmark}>
-          Sipply
-        </Text>
+        <Wordmark height={WORDMARK_LG} header />
         <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>A field guide to cocktails and spirits.</Text>
         <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.legal}>
           By continuing you agree to the{' '}
@@ -89,7 +88,6 @@ export function WelcomeStep({ geo, onHaveAccount }: { geo: Geometry; onHaveAccou
 const styles = StyleSheet.create({
   column: { flex: 1, alignItems: 'center' },
   wall: { flex: 1, marginBottom: WALL_TO_WORDMARK },
-  wordmark: { ...textRole.wordmarkLg, color: colors.text, textAlign: 'center' },
   strap: { ...textRole.body, color: colors.textMuted, textAlign: 'center', marginTop: 14 },
   legal: {
     ...textRole.small,

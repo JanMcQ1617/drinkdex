@@ -32,7 +32,7 @@ import type { DrinkCategory } from '@/types';
 /*   control    lineControl    #8A8A8A   control edges, resting glyphs  */
 /*   muted      textMuted      #5C5C5C   quiet text                     */
 /*   ink        text, lineInk  #0A0A0A   text, keys, active glyphs      */
-/*   accent     accent         #D0102C   the five places (v4.4, below)  */
+/*   accent     accent         #D0102C   the six places (v4.4, below)   */
 /*                                                                      */
 /* Daylight is light only (app.json keeps userInterfaceStyle light).    */
 /* The roles are named so a dark twin is a second map of the same keys. */
@@ -84,8 +84,8 @@ export const colors = {
    * bright enough to read as red on a 13pt figure and an 8pt dot, where
    * the old merlot leaned toward ink. Daylight stays black and white
    * everywhere else. The accent marks the two things the app is for,
-   * posting a drink and catching one, and the one dot that says something
-   * new has come, in EXACTLY five places:
+   * posting a drink and catching one, the one dot that says something
+   * new has come, and the name itself, in EXACTLY six places:
    *
    *   1  the + key in the tab bar           fill, onAccent glyph
    *   2  the post key: the drink page's     fill, onAccent label
@@ -96,13 +96,26 @@ export const colors = {
    *      only: "14" in "14 / 2,089" and
    *      in "14 entries in your Dex"
    *   5  Home's Activity dot                the 8pt dot
+   *   6  the logo: the wordmark (Home's     the paint, on the page
+   *      bar, sign-in, the welcome, the
+   *      password reset, the drawn intro)
+   *      and the mark where the app draws
+   *      it (the drawn intro, the
+   *      onboarding guide)
+   *
+   * The sixth is Jan's (v4.5, 20 Oct 2026, specs/v4.5-logo): the "Marker
+   * tag" logo is a red paint pen, and he asked for it in Campari, so the
+   * app icon's red and the name on every screen are one red. It is drawn
+   * only through brand/Wordmark and brand/Mark, red on white: white
+   * script on red is Coca-Cola's ground, so the app never sets the name
+   * white on an accent fill.
    *
    * WHY ONLY THERE. A colour that turns up everywhere stops meaning
    * anything. Red never says delete or error here: destructive words stay
    * ink and underlined, there are no red badges, and every other count,
    * line and state stays ink or muted, the active tab's line included.
    * check-design (rule 17) keeps these tokens to the code that draws the
-   * five, and the raw hex to this file; check-contrast fails any other
+   * six, and the raw hex to this file; check-contrast fails any other
    * hue, and an accent that drifts off Campari's.
    *
    * ON INK it is a fill only: 3.58:1 against ink clears 3:1 for a key or
@@ -113,7 +126,7 @@ export const colors = {
    * drawn only as one of the four grey avatar tones (avatarTone, below),
    * and never this red.
    */
-  /** The five places' fill, and the caught figure as text. 5.54:1 page, 5.08:1 wash, 4.64:1 press; 3.58:1 against ink. */
+  /** The six places' fill, the caught figure as text, and the logo's paint. 5.54:1 page, 5.08:1 wash, 4.64:1 press; 3.58:1 against ink. */
   accent: '#D0102C',
   /** The + or the post key while held. Carries onAccent at 7.66:1. */
   accentPressed: '#A80C23',
@@ -168,13 +181,18 @@ export const colors = {
   providerInk: '#1F1F1F',
 
   /*
-   * The intro film's paper: frame 0 of assets/video/intro.mp4, sampled at
-   * its top edge, so the moment before the first decoded frame is already
-   * the film's paper. A quotation of the film; carries no text. The film
-   * was re-graded to black and white for v4 (hue=s=0 plus a levels curve),
-   * which moved its paper from #D6C4B1 to this neutral grey.
+   * The intro film's ground: frame 0 of assets/video/intro.mp4, sampled
+   * at its edges and corners (Y 235, U = V 128 in BT.709 limited range,
+   * which is exact #FFFFFF; every one of its 300 frames has the same
+   * ground). It sits under the video in VideoIntro, so the moment before
+   * the first decoded frame, and the screen around the video where it
+   * stops short, are already the film's ground. Since v4.5 ("the tag",
+   * 20 Oct 2026) the film is drawn on the page's own white, so this equals
+   * colors.bg; it stays its own key because it quotes the film, not the
+   * page, and must follow the film if the film ever changes. Carries no
+   * text. (It was #EBEBEB, the wax-seal film's grey paper.)
    */
-  filmPaper: '#EBEBEB',
+  filmPaper: '#FFFFFF',
 } as const;
 
 /**
@@ -200,7 +218,7 @@ export const onMedia = {
 
 /* ==================================================================== */
 /* Typography                                                           */
-/* Playfair Display (drink names, the wordmark) / Inter (everything)    */
+/* Playfair Display (drink names) / Inter (everything)                  */
 /*                                                                      */
 /* Both families are LATIN-ONLY SUBSETS, self-hosted from assets/fonts/. */
 /* See assets/fonts/README.md before changing them.                     */
@@ -238,11 +256,12 @@ const SMALL = { fontSize: 13, lineHeight: 18, letterSpacing: 0 } as const;
  * the caller. Several roles share a size on purpose: the name says what the
  * text is, the size comes from the three above.
  *
- * PLAYFAIR DISCIPLINE. The display face appears only in the name roles
- * (wordmark, wordmarkLg, drinkHero, nameLg, name, nameSm, nameInline), and
- * check-design rule 6 fails any other route to it. A drink name is drawn
- * through DrinkName (components/cabinet.tsx), which fits it to its column
- * instead of truncating it.
+ * PLAYFAIR DISCIPLINE. The display face appears only in the drink-name
+ * roles (drinkHero, nameLg, name, nameSm, nameInline), and check-design
+ * rule 6 fails any other route to it. A drink name is drawn through
+ * DrinkName (components/cabinet.tsx), which fits it to its column
+ * instead of truncating it. The wordmark left Playfair in v4.5: it is the
+ * tagged logo now, outlined paths drawn by brand/Wordmark, not type.
  */
 export const textRole = {
   /* ---- Inter: the three sizes ---- */
@@ -282,9 +301,7 @@ export const textRole = {
   /** The onboarding guide's question in its bubble (v4.1, the one size outside the three; see above). */
   prompt:       { fontFamily: fonts.bodyMedium, fontSize: 22, lineHeight: 28, letterSpacing: -0.3 },
 
-  /* ---- Playfair: the wordmark and drink names ONLY (check-design rule 6) ---- */
-  wordmark:     { fontFamily: fonts.displayBold, ...TITLE, letterSpacing: -0.2 }, // Home's bar, set left
-  wordmarkLg:   { fontFamily: fonts.displayBold, fontSize: 44, lineHeight: 50 },  // sign-in, password reset
+  /* ---- Playfair: drink names ONLY (check-design rule 6) ---- */
   drinkHero:    { fontFamily: fonts.displayBold, fontSize: 52, lineHeight: 56, letterSpacing: -0.3 }, // drink page
   /** A drink at title size: the feed's and post's wall label, the catch moment. */
   nameLg:       { fontFamily: fonts.displayBold, ...TITLE, letterSpacing: -0.2 },

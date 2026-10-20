@@ -288,7 +288,7 @@ const PAIRS = [
   [C.reelInk, over(R.reelScrimMid, WHITE_FRAME), 4.5, 'caption at the shallow end of the scrim over a white frame'],
   [C.reelInk, over(R.reelScrim, WHITE_FRAME), 4.5, 'marker text on media over a white frame'],
 
-  'The accent (v4.4, Campari): the five places, and only those',
+  'The accent (v4.4, Campari): the six places, and only those',
   [C.accent, C.bg, 4.5, 'accent as text on page: the caught figure ("14 / 2,089", "14 entries")'], // 5.54
   [C.accent, C.bgSunk, 4.5, 'accent as text on wash'], // 5.08
   [C.accent, C.press, 4.5, 'accent as text on press'], // 4.64
@@ -296,6 +296,8 @@ const PAIRS = [
   [C.onAccent, C.accentPressed, 4.5, 'onAccent on accentPressed: the + or the post key held'], // 7.66
   [C.accent, C.bg, 3.0, 'accent fill on page (UI): the + key, the post key, the plate, the Activity dot'], // 5.54
   [C.accent, C.text, 3.0, 'accent fill against ink (UI): a key or plate on an ink ground keeps the fill'], // 3.58
+  // A logotype is exempt from WCAG's contrast minimum (1.4.3); the logo is held to the UI line anyway.
+  [C.accent, C.bg, 3.0, 'the logo on page (6, v4.5): the wordmark and the mark, red on white'], // 5.54
 
   'Quotations: the sign-in rows',
   [C.onFacebook, C.facebook, 4.5, 'Continue with Facebook label on Facebook blue'], // 4.82

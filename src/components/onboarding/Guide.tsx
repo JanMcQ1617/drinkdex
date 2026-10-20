@@ -1,6 +1,5 @@
-import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
-import { Image as RNImage, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   cancelAnimation,
   useAnimatedStyle,
@@ -13,48 +12,55 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { Mark } from '@/components/brand/Mark';
 import { colors, stroke } from '@/constants/theme';
 
 import { RING_INNER, RING_OUTER, SEAL } from './metrics';
 import { EASE_IO, EASE_OUT, T, useSettled } from './motion';
 
 /* ==================================================================== */
-/* The guide: Sipply's wax seal                                         */
+/* The guide: Sipply's mark                                             */
 /*                                                                      */
-/* Imprint's orb, in Daylight (spec 3, study 3.5): the app icon's seal   */
-/* (assets/images/icon.png) drawn at 1.56x inside a round clip, so only */
-/* the wax shows. Round is allowed: it is the guide mark. Decorative,    */
-/* hidden from VoiceOver; the bubble beside it speaks.                  */
+/* Imprint's orb, in Daylight (spec 3, study 3.5). It was the app       */
+/* icon's wax seal, cropped round out of icon.png; since v4.5 it is the */
+/* icon's letter instead: the tagged s (brand/Mark), in Campari on a    */
+/* disc of page. Not the icon's white s on a red disc: white script on  */
+/* red is Coca-Cola's ground, so the app leads with red on white        */
+/* wherever it has the choice, and here it does. The s takes the        */
+/* icon's own share of its disc (70%), so the guide reads as the icon   */
+/* the person tapped to get here. Round is allowed: it is the guide     */
+/* mark. Decorative, hidden from VoiceOver; the bubble beside it        */
+/* speaks.                                                              */
+/*                                                                      */
+/* The names stay the seal's (Seal, SEAL in metrics) so the steps and   */
+/* the reveal that place it kept their imports.                         */
 /*                                                                      */
 /* Three places (study 1): A centre stage at 200pt in two 1pt rings, B   */
 /* narration at 40pt, C question at 32pt. It belongs to its step's      */
 /* layer and rides the push (m14): no morph between modes.              */
 /*                                                                      */
-/* Its motion is decoration on a seal that reads without it:            */
+/* Its motion is decoration on a mark that reads without it:            */
 /*   speak (m12)  650ms after the screen settles, one +8% swell back     */
 /*                with a small undershoot, and a ring that ripples out   */
 /*   stamp (m21)  All set: down from 1.12, with one ripple              */
 /*   breathe (m13) mode A's rings, +/-3% out of phase, a second a half   */
-/* None of it under Reduce Motion. The seal's scale is redrawn plain     */
+/* None of it under Reduce Motion. The mark's scale is redrawn plain     */
 /* once its gesture is over, and the ripple is unmounted by a timer.     */
 /* ==================================================================== */
 
-const SEAL_ASSET = require('../../../assets/images/icon.png');
-/** The icon drawn this much larger than its clip, so only the wax shows. */
-const COVER = 1.56;
+/**
+ * The s's size on its disc: the icon tile's share (build-icons FILL), so
+ * its farthest point stays 0.09 of the disc inside the edge (0.41 from
+ * the centre against 0.5), clear of the round edge at every size.
+ */
+const MARK_SHARE = 0.7;
 /** The swell waits this long after the push (180ms) has settled the screen (m12). */
 const SPEAK_AT = T.pushIn + 650;
 const GESTURE_MS = 650;
 /** The inner ring's offset inside the outer one's box. */
 const INSET = (RING_OUTER - RING_INNER) / 2;
 
-let sealUri: string | null | undefined;
-function sealSource(decode: number) {
-  if (sealUri === undefined) sealUri = RNImage.resolveAssetSource(SEAL_ASSET)?.uri ?? null;
-  return sealUri ? { uri: sealUri, cacheKey: `sipply-seal#${decode}` } : SEAL_ASSET;
-}
-
-/** The seal alone, at `size`. A `collar` of page round it keeps prints off it (the reveal). */
+/** The guide's disc alone, at `size`. A `collar` of page round it keeps prints off it (the reveal). */
 export const Seal = React.memo(function Seal({
   size,
   collar = 0,
@@ -64,25 +70,14 @@ export const Seal = React.memo(function Seal({
   collar?: number;
   style?: StyleProp<ViewStyle>;
 }) {
-  const drawn = size * COVER;
-  const decode = Math.round(drawn);
   const clip = (
     <View
       style={[
         styles.clip,
-        // round-ok: the guide mark, Sipply's wax seal (check-design rule 4 allows it)
+        // round-ok: the guide mark, Sipply's disc (check-design rule 4 allows it)
         { width: size, height: size, borderRadius: size / 2 },
       ]}>
-      <Image
-        source={sealSource(decode)}
-        style={{ position: 'absolute', width: drawn, height: drawn, left: (size - drawn) / 2, top: (size - drawn) / 2 }}
-        contentFit="cover"
-        transition={0}
-        cachePolicy="memory-disk"
-        enforceEarlyResizing
-        accessibilityIgnoresInvertColors
-        accessible={false}
-      />
+      <Mark size={size * MARK_SHARE} />
     </View>
   );
   return (
@@ -95,7 +90,7 @@ export const Seal = React.memo(function Seal({
         collar > 0 && {
           padding: collar,
           backgroundColor: colors.bg,
-          // round-ok: the seal's page collar, a ring round the guide mark
+          // round-ok: the disc's page collar, a ring round the guide mark
           borderRadius: (size + 2 * collar) / 2,
         },
         style,
@@ -105,7 +100,7 @@ export const Seal = React.memo(function Seal({
   );
 });
 
-/** One 1pt rule ring that grows 1.35x from the seal and fades, mounted only while it runs. */
+/** One 1pt rule ring that grows 1.35x from the disc and fades, mounted only while it runs. */
 function Ripple({ size, box }: { size: number; box: number }) {
   const t = useSharedValue(0);
   useEffect(() => {
@@ -120,7 +115,7 @@ function Ripple({ size, box }: { size: number; box: number }) {
       pointerEvents="none"
       style={[
         styles.ring,
-        // round-ok: the guide's ripple, a ring round the seal
+        // round-ok: the guide's ripple, a ring round the disc
         { width: size, height: size, borderRadius: size / 2, borderColor: colors.rule, left: (box - size) / 2, top: (box - size) / 2 },
         anim,
       ]}
@@ -146,7 +141,7 @@ function useRippleWindow(at: number | null): boolean {
 export type GuideGesture = 'speak' | 'stamp' | 'none';
 
 /**
- * The seal in mode A, B or C, with its gesture. `from` flies it in from
+ * The guide in mode A, B or C, with its gesture. `from` flies it in from
  * another place (the reveal's centre, m20): an offset and a scale that
  * settle to its own slot in 240ms.
  */
@@ -263,6 +258,7 @@ export function Guide({
 
 const styles = StyleSheet.create({
   box: { alignItems: 'center', justifyContent: 'center' },
-  clip: { overflow: 'hidden', backgroundColor: colors.text },
+  /* Page, so the s stands on white whatever is behind the disc (a print, in the reveal). */
+  clip: { overflow: 'hidden', backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' },
   ring: { position: 'absolute', borderWidth: stroke.edge },
 });

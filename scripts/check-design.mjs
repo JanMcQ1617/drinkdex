@@ -15,8 +15,8 @@
  *   5. No uppercase, and no Title Case by transform. Letterspaced caps
  *      headings were the habit that most made the interface look
  *      machine-designed. See CAPS.
- *   6. Playfair is the wordmark and the drink names, nothing else, and a
- *      drink name is drawn by DrinkName. See PLAYFAIR.
+ *   6. Playfair is the drink names, nothing else, and a drink name is
+ *      drawn by DrinkName. See PLAYFAIR.
  *   7. Nothing under 11pt. See FLOOR.
  *   8. No tracked words, no capitals typed into copy, and a drink's style
  *      is shown in sentence case. See TRACKING.
@@ -32,7 +32,7 @@
  *  16. Edges are not ink: the decorative greys are never a text colour,
  *      the control grey is a glyph's or an edge's, and the Dex number's
  *      sign is U+00BA, never U+2116. See EDGE_INK.
- *  17. One accent, through its tokens, in its five places: the hex only
+ *  17. One accent, through its tokens, in its six places: the hex only
  *      in theme.ts, the tokens and the props that draw it only where
  *      theme.ts lists. See ACCENT_FILES and ACCENT_PROPS.
  *
@@ -61,7 +61,6 @@ const ALLOW = {
   'constants/theme.ts': 'defines the palette itself',
   'components/artwork/liquid.ts': 'defines the LIQUID pour palette',
   'components/artwork/index.tsx': 'defines garnish tints (olive, cherry, citrus)',
-  'components/SipplyIntro.tsx': 'exact port of the brand intro timeline',
 };
 
 const EMOJI = /\p{Extended_Pictographic}/u;
@@ -113,7 +112,6 @@ const ROUND_OK = /round-ok:\s*\w/;
 /** Files rule 4 does not read, and why. */
 const SHAPE_EXEMPT = [
   [/^constants\/theme\.ts$/, 'defines the radius scale, round included'],
-  [/^components\/SipplyIntro\.tsx$/, 'the brand film: the pour is drawn in discs'],
   [/^components\/artwork\//, 'drink illustrations: glasses and garnishes are round'],
 ];
 
@@ -133,18 +131,20 @@ const CAPS_TRANSFORM = {
 };
 
 /*
- * 6. Playfair is the wordmark's face and the drink names', and nothing
- *    else's: not counts, not shelf headers, not sentences, not initials
- *    (specs/v3-cabinet.md section 6.2). So the display fonts are named in
- *    theme.ts only, and there only as the `fontFamily` of a name role;
- *    every other file sets Playfair through one of those roles, whole. The
+ * 6. Playfair is the drink names' face, and nothing else's: not counts,
+ *    not shelf headers, not sentences, not initials (specs/v3-cabinet.md
+ *    section 6.2), and since v4.5 not the wordmark either, which is the
+ *    tagged logo drawn as outlined paths (brand/Wordmark) and no type
+ *    role at all. So the display fonts are named in theme.ts only, and
+ *    there only as the `fontFamily` of a name role; every other file
+ *    sets Playfair through one of those roles, whole. The
  *    `fonts` binding is followed through import aliases; a family string
  *    typed in anywhere counts (`const FACE = 'PlayfairDisplay…'` as much as
  *    a fontFamily); and so does a name role's family lent to other text
  *    (`fontFamily: textRole.nameLg.fontFamily` on a count), so none of
  *    those routes gets round the rule.
  */
-const NAME_ROLES = ['wordmark', 'wordmarkLg', 'drinkHero', 'nameLg', 'name', 'nameSm', 'nameInline'];
+const NAME_ROLES = ['drinkHero', 'nameLg', 'name', 'nameSm', 'nameInline'];
 const THEME = 'constants/theme.ts';
 /**
  * A display family's name as a string ('PlayfairDisplayLatin_700Bold'). A
@@ -152,10 +152,11 @@ const THEME = 'constants/theme.ts';
  * might test a family against.
  */
 const PLAYFAIR_FAMILY = /^PlayfairDisplay\w*_\d{3}\w*$/;
-/** Files rule 6 does not read, and why. */
-const PLAYFAIR_EXEMPT = {
-  'components/SipplyIntro.tsx': 'the brand film sets its own lockup',
-};
+/**
+ * Files rule 6 does not read, and why. None since v4.5: the drawn intro
+ * set its own Playfair lockup until the tagged wordmark replaced it.
+ */
+const PLAYFAIR_EXEMPT = {};
 /*
  * And a drink name is drawn by DrinkName (components/cabinet.tsx), which
  * fits it to its column and never gives it a line limit: the judges saw
@@ -165,10 +166,10 @@ const PLAYFAIR_EXEMPT = {
  * be a plain Text, free to take `numberOfLines`. `textRole['cardName']`
  * counts as `textRole.cardName`. Data that only carries a role on to
  * DrinkName (a table of roles) and member reads such as
- * `textRole.rowName.fontSize` pass. The wordmarks are not drink names, and
- * nameInline is the name inside an Inter sentence, a nested Text.
+ * `textRole.rowName.fontSize` pass. nameInline is the name inside an
+ * Inter sentence, a nested Text.
  */
-const DRINK_NAME_ROLES = NAME_ROLES.filter((r) => !['wordmark', 'wordmarkLg', 'nameInline'].includes(r));
+const DRINK_NAME_ROLES = NAME_ROLES.filter((r) => r !== 'nameInline');
 const CABINET_MODULE = /(^|\/)components\/cabinet$/;
 
 /*
@@ -254,10 +255,11 @@ const FULL_SIZE_OK = /full-size-ok:\s*\S/;
  *     these.
  */
 const GROUNDS = ['bg', 'surface', 'reelGround'];
-/** Files rule 10 does not read, and why. */
-const GROUNDS_EXEMPT = {
-  'components/SipplyIntro.tsx': "the brand film's root is bgSunk, the wash the pour lands on",
-};
+/**
+ * Files rule 10 does not read, and why. None since v4.5: the drawn intro
+ * stood on the wash its pour landed on; it stands on the page now.
+ */
+const GROUNDS_EXEMPT = {};
 
 /*
  * 11. media.tsx draws everything that sits on a photograph, and over a
@@ -391,11 +393,12 @@ const GLYPH_TAGS = new Set(['Icon', 'ActivityIndicator', 'GlassOutline']);
 const NUMERO = /\u2116/;
 
 /*
- * 17. One accent, through its tokens, in its five places (v4.4; theme.ts
+ * 17. One accent, through its tokens, in its six places (v4.4; theme.ts
  *     lists them, white spec 1.3). Campari is the palette's one hue and it
- *     means "post", "caught" or, as Home's one dot, "new". A red that
- *     turned up on another badge, a count or a delete key would blur all
- *     three, so each way it could spread fails:
+ *     means "post", "caught" or, as Home's one dot, "new"; and since v4.5
+ *     it is the logo's paint, the name itself. A red that turned up on
+ *     another badge, a count or a delete key would blur all four, so each
+ *     way it could spread fails:
  *
  *       - its hex, or its rgb()/rgba(), in code anywhere but theme.ts.
  *         Rule 2 already fails a hex outside ALLOW; this reads every file,
@@ -403,7 +406,7 @@ const NUMERO = /\u2116/;
  *         borrow it), catches the rgb forms rule 2 does not, and takes the
  *         values from theme.ts, so a retuned accent needs no edit here;
  *       - a token (`colors.accent`, `accentPressed`, `onAccent`) named
- *         anywhere but the code that draws the five places (ACCENT_FILES):
+ *         anywhere but the code that draws the six places (ACCENT_FILES):
  *         the right file is not enough, since ui.tsx and ScreenTopBar.tsx
  *         draw most of the app's controls, so each file lists the style
  *         keys and functions the tokens may sit inside (`within`);
@@ -411,14 +414,23 @@ const NUMERO = /\u2116/;
  *         Button's `post` variant, TopBarButton's `badge` (the Activity
  *         dot) and TopBarCount's `figure` (the caught figure).
  *
- *     A sixth place is Jan's decision, not a fix for this rule: add it to
- *     theme.ts's list and here, with its reason.
+ *     The logo (6) is drawn by two components and nowhere else: the
+ *     wordmark and the mark default to the accent inside brand/, so a
+ *     screen draws the logo by placing <Wordmark> or <Mark>, never by
+ *     naming the token. A screen that set the logo's red by hand, or a
+ *     seventh place, fails here.
+ *
+ *     A seventh place is Jan's decision, not a fix for this rule: add it
+ *     to theme.ts's list and here, with its reason.
  */
 const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
 /**
- * The files that draw the five places, and where in each. A `within` entry
+ * The files that draw the six places, and where in each. A `within` entry
  * names what the token must sit inside: a function, a variable or an
- * object key; `styles.fab` means both, the `fab` key of `styles`.
+ * object key; `styles.fab` means both, the `fab` key of `styles`. A
+ * `tokens` entry narrows which of the three may sit there: the logo is
+ * painted in the accent alone, so its pressed shade and the white that
+ * sits on it have no place in brand/.
  */
 const ACCENT_FILES = {
   'components/FloatingTabBar.tsx': {
@@ -434,6 +446,12 @@ const ACCENT_FILES = {
   'components/profile/ProfileHeader.tsx': {
     why: 'the caught figure in "14 entries in your Dex" (4)',
     within: ['styles.dexFigure'],
+  },
+  'components/brand/Wordmark.tsx': { why: "the wordmark's paint, the logo (6)", within: ['Wordmark'], tokens: ['accent'] },
+  'components/brand/Mark.tsx': {
+    why: "the mark's paint, the logo (6): the drawn intro and the onboarding guide",
+    within: ['Mark'],
+    tokens: ['accent'],
   },
 };
 /** The functions, variables and object keys a node sits inside, innermost first. */
@@ -1264,7 +1282,7 @@ function treeRules(rel, sf, lines, add) {
       }
     }
 
-    // 17. An accent token outside the code that draws the five places: the wrong file, or the wrong spot in the right one.
+    // 17. An accent token outside the code that draws the six places: the wrong file, or the wrong spot in the right one.
     if (rel !== THEME) {
       const token =
         ts.isPropertyAccessExpression(node) && isColorsToken(node)
@@ -1283,7 +1301,9 @@ function treeRules(rel, sf, lines, add) {
         const place = ACCENT_FILES[rel];
         const names = place ? enclosingNames(node) : [];
         if (!place) {
-          add('accent', at(node), `colors.${token} outside the accent's five places (ACCENT_FILES)`);
+          add('accent', at(node), `colors.${token} outside the accent's six places (ACCENT_FILES)`);
+        } else if (place.tokens && !place.tokens.includes(token)) {
+          add('accent', at(node), `colors.${token} in ${place.why}, which is painted in ${place.tokens.map((t) => `colors.${t}`).join(', ')} only`);
         } else if (!place.within.some((spot) => spot.split('.').every((name) => names.includes(name)))) {
           add('accent', at(node), `colors.${token} outside ${place.within.join(', ')}, where this file draws ${place.why}`);
         }
@@ -1384,7 +1404,7 @@ if (violations.length === 0) {
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
       '  stray shadows, gradient stops without their opacity, rarity readers, timed\n' +
       '  React Native animations, inverting photos, edge greys set as text, or the\n' +
-      '  accent outside its five places, outside the allowlists.\n',
+      '  accent outside its six places, outside the allowlists.\n',
   );
   process.exit(0);
 }

@@ -1,0 +1,38 @@
+{
+ "variant": "C9",
+ "rot": 9,
+ "fill": 0.7,
+ "splash_fill": 0.56,
+ "lift": 0.008,
+ "stroke": 21,
+ "icon_bbox": [
+  145.3,
+  172.2,
+  862.1,
+  859.5
+ ],
+ "splash_bbox": [
+  218.7,
+  238.6,
+  792.1,
+  788.3
+ ],
+ "android_bbox": [
+  255.1,
+  271.5,
+  757.3,
+  753
+ ],
+ "android_reach_px": 295.7,
+ "android_safe_r_px": 312.9,
+ "optical_centre_px": [
+  512,
+  503.8
+ ],
+ "splash_px_per_unit": 4.5462,
+ "splash_pivot_px": [
+  504.4,
+  513.4
+ ],
+ "splash_design_to_px": "x' = 512 + (x - 56.258) * 4.5462, y' = 503.81 + (y - 147.644) * 4.5462 (rotated-s design units)"
+}

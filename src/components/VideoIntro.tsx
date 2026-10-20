@@ -2,7 +2,7 @@ import { useEventListener } from 'expo';
 import { StatusBar } from 'expo-status-bar';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AppState, Pressable, StyleSheet } from 'react-native';
+import { AppState, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
   runOnJS,
@@ -12,6 +12,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { SPLASH_MARK } from '@/components/brand/paths';
 import { SipplyIntro } from '@/components/SipplyIntro';
 import { colors } from '@/constants/theme';
 import { applyMuted } from '@/lib/videoAudio';
@@ -19,10 +20,22 @@ import { applyMuted } from '@/lib/videoAudio';
 /* ==================================================================== */
 /* Launch intro — the film                                              */
 /*                                                                      */
-/* A 5s 1080x1920 H.264 clip generated from the app icon: the wax seal   */
-/* on grey paper (colors.filmPaper), black wax flooding up and settling. */
-/* Re-graded to black and white for v4 (Jan, 12 Oct 2026) with          */
-/* hue=s=0 and a levels curve, same 24 fps and bitrate as the original. */
+/* v4.5 "the tag" (20 Oct 2026; built in ~/Projects/sipply-intro/      */
+/* d-the-tag from the logo's own generator, specs/v4.5-logo/scribble).  */
+/* A 5.00s 1080x1920 60 fps H.264 clip, no audio, Campari on exact      */
+/* white (#FFFFFF, colors.filmPaper) on every frame:                    */
+/*   0.00-0.35  the splash, held still: the icon's clean s, tilted 9    */
+/*              degrees, exactly where and how big the native splash    */
+/*              draws it                                                */
+/*   0.35-0.99  the s turns upright, shrinks and glides left into its   */
+/*              slot as the wordmark's first letter                     */
+/*   1.05-2.92  "sipply" is written on in pen order, the way the tag    */
+/*              was drawn: i into the first p, the p's, the l running   */
+/*              on into the y and its swash                             */
+/*   2.95-3.48  the i's dot is dabbed, and the one drip runs down off   */
+/*              the swash to its bead                                   */
+/*   3.50-5.00  the finished wordmark, still, centred, 780 px wide      */
+/* No tagline, no call to action.                                       */
 /*                                                                      */
 /* EVERY COLD START (Jan, 30 Sep 2026; confirmed 1 Oct 2026). It used   */
 /* to play once per install, remembered in AsyncStorage, because iOS    */
@@ -45,12 +58,25 @@ import { applyMuted } from '@/lib/videoAudio';
 /* RootLayout lifts the splash. Lifted as soon as the app was ready     */
 /* instead, it dissolved onto whatever sat under the film before the    */
 /* first decoded frame — one more ground between splash and film. What  */
-/* sits under the video is the film's own paper (colors.filmPaper), so  */
-/* if the splash does go first it still lands on the film's colour, not */
-/* on the white page. A short timer is the guarantee here as well: a    */
-/* clip that never draws a frame must not be able to hold the splash    */
-/* up. The seal still jumps from the splash's size to the film's; only  */
-/* a re-cut of the clip's opening can remove that.                      */
+/* sits under the video is the film's own ground (colors.filmPaper,     */
+/* which is the page's white), so if the splash does go first it still  */
+/* lands on the film's colour. A short timer is the guarantee here as   */
+/* well: a clip that never draws a frame must not be able to hold the   */
+/* splash up.                                                           */
+/*                                                                      */
+/* FRAME 0 IS THE SPLASH. The splash is the Campari s on white, drawn   */
+/* 220pt wide (app.json; SPLASH_MARK), and the film opens on that same  */
+/* image, held still for 0.35s, longer than the splash's 250ms dissolve */
+/* (RootLayout), so the fading splash only ever lies over a still s:    */
+/* the dissolve is invisible. That only holds if the film is drawn at   */
+/* the splash's scale, so it is NOT cover-fitted: the film draws the    */
+/* splash's 1024 canvas as a 483 px square, so the video is sized at    */
+/* 220/483 pt per film px (491.9 x 874.5pt) and centred, as the splash  */
+/* is. Cover would scale it with the screen's height and match only on  */
+/* an 874pt-tall iPhone (about 9% too big on a 16 Pro Max, 24% too      */
+/* small on an SE). Where the video stops, the white fill carries on:   */
+/* the film's ground is exactly #FFFFFF, so the edge is invisible, and  */
+/* the 355pt wordmark fits inside a 375pt SE's width.                   */
 /*                                                                      */
 /* REDUCED MOTION FALLS BACK TO THE DRAWN INTRO, it does not skip.      */
 /* A video has one timeline and cannot soften itself, so honouring the  */
@@ -67,10 +93,10 @@ import { applyMuted } from '@/lib/videoAudio';
 /* app to do something, and a film with no way past it turns the        */
 /* welcome into a toll.                                                 */
 /*                                                                      */
-/* IT DISSOLVES OUT, it does not cut. The clip ends on merlot and the   */
-/* app's page is white, so unmounting on the last frame flashed from    */
-/* one to the other in a single frame. A short fade to what is          */
-/* underneath is the film's version of SipplyIntro's flood.             */
+/* IT DISSOLVES OUT, it does not cut. The clip ends on the red wordmark */
+/* on the white page, the same white as the app's, so the fade-out has  */
+/* no ground to flash: only the wordmark dissolves into the screen      */
+/* underneath, the film's version of SipplyIntro's closing fade.        */
 /*                                                                      */
 /* NEVER TRUST PLAYBACK ALONE TO END IT — SipplyIntro's rule 2, which   */
 /* the film had dropped. expo-video pauses the player when the app goes */
@@ -79,25 +105,33 @@ import { applyMuted } from '@/lib/videoAudio';
 /* frame. So the film resumes on return, leaves on an error, and a      */
 /* plain timer well past its length is the guarantee.                   */
 /*                                                                      */
-/* H.264 rather than the HEVC Higgsfield returns: a bundled asset       */
-/* should not depend on hardware HEVC, and it keeps Android open.       */
+/* H.264 (High, yuv420p, BT.709 limited range, tagged) rather than      */
+/* HEVC: a bundled asset should not depend on hardware HEVC, and it     */
+/* keeps Android open.                                                  */
 /* ==================================================================== */
 
-/** Past the 5.04s clip with room for a slow start; only a stalled film is still up by now. */
+/** Past the 5.00s clip with room for a slow start; only a stalled film is still up by now. */
 const CEILING_MS = 9000;
 /** The dissolve to the page. */
 const EXIT_MS = 280;
 /**
  * How long the splash waits for the film's first frame. A bundled clip
  * decodes well inside this; past it the splash lifts onto the film's
- * paper and the frame arrives under the dissolve or just after it.
+ * white ground and the frame arrives under the dissolve or just after it.
  */
 const FIRST_FRAME_WAIT_MS = 800;
+/** The clip's frame, in film px. */
+const FILM_W = 1080;
+const FILM_H = 1920;
+/** How wide the film draws the splash's 1024 canvas, in film px (centred at 540, 960). */
+const FILM_SPLASH_PX = 483;
+/** Points per film px: the native splash's width over the film's. */
+const FILM_PT = SPLASH_MARK.width / FILM_SPLASH_PX;
 
 /**
  * `onVisible` fires once the intro has something on screen for the native
  * splash to dissolve onto — the film's first frame (or, if that frame is
- * slow, the film's paper after FIRST_FRAME_WAIT_MS), or at once for the
+ * slow, the film's white ground after FIRST_FRAME_WAIT_MS), or at once for the
  * drawn intro. It may fire more than once; the caller must not care.
  */
 export function VideoIntro({ onDone, onVisible }: { onDone: () => void; onVisible: () => void }) {
@@ -125,6 +159,9 @@ export function VideoIntro({ onDone, onVisible }: { onDone: () => void; onVisibl
 
 function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void }) {
   const [leaving, setLeaving] = useState(false);
+  const screen = useWindowDimensions();
+  const filmW = FILM_W * FILM_PT;
+  const filmH = FILM_H * FILM_PT;
   const opacity = useSharedValue(1);
 
   /* Unmounts once, whichever of the dissolve's callback or its timer lands first. */
@@ -168,7 +205,7 @@ function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void
   );
 
   /*
-   * `playToEnd` rather than polling currentTime: the clip is 5.04s and a
+   * `playToEnd` rather than polling currentTime: the clip is 5.00s and a
    * timer racing that would either cut the last frames or hold a black
    * frame after them. The ceiling below does not race it — it sits well
    * past the clip's length and only matters when playback never finishes.
@@ -220,25 +257,34 @@ function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void
       pointerEvents={leaving ? 'none' : 'auto'}
       accessibilityViewIsModal>
       {/*
-        No status bar over the film: its second half is merlot, and the
-        app's dark glyphs sit on it at about 3:1 — a smudge across the top
-        of a full-bleed frame. It comes back as the dissolve STARTS, not
-        after it, because on a home-button iPhone a hidden bar hands the
+        No status bar over the film: the film is a title, one red mark on
+        a white field, and a clock and battery over it make it read as a
+        screen of the app before the app is there. It comes back as the
+        dissolve STARTS, not after it, because on a home-button iPhone a
+        hidden bar hands the
         page its 20pt back; the page re-lays out under the fading film
         instead of jumping once it is already showing.
       */}
       <StatusBar style="dark" hidden={!leaving} animated />
       <VideoView
-        style={styles.fill}
+        /*
+         * At the splash's scale and centred on the screen, as the splash
+         * is (header: FRAME 0 IS THE SPLASH). It may overflow the screen
+         * or stop short of it; the white fill around it is the film's
+         * own ground either way.
+         */
+        style={{
+          position: 'absolute',
+          width: filmW,
+          height: filmH,
+          left: (screen.width - filmW) / 2,
+          top: (screen.height - filmH) / 2,
+        }}
         player={player}
         /* Chrome of any kind on a launch intro reads as a video embed. */
         nativeControls={false}
-        /*
-         * cover, not contain: the clip is 9:16 and phones are not, so
-         * `contain` would letterbox the launch screen in black — on an
-         * app whose whole ground is white.
-         */
-        contentFit="cover"
+        /* The view is the clip's own 9:16, so nothing is cropped or letterboxed. */
+        contentFit="fill"
         allowsPictureInPicture={false}
         /*
          * Lifts the splash. It can fire again when the video track
@@ -258,11 +304,12 @@ function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void
 
 const styles = StyleSheet.create({
   /*
-   * The ground shows before the first video frame lands, and is what the
-   * splash dissolves onto if its fallback lifts it first. The film's own
-   * paper rather than the page: the first frame then lands on its own
-   * colour, with no extra change of ground in half a second. On the
-   * dissolve out it fades with the film, so the page is all that is left.
+   * The ground shows before the first video frame lands, around the video
+   * wherever it stops short of the screen, and is what the splash
+   * dissolves onto if its fallback lifts it first. It is the film's own
+   * ground, sampled from its frames (colors.filmPaper, exact white), so
+   * there is never a second ground. On the dissolve out it fades with the
+   * film, onto the page's same white.
    */
   fill: {
     position: 'absolute',

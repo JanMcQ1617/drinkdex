@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CatalogueFace } from '@/components/auth/CatalogueFace';
+import { Wordmark, WORDMARK_LG } from '@/components/brand/Wordmark';
 import { Print } from '@/components/cabinet';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { useScrollEdges } from '@/components/log/scrollEdges';
@@ -28,8 +29,9 @@ import type { Drink } from '@/types';
 /* sheet over the cabinet's wine lining, with three mounted drinks      */
 /* peeking above it. In v4 it is a plain white page (white spec,        */
 /* "Sign-in"; specs/v4-changes.md 7): the step's bar at the top, the    */
-/* large Playfair wordmark on the first step, the form, and nothing     */
-/* behind it. Jan: "make everything look sleek".                        */
+/* large wordmark on the first step (the tagged one in Campari since    */
+/* v4.5, brand/Wordmark), the form, and nothing behind it. Jan: "make   */
+/* everything look sleek".                                              */
 /*                                                                      */
 /* The names are the v3 ones (CabinetSheet, CabinetBackdrop's file) so  */
 /* every step that draws on this frame kept its import; the cabinet     */
@@ -53,8 +55,6 @@ export function useAuthPageScrolled(): boolean | null {
   return useContext(AuthPageScrolled);
 }
 
-/** The wordmark's Dynamic Type cap (spec 6.5). */
-const WORDMARK_CAP = 1.2;
 /** The picks' heading and its line cap here, as a Dex card's name does. */
 const NAME_CAP = 1.3;
 
@@ -101,7 +101,7 @@ function picksShown({ saved, picks }: PicksHead): Drink[] {
 /**
  * What sits above the form.
  *
- *   full     the first step: "Sipply" in wordmarkLg and the catalogue's
+ *   full     the first step: the large wordmark and the catalogue's
  *            size as the invitation. On a short window or at an
  *            accessibility text size, nothing (the bar says the step).
  *   compact  every other step: nothing. The bar's title is the step.
@@ -158,9 +158,8 @@ function Backdrop({ variant, picks }: { variant: 'full' | 'compact'; picks?: Pic
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
       style={styles.head}>
-      <Text maxFontSizeMultiplier={WORDMARK_CAP} style={[textRole.wordmarkLg, styles.ink, styles.centre]}>
-        Sipply
-      </Text>
+      {/* Decorative here, as the Text was: the head is hidden, and the step's bar names the page. */}
+      <Wordmark height={WORDMARK_LG} accessible={false} />
       <Text style={[textRole.body, styles.muted, styles.centre, styles.lede]}>
         {`${formatCount(TOTAL)} drinks. Start your Dex with the next one.`}
       </Text>

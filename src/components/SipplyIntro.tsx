@@ -1,48 +1,49 @@
-import * as Haptics from 'expo-haptics';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, {
   Easing,
-  interpolate,
   ReduceMotion,
   runOnJS,
   useAnimatedStyle,
-  useReducedMotion,
   useSharedValue,
   withTiming,
-  type SharedValue,
 } from 'react-native-reanimated';
-import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-import { colors, fonts, layout, textRole } from '@/constants/theme';
+import { Mark, markBox } from '@/components/brand/Mark';
+import { SPLASH_MARK } from '@/components/brand/paths';
+import { Wordmark, WORDMARK_ASPECT } from '@/components/brand/Wordmark';
+import { colors } from '@/constants/theme';
 
 /**
- * Launch intro — the pour fills the screen and the wordmark rises out of it.
+ * Launch intro, drawn: the Reduce Motion door.
  *
- * A port of the Sipply brand intro (`Sipp Brand Intro.dc.html` +
- * `sipp-video.jsx`), which authors three beats over 3.2s:
+ * VideoIntro plays the film on every cold start and mounts this instead
+ * when Reduce Motion is on: a video has one timeline and cannot soften
+ * itself, and launching straight into the app with no transition is its
+ * own jolt. So this is the path that matters for the people who asked for
+ * less motion, and everything in it is a plain fade. Nothing scales,
+ * travels or turns: the film's moves (the s turning from its 9 degrees
+ * back to the wordmark's angle, the wordmark drawing on and shrinking into
+ * Home's bar) are exactly what the setting asks to leave out.
  *
- *   POUR    two ink circles, one behind and one in front (the source's
- *           two reds, both ink since v4 Daylight), swell from ~68%
- *           down-screen until they flood the wash ground. easeInOutSine.
- *   REVEAL  the letters of "Sipply" pop in one at a time, 90ms apart,
- *           0.55 → 1 on an easeOutBack overshoot from a 50%/80% origin; a
- *           90×2 rule fades in above them; the tagline rises 28pt.
- *   HOLD    the whole lockup drifts 1.0 → 1.035, breathing, and stops.
+ * Three beats on white, the v4.5 logo (specs/v4.5-logo/scribble):
  *
- * Three departures from the source, all deliberate:
+ *   MARK   frame one is the launch screen to the point: the tagged s in
+ *          Campari on the page, at the splash's size and centre (brand/
+ *          paths SPLASH_MARK, which build-icons writes from app.json and
+ *          the splash raster's own placement), so when the native splash
+ *          lifts there is nothing to see change.
+ *   NAME   the s dissolves and the wordmark dissolves in where it stood,
+ *          as wide as the splash's 220pt canvas. One after the other,
+ *          overlapping by a beat: the tilted s and the wordmark are never
+ *          shown together at full strength (never one lockup, notes.md).
+ *   PAGE   the whole intro dissolves and the app is what was underneath.
+ *          Both are white, so the only change is the logo going.
  *
- *  - The tail is compressed. The source holds to 3.2s before it ends; a
- *    launch screen that outstays 3s is felt every single time the app is
- *    opened, so the rule and tagline land by 2.4s and the hold runs to 2.9s.
- *    The beats keep their proportions and their easings.
- *  - It exits by flooding, not by cutting. The pour ends on ink and the
- *    app's page is white, so a page-white disc opens from the centre and
- *    floods the frame — the app is simply what was underneath. Inherited
- *    from the intro this replaces, and the reason there is no visible seam.
- *  - The tagline is "Discover, log, share" in sentence case, untracked,
- *    where the source spaced capitals half an em apart (see TAGLINE).
+ * It replaces the v3 pour (ink circles flooding the screen, the Playfair
+ * letters popping on an overshoot, a breathing drift), which had become
+ * the one place Reduce Motion still got scale and bounce.
  *
  * Four rules this file learned the hard way and keeps:
  *  1. ONE shared value, set ONCE. Everything derives from a single master
@@ -51,132 +52,52 @@ import { colors, fonts, layout, textRole } from '@/constants/theme';
  *  2. Never trust the animation callback alone to dismiss the overlay — if
  *     the app is backgrounded mid-intro the frames stall and the callback
  *     never fires. The plain timer is the guarantee.
- *  3. Honour reduced motion: no pour, no pop, no drift, no zoom — the
- *     lockup is simply there, and the page dissolves in over it on time.
- *     Since the film took over, this file only runs when Reduce Motion is
- *     on, so this is the path that matters, not an afterthought.
+ *  3. Reduce Motion is the case, not an afterthought: fades only, on time.
  *  4. The clock opts OUT of Reanimated's own reduced-motion handling
  *     (`ReduceMotion.Never`). The clock is the timeline, not a motion, and
- *     each style that reads it decides its own reduced form. Left on the
- *     System default, Reanimated jumps a timing straight to its end when
- *     the setting is on — the clock read 3350 on frame one, the callback
+ *     each style that reads it is already a fade. Left on the System
+ *     default, Reanimated jumps a timing straight to its end when the
+ *     setting is on — the clock read its total on frame one, the callback
  *     fired, and the intro vanished before it was ever drawn: exactly the
- *     jolt this fallback exists to prevent.
+ *     jolt this path exists to prevent.
  */
 
 /* ---- Timeline, in milliseconds ---------------------------------------- */
 const T = {
-  backIn: [150, 850],
-  frontIn: [400, 1050],
-  glowIn: [900, 1400],
-  /** First letter starts here; each subsequent one 90ms later. */
-  letterFrom: 1000,
-  letterStagger: 90,
-  letterDur: 600,
-  taglineIn: [1600, 2300],
-  ruleIn: [1750, 2350],
-  driftIn: [1100, 2900],
-  floodIn: [2900, 3350],
+  /** The s holds as the splash left it, then dissolves. */
+  markOut: [500, 850],
+  /** The wordmark dissolves in, starting as the s is two-thirds gone. */
+  wordIn: [750, 1150],
+  /** The intro dissolves off the app. */
+  pageIn: [2150, 2550],
 } as const;
 
-const TOTAL = 3350;
-const FAILSAFE = 3800;
+const TOTAL = 2550;
+const FAILSAFE = 3000;
 
-const WORDMARK = 'Sipply';
-const WORDMARK_CAP = 1.2;
-/**
- * Sentence case and untracked. The source set it in capitals spaced half
- * an em apart, the letterspaced-caps habit the app no longer has anywhere
- * (check-design rule 8), the intro included.
- */
-const TAGLINE = 'Discover, log, share';
+/** The wordmark is as wide as the splash canvas the s was drawn in. */
+const WORD_H = SPLASH_MARK.width / WORDMARK_ASPECT;
+/** The s at the launch screen's size: its larger side, the splash raster's share of a 220pt canvas. */
+const MARK_SIZE = SPLASH_MARK.width * SPLASH_MARK.fill;
+/** How far the splash raster sets the s's optical centre above the screen's middle. */
+const MARK_LIFT = SPLASH_MARK.width * SPLASH_MARK.lift;
 
-/* ---- Worklet easings --------------------------------------------------
- * Hand-written rather than Reanimated's `Easing.*` because every element
- * reads the same master clock: each one needs its own curve applied to its
- * own slice of that clock, which is a function call, not an animation
- * config. Same curves the source names.
- */
+/* ---- Worklet easing -------------------------------------------------- */
 function clamp01(x: number) {
   'worklet';
   return x < 0 ? 0 : x > 1 ? 1 : x;
 }
 
-/** Progress of [from, to] at time t, clamped to the segment. */
-function seg(t: number, from: number, to: number) {
+/** Progress of [from, to] at time t, eased in and out (sine), clamped to the segment. */
+function fade(t: number, [from, to]: readonly [number, number]) {
   'worklet';
-  return clamp01((t - from) / (to - from));
-}
-
-function sineInOut(x: number) {
-  'worklet';
+  const x = clamp01((t - from) / (to - from));
   return -(Math.cos(Math.PI * x) - 1) / 2;
-}
-
-function cubicOut(x: number) {
-  'worklet';
-  return 1 - Math.pow(1 - x, 3);
-}
-
-/** easeOutBack — the overshoot that gives each letter its bounce. */
-function backOut(x: number) {
-  'worklet';
-  const c1 = 1.70158;
-  const c3 = c1 + 1;
-  return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
-}
-
-/** One letter of the wordmark, popping on its own slice of the clock. */
-function Letter({
-  char,
-  index,
-  clock,
-  reduced,
-  size,
-}: {
-  char: string;
-  index: number;
-  clock: SharedValue<number>;
-  reduced: boolean;
-  size: number;
-}) {
-  const style = useAnimatedStyle(() => {
-    if (reduced) return { opacity: 1, transform: [{ scale: 1 }] };
-    const start = T.letterFrom + index * T.letterStagger;
-    const p = seg(clock.value, start, start + T.letterDur);
-    return {
-      // Fades over the first 250ms of its own 600ms pop, as authored.
-      opacity: clamp01(seg(clock.value, start, start + 250)),
-      transform: [{ scale: 0.55 + backOut(p) * 0.45 }],
-    };
-  });
-
-  return (
-    // The wordmark's Dynamic Type cap (specs/v3-cabinet.md 6.5): uncapped, six
-    // letters at an accessibility size run past both edges of the screen.
-    <Animated.Text
-      maxFontSizeMultiplier={WORDMARK_CAP}
-      style={[
-        styles.letter,
-        { fontSize: size, lineHeight: size * 1.02 },
-        style,
-      ]}>
-      {char}
-    </Animated.Text>
-  );
 }
 
 export function SipplyIntro({ onDone }: { onDone: () => void }) {
   const { width: W, height: H } = useWindowDimensions();
-  const reduced = useReducedMotion();
   const [gone, setGone] = useState(false);
-  /*
-   * No status bar over the pour: the app's dark glyphs vanish on its
-   * ink. It comes back as the page starts to open rather than after, so
-   * on a home-button iPhone — where a hidden bar gives the page its 20pt
-   * back — the re-layout happens under the dissolve, not in plain sight.
-   */
-  const [opening, setOpening] = useState(false);
   const doneRef = useRef(false);
 
   const finish = useCallback(() => {
@@ -202,30 +123,12 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
         },
       ),
     );
-
-    /*
-     * The pour landing is the one moment worth feeling — it is where the
-     * front circle finishes covering the frame.
-     */
-    let pourTimer: ReturnType<typeof setTimeout> | undefined;
-    if (Platform.OS !== 'web' && !reduced) {
-      pourTimer = setTimeout(() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium).catch(() => {});
-      }, T.frontIn[1]);
-    }
-
-    const openTimer = setTimeout(() => setOpening(true), T.floodIn[0]);
     const failsafe = setTimeout(finish, FAILSAFE);
-    return () => {
-      if (pourTimer) clearTimeout(pourTimer);
-      clearTimeout(openTimer);
-      clearTimeout(failsafe);
-    };
+    return () => clearTimeout(failsafe);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const skip = useCallback(() => {
-    setOpening(true);
     rootO.set(
       // A dissolve is what Reduce Motion asks for, so it is not snapped away.
       withTiming(0, { duration: 220, reduceMotion: ReduceMotion.Never }, (ok) => {
@@ -235,73 +138,13 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
     setTimeout(finish, 360);
   }, [finish, rootO]);
 
-  /*
-   * Circle geometry. Each circle has to reach the furthest corner from its
-   * own centre, so it is sized once at full diameter and scaled 0 → 1 —
-   * animating width/height would re-layout every frame.
-   */
-  const cx = W / 2;
-  const backCY = H * 0.68;
-  const frontCY = H * 0.7;
-  const reach = (cy: number) =>
-    Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy)) * 2 * 1.04;
-  const backD = reach(backCY);
-  const frontD = reach(frontCY);
-
-  /** The flood disc opens from the centre of the lockup. */
-  const floodD = Math.hypot(cx, H / 2) * 2 * 1.04;
-
-  const wordSize = Math.min(Math.round(W * 0.19), 76);
-
-  const rootStyle = useAnimatedStyle(() => ({ opacity: rootO.value }));
-
-  const backStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: reduced ? 1 : sineInOut(seg(clock.value, T.backIn[0], T.backIn[1])) },
-    ],
-  }));
-
-  const frontStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: reduced ? 1 : sineInOut(seg(clock.value, T.frontIn[0], T.frontIn[1])) }],
-  }));
-
-  const glowStyle = useAnimatedStyle(() => ({
-    opacity: reduced ? 1 : sineInOut(seg(clock.value, T.glowIn[0], T.glowIn[1])),
-  }));
-
-  const lockupStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: reduced
-          ? 1
-          : interpolate(sineInOut(seg(clock.value, T.driftIn[0], T.driftIn[1])), [0, 1], [1, 1.035]),
-      },
-    ],
-  }));
-
-  const ruleStyle = useAnimatedStyle(() => ({
-    opacity: reduced ? 1 : sineInOut(seg(clock.value, T.ruleIn[0], T.ruleIn[1])),
-  }));
-
-  const taglineStyle = useAnimatedStyle(() => {
-    if (reduced) return { opacity: 1, transform: [{ translateY: 0 }] };
-    const p = cubicOut(seg(clock.value, T.taglineIn[0], T.taglineIn[1]));
-    return { opacity: p, transform: [{ translateY: 28 - p * 28 }] };
-  });
-
-  /*
-   * The exit. With motion, the page opens as a disc from the centre; with
-   * Reduce Motion, the same full-size disc fades in instead — a dissolve
-   * rather than a screen-filling zoom, and still no seam at the end.
-   */
-  const floodStyle = useAnimatedStyle(() => {
-    const p = seg(clock.value, T.floodIn[0], T.floodIn[1]);
-    return reduced
-      ? { opacity: p, transform: [{ scale: 1 }] }
-      : { opacity: 1, transform: [{ scale: p }] };
-  });
+  const rootStyle = useAnimatedStyle(() => ({ opacity: rootO.value * (1 - fade(clock.value, T.pageIn)) }));
+  const markStyle = useAnimatedStyle(() => ({ opacity: 1 - fade(clock.value, T.markOut) }));
+  const wordStyle = useAnimatedStyle(() => ({ opacity: fade(clock.value, T.wordIn) }));
 
   if (gone) return null;
+
+  const box = markBox(MARK_SIZE);
 
   /*
    * accessibilityViewIsModal: VoiceOver otherwise walks straight past the
@@ -316,103 +159,20 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
       style={[StyleSheet.absoluteFill, styles.root, rootStyle]}
       pointerEvents="box-none"
       accessibilityViewIsModal>
-      <StatusBar style="dark" hidden={!opening} animated />
-      {/* ---- The pour ---- */}
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.circle,
-          {
-            width: backD,
-            height: backD,
-            borderRadius: backD / 2,
-            left: cx - backD / 2,
-            top: backCY - backD / 2,
-            backgroundColor: colors.text,
-          },
-          backStyle,
-        ]}
-      />
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.circle,
-          {
-            width: frontD,
-            height: frontD,
-            borderRadius: frontD / 2,
-            left: cx - frontD / 2,
-            top: frontCY - frontD / 2,
-            backgroundColor: colors.text,
-          },
-          frontStyle,
-        ]}
-      />
+      {/* White from the first frame, as the splash is, so the bar's dark glyphs are right throughout. */}
+      <StatusBar style="dark" />
 
-      {/* ---- The warm bloom the wordmark sits in ---- */}
-      <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, glowStyle]}>
-        <Svg width="100%" height="100%">
-          <Defs>
-            <RadialGradient id="sipplyBloom" cx="50%" cy="35%" rx="120%" ry="90%">
-              <Stop offset="0" stopColor={colors.text} stopOpacity="0.35" />
-              <Stop offset="0.6" stopColor={colors.text} stopOpacity="0" />
-            </RadialGradient>
-          </Defs>
-          <Rect x="0" y="0" width="100%" height="100%" fill="url(#sipplyBloom)" />
-        </Svg>
+      {/* ---- The launch screen's s, where the splash drew it ---- */}
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.mark, { left: W / 2 - box / 2, top: H / 2 - MARK_LIFT - box / 2 }, markStyle]}>
+        <Mark size={MARK_SIZE} />
       </Animated.View>
 
-      {/* ---- The lockup ---- */}
-      <Animated.View style={[styles.lockup, lockupStyle]} pointerEvents="none">
-        <Animated.View style={[styles.rule, ruleStyle]} />
-        <View
-          style={styles.word}
-          accessible
-          accessibilityRole="header"
-          accessibilityLabel={WORDMARK}>
-          {WORDMARK.split('').map((ch, i) => (
-            <Letter
-              key={`${ch}-${i}`}
-              char={ch}
-              index={i}
-              clock={clock}
-              reduced={reduced}
-              size={wordSize}
-            />
-          ))}
-        </View>
-        <Animated.Text style={[styles.tagline, taglineStyle]}>{TAGLINE}</Animated.Text>
+      {/* ---- The wordmark ---- */}
+      <Animated.View pointerEvents="none" style={[styles.word, wordStyle]}>
+        <Wordmark height={WORD_H} header />
       </Animated.View>
-
-      {/* ---- Vignette ---- */}
-      <View pointerEvents="none" style={styles.vignette}>
-        <Svg width="100%" height="100%">
-          <Defs>
-            <RadialGradient id="sipplyVignette" cx="50%" cy="45%" rx="120%" ry="100%">
-              <Stop offset="0.62" stopColor={colors.text} stopOpacity="0" />
-              <Stop offset="1" stopColor={colors.text} stopOpacity="0.28" />
-            </RadialGradient>
-          </Defs>
-          <Rect x="0" y="0" width="100%" height="100%" fill="url(#sipplyVignette)" />
-        </Svg>
-      </View>
-
-      {/* ---- The page, opening ---- */}
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.circle,
-          {
-            width: floodD,
-            height: floodD,
-            borderRadius: floodD / 2,
-            left: cx - floodD / 2,
-            top: H / 2 - floodD / 2,
-            backgroundColor: colors.bg,
-          },
-          floodStyle,
-        ]}
-      />
 
       {/* Tap anywhere to skip. */}
       <Pressable
@@ -426,44 +186,10 @@ export function SipplyIntro({ onDone }: { onDone: () => void }) {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    /* The wash: the ground the pour lands on. */
-    backgroundColor: colors.bgSunk,
-    overflow: 'hidden',
-  },
-  circle: { position: 'absolute' },
-  vignette: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
-  lockup: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 18,
-  },
-  rule: {
-    width: 90,
-    height: 2,
-    backgroundColor: colors.line,
-  },
-  word: { flexDirection: 'row', alignItems: 'baseline' },
-  letter: {
-    fontFamily: fonts.displayBold,
-    color: colors.onInk,
-    /* The source pops each letter from its own foot, not its centre. */
-    transformOrigin: '50% 80%',
-  },
-  /* Inter Medium 13/18, onInkMuted on ink (7.85:1); centred if a large text size wraps it. */
-  tagline: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: textRole.helper.fontSize,
-    lineHeight: textRole.helper.lineHeight,
-    color: colors.onInkMuted,
-    textAlign: 'center',
-    paddingHorizontal: layout.gutter,
-  },
+  /* The page: the splash's ground (app.json backgroundColor) and the app's. */
+  root: { backgroundColor: colors.bg },
+  mark: { position: 'absolute' },
+  word: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' },
 });
 
 export default SipplyIntro;

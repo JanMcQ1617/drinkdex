@@ -2023,8 +2023,7 @@ const EMPTY_TONE = {
  *
  * The glyph is drawn bare, with no disc behind it: an icon in a tinted
  * circle over a title is the most copied empty state there is. The title
- * is Inter, like the rest of the chrome; Playfair stays for the wordmark
- * and drink names.
+ * is Inter, like the rest of the chrome; Playfair stays for drink names.
  *
  * Conventions: an empty list shows its subject's glyph and one primary
  * action. A failure shows `alert`, "Could not load …", "Check your

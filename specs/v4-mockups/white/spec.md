@@ -51,7 +51,7 @@ Nothing here changes a feature. It changes surfaces, type, spacing, iconography 
 
 ### 1.1 Tokens (they replace `colors` in theme.ts)
 
-Every value is a neutral grey (R = G = B). Role names replace material names, so a later dark map can use the same keys (§9). v4.4 adds one accent, Campari, in five places only (§1.3).
+Every value is a neutral grey (R = G = B). Role names replace material names, so a later dark map can use the same keys (§9). v4.4 adds one accent, Campari, in five places only, and v4.5 a sixth, the logo (§1.3).
 
 | Token | Hex | Job | Text? |
 |---|---|---|---|
@@ -125,23 +125,25 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 
 | Token | Hex | Job |
 |---|---|---|
-| `accent` | `#D0102C` | The fill in the five places, and the caught figure as text |
+| `accent` | `#D0102C` | The fill in the six places, the caught figure as text, and the logo's paint |
 | `accentPressed` | `#A80C23` | The + or the post key while held |
 | `onAccent` | `#FFFFFF` | The glyph, label or figures on an accent fill |
 
-**Exactly five places:**
+**Exactly six places:**
 
 1. **The + key** in the tab bar: accent fill, `accentPressed` held, a white +, its 4pt squared corners kept.
 2. **The post key:** the drink page's pinned "Post …" key, the + window's Post, and the post sheet's "Save & post" (Jan, 17 Oct 2026). Accent fill, white label, `accentPressed` held. The same + window key stays ink when it saves without posting ("Save to Dex", "Save photo"), and so does the pinned key on a drink someone added (custom/[id]), whose + window can only save it. The post sheet's other key, "Save to Dex" or "Save photo", stays secondary.
 3. **The caught Nº plate** (the drink page and the catch card): accent fill, white figures. The not-caught plate is unchanged. The likers sheet no longer draws a plate (layout spec 5.4).
 4. **The caught figure:** the number only, Inter 600, as accent text. That is the "14" in the Dex bar's "14 / 2,089" and the "14" in Profile's "14 entries in your Dex". The rest of each line stays muted.
 5. **Home's Activity dot:** the 8pt dot on the heart.
+6. **The logo** (v4.5, Jan, 20 Oct 2026; `specs/v4.5-logo`): the "Marker tag" wordmark wherever the app sets its name (Home's bar, sign-in's first step, the onboarding welcome, the password reset, the drawn intro) and the mark, the icon's tilted s, where the app draws it (the drawn intro's first frame, the onboarding guide). Red paint on the page, drawn only by `brand/Wordmark` and `brand/Mark`. Jan asked for the logo in Campari, so the icon's red and the name on every screen are one red. Never the wordmark white on an accent fill: white script on red is Coca-Cola's ground.
 
 **Rules:**
 
 - The active tab's line stays ink. The accent never says where you are.
 - Red never means delete or error. Destructive words stay ink and underlined. No red badges.
 - Profile's Tournaments state ("1 running", "N invitations"), followers, posts, "See all" and chip counts stay ink or muted.
+- Playfair is drink names only since v4.5: the wordmark is the tagged logo, drawn as outlined paths, not type (§2.1).
 - On an ink ground the accent is a fill only (3.58:1 against ink clears 3:1 for a key or a plate). Text on ink stays white, never red.
 
 **Contrast** (check-contrast asserts each one):
@@ -154,9 +156,10 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 | `onAccent` on `accent` | **5.54** | 4.5 |
 | `onAccent` on `accentPressed` | **7.66** | 4.5 |
 | `accent` fill against ink | **3.58** | 3 (non-text) |
+| The logo, `accent` on page | **5.54** | 3 (a logotype is exempt; held to the UI line) |
 | `accent` as text on ink | 3.58 | **Never**: asserted under 4.5 |
 
-**Guards.** check-contrast allows exactly this one family: `accent` and `accentPressed` must each sit within 2° of Campari's hue (351°), `onAccent` must stay neutral, and any other hue still fails, a swap to another accent hue included. check-design rule 17 fails the accent typed out (hex, rgb or rgba) anywhere in `src/` but theme.ts, the three tokens anywhere but the style keys and functions that draw the five places, and the props that draw it (Button's `post` variant, TopBarButton's `badge`, TopBarCount's `figure`) outside their place. A sixth place is Jan's decision, made in theme.ts and rule 17 together.
+**Guards.** check-contrast allows exactly this one family: `accent` and `accentPressed` must each sit within 2° of Campari's hue (351°), `onAccent` must stay neutral, and any other hue still fails, a swap to another accent hue included. check-design rule 17 fails the accent typed out (hex, rgb or rgba) anywhere in `src/` but theme.ts, the three tokens anywhere but the style keys and functions that draw the six places (for the logo, the `Wordmark` and `Mark` components and nowhere else), and the props that draw it (Button's `post` variant, TopBarButton's `badge`, TopBarCount's `figure`) outside their place. A seventh place is Jan's decision, made in theme.ts and rule 17 together.
 
 ---
 
@@ -165,6 +168,8 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 ### 2.1 Families: no new font
 
 **Inter** (400 / 500 / 600) sets everything. **Playfair Display** (600 / 700) sets the wordmark and drink names only, as now. Both are already in `assets/fonts` as Latin subsets.
+
+*v4.5:* the wordmark left Playfair. It is the "Marker tag" logo, outlined paths drawn by `brand/Wordmark` in Campari (§1.3, place 6), so Playfair sets drink names only and the `wordmark` and `wordmarkLg` roles are gone.
 
 Why no new family:
 

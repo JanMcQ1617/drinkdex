@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthMessage } from '@/components/AuthGate';
+import { Wordmark, WORDMARK_LG } from '@/components/brand/Wordmark';
 import { Icon } from '@/components/icons';
 import { Button, Field, haptic } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
@@ -205,9 +206,8 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
           { paddingTop: insets.top + space.xxxl, paddingBottom: insets.bottom + space.xxl },
         ]}
         keyboardShouldPersistTaps="handled">
-        <Text maxFontSizeMultiplier={1.2} style={styles.wordmark}>
-          Sipply
-        </Text>
+        {/* The brand's voice, set left with the page: `lead` stands the s's body on the gutter. */}
+        <Wordmark height={WORDMARK_LG} lead />
         <Text ref={titleRef} style={styles.title} accessibilityRole="header">
           Choose a new password
         </Text>
@@ -301,12 +301,6 @@ const styles = StyleSheet.create({
   },
   scroll: { paddingHorizontal: layout.gutter, flexGrow: 1 },
 
-  /*
-   * The wordmark is the brand's voice, so it keeps the display face,
-   * through wordmarkLg: Playfair is set only by a name role (check-design
-   * rule 6), and this is the same large wordmark the sign-in backdrop uses.
-   */
-  wordmark: { ...textRole.wordmarkLg, color: colors.text },
   /* A step's title is chrome: Inter, at the size every state title uses. */
   title: {
     ...textRole.emptyTitle,
