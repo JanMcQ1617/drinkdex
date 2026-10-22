@@ -42,8 +42,8 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,455 as pasted, recounted for build 27 the same way;
-3,845 with the two sign-in items below added to the list.]
+[4,000 max. 3,753 as pasted, recounted for build 28 the same way;
+3,876 with the first sign-in item below added to the list.]
 
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
@@ -92,9 +92,13 @@ Worth poking at:
 - **Your music.** Play something in Spotify or Apple Music, then open
   Sipply. It should keep playing through the opening film and the feed.
   Turning a video's sound on should lower your music, not stop it.
-- **The red.** One colour now marks the + key, the Post keys and your Dex
-  count. Tell me if it turns up anywhere else, or if a pale Post key ever
-  looks like it should work.
+- **The red.** One colour now marks the logo, the + key, the Post keys
+  (Save & post included) and your Dex count. Tell me if it turns up
+  anywhere else, or if a pale Post key ever looks like it should work.
+- **The new look.** Sipply has a new icon and a hand-written red logo.
+  Swipe the app away, then open it: the white launch screen should turn
+  into a short film where the s writes "sipply", with no flash or jump
+  between them. Tell me if the two reds ever look different.
 
 Please report:
 
@@ -111,13 +115,14 @@ You can delete your account any time from **Profile → "..."** (top right)
 **→ Settings → Delete account**. It removes everything, including your
 photos.
 
-### Add for a build with Apple and Facebook sign-in
+### Add for a build with Apple, Google and Facebook sign-in
 
-Paste these two items into the "Worth poking at" list above:
+Paste the first item into the "Worth poking at" list above. Add the second
+only once the Meta app is Live: in development mode Facebook sign-in works
+only for accounts added to the Meta app, so testers cannot try it.
 
-- **Signing in with Apple or Facebook.** Make an account with either
-  button, or with Google in a build that has it. You'll be asked to choose
-  a username before anything else.
+- **Signing in.** Make an account with Apple, Google or your email. You'll
+  be asked to choose a username before anything else.
 - **Friends from Facebook.** After continuing with Facebook, Find friends
   shows which of your Facebook friends are on Sipply. Facebook only lists
   friends who connected Sipply too, so it helps if one of them tests with
