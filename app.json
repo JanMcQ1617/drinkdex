@@ -22,7 +22,7 @@
         "dark": "./assets/images/icon-dark.png",
         "tinted": "./assets/images/icon-tinted.png"
       },
-      "buildNumber": "28",
+      "buildNumber": "29",
       "usesAppleSignIn": true,
       "associatedDomains": [
         "webcredentials:janmcq1617.github.io"
