@@ -12,7 +12,11 @@ flag.
 
 Tournaments need no flag: they appear once migration 020 is applied on the
 server, and stay hidden until then. Until it is, leave out every line or
-sentence below that mentions them.
+sentence below that mentions them. From build 30 (v4.7) they have a tab of
+their own, the red trophy key in the middle of the tab bar, whose Friends
+board (you and the people you follow, by how many different drinks each
+has posted) needs migration 025 too; without 025 the tab shows tournaments
+alone, so leave out the sentences about the Friends board.
 
 ---
 
@@ -32,7 +36,7 @@ Worth trying:
 - Daily ideas: turn them on in Settings, set the time a few minutes ahead, and check that one arrives (none comes on a day you have posted or added a drink)
 - A collection: make one, add to it, share its link, then stop sharing
 - The Dex in For you and By number, with the taste filters
-- A tournament with a friend who tests too: host it from Tournaments on your profile, join it, post, and check the standings
+- A tournament with a friend who tests too: tap the red trophy key in the middle of the tab bar, host one, join it, post, and check the standings, and that the Friends board on the same tab lists you both
 - Music from Spotify or Apple Music: it should keep playing when you open Sipply
 - Account deletion and password reset
 
@@ -42,8 +46,11 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,616 as pasted, recounted for build 29 the same way;
-3,739 with the first sign-in item below added to the list.]
+[4,000 max. 3,853 as pasted, recounted for build 30 (v4.7) the same way;
+3,976 with the first sign-in item below added to the list. Build 29 was
+3,616: Tournaments, the post keys and Posting were rewritten for the tab,
+the motion and the + on Home, and Tagging, Daily ideas and the look were
+cut to make room.]
 
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
@@ -51,15 +58,13 @@ both are useful.
 Worth poking at:
 
 - **Tagging people.** Post a drink and tap Tag people under the caption to
-  tag someone you follow, up to 10. On a post you already shared, its "..."
-  menu has Tag people too. From the tagged account, check the post is in
-  Activity (the heart on Home), then use the post's "..." menu to remove
-  yourself.
-- **Daily ideas.** Sipply offers them after you post or save something;
-  you can also turn them on in Profile → "..." (top right) → Settings →
-  Notifications. Set Time a few minutes ahead and wait. Try it on a day you
-  haven't posted or added a drink yet: on a day you have, no idea comes.
-  Turn them off and check nothing more arrives.
+  tag someone you follow. From the tagged account, check the post is in
+  Activity (the heart on Home), then remove yourself from the post's "..."
+  menu.
+- **Daily ideas.** Turn them on in Profile → "..." (top right) → Settings
+  → Notifications, set Time a few minutes ahead and wait. None comes on a
+  day you have posted or added a drink. Turn them off and check nothing
+  more arrives.
 - **Saved collections.** On the Saved tab, tap New collection. Hold a
   bookmark to save something straight into it. In the collection's "..."
   menu, share its link, open the link on another phone, then Stop sharing
@@ -72,12 +77,18 @@ Worth poking at:
   away; scroll up a little and they come back. Home's top bar does the
   same. Tell me if either gets stuck halfway, or a tab ever shows up blank
   or half drawn.
-- **Posting a drink.** Add a photo and a caption. Does it show up on your
+- **Tournaments.** The red trophy key in the middle of the tab bar is now
+  the Tournaments tab. Host one with someone you follow, join it from their
+  account, post a drink from each, and check its card and its page. Each
+  different drink adds one entry, up to 3 a day. Under it, Friends ranks
+  you and the people you follow by different drinks posted: a new drink
+  adds one, a re-post none. Tap a row to open that profile.
+- **Liking, sharing, saving.** Tap the heart, double-tap a photo, share and
+  save a post: each key now moves as it answers. Tell me if any of it feels
+  slow, busy or stuck. With Reduce Motion on, nothing should move.
+- **Posting a drink.** The + is now at the top of Home, beside the heart.
+  Type your drink, add a photo and a caption. Does it show up on your
   profile and in the feed?
-- **Tournaments.** On your profile, tap Tournaments under the Dex line (it's
-  in Profile → "..." too) and host one with someone you follow. Join it from their account, post a drink from each,
-  and check the standings. Each different drink posted adds one entry, up
-  to 3 a day. Try ending one, and deleting one.
 - **Finding people.** Search a username, or match your contacts. Contacts
   are hashed on your device and never uploaded.
 - **Your Instagram list.** In Find friends, request your followers and
@@ -92,11 +103,11 @@ Worth poking at:
 - **Your music.** Play something in Spotify or Apple Music, then open
   Sipply. It should keep playing through the opening film and the feed.
   Turning a video's sound on should lower your music, not stop it.
-- **The new look.** A new icon, a hand-written red logo and fine red pen
-  lines on most screens. Swipe the app away and open it: the film writes
-  "sipply", then the word glides into Home's top bar as the app rises in.
-  Tell me if anything jumps, flashes or lands in the wrong place, or if a
-  pale Post key ever looks like it should work.
+- **The look.** The red logo and its fine pen lines, a few more now: on the
+  Tournaments tab, under a tournament's name, at the foot of Activity.
+  Swipe the app away and open it: the film writes "sipply", then the word
+  glides into Home's top bar. Tell me if anything jumps, flashes or lands
+  in the wrong place, or if a pale Post key ever looks like it should work.
 
 Please report:
 
@@ -202,6 +213,13 @@ is 3,988, 12 to spare. Songs in place of phone sign-in need that cut and
 the third-party paragraph's two sentences about the Facebook friends list
 and access token dropped as well: 3,882, 118 to spare. Songs and phone
 sign-in together do not fit. Count before pasting.
+
+From build 30 (v4.7) the Tournaments paragraph is 847, not 644: it starts
+from the red trophy key and adds a sentence on the Friends board. Uncut,
+the build-25 set is then 4,586; with the two-sentence cut it is 3,971, 29
+to spare. Phone sign-in or songs on top need the deeper cuts, and
+appstore.md has that recount. Without migration 025, leave out the
+paragraph's last sentence (173), and it is 674.
 
 ### Add for a build with phone sign-in
 

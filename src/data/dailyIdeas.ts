@@ -132,7 +132,7 @@ export const IDEAS: readonly DailyIdea[] = [
   { id: 'first-07', cat: 'first', opens: 'dex', body: 'Not sure where to begin? Browse the Dex and tap any drink to read its story.' },
   { id: 'first-08', cat: 'first', opens: 'dex', body: 'Search the Dex by country. Type mexico or italy and see what comes from there.' },
   { id: 'first-09', cat: 'first', opens: 'log', body: 'Your first entry can be an old favourite. Find it in the Dex and add a photo.' },
-  { id: 'first-10', cat: 'first', opens: 'log', body: "Tap + and type a drink you remember. That's all it takes to start your Dex." },
+  { id: 'first-10', cat: 'first', opens: 'log', body: "Type a drink you remember. That's all it takes to start your Dex." },
   { id: 'first-11', cat: 'first', opens: 'log', body: "Log a drink you've had to see your first colour print in the Dex." },
   { id: 'first-12', cat: 'first', opens: 'dex', body: 'Search by style as well as by name: tiki, sour and spritz all work.' },
   { id: 'first-13', cat: 'first', opens: 'log', body: 'Spirits count too. A bottle you know well can be the first thing in your Dex.' },

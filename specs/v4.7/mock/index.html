@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v4.7 Tournaments tab</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/*
+ * v4.7 mocks, copied from the v4.6 mock tool (specs/v4.6-details/build/mock):
+ * the same Daylight tokens as src/constants/theme.ts, Campari as the accent,
+ * and the pen marks drawn from paths that scripts/../penPath.ts itself
+ * generated (marks.js, written by a one-off node import of penPath.ts:
+ * penRule(392, 5) for the board rule, penSwash(56), penRule(24, 6)).
+ * Open with #tabbar, #board, #empty, #loading or #wall.
+ */
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --press:#EBEBEB; --line:#E3E3E3; --hair:#D6D6D6; --rule:#C4C4C4;
+  --control:#8A8A8A; --muted:#5C5C5C; --ink:#0A0A0A; --onInk:#FFFFFF;
+  --photoEdge:rgba(10,10,10,.07);
+  --t1:#262626; --t2:#3D3D3D; --t3:#5C5C5C;
+  --acc:#D0102C; --accPressed:#A80C23; --onAcc:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E9E9E9}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+b{font-weight:600}
+.title{font:600 28px/34px Inter;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.b5{font-weight:500}.b6{font-weight:600}
+.small{font:400 13px/18px Inter}
+.muted{color:var(--muted)} .tn{font-variant-numeric:tabular-nums}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none;isolation:isolate}
+.circle{border-radius:50%}
+.sb{position:absolute;top:0;left:0;right:0;height:62px;background:var(--page);z-index:30}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.homeInd{position:absolute;left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:var(--ink);z-index:40}
+.print{position:absolute;overflow:hidden;background:var(--wash);border-radius:2px}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);border-radius:2px;pointer-events:none}
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center;white-space:nowrap;font:500 17px/24px Inter;letter-spacing:-.2px;gap:8px}
+.key.wash{background:var(--wash);color:var(--ink)}
+.key.ink{background:var(--ink);color:var(--onInk)}
+.card{position:absolute;background:var(--wash);border-radius:8px}
+.pm{position:absolute;pointer-events:none;z-index:29;overflow:visible}
+.wall{display:flex;flex-wrap:wrap;gap:28px;padding:36px 44px;width:2000px}
+.frame{display:flex;flex-direction:column;gap:12px;flex:none}
+.frame .phone{box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.cap{font:400 13px/19px Inter;color:#4A4A4A;width:440px}
+.cap b{color:var(--ink)}
+body.solo{background:var(--page)}
+body.solo .wall{padding:0;gap:0;width:auto}
+body.solo .cap{display:none}
+body.solo .frame{display:none}
+body.solo .frame.on{display:flex}
+body.solo .frame .phone{box-shadow:none}
+.strip{position:relative;width:440px;background:var(--page);overflow:hidden}
+.strip .lab{position:absolute;left:24px;font:600 13px/18px Inter;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wall" id="wall"></div>
+<script src="marks.js"></script>
+<script>
+const IMG = id => `../../../assets/drinks/${id}.webp`;
+
+/* ---------- glyphs: src/components/icons.tsx paths ---------- */
+const OUT = {
+  home:'<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>',
+  dex:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  chevronRight:'<path d="M9.4 5.4 16 12l-6.6 6.6"/>',
+  plus:'<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>',
+  bookmark:'<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  trophy:'<path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z"/><path d="M7.4 5.9H5a1.4 1.4 0 0 0-1.4 1.4 3.6 3.6 0 0 0 3.6 3.6"/><path d="M16.6 5.9H19a1.4 1.4 0 0 1 1.4 1.4 3.6 3.6 0 0 1-3.6 3.6"/><path d="M12 14.1v3.4"/><path d="M8.4 20.2a3.6 3.6 0 0 1 7.2 0z"/>',
+  users:'<circle cx="9" cy="8.5" r="3.4"/><path d="M2.8 19.6c.9-3.3 3.3-5 6.2-5s5.3 1.7 6.2 5"/><path d="M15.6 5.4a3.4 3.4 0 0 1 0 6.4"/><path d="M17.6 14.8c1.8.6 3.1 2.2 3.6 4.8"/>',
+};
+const SOLID = {
+  home:'<path fill-rule="evenodd" d="M12 2.7a1.4 1.4 0 0 1 .9.3l8.3 6.6a1.4 1.4 0 0 1 .5 1.1v8.7a2.2 2.2 0 0 1-2.2 2.2h-4.6v-5.7a1 1 0 0 0-1-1h-3.8a1 1 0 0 0-1 1v5.7H4.5a2.2 2.2 0 0 1-2.2-2.2v-8.7a1.4 1.4 0 0 1 .5-1.1l8.3-6.6a1.4 1.4 0 0 1 .9-.3z"/>',
+  dex:'<path d="M3.5 5.1a.5.5 0 0 0-.36.85l8.5 8.7a.5.5 0 0 0 .72 0l8.5-8.7a.5.5 0 0 0-.36-.85z"/><path d="M11.1 14.6h1.8v4.3h2.8a.9.9 0 0 1 0 1.8H8.3a.9.9 0 0 1 0-1.8h2.8z"/>',
+  bookmark:'<path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z"/>',
+  trophy:'<path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z"/><path d="M11.1 14v3.5h1.8V14z"/><path d="M12 16.6a3.6 3.6 0 0 0-3.6 3.6h7.2a3.6 3.6 0 0 0-3.6-3.6z"/>',
+};
+/*
+ * The solid trophy keeps its handles: the SOLID form has none, so the bar's
+ * filled trophy is the solid cup, base and stem PLUS the outline's two
+ * handles at the filled stroke (1.6 + 0.55), as Icon draws an outline at
+ * `filled` (see spec 1.2: TROPHY_KEY).
+ */
+const TROPHY_HANDLES = '<path d="M7.4 5.9H5a1.4 1.4 0 0 0-1.4 1.4 3.6 3.6 0 0 0 3.6 3.6"/><path d="M16.6 5.9H19a1.4 1.4 0 0 1 1.4 1.4 3.6 3.6 0 0 1-3.6 3.6"/>';
+const ic = (name, size=24, color='var(--ink)', sw=1.6, solid=false) => {
+  if (name === 'more') return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><circle cx="5.4" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.6" cy="12" r="1.7"/></svg>`;
+  if (solid && name === 'trophy') return `<svg width="${size}" height="${size}" viewBox="0 0 24 24"><g fill="${color}">${SOLID.trophy}</g><g fill="none" stroke="${color}" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">${TROPHY_HANDLES}</g></svg>`;
+  if (solid && SOLID[name]) return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">${SOLID[name]}</svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</svg>`;
+};
+const at = (x, y, inner, st='') => `<div class="a" style="left:${x}px;top:${y}px;${st}">${inner}</div>`;
+const PERSON = '<circle cx="12" cy="9" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6z"/>';
+const av = (x, y, d, tone) => `<div class="a circle" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:var(--${tone});display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="${Math.round(d*.86)}" height="${Math.round(d*.86)}" viewBox="0 0 24 24" fill="#FFFFFF">${PERSON}</svg></div>`;
+const photo = (id, x, y, w, h) => `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><img src="${IMG(id)}"></div>`;
+const M = (shape, left, top) => `<svg class="pm" width="1" height="1" style="left:${left}px;top:${top}px">${shape.d.map(d => `<path fill="var(--acc)" d="${d}"/>`).join('')}</svg>`;
+
+const statusBar = () => `<div class="sb"><span class="t">9:41</span><span class="island"></span></div>`;
+const homeInd = () => `<div class="homeInd"></div>`;
+
+/* ==================================================================== */
+/* The tab bar                                                          */
+/*                                                                      */
+/* v4.7: five equal slots, every one a page. Home · Dex · TOURNAMENTS · */
+/* Saved · Profile. The centre slot is the Tournaments key: the accent  */
+/* rectangle kept (52 wide, now 32 tall so the active line clears it by */
+/* the same 2.5 as it clears a glyph box), a white trophy on it,        */
+/* outline at rest and solid when you are on it, and the ink line under */
+/* it like any tab.                                                     */
+/* ==================================================================== */
+function tabs(active, top=873, old=false){
+  const xs = {home:44, dex:132, trophy:220, bookmark:308, profile:396}, cy = top + 24.5;
+  let h = `<div class="a" style="left:0;top:${top}px;width:440px;height:83px;background:var(--page);z-index:32"></div>`;
+  const g = name => at(xs[name]-13, cy-13, ic(name, 26, active===name?'var(--ink)':'var(--muted)', 1.6, active===name), 'z-index:33');
+  h += g('home') + g('dex') + g('bookmark');
+  if (old) {
+    h += `<div class="a" style="left:194px;top:${cy-19}px;width:52px;height:38px;border-radius:4px;background:var(--acc);display:flex;align-items:center;justify-content:center;z-index:33">${ic('plus',22,'var(--onAcc)',2)}</div>`;
+  } else {
+    const on = active === 'trophy';
+    h += `<div class="a" style="left:194px;top:${cy-16}px;width:52px;height:32px;border-radius:4px;background:var(--acc);display:flex;align-items:center;justify-content:center;z-index:33">${ic('trophy',22,'var(--onAcc)',1.6,on)}</div>`;
+  }
+  if (active === 'profile') h += `<div class="a circle" style="left:${396-16.5}px;top:${cy-16.5}px;width:33px;height:33px;box-shadow:inset 0 0 0 1.5px var(--ink);z-index:33"></div>`;
+  h += `<div class="a" style="z-index:33">${av(383, cy-13, 26, 't3')}</div>`;
+  h += `<div class="a" style="left:${xs[active]-9}px;top:${top+43}px;width:18px;height:2px;background:var(--ink);z-index:33"></div>`;
+  return h;
+}
+
+/* The lg top bar: title at x 24 in the 52 row (62..114), the swash under it (ScreenTopBar, v4.6 A.3 #4). */
+function bar(title){
+  return at(24, 71, `<span class="title">${title}</span>`, 'z-index:29') + M(PENM.swash, 25, 105 + 4 - 6);
+}
+
+/* People: stand-ins, as in the v4.3 and v4.6 mocks. */
+const P = {
+  me:{u:'nico.pours', tone:'t3'}, ana:{u:'ana', tone:'t2'}, leo:{u:'leo', tone:'t1'},
+  maya:{u:'maya.pours', tone:'t1'}, ines:{u:'ines.ag', tone:'t2'}, theo:{u:'theo_stirs', tone:'t1'},
+  sam:{u:'sam.ortega', tone:'t3'},
+};
+
+/* ==================================================================== */
+/* A running tournament: a wash card (ui Card, 8pt corner), 24 at the   */
+/* gutter, 16 in. Name in bodyStrong with the chevron, the meta line,    */
+/* then the top three on 26pt lines: rank (small 600, a 20 column), a   */
+/* 20pt face, the username in small ink, the entries right in muted.    */
+/* ==================================================================== */
+const CARD_PAD = 16, TOP_LINE = 26, CARD_W = 300;
+function card(y, t, x=24, w=392){
+  const rows = 3;   // always three lines' room, so the card never grows when the board arrives
+  const h = CARD_PAD + 24 + 18 + 10 + rows*TOP_LINE + CARD_PAD - 4;
+  const L = x + 16, R = x + w - 16;
+  let s = `<div class="card" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"></div>`;
+  s += at(L, y+CARD_PAD, `<span class="body b6 ell" style="display:block;width:${w-56}px">${t.name}</span>`);
+  s += at(R-16, y+CARD_PAD+4, ic('chevronRight',16,'var(--muted)'));
+  s += at(L, y+CARD_PAD+24, `<span class="small muted" style="white-space:nowrap">${t.meta}</span>`);
+  t.top.forEach((r, i) => {
+    const ry = y + CARD_PAD + 24 + 18 + 10 + i*TOP_LINE;
+    s += at(L, ry+4, `<span class="small b6 tn" style="display:inline-block;width:14px;text-align:right">${r.rank ?? ''}</span>`);
+    s += av(L+24, ry+3, 20, P[r.who].tone);
+    s += at(L+52, ry+4, `<span class="small">${P[r.who].u}${r.who==='me'?' <span class="muted">(you)</span>':''}</span>`);
+    s += `<div class="a small muted tn" style="top:${ry+4}px;right:${440-R}px;white-space:nowrap">${r.n}</div>`;
+  });
+  return [s, h];
+}
+
+/* ==================================================================== */
+/* FRIENDS: one 64pt row per person. Rank (17/24 600, a 28 column), the */
+/* 40pt face, the username over "42 entries", and the latest three      */
+/* prints, 40 square with 4 between, ending on the far gutter (416).    */
+/* Your row: the wash under it, 8 past the gutter each side, and "(you)".*/
+/* ==================================================================== */
+const ROW = 64;
+function friendRow(y, f){
+  let s = '';
+  if (f.who === 'me') s += `<div class="a" style="left:16px;top:${y}px;width:408px;height:${ROW}px;background:var(--wash);border-radius:4px"></div>`;
+  s += at(24, y+20, `<span class="body b6 tn" style="display:inline-block;width:20px;text-align:right">${f.rank ?? ''}</span>`);
+  s += av(56, y+12, 40, P[f.who].tone);
+  s += at(108, y+11, `<span class="body b5">${P[f.who].u}</span>${f.who==='me'?'<span class="body muted"> (you)</span>':''}`);
+  s += at(108, y+35, `<span class="small muted tn">${f.n === 0 ? 'No entries yet' : f.n + ' entries'}</span>`);
+  (f.pics || []).forEach((id, i) => { s += photo(id, 416 - 40*(3-i) - 4*(2-i), y+12, 40, 40); });
+  return s;
+}
+
+const groupHead = (y, text) => at(24, y, `<span class="small b6 muted">${text}</span>`);
+
+function board(){
+  let s = statusBar() + bar('Tournaments');
+  let y = 114 + 16;
+  s += `<div class="key wash" style="left:24px;top:${y}px;width:392px;height:48px">${ic('plus',20,'var(--ink)',1.8)}Host a tournament</div>`;
+  y += 48 + 24;
+  s += groupHead(y, 'On now'); y += 18 + 8;
+  /* Two or more on now: a horizontal row of 300pt cards, 12 apart, the next one peeking past the gutter. */
+  const [c1, h1] = card(y, {name:'Negroni week', meta:'Ends Sunday · 5 people', top:[
+    {rank:1, who:'ana', n:'6 entries'}, {rank:2, who:'me', n:'4 entries'}, {rank:3, who:'leo', n:'4 entries'}]}, 24, CARD_W);
+  s += c1;
+  const [c2] = card(y, {name:'Bar crawl club', meta:'Ends 2 Nov · 3 people', top:[
+    {rank:1, who:'maya', n:'3 entries'}, {rank:2, who:'theo', n:'1 entry'}, {rank:null, who:'sam', n:'No entries yet'}]}, 24 + CARD_W + 12, CARD_W);
+  s += c2; y += h1;
+  /* The quiet line: every tournament, with what is waiting at its end. */
+  s += at(24, y+13, `<span class="small muted">All tournaments</span>`);
+  s += `<div class="a small muted" style="top:${y+13}px;right:${440-416+16+4}px;white-space:nowrap">1 invitation</div>`;
+  s += at(416-16, y+14, ic('chevronRight',16,'var(--muted)'));
+  y += 44;
+  /* The board rule: penRule(392, 5) centred in a 24pt band, its centreline 12 down. */
+  s += M(PENM.board, 24, y + 12 - PENM.PEN.rule.mid);
+  y += 24;
+  s += groupHead(y + 4, 'Friends'); y += 18 + 4 + 8;
+  const F = [
+    {rank:1, who:'maya', n:87, pics:['last-word','sazerac','french-75']},
+    {rank:2, who:'ana', n:64, pics:['negroni','daiquiri','paloma']},
+    {rank:3, who:'me', n:42, pics:['black-russian','mai-tai','gimlet']},
+    {rank:3, who:'leo', n:42, pics:['boulevardier','manhattan','old-fashioned']},
+    {rank:5, who:'ines', n:19, pics:['aperol-spritz','margarita','mojito']},
+    {rank:6, who:'theo', n:7, pics:['paper-plane','whiskey-sour']},
+  ];
+  F.forEach(f => { s += friendRow(y, f); y += ROW; });
+  return s + tabs('trophy') + homeInd();
+}
+
+function emptyBoard(){
+  let s = statusBar() + bar('Tournaments');
+  let y = 114 + 16;
+  s += `<div class="key wash" style="left:24px;top:${y}px;width:392px;height:48px">${ic('plus',20,'var(--ink)',1.8)}Host a tournament</div>`;
+  y += 48 + 12;
+  s += at(24, y, `<div class="small muted" style="width:392px">Nothing on now. A tournament is a shared log of the different drinks each of you posts between two dates.</div>`);
+  y += 36 + 8;
+  s += M(PENM.board, 24, y + 12 - PENM.PEN.rule.mid);
+  y += 24;
+  s += groupHead(y + 4, 'Friends'); y += 18 + 4 + 8;
+  s += friendRow(y, {rank:null, who:'me', n:0, pics:[]}); y += ROW + 16;
+  s += at(24, y, `<div class="small muted" style="width:392px">Follow people to see how many different drinks each has posted.</div>`);
+  y += 36;
+  /* The way on is a quiet line, not a second wash key under the Host key. */
+  s += at(24, y+13, `<span class="small" style="font-weight:500">Find people to follow</span>`);
+  s += at(416-16, y+14, ic('chevronRight',16,'var(--ink)'));
+  return s + tabs('trophy') + homeInd();
+}
+
+function loadingBoard(){
+  /* Before the first answer: the bar, the key, the rule and the head are drawn; the rows wait as a quiet spinner (Hold), never a skeleton. */
+  let s = statusBar() + bar('Tournaments');
+  let y = 114 + 16;
+  s += `<div class="key wash" style="left:24px;top:${y}px;width:392px;height:48px">${ic('plus',20,'var(--ink)',1.8)}Host a tournament</div>`;
+  y += 44 + 120;
+  s += `<div class="a circle" style="left:208px;top:${y}px;width:24px;height:24px;border:2.5px solid var(--hair);border-top-color:var(--muted)"></div>`;
+  return s + tabs('trophy') + homeInd();
+}
+
+function tabStrips(){
+  const one = (label, active, old) => `<div class="strip" style="height:124px"><div class="lab" style="top:12px">${label}</div>${tabs(active, 36, old).replace(/height:83px/,'height:88px')}</div>`;
+  return `<div style="display:flex;flex-direction:column;gap:2px;background:#E9E9E9">` +
+    one('Build 29: the + key opens the + window', 'home', true) +
+    one('v4.7 at rest (Home): the Tournaments key, trophy outline', 'home', false) +
+    one('v4.7 on the Tournaments tab: trophy solid, the ink line under it', 'trophy', false) +
+    one('v4.7 on Saved: the line passes under the key on its way', 'bookmark', false) +
+    `</div>`;
+}
+
+const FRAMES = [
+  {id:'tabbar', html: tabStrips(), cap:'<b>The tab bar.</b> The red key stays, as the Tournaments tab.', strip:true},
+  {id:'board', html: board(), cap:'<b>The Friends board</b>, with two tournaments on now, an invitation waiting, and six people.'},
+  {id:'empty', html: emptyBoard(), cap:'<b>Empty</b>: no follows, no tournaments. Your own row stays, at no rank.'},
+  {id:'loading', html: loadingBoard(), cap:'<b>Loading</b>: the first visit before any answer.'},
+];
+const want = location.hash.slice(1);
+const wall = document.getElementById('wall');
+if (want && want !== 'wall') document.body.classList.add('solo');
+wall.innerHTML = FRAMES.map(f => `<div class="frame${f.id===want?' on':''}">${f.strip ? f.html : `<div class="phone">${f.html}</div>`}<div class="cap">${f.cap}</div></div>`).join('');
+</script>
+</body>
+</html>

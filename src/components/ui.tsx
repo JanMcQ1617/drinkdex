@@ -1368,7 +1368,7 @@ export interface SearchFieldProps
   > {
   value: string;
   onChangeText: (text: string) => void;
-  /** Names what is searched — "Name, style or country". Never the only label. */
+  /** What to type, e.g. "Type your drink". Never the only label. */
   placeholder: string;
   /** What VoiceOver calls the field. Required: the placeholder is not a label. */
   accessibilityLabel: string;

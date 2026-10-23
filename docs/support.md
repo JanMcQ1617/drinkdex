@@ -217,10 +217,9 @@ asks once they have. The link only opens on a phone that already has Sipply.
 A link shared from an older version of the app still opens your profile,
 but no longer follows anyone.
 
-**How do tournaments work?** On your profile, tap **Tournaments** under
-your Dex line (it's also in **"..."**, top right), then tap **Host a
-tournament**: give it a name, choose
-when it starts and how long it runs, add a goal if you want one, and invite
+**How do tournaments work?** Tap the red trophy key in the middle of the
+tab bar, then **Host a tournament**: give it a name, choose when it starts
+and how long it runs, add a goal if you want one, and invite
 people you follow. A tournament is a shared log: each different drink
 someone posts while it runs adds one entry. With a goal, whoever reaches
 that many entries first wins and the tournament ends there; otherwise, or
@@ -234,6 +233,12 @@ drink responsibly." The host can end a running tournament early from its
 that has not finished, and it disappears for everyone in it. Anyone who
 has joined can leave from the same menu before it finishes, but cannot
 rejoin, and an invitation you decline cannot be sent to you again.
+
+**What is Friends on the Tournaments tab?** You and the people you follow,
+in order of how many different drinks each has posted. Each drink counts
+once, ever, and custom drinks are not counted, so the number can be lower
+than their posts count. Amounts are never counted. It shows nobody you have blocked or who has blocked
+you. Tap a row to open that profile.
 
 **Why didn't a drink count?** Usually one of these:
 

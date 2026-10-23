@@ -260,6 +260,28 @@ export interface TournamentBoard
 }
 
 /**
+ * One person on the Tournaments tab's Friends board (v4.7, migration 025):
+ * you, or someone you follow. `entries` is how many DIFFERENT catalogue
+ * drinks they have posted, each counted once, ever (one post is one drink,
+ * 007), so it is the same figure as their posts count: never an amount,
+ * never per day, never reset (App Review 1.4.3).
+ */
+export interface FriendStanding {
+  userId: string;
+  username: string;
+  displayName: string;
+  accent: string;
+  avatarPath: string | null;
+  entries: number;
+  /** A competition rank (1, 2, 3, 3, 5); null at 0 entries, where a place would only be the alphabet's. */
+  place: number | null;
+  /** Another row has the same place: said "tied" to VoiceOver. Computed on the client. */
+  tied: boolean;
+  /** Up to three of their posts, newest first; photoPath null for a post with no photo. */
+  latest: { drinkId: string; photoPath: string | null }[];
+}
+
+/**
  * One row of Activity: a like on one of your posts, a new follower, or
  * someone tagging you in their post (migration 024). `key` is unique across
  * all three kinds (`like:<post>:<user>`, `follow:<user>`, `tag:<post>`), so

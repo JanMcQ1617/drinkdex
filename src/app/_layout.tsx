@@ -183,8 +183,8 @@ export default function RootLayout() {
           in (tabs).
         */}
         {/*
-          Posting a drink, from the bar's + and every other Post button. A
-          full-screen window that rises from the bottom (UIKit's cover
+          Posting a drink, from Home's create key and every other Post
+          button. A full-screen window that rises from the bottom (UIKit's cover
           vertical; a fade under Reduce Motion), like Instagram's create
           screen (Jan, build 17). It was a page sheet, a card with the app
           showing above it; as the whole screen, its search and the results

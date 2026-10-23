@@ -60,8 +60,10 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* ==================================================================== */
 /* Post a drink                                                         */
 /*                                                                      */
-/* The + tab's destination: a full-screen window that rises from the    */
-/* bottom (the root stack presents it as a fullScreenModal). v4 makes   */
+/* Posting's window, opened by Home's create key and every Post key     */
+/* (v4.7: the tab bar's centre is the Tournaments key now, and no       */
+/* longer opens it): a full-screen window that rises from the bottom    */
+/* (the root stack presents it as a fullScreenModal). v4 makes          */
 /* it two plain steps (layout spec 5.6; Jan: "I want less stuff"):      */
 /*                                                                      */
 /*   FIND     the X and the search field in the one top row, and the    */
@@ -775,18 +777,22 @@ export default function PostDrinkScreen() {
                 <Icon name="close" size={CLOSE_GLYPH} color={colors.text} />
               </Pressable>
               {/*
-                It searches name, style and origin, so its placeholder says how
-                to search: someone at a bar who never heard the drink's name can
-                still type "tiki" or "mexico". Return keeps the system's plain
-                key (SearchField's default) and lowers the keyboard over the
-                results, as in v3.3.
+                The placeholder invites the typing (Jan, 23 Oct 2026: "type
+                your drink"); it was "Name, style or country", which read as a
+                form's field hint rather than the one thing this window asks
+                of you. The spoken label keeps saying HOW it searches (name,
+                style and origin), so someone at a bar who never heard the
+                drink's name still knows "tiki" or "mexico" works, and
+                VoiceOver never depends on the placeholder (it is not a
+                label). Return keeps the system's plain key (SearchField's
+                default) and lowers the keyboard over the results, as in v3.3.
               */}
               <SearchField
                 ref={searchRef}
                 value={query}
                 onChangeText={onQueryChange}
                 autoFocus
-                placeholder="Name, style or country"
+                placeholder="Type your drink"
                 accessibilityLabel="Search for the drink you had, by name, style or country"
                 style={styles.findField}
               />

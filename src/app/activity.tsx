@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AuthGate } from '@/components/AuthGate';
 import { Print } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
+import { PenRule } from '@/components/details/PenMarks';
+import { PEN, PEN_SEED } from '@/components/details/penPath';
 import { Icon } from '@/components/icons';
 import { FollowButton } from '@/components/PeopleList';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
@@ -49,11 +51,18 @@ import type { ActivityItem, UserProfile } from '@/types';
 /*                                                                      */
 /* TOURNAMENT INVITATIONS. Home's trophy went with v4's less-stuff      */
 /* layout, so an open invitation is news here: one row at the top,      */
-/* "2 tournament invitations", that opens the Tournaments list (as      */
-/* Profile's ••• does). Only while the server has tournaments at all.   */
+/* "2 tournament invitations", that opens the Tournaments list (as the  */
+/* Tournaments tab's All tournaments line does). Only while the server  */
+/* has tournaments at all.                                              */
 /*                                                                      */
 /* DAYLIGHT. Rows 64 on the page, separated by space, not rules: faces, */
 /* the sentence in body, the post as a square print.                    */
+/*                                                                      */
+/* THE CLOSING RULE (v4.7, specs/v4.7/spec.md 6.1 #12). The 30 days end */
+/* the way a feed post ends: the pen's short 24pt rule at the gutter,   */
+/* 16 under the last row. It is the screen's one mark, and it is drawn  */
+/* only under rows: never on the loading hold, the error or the "No     */
+/* activity yet" page, where there is nothing to close.                 */
 /* ==================================================================== */
 
 export default function ActivityScreen() {
@@ -357,11 +366,28 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
           ) : null
         }
         ListEmptyComponent={empty}
-        // With only the invitations row the list is not empty, but the activity is: said under it.
-        ListFooterComponent={rows.length > 0 && visible.length === 0 ? empty : null}
+        // Rows to show end on the closing rule. With only the invitations
+        // row the list is not empty, but the activity is: said under it.
+        ListFooterComponent={visible.length > 0 ? <ClosingRule /> : rows.length > 0 ? empty : null}
         refreshing={reloading}
         onRefresh={onRefresh}
       />
+    </View>
+  );
+}
+
+/** The closing rule's length: a feed post's (PostCard's CLOSING_RULE), so the two read as one ending. */
+const CLOSING_RULE = 24;
+
+/**
+ * The 24pt pen rule under the last row. Static (a cached path, no
+ * measure, no state), so the footer costs nothing on a re-render, and
+ * hidden from VoiceOver by PenRule itself: the list ends where it ends.
+ */
+function ClosingRule() {
+  return (
+    <View style={styles.closing}>
+      <PenRule length={CLOSING_RULE} seed={PEN_SEED.activityEnd} />
     </View>
   );
 }
@@ -707,6 +733,8 @@ const styles = StyleSheet.create({
   list: { flex: 1 },
   ink: { color: colors.text },
   notice: { marginHorizontal: layout.gutter, marginTop: space.sm },
+  /* 16 under the last row's box, at the gutter; the box is the band and the rule's own 6 (its centreline 3.4 down). */
+  closing: { paddingTop: space.lg, paddingLeft: layout.gutter, height: space.lg + PEN.rule.height },
   /* A group head insets its own 16 (it was drawn for a panel), so this lands its words on the gutter. */
   sectionHeader: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: layout.gutter - space.lg },
 

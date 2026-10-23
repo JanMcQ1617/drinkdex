@@ -136,9 +136,9 @@ export interface RiseGroup {
  * stories once the wordmark's foot has cleared their rings.
  *
  *   chrome   Home's keys and the tab bar; sign-in's step bar. Opacity is
- *            linear over 64 ms (4 frames) so the red + key and the
- *            Activity dot are tinted for 3 frames at most, never a pink
- *            disc. The dot rides here: it is drawn inside TopBarButton.
+ *            linear over 64 ms (4 frames) so the red Tournaments key and
+ *            the Activity dot are tinted for 3 frames at most, never a
+ *            pink disc. The dot rides here: it is drawn inside TopBarButton.
  *   feed     Home's whole list, so every row moves together on any phone.
  *            Opacity over its first 30% (132 ms), so a photo is washed
  *            pink for 2 frames, not 8.

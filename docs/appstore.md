@@ -301,17 +301,27 @@ before pasting.
 From build 25, Daily ideas (498) goes in every time, and so does that cut.
 The Test Information notes grew too: Tags (216) is new, the age rating
 (341) gained a sentence, and three Settings paths gained the "..." step,
-so sign-in through Instagram is 2,339. Tournaments is 644, now that it
-starts from the Profile tab. With the 896 paragraph and tournaments, the
-uncut set is 4,383, 383 over. Cut, it is 3,768, 232 to spare. Phone
-sign-in on top makes 4,234 with its code line; take Contacts and Instagram
-down to their first sentence as well and it is 3,988, 12 to spare. Songs
-instead of phone sign-in need that cut and the two sentences of the
-third-party paragraph about the Facebook friends list and access token
-dropped (the privacy policy carries both): 3,882, 118 to spare. Songs and
+so sign-in through Instagram is 2,339. Tournaments is 847 from build 30
+(v4.7): it starts from the red trophy key in the tab bar and adds a
+sentence on the Friends board (it was 644 from the Profile tab). With the
+896 paragraph and tournaments, the uncut set is 4,586, 586 over. Cut, it
+is 3,971, 29 to spare. Phone sign-in on top needs more: Contacts and
+Instagram down to their first sentence (3,725 before phone sign-in) and
+the two sentences of the third-party paragraph about the Facebook friends
+list and access token dropped (the privacy policy carries both), which
+makes 3,962 with its code line, 38 to spare. Songs instead of phone
+sign-in, with every cut, is 4,085, 85 over, so songs fit only with
+tournaments' Friends sentence left out (3,912, 88 to spare). Songs and
 phone sign-in together do not fit, so count before pasting.
 
-### Tournaments — a server with migration 020 applied
+### Tournaments — a server with migrations 020 and 025 applied
+
+From build 30 (v4.7) tournaments are a tab of their own, the red trophy
+key in the middle of the bar, and the same tab carries the Friends board,
+which needs migration 025 (`supabase/migrations/025_friends_board.sql`).
+With 020 applied and 025 not, the tab shows tournaments alone: leave out
+the last sentence, "The same tab lists you …" (173 with its space), and
+the paragraph is 674.
 
 **Tournaments.** Anyone can hold a friendly tournament with people they
 follow: a shared log, and whoever posts the most different Dex entries
@@ -321,9 +331,12 @@ day's three never counts later, so nothing rewards posting a lot at once.
 No prizes, no entry fees, no streaks, no meters, no notifications. Every
 tournament screen shows the rules, ending "No prizes, and Apple is not a
 sponsor. Please drink responsibly." Names pass the caption filter. To find
-it, follow anyone, then Profile → Tournaments → Host a tournament.
+it, follow anyone, then tap the red trophy key in the middle of the tab bar
+→ Host a tournament. The same tab lists you and the people you follow by
+how many different Dex entries each has posted (each drink once, ever):
+no amounts, no per-day counts, no notifications.
 
-[644]
+[847]
 
 ### Songs on posts — a build with `EXPO_PUBLIC_STORY_MUSIC=tap`
 

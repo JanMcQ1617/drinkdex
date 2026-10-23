@@ -453,6 +453,24 @@ export type MyTournamentRow = {
 };
 
 /**
+ * One row of friends_board() (migration 025, specs/v4.7/spec.md 3.2): the
+ * caller or someone they follow, with how many DIFFERENT catalogue drinks
+ * they have posted (each once, ever) and their latest three posts. `place`
+ * is a competition rank (1, 2, 3, 3, 5), null at 0 entries. `latest` is a
+ * jsonb array of {drink_id, photo_path}, which lib/friendsBoard checks.
+ */
+export type FriendsBoardRow = {
+  user_id: string;
+  username: string;
+  display_name: string;
+  accent: string;
+  avatar_path: string | null;
+  entries: number;
+  place: number | null;
+  latest: unknown;
+};
+
+/**
  * What every friend matcher returns: the public profile columns of each
  * account it found, the same set PROFILE_COLS_FULL reads from profiles.
  * One declaration, so the three matchers cannot drift apart and each row
@@ -869,6 +887,16 @@ export type Database = {
       tournament_board: {
         Args: { t: string };
         Returns: Json;
+      };
+      /**
+       * The Tournaments tab's Friends board (025): you and everyone you
+       * follow, minus blocks either way, most entries first, then
+       * username; at most 200 plus you. Missing (PGRST202 / 42883) until
+       * 025 is applied, and the tab then leaves the Friends half out.
+       */
+      friends_board: {
+        Args: Record<string, never>;
+        Returns: FriendsBoardRow[];
       };
       /** Returns the new tournament's id. The host joins it as 'accepted'. */
       create_tournament: {

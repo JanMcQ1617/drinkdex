@@ -191,7 +191,15 @@ const MARKS = [
   { name: 'swash-1.3', what: 'Tab-root title at the 1.3 cap: 72.8pt, same weight', shape: penSwash(56 * 1.3) },
   { name: 'margin-rule', what: "Drink page: the record's margin rule, 160pt here (it measures itself)", shape: penVRule(160, PEN_SEED.margin) },
   { name: 'column-rule', what: 'Drink page: the facts column rule, 52pt here', shape: penVRule(52, PEN_SEED.column) },
-  { name: 'profile-margin', what: "Profile: beside the two ledger rows, 53.5pt at text scale 1", shape: penVRule(53.5, PEN_SEED.margin) },
+  // Retired in v4.7 with Profile's Tournaments line (specs/v4.7/spec.md 6.1); kept on the sheet as the record of what was drawn.
+  { name: 'profile-margin', what: "Profile (retired in v4.7): beside the two ledger rows, 53.5pt at text scale 1", shape: penVRule(53.5, PEN_SEED.margin) },
+  /* v4.7 6.1 #10 and #12. A tournament's name (#11) is the tab roots' swash itself, drawn above. */
+  {
+    name: 'board-rule',
+    what: `Tournaments tab: between tournaments and Friends, ${PHONE_W - 48}pt (24 to ${PHONE_W - 24})`,
+    shape: penRule(PHONE_W - 48, PEN_SEED.board),
+  },
+  { name: 'activity-end-rule', what: "Activity: the 24pt closing rule at the list's foot", shape: penRule(24, PEN_SEED.activityEnd) },
   {
     name: 'plate-drip',
     what: 'Drink page: the drip off a caught 62 x 24 Nº plate (plate drawn in Campari)',

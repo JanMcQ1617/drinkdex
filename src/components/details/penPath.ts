@@ -113,8 +113,20 @@ export const PEN = {
 /**
  * Seeds, one per placement, so each reads as its own stroke. 0 is Pen's
  * mock exactly, kept for the one rule Jan saw drawn on (Home's stories).
+ * v4.7 (specs/v4.7/spec.md 6.1) adds two: `board`, the rule between the
+ * Tournaments tab's tournaments and its Friends, and `activityEnd`, the
+ * short rule closing Activity's list. Only the waver's phase turns with
+ * a seed, never the weight, so the new two need no geometry of their own.
  */
-export const PEN_SEED = { stories: 0, entry: 1, sectionHead: 2, margin: 3, column: 4 } as const;
+export const PEN_SEED = {
+  stories: 0,
+  entry: 1,
+  sectionHead: 2,
+  margin: 3,
+  column: 4,
+  board: 5,
+  activityEnd: 6,
+} as const;
 
 /* ------------------------------------------------------------------ */
 /* The pen                                                            */

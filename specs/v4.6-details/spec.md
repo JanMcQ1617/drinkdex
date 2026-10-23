@@ -64,6 +64,8 @@ All four components share these properties:
 
 ### A.3 Placements (exactly these)
 
+Extended by specs/v4.7/spec.md §6 (23 Oct 2026): #7 retired, #9 to #12 added.
+
 The reference layout is 440 x 956 (the mocks), with 390 in brackets. "Clear" means distance from ink to the nearest photo, ring or face. Every placement holds **at least 12 pt** from any image.
 
 #### 1. Home: the stories head rule (Pen's "drawn rule")
@@ -151,6 +153,8 @@ There is no mark on any of these:
 Retired and never to return: Pen's ring around the caught figure and its red pen tick. Both turned a state red, and that is information.
 
 ### A.5 Per-screen budget
+
+Extended by specs/v4.7/spec.md §6 (23 Oct 2026): #7 retired, #9 to #12 added.
 
 A repeat of the same placement (the next post's closing rule, the next section's head rule) counts once. The logo and the six accent places do not count.
 

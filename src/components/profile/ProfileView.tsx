@@ -14,7 +14,7 @@ import {
 
 import { EmptyArt } from '@/components/DexCard';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
-import { ProfileHeader, type ProfileActions, type TournamentsLine } from '@/components/profile/ProfileHeader';
+import { ProfileHeader, type ProfileActions } from '@/components/profile/ProfileHeader';
 import { AboutSheet } from '@/components/profile/AboutSheet';
 import { usePostsByAuthor } from '@/components/profile/usePostsByAuthor';
 import { useProfileCounts } from '@/components/profile/useProfileCounts';
@@ -46,13 +46,12 @@ import type { Post, UserProfile } from '@/types';
 /* v4, less stuff (layout spec 5.5; 50 elements down to 31 at rest).    */
 /* Yours: the handle as the tab root's title with one ••• beside it,    */
 /* the face, name and one line of bio, the counts on one line, ONE key  */
-/* (Edit profile), "38 entries in your Dex ›", "Tournaments ›" while    */
-/* the server has them, then your posts as a grid of plain square       */
-/* prints. Theirs (pushed): back in the bar, the same body with Follow  */
-/* in the key's slot and their ••• beside it.                           */
+/* (Edit profile), "38 entries in your Dex ›", then your posts as a     */
+/* grid of plain square prints (the Tournaments line went to its own    */
+/* tab in v4.7). Theirs (pushed): back in the bar, the same body with   */
+/* Follow in the key's slot and their ••• beside it.                    */
 /*                                                                      */
 /* What went, and where (nothing is lost, it just isn't on screen):     */
-/*   + in the bar           the + tab                                   */
 /*   the gear               ••• › Settings                              */
 /*   Share profile          ••• › Share profile                         */
 /*   the Dex panel, ruler,  "38 entries in your Dex ›" opens Dex        */
@@ -159,7 +158,6 @@ export function ProfileView({
   isOwn,
   menu,
   menuHeader,
-  tournaments,
   onBack,
   onBlocked,
   bottomInset,
@@ -169,18 +167,12 @@ export function ProfileView({
   isOwn: boolean;
   /**
    * The ••• sheet's rows. Handed the About row, so each caller places it:
-   * yours ends with it (Share, Settings, Tournaments, About), theirs keeps
+   * yours ends with it (Share, Settings, About), theirs keeps
    * it beside Share, above Report and Block. Absent: no ••• (signed out).
    */
   menu?: (about: SheetAction) => SheetAction[];
   /** The sheet's small header line (theirs: the display name). */
   menuHeader?: string;
-  /**
-   * Yours: the Tournaments line under the Dex line, built by the caller
-   * beside the ••• row it mirrors. Absent: no line (the server has no
-   * tournaments). Ignored on someone else's profile.
-   */
-  tournaments?: TournamentsLine;
   /** Someone else's profile: the bar's back chevron. */
   onBack?: () => void;
   /** Someone else's profile: they were blocked from a screen pushed over this one. */
@@ -334,7 +326,6 @@ export function ProfileView({
         onEdit: () => router.push('/edit-profile'),
         dexCount,
         onOpenDex: () => router.push('/stats'),
-        tournaments,
       }
     : {
         kind: 'peer',
@@ -467,9 +458,8 @@ export function ProfileView({
   };
 
   /*
-   * Under the header: 12 from the last quiet line's 44pt row (Tournaments,
-   * or Dex when the server has no tournaments) to the first row of prints
-   * on yours, 24 from the key on theirs, where the key is the header's
+   * Under the header: 12 from the Dex line's 44pt row to the first row of
+   * prints on yours, 24 from the key on theirs, where the key is the header's
    * last thing.
    */
   const header = (

@@ -101,7 +101,7 @@ for (const [name, g] of Object.entries(RISE_GROUPS)) {
   check(g.start >= 0 && g.start + g.dur <= DOCK_MS, `${name} runs ${g.start} to ${g.start + g.dur}, outside the ${DOCK_MS} ms clock`);
   check(g.opMs > 0 && g.opMs <= g.dur, `${name}'s opacity runs ${g.opMs} ms of a ${g.dur} ms rise`);
 }
-check(RISE_GROUPS.chrome.opMs <= 80 && RISE_GROUPS.chrome.opLinear, 'the chrome must fade in under 80 ms, straight: the + key and the dot go pink otherwise');
+check(RISE_GROUPS.chrome.opMs <= 80 && RISE_GROUPS.chrome.opLinear, 'the chrome must fade in under 80 ms, straight: the Tournaments key and the dot go pink otherwise');
 check(RISE_GROUPS.stories.start >= 360, 'the stories may not start before 360 ms: the red script still lies on "Your story"');
 check(RISE_GROUPS.feed.start >= RISE_GROUPS.chrome.start, 'the feed rises after the chrome: bottom first, one direction');
 check(RULE_FROM + RULE_MS === DOCK_MS, `the rule draws ${RULE_FROM} to ${RULE_FROM + RULE_MS}, not to the end of the clock (${DOCK_MS})`);

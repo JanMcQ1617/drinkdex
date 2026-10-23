@@ -48,6 +48,14 @@ export const tournamentsHref = () => '/tournaments' as Href;
 export const tournamentHref = (id: string) =>
   ({ pathname: '/tournaments/[id]', params: { id } }) as unknown as Href;
 export const newTournamentHref = () => '/tournaments/new' as Href;
+/*
+ * The Tournaments TAB (v4.7, app/(tabs)/board.tsx), not the list above:
+ * the tab lives at /board so it never collides with the pushed /tournaments
+ * stack. Every tournamentsHref() link (Activity's invitations, a tournament
+ * page's cold Back, the tab's own "All tournaments" line) still opens the
+ * full list, which is where invitations are answered.
+ */
+export const boardHref = () => '/board' as Href;
 
 /**
  * What can go wrong, in the screens' terms. The server raises the first

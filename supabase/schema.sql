@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 024
+-- Sipply — the whole schema, as of migration 025
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-024 built on the live project, and records every one of
+-- migrations 002-025 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -2486,6 +2486,71 @@ begin
 end;
 $$;
 
+-- 025: the Tournaments tab's Friends board. The caller and everyone they
+-- follow, minus blocks either way, with how many DIFFERENT catalogue
+-- drinks each has posted (each once, ever; one post is one drink, 007),
+-- a competition `place` (1, 2, 3, 3, 5; null at 0), and their latest
+-- three posts. Most first, then username; at most 200 plus the caller.
+create or replace function public.friends_board()
+returns table (user_id uuid, username text, display_name text, accent text, avatar_path text,
+               entries integer, place integer, latest jsonb)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with me as (
+    select (select auth.uid()) as id
+  ),
+  people as (
+    select m.id as person from me m where m.id is not null
+    union
+    select f.following_id from public.follows f join me m on f.follower_id = m.id
+  ),
+  shown as (
+    select p.person
+    from people p
+    where not (p.person = any ((select private.my_block_set())::uuid[]))
+  ),
+  counted as (
+    select s.person,
+           (select count(distinct po.drink_id)::integer
+            from public.posts po
+            where po.author_id = s.person and po.drink_id !~ '^u_') as entries
+    from shown s
+  ),
+  ranked as (
+    select c.person, c.entries, pr.username, pr.display_name, pr.accent, pr.avatar_path,
+           (rank() over (order by c.entries desc))::integer as place,
+           row_number() over (order by c.entries desc, pr.username) as nth
+    from counted c
+    join public.profiles pr on pr.id = c.person
+  )
+  select r.person, r.username, r.display_name, r.accent, r.avatar_path, r.entries,
+         case when r.entries > 0 then r.place end,
+         coalesce((
+           select jsonb_agg(jsonb_build_object('drink_id', l.drink_id, 'photo_path', l.photo_path)
+                            order by l.last_at desc, l.id)
+           from (
+             select po.id, po.drink_id, po.photo_path,
+                    coalesce((select max(ph.created_at) from public.post_photos ph where ph.post_id = po.id),
+                             po.created_at) as last_at
+             from public.posts po
+             where po.author_id = r.person and po.drink_id !~ '^u_'
+             order by last_at desc, po.id
+             limit 3
+           ) l
+         ), '[]'::jsonb)
+  from ranked r
+  where r.nth <= 200 or r.person = (select m.id from me m)
+  order by r.entries desc, r.username;
+$$;
+
+comment on function public.friends_board() is
+  'The Tournaments tab''s Friends board (v4.7): the caller and everyone they follow, minus blocks either way, '
+  'with how many different catalogue drinks each has posted (each once, ever; never amounts) and their latest '
+  'three posts. Most first, then username; at most 200 plus the caller.';
+
 -- 020: invites, as the host, people the host follows, not blocked either
 -- way and never in it before (declined stays declined); 50 seats with the
 -- host. Returns how many were invited.
@@ -3246,6 +3311,10 @@ grant execute on function public.share_collection(uuid)       to authenticated;
 grant execute on function public.unshare_collection(uuid)     to authenticated;
 grant execute on function public.copy_shared_collection(uuid) to authenticated;
 grant execute on function public.get_shared_collection(uuid)  to anon, authenticated;
+
+-- 025.
+revoke all on function public.friends_board() from public, anon;
+grant execute on function public.friends_board() to authenticated;
 
 
 -- --------------------------------------------------------------------
@@ -4061,7 +4130,7 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 024'),
+  ('schema',                  'schema.sql, current as of 025'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -4084,5 +4153,6 @@ insert into public.schema_migrations (version, note) values
   ('021_post_likers',         'contained in schema.sql'),
   ('022_taste_profiles',      'contained in schema.sql'),
   ('023_collections',         'contained in schema.sql'),
-  ('024_post_tags',           'contained in schema.sql')
+  ('024_post_tags',           'contained in schema.sql'),
+  ('025_friends_board',       'contained in schema.sql')
 on conflict (version) do nothing;

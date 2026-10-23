@@ -32,7 +32,7 @@
  *  16. Edges are not ink: the decorative greys are never a text colour,
  *      the control grey is a glyph's or an edge's, and the Dex number's
  *      sign is U+00BA, never U+2116. See EDGE_INK.
- *  17. One accent, through its tokens, in its six places: the hex only
+ *  17. One accent, through its tokens, in its seven places: the hex only
  *      in theme.ts, the tokens and the props that draw it only where
  *      theme.ts lists. See ACCENT_FILES and ACCENT_PROPS. The detail tier
  *      (v4.6) may paint it in components/details/ alone, and its marks
@@ -395,12 +395,14 @@ const GLYPH_TAGS = new Set(['Icon', 'ActivityIndicator', 'GlassOutline']);
 const NUMERO = /\u2116/;
 
 /*
- * 17. One accent, through its tokens, in its six places (v4.4; theme.ts
+ * 17. One accent, through its tokens, in its seven places (v4.4; theme.ts
  *     lists them, white spec 1.3). Campari is the palette's one hue and it
- *     means "post", "caught" or, as Home's one dot, "new"; and since v4.5
- *     it is the logo's paint, the name itself. A red that turned up on
- *     another badge, a count or a delete key would blur all four, so each
- *     way it could spread fails:
+ *     means "post", "caught" or, as Home's one dot, "new"; since v4.5 it
+ *     is the logo's paint, the name itself; and since v4.7 (Jan, 23 Oct
+ *     2026, specs/v4.7/spec.md 1.5 and 4.1) it fills the bar's one key,
+ *     which opens the Tournaments tab where the + was, and a liked heart.
+ *     A red that turned up on another badge, a count or a delete key
+ *     would blur all of them, so each way it could spread fails:
  *
  *       - its hex, or its rgb()/rgba(), in code anywhere but theme.ts.
  *         Rule 2 already fails a hex outside ALLOW; this reads every file,
@@ -408,7 +410,7 @@ const NUMERO = /\u2116/;
  *         borrow it), catches the rgb forms rule 2 does not, and takes the
  *         values from theme.ts, so a retuned accent needs no edit here;
  *       - a token (`colors.accent`, `accentPressed`, `onAccent`) named
- *         anywhere but the code that draws the six places (ACCENT_FILES):
+ *         anywhere but the code that draws the seven places (ACCENT_FILES):
  *         the right file is not enough, since ui.tsx and ScreenTopBar.tsx
  *         draw most of the app's controls, so each file lists the style
  *         keys and functions the tokens may sit inside (`within`);
@@ -419,16 +421,25 @@ const NUMERO = /\u2116/;
  *     The logo (6) is drawn by two components and nowhere else: the
  *     wordmark and the mark default to the accent inside brand/, so a
  *     screen draws the logo by placing <Wordmark> or <Mark>, never by
- *     naming the token. A screen that set the logo's red by hand, or a
- *     seventh place, fails here.
+ *     naming the token. A screen that set the logo's red by hand, or an
+ *     eighth place, fails here.
  *
- *     A seventh place is Jan's decision, not a fix for this rule: add it
+ *     The liked heart (7) is PostCard's alone, and only its two drawings:
+ *     the like key's solid heart (LikeKey) and the double-tap heart over
+ *     the photo (HeartBurst), in the accent and never its pressed shade
+ *     (a pressed glyph key dims, as every glyph key does). The unliked
+ *     outline, the count, "Liked by…" and every other heart stay ink, so
+ *     the token anywhere else in PostCard, its share and save keys
+ *     included, fails.
+ *
+ *     An eighth place is Jan's decision, not a fix for this rule: add it
  *     to theme.ts's list and here, with its reason.
  *
  *     THE DETAIL TIER (v4.6, Jan, 23 Oct 2026; specs/v4.6-details/
- *     spec.md) is not a seventh place. It is the logo's paint pen at
- *     hairline weight: rules, a swash, one drip, ornament that says
- *     nothing, so it cannot blur what the six say. Two fences keep it so:
+ *     spec.md, extended by specs/v4.7/spec.md 6) is not an eighth place.
+ *     It is the logo's paint pen at hairline weight: rules, a swash, one
+ *     drip, ornament that says nothing, so it cannot blur what the seven
+ *     say. Two fences keep it so:
  *
  *       - the token, `colors.accent` and no other of the three, may sit
  *         anywhere in components/details/ (ACCENT_TIERS), the folder
@@ -444,17 +455,18 @@ const NUMERO = /\u2116/;
  */
 const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
 /**
- * The files that draw the six places, and where in each. A `within` entry
+ * The files that draw the seven places, and where in each. A `within` entry
  * names what the token must sit inside: a function, a variable or an
- * object key; `styles.fab` means both, the `fab` key of `styles`. A
- * `tokens` entry narrows which of the three may sit there: the logo is
- * painted in the accent alone, so its pressed shade and the white that
- * sits on it have no place in brand/.
+ * object key; `styles.trophyKey` means both, the `trophyKey` key of
+ * `styles`. A `tokens` entry narrows which of the three may sit there:
+ * the logo is painted in the accent alone, so its pressed shade and the
+ * white that sits on it have no place in brand/; nor in PostCard, whose
+ * liked heart is a glyph on the page, never a fill.
  */
 const ACCENT_FILES = {
   'components/FloatingTabBar.tsx': {
-    why: 'the + key (1)',
-    within: ['CentreAction', 'styles.fab', 'styles.fabPressed'],
+    why: 'the Tournaments key (1)',
+    within: ['TournamentsKey', 'styles.trophyKey', 'styles.trophyKeyPressed'],
   },
   'components/ui.tsx': { why: "the post key's skin, Button's `post` variant (2)", within: ['BUTTON_SKIN.post'] },
   'components/plate.tsx': { why: 'the caught Nº plate (3)', within: ['NumberPlate', 'styles.caught'] },
@@ -472,6 +484,11 @@ const ACCENT_FILES = {
     within: ['Mark'],
     tokens: ['accent'],
   },
+  'components/PostCard.tsx': {
+    why: 'the liked heart (7): the like key and the double-tap heart',
+    within: ['LikeKey', 'HeartBurst'],
+    tokens: ['accent'],
+  },
 };
 /**
  * Folders whose every file may name the accent, and which of its tokens.
@@ -479,14 +496,19 @@ const ACCENT_FILES = {
  */
 const ACCENT_TIERS = {
   'components/details/': {
-    why: 'the detail tier, the paint pen at hairline weight (ornament, not a seventh place)',
+    why: 'the detail tier, the paint pen at hairline weight (ornament, not an eighth place)',
     tokens: ['accent'],
   },
 };
 const accentTier = (rel) => Object.entries(ACCENT_TIERS).find(([dir]) => rel.startsWith(dir))?.[1];
 /** The detail marks' module, by any path that ends in it (`@/components/details/PenMarks`, `../details/PenMarks`). */
 const DETAIL_MODULE = /(^|\/)details\/PenMarks$/;
-/** The files that place a detail mark, the marks each may place, and why (specs/v4.6-details/spec.md, A). */
+/**
+ * The files that place a detail mark, the marks each may place, and why
+ * (specs/v4.6-details/spec.md, A; specs/v4.7/spec.md 6.4 added the last
+ * three and retired Profile's margin rule with the Tournaments line it
+ * sat beside).
+ */
 const DETAIL_SITES = {
   'components/home/TodaysPours.tsx': { marks: ['PenRule'], why: "the drawn rule under Home's stories" },
   'components/PostCard.tsx': { marks: ['PenRule'], why: 'the 24pt rule that closes each feed post' },
@@ -494,8 +516,10 @@ const DETAIL_SITES = {
   'components/ScreenTopBar.tsx': { marks: ['PenSwash'], why: "the swash under a tab root's title" },
   'components/TabPlaceholder.tsx': { marks: ['PenSwash'], why: "the same swash, where a lazy tab root's title waits" },
   'components/DrinkPanels.tsx': { marks: ['PenMargin'], why: "the drink page's margin and column rules" },
-  'components/profile/ProfileHeader.tsx': { marks: ['PenMargin'], why: "the margin rule beside Profile's ledger rows" },
   'components/plate.tsx': { marks: ['PlateDrip'], why: 'the drip off the caught Nº plate' },
+  'components/tournaments/FriendsBoard.tsx': { marks: ['PenRule'], why: "the board rule between the Tournaments tab's two halves" },
+  'app/tournaments/[id].tsx': { marks: ['PenSwash'], why: "the swash under a tournament's name" },
+  'app/activity.tsx': { marks: ['PenRule'], why: "the closing rule at Activity's foot" },
 };
 /** The functions, variables and object keys a node sits inside, innermost first. */
 function enclosingNames(node) {
@@ -1325,7 +1349,7 @@ function treeRules(rel, sf, lines, add) {
       }
     }
 
-    // 17. An accent token outside the code that draws the six places: the wrong file, or the wrong spot in the right one.
+    // 17. An accent token outside the code that draws the seven places: the wrong file, or the wrong spot in the right one.
     if (rel !== THEME) {
       const token =
         ts.isPropertyAccessExpression(node) && isColorsToken(node)
@@ -1344,7 +1368,7 @@ function treeRules(rel, sf, lines, add) {
         const place = ACCENT_FILES[rel] ?? accentTier(rel);
         const names = place?.within ? enclosingNames(node) : [];
         if (!place) {
-          add('accent', at(node), `colors.${token} outside the accent's six places (ACCENT_FILES) and its detail tier (ACCENT_TIERS)`);
+          add('accent', at(node), `colors.${token} outside the accent's seven places (ACCENT_FILES) and its detail tier (ACCENT_TIERS)`);
         } else if (place.tokens && !place.tokens.includes(token)) {
           add('accent', at(node), `colors.${token} in ${place.why}, which is painted in ${place.tokens.map((t) => `colors.${t}`).join(', ')} only`);
         } else if (place.within && !place.within.some((spot) => spot.split('.').every((name) => names.includes(name)))) {
@@ -1471,7 +1495,7 @@ if (violations.length === 0) {
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
       '  stray shadows, gradient stops without their opacity, rarity readers, timed\n' +
       '  React Native animations, inverting photos, edge greys set as text, or the\n' +
-      '  accent outside its six places and its detail tier, outside the allowlists.\n',
+      '  accent outside its seven places and its detail tier, outside the allowlists.\n',
   );
   process.exit(0);
 }

@@ -291,7 +291,7 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
   /*
    * v4.1: Home's create key (home-ig 5.5), beside the Activity heart: a
    * squared frame (rx 4, the keys' radius on this grid) with the plus in
-   * it. It opens the + window, as the tab bar's + does.
+   * it. It opens the + window.
    */
   create: (
     <>
@@ -538,11 +538,24 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
   facebook: (
     <Path d="M9.681 21.353v-6.384H7.702v-2.934h1.979v-1.264c0-3.268 1.478-4.782 4.686-4.782.321 0 .764.034 1.174.082a6.944 6.944 0 0 1 .913.156v2.66a6.898 6.898 0 0 0-.522-.029 21.444 21.444 0 0 0-.586-.007c-.566 0-1.007.077-1.34.247a1.349 1.349 0 0 0-.543.498c-.206.336-.299.796-.299 1.402v1.038h3.135l-.309 1.682-.23 1.251h-2.597v6.596C17.917 20.99 21.6 16.943 21.6 12.035c0-5.302-4.298-9.6-9.6-9.6s-9.6 4.298-9.6 9.6c0 4.502 3.099 8.28 7.281 9.318Z" />
   ),
+  /*
+   * The cup, stem and foot filled, and the HANDLES KEPT (v4.7, spec 1.2).
+   * Without them the solid read as a stemmed glass at 22 on the red
+   * Tournaments key, which is the Dex's own idea one slot over. The
+   * handles are the outline's two paths, stroked at the filled weight
+   * (1.6 + 0.55) in currentColor: a handle is a line, and filling its
+   * curve would close it into a blob. currentColor resolves to the `color`
+   * Icon sets on the solid group, so the handles always match the fill.
+   */
   trophy: (
     <>
       <Path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z" />
       <Path d="M11.1 14v3.5h1.8V14z" />
       <Path d="M12 16.6a3.6 3.6 0 0 0-3.6 3.6h7.2a3.6 3.6 0 0 0-3.6-3.6z" />
+      <G fill="none" stroke="currentColor" strokeWidth={STROKE + 0.55} strokeLinecap="round" strokeLinejoin="round">
+        <Path d="M7.4 5.9H5a1.4 1.4 0 0 0-1.4 1.4 3.6 3.6 0 0 0 3.6 3.6" />
+        <Path d="M16.6 5.9H19a1.4 1.4 0 0 1 1.4 1.4 3.6 3.6 0 0 1-3.6 3.6" />
+      </G>
     </>
   ),
   flame: (
@@ -632,7 +645,10 @@ export const Icon = React.memo(function Icon({
   if (solid) {
     return (
       <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-        <G fill={color}>{solid}</G>
+        {/* `color` too, so a solid with a stroked part (the trophy's handles) draws it in currentColor. */}
+        <G fill={color} color={color}>
+          {solid}
+        </G>
       </Svg>
     );
   }
@@ -690,10 +706,12 @@ export const GoogleMark = React.memo(function GoogleMark({ size = 20 }: { size?:
 /**
  * The glyphs the tab bar draws: each has a SOLID form for its active state.
  * Most are named after their route; Saved's route is `saved` and its glyph
- * is `bookmark`, My Bar's route is `bar` and its glyph is `bottle`.
+ * is `bookmark`, My Bar's route is `bar` and its glyph is `bottle`, and
+ * the Tournaments tab's route is `board` and its glyph is `trophy` (drawn
+ * white on the red key, FloatingTabBar's TournamentsKey).
  * (tabs)/_layout.tsx and FloatingTabBar draw them with
  * <Icon filled={focused} /> in the colour the bar hands them, so the glyph
  * always matches its own label — outline at rest, solid when active, the
  * iOS convention, which reads as a state change without relying on colour.
  */
-export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels' | 'bookmark' | 'bottle';
+export type TabName = 'home' | 'dex' | 'atlas' | 'stats' | 'profile' | 'reels' | 'bookmark' | 'bottle' | 'trophy';

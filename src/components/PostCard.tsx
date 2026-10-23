@@ -19,7 +19,6 @@ import Animated, {
   useSharedValue,
   withDelay,
   withSequence,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -100,7 +99,12 @@ export { timeAgo, timeAgoSpoken };
 /* 5.6), so while COMMENTS_ENABLED is false there is no comment glyph   */
 /* and no "View all N comments": no dead control.                       */
 /*                                                                      */
-/* No red anywhere: a liked heart is the solid ink heart.               */
+/* ONE RED: THE LIKED HEART (v4.7 §4, accent place 7). The like key's   */
+/* solid heart and the double-tap heart over the photo are Campari; the */
+/* unliked outline, the count, "Liked by…" and every other glyph stay   */
+/* ink. The token sits only inside LikeKey and HeartBurst (check-design */
+/* rule 17). Liking, sharing and saving each answer with a short timed  */
+/* motion of their own glyph (LikeKey, ShareKey, SaveKey).              */
 /* ==================================================================== */
 
 /**
@@ -112,26 +116,20 @@ export { timeAgo, timeAgoSpoken };
 const COMMENTS_ENABLED: boolean = false;
 
 /* ==================================================================== */
-/* Icon control                                                         */
+/* Glyph keys                                                           */
 /* ==================================================================== */
 
 /**
- * Action icon that POPS when it becomes selected.
+ * The shell every glyph key on a post shares: a full 44pt box with no
+ * slop, so the rows can be laid out on that grid. Pressed, it dims to
+ * half, the plain glyph rule.
  *
- * Liking is the most repeated gesture in the whole app, so it is worth a real
- * moment: a fast squash, then a spring overshoot past full size, then settle.
- * Turning a like OFF gets a smaller, quieter dip — undoing something should
- * not feel as good as doing it. The bookmark gets the same answer.
- *
- * Driven by the VALUE changing, never by mount. The feed is a virtualised
- * list, so a mount-triggered animation would set off a wave of popping hearts
- * every time a card scrolled back into view. The resting scale is 1, so a
- * pop that never runs leaves the glyph exactly where it should be. It runs
- * on the UI thread (Reanimated), never on a JS clock.
- *
- * A full 44pt box with no slop, so the rows can be laid out on that grid.
- * Pressed, it dims to half, the plain glyph rule; the pop is the real
- * feedback.
+ * On its own it draws the plain ink glyph and never moves (•••, and the
+ * comment key once comments exist). The three keys that answer with
+ * motion (v4.7 §4: LikeKey, ShareKey, SaveKey) pass their own glyph as
+ * `children` and keep their shared values to themselves, so a like moves
+ * one heart and wakes nothing else: not the card, not the list, not the
+ * other keys.
  */
 function IconButton({
   name,
@@ -141,9 +139,9 @@ function IconButton({
   accessibilityActions,
   onAccessibilityAction,
   size = GLYPH,
-  filled,
   selected,
   accessibilityHint,
+  children,
 }: {
   name: IconName;
   label: string;
@@ -154,31 +152,11 @@ function IconButton({
   accessibilityActions?: readonly AccessibilityActionInfo[];
   onAccessibilityAction?: (e: AccessibilityActionEvent) => void;
   size?: number;
-  filled?: boolean;
   selected?: boolean;
   accessibilityHint?: string;
+  /** A moving key's own glyph, in place of the plain one. */
+  children?: React.ReactNode;
 }) {
-  const reduced = useReducedMotion();
-  const scale = useSharedValue(1);
-  const prev = useRef(selected);
-
-  useEffect(() => {
-    if (selected === prev.current) return;
-    const turnedOn = !!selected && prev.current !== undefined;
-    prev.current = selected;
-    if (reduced) return;
-    scale.set(
-      turnedOn
-        ? withSequence(
-            withTiming(0.8, { duration: 90, easing: Easing.in(Easing.quad) }),
-            withSpring(1, { damping: 8, stiffness: 420, mass: 0.7 }),
-          )
-        : withSequence(withTiming(0.9, { duration: 90 }), withSpring(1, { damping: 14, stiffness: 300 })),
-    );
-  }, [selected, reduced, scale]);
-
-  const animated = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-
   return (
     <Pressable
       onPress={onPress}
@@ -191,10 +169,269 @@ function IconButton({
       accessibilityHint={accessibilityHint}
       accessibilityState={selected === undefined ? undefined : { selected }}
       style={({ pressed }) => [styles.iconBtn, pressed && styles.pressed]}>
-      <Animated.View style={animated}>
-        <Icon name={name} size={size} color={colors.text} filled={filled} />
-      </Animated.View>
+      {children ?? <Icon name={name} size={size} color={colors.text} />}
     </Pressable>
+  );
+}
+
+/*
+ * THE MOTION'S RULES, shared by the three keys below (v4.7 §4.6):
+ *
+ *   - Timed sequences that settle once, never a spring: build 29's
+ *     withSpring pair (damping 8) visibly bounced, and a heart that wobbles
+ *     reads as a toy. Every "pop" is three withTimings.
+ *   - The like and the bookmark are driven by their VALUE changing, never
+ *     by mount. The feed is a virtualised list: a mount-driven pop would
+ *     set off a wave of hearts every time a card scrolled back into view.
+ *     The share key is driven by its press, so a share from the ••• sheet
+ *     or anywhere else never moves it.
+ *   - Every value rests where the glyph belongs (scale 1, offset 0, the
+ *     ring at opacity 0), so a sequence that never runs, or that Reanimated
+ *     stalls after a Release cold start (specs/06-tab-switch-bug.md),
+ *     leaves the key looking exactly right.
+ *   - Reduce Motion: the state changes and nothing moves. Haptics stay.
+ *   - Transforms and opacity only, on the UI thread. No layout animation
+ *     (check-design rule 3), no state set per frame, nothing mounted by a
+ *     tap: the ring and the bookmark's fill window are always there, one
+ *     View each per post.
+ *
+ * The cards key each of them by the post's id, so a cell the list hands a
+ * different post starts fresh rather than popping on the new post's value.
+ */
+
+/** The like ring: a 26pt circle behind the heart, its 1.5pt edge in the accent. */
+const LIKE_RING_EDGE = 1.5;
+const LIKE_RING_FROM = 0.6;
+const LIKE_RING_TO = 1.5;
+
+/**
+ * The like key (v4.7 §4.1, 4.2): the heart, which is the app's seventh red
+ * (accent place 7). Unliked it is the ink outline; liked, the solid
+ * Campari heart, a switch at t 0 and never a colour tween, so there is no
+ * frame of a pink heart. A liked heart is the most universal red state
+ * there is, and Jan drew it red (23 Oct 2026). Every other heart in the
+ * app stays ink.
+ *
+ * Turning on: a squash (0 to 80), past full size (80 to 220), settle (220
+ * to 380), and from 80 to 400 the ring opens out from behind the glyph and
+ * fades, the only motion graphic in the app drawn outside a glyph, gone by
+ * 400 ms. Turning off: the outline at once and a small dip, no ring.
+ * Undoing something should not feel as good as doing it.
+ *
+ * The haptic is the caller's (onLike), so a like from the double tap and a
+ * like from the key feel the same, and a replayed double tap feels nothing.
+ */
+function LikeKey({ liked, onPress }: { liked: boolean; onPress: () => void }) {
+  const reduced = useReducedMotion();
+  const scale = useSharedValue(1);
+  const ringScale = useSharedValue(LIKE_RING_FROM);
+  const ringOpacity = useSharedValue(0);
+  const prev = useRef(liked);
+
+  useEffect(() => {
+    if (liked === prev.current) return;
+    prev.current = liked;
+    if (reduced) {
+      // Whatever was running (Reduce Motion turned on mid-pop) lands at rest.
+      scale.set(1);
+      ringOpacity.set(0);
+      return;
+    }
+    if (liked) {
+      scale.set(
+        withSequence(
+          withTiming(0.82, { duration: 80, easing: Easing.in(Easing.quad) }),
+          withTiming(1.18, { duration: 140, easing: Easing.out(Easing.cubic) }),
+          withTiming(1, { duration: 160, easing: Easing.inOut(Easing.quad) }),
+        ),
+      );
+      // Invisible through the squash, then 0.5 at 80 and out to nothing by 400.
+      const open = { duration: 320, easing: Easing.out(Easing.cubic) };
+      ringScale.set(
+        withSequence(withTiming(LIKE_RING_FROM, { duration: 0 }), withDelay(80, withTiming(LIKE_RING_TO, open))),
+      );
+      ringOpacity.set(
+        withSequence(
+          withTiming(0, { duration: 0 }),
+          withDelay(80, withTiming(0.5, { duration: 0 })),
+          withTiming(0, open),
+        ),
+      );
+    } else {
+      ringOpacity.set(0);
+      scale.set(
+        withSequence(
+          withTiming(0.9, { duration: 90, easing: Easing.out(Easing.quad) }),
+          withTiming(1, { duration: 140, easing: Easing.out(Easing.quad) }),
+        ),
+      );
+    }
+  }, [liked, reduced, scale, ringScale, ringOpacity]);
+
+  const glyph = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  const ring = useAnimatedStyle(() => ({ opacity: ringOpacity.value, transform: [{ scale: ringScale.value }] }));
+
+  return (
+    <IconButton name="heart" label="Like" onPress={onPress} selected={liked}>
+      <View style={styles.glyphBox}>
+        <Animated.View
+          pointerEvents="none"
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+          style={[styles.likeRing, { borderColor: colors.accent }, ring]}
+        />
+        <Animated.View style={glyph}>
+          <Icon name="heart" size={GLYPH} color={liked ? colors.accent : colors.text} filled={liked} />
+        </Animated.View>
+      </View>
+    </IconButton>
+  );
+}
+
+/**
+ * The share key, the paper dart (v4.7 §4.4). The system sheet opens AT
+ * ONCE (it is never held for an animation); the dart flies off along its
+ * own heading, up and to the right, under the sheet's rise, and comes back
+ * in from behind its start as the sheet settles: 0 to 160 out, a jump to
+ * just behind and below, 160 to 360 home. Ink throughout.
+ *
+ * Driven by the press, on this key's own values. A second press mid-flight
+ * restarts the sequence from wherever the dart is.
+ *
+ * `enabled` is false when there is nothing to share (the post's drink id
+ * left the catalogue, so share() has no name to send): the key then stays
+ * still and silent, since a dart flying with no sheet rising under it
+ * says something happened when nothing did.
+ */
+function ShareKey({ onPress, enabled }: { onPress: () => void; enabled: boolean }) {
+  const reduced = useReducedMotion();
+  const x = useSharedValue(0);
+  const y = useSharedValue(0);
+  const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
+
+  const press = () => {
+    if (!enabled) return;
+    haptic.tap();
+    onPress();
+    if (reduced) return;
+    const away = { duration: 160, easing: Easing.in(Easing.cubic) };
+    const jump = { duration: 0 };
+    const home = { duration: 200, easing: Easing.out(Easing.cubic) };
+    x.set(withSequence(withTiming(8, away), withTiming(-6, jump), withTiming(0, home)));
+    y.set(withSequence(withTiming(-3, away), withTiming(2, jump), withTiming(0, home)));
+    scale.set(withSequence(withTiming(0.9, away), withTiming(1, jump)));
+    opacity.set(withSequence(withTiming(0, away), withTiming(1, home)));
+  };
+
+  const flight = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateX: x.value }, { translateY: y.value }, { scale: scale.value }],
+  }));
+
+  return (
+    <IconButton name="send" label="Share" onPress={press}>
+      <Animated.View style={flight}>
+        <Icon name="send" size={GLYPH} color={colors.text} />
+      </Animated.View>
+    </IconButton>
+  );
+}
+
+/** How far the bookmark's drop lands, and its lift on an unsave. */
+const SAVE_DROP = 1.5;
+
+/**
+ * The save key, the bookmark (v4.7 §4.5). Saving POURS the fill in from
+ * the top: the solid bookmark sits in a glyph-sized window that clips it
+ * (overflow hidden); the window slides down from a glyph above while the
+ * solid inside slides up by the same amount, so the solid never moves on
+ * screen and only the clip's edge sweeps down over the outline (transforms
+ * only, PenRule's draw-on trick). Then the whole glyph lands, 1.5 down and
+ * back, like a drop settling. Unsaving: the solid goes at once and the
+ * outline lifts 1.5 and settles. Ink throughout.
+ *
+ * Driven by `saved` changing, which happens after the unsave confirmation
+ * when there is one, so a cancelled unsave never moves. The long press
+ * (Save to collection) saves first if it needs to, so it plays the same
+ * pour, and the sheet rises over it.
+ *
+ * The window's resting place follows the value it mounts with, so a saved
+ * post scrolling into view is already full and pours nothing.
+ */
+function SaveKey({
+  saved,
+  onPress,
+  onLongPress,
+  accessibilityActions,
+  onAccessibilityAction,
+}: {
+  saved: boolean;
+  onPress: () => void;
+  onLongPress?: () => void;
+  accessibilityActions?: readonly AccessibilityActionInfo[];
+  onAccessibilityAction?: (e: AccessibilityActionEvent) => void;
+}) {
+  const reduced = useReducedMotion();
+  // The window's offset: 0 shows the solid, -GLYPH hides it above the glyph.
+  const fill = useSharedValue(saved ? 0 : -GLYPH);
+  const drop = useSharedValue(0);
+  const prev = useRef(saved);
+
+  useEffect(() => {
+    if (saved === prev.current) return;
+    prev.current = saved;
+    if (reduced) {
+      fill.set(saved ? 0 : -GLYPH);
+      drop.set(0);
+      return;
+    }
+    if (saved) {
+      fill.set(
+        withSequence(
+          withTiming(-GLYPH, { duration: 0 }),
+          withTiming(0, { duration: 160, easing: Easing.out(Easing.cubic) }),
+        ),
+      );
+      drop.set(
+        withSequence(
+          withDelay(160, withTiming(SAVE_DROP, { duration: 100, easing: Easing.in(Easing.quad) })),
+          withTiming(0, { duration: 120, easing: Easing.out(Easing.quad) }),
+        ),
+      );
+    } else {
+      fill.set(-GLYPH);
+      drop.set(
+        withSequence(
+          withTiming(-SAVE_DROP, { duration: 90, easing: Easing.out(Easing.quad) }),
+          withTiming(0, { duration: 120, easing: Easing.out(Easing.quad) }),
+        ),
+      );
+    }
+  }, [saved, reduced, fill, drop]);
+
+  const landing = useAnimatedStyle(() => ({ transform: [{ translateY: drop.value }] }));
+  const clip = useAnimatedStyle(() => ({ transform: [{ translateY: fill.value }] }));
+  const solid = useAnimatedStyle(() => ({ transform: [{ translateY: -fill.value }] }));
+
+  return (
+    <IconButton
+      name="bookmark"
+      label="Save"
+      onPress={onPress}
+      onLongPress={onLongPress}
+      accessibilityActions={accessibilityActions}
+      onAccessibilityAction={onAccessibilityAction}
+      selected={saved}>
+      <Animated.View style={[styles.glyphBox, landing]}>
+        <Icon name="bookmark" size={GLYPH} color={colors.text} />
+        <Animated.View pointerEvents="none" style={[styles.saveWindow, clip]}>
+          <Animated.View style={solid}>
+            <Icon name="bookmark" size={GLYPH} color={colors.text} filled />
+          </Animated.View>
+        </Animated.View>
+      </Animated.View>
+    </IconButton>
   );
 }
 
@@ -207,24 +444,36 @@ const DOUBLE_TAP_MS = 260;
 /** The burst's whole life. A JS timer unmounts it then, whatever the animation did. */
 const BURST_MS = 900;
 /**
- * When the fade starts: motion.base before the end, so the heart has faded
- * out just as the timer unmounts it. The pop and a short hold fill the
- * time before.
+ * The burst's timeline (v4.7 §4.3): in by 180, a dip and a settle by 380,
+ * a hold, then from BURST_FADE_AT it lifts 12 and fades over BURST_FADE,
+ * gone at 840, 60 before the timer unmounts it.
  */
-const BURST_FADE_AT = BURST_MS - motion.base;
+const BURST_FADE_AT = 620;
+const BURST_FADE = 220;
+const BURST_LIFT = -12;
 
-/** The burst's heart, and the white ring round it. */
-const BURST = 88;
-const BURST_RING = 3;
+/*
+ * The burst's heart, and the white heart under it, 4pt larger each side.
+ * 128 draws about 97pt of heart on a 440pt photo (22% of its width):
+ * Instagram's is about a quarter, Jan drew his about a third. 96 drew 73pt
+ * (17%), which read as a sticker, not the big heart he asked for.
+ */
+const BURST = 128;
+const BURST_RING = 4;
 
 /**
- * The heart that answers a double tap on the photo. It answers a touch,
- * and it is skipped under Reduce Motion (the action row's heart still
- * fills). Drawn as the plates over a photo are (onMedia): solid ink with
- * a white ring, a white heart a little larger laid under the ink one, so
- * it holds on a pale daylight print and on a dark bar photo alike.
+ * The heart that answers a double tap on the photo: Instagram's gesture,
+ * a big heart over the picture (Jan, 23 Oct 2026). A 128pt solid Campari
+ * heart, the liked heart's own red (accent place 7), on a solid white
+ * heart a little larger (onMedia.ring), so it still reads on a red drink,
+ * a pale daylight print and a dark bar photo alike.
  *
- * ITS RESTING STATE IS "NOT MOUNTED". The card unmounts it on a JS timer
+ * It pops in past full size, dips, settles, holds, then lifts as it fades,
+ * as if let go. Timed throughout, no spring. Skipped under Reduce Motion:
+ * the action row's heart turning red is the answer there.
+ *
+ * ITS RESTING STATE IS "NOT MOUNTED". It mounts on the double tap (so it
+ * costs a scrolling feed nothing) and the card unmounts it on a JS timer
  * after BURST_MS rather than when its fade finishes: after a cold start in
  * a Release build Reanimated can stall for seconds while JS timers keep
  * running (specs/06-tab-switch-bug.md), and a stalled fade would have left
@@ -232,16 +481,31 @@ const BURST_RING = 3;
  */
 function HeartBurst() {
   const scale = useSharedValue(0);
-  const opacity = useSharedValue(1);
+  const opacity = useSharedValue(0);
+  const lift = useSharedValue(0);
 
   useEffect(() => {
-    scale.set(withSequence(withSpring(1.1, motion.spring), withSpring(1, motion.spring)));
-    opacity.set(withDelay(BURST_FADE_AT, withTiming(0, { duration: motion.base })));
-  }, [scale, opacity]);
+    const away = { duration: BURST_FADE, easing: Easing.in(Easing.quad) };
+    scale.set(
+      withSequence(
+        withTiming(1.15, { duration: 180, easing: Easing.out(Easing.cubic) }),
+        withTiming(0.95, { duration: 100, easing: Easing.inOut(Easing.quad) }),
+        withTiming(1, { duration: 100, easing: Easing.out(Easing.quad) }),
+        withDelay(BURST_FADE_AT - 380, withTiming(1.1, away)),
+      ),
+    );
+    opacity.set(
+      withSequence(
+        withTiming(1, { duration: 60, easing: Easing.out(Easing.cubic) }),
+        withDelay(BURST_FADE_AT - 60, withTiming(0, away)),
+      ),
+    );
+    lift.set(withDelay(BURST_FADE_AT, withTiming(BURST_LIFT, away)));
+  }, [scale, opacity, lift]);
 
   const animated = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    transform: [{ scale: scale.value }],
+    transform: [{ translateY: lift.value }, { scale: scale.value }],
   }));
 
   return (
@@ -253,7 +517,7 @@ function HeartBurst() {
       <Animated.View style={[styles.burst, animated]}>
         <Icon name="heart" size={BURST + 2 * BURST_RING} color={onMedia.ring} filled />
         <View style={styles.burstInk}>
-          <Icon name="heart" size={BURST} color={onMedia.fill} filled />
+          <Icon name="heart" size={BURST} color={colors.accent} filled />
         </View>
       </Animated.View>
     </View>
@@ -1028,20 +1292,18 @@ export const PostCard = React.memo(function PostCard({
   const actions = (
     <View pointerEvents="box-none" style={styles.actions}>
       {hasGallery ? <GalleryDots count={gallery.length} index={index} /> : null}
-      <IconButton name="heart" label="Like" onPress={onLike} filled={liked} selected={liked} />
+      <LikeKey key={`like:${post.id}`} liked={liked} onPress={onLike} />
       {comments ? <IconButton name="comment" label="Comment" onPress={() => comments(post.id)} /> : null}
-      <IconButton name="send" label="Share" onPress={share} />
+      <ShareKey key={`share:${post.id}`} onPress={share} enabled={!!drink} />
       <View pointerEvents="none" style={styles.spacer} />
       {canSave ? (
-        <IconButton
-          name="bookmark"
-          label="Save"
+        <SaveKey
+          key={`save:${post.id}`}
+          saved={saved}
           onPress={onSave}
           onLongPress={canCollect ? onSaveToCollection : undefined}
           accessibilityActions={canCollect ? SAVE_TO_COLLECTION : undefined}
           onAccessibilityAction={canCollect ? onSaveToCollectionAction(onSaveToCollection) : undefined}
-          filled={saved}
-          selected={saved}
         />
       ) : null}
     </View>
@@ -1548,6 +1810,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  /* A moving key's glyph box: the glyph's own 26, centred in the 44. */
+  glyphBox: { width: GLYPH, height: GLYPH, alignItems: 'center', justifyContent: 'center' },
+  /* The like ring, the glyph's size, behind it. Its edge colour is LikeKey's (rule 17). */
+  likeRing: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: GLYPH,
+    height: GLYPH,
+    // round-ok: the like ring, a ripple and not a control
+    borderRadius: radius.round,
+    borderWidth: LIKE_RING_EDGE,
+  },
+  /* The bookmark's fill window: the glyph's box, clipping the solid that pours in. */
+  saveWindow: { position: 'absolute', top: 0, left: 0, width: GLYPH, height: GLYPH, overflow: 'hidden' },
   dots: {
     ...StyleSheet.absoluteFill,
     flexDirection: 'row',

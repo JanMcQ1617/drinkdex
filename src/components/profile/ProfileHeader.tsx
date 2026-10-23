@@ -1,8 +1,5 @@
-import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { lineMarks } from '@/components/details/lineMarks';
-import { PenMargin } from '@/components/details/PenMarks';
-import { PEN } from '@/components/details/penPath';
 import { Icon } from '@/components/icons';
 import { Avatar, Button } from '@/components/ui';
 import { colors, fonts, layout, radius, space, textRole } from '@/constants/theme';
@@ -16,22 +13,18 @@ import type { UserProfile } from '@/types';
 /* top: the 80pt face at the gutter with the name beside it and the bio */
 /* under the name on ONE line (the whole bio is in ••• › About and Edit */
 /* profile); the three counts on one line; ONE key; on your own profile */
-/* the quiet "38 entries in your Dex ›" that opens Dex progress, and    */
-/* under it "Tournaments ›".                                            */
+/* the quiet "38 entries in your Dex ›" that opens Dex progress.       */
 /*                                                                      */
-/* The Tournaments line is there because the ••• row alone was too hard */
-/* to find (Jan, 17 Oct 2026). It says what is waiting, in the same     */
-/* quiet type: "1 running" while one of yours is on, else               */
-/* "2 invitations", else nothing beside the word. Not a badge (layout   */
-/* principle 9): the state is words at the line's end, as a settings    */
-/* row's value is. Yours only, as the Dex line is.                      */
+/* The Tournaments line that sat under it (17 Oct 2026) went with v4.7  */
+/* (Jan, 23 Oct 2026; specs/v4.7/spec.md 2.9): tournaments have a tab   */
+/* of their own now, the red trophy key in the middle of the bar, so a  */
+/* second way in from here would be a duplicate to keep in step.        */
 /*                                                                      */
 /* THE CAUGHT FIGURE IS THE ACCENT (v4.4, one of its five places; see   */
 /* theme.ts). In "38 entries in your Dex" the number alone is Campari   */
 /* at 600; the words stay muted. Nothing else here takes it: the        */
-/* Tournaments state, the counts, followers and posts stay ink or       */
-/* muted: a red "1 running" or "2 invitations" would read as a badge,   */
-/* and the app has one red dot, Home's Activity dot.                    */
+/* counts, followers and posts stay ink or muted, and the app has one   */
+/* red dot, Home's Activity dot.                                        */
 /*                                                                      */
 /* One layout for yours and anyone else's, so the two read as one       */
 /* screen. Yours has Edit profile in the key's slot; theirs has Follow  */
@@ -40,14 +33,11 @@ import type { UserProfile } from '@/types';
 /* a pushed screen's bar holds the back chevron and nothing else        */
 /* (layout principle 8, as the post detail moved its ••• into the row). */
 /*                                                                      */
-/* THE LEDGER'S MARGIN (v4.6, specs/v4.6-details A.3 #7). On your own  */
-/* profile, when both quiet lines show, the logo's pen rules them in    */
-/* the margin: a hairline in the middle of the left gutter (x 12) from  */
-/* the Dex line's cap height to the Tournaments line's baseline, so the */
-/* two read as the entries of one ledger. Ornament: no word, no count,  */
-/* and it never touches the red figure, which starts at x 24 on its own */
-/* row. Beside one row it would be a 9.5pt tick, a stray mark, so with  */
-/* one line there is none; someone else's profile never has it.         */
+/* No pen mark sits here any more. v4.6's margin rule (A.3 #7) ruled   */
+/* the Dex and Tournaments lines as one ledger and was drawn only when  */
+/* both showed; with one line left it would be a 9.5pt tick, a stray    */
+/* mark, so it retired with the Tournaments line (v4.7 6.1). Profile's  */
+/* one mark is the swash under its title (ScreenTopBar).                */
 /*                                                                      */
 /* The handle is not repeated here: it is the screen's title. The Dex   */
 /* panel, its ruler and the rank ladder moved to Dex progress (/stats), */
@@ -60,15 +50,8 @@ const AVATAR = 80;
 const IDENTITY_GAP = 20;
 /** Between the three counts (layout spec 5.5). */
 const COUNT_GAP = 28;
-/** The quiet lines' chevron (Dex, Tournaments). */
+/** The quiet line's chevron. */
 const CHEVRON = 16;
-
-export type TournamentsLine = {
-  /** "1 running", else "2 invitations"; absent when neither, and the line is just the word. */
-  detail?: string;
-  /** Opens the Tournaments list, as the ••• row does. */
-  onOpen: () => void;
-};
 
 export type ProfileActions =
   | {
@@ -78,11 +61,6 @@ export type ProfileActions =
       dexCount: number;
       /** Opens Dex progress. */
       onOpenDex: () => void;
-      /**
-       * The Tournaments line under the Dex line. Absent while the server
-       * has no tournaments, the gate the ••• row uses too.
-       */
-      tournaments?: TournamentsLine;
     }
   | {
       kind: 'peer';
@@ -114,16 +92,6 @@ export function ProfileHeader({
   actions: ProfileActions;
 }) {
   const bio = person.bio?.trim();
-  const { fontScale } = useWindowDimensions();
-  /*
-   * The margin rule's ends, from the small role's metrics at the size it
-   * is drawn (these lines do not cap): each line is centred in its 44pt
-   * row, so its cap height is that slack plus the line's own, and its
-   * baseline the same from the foot. Once the text outgrows the row the
-   * slack is 0 and the rule follows the type.
-   */
-  const m = lineMarks('inter', textRole.small.fontSize, textRole.small.lineHeight, fontScale);
-  const pad = Math.max(0, (layout.hit - m.lineHeight) / 2);
   return (
     <View style={styles.header}>
       <View style={styles.identity}>
@@ -211,10 +179,7 @@ export function ProfileHeader({
         ) : null}
       </View>
 
-      {/*
-        The ledger: the quiet lines as one block, so the pen's margin rule
-        is placed from its edges. It holds the Dex line's 4 over it.
-      */}
+      {/* The quiet line's wrapper: it holds the Dex line's 4 over it. */}
       {actions.kind === 'own' ? (
         <View style={styles.ledger}>
           <Pressable
@@ -230,41 +195,6 @@ export function ProfileHeader({
             </Text>
             <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
           </Pressable>
-
-          {actions.tournaments ? (
-            /*
-             * Straight under the Dex line, each its own 44pt row, so the two
-             * quiet lines read as one short list. One button to VoiceOver,
-             * word and state together: "Tournaments, 1 running".
-             */
-            <Pressable
-              onPress={actions.tournaments.onOpen}
-              accessibilityRole="button"
-              accessibilityLabel={
-                actions.tournaments.detail ? `Tournaments, ${actions.tournaments.detail}` : 'Tournaments'
-              }
-              accessibilityHint="Opens your tournaments"
-              style={({ pressed }) => [styles.line, pressed && styles.dimmed]}>
-              <View style={styles.lineText}>
-                <Text style={[textRole.small, styles.muted, styles.lineWord]}>Tournaments</Text>
-                {actions.tournaments.detail ? (
-                  <Text style={[textRole.small, styles.muted, styles.lineWord]}>{actions.tournaments.detail}</Text>
-                ) : null}
-              </View>
-              <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
-            </Pressable>
-          ) : null}
-          {actions.tournaments ? (
-            <PenMargin
-              kind="margin"
-              style={{
-                position: 'absolute',
-                left: -layout.gutter / 2 - PEN.vrule.mid,
-                top: pad + m.capTop,
-                bottom: pad + m.foot,
-              }}
-            />
-          ) : null}
         </View>
       ) : null}
     </View>
@@ -359,33 +289,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   morePressed: { backgroundColor: colors.press },
-  // The quiet lines: a 44pt row each, an 18pt line of small type and a chevron at the gutter.
+  // The quiet line: a 44pt row, an 18pt line of small type and a chevron at the gutter.
   line: {
     minHeight: layout.hit,
     flexDirection: 'row',
     alignItems: 'center',
     gap: space.sm,
   },
-  // The quiet lines' block: the first sits 18 under the key (its line at y 344 at 440).
+  // The quiet line's wrapper: it sits 18 under the key (its line at y 344 at 440).
   ledger: { marginTop: space.xs },
   dexText: { flex: 1 },
   /* The caught figure: the accent at 600 so the hue reads at 13pt (5.54:1 on the page), tabular like every count. */
   dexFigure: { fontFamily: fonts.bodySemiBold, color: colors.accent, fontVariant: ['tabular-nums'] },
-  /*
-   * At rest the word sits at the left and the state at the chevron. When
-   * Larger Text leaves no room for both, the state drops to a line of its
-   * own under the word, as a settings row's value does and as the counts
-   * wrap between two counts: the line breaks between the two, never inside
-   * "Tournaments". Two items shrinking side by side split the word at the
-   * accessibility sizes. Each still shrinks, so a state wider than the row
-   * wraps at its own space.
-   */
-  lineText: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    columnGap: space.sm,
-  },
-  lineWord: { flexShrink: 1 },
 });

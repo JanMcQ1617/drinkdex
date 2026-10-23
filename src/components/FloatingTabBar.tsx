@@ -1,4 +1,3 @@
-import { useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Animated, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,10 +12,10 @@ import { useAuth } from '@/store/auth';
 /* The tab bar                                                          */
 /*                                                                      */
 /* Five glyphs and one short line (layout spec 4: "10 → 5 elements";    */
-/* v4.2 decided 6 adds the line). Home · Dex · + · Saved · Profile, on  */
-/* an opaque page slab docked to the foot, with no rule, no shadow and  */
-/* no floating card. The name kept its file: it is still the bar        */
-/* TopTabs draws.                                                       */
+/* v4.2 decided 6 adds the line). Home · Dex · Tournaments · Saved ·    */
+/* Profile, on an opaque page slab docked to the foot, with no rule, no */
+/* shadow and no floating card. The name kept its file: it is still the */
+/* bar TopTabs draws.                                                   */
 /*                                                                      */
 /* NO LABELS ON SCREEN, EVERY LABEL SPOKEN. Each tab keeps its name as  */
 /* its accessibilityLabel ("Home", "Dex, your collection" …), so        */
@@ -30,11 +29,20 @@ import { useAuth } from '@/store/auth';
 /* TabName), and your face, which has none, takes a ring instead. And   */
 /* an 18 x 2 ink line with square ends sits under the active one (Jan,  */
 /* 13 Oct 2026: "add an affect to know in which tab i am in the         */
-/* bottom"). The + is the bar's only filled key, a Campari rectangle    */
-/* (the accent, v4.4), so it reads as a different KIND of control:      */
-/* posting is a thing you do, not a place you are. The line never rests */
-/* under it, and the line stays ink: where you are is not the accent's  */
-/* to say (theme.ts names its five places).                             */
+/* bottom").                                                            */
+/*                                                                      */
+/* THE TOURNAMENTS KEY (v4.7, Jan, 23 Oct 2026; specs/v4.7/spec.md 1).  */
+/* The centre slot was the + until build 29: a Campari rectangle that   */
+/* opened the + window and was not a page. Jan asked for the tournament */
+/* tab in its place, so the centre is now a real page of the pager, the */
+/* Friends board, drawn as the bar's one filled key: the same red       */
+/* rectangle (accent place 1, renamed), a white trophy on it, outline   */
+/* at rest and solid when you are on it, like every other glyph. The    */
+/* red keeps it the bar's one different KEY (the shared game, not a     */
+/* place you file things), and the line still says where you are: it    */
+/* rests under the key on Tournaments and stays ink, because where you  */
+/* are is not the accent's to say (theme.ts names its places). Posting  */
+/* lost nothing: Home's create key opens the + window, as on Instagram. */
 /*                                                                      */
 /* MOVED BY THE PAGER, NEVER BY A JS CLOCK. Changing tab is the pager's */
 /* ((tabs)/_layout.tsx): a swipe carries the page under the finger and  */
@@ -62,9 +70,18 @@ const FACE_RING = 1.5;
 const FACE_GAP = 2;
 const FACE_BOX = AVATAR + 2 * (FACE_RING + FACE_GAP);
 
-/** The + key, 52 x 38: 3pt of hitSlop takes it to 44. */
-const FAB_W = 52;
-const FAB_H = 38;
+/*
+ * The Tournaments key, 52 x 32 (spec 1.2). 32, not the +'s 38: the row
+ * is 49 and the active line sits at y 43 to 45 (LINE_TOP), so a 38 key
+ * (y 5.5 to 43.5) covered the line it now has to rest over. At 32 it runs
+ * 8.5 to 40.5 and the line hangs 2.5 under it, the same air it keeps
+ * under a 33pt glyph box. No hitSlop: the Pressable is the whole slot,
+ * as every tab's is, so the touch target is 88 x 49 at 440.
+ */
+const KEY_W = 52;
+const KEY_H = 32;
+/** The trophy on the key: a little under the bar's 26 so it sits inside the red with air round it. */
+const KEY_GLYPH = 22;
 
 /*
  * The active tab's line: 18 wide, under a 26pt glyph whose drawing is about
@@ -80,10 +97,19 @@ type TabBarIconProps = { focused: boolean; color: string; size: number };
 
 /*
  * The glyph a route falls back to when its screen sets no tabBarIcon (every
- * screen sets one today). Three routes are not named after their glyph:
- * Home's route is `index`, Saved's is `saved`, My Bar's is `bar`.
+ * screen sets one today). Four routes are not named after their glyph:
+ * Home's route is `index`, Saved's is `saved`, My Bar's is `bar`, and the
+ * Tournaments tab's is `board` (drawn as TournamentsKey, never this way).
  */
-const ROUTE_GLYPH: Readonly<Record<string, TabName>> = { index: 'home', saved: 'bookmark', bar: 'bottle' };
+const ROUTE_GLYPH: Readonly<Record<string, TabName>> = {
+  index: 'home',
+  saved: 'bookmark',
+  bar: 'bottle',
+  board: 'trophy',
+};
+
+/** The Tournaments tab's route: the slot the bar draws as its red key, wherever it falls. */
+const KEY_ROUTE = 'board';
 const glyphFor = (route: string): TabName => ROUTE_GLYPH[route] ?? (route as TabName);
 
 /*
@@ -130,33 +156,41 @@ type FloatingTabBarProps = {
 };
 
 /**
- * The post action: an accent rectangle seated in the bar before Saved,
- * 4pt corners like every key, its + white (onAccent, 5.54:1). Not a
- * route: posting a drink is a thing you do, and a tab for it would be a
- * permanently unselectable item in a bar whose job is where you are. 52 x
- * 38 with 3pt of hitSlop to 44. No haptic: it opens a full-screen window,
- * which is answer enough.
+ * The Tournaments tab, drawn as the bar's one filled key: a Campari
+ * rectangle (accent place 1), 4pt corners like every key, its trophy
+ * white (onAccent, 5.54:1), outline at rest and solid when focused, so
+ * where you are reads on the key the way it reads on every glyph, by
+ * shape and not by colour. It is a tab like the others: the same press
+ * (the caller's onPress, with its `select` haptic), the same `selected`
+ * state, the same spoken name, and the whole slot is its Pressable, so
+ * nothing needs hitSlop. Pressed, its fill goes accentPressed: controls
+ * answer a press with their fill, never a scale.
  *
- * It stands on a column of page as wide as the key and as tall as the row,
- * drawn over the active tab's line. So the line, crossing from the Dex to
- * Saved, passes behind the key instead of underlining it, and the + never
- * looks like the tab you are on, even mid-swipe.
+ * The only place this file names the accent (check-design rule 17 reads
+ * exactly TournamentsKey, styles.trophyKey and styles.trophyKeyPressed).
  */
-function CentreAction({ onPress }: { onPress: () => void }) {
+function TournamentsKey({
+  focused,
+  label,
+  onPress,
+}: {
+  focused: boolean;
+  label: string;
+  onPress: () => void;
+}) {
   return (
-    <View style={styles.slot}>
-      <View style={styles.fabColumn}>
-        <Pressable
-          onPress={onPress}
-          accessibilityRole="button"
-          accessibilityLabel="Post a drink"
-          accessibilityHint="Take a photo and pick the drink you had"
-          hitSlop={{ top: 3, bottom: 3 }}
-          style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}>
-          <Icon name="plus" size={22} color={colors.onAccent} filled />
-        </Pressable>
-      </View>
-    </View>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ selected: focused }}
+      style={styles.item}>
+      {({ pressed }) => (
+        <View style={[styles.trophyKey, pressed && styles.trophyKeyPressed]}>
+          <Icon name="trophy" size={KEY_GLYPH} color={colors.onAccent} filled={focused} />
+        </View>
+      )}
+    </Pressable>
   );
 }
 
@@ -180,7 +214,6 @@ function ProfileFace({ profile, focused }: { profile: ProfileRow; focused: boole
 
 export function FloatingTabBar({ state, descriptors, navigation, position, layout: box }: FloatingTabBarProps) {
   const insets = useSafeAreaInsets();
-  const router = useRouter();
   const { width: windowW } = useWindowDimensions();
   // The signed-in account's own row only: a stale row from a previous
   // account must never put someone else's face on this tab.
@@ -190,29 +223,23 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
   /*
    * Every route in the navigator's state is a page of the pager and a slot
    * here, in the same order (Reels and My Bar are not in the state while
-   * they are off). The + is drawn immediately before Saved, found by name,
-   * so it keeps its place beside the Dex if My Bar comes back after Saved;
-   * else before My Bar, else in the middle. Home · Dex · Saved · Profile
-   * is Home · Dex · + · Saved · Profile either way.
+   * they are off). There is no slot without a page any more (v4.7: the +
+   * that sat between the Dex and Saved became the Tournaments tab), so the
+   * track is plain: N pages, N equal slots, page i on slot i.
    */
   const visible = state.routes;
-  const savedAt = visible.findIndex((r) => r.name === 'saved');
-  const barAt = visible.findIndex((r) => r.name === 'bar');
-  const fabAt = savedAt >= 0 ? savedAt : barAt >= 0 ? barAt : Math.ceil(visible.length / 2);
 
   /*
    * THE LINE'S TRACK. The slots are equal (styles.slot is flex 1) across
-   * the bar's full width: one per page, and one for the + when it is drawn.
-   * A page at or past the + sits one slot further on, so page i rests the
-   * line on the centre of slot i (before the +) or i + 1 (after it), and a
-   * fraction of a page puts it between two. The + is a slot the line
-   * crosses, behind its column (CentreAction), and never one it stops at.
+   * the bar's full width, one per page, so page i rests the line on the
+   * centre of slot i and a fraction of a page puts it between two.
    * Counted from the routes actually in the state, so Reels or My Bar,
    * while on, take their slots and the line still lands on every glyph.
+   * It passes under the red key on its way from the Dex to Saved, and
+   * rests under it on Tournaments.
    */
   const pages = visible.length;
-  const slots = pages + (fabAt < pages ? 1 : 0);
-  const slotWidth = (box?.width || windowW) / slots;
+  const slotWidth = (box?.width || windowW) / pages;
 
   /*
    * A slot's width, held in a native value instead of baked into the
@@ -256,8 +283,8 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
    * and nothing about it starts hidden or waits for a frame.
    *
    * Built once, in practice: position is the pager's own memoised node, and
-   * the page count and the +'s place are fixed for a build (the pager
-   * rebuilds itself when its page count changes).
+   * the page count is fixed for a build (the pager rebuilds itself when its
+   * page count changes).
    */
   const glide = useMemo(() => {
     if (!position || pages < 2) return null;
@@ -265,27 +292,26 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
     return Animated.multiply(
       position.interpolate({
         inputRange: at,
-        outputRange: at.map((i) => (i < fabAt ? i : i + 1) + 0.5),
+        outputRange: at.map((i) => i + 0.5),
         extrapolate: 'clamp',
       }),
       slotW,
     );
-  }, [position, pages, fabAt, slotW]);
+  }, [position, pages, slotW]);
 
   useEffect(() => {
     slotW.setValue(slotWidth);
   }, [slotW, slotWidth, glide]);
 
   // Without a pager, a plain cut: the line stands on the focused tab's slot.
-  const focusedSlot = state.index < fabAt ? state.index : state.index + 1;
-  const lineX = glide ?? (focusedSlot + 0.5) * slotWidth;
+  const lineX = glide ?? (state.index + 0.5) * slotWidth;
 
   return (
     <View style={[styles.bar, { paddingBottom: insets.bottom }]}>
       {/*
-        The line, before the row, so the row draws over it and the +'s
-        column of page hides it as it crosses. Mounted for the bar's whole
-        life, never conditionally: the pager's native event writes to the
+        The line, before the row. Nothing in the row covers it: the red
+        key ends 2.5 above it. Mounted for the bar's whole life, never
+        conditionally: the pager's native event writes to the
         position values by native tag, and a native value whose last child
         detaches is dropped and recreated under a new tag (ScrollChrome's
         keeper note), which would freeze the line where it was. Decorative:
@@ -298,10 +324,11 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
         style={[styles.line, { transform: [{ translateX: lineX }] }]}
       />
       <View style={styles.row} accessibilityRole="tabbar">
-        {visible.map((route, at) => {
+        {visible.map((route) => {
           const options = descriptors[route.key]?.options ?? {};
           const focused = route.key === focusedKey;
           const color = focused ? colors.text : colors.textMuted;
+          const label = options.tabBarAccessibilityLabel ?? options.title ?? route.name;
 
           const onPress = () => {
             const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
@@ -326,35 +353,28 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
               ))
             );
 
-          return (
-            <React.Fragment key={route.key}>
-              {at === fabAt ? (
-                <CentreAction
-                  onPress={() => {
-                    /*
-                     * router, not navigation: `log` is a root-stack modal.
-                     * `navigate`, not `push`: a double tap, or taps queued
-                     * while the JS thread was busy, would stack one window
-                     * per tap; navigate reuses `log` when it is on top.
-                     */
-                    router.navigate('/log');
-                  }}
-                />
-              ) : null}
-              <View style={styles.slot}>
-                <Pressable
-                  onPress={onPress}
-                  accessibilityRole="button"
-                  accessibilityLabel={options.tabBarAccessibilityLabel ?? options.title ?? route.name}
-                  accessibilityState={{ selected: focused }}
-                  style={styles.item}>
-                  <View style={styles.glyphBox}>
-                    {glyph}
-                    {options.tabBarBadge ? <View style={styles.badge} /> : null}
-                  </View>
-                </Pressable>
+          if (route.name === KEY_ROUTE) {
+            return (
+              <View key={route.key} style={styles.slot}>
+                <TournamentsKey focused={focused} label={label} onPress={onPress} />
               </View>
-            </React.Fragment>
+            );
+          }
+
+          return (
+            <View key={route.key} style={styles.slot}>
+              <Pressable
+                onPress={onPress}
+                accessibilityRole="button"
+                accessibilityLabel={label}
+                accessibilityState={{ selected: focused }}
+                style={styles.item}>
+                <View style={styles.glyphBox}>
+                  {glyph}
+                  {options.tabBarBadge ? <View style={styles.badge} /> : null}
+                </View>
+              </Pressable>
+            </View>
           );
         })}
       </View>
@@ -420,22 +440,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   faceRingOn: { borderColor: colors.text },
-  /* The page behind the + (CentreAction): the key's width, the row's height. */
-  fabColumn: {
-    flex: 1,
-    width: FAB_W,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.bg,
-  },
-  fab: {
-    width: FAB_W,
-    height: FAB_H,
+  /*
+   * The Tournaments key's red, centred in its slot by the Pressable
+   * (styles.item): y 8.5 to 40.5 of the 49pt row, over the line's 43.
+   */
+  trophyKey: {
+    width: KEY_W,
+    height: KEY_H,
     borderRadius: radius.control,
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   /* A fill change, not a scale: controls answer a press with their fill. */
-  fabPressed: { backgroundColor: colors.accentPressed },
+  trophyKeyPressed: { backgroundColor: colors.accentPressed },
 });

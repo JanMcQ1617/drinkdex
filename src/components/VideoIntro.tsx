@@ -380,8 +380,8 @@ function Film({ onDone, onVisible }: { onDone: () => void; onVisible: () => void
     /*
      * Touches reach the app only once the film has gone. Every group
      * starts at 0, and the keys and the tab bar show from 160 + 64 ms: let
-     * through at once, a second tap in that window would press a + key or
-     * a tab nobody can see yet. Until then the skip key takes it, and
+     * through at once, a second tap in that window would press the
+     * Tournaments key or a tab nobody can see yet. Until then the skip key takes it, and
      * does nothing (the exit is already under way).
      */
     setTimeout(() => setPassThrough(true), EXIT_MS);

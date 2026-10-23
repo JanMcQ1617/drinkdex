@@ -51,7 +51,7 @@ Nothing here changes a feature. It changes surfaces, type, spacing, iconography 
 
 ### 1.1 Tokens (they replace `colors` in theme.ts)
 
-Every value is a neutral grey (R = G = B). Role names replace material names, so a later dark map can use the same keys (§9). v4.4 adds one accent, Campari, in five places only, and v4.5 a sixth, the logo (§1.3).
+Every value is a neutral grey (R = G = B). Role names replace material names, so a later dark map can use the same keys (§9). v4.4 adds one accent, Campari, in five places only, v4.5 a sixth, the logo, and v4.7 a seventh, the liked heart (§1.3).
 
 | Token | Hex | Job | Text? |
 |---|---|---|---|
@@ -63,8 +63,8 @@ Every value is a neutral grey (R = G = B). Role names replace material names, so
 | `rule` | `#C4C4C4` | The ring of a seen story or your own story, the ruler's baseline and minor ticks, the sheet grabber | Decorative |
 | `control` | `#8A8A8A` | Control edges (outline buttons, an empty plate, an unticked checkbox, the "In their Dex" tag), resting tab glyphs, the ruler's major ticks, the no-photo glass | UI (3:1). As text only at 18pt or larger |
 | `muted` | `#5C5C5C` | Secondary text: meta lines, usernames, counts beside heads, placeholders, inactive tab labels, ruler labels | Yes, body-safe |
-| `ink` | `#0A0A0A` | Text, solid buttons, plates over a photo, ticked boxes, the active tab, the unseen story ring, focus rings. The +, the post key and the caught plate are the accent since v4.4 (§1.3) | Yes |
-| `inkPressed` | `#333333` | A solid ink button while held (the + and the post key take `accentPressed`, §1.3) | Ground for `onInk` |
+| `ink` | `#0A0A0A` | Text, solid buttons, plates over a photo, ticked boxes, the active tab, the unseen story ring, focus rings. The tab bar's centre key (the + until v4.7, the Tournaments key since), the post key and the caught plate are the accent since v4.4 (§1.3) | Yes |
+| `inkPressed` | `#333333` | A solid ink button while held (the Tournaments key and the post key take `accentPressed`, §1.3) | Ground for `onInk` |
 | `onInk` | `#FFFFFF` | Text and glyphs on ink | Yes |
 | `onInkMuted` | `#A3A3A3` | The count inside an "on" chip ("In your bar 12") | Yes |
 | `scrim` | `rgba(10,10,10,0.36)` | The dim behind a sheet (composites to `#A7A7A7` over white) | Never under text that must be read |
@@ -117,7 +117,7 @@ Decorative only. check-contrast should list these so that nobody later puts text
 
 Over a photo there is only ever a solid `ink` plate with `onInk` digits, measured against the plate (19.80) and never against the picture.
 
-### 1.3 Accent (v4.4)
+### 1.3 Accent (v4.4, seven places since v4.7)
 
 Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/index.html`; the critic's final set is `specs/v4.4-accent/stress/campari-tweaked-*.png`). It is the red of the bitter in a Negroni. Daylight stays black and white everywhere else.
 
@@ -125,26 +125,27 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 
 | Token | Hex | Job |
 |---|---|---|
-| `accent` | `#D0102C` | The fill in the six places, the caught figure as text, and the logo's paint |
-| `accentPressed` | `#A80C23` | The + or the post key while held |
+| `accent` | `#D0102C` | The fill in the seven places, the caught figure as text, the logo's paint, and the liked heart |
+| `accentPressed` | `#A80C23` | The Tournaments key or the post key while held |
 | `onAccent` | `#FFFFFF` | The glyph, label or figures on an accent fill |
 
-**Exactly six places:**
+**Exactly seven places:**
 
-1. **The + key** in the tab bar: accent fill, `accentPressed` held, a white +, its 4pt squared corners kept.
+1. **The Tournaments key** in the tab bar (v4.7, Jan, 23 Oct 2026; `specs/v4.7/spec.md` 1.2 and 1.5): accent fill, `accentPressed` held, a white trophy (outline at rest, solid when its tab is showing), 52 x 32, its 4pt squared corners kept. It held the + until v4.7; Jan asked for the bar's middle to be the Tournaments tab, so the bar's one filled key now opens the shared game, and posting keeps its red in the post key (2) while Home's create key opens the + window.
 2. **The post key:** the drink page's pinned "Post …" key, the + window's Post, and the post sheet's "Save & post" (Jan, 17 Oct 2026). Accent fill, white label, `accentPressed` held. The same + window key stays ink when it saves without posting ("Save to Dex", "Save photo"), and so does the pinned key on a drink someone added (custom/[id]), whose + window can only save it. The post sheet's other key, "Save to Dex" or "Save photo", stays secondary.
 3. **The caught Nº plate** (the drink page and the catch card): accent fill, white figures. The not-caught plate is unchanged. The likers sheet no longer draws a plate (layout spec 5.4).
 4. **The caught figure:** the number only, Inter 600, as accent text. That is the "14" in the Dex bar's "14 / 2,089" and the "14" in Profile's "14 entries in your Dex". The rest of each line stays muted.
 5. **Home's Activity dot:** the 8pt dot on the heart.
 6. **The logo** (v4.5, Jan, 20 Oct 2026; `specs/v4.5-logo`): the "Marker tag" wordmark wherever the app sets its name (Home's bar, sign-in's first step, the onboarding welcome, the password reset, the drawn intro) and the mark, the icon's tilted s, where the app draws it (the drawn intro's first frame, the onboarding guide). Red paint on the page, drawn only by `brand/Wordmark` and `brand/Mark`. Jan asked for the logo in Campari, so the icon's red and the name on every screen are one red. Never the wordmark white on an accent fill: white script on red is Coca-Cola's ground.
+7. **The liked heart** (v4.7, Jan, 23 Oct 2026; `specs/v4.7/spec.md` 4.1): the like key's solid heart on a post and the 96pt double-tap heart over its photo (red on a white heart 3pt larger each side, so it reads on a red drink). Jan drew it red; it says nothing the key's selected state does not. The unliked outline, the like count, "Liked by…", Home's Activity heart, the likers sheet and every other heart stay ink. `accentPressed` is never used here: a pressed glyph key dims, as every glyph key does.
 
-**The detail tier (v4.6, Jan, 23 Oct 2026; `specs/v4.6-details/spec.md`).** Not a seventh place. The logo's paint pen at hairline weight (a filled outline, 0.4 to 1.25pt, swelling where the pen lands and thinning as it lifts) draws ornament at fixed placements: the rule under Home's stories (it draws itself in once, at the end of the intro's Dock), a 24pt rule closing each feed post, a rule under each Dex section head, the swash under a tab root's title (Dex, Saved, your username), the margin rule beside the drink page's record and the column rule between its facts, the margin rule beside Profile's ledger rows, and one drip off the caught Nº plate. Ornament, not information: no mark adds a word, a count, an icon or a state, none turns an existing state red, and none sits on a photo (12pt clear), a key, a chip, a field, the tab bar, a story ring or under a tappable figure. Drawn only by `components/details/`, in `accent` alone; check-design rule 17 lets the token sit in that folder (ACCENT_TIERS) and lets the marks be imported only by the files that hold a placement (DETAIL_SITES). A new placement is Jan's decision, made in the v4.6 spec and in rule 17 together.
+**The detail tier (v4.6, Jan, 23 Oct 2026; `specs/v4.6-details/spec.md`).** Not an eighth place. The logo's paint pen at hairline weight (a filled outline, 0.4 to 1.25pt, swelling where the pen lands and thinning as it lifts) draws ornament at fixed placements: the rule under Home's stories (it draws itself in once, at the end of the intro's Dock), a 24pt rule closing each feed post, a rule under each Dex section head, the swash under a tab root's title (Dex, Saved, your username), the margin rule beside the drink page's record and the column rule between its facts, and one drip off the caught Nº plate; since v4.7 (`specs/v4.7/spec.md` 6) the swash under the Tournaments tab's title (ScreenTopBar's own), the rule between that tab's tournaments and its Friends, the swash under a tournament's name on its own page, and a 24pt closing rule at Activity's foot. Profile's margin rule beside its ledger rows retired in v4.7 with the Tournaments line it sat beside. Ornament, not information: no mark adds a word, a count, an icon or a state, none turns an existing state red, and none sits on a photo (12pt clear), a key, a chip, a field, the tab bar, a story ring or under a tappable figure. Drawn only by `components/details/`, in `accent` alone; check-design rule 17 lets the token sit in that folder (ACCENT_TIERS) and lets the marks be imported only by the files that hold a placement (DETAIL_SITES). A new placement is Jan's decision, made in the spec (v4.6, and v4.7 for its four) and in rule 17 together.
 
 **Rules:**
 
 - The active tab's line stays ink. The accent never says where you are.
 - Red never means delete or error. Destructive words stay ink and underlined. No red badges.
-- Profile's Tournaments state ("1 running", "N invitations"), followers, posts, "See all" and chip counts stay ink or muted.
+- Followers, posts, likes, "See all", chip counts, the Tournaments tab's entries and ranks, and every other count stay ink or muted.
 - Playfair is drink names only since v4.5: the wordmark is the tagged logo, drawn as outlined paths, not type (§2.1).
 - On an ink ground the accent is a fill only (3.58:1 against ink clears 3:1 for a key or a plate). Text on ink stays white, never red.
 
@@ -159,9 +160,10 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 | `onAccent` on `accentPressed` | **7.66** | 4.5 |
 | `accent` fill against ink | **3.58** | 3 (non-text) |
 | The logo, `accent` on page | **5.54** | 3 (a logotype is exempt; held to the UI line) |
+| The liked heart, `accent` glyph on page (the burst's sits on its own white heart: the same pair) | **5.54** | 3 (non-text) |
 | `accent` as text on ink | 3.58 | **Never**: asserted under 4.5 |
 
-**Guards.** check-contrast allows exactly this one family: `accent` and `accentPressed` must each sit within 2° of Campari's hue (351°), `onAccent` must stay neutral, and any other hue still fails, a swap to another accent hue included. check-design rule 17 fails the accent typed out (hex, rgb or rgba) anywhere in `src/` but theme.ts, the three tokens anywhere but the style keys and functions that draw the six places (for the logo, the `Wordmark` and `Mark` components and nowhere else) and the detail tier's folder (`components/details/`, `accent` only), the props that draw it (Button's `post` variant, TopBarButton's `badge`, TopBarCount's `figure`) outside their place, and a detail mark imported by a file that holds no placement of it. A seventh place is Jan's decision, made in theme.ts and rule 17 together.
+**Guards.** check-contrast allows exactly this one family: `accent` and `accentPressed` must each sit within 2° of Campari's hue (351°), `onAccent` must stay neutral, and any other hue still fails, a swap to another accent hue included. check-design rule 17 fails the accent typed out (hex, rgb or rgba) anywhere in `src/` but theme.ts, the three tokens anywhere but the style keys and functions that draw the seven places (for the logo, the `Wordmark` and `Mark` components and nowhere else; for the liked heart, PostCard's `LikeKey` and `HeartBurst`, `accent` only) and the detail tier's folder (`components/details/`, `accent` only), the props that draw it (Button's `post` variant, TopBarButton's `badge`, TopBarCount's `figure`) outside their place, and a detail mark imported by a file that holds no placement of it. An eighth place is Jan's decision, made in theme.ts and rule 17 together.
 
 ---
 

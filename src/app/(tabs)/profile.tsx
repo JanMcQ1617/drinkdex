@@ -1,22 +1,18 @@
-import { useFocusEffect, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
-import type { TournamentsLine } from '@/components/profile/ProfileHeader';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
 import { EmptyState, Hold } from '@/components/ui';
 import { colors, space } from '@/constants/theme';
-import { formatCount } from '@/data';
 import { shareProfile } from '@/lib/profileLink';
 import { toProfile } from '@/lib/social';
-import { tournamentsHref } from '@/lib/tournaments';
 import { useAuth } from '@/store/auth';
-import { useTournaments } from '@/store/tournaments';
 
 /* ==================================================================== */
 /* Your profile                                                         */
@@ -25,33 +21,22 @@ import { useTournaments } from '@/store/tournaments';
 /* pushed over the tabs. Both draw the same ProfileView, so yours shows  */
 /* what other people see.                                                */
 /*                                                                      */
-/* v4: the bar holds the handle and one •••, nothing else (layout spec   */
-/* 5.5). Posting is the + tab; the gear and Share profile are rows of    */
-/* the •••: Share profile, Settings, Tournaments while the server has    */
-/* them, About. Account deletion is still two taps from here (•••,       */
-/* Settings, then the row), which is what Apple asks for, and its flow   */
-/* in Settings is unchanged.                                             */
+/* v4: the bar holds the handle and one •••, nothing else (layout spec  */
+/* 5.5). Posting is Home's create key; the gear and Share profile are   */
+/* rows of the •••: Share profile, Settings, About. Account deletion is */
+/* still two taps from here (•••, Settings, then the row), which is     */
+/* what Apple asks for, and its flow in Settings is unchanged.          */
 /*                                                                      */
-/* Tournaments moved here from Home's bar (and Activity's invitations    */
-/* still lead to them), so this screen asks the server on focus, as     */
-/* Home did: a server without migration 020 answers by switching the    */
-/* row off, and pending invitations show as its detail line. The same   */
-/* gate draws the Tournaments line under the Dex line (17 Oct 2026:     */
-/* the ••• row alone was too hard to find), which says "1 running"      */
-/* first, since a tournament on now is the one to look at.              */
+/* Tournaments are not here any more. Build 29 had a Tournaments line   */
+/* under the Dex line and a ••• row for them, and this screen asked the */
+/* server on focus to gate both. v4.7 gave them a tab of their own, the */
+/* red trophy key in the middle of the bar (Jan, 23 Oct 2026;           */
+/* specs/v4.7/spec.md 2.9), which replaced the line and the row: two    */
+/* ways in to the same list from one tab over would only be two things  */
+/* to keep in step. Activity's invitations row still opens the list.    */
 /*                                                                      */
 /* The list is the Profile tab's scroll source (chromeTab).              */
 /* ==================================================================== */
-
-/** "1 invitation", "2 invitations". */
-const invitations = (n: number) => `${formatCount(n)} ${n === 1 ? 'invitation' : 'invitations'}`;
-
-/*
- * The Tournaments line's state: what is on before what is asked of you,
- * and nothing at all when neither (the line is then just the word).
- */
-const lineDetail = (running: number, pending: number) =>
-  running > 0 ? `${formatCount(running)} running` : pending > 0 ? invitations(pending) : undefined;
 
 function OwnProfile() {
   const insets = useSafeAreaInsets();
@@ -62,32 +47,9 @@ function OwnProfile() {
   const profileLoading = useAuth((s) => s.profileLoading);
   const profileError = useAuth((s) => s.profileError);
   const refreshProfile = useAuth((s) => s.refreshProfile);
-  const tournaments = useTournaments((s) => s.supported);
-  const pendingInvites = useTournaments((s) => s.pendingInvites);
-  const running = useTournaments((s) => s.running);
   const [fallbackMenu, setFallbackMenu] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (myId) void useTournaments.getState().load();
-    }, [myId]),
-  );
-
   const settings: SheetAction = { label: 'Settings', onPress: () => router.push('/settings') };
-  const tournamentsRow: SheetAction[] = tournaments
-    ? [
-        {
-          label: 'Tournaments',
-          detail: pendingInvites > 0 ? invitations(pendingInvites) : undefined,
-          onPress: () => router.push(tournamentsHref()),
-        },
-      ]
-    : [];
-  // Signed out there is no profile to draw; checked anyway, as the store's load is.
-  const tournamentsLine: TournamentsLine | undefined =
-    tournaments && myId
-      ? { detail: lineDetail(running, pendingInvites), onOpen: () => router.push(tournamentsHref()) }
-      : undefined;
 
   /*
    * A profile already on screen stays there while it refreshes (an edit,
@@ -103,10 +65,8 @@ function OwnProfile() {
         menu={(about) => [
           { label: 'Share profile', onPress: () => shareProfile(person) },
           settings,
-          ...tournamentsRow,
           about,
         ]}
-        tournaments={tournamentsLine}
         bottomInset={insets.bottom + TAB_BAR_CLEARANCE + space.md}
         chromeTab="profile"
       />
@@ -150,7 +110,7 @@ function OwnProfile() {
       <ActionSheet
         visible={fallbackMenu}
         onClose={() => setFallbackMenu(false)}
-        actions={[settings, ...tournamentsRow]}
+        actions={[settings]}
       />
     </View>
   );

@@ -24,14 +24,14 @@ import type { TournamentSummary } from '@/types';
 /* ==================================================================== */
 /* Tournaments (spec v3.1 §11.3)                                        */
 /*                                                                      */
-/* Opened from Profile's Tournaments line and its •••, and from         */
+/* Opened from the Tournaments tab's All tournaments line and          */
 /* Activity's invitations row. Every tournament you host, are in or are */
 /* invited to, in four groups shown only when they hold something:      */
 /* Invitations (answered right here), On now, Coming up, and the last    */
 /* 20 Finished. A tournament counts the different Dex entries its       */
 /* members post while it runs; amounts are never counted.               */
 /*                                                                      */
-/* The list is the tournaments store's, so Profile's and Activity's      */
+/* The list is the tournaments store's, so the tab's and Activity's      */
 /* invitation counts and this screen agree: refetched on every focus and */
 /* pull, and after every answer.                                         */
 /*                                                                      */
@@ -94,7 +94,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
   /*
    * True once this screen's own first load has answered. Until then an
    * empty list is "not asked yet", never "No tournaments yet"; a list
-   * already loaded (Profile, Activity) shows at once.
+   * already loaded (the Tournaments tab, Activity) shows at once.
    */
   const [settled, setSettled] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -192,7 +192,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
   const body = !supported ? (
     /*
      * The server has no tournaments yet (migration 020 not applied).
-     * Profile and Activity hide their ways here then, so only an old link
+     * The tab and Activity hide their ways here then, so only an old link
      * lands here.
      */
     <EmptyState

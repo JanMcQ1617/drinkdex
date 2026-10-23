@@ -8,11 +8,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { PenSwash } from '@/components/details/PenMarks';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { InviteSheet } from '@/components/tournaments/InvitePicker';
@@ -61,7 +63,26 @@ import type { TournamentBoard, UserProfile } from '@/types';
 /* The board is the tournaments store's (refetched on focus, on a pull   */
 /* and after every action); the people in it are merged into the social  */
 /* store's profiles, as Activity does.                                  */
+/*                                                                      */
+/* THE SWASH UNDER THE NAME (v4.7, specs/v4.7/spec.md 6.1 #11). The     */
+/* name is a page title (Inter 28), the one pushed screen with a title  */
+/* of its own in the body rather than in the bar, so it is signed the   */
+/* way a tab root's title is: the pen's swash, from the title's own box */
+/* (3pt lower than a tab root's, clear of a typed name's descenders).   */
+/* It is ornament, never a state: it reads the same on now, coming up   */
+/* or finished; VoiceOver never meets it.                               */
+/* It is this screen's one mark; the standings get none (a margin rule  */
+/* beside them would sit 3.4pt from your row's wash and read as its     */
+/* border).                                                             */
 /* ==================================================================== */
+
+/**
+ * The swash's length follows the name's text scale up to here, as the
+ * tab roots' swash follows their capped title (TabPlaceholder's
+ * TITLE_CAP): past it a longer stroke stops reading as a signature and
+ * starts reading as an underline.
+ */
+const NAME_SWASH_CAP = 1.3;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const CHECK_CONNECTION = 'Check your connection and try again.';
@@ -311,6 +332,7 @@ function BoardView({
   run: (kind: Busy, call: () => Promise<Result<void>>, failTitle: string) => Promise<void>;
 }) {
   const router = useRouter();
+  const { fontScale } = useWindowDimensions();
   const host = ownEntry(profiles, board.hostId);
   const isHost = board.myStatus === 'host';
   const member = isHost || board.myStatus === 'accepted';
@@ -495,9 +517,18 @@ function BoardView({
         {/* ---- Head ---- */}
         <View style={styles.head}>
           <View style={styles.nameRow}>
-            <Text style={styles.name} accessibilityRole="header">
-              {board.name}
-            </Text>
+            {/*
+             * The wrapper is the name's own box (it takes the row's flex,
+             * so the ••• keeps its place beside it), and the swash is
+             * placed from its foot: under the last line of a name that
+             * wraps, at that line's start, as under a tab root's title.
+             */}
+            <View style={styles.nameBox}>
+              <Text style={styles.name} accessibilityRole="header">
+                {board.name}
+              </Text>
+              <PenSwash scale={Math.min(fontScale, NAME_SWASH_CAP)} style={styles.swash} />
+            </View>
             {options.length > 0 ? (
               <View style={styles.more}>
                 <TopBarButton icon="more" label="Tournament options" onPress={openOptions} />
@@ -612,8 +643,21 @@ const styles = StyleSheet.create({
   notice: { marginTop: space.lg },
 
   head: { paddingTop: space.lg, gap: space.xs },
-  nameRow: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm, marginBottom: space.xs },
-  name: { ...textRole.title, flex: 1, color: colors.text },
+  /* 8 under the name (not the head's 4): room for the swash's ink below the descenders. */
+  nameRow: { flexDirection: 'row', alignItems: 'flex-start', gap: space.sm, marginBottom: space.sm },
+  nameBox: { flex: 1 },
+  name: { ...textRole.title, color: colors.text },
+  /*
+   * 1 in from the name, its foot 7 under the name's line box: 3 lower than
+   * a tab root's swash. A tab root's title is the app's own word, with no
+   * descender under the swash's first 56pt; a tournament's name is typed by
+   * people and often has one ("Negroni week"), and at 4 the rising right
+   * end met the g's tail with 0 to 1pt between them. At 7 the ink sits
+   * below Inter 28's descender line. The status line's caps start about
+   * 16.5 under the box (nameRow's 8, the head's 4 gap, the small line's
+   * own lead), so the ink keeps 9.5 clear of the words below it.
+   */
+  swash: { position: 'absolute', left: 1, bottom: -7 },
   /*
    * The ••• glyph's right edge on the gutter (its 44 box overhangs by the
    * glyph's slack), centred on the name's first line.

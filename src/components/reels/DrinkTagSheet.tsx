@@ -84,8 +84,8 @@ export function DrinkTagSheet({
               <SearchField
                 value={query}
                 onChangeText={setQuery}
-                placeholder="Name, style or country"
-                accessibilityLabel="Search the Dex"
+                placeholder="Type your drink"
+                accessibilityLabel="Search for a drink to tag, by name, style or country"
                 autoFocus
                 style={styles.search}
               />

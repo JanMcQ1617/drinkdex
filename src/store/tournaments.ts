@@ -6,8 +6,9 @@ import { useAuth } from '@/store/auth';
 import type { TournamentBoard, TournamentSummary } from '@/types';
 
 /*
- * Your tournaments, for Home's trophy and its badge, the Tournaments list,
- * and each tournament's page.
+ * Your tournaments, for the Tournaments tab (its cards and its All
+ * tournaments line), the full list, Activity's invitations row and each
+ * tournament's page.
  *
  * Nothing here is cached across launches: standings move whenever a member
  * posts, and a stale leaderboard is worse than a moment's spinner. Not
@@ -23,10 +24,8 @@ interface TournamentsState {
   supported: boolean;
   /** Newest start first, as my_tournaments returns them. */
   list: TournamentSummary[];
-  /** Invitations still open (not finished): the dot on Home's trophy. */
+  /** Invitations still open (not finished): Activity's invitations row and the tab's "1 invitation". */
   pendingInvites: number;
-  /** Tournaments you are in that are on now: the "1 running" on your profile's Tournaments line. */
-  running: number;
   /** A load is in flight. The list keeps what it had meanwhile. */
   loading: boolean;
   /** The last load failed (offline, or the server refused); the list is what it was before. */
@@ -56,7 +55,6 @@ const EMPTY: Data = {
   supported: true,
   list: [],
   pendingInvites: 0,
-  running: 0,
   loading: false,
   failed: false,
   boards: {},
@@ -67,13 +65,10 @@ const pendingIn = (list: TournamentSummary[]) =>
   list.filter((t) => t.myStatus === 'invited' && t.state !== 'finished').length;
 
 /*
- * On now, in one you host or joined: the Tournaments list's "On now"
- * group (rowKind 'live'). An invitation to one that is on is still an
- * invitation, counted by pendingIn, so the two figures never count the
- * same tournament twice.
+ * v4.7 dropped `running` (the "1 running" on Profile's Tournaments line):
+ * the line went with the tab that replaced it, and the tab counts its own
+ * cards from `list` (FriendsBoard's liveOf), so nothing read it any more.
  */
-const runningIn = (list: TournamentSummary[]) =>
-  list.filter((t) => t.state === 'live' && (t.myStatus === 'host' || t.myStatus === 'accepted')).length;
 
 /*
  * Loads that overlap (a focus refetch racing a pull to refresh) are
@@ -96,14 +91,13 @@ export const useTournaments = create<TournamentsState>((set, get) => ({
       const list = await api.fetchMyTournaments();
       if (get().gen !== gen || seq !== loadSeq) return;
       if (list === null) {
-        set({ supported: false, list: [], pendingInvites: 0, running: 0, loading: false, failed: false });
+        set({ supported: false, list: [], pendingInvites: 0, loading: false, failed: false });
         return;
       }
       set({
         supported: true,
         list,
         pendingInvites: pendingIn(list),
-        running: runningIn(list),
         loading: false,
         failed: false,
       });
@@ -129,7 +123,7 @@ export const useTournaments = create<TournamentsState>((set, get) => ({
   forget: (id) => {
     const list = get().list.filter((t) => t.id !== id);
     const { [id]: _gone, ...boards } = get().boards;
-    set({ list, boards, pendingInvites: pendingIn(list), running: runningIn(list) });
+    set({ list, boards, pendingInvites: pendingIn(list) });
   },
 
   reset: () => {
