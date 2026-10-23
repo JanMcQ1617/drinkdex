@@ -42,8 +42,8 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,753 as pasted, recounted for build 28 the same way;
-3,876 with the first sign-in item below added to the list.]
+[4,000 max. 3,616 as pasted, recounted for build 29 the same way;
+3,739 with the first sign-in item below added to the list.]
 
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
@@ -92,13 +92,11 @@ Worth poking at:
 - **Your music.** Play something in Spotify or Apple Music, then open
   Sipply. It should keep playing through the opening film and the feed.
   Turning a video's sound on should lower your music, not stop it.
-- **The red.** One colour now marks the logo, the + key, the Post keys
-  (Save & post included) and your Dex count. Tell me if it turns up
-  anywhere else, or if a pale Post key ever looks like it should work.
-- **The new look.** Sipply has a new icon and a hand-written red logo.
-  Swipe the app away, then open it: the white launch screen should turn
-  into a short film where the s writes "sipply", with no flash or jump
-  between them. Tell me if the two reds ever look different.
+- **The new look.** A new icon, a hand-written red logo and fine red pen
+  lines on most screens. Swipe the app away and open it: the film writes
+  "sipply", then the word glides into Home's top bar as the app rises in.
+  Tell me if anything jumps, flashes or lands in the wrong place, or if a
+  pale Post key ever looks like it should work.
 
 Please report:
 
