@@ -224,6 +224,8 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
             onOpenAuthor={openAuthor}
             onBlocked={onBlocked}
             onDeleted={onBack}
+            // The feed closes each post with the pen's rule; a post on its own page closes nothing.
+            closingRule={false}
           />
         </ScrollView>
       )}

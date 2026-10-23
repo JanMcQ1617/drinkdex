@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Sipply v4.6 pen board</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter;color:#0A0A0A;background:#EDEDED;-webkit-font-smoothing:antialiased}
+h1{font:600 30px/36px Inter;letter-spacing:-.6px}
+.lede{font:400 15px/22px Inter;color:#4A4A4A;margin-top:6px}
+.k{font:600 12px/16px Inter;color:#5C5C5C;letter-spacing:.3px}
+b{font-weight:600}
+.acc{color:#D0102C}
+/* board */
+#board{display:none;width:2400px;height:1500px;padding:36px 40px;position:relative}
+.phones{display:flex;gap:22px;margin-top:24px}
+.ph{width:452px}
+.ph img{width:452px;height:982px;display:block;border-radius:22px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.ph .c{font:400 14px/20px Inter;color:#3A3A3A;margin-top:12px}
+.side{position:absolute;left:1980px;top:118px;width:380px}
+.d{background:#fff;border-radius:8px;padding:14px 16px 14px;margin-bottom:12px}
+.d .im{height:112px;display:flex;align-items:center;justify-content:center;background:#fff}
+.d .im img{max-height:112px;max-width:348px;display:block}
+.d .t{font:600 15px/20px Inter;margin-top:8px}
+.d .p{font:400 13px/18px Inter;color:#3A3A3A;margin-top:2px}
+.never{border-radius:8px;padding:12px 16px;box-shadow:inset 0 0 0 1px #CFCFCF;font:400 13px/18px Inter;color:#3A3A3A}
+.ba{position:absolute;left:40px;top:1300px;display:flex;gap:28px;align-items:flex-start}
+.ba .pair{display:flex;gap:10px}
+.ba img{display:block;background:#fff;border-radius:4px}
+.ba .lab{font:500 12px/16px Inter;color:#5C5C5C;margin-bottom:6px}
+/* crops */
+#crops{display:none;width:2568px;padding:32px 40px 40px}
+.row{margin-top:26px}
+.row .t{font:600 16px/22px Inter}
+.row .p{font:400 14px/20px Inter;color:#3A3A3A;margin-bottom:10px}
+.cols{display:flex;gap:40px}
+.cols .lab{font:500 12px/16px Inter;color:#5C5C5C;margin-bottom:6px}
+.cols img{display:block;background:#fff}
+body.board #board{display:block} body.crops #crops{display:block}
+</style></head><body>
+<div id="board">
+  <h1>Sipply v4.6 · <span class="acc">Pen marks</span> <span style="font-weight:400;color:#8A8A8A">v2</span></h1>
+  <div class="lede">The logo’s paint pen, at hairline weight. Three marks, each a filled outline that swells where the pen lands and thins as it lifts, never under 0.4 pt. Campari only. Ornament, never information: no new word, count, badge or icon, and no state turned red. One mark per screen; the logo does not count.</div>
+  <div class="phones">
+    <div class="ph"><img src="../home.png"><div class="c"><b>Home · 1 mark.</b> The drawn rule under the stories, the app’s one border. It draws itself on as the intro hands over, once per cold start.</div></div>
+    <div class="ph"><img src="../dex.png"><div class="c"><b>Dex · 1 mark.</b> The swash under “Dex”. The red 14 stays as it was, uncircled.</div></div>
+    <div class="ph"><img src="../drink.png"><div class="c"><b>Drink page · 1 mark.</b> The drip off the caught Nº plate, its one use in the app. The In-your-Dex check stays grey.</div></div>
+    <div class="ph"><img src="../profile.png"><div class="c"><b>Profile · 1 mark.</b> The swash under your username. The 14 is left plain.</div></div>
+  </div>
+  <div class="side">
+    <div class="d"><div class="im"><img src="out/crop-swash.png" style="height:96px"></div><div class="t">1 · Swash</div><div class="p">Tab-root titles only: Dex, Saved, your username. 56 pt × the title’s text scale (capped 1.3), 0.45 → 1.25 → 0.4 pt, lifting at the end like the y’s tail.</div></div>
+    <div class="d"><div class="im" style="height:78px"><img src="out/crop-rule.png" style="height:64px"></div><div class="t">2 · Drawn rule</div><div class="p">The one border: Home, under the stories, column wide. 0.4 → 1.1 → 0.4 pt, a 1 pt waver you can see, a 2 pt flick up as the pen lifts.</div></div>
+    <div class="d"><div class="im" style="height:100px"><img src="out/crop-drip.png" style="height:100px"></div><div class="t">3 · Drip</div><div class="p">Once in the app. Paint leaves the caught plate 6 pt in from its corner, necks, and ends in a teardrop: 8.5 pt in all.</div></div>
+    <div class="d"><div class="im" style="height:auto;flex-direction:column;gap:6px;align-items:stretch">
+      <img src="out/crop-draw30.png" style="width:348px;max-width:348px"><img src="out/crop-draw65.png" style="width:348px;max-width:348px"><img src="out/crop-draw100.png" style="width:348px;max-width:348px"></div>
+      <div class="t">The hand-off</div><div class="p">The intro’s last beat: as the film clears onto Home, the rule draws left to right in 320 ms, ease-out. Once per cold start; static under Reduce Motion.</div></div>
+    <div class="never"><b>Retired in v2.</b> The ring round the caught 14 and the red pen tick in “In your Dex”: both turned a figure or a state red, which is information.</div>
+  </div>
+  <div class="ba">
+    <div><div class="lab">Dex bar at @3x · before / after</div><div class="pair"><img src="out/crop-before-dexbar.png" style="width:560px"><img src="out/crop-after-dexbar.png" style="width:560px"></div></div>
+    <div><div class="lab">Drink plates at @3x · before / after</div><div class="pair"><img src="out/crop-before-plates.png" style="width:300px"><img src="out/crop-after-plates.png" style="width:300px"></div></div>
+  </div>
+</div>
+<div id="crops">
+  <h1>Pen marks v2 at @3x, before and after</h1>
+  <div class="lede">Cut from native @3x renders (3 px per pt, what an iPhone Pro draws), shown 1:1. Judge the hairlines here, not in the 2x phones. Every width is floored at 0.4 pt.</div>
+  <div class="row"><div class="t">Dex bar: the swash</div><div class="p">Swash 56 pt, peak 1.25 pt, lifting to 0.4. The ring is retired: the red 14 is already the accent, so circling it was emphasis.</div>
+    <div class="cols"><div><div class="lab">before</div><img src="out/crop-before-dexbar.png"></div><div><div class="lab">after</div><img src="out/crop-after-dexbar.png"></div></div></div>
+  <div class="row"><div class="t">Drink page: the drip</div><div class="p">8.5 pt from the plate’s edge to the foot of a 2.8 pt teardrop, 6 pt in from the right corner. The check stays grey.</div>
+    <div class="cols"><div><div class="lab">before</div><img src="out/crop-before-plates.png"></div><div><div class="lab">after</div><img src="out/crop-after-plates.png"></div></div></div>
+  <div class="row"><div class="t">Home: the drawn rule</div><div class="p">0.4 → 1.1 → 0.4 pt across the 392 pt column, with one long waver of 1 pt and a 2 pt flick at the end.</div>
+    <div class="cols"><div><div class="lab">before</div><img src="out/crop-before-rule.png"></div><div><div class="lab">after</div><img src="out/crop-after-rule.png"></div></div></div>
+  <div class="row"><div class="t">The hand-off: the rule draws on as the intro clears</div><div class="p">320 ms, left to right, ease-out. Frames at 30%, 65% and drawn.</div>
+    <div class="cols" style="flex-direction:column;gap:8px;align-items:flex-start"><img src="out/crop-draw30.png"><img src="out/crop-draw65.png"><img src="out/crop-draw100.png"></div></div>
+</div>
+<script>document.body.className = location.hash.slice(1) || 'board';</script>
+</body></html>

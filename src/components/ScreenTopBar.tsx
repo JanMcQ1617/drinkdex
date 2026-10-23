@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { PenSwash } from '@/components/details/PenMarks';
 import { Icon, type IconName } from '@/components/icons';
 import { colors, fonts, layout, radius, space, stroke, textRole } from '@/constants/theme';
 import { textWidth } from '@/lib/textFit';
@@ -39,6 +40,17 @@ import { textWidth } from '@/lib/textFit';
 /* laid out (transparent at rest), so it moves nothing when it shows.   */
 /* `ground="clear"` drops the fill and the rule, for Home's bar, which  */
 /* HomeChrome lays over its own ground.                                 */
+/*                                                                      */
+/* THE SWASH (v4.6, specs/v4.6-details A.3 #4). Under a tab root's      */
+/* title (Dex, Saved, your username, My Bar), the logo's pen draws one  */
+/* low arc that flicks up at its end, like the y's tail in "sipply": a  */
+/* signature, not an underline. Only on an lg bar with a title of its   */
+/* own: Home's wordmark already IS the pen, an empty title has nothing  */
+/* to sign, and a centred md title (a pushed screen, a window) never    */
+/* gets one. It grows in length with the title's text, never in         */
+/* weight, and stays 5 clear of the bar's foot rule. TabPlaceholder     */
+/* draws the same swash at the same point, so it does not pop in when   */
+/* the real bar replaces the placeholder.                               */
 /*                                                                      */
 /* The status bar is dark on every screen (the root's <StatusBar />):   */
 /* nothing in Daylight is dark enough to need light glyphs.             */
@@ -146,16 +158,26 @@ export function ScreenTopBar({
                 {titleNode}
               </View>
             ) : (
-              <Text
-                ref={titleRef}
-                numberOfLines={1}
-                adjustsFontSizeToFit
-                minimumFontScale={0.7}
-                maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP}
-                accessibilityRole="header"
-                style={[textRole.title, styles.ink, styles.flexShrink]}>
-                {title}
-              </Text>
+              /*
+               * The wrapper is the title's own box, so the swash is placed
+               * from the title's left edge and its line box's foot at any
+               * text size. The ref stays on the Text, for focus moves.
+               */
+              <View style={styles.flexShrink}>
+                <Text
+                  ref={titleRef}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.7}
+                  maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP}
+                  accessibilityRole="header"
+                  style={[textRole.title, styles.ink, styles.flexShrink]}>
+                  {title}
+                </Text>
+                {title !== '' ? (
+                  <PenSwash scale={Math.min(fontScale, BAR_TEXT_SCALE_CAP)} style={styles.swash} />
+                ) : null}
+              </View>
             )}
           </View>
           {right ? <View style={styles.rootRight}>{right}</View> : null}
@@ -404,6 +426,13 @@ const styles = StyleSheet.create({
   },
   rootTitle: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.sm },
   rootRight: { flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch' },
+  /*
+   * The swash's box: 1 right of the title's left edge, its foot 4 under
+   * the title's line box (so its top is 2 above it). At text scale 1 the
+   * line box ends at 43 in the 52 row, the box spans 41 to 47, and the
+   * ink keeps at least 5 clear of the bar's 1pt foot.
+   */
+  swash: { position: 'absolute', left: 1, bottom: -4 },
 
   /* md */
   row: {

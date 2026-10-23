@@ -1,0 +1,13 @@
+{
+  "name": "sipply-transition-drip",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/gen.cjs",
+    "check": "lockf -k -t 1800 /tmp/claude-501/hf-chrome.lock npx --yes hyperframes@0.8.92 check",
+    "render:png": "rm -rf out/png && lockf -k -t 1800 /tmp/claude-501/hf-chrome.lock npx --yes hyperframes@0.8.92 render --fps 60 --format png-sequence --no-browser-gpu --output out/png",
+    "encode": "tools/encode.sh",
+    "sheet": "python3 -I tools/sheet.py",
+    "all": "npm run build && npm run render:png && npm run encode && npm run sheet"
+  }
+}

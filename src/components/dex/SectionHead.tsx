@@ -1,6 +1,8 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
+import { PenRule } from '@/components/details/PenMarks';
+import { PEN_SEED } from '@/components/details/penPath';
 import { Icon } from '@/components/icons';
 import { colors, layout, space, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
@@ -22,11 +24,39 @@ import { formatCount } from '@/data';
 /* target opts out and the button answers VoiceOver's activate itself.  */
 /* At the largest text sizes the head wraps and "See all" drops under   */
 /* the name.                                                            */
+/*                                                                      */
+/* THE HEAD RULE (v4.6, specs/v4.6-details A.3 #3). Under the line, the */
+/* logo's pen draws a hairline across the column, gutter to gutter, the */
+/* way a ledger rules a section's head. A section rule, not an          */
+/* underline: its centreline is 6.4 under the line's box, where an      */
+/* underline would hug the words 2 under their baseline, so it never    */
+/* reads as a link under "See all 445". It sits in a 7pt spacer         */
+/* (HEAD_RULE) after the line and the 12 under the head is unchanged,   */
+/* so the first row's photos stay 12 clear of the ink. The Dex grid's   */
+/* jump estimate counts the 7 (dex.tsx headEstimate). Ornament only:    */
+/* both forms draw it, the same stroke on every section. It is the      */
+/* "See all" target's sibling, never its child: the press dims the row  */
+/* to half, and a half-strength Campari rule is pink, and would say the */
+/* rule is part of the button. The target keeps its old reach with slop */
+/* under the row (BELOW_ROW).                                           */
 /* ==================================================================== */
 
 const LINE = 24;
 /** Slop over the head, so the line and its 12 below reach 44 and more. */
 const SLOP = layout.hit - LINE - space.md;
+/**
+ * What the head rule adds to a head's height: a 7pt spacer under the line,
+ * the rule's box 3 down it, so its centreline is 6.4 under the line's box.
+ * Exported for the Dex grid's jump estimate.
+ */
+export const HEAD_RULE = 7;
+const RULE_TOP = 3;
+/**
+ * The press target's slop under its row: the rule's 7 and the 12 to the
+ * first row, which were inside the target before the rule left it, so
+ * the head is as easy to hit as it was.
+ */
+const BELOW_ROW = HEAD_RULE + space.md;
 
 export const SectionHead = React.memo(function SectionHead({
   label,
@@ -41,40 +71,54 @@ export const SectionHead = React.memo(function SectionHead({
   first: boolean;
   onSeeAll?: () => void;
 }) {
+  const { width } = useWindowDimensions();
+  // One cached path per screen width, the same for every head, so the grid's scroll pays nothing for it.
+  const rule = (
+    <View pointerEvents="none" style={styles.ruleSpace}>
+      <PenRule length={width - 2 * layout.gutter} seed={PEN_SEED.sectionHead} style={styles.rule} />
+    </View>
+  );
   if (all === null || !onSeeAll) {
     return (
-      <View style={[styles.head, !first && styles.after]}>
-        <View style={styles.line}>
-          <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.name]}>
-            {label}
-          </Text>
-          <Text style={[textRole.small, styles.muted]}>by number</Text>
+      <View style={styles.head}>
+        <View style={[styles.row, !first && styles.after]}>
+          <View style={styles.line}>
+            <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.name]}>
+              {label}
+            </Text>
+            <Text style={[textRole.small, styles.muted]}>by number</Text>
+          </View>
         </View>
+        {rule}
       </View>
     );
   }
   const words = `See all ${formatCount(all)}`;
   return (
-    <Pressable
-      onPress={onSeeAll}
-      accessible={false}
-      hitSlop={{ top: SLOP }}
-      style={({ pressed }) => [styles.head, !first && styles.after, pressed && styles.pressed]}>
-      <View style={styles.line}>
-        <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.name]}>
-          {label}
-        </Text>
-        <View
-          accessible
-          accessibilityRole="button"
-          accessibilityLabel={`${words} ${label.toLowerCase()} drinks`}
-          onAccessibilityTap={onSeeAll}
-          style={styles.see}>
-          <Text style={[styles.seeLabel, styles.ink]}>{words}</Text>
-          <Icon name="chevronRight" size={16} color={colors.text} />
+    <View style={styles.head}>
+      {/* The rule is the Pressable's sibling, not its child: the press dims the row, and a dimmed rule would be pink. */}
+      <Pressable
+        onPress={onSeeAll}
+        accessible={false}
+        hitSlop={{ top: SLOP, bottom: BELOW_ROW }}
+        style={({ pressed }) => [styles.row, !first && styles.after, pressed && styles.pressed]}>
+        <View style={styles.line}>
+          <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.name]}>
+            {label}
+          </Text>
+          <View
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel={`${words} ${label.toLowerCase()} drinks`}
+            onAccessibilityTap={onSeeAll}
+            style={styles.see}>
+            <Text style={[styles.seeLabel, styles.ink]}>{words}</Text>
+            <Icon name="chevronRight" size={16} color={colors.text} />
+          </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+      {rule}
+    </View>
   );
 });
 
@@ -83,8 +127,9 @@ const styles = StyleSheet.create({
   muted: { color: colors.textMuted },
   pressed: { opacity: 0.5 },
 
-  /* 24 tall, 12 to the first row; the gutter both sides. */
-  head: { paddingHorizontal: layout.gutter, paddingBottom: space.md },
+  /* 24 tall, then the rule's 7, then 12 to the first row; the gutter both sides. */
+  head: { paddingBottom: space.md },
+  row: { paddingHorizontal: layout.gutter },
   after: { paddingTop: space.sm },
   line: {
     minHeight: LINE,
@@ -95,6 +140,9 @@ const styles = StyleSheet.create({
     columnGap: space.lg,
   },
   name: { flexShrink: 1 },
+  /* The head rule's 7, under the line; the head's 12 to the first row follows it. */
+  ruleSpace: { height: HEAD_RULE, marginHorizontal: layout.gutter },
+  rule: { position: 'absolute', top: RULE_TOP, left: 0 },
   see: { flexDirection: 'row', alignItems: 'center', gap: 2 },
   seeLabel: {
     fontFamily: textRole.bodyMedium.fontFamily,

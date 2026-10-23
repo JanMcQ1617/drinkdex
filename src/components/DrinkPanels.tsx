@@ -15,6 +15,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DexStatusTag, DrinkName, Print } from '@/components/cabinet';
 import { DexThumb, DrinkFace } from '@/components/DexCard';
+import { lineMarks } from '@/components/details/lineMarks';
+import { PenMargin } from '@/components/details/PenMarks';
+import { PEN } from '@/components/details/penPath';
 import { Icon } from '@/components/icons';
 import { NumberPlate } from '@/components/plate';
 import { Avatar, Button } from '@/components/ui';
@@ -31,7 +34,7 @@ import {
   tastesOf,
   type LabelFact,
 } from '@/lib/drinkLabels';
-import { widestRun } from '@/lib/textFit';
+import { faceOf, fitScale, widestRun } from '@/lib/textFit';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
 import type {
@@ -65,6 +68,20 @@ import type {
 /* a catalogue entry never does (no composition summary, no steps, a    */
 /* serve guide with only a temperature, no ABV). A blank part is left   */
 /* out rather than drawn empty.                                         */
+/*                                                                      */
+/* THE RULED RECORD (v4.6, specs/v4.6-details A.3 #5, #6, #8). The one  */
+/* exception to "no rules": the logo's pen, at hairline weight, rules   */
+/* the record the way a ledger's page is ruled, and says nothing. A     */
+/* margin rule in the middle of the left gutter (x 12) runs from the    */
+/* name's cap height to the last fact's baseline (HeroRecord); a column */
+/* rule runs between the two fact columns, only when there are two      */
+/* (FactList); and a caught drink's Nº plate lets one drip of its paint */
+/* fall (NumberPlate's `drip`, passed by HeroTitle alone). None touches */
+/* the print (the margin rule starts 36.8 under it), a key or a word,   */
+/* and their heights come from the type's own metrics (details/         */
+/* lineMarks) with the rules measuring themselves, so they follow       */
+/* Dynamic Type. A drink not caught has two marks here, a caught one    */
+/* three, the most any screen has.                                      */
 /*                                                                      */
 /* Nothing here animates: content never waits on a frame loop to show.  */
 /* ==================================================================== */
@@ -203,11 +220,50 @@ export function HeroTitle({ drink, inDex, custom }: { drink: Drink; inDex: boole
           <AddedPlate />
         ) : (
           <>
-            <NumberPlate n={drink.dexNumber} tone={inDex ? 'caught' : 'notYet'} size="lg" />
+            {/* The drip: the plate honours it only once caught, so a drink not yet in your Dex has none. */}
+            <NumberPlate n={drink.dexNumber} tone={inDex ? 'caught' : 'notYet'} size="lg" drip />
             {inDex ? <DexStatusTag /> : <NotYetTag />}
           </>
         )}
       </View>
+    </View>
+  );
+}
+
+/**
+ * The record: the name, the plate and the facts, with the pen's margin
+ * rule beside them (v4.6). Both pages draw it (drink/[id] and custom/[id]),
+ * so a drink you added is ruled as a catalogue entry is.
+ *
+ * The rule's centreline is at x 12, the middle of the 24 gutter. It starts
+ * on the name's first-line cap height: the title block's 24 under the
+ * print, then the cap height inside the name's line box, worked out at the
+ * size DrinkName actually draws (its own fit for a long word, and its
+ * Dynamic Type cap), so a shrunk "Holunderbeergeist" still starts on its
+ * caps. It ends on the last fact caption's baseline, its line box's foot
+ * short of the record's bottom. PenMargin measures the height between.
+ *
+ * No facts, no record to rule: the rule is drawn only when FactList is.
+ */
+export function HeroRecord({ drink, inDex, custom }: { drink: Drink; inDex: boolean; custom?: boolean }) {
+  const { width, fontScale } = useWindowDimensions();
+  const ruled = factsOf(drink).length > 0;
+
+  const hero = textRole.drinkHero;
+  const nameScale = Math.min(fontScale, HERO_NAME_CAP);
+  // DrinkName's own fit (components/cabinet), from the same inputs, so the rule meets the caps it draws.
+  const fit = fitScale(drink.name, faceOf(hero.fontFamily), hero.fontSize * nameScale, width - layout.gutter * 2);
+  const top = space.xl + lineMarks('playfair', hero.fontSize * fit, hero.lineHeight * fit, nameScale).capTop;
+  const factScale = Math.min(fontScale, FACT_CAP);
+  const bottom = lineMarks('inter', textRole.small.fontSize, textRole.small.lineHeight, factScale).foot;
+
+  return (
+    <View style={styles.record}>
+      <HeroTitle drink={drink} inDex={inDex} custom={custom} />
+      <FactList drink={drink} />
+      {ruled ? (
+        <PenMargin kind="margin" style={{ position: 'absolute', left: layout.gutter / 2 - PEN.vrule.mid, top, bottom }} />
+      ) : null}
     </View>
   );
 }
@@ -264,6 +320,12 @@ function spokenFact(f: Fact): string {
  * inside the word. Worked out from lib/textFit (which errs wide), so the
  * first frame is the final one. Values wrap and cap at 1.3. One VoiceOver
  * element.
+ *
+ * The pen's column rule (v4.6) stands in the middle of the gap between
+ * the two columns, from the first value's cap height to the last
+ * caption's baseline, as a ledger's column rule runs its table (with
+ * three facts it still runs to the last row). Only when there ARE two
+ * columns: a single column has none, and the rule never invents one.
  */
 export function FactList({ drink }: { drink: Drink }) {
   const { width, fontScale } = useWindowDimensions();
@@ -280,9 +342,21 @@ export function FactList({ drink }: { drink: Drink }) {
       widestRun(f.caption, 'inter', textRole.small.fontSize * scale) <= half,
   );
   const cell = fitsHalf ? half : inner;
+  const columns = fitsHalf && facts.length >= 2;
 
   return (
     <View accessible accessibilityLabel={facts.map(spokenFact).join('. ')} style={styles.facts}>
+      {columns ? (
+        <PenMargin
+          kind="column"
+          style={{
+            position: 'absolute',
+            left: half + space.xl / 2 - PEN.vrule.mid,
+            top: lineMarks('inter', textRole.bodyStrong.fontSize, textRole.bodyStrong.lineHeight, scale).capTop,
+            bottom: lineMarks('inter', textRole.small.fontSize, textRole.small.lineHeight, scale).foot,
+          }}
+        />
+      ) : null}
       {facts.map((f) => (
         <View key={f.kind} style={{ width: cell }}>
           <Text maxFontSizeMultiplier={FACT_CAP} style={[textRole.bodyStrong, styles.ink]}>
@@ -875,6 +949,9 @@ const styles = StyleSheet.create({
     borderWidth: stroke.edge,
     borderColor: colors.hair,
   },
+
+  /* The record: full width, the frame the margin rule is placed in. */
+  record: { position: 'relative' },
 
   /* The facts, two to a row */
   facts: {

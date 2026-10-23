@@ -1,3 +1,4 @@
+import { useIsFocused } from 'expo-router';
 import { createContext, type ReactNode, useContext } from 'react';
 import {
   KeyboardAvoidingView,
@@ -15,10 +16,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CatalogueFace } from '@/components/auth/CatalogueFace';
 import { Wordmark, WORDMARK_LG } from '@/components/brand/Wordmark';
 import { Print } from '@/components/cabinet';
+import { DockSlot, Rise } from '@/components/DockRise';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { useScrollEdges } from '@/components/log/scrollEdges';
 import { colors, layout, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
+import { useFirstRunShowing } from '@/lib/firstRun';
 import type { Drink } from '@/types';
 
 /* ==================================================================== */
@@ -43,7 +46,14 @@ import type { Drink } from '@/types';
 /* steps pass their bar unchanged. A pinned footer's rule shows only    */
 /* while the form runs on under it.                                     */
 /*                                                                      */
-/* STATIC. Nothing here starts invisible or animates.                   */
+/* STATIC. Nothing here starts invisible or animates, but once: a cold  */
+/* start's film can dock onto the first step's wordmark (v4.6, the      */
+/* Dock; specs/v4.6-details/spec.md, B). The wordmark sits in a         */
+/* DockSlot, which registers where it is drawn and keeps it hidden      */
+/* until the film's flying wordmark lands on it (600 ms), and the lede  */
+/* under it rises with the form (SignInScreen). Both are on the Dock's  */
+/* clock, which rests at 1, so at rest they are the identity, and a     */
+/* step drawn at any other time is simply there.                        */
 /* ==================================================================== */
 
 /**
@@ -115,6 +125,16 @@ function picksShown({ saved, picks }: PicksHead): Drink[] {
 function Backdrop({ variant, picks }: { variant: 'full' | 'compact'; picks?: PicksHead }) {
   const { width, height, fontScale } = useWindowDimensions();
   const roomy = height >= FULL_MIN_HEIGHT && fontScale <= FULL_MAX_FONT_SCALE;
+  /*
+   * A Dock destination only while it is the page on screen. On a signed-
+   * out first launch Home's gate mounts this step UNDER the first run's
+   * onboarding, and a cold-start notification can push a page over its
+   * tab during the film; either way the film's wordmark must fly to the
+   * one that shows (the welcome) or settle, never land here unseen
+   * (lib/introDock, PRIORITY). Hooks above the early returns.
+   */
+  const focused = useIsFocused();
+  const covered = useFirstRunShowing();
 
   if (picks) {
     const n = picks.saved.length;
@@ -159,10 +179,14 @@ function Backdrop({ variant, picks }: { variant: 'full' | 'compact'; picks?: Pic
       importantForAccessibility="no-hide-descendants"
       style={styles.head}>
       {/* Decorative here, as the Text was: the head is hidden, and the step's bar names the page. */}
-      <Wordmark height={WORDMARK_LG} accessible={false} />
-      <Text style={[textRole.body, styles.muted, styles.centre, styles.lede]}>
-        {`${formatCount(TOTAL)} drinks. Start your Dex with the next one.`}
-      </Text>
+      <DockSlot id="signin" enabled={focused && !covered}>
+        <Wordmark height={WORDMARK_LG} accessible={false} />
+      </DockSlot>
+      <Rise group="body">
+        <Text style={[textRole.body, styles.muted, styles.centre, styles.lede]}>
+          {`${formatCount(TOTAL)} drinks. Start your Dex with the next one.`}
+        </Text>
+      </Rise>
     </View>
   );
 }

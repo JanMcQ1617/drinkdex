@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { OnboardingFlow } from '@/components/onboarding/OnboardingFlow';
 import { colors } from '@/constants/theme';
-import { useAuth } from '@/store/auth';
+import { useFirstRunShowing } from '@/lib/firstRun';
 import { useTaste } from '@/store/taste';
 
 /* ==================================================================== */
@@ -79,13 +79,8 @@ function exit(reason: ExitReason) {
 }
 
 export function FirstRun() {
-  const ready = useAuth((s) => s.ready);
-  const signedIn = useAuth((s) => s.session !== null);
-  const hydrated = useTaste((s) => s.hydrated);
-  const done = useTaste((s) => s.done);
-  const signInFirst = useTaste((s) => s.signInFirst);
-
-  if (!ready || signedIn || !hydrated || done || signInFirst) return null;
+  // The WHEN above, shared with sign-in's first step, which is covered while this is up (lib/firstRun).
+  if (!useFirstRunShowing()) return null;
 
   return (
     <View style={styles.root} accessibilityViewIsModal>

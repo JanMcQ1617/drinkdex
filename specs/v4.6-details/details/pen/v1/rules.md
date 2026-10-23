@@ -1,0 +1,54 @@
+# v4.6 details · "Pen marks" (slug `pen`)
+
+Jan, 23 Oct 2026: "add some type of border design … the red accent, but delicate details … simple yet complex." Standing rule (9 Oct): less stuff.
+
+**The idea.** The logo is the paint pen at full weight, so every detail is that pen at hairline weight. There are five marks and one colour. Each mark is ornament: it adds no word, count, badge, icon or decision. A screen reads as before at a glance. On a second look the same hand that wrote "sipply" has underlined, circled, ticked and, once, dripped.
+
+## The pen (all five marks)
+
+- **Drawn, not stroked.** Each mark is a *filled* outline built around a centreline. Its width swells where the pen lands and thins as it lifts, and the caps are round. A uniform `strokeWidth` line is not allowed: it reads as UI, not as a hand.
+- **Colour:** `accent` #D0102C only, at 100% opacity. No tint, no gradient, no second hue, and never `accentPressed`.
+- **Weight range:** 0.25 to 1.35 pt. Nothing is heavier, so the logo stays the only heavy red.
+- **Static.** Optional: the swash may draw on once per cold start (a 280 ms left-to-right clip, ease-out, right after the intro film). Under Reduce Motion it is static. The marks never loop or pulse.
+
+| # | Mark | Size | Width (land → peak → lift) | Shape |
+|---|---|---|---|---|
+| 1 | **Swash** | 56 × 6 pt, fixed length | 0.45 → 1.25 → 0.35 | A low arc that flicks up at the end, like the y's tail. It starts 1 pt right of the title's left edge, with its top 2 pt above the line box's foot. |
+| 2 | **Ring** | the figure + 6.5 pt each side, + 3.5 pt top and bottom | 0.3 → 0.95 → 0.25 | One loose ellipse tilted −9°. It starts at 200° and sweeps 405°, drifting 9% outward, so the ends cross at the left and never close. The figure gets 7 pt right margin so the loop clears the next character. |
+| 3 | **Drawn rule** | the column (24 → 416 pt) × 4 | 0.25 → 0.9 → 0.25 | Nearly straight, with a ±0.4 pt waver and a 1.5 pt flick up over the last 5%. |
+| 4 | **Tick** | 12 pt box | 0.5 → 1.3 (at the turn) → 0.3 | A short down-stroke, then a long lift. It replaces an existing check; it never adds one. |
+| 5 | **Drip** | 5.5 pt run + a 1.35 pt bead | 3.25 at the edge → 0.95 | Paint running off a red fill's bottom edge, 18 pt in from the right corner, ending in a teardrop bead. |
+
+## Where each goes
+
+| Surface | Mark | Notes |
+|---|---|---|
+| **Top bar, tab roots** | Swash under the title (Dex, Saved, your username) | One per bar. Home's bar has none, because the wordmark is already the pen. |
+| **Pushed screens, windows, sheets** | None | Their centred `barTitle` stays plain, so they read as transient. |
+| **The caught figure** (accent place 4: Dex bar "14 / 2,089", Profile "14 entries") | Ring | Wherever the accent sets the figure. Nowhere else, and never around any other number. |
+| **Home** | Drawn rule under the story tray | The app's one border. It replaces the spec's 1 pt `line` under the stories (§5.10). |
+| **Drink page, caught** | Tick in "In your Dex" + Drip off the Nº plate | The drip appears **here only**, its single use in the app. A drink not yet caught gets neither. |
+| **Empty states** | A swash under the headline, or a ring round the "0" | Use one or the other, not both. |
+| **Lists, grid cells, cards, feed posts** | **Never** | Nothing repeats per row: a mark on every item becomes a pattern, and a pattern is clutter. |
+| **Photos and prints** | **Never** | Nothing is drawn on or over a photograph, and no mark touches a print's edge. |
+| **Buttons, keys, chips, fields** | **Never** | That includes the + key and the post key. A mark on a control reads as a state. |
+| **Tab bar** | **Never** | The accent never says where you are (§1.3). The active line stays ink, and a red swash there would be information. |
+| **Avatars, story rings** | **Never** | A red loop round a face reads as an unseen story. |
+| **Body text, usernames, links** | **Never** | A pen underline under readable text looks like a link. The swash goes under titles only. |
+| **Errors, destructive actions, alerts** | **Never** | Red still never means delete or error. |
+| **On ink or accent grounds** | **Never** | The drip is the one mark that touches red, and it leaves the plate as the same paint. |
+
+## Budget
+
+- **At most 2 marks per screen.** The logo does not count. Today: Home 1, Dex 2, Drink 2, Profile 2, Saved 1, sheets 0.
+- **At most 1 mark per region** (a bar, a header block, a card).
+- The drip appears once in the whole app. The ring appears only where the figure is.
+- Adding a mark anywhere else is Jan's decision, made in this file and in check-design rule 17's allowlist together, like a seventh accent place.
+
+## Build (React Native)
+
+- One file, `brand/PenMarks.tsx`, exports `Swash`, `Ring`, `DrawnRule`, `PenTick` and `PlateDrip`. Each is a single react-native-svg `<Path fill={colors.accent}>`.
+- Swash, rule, tick and drip have fixed geometry, so their `d` strings are precomputed constants (generated by `penPath()` in `mock/index.html`).
+- The ring takes the figure's measured width from one `onLayout` on a header Text (never inside a list) and builds its `d` with the same `penPath()` in `useMemo`: 120 points, one time.
+- All five are `pointerEvents="none"` and `accessible={false}`. They have no labels because they carry no meaning.
+- Rule 17 adds `PenMarks` to the components allowed to read `colors.accent`.

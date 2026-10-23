@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthMessage } from '@/components/AuthGate';
 import { Wordmark, WORDMARK_LG } from '@/components/brand/Wordmark';
+import { DockSlot, Rise } from '@/components/DockRise';
 import { Icon } from '@/components/icons';
 import { Button, Field, haptic } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
@@ -48,6 +49,14 @@ import { useAuth } from '@/store/auth';
 /* every route screen. Daylight is dark-glyphed everywhere, so this     */
 /* only restates the root's choice; it is kept so a screen that ever    */
 /* mounts a light bar under it cannot put white glyphs on this page.    */
+/*                                                                      */
+/* A COLD-START RESET LINK PLAYS THE FILM OVER THIS (v4.6, the Dock;     */
+/* specs/v4.6-details/spec.md, B), so the film's wordmark docks onto     */
+/* this step's: a DockSlot registers where it is drawn (the Dock ranks   */
+/* it above every screen under it) and keeps it hidden until the flying  */
+/* one lands, and the title and form rise late, because they stand       */
+/* where it lands. On the Dock's clock, which rests at 1, so a link      */
+/* opened at any other time draws the step at once, as before.           */
 /* ==================================================================== */
 
 /**
@@ -207,78 +216,82 @@ function ChoosePassword({ onDone }: { onDone: () => void }) {
         ]}
         keyboardShouldPersistTaps="handled">
         {/* The brand's voice, set left with the page: `lead` stands the s's body on the gutter. */}
-        <Wordmark height={WORDMARK_LG} lead />
-        <Text ref={titleRef} style={styles.title} accessibilityRole="header">
-          Choose a new password
-        </Text>
-        <Text style={styles.blurb}>
-          You opened a reset link, so you are already signed in. Pick a password and it is done.
-        </Text>
+        <DockSlot id="reset" lead style={styles.wordmark}>
+          <Wordmark height={WORDMARK_LG} lead />
+        </DockSlot>
+        <Rise group="body">
+          <Text ref={titleRef} style={styles.title} accessibilityRole="header">
+            Choose a new password
+          </Text>
+          <Text style={styles.blurb}>
+            You opened a reset link, so you are already signed in. Pick a password and it is done.
+          </Text>
 
-        <View style={styles.form}>
-          <Field
-            label="New password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="At least 6 characters"
-            secure
-            autoComplete="password-new"
-            textContentType="newPassword"
-            returnKeyType="next"
-            submitBehavior="submit"
-            onSubmitEditing={() => confirmRef.current?.focus()}
-            error={
-              password.length > 0 && !longEnough ? 'Passwords must be at least 6 characters.' : null
-            }
-          />
-          <Field
-            ref={confirmRef}
-            label="Confirm password"
-            value={confirm}
-            onChangeText={setConfirm}
-            placeholder="Type it again"
-            secure
-            /* Not password-new: offering to generate a second password for
-               this field is how a mismatched pair gets saved to the keychain. */
-            autoComplete="off"
-            textContentType="newPassword"
-            returnKeyType="go"
-            submitBehavior="blurAndSubmit"
-            onSubmitEditing={() => void submit()}
-            error={typedConfirm && !matches ? 'These do not match.' : null}
-          />
+          <View style={styles.form}>
+            <Field
+              label="New password"
+              value={password}
+              onChangeText={setPassword}
+              placeholder="At least 6 characters"
+              secure
+              autoComplete="password-new"
+              textContentType="newPassword"
+              returnKeyType="next"
+              submitBehavior="submit"
+              onSubmitEditing={() => confirmRef.current?.focus()}
+              error={
+                password.length > 0 && !longEnough ? 'Passwords must be at least 6 characters.' : null
+              }
+            />
+            <Field
+              ref={confirmRef}
+              label="Confirm password"
+              value={confirm}
+              onChangeText={setConfirm}
+              placeholder="Type it again"
+              secure
+              /* Not password-new: offering to generate a second password for
+                 this field is how a mismatched pair gets saved to the keychain. */
+              autoComplete="off"
+              textContentType="newPassword"
+              returnKeyType="go"
+              submitBehavior="blurAndSubmit"
+              onSubmitEditing={() => void submit()}
+              error={typedConfirm && !matches ? 'These do not match.' : null}
+            />
 
-          {error ? <AuthMessage tone="error">{error}</AuthMessage> : null}
+            {error ? <AuthMessage tone="error">{error}</AuthMessage> : null}
 
-          <Button
-            label={busy && !leaving ? 'Setting password…' : 'Set password'}
-            onPress={() => void submit()}
-            disabled={!canSubmit}
-            loading={busy && !leaving}
-            block
-            style={styles.submit}
-          />
+            <Button
+              label={busy && !leaving ? 'Setting password…' : 'Set password'}
+              onPress={() => void submit()}
+              disabled={!canSubmit}
+              loading={busy && !leaving}
+              block
+              style={styles.submit}
+            />
 
-          {/*
-            The way back out, so it is the muted text button, under the
-            one action this step is for. While the sign-out runs it keeps
-            its size and shows a spinner, and its spoken name says what is
-            happening. The visible label stays put for that: Button hides
-            it under the spinner but keeps its width, so a shorter label
-            would only make the button jump narrower.
-          */}
-          <Button
-            label="Cancel and sign out"
-            accessibilityLabel={leaving ? 'Signing out' : undefined}
-            variant="text"
-            muted
-            size="sm"
-            loading={leaving}
-            onPress={cancel}
-            accessibilityHint="Signs you back out without changing your password"
-            style={styles.cancel}
-          />
-        </View>
+            {/*
+              The way back out, so it is the muted text button, under the
+              one action this step is for. While the sign-out runs it keeps
+              its size and shows a spinner, and its spoken name says what is
+              happening. The visible label stays put for that: Button hides
+              it under the spinner but keeps its width, so a shorter label
+              would only make the button jump narrower.
+            */}
+            <Button
+              label="Cancel and sign out"
+              accessibilityLabel={leaving ? 'Signing out' : undefined}
+              variant="text"
+              muted
+              size="sm"
+              loading={leaving}
+              onPress={cancel}
+              accessibilityHint="Signs you back out without changing your password"
+              style={styles.cancel}
+            />
+          </View>
+        </Rise>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -300,6 +313,8 @@ const styles = StyleSheet.create({
     zIndex: 20,
   },
   scroll: { paddingHorizontal: layout.gutter, flexGrow: 1 },
+  /* Its own width, on the gutter: the column stretches, and the Dock measures the wordmark, not the row. */
+  wordmark: { alignSelf: 'flex-start' },
 
   /* A step's title is chrome: Inter, at the size every state title uses. */
   title: {

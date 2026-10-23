@@ -30,6 +30,8 @@ import {
   SAVE_TO_COLLECTION,
 } from '@/components/collections/bookmark';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
+import { PenRule } from '@/components/details/PenMarks';
+import { PEN, PEN_SEED } from '@/components/details/penPath';
 import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
@@ -86,6 +88,10 @@ export { timeAgo, timeAgoSpoken };
 /*             "… more", cut before layout (lib/textFit), opened in     */
 /*             place by a tap.                                          */
 /*   time      "2 hours ago", muted. Then a 14pt foot.                  */
+/*   closing   in that foot, the pen's 24pt rule at the column (v4.6,   */
+/*             specs/v4.6-details A.3 #2): Ledger's entry rule, drawn   */
+/*             by the logo's pen, so each post ends as a ledger entry   */
+/*             does. Ornament: it says nothing, and moves nothing.      */
 /*                                                                      */
 /* 616 tall with a one-line caption, 634 with two. The post page        */
 /* (variant 'detail') is the same card with its caption opened.         */
@@ -304,6 +310,19 @@ const MORE_WORD = 'more';
 const LINE_GAP = space.xs;
 /** A post's foot: space only, then the next header. */
 const FOOT = 14;
+/**
+ * The closing rule's length: Ledger's entry rule, a tapered dash rather
+ * than a line across, so it closes the post without boxing it.
+ */
+const CLOSING_RULE = 24;
+/**
+ * Its centreline 11 under the time line's box, inside the 14pt foot: about
+ * 12 clear of the time's descenders and 13 over the next post's face, and
+ * the card is not one point taller. Placed by its nominal box (the
+ * centreline is PEN.rule.mid down a box PEN.rule.height tall), so 0.4 off
+ * the card's foot.
+ */
+const CLOSING_RULE_BOTTOM = FOOT - 11 - (PEN.rule.height - PEN.rule.mid);
 
 /* ==================================================================== */
 /* PostCard                                                             */
@@ -340,6 +359,12 @@ export interface PostCardProps {
   onOpenStory?: (authorId: string) => void;
   /** The comment thread, once comments exist; read only while COMMENTS_ENABLED. */
   onOpenComments?: (postId: string) => void;
+  /**
+   * The pen's 24pt rule in the card's foot (v4.6). On by default, because
+   * the feed is where posts follow one another; the post page passes false,
+   * since a post on its own screen closes nothing.
+   */
+  closingRule?: boolean;
 }
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -355,6 +380,7 @@ export const PostCard = React.memo(function PostCard({
   story,
   onOpenStory,
   onOpenComments,
+  closingRule = true,
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
@@ -1067,6 +1093,12 @@ export const PostCard = React.memo(function PostCard({
         style={[styles.quiet, styles.quietRow]}>
         {when}
       </Text>
+      {/*
+        The closing rule: one cached path and one static <Path> per card,
+        no measuring and no state, so the feed scrolls as it did. Absolute
+        in the foot, so no post is a point taller.
+      */}
+      {closingRule ? <PenRule length={CLOSING_RULE} seed={PEN_SEED.entry} style={styles.closingRule} /> : null}
 
       {likersOpen === null ? null : (
         <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} likes={likes} />
@@ -1450,6 +1482,8 @@ function Caption({
 const styles = StyleSheet.create({
   /* No card chrome and no fill: the post stands on the page, and a 14pt foot of space ends it. */
   card: { paddingBottom: FOOT },
+  /* The pen's closing rule, on the column (16), in the foot. */
+  closingRule: { position: 'absolute', left: GUTTER, bottom: CLOSING_RULE_BOTTOM },
   pressed: { opacity: 0.5 },
 
   /* The header: 52, the face at 16, the text 12 after it (60), ••• ending at 424. */

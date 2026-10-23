@@ -22,11 +22,10 @@ import { PostSheet, type PostSaving, type PostSheetMode } from '@/components/dex
 import {
   CompositionSection,
   DexSinceRow,
-  FactList,
   FieldNotes,
   FriendsWhoCaught,
   HeroPrint,
-  HeroTitle,
+  HeroRecord,
   OriginStory,
   PinnedPostBar,
   pinnedBarEstimate,
@@ -400,8 +399,8 @@ export default function DrinkDetailScreen() {
           recipe cannot do from behind a lock. Catching is the record that
           you did it, not the key to finding out how.
         */}
-        <HeroTitle drink={drink} inDex={unlocked} />
-        <FactList drink={drink} />
+        {/* The name, the plate and the facts, ruled in the margin by the pen (v4.6). */}
+        <HeroRecord drink={drink} inDex={unlocked} />
         {record ? <DexSinceRow drink={drink} record={record} post={myPost} onOpenPost={openPost} /> : null}
         <TastesOf notes={drink.tastingNotes} />
 

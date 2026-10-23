@@ -1,0 +1,319 @@
+/**
+ * The detail marks, rendered off the device for visual proof (v4.6,
+ * specs/v4.6-details/spec.md).
+ *
+ * ONE SOURCE. This imports src/components/details/penPath.ts itself, the
+ * file the app draws from: node strips its types and runs it as it is
+ * (penPath imports nothing and uses only erasable TypeScript, which its
+ * header promises to keep). A mirror of the geometry here would prove a
+ * copy, not what ships.
+ *
+ * NO BROWSER, as build-icons: the marks are straight-edged polygons (M,
+ * L and Z only), so each is filled here on an 8x8 supersampled grid with
+ * the nonzero rule, box-reduced to the pixel, and written as PNG through
+ * node:zlib. The drip's two pieces are filled separately and united, as
+ * the two <Path>s are on the device.
+ *
+ * Writes specs/v4.6-details/build/:
+ *   <mark>.svg         the mark alone, accent on the page, in points
+ *   <mark>@3x.png      the same at 3x (an iPhone Pro's scale), 1:1
+ *   sheet@3x.png       every mark stacked, with a 1pt grid tick beside each
+ *   index.html         the sheet with each mark's numbers
+ * and prints each mark's box and its thinnest and widest ink in device px.
+ *
+ * Run: node scripts/render-details.mjs
+ */
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import zlib from 'node:zlib';
+
+// penPath.ts has no package "type"; node reparses it as a module and says so once. Not news here.
+process.removeAllListeners('warning');
+const { PEN, PEN_SEED, FLOOR, penRule, penSwash, penVRule, plateDrip } = await import(
+  '../src/components/details/penPath.ts'
+);
+
+const ROOT = fileURLToPath(new URL('../', import.meta.url));
+const OUT = join(ROOT, 'specs/v4.6-details/build');
+mkdirSync(OUT, { recursive: true });
+
+/* The accent and the page, read from theme.ts so a retuned accent needs no edit here. */
+const theme = readFileSync(join(ROOT, 'src/constants/theme.ts'), 'utf8');
+const hex = theme.match(/\baccent:\s*'#([0-9A-Fa-f]{6})'/)?.[1];
+if (!hex) {
+  console.error('  render-details: cannot read colors.accent in theme.ts');
+  process.exit(2);
+}
+const RED = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const PAGE = [255, 255, 255];
+const PLATE_GREY = [0xe3, 0xe3, 0xe3];
+
+const SCALE = 3;
+const SS = 8;
+
+/* ------------------------------------------------------------------ */
+/* Raster                                                             */
+/* ------------------------------------------------------------------ */
+
+/** Subsample coverage of polygons (nonzero), in a w x h px canvas, pt -> px by SCALE, shifted by (ox, oy) pt. */
+function cover(polys, w, h, ox, oy, into = new Uint8Array(w * SS * h * SS)) {
+  const W = w * SS;
+  const H = h * SS;
+  const k = SCALE * SS;
+  for (const poly of polys) {
+    const pts = poly.map(([x, y]) => [(x + ox) * k, (y + oy) * k]);
+    for (let row = 0; row < H; row++) {
+      const sy = row + 0.5;
+      const xs = [];
+      for (let i = 0; i < pts.length; i++) {
+        const [x0, y0] = pts[i];
+        const [x1, y1] = pts[(i + 1) % pts.length];
+        if (y0 === y1) continue;
+        const up = y1 > y0;
+        if ((up && sy >= y0 && sy < y1) || (!up && sy >= y1 && sy < y0)) {
+          xs.push([x0 + ((sy - y0) * (x1 - x0)) / (y1 - y0), up ? 1 : -1]);
+        }
+      }
+      xs.sort((a, b) => a[0] - b[0]);
+      let wind = 0;
+      for (let i = 0; i < xs.length - 1; i++) {
+        wind += xs[i][1];
+        if (wind === 0) continue;
+        const a = Math.max(0, Math.ceil(xs[i][0] - 0.5));
+        const b = Math.min(W - 1, Math.ceil(xs[i + 1][0] - 0.5) - 1);
+        for (let c = a; c <= b; c++) into[row * W + c] = 1;
+      }
+    }
+  }
+  return into;
+}
+
+/** Box-reduce to per-pixel coverage 0..1. */
+function reduce(sub, w, h) {
+  const W = w * SS;
+  const out = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let n = 0;
+      for (let j = 0; j < SS; j++) for (let i = 0; i < SS; i++) n += sub[(y * SS + j) * W + x * SS + i];
+      out[y * w + x] = n / (SS * SS);
+    }
+  }
+  return out;
+}
+
+function crcTable() {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return t;
+}
+const CRC = crcTable();
+const crc32 = (buf) => {
+  let c = 0xffffffff;
+  for (const b of buf) c = CRC[(c ^ b) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+};
+function chunk(type, data) {
+  const len = Buffer.alloc(4);
+  len.writeUInt32BE(data.length);
+  const td = Buffer.concat([Buffer.from(type, 'ascii'), data]);
+  const crc = Buffer.alloc(4);
+  crc.writeUInt32BE(crc32(td));
+  return Buffer.concat([len, td, crc]);
+}
+/** RGB PNG from a w x h array of [r, g, b]. */
+function png(w, h, px) {
+  const raw = Buffer.alloc((w * 3 + 1) * h);
+  for (let y = 0; y < h; y++) {
+    raw[y * (w * 3 + 1)] = 0;
+    for (let x = 0; x < w; x++) {
+      const [r, g, b] = px[y * w + x];
+      const o = y * (w * 3 + 1) + 1 + x * 3;
+      raw[o] = r;
+      raw[o + 1] = g;
+      raw[o + 2] = b;
+    }
+  }
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0);
+  ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8;
+  ihdr[9] = 2;
+  return Buffer.concat([
+    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    chunk('IHDR', ihdr),
+    chunk('IDAT', zlib.deflateSync(raw, { level: 9 })),
+    chunk('IEND', Buffer.alloc(0)),
+  ]);
+}
+const mix = (bg, fg, c) => bg.map((v, i) => Math.round(v + (fg[i] - v) * c));
+
+/* ------------------------------------------------------------------ */
+/* The marks                                                          */
+/* ------------------------------------------------------------------ */
+
+/** A rounded-rect polygon, for the plate the drip leaves. */
+function roundRect(x, y, w, h, r) {
+  const pts = [];
+  const arc = (cx, cy, a0) => {
+    for (let i = 0; i <= 6; i++) {
+      const a = a0 + (Math.PI / 2) * (i / 6);
+      pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+  };
+  arc(x + w - r, y + r, -Math.PI / 2);
+  arc(x + w - r, y + h - r, 0);
+  arc(x + r, y + h - r, Math.PI / 2);
+  arc(x + r, y + r, Math.PI);
+  return pts;
+}
+
+/* At 390 x 844 (the common phone), with the 440 Pro Max's in the notes. */
+const PHONE_W = 390;
+const MARKS = [
+  {
+    name: 'stories-rule',
+    what: `Home: under the stories, ${PHONE_W - 32}pt (16 to ${PHONE_W - 16}); draws itself in once after the Dock`,
+    shape: penRule(PHONE_W - 32, PEN_SEED.stories),
+  },
+  {
+    name: 'section-head-rule',
+    what: `Dex: under a section head, ${PHONE_W - 48}pt (24 to ${PHONE_W - 24})`,
+    shape: penRule(PHONE_W - 48, PEN_SEED.sectionHead),
+  },
+  { name: 'entry-rule', what: 'Home: the 24pt rule closing each feed post', shape: penRule(24, PEN_SEED.entry) },
+  { name: 'swash', what: 'Tab-root title: 56pt at text scale 1', shape: penSwash(56) },
+  { name: 'swash-1.3', what: 'Tab-root title at the 1.3 cap: 72.8pt, same weight', shape: penSwash(56 * 1.3) },
+  { name: 'margin-rule', what: "Drink page: the record's margin rule, 160pt here (it measures itself)", shape: penVRule(160, PEN_SEED.margin) },
+  { name: 'column-rule', what: 'Drink page: the facts column rule, 52pt here', shape: penVRule(52, PEN_SEED.column) },
+  { name: 'profile-margin', what: "Profile: beside the two ledger rows, 53.5pt at text scale 1", shape: penVRule(53.5, PEN_SEED.margin) },
+  {
+    name: 'plate-drip',
+    what: 'Drink page: the drip off a caught 62 x 24 Nº plate (plate drawn in Campari)',
+    shape: plateDrip(),
+    plate: { w: 62, h: 24 },
+  },
+];
+
+/** Thinnest and widest ink across the stroke, from the outline's paired sides, in pt. */
+function widths(shape) {
+  const poly = shape.polys[0];
+  // The outline is left side (n), cap (5), right side reversed (n), cap (5).
+  const n = (poly.length - 10) / 2;
+  let lo = Infinity;
+  let hi = 0;
+  for (let i = 0; i < n; i++) {
+    const a = poly[i];
+    const b = poly[poly.length - 5 - 1 - i];
+    const d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+    lo = Math.min(lo, d);
+    hi = Math.max(hi, d);
+  }
+  return [lo, hi];
+}
+
+const r2 = (v) => Math.round(v * 100) / 100;
+const PAD = 4; // pt of page round each mark
+
+const rendered = [];
+for (const m of MARKS) {
+  const { x, y, w, h } = m.shape.box;
+  const polys = m.shape.polys;
+  // Canvas in pt: the ink's box, or the plate and the drip for the drip.
+  let cx = x;
+  let cy = y;
+  let cw = w;
+  let ch = h;
+  let plateCov = null;
+  if (m.plate) {
+    // The drip's frame origin is 6 in from the plate's right corner and 1.5 above its bottom edge.
+    const px = -(m.plate.w - PEN.drip.inset);
+    const py = -(m.plate.h - PEN.drip.overlap);
+    cx = Math.min(px, x);
+    cy = Math.min(py, y);
+    cw = Math.max(px + m.plate.w, x + w) - cx;
+    ch = Math.max(py + m.plate.h, y + h) - cy;
+    m.platePoly = roundRect(px, py, m.plate.w, m.plate.h, 2);
+  }
+  const W = Math.ceil((cw + 2 * PAD) * SCALE);
+  const H = Math.ceil((ch + 2 * PAD) * SCALE);
+  const ox = -cx + PAD;
+  const oy = -cy + PAD;
+  if (m.platePoly) plateCov = reduce(cover([m.platePoly], W, H, ox, oy), W, H);
+  const sub = new Uint8Array(W * SS * H * SS);
+  for (const poly of polys) cover([poly], W, H, ox, oy, sub);
+  const ink = reduce(sub, W, H);
+  // The plate and the drip are one paint, so their union is the image.
+  const cov = plateCov ? ink.map((c, i) => Math.max(c, plateCov[i])) : ink;
+  const px = Array.from(cov, (c) => mix(PAGE, RED, c));
+  writeFileSync(join(OUT, `${m.name}@3x.png`), png(W, H, px));
+
+  const svgW = r2(cw + 2 * PAD);
+  const svgH = r2(ch + 2 * PAD);
+  const fill = `#${hex}`;
+  const plateSvg = m.platePoly
+    ? `<path fill="${fill}" d="${m.platePoly.map(([a, b], i) => `${i ? 'L' : 'M'}${r2(a)} ${r2(b)}`).join('')}Z"/>`
+    : '';
+  writeFileSync(
+    join(OUT, `${m.name}.svg`),
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${svgW}" height="${svgH}" viewBox="${r2(cx - PAD)} ${r2(cy - PAD)} ${svgW} ${svgH}">` +
+      `<rect x="${r2(cx - PAD)}" y="${r2(cy - PAD)}" width="${svgW}" height="${svgH}" fill="#FFFFFF"/>${plateSvg}` +
+      m.shape.d.map((d) => `<path fill="${fill}" d="${d}"/>`).join('') +
+      '</svg>\n',
+  );
+
+  const [lo, hi] = widths(m.shape);
+  rendered.push({ ...m, W, H, cov, lo, hi });
+  console.log(
+    `  ${m.name.padEnd(18)} box ${String(w).padStart(3)} x ${String(h).padStart(3)} pt   ink ${r2(lo)} to ${r2(hi)} pt` +
+      ` (${r2(lo * SCALE)} to ${r2(hi * SCALE)} px at 3x)   ${m.shape.d.reduce((s, d) => s + d.length, 0)} chars`,
+  );
+  if (lo < FLOOR - 1e-6) {
+    console.error(`  render-details: ${m.name} falls under the ${FLOOR}pt floor`);
+    process.exit(1);
+  }
+}
+
+/* The sheet: every mark, left-aligned, 8pt of page between, a 1pt ink tick at the left for scale. */
+const GAP = 8 * SCALE;
+const SW = Math.max(...rendered.map((r) => r.W)) + 6 * SCALE;
+const SH = rendered.reduce((s, r) => s + r.H + GAP, GAP);
+const sheet = new Array(SW * SH).fill(PAGE);
+let top = GAP;
+for (const r of rendered) {
+  // 1pt by 1pt grey tick, vertically centred on the mark's canvas, for scale.
+  for (let y = 0; y < SCALE; y++) {
+    for (let x = 0; x < SCALE; x++) sheet[(top + Math.floor(r.H / 2) + y) * SW + SCALE + x] = PLATE_GREY;
+  }
+  for (let y = 0; y < r.H; y++) {
+    for (let x = 0; x < r.W; x++) sheet[(top + y) * SW + 6 * SCALE + x] = mix(PAGE, RED, r.cov[y * r.W + x]);
+  }
+  top += r.H + GAP;
+}
+writeFileSync(join(OUT, 'sheet@3x.png'), png(SW, SH, sheet));
+
+const rows = rendered
+  .map(
+    (r) =>
+      `<tr><td><img src="${r.name}@3x.png" width="${r.W / SCALE}" height="${r.H / SCALE}" style="image-rendering:auto"></td>` +
+      `<td><b>${r.name}</b><br>${r.what}<br><span>box ${r.shape.box.w} x ${r.shape.box.h} pt · ink ${r2(r.lo)} to ${r2(r.hi)} pt</span></td></tr>`,
+  )
+  .join('\n');
+writeFileSync(
+  join(OUT, 'index.html'),
+  `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pen details</title>
+<style>body{margin:24px;font:14px/1.45 -apple-system,system-ui,sans-serif;color:#0A0A0A;background:#fff}
+table{border-collapse:collapse}td{padding:10px 16px 10px 0;vertical-align:middle;border-bottom:1px solid #E3E3E3}
+span{color:#5C5C5C}img{display:block}</style>
+<h1>Pen details, v4.6</h1>
+<p>Generated by <code>scripts/render-details.mjs</code> from <code>src/components/details/penPath.ts</code>. Each image is 3x, shown at 1x here; open the PNG for 1:1 device pixels. <code>sheet@3x.png</code> holds all of them.</p>
+<table>${rows}</table>
+`,
+);
+console.log(`\n  wrote ${rendered.length * 2 + 2} files to specs/v4.6-details/build/\n`);

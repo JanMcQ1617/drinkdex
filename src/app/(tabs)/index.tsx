@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { EmptyArt } from '@/components/DexCard';
+import { Rise } from '@/components/DockRise';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { groupPours, storyMap } from '@/components/home/groupPours';
 import { HOME_BAR_HEIGHT, HomeChrome } from '@/components/home/HomeChrome';
@@ -54,6 +55,17 @@ import type { Post } from '@/types';
 /* seconds, and a stalled entrance left the feed blank under the row    */
 /* with no way back (specs/06-tab-switch-bug.md, cause 1). Posts are    */
 /* simply there.                                                        */
+/*                                                                      */
+/* EXCEPT ONCE, UNDER THE FILM'S LAST FRAME (v4.6, the Dock; specs/     */
+/* v4.6-details/spec.md, B). As the film's wordmark flies into the bar, */
+/* the whole list rises 16pt (240 to 680 ms) and the stories 14pt more  */
+/* inside it (360 to 780), once the wordmark's foot has cleared their   */
+/* rings; the stories rule rides with them, then draws itself in. Two   */
+/* wrappers, never a row: every visible post moves as one on any phone, */
+/* and no cell does any work for it. Nor is it an entrance: both are    */
+/* pure functions of the Dock's clock, which rests at 1, the identity,  */
+/* so a stalled clock, a resume or Reduce Motion leaves the feed drawn, */
+/* and anything that mounts later is simply there.                      */
 /* ==================================================================== */
 
 /**
@@ -268,17 +280,19 @@ function HomeFeed() {
     <View style={styles.header}>
       {/* The bar's place: HomeChrome draws the bar over it. */}
       <View style={{ height: insets.top + HOME_BAR_HEIGHT }} />
-      <TodaysPours
-        myId={myId}
-        pours={pours}
-        now={now}
-        status={poursStatus}
-        profiles={profiles}
-        seenHydrated={seenHydrated}
-        onPost={openLog}
-        onOpen={openPours}
-        onFindFriends={openFindFriends}
-      />
+      <Rise group="stories">
+        <TodaysPours
+          myId={myId}
+          pours={pours}
+          now={now}
+          status={poursStatus}
+          profiles={profiles}
+          seenHydrated={seenHydrated}
+          onPost={openLog}
+          onOpen={openPours}
+          onFindFriends={openFindFriends}
+        />
+      </Rise>
       {/*
         A refresh that fails over a feed already on screen says so here,
         under the stories. The posts stay: they are still the last good copy.
@@ -307,73 +321,76 @@ function HomeFeed() {
 
   return (
     <View style={styles.screen}>
-      <Animated.FlatList
-        ref={listRef}
-        data={rows}
-        renderItem={renderItem}
-        keyExtractor={(row) => row.key}
-        /*
-         * A post is most of a screen tall (616 to 634: the header, a
-         * square photo the screen's width, the actions, liked by, the
-         * caption and the time), so the default window (10 items up front,
-         * 21 screens kept mounted) held twenty-odd full-size photos in
-         * memory to show one.
-         */
-        initialNumToRender={2}
-        maxToRenderPerBatch={2}
-        windowSize={5}
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        style={styles.list}
-        contentContainerStyle={{
-          // The tab bar is docked over the foot of the feed, so the last post has to clear it.
-          paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
-        }}
-        ListHeaderComponent={header}
-        ListFooterComponent={footer}
-        /*
-         * Three states, never confused. A failed load used to fall through to
-         * "Nothing posted yet", which told someone offline with twenty follows
-         * to go and find people. While a pull is already spinning, the body
-         * stays empty rather than showing a second spinner.
-         */
-        ListEmptyComponent={
-          waiting ? (
-            refreshing ? null : (
-              <Hold fill={false} slowMessage="Still loading your feed." />
-            )
-          ) : feedError ? (
-            <EmptyState
-              icon="alert"
-              title="Could not load your feed"
-              body="Check your connection and try again."
-              actionVariant="secondary"
-              action={{ label: 'Try again', onPress: () => void load(myId) }}
-            />
-          ) : (
-            <EmptyState
-              art={<EmptyArt drinkId="negroni" />}
-              title="Nothing posted yet"
-              body="Follow friends to see their photos and Dex entries. Your posts land here too."
-              action={{ label: 'Find friends', onPress: openFindFriends }}
-            />
-          )
-        }
-        refreshControl={
+      {/* The feed's rise under the Dock: one wrapper for the whole list, header and all. */}
+      <Rise group="feed" style={styles.list}>
+        <Animated.FlatList
+          ref={listRef}
+          data={rows}
+          renderItem={renderItem}
+          keyExtractor={(row) => row.key}
           /*
-           * Ink on the page. Offset below the bar: the list starts at the
-           * top of the screen, so without it the spinner would turn under
-           * the status strip and the bar laid over it.
+           * A post is most of a screen tall (616 to 634: the header, a
+           * square photo the screen's width, the actions, liked by, the
+           * caption and the time), so the default window (10 items up front,
+           * 21 screens kept mounted) held twenty-odd full-size photos in
+           * memory to show one.
            */
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={colors.text}
-            progressViewOffset={insets.top + HOME_BAR_HEIGHT}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-      />
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          windowSize={5}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          style={styles.list}
+          contentContainerStyle={{
+            // The tab bar is docked over the foot of the feed, so the last post has to clear it.
+            paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+          }}
+          ListHeaderComponent={header}
+          ListFooterComponent={footer}
+          /*
+           * Three states, never confused. A failed load used to fall through to
+           * "Nothing posted yet", which told someone offline with twenty follows
+           * to go and find people. While a pull is already spinning, the body
+           * stays empty rather than showing a second spinner.
+           */
+          ListEmptyComponent={
+            waiting ? (
+              refreshing ? null : (
+                <Hold fill={false} slowMessage="Still loading your feed." />
+              )
+            ) : feedError ? (
+              <EmptyState
+                icon="alert"
+                title="Could not load your feed"
+                body="Check your connection and try again."
+                actionVariant="secondary"
+                action={{ label: 'Try again', onPress: () => void load(myId) }}
+              />
+            ) : (
+              <EmptyState
+                art={<EmptyArt drinkId="negroni" />}
+                title="Nothing posted yet"
+                body="Follow friends to see their photos and Dex entries. Your posts land here too."
+                action={{ label: 'Find friends', onPress: openFindFriends }}
+              />
+            )
+          }
+          refreshControl={
+            /*
+             * Ink on the page. Offset below the bar: the list starts at the
+             * top of the screen, so without it the spinner would turn under
+             * the status strip and the bar laid over it.
+             */
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.text}
+              progressViewOffset={insets.top + HOME_BAR_HEIGHT}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+        />
+      </Rise>
       {/* Over the list, last, so it draws on top and takes its own taps. */}
       <HomeChrome scrollY={scrollY} unread={unread} onActivity={openActivity} onPost={openLog} />
     </View>
@@ -385,7 +402,7 @@ function HomeFeed() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
-  // Nothing under the tray: it ends in its own 8pt foot, and the first post's header follows it (home-ig 5.2).
+  // Nothing added under the tray: it ends in its own 18pt foot (its 8, then the stories rule's 10pt band; TodaysPours), and the first post's header follows it (home-ig 5.2).
   header: { paddingBottom: 0 },
   // A failed refresh's line, between the tray's foot and the first header, on Home's column.
   notice: { marginHorizontal: layout.feedGutter, marginTop: space.sm, marginBottom: space.sm },

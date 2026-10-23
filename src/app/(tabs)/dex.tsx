@@ -43,7 +43,7 @@ import {
 import { ForYouRail } from '@/components/dex/ForYouRail';
 import { OrderSheet } from '@/components/dex/OrderSheet';
 import { QuickChips } from '@/components/dex/QuickChips';
-import { SectionHead } from '@/components/dex/SectionHead';
+import { HEAD_RULE, SectionHead } from '@/components/dex/SectionHead';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { NumberRail } from '@/components/NumberRail';
@@ -151,7 +151,7 @@ const HEADER_FOOT = space.lg;
 const CONTENT_TOP = space.sm;
 /** The header's height before it has measured itself: 112 at the default text size. */
 const HEADER_EST = FIELD_TOP + layout.search + CHIPS_TOP + layout.chip + HEADER_FOOT;
-/** A section head's line (SectionHead): 24, then 12 to its first row, and 8 more over a head after a section. */
+/** A section head's line (SectionHead): 24, its pen rule's 7 (HEAD_RULE), then 12 to its first row, and 8 more over a head after a section. */
 const HEAD_LINE = 24;
 
 /* ------------------------------------------------------------------ */
@@ -865,11 +865,13 @@ export default function DexScreen() {
    * A row's height before any is measured: the card with its two lines of
    * name, and the gap under it. With every row reserving two lines this is
    * nearly every row's height; only a three-line name at a large text size
-   * differs, and the retries below correct for it. A head is its line and
-   * the 12 under it, 8 more after a section.
+   * differs, and the retries below correct for it. A head is its line, the
+   * pen rule's 7 under it (a fixed 7: the rule never grows with the text)
+   * and the 12 under that, 8 more after a section. Leave the 7 out and a
+   * jump lands 7pt short for every head above it.
    */
   const rowEstimate = dexCardHeight(column, fontScale, NAME_LINES) + ROW_GAP;
-  const headEstimate = HEAD_LINE * Math.max(1, fontScale) + space.md;
+  const headEstimate = HEAD_LINE * Math.max(1, fontScale) + HEAD_RULE + space.md;
 
   /*
    * Most of the 1,045 rows have never been laid out, so the list cannot

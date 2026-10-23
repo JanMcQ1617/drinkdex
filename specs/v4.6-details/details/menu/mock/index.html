@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply v4.6 menu details</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+
+/*
+ * v4 "Daylight" tokens, exactly as src/constants/theme.ts has them. The
+ * accent rides on five more custom properties, set per phone by the
+ * direction it belongs to (THEMES below), so every row is the same
+ * markup and only the hue changes:
+ *   --acc        the fill: the + key, the post key, the caught plate
+ *   --accPressed the same fill while held
+ *   --onAcc      a glyph or label standing on the fill
+ *   --accText    the accent as type (the Dex figure)
+ *   --accMark    the thin marks: the active tab's line, the Activity dot
+ */
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --press:#EBEBEB; --line:#E3E3E3; --hair:#D6D6D6; --rule:#C4C4C4;
+  --control:#8A8A8A; --muted:#5C5C5C; --ink:#0A0A0A; --inkPressed:#333333; --onInk:#FFFFFF; --onInkMuted:#A3A3A3;
+  --scrim:rgba(10,10,10,.36); --photoEdge:rgba(10,10,10,.07);
+  --t1:#262626; --t2:#3D3D3D; --t3:#5C5C5C;
+  --acc:#0A0A0A; --accPressed:#333333; --onAcc:#FFFFFF; --accText:#0A0A0A; --accMark:#0A0A0A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E9E9E9}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+b{font-weight:600}
+
+/* the three sizes (title 28/34, body 17/24, small 13/18) and Playfair for drink names */
+.title{font:600 28px/34px Inter;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.b5{font-weight:500}.b6{font-weight:600}
+.small{font:400 13px/18px Inter}
+.pf{font:700 17px/24px Playfair;letter-spacing:-.2px}
+.plate{font:500 13px/18px Inter;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .tn{font-variant-numeric:tabular-nums}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.two{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.a{position:absolute}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none;isolation:isolate}
+.circle{border-radius:50%}
+.sb{position:absolute;top:0;left:0;right:0;height:62px;color:var(--ink);background:var(--page);z-index:30}
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.sb .r{position:absolute;right:30px;top:24px;display:flex;gap:6px;align-items:center}
+.homeInd{position:absolute;left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:var(--ink);z-index:40}
+
+/* prints: square corners, photoEdge inset (white spec 5) */
+.print{position:absolute;overflow:hidden;background:var(--wash);border-radius:2px}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);border-radius:2px;pointer-events:none}
+
+/* keys and chips: squared (4pt). Chips 32 tall, hair edge off, ink on (ui.tsx Chip) */
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center;white-space:nowrap;font:500 17px/24px Inter;letter-spacing:-.2px;gap:8px}
+.key.wash{background:var(--wash);color:var(--ink)}
+.key.acc{background:var(--acc);color:var(--onAcc)}
+.chips{display:flex;gap:8px;align-items:center}
+.chip{height:32px;flex:none;display:flex;align-items:center;gap:6px;padding:0 12px;border-radius:4px;box-shadow:inset 0 0 0 1px var(--hair);font:500 13px/18px Inter;color:var(--ink);white-space:nowrap;background:var(--page)}
+.chip.sort{background:var(--wash);box-shadow:none;padding:0 10px 0 12px;gap:4px}
+.field{position:absolute;left:24px;width:392px;height:44px;border-radius:4px;background:var(--wash)}
+
+/* ---------- the wall ---------- */
+.wall{width:2460px;height:6040px;position:relative;padding:0 44px}
+.head{position:absolute;left:44px;top:36px;width:2372px}
+.head h1{font:600 34px/40px Inter;letter-spacing:-.8px}
+.head .lede{font:400 17px/26px Inter;color:#3A3A3A;margin-top:10px;max-width:1500px}
+.set{position:absolute;left:44px;top:196px;width:2372px;display:grid;grid-template-columns:repeat(5,1fr) 1.25fr;gap:16px}
+.set .c{background:var(--page);border-radius:8px;padding:18px 18px 20px}
+.set .c .k{font:600 13px/18px Inter;color:var(--muted);font-variant-numeric:tabular-nums}
+.set .c h3{font:600 17px/24px Inter;letter-spacing:-.2px;margin:6px 0 6px}
+.set .c p{font:400 13px/19px Inter;color:#3A3A3A}
+.set .c.out{background:transparent;box-shadow:inset 0 0 0 1px #CFCFCF}
+.set .c.out li{font:400 13px/19px Inter;color:#3A3A3A;list-style:none;margin-top:5px}
+.set .c.out li b{color:var(--ink)}
+
+.row{position:absolute;left:44px;width:2372px;height:1100px;display:flex;gap:28px}
+.info{width:520px;flex:none;padding-top:4px}
+.info .no{font:600 13px/18px Inter;color:var(--muted);font-variant-numeric:tabular-nums}
+.info h2{font:600 40px/46px Inter;letter-spacing:-1px;margin-top:4px;display:flex;align-items:center;gap:14px}
+.info h2 i{width:30px;height:30px;border-radius:4px;flex:none}
+.info .idea{font:400 17px/25px Inter;color:#2A2A2A;margin-top:10px}
+.sw{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:22px}
+.sw .s{display:flex;gap:12px;align-items:center;background:var(--page);border-radius:6px;padding:10px}
+.sw .chipc{width:44px;height:44px;border-radius:4px;flex:none;box-shadow:inset 0 0 0 1px rgba(10,10,10,.08)}
+.sw .s .t1{font:600 15px/20px Inter;font-variant-numeric:tabular-nums}
+.sw .s .t2{font:400 12px/16px Inter;color:var(--muted)}
+.ct{width:100%;border-collapse:collapse;margin-top:18px;background:var(--page);border-radius:6px;overflow:hidden}
+.ct td{font:400 13px/18px Inter;padding:7px 10px;border-top:1px solid #EFEFEF;vertical-align:top}
+.ct tr:first-child td{border-top:none}
+.ct td.r{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ct td.v{width:58px;text-align:right;font:600 11px/18px Inter;letter-spacing:.2px;white-space:nowrap}
+.ct td.v.ok{color:#1C1C1C}.ct td.v.no{color:#8A8A8A}
+.ct .sample{display:inline-block;padding:0 6px;border-radius:2px;font-weight:600}
+.minis{display:flex;gap:14px;align-items:center;margin-top:18px;background:var(--page);border-radius:6px;padding:14px}
+.minis .m{display:flex;flex-direction:column;align-items:center;gap:6px}
+.minis .m span{font:400 11px/14px Inter;color:var(--muted)}
+.why{font:400 14px/21px Inter;color:#2A2A2A;margin-top:18px}
+.why b{color:var(--ink)}
+.frames{display:flex;gap:28px}
+.frame{display:flex;flex-direction:column;gap:12px;width:440px;flex:none}
+.frame .phone{box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.cap{font:400 13px/19px Inter;color:#4A4A4A}
+.cap b{color:var(--ink)}
+
+body.solo{background:var(--page)}
+body.solo .wall{padding:0;width:auto;height:auto}
+body.solo .head,body.solo .set,body.solo .info,body.solo .cap{display:none}
+body.solo .row{position:static;display:block;height:auto}
+body.solo .row,body.solo .frame{display:none}
+body.solo .row.on,body.solo .frame.on{display:block}
+body.solo .frames{display:block}
+body.solo .frame .phone{box-shadow:none}
+</style>
+</head>
+<body>
+<div class="wall" id="wall"></div>
+<script src="../../../../v4.2/data/dex.js"></script>
+<script>
+/* ==================================================================== */
+/* The four directions and today's black and white                      */
+/*                                                                      */
+/* Each is ONE hue. `acc` fills, `text` is the hue as type, `mark` the  */
+/* 2pt line and 8pt dot. They are the same hex wherever the hue can do  */
+/* all three on white; Saffron cannot be type (1.83:1), so it carries   */
+/* a deep twin for the one figure and is said so in its panel.          */
+/* `dark` is the hue for an ink ground (the reels, a Night twin), not   */
+/* drawn on these screens.                                              */
+/* ==================================================================== */
+const THEMES = [
+  {
+    id:'merlot', no:'1', name:'Merlot',
+    acc:'#7E2330', pressed:'#5E1A24', on:'#FFFFFF', text:'#7E2330', mark:'#7E2330', dark:'#E7899A',
+    idea:'The wine the app was born in, back as a single drop. The old icon’s merlot, exactly (#7E2330), now only where a drink is caught.',
+    why:`<b>For:</b> it is Sipply’s own colour, so nothing new has to be explained, and it sits with the reds of a Negroni or a Paloma without fighting them. 9.68:1 on white, so it can be type anywhere. <b>Against:</b> at 2pt and at 13pt it is dark enough (L 6%) to read as near-black from arm’s length: the + key and the post key carry it; the line and the figure whisper.`,
+  },
+  {
+    id:'cobalt', no:'2', name:'Cobalt',
+    acc:'#2448FF', pressed:'#1A35CC', on:'#FFFFFF', text:'#2448FF', mark:'#2448FF', dark:'#8C9CFF',
+    idea:'An electric ultramarine, the one hue no drink in the Dex has. Pushed toward violet (230°) so it is not Facebook’s or Coinbase’s blue.',
+    why:`<b>For:</b> the photographs are reds, oranges, ambers and greens; blue is the one colour none of them is, so the accent never competes with a drink and reads at any size, 2pt line included. 6.09:1 on white, white on it 6.09:1. The most “sleek product” of the four. <b>Against:</b> it is the least drinks-world, and it is the colour of a lot of software.`,
+  },
+  {
+    id:'saffron', no:'3', name:'Saffron',
+    acc:'#FFB000', pressed:'#E59A00', on:'#0A0A0A', text:'#A14E00', mark:'#FFB000', dark:'#FFB000',
+    idea:'A full-strength saffron yellow with ink on it, not white. Fully saturated (100%) where Brass was a grey gold (#B8924F, 45%), and it carries no metal.',
+    why:`<b>For:</b> the warmest and most cheerful, and the only one where the keys stay black-on-colour like the rest of the app’s ink. On ink it is 10.81:1, so a Night twin keeps it as is. <b>Against:</b> it cannot be type on white (1.83:1), so the one figure takes a deep twin, #A14E00, which reads burnt orange; and yellow sits close to whisky, Aperol and citrus in the photos. The 2pt line is decorative (the filled glyph says where you are), but the Activity dot at 1.83:1 would need a 1pt ink ring to reach 3:1.`,
+  },
+  {
+    id:'campari', no:'4', name:'Campari',
+    acc:'#D0102C', pressed:'#A80C23', on:'#FFFFFF', text:'#D0102C', mark:'#D0102C', dark:'#FF6B7D',
+    idea:'My pick: the red of the bitter in a Negroni. Merlot’s line, made bright enough to be seen at 2pt. Red, black and white is the oldest sleek there is.',
+    why:`<b>For:</b> it keeps Sipply in the red family Jan chose first, but at a luminance of 14% against Merlot’s 6% it reads as plain red on the 2pt line, the 8pt dot and the 13pt figure, where Merlot leans toward ink. A drinks colour, not a software colour, and the classic editorial triad with black and white. 5.54:1 on white, and white on it 5.54:1. <b>Against:</b> a red dot means “new” everywhere already (good here), and it is close to the reds in a few photos. <b>Also tried for this slot:</b> bottle green #0B6B47 (reads as a coffee chain or a bank) and acid chartreuse #D4FF3A (landonorris.com’s lime, but 1.16:1 on white: its line and dot vanish and it can never be type).`,
+  },
+  {
+    id:'bw', no:'0', name:'Today', bw:true,
+    acc:'#0A0A0A', pressed:'#333333', on:'#FFFFFF', text:'#5C5C5C', mark:'#0A0A0A', dark:'#FFFFFF',
+    idea:'Build 26 as it ships: ink on gallery white, and the drink photographs are the only colour. The same four screens, for comparison.',
+    why:`The same five places are all ink here: the + key, the post key, the caught plate, the line and the dot. The Dex figure is the quiet muted count it is today.`,
+  },
+];
+
+/* ---------- contrast (WCAG 2.x, the formula scripts/check-contrast.mjs uses) ---------- */
+const rgb = h => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+const lum = h => { const [r, g, b] = rgb(h).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * r + .7152 * g + .0722 * b; };
+const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + .05) / (y + .05); };
+
+const IMG = id => `../../../../../assets/drinks/${id}.webp`;
+const PROOF = id => `../../../../../assets/drinks/proof/${id}.webp`;
+const fmt = n => n.toLocaleString('en-US');
+const X = window.DEX;
+
+/* ---------- glyphs: src/components/icons.tsx paths ---------- */
+const OUT = {
+  home:'<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>',
+  dex:'<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>',
+  sliders:'<path d="M4 7.5h9.2"/><path d="M17.8 7.5H20"/><path d="M4 16.5h2.7"/><path d="M11.3 16.5H20"/><circle cx="15.5" cy="7.5" r="2.3"/><circle cx="9" cy="16.5" r="2.3"/>',
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  chevronRight:'<path d="M9.4 5.4 16 12l-6.6 6.6"/>',
+  chevronDown:'<path d="M5.4 9.4 12 16l6.6-6.6"/>',
+  plus:'<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>',
+  check:'<path d="M5 12.6 9.8 17.4 19 6.9"/>',
+  heart:'<path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/>',
+  send:'<path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/>',
+  bookmark:'<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  create:'<rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4"/><path d="M12 8v8"/><path d="M8 12h8"/>',
+};
+const SOLID = {
+  home:'<path fill-rule="evenodd" d="M12 2.7a1.4 1.4 0 0 1 .9.3l8.3 6.6a1.4 1.4 0 0 1 .5 1.1v8.7a2.2 2.2 0 0 1-2.2 2.2h-4.6v-5.7a1 1 0 0 0-1-1h-3.8a1 1 0 0 0-1 1v5.7H4.5a2.2 2.2 0 0 1-2.2-2.2v-8.7a1.4 1.4 0 0 1 .5-1.1l8.3-6.6a1.4 1.4 0 0 1 .9-.3z"/>',
+  dex:'<path d="M3.5 5.1a.5.5 0 0 0-.36.85l8.5 8.7a.5.5 0 0 0 .72 0l8.5-8.7a.5.5 0 0 0-.36-.85z"/><path d="M11.1 14.6h1.8v4.3h2.8a.9.9 0 0 1 0 1.8H8.3a.9.9 0 0 1 0-1.8h2.8z"/>',
+  bookmark:'<path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z"/>',
+  heart:'<path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z"/>',
+};
+const ic = (name, size=24, color='var(--ink)', sw=1.6, solid=false) => {
+  if (name === 'more') return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><circle cx="5.4" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.6" cy="12" r="1.7"/></svg>`;
+  if (solid && SOLID[name]) return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}">${SOLID[name]}</svg>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</svg>`;
+};
+const at = (x, y, inner, st='') => `<div class="a" style="left:${x}px;top:${y}px;${st}">${inner}</div>`;
+/* ==================================================================== */
+/* v4.6 "Cocktail menu" details. Ornament, never information.           */
+/* ?plain renders the same phone without them (the "before").           */
+/* All in Campari (--acc). Weights in pt; the phone is drawn at 1px=1pt. */
+/* ==================================================================== */
+const ORN = !/plain/.test(location.search);
+const OC = 'var(--acc)';
+/* ?lone stages the drink page's own print with nothing pinned over it, for the brackets crop only */
+const LONE = /lone/.test(location.search);
+const O = {
+  /* a hairline: 0.5pt unless told */
+  line: (x, y, w, t=.5) => `<div class="a" style="left:${x}px;top:${y}px;width:${w}px;height:${t}px;background:${OC};z-index:6"></div>`,
+  /* the diamond: a 5pt square turned 45 degrees (7.1 across), centred on (cx, cy) */
+  diamond: (cx, cy, s=5) => `<div class="a" style="left:${cx-s/2}px;top:${cy-s/2}px;width:${s}px;height:${s}px;background:${OC};transform:rotate(45deg);z-index:6"></div>`,
+  /* the divider: 40pt of hairline, 7pt air, the diamond, 7pt air, 40pt of hairline */
+  divider: (cx, cy, arm=40, gap=7) => ORN ? O.line(cx-gap-arm, cy-.25, arm) + O.diamond(cx, cy) + O.line(cx+gap, cy-.25, arm) : '',
+  /* the menu rule: two 0.5pt hairlines, 2pt of air between (3pt overall) */
+  rule: (x, y, w, z=29) => ORN ? `<div class="a" style="left:${x}px;top:${y}px;width:${w}px;height:3px;border-top:.5px solid ${OC};border-bottom:.5px solid ${OC};z-index:${z}"></div>` : '',
+  /* the leader: 1pt round dots on a 4pt pitch, sitting on the baseline */
+  leader: (centred=false) => ORN ? `<span style="flex:1;align-self:${centred?'center;transform:translateY(4.5px)':'baseline'};height:1px;margin:0 8px;min-width:24px;background:radial-gradient(circle, ${OC} .5px, transparent .75px) 0 0/4px 1px repeat-x"></span>` : '<span style="flex:1"></span>',
+  /* corner brackets: 1pt, 8pt arms, standing 4pt off the print's edge */
+  brackets: (x, y, w, h, arm=8, off=4, t=1) => {
+    if (!ORN) return '';
+    const L = x-off, T = y-off, R = x+w+off, B = y+h+off;
+    const c = (l, tp, bt, bl) => `<div class="a" style="left:${l}px;top:${tp}px;width:${arm}px;height:${arm}px;${bt}:${t}px solid ${OC};${bl}:${t}px solid ${OC};z-index:6"></div>`;
+    return c(L, T, 'border-top', 'border-left') + c(R-arm, T, 'border-top', 'border-right') +
+           c(L, B-arm, 'border-bottom', 'border-left') + c(R-arm, B-arm, 'border-bottom', 'border-right');
+  },
+};
+const PERSON = '<circle cx="12" cy="9" r="4"/><path d="M4 21c1.2-4 4.4-6 8-6s6.8 2 8 6z"/>';
+const av = (x, y, d, tone) => `<div class="a circle" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:var(--${tone});display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="${Math.round(d*.86)}" height="${Math.round(d*.86)}" viewBox="0 0 24 24" fill="#FFFFFF">${PERSON}</svg></div>`;
+const photo = (id, x, y, w, h, extra='') => `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;${extra}"><img src="${IMG(id)}"></div>`;
+
+/* ---------- system chrome ---------- */
+const statusBar = () => `<div class="sb"><span class="t">9:41</span><span class="island"></span><span class="r">
+  <svg width="18" height="12" viewBox="0 0 18 12" fill="#0A0A0A"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+  <svg width="16" height="12" viewBox="0 0 16 12" fill="#0A0A0A"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1.2-1.3A10.3 10.3 0 0 0 8 .4C5.2.4 2.7 1.5.8 3.3L2 4.6a8.5 8.5 0 0 1 6-2.4Zm0 3.6c1.3 0 2.5.5 3.4 1.3l1.2-1.3A6.7 6.7 0 0 0 8 4c-1.8 0-3.4.7-4.6 1.8l1.2 1.3c.9-.8 2.1-1.3 3.4-1.3ZM8 9.3l1.9-1.7a2.9 2.9 0 0 0-3.8 0Z"/></svg>
+  <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#0A0A0A" stroke-opacity=".35"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#0A0A0A"/><path d="M25 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2Z" fill="#0A0A0A" fill-opacity=".4"/></svg></span></div>`;
+const homeInd = () => `<div class="homeInd"></div>`;
+
+/*
+ * The tab bar as build 26 draws it (FloatingTabBar): Home · Dex · + · Saved
+ * · Profile on an opaque page slab, the active glyph filled in ink, your
+ * face ringed, and the 18 x 2 line under the active slot at y 43 of the
+ * 49pt row. ACCENT: the + key's fill, and the line.
+ */
+function tabs(active){
+  const xs = {home:44, dex:132, bookmark:308, profile:396}, cy = 897.5;
+  let h = `<div class="a" style="left:0;top:873px;width:440px;height:83px;background:var(--page);z-index:32"></div>`;
+  const g = name => at(xs[name]-13, cy-13, ic(name, 26, active===name?'var(--ink)':'var(--muted)', 1.6, active===name), 'z-index:33');
+  h += g('home') + g('dex') + g('bookmark');
+  h += `<div class="a" style="left:194px;top:${cy-19}px;width:52px;height:38px;border-radius:4px;background:var(--acc);display:flex;align-items:center;justify-content:center;z-index:33">${ic('plus',22,'var(--onAcc)',2)}</div>`;
+  if (active === 'profile') h += `<div class="a circle" style="left:${396-16.5}px;top:${cy-16.5}px;width:33px;height:33px;box-shadow:inset 0 0 0 1.5px var(--ink);z-index:33"></div>`;
+  h += `<div class="a" style="z-index:33">${av(383, cy-13, 26, 't3')}</div>`;
+  h += `<div class="a" style="left:${xs[active]-9}px;top:916px;width:18px;height:2px;background:var(--ink);z-index:33"></div>`;
+  return h + homeInd();
+}
+
+/* ==================================================================== */
+/* The people: stand-ins, as in the v4.3 mocks                          */
+/* ==================================================================== */
+const P = {
+  me:   {u:'nico.pours', n:'Nico Pérez',  tone:'t3'},
+  ana:  {u:'ana',        tone:'t2'}, leo:{u:'leo', tone:'t1'},
+  maya: {u:'maya.pours', tone:'t1'}, ines:{u:'ines.ag', tone:'t2'},
+  theo: {u:'theo_stirs', tone:'t1'}, sam:{u:'sam.ortega', tone:'t3'},
+};
+
+/* ==================================================================== */
+/* 1 Home: a post, as PostCard draws it (home-ig, v4.3)                 */
+/* ACCENT: the Activity dot on the heart, the line under Home, the +.   */
+/* ==================================================================== */
+function homeTop(){
+  return `<div class="a" style="left:0;top:62px;width:440px;height:45px;background:var(--page);z-index:28"></div>` +
+    at(14, 67, '<img src="../../../../v4.5-logo/final/wordmark.svg" alt="Sipply" style="display:block;height:42px;width:auto">', 'z-index:29') +
+    at(354, 71, ic('create',26), 'z-index:29') + at(398, 71, ic('heart',26), 'z-index:29') +
+    /* 8pt with a 2pt page ring, 12 outer (ScreenTopBar badge) */
+    `<div class="a circle" style="left:413px;top:69px;width:12px;height:12px;background:var(--accMark);border:2px solid var(--page);z-index:30"></div>`;
+}
+function tray(y0){
+  const S = [['me',null,true],['ana','daiquiri',false],['leo','negroni',false],['ines','paloma',false],['theo','paper-plane',true],['sam','mojito',true]];
+  let h = '';
+  S.forEach(([k, img, seen], i) => {
+    const x = 12 + i*80, y = y0 + 8, p = P[k];
+    if (k === 'me') {
+      h += av(x+5, y+5, 56, p.tone);
+      h += `<div class="a circle" style="left:${x+41}px;top:${y+41}px;width:22px;height:22px;background:var(--ink);box-shadow:0 0 0 3px var(--page);display:flex;align-items:center;justify-content:center">${ic('plus',14,'#FFFFFF',2.4)}</div>`;
+    } else {
+      h += `<div class="a circle" style="left:${x}px;top:${y}px;width:66px;height:66px;box-shadow:inset 0 0 0 ${seen?'1px var(--rule)':'2px var(--ink)'}"></div>`;
+      h += `<div class="a circle" style="left:${x+5}px;top:${y+5}px;width:56px;height:56px;overflow:hidden;background:var(--wash)"><img src="${IMG(img)}" style="position:absolute;left:-14px;top:-12px;width:84px;height:84px;object-fit:cover"></div>`;
+    }
+    h += `<div class="a small ell" style="left:${x-7}px;top:${y+70}px;width:80px;text-align:center;color:${k==='me'||seen?'var(--muted)':'var(--ink)'}">${k==='me'?'Your story':p.u}</div>`;
+  });
+  return h;
+}
+function post(y0, o){
+  let h = '';
+  if (o.ring) h += `<div class="a circle" style="left:12px;top:${y0+6}px;width:40px;height:40px;box-shadow:inset 0 0 0 2px var(--ink)"></div>`;
+  h += av(16, y0+10, 32, P[o.who].tone);
+  h += `<div class="a small" style="left:60px;top:${y0+8}px;width:330px;white-space:nowrap">${o.line}</div>`;
+  h += at(60, y0+26, `<span style="font:700 13px/18px Playfair">${o.drink}</span>`);
+  h += at(400, y0+14, ic('more',24));
+  h += `<div class="print" style="left:0;top:${y0+52}px;width:440px;height:440px;border-radius:0"><img src="${IMG(o.img)}" style="transform:scale(${o.zoom||1.1})"></div>`;
+  const ay = y0+52+440;
+  h += at(16, ay+9, ic('heart',26,'var(--ink)',1.6,o.liked)) + at(60, ay+9, ic('send',26)) + at(398, ay+9, ic('bookmark',26));
+  h += `<div class="a circle" style="left:16px;top:${ay+44}px;width:22px;height:22px;background:var(--page);padding:2px">${av(2,2,18,P[o.liker].tone)}</div>`;
+  h += at(46, ay+46, `<span class="small">Liked by <b>${P[o.liker].u}</b> and <b>${o.others} others</b></span>`);
+  h += `<div class="a small" style="left:16px;top:${ay+70}px;width:408px"><b>${P[o.who].u}</b> ${o.caption}</div>`;
+  h += at(16, ay+70+18+4, `<span class="small muted">${o.when}</span>`);
+  return h;
+}
+const homeScreen = () =>
+  tray(107) +
+  post(211, {who:'maya', ring:true, line:'<b>maya.pours</b> with <b>ana</b> and <b>leo</b>', drink:'Negroni', img:'negroni',
+    liker:'ines', others:23, liked:true, caption:'Leo’s recipe, in his kitchen. Equal parts, stirred long.', when:'2 hours ago'}) +
+  O.divider(220, 834) +
+  av(16, 855, 32, P.ines.tone) + at(60, 853, '<span class="small"><b>ines.ag</b></span>') + at(60, 871, '<span style="font:700 13px/18px Playfair">Paloma</span>') +
+  statusBar() + homeTop() + tabs('home');
+
+/* ==================================================================== */
+/* 2 Dex: For you at rest (v4.2 frame 1, the same tools/dex-order data) */
+/* ACCENT: the caught figure in the bar, the line under Dex, the +.     */
+/* ==================================================================== */
+function face(w){
+  const s = Math.round(w*.34);
+  return `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="var(--control)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5h15l-7.5 7.6z"/><path d="M12 12.6v6.2"/><path d="M8.4 19.4h7.2"/></svg></div>`;
+}
+function card(it, x, y, w=184){
+  const inner = !it.photo ? face(w) : `<img src="${it.caught ? IMG(it.id) : PROOF(it.id)}" onerror="this.src='${IMG(it.id)}';this.style.filter='grayscale(1) contrast(.7) brightness(1.15)'">`;
+  return `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${w}px">${inner}</div>` +
+    `<div class="a pf two" style="left:${x}px;top:${y+w+8}px;width:${w}px;color:${it.caught?'var(--ink)':'var(--muted)'}">${it.name}</div>`;
+}
+const ROW = 264;
+function sectionHead(y, label, right){
+  if (!ORN) return at(24, y, `<span class="body b6">${label}</span>`) +
+    at(216, y+3, `<div style="width:200px;display:flex;justify-content:flex-end;align-items:center;gap:2px"><span class="small" style="font-weight:500">${right}</span>${ic('chevronRight',16,'var(--ink)',1.8)}</div>`);
+  return at(24, y, `<div style="width:392px;display:flex;align-items:baseline"><span class="body b6">${label}</span>${O.leader()}<span class="small" style="font-weight:500">${right}</span><span style="align-self:center;margin-left:2px">${ic('chevronRight',16,'var(--ink)',1.8)}</span></div>`);
+}
+/* "14 / 2,089". Today: small muted. With an accent: the 14 in 600 and the accent's type colour, the rest unchanged. */
+const figure = (T, n, rest) => T.bw
+  ? `<span class="muted">${n}${rest}</span>`
+  : `<b style="color:var(--accText)">${n}</b><span class="muted">${rest}</span>`;
+function dexScreen(T){
+  let h = '', y = 234;
+  const s = X.sections[0];
+  h += sectionHead(y, s.label, `See all ${fmt(s.all)}`); y += 36;
+  for (let r = 0; r < 6; r += 2) { [0,1].forEach(c => { const it = s.items[r+c]; if (it) h += card(it, c ? 232 : 24, y); }); y += ROW; }
+  const chips = ['Sour and citrusy','Fruity','Rum','Tequila and mezcal'].map(l => `<span class="chip">${l}</span>`).join('');
+  return h + statusBar() +
+    `<div class="a" style="left:0;top:62px;width:440px;height:164px;background:var(--page);z-index:28"></div>` +
+    at(24, 71, '<span class="title">Dex</span>', 'z-index:29') +
+    at(240, 83, `<span class="small tn">${figure(T, X.caughtCount, ` / ${fmt(X.total)}`)}</span>`, 'z-index:29;width:176px;text-align:right') +
+    `<div class="field" style="top:122px;z-index:29">${at(12,12,ic('search',20,'var(--muted)'))}${at(42,10,'<span class="body muted">Search a name or number</span>')}${at(354,11,ic('sliders',22))}</div>` +
+    `<div class="a chips" style="left:24px;top:178px;width:416px;overflow:hidden;z-index:29"><span class="chip sort">For you${ic('chevronDown',14,'var(--ink)',1.8)}</span>${chips}</div>` +
+    tabs('dex');  /* no menu rule: a bar with a field and chips already has an edge */
+}
+
+/* ==================================================================== */
+/* 3 The drink page: Daiquiri, in your Dex (app/drink/[id], DrinkPanels) */
+/* ACCENT: the caught Nº plate, and the pinned post key.                */
+/* ==================================================================== */
+function drinkScreen(){
+  let h = '';
+  h += at(20, 76, ic('chevronLeft',24)) + at(390, 76, ic('bookmark',24));
+  h += `<div class="print" style="left:0;top:114px;width:440px;height:440px;border-radius:0"><img src="${IMG('daiquiri')}"></div>`;
+  h += `<div class="a" style="left:24px;top:578px;font:700 52px/56px Playfair;letter-spacing:-.3px">Daiquiri</div>`;
+  /* the plates row, 12 under the name: the lg plate (24 tall, 8 in) beside the in-Dex tag (26, hair edge) */
+  h += `<div class="a" style="left:24px;top:646px;height:26px;display:flex;align-items:center;gap:8px">` +
+    `<div class="plate" style="height:24px;padding:0 8px;border-radius:2px;background:var(--acc);color:var(--onAcc);display:flex;align-items:center">Nº 0100</div>` +
+    `<div style="height:26px;padding:0 8px;border-radius:2px;box-shadow:inset 0 0 0 1px var(--hair);display:flex;align-items:center;gap:4px">${ic('check',12,'var(--muted)',1.8)}<span class="small b5 muted">In your Dex</span></div></div>`;
+  /* the facts, two to a row (184 cells, 24 apart) */
+  const fact = (x, y, v, c) => at(x, y, `<div class="body b6">${v}</div><div class="small muted">${c}</div>`);
+  h += fact(24, 694, 'Sour', 'cocktail') + fact(232, 694, 'Santiago de Cuba', 'Cuba');
+  h += fact(24, 752, 'Coupe', 'glass') + fact(232, 752, '20%', 'abv');
+  /* In your Dex since, 32 under */
+  h += O.divider(220, 810);
+  h += photo('daiquiri', 24, 826, 52, 52, 'transform:none') + (LONE ? O.brackets(24, 826, 52, 52, 6, 4) : '');
+  h += at(92, 829, '<div class="body b5">In your Dex since 14 September</div><div class="small muted">Shared · 2 photos</div>');
+  h += at(398, 843, ic('chevronRight',18,'var(--muted)'));
+  /* the pinned bar: page, a 1pt line while there is more below, the one key */
+  if (!LONE) h += `<div class="a" style="left:0;top:858px;width:440px;height:98px;background:var(--page);box-shadow:inset 0 1px 0 var(--line);z-index:31"></div>`;
+  if (!LONE) h += `<div class="key acc" style="left:24px;top:870px;width:392px;height:52px;z-index:32">${ic('plus',20,'var(--onAcc)',2)}Post Daiquiri again</div>`;
+  return h + statusBar() + homeInd();
+}
+
+/* ==================================================================== */
+/* 4 Profile: yours (ProfileHeader as the working tree has it)          */
+/* ACCENT: the figure in "14 entries in your Dex", the line, the +.     */
+/* ==================================================================== */
+function profileScreen(T){
+  let h = '';
+  h += at(24, 71, '<span class="title">nico.pours</span>') + at(390, 75, ic('more',26));
+  h += av(24, 130, 80, 't3');
+  h += at(124, 147, '<div class="body b6">Nico Pérez</div><div class="small muted" style="margin-top:4px">Rum, lime and a long table. San Juan.</div>');
+  h += at(24, 234, `<span class="body muted"><b class="tn" style="color:var(--ink)">12</b> posts</span><span class="body muted" style="margin-left:28px"><b class="tn" style="color:var(--ink)">212</b> followers</span><span class="body muted" style="margin-left:28px"><b class="tn" style="color:var(--ink)">180</b> following</span>`);
+  h += `<div class="key wash" style="left:24px;top:282px;width:392px;height:44px">Edit profile</div>`;
+  const line = (y, left, right='') => `<div class="a" style="left:24px;top:${y}px;width:392px;height:44px;display:flex;align-items:center"><span class="small">${left}</span>${right ? O.leader(true) + right + '<span style="width:4px"></span>' : '<span style="flex:1"></span>'}${ic('chevronRight',16,'var(--muted)')}</div>`;
+  h += line(330, figure(T, '14', ' entries in your Dex'));
+  h += line(374, '<span class="muted">Tournaments</span>', '<span class="small muted">1 running</span>');
+  const grid = ['daiquiri','mojito','margarita','paloma','pina-colada','espresso-martini','cuba-libre','tequila-sunrise','hemingway-daiquiri','mai-tai','clover-club','aviation'];
+  const w = (392 - 16) / 3;
+  grid.forEach((id, i) => { const c = i % 3, r = Math.floor(i / 3); h += photo(id, 24 + c*(w+8), 434 + r*(w+8), w, w); });
+  h += O.rule(24, 114, 392);
+  return h + statusBar() + tabs('profile');
+}
+
+/* ==================================================================== */
+/* The wall                                                             */
+/* ==================================================================== */
+const SCREENS = [
+  ['home', 'Home', homeScreen, '<b>Home.</b> The Activity dot on the heart, the line under Home, the + key. The post and its photo carry no accent.'],
+  ['dex', 'Dex', dexScreen, '<b>Dex.</b> The caught figure in the bar (“14”), the line, the +. Every other word stays ink and muted.'],
+  ['drink', 'Drink page', drinkScreen, '<b>Drink page.</b> The caught Nº plate and the pinned post key: the record of the catch and the act of it.'],
+  ['profile', 'Profile', profileScreen, '<b>Profile.</b> The figure in “14 entries in your Dex”, the line under your face, the +. Edit profile stays the wash key.'],
+];
+
+const SET = [
+  ['1', 'The + key', 'The tab bar’s one filled key, on every tab. It is the brand’s home: posting a drink is what the app is for. Held: the pressed fill.'],
+  ['2', 'The post key', 'Only the key that posts a drink: the drink page’s pinned “Post this drink” and the + window’s Post. The same act as the +, so the same colour. Follow, Done, Continue and Allow stay ink: one accent key per view at most.'],
+  ['3', 'The caught plate', 'The Nº plate the moment a drink is yours: the drink page, the likers sheet, and the catch card, where it now fills with the accent instead of ink. The not-yet plate keeps its grey edge.'],
+  ['4', 'The Dex figure', 'Your caught count, where it is a figure: the Dex bar’s “14 / 2,089” and Profile’s “14 entries in your Dex”. The one place the accent is type, set 600 so the hue shows at 13pt.'],
+  ['5', 'Where you are, what’s new', 'The active tab’s 18 × 2 line and the 8pt Activity dot on Home’s heart. Two marks, both a few points across.'],
+];
+const LEFT_OUT = [
+  ['Story rings', 'five rings would put confetti over the very photos the colour is saved for'],
+  ['The liked heart', 'likes are social, not the catch; the solid ink fill already says it'],
+  ['Usernames and links', 'colour would run through every caption and list'],
+  ['Selection ticks and chips', 'state, many to a view: a tag picker would have six accent squares'],
+  ['Follow, Allow daily ideas', 'primary keys that do not post a drink keep their ink'],
+];
+
+const wall = document.getElementById('wall');
+let html = `<div class="head"><h1>Sipply v4.4: one accent</h1>
+  <div class="lede">Jan: “I feel like it looks good, minimalistic and sleek, but an accent is missing.” Four directions, each one hue, used in the same five places on every row, so the rows differ only in the colour. Everything else is Daylight as build 26 ships it (theme.ts), and the drink photographs stay the colour. Contrast figures are WCAG 2.x, computed in this page from the hexes shown. The last row is today’s black and white.</div></div>`;
+html += `<div class="set">` + SET.map(([k, t, p]) => `<div class="c"><div class="k">${k}</div><h3>${t}</h3><p>${p}</p></div>`).join('') +
+  `<div class="c out"><div class="k">Left out, on purpose</div>${'<ul>' + LEFT_OUT.map(([t, p]) => `<li><b>${t}</b>: ${p}.</li>`).join('') + '</ul>'}</div></div>`;
+
+const pass = (r, min) => `<td class="v ${r >= min ? 'ok' : 'no'}">${r >= min ? 'AA' : 'fails'}${min === 3 ? ' UI' : ''}</td>`;
+function info(T){
+  const W = '#FFFFFF', WA = '#F5F5F5', PR = '#EBEBEB', INK = '#0A0A0A';
+  const rows = [];
+  const add = (label, fg, bg, min, sample) => rows.push(`<tr><td>${label}</td><td class="r">${ratio(fg, bg).toFixed(2)}:1</td>${pass(ratio(fg, bg), min)}</tr>`);
+  const textName = T.bw ? `today, muted ${T.text}` : T.text === T.acc ? 'accent' : `the type twin ${T.text}`;
+  add(`Figure as type (${textName}) on page #FFFFFF`, T.text, W, 4.5);
+  add(`… on wash #F5F5F5`, T.text, WA, 4.5);
+  add(`… on press #EBEBEB`, T.text, PR, 4.5);
+  add(`${T.on === '#FFFFFF' ? 'White' : 'Ink'} label and glyph on the fill`, T.on, T.acc, 4.5);
+  add(`… on the held fill ${T.pressed}`, T.on, T.pressed, 4.5);
+  add(`Line, dot and key against page (UI)`, T.mark, W, 3);
+  if (T.text !== T.acc && !T.bw) add(`The fill ${T.acc} as type on page (not used so)`, T.acc, W, 4.5);
+  if (!T.bw) add(`On ink #0A0A0A, the dark variant ${T.dark}`, T.dark, INK, 4.5);
+  const sw = (hex, t1, t2) => `<div class="s"><div class="chipc" style="background:${hex}"></div><div><div class="t1">${hex}</div><div class="t2">${t1}${t2 ? ' · ' + t2 : ''}</div></div></div>`;
+  let s = sw(T.acc, 'fill', 'the +, post key, plate' + (T.mark === T.acc ? ', line, dot' : '') + (T.text === T.acc ? ', figure' : '') + (!T.bw && T.dark === T.acc ? ', and on ink' : ''));
+  s += sw(T.pressed, 'held', 'a key while pressed');
+  s += sw(T.on, 'on the fill', T.on === '#FFFFFF' ? 'white label and glyph' : 'ink label and glyph');
+  if (T.text !== T.acc && !T.bw) s += sw(T.text, 'type twin', 'the figure only');
+  if (!T.bw && T.dark !== T.acc) s += sw(T.dark, 'on ink', 'reels, a Night twin');
+  const mini = `<div class="minis">
+    <div class="m"><div style="width:52px;height:38px;border-radius:4px;background:${T.acc};display:flex;align-items:center;justify-content:center">${ic('plus',22,T.on,2)}</div><span>+ at rest</span></div>
+    <div class="m"><div style="width:52px;height:38px;border-radius:4px;background:${T.pressed};display:flex;align-items:center;justify-content:center">${ic('plus',22,T.on,2)}</div><span>+ held</span></div>
+    <div class="m"><div class="plate" style="height:24px;padding:0 8px;border-radius:2px;background:${T.acc};color:${T.on};display:flex;align-items:center">Nº 0100</div><span>caught plate</span></div>
+    <div class="m"><div class="small" style="height:24px;display:flex;align-items:center"><b style="color:${T.bw ? 'var(--muted)' : T.text};font-weight:${T.bw ? 400 : 600}">14</b><span class="muted">&nbsp;/ 2,089</span></div><span>figure</span></div>
+    <div class="m"><div style="height:24px;display:flex;align-items:center;gap:10px"><div style="width:18px;height:2px;background:${T.mark}"></div><div class="circle" style="width:8px;height:8px;background:${T.mark}"></div></div><span>line, dot</span></div>
+  </div>`;
+  return `<div class="info"><div class="no">${T.bw ? 'For comparison' : 'Direction ' + T.no}</div>
+    <h2><i style="background:${T.acc}"></i>${T.name}</h2><div class="idea">${T.idea}</div>
+    <div class="sw">${s}</div>${mini}<table class="ct">${rows.join('')}</table><div class="why">${T.why}</div></div>`;
+}
+
+THEMES.forEach((T, i) => {
+  const vars = `--acc:${T.acc};--accPressed:${T.pressed};--onAcc:${T.on};--accText:${T.text};--accMark:${T.mark}`;
+  html += `<div class="row" id="r-${T.id}" style="top:${500 + i * 1110}px;${vars}">${info(T)}<div class="frames">` +
+    SCREENS.map(([sid, , fn, cap]) => `<div class="frame" id="f-${T.id}-${sid}"><div class="phone">${fn(T)}</div><div class="cap">${cap}</div></div>`).join('') +
+    `</div></div>`;
+});
+wall.innerHTML = html;
+
+/* index.html#cobalt-dex shows one phone at 440 x 956, for the 2x PNGs */
+const hash = location.hash.slice(1);
+if (hash) {
+  document.body.classList.add('solo');
+  const [tid] = hash.split('-');
+  document.getElementById('r-' + tid)?.classList.add('on');
+  document.getElementById('f-' + hash)?.classList.add('on');
+}
+</script>
+</body>
+</html>

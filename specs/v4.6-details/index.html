@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sipply: details and the way in</title>
+<style>
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+:root{--page:#fff;--ink:#0A0A0A;--muted:#6B6B6B;--line:#E6E6E6;--wash:#F6F6F6;--acc:#D0102C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 15px/1.5 Inter,system-ui,sans-serif}
+main{max-width:1240px;margin:0 auto;padding:56px 24px 96px}
+h1{font:600 40px/1.1 Inter;letter-spacing:-.02em;margin:0}
+h2{font:600 26px/1.2 Inter;margin:0 0 6px;letter-spacing:-.01em}
+h3{font:600 19px/1.25 Inter;margin:0}
+.lede{color:var(--muted);max-width:720px;margin:14px 0 0}
+.quote{border-left:1px solid var(--acc);padding:2px 0 2px 14px;margin:22px 0 0;max-width:760px;color:#333}
+section{margin-top:72px}
+.sh{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--ink);padding-bottom:10px;margin-bottom:28px}
+.sh .n{font:600 13px Inter;letter-spacing:.12em;color:var(--acc)}
+.fin{margin-bottom:56px}
+.fh{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 16px;margin-bottom:14px}
+.score{font:500 13px Inter;color:var(--muted)}
+.score b{color:var(--acc);font-weight:600}
+.tag{font:600 11px Inter;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--acc);padding:3px 7px;border-radius:2px}
+.phones{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.phones figure{margin:0}
+.phones img{width:100%;display:block;border:1px solid var(--line);border-radius:6px}
+figcaption{font:500 12px Inter;color:var(--muted);margin-top:6px}
+.rowlabel{font:600 12px Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:18px 0 8px}
+.crops{width:100%;display:block;border:1px solid var(--line);margin-top:8px}
+.fa{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.fa div{background:var(--wash);padding:12px 14px;border-radius:4px;font-size:14px}
+.fa b{display:block;font:600 12px Inter;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.fa .for b{color:var(--ink)} .fa .against b{color:var(--acc)}
+.others{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.others img{width:100%;display:block;border:1px solid var(--line)}
+.others p{color:var(--muted);font-size:14px;margin:6px 0 0}
+.tr{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+.tr video{width:100%;display:block;border:1px solid var(--line);border-radius:10px;background:#fff}
+.tr img{width:100%;display:block;border:1px solid var(--line)}
+.tr p{margin:0 0 10px;font-size:14px}
+.rec{background:var(--wash);padding:20px 22px;border-top:1px solid var(--acc);margin-top:28px}
+.rec p{margin:6px 0 0}
+a{color:var(--ink)}
+.compare{width:100%;display:block;border:1px solid var(--line);margin-top:8px}
+@media (max-width:820px){.phones{grid-template-columns:repeat(2,1fr)}.fa,.others{grid-template-columns:1fr}.tr{grid-template-columns:1fr}.tr video{max-width:300px}h1{font-size:30px}}
+</style></head>
+<body><main>
+<h1>Sipply: details and the way in</h1>
+<p class="lede">v4.6, 23 Oct 2026. Two questions: which delicate red detail system makes the app less bland, and what motion carries the intro film into the app. Four detail systems and three transitions were built, scored by three judges (taste, craft, build, out of 10 each), and the top two of each were refined once.</p>
+<p class="quote">Jan: “a short part after the intro so instead of just disappearing … it has some sort of motion design that transitions into the app … the red accent, but delicate details, making it appear as if it was simple yet complex.” Standing rule from 9 Oct: less stuff. Every mark below is ornament, not information.</p>
+
+<section>
+<div class="sh"><span class="n">1</span><h2>The details</h2></div>
+
+<p class="rowlabel">Today, for comparison (v4.5, campari, new wordmark, ink tab line)</p>
+<div class="phones">
+<figure><img src="today/today-home.png" alt="Home today"><figcaption>Home</figcaption></figure>
+<figure><img src="today/today-dex.png" alt="Dex today"><figcaption>Dex</figcaption></figure>
+<figure><img src="today/today-drink.png" alt="Drink page today"><figcaption>Drink</figcaption></figure>
+<figure><img src="today/today-profile.png" alt="Profile today"><figcaption>Profile</figcaption></figure>
+</div>
+
+<div class="fin" style="margin-top:44px">
+<div class="fh"><span class="tag">Finalist</span><h3>Pen marks v2</h3><span class="score">judges <b>21</b> / 30 · taste 8 · craft 6 · build 7</span></div>
+<p style="margin:0 0 12px;color:var(--muted);font-size:14px">The logo's paint pen comes back at hairline weight: a drawn rule under Home's stories, a swash under tab-root titles (Dex, Profile), and one drip off the caught Nº plate. One mark per screen.</p>
+<div class="phones">
+<figure><img src="details/pen/home.png" alt="Home, pen marks"><figcaption>Home: drawn rule under the stories</figcaption></figure>
+<figure><img src="details/pen/dex.png" alt="Dex, pen marks"><figcaption>Dex: swash under the title</figcaption></figure>
+<figure><img src="details/pen/drink.png" alt="Drink, pen marks"><figcaption>Drink: the plate drips</figcaption></figure>
+<figure><img src="details/pen/profile.png" alt="Profile, pen marks"><figcaption>Profile: swash under the username</figcaption></figure>
+</div>
+<p class="rowlabel">At 3x, 1:1, before and after</p>
+<img class="crops" src="details/pen/detail-crops.png" alt="Pen marks at 3x">
+<div class="fa"><div class="for"><b>For</b>The only system that feels like Sipply: the hand that wrote the logo signs the page. Ownable, answers “too bland” on a second look, adds nothing to read, and its rule draws on as the intro ends.</div>
+<div class="against"><b>Against</b>Three marks only, so it may still feel quiet. The 1 pt waver could read as wobble on a real device; the fallback is a straight rule that only tapers.</div></div>
+</div>
+
+<div class="fin">
+<div class="fh"><span class="tag">Finalist</span><h3>Bar ledger v2</h3><span class="score">judges <b>21.5</b> / 30 · taste 5.5 · craft 8 · build 8</span></div>
+<p style="margin:0 0 12px;color:var(--muted);font-size:14px">A bartender's ruled ledger: one straight Campari ruling, 2 device px, placed where a ledger printer would put one. A double rule under Home's stories, a head rule under Dex sections, margin and column rules on the drink page and Profile, a 24 pt entry rule closing each post.</p>
+<div class="phones">
+<figure><img src="details/ledger/home.png" alt="Home, ledger"><figcaption>Home: head double rule, entry rule</figcaption></figure>
+<figure><img src="details/ledger/dex.png" alt="Dex, ledger"><figcaption>Dex: head rule per section</figcaption></figure>
+<figure><img src="details/ledger/drink.png" alt="Drink, ledger"><figcaption>Drink: margin and column rules</figcaption></figure>
+<figure><img src="details/ledger/profile.png" alt="Profile, ledger"><figcaption>Profile: margin rule</figcaption></figure>
+</div>
+<p class="rowlabel">At 3x, 1:1, before and after</p>
+<img class="crops" src="details/ledger/detail-crops.png" alt="Ledger rulings at 3x" style="max-width:900px">
+<div class="fa"><div class="for"><b>For</b>The most disciplined and cheapest to build: one motif, crisp whole-pixel lines, plain Views, nothing animated, nothing per grid cell.</div>
+<div class="against"><b>Against</b>At arm's length Dex and Profile look unchanged, and a straight red line is a mark any app could have. It answers “delicate” better than “bland”.</div></div>
+</div>
+
+<p class="rowlabel">Today vs both finalists, Home and Drink</p>
+<img class="compare" src="compare-details.png" alt="Today vs ledger vs pen, Home and Drink">
+
+<p class="rowlabel" style="margin-top:44px">Also built, not taken forward</p>
+<div class="others">
+<div><img src="details/menu/board.png" alt="Cocktail menu board"><h3 style="margin-top:10px">Cocktail menu <span class="score">19.5 / 30</span></h3><p>A diamond divider (the most delicate single mark of the four), dotted leaders and corner brackets. Leaders point the eye at counts, brackets read as a camera viewfinder.</p></div>
+<div><img src="details/proof/board.png" alt="Print proof board"><h3 style="margin-top:10px">Print proof <span class="score">16 / 30</span></h3><p>Crop and registration marks. Clever for designers, but they read as rendering glitches, the crosshair reads as a target, and it needs a seventh accent place.</p></div>
+</div>
+</section>
+
+<section>
+<div class="sh"><span class="n">2</span><h2>The way in: intro to app</h2></div>
+<p style="color:var(--muted);margin:-12px 0 28px;max-width:760px">Each preview starts on the film's last frame (the finished wordmark on white) and ends on Home. Looping, muted, at 390 × 844 pt. <a href="transitions.mp4">transitions.mp4</a> plays both back to back.</p>
+
+<div class="fin">
+<div class="fh"><span class="tag">Finalist</span><h3>Dock v2</h3><span class="score">judges <b>23</b> / 30 · taste 8 · craft 7.5 · build 7.5</span></div>
+<div class="tr">
+<video src="transition/dock/preview.mp4" autoplay muted loop playsinline></video>
+<div><p>The wordmark you just watched flies up and becomes the logo in Home's bar (600 ms), while the page fills from the bottom up: tab bar and keys at 160 ms, feed at 240 ms, stories at 360 ms. Pen's drawn rule signs the page under the stories from 560 to 840 ms. Done in about 0.9 s.</p>
+<img src="transition/dock/frames.png" alt="Dock frames">
+<div class="fa"><div class="for"><b>For</b>Inevitable rather than decorative: the logo becomes the logo. Reads like the best iOS launches and needs no new red.</div>
+<div class="against"><b>Against</b>Touches the most of Home (bar keys, feed, tab bar). Bottom-up fill may read as backwards; the pen beat is quiet on a first watch.</div></div>
+</div></div></div>
+
+<div class="fin">
+<div class="fh"><span class="tag">Finalist</span><h3>Hairline curtain v2</h3><span class="score">judges <b>20.5</b> / 30 · taste 5.5 · craft 6.5 · build 8.5</span></div>
+<div class="tr">
+<video src="transition/curtain/preview.mp4" autoplay muted loop playsinline></video>
+<div><p>A pen stroke runs out from under the drip's bead, parts into a double rule, and the white splits along it: the top half carries the logo up into the bar, the bottom half drops away, and Home develops in the gap. 820 ms in all, no red left by 400 ms.</p>
+<img src="transition/curtain/frames.png" alt="Curtain frames">
+<div class="fa"><div class="for"><b>For</b>The most self-contained build: it sits above Home and touches nothing inside it, so a stall leaves Home untouched. Pairs naturally with the ledger.</div>
+<div class="against"><b>Against</b>The most decorative and least inevitable; a dissolve under a wipe can read as two ideas. Only Home was rendered.</div></div>
+</div></div></div>
+
+<p class="rowlabel">Also built, not taken forward</p>
+<div class="tr">
+<video src="transition/drip/preview.mp4" autoplay muted loop playsinline></video>
+<div><h3>The drop <span class="score">19 / 30</span></h3><p style="color:var(--muted);margin-top:6px">The logo's drip falls and becomes the + key. The most ownable idea, but on a phone the 9 pt drop is a speck falling one way while the wordmark flies the other, and it is the costliest and riskiest to build.</p>
+<img src="transition/drip/frames.png" alt="Drop frames"></div>
+</div>
+</section>
+
+<div class="rec">
+<h3>Recommendation</h3>
+<p><b>Details: Pen marks.</b> It is the only system that is Sipply's own (the logo's hand at hairline weight), it answers “too bland” without adding anything to read, and one mark per screen keeps to “less stuff”.</p>
+<p><b>Transition: Dock.</b> The film's wordmark becomes the app's wordmark, so the motion feels inevitable rather than decorative, and its closing beat is Pen's rule drawing on, so the two choices read as one idea.</p>
+</div>
+</main></body></html>

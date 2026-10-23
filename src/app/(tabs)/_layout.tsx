@@ -1,8 +1,9 @@
 import { TopTabs } from 'expo-router/js-top-tabs';
 import React from 'react';
-import { type ColorValue, Dimensions } from 'react-native';
+import { type ColorValue, Dimensions, StyleSheet } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 
+import { Rise } from '@/components/DockRise';
 import { FloatingTabBar } from '@/components/FloatingTabBar';
 import { Icon, type IconName } from '@/components/icons';
 import { ScrollChromeProvider } from '@/components/ScrollChrome';
@@ -60,6 +61,15 @@ import { COPY, REELS_ENABLED } from '@/lib/reels';
  * too, while it is on: what you own and what you can make with it is
  * somewhere you come back to.
  *
+ * THE BAR RISES ONCE, under the film's docking wordmark on a cold start
+ * (v4.6, the Dock; specs/v4.6-details/spec.md, B): 8pt in the chrome
+ * group with Home's keys, 160 to 520 ms after the film, its opacity
+ * over 64 ms. The wrapper is here, in the `tabBar` render prop, so
+ * FloatingTabBar itself stays free of Reanimated (its header): it is a
+ * full-screen, touch-through layer, because the bar places itself
+ * absolutely at the TabView's foot and must keep doing so inside it. On
+ * the Dock's clock, which rests at 1, so at rest it is the identity.
+ *
  * ScrollChromeProvider sits around the navigator so every tab screen has
  * one scroll source: Home's top bar slides away on it
  * (components/ScrollChrome.tsx).
@@ -77,7 +87,11 @@ export default function TabLayout() {
       <TopTabs
         tabBarPosition="bottom"
         // Typed here because the vendored navigator types its bar's props as `any`.
-        tabBar={(props: React.ComponentProps<typeof FloatingTabBar>) => <FloatingTabBar {...props} />}
+        tabBar={(props: React.ComponentProps<typeof FloatingTabBar>) => (
+          <Rise group="chrome" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+            <FloatingTabBar {...props} />
+          </Rise>
+        )}
         // The pages side by side from the first frame, before the TabView has measured itself.
         initialLayout={{ width: Dimensions.get('window').width }}
         style={{ backgroundColor: colors.bg }}

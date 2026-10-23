@@ -1,5 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
+import { lineMarks } from '@/components/details/lineMarks';
+import { PenMargin } from '@/components/details/PenMarks';
+import { PEN } from '@/components/details/penPath';
 import { Icon } from '@/components/icons';
 import { Avatar, Button } from '@/components/ui';
 import { colors, fonts, layout, radius, space, textRole } from '@/constants/theme';
@@ -36,6 +39,15 @@ import type { UserProfile } from '@/types';
 /* About, Report and Block. That ••• lives here, not in the bar, because */
 /* a pushed screen's bar holds the back chevron and nothing else        */
 /* (layout principle 8, as the post detail moved its ••• into the row). */
+/*                                                                      */
+/* THE LEDGER'S MARGIN (v4.6, specs/v4.6-details A.3 #7). On your own  */
+/* profile, when both quiet lines show, the logo's pen rules them in    */
+/* the margin: a hairline in the middle of the left gutter (x 12) from  */
+/* the Dex line's cap height to the Tournaments line's baseline, so the */
+/* two read as the entries of one ledger. Ornament: no word, no count,  */
+/* and it never touches the red figure, which starts at x 24 on its own */
+/* row. Beside one row it would be a 9.5pt tick, a stray mark, so with  */
+/* one line there is none; someone else's profile never has it.         */
 /*                                                                      */
 /* The handle is not repeated here: it is the screen's title. The Dex   */
 /* panel, its ruler and the rank ladder moved to Dex progress (/stats), */
@@ -102,6 +114,16 @@ export function ProfileHeader({
   actions: ProfileActions;
 }) {
   const bio = person.bio?.trim();
+  const { fontScale } = useWindowDimensions();
+  /*
+   * The margin rule's ends, from the small role's metrics at the size it
+   * is drawn (these lines do not cap): each line is centred in its 44pt
+   * row, so its cap height is that slack plus the line's own, and its
+   * baseline the same from the foot. Once the text outgrows the row the
+   * slack is 0 and the rule follows the type.
+   */
+  const m = lineMarks('inter', textRole.small.fontSize, textRole.small.lineHeight, fontScale);
+  const pad = Math.max(0, (layout.hit - m.lineHeight) / 2);
   return (
     <View style={styles.header}>
       <View style={styles.identity}>
@@ -189,44 +211,61 @@ export function ProfileHeader({
         ) : null}
       </View>
 
+      {/*
+        The ledger: the quiet lines as one block, so the pen's margin rule
+        is placed from its edges. It holds the Dex line's 4 over it.
+      */}
       {actions.kind === 'own' ? (
-        <Pressable
-          onPress={actions.onOpenDex}
-          accessibilityRole="button"
-          accessibilityLabel={dexLine(actions.dexCount)}
-          accessibilityHint="Opens Dex progress"
-          style={({ pressed }) => [styles.line, styles.dexLine, pressed && styles.dimmed]}>
-          <Text style={[textRole.small, styles.muted, styles.dexText]}>
-            {/* The accent only once there is something caught: a red 0 reads as an error. */}
-            <Text style={actions.dexCount > 0 ? styles.dexFigure : undefined}>{formatCount(actions.dexCount)}</Text>
-            {dexWords(actions.dexCount)}
-          </Text>
-          <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
-        </Pressable>
-      ) : null}
+        <View style={styles.ledger}>
+          <Pressable
+            onPress={actions.onOpenDex}
+            accessibilityRole="button"
+            accessibilityLabel={dexLine(actions.dexCount)}
+            accessibilityHint="Opens Dex progress"
+            style={({ pressed }) => [styles.line, pressed && styles.dimmed]}>
+            <Text style={[textRole.small, styles.muted, styles.dexText]}>
+              {/* The accent only once there is something caught: a red 0 reads as an error. */}
+              <Text style={actions.dexCount > 0 ? styles.dexFigure : undefined}>{formatCount(actions.dexCount)}</Text>
+              {dexWords(actions.dexCount)}
+            </Text>
+            <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
+          </Pressable>
 
-      {actions.kind === 'own' && actions.tournaments ? (
-        /*
-         * Straight under the Dex line, each its own 44pt row, so the two
-         * quiet lines read as one short list. One button to VoiceOver,
-         * word and state together: "Tournaments, 1 running".
-         */
-        <Pressable
-          onPress={actions.tournaments.onOpen}
-          accessibilityRole="button"
-          accessibilityLabel={
-            actions.tournaments.detail ? `Tournaments, ${actions.tournaments.detail}` : 'Tournaments'
-          }
-          accessibilityHint="Opens your tournaments"
-          style={({ pressed }) => [styles.line, pressed && styles.dimmed]}>
-          <View style={styles.lineText}>
-            <Text style={[textRole.small, styles.muted, styles.lineWord]}>Tournaments</Text>
-            {actions.tournaments.detail ? (
-              <Text style={[textRole.small, styles.muted, styles.lineWord]}>{actions.tournaments.detail}</Text>
-            ) : null}
-          </View>
-          <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
-        </Pressable>
+          {actions.tournaments ? (
+            /*
+             * Straight under the Dex line, each its own 44pt row, so the two
+             * quiet lines read as one short list. One button to VoiceOver,
+             * word and state together: "Tournaments, 1 running".
+             */
+            <Pressable
+              onPress={actions.tournaments.onOpen}
+              accessibilityRole="button"
+              accessibilityLabel={
+                actions.tournaments.detail ? `Tournaments, ${actions.tournaments.detail}` : 'Tournaments'
+              }
+              accessibilityHint="Opens your tournaments"
+              style={({ pressed }) => [styles.line, pressed && styles.dimmed]}>
+              <View style={styles.lineText}>
+                <Text style={[textRole.small, styles.muted, styles.lineWord]}>Tournaments</Text>
+                {actions.tournaments.detail ? (
+                  <Text style={[textRole.small, styles.muted, styles.lineWord]}>{actions.tournaments.detail}</Text>
+                ) : null}
+              </View>
+              <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
+            </Pressable>
+          ) : null}
+          {actions.tournaments ? (
+            <PenMargin
+              kind="margin"
+              style={{
+                position: 'absolute',
+                left: -layout.gutter / 2 - PEN.vrule.mid,
+                top: pad + m.capTop,
+                bottom: pad + m.foot,
+              }}
+            />
+          ) : null}
+        </View>
       ) : null}
     </View>
   );
@@ -327,8 +366,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: space.sm,
   },
-  // The first sits 18 under the key (its line at y 344 at 440).
-  dexLine: { marginTop: space.xs },
+  // The quiet lines' block: the first sits 18 under the key (its line at y 344 at 440).
+  ledger: { marginTop: space.xs },
   dexText: { flex: 1 },
   /* The caught figure: the accent at 600 so the hue reads at 13pt (5.54:1 on the page), tabular like every count. */
   dexFigure: { fontFamily: fonts.bodySemiBold, color: colors.accent, fontVariant: ['tabular-nums'] },

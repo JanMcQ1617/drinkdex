@@ -1,8 +1,11 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
+import { HOME_RULE_DRAW } from '@/components/details/handoff';
+import { PenRule } from '@/components/details/PenMarks';
+import { PEN_SEED } from '@/components/details/penPath';
 import { groupPours, POUR_WINDOW_MS, type PourGroup } from '@/components/home/groupPours';
 import { Icon } from '@/components/icons';
 import { Avatar, haptic, PressableScale } from '@/components/ui';
@@ -47,6 +50,19 @@ import type { Drink, Pour, UserProfile } from '@/types';
 /* NO PLACEHOLDERS. Before the first answer, or after a failed one, the */
 /* row is your own circle alone: no skeleton circles and no message,    */
 /* because the feed below already says whether the connection is there. */
+/*                                                                      */
+/* THE PEN SIGNS THE TRAY (v4.6, specs/v4.6-details A.3 #1). Under the  */
+/* names, the drawn rule: the logo's pen at hairline weight across      */
+/* Home's 16 column, the one mark on Home not repeated per post. It is  */
+/* ornament and says nothing: no count, no state. It sits in a 10pt     */
+/* band under the rail, so the tray's foot goes from 8 to 18, and its   */
+/* centreline lands 14.1 under the names' baseline and 14.1 over the    */
+/* first post's ring, 32 clear of the discs. After the intro it draws   */
+/* itself in once, the Dock's last beat: its PenRule reads              */
+/* HOME_RULE_DRAW, which only the Dock moves and which rests at 1, so   */
+/* on any other launch it is simply there. It lives HERE, inside the    */
+/* one root this component returns, so it rises with the stories group  */
+/* that index.tsx wraps round <TodaysPours>.                            */
 /* ==================================================================== */
 
 const STORY = layout.story;
@@ -84,6 +100,13 @@ const BADGE = 22 + 2 * BADGE_RING;
 const BADGE_AT = STORY.ring - BADGE;
 const BADGE_PLUS = 14;
 const BADGE_STROKE = 2.4;
+/**
+ * The rule band under the rail: 10pt, so the tray's foot is 18. The rule's
+ * nominal box sits 1.5 above the band's top, which puts its centreline
+ * (PEN.rule.mid, 3.4 down its box) 1.9 into the band (spec A.3 #1).
+ */
+const RULE_BAND = 10;
+const RULE_TOP = -1.5;
 /** The longest single wait for the next story to expire; re-armed after. */
 const MAX_TIMER_MS = 60 * 60 * 1000;
 
@@ -167,6 +190,7 @@ export function TodaysPours({
 }: TodaysPoursProps) {
   const seen = useSeen((s) => s.pours[myId]);
   const ownRow = useAuth((s) => s.profile);
+  const { width } = useWindowDimensions();
   const { mine, others } = groupPours(pours, myId, seen, now);
   const ready = status === 'ready';
   const shown = ready ? others : [];
@@ -277,19 +301,32 @@ export function TodaysPours({
    * scroll view on screen opts in, and every ScrollView opts in by default.
    * With this row in too, the tap reached neither, and the feed never went
    * back to the top.
+   *
+   * One root, the rail then the rule band: the Dock lifts this component
+   * as one group, and the rule must rise with the circles it rules.
    */
   return (
-    <FlatList
-      horizontal
-      data={items}
-      keyExtractor={itemKey}
-      renderItem={renderItem}
-      initialNumToRender={7}
-      windowSize={3}
-      scrollsToTop={false}
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.rail}
-    />
+    <View>
+      <FlatList
+        horizontal
+        data={items}
+        keyExtractor={itemKey}
+        renderItem={renderItem}
+        initialNumToRender={7}
+        windowSize={3}
+        scrollsToTop={false}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.rail}
+      />
+      <View style={styles.ruleBand}>
+        <PenRule
+          length={width - 2 * layout.feedGutter}
+          seed={PEN_SEED.stories}
+          draw={HOME_RULE_DRAW}
+          style={styles.rule}
+        />
+      </View>
+    </View>
   );
 }
 
@@ -401,6 +438,9 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
 
 const styles = StyleSheet.create({
   rail: { paddingHorizontal: RAIL_END, paddingVertical: RAIL_PAD },
+  /* The pen's band: 10 under the rail, the rule on Home's 16 column (the faces', the captions'). */
+  ruleBand: { height: RULE_BAND },
+  rule: { position: 'absolute', left: layout.feedGutter, top: RULE_TOP },
   item: { width: STORY.slot, alignItems: 'center', paddingVertical: SLOT_PAD },
 
   /* The ring box, so the ring and the disc are placed from its edge. */

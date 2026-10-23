@@ -1,0 +1,9 @@
+{
+  "name": "sipply-dock",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "lockf -k -t 1800 /tmp/claude-501/hf-chrome.lock npx --yes hyperframes@0.8.92 check",
+    "render:png": "rm -rf out/png && lockf -k -t 1800 /tmp/claude-501/hf-chrome.lock npx --yes hyperframes@0.8.92 render --fps 60 --format png-sequence --no-browser-gpu --output out/png"
+  }
+}

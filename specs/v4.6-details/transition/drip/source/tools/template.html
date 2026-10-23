@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1170, height=2532" />
+<title>Sipply intro to Home, the drop</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+@font-face{font-family:Inter;src:url(assets/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(assets/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(assets/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(assets/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --line:#E3E3E3; --rule:#C4C4C4; --muted:#5C5C5C; --ink:#0A0A0A;
+  --photoEdge:rgba(10,10,10,.07); --t1:#262626; --t2:#3D3D3D; --t3:#5C5C5C;
+  --acc:#D0102C; --onAcc:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{margin:0;background:#FFFFFF}
+#root{position:relative;width:100%;height:100%;overflow:hidden;background:#FFFFFF}
+#ground{position:absolute;inset:0;background:#FFFFFF}
+/* the phone, drawn in points and blown up 3x (1170 x 2532 = 390 x 844 pt @3x) */
+#stage{position:absolute;left:0;top:0;width:390px;height:844px;transform:scale(3);transform-origin:0 0;overflow:hidden;
+  font-family:Inter,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+b{font-weight:600}
+.a{position:absolute}
+.circle{border-radius:50%}
+.small{font:400 13px/18px Inter}
+.muted{color:var(--muted)}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.print{position:absolute;overflow:hidden;background:var(--wash);border-radius:2px}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);border-radius:2px;pointer-events:none}
+#home{position:absolute;inset:0;background:var(--page);z-index:0;isolation:isolate}
+.sb{position:absolute;top:0;left:0;right:0;height:47px;background:var(--page);z-index:30}
+.sb .t{position:absolute;left:38px;top:14px;font:600 17px/22px Inter;letter-spacing:-.2px}
+.sb .r{position:absolute;right:26px;top:19px;display:flex;gap:6px;align-items:center}
+.homeInd{position:absolute;left:128px;top:831px;width:134px;height:5px;border-radius:3px;background:var(--ink);z-index:40}
+/* the film's white, lifted away as one sheet; its foot carries a soft paper shadow */
+#sheet{position:absolute;z-index:1;left:0;top:0;width:390px;height:844px;background:#FFFFFF;
+  box-shadow:0 1px 0 rgba(10,10,10,.05),0 10px 24px rgba(10,10,10,.07)}
+#ov{position:absolute;z-index:2;left:0;top:0;width:390px;height:844px}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-width="1170" data-height="2532" data-duration="__DUR__">
+  <div id="ground"></div>
+  <div id="stage" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+    <div id="home">__HOME__</div>
+    <div id="sheet"></div>
+    <svg id="ov" viewBox="0 0 390 844" xmlns="http://www.w3.org/2000/svg">
+      <g id="wm" transform="__WM0__"><path fill="#D0102C" d="__WMD__"/></g>
+      <path id="neck" fill="#D0102C" d="M0 0"/>
+      <path id="drop" fill="#D0102C" d="M0 0"/>
+      <rect id="key" fill="#D0102C" x="0" y="0" width="0" height="0" rx="0"/>
+      <g stroke="#FFFFFF" stroke-linecap="round" fill="none">
+        <path id="plusH" d="M195 785.5h0" stroke-width="1.833" opacity="0"/>
+        <path id="plusV" d="M195 785.5v0" stroke-width="1.833" opacity="0"/>
+      </g>
+    </svg>
+  </div>
+</div>
+<script>
+(function () {
+  /* ================================================================ */
+  /* "The drop" (slug drip). Every value is a pure function of time,  */
+  /* state(ms), sampled once per 60 fps frame into tl.set()s, so the  */
+  /* render is seek-safe and the numbers are the native build's.      */
+  /* Times are ms from the film's last frame (T0).                    */
+  /* ================================================================ */
+  var FPS = 60, PRE = __PRE__, POST = __POST__;
+  var S = __STATE_SRC__;
+  var END = S.END;
+  var tl = gsap.timeline({ paused: true });
+  var els = {
+    wm: document.getElementById('wm'), neck: document.getElementById('neck'),
+    drop: document.getElementById('drop'), key: document.getElementById('key'),
+    plusH: document.getElementById('plusH'), plusV: document.getElementById('plusV'),
+    sheet: document.getElementById('sheet'), ov: document.getElementById('ov'),
+    homeKey: document.getElementById('homeKey'), homeWm: document.getElementById('homeWm'),
+  };
+  function apply(st, at) {
+    tl.set(els.wm, { attr: { transform: st.wm, opacity: st.wmO } }, at);
+    tl.set(els.neck, { attr: { d: st.neck } }, at);
+    tl.set(els.drop, { attr: { d: st.drop } }, at);
+    tl.set(els.key, { attr: st.key }, at);
+    tl.set(els.plusH, { attr: { d: st.plusH, opacity: st.plusO } }, at);
+    tl.set(els.plusV, { attr: { d: st.plusV, opacity: st.plusO } }, at);
+    tl.set(els.sheet, { y: st.sheetY, opacity: st.sheetO }, at);
+    tl.set([els.homeKey, els.homeWm], { opacity: st.homeO }, at);
+  }
+  var total = Math.round((PRE + END / 1000 + POST) * FPS);
+  for (var f = 0; f <= total; f++) {
+    var ms = (f / FPS - PRE) * 1000;
+    apply(S.state(ms), f === 0 ? 0 : f / FPS - 0.001);
+  }
+  window.__timelines["main"] = tl;
+})();
+</script>
+</body>
+</html>

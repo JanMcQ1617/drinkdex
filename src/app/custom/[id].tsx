@@ -6,10 +6,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   CompositionSection,
   DexSinceRow,
-  FactList,
   FieldNotes,
   HeroPrint,
-  HeroTitle,
+  HeroRecord,
   OriginStory,
   PinnedPostBar,
   pinnedBarEstimate,
@@ -188,8 +187,8 @@ export default function CustomDrinkScreen() {
           accessibilityLabel={photo ? `Your photo of ${drink.name}` : `Drawing of ${drink.name}`}
         />
 
-        <HeroTitle drink={drawn} inDex custom />
-        <FactList drink={drawn} />
+        {/* Ruled as a catalogue entry's record is (v4.6): one HeroRecord, both pages. */}
+        <HeroRecord drink={drawn} inDex custom />
 
         {/* Where the suggestion stands. Ink only when the person has to act; no red in Daylight. */}
         {status ? (

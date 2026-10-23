@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { PlateDrip } from '@/components/details/PenMarks';
 import { colors, radius, stroke, textRole } from '@/constants/theme';
 import { formatDexNumber } from '@/data';
 
@@ -28,6 +29,17 @@ import { formatDexNumber } from '@/data';
 /*                                                                      */
 /* Never its own VoiceOver element: the row or page that holds it says  */
 /* "number 127".                                                        */
+/*                                                                      */
+/* THE DRIP (v4.6, specs/v4.6-details A.3 #8). On the drink page, and   */
+/* only there, the caught plate lets one drip of its paint fall: a run  */
+/* off the bottom edge 6 in from the right corner and a small bead,     */
+/* the logo's own drip at hairline scale. It is the same paint leaving  */
+/* the same plate, so it adds no colour and no state: a plate not       */
+/* caught never drips, and the state is still the fill and the tag      */
+/* beside it. `drip` is passed by the drink page's HeroTitle alone and  */
+/* honoured only on a caught lg plate, so the catch card, the rail      */
+/* thumb and the grids never mount its Svg. The caught plate is drawn   */
+/* overflow visible, so the drip is not clipped at the plate's edge.    */
 /* ==================================================================== */
 
 export type PlateSize = 'sm' | 'lg';
@@ -51,15 +63,19 @@ export const NumberPlate = React.memo(function NumberPlate({
   label,
   tone = 'caught',
   size = 'sm',
+  drip = false,
 }: {
   n?: number;
   /** Text in place of the number: the Nº rail's thumb ("0127"). */
   label?: string;
   tone?: PlateTone;
   size?: PlateSize;
+  /** The drink page's drip off the caught plate (v4.6): honoured on a caught lg plate only. */
+  drip?: boolean;
 }) {
   const p = PLATE[size];
   const empty = tone === 'notYet';
+  const drips = drip && tone === 'caught' && size === 'lg';
   const text = label ?? (n != null ? formatPlateNumber(n) : '');
   return (
     <View
@@ -76,6 +92,7 @@ export const NumberPlate = React.memo(function NumberPlate({
         style={[textRole.plate, { color: empty ? colors.textMuted : colors.onAccent }]}>
         {text}
       </Text>
+      {drips ? <PlateDrip /> : null}
     </View>
   );
 });
@@ -87,6 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.badge,
     borderWidth: stroke.edge,
   },
-  caught: { backgroundColor: colors.accent, borderColor: colors.accent },
+  /* Never clipped: the drip leaves the plate through its bottom edge. */
+  caught: { backgroundColor: colors.accent, borderColor: colors.accent, overflow: 'visible' },
   empty: { borderColor: colors.lineControl },
 });

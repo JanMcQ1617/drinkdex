@@ -2,6 +2,7 @@ import React, { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 
+import { Rise } from '@/components/DockRise';
 import { announce, haptic } from '@/components/ui';
 import { colors } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
@@ -855,14 +856,23 @@ export function OnboardingFlow({
       <Layer key={current} role="in" dir={stage.dir} how={how}>
         {renderStep(current, true)}
       </Layer>
-      <FooterKey
-        top={geo.keyTop}
-        label={label}
-        look={look}
-        hidden={hidden}
-        shift={current === 'welcome' ? WELCOME_SHIFT : 0}
-        onPress={onKey}
-      />
+      {/*
+        Get started rises with the welcome's words and its other key when a
+        cold start's film docks onto the welcome (v4.6; steps/Welcome). A
+        full-screen, touch-through layer, so the key keeps its own place;
+        on the Dock's clock, which rests at 1, so on every other step and
+        at every other time it is the identity.
+      */}
+      <Rise group="body" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        <FooterKey
+          top={geo.keyTop}
+          label={label}
+          look={look}
+          hidden={hidden}
+          shift={current === 'welcome' ? WELCOME_SHIFT : 0}
+          onPress={onKey}
+        />
+      </Rise>
     </View>
   );
 }

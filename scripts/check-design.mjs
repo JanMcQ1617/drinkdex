@@ -34,7 +34,9 @@
  *      sign is U+00BA, never U+2116. See EDGE_INK.
  *  17. One accent, through its tokens, in its six places: the hex only
  *      in theme.ts, the tokens and the props that draw it only where
- *      theme.ts lists. See ACCENT_FILES and ACCENT_PROPS.
+ *      theme.ts lists. See ACCENT_FILES and ACCENT_PROPS. The detail tier
+ *      (v4.6) may paint it in components/details/ alone, and its marks
+ *      are placed only from DETAIL_SITES. See ACCENT_TIERS.
  *
  * Comments are stripped before any rule runs, block comments included,
  * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5
@@ -422,6 +424,23 @@ const NUMERO = /\u2116/;
  *
  *     A seventh place is Jan's decision, not a fix for this rule: add it
  *     to theme.ts's list and here, with its reason.
+ *
+ *     THE DETAIL TIER (v4.6, Jan, 23 Oct 2026; specs/v4.6-details/
+ *     spec.md) is not a seventh place. It is the logo's paint pen at
+ *     hairline weight: rules, a swash, one drip, ornament that says
+ *     nothing, so it cannot blur what the six say. Two fences keep it so:
+ *
+ *       - the token, `colors.accent` and no other of the three, may sit
+ *         anywhere in components/details/ (ACCENT_TIERS), the folder
+ *         that draws the marks, and still nowhere new outside it;
+ *       - the marks (details/PenMarks) are imported only by the files
+ *         that hold a placement, each naming the marks it may place
+ *         (DETAIL_SITES). A mark on a key, a chip, a photo, a story ring
+ *         or the tab bar would be a new import here, and fails. Adding a
+ *         placement is Jan's decision, made in the spec and here together.
+ *
+ *     penPath (the geometry), lineMarks (type metrics) and handoff (the
+ *     draw-on's value) paint nothing, so anything may import them.
  */
 const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
 /**
@@ -453,6 +472,30 @@ const ACCENT_FILES = {
     within: ['Mark'],
     tokens: ['accent'],
   },
+};
+/**
+ * Folders whose every file may name the accent, and which of its tokens.
+ * Unlike ACCENT_FILES there is no `within`: the whole folder draws marks.
+ */
+const ACCENT_TIERS = {
+  'components/details/': {
+    why: 'the detail tier, the paint pen at hairline weight (ornament, not a seventh place)',
+    tokens: ['accent'],
+  },
+};
+const accentTier = (rel) => Object.entries(ACCENT_TIERS).find(([dir]) => rel.startsWith(dir))?.[1];
+/** The detail marks' module, by any path that ends in it (`@/components/details/PenMarks`, `../details/PenMarks`). */
+const DETAIL_MODULE = /(^|\/)details\/PenMarks$/;
+/** The files that place a detail mark, the marks each may place, and why (specs/v4.6-details/spec.md, A). */
+const DETAIL_SITES = {
+  'components/home/TodaysPours.tsx': { marks: ['PenRule'], why: "the drawn rule under Home's stories" },
+  'components/PostCard.tsx': { marks: ['PenRule'], why: 'the 24pt rule that closes each feed post' },
+  'components/dex/SectionHead.tsx': { marks: ['PenRule'], why: 'the head rule under a Dex section head' },
+  'components/ScreenTopBar.tsx': { marks: ['PenSwash'], why: "the swash under a tab root's title" },
+  'components/TabPlaceholder.tsx': { marks: ['PenSwash'], why: "the same swash, where a lazy tab root's title waits" },
+  'components/DrinkPanels.tsx': { marks: ['PenMargin'], why: "the drink page's margin and column rules" },
+  'components/profile/ProfileHeader.tsx': { marks: ['PenMargin'], why: "the margin rule beside Profile's ledger rows" },
+  'components/plate.tsx': { marks: ['PlateDrip'], why: 'the drip off the caught Nº plate' },
 };
 /** The functions, variables and object keys a node sits inside, innermost first. */
 function enclosingNames(node) {
@@ -1298,14 +1341,38 @@ function treeRules(rel, sf, lines, add) {
               ? (node.propertyName ?? node.name).getText(sf)
               : null;
       if (token && ACCENT_TOKENS.has(token)) {
-        const place = ACCENT_FILES[rel];
-        const names = place ? enclosingNames(node) : [];
+        const place = ACCENT_FILES[rel] ?? accentTier(rel);
+        const names = place?.within ? enclosingNames(node) : [];
         if (!place) {
-          add('accent', at(node), `colors.${token} outside the accent's six places (ACCENT_FILES)`);
+          add('accent', at(node), `colors.${token} outside the accent's six places (ACCENT_FILES) and its detail tier (ACCENT_TIERS)`);
         } else if (place.tokens && !place.tokens.includes(token)) {
           add('accent', at(node), `colors.${token} in ${place.why}, which is painted in ${place.tokens.map((t) => `colors.${t}`).join(', ')} only`);
-        } else if (!place.within.some((spot) => spot.split('.').every((name) => names.includes(name)))) {
+        } else if (place.within && !place.within.some((spot) => spot.split('.').every((name) => names.includes(name)))) {
           add('accent', at(node), `colors.${token} outside ${place.within.join(', ')}, where this file draws ${place.why}`);
+        }
+      }
+    }
+
+    // 17. A detail mark placed from a file that holds no placement, or a mark that file does not place.
+    if (
+      ts.isImportDeclaration(node) &&
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      DETAIL_MODULE.test(node.moduleSpecifier.text) &&
+      !accentTier(rel)
+    ) {
+      const site = DETAIL_SITES[rel];
+      const clause = node.importClause;
+      const bindings = clause?.namedBindings;
+      if (!site) {
+        add('accent', at(node), 'a detail mark imported outside its placements (DETAIL_SITES)');
+      } else if (clause?.name || (bindings && ts.isNamespaceImport(bindings))) {
+        add('accent', at(node), 'import the detail marks by name, so DETAIL_SITES can read which');
+      } else if (bindings) {
+        for (const el of bindings.elements) {
+          const mark = (el.propertyName ?? el.name).text;
+          if (!site.marks.includes(mark)) {
+            add('accent', at(el), `${mark} is not placed here: this file places ${site.marks.join(', ')} (${site.why})`);
+          }
         }
       }
     }
@@ -1404,7 +1471,7 @@ if (violations.length === 0) {
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
       '  stray shadows, gradient stops without their opacity, rarity readers, timed\n' +
       '  React Native animations, inverting photos, edge greys set as text, or the\n' +
-      '  accent outside its six places, outside the allowlists.\n',
+      '  accent outside its six places and its detail tier, outside the allowlists.\n',
   );
   process.exit(0);
 }

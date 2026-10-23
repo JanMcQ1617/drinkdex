@@ -5,6 +5,7 @@ import { AuthHold } from '@/components/auth/AuthHold';
 import { AuthTitleBar, useInputFocusOnShow, useStepTitleFocus } from '@/components/auth/AuthTitleBar';
 import { CabinetSheet } from '@/components/auth/CabinetBackdrop';
 import { CountryPicker } from '@/components/auth/CountryPicker';
+import { Rise } from '@/components/DockRise';
 import { AuthStoreMessages, EmailStep, PasswordStep, ResetStep } from '@/components/auth/EmailSteps';
 import { PhoneCodeStep } from '@/components/auth/PhoneCodeStep';
 import { useRemembered } from '@/components/auth/rememberedAccount';
@@ -270,18 +271,29 @@ export default function SignInScreen({ onClose, home }: { onClose: () => void; h
     <CabinetSheet
       backdrop={entry ? 'full' : 'compact'}
       picks={keepPicks ? { saved, picks } : undefined}
+      /*
+        A cold start's film can dock onto this step's wordmark (v4.6, the
+        Dock; auth/CabinetBackdrop): the bar then rises with the tab bar
+        in the chrome group, and the form under the wordmark rises late,
+        with the lede, because it stands where the wordmark lands. Both
+        are the identity at rest, which is every other time.
+      */
       bar={
-        <AuthTitleBar
-          title={titleOf(step, emailStatus, keepPicks)}
-          leading={leading.kind}
-          onLeading={leading.onPress}
-          titleRef={titleRef}
-          insetTop={false}
-        />
+        <Rise group="chrome">
+          <AuthTitleBar
+            title={titleOf(step, emailStatus, keepPicks)}
+            leading={leading.kind}
+            onLeading={leading.onPress}
+            titleRef={titleRef}
+            insetTop={false}
+          />
+        </Rise>
       }
       contentStyle={styles.body}>
-      {/* Keyed on the step: each one mounts fresh, with nothing carried over but the store. */}
-      <View key={stepKey}>{body}</View>
+      <Rise group="body">
+        {/* Keyed on the step: each one mounts fresh, with nothing carried over but the store. */}
+        <View key={stepKey}>{body}</View>
+      </Rise>
     </CabinetSheet>
   );
 }

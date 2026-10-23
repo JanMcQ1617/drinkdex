@@ -1,8 +1,10 @@
+import { useIsFocused } from 'expo-router';
 import React from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Wordmark } from '@/components/brand/Wordmark';
+import { DockSlot, Rise } from '@/components/DockRise';
 import { TopBarButton } from '@/components/ScreenTopBar';
 import { useHideOnScroll } from '@/components/ScrollChrome';
 import { colors, layout, stroke } from '@/constants/theme';
@@ -30,6 +32,17 @@ import { colors, layout, stroke } from '@/constants/theme';
 /* and opacity only, no timer, no Reanimated. At offset 0 every value   */
 /* is the identity, so a stall would leave the bar fully drawn. While   */
 /* VoiceOver runs the bar never hides (useHideOnScroll is constant 0).  */
+/*                                                                      */
+/* THE DOCK LANDS HERE (v4.6; specs/v4.6-details/spec.md, B). On a cold */
+/* start the film's wordmark flies into this bar's: the wordmark sits   */
+/* in a DockSlot, which registers where it is drawn and keeps it hidden */
+/* until the flying one lands on it (600 ms), and the two keys rise 8pt */
+/* in the chrome group (160 to 520 ms; their opacity over 64 ms, so the */
+/* + and the Activity dot are never a pink wash). The slot is here, not */
+/* inside HomeWordmark, because the tab's placeholder draws HomeWordmark*/
+/* too and must not be a destination. Both are Reanimated wrappers on   */
+/* the Dock's clock, which rests at 1, so at rest they are the identity */
+/* and the scroll's native-driven motion above them is unchanged.       */
 /* ==================================================================== */
 
 /** Home's row under the status bar (home-ig 2.1): 62 to 106 at 440 x 956. */
@@ -89,16 +102,28 @@ export function HomeChrome({ scrollY, unread, onActivity, onPost }: HomeChromePr
   const translateY = hide.interpolate({ inputRange: [0, HIDE], outputRange: [0, -HIDE] });
   // At rest there is no rule: one across the top of the stories would say the page had scrolled.
   const rule = scrollY.interpolate({ inputRange: [0, RULE_IN], outputRange: [0, 1], extrapolate: 'clamp' });
+  /*
+   * A Dock destination only while Home is the tab on screen. A cold-start
+   * notification tap routes during the film (a drink page pushed over the
+   * tabs, Activity, the Dex), and Home stays mounted under it: the film's
+   * wordmark must not fly into a covered bar (lib/introDock, PRIORITY).
+   */
+  const focused = useIsFocused();
 
   return (
     <View pointerEvents="box-none" style={[styles.root, { height: insets.top + HIDE }]}>
       {/* The bar: under the strip, so it slides away beneath it. */}
       <Animated.View pointerEvents="box-none" style={[styles.bar, { top: insets.top, transform: [{ translateY }] }]}>
         <View style={styles.row}>
-          <HomeWordmark />
+          {/* `lead`: HomeWordmark is set with Wordmark's lead, which the measure takes back out. */}
+          <DockSlot id="home" lead enabled={focused} style={styles.wordmark}>
+            <HomeWordmark />
+          </DockSlot>
           <View style={styles.spacer} />
-          <TopBarButton icon="create" label="Post a drink" onPress={onPost} />
-          <TopBarButton icon="heart" label="Activity" badge={unread} onPress={onActivity} />
+          <Rise group="chrome" style={styles.keys}>
+            <TopBarButton icon="create" label="Post a drink" onPress={onPost} />
+            <TopBarButton icon="heart" label="Activity" badge={unread} onPress={onActivity} />
+          </Rise>
         </View>
         <Animated.View pointerEvents="none" style={[styles.rule, { opacity: rule }]} />
       </Animated.View>
@@ -127,6 +152,8 @@ const styles = StyleSheet.create({
   /* On the row's foot. `lead` moves it out by the s's tail so the s's body is what stands on the 16 column. */
   wordmark: { alignSelf: 'flex-end' },
   spacer: { flex: 1 },
+  /* The two keys as one group for the Dock's rise, abutting as they did in the row. */
+  keys: { flexDirection: 'row' },
   /* Over the bar's 1pt foot, under the row, so it moves nothing. */
   rule: { position: 'absolute', left: 0, right: 0, bottom: 0, height: stroke.edge, backgroundColor: colors.line },
   strip: { position: 'absolute', top: 0, left: 0, right: 0, backgroundColor: colors.bg },

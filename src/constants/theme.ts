@@ -32,7 +32,8 @@ import type { DrinkCategory } from '@/types';
 /*   control    lineControl    #8A8A8A   control edges, resting glyphs  */
 /*   muted      textMuted      #5C5C5C   quiet text                     */
 /*   ink        text, lineInk  #0A0A0A   text, keys, active glyphs      */
-/*   accent     accent         #D0102C   the six places (v4.4, below)   */
+/*   accent     accent         #D0102C   the six places (v4.4, below),  */
+/*                                       and the v4.6 detail tier       */
 /*                                                                      */
 /* Daylight is light only (app.json keeps userInterfaceStyle light).    */
 /* The roles are named so a dark twin is a second map of the same keys. */
@@ -110,12 +111,28 @@ export const colors = {
    * script on red is Coca-Cola's ground, so the app never sets the name
    * white on an accent fill.
    *
+   * THE DETAIL TIER (v4.6, Jan, 23 Oct 2026; specs/v4.6-details/
+   * spec.md) is NOT a seventh place. Jan found the app "too bland" and
+   * asked for "delicate details … simple yet complex", so the logo's
+   * paint pen comes back at hairline weight (0.4 to 1.25pt, filled and
+   * swelling, never a stroked line): a rule under Home's stories, a
+   * 24pt rule closing each feed post, a rule under each Dex section
+   * head, the swash under a tab root's title, the drink page's margin
+   * and column rules and Profile's margin rule, and one drip off the
+   * caught plate. They are ornament, not information: none adds a
+   * word, a count or a state, none sits on a photo, a key, a chip, a
+   * field, a story ring or the tab bar, and none turns an existing
+   * state red, so they cannot blur what the six places say. Drawn only
+   * by components/details/, in `accent` alone (never accentPressed),
+   * and placed only from the files check-design lists (DETAIL_SITES).
+   *
    * WHY ONLY THERE. A colour that turns up everywhere stops meaning
    * anything. Red never says delete or error here: destructive words stay
    * ink and underlined, there are no red badges, and every other count,
    * line and state stays ink or muted, the active tab's line included.
    * check-design (rule 17) keeps these tokens to the code that draws the
-   * six, and the raw hex to this file; check-contrast fails any other
+   * six and the detail tier's folder, and the raw hex to this file;
+   * check-contrast fails any other
    * hue, and an accent that drifts off Campari's.
    *
    * ON INK it is a fill only: 3.58:1 against ink clears 3:1 for a key or
@@ -126,7 +143,7 @@ export const colors = {
    * drawn only as one of the four grey avatar tones (avatarTone, below),
    * and never this red.
    */
-  /** The six places' fill, the caught figure as text, and the logo's paint. 5.54:1 page, 5.08:1 wash, 4.64:1 press; 3.58:1 against ink. */
+  /** The six places' fill, the caught figure as text, the logo's paint, and the detail tier's pen. 5.54:1 page, 5.08:1 wash, 4.64:1 press; 3.58:1 against ink. */
   accent: '#D0102C',
   /** The + or the post key while held. Carries onAccent at 7.66:1. */
   accentPressed: '#A80C23',

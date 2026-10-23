@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { PRIVACY_URL, TERMS_URL } from '@/components/auth/Consent';
 import { Wordmark, WORDMARK_LG } from '@/components/brand/Wordmark';
+import { DockSlot, Rise } from '@/components/DockRise';
 import { colors, radius, space, textRole } from '@/constants/theme';
 
 import {
@@ -30,6 +31,17 @@ import { WelcomeWall } from '../WelcomeWall';
 /*                                                                      */
 /* The terms' two links open as auth/Consent's do, in the in-app        */
 /* browser, at the same published URLs.                                 */
+/*                                                                      */
+/* A COLD START CAN LAND HERE (v4.6, the Dock; specs/v4.6-details/      */
+/* spec.md, B). The film's wordmark flies down into this one (a         */
+/* DockSlot: it registers where it is drawn and stays hidden until the  */
+/* flying one lands, 600 ms), the wall fades in once the wordmark is    */
+/* clear of it (360 to 780 ms; no rise, its rows already drift), and    */
+/* the line, the terms and both keys rise 10pt (420 to 880), late,      */
+/* because they stand where the wordmark lands. Get started is the      */
+/* flow's footer key, so it rises in OnboardingFlow. No pen mark here:  */
+/* the detail system does not reach the onboarding. On the Dock's clock,*/
+/* which rests at 1, so at rest every one of these is the identity.     */
 /* ==================================================================== */
 
 const LABEL_CAP = 1.3;
@@ -50,44 +62,56 @@ export function WelcomeStep({ geo, onHaveAccount }: { geo: Geometry; onHaveAccou
   return (
     <View style={StyleSheet.absoluteFill}>
       <View style={[styles.column, { paddingBottom: geo.height - primaryTop + WELCOME_TEXT_FOOT }]}>
-        <WelcomeWall style={styles.wall} />
-        <Wordmark height={WORDMARK_LG} header />
-        <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>A field guide to cocktails and spirits.</Text>
-        <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.legal}>
-          By continuing you agree to the{' '}
-          <Text
-            style={styles.link}
-            accessibilityRole="link"
-            onPress={() => void WebBrowser.openBrowserAsync(TERMS_URL)}>
-            Terms of Use
-          </Text>{' '}
-          and{' '}
-          <Text
-            style={styles.link}
-            accessibilityRole="link"
-            onPress={() => void WebBrowser.openBrowserAsync(PRIVACY_URL)}>
-            Privacy Policy
+        <Rise group="wall" style={styles.wall}>
+          <WelcomeWall style={styles.wallFill} />
+        </Rise>
+        <DockSlot id="welcome">
+          <Wordmark height={WORDMARK_LG} header />
+        </DockSlot>
+        <Rise group="body" style={styles.words}>
+          <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>A field guide to cocktails and spirits.</Text>
+          <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.legal}>
+            By continuing you agree to the{' '}
+            <Text
+              style={styles.link}
+              accessibilityRole="link"
+              onPress={() => void WebBrowser.openBrowserAsync(TERMS_URL)}>
+              Terms of Use
+            </Text>{' '}
+            and{' '}
+            <Text
+              style={styles.link}
+              accessibilityRole="link"
+              onPress={() => void WebBrowser.openBrowserAsync(PRIVACY_URL)}>
+              Privacy Policy
+            </Text>
+            .
           </Text>
-          .
-        </Text>
+        </Rise>
       </View>
-      <Pressable
-        onPress={onHaveAccount}
-        accessibilityRole="button"
-        accessibilityLabel="I already have an account"
-        accessibilityHint="Signs in without the questions"
-        style={({ pressed }) => [styles.secondary, { top: secondaryTop }, pressed && styles.secondaryPressed]}>
-        <Text maxFontSizeMultiplier={LABEL_CAP} numberOfLines={1} style={styles.secondaryLabel}>
-          I already have an account
-        </Text>
-      </Pressable>
+      <Rise group="body" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        <Pressable
+          onPress={onHaveAccount}
+          accessibilityRole="button"
+          accessibilityLabel="I already have an account"
+          accessibilityHint="Signs in without the questions"
+          style={({ pressed }) => [styles.secondary, { top: secondaryTop }, pressed && styles.secondaryPressed]}>
+          <Text maxFontSizeMultiplier={LABEL_CAP} numberOfLines={1} style={styles.secondaryLabel}>
+            I already have an account
+          </Text>
+        </Pressable>
+      </Rise>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   column: { flex: 1, alignItems: 'center' },
-  wall: { flex: 1, marginBottom: WALL_TO_WORDMARK },
+  /* The wall's frame, now its fade's wrapper: what is left above the wordmark, the column's full width. */
+  wall: { flex: 1, marginBottom: WALL_TO_WORDMARK, alignSelf: 'stretch' },
+  wallFill: { flex: 1 },
+  /* The line and the terms, as one group: the column's width, each centred in it as before. */
+  words: { alignSelf: 'stretch', alignItems: 'center' },
   strap: { ...textRole.body, color: colors.textMuted, textAlign: 'center', marginTop: 14 },
   legal: {
     ...textRole.small,
