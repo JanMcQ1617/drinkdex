@@ -5,8 +5,8 @@
  * REELS_ENABLED uses (lib/reels.ts).
  *
  * Off means: no tab and no page to swipe to ((tabs)/_layout.tsx wraps it in
- * TopTabs.Protected; Saved holds its old slot, and the + stays between Dex
- * and Saved either way), no "Do you make drinks at home?" or bar step in
+ * TopTabs.Protected; Saved holds its old slot, and the red Dex key stays
+ * between Tournaments and Saved either way), no "Do you make drinks at home?" or bar step in
  * the first run (onboarding/path.ts), and no "You can make it" on the
  * picks (lib/recommend.ts). The screen, the store
  * and everyone's saved shelf stay as they are, so turning it back on loses

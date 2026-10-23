@@ -30,10 +30,11 @@ import { useAuth } from '@/store/auth';
 /* Tournaments are not here any more. Build 29 had a Tournaments line   */
 /* under the Dex line and a ••• row for them, and this screen asked the */
 /* server on focus to gate both. v4.7 gave them a tab of their own, the */
-/* red trophy key in the middle of the bar (Jan, 23 Oct 2026;           */
-/* specs/v4.7/spec.md 2.9), which replaced the line and the row: two    */
-/* ways in to the same list from one tab over would only be two things  */
-/* to keep in step. Activity's invitations row still opens the list.    */
+/* trophy, second in the bar (Jan, 23 Oct 2026; specs/v4.7/spec.md 2.9; */
+/* it sat on the red key in the middle until his swap that day), which  */
+/* replaced the line and the row: two ways in to the same list from     */
+/* another tab would only be two things to keep in step. Activity's     */
+/* invitations row still opens the list.                                */
 /*                                                                      */
 /* The list is the Profile tab's scroll source (chromeTab).              */
 /* ==================================================================== */

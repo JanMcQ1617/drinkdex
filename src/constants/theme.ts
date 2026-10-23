@@ -85,13 +85,13 @@ export const colors = {
    * bright enough to read as red on a 13pt figure and an 8pt dot, where
    * the old merlot leaned toward ink. Daylight stays black and white
    * everywhere else. The accent marks the things the app is for,
-   * posting a drink, catching one and the game you share with friends,
+   * posting a drink, catching one and the Dex you catch them into,
    * the one dot that says something new has come, the name itself, and
    * a like, in EXACTLY seven places:
    *
-   *   1  the Tournaments key in the tab     fill, onAccent glyph
-   *      bar (the red key, a trophy
-   *      on it)
+   *   1  the Dex key in the tab bar         fill, onAccent glyph
+   *      (the red key in the middle,
+   *      the Dex's glass on it)
    *   2  the post key: the drink page's     fill, onAccent label
    *      pinned key, the + window's Post,
    *      the post sheet's "Save & post"
@@ -111,11 +111,16 @@ export const colors = {
    *      heart over a post's photo          the photo
    *
    * Place 1 held the + until v4.7 (Jan, 23 Oct 2026, specs/v4.7/spec.md
-   * 1.5): he asked for the bar's middle to be the Tournaments tab, so the
-   * bar's one filled key now opens the app's shared game, and posting
-   * keeps its red in the post key (2) and Home's create key opens the +
-   * window. The red never says where you are: the active tab's line stays
-   * ink, under the red key as under every other.
+   * 1.5): he asked for the bar's middle to be the Tournaments tab, and
+   * build 30 shipped it as the Tournaments key. The same day he swapped
+   * it with the Dex ("make the dex section the middle one and the
+   * tournament where the deck is"; the spec's dated note at 1), so the
+   * bar's one filled key now opens the collection the app is built
+   * around, and Tournaments is an ordinary tab in the second slot, in
+   * ink like the rest. Posting keeps its red in the post key (2) and
+   * Home's create key opens the + window. The red never says where you
+   * are: the active tab's line stays ink, under the red key as under
+   * every other.
    *
    * The seventh is Jan's too (v4.7, 4.1): he drew the liked heart red.
    * A liked heart is the most universal red state there is, and it says
@@ -168,7 +173,7 @@ export const colors = {
    */
   /** The seven places' fill, the caught figure as text, the logo's paint, the liked heart, and the detail tier's pen. 5.54:1 page, 5.08:1 wash, 4.64:1 press; 3.58:1 against ink. */
   accent: '#D0102C',
-  /** The Tournaments key or the post key while held. Carries onAccent at 7.66:1. */
+  /** The Dex key or the post key while held. Carries onAccent at 7.66:1. */
   accentPressed: '#A80C23',
   /** The glyph, label or figures on an accent fill. 5.54:1 on accent. */
   onAccent: '#FFFFFF',

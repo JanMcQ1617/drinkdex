@@ -400,7 +400,9 @@ const NUMERO = /\u2116/;
  *     means "post", "caught" or, as Home's one dot, "new"; since v4.5 it
  *     is the logo's paint, the name itself; and since v4.7 (Jan, 23 Oct
  *     2026, specs/v4.7/spec.md 1.5 and 4.1) it fills the bar's one key,
- *     which opens the Tournaments tab where the + was, and a liked heart.
+ *     where the + was, and a liked heart. That key opened the Tournaments
+ *     tab in build 30; Jan swapped the two the same day, so it is the Dex
+ *     key, and Tournaments is an ink tab in the second slot.
  *     A red that turned up on another badge, a count or a delete key
  *     would blur all of them, so each way it could spread fails:
  *
@@ -457,7 +459,7 @@ const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
 /**
  * The files that draw the seven places, and where in each. A `within` entry
  * names what the token must sit inside: a function, a variable or an
- * object key; `styles.trophyKey` means both, the `trophyKey` key of
+ * object key; `styles.dexKey` means both, the `dexKey` key of
  * `styles`. A `tokens` entry narrows which of the three may sit there:
  * the logo is painted in the accent alone, so its pressed shade and the
  * white that sits on it have no place in brand/; nor in PostCard, whose
@@ -465,8 +467,9 @@ const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
  */
 const ACCENT_FILES = {
   'components/FloatingTabBar.tsx': {
-    why: 'the Tournaments key (1)',
-    within: ['TournamentsKey', 'styles.trophyKey', 'styles.trophyKeyPressed'],
+    // The Dex key since Jan's swap (v4.7, 23 Oct 2026; build 30 shipped it as the Tournaments key).
+    why: 'the Dex key (1)',
+    within: ['DexKey', 'styles.dexKey', 'styles.dexKeyPressed'],
   },
   'components/ui.tsx': { why: "the post key's skin, Button's `post` variant (2)", within: ['BUTTON_SKIN.post'] },
   'components/plate.tsx': { why: 'the caught Nº plate (3)', within: ['NumberPlate', 'styles.caught'] },

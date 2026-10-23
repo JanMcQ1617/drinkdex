@@ -86,7 +86,7 @@ export interface HomeChromeProps {
   /** The heart's dot: a like or a follow since Activity was last opened. */
   unread: boolean;
   onActivity: () => void;
-  /** The create key: the one key that opens the + window from a tab (the bar's centre is Tournaments since v4.7). */
+  /** The create key: the one key that opens the + window from a tab (the bar's centre is the Dex key since v4.7). */
   onPost: () => void;
 }
 

@@ -28,9 +28,11 @@ import type { FriendStanding, TournamentSummary } from '@/types';
 /* ==================================================================== */
 /* The Tournaments tab: the Friends board (specs/v4.7/spec.md 2)        */
 /*                                                                      */
-/* Jan, 23 Oct 2026: the red key in the middle of the bar opens "the    */
-/* tournament tab … where the users can see a whole table of all the    */
-/* drinks their friends have registered". Two halves, top to bottom:    */
+/* Jan, 23 Oct 2026: "the tournament tab … where the users can see a    */
+/* whole table of all the drinks their friends have registered". It sat */
+/* on the red key in the middle of the bar in build 30; the same day he */
+/* gave the middle to the Dex, so it is the trophy, second in the bar.  */
+/* Two halves, top to bottom:                                           */
 /*                                                                      */
 /*   TOURNAMENTS. "Host a tournament" first (he asked for it on top),   */
 /*   then a card per tournament on now that you host or joined, ending  */

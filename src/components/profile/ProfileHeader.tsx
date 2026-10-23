@@ -17,8 +17,8 @@ import type { UserProfile } from '@/types';
 /*                                                                      */
 /* The Tournaments line that sat under it (17 Oct 2026) went with v4.7  */
 /* (Jan, 23 Oct 2026; specs/v4.7/spec.md 2.9): tournaments have a tab   */
-/* of their own now, the red trophy key in the middle of the bar, so a  */
-/* second way in from here would be a duplicate to keep in step.        */
+/* of their own now, the trophy second in the bar, so a second way in   */
+/* from here would be a duplicate to keep in step.                      */
 /*                                                                      */
 /* THE CAUGHT FIGURE IS THE ACCENT (v4.4, one of its five places; see   */
 /* theme.ts). In "38 entries in your Dex" the number alone is Campari   */

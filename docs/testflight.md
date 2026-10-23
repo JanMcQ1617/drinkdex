@@ -13,7 +13,8 @@ flag.
 Tournaments need no flag: they appear once migration 020 is applied on the
 server, and stay hidden until then. Until it is, leave out every line or
 sentence below that mentions them. From build 30 (v4.7) they have a tab of
-their own, the red trophy key in the middle of the tab bar, whose Friends
+their own, the trophy, second in the tab bar (build 30 itself had it on the
+red key in the middle, which is the Dex's since Jan's swap), whose Friends
 board (you and the people you follow, by how many different drinks each
 has posted) needs migration 025 too; without 025 the tab shows tournaments
 alone, so leave out the sentences about the Friends board.
@@ -22,8 +23,10 @@ alone, so leave out the sentences about the Friends board.
 
 ## Beta App Description
 
-[4,000 max. 1,451 as pasted, counted for build 25 the way appstore.md
-counts: bold marks gone, a paragraph's line breaks as spaces.]
+[4,000 max. 1,595 as pasted, recounted after the Dex and Tournaments
+swapped places (23 Oct 2026) the way appstore.md counts: bold marks gone, a
+paragraph's line breaks as spaces. Build 25 was 1,451; the tournament item
+grew for build 30 (1,609) and shortened with the swap.]
 
 Sipply is a field guide to cocktails and spirits. Its Dex holds 2,089 entries, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
 
@@ -36,7 +39,7 @@ Worth trying:
 - Daily ideas: turn them on in Settings, set the time a few minutes ahead, and check that one arrives (none comes on a day you have posted or added a drink)
 - A collection: make one, add to it, share its link, then stop sharing
 - The Dex in For you and By number, with the taste filters
-- A tournament with a friend who tests too: tap the red trophy key in the middle of the tab bar, host one, join it, post, and check the standings, and that the Friends board on the same tab lists you both
+- A tournament with a friend who tests too: tap the trophy, second in the tab bar, host one, join it, post, and check the standings, and that the Friends board on the same tab lists you both
 - Music from Spotify or Apple Music: it should keep playing when you open Sipply
 - Account deletion and password reset
 
@@ -46,11 +49,13 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,853 as pasted, recounted for build 30 (v4.7) the same way;
-3,976 with the first sign-in item below added to the list. Build 29 was
-3,616: Tournaments, the post keys and Posting were rewritten for the tab,
-the motion and the + on Home, and Tagging, Daily ideas and the look were
-cut to make room.]
+[4,000 max. 3,860 as pasted, recounted after the Dex and Tournaments
+swapped places (23 Oct 2026) the same way; 3,983 with the first sign-in
+item below added to the list, 17 to spare. Build 30 was 3,853 (3,976):
+Tournaments now starts from the trophy, second in the bar, and Posting
+says the red key is the Dex. Build 29 was 3,616: Tournaments, the post
+keys and Posting were rewritten for the tab, the motion and the + on Home,
+and Tagging, Daily ideas and the look were cut to make room.]
 
 Thanks for trying Sipply. It's early, so tell me what's broken or confusing —
 both are useful.
@@ -77,18 +82,18 @@ Worth poking at:
   away; scroll up a little and they come back. Home's top bar does the
   same. Tell me if either gets stuck halfway, or a tab ever shows up blank
   or half drawn.
-- **Tournaments.** The red trophy key in the middle of the tab bar is now
-  the Tournaments tab. Host one with someone you follow, join it from their
-  account, post a drink from each, and check its card and its page. Each
-  different drink adds one entry, up to 3 a day. Under it, Friends ranks
-  you and the people you follow by different drinks posted: a new drink
-  adds one, a re-post none. Tap a row to open that profile.
+- **Tournaments.** Tap the trophy, second in the tab bar. Host one with
+  someone you follow, join it from their account, post a drink from each,
+  and check its card and its page. Each different drink adds one entry, up
+  to 3 a day. Under it, Friends ranks you and the people you follow by
+  different drinks posted: a new drink adds one, a re-post none. Tap a row
+  to open that profile.
 - **Liking, sharing, saving.** Tap the heart, double-tap a photo, share and
   save a post: each key now moves as it answers. Tell me if any of it feels
   slow, busy or stuck. With Reduce Motion on, nothing should move.
-- **Posting a drink.** The + is now at the top of Home, beside the heart.
-  Type your drink, add a photo and a caption. Does it show up on your
-  profile and in the feed?
+- **Posting a drink.** The + is now at the top of Home, beside the heart
+  (the red key in the tab bar is the Dex now). Type your drink, add a photo
+  and a caption. Does it show up on your profile and in the feed?
 - **Finding people.** Search a username, or match your contacts. Contacts
   are hashed on your device and never uploaded.
 - **Your Instagram list.** In Find friends, request your followers and
@@ -214,12 +219,14 @@ the third-party paragraph's two sentences about the Facebook friends list
 and access token dropped as well: 3,882, 118 to spare. Songs and phone
 sign-in together do not fit. Count before pasting.
 
-From build 30 (v4.7) the Tournaments paragraph is 847, not 644: it starts
-from the red trophy key and adds a sentence on the Friends board. Uncut,
-the build-25 set is then 4,586; with the two-sentence cut it is 3,971, 29
-to spare. Phone sign-in or songs on top need the deeper cuts, and
-appstore.md has that recount. Without migration 025, leave out the
-paragraph's last sentence (173), and it is 674.
+Since the Dex and Tournaments swapped places (23 Oct 2026) the
+Tournaments paragraph is 833, not 644: it starts from the trophy, second
+in the tab bar, and adds a sentence on the Friends board (build 30's, from
+the red key in the middle, was 847). Uncut, the build-25 set is then
+4,572; with the two-sentence cut it is 3,957, 43 to spare. Phone sign-in
+or songs on top need the deeper cuts, and appstore.md has that recount.
+Without migration 025, leave out the paragraph's last sentence (173), and
+it is 660.
 
 ### Add for a build with phone sign-in
 

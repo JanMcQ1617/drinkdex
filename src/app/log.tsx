@@ -61,8 +61,8 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* Post a drink                                                         */
 /*                                                                      */
 /* Posting's window, opened by Home's create key and every Post key     */
-/* (v4.7: the tab bar's centre is the Tournaments key now, and no       */
-/* longer opens it): a full-screen window that rises from the bottom    */
+/* (v4.7: the tab bar's centre is the Dex key now, and no longer opens  */
+/* it): a full-screen window that rises from the bottom                 */
 /* (the root stack presents it as a fullScreenModal). v4 makes          */
 /* it two plain steps (layout spec 5.6; Jan: "I want less stuff"):      */
 /*                                                                      */

@@ -5,7 +5,8 @@ import { useAuth } from '@/store/auth';
 /* ==================================================================== */
 /* The Tournaments tab (v4.7, specs/v4.7/spec.md 2)                     */
 /*                                                                      */
-/* The page behind the red trophy key in the middle of the bar: running */
+/* The page behind the trophy, second in the bar (the red key in the    */
+/* middle has been the Dex's since Jan's swap, 23 Oct 2026): running    */
 /* tournaments on top, and the Friends board under them (components/    */
 /* tournaments/FriendsBoard). Its route is `board`, at /board, never    */
 /* /tournaments, which is the pushed full list and its children; a tab  */

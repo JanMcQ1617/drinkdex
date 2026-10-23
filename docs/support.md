@@ -217,8 +217,8 @@ asks once they have. The link only opens on a phone that already has Sipply.
 A link shared from an older version of the app still opens your profile,
 but no longer follows anyone.
 
-**How do tournaments work?** Tap the red trophy key in the middle of the
-tab bar, then **Host a tournament**: give it a name, choose when it starts
+**How do tournaments work?** Tap the trophy, second in the tab bar, then
+**Host a tournament**: give it a name, choose when it starts
 and how long it runs, add a goal if you want one, and invite
 people you follow. A tournament is a shared log: each different drink
 someone posts while it runs adds one entry. With a goal, whoever reaches

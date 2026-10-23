@@ -24,6 +24,8 @@ Rules that hold everywhere in this round (the same as v4.6):
 
 ## 1. The tab bar
 
+> **Swap, 23 Oct 2026 (after build 30).** Jan: "make the dex section the middle one and the tournament where the deck is" (the "deck" is the Dex). The order is now **Home · Tournaments · Dex · Saved · Profile**. The red centre key holds the Dex: `DexKey` (was `TournamentsKey`), `styles.dexKey` / `styles.dexKeyPressed` (were `trophyKey` / `trophyKeyPressed`), drawn for `route.name === 'dex'`, the Dex's stemmed glass (`dex`) white on red at 22, outline at rest and solid when focused, the ink line resting under it, every measure in 1.2 unchanged. Tournaments (`board`) is an ordinary tab in the second slot: the `trophy` glyph at 26, muted outline at rest, solid ink when focused (handles kept, 1.2), the line under it. The pager order in `(tabs)/_layout.tsx` is the only order: the bar, the swipe and the line follow it; Home stays first; every link goes by name (`/dex`, `/board`), so none changed. With Reels on, Reels sits straight after Home. Accent place 1 is renamed **the Dex key** in theme.ts, the white spec §1.3 and check-design rule 17 (`why: 'the Dex key (1)'`, `within: ['DexKey', 'styles.dexKey', 'styles.dexKeyPressed']`). Both screens are otherwise unchanged. The rest of this part is the build-30 contract as written; read "the Tournaments key" in it as the red key, now the Dex's. `mock/tabbar.png` still shows the build-30 order and was not redrawn; `build/swap-tabbar@1x.png` and `build/swap-tabbar@3x.png` show the swapped order, drawn from the code's paths and sizes, and stand in for it.
+
 ### 1.1 What changes
 
 Build 29: Home · Dex · **+** · Saved · Profile, where the + was not a page (it opened the + window, `/log`).

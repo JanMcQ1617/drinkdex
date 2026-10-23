@@ -63,8 +63,8 @@ Every value is a neutral grey (R = G = B). Role names replace material names, so
 | `rule` | `#C4C4C4` | The ring of a seen story or your own story, the ruler's baseline and minor ticks, the sheet grabber | Decorative |
 | `control` | `#8A8A8A` | Control edges (outline buttons, an empty plate, an unticked checkbox, the "In their Dex" tag), resting tab glyphs, the ruler's major ticks, the no-photo glass | UI (3:1). As text only at 18pt or larger |
 | `muted` | `#5C5C5C` | Secondary text: meta lines, usernames, counts beside heads, placeholders, inactive tab labels, ruler labels | Yes, body-safe |
-| `ink` | `#0A0A0A` | Text, solid buttons, plates over a photo, ticked boxes, the active tab, the unseen story ring, focus rings. The tab bar's centre key (the + until v4.7, the Tournaments key since), the post key and the caught plate are the accent since v4.4 (§1.3) | Yes |
-| `inkPressed` | `#333333` | A solid ink button while held (the Tournaments key and the post key take `accentPressed`, §1.3) | Ground for `onInk` |
+| `ink` | `#0A0A0A` | Text, solid buttons, plates over a photo, ticked boxes, the active tab, the unseen story ring, focus rings. The tab bar's centre key (the + until v4.7, the Tournaments key in build 30, the Dex key since), the post key and the caught plate are the accent since v4.4 (§1.3) | Yes |
+| `inkPressed` | `#333333` | A solid ink button while held (the Dex key and the post key take `accentPressed`, §1.3) | Ground for `onInk` |
 | `onInk` | `#FFFFFF` | Text and glyphs on ink | Yes |
 | `onInkMuted` | `#A3A3A3` | The count inside an "on" chip ("In your bar 12") | Yes |
 | `scrim` | `rgba(10,10,10,0.36)` | The dim behind a sheet (composites to `#A7A7A7` over white) | Never under text that must be read |
@@ -126,12 +126,12 @@ Jan picked **Campari** on 17 Oct 2026 from four single hues (`specs/v4.4-accent/
 | Token | Hex | Job |
 |---|---|---|
 | `accent` | `#D0102C` | The fill in the seven places, the caught figure as text, the logo's paint, and the liked heart |
-| `accentPressed` | `#A80C23` | The Tournaments key or the post key while held |
+| `accentPressed` | `#A80C23` | The Dex key or the post key while held |
 | `onAccent` | `#FFFFFF` | The glyph, label or figures on an accent fill |
 
 **Exactly seven places:**
 
-1. **The Tournaments key** in the tab bar (v4.7, Jan, 23 Oct 2026; `specs/v4.7/spec.md` 1.2 and 1.5): accent fill, `accentPressed` held, a white trophy (outline at rest, solid when its tab is showing), 52 x 32, its 4pt squared corners kept. It held the + until v4.7; Jan asked for the bar's middle to be the Tournaments tab, so the bar's one filled key now opens the shared game, and posting keeps its red in the post key (2) while Home's create key opens the + window.
+1. **The Dex key** in the tab bar (v4.7, Jan, 23 Oct 2026; `specs/v4.7/spec.md` 1.2, 1.5 and the dated note at 1): accent fill, `accentPressed` held, the Dex's stemmed glass in white (outline at rest, solid when its tab is showing), 52 x 32, its 4pt squared corners kept. It held the + until v4.7. Jan asked for the bar's middle to be the Tournaments tab, and build 30 shipped it as the Tournaments key with a white trophy; the same day he swapped it with the Dex ("make the dex section the middle one and the tournament where the deck is"), so the bar's one filled key now opens the collection, and Tournaments is an ordinary ink tab in the second slot. Posting keeps its red in the post key (2) while Home's create key opens the + window.
 2. **The post key:** the drink page's pinned "Post …" key, the + window's Post, and the post sheet's "Save & post" (Jan, 17 Oct 2026). Accent fill, white label, `accentPressed` held. The same + window key stays ink when it saves without posting ("Save to Dex", "Save photo"), and so does the pinned key on a drink someone added (custom/[id]), whose + window can only save it. The post sheet's other key, "Save to Dex" or "Save photo", stays secondary.
 3. **The caught Nº plate** (the drink page and the catch card): accent fill, white figures. The not-caught plate is unchanged. The likers sheet no longer draws a plate (layout spec 5.4).
 4. **The caught figure:** the number only, Inter 600, as accent text. That is the "14" in the Dex bar's "14 / 2,089" and the "14" in Profile's "14 entries in your Dex". The rest of each line stays muted.

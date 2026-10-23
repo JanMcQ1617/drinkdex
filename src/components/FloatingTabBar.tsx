@@ -12,7 +12,7 @@ import { useAuth } from '@/store/auth';
 /* The tab bar                                                          */
 /*                                                                      */
 /* Five glyphs and one short line (layout spec 4: "10 → 5 elements";    */
-/* v4.2 decided 6 adds the line). Home · Dex · Tournaments · Saved ·    */
+/* v4.2 decided 6 adds the line). Home · Tournaments · Dex · Saved ·    */
 /* Profile, on an opaque page slab docked to the foot, with no rule, no */
 /* shadow and no floating card. The name kept its file: it is still the */
 /* bar TopTabs draws.                                                   */
@@ -31,18 +31,23 @@ import { useAuth } from '@/store/auth';
 /* 13 Oct 2026: "add an affect to know in which tab i am in the         */
 /* bottom").                                                            */
 /*                                                                      */
-/* THE TOURNAMENTS KEY (v4.7, Jan, 23 Oct 2026; specs/v4.7/spec.md 1).  */
-/* The centre slot was the + until build 29: a Campari rectangle that   */
-/* opened the + window and was not a page. Jan asked for the tournament */
-/* tab in its place, so the centre is now a real page of the pager, the */
-/* Friends board, drawn as the bar's one filled key: the same red       */
-/* rectangle (accent place 1, renamed), a white trophy on it, outline   */
-/* at rest and solid when you are on it, like every other glyph. The    */
-/* red keeps it the bar's one different KEY (the shared game, not a     */
-/* place you file things), and the line still says where you are: it    */
-/* rests under the key on Tournaments and stays ink, because where you  */
-/* are is not the accent's to say (theme.ts names its places). Posting  */
-/* lost nothing: Home's create key opens the + window, as on Instagram. */
+/* THE DEX KEY (v4.7, Jan, 23 Oct 2026; specs/v4.7/spec.md 1 and its    */
+/* dated note). The centre slot was the + until build 29: a Campari     */
+/* rectangle that opened the + window and was not a page. Build 30 put  */
+/* the Tournaments tab there, on the same red with a white trophy. The  */
+/* same day Jan swapped the two: "make the dex section the middle one   */
+/* and the tournament where the deck is" (the deck being the Dex). So   */
+/* the centre is the Dex, the collection the app is built around, drawn */
+/* as the bar's one filled key: the red rectangle (accent place 1, now  */
+/* the Dex key), the Dex's own stemmed glass on it in white, outline at */
+/* rest and solid when you are on it, like every other glyph. The red   */
+/* keeps it the bar's one different KEY, and the line still says where  */
+/* you are: it rests under the key on the Dex and stays ink, because    */
+/* where you are is not the accent's to say (theme.ts names its         */
+/* places). Tournaments took the Dex's old second slot as an ordinary   */
+/* tab: its trophy in muted outline at rest, solid ink on its page, the */
+/* line under it, exactly as Home's house is drawn. Posting lost        */
+/* nothing: Home's create key opens the + window, as on Instagram.      */
 /*                                                                      */
 /* MOVED BY THE PAGER, NEVER BY A JS CLOCK. Changing tab is the pager's */
 /* ((tabs)/_layout.tsx): a swipe carries the page under the finger and  */
@@ -71,7 +76,8 @@ const FACE_GAP = 2;
 const FACE_BOX = AVATAR + 2 * (FACE_RING + FACE_GAP);
 
 /*
- * The Tournaments key, 52 x 32 (spec 1.2). 32, not the +'s 38: the row
+ * The Dex key, 52 x 32 (spec 1.2, which drew it for the trophy; the
+ * measures moved with the red, unchanged). 32, not the +'s 38: the row
  * is 49 and the active line sits at y 43 to 45 (LINE_TOP), so a 38 key
  * (y 5.5 to 43.5) covered the line it now has to rest over. At 32 it runs
  * 8.5 to 40.5 and the line hangs 2.5 under it, the same air it keeps
@@ -80,7 +86,7 @@ const FACE_BOX = AVATAR + 2 * (FACE_RING + FACE_GAP);
  */
 const KEY_W = 52;
 const KEY_H = 32;
-/** The trophy on the key: a little under the bar's 26 so it sits inside the red with air round it. */
+/** The Dex's glass on the key: a little under the bar's 26 so it sits inside the red with air round it. */
 const KEY_GLYPH = 22;
 
 /*
@@ -99,7 +105,9 @@ type TabBarIconProps = { focused: boolean; color: string; size: number };
  * The glyph a route falls back to when its screen sets no tabBarIcon (every
  * screen sets one today). Four routes are not named after their glyph:
  * Home's route is `index`, Saved's is `saved`, My Bar's is `bar`, and the
- * Tournaments tab's is `board` (drawn as TournamentsKey, never this way).
+ * Tournaments tab's is `board`, whose trophy is an ordinary tab glyph again
+ * since the swap. The Dex's route is `dex`, its glyph's own name, though
+ * the bar draws it as DexKey and never this way.
  */
 const ROUTE_GLYPH: Readonly<Record<string, TabName>> = {
   index: 'home',
@@ -108,8 +116,8 @@ const ROUTE_GLYPH: Readonly<Record<string, TabName>> = {
   board: 'trophy',
 };
 
-/** The Tournaments tab's route: the slot the bar draws as its red key, wherever it falls. */
-const KEY_ROUTE = 'board';
+/** The Dex's route: the slot the bar draws as its red key, wherever it falls. */
+const KEY_ROUTE = 'dex';
 const glyphFor = (route: string): TabName => ROUTE_GLYPH[route] ?? (route as TabName);
 
 /*
@@ -156,9 +164,9 @@ type FloatingTabBarProps = {
 };
 
 /**
- * The Tournaments tab, drawn as the bar's one filled key: a Campari
- * rectangle (accent place 1), 4pt corners like every key, its trophy
- * white (onAccent, 5.54:1), outline at rest and solid when focused, so
+ * The Dex tab, drawn as the bar's one filled key: a Campari rectangle
+ * (accent place 1), 4pt corners like every key, the Dex's stemmed glass
+ * white on it (onAccent, 5.54:1), outline at rest and solid when focused, so
  * where you are reads on the key the way it reads on every glyph, by
  * shape and not by colour. It is a tab like the others: the same press
  * (the caller's onPress, with its `select` haptic), the same `selected`
@@ -167,9 +175,9 @@ type FloatingTabBarProps = {
  * answer a press with their fill, never a scale.
  *
  * The only place this file names the accent (check-design rule 17 reads
- * exactly TournamentsKey, styles.trophyKey and styles.trophyKeyPressed).
+ * exactly DexKey, styles.dexKey and styles.dexKeyPressed).
  */
-function TournamentsKey({
+function DexKey({
   focused,
   label,
   onPress,
@@ -186,8 +194,8 @@ function TournamentsKey({
       accessibilityState={{ selected: focused }}
       style={styles.item}>
       {({ pressed }) => (
-        <View style={[styles.trophyKey, pressed && styles.trophyKeyPressed]}>
-          <Icon name="trophy" size={KEY_GLYPH} color={colors.onAccent} filled={focused} />
+        <View style={[styles.dexKey, pressed && styles.dexKeyPressed]}>
+          <Icon name="dex" size={KEY_GLYPH} color={colors.onAccent} filled={focused} />
         </View>
       )}
     </Pressable>
@@ -224,7 +232,7 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
    * Every route in the navigator's state is a page of the pager and a slot
    * here, in the same order (Reels and My Bar are not in the state while
    * they are off). There is no slot without a page any more (v4.7: the +
-   * that sat between the Dex and Saved became the Tournaments tab), so the
+   * that sat in the centre became a tab, the Dex since the swap), so the
    * track is plain: N pages, N equal slots, page i on slot i.
    */
   const visible = state.routes;
@@ -235,8 +243,8 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
    * centre of slot i and a fraction of a page puts it between two.
    * Counted from the routes actually in the state, so Reels or My Bar,
    * while on, take their slots and the line still lands on every glyph.
-   * It passes under the red key on its way from the Dex to Saved, and
-   * rests under it on Tournaments.
+   * It passes under the red key on its way from Tournaments to Saved,
+   * and rests under it on the Dex.
    */
   const pages = visible.length;
   const slotWidth = (box?.width || windowW) / pages;
@@ -356,7 +364,7 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
           if (route.name === KEY_ROUTE) {
             return (
               <View key={route.key} style={styles.slot}>
-                <TournamentsKey focused={focused} label={label} onPress={onPress} />
+                <DexKey focused={focused} label={label} onPress={onPress} />
               </View>
             );
           }
@@ -441,10 +449,10 @@ const styles = StyleSheet.create({
   },
   faceRingOn: { borderColor: colors.text },
   /*
-   * The Tournaments key's red, centred in its slot by the Pressable
+   * The Dex key's red, centred in its slot by the Pressable
    * (styles.item): y 8.5 to 40.5 of the 49pt row, over the line's 43.
    */
-  trophyKey: {
+  dexKey: {
     width: KEY_W,
     height: KEY_H,
     borderRadius: radius.control,
@@ -453,5 +461,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   /* A fill change, not a scale: controls answer a press with their fill. */
-  trophyKeyPressed: { backgroundColor: colors.accentPressed },
+  dexKeyPressed: { backgroundColor: colors.accentPressed },
 });

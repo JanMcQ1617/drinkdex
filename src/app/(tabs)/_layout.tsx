@@ -13,18 +13,29 @@ import { MY_BAR_ENABLED } from '@/lib/myBar';
 import { COPY, REELS_ENABLED } from '@/lib/reels';
 
 /**
- * The top-level destinations: Home · Dex · Tournaments · Saved · Profile,
- * with Reels between Home and the Dex while it is switched on
+ * The top-level destinations: Home · Tournaments · Dex · Saved · Profile,
+ * with Reels straight after Home while it is switched on
  * (EXPO_PUBLIC_REELS), and My Bar after Saved while it is
  * (EXPO_PUBLIC_MY_BAR; off since build 22).
  *
- * TOURNAMENTS IS A PAGE (v4.7, Jan, 23 Oct 2026; specs/v4.7/spec.md 1.3).
- * The centre slot was the + until build 29, a key that opened the +
- * window and was not a page. It is now the Friends board, route `board`,
- * which the bar draws as its red trophy key (FloatingTabBar). The route
- * is `board`, URL /board, and never /tournaments: that path is the pushed
- * full list (app/tournaments/index.tsx) and its children, which a tab at
- * the same path would collide with. No Protected guard: the page count
+ * THE DEX IN THE MIDDLE, TOURNAMENTS SECOND (v4.7, Jan, 23 Oct 2026;
+ * specs/v4.7/spec.md 1 and its dated note). The centre slot was the +
+ * until build 29, a key that opened the + window and was not a page.
+ * Build 30 made it the Tournaments tab on the red key; the same day Jan
+ * asked for "the dex section the middle one and the tournament where the
+ * deck is", so the two pages swapped places here and nowhere else: this
+ * order IS the bar's order, the pager's swipe order and the line's track
+ * (FloatingTabBar draws one slot per route in the state, in order, and
+ * the red key on the route named `dex`, wherever it falls). Every link
+ * into either page goes by name (/dex, /board, lib/tournaments' hrefs),
+ * never by index, so nothing else moved. Home stays first, so it is
+ * still the page the app opens on.
+ *
+ * TOURNAMENTS IS A PAGE: the Friends board, which the bar draws as an
+ * ordinary tab with the trophy glyph. Its route is `board`, URL /board,
+ * and never /tournaments: that path is the pushed full list
+ * (app/tournaments/index.tsx) and its children, which a tab at the same
+ * path would collide with. No Protected guard: the page count
  * must be fixed for a build, and the tab must exist whether or not the
  * server has migrations 020 and 025 (the board says what it shows then).
  * Posting is Home's create key, and every Post key, as before.
@@ -136,22 +147,22 @@ export default function TabLayout() {
           />
         </TopTabs.Protected>
         <TopTabs.Screen
-          name="dex"
-          options={{
-            title: 'Dex',
-            tabBarAccessibilityLabel: 'Dex, your collection',
-            tabBarIcon: tabIcon('dex'),
-            lazyPlaceholder: () => <TabPlaceholder title="Dex" />,
-          }}
-        />
-        <TopTabs.Screen
           name="board"
           options={{
             title: 'Tournaments',
             tabBarAccessibilityLabel: 'Tournaments',
-            // The bar draws it on the red key (FloatingTabBar's TournamentsKey); this is its fallback.
             tabBarIcon: tabIcon('trophy'),
             lazyPlaceholder: () => <TabPlaceholder title="Tournaments" />,
+          }}
+        />
+        <TopTabs.Screen
+          name="dex"
+          options={{
+            title: 'Dex',
+            tabBarAccessibilityLabel: 'Dex, your collection',
+            // The bar draws it on the red key (FloatingTabBar's DexKey); this is its fallback.
+            tabBarIcon: tabIcon('dex'),
+            lazyPlaceholder: () => <TabPlaceholder title="Dex" />,
           }}
         />
         <TopTabs.Screen

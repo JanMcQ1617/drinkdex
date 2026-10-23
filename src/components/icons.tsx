@@ -540,10 +540,12 @@ const SOLID: Partial<Record<IconName, React.ReactNode>> = {
   ),
   /*
    * The cup, stem and foot filled, and the HANDLES KEPT (v4.7, spec 1.2).
-   * Without them the solid read as a stemmed glass at 22 on the red
-   * Tournaments key, which is the Dex's own idea one slot over. The
-   * handles are the outline's two paths, stroked at the filled weight
-   * (1.6 + 0.55) in currentColor: a handle is a line, and filling its
+   * Without them the solid read as a stemmed glass, which is the Dex's
+   * own idea, and since the swap the Dex's glass is on the red key in
+   * the very next slot, so the Tournaments tab's solid trophy (ink, at
+   * the bar's 26) must not be mistaken for it. The handles are the
+   * outline's two paths, stroked at the filled weight (1.6 + 0.55) in
+   * currentColor: a handle is a line, and filling its
    * curve would close it into a blob. currentColor resolves to the `color`
    * Icon sets on the solid group, so the handles always match the fill.
    */
@@ -707,8 +709,9 @@ export const GoogleMark = React.memo(function GoogleMark({ size = 20 }: { size?:
  * The glyphs the tab bar draws: each has a SOLID form for its active state.
  * Most are named after their route; Saved's route is `saved` and its glyph
  * is `bookmark`, My Bar's route is `bar` and its glyph is `bottle`, and
- * the Tournaments tab's route is `board` and its glyph is `trophy` (drawn
- * white on the red key, FloatingTabBar's TournamentsKey).
+ * the Tournaments tab's route is `board` and its glyph is `trophy`, drawn
+ * like every other tab's. The Dex's `dex` is drawn white on the red key
+ * (FloatingTabBar's DexKey), outline and solid all the same.
  * (tabs)/_layout.tsx and FloatingTabBar draw them with
  * <Icon filled={focused} /> in the colour the bar hands them, so the glyph
  * always matches its own label — outline at rest, solid when active, the
