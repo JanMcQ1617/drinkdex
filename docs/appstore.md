@@ -237,7 +237,7 @@ The Dex can follow your tastes. For you puts the drinks that match what you like
 
 Scroll up in the Dex and the search field and filters come back.
 
-783 of the 899 cocktails now have a photograph.
+889 of the 899 cocktails now have a photograph.
 
 Home looks like the feed you know: the full photo, then like, share and save, and who liked it.
 
@@ -265,8 +265,8 @@ collections need 023 (applied 13 Oct 2026). Without 024 the build shows no
 Tag people row, so delete that paragraph.
 
 The photo count was counted out of `src/data/drinkPhotos.ts` against
-`src/data/drinks.json`: 795 of the 2,089 entries have one, 783 cocktails
-and 12 spirits. Recount after any photo import.
+`src/data/drinks.json`: 901 of the 2,089 entries have one, 889 cocktails
+and 12 spirits (recounted 24 Oct 2026). Recount after any photo import.
 
 "Apple, Google or Facebook" describes a build with all three sign-in flags
 on, as build 25 has. Facebook also needs the Meta app to be Live: in
