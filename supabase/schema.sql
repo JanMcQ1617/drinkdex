@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 026
+-- Sipply — the whole schema, as of migration 027
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-026 built on the live project, and records every one of
+-- migrations 002-027 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -534,6 +534,71 @@ create table if not exists public.post_tag_refusals (
   primary key (post_id, tagged_id)
 );
 
+-- Push (027): the address Apple's Push Notification service needs to
+-- reach one phone, per account, with its APNs environment. One token is
+-- one phone: a second account registering it takes it over. At most five
+-- per account (register_push_token trims). Owner-only reads; written only
+-- by the RPCs and, deleting a token Apple calls dead, the push function.
+create table if not exists public.push_tokens (
+  token      text primary key,
+  user_id    uuid not null references public.profiles on delete cascade,
+  env        text not null default 'production',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  constraint push_tokens_token_shape check (token ~ '^[0-9a-f]{64,200}$'),
+  constraint push_tokens_env check (env in ('production', 'sandbox'))
+);
+
+-- 027: the three alerts per account, all on until changed; no row reads
+-- as all on.
+create table if not exists public.push_settings (
+  user_id    uuid primary key references public.profiles on delete cascade,
+  tags       boolean not null default true,
+  invites    boolean not null default true,
+  follows    boolean not null default true,
+  updated_at timestamptz not null default now()
+);
+
+-- 027: what was pushed, one row per event (the follower is a follow's
+-- subject, so a pair is pushed once, ever). The post and tournament
+-- columns only cascade. Written by push_claim; nobody reads it.
+create table if not exists private.push_ledger (
+  kind          text not null,
+  subject_id    uuid not null,
+  recipient_id  uuid not null references public.profiles    on delete cascade,
+  actor_id      uuid not null references public.profiles    on delete cascade,
+  post_id       uuid          references public.posts       on delete cascade,
+  tournament_id uuid          references public.tournaments on delete cascade,
+  sent_at       timestamptz not null default now(),
+  primary key (kind, subject_id, recipient_id),
+  constraint push_ledger_subject check (
+    case kind
+      when 'tag'    then post_id is not null and post_id = subject_id and tournament_id is null
+      when 'invite' then tournament_id is not null and tournament_id = subject_id and post_id is null
+      when 'follow' then subject_id = actor_id and post_id is null and tournament_id is null
+      else false
+    end)
+);
+
+alter table private.push_ledger enable row level security;
+revoke all on private.push_ledger from public, anon, authenticated;
+
+-- 027: when one person last notified another of a tag, or of an invite:
+-- one an hour each, from the same person to the same person, and never
+-- cascading from a post or a tournament, so deleting and making again is
+-- no way round it. Written by push_claim, given back by push_release.
+create table if not exists private.push_pair (
+  kind         text not null,
+  actor_id     uuid not null references public.profiles on delete cascade,
+  recipient_id uuid not null references public.profiles on delete cascade,
+  last_at      timestamptz not null default now(),
+  primary key (kind, actor_id, recipient_id),
+  constraint push_pair_kind check (kind in ('tag', 'invite'))
+);
+
+alter table private.push_pair enable row level security;
+revoke all on private.push_pair from public, anon, authenticated;
+
 
 -- --------------------------------------------------------------------
 -- Indexes
@@ -616,6 +681,15 @@ create index if not exists post_tag_refusals_tagged_idx on public.post_tag_refus
 create index if not exists post_photos_apple_place_idx
   on public.post_photos (apple_place_id, created_at desc) where apple_place_id is not null;
 create index if not exists posts_drink_idx on public.posts (drink_id);
+-- 027: an account's phones, newest first (the cap's trim, push_claim);
+-- and the ledger's and the pairs' cascades.
+create index if not exists push_tokens_user_idx       on public.push_tokens (user_id, updated_at desc);
+create index if not exists push_ledger_recipient_idx  on private.push_ledger (recipient_id);
+create index if not exists push_ledger_actor_idx      on private.push_ledger (actor_id);
+create index if not exists push_ledger_post_idx       on private.push_ledger (post_id) where post_id is not null;
+create index if not exists push_ledger_tournament_idx on private.push_ledger (tournament_id) where tournament_id is not null;
+create index if not exists push_pair_actor_idx        on private.push_pair (actor_id);
+create index if not exists push_pair_recipient_idx    on private.push_pair (recipient_id);
 
 
 -- --------------------------------------------------------------------
@@ -3393,6 +3467,408 @@ end;
 $$;
 
 
+-- 027: push. The secret check, the block check and the switch, then the
+-- queue every trigger calls (013's pg_net pattern: ids only, the Vault
+-- secret as a header, a warning and never a refused insert), the three
+-- trigger functions, the app's four RPCs and the push function's three
+-- (service_role only). The why is in migrations/027_push.sql.
+-- The Vault secret, compared as digests so the comparison never walks the
+-- text. False when either side is missing or empty.
+create or replace function private.push_secret_matches(p_secret text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select coalesce(p_secret, '') <> ''
+     and exists (
+       select 1 from vault.decrypted_secrets ds
+       where ds.name = 'push_secret'
+         and coalesce(ds.decrypted_secret, '') <> ''
+         and sha256(convert_to(ds.decrypted_secret, 'UTF8')) = sha256(convert_to(p_secret, 'UTF8'))
+     );
+$$;
+
+-- A block either way, read from the table: private.my_block_set() is the
+-- CALLER's set (auth.uid()), and neither the trigger nor the function
+-- runs as either person.
+create or replace function private.push_blocked(a uuid, b uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select exists (
+    select 1 from public.blocks x
+    where (x.blocker_id = a and x.blocked_id = b) or (x.blocker_id = b and x.blocked_id = a)
+  );
+$$;
+
+-- The recipient's switch for this kind of event; on when they never set one.
+create or replace function private.push_setting_on(p_kind text, p_user uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select coalesce((
+    select case p_kind when 'tag' then s.tags when 'invite' then s.invites when 'follow' then s.follows end
+    from public.push_settings s where s.user_id = p_user
+  ), p_kind in ('tag', 'invite', 'follow'));
+$$;
+
+/*
+ * Queues one call to the function for one event, after the cheap checks
+ * that would make it pointless: nobody to tell, no phone to tell them on,
+ * their switch off, a block, already pushed, or (a tag or an invite) the
+ * same person's hour not over yet. push_claim checks all of
+ * it again, as of when the call lands. The body carries ids only, never a
+ * name or a word. The warning names the kind and the error, never a
+ * person. Never raises.
+ */
+create or replace function private.queue_push(p_kind text, p_subject uuid, p_recipient uuid, p_actor uuid)
+returns void
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  secret text;
+  target text;
+begin
+  if p_subject is null or p_recipient is null or p_actor is null or p_recipient = p_actor
+     or not exists (select 1 from public.push_tokens t where t.user_id = p_recipient)
+     or not private.push_setting_on(p_kind, p_recipient)
+     or private.push_blocked(p_actor, p_recipient)
+     or exists (select 1 from private.push_ledger l
+                where l.kind = p_kind and l.subject_id = p_subject and l.recipient_id = p_recipient)
+     or exists (select 1 from private.push_pair q
+                where q.kind = p_kind and q.actor_id = p_actor and q.recipient_id = p_recipient
+                  and q.last_at > now() - interval '1 hour') then
+    return;
+  end if;
+
+  select ds.decrypted_secret into secret from vault.decrypted_secrets ds where ds.name = 'push_secret' limit 1;
+  select ds.decrypted_secret into target from vault.decrypted_secrets ds where ds.name = 'push_url' limit 1;
+  if coalesce(btrim(secret), '') = '' or coalesce(btrim(target), '') = '' then
+    return;
+  end if;
+
+  perform net.http_post(
+    url     := btrim(target),
+    body    := jsonb_build_object('kind', p_kind, 'subject', p_subject, 'recipient', p_recipient),
+    headers := jsonb_build_object('Content-Type', 'application/json', 'x-sipply-push', secret),
+    timeout_milliseconds := 10000
+  );
+exception
+  when others then
+    raise warning 'push not queued (%): %', p_kind, sqlerrm;
+end;
+$$;
+
+create or replace function private.push_on_tag()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  perform private.queue_push('tag', new.post_id, new.tagged_id,
+                             (select p.author_id from public.posts p where p.id = new.post_id));
+  return null;
+exception
+  when others then
+    raise warning 'push on tag skipped: %', sqlerrm;
+    return null;
+end;
+$$;
+
+-- Only an 'invited' row (the trigger's WHEN): the host's own row is
+-- 'accepted', and queue_push drops recipient = actor besides.
+create or replace function private.push_on_invite()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  perform private.queue_push('invite', new.tournament_id, new.user_id,
+                             (select x.host_id from public.tournaments x where x.id = new.tournament_id));
+  return null;
+exception
+  when others then
+    raise warning 'push on invite skipped: %', sqlerrm;
+    return null;
+end;
+$$;
+
+create or replace function private.push_on_follow()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  perform private.queue_push('follow', new.follower_id, new.following_id, new.follower_id);
+  return null;
+exception
+  when others then
+    raise warning 'push on follow skipped: %', sqlerrm;
+    return null;
+end;
+$$;
+
+create or replace function public.register_push_token(p_token text, p_env text)
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me  uuid := auth.uid();
+  tok text := lower(btrim(coalesce(p_token, '')));
+begin
+  if me is null then
+    raise exception 'not signed in: register_push_token got no auth.uid()' using errcode = '28000';
+  end if;
+  if tok !~ '^[0-9a-f]{64,200}$' or p_env is null or p_env not in ('production', 'sandbox') then
+    raise exception 'push_token_invalid' using errcode = 'P0001';
+  end if;
+
+  -- Serialised per account, so two launches at once cannot both trim.
+  perform pg_advisory_xact_lock(hashtextextended('push_tokens:' || me::text, 0));
+  insert into public.push_tokens as t (token, user_id, env)
+  values (tok, me, p_env)
+  on conflict (token) do update
+    set user_id = excluded.user_id, env = excluded.env, updated_at = now();
+
+  -- At most five phones per account: the least recently seen beyond that go.
+  delete from public.push_tokens t
+  where t.user_id = me
+    and t.token not in (
+      select k.token from public.push_tokens k
+      where k.user_id = me
+      order by k.updated_at desc, k.token
+      limit 5
+    );
+  return true;
+end;
+$$;
+
+create or replace function public.unregister_push_token(p_token text)
+returns boolean
+language sql
+volatile
+security definer
+set search_path = ''
+as $$
+  with gone as (
+    delete from public.push_tokens t
+    where t.token = lower(btrim(coalesce(p_token, '')))
+    returning 1
+  )
+  select exists (select 1 from gone);
+$$;
+
+create or replace function public.my_push_settings()
+returns jsonb
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select jsonb_build_object(
+    'tags',    coalesce(s.tags, true),
+    'invites', coalesce(s.invites, true),
+    'follows', coalesce(s.follows, true))
+  from (select (select auth.uid()) as me) one
+  left join public.push_settings s on s.user_id = one.me;
+$$;
+
+create or replace function public.set_push_setting(p_kind text, p_on boolean)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me uuid := auth.uid();
+begin
+  if me is null then
+    raise exception 'not signed in: set_push_setting got no auth.uid()' using errcode = '28000';
+  end if;
+  if p_kind is null or p_kind not in ('tags', 'invites', 'follows') or p_on is null then
+    raise exception 'push_setting_invalid' using errcode = 'P0001';
+  end if;
+  insert into public.push_settings (user_id) values (me) on conflict (user_id) do nothing;
+  update public.push_settings s
+     set tags       = case when p_kind = 'tags'    then p_on else s.tags end,
+         invites    = case when p_kind = 'invites' then p_on else s.invites end,
+         follows    = case when p_kind = 'follows' then p_on else s.follows end,
+         updated_at = now()
+   where s.user_id = me;
+  return public.my_push_settings();
+end;
+$$;
+
+create or replace function public.push_caller_ok(p_secret text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select private.push_secret_matches(p_secret);
+$$;
+
+create or replace function public.push_claim(p_secret text, p_kind text, p_subject uuid, p_recipient uuid)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  v_actor  uuid;
+  v_at     timestamptz;
+  v_title  text;
+  v_who    text;
+  v_tokens jsonb;
+  v_n      integer;
+begin
+  if not private.push_secret_matches(p_secret) then
+    return jsonb_build_object('result', 'forbidden');
+  end if;
+  if p_kind is null or p_subject is null or p_recipient is null then
+    return jsonb_build_object('result', 'bad_request');
+  end if;
+
+  if p_kind = 'tag' then
+    select p.author_id, t.created_at into v_actor, v_at
+    from public.post_tags t
+    join public.posts p on p.id = t.post_id
+    where t.post_id = p_subject and t.tagged_id = p_recipient;
+  elsif p_kind = 'invite' then
+    -- Still asked, never the host, and only while it is still being played.
+    select x.host_id, m.invited_at, x.name into v_actor, v_at, v_title
+    from public.tournament_members m
+    join public.tournaments x on x.id = m.tournament_id
+    where m.tournament_id = p_subject and m.user_id = p_recipient and m.status = 'invited'
+      and x.host_id <> p_recipient and x.finished_at is null and x.finalized_at is null;
+  elsif p_kind = 'follow' then
+    select f.follower_id, f.created_at into v_actor, v_at
+    from public.follows f
+    where f.follower_id = p_subject and f.following_id = p_recipient;
+  else
+    return jsonb_build_object('result', 'bad_request');
+  end if;
+
+  if v_actor is null or v_actor = p_recipient then
+    return jsonb_build_object('result', 'gone');
+  end if;
+  -- pg_net sends within seconds; an hour covers a backlog, and keeps an
+  -- old event from going out the day the function is configured.
+  if v_at is null or v_at < now() - interval '1 hour' then
+    return jsonb_build_object('result', 'stale');
+  end if;
+  if private.push_blocked(v_actor, p_recipient) then
+    return jsonb_build_object('result', 'blocked');
+  end if;
+  if not private.push_setting_on(p_kind, p_recipient) then
+    return jsonb_build_object('result', 'off');
+  end if;
+  select pr.username into v_who from public.profiles pr where pr.id = v_actor;
+  if v_who is null then
+    return jsonb_build_object('result', 'gone');
+  end if;
+  select jsonb_agg(jsonb_build_object('token', t.token, 'env', t.env) order by t.updated_at desc)
+    into v_tokens
+  from public.push_tokens t
+  where t.user_id = p_recipient;
+  if v_tokens is null then
+    return jsonb_build_object('result', 'no_device');
+  end if;
+
+  -- Last, so an event refused above stays unpushed, never used up.
+  insert into private.push_ledger (kind, subject_id, recipient_id, actor_id, post_id, tournament_id)
+  values (p_kind, p_subject, p_recipient, v_actor,
+          case when p_kind = 'tag' then p_subject end,
+          case when p_kind = 'invite' then p_subject end)
+  on conflict do nothing;
+  get diagnostics v_n = row_count;
+  if v_n = 0 then
+    return jsonb_build_object('result', 'duplicate');
+  end if;
+
+  -- A tag or an invite: the pair's hour, taken only when it is over (a
+  -- racing claim waits on the row, then sees it taken). Not over: the
+  -- ledger row just written goes again, so this event stays unspent.
+  if p_kind in ('tag', 'invite') then
+    insert into private.push_pair as q (kind, actor_id, recipient_id, last_at)
+    values (p_kind, v_actor, p_recipient, now())
+    on conflict (kind, actor_id, recipient_id) do update
+      set last_at = excluded.last_at
+      where q.last_at <= now() - interval '1 hour';
+    get diagnostics v_n = row_count;
+    if v_n = 0 then
+      delete from private.push_ledger l
+       where l.kind = p_kind and l.subject_id = p_subject and l.recipient_id = p_recipient;
+      return jsonb_build_object('result', 'limited');
+    end if;
+  end if;
+
+  return jsonb_build_object(
+    'result', 'send', 'kind', p_kind, 'subject', p_subject,
+    'actor', v_who, 'title', v_title, 'tokens', v_tokens);
+end;
+$$;
+
+/*
+ * Gives a claim back, for the function alone, when no phone can have
+ * shown it: Apple answered for every phone, and refused each (the
+ * provider token, a dead device token, any other refusal). The ledger
+ * row goes, and the pair's
+ * hour with it when this claim took it (written in the claim's own
+ * transaction, so its last_at is the row's sent_at to the microsecond),
+ * so the same event, or the next like it, can push once the fault is
+ * fixed. Only a claim from the last ten minutes: the function gives back
+ * within seconds of claiming, and nothing older is ever undone. True when
+ * one was given back.
+ */
+create or replace function public.push_release(p_secret text, p_kind text, p_subject uuid, p_recipient uuid)
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  v_actor uuid;
+  v_at    timestamptz;
+begin
+  if not private.push_secret_matches(p_secret) then
+    return false;
+  end if;
+  delete from private.push_ledger l
+   where l.kind = p_kind and l.subject_id = p_subject and l.recipient_id = p_recipient
+     and l.sent_at > now() - interval '10 minutes'
+  returning l.actor_id, l.sent_at into v_actor, v_at;
+  if v_actor is null then
+    return false;
+  end if;
+  delete from private.push_pair q
+   where q.kind = p_kind and q.actor_id = v_actor and q.recipient_id = p_recipient and q.last_at = v_at;
+  return true;
+end;
+$$;
+
+
 -- --------------------------------------------------------------------
 -- Function privileges
 --
@@ -3547,6 +4023,31 @@ revoke all on function public.place_drinks(text)                           from 
 grant execute on function public.set_photo_place(uuid, text, text, text)   to authenticated;
 grant execute on function public.drink_places(text)                        to authenticated;
 grant execute on function public.place_drinks(text)                        to authenticated;
+
+-- 027. The app's four need an account, except unregister, which a
+-- signed-out phone uses for its own token; the push function's three are
+-- service_role's alone; the rest are reached only from definer code.
+revoke all on function private.push_secret_matches(text)                from public, anon, authenticated;
+revoke all on function private.push_blocked(uuid, uuid)                 from public, anon, authenticated;
+revoke all on function private.push_setting_on(text, uuid)              from public, anon, authenticated;
+revoke all on function private.queue_push(text, uuid, uuid, uuid)       from public, anon, authenticated;
+revoke all on function private.push_on_tag()                            from public, anon, authenticated;
+revoke all on function private.push_on_invite()                         from public, anon, authenticated;
+revoke all on function private.push_on_follow()                         from public, anon, authenticated;
+revoke all on function public.register_push_token(text, text)           from public, anon;
+revoke all on function public.unregister_push_token(text)               from public;
+revoke all on function public.my_push_settings()                        from public, anon;
+revoke all on function public.set_push_setting(text, boolean)           from public, anon;
+revoke all on function public.push_caller_ok(text)                      from public, anon, authenticated;
+revoke all on function public.push_claim(text, text, uuid, uuid)        from public, anon, authenticated;
+revoke all on function public.push_release(text, text, uuid, uuid)      from public, anon, authenticated;
+grant execute on function public.register_push_token(text, text)        to authenticated;
+grant execute on function public.unregister_push_token(text)            to anon, authenticated;
+grant execute on function public.my_push_settings()                     to authenticated;
+grant execute on function public.set_push_setting(text, boolean)        to authenticated;
+grant execute on function public.push_caller_ok(text)                   to service_role;
+grant execute on function public.push_claim(text, text, uuid, uuid)     to service_role;
+grant execute on function public.push_release(text, text, uuid, uuid)   to service_role;
 
 
 -- --------------------------------------------------------------------
@@ -3736,6 +4237,24 @@ create trigger blocks_drop_tags
   after insert on public.blocks
   for each row execute function public.drop_tags_on_block();
 
+-- 027. AFTER INSERT, so only a row that is about to commit is pushed; an
+-- invite only while 'invited' (the host's own row is 'accepted').
+drop trigger if exists post_tags_push on public.post_tags;
+create trigger post_tags_push
+  after insert on public.post_tags
+  for each row execute function private.push_on_tag();
+
+drop trigger if exists tournament_members_push on public.tournament_members;
+create trigger tournament_members_push
+  after insert on public.tournament_members
+  for each row when (new.status = 'invited')
+  execute function private.push_on_invite();
+
+drop trigger if exists follows_push on public.follows;
+create trigger follows_push
+  after insert on public.follows
+  for each row execute function private.push_on_follow();
+
 
 -- --------------------------------------------------------------------
 -- Table privileges
@@ -3760,7 +4279,9 @@ create trigger blocks_drop_tags
 -- updated (remove and tag again); their refusals are unreachable. Places
 -- (026) are two columns of post_photos under its own grants and
 -- policies: written by the photo's insert and by set_photo_place, never
--- by an update.
+-- by an update. Push (027) is select-only for its owner: tokens and the
+-- three switches are written through RPCs, and the push function deletes
+-- a dead token as service_role.
 -- --------------------------------------------------------------------
 
 grant select on public.profiles to anon, authenticated;
@@ -3823,6 +4344,10 @@ grant select, delete on public.post_tags to authenticated;
 grant insert (post_id, tagged_id) on public.post_tags to authenticated;
 
 revoke all on public.post_tag_refusals from anon, authenticated;
+
+revoke all on public.push_tokens, public.push_settings from anon, authenticated;
+grant select on public.push_tokens, public.push_settings to authenticated;
+grant select, delete on public.push_tokens to service_role;
 
 
 -- --------------------------------------------------------------------
@@ -4126,6 +4651,19 @@ create policy post_tags_delete on public.post_tags
                where p.id = post_id and p.author_id = (select auth.uid()))
   );
 
+-- Push (027): your own phones and your own switches, read-only; every
+-- write is an RPC.
+alter table public.push_tokens   enable row level security;
+alter table public.push_settings enable row level security;
+
+drop policy if exists push_tokens_read_own   on public.push_tokens;
+drop policy if exists push_settings_read_own on public.push_settings;
+
+create policy push_tokens_read_own on public.push_tokens
+  for select to authenticated using (user_id = (select auth.uid()));
+create policy push_settings_read_own on public.push_settings
+  for select to authenticated using (user_id = (select auth.uid()));
+
 -- Drink suggestions (018): own rows only, and nobody else reads. Editable
 -- only until Jan has reviewed it; withdrawing is always allowed.
 drop policy if exists drink_submissions_read_own   on public.drink_submissions;
@@ -4366,12 +4904,39 @@ select cron.schedule('sipply-submissions-check', '20 * * * *', $$select private.
 
 
 -- --------------------------------------------------------------------
+-- Vault (027)
+--
+-- The push triggers' shared secret, made here so nobody types it (see
+-- migrations/027_push.sql §5). The function's address is NOT made here:
+-- 027 stores the live project's, and a new project stays inert until its
+-- own is stored, so its triggers never call another project's function:
+--   select vault.create_secret('https://<ref>.supabase.co/functions/v1/push', 'push_url');
+-- --------------------------------------------------------------------
+
+do $$
+declare
+  fresh text;
+begin
+  if not exists (select 1 from vault.secrets s where s.name = 'push_secret') then
+    if to_regprocedure('extensions.gen_random_bytes(integer)') is not null then
+      execute 'select encode(extensions.gen_random_bytes(32), ''hex'')' into fresh;
+    else
+      fresh := replace(gen_random_uuid()::text || gen_random_uuid()::text, '-', '');
+    end if;
+    perform vault.create_secret(fresh, 'push_secret',
+      'Sipply 027: the header the push triggers send to the push Edge Function. Made by the migration; nobody types it.');
+  end if;
+end;
+$$;
+
+
+-- --------------------------------------------------------------------
 -- Record what this file stands in for. Last statement on purpose: a run
 -- that fails partway must not claim to have succeeded.
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 025'),
+  ('schema',                  'schema.sql, current as of 027'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -4396,5 +4961,6 @@ insert into public.schema_migrations (version, note) values
   ('023_collections',         'contained in schema.sql'),
   ('024_post_tags',           'contained in schema.sql'),
   ('025_friends_board',       'contained in schema.sql'),
-  ('026_places',              'contained in schema.sql')
+  ('026_places',              'contained in schema.sql'),
+  ('027_push',                'contained in schema.sql')
 on conflict (version) do nothing;

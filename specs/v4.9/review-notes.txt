@@ -1,0 +1,23 @@
+Sign-in required? Yes. Reviewers can create an account with any email; there is no invite code or gate.
+
+User-generated content. Sipply has posts, photos and usernames from other users. Reporting and blocking are both available from the "..." menu on any post or profile that isn't yours: report offers a reason, block is immediate and symmetric, and removes any follow between the two accounts. Blocks can be undone from Profile → "..." → Settings → Blocked accounts. Captions, bios, display names and usernames pass a server-side filter that refuses slurs and explicit sexual terms before they are saved.
+
+Tags. A post can tag up to 10 people its author follows, never anyone they are blocked with either way. Anyone tagged can remove themselves from the post's "..." menu, and a post with tags is reported like any other.
+
+Account deletion. Profile → "..." (top right) → Settings → Delete account. Deletes the account, all posts, all photos and all follows. No email or support request needed.
+
+Age rating. 18+. Sipply is for people of legal drinking age where they live: its first screens ask, and stop anyone who answers no, and every new account confirms it. The app is about alcoholic drinks and includes references to alcohol throughout. It does not sell alcohol, does not facilitate purchase, and contains no commerce of any kind.
+
+Contacts. The app asks for contacts access, but contacts are not collected.
+
+Instagram. There is no Instagram login and no Instagram API.
+
+Third-party accounts? Sign in with Apple, Continue with Google and Continue with Facebook, alongside email. Sign in with Apple is shown wherever Continue with Google or Continue with Facebook is (guideline 4.8), and each one asks a new account to choose a username before anything else. Continue with Google asks for openid, email and profile only. Continue with Facebook asks for public_profile and email. Both run in the system authentication sheet; there is no Google or Facebook SDK in the app. The other outside services are Supabase for hosting and sign-in, and Expo for app updates.
+
+Daily ideas. Optional local notifications, at most one a day, at a time the person picks (6 PM by default). An in-app screen offers them only after a first logged or added drink, post, save or follow; it shows an example, and iOS asks only after Allow. On or off in Profile → "..." → Settings → Notifications. Messages invite logging drinks already had, writing down recipes, reading about and saving drinks; none suggests drinking, a time to drink or drinking more. To see the offer, post a drink.
+
+People notifications (optional). A tag, a tournament invite or a new follower ("ana started following you."). Their own in-app screen asks first, then iOS. Three switches in Settings → Notifications.
+
+Tournaments. Anyone can hold a friendly tournament with people they follow: a shared log, and whoever posts the most different Dex entries wins. Each drink counts once, and amounts are never counted or shown. Only 3 entries a day count per person, and a drink first posted after the day's three never counts later, so nothing rewards posting a lot at once. No prizes, no entry fees, no streaks, no meters, no notifications but the invite. Every tournament screen shows the rules, ending "No prizes, and Apple is not a sponsor. Please drink responsibly." Names pass the caption filter. To find it, follow anyone, then tap the trophy, second in the tab bar → Host a tournament.
+
+Places. A post can name the bar or restaurant it was had at, found with Apple Maps search on the device (MapKit). Only venues can be tagged, never a home or an address. Location is When In Use, asked only on a tap of Show places near me; search by name works without it, and the device's location never reaches our server. Pages count people who had a drink at a place, never amounts, prices, deals or rankings. Wrong places are reported from the post's "..." menu. Try it on iOS 18 or later: post a drink, then Add place.

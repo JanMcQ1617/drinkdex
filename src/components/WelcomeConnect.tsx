@@ -72,8 +72,9 @@ export function WelcomeConnect({ onDone }: { onDone: () => void }) {
       {/*
         FindFriends draws <FacebookFriends /> straight after contacts, so
         someone who has just signed in with Facebook sees their friends in
-        the second section without asking for anything. Not mounted here
-        as well: it would draw twice.
+        the second section without asking for anything (while the friends
+        flag is on, lib/facebook). Not mounted here as well: it would draw
+        twice.
       */}
       <FindFriends />
     </CabinetSheet>

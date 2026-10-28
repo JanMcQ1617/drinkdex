@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 26 October 2026**
+**Last updated: 28 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -47,37 +47,25 @@ Google email address already has a Sipply account, Continue with Google
 signs you in to that account.
 
 **Continue with Facebook (only if you use it).** Facebook's own page asks
-you to let Sipply have your name, profile picture, email address and
-friends list. You can use it to sign up or sign in, or add it to an
-account you already have with **Connect Facebook** under Find friends.
-Each part is used for one thing:
+you to let Sipply have your name, profile picture and email address. You
+can use it to sign up or sign in. Each part is used for one thing:
 
 - **Your name** becomes your display name if Facebook is how you sign up.
   Other users can see it, and you can change it before you finish signing
   up, or later in Edit profile.
 - **Your email address** becomes your sign-in address if Facebook is how
-  you sign up. Added to an existing account, it is kept with your Facebook
-  sign-in details and changes nothing.
+  you sign up.
 - **Your profile picture.** Facebook sends a link to it, which our
   authentication provider keeps with your sign-in details. Sipply does not
   show it or copy it: your Sipply profile photo is only ever one you
   choose.
 - **An identifier for you.** Facebook gives each app its own number for
   each person, which means nothing outside Sipply. It is kept with your
-  account, and it is what lets your Facebook friends on Sipply find you.
-- **Your friends list.** Facebook only ever tells Sipply about friends who
-  also use Sipply and let it see their friends list too, never your whole
-  list. Your phone asks Facebook for them each time you sign in with
-  Facebook or connect it, and whenever you tap **Check Facebook**, then
-  sends their Sipply-only identifiers to be matched against accounts that
-  connected Facebook. The match stores nothing: not the list, not the
-  identifiers, not even a count. **Your Facebook friends list is never
-  kept on our servers.** The profiles it finds are kept on your phone
-  (see "On your device").
-- **Facebook's access key.** Facebook also gives the app a temporary key
-  for reading that list. It is used from your phone, held only in the
-  app's memory until the app closes or you sign out, and never saved, on
-  the phone or on our servers.
+  account, so the same Facebook account signs you in to it again.
+- **Not your friends list.** Sipply does not ask Facebook for your
+  friends and never reads them.
+- **Facebook's access key.** Facebook also gives the app a temporary key.
+  It is discarded on your phone and never stored.
 
 **Profile.** Your username, display name, an optional bio, an optional
 profile photo, and an accent colour. All of these are visible to anyone
@@ -208,6 +196,40 @@ or who has blocked you, is counted or shown. You can add or remove the
 place on your own posts at any time, and it goes when the photo or the
 post does.
 
+**Notifications from other people (only if you allow them).** Sipply can
+tell you when someone tags you in a post, invites you to a tournament or
+starts following you. It asks you first, on a screen of its own that
+names all three, separately from daily ideas: allowing daily ideas does
+not allow these. Only if you tap Allow there, and your iPhone allows
+Sipply's notifications, does the app send our server your phone's device
+token: the address Apple issues so that a server can send that phone a
+notification for Sipply. It cannot be used to find or contact you
+anywhere else. We store it with your account, whether it belongs to a
+development build of the app, and when it was last used, for at most
+five phones per account. Your three switches for these notifications are
+stored with your account too, and are all on until you change them. The
+phone remembers whether you answered that screen and what you answered,
+so that it does not ask again. When one of those things happens, our
+server sends Apple's Push Notification service that token with the
+notification: its one line, such as "ana started following you.", what
+kind it is, and the link it opens in Sipply, which holds the random id
+of the post, tournament or person it is about. Apple delivers it to your
+phone and handles it under its own privacy policy. So that nothing is
+sent twice, we keep a note of each notification sent: what kind it was,
+who it was from and to, the post or tournament it was about, and when,
+never its words.
+The notes for a post or a tournament go with it; the notes for follows
+stay until either account is deleted, so that following someone again
+does not notify them again. So that nobody can send you a stream of
+them, we also keep, for each person who has tagged you or invited you to
+a tournament, when the last of those notifications was sent (at most one
+of each an hour from the same person); that stays until either account
+is deleted. The token is removed from our server when you sign out, when
+you turn all three switches off in **Profile → "..." → Settings →
+Notifications**, when you turn notifications off for Sipply in your
+iPhone's settings (the next time you open the app), or when you delete
+your account.
+
 **Invite links.** When you share an invite, Sipply creates a random link
 that stops working after 30 days. Anyone who accepts it in that time
 follows you, and you follow them back, unless one of you has blocked the
@@ -261,8 +283,7 @@ friends clears it.
 strangers, each account can check at most 3,000 phone numbers and
 Instagram handles, counted together, in any 24 hours. To enforce that, we
 record how many you checked, from which list, and when, never the hashes
-themselves. Facebook friends are not counted, because Facebook itself
-decides whom it lists.
+themselves.
 
 The sign-in screen has a limit of its own. When you enter an email
 address there, Sipply checks whether it already has an account, so the
@@ -285,11 +306,8 @@ hashes and the app would otherwise ask for them again; **Stop being
 findable** removes them here as well. The Instagram list you import is
 cached on the phone too, so re-checking it does not need another download,
 and **Forget my imported list** in Profile → "..." → Settings → Find
-friends clears it. If you connected Facebook, the Sipply profiles of your
-Facebook friends who are here are kept on the phone, with when they were
-checked, so the list is there next time; never a Facebook identifier.
-Signing out clears the Instagram list, the number, the username and the
-Facebook friends; your collection stays. So the app can offer **Welcome
+friends clears it. Signing out clears the Instagram list, the number and
+the username; your collection stays. So the app can offer **Welcome
 back**, the phone keeps the last account's display name, profile photo and
 the way it signed in (Apple, Google, Facebook, phone or email; never the
 number, the address or a password) after you sign out. **Not you? Forget
@@ -307,8 +325,8 @@ number made on the phone, so that phones do not all get the same idea on
 the same evening. So that it does not keep asking, it also
 remembers when it offered you daily ideas and what you answered. Nothing
 about them is sent to us or to anyone else, and no push notification
-service is involved: Sipply does not ask for the address a server would
-need to send your phone a notification. They are a setting of the phone,
+service is involved in them: they never use the device token described
+under Notifications from other people. They are a setting of the phone,
 not of your account: signing out keeps your choice, but none come while
 you are signed out, and they start again when you sign in. Turn them off in
 **Profile → "..." → Settings → Notifications**, or at any time in your
@@ -383,7 +401,10 @@ each version.
 **Apple**, if you use Sign in with Apple, confirms who you are and so knows
 that you use Sipply, under Apple's own privacy policy. When you delete your
 account, our server asks Apple to end Sipply's access, as described under
-Deleting your account. If you are testing
+Deleting your account. If you allow notifications from other people,
+Apple's Push Notification service receives your phone's device token and
+each notification (its line, its kind and the link it opens), to deliver
+it, as described above. If you are testing
 Sipply through TestFlight, Apple also receives standard crash and
 installation information. If you search for a song or see one on a story,
 Apple Music serves its cover art, and its preview when it plays, to your
@@ -395,10 +416,9 @@ knows that you use Sipply, under Google's own privacy policy. Sipply sends
 Google nothing else about you or what you do here.
 
 **Meta**, if you use Continue with Facebook, knows that you connected
-Sipply and when the app asks for your friends list, under Meta's own
-privacy policy. Sipply sends Facebook nothing else about you or what you do
-here. Choosing an Instagram download involves no connection to Instagram at
-all.
+Sipply, under Meta's own privacy policy. Sipply sends Facebook nothing
+else about you or what you do here. Choosing an Instagram download
+involves no connection to Instagram at all.
 
 **Our report alerts.** When anyone files a report, a one-line alert goes to
 the private chat channel where reports are picked up. It says why the
@@ -425,7 +445,9 @@ your collections (any link to one stops working), your taste answers and
 saved drinks, your follows in both directions, your blocks, your invite
 links, the drinks
 you added and their photos, the hashes that make you findable, the
-records kept for the matching and song-search limits, and the tournaments
+records kept for the matching, song-search and notification limits, your
+phones' device tokens, your notification switches and the notes of
+notifications sent to you or about you, and the tournaments
 you host, with your place in anyone else's. If you signed in with your
 phone number, it also deletes the number (Twilio keeps its own record of the
 texts it sent, under its own policy); if you signed in with Apple, Google or
@@ -434,8 +456,8 @@ Google or Facebook sent when you signed in. On the phone you delete from,
 the collection and the drinks you added are reset and the photos Sipply
 kept for them are removed, your taste answers and saved drinks are
 cleared, and what Sipply remembered there for finding friends (your
-number, your Instagram username, an imported Instagram list, your Facebook
-friends) is forgotten. It cannot be undone, and your username
+number, your Instagram username, an imported Instagram list) is
+forgotten. It cannot be undone, and your username
 becomes available to someone else.
 
 A suggestion already included in a monthly email stays in that email. A
@@ -500,11 +522,12 @@ anything else, email us.
 If you are in the EEA or UK: our basis for processing is performing the
 service you asked for (your account, your posts with the songs, tags and
 places on them, the drinks you add, your tastes and the drinks you save, your
-collections, the tournaments you host or join, and the sign-in and
-friend finding you choose to use) and our legitimate interest in keeping
+collections, the tournaments you host or join, the notifications you
+allow, and the sign-in and friend finding you choose to use) and our legitimate interest in keeping
 the app safe (reports, blocks, the notes that stop someone being tagged
 again on a post they left, the text filter, the matching limits, the
-song-search limit and the sign-in screen's limit).
+song-search limit, the notification limits and the sign-in screen's
+limit).
 You may complain to your local data protection authority.
 
 If you are in California: we do not sell or share personal information,

@@ -20,6 +20,15 @@ import type { UserProfile } from '@/types';
 /* turns those ids into profiles against the Facebook identities         */
 /* Supabase Auth holds, so nobody can claim someone else's account.      */
 /*                                                                      */
+/* THE FRIENDS FLAG. All of that waits on FACEBOOK_FRIENDS_ENABLED      */
+/* (EXPO_PUBLIC_FACEBOOK_FRIENDS), off unless the build says 'on', and  */
+/* off since 28 October 2026 for Meta's App Review                      */
+/* (specs/v4.9/meta-review.md). Off, Continue with Facebook is a        */
+/* sign-in and nothing more: Facebook's dialog asks for public_profile  */
+/* and email alone, Graph is never asked about anyone's friends, and    */
+/* the token is dropped unread, as Google's is. Every line below stays, */
+/* so 'on' brings it all back as it was.                                */
+/*                                                                      */
 /* THE BROWSER LEG is lib/oauth's, shared with Continue with Google.    */
 /* This file passes it Facebook's scopes, its auth_type and its copy.    */
 /*                                                                      */
@@ -39,8 +48,36 @@ import type { UserProfile } from '@/types';
 /* also drops anyone blocked or deleted since.                          */
 /* ==================================================================== */
 
-/** Name and email to make the account; user_friends is the reason to ask. */
-const SCOPES = 'public_profile email user_friends';
+/**
+ * Friends from Facebook is built, and OFF. Decided 28 Oct 2026: the Meta
+ * app's first App Review asks for email and public_profile only, because
+ * user_friends needs a screencast of its own and is the hardest of the
+ * three to get approved, and friends can already be found by contacts,
+ * the Instagram list and username search. On only when the build sets
+ * EXPO_PUBLIC_FACEBOOK_FRIENDS=on, the pattern REELS_ENABLED uses
+ * (lib/reels.ts): static dot access, so Expo inlines it.
+ *
+ * Off means: SCOPES leaves user_friends out, so Facebook's dialog never
+ * mentions a friends list; syncFacebookFriends returns before it reads a
+ * token, so neither /me/friends nor /me/permissions is ever asked;
+ * store/auth passes Facebook no onProviderToken, so its token is dropped
+ * unread and never held; FacebookFriends draws nothing (no section, no
+ * Connect Facebook); and Settings' Find friends hint leaves Facebook out.
+ * A list an earlier build left on the phone is never read, and sign-out
+ * still clears it. Continue with Facebook itself is
+ * EXPO_PUBLIC_FACEBOOK_SIGN_IN's and works the same either way.
+ *
+ * Turning it on needs Meta's approval of user_friends first, then the
+ * friends paragraphs back in the privacy policy, the support page and the
+ * data deletion page (meta-review.md, "Adding user_friends back").
+ */
+export const FACEBOOK_FRIENDS_ENABLED = process.env.EXPO_PUBLIC_FACEBOOK_FRIENDS === 'on';
+
+/**
+ * Name and email to make the account; user_friends is the reason to ask,
+ * and is asked only while the friends flag is on.
+ */
+const SCOPES = FACEBOOK_FRIENDS_ENABLED ? 'public_profile email user_friends' : 'public_profile email';
 
 const GRAPH_ORIGIN = 'https://graph.facebook.com/';
 const FRIENDS_URL = `${GRAPH_ORIGIN}v21.0/me/friends?fields=id&limit=500`;
@@ -139,7 +176,9 @@ export function openFacebookAuth(mode: FacebookMode): Promise<FacebookAuthOutcom
      * Passed on to Facebook by GoTrue. Facebook never asks again for a
      * permission someone once declined unless told to, so without this a
      * friends list left unticked the first time could never be shared
-     * afterwards. With nothing declined it is the ordinary dialog.
+     * afterwards. The same holds for an email address left unticked,
+     * which is why it stays with the friends flag off. With nothing
+     * declined it is the ordinary dialog.
      */
     queryParams: { auth_type: 'rerequest' },
     describe: (code) => describe(code, mode),
@@ -153,8 +192,13 @@ export function openFacebookAuth(mode: FacebookMode): Promise<FacebookAuthOutcom
 /** The one provider token this session holds, and whose it is. Memory only. */
 let held: { userId: string; token: string } | null = null;
 
-/** Keeps a Facebook token from a sign-in or link for the friends check. */
+/**
+ * Keeps a Facebook token from a sign-in or link for the friends check.
+ * Never with the friends flag off: there is no check for it to serve, and
+ * store/auth does not pass it here then either.
+ */
 export function holdFacebookToken(userId: string, token: string): void {
+  if (!FACEBOOK_FRIENDS_ENABLED) return;
   held = { userId, token };
 }
 
@@ -342,9 +386,11 @@ function friendsFailure(e: unknown): string {
  * Asks Facebook who of this person's friends use Sipply, matches them, and
  * caches the answer. Needs the token from a sign-in or link in this
  * session (holdFacebookToken); returns false without one, or on failure,
- * which is recorded for the screen in `failures`.
+ * which is recorded for the screen in `failures`. With the friends flag
+ * off it returns false before anything else, so Graph is never asked.
  */
 export async function syncFacebookFriends(userId: string): Promise<boolean> {
+  if (!FACEBOOK_FRIENDS_ENABLED) return false;
   const token = held?.userId === userId ? held.token : null;
   if (!token) return false;
   if (useFacebookFriends.getState().checking[userId]) return false;
@@ -412,12 +458,14 @@ export async function loadFacebookFriends(userId: string): Promise<FacebookFrien
 
 /**
  * The signed-in account's Sipply friends from Facebook: null when the
- * account has no Facebook identity, otherwise the cached list — empty when
- * none of those friends are here, and also when nothing has been checked
- * on this phone yet (useFacebookFriends tells those apart, with null).
- * A list is made right after a Facebook sign-in or link; this reads it.
+ * account has no Facebook identity, or the friends flag is off, otherwise
+ * the cached list — empty when none of those friends are here, and also
+ * when nothing has been checked on this phone yet (useFacebookFriends
+ * tells those apart, with null). A list is made right after a Facebook
+ * sign-in or link; this reads it.
  */
 export async function fetchFacebookFriends(): Promise<UserProfile[] | null> {
+  if (!FACEBOOK_FRIENDS_ENABLED) return null;
   const { data } = await supabase.auth.getSession();
   const user = data.session?.user;
   if (!user || !hasFacebookIdentity(user)) return null;

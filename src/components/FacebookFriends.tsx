@@ -6,6 +6,7 @@ import { FindNote, FindSection } from '@/components/profile/FindSection';
 import { Button, Notice } from '@/components/ui';
 import { colors, space } from '@/constants/theme';
 import {
+  FACEBOOK_FRIENDS_ENABLED,
   canCheckWithoutFacebook,
   hasFacebookIdentity,
   loadFacebookFriends,
@@ -36,9 +37,24 @@ import { FACEBOOK_SIGN_IN_ENABLED, useAuth } from '@/store/auth';
 /* What it can find is honest about its limit: Facebook lists only the   */
 /* friends who ALSO connected Sipply, never everyone (lib/facebook). The */
 /* copy says so rather than promising a friends list it cannot have.     */
+/*                                                                      */
+/* None of it while the friends flag is off (lib/facebook,              */
+/* FACEBOOK_FRIENDS_ENABLED): FacebookFriends is then nothing, so Find  */
+/* friends goes from contacts straight to being findable, with no gap   */
+/* and no Connect Facebook. The section below stays as it was for the   */
+/* day the flag comes back on.                                          */
 /* ==================================================================== */
 
+/**
+ * The flag's gate. A wrapper rather than a return inside the section, so
+ * a build that cannot show it never runs its hooks either, and never
+ * reads a list an earlier build left on the phone.
+ */
 export function FacebookFriends() {
+  return FACEBOOK_FRIENDS_ENABLED ? <FacebookFriendsSection /> : null;
+}
+
+function FacebookFriendsSection() {
   const user = useAuth((s) => s.session?.user);
   const connectFacebook = useAuth((s) => s.connectFacebook);
   const myId = user?.id;

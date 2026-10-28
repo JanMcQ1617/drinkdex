@@ -21,6 +21,7 @@ import {
   rememberPhone,
 } from '@/lib/discovery';
 import {
+  FACEBOOK_FRIENDS_ENABLED,
   clearFacebookCache,
   hasFacebookIdentity,
   holdFacebookToken,
@@ -157,7 +158,9 @@ interface AuthState {
   /**
    * For the signed-in account: adds Facebook to it when it has none
    * (linkIdentity), or goes back through Facebook for a fresh friends list
-   * when it has. Either way the friends check runs straight after.
+   * when it has. Either way the friends check runs straight after. Offered
+   * only in Find friends' Facebook section, so only while the friends flag
+   * is on (lib/facebook).
    */
   connectFacebook: () => Promise<string | null>;
   /**
@@ -678,8 +681,9 @@ export function onAccountDeleted(listener: (uid: string) => void): () => void {
  * Turns what came back from the browser leg (lib/oauth) into a session.
  * Shared by Google and Facebook; only the provider token differs, and
  * `onProviderToken` decides what happens to it. Facebook keeps it in
- * memory for the friends check (keepFacebookToken, below). Google passes
- * nothing, so Google's token is dropped here, unread.
+ * memory for the friends check (keepFacebookToken, below) while the
+ * friends flag is on. Google passes nothing, and so does Facebook with
+ * the flag off, so their token is dropped here, unread.
  *
  * `expected` is the signed-in account when a provider is being connected
  * to it (only Facebook, today). The tokens are refused, before
@@ -748,6 +752,13 @@ function keepFacebookToken(uid: string, token: string): void {
   holdFacebookToken(uid, token);
   void syncFacebookFriends(uid);
 }
+
+/*
+ * What Facebook's sign-in and connect hand finishOAuth: keepFacebookToken
+ * while the friends flag is on (lib/facebook), and nothing while it is
+ * off, so Facebook's token is then dropped there unread, as Google's is.
+ */
+const onFacebookToken = FACEBOOK_FRIENDS_ENABLED ? keepFacebookToken : undefined;
 
 /** The buckets that keep files under the account's id: <bucket>/<uid>/<file>. */
 const SWEPT_BUCKETS = ['pours', 'reels'] as const;
@@ -1126,7 +1137,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
     set({ error: null, notice: null });
     const failed = 'Facebook did not sign you in. Try again, or use your email.';
     try {
-      return await finishOAuth(await openFacebookAuth('sign-in'), null, failed, keepFacebookToken);
+      return await finishOAuth(await openFacebookAuth('sign-in'), null, failed, onFacebookToken);
     } catch {
       return failed;
     }
@@ -1149,7 +1160,7 @@ export const useAuth = create<AuthState>()((set, get) => ({
     const mode = hasFacebookIdentity(user) ? 'sign-in' : 'link';
     const failed = 'Could not connect Facebook. Try again.';
     try {
-      return await finishOAuth(await openFacebookAuth(mode), user.id, failed, keepFacebookToken);
+      return await finishOAuth(await openFacebookAuth(mode), user.id, failed, onFacebookToken);
     } catch {
       return failed;
     }

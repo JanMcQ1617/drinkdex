@@ -56,7 +56,8 @@ const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings,
  * Facebook follows it because, for an account signed in with it, it asks
  * nothing more: the sign-in already said which of its friends are here.
  * <FacebookFriends> decides for itself whether it has anything to show —
- * the friends, a row to connect Facebook, or nothing.
+ * the friends, a row to connect Facebook, or nothing, which is all it
+ * ever is while lib/facebook's friends flag is off.
  *
  * Every list ends in <MatchResults>, which leads with "Follow all" —
  * finding forty people is worthless if acting on them is forty taps.

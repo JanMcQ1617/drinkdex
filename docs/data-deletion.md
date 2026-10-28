@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 26 October 2026**
+**Last updated: 28 October 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -33,6 +33,11 @@ From our servers:
 - the tournaments you host (with everyone's place in them), your place in
   tournaments others host, and the song you added to any post
 - the count of song searches kept for the search limit
+- your phones' device tokens (the addresses Apple uses to bring Sipply's
+  notifications to each phone), your notification switches, the notes of
+  notifications sent to you or about you, and the records that limit how
+  often one person's tags and tournament invites can notify another (once
+  an hour each)
 - your invite links, the hashes that let people find you by phone number
   or Instagram username, and the record kept for the matching limits
 - your sign-in details: the phone number you signed in with, if you did,
@@ -42,15 +47,12 @@ From our servers:
 
 From the phone you delete from:
 
-- the list of your Facebook friends who are on Sipply, and Facebook's
-  access key if it is still in memory
 - your collection, the drinks you added, the photos kept for them, your
   taste answers and the drinks you saved, and what Sipply
   remembered there for finding friends
 
-Your Facebook friends list was never on our servers to begin with. It is
-matched each time you connect or check it and never kept, and the
-[Privacy Policy](privacy) explains how.
+Your Facebook friends list was never on our servers: Sipply does not ask
+Facebook for it.
 
 Daily ideas, if you turned them on, were never on our servers either:
 your phone schedules them, and none come while you are signed out, so
@@ -60,6 +62,12 @@ good, untick them in **Profile → "..." → Settings → Notifications** before
 you delete the account, or at any time in your iPhone's **Settings →
 Notifications → Sipply**. Deleting Sipply from your phone removes them
 too.
+
+Notifications from other people (a tag, a tournament invite, a new
+follower) stop with the account: its device tokens go with it, so our
+server has nowhere left to send them. The phone keeps only your answer to
+the screen that asked about them, under the deleted account's identifier,
+which no new account can have.
 
 A few things outlast the account. A report someone filed about you, or
 about a post of yours, keeps its own copy of what it was about, your
@@ -80,10 +88,9 @@ sharing anything more with Sipply:
    [facebook.com/settings?tab=applications](https://www.facebook.com/settings?tab=applications).
 2. Choose **Sipply**, then **Remove**.
 
-From then on Facebook sends Sipply nothing more about you, and you drop
-out of your Facebook friends' lists in Sipply the next time they check
-Facebook. Facebook may also offer to delete anything Sipply posted for
-you; Sipply never posts, so there is nothing there.
+From then on Facebook sends Sipply nothing more about you. Facebook may
+also offer to delete anything Sipply posted for you; Sipply never posts,
+so there is nothing there.
 
 If your Sipply account was made with Continue with Facebook, delete it
 first. Signing in to delete it afterwards would mean connecting Facebook

@@ -12,6 +12,7 @@ import {
   setupNotifications,
   takeLaunchTap,
 } from '@/lib/notifications';
+import { startPush } from '@/lib/push';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 import { useCollections } from '@/store/collections';
@@ -20,13 +21,14 @@ import { type DoneKind, useNotificationPrefs } from '@/store/notificationPrefs';
 import { useSocial } from '@/store/social';
 import { useTaste } from '@/store/taste';
 
+import { AlertsOptInHost } from './AlertsOptIn';
 import { IdeasOptInHost } from './IdeasOptIn';
 
 /* ==================================================================== */
 /* Notifications, over the whole app (spec §3.7, §3.8)                  */
 /*                                                                      */
-/* Mounted once in the root layout. Draws only the ask                  */
-/* (IdeasOptInHost); everything else here is wiring:                    */
+/* Mounted once in the root layout. Draws only the two asks             */
+/* (IdeasOptInHost, AlertsOptInHost); everything else here is wiring:   */
 /*                                                                      */
 /*   SETUP     the foreground handler and Android's channel, before any */
 /*             ask (lib/notifications setupNotifications).              */
@@ -41,6 +43,9 @@ import { IdeasOptInHost } from './IdeasOptIn';
 /*             a post, a drink of your own, a save, a follow, your      */
 /*             tastes, the feed arriving, signing in, or collections.   */
 /*             Debounced, so a burst of changes is one replan.          */
+/*   PUSH      v4.9: this phone's address for other people's news,      */
+/*             kept in step with the account, iOS's answer and the      */
+/*             switches (lib/push startPush, which says when).          */
 /*   FIRSTS    the same changes, when they are the person's own doing,  */
 /*             tell store/notificationPrefs that the ask may now be     */
 /*             fair (noteDone). Hydration, a sign-in's sync and a feed  */
@@ -73,6 +78,8 @@ export function NotificationsHost() {
   useEffect(() => {
     setupNotifications();
   }, []);
+
+  useEffect(() => startPush(), []);
 
   /* ---- Taps ---- */
 
@@ -209,5 +216,10 @@ export function NotificationsHost() {
     };
   }, []);
 
-  return <IdeasOptInHost />;
+  return (
+    <>
+      <IdeasOptInHost />
+      <AlertsOptInHost />
+    </>
+  );
 }

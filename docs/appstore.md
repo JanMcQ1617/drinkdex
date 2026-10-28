@@ -197,8 +197,11 @@ score, but they are still the nearest thing in the app to one, so the
 listing does not point anyone at them.
 
 The Facebook paragraph under PEOPLE describes a build made with
-`EXPO_PUBLIC_FACEBOOK_SIGN_IN=on`. If the build you submit has it off,
-delete that paragraph, and the count drops by 181.
+`EXPO_PUBLIC_FACEBOOK_SIGN_IN=on` and `EXPO_PUBLIC_FACEBOOK_FRIENDS=on`.
+If the build you submit has either off, delete that paragraph, and the
+count drops by 181. The friends flag is off from 28 October 2026, while
+Meta reviews Facebook sign-in without `user_friends`
+(`specs/v4.9/meta-review.md`).
 
 The tournament paragraph under PEOPLE describes a server with migration
 020 applied, which is what makes tournaments appear. If it is not applied
@@ -330,6 +333,23 @@ sign-in nor songs fits beside Places even then: phone sign-in with its
 code line makes 4,299, 299 over, and songs 4,422, 422 over. A build that
 needs either of them and Places has to choose, so count before pasting.
 
+From build 34 (v4.9), People notifications (199) goes in, straight after
+Daily ideas, whenever migration 027 is applied, and Tournaments says "no
+notifications but the invite" (675 without its Friends sentence). On top
+of the 3,831 set that is 4,047, 47 over. With Friends from Facebook off,
+as it is from 28 Oct 2026 ([testflight.md](testflight.md)), Continue with
+Facebook asks for "public_profile and email" (14 fewer): 4,033, 33 over.
+Either way, also cut Continue with Google's clause about its access token
+from the third-party paragraph, "; its access token is discarded on the
+device and never stored" (62; the privacy policy carries it, as it does
+Facebook's), leaving "Continue with Google asks for openid, email and
+profile only.": 3,971 with the friends flag off (the paragraph 589), 29 to
+spare, or 3,985 with it on (603), 15 to spare, recounted from the files on
+28 Oct 2026. The exact text for build 34, friends off, is in
+`specs/v4.9/review-notes.txt`; it is only right while these files say
+what it says, so after any edit to a pasted paragraph, recount and write
+it again. Phone sign-in and songs fit even less than they did.
+
 ### Tournaments — a server with migrations 020 and 025 applied
 
 From build 30 (v4.7) tournaments are a tab of their own, the trophy,
@@ -338,22 +358,29 @@ swap, 23 Oct 2026), and the same tab carries the Friends board,
 which needs migration 025 (`supabase/migrations/025_friends_board.sql`).
 With 020 applied and 025 not, the tab shows tournaments alone: leave out
 the last sentence, "The same tab lists you …" (173 with its space), and
-the paragraph is 660.
+the paragraph is 675.
+
+From build 34 (v4.9), with migration 027 applied, the person invited gets
+a push naming the host and the tournament (`specs/v4.9/push.md`), so "no
+notifications" became "no notifications but the invite" (28 Oct 2026, +15:
+848, or 675 without the Friends sentence). For a build before 34, or a
+server without 027, put back "no notifications" (833, or 660). The Friends
+sentence's "no notifications" holds either way: the board sends none.
 
 **Tournaments.** Anyone can hold a friendly tournament with people they
 follow: a shared log, and whoever posts the most different Dex entries
 wins. Each drink counts once, and amounts are never counted or shown.
 Only 3 entries a day count per person, and a drink first posted after the
 day's three never counts later, so nothing rewards posting a lot at once.
-No prizes, no entry fees, no streaks, no meters, no notifications. Every
-tournament screen shows the rules, ending "No prizes, and Apple is not a
-sponsor. Please drink responsibly." Names pass the caption filter. To find
-it, follow anyone, then tap the trophy, second in the tab bar → Host a
-tournament. The same tab lists you and the people you follow by
-how many different Dex entries each has posted (each drink once, ever):
-no amounts, no per-day counts, no notifications.
+No prizes, no entry fees, no streaks, no meters, no notifications but the
+invite. Every tournament screen shows the rules, ending "No prizes, and
+Apple is not a sponsor. Please drink responsibly." Names pass the caption
+filter. To find it, follow anyone, then tap the trophy, second in the tab
+bar → Host a tournament. The same tab lists you and the people you follow
+by how many different Dex entries each has posted (each drink once,
+ever): no amounts, no per-day counts, no notifications.
 
-[833]
+[848]
 
 ### Songs on posts — a build with `EXPO_PUBLIC_STORY_MUSIC=tap`
 
@@ -407,6 +434,42 @@ day's idea is skipped, because it would only ask for what was just done, so
 after the post that brings up the offer, the first idea comes the next day.
 Turning Daily ideas on in Settings, without logging anything, shows the
 same offer and leaves today in the plan.
+
+### People notifications — build 34 and later, with migration 027 applied
+
+From build 34 (v4.9): the first notifications Sipply sends from a server,
+when someone tags, invites or follows the person. Nothing about them shows
+until migration 027 (`supabase/migrations/027_push.sql`) is applied: before
+it, the build asks nothing, registers no token and shows no switches, so
+leave this paragraph out, and the Tournaments paragraph's "but the invite"
+with it. App Review holds them to guideline 4.5.4 as it does Daily ideas
+(their own consent before iOS asks, and an off switch in the app), and
+1.4.3 reads their words. Spec v4.9 (`specs/v4.9/push.md`) §3 and §4 are
+the source; paste it straight after Daily ideas.
+
+**People notifications (optional).** A tag, a tournament invite or a new
+follower ("ana started following you."). Their own in-app screen asks
+first, then iOS. Three switches in Settings → Notifications.
+
+[199]
+
+Not for pasting: what the paragraph rests on, to check on the build.
+
+- **The ask** comes up once per account on each phone, the first time
+  Activity opens (the heart on Home), or when one of the three is ticked in
+  Settings before that. Its Allow is the only yes: iOS allowing Sipply for
+  daily ideas never stands in for it, and with notifications already on
+  there is no iOS prompt after it. Not now is kept.
+- **The words** say who did what and nothing else: "ana tagged you in a
+  post.", "ana invited you to" the tournament's name, "ana started
+  following you." A tournament name with a digit or a word from the daily
+  ideas' banned list is sent as "a tournament". No drink, time, amount or
+  count, no badge, nothing promotional (4.5.3).
+- **Nothing is sent** between people blocked either way, nothing goes
+  twice, and one person's tags and invites reach another at most once an
+  hour each.
+- **To watch one arrive** takes two accounts and the steps in
+  `specs/v4.9/push.md` §7, step 8.
 
 ### Places — a build with the place-search module and migration 026 applied
 
@@ -480,7 +543,8 @@ Not App Store Connect: these go in the Meta developer app whose App ID and
 secret Supabase's Facebook provider uses, under App settings → Basic. Meta
 needs the privacy policy and the data deletion page before the app can go
 live or `user_friends` can be reviewed; the terms URL is optional and
-costs nothing to fill in.
+costs nothing to fill in. Business verification, App Review and Publish
+are step by step in `specs/v4.9/meta-review.md`.
 
 | Field | Value |
 | --- | --- |
@@ -503,14 +567,18 @@ other has to.
 
 Apple's test for "collected" is that data leaves the phone and is kept
 longer than it takes to answer the request. So the contact hashes, the
-Instagram hashes and the Facebook friend ids sent for matching are **not**
+Instagram hashes and the Facebook friend ids sent for matching (only by a
+build with `EXPO_PUBLIC_FACEBOOK_FRIENDS=on`; with it off none are sent,
+and no answer below changes) are **not**
 collected — they are compared and dropped — and neither is the email
 address the sign-in screen checks for an account. Nothing that stays on the
 phone is collected either: the collection, unposted photos, the cached
-Instagram and Facebook lists, which posts and activity have been seen, and
-the daily ideas (from build 25), which are planned and scheduled on the
-phone with the time, the ideas already shown and a random seed it keeps to
-itself.
+Instagram list (and Facebook list, with that flag on), which posts and
+activity have been seen,
+each account's answer to the screen that asks about notifications from
+other people (from build 34), and the daily ideas (from build 25), which
+are planned and scheduled on the phone with the time, the ideas already
+shown and a random seed it keeps to itself.
 Song searches are not collected: the words go through our server to Apple
 Music and are not kept. The server holds each answer in memory for ten
 minutes, with no account attached, only so the same search is not asked
@@ -548,20 +616,21 @@ otherwise:
 | User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps; tournaments (name, dates, goal, invitations, standings and the host's time zone); the song added to a post; collections (their names and what is in them, and a share link when you make one); tags (the people you tag on a post, and the record kept when someone removes themselves from one, so that post cannot tag them again) |
 | Location → Precise Location | Yes | The place a person tags on a post's photo (a bar, restaurant or similar venue chosen from Apple Maps), kept as Apple's Place ID for that venue and the name the person gives it, shown with the post. The Place ID names one venue, so it places the person there as exactly as coordinates would, although no coordinates are stored. The device's own location is used on the phone and by Apple Maps only, and never sent to Sipply. |
 | Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
-| Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
-| Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
-| Other Data → Other Data Types | Yes | Taste answers and saved drinks: what the person usually drinks, which spirits and flavours they like, whether they make drinks at home and what was in their bar, and the drinks they saved, kept with the account so they follow it to a new phone. Owner only, never on the profile. Purposes **App Functionality** and **Product Personalization** (the answers choose the drinks suggested, on the phone, by the same rules for everyone) |
+| Identifiers → Device ID | Yes, from build 34 (**No** until build 33) | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account. From build 34, also the phone's APNs device token: the address Apple issues so that a server can send that phone a notification for Sipply. It is kept with the account (at most five phones) only once the person has allowed notifications from other people, so that a tag, a tournament invite or a new follower reaches that person's phone, and is sent, with each notification's one line, its kind and the in-app link it opens (holding the random id of the post, tournament or person it is about), to Apple's Push Notification service, which delivers it. It comes off the server when the person signs out, turns all three switches off, turns notifications off for Sipply in iOS (read the next time the app opens) or deletes the account |
+| Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. From build 34, when one person last notified another of a tag, and of a tournament invite, never any words; kept only to enforce one of each an hour between the same two people, until either account is deleted. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
+| Other Data → Other Data Types | Yes | Taste answers and saved drinks: what the person usually drinks, which spirits and flavours they like, whether they make drinks at home and what was in their bar, and the drinks they saved, kept with the account so they follow it to a new phone. Owner only, never on the profile. From build 34, also the account's three switches for notifications from other people (tags, invites, new followers), all on until changed. Purposes **App Functionality** and **Product Personalization** (the answers choose the drinks suggested, on the phone, by the same rules for everyone; the switches are App Functionality alone) |
 
 App Functionality covers Other Usage Data: Apple's definition of the
 purpose includes preventing fraud and implementing security measures, which
-is what the matching limit, the song-search limit and the sign-in meter
-are. Product Personalization is Apple's purpose for customising what a
-person sees, recommendations included, which is what the taste answers
-do; it is not tracking, because nothing is combined with
-other companies' data or shared. Device
-ID stays App Functionality only as long as Expo's install counts are used
-for checking rollouts; if they start informing product decisions, add
-Analytics to it.
+is what the matching limit, the song-search limit, the notifications' hour
+between two people and the sign-in meter are. Product Personalization is
+Apple's purpose for customising what a person sees, recommendations
+included, which is what the taste answers do; it is not tracking, because
+nothing is combined with other companies' data or shared. Device ID stays
+App Functionality only as long as Expo's install counts are used for
+checking rollouts; if they start informing product decisions, add
+Analytics to it. The push token is App Functionality alone: it delivers
+the notifications the person allowed, and nothing else reads it.
 
 Everything else is **Not collected**: Contacts, Coarse Location (the
 device's own location never leaves the phone except to Apple Maps for a
@@ -571,6 +640,11 @@ Health, Financial Info, Purchases, Sensitive Info, Product Interaction,
 Advertising Data and Diagnostics.
 Tournaments, songs, collections and tags add no new type: they are user
 content, and the song-search count is usage data, both declared above.
+Notifications from other people (build 34) add none either: the token is
+the Device ID above, the notes of what was sent are about follows, tags
+and invites already in Other User Content, the hour between two people is
+usage data like the matching limit's, and the switches sit with the taste
+answers in Other Data Types.
 
 **Build 33 (v4.8) adds Location → Precise Location: linked to the user,
 App Functionality, not used for tracking.** The device's own location
@@ -614,29 +688,44 @@ Coarse would mean dropping the tag itself. Publish the privacy policy
 
 **Build 25 (v4.3) changes nothing here but the tags in Other User
 Content.** Daily ideas are local notifications and collect nothing.
-Build 25 never asks for a push token, from Apple or from Expo:
+Build 25 never asked for a push token, from Apple or from Expo:
 expo-notifications (as read in 57.0.23, the version build 25 installs)
 registers with Apple's push service only when `getDevicePushTokenAsync`
 or `getExpoPushTokenAsync` is called, or when
-`setAutoServerRegistrationEnabledAsync` has been turned on, and build 25
-does none of these, so no device token exists to collect. Check before
-submitting, after any expo-notifications upgrade too:
-`grep -rnE 'PushTokenAsync|AutoServerRegistration' src` finds nothing.
+`setAutoServerRegistrationEnabledAsync` has been turned on, and builds 25
+to 33 do none of these, so no device token existed to collect.
 
-That stops being true with the tag pushes in spec v4.3 §2.5, which keep
-each phone's token with its account. The spec plans them as an
-over-the-air update with no new build, and this page has to move first:
-the questionnaire (a token kept with an account is most likely a Device
-ID, linked), the privacy policy's Daily ideas paragraph, which says
-Sipply does not ask for that address, and the manifest below. The
-manifest ships inside the binary, so an over-the-air update cannot change
-it: for it to stay true, its Device ID entry (linked false today) becomes
-linked in a build that ships before the pushes go out.
+**Build 34 (v4.9) makes Device ID linked to the user, still App
+Functionality only and not used for tracking.** Its notifications from
+other people (`specs/v4.9/push.md`) keep each phone's APNs device token
+with its account, so that a tag, a tournament invite or a new follower
+reaches that person's phone: a Device ID, and linked. The token is asked
+for only after the alerts' own Allow (iOS allowing Sipply for daily ideas
+is never enough by itself), while iOS allows Sipply's notifications and at
+least one of the three switches is on, and it stays on the server only
+until one of those stops holding or the account is deleted (the table
+says when). It is asked for from Apple alone: `src/lib/push.ts` calls
+`getDevicePushTokenAsync`, never Expo's token or its server registration,
+so Expo's push service is never involved and Apple's is the only one the
+privacy policy names. Check before submitting, after any
+expo-notifications upgrade too:
+`grep -rnE 'ExpoPushTokenAsync|AutoServerRegistration' src` finds
+nothing, and `grep -rn 'getDevicePushTokenAsync' src` finds only
+`src/lib/push.ts`.
+
+Change the existing Device ID row from not linked to linked; do not add a
+second one, since the questionnaire takes one answer per type, whatever
+identifiers it covers. Spec v4.3 §2.5 planned these pushes as an
+over-the-air update, but the manifest below ships inside the binary and an
+update cannot change it, so they wait for build 34, whose manifest says
+linked. Publish the privacy policy (its Notifications from other people
+paragraph) and the new label before build 34 goes to review.
 
 The same types belong in the app's privacy manifest,
 `ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. It lists
-all ten, Device ID with `NSPrivacyCollectedDataTypeLinked` false and Other
-Data Types with both its purposes, and an eleventh, Audio Data, for the
+all ten, Device ID with `NSPrivacyCollectedDataTypeLinked` true from
+build 34 (false until build 33, while it was Expo's installation id alone)
+and Other Data Types with both its purposes, and an eleventh, Audio Data, for the
 microphone the Reels recorder uses. Build 33 adds the tenth,
 `NSPrivacyCollectedDataTypePreciseLocation`, linked, not tracking, for
 `NSPrivacyCollectedDataTypePurposeAppFunctionality` (spec v4.8 §1.6). MapKit and CoreLocation are not required-reason APIs, so

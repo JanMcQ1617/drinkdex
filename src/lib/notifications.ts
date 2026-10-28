@@ -43,10 +43,11 @@ import { EMPTY_ANSWERS, hasAnswers, useTaste } from '@/store/taste';
 /* So nothing ever arrives that the person cannot turn off in Sipply.   */
 /*                                                                      */
 /* A TAP opens the notification's `data.url`, whatever its kind, once   */
-/* it passes the allowlist below. So a later server push (a tag, spec   */
-/* §2.5) that carries `url: '/post/<id>'` opens its post with no client */
-/* change: build 25 already has the module, the entitlement and this    */
-/* handler.                                                             */
+/* it passes the allowlist below. So the server's pushes (v4.9, lib/    */
+/* push and supabase/functions/push: a tag, a tournament invite, a new  */
+/* follower) open their post, tournament or person here: `url` is       */
+/* `/post/<id>`, `/tournaments/<id>` or `/user/<id>`. Those are the one */
+/* thing Sipply sends from a server; daily ideas stay local.            */
 /*                                                                      */
 /* Web: every call is a no-op. Nothing here can schedule there.         */
 /* ==================================================================== */
@@ -68,8 +69,10 @@ let setUp = false;
  * any ask.
  *
  * While Sipply is open at the idea's time, the idea goes to Notification
- * Centre only: no banner over what the person is doing, and no sound. Any
- * other kind (a later tag push) shows its banner as usual.
+ * Centre only: no banner over what the person is doing, and no sound. A
+ * push from the server (lib/push) shows its banner as usual, unless the
+ * phone is signed out: then it is news for an account that is not here,
+ * which lib/push is already taking off the server, and it is not shown.
  */
 export function setupNotifications(): void {
   if (OFF || setUp) return;
@@ -77,10 +80,11 @@ export function setupNotifications(): void {
   Notifications.setNotificationHandler({
     handleNotification: async (n) => {
       const daily = n.request.content.data?.kind === DAILY_KIND;
+      const stray = isRemote(n.request) && useAuth.getState().session === null;
       return {
-        shouldShowBanner: !daily,
-        shouldShowList: true,
-        shouldPlaySound: !daily,
+        shouldShowBanner: !daily && !stray,
+        shouldShowList: !stray,
+        shouldPlaySound: !daily && !stray,
         shouldSetBadge: false,
       };
     },
@@ -415,7 +419,7 @@ const UUID = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
  */
 const ALLOWED = new RegExp(
   '^/(|log|dex|saved|profile|activity|stats|find-friends|add-drink\\?from=shelf|settings\\?open=tastes' +
-    `|drink/[a-z0-9][a-z0-9-]{0,79}|post/${UUID}|user/${UUID})$`,
+    `|drink/[a-z0-9][a-z0-9-]{0,79}|post/${UUID}|user/${UUID}|tournaments/${UUID})$`,
 );
 
 /** The allowed path a notification's data asks for, or Home. */
@@ -474,9 +478,31 @@ export function routeNotification(data: unknown): void {
     case 'user':
       router.push({ pathname: '/user/[id]', params: { id } });
       return;
+    case 'tournaments':
+      router.push({ pathname: '/tournaments/[id]', params: { id } });
+      return;
     default:
       router.navigate('/');
   }
+}
+
+/** A notification that came from a server (APNs), not one this phone scheduled. */
+function isRemote(request: Notifications.NotificationRequest): boolean {
+  return (request.trigger as { type?: unknown } | null)?.type === 'push';
+}
+
+/*
+ * A notification's data. expo-notifications hands a remote one's data
+ * over from the payload's top-level `body` dictionary (supabase/functions/
+ * push puts { kind, url } there); should a version ever leave `data`
+ * empty, the trigger's own copy of the payload is read the same way.
+ */
+function dataOf(request: Notifications.NotificationRequest): unknown {
+  const data = request.content.data;
+  if (data && typeof data === 'object' && Object.keys(data).length > 0) return data;
+  if (!isRemote(request)) return data;
+  const payload = (request.trigger as { payload?: Record<string, unknown> }).payload;
+  return payload && typeof payload.body === 'object' ? payload.body : data;
 }
 
 /** A tap, as the host needs it: what it opens, and a key so it is acted on once. */
@@ -489,7 +515,7 @@ function tapOf(r: Notifications.NotificationResponse | null): NotificationTap | 
   // A tap on the notification itself; a later action button would bring its own handling.
   if (!r || r.actionIdentifier !== Notifications.DEFAULT_ACTION_IDENTIFIER) return null;
   const n = r.notification;
-  return { key: `${n.request.identifier}@${n.date}`, data: n.request.content.data };
+  return { key: `${n.request.identifier}@${n.date}`, data: dataOf(n.request) };
 }
 
 /*

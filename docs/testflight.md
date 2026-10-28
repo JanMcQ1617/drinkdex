@@ -10,6 +10,14 @@ Facebook, shows only beside Apple. The parts that describe each sit under
 their own headings below; leave those out of a build made without the
 flag.
 
+Friends from Facebook needs `EXPO_PUBLIC_FACEBOOK_FRIENDS=on` as well, and
+it is off from 28 October 2026, while Meta reviews Facebook sign-in
+without `user_friends` (`specs/v4.9/meta-review.md`). With it off, leave
+out the Friends from Facebook item, make Continue with Facebook ask for
+"public_profile and email" in the third-party paragraphs, and leave out
+their two sentences about the Facebook friends list and access token (the
+cut the counts below already describe).
+
 Tournaments need no flag: they appear once migration 020 is applied on the
 server, and stay hidden until then. Until it is, leave out every line or
 sentence below that mentions them. From build 30 (v4.7) they have a tab of
@@ -263,9 +271,13 @@ Review notes in [appstore.md](appstore.md) into the notes above.
 Tournaments (migration 020 applied): paste its **Tournaments** paragraph
 too. Places (build 33 or later, with migration 026 applied): paste its
 **Places** paragraph, and leave out the Tournaments paragraph's last
-sentence to make room. Story music (`EXPO_PUBLIC_STORY_MUSIC=tap`): paste
-its **Songs on posts** paragraph as well. Each is written once, there, so
-the two sets of notes cannot drift apart.
+sentence to make room. People notifications (build 34 or later, with
+migration 027 applied): paste its **People notifications** paragraph
+straight after Daily ideas, with the Tournaments paragraph's "no
+notifications but the invite" as appstore.md now has it. Story music
+(`EXPO_PUBLIC_STORY_MUSIC=tap`): paste its **Songs on posts** paragraph as
+well. Each is written once, there, so the two sets of notes cannot drift
+apart.
 
 This field has the same 4,000-character limit, measured the way
 appstore.md measures it: bold marks gone, each paragraph's line breaks as
@@ -298,6 +310,12 @@ sentences dropped, and Tournaments without its last sentence. That set
 is 3,831, 169 to spare (recounted 26 Oct 2026; 4,004 with the Friends
 sentence kept, 4 over). Phone sign-in or songs do not fit beside it;
 appstore.md has the recount.
+
+Build 34's People notifications (199) and the invite in Tournaments (15)
+need one cut more: Continue with Google's clause about its access token,
+which the privacy policy carries. With Friends from Facebook off, that set
+is 3,971, 29 to spare (recounted 28 Oct 2026); appstore.md has the
+recount, and `specs/v4.9/review-notes.txt` the exact text.
 
 ### Add for a build with phone sign-in
 

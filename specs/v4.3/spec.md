@@ -462,7 +462,7 @@ Person N (new, signed out, no answers, nothing caught):
 
   > **Daily ideas (optional notifications).** Only after someone has used Sipply (their first logged drink, post, drink of their own, save or follow) does one screen offer a notification a day; it shows an example, says how to turn it off, and iOS's prompt follows only if they tap Allow. The notifications are local, scheduled on the phone, at most one a day at the time the person picks (6:00 PM unless changed); Settings → Notifications turns them off. The 200 messages invite people to log drinks they have already had, write down recipes, read about drinks, save and organise them, and see friends' posts. None suggests drinking, a time to drink or drinking more. To see it: log a drink, finish the celebration, and return to Home.
 
-- The tournaments paragraph's "no push notifications" stays true: tournaments send none.
+- The tournaments paragraph's "no push notifications" stays true: tournaments send none. **Superseded (28 Oct 2026): from v4.9 a tournament sends one push, the invitation, and the review notes say so; see `specs/v4.9/push.md`.**
 
 `docs/terms.md`: no change.
 

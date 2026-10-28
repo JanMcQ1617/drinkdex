@@ -540,6 +540,47 @@ export type MatchedProfileRow = {
   created_at: string;
 };
 
+/**
+ * One phone's address for Apple's Push Notification service (migration
+ * 027, specs/v4.9/push.md §2). The token is the key, so one phone belongs
+ * to one account at a time: a second account registering the same token
+ * takes it over. At most five per account, the least recently seen beyond
+ * that trimmed. Readable by its owner only; every write goes through
+ * register_push_token and unregister_push_token, so no client role holds
+ * a write grant. Deleted with the account.
+ */
+export type PushTokenRow = {
+  /** Lower-case hex, 64 to 200 characters (push_tokens_token_shape). */
+  token: string;
+  user_id: string;
+  /** The APNs host the token belongs to: TestFlight and the App Store are production, a development build sandbox. */
+  env: 'production' | 'sandbox';
+  created_at: string;
+  /** Touched by every registration, once per run of the app, so the cap trims the phones no longer in use. */
+  updated_at: string;
+};
+
+/**
+ * The three switches for other people's news, per ACCOUNT (migration
+ * 027): someone tags you in a post, invites you to a tournament, starts
+ * following you. All three on until changed, and no row reads as all
+ * three on (my_push_settings), so a row exists only once one has been
+ * changed. Readable by its owner only; written only through
+ * set_push_setting. Deleted with the account.
+ *
+ * 027's other two tables, private.push_ledger (what was pushed, so
+ * nothing goes twice) and private.push_pair (the hour between two
+ * people), are outside the API altogether: only push_claim and
+ * push_release touch them, as the definer.
+ */
+export type PushSettingsRow = {
+  user_id: string;
+  tags: boolean;
+  invites: boolean;
+  follows: boolean;
+  updated_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -756,6 +797,24 @@ export type Database = {
       };
       tournament_members: {
         Row: TournamentMemberRow;
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      /*
+       * Migration 027. Select only, the owner's own rows: every write is an
+       * RPC (register_push_token, unregister_push_token, set_push_setting),
+       * so the token's shape, the five-phone cap and the switch names
+       * cannot be skipped by writing the rows directly.
+       */
+      push_tokens: {
+        Row: PushTokenRow;
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      push_settings: {
+        Row: PushSettingsRow;
         Insert: never;
         Update: never;
         Relationships: [];
@@ -1041,6 +1100,65 @@ export type Database = {
       copy_shared_collection: {
         Args: { p_share: string };
         Returns: string;
+      };
+      /*
+       * Push (migration 027, specs/v4.9/push.md). Missing (PGRST202 /
+       * 42883) until 027 is applied, which lib/push reads as "no alert
+       * switches": nothing registers and Settings leaves the three rows
+       * out. The app's four:
+       *
+       * register_push_token puts this phone's token on the caller's
+       * account (lower-cased, moved from any other account, trimmed to
+       * five phones) and is true; it raises P0001 push_token_invalid for a
+       * token that is not 64 to 200 hex characters or an env that is
+       * neither production nor sandbox. unregister_push_token takes the
+       * token alone and is anon's too, so a signed-out phone takes its own
+       * off; true when one was there. my_push_settings and
+       * set_push_setting answer the caller's three switches as an object
+       * ({ tags, invites, follows }, all true when never changed), which
+       * lib/push shape-checks; set_push_setting raises P0001
+       * push_setting_invalid for any other kind. The other three are not
+       * anon's.
+       */
+      register_push_token: {
+        Args: { p_token: string; p_env: 'production' | 'sandbox' };
+        Returns: boolean;
+      };
+      unregister_push_token: {
+        Args: { p_token: string };
+        Returns: boolean;
+      };
+      my_push_settings: {
+        Args: Record<string, never>;
+        Returns: Json;
+      };
+      set_push_setting: {
+        Args: { p_kind: 'tags' | 'invites' | 'follows'; p_on: boolean };
+        Returns: Json;
+      };
+      /*
+       * The push Edge Function's three, callable with the service_role key
+       * alone, never by the app (as charge_music_search is the apple-music
+       * function's). Each first compares p_secret with the Vault secret the
+       * triggers send, by digest. push_caller_ok answers only that.
+       * push_claim answers { result: 'send', kind, subject, actor, title,
+       * tokens: [{ token, env }] } and writes the ledger in the same step,
+       * or { result } with one word (forbidden, bad_request, gone, stale,
+       * blocked, off, no_device, duplicate, limited). push_release gives a
+       * claim from the last ten minutes back when Apple refused it on
+       * every phone, true when it did.
+       */
+      push_caller_ok: {
+        Args: { p_secret: string };
+        Returns: boolean;
+      };
+      push_claim: {
+        Args: { p_secret: string; p_kind: 'tag' | 'invite' | 'follow'; p_subject: string; p_recipient: string };
+        Returns: Json;
+      };
+      push_release: {
+        Args: { p_secret: string; p_kind: 'tag' | 'invite' | 'follow'; p_subject: string; p_recipient: string };
+        Returns: boolean;
       };
     };
     Enums: Record<never, never>;

@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 26 October 2026**
+**Last updated: 28 October 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -303,16 +303,13 @@ without unzipping it. If Sipply says the download is too big, it is the
 full export with every photo in it: request again with only Followers and
 following. The file is read on your phone and never uploaded.
 
-**Why do I only see some of my Facebook friends?** Facebook only tells
-Sipply about friends who also use Sipply and allowed their friends list
-when they connected it. Friends who use Sipply without connecting Facebook
-are not on that list; find them by username instead. If you expected
-some and see none, tap **Check Facebook** again and allow your friends list
-when Facebook asks.
+**Can I find my Facebook friends?** Not through Facebook: Sipply does not
+ask Facebook for your friends list. Find them by contacts, your Instagram
+list or their username in Find friends.
 
 **Does Sipply post to Facebook or Instagram?** No, never. It asks Facebook
-for your name, email, picture and friends list, and nothing else, and it has
-no connection to Instagram at all.
+for your name, email and picture, and nothing else, and it has no
+connection to Instagram at all.
 
 **How do I stop Sipply using my Facebook account?** Remove Sipply under
 **Apps and websites** in Facebook's settings.
