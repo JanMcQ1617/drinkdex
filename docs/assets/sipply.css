@@ -1,0 +1,276 @@
+/* ==================================================================== */
+/* The site's theme: Daylight, as the app draws it                      */
+/*                                                                      */
+/* Shared by the front page (docs/index.html) and every markdown page   */
+/* (docs/_layouts/default.html: support, privacy, terms, data           */
+/* deletion). The shared-collection page (docs/c/index.html) keeps its  */
+/* own copy of the few values it draws with, because its Content-       */
+/* Security-Policy allows inline styles only.                           */
+/*                                                                      */
+/* THE VALUES ARE THE APP'S (src/constants/theme.ts), never a site      */
+/* palette of their own: black ink on white, neutral greys only, and    */
+/* one red, Campari #D0102C. The red is the logo and the pen and        */
+/* nothing else here: never a link, never a key, never an error, so it  */
+/* keeps meaning what it means in the app (theme.ts, the seven places). */
+/* Daylight is light only (app.json), so the site is too.               */
+/*                                                                      */
+/* TYPE is the app's two families, self-hosted from assets/fonts as     */
+/* Latin WOFF2 cuts (docs/assets/fonts, OFL, licences beside them):     */
+/* Inter for everything, Playfair 700 for drink names and nothing else  */
+/* (check-design rule 6). The wordmark is the logo's own outline, an    */
+/* image, never a font.                                                 */
+/*                                                                      */
+/* SHAPES are the app's radii and nothing rounder: 2 for a print or a   */
+/* plate, 4 for a key, 8 for a card. No pills, no outlined chips.       */
+/* ==================================================================== */
+
+@font-face { font-family: "Inter Latin"; font-weight: 400; font-style: normal; font-display: swap; src: url("fonts/InterLatin_400Regular.woff2") format("woff2"); }
+@font-face { font-family: "Inter Latin"; font-weight: 500; font-style: normal; font-display: swap; src: url("fonts/InterLatin_500Medium.woff2") format("woff2"); }
+@font-face { font-family: "Inter Latin"; font-weight: 600; font-style: normal; font-display: swap; src: url("fonts/InterLatin_600SemiBold.woff2") format("woff2"); }
+@font-face { font-family: "Playfair Display Latin"; font-weight: 700; font-style: normal; font-display: swap; src: url("fonts/PlayfairDisplayLatin_700Bold.woff2") format("woff2"); }
+
+:root {
+  color-scheme: light;
+  /* Grounds */
+  --page: #FFFFFF;
+  --wash: #F5F5F5;
+  --press: #EBEBEB;
+  /* Edges */
+  --line: #E3E3E3;
+  --hair: #D6D6D6;
+  --rule: #C4C4C4;
+  --control: #8A8A8A;
+  /* Ink */
+  --ink: #0A0A0A;
+  --ink-pressed: #333333;
+  --muted: #5C5C5C;
+  --on-ink: #FFFFFF;
+  --on-ink-muted: #A3A3A3;
+  /* The one red: the logo and the pen. */
+  --accent: #D0102C;
+  --photo-edge: rgba(10, 10, 10, 0.07);
+
+  --body: "Inter Latin", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --display: "Playfair Display Latin", "Playfair Display", Georgia, serif;
+
+  --r-print: 2px;
+  --r-key: 4px;
+  --r-card: 8px;
+
+  /* 16 at a phone's width (the app's feed gutter), 40 at a desk. */
+  --gut: clamp(16px, 4vw, 40px);
+  --max: 1240px;
+  --bar: 64px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--page);
+  scroll-padding-top: calc(var(--bar) + 16px);
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 400 17px/1.55 var(--body);
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "calt" 1;
+}
+
+img, video, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/*
+ * The gutter, or the side's safe area where that is wider: the pages ask
+ * for viewport-fit=cover (so the foot's white runs under the home
+ * indicator), which on a notched iPhone held sideways puts the window's
+ * edge under the sensor housing.
+ */
+.wrap {
+  width: 100%; max-width: var(--max); margin: 0 auto;
+  padding: 0 max(var(--gut), env(safe-area-inset-right)) 0 max(var(--gut), env(safe-area-inset-left));
+}
+
+.sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip {
+  position: absolute; left: max(var(--gut), env(safe-area-inset-left)); top: -80px; z-index: 30;
+  background: var(--ink); color: var(--on-ink); padding: 10px 14px;
+  border-radius: var(--r-key); text-decoration: none; font-weight: 500;
+}
+.skip:focus { top: 12px; }
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+/* ---- Keys: the app's, squared (4), one ink key per view ------------- */
+
+.key {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; padding: 0 22px;
+  border: 0; border-radius: var(--r-key);
+  font: 500 17px/1 var(--body); letter-spacing: -0.012em;
+  text-decoration: none; white-space: nowrap; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.key.ink { background: var(--ink); color: var(--on-ink); }
+.key.ink:active { background: var(--ink-pressed); }
+.key.wash { background: var(--wash); color: var(--ink); }
+.key.wash:active { background: var(--press); }
+.key.sm { min-height: 40px; padding: 0 16px; font-size: 15px; }
+@media (hover: hover) {
+  .key.ink:hover { background: var(--ink-pressed); }
+  .key.wash:hover { background: var(--press); }
+}
+.key svg { width: 20px; height: 20px; flex: none; }
+
+/* A quiet line: ink, underlined only on hover, never red. */
+.quiet {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 44px;
+  color: var(--ink); font-weight: 500; text-decoration: none;
+}
+.quiet svg { width: 16px; height: 16px; }
+@media (hover: hover) { .quiet:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; } }
+
+/* ---- The bar ------------------------------------------------------- */
+/*
+ * The app's top bar: the page's white, and its 1pt line only once the
+ * page has scrolled under it (useScrolledPast). The front page docks the
+ * wordmark into it only when the hero's tag has left the window, as the
+ * film's wordmark docks into Home's bar (v4.6 B).
+ */
+.bar {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--page);
+  box-shadow: inset 0 -1px 0 transparent;
+  transition: box-shadow .2s ease;
+}
+.bar.scrolled { box-shadow: inset 0 -1px 0 var(--line); }
+.bar-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: var(--bar); }
+.bar-mark { display: block; flex: none; margin-left: -4px; padding: 4px; border-radius: var(--r-key); }
+.bar-mark img { height: 34px; width: auto; }
+.bar-nav { display: flex; align-items: center; gap: clamp(12px, 2.4vw, 28px); }
+.bar-nav .quiet { font-size: 15px; }
+@media (max-width: 560px) { .bar-nav .quiet { display: none; } }
+
+/* ---- Prints: a photo as the app hangs one ------------------------- */
+/* 2pt corners and the inset photoEdge, so a pale photo still has an edge on white. */
+.print { position: relative; border-radius: var(--r-print); overflow: hidden; background: var(--wash); }
+.print img { width: 100%; height: 100%; object-fit: cover; }
+.print::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--photo-edge); pointer-events: none; }
+
+/* A drink's name: Playfair 700, the only place the site sets it. */
+.drink-name { font-family: var(--display); font-weight: 700; letter-spacing: 0; }
+
+/* The Nº plate: Inter 500 13/18, tracked 1, tabular, on Campari when caught. */
+.plate {
+  position: relative; display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px;
+  border-radius: var(--r-print); background: var(--accent); color: #FFFFFF;
+  font: 500 13px/18px var(--body); letter-spacing: 1px; font-variant-numeric: tabular-nums;
+}
+.plate .drip { position: absolute; right: 6px; bottom: 1.5px; width: 0; height: 0; overflow: visible; }
+.plate .drip svg { position: absolute; left: -3px; top: -3px; width: 6px; height: 12px; max-width: none; overflow: visible; }
+.dexno { font: 500 13px/18px var(--body); letter-spacing: 1px; font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+
+/* ---- The pen (docs/assets/pen.js) --------------------------------- */
+/*
+ * A mark's element is its nominal box; pen.js puts the ink in it. Until
+ * a mark is drawn its window sits shifted out and its ink shifted back,
+ * so nothing shows; drawing slides both home together (PenMarks DrawOn).
+ */
+[data-pen] { position: relative; display: block; pointer-events: none; overflow: visible; }
+[data-pen="rule"] { height: 6px; }
+[data-pen="vrule"] { width: 6px; }
+.pen-window { display: block; overflow: hidden; }
+.pen-ink { display: block; width: 100%; height: 100%; }
+.pen-ink svg { overflow: visible; max-width: none; }
+.pen-ready [data-pen]:not(.pen-drawn) .pen-window { transform: translateX(-100%); }
+.pen-ready [data-pen]:not(.pen-drawn) .pen-ink { transform: translateX(100%); }
+.pen-ready [data-pen]:not(.pen-drawn) .pen-window.pen-v { transform: translateY(-100%); }
+.pen-ready [data-pen]:not(.pen-drawn) .pen-v .pen-ink { transform: translateY(100%); }
+@media (prefers-reduced-motion: no-preference) {
+  .pen-window, .pen-ink { transition: transform .62s cubic-bezier(.33, 1, .68, 1); }
+}
+
+/* ---- The foot ------------------------------------------------------ */
+
+.foot { margin-top: clamp(72px, 10vw, 128px); padding: 40px 0 calc(48px + env(safe-area-inset-bottom)); box-shadow: inset 0 1px 0 var(--line); }
+.foot-row { display: grid; gap: 28px 40px; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 900px) { .foot-row { grid-template-columns: auto 1fr; } }
+.foot-mark img { height: 40px; width: auto; }
+.foot nav { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+@media (min-width: 900px) { .foot nav { justify-content: flex-end; } }
+.foot nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 500; font-size: 15px; text-decoration: none; }
+@media (hover: hover) { .foot nav a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; } }
+.foot-notes { display: grid; gap: 10px; margin-top: 28px; max-width: 64ch; }
+.foot-notes p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.foot-end { margin-top: 28px; width: 24px; }
+
+/* ---- Markdown pages (docs/_layouts/default.html) ------------------ */
+/*
+ * Support, privacy, terms and data deletion: words to be read, so one
+ * measured column and the app's reading sizes, with the pen used as the
+ * app uses it on a tab root: the swash under the title, the rule where
+ * the page breaks (a markdown ---, on a page with three or fewer), and a
+ * short closing rule at the foot. Links are ink and underlined, as the
+ * app's destructive and outbound words are: never red.
+ */
+.doc { padding-top: clamp(28px, 6vw, 72px); }
+.doc-grid { display: grid; gap: 48px; }
+@media (min-width: 1100px) { .doc-grid { grid-template-columns: minmax(0, 700px) minmax(0, 1fr); gap: 96px; } }
+/* The section list: only where there is room beside the column, never above it on a phone. */
+.toc { display: none; }
+@media (min-width: 1100px) {
+  .toc:not([hidden]) { display: block; position: sticky; top: calc(var(--bar) + 40px); align-self: start; max-width: 300px; padding-top: 12px; }
+}
+.toc-label { margin: 0 0 12px; font-size: 13px; line-height: 18px; color: var(--muted); }
+.toc ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+.toc a { display: block; padding: 5px 0; color: var(--muted); font-size: 14px; line-height: 1.35; text-decoration: none; }
+.toc a[aria-current] { color: var(--ink); font-weight: 500; }
+@media (hover: hover) { .toc a:hover { color: var(--ink); } }
+.prose { max-width: 700px; }
+.prose > :first-child { margin-top: 0; }
+.prose h1 {
+  position: relative; margin: 0 0 32px;
+  font: 600 clamp(36px, 5vw, 52px)/1.06 var(--body); letter-spacing: -0.035em;
+}
+/* Under the title's last line, lowered by the descenders' depth ("Privacy", "Support" and "Deleting your data" all have one). */
+.prose h1 .title-swash { position: absolute; left: 0.04em; bottom: -0.3em; }
+.prose h2 {
+  margin: 56px 0 12px;
+  font: 600 clamp(22px, 2.4vw, 26px)/1.2 var(--body); letter-spacing: -0.022em;
+}
+.prose h3 { margin: 36px 0 8px; font: 600 19px/1.3 var(--body); letter-spacing: -0.015em; }
+.prose h4, .prose h5, .prose h6 { margin: 28px 0 6px; font: 600 17px/1.35 var(--body); }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 18px; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li { margin: 6px 0; }
+.prose li::marker { color: var(--muted); }
+.prose strong { font-weight: 600; }
+.prose a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--control); overflow-wrap: anywhere; }
+@media (hover: hover) { .prose a:hover { text-decoration-color: var(--ink); } }
+/* "Last updated", the line under every title. */
+.prose h1 + p { color: var(--muted); font-size: 15px; margin-bottom: 28px; }
+.prose h1 + p strong { font-weight: 500; }
+.prose hr { border: 0; height: 1px; background: var(--line); margin: 40px 0; }
+.prose hr.pen-hr { height: 0; background: none; margin: 0; }
+.prose .pen-break { margin: 40px 0; }
+.prose code { font: 500 0.88em/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--wash); border-radius: var(--r-print); padding: 0.1em 0.35em; overflow-wrap: anywhere; }
+.prose pre { background: var(--wash); border-radius: var(--r-card); padding: 16px; overflow-x: auto; }
+.prose pre code { background: none; padding: 0; overflow-wrap: normal; }
+.prose blockquote { margin-left: 0; padding-left: 18px; box-shadow: inset 2px 0 0 var(--line); color: var(--muted); }
+/* Tables scroll inside themselves, never the page. */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: 10px 16px 10px 0; box-shadow: inset 0 -1px 0 var(--line); }
+.prose th { font-weight: 600; white-space: nowrap; }
+.prose img { height: auto; border-radius: var(--r-print); }
+.doc-end { width: 24px; margin-top: 48px; }

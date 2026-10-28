@@ -8,216 +8,700 @@
 
   The other pages in docs/ are markdown and DO want the theme. Only this one
   opts out.
+
+  v4.9 (28 Oct 2026): the front page in the app's own look, Daylight, in
+  place of the v3 wine and cream. What it is made of, all of it the app's:
+  - assets/sipply.css, the theme every page shares (the app's tokens, its
+    two fonts self-hosted, its keys, prints and plate).
+  - img/tag.mp4, the opening film (assets/video/intro.mp4) cut to the tag
+    being written: 0 to 3.6 s, cropped to the ink, plain white ground, 47 KB.
+    It plays once, muted, and img/wordmark.svg takes over from its last
+    frame, laid exactly over it (the numbers are by .tag-word); with Reduce
+    Motion, no autoplay or no JavaScript, the wordmark is all there is.
+    Re-cut it, and re-measure, if the film is redrawn.
+  - assets/pen.js, the app's pen (details/penPath.ts) ported, for the swash
+    under the headline and the hairline rules.
+  - img/drinks/, a dozen of the app's own drink photographs (assets/drinks),
+    resized to WebP, and the Paloma's grey proof (assets/drinks/proof) as
+    it is. Every name, number, style, fact and recipe on this page
+    is the catalogue's (src/data/drinks.json, worded through lib/drinkLabels
+    as the app words them). If the catalogue changes them, change them here.
+  The counts (2,089 entries, 899 cocktails, 1,190 spirits) and every line
+  about tournaments, saved collections, tags and places are the approved
+  wording in appstore.md and testflight.md, held to App Store guideline 1.4.3:
+  nothing here asks anyone to drink, or to drink more. No ratings, reviews,
+  download counts or user numbers: there are none to show.
 -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sipply — a drinks field guide for iPhone</title>
-<meta name="description" content="A field guide to 2,089 cocktails and spirits, each with the real recipe. Log the ones you have had, keep your own photo, and save the rest for later.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFFFFF">
+<title>Sipply, a drinks field guide for iPhone</title>
+<meta name="description" content="A field guide to 2,089 drinks: 899 cocktails with real recipes and 1,190 spirits. Log the ones you have had, keep your own photo of each, and follow friends.">
 <link rel="icon" href="img/icon.png">
-<meta property="og:title" content="Sipply — a drinks field guide for iPhone">
-<meta property="og:description" content="A field guide to 2,089 cocktails and spirits, each with the real recipe.">
-<meta property="og:image" content="https://janmcq1617.github.io/drinkdex/img/icon.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta property="og:title" content="Sipply, a drinks field guide for iPhone">
+<meta property="og:description" content="A field guide to 2,089 cocktails and spirits, each cocktail with its real recipe.">
+<meta property="og:image" content="https://janmcq1617.github.io/drinkdex/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/InterLatin_600SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/InterLatin_400Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/sipply.css">
+<script>
+  /* Before first paint: lets the CSS hide what the scripts will reveal, so nothing flashes. */
+  document.documentElement.classList.add('js');
+</script>
 
 <style>
-  /* The app's own tokens, so the site and the product are one thing. */
-  :root{
-    --bg:#F7F2EA; --sunk:#E9E5DF; --surface:#FFFFFF; --line:#EFE9E0;
-    --ink:#2B2322; --muted:#6A6058; --faint:#9A8F85;
-    --wine:#5B0F1A; --taupe:#736247;
-    --display:"Playfair Display",Georgia,serif;
-    --body:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    --gut:clamp(20px,5vw,32px);
-  }
-  *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:var(--body); font-size:17px; line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:1040px; margin:0 auto; padding:0 var(--gut)}
+  /* ---- Type ---------------------------------------------------------- */
+  h1, h2, h3 { margin: 0; font-weight: 600; text-wrap: balance; }
+  h1 { font-size: clamp(38px, 3.6vw, 54px); line-height: 1.04; letter-spacing: -0.038em; }
+  h2 { font-size: clamp(30px, 3.3vw, 46px); line-height: 1.06; letter-spacing: -0.034em; }
+  h3 { font-size: 20px; line-height: 1.25; letter-spacing: -0.02em; }
+  p { margin: 0; }
+  .lede { font-size: clamp(18px, 1.45vw, 21px); line-height: 1.45; color: var(--muted); max-width: 34ch; }
+  .body { color: var(--muted); max-width: 52ch; }
+  section { scroll-margin-top: calc(var(--bar) + 8px); }
 
-  /* ---- Hero ------------------------------------------------------- */
-  header{padding:clamp(48px,9vw,96px) 0 clamp(32px,6vw,64px)}
-  .mark{width:84px; height:84px; border-radius:20px; display:block; margin-bottom:28px}
-  h1{
-    font-family:var(--display); font-weight:700;
-    font-size:clamp(40px,7.5vw,68px); line-height:1.06;
-    letter-spacing:-0.015em; margin:0 0 18px; max-width:15ch;
+  /* The bar's wordmark docks once the hero's tag has left the window (scripts at the foot). */
+  .js .bar:not(.docked) .bar-mark { opacity: 0; visibility: hidden; }
+  /* With Reduce Motion it simply appears: no rise, no fade. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bar-mark { transition: opacity .28s ease, transform .28s ease, visibility .28s; }
+    .js .bar:not(.docked) .bar-mark { transform: translateY(4px); }
   }
-  .lede{
-    font-size:clamp(18px,2.4vw,22px); line-height:1.5;
-    color:var(--muted); margin:0 0 32px; max-width:46ch;
-  }
-  .cta{display:flex; flex-wrap:wrap; align-items:center; gap:16px 24px}
-  .badge{
-    display:inline-flex; align-items:center; gap:10px;
-    background:var(--wine); color:#fff; text-decoration:none;
-    font-weight:600; font-size:15px; padding:14px 22px; border-radius:999px;
-  }
-  .badge[aria-disabled="true"]{background:var(--sunk); color:var(--taupe); cursor:default}
-  .cta small{color:var(--faint); font-size:14px}
-
-  /* ---- Screenshot placeholders ------------------------------------ */
   /*
-   * 1320x2868 is the 6.9" iPhone frame the App Store wants, so the box is
-   * that exact ratio. Swapping in a real PNG means deleting the <div> and
-   * dropping an <img> in its place — nothing else moves.
+   * One ink key per view (sipply.css). The bar's key is the wash key
+   * while the hero's ink key is on screen, and again while the beta
+   * panel's is; it takes the ink only when it is the one key in view
+   * (.lead, scripts at the foot). Without JavaScript it is simply ink.
    */
-  .shots{
-    display:grid; gap:clamp(16px,3vw,28px);
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    padding:clamp(24px,5vw,48px) 0;
-  }
-  .shot{
-    aspect-ratio:1320/2868; border-radius:24px;
-    background:var(--sunk);
-    display:flex; align-items:center; justify-content:center;
-    text-align:center; padding:20px;
-  }
-  .shot span{
-    font-size:13px; line-height:1.45; color:var(--taupe);
-    max-width:18ch;
-  }
+  .js .bar:not(.lead) .bar-key { background: var(--wash); color: var(--ink); }
+  .js .bar:not(.lead) .bar-key:active { background: var(--press); }
+  @media (hover: hover) { .js .bar:not(.lead) .bar-key:hover { background: var(--press); } }
+  @media (prefers-reduced-motion: no-preference) { .bar-key { transition: background-color .2s ease, color .2s ease; } }
 
-  /* ---- Feature rows ----------------------------------------------- */
-  section{padding:clamp(40px,7vw,80px) 0; border-top:1px solid var(--line)}
-  .kicker{
-    font-family:var(--body); font-weight:500; font-size:12px;
-    letter-spacing:0.28em; text-transform:uppercase; color:var(--taupe);
-    margin:0 0 14px;
+  /* ---- Hero ---------------------------------------------------------- */
+  .hero {
+    display: grid; gap: 48px 64px; align-items: start;
+    padding-top: clamp(8px, 2.4vw, 32px); padding-bottom: clamp(56px, 8vw, 104px);
   }
-  h2{
-    font-family:var(--display); font-weight:600;
-    font-size:clamp(28px,4.2vw,40px); line-height:1.15;
-    letter-spacing:-0.01em; margin:0 0 14px; max-width:20ch;
+  @media (min-width: 960px) {
+    .hero { grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr); min-height: calc(100dvh - var(--bar)); align-items: center; }
   }
-  section p{margin:0; color:var(--muted); max-width:56ch}
-  .row{display:grid; gap:clamp(24px,4vw,56px); align-items:center}
-  @media(min-width:780px){
-    .row{grid-template-columns:1fr 1fr}
-    .row.flip .copy{order:2}
-  }
-  .row .shot{max-width:320px; margin:0 auto; width:100%}
+  .hero-copy { display: grid; justify-items: start; }
 
-  .stats{display:flex; flex-wrap:wrap; gap:8px 40px; margin-top:28px; padding:0; list-style:none}
-  .stats b{
-    display:block; font-family:var(--display); font-weight:700;
-    font-size:30px; line-height:1.1; color:var(--wine);
+  /*
+   * The tag. Its box is the ink's (the film's union over all 216 frames,
+   * 656 x 404 at the film's scale) with 10 spare each way, so it lines up
+   * with the column by its letters, not by the film's white margins; the
+   * video and its still sit out from it by those margins and are clipped
+   * to it. Multiply makes the film's white the page's, whatever a
+   * decoder does to it.
+   */
+  .tag { position: relative; width: min(100%, 520px); aspect-ratio: 676 / 424; overflow: hidden; margin-left: -1.2%; }
+  .tag-film { position: absolute; left: -5.03%; top: -8.49%; width: 110.06%; height: 116.98%; mix-blend-mode: multiply; display: none; object-fit: cover; max-width: none; }
+  /*
+   * The vector wordmark, laid exactly over the film's last frame: the
+   * film draws the lockup at 1.428 px a design unit, its origin at
+   * (232.3, 729.7) in the 1080 x 1920 frame (measured from the frame's ink
+   * against WORDMARK_PATH.ink), so the SVG's viewBox lands at these
+   * shares of the tag's box. It is what shows with no film, and it takes
+   * over the moment the film ends, the way the app's wordmark takes over
+   * from the film in the Dock (v4.6 B.3): same letters, same place, so
+   * nothing moves, only the edges sharpen from video to vector.
+   */
+  .tag-word { position: absolute; left: 1.163%; top: 1.851%; width: 97.80%; height: 96.16%; max-width: none; }
+  .tag.film .tag-film { display: block; }
+  .tag.film .tag-word { visibility: hidden; }
+  .tag.film.done .tag-word { visibility: visible; }
+  .tag.film.done .tag-film { visibility: hidden; }
+
+  .hero h1 { position: relative; margin-top: clamp(24px, 3vw, 40px); max-width: 21ch; }
+  /* The swash under the headline's last line: the app's offsets (left 1, bottom -4 under a 28pt title) at the headline's size. */
+  /* Lower than a tab root's (-4 at 28pt, so -0.14em) by the descenders' depth, as a tournament's typed name is (v4.7 6.1, #11): "yours" has a y. */
+  .h1-swash { position: absolute; left: 0.04em; bottom: -0.3em; }
+  .hero .lede { margin-top: 34px; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 32px; }
+  @media (max-width: 560px) { .cta .key { width: 100%; } }
+
+  /* ---- The record: the drink page's head, as the app draws it --------- */
+  /* Under the copy's left edge on a narrow window; beside it, to the column's right. */
+  .record { margin: 0; width: 100%; max-width: 460px; justify-self: start; }
+  @media (min-width: 960px) { .record { justify-self: end; } }
+  .record .print { aspect-ratio: 16 / 15; }
+  .record-body { position: relative; padding: 26px 0 0 26px; }
+  /* The margin rule: centreline 12 in from the record's edge, the name's cap height to the last caption's baseline. */
+  .margin-rule { position: absolute; left: 9px; top: calc(26px + 12px); bottom: 4.3px; }
+  .record .drink-name { font-size: 48px; line-height: 52px; }
+  .record .plate { margin-top: 12px; }
+  .facts { position: relative; display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; row-gap: 18px; margin: 24px 0 0; }
+  .facts div { min-width: 0; }
+  .facts dd { margin: 0; }
+  .facts b { display: block; font-weight: 600; font-size: 17px; line-height: 24px; letter-spacing: -0.012em; }
+  .facts span { display: block; font-size: 13px; line-height: 18px; color: var(--muted); }
+  .column-rule { position: absolute; left: calc(50% - 3px); top: 5.8px; bottom: 4.3px; }
+
+  /* ---- Section heads, the Dex's: words on a row, the pen's rule under ---- */
+  .head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .head-aside { color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .head-rule { margin-top: 18px; }
+
+  /* ---- The Dex --------------------------------------------------------- */
+  .dex-body { display: grid; gap: 40px 56px; margin-top: 40px; }
+  @media (min-width: 960px) { .dex-body { grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr); } }
+  .dex-copy { display: grid; gap: 28px; align-content: start; }
+  .dex-copy .big { font-size: clamp(22px, 2vw, 27px); line-height: 1.32; letter-spacing: -0.022em; font-weight: 500; max-width: 26ch; }
+  .counts { display: flex; flex-wrap: wrap; gap: 8px 40px; margin: 0; padding: 0; list-style: none; }
+  .counts b { display: block; font-size: clamp(40px, 4.4vw, 60px); line-height: 1; letter-spacing: -0.045em; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .counts span { display: block; margin-top: 8px; color: var(--muted); font-size: 15px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; margin: 0; padding: 0; list-style: none; }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .grid .print { aspect-ratio: 1; }
+  .grid .dexno { display: block; margin-top: 12px; }
+  .grid .drink-name { margin-top: 2px; font-size: 17px; line-height: 22px; }
+  .grid .sub { margin-top: 2px; font-size: 13px; line-height: 18px; color: var(--muted); }
+
+  /* ---- The spec ------------------------------------------------------- */
+  .spec-wrap { display: grid; gap: 40px 64px; align-items: start; }
+  @media (min-width: 960px) { .spec-wrap { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); } }
+  .spec-wrap > .print { aspect-ratio: 1; max-width: 560px; width: 100%; }
+  @media (min-width: 960px) { .spec-wrap > .print { position: sticky; top: calc(var(--bar) + 24px); } }
+  .spec-copy .body { margin-top: 18px; }
+  .spec { margin-top: 40px; }
+  .spec-name { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .spec-name .drink-name { font-size: 34px; line-height: 40px; }
+  .spec-kind { margin-top: 4px; color: var(--muted); font-size: 15px; }
+  .spec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 32px; padding-bottom: 12px; box-shadow: inset 0 -1px 0 var(--line); }
+  .spec-head h3 { font-size: 17px; line-height: 24px; letter-spacing: -0.012em; }
+  .spec-head span { color: var(--muted); font-size: 15px; }
+  .ings { margin: 0; padding: 0; list-style: none; }
+  .ings li { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 10px 0; }
+  .ings .amt b { display: block; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .ings .amt span { display: block; font-size: 13px; line-height: 18px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .ings .note { color: var(--muted); font-size: 13px; }
+  .steps { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 12px; padding: 7px 0; counter-increment: step; }
+  .steps li::before { content: counter(step); color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .garnish { margin-top: 20px; }
+  .garnish dt { font-size: 13px; line-height: 18px; color: var(--muted); }
+  .garnish dd { margin: 2px 0 0; }
+
+  /*
+   * ---- Your photo: the same Dex card before and after you post it ------
+   * The app's whole idea in two cells (DexCard): one you have not posted
+   * is the grey proof of the catalogue's photo with its name in muted
+   * ink; one you have is your own photograph with its name in ink and
+   * its plate on Campari. The site has no photo of yours to show, so the
+   * second card is the compose screen's empty photo (log/PhotoSource
+   * PhotoSlot: the wash and the camera glyph, nothing else), the place
+   * your photo goes. A real one can go in that frame later as a .print.
+   */
+  .yours { padding-top: clamp(80px, 11vw, 144px); }
+  .yours-grid { display: grid; gap: 40px 64px; align-items: center; }
+  @media (min-width: 960px) { .yours-grid { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); } }
+  .yours h2 { font-size: clamp(34px, 4.4vw, 62px); line-height: 1.02; letter-spacing: -0.045em; max-width: 17ch; }
+  .yours .body { margin-top: 28px; font-size: clamp(17px, 1.35vw, 19px); max-width: 50ch; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; max-width: 560px; }
+  .pair figure { margin: 0; min-width: 0; }
+  .pair .print, .slot { aspect-ratio: 1; }
+  .slot { display: grid; place-items: center; background: var(--wash); border-radius: var(--r-print); }
+  .slot svg { width: 32px; height: 32px; color: var(--ink); }
+  .pair .no { display: flex; align-items: center; height: 24px; margin-top: 12px; }
+  .pair .drink-name { margin-top: 2px; font-size: 17px; line-height: 22px; }
+  .pair .not-yet { color: var(--muted); }
+  .pair figcaption { margin-top: 10px; padding-top: 10px; box-shadow: inset 0 1px 0 var(--line); font-size: 13px; line-height: 18px; color: var(--muted); }
+
+  /*
+   * ---- People: five panels, each with a piece of the app in it --------
+   * The panels are the app's cards (wash, 8, no edge). In each, on the
+   * page's white, the screen it describes, drawn at the app's own sizes
+   * from its own parts: a feed post (PostCard), a tournament's head and
+   * log (tournaments/[id], its swash), a collection's shelf, two rows of
+   * Activity (TagRow), and a drink page's Where people have had it.
+   * The people and places in them are examples, and say so; the photos
+   * in a post are the no-photo face (VectorFace: the drink's glass as a
+   * control-grey outline on the wash), never a catalogue print passed
+   * off as someone's own. Ornament for sighted readers: each piece is
+   * aria-hidden, and the panel's words under it say the same thing.
+   */
+  .people .head { margin-bottom: 0; }
+  /* On a phone the aside takes its own line under the heading, rather than squeezing it to three. */
+  @media (max-width: 560px) { .people .head { display: block; } .people .head-aside { margin-top: 8px; } }
+  .bento { display: grid; gap: 16px; margin-top: 40px; }
+  @media (min-width: 900px) {
+    .bento { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-areas:
+      "feed feed feed feed feed feed trn trn trn trn trn trn"
+      "feed feed feed feed feed feed svd svd svd svd svd svd"
+      "tag tag tag tag tag tag plc plc plc plc plc plc"; }
+    .cell.feed { grid-area: feed; }
+    .cell.trn { grid-area: trn; }
+    .cell.svd { grid-area: svd; }
+    .cell.tagp { grid-area: tag; }
+    .cell.plc { grid-area: plc; }
   }
-  .stats span{font-size:14px; color:var(--muted)}
+  .cell { display: grid; align-content: start; gap: 10px; padding: clamp(16px, 2.2vw, 28px); background: var(--wash); border-radius: var(--r-card); min-width: 0; }
+  .cell p { color: var(--muted); max-width: 46ch; }
+  .cell .screen + h3 { margin-top: 14px; }
 
-  /* ---- Footer ------------------------------------------------------ */
-  footer{padding:clamp(40px,6vw,72px) 0 64px; border-top:1px solid var(--line)}
-  footer nav{display:flex; flex-wrap:wrap; gap:12px 28px; margin-bottom:24px}
-  footer a{color:var(--wine); text-decoration:none; font-weight:500}
-  footer a:hover{text-decoration:underline}
-  .colophon{font-size:14px; color:var(--muted); max-width:54ch; margin:0}
-  .colophon a{font-weight:400}
+  /* The piece of the app: the page's white, a card's corner, the app's text sizes (13/18 small, 17/24 body). */
+  .screen { position: relative; background: var(--page); border-radius: var(--r-card); font-size: 13px; line-height: 18px; letter-spacing: 0; color: var(--ink); }
+  .screen b { font-weight: 600; }
+  .cell .screen p { color: var(--ink); max-width: none; }
+  .cell .screen .muted { color: var(--muted); }
+  .screen .g { width: 24px; height: 24px; flex: none; }
+  .screen .g-sm { width: 20px; height: 20px; flex: none; color: var(--muted); }
 
-  @media(prefers-reduced-motion:no-preference){
-    .badge{transition:transform .18s ease}
-    .badge:not([aria-disabled]):hover{transform:translateY(-1px)}
+  /* A person: initials on one of the app's four grey tones (avatarTone), the one round thing. */
+  .av { display: inline-grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: #3D3D3D; color: #FFFFFF; font: 600 13px/1 var(--body); }
+  .av.lg { width: 40px; height: 40px; font-size: 16px; }
+  .av.sm { width: 24px; height: 24px; font-size: 11px; }
+  .av.t1 { background: #262626; }
+  .av.t3 { background: #5C5C5C; }
+  .av.t4 { background: #E3E3E3; color: var(--ink); }
+
+  /* The no-photo face: the drink's glass, 1.4 wide whatever its size, control grey on the wash. */
+  .nophoto { display: grid; place-items: center; overflow: hidden; background: var(--wash); }
+  .nophoto svg { width: 56%; height: auto; aspect-ratio: 100 / 112; max-width: none; fill: none; stroke: var(--control); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* The feed post: header 52, the square print full bleed, actions 44, caption, time, the closing rule. */
+  .post { overflow: hidden; max-width: 440px; width: 100%; justify-self: center; }
+  .post-head { display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 12px 0 16px; }
+  .post-who { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .post-who .drink-name { font-size: 13px; line-height: 18px; }
+  /*
+   * The print is full bleed in the app; here the post is a crop on a wash
+   * panel, so its wash print would melt into the panel. It sits in from
+   * the post's edges by its gutter (16), on the post's white, with the
+   * print's edge.
+   */
+  .post .nophoto { aspect-ratio: 1; margin: 0 16px; border-radius: var(--r-print); box-shadow: inset 0 0 0 1px var(--photo-edge); }
+  /* Beside two panels, the post takes the panel's width and the middle of the room they leave. */
+  @media (min-width: 900px) { .cell.feed { grid-template-rows: 1fr auto auto; } .cell.feed .post { max-width: none; align-self: center; } }
+  .post-actions { display: flex; align-items: center; gap: 16px; height: 44px; margin-top: 4px; padding: 0 16px; }
+  .post-actions .spacer { flex: 1; }
+  .post-cap { padding: 2px 16px 0; }
+  .post-when { padding: 4px 16px 0; }
+  .post-end { width: 24px; margin: 10px 16px 14px; }
+
+  /* A tournament's head (its typed name signed with the swash, 3 lower than a tab root's) over its shared log. */
+  .tourn { padding: 20px 16px 8px; }
+  .t-name { position: relative; font: 600 28px/34px var(--body); letter-spacing: -0.4px; }
+  .t-swash { position: absolute; left: 1px; bottom: -7px; }
+  .t-meta { margin-top: 14px; }
+  .log { margin: 12px 0 0; padding: 0; list-style: none; }
+  .log li { display: flex; align-items: center; gap: 12px; min-height: 52px; }
+  .log .who { flex: 1; min-width: 0; }
+  .log .who > span { display: block; }
+  .log .drink-name { font-size: 13px; line-height: 18px; }
+
+  /* A collection: its name and whether it is shared, over its shelf of prints. */
+  .coll { padding: 16px; }
+  .coll-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .coll-head b { font-size: 17px; line-height: 24px; letter-spacing: -0.2px; }
+  .shelf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .shelf .print { aspect-ratio: 1; }
+  .shelf .drink-name { margin-top: 6px; font-size: 13px; line-height: 18px; overflow-wrap: anywhere; }
+
+  /* Activity: a face, the sentence, the post's print at 44. */
+  .act { padding: 6px 16px; }
+  .act-row { display: flex; align-items: center; gap: 12px; min-height: 64px; }
+  .act-row p { flex: 1; min-width: 0; font-size: 15px; line-height: 21px; }
+  .act .nophoto { width: 44px; height: 44px; flex: none; border-radius: var(--r-print); box-shadow: inset 0 0 0 1px var(--photo-edge); }
+  .act .nophoto svg { width: 62%; }
+
+  /* Where people have had it: the head, then each place's pin, label over who, chevron. */
+  .where { padding: 16px; }
+  .where-h { font-weight: 600; font-size: 17px; line-height: 24px; letter-spacing: -0.2px; }
+  .where-row { display: flex; align-items: center; gap: 12px; min-height: 56px; }
+  .where-row .label { flex: 1; min-width: 0; }
+  .where-row .label > span { display: block; }
+  .where-row .label > span:first-child { font-size: 17px; line-height: 24px; letter-spacing: -0.2px; }
+
+  /* ---- What it does not do: six lines on the ledger's hairline --------- */
+  .nots-top { display: grid; gap: 18px 64px; align-items: end; }
+  @media (min-width: 960px) { .nots-top { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); } }
+  .nots-copy .quiet { margin-top: 8px; }
+  .nots { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 32px; margin: 40px 0 0; padding: 0; list-style: none; }
+  @media (min-width: 640px) { .nots { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 960px) { .nots { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .nots li { padding: 18px 0 24px; box-shadow: inset 0 1px 0 var(--line); font-size: clamp(24px, 2.5vw, 34px); line-height: 1.12; letter-spacing: -0.032em; font-weight: 600; text-wrap: balance; }
+
+  /* ---- The beta -------------------------------------------------------- */
+  .beta { margin-top: clamp(80px, 11vw, 144px); }
+  .beta-panel { display: grid; gap: 32px 56px; padding: clamp(28px, 5vw, 64px); background: var(--wash); border-radius: var(--r-card); }
+  @media (min-width: 900px) { .beta-panel { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; } }
+  .app-icon { width: 96px; height: 96px; border-radius: 22px; }
+  .beta ol { margin: 18px 0 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 8px; }
+  .beta ol li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; counter-increment: step; color: var(--muted); }
+  .beta ol li::before { content: counter(step); color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .beta-key { display: grid; gap: 12px; justify-items: start; }
+  .beta-key small { color: var(--muted); font-size: 13px; line-height: 18px; max-width: 30ch; }
+  @media (max-width: 560px) { .beta-key, .beta-key .key { width: 100%; } }
+
+  .space { padding-top: clamp(80px, 11vw, 144px); }
+  /* Under the Paloma's two cards, less air: they already close the section above. */
+  .space.people { padding-top: clamp(72px, 7vw, 96px); }
+
+  /* ---- Entering: one quiet rise per block, once ------------------------ */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .rise { opacity: 0; transform: translateY(14px); transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1); }
+    .js .rise.in { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to the page</a>
 
-<header class="wrap">
-  <img class="mark" src="img/icon.png" alt="" width="84" height="84">
-  <h1>A field guide to drinks, and a record of yours.</h1>
-  <p class="lede">
-    Sipply is a field guide to 2,089 cocktails and spirits. Post a drink you
-    have had and it joins a collection you actually own, with your own photo.
-    Save the rest for later, and follow the people you drink with.
-  </p>
-  <div class="cta">
-    <a class="badge" href="https://testflight.apple.com/join/1T5KAfkz" rel="noopener">Join the beta on TestFlight</a>
-    <small>Not on the App Store yet. The beta runs on TestFlight, Apple's app for testing.</small>
+<!-- The app's own glyphs (components/icons.tsx): the 24 grid, 1.6 stroke, round caps. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="i-pin" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21.1s-6.6-5.7-6.6-11.2a6.6 6.6 0 0 1 13.2 0c0 5.5-6.6 11.2-6.6 11.2z"/><circle cx="12" cy="9.9" r="2.4"/></g>
+    <g id="i-chev" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.4 5.4 16 12l-6.6 6.6"/></g>
+    <g id="i-camera" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.6 7.9h3.1l1.5-2.2h5.6l1.5 2.2h3.1a1.5 1.5 0 0 1 1.5 1.5v8.4a1.5 1.5 0 0 1-1.5 1.5H4.6a1.5 1.5 0 0 1-1.5-1.5V9.4a1.5 1.5 0 0 1 1.5-1.5z"/><circle cx="12" cy="13.4" r="3.5"/></g>
+    <g id="i-heart" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/></g>
+    <g id="i-share" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.4V3.9"/><path d="M8.2 7.5 12 3.7l3.8 3.8"/><path d="M5.4 13.2v5.9a1.5 1.5 0 0 0 1.5 1.5h10.2a1.5 1.5 0 0 0 1.5-1.5v-5.9"/></g>
+    <g id="i-bookmark" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/></g>
+    <g id="i-more" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.4" cy="12" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="18.6" cy="12" r="1.15"/></g>
+    <!-- The no-photo face's glasses (artwork/glasses.ts SHAPES): vessel and parts, stroked, on the 100 x 112 grid. -->
+    <g id="glass-highball"><path d="M35 24 L36.5 95 Q36.5 98.5 40 98.5 H60 Q63.5 98.5 63.5 95 L65 24 Z" vector-effect="non-scaling-stroke"/></g>
+    <g id="glass-rocks"><path d="M30 46 L31 93 Q31 96.5 34.5 96.5 H65.5 Q69 96.5 69 93 L70 46 Z" vector-effect="non-scaling-stroke"/><path d="M32.4 88 H67.6" vector-effect="non-scaling-stroke"/></g>
+  </defs>
+</svg>
+
+<span id="top" aria-hidden="true" style="position:absolute;top:0;height:1px;width:1px"></span>
+
+<header class="bar" id="bar">
+  <div class="wrap bar-row">
+    <a class="bar-mark" href="./" aria-label="Sipply"><img src="img/wordmark-sm.svg" alt="" width="61" height="34"></a>
+    <nav class="bar-nav" aria-label="Sipply">
+      <a class="quiet" href="#dex">The Dex</a>
+      <a class="quiet" href="#people">Friends</a>
+      <a class="key ink sm bar-key" href="https://testflight.apple.com/join/1T5KAfkz" rel="noopener">Join the beta</a>
+    </nav>
   </div>
 </header>
 
-<div class="wrap shots">
-  <!-- Replace each <div class="shot"> with <img src="img/shot-N.png" alt="…"> -->
-  <div class="shot"><span>The Dex</span></div>
-  <div class="shot"><span>A drink card</span></div>
-  <div class="shot"><span>Posting a drink</span></div>
-  <div class="shot"><span>Saved</span></div>
-</div>
+<main id="main">
 
-<section class="wrap">
-  <div class="row">
-    <div class="copy">
-      <p class="kicker">The Dex</p>
-      <h2>A collection, not a checklist</h2>
-      <p>
-        Every cocktail and every bottle, each with its own entry. Locked ones
-        sit in greyscale until you post them; yours keep the photograph you
-        took, and your own shot replaces the stock one from then on.
-      </p>
-      <ul class="stats">
-        <li><b>2,089</b><span>entries</span></li>
-        <li><b>899</b><span>cocktails</span></li>
-        <li><b>1,190</b><span>spirits</span></li>
+  <section class="hero wrap" aria-labelledby="hero-h">
+    <div class="hero-copy">
+      <div class="tag" id="tag" role="img" aria-label="Sipply">
+        <img class="tag-word" src="img/wordmark.svg" alt="" width="463" height="286" fetchpriority="high">
+        <video class="tag-film" muted playsinline disablepictureinpicture disableremoteplayback preload="none" poster="img/tag-start.webp" aria-hidden="true" tabindex="-1"></video>
+      </div>
+      <script>
+        /*
+         * The film plays once, muted, and the vector name takes over from
+         * its last frame. Only with motion allowed; anything that stops it
+         * (Low Power Mode, a blocked autoplay, a failed load) leaves the
+         * vector name, so the name is always there.
+         */
+        (function () {
+          var tag = document.getElementById('tag');
+          var film = tag.querySelector('.tag-film');
+          if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+          var still = function () { tag.classList.remove('film'); };
+          tag.classList.add('film');
+          film.addEventListener('error', still);
+          film.addEventListener('ended', function () { tag.classList.add('done'); });
+          film.src = 'img/tag.mp4';
+          var p = film.play();
+          if (p && p.catch) p.catch(still);
+        })();
+      </script>
+      <h1 id="hero-h">A field guide to drinks, and a record of yours.<span class="h1-swash" data-pen="swash" data-size="title" data-delay="2600"></span></h1>
+      <p class="lede">2,089 cocktails and spirits, every cocktail with its real recipe. Post the ones you have had, with your own photo.</p>
+      <div class="cta">
+        <a class="key ink" id="hero-key" href="https://testflight.apple.com/join/1T5KAfkz" rel="noopener">Join the beta</a>
+        <a class="quiet" href="#beta">How the beta works<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></a>
+      </div>
+    </div>
+
+    <!-- The drink page's head (DrinkPanels HeroRecord): the print, the name, the caught plate and its drip, the four facts. -->
+    <figure class="record" aria-label="The Negroni's entry in the Dex: number 127, a spirit-forward cocktail from Florence, Italy, served in a rocks glass, 24 percent">
+      <div class="print"><img src="img/drinks/negroni-880.webp" alt="" width="880" height="880" fetchpriority="high"></div>
+      <div class="record-body" aria-hidden="true">
+        <span class="margin-rule" data-pen="vrule" data-seed="3" data-delay="300"></span>
+        <p class="drink-name">Negroni</p>
+        <span class="plate">Nº 0127<span class="drip"><svg viewBox="-3 -3 6 12" width="6" height="12"><path fill="#D0102C" d="M-1.7 0.03L-1.52 0.17L-1.36 0.32L-1.22 0.47L-1.11 0.61L-1 0.76L-0.92 0.91L-0.84 1.06L-0.77 1.2L-0.72 1.35L-0.67 1.5L-0.62 1.65L-0.59 1.79L-0.55 1.94L-0.53 2.09L-0.5 2.24L-0.48 2.39L-0.46 2.54L-0.44 2.68L-0.43 2.83L-0.41 2.98L-0.4 3.13L-0.39 3.28L-0.38 3.43L-0.38 3.58L-0.37 3.72L-0.36 3.87L-0.35 4.02L-0.35 4.17L-0.34 4.32L-0.34 4.47L-0.33 4.62L-0.33 4.76L-0.33 4.91L-0.32 5.06L-0.32 5.21L-0.31 5.36L-0.31 5.51L-0.31 5.66L-0.3 5.81L-0.3 5.95L-0.3 6.1L-0.3 6.25L-0.29 6.4L-0.29 6.55L-0.29 6.7L-0.28 6.85L-0.28 6.99L-0.22 7.19L-0.07 7.34L0.13 7.39L0.33 7.33L0.47 7.18L0.52 6.98L0.52 6.83L0.52 6.68L0.51 6.54L0.51 6.39L0.51 6.24L0.51 6.09L0.51 5.94L0.5 5.79L0.5 5.64L0.5 5.49L0.5 5.35L0.5 5.2L0.49 5.05L0.49 4.9L0.49 4.75L0.49 4.6L0.49 4.45L0.49 4.3L0.49 4.16L0.49 4.01L0.49 3.86L0.5 3.71L0.5 3.56L0.5 3.41L0.51 3.26L0.51 3.11L0.52 2.97L0.53 2.82L0.53 2.67L0.55 2.52L0.56 2.37L0.58 2.22L0.6 2.07L0.62 1.92L0.65 1.77L0.68 1.62L0.72 1.47L0.76 1.33L0.82 1.18L0.88 1.03L0.95 0.88L1.03 0.73L1.13 0.58L1.24 0.42L1.37 0.27L1.52 0.12L1.7 -0.03L1.46 -0.88L0.82 -1.49L-0.03 -1.7L-0.88 -1.46L-1.49 -0.82Z"/><path fill="#D0102C" d="M0.12 3.35L0.22 3.61L0.33 3.88L0.45 4.13L0.58 4.39L0.71 4.64L0.85 4.89L0.98 5.14L1.1 5.39L1.22 5.65L1.32 5.91L1.4 6.17L1.46 6.43L1.51 6.71L1.52 6.99L1.49 7.28L1.41 7.57L1.28 7.83L1.11 8.06L0.9 8.25L0.66 8.38L0.39 8.47L0.12 8.5L-0.15 8.47L-0.42 8.38L-0.66 8.25L-0.87 8.06L-1.04 7.83L-1.17 7.57L-1.25 7.28L-1.28 6.99L-1.27 6.71L-1.22 6.43L-1.16 6.17L-1.08 5.91L-0.98 5.65L-0.86 5.39L-0.74 5.14L-0.61 4.89L-0.47 4.64L-0.34 4.39L-0.21 4.13L-0.09 3.88L0.02 3.61Z"/></svg></span></span>
+        <dl class="facts">
+          <span class="column-rule" data-pen="vrule" data-seed="4" data-delay="500"></span>
+          <div><dt class="sr">Kind</dt><dd><b>Spirit-forward</b><span>cocktail</span></dd></div>
+          <div><dt class="sr">Origin</dt><dd><b>Florence</b><span>Italy</span></dd></div>
+          <div><dt class="sr">Glass</dt><dd><b>Rocks</b><span>glass</span></dd></div>
+          <div><dt class="sr">Strength</dt><dd><b>24%</b><span>abv</span></dd></div>
+        </dl>
+      </div>
+    </figure>
+  </section>
+
+  <section class="wrap" id="dex" aria-labelledby="dex-h">
+    <div class="head rise">
+      <h2 id="dex-h">The Dex</h2>
+      <p class="head-aside">2,089 entries</p>
+    </div>
+    <span class="head-rule" data-pen="rule" data-seed="2"></span>
+
+    <div class="dex-body">
+      <div class="dex-copy rise">
+        <p class="big">Every cocktail and every bottle has an entry: the glass it belongs in, where it comes from, and for every cocktail, the real recipe.</p>
+        <ul class="counts">
+          <li><b>899</b><span>cocktails</span></li>
+          <li><b>1,190</b><span>spirits</span></li>
+        </ul>
+        <p class="body">Search it, filter it by flavour, spirit or kind, or scroll and find something you have never heard of.</p>
+      </div>
+
+      <!-- Eight entries in Dex order, as the grid hangs them: the print, the name in Playfair, the number and the style. -->
+      <ul class="grid rise" aria-label="Eight entries from the Dex">
+        <li><div class="print"><img src="img/drinks/espresso-martini-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0004</p><p class="drink-name">Espresso Martini</p><p class="sub">Creamy &amp; dessert</p></li>
+        <li><div class="print"><img src="img/drinks/paloma-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0025</p><p class="drink-name">Paloma</p><p class="sub">Highball</p></li>
+        <li><div class="print"><img src="img/drinks/bramble-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0040</p><p class="drink-name">Bramble</p><p class="sub">Modern classic</p></li>
+        <li><div class="print"><img src="img/drinks/aviation-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0092</p><p class="drink-name">Aviation</p><p class="sub">Sour</p></li>
+        <li><div class="print"><img src="img/drinks/clover-club-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0097</p><p class="drink-name">Clover Club</p><p class="sub">Sour</p></li>
+        <li><div class="print"><img src="img/drinks/french-75-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0117</p><p class="drink-name">French 75</p><p class="sub">Sparkling</p></li>
+        <li><div class="print"><img src="img/drinks/boulevardier-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0122</p><p class="drink-name">Boulevardier</p><p class="sub">Spirit-forward</p></li>
+        <li><div class="print"><img src="img/drinks/jungle-bird-480.webp" alt="" width="480" height="480" loading="lazy" decoding="async"></div><p class="dexno">Nº 0137</p><p class="drink-name">Jungle Bird</p><p class="sub">Tiki</p></li>
       </ul>
     </div>
-    <div class="shot"><span>Dex grid</span></div>
-  </div>
-</section>
+  </section>
 
-<section class="wrap">
-  <div class="row flip">
-    <div class="copy">
-      <p class="kicker">Saved</p>
-      <h2>Keep the ones worth coming back to</h2>
-      <p>
-        Bookmark any drink or post and it lands in Saved. Group them into
-        collections, a list of sours or the drinks for a dinner, and share a
-        collection by link with anyone, app or not. Stop sharing and the link
-        stops working.
-      </p>
+  <section class="wrap space" id="recipe" aria-labelledby="recipe-h">
+    <div class="spec-wrap">
+      <div class="print rise"><img src="img/drinks/mai-tai-720.webp" alt="A Mai Tai in a rocks glass, with a lime wheel on a pick and a sprig of mint." width="720" height="720" loading="lazy" decoding="async"></div>
+      <div class="spec-copy">
+        <h2 id="recipe-h" class="rise">The recipe, the glass, and where it came from</h2>
+        <p class="body rise">Build, measures and method for every cocktail; base, distillation and ageing for every spirit. Written to be read while you mix, not scrolled past.</p>
+
+        <!-- The drink page's spec (DrinkPanels SpecSection), the Mai Tai's as the catalogue has it. -->
+        <div class="spec rise">
+          <div class="spec-name"><p class="drink-name">Mai Tai</p><span class="dexno">Nº 0145</span></div>
+          <p class="spec-kind">Tiki &amp; tropical cocktail from Oakland, USA</p>
+          <div class="spec-head"><h3>The spec</h3><span>Shaken · 5 ingredients</span></div>
+          <ul class="ings">
+            <li><span class="amt"><b>2 oz</b><span>60 ml</span></span><span>Aged rum</span></li>
+            <li><span class="amt"><b>1 oz</b><span>30 ml</span></span><span>Lime juice (fresh)</span></li>
+            <li><span class="amt"><b>0.5 oz</b><span>15 ml</span></span><span>Orange curaçao</span></li>
+            <li><span class="amt"><b>0.5 oz</b><span>15 ml</span></span><span>Orgeat syrup</span></li>
+            <li><span class="amt"><b>1 cup</b></span><span>Crushed ice <span class="note">· plus more to serve</span></span></li>
+          </ul>
+          <ol class="steps">
+            <li>Squeeze the lime and keep one spent half-shell for the garnish.</li>
+            <li>Add the rum, lime juice, curaçao, and orgeat to a shaker with about 1 cup of crushed ice.</li>
+            <li>Shake hard for 8-10 seconds.</li>
+            <li>Pour everything, ice and all, into a double rocks glass and top with more crushed ice.</li>
+            <li>Nestle the spent lime shell on top like a little island, tuck a mint sprig beside it, and serve with a straw.</li>
+          </ol>
+          <dl class="garnish"><dt>Garnish</dt><dd>Spent lime shell and a fresh mint sprig</dd></dl>
+        </div>
+      </div>
     </div>
-    <div class="shot"><span>Saved collections</span></div>
-  </div>
-</section>
+  </section>
 
-<section class="wrap">
-  <div class="row">
-    <div class="copy">
-      <p class="kicker">Every entry</p>
-      <h2>The recipe, the glass, and where it came from</h2>
-      <p>
-        Build, method, garnish and serving notes for what you mix; base,
-        distillation and ageing for what you pour — and grapes and region for
-        the sherries and vermouths that sit between the two. Written to be read
-        at a bar, not scrolled past.
-      </p>
+  <section class="wrap yours" id="yours" aria-labelledby="yours-h">
+    <div class="yours-grid">
+      <div>
+        <h2 id="yours-h" class="rise">Post a drink you have had, and your own photo goes on its card.</h2>
+        <p class="body rise">Each drink you post lands on your profile with your own photograph of it, not a stock picture of someone else's glass. Write down a drink the Dex does not have, recipe and all, and it gets a page of its own.</p>
+      </div>
+
+      <!-- The Paloma's Dex card, before and after it is posted (DexCard; the empty photo is log/PhotoSource's). -->
+      <div class="pair rise">
+        <figure>
+          <div class="print"><img src="img/drinks/paloma-proof-256.webp" alt="" width="256" height="256" loading="lazy" decoding="async"></div>
+          <div class="no" aria-hidden="true"><span class="dexno">Nº 0025</span></div>
+          <p class="drink-name not-yet" aria-hidden="true">Paloma</p>
+          <figcaption>Not posted yet: the Dex's grey proof.</figcaption>
+        </figure>
+        <figure>
+          <div class="slot" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-camera"/></svg></div>
+          <div class="no" aria-hidden="true"><span class="plate">Nº 0025</span></div>
+          <p class="drink-name" aria-hidden="true">Paloma</p>
+          <figcaption>Posted: your own photo, in this frame.</figcaption>
+        </figure>
+      </div>
     </div>
-    <div class="shot"><span>Recipe detail</span></div>
-  </div>
-</section>
+  </section>
 
-<footer class="wrap">
-  <nav>
-    <a href="support.html">Support</a>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Use</a>
-    <a href="data-deletion.html">Delete your data</a>
-    <a href="mailto:mcqueeny1617@gmail.com">mcqueeny1617@gmail.com</a>
-  </nav>
-  <p class="colophon">
-    Sipply is made by one person. There is no support queue and no ticket
-    number — there is an email address, and it is read.
-  </p>
+  <section class="wrap space people" id="people" aria-labelledby="people-h">
+    <div class="head rise">
+      <h2 id="people-h">With the people you follow</h2>
+      <p class="head-aside">Names are examples</p>
+    </div>
+    <span class="head-rule" data-pen="rule" data-seed="5"></span>
+
+    <div class="bento">
+      <article class="cell feed rise">
+        <!-- A post on Home (PostCard): the face, "ana with leo" over the drink and its place, the print, the keys, the caption, the time, the closing rule. -->
+        <div class="screen post" aria-hidden="true">
+          <div class="post-head">
+            <span class="av">A</span>
+            <span class="post-who"><b>ana</b> with leo<br><span class="drink-name">Paloma</span> at Harbour Bar</span>
+            <svg class="g" viewBox="0 0 24 24"><use href="#i-more"/></svg>
+          </div>
+          <div class="nophoto"><svg viewBox="0 0 100 112"><use href="#glass-highball"/></svg></div>
+          <div class="post-actions">
+            <svg class="g" viewBox="0 0 24 24"><use href="#i-heart"/></svg>
+            <svg class="g" viewBox="0 0 24 24"><use href="#i-share"/></svg>
+            <span class="spacer"></span>
+            <svg class="g" viewBox="0 0 24 24"><use href="#i-bookmark"/></svg>
+          </div>
+          <p class="post-cap"><b>ana</b> Grapefruit soda, and salt on half the rim.</p>
+          <p class="post-when muted">2 hours ago</p>
+          <span class="post-end" data-pen="rule" data-seed="1"></span>
+        </div>
+        <h3>The feed</h3>
+        <p>Follow friends and see the drinks they post, with their photos and captions.</p>
+      </article>
+      <article class="cell trn rise">
+        <!-- A tournament's head (tournaments/[id]): the typed name and its swash, the dates and who is in it, then its shared log. No standings, no counts. -->
+        <div class="screen tourn" aria-hidden="true">
+          <p class="t-name">The Lisbon trip<span class="t-swash" data-pen="swash" data-size="title"></span></p>
+          <p class="t-meta muted">12 to 19 June · 4 people</p>
+          <ul class="log">
+            <li><span class="av sm t1">A</span><span class="who"><b>ana</b><span><span class="dexno">Nº 0664</span> <span class="drink-name">Porto Tónico</span></span></span><span class="muted">12 Jun</span></li>
+            <li><span class="av sm t4">L</span><span class="who"><b>leo</b><span><span class="dexno">Nº 2061</span> <span class="drink-name">Ruby Port</span></span></span><span class="muted">14 Jun</span></li>
+          </ul>
+        </div>
+        <h3>Tournaments</h3>
+        <p>Host a tournament with people you follow: one shared log of the drinks each of you posts between the dates you pick. No prizes, and how much anyone drinks is never counted or shown.</p>
+      </article>
+      <article class="cell svd rise">
+        <!-- A collection on Saved: its name, shared by link, and its shelf. -->
+        <div class="screen coll" aria-hidden="true">
+          <div class="coll-head"><b>Classics</b><span class="muted">Shared by link</span></div>
+          <ul class="shelf">
+            <li><div class="print"><img src="img/drinks/mojito-320.webp" alt="" width="320" height="320" loading="lazy" decoding="async"></div><p class="drink-name">Mojito</p></li>
+            <li><div class="print"><img src="img/drinks/daiquiri-320.webp" alt="" width="320" height="320" loading="lazy" decoding="async"></div><p class="drink-name">Daiquiri</p></li>
+            <li><div class="print"><img src="img/drinks/old-fashioned-320.webp" alt="" width="320" height="320" loading="lazy" decoding="async"></div><p class="drink-name">Old Fashioned</p></li>
+          </ul>
+        </div>
+        <h3>Saved</h3>
+        <p>Save any drink or post to come back to, and sort them into collections. Share a collection by link, and stop sharing whenever you like.</p>
+      </article>
+      <article class="cell tagp rise">
+        <!-- Two rows of Activity (TagRow): the face, "leo tagged you in their Negroni.", the time, the post's print. -->
+        <div class="screen act" aria-hidden="true">
+          <div class="act-row"><span class="av lg t3">L</span><p><b>leo</b> tagged you in their <span class="drink-name">Negroni</span>. <span class="muted">2h</span></p><span class="nophoto"><svg viewBox="0 0 100 112"><use href="#glass-rocks"/></svg></span></div>
+          <div class="act-row"><span class="av lg">A</span><p><b>ana</b> tagged you in their <span class="drink-name">Paloma</span>. <span class="muted">3d</span></p><span class="nophoto"><svg viewBox="0 0 100 112"><use href="#glass-highball"/></svg></span></div>
+        </div>
+        <h3>Tag people</h3>
+        <p>Tag the people you were with on a post, and they see it in Activity. Anyone you tag can remove themselves.</p>
+      </article>
+      <article class="cell plc rise">
+        <!-- The drink page's last section (places/WherePeopleHadIt): the pin, the label people gave the place over who posted there, the chevron. -->
+        <div class="screen where" aria-hidden="true">
+          <p class="where-h">Where people have had it</p>
+          <div class="where-row"><svg class="g-sm" viewBox="0 0 24 24"><use href="#i-pin"/></svg><span class="label"><span>Harbour Bar</span><span class="muted">Someone you follow</span></span><svg class="g-sm" viewBox="0 0 24 24"><use href="#i-chev"/></svg></div>
+          <div class="where-row"><svg class="g-sm" viewBox="0 0 24 24"><use href="#i-pin"/></svg><span class="label"><span>Caffè Centrale</span><span class="muted">2 people</span></span><svg class="g-sm" viewBox="0 0 24 24"><use href="#i-chev"/></svg></div>
+        </div>
+        <h3>Places</h3>
+        <p>On iOS 18 or later, add the place to a post, found with Apple Maps. A drink's own page shows where people have had it.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap space" id="not" aria-labelledby="not-h">
+    <div class="nots-top rise">
+      <h2 id="not-h">What Sipply does not do</h2>
+      <div class="nots-copy">
+        <p class="body">Sipply does not sell alcohol and cannot be used to order it. It is a reference and a diary, nothing more.</p>
+        <a class="quiet" href="privacy.html">Read the privacy policy<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-chev"/></svg></a>
+      </div>
+    </div>
+    <ul class="nots rise">
+      <li>No ads.</li>
+      <li>No analytics.</li>
+      <li>No trackers.</li>
+      <li>No advertising identifier.</li>
+      <li>Nothing sold or shared with anyone.</li>
+      <li>Nothing to buy inside the app.</li>
+    </ul>
+  </section>
+
+  <section class="wrap beta" id="beta" aria-labelledby="beta-h">
+    <div class="beta-panel rise">
+      <img class="app-icon" src="img/icon.png" alt="" width="512" height="512" loading="lazy" decoding="async">
+      <div>
+        <h2 id="beta-h">Sipply is in beta on TestFlight</h2>
+        <ol>
+          <li>Install TestFlight, Apple's app for trying apps before they are out, from the App Store.</li>
+          <li>Open the invite on your iPhone.</li>
+          <li>Tap Accept, then Install.</li>
+        </ol>
+      </div>
+      <div class="beta-key">
+        <a class="key ink" id="beta-key" href="https://testflight.apple.com/join/1T5KAfkz" rel="noopener">Join the beta</a>
+        <small>For iPhone. Sipply is for people of legal drinking age.</small>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-row">
+      <a class="foot-mark" href="./" aria-label="Sipply"><img src="img/wordmark.svg" alt="" width="78" height="48"></a>
+      <nav aria-label="Support and legal">
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Use</a>
+        <a href="data-deletion.html">Delete your data</a>
+        <a href="mailto:mcqueeny1617@gmail.com">mcqueeny1617@gmail.com</a>
+      </nav>
+    </div>
+    <div class="foot-notes">
+      <p>Sipply is made by one person. There is no support queue and no ticket number. There is an email address, and it is read.</p>
+      <p>Sipply is for people of legal drinking age. Please drink responsibly, and never drive after drinking.</p>
+    </div>
+    <span class="foot-end" data-pen="rule" data-seed="6"></span>
+  </div>
 </footer>
 
+<script src="assets/pen.js" defer></script>
+<script>
+  /*
+   * The bar: its 1pt line once the page is under it, and the wordmark
+   * docked into it once the hero's tag has gone by. Observers, never a
+   * scroll handler. A block rises once, the first time it comes into view.
+   */
+  (function () {
+    var bar = document.getElementById('bar');
+    if (!('IntersectionObserver' in window)) {
+      bar.classList.add('docked', 'lead');
+      document.querySelectorAll('.rise').forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    // An observer may hand over several entries for its one target at once; the last is the latest.
+    var last = function (e) { return e[e.length - 1].isIntersecting; };
+    new IntersectionObserver(function (e) { bar.classList.toggle('scrolled', !last(e)); }).observe(document.getElementById('top'));
+    new IntersectionObserver(function (e) { bar.classList.toggle('docked', !last(e)); }, { rootMargin: '-64px 0px 0px 0px' }).observe(document.getElementById('tag'));
+    /*
+     * The bar's key leads (ink) only when neither page key is in view:
+     * the hero's (behind the bar counts as gone) and the beta panel's.
+     */
+    var heroIn = true, betaIn = false;
+    var lead = function () { bar.classList.toggle('lead', !heroIn && !betaIn); };
+    new IntersectionObserver(function (e) { heroIn = last(e); lead(); }, { rootMargin: '-64px 0px 0px 0px' }).observe(document.getElementById('hero-key'));
+    new IntersectionObserver(function (e) { betaIn = last(e); lead(); }).observe(document.getElementById('beta-key'));
+    var rise = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        rise.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.rise').forEach(function (el) { rise.observe(el); });
+  })();
+</script>
 </body>
 </html>

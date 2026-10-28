@@ -1,0 +1,155 @@
+<!doctype html>
+<!--
+  The layout every markdown page in docs/ is wrapped in (support, privacy,
+  terms, data deletion): Pages' jekyll-default-layout gives a page with no
+  front matter the `default` layout, and this file is it, in place of the
+  Pages theme's. Styling only: the words are the markdown's, untouched.
+
+  It wears the front page's theme (assets/sipply.css): the app's bar with
+  the wordmark, one measured column, the pen's swash under the title, its
+  rule where the page breaks, a short closing rule at the foot, and the
+  front page's foot. The title comes from the page's first heading
+  (jekyll-titles-from-headings, a Pages default), so nothing here needs
+  front matter either.
+
+  Paths go through relative_url, so they hold under the /drinkdex/ project
+  path and in docs/wine/ alike.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFFFFF">
+{% if page.title and page.title != site.title %}<title>{{ page.title }} · {{ site.title }}</title>{% else %}<title>{{ site.title }}</title>{% endif %}
+<meta name="description" content="{{ page.description | default: site.description }}">
+<link rel="icon" href="{{ '/img/icon.png' | relative_url }}">
+<link rel="apple-touch-icon" href="{{ '/img/apple-touch-icon.png' | relative_url }}">
+<meta property="og:title" content="{{ page.title | default: site.title }}">
+<meta property="og:description" content="{{ site.description }}">
+<meta property="og:image" content="https://janmcq1617.github.io/drinkdex/img/og.png">
+<meta property="og:type" content="article">
+<link rel="preload" href="{{ '/assets/fonts/InterLatin_400Regular.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ '/assets/sipply.css' | relative_url }}">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the page</a>
+
+<span id="top" aria-hidden="true" style="position:absolute;top:0;height:1px;width:1px"></span>
+<header class="bar" id="bar">
+  <div class="wrap bar-row">
+    <a class="bar-mark" href="{{ '/' | relative_url }}" aria-label="Sipply, home"><img src="{{ '/img/wordmark-sm.svg' | relative_url }}" alt="" width="61" height="34"></a>
+    <nav class="bar-nav" aria-label="Sipply">
+      <a class="quiet" href="{{ '/support.html' | relative_url }}">Support</a>
+      <a class="key ink sm" href="https://testflight.apple.com/join/1T5KAfkz" rel="noopener">Join the beta</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="doc wrap">
+  <div class="doc-grid">
+    <div>
+      <article class="prose" id="prose">
+{{ content }}
+      </article>
+      <span class="doc-end" data-pen="rule" data-seed="6"></span>
+    </div>
+    <nav class="toc" id="toc" aria-label="On this page" hidden></nav>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-row">
+      <a class="foot-mark" href="{{ '/' | relative_url }}" aria-label="Sipply, home"><img src="{{ '/img/wordmark.svg' | relative_url }}" alt="" width="78" height="48"></a>
+      <nav aria-label="Support and legal">
+        <a href="{{ '/support.html' | relative_url }}">Support</a>
+        <a href="{{ '/privacy.html' | relative_url }}">Privacy Policy</a>
+        <a href="{{ '/terms.html' | relative_url }}">Terms of Use</a>
+        <a href="{{ '/data-deletion.html' | relative_url }}">Delete your data</a>
+        <a href="mailto:mcqueeny1617@gmail.com">mcqueeny1617@gmail.com</a>
+      </nav>
+    </div>
+    <div class="foot-notes">
+      <p>Sipply is made by one person. There is no support queue and no ticket number. There is an email address, and it is read.</p>
+      <p>Sipply is for people of legal drinking age. Please drink responsibly, and never drive after drinking.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /*
+   * The pen's places on a page of words, found rather than written into
+   * the markdown: the swash under the first heading, and a rule in place
+   * of each --- on a page with three or fewer (a page with dozens keeps
+   * plain hairlines: a mark repeated that often is a pattern, not a
+   * detail). The <hr> stays, for whoever reads the page by its structure.
+   */
+  (function () {
+    var prose = document.getElementById('prose');
+    var h1 = prose.querySelector('h1');
+    if (h1) {
+      var swash = document.createElement('span');
+      swash.className = 'title-swash';
+      swash.setAttribute('data-pen', 'swash');
+      swash.setAttribute('data-size', 'title');
+      h1.appendChild(swash);
+    }
+    var hrs = prose.querySelectorAll('hr');
+    if (hrs.length && hrs.length <= 3) {
+      Array.prototype.forEach.call(hrs, function (hr, i) {
+        var rule = document.createElement('span');
+        rule.className = 'pen-break';
+        rule.setAttribute('data-pen', 'rule');
+        rule.setAttribute('data-seed', String(2 + i));
+        hr.classList.add('pen-hr');
+        hr.parentNode.insertBefore(rule, hr.nextSibling);
+      });
+    }
+    /*
+     * On a wide window, the page's own section heads as a list beside it,
+     * so a long policy can be crossed in one move. Built from the h2s the
+     * markdown already has (kramdown gives each an id); no words of its
+     * own beyond its label. The section being read is the one in ink.
+     * From four heads to sixteen: under four there is nothing to cross,
+     * and over sixteen a list is the page again.
+     */
+    var heads = Array.prototype.filter.call(prose.querySelectorAll('h2[id]'), function (h) { return h.textContent.trim(); });
+    var toc = document.getElementById('toc');
+    if (heads.length >= 4 && heads.length <= 16) {
+      var label = document.createElement('p');
+      label.className = 'toc-label';
+      label.textContent = 'On this page';
+      var list = document.createElement('ol');
+      var links = heads.map(function (h) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + h.id;
+        a.textContent = h.textContent.trim();
+        li.appendChild(a);
+        list.appendChild(li);
+        return a;
+      });
+      toc.appendChild(label);
+      toc.appendChild(list);
+      toc.hidden = false;
+      if ('IntersectionObserver' in window) {
+        // Whenever a head crosses the top quarter, the current section is the last head above that line (none above the first).
+        var seen = new IntersectionObserver(function () {
+          var line = window.innerHeight * 0.25, i = -1;
+          heads.forEach(function (h, j) { if (h.getBoundingClientRect().top <= line) i = j; });
+          links.forEach(function (a, j) { if (j === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+        }, { rootMargin: '0px 0px -75% 0px' });
+        heads.forEach(function (h) { seen.observe(h); });
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
+      var bar = document.getElementById('bar');
+      new IntersectionObserver(function (e) { bar.classList.toggle('scrolled', !e[0].isIntersecting); }).observe(document.getElementById('top'));
+    }
+  })();
+</script>
+<script src="{{ '/assets/pen.js' | relative_url }}" defer></script>
+</body>
+</html>
