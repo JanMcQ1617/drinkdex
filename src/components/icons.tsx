@@ -77,7 +77,8 @@ export type IconName =
   | 'bell'
   | 'sliders'
   | 'arrowRight'
-  | 'create';
+  | 'create'
+  | 'pin';
 
 export interface IconProps {
   name: IconName;
@@ -471,6 +472,19 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
       <Path d="M9.4 17V5.8l9.4-2.2v11" />
       <Circle cx={7.2} cy={17.1} r={2.2} />
       <Circle cx={16.6} cy={14.7} r={2.2} />
+    </>
+  ),
+  /*
+   * A place on a post (v4.8, specs/v4.8-places 3.0): a plain map marker,
+   * a drop with a hole, outline only. It is nobody's logo: no folded
+   * corner, no flag, no fill. There is no solid form on purpose, since a
+   * place is never a state (nothing is "on" or "off" about where a drink
+   * was had), so `filled` falls back to the heavier outline.
+   */
+  pin: (
+    <>
+      <Path d="M12 21.1s-6.6-5.7-6.6-11.2a6.6 6.6 0 0 1 13.2 0c0 5.5-6.6 11.2-6.6 11.2z" />
+      <Circle cx={12} cy={9.9} r={2.4} />
     </>
   ),
 };

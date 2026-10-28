@@ -19,14 +19,24 @@ board (you and the people you follow, by how many different drinks each
 has posted) needs migration 025 too; without 025 the tab shows tournaments
 alone, so leave out the sentences about the Friends board.
 
+Places need no flag either, but they need two things: the place-search
+module, which ships inside the binary from build 33 (v4.8), and migration
+026 applied on the server. Until both are there the build shows no Add
+place, no "at …" line and no Where people have had it, so leave out every
+line below that mentions places. Tagging also needs iOS 18 or later
+(Apple's Place IDs, spec v4.8 §0.5); on an older iPhone there is no Add
+place, while places others tagged still show by name.
+
 ---
 
 ## Beta App Description
 
-[4,000 max. 1,595 as pasted, recounted after the Dex and Tournaments
-swapped places (23 Oct 2026) the way appstore.md counts: bold marks gone, a
-paragraph's line breaks as spaces. Build 25 was 1,451; the tournament item
-grew for build 30 (1,609) and shortened with the swap.]
+[4,000 max. 1,665 as pasted, recounted for build 33 (25 Oct 2026) the way
+appstore.md counts: bold marks gone, a paragraph's line breaks as spaces.
+The Places line is 70 with its line break; without migration 026 leave it
+out, and it is 1,595, as it was after the Dex and Tournaments swapped
+places (23 Oct 2026). Build 25 was 1,451; the tournament item grew for
+build 30 (1,609) and shortened with the swap.]
 
 Sipply is a field guide to cocktails and spirits. Its Dex holds 2,089 entries, made up of 899 cocktails and 1,190 spirits. Each entry carries its glassware and where it comes from; every cocktail carries the build, the measures and the method.
 
@@ -35,6 +45,7 @@ Post a drink you have had and it joins your Dex. Add a photo and your own shot r
 This build lets you tag the people you were with on a post, and adds Daily ideas: one notification a day at most, at a time you choose, and only if you turn them on. The Saved tab now holds collections you name and can share by link. The Dex has taste filters, Fruity among them, and its search comes back as soon as you scroll up.
 
 Worth trying:
+- Tagging the bar on a post, and the drink's Where people have had it
 - Tagging someone you follow on a post, and removing yourself from a post that tags you
 - Daily ideas: turn them on in Settings, set the time a few minutes ahead, and check that one arrives (none comes on a day you have posted or added a drink)
 - A collection: make one, add to it, share its link, then stop sharing
@@ -49,9 +60,15 @@ Anything that looks broken, slow or wrong on your screen is worth reporting.
 
 ## What to Test
 
-[4,000 max. 3,860 as pasted, recounted after the Dex and Tournaments
-swapped places (23 Oct 2026) the same way; 3,983 with the first sign-in
-item below added to the list, 17 to spare. Build 30 was 3,853 (3,976):
+[4,000 max. 3,843 as pasted, recounted for build 33 (26 Oct 2026) the
+same way; 3,966 with the first sign-in item below added to the list, 34
+to spare. Places is new (423 with its line break, after the licence
+rework added iOS 18 and naming the place; 378 before that, and 334
+before its Tag this place step and Apple-only maps key), and Liking,
+sharing, saving (211) and Scrolling (229) came out to make room: both
+shipped in builds 29 and 30 and have been tested since. Without
+migration 026, leave Places out too (3,420). After the Dex and Tournaments swapped places (23
+Oct 2026) it was 3,860 (3,983). Build 30 was 3,853 (3,976):
 Tournaments now starts from the trophy, second in the bar, and Posting
 says the red key is the Dex. Build 29 was 3,616: Tournaments, the post
 keys and Posting were rewritten for the tab, the motion and the + on Home,
@@ -62,6 +79,12 @@ both are useful.
 
 Worth poking at:
 
+- **Places.** On iOS 18 or later, post a drink and tap Add place under
+  the caption. Search a bar by name, or tap Show places near me (iOS asks
+  for your location only then; say no once and check search still works).
+  Pick one, change its name if you like, and tap Tag this place. Tap the
+  place on your post to open its page and try Open in Apple Maps. On the
+  drink's own page, check the bar shows under Where people have had it.
 - **Tagging people.** Post a drink and tap Tag people under the caption to
   tag someone you follow. From the tagged account, check the post is in
   Activity (the heart on Home), then remove yourself from the post's "..."
@@ -78,19 +101,12 @@ Worth poking at:
   kinds of drinks first; switch to By number for the plain order. Try the
   filters (the sliders at the end of the search field), Fruity among them,
   search, and open a few. Does it stay smooth when you scroll fast?
-- **Scrolling.** Scroll down the Dex and the search field and filters slide
-  away; scroll up a little and they come back. Home's top bar does the
-  same. Tell me if either gets stuck halfway, or a tab ever shows up blank
-  or half drawn.
 - **Tournaments.** Tap the trophy, second in the tab bar. Host one with
   someone you follow, join it from their account, post a drink from each,
   and check its card and its page. Each different drink adds one entry, up
   to 3 a day. Under it, Friends ranks you and the people you follow by
   different drinks posted: a new drink adds one, a re-post none. Tap a row
   to open that profile.
-- **Liking, sharing, saving.** Tap the heart, double-tap a photo, share and
-  save a post: each key now moves as it answers. Tell me if any of it feels
-  slow, busy or stuck. With Reduce Motion on, nothing should move.
 - **Posting a drink.** The + is now at the top of Home, beside the heart
   (the red key in the tab bar is the Dex now). Type your drink, add a photo
   and a caption. Does it show up on your profile and in the feed?
@@ -141,6 +157,52 @@ only for accounts added to the Meta app, so testers cannot try it.
   shows which of your Facebook friends are on Sipply. Facebook only lists
   friends who connected Sipply too, so it helps if one of them tests with
   you.
+
+### Places, checked on the phone before review (not for pasting)
+
+Jan's pass on build 33, from spec v4.8 §6.4. Tick each before submitting:
+
+- [ ] Before 026: no Add place, no "at …", no Where people have had it, no
+  errors. The build looks like build 32.
+- [ ] After 026: Add place under Tag people; the search finds bars by name
+  with location never asked.
+- [ ] Show places near me shows the system prompt with the purpose string
+  from `app.json`. Allow While Using lists venues within 800 m with
+  distances in feet or miles. After Don't Allow, the same row reads
+  "Location is off for Sipply in Settings." and opens Settings, and search
+  still works. Precise Location off shows its own line.
+- [ ] Tapping a result shows Tag this place with Apple's map of the venue
+  (ink marker, no other points of interest, the Apple Maps logo and Legal
+  link visible and Legal tappable) and Name on your post filled with
+  Apple's name; Back to search keeps what was typed.
+- [ ] Rename the place before tagging: the post says your name for it, and
+  its page shows Apple's own name beside the map. An empty name, or one
+  with a refused word, is stopped in the step and nothing posts with it.
+- [ ] Searching a home address or a school finds nothing taggable.
+- [ ] Save & post with a place: the feed shows "Negroni at La Factoría",
+  and the place opens its page with the photo in the grid. Save to Dex
+  with a place chosen posts nothing and tags nothing.
+- [ ] A gallery post with a place on one photo: the line follows the photo
+  and the header never jumps.
+- [ ] Your "..." → Remove place takes the tag away; Add place puts one
+  back.
+- [ ] The place page shows the same map under its header (looked up live
+  from Apple by the Place ID; the server keeps no address or position),
+  and Open in Apple Maps opens the venue's own card. There is no Google
+  Maps option anywhere. In airplane mode the page still shows the name,
+  the counts and the drinks, without the map.
+- [ ] A drink's page shows Where people have had it, places with someone
+  you follow first, then the most recent, and never asks for location.
+- [ ] On an iPhone below iOS 18 (if one is to hand): no Add place
+  anywhere; a post tagged elsewhere still says "at …", and its page shows
+  the drinks without a map.
+- [ ] Someone else's post with a place: Report offers Wrong place tagged;
+  the report's snapshot names the place.
+- [ ] Airplane mode: the search shows its error; posting without a place
+  still works.
+- [ ] `plutil -p Sipply.app/Info.plist | grep -i location` prints only
+  `NSLocationWhenInUseUsageDescription`.
+- [ ] `scripts/check-native-links.sh` passes on the archive.
 
 ---
 
@@ -194,14 +256,16 @@ file only the user's own username is read, and it is stored, as a hash,
 only if the user accepts it. The usernames are hashed and matched the same way as
 phone numbers, under the same limit.
 
-### Add Daily ideas to every build from 25, and tournaments and story music when it has them
+### Add Daily ideas to every build from 25, and tournaments, places and story music when it has them
 
 Every build from 25: paste the **Daily ideas** paragraph from the App
 Review notes in [appstore.md](appstore.md) into the notes above.
 Tournaments (migration 020 applied): paste its **Tournaments** paragraph
-too. Story music (`EXPO_PUBLIC_STORY_MUSIC=tap`): paste its **Songs on
-posts** paragraph as well. Each is written once, there, so the two sets of
-notes cannot drift apart.
+too. Places (build 33 or later, with migration 026 applied): paste its
+**Places** paragraph, and leave out the Tournaments paragraph's last
+sentence to make room. Story music (`EXPO_PUBLIC_STORY_MUSIC=tap`): paste
+its **Songs on posts** paragraph as well. Each is written once, there, so
+the two sets of notes cannot drift apart.
 
 This field has the same 4,000-character limit, measured the way
 appstore.md measures it: bold marks gone, each paragraph's line breaks as
@@ -227,6 +291,13 @@ the red key in the middle, was 847). Uncut, the build-25 set is then
 or songs on top need the deeper cuts, and appstore.md has that recount.
 Without migration 025, leave out the paragraph's last sentence (173), and
 it is 660.
+
+Build 33's Places paragraph (522) needs every cut: Contacts and Instagram
+down to their first sentence, the third-party paragraph's two Facebook
+sentences dropped, and Tournaments without its last sentence. That set
+is 3,831, 169 to spare (recounted 26 Oct 2026; 4,004 with the Friends
+sentence kept, 4 over). Phone sign-in or songs do not fit beside it;
+appstore.md has the recount.
 
 ### Add for a build with phone sign-in
 

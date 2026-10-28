@@ -315,6 +315,21 @@ instead of phone sign-in, with every cut, is 4,071, 71 over, so songs fit
 only with tournaments' Friends sentence left out (3,898, 102 to spare).
 Songs and phone sign-in together do not fit, so count before pasting.
 
+From build 33 (v4.8), Places (522) goes in whenever the build has the
+place-search module and migration 026 is applied. Recounted from the
+files on 25 Oct 2026, the same way: sign-in through Instagram with
+Contacts (516 now) and Instagram down to their first sentence (75 and
+60), the third-party paragraph without its two sentences about the
+Facebook friends list and access token (665), Daily ideas (498) and
+Tournaments (833) make 3,480 before phone sign-in and songs. Places on
+top is 4,004, 4 over (it was 503 until 26 Oct, when it gained "on iOS 18
+or later", since tagging needs Apple's Place IDs), so also leave out
+Tournaments' last sentence, the one on the Friends board (173 with its
+space; the paragraph is then 660): 3,831, 169 to spare. Neither phone
+sign-in nor songs fits beside Places even then: phone sign-in with its
+code line makes 4,299, 299 over, and songs 4,422, 422 over. A build that
+needs either of them and Places has to choose, so count before pasting.
+
 ### Tournaments — a server with migrations 020 and 025 applied
 
 From build 30 (v4.7) tournaments are a tab of their own, the trophy,
@@ -393,6 +408,57 @@ after the post that brings up the offer, the first idea comes the next day.
 Turning Daily ideas on in Settings, without logging anything, shows the
 same offer and leaves today in the plan.
 
+### Places — a build with the place-search module and migration 026 applied
+
+From build 33 (v4.8). It needs both halves: the native module
+(`modules/place-search`) ships inside the binary, and nothing about places
+shows until migration 026 (`supabase/migrations/026_places.sql`) is
+applied, so a build without it looks like build 32. Apply 026 before
+submitting anyway: the binary carries a location purpose string, and the
+reviewer should find the feature that uses it. Spec v4.8 §4.4 is the
+source; paste it with the Tournaments cut described above.
+
+**Places.** A post can name the bar or restaurant it was had at, found
+with Apple Maps search on the device (MapKit). Only venues can be tagged,
+never a home or an address. Location is When In Use, asked only on a tap
+of Show places near me; search by name works without it, and the device's
+location never reaches our server. Pages count people who had a drink at a
+place, never amounts, prices, deals or rankings. Wrong places are reported
+from the post's "..." menu. Try it on iOS 18 or later: post a drink, then
+Add place.
+
+[522]
+
+Not for pasting: the guidelines to check on the build before submitting.
+
+- **5.1.1.** Location is asked for on demand (only on a tap of Show places
+  near me), with a purpose string, and search by name works when it is
+  denied.
+- **5.1.5.** Location is directly relevant to the feature (places near
+  you), and nothing uses it in the background.
+- **2.5.4.** No background modes: no `UIBackgroundModes` `location`, no
+  Always permission.
+- **1.4.3.** Nothing encourages drinking: a place is only ever "where
+  people have had it", counted in people, with no deals, prices, opening
+  hours or rankings of bars, and the place page has no key to post a drink
+  there.
+- **4.0 and 5.2, and the MapKit licence (DPLA Attachment 6).** Apple Maps
+  data is shown with an Apple map that keeps its logo and Legal link
+  (§2.1, §2.4): the Tag this place step and the place page each draw one,
+  and the search sheet and place page also credit Apple in words ("Places
+  from Apple Maps", "Place details from Apple Maps"). Map Data is shown on
+  no other map: there is no Google Maps link and no Google API. And no
+  Apple address, area, category or position is kept on our server (§2.2,
+  §2.5): per tagged photo it stores only Apple's Place ID and the poster's
+  own name for the place (prefilled from Apple's, editable, filtered), and
+  the phone looks the address and position up live by that id, holding
+  them in memory for the session only (spec v4.8 §0.5). A label the poster
+  leaves as it was is Apple's name word for word, so this narrows the
+  §2.2 risk rather than removing it; spec §0.5 says why it is accepted.
+- **Below iOS 18** there are no Place IDs, so there is no Add place; a
+  place someone else tagged still shows as its name, and its page shows
+  the drinks without Apple's map.
+
 ---
 
 ## URLs
@@ -450,6 +516,13 @@ Music and are not kept. The server holds each answer in memory for ten
 minutes, with no account attached, only so the same search is not asked
 twice; if that cache ever grows longer or is written anywhere, declare
 Search History.
+Place searches (from build 33) are not collected either: what is typed,
+and the device's location if the person allowed it, go from the phone to
+Apple through MapKit and never reach our server. Only a place a person
+tags is kept, on the photo once posted, as Apple's Place ID and the name
+the person gives it, and it is declared below. Looking a tagged place up
+again (its address and map, on its page) also runs between the phone and
+Apple, by that id, and is held only in the phone's memory.
 Crash reports Apple gathers itself, through TestFlight or the App Store,
 are Apple's to declare, not the app's.
 The onboarding's taste answers and the saved drinks are kept on
@@ -462,7 +535,7 @@ declared below.
 **Tracking.** No, for every type below. Nothing is combined with other
 companies' data, and nothing goes to a data broker.
 
-Declare these nine, each **linked to the user** unless the table says
+Declare these ten, each **linked to the user** unless the table says
 otherwise, and each for **App Functionality** only unless the table says
 otherwise:
 
@@ -473,6 +546,7 @@ otherwise:
 | Contact Info → Phone Number | Yes | The sign-in number for anyone who signs in by phone, kept by the authentication provider; otherwise only as a salted hash, and only for someone who makes themselves findable. Apple counts a hash as the data it came from |
 | User Content → Photos or Videos | Yes | Post photos, the profile photo, and the photo sent with a drink suggestion. Also covers the link to a Google or Facebook profile picture that Supabase keeps from sign-in, which the app never shows or copies |
 | User Content → Other User Content | Yes | Captions, bios, likes, saves, follows, invites, drink suggestions, reports and the copy a report keeps; tournaments (name, dates, goal, invitations, standings and the host's time zone); the song added to a post; collections (their names and what is in them, and a share link when you make one); tags (the people you tag on a post, and the record kept when someone removes themselves from one, so that post cannot tag them again) |
+| Location → Precise Location | Yes | The place a person tags on a post's photo (a bar, restaurant or similar venue chosen from Apple Maps), kept as Apple's Place ID for that venue and the name the person gives it, shown with the post. The Place ID names one venue, so it places the person there as exactly as coordinates would, although no coordinates are stored. The device's own location is used on the phone and by Apple Maps only, and never sent to Sipply. |
 | Identifiers → User ID | Yes | The account id and username; the id Apple or Facebook issues for Sipply, and the id Google issues; the hash of the user's own Instagram handle |
 | Identifiers → Device ID | **No** | The random installation id Expo's update check sends. Expo keeps it to deliver updates and count installs per version; nothing ties it to an account |
 | Usage Data → Other Usage Data | Yes | How many phone numbers or handles an account checked, from which list, and when; kept only to enforce the 3,000-a-day matching limit. How many song searches an account made in each hour, never the words; kept only to enforce the 120-an-hour limit. Also, with no account attached, the sign-in screen's hour-long meter of email checks, kept per scrambled IP address |
@@ -489,12 +563,54 @@ ID stays App Functionality only as long as Expo's install counts are used
 for checking rollouts; if they start informing product decisions, add
 Analytics to it.
 
-Everything else is **Not collected**: Contacts, Location (photos are
-re-encoded without it), Search History (the Dex is searched on the
-phone), Browsing History, Health, Financial Info, Purchases, Sensitive
-Info, Product Interaction, Advertising Data and Diagnostics.
+Everything else is **Not collected**: Contacts, Coarse Location (the
+device's own location never leaves the phone except to Apple Maps for a
+search, and photos are re-encoded without location), Search History (the
+Dex and place searches run on the phone or with Apple), Browsing History,
+Health, Financial Info, Purchases, Sensitive Info, Product Interaction,
+Advertising Data and Diagnostics.
 Tournaments, songs, collections and tags add no new type: they are user
 content, and the song-search count is usage data, both declared above.
+
+**Build 33 (v4.8) adds Location → Precise Location: linked to the user,
+App Functionality, not used for tracking.** The device's own location
+stays not collected. Why, from Apple's own definitions
+(developer.apple.com/app-store/app-privacy-details, read 25 Oct 2026;
+spec v4.8 §4.3 quotes them):
+
+- **A tagged place is collected.** It leaves the phone for our server (the
+  photo's `apple_place_id` and `place_label`, on Save & post or through
+  `set_photo_place`) and is kept with the post, far longer than it takes
+  to answer the request.
+- **It is still Precise Location, after the licence rework (spec v4.8
+  §0.5).** Apple's definition is information that describes the location
+  of a user or device at the resolution of a latitude and longitude with
+  three or more decimal places. Sipply no longer stores the venue's
+  coordinates, but that changes how the location is held, not what it is:
+  the Place ID points at one venue, anyone with MapKit can turn it back
+  into that venue's exact position, and the tag says the person was there
+  when they had the drink, linked to the account through the post. The
+  licence decided what Sipply may keep of Apple's data; it does not make
+  the user's location any coarser, so the label does not change.
+- **Other User Content alone is not enough.** Apple's page says that data a
+  user is asked to type into a field is disclosed as its specific type, and
+  a place picker asks for exactly one type, a location. Under-declaring is
+  a rejection risk; over-declaring costs one row on the label.
+- **The device's own location is not collected.** Apple counts data
+  processed only on the device as not collected, and what Apple itself
+  collects, through MapKit, as Apple's to disclose. The fix goes to MapKit
+  and never reaches Sipply (spec v4.8 §2.6).
+- **Coarse Location is not declared.** Nothing coarser than the venue is
+  kept.
+- **Name is not a new type.** The name the person gives the place is their
+  own words about the post, like a caption, so it is already inside Other
+  User Content; it is listed under Precise Location above only because it
+  travels with the Place ID.
+
+There is no Coarse alternative any more. The first draft could have
+stored rounded coordinates; a Place ID cannot be rounded, so showing
+Coarse would mean dropping the tag itself. Publish the privacy policy
+(its Places paragraph) before changing the label.
 
 **Build 25 (v4.3) changes nothing here but the tags in Other User
 Content.** Daily ideas are local notifications and collect nothing.
@@ -519,9 +635,13 @@ linked in a build that ships before the pushes go out.
 
 The same types belong in the app's privacy manifest,
 `ios.privacyManifests.NSPrivacyCollectedDataTypes` in `app.json`. It lists
-all nine, Device ID with `NSPrivacyCollectedDataTypeLinked` false and Other
-Data Types with both its purposes, and a tenth, Audio Data, for the
-microphone the Reels recorder uses. The
+all ten, Device ID with `NSPrivacyCollectedDataTypeLinked` false and Other
+Data Types with both its purposes, and an eleventh, Audio Data, for the
+microphone the Reels recorder uses. Build 33 adds the tenth,
+`NSPrivacyCollectedDataTypePreciseLocation`, linked, not tracking, for
+`NSPrivacyCollectedDataTypePurposeAppFunctionality` (spec v4.8 §1.6). MapKit and CoreLocation are not required-reason APIs, so
+`NSPrivacyAccessedAPITypes` does not change. The binary's only location
+key is `NSLocationWhenInUseUsageDescription`. The
 manifest ships inside the binary, and the recorder is in every build from
 the one after 11 even while Reels is switched off, so the manifest
 declares it from that build on. The questionnaire above adds Audio Data

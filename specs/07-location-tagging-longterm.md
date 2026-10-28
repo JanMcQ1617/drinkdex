@@ -1,3 +1,5 @@
+Superseded by specs/v4.8-places/spec.md (25 Oct 2026) wherever they differ; see its §0.2.
+
 # 07 · Location tagging (long term)
 
 Status: **design only. Nothing in this file gets built now.** It is written so that, when Jan schedules it, an engineer can build Phase 1 without asking anything. Owner tag for the implementer: **LOC**.

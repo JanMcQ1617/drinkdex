@@ -1,6 +1,6 @@
 # Support
 
-**Last updated: 17 October 2026**
+**Last updated: 26 October 2026**
 
 Sipply is made by one person. There is no support queue and no ticket
 number — there is an email address, and it is read.
@@ -142,6 +142,35 @@ they cannot tag you on that post again.
 
 **Blocks remove tags.** Blocking someone, either way, removes the tags
 between you, and unblocking does not bring them back.
+
+## Places on a post
+
+**Tag one.** When you post a drink, tap **Add place** under the caption,
+search for the bar or restaurant by name, tap it, check it on the map,
+and tap **Tag this place**. **Name on your post** starts as the name Apple
+Maps shows; change it if you like (up to 60 characters), and that is what
+your post says. Only places like bars, restaurants, breweries, wineries,
+cafés and hotels can be tagged, never a home or a street address.
+
+**Tagging needs iOS 18 or later.** On an older iPhone there is no **Add
+place**, but places other people tagged still show on their posts, and
+their pages list the drinks posted there.
+
+**Remove one, or rename it.** On your own post, open its **"..."** menu →
+**Remove place**. **Add place** in the same menu tags a post that has
+none, so to rename a place, remove it and add it again.
+
+**A wrong place on someone's post.** Open the post's **"..."** menu →
+**Report** → **Wrong place tagged**.
+
+**Location is optional.** **Show places near me** asks for your location
+only when you tap it, and searching by name always works without it. Your
+location goes only to Apple Maps, to find places near you, and is never
+sent to Sipply. Everyone signed in to Sipply can see a place you tag, so
+tag a place after you have left if you would rather not show where you
+are. To change your answer later, open your iPhone's **Settings →
+Privacy & Security → Location Services → Sipply**; if you said no, tapping
+**Show places near me** opens it.
 
 ## Saved collections
 

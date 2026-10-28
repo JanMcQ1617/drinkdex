@@ -442,7 +442,9 @@ export async function pickFromCamera(): Promise<PickResult> {
  *
  * 'untagged' (v4.3 §2.3) is a post that is up but missed some of its
  * tags. It points at the post's own ••• rather than at posting again:
- * Tag people there writes the tags and nothing else.
+ * Tag people there writes the tags and nothing else. 'unplaced' (v4.8)
+ * is the same for the place: the post and its photo are up, and Add place
+ * in the post's ••• puts the place on that photo without posting again.
  */
 export function reportPost(outcome: PostOutcome): void {
   if (outcome === 'ok') return;
@@ -453,6 +455,8 @@ export function reportPost(outcome: PostOutcome): void {
     );
   } else if (outcome === 'untagged') {
     showNotice('Posted', "Some tags didn't save. Open the post's ••• and choose Tag people to try again.");
+  } else if (outcome === 'unplaced') {
+    showNotice('Posted without the place', "The place didn't save. Open the post's ••• and choose Add place to try again.");
   } else if (outcome === 'objectionable') {
     showNotice(
       'Not posted',

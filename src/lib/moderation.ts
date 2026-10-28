@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase';
 /* This module only records the block and lets the UI reflect it.        */
 /* ==================================================================== */
 
-/** The reasons the reports table will accept — see report_reason_known. */
+/** The reasons every report offers. report_reason_known accepts these and PLACE_REPORT_REASON (026). */
 export const REPORT_REASONS = [
   { key: 'spam', label: 'Spam or scam' },
   { key: 'harassment', label: 'Harassment or hate' },
@@ -19,7 +19,17 @@ export const REPORT_REASONS = [
   { key: 'other', label: 'Something else' },
 ] as const;
 
-export type ReportReason = (typeof REPORT_REASONS)[number]['key'];
+/**
+ * "Wrong place tagged" (v4.8 P9, migration 026): a post's photo names a
+ * place it was not had at. Its own constant rather than a seventh row of
+ * REPORT_REASONS, so profile and reel reports, which list those, never
+ * offer it; a post's Report adds it only when the photo on screen has a
+ * place, just before "Something else". The report's server-built evidence
+ * names the post's places, so the moderator sees what was tagged.
+ */
+export const PLACE_REPORT_REASON = { key: 'wrong_place', label: 'Wrong place tagged' } as const;
+
+export type ReportReason = (typeof REPORT_REASONS)[number]['key'] | typeof PLACE_REPORT_REASON.key;
 
 /**
  * Blocks someone. Idempotent — blocking twice is not an error, because the

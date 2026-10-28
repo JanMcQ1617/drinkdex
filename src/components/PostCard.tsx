@@ -35,6 +35,7 @@ import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
 import { MediaMarker } from '@/components/media';
+import { PlaceSearchSheet } from '@/components/places/PlaceSearchSheet';
 import { formatPlateNumber } from '@/components/plate';
 import { TaggedSheet } from '@/components/tags/TaggedSheet';
 import { TagPeopleSheet } from '@/components/tags/TagPeopleSheet';
@@ -42,7 +43,16 @@ import { announce, Avatar, haptic } from '@/components/ui';
 import { colors, fonts, layout, motion, onMedia, radius, space, stroke, textRole } from '@/constants/theme';
 import { formatCount, getDrink } from '@/data';
 import { photoFor } from '@/data/drinkPhotos';
-import { blockUser, REPORT_REASONS, reportPost, type ReportReason } from '@/lib/moderation';
+import {
+  blockUser,
+  OBJECTIONABLE_MESSAGE,
+  PLACE_REPORT_REASON,
+  REPORT_REASONS,
+  reportPost,
+  type ReportReason,
+} from '@/lib/moderation';
+import { photoPlace, placeHref, type PlaceRef, placesSupported, samePlace } from '@/lib/places';
+import { placeSearchAvailable } from '@/lib/placeSearch';
 import {
   isBlankCaption,
   isRenderablePost,
@@ -58,6 +68,7 @@ import { useAuth } from '@/store/auth';
 import { collectionsOn, type SavedThing, useCollections, useCollectionsOn } from '@/store/collections';
 import { useSocial } from '@/store/social';
 import type { Post, UserProfile } from '@/types';
+import { showNotice } from '@/utils/alerts';
 
 /*
  * Re-exported so the screens that import the time helpers from here
@@ -77,7 +88,8 @@ export { timeAgo, timeAgoSpoken };
 /*             you have not seen), the username over the drink in       */
 /*             Playfair, where Instagram puts a place, and •••. With    */
 /*             tags (v4.3), the username's line goes on: "maya.pours    */
-/*             with ana and leo".                                       */
+/*             with ana and leo". With a place on the photo on screen   */
+/*             (v4.8), so does the drink's: "Negroni at La Factoría".   */
 /*   photo     440 x 440, full bleed, square corners, the photo edge.   */
 /*   actions   44: heart, share · · · bookmark. The gallery's dots sit  */
 /*             in the middle.                                           */
@@ -550,6 +562,20 @@ const AVATAR_SLOP = (layout.hit - HEADER_AVATAR) / 2;
 const LINE_SLOP = (HEADER_H - 2 * textRole.small.lineHeight) / 2;
 /** Dynamic Type cap for the header's two lines: they sit beside a fixed-size face (specs/v3-cabinet.md 6.5). */
 const HEADER_CAP = 1.3;
+/** A photo's place as one key: its Place ID and its words, so relabelling the same place is a change too. */
+function placeStamp(p: PlaceRef | null): string {
+  return p ? `${p.appleId}|${p.label}` : '-';
+}
+
+/** The words between the drink and its place, in muted (v4.8). */
+const AT_WORD = ' at ';
+/**
+ * The least of the line a place keeps (or all of itself, if shorter),
+ * however long the drink's name: enough for a word and an ellipsis. Above
+ * it, the place takes only what the drink's own width leaves, so a place
+ * never makes a drink that fits on its own wrap to a second line.
+ */
+const PLACE_FLOOR = 48;
 
 /** The gallery's "1/3" marker, 12 in from the photo's top right corner. */
 const COUNT_INSET = 12;
@@ -652,6 +678,7 @@ export const PostCard = React.memo(function PostCard({
   const toggleSave = useSocial((s) => s.toggleSave);
   const setTags = useSocial((s) => s.setTags);
   const removeMyTag = useSocial((s) => s.removeMyTag);
+  const setPhotoPlace = useSocial((s) => s.setPhotoPlace);
   const router = useRouter();
   const reduced = useReducedMotion();
   const { width, fontScale } = useWindowDimensions();
@@ -916,6 +943,57 @@ export const PostCard = React.memo(function PostCard({
   const hasGallery = gallery.length > 1;
 
   /*
+   * Where the photo ON SCREEN was had (v4.8, migration 026): a place
+   * belongs to a photo, not the post (P5), since a re-post of the same
+   * drink can be at another bar, so the header's "at …" follows the
+   * gallery as it pages. Newest photo first, so at rest it is the latest
+   * photo's place.
+   *
+   * On the like's terms, an overlay over the server's answer for this
+   * photo, stamped with that answer: your own ••• Add place or Remove
+   * place shows at once, here and on the post page (which holds its own
+   * copy the store does not patch), drops out once the store's copy
+   * moves, and is cleared when the write fails. Unknown places (026 not
+   * there, or the read failed) are no place: no line, as before v4.8.
+   */
+  const serverPlace = photoPlace(post, current);
+  const placeKey = `${post.id}|${current ?? ''}|${placeStamp(serverPlace)}`;
+  const [placeFlip, setPlaceFlip] = useState<{ key: string; place: PlaceRef | null } | null>(null);
+  const place = placeFlip?.key === placeKey ? placeFlip.place : serverPlace;
+
+  /*
+   * Your ••• Add place: the search, for the photo on screen when it was
+   * opened. null until first opened, then mounted for good, as Tag
+   * people's picker, so it still slides away when it closes.
+   */
+  const [placing, setPlacing] = useState<{ open: boolean; path: string } | null>(null);
+
+  /*
+   * Adds or removes the place on one of your photos. The line changes
+   * first; the store patches the feed's copy and writes it
+   * (set_photo_place). A refusal puts the line back and says so.
+   */
+  const writePlace = useCallback(
+    (path: string, next: PlaceRef | null) => {
+      if (!myId) return;
+      if (samePlace(photoPlace(post, path), next)) return;
+      const stamp = { key: `${post.id}|${path}|${placeStamp(photoPlace(post, path))}`, place: next };
+      setPlaceFlip(stamp);
+      void setPhotoPlace(myId, post.id, path, next).then((result) => {
+        if (result === 'ok') {
+          haptic.success();
+          announce(next ? `Place added, ${next.label}` : 'Place removed');
+        } else {
+          setPlaceFlip((f) => (f === stamp ? null : f));
+          if (result === 'objectionable') showNotice("Couldn't add the place", OBJECTIONABLE_MESSAGE);
+          else showNotice("Couldn't update the place", 'Check your connection and try again.');
+        }
+      });
+    },
+    [myId, post, setPhotoPlace],
+  );
+
+  /*
    * Sign the rest of the gallery up front, so a tap to the next photo finds
    * its URL already in hand and paints at once instead of blanking the frame
    * for a round trip.
@@ -1105,6 +1183,13 @@ export const PostCard = React.memo(function PostCard({
    * someone else's post that tags you, Remove me from this post, after
    * View drink and before Report. Plain, not destructive: it removes
    * nothing of theirs.
+   *
+   * Places (v4.8 §3.3), only once the server has them: your own post's
+   * Add place, or Remove place, for the photo on screen, after Tag people
+   * and before View drink. One item, never both: the one that changes
+   * what is there. Remove is plain and asks nothing, since Add puts one
+   * back. Add needs the place-search module, so a build without it can
+   * still take a regretted place off.
    */
   const menuActions: SheetAction[] = [
     ...(canSave ? [{ label: saved ? 'Remove from saved' : 'Save', onPress: onSave }] : []),
@@ -1116,6 +1201,13 @@ export const PostCard = React.memo(function PostCard({
             onPress: () => setTagging(true),
           },
         ]
+      : []),
+    ...(mine && current && placesSupported()
+      ? place
+        ? [{ label: 'Remove place', onPress: () => writePlace(current, null) }]
+        : placeSearchAvailable()
+          ? [{ label: 'Add place', onPress: () => setPlacing({ open: true, path: current }) }]
+          : []
       : []),
     { label: 'View drink', detail: formatPlateNumber(drink.dexNumber), onPress: () => onOpenDrink(drink.id) },
     ...(mine
@@ -1136,7 +1228,16 @@ export const PostCard = React.memo(function PostCard({
           ]
         : []),
   ];
-  const reasonActions: SheetAction[] = REPORT_REASONS.map((r) => ({
+  /*
+   * "Wrong place tagged" (v4.8 P9) only when the photo on screen has a
+   * place, just before "Something else"; the server's evidence names the
+   * post's places, so the report shows what was tagged.
+   */
+  const reasonActions: SheetAction[] = [
+    ...REPORT_REASONS.filter((r) => r.key !== 'other'),
+    ...(place ? [PLACE_REPORT_REASON] : []),
+    ...REPORT_REASONS.filter((r) => r.key === 'other'),
+  ].map((r) => ({
     label: r.label,
     onPress: () => fileReport(r.key),
   }));
@@ -1320,7 +1421,10 @@ export const PostCard = React.memo(function PostCard({
         when={when}
         story={story && onOpenStory ? story : undefined}
         width={width}
+        fontScale={fontScale}
         withTarget={withTarget}
+        place={place}
+        onOpenPlace={(appleId) => router.push(placeHref(appleId))}
         onOpenAuthor={onOpenAuthor}
         onOpenStory={onOpenStory}
         onOpenDrink={onOpenDrink}
@@ -1382,6 +1486,14 @@ export const PostCard = React.memo(function PostCard({
           onClose={() => setTagging(false)}
         />
       )}
+      {placing === null ? null : (
+        <PlaceSearchSheet
+          visible={placing.open}
+          current={null}
+          onPick={(picked) => writePlace(placing.path, picked)}
+          onClose={() => setPlacing((p) => (p ? { ...p, open: false } : p))}
+        />
+      )}
       {menu === null ? null : (
         <ActionSheet
           visible={menu.open}
@@ -1432,10 +1544,18 @@ interface WithTarget {
  * ink. Everything after the username is one target: one person's profile,
  * or In this post. Nothing else moves, so the header keeps its two lines.
  *
+ * With a place on the photo on screen (v4.8 §3.3) the drink's line goes
+ * on the same way, "Negroni at La Factoría": " at " in muted, the place in
+ * Inter 500, one line. The place takes what the drink leaves but never
+ * less than min(its own width, 48) (PLACE_FLOOR), worked out before layout at the
+ * header's capped size (lib/textFit), so the line stays one line and the
+ * header never jumps as the gallery pages. The place is its own target
+ * and opens the place's page.
+ *
  * VoiceOver hears the face and the two lines as one element, "maya.pours,
- * with ana and leo, Negroni, 2 hours ago": activating it opens the
- * profile, and the drink, the story and the tagged are its actions. The
- * ••• is its own button.
+ * with ana and leo, Negroni, at La Factoría, 2 hours ago": activating it
+ * opens the profile, and the drink, the place, the story and the tagged
+ * are its actions. The ••• is its own button.
  */
 function PostHeader({
   who,
@@ -1444,7 +1564,10 @@ function PostHeader({
   when,
   story,
   width,
+  fontScale,
   withTarget,
+  place,
+  onOpenPlace,
   onOpenAuthor,
   onOpenStory,
   onOpenDrink,
@@ -1457,8 +1580,12 @@ function PostHeader({
   /** Set only when the story can be opened. */
   story?: 'unseen' | 'seen';
   width: number;
+  fontScale: number;
   /** Who the author was with; absent, the first line is the username alone. */
   withTarget?: WithTarget;
+  /** Where the photo on screen was had; absent, the second line is the drink alone. */
+  place?: PlaceRef | null;
+  onOpenPlace: (appleId: string) => void;
   onOpenAuthor?: (authorId: string) => void;
   onOpenStory?: (authorId: string) => void;
   onOpenDrink: (drinkId: string) => void;
@@ -1470,11 +1597,33 @@ function PostHeader({
   const onAvatar = openStory ?? openProfile;
 
   const measure = headerMeasure(width);
+  /*
+   * The second line's split, before layout. The drink keeps its own width
+   * first: the place gets what is left after the drink and " at ", and
+   * never less than PLACE_FLOOR (or its own width, if shorter), and it
+   * ellipsizes inside that. So a drink that fits the line alone still fits
+   * it beside a place, and the header keeps its two lines as a gallery
+   * pages between photos with and without one (only a name within 48pt
+   * of the whole measure can still be pushed to fit tighter). Both are
+   * costed on the wide class estimates ('playfair', 'inter'), so the
+   * drink's share is never short.
+   */
+  const lineSize = textRole.small.fontSize * Math.min(fontScale, HEADER_CAP);
+  const atWidth = place ? textWidth(AT_WORD, 'inter400', lineSize) : 0;
+  const placeShare = place
+    ? Math.min(
+        textWidth(place.label, 'inter', lineSize),
+        Math.max(PLACE_FLOOR, measure - atWidth - textWidth(drinkName, 'playfair', lineSize)),
+      )
+    : 0;
+  const drinkMeasure = place ? Math.max(0, measure - atWidth - placeShare) : measure;
+  const openPlace = place ? () => onOpenPlace(place.appleId) : undefined;
 
   const a11yActions: AccessibilityActionInfo[] = [
     ...(openProfile ? [{ name: 'activate' }] : []),
     ...(openStory ? [{ name: 'story', label: 'View story' }] : []),
     { name: 'drink', label: `Open ${drinkName}` },
+    ...(place ? [{ name: 'place', label: `Open ${place.label}` }] : []),
     ...(withTarget ? [{ name: 'with', label: withTarget.label }] : []),
   ];
   const onA11yAction = (e: AccessibilityActionEvent) => {
@@ -1488,13 +1637,18 @@ function PostHeader({
       case 'drink':
         openDrink();
         break;
+      case 'place':
+        openPlace?.();
+        break;
       case 'with':
         withTarget?.onPress();
         break;
     }
   };
 
-  const spoken = [who.username, withTarget?.line.spoken, drinkName, when].filter(Boolean).join(', ');
+  const spoken = [who.username, withTarget?.line.spoken, drinkName, place ? `at ${place.label}` : null, when]
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <View style={styles.header}>
@@ -1546,12 +1700,40 @@ function PostHeader({
               </Pressable>
             ) : null}
           </View>
-          <Pressable
-            onPress={openDrink}
-            hitSlop={{ bottom: LINE_SLOP, right: space.sm }}
-            style={({ pressed }) => [styles.hug, pressed && styles.pressed]}>
-            <DrinkName name={drinkName} role={textRole.nameSm} measure={measure} cap={HEADER_CAP} color={colors.text} />
-          </Pressable>
+          {/*
+            The second line: the drink, and with a place "at" it. The drink
+            gives up its slop on the right to the place, as the username does
+            to the "with …"; the " at " between them is no target.
+          */}
+          <View style={styles.secondLine}>
+            <Pressable
+              onPress={openDrink}
+              hitSlop={{ bottom: LINE_SLOP, right: place ? 0 : space.sm }}
+              style={({ pressed }) => [styles.hug, place && { maxWidth: drinkMeasure }, pressed && styles.pressed]}>
+              <DrinkName
+                name={drinkName}
+                role={textRole.nameSm}
+                measure={drinkMeasure}
+                cap={HEADER_CAP}
+                color={colors.text}
+              />
+            </Pressable>
+            {place ? (
+              <>
+                <Text maxFontSizeMultiplier={HEADER_CAP} style={styles.atWord}>
+                  {AT_WORD}
+                </Text>
+                <Pressable
+                  onPress={openPlace}
+                  hitSlop={{ bottom: LINE_SLOP, right: space.sm }}
+                  style={({ pressed }) => [styles.placeHug, pressed && styles.pressed]}>
+                  <Text numberOfLines={1} maxFontSizeMultiplier={HEADER_CAP} style={styles.placeName}>
+                    {place.label}
+                  </Text>
+                </Pressable>
+              </>
+            ) : null}
+          </View>
         </View>
       </View>
       <IconButton name="more" label="Post options" onPress={onMore} size={MORE_GLYPH} />
@@ -1777,6 +1959,11 @@ const styles = StyleSheet.create({
   firstLine: { flexDirection: 'row', maxWidth: '100%' },
   withHug: { flexShrink: 1, minWidth: 0 },
   withWords: { ...textRole.small, color: colors.text },
+  /* The drink, then " at " and the place (v4.8): the drink keeps its fitted width, the place gives way. */
+  secondLine: { flexDirection: 'row', alignItems: 'center', maxWidth: '100%' },
+  atWord: { ...textRole.small, color: colors.textMuted },
+  placeHug: { flexShrink: 1, minWidth: 0 },
+  placeName: { ...textRole.small, fontFamily: fonts.bodyMedium, color: colors.text },
 
   galleryCount: { position: 'absolute', top: COUNT_INSET, right: COUNT_INSET },
   burstLayer: {

@@ -85,7 +85,13 @@ export type ReportRow = {
    * kind of subject it was ('post', 'reel' or 'account').
    */
   snapshot: { [key: string]: unknown } | null;
-  reason: string;
+  /**
+   * report_reason_known's list. 'wrong_place' (migration 026) is offered
+   * only on a post whose photo on screen has a place; since 026 the
+   * snapshot also carries the post's places, so the report shows what was
+   * tagged.
+   */
+  reason: 'spam' | 'harassment' | 'nudity' | 'violence' | 'underage' | 'other' | 'wrong_place';
   note: string | null;
   created_at: string;
 };
@@ -114,17 +120,65 @@ export type PostPhotoRow = {
   /** When the picture was taken. Orders the carousel, newest first. */
   taken_at: string;
   created_at: string;
+  /**
+   * Where this photo was had (migration 026): Apple's Place ID and the
+   * poster's label for it, both or neither (post_photos_place_pair). On the
+   * photo, not the post, because a re-post of the same drink can be at
+   * another bar. Nothing else of Apple's is stored (MapKit's licence,
+   * specs/v4.8-places §0.5): the address and position are looked up live.
+   */
+  apple_place_id: string | null;
+  /** 1 to 60 characters, trimmed, one line; the caption filter runs on it. */
+  place_label: string | null;
 } & PostPhotoMusicColumns;
 
 /**
- * What a client may send for a new photo. The music columns are optional,
- * not merely nullable: a client running ahead of migration 020 must not
- * name them at all (PostgREST answers PGRST204 for an unknown column).
+ * What a client may send for a new photo. The music columns and the place
+ * columns are optional, not merely nullable: a client running ahead of
+ * migration 020 or 026 must not name them at all (PostgREST answers
+ * PGRST204 for an unknown column).
  */
-export type PostPhotoInsert = Omit<PostPhotoRow, 'id' | 'taken_at' | 'created_at' | keyof PostPhotoMusicColumns> & {
+export type PostPhotoInsert = Omit<
+  PostPhotoRow,
+  'id' | 'taken_at' | 'created_at' | 'apple_place_id' | 'place_label' | keyof PostPhotoMusicColumns
+> & {
   id?: string;
   taken_at?: string;
+  apple_place_id?: string | null;
+  place_label?: string | null;
 } & Partial<PostPhotoMusicColumns>;
+
+/**
+ * One row of drink_places() (migration 026): an Apple Place ID where
+ * people have had the drink, the newest label anyone gave it, how many
+ * DIFFERENT people tagged a photo of it there, and whether someone you
+ * follow is among them. Followed first, then most recent; never by how
+ * many, never by distance (the server holds no coordinates). Checked by
+ * lib/places, not trusted.
+ */
+export type DrinkPlaceRow = {
+  apple_place_id: string;
+  label: string;
+  people: number;
+  followed: boolean;
+  last_at: string;
+};
+
+/**
+ * One row of place_drinks() (migration 026): a catalogue drink posted at
+ * an Apple Place ID, with how many different people, its newest tagged
+ * photo there and when. people_here (the place's different people over
+ * every drink) and label (its newest label) are the same on every row.
+ */
+export type PlaceDrinkRow = {
+  drink_id: string;
+  people: number;
+  post_id: string;
+  photo_path: string | null;
+  last_at: string;
+  people_here: number;
+  label: string;
+};
 
 export type FollowRow = {
   follower_id: string;
@@ -897,6 +951,27 @@ export type Database = {
       friends_board: {
         Args: Record<string, never>;
         Returns: FriendsBoardRow[];
+      };
+      /*
+       * Places (migration 026). Missing (PGRST202 / 42883) until 026 is
+       * applied, which the app reads as "places off". None carries a
+       * coordinate, either way: the server holds only Apple's Place ID and
+       * the poster's label. set_photo_place takes both or neither (both
+       * null removes the tag), is false when the photo is not yours or is
+       * gone, and raises P0001 place_invalid or objectionable_content
+       * (detail 'place').
+       */
+      set_photo_place: {
+        Args: { p_post_id: string; p_path: string; p_apple_place_id: string | null; p_label: string | null };
+        Returns: boolean;
+      };
+      drink_places: {
+        Args: { p_drink_id: string };
+        Returns: DrinkPlaceRow[];
+      };
+      place_drinks: {
+        Args: { p_apple_place_id: string };
+        Returns: PlaceDrinkRow[];
       };
       /** Returns the new tournament's id. The host joins it as 'accepted'. */
       create_tournament: {

@@ -3,6 +3,9 @@ import { File } from 'expo-file-system';
 import { getDrink } from '@/data';
 import type { PostLikerRow, ProfileRow } from '@/lib/database.types';
 import { STORY_MUSIC, musicColumns, songFromRow } from '@/lib/music';
+// Types only: lib/places imports this file at runtime, so the reverse stays type-only (no cycle).
+import type { PlaceRef } from '@/lib/places';
+import { isPlaceId } from '@/lib/placeSearch';
 import { stripMetadata } from '@/lib/pour';
 import { supabase } from '@/lib/supabase';
 import type { ActivityItem, Post, Pour, Song, UserProfile } from '@/types';
@@ -148,6 +151,7 @@ function toPost(
   mySaves: Set<string>,
   likers: Map<string, UserProfile> | null,
   tags: Map<string, UserProfile[]> | null,
+  places: Map<string, Record<string, PlaceRef>> | null,
 ): Post {
   return {
     id: row.id,
@@ -170,6 +174,8 @@ function toPost(
     savedByMe: mySaves.has(row.id),
     // No map: unknown, so the header draws no "with" line. A post missing from it: nobody tagged.
     tagged: tags ? (tags.get(row.id) ?? []) : undefined,
+    // No map: unknown, so no "at" line. A post missing from it: no photo of it has a place.
+    places: places ? (places.get(row.id) ?? {}) : undefined,
     commentCount: 0,
     mine: row.author_id === myId,
   };
@@ -239,20 +245,22 @@ export function disableAvatarColumn(): void {
 /* Feature presence                                                     */
 /*                                                                      */
 /* The same problem one level up: a build can reach a phone before Jan  */
-/* runs the migration that adds a table or a function. Saves (017),      */
-/* recent_pours (017), the likers functions (021) and tags (024) are the */
-/* ones this file reads (lib/tournaments reads 020's functions the same  */
-/* way). A missing one is read as "feature off", never as a failure: the */
-/* save button hides, Today's pours shows only your own tile, a post's   */
-/* likes line is the plain count, and there is no Tag people row, no     */
-/* "with" line and no tag in Activity, while the feed itself, which      */
-/* needs none of them, keeps working.                                    */
+/* runs the migration that adds a table or a function. Saves (017),     */
+/* recent_pours (017), the likers functions (021), tags (024) and the   */
+/* places on a post's photos (026) are the ones this file reads         */
+/* (lib/tournaments reads 020's functions the same way, lib/places the  */
+/* rest of 026's). A missing one is read as "feature off", never as a   */
+/* failure: the save button hides, Today's pours shows only your own    */
+/* tile, a post's likes line is the plain count, there is no Tag people */
+/* row, no "with" line and no tag in Activity, and no "at" line, no     */
+/* Add place and no place section, while the feed itself, which needs   */
+/* none of them, keeps working.                                         */
 /*                                                                      */
-/* Saves, the likers and tags are remembered for the rest of the session */
-/* once the server says they are not there, as the avatar column is, so  */
-/* a missing function costs the loads already in flight at launch one    */
-/* failed request each, and nothing after. A relaunch asks again, so     */
-/* applying the migration needs no new build.                            */
+/* Saves, the likers, tags and places are remembered for the rest of    */
+/* the session once the server says they are not there, as the avatar   */
+/* column is, so a missing function costs the loads already in flight   */
+/* at launch one failed request each, and nothing after. A relaunch     */
+/* asks again, so applying the migration needs no new build.            */
 /* ==================================================================== */
 
 let savesTablePresent = true;
@@ -304,6 +312,38 @@ export function isMissingFunction(e: { code?: string } | null): boolean {
  */
 function isMissingTags(e: { code?: string; message?: string } | null): boolean {
   return !!e && !isMissingAvatarColumn(e) && (isMissingRelation(e) || e.code === 'PGRST200');
+}
+
+/*
+ * Places (026). The flag lives here rather than in lib/places because
+ * this file reads post_photos.apple_place_id for every post (fetchPostPlaces)
+ * and lib/places imports this one; lib/places re-exports placesSupported,
+ * which is where the screens take it from.
+ */
+let placesPresent = true;
+
+/** False once the server has said migration 026 is not there: no "at" line, no Add place, no place page data. */
+export const placesSupported = () => placesPresent;
+
+/** Stops asking for places for the rest of this session (lib/places, on a missing table or function). */
+export function disablePlaces(): void {
+  placesPresent = false;
+}
+
+/**
+ * 026 is not applied, read from any of its reads: no such function
+ * (PGRST202, 42883), or no post_photos.apple_place_id / place_label
+ * (42703 on a read, PGRST204 on a write naming one). The column cases
+ * must name a place column, and never match the avatar column's 42703: a
+ * typo elsewhere must not switch places off, and the avatar must not
+ * either. (Since the licence rework, §0.5, there is no places table and
+ * no embed to miss.)
+ */
+export function isMissingPlaces(e: { code?: string; message?: string } | null): boolean {
+  if (!e || isMissingAvatarColumn(e)) return false;
+  if (isMissingFunction(e)) return true;
+  const msg = e.message ?? '';
+  return (e.code === '42703' || e.code === 'PGRST204') && /apple_place_id|place_label/i.test(msg);
 }
 
 /* ==================================================================== */
@@ -659,6 +699,80 @@ async function fetchPostTags(postIds: string[]): Promise<Map<string, UserProfile
   }
 }
 
+/*
+ * A tagged photo's two place columns (migration 026). Typed loosely and
+ * checked, not trusted: the label is someone else's words.
+ */
+interface PlacedPhotoRow {
+  post_id: string;
+  path: string;
+  apple_place_id: unknown;
+  place_label: unknown;
+}
+
+/*
+ * The checks lib/places' toPlaceRef runs, for the two columns a photo
+ * carries. Written here rather than imported: lib/places imports this
+ * file, and a runtime import back would be a cycle. The server already
+ * holds the label to one tidy line of 1 to 60 characters; this only
+ * refuses what is not a string.
+ */
+function photoPlaceRef(id: unknown, label: unknown): PlaceRef | null {
+  if (!isPlaceId(id)) return null;
+  const said = typeof label === 'string' ? label.trim() : '';
+  if (!said) return null;
+  return { appleId: id, label: said };
+}
+
+/**
+ * Where THESE posts' photos were had (migration 026), by post id, then by
+ * photo path: each photo's Place ID and its poster's label, nothing else
+ * (the server holds nothing else, §0.5). A post with no tagged photo is missing from the map, which
+ * toPost reads as {}.
+ *
+ * fetchPostTags exactly: the same chunks, null for unknown (026 missing,
+ * which also switches places off for the session, or a read failed), and
+ * never a throw. A read of its own rather than an embed in POST_SELECT,
+ * for 024's reason: a post read must never fail because of its places.
+ * The chunk is the tags' 100 posts; a post's photos are not capped, so a
+ * page of 100 posts would need more than ten tagged photos each on
+ * average to reach the API's 1,000-row cap.
+ */
+async function fetchPostPlaces(postIds: string[]): Promise<Map<string, Record<string, PlaceRef>> | null> {
+  if (!placesPresent) return null;
+  if (postIds.length === 0) return new Map();
+  try {
+    const pages = await Promise.all(
+      chunk(postIds, TAGGED_POSTS_PER_REQUEST).map(async (part) => {
+        const { data, error } = await supabase
+          .from('post_photos')
+          .select('post_id, path, apple_place_id, place_label')
+          .in('post_id', part)
+          .not('apple_place_id', 'is', null);
+        if (error) {
+          if (isMissingPlaces(error)) placesPresent = false;
+          return null;
+        }
+        return (data ?? []) as unknown as PlacedPhotoRow[];
+      }),
+    );
+    // One failed chunk makes the whole answer unknown: a post in it would read as "no place" when it has one.
+    if (pages.some((page) => page === null)) return null;
+    const out = new Map<string, Record<string, PlaceRef>>();
+    for (const row of pages.flatMap((page) => page ?? [])) {
+      if (typeof row.post_id !== 'string' || typeof row.path !== 'string') continue;
+      const place = photoPlaceRef(row.apple_place_id, row.place_label);
+      if (!place) continue;
+      const byPath = out.get(row.post_id);
+      if (byPath) byPath[row.path] = place;
+      else out.set(row.post_id, { [row.path]: place });
+    }
+    return out;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Rows to posts, minus any whose drink has left the Dex.
  *
@@ -673,13 +787,14 @@ async function fetchPostTags(postIds: string[]): Promise<Map<string, UserProfile
 async function toPosts(rows: PostQueryRow[], myId: string): Promise<Post[]> {
   const live = rows.filter((r) => getDrink(r.drink_id));
   const ids = live.map((r) => r.id);
-  const [myLikes, mySaves, likers, tags] = await Promise.all([
+  const [myLikes, mySaves, likers, tags, places] = await Promise.all([
     fetchMyLikes(myId, ids),
     fetchMySaves(myId, ids),
     fetchLikeSummaries(ids),
     fetchPostTags(ids),
+    fetchPostPlaces(ids),
   ]);
-  return live.map((r) => toPost(r, myId, myLikes, mySaves, likers, tags));
+  return live.map((r) => toPost(r, myId, myLikes, mySaves, likers, tags, places));
 }
 
 /**
@@ -1681,6 +1796,18 @@ export function forgetSignedPhoto(path: string | null, bucket: Bucket = 'pours')
  * will not take the song (a column 020 has not added yet, the content
  * filter, the shape check), the photo is written again without it: the
  * photo matters more than the song.
+ *
+ * `place` is where this photo was had (migration 026, v4.8 P5): Apple's
+ * Place ID and the poster's label, the only two things Sipply keeps about
+ * a venue (§0.5). Like the song it goes on the photo row, never the post,
+ * because a re-post of the same drink can be at another bar; and like the
+ * song it never costs the photo. A place-bearing insert refused because of
+ * the place (the label's content filter, detail 'place'; a shape check;
+ * or PGRST204, 026 not applied) is written again without it. `placed`
+ * says whether it went on: true when there was no place to send, so only a
+ * place that was asked for and dropped reads false ('unplaced'). With no
+ * photo there is nothing to carry a place, which is false too when one was
+ * asked for; the compose rows offer a place only beside a photo.
  */
 export async function createPost(
   myId: string,
@@ -1688,7 +1815,8 @@ export async function createPost(
   caption: string,
   localPhotoUri: string | null,
   music?: Song | null,
-): Promise<{ withPhoto: boolean; postId: string }> {
+  place?: PlaceRef | null,
+): Promise<{ withPhoto: boolean; postId: string; placed: boolean }> {
   /*
    * onConflict rather than a select-then-insert: two logs racing from the
    * same account would both see "no post" and the second insert would fail
@@ -1732,29 +1860,58 @@ export async function createPost(
     }
   }
 
-  if (!localPhotoUri) return { withPhoto: true, postId };
+  const noPlace = !place;
+  if (!localPhotoUri) return { withPhoto: true, postId, placed: noPlace };
 
   const path = await uploadPhoto(myId, localPhotoUri);
-  if (!path) return { withPhoto: false, postId };
+  if (!path) return { withPhoto: false, postId, placed: noPlace };
 
   /*
    * The trigger repoints posts.photo_path at the newest photo. If the row
    * cannot be written the post is still up, so this is the same answer as a
    * failed upload rather than a throw that would call the whole post failed —
    * and the object just uploaded is removed, since nothing points at it.
+   *
+   * The song and the place each drop out on a refusal that names them,
+   * the place first: a PGRST204 naming apple_place_id is 026 missing, not
+   * the song, and reading it as the song's would lose a song the server
+   * would have taken. Each pass removes one of them, so there are at most three
+   * inserts, and one in the usual case.
    */
-  const song = music && STORY_MUSIC !== 'off' ? musicColumns(music) : {};
-  let { error: photoError } = await supabase
-    .from('post_photos')
-    .insert({ post_id: postId, path, ...song });
-  if (photoError && Object.keys(song).length > 0 && isMusicRefusal(photoError)) {
-    ({ error: photoError } = await supabase.from('post_photos').insert({ post_id: postId, path }));
+  let song = music && STORY_MUSIC !== 'off' ? musicColumns(music) : {};
+  let placeCols: { apple_place_id?: string; place_label?: string } = place
+    ? { apple_place_id: place.appleId, place_label: place.label }
+    : {};
+  for (;;) {
+    const { error: photoError } = await supabase
+      .from('post_photos')
+      .insert({ post_id: postId, path, ...song, ...placeCols });
+    if (!photoError) return { withPhoto: true, postId, placed: noPlace || placeCols.apple_place_id !== undefined };
+    if (placeCols.apple_place_id !== undefined && isPlaceRefusal(photoError)) {
+      if (photoError.code === 'PGRST204') disablePlaces();
+      placeCols = {};
+    } else if (Object.keys(song).length > 0 && isMusicRefusal(photoError)) {
+      song = {};
+    } else {
+      await removeStoredPhoto(path);
+      return { withPhoto: false, postId, placed: noPlace };
+    }
   }
-  if (photoError) {
-    await removeStoredPhoto(path);
-    return { withPhoto: false, postId };
-  }
-  return { withPhoto: true, postId };
+}
+
+/**
+ * True when a photo insert failed because of its place and would go
+ * through without it: the label's content filter (P0001
+ * objectionable_content, detail 'place'; the compose step runs the same
+ * filter first, so this is a modified client or a newer word list), one of
+ * 026's place checks (23514 naming post_photos_place_*), or PGRST204
+ * naming a place column (026 not applied).
+ */
+function isPlaceRefusal(e: { code?: string; message?: string; details?: string | null }): boolean {
+  const said = `${e.message ?? ''} ${e.details ?? ''}`;
+  if (e.code === 'P0001') return /objectionable_content/.test(e.message ?? '') && e.details === 'place';
+  if (e.code === '23514') return /post_photos_place/.test(said);
+  return e.code === 'PGRST204' && /apple_place_id|place_label/i.test(said);
 }
 
 /**

@@ -1,6 +1,6 @@
 # Deleting your data
 
-**Last updated: 17 October 2026**
+**Last updated: 26 October 2026**
 
 How to delete everything Sipply holds about you, what that removes, and how
 to remove Sipply from Facebook, Google or Apple if you signed in with one of
@@ -66,7 +66,9 @@ about a post of yours, keeps its own copy of what it was about, your
 username included, so that it can still be reviewed. A report you filed is
 kept without your identity. A drink you suggested that was already in a
 monthly email stays in that email, and one already added to the Dex stays
-in the Dex, without your name.
+in the Dex, without your name. The places you tagged on your posts are
+part of those photos, so they go with them, except in the copy a report
+about that post keeps.
 
 ## Remove Sipply from Facebook
 

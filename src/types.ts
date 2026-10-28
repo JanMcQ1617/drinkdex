@@ -1,3 +1,21 @@
+/*
+ * What a post's photo carries about its place (v4.8, as reworked for
+ * MapKit's licence, specs/v4.8-places §0.5): Apple's Place ID, which is
+ * all Sipply keeps of Apple's data (the address and the map are looked up
+ * live by it), and the poster's own label for the place, which "at La
+ * Factoría" prints. No coordinates: the server holds none. Declared here
+ * rather than imported from lib/places, because this file imports nothing
+ * at all: scripts/check-artwork.mjs compiles files that read it with plain
+ * tsc and no path aliases, so an '@/' import here breaks that gate.
+ * lib/places re-exports it beside the rest of the place shapes.
+ */
+export interface PlaceRef {
+  /** MKMapItem.identifier's rawValue (iOS 18+); also the place page's route id. */
+  appleId: string;
+  /** The poster's name for it, 1 to 60 characters (prefilled from Apple, editable). */
+  label: string;
+}
+
 export type DrinkCategory = 'cocktail' | 'spirit';
 
 export interface RecipeIngredient {
@@ -137,6 +155,13 @@ export interface Post {
    * line at all. [] = known, and nobody is tagged.
    */
   tagged?: UserProfile[];
+  /**
+   * Where each photo was had (migration 026), by photo path. undefined =
+   * unknown (026 not applied, or the read failed): no place line. {} = known,
+   * and no photo of this post has a place. Keyed by path, not index, so the
+   * gallery's order never matters.
+   */
+  places?: Record<string, PlaceRef>;
   commentCount?: number;
   /** True when authored by the signed-in user. */
   mine?: boolean;

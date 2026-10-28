@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 025
+-- Sipply — the whole schema, as of migration 026
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-025 built on the live project, and records every one of
+-- migrations 002-026 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -144,6 +144,17 @@ create table if not exists public.post_photos (
   -- When the picture was TAKEN, which orders the carousel.
   taken_at   timestamptz not null default now(),
   created_at timestamptz not null default now(),
+  -- Where this photo was had (026): a photo, not the post, because a
+  -- re-post of the same drink can be at another bar. Apple's Place ID
+  -- (MKMapItem.identifier, iOS 18+), a stable reference Apple lets apps
+  -- store, and the poster's own label for it (prefilled with Apple's name,
+  -- editable like a caption, filtered like one). Both or neither. Nothing
+  -- else of Apple's is kept: no address, area, kind or coordinates, since
+  -- MapKit's licence forbids a derived database of its Map Data (DPLA
+  -- Attachment 6 §2.2, §2.5); the phone looks the rest up live by id.
+  -- Written by the photo's own insert and by set_photo_place.
+  apple_place_id text,
+  place_label    text,
   -- The song on this photo's story (020): on the photo, not the post, so a
   -- re-post with no song does not inherit the last one's. All null, or all
   -- but the artwork set, on Apple's own hosts only.
@@ -171,7 +182,23 @@ create table if not exists public.post_photos (
            or (char_length(music_artwork_url) <= 500 and music_artwork_url ~ '^https://is[0-9]+-ssl\.mzstatic\.com/'))
       and music_storefront ~ '^[a-z]{2}$'
     )
-  )
+  ),
+  -- 026: the id as MKMapItem.Identifier rawValues look, held loosely, and
+  -- also what the place route accepts; the label tidy, 1 to 60 characters,
+  -- one line.
+  constraint post_photos_place_id_shape check (
+    apple_place_id is null or apple_place_id ~ '^[A-Za-z0-9._:-]{1,100}$'
+  ),
+  constraint post_photos_place_label_shape check (
+    place_label is null or (
+      char_length(place_label) between 1 and 60
+      and place_label = btrim(place_label)
+      and place_label !~ '[[:cntrl:]]'
+    -- direction overrides and zero-width marks (not the joiners U+200C/D)
+    and place_label !~ '[\u200B\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]'
+    )
+  ),
+  constraint post_photos_place_pair check ((apple_place_id is null) = (place_label is null))
 );
 
 create table if not exists public.likes (
@@ -242,7 +269,7 @@ create table if not exists public.reports (
   reported_reel_id   uuid references public.reels on delete set null,
   constraint report_subject_at_most_one check (num_nonnulls(reported_post_id, reported_user_id, reported_reel_id) <= 1),
   constraint report_reason_known check (
-    reason in ('spam', 'harassment', 'nudity', 'violence', 'underage', 'other')
+    reason in ('spam', 'harassment', 'nudity', 'violence', 'underage', 'other', 'wrong_place')
   ),
   constraint report_note_len check (note is null or char_length(note) <= 1000)
 );
@@ -584,6 +611,11 @@ create index if not exists collection_items_post_idx
 -- count); the refusals' profile cascade deletes by tagged_id.
 create index if not exists post_tags_tagged_recent_idx  on public.post_tags (tagged_id, created_at desc);
 create index if not exists post_tag_refusals_tagged_idx on public.post_tag_refusals (tagged_id);
+-- 026: a place's tagged photos, newest first (place_drinks); and
+-- drink_places, which starts from a drink.
+create index if not exists post_photos_apple_place_idx
+  on public.post_photos (apple_place_id, created_at desc) where apple_place_id is not null;
+create index if not exists posts_drink_idx on public.posts (drink_id);
 
 
 -- --------------------------------------------------------------------
@@ -858,7 +890,11 @@ $$;
 
 -- 012, widened to reels by 019: who wrote the reported thing, which kind
 -- of thing it was, and a copy of the text. Never a file path: deletion
--- removes the file, and a path to nothing helps no moderator.
+-- removes the file, and a path to nothing helps no moderator. 026 adds the
+-- post's places (Apple's Place ID and the poster's label, newest photo
+-- first), so a 'wrong_place' report shows what was tagged; each carries
+-- when its photo was taken, to say WHICH photo had it, and still never a
+-- path.
 create or replace function private.report_evidence(
   post uuid,
   person uuid,
@@ -891,6 +927,12 @@ as $$
       'posted_at',    coalesce((select p.created_at from public.posts p where p.id = post),
                                (select r.created_at from public.reels r where r.id = reel)),
       'duration_ms',  (select r.duration_ms from public.reels r where r.id = reel),
+      'places',       (select jsonb_agg(jsonb_build_object(
+                                'apple_place_id', ph.apple_place_id, 'label', ph.place_label,
+                                'photo_taken_at', ph.taken_at)
+                              order by ph.taken_at desc)
+                       from public.post_photos ph
+                       where ph.post_id = post and ph.apple_place_id is not null),
       'username',     pr.username,
       'display_name', pr.display_name,
       'bio',          pr.bio
@@ -2151,6 +2193,24 @@ begin
 end;
 $$;
 
+-- 026: the 011 content filter on a photo's place label, as 020's on the
+-- song. A trigger, so Save & post's insert and set_photo_place are held to
+-- one line. The app posts the photo without the place on a refusal
+-- (detail 'place').
+create or replace function public.reject_objectionable_place()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.place_label is not null and public.is_objectionable(new.place_label) then
+    raise exception 'objectionable_content' using errcode = 'P0001', detail = 'place';
+  end if;
+  return new;
+end;
+$$;
+
 -- 020: charges one song search to the caller, 120 per account per hour.
 -- Called by the apple-music Edge Function as the user. One upsert, so
 -- parallel searches each add one; a day of old rows is swept on the way.
@@ -2550,6 +2610,169 @@ comment on function public.friends_board() is
   'The Tournaments tab''s Friends board (v4.7): the caller and everyone they follow, minus blocks either way, '
   'with how many different catalogue drinks each has posted (each once, ever; never amounts) and their latest '
   'three posts. Most first, then username; at most 200 plus the caller.';
+
+-- 026: add, change or remove the place on a photo of your own post:
+-- Apple's Place ID and your label, both or neither (both null removes
+-- it). The label is tidied as the phone tidies it (edges trimmed, runs of
+-- spaces made one); then the table's checks and the filter trigger hold
+-- the line. False when the photo is not yours or is gone. Errors: P0001
+-- place_invalid (one without the other, a bad id, over 60 characters,
+-- control characters); objectionable_content (detail 'place'). The update
+-- fires 007's preview trigger and 017's clock pin, both of which leave the
+-- row as it was.
+create or replace function public.set_photo_place(
+  p_post_id        uuid,
+  p_path           text,
+  p_apple_place_id text,
+  p_label          text)
+returns boolean
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  v_uid   uuid := (select auth.uid());
+  v_id    text := nullif(btrim(coalesce(p_apple_place_id, '')), '');
+  -- Invisible direction and zero-width marks go first (they could make a
+  -- label read backwards or hide a word from the filter), then whitespace
+  -- runs, line breaks and tabs included, become one space, and only then
+  -- are the edges trimmed. Trimming first left a leading tab or newline
+  -- as a leading space, which the table check then refused with 23514
+  -- instead of place_invalid. U+200C and U+200D (the zero-width joiners)
+  -- stay: Persian, the Indic scripts and emoji sequences need them.
+  v_label text := nullif(btrim(regexp_replace(
+                    regexp_replace(coalesce(p_label, ''), '[\u200B\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]', '', 'g'),
+                    '\s+', ' ', 'g')), '');
+  v_n     integer;
+begin
+  if v_uid is null then
+    return false;
+  end if;
+  if (v_id is null) <> (v_label is null)
+     or (v_id is not null and (
+           v_id !~ '^[A-Za-z0-9._:-]{1,100}$'
+           or char_length(v_label) > 60
+           or v_label ~ '[[:cntrl:]]'
+           or v_label ~ '[\u200B\u200E\u200F\u202A-\u202E\u2066-\u2069\uFEFF]')) then
+    raise exception 'place_invalid' using errcode = 'P0001';
+  end if;
+  update public.post_photos ph
+  set apple_place_id = v_id,
+      place_label    = v_label
+  from public.posts po
+  where ph.post_id = p_post_id
+    and ph.path = p_path
+    and po.id = ph.post_id
+    and po.author_id = v_uid;
+  get diagnostics v_n = row_count;
+  return v_n > 0;
+end;
+$$;
+
+comment on function public.set_photo_place(uuid, text, text, text) is
+  'v4.8: add, change or remove the place on a photo of your own post: Apple''s Place ID and your label for it, '
+  'both or neither. The label is tidied, checked (1 to 60 characters) and filtered. False when not yours.';
+
+-- 026: where people have had a drink. One row per Apple Place ID: the
+-- label of the most recent tagged photo of this drink there, how many
+-- different people tagged it, whether someone you follow is among them
+-- (never you), and when it was last posted. People you follow first, then
+-- the most recent; never by how many (1.4.3), and never by distance: the
+-- server holds no coordinates and the caller's location is never sent.
+-- Blocks both ways leave people out, as posts_read does. Inner columns
+-- aliased (pid, said) so none reads as a returned name.
+create or replace function public.drink_places(p_drink_id text)
+returns table (apple_place_id text, label text, people integer, followed boolean, last_at timestamptz)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with me as (
+    select (select auth.uid()) as id
+  ),
+  tagged as (
+    select ph.apple_place_id as pid, ph.place_label as said, po.author_id, ph.created_at
+    from public.posts po
+    join public.post_photos ph on ph.post_id = po.id
+    cross join me m
+    where m.id is not null
+      and po.drink_id = p_drink_id
+      and ph.apple_place_id is not null
+      and not (po.author_id = any ((select private.my_block_set())::uuid[]))
+  ),
+  per as (
+    select t.pid,
+           (array_agg(t.said order by t.created_at desc, t.author_id))[1] as said,
+           count(distinct t.author_id)::integer as people,
+           coalesce(bool_or(f.following_id is not null), false) as followed,
+           max(t.created_at) as last_at
+    from tagged t
+    left join public.follows f
+      on f.follower_id = (select m.id from me m) and f.following_id = t.author_id
+    group by t.pid
+  )
+  select p.pid, p.said, p.people, p.followed, p.last_at
+  from per p
+  order by p.followed desc, p.last_at desc, p.pid
+  limit 100;
+$$;
+
+comment on function public.drink_places(text) is
+  'v4.8: where people have had a drink, per Apple Place ID: the newest label, different people, whether you '
+  'follow any of them. Followed first, then most recent; never by how many. Blocks both ways honoured. At most 100.';
+
+-- 026: what people have had at a place. One row per catalogue drink
+-- tagged at this Apple Place ID: how many different people, the newest
+-- tagged photo of it here (its post and path), and when. `people_here` is
+-- the place's different people over every drink and `label` its newest
+-- label, both the same on every row. Newest first; at most 120. Blocks
+-- both ways leave people out. A malformed id answers nothing.
+create or replace function public.place_drinks(p_apple_place_id text)
+returns table (drink_id text, people integer, post_id uuid, photo_path text, last_at timestamptz,
+               people_here integer, label text)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  with tagged as (
+    select po.drink_id as did, po.author_id, po.id as pid, ph.path, ph.created_at, ph.place_label as said
+    from public.post_photos ph
+    join public.posts po on po.id = ph.post_id
+    where (select auth.uid()) is not null
+      and p_apple_place_id ~ '^[A-Za-z0-9._:-]{1,100}$'
+      and ph.apple_place_id = p_apple_place_id
+      and po.drink_id !~ '^u_'
+      and not (po.author_id = any ((select private.my_block_set())::uuid[]))
+  ),
+  total as (
+    select count(distinct t.author_id)::integer as n,
+           (array_agg(t.said order by t.created_at desc, t.pid))[1] as said
+    from tagged t
+  ),
+  per as (
+    select t.did, count(distinct t.author_id)::integer as people, max(t.created_at) as last_at
+    from tagged t
+    group by t.did
+  )
+  select p.did, p.people, l.pid, l.path, p.last_at, tt.n, tt.said
+  from per p
+  cross join total tt
+  cross join lateral (
+    select t.pid, t.path from tagged t
+    where t.did = p.did
+    order by t.created_at desc, t.pid
+    limit 1
+  ) l
+  order by p.last_at desc, p.did
+  limit 120;
+$$;
+
+comment on function public.place_drinks(text) is
+  'v4.8: the different drinks posted at an Apple Place ID, each with different people and its newest photo there, '
+  'plus the place''s newest label. Newest first, at most 120. Blocks both ways honoured.';
 
 -- 020: invites, as the host, people the host follows, not blocked either
 -- way and never in it before (declined stays declined); 50 seats with the
@@ -3270,6 +3493,7 @@ grant execute on function public.my_reel_quota()                to authenticated
 -- through the definer functions; my_tournament_ids is read by the
 -- tournament read policies as the querying role.
 revoke all on function public.reject_objectionable_music()                from public, anon, authenticated;
+revoke all on function public.reject_objectionable_place()                from public, anon, authenticated;
 revoke all on function public.reject_objectionable_tournament()           from public, anon, authenticated;
 revoke all on function private.drop_tournament_membership_on_block()      from public, anon, authenticated;
 revoke all on function private.tournament_daily_cap()                     from public, anon, authenticated;
@@ -3315,6 +3539,14 @@ grant execute on function public.get_shared_collection(uuid)  to anon, authentic
 -- 025.
 revoke all on function public.friends_board() from public, anon;
 grant execute on function public.friends_board() to authenticated;
+
+-- 026. The three place RPCs need an account.
+revoke all on function public.set_photo_place(uuid, text, text, text)      from public, anon;
+revoke all on function public.drink_places(text)                           from public, anon;
+revoke all on function public.place_drinks(text)                           from public, anon;
+grant execute on function public.set_photo_place(uuid, text, text, text)   to authenticated;
+grant execute on function public.drink_places(text)                        to authenticated;
+grant execute on function public.place_drinks(text)                        to authenticated;
 
 
 -- --------------------------------------------------------------------
@@ -3425,6 +3657,12 @@ create trigger post_photos_reject_objectionable
   before insert or update of music_title, music_artist on public.post_photos
   for each row execute function public.reject_objectionable_music();
 
+-- 026. The place label, on the same terms.
+drop trigger if exists post_photos_reject_objectionable_place on public.post_photos;
+create trigger post_photos_reject_objectionable_place
+  before insert or update of place_label on public.post_photos
+  for each row execute function public.reject_objectionable_place();
+
 drop trigger if exists tournaments_reject_objectionable on public.tournaments;
 create trigger tournaments_reject_objectionable
   before insert or update on public.tournaments
@@ -3519,7 +3757,10 @@ create trigger blocks_drop_tags
 -- (visibility, share_id and shared_at move only through the sharing
 -- functions), and an item is added or removed, never changed. Tags (024)
 -- are inserted naming the two ids, so the clock is the server's, and never
--- updated (remove and tag again); their refusals are unreachable.
+-- updated (remove and tag again); their refusals are unreachable. Places
+-- (026) are two columns of post_photos under its own grants and
+-- policies: written by the photo's insert and by set_photo_place, never
+-- by an update.
 -- --------------------------------------------------------------------
 
 grant select on public.profiles to anon, authenticated;
@@ -4154,5 +4395,6 @@ insert into public.schema_migrations (version, note) values
   ('022_taste_profiles',      'contained in schema.sql'),
   ('023_collections',         'contained in schema.sql'),
   ('024_post_tags',           'contained in schema.sql'),
-  ('025_friends_board',       'contained in schema.sql')
+  ('025_friends_board',       'contained in schema.sql'),
+  ('026_places',              'contained in schema.sql')
 on conflict (version) do nothing;

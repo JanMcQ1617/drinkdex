@@ -1,13 +1,16 @@
 import { Image } from 'expo-image';
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Print } from '@/components/cabinet';
+import { PlaceRow } from '@/components/places/PlaceRow';
+import { PlaceSearchSheet } from '@/components/places/PlaceSearchSheet';
 import { TopBarTextButton } from '@/components/ScreenTopBar';
 import { SheetGrabber } from '@/components/Sheet';
 import { Button, Field } from '@/components/ui';
 import { colors, layout, space, textRole } from '@/constants/theme';
+import type { PlaceRef } from '@/lib/places';
 import { NOTE_MAX } from '@/lib/pour';
 
 /* ==================================================================== */
@@ -23,6 +26,19 @@ import { NOTE_MAX } from '@/lib/pour';
 /* is the system's sheet, which keeps the field above the keyboard and  */
 /* closes with a swipe, never the short BottomSheet. Cancel is the one  */
 /* way out that needs no gesture.                                       */
+/*                                                                      */
+/* PLACE (v4.8, specs/v4.8-places 3.1). Under the caption (a first      */
+/* photo) or under the preview (another one), before the two keys: Add  */
+/* place, or the place picked as a chip. Only signed in, with a photo,  */
+/* and where places work at all (`placesOn`: migration 026, the         */
+/* place-search module, iOS 18). The route owns the place (a Place ID   */
+/* and the poster's label) and sends it with Save & post alone; Save to */
+/* Dex and Save photo drop it, since not posting is the decision (P7).  */
+/*                                                                      */
+/* THE SEARCH SHEET IS A CHILD OF THIS SHEET'S MODAL, not a sibling in  */
+/* the route: iOS presents a modal only from the topmost view           */
+/* controller, which while this sheet is up is this sheet. Rendered     */
+/* beside it in the route, it would never appear.                      */
 /* ==================================================================== */
 
 export type PostSheetMode = 'unlock' | 'update';
@@ -41,6 +57,10 @@ export function PostSheet({
   note,
   noteError,
   saving,
+  place,
+  placesOn,
+  onAddPlace,
+  onRemovePlace,
   onClose,
   onTakePhoto,
   onChoosePhoto,
@@ -56,6 +76,13 @@ export function PostSheet({
   note: string;
   noteError: string | null;
   saving: PostSaving;
+  /** The place picked for this photo, or none. */
+  place: PlaceRef | null;
+  /** Places work here: signed in, migration 026 there, the place-search module in this build, iOS 18+. */
+  placesOn: boolean;
+  /** A place picked in the search (its Place ID and label); the route keeps it for Save & post. */
+  onAddPlace: (place: PlaceRef) => void;
+  onRemovePlace: () => void;
   onClose: () => void;
   onTakePhoto: () => void;
   onChoosePhoto: () => void;
@@ -69,6 +96,12 @@ export function PostSheet({
   const busy = saving !== null;
   const previewW = Math.round(width - 2 * layout.gutter);
   const previewH = Math.round(previewW * PREVIEW_ASPECT);
+  /* The place search, open over this sheet (see the header on why it is drawn inside it). */
+  const [searching, setSearching] = useState(false);
+  const offerPlace = signedIn && pickedUri != null && placesOn;
+  const placeRow = offerPlace ? (
+    <PlaceRow place={place} onAdd={() => setSearching(true)} onRemove={onRemovePlace} disabled={busy} />
+  ) : null;
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet" onRequestClose={onClose}>
@@ -133,7 +166,7 @@ export function PostSheet({
                   label="Add a caption"
                   value={note}
                   onChangeText={onNoteChange}
-                  placeholder="Where you had it, what you thought"
+                  placeholder="Say something about it"
                   maxLength={NOTE_MAX}
                   autoCapitalize="sentences"
                   autoCorrect
@@ -142,6 +175,9 @@ export function PostSheet({
                   accessibilityLabel="Caption, optional"
                 />
               ) : null}
+
+              {/* Add place: under the caption, or under the preview when there is no caption. */}
+              {placeRow}
 
               {/*
                 The same pair, in the same order, as the + window. Posting is
@@ -194,6 +230,15 @@ export function PostSheet({
             </View>
           )}
         </ScrollView>
+
+        {offerPlace ? (
+          <PlaceSearchSheet
+            visible={searching}
+            current={place}
+            onPick={onAddPlace}
+            onClose={() => setSearching(false)}
+          />
+        ) : null}
       </View>
     </Modal>
   );

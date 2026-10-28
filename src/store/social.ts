@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
+import { placesSupported, samePlace, setPhotoPlaceRemote, type PlaceRef } from '@/lib/places';
 import * as api from '@/lib/social';
 import { whoShort } from '@/lib/tags';
 import type { Post, Pour, Song, UserProfile } from '@/types';
@@ -14,6 +15,9 @@ import { showNotice } from '@/utils/alerts';
  *   'untagged'      — the post is up, with its photo, but some of the tags
  *                     picked with it (v4.3) did not save: refused by the
  *                     server, or the request failed.
+ *   'unplaced'      — the post is up, with its photo and its tags, but the
+ *                     place picked with it (v4.8) did not go on the photo:
+ *                     its label was refused, or 026 is not there.
  *   'objectionable' — the caption was refused; show OBJECTIONABLE_MESSAGE
  *                     next to the field. Nothing was written.
  *   'failed'        — nothing reached the server.
@@ -22,9 +26,10 @@ import { showNotice } from '@/utils/alerts';
  * words from the caller, and a boolean would fold them into one "failed".
  * A missing photo outranks missing tags: the way back for both is posting
  * the drink again, and that compose starts from the post's tags as they
- * are.
+ * are. Missing tags outrank a missing place, which is the smallest loss
+ * and has its own way back (the post's ••• → Add place).
  */
-export type PostOutcome = 'ok' | 'no-photo' | 'untagged' | 'objectionable' | 'failed';
+export type PostOutcome = 'ok' | 'no-photo' | 'untagged' | 'unplaced' | 'objectionable' | 'failed';
 
 /** The tags to write with a post (v4.3 §1.2): who is picked, and who the post had when the picking began. */
 export interface PostTags {
@@ -73,6 +78,14 @@ interface SocialState {
    * this moves.
    */
   tagsVersion: number;
+  /**
+   * Bumped after every place written on one of your photos (v4.8 P8): Add
+   * place or Remove place from a post's •••, on success. tagsVersion's
+   * rule: this store patches only the feed's copy, so the post page,
+   * holding its own, reads it again when this moves. The place sent with a
+   * new post moves postsVersion instead, as the post itself does.
+   */
+  placesVersion: number;
 
   loadingFeed: boolean;
   loadingPeople: boolean;
@@ -142,6 +155,10 @@ interface SocialState {
    * `tags`, from the compose row (v4.3 §1.2), is written once the post is
    * up: the difference between `prev` and `next`. A tag that does not
    * save never fails the post; it is 'untagged'.
+   * `place` (v4.8) is where this photo was had: Apple's Place ID and the
+   * poster's label, from the search sheet's "Tag this place" step; it goes
+   * on the photo row with Save & post only. A place that does not go on
+   * never fails the post; it is 'unplaced'.
    */
   addPost: (
     myId: string,
@@ -150,6 +167,7 @@ interface SocialState {
     photoUri: string | null,
     music?: Song | null,
     tags?: PostTags,
+    place?: PlaceRef | null,
   ) => Promise<PostOutcome>;
   /**
    * Your own post's Tag people, on Done (v4.3 §1.5): writes the difference
@@ -166,6 +184,20 @@ interface SocialState {
    * then, and says nothing: the card that asked has its own words.
    */
   removeMyTag: (myId: string, postId: string) => Promise<boolean>;
+  /**
+   * Your own post's Add place / Remove place (v4.8 P8), for one photo,
+   * by path: `place` to tag it, null to take the tag off. The feed's copy
+   * changes at once and goes back as it was when the write fails. Resolves
+   * the write's answer ('objectionable' when the label was refused,
+   * 'failed' at once without writing when places are off); it says nothing
+   * either way, since the card has its own words.
+   */
+  setPhotoPlace: (
+    myId: string,
+    postId: string,
+    path: string,
+    place: PlaceRef | null,
+  ) => Promise<'ok' | 'refused' | 'objectionable' | 'failed'>;
   removePostsForDrink: (myId: string, drinkId: string) => Promise<void>;
   /** Deletes one of your posts and its photos. Resolves false when it failed. */
   removePost: (myId: string, postId: string) => Promise<boolean>;
@@ -202,6 +234,7 @@ const EMPTY = {
   activityLatestAt: null as string | null,
   savesVersion: 0,
   tagsVersion: 0,
+  placesVersion: 0,
   loadingFeed: false,
   loadingPeople: false,
   feedError: null as string | null,
@@ -633,13 +666,13 @@ export const useSocial = create<SocialState>()((set, get) => ({
    * version bump with the feed untouched as a post made, and one with the
    * feed replaced as a post removed.
    */
-  addPost: async (myId, drinkId, caption, photoUri, music, tags) => {
+  addPost: async (myId, drinkId, caption, photoUri, music, tags, place) => {
     // Refused here without a round trip; the server holds the same line.
     if (containsObjectionable(caption)) return 'objectionable';
     const gen = get().gen;
-    let posted: { withPhoto: boolean; postId: string };
+    let posted: { withPhoto: boolean; postId: string; placed: boolean };
     try {
-      posted = await api.createPost(myId, drinkId, caption, photoUri, music);
+      posted = await api.createPost(myId, drinkId, caption, photoUri, music, place);
     } catch (e) {
       const outcome = isObjectionableError(e) ? 'objectionable' : 'failed';
       if (get().gen !== gen) return outcome;
@@ -654,7 +687,13 @@ export const useSocial = create<SocialState>()((set, get) => ({
       const unremoved = unremovedOf(tags.next, tags.prev, r.removed);
       tagsSaved = !api.tagsSupported() || (r.refused.length === 0 && unremoved.length === 0);
     }
-    const outcome: PostOutcome = !posted.withPhoto ? 'no-photo' : tagsSaved ? 'ok' : 'untagged';
+    const outcome: PostOutcome = !posted.withPhoto
+      ? 'no-photo'
+      : !tagsSaved
+        ? 'untagged'
+        : !posted.placed
+          ? 'unplaced'
+          : 'ok';
 
     if (get().gen !== gen) return outcome;
     set({ postsVersion: get().postsVersion + 1 });
@@ -734,6 +773,49 @@ export const useSocial = create<SocialState>()((set, get) => ({
       set({ error: (e as Error).message });
       return false;
     }
+  },
+
+  /*
+   * toggleSave's shape: the feed's copy first, the write, and the copy put
+   * back on a failure, unless a refresh meanwhile already holds the
+   * server's answer (the photo's place is then no longer the one this
+   * call set). A post the feed does not hold (a profile's, an older one)
+   * still writes; the post page holds its own copy and reads it again on
+   * placesVersion. A post whose places were unknown (undefined) gains a
+   * map holding only this photo, which is true as far as it goes: the
+   * other photos draw no line until the next read says.
+   */
+  setPhotoPlace: async (_myId, postId, path, place) => {
+    if (!placesSupported()) return 'failed';
+    const gen = get().gen;
+    const held = get().feed.find((p) => p.id === postId);
+    const had = held?.places && Object.prototype.hasOwnProperty.call(held.places, path) ? held.places[path] : null;
+    const withPlace = (p: Post, next: PlaceRef | null): Post => {
+      const { [path]: _gone, ...rest } = p.places ?? {};
+      return { ...p, places: next ? { ...rest, [path]: next } : rest };
+    };
+    const patch = (change: (p: Post) => Post, when: (p: Post) => boolean = () => true) => {
+      if (!get().feed.some((p) => p.id === postId && when(p))) return;
+      set({ feed: get().feed.map((p) => (p.id === postId && when(p) ? change(p) : p)) });
+    };
+    // Unknown stays unknown on the way back: a map this call made goes again.
+    const restore = (p: Post): Post => {
+      const back = withPlace(p, had);
+      return held?.places === undefined && Object.keys(back.places ?? {}).length === 0
+        ? { ...back, places: undefined }
+        : back;
+    };
+    const showsMine = (p: Post) => samePlace(p.places?.[path] ?? null, place);
+
+    if (held) patch((p) => withPlace(p, place));
+    const result = await setPhotoPlaceRemote(postId, path, place);
+    if (get().gen !== gen) return result;
+    if (result !== 'ok') {
+      if (held) patch(restore, showsMine);
+      return result;
+    }
+    set({ placesVersion: get().placesVersion + 1 });
+    return 'ok';
   },
 
   removePost: async (myId, postId) => {

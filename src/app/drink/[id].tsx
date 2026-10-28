@@ -34,12 +34,15 @@ import {
   TastesOf,
   useMoreBelow,
 } from '@/components/DrinkPanels';
+import { WherePeopleHadIt } from '@/components/places/WherePeopleHadIt';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { announce, Button, EmptyState, haptic } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
 import { getDrink } from '@/data';
 import { photoFor } from '@/data/drinkPhotos';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
+import { type PlaceRef, placesSupported } from '@/lib/places';
+import { placeSearchAvailable } from '@/lib/placeSearch';
 import {
   persistPhoto,
   pickFromCamera,
@@ -79,6 +82,12 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * it out. It works signed out, since saved drinks are the phone's first.
  * Saved is bookmarks, not a list of drinks still to catch, so catching a
  * drink leaves it saved (Jan, 13 Oct 2026).
+ *
+ * PLACES (v4.8, specs/v4.8-places 3.1 and 3.5). The post sheet offers
+ * Add place under the caption; this route holds the pick and sends it
+ * with Save & post alone (Save to Dex and Save photo post nothing, so
+ * they tag nothing). And the page ends with Where people have had it,
+ * which draws nothing until there is a place to show.
  */
 
 export default function DrinkDetailScreen() {
@@ -174,12 +183,24 @@ export default function DrinkDetailScreen() {
   const [note, setNote] = useState('');
   const [noteError, setNoteError] = useState<string | null>(null);
   const [saving, setSaving] = useState<PostSaving>(null);
+  /*
+   * Where this photo was had (v4.8): Apple's Place ID and the poster's
+   * label for it. Starts empty with every sheet: a place is about one
+   * time the drink was had, so the last post's never carries over.
+   * Offered only signed in, with migration 026 there, the place-search
+   * module in this build and iOS 18 or later (placeSearchAvailable;
+   * placesSupported can turn off mid-session, when the server says 026
+   * is not there, so it is read at render).
+   */
+  const [place, setPlace] = useState<PlaceRef | null>(null);
+  const placesOn = !!myId && placesSupported() && placeSearchAvailable();
 
   const openSheet = useCallback((mode: PostSheetMode) => {
     setSheetMode(mode);
     setPickedUri(null);
     setNote('');
     setNoteError(null);
+    setPlace(null);
     setSheetVisible(true);
   }, []);
 
@@ -188,6 +209,7 @@ export default function DrinkDetailScreen() {
     setPickedUri(null);
     setNote('');
     setNoteError(null);
+    setPlace(null);
   }, []);
 
   /*
@@ -253,6 +275,8 @@ export default function DrinkDetailScreen() {
       }
 
       setSaving(alsoPost ? 'post' : 'dex');
+      // Only Save & post sends a place, and only one picked while places work (P7).
+      const placeToSend = alsoPost && placesOn ? place : null;
       try {
         const uri = await persistPhoto(drink.id, pickedUri);
         if (sheetMode === 'update') {
@@ -267,7 +291,7 @@ export default function DrinkDetailScreen() {
            * from here without it (reportPost's promise).
            */
           if (myId && alsoPost) {
-            void addPost(myId, drink.id, '', uri).then(reportPost);
+            void addPost(myId, drink.id, '', uri, undefined, undefined, placeToSend).then(reportPost);
           } else if (myId) {
             void addPhotoForDrink(myId, drink.id, uri).then(reportPostPhoto);
           }
@@ -286,7 +310,7 @@ export default function DrinkDetailScreen() {
            * catching a drink lands on.
            */
           if (alsoPost && myId) {
-            void addPost(myId, drink.id, trimmed, uri).then(reportPost);
+            void addPost(myId, drink.id, trimmed, uri, undefined, undefined, placeToSend).then(reportPost);
           }
           haptic.success();
           closeSheet();
@@ -295,7 +319,22 @@ export default function DrinkDetailScreen() {
         setSaving(null);
       }
     },
-    [addPhotoForDrink, addPost, closeSheet, drink, myId, note, noteError, pickedUri, saving, sheetMode, unlock, updatePhoto],
+    [
+      addPhotoForDrink,
+      addPost,
+      closeSheet,
+      drink,
+      myId,
+      note,
+      noteError,
+      pickedUri,
+      place,
+      placesOn,
+      saving,
+      sheetMode,
+      unlock,
+      updatePhoto,
+    ],
   );
 
   /*
@@ -412,6 +451,8 @@ export default function DrinkDetailScreen() {
         <FieldNotes description={drink.description} />
         <OriginStory drink={drink} />
         <FriendsWhoCaught drinkId={drink.id} onOpenPost={openPost} />
+        {/* Last, so that appearing once its rows arrive moves nothing above it. */}
+        <WherePeopleHadIt drinkId={drink.id} />
 
         {/*
           Taking the drink back out, at the foot: the bare destructive words
@@ -451,6 +492,10 @@ export default function DrinkDetailScreen() {
         note={note}
         noteError={noteError}
         saving={saving}
+        place={place}
+        placesOn={placesOn}
+        onAddPlace={setPlace}
+        onRemovePlace={() => setPlace(null)}
         onClose={closeSheet}
         onTakePhoto={() => void takePhoto()}
         onChoosePhoto={() => void choosePhoto()}

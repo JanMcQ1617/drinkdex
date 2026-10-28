@@ -1,6 +1,6 @@
 # Terms of Use
 
-**Last updated: 17 October 2026**
+**Last updated: 26 October 2026**
 
 Sipply is a drinks field guide. You collect entries, post what you drink,
 and share it with people you follow. These are the rules for using it.
@@ -50,8 +50,12 @@ Specifically, do not post or send:
 - Someone else's photos or personal information posted without their consent
 - Impersonation of another person or account
 
+Tag only places where you actually had the drink, call them by a name that
+is true, and never use a place to mislead or harass.
+
 Captions, bios, display names, usernames, the drinks you add, tournament
-names and the songs added to posts are checked when you save them, and text
+names, the songs added to posts and the names you give the places you tag
+are checked when you save them, and text
 containing a slur or an explicit sexual term is refused. That filter is a
 floor, not the rule: anything on the list above is removed when it is
 reported, whether or not the filter caught it.
@@ -101,6 +105,10 @@ published.
 **Songs.** A song you add to a post belongs to its rights-holders, not to
 you or to Sipply. Its preview comes from Apple Music and plays as a preview
 of that song, with a link to it in Apple Music.
+
+**Places.** The name on a tagged place is the poster's, starting from the
+name Apple Maps shows; a place's address and map come from Apple Maps. A
+place appearing in Sipply is not an endorsement either way.
 
 **Treat anything you post as visible to everyone signed in to Sipply.**
 

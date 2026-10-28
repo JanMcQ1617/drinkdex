@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v4.8 places renders</title>
+<style>
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:Inter;src:url(../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+@font-face{font-family:Playfair;src:url(../../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf);font-weight:700}
+/*
+ * Visual review renders of what the v4.8 CODE draws (not the spec). Every
+ * measure is read off PlaceRow.tsx, PlaceSearchSheet.tsx, PostCard.tsx's
+ * PostHeader, PlacePage.tsx, WherePeopleHadIt.tsx, log.tsx, PostSheet.tsx,
+ * Sheet.tsx (ActionSheet/BottomSheet) and ui.tsx (Button, SearchField,
+ * Notice, Hold, EmptyState); glyphs from icons.tsx; tokens from theme.ts.
+ * Open with a #frame hash. The feed post's closing pen rule comes from the
+ * v4.6 marks (PENM.entry), as the v4.7 renders draw it.
+ */
+:root{--page:#FFFFFF;--wash:#F5F5F5;--press:#EBEBEB;--line:#E3E3E3;--hair:#D6D6D6;--rule:#C4C4C4;--control:#8A8A8A;--muted:#5C5C5C;--ink:#0A0A0A;
+--photoEdge:rgba(10,10,10,.07);--scrim:rgba(10,10,10,.36);--t1:#262626;--t2:#3D3D3D;--t3:#5C5C5C;--acc:#D0102C;--onAcc:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{font-family:Inter,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+.a{position:absolute}
+.title{font:600 28px/34px Inter;letter-spacing:-.4px}
+.body{font:400 17px/24px Inter;letter-spacing:-.2px}
+.bm{font:500 17px/24px Inter;letter-spacing:-.2px}
+.bs{font:600 17px/24px Inter;letter-spacing:-.2px}
+.small{font:400 13px/18px Inter}
+.gt{font:600 13px/18px Inter}
+.pf13{font:700 13px/18px Playfair}
+.pf17{font:700 17px/24px Playfair}
+.muted{color:var(--muted)} .tn{font-variant-numeric:tabular-nums}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.two{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden}
+.strip{position:relative;width:440px;background:var(--page);overflow:hidden}
+.circle{border-radius:50%}
+.print{position:absolute;overflow:hidden;background:var(--wash)}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge)}
+.pm{position:absolute;pointer-events:none;z-index:29;overflow:visible}
+.spin{border-radius:50%;border:2.5px solid var(--hair);border-top-color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../v4.6-details/build/mock/marks.js"></script>
+<script src="names.js"></script>
+<script>
+const IMG = id => `../../../assets/drinks/${id}.webp`;
+/* ---- icons.tsx (outline, 1.6 stroke, round caps/joins) ---- */
+const OUT = {
+  chevronLeft:'<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  chevronRight:'<path d="M9.4 5.4 16 12l-6.6 6.6"/>',
+  search:'<circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.5 15.5 20.4 20.4"/>',
+  close:'<path d="M6.2 6.2 17.8 17.8"/><path d="M17.8 6.2 6.2 17.8"/>',
+  more:'<circle cx="5.4" cy="12" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="18.6" cy="12" r="1.15"/>',
+  heart:'<path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/>',
+  send:'<path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/>',
+  bookmark:'<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  profile:'<circle cx="12" cy="8.2" r="3.7"/><path d="M4.9 20.4a7.3 7.3 0 0 1 14.2 0"/>',
+  check:'<path d="M5 12.6 9.8 17.4 19 6.9"/>',
+  alert:'<circle cx="12" cy="12" r="8.7"/><path d="M12 7.7v5.1"/><path d="M12 16.3h.01"/>',
+  music:'<path d="M9.4 17V5.8l9.4-2.2v11"/><circle cx="7.2" cy="17.1" r="2.2"/><circle cx="16.6" cy="14.7" r="2.2"/>',
+  /* v4.8 */
+  pin:'<path d="M12 21.1s-6.6-5.7-6.6-11.2a6.6 6.6 0 0 1 13.2 0c0 5.5-6.6 11.2-6.6 11.2z"/><circle cx="12" cy="9.9" r="2.4"/>',
+};
+const ic = (name, size, color) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none"><g stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none">${OUT[name]}</g></svg>`;
+const at = (x, y, inner, st='') => `<div class="a" style="left:${x}px;top:${y}px;${st}">${inner}</div>`;
+const initials = n => n.split(/[ ._-]+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+const av = (x, y, d, tone, name) => `<div class="a circle" style="left:${x}px;top:${y}px;width:${d}px;height:${d}px;background:var(--${tone});display:flex;align-items:center;justify-content:center;color:#fff;font:600 ${Math.round(d*0.38)}px/1 Inter">${initials(name)}</div>`;
+const photo = (id, x, y, w, h) => `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px"><img src="${IMG(id)}"></div>`;
+const M = (shape, left, top) => `<svg class="pm" width="1" height="1" style="left:${left}px;top:${top}px">${shape.d.map(d => `<path fill="var(--acc)" d="${d}"/>`).join('')}</svg>`;
+const statusBar = (bg='#fff', fg='var(--ink)') => `<div class="a" style="left:0;top:0;width:440px;height:62px;background:${bg};z-index:30"><span class="a" style="left:52px;top:21px;font:600 17px/22px Inter;color:${fg}">9:41</span><span class="a" style="left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000"></span></div>`;
+const homeInd = (c='var(--ink)') => `<div class="a" style="left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:${c};z-index:40"></div>`;
+/*
+ * A stand-in for PlaceMapView (v4.8 final integration): MapKit draws the real
+ * one natively, muted emphasis, light, no points of interest of Apple's, one
+ * ink marker, Apple's logo and Legal link in the lower corners. This is a
+ * drawing of that composition, not of any real street.
+ */
+const mapPic = (x, y, w, h) => {
+  const cx = w / 2, cy = h / 2;
+  let roads = '';
+  const vx = [0.08, 0.31, 0.55, 0.79], hy = [0.18, 0.5, 0.82];
+  vx.forEach((f, i) => roads += `<rect x="${f*w - (i===2?5:3)}" y="-10" width="${i===2?10:6}" height="${h+20}" fill="#FFFFFF" transform="rotate(${i%2?4:-3} ${f*w} ${cy})"/>`);
+  hy.forEach((f, i) => roads += `<rect x="-10" y="${f*h - (i===1?5:3)}" width="${w+20}" height="${i===1?10:6}" fill="#FFFFFF" transform="rotate(${i%2?-2:3} ${cx} ${f*h})"/>`);
+  const park = `<rect x="${0.6*w}" y="${0.58*h}" width="${0.16*w}" height="${0.2*h}" rx="3" fill="#E4EADF"/>`;
+  const water = `<path d="M0 ${h*0.86} C ${w*0.2} ${h*0.8}, ${w*0.35} ${h*0.95}, ${w*0.5} ${h*0.9} S ${w*0.8} ${h*0.84}, ${w} ${h*0.9} V ${h} H 0 Z" fill="#DCE3EA"/>`;
+  const marker = `<g transform="translate(${cx-14} ${cy-38})"><path d="M14 38 C14 38 0 23 0 14 A14 14 0 0 1 28 14 C28 23 14 38 14 38 Z" fill="#0A0A0A"/><circle cx="14" cy="14" r="5.5" fill="#fff"/></g>`;
+  const logo = `<text x="8" y="${h-8}" font-family="Inter" font-weight="600" font-size="11" fill="#5C5C5C"> Maps</text>`;
+  const legal = `<text x="${w-8}" y="${h-8}" text-anchor="end" font-family="Inter" font-size="10" fill="#5C5C5C" text-decoration="underline">Legal</text>`;
+  return `<div class="a" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;border:0.5px solid var(--hair);overflow:hidden;background:#F1F0EC"><svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${park}${water}${roads}${marker}${logo}${legal}</svg></div>`;
+};
+const cv = document.createElement('canvas').getContext('2d');
+const tw = (t, font) => { cv.font = font; return cv.measureText(t).width; };
+
+/* ===================================================================== */
+/* 1. The + window's compose step (log.tsx), scrolled so the rows show.  */
+/*    column 24..416; photo 392x490; caption 88 (+24); Tag people 56     */
+/*    (+16); Add place 56 (+16, PlaceRow); Add music sm (+16); foot:     */
+/*    rule, Post (accent, block 52), "Save to Dex only" (text 44).       */
+/* ===================================================================== */
+function placeRowHtml(y, place, opts={}) {
+  // PlaceRow: 56; pin 24 at 24; label/chip 12 after (x 60); chevron 20 ends at 416 (marginLeft -4)
+  let s = '';
+  if (opts.pressed) s += `<div class="a" style="left:24px;top:${y}px;width:392px;height:56px;background:var(--press)"></div>`;
+  s += at(24, y+16, ic('pin', 24, 'var(--ink)'));
+  if (!place) {
+    s += at(60, y+16, `<span class="bm">Add place</span>`);
+    s += at(396, y+18, ic('chevronRight', 20, 'var(--muted)'));
+  } else {
+    // chip: 32 tall, page fill, 1pt hair, radius 4; name pl 12 pr 8 Inter 500 13; × 16 + pr 8. Max width = 416 - 60 = 356.
+    const nameMax = 356 - 2 - 12 - 8 - 16 - 8;
+    s += `<div class="a" style="left:60px;top:${y+12}px;height:32px;max-width:356px;display:flex;align-items:center;border:1px solid var(--hair);border-radius:4px;background:#fff">
+      <span class="ell" style="font:500 13px/18px Inter;padding-left:12px;padding-right:8px;max-width:${nameMax+20}px">${place}</span>
+      <span style="padding-right:8px">${ic('close',16,'var(--muted)')}</span></div>`;
+  }
+  return s;
+}
+function compose(place, opts={}) {
+  let s = statusBar();
+  // ComposeBar: back chevron, the drink centred in Playfair, rule while scrolled under
+  s += `<div class="a" style="left:0;top:62px;width:440px;height:52px;background:#fff;z-index:20;border-bottom:1px solid var(--line)"></div>`;
+  s += at(14, 62+14, ic('chevronLeft', 24, 'var(--ink)'), 'z-index:21');
+  s += `<div class="a pf17" style="left:0;top:${62+14}px;width:440px;text-align:center;z-index:21">Negroni</div>`;
+  const scroll = opts.scroll ?? 330;
+  const y0 = 114 + 8 - scroll;
+  s += photo('negroni', 24, y0, 392, 490);
+  let y = y0 + 490 + 24;
+  s += `<div class="a" style="left:24px;top:${y}px;width:392px;height:88px;background:var(--wash);border-radius:4px"></div>`;
+  s += at(40, y+15, `<span class="body ${opts.caption ? '' : 'muted'}">${opts.caption || 'Say something about it'}</span>`);
+  y += 88 + 16;
+  // Tag people
+  s += at(24, y+16, ic('profile', 24, 'var(--ink)'));
+  s += at(60, y+16, `<span class="bm">Tag people</span>`);
+  s += `<div class="a body muted ell" style="left:180px;top:${y+16}px;width:208px;text-align:right">${opts.tags || ''}</div>`;
+  s += at(396, y+18, ic('chevronRight', 20, 'var(--muted)'));
+  y += 56 + 16;
+  s += placeRowHtml(y, place, opts);
+  const placeY = y;
+  y += 56 + 16;
+  // Add music: secondary sm, 36, wash, icon 16 + label, pad 14, gap 8, alignSelf start
+  const mw = 14 + 16 + 8 + tw('Add music', '500 17px Inter') + 14;
+  s += `<div class="a" style="left:24px;top:${y}px;width:${mw}px;height:36px;background:var(--wash);border-radius:4px;display:flex;align-items:center;padding-left:14px;gap:8px">${ic('music',16,'var(--ink)')}<span class="bm">Add music</span></div>`;
+  // Foot: paddingTop 8, Post 52, text key 44, insets 34 + 8; rule (line) when more below
+  const ft = 956 - (8 + 52 + 44 + 34 + 8);
+  s += `<div class="a" style="left:0;top:${ft}px;width:440px;height:${956-ft}px;background:#fff;border-top:1px solid var(--line);z-index:20"></div>`;
+  s += `<div class="a" style="left:24px;top:${ft+8}px;width:392px;height:52px;background:var(--acc);border-radius:4px;display:flex;align-items:center;justify-content:center;z-index:21"><span class="bm" style="color:#fff">Post</span></div>`;
+  s += `<div class="a" style="left:24px;top:${ft+60}px;width:392px;height:44px;display:flex;align-items:center;justify-content:center;z-index:21"><span class="bm">Save to Dex only</span></div>`;
+  return `<div class="phone">${s}${homeInd()}</div>`;
+}
+
+/* ===================================================================== */
+/* 1b. The drink page's PostSheet ('unlock'): title row, line, preview,  */
+/*     caption Field (labelled), PlaceRow, the two keys, Choose another. */
+/*     body gap 16, gutter 24.                                           */
+/* ===================================================================== */
+function pageSheetFrame(inner, behindTitle='') {
+  // iOS pageSheet: the presenting screen pushed back and dimmed, the sheet from ~y 72 with 10pt corners
+  let s = `<div class="a" style="left:0;top:0;width:440px;height:956px;background:#000"></div>`;
+  s += `<div class="a" style="left:16px;top:52px;width:408px;height:40px;background:#8a8a8a;border-radius:10px 10px 0 0"></div>`;
+  s += statusBar('transparent', '#fff');
+  s += `<div class="a" style="left:0;top:62px;width:440px;height:894px;background:#fff;border-radius:10px 10px 0 0;overflow:hidden">${inner}</div>`;
+  return `<div class="phone">${s}${homeInd()}</div>`;
+}
+function sheetHead(title) {
+  // SheetGrabber: pt 8, 36x5, pb 16 => 29; title row 44 (Cancel text key min 44)
+  let s = `<div class="a" style="left:202px;top:8px;width:36px;height:5px;border-radius:1px;background:var(--rule)"></div>`;
+  s += at(24, 29+10, `<span class="bs">${title}</span>`);
+  const cw = tw('Cancel', '400 17px Inter');
+  s += `<div class="a body muted" style="top:${29+10}px;left:${440-24-cw}px">Cancel</div>`;
+  return s;
+}
+function postSheet(place) {
+  let s = sheetHead('Post <span class="pf17">Negroni</span>');
+  let y = 29 + 44 + 8;
+  s += at(24, y, `<div class="small muted" style="width:392px">A photo is how a drink joins your Dex. Posting it is up to you.</div>`);
+  y += 18 + 16 + 4;
+  const pw = 392, ph = Math.round(392 * 0.75);
+  s += photo('negroni', 24, y, pw, ph);
+  y += ph + 16;
+  // Field with label: 56+; label small muted over value
+  s += `<div class="a" style="left:24px;top:${y}px;width:392px;height:66px;background:var(--wash);border-radius:4px"></div>`;
+  s += at(40, y+10, `<div style="font:500 13px/18px Inter;color:var(--muted)">Add a caption</div><div class="body muted" style="margin-top:4px">Say something about it</div>`);
+  y += 66 + 16;
+  s += placeRowHtml(y, place);
+  y += 56 + 16;
+  s += `<div class="a" style="left:24px;top:${y}px;width:190px;height:52px;background:var(--wash);border-radius:4px;display:flex;align-items:center;justify-content:center"><span class="bm">Save to Dex</span></div>`;
+  s += `<div class="a" style="left:226px;top:${y}px;width:190px;height:52px;background:var(--acc);border-radius:4px;display:flex;align-items:center;justify-content:center"><span class="bm" style="color:#fff">Save &amp; post</span></div>`;
+  y += 52 + 16;
+  s += `<div class="a" style="left:24px;top:${y}px;width:392px;height:44px;display:flex;align-items:center;justify-content:center"><span class="bm muted">Choose another</span></div>`;
+  return pageSheetFrame(s);
+}
+
+/* ===================================================================== */
+/* 2. PlaceSearchSheet: grabber, "Add place" + Cancel, SearchField (mt 8,*/
+/*    44, focused = white + 2pt ink ring), list content pt 8.            */
+/* ===================================================================== */
+const KB_H = 336;
+function keyboard() {
+  // the light system keyboard, drawn as a block with its rows of keys (return key "return", default type)
+  const top = 956 - KB_H;
+  let s = `<div class="a" style="left:0;top:${top}px;width:440px;height:${KB_H}px;background:#D1D3D9;z-index:50"></div>`;
+  const rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  rows.forEach((r, i) => {
+    const kw = 37, gap = 6.5; const total = r.length * kw + (r.length - 1) * gap; let x = (440 - total) / 2;
+    for (const ch of r) { s += `<div class="a" style="left:${x}px;top:${top + 10 + i*56}px;width:${kw}px;height:46px;background:#fff;border-radius:5px;z-index:51;display:flex;align-items:center;justify-content:center;font:400 22px Inter">${ch}</div>`; x += kw + gap; }
+  });
+  s += `<div class="a" style="left:6px;top:${top+178}px;width:92px;height:46px;background:#ABB0BC;border-radius:5px;z-index:51;display:flex;align-items:center;justify-content:center;font:400 16px Inter">123</div>`;
+  s += `<div class="a" style="left:104px;top:${top+178}px;width:226px;height:46px;background:#fff;border-radius:5px;z-index:51;display:flex;align-items:center;justify-content:center;font:400 16px Inter">space</div>`;
+  s += `<div class="a" style="left:336px;top:${top+178}px;width:98px;height:46px;background:#ABB0BC;border-radius:5px;z-index:51;display:flex;align-items:center;justify-content:center;font:400 16px Inter">return</div>`;
+  return s;
+}
+function searchSheet(st) {
+  // st: {query, focused, block:'undetermined'|'near'|'precise-off'|'denied', hold, rows:[{t,sub,check,spin}], notice, noMatch, keyboard}
+  let s = sheetHead('Add place');
+  const fy = 29 + 44 + 8;
+  const foc = st.focused;
+  s += `<div class="a" style="left:24px;top:${fy}px;width:392px;height:44px;border-radius:4px;background:${foc ? '#fff' : 'var(--wash)'};${foc ? 'box-shadow:inset 0 0 0 2px var(--ink)' : ''}"></div>`;
+  s += at(36, fy+12, ic('search', 20, foc ? 'var(--ink)' : 'var(--muted)'));
+  if (st.query) {
+    s += at(64, fy+10, `<span class="body">${st.query}</span>`);
+    if (foc) s += `<div class="a" style="left:${64 + tw(st.query, '400 17px Inter') + 1}px;top:${fy+11}px;width:2px;height:22px;background:#0A84FF"></div>`;
+    s += at(388, fy+8, `<div style="width:28px;height:28px;display:flex;align-items:center;justify-content:center">${ic('close',16,'var(--muted)')}</div>`);
+  } else {
+    s += at(64, fy+10, `<span class="body muted">Search a bar or restaurant</span>`);
+    if (foc) s += `<div class="a" style="left:64px;top:${fy+11}px;width:2px;height:22px;background:#0A84FF"></div>`;
+  }
+  let y = fy + 44 + 8;
+  if (st.notice) {
+    s += `<div class="a" style="left:24px;top:${y}px;width:392px;border:1px solid var(--ink);background:var(--wash);border-radius:4px;padding:12px;display:flex;gap:8px;align-items:flex-start">${ic('alert',18,'var(--ink)')}<span class="small" style="flex:1">${st.notice}</span>${st.noticeAction ? `<span style="font:600 13px/18px Inter">${st.noticeAction}</span>` : ''}</div>`;
+    y += 12 + 12 + 18 * (st.noticeLines || 2) + 2 + 12;
+  }
+  if (st.block === 'undetermined' || st.block === 'denied') {
+    s += at(24, y+18, ic('pin', 20, 'var(--muted)'));
+    s += at(56, y+8, `<div class="body">Show places near me</div><div class="small muted">${st.block === 'denied' ? 'Location is off for Sipply in Settings.' : "Your location isn't sent to Sipply."}</div>`);
+    y += 58;
+  } else if (st.block === 'near') {
+    s += at(24, y+8, `<span class="gt muted">Near you</span>`);
+    y += 8 + 18 + 4;
+  } else if (st.block === 'precise-off') {
+    y += 16;
+    s += at(24, y, `<div class="small muted" style="width:392px">Precise Location is off for Sipply, so places near you aren't listed. Search by name.</div>`);
+    y += 36;
+  }
+  if (st.hold) {
+    s += `<div class="a spin" style="left:208px;top:${y+48}px;width:24px;height:24px"></div>`;
+    y += 48 + 24 + 48;
+  }
+  if (st.nothingNear) { y += 16; s += at(24, y, `<div class="small muted" style="width:392px">No bars or restaurants within 800 m. Search by name.</div>`); y += 18; }
+  (st.rows || []).forEach((r, i) => {
+    const two = r.two;
+    const h = Math.max(64, 8 + (two ? 48 : 24) + (r.sub ? 18 : 0) + 8);
+    if (r.pressed) s += `<div class="a" style="left:0;top:${y}px;width:440px;height:${h}px;background:var(--press)"></div>`;
+    if (i > 0) s += `<div class="a" style="left:24px;top:${y}px;width:416px;height:0.5px;background:var(--hair)"></div>`;
+    const textH = (two ? 48 : 24) + (r.sub ? 18 : 0);
+    const ty = y + (h - textH) / 2;
+    s += at(24, ty, `<div class="body ${two ? 'two' : ''}" style="width:${392-20-12}px">${r.t}</div>${r.sub ? `<div class="small muted ell" style="width:${392-20-12}px">${r.sub}</div>` : ''}`);
+    if (r.check) s += at(396, y + (h-20)/2, ic('check', 20, 'var(--ink)'));
+    if (r.spin) s += `<div class="a spin" style="left:396px;top:${y + (h-20)/2}px;width:20px;height:20px"></div>`;
+    y += h;
+  });
+  if (st.noMatch) { y += 24; s += `<div class="a small muted" style="left:24px;top:${y}px;width:392px;text-align:center">No bars or restaurants match “${st.query}”.</div>`; y += 18; }
+  y += 16;
+  s += `<div class="a small muted" style="left:24px;top:${y}px;width:392px;text-align:center">Places from Apple Maps</div>`;
+  if (st.keyboard) s += keyboard().replace(/top:(\d+(\.\d+)?)px/g, (m, n) => `top:${parseFloat(n) - 62}px`);
+  return pageSheetFrame(s);
+}
+/* The "Tag this place" step (0.5 rework, 27 Oct): the title row, then at the gutter (pt 8) the map 392 x 196, Apple's name (bodyStrong, mt 16), the meta (small muted, mt 4), "Name on your post" (Field, mt 24, prefilled with Apple's name, 60 max), Tag this place (primary block 52, mt 24), Back to search (text sm, centred, mt 8). */
+function confirmStep(o={}) {
+  let s = sheetHead('Add place');
+  let y = 29 + 44 + 8;
+  s += mapPic(24, y, 392, 196); y += 196 + 16;
+  s += at(24, y, `<div class="bs" style="width:392px">${o.name || 'La Factoría'}</div>`); y += 24 + 4;
+  s += at(24, y, `<div class="small muted" style="width:392px">${o.meta || 'Bar · Calle San Sebastián 148, San Juan · 350 ft'}</div>`); y += 18;
+  if (o.notice) {
+    y += 16;
+    s += `<div class="a" style="left:24px;top:${y}px;width:392px;border:1px solid var(--ink);background:var(--wash);border-radius:4px;padding:12px;display:flex;gap:8px;align-items:flex-start">${ic('alert',18,'var(--ink)')}<span class="small" style="flex:1">${o.notice}</span></div>`;
+    y += 12 + 12 + 36 + 2;
+  }
+  // Field with a value: label (500 13 muted) over the value (body ink), as the post sheet's caption Field.
+  y += 24;
+  const label = o.label ?? (o.name || 'La Factoría');
+  s += `<div class="a" style="left:24px;top:${y}px;width:392px;height:66px;background:var(--wash);border-radius:4px"></div>`;
+  s += at(40, y+10, `<div style="font:500 13px/18px Inter;color:var(--muted)">Name on your post</div><div class="body ell" style="margin-top:4px;width:360px">${label}</div>`);
+  y += 66;
+  if (o.labelError) { y += 8; s += at(24, y, `<div class="small" style="display:flex;gap:6px;align-items:center">${ic('alert',14,'var(--ink)')}${o.labelError}</div>`); y += 18; }
+  y += 24;
+  s += `<div class="a" style="left:24px;top:${y}px;width:392px;height:52px;background:var(--ink);border-radius:4px;display:flex;align-items:center;justify-content:center">${o.saving ? '<div class="spin" style="width:20px;height:20px;border-color:#555;border-top-color:#fff"></div>' : '<span class="bm" style="color:#fff">Tag this place</span>'}</div>`;
+  y += 52 + 8;
+  s += `<div class="a" style="left:0;top:${y}px;width:440px;height:36px;display:flex;align-items:center;justify-content:center"><span class="bm" style="${o.saving ? 'opacity:.42' : ''}">Back to search</span></div>`;
+  return pageSheetFrame(s);
+}
+const SUGG = [
+  {t:'La Factoría', sub:'Calle San Sebastián 148, San Juan, Puerto Rico'},
+  {t:'La Factoría Bar', sub:'Avenida Ponce de León 1500, San Juan'},
+  {t:'La Fabrica Café', sub:'Calle Loíza 2000, San Juan'},
+  {t:'Factoría del Mar Restaurant y Terraza en la Playa del Condado', sub:'Avenida Ashford 1045, San Juan', two:true},
+  {t:'La Factoría de Tapas', sub:'Calle Fortaleza 300, San Juan'},
+];
+const NEAR = [
+  {t:'La Factoría', sub:'Bar · 350 ft'},
+  {t:'El Batey', sub:'Bar · 0.1 mi'},
+  {t:'Casa Bacardí Old San Juan', sub:'Distillery · 0.2 mi'},
+  {t:'Café Puerto Rico', sub:'Restaurant · 0.2 mi'},
+  {t:'Hotel El Convento', sub:'Hotel · 0.3 mi'},
+  {t:'Pirilo Pizza Rústica', sub:'Restaurant · 0.3 mi'},
+  {t:'La Taberna Lúpulo', sub:'Bar · 0.4 mi'},
+  {t:'Señor Paleta', sub:'Café · 0.4 mi'},
+];
+
+/* ===================================================================== */
+/* 3. PostCard header: 52; face 32 at 16; lines at 60; ••• 24 ends 424.  */
+/*    measure = 440 - (16+32+12) - (6+44) - 8 = 322. With a place:       */
+/*    drink measure = 322 - w(" at ") - min(w(place), 96).               */
+/* ===================================================================== */
+const MEASURE = 322;
+function headerHtml(o) {
+  const atW = tw(' at ', '400 13px Inter');
+  const drinkW = tw(o.drink, '700 13px Playfair');
+  // v4.8 final: the place takes what the drink leaves, never under 48 (PostCard PLACE_FLOOR).
+  const placeShare = o.place ? Math.min(tw(o.place, '500 13px Inter'), Math.max(48, MEASURE - atW - drinkW)) : 0;
+  const drinkMeasure = o.place ? Math.max(0, MEASURE - atW - placeShare) : MEASURE;
+  const drinkLines = drinkW > drinkMeasure ? 2 : 1;
+  const lines = 1 + drinkLines;
+  const h = Math.max(52, 8 + lines * 18 + 8);
+  let s = av(16, (h-32)/2, 32, o.tone || 't1', o.who);
+  const top = (h - lines*18) / 2;
+  s += at(60, top, `<div class="small" style="width:${MEASURE}px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><b style="font-weight:600">${o.who}</b>${o.with ? ` with <b style="font-weight:600">${o.with}</b>` : ''}</div>`);
+  // second line: row, centred items; drink hugs (maxWidth drinkMeasure), " at " muted, place flexShrink with ellipsis
+  s += at(60, top+18, `<div style="display:flex;align-items:center;max-width:${MEASURE}px;width:${MEASURE}px">
+     <div class="pf13" style="max-width:${drinkMeasure}px;flex:none">${o.drink}</div>
+     ${o.place ? `<span class="small muted" style="white-space:pre;flex:none"> at </span><span class="ell" style="font:500 13px/18px Inter;flex:0 1 auto;min-width:0">${o.place}</span>` : ''}
+   </div>`);
+  s += at(400, (h-24)/2, ic('more', 24, 'var(--ink)'));
+  return {html: s, h, drinkLines, drinkMeasure};
+}
+function post(o) {
+  const H = headerHtml(o);
+  let s = H.html;
+  const py = H.h;
+  s += `<div class="a" style="left:0;top:${py}px;width:440px;height:440px;overflow:hidden;background:var(--wash)"><img src="${IMG(o.img)}" style="width:100%;height:100%;object-fit:cover"></div>`;
+  if (o.gallery) {
+    s += `<div class="a" style="right:12px;top:${py+12}px;padding:2px 8px;border-radius:2px;background:var(--ink);color:#fff;font:500 13px/18px Inter;z-index:3">${o.gallery}</div>`;
+  }
+  const ay = py + 440;
+  s += at(16, ay+9, ic('heart', 26, 'var(--ink)'));
+  s += at(60, ay+9, ic('send', 26, 'var(--ink)'));
+  s += at(398, ay+9, ic('bookmark', 26, 'var(--ink)'));
+  if (o.gallery) s += `<div class="a" style="left:206px;top:${ay+19}px;display:flex;gap:4px"><span class="circle" style="width:6px;height:6px;background:var(--ink)"></span><span class="circle" style="width:6px;height:6px;background:var(--hair)"></span></div>`;
+  s += at(16, ay+44+2, `<span class="small"><b style="font-weight:600">12 likes</b></span>`);
+  s += at(16, ay+44+26, `<span class="small"><b style="font-weight:600">${o.who}</b> ${o.caption || ''}</span>`);
+  s += at(16, ay+44+26+20, `<span class="small muted">2 hours ago</span>`);
+  if (window.PENM && PENM.entry) s += M(PENM.entry, 16, ay+44+26+20+18+12);
+  return `<div class="strip" style="height:${ay+44+26+20+18+30}px">${s}</div>`;
+}
+function headers() {
+  const cases = [
+    {lab:'At rest, no place (as build 32)', who:'maya.pours', drink:'Negroni', tone:'t1'},
+    {lab:'"Negroni at La Factoría"', who:'maya.pours', drink:'Negroni', place:'La Factoría', tone:'t1'},
+    {lab:'With tags and a place', who:'maya.pours', with:'ana and leo', drink:'Negroni', place:'La Factoría', tone:'t1'},
+    {lab:'Long place: ellipsis', who:'theo_stirs', drink:'Paper Plane', place:'The Dead Rabbit Grocery and Grog', tone:'t2'},
+    {lab:'Long drink + place (floor 48)', who:'ines.ag', drink:'Corpse Reviver No. 2', place:'Hotel El Convento', tone:'t2'},
+    {lab:'Longest name + place', who:'sam.ortega', drink:'Johnnie Walker Gold Label Reserve', place:'La Factoría', tone:'t3'},
+    {lab:'Longest name, no place', who:'sam.ortega', drink:'Johnnie Walker Gold Label Reserve', tone:'t3'},
+  ];
+  let out = '';
+  cases.forEach(c => {
+    const H = headerHtml(c);
+    out += `<div class="strip" style="height:${H.h + 22}px;border-bottom:2px solid #E9E9E9"><div class="a small muted" style="left:16px;top:2px;font-weight:600;font-size:11px">${c.lab} · drink measure ${Math.round(H.drinkMeasure)} · ${H.drinkLines} line${H.drinkLines>1?'s':''}</div><div class="a" style="left:0;top:20px;width:440px;height:${H.h}px">${H.html}</div></div>`;
+  });
+  return out;
+}
+
+/* ===================================================================== */
+/* 4. The place page: ScreenTopBar md (52), head pt 12: name title,      */
+/*    meta small muted mt 4, count mt 4, map 2:1 mt 16, Open in Apple    */
+/*    Maps (secondary sm) mt 12; section title mt 32 mb 12; grid; footer.*/
+/* ===================================================================== */
+const PLACE = {name:'La Factoría', apple:'Bar · Calle San Sebastián 148, San Juan, 00901', count:'12 different drinks, posted by 9 people'};
+const PDRINKS = [['negroni','Negroni'],['old-fashioned','Old Fashioned'],['daiquiri','Daiquiri'],['paloma','Paloma'],['last-word','Last Word'],['espresso-martini','Espresso Martini'],['mai-tai','Mai Tai'],['french-75','French 75'],['corpse-reviver-no-2','Corpse Reviver No. 2'],['sazerac','Sazerac'],['mojito','Mojito'],['margarita','Margarita']];
+function placePage(o={}) {
+  // 0.5 rework: the title is the newest label; the map and Apple's line (Apple's own name only when it
+  // differs from the label, the kind, the address) appear only once Apple answers (o.offline: they never do).
+  let s = statusBar();
+  s += `<div class="a" style="left:0;top:62px;width:440px;height:52px;background:#fff;z-index:20;${o.scrolled ? 'border-bottom:1px solid var(--line)' : ''}"></div>`;
+  s += at(14, 62+14, ic('chevronLeft', 24, 'var(--ink)'), 'z-index:21');
+  const name = o.name || PLACE.name;
+  if (o.scrolled) s += `<div class="a bs" style="left:0;top:${62+14}px;width:440px;text-align:center;z-index:21">${name}</div>`;
+  const off = o.scrolled ? 300 : 0;
+  let y = 114 + 12 - off;
+  const nameLines = tw(name, '600 28px Inter') > 392 ? 2 : 1;
+  s += at(24, y, `<div class="title" style="width:392px">${name}</div>`); y += 34 * nameLines;
+  const drinks = o.empty ? [] : PDRINKS;
+  if (drinks.length) { y += 4; s += at(24, y, `<div class="small muted tn">${PLACE.count}</div>`); y += 18; }
+  if (!o.offline) {
+    y += 16;
+    s += mapPic(24, y, 392, 196); y += 196;
+    const words = o.apple || PLACE.apple;
+    y += 8; s += at(24, y, `<div class="small muted" style="width:392px">${words}</div>`); y += 18 * (tw(words, '400 13px Inter') > 392 ? 2 : 1);
+    y += 12;
+    const kw = 14 + 16 + 8 + tw('Open in Apple Maps', '500 17px Inter') + 14;
+    s += `<div class="a" style="left:24px;top:${y}px;width:${kw}px;height:36px;background:var(--wash);border-radius:4px;display:flex;align-items:center;padding-left:14px;gap:8px">${ic('pin',16,'var(--ink)')}<span class="bm">Open in Apple Maps</span></div>`;
+    y += 36;
+  }
+  y += 32;
+  if (!drinks.length) {
+    s += at(24, y, `<span class="small muted">Nothing posted here yet.</span>`);
+  } else {
+    s += at(24, y, `<span class="bs">Drinks people have had here</span>`); y += 24 + 12;
+    const tile = (392 - 24) / 3;
+    for (let r = 0; r < drinks.length; r += 3) {
+      let rowH = 0;
+      drinks.slice(r, r+3).forEach(([id, n], i) => {
+        const x = 24 + i * (tile + 12);
+        s += photo(id, x, y, tile, tile);
+        const lines = tw(n, '700 17px Playfair') > tile ? 2 : 1;
+        s += at(x, y + tile + 8, `<div class="pf17" style="width:${tile}px">${n}</div>`);
+        rowH = Math.max(rowH, tile + 8 + 24*lines);
+      });
+      y += rowH + 12;
+    }
+    y += 24 - 12 + 12;
+    if (!o.offline) s += `<div class="a small muted" style="left:24px;top:${y}px;width:392px;text-align:center">Place details from Apple Maps</div>`;
+  }
+  return `<div class="phone">${s}${homeInd()}</div>`;
+}
+/* ActionSheet (BottomSheet fade, scrim 0.36): panel radius 12, gutter 24, grabber pt 8 pb 16, header small muted mb 8, actions 56 body; pb insets 34 + 16. */
+function mapsSheet(name) {
+  const ph = 29 + 18 + 8 + 56 + 56 + 34 + 16;
+  let s = `<div class="a" style="left:0;top:0;width:440px;height:956px;background:var(--scrim);z-index:60"></div>`;
+  s += `<div class="a" style="left:0;top:${956-ph}px;width:440px;height:${ph}px;background:#fff;border-radius:12px 12px 0 0;box-shadow:0 -8px 30px rgba(10,10,10,.12);z-index:61">
+    <div class="a" style="left:202px;top:8px;width:36px;height:5px;border-radius:1px;background:var(--rule)"></div>
+    <div class="a small muted" style="left:24px;top:29px">${name}</div>
+    <div class="a body" style="left:24px;top:${29+18+8+16}px">Open in Apple Maps</div>
+    <div class="a body" style="left:24px;top:${29+18+8+56+16}px">Open in Google Maps</div>
+  </div>`;
+  return s;
+}
+function postMenu(hasPlace) {
+  // Your own post's •••: Save? / Edit tags? / Tag people / Add place|Remove place / View drink (Nº) / Delete
+  const acts = [['Tag people'], [hasPlace ? 'Remove place' : 'Add place'], ['View drink', 'Nº 0127'], ['Delete', null, true]];
+  const ph = 29 + 18 + 8 + acts.reduce((h, a) => h + (a[1] ? 56 + 4 : 56), 0) + 34 + 16;
+  let s = `<div class="a" style="left:0;top:0;width:440px;height:956px;background:var(--scrim);z-index:60"></div>`;
+  let inner = `<div class="a" style="left:202px;top:8px;width:36px;height:5px;border-radius:1px;background:var(--rule)"></div><div class="a small muted" style="left:24px;top:29px">nico.pours, 2 hours ago</div>`;
+  let y = 29 + 18 + 8;
+  acts.forEach(([l, d, del]) => {
+    const h = d ? 60 : 56;
+    inner += `<div class="a" style="left:24px;top:${y + (h - (d ? 42 : 24))/2}px"><div class="${del ? 'bs' : 'body'}" style="${del ? 'text-decoration:underline' : ''}">${l}</div>${d ? `<div class="small muted">${d}</div>` : ''}</div>`;
+    y += h;
+  });
+  s += `<div class="a" style="left:0;top:${956-ph}px;width:440px;height:${ph}px;background:#fff;border-radius:12px 12px 0 0;z-index:61">${inner}</div>`;
+  return `<div class="phone">${statusBar()}${post({who:'nico.pours', drink:'Negroni', place: hasPlace ? 'La Factoría' : null, img:'negroni', tone:'t3', caption:'Friday.'}).replace('class="strip"', 'class="a" style="top:62px;left:0;width:440px;height:900px;overflow:hidden"')}${s}${homeInd()}</div>`;
+}
+
+/* ===================================================================== */
+/* 5. The drink page's foot: Friends who logged it (rows 44, face 32),   */
+/*    then Where people have had it (section mt 32, gap 12; rows 56: pin  */
+/*    20 muted, name body + small muted meta, chevron 18), "Show 2 more" */
+/*    (text sm, ml -12), the remove-from-Dex words, the pinned post bar. */
+/* ===================================================================== */
+function drinkFoot(o={}) {
+  let s = statusBar();
+  s += `<div class="a" style="left:0;top:62px;width:440px;height:52px;background:#fff;z-index:20;border-bottom:1px solid var(--line)"></div>`;
+  s += at(14, 62+14, ic('chevronLeft', 24, 'var(--ink)'), 'z-index:21');
+  s += `<div class="a pf17" style="left:0;top:${62+14}px;width:440px;text-align:center;z-index:21">Negroni</div>`;
+  let y = 130;
+  // Origin story tail (prose)
+  s += at(24, y, `<div class="bs">Origin story</div>`); y += 24 + 12;
+  s += at(24, y, `<div class="body" style="width:392px">Count Camillo Negroni asked for his Americano stronger, with gin in place of the soda, at Caffè Casoni in Florence around 1919. The orange peel marked it as his.</div>`); y += 24 * 4;
+  // Friends who logged it
+  y += 32; s += at(24, y, `<div class="bs">Friends who logged it</div>`); y += 24 + 12;
+  [['ana','t2'],['leo','t1']].forEach(([u, t]) => {
+    s += av(24, y+6, 32, t, u); s += at(68, y+10, `<span class="body">${u}</span>`); s += at(398, y+13, ic('chevronRight',18,'var(--muted)'));
+    y += 44 + 12;
+  });
+  y -= 12;
+  // Where people have had it
+  y += 32; s += at(24, y, `<div class="bs">Where people have had it</div>`); y += 24 + 12;
+  // 0.5 rework: WherePeopleHadIt's whoLine; server order (followed first, then most recent); no area, no distance.
+  const rows = o.rows || [
+    {n:'La Factoría', m:'3 people, including someone you follow'},
+    {n:'El Batey', m:'Someone you follow'},
+    {n:'Hotel El Convento', m:'2 people'},
+  ];
+  rows.forEach((r, i) => {
+    s += at(24, y+18, ic('pin', 20, 'var(--muted)'));
+    s += at(56, y+7, `<div class="body ell" style="width:${392-32-12-18}px">${r.n}</div><div class="small muted">${r.m}</div>`);
+    s += at(398, y+19, ic('chevronRight', 18, 'var(--muted)'));
+    y += 56; // the rows sit in one inner View: no section gap between them
+  });
+  if (o.more !== 0) { y += 12; s += `<div class="a" style="left:16px;top:${y}px;height:36px;padding:0 8px;display:flex;align-items:center"><span class="bm">Show ${o.more ?? 2} more</span></div>`; y += 36; }
+  // Remove from Dex words at the foot
+  y += 48; s += `<div class="a" style="left:0;top:${y}px;width:440px;text-align:center"><span class="bs" style="text-decoration:underline">Remove from your Dex</span></div>`;
+  // Pinned post bar: 74, rule over it, accent key "Post Negroni again"
+  const bt = 956 - 74 - 34 + 8;
+  s += `<div class="a" style="left:0;top:${bt}px;width:440px;height:${956-bt}px;background:#fff;border-top:1px solid var(--line);z-index:20"></div>`;
+  s += `<div class="a" style="left:24px;top:${bt+11}px;width:392px;height:52px;background:var(--acc);border-radius:4px;display:flex;align-items:center;justify-content:center;z-index:21"><span class="bm" style="color:#fff">Post Negroni again</span></div>`;
+  return `<div class="phone">${s}${homeInd()}</div>`;
+}
+
+/* ===================================================================== */
+/* Audit: how many catalogue names wrap on the header's second line.     */
+/* ===================================================================== */
+function audit() {
+  const atW = tw(' at ', '400 13px Inter');
+  const res = {};
+  for (const [lab, scale] of [['default', 1], ['dynamic type 1.3 cap', 1.3]]) {
+    const sz = 13 * scale;
+    const atS = atW * scale;
+    const share = 48; // v4.8 final: a long place only ever keeps its 48pt floor beside a long drink
+    const noPlace = NAMES.filter(n => tw(n, `700 ${sz}px Playfair`) > MEASURE).length;
+    const withPlace = NAMES.filter(n => tw(n, `700 ${sz}px Playfair`) > MEASURE - atS - share).length;
+    res[lab] = {noPlace, withPlace, examples: NAMES.filter(n => tw(n, `700 ${sz}px Playfair`) > MEASURE - atS - share && tw(n, `700 ${sz}px Playfair`) <= MEASURE).slice(0, 8)};
+  }
+  return `<pre id="audit" style="font:12px/16px monospace;padding:12px;white-space:pre-wrap;width:440px">${JSON.stringify(res, null, 1)}</pre>`;
+}
+
+const FRAMES = {
+  'compose-empty': () => compose(null),
+  'compose-rest': () => compose(null, {scroll:0}),
+  'compose-chosen': () => compose('La Factoría', {tags:'ana and leo'}),
+  'compose-long': () => compose('The Dead Rabbit Grocery and Grog, Financial District'),
+  'postsheet-chosen': () => postSheet('La Factoría'),
+  'search-empty': () => searchSheet({focused:true, block:'undetermined', keyboard:true}),
+  'search-searching': () => searchSheet({focused:true, query:'la fac', hold:true, keyboard:true}),
+  'search-results': () => searchSheet({focused:true, query:'la fac', rows:SUGG, keyboard:true}),
+  'search-results-nokb': () => searchSheet({focused:false, query:'la fac', rows:SUGG.map((r,i)=>i===0?{...r, check:true}:r)}),
+  'search-picking': () => searchSheet({focused:false, query:'la fac', rows:SUGG.map((r,i)=>i===0?{...r, spin:true}:r)}),
+  'search-near': () => searchSheet({focused:false, block:'near', rows:NEAR}),
+  'search-denied': () => searchSheet({focused:true, block:'denied', keyboard:true}),
+  'search-nomatch': () => searchSheet({focused:true, query:'zzqx', noMatch:true, keyboard:true}),
+  'search-nottaggable': () => searchSheet({focused:false, query:'la fac', rows:SUGG, notice:"This place can't be tagged. Pick a bar, restaurant or similar place."}),
+  'search-failed': () => searchSheet({focused:false, query:'la fac', notice:"Couldn't search places. Check your connection and try again.", noticeAction:'Try again'}),
+  'feed-post': () => post({who:'maya.pours', drink:'Negroni', place:'La Factoría', img:'negroni', tone:'t1', caption:'Third one this year here.'}),
+  'feed-gallery': () => post({who:'maya.pours', with:'ana and leo', drink:'Paloma', place:'El Batey', img:'paloma', tone:'t1', gallery:'1/2', caption:'Sunday.'}),
+  'headers': () => headers(),
+  'place-page': () => placePage(),
+  'place-scrolled': () => placePage({scrolled:true}),
+  'place-empty': () => placePage({empty:true}),
+  'search-confirm': () => confirmStep(),
+  'search-confirm-saving': () => confirmStep({saving:true}),
+  'search-confirm-edited': () => confirmStep({label:'La Factoría, back room'}),
+  'search-confirm-refused': () => confirmStep({label:'', labelError:'Give the place a name.'}),
+  'place-renamed': () => placePage({name:'The back room', apple:'La Factoría · Bar · Calle San Sebastián 148, San Juan, 00901'}),
+  'place-offline': () => placePage({offline:true}),
+  'post-menu-add': () => postMenu(false),
+  'post-menu-remove': () => postMenu(true),
+  'drink-where': () => drinkFoot(),
+  'audit': () => audit(),
+};
+const want = location.hash.slice(1) || 'place-page';
+/* Measure only once the faces are in: canvas widths before then are the fallback's. */
+Promise.all(['400 13px Inter','500 13px Inter','600 13px Inter','700 13px Playfair'].map(f => document.fonts.load(f)))
+  .finally(() => { document.getElementById('root').innerHTML = FRAMES[want](); document.title = 'ready'; });
+</script>
+</body>
+</html>

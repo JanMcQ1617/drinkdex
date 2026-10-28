@@ -30,10 +30,14 @@ import type { Post } from '@/types';
 /* the time. The drink in the header opens the drink page. The bar's    */
 /* 1pt rule shows once the post runs under it.                          */
 /*                                                                      */
-/* Tags (v4.3) are the one part of the post this page fetches again on  */
-/* its own: the store does not patch this copy, so when tags change     */
-/* anywhere (the ••• Tag people, Remove me) its tagsVersion moves and   */
-/* the post is read again quietly, the card's "with" line with it.      */
+/* Tags (v4.3) and places (v4.8) are the parts of the post this page    */
+/* fetches again on its own: the store does not patch this copy, so     */
+/* when tags change anywhere (the ••• Tag people, Remove me) its        */
+/* tagsVersion moves, and when a place changes (the ••• Add place or    */
+/* Remove place) its placesVersion moves, and the post is read again    */
+/* quietly, the card's "with" line and "at" line with it. The card      */
+/* already shows its own change at once; this keeps the page's copy of  */
+/* the post from putting the old place back on its next render.        */
 /*                                                                      */
 /* "Unavailable" is one state for three causes the screen cannot tell   */
 /* apart and should not try to: the post was deleted, you are blocked   */
@@ -99,6 +103,7 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
   const ownRow = useAuth((s) => s.profile);
   const dropAuthor = useSocial((s) => s.dropAuthor);
   const tagsVersion = useSocial((s) => s.tagsVersion);
+  const placesVersion = useSocial((s) => s.placesVersion);
   const [scrolled, onScroll] = useScrolledPast();
 
   const valid = POST_ID.test(id);
@@ -122,14 +127,15 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
   }, [id, myId, valid, attempt]);
 
   /*
-   * A tag change since this page opened: the post again, quietly. Only a
-   * post that comes back replaces the one shown; a failure or a post now
-   * missing leaves it, and the card's own overlay already shows the
-   * change, or has put it back when the write failed.
+   * A tag or place change since this page opened: the post again,
+   * quietly. Only a post that comes back replaces the one shown; a failure
+   * or a post now missing leaves it, and the card's own overlay already
+   * shows the change, or has put it back when the write failed.
    */
   const [tagsVersionOnOpen] = useState(tagsVersion);
+  const [placesVersionOnOpen] = useState(placesVersion);
   useEffect(() => {
-    if (!valid || tagsVersion === tagsVersionOnOpen) return;
+    if (!valid || (tagsVersion === tagsVersionOnOpen && placesVersion === placesVersionOnOpen)) return;
     let alive = true;
     fetchPost(id, myId).then(
       (post) => {
@@ -140,7 +146,7 @@ function PostBody({ myId, id, onBack }: { myId: string; id: string; onBack: () =
     return () => {
       alive = false;
     };
-  }, [id, myId, valid, tagsVersion, tagsVersionOnOpen]);
+  }, [id, myId, valid, tagsVersion, tagsVersionOnOpen, placesVersion, placesVersionOnOpen]);
 
   const status = valid ? (loaded?.status ?? 'loading') : 'missing';
 

@@ -245,7 +245,10 @@ function diff(label, mine, theirs) {
  * photo weight then moved A, B, D and E, the reference and the port alike.
  * They are pinned to the reference's output from then on, so a change to
  * either still shows here; a photo import that moves them needs them read
- * again from node specs/v4.2/tools/recommend.mjs.
+ * again from node specs/v4.2/tools/recommend.mjs. 9554e08 (24 Oct 2026)
+ * photographed Weng Weng, which then outscores Enzoni for run A's fourth
+ * pick (0.86, photo weight, Party, "Because you like bourbon"); read
+ * again from the reference on 26 Oct 2026.
  */
 const RUNS = {
   A: {
@@ -254,7 +257,7 @@ const RUNS = {
       flavours: ['bitter', 'strong'], home: 'sometimes',
       bar: ['gin', 'bourbon', 'lime', 'lemon', 'sugar-syrup', 'soda-water', 'campari', 'sweet-vermouth'],
     },
-    ids: ['boulevardier', 'left-hand', 'negroni', 'enzoni', 'bottled-in-bond-bourbon', 'contemporary-gin'],
+    ids: ['boulevardier', 'left-hand', 'negroni', 'weng-weng', 'bottled-in-bond-bourbon', 'contemporary-gin'],
     matching: 574,
   },
   B: {

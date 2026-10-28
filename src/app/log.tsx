@@ -27,6 +27,8 @@ import { AddNewRow, ResultRow } from '@/components/log/ResultRow';
 import { WithScrollEdges } from '@/components/log/scrollEdges';
 import { TagPeopleRow } from '@/components/log/TagPeopleRow';
 import { MusicPicker } from '@/components/MusicPicker';
+import { PlaceRow } from '@/components/places/PlaceRow';
+import { PlaceSearchSheet } from '@/components/places/PlaceSearchSheet';
 import { SongArtwork } from '@/components/songs';
 import { TagPeopleSheet } from '@/components/tags/TagPeopleSheet';
 import { announce, Button, Field, haptic, SearchField } from '@/components/ui';
@@ -37,6 +39,8 @@ import { styleLabel } from '@/lib/drinkLabels';
 import { fold, MAX_RESULTS, rank, rankCustom, SEARCH_INDEX } from '@/lib/drinkSearch';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import { STORY_MUSIC } from '@/lib/music';
+import { type PlaceRef, placesSupported } from '@/lib/places';
+import { placeSearchAvailable } from '@/lib/placeSearch';
 import {
   customPhotoUri,
   NOTE_MAX,
@@ -105,6 +109,19 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /* Dex only" keeps the drink and drops them, with no confirm, since not */
 /* posting is the decision. A re-post starts from the post's own tags,  */
 /* and Post writes the difference.                                      */
+/*                                                                      */
+/* PLACE (v4.8, specs/v4.8-places 3.1). Under Tag people (or under the  */
+/* caption when Tag people is not offered), one optional row tags the   */
+/* bar or restaurant where it was had, found with Apple Maps on the     */
+/* phone (PlaceSearchSheet). Only where Post exists, with a photo, and  */
+/* where places work at all: migration 026 on the server, the           */
+/* place-search module in this build, and iOS 18 or later (an Apple     */
+/* Place ID is all the server keeps of a venue, spec §0.5). The tag is  */
+/* that id and the poster's own name for the place, prefilled from      */
+/* Apple and editable in the search's last step. Like the song and the  */
+/* tags it goes with Post only, and "Save to Dex only" drops it with no */
+/* confirm. It belongs to this photo, not the post (P5), so a re-post   */
+/* starts with none, and a change of drink clears it.                   */
 /* ==================================================================== */
 
 /** Story music is on: "Add music" and its picker exist at all. */
@@ -281,6 +298,14 @@ export default function PostDrinkScreen() {
     prev: UserProfile[];
   } | null>(null);
   const [pickingTags, setPickingTags] = useState(false);
+  /*
+   * Where this photo was had (v4.8), kept with the drink it was picked
+   * for, so choosing another drink starts with none rather than carrying
+   * a bar across. Nothing is written until Post, which sends the Place ID
+   * and the label with the photo.
+   */
+  const [placePick, setPlacePick] = useState<{ drinkId: string; place: PlaceRef } | null>(null);
+  const [pickingPlace, setPickingPlace] = useState(false);
   /*
    * Whether the server has tags, as state: lib/social learns it from the
    * first read of post_tags, which may land after this window opened, and
@@ -510,6 +535,15 @@ export default function PostDrinkScreen() {
   const tagsChanged = offerTags && !samePeople(tagged, taggedBefore);
 
   /*
+   * Add place shows where Post can send it and there is a photo to tag
+   * (§3.1). placesSupported() turns off for the session once the server
+   * says 026 is not there, so it is read at render, as the row's own
+   * condition, rather than kept in state.
+   */
+  const offerPlace = posts && photoUri != null && placesSupported() && placeSearchAvailable();
+  const place = drinkId && placePick?.drinkId === drinkId ? placePick.place : null;
+
+  /*
    * A re-post's starting tags: read once per drink as compose opens it.
    * The read also tells lib/social whether 024 is there, so the flag is
    * asked again once it lands.
@@ -617,7 +651,9 @@ export default function PostDrinkScreen() {
           const tags = tagsChanged
             ? { next: tagged.map((p) => p.id), prev: taggedBefore.map((p) => p.id) }
             : undefined;
-          void addPost(myId, drink.id, trimmedNote, uri, MUSIC_ON ? song : null, tags).then(reportPost);
+          // The place too, picked for this drink, and only while the row is offered.
+          const placeToSend = offerPlace ? place : null;
+          void addPost(myId, drink.id, trimmedNote, uri, MUSIC_ON ? song : null, tags, placeToSend).then(reportPost);
         } else if (relog && myId) {
           void addPhotoForDrink(myId, drink.id, uri).then(reportPostPhoto);
         }
@@ -641,6 +677,8 @@ export default function PostDrinkScreen() {
       tagsChanged,
       tagged,
       taggedBefore,
+      offerPlace,
+      place,
       unlock,
       myId,
       addPost,
@@ -658,9 +696,10 @@ export default function PostDrinkScreen() {
    * the picker's cache until it is saved. An empty window still closes on
    * the first tap of the X, and so does one that only holds the drink it
    * was opened for. A chosen song is work too, and so is a tag set that
-   * differs from where it started. The full-screen window has no swipe to
-   * close, so this catches the X and Android's back; mid-save the attempt
-   * is ignored rather than offering to discard a save already happening.
+   * differs from where it started, and so is a place picked. The
+   * full-screen window has no swipe to close, so this catches the X and
+   * Android's back; mid-save the attempt is ignored rather than offering
+   * to discard a save already happening.
    */
   const dirty =
     !saved &&
@@ -668,7 +707,8 @@ export default function PostDrinkScreen() {
       (drink != null && drink.id !== preselectId) ||
       note.trim().length > 0 ||
       song != null ||
-      tagsChanged);
+      tagsChanged ||
+      place != null);
   usePreventRemove(dirty, ({ data }) => {
     if (busy) return;
     confirmDestructive(
@@ -930,6 +970,29 @@ export default function PostDrinkScreen() {
             ) : null}
 
             {/*
+              Add place, 16 under Tag people (or the caption), before the
+              music: where it was had, and the way to the search. Not during
+              a save: save() has already read the place.
+            */}
+            {offerPlace && drinkId ? (
+              <View style={styles.tagRow}>
+                <PlaceRow
+                  place={place}
+                  disabled={!!saved}
+                  onAdd={() => {
+                    if (busy || saved) return;
+                    Keyboard.dismiss();
+                    setPickingPlace(true);
+                  }}
+                  onRemove={() => {
+                    if (busy || saved) return;
+                    setPlacePick(null);
+                  }}
+                />
+              </View>
+            ) : null}
+
+            {/*
               Music, only where Post can send it. No song: one small key. A
               song: its cover, title and artist, and Remove. Auditioning is the
               picker's, beside its Apple Music link.
@@ -1069,6 +1132,19 @@ export default function PostDrinkScreen() {
           initial={tagged}
           onDone={(picked) => setTagPick({ drinkId, people: picked, prev: taggedBefore })}
           onClose={() => setPickingTags(false)}
+        />
+      ) : null}
+
+      {/*
+        The place search hands back a Place ID and a label; nothing
+        about the post is written until Post.
+      */}
+      {offerPlace && drinkId ? (
+        <PlaceSearchSheet
+          visible={pickingPlace}
+          current={place}
+          onPick={(picked) => setPlacePick({ drinkId, place: picked })}
+          onClose={() => setPickingPlace(false)}
         />
       ) : null}
 

@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Last updated: 17 October 2026**
+**Last updated: 26 October 2026**
 
 Sipply is a drinks field guide. You collect entries, and you can share what
 you've had with people you follow. This policy describes exactly what the
@@ -184,6 +184,30 @@ way, removes the tags between you, and unblocking does not bring them
 back. Tags, and those notes, are kept with the post, and go when the post
 or either account is deleted.
 
+**Places (only if you tag one, on iOS 18 or later).** When you post a
+drink you can add the place you had it: a bar, restaurant, brewery,
+winery, distillery, café, hotel or music venue; the search only offers
+venues, never a home or a street address. Places are found with Apple
+Maps on your phone. What you type goes to Apple to find them, and if you
+allow it, so does your location, to suggest places near you; your
+location is never sent to Sipply or saved. When you tag a place, Sipply
+stores two things with that photo: Apple's identifier for the place, and
+the name you give it, which starts as the name Apple Maps shows and which
+you can change, like a caption. Sipply does not store the place's
+address, its area or its position on the map: when a place's page is
+open, your phone asks Apple Maps for them by that identifier, shows them
+with Apple's map, and keeps them only in its memory while the app is
+open. Because the identifier names one venue, a tag is still a record of
+where you were: it is the only location Sipply keeps, and the App Store
+lists it as Precise Location. Everyone signed in to Sipply can see the
+place on your post, so it shows where you were when you posted. Each
+place has a page showing the drinks people have posted there, and a
+drink's page shows the places people have had it, with how many people
+and whether someone you follow is among them; nobody you have blocked,
+or who has blocked you, is counted or shown. You can add or remove the
+place on your own posts at any time, and it goes when the photo or the
+post does.
+
 **Invite links.** When you share an invite, Sipply creates a random link
 that stops working after 30 days. Anyone who accepts it in that time
 follows you, and you follow them back, unless one of you has blocked the
@@ -191,8 +215,8 @@ other. We store the link, who made it and when, and when it stops working.
 
 **Reports and blocks.** If you report a post or an account, or block
 someone, we store that you did so. A report also keeps a copy of what it
-is about — the caption, the drink and when it was posted, and the author's
-username, display name and bio — so that it can still be reviewed if the
+is about — the caption, the drink and when it was posted, the places
+tagged on it, and the author's username, display name and bio — so that it can still be reviewed if the
 post or the account is deleted. Blocks are private — the person you
 blocked is not told.
 
@@ -296,6 +320,10 @@ phone removes them too.
 - **No analytics, no tracking, no advertising.** The app contains no
   analytics SDK, no crash-reporting service, no advertising identifier,
   and no third-party trackers of any kind.
+- **No location tracking.** Sipply never uses your location in the
+  background, never sends it to our servers and never saves it. If you
+  allow it, it is used on your phone, and by Apple Maps, only while you
+  search for a place to tag.
 - **We do not sell or share your data with anyone.**
 - **We do not track you across other apps or websites.**
 - **Nothing is posted anywhere on your behalf.** Sipply never posts to
@@ -307,8 +335,9 @@ phone removes them too.
   rank drinks, not people, and nothing is sent anywhere to make them.
   Daily ideas, if you turn them on, are chosen the same way. The
   one automatic check on what you write is a text filter: captions, bios,
-  display names, usernames, the drinks you add, tournament names and the
-  songs added to posts are checked when you save them, and a collection's
+  display names, usernames, the drinks you add, tournament names, the
+  songs added to posts and the names you give the places you tag are
+  checked when you save them, and a collection's
   name when you share it or rename it while it is shared. Text containing
   a slur or an explicit sexual term is refused. It refuses the text and
   does nothing else to your account.
@@ -332,6 +361,13 @@ part of the address that browsers never send to it.
 behalf, and runs sign-in, including phone sign-in, Sign in with Apple,
 Continue with Google and Continue with Facebook. They do not use any of it
 for their own purposes.
+
+**Apple Maps**, if you tag a place or open one: your phone sends what you
+type, and your location if you allowed it, to Apple to find places, and a
+place's identifier to Apple to show its page, under Apple's privacy
+policy. A place's page, and the step before you tag one, show Apple's map
+of the venue and its address, which your phone loads from Apple. Opening a
+place in Apple Maps hands it to that app.
 
 **Twilio**, if you sign in with your phone number, receives the number from
 our authentication provider and sends the text message with your code,
@@ -403,7 +439,9 @@ friends) is forgotten. It cannot be undone, and your username
 becomes available to someone else.
 
 A suggestion already included in a monthly email stays in that email. A
-drink already added to the Dex stays in the Dex, without your name.
+drink already added to the Dex stays in the Dex, without your name. The
+places you tagged are part of your photos, so they go with them, except
+in the copy a report about that post keeps.
 
 Your photos go first. The app deletes every one of them from storage, and
 only when none are left is the account itself deleted. If a photo cannot be
@@ -460,8 +498,8 @@ correct it, or ask us to delete it. Deletion is built into the app; for
 anything else, email us.
 
 If you are in the EEA or UK: our basis for processing is performing the
-service you asked for (your account, your posts with the songs and tags
-on them, the drinks you add, your tastes and the drinks you save, your
+service you asked for (your account, your posts with the songs, tags and
+places on them, the drinks you add, your tastes and the drinks you save, your
 collections, the tournaments you host or join, and the sign-in and
 friend finding you choose to use) and our legitimate interest in keeping
 the app safe (reports, blocks, the notes that stop someone being tagged
