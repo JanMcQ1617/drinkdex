@@ -1,8 +1,9 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
-import { PenRule } from '@/components/details/PenMarks';
+import { PenDoubleRule, PenRule } from '@/components/details/PenMarks';
 import { PEN_SEED } from '@/components/details/penPath';
+import { PressNumeral } from '@/components/details/PressMarks';
 import { Icon } from '@/components/icons';
 import { colors, layout, space, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
@@ -39,6 +40,27 @@ import { formatCount } from '@/data';
 /* to half, and a half-strength Campari rule is pink, and would say the */
 /* rule is part of the button. The target keeps its old reach with slop */
 /* under the row (BELOW_ROW).                                           */
+/*                                                                      */
+/* THE FIGURE AND THE REST HEAD (v4.9, specs/v4.9/details C.4). Jan     */
+/* picked "big outlined numbers on drink pages and Dex sections". A     */
+/* For-you head is numbered in the person's order, "01", "02", with the */
+/* press's outlined figure (details/PressMarks: Inter 600 as 1pt rings  */
+/* in colors.rule) at cap 40 on the gutter, 10 over the line            */
+/* (NUMERAL_BAND, which the Dex grid's jump estimate counts). Printed,  */
+/* never the pen's red, and never spoken: the name is the header, and   */
+/* the figure says nothing the order does not. It is the "See all"      */
+/* target's sibling, before it, as the rule is: the press dims the row, */
+/* and a dimmed figure would say it was part of the button. The 8 over  */
+/* a head after a section moves onto the figure, so a numbered head has */
+/* the air over it that any head has. Above 1.3x text it is not drawn:  */
+/* it never grows with the text, and beside words that have grown it    */
+/* would read as a stray grey shape.                                    */
+/*                                                                      */
+/* Everything else draws no figure. Its head rule is the pen's double   */
+/* rule (PenDoubleRule) in the same 7pt spacer, the upper stroke where  */
+/* the single one runs and the lower falling into the 12 under it, 8.8  */
+/* clear of the first prints: For you ends here, and the catalogue      */
+/* begins.                                                              */
 /* ==================================================================== */
 
 const LINE = 24;
@@ -58,10 +80,31 @@ const RULE_TOP = 3;
  */
 const BELOW_ROW = HEAD_RULE + space.md;
 
+/** The section figure's cap height, pt: its box's height, never scaled with Larger Text. */
+const FIGURE_CAP = 40;
+/** From the figure's baseline (its box's foot) to the head's line. */
+const FIGURE_GAP = 10;
+/**
+ * What a numbered head adds to a head's height: the figure's cap and the
+ * 10 under it. The 8 over a head after a section is not in it (it moves
+ * onto the figure). Exported for the Dex grid's jump estimate.
+ */
+export const NUMERAL_BAND = FIGURE_CAP + FIGURE_GAP;
+/** Above this text size a head draws no figure, and adds no NUMERAL_BAND. */
+export const NUMERAL_TEXT_CAP = 1.3;
+
+/**
+ * "01", "02": padded, since an unpadded 1 in outline is a thin stick, and
+ * two figures with no Nº never read as a drink's number (v4.9 J, taste 7).
+ */
+const pad2 = (n: number) => String(n).padStart(2, '0');
+
 export const SectionHead = React.memo(function SectionHead({
   label,
   all,
   first,
+  ordinal,
+  rest = false,
   onSeeAll,
 }: {
   label: string;
@@ -69,19 +112,37 @@ export const SectionHead = React.memo(function SectionHead({
   all: number | null;
   /** The first head on the page: no extra air over it. */
   first: boolean;
+  /** A For-you section's place in the order, from 1: the press's figure over the head (v4.9). */
+  ordinal?: number;
+  /** Everything else's head: the pen's double rule under it (v4.9). */
+  rest?: boolean;
   onSeeAll?: () => void;
 }) {
-  const { width } = useWindowDimensions();
+  const { width, fontScale } = useWindowDimensions();
   // One cached path per screen width, the same for every head, so the grid's scroll pays nothing for it.
   const rule = (
     <View pointerEvents="none" style={styles.ruleSpace}>
-      <PenRule length={width - 2 * layout.gutter} seed={PEN_SEED.sectionHead} style={styles.rule} />
+      {rest ? (
+        <PenDoubleRule length={width - 2 * layout.gutter} seed={PEN_SEED.restHead} style={styles.rule} />
+      ) : (
+        <PenRule length={width - 2 * layout.gutter} seed={PEN_SEED.sectionHead} style={styles.rule} />
+      )}
     </View>
   );
+  // One cached path per figure ("01" at cap 40), measured never: a head is a list cell.
+  const figure =
+    ordinal !== undefined && fontScale <= NUMERAL_TEXT_CAP ? (
+      <View style={[styles.figure, !first && styles.after]}>
+        <PressNumeral text={pad2(ordinal)} cap={FIGURE_CAP} />
+      </View>
+    ) : null;
+  // The 8 over a head after a section: on the figure when there is one, else on the row.
+  const air = !first && !figure;
   if (all === null || !onSeeAll) {
     return (
       <View style={styles.head}>
-        <View style={[styles.row, !first && styles.after]}>
+        {figure}
+        <View style={[styles.row, air && styles.after]}>
           <View style={styles.line}>
             <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.name]}>
               {label}
@@ -96,12 +157,13 @@ export const SectionHead = React.memo(function SectionHead({
   const words = `See all ${formatCount(all)}`;
   return (
     <View style={styles.head}>
-      {/* The rule is the Pressable's sibling, not its child: the press dims the row, and a dimmed rule would be pink. */}
+      {/* The figure and the rule are the Pressable's siblings: the press dims the row, and a dimmed rule is pink. */}
+      {figure}
       <Pressable
         onPress={onSeeAll}
         accessible={false}
         hitSlop={{ top: SLOP, bottom: BELOW_ROW }}
-        style={({ pressed }) => [styles.row, !first && styles.after, pressed && styles.pressed]}>
+        style={({ pressed }) => [styles.row, air && styles.after, pressed && styles.pressed]}>
         <View style={styles.line}>
           <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink, styles.name]}>
             {label}
@@ -131,6 +193,8 @@ const styles = StyleSheet.create({
   head: { paddingBottom: space.md },
   row: { paddingHorizontal: layout.gutter },
   after: { paddingTop: space.sm },
+  /* A numbered head's figure on the gutter, its foot 10 over the line (NUMERAL_BAND with its cap). */
+  figure: { paddingHorizontal: layout.gutter, paddingBottom: FIGURE_GAP, alignItems: 'flex-start' },
   line: {
     minHeight: LINE,
     flexDirection: 'row',

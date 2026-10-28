@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { type NativeScrollEvent, type NativeSyntheticEvent, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Paper } from '@/components/details/Paper';
 import {
   CompositionSection,
   DexSinceRow,
@@ -13,6 +14,7 @@ import {
   PinnedPostBar,
   pinnedBarEstimate,
   ServeSection,
+  serveRows,
   SpecSection,
   TastesOf,
   useMoreBelow,
@@ -47,6 +49,12 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*   - The pinned key is ink, not the accent (v4.4): the + window it    */
 /*     opens can only save a drink someone added, never post it, and    */
 /*     the accent says post.                                            */
+/*   - The first how-section opens with the pen's double rule and no    */
+/*     figure (v4.9 C.5): the press's figure is a Dex number, and this  */
+/*     drink has none.                                                  */
+/*                                                                      */
+/* The page and its bar lie on the paper's grain (v4.9 A.5), as the     */
+/* drink page's do; loading and the unknown drink stay bare.            */
 /*                                                                      */
 /* The store is read with own keys only, so /custom/constructor is      */
 /* nothing; until the store has loaded the page is a Hold, never a bare */
@@ -85,11 +93,13 @@ export default function CustomDrinkScreen() {
   const pour = live ? livePour : gone?.pour;
 
   const back = () => router.back();
-  const bar = (title: string) => (
+  // `paper` on the page's own bar only (v4.9 A.5): loading and the unknown drink stay as they were.
+  const bar = (title: string, paper = false) => (
     <ScreenTopBar
       title={title}
       titleVisible={false}
       showRule={scrolled}
+      paper={paper}
       left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
     />
   );
@@ -160,17 +170,22 @@ export default function CustomDrinkScreen() {
     );
 
   const serve = drawn.serve;
-  const showServe =
-    !cocktail &&
-    serve != null &&
-    Boolean(serve.temp || serve.how || serve.glass || (serve.pair && serve.pair.length > 0));
+  /*
+   * Whether the serve guide draws a row (DrinkPanels' serveRows): its
+   * glass is this drink's own glassware, which the facts already show, so
+   * a guide with only a glass draws nothing, and the composition is then
+   * the first how-section, the one the lead opens.
+   */
+  const showServe = !cocktail && serve != null && serveRows(serve, drawn).length > 0;
   const composition = drawn.composition;
   const showComposition = !cocktail && composition != null && composition.components.length > 0;
 
   return (
     <View style={styles.screen}>
+      {/* The paper's grain under the page (v4.9 A.5): outside the scroll, so the page moves over a fixed sheet. */}
+      <Paper />
       {/* No visible title: the name under the print is the page's title. The bar still speaks it. */}
-      {bar(drink.name)}
+      {bar(drink.name, true)}
 
       <ScrollView
         style={styles.scroll}
@@ -209,9 +224,14 @@ export default function CustomDrinkScreen() {
         {pour ? <DexSinceRow drink={drawn} record={pour} /> : null}
         <TastesOf notes={drink.tastingNotes} />
 
-        {cocktail && drawn.recipe && drink.ingredients.length > 0 ? <SpecSection recipe={drawn.recipe} /> : null}
-        {showServe && serve ? <ServeSection serve={serve} drink={drawn} /> : null}
-        {showComposition && composition ? <CompositionSection composition={composition} /> : null}
+        {/* The first how-section drawn opens with the pen's double rule, and no figure: it has no number (v4.9 C.5). */}
+        {cocktail && drawn.recipe && drink.ingredients.length > 0 ? (
+          <SpecSection recipe={drawn.recipe} number={null} />
+        ) : null}
+        {showServe && serve ? <ServeSection serve={serve} drink={drawn} number={null} /> : null}
+        {showComposition && composition ? (
+          <CompositionSection composition={composition} number={showServe ? undefined : null} />
+        ) : null}
 
         <FieldNotes description={drink.description} />
         {/* "The story" on the add-a-drink form is the drink's funFact, so it shows here. */}

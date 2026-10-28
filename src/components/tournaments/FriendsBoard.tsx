@@ -5,7 +5,10 @@ import { FlatList, Pressable, RefreshControl, ScrollView, StyleSheet, Text, useW
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Print } from '@/components/cabinet';
-import { PenRule } from '@/components/details/PenMarks';
+import { EndMark, PenCrown } from '@/components/details/DoodleMarks';
+import { DOUBLE } from '@/components/details/framePath';
+import { Paper } from '@/components/details/Paper';
+import { PenDoubleRule } from '@/components/details/PenMarks';
 import { PEN, PEN_SEED } from '@/components/details/penPath';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
@@ -67,6 +70,30 @@ import type { FriendStanding, TournamentSummary } from '@/types';
 /* both halves are drawn: with one there is nothing to separate. The    */
 /* tab's other mark is the swash under its title (ScreenTopBar).        */
 /*                                                                      */
+/* v4.9 (Jan, 28 Oct 2026: "it still feels too empty"; specs/v4.9/      */
+/* details/spec.md C.6). The tab landed on the board, so it changes     */
+/* little, and every change is ornament, never information:             */
+/*                                                                      */
+/*   The rule is DOUBLED, the pen ruling twice by hand, the lower its   */
+/*   own stroke 3.2 under the upper: a half closes the way the drink    */
+/*   page's spec card and Home's stories do.                            */
+/*                                                                      */
+/*   A pen CROWN perches on the leader's face, off its top right, 0.5   */
+/*   above it, anchored to the Avatar's own box so the rank column's    */
+/*   growth with Larger Text never moves it. Ties crown each leader     */
+/*   (they share the place), nobody at nought is crowned, and the "1"   */
+/*   is still drawn and still spoken: the crown repeats a place that    */
+/*   is shown, the one mark that follows data, and only because Jan     */
+/*   asked for it. A row says what it said before.                      */
+/*                                                                      */
+/*   The cards are TICKET STUBS (TournamentCard), and the list's end    */
+/*   is SIGNED: the shaker and the swash under it, right-aligned on the */
+/*   far gutter, once there is someone on the board besides you. Never  */
+/*   beside the "Find people to follow" line, which is a link.          */
+/*                                                                      */
+/*   The page is on the PAPER (details/Paper), and so is its bar; the   */
+/*   "not here yet" gate stays bare, as every feature gate does.        */
+/*                                                                      */
 /* WHEN THE SERVER IS BEHIND. Without 025 the Friends half (its head,   */
 /* rows, foot sentence and the rule) is left out with no error; without */
 /* 020 the tournaments half is. Neither: the full list's own "not here  */
@@ -101,6 +128,12 @@ const PRINTS = 3;
 const BLEED = space.sm;
 /** The board rule's band: its centreline is the band's middle. */
 const BAND = space.xl;
+/**
+ * The doubled rule's box in the band (v4.9 C.6): the middle of its two
+ * centrelines (3.4 and 6.6 down its 10pt box) on the band's middle, so
+ * its top is 7 and each stroke keeps 10.4 to the band's edge.
+ */
+const BAND_RULE_TOP = BAND / 2 - (PEN.rule.mid + DOUBLE.gap / 2);
 const CHEVRON = 16;
 
 /** SectionHeader's group size pads 16 each side; this puts its words at x 24. */
@@ -278,14 +311,19 @@ export function FriendsBoard({ myId }: { myId: string }) {
   const fPending = fSupported && !fLoaded && rows.length === 0;
   const firstVisit = tPending || fPending;
 
-  // A tab root: the title set left (its swash is ScreenTopBar's own), nothing on the right.
-  const top = <ScreenTopBar size="lg" title="Tournaments" showRule={scrolled} />;
+  /*
+   * A tab root: the title set left (its swash is ScreenTopBar's own),
+   * nothing on the right. The bar lies on the paper only over the page
+   * that has it (v4.9 A.5), so the two meet as one sheet; the gate below
+   * keeps the bare page it had, and so its bar.
+   */
+  const bar = (paper: boolean) => <ScreenTopBar size="lg" title="Tournaments" showRule={scrolled} paper={paper} />;
 
   /* Both migrations missing: the full list's own words, and nothing else. */
   if (!tSupported && !fSupported) {
     return (
       <View style={styles.screen}>
-        {top}
+        {bar(false)}
         <View style={styles.center}>
           <EmptyState
             icon="trophy"
@@ -415,16 +453,17 @@ export function FriendsBoard({ myId }: { myId: string }) {
       ) : null}
 
       {/*
-        The board rule: a 24pt band that ends the tournaments half, the pen's
-        hairline on its middle (spec 2.4). 12 clear of the text above and of
-        the Friends head below. A static path, cached by its length.
+        The board rule: a 24pt band that ends the tournaments half (spec
+        2.4), the pen's two strokes centred on its middle (v4.9 C.6), each
+        10.4 clear of the text above or the Friends head below. A static
+        path, one Path, cached by its length.
       */}
       {bandShown ? (
         <View style={styles.band} accessible={false} importantForAccessibility="no-hide-descendants">
-          <PenRule
+          <PenDoubleRule
             length={fullCard}
             seed={PEN_SEED.board}
-            style={{ position: 'absolute', left: 0, top: BAND / 2 - PEN.rule.mid }}
+            style={{ position: 'absolute', left: 0, top: BAND_RULE_TOP }}
           />
         </View>
       ) : null}
@@ -455,9 +494,18 @@ export function FriendsBoard({ myId }: { myId: string }) {
 
   /* You follow nobody: the table is your row alone, and a way to find people under it. */
   const followsNobody = friendsShown && fLoaded && !fFailed && rows.every((r) => r.userId === myId);
+  /*
+   * The list's end is signed (v4.9 C.10) once the board holds someone
+   * besides you, which also means you follow somebody, so the mark never
+   * sits beside the "Find people to follow" link. It waits for the Hold
+   * with the rules under it, so the two arrive together.
+   */
+  const signed = friendsShown && !firstVisit && rows.some((r) => r.userId !== myId);
 
   const footer = (
     <View>
+      {/* The shaker and the swash under it, 18 under the last row, its box's right edge on the far gutter. */}
+      {signed ? <EndMark name="shaker" style={styles.endMark} /> : null}
       {followsNobody ? (
         <View style={styles.lonely}>
           <Text style={styles.footText}>Follow people to see how many different drinks each has posted.</Text>
@@ -483,7 +531,9 @@ export function FriendsBoard({ myId }: { myId: string }) {
 
   return (
     <View style={styles.screen}>
-      {top}
+      {/* The paper first, under everything: fixed while the rows scroll over it. */}
+      <Paper />
+      {bar(true)}
       <FlatList
         ref={listRef}
         data={friendsShown ? rows : []}
@@ -572,7 +622,15 @@ const FriendRow = React.memo(function FriendRow({
         minimumFontScale={0.75}>
         {ranked ? row.place : ''}
       </Text>
-      <Avatar name={row.displayName} accent={row.accent} size={FACE} avatarPath={row.avatarPath} />
+      {/*
+       * The face in a plain View of its own box, so the crown (v4.9 C.6)
+       * is anchored to the face and not to the rank column, which grows
+       * with Larger Text. Every leader of a tie is crowned; nobody at 0.
+       */}
+      <View>
+        <Avatar name={row.displayName} accent={row.accent} size={FACE} avatarPath={row.avatarPath} />
+        {ranked && row.place === 1 ? <PenCrown face={FACE} /> : null}
+      </View>
       <View style={styles.who}>
         {/* The username, not the display name: what people know each other by here, and what the cards show. */}
         <Text numberOfLines={1} style={styles.username}>
@@ -694,6 +752,8 @@ const styles = StyleSheet.create({
   /* 2pt corners, like every small print; the edge is Print's own photoEdge inset. */
   print: { borderRadius: radius.badge },
 
+  /* 18 under the last row, on the far gutter; 9 more under it, then the rules' own 24. */
+  endMark: { marginTop: 18, marginRight: layout.gutter, marginBottom: 9 },
   lonely: { marginTop: space.lg, marginHorizontal: layout.gutter },
   footText: { ...textRole.small, color: colors.textMuted },
   findLine: { minHeight: layout.hit, flexDirection: 'row', alignItems: 'center', gap: space.xs },

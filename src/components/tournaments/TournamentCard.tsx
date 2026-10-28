@@ -1,9 +1,10 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native';
 
+import { TicketCard } from '@/components/details/PressMarks';
 import { Icon } from '@/components/icons';
 import { dayWord, differentDrinks, lastMoment, ordinal, peopleCount } from '@/components/tournaments/TournamentRow';
-import { Avatar, Card } from '@/components/ui';
+import { Avatar } from '@/components/ui';
 import { colors, fonts, space, tabular, textRole } from '@/constants/theme';
 import type { TournamentBoard, TournamentSummary } from '@/types';
 
@@ -12,8 +13,20 @@ import type { TournamentBoard, TournamentSummary } from '@/types';
 /* (specs/v4.7/spec.md 2.3)                                             */
 /*                                                                      */
 /* Its name, when it ends and how many are in it, and the top three.    */
-/* The cards are the tab's only panels (ui.Card: wash, 8pt corner, no   */
+/* The cards are the tab's only panels (the wash, 8pt corners, no       */
 /* edge); everything else there sits on the page.                       */
+/*                                                                      */
+/* A TICKET STUB (v4.9, specs/v4.9/details/spec.md C.6). Jan's "a       */
+/* torn-ticket edge on cards", built as the press would cut it, not as  */
+/* torn paper (a ragged edge reads as craft): the card's own wash drawn */
+/* as one silhouette with a half-round die-cut notch in each side,      */
+/* centred in the 10pt gap between the head and the standings, and a    */
+/* perforation from notch to notch in `rule`, all greys (PressMarks'    */
+/* TicketCard). The card measures its head, so Larger Text moves the    */
+/* notches with the gap; until it has measured it is the plain wash     */
+/* card it was, so no frame is unfilled. It is still the one button,    */
+/* pressed it still goes `press`, and nothing red sits on it: the tear  */
+/* line is ornament, never a place to tear or a state.                  */
 /*                                                                      */
 /* ALWAYS ROOM FOR THREE LINES. 16 + name 24 + meta 18 + 10 + three     */
 /* 26pt lines + 12 = 158, whether or not the standings have arrived, so */
@@ -86,18 +99,25 @@ export const TournamentCard = React.memo(function TournamentCard({
       accessibilityHint="Opens the tournament"
       style={style}>
       {({ pressed }) => (
-        <Card style={[styles.card, pressed && styles.pressed]}>
-          <View style={styles.nameRow}>
-            {/* Inter, never Playfair: a tournament's name is not a drink's. */}
-            <Text numberOfLines={1} style={styles.name}>
-              {t.name}
-            </Text>
-            <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
-          </View>
-          <Text numberOfLines={1} style={styles.meta}>
-            {meta}
-          </Text>
-          <View style={styles.standings}>
+        <TicketCard
+          pressed={pressed}
+          style={styles.card}
+          head={
+            <>
+              <View style={styles.nameRow}>
+                {/* Inter, never Playfair: a tournament's name is not a drink's. */}
+                <Text numberOfLines={1} style={styles.name}>
+                  {t.name}
+                </Text>
+                <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
+              </View>
+              <Text numberOfLines={1} style={styles.meta}>
+                {meta}
+              </Text>
+            </>
+          }>
+          {/* Under the tear line; the 10 above it is the ticket's own gap, where the notches bite. */}
+          <View>
             {Array.from({ length: TOP }, (_, i) => {
               const s = top[i];
               if (!s) return <View key={`empty-${i}`} style={styles.line} />;
@@ -124,22 +144,22 @@ export const TournamentCard = React.memo(function TournamentCard({
               );
             })}
           </View>
-        </Card>
+        </TicketCard>
       )}
     </Pressable>
   );
 });
 
 const styles = StyleSheet.create({
-  /* 16 round the content, 12 under the last line (spec 2.3's 158). */
-  card: { minHeight: CARD_HEIGHT, padding: space.lg, paddingBottom: space.md },
-  /* Controls answer a press with their fill; no scale. */
-  pressed: { backgroundColor: colors.press },
+  /*
+   * TicketCard pads 16 round the content and 12 under the last line, with
+   * its 10 between the head and the standings (spec 2.3's 158), and answers
+   * a press with its fill, never a scale.
+   */
+  card: { minHeight: CARD_HEIGHT },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   name: { ...textRole.bodyStrong, flex: 1, color: colors.text },
   meta: { ...textRole.small, color: colors.textMuted },
-  /* 10 under the meta: between the 8 and 12 steps, so the three lines read as the card's body, not a new block. */
-  standings: { marginTop: 10 },
   line: { minHeight: LINE, flexDirection: 'row', alignItems: 'center', gap: 10 },
   rank: {
     ...textRole.small,

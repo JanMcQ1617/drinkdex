@@ -7,8 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AuthGate } from '@/components/AuthGate';
 import { Print } from '@/components/cabinet';
 import { DexThumb } from '@/components/DexCard';
-import { PenRule } from '@/components/details/PenMarks';
-import { PEN, PEN_SEED } from '@/components/details/penPath';
+import { EndMark } from '@/components/details/DoodleMarks';
+import { Paper } from '@/components/details/Paper';
 import { Icon } from '@/components/icons';
 import { FollowButton } from '@/components/PeopleList';
 import { timeAgo, timeAgoSpoken } from '@/components/PostCard';
@@ -58,11 +58,22 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* DAYLIGHT. Rows 64 on the page, separated by space, not rules: faces, */
 /* the sentence in body, the post as a square print.                    */
 /*                                                                      */
-/* THE CLOSING RULE (v4.7, specs/v4.7/spec.md 6.1 #12). The 30 days end */
-/* the way a feed post ends: the pen's short 24pt rule at the gutter,   */
-/* 16 under the last row. It is the screen's one mark, and it is drawn  */
-/* only under rows: never on the loading hold, the error or the "No     */
-/* activity yet" page, where there is nothing to close.                 */
+/* THE SIGNED END (v4.9, specs/v4.9/details/spec.md C.10; until then    */
+/* v4.7's closing rule, specs/v4.7/spec.md 6.1 #12, retired so a list   */
+/* ends one way everywhere). The 30 days end signed: the cherry and the */
+/* swash under it (details/DoodleMarks' EndMark), right-aligned on the  */
+/* gutter 18 under the last row, as the list's footer, one static node  */
+/* and never a cell. It is the screen's one mark, and it is drawn only  */
+/* under rows: never on the loading hold, the error or the "No activity */
+/* yet" page, where there is nothing to sign.                           */
+/*                                                                      */
+/* That page opts in to the cherry's own composition instead (C.9): the */
+/* cherry and an olive pick in an arch over the heart, with no new      */
+/* words, its top at 38% of the free height under whatever is above it  */
+/* (the list's content grows to the screen for it, and so does the      */
+/* footer when the invitations row stands over it). The paper (A.5) is  */
+/* the root's first child and the bar's, through ScreenTopBar's         */
+/* `paper`, so the two meet as one sheet.                               */
 /* ==================================================================== */
 
 export default function ActivityScreen() {
@@ -340,15 +351,19 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
         icon="heart"
         title="No activity yet"
         body="When someone likes your post, follows you or tags you, it shows up here."
+        doodle="cherry"
+        place="optical"
       />
     );
 
   return (
     <View style={styles.screen}>
+      <Paper />
       <ScreenTopBar
         title="Activity"
         showRule={scrolled}
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
+        paper
       />
       <FlatList
         data={rows}
@@ -357,7 +372,7 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
         onScroll={onScroll}
         scrollEventThrottle={16}
         style={styles.list}
-        contentContainerStyle={{ paddingBottom: insets.bottom + space.xl }}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + space.xl }]}
         ListHeaderComponent={
           loaded?.status === 'ready' && loaded.refreshFailed && visible.length > 0 ? (
             <Notice tone="error" style={styles.notice}>
@@ -366,28 +381,16 @@ function ActivityBody({ myId, onBack }: { myId: string; onBack: () => void }) {
           ) : null
         }
         ListEmptyComponent={empty}
-        // Rows to show end on the closing rule. With only the invitations
-        // row the list is not empty, but the activity is: said under it.
-        ListFooterComponent={visible.length > 0 ? <ClosingRule /> : rows.length > 0 ? empty : null}
+        // Rows to show end signed. With only the invitations row the list
+        // is not empty, but the activity is: said under it, in the free
+        // height the footer then grows to, as the empty list's would.
+        ListFooterComponent={
+          visible.length > 0 ? <EndMark name="cherry" style={styles.end} /> : rows.length > 0 ? empty : null
+        }
+        ListFooterComponentStyle={visible.length === 0 && rows.length > 0 ? styles.footerFill : undefined}
         refreshing={reloading}
         onRefresh={onRefresh}
       />
-    </View>
-  );
-}
-
-/** The closing rule's length: a feed post's (PostCard's CLOSING_RULE), so the two read as one ending. */
-const CLOSING_RULE = 24;
-
-/**
- * The 24pt pen rule under the last row. Static (a cached path, no
- * measure, no state), so the footer costs nothing on a re-render, and
- * hidden from VoiceOver by PenRule itself: the list ends where it ends.
- */
-function ClosingRule() {
-  return (
-    <View style={styles.closing}>
-      <PenRule length={CLOSING_RULE} seed={PEN_SEED.activityEnd} />
     </View>
   );
 }
@@ -733,8 +736,16 @@ const styles = StyleSheet.create({
   list: { flex: 1 },
   ink: { color: colors.text },
   notice: { marginHorizontal: layout.gutter, marginTop: space.sm },
-  /* 16 under the last row's box, at the gutter; the box is the band and the rule's own 6 (its centreline 3.4 down). */
-  closing: { paddingTop: space.lg, paddingLeft: layout.gutter, height: space.lg + PEN.rule.height },
+  /* At least the list's height, so "No activity yet" has a free height to set itself in (v4.9 C.9). */
+  content: { flexGrow: 1 },
+  /* The footer holding "No activity yet" under the invitations row takes that free height. */
+  footerFill: { flexGrow: 1 },
+  /*
+   * The signed end: 18 under the last row's box, its box's right edge on
+   * the gutter (v4.9 C.10). Static (cached paths, no measure, no state),
+   * and hidden from VoiceOver by EndMark itself: the list ends where it ends.
+   */
+  end: { marginTop: 18, marginRight: layout.gutter },
   /* A group head insets its own 16 (it was drawn for a panel), so this lands its words on the gutter. */
   sectionHeader: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: layout.gutter - space.lg },
 

@@ -13,7 +13,9 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Paper } from '@/components/details/Paper';
 import { PenSwash } from '@/components/details/PenMarks';
+import { useTabArrival } from '@/components/details/tabArrival';
 import { Icon, type IconName } from '@/components/icons';
 import { colors, fonts, layout, radius, space, stroke, textRole } from '@/constants/theme';
 import { textWidth } from '@/lib/textFit';
@@ -48,9 +50,27 @@ import { textWidth } from '@/lib/textFit';
 /* own: Home's wordmark already IS the pen, an empty title has nothing  */
 /* to sign, and a centred md title (a pushed screen, a window) never    */
 /* gets one. It grows in length with the title's text, never in         */
-/* weight, and stays 5 clear of the bar's foot rule. TabPlaceholder     */
-/* draws the same swash at the same point, so it does not pop in when   */
-/* the real bar replaces the placeholder.                               */
+/* weight, and stays 5 clear of the bar's foot rule.                    */
+/*                                                                      */
+/* IT SIGNS EACH TAB AS IT OPENS (v4.9, specs/v4.9/details B). Jan      */
+/* asked for the line he likes to draw itself in each time a tab opens: */
+/* TitleSwash, the swash's own child component, alone reads the tab's   */
+/* arrival (details/tabArrival) and hands it to the swash's draw-on, so */
+/* the bar's hooks stay unconditional and a focus change re-renders the */
+/* swash alone. It starts undrawn (a lazy tab mounts behind, mid-drag), */
+/* draws in 140ms after the tab lands, rests drawn, and never loops;    */
+/* under Reduce Motion it is simply there. Every lg bar with a title is */
+/* a tab root, so the arrival is the tabs': a pushed page over the tabs */
+/* and the pop back are not a tab opening. TabPlaceholder no longer     */
+/* draws a swash: the real bar mounts and signs.                        */
+/*                                                                      */
+/* THE PAPER (v4.9, A.5), only when a screen asks: `paper` lays the     */
+/* grain (details/Paper) as the bar's first child, so the bar's sheet   */
+/* meets the page's under it without a step (noise against offset noise */
+/* shows no seam). Off by default, because this bar also heads sheets,  */
+/* windows, sign-in and Settings, which stay bare; check-design's       */
+/* DETAIL_PROPS lets only the ten paper screens pass it. A clear bar    */
+/* (Home's) never draws it: HomeChrome lays Home's own.                 */
 /*                                                                      */
 /* The status bar is dark on every screen (the root's <StatusBar />):   */
 /* nothing in Daylight is dark enough to need light glyphs.             */
@@ -100,6 +120,12 @@ export interface ScreenTopBarProps {
   titleRef?: React.Ref<Text>;
   /** 'solid' (default): the page and its rule. 'clear': neither (Home). */
   ground?: 'solid' | 'clear';
+  /**
+   * The paper's grain under the bar (v4.9 A.5): only on the screens whose
+   * page has it, so the two meet as one sheet. Ignored on a clear bar.
+   * check-design (DETAIL_PROPS) fails it anywhere else.
+   */
+  paper?: boolean;
 }
 
 function isTextButton(node: ReactNode): node is ReactElement<TopBarTextButtonProps> {
@@ -140,16 +166,31 @@ export function ScreenTopBar({
   inset = 'safe',
   titleRef,
   ground = 'solid',
+  paper = false,
 }: ScreenTopBarProps) {
   const insets = useSafeAreaInsets();
   const { fontScale } = useWindowDimensions();
   const clear = ground === 'clear';
   const paddingTop = inset === 'safe' ? insets.top : inset === 'sheet' ? SHEET_INSET : 0;
   const barStyle = [styles.bar, { paddingTop }, clear ? styles.barClear : showRule && styles.barRuled];
+  /*
+   * The bar's first child, so the row draws over it, in a box that runs
+   * on over the foot's 1pt rule band: an absolute child is laid inside
+   * its parent's border, so the grain alone would stop 1pt short and
+   * leave a line of the bar's plain white between its sheet and the
+   * page's at rest. When the rule shows, 1.6% of grain over it is not seen.
+   */
+  const grain =
+    paper && !clear ? (
+      <View pointerEvents="none" style={styles.grain}>
+        <Paper />
+      </View>
+    ) : null;
 
   if (size === 'lg') {
     return (
       <View style={barStyle}>
+        {grain}
         <View style={styles.rootRow}>
           <View style={styles.rootTitle}>
             {left}
@@ -174,9 +215,7 @@ export function ScreenTopBar({
                   style={[textRole.title, styles.ink, styles.flexShrink]}>
                   {title}
                 </Text>
-                {title !== '' ? (
-                  <PenSwash scale={Math.min(fontScale, BAR_TEXT_SCALE_CAP)} style={styles.swash} />
-                ) : null}
+                {title !== '' ? <TitleSwash scale={Math.min(fontScale, BAR_TEXT_SCALE_CAP)} /> : null}
               </View>
             )}
           </View>
@@ -193,6 +232,7 @@ export function ScreenTopBar({
 
   return (
     <View style={barStyle}>
+      {grain}
       <View style={styles.row}>
         <View style={[styles.side, { width: leftWidth }]}>{left}</View>
         <View style={[styles.side, styles.sideRight, { width: rightWidth }]}>{right}</View>
@@ -225,6 +265,16 @@ export function ScreenTopBar({
       </View>
     </View>
   );
+}
+
+/**
+ * The swash under a tab root's title, signing the tab each time it opens:
+ * its own component, so the arrival's hook is called only where a swash
+ * is drawn and a focus change re-renders this alone.
+ */
+function TitleSwash({ scale }: { scale: number }) {
+  const draw = useTabArrival();
+  return <PenSwash scale={scale} draw={draw} style={styles.swash} />;
 }
 
 /**
@@ -409,6 +459,8 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   barRuled: { borderBottomColor: colors.line },
+  /* The paper's box: the bar's, down to the outer edge of its foot's border (v4.9 A.5). */
+  grain: { position: 'absolute', top: 0, left: 0, right: 0, bottom: -stroke.edge },
   /* No ground and no rule, so a clear bar is exactly its row (plus its inset). */
   barClear: { backgroundColor: 'transparent', borderBottomWidth: 0 },
   ink: { color: colors.text },

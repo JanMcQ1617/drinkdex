@@ -58,9 +58,9 @@ export const colors = {
   line: '#E3E3E3',
   /** Row separators at hairlineWidth, an unticked tile's edge. 1.45:1. */
   hair: '#D6D6D6',
-  /** The sheet grabber, the ruler's baseline and minor ticks. 1.74:1. */
+  /** The sheet grabber, the ruler's baseline and minor ticks; since v4.9 the press's outlined figures and a ticket's perforation, as path fills. 1.74:1. */
   rule: '#C4C4C4',
-  /** Control edges (an empty plate, an unticked box), resting tab glyphs, the no-photo glass. UI: 3.45:1 page, 3.17:1 wash. */
+  /** Control edges (an empty plate, an unticked box), resting tab glyphs, the no-photo glass; since v4.9 the press's menu leaders, as path fills. UI: 3.45:1 page, 3.17:1 wash. */
   lineControl: '#8A8A8A',
   /** An outline key's edge while held, the focus ring. */
   lineInk: '#0A0A0A',
@@ -153,6 +153,22 @@ export const colors = {
    * state red, so they cannot blur what the seven places say. Drawn only
    * by components/details/, in `accent` alone (never accentPressed),
    * and placed only from the files check-design lists (DETAIL_SITES).
+   *
+   * v4.9 (Jan, 28 Oct 2026, specs/v4.9/details/spec.md: "it still feels
+   * too empty") gives the tier more of the same pen, still ornament: six
+   * garnish doodles in clusters on the empty states that opt in and
+   * signed at the ends of lists, a crown on the Tournaments leader, the
+   * arrow on two empty states' keys (never one that posts a drink),
+   * crop corners round a feed post and an empty state's print, and the
+   * double rule (Home's stories, the Tournaments board, the spec card,
+   * the Dex's "Everything else"); the swash draws itself in as a tab
+   * opens. Beside the pen there is now a PRESS, printed in greys and
+   * never in this red: the big outlined figures and the ticket's
+   * perforation in `rule`, the menu leaders in `lineControl`, a ticket's
+   * own fill in `bgSunk` (`press` while held), each a fill of a path and
+   * never a text colour. And a paper grain under the page grounds, black
+   * at a low alpha over `bg`, so no token is added for it. check-design
+   * keeps the press and the paper off the accent (ACCENT_TIER_EXCEPT).
    *
    * WHY ONLY THERE. A colour that turns up everywhere stops meaning
    * anything. Red never says delete or error here: destructive words stay

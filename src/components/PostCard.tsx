@@ -29,8 +29,7 @@ import {
   SAVE_TO_COLLECTION,
 } from '@/components/collections/bookmark';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
-import { PenRule } from '@/components/details/PenMarks';
-import { PEN, PEN_SEED } from '@/components/details/penPath';
+import { PostCorners } from '@/components/details/FrameMarks';
 import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
@@ -99,10 +98,16 @@ export { timeAgo, timeAgoSpoken };
 /*             "… more", cut before layout (lib/textFit), opened in     */
 /*             place by a tap.                                          */
 /*   time      "2 hours ago", muted. Then a 14pt foot.                  */
-/*   closing   in that foot, the pen's 24pt rule at the column (v4.6,   */
-/*             specs/v4.6-details A.3 #2): Ledger's entry rule, drawn   */
-/*             by the logo's pen, so each post ends as a ledger entry   */
-/*             does. Ornament: it says nothing, and moves nothing.      */
+/*   corners   the post drawn as a print (v4.9, specs/v4.9/details      */
+/*             C.1): the logo's pen marks two crop corners, the         */
+/*             anti-diagonal pair, 8 in from the screen's edges with    */
+/*             15pt arms. Top right above the ••• (13 clear of it, 34   */
+/*             above the photo; not on Home's first post, which sits    */
+/*             under the stories rule); bottom left in the foot, where  */
+/*             on Home the corner turns into the 24pt closing rule as   */
+/*             ONE stroke (Ledger's entry rule, v4.6 A.3 #2), and on    */
+/*             the post page stands alone. Ornament: it says nothing,   */
+/*             and moves nothing.                                       */
 /*                                                                      */
 /* 616 tall with a one-line caption, 634 with two. The post page        */
 /* (variant 'detail') is the same card with its caption opened.         */
@@ -598,21 +603,12 @@ const CUT_MARK = '… ';
 const MORE_WORD = 'more';
 /** Between the liked-by row's foot, the caption, the comments line and the time. */
 const LINE_GAP = space.xs;
-/** A post's foot: space only, then the next header. */
+/**
+ * A post's foot: space only, then the next header. Since v4.9 the pen's
+ * bottom-left corner stands in it (FrameMarks' PostCorners, 3 off the
+ * card's foot), so the card is not one point taller for its frame.
+ */
 const FOOT = 14;
-/**
- * The closing rule's length: Ledger's entry rule, a tapered dash rather
- * than a line across, so it closes the post without boxing it.
- */
-const CLOSING_RULE = 24;
-/**
- * Its centreline 11 under the time line's box, inside the 14pt foot: about
- * 12 clear of the time's descenders and 13 over the next post's face, and
- * the card is not one point taller. Placed by its nominal box (the
- * centreline is PEN.rule.mid down a box PEN.rule.height tall), so 0.4 off
- * the card's foot.
- */
-const CLOSING_RULE_BOTTOM = FOOT - 11 - (PEN.rule.height - PEN.rule.mid);
 
 /* ==================================================================== */
 /* PostCard                                                             */
@@ -650,11 +646,19 @@ export interface PostCardProps {
   /** The comment thread, once comments exist; read only while COMMENTS_ENABLED. */
   onOpenComments?: (postId: string) => void;
   /**
-   * The pen's 24pt rule in the card's foot (v4.6). On by default, because
-   * the feed is where posts follow one another; the post page passes false,
-   * since a post on its own screen closes nothing.
+   * The pen's 24pt rule in the card's foot (v4.6), drawn since v4.9 as one
+   * stroke with the bottom-left crop corner, which turns into it. On by
+   * default, because the feed is where posts follow one another; the post
+   * page passes false, since a post on its own screen closes nothing, and
+   * keeps the corner alone.
    */
   closingRule?: boolean;
+  /**
+   * The top-right crop corner (v4.9 C.1). On by default; Home passes false
+   * for its first post, whose corner would sit 10pt under the stories
+   * rule's lower stroke, two marks of the pen side by side.
+   */
+  cornerTop?: boolean;
 }
 
 type Timer = ReturnType<typeof setTimeout>;
@@ -671,6 +675,7 @@ export const PostCard = React.memo(function PostCard({
   onOpenStory,
   onOpenComments,
   closingRule = true,
+  cornerTop = true,
 }: PostCardProps) {
   const myId = useAuth((s) => s.session?.user.id);
   const toggleLike = useSocial((s) => s.toggleLike);
@@ -1460,11 +1465,13 @@ export const PostCard = React.memo(function PostCard({
         {when}
       </Text>
       {/*
-        The closing rule: one cached path and one static <Path> per card,
-        no measuring and no state, so the feed scrolls as it did. Absolute
-        in the foot, so no post is a point taller.
+        The print's corners (v4.9 C.1), the closing rule in the foot's:
+        two cached paths and two static <Path>s per card, placed by the
+        card's own edges, with no measuring and no state, so the feed
+        scrolls as it did. Absolute, so no post is a point taller, and
+        never on the photo: the nearest ink is 34 above it.
       */}
-      {closingRule ? <PenRule length={CLOSING_RULE} seed={PEN_SEED.entry} style={styles.closingRule} /> : null}
+      <PostCorners top={cornerTop} foot={closingRule ? 'rule' : 'corner'} />
 
       {likersOpen === null ? null : (
         <LikersSheet postId={post.id} visible={likersOpen} onClose={closeLikers} likes={likes} />
@@ -1926,8 +1933,6 @@ function Caption({
 const styles = StyleSheet.create({
   /* No card chrome and no fill: the post stands on the page, and a 14pt foot of space ends it. */
   card: { paddingBottom: FOOT },
-  /* The pen's closing rule, on the column (16), in the foot. */
-  closingRule: { position: 'absolute', left: GUTTER, bottom: CLOSING_RULE_BOTTOM },
   pressed: { opacity: 0.5 },
 
   /* The header: 52, the face at 16, the text 12 after it (60), ••• ending at 424. */

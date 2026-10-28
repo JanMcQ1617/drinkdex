@@ -4,6 +4,7 @@ import { Animated, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Wordmark } from '@/components/brand/Wordmark';
+import { Paper } from '@/components/details/Paper';
 import { DockSlot, Rise } from '@/components/DockRise';
 import { TopBarButton } from '@/components/ScreenTopBar';
 import { useHideOnScroll } from '@/components/ScrollChrome';
@@ -43,6 +44,15 @@ import { colors, layout, stroke } from '@/constants/theme';
 /* too and must not be a destination. Both are Reanimated wrappers on   */
 /* the Dock's clock, which rests at 1, so at rest they are the identity */
 /* and the scroll's native-driven motion above them is unchanged.       */
+/*                                                                      */
+/* ON THE PAPER (v4.9; specs/v4.9/details/spec.md A.5). The bar and the */
+/* strip are Home's ground, so each carries the paper's grain as its    */
+/* first child, under the row: noise against the root's offset noise    */
+/* shows no seam, so the bar meets the page without a step, and its     */
+/* grain slides away with it on scroll. Each Paper rides the chrome     */
+/* group's Rise (the Dock's clock again), so on a cold start the grain  */
+/* arrives with the keys and the film's last frame stays the white it   */
+/* was; at rest it is simply there.                                     */
 /* ==================================================================== */
 
 /** Home's row under the status bar (home-ig 2.1): 62 to 106 at 440 x 956. */
@@ -114,6 +124,10 @@ export function HomeChrome({ scrollY, unread, onActivity, onPost }: HomeChromePr
     <View pointerEvents="box-none" style={[styles.root, { height: insets.top + HIDE }]}>
       {/* The bar: under the strip, so it slides away beneath it. */}
       <Animated.View pointerEvents="box-none" style={[styles.bar, { top: insets.top, transform: [{ translateY }] }]}>
+        {/* The bar's paper, first, under the row; it arrives with the chrome. */}
+        <Rise group="chrome" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+          <Paper />
+        </Rise>
         <View style={styles.row}>
           {/* `lead`: HomeWordmark is set with Wordmark's lead, which the measure takes back out. */}
           <DockSlot id="home" lead enabled={focused} style={styles.wordmark}>
@@ -128,8 +142,12 @@ export function HomeChrome({ scrollY, unread, onActivity, onPost }: HomeChromePr
         <Animated.View pointerEvents="none" style={[styles.rule, { opacity: rule }]} />
       </Animated.View>
 
-      {/* The status strip: always the page, over the bar, and it takes the touches in its band. */}
-      <View pointerEvents="auto" style={[styles.strip, { height: insets.top }]} />
+      {/* The status strip: always the page, over the bar, and it takes the touches in its band. Its paper, the same way. */}
+      <View pointerEvents="auto" style={[styles.strip, { height: insets.top }]}>
+        <Rise group="chrome" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+          <Paper />
+        </Rise>
+      </View>
     </View>
   );
 }

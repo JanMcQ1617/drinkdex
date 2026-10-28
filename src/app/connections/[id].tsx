@@ -150,6 +150,12 @@ function Connections({
   const reloading = asked.who === who && asked.n > 0 && !!mine && !current;
   const reload = () => setAsked({ who, n: asked.who === who ? asked.n + 1 : 1 });
 
+  /*
+   * The three empty lists opt in to the pen's composition over the people
+   * glyph (v4.9, specs/v4.9/details/spec.md C.9): a coupe and a twist in
+   * an arch with the glyph at their foot, one path, hidden. The hold and
+   * the failure stay bare.
+   */
   const empty =
     status === 'loading' ? (
       <Hold fill={false} slowMessage="Still loading this list." />
@@ -166,6 +172,7 @@ function Connections({
         icon="users"
         title="No followers yet"
         body={`When someone follows ${whose}, they show up here.`}
+        doodle="coupe"
       />
     ) : isSelf ? (
       <EmptyState
@@ -173,12 +180,14 @@ function Connections({
         title="Not following anyone yet"
         body="Follow friends to see their posts on Home."
         action={{ label: 'Find friends', onPress: () => router.push('/find-friends') }}
+        doodle="coupe"
       />
     ) : (
       <EmptyState
         icon="users"
         title="Not following anyone yet"
         body={`${username ? `@${username}` : 'This account'} hasn't followed anyone yet.`}
+        doodle="coupe"
       />
     );
 

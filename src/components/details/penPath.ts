@@ -42,6 +42,16 @@
 /* properties), so node runs it as it is. Keep it that way: a mirror in */
 /* the script would drift from what ships.                              */
 /*                                                                      */
+/* THE HAND'S TOOLKIT (v4.9, specs/v4.9/details/spec.md A.2). The pen's */
+/* own helpers (stroke, cap, press, catmull, toD, shapeOf, cached, and  */
+/* the small sums) are exported as they were, so the v4.9 generators    */
+/* (doodlePath, framePath) draw with the identical hand rather than a   */
+/* copy of it, and it gains the few they share: place (a baked turn and */
+/* move), line (a stroke through hand-placed points), loop, dot, and    */
+/* shapeOne, which draws a mark of many strokes as ONE path, so a mark  */
+/* is one native view on Fabric. None of it changes a v4.6 mark:        */
+/* penRule(392, 0) is still Pen's mock.                                 */
+/*                                                                      */
 /* DETERMINISTIC. Same arguments, same path, on every device and every  */
 /* render: no randomness, no clock. A `seed` turns the waver's phase by */
 /* the golden angle, so two placements are not the same stamp, and the  */
@@ -117,6 +127,19 @@ export const PEN = {
  * Tournaments tab's tournaments and its Friends, and `activityEnd`, the
  * short rule closing Activity's list. Only the waver's phase turns with
  * a seed, never the weight, so the new two need no geometry of their own.
+ *
+ * v4.9 (specs/v4.9/details/spec.md A.2) adds two more for the double
+ * rules (framePath's doubleRule): `spec`, ruling the drink page's spec
+ * card, and `restHead`, the Dex's "Everything else" head. A double rule
+ * draws its lower stroke with `seed + 3`, so 8, 14 and 15 are RESERVED,
+ * the lower strokes of `board`, `spec` and `restHead`: never give a
+ * placement one of them. Home's doubled stories rule (doubleRule(L,
+ * PEN_SEED.stories), spec C.1) draws its lower stroke with 3, `margin`'s
+ * number; that is a different generator (penRule, where the margin is
+ * penVRule) on a different screen, so nothing ever shows the two strokes
+ * together, and its upper stroke stays seed 0, Pen's mock. `activityEnd`
+ * retired with Activity's closing rule (v4.9 C.10): its key stays, so
+ * its number is never reused.
  */
 export const PEN_SEED = {
   stories: 0,
@@ -126,6 +149,8 @@ export const PEN_SEED = {
   column: 4,
   board: 5,
   activityEnd: 6,
+  spec: 11,
+  restHead: 12,
 } as const;
 
 /* ------------------------------------------------------------------ */
@@ -136,23 +161,23 @@ export const PEN_SEED = {
 const CAP_STEPS = 6;
 const GOLDEN = 2.39996;
 
-const r2 = (v: number) => Math.round(v * 100) / 100;
-const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
-const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+export const r2 = (v: number) => Math.round(v * 100) / 100;
+export const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+export const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 /** Smoothstep from a to b. */
-const smooth = (a: number, b: number, t: number) => {
+export const smooth = (a: number, b: number, t: number) => {
   const u = clamp01((t - a) / (b - a));
   return u * u * (3 - 2 * u);
 };
 /** Lengths are drawn to the quarter point, which also bounds the cache. */
-const quarter = (v: number) => Math.round(v * 4) / 4;
+export const quarter = (v: number) => Math.round(v * 4) / 4;
 
 /**
  * The outline of a pen stroke: `sample(t)` is the centreline for t in
  * 0..1 and `width(t)` the pen's width there (floored). Left side out,
  * round end, right side back, round start: one closed polygon.
  */
-function stroke(sample: (t: number) => Pt, width: (t: number) => number, n: number): Pt[] {
+export function stroke(sample: (t: number) => Pt, width: (t: number) => number, n: number): Pt[] {
   const P: Pt[] = [];
   for (let i = 0; i < n; i++) P.push(sample(i / (n - 1)));
   const left: Pt[] = [];
@@ -184,7 +209,7 @@ function stroke(sample: (t: number) => Pt, width: (t: number) => number, n: numb
 }
 
 /** A round end's inner points: forward (dir 1) from left to right, or back (dir -1) from right to left. */
-function cap(p: Pt, t: Pt, w: number, dir: 1 | -1): Pt[] {
+export function cap(p: Pt, t: Pt, w: number, dir: 1 | -1): Pt[] {
   const nx = -t[1];
   const ny = t[0];
   const pts: Pt[] = [];
@@ -198,13 +223,13 @@ function cap(p: Pt, t: Pt, w: number, dir: 1 | -1): Pt[] {
 }
 
 /** Pen's pressure for the swash: lands at `land`, swells to `peak` by t = at, lifts to `lift`. */
-const press = (land: number, peak: number, lift: number, at = 0.14) => (t: number) =>
+export const press = (land: number, peak: number, lift: number, at = 0.14) => (t: number) =>
   t < at
     ? land + (peak - land) * Math.sin(((t / at) * Math.PI) / 2)
     : lift + (peak - lift) * Math.pow(1 - (t - at) / (1 - at), 0.85);
 
 /** Catmull-Rom through `pts`, for t in 0..1. */
-const catmull = (pts: Pt[]) => (t: number): Pt => {
+export const catmull = (pts: Pt[]) => (t: number): Pt => {
   const n = pts.length - 1;
   const u = Math.min(t * n, n - 1e-6);
   const i = Math.floor(u);
@@ -223,7 +248,7 @@ const catmull = (pts: Pt[]) => (t: number): Pt => {
 };
 
 /** M/L/Z path data for a polygon. */
-function toD(poly: Pt[]): string {
+export function toD(poly: Pt[]): string {
   let d = '';
   poly.forEach(([x, y], i) => {
     d += `${i === 0 ? 'M' : 'L'}${r2(x)} ${r2(y)}`;
@@ -231,7 +256,7 @@ function toD(poly: Pt[]): string {
   return `${d}Z`;
 }
 
-function shapeOf(polys: Pt[][]): PenShape {
+export function shapeOf(polys: Pt[][]): PenShape {
   let x0 = Infinity;
   let y0 = Infinity;
   let x1 = -Infinity;
@@ -254,13 +279,148 @@ function shapeOf(polys: Pt[][]): PenShape {
 }
 
 const cache = new Map<string, PenShape>();
-function cached(key: string, make: () => PenShape): PenShape {
-  let s = cache.get(key);
+/** One build per key, kept. Typed by what `make` returns, so a shape with extra fields (a signature's nominal box, a numeral's width) keeps them. */
+export function cached<S extends PenShape>(key: string, make: () => S): S {
+  let s = cache.get(key) as S | undefined;
   if (!s) {
     s = make();
     cache.set(key, s);
   }
   return s;
+}
+
+/* ------------------------------------------------------------------ */
+/* Shared by the v4.9 generators (doodlePath, framePath)              */
+/*                                                                    */
+/* Ported 1:1 from specs/v4.9/details/tools/pen.mjs, where the board  */
+/* was drawn with them: placing a drawing, sampling a hand-placed     */
+/* stroke, a loop, a dot, and drawing a mark of many strokes as ONE   */
+/* path.                                                              */
+/* ------------------------------------------------------------------ */
+
+/** A pen's pressure along a stroke, t in 0..1, in points (floored by stroke()). */
+export type Width = (t: number) => number;
+
+/** How place() moves a drawing: `rot` degrees about (cx, cy), the centrelines scaled by `s` about the same point, then moved by (dx, dy). */
+export interface Placement {
+  rot?: number;
+  cx?: number;
+  cy?: number;
+  dx?: number;
+  dy?: number;
+  s?: number;
+}
+
+/** Rotate and place a list of polygons: degrees about (cx, cy), then translate by (dx, dy). */
+export function place(polys: Pt[][], { rot = 0, cx = 0, cy = 0, dx = 0, dy = 0, s = 1 }: Placement = {}): Pt[][] {
+  const a = (rot * Math.PI) / 180;
+  const c = Math.cos(a);
+  const sn = Math.sin(a);
+  return polys.map((poly) =>
+    poly.map(([x, y]): Pt => {
+      const u = (x - cx) * s;
+      const v = (y - cy) * s;
+      return [cx + u * c - v * sn + dx, cy + u * sn + v * c + dy];
+    }),
+  );
+}
+
+/** Samples for a stroke of a given drawn length: one every ~0.6pt, 16 to 220. */
+export const samplesAlong = (len: number) => clamp(Math.round(len / 0.6), 16, 220);
+
+/** The drawn length of a sampled centreline. */
+export function lengthOf(sample: (t: number) => Pt, n = 64): number {
+  let L = 0;
+  let p = sample(0);
+  for (let i = 1; i <= n; i++) {
+    const q = sample(i / n);
+    L += Math.hypot(q[0] - p[0], q[1] - p[1]);
+    p = q;
+  }
+  return L;
+}
+
+/** One pen stroke through hand-placed points (Catmull-Rom), with a pressure curve. */
+export function line(pts: Pt[], w: Width): Pt[] {
+  const s = catmull(pts);
+  return stroke(s, w, samplesAlong(lengthOf(s)));
+}
+
+/** A hand-drawn loop's ellipse and how the pen goes round it (see loop()). */
+export interface LoopSpec {
+  cx: number;
+  cy: number;
+  rx: number;
+  ry?: number;
+  from?: number;
+  sweep?: number;
+  spiral?: number;
+  wobble?: number;
+  seed?: number;
+  tilt?: number;
+}
+
+/**
+ * A hand-drawn loop: an ellipse at (cx, cy) with radii rx, ry, started at
+ * `from` degrees and swept `sweep` degrees (over 360 closes past its start,
+ * as a pen does), the radius easing by `spiral` (0.95 ends 5% inside) and a
+ * slow `wobble` (fraction of the radius, two lobes, phase `seed`).
+ */
+export function loop(
+  { cx, cy, rx, ry = rx, from = -100, sweep = 372, spiral = 0.96, wobble = 0.02, seed = 0, tilt = 0 }: LoopSpec,
+  w: Width,
+): Pt[] {
+  const a0 = (from * Math.PI) / 180;
+  const sw = (sweep * Math.PI) / 180;
+  const ta = (tilt * Math.PI) / 180;
+  const ph = seed * GOLDEN;
+  const sample = (t: number): Pt => {
+    const a = a0 + sw * t;
+    const k = (1 + (spiral - 1) * t) * (1 + wobble * Math.sin(2 * a + ph));
+    const x = Math.cos(a) * rx * k;
+    const y = Math.sin(a) * ry * k;
+    return [cx + x * Math.cos(ta) - y * Math.sin(ta), cy + x * Math.sin(ta) + y * Math.cos(ta)];
+  };
+  return stroke(sample, w, samplesAlong(lengthOf(sample)));
+}
+
+/** A filled dot (a pen's touch), flattened to `steps` edges. */
+export function dot(cx: number, cy: number, r: number, steps = 10): Pt[] {
+  const out: Pt[] = [];
+  for (let i = 0; i < steps; i++) {
+    const a = (2 * Math.PI * i) / steps;
+    out.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  }
+  return out;
+}
+
+/** Twice the signed area of a polygon (y down: positive is clockwise on screen). */
+export function signedArea(poly: Pt[]): number {
+  let a = 0;
+  for (let i = 0, n = poly.length; i < n; i++) {
+    const [x0, y0] = poly[i]!;
+    const [x1, y1] = poly[(i + 1) % n]!;
+    a += x0 * y1 - x1 * y0;
+  }
+  return a;
+}
+
+/**
+ * ONE PATH PER MARK (build review, 28 Oct). On Fabric every react-native-svg
+ * <Path> is its own native view, so a mark of seven strokes was seven views.
+ * Every new mark is drawn as one `d`: each polygon is turned to the same
+ * winding (by its signed area) and the subpaths are concatenated, so the
+ * default nonzero fill paints exactly their union (overlaps stay filled; a
+ * loop's open middle, which its own stroke winds to zero, stays open).
+ */
+export function oneD(polys: Pt[][]): string {
+  return polys.map((p) => toD(signedArea(p) < 0 ? [...p].reverse() : p)).join('');
+}
+
+/** shapeOf(), with the polygons drawn as one path (oneD). */
+export function shapeOne(polys: Pt[][]): PenShape {
+  const s = shapeOf(polys);
+  return { ...s, d: [oneD(polys)] };
 }
 
 /* ------------------------------------------------------------------ */

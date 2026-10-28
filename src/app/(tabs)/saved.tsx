@@ -8,6 +8,8 @@ import { AllSavedTab, useSavedPosts } from '@/components/collections/AllSaved';
 import { Cover, type CoverPiece } from '@/components/collections/Cover';
 import { NewCollectionSheet } from '@/components/collections/SaveSheet';
 import { EmptyArt } from '@/components/DexCard';
+import { EndMark } from '@/components/details/DoodleMarks';
+import { Paper } from '@/components/details/Paper';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, useScrolledPast } from '@/components/ScreenTopBar';
@@ -48,6 +50,27 @@ import { useTaste } from '@/store/taste';
 /*                                                                      */
 /* The list refreshes when the tab comes to the front (stale-gated in    */
 /* store/collections), so a collection made on another phone shows.     */
+/*                                                                      */
+/* THE PAPER, AND THE PEN'S SIGNATURE (v4.9, specs/v4.9/details/spec.md */
+/* A.5 and C.8). The page's grain is the root's first child, and the    */
+/* bar's through ScreenTopBar's `paper`, so the two meet as one sheet.  */
+/* Where the tiles stop the list is signed: the olive pick and the      */
+/* swash under it (details/DoodleMarks' EndMark), right-aligned on the  */
+/* gutter 18 under the last row, as the list's footer, one static node  */
+/* and never a cell. Nothing saved: the empty state opts in to the      */
+/* olive's composition round the Paper Plane proof (the print's two     */
+/* crop corners, the olive pick, a twist and a cherry), with no arrow   */
+/* because it has no key, its top at 38% of the free height (the list's */
+/* content grows to the screen for it). The covers get no corners: they */
+/* are keys.                                                            */
+/*                                                                      */
+/* Each of the two pages owns its bar, so its swash's arrival is its    */
+/* own (details/tabArrival): when collections turn on or off with the   */
+/* tab in front (a list that loads after the first visit, an account    */
+/* switch, coming back online), the page that mounts signs again, 140ms */
+/* after the swap. Accepted as it is: the whole page changes at that    */
+/* moment, the swash never sticks half drawn, and one bar for both      */
+/* pages would have to hoist each list's scroll signal for its rule.    */
 /* ==================================================================== */
 
 export default function SavedTab() {
@@ -157,8 +180,9 @@ function SavedTiles({ myId }: { myId: string }) {
 
   return (
     <View style={styles.screen}>
+      <Paper />
       {/* A tab root: the title set left, and no icon (v4: at most one, and this page needs none). */}
-      <ScreenTopBar size="lg" title="Saved" showRule={scrolled} />
+      <ScreenTopBar size="lg" title="Saved" showRule={scrolled} paper />
       <Animated.FlatList<Tile[]>
         ref={listRef}
         data={nothing ? [] : rows}
@@ -172,8 +196,12 @@ function SavedTiles({ myId }: { myId: string }) {
             art={<EmptyArt drinkId="paper-plane" mode="proof" />}
             title="Save drinks to find them here"
             body="Tap the bookmark at the top of any drink's page."
+            doodle="olive"
+            place="optical"
           />
         }
+        // The tiles' end, signed. Never on the empty state, which has its own composition.
+        ListFooterComponent={nothing ? null : <EndMark name="olive" style={styles.end} />}
         onScroll={onScroll}
         scrollEventThrottle={16}
         refreshing={pulling || reloading}
@@ -183,7 +211,7 @@ function SavedTiles({ myId }: { myId: string }) {
         windowSize={5}
         style={styles.list}
         // The tab bar is docked over the foot of the list, so the last row has to clear it.
-        contentContainerStyle={{ paddingBottom: insets.bottom + TAB_BAR_CLEARANCE }}
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + TAB_BAR_CLEARANCE }]}
         showsVerticalScrollIndicator={false}
       />
       <NewCollectionSheet
@@ -247,6 +275,8 @@ function TileView({ tile, size, onPress }: { tile: Tile; size: number; onPress: 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
+  /* At least the list's height, so the empty state has a free height to set itself in (v4.9 C.9). */
+  content: { flexGrow: 1 },
   privacy: {
     ...textRole.small,
     color: colors.textMuted,
@@ -263,6 +293,8 @@ const styles = StyleSheet.create({
     paddingBottom: layout.dexLedge,
   },
   tile: {},
+  /* The signed end: 18 under the last row's ledge, its box's right edge on the gutter (v4.9 C.10). */
+  end: { marginTop: 18, marginRight: layout.gutter },
   newCover: { backgroundColor: colors.bgSunk, alignItems: 'center', justifyContent: 'center' },
   name: { ...textRole.bodyMedium, color: colors.text, marginTop: NAME_GAP },
   meta: { ...textRole.small, color: colors.textMuted },

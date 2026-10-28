@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Animated, Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { Paper } from '@/components/details/Paper';
 import { Icon, type TabName } from '@/components/icons';
 import { Avatar, haptic } from '@/components/ui';
 import type { ProfileRow } from '@/lib/database.types';
@@ -59,6 +60,18 @@ import { useAuth } from '@/store/auth';
 /* rests. The filled glyph switches with the navigator's index: at once */
 /* on a tap, and on a swipe when the pager picks the page. No timer,    */
 /* no Animated.timing, no Reanimated.                                   */
+/*                                                                      */
+/* THE PAPER (v4.9, specs/v4.9/details/spec.md A.5). The slab is the    */
+/* page's ground, so it carries the page's grain (details/Paper), laid  */
+/* as the bar View's first child under the line and the row: the bar    */
+/* meets the page above it as one sheet, and noise against offset noise */
+/* shows no seam. The ground only. No mark is ever drawn on the bar     */
+/* (never a key, a glyph or the line: the pen keeps off the tab bar),   */
+/* and the paper is static and measures only its own box, so the bar    */
+/* stays free of Reanimated. At the Dock it arrives with the chrome,    */
+/* because the bar already sits in the chrome Rise                      */
+/* ((tabs)/_layout.tsx). Under Reduce Transparency or Invert Colours    */
+/* there is none, and the slab is the plain white it was.               */
 /* ==================================================================== */
 
 /**
@@ -316,6 +329,8 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
 
   return (
     <View style={[styles.bar, { paddingBottom: insets.bottom }]}>
+      {/* The slab's grain, first, so the line and the row draw over it: the ground only (v4.9 A.5). */}
+      <Paper />
       {/*
         The line, before the row. Nothing in the row covers it: the red
         key ends 2.5 above it. Mounted for the bar's whole life, never
@@ -391,7 +406,7 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
 }
 
 const styles = StyleSheet.create({
-  /* Docked and opaque: the page's white under the row and the home indicator. */
+  /* Docked and opaque: the page's white, and its paper, under the row and the home indicator. */
   bar: {
     position: 'absolute',
     left: 0,

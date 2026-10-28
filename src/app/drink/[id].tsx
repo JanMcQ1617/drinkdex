@@ -18,6 +18,7 @@ import {
   onSaveToCollectionAction,
   SAVE_TO_COLLECTION,
 } from '@/components/collections/bookmark';
+import { Paper } from '@/components/details/Paper';
 import { PostSheet, type PostSaving, type PostSheetMode } from '@/components/dex/PostSheet';
 import {
   CompositionSection,
@@ -30,6 +31,7 @@ import {
   PinnedPostBar,
   pinnedBarEstimate,
   ServeSection,
+  serveRows,
   SpecSection,
   TastesOf,
   useMoreBelow,
@@ -88,6 +90,13 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * with Save & post alone (Save to Dex and Save photo post nothing, so
  * they tag nothing). And the page ends with Where people have had it,
  * which draws nothing until there is a place to show.
+ *
+ * THE PAPER AND THE FIGURE (v4.9, specs/v4.9/details A.5, C.5). The page
+ * and its bar lie on the paper's grain; the unknown drink stays bare, as
+ * every dead end does. The first how-section the page draws opens with
+ * the drink's figure, "Nº 0100" in the press's outline over the pen's
+ * double rule: the spec for a cocktail, else the serve guide, else what
+ * it is made of. The same grey caught or not: the plate says which.
  */
 
 export default function DrinkDetailScreen() {
@@ -361,11 +370,13 @@ export default function DrinkDetailScreen() {
   }, [drink, myId, relock, removePostsForDrink, router]);
 
   const back = () => router.back();
-  const bar = (title: string, right?: React.ReactNode) => (
+  // `paper` on the page's own bar only (v4.9 A.5): the unknown drink's stays as it was.
+  const bar = (title: string, right?: React.ReactNode, paper = false) => (
     <ScreenTopBar
       title={title}
       titleVisible={false}
       showRule={scrolled}
+      paper={paper}
       left={<TopBarButton icon="chevronLeft" label="Back" onPress={back} />}
       right={right}
     />
@@ -399,9 +410,13 @@ export default function DrinkDetailScreen() {
   // Named for what is actually drawn: a photo, your photo, or the drawing.
   const printNoun = stockPhoto ? 'Photo' : ownPhoto ? 'Your photo' : 'Drawing';
   const openPost = (postId: string) => router.push({ pathname: '/post/[id]', params: { id: postId } });
+  // A spirit's serve guide is first when it has a row to draw (every catalogue spirit's has); else its makeup.
+  const serveFirst = drink.serve != null && serveRows(drink.serve, drink).length > 0;
 
   return (
     <View style={styles.screen}>
+      {/* The paper's grain under the page (v4.9 A.5): outside the scroll, so the page moves over a fixed sheet. */}
+      <Paper />
       {/* No visible title: the name under the print is the page's title. The bar still speaks it. */}
       {bar(
         drink.name,
@@ -415,6 +430,7 @@ export default function DrinkDetailScreen() {
           accessibilityActions={canCollect ? SAVE_TO_COLLECTION : undefined}
           onAccessibilityAction={canCollect ? onSaveToCollectionAction(saveToCollection) : undefined}
         />,
+        true,
       )}
 
       <ScrollView
@@ -443,10 +459,18 @@ export default function DrinkDetailScreen() {
         {record ? <DexSinceRow drink={drink} record={record} post={myPost} onOpenPost={openPost} /> : null}
         <TastesOf notes={drink.tastingNotes} />
 
-        {/* How it's made: the spec for a cocktail; for a spirit, how to pour it and what's in it. */}
-        {drink.recipe ? <SpecSection recipe={drink.recipe} /> : null}
-        {!drink.recipe && drink.serve ? <ServeSection serve={drink.serve} drink={drink} /> : null}
-        {!drink.recipe && drink.composition ? <CompositionSection composition={drink.composition} /> : null}
+        {/*
+          How it's made: the spec for a cocktail; for a spirit, how to pour
+          it and what's in it. The first drawn takes the drink's number, and
+          with it the lead: the double rule and the figure (v4.9 C.5).
+        */}
+        {drink.recipe ? <SpecSection recipe={drink.recipe} number={drink.dexNumber} /> : null}
+        {!drink.recipe && drink.serve ? (
+          <ServeSection serve={drink.serve} drink={drink} number={serveFirst ? drink.dexNumber : undefined} />
+        ) : null}
+        {!drink.recipe && drink.composition ? (
+          <CompositionSection composition={drink.composition} number={serveFirst ? undefined : drink.dexNumber} />
+        ) : null}
 
         <FieldNotes description={drink.description} />
         <OriginStory drink={drink} />

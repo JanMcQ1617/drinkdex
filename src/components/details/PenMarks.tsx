@@ -5,6 +5,7 @@ import Svg, { Path } from 'react-native-svg';
 
 import { colors, stroke } from '@/constants/theme';
 
+import { DOUBLE, doubleRule } from './framePath';
 import { PEN, PEN_SEED, penRule, penSwash, penVRule, plateDrip, type PenShape } from './penPath';
 
 /* ==================================================================== */
@@ -26,6 +27,20 @@ import { PEN, PEN_SEED, penRule, penSwash, penVRule, plateDrip, type PenShape } 
 /*   PenSwash   under a tab root's title (Dex, Saved, your username)    */
 /*   PlateDrip  the one drip, off the caught Nº plate, drink page only  */
 /*                                                                      */
+/* v4.9 (specs/v4.9/details/spec.md A.3) adds one mark and one motion:  */
+/*                                                                      */
+/*   PenDoubleRule  two pen rules 3.2pt apart, the lower its own stroke */
+/*              (framePath's doubleRule): Home's stories rule doubled,  */
+/*              the Tournaments board rule, the spec card's head, the   */
+/*              Dex's "Everything else" head                            */
+/*   PenSwash's `draw`  the swash signing each tab as it opens (B):     */
+/*              ScreenTopBar's TitleSwash passes details/tabArrival's   */
+/*              value, through the same transform-only DrawOn           */
+/*                                                                      */
+/* The doodles, the frames and the press have modules of their own      */
+/* (DoodleMarks, FrameMarks, PressMarks, Paper), each fenced by rule 17 */
+/* the way this one is.                                                 */
+/*                                                                      */
 /* THE DETAIL TIER OF THE ACCENT. Campari, at 100%, and nothing else:   */
 /* no tint, no second hue, never accentPressed. It is not a seventh     */
 /* place (theme.ts): the six places say "post", "caught", "new" and the */
@@ -37,7 +52,8 @@ import { PEN, PEN_SEED, penRule, penSwash, penVRule, plateDrip, type PenShape } 
 /* CHEAP BY CONSTRUCTION. The geometry is penPath's, cached by its      */
 /* arguments, so a mark in a list cell (the feed's closing rule) is one */
 /* Map lookup and one static <Path> per render, and nothing here runs   */
-/* on a frame clock except the one draw-on, on the UI thread. No        */
+/* on a frame clock except the draw-ons (Home's stories rule, and since */
+/* v4.9 a tab root's swash as the tab opens), on the UI thread. No      */
 /* shadows, no images, no strokeWidth.                                  */
 /*                                                                      */
 /* INVISIBLE TO EVERYTHING BUT THE EYE. Each mark is pointerEvents none */
@@ -129,15 +145,42 @@ export const PenRule = React.memo(function PenRule({ length, seed = PEN_SEED.sto
 export interface PenSwashProps {
   /** min(fontScale, the bar's text cap): the swash grows in length with the title, never in weight. */
   scale?: number;
+  /** A tab root's arrival (details/tabArrival, v4.9 B): the swash draws itself in each time the tab opens. Without it, it stands drawn. */
+  draw?: SharedValue<number>;
   style?: StyleProp<ViewStyle>;
 }
 
 /** The swash under a tab root's title. Its box is (56 x scale) x 6; its origin goes 1pt right of the title and 2pt above the line box's foot. */
-export const PenSwash = React.memo(function PenSwash({ scale = 1, style }: PenSwashProps) {
+export const PenSwash = React.memo(function PenSwash({ scale = 1, draw, style }: PenSwashProps) {
   const length = PEN.swash.length * scale;
+  const shape = penSwash(length);
   return (
     <View {...HIDDEN} style={[{ width: length, height: PEN.swash.height, overflow: 'visible' }, style]}>
-      <Ink shape={penSwash(length)} />
+      {draw ? <DrawOn shape={shape} draw={draw} /> : <Ink shape={shape} />}
+    </View>
+  );
+});
+
+export interface PenDoubleRuleProps {
+  /** The rules' length, in points: the nominal box is length x 10, the upper centreline 3.4 down, the lower 6.6. */
+  length: number;
+  /** Which stroke of the pen (PEN_SEED) draws the upper rule; the lower is seed + 3, its own stroke. */
+  seed: number;
+  /**
+   * Home's stories rule only (v4.9 C.1): its draw-on. The window is the
+   * ink's whole box, so both strokes draw in the one pass, the upper
+   * leading by its own 1.5% of length.
+   */
+  draw?: SharedValue<number>;
+  style?: StyleProp<ViewStyle>;
+}
+
+/** Two pen rules, ruled twice by hand, never one thick line: the lower 1.5% shorter and its own stroke. */
+export const PenDoubleRule = React.memo(function PenDoubleRule({ length, seed, draw, style }: PenDoubleRuleProps) {
+  const shape = doubleRule(length, seed);
+  return (
+    <View {...HIDDEN} style={[{ width: length, height: DOUBLE.height, overflow: 'visible' }, style]}>
+      {draw ? <DrawOn shape={shape} draw={draw} /> : <Ink shape={shape} />}
     </View>
   );
 });

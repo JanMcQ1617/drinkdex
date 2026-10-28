@@ -23,6 +23,11 @@ import type { Drink } from '@/types';
 /* A grid row is two drinks. Each row carries the spot the Nº rail's    */
 /* thumb reads while that row is at the top of the grid: a section's    */
 /* stop inside a For-you front, else the row's first Dex number.        */
+/*                                                                      */
+/* A head carries what its ornament needs (v4.9, specs/v4.9/details     */
+/* C.4), so SectionHead looks nothing up: a For-you head its place in   */
+/* the order, 1 for the first section drawn (the press's "01" over it), */
+/* and Everything else's head `rest`, whose rule the pen doubles.       */
 /* ==================================================================== */
 
 /** Two to a row (layout spec 5.2): 184pt prints at 440. */
@@ -43,6 +48,14 @@ export type GridRow =
       /** The first head on the page: no extra air over it. */
       first: boolean;
       spot: RailSpot;
+      /**
+       * A For-you section's place in the person's order, from 1: the
+       * press's figure over its head ("01", v4.9 C.4). Ornament, never
+       * spoken; Everything else has none.
+       */
+      ordinal?: number;
+      /** Everything else's head: the pen doubles its rule, where For you ends and the catalogue begins (v4.9 C.4). */
+      rest?: boolean;
     }
   | {
       type: 'drinks';
@@ -181,7 +194,16 @@ export function dexGrid({
       if (s.drinks.length === 0) continue;
       const spot = stopSpot(stops.length);
       stopRows.push(rows.length);
-      rows.push({ type: 'head', key: `head:${s.kind}:${s.key}`, label: s.label, section: s, first: stops.length === 0, spot });
+      rows.push({
+        type: 'head',
+        key: `head:${s.kind}:${s.key}`,
+        label: s.label,
+        section: s,
+        first: stops.length === 0,
+        spot,
+        // Counted before the push, so the sections the grid draws are 01, 02, … with no gap for one left out.
+        ordinal: stops.length + 1,
+      });
       stops.push(s.label);
       pushRows(rows, s.drinks, spot);
     }
@@ -192,6 +214,7 @@ export function dexGrid({
       section: null,
       first: rows.length === 0,
       spot: forYou.rest[0]?.dexNumber ?? 1,
+      rest: true,
     });
     const restStart = rows.length;
     pushRows(rows, forYou.rest, null);

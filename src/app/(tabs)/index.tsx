@@ -5,6 +5,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
 import { EmptyArt } from '@/components/DexCard';
+import { EndMark } from '@/components/details/DoodleMarks';
+import { Paper } from '@/components/details/Paper';
 import { Rise } from '@/components/DockRise';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { groupPours, storyMap } from '@/components/home/groupPours';
@@ -66,6 +68,19 @@ import type { Post } from '@/types';
 /* pure functions of the Dock's clock, which rests at 1, the identity,  */
 /* so a stalled clock, a resume or Reduce Motion leaves the feed drawn, */
 /* and anything that mounts later is simply there.                      */
+/*                                                                      */
+/* PRINTED, AND SIGNED (v4.9; specs/v4.9/details/spec.md C.0 to C.3).   */
+/* Jan: "it still feels too empty". The page is the paper now, its      */
+/* grain the first thing under the list (Paper, fixed behind the        */
+/* scroll, arriving with the chrome under the Dock), and the pen frames */
+/* it without a mark per row: the stories rule is doubled               */
+/* (TodaysPours), each post is drawn as a print with two crop corners   */
+/* (PostCard; not the first post's top one, which would sit under the   */
+/* rule), and the feed's foot is signed, the coupe and the swash set    */
+/* right on the column as the footer's first thing. With nothing        */
+/* posted, the empty state sits at 38% of the free height with its      */
+/* composition round the print and the pen's arrow to "Find friends";   */
+/* never to the post key (App Store 1.4.3).                             */
 /* ==================================================================== */
 
 /**
@@ -210,7 +225,7 @@ function HomeFeed() {
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: Row }) =>
+    ({ item, index }: { item: Row; index: number }) =>
       item.kind === 'post' ? (
         <PostCard
           post={item.post}
@@ -222,6 +237,8 @@ function HomeFeed() {
           onBlocked={dropAuthor}
           story={story[item.post.authorId]}
           onOpenStory={openPours}
+          // The first post's top corner would sit 10 under the stories rule's lower stroke (v4.9 C.1).
+          cornerTop={index > 0}
         />
       ) : (
         <NotInDexYet picks={item.picks} profiles={profiles} onOpenDrink={openDrink} />
@@ -307,11 +324,15 @@ function HomeFeed() {
 
   /*
    * The foot of a feed with posts: where it ends, in Sipply's words, and
-   * the one thing to do there.
+   * the one thing to do there. Signed first (v4.9 C.2, C.10): Home's coupe
+   * and the swash under it, right on the footer's content edge, 18 under
+   * the last post (the footer's 8 and its own 10). One static node, never
+   * a cell; it says nothing, so the words after it are still the end.
    */
   const footer =
     visibleFeed.length > 0 ? (
       <View style={styles.footer}>
+        <EndMark name="coupe" style={styles.endMark} />
         <Text style={styles.footerText}>
           {feed.length >= FEED_CAP ? `That's the newest ${FEED_CAP} posts.` : "That's every post so far."}
         </Text>
@@ -321,6 +342,14 @@ function HomeFeed() {
 
   return (
     <View style={styles.screen}>
+      {/*
+        The paper, first, fixed behind the list (v4.9 A.5): the posts
+        scroll over it. In the chrome group's rise, so under the Dock the
+        grain arrives with the keys and the film's white frame stays white.
+      */}
+      <Rise group="chrome" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
+        <Paper />
+      </Rise>
       {/* The feed's rise under the Dock: one wrapper for the whole list, header and all. */}
       <Rise group="feed" style={styles.list}>
         <Animated.FlatList
@@ -344,6 +373,8 @@ function HomeFeed() {
           contentContainerStyle={{
             // The tab bar is docked over the foot of the feed, so the last post has to clear it.
             paddingBottom: insets.bottom + TAB_BAR_CLEARANCE + space.md,
+            // An empty feed's height to share: the empty state sits at 38% of it (v4.9 C.3). A feed outgrows it.
+            flexGrow: 1,
           }}
           ListHeaderComponent={header}
           ListFooterComponent={footer}
@@ -367,11 +398,20 @@ function HomeFeed() {
                 action={{ label: 'Try again', onPress: () => void load(myId) }}
               />
             ) : (
+              /*
+               * At 38% of the free height (the list's content grows to the
+               * screen for it), with the pen's composition round the print,
+               * the coupe and a lime, and its arrow to "Find friends": a key
+               * that leads somewhere to look, never one that posts (v4.9 C.3).
+               */
               <EmptyState
                 art={<EmptyArt drinkId="negroni" />}
                 title="Nothing posted yet"
                 body="Follow friends to see their photos and Dex entries. Your posts land here too."
                 action={{ label: 'Find friends', onPress: openFindFriends }}
+                doodle="coupe"
+                arrow
+                place="optical"
               />
             )
           }
@@ -414,4 +454,6 @@ const styles = StyleSheet.create({
     gap: space.md,
   },
   footerText: { ...textRole.small, color: colors.textMuted, textAlign: 'center' },
+  // The signed coupe: 10 under the footer's top, its own alignSelf putting it on the right content edge (416 at 440).
+  endMark: { marginTop: 10 },
 });

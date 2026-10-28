@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 
 import { EmptyArt } from '@/components/DexCard';
+import { EndMark } from '@/components/details/DoodleMarks';
+import { Paper } from '@/components/details/Paper';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ProfileHeader, type ProfileActions } from '@/components/profile/ProfileHeader';
 import { AboutSheet } from '@/components/profile/AboutSheet';
@@ -76,6 +78,21 @@ import type { Post, UserProfile } from '@/types';
 /* Each section says what an empty list means: still loading (a Hold),  */
 /* could not load (Try again), or nothing there yet. A failed refetch   */
 /* over rows already shown keeps them and says so above them.           */
+/*                                                                      */
+/* THE PAPER, AND THE PEN'S SIGNATURE (v4.9, specs/v4.9/details/spec.md */
+/* A.5 and C.8). Yours is a tab root, a page ground: the grain is the   */
+/* root's first child, and the bar's through ScreenTopBar's `paper`, so */
+/* the two meet as one sheet. Theirs is pushed and stays the plain      */
+/* white. Your grid is signed where it stops: the twist and the swash   */
+/* under it (details/DoodleMarks' EndMark), right-aligned on the gutter */
+/* 18 under the last prints, then "Showing the latest N of M" when the  */
+/* grid is one page of more. Both are the list's footer, one static     */
+/* node and never a cell. No posts yet: yours opts in to the twist's    */
+/* composition round the Negroni print, staying at the top (the header  */
+/* already fills it), and with no arrow, because its key posts a drink  */
+/* and no mark ever points at one (App Store 1.4.3); theirs, the twist  */
+/* and a coupe over the camera. The grid's prints get no corners: they  */
+/* are keys.                                                            */
 /* ==================================================================== */
 
 type Section = 'posts' | 'videos';
@@ -84,7 +101,6 @@ type Row =
   | { key: string; kind: 'posts'; posts: Post[] }
   | { key: string; kind: 'videos'; videos: ProfileVideo[] }
   | { key: string; kind: 'state'; state: 'loading' | 'empty' | 'error' }
-  | { key: string; kind: 'note'; text: string }
   | { key: string; kind: 'notice' };
 
 /* Only while Reels are on; off, there is one section and no strip at all. */
@@ -356,18 +372,27 @@ export function ProfileView({
       ? sectionRows('videos', videos.status, videos.videos, (items) =>
           chunk(items, 3).map((r): Row => ({ key: `videos:${r[0]!.id}`, kind: 'videos', videos: r })),
         )
-      : sectionRows('posts', posts.status, shown, (items) => [
-          ...chunk(items, 3).map((r): Row => ({ key: `posts:${r[0]!.id}`, kind: 'posts', posts: r })),
-          ...(pageOnly && posts.total !== null
-            ? [
-                {
-                  key: 'posts:note',
-                  kind: 'note' as const,
-                  text: `Showing the latest ${formatCount(posts.posts.length)} of ${formatCount(posts.total)} posts.`,
-                },
-              ]
-            : []),
-        ]);
+      : sectionRows('posts', posts.status, shown, (items) =>
+          chunk(items, 3).map((r): Row => ({ key: `posts:${r[0]!.id}`, kind: 'posts', posts: r })),
+        );
+
+  /*
+   * Under the grid of posts, the list's footer: on yours, its end signed
+   * (the twist, v4.9 C.10), then the note that the grid is one page of
+   * more, when it is. Never under the reels, the hold, a failure or an
+   * empty state.
+   */
+  const gridShown = section === 'posts' && shown.length > 0;
+  const footer = gridShown ? (
+    <>
+      {isOwn ? <EndMark name="twist" style={styles.end} /> : null}
+      {pageOnly && posts.total !== null ? (
+        <Text style={styles.note}>
+          {`Showing the latest ${formatCount(posts.posts.length)} of ${formatCount(posts.total)} posts.`}
+        </Text>
+      ) : null}
+    </>
+  ) : null;
 
   const reloadSection = section === 'videos' ? videos.reload : posts.reload;
 
@@ -421,9 +446,11 @@ export function ProfileView({
         title="Post your first drink"
         body="Drinks you share show up here."
         action={{ label: 'Post a drink', onPress: () => router.navigate('/log') }}
+        // The twist's composition, top-placed, and never an arrow: this key posts a drink (v4.9 C.8).
+        doodle="twist"
       />
     ) : (
-      <EmptyState icon="camera" title="No posts yet" body={`${u} hasn't posted a drink yet.`} />
+      <EmptyState icon="camera" title="No posts yet" body={`${u} hasn't posted a drink yet.`} doodle="twist" />
     );
   };
 
@@ -433,8 +460,6 @@ export function ProfileView({
         return <PostGridRow posts={item.posts} />;
       case 'videos':
         return <VideoGridRow videos={item.videos} />;
-      case 'note':
-        return <Text style={styles.note}>{item.text}</Text>;
       case 'notice':
         return (
           <Notice tone="error" style={styles.notice}>
@@ -485,6 +510,7 @@ export function ProfileView({
       keyExtractor={(row) => row.key}
       renderItem={renderRow}
       ListHeaderComponent={header}
+      ListFooterComponent={footer}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       refreshing={posts.reloading || (section === 'videos' && videos.reloading)}
@@ -507,6 +533,8 @@ export function ProfileView({
 
   return (
     <View style={styles.screen}>
+      {/* Yours alone: a tab root's page ground (the header note). */}
+      {isOwn ? <Paper /> : null}
       {/*
         The bare username: no @, no lock and no chevron, because there is
         no account switcher for a chevron to promise. Yours is a tab root,
@@ -521,6 +549,7 @@ export function ProfileView({
             openMenu ? <TopBarButton icon="more" label="Profile options" onPress={openMenu} /> : undefined
           }
           showRule={scrolled}
+          paper
         />
       ) : (
         <ScreenTopBar
@@ -563,5 +592,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.gutter,
     paddingTop: space.lg,
   },
+  /* The signed end: 18 under the last prints, its box's right edge on the gutter, 9 over the note (v4.9 C.10). */
+  end: { marginTop: 18, marginRight: layout.gutter, marginBottom: 9 },
   notice: { marginHorizontal: layout.gutter, marginTop: space.md, marginBottom: space.sm },
 });

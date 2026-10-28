@@ -38,6 +38,14 @@ import type { TournamentSummary } from '@/types';
 /* Daylight: rows on the page under small group heads, no panels, and   */
 /* the bar holds only Back (layout principle 8), so "Host a tournament" */
 /* is a key under the list.                                             */
+/*                                                                      */
+/* v4.9 (specs/v4.9/details/spec.md C.9). "No tournaments yet" opts in  */
+/* to the pen's composition over its trophy: the shaker up left and a   */
+/* lime up right, an arch with the glyph at its foot, top-placed and    */
+/* with no arrow (an arrow is only ever an art-led state's). Ornament,  */
+/* never a word: no doodle means a screen. The rest of this pushed page */
+/* stays bare, with no paper (A.5), and so does every other state here: */
+/* the gate, the error, the wait.                                       */
 /* ==================================================================== */
 
 const FINISHED_SHOWN = 20;
@@ -243,6 +251,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
   ) : (
     <EmptyState
       icon="trophy"
+      doodle="shaker"
       title="No tournaments yet"
       body="Host one and invite people you follow to keep a shared log of Dex entries. Whoever posts the most entries wins."
       action={{ label: 'Host a tournament', onPress: host }}

@@ -16,10 +16,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DexStatusTag, DrinkName, Print } from '@/components/cabinet';
 import { DexThumb, DrinkFace } from '@/components/DexCard';
 import { lineMarks } from '@/components/details/lineMarks';
-import { PenMargin } from '@/components/details/PenMarks';
-import { PEN } from '@/components/details/penPath';
+import { numeralWidth } from '@/components/details/numeralPath';
+import { Paper } from '@/components/details/Paper';
+import { PenDoubleRule, PenMargin } from '@/components/details/PenMarks';
+import { PEN, PEN_SEED } from '@/components/details/penPath';
+import { PressLeader, PressNumeral } from '@/components/details/PressMarks';
 import { Icon } from '@/components/icons';
-import { NumberPlate } from '@/components/plate';
+import { formatPlateNumber, NumberPlate } from '@/components/plate';
 import { Avatar, Button } from '@/components/ui';
 import { CATEGORY_META, colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import {
@@ -69,7 +72,7 @@ import type {
 /* serve guide with only a temperature, no ABV). A blank part is left   */
 /* out rather than drawn empty.                                         */
 /*                                                                      */
-/* THE RULED RECORD (v4.6, specs/v4.6-details A.3 #5, #6, #8). The one  */
+/* THE RULED RECORD (v4.6, specs/v4.6-details A.3 #5, #6, #8). The first */
 /* exception to "no rules": the logo's pen, at hairline weight, rules   */
 /* the record the way a ledger's page is ruled, and says nothing. A     */
 /* margin rule in the middle of the left gutter (x 12) runs from the    */
@@ -80,8 +83,27 @@ import type {
 /* the print (the margin rule starts 36.8 under it), a key or a word,   */
 /* and their heights come from the type's own metrics (details/         */
 /* lineMarks) with the rules measuring themselves, so they follow       */
-/* Dynamic Type. A drink not caught has two marks here, a caught one    */
-/* three, the most any screen has.                                      */
+/* Dynamic Type.                                                        */
+/*                                                                      */
+/* THE SPEC AS A MENU CARD (v4.9, specs/v4.9/details C.5, A.5). Jan:    */
+/* "it still feels too empty", and two of the directions he picked land */
+/* here. The first how-section the page draws (the spec, else the       */
+/* serve, else the composition) opens with a lead: the pen's double     */
+/* rule across the column, then the drink's own figure in the press's   */
+/* outline, "Nº 0100" at cap 64 in colors.rule (the plate's spelling,   */
+/* shrunk only to fit a narrow column, and drawn only up to 1.3x text), */
+/* then its head. A custom drink gets the rule without a figure: it has */
+/* no number. The figure is the same grey caught or not, and never      */
+/* spoken (the plate says "Number 100"). The spec's rows read as a menu */
+/* sets them, item ··· amount: the press's dotted leader between, on    */
+/* the item's first baseline, its dots dropped when the item wraps or   */
+/* has no amount (the leader itself is always laid out, so a wrap can   */
+/* never undo itself). Past 1.3x, or with an amount wider than its      */
+/* column, the rows stack as they always did. The page and the pinned   */
+/* bar lie on the paper's grain (A.5).                                  */
+/*                                                                      */
+/* So a drink not caught has two pen marks at rest and three in all, a  */
+/* caught one three and four, and the press's two (v4.9 D.1).           */
 /*                                                                      */
 /* Nothing here animates: content never waits on a frame loop to show.  */
 /* ==================================================================== */
@@ -106,10 +128,22 @@ function sentence(s: string): string {
 const HERO_NAME_CAP = 1.2;
 const FACT_CAP = 1.3;
 
-/** The spec's amount column, the gap after it, and when it stops being a column. */
+/**
+ * The spec's amount column as it was, the gap after it, and when it stops
+ * being a column. Beside the item (v4.9) the column is as wide as its
+ * words, at the row's end; an amount wider than the old column's 76 of
+ * text still stacks every row, as it always did.
+ */
 const AMOUNT_COL = 84;
 const AMOUNT_GAP = space.sm;
 const STACK_ABOVE_SCALE = 1.3;
+
+/** The how-section's figure at its largest, its cap height in pt (v4.9 C.5): never scaled with Larger Text. */
+const NUMERAL_CAP = 64;
+/** Above this text size the lead draws no figure. */
+const NUMERAL_TEXT_CAP = 1.3;
+/** From the lead's double rule to the figure, or to the head when there is no figure. */
+const LEAD_GAP = space.lg;
 
 /** Hidden from VoiceOver and untouchable: the row it sits in speaks. */
 const DECOR = {
@@ -476,20 +510,26 @@ export function DexSinceRow({
  * A section of the page: its head in body 600 (a header for the rotor),
  * an optional quiet aside on the same line ("Stirred · 3 ingredients"),
  * then its content. Set apart from the one above by space alone.
+ *
+ * `lead` is drawn over the head, after the section's 32 of air (v4.9):
+ * the first how-section's HowLead, and nothing on any other section.
  */
 function Section({
   title,
   aside,
+  lead,
   style,
   children,
 }: {
   title: string;
   aside?: string;
+  lead?: React.ReactNode;
   style?: ViewStyle;
   children: React.ReactNode;
 }) {
   return (
     <View style={[styles.section, style]}>
+      {lead}
       <View style={styles.sectionHead}>
         <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink]}>
           {title}
@@ -500,6 +540,35 @@ function Section({
     </View>
   );
 }
+
+/**
+ * The first how-section's lead (v4.9 C.5): the pen's double rule across
+ * the column, 16, then, for a catalogue drink up to 1.3x text, its figure
+ * in the press's outline ("Nº 0100", the plate's spelling) at cap 64, or
+ * smaller where the column is narrower than the figure ("Nº 0444" takes
+ * 61 at 390pt), and the section's own 12 to the head. `number` null (a
+ * custom drink, which has none) is the rule alone, 16 over the head.
+ *
+ * Both marks are hidden and measure nothing: the figure's width is its
+ * advances, and the rule's the column's. The figure never says whether
+ * the drink is caught; the plate above does, in words.
+ */
+function HowLead({ number }: { number: number | null }) {
+  const { width, fontScale } = useWindowDimensions();
+  const measure = width - layout.gutter * 2;
+  const figure = number !== null && fontScale <= NUMERAL_TEXT_CAP ? formatPlateNumber(number) : null;
+  // The cap that fits the column, floored to a whole point, so the set never runs past the gutter.
+  const cap = figure ? Math.min(NUMERAL_CAP, Math.floor(measure / numeralWidth(figure, 1))) : 0;
+  return (
+    <View style={figure ? undefined : styles.leadBare}>
+      <PenDoubleRule length={measure} seed={PEN_SEED.spec} />
+      {figure ? <PressNumeral text={figure} cap={cap} style={styles.leadFigure} /> : null}
+    </View>
+  );
+}
+
+/** The section's lead for `number`: none when it is not passed (every how-section but the page's first). */
+const leadFor = (number: number | null | undefined) => (number === undefined ? undefined : <HowLead number={number} />);
 
 /** A label over its detail: method, garnish, the serve's parts, the composition's. */
 function Detail({ label, detail }: { label: string; detail: string }) {
@@ -530,32 +599,68 @@ export function TastesOf({ notes }: { notes: string[] }) {
 const ONE_WORD = /^\S{1,16}$/;
 
 /**
- * One ingredient, amount first, the way a bartender reads a spec: the
- * amount in tabular 600 in an 84pt column, its metric under it, then the
- * item with any note after it ("Soda water · to top").
+ * One ingredient, as a menu sets it (v4.9 C.5, O-1): the item with any
+ * note after it ("Soda water · to top"), the press's dotted leader, then
+ * the amount in tabular 600 over its metric, right-aligned at the row's
+ * end. The row aligns on first baselines, so the leader (a childless
+ * View, whose baseline is its foot) sits on the item's first line, level
+ * with the amount's figures. The item counts its lines (onTextLayout,
+ * one extra render, on a page and never in a cell): the dots show only
+ * beside an item on one line with an amount to lead to. The leader's
+ * View is laid out either way, so dropping its dots can never unwrap the
+ * item and loop. Spoken in the order it reads: item, amount, metric,
+ * note.
  *
  * `stacked` puts the amount above the item in one column, for every row
- * at once so the column never half-holds: past 1.3x text an 84pt column
- * would wrap "1.5 oz" a letter at a time, and an amount whose longest word
- * is wider than the column ("1 barspoon", "2–3 cherries") would break
- * inside the word.
+ * at once, exactly as the spec was set before v4.9 (and spoken amount
+ * first, as it then reads): past 1.3x text an item, a leader and an
+ * amount no longer share a phone's line, and an amount whose longest word
+ * is wider than the old column ("1 barspoon", "2–3 cherries") would
+ * squeeze the item to a word a line.
  */
 function IngredientRow({ ing, stacked }: { ing: RecipeIngredient; stacked: boolean }) {
   const { amount, metric, note } = splitAmount(ing.amount);
-  const spoken = [amount, metric, ing.item, note].filter(Boolean).join(', ');
   const hasAmount = Boolean(amount || metric);
+  // The item's lines, from its own layout: one until it has drawn, as nearly every item is.
+  const [lines, setLines] = useState(1);
+  const figures = hasAmount ? (
+    <>
+      {amount ? <Text style={[textRole.specAmount, styles.ink]}>{amount}</Text> : null}
+      {metric ? <Text style={[textRole.small, styles.muted, tabular]}>{metric}</Text> : null}
+    </>
+  ) : null;
+  const noteText = note ? <Text style={[textRole.small, styles.muted]}>{` · ${note}`}</Text> : null;
+
+  if (stacked) {
+    return (
+      <View
+        accessible
+        accessibilityLabel={[amount, metric, ing.item, note].filter(Boolean).join(', ')}
+        style={[styles.ingRow, styles.ingRowStacked]}>
+        {figures ? <View>{figures}</View> : null}
+        <Text style={[textRole.body, styles.ink]}>
+          {ing.item}
+          {noteText}
+        </Text>
+      </View>
+    );
+  }
   return (
-    <View accessible accessibilityLabel={spoken} style={[styles.ingRow, stacked && styles.ingRowStacked]}>
-      {hasAmount || !stacked ? (
-        <View style={stacked ? null : styles.amountCol}>
-          {amount ? <Text style={[textRole.specAmount, styles.ink]}>{amount}</Text> : null}
-          {metric ? <Text style={[textRole.small, styles.muted, tabular]}>{metric}</Text> : null}
-        </View>
-      ) : null}
-      <Text style={[textRole.body, styles.ink, !stacked && styles.ingItemBeside]}>
+    <View
+      accessible
+      accessibilityLabel={[ing.item, amount, metric, note].filter(Boolean).join(', ')}
+      style={styles.ingRow}>
+      <Text
+        onTextLayout={(e) => {
+          const n = e.nativeEvent.lines.length;
+          if (n !== lines) setLines(n);
+        }}
+        style={[textRole.body, styles.ink, styles.ingItem]}>
         {ing.item}
-        {note ? <Text style={[textRole.small, styles.muted]}>{` · ${note}`}</Text> : null}
+        {noteText}
       </Text>
+      <PressLeader dots={hasAmount && lines === 1} />
+      {figures ? <View style={styles.amountCol}>{figures}</View> : null}
     </View>
   );
 }
@@ -569,8 +674,12 @@ function IngredientRow({ ing, stacked }: { ing: RecipeIngredient; stacked: boole
  * head gets a row. A drink someone added may have no steps and no
  * amounts: the block is left out and a missing amount leaves its column
  * empty rather than inventing one. Nothing at all when there is nothing.
+ *
+ * `number`, on the page's first how-section only, draws the lead over
+ * the head (HowLead, v4.9): the drink's Dex number, or null for a drink
+ * someone added (the rule without a figure). Left out, no lead.
  */
-export function SpecSection({ recipe }: { recipe: Recipe }) {
+export function SpecSection({ recipe, number }: { recipe: Recipe; number?: number | null }) {
   const { fontScale } = useWindowDimensions();
   const method = (recipe.method ?? '').trim();
   const headMethod = ONE_WORD.test(method) ? sentence(method) : '';
@@ -596,7 +705,7 @@ export function SpecSection({ recipe }: { recipe: Recipe }) {
     });
 
   return (
-    <Section title="The spec" aside={aside}>
+    <Section title="The spec" aside={aside} lead={leadFor(number)}>
       {n > 0 ? (
         <View style={styles.rows}>
           {recipe.ingredients.map((ing, i) => (
@@ -632,6 +741,26 @@ const glassKey = (s: string | undefined) =>
     .replace(/\s+glass(?:es)?$/, '');
 
 /**
+ * The serve guide's rows that say something, and the glass only when it
+ * says more than the facts do (ServeSection, below). Empty when the
+ * section would draw nothing, so a page can tell whether it is the first
+ * how-section drawn, the one the lead goes on.
+ */
+export function serveRows(
+  serve: ServeGuide,
+  drink?: Pick<Drink, 'category' | 'glassware' | 'subcategory'>,
+): { label: string; detail: string }[] {
+  const shown = drink ? glassPhrase(drink) : '';
+  const glass = shown && glassKey(serve.glass) === glassKey(shown) ? '' : serve.glass;
+  return [
+    { label: 'Temperature', detail: serve.temp },
+    { label: 'Glass', detail: glass },
+    { label: 'How to serve it', detail: serve.how },
+    { label: 'Pairs with', detail: (serve.pair ?? []).filter(Boolean).join(', ') },
+  ].filter((r) => r.detail && r.detail.trim());
+}
+
+/**
  * Spirits: how to pour it at home. Each part only when it has something
  * in it, since a drink someone added may know its temperature and nothing
  * else.
@@ -642,25 +771,23 @@ const glassKey = (s: string | undefined) =>
  * clutter v4 took out. "Chilled shot glass" and "Copita or Glencairn" say
  * more than the fact's "Shot glass" and "Glencairn glass", so they keep
  * the row.
+ *
+ * `number` draws the lead, as SpecSection's does, when this is the page's
+ * first how-section: a spirit's.
  */
 export function ServeSection({
   serve,
   drink,
+  number,
 }: {
   serve: ServeGuide;
   drink?: Pick<Drink, 'category' | 'glassware' | 'subcategory'>;
+  number?: number | null;
 }) {
-  const shown = drink ? glassPhrase(drink) : '';
-  const glass = shown && glassKey(serve.glass) === glassKey(shown) ? '' : serve.glass;
-  const rows = [
-    { label: 'Temperature', detail: serve.temp },
-    { label: 'Glass', detail: glass },
-    { label: 'How to serve it', detail: serve.how },
-    { label: 'Pairs with', detail: (serve.pair ?? []).filter(Boolean).join(', ') },
-  ].filter((r) => r.detail && r.detail.trim());
+  const rows = serveRows(serve, drink);
   if (rows.length === 0) return null;
   return (
-    <Section title="Serving">
+    <Section title="Serving" lead={leadFor(number)}>
       {rows.map((r) => (
         <Detail key={r.label} label={r.label} detail={sentence(r.detail.trim())} />
       ))}
@@ -674,14 +801,22 @@ export function ServeSection({
  * data (Base/Distillation/Aging for a spirit, Grapes/Region/Vinification
  * for a sherry or a port). The summary leads and the process closes; a
  * drink someone added has no summary (it is editorial).
+ *
+ * `number` draws the lead when no serve guide came before it (HowLead).
  */
-export function CompositionSection({ composition }: { composition: Composition }) {
+export function CompositionSection({
+  composition,
+  number,
+}: {
+  composition: Composition;
+  number?: number | null;
+}) {
   const parts = composition.components.filter((c) => c.detail.trim());
   const summary = composition.summary.trim();
   const process = composition.process.trim();
   if (parts.length === 0 && !summary && !process) return null;
   return (
-    <Section title="What's in it">
+    <Section title="What's in it" lead={leadFor(number)}>
       {summary ? <Text style={[textRole.body, styles.ink]}>{summary}</Text> : null}
       {parts.map((c, i) => (
         <Detail key={`${i}-${c.label}`} label={c.label} detail={c.detail} />
@@ -830,6 +965,10 @@ const BAR_CAP = 1.3;
  * The label caps at 1.3 and may wrap to two lines; the bar grows with it.
  * `onHeight` reports the bar's measured height so the route can pad its
  * content by it, and nothing at the foot hides under a bar that grew.
+ *
+ * The bar lies on the paper's grain (v4.9 A.5), its first child, as the
+ * page under it does, so the bar reads as the page and not as a panel.
+ * The key keeps its own fill.
  */
 export function PinnedPostBar({
   name,
@@ -853,6 +992,10 @@ export function PinnedPostBar({
     <View
       onLayout={(e) => onHeight?.(Math.ceil(e.nativeEvent.layout.height))}
       style={[styles.bar, ruled && styles.barRuled, { paddingBottom: Math.max(insets.bottom, space.md) }]}>
+      {/* Up over the top border's band: inside it, the grain would leave the bar's white as a 1pt line. */}
+      <View pointerEvents="none" style={styles.barGrain}>
+        <Paper />
+      </View>
       <Button
         label={label}
         variant={postable ? 'post' : 'primary'}
@@ -963,6 +1106,10 @@ const styles = StyleSheet.create({
     rowGap: space.lg,
   },
 
+  /* The lead (v4.9): the double rule, 16, the figure, the section's 12 to the head; with no figure, 16 to it. */
+  leadFigure: { marginTop: LEAD_GAP },
+  leadBare: { marginBottom: LEAD_GAP - space.md },
+
   /* Sections: 32 of air above each, the head 12 over its content. */
   section: { marginTop: layout.section, paddingHorizontal: layout.gutter, gap: space.md },
   sectionHead: {
@@ -982,12 +1129,13 @@ const styles = StyleSheet.create({
   sinceText: { flex: 1 },
   note: { marginTop: space.xs },
 
-  /* Ingredients */
+  /* Ingredients: item ··· amount on the first baseline (the leader sets its own flex, 16 wide at least). */
   ingRow: { flexDirection: 'row', alignItems: 'baseline' },
   ingRowStacked: { flexDirection: 'column', alignItems: 'stretch', gap: 2 },
-  amountCol: { width: AMOUNT_COL, paddingRight: AMOUNT_GAP },
-  /* Beside the amount column it takes the rest of the row; stacked, its own height. */
-  ingItemBeside: { flex: 1 },
+  /* The item gives way first, wrapping before the amount or the leader's 16 would. */
+  ingItem: { flexShrink: 1 },
+  /* As wide as its words, at the row's end; the metric right-aligned under the amount. */
+  amountCol: { alignItems: 'flex-end' },
 
   /* Steps */
   stepRow: { flexDirection: 'row', alignItems: 'flex-start' },
@@ -1012,4 +1160,6 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
   },
   barRuled: { borderTopColor: colors.line },
+  /* The paper's box: the bar's, up to the outer edge of its top border (v4.9 A.5). */
+  barGrain: { position: 'absolute', top: -stroke.edge, left: 0, right: 0, bottom: 0 },
 });

@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { Paper } from '@/components/details/Paper';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { ScreenTopBar, TopBarButton } from '@/components/ScreenTopBar';
@@ -37,6 +38,12 @@ import { useAuth } from '@/store/auth';
 /* invitations row still opens the list.                                */
 /*                                                                      */
 /* The list is the Profile tab's scroll source (chromeTab).              */
+/*                                                                      */
+/* The paper (v4.9, specs/v4.9/details/spec.md A.5). ProfileView lays   */
+/* the page's grain under your profile; the fallback below, which holds */
+/* the tab while your row is loading or has failed, lays the same at    */
+/* its root and under its bar, so the tab's ground never changes as the */
+/* profile replaces it. It has no title, so no swash.                   */
 /* ==================================================================== */
 
 function OwnProfile() {
@@ -82,11 +89,13 @@ function OwnProfile() {
    */
   return (
     <View style={styles.screen}>
+      <Paper />
       <ScreenTopBar
         size="lg"
         title=""
         right={<TopBarButton icon="more" label="Profile options" onPress={() => setFallbackMenu(true)} />}
         showRule={false}
+        paper
       />
       {profileError && !profileLoading ? (
         /*

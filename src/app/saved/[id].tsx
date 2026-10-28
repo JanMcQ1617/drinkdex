@@ -300,6 +300,11 @@ function CollectionBody({
     </View>
   );
 
+  /*
+   * The pen's composition over the bookmark (v4.9, specs/v4.9/details/spec.md
+   * C.9): the olive pick and a cherry in an arch with the glyph at their
+   * foot, one path, hidden. No arrow: that is an art-led state's alone.
+   */
   const empty = (
     <View style={styles.emptyWrap}>
       <EmptyState
@@ -314,6 +319,7 @@ function CollectionBody({
           },
         }}
         actionVariant="secondary"
+        doodle="olive"
       />
     </View>
   );

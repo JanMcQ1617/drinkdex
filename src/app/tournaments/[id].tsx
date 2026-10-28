@@ -14,6 +14,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AuthGate } from '@/components/AuthGate';
+import { Paper } from '@/components/details/Paper';
 import { PenSwash } from '@/components/details/PenMarks';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
@@ -71,9 +72,17 @@ import type { TournamentBoard, UserProfile } from '@/types';
 /* (3pt lower than a tab root's, clear of a typed name's descenders).   */
 /* It is ornament, never a state: it reads the same on now, coming up   */
 /* or finished; VoiceOver never meets it.                               */
-/* It is this screen's one mark; the standings get none (a margin rule  */
-/* beside them would sit 3.4pt from your row's wash and read as its     */
-/* border).                                                             */
+/* It stays static (v4.9 B): this is a pushed page, not a tab opening.  */
+/* The standings get no rule (a margin rule beside them would sit 3.4pt */
+/* from your row's wash and read as its border).                        */
+/*                                                                      */
+/* v4.9 (specs/v4.9/details/spec.md C.7, A.5). While it is on, the      */
+/* leader's face wears the pen's crown (Leaderboard), the screen's one  */
+/* other mark. The page and its bar lie on the paper, meeting as one    */
+/* sheet, and so does the page that waits for the board, so the grain   */
+/* is already there when the board draws. A tournament that is not      */
+/* available and a load that failed stay bare, as every dead end and    */
+/* error does.                                                          */
 /* ==================================================================== */
 
 /**
@@ -193,12 +202,16 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
 
   /* ---- Before there is a board to draw, with its names ---- */
   if (!shown || (outcome === null && !named)) {
+    // Waiting for the board: on the paper it will draw on. The dead end and the error stay bare (v4.9 A.5).
+    const holding = !gone && outcome !== 'failed';
     return (
       <View style={styles.screen}>
+        {holding ? <Paper /> : null}
         <ScreenTopBar
           title="Tournament"
           showRule={false}
           left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
+          paper={holding}
         />
         <View style={styles.center}>
           {gone ? (
@@ -489,6 +502,8 @@ function BoardView({
 
   return (
     <View style={styles.screen}>
+      {/* The paper first, under everything: fixed while the page scrolls over it. */}
+      <Paper />
       {/*
         A pushed screen's bar holds Back and nothing else (layout principle
         8). The name is the head's, not the bar's (a name appears once), and
@@ -500,6 +515,7 @@ function BoardView({
         titleVisible={false}
         showRule={scrolled}
         left={<TopBarButton icon="chevronLeft" label="Back" onPress={onBack} />}
+        paper
       />
       <ScrollView
         onScroll={onScroll}

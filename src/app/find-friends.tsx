@@ -65,7 +65,10 @@ export default function FindFriendsScreen() {
    * Failure and empty say different things. The empty line used to show
    * when the list failed to load too, so a dropped request read as "you're
    * early". Empty has no key: the invite section is on this same screen.
-   * Only the rows are the list's data; these stand in for them.
+   * Only the rows are the list's data; these stand in for them. Empty
+   * opts in to the pen's composition over the people glyph (v4.9,
+   * specs/v4.9/details/spec.md C.9): a coupe and a twist in an arch,
+   * one path, hidden; the hold and the failure stay bare.
    */
   const everyoneState =
     loadingPeople && people.length === 0 ? (
@@ -88,6 +91,7 @@ export default function FindFriendsScreen() {
         icon="users"
         title="No one else here yet"
         body="Send a friend an invite from this screen. When they join, you’ll follow each other."
+        doodle="coupe"
       />
     ) : null;
 

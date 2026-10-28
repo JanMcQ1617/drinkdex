@@ -14,6 +14,7 @@ import {
   Text,
   TextInput,
   type TextStyle,
+  useWindowDimensions,
   View,
   type ViewStyle,
 } from 'react-native';
@@ -27,6 +28,8 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { DrinkName } from '@/components/cabinet';
+import { EmptyMarks, PenArrow } from '@/components/details/DoodleMarks';
+import type { DoodleName } from '@/components/details/doodlePath';
 import { Icon, type IconName } from '@/components/icons';
 import {
   avatarTone,
@@ -2010,6 +2013,11 @@ export function SelectField({
 /** Either the glyph or the art: one picture above the title, never none. */
 type EmptyStateArt = { icon: IconName; art?: React.ReactNode } | { icon?: IconName; art: React.ReactNode };
 
+/** The empty state's arrow hides above this text size: "Show every drink" outgrows its 200pt key past it (v4.9 C.9). */
+const ARROW_TEXT_CAP = 1.15;
+/** And under this phone width, where its start (62pt right of the key) would leave the 24pt gutter. */
+const ARROW_MIN_WIDTH = 372;
+
 const EMPTY_TONE = {
   paper: { glyph: colors.text, title: colors.text, body: colors.textMuted, action: 'primary', secondary: 'text' },
   dark: { glyph: colors.reelInk, title: colors.reelInk, body: colors.reelInkMuted, action: 'onDark', secondary: 'onDarkText' },
@@ -2038,6 +2046,30 @@ const EMPTY_TONE = {
  * (which imports this file), and it is hidden from VoiceOver: the title
  * says what the picture shows. The art must be a real catalogue drink,
  * never an invented person or post.
+ *
+ * THE PEN'S COMPOSITION (v4.9, specs/v4.9/details/spec.md C.9), only
+ * for a caller that opts in. `doodle` names the subject, and the picture
+ * gains its cluster, ONE path: round an art print, its anti-diagonal crop
+ * corners and two or three garnishes beside it; over a glyph, two in an
+ * arch with the glyph at their foot (details/DoodleMarks' EmptyMarks, at
+ * the picture's own top-left). Nothing draws unless a caller passes it,
+ * so an error, a dead end, a sheet or a future empty state is bare
+ * without an edit, and check-design's DETAIL_PROPS lets only the opt-in
+ * table's files pass it. The dark tone (the reels) and an `alert` glyph
+ * (a failure) draw nothing, whatever is passed.
+ *
+ * `arrow` adds the pen's hook from beside the body round to the key, on
+ * the two art-led keys that lead somewhere to look (Home's "Find
+ * friends", the Dex's "Show every drink"), never on a key that posts or
+ * logs a drink (App Store 1.4.3). It is drawn only while it fits: text
+ * at 1.15 or under ("Show every drink" outgrows the 200pt key above it)
+ * and a phone 372pt wide or more, where its start stays inside the
+ * gutter. Its wrapper is a plain View, never hidden, so VoiceOver still
+ * reaches the key; only the marks themselves are hidden.
+ *
+ * `place="optical"` sets the composition's top at 38% of the free height
+ * rather than at the top: for a list's ListEmptyComponent whose list
+ * gives its content `flexGrow: 1`, so there is a height to share.
  */
 export function EmptyState({
   icon,
@@ -2048,6 +2080,9 @@ export function EmptyState({
   actionVariant,
   secondaryAction,
   tone = 'paper',
+  doodle,
+  arrow = false,
+  place = 'top',
 }: EmptyStateArt & {
   title: string;
   body: string;
@@ -2057,26 +2092,45 @@ export function EmptyState({
   /** A quieter second way out, under the action: "Clear search". */
   secondaryAction?: { label: string; onPress: () => void };
   tone?: 'paper' | 'dark';
+  /** The pen's composition round the picture (v4.9 C.9). None by default: a caller opts in. */
+  doodle?: DoodleName;
+  /** The pen's arrow to the key, on an art-led state with an action (v4.9 C.9). */
+  arrow?: boolean;
+  /** 'top' (default), or 'optical': the composition's top at 38% of the free height. */
+  place?: 'top' | 'optical';
 }) {
   const t = EMPTY_TONE[tone];
+  const { fontScale, width } = useWindowDimensions();
+  // A failure and the reels' dark ground stay bare, whatever is passed.
+  const bare = tone === 'dark' || icon === 'alert';
+  const marks = !bare && doodle ? doodle : null;
+  const arrowShown = !bare && arrow && !!art && fontScale <= ARROW_TEXT_CAP && width >= ARROW_MIN_WIDTH;
+  const optical = place === 'optical';
   return (
-    <View style={[styles.empty, tone === 'dark' && styles.emptyDark]}>
-      {art ? (
-        <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-          {art}
-        </View>
-      ) : icon ? (
-        <Icon name={icon} size={36} color={t.glyph} />
-      ) : null}
+    <View style={[styles.empty, optical && styles.emptyFill, tone === 'dark' && styles.emptyDark]}>
+      {optical ? <View style={styles.emptyAbove} /> : null}
+      <View style={styles.emptyPicture}>
+        {art ? (
+          <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+            {art}
+          </View>
+        ) : icon ? (
+          <Icon name={icon} size={36} color={t.glyph} />
+        ) : null}
+        {marks ? <EmptyMarks name={marks} kind={art ? 'art' : 'icon'} /> : null}
+      </View>
       <Text style={[textRole.emptyTitle, styles.emptyTitle, { color: t.title }]}>{title}</Text>
       <Text style={[styles.emptyBody, { color: t.body }]}>{body}</Text>
       {action ? (
-        <Button
-          label={action.label}
-          onPress={action.onPress}
-          variant={actionVariant ?? t.action}
-          style={styles.emptyAction}
-        />
+        <View style={styles.emptyActionBox}>
+          <Button
+            label={action.label}
+            onPress={action.onPress}
+            variant={actionVariant ?? t.action}
+            style={styles.emptyActionKey}
+          />
+          {arrowShown ? <PenArrow /> : null}
+        </View>
       ) : null}
       {secondaryAction ? (
         <Button
@@ -2087,6 +2141,7 @@ export function EmptyState({
           style={styles.emptySecondary}
         />
       ) : null}
+      {optical ? <View style={styles.emptyBelow} /> : null}
     </View>
   );
 }
@@ -2529,7 +2584,15 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     marginTop: space.sm,
   },
-  emptyAction: { marginTop: space.xl, minWidth: 200 },
+  /* The optical place: the composition's top at 38% of the free height, the rest under it. */
+  emptyFill: { flexGrow: 1 },
+  emptyAbove: { flexGrow: 38 },
+  emptyBelow: { flexGrow: 62 },
+  /* The picture's own box, so the pen's composition is drawn in the print's or the glyph's frame. */
+  emptyPicture: { position: 'relative', overflow: 'visible' },
+  /* A plain wrapper (no accessibility props), so the arrow's frame is the key's top-right corner. */
+  emptyActionBox: { marginTop: space.xl },
+  emptyActionKey: { minWidth: 200 },
   emptySecondary: { marginTop: space.xs },
 
   /* Hold */

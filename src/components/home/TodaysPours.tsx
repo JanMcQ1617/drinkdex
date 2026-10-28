@@ -1,11 +1,13 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
 import { FlatList, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useDerivedValue } from 'react-native-reanimated';
 
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { HOME_RULE_DRAW } from '@/components/details/handoff';
-import { PenRule } from '@/components/details/PenMarks';
+import { PenDoubleRule } from '@/components/details/PenMarks';
 import { PEN_SEED } from '@/components/details/penPath';
+import { useTabArrival } from '@/components/details/tabArrival';
 import { groupPours, POUR_WINDOW_MS, type PourGroup } from '@/components/home/groupPours';
 import { Icon } from '@/components/icons';
 import { Avatar, haptic, PressableScale } from '@/components/ui';
@@ -55,14 +57,28 @@ import type { Drink, Pour, UserProfile } from '@/types';
 /* names, the drawn rule: the logo's pen at hairline weight across      */
 /* Home's 16 column, the one mark on Home not repeated per post. It is  */
 /* ornament and says nothing: no count, no state. It sits in a 10pt     */
-/* band under the rail, so the tray's foot goes from 8 to 18, and its   */
-/* centreline lands 14.1 under the names' baseline and 14.1 over the    */
-/* first post's ring, 32 clear of the discs. After the intro it draws   */
-/* itself in once, the Dock's last beat: its PenRule reads              */
-/* HOME_RULE_DRAW, which only the Dock moves and which rests at 1, so   */
-/* on any other launch it is simply there. It lives HERE, inside the    */
-/* one root this component returns, so it rises with the stories group  */
-/* that index.tsx wraps round <TodaysPours>.                            */
+/* band under the rail, so the tray's foot goes from 8 to 18.           */
+/*                                                                      */
+/* DOUBLED SINCE v4.9 (specs/v4.9/details C.1). The rule Jan likes is   */
+/* the upper stroke, exactly itself (Pen's mock, seed 0), and the       */
+/* double rule that landed on Tournaments and the drink page adds a     */
+/* lower one, 3.2 under it and its own stroke, so Home's two halves,    */
+/* the stories and the feed, are divided the way the board's are. The   */
+/* pair sits 2pt higher than the single rule did, in the same band: the */
+/* upper centreline on the band's top, 12.1 under the names' baseline,  */
+/* and the lower 3.1 into it, 12.9 over the first post's ring, so the   */
+/* 12pt ring clearance holds and nothing below moves.                   */
+/*                                                                      */
+/* IT SIGNS EACH ARRIVAL. After the intro it draws itself in, the       */
+/* Dock's last beat (HOME_RULE_DRAW, which only the Dock moves and      */
+/* which rests at 1), and since v4.9 (B, O-2) it draws in again each    */
+/* time Home opens as a tab, on details/tabArrival's clock, the one a   */
+/* tab root's swash signs by. It follows the lesser of the two, so on a */
+/* cold start the Dock's later draw-on governs, and under Reduce Motion */
+/* both rest at 1 and it is simply there. Both strokes draw in one      */
+/* window, the upper leading by its own 1.5% of length. It lives HERE,  */
+/* inside the one root this component returns, so it rises with the     */
+/* stories group that index.tsx wraps round <TodaysPours>.              */
 /* ==================================================================== */
 
 const STORY = layout.story;
@@ -101,12 +117,17 @@ const BADGE_AT = STORY.ring - BADGE;
 const BADGE_PLUS = 14;
 const BADGE_STROKE = 2.4;
 /**
- * The rule band under the rail: 10pt, so the tray's foot is 18. The rule's
- * nominal box sits 1.5 above the band's top, which puts its centreline
- * (PEN.rule.mid, 3.4 down its box) 1.9 into the band (spec A.3 #1).
+ * The rule band under the rail: 10pt, so the tray's foot is 18. Since v4.9
+ * the rule is doubled (framePath's DOUBLE: a box 10 tall, its centrelines
+ * 3.4 and 6.6 down it), and its box sits 3.5 above the band's top, 2
+ * higher than the single rule's 1.5: the upper centreline on the band's
+ * top (-0.1), the lower 3.1 into it, which keeps 12.9 over the first
+ * post's story ring where the single rule's offset would have left 10.9
+ * (v4.9 C.1; the 12pt ring clearance, v4.6 A.3). The band and everything
+ * after it stay where they were.
  */
 const RULE_BAND = 10;
-const RULE_TOP = -1.5;
+const RULE_TOP = -3.5;
 /** The longest single wait for the next story to expire; re-armed after. */
 const MAX_TIMER_MS = 60 * 60 * 1000;
 
@@ -191,6 +212,14 @@ export function TodaysPours({
   const seen = useSeen((s) => s.pours[myId]);
   const ownRow = useAuth((s) => s.profile);
   const { width } = useWindowDimensions();
+  /*
+   * The stories rule's draw (v4.9 B, O-2): the lesser of the Dock's
+   * (HOME_RULE_DRAW, its last beat on a cold start) and Home's own arrival
+   * as a tab, so it signs the page on every return to Home and the Dock's
+   * later draw-on still governs the first. On the UI thread, no render.
+   */
+  const arrival = useTabArrival();
+  const draw = useDerivedValue(() => Math.min(HOME_RULE_DRAW.get(), arrival.get()));
   const { mine, others } = groupPours(pours, myId, seen, now);
   const ready = status === 'ready';
   const shown = ready ? others : [];
@@ -303,7 +332,8 @@ export function TodaysPours({
    * back to the top.
    *
    * One root, the rail then the rule band: the Dock lifts this component
-   * as one group, and the rule must rise with the circles it rules.
+   * as one group, and the rule must rise with the circles it rules. Both
+   * of its strokes are one cached path in one window (PenDoubleRule).
    */
   return (
     <View>
@@ -319,10 +349,10 @@ export function TodaysPours({
         contentContainerStyle={styles.rail}
       />
       <View style={styles.ruleBand}>
-        <PenRule
+        <PenDoubleRule
           length={width - 2 * layout.feedGutter}
           seed={PEN_SEED.stories}
-          draw={HOME_RULE_DRAW}
+          draw={draw}
           style={styles.rule}
         />
       </View>
@@ -438,7 +468,7 @@ function PourFace({ pour, drink }: { pour: Pour; drink?: Drink }) {
 
 const styles = StyleSheet.create({
   rail: { paddingHorizontal: RAIL_END, paddingVertical: RAIL_PAD },
-  /* The pen's band: 10 under the rail, the rule on Home's 16 column (the faces', the captions'). */
+  /* The pen's band: 10 under the rail, the doubled rule on Home's 16 column (the faces', the captions'). */
   ruleBand: { height: RULE_BAND },
   rule: { position: 'absolute', left: layout.feedGutter, top: RULE_TOP },
   item: { width: STORY.slot, alignItems: 'center', paddingVertical: SLOT_PAD },

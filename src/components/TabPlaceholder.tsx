@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { PenSwash } from '@/components/details/PenMarks';
 import { HOME_ROW, HomeWordmark } from '@/components/home/HomeChrome';
 import { colors, layout, textRole } from '@/constants/theme';
 
@@ -18,14 +17,23 @@ import { colors, layout, textRole } from '@/constants/theme';
  * title row's 52pt height and 24 gutter would set it 3 lower and 8 in,
  * and the logo would visibly jump as the real bar replaced it.
  *
- * A page tab's title carries the pen's swash (v4.6), drawn as
- * ScreenTopBar's lg bar draws it (the same wrapper, offsets and length),
- * so the swash is already there when the real bar mounts over it. Home's
- * wordmark gets none (it is the pen), and neither does the Reels ground:
- * the marks never sit on an ink ground, and Reels' own bar has none.
+ * No swash (v4.9, specs/v4.9/details B). It drew the pen's swash under
+ * a page tab's title, so the swash was already there when the real bar
+ * mounted. Since v4.9 the real bar's swash draws itself in as the tab
+ * arrives, starting undrawn, so a drawn one here would show drawn, then
+ * blank, then drawn: the placeholder leaves it to the bar.
+ *
+ * No paper either, though the real pages lie on it (v4.9 A.5). With
+ * `lazy` and a known width, every tab not in front shows this from
+ * launch, so a full-screen grain here was some 32 tile views a tab,
+ * well over a hundred, mounted in the Dock's own frames, to be seen for
+ * the frame or two of a first swipe before the real page replaces it.
+ * And it bought nothing: the real page's Paper draws only once it has
+ * measured, so a grain here would blink off for that frame and back.
+ * The page's own paper simply arrives with it.
  */
 
-/** The bars' text cap (ScreenTopBar's BAR_TEXT_SCALE_CAP): the title's, and so the swash's length. */
+/** The bars' text cap (ScreenTopBar's BAR_TEXT_SCALE_CAP). */
 const TITLE_CAP = 1.3;
 
 export interface TabPlaceholderProps {
@@ -39,7 +47,6 @@ export interface TabPlaceholderProps {
 
 export function TabPlaceholder({ title, ground = 'page', wordmark = false }: TabPlaceholderProps) {
   const insets = useSafeAreaInsets();
-  const { fontScale } = useWindowDimensions();
   const reel = ground === 'reel';
   if (wordmark) {
     return (
@@ -62,7 +69,6 @@ export function TabPlaceholder({ title, ground = 'page', wordmark = false }: Tab
             style={[textRole.title, reel ? styles.titleReel : styles.title]}>
             {title}
           </Text>
-          {reel || title === '' ? null : <PenSwash scale={Math.min(fontScale, TITLE_CAP)} style={styles.swash} />}
         </View>
       </View>
     </View>
@@ -74,10 +80,8 @@ const styles = StyleSheet.create({
   rootReel: { backgroundColor: colors.reelGround },
   /* The real bars' title row: under the status bar, the title at the gutter. */
   row: { justifyContent: 'center', paddingHorizontal: layout.gutter },
-  /* The title's own box, at the gutter, as the lg bar's wrapper is: the swash is placed from it. */
+  /* The title's own box, at the gutter, as the lg bar's wrapper is. */
   titleBox: { alignSelf: 'flex-start', flexShrink: 1 },
-  /* ScreenTopBar's swash, to the point: 1 in from the title, its foot 4 under the title's line box. */
-  swash: { position: 'absolute', left: 1, bottom: -4 },
   /* HomeChrome's row: 44 under the status bar, the column at 16, the wordmark on its foot. */
   homeRow: { height: HOME_ROW, flexDirection: 'row', alignItems: 'center', paddingLeft: layout.feedGutter },
   title: { color: colors.text },

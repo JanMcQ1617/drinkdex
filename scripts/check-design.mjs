@@ -35,8 +35,10 @@
  *  17. One accent, through its tokens, in its seven places: the hex only
  *      in theme.ts, the tokens and the props that draw it only where
  *      theme.ts lists. See ACCENT_FILES and ACCENT_PROPS. The detail tier
- *      (v4.6) may paint it in components/details/ alone, and its marks
- *      are placed only from DETAIL_SITES. See ACCENT_TIERS.
+ *      (v4.6) may paint it in components/details/ alone, but never in its
+ *      press or its paper (v4.9); its marks are placed only from
+ *      DETAIL_SITES, inside the code each file names, and through a
+ *      component's prop only from DETAIL_PROPS. See ACCENT_TIERS.
  *
  * Comments are stripped before any rule runs, block comments included,
  * so prose may mention a hex, an emoji or a banned style. Rules 1 to 5
@@ -52,7 +54,7 @@
  */
 
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, posix } from 'node:path';
 
 import ts from 'typescript';
 
@@ -454,6 +456,41 @@ const NUMERO = /\u2116/;
  *
  *     penPath (the geometry), lineMarks (type metrics) and handoff (the
  *     draw-on's value) paint nothing, so anything may import them.
+ *
+ *     v4.9 (Jan, 28 Oct 2026; specs/v4.9/details/spec.md E: "it still
+ *     feels too empty") gives the tier five painting modules, and the
+ *     fences grow with them:
+ *
+ *       - the marks are any of details/PenMarks, DoodleMarks (the
+ *         garnishes, the crown, the arrow, an empty state's cluster),
+ *         FrameMarks (a post's crop corners), PressMarks (the outlined
+ *         figures, the leaders, the ticket) and Paper (the grain), and
+ *         DETAIL_SITES says which each file may place;
+ *       - the press and the paper are in the folder but are NOT the
+ *         pen's (ACCENT_TIER_EXCEPT): the token fails in them, and so
+ *         does any import of a pen module, by relative path or alias, so
+ *         a grey mark cannot draw red through a pen component;
+ *       - a site's `within` names the code its marks may be placed in,
+ *         read at each JSX use (ui.tsx's EmptyMarks in EmptyState, never
+ *         in Button), and a mark referenced any other way than as an
+ *         element (`const M = EndMark`, a mark passed as a prop) fails,
+ *         since nothing could then say where it lands; `import type` is
+ *         exempt, as it paints nothing;
+ *       - a site's `retiring` lists marks it still imports until the
+ *         close-out (spec F5) deletes the key, so each package of the
+ *         build passes this guard on its own (v4.9's close-out deleted
+ *         all four; the key stays for the next build's packages);
+ *       - a mark comes into a file by name only: re-exported (`export
+ *         … from`), `require`d or `import()`ed, it would reach a file
+ *         that holds no placement without an import here to read, so
+ *         each fails outside the folder;
+ *       - DETAIL_PROPS fences the props that place a mark through a
+ *         component: EmptyState's `doodle` and `arrow`, ScreenTopBar's
+ *         `paper`. Doodles are opt-in, so a new sheet or dead end stays
+ *         bare unless its file is added here.
+ *
+ *     doodlePath, framePath, numeralPath, numeralGlyphs and tabArrival
+ *     paint nothing either, and are importable anywhere.
  */
 const ACCENT_TOKENS = new Set(['accent', 'accentPressed', 'onAccent']);
 /**
@@ -504,26 +541,124 @@ const ACCENT_TIERS = {
   },
 };
 const accentTier = (rel) => Object.entries(ACCENT_TIERS).find(([dir]) => rel.startsWith(dir))?.[1];
-/** The detail marks' module, by any path that ends in it (`@/components/details/PenMarks`, `../details/PenMarks`). */
-const DETAIL_MODULE = /(^|\/)details\/PenMarks$/;
+/**
+ * Files in a tier that are not the tier's to paint, and why (v4.9 E.1).
+ * The accent fails in them, and so does an import of a pen module.
+ */
+const ACCENT_TIER_EXCEPT = {
+  'components/details/PressMarks.tsx': 'the press is printed in greys',
+  'components/details/Paper.tsx': 'the paper is a ground',
+};
+/** The pen's painting modules, as paths under src/ without an extension: what an excepted file may not import. */
+const PEN_MODULES = new Set(['components/details/PenMarks', 'components/details/DoodleMarks', 'components/details/FrameMarks']);
+/** A module specifier as a path under src/ (the `@/` alias, or relative to the importing file), or null for a package. */
+function srcModule(rel, spec) {
+  const bare = spec.replace(/\.[cm]?[jt]sx?$/, '');
+  if (bare.startsWith('@/')) return posix.normalize(bare.slice(2));
+  if (bare.startsWith('.')) return posix.normalize(posix.join(posix.dirname(rel), bare));
+  return null;
+}
+/**
+ * The detail marks' painting modules, by any path that ends in one
+ * (`@/components/details/PenMarks`, `../details/DoodleMarks`): the pen's
+ * three, the press and the paper (v4.9).
+ */
+const DETAIL_MODULE = /(^|\/)details\/(PenMarks|DoodleMarks|FrameMarks|PressMarks|Paper)$/;
 /**
  * The files that place a detail mark, the marks each may place, and why
- * (specs/v4.6-details/spec.md, A; specs/v4.7/spec.md 6.4 added the last
- * three and retired Profile's margin rule with the Tournaments line it
- * sat beside).
+ * (specs/v4.6-details/spec.md, A; specs/v4.7/spec.md 6.4; replaced whole
+ * by specs/v4.9/details/spec.md E.1). `within`: the functions, variables
+ * or keys each JSX use of a mark must sit inside (as ACCENT_FILES'
+ * `within` for the token). `retiring`: marks the file may still import
+ * until a build's close-out deletes the key, so each package passes on
+ * its own result (v4.9's F5 deleted the four it had: TodaysPours',
+ * PostCard's, FriendsBoard's and Activity's PenRule).
  */
 const DETAIL_SITES = {
-  'components/home/TodaysPours.tsx': { marks: ['PenRule'], why: "the drawn rule under Home's stories" },
-  'components/PostCard.tsx': { marks: ['PenRule'], why: 'the 24pt rule that closes each feed post' },
-  'components/dex/SectionHead.tsx': { marks: ['PenRule'], why: 'the head rule under a Dex section head' },
-  'components/ScreenTopBar.tsx': { marks: ['PenSwash'], why: "the swash under a tab root's title" },
-  'components/TabPlaceholder.tsx': { marks: ['PenSwash'], why: "the same swash, where a lazy tab root's title waits" },
-  'components/DrinkPanels.tsx': { marks: ['PenMargin'], why: "the drink page's margin and column rules" },
+  'components/home/TodaysPours.tsx': { marks: ['PenDoubleRule'], why: "the doubled rule under Home's stories, signed on each Home arrival" },
+  'components/PostCard.tsx': { marks: ['PostCorners'], why: "the post's crop corners; its foot is the closing rule" },
+  'components/dex/SectionHead.tsx': {
+    marks: ['PenRule', 'PenDoubleRule', 'PressNumeral'],
+    why: "the head rule, the rest head's double rule, the section figure",
+  },
+  'components/ScreenTopBar.tsx': {
+    marks: ['PenSwash', 'Paper'],
+    within: ['ScreenTopBar', 'TitleSwash'],
+    why: "the arriving swash; the bar's paper",
+  },
+  'components/DrinkPanels.tsx': {
+    marks: ['PenMargin', 'PenDoubleRule', 'PressNumeral', 'PressLeader', 'Paper'],
+    why: "the record's rules; the spec card; the pinned bar's paper",
+  },
   'components/plate.tsx': { marks: ['PlateDrip'], why: 'the drip off the caught Nº plate' },
-  'components/tournaments/FriendsBoard.tsx': { marks: ['PenRule'], why: "the board rule between the Tournaments tab's two halves" },
-  'app/tournaments/[id].tsx': { marks: ['PenSwash'], why: "the swash under a tournament's name" },
-  'app/activity.tsx': { marks: ['PenRule'], why: "the closing rule at Activity's foot" },
+  'components/tournaments/FriendsBoard.tsx': {
+    marks: ['PenDoubleRule', 'PenCrown', 'EndMark', 'Paper'],
+    why: 'the board rule doubled, the crown, the end, the paper',
+  },
+  'components/tournaments/TournamentCard.tsx': { marks: ['TicketCard'], why: 'the ticket card' },
+  'components/tournaments/Leaderboard.tsx': { marks: ['PenCrown'], why: "the leader's crown while it is live" },
+  'app/tournaments/[id].tsx': { marks: ['PenSwash', 'Paper'], why: "the swash under its name; the paper" },
+  'app/activity.tsx': { marks: ['EndMark', 'Paper'], why: "Activity's end mark (its closing rule retired)" },
+  'components/ui.tsx': { marks: ['EmptyMarks', 'PenArrow'], within: ['EmptyState'], why: "an empty state's composition" },
+  'app/(tabs)/index.tsx': { marks: ['EndMark', 'Paper'], why: "the feed's end; Home's paper" },
+  'components/home/HomeChrome.tsx': { marks: ['Paper'], why: "the bar's and the strip's paper" },
+  'components/FloatingTabBar.tsx': { marks: ['Paper'], within: ['FloatingTabBar'], why: "the slab's ground only" },
+  'app/(tabs)/dex.tsx': { marks: ['EndMark', 'Paper'], why: "the grid's end; the Dex's paper and header" },
+  'app/(tabs)/saved.tsx': { marks: ['EndMark', 'Paper'], why: "the tiles' end; the paper" },
+  'components/collections/AllSaved.tsx': { marks: ['EndMark', 'Paper'], why: 'the same' },
+  'components/profile/ProfileView.tsx': { marks: ['EndMark', 'Paper'], why: "the grid's end; your profile's paper" },
+  'app/(tabs)/profile.tsx': { marks: ['Paper'], why: "the profile tab's fallback paper" },
+  'app/drink/[id].tsx': { marks: ['Paper'], why: "the page's paper" },
+  'app/custom/[id].tsx': { marks: ['Paper'], why: "the page's paper" },
 };
+/**
+ * Props that place a detail mark through a component, on which element,
+ * and the files that may pass them, each with what it places there
+ * (v4.9 E.2). Read as ACCENT_PROPS is: any use outside its files fails.
+ * The doodles are opt-in, so this table is the whole of where they go.
+ */
+const DETAIL_PROPS = [
+  {
+    tag: 'EmptyState',
+    prop: 'doodle',
+    files: {
+      'app/(tabs)/index.tsx': 'Home\'s "Nothing posted yet": the coupe round the print',
+      'app/(tabs)/dex.tsx': 'the Dex\'s "Nothing logged yet": the lime round the print',
+      'app/tournaments/index.tsx': '"No tournaments yet": the shaker over the glyph',
+      'app/(tabs)/saved.tsx': 'Saved\'s empty: the olive round the print',
+      'components/collections/AllSaved.tsx': 'All saved\'s empty: the olive round the print',
+      'components/profile/ProfileView.tsx': 'the posts empties, yours and theirs: the twist',
+      'app/activity.tsx': '"No activity yet": the cherry over the glyph',
+      'app/saved/[id].tsx': 'a collection\'s "Nothing here yet": the olive over the glyph',
+      'app/connections/[id].tsx': 'no followers, not following anyone: the coupe over the glyph',
+      'app/find-friends.tsx': '"No one else here yet": the coupe over the glyph',
+    },
+  },
+  {
+    tag: 'EmptyState',
+    prop: 'arrow',
+    files: {
+      'app/(tabs)/index.tsx': 'the arrow to "Find friends"',
+      'app/(tabs)/dex.tsx': 'the arrow to "Show every drink"',
+    },
+  },
+  {
+    tag: 'ScreenTopBar',
+    prop: 'paper',
+    files: {
+      'app/(tabs)/dex.tsx': "the Dex's bar",
+      'app/drink/[id].tsx': "the drink page's bar",
+      'app/custom/[id].tsx': "a custom drink's bar",
+      'components/tournaments/FriendsBoard.tsx': "the Tournaments tab's bar",
+      'app/tournaments/[id].tsx': "a tournament's bars",
+      'app/(tabs)/saved.tsx': "Saved's bar",
+      'components/collections/AllSaved.tsx': "All saved's bar",
+      'components/profile/ProfileView.tsx': "your profile's bar",
+      'app/(tabs)/profile.tsx': "the profile tab's fallback bar",
+      'app/activity.tsx': "Activity's bar",
+    },
+  },
+];
 /** The functions, variables and object keys a node sits inside, innermost first. */
 function enclosingNames(node) {
   const names = [];
@@ -1032,6 +1167,37 @@ function treeRules(rel, sf, lines, add) {
   /** `colors.x`, or `theme.colors.x` through a namespace import. */
   const isColorsToken = (expr) => !!expr && ts.isPropertyAccessExpression(expr) && isName(expr.expression, colorsNames);
 
+  // 17. The detail marks this file imports by value (local name -> mark), so each use can be read where it lands.
+  const site = accentTier(rel) ? undefined : DETAIL_SITES[rel];
+  const detailMarks = new Map();
+  if (site) {
+    for (const st of sf.statements) {
+      if (!ts.isImportDeclaration(st) || !ts.isStringLiteral(st.moduleSpecifier)) continue;
+      if (!DETAIL_MODULE.test(st.moduleSpecifier.text) || st.importClause?.isTypeOnly) continue;
+      const bindings = st.importClause?.namedBindings;
+      if (!bindings || !ts.isNamedImports(bindings)) continue;
+      for (const el of bindings.elements) if (!el.isTypeOnly) detailMarks.set(el.name.text, (el.propertyName ?? el.name).text);
+    }
+  }
+  /** An identifier that is a name in its parent (a key, a member, an attribute), not a reference to a binding. */
+  const nameOnly = (id) => {
+    const p = id.parent;
+    return (
+      ts.isImportSpecifier(p) ||
+      ((ts.isJsxOpeningElement(p) || ts.isJsxSelfClosingElement(p) || ts.isJsxClosingElement(p)) && p.tagName === id) ||
+      ((ts.isPropertyAccessExpression(p) || ts.isQualifiedName(p)) && (p.name === id || p.right === id)) ||
+      ((ts.isPropertyAssignment(p) ||
+        ts.isPropertySignature(p) ||
+        ts.isPropertyDeclaration(p) ||
+        ts.isMethodDeclaration(p) ||
+        ts.isMethodSignature(p) ||
+        ts.isJsxAttribute(p) ||
+        ts.isEnumMember(p)) &&
+        p.name === id) ||
+      (ts.isBindingElement(p) && p.propertyName === id)
+    );
+  };
+
   const playfair = (node, why = 'set Playfair through a name role') => {
     if (PLAYFAIR_EXEMPT[rel]) return;
     const reason = rel === THEME ? playfairInTheme(node, roles) : why;
@@ -1368,9 +1534,12 @@ function treeRules(rel, sf, lines, add) {
               ? (node.propertyName ?? node.name).getText(sf)
               : null;
       if (token && ACCENT_TOKENS.has(token)) {
-        const place = ACCENT_FILES[rel] ?? accentTier(rel);
+        const except = ACCENT_TIER_EXCEPT[rel];
+        const place = except ? undefined : (ACCENT_FILES[rel] ?? accentTier(rel));
         const names = place?.within ? enclosingNames(node) : [];
-        if (!place) {
+        if (except) {
+          add('accent', at(node), `colors.${token} in the detail tier's folder, but ${except} (ACCENT_TIER_EXCEPT)`);
+        } else if (!place) {
           add('accent', at(node), `colors.${token} outside the accent's seven places (ACCENT_FILES) and its detail tier (ACCENT_TIERS)`);
         } else if (place.tokens && !place.tokens.includes(token)) {
           add('accent', at(node), `colors.${token} in ${place.why}, which is painted in ${place.tokens.map((t) => `colors.${t}`).join(', ')} only`);
@@ -1387,21 +1556,63 @@ function treeRules(rel, sf, lines, add) {
       DETAIL_MODULE.test(node.moduleSpecifier.text) &&
       !accentTier(rel)
     ) {
-      const site = DETAIL_SITES[rel];
       const clause = node.importClause;
       const bindings = clause?.namedBindings;
       if (!site) {
         add('accent', at(node), 'a detail mark imported outside its placements (DETAIL_SITES)');
       } else if (clause?.name || (bindings && ts.isNamespaceImport(bindings))) {
         add('accent', at(node), 'import the detail marks by name, so DETAIL_SITES can read which');
-      } else if (bindings) {
+      } else if (bindings && !clause.isTypeOnly) {
         for (const el of bindings.elements) {
           const mark = (el.propertyName ?? el.name).text;
-          if (!site.marks.includes(mark)) {
+          if (!el.isTypeOnly && !site.marks.includes(mark) && !site.retiring?.includes(mark)) {
             add('accent', at(el), `${mark} is not placed here: this file places ${site.marks.join(', ')} (${site.why})`);
           }
         }
       }
+    }
+
+    // 17. A detail mark brought in any way but a named import: re-exported, required or import()ed, nothing could read where it goes.
+    if (!accentTier(rel)) {
+      const via = ts.isExportDeclaration(node) && node.moduleSpecifier
+        ? node.moduleSpecifier
+        : ts.isCallExpression(node) &&
+            (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+              (ts.isIdentifier(node.expression) && node.expression.text === 'require'))
+          ? node.arguments[0]
+          : undefined;
+      if (via && ts.isStringLiteralLike(via) && DETAIL_MODULE.test(via.text)) {
+        add('accent', at(node), `a detail mark ${ts.isExportDeclaration(node) ? 're-exported' : 'loaded at run time'}: import the marks by name where they are placed (DETAIL_SITES)`);
+      }
+    }
+
+    // 17. The press and the paper import no pen module, by relative path or alias: a grey mark never draws red through one.
+    if (
+      ACCENT_TIER_EXCEPT[rel] &&
+      (ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) &&
+      node.moduleSpecifier &&
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      PEN_MODULES.has(srcModule(rel, node.moduleSpecifier.text))
+    ) {
+      add('accent', at(node), `a pen mark imported where ${ACCENT_TIER_EXCEPT[rel]} (ACCENT_TIER_EXCEPT)`);
+    }
+
+    // 17. A detail mark placed outside the code its site names (`within`), read at each JSX use.
+    if (
+      site?.within &&
+      (ts.isJsxOpeningElement(node) || ts.isJsxSelfClosingElement(node)) &&
+      ts.isIdentifier(node.tagName) &&
+      detailMarks.has(node.tagName.text)
+    ) {
+      const names = enclosingNames(node);
+      if (!site.within.some((spot) => spot.split('.').every((name) => names.includes(name)))) {
+        add('accent', at(node), `<${node.tagName.text}> outside ${site.within.join(', ')}, where this file places ${site.why}`);
+      }
+    }
+
+    // 17. A detail mark referenced any way but as an element: nothing could then say where it lands.
+    if (detailMarks.size && ts.isIdentifier(node) && detailMarks.has(node.text) && !nameOnly(node)) {
+      add('accent', at(node), `${node.text} referenced outside JSX: place a detail mark as an element, so DETAIL_SITES can read where`);
     }
 
     // 17. A prop that draws the accent, passed outside its place.
@@ -1413,6 +1624,10 @@ function treeRules(rel, sf, lines, add) {
           ? arms(node.initializer).some((v) => ts.isStringLiteralLike(v) && v.text === value)
           : true;
         if (draws) add('accent', at(node), `<${on} ${prop}${value ? `="${value}"` : ''}> draws the accent outside its place (ACCENT_PROPS)`);
+      }
+      for (const { tag: on, prop, files } of DETAIL_PROPS) {
+        if (tag !== on || keyOf(node) !== prop || files[rel]) continue;
+        add('accent', at(node), `<${on} ${prop}> places a detail mark outside its placements (DETAIL_PROPS)`);
       }
     }
 

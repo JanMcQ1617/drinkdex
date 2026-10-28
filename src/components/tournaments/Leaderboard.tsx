@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { PenCrown } from '@/components/details/DoodleMarks';
 import { Icon } from '@/components/icons';
 import { differentDrinks } from '@/components/tournaments/TournamentRow';
 import { Avatar } from '@/components/ui';
@@ -22,6 +23,15 @@ import type { Standing, TournamentState, UserProfile } from '@/types';
 /* Rows on the page, 56 apart and set apart by space, not rules. Their  */
 /* content sits on the gutter; the row reaches 8pt past it each side,   */
 /* so your row's wash and a press have a margin round the words.         */
+/*                                                                      */
+/* THE CROWN (v4.9, specs/v4.9/details/spec.md C.7). While it is on,    */
+/* the leader's face wears the pen's crown, as the Tournaments tab's    */
+/* does, at 0.8 for the 32pt face: off its top right, 0.5 above it,     */
+/* anchored to the Avatar's own box. It only repeats the "1" beside it, */
+/* which is still drawn and still spoken; a row says what it said       */
+/* before. Nobody at nought is crowned (they have no rank), nor anyone  */
+/* before the start, and once it has finished the trophy stands in the  */
+/* "1"'s place instead, so the two never meet.                          */
 /* ==================================================================== */
 
 /** The rank column, so every face and name starts on one line down the list. */
@@ -82,6 +92,8 @@ export function Leaderboard({
         const mine = s.userId === myId;
         const won = state === 'finished' && s.userId === winnerId;
         const ranked = !upcoming && s.distinct > 0;
+        // The server breaks ties by who got there first, so one row holds rank 1.
+        const crowned = state === 'live' && ranked && s.rank === 1;
         const distinct = upcoming ? 0 : s.distinct;
         const name = nameOf(people, s.userId);
         const person = profileOf(people, s.userId);
@@ -111,12 +123,16 @@ export function Leaderboard({
                 </Text>
               ) : null}
             </View>
-            <Avatar
-              name={person?.displayName ?? '?'}
-              accent={person?.accent ?? colors.text}
-              size={FACE}
-              avatarPath={person?.avatarPath}
-            />
+            {/* The face in a plain View of its own box: the crown's anchor, whatever the rank column does. */}
+            <View>
+              <Avatar
+                name={person?.displayName ?? '?'}
+                accent={person?.accent ?? colors.text}
+                size={FACE}
+                avatarPath={person?.avatarPath}
+              />
+              {crowned ? <PenCrown face={FACE} /> : null}
+            </View>
             <Text style={styles.username}>
               {name}
               {mine ? <Text style={styles.you}> (you)</Text> : null}

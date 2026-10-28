@@ -12,6 +12,8 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DexCard, EmptyArt } from '@/components/DexCard';
+import { EndMark } from '@/components/details/DoodleMarks';
+import { Paper } from '@/components/details/Paper';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { chunk, PostGridRow } from '@/components/profile/PostGrid';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
@@ -66,6 +68,21 @@ import type { Drink, Post } from '@/types';
 /* savesVersion), so a post unsaved from its own screen is gone when    */
 /* you return, and nothing is fetched while the page is not in front.   */
 /* The drinks are the store's, so they are always current.              */
+/*                                                                      */
+/* THE PAPER, AND THE PEN'S SIGNATURE (v4.9, specs/v4.9/details/spec.md */
+/* A.5 and C.8), as on the Saved tab's tiles. The grain is              */
+/* AllSavedTab's alone, the root's first child and its bar's through    */
+/* ScreenTopBar's `paper`: that is the Saved tab, a page ground.        */
+/* AllSavedPage is a pushed list page, and stays the plain white a      */
+/* collection's page is. Both draw the list, so both are signed where   */
+/* it ends: the olive pick and the swash under it (details/DoodleMarks' */
+/* EndMark), right-aligned on the gutter 18 under the last row, as the  */
+/* list's footer, one static node and never a cell. Only once nothing   */
+/* more is coming under the rows: it waits while the posts are still    */
+/* loading, and never stands over their failure. Nothing saved: the     */
+/* empty state opts in to the olive's composition round the Paper Plane */
+/* proof, with no arrow because it has no key, its top at 38% of the    */
+/* free height (the list's content grows to the screen for it).         */
 /* ==================================================================== */
 
 const NO_POSTS: Post[] = [];
@@ -223,8 +240,9 @@ export function AllSavedTab({ myId }: { myId: string | null }) {
 
   return (
     <View style={styles.screen}>
+      <Paper />
       {/* A tab root: the title set left, and no icon (v4: at most one, and this page needs none). */}
-      <ScreenTopBar size="lg" title="Saved" showRule={scrolled} />
+      <ScreenTopBar size="lg" title="Saved" showRule={scrolled} paper />
       <AllSavedList
         myId={myId}
         listRef={listRef}
@@ -370,6 +388,9 @@ function AllSavedList({
       loadFailed
     ) : null;
 
+  /* The list's end, signed, once nothing more is coming under the rows (the header note). */
+  const end = rows.length > 0 && footer === null ? <EndMark name="olive" style={styles.end} /> : null;
+
   const empty =
     !ready || status === 'loading' ? (
       <Hold fill={false} slowMessage={ready ? 'Still loading your saved posts.' : 'Still loading what you saved.'} />
@@ -385,6 +406,8 @@ function AllSavedList({
         art={<EmptyArt drinkId="paper-plane" mode="proof" />}
         title="Save drinks to find them here"
         body="Tap the bookmark at the top of any drink's page."
+        doodle="olive"
+        place="optical"
       />
     );
 
@@ -417,7 +440,7 @@ function AllSavedList({
         </>
       }
       ListEmptyComponent={empty}
-      ListFooterComponent={footer}
+      ListFooterComponent={footer ?? end}
       onScroll={onScroll}
       scrollEventThrottle={16}
       // Signed out there is nothing to pull for: the drinks are already the phone's.
@@ -432,7 +455,7 @@ function AllSavedList({
       initialNumToRender={4}
       windowSize={5}
       style={styles.list}
-      contentContainerStyle={{ paddingBottom }}
+      contentContainerStyle={[styles.content, { paddingBottom }]}
       showsVerticalScrollIndicator={false}
     />
   );
@@ -441,6 +464,8 @@ function AllSavedList({
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   list: { flex: 1 },
+  /* At least the list's height, so the empty state has a free height to set itself in (v4.9 C.9). */
+  content: { flexGrow: 1 },
   /*
    * A section head, then its prints: 32 above every head (layout.section),
    * counted from the foot of the drink grid's last row, which already
@@ -477,4 +502,6 @@ const styles = StyleSheet.create({
   },
   /* 4 under the head and 8 here: the same 12 the posts' first row stands under it. */
   drinkRowFirst: { paddingTop: layout.gridGap },
+  /* The signed end: 18 under the last row (a drink row's ledge, or the posts' prints), its box's right edge on the gutter (v4.9 C.10). */
+  end: { marginTop: 18, marginRight: layout.gutter },
 });

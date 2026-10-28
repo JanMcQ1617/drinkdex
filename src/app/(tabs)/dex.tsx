@@ -28,6 +28,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CustomDrinkTile } from '@/components/CustomDrinkTile';
 import { DexCard, dexCardHeight, EmptyArt } from '@/components/DexCard';
 import { takeDexFilter } from '@/components/dex/dexFilter';
+import { EndMark } from '@/components/details/DoodleMarks';
+import { Paper } from '@/components/details/Paper';
 import { FilterSheet } from '@/components/dex/FilterSheet';
 import {
   COLUMNS,
@@ -43,7 +45,7 @@ import {
 import { ForYouRail } from '@/components/dex/ForYouRail';
 import { OrderSheet } from '@/components/dex/OrderSheet';
 import { QuickChips } from '@/components/dex/QuickChips';
-import { HEAD_RULE, SectionHead } from '@/components/dex/SectionHead';
+import { HEAD_RULE, NUMERAL_BAND, NUMERAL_TEXT_CAP, SectionHead } from '@/components/dex/SectionHead';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { NumberRail } from '@/components/NumberRail';
@@ -120,6 +122,16 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /* tile for a moment, in any order; the Nº rail jumps by number (and,   */
 /* For you, by section) as you drag, and shows only while the grid      */
 /* moves.                                                               */
+/*                                                                      */
+/* v4.9 (specs/v4.9/details/spec.md C.4, A.5). Jan: "it still feels too */
+/* empty". The paper's grain under the page, the bar and the header;    */
+/* each For-you section numbered by the press ("01" over its head,      */
+/* SectionHead), and Everything else's head rule doubled by the pen; at */
+/* rest the grid's end signed (the lime and the swash under it); and an */
+/* empty Logged set at 38% of the free height in the pen's composition, */
+/* with the arrow to "Show every drink". Ornament, never information:   */
+/* no word, count or state is added, and nothing sits on a print, a     */
+/* chip, the field or the rail.                                         */
 /* ==================================================================== */
 
 /* ------------------------------------------------------------------ */
@@ -151,7 +163,10 @@ const HEADER_FOOT = space.lg;
 const CONTENT_TOP = space.sm;
 /** The header's height before it has measured itself: 112 at the default text size. */
 const HEADER_EST = FIELD_TOP + layout.search + CHIPS_TOP + layout.chip + HEADER_FOOT;
-/** A section head's line (SectionHead): 24, its pen rule's 7 (HEAD_RULE), then 12 to its first row, and 8 more over a head after a section. */
+/**
+ * A section head's line (SectionHead): 24, its pen rule's 7 (HEAD_RULE), then 12 to its first row, and 8 more over a
+ * head after a section; a For-you head's figure adds its NUMERAL_BAND over the line (v4.9).
+ */
 const HEAD_LINE = 24;
 
 /* ------------------------------------------------------------------ */
@@ -300,16 +315,23 @@ const DexRow = React.memo(function DexRow({
   );
 });
 
-/** A head row: a For-you section's, with "See all", or Everything else's "by number". */
+/**
+ * A head row: a For-you section's, with "See all" and its figure (v4.9),
+ * or Everything else's "by number", over the pen's double rule.
+ */
 const HeadRow = React.memo(function HeadRow({
   label,
   section,
   first,
+  ordinal,
+  rest,
   onSeeAll,
 }: {
   label: string;
   section: ForYouSection | null;
   first: boolean;
+  ordinal?: number;
+  rest?: boolean;
   onSeeAll: (section: ForYouSection) => void;
 }) {
   return (
@@ -317,6 +339,8 @@ const HeadRow = React.memo(function HeadRow({
       label={label}
       all={section ? section.all : null}
       first={first}
+      ordinal={ordinal}
+      rest={rest}
       onSeeAll={section ? () => onSeeAll(section) : undefined}
     />
   );
@@ -466,6 +490,13 @@ function NotTheOne({ query, onAdd }: { query: string; onAdd: () => void }) {
  * added is in the row above, and the message points there instead. A
  * search the catalogue does answer, but only under other filters, says so
  * and clears the filters, not the words.
+ *
+ * Only the empty Logged opts into the pen (v4.9, specs/v4.9/details C.4):
+ * the Ramos proof in its crop corners, the lime low left and the shaker
+ * high right, at 38% of the free height (the list's content grows to the
+ * screen for it), and the arrow to "Show every drink", which leads to
+ * the whole catalogue: a key to look, never one that logs a drink. The
+ * misses stay bare: a doodle beside "No match" would dress up a dead end.
  */
 function GridEmpty({
   query,
@@ -546,6 +577,10 @@ function GridEmpty({
         title="Nothing logged yet"
         body="Open any drink and post it to add it here."
         action={{ label: 'Show every drink', onPress: onShowAll }}
+        // The pen's composition round the proof, at 38% of the free height, and the arrow to the key (v4.9 C.9).
+        doodle="lime"
+        arrow
+        place="optical"
       />
     );
   }
@@ -868,10 +903,13 @@ export default function DexScreen() {
    * differs, and the retries below correct for it. A head is its line, the
    * pen rule's 7 under it (a fixed 7: the rule never grows with the text)
    * and the 12 under that, 8 more after a section. Leave the 7 out and a
-   * jump lands 7pt short for every head above it.
+   * jump lands 7pt short for every head above it. A For-you head also has
+   * its figure's 50 over the line (v4.9, NUMERAL_BAND), which it draws
+   * only up to 1.3x text, so the band counts only there too.
    */
   const rowEstimate = dexCardHeight(column, fontScale, NAME_LINES) + ROW_GAP;
   const headEstimate = HEAD_LINE * Math.max(1, fontScale) + HEAD_RULE + space.md;
+  const figureBand = fontScale <= NUMERAL_TEXT_CAP ? NUMERAL_BAND : 0;
 
   /*
    * Most of the 1,045 rows have never been laid out, so the list cannot
@@ -941,11 +979,12 @@ export default function DexScreen() {
       let offset = listHeadH.current;
       for (let i = 0; i < info.index && i < forRows.length; i++) {
         const r = forRows[i]!;
-        offset += r.type === 'head' ? headEstimate + (r.first ? 0 : space.sm) : rowEstimate;
+        offset +=
+          r.type === 'head' ? headEstimate + (r.ordinal ? figureBand : 0) + (r.first ? 0 : space.sm) : rowEstimate;
       }
       listRef.current?.scrollToOffset({ offset, animated: false });
     },
-    [headEstimate, rowEstimate],
+    [figureBand, headEstimate, rowEstimate],
   );
 
   /*
@@ -1206,7 +1245,14 @@ export default function DexScreen() {
   const renderItem = useCallback(
     ({ item }: { item: GridRow }) =>
       item.type === 'head' ? (
-        <HeadRow label={item.label} section={item.section} first={item.first} onSeeAll={onSeeAll} />
+        <HeadRow
+          label={item.label}
+          section={item.section}
+          first={item.first}
+          ordinal={item.ordinal}
+          rest={item.rest}
+          onSeeAll={onSeeAll}
+        />
       ) : (
         <DexRow row={item.drinks} cardWidth={column} outline={outline} onPress={openDrink} />
       ),
@@ -1269,9 +1315,20 @@ export default function DexScreen() {
     </View>
   );
 
+  /*
+   * Under the grid: "Not the one you meant?" under a search that found
+   * other names; else, at rest (no words, no chip, slider or status
+   * filter on, and a row to end), the grid's end signed by the pen (v4.9
+   * C.4, C.10): the lime and the swash under it, right-aligned on the
+   * content edge, 18 under the last row. One static node, never a cell.
+   * Never under a search or a filter's narrower grid: the signature
+   * closes the Dex, not a result.
+   */
   const footer =
     matched > 0 && named && !catalogueHasName && !ownNamed ? (
       <NotTheOne query={textQuery} onAdd={() => openAdd(textQuery)} />
+    ) : !flat && rows.length > 0 ? (
+      <EndMark name="lime" style={styles.end} />
     ) : null;
 
   /* The rail's kind: section stops For you at rest; none for a flat For-you result, which is in no number order. */
@@ -1280,11 +1337,14 @@ export default function DexScreen() {
 
   return (
     <View style={styles.screen}>
+      {/* The paper's grain (v4.9 A.5): static, outside the list, so the grid scrolls over a fixed sheet. */}
+      <Paper />
       {/* A fixed bar: the screen's name, and the count that opens Dex progress. The rule shows once content is under it. */}
       <ScreenTopBar
         size="lg"
         title="Dex"
         showRule={scrolled}
+        paper
         right={
           <TopBarCount
             // The caught figure in the accent (v4.4), the "/ 2,089" muted as before.
@@ -1308,10 +1368,13 @@ export default function DexScreen() {
           first for VoiceOver (where it is pinned, never hidden); drawn
           over the list by its zIndex. The page ground moves with the
           slide, the fade is on what stands on it, so nothing shows
-          through a header half way.
+          through a header half way. The ground carries its own paper
+          (v4.9 A.5), its first child, outside the fade: it covers the
+          grid it slides over, so the grain has to slide with it.
         */}
         <View pointerEvents="box-none" style={[styles.headClip, { height: headerH }]}>
           <Animated.View onLayout={onHeaderLayout} style={[styles.header, { transform: [{ translateY: headerY }] }]}>
+            <Paper />
             <Animated.View style={{ opacity: headerOpacity }}>
               {/*
                 The app's one search field. The placeholder names the two
@@ -1347,6 +1410,8 @@ export default function DexScreen() {
           keyExtractor={(row) => row.key}
           style={styles.list}
           contentContainerStyle={{
+            // At least the list's height, so an empty Logged can sit at 38% of the free height (v4.9 C.4).
+            flexGrow: 1,
             paddingTop: headerH + CONTENT_TOP,
             paddingBottom: insets.bottom + TAB_BAR_CLEARANCE,
           }}
@@ -1517,6 +1582,9 @@ const styles = StyleSheet.create({
   },
   /* The rail's own 24pt width, at the dock's left: 4pt short of the edge. */
   rail: { flex: 1 },
+
+  /* The grid's end at rest: 18 past the last row's 24 ledge, its right edge on the content edge. */
+  end: { marginTop: 18, marginRight: GUTTER },
 
   /* "Not the one you meant?" under a search */
   notTheOne: {
