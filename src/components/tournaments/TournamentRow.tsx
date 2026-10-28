@@ -260,8 +260,8 @@ function secondLine(
 
 /**
  * One tournament in the list, min 64, on the page at the gutter (rows
- * are set apart by space, not rules): its name (Inter, never Playfair:
- * it is not a drink's name), the line under it, and at the end your
+ * are set apart by space, not rules): its name (Archivo, never the
+ * marker: it is not a drink's name), the line under it, and at the end your
  * place (on now), Join and Decline (an invitation), or a chevron.
  *
  * A row with Join and Decline is not one button: the name and line open

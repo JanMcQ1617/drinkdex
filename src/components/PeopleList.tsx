@@ -44,8 +44,9 @@ export interface MatchEntry {
 /* ------------------------------------------------------------------ */
 
 /*
- * The two labels a key can toggle between, measured in Inter Medium 17
- * (the key's label): "Following" 76.5pt, "Follow back" 95pt. With the sm
+ * The two labels a key can toggle between, measured in Archivo SemiBold
+ * 17 (the key's label since v4.10): "Following" 75.9pt, "Follow back"
+ * 93.1pt, each under the width kept for it. With the sm
  * key's 14pt padding and 1pt edge each side, a key 30pt wider than its
  * longer label holds both.
  */

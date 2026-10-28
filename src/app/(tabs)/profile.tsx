@@ -39,11 +39,12 @@ import { useAuth } from '@/store/auth';
 /*                                                                      */
 /* The list is the Profile tab's scroll source (chromeTab).              */
 /*                                                                      */
-/* The paper (v4.9, specs/v4.9/details/spec.md A.5). ProfileView lays   */
-/* the page's grain under your profile; the fallback below, which holds */
-/* the tab while your row is loading or has failed, lays the same at    */
-/* its root and under its bar, so the tab's ground never changes as the */
-/* profile replaces it. It has no title, so no swash.                   */
+/* The paper (v4.9, specs/v4.9/details/spec.md A.5; the sweep since     */
+/* v4.10, specs/v4.10/spec.md G). ProfileView lays the page's paper     */
+/* under your profile; the fallback below, which holds the tab while    */
+/* your row is loading or has failed, lays the same at its root and     */
+/* under its bar, so the tab's ground never changes as the profile      */
+/* replaces it. It has no title, so no swash.                           */
 /* ==================================================================== */
 
 function OwnProfile() {

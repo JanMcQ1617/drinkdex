@@ -45,7 +45,7 @@ import {
 import { ForYouRail } from '@/components/dex/ForYouRail';
 import { OrderSheet } from '@/components/dex/OrderSheet';
 import { QuickChips } from '@/components/dex/QuickChips';
-import { HEAD_RULE, NUMERAL_BAND, NUMERAL_TEXT_CAP, SectionHead } from '@/components/dex/SectionHead';
+import { HEAD_LINE, HEAD_RULE, NUMERAL_BAND, NUMERAL_TEXT_CAP, SectionHead } from '@/components/dex/SectionHead';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { NumberRail } from '@/components/NumberRail';
@@ -93,10 +93,11 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /*   THE HEADER  "Search a name or number", with the sliders glyph at   */
 /*               its end opening the filter sheet; under it the order   */
 /*               key and the quick chips (v4.2 §1.5, §2.3).             */
-/*   THE GRID    two to a row: a big square print and its Playfair      */
-/*               name, nothing else. Caught is the colour print with    */
-/*               the name in ink; not yet, the grey proof of the same   */
-/*               frame with the name muted. No plates, shelves or tags. */
+/*   THE GRID    two to a row: a big square print and its name in the   */
+/*               marker (Sedgwick Ave), nothing else. Caught is the     */
+/*               colour print with the name in ink; not yet, the grey   */
+/*               proof of the same frame with the name muted. No        */
+/*               plates, shelves or tags.                               */
 /*                                                                      */
 /* v4.2 (specs/v4.2/spec.md §1 to §3). Jan: "If he picks out fruity     */
 /* drinks or sour drinks, then put them in an order where those drinks  */
@@ -124,14 +125,15 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /* moves.                                                               */
 /*                                                                      */
 /* v4.9 (specs/v4.9/details/spec.md C.4, A.5). Jan: "it still feels too */
-/* empty". The paper's grain under the page, the bar and the header;    */
-/* each For-you section numbered by the press ("01" over its head,      */
-/* SectionHead), and Everything else's head rule doubled by the pen; at */
-/* rest the grid's end signed (the lime and the swash under it); and an */
-/* empty Logged set at 38% of the free height in the pen's composition, */
-/* with the arrow to "Show every drink". Ornament, never information:   */
-/* no word, count or state is added, and nothing sits on a print, a     */
-/* chip, the field or the rail.                                         */
+/* empty". The paper under the page, the bar and the header (the sweep  */
+/* since v4.10, specs/v4.10/spec.md G); each For-you section numbered   */
+/* by the press ("01" over its head, SectionHead), and Everything       */
+/* else's head rule doubled by the pen; at rest the grid's end signed   */
+/* (the lime and the swash under it); and an empty Logged set at 38% of */
+/* the free height in the pen's composition, with the arrow to "Show    */
+/* every drink". Ornament, never information: no word, count or state   */
+/* is added, and nothing sits on a print, a chip, the field or the      */
+/* rail.                                                                */
 /* ==================================================================== */
 
 /* ------------------------------------------------------------------ */
@@ -163,11 +165,6 @@ const HEADER_FOOT = space.lg;
 const CONTENT_TOP = space.sm;
 /** The header's height before it has measured itself: 112 at the default text size. */
 const HEADER_EST = FIELD_TOP + layout.search + CHIPS_TOP + layout.chip + HEADER_FOOT;
-/**
- * A section head's line (SectionHead): 24, its pen rule's 7 (HEAD_RULE), then 12 to its first row, and 8 more over a
- * head after a section; a For-you head's figure adds its NUMERAL_BAND over the line (v4.9).
- */
-const HEAD_LINE = 24;
 
 /* ------------------------------------------------------------------ */
 /* Search (the catalogue's own key and its fold are in dexRows)        */
@@ -903,9 +900,12 @@ export default function DexScreen() {
    * differs, and the retries below correct for it. A head is its line, the
    * pen rule's 7 under it (a fixed 7: the rule never grows with the text)
    * and the 12 under that, 8 more after a section. Leave the 7 out and a
-   * jump lands 7pt short for every head above it. A For-you head also has
-   * its figure's 50 over the line (v4.9, NUMERAL_BAND), which it draws
-   * only up to 1.3x text, so the band counts only there too.
+   * jump lands 7pt short for every head above it. The line is
+   * SectionHead's own HEAD_LINE (the poster's 26 since v4.10, which was
+   * a local 24 here until then: a copy that drifts puts every jump 2pt
+   * short per head above it). A For-you head also has its figure's 58
+   * over the line (NUMERAL_BAND: the cap's 48 and the 10 under it, v4.10),
+   * which it draws only up to 1.3x text, so the band counts only there too.
    */
   const rowEstimate = dexCardHeight(column, fontScale, NAME_LINES) + ROW_GAP;
   const headEstimate = HEAD_LINE * Math.max(1, fontScale) + HEAD_RULE + space.md;
@@ -1337,7 +1337,7 @@ export default function DexScreen() {
 
   return (
     <View style={styles.screen}>
-      {/* The paper's grain (v4.9 A.5): static, outside the list, so the grid scrolls over a fixed sheet. */}
+      {/* The paper (v4.9 A.5; the sweep, v4.10 G): static, outside the list, so the grid scrolls over a fixed sheet. */}
       <Paper />
       {/* A fixed bar: the screen's name, and the count that opens Dex progress. The rule shows once content is under it. */}
       <ScreenTopBar
@@ -1370,7 +1370,10 @@ export default function DexScreen() {
           slide, the fade is on what stands on it, so nothing shows
           through a header half way. The ground carries its own paper
           (v4.9 A.5), its first child, outside the fade: it covers the
-          grid it slides over, so the grain has to slide with it.
+          grid it slides over, so the paper has to slide with it. It
+          lies in the sweep's white 40% of the window (v4.10,
+          specs/v4.10/spec.md G.3), so that paper draws nothing and the
+          header is the page's white.
         */}
         <View pointerEvents="box-none" style={[styles.headClip, { height: headerH }]}>
           <Animated.View onLayout={onHeaderLayout} style={[styles.header, { transform: [{ translateY: headerY }] }]}>

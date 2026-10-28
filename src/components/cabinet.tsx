@@ -9,6 +9,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 
+import { inkRoom } from '@/components/details/lineMarks';
 import { Icon } from '@/components/icons';
 import { colors, radius, space, stroke, textRole } from '@/constants/theme';
 import { faceOf, fitScale } from '@/lib/textFit';
@@ -51,16 +52,37 @@ export function svgStop(color: string, opacity = 1): { stopColor: string; stopOp
 /* DrinkName                                                            */
 /* ==================================================================== */
 
+/** The smallest a name is shrunk to, in the marker and in a text role (points, as drawn). */
+const DISPLAY_FLOOR = 15;
+const TEXT_FLOOR = 11;
+
+/**
+ * DrinkName's own fit: the scale it draws `role` at for `name` in
+ * `measure` at this text size, so a caller that places something on the
+ * name's lines (the drink page's margin rule) meets the size it draws.
+ */
+export function nameFit(name: string, role: TextStyle, measure: number, cap: number, fontScale: number): number {
+  const face = faceOf(role.fontFamily);
+  const size = (role.fontSize ?? textRole.name.fontSize) * Math.min(fontScale, cap);
+  return fitScale(name, face, size, measure, face === 'display' ? DISPLAY_FLOOR : TEXT_FLOOR);
+}
+
 /**
  * A drink's name, and the ONLY way one is drawn (specs/v3-cabinet.md 6.4).
+ * Since v4.10 it is written in the marker, Sedgwick Ave, the nearest hand
+ * to the logo's paint pen (specs/v4.10/spec.md T.4): catalogue names and a
+ * custom drink's alike, since a second face in one grid would read as a
+ * bug.
  *
  * Names never truncate: no `numberOfLines`, no `adjustsFontSizeToFit`. They
  * wrap at word boundaries and their containers grow. What a line limit
  * used to hide is a word wider than its column, which iOS would break
- * mid-word ("Holunderbeergei / st"), so the role is shrunk, never below
- * 11pt, until the name's widest unbreakable run fits `measure`. Short
- * names are untouched; a name with a long word shrinks only as far as it
- * must.
+ * mid-word ("Holunderbeergei / st"), so the role is shrunk until the
+ * name's widest unbreakable run fits `measure`: never below 15pt in the
+ * marker, whose thin hand stops reading as a name under it, and never
+ * below 11pt in a text role. Short names are untouched; a name with a long
+ * word shrinks only as far as it must. No catalogue name needs it at the
+ * grid's 22; a custom drink can.
  *
  * The size is worked out, not measured (lib/textFit.ts): at this Dynamic
  * Type size the role would draw at `role.fontSize × min(fontScale, cap)`,
@@ -69,9 +91,18 @@ export function svgStop(color: string, opacity = 1): { stopColor: string; stopOp
  * it on the fitted size. Pure layout: no state and no onLayout, so the
  * first frame is the final one.
  *
+ * INK ROOM. The marker's tails and accents reach past its line box, and
+ * iOS clips a Text to its bounds, so the Text takes lineMarks' inkRoom at
+ * the size it is drawn: padding past the line box above and below, taken
+ * back as negative margin from the caller's own margins, so the layout is
+ * still the line box and the q of "Daiquiri" and the dot of "Żubrówka"
+ * are whole. A text role (a locked Dex card's) takes none.
+ *
  * `measure` is the column's width in points, which every call site knows
  * from the window width (the table in 6.4). `role` is one of theme.ts's
- * name roles (a locked Dex card passes its Inter Medium 15/20 instead).
+ * name roles (a locked Dex card passes its Archivo 500 15/20 instead).
+ * `cap` is at most 1.3 at every site, so no marker line draws above 1.3
+ * times its role.
  */
 export function DrinkName({
   name,
@@ -97,7 +128,9 @@ export function DrinkName({
   const { fontScale } = useWindowDimensions();
   const fontSize = role.fontSize ?? textRole.name.fontSize;
   const lineHeight = role.lineHeight ?? Math.round(fontSize * 1.25);
-  const scale = fitScale(name, faceOf(role.fontFamily), fontSize * Math.min(fontScale, cap), measure);
+  const face = faceOf(role.fontFamily);
+  const grown = Math.min(fontScale, cap);
+  const scale = nameFit(name, role, measure, cap, fontScale);
   return (
     <Text
       maxFontSizeMultiplier={cap}
@@ -108,6 +141,7 @@ export function DrinkName({
         style,
         { fontSize: fontSize * scale, lineHeight: lineHeight * scale },
         role.letterSpacing != null && { letterSpacing: role.letterSpacing * scale },
+        face === 'display' && inkRoom('display', fontSize * scale * grown, style),
       ]}>
       {name}
     </Text>

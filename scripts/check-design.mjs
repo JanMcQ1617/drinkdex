@@ -14,9 +14,14 @@
  *      and round objects (a shutter, a dot) are circles. See SHAPE.
  *   5. No uppercase, and no Title Case by transform. Letterspaced caps
  *      headings were the habit that most made the interface look
- *      machine-designed. See CAPS.
- *   6. Playfair is the drink names, nothing else, and a drink name is
- *      drawn by DrinkName. See PLAYFAIR.
+ *      machine-designed. See CAPS. The one transform allowed is the
+ *      poster's capitals, in theme.ts's textRole.sub (v4.10).
+ *   6. Three faces, three jobs: the marker (Sedgwick Ave) is the drink
+ *      names, the tab titles and the empty states' headlines, the poster
+ *      (Anton) the section heads, the text (Archivo) everything else;
+ *      a drink name is drawn by DrinkName, never capped above 1.3;
+ *      every line clears its face's natural line; and theme.ts names
+ *      only fonts _layout.tsx loads. See DISPLAY_ROLES.
  *   7. Nothing under 11pt. See FLOOR.
  *   8. No tracked words, no capitals typed into copy, and a drink's style
  *      is shown in sentence case. See TRACKING.
@@ -47,8 +52,8 @@
  * tree (the project's own `typescript`), which holds no comments at all.
  * They need it: a caps check on whole lines flags code such as `SIZE -
  * STROKE`, and an <Image> element or a style object runs across lines.
- * The opt-out markers (`round-ok:`, `tracking-ok:`, `full-size-ok:`) are
- * comments, so they are read from the raw line.
+ * The opt-out markers (`round-ok:`, `tracking-ok:`, `caps-ok:`,
+ * `full-size-ok:`) are comments, so they are read from the raw line.
  *
  * Run: node scripts/check-design.mjs
  */
@@ -120,14 +125,24 @@ const SHAPE_EXEMPT = [
 ];
 
 /*
- * 5. No uppercase. No exemptions: not even a section heading. The label
- *    is written in sentence case in the source, and that is how it shows.
- *    `capitalize` is the same mistake in Title Case, the voice the judges
- *    flagged on Log rows (there it came from the data; rule 8 covers that
- *    way in), so the syntax-tree pass flags it, and either value on an
- *    arm of a conditional.
+ * 5. No uppercase. The label is written in sentence case in the source,
+ *    and that is how it shows. `capitalize` is the same mistake in Title
+ *    Case, the voice the judges flagged on Log rows (there it came from
+ *    the data; rule 8 covers that way in), so the syntax-tree pass flags
+ *    it, and either value on an arm of a conditional.
+ *
+ *    ONE EXCEPTION (v4.10, specs/v4.10/spec.md T.10): the poster's
+ *    capitals. A `textTransform: 'uppercase'` is allowed in theme.ts
+ *    only, on a line (or under a line) marked `caps-ok: <reason>`, and
+ *    only inside textRole.sub, which rule 6 lets two files read. Anton's
+ *    poster caps are the board's (SOUR AND CITRUSY, THE SPEC); the
+ *    transform keeps the copy and VoiceOver in the sentence case it is
+ *    written in; and this rule's history, tracked Inter caps reading
+ *    machine-made, is about a body face, not a poster face. Typed
+ *    capitals (rule 8's CAPS_TEXT) stay banned everywhere.
  */
 const CAPS = /textTransform:\s*['"]uppercase['"]/;
+const CAPS_OK = /caps-ok:\s*\S/;
 /** Banned transforms and their reason. uppercase reports as the line check does, so one site is one report. */
 const CAPS_TRANSFORM = {
   uppercase: undefined,
@@ -135,46 +150,94 @@ const CAPS_TRANSFORM = {
 };
 
 /*
- * 6. Playfair is the drink names' face, and nothing else's: not counts,
- *    not shelf headers, not sentences, not initials (specs/v3-cabinet.md
- *    section 6.2), and since v4.5 not the wordmark either, which is the
- *    tagged logo drawn as outlined paths (brand/Wordmark) and no type
- *    role at all. So the display fonts are named in theme.ts only, and
- *    there only as the `fontFamily` of a name role; every other file
- *    sets Playfair through one of those roles, whole. The
- *    `fonts` binding is followed through import aliases; a family string
- *    typed in anywhere counts (`const FACE = 'PlayfairDisplay…'` as much as
- *    a fontFamily); and so does a name role's family lent to other text
- *    (`fontFamily: textRole.nameLg.fontFamily` on a count), so none of
- *    those routes gets round the rule.
+ * 6. Three faces, three jobs (v4.10, specs/v4.10/spec.md T.10; until
+ *    build 34 one display face set the drink names). The marker, Sedgwick
+ *    Ave, is the drink names, the app's own tab titles and the empty
+ *    states' headlines (DISPLAY_ROLES); the poster, Anton, is the Dex's
+ *    and the drink page's section heads (SUB_ROLES); the text, Archivo,
+ *    is every other role. Never the marker or the poster on a count, an
+ *    amount, a Nº, a key, a handle or a sentence (specs/v3-cabinet.md
+ *    6.2 for the names; the judges' list for the rest), and never the
+ *    wordmark, which is the tagged logo drawn as outlined paths
+ *    (brand/Wordmark) and no type role at all.
+ *
+ *    In theme.ts, `fonts.display` may only be the `fontFamily` of a
+ *    DISPLAY role and `fonts.sub` only that of a SUB role, and every
+ *    other role names a body key (BODY_KEYS): that is what fails the
+ *    marker reaching `button`, `count`, `plate` or `title`. Outside
+ *    theme.ts no file names `fonts.display*` or `fonts.sub` at all,
+ *    followed through import aliases, by property, element or
+ *    destructuring; a family string typed in anywhere counts (`const FACE
+ *    = 'SedgwickAve…'` as much as a fontFamily, any of the five
+ *    families, the retired two included), except as a key in a font map;
+ *    and so does a DISPLAY or SUB role's family lent to other text
+ *    (`fontFamily: textRole.nameLg.fontFamily` on a count). Every file
+ *    sets the marker and the poster through one of those roles, whole.
+ *
+ *    The fenced roles are read only where their job is (ROLE_READERS):
+ *    `tabTitle` by ScreenTopBar's lg bar and TabPlaceholder, `emptyTitle`
+ *    by EmptyState (ui.tsx), `sub` by the two section heads.
+ *
+ *    THE NATURAL LINE. Each theme.ts role with a fontSize has a
+ *    lineHeight of at least its face's (hhea ascent + descent) x size,
+ *    read from lineMarks.ts's FACE_METRICS (as theme.ts is read, from the
+ *    syntax tree), which build-fonts.py --check holds to the font files.
+ *    Below it React Native's iOS layout centres nothing (RN 0.86's
+ *    RCTApplyBaselineOffset returns early), so lineMarks would no longer
+ *    say where the type sits.
+ *
+ *    THE KEYS. Every `fonts` value is a key of _layout.tsx's
+ *    `useFonts({…})`: a mismatch falls back to the system face silently,
+ *    so the build fails it instead.
  */
-const NAME_ROLES = ['drinkHero', 'nameLg', 'name', 'nameSm', 'nameInline'];
+const DISPLAY_ROLES = ['tabTitle', 'drinkHero', 'nameLg', 'name', 'nameSm', 'emptyTitle'];
+const SUB_ROLES = ['sub'];
+/** The `fonts` keys a role outside DISPLAY_ROLES and SUB_ROLES may name: the text's. */
+const BODY_KEYS = ['body', 'bodyMedium', 'bodySemiBold', 'bodyBold', 'label', 'numeral'];
 const THEME = 'constants/theme.ts';
+const LINE_MARKS = 'components/details/lineMarks.ts';
+const LAYOUT = 'app/_layout.tsx';
 /**
- * A display family's name as a string ('PlayfairDisplayLatin_700Bold'). A
- * font file's path is not one, nor is the bare word a measuring helper
- * might test a family against.
+ * A family's name as a string ('SedgwickAveLatin_400Regular'), any of the
+ * shipped three or the retired two. A font file's path is not one, nor is
+ * the bare word a measuring helper might test a family against.
  */
-const PLAYFAIR_FAMILY = /^PlayfairDisplay\w*_\d{3}\w*$/;
+const FACE_FAMILY = /^(SedgwickAve|Anton|Archivo|PlayfairDisplay|Inter)\w*_\d{3}\w*$/;
 /**
  * Files rule 6 does not read, and why. None since v4.5: the drawn intro
- * set its own Playfair lockup until the tagged wordmark replaced it.
+ * set its own serif lockup until the tagged wordmark replaced it.
  */
-const PLAYFAIR_EXEMPT = {};
+const FACE_EXEMPT = {};
+/** Where each fenced role may be read outside theme.ts: the code that draws its job. */
+const ROLE_READERS = {
+  tabTitle: ['components/ScreenTopBar.tsx', 'components/TabPlaceholder.tsx'],
+  emptyTitle: ['components/ui.tsx'],
+  sub: ['components/dex/SectionHead.tsx', 'components/DrinkPanels.tsx'],
+};
 /*
  * And a drink name is drawn by DrinkName (components/cabinet.tsx), which
- * fits it to its column and never gives it a line limit: the judges saw
- * "Ramos Gin ..." on a Today's tile (specs/v3-cabinet.md section 6.4). So
- * the drink-name roles reach a screen only as DrinkName's `role`. Used as
- * a `style`, spread into a style object or put in a StyleSheet they would
- * be a plain Text, free to take `numberOfLines`. `textRole['cardName']`
- * counts as `textRole.cardName`. Data that only carries a role on to
- * DrinkName (a table of roles) and member reads such as
- * `textRole.rowName.fontSize` pass. nameInline is the name inside an
- * Inter sentence, a nested Text.
+ * fits it to its column, never gives it a line limit and gives the
+ * marker its ink room: the judges saw "Ramos Gin ..." on a Today's tile
+ * (specs/v3-cabinet.md section 6.4). So the drink-name roles reach a
+ * screen only as DrinkName's `role`. Used as a `style`, spread into a
+ * style object or put in a StyleSheet they would be a plain Text, free to
+ * take `numberOfLines`. `textRole['cardName']` counts as
+ * `textRole.cardName`. Data that only carries a role on to DrinkName (a
+ * table of roles) and member reads such as `textRole.rowName.fontSize`
+ * pass. nameInline is the name inside a sentence, a nested Text in
+ * Archivo 600, and is not fenced.
  */
-const DRINK_NAME_ROLES = NAME_ROLES.filter((r) => r !== 'nameInline');
+const DRINK_NAME_ROLES = ['drinkHero', 'nameLg', 'name', 'nameSm'];
 const CABINET_MODULE = /(^|\/)components\/cabinet$/;
+/*
+ * And no DrinkName is capped above 1.3 (specs/v4.10/spec.md T.4): the
+ * marker's ink room and the fit tables are worked to that, and three sites
+ * still sat at v3.3's 1.4 when the marker landed, one of them missed by the
+ * spec's own file table (log/ResultRow). A `cap` that is a literal or a
+ * file-level const is read (either arm of a conditional too); one computed
+ * from anything else (a prop, a table) states its own and is not.
+ */
+const NAME_CAP_MAX = 1.3;
 
 /*
  * 7. Nothing under 11pt, the floor of `type` and the smallest size iOS
@@ -386,7 +449,7 @@ const TIMED = new Set(['timing', 'spring', 'decay', 'loop', 'sequence', 'paralle
  *     (or a spinner or GlassOutline, which are glyphs), may not be one of the edge tokens,
  *     on either arm.
  *
- *     And "Nº 0127" is N + U+00BA: the Inter latin subset has the
+ *     And "Nº 0127" is N + U+00BA: the Archivo latin subset has the
  *     masculine ordinal and not U+2116 (the numero sign), which would draw
  *     as a fallback glyph from the system font. Any U+2116 in src/ fails.
  */
@@ -464,7 +527,8 @@ const NUMERO = /\u2116/;
  *       - the marks are any of details/PenMarks, DoodleMarks (the
  *         garnishes, the crown, the arrow, an empty state's cluster),
  *         FrameMarks (a post's crop corners), PressMarks (the outlined
- *         figures, the leaders, the ticket) and Paper (the grain), and
+ *         figures, the leaders, the ticket) and Paper (the sweep since
+ *         v4.10, specs/v4.10/spec.md G), and
  *         DETAIL_SITES says which each file may place;
  *       - the press and the paper are in the folder but are NOT the
  *         pen's (ACCENT_TIER_EXCEPT): the token fails in them, and so
@@ -1006,23 +1070,166 @@ function textRoleObject(sf) {
 }
 
 /**
- * Rule 6 inside theme.ts: a Playfair reference is allowed only as the
- * fontFamily of a textRole entry listed in NAME_ROLES. Returns why not, or
- * null when it is.
+ * Rule 6 inside theme.ts: `fonts.display` is allowed only as the
+ * fontFamily of a textRole entry in DISPLAY_ROLES, and `fonts.sub` only
+ * as that of one in SUB_ROLES. `face` is which was read. Returns why not,
+ * or null when it is.
  */
-function playfairInTheme(site, roles) {
+function faceInTheme(site, roles, face) {
+  const [allowed, list, word] =
+    face === 'sub' ? [SUB_ROLES, 'SUB_ROLES', 'the poster'] : [DISPLAY_ROLES, 'DISPLAY_ROLES', 'the marker'];
   const prop = site.parent;
   if (!prop || !ts.isPropertyAssignment(prop) || keyOf(prop) !== 'fontFamily') {
-    return 'name the display face only as the fontFamily of a name role';
+    return `name ${word} only as the fontFamily of a ${list} role`;
   }
   const role = prop.parent?.parent;
   if (!role || !ts.isPropertyAssignment(role) || role.parent !== roles) {
-    return 'only a textRole entry may set Playfair';
+    return `only a textRole entry may set ${word}`;
   }
   const name = keyOf(role);
-  return NAME_ROLES.includes(name)
-    ? null
-    : `textRole.${name} is Playfair but not a name role (NAME_ROLES)`;
+  return allowed.includes(name) ? null : `textRole.${name} is ${word} but not in ${list}`;
+}
+
+/** A top-level `const NAME = { … }` object literal in a file, by name (theme.ts's TITLE, BODY, …). */
+function constObjects(sf) {
+  const out = new Map();
+  for (const st of sf.statements) {
+    if (!ts.isVariableStatement(st)) continue;
+    for (const d of st.declarationList.declarations) {
+      const init = unwrap(d.initializer);
+      if (ts.isIdentifier(d.name) && init && ts.isObjectLiteralExpression(init)) out.set(d.name.text, init);
+    }
+  }
+  return out;
+}
+
+/** A role's numeric fontSize and lineHeight, through `...TITLE`-style spreads of the file's const objects; later keys win. */
+function roleMetrics(obj, objects, seen = new Set()) {
+  const out = {};
+  for (const p of obj.properties) {
+    if (ts.isSpreadAssignment(p) && ts.isIdentifier(p.expression) && objects.has(p.expression.text)) {
+      if (seen.has(p.expression.text)) continue;
+      Object.assign(out, roleMetrics(objects.get(p.expression.text), objects, new Set([...seen, p.expression.text])));
+    } else if (ts.isPropertyAssignment(p)) {
+      const key = keyOf(p);
+      const v = unwrap(p.initializer);
+      if ((key === 'fontSize' || key === 'lineHeight') && v && ts.isNumericLiteral(v)) out[key] = Number(v.text);
+      else if (key === 'fontFamily') out.fontFamily = p.initializer;
+    }
+  }
+  return out;
+}
+
+/** lineMarks.ts's FACE_METRICS (face -> { ascent, descent }), from its syntax tree, or null. */
+function faceMetrics() {
+  let text;
+  try {
+    text = readFileSync(join(ROOT, LINE_MARKS), 'utf8');
+  } catch {
+    return null;
+  }
+  const sf = parse(LINE_MARKS, text);
+  let table = null;
+  const visit = (node) => {
+    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.name.text === 'FACE_METRICS') {
+      const init = unwrap(node.initializer);
+      if (init && ts.isObjectLiteralExpression(init)) table = init;
+    }
+    if (!table) ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  if (!table) return null;
+  const out = {};
+  for (const p of table.properties) {
+    const v = ts.isPropertyAssignment(p) ? unwrap(p.initializer) : null;
+    if (!v || !ts.isObjectLiteralExpression(v)) continue;
+    const m = {};
+    for (const q of v.properties) {
+      const n = ts.isPropertyAssignment(q) ? unwrap(q.initializer) : null;
+      if (n && ts.isNumericLiteral(n)) m[keyOf(q)] = Number(n.text);
+    }
+    out[keyOf(p)] = m;
+  }
+  return out;
+}
+
+/** The keys of _layout.tsx's `useFonts({…})`, or null when there is no such call. */
+function useFontsKeys() {
+  let text;
+  try {
+    text = readFileSync(join(ROOT, LAYOUT), 'utf8');
+  } catch {
+    return null;
+  }
+  let keys = null;
+  const visit = (node) => {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      node.expression.text === 'useFonts' &&
+      node.arguments[0] &&
+      ts.isObjectLiteralExpression(unwrap(node.arguments[0]))
+    ) {
+      keys = new Set(unwrap(node.arguments[0]).properties.map(keyOf).filter(Boolean));
+    }
+    if (!keys) ts.forEachChild(node, visit);
+  };
+  visit(parse(LAYOUT, text));
+  return keys;
+}
+
+/**
+ * Rule 6's theme.ts-wide checks: every role off the marker and the
+ * poster names a body key, every line clears its face's natural line, and
+ * every `fonts` value is a key _layout.tsx loads.
+ */
+function themeFaces(sf, roles, add, at) {
+  const objects = constObjects(sf);
+  const metrics = faceMetrics();
+  if (!metrics) add('face', 0, `cannot read FACE_METRICS from ${LINE_MARKS}`);
+  for (const role of roles.properties) {
+    if (!ts.isPropertyAssignment(role)) continue;
+    const name = keyOf(role);
+    const obj = unwrap(role.initializer);
+    if (!obj || !ts.isObjectLiteralExpression(obj)) continue;
+    const m = roleMetrics(obj, objects);
+    const fam = m.fontFamily ? unwrap(m.fontFamily) : null;
+    const key = fam && ts.isPropertyAccessExpression(fam) && ts.isIdentifier(fam.expression) && fam.expression.text === 'fonts'
+      ? fam.name.text
+      : null;
+    if (!key) {
+      add('face', at(role), `textRole.${name} must name its face as fonts.<key>`);
+      continue;
+    }
+    if (!DISPLAY_ROLES.includes(name) && !SUB_ROLES.includes(name) && !BODY_KEYS.includes(key)) {
+      add('face', at(role), `textRole.${name} is not a DISPLAY or SUB role, so it names a body key (${BODY_KEYS.join(', ')})`);
+    }
+    const face = key === 'display' ? 'display' : key === 'sub' ? 'sub' : 'text';
+    const fm = metrics?.[face];
+    if (m.fontSize != null && fm) {
+      const natural = (fm.ascent + fm.descent) * m.fontSize;
+      if (m.lineHeight == null || m.lineHeight < natural - 1e-9) {
+        add(
+          'face',
+          at(role),
+          `textRole.${name}: lineHeight ${m.lineHeight ?? 'unset'} is under ${face}'s natural line at ${m.fontSize} (${natural.toFixed(2)})`,
+        );
+      }
+    }
+  }
+  // The keys: every `fonts` value is a key of _layout.tsx's useFonts.
+  const loaded = useFontsKeys();
+  const fontsObj = constObjects(sf).get('fonts');
+  if (!loaded) add('face', 0, `cannot find useFonts({…}) in ${LAYOUT}`);
+  if (!fontsObj) add('face', 0, 'cannot find `fonts` in theme.ts');
+  if (loaded && fontsObj) {
+    for (const p of fontsObj.properties) {
+      const v = ts.isPropertyAssignment(p) ? unwrap(p.initializer) : null;
+      if (v && ts.isStringLiteralLike(v) && !loaded.has(v.text)) {
+        add('face', at(p), `fonts.${keyOf(p)} is '${v.text}', which ${LAYOUT}'s useFonts does not load: it would fall back silently`);
+      }
+    }
+  }
 }
 
 /**
@@ -1198,47 +1405,71 @@ function treeRules(rel, sf, lines, add) {
     );
   };
 
-  const playfair = (node, why = 'set Playfair through a name role') => {
-    if (PLAYFAIR_EXEMPT[rel]) return;
-    const reason = rel === THEME ? playfairInTheme(node, roles) : why;
-    if (reason) add('playfair', at(node), reason);
+  /** Which fenced face a `fonts` key is: 'display' for display*, 'sub' for sub, else null. */
+  const fencedFace = (key) => (key.startsWith('display') ? 'display' : key === 'sub' ? 'sub' : null);
+  const face = (node, which, why) => {
+    if (FACE_EXEMPT[rel]) return;
+    const reason =
+      rel === THEME
+        ? faceInTheme(node, roles, which)
+        : (why ?? `set ${which === 'sub' ? 'the poster' : 'the marker'} through its role, whole (rule 6)`);
+    if (reason) add('face', at(node), reason);
   };
 
   const visit = (node) => {
-    // 6. `fonts.display*`, `fonts['display*']`, `const { display } = fonts`.
+    // 6. `fonts.display*` or `fonts.sub`, `fonts['…']`, `const { display } = fonts`.
     if (ts.isPropertyAccessExpression(node) && isName(node.expression, fonts)) {
-      if (node.name.text.startsWith('display')) playfair(node);
+      const which = fencedFace(node.name.text);
+      if (which) face(node, which);
     } else if (
       ts.isElementAccessExpression(node) &&
       isName(node.expression, fonts) &&
       ts.isStringLiteral(node.argumentExpression) &&
-      node.argumentExpression.text.startsWith('display')
+      fencedFace(node.argumentExpression.text)
     ) {
-      playfair(node);
+      face(node, fencedFace(node.argumentExpression.text));
     } else if (
       ts.isBindingElement(node) &&
       node.parent?.parent &&
       ts.isVariableDeclaration(node.parent.parent) &&
       isName(node.parent.parent.initializer, fonts) &&
-      (node.propertyName ?? node.name).getText().startsWith('display')
+      fencedFace((node.propertyName ?? node.name).getText())
     ) {
-      playfair(node);
+      face(node, fencedFace((node.propertyName ?? node.name).getText()));
     }
 
     // 6. A drink-name role drawn as a plain style.
-    if (rel !== THEME && DRINK_NAME_ROLES.includes(roleRead(node, textRoles))) {
+    const read = rel !== THEME ? roleRead(node, textRoles) : null;
+    if (read && DRINK_NAME_ROLES.includes(read)) {
       const why = nameRoleAsStyle(node, sf, drinkNames);
       if (why) add('name', at(node), why);
     }
 
-    // 6. A display family typed in as a string, wherever it is kept. A key (a font map) only names a file to load.
+    // 6. A drink name capped above 1.3 (NAME_CAP_MAX).
+    if (
+      ts.isJsxAttribute(node) &&
+      node.name.getText(sf) === 'cap' &&
+      drinkNames.has(node.parent.parent.tagName.getText(sf)) &&
+      node.initializer &&
+      ts.isJsxExpression(node.initializer) &&
+      literals(node.initializer.expression, consts).some((n) => n > NAME_CAP_MAX)
+    ) {
+      add('name', at(node), `a DrinkName capped above ${NAME_CAP_MAX}: no marker line draws above 1.3 times its role`);
+    }
+
+    // 6. A fenced role read outside the code that draws its job.
+    if (read && Object.hasOwn(ROLE_READERS, read) && !ROLE_READERS[read].includes(rel)) {
+      add('face', at(node), `textRole.${read} is read only in ${ROLE_READERS[read].join(' and ')}`);
+    }
+
+    // 6. A family typed in as a string, wherever it is kept. A key (a font map) only names a file to load.
     if (
       rel !== THEME &&
       ts.isStringLiteralLike(node) &&
-      PLAYFAIR_FAMILY.test(node.text) &&
+      FACE_FAMILY.test(node.text) &&
       !(ts.isPropertyAssignment(node.parent) && node.parent.name === node)
     ) {
-      playfair(node);
+      face(node, 'display', `a font family typed in ('${node.text}'): name it through fonts or a textRole`);
     }
 
     // 8. A drink's style drawn as the catalogue stores it.
@@ -1304,31 +1535,34 @@ function treeRules(rel, sf, lines, add) {
       const key = keyOf(node);
       const value = node.initializer;
 
-      // 6. A family string typed in place of the token.
+      // 6. A family string typed in place of the token, theme.ts included.
       const str = unwrap(value);
-      if (key === 'fontFamily' && str && ts.isStringLiteralLike(str) && /Playfair/.test(str.text)) {
-        playfair(str);
+      if (key === 'fontFamily' && str && ts.isStringLiteralLike(str) && FACE_FAMILY.test(str.text)) {
+        add('face', at(str), `a font family typed in ('${str.text}'): name it through fonts or a textRole`);
       }
 
-      // 6. A name role's family lent to other text: `fontFamily: textRole.nameLg.fontFamily`.
+      // 6. A marker or poster role's family lent to other text: `fontFamily: textRole.nameLg.fontFamily`.
       if (rel !== THEME && key === 'fontFamily') {
         for (const v of arms(value)) {
-          if (
-            ts.isPropertyAccessExpression(v) &&
-            v.name.text === 'fontFamily' &&
-            NAME_ROLES.includes(roleRead(unwrap(v.expression), textRoles))
-          ) {
-            playfair(v, "a name role's family on other text: use the role whole, or an Inter role");
+          const lent = ts.isPropertyAccessExpression(v) && v.name.text === 'fontFamily' ? roleRead(unwrap(v.expression), textRoles) : null;
+          if (lent && (DISPLAY_ROLES.includes(lent) || SUB_ROLES.includes(lent))) {
+            face(v, SUB_ROLES.includes(lent) ? 'sub' : 'display', `textRole.${lent}'s family on other text: use the role whole, or an Archivo role`);
           }
         }
       }
 
-      // 5. Uppercase and Title Case by transform, on either arm.
+      // 5. Uppercase and Title Case by transform, on either arm; the poster's capitals in theme.ts's textRole.sub alone.
       if (key === 'textTransform') {
         for (const v of arms(value)) {
-          if (ts.isStringLiteralLike(v) && Object.hasOwn(CAPS_TRANSFORM, v.text)) {
-            add('caps', at(node), CAPS_TRANSFORM[v.text]);
+          if (!ts.isStringLiteralLike(v) || !Object.hasOwn(CAPS_TRANSFORM, v.text)) continue;
+          if (v.text === 'uppercase' && rel === THEME && marked(CAPS_OK, at(node))) {
+            const role = node.parent?.parent;
+            const inSub =
+              roles && role && ts.isPropertyAssignment(role) && role.parent === roles && SUB_ROLES.includes(keyOf(role));
+            if (!inSub) add('caps', at(node), 'caps-ok: is for the poster alone, inside textRole.sub');
+            continue;
           }
+          add('caps', at(node), CAPS_TRANSFORM[v.text]);
         }
       }
 
@@ -1653,7 +1887,8 @@ function treeRules(rel, sf, lines, add) {
 
   for (const [i, what] of rarityLines) add('rarity', i, `${[...what].join(', ')}: rarity was removed in v3.1`);
 
-  if (rel === THEME && !roles) add('playfair', 0, 'cannot find `textRole` in theme.ts');
+  if (rel === THEME && !roles) add('face', 0, 'cannot find `textRole` in theme.ts');
+  if (rel === THEME && roles) themeFaces(sf, roles, add, at);
 }
 
 const violations = [];
@@ -1678,10 +1913,10 @@ for (const [order, file] of files.entries()) {
   treeRules(rel, parse(rel, text), lines, add);
 
   code.forEach((c, i) => {
-    // Rule 5 reads every file, the allowlist included.
-    if (CAPS.test(c)) add('caps', i);
+    // Rule 5 reads every file, the allowlist included; the tree pass holds a caps-ok: in theme.ts to textRole.sub.
+    if (CAPS.test(c) && !(rel === THEME && (CAPS_OK.test(lines[i]) || (i > 0 && CAPS_OK.test(lines[i - 1]))))) add('caps', i);
     // Rule 16's numero sign, every file: it is wrong in a string as much as in a style.
-    if (NUMERO.test(c)) add('edge', i, 'U+2116 is not in the Inter subset: write N + U+00BA');
+    if (NUMERO.test(c)) add('edge', i, 'U+2116 is not in the Archivo subset: write N + U+00BA');
     // Rule 17's typed-out accent (hex or rgb), every file but theme.ts, the allowlist included.
     if (rel !== THEME && ACCENT_HEX.some((re) => re.test(c))) add('accent', i, "the accent typed out (hex or rgb): use its tokens");
 
@@ -1709,7 +1944,7 @@ console.log('\n  Sipply design-system guard\n');
 if (violations.length === 0) {
   console.log(
     '  No emoji-as-UI, hardcoded hex, layout animations, ovals, uppercase or Title Case,\n' +
-      '  stray Playfair, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
+      '  a face outside its job, drink names outside DrinkName, type under 11pt, tracking, raw\n' +
       '  drink styles, full-size decodes, off-ground screens, unaudited ink over media,\n' +
       '  stray shadows, gradient stops without their opacity, rarity readers, timed\n' +
       '  React Native animations, inverting photos, edge greys set as text, or the\n' +

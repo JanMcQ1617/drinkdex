@@ -92,11 +92,12 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * which draws nothing until there is a place to show.
  *
  * THE PAPER AND THE FIGURE (v4.9, specs/v4.9/details A.5, C.5). The page
- * and its bar lie on the paper's grain; the unknown drink stays bare, as
- * every dead end does. The first how-section the page draws opens with
- * the drink's figure, "Nº 0100" in the press's outline over the pen's
- * double rule: the spec for a cocktail, else the serve guide, else what
- * it is made of. The same grey caught or not: the plate says which.
+ * and its bar lie on the paper (the sweep since v4.10, specs/v4.10/spec.md
+ * G); the unknown drink stays bare, as every dead end does. The first
+ * how-section the page draws opens with the drink's figure, "Nº 0100" in
+ * the press's outline over the pen's double rule: the spec for a
+ * cocktail, else the serve guide, else what it is made of. The same grey
+ * caught or not: the plate says which.
  */
 
 export default function DrinkDetailScreen() {
@@ -415,7 +416,7 @@ export default function DrinkDetailScreen() {
 
   return (
     <View style={styles.screen}>
-      {/* The paper's grain under the page (v4.9 A.5): outside the scroll, so the page moves over a fixed sheet. */}
+      {/* The paper under the page (v4.9 A.5; the sweep, v4.10 G): outside the scroll, so the page moves over a fixed sheet. */}
       <Paper />
       {/* No visible title: the name under the print is the page's title. The bar still speaks it. */}
       {bar(

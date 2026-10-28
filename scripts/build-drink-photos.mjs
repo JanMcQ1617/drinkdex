@@ -63,7 +63,7 @@ const PREV_DIR = path.join(ROOT, 'assets', '.drinks-prev');
 const MAP_FILE = path.join(ROOT, 'src', 'data', 'drinkPhotos.ts');
 const DAYLIGHT = path.join(ROOT, 'scripts', 'lib', 'daylight.py');
 /** Labels on the QA sheets, in the app's own face. */
-const QA_FONT = path.join(ROOT, 'assets', 'fonts', 'InterLatin_500Medium.ttf');
+const QA_FONT = path.join(ROOT, 'assets', 'fonts', 'ArchivoLatin_500Medium.ttf');
 
 if (!fs.existsSync(DAYLIGHT)) fail(`${path.relative(ROOT, DAYLIGHT)} is missing: it is the bake.`);
 /** The bake script's sha256, as the generated header records it. */

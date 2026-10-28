@@ -1,87 +1,83 @@
+import { ADVANCE_CHARS, FACE_ADVANCES, TEXT_CLASS_EM } from '@/lib/faceAdvances';
+
 /* ==================================================================== */
 /* Fitting a word to its column, without measuring it                   */
 /*                                                                      */
 /* A drink name never takes a line limit (specs/v3-cabinet.md 6.4): it  */
 /* wraps at word boundaries and its container grows. The one way it can */
 /* still break is INSIDE a word: iOS character-wraps a word wider than  */
-/* its line, and the catalogue has such words ("Holunderbeergeist" is   */
-/* 453pt at the drink page's 52pt on a 361pt column). So DrinkName      */
+/* its line, and the catalogue has such words ("Holunderbeergeist" at   */
+/* the drink page's 60pt is wider than its column). So DrinkName        */
 /* (components/cabinet.tsx) shrinks a name until its widest unbreakable */
 /* run fits, and this file says how wide that run is.                   */
 /*                                                                      */
 /* An ESTIMATE, not a measurement, on purpose. onLayout would draw the  */
 /* name once at full size and then again shrunk, a visible jump on      */
 /* every long name and a second layout pass on every Dex card. A width  */
-/* costed per character class is pure arithmetic, so the first frame is */
-/* already the final one. The class widths were measured against the    */
-/* font files (Playfair Display Bold, Inter SemiBold, the widest cuts   */
-/* the app draws names and label values in) and are deliberately on the */
-/* wide side: an estimate that is too wide shrinks a name a little more */
-/* than it needed; one that is too narrow lets a word break.            */
+/* costed per character is pure arithmetic, so the first frame is       */
+/* already the final one.                                               */
 /*                                                                      */
-/* Running text is the other job (v4.1): Home's caption is cut to two   */
-/* lines with its "… more" before layout. A class estimate errs a fifth */
-/* or more wide on a sentence, which cut a caption well short of its    */
-/* second line's end, so Inter's two text cuts also have their own      */
-/* advance widths here ('inter400', 'inter600'), read from the font     */
-/* files and set 2% over. Inter's kerning only draws pairs closer, so   */
-/* these still never fall short of the line iOS sets.                   */
+/* The faces are named by their job, not their family, so the next swap */
+/* renames nothing (v4.10, specs/v4.10/spec.md T.9):                    */
+/*   'display'  the marker, Sedgwick Ave: drink names, the tab titles   */
+/*   'text400'  Archivo Regular: running text (Home's caption)          */
+/*   'text600'  Archivo SemiBold: a username before a caption, a strong */
+/*              word in a tag line                                      */
+/*   'text'     a wide class estimate costed on Archivo 600, its widest */
+/*              cut, for labels and values in any Archivo weight        */
+/* The three exact faces read GENERATED advances (lib/faceAdvances.ts,  */
+/* from the shipped fonts by scripts/build-fonts.py): each character's  */
+/* advance plus the widest positive kern it can take on its left and    */
+/* its share of any ligature wider than its parts, set 2% over. Those   */
+/* allowances matter now: Sedgwick has 651 kern pairs and some widen a  */
+/* pair by 140 units in 1,000 (Archivo's by up to 50), and its f_f is   */
+/* 136 wider than f + f. Inter only ever tightened, which is why its    */
+/* tables needed none. specs/v4.10/type/tools/fit.mjs holds the         */
+/* marker's estimate over Chrome's shaped width for every catalogue     */
+/* name. An estimate that is too wide shrinks a name a little more      */
+/* than it needed, or cuts a caption a word early; one that is too      */
+/* narrow lets a word break, so every table errs wide.                  */
 /*                                                                      */
 /* Pure: no React, no theme. The face is passed in, not looked up.      */
 /* ==================================================================== */
 
 /**
- * 'playfair' and 'inter': the wide class estimates, for names and labels
- * (Inter's costed on SemiBold, its widest cut). 'inter400' and 'inter600':
- * Inter Regular and SemiBold's own advances, for running text.
+ * 'display', 'text400' and 'text600': the marker's and Archivo Regular's
+ * and SemiBold's own advances. 'text': the wide class estimate for labels
+ * and values (Archivo, costed on SemiBold).
  */
-export type Face = 'playfair' | 'inter' | 'inter400' | 'inter600';
-type ClassFace = 'playfair' | 'inter';
-
-/** Advance widths in em, per character class. */
-const CLASS_EM: Record<ClassFace, { narrow: number; lower: number; cap: number; wide: number }> = {
-  playfair: { narrow: 0.49, lower: 0.66, cap: 0.9, wide: 0.97 },
-  inter: { narrow: 0.47, lower: 0.65, cap: 0.77, wide: 1.02 },
-};
+export type Face = 'display' | 'text' | 'text400' | 'text600';
+type ExactFace = 'display' | 'text400' | 'text600';
 
 /*
- * Inter's advances in font units (2048 to the em), from
- * assets/fonts/InterLatin_400Regular.ttf and InterLatin_600SemiBold.ttf
- * (hmtx), for U+0020 to U+007E in order, then the typographic marks in
- * TYPO_MARKS. An accented letter has its base letter's advance in Inter,
- * but for the three whose caron is drawn as an apostrophe (ď ľ ť), which
- * are listed with the marks. Regenerate these with the fonts.
+ * faceAdvances covers U+0020 to U+007E, the typographic marks (’ ‘ “ ” –
+ * — … • ·, and ď ľ ť, whose caron is drawn as an apostrophe and so is
+ * wider than the base letter) and every letter of the catalogue's names.
+ * Anything else is costed as its base letter, then as FALLBACK_EM.
  */
-const INTER_UPM = 2048;
-const TYPO_MARKS = '’‘“”–—…•·ďľť';
-const INTER_UNITS: Record<'inter400' | 'inter600', string> = {
-  inter400:
-    '576 589 954 1297 1314 2011 1319 614 747 747 1026 1355 590 942 590 738 1292 833 1249 1265 1323 1215 1270 1159 1267 1270 590 618 1355 1355 1355 1047 1978 1413 1340 1496 1478 1231 1209 1528 1522 550 1169 1376 1158 1850 1543 1566 1308 1566 1318 1314 1322 1524 1413 2018 1397 1390 1288 747 738 747 965 934 661 1150 1254 1170 1254 1194 758 1256 1211 496 496 1124 496 1794 1210 1228 1254 1254 771 1081 670 1211 1151 1676 1118 1151 1131 873 681 873 1355 ' +
-    '534 534 902 902 1024 2048 1770 1152 590 1454 696 770',
-  inter600:
-    '516 658 1071 1318 1332 2057 1357 667 764 764 1105 1378 653 953 653 776 1351 866 1276 1303 1364 1254 1310 1180 1311 1310 653 674 1378 1378 1378 1113 2046 1490 1350 1509 1479 1240 1204 1534 1527 567 1187 1440 1158 1889 1555 1574 1321 1583 1336 1332 1352 1507 1490 2089 1474 1461 1336 764 776 764 986 961 719 1176 1278 1193 1278 1211 796 1281 1254 536 536 1166 536 1844 1253 1247 1278 1278 813 1125 723 1254 1202 1719 1165 1205 1159 931 735 931 1378 ' +
-    '602 602 1038 1027 1024 2048 1958 1031 653 1514 772 859',
-};
 /** Headroom over the font's own advances, for a scaled font's rounding. */
 const ADVANCE_SLACK = 1.02;
 /**
- * A character Inter does not draw (an emoji, another script) comes from a
- * system font, and is costed wider than any letter: Apple's emoji are
- * about 1.25em.
+ * A character the face does not draw (an emoji, another script) comes
+ * from a system font, and is costed wider than any letter: Apple's emoji
+ * are about 1.25em.
  */
 const FALLBACK_EM = 1.3;
 
-/** Each exact face's advances in em, by character. */
-const ADVANCE_EM: Record<'inter400' | 'inter600', Map<string, number>> = {
-  inter400: advanceTable(INTER_UNITS.inter400),
-  inter600: advanceTable(INTER_UNITS.inter600),
+/** Each exact face's advances in em, by character. A 0 in the table is a character the face does not draw, and is left out. */
+const ADVANCE_EM: Record<ExactFace, Map<string, number>> = {
+  display: advanceTable(FACE_ADVANCES.display),
+  text400: advanceTable(FACE_ADVANCES.text400),
+  text600: advanceTable(FACE_ADVANCES.text600),
 };
 
-function advanceTable(units: string): Map<string, number> {
-  const chars = [...Array.from({ length: 0x7f - 0x20 }, (_, i) => String.fromCharCode(0x20 + i)), ...TYPO_MARKS];
+function advanceTable({ upem, units }: { upem: number; units: string }): Map<string, number> {
   const values = units.split(' ').map(Number);
   const table = new Map<string, number>();
-  chars.forEach((ch, i) => table.set(ch, ((values[i] ?? INTER_UPM) / INTER_UPM) * ADVANCE_SLACK));
+  ADVANCE_CHARS.forEach((ch, i) => {
+    const u = values[i];
+    if (u) table.set(ch, (u / upem) * ADVANCE_SLACK);
+  });
   return table;
 }
 
@@ -96,11 +92,11 @@ function base(ch: string): string {
 }
 
 function charEm(ch: string, face: Face): number {
-  if (face === 'inter400' || face === 'inter600') {
+  if (face !== 'text') {
     const table = ADVANCE_EM[face];
     return table.get(ch) ?? table.get(base(ch)) ?? FALLBACK_EM;
   }
-  const em = CLASS_EM[face];
+  const em = TEXT_CLASS_EM;
   const b = base(ch);
   if (NARROW.has(b)) return em.narrow;
   if (WIDE.has(b)) return em.wide;
@@ -140,13 +136,13 @@ function runs(text: string): string[] {
 /**
  * Conservative width in points of the widest unbreakable run of `text`:
  * split on spaces, and after hyphens and en dashes (where iOS may break).
- * Each character is costed by class, in em: Playfair narrow 0.49, lower
- * 0.66, cap/digit 0.90, wide 0.97; Inter narrow 0.47, lower 0.65,
- * cap/digit 0.77, wide 1.02. Classes: narrow = i j l t f r I ' ’ . , : ; !
- * | ( ) / - and space; wide = m w M W æ œ Æ Œ %; cap = other capitals,
- * digits, & – ~; lower = everything else (accents are classed by their
- * base letter). Never below the real advance for any catalogue name,
- * origin or abv string, and at most ~25% above it on long words.
+ * An exact face costs each character by its own advance and widest kern
+ * (faceAdvances). 'text' costs it by class, in em, at Archivo 600's
+ * widest in each (TEXT_CLASS_EM, generated): narrow = i j l t f r I ' ’ .
+ * , : ; ! | ( ) / - and space; wide = m w M W æ œ Æ Œ %; cap = other
+ * capitals, digits, & – ~; lower = everything else (accents are classed
+ * by their base letter). Never below the shaped width of any catalogue
+ * name's widest run (specs/v4.10/type/tools/fit.mjs checks all 2,089).
  */
 export function widestRun(text: string, face: Face, size: number): number {
   let widest = 0;
@@ -277,11 +273,11 @@ export function clampToLines(
 }
 
 /**
- * Which estimate a font family takes: Playfair for the display face,
- * Inter for everything else. Read from the family name so this file and
- * DrinkName need no import of the display tokens (check-design rule 6
- * keeps those inside constants/theme.ts).
+ * Which estimate a font family takes: 'display' for the marker, the wide
+ * 'text' estimate for everything else. Read from the family name so this
+ * file and DrinkName need no import of the display tokens (check-design
+ * rule 6 keeps those inside constants/theme.ts).
  */
 export function faceOf(fontFamily: string | undefined): Face {
-  return fontFamily && /playfair/i.test(fontFamily) ? 'playfair' : 'inter';
+  return fontFamily && /SedgwickAve/.test(fontFamily) ? 'display' : 'text';
 }

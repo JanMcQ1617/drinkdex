@@ -45,12 +45,14 @@ import { colors, layout, stroke } from '@/constants/theme';
 /* the Dock's clock, which rests at 1, so at rest they are the identity */
 /* and the scroll's native-driven motion above them is unchanged.       */
 /*                                                                      */
-/* ON THE PAPER (v4.9; specs/v4.9/details/spec.md A.5). The bar and the */
-/* strip are Home's ground, so each carries the paper's grain as its    */
-/* first child, under the row: noise against the root's offset noise    */
-/* shows no seam, so the bar meets the page without a step, and its     */
-/* grain slides away with it on scroll. Each Paper rides the chrome     */
-/* group's Rise (the Dock's clock again), so on a cold start the grain  */
+/* ON THE PAPER (v4.9; specs/v4.9/details/spec.md A.5; the sweep since  */
+/* v4.10, specs/v4.10/spec.md G). The bar and the strip are Home's      */
+/* ground, so each carries the paper as its first child, under the row. */
+/* Both lie in the sweep's white 40% of the window, so each Paper       */
+/* measures its place and draws nothing there: the bar and the strip    */
+/* are the page's own white, and the bar meets the page without a step, */
+/* at rest and as it slides away on scroll. Each Paper rides the chrome */
+/* group's Rise (the Dock's clock again), so on a cold start the paper  */
 /* arrives with the keys and the film's last frame stays the white it   */
 /* was; at rest it is simply there.                                     */
 /* ==================================================================== */
@@ -65,9 +67,10 @@ const ROW_END = layout.feedGutter - (layout.hit - 26) / 2;
 /** Scroll over which the bar's foot rule fades in. */
 const RULE_IN = 8;
 /*
- * The wordmark: 42pt tall, which puts its x-height at 14.7, Playfair 28's,
- * so the tagged name has the presence the set one had (specs/v4.5-logo/
- * scribble/notes.md, App size). The box holds the l's loop above and the
+ * The wordmark: 42pt tall, which puts its x-height at 14.7, the x-height
+ * the set wordmark had at 28 before v4.5, so the tagged name has the
+ * presence the set one had (specs/v4.5-logo/scribble/notes.md, App
+ * size). The box holds the l's loop above and the
  * swash and its drip below, so it is nearly the row: it sits on the row's
  * foot (64 to 106 at rest), which centres its x-height on the keys'
  * glyphs (83.4 against 84) and keeps the drip's bead (105.8) inside the

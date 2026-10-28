@@ -5,7 +5,7 @@
  * WHAT IT MAKES. One PNG per screenshot, 1320 x 2868 (or 1290 x 2796 with
  * --size), 8-bit RGB with no alpha, numbered in the captions file's order
  * so they upload in that order. Each is the app's own page: white ground,
- * a short caption in Inter 600 at the gutter with the pen swash under it
+ * a short caption in Archivo 600 at the gutter with the pen swash under it
  * (a tab root's title lockup, enlarged), the screenshot below in a plain
  * rounded frame, and the tagged wordmark signing the foot in Campari.
  *
@@ -114,8 +114,8 @@ const PAGE_RGB = [1, 3, 5].map((i) => parseInt(C.page.slice(i, i + 2), 16));
 
 const font = (file) => `data:font/ttf;base64,${readFileSync(join(ROOT, 'assets/fonts', file)).toString('base64')}`;
 const FONT_FACES = `
-  @font-face { font-family: 'InterSipply'; font-weight: 600; src: url(${font('InterLatin_600SemiBold.ttf')}) format('truetype'); }
-  @font-face { font-family: 'InterSipply'; font-weight: 500; src: url(${font('InterLatin_500Medium.ttf')}) format('truetype'); }`;
+  @font-face { font-family: 'ArchivoSipply'; font-weight: 600; src: url(${font('ArchivoLatin_600SemiBold.ttf')}) format('truetype'); }
+  @font-face { font-family: 'ArchivoSipply'; font-weight: 500; src: url(${font('ArchivoLatin_500Medium.ttf')}) format('truetype'); }`;
 
 /* ------------------------------------------------------------------ */
 /* The page, in points (the canvas is 3x: 1320 x 2868 is 440 x 956)   */
@@ -158,8 +158,11 @@ const L = {
 };
 
 /**
- * textRole.title, 28/34 tracked -0.4: the tab-root title the caption
- * enlarges. The caption is set at `size` and everything about the lockup
+ * textRole.title, Archivo 600 28/34 tracked -0.4: the title lockup the
+ * caption enlarges. Since v4.10 the app's own tab titles are the marker
+ * (Sedgwick Ave), but a caption is a sentence, so it stays in Archivo, as
+ * a typed title is (specs/v4.10/spec.md T.12); the screenshots are not
+ * re-shot in that release. The caption is set at `size` and everything about the lockup
  * (its line, its tracking, the swash's length AND weight) scales by
  * size / 28 together. The app grows the swash in length only, because
  * there the title grows for reading; here the whole lockup is a picture
@@ -175,7 +178,7 @@ function lockup(size) {
 }
 
 const captionCss = (lk) => `
-  font-family: 'InterSipply'; font-weight: 600;
+  font-family: 'ArchivoSipply'; font-weight: 600;
   font-size: ${lk.size}px; line-height: ${lk.line}px; letter-spacing: ${lk.track}px;
   width: ${W - 2 * L.gutter}px; color: ${C.ink};
   text-wrap: balance; -webkit-font-smoothing: antialiased; font-kerning: normal;`;
@@ -340,7 +343,7 @@ function fitCaptions(work, captions) {
   <pre id="result"></pre>
   <script>
     document.fonts.ready.then(() => {
-      const loaded = document.fonts.check("600 30px InterSipply");
+      const loaded = document.fonts.check("600 30px ArchivoSipply");
       const rows = [...document.querySelectorAll('.c')].map((el) => [
         +el.dataset.i, +el.dataset.s, Math.round(el.getBoundingClientRect().height / parseFloat(el.style.lineHeight)),
       ]);
@@ -353,7 +356,7 @@ function fitCaptions(work, captions) {
   const json = dom.match(/<pre id="result">([^<]*)<\/pre>/)?.[1];
   if (!json) fail('the caption measure came back empty');
   const { loaded, rows } = JSON.parse(json.replace(/&quot;/g, '"').replace(/&amp;/g, '&'));
-  if (!loaded) fail('Inter did not load in the measure page, so its line counts are a fallback face\'s');
+  if (!loaded) fail('Archivo did not load in the measure page, so its line counts are a fallback face\'s');
   const lines = new Map(rows.map(([i, s, n]) => [`${i}|${s}`, n]));
   for (const s of CAPTION_SIZES) {
     if (captions.every((_, i) => lines.get(`${i}|${s}`) <= L.lines)) {
@@ -431,7 +434,7 @@ function makePlaceholders(work, folder) {
       html, body { margin: 0; width: ${w}px; height: ${h}px; background: ${C.hair}; overflow: hidden; }
       body { position: relative; }
       div { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            font: 500 17px/24px 'InterSipply'; color: ${C.muted}; }
+            font: 500 17px/24px 'ArchivoSipply'; color: ${C.muted}; }
       </style></head><body><div>screenshot</div></body></html>`;
     writeFileSync(join(folder, name), opaquePng(capture(work, `placeholder-${name}`, html, w, h), PAGE_RGB));
     return name;

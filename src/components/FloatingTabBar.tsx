@@ -7,6 +7,7 @@ import { Icon, type TabName } from '@/components/icons';
 import { Avatar, haptic } from '@/components/ui';
 import type { ProfileRow } from '@/lib/database.types';
 import { colors, layout, radius, stroke } from '@/constants/theme';
+import { useBareGround } from '@/lib/bareGround';
 import { useAuth } from '@/store/auth';
 
 /* ==================================================================== */
@@ -61,17 +62,24 @@ import { useAuth } from '@/store/auth';
 /* on a tap, and on a swipe when the pager picks the page. No timer,    */
 /* no Animated.timing, no Reanimated.                                   */
 /*                                                                      */
-/* THE PAPER (v4.9, specs/v4.9/details/spec.md A.5). The slab is the    */
-/* page's ground, so it carries the page's grain (details/Paper), laid  */
-/* as the bar View's first child under the line and the row: the bar    */
-/* meets the page above it as one sheet, and noise against offset noise */
-/* shows no seam. The ground only. No mark is ever drawn on the bar     */
-/* (never a key, a glyph or the line: the pen keeps off the tab bar),   */
-/* and the paper is static and measures only its own box, so the bar    */
-/* stays free of Reanimated. At the Dock it arrives with the chrome,    */
-/* because the bar already sits in the chrome Rise                      */
-/* ((tabs)/_layout.tsx). Under Reduce Transparency or Invert Colours    */
-/* there is none, and the slab is the plain white it was.               */
+/* THE PAPER (v4.9, specs/v4.9/details/spec.md A.5; the sweep since     */
+/* v4.10, specs/v4.10/spec.md G). The slab is the page's ground, so it  */
+/* carries the page's paper (details/Paper), laid as the bar View's     */
+/* first child under the line and the row. The sweep is anchored to the */
+/* window and the slab's Paper cuts it at the slab's own place, so the  */
+/* slab shows the sweep's foot exactly as the page above it would at    */
+/* that height: the bar meets the page as one sheet, with no step. The  */
+/* ground only. No mark is ever drawn on the bar (never a key, a glyph  */
+/* or the line: the pen keeps off the tab bar), and the paper is static */
+/* and measures only its own place in the window, so the bar stays free */
+/* of Reanimated. At the Dock it arrives with the chrome, because the   */
+/* bar already sits in the chrome Rise ((tabs)/_layout.tsx). Under      */
+/* Reduce Transparency, Invert Colours or Increase Contrast there is    */
+/* none, and the slab is the plain white it was. Under a bare page (the */
+/* sign-in page and the steps after it, which are plain white on        */
+/* purpose) there is none either: lib/bareGround holds it bare while    */
+/* that page is focused, so the slab is white under white rather than   */
+/* the sweep's foot ending in a step at the bar's top.                  */
 /* ==================================================================== */
 
 /**
@@ -239,6 +247,8 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
   // The signed-in account's own row only: a stale row from a previous
   // account must never put someone else's face on this tab.
   const me = useAuth((s) => (s.session && s.profile?.id === s.session.user.id ? s.profile : null));
+  // A bare page is focused over the bar (lib/bareGround): the slab is its white, with no paper.
+  const bare = useBareGround();
 
   const focusedKey = state.routes[state.index]?.key;
   /*
@@ -329,8 +339,8 @@ export function FloatingTabBar({ state, descriptors, navigation, position, layou
 
   return (
     <View style={[styles.bar, { paddingBottom: insets.bottom }]}>
-      {/* The slab's grain, first, so the line and the row draw over it: the ground only (v4.9 A.5). */}
-      <Paper />
+      {/* The slab's paper, first, so the line and the row draw over it: the ground only (v4.9 A.5; the sweep, v4.10 G). */}
+      {bare ? null : <Paper />}
       {/*
         The line, before the row. Nothing in the row covers it: the red
         key ends 2.5 above it. Mounted for the bar's whole life, never

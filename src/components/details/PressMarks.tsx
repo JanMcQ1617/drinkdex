@@ -17,7 +17,7 @@ import type { PenShape } from './penPath';
 /* cards" are the PRINTER's, not the hand's: the page set in type and   */
 /* die-cut, beside the pen that signs it.                               */
 /*                                                                      */
-/*   PressNumeral  a big outlined figure, Inter 600 as hairline rings:  */
+/*   PressNumeral  a big outlined figure, Anton as hairline rings:      */
 /*                 the drink page's Nº 0100, the Dex's 01, 02, …        */
 /*                 (colors.rule, 1.74:1: seen, never read)              */
 /*   PressLeader   the dots between an ingredient and its amount, as a  */

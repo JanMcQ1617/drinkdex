@@ -179,8 +179,10 @@ export function CameraGate({
 
 /**
  * One of the gate's stops: a glyph, a title, a sentence, and the way on.
- * White on the reels ground, as the camera that follows it is dark; Inter,
- * because a primer is chrome, not the brand's voice.
+ * White on the reels ground, as the camera that follows it is dark;
+ * Archivo 600 (`bodyStrong`, not the marker's `emptyTitle`, which is
+ * EmptyState's alone since v4.10), because a primer is chrome, not the
+ * brand's voice.
  */
 function GateScreen({
   icon,
@@ -198,7 +200,7 @@ function GateScreen({
   return (
     <View style={[styles.fill, styles.screen]}>
       <Icon name={icon} size={40} color={colors.reelInk} />
-      <Text style={[textRole.emptyTitle, styles.title]} accessibilityRole="header">
+      <Text style={[textRole.bodyStrong, styles.title]} accessibilityRole="header">
         {title}
       </Text>
       <Text style={styles.body}>{body}</Text>

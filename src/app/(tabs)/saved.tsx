@@ -52,12 +52,13 @@ import { useTaste } from '@/store/taste';
 /* store/collections), so a collection made on another phone shows.     */
 /*                                                                      */
 /* THE PAPER, AND THE PEN'S SIGNATURE (v4.9, specs/v4.9/details/spec.md */
-/* A.5 and C.8). The page's grain is the root's first child, and the    */
-/* bar's through ScreenTopBar's `paper`, so the two meet as one sheet.  */
-/* Where the tiles stop the list is signed: the olive pick and the      */
-/* swash under it (details/DoodleMarks' EndMark), right-aligned on the  */
-/* gutter 18 under the last row, as the list's footer, one static node  */
-/* and never a cell. Nothing saved: the empty state opts in to the      */
+/* A.5 and C.8; the paper is the sweep since v4.10,                     */
+/* specs/v4.10/spec.md G). The page's paper is the root's first child,  */
+/* and the bar's through ScreenTopBar's `paper`, so the two meet as one */
+/* sheet. Where the tiles stop the list is signed: the olive pick and   */
+/* the swash under it (details/DoodleMarks' EndMark), right-aligned on  */
+/* the gutter 18 under the last row, as the list's footer, one static   */
+/* node and never a cell. Nothing saved: the empty state opts in to the */
 /* olive's composition round the Paper Plane proof (the print's two     */
 /* crop corners, the olive pick, a twist and a cherry), with no arrow   */
 /* because it has no key, its top at 38% of the free height (the list's */

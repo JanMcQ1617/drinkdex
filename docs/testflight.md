@@ -18,6 +18,16 @@ out the Friends from Facebook item, make Continue with Facebook ask for
 their two sentences about the Facebook friends list and access token (the
 cut the counts below already describe).
 
+Build 35 is made with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=off` as well, from 28
+October 2026, until Meta approves the app (`specs/v4.9/meta-review.md`,
+§9). Until then Facebook's page signs in only people with a role on the
+Meta app, and every other tester got a page that hung or said the app is
+not active. With it off there is no Continue with Facebook anywhere: use
+the third-party paragraph for a build with Apple and Google sign-in, near
+the end, and the Signing in item without Friends from Facebook. Someone who
+made their account with Facebook in an earlier build signs in with the
+email address that Facebook account uses, and sets a password by email.
+
 Tournaments need no flag: they appear once migration 020 is applied on the
 server, and stay hidden until then. Until it is, leave out every line or
 sentence below that mentions them. From build 30 (v4.7) they have a tab of
@@ -157,7 +167,9 @@ photos.
 
 Paste the first item into the "Worth poking at" list above. Add the second
 only once the Meta app is Live: in development mode Facebook sign-in works
-only for accounts added to the Meta app, so testers cannot try it.
+only for accounts added to the Meta app, so testers cannot try it. Build
+35, with Facebook sign-in off, takes the first item alone: it names only
+Apple, Google and email.
 
 - **Signing in.** Make an account with Apple, Google or your email. You'll
   be asked to choose a username before anything else.
@@ -315,7 +327,12 @@ Build 34's People notifications (199) and the invite in Tournaments (15)
 need one cut more: Continue with Google's clause about its access token,
 which the privacy policy carries. With Friends from Facebook off, that set
 is 3,971, 29 to spare (recounted 28 Oct 2026); appstore.md has the
-recount, and `specs/v4.9/review-notes.txt` the exact text.
+recount.
+
+Build 35 has Continue with Facebook off, so its third-party paragraph is
+the one for a build with Apple and Google sign-in, below (471, against the
+589 above): the same set is 3,853, 147 to spare (recounted 28 Oct 2026),
+and `specs/v4.9/review-notes.txt` has the exact text.
 
 ### Add for a build with phone sign-in
 
@@ -354,6 +371,23 @@ Sipply are sent to a matching function, which stores none of them. The
 Facebook access token stays in memory and is never stored. The other
 outside services are Supabase for hosting and sign-in, and Expo for app
 updates.
+
+### Third-party accounts — a build WITH Apple and Google sign-in, without Facebook
+
+Build 35 and every build until Meta approves the app
+(`EXPO_PUBLIC_FACEBOOK_SIGN_IN=off`). This is the paragraph in
+`specs/v4.9/review-notes.txt`. Once the flag is back on, the paragraph
+after it is the one to paste again.
+
+**Third-party accounts?** Sign in with Apple and Continue with Google,
+alongside email. Sign in with Apple is shown wherever Continue with Google
+is (guideline 4.8), and either one asks a new account to choose a username
+before anything else. Continue with Google asks for openid, email and
+profile only, and runs in the system authentication sheet; there is no
+Google SDK in the app. The other outside services are Supabase for hosting
+and sign-in, and Expo for app updates.
+
+[471]
 
 ### Third-party accounts — a build WITH Apple, Google and Facebook sign-in
 

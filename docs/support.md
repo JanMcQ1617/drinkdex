@@ -56,6 +56,14 @@ If you signed up with Apple, Google, Facebook or your phone number, there
 is no Sipply password to forget: use the same button on the sign-in screen
 again (or your number, for a new code).
 
+**Signed up with Facebook, and there is no Facebook button?** Some versions
+of Sipply leave Continue with Facebook out. Your account is still there,
+and its email address is the one your Facebook account uses: on the
+sign-in screen, continue with email, type that address, then tap **Or set
+a password by email** (or **Forgot your password?**). The link it sends
+signs you in and asks you to choose a password, and from then on that
+email and password sign you in.
+
 Otherwise, on the sign-in screen, tap **Forgot your password?**, type the
 email you signed up with, and tap **Send reset link**. Opening the link from
 your email takes you straight into Sipply and asks you to choose a new

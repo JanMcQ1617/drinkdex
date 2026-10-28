@@ -37,7 +37,7 @@ const ROW_H = 56;
 const GLYPH = 24;
 const CHEVRON = 20;
 const CHIP_CLOSE = 16;
-/** The chip's name at Inter 500 13, grown no further than this beside a fixed glyph. */
+/** The chip's name at Archivo 500 13, grown no further than this beside a fixed glyph. */
 const CHIP_CAP = 1.4;
 /** The × is 16 in a 32 chip: 14 of slop each way takes it to 44. */
 const CLOSE_SLOP = (layout.hit - CHIP_CLOSE) / 2;

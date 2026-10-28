@@ -21,6 +21,7 @@ import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { useScrollEdges } from '@/components/log/scrollEdges';
 import { colors, layout, space, stroke, tabular, textRole } from '@/constants/theme';
 import { formatCount, getDrink, TOTAL } from '@/data';
+import { useHoldBareGround } from '@/lib/bareGround';
 import { useFirstRunShowing } from '@/lib/firstRun';
 import type { Drink } from '@/types';
 
@@ -234,6 +235,8 @@ export function CabinetSheet({
   const insets = useSafeAreaInsets();
   const clearance = insets.bottom + TAB_BAR_CLEARANCE + space.md;
   const edges = useScrollEdges();
+  // A plain white page with the tab bar under it: the slab drops its paper while this is focused (lib/bareGround).
+  useHoldBareGround();
 
   const scroll = (
     <ScrollView

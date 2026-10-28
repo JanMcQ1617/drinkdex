@@ -41,7 +41,7 @@ import { colors } from '@/constants/theme';
  *   PAGE   the whole intro dissolves and the app is what was underneath.
  *          Both are white, so the only change is the logo going.
  *
- * It replaces the v3 pour (ink circles flooding the screen, the Playfair
+ * It replaces the v3 pour (ink circles flooding the screen, the serif
  * letters popping on an overshoot, a breathing drift), which had become
  * the one place Reduce Motion still got scale and bounce.
  *

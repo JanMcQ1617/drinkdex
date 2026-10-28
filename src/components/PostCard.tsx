@@ -22,7 +22,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { DrinkName, Print } from '@/components/cabinet';
+import { DrinkName, nameFit, Print } from '@/components/cabinet';
 import {
   confirmUnsave,
   onSaveToCollectionAction,
@@ -30,6 +30,7 @@ import {
 } from '@/components/collections/bookmark';
 import { DrinkFace, FACE_FILL } from '@/components/DexCard';
 import { PostCorners } from '@/components/details/FrameMarks';
+import { lineMarks } from '@/components/details/lineMarks';
 import { Icon, type IconName } from '@/components/icons';
 import { LikersSheet } from '@/components/LikersSheet';
 import { ActionSheet, type SheetAction } from '@/components/Sheet';
@@ -84,11 +85,12 @@ export { timeAgo, timeAgoSpoken };
 /* bottom, at 440 wide:                                                 */
 /*                                                                      */
 /*   header    52: the face (in a 2pt ink ring when they have a story   */
-/*             you have not seen), the username over the drink in       */
-/*             Playfair, where Instagram puts a place, and •••. With    */
-/*             tags (v4.3), the username's line goes on: "maya.pours    */
-/*             with ana and leo". With a place on the photo on screen   */
-/*             (v4.8), so does the drink's: "Negroni at La Factoría".   */
+/*             you have not seen), the username over the drink in the   */
+/*             marker (Sedgwick Ave 19/24, v4.10), where Instagram puts */
+/*             a place, and •••. With tags (v4.3), the username's line  */
+/*             goes on: "maya.pours with ana and leo". With a place on  */
+/*             the photo on screen (v4.8), so does the drink's:         */
+/*             "Negroni at La Factoría".                                */
 /*   photo     440 x 440, full bleed, square corners, the photo edge.   */
 /*   actions   44: heart, share · · · bookmark. The gallery's dots sit  */
 /*             in the middle.                                           */
@@ -563,8 +565,8 @@ const STORY_RING = HEADER_AVATAR + 2 * (stroke.ring + STORY_RING_GAP);
 const STORY_RING_AT = -(stroke.ring + STORY_RING_GAP);
 /** The 32pt face reaches a 44pt target. */
 const AVATAR_SLOP = (layout.hit - HEADER_AVATAR) / 2;
-/** The header's two 18pt lines take the row's spare 8 above the name and 8 under the drink. */
-const LINE_SLOP = (HEADER_H - 2 * textRole.small.lineHeight) / 2;
+/** The header's two lines (the username's 18, the drink's 24) take the row's spare 5 above the name and 5 under the drink. */
+const LINE_SLOP = (HEADER_H - textRole.small.lineHeight - textRole.nameSm.lineHeight) / 2;
 /** Dynamic Type cap for the header's two lines: they sit beside a fixed-size face (specs/v3-cabinet.md 6.5). */
 const HEADER_CAP = 1.3;
 /** A photo's place as one key: its Place ID and its words, so relabelling the same place is a change too. */
@@ -1301,10 +1303,10 @@ export const PostCard = React.memo(function PostCard({
 
   /*
    * The caption: the username, then the words. On the feed it is cut to
-   * two lines ending "… more", worked out here before layout from Inter's
-   * own advances (lib/textFit, set a little wide, so the kept words always
-   * fit), so the cell is its final height on its first frame, at any text
-   * size. Opened, or on the post page, it is whole.
+   * two lines ending "… more", worked out here before layout from Archivo's
+   * own advances and widest kerns (lib/textFit, set a little wide, so the
+   * kept words always fit), so the cell is its final height on its first
+   * frame, at any text size. Opened, or on the post page, it is whole.
    */
   const captionText = isBlankCaption(post.caption) ? null : post.caption.trim();
   const opened = detail || openedFor === post.id;
@@ -1313,13 +1315,13 @@ export const PostCard = React.memo(function PostCard({
     captionText && !opened
       ? clampToLines(
           captionText,
-          'inter400',
+          'text400',
           captionSize,
           width - 2 * GUTTER,
           CAPTION_LINES,
           CUT_MARK + MORE_WORD,
           // The username before it is SemiBold.
-          textWidth(who.username, 'inter600', captionSize),
+          textWidth(who.username, 'text600', captionSize),
         )
       : null;
 
@@ -1553,7 +1555,10 @@ interface WithTarget {
  *
  * With a place on the photo on screen (v4.8 §3.3) the drink's line goes
  * on the same way, "Negroni at La Factoría": " at " in muted, the place in
- * Inter 500, one line. The place takes what the drink leaves but never
+ * Archivo 500, one line, both on the drink's baseline (the drink is the
+ * marker at 19, they are Archivo at 13, so the row aligns tops and drops
+ * the two by the difference, lineMarks; centred, the small words would
+ * float). The place takes what the drink leaves but never
  * less than min(its own width, 48) (PLACE_FLOOR), worked out before layout at the
  * header's capped size (lib/textFit), so the line stays one line and the
  * header never jumps as the gallery pages. The place is its own target
@@ -1611,19 +1616,32 @@ function PostHeader({
    * ellipsizes inside that. So a drink that fits the line alone still fits
    * it beside a place, and the header keeps its two lines as a gallery
    * pages between photos with and without one (only a name within 48pt
-   * of the whole measure can still be pushed to fit tighter). Both are
-   * costed on the wide class estimates ('playfair', 'inter'), so the
+   * of the whole measure can still be pushed to fit tighter). The drink
+   * is costed on the marker's own advances at its own 19 ('display', not
+   * the caption's 13), the place on the wide 'text' estimate, so the
    * drink's share is never short.
    */
-  const lineSize = textRole.small.fontSize * Math.min(fontScale, HEADER_CAP);
-  const atWidth = place ? textWidth(AT_WORD, 'inter400', lineSize) : 0;
+  const headScale = Math.min(fontScale, HEADER_CAP);
+  const lineSize = textRole.small.fontSize * headScale;
+  const atWidth = place ? textWidth(AT_WORD, 'text400', lineSize) : 0;
   const placeShare = place
     ? Math.min(
-        textWidth(place.label, 'inter', lineSize),
-        Math.max(PLACE_FLOOR, measure - atWidth - textWidth(drinkName, 'playfair', lineSize)),
+        textWidth(place.label, 'text', lineSize),
+        Math.max(PLACE_FLOOR, measure - atWidth - textWidth(drinkName, 'display', textRole.nameSm.fontSize * headScale)),
       )
     : 0;
   const drinkMeasure = place ? Math.max(0, measure - atWidth - placeShare) : measure;
+  /*
+   * " at " and the place drop onto the drink's first baseline (v4.10 T.4):
+   * the drink's line box at the size DrinkName draws it (its fit and the
+   * header's cap), less the small line's own baseline. 4.6 at 1x.
+   */
+  const fit = nameFit(drinkName, textRole.nameSm, drinkMeasure, HEADER_CAP, fontScale);
+  const atDrop = Math.max(
+    0,
+    lineMarks('display', textRole.nameSm.fontSize * fit, textRole.nameSm.lineHeight * fit, headScale).baseline -
+      lineMarks('text', textRole.small.fontSize, textRole.small.lineHeight, headScale).baseline,
+  );
   const openPlace = place ? () => onOpenPlace(place.appleId) : undefined;
 
   const a11yActions: AccessibilityActionInfo[] = [
@@ -1727,13 +1745,13 @@ function PostHeader({
             </Pressable>
             {place ? (
               <>
-                <Text maxFontSizeMultiplier={HEADER_CAP} style={styles.atWord}>
+                <Text maxFontSizeMultiplier={HEADER_CAP} style={[styles.atWord, { marginTop: atDrop }]}>
                   {AT_WORD}
                 </Text>
                 <Pressable
                   onPress={openPlace}
                   hitSlop={{ bottom: LINE_SLOP, right: space.sm }}
-                  style={({ pressed }) => [styles.placeHug, pressed && styles.pressed]}>
+                  style={({ pressed }) => [styles.placeHug, { marginTop: atDrop }, pressed && styles.pressed]}>
                   <Text numberOfLines={1} maxFontSizeMultiplier={HEADER_CAP} style={styles.placeName}>
                     {place.label}
                   </Text>
@@ -1964,8 +1982,8 @@ const styles = StyleSheet.create({
   firstLine: { flexDirection: 'row', maxWidth: '100%' },
   withHug: { flexShrink: 1, minWidth: 0 },
   withWords: { ...textRole.small, color: colors.text },
-  /* The drink, then " at " and the place (v4.8): the drink keeps its fitted width, the place gives way. */
-  secondLine: { flexDirection: 'row', alignItems: 'center', maxWidth: '100%' },
+  /* The drink, then " at " and the place (v4.8): the drink keeps its fitted width, the place gives way. Tops aligned: the small words drop onto the drink's baseline (atDrop). */
+  secondLine: { flexDirection: 'row', alignItems: 'flex-start', maxWidth: '100%' },
   atWord: { ...textRole.small, color: colors.textMuted },
   placeHug: { flexShrink: 1, minWidth: 0 },
   placeName: { ...textRole.small, fontFamily: fonts.bodyMedium, color: colors.text },

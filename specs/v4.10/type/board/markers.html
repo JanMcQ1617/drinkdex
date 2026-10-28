@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply v4.10 marker candidates</title>
+<style>
+/* ==================================================================== */
+/* v4.10 type: the marker candidates, beside the wordmark               */
+/*                                                                      */
+/* Every candidate for the display role, set from the real file in      */
+/* ../fonts/ (Google Fonts' own repo), next to the drawn wordmark from  */
+/* specs/v4.5-logo/final. The wordmark is not a font: it was drawn as   */
+/* pen centrelines and outlined (v4.5-logo/scribble/notes.md), so the   */
+/* job is the closest hand, not the same family. Each row sets the same */
+/* words at one size, x-heights matched to the wordmark's, so the       */
+/* comparison is of hand and not of nominal size.                       */
+/* ==================================================================== */
+@font-face{font-family:SedgwickAve;src:url(../fonts/SedgwickAve-Regular.ttf)}
+@font-face{font-family:SedgwickAveDisplay;src:url(../fonts/SedgwickAveDisplay-Regular.ttf)}
+@font-face{font-family:Kaushan;src:url(../fonts/KaushanScript-Regular.ttf)}
+@font-face{font-family:Mansalva;src:url(../fonts/Mansalva-Regular.ttf)}
+@font-face{font-family:Marck;src:url(../fonts/MarckScript-Regular.ttf)}
+@font-face{font-family:CaveatBrush;src:url(../fonts/CaveatBrush-Regular.ttf)}
+@font-face{font-family:Caveat;src:url("../fonts/Caveat[wght].ttf");font-weight:400 700}
+@font-face{font-family:JustAnotherHand;src:url(../fonts/JustAnotherHand-Regular.ttf)}
+@font-face{font-family:Kalam;src:url(../fonts/Kalam-Bold.ttf);font-weight:700}
+@font-face{font-family:PermanentMarker;src:url(../fonts/PermanentMarker-Regular.ttf)}
+@font-face{font-family:Inter;src:url(../../../../assets/fonts/InterLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(../../../../assets/fonts/InterLatin_600SemiBold.ttf);font-weight:600}
+:root{--ink:#0A0A0A;--acc:#D0102C;--muted:#5C5C5C;--line:#E3E3E3;--page:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--page);color:var(--ink);font-family:Inter;-webkit-font-smoothing:antialiased;padding:40px 44px;width:1800px}
+h1{font:600 30px/36px Inter;letter-spacing:-.6px}
+.lede{font:400 15px/22px Inter;color:#333;margin:8px 0 24px;max-width:1300px}
+.row{display:grid;grid-template-columns:250px 1fr;gap:24px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.lab b{display:block;font:600 15px/20px Inter}
+.lab span{display:block;font:400 12px/17px Inter;color:var(--muted)}
+.set{display:flex;align-items:baseline;gap:34px;white-space:nowrap;overflow:hidden}
+.wm{height:64px;display:block}
+.red{color:var(--acc)}
+.s{font-size:var(--z)}
+.m{font-size:calc(var(--z) * .62)}
+.t{font-size:calc(var(--z) * .42)}
+</style>
+</head>
+<body>
+<h1>The display role: which marker is the logo’s hand</h1>
+<p class="lede">The wordmark (red, drawn, not a font) and each candidate. Every row is sized so its x-height matches the wordmark’s at this scale; “sipply” in each face is only for comparing the hand, never for use. Then a drink name at hero, title and grid size.</p>
+<div id="rows"></div>
+<script>
+/* x-height / em, read from each file's OS/2 table (tools/fontaudit.py). */
+const C = [
+  ['SedgwickAve', 'Sedgwick Ave', 'OFL · graffiti handwriting, the closest tag. No º.', 0.660],
+  ['SedgwickAveDisplay', 'Sedgwick Ave Display', 'OFL · the same hand, wider, flourished.', 0.650],
+  ['Kaushan', 'Kaushan Script', 'OFL (RFN) · brush script, sport-poster energy.', 0.452],
+  ['Mansalva', 'Mansalva', 'OFL · fast brush-marker, irregular.', 0.384],
+  ['Marck', 'Marck Script', 'OFL (RFN) · connected marker script. No º.', 0.263],
+  ['CaveatBrush', 'Caveat Brush', 'OFL · brush version of Caveat.', 0.420],
+  ['Caveat', 'Caveat 700', 'OFL · handwriting, variable 400 to 700.', 0.400, 700],
+  ['JustAnotherHand', 'Just Another Hand', 'Apache · tall condensed marker.', 0.430],
+  ['Kalam', 'Kalam Bold', 'OFL · felt-tip hand.', 0.541, 700],
+  ['PermanentMarker', 'Permanent Marker', 'Apache · caps only (the control).', 0.610],
+];
+/* The wordmark at 64 tall: its x-height is 100 of its 285.52-unit box, so 22.4 px. */
+const XH = 64 * 100 / 285.52;
+let s = `<div class="row"><div class="lab"><b>The wordmark</b><span>drawn paths, specs/v4.5-logo/final</span></div><div class="set"><img class="wm" src="../../../v4.5-logo/final/wordmark.svg"><span style="font:400 15px Inter;color:var(--muted)">x-height ${XH.toFixed(1)} px at 64 tall</span></div></div>`;
+for (const [fam, name, note, xh, w] of C) {
+  const z = XH / xh;
+  s += `<div class="row"><div class="lab"><b>${name}</b><span>${note}</span></div>
+  <div class="set" style="font-family:${fam};font-weight:${w || 400};--z:${z.toFixed(1)}px">
+    <span class="s red">sipply</span><span class="s">Negroni</span><span class="m">Tequila Añejo</span><span class="m">Crème de Cassis</span><span class="t">Ti’ Punch · Vieux Carré · Rượu Nếp · Dex · My Bar</span>
+  </div></div>`;
+}
+document.getElementById('rows').innerHTML = s;
+</script>
+</body>
+</html>

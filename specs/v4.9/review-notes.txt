@@ -12,7 +12,7 @@ Contacts. The app asks for contacts access, but contacts are not collected.
 
 Instagram. There is no Instagram login and no Instagram API.
 
-Third-party accounts? Sign in with Apple, Continue with Google and Continue with Facebook, alongside email. Sign in with Apple is shown wherever Continue with Google or Continue with Facebook is (guideline 4.8), and each one asks a new account to choose a username before anything else. Continue with Google asks for openid, email and profile only. Continue with Facebook asks for public_profile and email. Both run in the system authentication sheet; there is no Google or Facebook SDK in the app. The other outside services are Supabase for hosting and sign-in, and Expo for app updates.
+Third-party accounts? Sign in with Apple and Continue with Google, alongside email. Sign in with Apple is shown wherever Continue with Google is (guideline 4.8), and either one asks a new account to choose a username before anything else. Continue with Google asks for openid, email and profile only, and runs in the system authentication sheet; there is no Google SDK in the app. The other outside services are Supabase for hosting and sign-in, and Expo for app updates.
 
 Daily ideas. Optional local notifications, at most one a day, at a time the person picks (6 PM by default). An in-app screen offers them only after a first logged or added drink, post, save or follow; it shows an example, and iOS asks only after Allow. On or off in Profile → "..." → Settings → Notifications. Messages invite logging drinks already had, writing down recipes, reading about and saving drinks; none suggests drinking, a time to drink or drinking more. To see the offer, post a drink.
 

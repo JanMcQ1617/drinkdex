@@ -10,6 +10,7 @@
 | Business verification | Meta, the business portfolio | Jan (§4) |
 | App Review: email, public_profile | Meta, App Review | Jan (§5) |
 | Publish, then the outside test | Meta, then a phone | Jan (§6) |
+| Continue with Facebook hidden, `EXPO_PUBLIC_FACEBOOK_SIGN_IN=off` | `.env`; `src/components/auth/WelcomeBack.tsx` for accounts made with Facebook | Build 35, back on after approval (§9) |
 
 Rules that hold everywhere:
 
@@ -156,7 +157,7 @@ Every row of the request green (Business verification, platform settings, App ve
 
 1. **Publish.** The dashboard's **Publish** (the App Mode switch from Development to Live). Keep the privacy and data deletion URLs answering afterwards: Meta checks them and can restrict a live app whose policy 404s.
 2. **Test with an account that has no role on the Meta app** (someone else's real Facebook account, on their iPhone or yours after they sign in there), on build 34 from the public link: Continue with Facebook, the dialog lists name and profile picture and email only, Choose a username, the profile. Then Supabase → Authentication → Users: the new user shows Facebook as its provider. Your own role account keeps working either way.
-3. **The App Store copy.** The Meta app is Live, so What's New can say "Sign in with Apple, Google or Facebook." (`docs/appstore.md`). The description's Facebook paragraph and the TestFlight "Friends from Facebook" item stay out while the friends flag is off, and the review notes' third-party paragraph says "public_profile and email" (`docs/testflight.md`).
+3. **The App Store copy.** The Meta app is Live, so What's New can say "Sign in with Apple, Google or Facebook." (`docs/appstore.md`), in a build with Continue with Facebook back on (from build 35 it is off until then, §9). The description's Facebook paragraph and the TestFlight "Friends from Facebook" item stay out while the friends flag is off, and the review notes' third-party paragraph says "public_profile and email" (`docs/testflight.md`).
 
 ## 7. Adding `user_friends` back later
 
@@ -172,3 +173,21 @@ Every row of the request green (Business verification, platform settings, App ve
 - Whether `Continue with Facebook` completes in an unsigned Simulator build (§5.4 step 4 is the check).
 - The values in `.env`: only names were read, plus the one line appended.
 - The privacy policy does not name The Idealize L.L.C. as the app's operator. Meta does not ask it to; if a reviewer asks who runs the app, it is the verified business.
+
+## 9. Build 35: Continue with Facebook hidden until Meta approves
+
+Build 35 is made with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=off` (28 Oct 2026, the lead's call, which Jan delegated). In development mode Facebook signs in only people with a role on this Meta app, and every other tester who tapped Continue with Facebook got a page that hung or said the app is not active. Off, no screen offers Facebook: the sign-in card and "Sign in another way" list Apple and Google, Apple wherever Google is (4.8, `src/components/auth/methods.ts`), and Find friends and Settings already showed none with the friends flag off. An account made with Facebook still gets in by email: its sign-in address is the one Facebook gave, the lookup answers "other" for it (migration 016: OAuth accounts carry an empty password), and that step has **Or set a password by email**, whose link signs the person in to choose one. Welcome back, for such an account, offers Continue with email under a line that says so (`WelcomeBack.tsx`), and `docs/support.md` says the same for people. The review notes lost their Facebook sentences (`specs/v4.9/review-notes.txt`, 3,853 characters).
+
+**Meta's reviewer still needs the button.** §5.3 sends the reviewer to the public TestFlight link, which serves the newest build its group has, so once build 35 is in that group the reviewer finds no Continue with Facebook and §5.3's steps 2 to 4 are untrue. While the request is open, give Meta a link that still serves build 34: a second external group in TestFlight holding build 34 alone, with a public link of its own, in §5.3's step 1. Or give Meta the Simulator build (§5.4) alone, made with this flag `on` in `.env` for that build only and set back after, and say so in §5.3.
+
+**When Meta approves** (and the app is Published, §6.1), set the flag back on, make a build, and put the review notes' sentence back. The flag is JS-only, so an EAS Update would carry it, but the review notes and What's New go with a build:
+
+1. `.env`: `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on`. The friends flag stays off until §7.
+2. Make a build (`scripts/build-ios.sh archive`, the next build number), and do §6.2's outside test on it rather than on build 34.
+3. Put the Facebook sentences back in the review notes' third-party paragraph, which is then build 34's again (589 characters; the set goes back to 3,971):
+
+   > Third-party accounts? Sign in with Apple, Continue with Google and Continue with Facebook, alongside email. Sign in with Apple is shown wherever Continue with Google or Continue with Facebook is (guideline 4.8), and each one asks a new account to choose a username before anything else. Continue with Google asks for openid, email and profile only. Continue with Facebook asks for public_profile and email. Both run in the system authentication sheet; there is no Google or Facebook SDK in the app. The other outside services are Supabase for hosting and sign-in, and Expo for app updates.
+
+   Then What's New goes back to "Sign in with Apple, Google or Facebook." (`docs/appstore.md`), and `docs/testflight.md` back to its Apple, Google and Facebook paragraph. Nothing in `WelcomeBack.tsx` needs undoing: with the flag on, an account made with Facebook gets its Continue with Facebook button again.
+
+Not verified here: the WelcomeBack line and the email path on a phone, with an account made with Facebook (only people with a role on the Meta app can have made one); and whether App Store Connect lets build 34 join a second external group without another Beta App Review.

@@ -105,7 +105,7 @@ export const TournamentCard = React.memo(function TournamentCard({
           head={
             <>
               <View style={styles.nameRow}>
-                {/* Inter, never Playfair: a tournament's name is not a drink's. */}
+                {/* Archivo, never the marker: a tournament's name is not a drink's. */}
                 <Text numberOfLines={1} style={styles.name}>
                   {t.name}
                 </Text>

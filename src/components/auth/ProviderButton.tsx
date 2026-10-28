@@ -58,7 +58,7 @@ type Skin = { bg: string; pressedBg?: string; edge: string; ink: string; label: 
 
 /*
  * Apple's title is the system font (fontFamily left unset), as the HIG asks
- * of a Sign in with Apple button; every other row is Inter.
+ * of a Sign in with Apple button; every other row is Archivo.
  */
 const APPLE_LABEL: TextStyle = { fontSize: 17, lineHeight: 22, fontWeight: '600' };
 
@@ -211,9 +211,9 @@ export function ProviderError() {
 }
 
 /**
- * textFit errs wide by about a seventh on "Phone number" in Inter SemiBold
- * (127pt worked out at 16pt, about 110 drawn), which alone would stack the
- * pair on every 375pt phone. Taken back here; were a phone ever to draw it
+ * textFit errs wide by about a seventh on "Phone number" in Archivo
+ * SemiBold, the key's weight since v4.10 (130pt worked out at 17pt, about
+ * 115 drawn), which alone would stack the pair on every 375pt phone. Taken back here; were a phone ever to draw it
  * wider than this allows, the label wraps inside its half and the row grows.
  */
 const PAIR_ESTIMATE = 0.9;
@@ -227,7 +227,7 @@ const PAIR_ESTIMATE = 0.9;
 function pairFits(windowWidth: number, fontScale: number): boolean {
   const half = (windowWidth - 2 * layout.gutter - space.sm) / 2;
   const room = half - 2 * (stroke.edge + HALF_PAD) - MARK - space.sm;
-  const words = textWidth(SHORT.phone ?? '', 'inter', textRole.button.fontSize * fontScale);
+  const words = textWidth(SHORT.phone ?? '', 'text', textRole.button.fontSize * fontScale);
   return words * PAIR_ESTIMATE <= room;
 }
 

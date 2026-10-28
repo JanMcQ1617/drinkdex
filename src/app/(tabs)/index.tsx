@@ -70,17 +70,18 @@ import type { Post } from '@/types';
 /* and anything that mounts later is simply there.                      */
 /*                                                                      */
 /* PRINTED, AND SIGNED (v4.9; specs/v4.9/details/spec.md C.0 to C.3).   */
-/* Jan: "it still feels too empty". The page is the paper now, its      */
-/* grain the first thing under the list (Paper, fixed behind the        */
-/* scroll, arriving with the chrome under the Dock), and the pen frames */
-/* it without a mark per row: the stories rule is doubled               */
-/* (TodaysPours), each post is drawn as a print with two crop corners   */
-/* (PostCard; not the first post's top one, which would sit under the   */
-/* rule), and the feed's foot is signed, the coupe and the swash set    */
-/* right on the column as the footer's first thing. With nothing        */
-/* posted, the empty state sits at 38% of the free height with its      */
-/* composition round the print and the pen's arrow to "Find friends";   */
-/* never to the post key (App Store 1.4.3).                             */
+/* Jan: "it still feels too empty". The page is the paper now, the      */
+/* first thing under the list (Paper, fixed behind the scroll, arriving */
+/* with the chrome under the Dock; since v4.10 the sweep, white to 40%  */
+/* of the window, then easing to #FBFBFB at the foot,                   */
+/* specs/v4.10/spec.md G), and the pen frames it without a mark per     */
+/* row: the stories rule is doubled (TodaysPours), each post is drawn   */
+/* as a print with two crop corners (PostCard; not the first post's top */
+/* one, which would sit under the rule), and the feed's foot is signed, */
+/* the coupe and the swash set right on the column as the footer's      */
+/* first thing. With nothing posted, the empty state sits at 38% of the */
+/* free height with its composition round the print and the pen's arrow */
+/* to "Find friends"; never to the post key (App Store 1.4.3).          */
 /* ==================================================================== */
 
 /**
@@ -343,9 +344,10 @@ function HomeFeed() {
   return (
     <View style={styles.screen}>
       {/*
-        The paper, first, fixed behind the list (v4.9 A.5): the posts
-        scroll over it. In the chrome group's rise, so under the Dock the
-        grain arrives with the keys and the film's white frame stays white.
+        The paper, first, fixed behind the list (v4.9 A.5; the sweep,
+        v4.10 G): the posts scroll over it. In the chrome group's rise, so
+        under the Dock the sweep arrives with the keys and the film's white
+        frame stays white.
       */}
       <Rise group="chrome" pointerEvents="box-none" style={StyleSheet.absoluteFill}>
         <Paper />

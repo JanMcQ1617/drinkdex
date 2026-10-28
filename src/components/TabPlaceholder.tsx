@@ -1,16 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { inkRoom } from '@/components/details/lineMarks';
 import { HOME_ROW, HomeWordmark } from '@/components/home/HomeChrome';
 import { colors, layout, textRole } from '@/constants/theme';
 
 /*
  * What a lazy tab shows for the moment before its screen mounts: the page
- * and its top bar's title, set where the real bar sets it (left, in
- * `title`), so the tab arrives as it will draw rather than as a blank
- * page. Never featureless: a plain white page reads as a screen that
- * failed to load.
+ * and its top bar's title, set where and as the real bar sets it, so the
+ * tab arrives as it will draw rather than as a blank page. Never
+ * featureless: a plain white page reads as a screen that failed to load.
+ *
+ * Since v4.10 (specs/v4.10/spec.md T.6) that is the marker's tag,
+ * `tabTitle` at 36/46, never scaled and with its ink room, for
+ * Tournaments, the Dex, Saved and My Bar; `title` (Archivo 600 28/34, to
+ * the bars' 1.3 cap) for Profile, whose bar will set your handle
+ * (`userTitle`), and on the Reels ground.
  *
  * Home's is its wordmark, and it is HomeChrome's own (HomeWordmark, in
  * HomeChrome's 44pt row at the feed's 16 column), not a title row's: the
@@ -25,16 +31,18 @@ import { colors, layout, textRole } from '@/constants/theme';
  *
  * No paper either, though the real pages lie on it (v4.9 A.5). With
  * `lazy` and a known width, every tab not in front shows this from
- * launch, so a full-screen grain here was some 32 tile views a tab,
- * well over a hundred, mounted in the Dock's own frames, to be seen for
- * the frame or two of a first swipe before the real page replaces it.
- * And it bought nothing: the real page's Paper draws only once it has
- * measured, so a grain here would blink off for that frame and back.
- * The page's own paper simply arrives with it.
+ * launch, so a full-screen paper here would be mounted in the Dock's own
+ * frames to be seen for the frame or two of a first swipe before the
+ * real page replaces it (in v4.9 the paper was some 32 tile views a tab).
+ * And it buys nothing: the real page's Paper draws only once it has
+ * measured, and the sweep is white over the top 40% of the window, where
+ * this title sits. The page's own paper simply arrives with it.
  */
 
-/** The bars' text cap (ScreenTopBar's BAR_TEXT_SCALE_CAP). */
+/** A typed title's text cap (ScreenTopBar's BAR_TEXT_SCALE_CAP). */
 const TITLE_CAP = 1.3;
+/** A tag title never grows (ScreenTopBar's TAB_TITLE_CAP). */
+const TAG_CAP = 1;
 
 export interface TabPlaceholderProps {
   /** The tab's name, drawn where its top bar's title will be. */
@@ -43,11 +51,15 @@ export interface TabPlaceholderProps {
   ground?: 'page' | 'reel';
   /** Home's bar sets the wordmark, not the tab's name. */
   wordmark?: boolean;
+  /** The real bar will set a title a person typed (your handle), in Archivo: so does this (ScreenTopBar's `userTitle`). */
+  userTitle?: boolean;
 }
 
-export function TabPlaceholder({ title, ground = 'page', wordmark = false }: TabPlaceholderProps) {
+export function TabPlaceholder({ title, ground = 'page', wordmark = false, userTitle = false }: TabPlaceholderProps) {
   const insets = useSafeAreaInsets();
+  const { fontScale } = useWindowDimensions();
   const reel = ground === 'reel';
+  const tag = !reel && !userTitle;
   if (wordmark) {
     return (
       <View accessible accessibilityLabel={`${title}, loading`} style={styles.root}>
@@ -64,9 +76,13 @@ export function TabPlaceholder({ title, ground = 'page', wordmark = false }: Tab
           <Text
             numberOfLines={1}
             adjustsFontSizeToFit
-            minimumFontScale={0.8}
-            maxFontSizeMultiplier={TITLE_CAP}
-            style={[textRole.title, reel ? styles.titleReel : styles.title]}>
+            minimumFontScale={0.7}
+            maxFontSizeMultiplier={tag ? TAG_CAP : TITLE_CAP}
+            style={
+              tag
+                ? [textRole.tabTitle, styles.title, inkRoom('display', textRole.tabTitle.fontSize * Math.min(fontScale, TAG_CAP))]
+                : [textRole.title, reel ? styles.titleReel : styles.title]
+            }>
             {title}
           </Text>
         </View>

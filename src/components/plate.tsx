@@ -45,7 +45,7 @@ import { formatDexNumber } from '@/data';
 export type PlateSize = 'sm' | 'lg';
 export type PlateTone = 'caught' | 'notYet';
 
-/** "Nº 0009": N and U+00BA, which the Inter subset has (U+2116 is not in it; check-design rule 16). */
+/** "Nº 0009": N and U+00BA, which the Archivo subset has (U+2116 is not in it; check-design rule 16). */
 export function formatPlateNumber(n: number): string {
   return `Nº ${formatDexNumber(n).slice(1)}`;
 }

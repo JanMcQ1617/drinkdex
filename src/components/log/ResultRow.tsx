@@ -30,8 +30,13 @@ const THUMB_GAP = space.lg;
 const ROW_PAD_V = space.sm;
 /** The chosen drink's check, at the row's end, when the search is reopened to change it. */
 const CHECK = 20;
-/** Dynamic Type cap on a result's name (specs/v3-cabinet.md 6.5, as v3.3). */
-const RESULT_NAME_CAP = 1.4;
+/**
+ * Dynamic Type cap on a result's name (specs/v3-cabinet.md 6.5): 1.4 from
+ * v3.3, 1.3 since v4.10, so no marker line draws above 1.3 times its role
+ * (specs/v4.10/spec.md T.4, which missed this third site). The row only
+ * has a minimum height, so a shorter cap only ever shrinks it.
+ */
+const RESULT_NAME_CAP = 1.3;
 
 /** The name's column: the window less the gutters, the thumb and its gap, and the check when shown. */
 function resultNameMeasure(windowWidth: number, chosen: boolean): number {

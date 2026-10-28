@@ -9,8 +9,8 @@ import { colors, layout, space, stroke, textRole } from '@/constants/theme';
 /* ==================================================================== */
 /* The compose step's bar (layout spec 5.6, "after picking")            */
 /*                                                                      */
-/* A back chevron and the chosen drink's name, centred, in Playfair at  */
-/* body size: the name is the screen's title, so there is no "Post a    */
+/* A back chevron and the chosen drink's name, centred, in the marker   */
+/* at name size: the name is the screen's title, so there is no "Post a */
 /* drink" above it and no other icon (layout principle 8).              */
 /*                                                                      */
 /* WHY NOT ScreenTopBar. Its row is a fixed 52pt, which suits a word    */

@@ -153,8 +153,6 @@ Follow friends and see the drinks they post, with their photos and captions. Tag
 
 Host a tournament with people you follow: one shared log of the drinks each of you posts between the dates you pick. No prizes, and how much anyone drinks is never counted or shown.
 
-Continue with Facebook and see which of your Facebook friends are already here. Facebook only shows Sipply the friends who connected it too, and Sipply never posts anything there.
-
 If you would rather bring your Instagram circle, ask Instagram for a copy of your followers and following and hand Sipply the .zip it sends. Sipply never connects to your Instagram account: the file is read on your phone, and the usernames in it are scrambled there before they are compared.
 
 DAILY IDEAS
@@ -174,7 +172,7 @@ You can delete your account in Settings, which opens from your profile, without 
 Sipply is for people old enough to drink where they live. Please drink responsibly, and never drive after drinking.
 ```
 
-[3,120, recounted for build 25, comfortably inside 4000, with room if you want to add a line]
+[2,939, recounted for build 35 (28 Oct 2026) without the Facebook paragraph below; 3,120 with it, as build 25 had it. Comfortably inside 4000, with room if you want to add a line]
 
 Build 25 rewrote this for guideline 1.4.3 (apps must not encourage
 drinking or excessive drinking), which the daily ideas bring under closer
@@ -196,12 +194,18 @@ the line under it ("Next: Cataloguer, at 209 entries", for someone with
 score, but they are still the nearest thing in the app to one, so the
 listing does not point anyone at them.
 
-The Facebook paragraph under PEOPLE describes a build made with
-`EXPO_PUBLIC_FACEBOOK_SIGN_IN=on` and `EXPO_PUBLIC_FACEBOOK_FRIENDS=on`.
-If the build you submit has either off, delete that paragraph, and the
-count drops by 181. The friends flag is off from 28 October 2026, while
-Meta reviews Facebook sign-in without `user_friends`
-(`specs/v4.9/meta-review.md`).
+The Facebook paragraph is out of PEOPLE from build 35. It describes a
+build made with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on` and
+`EXPO_PUBLIC_FACEBOOK_FRIENDS=on`, and build 35 has both off: the friends
+flag from 28 October 2026, while Meta reviews Facebook sign-in without
+`user_friends`, and Continue with Facebook itself from build 35, until
+Meta approves the app (`specs/v4.9/meta-review.md`, §9). Once both are on
+again, paste it back between the tournament paragraph and the Instagram
+one, and the count grows by 181:
+
+```
+Continue with Facebook and see which of your Facebook friends are already here. Facebook only shows Sipply the friends who connected it too, and Sipply never posts anything there.
+```
 
 The tournament paragraph under PEOPLE describes a server with migration
 020 applied, which is what makes tournaments appear. If it is not applied
@@ -246,14 +250,14 @@ Home looks like the feed you know: the full photo, then like, share and save, an
 
 New to Sipply? A few questions about your tastes come before you sign in.
 
-Sign in with Apple, Google or Facebook.
+Sign in with Apple or Google.
 
 Swipe between tabs, and a line under the active tab shows where you are.
 
 Black and white throughout, with less on every screen, so the drink photographs are the only colour.
 ```
 
-[1,332]
+[1,322]
 
 Guideline 1.4.3 reads this field like the rest of the listing, so every
 line is about the catalogue, recipes, what you have posted or friends,
@@ -271,10 +275,13 @@ The photo count was counted out of `src/data/drinkPhotos.ts` against
 `src/data/drinks.json`: 901 of the 2,089 entries have one, 889 cocktails
 and 12 spirits (recounted 24 Oct 2026). Recount after any photo import.
 
-"Apple, Google or Facebook" describes a build with all three sign-in flags
-on, as build 25 has. Facebook also needs the Meta app to be Live: in
-development mode only the app's own roles can use it, so until then make
-the line "Sign in with Apple or Google." (the count drops by 10).
+"Apple or Google" is build 35's: it is made with
+`EXPO_PUBLIC_FACEBOOK_SIGN_IN=off`, because in development mode only the
+Meta app's own roles can use Facebook, and everyone else's page hung or
+said the app is not active. Once Meta approves and the app is Live, a
+build with the flag back on (`specs/v4.9/meta-review.md`, §9) makes the
+line "Sign in with Apple, Google or Facebook." again, as build 25 had it
+(the count grows by 10).
 
 ---
 
@@ -345,10 +352,22 @@ device and never stored" (62; the privacy policy carries it, as it does
 Facebook's), leaving "Continue with Google asks for openid, email and
 profile only.": 3,971 with the friends flag off (the paragraph 589), 29 to
 spare, or 3,985 with it on (603), 15 to spare, recounted from the files on
-28 Oct 2026. The exact text for build 34, friends off, is in
-`specs/v4.9/review-notes.txt`; it is only right while these files say
-what it says, so after any edit to a pasted paragraph, recount and write
-it again. Phone sign-in and songs fit even less than they did.
+28 Oct 2026. Phone sign-in and songs fit even less than they did.
+
+From build 35, Continue with Facebook is off too
+(`EXPO_PUBLIC_FACEBOOK_SIGN_IN=off`, 28 Oct 2026): until Meta approves the
+app (`specs/v4.9/meta-review.md`, §9), Facebook signs in only the Meta
+app's own roles, and every other tester got a page that hung or said the
+app is not active. The build shows Sign in with Apple and Continue with
+Google, Apple wherever Google is (4.8), so the third-party paragraph is
+the Apple and Google one in [testflight.md](testflight.md), written
+without Google's token clause, as above (471, against 589): the build-34
+set becomes 3,853, 147 to spare, recounted from the files on 28 Oct 2026.
+The exact
+text for build 35 is in `specs/v4.9/review-notes.txt`; it is only right
+while these files say what it says, so after any edit to a pasted
+paragraph, recount and write it again. When the flag comes back on, so
+does build 34's paragraph, and meta-review.md §9 has its text.
 
 ### Tournaments — a server with migrations 020 and 025 applied
 
@@ -555,7 +574,8 @@ are step by step in `specs/v4.9/meta-review.md`.
 `data-deletion` is new and does not exist until `main` moves. It has to
 be live, along with the privacy policy that describes Facebook, before
 the Meta app goes to review, which is before any build with the Facebook
-button reaches testers.
+button reaches testers. Build 34 reached them with it anyway; build 35
+hides it again until Meta approves (`specs/v4.9/meta-review.md`, §9).
 
 ---
 
@@ -564,6 +584,11 @@ button reaches testers.
 App Store Connect → the app → **App Privacy**. These answers restate
 [the privacy policy](privacy), which is the source: if either changes, the
 other has to.
+
+Build 35's Continue with Facebook being off changes none of them: the
+accounts made with Facebook in earlier builds keep what Facebook sent
+(the name, the email address, the picture link and Facebook's id), and the
+button comes back once Meta approves the app.
 
 Apple's test for "collected" is that data leaves the phone and is kept
 longer than it takes to answer the request. So the contact hashes, the

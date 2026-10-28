@@ -70,7 +70,8 @@ import type { Drink, Post } from '@/types';
 /* The drinks are the store's, so they are always current.              */
 /*                                                                      */
 /* THE PAPER, AND THE PEN'S SIGNATURE (v4.9, specs/v4.9/details/spec.md */
-/* A.5 and C.8), as on the Saved tab's tiles. The grain is              */
+/* A.5 and C.8; the paper is the sweep since v4.10,                     */
+/* specs/v4.10/spec.md G), as on the Saved tab's tiles. The paper is    */
 /* AllSavedTab's alone, the root's first child and its bar's through    */
 /* ScreenTopBar's `paper`: that is the Saved tab, a page ground.        */
 /* AllSavedPage is a pushed list page, and stays the plain white a      */

@@ -194,7 +194,8 @@ export default function TabLayout() {
             // The bar draws your photo here once you are signed in; this
             // glyph is what it shows signed out.
             tabBarIcon: tabIcon('profile'),
-            lazyPlaceholder: () => <TabPlaceholder title="Profile" />,
+            // Your handle takes this place once it loads, typed by you, so the placeholder draws as that bar will (userTitle).
+            lazyPlaceholder: () => <TabPlaceholder title="Profile" userTitle />,
           }}
         />
       </TopTabs>

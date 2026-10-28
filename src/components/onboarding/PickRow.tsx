@@ -20,11 +20,11 @@ import { SaveKey } from './SaveKey';
 /* One of the first picks                                               */
 /*                                                                      */
 /* specs/v4.1-changes.md 1.4 (spec 2, "Result rows"): a 72pt print (the */
-/* no-photo face on wash for a drink without one), the name in Playfair */
-/* through DrinkName (it scales a long name to fit its 156pt column,     */
-/* never an ellipsis), the why line in small muted ink, two lines at     */
-/* most, with ". You can make it." when the bar makes it, and Save to    */
-/* try at the right.                                                    */
+/* no-photo face on wash for a drink without one), the name in the      */
+/* marker through DrinkName (it scales a long name to fit its 156pt     */
+/* column, never an ellipsis), the why line in small muted ink, two     */
+/* lines at most, with ". You can make it." when the bar makes it, and  */
+/* Save to try at the right.                                            */
 /*                                                                      */
 /* The reveal (m20) holds the print back while a copy flies to it, and  */
 /* the words and the key until their turn. Held means not drawn by       */

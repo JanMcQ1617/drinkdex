@@ -316,9 +316,14 @@ const styles = StyleSheet.create({
   /* Its own width, on the gutter: the column stretches, and the Dock measures the wordmark, not the row. */
   wordmark: { alignSelf: 'flex-start' },
 
-  /* A step's title is chrome: Inter, at the size every state title uses. */
+  /*
+   * A step's title is chrome: Archivo 600 at body size, build 34's state
+   * title exactly. Not the marker's `emptyTitle` (EmptyState's alone since
+   * v4.10, specs/v4.10/spec.md 0.7): a hand-set title under the drawn
+   * wordmark reads as a second logo.
+   */
   title: {
-    ...textRole.emptyTitle,
+    ...textRole.bodyStrong,
     color: colors.text,
     marginTop: space.lg,
   },

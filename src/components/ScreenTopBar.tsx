@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { inkRoom, lineMarks } from '@/components/details/lineMarks';
 import { Paper } from '@/components/details/Paper';
 import { PenSwash } from '@/components/details/PenMarks';
 import { useTabArrival } from '@/components/details/tabArrival';
@@ -27,10 +28,12 @@ import { textWidth } from '@/lib/textFit';
 /* a title or the wordmark, and at most one icon. A pushed screen gets  */
 /* a back chevron and no other icon.                                    */
 /*                                                                      */
-/*   size="lg"  a tab root: the title set LEFT at the gutter in `title` */
-/*              (28/34), Home's wordmark in its place, and one control  */
-/*              (or the quiet count, TopBarCount) right-aligned to the  */
-/*              far gutter.                                             */
+/*   size="lg"  a tab root: the title set LEFT at the gutter in the     */
+/*              marker's `tabTitle` (Sedgwick Ave 36/46, v4.10), or in  */
+/*              `title` (Archivo 600 28/34) when a person typed it      */
+/*              (`userTitle`: your handle), Home's wordmark in its      */
+/*              place, and one control (or the quiet count,             */
+/*              TopBarCount) right-aligned to the far gutter.           */
 /*   size="md"  a pushed screen or a window: back or close on the left, */
 /*              the title centred in `barTitle` (17/24), or no visible  */
 /*              title at all (`titleVisible={false}`), as the post      */
@@ -49,8 +52,12 @@ import { textWidth } from '@/lib/textFit';
 /* signature, not an underline. Only on an lg bar with a title of its   */
 /* own: Home's wordmark already IS the pen, an empty title has nothing  */
 /* to sign, and a centred md title (a pushed screen, a window) never    */
-/* gets one. It grows in length with the title's text, never in         */
-/* weight, and stays 5 clear of the bar's foot rule.                    */
+/* gets one. Under a tag title (v4.10, specs/v4.10/spec.md T.6) it      */
+/* never scales, as the title does not: its box spans 44 to 50 in the   */
+/* 52 row, 1 under the title's 3..49 line box, and its ink keeps 2      */
+/* clear of the bar's foot. Under a typed title it sits where it always */
+/* has, growing in length with the title's text (to the 1.3 cap), never */
+/* in weight, and stays 5 clear of the foot rule.                       */
 /*                                                                      */
 /* IT SIGNS EACH TAB AS IT OPENS (v4.9, specs/v4.9/details B). Jan      */
 /* asked for the line he likes to draw itself in each time a tab opens: */
@@ -65,12 +72,16 @@ import { textWidth } from '@/lib/textFit';
 /* draws a swash: the real bar mounts and signs.                        */
 /*                                                                      */
 /* THE PAPER (v4.9, A.5), only when a screen asks: `paper` lays the     */
-/* grain (details/Paper) as the bar's first child, so the bar's sheet   */
-/* meets the page's under it without a step (noise against offset noise */
-/* shows no seam). Off by default, because this bar also heads sheets,  */
-/* windows, sign-in and Settings, which stay bare; check-design's       */
-/* DETAIL_PROPS lets only the ten paper screens pass it. A clear bar    */
-/* (Home's) never draws it: HomeChrome lays Home's own.                 */
+/* paper (details/Paper) as the bar's first child, so the bar's sheet   */
+/* meets the page's under it without a step. Since v4.10 the paper is   */
+/* the sweep, white to 40% of the window, then easing to #FBFBFB at the */
+/* foot (specs/v4.10/spec.md G), and each Paper slices that one window- */
+/* anchored picture at its own window y, so a bar, which ends in the    */
+/* white 40%, draws nothing and still meets the page as one sheet. Off  */
+/* by default, because this bar also heads sheets, windows, sign-in and */
+/* Settings, which stay bare; check-design's DETAIL_PROPS lets only the */
+/* ten paper screens pass it. A clear bar (Home's) never draws it:      */
+/* HomeChrome lays Home's own.                                          */
 /*                                                                      */
 /* The status bar is dark on every screen (the root's <StatusBar />):   */
 /* nothing in Daylight is dark enough to need light glyphs.             */
@@ -84,7 +95,13 @@ const SIDE_WIDE = 80;
 const TITLE_GAP = 4;
 /** A bar's words grow with Larger Text only so far (their maxFontSizeMultiplier). */
 const BAR_TEXT_SCALE_CAP = 1.3;
-/** Spare room for the SemiBold word: textFit's Inter classes are costed on SemiBold already. */
+/**
+ * A tag title never grows (v4.10, specs/v4.10/spec.md T.8): 36pt is
+ * already build 34's title at its 1.3 cap (28 x 1.3 = 36.4), it keeps the
+ * fixed 52pt row and its swash, and a tag at 2x stops reading as a tag.
+ */
+const TAB_TITLE_CAP = 1;
+/** Spare room for the SemiBold word: textFit's 'text' classes are costed on Archivo SemiBold already. */
 const SEMIBOLD_SET = 1.06;
 /** iOS page sheets draw their own grabber area; the bar starts just under it. */
 const SHEET_INSET = space.sm;
@@ -92,11 +109,27 @@ const SHEET_INSET = space.sm;
 const GLYPH = 26;
 const GLYPH_SLACK = (layout.hit - GLYPH) / 2;
 /**
- * The quiet count sits on the title's baseline (layout spec 4): with the
- * 34pt title line centred in the 52pt row, the baseline is about 36pt
- * down, and a 13/18 line's baseline about 14pt into it.
+ * Where a tag title's baseline sits in the 52pt row, at a text scale
+ * `s` (at most 1, as the title never grows): its 46pt line box is centred
+ * in the row, 3 to 49 at 1x, and the marker's baseline 34.25 into it, so
+ * 37.25 down (specs/v4.10/spec.md T.6).
  */
-const COUNT_FOOT = layout.topBar - 36 - (textRole.small.lineHeight - 14);
+function tabTitleBaseline(s: number): number {
+  const t = textRole.tabTitle;
+  return (layout.topBar - t.lineHeight * s) / 2 + lineMarks('display', t.fontSize, t.lineHeight, s).baseline;
+}
+
+/**
+ * The quiet count sits on the tag title's baseline (layout spec 4), each
+ * at its own drawn size: the count's 13/18 Archivo line ends this far
+ * above the row's foot, its baseline on the title's. A glyph control on
+ * the right (•••) stays centred instead.
+ */
+function countFoot(fontScale: number): number {
+  const c = textRole.small;
+  const count = lineMarks('text', c.fontSize, c.lineHeight, Math.min(fontScale, BAR_TEXT_SCALE_CAP));
+  return layout.topBar - tabTitleBaseline(Math.min(fontScale, TAB_TITLE_CAP)) - count.foot;
+}
 
 export interface ScreenTopBarProps {
   /** The bar's title, and its spoken name even when `titleNode` replaces the text or the title is hidden. */
@@ -121,11 +154,18 @@ export interface ScreenTopBarProps {
   /** 'solid' (default): the page and its rule. 'clear': neither (Home). */
   ground?: 'solid' | 'clear';
   /**
-   * The paper's grain under the bar (v4.9 A.5): only on the screens whose
-   * page has it, so the two meet as one sheet. Ignored on a clear bar.
-   * check-design (DETAIL_PROPS) fails it anywhere else.
+   * The paper under the bar (v4.9 A.5; the sweep since v4.10): only on
+   * the screens whose page has it, so the two meet as one sheet. Ignored
+   * on a clear bar. check-design (DETAIL_PROPS) fails it anywhere else.
    */
   paper?: boolean;
+  /**
+   * lg only: the title is something a person typed (your handle), so it is
+   * set in `title`, Archivo 600 28/34, growing to the bars' 1.3 cap, not in
+   * the marker: an identifier must be read exactly (l, I, 1, dots,
+   * underscores). Off, the title is the app's own word in `tabTitle`.
+   */
+  userTitle?: boolean;
 }
 
 function isTextButton(node: ReactNode): node is ReactElement<TopBarTextButtonProps> {
@@ -140,7 +180,7 @@ function isTextButton(node: ReactNode): node is ReactElement<TopBarTextButtonPro
 function textSideWidth(button: ReactElement<TopBarTextButtonProps>, fontScale: number): number {
   const { label, muted } = button.props;
   const size = textRole.rowTitle.fontSize * Math.min(fontScale, BAR_TEXT_SCALE_CAP);
-  const word = Math.ceil(textWidth(label, 'inter', size) * (muted ? 1 : SEMIBOLD_SET));
+  const word = Math.ceil(textWidth(label, 'text', size) * (muted ? 1 : SEMIBOLD_SET));
   return Math.max(SIDE_WIDE, space.xs + 2 * space.md + word + 2);
 }
 
@@ -167,6 +207,7 @@ export function ScreenTopBar({
   titleRef,
   ground = 'solid',
   paper = false,
+  userTitle = false,
 }: ScreenTopBarProps) {
   const insets = useSafeAreaInsets();
   const { fontScale } = useWindowDimensions();
@@ -176,21 +217,23 @@ export function ScreenTopBar({
   /*
    * The bar's first child, so the row draws over it, in a box that runs
    * on over the foot's 1pt rule band: an absolute child is laid inside
-   * its parent's border, so the grain alone would stop 1pt short and
-   * leave a line of the bar's plain white between its sheet and the
-   * page's at rest. When the rule shows, 1.6% of grain over it is not seen.
+   * its parent's border, so the paper alone would stop 1pt short of the
+   * page's under it. Its box ends in the sweep's white, so today it draws
+   * nothing; the box is kept so the two still meet if either moves.
    */
-  const grain =
+  const paperLayer =
     paper && !clear ? (
-      <View pointerEvents="none" style={styles.grain}>
+      <View pointerEvents="none" style={styles.paper}>
         <Paper />
       </View>
     ) : null;
 
   if (size === 'lg') {
+    // A tag title never scales, so neither does its ink room nor its swash (T.6, T.8).
+    const tagScale = Math.min(fontScale, TAB_TITLE_CAP);
     return (
       <View style={barStyle}>
-        {grain}
+        {paperLayer}
         <View style={styles.rootRow}>
           <View style={styles.rootTitle}>
             {left}
@@ -202,7 +245,9 @@ export function ScreenTopBar({
               /*
                * The wrapper is the title's own box, so the swash is placed
                * from the title's left edge and its line box's foot at any
-               * text size. The ref stays on the Text, for focus moves.
+               * text size: the marker's ink room is padding taken back as
+               * margin, so the box is still the line box. The ref stays on
+               * the Text, for focus moves.
                */
               <View style={styles.flexShrink}>
                 <Text
@@ -210,12 +255,26 @@ export function ScreenTopBar({
                   numberOfLines={1}
                   adjustsFontSizeToFit
                   minimumFontScale={0.7}
-                  maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP}
+                  maxFontSizeMultiplier={userTitle ? BAR_TEXT_SCALE_CAP : TAB_TITLE_CAP}
                   accessibilityRole="header"
-                  style={[textRole.title, styles.ink, styles.flexShrink]}>
+                  style={
+                    userTitle
+                      ? [textRole.title, styles.ink, styles.flexShrink]
+                      : [
+                          textRole.tabTitle,
+                          styles.ink,
+                          styles.flexShrink,
+                          inkRoom('display', textRole.tabTitle.fontSize * tagScale),
+                        ]
+                  }>
                   {title}
                 </Text>
-                {title !== '' ? <TitleSwash scale={Math.min(fontScale, BAR_TEXT_SCALE_CAP)} /> : null}
+                {title !== '' ? (
+                  <TitleSwash
+                    scale={userTitle ? Math.min(fontScale, BAR_TEXT_SCALE_CAP) : 1}
+                    under={userTitle ? 'typed' : 'tag'}
+                  />
+                ) : null}
               </View>
             )}
           </View>
@@ -232,7 +291,7 @@ export function ScreenTopBar({
 
   return (
     <View style={barStyle}>
-      {grain}
+      {paperLayer}
       <View style={styles.row}>
         <View style={[styles.side, { width: leftWidth }]}>{left}</View>
         <View style={[styles.side, styles.sideRight, { width: rightWidth }]}>{right}</View>
@@ -272,9 +331,9 @@ export function ScreenTopBar({
  * its own component, so the arrival's hook is called only where a swash
  * is drawn and a focus change re-renders this alone.
  */
-function TitleSwash({ scale }: { scale: number }) {
+function TitleSwash({ scale, under }: { scale: number; under: 'tag' | 'typed' }) {
   const draw = useTabArrival();
-  return <PenSwash scale={scale} draw={draw} style={styles.swash} />;
+  return <PenSwash scale={scale} draw={draw} style={under === 'tag' ? styles.swashTag : styles.swash} />;
 }
 
 /**
@@ -339,7 +398,7 @@ export function TopBarButton({
  * "38 / 2,089". Small, muted, tabular. With `onPress` it is a button (the
  * Dex's opens Dex progress), and `accessibilityLabel` says it in words.
  *
- * `figure` is the caught figure, drawn before `text` in Inter 600 and the
+ * `figure` is the caught figure, drawn before `text` in Archivo 600 and the
  * accent (v4.4, one of its five places): the "38" of "38 / 2,089", the
  * number only, with the rest still the quiet muted count. 600 so the hue
  * reads at 13pt (5.54:1 on the page). Spoken as part of the label, never
@@ -358,6 +417,9 @@ export function TopBarCount({
   accessibilityLabel: string;
   accessibilityHint?: string;
 }) {
+  const { fontScale } = useWindowDimensions();
+  // On the tag title's baseline at this text size, each at its own drawn scale (T.6).
+  const slot = [styles.countSlot, { paddingBottom: countFoot(fontScale) }];
   const body = (
     <Text maxFontSizeMultiplier={BAR_TEXT_SCALE_CAP} style={[textRole.small, styles.count]}>
       {figure ? <Text style={styles.figure}>{figure}</Text> : null}
@@ -366,7 +428,7 @@ export function TopBarCount({
   );
   if (!onPress) {
     return (
-      <View accessible accessibilityLabel={accessibilityLabel} style={styles.countSlot}>
+      <View accessible accessibilityLabel={accessibilityLabel} style={slot}>
         {body}
       </View>
     );
@@ -378,7 +440,7 @@ export function TopBarCount({
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       accessibilityHint={accessibilityHint}
-      style={({ pressed }) => [styles.countSlot, pressed && styles.glyphPressed]}>
+      style={({ pressed }) => [slot, pressed && styles.glyphPressed]}>
       {body}
     </Pressable>
   );
@@ -460,7 +522,7 @@ const styles = StyleSheet.create({
   },
   barRuled: { borderBottomColor: colors.line },
   /* The paper's box: the bar's, down to the outer edge of its foot's border (v4.9 A.5). */
-  grain: { position: 'absolute', top: 0, left: 0, right: 0, bottom: -stroke.edge },
+  paper: { position: 'absolute', top: 0, left: 0, right: 0, bottom: -stroke.edge },
   /* No ground and no rule, so a clear bar is exactly its row (plus its inset). */
   barClear: { backgroundColor: 'transparent', borderBottomWidth: 0 },
   ink: { color: colors.text },
@@ -479,12 +541,19 @@ const styles = StyleSheet.create({
   rootTitle: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: space.sm },
   rootRight: { flexDirection: 'row', alignItems: 'center', alignSelf: 'stretch' },
   /*
-   * The swash's box: 1 right of the title's left edge, its foot 4 under
-   * the title's line box (so its top is 2 above it). At text scale 1 the
-   * line box ends at 43 in the 52 row, the box spans 41 to 47, and the
-   * ink keeps at least 5 clear of the bar's 1pt foot.
+   * The swash's box under a typed title: 1 right of the title's left
+   * edge, its foot 4 under the title's line box (so its top is 2 above
+   * it). At text scale 1 the line box ends at 43 in the 52 row, the box
+   * spans 41 to 47, and the ink keeps at least 5 clear of the bar's 1pt
+   * foot.
    */
   swash: { position: 'absolute', left: 1, bottom: -4 },
+  /*
+   * Under a tag title (T.6): its foot 1 under the 3..49 line box, so the
+   * box spans 44 to 50 in the 52 row at scale 1 always, and its ink keeps
+   * 2 clear of the foot.
+   */
+  swashTag: { position: 'absolute', left: 1, bottom: -1 },
 
   /* md */
   row: {
@@ -535,11 +604,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
   },
 
-  /* The quiet count: on the title's baseline, right-aligned to the far gutter. */
+  /* The quiet count: on the title's baseline (countFoot, at the reader's size), right-aligned to the far gutter. */
   countSlot: {
     alignSelf: 'stretch',
     justifyContent: 'flex-end',
-    paddingBottom: COUNT_FOOT,
     paddingRight: GLYPH_SLACK,
   },
   count: { color: colors.textMuted, fontVariant: ['tabular-nums'] },

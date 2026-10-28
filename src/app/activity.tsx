@@ -71,9 +71,10 @@ import type { ActivityItem, UserProfile } from '@/types';
 /* cherry and an olive pick in an arch over the heart, with no new      */
 /* words, its top at 38% of the free height under whatever is above it  */
 /* (the list's content grows to the screen for it, and so does the      */
-/* footer when the invitations row stands over it). The paper (A.5) is  */
-/* the root's first child and the bar's, through ScreenTopBar's         */
-/* `paper`, so the two meet as one sheet.                               */
+/* footer when the invitations row stands over it). The paper (A.5; the */
+/* sweep since v4.10, specs/v4.10/spec.md G) is the root's first child  */
+/* and the bar's, through ScreenTopBar's `paper`, so the two meet as    */
+/* one sheet.                                                           */
 /* ==================================================================== */
 
 export default function ActivityScreen() {
@@ -521,7 +522,7 @@ function LikesRow({
         style={({ pressed }) => [styles.rowText, pressed && styles.pressed]}>
         <Text style={styles.sentence}>
           {likersShown(people)} liked your{' '}
-          {/* The drink in Playfair, as a name inside an Inter sentence is set. */}
+          {/* The drink as a name inside a sentence is set: nameInline, Archivo 600 at the sentence's size. */}
           {drink ? <Text style={textRole.nameInline}>{drink.name}</Text> : 'post'}.{' '}
           <Text style={styles.when}>{timeAgo(newest.at)}</Text>
         </Text>
@@ -579,7 +580,7 @@ function TagRow({
         style={({ pressed }) => [styles.rowText, pressed && styles.pressed]}>
         <Text style={styles.sentence}>
           <Text style={styles.strong}>{person.username}</Text> tagged you{' '}
-          {/* The drink in Playfair, as a name inside an Inter sentence is set. */}
+          {/* The drink as a name inside a sentence is set: nameInline, Archivo 600 at the sentence's size. */}
           {drink ? (
             <>
               in their <Text style={textRole.nameInline}>{drink.name}</Text>

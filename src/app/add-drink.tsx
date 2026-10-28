@@ -360,8 +360,8 @@ function TokenField({
 
 /** The thumbnail's column in a similar row: DexThumb's 52pt (its `row` size) and the row's 12pt gap. */
 const SIMILAR_THUMB_COLUMN = 52 + space.md;
-/** Dynamic Type cap on a row's name (specs/v3-cabinet.md 6.5). */
-const SIMILAR_NAME_CAP = 1.4;
+/** Dynamic Type cap on a row's name (specs/v3-cabinet.md 6.5): 1.3 since v4.10, so no marker line draws above 1.3 times its role (specs/v4.10/spec.md T.4). */
+const SIMILAR_NAME_CAP = 1.3;
 
 /**
  * "Already in the Dex?": up to three catalogue drinks whose names answer
@@ -370,7 +370,7 @@ const SIMILAR_NAME_CAP = 1.4;
  * Name field says it is already in the Dex.
  *
  * Rows of drinks, with the + window's result parts: the drink's square
- * print, its name in Playfair through DrinkName (it wraps and the row
+ * print, its name in the marker (Sedgwick Ave) through DrinkName (it wraps and the row
  * grows, never cut short), and its style in sentence case under it, the
  * one thing these rows say that the + window's do not: here it tells a
  * near-twin from the drink being typed. Three rows under a field are part
@@ -394,7 +394,7 @@ function SimilarInDex({
 }) {
   const { fontScale } = useWindowDimensions();
   // The verb is uncapped body text, so it is measured at the reader's size.
-  const verb = space.md + textWidth(action, 'inter', textRole.buttonSm.fontSize * fontScale);
+  const verb = space.md + textWidth(action, 'text', textRole.buttonSm.fontSize * fontScale);
   const below = width - 2 * layout.gutter - SIMILAR_THUMB_COLUMN;
   const beside = below - verb;
   /*

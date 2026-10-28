@@ -15,8 +15,8 @@ import { artFootprint, GlassOutline } from './index';
 /* window (a merlot or espresso radial pool), which was colour, and     */
 /* Daylight's only colour is a photograph you have earned.              */
 /*                                                                      */
-/* Caught and not yet share the face: the name beside it (Playfair ink  */
-/* or muted) and, on the drink page, the plate tell them apart.         */
+/* Caught and not yet share the face: the name beside it (the marker,   */
+/* ink or muted) and, on the drink page, the plate tell them apart.     */
 /* ==================================================================== */
 
 /**

@@ -18,10 +18,10 @@ import type { Drink, Post, UserProfile } from '@/types';
 /* people you follow have posted that you have not logged. The heading  */
 /* says whose they are, not that they are missing from your Dex: a gap  */
 /* to fill is a nudge to have them (App Review 1.4.3). Each is the      */
-/* friend's photo as a small print on the page, its name in Playfair    */
-/* under it and who posted it under that. The picks come from           */
-/* lib/cabinet's notInDexYet over the feed already on the phone: no new */
-/* query, and only drinks friends really posted.                        */
+/* friend's photo as a small print on the page, its name in the marker  */
+/* (Sedgwick Ave) under it and who posted it under that. The picks come */
+/* from lib/cabinet's notInDexYet over the feed already on the phone:   */
+/* no new query, and only drinks friends really posted.                 */
 /*                                                                      */
 /* DAYLIGHT. No band, no ground of its own: a heading and the prints,   */
 /* set apart from the posts round it by space alone (layout principle   */

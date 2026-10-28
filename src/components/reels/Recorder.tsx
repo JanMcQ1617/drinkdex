@@ -261,7 +261,7 @@ export function Recorder({
     return (
       <View style={[styles.fill, styles.failed]}>
         <Icon name="camera" size={40} color={colors.reelInk} />
-        <Text style={[textRole.emptyTitle, styles.failedTitle]} accessibilityRole="header">
+        <Text style={[textRole.bodyStrong, styles.failedTitle]} accessibilityRole="header">
           The camera didn&apos;t start
         </Text>
         <Text style={styles.failedBody}>Close any other app that is using the camera, then try again.</Text>

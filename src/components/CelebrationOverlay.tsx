@@ -238,7 +238,7 @@ export function CelebrationOverlay() {
           <Icon name="dex" size={48} color={colors.text} />
         </View>
 
-        {/* A title is a reading of the collection, not a drink, so it is Inter (Playfair is for drink names only). */}
+        {/* A title is a reading of the collection, not a drink, so it is Archivo (the marker is for drink names). */}
         <Text style={[textRole.title, styles.ink, styles.centred]} accessibilityRole="header">
           {current.milestone.title}
         </Text>

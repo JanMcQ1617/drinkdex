@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, type TextInput, View } from 'react-native'
 
 import { useInputFocusOnShow } from '@/components/auth/AuthTitleBar';
 import { AuthMessage } from '@/components/auth/Consent';
+import { useMethods } from '@/components/auth/methods';
 import { ProviderRows } from '@/components/auth/ProviderButton';
 import { Button, Field, FieldGroup } from '@/components/ui';
 import { colors, fonts, space, textRole } from '@/constants/theme';
@@ -35,6 +36,16 @@ const EMAIL_HINT = 'We’ll check whether you already have an account.';
 const NEW_PASSWORD_HINT = 'At least 6 characters.';
 const OTHER_LEDE =
   'That email belongs to an account that signs in another way: with Apple, Google, Facebook or a phone number. Use the one you set it up with.';
+/*
+ * The same step with no Continue with Facebook on screen (build 35 on, until
+ * Meta approves the app: specs/v4.9/meta-review.md; or Apple unavailable on
+ * this device, which takes Facebook with it). An account made with Facebook
+ * is sent here by Welcome back's Continue with email, and naming a button
+ * that is not drawn would leave it nowhere to go: its way in is the password
+ * by email under the rows, so the lede says so in as many words.
+ */
+const OTHER_LEDE_NO_FACEBOOK =
+  'That email belongs to an account that signs in another way: with Apple, Google or a phone number. Use the one you set it up with. For an account made with Facebook, set a password by email below.';
 const RESET_LEDE = 'We’ll email a link to set a new password.';
 
 function noop() {}
@@ -266,9 +277,10 @@ function PasswordForm() {
 function OtherWayStep() {
   const sendReset = useSignInFlow((s) => s.sendReset);
   const busy = useAuth((s) => s.busy);
+  const { facebook } = useMethods();
   return (
     <View>
-      <Text style={styles.lede}>{OTHER_LEDE}</Text>
+      <Text style={styles.lede}>{facebook ? OTHER_LEDE : OTHER_LEDE_NO_FACEBOOK}</Text>
       {/* The email is what brought them here; the phone row is how a phone account gets back in. */}
       <ProviderRows withPhone />
       <Button

@@ -96,7 +96,7 @@ export const colors = {
    *      pinned key, the + window's Post,
    *      the post sheet's "Save & post"
    *   3  the caught Nº plate                fill, onAccent figures
-   *   4  the caught figure, the number      text, Inter 600
+   *   4  the caught figure, the number      text, Archivo 600
    *      only: "14" in "14 / 2,089" and
    *      in "14 entries in your Dex"
    *   5  Home's Activity dot                the 8pt dot
@@ -166,9 +166,11 @@ export const colors = {
    * never in this red: the big outlined figures and the ticket's
    * perforation in `rule`, the menu leaders in `lineControl`, a ticket's
    * own fill in `bgSunk` (`press` while held), each a fill of a path and
-   * never a text colour. And a paper grain under the page grounds, black
-   * at a low alpha over `bg`, so no token is added for it. check-design
-   * keeps the press and the paper off the accent (ACCENT_TIER_EXCEPT).
+   * never a text colour. And the paper under the page grounds, which
+   * since v4.10 draws the sweep: white to 40% of the window, then easing
+   * to #FBFBFB at the foot (specs/v4.10/spec.md G), a neutral picture over
+   * `bg`, so no token is added for it. check-design keeps the press and
+   * the paper off the accent (ACCENT_TIER_EXCEPT).
    *
    * WHY ONLY THERE. A colour that turns up everywhere stops meaning
    * anything. Red never says delete or error here: destructive words stay
@@ -278,74 +280,135 @@ export const onMedia = {
 } as const;
 
 /* ==================================================================== */
-/* Typography                                                           */
-/* Playfair Display (drink names) / Inter (everything)                  */
+/* Typography: three faces, three jobs (v4.10, specs/v4.10/spec.md T)   */
 /*                                                                      */
-/* Both families are LATIN-ONLY SUBSETS, self-hosted from assets/fonts/. */
-/* See assets/fonts/README.md before changing them.                     */
+/*   the marker  Sedgwick Ave    every drink name, the app's own tab    */
+/*                               titles, the empty states' headlines    */
+/*   the poster  Anton           the Dex's and the drink page's section */
+/*                               heads, in capitals by transform; the   */
+/*                               press's outlined figures are its paths */
+/*   the text    Archivo 400,    everything else: rows, steps, keys,    */
+/*               500, 600        fields, captions, handles, and every   */
+/*                               count, amount and Nº                   */
+/*                                                                      */
+/* Jan, 28 Oct 2026, of the red paint-pen wordmark: "make it so all     */
+/* the text in the app is in this same font, and mix it with subheading */
+/* and one other font". The logo is drawn, not set, so the marker is    */
+/* the nearest hand to its pen (specs/v4.10/type/README.md 1).          */
+/*                                                                      */
+/* All five cuts are LATIN SUBSETS, self-hosted from assets/fonts/ and  */
+/* built by scripts/build-fonts.py from pinned upstream files. See      */
+/* assets/fonts/README.md before changing them.                         */
 /* ==================================================================== */
 
 export const fonts = {
-  display: 'PlayfairDisplayLatin_600SemiBold',
-  displayBold: 'PlayfairDisplayLatin_700Bold',
-  body: 'InterLatin_400Regular',
-  bodyMedium: 'InterLatin_500Medium',
-  bodySemiBold: 'InterLatin_600SemiBold',
-  bodyBold: 'InterLatin_600SemiBold',
-  /** The Dex number. */
-  label: 'InterLatin_500Medium',
-  /** Figures. Inter, with the `tabular` style for column alignment. */
-  numeral: 'InterLatin_500Medium',
+  /** The marker, Sedgwick Ave (one cut): only the DISPLAY roles below (check-design rule 6). */
+  display: 'SedgwickAveLatin_400Regular',
+  /** The poster, Anton (one cut): only `sub` (rule 6). The press's figures are paths of the same file (numeralGlyphs). */
+  sub: 'AntonLatin_400Regular',
+  body: 'ArchivoLatin_400Regular',
+  bodyMedium: 'ArchivoLatin_500Medium',
+  bodySemiBold: 'ArchivoLatin_600SemiBold',
+  bodyBold: 'ArchivoLatin_600SemiBold',
+  /** The Dex number (the plate): Archivo 600, tabular. */
+  label: 'ArchivoLatin_600SemiBold',
+  /** Figures. Archivo, with the `tabular` style for column alignment. */
+  numeral: 'ArchivoLatin_500Medium',
 } as const;
 
 /*
  * The three sizes (specs/v4-mockups/layout/spec.md section 2). Jan: "I
- * want less stuff". Title 28/34, body 17/24 and small 13/18, plus
- * Playfair at the title and body sizes for drink names. Weight (400, 500,
- * 600) carries emphasis instead of a fourth size.
+ * want less stuff". Title 28/34, body 17/24 and small 13/18 in Archivo,
+ * and weight (400, 500, 600) carries emphasis instead of a fourth size.
  *
  * One exception, agreed with Jan for v4.1 (specs/v4.1-changes.md 0.3):
- * `prompt`, Inter 500 22/28, the onboarding guide's question in its
+ * `prompt`, Archivo 500 22/28, the onboarding guide's question in its
  * bubble, which is the only place it is drawn.
+ *
+ * The marker is sized by its own x-height, not by the number (v4.10 T.2):
+ * Sedgwick's is 0.66 of its em against Archivo's 0.526, so its two sizes,
+ * the tag at 36/46 and the name at 22/28, sit beside the title and body
+ * sizes as the same weight of voice. Every line height here is at least
+ * its face's natural line, (hhea ascent + descent) x size: Sedgwick 1.249
+ * em, Anton 1.505, Archivo 1.088. At or above it React Native centres the
+ * glyphs in the line box, which is what lineMarks() assumes; below it the
+ * type sits where TextKit's clamp puts it. check-design asserts it.
  */
 const TITLE = { fontSize: 28, lineHeight: 34, letterSpacing: -0.4 } as const;
 const BODY = { fontSize: 17, lineHeight: 24, letterSpacing: -0.2 } as const;
 const SMALL = { fontSize: 13, lineHeight: 18, letterSpacing: 0 } as const;
+/** The marker at title size: a tab root's title, a drink at title size. */
+const TAG_TITLE = { fontSize: 36, lineHeight: 46, letterSpacing: 0 } as const;
+/** The marker at name size: a drink in a grid or list, an empty state's headline. */
+const TAG_NAME = { fontSize: 22, lineHeight: 28, letterSpacing: 0 } as const;
 
 /**
  * Text roles. A role is a whole text style for one job; colour is left to
  * the caller. Several roles share a size on purpose: the name says what the
- * text is, the size comes from the three above.
+ * text is, the size comes from the constants above.
  *
- * PLAYFAIR DISCIPLINE. The display face appears only in the drink-name
- * roles (drinkHero, nameLg, name, nameSm, nameInline), and check-design
- * rule 6 fails any other route to it. A drink name is drawn through
- * DrinkName (components/cabinet.tsx), which fits it to its column
- * instead of truncating it. The wordmark left Playfair in v4.5: it is the
- * tagged logo now, outlined paths drawn by brand/Wordmark, not type.
+ * THREE FACES, THREE JOBS (check-design rule 6). The marker sets only the
+ * DISPLAY roles: the tab title, the four drink-name roles and the empty
+ * state's headline. It never sets a figure or an identifier: a count, an
+ * amount, a Nº, a key, a handle, a tournament's, a collection's or a
+ * place's name must be read exactly (l, I, 1, dots, underscores), so they
+ * are Archivo, and `title` with them. A drink name is drawn through
+ * DrinkName (components/cabinet.tsx), which fits it to its column instead
+ * of truncating it and gives the marker's ink room past its line box
+ * (lineMarks' inkRoom); a name inside a sentence is `nameInline`, Archivo
+ * 600 at the sentence's own size, so the marker never sits in a line of
+ * text. The poster sets `sub` alone, in two files. Every other role is
+ * Archivo. The wordmark is none of these: it is the tagged logo, outlined
+ * paths drawn by brand/Wordmark, not type.
  */
 export const textRole = {
-  /* ---- Inter: the three sizes ---- */
-  /** Tab-root titles ("Dex", "My Bar", "nico.pours"), set left. */
+  /* ---- The marker, Sedgwick Ave: the DISPLAY roles ONLY (check-design rule 6) ---- */
+  /** The app's own tab-root titles (Dex, Saved, Tournaments, My Bar). Read only by ScreenTopBar's lg bar and TabPlaceholder, never scaled. */
+  tabTitle:     { fontFamily: fonts.display, ...TAG_TITLE },
+  /** The drink page's name. */
+  drinkHero:    { fontFamily: fonts.display, fontSize: 60, lineHeight: 76, letterSpacing: 0 },
+  /** A drink at title size: a post's wall label, the catch moment. */
+  nameLg:       { fontFamily: fonts.display, ...TAG_TITLE },
+  /** A drink at name size: grids, lists, picker rows. */
+  name:         { fontFamily: fonts.display, ...TAG_NAME },
+  /** A drink on a post header's second line, where Instagram puts a place (home-ig 2.4), beside " at " and the place in Archivo 13/18. */
+  nameSm:       { fontFamily: fonts.display, fontSize: 19, lineHeight: 24, letterSpacing: 0 },
+  /** EmptyState's headline, and only EmptyState's. */
+  emptyTitle:   { fontFamily: fonts.display, ...TAG_NAME },
+
+  /* ---- The poster, Anton: `sub` ONLY ---- */
+  /** The Dex's section heads and the drink page's ("Sour and citrusy", "The spec"): written in sentence case, drawn in poster capitals. */
+  sub: {
+    fontFamily: fonts.sub,
+    fontSize: 16,
+    lineHeight: 26,
+    letterSpacing: 0.8, // tracking-ok: poster capitals, spaced as the board set them; never a word in a sentence
+    // caps-ok: Anton's poster capitals are a transform, so the copy and VoiceOver keep the sentence case it is written in
+    textTransform: 'uppercase',
+  },
+
+  /* ---- The text, Archivo: the three sizes ---- */
+  /** A title that is not the marker's: a handle, a tournament's, collection's or place's name, the milestone, the phone code's digits (with `tabular`). */
   title:        { fontFamily: fonts.bodySemiBold, ...TITLE },
   /** Rows, names, field text, captions, the payoff line. */
   body:         { fontFamily: fonts.body, ...BODY },
-  /** Key labels and quiet emphasis. */
+  /** Quiet emphasis. */
   bodyMedium:   { fontFamily: fonts.bodyMedium, ...BODY },
   /** Shelf heads, "You can make 31", a person's name. */
   bodyStrong:   { fontFamily: fonts.bodySemiBold, ...BODY },
   /** Story names, the quiet count beside a title, bios, meta lines. */
   small:        { fontFamily: fonts.body, ...SMALL },
 
-  /* ---- Inter: named jobs, on the three sizes ---- */
+  /* ---- The text, Archivo: named jobs, on the three sizes ---- */
   barTitle:     { fontFamily: fonts.bodySemiBold, ...BODY },  // a pushed screen's centred title, sheet titles
-  emptyTitle:   { fontFamily: fonts.bodySemiBold, ...BODY },  // EmptyState
+  /** Form and list heads (SectionHeader): Archivo, never the poster. */
   sectionTitle: { fontFamily: fonts.bodySemiBold, ...BODY },
   groupTitle:   { fontFamily: fonts.bodySemiBold, ...SMALL },
   rowTitle:     { fontFamily: fonts.body, ...BODY },
   rowSubtitle:  { fontFamily: fonts.body, ...SMALL },
-  button:       { fontFamily: fonts.bodyMedium, ...BODY },
-  buttonSm:     { fontFamily: fonts.bodyMedium, ...BODY },
+  /** Every key's label, the red key's included: one weight for every command, so no key reads heavier than the next (v4.10 0.5). */
+  button:       { fontFamily: fonts.bodySemiBold, ...BODY },
+  buttonSm:     { fontFamily: fonts.bodySemiBold, ...BODY },
   fieldLabel:   { fontFamily: fonts.bodyMedium, ...SMALL },
   fieldValue:   { fontFamily: fonts.body, ...BODY },
   helper:       { fontFamily: fonts.body, ...SMALL },
@@ -361,17 +424,8 @@ export const textRole = {
   plate:        { fontFamily: fonts.label, fontSize: 13, lineHeight: 18, letterSpacing: 1.0, fontVariant: ['tabular-nums'] }, // tracking-ok: a code of figures, not words
   /** The onboarding guide's question in its bubble (v4.1, the one size outside the three; see above). */
   prompt:       { fontFamily: fonts.bodyMedium, fontSize: 22, lineHeight: 28, letterSpacing: -0.3 },
-
-  /* ---- Playfair: drink names ONLY (check-design rule 6) ---- */
-  drinkHero:    { fontFamily: fonts.displayBold, fontSize: 52, lineHeight: 56, letterSpacing: -0.3 }, // drink page
-  /** A drink at title size: the feed's and post's wall label, the catch moment. */
-  nameLg:       { fontFamily: fonts.displayBold, ...TITLE, letterSpacing: -0.2 },
-  /** A drink at body size: grids, lists, picker rows. */
-  name:         { fontFamily: fonts.displayBold, ...BODY, letterSpacing: 0 },
-  /** A drink at small size: the second line of a Home post's header, where Instagram puts a place (home-ig 2.4). */
-  nameSm:       { fontFamily: fonts.displayBold, ...SMALL, letterSpacing: 0 },
-  /** A name inside an Inter sentence ("theo_stirs's Paper Plane"), a nested Text. */
-  nameInline:   { fontFamily: fonts.displayBold },
+  /** A drink inside a sentence ("theo_stirs's Paper Plane"), a nested Text: Archivo 600 at the sentence's own size, never the marker. */
+  nameInline:   { fontFamily: fonts.bodySemiBold },
 } satisfies Record<string, TextStyle>;
 
 /** Figures that must line up in a column: stats, dex numbers, counts. */

@@ -66,30 +66,31 @@ import type { TournamentBoard, UserProfile } from '@/types';
 /* store's profiles, as Activity does.                                  */
 /*                                                                      */
 /* THE SWASH UNDER THE NAME (v4.7, specs/v4.7/spec.md 6.1 #11). The     */
-/* name is a page title (Inter 28), the one pushed screen with a title  */
-/* of its own in the body rather than in the bar, so it is signed the   */
-/* way a tab root's title is: the pen's swash, from the title's own box */
-/* (3pt lower than a tab root's, clear of a typed name's descenders).   */
-/* It is ornament, never a state: it reads the same on now, coming up   */
-/* or finished; VoiceOver never meets it.                               */
+/* name is a page title (textRole.title, Archivo 600 28), the one       */
+/* pushed screen with a title of its own in the body rather than in the */
+/* bar, so it is signed the way a tab root's title is: the pen's swash, */
+/* from the title's own box (3pt lower than a tab root's, clear of a    */
+/* typed name's descenders). It is ornament, never a state: it reads    */
+/* the same on now, coming up or finished; VoiceOver never meets it.    */
 /* It stays static (v4.9 B): this is a pushed page, not a tab opening.  */
 /* The standings get no rule (a margin rule beside them would sit 3.4pt */
 /* from your row's wash and read as its border).                        */
 /*                                                                      */
 /* v4.9 (specs/v4.9/details/spec.md C.7, A.5). While it is on, the      */
 /* leader's face wears the pen's crown (Leaderboard), the screen's one  */
-/* other mark. The page and its bar lie on the paper, meeting as one    */
-/* sheet, and so does the page that waits for the board, so the grain   */
-/* is already there when the board draws. A tournament that is not      */
-/* available and a load that failed stay bare, as every dead end and    */
-/* error does.                                                          */
+/* other mark. The page and its bar lie on the paper (the sweep since   */
+/* v4.10, specs/v4.10/spec.md G), meeting as one sheet, and so does the */
+/* page that waits for the board, so the sweep is already there when    */
+/* the board draws. A tournament that is not available and a load that  */
+/* failed stay bare, as every dead end and error does.                  */
 /* ==================================================================== */
 
 /**
  * The swash's length follows the name's text scale up to here, as the
- * tab roots' swash follows their capped title (TabPlaceholder's
- * TITLE_CAP): past it a longer stroke stops reading as a signature and
- * starts reading as an underline.
+ * swash under a typed title in a tab's bar does (your profile's handle;
+ * a tab root's own title, in the marker, never scales since v4.10,
+ * specs/v4.10/spec.md T.8): past it a longer stroke stops reading as a
+ * signature and starts reading as an underline.
  */
 const NAME_SWASH_CAP = 1.3;
 
@@ -669,7 +670,7 @@ const styles = StyleSheet.create({
    * descender under the swash's first 56pt; a tournament's name is typed by
    * people and often has one ("Negroni week"), and at 4 the rising right
    * end met the g's tail with 0 to 1pt between them. At 7 the ink sits
-   * below Inter 28's descender line. The status line's caps start about
+   * below Archivo 28's descender line. The status line's caps start about
    * 16.5 under the box (nameRow's 8, the head's 4 gap, the small line's
    * own lead), so the ink keeps 9.5 clear of the words below it.
    */

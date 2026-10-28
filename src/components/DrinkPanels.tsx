@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DexStatusTag, DrinkName, Print } from '@/components/cabinet';
+import { DexStatusTag, DrinkName, nameFit, Print } from '@/components/cabinet';
 import { DexThumb, DrinkFace } from '@/components/DexCard';
 import { lineMarks } from '@/components/details/lineMarks';
 import { numeralWidth } from '@/components/details/numeralPath';
@@ -37,7 +37,7 @@ import {
   tastesOf,
   type LabelFact,
 } from '@/lib/drinkLabels';
-import { faceOf, fitScale, widestRun } from '@/lib/textFit';
+import { widestRun } from '@/lib/textFit';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
 import type {
@@ -65,7 +65,8 @@ import type {
 /* facts the feed and the grids no longer stamp on (kind, origin,       */
 /* glass, strength), and the reading: the spec, the field notes, the    */
 /* origin story, and the friends who caught it. Sections are set apart */
-/* by space under body-600 heads: no cards, no rules, no bands.         */
+/* by space under the poster's heads (Anton capitals, since v4.10,      */
+/* specs/v4.10/spec.md T.7): no cards, no rules, no bands.              */
 /*                                                                      */
 /* Every panel copes with blanks, because a custom drink has them where */
 /* a catalogue entry never does (no composition summary, no steps, a    */
@@ -90,8 +91,9 @@ import type {
 /* here. The first how-section the page draws (the spec, else the       */
 /* serve, else the composition) opens with a lead: the pen's double     */
 /* rule across the column, then the drink's own figure in the press's   */
-/* outline, "Nº 0100" at cap 64 in colors.rule (the plate's spelling,   */
-/* shrunk only to fit a narrow column, and drawn only up to 1.3x text), */
+/* outline, "Nº 0100" at cap 48 in colors.rule (Anton's figures since   */
+/* v4.10, the plate's spelling, shrunk only to fit a narrow column, and */
+/* drawn only up to 1.3x text),                                         */
 /* then its head. A custom drink gets the rule without a figure: it has */
 /* no number. The figure is the same grey caught or not, and never      */
 /* spoken (the plate says "Number 100"). The spec's rows read as a menu */
@@ -100,7 +102,9 @@ import type {
 /* has no amount (the leader itself is always laid out, so a wrap can   */
 /* never undo itself). Past 1.3x, or with an amount wider than its      */
 /* column, the rows stack as they always did. The page and the pinned   */
-/* bar lie on the paper's grain (A.5).                                  */
+/* bar lie on the paper (A.5), which since v4.10 draws the sweep: white */
+/* to 40% of the window, then easing to #FBFBFB at the foot             */
+/* (specs/v4.10/spec.md G).                                             */
 /*                                                                      */
 /* So a drink not caught has two pen marks at rest and three in all, a  */
 /* caught one three and four, and the press's two (v4.9 D.1).           */
@@ -138,8 +142,13 @@ const AMOUNT_COL = 84;
 const AMOUNT_GAP = space.sm;
 const STACK_ABOVE_SCALE = 1.3;
 
-/** The how-section's figure at its largest, its cap height in pt (v4.9 C.5): never scaled with Larger Text. */
-const NUMERAL_CAP = 64;
+/**
+ * The how-section's figure at its largest, its cap height in pt (v4.9
+ * C.5): never scaled with Larger Text. 48 since v4.10, the Dex's sections'
+ * cap too: Anton is condensed and tall, and at the 64 build 34's figure
+ * took it would be a wall.
+ */
+const NUMERAL_CAP = 48;
 /** Above this text size the lead draws no figure. */
 const NUMERAL_TEXT_CAP = 1.3;
 /** From the lead's double rule to the figure, or to the head when there is no figure. */
@@ -221,8 +230,9 @@ function NotYetTag() {
 /**
  * The name, then the Nº plate and whether it is in your Dex.
  *
- * The name is Playfair at 52 through DrinkName: no line limit, and shrunk
- * only when its widest word would not fit the line ("Holunderbeergeist").
+ * The name is the marker (Sedgwick Ave) at 60 through DrinkName: no line
+ * limit, and shrunk only when its widest word would not fit the line
+ * ("Holunderbeergeist").
  * A header, for the Headings rotor.
  *
  * The plate is solid Campari, the accent, once the drink is in your Dex
@@ -286,10 +296,10 @@ export function HeroRecord({ drink, inDex, custom }: { drink: Drink; inDex: bool
   const hero = textRole.drinkHero;
   const nameScale = Math.min(fontScale, HERO_NAME_CAP);
   // DrinkName's own fit (components/cabinet), from the same inputs, so the rule meets the caps it draws.
-  const fit = fitScale(drink.name, faceOf(hero.fontFamily), hero.fontSize * nameScale, width - layout.gutter * 2);
-  const top = space.xl + lineMarks('playfair', hero.fontSize * fit, hero.lineHeight * fit, nameScale).capTop;
+  const fit = nameFit(drink.name, hero, width - layout.gutter * 2, HERO_NAME_CAP, fontScale);
+  const top = space.xl + lineMarks('display', hero.fontSize * fit, hero.lineHeight * fit, nameScale).capTop;
   const factScale = Math.min(fontScale, FACT_CAP);
-  const bottom = lineMarks('inter', textRole.small.fontSize, textRole.small.lineHeight, factScale).foot;
+  const bottom = lineMarks('text', textRole.small.fontSize, textRole.small.lineHeight, factScale).foot;
 
   return (
     <View style={styles.record}>
@@ -372,8 +382,8 @@ export function FactList({ drink }: { drink: Drink }) {
   const scale = Math.min(fontScale, FACT_CAP);
   const fitsHalf = facts.every(
     (f) =>
-      widestRun(f.value, 'inter', textRole.bodyStrong.fontSize * scale) <= half &&
-      widestRun(f.caption, 'inter', textRole.small.fontSize * scale) <= half,
+      widestRun(f.value, 'text', textRole.bodyStrong.fontSize * scale) <= half &&
+      widestRun(f.caption, 'text', textRole.small.fontSize * scale) <= half,
   );
   const cell = fitsHalf ? half : inner;
   const columns = fitsHalf && facts.length >= 2;
@@ -386,8 +396,8 @@ export function FactList({ drink }: { drink: Drink }) {
           style={{
             position: 'absolute',
             left: half + space.xl / 2 - PEN.vrule.mid,
-            top: lineMarks('inter', textRole.bodyStrong.fontSize, textRole.bodyStrong.lineHeight, scale).capTop,
-            bottom: lineMarks('inter', textRole.small.fontSize, textRole.small.lineHeight, scale).foot,
+            top: lineMarks('text', textRole.bodyStrong.fontSize, textRole.bodyStrong.lineHeight, scale).capTop,
+            bottom: lineMarks('text', textRole.small.fontSize, textRole.small.lineHeight, scale).foot,
           }}
         />
       ) : null}
@@ -507,9 +517,16 @@ export function DexSinceRow({
 /* ==================================================================== */
 
 /**
- * A section of the page: its head in body 600 (a header for the rotor),
- * an optional quiet aside on the same line ("Stirred · 3 ingredients"),
- * then its content. Set apart from the one above by space alone.
+ * A section of the page: its head in the poster (`sub`, Anton 16/26 in
+ * capitals by transform, v4.10 T.7; a header for the rotor, spoken as it
+ * is written), an optional quiet aside on the same line ("Stirred · 3
+ * ingredients"), then its content. Set apart from the one above by space
+ * alone.
+ *
+ * The aside sits on the head's baseline: the row aligns tops and drops
+ * the aside by the difference between the poster's baseline and
+ * Archivo's small line's (lineMarks), both at the reader's text size, as
+ * neither caps. When the head wraps, the aside goes under it.
  *
  * `lead` is drawn over the head, after the section's 32 of air (v4.9):
  * the first how-section's HowLead, and nothing on any other section.
@@ -527,14 +544,21 @@ function Section({
   style?: ViewStyle;
   children: React.ReactNode;
 }) {
+  const { fontScale } = useWindowDimensions();
+  const head = lineMarks('sub', textRole.sub.fontSize, textRole.sub.lineHeight, fontScale);
+  const quiet = lineMarks('text', textRole.small.fontSize, textRole.small.lineHeight, fontScale);
   return (
     <View style={[styles.section, style]}>
       {lead}
       <View style={styles.sectionHead}>
-        <Text accessibilityRole="header" style={[textRole.bodyStrong, styles.ink]}>
+        <Text accessibilityRole="header" accessibilityLabel={title} style={[textRole.sub, styles.ink]}>
           {title}
         </Text>
-        {aside ? <Text style={[textRole.small, styles.muted]}>{aside}</Text> : null}
+        {aside ? (
+          <Text style={[textRole.small, styles.muted, { marginTop: Math.max(0, head.baseline - quiet.baseline) }]}>
+            {aside}
+          </Text>
+        ) : null}
       </View>
       {children}
     </View>
@@ -544,9 +568,10 @@ function Section({
 /**
  * The first how-section's lead (v4.9 C.5): the pen's double rule across
  * the column, 16, then, for a catalogue drink up to 1.3x text, its figure
- * in the press's outline ("Nº 0100", the plate's spelling) at cap 64, or
- * smaller where the column is narrower than the figure ("Nº 0444" takes
- * 61 at 390pt), and the section's own 12 to the head. `number` null (a
+ * in the press's outline ("Nº 0100", the plate's spelling) at cap 48, or
+ * smaller where the column is narrower than the figure (at 48 Anton's
+ * condensed figures fit every phone's column, so the fit is a guard),
+ * and the section's own 12 to the head. `number` null (a
  * custom drink, which has none) is the rule alone, 16 over the head.
  *
  * Both marks are hidden and measure nothing: the figure's width is its
@@ -699,8 +724,8 @@ export function SpecSection({ recipe, number }: { recipe: Recipe; number?: numbe
     recipe.ingredients.some((ing) => {
       const s = splitAmount(ing.amount);
       return (
-        widestRun(s.amount, 'inter', textRole.specAmount.fontSize * fontScale) > amountText ||
-        widestRun(s.metric ?? '', 'inter', textRole.small.fontSize * fontScale) > amountText
+        widestRun(s.amount, 'text', textRole.specAmount.fontSize * fontScale) > amountText ||
+        widestRun(s.metric ?? '', 'text', textRole.small.fontSize * fontScale) > amountText
       );
     });
 
@@ -966,9 +991,12 @@ const BAR_CAP = 1.3;
  * `onHeight` reports the bar's measured height so the route can pad its
  * content by it, and nothing at the foot hides under a bar that grew.
  *
- * The bar lies on the paper's grain (v4.9 A.5), its first child, as the
- * page under it does, so the bar reads as the page and not as a panel.
- * The key keeps its own fill.
+ * The bar lies on the paper (v4.9 A.5), its first child, as the page
+ * under it does, so the bar reads as the page and not as a panel: since
+ * v4.10 the sweep (specs/v4.10/spec.md G), and the bar's slice of it is
+ * the page's own at the same window height, so the two meet with no
+ * step. The key keeps its own fill, and its label is Archivo 600 like
+ * every key's ("Post Piña Colada again" in plain bold, never the marker).
  */
 export function PinnedPostBar({
   name,
@@ -992,8 +1020,8 @@ export function PinnedPostBar({
     <View
       onLayout={(e) => onHeight?.(Math.ceil(e.nativeEvent.layout.height))}
       style={[styles.bar, ruled && styles.barRuled, { paddingBottom: Math.max(insets.bottom, space.md) }]}>
-      {/* Up over the top border's band: inside it, the grain would leave the bar's white as a 1pt line. */}
-      <View pointerEvents="none" style={styles.barGrain}>
+      {/* Up over the top border's band: inside it, the paper would stop 1pt short of the page's above. */}
+      <View pointerEvents="none" style={styles.barPaper}>
         <Paper />
       </View>
       <Button
@@ -1112,10 +1140,11 @@ const styles = StyleSheet.create({
 
   /* Sections: 32 of air above each, the head 12 over its content. */
   section: { marginTop: layout.section, paddingHorizontal: layout.gutter, gap: space.md },
+  /* Tops aligned, never centred or baseline-flexed: the aside drops onto the poster's baseline (Section). */
   sectionHead: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignItems: 'baseline',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     columnGap: space.md,
     rowGap: 2,
@@ -1161,5 +1190,5 @@ const styles = StyleSheet.create({
   },
   barRuled: { borderTopColor: colors.line },
   /* The paper's box: the bar's, up to the outer edge of its top border (v4.9 A.5). */
-  barGrain: { position: 'absolute', top: -stroke.edge, left: 0, right: 0, bottom: 0 },
+  barPaper: { position: 'absolute', top: -stroke.edge, left: 0, right: 0, bottom: 0 },
 });

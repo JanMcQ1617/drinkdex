@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipply v4.10 final proof</title>
+<style>
+/* ==================================================================== */
+/* v4.10 final proof: three screens with what build 35 ships            */
+/*                                                                      */
+/* The integration pass's proof of TYPE and GROUND together, on the     */
+/* five cuts the app loads (assets/fonts/, built by build-fonts.py) and */
+/* the sweep it lays (assets/details/ground.png, by build-ground.mjs),  */
+/* never the upstream files the direction boards were set from. The     */
+/* role table below is theme.ts's textRole, value for value, and the    */
+/* press's figure and the plate's drip are generated from              */
+/* src/components/details by tools/build.mjs (figures.js). The screens  */
+/* and the other pen marks are the type board's (specs/v4.10/type/      */
+/* board), itself on the v4.9 board's geometry and marks.js.            */
+/*                                                                      */
+/* THE GROUND IS DRAWN AS THE APP LAYS IT. Paper is window-anchored:    */
+/* white down to 40% of the window, then the 440 x 574 PNG stretched    */
+/* over the lower 60%. The root's Paper is .paper here; a bar that      */
+/* carries one (the tab bar's slab, the drink page's pinned bar) cuts   */
+/* the same picture at its own window y (.slice). The PNG is drawn      */
+/* texel for texel (image-rendering: pixelated): Chrome's smooth        */
+/* upscale averages a dither away (specs/v4.10/ground/README.md).       */
+/* The sign-in page has no Paper of its own (sign-in stays bare, spec   */
+/* G.1), and since the integration pass its slab has none either while */
+/* it is focused (lib/bareGround): ?s=signin&before=1 draws the slab as */
+/* it was, the sweep's foot ending in a 255-over-251 step at y 873.     */
+/*                                                                      */
+/* ?s=home | drink | signin draws one phone alone (the shots); no query */
+/* is the three side by side.                                           */
+/* ==================================================================== */
+@font-face{font-family:SedgwickAveLatin;src:url(../../../assets/fonts/SedgwickAveLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:AntonLatin;src:url(../../../assets/fonts/AntonLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:ArchivoLatin;src:url(../../../assets/fonts/ArchivoLatin_400Regular.ttf);font-weight:400}
+@font-face{font-family:ArchivoLatin;src:url(../../../assets/fonts/ArchivoLatin_500Medium.ttf);font-weight:500}
+@font-face{font-family:ArchivoLatin;src:url(../../../assets/fonts/ArchivoLatin_600SemiBold.ttf);font-weight:600}
+
+/* theme.ts colours: black, white, one red, and one neutral hue for every grey. */
+:root{
+  --page:#FFFFFF; --wash:#F5F5F5; --press:#EBEBEB; --line:#E3E3E3; --hair:#D6D6D6; --rule:#C4C4C4;
+  --control:#8A8A8A; --muted:#5C5C5C; --ink:#0A0A0A; --onInk:#FFFFFF;
+  --photoEdge:rgba(10,10,10,.07); --acc:#D0102C;
+  --t1:#262626; --t2:#3D3D3D; --t3:#5C5C5C;
+  --ground:url(../../../assets/details/ground.png);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#ECECEC}
+body{font-family:ArchivoLatin,system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+svg{display:block;overflow:visible}
+.a{position:absolute}
+.nw{white-space:nowrap}
+.muted{color:var(--muted)}
+.mk{position:absolute;overflow:visible;pointer-events:none}
+.phone{position:relative;width:440px;height:956px;background:var(--page);overflow:hidden;flex:none;isolation:isolate}
+/* The root's Paper, and a bar's slice of the same picture (window y 382.4 = 40% of 956). */
+.paper{position:absolute;inset:0;pointer-events:none;background:var(--ground) 0 382.4px/440px 573.6px no-repeat;image-rendering:pixelated}
+.slice{background-image:var(--ground);background-repeat:no-repeat;background-size:440px 573.6px;image-rendering:pixelated}
+.chrome{position:absolute;left:0;right:0;background-color:var(--page);z-index:20}
+.circle{border-radius:50%}
+.sb{position:absolute;top:0;left:0;right:0;height:62px;z-index:30}
+/* The status bar is the system's own type (SF), not the app's. */
+.sb .t{position:absolute;left:52px;top:21px;font:600 17px/22px -apple-system,system-ui,sans-serif;letter-spacing:-.2px}
+.sb .island{position:absolute;left:157px;top:11px;width:126px;height:37px;border-radius:19px;background:#000}
+.homeInd{position:absolute;left:150px;top:942px;width:140px;height:5px;border-radius:3px;background:var(--ink);z-index:40}
+.print{position:absolute;overflow:hidden;background:var(--wash)}
+.print img{display:block;width:100%;height:100%;object-fit:cover}
+.print::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px var(--photoEdge);pointer-events:none}
+.av{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font:600 12px ArchivoLatin;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.col{position:absolute;left:0;width:440px}
+.col .pad{padding:0 24px}
+.rowb{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.lead{flex:1;align-self:baseline;height:3px;min-width:12px;background:radial-gradient(circle,var(--control) 0.9px,transparent 1.1px) right center/4px 3px repeat-x;transform:translateY(-1px)}
+.plate{position:relative;display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:2px;background:var(--acc);color:#fff}
+.key{position:absolute;border-radius:4px;display:flex;align-items:center;justify-content:center;white-space:nowrap;gap:8px}
+
+/* ---------- theme.ts textRole, value for value (v4.10) ---------- */
+.r-hero{font-family:SedgwickAveLatin;font-weight:400;font-size:60px;line-height:76px;letter-spacing:0}
+.r-nameSm{font-family:SedgwickAveLatin;font-weight:400;font-size:19px;line-height:24px;letter-spacing:0}
+.r-name{font-family:SedgwickAveLatin;font-weight:400;font-size:22px;line-height:28px;letter-spacing:0}
+.r-sub{font-family:AntonLatin;font-weight:400;font-size:16px;line-height:26px;letter-spacing:.8px;text-transform:uppercase}
+.r-body{font-family:ArchivoLatin;font-weight:400;font-size:17px;line-height:24px;letter-spacing:-.2px}
+.r-bodyStrong,.r-button,.r-barTitle{font-family:ArchivoLatin;font-weight:600;font-size:17px;line-height:24px;letter-spacing:-.2px}
+.r-amount{font-family:ArchivoLatin;font-weight:600;font-size:17px;line-height:24px;letter-spacing:-.2px;font-variant-numeric:tabular-nums}
+.r-small,.r-helper{font-family:ArchivoLatin;font-weight:400;font-size:13px;line-height:18px;letter-spacing:0}
+.r-smallStrong{font-family:ArchivoLatin;font-weight:600;font-size:13px;line-height:18px;letter-spacing:0}
+.r-status,.r-fieldLabel{font-family:ArchivoLatin;font-weight:500;font-size:13px;line-height:18px;letter-spacing:0}
+.r-plate{font-family:ArchivoLatin;font-weight:600;font-size:13px;line-height:18px;letter-spacing:1px;font-variant-numeric:tabular-nums}
+/* Field's TextInput: the value role's family and size, and no line height (ui.tsx fieldInput). */
+.r-fieldValue{font-family:ArchivoLatin;font-weight:400;font-size:17px;line-height:24px;letter-spacing:0}
+
+/* ---------- the three side by side ---------- */
+.wall{padding:40px 44px 60px}
+.wall h1{font:600 28px/34px ArchivoLatin;letter-spacing:-.4px}
+.wall .lede{font:400 15px/22px ArchivoLatin;color:#333;margin-top:8px;max-width:1376px}
+.row{display:flex;gap:28px;margin-top:24px}
+.frame .phone{box-shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.08)}
+.frame .cap{font:500 13px/18px ArchivoLatin;color:#555;margin-top:10px}
+body.solo{background:var(--page)}
+body.solo .wall{padding:0}
+</style>
+</head>
+<body>
+<div class="wall" id="wall"></div>
+<script src="../../v4.9/details/board/marks.js"></script>
+<script src="figures.js"></script>
+<script>
+const A = '../../../assets/';
+const IMG = (id) => `${A}drinks/${id}.webp`;
+const MK = window.MARKS;
+const FIG = window.FIGURES;
+
+/* ---------- marks: the v4.9 board's generated pen (marks.js), and the two generated here ---------- */
+function M(spec, x, y, fill = 'var(--acc)') {
+  const m = MK[spec];
+  const { x: bx, y: by, w, h } = m.box;
+  const f = m.tier === 'press' ? 'var(--control)' : fill;
+  return `<svg class="mk" viewBox="${bx} ${by} ${w} ${h}" style="left:${x + bx}px;top:${y + by}px;width:${w}px;height:${h}px">${m.d.map((d) => `<path d="${d}" fill="${f}"/>`).join('')}</svg>`;
+}
+function Mb(spec, h) {
+  return `<div style="position:relative;height:${h}px">${M(spec, 0, 0)}</div>`;
+}
+/** A generated shape (figures.js) with its frame's origin at (x, y), in px or a CSS length, filled nonzero as the device's <Path>. */
+function F(shape, x, y, fill) {
+  const { x: bx, y: by, w, h } = shape.box;
+  const at = (v, b) => (typeof v === 'number' ? `${v + b}px` : `calc(${v} + ${b}px)`);
+  return `<svg class="mk" viewBox="${bx} ${by} ${w} ${h}" style="left:${at(x, bx)};top:${at(y, by)};width:${w}px;height:${h}px">${shape.d.map((d) => `<path d="${d}" fill="${fill}"/>`).join('')}</svg>`;
+}
+function WM(x, y, h) {
+  const m = MK.wordmark;
+  const { x: bx, y: by, w: bw, h: bh } = m.box;
+  return `<svg class="mk" viewBox="${bx} ${by} ${bw} ${bh}" style="left:${x}px;top:${y}px;width:${(h * bw) / bh}px;height:${h}px">${m.d.map((d) => `<path d="${d}" fill="var(--acc)"/>`).join('')}</svg>`;
+}
+
+/* ---------- glyphs: src/components/icons.tsx ---------- */
+const OUT = {
+  home: '<path d="M3.2 10.4 12 3.4l8.8 7"/><path d="M5.4 9.3V19.4a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6V9.3"/><path d="M9.6 21V14.9h4.8V21"/>',
+  dex: '<path d="M3.9 5.4h16.2l-8.1 8.3z"/><path d="M12 13.7v5.5"/><path d="M8.3 19.6h7.4"/>',
+  chevronLeft: '<path d="M14.6 5.4 8 12l6.6 6.6"/>',
+  plus: '<path d="M12 5.2v13.6"/><path d="M5.2 12h13.6"/>',
+  check: '<path d="M5 12.6 9.8 17.4 19 6.9"/>',
+  heart: '<path d="M12 20.3 4.9 13.4a4.3 4.3 0 0 1 0-6.2 4.5 4.5 0 0 1 6.3 0l.8.8.8-.8a4.5 4.5 0 0 1 6.3 0 4.3 4.3 0 0 1 0 6.2z"/>',
+  send: '<path d="M2.9 10.9 21.1 4.9 9.1 13.1z"/><path d="M9.1 13.1 21.1 4.9 12.6 19.1z"/>',
+  bookmark: '<path d="M6.4 4.6h11.2v15.8L12 16.3l-5.6 4.1z"/>',
+  create: '<rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4"/><path d="M12 8v8"/><path d="M8 12h8"/>',
+  more: '<circle cx="5.4" cy="12" r="1.15"/><circle cx="12" cy="12" r="1.15"/><circle cx="18.6" cy="12" r="1.15"/>',
+  trophy: '<path d="M7.4 4.4h9.2v5.1a4.6 4.6 0 0 1-9.2 0z"/><path d="M7.4 5.9H5a1.4 1.4 0 0 0-1.4 1.4 3.6 3.6 0 0 0 3.6 3.6"/><path d="M16.6 5.9H19a1.4 1.4 0 0 1 1.4 1.4 3.6 3.6 0 0 1-3.6 3.6"/><path d="M12 14.1v3.4"/><path d="M8.4 20.2a3.6 3.6 0 0 1 7.2 0z"/>',
+  profile: '<circle cx="12" cy="8.2" r="3.7"/><path d="M4.9 20.4a7.3 7.3 0 0 1 14.2 0"/>',
+};
+const SOLID = {
+  home: '<path fill-rule="evenodd" d="M12 2.7a1.4 1.4 0 0 1 .9.3l8.3 6.6a1.4 1.4 0 0 1 .5 1.1v8.7a2.2 2.2 0 0 1-2.2 2.2h-4.6v-5.7a1 1 0 0 0-1-1h-3.8a1 1 0 0 0-1 1v5.7H4.5a2.2 2.2 0 0 1-2.2-2.2v-8.7a1.4 1.4 0 0 1 .5-1.1l8.3-6.6a1.4 1.4 0 0 1 .9-.3z"/>',
+  bookmark: '<path d="M6.4 4.6a.9.9 0 0 0-.9.9v14.9a.9.9 0 0 0 1.42.73L12 17.4l5.08 3.73a.9.9 0 0 0 1.42-.73V5.5a.9.9 0 0 0-.9-.9z"/>',
+  heart: '<path d="M12 20.9a1 1 0 0 1-.68-.27l-6.9-6.7a5.1 5.1 0 0 1 0-7.4 5.4 5.4 0 0 1 7.58 0 5.4 5.4 0 0 1 7.58 0 5.1 5.1 0 0 1 0 7.4l-6.9 6.7a1 1 0 0 1-.68.27z"/>',
+};
+function I(name, x, y, size = 26, color = 'var(--ink)', filled = false, z = '') {
+  const solid = filled && SOLID[name];
+  const body = solid
+    ? `<g fill="${color}">${SOLID[name]}</g>`
+    : `<g stroke="${color}" stroke-width="${filled ? 2.15 : 1.6}" stroke-linecap="round" stroke-linejoin="round" fill="${name === 'more' ? color : 'none'}">${OUT[name]}</g>`;
+  return `<svg class="a" width="${size}" height="${size}" viewBox="0 0 24 24" style="left:${x}px;top:${y}px;${z}">${body}</svg>`;
+}
+const inlineI = (name, size, color = 'currentColor', sw = 1.8) =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="display:inline-block;vertical-align:-${Math.round(size * 0.2)}px"><g stroke="${color}" stroke-width="${sw}" fill="none" stroke-linecap="round" stroke-linejoin="round">${OUT[name]}</g></svg>`;
+
+/* ---------- text placed by baseline (Home's absolute rows), as the type board does ---------- */
+const t = (html, x, y, role, style = '') => `<div class="a r-${role}" data-by="${y}" style="left:${x}px;${style}">${html}</div>`;
+const tc = (html, cx, y, w, role, style = '') => `<div class="a r-${role}" data-by="${y}" style="left:${cx - w / 2}px;width:${w}px;text-align:center;${style}">${html}</div>`;
+function placeBaselines(root) {
+  for (const el of root.querySelectorAll('[data-by]')) {
+    const probe = document.createElement('span');
+    probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+    el.insertBefore(probe, el.firstChild);
+    el.style.top = '0px';
+    const base = probe.getBoundingClientRect().top - el.getBoundingClientRect().top;
+    probe.remove();
+    el.style.top = `${Number(el.dataset.by) - base}px`;
+  }
+}
+const pr = (src, x, y, w, h, extra = '') => `<div class="print" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;${extra}"><img src="${src}"></div>`;
+const TONES = ['var(--t1)', 'var(--t2)', 'var(--t3)'];
+const av = (ini, x, y, s, tone = 0) => `<div class="av" style="left:${x}px;top:${y}px;width:${s}px;height:${s}px;background:${TONES[tone]};font-size:${Math.round(s * 0.36)}px">${ini}</div>`;
+
+/* ---------- chrome ---------- */
+/** A bar at window y `top`, `h` tall: plain white, or (`paper`) the sweep cut at its own place. */
+const bar = (top, h, paper, extra = '') =>
+  `<div class="chrome${paper ? ' slice' : ''}" style="top:${top}px;height:${h}px;${paper ? `background-position:0 ${382.4 - top}px;` : ''}${extra}"></div>`;
+function statusBar() {
+  return `${bar(0, 62, false, 'z-index:25')}<div class="sb"><div class="t">9:41</div><div class="island"></div>
+  <svg class="a" style="left:337px;top:24px" width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#0A0A0A"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#0A0A0A"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#0A0A0A"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#0A0A0A"/></svg>
+  <svg class="a" style="left:361px;top:24px" width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.5 0 4.8 1 6.5 2.6l1.2-1.3C14.2 1.6 11.5.5 8.5.5S2.8 1.6.8 3.5L2 4.8c1.7-1.6 4-2.6 6.5-2.6z" fill="#0A0A0A"/><path d="M8.5 5.6c1.6 0 3 .6 4.1 1.6l1.2-1.3C12.4 4.6 10.5 3.9 8.5 3.9S4.6 4.6 3.2 5.9l1.2 1.3c1.1-1 2.5-1.6 4.1-1.6z" fill="#0A0A0A"/><path d="M8.5 9 10.9 6.5c-.7-.5-1.5-.9-2.4-.9s-1.7.3-2.4.9z" fill="#0A0A0A"/></svg>
+  <svg class="a" style="left:383px;top:23px" width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#0A0A0A" opacity=".35"/><rect x="2" y="2" width="20" height="9" rx="2" fill="#0A0A0A"/><path d="M25 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2z" fill="#0A0A0A" opacity=".4"/></svg></div>`;
+}
+/** The tab bar (FloatingTabBar): its slab carries the page's paper unless a bare page holds it; signed out, Profile is its glyph. */
+function tabBar(active, signedIn, paper = true) {
+  const cy = 897.5;
+  const z = 'z-index:22;';
+  const g = (name, cx, on) => I(name, cx - 13, cy - 13, 26, on ? 'var(--ink)' : 'var(--muted)', on, z);
+  let s = bar(873, 83, paper);
+  s += g('home', 44, active === 'home') + g('trophy', 132, false);
+  s += `<div class="a" style="left:194px;top:${cy - 16}px;width:52px;height:32px;border-radius:4px;background:var(--acc);z-index:22"></div>`;
+  s += I('dex', 209, cy - 11, 22, '#fff', false, z);
+  s += g('bookmark', 308, false);
+  s += signedIn
+    ? `<div class="av" style="left:383px;top:${cy - 13}px;width:26px;height:26px;background:var(--t3);font-size:10px;z-index:22">NP</div>`
+    : g('profile', 396, false);
+  if (active === 'home') s += `<div class="a" style="left:35px;top:914px;width:18px;height:2px;background:var(--ink);z-index:22"></div>`;
+  return s;
+}
+const phone = (inner, paper) => `<div class="phone">${paper ? '<div class="paper"></div>' : ''}${statusBar()}${inner}<div class="homeInd"></div></div>`;
+
+/* ==================================================================== */
+/* Home at rest (signed in): the root's Paper and the slab's            */
+/* ==================================================================== */
+const STORIES = [
+  { n: 'Your story', me: true },
+  { n: 'ana', img: 'daiquiri' },
+  { n: 'leo', img: 'negroni' },
+  { n: 'ines.ag', img: 'paloma' },
+  { n: 'theo_stirs', img: 'clover-club', seen: true },
+  { n: 'sam.', img: 'mojito', seen: true },
+];
+function home() {
+  /* Home's bar and strip lie in the sweep's white 40%: their Paper draws nothing, so they are the page's white. */
+  let s = bar(62, 44, false);
+  s += `<div class="a" style="left:0;top:0;width:440px;height:106px;z-index:21">${WM(13.7, 63, 42)}${I('create', 354, 71, 26)}${I('heart', 398, 71, 26)}
+  <div class="a" style="left:414px;top:66px;width:12px;height:12px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 2px #fff"></div></div>`;
+  STORIES.forEach((st, i) => {
+    const cx = 45 + 80 * i;
+    const cy = 147.5;
+    if (st.me) {
+      s += `<div class="av" style="left:${cx - 28}px;top:${cy - 28}px;width:56px;height:56px;background:var(--t3)"><svg width="56" height="56" viewBox="0 0 24 24"><circle cx="12" cy="9.2" r="3.6" fill="#fff"/><path d="M5 19.6a7 7 0 0 1 14 0z" fill="#fff"/></svg></div>`;
+      s += `<div class="a circle" style="left:${cx + 12}px;top:${cy + 12}px;width:24px;height:24px;background:var(--ink);box-shadow:0 0 0 2.5px #fff"></div>${I('plus', cx + 15, cy + 15, 18, '#fff', true)}`;
+    } else {
+      s += `<div class="a circle" style="left:${cx - 33}px;top:${cy - 33}px;width:66px;height:66px;box-shadow:inset 0 0 0 ${st.seen ? '1px var(--hair)' : '2px var(--ink)'}"></div>`;
+      s += `<div class="av" style="left:${cx - 28}px;top:${cy - 28}px;width:56px;height:56px;background:var(--wash)"><img src="${IMG(st.img)}"></div>`;
+    }
+    s += tc(st.n, cx, 199.5, 80, 'small', `white-space:nowrap;${st.me || st.seen ? 'color:var(--muted)' : ''}`);
+  });
+  s += M('dbl|408|0', 16, 205);
+  const post = (top, p) => {
+    const ph = top + 52;
+    const pb = ph + 440;
+    let h = '';
+    h += `<div class="a circle" style="left:12px;top:${top + 6}px;width:40px;height:40px;box-shadow:inset 0 0 0 2px var(--ink)"></div>`;
+    h += av(p.ini, 16, top + 10, 32, p.tone);
+    h += t(`${p.user}${p.with ? ` <span class="r-small">with</span> ${p.with}` : ''}`, 60, top + 20, 'smallStrong', 'white-space:nowrap');
+    h += t(`<span class="r-nameSm">${p.drink}</span>${p.at ? `<span class="r-small"> at ${p.at}</span>` : ''}`, 60, top + 42, 'nameSm', 'white-space:nowrap');
+    h += I('more', 398, top + 13, 26);
+    h += pr(IMG(p.img), 0, ph, 440, 440);
+    h += I('heart', 16, pb + 9, 26, p.liked ? 'var(--acc)' : 'var(--ink)', !!p.liked);
+    h += I('send', 60, pb + 9, 26) + I('bookmark', 398, pb + 9, 26);
+    h += av('', 16, pb + 46, 18, 2);
+    const liked = pb + 46 + 13.5;
+    h += t(`Liked by <span class="r-smallStrong">${p.likedBy}</span> and <span class="r-smallStrong">${p.others}</span>`, 42, liked, 'small', 'white-space:nowrap');
+    const cap = liked + 18 + 4;
+    h += `<div class="a r-small" data-by="${cap}" style="left:16px;width:408px"><span class="r-smallStrong">${p.user}</span> ${p.caption}</div>`;
+    const time = cap + 18 + 2;
+    h += t(p.time, 16, time, 'small', 'color:var(--muted)');
+    const bottom = time + 18;
+    h += M('crule', 8, bottom - 3 - 15);
+    return [h, bottom + 6];
+  };
+  const [p1, b1] = post(214, { user: 'maya.pours', with: 'ana', ini: 'MP', tone: 0, drink: 'Negroni', at: 'Bar Pastis', img: 'negroni', liked: true, likedBy: 'ines.ag', others: '23 others', caption: 'Leo’s recipe, in his kitchen. Equal parts, stirred long.', time: '2 hours ago' });
+  const [p2] = post(b1, { user: 'leo', ini: 'L', tone: 1, drink: "Ti' Punch", img: 'ti-punch', likedBy: 'maya.pours', others: '9 others', caption: 'Agricole, a coin of lime, no ice.', time: '5 hours ago' });
+  return phone(s + p1 + M('crop|15|15|15|0|tr', 440 - 8 - 15, b1 + 3) + p2 + tabBar('home', true), true);
+}
+
+/* ==================================================================== */
+/* The drink page, scrolled from the print to the spec: the root's      */
+/* Paper and the pinned bar's                                           */
+/* ==================================================================== */
+const PINA = {
+  name: 'Piña Colada', n: 147, img: 'pina-colada',
+  /* factsOf: kind, origin, glass, strength, two to a row. */
+  facts: [['Tiki & tropical', 'cocktail'], ['San Juan', 'Puerto Rico'], ['Hurricane', 'glass'], ['10–13%', 'abv']],
+  aside: 'Blended · 4 ingredients',
+  rows: [['White rum', '2 oz', '60 ml'], ['Cream of coconut', '1.5 oz', '45 ml'], ['Pineapple juice', '3 oz', '90 ml'], ['Ice', 'About 1.5 cups', '']],
+  steps: [
+    'Add the rum, cream of coconut, and pineapple juice to a blender.',
+    'Add about 1.5 cups of ice and blend until smooth and slushy, 20-30 seconds.',
+    'Pour into a chilled hurricane glass or poco grande.',
+  ],
+};
+const plateNo = (n) => `Nº ${String(n).padStart(4, '0')}`;
+function drink() {
+  const d = PINA;
+  const fig = FIG[plateNo(d.n)];
+  const drip = FIG.drip;
+  /* ScreenTopBar with `paper`: in the sweep's white 40%, so white; its rule shows with content under it. */
+  let s = bar(62, 52, false, 'box-shadow:inset 0 -1px 0 var(--line)');
+  s += `<div class="a" style="left:0;top:0;width:440px;height:114px;z-index:21">${I('chevronLeft', 15, 75, 26)}${I('bookmark', 391, 75, 26, 'var(--ink)', true)}</div>`;
+  let c = `<div class="print" style="position:relative;width:440px;height:56px"><img src="${IMG(d.img)}" style="object-position:50% 92%"></div>`;
+  /* HeroTitle: 24 under the print; the plate row 12 under the name; FactList 24 under that. */
+  c += `<div class="pad" style="padding-top:24px">`;
+  c += `<div class="r-hero" aria-label="${d.name}">${d.name}</div>`;
+  /* PlateDrip: its frame's origin `inset` in from the plate's outer right and `overlap` up from its outer foot. */
+  c += `<div style="display:flex;align-items:center;gap:10px;margin-top:12px"><span class="plate r-plate">${plateNo(d.n)}${F(drip, `calc(100% - ${drip.inset}px)`, `calc(100% - ${drip.overlap}px)`, 'var(--acc)')}</span><span class="r-status muted" style="display:inline-flex;align-items:center;gap:4px">${inlineI('check', 16, 'var(--muted)', 2)}In your Dex</span></div>`;
+  c += `<div style="display:flex;flex-wrap:wrap;row-gap:12px;margin-top:24px">${d.facts.map(([v, k]) => `<div style="width:196px;padding-right:12px"><div class="r-bodyStrong">${v}</div><div class="r-small muted">${k}</div></div>`).join('')}</div>`;
+  c += `</div>`;
+  /* SpecSection: 32 of air; the lead (the double rule, 16, the figure at cap 48), then 12 to the head and 12 to the rows. */
+  c += `<div class="pad" style="margin-top:32px">`;
+  c += Mb('dbl|392|11', 6);
+  c += `<div style="position:relative;height:48px;margin-top:16px">${F(fig, 0, 0, 'var(--rule)')}</div>`;
+  c += `<div class="rowb" style="margin-top:12px;align-items:flex-start"><div class="r-sub">The spec</div><div class="r-small muted" style="margin-top:4px">${d.aside}</div></div>`;
+  c += `<div style="margin-top:0">`;
+  for (const [item, amt, metric] of d.rows) {
+    c += `<div style="margin-top:12px"><div class="rowb" style="justify-content:flex-start;gap:6px"><span class="r-body nw">${item}</span><span class="lead"></span><span class="r-amount nw">${amt}</span></div>${metric ? `<div class="r-small muted" style="text-align:right;font-variant-numeric:tabular-nums">${metric}</div>` : ''}</div>`;
+  }
+  c += `</div><div style="margin-top:16px">`;
+  d.steps.forEach((st, i) => {
+    c += `<div style="display:flex;margin-top:12px"><div class="r-bodyStrong muted" style="width:28px;flex:none;font-variant-numeric:tabular-nums">${i + 1}</div><div class="r-body" style="width:364px">${st}</div></div>`;
+  });
+  c += `</div></div>`;
+  s += `<div class="col" style="top:114px">${c}</div>`;
+  /* The pinned bar (DrinkPanels): its own Paper, the sweep cut at window y 858. */
+  s += bar(858, 98, true, 'box-shadow:inset 0 1px 0 var(--line)');
+  s += `<div class="key r-button" style="left:24px;top:870px;width:392px;height:52px;z-index:22;background:var(--acc);color:#fff">${inlineI('plus', 22, '#fff', 2)}Post ${d.name} again</div>`;
+  return phone(s, true);
+}
+
+/* ==================================================================== */
+/* Sign-in, the email step (signed out, on Home's gate): the sign-in    */
+/* page is bare white (CabinetSheet, no Paper); only the slab carries   */
+/* the sweep                                                            */
+/* ==================================================================== */
+function signin() {
+  /* AuthTitleBar md: back at the left, the title centred in barTitle; its rule clear at rest. */
+  let s = bar(62, 52, false);
+  s += `<div class="a" style="left:0;top:0;width:440px;height:114px;z-index:21">${I('chevronLeft', 13, 75, 26)}
+    <div class="a r-barTitle nw" style="left:0;width:440px;top:76px;text-align:center">Continue with email</div></div>`;
+  /* The body: 24 in and 24 down (SignInScreen styles.body). FieldGroup: 1pt wash edge round the row's 60. */
+  const g = 138;
+  s += `<div class="a" style="left:24px;top:${g}px;width:392px;height:62px;border-radius:4px;background:var(--wash)"></div>`;
+  s += `<div class="a r-fieldLabel muted" style="left:41px;top:${g + 9}px">Email</div>`;
+  s += `<div class="a r-fieldValue" style="left:41px;top:${g + 29}px">maya.pours@example.com</div>`;
+  /* FieldNote: the hint, 8 under the group. */
+  s += `<div class="a r-helper muted" style="left:24px;top:${g + 70}px;width:392px">We’ll check whether you already have an account.</div>`;
+  /* Continue: the primary key (ink), 24 under the note, block. */
+  s += `<div class="key r-button" style="left:24px;top:${g + 112}px;width:392px;height:52px;background:var(--ink);color:#fff">Continue</div>`;
+  /* CabinetSheet holds the ground bare while focused (lib/bareGround), so the slab is white too. */
+  return phone(s + tabBar('home', false, q.has('before')), false);
+}
+
+/* ==================================================================== */
+const SCREENS = {
+  home: ['Home at rest', home],
+  drink: ['The drink page, at the spec', drink],
+  signin: ['Sign in, the email step', signin],
+};
+const q = new URLSearchParams(location.search);
+const sq = q.get('s');
+const wall = document.getElementById('wall');
+if (SCREENS[sq]) {
+  document.body.classList.add('solo');
+  wall.innerHTML = SCREENS[sq][1]();
+} else {
+  wall.innerHTML = `<h1>Sipply v4.10 · the final proof</h1>
+  <p class="lede">The five shipped cuts (Sedgwick Ave for the names, Anton for the heads, Archivo for everything else) and the shipped sweep, white to 40% of the window and #FBFBFB at the foot, drawn texel for texel. Paper where the app lays it: Home's root and the slab, the drink page's root and its pinned bar, and none on the bare sign-in page, whose slab is held white with it.</p>
+  <div class="row">${Object.values(SCREENS).map(([cap, fn]) => `<div class="frame">${fn()}<div class="cap">${cap}</div></div>`).join('')}</div>`;
+}
+document.fonts.ready.then(() => {
+  placeBaselines(wall);
+  document.body.dataset.ready = '1';
+});
+</script>
+</body>
+</html>

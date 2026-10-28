@@ -91,8 +91,9 @@ import type { FriendStanding, TournamentSummary } from '@/types';
 /*   far gutter, once there is someone on the board besides you. Never  */
 /*   beside the "Find people to follow" line, which is a link.          */
 /*                                                                      */
-/*   The page is on the PAPER (details/Paper), and so is its bar; the   */
-/*   "not here yet" gate stays bare, as every feature gate does.        */
+/*   The page is on the PAPER (details/Paper; the sweep since v4.10,    */
+/*   specs/v4.10/spec.md G), and so is its bar; the "not here yet" gate */
+/*   stays bare, as every feature gate does.                            */
 /*                                                                      */
 /* WHEN THE SERVER IS BEHIND. Without 025 the Friends half (its head,   */
 /* rows, foot sentence and the rule) is left out with no error; without */

@@ -17,7 +17,7 @@ import { BUBBLE_PAD, SUB_GAP, TAIL_H, TAIL_W } from './metrics';
 /*   A  centre stage: under the 200pt seal, a 20 x 9 tail at its top     */
 /*      centre pointing up at it                                        */
 /*                                                                      */
-/* The prompt is `prompt`, Inter 500 22/28 (the one size outside v4's    */
+/* The prompt is `prompt`, Archivo 500 22/28 (the one size outside v4's */
 /* three, agreed with Jan), capped at 1.3x so a two-line question stays */
 /* a bubble. `**word**` sets a run in 600: "Which **whiskey** do you     */
 /* reach for?". An optional sub line in small muted ink 8 under it.     */

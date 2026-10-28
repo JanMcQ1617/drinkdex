@@ -85,7 +85,7 @@ const strong = (text: string): WithPart => ({ text, strong: true });
  * FITTED BEFORE LAYOUT. The first line is the author's name and these
  * words, on one line of `measure` points beside the face and the •••, at
  * the header's small size times `fontScale` (the caller caps it at the
- * header's own HEADER_CAP, as the Text does). Inter's own advances
+ * header's own HEADER_CAP, as the Text does). Archivo's own advances
  * (lib/textFit, set a little wide) decide which wording is the first to
  * fit: as worded; with two names, "with ana and 1 other"; then "with 3
  * people" (or "with 1 person"). If even that does not fit, the last is
@@ -115,9 +115,9 @@ export function withLine(
   tries.push([WITH, strong(n === 1 ? '1 person' : `${n} people`)]);
 
   const size = textRole.small.fontSize * o.fontScale;
-  const room = o.measure - textWidth(author.username, 'inter600', size);
+  const room = o.measure - textWidth(author.username, 'text600', size);
   const width = (parts: WithPart[]) =>
-    parts.reduce((w, p) => w + textWidth(p.text, p.strong ? 'inter600' : 'inter400', size), 0);
+    parts.reduce((w, p) => w + textWidth(p.text, p.strong ? 'text600' : 'text400', size), 0);
   const parts = tries.find((t) => width(t) <= room) ?? tries[tries.length - 1]!;
 
   return {

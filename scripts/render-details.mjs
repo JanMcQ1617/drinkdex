@@ -289,8 +289,8 @@ const V49 = [
   ...Object.keys(SIGN_ROT).map((n) => ({ name: `sign-${n}`, what: `A list's end, signed: the ${n} at ${DOODLE_SCALE.sign}, ${SIGN_ROT[n]} degrees, and the swash`, shape: signature(n, SIGN_ROT[n]) })),
   ...ART.map((n) => ({ name: `cluster-${n}-art`, what: `An empty state round a print: the ${n}'s cluster and the corners, one path`, shape: emptyCluster(n, 'art') })),
   ...ICON.map((n) => ({ name: `cluster-${n}-icon`, what: `An empty state over a glyph: the ${n}'s cluster, one path`, shape: emptyCluster(n, 'icon') })),
-  { name: 'figure-01', what: 'Dex: a section figure, cap 40, in rule (the press)', shape: numeral('01', 40), ink: 'rule' },
-  { name: 'figure-no-0100', what: 'Drink page: the spec card\'s figure, cap 64, in rule (the press)', shape: numeral('Nº 0100', 64), ink: 'rule' },
+  { name: 'figure-01', what: 'Dex: a section figure, cap 48, in rule (the press, Anton since v4.10)', shape: numeral('01', 48), ink: 'rule' },
+  { name: 'figure-no-0100', what: 'Drink page: the spec card\'s figure, cap 48, in rule (the press, Anton since v4.10)', shape: numeral('Nº 0100', 48), ink: 'rule' },
   { name: 'leader', what: 'Drink page: a menu leader, 120pt, in lineControl (the press)', shape: leader(120), ink: 'control' },
   {
     name: 'ticket',
@@ -504,9 +504,9 @@ if (missing.length) {
 }
 // The Dex's section figures ("01" on), and the drink page's "Nº 0000" at the caps its column fits on a 375, 390 and 440 phone.
 const texts = [
-  ...Array.from({ length: 99 }, (_, i) => [String(i + 1).padStart(2, '0'), 40]),
+  ...Array.from({ length: 99 }, (_, i) => [String(i + 1).padStart(2, '0'), 48]),
   ...['Nº 0001', 'Nº 0100', 'Nº 0444', 'Nº 0888', 'Nº 2089'].flatMap((t) =>
-    [375, 390, 440].map((W) => [t, Math.min(64, Math.floor((W - 48) / numeralWidth(t, 1)))]),
+    [375, 390, 440].map((W) => [t, Math.min(48, Math.floor((W - 48) / numeralWidth(t, 1)))]),
   ),
 ];
 for (const [t, c] of texts) {

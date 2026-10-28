@@ -30,6 +30,7 @@ import Animated, {
 import { DrinkName } from '@/components/cabinet';
 import { EmptyMarks, PenArrow } from '@/components/details/DoodleMarks';
 import type { DoodleName } from '@/components/details/doodlePath';
+import { inkRoom } from '@/components/details/lineMarks';
 import { Icon, type IconName } from '@/components/icons';
 import {
   avatarTone,
@@ -58,7 +59,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 /*      is its `bgSunk` fill; a rule appears only where content scrolls  */
 /*      under a bar. A state that must read (a focused field, an error)  */
 /*      takes a 2pt ink ring overlay, so nothing moves.                 */
-/*   3. Chrome is Inter, through theme.ts's textRole, at three sizes.    */
+/*   3. Chrome is Archivo, through theme.ts's textRole, at three sizes. */
 /*   4. Nothing performs. Controls answer a press with a FILL change,    */
 /*      never a scale; only media tiles keep PressableScale. Every state */
 /*      that matters is shown without motion too: Reanimated can stall   */
@@ -688,7 +689,7 @@ const LARGE_AVATAR = 64;
  * the three dark ones and ink on the light one. The ring, when asked for,
  * is ink: the profile header's 1pt ring with a gap (white spec D14).
  *
- * The initials are Inter SemiBold (check-design rule 6), 40% of the disc
+ * The initials are Archivo SemiBold (check-design rule 6), 40% of the disc
  * and never under 11pt, the app's floor.
  *
  * Deliberately not emoji: emoji render in the system font, so their weight
@@ -827,7 +828,7 @@ export function Avatar({
 /**
  * A heading for a stretch of a screen, and announced as one.
  *
- * Sentence case, Inter, no tracking. It replaces the letterspaced
+ * Sentence case, Archivo, no tracking. It replaces the letterspaced
  * uppercase taupe label, which the code's own comment called "the habit
  * that most makes an interface look machine-designed": a heading is
  * written as it is read.
@@ -957,7 +958,8 @@ export type ListRowProps = ListRowBaseProps &
     | {
         /**
          * The title is a drink's name: drawn through DrinkName in
-         * `textRole.name` (Playfair 17/24, Dynamic Type cap 1.4), with no
+         * `textRole.name` (the marker, Sedgwick Ave 22/28, Dynamic Type cap
+         * 1.3 since v4.10, specs/v4.10/spec.md T.4), with no
          * line limit, fitted to `titleMeasure`.
          */
         titleRole: 'name';
@@ -984,7 +986,7 @@ export type ListRowProps = ListRowBaseProps &
  * stays one unbroken strip. The last row of a group draws none.
  *
  * `titleRole="name"` is for a list of drinks (My Bar, Log, Add a drink):
- * the title is the drink's name, set in Playfair and never truncated.
+ * the title is the drink's name, set in the marker and never truncated.
  */
 export function ListRow({
   title,
@@ -1034,7 +1036,7 @@ export function ListRow({
       <View style={styles.rowMain}>
         <View style={styles.rowText}>
           {titleRole === 'name' ? (
-            <DrinkName name={title} role={textRole.name} measure={titleMeasure!} cap={1.4} color={ink} />
+            <DrinkName name={title} role={textRole.name} measure={titleMeasure!} cap={1.3} color={ink} />
           ) : (
             <Text
               style={[
@@ -1590,8 +1592,9 @@ function fieldBoxStyle(slot: GroupSlot | null, multiline: boolean, sunk: boolean
  * edge of its own: 1pt outside the row is the group's own outer edge, so
  * the ring's corners match the group's (`control`) where the row meets a
  * corner, and are square where it meets another row. There the ring also
- * covers the separator it shares with its neighbour, which is why the row
- * is lifted above its siblings while ringed.
+ * covers the separator it shares with its neighbour, which is why a row of
+ * a group stands above its siblings: always, never only while ringed (see
+ * Field's wrapper, and specs/v4.10/email-focus.md).
  */
 function FieldRing({ color, slot }: { color: string; slot: GroupSlot | null }) {
   const corners = slot ? slotCorners(slot.position, radius.control) : { borderRadius: radius.control + 1 };
@@ -1782,8 +1785,31 @@ export function Field(props: FieldProps) {
   // An error is news; the same hint as help is not.
   useAnnounce(noteIsError ? note : null);
 
+  /*
+   * A row of a FieldGroup is lifted whether or not it is ringed (v4.10,
+   * specs/v4.10/email-focus.md). The lift is a zIndex, and under Fabric a
+   * zIndex does two native things: it makes this wrapper a view of its
+   * own (without one the wrapper is flattened away and the box is mounted
+   * straight into the group's view), and it sets the wrapper's place among
+   * its siblings. Lifted only while ringed, focusing the field turned the
+   * wrapper into a view and moved the box into it, a Remove and an Insert,
+   * and a text field taken out of the window resigns: the keyboard dropped
+   * the moment it rose, the blur put the box back, and only a letter typed
+   * in the gap before the ring drew ever landed. That was Email, Password
+   * and Phone number, every group row a person types in, builds 12 to 34.
+   * Held constant, the wrapper keeps one native shape and one place
+   * whatever the focus, so nothing under it moves. A field on its own
+   * stays as it always was, flattened, ringed or not.
+   *
+   * The rule for any View above a TextInput, here or in a screen: nothing
+   * that focus or a keystroke changes may give it a native view or take
+   * one away (a zIndex, an opacity, a transform, a fill, a border,
+   * overflow, pointerEvents, accessible), nor change its key or its type.
+   * Draw the change in a sibling overlay instead, as FieldRing does.
+   * specs/v4.10/email-focus.test.mjs checks this wrapper.
+   */
   return (
-    <View style={[slot && ringColor ? styles.fieldLifted : null, style]}>
+    <View style={[slot ? styles.fieldLifted : null, style]}>
       <View>
         <Pressable
           // Tapping anywhere in the box, the label included, starts typing.
@@ -2031,7 +2057,11 @@ const EMPTY_TONE = {
  *
  * The glyph is drawn bare, with no disc behind it: an icon in a tinted
  * circle over a title is the most copied empty state there is. The title
- * is Inter, like the rest of the chrome; Playfair stays for drink names.
+ * is the marker (Sedgwick Ave, `emptyTitle`, v4.10 T.2): the headline is
+ * said in the logo's hand, and the body under it in Archivo. It is a
+ * sentence a reader must read, so it is never capped, and it takes the
+ * marker's ink room at the size it is drawn, so a tail on its last line
+ * is not clipped.
  *
  * Conventions: an empty list shows its subject's glyph and one primary
  * action. A failure shows `alert`, "Could not load …", "Check your
@@ -2119,7 +2149,15 @@ export function EmptyState({
         ) : null}
         {marks ? <EmptyMarks name={marks} kind={art ? 'art' : 'icon'} /> : null}
       </View>
-      <Text style={[textRole.emptyTitle, styles.emptyTitle, { color: t.title }]}>{title}</Text>
+      <Text
+        style={[
+          textRole.emptyTitle,
+          styles.emptyTitle,
+          { color: t.title },
+          inkRoom('display', textRole.emptyTitle.fontSize * fontScale, styles.emptyTitle),
+        ]}>
+        {title}
+      </Text>
       <Text style={[styles.emptyBody, { color: t.body }]}>{body}</Text>
       {action ? (
         <View style={styles.emptyActionBox}>
@@ -2543,7 +2581,18 @@ const styles = StyleSheet.create({
     bottom: -1,
     borderWidth: stroke.ring,
   },
-  /* A ringed row inside a group draws over the separators it shares. */
+  /*
+   * Every row inside a group, ringed or not, so its ring draws over the
+   * separators it shares and focus never changes the row's native view or
+   * order (Field's wrapper says why). At rest a row overlaps no separator,
+   * so the constant lift draws nothing differently. The one cost: equal
+   * lifts draw in document order, so a ringed row with another row under
+   * it would lose the bottom of its ring's outer point, the part past the
+   * hairline rule, under that row's fill. No group has one: each row a
+   * person types in is the only row or the last (Email; Password under
+   * the address; Phone number under the country), and a sliver of ring is
+   * worth less than the keyboard.
+   */
   fieldLifted: { zIndex: 1 },
   fieldNote: { flexDirection: 'row', alignItems: 'flex-start', gap: 6 },
   /* textMuted, not textFaint: 13pt text a person has to read. */

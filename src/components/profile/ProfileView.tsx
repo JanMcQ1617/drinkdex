@@ -80,10 +80,14 @@ import type { Post, UserProfile } from '@/types';
 /* over rows already shown keeps them and says so above them.           */
 /*                                                                      */
 /* THE PAPER, AND THE PEN'S SIGNATURE (v4.9, specs/v4.9/details/spec.md */
-/* A.5 and C.8). Yours is a tab root, a page ground: the grain is the   */
-/* root's first child, and the bar's through ScreenTopBar's `paper`, so */
-/* the two meet as one sheet. Theirs is pushed and stays the plain      */
-/* white. Your grid is signed where it stops: the twist and the swash   */
+/* A.5 and C.8). Yours is a tab root, a page ground: the paper (the     */
+/* sweep since v4.10, white to 40% of the window, then easing to        */
+/* #FBFBFB at the foot; specs/v4.10/spec.md G) is the root's first      */
+/* child, and the bar's through ScreenTopBar's `paper`, so the two meet */
+/* as one sheet. Theirs is pushed and stays the plain white. Your bar's */
+/* title is your handle, typed by you, so it is set in Archivo, not the */
+/* marker (`userTitle`, specs/v4.10/spec.md T.6): a handle must be read */
+/* exactly. Your grid is signed where it stops: the twist and the swash */
 /* under it (details/DoodleMarks' EndMark), right-aligned on the gutter */
 /* 18 under the last prints, then "Showing the latest N of M" when the  */
 /* grid is one page of more. Both are the list's footer, one static     */
@@ -545,6 +549,7 @@ export function ProfileView({
         <ScreenTopBar
           size="lg"
           title={person.username}
+          userTitle
           right={
             openMenu ? <TopBarButton icon="more" label="Profile options" onPress={openMenu} /> : undefined
           }

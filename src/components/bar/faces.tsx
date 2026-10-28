@@ -15,7 +15,7 @@ import type { Drink } from '@/types';
 /* the invert guard and the no-photo face (the glass outlined on wash). */
 /* ==================================================================== */
 
-/** The Make list's print (layout 5.6: a 40pt print beside a Playfair name). */
+/** The Make list's print (layout 5.6: a 40pt print beside a name in the marker, Sedgwick Ave). */
 export const MAKE_THUMB = 40;
 
 /** A drink's 40pt colour print. Decorative: its row says the name. */
@@ -40,7 +40,7 @@ export function nameLines(name: string, size: number, measure: number): number {
   let line = '';
   for (const word of name.split(/\s+/).filter(Boolean)) {
     const next = line ? `${line} ${word}` : word;
-    if (line && textWidth(next, 'playfair', size) > measure) {
+    if (line && textWidth(next, 'display', size) > measure) {
       lines++;
       line = word;
     } else {

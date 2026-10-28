@@ -2,14 +2,16 @@ import { NUMERAL_FONT, NUMERAL_GLYPHS } from './numeralGlyphs';
 import { cached, type PenShape, type Pt, shapeOf, toD } from './penPath';
 
 /* ==================================================================== */
-/* The outlined numerals: Inter 600's figures as hairline rings         */
+/* The outlined numerals: Anton's figures as hairline rings             */
 /*                                                                      */
 /* v4.9 (Jan, 28 Oct 2026; specs/v4.9/details/spec.md A.2), ported 1:1  */
 /* from specs/v4.9/details/tools/numerals.mjs, reading the GENERATED    */
 /* glyph table numeralGlyphs.ts (scripts/build-numerals.py, the same    */
 /* data as the board's tools/glyphs.json). Jan picked "big outlined     */
 /* numbers on drink pages and Dex sections": the drink page's Nº 0100   */
-/* and the Dex's section figures, 01, 02 and on.                        */
+/* and the Dex's section figures, 01, 02 and on. Since v4.10 the glyphs */
+/* are Anton's, the section heads' poster face, with its degree ring as */
+/* the Nº's sign (specs/v4.10/spec.md T.5), at cap 48 on both screens.  */
 /*                                                                      */
 /* PRESS, NOT PEN. A printed outline face (the way a menu or a magazine */
 /* sets a big hollow figure), so its line is UNIFORM, `ring` pt, and    */
@@ -23,7 +25,8 @@ import { cached, type PenShape, type Pt, shapeOf, toD } from './penPath';
 /* `d` is ONE path for the whole figure (build review, 28 Oct: a path   */
 /* per ring was 7 to 11 native views for "0100"): each ring is its      */
 /* outer offset plus its reversed inner one, and rings never overlap    */
-/* (Inter 600's stems are 5pt and more at every cap drawn, the ring 1), */
+/* (Anton is a static cut with no overlapping contours, and its         */
+/* thinnest counter, the 0's, is 4.7pt at cap 48 against the 1pt ring), */
 /* so the default nonzero fill paints exactly the rings.                */
 /*                                                                      */
 /* DECIMATED. The font's curves are flattened finely once (1/96 em, in  */
@@ -40,9 +43,10 @@ import { cached, type PenShape, type Pt, shapeOf, toD } from './penPath';
 /* top on the cap height and its bottom on the baseline, so a caller    */
 /* aligns the figure's caps and baseline, never its ink.                */
 /*                                                                      */
-/* Not Playfair, and not text: rule 6 keeps Playfair for drink names,   */
-/* and these are paths of Inter, hidden from VoiceOver, which reads the */
-/* plate's "Number 100" instead.                                        */
+/* Not the marker, and not text: rule 6 keeps the marker for drink      */
+/* names and the poster for section heads, and these are paths of       */
+/* Anton's file, hidden from VoiceOver, which reads the plate's "Number */
+/* 100" instead.                                                        */
 /* ==================================================================== */
 
 export const NUMERAL = {

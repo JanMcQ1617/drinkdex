@@ -34,6 +34,15 @@ import { useSignInFlow } from '@/store/signInFlow';
 /* When the remembered way in is no longer offered (its flag turned off, */
 /* or Apple unavailable on this device), the card shows every way in    */
 /* instead of a button that cannot work.                                */
+/*                                                                      */
+/* FACEBOOK IS THE EXCEPTION. With Continue with Facebook off (build 35 */
+/* on, until Meta approves the app: specs/v4.9/meta-review.md), an      */
+/* account made with it still has a way in that works, its email: the   */
+/* sign-in address is the one Facebook gave. That address's lookup      */
+/* answers "signs in another way", whose step offers a password by      */
+/* email, and the reset link signs the person in to choose one. So the  */
+/* one button is Continue with email, under a line that says so, rather */
+/* than the full card under "Last time you signed in with Facebook".    */
 /* ==================================================================== */
 
 const LAST_TIME: Record<RememberedMethod, string> = {
@@ -43,6 +52,10 @@ const LAST_TIME: Record<RememberedMethod, string> = {
   phone: 'Last time you signed in with your phone number.',
   email: 'Last time you signed in with your email.',
 };
+
+/** Under the name, for an account made with Facebook while Continue with Facebook is off. */
+const FACEBOOK_OFF =
+  'Facebook sign-in is not available right now. Continue with the email address your Facebook account uses, and Sipply can email you a link to set a password.';
 
 /** "Not you? Forget this account": the remembered record goes, and the screen becomes the first-run one. */
 function ForgetAccount() {
@@ -88,7 +101,9 @@ export function WelcomeBack({
     (method === 'google' && methods.google) ||
     (method === 'facebook' && methods.facebook) ||
     (method === 'phone' && methods.phone);
-  const primary = offered ? method : null;
+  // See FACEBOOK IS THE EXCEPTION in the header.
+  const facebookOff = method === 'facebook' && !methods.facebook;
+  const primary = offered ? method : facebookOff ? 'email' : null;
   const lastTime = method ? LAST_TIME[method] : null;
 
   return (
@@ -117,6 +132,7 @@ export function WelcomeBack({
 
       {primary ? (
         <>
+          {facebookOff ? <Text style={styles.note}>{FACEBOOK_OFF}</Text> : null}
           <View style={styles.stack}>
             <ProviderButton
               method={primary}
@@ -147,6 +163,8 @@ const styles = StyleSheet.create({
   whoText: { flex: 1 },
   name: { color: colors.text },
   lastTime: { color: colors.textMuted, marginTop: 2 },
+  // The email steps' lede (auth/EmailSteps), so the line reads as the same voice.
+  note: { ...textRole.body, color: colors.textMuted, marginBottom: space.lg },
   stack: { gap: space.sm },
   forget: { alignSelf: 'center', marginTop: space.lg, paddingVertical: space.xs },
   pressed: { opacity: 0.5 },

@@ -8,7 +8,7 @@ import { colors } from '@/constants/theme';
 /*                                                                      */
 /* Hand-drawn on a 24×24 grid. One visual language throughout:          */
 /*   • 1.6 stroke (v4 Daylight; was 1.75), round caps and joins         */
-/*     (echoes Playfair Display's bracketed serifs)                     */
+/*     (soft ends, like the marker's pen)                               */
 /*   • outline for resting state, filled for active state               */
 /*   • geometry sits on half-pixel centers so strokes stay crisp        */
 /*                                                                      */

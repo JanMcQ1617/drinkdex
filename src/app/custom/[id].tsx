@@ -53,8 +53,9 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*     figure (v4.9 C.5): the press's figure is a Dex number, and this  */
 /*     drink has none.                                                  */
 /*                                                                      */
-/* The page and its bar lie on the paper's grain (v4.9 A.5), as the     */
-/* drink page's do; loading and the unknown drink stay bare.            */
+/* The page and its bar lie on the paper (v4.9 A.5; the sweep since     */
+/* v4.10, specs/v4.10/spec.md G), as the drink page's do; loading and   */
+/* the unknown drink stay bare.                                         */
 /*                                                                      */
 /* The store is read with own keys only, so /custom/constructor is      */
 /* nothing; until the store has loaded the page is a Hold, never a bare */
@@ -182,7 +183,7 @@ export default function CustomDrinkScreen() {
 
   return (
     <View style={styles.screen}>
-      {/* The paper's grain under the page (v4.9 A.5): outside the scroll, so the page moves over a fixed sheet. */}
+      {/* The paper under the page (v4.9 A.5; the sweep, v4.10 G): outside the scroll, so the page moves over a fixed sheet. */}
       <Paper />
       {/* No visible title: the name under the print is the page's title. The bar still speaks it. */}
       {bar(drink.name, true)}

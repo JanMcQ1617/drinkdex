@@ -81,13 +81,16 @@ export default function RootLayout() {
   // For the log window's entrance. Above the splash gate's early return, like every hook here.
   const reducedMotion = useReducedMotion();
   const [fontsLoaded, fontError] = useFonts({
-    // Latin-only subsets — see assets/fonts/README.md. Each key must match
-    // its `fonts.*` value in theme.ts byte-for-byte or it silently falls back.
-    PlayfairDisplayLatin_600SemiBold: require('../../assets/fonts/PlayfairDisplayLatin_600SemiBold.ttf'),
-    PlayfairDisplayLatin_700Bold: require('../../assets/fonts/PlayfairDisplayLatin_700Bold.ttf'),
-    InterLatin_400Regular: require('../../assets/fonts/InterLatin_400Regular.ttf'),
-    InterLatin_500Medium: require('../../assets/fonts/InterLatin_500Medium.ttf'),
-    InterLatin_600SemiBold: require('../../assets/fonts/InterLatin_600SemiBold.ttf'),
+    // The marker, the poster and the text (v4.10, specs/v4.10/spec.md T.1):
+    // Latin-only subsets built by scripts/build-fonts.py, see
+    // assets/fonts/README.md. Each key must match its `fonts.*` value in
+    // theme.ts byte-for-byte or it silently falls back; build-fonts --check
+    // and check-design both fail a mismatch.
+    SedgwickAveLatin_400Regular: require('../../assets/fonts/SedgwickAveLatin_400Regular.ttf'),
+    AntonLatin_400Regular: require('../../assets/fonts/AntonLatin_400Regular.ttf'),
+    ArchivoLatin_400Regular: require('../../assets/fonts/ArchivoLatin_400Regular.ttf'),
+    ArchivoLatin_500Medium: require('../../assets/fonts/ArchivoLatin_500Medium.ttf'),
+    ArchivoLatin_600SemiBold: require('../../assets/fonts/ArchivoLatin_600SemiBold.ttf'),
   });
 
   /*

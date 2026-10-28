@@ -319,7 +319,7 @@ const APPLE_MUSIC_LINK = /^https:\/\/music\.apple\.com\//;
  * App Review 5.2.5 asks for beside any playable preview. Always on screen
  * with the preview it credits, in the viewer and in the picker.
  *
- * A text link (Inter Medium 13/18) until Jan adds Apple's badge
+ * A text link (Archivo Medium 13/18) until Jan adds Apple's badge
  * (assets/images/apple-music-badge-white.png and -black.png); then this
  * swaps to the badge, which must land before the music flag goes on. The
  * text is enough for a build that ships with the flag off.

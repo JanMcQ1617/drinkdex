@@ -35,7 +35,7 @@ const ADDED_CHROME = 2 * 14 + 2 + 16 + 8;
  * it). textWidth errs long, so the word always fits.
  */
 function keyWidth(fontScale: number): number {
-  return Math.max(KEY_WIDTH, Math.ceil(ADDED_CHROME + textWidth('Added', 'inter', textRole.buttonSm.fontSize! * fontScale)));
+  return Math.max(KEY_WIDTH, Math.ceil(ADDED_CHROME + textWidth('Added', 'text', textRole.buttonSm.fontSize! * fontScale)));
 }
 
 export function NextBottleSheet({

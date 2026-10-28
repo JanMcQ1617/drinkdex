@@ -150,16 +150,20 @@ const html = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <title>Sipply — the complete Dex</title>
 <style>
-  @font-face { font-family: 'Playfair'; font-weight: 700;
-    src: url('file://${FONTS}/PlayfairDisplayLatin_700Bold.ttf'); }
-  @font-face { font-family: 'Playfair'; font-weight: 600;
-    src: url('file://${FONTS}/PlayfairDisplayLatin_600SemiBold.ttf'); }
-  @font-face { font-family: 'Inter'; font-weight: 400;
-    src: url('file://${FONTS}/InterLatin_400Regular.ttf'); }
-  @font-face { font-family: 'Inter'; font-weight: 500;
-    src: url('file://${FONTS}/InterLatin_500Medium.ttf'); }
-  @font-face { font-family: 'Inter'; font-weight: 600;
-    src: url('file://${FONTS}/InterLatin_600SemiBold.ttf'); }
+  /*
+   * The app's faces (v4.10, specs/v4.10/spec.md T.12): the marker for the
+   * names and heads, Archivo for the rest. The marker is one cut, so it
+   * is declared for every weight: a heading's 600 or 700 below draws the
+   * cut as it is, never a synthesised bold.
+   */
+  @font-face { font-family: 'Sedgwick'; font-weight: 100 900;
+    src: url('file://${FONTS}/SedgwickAveLatin_400Regular.ttf'); }
+  @font-face { font-family: 'Archivo'; font-weight: 400;
+    src: url('file://${FONTS}/ArchivoLatin_400Regular.ttf'); }
+  @font-face { font-family: 'Archivo'; font-weight: 500;
+    src: url('file://${FONTS}/ArchivoLatin_500Medium.ttf'); }
+  @font-face { font-family: 'Archivo'; font-weight: 600;
+    src: url('file://${FONTS}/ArchivoLatin_600SemiBold.ttf'); }
 
   :root {
     --bone: #F7F2EA; --paper: #FFFFFF; --ink: #2B2322; --muted: #6A6058;
@@ -178,7 +182,7 @@ const html = `<!DOCTYPE html>
   * { box-sizing: border-box; }
   html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body { margin: 0; background: var(--paper); color: var(--ink);
-         font-family: 'Inter', sans-serif; font-size: 9.5pt; }
+         font-family: 'Archivo', sans-serif; font-size: 9.5pt; }
 
   /* --- cover ------------------------------------------------------- */
   .cover { page: bleed; break-after: page;
@@ -188,9 +192,9 @@ const html = `<!DOCTYPE html>
            padding: 0 0.9in; }
   .seal { width: 92px; height: 92px; margin: 0 auto 34px; border-radius: 50%;
           border: 1.5px solid var(--gilt); color: #E9E5DF;
-          font-family: 'Playfair', serif; font-weight: 700; font-size: 40pt;
+          font-family: 'Sedgwick', cursive; font-weight: 700; font-size: 40pt;
           line-height: 89px; }
-  .cover h1 { font-family: 'Playfair', serif; font-weight: 700;
+  .cover h1 { font-family: 'Sedgwick', cursive; font-weight: 700;
               font-size: 52pt; margin: 0; letter-spacing: -0.5pt;
               color: #F7F2EA; }
   .cover .sub { font-weight: 500; font-size: 10pt; color: var(--gilt);
@@ -201,7 +205,7 @@ const html = `<!DOCTYPE html>
                   border-bottom: 1px solid rgba(233,229,223,0.28); }
   .cover .tally div { padding: 20px 38px; }
   .cover .tally div + div { border-left: 1px solid rgba(233,229,223,0.28); }
-  .cover .tally b { display: block; font-family: 'Playfair', serif;
+  .cover .tally b { display: block; font-family: 'Sedgwick', cursive;
                     font-weight: 700; font-size: 27pt; color: #F7F2EA; }
   .cover .tally span { font-size: 7.5pt; letter-spacing: 1.6pt;
                        text-transform: uppercase;
@@ -213,12 +217,12 @@ const html = `<!DOCTYPE html>
 
   /* --- contents ---------------------------------------------------- */
   .contents { break-after: page; }
-  .contents h2 { font-family: 'Playfair', serif; font-weight: 700;
+  .contents h2 { font-family: 'Sedgwick', cursive; font-weight: 700;
                  font-size: 19pt; margin: 0 0 5px; }
   .contents .lead { color: var(--muted); font-size: 8.5pt; margin: 0 0 24px;
                     max-width: 5.2in; line-height: 1.5; }
   .toc { columns: 2; column-gap: 44px; }
-  .toc-cat { font-family: 'Playfair', serif; font-weight: 700; font-size: 12pt;
+  .toc-cat { font-family: 'Sedgwick', cursive; font-weight: 700; font-size: 12pt;
              margin: 16px 0 6px; padding-bottom: 4px;
              border-bottom: 1px solid var(--ink);
              display: flex; justify-content: space-between;
@@ -233,7 +237,7 @@ const html = `<!DOCTYPE html>
               height: 11in; width: 8.5in; background: var(--bone);
               display: flex; flex-direction: column; justify-content: center;
               text-align: center; padding: 0 1in; }
-  .cat-open h1 { font-family: 'Playfair', serif; font-weight: 700;
+  .cat-open h1 { font-family: 'Sedgwick', cursive; font-weight: 700;
                  font-size: 34pt; margin: 22px 0 10px; color: var(--wine); }
   .cat-count { color: var(--muted); font-size: 9pt; margin: 0;
                letter-spacing: 1.2pt; text-transform: uppercase; }
@@ -243,11 +247,11 @@ const html = `<!DOCTYPE html>
 
   /* --- families ---------------------------------------------------- */
   .family { margin-bottom: 20px; }
-  h2 { font-family: 'Playfair', serif; font-weight: 600; font-size: 12.5pt;
+  h2 { font-family: 'Sedgwick', cursive; font-weight: 600; font-size: 12.5pt;
        margin: 0 0 8px; padding-bottom: 5px;
        border-bottom: 1px solid var(--rule);
        break-after: avoid; }
-  .family-n { float: right; font-family: 'Inter', sans-serif; font-weight: 400;
+  .family-n { float: right; font-family: 'Archivo', sans-serif; font-weight: 400;
               font-size: 8pt; color: var(--faint); padding-top: 5px;
               font-variant-numeric: tabular-nums; }
   .cols { columns: 3; column-gap: 22px; }
