@@ -97,7 +97,7 @@ Meta wants one description per permission. Each also has the box "I agree that I
 
 > Sipply is an iOS app in public beta on TestFlight. Meta test users can sign in while the app is in development mode.
 >
-> 1. On an iPhone, install TestFlight from the App Store, then open https://testflight.apple.com/join/1T5KAfkz on that iPhone, tap Accept, then Install. Open Sipply. A short intro plays first.
+> 1. On an iPhone, install TestFlight from the App Store, then open https://testflight.apple.com/join/1VzQAnq9 on that iPhone, tap Accept, then Install. Open Sipply. A short intro plays first.
 > 2. On the welcome screen, tap "I already have an account". The screen "Sign in or join Sipply" lists Continue with Apple, Continue with Google and Continue with Facebook.
 > 3. Tap Continue with Facebook. iOS asks whether Sipply may use "supabase.co" to sign in (our sign-in provider); tap Continue.
 > 4. Facebook's login dialog opens. Log in with a test user. The dialog asks for the name and profile picture (public_profile) and the email address (email) only. Tap Continue.
@@ -191,3 +191,13 @@ Build 35 is made with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=off` (28 Oct 2026, the lead'
    Then What's New goes back to "Sign in with Apple, Google or Facebook." (`docs/appstore.md`), and `docs/testflight.md` back to its Apple, Google and Facebook paragraph. Nothing in `WelcomeBack.tsx` needs undoing: with the flag on, an account made with Facebook gets its Continue with Facebook button again.
 
 Not verified here: the WelcomeBack line and the email path on a phone, with an account made with Facebook (only people with a role on the Meta app can have made one); and whether App Store Connect lets build 34 join a second external group without another Beta App Review.
+
+## 10. Build 36: the reviewer's build (29 Oct 2026)
+
+Build 36 is build 35 with `EXPO_PUBLIC_FACEBOOK_SIGN_IN=on` (commit e0bbc09; 4ecbf18 set it back off for every later build). It sits alone in the external TestFlight group **Meta review** (id 1a1c3ae0-e209-4a7a-975e-8583e7171e3a), public link **https://testflight.apple.com/join/1VzQAnq9**, which §5.3's step 1 now names. The public group (`1T5KAfkz`) stays on build 35, with Facebook hidden. Build 34 was not used: its email field drops the keyboard, and §5.3's step 7 types an email.
+
+- Its What to Test is §5.3's steps, rewritten for testers (1,410 characters).
+- The app-level beta review notes were switched to a version that names Facebook and says it signs in only Meta test accounts until Meta finishes its review (3,990 characters). **Put `specs/v4.9/review-notes.txt` back before submitting build 37.**
+- Submitted to Beta App Review on 29 Oct: WAITING_FOR_REVIEW.
+- **Check first, on Jan's phone:** Continue with Facebook hung in the sign-in sheet on build 34, for Jan, who has a role. If it hangs on build 36 too, do not record or submit; that is a bug to find first.
+- Meta's dashboard (29 Oct): no iOS platform is added, so §5.4's Simulator build should not be asked for. The app is not linked to a business portfolio yet; that comes before Business verification.
