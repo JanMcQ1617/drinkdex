@@ -37,7 +37,9 @@ import {
   tastesOf,
   type LabelFact,
 } from '@/lib/drinkLabels';
-import { widestRun } from '@/lib/textFit';
+import { BUY_LABEL, buyLabelFor } from '@/lib/shop';
+import { postKeyLabel } from '@/lib/shopCore';
+import { textWidth, widestRun } from '@/lib/textFit';
 import { useAuth } from '@/store/auth';
 import { useSocial } from '@/store/social';
 import type {
@@ -965,16 +967,27 @@ export function FriendsWhoCaught({ drinkId, onOpenPost }: { drinkId: string; onO
 /* Pinned bar                                                           */
 /* ==================================================================== */
 
-/** Past this many characters "Post <name> again" becomes "Post it again". */
-const BAR_NAME_MAX = 22;
 const BAR_CAP = 1.3;
+/** Between the split bar's two keys: the post sheet's pair keeps the same 12. */
+const BAR_GAP = space.md;
+/**
+ * A key's label inset, each side: ui.tsx's styles.button pads 20 inside a
+ * 1pt edge. specs/v4.11/shop.test.mjs fails if the two part.
+ */
+const KEY_INSET = 20 + stroke.edge;
+
+/** The label's room on one line in each of the split bar's two keys, in points, at this window width. */
+function splitKeyRoom(windowWidth: number): number {
+  return (windowWidth - 2 * layout.gutter - BAR_GAP) / 2 - 2 * KEY_INSET;
+}
 
 /**
  * The page's one action, pinned to the foot on the page's white: "Post
  * this drink" until it is in your Dex, then "Post <name> again" ("Post it
- * again" for a name too long to sit in a key). The post key: the accent
- * fill with a white label (v4.4, one of its five places; the + window's
- * Post and the post sheet's "Save & post" are the other keys in it). Spoken "Post <name>" / "Post <name>
+ * again" for a name too long to sit in a key: lib/shopCore's
+ * postKeyLabel). The post key: the accent fill with a white label (v4.4,
+ * one of its five places; the + window's Post and the post sheet's "Save
+ * & post" are the other keys in it). Spoken "Post <name>" / "Post <name>
  * again", the full name either way. Never "Post another <name>", which
  * reads as having another (App Review 1.4.3).
  *
@@ -983,13 +996,34 @@ const BAR_CAP = 1.3;
  * the accent says post. A red key whose window posts nothing would be a
  * sixth place, and a wrong one.
  *
+ * BUY A BOTTLE (v4.11, specs/v4.11/shop.md). With `onBuy` (a spirit's
+ * page, the shop on: lib/shop's offersBottle) the bar holds two keys
+ * side by side, half and half with the post sheet's 12 between them, as
+ * Jan drew it: the post key on the left, the same key doing the same
+ * thing, and "Buy a bottle" on the right. Buy is the wash key,
+ * `secondary`, ink on the wash, so the bar keeps one hue: red still means
+ * post, and only post (check-design rule 17). Neither key carries a mark
+ * in the split: at half of a 393pt phone the post key's plus would push
+ * "Post this drink" onto a second line, and the words matter more than
+ * the glyph.
+ * The post key's label is costed against its half (postKeyLabel), so
+ * "Post <name> again" falls back to "Post it again" sooner. `buying` is
+ * the checkout starting: Button's loading, a spinner over Buy's label at
+ * its own size, and no second tap. The post key is held meanwhile, and
+ * shown held: disabled, so it dims and VoiceOver says so, rather than a
+ * live-looking key whose taps go nowhere (one sheet at a time, and
+ * Stripe's is about to rise). Without `onBuy` the bar is the one
+ * full-width key it always was.
+ *
  * The 1pt rule over it shows only while the page has more under the bar
  * (`ruled`, the route's scroll signal), as a top bar's rule does: at the
  * page's end nothing is under it, and a rule there would be a divider.
  *
  * The label caps at 1.3 and may wrap to two lines; the bar grows with it.
- * `onHeight` reports the bar's measured height so the route can pad its
- * content by it, and nothing at the foot hides under a bar that grew.
+ * Split, the two keys stand in one row and take the taller one's height,
+ * so `onHeight` (the bar's own measure) still reports the taller of the
+ * two. The route pads its content by it, and nothing at the foot hides
+ * under a bar that grew.
  *
  * The bar lies on the paper (v4.9 A.5), its first child, as the page
  * under it does, so the bar reads as the page and not as a panel: since
@@ -1005,6 +1039,8 @@ export function PinnedPostBar({
   postable = true,
   onPress,
   onHeight,
+  onBuy,
+  buying = false,
 }: {
   name: string;
   collected: boolean;
@@ -1013,9 +1049,22 @@ export function PinnedPostBar({
   postable?: boolean;
   onPress: () => void;
   onHeight?: (height: number) => void;
+  /** A spirit's page with the shop on: splits the bar and adds "Buy a bottle". */
+  onBuy?: () => void;
+  /** The checkout is starting: Buy spins and takes no second tap, and the post key is held. */
+  buying?: boolean;
 }) {
   const insets = useSafeAreaInsets();
-  const label = collected ? (name.length > BAR_NAME_MAX ? 'Post it again' : `Post ${name} again`) : 'Post this drink';
+  const { width, fontScale } = useWindowDimensions();
+  const split = onBuy != null;
+  // Costed at the size the label is drawn: Dynamic Type, up to the bar's cap.
+  const size = textRole.button.fontSize * Math.min(fontScale, BAR_CAP);
+  const label = postKeyLabel(
+    name,
+    collected,
+    split ? { room: splitKeyRoom(width), width: (text) => textWidth(text, 'text600', size) } : null,
+  );
+  const spoken = collected ? `Post ${name} again` : `Post ${name}`;
   return (
     <View
       onLayout={(e) => onHeight?.(Math.ceil(e.nativeEvent.layout.height))}
@@ -1024,15 +1073,38 @@ export function PinnedPostBar({
       <View pointerEvents="none" style={styles.barPaper}>
         <Paper />
       </View>
-      <Button
-        label={label}
-        variant={postable ? 'post' : 'primary'}
-        icon="plus"
-        block
-        onPress={onPress}
-        accessibilityLabel={collected ? `Post ${name} again` : `Post ${name}`}
-        maxFontSizeMultiplier={BAR_CAP}
-      />
+      {split ? (
+        <View style={styles.barKeys}>
+          <Button
+            label={label}
+            variant={postable ? 'post' : 'primary'}
+            onPress={onPress}
+            disabled={buying}
+            accessibilityLabel={spoken}
+            maxFontSizeMultiplier={BAR_CAP}
+            style={styles.barKey}
+          />
+          <Button
+            label={BUY_LABEL}
+            variant="secondary"
+            onPress={onBuy}
+            loading={buying}
+            accessibilityLabel={buyLabelFor(name)}
+            maxFontSizeMultiplier={BAR_CAP}
+            style={styles.barKey}
+          />
+        </View>
+      ) : (
+        <Button
+          label={label}
+          variant={postable ? 'post' : 'primary'}
+          icon="plus"
+          block
+          onPress={onPress}
+          accessibilityLabel={spoken}
+          maxFontSizeMultiplier={BAR_CAP}
+        />
+      )}
     </View>
   );
 }
@@ -1189,6 +1261,9 @@ const styles = StyleSheet.create({
     borderTopColor: 'transparent',
   },
   barRuled: { borderTopColor: colors.line },
+  /* The split bar (v4.11): two keys, half and half, the taller one's height. */
+  barKeys: { flexDirection: 'row', gap: BAR_GAP },
+  barKey: { flex: 1 },
   /* The paper's box: the bar's, up to the outer edge of its top border (v4.9 A.5). */
   barPaper: { position: 'absolute', top: -stroke.edge, left: 0, right: 0, bottom: 0 },
 });

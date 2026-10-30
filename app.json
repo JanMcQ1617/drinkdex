@@ -22,7 +22,7 @@
         "dark": "./assets/images/icon-dark.png",
         "tinted": "./assets/images/icon-tinted.png"
       },
-      "buildNumber": "36",
+      "buildNumber": "37",
       "usesAppleSignIn": true,
       "associatedDomains": [
         "webcredentials:janmcq1617.github.io"
@@ -184,6 +184,13 @@
         {
           "icon": "./assets/images/android-icon-monochrome.png",
           "color": "#0A0A0A"
+        }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.janmcqueeny.drinkdex",
+          "enableGooglePay": false
         }
       ]
     ],

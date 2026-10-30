@@ -1,0 +1,29 @@
+Thanks for trying Sipply. It's early, so tell me what's broken or confusing — both are useful.
+
+New in this build:
+
+- Buy a bottle. Open any spirit (try Campari or Green Chartreuse): the key at the bottom is now two, Post this drink and Buy a bottle. Cocktails keep the one Post this drink key. Buy a bottle is a preview in test mode: no store is connected yet, nothing ships, and no real money moves. The test order is US$1.00. Pay with Stripe's test card 4242 4242 4242 4242, any future date, any CVC and any ZIP, or with Apple Pay: in test mode your real card is not charged. Tell me if the payment sheet looks wrong, if Apple Pay doesn't show up on a phone that has it, or if anything after paying is unclear.
+- Continue with Facebook stays hidden while Meta reviews the app. If you made your account with Facebook, choose Continue with email with the address your Facebook account uses, then Or set a password by email.
+
+Worth poking at:
+
+- From the last build: email sign-in (the keyboard should stay up while you type), the new lettering (tell me if a name is cut off: try Crème de Cassis, Żubrówka, Ti' Punch), and the white background (tell me if you see a band where the tab bar meets the page).
+- People notifications. Open Activity (the heart on Home) and allow alerts, then have a second account follow you, tag you or invite you to a tournament: one notification each. Turn each kind off in Profile → "..." → Settings → Notifications.
+- Signing in with Google, and with Apple.
+- Places. On iOS 18 or later, post a drink and tap Add place, then open the place from your post.
+- Tagging people, Daily ideas (Settings → Notifications), Saved collections and their share links.
+- The Dex: For you and By number, the filters, search. Does it stay smooth when you scroll fast?
+- Tournaments: host one with someone you follow and post a drink from each account.
+- Posting a drink: the + at the top of Home.
+
+Please report:
+
+- Anything that crashes, hangs, or shows an error you can't get out of
+- A payment sheet that never opens, or a payment that seems to go through twice
+- A photo that fails to upload or appears on the wrong post
+- Anything that looks wrong — spacing, colour, text that's cut off
+- Anything you expected to be able to do and couldn't
+
+Two things I already know about: the app is 18+ and alcohol-focused by design, and your collection lives on your device — signing in elsewhere won't bring it with you.
+
+You can delete your account any time from Profile → "..." → Settings → Delete account. It removes everything, including your photos.

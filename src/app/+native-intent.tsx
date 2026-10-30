@@ -1,6 +1,8 @@
 import { INVITE_PATH } from '@/lib/invite';
 import { AUTH_CALLBACK_PATH } from '@/lib/oauth';
 import { RECOVERY_PATH } from '@/lib/recovery';
+import { SPIRIT_SHOP_ENABLED } from '@/lib/shop';
+import { STRIPE_RETURN_PATH } from '@/lib/shopCore';
 
 /* ==================================================================== */
 /* Incoming links, before the router sees them                          */
@@ -29,6 +31,13 @@ import { RECOVERY_PATH } from '@/lib/recovery';
 /*     screen they were on, and the handler's own alert or overlay       */
 /*     arrives over it. A stray auth callback has no handler to wait     */
 /*     for: its session was already taken, or the sheet was closed.      */
+/*                                                                      */
+/* A fourth, while the shop is on (v4.11, specs/v4.11/shop.md):         */
+/* drinkdex://stripe-redirect, where a payment method that left the app  */
+/* (a bank's page, another app) sends the person back to the payment    */
+/* sheet. components/ShopHost hands it to Stripe; like a stray auth      */
+/* callback it goes nowhere while running and Home on a cold start.      */
+/* With the shop off the link is passed through as before.              */
 /*                                                                      */
 /* The old drinkdex://u/<uuid> invite, which named a user rather than    */
 /* carrying a token, opens that person's profile (the /user/[id] screen) */
@@ -72,6 +81,8 @@ export function redirectSystemPath({
     if (first === INVITE_PATH || first === RECOVERY_PATH) return initial ? '/' : null;
 
     if (`${first}/${second}` === AUTH_CALLBACK_PATH) return initial ? '/' : null;
+
+    if (SPIRIT_SHOP_ENABLED && first === STRIPE_RETURN_PATH) return initial ? '/' : null;
 
     if (first === 'u' && UUID.test(second)) return `/user/${second.toLowerCase()}`;
 

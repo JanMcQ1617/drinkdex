@@ -14,9 +14,11 @@ import { InviteLinkHandler } from '@/components/InviteLinkHandler';
 import { NotificationsHost } from '@/components/notifications/NotificationsHost';
 import { CelebrationOverlay } from '@/components/CelebrationOverlay';
 import { PasswordResetOverlay } from '@/components/PasswordResetOverlay';
+import { ShopHost } from '@/components/ShopHost';
 import { SubmissionSync } from '@/components/SubmissionSync';
 import { colors, fonts } from '@/constants/theme';
 import { introHasPlayed, markIntroPlayed } from '@/lib/intro';
+import { SPIRIT_SHOP_ENABLED } from '@/lib/shop';
 import { useAuth } from '@/store/auth';
 import { useCollection } from '@/store/collection';
 
@@ -299,6 +301,13 @@ export default function RootLayout() {
         splash waited on would be one more way to hold a blank page.
       */}
       <SubmissionSync />
+      {/*
+        Stripe, for Buy a bottle on a spirit's page (v4.11,
+        specs/v4.11/shop.md): StripeProvider and the payment return link.
+        Only while the shop is on (EXPO_PUBLIC_SPIRIT_SHOP), and it draws
+        nothing; with the shop off nothing of Stripe is mounted or loaded.
+      */}
+      {SPIRIT_SHOP_ENABLED ? <ShopHost /> : null}
       {/*
         Daily ideas (v4.3 §3): replans the fortnight of local notifications
         at launch, on return to the app and after a change, opens what a
