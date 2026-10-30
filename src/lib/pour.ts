@@ -169,6 +169,57 @@ export async function stripMetadata(
   }
 }
 
+/** JPEG quality for cropCentre's file: an intermediate, re-encoded once more by persistPhoto, so kept near lossless. */
+const CROP_QUALITY = 0.92;
+
+/**
+ * The middle of a photo, `factor` times closer: the centred crop whose
+ * sides are 1/factor of the photo's, as a new JPEG, and its uri. The post
+ * camera's 2 (components/PostCamera) is this crop of the 1x photo, which
+ * is what the preview showed it doing.
+ *
+ * WHY A CROP AND NOT expo-camera'S ZOOM. The `zoom` prop is a fraction of
+ * the lens's maximum on a curve (videoZoomFactor = max ^ zoom, with max
+ * the active format's own, which differs by phone and by format and is
+ * not readable from JavaScript), so no value of it means "2x" on every
+ * phone. A crop is 2x on all of them, and loses nothing the post keeps:
+ * half of a 4032 x 3024 photo is 2016 x 1512, and stripMetadata caps
+ * every photo at 2048 anyway.
+ *
+ * The manipulator turns the pixels upright as it decodes (see
+ * stripMetadata), so the crop is centred on the photo as it is seen,
+ * whichever way the phone was held. Nothing here keeps metadata either;
+ * persistPhoto still strips the result like any other photo.
+ *
+ * THROWS on failure; the camera then keeps the whole photo (PostCamera).
+ */
+export async function cropCentre(uri: string, factor: number): Promise<string> {
+  // Released as soon as the file is written, as in stripMetadata.
+  const held: { release(): void }[] = [];
+  try {
+    const loading = ImageManipulator.manipulate(uri);
+    held.push(loading);
+    const image = await loading.renderAsync();
+    held.push(image);
+    const width = Math.round(image.width / factor);
+    const height = Math.round(image.height / factor);
+    const editing = ImageManipulator.manipulate(image);
+    held.push(editing);
+    editing.crop({
+      originX: Math.floor((image.width - width) / 2),
+      originY: Math.floor((image.height - height) / 2),
+      width,
+      height,
+    });
+    const cropped = await editing.renderAsync();
+    held.push(cropped);
+    const out = await cropped.saveAsync({ format: SaveFormat.JPEG, compress: CROP_QUALITY });
+    return out.uri;
+  } finally {
+    for (const ref of held) ref.release();
+  }
+}
+
 /**
  * Stores a picked photo in app document storage so it survives cache
  * cleanup, as the stripped copy rather than the original.

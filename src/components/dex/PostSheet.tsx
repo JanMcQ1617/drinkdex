@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Print } from '@/components/cabinet';
 import { PlaceRow } from '@/components/places/PlaceRow';
 import { PlaceSearchSheet } from '@/components/places/PlaceSearchSheet';
+import { PostCamera, useCameraAccess } from '@/components/PostCamera';
 import { TopBarTextButton } from '@/components/ScreenTopBar';
 import { SheetGrabber } from '@/components/Sheet';
 import { Button, Field } from '@/components/ui';
@@ -17,10 +18,19 @@ import { NOTE_MAX } from '@/lib/pour';
 /* The drink page's post sheet                                          */
 /*                                                                      */
 /* A first photo of the drink ("Post Negroni"), or another one ("Post   */
-/* it again"): the two sources, then the picked photo, its caption and  */
-/* the same pair of keys as the + window, "Save to Dex" and "Save &     */
-/* post". The route owns what saving does (drink/[id].tsx); this draws  */
-/* it.                                                                  */
+/* it again"): the picked photo, its caption and the same pair of keys  */
+/* as the + window, "Save to Dex" and "Save & post". The route owns     */
+/* what saving does (drink/[id].tsx); this draws it.                    */
+/*                                                                      */
+/* CAMERA FIRST (v4.11, specs/v4.11/post-camera.md). The route opens    */
+/* the camera before this sheet and raises it with the photo already    */
+/* picked, so the sheet's two sources ("Take photo", "Choose photo")    */
+/* show only when the camera is refused. "Choose another" opens the     */
+/* camera again, over this sheet, and a new photo comes back to it with */
+/* the caption and the place kept; refused, it goes back to the two     */
+/* sources as before. Take photo opens the camera too once it has been  */
+/* allowed, and otherwise the route's system camera, whose refusal says */
+/* where Settings turns it on.                                          */
 /*                                                                      */
 /* A PAGE SHEET (specs/v4-changes.md 2.2): it holds a text field, so it */
 /* is the system's sheet, which keeps the field above the keyboard and  */
@@ -35,10 +45,10 @@ import { NOTE_MAX } from '@/lib/pour';
 /* and the poster's label) and sends it with Save & post alone; Save to */
 /* Dex and Save photo drop it, since not posting is the decision (P7).  */
 /*                                                                      */
-/* THE SEARCH SHEET IS A CHILD OF THIS SHEET'S MODAL, not a sibling in  */
-/* the route: iOS presents a modal only from the topmost view           */
-/* controller, which while this sheet is up is this sheet. Rendered     */
-/* beside it in the route, it would never appear.                      */
+/* THE SEARCH SHEET AND THE CAMERA ARE CHILDREN OF THIS SHEET'S MODAL,  */
+/* not siblings in the route: iOS presents a modal only from the        */
+/* topmost view controller, which while this sheet is up is this sheet. */
+/* Rendered beside it in the route, neither would ever appear.          */
 /* ==================================================================== */
 
 export type PostSheetMode = 'unlock' | 'update';
@@ -65,6 +75,7 @@ export function PostSheet({
   onTakePhoto,
   onChoosePhoto,
   onChooseAnother,
+  onReplacePhoto,
   onNoteChange,
   onConfirm,
 }: {
@@ -84,9 +95,13 @@ export function PostSheet({
   onAddPlace: (place: PlaceRef) => void;
   onRemovePlace: () => void;
   onClose: () => void;
+  /** The system camera: Take photo, with the post camera refused. */
   onTakePhoto: () => void;
   onChoosePhoto: () => void;
+  /** Back to the two sources: Choose another, with the post camera refused. */
   onChooseAnother: () => void;
+  /** A photo from the post camera, opened over this sheet by Choose another or Take photo. */
+  onReplacePhoto: (uri: string) => void;
   onNoteChange: (text: string) => void;
   /** `alsoPost` is the person's answer to "share this?", asked by the two keys. */
   onConfirm: (alsoPost: boolean) => void;
@@ -99,6 +114,17 @@ export function PostSheet({
   /* The place search, open over this sheet (see the header on why it is drawn inside it). */
   const [searching, setSearching] = useState(false);
   const offerPlace = signedIn && pickedUri != null && placesOn;
+  /*
+   * The camera over this sheet (v4.11): "Choose another", and Take photo
+   * once the camera is allowed. `orElse` is the way each went before,
+   * for a camera that is refused.
+   */
+  const askCamera = useCameraAccess();
+  const [shooting, setShooting] = useState(false);
+  const openCamera = async (orElse: () => void) => {
+    if (await askCamera()) setShooting(true);
+    else orElse();
+  };
   const placeRow = offerPlace ? (
     <PlaceRow place={place} onAdd={() => setSearching(true)} onRemove={onRemovePlace} disabled={busy} />
   ) : null;
@@ -212,20 +238,30 @@ export function PostSheet({
                   Sign in to post. Saving to your Dex works either way.
                 </Text>
               ) : null}
-              {/* Back to the two sources, not "Retake": after a library pick there was nothing to retake. */}
+              {/*
+                The camera again, whose library key is the other source, so
+                not "Retake": after a library pick there was nothing to
+                retake. Back to the two sources if the camera is refused.
+              */}
               <Button
                 label="Choose another"
                 variant="text"
                 muted
                 block
-                onPress={onChooseAnother}
+                onPress={() => void openCamera(onChooseAnother)}
                 disabled={busy}
                 accessibilityLabel="Choose another photo"
               />
             </>
           ) : (
             <View style={styles.sources}>
-              <Button label="Take photo" variant="secondary" icon="camera" block onPress={onTakePhoto} />
+              <Button
+                label="Take photo"
+                variant="secondary"
+                icon="camera"
+                block
+                onPress={() => void openCamera(onTakePhoto)}
+              />
               <Button label="Choose photo" variant="secondary" icon="grid" block onPress={onChoosePhoto} />
             </View>
           )}
@@ -239,6 +275,15 @@ export function PostSheet({
             onClose={() => setSearching(false)}
           />
         ) : null}
+
+        <PostCamera
+          visible={shooting}
+          onPhoto={(uri) => {
+            setShooting(false);
+            onReplacePhoto(uri);
+          }}
+          onClose={() => setShooting(false)}
+        />
       </View>
     </Modal>
   );

@@ -22,15 +22,18 @@ import { InviteSheet } from '@/components/tournaments/InvitePicker';
 import { Leaderboard, PendingInvites } from '@/components/tournaments/Leaderboard';
 import {
   dateLong,
+  DaySpan,
   dayLong,
   differentDrinks,
+  type Fact,
+  Facts,
   lastMoment,
   peopleCount,
   TournamentRules,
   tournamentErrorText,
 } from '@/components/tournaments/TournamentRow';
-import { announce, Button, Card, EmptyState, haptic, Hold, Notice, SectionHeader } from '@/components/ui';
-import { colors, layout, space, textRole } from '@/constants/theme';
+import { announce, Avatar, Button, Card, EmptyState, haptic, Hold, Notice, SectionHeader } from '@/components/ui';
+import { colors, layout, space, tabular, textRole } from '@/constants/theme';
 import { REPORT_REASONS, reportUser, type ReportReason } from '@/lib/moderation';
 import { fetchProfiles } from '@/lib/social';
 import {
@@ -56,10 +59,19 @@ import type { TournamentBoard, UserProfile } from '@/types';
 /* the name (the bar holds only the back chevron): the host invites,    */
 /* ends or deletes; a member leaves or reports the host.                */
 /*                                                                      */
-/* NO DAILY COUNTER. A "1 of 3 today" meter is a quota to fill, which is */
-/* the shape App Review 1.4.3 reads as encouraging drinking. The one     */
-/* line about the cap appears only once you have reached it, to say why  */
-/* a drink posted later today will not count.                           */
+/* THE HEAD IN FIGURES (v4.11, specs/v4.11/tournaments.md 3). Under the */
+/* name, its first and last day as two calendar pages and a facts line  */
+/* (on now, the goal, who hosts, how many are in it), where two lines   */
+/* of sentences were; the winner as the trophy, a face and the count.   */
+/* Each still says its sentence to VoiceOver ("On now, ends Sunday.     */
+/* First to 10 entries wins. Hosted by @ana. 5 people."). The rules are */
+/* the one line and its "i" key, at the foot as before.                 */
+/*                                                                      */
+/* NO DAILY COUNTER. A "1 of 3 today" meter is a quota to fill, which   */
+/* is the shape App Review 1.4.3 reads as encouraging drinking. The one */
+/* line about the cap appears only once you have reached it, to say why */
+/* a drink posted later today will not count, in plain words: no tick   */
+/* or other glyph beside it, which would mark the cap as a quota met.   */
 /*                                                                      */
 /* The board is the tournaments store's (refetched on focus, on a pull   */
 /* and after every action); the people in it are merged into the social  */
@@ -356,9 +368,9 @@ function BoardView({
   const mine = board.standings.find((s) => s.userId === myId);
   const hostLabel = host ? `@${host.username}` : null;
 
-  /* ---- The head's two lines ---- */
+  /* ---- The head: two pages and a facts line, said as the sentences they were ---- */
   const status = live
-    ? `On now · ends ${dayLong(lastMoment(board.endsAt))}`
+    ? `On now, ends ${dayLong(lastMoment(board.endsAt))}`
     : finished
       ? `Finished ${dateLong(lastMoment(board.finishedAt ?? board.endsAt))}`
       : `Starts ${dayLong(new Date(board.startsAt))}`;
@@ -366,9 +378,21 @@ function BoardView({
     board.target === null
       ? 'Most entries by the end wins'
       : `First to ${differentDrinks(board.target)} wins`;
-  const hosted = isHost ? 'hosted by you' : hostLabel ? `hosted by ${hostLabel}` : 'hosted by another member';
-  // The goal and the host share a line (less stuff): two quiet lines under the name, not three.
-  const goalLine = `${goal} · ${hosted}`;
+  const hosted = isHost ? 'Hosted by you' : hostLabel ? `Hosted by ${hostLabel}` : 'Hosted by another member';
+  const members = board.standings.length;
+  const headSpoken = `${status}. ${goal}. ${hosted}. ${peopleCount(members)}.`;
+  const headFacts: Fact[] = [
+    live
+      ? { key: 'state', icon: 'play', text: 'On now' }
+      : finished
+        ? { key: 'state', icon: 'check', text: 'Finished' }
+        : { key: 'state', icon: 'calendar', text: 'Coming up' },
+    board.target === null
+      ? { key: 'goal', icon: 'trophy', text: 'Most entries' }
+      : { key: 'goal', icon: 'flag', text: `First to ${board.target}` },
+    { key: 'host', icon: 'profile', text: isHost ? 'You' : (hostLabel ?? 'Host') },
+    { key: 'people', icon: 'users', text: String(members) },
+  ];
 
   /* ---- Who won ---- */
   const winnerStanding = board.winnerId ? board.standings.find((s) => s.userId === board.winnerId) : undefined;
@@ -552,18 +576,41 @@ function BoardView({
               </View>
             ) : null}
           </View>
-          <Text style={styles.line}>{status}</Text>
-          <Text style={styles.line}>{goalLine}</Text>
+          <View style={styles.headFacts} accessible accessibilityLabel={headSpoken}>
+            <DaySpan first={new Date(board.startsAt)} last={lastMoment(board.endsAt)} />
+            <Facts items={headFacts} />
+          </View>
         </View>
 
         {/* ---- Finished: who won ---- */}
         {finished ? (
           <Card style={styles.winner}>
+            {/* The trophy, the face and the count; the sentence is what VoiceOver says. */}
             <View style={styles.winnerRow} accessible accessibilityLabel={winnerLine}>
               {board.winnerId || board.winnerHidden ? (
                 <Icon name="trophy" size={28} color={colors.text} />
               ) : null}
-              <Text style={styles.winnerText}>{winnerLine}</Text>
+              {board.winnerId && winnerProfile ? (
+                <Avatar
+                  name={winnerProfile.displayName}
+                  accent={winnerProfile.accent}
+                  size={WINNER_FACE}
+                  avatarPath={winnerProfile.avatarPath}
+                />
+              ) : null}
+              <Text style={styles.winnerText}>
+                {board.winnerHidden ? 'Winner hidden' : board.winnerId ? winnerName : 'No winner'}
+              </Text>
+              {board.winnerId && winnerStanding ? (
+                <View style={styles.winnerCount}>
+                  <Text style={styles.winnerFigure} maxFontSizeMultiplier={1.3}>
+                    {winnerStanding.distinct}
+                  </Text>
+                  <Text style={styles.line} maxFontSizeMultiplier={1.3}>
+                    {winnerStanding.distinct === 1 ? 'entry' : 'entries'}
+                  </Text>
+                </View>
+              ) : null}
             </View>
           </Card>
         ) : null}
@@ -572,10 +619,17 @@ function BoardView({
         {live && member ? (
           <View style={styles.actions}>
             <Button label="Post a drink you've had" icon="plus" block onPress={() => router.navigate('/log')} />
+            {/*
+             * Only once the cap is reached, never as a count toward it, and
+             * plain words with no glyph: a tick beside a day's count reads as
+             * a quota met (NO DAILY COUNTER above). Why a later post will not
+             * count, nothing more.
+             */}
             {mine && mine.today >= board.dailyCap ? (
-              <Text style={styles.line}>
-                {board.dailyCap} entries counted today. Entries you post later today will not count in
-                this tournament.
+              <Text
+                style={styles.line}
+                accessibilityLabel={`${board.dailyCap} entries counted today. Entries you post later today will not count in this tournament.`}>
+                {`${board.dailyCap} counted today · later posts today won't count here`}
               </Text>
             ) : null}
           </View>
@@ -605,12 +659,8 @@ function BoardView({
         {/* ---- Standings ---- */}
         {board.standings.length > 0 ? (
           <>
+            {/* Before the start: no note under the head (the first page above says when), and no ranks. */}
             <SectionHeader title="Standings" size="group" style={styles.header} />
-            {board.state === 'upcoming' ? (
-              <Text style={[styles.line, styles.groupNote]}>
-                Coming up: entries count from {dayLong(new Date(board.startsAt))}
-              </Text>
-            ) : null}
             <Leaderboard
               standings={board.standings}
               people={profiles}
@@ -651,6 +701,8 @@ function BoardView({
 
 /** TopBarButton's glyph, for the ••• beside the name. */
 const MORE_GLYPH = 26;
+/** The winner's face in the panel: the Friends rows' 40. */
+const WINNER_FACE = 40;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
@@ -670,9 +722,9 @@ const styles = StyleSheet.create({
    * descender under the swash's first 56pt; a tournament's name is typed by
    * people and often has one ("Negroni week"), and at 4 the rising right
    * end met the g's tail with 0 to 1pt between them. At 7 the ink sits
-   * below Archivo 28's descender line. The status line's caps start about
-   * 16.5 under the box (nameRow's 8, the head's 4 gap, the small line's
-   * own lead), so the ink keeps 9.5 clear of the words below it.
+   * below Archivo 28's descender line. Since v4.11 the calendar pages
+   * start 20 under the box (nameRow's 8, the head's 4 gap, headFacts' 8),
+   * so the ink keeps 13 clear of their wash.
    */
   swash: { position: 'absolute', left: 1, bottom: -7 },
   /*
@@ -684,16 +736,22 @@ const styles = StyleSheet.create({
     marginTop: ((textRole.title.lineHeight ?? layout.hit) - layout.hit) / 2,
   },
   line: { ...textRole.small, color: colors.textMuted },
+  /*
+   * The pages and the facts, 8 under the head's gap: the swash's ink
+   * reaches 7 under the name's box and the pages' wash starts 20 under it
+   * (nameRow's 8, the head's 4, this 8), so the two never meet.
+   */
+  headFacts: { marginTop: space.sm, gap: space.md },
 
   winner: { marginTop: space.xl, padding: space.lg },
   winnerRow: { flexDirection: 'row', alignItems: 'center', gap: space.md },
   winnerText: { ...textRole.bodyStrong, flex: 1, color: colors.text },
+  winnerCount: { alignItems: 'flex-end' },
+  winnerFigure: { ...textRole.heroFigure, ...tabular, color: colors.text },
 
   actions: { marginTop: space.xl, gap: space.md },
 
   /* A group head insets its own 16 (it was drawn for a panel); this puts its words on the gutter. */
   header: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: -space.lg },
-  /* Under a group header, in line with it and with the rows below. */
-  groupNote: { marginBottom: space.sm },
   rules: { marginTop: space.xl },
 });

@@ -4,6 +4,7 @@ import type { MyTournamentRow } from '@/lib/database.types';
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import { isMissingFunction } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
+import { DAY_MS, WINDOW_RULES } from '@/lib/tournamentWindow';
 import type {
   Standing,
   TournamentBoard,
@@ -26,15 +27,21 @@ import type {
 /* fetchMyTournaments says so with null, which switches the feature off. */
 /* ==================================================================== */
 
-/** The server's rules, for the screens' limits and copy. The server has the last word on each. */
+/**
+ * The server's rules, for the screens' limits and copy. The server has the
+ * last word on each. The window's and the goal's live in tournamentWindow
+ * (pure, so its test runs them as they are); these repeat the two the
+ * screens read most.
+ */
 export const TOURNAMENT_LIMITS = {
   nameMax: 40,
-  maxDays: 31,
+  maxDays: WINDOW_RULES.maxDays,
   /** Host included, so a host can invite 49. */
   maxMembers: 50,
+  /** The goal stepper's quick picks (the host sheet's goal chips until v4.11). */
   targetChoices: [5, 10, 20],
   /** Entries that count per member per day (private.tournament_daily_cap()). */
-  dailyCap: 3,
+  dailyCap: WINDOW_RULES.dailyCap,
 } as const;
 
 /*
@@ -80,55 +87,12 @@ export type Result<T> = { ok: true; value: T } | { ok: false; reason: Tournament
 /* -------------------------------------------------------------------- */
 /* Dates                                                                */
 /*                                                                      */
-/* Chips, not a calendar: there is no date-picker module in the binary  */
-/* and none may be added, and every chip is a valid window by           */
-/* construction (a start within 30 days, a length of 1 to 31 days).     */
+/* A calendar since v4.11 (specs/v4.11/tournaments.md): the host taps a */
+/* first and a last day, and lib/tournamentWindow turns them into the   */
+/* two instants sent here and greys out every day that would make a     */
+/* window the server refuses. No date-picker module: the calendar is    */
+/* drawn in JavaScript (components/tournaments/RangeCalendar).          */
 /* -------------------------------------------------------------------- */
-
-export type TournamentStart = 'now' | 'tomorrow' | 'nextMonday';
-export type TournamentLength = '3d' | '1w' | '2w' | '30d';
-
-/** Days in each length chip. */
-export const LENGTH_DAYS: Record<TournamentLength, number> = { '3d': 3, '1w': 7, '2w': 14, '30d': 30 };
-
-/**
- * The longest goal a length allows: dailyCap × days, since at most three
- * new drinks count a day ("First to 10" cannot be won in 3 days). The host
- * sheet greys out goal chips above it; create_tournament refuses them with
- * invalid_goal.
- */
-export function maxGoalFor(length: TournamentLength): number {
-  return TOURNAMENT_LIMITS.dailyCap * LENGTH_DAYS[length];
-}
-
-/**
- * When a start chip starts, in the phone's time zone: now, tomorrow at
- * 00:00, or the next Monday at 00:00 (always ahead: on a Monday it is the
- * Monday after).
- */
-export function startChoice(kind: TournamentStart, now: Date = new Date()): Date {
-  if (kind === 'now') return new Date(now.getTime());
-  const day = now.getDay(); // 0 Sunday … 6 Saturday
-  const ahead = kind === 'tomorrow' ? 1 : (1 - day + 7) % 7 || 7;
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + ahead);
-}
-
-/**
- * The (exclusive) end of a tournament that starts at `start` and runs for a
- * length chip. Calendar days in the phone's zone, so a tournament that
- * starts at midnight ends at midnight across a clock change.
- */
-export function endFor(start: Date, length: TournamentLength): Date {
-  return new Date(
-    start.getFullYear(),
-    start.getMonth(),
-    start.getDate() + LENGTH_DAYS[length],
-    start.getHours(),
-    start.getMinutes(),
-    start.getSeconds(),
-    start.getMilliseconds(),
-  );
-}
 
 /** The phone's IANA zone, which becomes the tournament's day for the daily cap. */
 function deviceTimeZone(): string {
@@ -323,8 +287,6 @@ export function cleanTournamentName(name: string): string {
   return name.replace(/\s+/g, ' ').trim();
 }
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-
 /**
  * Hosts a tournament and invites people you follow. Resolves to its id.
  *
@@ -346,20 +308,23 @@ export async function createTournament(input: {
   if (containsObjectionable(name)) return { ok: false, reason: 'objectionable' };
 
   /*
-   * A "Now" start is computed when the chip is picked; a host who then
-   * spends more than five minutes on the name and the invitations would be
-   * refused as invalid_dates. A start already in the past means "now", so
-   * both ends move up together and the length stays what was chosen.
+   * A start of today is "now", worked out as Create is pressed, and a few
+   * moments pass before this line: a start already in the past moves up
+   * to now, so the server never reads it as one (it refuses a start more
+   * than five minutes old). The end does not move with it: it is a
+   * calendar day's boundary, the 00:00 after the last day the host
+   * picked, and a window that this makes too short is refused below.
    */
-  const late = Date.now() - input.startsAt.getTime();
-  const startsAt = late > 0 ? new Date(input.startsAt.getTime() + late) : input.startsAt;
-  const endsAt = late > 0 ? new Date(input.endsAt.getTime() + late) : input.endsAt;
+  const startsAt = input.startsAt.getTime() < Date.now() ? new Date() : input.startsAt;
+  const endsAt = input.endsAt;
 
   const span = endsAt.getTime() - startsAt.getTime();
   if (!(span >= DAY_MS && span <= TOURNAMENT_LIMITS.maxDays * DAY_MS)) return { ok: false, reason: 'invalid_dates' };
   if (
     input.target !== null &&
-    (input.target < 2 || input.target > 100 || input.target > TOURNAMENT_LIMITS.dailyCap * Math.ceil(span / DAY_MS))
+    (input.target < WINDOW_RULES.minTarget ||
+      input.target > WINDOW_RULES.maxTarget ||
+      input.target > WINDOW_RULES.dailyCap * Math.ceil(span / DAY_MS))
   ) {
     return { ok: false, reason: 'invalid_goal' };
   }

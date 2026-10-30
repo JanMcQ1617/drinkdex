@@ -1,16 +1,18 @@
+import { useState } from 'react';
 import {
   Pressable,
   type StyleProp,
   StyleSheet,
   Text,
-  type TextStyle,
   useWindowDimensions,
   View,
+  type ViewStyle,
 } from 'react-native';
 
-import { Icon } from '@/components/icons';
+import { Icon, type IconName } from '@/components/icons';
+import { BottomSheet } from '@/components/Sheet';
 import { Button } from '@/components/ui';
-import { colors, layout, space, tabular, textRole } from '@/constants/theme';
+import { colors, layout, radius, space, tabular, textRole } from '@/constants/theme';
 import { TOURNAMENT_LIMITS, type TournamentError } from '@/lib/tournaments';
 import type { TournamentSummary } from '@/types';
 
@@ -29,6 +31,25 @@ import type { TournamentSummary } from '@/types';
 /* shots, volume, streaks or speed, and never a count of anything but   */
 /* entries. No meter or progress bar toward the daily cap or a goal:    */
 /* the standings are the only figures.                                  */
+/*                                                                      */
+/* LESS TEXT (v4.11, specs/v4.11/tournaments.md; Jan, 30 Oct 2026:      */
+/* "almost no text explaining in the tournament section, less words     */
+/* more visuals"). What a screen said in sentences it now shows: a      */
+/* glyph and a figure in a facts line (the dates as "30 Oct – 5 Nov",   */
+/* the people, the goal), a day as a calendar page (DayTile). The words */
+/* did not go: every row, line and tile still SAYS its sentence to      */
+/* VoiceOver, so the spoken app is the app it was. Still no meter and   */
+/* no bar: a bar of the time left is a countdown, which the cards' own  */
+/* rule (TournamentCard) keeps out, and a bar toward a goal or the cap  */
+/* is the quota the rule above keeps out.                               */
+/*                                                                      */
+/* THE RULES SHRINK TO ONE LINE, NEVER OFF THE SCREEN. The sentence     */
+/* every tournament screen carried (App Review 1.4.3 and 5.3) is now    */
+/* "No prizes · Apple is not a sponsor · Drink responsibly" and the "i" */
+/* key beside it, which opens the sentence itself, word for word, in a  */
+/* short sheet (TournamentRules). Both are in the scroll body of every  */
+/* tournament screen, as the sentence was, and specs/v4.11/             */
+/* tournaments.test.mjs fails a screen that drops them.                 */
 /* ==================================================================== */
 
 /* -------------------------------------------------------------------- */
@@ -66,8 +87,8 @@ export function ordinal(n: number): string {
   }
 }
 
-const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const MONTHS = [
+export const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+export const MONTHS = [
   'January',
   'February',
   'March',
@@ -109,7 +130,7 @@ export function lastMoment(endsAt: string | Date): Date {
   return new Date(t - 60_000);
 }
 
-/** "Mon 6 Oct": the host sheet's "Runs … to …" line. */
+/** "Mon 6 Oct": a day said short. */
 export function shortDay(d: Date, now: number = Date.now()): string {
   return `${WEEKDAYS[d.getDay()]!.slice(0, 3)} ${d.getDate()} ${MONTHS[d.getMonth()]!.slice(0, 3)}${yearOf(d, now)}`;
 }
@@ -127,7 +148,7 @@ export function dayWord(d: Date, now: number = Date.now()): string {
   return `${d.getDate()} ${MONTHS[d.getMonth()]!.slice(0, 3)}${yearOf(d, now)}`;
 }
 
-/** "today", "tomorrow", else "Saturday 18 October": a tournament page's status line. */
+/** "today", "tomorrow", else "Saturday 18 October": a tournament page's spoken status. */
 export function dayLong(d: Date, now: number = Date.now()): string {
   const ahead = daysAhead(d, now);
   if (ahead === 0) return 'today';
@@ -140,6 +161,32 @@ export function dateLong(d: Date, now: number = Date.now()): string {
   return `${d.getDate()} ${MONTHS[d.getMonth()]}${yearOf(d, now)}`;
 }
 
+/**
+ * A tournament's days as figures: "30 Oct – 5 Nov", "2–8 Nov" inside one
+ * month, "5 Nov" for a single day, the year after the end when it is not
+ * this one. The end is its last day (ends_at is exclusive). An en dash,
+ * which the Latin subset has: the arrow (U+2192) it does not.
+ */
+export function spanText(startsAt: string | Date, endsAt: string | Date, now: number = Date.now()): string {
+  const a = typeof startsAt === 'string' ? new Date(startsAt) : startsAt;
+  const b = lastMoment(endsAt);
+  const mon = (d: Date) => MONTHS[d.getMonth()]!.slice(0, 3);
+  const sameYear = a.getFullYear() === b.getFullYear();
+  if (sameYear && a.getMonth() === b.getMonth()) {
+    if (a.getDate() === b.getDate()) return `${b.getDate()} ${mon(b)}${yearOf(b, now)}`;
+    return `${a.getDate()}–${b.getDate()} ${mon(b)}${yearOf(b, now)}`;
+  }
+  return `${a.getDate()} ${mon(a)}${sameYear ? '' : yearOf(a, now)} – ${b.getDate()} ${mon(b)}${yearOf(b, now)}`;
+}
+
+/** The same days, spoken: "30 October to 5 November". */
+export function spokenSpan(startsAt: string | Date, endsAt: string | Date, now: number = Date.now()): string {
+  const a = typeof startsAt === 'string' ? new Date(startsAt) : startsAt;
+  const b = lastMoment(endsAt);
+  if (daysAhead(b, a.getTime()) === 0) return dateLong(b, now);
+  return `${dateLong(a, now)} to ${dateLong(b, now)}`;
+}
+
 /* -------------------------------------------------------------------- */
 /* Errors                                                               */
 /* -------------------------------------------------------------------- */
@@ -150,16 +197,18 @@ export function dateLong(d: Date, now: number = Date.now()): string {
  * sheet's (§11.3); the next three come from the page's actions (an
  * invitation answered twice, a tournament deleted under you). `fallback`
  * is the screen's own "Could not … Check your connection" sentence, for
- * a request that failed or never arrived.
+ * a request that failed or never arrived. The calendar and the stepper
+ * keep a host inside the server's dates and goals, so the two refusals
+ * about them are now only a sheet left open past midnight.
  */
 export function tournamentErrorText(reason: TournamentError, fallback: string): string {
   switch (reason) {
     case 'objectionable':
       return 'That name includes language Sipply does not allow.';
     case 'invalid_dates':
-      return 'Those dates do not work. Pick a start within 30 days.';
+      return 'Those dates no longer work. Pick them again.';
     case 'invalid_goal':
-      return 'That goal cannot be reached in that time. Pick a longer tournament or a smaller goal.';
+      return 'That goal no longer fits those dates. Pick a smaller one.';
     case 'too_many':
       return 'You are hosting 5 tournaments already. End one to host another.';
     case 'no_invitees':
@@ -181,27 +230,160 @@ export const NO_INVITEES =
   'None of those people can be invited. They may have blocked you or stopped following.';
 
 /* -------------------------------------------------------------------- */
-/* The rules line                                                       */
+/* The rules                                                            */
 /* -------------------------------------------------------------------- */
 
 /**
+ * The rules in full: the sentence every tournament screen showed until
+ * v4.11, word for word, now in the "i" key's sheet. "Please drink
+ * responsibly." is part of it on purpose (App Review 1.4.3), and so is
+ * "Apple is not a sponsor" (5.3, though nothing of value is ever
+ * offered). The cap is the server's (tournament_board's daily_cap).
+ */
+export function tournamentRulesText(cap: number = TOURNAMENT_LIMITS.dailyCap): string {
+  return (
+    `Each different drink you post while it runs adds one entry, up to ${cap} a day. ` +
+    'Entries are counted, never amounts. No prizes, and Apple is not a sponsor. Please drink responsibly.'
+  );
+}
+
+/** The rules on the screen itself: the three facts a reviewer looks for, in one line. */
+export const RULES_LINE = 'No prizes · Apple is not a sponsor · Drink responsibly';
+
+/** What the Tournaments tab's Friends half counts: its foot sentence until v4.11, now in the same sheet. */
+export const FRIENDS_RULE =
+  'Friends shows how many different drinks each person has posted, each counted once.';
+
+/** The "i" key: 32 square (a chip's height), 6 of slop above and below for the finger's 44. */
+const INFO_KEY = layout.chip;
+
+/**
  * The rules, on every tournament screen, in the scroll body (never only
- * in a collapsed section). "Please drink responsibly." is part of it on
- * purpose (App Review 1.4.3), and so is "Apple is not a sponsor" (5.3,
- * though nothing of value is ever offered).
+ * in a collapsed section): RULES_LINE, and the "i" key that opens the
+ * whole sentence in a short sheet. Read-only, so the sheet has no key:
+ * the scrim, the grabber and VoiceOver's escape close it (AboutSheet's
+ * pattern). `friends` adds the Friends board's sentence under the rules,
+ * on the Tournaments tab, where the board sits beside them.
+ *
+ * A row, never text inside another Text: the key is its own control, so
+ * VoiceOver reaches the line and then "Tournament rules, button".
  */
 export function TournamentRules({
   cap = TOURNAMENT_LIMITS.dailyCap,
+  friends = false,
   style,
 }: {
   cap?: number;
-  style?: StyleProp<TextStyle>;
+  friends?: boolean;
+  style?: StyleProp<ViewStyle>;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <View style={[styles.rulesRow, style]}>
+      <Text style={styles.rules}>{RULES_LINE}</Text>
+      <Pressable
+        onPress={() => setOpen(true)}
+        hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+        accessibilityRole="button"
+        accessibilityLabel="Tournament rules"
+        accessibilityHint="Opens the full rules"
+        style={({ pressed }) => [styles.infoKey, pressed && styles.infoKeyPressed]}>
+        <Icon name="info" size={18} color={colors.text} />
+      </Pressable>
+      <BottomSheet visible={open} onClose={() => setOpen(false)} title="Rules">
+        <Text selectable style={styles.sheetText}>
+          {tournamentRulesText(cap)}
+        </Text>
+        {friends ? <Text style={[styles.sheetText, styles.sheetMore]}>{FRIENDS_RULE}</Text> : null}
+      </BottomSheet>
+    </View>
+  );
+}
+
+/* -------------------------------------------------------------------- */
+/* Facts and days                                                       */
+/* -------------------------------------------------------------------- */
+
+/** One glyph and its figure or word: "[calendar] 30 Oct – 5 Nov", "[users] 5". */
+export type Fact = { key: string; icon: IconName; text: string };
+
+/**
+ * A line of facts, each a 14pt glyph beside small muted text, wrapping
+ * whole facts (never a fact across a line). Silent: whatever holds it
+ * says the sentence the facts stand for, so a VoiceOver user hears "Ends
+ * Sunday, 5 people" and never "calendar, 30 Oct".
+ */
+export function Facts({ items, style }: { items: readonly Fact[]; style?: StyleProp<ViewStyle> }) {
+  if (items.length === 0) return null;
+  return (
+    <View
+      style={[styles.facts, style]}
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants">
+      {items.map((f) => (
+        <View key={f.key} style={styles.fact}>
+          <Icon name={f.icon} size={14} color={colors.textMuted} />
+          <Text style={styles.factText} numberOfLines={1}>
+            {f.text}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+/** The calendar page's width; three lines of it stand 18 + 34 + 18 over 8 above and below. */
+export const DAY_TILE_W = 72;
+
+/**
+ * A day as a calendar page: the weekday, the date as a big figure, the
+ * month. On the wash, squared, like a ticket's fill. `day` null is a day
+ * not picked yet: an en dash where the figure goes. Silent, like Facts:
+ * the screen says the dates in words. The figure is capped at 1.3, as
+ * every figure in a fixed box is (the rank columns' cap): the page grows
+ * to fit it, and the words above and below wrap rather than clip.
+ */
+export function DayTile({ day, style }: { day: Date | null; style?: StyleProp<ViewStyle> }) {
+  return (
+    <View
+      style={[styles.tile, style]}
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants">
+      <Text style={styles.tileWord} maxFontSizeMultiplier={1.3} numberOfLines={1}>
+        {day ? WEEKDAYS[day.getDay()]!.slice(0, 3) : ' '}
+      </Text>
+      <Text style={[styles.tileFigure, !day && styles.tileEmpty]} maxFontSizeMultiplier={1.3} numberOfLines={1}>
+        {day ? day.getDate() : '–'}
+      </Text>
+      <Text style={styles.tileWord} maxFontSizeMultiplier={1.3} numberOfLines={1}>
+        {day ? MONTHS[day.getMonth()]!.slice(0, 3) : ' '}
+      </Text>
+    </View>
+  );
+}
+
+/** Two pages and the arrow between them: a tournament's first and last day. */
+export function DaySpan({
+  first,
+  last,
+  style,
+}: {
+  first: Date;
+  last: Date | null;
+  style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <Text style={[styles.rules, style]}>
-      Each different drink you post while it runs adds one entry, up to {cap} a day. Entries are
-      counted, never amounts. No prizes, and Apple is not a sponsor. Please drink responsibly.
-    </Text>
+    <View
+      style={[styles.span, style]}
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants">
+      <DayTile day={first} />
+      <Icon name="arrowRight" size={20} color={colors.textMuted} />
+      <DayTile day={last} />
+    </View>
   );
 }
 
@@ -227,8 +409,11 @@ export function rowKind(t: TournamentSummary): RowKind | null {
   return t.state;
 }
 
-/** The second line, as shown and as spoken. Names are usernames, without the @. */
-function secondLine(
+/**
+ * The second line as VoiceOver says it (the facts line shows it). Names
+ * are usernames, without the @. The sentence it was on screen until v4.11.
+ */
+function spokenLine(
   t: TournamentSummary,
   kind: RowKind,
   myId: string,
@@ -250,19 +435,44 @@ function secondLine(
     t.state === 'live'
       ? `Ends ${dayWord(lastMoment(t.endsAt))}`
       : `Starts ${dayWord(new Date(t.startsAt))}`;
+  const goal = t.target === null ? '' : ` · first to ${differentDrinks(t.target)}`;
   /*
    * An invitation also says who it is from: it is a stranger's name
    * otherwise, and who asked is what decides whether to join.
    */
-  if (kind === 'invite' && names.host) return `Hosted by @${names.host} · ${when} · ${people}`;
-  return `${when} · ${people}`;
+  if (kind === 'invite' && names.host) return `Hosted by @${names.host} · ${when} · ${people}${goal}`;
+  return `${when} · ${people}${goal}`;
+}
+
+/** The second line as shown: glyphs and figures. */
+function factsOf(
+  t: TournamentSummary,
+  kind: RowKind,
+  myId: string,
+  names: { host?: string; winner?: string },
+): Fact[] {
+  if (kind === 'finished') {
+    if (t.winnerHidden) return [{ key: 'won', icon: 'trophy', text: 'Hidden' }];
+    if (!t.winnerId) return [{ key: 'won', icon: 'trophy', text: 'No winner' }];
+    const who = t.winnerId === myId ? 'You' : names.winner ? `@${names.winner}` : null;
+    if (!who) return [{ key: 'when', icon: 'calendar', text: spanText(t.startsAt, t.finishedAt ?? t.endsAt) }];
+    return [{ key: 'won', icon: 'trophy', text: `${who} · ${t.winnerDistinct ?? 0}` }];
+  }
+  const facts: Fact[] = [];
+  if (kind === 'invite' && names.host) facts.push({ key: 'host', icon: 'addPerson', text: `@${names.host}` });
+  facts.push({ key: 'when', icon: 'calendar', text: spanText(t.startsAt, t.endsAt) });
+  facts.push({ key: 'people', icon: 'users', text: String(t.members) });
+  if (t.target !== null) facts.push({ key: 'goal', icon: 'flag', text: String(t.target) });
+  return facts;
 }
 
 /**
  * One tournament in the list, min 64, on the page at the gutter (rows
  * are set apart by space, not rules): its name (Archivo, never the
- * marker: it is not a drink's name), the line under it, and at the end your
- * place (on now), Join and Decline (an invitation), or a chevron.
+ * marker: it is not a drink's name), the facts line under it (its dates,
+ * the people in it and a "First to" goal; who won, once finished), and at
+ * the end your place (on now), Join and Decline (an invitation), or a
+ * chevron.
  *
  * A row with Join and Decline is not one button: the name and line open
  * the tournament, and each answer is its own control, so VoiceOver can
@@ -270,8 +480,9 @@ function secondLine(
  * row is one button, chevron and place included.
  *
  * Your place shows only once you have an entry counted: at nought every
- * rank is the server's tie-break, and "You're 1st" with nothing posted
- * would be a claim the standings do not make.
+ * rank is the server's tie-break, and "1st" with nothing posted would be
+ * a claim the standings do not make. It is the ordinal alone ("2nd");
+ * VoiceOver says "you're 2nd".
  */
 export function TournamentRow({
   tournament: t,
@@ -296,15 +507,15 @@ export function TournamentRow({
   answering?: 'join' | 'decline' | null;
 }) {
   const { fontScale } = useWindowDimensions();
-  const line = secondLine(t, kind, myId, { host: hostName, winner: winnerName });
-  const place =
-    kind === 'live' && t.myRank != null && (t.myDistinct ?? 0) > 0 ? `You're ${ordinal(t.myRank)}` : null;
-  const spoken = `${t.name}, ${line}${place ? `, you're ${ordinal(t.myRank!)}` : ''}`;
+  const names = { host: hostName, winner: winnerName };
+  const line = spokenLine(t, kind, myId, names);
+  const place = kind === 'live' && t.myRank != null && (t.myDistinct ?? 0) > 0 ? ordinal(t.myRank) : null;
+  const spoken = `${t.name}, ${line}${place ? `, you're ${place}` : ''}`;
 
   const text = (
     <View style={styles.text}>
       <Text style={styles.name}>{t.name}</Text>
-      <Text style={styles.line}>{line}</Text>
+      <Facts items={factsOf(t, kind, myId, names)} />
     </View>
   );
 
@@ -362,7 +573,37 @@ export function TournamentRow({
 }
 
 const styles = StyleSheet.create({
-  rules: { ...textRole.small, color: colors.textMuted },
+  /* The rules: the line beside its key, the key on the line's first line. */
+  rulesRow: { flexDirection: 'row', alignItems: 'flex-start', gap: space.md },
+  rules: { ...textRole.small, flex: 1, color: colors.textMuted, paddingTop: (INFO_KEY - 18) / 2 },
+  /* A squared wash key, the secondary key's fill and press. */
+  infoKey: {
+    width: INFO_KEY,
+    height: INFO_KEY,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: radius.control,
+    backgroundColor: colors.bgSunk,
+  },
+  infoKeyPressed: { backgroundColor: colors.press },
+  sheetText: { ...textRole.body, color: colors.text },
+  sheetMore: { marginTop: space.md, marginBottom: space.sm },
+
+  facts: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: space.md, rowGap: 2 },
+  fact: { flexDirection: 'row', alignItems: 'center', gap: space.xs, flexShrink: 1 },
+  factText: { ...textRole.small, ...tabular, flexShrink: 1, color: colors.textMuted },
+
+  tile: {
+    width: DAY_TILE_W,
+    alignItems: 'center',
+    paddingVertical: space.sm,
+    borderRadius: radius.control,
+    backgroundColor: colors.bgSunk,
+  },
+  tileWord: { ...textRole.small, color: colors.textMuted },
+  tileFigure: { ...textRole.heroFigure, color: colors.text },
+  tileEmpty: { color: colors.textMuted },
+  span: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
 
   /* On the page: the gutter each side, 12pt between the parts, the press filling the row edge to edge. */
   row: {
@@ -378,8 +619,7 @@ const styles = StyleSheet.create({
   pressed: { backgroundColor: colors.press },
   text: { flex: 1, gap: 2 },
   name: { ...textRole.bodyStrong, color: colors.text },
-  line: { ...textRole.small, color: colors.textMuted },
-  place: { ...textRole.bodyStrong, ...tabular, color: colors.text },
+  place: { ...textRole.count, color: colors.text },
   answers: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
   /* Large text: a column, the answers under the name, in line with its left edge. */
   rowStacked: { flexDirection: 'column', alignItems: 'stretch', gap: 0, paddingRight: layout.gutter },

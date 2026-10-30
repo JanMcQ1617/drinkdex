@@ -572,7 +572,11 @@ const ACCENT_FILES = {
     why: 'the Dex key (1)',
     within: ['DexKey', 'styles.dexKey', 'styles.dexKeyPressed'],
   },
-  'components/ui.tsx': { why: "the post key's skin, Button's `post` variant (2)", within: ['BUTTON_SKIN.post'] },
+  'components/ui.tsx': {
+    // rowTitleRed: Settings' three Account rows in red, Jan's call on 30 Oct 2026 (ListRow's `red`).
+    why: "the post key's skin, Button's `post` variant (2), and the red Account rows",
+    within: ['BUTTON_SKIN.post', 'styles.rowTitleRed'],
+  },
   'components/plate.tsx': { why: 'the caught Nº plate (3)', within: ['NumberPlate', 'styles.caught'] },
   'components/ScreenTopBar.tsx': {
     why: "TopBarCount's caught figure (4) and TopBarButton's dot, the Activity dot (5)",

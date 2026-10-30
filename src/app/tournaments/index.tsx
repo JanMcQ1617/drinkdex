@@ -39,6 +39,12 @@ import type { TournamentSummary } from '@/types';
 /* the bar holds only Back (layout principle 8), so "Host a tournament" */
 /* is a key under the list.                                             */
 /*                                                                      */
+/* v4.11 (specs/v4.11/tournaments.md 3): each row's second line is a    */
+/* facts line (its dates as figures, the people, a "First to" goal; who */
+/* won, once finished) that says its old sentence to VoiceOver; "No     */
+/* tournaments yet" says what to do, not what a tournament is; and the  */
+/* rules are the one line and the "i" key.                              */
+/*                                                                      */
 /* v4.9 (specs/v4.9/details/spec.md C.9). "No tournaments yet" opts in  */
 /* to the pen's composition over its trophy: the shaker up left and a   */
 /* lime up right, an arch with the glyph at its foot, top-placed and    */
@@ -253,7 +259,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
       icon="trophy"
       doodle="shaker"
       title="No tournaments yet"
-      body="Host one and invite people you follow to keep a shared log of Dex entries. Whoever posts the most entries wins."
+      body="Host one with people you follow."
       action={{ label: 'Host a tournament', onPress: host }}
     />
   );
@@ -275,7 +281,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
         }
         showsVerticalScrollIndicator={false}>
         {body}
-        {/* The rules, under the list on every visit, in the scroll body. */}
+        {/* The rules, under the list on every visit, in the scroll body: one line and the "i" key. */}
         <TournamentRules style={styles.rules} />
       </ScrollView>
     </View>

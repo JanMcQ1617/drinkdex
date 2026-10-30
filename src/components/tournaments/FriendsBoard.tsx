@@ -14,7 +14,7 @@ import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, useScrolledPast } from '@/components/ScreenTopBar';
 import { TournamentCard, type CardPerson } from '@/components/tournaments/TournamentCard';
-import { ordinal, rowKind, TournamentRules } from '@/components/tournaments/TournamentRow';
+import { FRIENDS_RULE, ordinal, rowKind, TournamentRules } from '@/components/tournaments/TournamentRow';
 import { Avatar, Button, EmptyState, Hold, Notice, SectionHeader } from '@/components/ui';
 import { colors, fonts, layout, motion, radius, space, tabular, textRole } from '@/constants/theme';
 import { formatCount } from '@/data';
@@ -100,6 +100,13 @@ import type { FriendStanding, TournamentSummary } from '@/types';
 /* 020 the tournaments half is. Neither: the full list's own "not here  */
 /* yet". Each store asks again on the next focus, so applying a         */
 /* migration needs no new build.                                        */
+/*                                                                      */
+/* LESS TEXT (v4.11, specs/v4.11/tournaments.md 3). "Nothing on now"    */
+/* stands alone, without the sentence about what a tournament is; the   */
+/* "Find people to follow" link without the sentence above it; and the  */
+/* foot is the tournaments' one-line rules and "i" key, whose sheet     */
+/* also holds the Friends half's sentence (what is counted). Each was   */
+/* said beside the thing it explained; the "i" key is where it is read. */
 /*                                                                      */
 /* Less stuff: no panels round the rows and no rules between them, rows */
 /* on the page set apart by space (layout principle 3). Nothing here    */
@@ -446,10 +453,7 @@ export function FriendsBoard({ myId }: { myId: string }) {
            * above as it has under the quiet line: at the band's own 12 it
            * read as this sentence's underline, a mark on body text.
            */
-          <Text style={[styles.nothing, bandShown && styles.nothingOverRule]}>
-            Nothing on now. A tournament is a shared log of the Dex entries you and people you follow post
-            between two dates.
-          </Text>
+          <Text style={[styles.nothing, bandShown && styles.nothingOverRule]}>Nothing on now</Text>
         )
       ) : null}
 
@@ -509,23 +513,28 @@ export function FriendsBoard({ myId }: { myId: string }) {
       {signed ? <EndMark name="shaker" style={styles.endMark} /> : null}
       {followsNobody ? (
         <View style={styles.lonely}>
-          <Text style={styles.footText}>Follow people to see how many different drinks each has posted.</Text>
           <Pressable
             onPress={() => router.push('/find-friends')}
             accessibilityRole="button"
             accessibilityLabel="Find people to follow"
+            accessibilityHint="To see how many different drinks each has posted"
             style={({ pressed }) => [styles.findLine, pressed && styles.dimmed]}>
+            <Icon name="addPerson" size={CHEVRON} color={colors.text} />
             <Text style={styles.find}>Find people to follow</Text>
             <Icon name="chevronRight" size={CHEVRON} color={colors.text} />
           </Pressable>
         </View>
       ) : null}
-      {/* What is counted, then the tournaments' own rules, in one Text (never only in a collapsed section). */}
-      {!firstVisit && (friendsShown || tSupported) ? (
-        <Text style={[styles.footText, styles.rules]}>
-          {friendsShown ? 'Friends shows how many different drinks each person has posted, each counted once. ' : ''}
-          {tSupported ? <TournamentRules style={styles.footText} /> : null}
-        </Text>
+      {/*
+        The tournaments' rules, one line and the "i" key, in the scroll
+        body (never only in a collapsed section); the key's sheet also says
+        what Friends counts. Without tournaments (no 020) the Friends
+        sentence stands on its own, as it did.
+      */}
+      {!firstVisit && tSupported ? (
+        <TournamentRules friends={friendsShown} style={styles.rules} />
+      ) : !firstVisit && friendsShown ? (
+        <Text style={[styles.footText, styles.rules]}>{FRIENDS_RULE}</Text>
       ) : null}
     </View>
   );

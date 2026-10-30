@@ -12,9 +12,11 @@ import { colors } from '@/constants/theme';
 /*                                                                      */
 /* After picking a drink, the photo is the screen: a 4:5 print across   */
 /* the column, 392 x 490 at 440. Empty, it is the wash with a camera    */
-/* glyph and nothing else; one tap asks "camera or library", the two    */
-/* ways in as peers, because half the time the drink was photographed   */
-/* before anyone opened Sipply.                                         */
+/* glyph and nothing else; one tap opens the post camera (v4.11,        */
+/* components/PostCamera), whose library key keeps the two ways in as   */
+/* peers, because half the time the drink was photographed before       */
+/* anyone opened Sipply. The sheet below, "camera or library", is what  */
+/* the tap opens when the camera is refused, so posting still works.    */
 /*                                                                      */
 /* The choice is the kit's ActionSheet, which runs a row only once the  */
 /* sheet has gone: the camera and the library are UIKit controllers,    */

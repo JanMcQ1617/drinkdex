@@ -387,7 +387,8 @@ export default function SettingsScreen() {
           Instagram parks Log Out at the very bottom under its own "Login"
           heading, far from anything routine. The three irreversible actions
           get the same treatment, ordered by how much they destroy, drawn
-          destructive (ink SemiBold, underlined) with no chevron: they act
+          destructive (SemiBold, in red since 30 Oct 2026 at Jan's ask, the
+          way iOS's Settings does; ListRow's `red`) with no chevron: they act
           rather than navigate. Each keeps its one line, which says what is
           kept and what goes before the confirm does.
 
@@ -402,6 +403,7 @@ export default function SettingsScreen() {
             subtitle="Locks every entry again. Posts and account stay."
             onPress={confirmReset}
             destructive
+            red
             disabled={pending !== null}
           />
           <ListRow
@@ -409,6 +411,7 @@ export default function SettingsScreen() {
             subtitle={pending === 'signout' ? 'Signing out…' : 'Your collection stays on this phone.'}
             onPress={confirmSignOut}
             destructive
+            red
             busy={pending === 'signout'}
             disabled={pending === 'delete'}
           />
@@ -421,6 +424,7 @@ export default function SettingsScreen() {
             }
             onPress={confirmDelete}
             destructive
+            red
             busy={pending === 'delete'}
             disabled={pending === 'signout'}
           />

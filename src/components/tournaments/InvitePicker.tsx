@@ -17,7 +17,7 @@ import { useScrollEdges } from '@/components/log/scrollEdges';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { NO_INVITEES, tournamentErrorText } from '@/components/tournaments/TournamentRow';
 import { Avatar, Button, EmptyState, haptic, Hold, Notice, SearchField } from '@/components/ui';
-import { colors, layout, radius, space, stroke, textRole } from '@/constants/theme';
+import { colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
 import { fetchConnections } from '@/lib/social';
 import { invite } from '@/lib/tournaments';
 import type { UserProfile } from '@/types';
@@ -137,14 +137,30 @@ export function InvitePicker({
 
   return (
     <View style={styles.picker}>
-      {/* A count, never a meter: how many are asked, and when the seats run out. */}
-      <Text style={styles.counter} accessibilityLiveRegion="polite">
-        {max <= 0
-          ? 'This tournament is full.'
-          : full
-            ? `${selected.length} invited, as many as there is room for`
-            : `${selected.length} invited`}
-      </Text>
+      {/*
+        A count, never a meter: how many are asked out of the seats there
+        are, as figures ("3 / 49", v4.11), said in words.
+      */}
+      {max <= 0 ? (
+        <Text style={styles.counter} accessibilityLiveRegion="polite">
+          This tournament is full.
+        </Text>
+      ) : (
+        <View
+          style={styles.counterRow}
+          accessible
+          accessibilityLiveRegion="polite"
+          accessibilityLabel={
+            full
+              ? `${selected.length} invited, as many as there is room for`
+              : `${selected.length} invited, room for ${max}`
+          }>
+          <Icon name="addPerson" size={14} color={colors.textMuted} />
+          <Text style={[styles.counter, tabular]}>
+            {selected.length} / {max}
+          </Text>
+        </View>
+      )}
       {offered.length > SEARCH_FROM ? (
         <SearchField
           value={query}
@@ -360,6 +376,7 @@ function InviteSheetBody({
 const styles = StyleSheet.create({
   picker: { gap: space.md },
   counter: { ...textRole.small, color: colors.textMuted },
+  counterRow: { flexDirection: 'row', alignItems: 'center', gap: space.xs },
   note: { ...textRole.small, color: colors.textMuted, paddingVertical: space.sm },
 
   /* 64pt with a 40pt face, its content on the gutter and its press 8pt past it. */

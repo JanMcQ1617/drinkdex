@@ -4,6 +4,8 @@ New in this build:
 
 - Buy a bottle. Open any spirit (try Campari or Green Chartreuse): the key at the bottom is now two, Post this drink and Buy a bottle. Cocktails keep the one Post this drink key. Buy a bottle is a preview in test mode: no store is connected yet, nothing ships, and no real money moves. The test order is US$1.00. Pay with Stripe's test card 4242 4242 4242 4242, any future date, any CVC and any ZIP, or with Apple Pay: in test mode your real card is not charged. Tell me if the payment sheet looks wrong, if Apple Pay doesn't show up on a phone that has it, or if anything after paying is unclear.
 - Continue with Facebook stays hidden while Meta reviews the app. If you made your account with Facebook, choose Continue with email with the address your Facebook account uses, then Or set a password by email.
+- Hosting a tournament: pick the first and last day on a calendar (starting within the next 30 days, up to 31 days long), then a goal: most entries, or first to a number you pick (the dates set how high it can go). The "i" beside the rules line opens the full rules. Tell me if a day inside those limits is greyed out.
+- Post opens the camera. Tap Post this drink, or pick a drink after the + on Home: the X closes it, the key at the bottom left opens your photos, and .5, 1 and 2 zoom where your phone can. Tell me if a photo comes out framed differently from what you saw.
 
 Worth poking at:
 
@@ -14,7 +16,7 @@ Worth poking at:
 - Tagging people, Daily ideas (Settings → Notifications), Saved collections and their share links.
 - The Dex: For you and By number, the filters, search. Does it stay smooth when you scroll fast?
 - Tournaments: host one with someone you follow and post a drink from each account.
-- Posting a drink: the + at the top of Home.
+- Posting a drink: the + at the top of Home. Also with the camera turned off for Sipply in Settings: you should still be able to post a photo from your library.
 
 Please report:
 

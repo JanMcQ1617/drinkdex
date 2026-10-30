@@ -493,6 +493,7 @@ export function MediaIconButton({
   selected,
   disabled,
   accessibilityHint,
+  accessibilityValue,
   style,
 }: {
   icon: IconName;
@@ -501,6 +502,8 @@ export function MediaIconButton({
   selected?: boolean;
   disabled?: boolean;
   accessibilityHint?: string;
+  /** A key with more than two states says which it is in (the post camera's Flash: off, auto, on). */
+  accessibilityValue?: { text: string };
   /** Placement only (absolute top/left over the media). */
   style?: StyleProp<ViewStyle>;
 }) {
@@ -512,6 +515,7 @@ export function MediaIconButton({
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}
+      accessibilityValue={accessibilityValue}
       accessibilityState={{ disabled: !!disabled, selected: !!selected }}
       style={({ pressed }) => [
         styles.mediaButton,
@@ -561,6 +565,9 @@ export function Tag({ label, style }: { label: string; style?: StyleProp<ViewSty
  * small glyph after it ('close' on a token that removes itself).
  *
  * 32pt tall with 6pt of hitSlop above and below, so the finger gets 44.
+ * A word is wider than 44 by itself; a bare figure is not ("5" is about
+ * 34), so `figure` holds the chip to 44 wide with its label centred, and
+ * the finger gets 44 both ways (the host sheet's goal picks, 5 10 20).
  */
 export function Chip({
   label,
@@ -570,6 +577,7 @@ export function Chip({
   trailingIcon,
   count,
   disabled,
+  figure,
   accessibilityLabel,
 }: {
   label: string;
@@ -579,6 +587,8 @@ export function Chip({
   trailingIcon?: IconName;
   count?: number;
   disabled?: boolean;
+  /** A label of a figure or two: at least 44 wide, centred. */
+  figure?: boolean;
   accessibilityLabel?: string;
 }) {
   const ink = selected ? colors.onInk : colors.text;
@@ -601,6 +611,7 @@ export function Chip({
       accessibilityState={{ selected, disabled: !!disabled }}
       style={({ pressed }) => [
         styles.chip,
+        figure && styles.chipFigure,
         selected && styles.chipSelected,
         pressed && (selected ? styles.chipSelectedPressed : styles.chipPressed),
         disabled && styles.buttonDisabled,
@@ -945,6 +956,13 @@ interface ListRowBaseProps {
   emphasis?: boolean;
   /** Title SemiBold and underlined (no red in Daylight), and never a chevron. */
   destructive?: boolean;
+  /**
+   * With `destructive`: the title in the accent instead of underlined.
+   * Settings' Account rows only (Reset collection, Sign out, Delete
+   * account), Jan's call on 30 Oct 2026, the way iOS's own Settings
+   * colours them. check-design keeps the accent to `styles.rowTitleRed`.
+   */
+  red?: boolean;
   disabled?: boolean;
   /** A spinner in place of the leading icon while the row's action runs. */
   busy?: boolean;
@@ -996,6 +1014,7 @@ export function ListRow({
   onPress,
   emphasis,
   destructive,
+  red,
   disabled,
   busy,
   accessibilityLabel,
@@ -1043,7 +1062,7 @@ export function ListRow({
                 textRole.rowTitle,
                 { color: ink },
                 (emphasis || destructive) && styles.rowTitleEmphasis,
-                destructive && styles.rowTitleDestructive,
+                destructive && (red ? styles.rowTitleRed : styles.rowTitleDestructive),
               ]}>
               {title}
             </Text>
@@ -2340,6 +2359,7 @@ const styles = StyleSheet.create({
     borderColor: colors.hair,
     backgroundColor: colors.bg,
   },
+  chipFigure: { minWidth: layout.hit, justifyContent: 'center' },
   chipSelected: { backgroundColor: colors.text, borderColor: colors.text },
   chipPressed: { backgroundColor: colors.press },
   chipSelectedPressed: { backgroundColor: colors.inkPressed, borderColor: colors.inkPressed },
@@ -2404,6 +2424,7 @@ const styles = StyleSheet.create({
   rowText: { flex: 1 },
   rowTitleEmphasis: { fontFamily: fonts.bodySemiBold },
   rowTitleDestructive: { textDecorationLine: 'underline' },
+  rowTitleRed: { color: colors.accent },
   rowSubtitle: { ...textRole.rowSubtitle, color: colors.textMuted },
   rowTrailingText: {
     fontFamily: fonts.body,

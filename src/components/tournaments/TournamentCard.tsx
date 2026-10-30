@@ -3,7 +3,16 @@ import { Pressable, StyleSheet, Text, View, type ViewStyle } from 'react-native'
 
 import { TicketCard } from '@/components/details/PressMarks';
 import { Icon } from '@/components/icons';
-import { dayWord, differentDrinks, lastMoment, ordinal, peopleCount } from '@/components/tournaments/TournamentRow';
+import {
+  dayWord,
+  differentDrinks,
+  type Fact,
+  Facts,
+  lastMoment,
+  ordinal,
+  peopleCount,
+  spanText,
+} from '@/components/tournaments/TournamentRow';
 import { Avatar } from '@/components/ui';
 import { colors, fonts, space, tabular, textRole } from '@/constants/theme';
 import type { TournamentBoard, TournamentSummary } from '@/types';
@@ -12,7 +21,11 @@ import type { TournamentBoard, TournamentSummary } from '@/types';
 /* One running tournament, as a card on the Tournaments tab             */
 /* (specs/v4.7/spec.md 2.3)                                             */
 /*                                                                      */
-/* Its name, when it ends and how many are in it, and the top three.    */
+/* Its name, its dates and how many are in it (a facts line since       */
+/* v4.11: the calendar glyph and "30 Oct – 5 Nov", the people glyph and */
+/* "5", and a "First to" goal's flag and N; spoken "Ends Sunday, 5      */
+/* people, first to 10 entries"), and the top three, each with the      */
+/* count as a figure.                                                   */
 /* The cards are the tab's only panels (the wash, 8pt corners, no       */
 /* edge); everything else there sits on the page.                       */
 /*                                                                      */
@@ -38,10 +51,11 @@ import type { TournamentBoard, TournamentSummary } from '@/types';
 /* RANKS ARE THE SERVER'S. A tournament breaks a tie by who got there   */
 /* first, so ranks never repeat on a card (1, 2, 3 even at 4 entries    */
 /* each), unlike the Friends board under it, where a tie is a tie. A    */
-/* member with nothing counted yet shows no figure and "No entries yet" */
-/* (Leaderboard's rule: at nought every rank is only the tie-break).    */
-/* The time left is a day, never a countdown clock; the only figures    */
-/* are entries (App Review 1.4.3).                                      */
+/* member with nothing counted yet shows no rank and a dash where the   */
+/* figure goes, said "no entries yet" (Leaderboard's rule: at nought    */
+/* every rank is only the tie-break). The dates are days, never a       */
+/* countdown clock or a bar of time left; the only figures are entries  */
+/* (App Review 1.4.3).                                                  */
 /* ==================================================================== */
 
 /** One person as a card line needs them: from the Friends board's rows or the social store. */
@@ -77,19 +91,26 @@ export const TournamentCard = React.memo(function TournamentCard({
   /** Its width: the full column for one card, 300 for a row of them. */
   style?: ViewStyle;
 }) {
-  const meta = `Ends ${dayWord(lastMoment(t.endsAt))} · ${peopleCount(t.members)}`;
+  // The facts line as VoiceOver says it, the goal as TournamentRow's spokenLine says it.
+  const goal = t.target === null ? '' : `, first to ${differentDrinks(t.target)}`;
+  const meta = `Ends ${dayWord(lastMoment(t.endsAt))}, ${peopleCount(t.members)}${goal}`;
+  const facts: Fact[] = [
+    { key: 'when', icon: 'calendar', text: spanText(t.startsAt, t.endsAt) },
+    { key: 'people', icon: 'users', text: String(t.members) },
+  ];
+  if (t.target !== null) facts.push({ key: 'goal', icon: 'flag', text: String(t.target) });
   const top = (board?.standings ?? []).slice(0, TOP);
 
   /*
    * One button to VoiceOver, everything on it said once in reading order:
-   * "Negroni week. Ends Sunday, 5 people. 1st ana, 6 entries. 2nd you,
-   * 4 entries." The meta's dot is a comma when spoken.
+   * "Negroni week. Ends Sunday, 5 people, first to 10 entries. 1st ana,
+   * 6 entries. 2nd you, 4 entries." The goal only when it has one.
    */
   const spokenLines = top.map((s) => {
     const who = s.userId === myId ? 'you' : (personOf(s.userId)?.username ?? SOMEONE);
     return s.distinct > 0 ? `${ordinal(s.rank)} ${who}, ${differentDrinks(s.distinct)}` : `${who}, no entries yet`;
   });
-  const spoken = [t.name, meta.replace(' · ', ', '), ...spokenLines].map((x) => `${x}.`).join(' ');
+  const spoken = [t.name, meta, ...spokenLines].map((x) => `${x}.`).join(' ');
 
   return (
     <Pressable
@@ -111,9 +132,8 @@ export const TournamentCard = React.memo(function TournamentCard({
                 </Text>
                 <Icon name="chevronRight" size={CHEVRON} color={colors.textMuted} />
               </View>
-              <Text numberOfLines={1} style={styles.meta}>
-                {meta}
-              </Text>
+              {/* One 18pt line: the facts never wrap here (the card's 158 counts one). */}
+              <Facts items={facts} style={styles.meta} />
             </>
           }>
           {/* Under the tear line; the 10 above it is the ticket's own gap, where the notches bite. */}
@@ -139,7 +159,9 @@ export const TournamentCard = React.memo(function TournamentCard({
                     {person?.username ?? SOMEONE}
                     {mine ? <Text style={styles.you}> (you)</Text> : null}
                   </Text>
-                  <Text style={styles.entries}>{ranked ? differentDrinks(s.distinct) : 'No entries yet'}</Text>
+                  <Text style={styles.entries} maxFontSizeMultiplier={1.3}>
+                    {ranked ? s.distinct : '–'}
+                  </Text>
                 </View>
               );
             })}
@@ -159,7 +181,7 @@ const styles = StyleSheet.create({
   card: { minHeight: CARD_HEIGHT },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: space.sm },
   name: { ...textRole.bodyStrong, flex: 1, color: colors.text },
-  meta: { ...textRole.small, color: colors.textMuted },
+  meta: { flexWrap: 'nowrap', overflow: 'hidden' },
   line: { minHeight: LINE, flexDirection: 'row', alignItems: 'center', gap: 10 },
   rank: {
     ...textRole.small,

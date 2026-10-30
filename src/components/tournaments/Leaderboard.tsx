@@ -4,7 +4,7 @@ import { PenCrown } from '@/components/details/DoodleMarks';
 import { Icon } from '@/components/icons';
 import { differentDrinks } from '@/components/tournaments/TournamentRow';
 import { Avatar } from '@/components/ui';
-import { colors, layout, radius, space, tabular, textRole } from '@/constants/theme';
+import { colors, layout, radius, space, textRole } from '@/constants/theme';
 import type { Standing, TournamentState, UserProfile } from '@/types';
 
 /* ==================================================================== */
@@ -12,9 +12,11 @@ import type { Standing, TournamentState, UserProfile } from '@/types';
 /* (spec v3.1 §11.3)                                                    */
 /*                                                                      */
 /* One row per accepted member, in the server's rank order: rank,       */
-/* face, username, "{k} entries". The only figures on a                  */
-/* tournament's page are these: no meter, no progress toward a goal or   */
-/* the daily cap (App Review 1.4.3).                                     */
+/* face, username, and the count as a figure ("6"; VoiceOver says "6    */
+/* entries", and since v4.11 the screen shows the figure alone,         */
+/* specs/v4.11/tournaments.md 3). The only figures on a tournament's    */
+/* page are these: no meter, no progress toward a goal or the daily cap */
+/* (App Review 1.4.3).                                                  */
 /*                                                                      */
 /* Your row is said three ways, not by colour alone: the wash under it, */
 /* "(you)" after your name, and ", you" in its spoken label. The winner  */
@@ -137,7 +139,9 @@ export function Leaderboard({
               {name}
               {mine ? <Text style={styles.you}> (you)</Text> : null}
             </Text>
-            <Text style={styles.count}>{differentDrinks(distinct)}</Text>
+            <Text style={styles.count} maxFontSizeMultiplier={1.3}>
+              {distinct}
+            </Text>
           </Pressable>
         );
       })}
@@ -147,8 +151,10 @@ export function Leaderboard({
 
 /**
  * The people invited who have not answered yet, for the host and the
- * members: a face, the username and "Hasn't joined yet". Static rows:
- * there is nothing to do about an invitation but wait for it.
+ * members: a face, the username and the envelope (an invitation still
+ * out; "hasn't joined yet" is what VoiceOver says, under the "Invited"
+ * head the screen gives them). Static rows: there is nothing to do about
+ * an invitation but wait for it.
  */
 export function PendingInvites({
   ids,
@@ -175,10 +181,8 @@ export function PendingInvites({
               size={FACE}
               avatarPath={person?.avatarPath}
             />
-            <View style={styles.pendingText}>
-              <Text style={styles.pendingName}>{name}</Text>
-              <Text style={styles.pendingNote}>Hasn&apos;t joined yet</Text>
-            </View>
+            <Text style={[styles.pendingName, styles.pendingText]}>{name}</Text>
+            <Icon name="mail" size={18} color={colors.textMuted} />
           </View>
         );
       })}
@@ -205,10 +209,9 @@ const styles = StyleSheet.create({
   rankText: { ...textRole.count, color: colors.textMuted, textAlign: 'center' },
   username: { ...textRole.bodyStrong, flex: 1, color: colors.text },
   you: { fontFamily: textRole.body.fontFamily, color: colors.textMuted },
-  count: { ...textRole.body, ...tabular, color: colors.text, textAlign: 'right' },
+  count: { ...textRole.count, color: colors.text, textAlign: 'right' },
 
   pendingRow: { minHeight: layout.rowTall - space.sm },
   pendingText: { flex: 1 },
   pendingName: { ...textRole.bodyStrong, color: colors.text },
-  pendingNote: { ...textRole.small, color: colors.textMuted },
 });

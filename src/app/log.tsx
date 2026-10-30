@@ -1,5 +1,6 @@
 import { useFocusEffect, useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
-import { usePreventRemove } from 'expo-router/react-navigation';
+import type { NativeStackNavigationProp } from 'expo-router/native-stack';
+import { type ParamListBase, usePreventRemove } from 'expo-router/react-navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Alert,
@@ -29,6 +30,7 @@ import { TagPeopleRow } from '@/components/log/TagPeopleRow';
 import { MusicPicker } from '@/components/MusicPicker';
 import { PlaceRow } from '@/components/places/PlaceRow';
 import { PlaceSearchSheet } from '@/components/places/PlaceSearchSheet';
+import { PostCamera, useCameraAccess } from '@/components/PostCamera';
 import { SongArtwork } from '@/components/songs';
 import { TagPeopleSheet } from '@/components/tags/TagPeopleSheet';
 import { announce, Button, Field, haptic, SearchField } from '@/components/ui';
@@ -77,6 +79,20 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
 /*   COMPOSE  after picking: the drink's name as the bar's title, the   */
 /*            photo (4:5 across the column), the caption, and Post at   */
 /*            the foot with "Save to Dex only" under it. About 6.       */
+/*                                                                      */
+/* CAMERA FIRST (v4.11, specs/v4.11/post-camera.md). Compose opens on   */
+/* the camera (components/PostCamera) whenever it opens without a       */
+/* photo: a drink picked from the results, or a drink this window was   */
+/* opened for (`/log?drink=`, once the window has finished rising: iOS  */
+/* drops a modal asked for mid-presentation). The photo slot opens the  */
+/* camera too. Close camera leaves compose as it was, the slot empty;   */
+/* a photo taken or chosen lands in the slot. With the camera refused,  */
+/* nothing opens by itself and the slot asks "camera or library" as it  */
+/* did before (PhotoSourceSheet), so posting still works; its Take      */
+/* photo says where Settings turns the camera on. A drink handed back   */
+/* by the add-a-drink form does not open the camera by itself: the form */
+/* is a sheet still on its way down when it lands, and the slot is one  */
+/* tap.                                                                 */
 /*                                                                      */
 /* WHY FIND FIRST. v3.3 put the photo first and the search under it,    */
 /* and the screen carried both at once: a print beside the field, a     */
@@ -243,7 +259,8 @@ type Step = 'find' | 'compose';
 export default function PostDrinkScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const navigation = useNavigation();
+  // The native stack's, for its transitionEnd (the camera on arrival, below).
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   /*
    * `/log?drink=<id>` opens with that drink chosen, straight into compose:
@@ -275,6 +292,10 @@ export default function PostDrinkScreen() {
   const [query, setQuery] = useState(() => resolveDrink(preselectId)?.name ?? '');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [choosingSource, setChoosingSource] = useState(false);
+  /** The post camera is up (v4.11). */
+  const [shooting, setShooting] = useState(false);
+  /** Opened for a drink: the camera is due once the window has finished rising. */
+  const cameraOnArrival = useRef(resolveDrink(preselectId) != null);
   /** The caption. Still `note` in code: the Dex entry's field (UnlockRecord.note) keeps that name. */
   const [note, setNote] = useState('');
   /** Said under the caption when it would be refused. */
@@ -337,6 +358,37 @@ export default function PostDrinkScreen() {
   const isCustom = drink != null && isCustomId(drink.id);
 
   /*
+   * The camera (v4.11). `orSources` is a tap on the photo slot, which
+   * falls back to the old "camera or library" sheet when the camera is
+   * refused; the camera opening by itself falls back to nothing, leaving
+   * the slot to be tapped.
+   */
+  const askCamera = useCameraAccess();
+  const openCamera = useCallback(
+    async (orSources: boolean) => {
+      if (await askCamera()) setShooting(true);
+      else if (orSources) setChoosingSource(true);
+    },
+    [askCamera],
+  );
+
+  /*
+   * A window opened for a drink (`/log?drink=`) starts in compose with no
+   * photo, so the camera is next, once the window is up: transitionEnd,
+   * opening, fires after the rise (fade under Reduce Motion) is done. A
+   * window that never reports it keeps its slot, one tap from the camera.
+   */
+  useEffect(
+    () =>
+      navigation.addListener('transitionEnd', (e) => {
+        if (e.data.closing || !cameraOnArrival.current) return;
+        cameraOnArrival.current = false;
+        void openCamera(false);
+      }),
+    [navigation, openCamera],
+  );
+
+  /*
    * Picking a drink you already have makes this an update, not a catch:
    * the entry keeps its date and takes the new photo, there is nothing to
    * celebrate, and posting adds the photo to the drink's post rather than
@@ -391,14 +443,19 @@ export default function PostDrinkScreen() {
    * keeps taps while the keyboard is up (keyboardShouldPersistTaps). Said
    * aloud, since the row under the finger is gone.
    */
-  const pick = useCallback((d: Drink) => {
-    haptic.select();
-    Keyboard.dismiss();
-    searchRef.current?.blur();
-    setDrink(d);
-    setStep('compose');
-    announce(`Selected ${d.name}`);
-  }, []);
+  const pick = useCallback(
+    (d: Drink) => {
+      haptic.select();
+      Keyboard.dismiss();
+      searchRef.current?.blur();
+      setDrink(d);
+      setStep('compose');
+      announce(`Selected ${d.name}`);
+      // Compose without a photo opens on the camera (v4.11); a photo already here stays.
+      if (photoUri == null) void openCamera(false);
+    },
+    [photoUri, openCamera],
+  );
 
   /*
    * Back from compose: the search as it was left. The field mounts again
@@ -910,7 +967,7 @@ export default function PostDrinkScreen() {
               onPress={() => {
                 if (busy || saved) return;
                 Keyboard.dismiss();
-                setChoosingSource(true);
+                void openCamera(true);
               }}
             />
 
@@ -1114,6 +1171,19 @@ export default function PostDrinkScreen() {
         covers every other way a drink is collected.
       */}
       <CelebrationOverlay />
+
+      {/*
+        The camera (v4.11): a photo lands in the slot, Close leaves the
+        slot as it was. The source sheet under it is the camera refused.
+      */}
+      <PostCamera
+        visible={shooting}
+        onPhoto={(uri) => {
+          setPhotoUri(uri);
+          setShooting(false);
+        }}
+        onClose={() => setShooting(false)}
+      />
 
       <PhotoSourceSheet
         visible={choosingSource}

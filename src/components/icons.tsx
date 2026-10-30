@@ -68,6 +68,8 @@ export type IconName =
   | 'stack'
   | 'flip'
   | 'flash'
+  | 'flashOff'
+  | 'flashAuto'
   | 'volume'
   | 'volumeOff'
   | 'play'
@@ -78,7 +80,11 @@ export type IconName =
   | 'sliders'
   | 'arrowRight'
   | 'create'
-  | 'pin';
+  | 'pin'
+  | 'minus'
+  | 'info'
+  | 'calendar'
+  | 'flag';
 
 export interface IconProps {
   name: IconName;
@@ -426,6 +432,27 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
   ),
   /* A lightning bolt: the torch. Solid when it is on. */
   flash: <Path d="M13.4 2.8 5.8 13.3h5.5l-.9 7.9 7.8-10.6h-5.5z" />,
+  /*
+   * The post camera's flash, off and auto (v4.11). On is `flash` itself,
+   * solid on the selected key. Off is the same bolt struck through, corner
+   * to corner, so it reads as "not" before it reads as anything else; auto
+   * moves the bolt over and sets an A in the corner it leaves, the
+   * camera's own shorthand, drawn as two strokes and a bar on the grid
+   * rather than set as a letter (no type in the icon set).
+   */
+  flashOff: (
+    <>
+      <Path d="M13.4 2.8 5.8 13.3h5.5l-.9 7.9 7.8-10.6h-5.5z" />
+      <Path d="M4.2 3.4 19.8 20.6" />
+    </>
+  ),
+  flashAuto: (
+    <>
+      <Path d="M10.8 2.8 3.2 13.3h5.5l-.9 7.9 7.8-10.6h-5.5z" />
+      <Path d="M16.4 20.6 18.7 14.6 21 20.6" />
+      <Path d="M17.2 18.6h3" />
+    </>
+  ),
   /* A speaker and two waves: sound is on. */
   volume: (
     <>
@@ -485,6 +512,38 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     <>
       <Path d="M12 21.1s-6.6-5.7-6.6-11.2a6.6 6.6 0 0 1 13.2 0c0 5.5-6.6 11.2-6.6 11.2z" />
       <Circle cx={12} cy={9.9} r={2.4} />
+    </>
+  ),
+  /*
+   * v4.11, the tournaments (specs/v4.11/tournaments.md 4): words became
+   * glyphs. `minus` is the goal stepper's other key, the plus's bar alone.
+   * `info` is a lowercase i, no ring (a ring is an oval; the key round it
+   * is squared): the rules key. `calendar` is a squared page with its two
+   * rings, for a tournament's dates; `flag` a pennant on a pole, for a
+   * "First to" goal (a finish line, not a country). None has a solid form:
+   * none is ever a state.
+   */
+  minus: <Path d="M5.2 12h13.6" />,
+  info: (
+    <>
+      <Path d="M12 10.4v8.2" />
+      <Path d="M10.4 10.4H12" />
+      <Path d="M10.2 18.6h3.6" />
+      <Circle cx={12} cy={6.4} r={1.1} />
+    </>
+  ),
+  calendar: (
+    <>
+      <Rect x={3.8} y={5.2} width={16.4} height={15.2} rx={2.2} />
+      <Path d="M3.8 9.8h16.4" />
+      <Path d="M8.2 3.4v3.6" />
+      <Path d="M15.8 3.4v3.6" />
+    </>
+  ),
+  flag: (
+    <>
+      <Path d="M5.8 21V3.6" />
+      <Path d="M5.8 4.4h12.4l-2.8 4.4 2.8 4.4H5.8" />
     </>
   ),
 };

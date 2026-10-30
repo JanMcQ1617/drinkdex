@@ -173,8 +173,11 @@ export const colors = {
    * the paper off the accent (ACCENT_TIER_EXCEPT).
    *
    * WHY ONLY THERE. A colour that turns up everywhere stops meaning
-   * anything. Red never says delete or error here: destructive words stay
-   * ink and underlined, there are no red badges, and every other count,
+   * anything. Red never says error here, and says delete in one place
+   * only: Settings' Account rows (Reset collection, Sign out, Delete
+   * account), Jan's call on 30 Oct 2026, as iOS's own Settings does.
+   * Every other destructive word stays ink and underlined, there are no
+   * red badges, and every other count,
    * line and state stays ink or muted, the active tab's line included.
    * check-design (rule 17) keeps these tokens to the code that draws the
    * seven and the detail tier's folder, and the raw hex to this file;

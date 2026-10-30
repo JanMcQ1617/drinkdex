@@ -37,6 +37,7 @@ import {
   useMoreBelow,
 } from '@/components/DrinkPanels';
 import { WherePeopleHadIt } from '@/components/places/WherePeopleHadIt';
+import { PostCamera, useCameraAccess } from '@/components/PostCamera';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { announce, Button, EmptyState, haptic } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
@@ -108,6 +109,16 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * moves and nothing ships, and the confirmation says so. A failure is
  * said with the app's notice, closing the sheet with nothing. Signed out
  * the key still shows, as Post does, and says what needs an account.
+ *
+ * CAMERA FIRST (v4.11, specs/v4.11/post-camera.md). The post key opens
+ * the camera (components/PostCamera), not the sheet: a photo taken or
+ * chosen there raises the sheet with it already picked, at its caption,
+ * place and two keys, and Close camera leaves the page as it was. The
+ * sheet rises only once the camera has finished leaving (its onDismiss):
+ * iOS drops a sheet asked for while another presentation is still moving.
+ * With the camera refused, now or before, the key opens the sheet as it
+ * did before, at its two sources, so posting still works, and its Take
+ * photo is the way to Settings.
  */
 
 export default function DrinkDetailScreen() {
@@ -198,6 +209,14 @@ export default function DrinkDetailScreen() {
 
   // The post sheet's state
   const [sheetVisible, setSheetVisible] = useState(false);
+  /*
+   * The camera, which comes before the sheet (v4.11). `sheetAfterCamera`
+   * is a photo waiting for the camera to finish leaving: the sheet rises
+   * in the camera's onDismiss, never in the same commit that closes it.
+   */
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const sheetAfterCamera = useRef(false);
+  const askCamera = useCameraAccess();
   const [sheetMode, setSheetMode] = useState<PostSheetMode>('unlock');
   const [pickedUri, setPickedUri] = useState<string | null>(null);
   const [note, setNote] = useState('');
@@ -257,12 +276,41 @@ export default function DrinkDetailScreen() {
     }
   }, [drink]);
 
-  const openSheet = useCallback((mode: PostSheetMode) => {
-    setSheetMode(mode);
-    setPickedUri(null);
-    setNote('');
-    setNoteError(null);
-    setPlace(null);
+  /*
+   * The post key: a fresh post, then the camera, or the sheet at its two
+   * sources when the camera is refused (useCameraAccess asks iOS first if
+   * it still can).
+   */
+  const openSheet = useCallback(
+    async (mode: PostSheetMode) => {
+      setSheetMode(mode);
+      setPickedUri(null);
+      setNote('');
+      setNoteError(null);
+      setPlace(null);
+      sheetAfterCamera.current = false;
+      if (await askCamera()) setCameraOpen(true);
+      else setSheetVisible(true);
+    },
+    [askCamera],
+  );
+
+  /* A photo from the camera: kept, the camera closed, and the sheet raised once it has gone. */
+  const onCameraPhoto = useCallback((uri: string) => {
+    setPickedUri(uri);
+    sheetAfterCamera.current = true;
+    setCameraOpen(false);
+  }, []);
+
+  /* Close camera: nothing was taken, so nothing follows. */
+  const onCameraClose = useCallback(() => {
+    sheetAfterCamera.current = false;
+    setCameraOpen(false);
+  }, []);
+
+  const onCameraGone = useCallback(() => {
+    if (!sheetAfterCamera.current) return;
+    sheetAfterCamera.current = false;
     setSheetVisible(true);
   }, []);
 
@@ -275,6 +323,10 @@ export default function DrinkDetailScreen() {
   }, []);
 
   /*
+   * The sheet's own two sources, which it shows only when the camera is
+   * refused (v4.11): its Take photo opens the camera over it when the
+   * camera has been allowed since, and comes here only when it has not.
+   *
    * Picking comes from lib/pour, the same code the + window uses, so there
    * is one answer to where a pour photo comes from, and that answer strips
    * its location and caps its size before anything is stored or shared. A
@@ -558,7 +610,7 @@ export default function DrinkDetailScreen() {
         collected={unlocked}
         ruled={below.moreBelow}
         onPress={() => {
-          if (!checkoutOut.current) openSheet(unlocked ? 'update' : 'unlock');
+          if (!checkoutOut.current) void openSheet(unlocked ? 'update' : 'unlock');
         }}
         onHeight={setBarH}
         onBuy={offersBottle(drink) ? () => void buyBottle() : undefined}
@@ -582,8 +634,17 @@ export default function DrinkDetailScreen() {
         onTakePhoto={() => void takePhoto()}
         onChoosePhoto={() => void choosePhoto()}
         onChooseAnother={() => setPickedUri(null)}
+        onReplacePhoto={setPickedUri}
         onNoteChange={onNoteChange}
         onConfirm={(alsoPost) => void handleConfirm(alsoPost)}
+      />
+
+      {/* The post key's first step (v4.11): the sheet follows a photo, once this has gone. */}
+      <PostCamera
+        visible={cameraOpen}
+        onPhoto={onCameraPhoto}
+        onClose={onCameraClose}
+        onDismiss={onCameraGone}
       />
     </View>
   );
