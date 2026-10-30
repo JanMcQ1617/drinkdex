@@ -81,6 +81,7 @@ export type IconName =
   | 'arrowRight'
   | 'create'
   | 'pin'
+  | 'locate'
   | 'minus'
   | 'info'
   | 'calendar'
@@ -512,6 +513,20 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     <>
       <Path d="M12 21.1s-6.6-5.7-6.6-11.2a6.6 6.6 0 0 1 13.2 0c0 5.5-6.6 11.2-6.6 11.2z" />
       <Circle cx={12} cy={9.9} r={2.4} />
+    </>
+  ),
+  /*
+   * Where you are (v4.11, specs/v4.11/current-place.md): the Add place
+   * sheet's Current place row. A ring with four ticks and a dot, the map's
+   * plain "you are here", so it never reads as `pin`, which is a place on
+   * a post, in the row under it. Not an arrow: the tilted location arrow
+   * is Apple's own symbol. No solid form: where you are is not a state.
+   */
+  locate: (
+    <>
+      <Circle cx={12} cy={12} r={6.4} />
+      <Circle cx={12} cy={12} r={1.3} />
+      <Path d="M12 2.6v3M12 18.4v3M2.6 12h3M18.4 12h3" />
     </>
   ),
   /*

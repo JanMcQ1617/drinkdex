@@ -10,8 +10,9 @@ import { Platform } from 'react-native';
 /* server. Of what it returns, only two things ever reach Sipply, and    */
 /* only when a post is tagged: the venue's Apple Place ID and the label  */
 /* the poster gives it (lib/places, store/social). currentCoordinate's   */
-/* fix is for biasing a search and "350 ft" on this phone; NEVER pass it */
-/* to supabase, a URL, a log or storage (§2.6).                         */
+/* fix is for biasing a search, naming the place you are in and "350 ft" */
+/* on this phone; NEVER pass it to supabase, a URL, a log or storage     */
+/* (§2.6).                                                              */
 /*                                                                      */
 /* APPLE'S DATA STAYS APPLE'S (the licence rework, spec §0.5). MapKit's  */
 /* licence (DPLA Attachment 6 §2.2, §2.5) rules out a server database   */
@@ -519,7 +520,7 @@ export function cancelPlaceSearch(): void {
 }
 
 /* -------------------------------------------------------------------- */
-/* Location: When In Use, asked only from "Show places near me"         */
+/* Location: When In Use, asked only on a tap in the place search       */
 /* -------------------------------------------------------------------- */
 
 const UNAVAILABLE: LocationState = { permission: 'unavailable', precise: false };
@@ -560,17 +561,31 @@ export async function requestLocation(): Promise<LocationState> {
   }
 }
 
+/*
+ * The accuracy the fix is asked for (kCLLocationAccuracyHundredMeters in
+ * PlaceSearchEngine.swift). CoreLocation answers with worse when it has
+ * nothing better in time, indoors on weak wifi a few hundred metres; such
+ * a fix still biases a search and lists what is near, but it cannot say
+ * which bar you are in (the sheet's Current place, v4.11).
+ */
+const CLOSE_FIX_M = 100;
+
 /**
  * A coarse fix (about 100 m), only when already granted; null otherwise. Never prompts. NEVER send it anywhere.
- * The accuracy native reports is dropped here, so nothing past this line has more than a point.
+ * Of the accuracy native reports only `close` passes this line (within CLOSE_FIX_M, or not), so nothing past
+ * it has more than a point and a yes or no.
  */
-export async function currentCoordinate(): Promise<LatLng | null> {
+export async function currentCoordinate(): Promise<{ at: LatLng; close: boolean } | null> {
   if (!native) return null;
   try {
     const raw = await native.currentCoordinate();
     if (typeof raw !== 'object' || raw === null) return null;
     const r = raw as Record<string, unknown>;
-    return point(r.lat, r.lng);
+    const at = point(r.lat, r.lng);
+    if (!at) return null;
+    // CLLocation's horizontalAccuracy, in metres; negative is "invalid", and missing reads as not close.
+    const close = typeof r.accuracy === 'number' && r.accuracy >= 0 && r.accuracy <= CLOSE_FIX_M;
+    return { at, close };
   } catch {
     return null;
   }

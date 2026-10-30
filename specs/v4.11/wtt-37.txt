@@ -6,6 +6,7 @@ New in this build:
 - Continue with Facebook stays hidden while Meta reviews the app. If you made your account with Facebook, choose Continue with email with the address your Facebook account uses, then Or set a password by email.
 - Hosting a tournament: pick the first and last day on a calendar (starting within the next 30 days, up to 31 days long), then a goal: most entries, or first to a number you pick (the dates set how high it can go). The "i" beside the rules line opens the full rules. Tell me if a day inside those limits is greyed out.
 - Post opens the camera. Tap Post this drink, or pick a drink after the + on Home: the X closes it, the key at the bottom left opens your photos, and .5, 1 and 2 zoom where your phone can. Tell me if a photo comes out framed differently from what you saw.
+- Current place. On iOS 18 or later, with Precise Location on, Add place now starts with the bar or restaurant you're in, at the top: tap it, then Tag this place. If Sipply has never asked for your location, that first tap asks; tap again once it shows the place. Tell me if it picks the place next door, or says there's nothing here when there is.
 
 Worth poking at:
 
