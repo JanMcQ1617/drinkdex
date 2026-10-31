@@ -86,7 +86,13 @@ export interface ResolvedPlace {
   category: PlaceCategory | null;
 }
 
-export type LocationPermission = 'unavailable' | 'undetermined' | 'denied' | 'restricted' | 'granted';
+/*
+ * `services_off`: Location Services are off for the whole phone (Settings →
+ * Privacy & Security → Location Services), so no prompt can show. Only
+ * requestLocation answers it, from build 38's native on (v4.12): the
+ * permission locationState() reads is Sipply's own, still 'undetermined'.
+ */
+export type LocationPermission = 'unavailable' | 'undetermined' | 'denied' | 'restricted' | 'granted' | 'services_off';
 export interface LocationState { permission: LocationPermission; precise: boolean }
 
 export type PlaceSearchErrorCode = 'offline' | 'throttled' | 'stale' | 'failed' | 'unavailable';
@@ -524,7 +530,7 @@ export function cancelPlaceSearch(): void {
 /* -------------------------------------------------------------------- */
 
 const UNAVAILABLE: LocationState = { permission: 'unavailable', precise: false };
-const PERMISSIONS: readonly LocationPermission[] = ['undetermined', 'denied', 'restricted', 'granted'];
+const PERMISSIONS: readonly LocationPermission[] = ['undetermined', 'denied', 'restricted', 'granted', 'services_off'];
 
 function toLocationState(raw: unknown): LocationState {
   if (typeof raw !== 'object' || raw === null) return UNAVAILABLE;
@@ -551,7 +557,13 @@ export async function locationState(): Promise<LocationState> {
   }
 }
 
-/** Shows the system prompt only while 'undetermined'; otherwise answers at once. */
+/**
+ * Shows the system prompt only while 'undetermined'; otherwise answers at once, and so does
+ * 'services_off'. Still 'undetermined' = no prompt came: native answers so a few seconds after an
+ * ask with the app active throughout (PlaceSearchEngine.swift's watchPermission, build 38 on, the
+ * only native this JS can meet: the runtime version is the native fingerprint). The caller keeps a
+ * deadline of its own anyway, should native ever not answer (PlaceSearchSheet's ASK_WAIT_MS).
+ */
 export async function requestLocation(): Promise<LocationState> {
   if (!native) return UNAVAILABLE;
   try {

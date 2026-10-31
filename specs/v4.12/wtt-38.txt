@@ -3,7 +3,7 @@ Thanks for trying Sipply. It's early, so tell me what's broken or confusing — 
 New in this build:
 
 - Join with code. Host a tournament without inviting anyone: once it's made you get a 6-character code, with Copy and Share. On a second account, open the trophy tab, tap Join with code, type or paste the code (any case), check the tournament it shows and tap Join. Everyone in a tournament sees its code on its page until it ends. Tell me if a code you were sent comes back wrong, or if the shared link doesn't open Sipply.
-- Current place, fixed. A tap on it now does something whenever it isn't saying "Finding where you are…" (that ends within 20 seconds): "No bar or restaurant here." or "Can't tell which place you're in." takes you to the search box, "Couldn't find where you are. Try again." looks again, and with Precise Location off the row opens Settings. If a tap still does nothing, send me a screenshot of what the row says.
+- Current place, fixed. A tap on it now does something whenever it isn't saying "Finding where you are…" (that ends within 20 seconds): "No bar or restaurant here." or "Can't tell which place you're in." takes you to the search box, "Couldn't find where you are. Try again." looks again, and with Precise Location off the row opens Settings. The first tap on a phone never asked brings up the iOS location prompt; with Location Services off it says so and where to turn them on. If a tap still does nothing, send me a screenshot of what the row says.
 
 Worth poking at:
 

@@ -86,6 +86,15 @@ import { usePlaces } from '@/store/places';
 /* (Tag this place, ask, Settings, look again, or the field, to search  */
 /* by name), and finding says so and ends after FIND_WAIT_MS.           */
 /*                                                                      */
+/* AND EVERY ASK ENDS. Build 37's native asked iOS once and then waited */
+/* on the prompt's answer alone, so a prompt that never showed          */
+/* (Location Services off for the whole phone, or an ask iOS dropped)   */
+/* left that tap, and every tap after it, waiting for good under a row  */
+/* that never changed. Now the row spins while an ask is out, Location  */
+/* Services off says so and where the switch is, and an ask no prompt   */
+/* answers says the prompt didn't open, with Try again and Settings     */
+/* (askLocation, ASK_WAIT_MS).                                          */
+/*                                                                      */
 /* A TAP SHOWS THE PLACE BEFORE IT IS TAGGED. A row, once resolved,     */
 /* opens a short "Tag this place" step: Apple's map of the venue, its   */
 /* name and address, the name it will carry on the post, the key, and   */
@@ -183,9 +192,24 @@ const HERE_KEY = 'here';
  * fix), but MapKit's nearby search has no deadline of its own, and on a
  * weak connection it can outlast anyone's patience: the row spun, took no
  * tap, and read as broken. 20 s is native's 10 for the fix and 10 more for
- * Apple's answer.
+ * Apple's answer. Native ends the search at 10 s too since build 38
+ * (run()'s searchWait), so this is the backstop, should either not answer.
  */
 const FIND_WAIT_MS = 20_000;
+/*
+ * How long a tap on Current place waits for the location prompt, with the
+ * app active throughout, before saying it didn't open. The prompt makes
+ * the app inactive, and while it is up nothing is decided; back to active
+ * with no answer, the wait starts again. Native settles first (3 s,
+ * PlaceSearchEngine.swift's promptWait) with 'undetermined', which reads
+ * the same; this is the backstop, should native ever not answer, so the
+ * row can never be left dead. Not for build 37's native: the runtime
+ * version is the native fingerprint (app.json) and v4.12 changes the
+ * Swift, so no update brings this JS to a build without promptWait.
+ */
+const ASK_WAIT_MS = 8_000;
+/* Back to active with the location state unchanged, how long until it is read once more (the AppState listener). */
+const REREAD_MS = 1_000;
 const FINDING_LINE = 'Finding where you are…';
 const NOTHING_HERE_LINE = 'No bar or restaurant here.';
 const UNSURE_HERE_LINE = "Can't tell which place you're in.";
@@ -194,6 +218,16 @@ const LOST_LINE = "Couldn't find where you are. Try again.";
 const LOCATION_OFF_LINE = 'Location is off for Sipply in Settings.';
 /* The Precise Location switch sits on the same Settings page as the Location one, under it. */
 const PRECISE_OFF_LINE = 'Precise Location is off in Settings.';
+/* Asked, and no prompt came (ASK_WAIT_MS): a tap asks again, and the row's Settings key opens Sipply's page. */
+const PROMPT_MISSED_LINE = "The location prompt didn't open. Try again.";
+/*
+ * Location Services off for the whole phone (requestLocation's
+ * 'services_off'). That switch is not on Sipply's Settings page, and no
+ * public URL opens it, so the line says where it is and the tap opens
+ * Sipply's page, the nearest the app can take you.
+ */
+const SERVICES_OFF_TITLE = 'Location Services are off';
+const SERVICES_OFF_LINE = 'Settings → Privacy & Security → Location Services';
 /*
  * "Isn't sent to Sipply", not "stays on your phone": the nearby search
  * sends the position to Apple (MKLocalPointsOfInterestRequest), as the
@@ -240,6 +274,10 @@ type Near =
  * The Current place row, by the location state and the nearby answer.
  * Every kind but `finding` takes a tap:
  *   `ask`        never answered: a tap asks.
+ *   `missed`     asked, and no prompt came: a tap asks again, and the
+ *                row's Settings key opens Sipply's page.
+ *   `servicesOff` Location Services off for the whole phone: a tap opens
+ *                Settings, and the line says where that switch is.
  *   `finding`    the fix and nearby() are out: a spinner and words, ended
  *                by FIND_WAIT_MS.
  *   `found`      a venue within HERE_RADIUS_M: Tag this place.
@@ -255,6 +293,8 @@ type Near =
  */
 type Here =
   | { kind: 'ask' }
+  | { kind: 'missed' }
+  | { kind: 'servicesOff' }
   | { kind: 'finding' }
   | { kind: 'found'; p: FoundPlace }
   | { kind: 'none' }
@@ -356,8 +396,10 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
      * a tap asks again) or Apple's answer (failed: the list's own Notice
      * and its Try again, as for any search that did not answer). Native's
      * own 10 s ends most waits for a fix first, as no fix (`!at`, lost
-     * too); one CoreLocation delivers after that is kept natively, so the
-     * lost row's second ask gets it at once.
+     * too); one CoreLocation delivers after that is kept natively (from
+     * build 38, when within 100 m), so the lost row's second ask gets it at
+     * once. Native's 10 s for Apple's answer (build 38's run()) ends most of
+     * the rest first, as the failed Notice.
      */
     let located = false;
     const watchdog = state.precise
@@ -404,11 +446,17 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
    * position to Apple for a sheet that was dismissed and taking MapKit's
    * one search from whatever asked next, a reopened sheet's included. The
    * number moves on, so a load still out stops at its next `live()`, and
-   * its watchdog, if it fires first, finds it stale and sets nothing.
+   * its watchdog, if it fires first, finds it stale and sets nothing. An
+   * ask still out stops waiting the same way (askSeq, askStop).
    */
+  const askSeq = useRef(0);
+  /* Ends the newest ask's deadline and its app-state listener: a newer ask, or the sheet going. */
+  const askStop = useRef<(() => void) | null>(null);
   useEffect(
     () => () => {
       loadSeq.current += 1;
+      askSeq.current += 1;
+      askStop.current?.();
     },
     [],
   );
@@ -439,24 +487,47 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
    * loads as a tap does: the row goes to finding, then to the place, by
    * itself. Only after the app was really away (background): the location
    * prompt only makes it inactive, and askLocation already loads what that
-   * answer allows.
+   * answer allows. Except after a `missed` ask with none out since
+   * (`lateAsk`): native has already answered it, so a prompt that opened
+   * late is answered with nobody listening, and coming back from it
+   * (inactive) is read here too. That mark and away (`appAway`) are refs,
+   * and askLocation sets them as it answers: the listener subscribes again
+   * in the render that turns the row `missed`, and the prompt's inactive
+   * can reach the subscription it replaces, where a local would be lost.
+   * Nothing changed yet, the state is read once more REREAD_MS later,
+   * since CoreLocation may apply a new answer just after the app is back
+   * (native allows the same, appReturned).
    */
+  const [askMissed, setAskMissed] = useState(false);
+  const [asking, setAsking] = useState(false);
+  const lateAsk = useRef(false);
+  const appAway = useRef(false);
   useEffect(() => {
     if (!loc) return;
     let alive = true;
-    let away = false;
-    const sub = AppState.addEventListener('change', (now) => {
-      if (now === 'background') away = true;
-      if (now !== 'active' || !away) return;
-      away = false;
+    let again: ReturnType<typeof setTimeout> | null = null;
+    const read = (retry: boolean) => {
       void locationState().then((state) => {
-        if (!alive || (state.permission === loc.permission && state.precise === loc.precise)) return;
+        if (!alive) return;
+        if (state.permission === loc.permission && state.precise === loc.precise) {
+          if (retry) again = setTimeout(() => read(false), REREAD_MS);
+          return;
+        }
+        lateAsk.current = false;
+        setAskMissed(false);
         setLoc(state);
         void loadNear(state);
       });
+    };
+    const sub = AppState.addEventListener('change', (now) => {
+      if (now === 'background' || (now === 'inactive' && lateAsk.current)) appAway.current = true;
+      if (now !== 'active' || !appAway.current) return;
+      appAway.current = false;
+      read(true);
     });
     return () => {
       alive = false;
+      if (again) clearTimeout(again);
       sub.remove();
     };
   }, [loc, loadNear]);
@@ -465,19 +536,82 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
    * The one place in the app that can raise the system's location prompt,
    * behind the one row that asks, Current place. Its answer loads the row
    * and the list under it, since both come from the one nearby() answer.
+   *
+   * EVERY ASK ENDS (v4.12). Build 37's native waited on the prompt's answer
+   * alone, so a prompt that never showed left the tap, and each tap after
+   * it, waiting for good. Now the row spins while an ask is out and still
+   * takes a tap (native asks iOS again), and an answer comes whatever
+   * happens: the prompt's; 'services_off' at once; or 'undetermined', no
+   * prompt came, from native's own few seconds or, should native ever not
+   * answer, ASK_WAIT_MS here, the state read afresh. Native answers every
+   * waiting ask at once, so only the newest may set anything (`askSeq`).
+   * A native answer after the deadline here still lands, as it is the
+   * prompt's own, but only one answer other than 'undetermined' does
+   * (`decided`).
    */
-  const askLocation = async () => {
+  const askLocation = () => {
     haptic.select();
-    const state = await requestLocation();
-    setLoc(state);
-    /*
-     * Allowed with Precise Location: the nearby list is about to show, and
-     * the keys, up since the sheet opened with nothing near to show, would
-     * sit over it (the open's own rule, above). Down, a later tap on
-     * "nothing here" visibly brings them back to search by name.
-     */
-    if (state.permission === 'granted' && state.precise) Keyboard.dismiss();
-    void loadNear(state);
+    askStop.current?.();
+    const seq = ++askSeq.current;
+    lateAsk.current = false;
+    setAsking(true);
+    let open = true;
+    let away = false;
+    // An answer other than 'undetermined' has landed: anything after it is the same answer again.
+    let decided = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let sub: ReturnType<typeof AppState.addEventListener> | null = null;
+    const stop = () => {
+      if (!open) return;
+      open = false;
+      if (timer) clearTimeout(timer);
+      sub?.remove();
+    };
+    askStop.current = stop;
+    const answer = (state: LocationState) => {
+      stop();
+      if (decided || seq !== askSeq.current) return;
+      decided = state.permission !== 'undetermined';
+      /*
+       * No prompt came, as far as native knew: one may still open late
+       * (the AppState listener above). Already inactive as the answer
+       * lands, it opened just after native answered: its return is read.
+       */
+      lateAsk.current = !decided;
+      if (!decided && away) appAway.current = true;
+      setAsking(false);
+      setAskMissed(state.permission === 'undetermined');
+      setLoc(state);
+      /*
+       * Allowed with Precise Location: the nearby list is about to show, and
+       * the keys, up since the sheet opened with nothing near to show, would
+       * sit over it (the open's own rule, above). Down, a later tap on
+       * "nothing here" visibly brings them back to search by name.
+       */
+      if (state.permission === 'granted' && state.precise) Keyboard.dismiss();
+      void loadNear(state);
+    };
+    /* ASK_WAIT_MS of the app staying active with no answer: the state as it is, 'undetermined' if no prompt came. */
+    const arm = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
+        if (!open || away) return;
+        void locationState().then((state) => {
+          if (open) answer(state);
+        });
+      }, ASK_WAIT_MS);
+    };
+    // The prompt makes the app inactive: nothing is decided while it is up, and the wait starts again after.
+    sub = AppState.addEventListener('change', (now) => {
+      if (now !== 'active') away = true;
+      else if (away) {
+        away = false;
+        arm();
+      }
+    });
+    arm();
+    void requestLocation().then(answer);
   };
 
   /* ---- Suggestions as you type, and the return key's search ---- */
@@ -622,7 +756,9 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
     if (!loc) return null;
     switch (loc.permission) {
       case 'undetermined':
-        return { kind: 'ask' };
+        return askMissed ? { kind: 'missed' } : { kind: 'ask' };
+      case 'services_off':
+        return { kind: 'servicesOff' };
       case 'denied':
         return { kind: 'off' };
       case 'granted':
@@ -679,10 +815,15 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
   /*
    * "No bar or restaurant here." and "Can't tell which place you're in."
    * end the row's question, so a tap goes to the one way left to name the
-   * place: its name, typed. Not a second look: native serves the same fix
-   * for 120 s (PlaceSearchEngine.swift's fixAt), so looking again would
-   * spin and give the same answer, a tap that looks as if it worked and
-   * did not.
+   * place: its name, typed. Not a second look, which would spin and give
+   * the same answer, a tap that looks as if it worked and did not. A fix
+   * within 100 m native serves again for 120 s (PlaceSearchEngine.swift's
+   * fixAt). A coarser one, `unsure`'s, it no longer holds (build 38), but
+   * a fresh one-shot fix from the same spot moments later is most often as
+   * coarse: CoreLocation already answered with the best it had in time
+   * (lib/placeSearch's CLOSE_FIX_M). A look worth offering needs native to
+   * keep updating until a fix is close (specs/v4.12/current-place-fix.md
+   * §4, for a later native build).
    */
   const searchByName = () => fieldRef.current?.focus();
 
@@ -749,7 +890,9 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
    * confirm step, the place. The nearby answer is heard with Current place
    * first: the row a tap asked from comes back as a different view (ask,
    * finding, found), so VoiceOver's focus does not stay on it to hear what
-   * it found, and the count alone would not say.
+   * it found, and the count alone would not say. `missed` is withdrawn
+   * while a Try again is out, so that one ending with no prompt either is
+   * heard too: useAnnounce speaks only a change.
    */
   const heardHere =
     !typing && hereShown ? (hereFound ? `Current place, ${hereFound.name}. ` : hereLine ? `${hereLine} ` : '') : '';
@@ -759,6 +902,10 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
     ? noMatchLine
     : !typing && near.status === 'lost'
     ? `Current place. ${LOST_LINE}`
+    : !typing && here?.kind === 'missed' && !asking
+    ? `Current place. ${PROMPT_MISSED_LINE}`
+    : !typing && here?.kind === 'servicesOff'
+    ? `Current place. ${SERVICES_OFF_TITLE}.`
     : nothingNear
       ? nothingNearLine
       : (answeredNow || (!typing && near.status === 'ready')) && !trouble
@@ -802,12 +949,14 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
         ) : null;
       case 'undetermined':
       case 'denied':
+      case 'services_off':
         /*
          * One row, not a sentence and a key on every open ("less stuff"):
          * since v4.11 it is Current place, above. Never answered, a tap on
          * it asks; v4.8's "Show places near me" under it asked the same
          * question and filled from the same answer, so it went. After a
-         * refusal it says where the switch is and goes there; a second row
+         * refusal, or with Location Services off for the whole phone, it
+         * says where the switch is and goes to Settings; a second row
          * saying the same words to the same Settings page would be the
          * same thing twice. iOS never asks twice, so Settings is the only
          * way back.
@@ -844,12 +993,40 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
         );
       }
       case 'ask':
+        // Spins while the ask is out, and still takes a tap: native asks iOS again (a repeat under the prompt is ignored).
         return (
           <HereRow
+            busy={asking}
             line={NOT_SENT_LINE}
             label={`Current place. ${NOT_SENT_LINE}`}
             hint="Asks to use your location to find where you are"
-            onPress={() => void askLocation()}
+            onPress={askLocation}
+          />
+        );
+      case 'missed':
+        /*
+         * No prompt came. The row asks again (build 38's native asks iOS
+         * on every tap), and its Settings key opens Sipply's page, the one
+         * Settings page an app may open.
+         */
+        return (
+          <HereRow
+            busy={asking}
+            line={PROMPT_MISSED_LINE}
+            label={`Current place. ${PROMPT_MISSED_LINE}`}
+            hint="Asks to use your location again"
+            onPress={askLocation}
+            action={{ label: 'Settings', hint: 'Opens Sipply in Settings', onPress: () => void Linking.openSettings() }}
+          />
+        );
+      case 'servicesOff':
+        return (
+          <HereRow
+            title={SERVICES_OFF_TITLE}
+            line={SERVICES_OFF_LINE}
+            label={`Current place. ${SERVICES_OFF_TITLE}. Turn them on in Settings, Privacy & Security, Location Services.`}
+            hint="Opens Settings"
+            onPress={() => void Linking.openSettings()}
           />
         );
       case 'finding':
@@ -1067,24 +1244,31 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
  * front, since this row has no trailing check yet), "Current place" over
  * one quiet line. Every state but finding takes a tap (ask, Settings, look
  * again, or the field), so the plain View, no press and no fill, is the
- * busy row alone, and it says in words that it is busy as well as with the
- * spinner: in build 37 two quiet states drew this same row, glyph and all,
- * took no tap, and looked like a button that did nothing. Every label
- * starts with the words on the row, so "Tap Current place" in Voice
- * Control finds it in any state.
+ * finding row alone, and it says in words that it is busy as well as with
+ * the spinner: in build 37 two quiet states drew this same row, glyph and
+ * all, took no tap, and looked like a button that did nothing. An ask out
+ * spins too, but stays a button with its press fill (v4.12): another tap
+ * asks again. Every label starts with "Current place", so "Tap Current
+ * place" in Voice Control finds it in any state, Location Services off
+ * included, whose first line names the switch instead (`title`).
  */
 function HereRow({
+  title = 'Current place',
   line,
   label,
   hint,
   busy = false,
   onPress,
+  action,
 }: {
+  title?: string;
   line?: string;
   label: string;
   hint?: string;
   busy?: boolean;
   onPress?: () => void;
+  /** A second way out, a text key on the far gutter beside the row (no prompt came: Settings). */
+  action?: { label: string; hint: string; onPress: () => void };
 }) {
   const parts = (
     <>
@@ -1096,7 +1280,7 @@ function HereRow({
         )}
       </View>
       <View style={styles.rowText}>
-        <Text style={styles.body}>Current place</Text>
+        <Text style={styles.body}>{title}</Text>
         {line ? <Text style={styles.quiet}>{line}</Text> : null}
       </View>
     </>
@@ -1108,15 +1292,31 @@ function HereRow({
       </View>
     );
   }
-  return (
+  const row = (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={hint}
-      style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
+      accessibilityState={{ busy }}
+      style={({ pressed }) => [styles.row, action && styles.rowBesideKey, pressed && styles.rowPressed]}>
       {parts}
     </Pressable>
+  );
+  if (!action) return row;
+  // Side by side, not one inside the other, so VoiceOver and Voice Control reach each on its own.
+  return (
+    <View style={styles.rowWithKey}>
+      {row}
+      <Button
+        label={action.label}
+        variant="text"
+        size="sm"
+        onPress={action.onPress}
+        accessibilityHint={action.hint}
+        style={styles.rowKey}
+      />
+    </View>
   );
 }
 
@@ -1247,6 +1447,15 @@ const styles = StyleSheet.create({
     paddingVertical: space.sm,
   },
   rowPressed: { backgroundColor: colors.press },
+  /*
+   * Current place with a text key beside it (no prompt came: Settings): the
+   * row's press fill stops where the key starts, 12 from its words (4 here,
+   * the key's own 8), and the key's inset is taken back so its word ends on
+   * the far gutter, as the title row's Cancel does.
+   */
+  rowWithKey: { flexDirection: 'row', alignItems: 'stretch' },
+  rowBesideKey: { flex: 1, paddingRight: space.xs },
+  rowKey: { alignSelf: 'center', marginRight: layout.gutter - space.sm },
   /* Current place's glyph (or its spinner): 20 at the gutter, the words 12 after it. */
   lead: { width: LEAD_GLYPH, alignItems: 'center', justifyContent: 'center' },
   rowText: { flex: 1 },

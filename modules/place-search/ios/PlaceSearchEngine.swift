@@ -8,9 +8,10 @@ import MapKit
 /* Apple Maps on the phone is the whole search: MKLocalSearchCompleter  */
 /* for the rows that appear as you type, MKLocalSearch to turn a tapped */
 /* row (or the return key) into a venue, MKLocalPointsOfInterestRequest */
-/* for "Show places near me", and MKMapItemRequest to look a stored     */
-/* Place ID up again. No key, no billing, no proxy: what the person     */
-/* types and where they are go to Apple and nowhere else.               */
+/* for the venues near you (the sheet's Current place and Near you),    */
+/* and MKMapItemRequest to look a stored Place ID up again. No key, no  */
+/* billing, no proxy: what the person types and where they are go to    */
+/* Apple and nowhere else.                                              */
 /*                                                                      */
 /* WHY A LOOK-UP BY ID (the licence rework, spec §0.5). Apple's MapKit  */
 /* licence (DPLA Attachment 6 §2.2, §2.5) rules out a server database   */
@@ -33,10 +34,15 @@ import MapKit
 /* are used where they exist so the archive stays warning-free.          */
 /*                                                                      */
 /* Every call arrives on the main queue (the glue's .runOnQueue(.main)), */
-/* which is where the completer and the location manager call back, so   */
-/* nothing here needs a lock. Rules held (spec §1.5, grepped in §6.1):    */
-/* the device fix lives only in memory for at most 120 s and is never    */
-/* written, logged or printed; When In Use only, one-shot fixes only.    */
+/* which is where the completer and the location manager call back, and */
+/* where UIApplication posts its active and inactive notifications, so  */
+/* nothing here needs a lock. The one read made elsewhere is            */
+/* CLLocationManager.locationServicesEnabled(), which Apple warns can   */
+/* block the UI: requestLocation reads it on a background queue and     */
+/* touches nothing until it is back on main. Rules held (spec §1.5,     */
+/* grepped in §6.1): the device fix lives only in memory, for at most   */
+/* 120 s and only when within 100 m, and is never written, logged or    */
+/* printed; When In Use only, one-shot fixes only.                      */
 /* ==================================================================== */
 
 /// A failure the glue turns into a coded JS error (src/lib/placeSearch.ts maps the codes).
@@ -108,6 +114,34 @@ private func failure(_ error: Error) -> PlaceFailure {
 /* Settles a reply that a newer call took over. JS reads it as null ("drop it"), never as an error. */
 private let cancelled = PlaceFailure(code: "ERR_PLACES_CANCELLED", message: "Superseded by a newer search")
 
+/* A search MapKit had not answered in searchWait: coded as the connection, so JS says what it says when offline. */
+private let timedOut = PlaceFailure(code: "ERR_PLACES_OFFLINE", message: "Apple Maps did not answer in time")
+
+/*
+ * How long a venue search may hold MapKit's one turn (run()). MapKit sets
+ * no deadline of its own, and on a weak connection a nearby search spun on
+ * under Current place (specs/v4.12/current-place-fix.md §1, 3). The
+ * sheet's FIND_WAIT_MS (20 s) is currentCoordinate's 10 and these 10.
+ */
+private let searchWait: TimeInterval = 10
+
+/*
+ * How long requestLocation waits, with the app active throughout, for the
+ * location prompt to show. The prompt makes the app inactive within a
+ * moment of the ask; still active after this, no prompt came, and the
+ * waiting replies get the state as it is.
+ */
+private let promptWait: TimeInterval = 3
+
+/*
+ * UIApplication's notifications by their string values, as the error
+ * domains above are: the engine imports only MapKit, CoreLocation and
+ * Foundation (spec §1.5). The values are UIKit's constants' own (checked
+ * against UIApplication.willResignActiveNotification.rawValue).
+ */
+private let appWillResignActive = Notification.Name("UIApplicationWillResignActiveNotification")
+private let appDidBecomeActive = Notification.Name("UIApplicationDidBecomeActiveNotification")
+
 final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocationManagerDelegate {
 
   // ---- Suggestions ------------------------------------------------------
@@ -162,9 +196,10 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
    * search sheet's locationState() on every open does create one: the
    * permission and the accuracy setting are only readable from an
    * instance. Creating one shows no prompt and starts no updates; only
-   * requestLocation (behind "Show places near me") can prompt, and only
-   * currentCoordinate (already allowed) asks for a fix. Hundred-metre
-   * accuracy is all a nearby list needs, and it settles faster.
+   * requestLocation (behind a tap on the sheet's Current place) can
+   * prompt, and only currentCoordinate (already allowed) asks for a fix.
+   * Hundred-metre accuracy is all a nearby list needs, and it settles
+   * faster.
    */
   private lazy var manager: CLLocationManager = {
     let m = CLLocationManager()
@@ -172,10 +207,23 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
     m.delegate = self
     return m
   }()
+  /*
+   * The asks waiting on the prompt's answer, all settled by the one answer
+   * (settlePermission). `permissionTicket` moves on with every ask, wait
+   * and answer, so an older promptWait timer finds itself overtaken;
+   * `appInactive` mirrors UIApplication's notifications, and is true while
+   * the prompt is up.
+   */
   private var permissionReplies: [PlaceReply] = []
+  private var permissionTicket = 0
+  private var appInactive = false
   private var fixReplies: [PlaceReply] = []
   private var fixTicket = 0
-  /* Held in memory only, for at most 120 s, and dropped when the app backgrounds. Never written anywhere. */
+  /*
+   * Held in memory only, for at most 120 s, and dropped when the app
+   * backgrounds. Never written anywhere. Only a fix within 100 m is held
+   * (didUpdateLocations says why).
+   */
   private var fix: CLLocation?
   private var fixAt: Date?
 
@@ -184,6 +232,10 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
     completer.delegate = self
     completer.resultTypes = .pointOfInterest
     completer.pointOfInterestFilter = venueFilter()
+    // Posted on the main queue, like everything else here. Selector observers need no removing (iOS 9 and later).
+    let center = NotificationCenter.default
+    center.addObserver(self, selector: #selector(appResigned), name: appWillResignActive, object: nil)
+    center.addObserver(self, selector: #selector(appReturned), name: appDidBecomeActive, object: nil)
   }
 
   // MARK: suggest
@@ -313,6 +365,8 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
    * cancelled search from settling the new reply. MKLocalSearch is throttled
    * per device (about 50 a minute, observed), and the sheet sends one per tap.
    * The completion is main-queue (NS_SWIFT_UI_ACTOR in MKLocalSearch.h).
+   * Still out after searchWait, it is cancelled and answers as offline;
+   * the same identity check keeps its late callback from settling anything.
    */
   private func run(_ s: MKLocalSearch, reply: @escaping PlaceReply, shape: @escaping ([MKMapItem]) -> Any) {
     activeSearch?.cancel()
@@ -328,6 +382,14 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
         return
       }
       reply(.success(shape(response?.mapItems ?? [])))
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + searchWait) { [weak self] in
+      guard let self, self.activeSearch === s, let reply = self.searchReply else { return }
+      // Let go before cancelling, so nothing can settle this reply twice.
+      self.activeSearch = nil
+      self.searchReply = nil
+      s.cancel()
+      reply(.failure(timedOut))
     }
   }
 
@@ -383,25 +445,94 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
     return ["permission": permission, "precise": m.accuracyAuthorization == .fullAccuracy]
   }
 
-  /* When In Use only. There is no Always request anywhere in the app (6.1 greps for it). */
+  /*
+   * When In Use only. There is no Always request anywhere in the app (6.1
+   * greps for it).
+   *
+   * EVERY ASK ENDS (v4.12, specs/v4.12/current-place-fix.md §1, 7). Build
+   * 37 asked iOS for the first waiting reply only and then waited on the
+   * delegate alone, so a prompt that never showed left the promise open,
+   * and every later tap of Current place joined the wait and did nothing.
+   * Now:
+   *   - Location Services off for the whole phone answers "services_off"
+   *     at once: no prompt can show, and the row says where the switch is.
+   *   - Every ask while undetermined asks iOS again (a repeat while the
+   *     prompt is up is ignored) and joins the wait; one answer settles all.
+   *   - No answer promptWait after an ask, with the app active throughout:
+   *     no prompt came, and the waiting replies get the state as it is,
+   *     still undetermined. The prompt makes the app inactive, so while it
+   *     is up nothing is settled early; back to active with no answer yet,
+   *     the wait starts again (appReturned).
+   */
   func requestLocation(reply: @escaping PlaceReply) {
     guard manager.authorizationStatus == .notDetermined else {
       reply(.success(locationState()))
       return
     }
     permissionReplies.append(reply)
-    if permissionReplies.count == 1 {
-      manager.requestWhenInUseAuthorization()
+    // An older ask's promptWait, fired while the check is out, would settle this ask before it asks: overtaken.
+    permissionTicket += 1
+    // Apple: locationServicesEnabled() can block the UI if read on the main thread.
+    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+      let servicesOn = CLLocationManager.locationServicesEnabled()
+      guard let self else { return }
+      DispatchQueue.main.async {
+        self.ask(servicesOn: servicesOn)
+      }
     }
+  }
+
+  private func ask(servicesOn: Bool) {
+    // Settled with the others while the check was out: the delegate, an earlier ask's check, or a newer wait.
+    guard !permissionReplies.isEmpty else { return }
+    guard manager.authorizationStatus == .notDetermined else {
+      settlePermission(locationState())
+      return
+    }
+    guard servicesOn else {
+      settlePermission(["permission": "services_off", "precise": false])
+      return
+    }
+    manager.requestWhenInUseAuthorization()
+    watchPermission()
+  }
+
+  /* promptWait from now, the waiting replies get the state as it is: unless the prompt is up, or a newer wait took over. */
+  private func watchPermission() {
+    permissionTicket += 1
+    let ticket = permissionTicket
+    DispatchQueue.main.asyncAfter(deadline: .now() + promptWait) { [weak self] in
+      guard let self, self.permissionTicket == ticket, !self.appInactive, !self.permissionReplies.isEmpty else { return }
+      self.settlePermission(self.locationState())
+    }
+  }
+
+  private func settlePermission(_ state: [String: Any]) {
+    permissionTicket += 1
+    let replies = permissionReplies
+    permissionReplies = []
+    replies.forEach { $0(.success(state)) }
+  }
+
+  @objc private func appResigned() {
+    appInactive = true
+  }
+
+  /*
+   * Back from the prompt with its answer, the delegate settles the wait
+   * (before this, or just after: the fresh promptWait leaves it time).
+   * Back with none (the app went inactive for something else, or the
+   * prompt went without an answer), the wait ends promptWait later.
+   */
+  @objc private func appReturned() {
+    appInactive = false
+    if !permissionReplies.isEmpty { watchPermission() }
   }
 
   func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
     // Also called once as the manager is made, while still undetermined: wait for the answer.
     guard manager.authorizationStatus != .notDetermined else { return }
-    let state = locationState()
-    let replies = permissionReplies
-    permissionReplies = []
-    replies.forEach { $0(.success(state)) }
+    settlePermission(locationState())
   }
 
   /* A coarse fix, only when already allowed. Never prompts. Null on any failure: a fix is a nicety. */
@@ -428,8 +559,18 @@ final class PlaceSearchEngine: NSObject, MKLocalSearchCompleterDelegate, CLLocat
 
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     guard let last = locations.last else { return }
-    fix = last
-    fixAt = Date()
+    /*
+     * Held for the next ask only when it is as good as it was asked to be
+     * (100 m, lib/placeSearch's CLOSE_FIX_M). A worse one, usual indoors on
+     * weak wifi, answers this ask alone: served again for 120 s, it would
+     * make every second look the same coarse guess, when a fresh fix may
+     * be close enough to name the place.
+     */
+    let accuracy = last.horizontalAccuracy
+    if accuracy >= 0 && accuracy <= kCLLocationAccuracyHundredMeters {
+      fix = last
+      fixAt = Date()
+    }
     settleFix(last)
   }
 
