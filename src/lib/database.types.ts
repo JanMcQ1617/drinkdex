@@ -467,6 +467,13 @@ export type TournamentRow = {
   /** Results frozen. Deleting a post after this changes nothing. */
   finalized_at: string | null;
   created_at: string;
+  /**
+   * Migration 028: six of 2-9 and A-Z without I, L and O, made by the
+   * server, unique among tournaments that are not finished. Null on one
+   * that finished before 028. Before 028 there is no such column, and a
+   * read naming it fails (42703): lib/tournaments reads that as no code.
+   */
+  join_code: string | null;
 };
 
 /**
@@ -1032,7 +1039,12 @@ export type Database = {
         Args: { p_apple_place_id: string };
         Returns: PlaceDrinkRow[];
       };
-      /** Returns the new tournament's id. The host joins it as 'accepted'. */
+      /**
+       * Returns the new tournament's id. The host joins it as 'accepted'.
+       * Since 028 p_invitees may be empty (people join with the code,
+       * read from tournaments.join_code); no_invitees only when people
+       * were named and none of them could be invited.
+       */
       create_tournament: {
         Args: {
           p_name: string;
@@ -1043,6 +1055,28 @@ export type Database = {
           p_invitees: string[];
         };
         Returns: string;
+      };
+      /*
+       * Join codes (migration 028). Missing (PGRST202 / 42883) until 028
+       * is applied, which lib/tournaments reads as "no codes": the host
+       * sheet keeps an invite required, no code is shown, and Join with
+       * code says it is not here yet. Neither raises for a refusal (a
+       * raise would roll back the wrong guess it counts): each answers
+       * { result } with one word. tournament_by_code: ok, member or full
+       * with the preview (id, name, starts_at, ends_at, target, state,
+       * members, host { id, username, display_name, accent, avatar_path
+       * }), else not_found, limited, finished or not_allowed.
+       * join_tournament_with_code: joined or member with the id, else
+       * not_found, limited, finished, full or not_allowed. Shape-checked
+       * by lib/tournamentCode, not trusted. Signed out is 28000.
+       */
+      tournament_by_code: {
+        Args: { p_code: string };
+        Returns: Json;
+      };
+      join_tournament_with_code: {
+        Args: { p_code: string };
+        Returns: Json;
       };
       /** Host only, before it finishes. Returns how many were invited. */
       invite_to_tournament: {

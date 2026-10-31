@@ -1,0 +1,30 @@
+Thanks for trying Sipply. It's early, so tell me what's broken or confusing — both are useful.
+
+New in this build:
+
+- Join with code. Host a tournament without inviting anyone: once it's made you get a 6-character code, with Copy and Share. On a second account, open the trophy tab, tap Join with code, type or paste the code (any case), check the tournament it shows and tap Join. Everyone in a tournament sees its code on its page until it ends. Tell me if a code you were sent comes back wrong, or if the shared link doesn't open Sipply.
+- Current place, fixed. A tap on it now does something whenever it isn't saying "Finding where you are…" (that ends within 20 seconds): "No bar or restaurant here." or "Can't tell which place you're in." takes you to the search box, "Couldn't find where you are. Try again." looks again, and with Precise Location off the row opens Settings. If a tap still does nothing, send me a screenshot of what the row says.
+
+Worth poking at:
+
+- From the last build: Buy a bottle on a spirit (test mode: Stripe's test card 4242 4242 4242 4242, nothing is charged), the tournament calendar and its custom goal, Post opening the camera, and Current place at the top of Add place.
+- Continue with Facebook stays hidden while Meta reviews the app. If you made your account with Facebook, choose Continue with email with the address your Facebook account uses, then Or set a password by email.
+- People notifications. Open Activity (the heart on Home) and allow alerts, then have a second account follow you, tag you or invite you to a tournament: one notification each. Turn each kind off in Profile → "..." → Settings → Notifications.
+- Signing in with Google, and with Apple.
+- Places. On iOS 18 or later, post a drink and tap Add place, then open the place from your post.
+- Tagging people, Daily ideas (Settings → Notifications), Saved collections and their share links.
+- The Dex: For you and By number, the filters, search. Does it stay smooth when you scroll fast?
+- Tournaments: host one, join it with its code from a second account, and post a drink from each.
+- Posting a drink: the + at the top of Home. Also with the camera turned off for Sipply in Settings: you should still be able to post a photo from your library.
+
+Please report:
+
+- Anything that crashes, hangs, or shows an error you can't get out of
+- A payment sheet that never opens, or a payment that seems to go through twice
+- A photo that fails to upload or appears on the wrong post
+- Anything that looks wrong — spacing, colour, text that's cut off
+- Anything you expected to be able to do and couldn't
+
+Two things I already know about: the app is 18+ and alcohol-focused by design, and your collection lives on your device — signing in elsewhere won't bring it with you.
+
+You can delete your account any time from Profile → "..." → Settings → Delete account. It removes everything, including your photos.

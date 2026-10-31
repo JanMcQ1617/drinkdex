@@ -44,6 +44,8 @@ Rules that hold (specs/v4.8-places, unchanged):
 
 ## 2. The row, state by state
 
+> **Changed in v4.12** (specs/v4.12/current-place-fix.md, after "it doesn't let me do it" on build 37): the inert rows below now take a tap (nothing here and can't tell go to the field; no fix is its own row, "Couldn't find where you are. Try again."), finding says so in words and ends at 20 s, and Precise Location off is a Current place row that opens Settings. This table is build 37's.
+
 | Location | The row | A tap | VoiceOver |
 |---|---|---|---|
 | Never answered | ⌖ **Current place** over **"Your location isn't sent to Sipply."** (the line Show places near me carried, which this row replaced, §5) | `askLocation()`: the system prompt. Allowed, the fix and `nearby()` run and the row fills; that is the first tap, and the second opens Tag this place | "Current place. Your location isn't sent to Sipply.", hint "Asks to use your location to find where you are" |

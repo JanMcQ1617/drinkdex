@@ -33,6 +33,15 @@ interface TournamentsState {
   /** Each tournament page's last answer, by id. */
   boards: Record<string, TournamentBoard>;
   /**
+   * Whether the server has join codes (migration 028, v4.12): null until
+   * something has said. The host sheet asks (probeCodes) and reads it:
+   * false keeps an invite required, as before codes, and is also set by
+   * any answer that shows 028 missing (Join with code's lookup, a create
+   * with nobody invited refused). Per account and per launch, like
+   * `supported`, so 028 applied mid-session shows on the next launch.
+   */
+  codes: boolean | null;
+  /**
    * Which account's tournaments these are, as a counter that reset() bumps.
    * Every action reads it before its first await and writes nothing if it
    * has moved on, so an answer for account A never lands in account B's
@@ -46,10 +55,14 @@ interface TournamentsState {
   loadBoard: (id: string) => Promise<Result<TournamentBoard>>;
   /** After you delete or leave one: it leaves the list and boards at once, before the next load. */
   forget: (id: string) => void;
+  /** Asks the server whether it has codes, once, until it gets an answer. */
+  probeCodes: () => Promise<void>;
+  /** Something showed whether 028 is there. */
+  setCodes: (codes: boolean) => void;
   reset: () => void;
 }
 
-type Data = Omit<TournamentsState, 'gen' | 'load' | 'loadBoard' | 'forget' | 'reset'>;
+type Data = Omit<TournamentsState, 'gen' | 'load' | 'loadBoard' | 'forget' | 'probeCodes' | 'setCodes' | 'reset'>;
 
 const EMPTY: Data = {
   supported: true,
@@ -58,6 +71,7 @@ const EMPTY: Data = {
   loading: false,
   failed: false,
   boards: {},
+  codes: null,
 };
 
 /** Open invitations: yours to answer, in a tournament that has not finished. */
@@ -125,6 +139,16 @@ export const useTournaments = create<TournamentsState>((set, get) => ({
     const { [id]: _gone, ...boards } = get().boards;
     set({ list, boards, pendingInvites: pendingIn(list) });
   },
+
+  probeCodes: async () => {
+    if (get().codes !== null || !useAuth.getState().session) return;
+    const gen = get().gen;
+    const codes = await api.probeJoinCodes();
+    if (get().gen !== gen || codes === null) return;
+    set({ codes });
+  },
+
+  setCodes: (codes) => set({ codes }),
 
   reset: () => {
     loadSeq += 1;

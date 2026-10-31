@@ -2,6 +2,7 @@ import { useNavigation, useRouter } from 'expo-router';
 import { usePreventRemove } from 'expo-router/react-navigation';
 import { useCallback, useEffect, useState } from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -17,6 +18,7 @@ import { useScrollEdges } from '@/components/log/scrollEdges';
 import { ScreenTopBar, TopBarTextButton } from '@/components/ScreenTopBar';
 import { GoalPicker, type GoalKind } from '@/components/tournaments/GoalPicker';
 import { InvitePicker } from '@/components/tournaments/InvitePicker';
+import { JoinCodeCard } from '@/components/tournaments/JoinCode';
 import { RangeCalendar } from '@/components/tournaments/RangeCalendar';
 import {
   DaySpan,
@@ -24,8 +26,9 @@ import {
   TournamentRules,
   tournamentErrorText,
 } from '@/components/tournaments/TournamentRow';
-import { Button, Field, haptic, Notice, SectionHeader } from '@/components/ui';
+import { announce, Button, Field, haptic, Notice, SectionHeader } from '@/components/ui';
 import { colors, layout, space, stroke, textRole } from '@/constants/theme';
+import { createSaysNoCodes, inviteRequired } from '@/lib/tournamentCode';
 import {
   cleanTournamentName,
   createTournament,
@@ -82,6 +85,25 @@ import { confirmDestructive } from '@/utils/alerts';
 /*                                                                      */
 /* The rules are the one line and its "i" key (TournamentRules), as     */
 /* on every tournament screen.                                          */
+/*                                                                      */
+/* INVITING IS OPTIONAL, AND THE CODE COMES BACK (v4.12,                */
+/* specs/v4.12/join-codes.md; Jan, 30 Oct 2026: "create the tournament  */
+/* and give me a code for other people to join instead of having to     */
+/* invite my friends before creating the tournament"). Migration 028    */
+/* gives every tournament a join code as it is made, so Create needs a  */
+/* name and the dates, nobody else; the head says "Invite · optional"   */
+/* and the key says "Create" until someone is picked ("Create and       */
+/* invite" then). Made, the sheet turns into the code: the name, the    */
+/* six boxes, Copy and Share (JoinCodeCard), the rules, and "Open       */
+/* tournament" at the foot. The same code is on the tournament's page   */
+/* for everyone in it while it runs.                                    */
+/*                                                                      */
+/* WITHOUT 028 the sheet is build 37's. It asks the server once         */
+/* (probeCodes) and, told there are no codes, keeps an invite required  */
+/* (lib/tournamentCode's inviteRequired). A create with nobody picked   */
+/* before that answer is refused by 020 (no_invitees), which the sheet  */
+/* reads the same way and says: invite someone, for now. With no code   */
+/* to show, a made tournament opens its page, as it always did.         */
 /* ==================================================================== */
 
 /** The goal a "First to" opens on, held to what the dates allow. */
@@ -91,6 +113,9 @@ const FIRST_TO = 10;
 const MAX_INVITEES = TOURNAMENT_LIMITS.maxMembers - 1;
 
 const CREATE_FAILED = 'Could not create the tournament. Check your connection and try again.';
+
+/** Nobody picked, on a server without codes (020 refused it): what to do instead. */
+const INVITE_FOR_NOW = 'For now, invite at least one person you follow.';
 
 /** Create found the sheet out of date (toSend), sent nothing, and measured it again. */
 const CAUGHT_UP = 'Time moved on while this was open, so the dates and goal are updated. Check them, then try again.';
@@ -134,7 +159,15 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const loadList = useTournaments((s) => s.load);
+  const codes = useTournaments((s) => s.codes);
+  const probeCodes = useTournaments((s) => s.probeCodes);
+  const setCodes = useTournaments((s) => s.setCodes);
   const edges = useScrollEdges();
+
+  /* Whether the server has codes (028), once per launch: without them an invite is still required. */
+  useEffect(() => {
+    void probeCodes();
+  }, [probeCodes]);
 
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
@@ -157,20 +190,23 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
   const [error, setError] = useState<string | null>(null);
   /** Set once the server has made it: the sheet then gives way to its page. */
   const [createdId, setCreatedId] = useState<string | null>(null);
+  /** Made, with a code to share: the sheet shows the code until "Open tournament". */
+  const [made, setMade] = useState<{ id: string; name: string; code: string } | null>(null);
 
   const ceiling = maxGoal(settled.first, settled.last, opened);
   const shownTarget = clampGoal(target, ceiling) ?? WINDOW_RULES.minTarget;
   const days = range.last ? rangeDays(range.first, range.last) : null;
   const named = cleanTournamentName(name).length > 0;
   const dated = range.last !== null;
-  const canCreate = named && dated && invitees.length > 0;
+  const needInvite = inviteRequired(codes);
+  const canCreate = named && dated && (!needInvite || invitees.length > 0);
 
   /*
    * A sheet closes on a downward swipe, and a name and a list of people
    * would go with it. Both that and Cancel ask first while anything is
    * filled in; mid-create the dismissal is held rather than offered.
    */
-  const dirty = !createdId && (name.trim().length > 0 || invitees.length > 0);
+  const dirty = !createdId && !made && (name.trim().length > 0 || invitees.length > 0);
   usePreventRemove(dirty, ({ data }) => {
     if (creating) return;
     confirmDestructive(
@@ -226,14 +262,28 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
     setNameError(null);
     const r = await createTournament({ name, ...sent, invitees });
     if (r.ok) {
-      // The button keeps its spinner until the page replaces the sheet.
       haptic.success();
       void loadList();
-      setCreatedId(r.value);
+      if (r.value.joinCode) {
+        // The code, on this sheet: the keyboard has nothing left to type into.
+        Keyboard.dismiss();
+        setCreating(false);
+        setMade({ id: r.value.id, name: cleanTournamentName(name), code: r.value.joinCode });
+        announce('Tournament created. Share the code.');
+        return;
+      }
+      // No code to show: the button keeps its spinner until the page replaces the sheet.
+      setCreatedId(r.value.id);
       return;
     }
     setCreating(false);
     haptic.error();
+    // Nobody picked and 020 refused it: this server has no codes, so someone must be asked, as before.
+    if (createSaysNoCodes(r.reason, invitees.length)) {
+      setCodes(false);
+      setError(INVITE_FOR_NOW);
+      return;
+    }
     // The filter's refusal belongs under the field it is about; the rest above the button.
     if (r.reason === 'objectionable') setNameError(tournamentErrorText(r.reason, CREATE_FAILED));
     else if (CREATE_REASONS.includes(r.reason)) setError(tournamentErrorText(r.reason, CREATE_FAILED));
@@ -250,10 +300,10 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
         setSheetH((prev) => (prev === h ? prev : h));
       }}>
       <ScreenTopBar
-        title="Host a tournament"
+        title={made ? 'Share the code' : 'Host a tournament'}
         inset={Platform.OS === 'ios' ? 'sheet' : 'safe'}
         showRule={edges.under}
-        left={<TopBarTextButton label="Cancel" muted onPress={onClose} />}
+        left={<TopBarTextButton label={made ? 'Close' : 'Cancel'} muted onPress={onClose} />}
       />
       <ScrollView
         style={styles.scroll}
@@ -265,98 +315,121 @@ function HostForm({ myId, onClose }: { myId: string; onClose: () => void }) {
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         showsVerticalScrollIndicator={false}>
-        {/* 1. Name. Prose, so capitals and autocorrect are on; one line (the server refuses a break). */}
-        <Field
-          label="Name"
-          value={name}
-          onChangeText={(v) => {
-            setName(v);
-            setNameError(null);
-          }}
-          placeholder="September field notes"
-          maxLength={TOURNAMENT_LIMITS.nameMax}
-          autoCapitalize="sentences"
-          autoCorrect
-          returnKeyType="done"
-          error={nameError}
-        />
-
-        {/* 2. The dates: the two pages and the days they make, then the month. */}
-        <SectionHeader title="Dates" size="group" style={styles.header} />
-        <View style={styles.dates} accessible accessibilityLabel={spokenDates(range, days, opened)}>
-          <DaySpan first={range.first} last={range.last} />
-          <View style={styles.days}>
-            <Text style={[styles.daysFigure, !days && styles.daysNone]} maxFontSizeMultiplier={1.3}>
-              {days ?? '–'}
+        {made ? (
+          /*
+           * Made: the code, to send to whoever should come. The rules stay
+           * at the foot, as on every tournament screen.
+           */
+          <View>
+            <Text style={styles.madeName} accessibilityRole="header">
+              {made.name}
             </Text>
-            <Text style={styles.daysUnder} maxFontSizeMultiplier={1.3}>
-              {days === 1 ? 'day' : 'days'} · max {WINDOW_RULES.maxDays}
-            </Text>
+            <JoinCodeCard code={made.code} name={made.name} hosting style={styles.madeCode} />
+            <TournamentRules style={styles.rules} />
           </View>
-        </View>
-        <View style={styles.calendar}>
-          {/* Caught up, a new calendar: its page opens on the first day again, not on a month midnight has left. */}
-          <RangeCalendar key={opened.getTime()} range={range} now={opened} onChange={chooseDates} />
-        </View>
+        ) : (
+          <>
+            {/* 1. Name. Prose, so capitals and autocorrect are on; one line (the server refuses a break). */}
+            <Field
+              label="Name"
+              value={name}
+              onChangeText={(v) => {
+                setName(v);
+                setNameError(null);
+              }}
+              placeholder="September field notes"
+              maxLength={TOURNAMENT_LIMITS.nameMax}
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="done"
+              error={nameError}
+            />
 
-        {/* 3. Goal */}
-        <SectionHeader title="Goal" size="group" style={styles.header} />
-        <GoalPicker
-          kind={goalKind}
-          onKind={(next) => {
-            setGoalKind(next);
-            setError(null);
-          }}
-          value={shownTarget}
-          max={ceiling}
-          onStep={(by) => {
-            // From the figure shown, and as an update: a held key steps from the last step, not the first.
-            setTarget((t) => (clampGoal((clampGoal(t, ceiling) ?? WINDOW_RULES.minTarget) + by, ceiling) ?? t));
-            setError(null);
-          }}
-          onPick={(n) => {
-            setTarget(n);
-            setError(null);
-          }}
-        />
+            {/* 2. The dates: the two pages and the days they make, then the month. */}
+            <SectionHeader title="Dates" size="group" style={styles.header} />
+            <View style={styles.dates} accessible accessibilityLabel={spokenDates(range, days, opened)}>
+              <DaySpan first={range.first} last={range.last} />
+              <View style={styles.days}>
+                <Text style={[styles.daysFigure, !days && styles.daysNone]} maxFontSizeMultiplier={1.3}>
+                  {days ?? '–'}
+                </Text>
+                <Text style={styles.daysUnder} maxFontSizeMultiplier={1.3}>
+                  {days === 1 ? 'day' : 'days'} · max {WINDOW_RULES.maxDays}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.calendar}>
+              {/* Caught up, a new calendar: its page opens on the first day again, not on a month midnight has left. */}
+              <RangeCalendar key={opened.getTime()} range={range} now={opened} onChange={chooseDates} />
+            </View>
 
-        {/* 4. Invite */}
-        <SectionHeader title="Invite" size="group" style={styles.header} />
-        <InvitePicker
-          myId={myId}
-          selected={invitees}
-          onChange={(next) => {
-            setInvitees(next);
-            setError(null);
-          }}
-          max={MAX_INVITEES}
-          // Nobody to ask: this sheet gives way to Find friends, and Back from there is the list.
-          onFindFriends={() => router.replace('/find-friends')}
-        />
+            {/* 3. Goal */}
+            <SectionHeader title="Goal" size="group" style={styles.header} />
+            <GoalPicker
+              kind={goalKind}
+              onKind={(next) => {
+                setGoalKind(next);
+                setError(null);
+              }}
+              value={shownTarget}
+              max={ceiling}
+              onStep={(by) => {
+                // From the figure shown, and as an update: a held key steps from the last step, not the first.
+                setTarget((t) => (clampGoal((clampGoal(t, ceiling) ?? WINDOW_RULES.minTarget) + by, ceiling) ?? t));
+                setError(null);
+              }}
+              onPick={(n) => {
+                setTarget(n);
+                setError(null);
+              }}
+            />
 
-        {/* 5. The rules: one line, and the "i" key for the whole of them. */}
-        <TournamentRules style={styles.rules} />
+            {/* 4. Invite: optional while the server has codes (the code is the other way in). */}
+            <SectionHeader title={needInvite ? 'Invite' : 'Invite · optional'} size="group" style={styles.header} />
+            <InvitePicker
+              myId={myId}
+              selected={invitees}
+              onChange={(next) => {
+                setInvitees(next);
+                setError(null);
+              }}
+              max={MAX_INVITEES}
+              optional={!needInvite}
+              // Nobody to ask: this sheet gives way to Find friends, and Back from there is the list.
+              onFindFriends={() => router.replace('/find-friends')}
+            />
+
+            {/* 5. The rules: one line, and the "i" key for the whole of them. */}
+            <TournamentRules style={styles.rules} />
+          </>
+        )}
       </ScrollView>
 
       {/* 6. The footer, outside the scroll, where the thumb is: a bar at the foot, ruled only while the form runs under it. */}
       <View style={[styles.footer, edges.moreBelow && styles.footerRuled, { paddingBottom: insets.bottom + space.md }]}>
-        {error ? <Notice tone="error">{error}</Notice> : null}
-        <Button
-          label="Create and invite"
-          onPress={() => void create()}
-          disabled={!canCreate}
-          loading={creating}
-          block
-          accessibilityHint={
-            canCreate
-              ? undefined
-              : !named
-                ? 'Give the tournament a name first'
-                : !dated
-                  ? 'Pick the last day first'
-                  : 'Invite at least one person first'
-          }
-        />
+        {made ? (
+          <Button label="Open tournament" onPress={() => setCreatedId(made.id)} loading={!!createdId} block />
+        ) : (
+          <>
+            {error ? <Notice tone="error">{error}</Notice> : null}
+            <Button
+              label={invitees.length > 0 ? 'Create and invite' : 'Create'}
+              onPress={() => void create()}
+              disabled={!canCreate}
+              loading={creating}
+              block
+              accessibilityHint={
+                canCreate
+                  ? undefined
+                  : !named
+                    ? 'Give the tournament a name first'
+                    : !dated
+                      ? 'Pick the last day first'
+                      : 'Invite at least one person first'
+              }
+            />
+          </>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -376,6 +449,9 @@ const styles = StyleSheet.create({
   daysUnder: { ...textRole.small, color: colors.textMuted, textAlign: 'right' },
   calendar: { marginTop: space.lg },
   rules: { marginTop: space.xl },
+  /* Made: the name as the page will title it, then the code 16 under it. */
+  madeName: { ...textRole.title, color: colors.text },
+  madeCode: { marginTop: space.lg },
   footer: {
     paddingHorizontal: layout.gutter,
     paddingTop: space.md,

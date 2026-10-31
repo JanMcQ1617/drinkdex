@@ -33,6 +33,11 @@ import type { UserProfile } from '@/types';
 /* Used twice: inside the host sheet's scroll body (new.tsx), and in a   */
 /* page sheet of its own from a tournament's options (InviteSheet,       */
 /* below), which leaves out everyone already in it or asked.            */
+/*                                                                      */
+/* `optional` (v4.12): on the host sheet, while the server has join     */
+/* codes, asking anyone is optional, so following nobody is no dead    */
+/* end: the empty state says the code is the other way in, and keeps    */
+/* Find friends as the second.                                          */
 /* ==================================================================== */
 
 /** Past this many people the list gets a search field. */
@@ -55,6 +60,7 @@ export function InvitePicker({
   onChange,
   max,
   exclude,
+  optional = false,
   onFindFriends,
 }: {
   myId: string;
@@ -64,6 +70,8 @@ export function InvitePicker({
   max: number;
   /** Already in the tournament or asked: not offered again. */
   exclude?: ReadonlySet<string>;
+  /** Nobody need be picked: the tournament's join code lets people in (v4.12). */
+  optional?: boolean;
   /** The way out when you follow nobody. */
   onFindFriends: () => void;
 }) {
@@ -107,7 +115,15 @@ export function InvitePicker({
   }
 
   if (loaded.people.length === 0) {
-    return (
+    return optional ? (
+      <EmptyState
+        icon="users"
+        title="Nobody to invite yet"
+        body="Share the join code once it's made, or find people to follow."
+        actionVariant="secondary"
+        action={{ label: 'Find friends', onPress: onFindFriends }}
+      />
+    ) : (
       <EmptyState
         icon="users"
         title="Follow people first"

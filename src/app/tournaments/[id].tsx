@@ -1,5 +1,5 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActionSheetIOS,
   Alert,
@@ -19,6 +19,7 @@ import { PenSwash } from '@/components/details/PenMarks';
 import { Icon } from '@/components/icons';
 import { ScreenTopBar, TopBarButton, useScrolledPast } from '@/components/ScreenTopBar';
 import { InviteSheet } from '@/components/tournaments/InvitePicker';
+import { JoinCodeCard } from '@/components/tournaments/JoinCode';
 import { Leaderboard, PendingInvites } from '@/components/tournaments/Leaderboard';
 import {
   dateLong,
@@ -39,6 +40,7 @@ import { fetchProfiles } from '@/lib/social';
 import {
   deleteTournament,
   endTournament,
+  fetchJoinCode,
   leave,
   respond,
   type Result,
@@ -95,6 +97,17 @@ import type { TournamentBoard, UserProfile } from '@/types';
 /* page that waits for the board, so the sweep is already there when    */
 /* the board draws. A tournament that is not available and a load that  */
 /* failed stay bare, as every dead end and error does.                  */
+/*                                                                      */
+/* THE JOIN CODE (v4.12, specs/v4.12/join-codes.md). For the host and   */
+/* everyone in it, while it has not finished: a "Join code" head, the   */
+/* six boxes, Copy and Share (JoinCodeCard), after what you can do and   */
+/* before the standings, so the way to bring someone in is near the top */
+/* while it is coming up. Read from the tournament's row once per visit */
+/* (lib/tournaments' fetchJoinCode; it never changes), and again with   */
+/* the next board load (a pull, a return) while a read has come back    */
+/* empty, so a weak connection costs it only until the next pull. Not   */
+/* shown to someone only invited (Join first), nor once it has finished */
+/* (nobody can join then), nor without migration 028 (no code to read). */
 /* ==================================================================== */
 
 /**
@@ -176,6 +189,31 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
   const [refreshing, setRefreshing] = useState(false);
   const [busy, setBusy] = useState<Busy | null>(null);
   const [inviting, setInviting] = useState(false);
+  /* The join code, for the people in it while it runs (null: none to show, or not read yet). */
+  const [joinCode, setJoinCode] = useState<string | null>(null);
+  const wantCode =
+    !!board && (board.myStatus === 'host' || board.myStatus === 'accepted') && board.state !== 'finished';
+  /*
+   * A read that came back empty (offline, a failed call, or no 028) is
+   * asked again by the next board load, a pull or a return to the page,
+   * or the code never came until the page was opened afresh. Only after
+   * an empty one, so a first visit, whose board load and code read are
+   * out together, asks once.
+   */
+  const [codeTry, setCodeTry] = useState(0);
+  const codeMissed = useRef(false);
+  useEffect(() => {
+    if (!wantCode || joinCode) return;
+    let alive = true;
+    void fetchJoinCode(id).then((c) => {
+      if (!alive) return;
+      codeMissed.current = c === null;
+      setJoinCode(c);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [id, wantCode, joinCode, codeTry]);
   /*
    * The board as it stood when you deleted, left or declined it. Those
    * take it out of the store at once, and without this the page would
@@ -188,7 +226,12 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
       if (!wellFormed) return;
       let alive = true;
       void fetchBoardWithPeople(id).then((o) => {
-        if (alive) setOutcome(o);
+        if (!alive) return;
+        setOutcome(o);
+        if (codeMissed.current) {
+          codeMissed.current = false;
+          setCodeTry((n) => n + 1);
+        }
       });
       return () => {
         alive = false;
@@ -196,7 +239,13 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
     }, [id, wellFormed]),
   );
 
-  const refetch = async () => setOutcome(await fetchBoardWithPeople(id));
+  const refetch = async () => {
+    setOutcome(await fetchBoardWithPeople(id));
+    if (codeMissed.current) {
+      codeMissed.current = false;
+      setCodeTry((n) => n + 1);
+    }
+  };
   const refresh = async () => {
     setRefreshing(true);
     await refetch();
@@ -267,6 +316,7 @@ function TournamentPage({ id, myId, onBack }: { id: string; myId: string; onBack
       scrolled={scrolled}
       onScroll={onScroll}
       bottomInset={insets.bottom}
+      joinCode={wantCode ? joinCode : null}
       busy={busy}
       inviting={inviting}
       onBack={onBack}
@@ -330,6 +380,7 @@ function BoardView({
   scrolled,
   onScroll,
   bottomInset,
+  joinCode,
   busy,
   inviting,
   onBack,
@@ -348,6 +399,8 @@ function BoardView({
   scrolled: boolean;
   onScroll: ReturnType<typeof useScrolledPast>[1];
   bottomInset: number;
+  /** The code to share, for someone in it while it runs; null hides it. */
+  joinCode: string | null;
   busy: Busy | null;
   inviting: boolean;
   onBack: () => void;
@@ -654,6 +707,14 @@ function BoardView({
               onPress={confirmDecline}
             />
           </View>
+        ) : null}
+
+        {/* ---- The join code: for the people in it, while it can still be joined ---- */}
+        {joinCode && member && !finished ? (
+          <>
+            <SectionHeader title="Join code" size="group" style={styles.header} />
+            <JoinCodeCard code={joinCode} name={board.name} hosting={isHost} />
+          </>
         ) : null}
 
         {/* ---- Standings ---- */}

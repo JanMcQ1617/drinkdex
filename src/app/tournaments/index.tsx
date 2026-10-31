@@ -15,7 +15,7 @@ import {
 import { announce, Button, EmptyState, haptic, Hold, Notice, SectionHeader } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
 import { fetchProfiles } from '@/lib/social';
-import { newTournamentHref, respond, tournamentHref } from '@/lib/tournaments';
+import { joinCodeHref, newTournamentHref, respond, tournamentHref } from '@/lib/tournaments';
 import { useAuth } from '@/store/auth';
 import { mergeProfiles, useSocial } from '@/store/social';
 import { useTournaments } from '@/store/tournaments';
@@ -38,6 +38,11 @@ import type { TournamentSummary } from '@/types';
 /* Daylight: rows on the page under small group heads, no panels, and   */
 /* the bar holds only Back (layout principle 8), so "Host a tournament" */
 /* is a key under the list.                                             */
+/*                                                                      */
+/* v4.12 (specs/v4.12/join-codes.md): "Join with code" wherever Host    */
+/* is, as on the tab: a second wash key under Host, and the empty       */
+/* state's quieter second way out. Hosting needs nobody invited now, so */
+/* the empty state no longer says it is "with people you follow".       */
 /*                                                                      */
 /* v4.11 (specs/v4.11/tournaments.md 3): each row's second line is a    */
 /* facts line (its dates as figures, the people, a "First to" goal; who */
@@ -172,6 +177,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
 
   const open = (t: TournamentSummary) => router.push(tournamentHref(t.id));
   const host = () => router.push(newTournamentHref());
+  const joinByCode = () => router.push(joinCodeHref());
 
   /*
    * Join or decline here, without opening it. Declining is final for that
@@ -243,6 +249,7 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
         </View>
       ))}
       <Button label="Host a tournament" variant="secondary" icon="plus" block onPress={host} style={styles.host} />
+      <Button label="Join with code" variant="secondary" icon="addPerson" block onPress={joinByCode} style={styles.join} />
     </>
   ) : !settled ? (
     <Hold fill={false} slowMessage="Still loading your tournaments." />
@@ -259,8 +266,9 @@ function TournamentsBody({ myId, onBack }: { myId: string; onBack: () => void })
       icon="trophy"
       doodle="shaker"
       title="No tournaments yet"
-      body="Host one with people you follow."
+      body="Host one, or join with a code someone shared."
       action={{ label: 'Host a tournament', onPress: host }}
+      secondaryAction={{ label: 'Join with code', onPress: joinByCode }}
     />
   );
 
@@ -300,5 +308,7 @@ const styles = StyleSheet.create({
   firstHeader: { marginTop: space.lg, marginBottom: space.xs, marginHorizontal: HEAD_INSET },
   header: { marginTop: space.xl, marginBottom: space.xs, marginHorizontal: HEAD_INSET },
   host: { marginTop: space.xl, marginHorizontal: layout.gutter },
+  /* 8 under Host: two keys of one kind, read as a pair (FriendsBoard's). */
+  join: { marginTop: space.sm, marginHorizontal: layout.gutter },
   rules: { marginTop: space.xl, marginHorizontal: layout.gutter },
 });

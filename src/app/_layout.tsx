@@ -251,6 +251,14 @@ export default function RootLayout() {
           options={{ presentation: 'modal', gestureDirection: 'vertical' }}
         />
         {/*
+          Joining one with a code (v4.12): a task too, the same sheet. A
+          join link opens it with the code in (app/+native-intent).
+        */}
+        <Stack.Screen
+          name="tournaments/join"
+          options={{ presentation: 'modal', gestureDirection: 'vertical' }}
+        />
+        {/*
           Editing, on the other hand, is a task — modal, so the downward
           dismiss reads as "never mind" and the Cancel in its bar means the
           same thing as the gesture.

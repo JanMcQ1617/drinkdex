@@ -76,6 +76,16 @@ import { usePlaces } from '@/store/places';
 /* asks (it replaced v4.8's "Show places near me", which asked the same */
 /* question), and after a refusal it says so and opens Settings.        */
 /*                                                                      */
+/* NO STATE OF IT IS A DEAD END (v4.12, specs/v4.12/current-place-fix). */
+/* In build 37 "No bar or restaurant here." and "Can't tell which place */
+/* you're in." took no tap, a fix that never came read as "nothing      */
+/* within 800 m" and took none either, "finding" could spin for as long */
+/* as Apple took, and Precise Location off was a line under the field   */
+/* that named the row it hid: a tap on Current place did nothing, which */
+/* is how it was reported. Now every state but finding does something   */
+/* (Tag this place, ask, Settings, look again, or the field, to search  */
+/* by name), and finding says so and ends after FIND_WAIT_MS.           */
+/*                                                                      */
 /* A TAP SHOWS THE PLACE BEFORE IT IS TAGGED. A row, once resolved,     */
 /* opens a short "Tag this place" step: Apple's map of the venue, its   */
 /* name and address, the name it will carry on the post, the key, and   */
@@ -166,9 +176,24 @@ const NEARBY_RADIUS_M = 800;
 const HERE_RADIUS_M = 100;
 /** The current place's key as a pick: never a list row's (`near:`, `found:`, `s:`). */
 const HERE_KEY = 'here';
+/*
+ * How long Current place may say it is finding before it says what it
+ * was waiting for. Native gives up on the fix at 10 s
+ * (PlaceSearchEngine.swift's currentCoordinate, which then answers no
+ * fix), but MapKit's nearby search has no deadline of its own, and on a
+ * weak connection it can outlast anyone's patience: the row spun, took no
+ * tap, and read as broken. 20 s is native's 10 for the fix and 10 more for
+ * Apple's answer.
+ */
+const FIND_WAIT_MS = 20_000;
+const FINDING_LINE = 'Finding where you are…';
 const NOTHING_HERE_LINE = 'No bar or restaurant here.';
 const UNSURE_HERE_LINE = "Can't tell which place you're in.";
+/* No fix came (CoreLocation failed, or gave none in native's 10 s, or the ask outran FIND_WAIT_MS): a tap looks again. */
+const LOST_LINE = "Couldn't find where you are. Try again.";
 const LOCATION_OFF_LINE = 'Location is off for Sipply in Settings.';
+/* The Precise Location switch sits on the same Settings page as the Location one, under it. */
+const PRECISE_OFF_LINE = 'Precise Location is off in Settings.';
 /*
  * "Isn't sent to Sipply", not "stays on your phone": the nearby search
  * sends the position to Apple (MKLocalPointsOfInterestRequest), as the
@@ -199,18 +224,34 @@ type Trouble = 'throttled' | 'failed';
 /** An answer, kept with the term it answers, so a slow one for an older term never shows under a newer. */
 type Answer<T> = { term: string; rows: T } | { term: string; trouble: Trouble };
 
-/** The nearby list: asked once per open, and only with a precise fix. */
-type Near = { status: 'idle' } | { status: 'loading' } | { status: 'ready'; rows: FoundPlace[] } | { status: 'failed'; trouble: Trouble };
+/**
+ * The nearby list: asked once per open, and only with a precise fix.
+ * `lost` is no fix at all, which is not "nothing near": build 37 read it
+ * as an empty answer and said "No bars or restaurants within 800 m".
+ */
+type Near =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'ready'; rows: FoundPlace[] }
+  | { status: 'failed'; trouble: Trouble }
+  | { status: 'lost' };
 
 /**
- * The Current place row, by the location state and the nearby answer:
- * `ask` (never answered: a tap asks), `finding` (the fix and nearby() are
- * out), `found`, `none` (nothing within HERE_RADIUS_M), `unsure` (venues
- * near, but the fix is too coarse to say which one you are in) or `off`
- * (refused: a tap opens Settings). Null draws no row: approximate
- * location (its own line says why), restricted, no module, a nearby ask
- * superseded, or one that failed (the Notice says why, and Try again
- * finds it again).
+ * The Current place row, by the location state and the nearby answer.
+ * Every kind but `finding` takes a tap:
+ *   `ask`        never answered: a tap asks.
+ *   `finding`    the fix and nearby() are out: a spinner and words, ended
+ *                by FIND_WAIT_MS.
+ *   `found`      a venue within HERE_RADIUS_M: Tag this place.
+ *   `none`       nothing within HERE_RADIUS_M, and `unsure`, venues near
+ *                but the fix too coarse to say which one you are in: a
+ *                tap puts the cursor in the field, to search by name.
+ *   `lost`       no fix came: a tap looks again.
+ *   `off`        refused, and `imprecise`, Precise Location off: a tap
+ *                opens Settings, where both switches are.
+ * Null draws no row: restricted, no module, a nearby ask superseded (asked
+ * again as the field is cleared), or one that failed (the Notice says why,
+ * and Try again finds it again).
  */
 type Here =
   | { kind: 'ask' }
@@ -218,7 +259,9 @@ type Here =
   | { kind: 'found'; p: FoundPlace }
   | { kind: 'none' }
   | { kind: 'unsure' }
-  | { kind: 'off' };
+  | { kind: 'lost' }
+  | { kind: 'off' }
+  | { kind: 'imprecise' };
 
 function troubleOf(e: unknown): Trouble {
   return e instanceof PlaceSearchError && e.code === 'throttled' ? 'throttled' : 'failed';
@@ -284,8 +327,21 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
    * but lists nothing: a kilometre-wide guess would put the wrong bars
    * "near you". Turned off in Settings while the sheet was open (below),
    * what the last fix found goes with it.
+   *
+   * EACH LOAD TAKES A NUMBER, and only the newest may land (`loadSeq`).
+   * Two can be out at once (Try again or the lost row tapped twice, the
+   * location prompt's answer beside a return from Settings), and native
+   * runs one MKLocalSearch at a time, so the newer nearby() settles the
+   * older as superseded; that older null, landing after the newer answer,
+   * blanked the row and the list it had just filled.
    */
+  const loadSeq = useRef(0);
+  /* An ask the field's clearing owed while a suggestion settled (onChangeText, payNear); any load pays it. */
+  const nearOwed = useRef(false);
   const loadNear = useCallback(async (state: LocationState) => {
+    const seq = ++loadSeq.current;
+    const live = () => seq === loadSeq.current;
+    nearOwed.current = false;
     if (state.permission !== 'granted') {
       setFix(null);
       setFixClose(false);
@@ -293,27 +349,69 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
       return;
     }
     setNear(state.precise ? { status: 'loading' } : { status: 'idle' });
-    const got = await currentCoordinate();
-    const at = got?.at ?? null;
-    setFix(at);
-    setFixClose(got?.close ?? false);
-    if (!state.precise) return;
-    if (!at) {
-      setNear({ status: 'ready', rows: [] });
-      return;
-    }
+    /*
+     * Never a row that spins for good. FIND_WAIT_MS after the ask, what is
+     * still out is dropped (the number moves on, so a late answer cannot
+     * land) and the row says what it was waiting for: the fix (lost, which
+     * a tap asks again) or Apple's answer (failed: the list's own Notice
+     * and its Try again, as for any search that did not answer). Native's
+     * own 10 s ends most waits for a fix first, as no fix (`!at`, lost
+     * too); one CoreLocation delivers after that is kept natively, so the
+     * lost row's second ask gets it at once.
+     */
+    let located = false;
+    const watchdog = state.precise
+      ? setTimeout(() => {
+          if (!live()) return;
+          loadSeq.current += 1;
+          setNear(located ? { status: 'failed', trouble: 'failed' } : { status: 'lost' });
+        }, FIND_WAIT_MS)
+      : null;
     try {
-      const rows = await nearby(at);
-      /*
-       * Superseded: MapKit runs one venue search at a time, and a tap on a
-       * row or the return key took its turn (or the sheet is going). The
-       * list then says nothing rather than spinning for good.
-       */
-      setNear(rows ? { status: 'ready', rows } : { status: 'idle' });
-    } catch (e) {
-      setNear({ status: 'failed', trouble: troubleOf(e) });
+      const got = await currentCoordinate();
+      if (!live()) return;
+      const at = got?.at ?? null;
+      setFix(at);
+      setFixClose(got?.close ?? false);
+      if (!state.precise) return;
+      if (!at) {
+        setNear({ status: 'lost' });
+        return;
+      }
+      located = true;
+      try {
+        const rows = await nearby(at);
+        if (!live()) return;
+        /*
+         * Superseded: MapKit runs one venue search at a time, and a tap on a
+         * suggestion or the return key took its turn (or the sheet is
+         * going). The list then says nothing rather than spinning for good,
+         * and clearing the field asks again (onChangeText).
+         */
+        setNear(rows ? { status: 'ready', rows } : { status: 'idle' });
+      } catch (e) {
+        if (live()) setNear({ status: 'failed', trouble: troubleOf(e) });
+      }
+    } finally {
+      if (watchdog) clearTimeout(watchdog);
     }
   }, []);
+
+  /*
+   * Gone, nothing it asked may land or ask again. Closing cancels the
+   * search in flight (PlaceSearchSheet's close), but not a fix: one that
+   * came after (native waits up to 10 s) went on to nearby(), sending the
+   * position to Apple for a sheet that was dismissed and taking MapKit's
+   * one search from whatever asked next, a reopened sheet's included. The
+   * number moves on, so a load still out stops at its next `live()`, and
+   * its watchdog, if it fires first, finds it stale and sets nothing.
+   */
+  useEffect(
+    () => () => {
+      loadSeq.current += 1;
+    },
+    [],
+  );
 
   useEffect(() => {
     let alive = true;
@@ -335,12 +433,13 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
 
   /*
    * Back from Settings with the sheet still open: Current place sends a
-   * refusal there, and iOS does not end the app for a location switch, so
-   * the sheet would go on saying "Location is off" after it was turned on.
-   * The state is read again, and a change loads as a tap does: the row
-   * goes to finding, then to the place, by itself. Only after the app was
-   * really away (background): the location prompt only makes it inactive,
-   * and askLocation already loads what that answer allows.
+   * refusal there, and Precise Location off (v4.12), and iOS does not end
+   * the app for either switch, so the sheet would go on saying "Location
+   * is off" after it was turned on. The state is read again, and a change
+   * loads as a tap does: the row goes to finding, then to the place, by
+   * itself. Only after the app was really away (background): the location
+   * prompt only makes it inactive, and askLocation already loads what that
+   * answer allows.
    */
   useEffect(() => {
     if (!loc) return;
@@ -371,6 +470,13 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
     haptic.select();
     const state = await requestLocation();
     setLoc(state);
+    /*
+     * Allowed with Precise Location: the nearby list is about to show, and
+     * the keys, up since the sheet opened with nothing near to show, would
+     * sit over it (the open's own rule, above). Down, a later tap on
+     * "nothing here" visibly brings them back to search by name.
+     */
+    if (state.permission === 'granted' && state.precise) Keyboard.dismiss();
     void loadNear(state);
   };
 
@@ -440,10 +546,22 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
     setChosen(found);
   };
 
+  /*
+   * The nearby ask the field's clearing owed while a suggestion settled
+   * (onChangeText), made once the pick has let go of MapKit's one search
+   * and the list is back: the pick failed, or Back to search from Tag
+   * this place. Not as a pick is superseded, which may be the sheet
+   * going, nor on the Tag step, which shows no list.
+   */
+  const payNear = () => {
+    if (nearOwed.current && loc?.permission === 'granted' && loc.precise) void loadNear(loc);
+  };
+
   const backToSearch = () => {
     setPickNotice(null);
     setLabelError(null);
     setChosen(null);
+    payNear();
   };
 
   /*
@@ -480,12 +598,14 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
         found = await resolve(row.s);
       } catch (e) {
         setPickNotice(TROUBLE_LINE[troubleOf(e)]);
+        payNear();
         return;
       }
       // Superseded: the sheet is closing, or a newer ask took MapKit's turn.
       if (found === null) return;
       if (found === 'not_taggable') {
         setPickNotice("This place can't be tagged. Pick a bar, restaurant or similar place.");
+        payNear();
         return;
       }
       choose(found);
@@ -506,8 +626,9 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
       case 'denied':
         return { kind: 'off' };
       case 'granted':
-        if (!loc.precise) return null;
+        if (!loc.precise) return { kind: 'imprecise' };
         if (near.status === 'loading') return { kind: 'finding' };
+        if (near.status === 'lost') return { kind: 'lost' };
         if (near.status !== 'ready') return null;
         if (hereVenue) return { kind: 'found', p: hereVenue };
         return nearest && !fixClose ? { kind: 'unsure' } : { kind: 'none' };
@@ -535,10 +656,35 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
   const hereBusy = hereShown && here?.kind === 'finding';
 
   const onChangeText = (text: string) => {
-    if (!typing && text.trim().length >= MIN_QUERY) setHereKept(hereFound !== null);
+    const nowTyping = text.trim().length >= MIN_QUERY;
+    if (!typing && nowTyping) setHereKept(hereFound !== null);
+    /*
+     * Back under two characters with the nearby answer superseded while
+     * the term was out (a suggestion's tap or the return key took MapKit's
+     * one search): asked again, or the sheet showed neither the row nor
+     * Near you until it was reopened. Not while a suggestion is settling,
+     * whose search this one would cancel in turn: owed instead, and asked
+     * once the pick lets go (payNear). Typing a term again cancels the
+     * debt, since the next clearing asks for itself.
+     */
+    if (typing && !nowTyping && near.status === 'idle' && loc?.permission === 'granted' && loc.precise) {
+      if (settling === null) void loadNear(loc);
+      else nearOwed.current = true;
+    }
+    if (nowTyping) nearOwed.current = false;
     setQuery(text);
     setPickNotice(null);
   };
+
+  /*
+   * "No bar or restaurant here." and "Can't tell which place you're in."
+   * end the row's question, so a tap goes to the one way left to name the
+   * place: its name, typed. Not a second look: native serves the same fix
+   * for 120 s (PlaceSearchEngine.swift's fixAt), so looking again would
+   * spin and give the same answer, a tap that looks as if it worked and
+   * did not.
+   */
+  const searchByName = () => fieldRef.current?.focus();
 
   /* ---- What the list holds ---- */
 
@@ -586,7 +732,7 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
   const nothingNear = !typing && near.status === 'ready' && near.rows.length === 0;
   const noMatchLine = `No bars or restaurants match “${term}”.`;
   const nothingNearLine = `No bars or restaurants within ${formatDistance(NEARBY_RADIUS_M)}. Search by name.`;
-  /* Current place's one quiet line when it holds no venue; with nothing near at all it says so for the whole list. */
+  /* Current place's one quiet line when the answer held no venue for it; with nothing near at all it says so for the whole list. */
   const hereLine =
     here?.kind === 'none'
       ? nothingNear
@@ -594,7 +740,9 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
         : NOTHING_HERE_LINE
       : here?.kind === 'unsure'
         ? UNSURE_HERE_LINE
-        : null;
+        : here?.kind === 'lost'
+          ? LOST_LINE
+          : null;
 
   /*
    * After each answer VoiceOver hears how many, or the empty line; on the
@@ -609,6 +757,8 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
     ? `${chosen.name}. Tag this place?`
     : noMatch
     ? noMatchLine
+    : !typing && near.status === 'lost'
+    ? `Current place. ${LOST_LINE}`
     : nothingNear
       ? nothingNearLine
       : (answeredNow || (!typing && near.status === 'ready')) && !trouble
@@ -637,17 +787,19 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
     if (typing || !loc) return null;
     switch (loc.permission) {
       case 'granted':
-        return loc.precise ? (
-          near.status === 'ready' && rows.length > 0 ? (
-            <Text accessibilityRole="header" style={[styles.groupTitle, styles.gutter]}>
-              Near you
-            </Text>
-          ) : null
-        ) : (
-          <Text style={[styles.quiet, styles.line]}>
-            Precise Location is off for Sipply, so your current place and places near you aren&apos;t listed. Search by name.
+        /*
+         * Near you's heading, over the venues. With Precise Location off
+         * there are none to head, and since v4.12 Current place says why
+         * and opens Settings (`imprecise`): build 37 said it in a line here
+         * instead, which named "your current place" as one of the things
+         * not listed and could not be tapped, so a finger that went for the
+         * words got nothing.
+         */
+        return loc.precise && near.status === 'ready' && rows.length > 0 ? (
+          <Text accessibilityRole="header" style={[styles.groupTitle, styles.gutter]}>
+            Near you
           </Text>
-        );
+        ) : null;
       case 'undetermined':
       case 'denied':
         /*
@@ -701,15 +853,48 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
           />
         );
       case 'finding':
-        return <HereRow busy label="Current place, finding where you are" />;
+        return <HereRow busy line={FINDING_LINE} label="Current place, finding where you are" />;
       case 'none':
       case 'unsure':
-        return hereLine ? <HereRow line={hereLine} label={`Current place. ${hereLine}`} /> : null;
+        return hereLine ? (
+          <HereRow
+            line={hereLine}
+            label={`Current place. ${hereLine}`}
+            hint="Puts the cursor in the search field, to search by name"
+            onPress={searchByName}
+          />
+        ) : null;
+      case 'lost':
+        return (
+          <HereRow
+            line={LOST_LINE}
+            label={`Current place. ${LOST_LINE}`}
+            hint="Looks for where you are again"
+            onPress={() => {
+              if (loc) void loadNear(loc);
+            }}
+          />
+        );
       case 'off':
         return (
           <HereRow
             line={LOCATION_OFF_LINE}
             label={`Current place. ${LOCATION_OFF_LINE}`}
+            hint="Opens Settings"
+            onPress={() => void Linking.openSettings()}
+          />
+        );
+      case 'imprecise':
+        /*
+         * Allowed, but approximate: a kilometre-wide guess cannot name the
+         * bar you are in, so the row names no place. It says why, and goes
+         * where the switch is; coming back with it on loads as a tap does
+         * (Body's AppState listener compares `precise` too).
+         */
+        return (
+          <HereRow
+            line={PRECISE_OFF_LINE}
+            label={`Current place. ${PRECISE_OFF_LINE}`}
             hint="Opens Settings"
             onPress={() => void Linking.openSettings()}
           />
@@ -880,9 +1065,13 @@ function Body({ current, onPick, onClose }: { current: PlaceRef | null; onPick: 
  * 20pt locate glyph at the gutter (a spinner in its place while the fix
  * and nearby() are out, the trailing slot's busy pattern moved to the
  * front, since this row has no trailing check yet), "Current place" over
- * one quiet line. A tap only where it does something: ask, or Settings.
- * Every label starts with the words on the row, so "Tap Current place"
- * in Voice Control finds it in any state.
+ * one quiet line. Every state but finding takes a tap (ask, Settings, look
+ * again, or the field), so the plain View, no press and no fill, is the
+ * busy row alone, and it says in words that it is busy as well as with the
+ * spinner: in build 37 two quiet states drew this same row, glyph and all,
+ * took no tap, and looked like a button that did nothing. Every label
+ * starts with the words on the row, so "Tap Current place" in Voice
+ * Control finds it in any state.
  */
 function HereRow({
   line,
@@ -1036,8 +1225,6 @@ const styles = StyleSheet.create({
   content: { paddingTop: space.sm, paddingBottom: space.xxxl },
 
   notice: { marginHorizontal: layout.gutter, marginBottom: space.md },
-  /* A quiet line at the gutter, 16 under the field. */
-  line: { paddingHorizontal: layout.gutter, paddingTop: space.lg, alignItems: 'flex-start' },
   noMatch: { textAlign: 'center', paddingHorizontal: layout.gutter, paddingTop: space.xl },
   attribution: { textAlign: 'center', marginTop: space.lg, paddingHorizontal: layout.gutter },
 

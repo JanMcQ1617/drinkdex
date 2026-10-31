@@ -1,9 +1,9 @@
 -- ====================================================================
--- Sipply — the whole schema, as of migration 027
+-- Sipply — the whole schema, as of migration 028
 --
 -- FOR A NEW, EMPTY SUPABASE PROJECT ONLY. Paste into the SQL Editor and
 -- Run once. It builds in one pass what the original base schema plus
--- migrations 002-027 built on the live project, and records every one of
+-- migrations 002-028 built on the live project, and records every one of
 -- them in schema_migrations, so 009's drift check reads the same on both.
 --
 -- NEVER RUN IT ON THE LIVE PROJECT. The live database changes only through
@@ -402,11 +402,24 @@ create table if not exists private.music_search_usage (
   primary key (user_id, hour)
 );
 
+-- Wrong tournament codes (028), the same shape: per account and clock
+-- hour, twenty in this hour and the last and the next guess is refused
+-- unread. Counts and hours only, never the codes tried. Revoked outright.
+create table if not exists private.tournament_code_misses (
+  user_id uuid not null references public.profiles on delete cascade,
+  hour    timestamptz not null,
+  count   integer not null default 0,
+  primary key (user_id, hour)
+);
+
 -- Tournaments (020): friends compete to try the most DIFFERENT drinks.
 -- ends_at is exclusive; target null = most by the end; tz is the host's
 -- IANA zone, the daily cap's calendar day. finished_at, winner_id and
 -- finalized_at are written once, by finalize_tournament. Select-only for
--- clients: every write is an RPC.
+-- clients: every write is an RPC. join_code (028) is six of the 31
+-- characters that cannot be misread (2-9, A-Z without I, L, O), unique
+-- among unfinished tournaments (tournaments_join_code_open); its default,
+-- private.new_tournament_code(), is set under Functions, once it exists.
 create table if not exists public.tournaments (
   id           uuid primary key default gen_random_uuid(),
   host_id      uuid not null references public.profiles on delete cascade,
@@ -420,12 +433,14 @@ create table if not exists public.tournaments (
   winner_id    uuid references public.profiles on delete set null,
   finalized_at timestamptz,           -- results frozen
   created_at   timestamptz not null default now(),
+  join_code    text,                  -- 028: how people join without an invitation
   constraint tournaments_name_shape check (
     name = btrim(name) and char_length(name) between 1 and 40 and name !~ '[\r\n\t]'),
   constraint tournaments_window check (
     ends_at - starts_at >= interval '1 day' and ends_at - starts_at <= interval '31 days'),
   constraint tournaments_target check (target is null or target between 2 and 100),
-  constraint tournaments_tz_len check (char_length(tz) between 1 and 64)
+  constraint tournaments_tz_len check (char_length(tz) between 1 and 64),
+  constraint tournaments_join_code_shape check (join_code is null or join_code ~ '^[2-9A-HJKMNP-Z]{6}$')
 );
 
 -- The host has a row too, always 'accepted'. 'declined' covers declining,
@@ -657,6 +672,10 @@ create unique index if not exists reports_once_per_reel  on public.reports (repo
 -- I am in", by person and status.
 create index if not exists tournaments_host_idx          on public.tournaments (host_id, created_at desc);
 create index if not exists tournament_members_user_idx   on public.tournament_members (user_id, status);
+-- 028: one tournament per code among the unfinished; a finished one keeps
+-- its code on its row, out of the index, and the code may be drawn again.
+create unique index if not exists tournaments_join_code_open
+  on public.tournaments (join_code) where finalized_at is null;
 -- 022: the want-to-try list, newest first, for the first sync's read.
 create index if not exists want_to_try_user_created_idx on public.want_to_try (user_id, created_at desc);
 -- 023: a person's collections, last saved to first; each item once per
@@ -2885,7 +2904,10 @@ $$;
 
 -- 020: hosts a tournament. Errors are P0001: invalid_dates, invalid_goal,
 -- too_many_tournaments, no_invitees (rolls the call back), and the name
--- filter's objectionable_content (detail 'tournament_name').
+-- filter's objectionable_content (detail 'tournament_name'). Since 028
+-- inviting is optional: no_invitees only when people were named and none
+-- of them could be invited. The code is the column's default; the insert
+-- is tried again (three times at most) when two creates drew the same one.
 create or replace function public.create_tournament(
   p_name text, p_starts_at timestamptz, p_ends_at timestamptz,
   p_target integer, p_tz text, p_invitees uuid[])
@@ -2896,8 +2918,10 @@ security definer
 set search_path = ''
 as $$
 declare
-  me  uuid := auth.uid();
-  tid uuid;
+  me    uuid := auth.uid();
+  tid   uuid;
+  tries integer := 0;
+  asked integer := coalesce(cardinality(array_remove(p_invitees, null)), 0);
 begin
   if me is null then
     raise exception 'not signed in: create_tournament got no auth.uid()' using errcode = '28000';
@@ -2926,17 +2950,28 @@ begin
   end if;
 
   -- One line, single spaces: the name check's shape. The filter runs in
-  -- the insert trigger.
-  insert into public.tournaments (host_id, name, starts_at, ends_at, target, tz)
-  values (me, btrim(regexp_replace(coalesce(p_name, ''), '\s+', ' ', 'g')), p_starts_at, p_ends_at,
-          p_target,
-          coalesce((select z.name from pg_catalog.pg_timezone_names z where z.name = p_tz), 'UTC'))
-  returning id into tid;
+  -- the insert trigger. The code is the column's default.
+  loop
+    begin
+      insert into public.tournaments (host_id, name, starts_at, ends_at, target, tz)
+      values (me, btrim(regexp_replace(coalesce(p_name, ''), '\s+', ' ', 'g')), p_starts_at, p_ends_at,
+              p_target,
+              coalesce((select z.name from pg_catalog.pg_timezone_names z where z.name = p_tz), 'UTC'))
+      returning id into tid;
+      exit;
+    exception
+      when unique_violation then
+        tries := tries + 1;
+        if tries >= 3 then
+          raise;
+        end if;
+    end;
+  end loop;
 
   insert into public.tournament_members (tournament_id, user_id, status, responded_at)
   values (tid, me, 'accepted', now());
 
-  if private.add_invitees(tid, me, p_invitees) = 0 then
+  if private.add_invitees(tid, me, p_invitees) = 0 and asked > 0 then
     raise exception 'no_invitees' using errcode = 'P0001';     -- rolls the whole call back
   end if;
   return tid;
@@ -3134,6 +3169,267 @@ begin
      and ((x.host_id = new.blocker_id and m.user_id = new.blocked_id)
        or (x.host_id = new.blocked_id and m.user_id = new.blocker_id));
   return null;
+end;
+$$;
+
+-- 028: a typed code as stored (upper case, no spaces or dashes), or null
+-- when it cannot be one. Reads nothing.
+create or replace function private.tournament_code_norm(p_code text)
+returns text
+language sql
+immutable
+set search_path = ''
+as $$
+  select case when x.c ~ '^[2-9A-HJKMNP-Z]{6}$' then x.c end
+  from (select upper(regexp_replace(coalesce(p_code, ''), '[[:space:]-]+', '', 'g')) as c) x;
+$$;
+
+-- 028: a new code, free among unfinished tournaments: one byte of a fresh
+-- gen_random_uuid() per character, a byte of 248 or more drawn again (no
+-- bias), and a code the content filter would refuse drawn again too.
+create or replace function private.new_tournament_code()
+returns text
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  abc  constant text := '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
+  b    integer;
+  code text;
+begin
+  loop
+    code := '';
+    while char_length(code) < 6 loop
+      b := get_byte(uuid_send(gen_random_uuid()), 0);
+      if b < 248 then
+        code := code || substr(abc, b % 31 + 1, 1);
+      end if;
+    end loop;
+    exit when not public.is_objectionable(code, true)
+          and not exists (select 1 from public.tournaments x
+                          where x.join_code = code and x.finalized_at is null);
+  end loop;
+  return code;
+end;
+$$;
+
+-- The column's default, now that the generator exists (028).
+alter table public.tournaments alter column join_code set default private.new_tournament_code();
+
+-- 028: the one way a code reaches a tournament: {result: 'found', id}, or
+-- not_found (a miss, charged; also a host the caller is blocked with),
+-- limited (twenty misses in this hour and the last, refused unread) or
+-- finished (frozen on the way, or a finished tournament's code, which is
+-- not charged). A code that cannot be one is not_found uncharged. The
+-- caller's guesses are serialised; both RPCs sign out a deleted account's
+-- live token before this (no profile, so no miss could be counted).
+create or replace function private.find_tournament_by_code(p_code text)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me     uuid := auth.uid();
+  code   text := private.tournament_code_norm(p_code);
+  missed integer;
+  r      public.tournaments;
+begin
+  if me is null or code is null then
+    return jsonb_build_object('result', 'not_found');
+  end if;
+
+  perform pg_advisory_xact_lock(hashtextextended('tournament_code:' || me::text, 0));
+  delete from private.tournament_code_misses u
+  where u.user_id = me and u.hour < now() - interval '1 day';
+  select coalesce(sum(u.count), 0) into missed
+  from private.tournament_code_misses u
+  where u.user_id = me and u.hour >= date_trunc('hour', now()) - interval '1 hour';
+  if missed >= 20 then
+    return jsonb_build_object('result', 'limited');
+  end if;
+
+  select * into r from public.tournaments x
+  where x.join_code = code and x.finalized_at is null;
+  -- None running, but a finished one kept it (section 2): a real code,
+  -- sent by someone, answered as what it is and not charged, as the
+  -- frozen-on-the-way answer below is not. It opens nothing. Most ended
+  -- tournaments are frozen by the first visit after their end
+  -- (my_tournaments), so without this a code shared on Friday read as
+  -- wrong on Monday and every retry of it cost a guess. A host the
+  -- caller is blocked with stays hidden here too. (`found` is still the
+  -- select's: an IF's condition never sets it.)
+  if not found and exists (select 1 from public.tournaments x
+                           where x.join_code = code and x.finalized_at is not null
+                             and not (x.host_id = any (private.my_block_set()))) then
+    return jsonb_build_object('result', 'finished');
+  end if;
+  if not found or r.host_id = any (private.my_block_set()) then
+    insert into private.tournament_code_misses as u (user_id, hour, count)
+    values (me, date_trunc('hour', now()), 1)
+    on conflict (user_id, hour) do update set count = u.count + 1;
+    return jsonb_build_object('result', 'not_found');
+  end if;
+
+  if private.tournament_finish_at(r.id) is not null then
+    perform private.finalize_tournament(r.id);
+    return jsonb_build_object('result', 'finished');
+  end if;
+  return jsonb_build_object('result', 'found', 'id', r.id);
+end;
+$$;
+
+-- 028: whether the caller may join by the code: member, not_allowed
+-- (declined before, or blocked either way with anyone in it or asked),
+-- full (50 in it or asked) or ok.
+create or replace function private.code_join_state(t uuid, me uuid)
+returns text
+language plpgsql
+stable
+security definer
+set search_path = ''
+as $$
+declare
+  mine    text;
+  blocked uuid[] := private.my_block_set();
+begin
+  if exists (select 1 from public.tournaments x where x.id = t and x.host_id = me) then
+    return 'member';
+  end if;
+  select m.status into mine from public.tournament_members m
+  where m.tournament_id = t and m.user_id = me;
+  if mine = 'accepted' then
+    return 'member';
+  end if;
+  if mine = 'declined' then
+    return 'not_allowed';
+  end if;
+  if exists (select 1 from public.tournament_members m
+             where m.tournament_id = t and m.status in ('invited', 'accepted')
+               and m.user_id = any (blocked)) then
+    return 'not_allowed';
+  end if;
+  if mine is null and (select count(*) from public.tournament_members m
+                       where m.tournament_id = t and m.status in ('invited', 'accepted')) >= 50 then
+    return 'full';
+  end if;
+  return 'ok';
+end;
+$$;
+
+-- 028: what the app shows before joining (the name, dates, goal, host,
+-- how many are in it), with result ok, member or full; else one word.
+create or replace function public.tournament_by_code(p_code text)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me    uuid := auth.uid();
+  hit   jsonb;
+  r     public.tournaments;
+  h     public.profiles;
+  st    text;
+begin
+  if me is null or coalesce((auth.jwt() ->> 'is_anonymous')::boolean, false) then
+    raise exception 'not signed in: tournament_by_code got no auth.uid()' using errcode = '28000';
+  end if;
+  -- A deleted account's token still verifies until it expires, and its
+  -- uid has no profile, so its misses could never be written (the foreign
+  -- key): every wrong guess would fail as an error, a right one would
+  -- answer, and the twenty would never count. Signed out, before any
+  -- lookup. Every live account has a profile (handle_new_user).
+  if not exists (select 1 from public.profiles p where p.id = me) then
+    raise exception 'not signed in: tournament_by_code''s account is gone' using errcode = '28000';
+  end if;
+  hit := private.find_tournament_by_code(p_code);
+  if hit ->> 'result' <> 'found' then
+    return hit;
+  end if;
+  select * into r from public.tournaments x where x.id = (hit ->> 'id')::uuid;
+  if not found then
+    return jsonb_build_object('result', 'not_found');   -- deleted a moment ago; not a guess
+  end if;
+  st := private.code_join_state(r.id, me);
+  if st = 'not_allowed' then
+    return jsonb_build_object('result', 'not_allowed');
+  end if;
+  select * into h from public.profiles p where p.id = r.host_id;
+  return jsonb_build_object(
+    'result', st,
+    'id', r.id, 'name', r.name, 'starts_at', r.starts_at, 'ends_at', r.ends_at, 'target', r.target,
+    'state', private.tournament_state(r),
+    'members', (select count(*)::integer from public.tournament_members m
+                where m.tournament_id = r.id and m.status = 'accepted'),
+    'host', jsonb_build_object('id', h.id, 'username', h.username, 'display_name', h.display_name,
+                               'accent', h.accent, 'avatar_path', h.avatar_path));
+end;
+$$;
+
+-- 028: joins by a code, every check again under the tournament's lock;
+-- 'accepted' at once (an open invitation is accepted), so 027's invite
+-- push, which fires only for an inserted 'invited' row, never does.
+create or replace function public.join_tournament_with_code(p_code text)
+returns jsonb
+language plpgsql
+volatile
+security definer
+set search_path = ''
+as $$
+declare
+  me    uuid := auth.uid();
+  hit   jsonb;
+  t     uuid;
+  st    text;
+begin
+  if me is null or coalesce((auth.jwt() ->> 'is_anonymous')::boolean, false) then
+    raise exception 'not signed in: join_tournament_with_code got no auth.uid()' using errcode = '28000';
+  end if;
+  -- A deleted account's live token: signed out, as tournament_by_code says why.
+  if not exists (select 1 from public.profiles p where p.id = me) then
+    raise exception 'not signed in: join_tournament_with_code''s account is gone' using errcode = '28000';
+  end if;
+  hit := private.find_tournament_by_code(p_code);
+  if hit ->> 'result' <> 'found' then
+    return hit;
+  end if;
+  t := (hit ->> 'id')::uuid;
+
+  perform pg_advisory_xact_lock(hashtextextended('tournament:' || t::text, 0));
+  -- Deleted, or frozen by another read, while this waited for the lock.
+  if not exists (select 1 from public.tournaments x where x.id = t) then
+    return jsonb_build_object('result', 'not_found');
+  end if;
+  if exists (select 1 from public.tournaments x where x.id = t and x.finalized_at is not null) then
+    return jsonb_build_object('result', 'finished');
+  end if;
+  if private.tournament_finish_at(t) is not null then
+    perform private.finalize_tournament(t);
+    return jsonb_build_object('result', 'finished');
+  end if;
+  st := private.code_join_state(t, me);
+  if st = 'member' then
+    return jsonb_build_object('result', 'member', 'id', t);
+  end if;
+  if st <> 'ok' then
+    return jsonb_build_object('result', st);
+  end if;
+
+  if exists (select 1 from public.tournament_members m
+             where m.tournament_id = t and m.user_id = me and m.status = 'invited') then
+    update public.tournament_members m
+       set status = 'accepted', responded_at = now()
+     where m.tournament_id = t and m.user_id = me;
+  else
+    insert into public.tournament_members (tournament_id, user_id, status, responded_at)
+    values (t, me, 'accepted', now());
+  end if;
+  return jsonb_build_object('result', 'joined', 'id', t);
 end;
 $$;
 
@@ -4049,6 +4345,18 @@ grant execute on function public.push_caller_ok(text)                   to servi
 grant execute on function public.push_claim(text, text, uuid, uuid)     to service_role;
 grant execute on function public.push_release(text, text, uuid, uuid)   to service_role;
 
+-- 028. The two code RPCs need an account (create_tournament is above);
+-- the helpers are reached only from definer code, the generator also as
+-- the column's default, which create_tournament evaluates as its owner.
+revoke all on function private.tournament_code_norm(text)         from public, anon, authenticated;
+revoke all on function private.new_tournament_code()              from public, anon, authenticated;
+revoke all on function private.find_tournament_by_code(text)      from public, anon, authenticated;
+revoke all on function private.code_join_state(uuid, uuid)        from public, anon, authenticated;
+revoke all on function public.tournament_by_code(text)            from public, anon;
+revoke all on function public.join_tournament_with_code(text)     from public, anon;
+grant execute on function public.tournament_by_code(text)         to authenticated;
+grant execute on function public.join_tournament_with_code(text)  to authenticated;
+
 
 -- --------------------------------------------------------------------
 -- Triggers
@@ -4317,6 +4625,7 @@ revoke update, truncate, references, trigger on public.reel_likes from authentic
 
 revoke all on private.submission_digests from public, anon, authenticated;
 revoke all on private.music_search_usage from public, anon, authenticated;
+revoke all on private.tournament_code_misses from public, anon, authenticated;
 
 revoke all on public.tournaments, public.tournament_members from anon, authenticated;
 grant select on public.tournaments, public.tournament_members to authenticated;
@@ -4377,6 +4686,7 @@ alter table public.reels           enable row level security;
 alter table public.reel_likes      enable row level security;
 alter table private.submission_digests enable row level security;
 alter table private.music_search_usage enable row level security;
+alter table private.tournament_code_misses enable row level security;
 alter table public.tournaments     enable row level security;
 alter table public.tournament_members enable row level security;
 alter table public.taste_profiles  enable row level security;
@@ -4744,9 +5054,9 @@ create policy tournament_members_read on public.tournament_members
   );
 
 -- profile_secrets, discovery_usage, blocked_terms, sign_in_lookups,
--- post_tag_refusals, private.submission_digests and
--- private.music_search_usage: RLS on and no policy at all, on top of the
--- revoked grants. Default-deny.
+-- post_tag_refusals, private.submission_digests,
+-- private.music_search_usage and private.tournament_code_misses: RLS on
+-- and no policy at all, on top of the revoked grants. Default-deny.
 
 
 -- --------------------------------------------------------------------
@@ -4936,7 +5246,7 @@ $$;
 -- --------------------------------------------------------------------
 
 insert into public.schema_migrations (version, note) values
-  ('schema',                  'schema.sql, current as of 027'),
+  ('schema',                  'schema.sql, current as of 028'),
   ('002_social_graph',        'contained in schema.sql'),
   ('003_hardening',           'contained in schema.sql'),
   ('004_validate_hardening',  'contained in schema.sql'),
@@ -4962,5 +5272,6 @@ insert into public.schema_migrations (version, note) values
   ('024_post_tags',           'contained in schema.sql'),
   ('025_friends_board',       'contained in schema.sql'),
   ('026_places',              'contained in schema.sql'),
-  ('027_push',                'contained in schema.sql')
+  ('027_push',                'contained in schema.sql'),
+  ('028_tournament_join_codes', 'contained in schema.sql')
 on conflict (version) do nothing;

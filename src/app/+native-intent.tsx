@@ -3,6 +3,7 @@ import { AUTH_CALLBACK_PATH } from '@/lib/oauth';
 import { RECOVERY_PATH } from '@/lib/recovery';
 import { SPIRIT_SHOP_ENABLED } from '@/lib/shop';
 import { STRIPE_RETURN_PATH } from '@/lib/shopCore';
+import { codeFromLink, JOIN_PATH } from '@/lib/tournamentCode';
 
 /* ==================================================================== */
 /* Incoming links, before the router sees them                          */
@@ -48,6 +49,14 @@ import { STRIPE_RETURN_PATH } from '@/lib/shopCore';
 /* opens app/collection/[share] with the id lower-cased, as stored. A    */
 /* malformed id still goes there, where it reads as a link that is not  */
 /* shared any more rather than as Unmatched Route.                      */
+/*                                                                      */
+/* drinkdex://join/<code>, a tournament's shared code (v4.12,           */
+/* specs/v4.12/join-codes.md), opens Join with code with the code in    */
+/* its boxes, read as the boxes read a paste (lib/tournamentCode's      */
+/* codeFromLink: any case, spaces and dashes dropped). It joins nothing */
+/* by itself: Join is pressed on the sheet, after the invitation shows. */
+/* A link with no code in it opens the sheet empty.                     */
+/*                                                                      */
 /* Anything else is passed through untouched.                           */
 /*                                                                      */
 /* Must never throw: an exception here is raised inside the router's     */
@@ -85,6 +94,11 @@ export function redirectSystemPath({
     if (SPIRIT_SHOP_ENABLED && first === STRIPE_RETURN_PATH) return initial ? '/' : null;
 
     if (first === 'u' && UUID.test(second)) return `/user/${second.toLowerCase()}`;
+
+    if (first === JOIN_PATH) {
+      const code = codeFromLink(second);
+      return code ? `/tournaments/join?code=${code}` : '/tournaments/join';
+    }
 
     // Even with the id missing (a link cut short): the screen reads that as not shared, never Unmatched Route.
     if (first === 'collection') {

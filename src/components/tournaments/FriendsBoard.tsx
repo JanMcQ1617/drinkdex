@@ -20,7 +20,7 @@ import { colors, fonts, layout, motion, radius, space, tabular, textRole } from 
 import { formatCount } from '@/data';
 import { photoFor } from '@/data/drinkPhotos';
 import { fetchProfiles } from '@/lib/social';
-import { newTournamentHref, tournamentHref, tournamentsHref } from '@/lib/tournaments';
+import { joinCodeHref, newTournamentHref, tournamentHref, tournamentsHref } from '@/lib/tournaments';
 import { useSignedPhoto } from '@/lib/useSignedPhoto';
 import { useAuth } from '@/store/auth';
 import { useFriendsBoard } from '@/store/friendsBoard';
@@ -107,6 +107,14 @@ import type { FriendStanding, TournamentSummary } from '@/types';
 /* foot is the tournaments' one-line rules and "i" key, whose sheet     */
 /* also holds the Friends half's sentence (what is counted). Each was   */
 /* said beside the thing it explained; the "i" key is where it is read. */
+/*                                                                      */
+/* JOIN WITH CODE (v4.12, specs/v4.12/join-codes.md; Jan, 30 Oct 2026: */
+/* "give me a code for other people to join"). A second wash key under  */
+/* Host a tournament, the same width, with the person-and-plus glyph:   */
+/* it opens the Join with code sheet (app/tournaments/join), where the  */
+/* code someone shared is typed or pasted. Shown wherever Host is; on a */
+/* server without migration 028 the sheet itself says it is not here   */
+/* yet, so the key never comes and goes under the thumb.               */
 /*                                                                      */
 /* Less stuff: no panels round the rows and no rules between them, rows */
 /* on the page set apart by space (layout principle 3). Nothing here    */
@@ -372,14 +380,24 @@ export function FriendsBoard({ myId }: { myId: string }) {
       ) : null}
 
       {tSupported ? (
-        <Button
-          label="Host a tournament"
-          variant="secondary"
-          icon="plus"
-          block
-          onPress={() => router.push(newTournamentHref())}
-          style={styles.host}
-        />
+        <>
+          <Button
+            label="Host a tournament"
+            variant="secondary"
+            icon="plus"
+            block
+            onPress={() => router.push(newTournamentHref())}
+            style={styles.host}
+          />
+          <Button
+            label="Join with code"
+            variant="secondary"
+            icon="addPerson"
+            block
+            onPress={() => router.push(joinCodeHref())}
+            style={styles.join}
+          />
+        </>
       ) : null}
 
       {tSupported && !firstVisit ? (
@@ -696,6 +714,8 @@ const styles = StyleSheet.create({
   head: { paddingTop: space.lg },
   notice: { marginHorizontal: layout.gutter, marginBottom: space.lg },
   host: { marginHorizontal: layout.gutter },
+  /* 8 under Host: two keys of one kind, read as a pair. */
+  join: { marginHorizontal: layout.gutter, marginTop: space.sm },
   /* A group head insets its own 16 (it was drawn for a panel), so this lands its words on the gutter. */
   groupHead: { marginTop: space.xl, marginBottom: space.sm, marginHorizontal: HEAD_INSET },
   cardRow: { paddingHorizontal: layout.gutter, gap: CARD_GAP },
@@ -708,7 +728,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: space.sm,
   },
-  /* With no card above it, it sits 12 under the Host key, as the empty sentence does. */
+  /* With no card above it, it sits 12 under the two keys, as the empty sentence does. */
   quietFirst: { marginTop: space.md },
   quiet: { ...textRole.small, color: colors.textMuted },
   /*

@@ -1,9 +1,22 @@
+import * as Linking from 'expo-linking';
 import type { Href } from 'expo-router';
+import { Clipboard, Share } from 'react-native';
 
 import type { MyTournamentRow } from '@/lib/database.types';
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import { isMissingFunction } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
+import {
+  type CodeJoin,
+  type CodeLookup,
+  isJoinCode,
+  JOIN_PATH,
+  joinCodeMessage,
+  probeAnswer,
+  readJoin,
+  readLookup,
+  troubleOf,
+} from '@/lib/tournamentCode';
 import { DAY_MS, WINDOW_RULES } from '@/lib/tournamentWindow';
 import type {
   Standing,
@@ -55,6 +68,9 @@ export const tournamentsHref = () => '/tournaments' as Href;
 export const tournamentHref = (id: string) =>
   ({ pathname: '/tournaments/[id]', params: { id } }) as unknown as Href;
 export const newTournamentHref = () => '/tournaments/new' as Href;
+/** Join with code (v4.12), with the code filled in when a link brought one. */
+export const joinCodeHref = (code?: string) =>
+  ({ pathname: '/tournaments/join', params: code ? { code } : {} }) as unknown as Href;
 /*
  * The Tournaments TAB (v4.7, app/(tabs)/board.tsx), not the list above:
  * the tab lives at /board so it never collides with the pushed /tournaments
@@ -288,13 +304,22 @@ export function cleanTournamentName(name: string): string {
 }
 
 /**
- * Hosts a tournament and invites people you follow. Resolves to its id.
+ * Hosts a tournament and invites the people you follow that you picked,
+ * if any. Resolves to its id and its join code.
  *
  * The name goes through the content filter here first (the server has the
  * last word), and the dates and goal are checked against the same rules as
  * create_tournament, so a refusal the phone can see costs no round trip.
  * An empty or over-long name is 'failed': the host sheet never sends one.
  * The phone's time zone becomes the tournament's day for the daily cap.
+ *
+ * NOBODY INVITED IS FINE SINCE 028 (v4.12): the code is the way in. The
+ * server makes it (the column's default) and create_tournament still
+ * returns only the id, which build 37 reads, so the code is read from the
+ * row straight after, as the host can. Null when that read fails or 028
+ * is missing: the sheet then opens the tournament as it always did. A
+ * server without 028 refuses nobody invited with no_invitees, which the
+ * sheet reads as "no codes here" (lib/tournamentCode's createSaysNoCodes).
  */
 export async function createTournament(input: {
   name: string;
@@ -302,7 +327,7 @@ export async function createTournament(input: {
   endsAt: Date;
   target: number | null;
   invitees: string[];
-}): Promise<Result<string>> {
+}): Promise<Result<{ id: string; joinCode: string | null }>> {
   const name = cleanTournamentName(input.name);
   if (name.length === 0 || name.length > TOURNAMENT_LIMITS.nameMax) return { ok: false, reason: 'failed' };
   if (containsObjectionable(name)) return { ok: false, reason: 'objectionable' };
@@ -330,9 +355,8 @@ export async function createTournament(input: {
   }
 
   const invitees = [...new Set(input.invitees)].slice(0, TOURNAMENT_LIMITS.maxMembers - 1);
-  if (invitees.length === 0) return { ok: false, reason: 'no_invitees' };
 
-  return call(
+  const made = await call(
     () =>
       supabase.rpc('create_tournament', {
         p_name: name,
@@ -344,6 +368,8 @@ export async function createTournament(input: {
       }),
     str,
   );
+  if (!made.ok) return made;
+  return { ok: true, value: { id: made.value, joinCode: await fetchJoinCode(made.value) } };
 }
 
 /** Host only, before it finishes. Resolves to how many were invited (0 when none of them could be). */
@@ -369,4 +395,104 @@ export function endTournament(id: string): Promise<Result<void>> {
 /** Host only: it disappears for everyone in it. */
 export function deleteTournament(id: string): Promise<Result<void>> {
   return call(() => supabase.rpc('delete_tournament', { t: id }), VOID);
+}
+
+/* -------------------------------------------------------------------- */
+/* Join codes (v4.12, migration 028, specs/v4.12/join-codes.md)         */
+/*                                                                      */
+/* Every tournament has a code from the moment it is made; whoever is   */
+/* in it may share it, and anyone with it joins from Join with code.    */
+/* What a code is, how a typed one is read and how the answers are      */
+/* checked live in lib/tournamentCode, which imports nothing so its     */
+/* test can run it. These are the calls.                                */
+/*                                                                      */
+/* WITHOUT 028 nothing here errors: the code is null (no column), the   */
+/* probe says false and the lookups 'unsupported' (no function), and    */
+/* the screens leave codes out or say they are not here yet.            */
+/* -------------------------------------------------------------------- */
+
+/**
+ * A tournament's code, read from its row as tournaments_read lets anyone
+ * in it or asked (the host included) read it. Null when there is none to
+ * show: 028 missing (42703, no such column), a tournament that finished
+ * before 028, a failed read, or anything that is not a code.
+ */
+export async function fetchJoinCode(id: string): Promise<string | null> {
+  try {
+    const { data, error } = await supabase.from('tournaments').select('join_code').eq('id', id).maybeSingle();
+    if (error || !data) return null;
+    return typeof data.join_code === 'string' && isJoinCode(data.join_code) ? data.join_code : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Whether the server has codes: tournament_by_code with no code, which
+ * 028 answers as a wrong code without counting it against anyone. True,
+ * false (028 missing) or null (no answer: offline, or anything else).
+ */
+export async function probeJoinCodes(): Promise<boolean | null> {
+  try {
+    const { data, error } = await supabase.rpc('tournament_by_code', { p_code: '' });
+    return probeAnswer(error, data);
+  } catch {
+    return null;
+  }
+}
+
+/** The tournament a code opens, as Join with code shows it before anyone joins. Every wrong code counts against the hour's twenty. */
+export async function lookupJoinCode(code: string): Promise<CodeLookup> {
+  try {
+    const { data, error } = await supabase.rpc('tournament_by_code', { p_code: code });
+    if (error) return { kind: troubleOf(error) };
+    return readLookup(data);
+  } catch (e) {
+    return { kind: troubleOf(e) };
+  }
+}
+
+/** Joins by the code: the tournament's id once in, or why not. The server checks everything again. */
+export async function joinWithCode(code: string): Promise<CodeJoin> {
+  try {
+    const { data, error } = await supabase.rpc('join_tournament_with_code', { p_code: code });
+    if (error) return { kind: troubleOf(error) };
+    return readJoin(data);
+  } catch (e) {
+    return { kind: troubleOf(e) };
+  }
+}
+
+/** The link that opens Join with code with this code in it: drinkdex://join/ABC234 (app/+native-intent). */
+export const joinCodeUrl = (code: string) => Linking.createURL(`${JOIN_PATH}/${code}`);
+
+/**
+ * The share sheet, with the code and its link (lib/tournamentCode's
+ * joinCodeMessage). Fire and forget, as shareProfile is: a dismissed
+ * sheet is not an error.
+ */
+export function shareJoinCode(p: { name: string; code: string; hosting: boolean }): void {
+  Share.share({ message: joinCodeMessage({ ...p, url: joinCodeUrl(p.code) }) }).catch(() => {
+    /* dismissed, or unsupported off-device */
+  });
+}
+
+/**
+ * Puts the code on the clipboard; false when it could not.
+ *
+ * React Native's own Clipboard, which is still in 0.86's core
+ * (RCTClipboard is one of its CoreModules, so it is in the binary
+ * already) and is marked for removal in a later release: no new package
+ * or native module for one key. Reached only here, so the day it goes
+ * this returns false and the caller falls back to the share sheet, which
+ * has its own Copy. In development React Native warns once that it has
+ * moved; release builds show nothing.
+ */
+export function copyJoinCode(code: string): boolean {
+  try {
+    Clipboard.setString(code);
+    return true;
+  } catch {
+    return false;
+  }
 }
