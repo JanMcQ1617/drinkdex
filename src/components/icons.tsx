@@ -56,7 +56,6 @@ export type IconName =
   | 'grid'
   | 'settings'
   | 'comment'
-  | 'instagram'
   | 'facebook'
   | 'document'
   | 'bottle'
@@ -198,26 +197,15 @@ const OUTLINE: Record<IconName, React.ReactNode> = {
     <Path d="M20.4 12.6a7.4 7.4 0 0 1-8 7.4 8.5 8.5 0 0 1-3-.6L4.2 20.4l1.1-4.9a7.4 7.4 0 0 1-.7-3.2 7.4 7.4 0 0 1 8-7.4 7.5 7.5 0 0 1 7.8 7.4z" />
   ),
   /*
-   * Instagram's mark redrawn on our own grid rather than dropped in as the
-   * brand asset: at 1.75 stroke beside the other glyphs it reads as part of
-   * the set, and Meta's guidelines forbid restyling the official logo. It
-   * labels a Sipply feature, so it should look like Sipply.
-   */
-  instagram: (
-    <>
-      <Path d="M7.6 3.9h8.8a3.7 3.7 0 0 1 3.7 3.7v8.8a3.7 3.7 0 0 1-3.7 3.7H7.6a3.7 3.7 0 0 1-3.7-3.7V7.6a3.7 3.7 0 0 1 3.7-3.7Z" />
-      <Circle cx={12} cy={12} r={3.6} />
-      <Path d="M16.9 7.15h.01" />
-    </>
-  ),
-  /*
    * Facebook, drawn two ways for two jobs.
    *
-   * This outline is ours, on our grid, for the same reason as the Instagram
-   * glyph above: where it labels a Sipply feature (a "Connect Facebook"
-   * row, a friends list), it should read as part of this set. The ring is
-   * the Atlas ring and the f stands on its lowest point, as Facebook's own
-   * f runs out through the foot of its disc.
+   * This outline is ours, on our grid, redrawn rather than dropped in as
+   * the brand asset: where it labels a Sipply feature (a "Connect Facebook"
+   * row, a friends list), it should read as part of this set, and Meta's
+   * guidelines forbid restyling the official logo. The ring is the Atlas
+   * ring and the f stands on its lowest point, as Facebook's own f runs
+   * out through the foot of its disc. (The Instagram outline drawn the
+   * same way above it went in v4.14; nothing had drawn it since v4.)
    *
    * The solid (below) is Facebook's own mark. It is for the sign-in button,
    * where the control stands for their account and Meta's guidelines ask

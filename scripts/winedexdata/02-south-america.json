@@ -1,0 +1,394 @@
+[
+ {
+  "id": "mendoza",
+  "name": "Mendoza",
+  "subcategory": "Regional Red",
+  "description": "High-altitude Malbec at the foot of the Andes: violet, black plum and velvet tannin, grown where the vines sit up to a mile above sea level.",
+  "abv": "13.5–15%",
+  "origin": "Mendoza, Argentina",
+  "rarity": "common",
+  "tastingNotes": [
+   "violet",
+   "black plum",
+   "cocoa",
+   "vanilla"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Malbec is originally a Bordeaux grape that nearly disappeared in France after frost in 1956; Argentina had already made it the national grape, and it now grows more Malbec than the rest of the world combined.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly below room temperature in a large glass. Altitude gives these wines both intense colour and a fine, powdery tannin that shows best with a little air, so decant young bottles for thirty minutes. The floral violet note is the marker of good Mendoza Malbec and fades if the wine is served too warm.",
+   "pair": [
+    "Grilled steak",
+    "Empanadas",
+    "Chimichurri lamb"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude Malbec grown on alluvial soils in the Andean rain shadow.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Malbec, with Cabernet Sauvignon and Bonarda alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Mendoza province at 800–1,500 metres in the Andean foothills."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented warm, with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, often partly new."
+    }
+   ],
+   "process": "Intense high-altitude sunlight thickens skins and builds colour and tannin, while cold nights preserve the acidity and floral aromatics."
+  }
+ },
+ {
+  "id": "valle-de-uco",
+  "name": "Valle de Uco",
+  "subcategory": "Regional Red",
+  "description": "Mendoza's coldest, highest sub-region, climbing past 1,500 metres. Tighter, more mineral and more structured than the valley floor below.",
+  "abv": "13.5–15%",
+  "origin": "Mendoza, Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blueberry",
+   "violet",
+   "crushed stone",
+   "herb"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Parts of the Uco Valley sit above 1,500 metres, high enough that hail nets are standard equipment and the growing season runs weeks behind vineyards an hour away.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant for an hour — Uco Malbec is markedly more structured than lower-altitude Mendoza and needs air to unwind. Serve cool in a large glass. The wines reward keeping; a bottle at five to eight years shows the stony, herbal character that altitude gives and that young bottles hide behind fruit.",
+   "pair": [
+    "Roast lamb",
+    "Grilled beef ribs",
+    "Hard sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Very high-altitude Malbec on stony alluvial soils, cooler and firmer than valley-floor Mendoza.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Malbec, with Cabernet Franc and Chardonnay planted alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Uco Valley, at 1,000–1,700 metres in the Mendoza pre-cordillera."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Careful, cooler fermentation with restrained extraction to protect freshness."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, often with a portion of concrete or amphora."
+    }
+   ],
+   "process": "Extreme altitude slows ripening and preserves acidity, producing tighter, stonier wines that need more bottle age than warmer Mendoza sites."
+  }
+ },
+ {
+  "id": "cafayate",
+  "name": "Cafayate",
+  "subcategory": "White",
+  "description": "Torrontés grown at nearly two thousand metres in the Calchaquí valleys — intensely floral on the nose and, unexpectedly, bone dry on the palate.",
+  "abv": "13–14%",
+  "origin": "Salta, Argentina",
+  "rarity": "rare",
+  "tastingNotes": [
+   "rose petal",
+   "jasmine",
+   "white peach",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Some Cafayate vineyards sit above 2,000 metres, among the highest commercial vineyards on earth, where ultraviolet intensity is strong enough to thicken grape skins measurably.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled — the aromatics are so forward that a warm glass tips into perfume. The classic surprise is the gap between nose and palate: it smells sweet and finishes dry, so pair it as a dry white rather than an aromatic off-dry one. Drink young; Torrontés loses its florals within a couple of years.",
+   "pair": [
+    "Ceviche",
+    "Empanadas",
+    "Spiced chicken"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude aromatic Torrontés fermented dry in stainless steel.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Torrontés Riojano."
+    },
+    {
+     "label": "Region",
+     "detail": "The Calchaquí Valleys around Cafayate in Salta, at 1,700–2,000 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless-steel fermentation to preserve the floral aromatics."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young for freshness."
+    }
+   ],
+   "process": "Extreme altitude and intense ultraviolet light build powerful floral aromatics, which cold stainless fermentation captures before bottling the wine dry and young."
+  }
+ },
+ {
+  "id": "colchagua-valley",
+  "name": "Colchagua Valley",
+  "subcategory": "Regional Red",
+  "description": "Chile's warm heartland for Carmenère and Cabernet: ripe, dark and softly herbal, with the green-pepper note that gives the grape away.",
+  "abv": "13.5–14.5%",
+  "origin": "Colchagua, Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black cherry",
+   "green peppercorn",
+   "cocoa",
+   "tobacco"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Carmenère was believed extinct after phylloxera until 1994, when a French researcher realised Chile's 'Merlot' had been Carmenère all along — the country had been growing a lost Bordeaux grape for a century without knowing.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass, and decant a young bottle for half an hour. The signature green-peppercorn note is a varietal marker rather than a fault, but it becomes vegetal if the wine is served too cold, so avoid over-chilling. It softens considerably with a few years in bottle.",
+   "pair": [
+    "Grilled beef",
+    "Pastel de choclo",
+    "Roast pepper dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Warm-climate Carmenère and Cabernet Sauvignon on alluvial valley soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Carmenère and Cabernet Sauvignon, with Syrah alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Colchagua Valley in Chile's Rapel region, warmed and sheltered from the Pacific."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with extended maceration for colour and body."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French and American oak."
+    }
+   ],
+   "process": "A warm, dry growing season ripens Carmenère fully — essential, since underripe fruit turns aggressively green — and extended maceration builds the dark, soft-tannined style."
+  }
+ },
+ {
+  "id": "maipo-valley",
+  "name": "Maipo Valley",
+  "subcategory": "Regional Red",
+  "description": "Chile's oldest fine-wine valley, on Santiago's doorstep: Cabernet with a distinctive minty, dusty edge that locals attribute to the Andes above it.",
+  "abv": "13.5–14.5%",
+  "origin": "Maipo, Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "mint",
+   "dust",
+   "cedar"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The minty-eucalyptus note in Maipo Cabernet is so consistent that it functions as a regional signature, and it appears in wines from vineyards with no eucalyptus trees anywhere near them.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour. Serve cool in a large glass so the mint and cedar sit alongside the cassis rather than dominating. Alto Maipo wines from higher up the Andean slope are firmer and repay a decade in bottle; valley-floor wines drink well much sooner.",
+   "pair": [
+    "Roast lamb",
+    "Grilled steak",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Andean-influenced Cabernet Sauvignon from Chile's most established fine-wine valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, with Merlot and Carmenère."
+    },
+    {
+     "label": "Region",
+     "detail": "The Maipo Valley south of Santiago, rising into the Andean foothills at Alto Maipo."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with long maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French oak, a portion new."
+    }
+   ],
+   "process": "Warm days and cold Andean nights build ripe blackcurrant fruit over firm acidity, with long maceration and oak ageing giving the cedar and structure."
+  }
+ },
+ {
+  "id": "casablanca-valley",
+  "name": "Casablanca Valley",
+  "subcategory": "White",
+  "description": "Chile's cool coastal valley, planted only since the 1980s: crisp Sauvignon Blanc with grapefruit bite and a distinctly saline finish.",
+  "abv": "12.5–13.5%",
+  "origin": "Casablanca, Chile",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "grapefruit",
+   "lime zest",
+   "saline",
+   "green herb"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Casablanca was considered too cold to ripen grapes until the 1980s, when growers proved otherwise; it is now the reference point for Chilean white wine and barely thirty years old as a region.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. The salinity that marks coastal Chilean Sauvignon shows best cold, and the grapefruit sharpens rather than softens as the wine warms. Drink young — these are made for freshness and lose their edge after two or three years.",
+   "pair": [
+    "Oysters",
+    "Ceviche",
+    "Goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool coastal Sauvignon Blanc and Chardonnay under strong Pacific influence.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc and Chardonnay, with some Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "The Casablanca Valley between Santiago and the Pacific, cooled by coastal fog."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless-steel fermentation, protecting aromatics from oxygen."
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or no oak; brief lees contact for texture."
+    }
+   ],
+   "process": "Morning fog and cold Pacific air slow ripening dramatically, holding acidity while the aromatic compounds develop, and stainless fermentation preserves both."
+  }
+ },
+ {
+  "id": "itata-valley",
+  "name": "Itata Valley",
+  "subcategory": "Regional Red",
+  "description": "Chile's oldest vineyards and its newest fashion: ungrafted País and Cinsault, dry-farmed on granite by smallholders, made without makeup.",
+  "abv": "12–13.5%",
+  "origin": "Itata, Chile",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "wild herb",
+   "granite",
+   "cranberry"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "País arrived with Spanish missionaries in the sixteenth century and was Chile's dominant grape until the 1990s, when it was dismissed as peasant wine — the same old bush vines are now the country's most sought-after fruit.",
+  "serve": {
+   "temp": "55-58°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve cool, closer to cellar temperature than room temperature — these are light, high-acid reds that turn thin and sour if served warm. Use a wide glass. Many are made with minimal sulphur and little filtration, so expect some sediment and treat an open bottle as a two-day proposition.",
+   "pair": [
+    "Charcuterie",
+    "Roast chicken",
+    "Tomato dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Light, dry-farmed reds from old ungrafted País and Cinsault bush vines on granite.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "País and Cinsault, some over a century old and ungrafted."
+    },
+    {
+     "label": "Region",
+     "detail": "The Itata Valley in southern Chile, on decomposed granite, farmed without irrigation."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster and semi-carbonic fermentation with native yeast."
+    },
+    {
+     "label": "Aging",
+     "detail": "Old barrels, concrete or tank; little or no new oak."
+    }
+   ],
+   "process": "Ancient dry-farmed bush vines on granite give low yields of high-acid fruit, fermented with native yeast and minimal intervention to make deliberately light, fresh reds."
+  }
+ },
+ {
+  "id": "serra-gaucha",
+  "name": "Serra Gaúcha",
+  "subcategory": "Sparkling",
+  "description": "Brazil's sparkling heartland, settled by Italian immigrants: traditional-method fizz with tropical fruit brightness and unusually high natural acidity.",
+  "abv": "11.5–12.5%",
+  "origin": "Rio Grande do Sul, Brazil",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "white peach",
+   "brioche",
+   "citrus"
+  ],
+  "glassware": "Flute or tulip",
+  "funFact": "Brazilian sparkling wine has quietly won a string of international blind tastings, helped by a humid climate that keeps acidity high — the same humidity that makes still red wine difficult there.",
+  "serve": {
+   "temp": "43-47°F, well chilled",
+   "glass": "Flute or tulip",
+   "how": "Serve well chilled in a tulip rather than a narrow flute, which traps the brioche aroma. Pour at an angle to preserve the mousse. These are made in the traditional method with real lees ageing, so treat them as you would Cava or Crémant rather than as a simple party fizz.",
+   "pair": [
+    "Fried snacks",
+    "Sushi",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Traditional-method sparkling wine from a humid subtropical highland region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay, Pinot Noir and Riesling Itálico."
+    },
+    {
+     "label": "Region",
+     "detail": "The Serra Gaúcha highlands of Rio Grande do Sul, settled by Italian immigrants from the 1870s."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional method — secondary fermentation in bottle."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months on lees before disgorgement."
+    }
+   ],
+   "process": "High humidity and cool highland nights keep acidity unusually high, which suits secondary bottle fermentation and gives the wines their tension."
+  }
+ }
+]

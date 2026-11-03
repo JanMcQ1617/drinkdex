@@ -1,0 +1,30 @@
+Thanks for trying Sipply. It's early, so tell me what's broken or confusing — both are useful.
+
+New in this build:
+
+- Wine is back. The Dex now holds 4,671 entries: 899 cocktails, 1,428 spirits and 2,344 wines, from the classic grapes and regions to every named wine in the Wine Atlas. Tap Wines in the row under the search, or search a grape ("nebbiolo" finds Barolo). A wine's page has On the map, which opens the Wine Atlas there: every named wine by country or A–Z, and the grapes behind them. If you logged a wine before it left in September, it should be back in your Dex, counted. Tell me if a wine is missing, misnamed or under the wrong country.
+- New filters. The sliders key opens them in the order you'd choose: Type, Flavour, Strength (Light, Medium, Strong, by ABV), then Spirit, Style, Grape, Country and Region (Style, Grape and Region once you've picked a type). Every choice shows how many drinks it would show, and one that would show nothing is dimmed, so no tap leaves the Dex empty. Long lists show six, then See all with a search. A row under the quick chips shows what's on, each with an ×, and Clear all. Tell me if a number doesn't match what the Dex then shows.
+- Find friends is simpler: Find from contacts, Let friends find you, Share invite link and Find by username, with Everyone on Sipply under them. The Instagram list import is gone, and what it saved on your phone is cleared by itself.
+
+Worth poking at:
+
+- From the last build: Join with code for tournaments, and Current place at the top of Add place.
+- Continue with Facebook stays hidden while Meta reviews the app. If you made your account with Facebook, choose Continue with email with the address your Facebook account uses, then Or set a password by email.
+- People notifications. Open Activity (the heart on Home) and allow alerts, then have a second account follow you, tag you or invite you to a tournament: one notification each. Turn each kind off in Profile → "..." → Settings → Notifications.
+- Signing in with Google, and with Apple.
+- Places. On iOS 18 or later, post a drink and tap Add place, then open the place from your post.
+- Tagging people, Daily ideas (Settings → Notifications), Saved collections and their share links.
+- The Dex: For you and By number, search, and the Wines chip. It's twice the size now: does it stay smooth when you scroll fast?
+- Tournaments: host one, join it with its code from a second account, and post a drink from each.
+- Posting a drink: the + at the top of Home. Also with the camera turned off for Sipply in Settings: you should still be able to post a photo from your library.
+
+Please report:
+
+- Anything that crashes, hangs, or shows an error you can't get out of
+- A photo that fails to upload or appears on the wrong post
+- Anything that looks wrong — spacing, colour, text that's cut off
+- Anything you expected to be able to do and couldn't
+
+Things I already know about: the app is 18+ and alcohol-focused by design; your collection lives on your device, so signing in elsewhere won't bring it with you; most wines have no photo yet (71 do), so the rest show a drawn glass; and with the Dex twice the size, the title on Dex progress can read lower than it did.
+
+You can delete your account any time from Profile → "..." → Settings → Delete account. It removes everything, including your photos.

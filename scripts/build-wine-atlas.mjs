@@ -2,15 +2,17 @@
  * Builds src/data/wineAtlas.json from the pipe-delimited sources in
  * scripts/winedata/.
  *
- * The atlas is a REFERENCE layer, not part of the collectible Dex. Dex cards
- * are hand-authored and numbered 1-460; nothing here adds to that set or
- * touches a dexNumber. What it does is give the 90 wine cards something to
- * point at: every named wine on earth that carries an appellation, and the
- * grape varieties behind them, merged across synonyms.
+ * The atlas is a REFERENCE layer: every named wine on earth that carries an
+ * appellation, and the grape varieties behind them, merged across synonyms.
+ * Nothing here touches a dexNumber. Two things read it: the app's Wine Atlas
+ * screen and a wine card's "On the map" (src/data/wineAtlas.ts), and
+ * scripts/merge-wine-atlas.mjs, which turns each atlas wine into a Dex card.
+ * It also writes docs/wine/, the published lists (below).
  *
- * Run: node scripts/build-wine-atlas.mjs
+ *   node scripts/build-wine-atlas.mjs           # write the atlas and docs/wine/
+ *   node scripts/build-wine-atlas.mjs --check   # write nothing; exit 1 if any of the seven files is out of step
  */
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -149,7 +151,24 @@ const out = {
   wines,
 };
 
-writeFileSync(join(ROOT, 'src', 'data', 'wineAtlas.json'), JSON.stringify(out) + '\n');
+/*
+ * --check (v4.14): the atlas has been tracked again since wine came back to
+ * the Dex, and it is generated, so a winedata edit without this run would
+ * leave the app's atlas, the Dex's wine cards and the published lists
+ * describing three different atlases. Every write goes through emit(), which
+ * under --check compares instead, so the check and the build cannot part.
+ */
+const CHECK = process.argv.includes('--check');
+const stale = [];
+function emit(path, text) {
+  if (!CHECK) {
+    writeFileSync(path, text);
+    return;
+  }
+  if (!existsSync(path) || readFileSync(path, 'utf8') !== text) stale.push(path.slice(ROOT.length + 1));
+}
+
+emit(join(ROOT, 'src', 'data', 'wineAtlas.json'), JSON.stringify(out) + '\n');
 
 /* ------------------------------------------------------------------ */
 /* Human-readable lists                                                */
@@ -162,7 +181,7 @@ writeFileSync(join(ROOT, 'src', 'data', 'wineAtlas.json'), JSON.stringify(out) +
 /* ------------------------------------------------------------------ */
 
 const DOCS = join(ROOT, 'docs', 'wine');
-mkdirSync(DOCS, { recursive: true });
+if (!CHECK) mkdirSync(DOCS, { recursive: true });
 
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const csvCell = (v) => (/[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
@@ -204,13 +223,13 @@ const csvJoin = (rows) => '\ufeff' + rows.join('\r\n') + '\r\n';
     }
     lines.push('---', '');
   }
-  writeFileSync(join(DOCS, 'wines-by-country.md'), lines.join('\n'));
+  emit(join(DOCS, 'wines-by-country.md'), lines.join('\n'));
 
   const csv = [csvRow(['Country', 'Region', 'Wine', 'Classification', 'Style', 'Grapes'])];
   for (const w of wines) {
     csv.push(csvRow([countryNames[w.c], w.r, w.n, w.t, w.s, (rawGrapes.get(w) ?? '').replace(/, /g, '; ')]));
   }
-  writeFileSync(join(DOCS, 'wines-by-country.csv'), csvJoin(csv));
+  emit(join(DOCS, 'wines-by-country.csv'), csvJoin(csv));
 }
 
 /* --- master A-Z --- */
@@ -230,8 +249,8 @@ const csvJoin = (rows) => '\ufeff' + rows.join('\r\n') + '\r\n';
     lines.push(`${i + 1}. **${w.n}** — ${countryNames[w.c]} · ${w.r} · ${w.t} · ${w.s}`);
     csv.push(csvRow([i + 1, w.n, countryNames[w.c], w.r, w.t, w.s, (rawGrapes.get(w) ?? '').replace(/, /g, '; ')]));
   });
-  writeFileSync(join(DOCS, 'all-wines-master.md'), lines.join('\n') + '\n');
-  writeFileSync(join(DOCS, 'all-wines-master.csv'), csvJoin(csv));
+  emit(join(DOCS, 'all-wines-master.md'), lines.join('\n') + '\n');
+  emit(join(DOCS, 'all-wines-master.csv'), csvJoin(csv));
 }
 
 /* --- grape varieties --- */
@@ -279,8 +298,17 @@ const csvJoin = (rows) => '\ufeff' + rows.join('\r\n') + '\r\n';
     lines.push('');
     csv.push(csvRow([i + 1, name, m.color, m.origin, m.synonyms.join('; '), wl.length, where.length, where.join('; '), m.note]));
   });
-  writeFileSync(join(DOCS, 'grape-varieties.md'), lines.join('\n'));
-  writeFileSync(join(DOCS, 'grape-varieties.csv'), csvJoin(csv));
+  emit(join(DOCS, 'grape-varieties.md'), lines.join('\n'));
+  emit(join(DOCS, 'grape-varieties.csv'), csvJoin(csv));
+}
+
+if (CHECK) {
+  if (stale.length) {
+    console.error(`build-wine-atlas: out of step with scripts/winedata/: ${stale.join(', ')}. Run node scripts/build-wine-atlas.mjs`);
+    process.exit(1);
+  }
+  console.log(`build-wine-atlas: wineAtlas.json and the 6 docs/wine/ lists are in step (${out.counts.wines} wines)`);
+  process.exit(0);
 }
 
 console.log(`docs/wine/ — 6 list files regenerated alongside the atlas`);

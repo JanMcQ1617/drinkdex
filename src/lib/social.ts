@@ -2177,8 +2177,7 @@ export async function setPhoneHash(_myId: string, phoneHash: string | null): Pro
 /*
  * Hashes per matcher call. The server refuses more than 500 in one call
  * (migration 011); 300 stays clear of that edge. The daily quota — 3,000
- * hashes across both matchers — is counted per hash, so smaller calls cost
- * nothing extra. Past the quota the server raises 'rate_limited', which is
+ * hashes — is counted per hash, so smaller calls cost nothing extra. Past the quota the server raises 'rate_limited', which is
  * thrown to the caller as is: it is the caller that has to say "try again
  * tomorrow" rather than "none of your contacts are here".
  */
@@ -2208,48 +2207,21 @@ export async function matchContacts(hashes: string[]): Promise<UserProfile[]> {
 }
 
 /**
- * Makes this account findable by Instagram handle, or clears it.
+ * Takes back this account's Instagram handle claim, the opt-out the
+ * Instagram import's "Stop being findable" used to make.
  *
- * Same contract as setPhoneHash, including the ignored id argument: only
- * the salted hash of the normalized handle is stored, never the handle,
- * and the server decides whose row it lands on. Pass null to opt back out.
- */
-export async function setInstagramHash(
-  _myId: string,
-  handleHash: string | null,
-): Promise<void> {
-  const { error } = await supabase.rpc('set_instagram_hash', { hash: handleHash });
-  if (error) throw error;
-}
-
-/**
- * Given hashes of the handles in the user's Instagram export, returns the
- * Sipply accounts that opted in with a matching hash.
+ * Clear only. v4.14 took the import out (specs/v4.14/find-friends.md), so
+ * nothing sets a handle any more and nothing here matches one; this stays
+ * for lib/discovery's retireInstagram, which withdraws a claim this phone
+ * made, until the server drops set_instagram_hash with the column.
  *
- * Keyed by hash rather than returning bare profiles: the caller holds the
- * hash → handle map locally, so it can label a row "@sarah.g" without the
- * server ever having seen the handle. Chunked and rate-limited exactly as
- * matchContacts is — the two share one daily quota.
+ * Once it has, there is nothing left to withdraw, so a missing function
+ * is done rather than failed. Thrown, it would keep the handle on the
+ * phone and send a doomed call on every profile load from then on.
  */
-export async function matchInstagram(
-  hashes: string[],
-): Promise<{ profile: UserProfile; hash: string }[]> {
-  const unique = [...new Set(hashes)].filter(Boolean);
-  if (unique.length === 0) return [];
-
-  const out: { profile: UserProfile; hash: string }[] = [];
-  const seen = new Set<string>();
-
-  for (const part of chunk(unique, HASHES_PER_CALL)) {
-    const { data, error } = await supabase.rpc('match_instagram', { hashes: part });
-    if (error) throw error;
-    for (const row of data ?? []) {
-      if (seen.has(row.id)) continue;
-      seen.add(row.id);
-      out.push({ hash: row.matched_hash, profile: toProfile(row) });
-    }
-  }
-  return out;
+export async function clearInstagramHash(): Promise<void> {
+  const { error } = await supabase.rpc('set_instagram_hash', { hash: null });
+  if (error && !isMissingFunction(error)) throw error;
 }
 
 /*
@@ -2265,8 +2237,8 @@ const FACEBOOK_IDS_PER_CALL = 5000;
  * Given the app-scoped Facebook ids of the user's friends, returns the
  * Sipply accounts signed in with those Facebook identities.
  *
- * Sent as they are, not hashed like the contact and Instagram matchers: an
- * app-scoped id means nothing outside Sipply's Facebook app, and the server
+ * Sent as they are, not hashed like the contact matcher: an app-scoped
+ * id means nothing outside Sipply's Facebook app, and the server
  * has to compare it with the identity Supabase Auth already holds. Never
  * includes you or anyone blocked either way — the server leaves them out —
  * and comes back empty when this account has no Facebook identity itself.

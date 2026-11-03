@@ -1,0 +1,3588 @@
+[
+ {
+  "id": "ice-wine",
+  "name": "Ice Wine",
+  "subcategory": "Dessert",
+  "description": "A dessert wine pressed from grapes harvested while frozen solid on the vine, often in the dead of night. The ice stays behind in the press, leaving pure concentrated nectar.",
+  "abv": "9–12%",
+  "origin": "Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lychee",
+   "peach",
+   "honey",
+   "candied citrus"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Canadian regulations require grapes for icewine to be picked at minus eight degrees Celsius or colder, and Canada is now the world's largest producer.",
+  "serve": {
+   "temp": "43-47°F, well chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Chill the bottle hard, then pour small — two to three ounces is a full serving of something this concentrated. Swirl gently and let it warm slightly in the glass so the lychee and peach aromatics open up over the honeyed core. Sip slowly at the end of a meal and notice how the piercing acidity keeps all that sugar tasting like fresh fruit rather than syrup.",
+   "pair": [
+    "fruit tarts",
+    "blue cheese",
+    "foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Riesling or Vidal Blanc, frozen on the vine in Germany, Austria and Canada.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling and Vidal Blanc; Cabernet Franc for rosé versions"
+    },
+    {
+     "label": "Region",
+     "detail": "Mosel and Rheingau, Austria, and Canada's Niagara Peninsula"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Frozen grapes pressed whole; water stays behind as ice"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually steel, released young; ages decades on sheer acidity"
+    }
+   ],
+   "process": "Pressing the fruit while still frozen leaves the water behind as ice and extracts only concentrated syrup."
+  }
+ },
+ {
+  "id": "moscato-dasti",
+  "name": "Moscato d'Asti",
+  "subcategory": "Dessert",
+  "description": "A gently fizzy, grapey-sweet whisper of a wine from Piedmont, so low in alcohol it barely counts. Tastes like biting into a chilled muscat grape at peak ripeness.",
+  "abv": "5–5.5%",
+  "origin": "Piedmont, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "muscat grape",
+   "peach",
+   "orange blossom",
+   "honey"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "At around 5.5% alcohol, Moscato d'Asti is one of the lightest wines in the world — Piedmontese winemakers historically drank it with lunch so they could keep working.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve this straight from the fridge in a white wine glass — the gentle frizzante sparkle and orange-blossom perfume are the whole show, so drink it young and cold. Skip the swirling ritual; just pour, sniff, and enjoy the burst of fresh muscat grape. At barely 5.5% alcohol it works as well at brunch as it does with dessert.",
+   "pair": [
+    "fresh peaches and berries",
+    "almond cake",
+    "spicy brunch dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Moscato Bianco from the Asti hills of Piedmont, barely fermented and gently fizzy.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Moscato Bianco, also called Muscat Blanc à Petits Grains"
+    },
+    {
+     "label": "Region",
+     "detail": "Asti DOCG, across the hills of southern Piedmont"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Single partial fermentation in sealed tank, chilled to a halt"
+    },
+    {
+     "label": "Aging",
+     "detail": "None whatsoever; drink it as young as you can find it"
+    }
+   ],
+   "process": "Chilling the tank mid-fermentation strands both the natural sugar and a light spritz of trapped carbon dioxide."
+  }
+ },
+ {
+  "id": "sauternes",
+  "name": "Sauternes",
+  "subcategory": "Dessert",
+  "description": "Bordeaux's liquid gold, made from grapes deliberately left to be shriveled by 'noble rot'. The fungus concentrates sugar and conjures flavors no healthy grape could manage.",
+  "abv": "13–14%",
+  "origin": "Sauternes, Bordeaux, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "apricot",
+   "honey",
+   "saffron",
+   "marmalade",
+   "botrytis"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "The noble rot fungus, Botrytis cinerea, only works its magic under the region's precise rhythm of misty mornings followed by dry, sunny afternoons.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Chill well but not ice-cold, and pour modest two-to-three-ounce servings into small glasses so the botrytis perfume concentrates. Give it a slow swirl and hunt for the signature saffron and marmalade notes layered over apricot and honey. A young bottle is delicious on opening; older Sauternes rewards ten minutes of air in the glass.",
+   "pair": [
+    "Roquefort cheese",
+    "foie gras",
+    "apricot or peach desserts"
+   ]
+  },
+  "composition": {
+   "summary": "Botrytis-shriveled Sémillon with Sauvignon Blanc and Muscadelle from Sauternes in Bordeaux.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sémillon-dominant, with Sauvignon Blanc and a little Muscadelle"
+    },
+    {
+     "label": "Region",
+     "detail": "Sauternes and Barsac, where the Ciron meets the Garonne"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Noble rot; pickers make repeated passes for shriveled berries"
+    },
+    {
+     "label": "Aging",
+     "detail": "Barriques for a year and a half or more"
+    }
+   ],
+   "process": "Botrytis cinerea punctures the skins and evaporates water, concentrating sugar while adding its own honeyed, saffron perfume."
+  }
+ },
+ {
+  "id": "tokaji-aszu",
+  "name": "Tokaji Aszú",
+  "subcategory": "Dessert",
+  "description": "Hungary's amber royalty, blended from individually picked botrytized berries and once reserved for the courts of Europe. Sweetness measured in the old 'puttonyos' scale of berry baskets.",
+  "abv": "9–12%",
+  "origin": "Tokaj, Hungary",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "apricot",
+   "honey",
+   "orange peel",
+   "saffron"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Louis XIV of France famously dubbed it 'Vinum Regum, Rex Vinorum' — the wine of kings, the king of wines.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Serve lightly chilled in small glasses and pour it as an occasion — this was the wine of kings, so give it a moment of ceremony. Swirl and watch the amber legs, then look for apricot and orange peel riding over that unmistakable saffron-honey botrytis note. Its electric acidity means it never cloys, so let each sip linger and count how long the finish runs.",
+   "pair": [
+    "blue cheese",
+    "apricot pastries",
+    "foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Botrytized Furmint and Hárslevelű berries blended into base wine in Hungary's Tokaj.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Furmint led, with Hárslevelű and aromatic Sárga Muskotály"
+    },
+    {
+     "label": "Region",
+     "detail": "Tokaj, on volcanic slopes above the Bodrog and Tisza"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Aszú berries kneaded to paste, macerated in base wine"
+    },
+    {
+     "label": "Aging",
+     "detail": "Years in oak casks in mold-lined volcanic cellars"
+    }
+   ],
+   "process": "Hand-picked botrytized berries are mashed into a paste and steeped in dry base wine, then pressed and refermented."
+  }
+ },
+ {
+  "id": "trockenbeerenauslese",
+  "name": "Trockenbeerenauslese",
+  "subcategory": "Dessert",
+  "description": "The rarest tier of German wine: individually plucked, botrytis-shriveled berries yielding mere drops of intensely sweet juice. Produced only in vintages when nature cooperates perfectly.",
+  "abv": "5.5–8%",
+  "origin": "Germany",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "honey",
+   "dried apricot",
+   "marmalade",
+   "caramel"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "The tongue-twisting name means 'dry berry select harvest' — pickers may pass through a vineyard many times to gather single raisined berries by hand.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "Small dessert wine glass",
+   "how": "This is one of the rarest wines in the world, so treat a bottle like an event: chill it gently, pour tiny one-to-two-ounce servings, and share it among friends. No decanting needed — just swirl softly and let the dried apricot, marmalade, and caramel unfold as it warms in the glass. Sip it on its own or alongside something simple; the wine itself is the dessert.",
+   "pair": [
+    "simple butter shortbread",
+    "ripe soft cheese",
+    "poached apricots"
+   ]
+  },
+  "composition": {
+   "summary": "Individually picked, botrytis-raisined Riesling berries from Germany's great river vineyards.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Usually Riesling; also Silvaner, Scheurebe and other Prädikat varieties"
+    },
+    {
+     "label": "Region",
+     "detail": "Mosel, Rheingau, Pfalz and Rheinhessen, in cooperative vintages only"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Botrytis raisins; sugar so high fermentation stalls near single digits"
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral casks or steel; the real aging happens in bottle"
+    }
+   ],
+   "process": "Pickers gather shriveled berries one at a time, so a whole vine may yield a single glass."
+  }
+ },
+ {
+  "id": "vin-santo",
+  "name": "Vin Santo",
+  "subcategory": "Dessert",
+  "description": "Tuscany's 'holy wine', made from grapes dried on mats for months and then aged for years in small sealed barrels tucked under attic roofs. Amber, nutty, and made for dunking biscotti.",
+  "abv": "14–17%",
+  "origin": "Tuscany, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "hazelnut",
+   "dried fig",
+   "caramel",
+   "orange peel"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "The classic Tuscan ritual is to dip crunchy cantucci almond biscuits directly into a glass of Vin Santo at the end of a meal.",
+  "serve": {
+   "temp": "55-60°F, cool room temp",
+   "glass": "Small dessert wine glass",
+   "how": "Serve just below room temperature in a small glass at the end of a meal, Tuscan style. The proper ritual is non-negotiable: dunk a crunchy cantucci almond biscuit straight into the glass and let it soak up the amber wine. Between bites, swirl and pick out the hazelnut, dried fig, and orange peel that years under the attic roof have concentrated.",
+   "pair": [
+    "cantucci (almond biscotti)",
+    "aged pecorino",
+    "dried figs and walnuts"
+   ]
+  },
+  "composition": {
+   "summary": "Trebbiano and Malvasia dried on mats, then sealed in tiny Tuscan barrels.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Trebbiano Toscano and Malvasia Bianca; Sangiovese for pink Occhio di Pernice"
+    },
+    {
+     "label": "Region",
+     "detail": "Tuscany, especially Chianti Classico and Montepulciano"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Appassimento on straw mats, then fermented on a resident madre"
+    },
+    {
+     "label": "Aging",
+     "detail": "Years sealed in small caratelli barrels under the roof"
+    }
+   ],
+   "process": "The sealed caratelli bake and freeze through the seasons in an unheated attic, oxidizing the wine into amber."
+  }
+ },
+ {
+  "id": "commandaria",
+  "name": "Commandaria",
+  "subcategory": "Fortified Wine",
+  "description": "An amber dessert wine of sun-dried Xynisteri and Mavro grapes from the foothills of Cyprus, made in recognizably the same way for millennia. Encountering a bottle in the wild is a genuine event.",
+  "abv": "15%",
+  "origin": "Troodos foothills, Cyprus",
+  "rarity": "legendary",
+  "tastingNotes": [
+   "raisin",
+   "honey",
+   "carob",
+   "coffee"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Commandaria is often cited as the world's oldest named wine still in production, taking its name from a medieval Crusader commandery on Cyprus.",
+  "serve": {
+   "temp": "54-59°F, lightly chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Serve lightly chilled in a small glass and take your time — you are drinking the world's oldest named wine still in production. Swirl slowly and look for the layers: raisin and honey up front, then the darker carob and coffee notes that sun-dried grapes and long aging bring. It is fortified and sweet, so pour small and let it close out the evening.",
+   "pair": [
+    "dark chocolate",
+    "baklava",
+    "aged hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Sun-dried Xynisteri and Mavro grapes from designated villages in the Cypriot Troodos foothills.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "White Xynisteri and red Mavro, sun-dried after picking"
+    },
+    {
+     "label": "Region",
+     "detail": "Fourteen designated villages in the Troodos foothills, Cyprus"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes sun-dried on the ground; some producers fortify"
+    },
+    {
+     "label": "Aging",
+     "detail": "Years in oak; several houses run ancient solera casks"
+    }
+   ],
+   "process": "Grapes are laid out in the Cypriot sun until raisined, a concentration step unchanged since Crusader times."
+  }
+ },
+ {
+  "id": "madeira",
+  "name": "Madeira",
+  "subcategory": "Fortified Wine",
+  "description": "A wine deliberately cooked and oxidized on a volcanic Atlantic island until virtually indestructible. Bracing acidity keeps its caramel depths from ever feeling heavy.",
+  "abv": "17–20%",
+  "origin": "Madeira, Portugal",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "burnt caramel",
+   "walnut",
+   "candied orange",
+   "sharp acidity"
+  ],
+  "glassware": "Copita",
+  "funFact": "Madeira's heat-and-oxygen upbringing makes bottles from the 18th century still drinkable, and America's Founding Fathers reportedly toasted independence with it in 1776.",
+  "serve": {
+   "temp": "55-60°F, cellar temp",
+   "glass": "Copita",
+   "how": "Pour into a copita at cool cellar temperature — drier styles like Sercial can take a deeper chill, while sweeter Bual and Malmsey shine closer to 60°F. No need to rush the bottle: Madeira is already cooked and oxidized, so an open bottle keeps for months on the counter. Swirl and notice how the burnt caramel and walnut richness is sliced clean by that famous whip-crack acidity.",
+   "pair": [
+    "roasted nuts",
+    "aged cheddar",
+    "caramel or toffee desserts"
+   ]
+  },
+  "composition": {
+   "summary": "Tinta Negra plus four noble varieties, fortified and heat-aged on a volcanic Atlantic island.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mostly Tinta Negra; Sercial, Verdelho, Bual and Malvasia for noble bottlings"
+    },
+    {
+     "label": "Region",
+     "detail": "The island of Madeira, on terraced volcanic slopes"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fortified with grape spirit, timing set by desired sweetness"
+    },
+    {
+     "label": "Aging",
+     "detail": "Estufagem heating, or slow canteiro loft aging for decades"
+    }
+   ],
+   "process": "Deliberate cooking and oxidation — once done accidentally by tropical sea voyages — makes the wine practically immortal."
+  }
+ },
+ {
+  "id": "marsala",
+  "name": "Marsala",
+  "subcategory": "Fortified Wine",
+  "description": "Sicily's amber fortified wine, ranging from bone dry aperitif to sticky dessert form. Most Americans first encounter it hiding in a pan of chicken.",
+  "abv": "15–20%",
+  "origin": "Marsala, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "dried apricot",
+   "vanilla",
+   "brown sugar",
+   "walnut"
+  ],
+  "glassware": "Small wine glass",
+  "funFact": "English merchant John Woodhouse began fortifying and shipping Marsala in 1773 so it would survive the sea voyage to Britain, turning a local Sicilian wine into a global staple.",
+  "serve": {
+   "temp": "55-60°F, lightly chilled (dry) or cool room temp (sweet)",
+   "glass": "Small wine glass",
+   "how": "Serve dry (secco) Marsala lightly chilled as an aperitif and sweeter styles at cool room temperature after dinner, always in a small wine glass. Pour a couple of ounces, swirl, and look past its saucepan reputation to the dried apricot, vanilla, and walnut character of a real Superiore or Vergine bottling. Like other fortifieds, an open bottle holds up for weeks.",
+   "pair": [
+    "aged pecorino",
+    "roasted almonds",
+    "tiramisu"
+   ]
+  },
+  "composition": {
+   "summary": "Sicilian Grillo, Catarratto and Inzolia, or dark Perricone, fortified with grape spirit.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grillo, Catarratto, Inzolia for gold; Perricone and Nero d'Avola for ruby"
+    },
+    {
+     "label": "Region",
+     "detail": "The Marsala DOC around Trapani, western Sicily"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fortified with spirit; sweeter styles get cooked must, or mosto cotto"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak, climbing from Fine through Superiore to long-aged Vergine"
+    }
+   ],
+   "process": "Fortification with grape spirit — and for many styles a dose of caramelized cooked must — sets the style."
+  }
+ },
+ {
+  "id": "barbera",
+  "name": "Barbera",
+  "subcategory": "Red Varietal",
+  "description": "Piedmont's everyday companion: dark-fruited, low in tannin, and crackling with acidity. While Nebbiolo poses for portraits, Barbera does the actual dinner-table work.",
+  "abv": "13–14.5%",
+  "origin": "Piedmont, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "red plum",
+   "blackberry",
+   "violet",
+   "espresso"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Barbera is the most planted red grape of Piedmont, pouring the wine locals actually drink while Nebbiolo gets the glory.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Serve at cellar temperature — 15 minutes in the fridge fixes a room-warm bottle — in a standard red wine glass. No decanting needed for everyday bottlings; just pour, swirl, and enjoy the dark plum and violet with that espresso-tinged finish. Its high acidity and soft tannin mean it truly comes alive at the table, so open it with dinner rather than before it.",
+   "pair": [
+    "pizza and pasta with red sauce",
+    "salumi and cured meats",
+    "mushroom risotto"
+   ]
+  },
+  "composition": {
+   "summary": "Pure Barbera from the Asti, Alba and Monferrato hills of Piedmont.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Barbera, unblended; Piedmont's most planted red variety"
+    },
+    {
+     "label": "Region",
+     "detail": "Barbera d'Asti, d'Alba and del Monferrato, in Piedmont"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented dry; malolactic rounds off its ferocious natural acidity"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel for the everyday version; Superiore bottlings see oak"
+    }
+   ],
+   "process": "Malolactic fermentation converts sharp malic acid to softer lactic, taming a grape that would otherwise cut like a knife."
+  }
+ },
+ {
+  "id": "cabernet-franc",
+  "name": "Cabernet Franc",
+  "subcategory": "Red Varietal",
+  "description": "The leafy, aromatic elder of the Bordeaux clan, lighter on its feet than its famous offspring. In the Loire it appears alone, all raspberry and pencil shavings.",
+  "abv": "12.5–14%",
+  "origin": "Southwest France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "raspberry",
+   "bell pepper",
+   "pencil shavings",
+   "violet"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "Cabernet Franc is a parent of both Cabernet Sauvignon and Merlot, making it the quiet patriarch of the entire Bordeaux family.",
+  "serve": {
+   "temp": "58-63°F, cool cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Serve slightly cooler than most reds in a Bordeaux glass — a light chill flatters its aromatics, and Loire versions can go cooler still. Give it a good swirl and hunt for the signature trio of raspberry, bell pepper, and pencil shavings. Lighter Chinon-style bottles need no decanting, while a structured example benefits from thirty minutes of air.",
+   "pair": [
+    "roast chicken with herbs",
+    "goat cheese",
+    "pork tenderloin"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Franc, solo in the middle Loire and a blending partner in Bordeaux.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Franc alone in the Loire; blended on Bordeaux's Right Bank"
+    },
+    {
+     "label": "Region",
+     "detail": "Chinon, Bourgueil and Saumur-Champigny; Saint-Émilion in Bordeaux"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Gentle extraction; picked ripe to soften its leafy pyrazine streak"
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral vessels in the Loire, barriques on the Right Bank"
+    }
+   ],
+   "process": "Restrained extraction keeps its raspberry lift and pencil-shaving perfume intact rather than burying them in tannin."
+  }
+ },
+ {
+  "id": "cabernet-sauvignon",
+  "name": "Cabernet Sauvignon",
+  "subcategory": "Red Varietal",
+  "description": "The apex predator of red grapes, armored in tannin and dark cassis. It adapts to nearly every wine region on Earth and dominates steakhouse lists without mercy.",
+  "abv": "13.5–15%",
+  "origin": "Bordeaux, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackcurrant",
+   "cedar",
+   "tobacco",
+   "graphite"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "DNA profiling at UC Davis in 1996 revealed Cabernet Sauvignon is the offspring of a chance cross between Cabernet Franc and Sauvignon Blanc.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Decant a young bottle for an hour to soften its tannic armor, then serve at cellar temperature in a large Bordeaux glass with a five-ounce pour. Swirl assertively and look for blackcurrant up front with cedar, tobacco, and graphite behind it. Taste it alongside rich food — the tannins that feel stern on their own turn silky against a steak.",
+   "pair": [
+    "grilled ribeye",
+    "braised short ribs",
+    "aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Sauvignon, born in Bordeaux's Médoc and now planted nearly everywhere.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon; a chance Cabernet Franc × Sauvignon Blanc cross"
+    },
+    {
+     "label": "Region",
+     "detail": "Left Bank Médoc gravel; also Napa, Coonawarra, Maipo"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Long maceration pulls tannin and color from thick skins"
+    },
+    {
+     "label": "Aging",
+     "detail": "French oak barriques, often a year or two, some barrels new"
+    }
+   ],
+   "process": "Extended time on those thick skins builds the tannic armature that lets it age for decades."
+  }
+ },
+ {
+  "id": "carmenere",
+  "name": "Carmenère",
+  "subcategory": "Red Varietal",
+  "description": "A Bordeaux ghost that vanished from Europe and resurfaced alive in Chile, where it now thrives. Dark fruit runs alongside a telltale streak of green peppercorn and paprika.",
+  "abv": "13–14.5%",
+  "origin": "Bordeaux, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "black plum",
+   "green peppercorn",
+   "paprika",
+   "chocolate"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "Believed lost to the 19th-century phylloxera plague, Carmenère was rediscovered in Chile in 1994, where it had been mistaken for Merlot for over a century.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Serve at cellar temperature in a Bordeaux glass, giving it thirty minutes in a decanter to shake off any bottle funk. Swirl and enjoy the party trick: ripe black plum and chocolate cut by a savory streak of green peppercorn and paprika. That gentle spice makes it more food-flexible than Cabernet, so do not save it only for steak night.",
+   "pair": [
+    "grilled meats with chimichurri",
+    "roasted vegetables",
+    "empanadas"
+   ]
+  },
+  "composition": {
+   "summary": "Carmenère, a lost Bordeaux variety that found its real home in Chile.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Carmenère; long mistaken for Merlot in Chilean vineyards"
+    },
+    {
+     "label": "Region",
+     "detail": "Colchagua, Rapel and Maipo in Chile; born in the Médoc"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Harvested very late to burn off its harsh green pyrazines"
+    },
+    {
+     "label": "Aging",
+     "detail": "French and American oak, typically around a year"
+    }
+   ],
+   "process": "It ripens weeks after Merlot, so picking late is what separates plush black fruit from raw capsicum."
+  }
+ },
+ {
+  "id": "gamay",
+  "name": "Gamay",
+  "subcategory": "Red Varietal",
+  "description": "The bright, bouncy sprite of Beaujolais, best served with a slight chill and minimal ceremony. Low tannin and juicy red fruit keep it light on its feet.",
+  "abv": "12–13%",
+  "origin": "Beaujolais, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "cranberry",
+   "red cherry",
+   "banana",
+   "peony"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "In 1395, Duke Philip the Bold of Burgundy banned Gamay from his lands by decree, denouncing it as a 'very bad and disloyal plant.'",
+  "serve": {
+   "temp": "55-60°F, lightly chilled",
+   "glass": "Burgundy glass",
+   "how": "This is the red that loves the fridge — give it 20-30 minutes of chill and serve in a Burgundy glass with zero ceremony. No decanting, no waiting; just pour and enjoy the juicy cranberry and cherry with that curious whisper of banana in young Beaujolais. It is built for the table rather than for contemplation, so serve it with the food and open it early in the meal.",
+   "pair": [
+    "roast chicken",
+    "charcuterie boards",
+    "salmon"
+   ]
+  },
+  "composition": {
+   "summary": "Gamay Noir à Jus Blanc from the granite hills of Beaujolais.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Gamay Noir à Jus Blanc, dark skin over white juice"
+    },
+    {
+     "label": "Region",
+     "detail": "Beaujolais and its ten crus, on pink granite and schist"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole clusters in a CO2-filled tank: carbonic maceration"
+    },
+    {
+     "label": "Aging",
+     "detail": "Concrete or old wood; Nouveau ships weeks after harvest"
+    }
+   ],
+   "process": "Carbonic maceration ferments the juice inside intact berries, generating banana-and-bubblegum esters with almost no tannin."
+  }
+ },
+ {
+  "id": "grenache",
+  "name": "Grenache",
+  "subcategory": "Red Varietal",
+  "description": "A sun-worshipper that trades color for strength, ripening to heady alcohol while staying pale and perfumed. Frequently encountered in disguise inside famous southern blends.",
+  "abv": "14–15.5%",
+  "origin": "Aragon, Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "kirsch",
+   "white pepper",
+   "dried herbs"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Grenache is one of the most widely planted red grapes on Earth, yet it mostly toils anonymously as the backbone of blends like Châteauneuf-du-Pape and Priorat.",
+  "serve": {
+   "temp": "60-64°F, cellar temp",
+   "glass": "Burgundy glass",
+   "how": "Serve at cool cellar temperature in a Burgundy glass — its pale color hides serious alcohol, and too much warmth makes that heat shout. Swirl and lean into the perfume: candied strawberry and kirsch with white pepper and dried herbs underneath. A brief 20-30 minute decant helps fuller Rhône-style bottles knit together.",
+   "pair": [
+    "lamb with herbs de Provence",
+    "grilled sausages",
+    "ratatouille"
+   ]
+  },
+  "composition": {
+   "summary": "Grenache Noir, or Garnacha, from Spain's Aragón and across the southern Rhône.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache Noir, known as Garnacha in its Spanish homeland"
+    },
+    {
+     "label": "Region",
+     "detail": "Aragón, Catalonia, and the southern Rhône, plus Sardinia as Cannonau"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Oxidation-prone, so handled reductively and usually blended"
+    },
+    {
+     "label": "Aging",
+     "detail": "Concrete or large foudres; new oak flattens its perfume"
+    }
+   ],
+   "process": "It ripens to enormous sugar while keeping thin skins, giving high alcohol in a pale, perfumed wine."
+  }
+ },
+ {
+  "id": "malbec",
+  "name": "Malbec",
+  "subcategory": "Red Varietal",
+  "description": "Driven from France by frost and fashion, it evolved a triumphant second form at high altitude in Mendoza. Inky, violet-scented, and clearly built for grilled meat.",
+  "abv": "13.5–14.5%",
+  "origin": "Cahors, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "plum",
+   "violet",
+   "cocoa"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "World Malbec Day is celebrated on April 17, commemorating the 1853 initiative that brought French vine cuttings — Malbec among them — to Argentina.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Serve at cellar temperature in a Bordeaux glass, decanting a young bottle for thirty minutes to let the inky fruit stretch out. Swirl and watch it stain the glass, then look for blackberry and plum lifted by violet perfume with cocoa on the finish. This wine was practically engineered for the grill, so save it for asado night and pour with confidence.",
+   "pair": [
+    "grilled steak",
+    "barbecued ribs",
+    "provoleta or grilled cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Malbec, exiled from Cahors in France and reborn high in Argentina's Mendoza.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Malbec, called Côt or Auxerrois in its native France"
+    },
+    {
+     "label": "Region",
+     "detail": "Cahors in southwest France; Luján de Cuyo and the Uco Valley"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Extended maceration; altitude and UV thicken the skins"
+    },
+    {
+     "label": "Aging",
+     "detail": "French oak, six to eighteen months for most bottlings"
+    }
+   ],
+   "process": "Mendoza's altitude gives cold nights and fierce sun, building color and violet aromatics that Cahors never quite reached."
+  }
+ },
+ {
+  "id": "merlot",
+  "name": "Merlot",
+  "subcategory": "Red Varietal",
+  "description": "The velvet diplomat of Bordeaux: plush, plummy, and quick to befriend newcomers. Often observed softening the sharp edges of its fiercer blending partners.",
+  "abv": "13–14.5%",
+  "origin": "Bordeaux, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "plum",
+   "black cherry",
+   "chocolate",
+   "bay leaf"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "US Merlot sales slumped after the 2004 film Sideways, in which the protagonist loudly refuses to drink it — a dip economists dubbed the 'Sideways effect.'",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Serve at cellar temperature in a Bordeaux glass — a room-warm bottle turns flabby, so give it 15 minutes in the fridge first. Its plush tannins mean decanting is optional; a quick swirl in the glass releases the plum, black cherry, and chocolate readily. Notice the velvet texture that made it famous: this is the red to pour for a crowd, whatever the movies say.",
+   "pair": [
+    "roast chicken",
+    "mushroom dishes",
+    "pork roast"
+   ]
+  },
+  "composition": {
+   "summary": "Merlot, the plush early-ripening backbone of Bordeaux's Right Bank.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Merlot; offspring of Cabernet Franc and the obscure Magdeleine Noire"
+    },
+    {
+     "label": "Region",
+     "detail": "Pomerol and Saint-Émilion clay; also Tuscany, Chile, Washington"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Ripens early; gentle extraction preserves its plummy softness"
+    },
+    {
+     "label": "Aging",
+     "detail": "Barriques, roughly a year; top Pomerol goes considerably longer"
+    }
+   ],
+   "process": "Larger berries and thinner skins than Cabernet mean less tannin extracted, which is precisely why it blends so well."
+  }
+ },
+ {
+  "id": "mourvedre",
+  "name": "Mourvèdre",
+  "subcategory": "Red Varietal",
+  "description": "A brooding, sun-loving beast that demands heat to ripen and repays it with dark fruit, leather, and a whiff of the wild. Rarely seen alone; usually lurking in blends.",
+  "abv": "14–15%",
+  "origin": "Valencia, Spain",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black fruit",
+   "game",
+   "leather",
+   "garrigue"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Known as Monastrell in its native Spain and Mataro in Australia and California, it supplies the brooding 'M' in GSM blends.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Decant for a full hour — this brooding grape is famously reductive and needs air to trade funk for perfume. Serve at cellar temperature in a red wine glass and swirl often, watching black fruit give way to leather, game, and that wild scrubland garrigue note. It is a wine for slow evenings and rich food, not casual sipping.",
+   "pair": [
+    "braised lamb shanks",
+    "wild game",
+    "beef stew"
+   ]
+  },
+  "composition": {
+   "summary": "Mourvèdre, or Monastrell, from the heat of Bandol and southeast Spain.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Mourvèdre; Monastrell in Spain, Mataro in Australia and California"
+    },
+    {
+     "label": "Region",
+     "detail": "Bandol in Provence; Jumilla, Yecla and Valencia in Spain"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Needs extreme heat to ripen; reductive, so it demands air"
+    },
+    {
+     "label": "Aging",
+     "detail": "Long foudre aging, which Bandol reds require by law"
+    }
+   ],
+   "process": "Slow aging in large old wood lets oxygen blow off its reductive funk and unwind the brutal young tannin."
+  }
+ },
+ {
+  "id": "nebbiolo",
+  "name": "Nebbiolo",
+  "subcategory": "Red Varietal",
+  "description": "Deceptively pale and brutally tannic, it lures the unwary with roses and tar before striking. Long cellaring is required to tame it.",
+  "abv": "13.5–14.5%",
+  "origin": "Piedmont, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "tar",
+   "rose",
+   "dried cherry",
+   "truffle"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Nebbiolo likely takes its name from 'nebbia,' the fog that blankets Piedmont's hills during its late-October harvest.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Burgundy glass",
+   "how": "Decant a young Barolo or Barbaresco for one to two hours — the tannins are genuinely fierce and need the air. Serve at cellar temperature in a big-bowled Burgundy glass and swirl patiently; the pale garnet color is a decoy for the tar, rose, and dried cherry that emerge in waves. Always drink it with fatty food, which is the only thing that truly tames it.",
+   "pair": [
+    "truffle risotto",
+    "braised beef in Barolo",
+    "aged Parmigiano-Reggiano"
+   ]
+  },
+  "composition": {
+   "summary": "Nebbiolo, grown in Piedmont's Langhe and, as Chiavennasca, in alpine Valtellina.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Nebbiolo; called Chiavennasca in Valtellina, Spanna in northern Piedmont"
+    },
+    {
+     "label": "Region",
+     "detail": "Langhe hills around Barolo and Barbaresco, plus Roero and Valtellina"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Long maceration extracting fierce tannin from famously pale skins"
+    },
+    {
+     "label": "Aging",
+     "detail": "Years in large Slavonian botti, or barriques in modernist cellars"
+    }
+   ],
+   "process": "Extended skin contact draws out huge tannin and acid but almost no pigment, hence the pale, punishing young wines."
+  }
+ },
+ {
+  "id": "nero-davola",
+  "name": "Nero d'Avola",
+  "subcategory": "Red Varietal",
+  "description": "Sicily's dark champion, forged in volcanic heat and Mediterranean sun. Ripe black cherry with a warm, faintly spicy finish.",
+  "abv": "13–14.5%",
+  "origin": "Sicily, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "black cherry",
+   "plum",
+   "chili",
+   "dried herbs"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Its name means 'black of Avola,' after a small town in southeastern Sicily, and it is the island's most planted red grape.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Serve at cellar temperature in a red wine glass — Sicilian sun packs this wine with ripe fruit, and a slight chill keeps it fresh. A quick swirl releases black cherry and plum with that faint warm-chili tingle on the finish. No decanting needed for most bottles; open it with something off the grill and let the wine's sunny weight do the rest.",
+   "pair": [
+    "grilled swordfish or tuna",
+    "pasta alla Norma",
+    "spicy sausage"
+   ]
+  },
+  "composition": {
+   "summary": "Nero d'Avola, Sicily's most planted red, named for a town near Syracuse.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Nero d'Avola; blended with Frappato in Cerasuolo di Vittoria"
+    },
+    {
+     "label": "Region",
+     "detail": "Across Sicily, with Noto and Vittoria as historic heartlands"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Temperature-controlled ferment keeps Mediterranean ripeness from tipping into stew"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel for the fresh style; oak for riserva bottlings"
+    }
+   ],
+   "process": "Cool, controlled fermentation is what keeps a grape grown in punishing heat tasting like fruit rather than jam."
+  }
+ },
+ {
+  "id": "petite-sirah",
+  "name": "Petite Sirah",
+  "subcategory": "Red Varietal",
+  "description": "Nothing about this wine is petite except the berries. It stains glasses, teeth, and reputations with some of the darkest, most tannic juice in California.",
+  "abv": "13.5–15%",
+  "origin": "Southern France",
+  "rarity": "common",
+  "tastingNotes": [
+   "blueberry",
+   "dark chocolate",
+   "black tea",
+   "pepper"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "Petite Sirah is the grape Durif, a 19th-century French cross of Syrah and Peloursin named for the botanist who propagated it.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Decant for at least an hour — this is some of the darkest, most tannic juice in California and it needs room to breathe. Serve at cellar temperature in a Bordeaux glass, swirl hard, and brace for blueberry and dark chocolate wrapped in black-tea tannin. Fair warning: it will stain the glass, so pair it with something fatty enough to fight back.",
+   "pair": [
+    "barbecued brisket",
+    "beef chili",
+    "blue cheese burgers"
+   ]
+  },
+  "composition": {
+   "summary": "Durif, a Syrah and Peloursin cross, now essentially a California specialty.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Durif, a 19th-century French cross of Syrah and Peloursin"
+    },
+    {
+     "label": "Region",
+     "detail": "California — Lodi, Napa and Sonoma — plus Australia and Israel"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Tiny berries mean extreme skin-to-juice ratio and monstrous extraction"
+    },
+    {
+     "label": "Aging",
+     "detail": "American or French oak, often a year or more"
+    }
+   ],
+   "process": "Unusually small berries pack tight clusters, so the juice meets far more skin and seed than any normal grape."
+  }
+ },
+ {
+  "id": "pinot-noir",
+  "name": "Pinot Noir",
+  "subcategory": "Red Varietal",
+  "description": "A famously temperamental creature that sulks in the wrong climate and transcends in the right one. Thin-skinned in every sense, it rewards patient handlers with silk and perfume.",
+  "abv": "12.5–14%",
+  "origin": "Burgundy, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "cherry",
+   "raspberry",
+   "mushroom",
+   "rose petal"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Pinot Noir is genetically unstable and mutates readily — Pinot Gris and Pinot Blanc are simply color mutations of the very same variety.",
+  "serve": {
+   "temp": "55-60°F, lightly chilled",
+   "glass": "Burgundy glass",
+   "how": "Serve slightly chilled in a wide-bowled Burgundy glass, which gathers its delicate perfume — 20 minutes in the fridge is the easy home trick. Skip heavy decanting; a gentle swirl in the glass is enough for this thin-skinned grape. Sniff before every sip and track the evolution from bright cherry and raspberry into mushroom and rose petal as it warms.",
+   "pair": [
+    "roast duck",
+    "grilled salmon",
+    "mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Pinot Noir, the thin-skinned red of Burgundy's Côte d'Or and cool climates everywhere.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir, genetically unstable and prone to clonal mutation"
+    },
+    {
+     "label": "Region",
+     "detail": "Côte d'Or Burgundy; Oregon, Sonoma Coast, Central Otago, Martinborough"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cold soak, gentle punch-downs, often a share of whole clusters"
+    },
+    {
+     "label": "Aging",
+     "detail": "French barriques for a year or so, a portion new"
+    }
+   ],
+   "process": "Everything is done gently — thin skins give up color and tannin fast, and hard handling turns silk into coarseness."
+  }
+ },
+ {
+  "id": "pinotage",
+  "name": "Pinotage",
+  "subcategory": "Red Varietal",
+  "description": "A laboratory-born hybrid unique to South Africa, smoky and mulberry-dark with a divisive reputation. Modern specimens have evolved well beyond their rustic ancestors.",
+  "abv": "13.5–15%",
+  "origin": "Stellenbosch, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "mulberry",
+   "smoke",
+   "rooibos",
+   "coffee"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Pinotage was created in 1925 when scientist Abraham Perold crossed Pinot Noir with Cinsaut, then locally called Hermitage — hence the portmanteau name.",
+  "serve": {
+   "temp": "58-63°F, cool cellar temp",
+   "glass": "Red wine glass",
+   "how": "Serve a touch cooler than most reds in a red wine glass and give modern bottlings 30 minutes of decanting to shed any smoky edge. Swirl and look for the signature South African profile: dark mulberry fruit over smoke, rooibos tea, and coffee. Judge it with food rather than alone — its rustic reputation melts away next to anything charred on a braai.",
+   "pair": [
+    "braai (barbecued) meats",
+    "venison",
+    "smoky bean stews"
+   ]
+  },
+  "composition": {
+   "summary": "Pinotage, a 1925 South African cross of Pinot Noir and Cinsaut.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinotage; Pinot Noir crossed with Cinsaut, then called Hermitage"
+    },
+    {
+     "label": "Region",
+     "detail": "Stellenbosch and Swartland, South Africa; grown almost nowhere else"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Careful temperature control avoids the acetone notes of rustic old bottlings"
+    },
+    {
+     "label": "Aging",
+     "detail": "French oak; the 'coffee' style uses heavily toasted staves"
+    }
+   ],
+   "process": "Modern producers ferment cooler and pick earlier, which is what separates today's mulberry-and-smoke wines from the grape's rough reputation."
+  }
+ },
+ {
+  "id": "sangiovese",
+  "name": "Sangiovese",
+  "subcategory": "Red Varietal",
+  "description": "Tuscany's sour-cherry heartbeat, bristling with acidity and dusty tannin. It insists on being served with food, preferably something involving tomatoes.",
+  "abv": "12.5–14%",
+  "origin": "Tuscany, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "sour cherry",
+   "tomato leaf",
+   "balsamic",
+   "earth"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "The name is thought to derive from the Latin 'sanguis Jovis' — the blood of Jupiter.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Serve at cellar temperature in a red wine glass, decanting sturdier Chianti Classico or Brunello styles for thirty minutes to an hour. Swirl and find the sour cherry and tomato-leaf tang over dusty tannin and earth. This grape genuinely sulks without food, so honor its one demand: put something tomato-based or fatty on the table before you pour.",
+   "pair": [
+    "pasta with tomato ragù",
+    "margherita pizza",
+    "bistecca alla Fiorentina"
+   ]
+  },
+  "composition": {
+   "summary": "Sangiovese, the sour-cherry red grape at the heart of Tuscany.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sangiovese and its clones, including Brunello and Prugnolo Gentile"
+    },
+    {
+     "label": "Region",
+     "detail": "Tuscany above all; also Romagna and Umbria as Montefalco blends"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented on skins; high acid preserved for the dinner table"
+    },
+    {
+     "label": "Aging",
+     "detail": "Large botti traditionally, barriques in the Super Tuscan style"
+    }
+   ],
+   "process": "Fermentation is managed to keep its bracing acidity intact, which is exactly what makes it work with tomatoes."
+  }
+ },
+ {
+  "id": "syrah-shiraz",
+  "name": "Syrah / Shiraz",
+  "subcategory": "Red Varietal",
+  "description": "A shape-shifter with two known forms: peppery and savage on Rhône granite, sunny and jam-packed as Australian Shiraz. Its signature move is a crack of black pepper behind dark fruit.",
+  "abv": "13.5–15%",
+  "origin": "Rhône Valley, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "black pepper",
+   "smoked meat",
+   "violet"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "DNA testing in 1998 proved Syrah is a cross of two obscure French alpine grapes, Dureza and Mondeuse Blanche, debunking legends tying it to the Persian city of Shiraz.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Serve at cellar temperature in a red wine glass, giving young structured bottles 30-60 minutes in a decanter. Swirl and identify which form you have caught: a savage Rhône Syrah leads with black pepper and smoked meat, while sunny Australian Shiraz leads with jammy blackberry. Either way, hunt for that signature crack of pepper behind the dark fruit — it is the grape's calling card.",
+   "pair": [
+    "pepper-crusted steak",
+    "barbecued lamb",
+    "hard sheep's cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Syrah, from the granite terraces of the northern Rhône and Australia's Barossa.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah; a natural cross of Dureza and Mondeuse Blanche"
+    },
+    {
+     "label": "Region",
+     "detail": "Hermitage, Cornas, Côte-Rôtie; Barossa and McLaren Vale as Shiraz"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-bunch fermentation in the Rhône; destemmed and riper in Australia"
+    },
+    {
+     "label": "Aging",
+     "detail": "French oak in France, sweeter American oak in Australia"
+    }
+   ],
+   "process": "Whole-bunch fermentation and cool granite sites preserve rotundone, the compound responsible for that crack of black pepper."
+  }
+ },
+ {
+  "id": "tannat",
+  "name": "Tannat",
+  "subcategory": "Red Varietal",
+  "description": "The name warns you: this is tannin incarnate, a black-fruited bruiser from France's rugged southwest. It found a gentler second home across the Atlantic in Uruguay.",
+  "abv": "13.5–15%",
+  "origin": "Madiran, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackberry",
+   "black plum",
+   "cocoa",
+   "smoke"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "Tannat contains some of the highest levels of tannins and procyanidins measured in any red wine grape, and Uruguay has adopted it as its national grape.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Decant for one to two hours — the name warns you, and the tannins deliver. Serve at cellar temperature in a Bordeaux glass, swirl generously, and let blackberry, black plum, and cocoa emerge from behind the smoke and grip. Never drink it on an empty stomach; this is a wine that demands rich, fatty food as a sparring partner.",
+   "pair": [
+    "Uruguayan-style grilled beef",
+    "cassoulet",
+    "hard aged cheeses"
+   ]
+  },
+  "composition": {
+   "summary": "Tannat, the ferociously tannic red of Madiran and, in gentler form, Uruguay.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Tannat, holder of some of the highest tannin levels measured"
+    },
+    {
+     "label": "Region",
+     "detail": "Madiran and Irouléguy in southwest France; Canelones, Uruguay"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Micro-oxygenation was invented in Madiran specifically to tame it"
+    },
+    {
+     "label": "Aging",
+     "detail": "Oak for a year or more; Madiran needs several years' patience"
+    }
+   ],
+   "process": "Micro-oxygenation drips tiny amounts of oxygen through the wine, polymerizing tannins that would otherwise strip your mouth bare."
+  }
+ },
+ {
+  "id": "tempranillo",
+  "name": "Tempranillo",
+  "subcategory": "Red Varietal",
+  "description": "Spain's noble workhorse, equally at home napping for years in oak barrels or bottled young and juicy. Leather and dried fruit emerge as it matures.",
+  "abv": "13–14.5%",
+  "origin": "Northern Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "red cherry",
+   "dried fig",
+   "dill",
+   "leather",
+   "tobacco"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "Its name comes from the Spanish 'temprano,' meaning early, because the grape ripens weeks ahead of most of its Iberian neighbors.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Serve at cellar temperature in a Bordeaux glass — young joven styles enjoy a slight chill, while oak-aged Reserva and Gran Reserva want 30-60 minutes of decanting. Swirl and trace its two lives: bright red cherry and dill in youth, then dried fig, leather, and tobacco as barrel age takes over. Pour it alongside anything roasted and notice how the American-oak dill note plays with savory food.",
+   "pair": [
+    "roast lamb",
+    "jamón ibérico and Manchego",
+    "grilled chorizo"
+   ]
+  },
+  "composition": {
+   "summary": "Tempranillo, Spain's noble red, under different names across Rioja, Ribera and Toro.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Tempranillo; Tinto Fino in Ribera, Tinta de Toro in Toro"
+    },
+    {
+     "label": "Region",
+     "detail": "Rioja, Ribera del Duero, Toro; Tinta Roriz in Portugal"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Ripens early, keeping moderate acidity and supple mid-weight tannin"
+    },
+    {
+     "label": "Aging",
+     "detail": "American oak in the traditional idiom, French oak in modern cellars"
+    }
+   ],
+   "process": "Long rest in oak is the point — Tempranillo's neutral fruit is a canvas for vanilla, dill and leather."
+  }
+ },
+ {
+  "id": "touriga-nacional",
+  "name": "Touriga Nacional",
+  "subcategory": "Red Varietal",
+  "description": "Portugal's flagship grape, intensely floral and concentrated, long the secret muscle behind great Port. Increasingly spotted flying solo as a dry table wine.",
+  "abv": "13–14.5%",
+  "origin": "Dão, Portugal",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blueberry",
+   "violet",
+   "bergamot",
+   "rockrose"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Touriga Nacional yields tiny, thick-skinned berries and famously stingy crops, which is exactly why it anchors the blends of vintage Port.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Open 30-45 minutes ahead or give it a quick decant — young Touriga is tightly wound and needs air to unfurl its violet perfume. Pour a third of a glass, swirl, and get your nose in there before sipping. Notice how the floral bergamot top notes sit over dense blueberry fruit and firm but polished tannins.",
+   "pair": [
+    "grilled lamb chops",
+    "roast duck",
+    "aged sheep's-milk cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Touriga Nacional, Portugal's flagship red grape, from the Dão and the Douro.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Touriga Nacional; tiny thick-skinned berries and famously stingy yields"
+    },
+    {
+     "label": "Region",
+     "detail": "Dão granite and Douro schist, in northern Portugal"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Low yields concentrate its violet and bergamot aromatics"
+    },
+    {
+     "label": "Aging",
+     "detail": "French oak for dry table wines; the muscle behind vintage Port"
+    }
+   ],
+   "process": "Tiny berries with a huge skin-to-pulp ratio give the color and floral concentration that anchor a Port blend."
+  }
+ },
+ {
+  "id": "zinfandel",
+  "name": "Zinfandel",
+  "subcategory": "Red Varietal",
+  "description": "A Croatian native that migrated to California and went gloriously feral, ripening into brambly, high-octane jamminess. Gnarled old-vine specimens over a century old still roam Lodi and Sonoma.",
+  "abv": "14–16%",
+  "origin": "Dalmatia, Croatia",
+  "rarity": "common",
+  "tastingNotes": [
+   "bramble",
+   "raspberry jam",
+   "black pepper",
+   "licorice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "In 2001, DNA sleuths traced Zinfandel to the obscure Croatian grape Crljenak Kaštelanski, proving it identical to Italy's Primitivo.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Zin runs hot in alcohol, so resist serving it at warm room temperature — 20 minutes in the fridge tames the burn and sharpens the brambly fruit. No decanting needed; just pour and swirl. Taste for the signature one-two of jammy raspberry sweetness up front and cracked black pepper on the finish.",
+   "pair": [
+    "barbecue ribs",
+    "smash burgers",
+    "pepperoni pizza"
+   ]
+  },
+  "composition": {
+   "summary": "Zinfandel, genetically Croatian Crljenak Kaštelanski and identical to Italy's Primitivo.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel; Crljenak Kaštelanski in Croatia, Primitivo in Puglia"
+    },
+    {
+     "label": "Region",
+     "detail": "Lodi, Sonoma, Napa and Amador in California; Dalmatian in origin"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Clusters ripen unevenly, so ripe berries and raisins ferment together"
+    },
+    {
+     "label": "Aging",
+     "detail": "American oak commonly; old-vine bottlings often see French barrels"
+    }
+   ],
+   "process": "Uneven ripening within each cluster means fresh fruit and raisins go into the same tank, producing brambly jam at high alcohol."
+  }
+ },
+ {
+  "id": "amarone-della-valpolicella",
+  "name": "Amarone della Valpolicella",
+  "subcategory": "Regional Red",
+  "description": "Born from grapes dried on racks for months before fermentation, concentrating them into a rich, raisin-edged giant. Velvety, potent, and best approached after dinner is already underway.",
+  "abv": "15–16.5%",
+  "origin": "Veneto, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "raisin",
+   "black cherry",
+   "chocolate",
+   "tobacco"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Amarone means roughly 'the great bitter,' a name coined to distinguish this dry wine from Recioto, the sweet style it accidentally evolved from when a barrel fermented fully dry.",
+  "serve": {
+   "temp": "62-65°F, cellar temp",
+   "glass": "Burgundy glass",
+   "how": "Decant for at least an hour — this raisin-dried giant is dense and benefits enormously from air. Serve in a wide Burgundy bowl with modest pours; at 15%+ ABV it is a sipper, not a gulper, and ideal as the last wine of the night. Let it warm slightly in the glass and watch chocolate and tobacco emerge behind the black cherry.",
+   "pair": [
+    "braised short ribs",
+    "aged Parmigiano-Reggiano",
+    "dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Corvina, Corvinone and Rondinella, air-dried for months in Italy's Valpolicella.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Corvina and Corvinone led, with Rondinella and sometimes Molinara"
+    },
+    {
+     "label": "Region",
+     "detail": "Valpolicella, in the hills north of Verona, Veneto"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Appassimento: clusters dried on racks for months, losing much weight"
+    },
+    {
+     "label": "Aging",
+     "detail": "At least two years, usually longer, in oak botti"
+    }
+   ],
+   "process": "Months of drying in airy fruttaio lofts concentrate the sugar, and fermenting that all the way dry gives the power."
+  }
+ },
+ {
+  "id": "barolo",
+  "name": "Barolo",
+  "subcategory": "Regional Red",
+  "description": "Nebbiolo's final evolution, achieved only on the Langhe hills after years of mandatory aging. Pale in color, colossal in structure, haunted by tar and roses.",
+  "abv": "14–15%",
+  "origin": "Piedmont, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "tar",
+   "rose",
+   "cherry",
+   "licorice",
+   "leather"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Italian law requires Barolo to age at least 38 months before release, and it has long been called 'the wine of kings and the king of wines.'",
+  "serve": {
+   "temp": "62-65°F, cellar temp",
+   "glass": "Burgundy glass",
+   "how": "Young Barolo demands a long decant — two hours is not excessive — to soften Nebbiolo's famously grippy tannins. Use a big-bowled Burgundy glass and don't be fooled by the pale brick color; the structure underneath is colossal. Sniff for the classic 'tar and roses' paradox, then notice how cherry fruit, licorice, and leather stretch across a very long finish.",
+   "pair": [
+    "truffle risotto",
+    "braised beef in Barolo",
+    "aged Castelmagno cheese"
+   ]
+  },
+  "composition": {
+   "summary": "One hundred percent Nebbiolo from eleven communes in Piedmont's Langhe hills.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Nebbiolo only; no other variety is permitted"
+    },
+    {
+     "label": "Region",
+     "detail": "Eleven communes of the Langhe, including La Morra and Serralunga"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Long maceration on skins to build its architectural tannin"
+    },
+    {
+     "label": "Aging",
+     "detail": "38 months minimum before release, at least 18 in wood"
+    }
+   ],
+   "process": "The mandatory years in cask are the whole design: nothing else softens Nebbiolo's tannin into tar-and-roses."
+  }
+ },
+ {
+  "id": "bordeaux-blend",
+  "name": "Bordeaux Blend",
+  "subcategory": "Regional Red",
+  "description": "A team composition perfected over centuries: Cabernet Sauvignon for structure, Merlot for flesh, with Cabernet Franc, Petit Verdot, and Malbec in support. Imitated on every continent that grows grapes.",
+  "abv": "13–14.5%",
+  "origin": "Bordeaux, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "cassis",
+   "plum",
+   "cedar",
+   "cigar box"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "American producers coined the term 'Meritage' — rhyming with 'heritage' — in 1988 to name New World wines built from Bordeaux grape varieties.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Give a young bottle 45-60 minutes in a decanter; older bottles need only a gentle pour off their sediment. The tall Bordeaux glass funnels cassis and cedar straight to your nose — swirl and look for the 'cigar box' note that marks a classic blend. Taste how Cabernet's firm backbone and Merlot's plummy flesh interlock, and let the tannins soften course by course through dinner.",
+   "pair": [
+    "ribeye steak",
+    "roast leg of lamb",
+    "hard aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Sauvignon and Merlot, plus Cabernet Franc, Petit Verdot and Malbec.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon and Merlot lead; Cabernet Franc, Petit Verdot, Malbec support"
+    },
+    {
+     "label": "Region",
+     "detail": "Bordeaux; Cabernet on Left Bank gravel, Merlot on Right Bank clay"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Parcels fermented separately, then assembled by tasting after fermentation"
+    },
+    {
+     "label": "Aging",
+     "detail": "French barriques, roughly a year to two, some proportion new"
+    }
+   ],
+   "process": "The blend is assembled after fermentation, letting the winemaker balance Cabernet's structure against Merlot's flesh every single vintage."
+  }
+ },
+ {
+  "id": "brunello-di-montalcino",
+  "name": "Brunello di Montalcino",
+  "subcategory": "Regional Red",
+  "description": "Sangiovese in its most patient and powerful form, grown on a single Tuscan hilltop and aged for years before it may leave home. Rewards those who wait even longer.",
+  "abv": "13.5–15%",
+  "origin": "Montalcino, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dried cherry",
+   "fig",
+   "espresso",
+   "leather"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Brunello cannot legally be sold until January 1 of the fifth year after harvest, and it was among the first Italian wines awarded DOCG status in 1980.",
+  "serve": {
+   "temp": "62-65°F, cellar temp",
+   "glass": "Burgundy glass",
+   "how": "Decant one to two hours before dinner — Brunello is built for patience and repays every minute of air. Pour into a wide bowl, swirl, and track how it evolves in the glass from tight dried cherry into fig, espresso, and leather. Keep pours small and revisit over the whole evening; the last glass is often the best one.",
+   "pair": [
+    "bistecca alla fiorentina",
+    "wild boar ragu over pici",
+    "pecorino toscano"
+   ]
+  },
+  "composition": {
+   "summary": "Pure Sangiovese Grosso from the single hilltop commune of Montalcino in Tuscany.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sangiovese alone, the local Brunello clone; blending is forbidden"
+    },
+    {
+     "label": "Region",
+     "detail": "Montalcino, one commune south of Siena in Tuscany"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Long maceration; the warm, dry hill ripens Sangiovese fully"
+    },
+    {
+     "label": "Aging",
+     "detail": "Two years minimum in oak plus months in bottle before release"
+    }
+   ],
+   "process": "Mandated years in cask and bottle mean the wine reaches you already resolved, with more decades still ahead of it."
+  }
+ },
+ {
+  "id": "chateauneuf-du-pape",
+  "name": "Châteauneuf-du-Pape",
+  "subcategory": "Regional Red",
+  "description": "A warm, spicy Grenache-led blend from stony vineyards once tended for the popes of Avignon. Up to thirteen grape varieties may join the party.",
+  "abv": "13.5–15.5%",
+  "origin": "Southern Rhône, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "raspberry",
+   "garrigue",
+   "olive",
+   "warm spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "In 1954 the village council passed a decree banning flying saucers from landing in its vineyards, with any offending craft to be impounded — the decree still stands.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Burgundy glass",
+   "how": "A 30-60 minute decant knits the Grenache-led blend together and blows off any reductive funk. Serve just below room temperature so the warm-climate alcohol stays in check. Swirl and hunt for garrigue — that wild rosemary-and-thyme scrubland note — layered under ripe raspberry and a savory olive streak.",
+   "pair": [
+    "herb-crusted rack of lamb",
+    "beef daube",
+    "mushroom cassoulet"
+   ]
+  },
+  "composition": {
+   "summary": "A Grenache-led southern Rhône blend drawing on thirteen permitted grape varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache-dominant, with Syrah, Mourvèdre, Cinsault and ten more permitted"
+    },
+    {
+     "label": "Region",
+     "detail": "Southern Rhône, on galets roulés — rounded stones that radiate heat"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Varieties often co-fermented; extraction kept gentle for Grenache"
+    },
+    {
+     "label": "Aging",
+     "detail": "Concrete tanks and large foudres; new barriques are rare"
+    }
+   ],
+   "process": "Those famous river stones store the day's heat and release it overnight, driving Grenache to full, spicy ripeness."
+  }
+ },
+ {
+  "id": "chianti",
+  "name": "Chianti",
+  "subcategory": "Regional Red",
+  "description": "Tuscany's Sangiovese-based table companion, once famous for its straw-basket fiasco bottle. Tart cherry and dusty herbs, engineered by centuries of pairing with pasta.",
+  "abv": "12.5–14%",
+  "origin": "Tuscany, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "tart cherry",
+   "dried oregano",
+   "balsamic",
+   "leather"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "A 1716 edict by Cosimo III de' Medici drew official boundaries around Chianti, making it one of the world's first legally delimited wine regions.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "No ceremony required: pull the cork, pour, and let the first glass open while dinner hits the table. Chianti's bright acidity is engineered for food, so taste it alongside something tomato-based rather than alone. Notice how the tart cherry snap cuts through fat and how dusty oregano and leather linger on the finish.",
+   "pair": [
+    "spaghetti with tomato sauce",
+    "margherita pizza",
+    "salami and pecorino board"
+   ]
+  },
+  "composition": {
+   "summary": "Sangiovese-based Tuscan red, with Canaiolo and Colorino traditionally along for support.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sangiovese majority, with Canaiolo, Colorino and permitted international varieties"
+    },
+    {
+     "label": "Region",
+     "detail": "Chianti and Chianti Classico, between Florence and Siena"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Governo alla toscana, a restart on dried grapes, is the old trick"
+    },
+    {
+     "label": "Aging",
+     "detail": "Classico rests about a year; Riserva two, part of it in wood"
+    }
+   ],
+   "process": "Sangiovese's tart cherry and dusty tannin are preserved rather than covered, which is why it needs food to make sense."
+  }
+ },
+ {
+  "id": "cote-rotie",
+  "name": "Côte-Rôtie",
+  "subcategory": "Regional Red",
+  "description": "Syrah from vertiginous terraced slopes so steep they must be worked by hand, perfumed with violets and smoked meat. The 'roasted slope' earns its name every summer.",
+  "abv": "13–14%",
+  "origin": "Northern Rhône, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black raspberry",
+   "bacon fat",
+   "violet",
+   "white pepper"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Producers may legally co-ferment up to 20% of the white grape Viognier with Syrah here — a rare red-white marriage enshrined in French appellation law.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Decant 45-60 minutes to coax out the perfume — this is one of the world's most aromatic Syrahs and it opens like a flower. Serve at cool cellar temperature in a generous glass and swirl slowly before every sip. The magic is the contrast: violet florals and black raspberry riding over savory bacon fat and white pepper.",
+   "pair": [
+    "roast squab or duck breast",
+    "peppercorn steak",
+    "grilled portobello mushrooms"
+   ]
+  },
+  "composition": {
+   "summary": "Syrah with a legal splash of white Viognier, from terraced Northern Rhône slopes.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, with up to 20% Viognier permitted in the ferment"
+    },
+    {
+     "label": "Region",
+     "detail": "Côte Brune and Côte Blonde, terraced above Ampuis in the Rhône"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Syrah and Viognier co-fermented together, not blended afterwards"
+    },
+    {
+     "label": "Aging",
+     "detail": "Barriques for a year or two; top cuvées go longer"
+    }
+   ],
+   "process": "Co-fermenting a white grape with the red stabilizes color and lifts the wine into violets and smoked meat."
+  }
+ },
+ {
+  "id": "montepulciano-dabruzzo",
+  "name": "Montepulciano d'Abruzzo",
+  "subcategory": "Regional Red",
+  "description": "Central Italy's friendly, inky trattoria staple: soft tannins, dark plummy fruit, and a fair price for the quality. Rarely demands attention; always earns it.",
+  "abv": "12.5–14%",
+  "origin": "Abruzzo, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "black plum",
+   "boysenberry",
+   "oregano",
+   "cocoa"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Despite the name, the Montepulciano grape has nothing to do with the Tuscan town of Montepulciano, whose famous wine is made from Sangiovese instead.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "This is a weeknight wine — open and pour, no decanting or fuss needed, though a slight chill flatters its plush fruit. Taste for soft, dusty tannins wrapped around black plum and a cocoa-edged finish. It flatters almost anything from the stovetop, from a slow ragù to grilled sausages.",
+   "pair": [
+    "lasagna",
+    "grilled sausages",
+    "eggplant parmigiana"
+   ]
+  },
+  "composition": {
+   "summary": "The Montepulciano grape, grown across Abruzzo — no relation to the Tuscan town.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Montepulciano; unrelated to Vino Nobile di Montepulciano's Sangiovese"
+    },
+    {
+     "label": "Region",
+     "detail": "Abruzzo, between the Apennines and the Adriatic coast"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Moderate extraction keeps the tannin soft and the fruit forward"
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly steel; Colline Teramane riserva bottlings see oak"
+    }
+   ],
+   "process": "Deliberately gentle handling keeps a deeply pigmented grape drinkable young, which is the entire point of a trattoria red."
+  }
+ },
+ {
+  "id": "priorat",
+  "name": "Priorat",
+  "subcategory": "Regional Red",
+  "description": "Old-vine Garnacha and Cariñena clawing a living from black slate hillsides in Catalonia. The resulting wines are dense, mineral, and unapologetically powerful.",
+  "abv": "14.5–15.5%",
+  "origin": "Catalonia, Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "fig",
+   "slate",
+   "licorice"
+  ],
+  "glassware": "Red wine glass",
+  "funFact": "Priorat is one of only two Spanish regions granted top-tier DOCa/DOQ status (the other is Rioja), with vines rooted in a glittering slate soil called llicorella.",
+  "serve": {
+   "temp": "62-65°F, cellar temp",
+   "glass": "Red wine glass",
+   "how": "Decant a solid hour — Priorat's dense old-vine fruit and slate spine take time to loosen up. Serve at cool cellar temperature to keep the 15% alcohol from dominating, and pour modestly. Taste for the licorella signature: a wet-stone mineral streak cutting through black cherry, fig, and licorice.",
+   "pair": [
+    "grilled lamb with romesco",
+    "venison stew",
+    "manchego cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Old-vine Garnacha and Cariñena rooted in the black slate of Catalonia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Garnacha and Cariñena from old vines, often with Cabernet or Syrah"
+    },
+    {
+     "label": "Region",
+     "detail": "Priorat DOQ, Catalonia, on llicorella slate terraces"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Tiny yields from ancient vines give natural concentration"
+    },
+    {
+     "label": "Aging",
+     "detail": "French oak barriques; the best bottlings age for a decade plus"
+    }
+   ],
+   "process": "Vines claw through fractured llicorella slate for water, producing minuscule crops of intensely concentrated fruit."
+  }
+ },
+ {
+  "id": "rioja",
+  "name": "Rioja",
+  "subcategory": "Regional Red",
+  "description": "Tempranillo raised in American oak until it emerges smelling of vanilla, coconut, and old libraries. Its Crianza–Reserva–Gran Reserva ranking system tells you how long it slumbered.",
+  "abv": "13–14.5%",
+  "origin": "Rioja, Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "cherry",
+   "vanilla",
+   "coconut",
+   "dill",
+   "leather"
+  ],
+  "glassware": "Bordeaux glass",
+  "funFact": "In 1991, Rioja became the first Spanish region elevated to DOCa status, the country's highest wine classification.",
+  "serve": {
+   "temp": "60-65°F, cellar temp",
+   "glass": "Bordeaux glass",
+   "how": "Crianza can be opened and poured straight away; Reserva and Gran Reserva reward 30 minutes in a decanter or a careful pour off sediment. Serve at cellar temperature in a Bordeaux glass and swirl to release the American-oak perfume. Notice the signature vanilla-coconut-dill trio floating over dried cherry, and how silky the tannins have become after their long slumber.",
+   "pair": [
+    "roast lamb",
+    "jamón ibérico",
+    "grilled chorizo"
+   ]
+  },
+  "composition": {
+   "summary": "Tempranillo led, with Garnacha, Graciano and Mazuelo, from northern Spain's Ebro valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Tempranillo mainly, with Garnacha, Graciano and Mazuelo"
+    },
+    {
+     "label": "Region",
+     "detail": "Rioja DOCa, spanning Rioja Alta, Alavesa and Oriental"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional houses ferment to a soft, mid-weight wine built for wood"
+    },
+    {
+     "label": "Aging",
+     "detail": "Gran Reserva: min. 2 yrs oak plus 3 yrs bottle"
+    }
+   ],
+   "process": "Long rest in American oak is the signature, layering vanilla, coconut and dill over the wine's dried-fruit core."
+  }
+ },
+ {
+  "id": "provence-rose",
+  "name": "Provence Rosé",
+  "subcategory": "Rosé",
+  "description": "The pale-pink standard-bearer of all rosé: dry, delicate, and the color of onion skin at sunset. Migrates in enormous numbers to patios every summer.",
+  "abv": "12.5–13.5%",
+  "origin": "Provence, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "white peach",
+   "citrus",
+   "herbs"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Rosé makes up roughly nine in ten bottles produced in Provence, France's oldest wine region, first planted by Greek settlers around 600 BC.",
+  "serve": {
+   "temp": "38-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill the bottle thoroughly — a couple hours in the fridge or 20 minutes in an ice bucket — and keep it on ice as you pour. Serve in a white wine glass rather than a tumbler so the delicate strawberry and white peach aromatics have somewhere to go. Drink it young, cold, and preferably outdoors; the point is refreshment with a whisper of herbs on the dry finish.",
+   "pair": [
+    "niçoise salad",
+    "grilled shrimp",
+    "goat cheese and tapenade"
+   ]
+  },
+  "composition": {
+   "summary": "Grenache, Cinsault and Syrah, pressed pale in the vineyards of southern France.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache, Cinsault, Syrah and Mourvèdre; Tibouren and Rolle appear too"
+    },
+    {
+     "label": "Region",
+     "detail": "Côtes de Provence, Coteaux d'Aix and Bandol rosé, southern France"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Direct press with minimal skin contact, then cold fermentation"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel only, released the spring after harvest"
+    }
+   ],
+   "process": "The juice is pressed off the skins almost immediately, which is what gives that famous onion-skin pallor."
+  }
+ },
+ {
+  "id": "tavel",
+  "name": "Tavel",
+  "subcategory": "Rosé",
+  "description": "The serious one of the rosé family: dark-hued, full-bodied, and structured enough to face down a steak. Its home appellation in the Rhône makes nothing else.",
+  "abv": "13–14%",
+  "origin": "Tavel, Rhône Valley, France",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raspberry",
+   "blood orange",
+   "garrigue",
+   "spice"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Tavel is one of the few French appellations devoted exclusively to rosé, and it counted Ernest Hemingway among its devoted drinkers.",
+  "serve": {
+   "temp": "45-50°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Chill it, but not to death — Tavel is a full-bodied rosé and shows more character a few degrees warmer than a pale Provence pink. Pour into a white wine glass, swirl, and treat it like a light red: it has real structure and even a whisper of tannin. Notice the depth of raspberry and blood orange, and don't hesitate to serve it with actual dinner, not just appetizers.",
+   "pair": [
+    "grilled salmon",
+    "roast chicken with herbs",
+    "charcuterie board"
+   ]
+  },
+  "composition": {
+   "summary": "A Grenache-led Rhône rosé, the only wine its appellation is allowed to make.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grenache led, with Cinsault, Clairette, Syrah, Mourvèdre and Bourboulenc"
+    },
+    {
+     "label": "Region",
+     "detail": "Tavel AOC, across the Rhône from Châteauneuf-du-Pape"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Extended skin maceration, far longer than any Provençal rosé"
+    },
+    {
+     "label": "Aging",
+     "detail": "Released young, unoaked, but holds for several years"
+    }
+   ],
+   "process": "A day or two of skin contact — not minutes — is what gives Tavel its dark hue and real structure."
+  }
+ },
+ {
+  "id": "white-zinfandel",
+  "name": "White Zinfandel",
+  "subcategory": "Rosé",
+  "description": "A sweet, blush-pink pour born from a happy winemaking accident in 1970s California. Wine snobs scoff, but it kept America's old Zinfandel vines in the ground.",
+  "abv": "9–10.5%",
+  "origin": "California, USA",
+  "rarity": "common",
+  "tastingNotes": [
+   "strawberry",
+   "watermelon",
+   "cotton candy",
+   "melon"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "It was created in 1975 when a Zinfandel fermentation stuck, leaving residual sugar in a pale pink wine that went on to become a massive commercial hit.",
+  "serve": {
+   "temp": "38-45°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it ice-cold straight from the fridge — the chill keeps the sweetness bright instead of cloying. No swirling ceremony needed; this is a porch wine, so pour it full and casual, even over a cube on a hot day. Taste for juicy strawberry and watermelon with that nostalgic cotton-candy lift on the finish.",
+   "pair": [
+    "spicy buffalo wings",
+    "fruit salad",
+    "sharp cheddar and crackers"
+   ]
+  },
+  "composition": {
+   "summary": "Zinfandel pressed off its skins fast, made sweet and pink in California.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Zinfandel, the same red grape behind brambly Californian reds"
+    },
+    {
+     "label": "Region",
+     "detail": "California, chiefly Lodi and the Central Valley"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Brief skin contact, then fermentation halted to leave residual sugar"
+    },
+    {
+     "label": "Aging",
+     "detail": "None at all; bottled and shipped as fresh as possible"
+    }
+   ],
+   "process": "Stopping fermentation early — originally by accident, in 1975 — leaves the sugar that defines the whole style."
+  }
+ },
+ {
+  "id": "orange-wine",
+  "name": "Orange Wine",
+  "subcategory": "Skin-Contact",
+  "description": "White wine made like a red: the juice ferments on its grape skins for days or months, emerging amber-hued, tannic, and faintly wild. Contains no oranges whatsoever.",
+  "abv": "11–13.5%",
+  "origin": "Georgia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dried apricot",
+   "black tea",
+   "nuts",
+   "bruised apple"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The technique traces back roughly 8,000 years to Georgia, where wine is still fermented in buried clay vessels called qvevri — a method inscribed on UNESCO's cultural heritage list.",
+  "serve": {
+   "temp": "50-55°F, cool but not cold",
+   "glass": "White wine glass",
+   "how": "Serve cooler than a red but warmer than a white — over-chilling buries its wild aromatics and accentuates the tannin. Pour into a white wine glass, swirl, and give it a few minutes; some bottles are unfiltered, so stand them upright beforehand and expect a little haze. Taste it like a red in white's clothing: dried apricot and black tea with a grippy, savory finish that loves food.",
+   "pair": [
+    "Georgian walnut chicken (satsivi)",
+    "hard aged cheeses",
+    "spiced Middle Eastern mezze"
+   ]
+  },
+  "composition": {
+   "summary": "White grapes fermented on their skins — Rkatsiteli in Georgia, Ribolla Gialla in Friuli.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "White varieties: Rkatsiteli in Georgia, Ribolla Gialla and Pinot Grigio elsewhere"
+    },
+    {
+     "label": "Region",
+     "detail": "Georgia's Kakheti heartland; also Friuli, Slovenia and beyond"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Skin and stem contact for days to months, like a red"
+    },
+    {
+     "label": "Aging",
+     "detail": "Buried qvevri clay amphorae in Georgia; neutral wood elsewhere"
+    }
+   ],
+   "process": "Fermenting white juice on its skins extracts tannin and phenolic color, producing amber wine with a red wine's grip."
+  }
+ },
+ {
+  "id": "cava",
+  "name": "Cava",
+  "subcategory": "Sparkling",
+  "description": "Spain's bottle-fermented answer to Champagne, made mostly in Catalonia from a trio of local grapes. Delivers toasty traditional-method character at a friendly price.",
+  "abv": "11.5–12.5%",
+  "origin": "Penedès, Catalonia, Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "quince",
+   "citrus",
+   "almond",
+   "toast"
+  ],
+  "glassware": "Tulip or flute glass",
+  "funFact": "The name simply means 'cellar' in Catalan, after the underground caves where the bottles age; the classic blend is Macabeo, Xarel·lo, and Parellada.",
+  "serve": {
+   "temp": "38-45°F, well chilled",
+   "glass": "Tulip or flute glass",
+   "how": "Chill thoroughly, then open with a whisper, not a pop — ease the cork out while holding it, keeping the bottle at 45 degrees. Pour slowly down the side of a tulip glass to preserve the mousse. Watch the bead, then taste for quince and citrus with the almond-and-toast signature of real bottle fermentation at a fraction of Champagne's price — a natural partner for weeknight tapas.",
+   "pair": [
+    "patatas bravas",
+    "fried croquetas",
+    "Spanish tortilla"
+   ]
+  },
+  "composition": {
+   "summary": "Macabeo, Xarel·lo and Parellada, bottle-fermented in the cellars of Catalonia's Penedès.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Macabeo, Xarel·lo and Parellada; Chardonnay and Trepat also permitted"
+    },
+    {
+     "label": "Region",
+     "detail": "Penedès in Catalonia supplies the overwhelming majority"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional method: second fermentation inside each individual bottle"
+    },
+    {
+     "label": "Aging",
+     "detail": "Min. 9 months on lees; Reserva 18, Gran Reserva 30"
+    }
+   ],
+   "process": "A second fermentation sealed inside the bottle traps the bubbles and leaves spent yeast to build toasty complexity."
+  }
+ },
+ {
+  "id": "champagne",
+  "name": "Champagne",
+  "subcategory": "Sparkling",
+  "description": "The apex predator of sparkling wine, born of a second fermentation inside each bottle in France's chilly northeast. Its very name is guarded by law worldwide.",
+  "abv": "12–12.5%",
+  "origin": "Champagne, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "brioche",
+   "green apple",
+   "citrus",
+   "almond",
+   "chalk"
+  ],
+  "glassware": "Tulip or flute glass",
+  "funFact": "The pressure inside a Champagne bottle reaches about six atmospheres — roughly triple the pressure in a car tire.",
+  "serve": {
+   "temp": "38-45°F, well chilled",
+   "glass": "Tulip or flute glass",
+   "how": "Chill three hours in the fridge or 30 minutes in an ice-water bucket, then twist the bottle — not the cork — until it releases with a soft sigh; six atmospheres of pressure deserve respect. Pour gently down the tilted side of a tulip glass, which shows more aroma than a skinny flute. Watch the endless bead of tiny bubbles, and taste for brioche and green apple with that chalky mineral snap on the finish.",
+   "pair": [
+    "fresh oysters",
+    "fried chicken",
+    "salty potato chips with crème fraîche"
+   ]
+  },
+  "composition": {
+   "summary": "Chardonnay, Pinot Noir and Meunier, bottle-fermented on the chalk of northeast France.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay, Pinot Noir and Meunier, in almost any proportion"
+    },
+    {
+     "label": "Region",
+     "detail": "Champagne AOC: Montagne de Reims, Côte des Blancs, Vallée de la Marne"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Méthode traditionnelle: tirage, riddling, disgorgement, then a dosage"
+    },
+    {
+     "label": "Aging",
+     "detail": "Non-vintage at least 15 months; vintage bottlings three years"
+    }
+   ],
+   "process": "Yeast and sugar sealed into each bottle ferment a second time, dissolving CO2 to roughly six atmospheres of pressure."
+  }
+ },
+ {
+  "id": "cremant",
+  "name": "Crémant",
+  "subcategory": "Sparkling",
+  "description": "France's family of traditional-method sparklers made everywhere except Champagne — Alsace, the Loire, Burgundy, and beyond. The insider's route to fine French bubbles.",
+  "abv": "11.5–12.5%",
+  "origin": "France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "apple",
+   "brioche",
+   "citrus",
+   "white flowers"
+  ],
+  "glassware": "Tulip or flute glass",
+  "funFact": "There are eight Crémant appellations across France, from Crémant d'Alsace to Crémant de Limoux, all using Champagne's bottle-fermentation method.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Tulip glass (or flute)",
+   "how": "Chill the bottle for at least three hours, ease the cork out with a sigh rather than a pop, and pour slowly down the tilted side of a tulip glass to preserve the mousse. Let it sit a moment so the foam settles, then top up to about two-thirds full. Notice how the apple and citrus up front give way to a brioche note from its Champagne-method lees aging — proof you got fine French bubbles at half the price.",
+   "pair": [
+    "oysters",
+    "gougères or salty cheese puffs",
+    "fried chicken"
+   ]
+  },
+  "composition": {
+   "summary": "Traditional-method French sparkling wine from eight appellations outside Champagne.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Local varieties: Chenin in the Loire, Pinot Blanc in Alsace, Mauzac at Limoux"
+    },
+    {
+     "label": "Region",
+     "detail": "Eight appellations: Alsace, Loire, Bourgogne, Limoux, Bordeaux, Jura, Die, Savoie"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Same bottle-fermentation as Champagne, with hand-harvest and whole-bunch pressing required"
+    },
+    {
+     "label": "Aging",
+     "detail": "At least nine months on the lees before disgorgement"
+    }
+   ],
+   "process": "The Champagne method applied to regional grapes — same second fermentation in bottle, different fruit and a lower price."
+  }
+ },
+ {
+  "id": "english-sparkling",
+  "name": "English Sparkling Wine",
+  "subcategory": "Sparkling",
+  "description": "A cool-climate upstart from the chalk hills of southern England that has taken to beating Champagne in blind tastings. Crisp, taut, and quietly smug about the whole thing.",
+  "abv": "12–12.5%",
+  "origin": "Sussex and Kent, England",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "lemon",
+   "chalk",
+   "brioche"
+  ],
+  "glassware": "Tulip or flute glass",
+  "funFact": "The chalk downs of southern England belong to the same geological basin as the chalk beneath Champagne, just across the Channel.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Tulip glass (or flute)",
+   "how": "Treat it exactly like good Champagne: a long fridge chill, a gentle quarter-twist of the bottle while holding the cork still, and a slow pour into a tulip glass. Don't serve it ice-cold from a bucket — a few degrees warmer lets the chalk and brioche notes emerge behind the green apple snap. Sip slowly and watch the fine, persistent bead; that taut, mouthwatering acidity is the signature of England's cool chalk hills.",
+   "pair": [
+    "fish and chips",
+    "smoked salmon",
+    "aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Chardonnay, Pinot Noir and Meunier grown on the chalk downs of southern England.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay, Pinot Noir and Meunier; the Champagne trio exactly"
+    },
+    {
+     "label": "Region",
+     "detail": "Sussex, Kent and Hampshire, on southern England's chalk"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional method, with second fermentation and riddling in bottle"
+    },
+    {
+     "label": "Aging",
+     "detail": "Extended lees aging, typically well past Champagne's minimums"
+    }
+   ],
+   "process": "A marginally cool climate on the same chalk seam as Champagne yields the searing acidity that bottle aging then rounds out."
+  }
+ },
+ {
+  "id": "franciacorta",
+  "name": "Franciacorta",
+  "subcategory": "Sparkling",
+  "description": "Italy's most serious sparkling wine, bottle-fermented in Lombardy from Chardonnay and Pinot Noir. It rarely leaves Italy, where locals happily drink most of it themselves.",
+  "abv": "12–13%",
+  "origin": "Lombardy, Italy",
+  "rarity": "rare",
+  "tastingNotes": [
+   "baked apple",
+   "hazelnut",
+   "brioche",
+   "citrus"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Non-vintage Franciacorta must age at least 18 months on its lees in bottle — longer than the 12 months required for non-vintage Champagne.",
+  "serve": {
+   "temp": "42-46°F, chilled but not icy",
+   "glass": "Tulip glass",
+   "how": "Serve this slightly warmer than everyday fizz — its long lees aging deserves room to speak. Pour gently into a tulip glass, give it a minute to open, and take a slow first sip before the chill fully lifts. Look for the baked apple and hazelnut richness layered over citrus; that toasty depth is what 18-plus months on the lees buys you.",
+   "pair": [
+    "risotto alla milanese",
+    "prosciutto and melon",
+    "roast chicken"
+   ]
+  },
+  "composition": {
+   "summary": "Chardonnay and Pinot Nero, bottle-fermented in Lombardy near Lake Iseo.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay and Pinot Nero, plus Pinot Bianco and native Erbamat"
+    },
+    {
+     "label": "Region",
+     "detail": "Franciacorta DOCG, on glacial moraine south of Lake Iseo"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Metodo classico: second fermentation and riddling in bottle"
+    },
+    {
+     "label": "Aging",
+     "detail": "Non-vintage rests at least 18 months on its lees"
+    }
+   ],
+   "process": "Italy's longest mandatory lees aging for a non-vintage sparkler is what gives Franciacorta its bready depth."
+  }
+ },
+ {
+  "id": "lambrusco",
+  "name": "Lambrusco",
+  "subcategory": "Sparkling",
+  "description": "A frothing purple sparkler from Emilia-Romagna, engineered by generations of Italians to cut through plates of salumi and lasagna. Dry versions bear no resemblance to its sugary 1980s reputation.",
+  "abv": "8–11.5%",
+  "origin": "Emilia-Romagna, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "blackberry",
+   "violet",
+   "rhubarb",
+   "fresh cherry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "In the late 1970s and 1980s, sweet Lambrusco was the best-selling imported wine in the United States.",
+  "serve": {
+   "temp": "46-50°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Chill it like a white wine, then pour it into a white wine glass — no flute needed, the froth is meant to relax into a purple foam and fade. Seek out a bottle labeled secco (dry) and forget the sugary 1980s versions. Sip it alongside rich, fatty food and notice how the blackberry fruit and gentle fizz scrub your palate clean between bites.",
+   "pair": [
+    "salumi and mortadella",
+    "lasagna or baked pasta",
+    "pizza"
+   ]
+  },
+  "composition": {
+   "summary": "Several distinct Lambrusco grape varieties, fizzed up across Emilia-Romagna.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Lambrusco Grasparossa, Salamino, Sorbara and Maestri — genuinely different varieties"
+    },
+    {
+     "label": "Region",
+     "detail": "Emilia-Romagna, around Modena and Reggio Emilia"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Charmat tank fermentation mostly; some producers use the ancestral method"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; bottled young while the purple froth is at its brightest"
+    }
+   ],
+   "process": "A second fermentation in pressurized tank keeps the fruit fresh and the foam abundant, ready to cut through salumi."
+  }
+ },
+ {
+  "id": "pet-nat",
+  "name": "Pét-Nat",
+  "subcategory": "Sparkling",
+  "description": "Short for pétillant naturel: wine bottled before its first fermentation finishes, trapping bubbles the ancestral way. Often cloudy, usually crown-capped, always a little unpredictable.",
+  "abv": "10.5–12.5%",
+  "origin": "Limoux, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yeast",
+   "orchard fruit",
+   "citrus",
+   "funk"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "The ancestral method behind pét-nat predates Champagne's technique — monks at Saint-Hilaire near Limoux were making sparkling wine this way in the 1500s.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Tulip glass",
+   "how": "Chill it upright for a day so the sediment settles, then pop the crown cap over the sink — pét-nat can be lively. Pour the first glasses gently off the sediment, or give the bottle a slow roll first if you want the cloudy, yeasty full experience; both are legitimate. Expect orchard fruit and a little funk rather than polish, and drink it young and cold — unpredictability is the charm.",
+   "pair": [
+    "charcuterie",
+    "soft-rind cheeses",
+    "spicy fried snacks"
+   ]
+  },
+  "composition": {
+   "summary": "Any grape bottled mid-fermentation — the ancestral method, older than Champagne.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Anything: Mauzac at Limoux, Chenin, Gamay, Glera, whatever the grower has"
+    },
+    {
+     "label": "Region",
+     "detail": "Limoux is the ancestral home; now made worldwide"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Méthode ancestrale: bottled before the first fermentation finishes"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; usually undisgorged, cloudy, and sealed with a crown cap"
+    }
+   ],
+   "process": "The first and only fermentation finishes inside the sealed bottle, so the bubbles are the wine's original carbon dioxide."
+  }
+ },
+ {
+  "id": "prosecco",
+  "name": "Prosecco",
+  "subcategory": "Sparkling",
+  "description": "Italy's cheerful, pear-scented fizz, made from the Glera grape and carbonated in big steel tanks rather than bottles. The engine behind every Aperol Spritz.",
+  "abv": "11–12%",
+  "origin": "Veneto, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "pear",
+   "green apple",
+   "white flowers",
+   "honeydew"
+  ],
+  "glassware": "Tulip or flute glass",
+  "funFact": "Prosecco takes its name from a small village near Trieste, though most of it now comes from vineyards between Conegliano and Valdobbiadene.",
+  "serve": {
+   "temp": "38-42°F, thoroughly chilled",
+   "glass": "Tulip glass (or flute)",
+   "how": "Prosecco wants to be cold — give it a proper fridge chill or twenty minutes in an ice bucket before opening. Pour down the side of a tulip glass and drink it fresh and young; its pear-and-white-flower charm fades fast in an open bottle. Enjoy it as an aperitivo on its own, and save any leftovers for tomorrow's Aperol Spritz or mimosa.",
+   "pair": [
+    "prosciutto-wrapped melon",
+    "light seafood antipasti",
+    "salty potato chips"
+   ]
+  },
+  "composition": {
+   "summary": "The Glera grape, fermented sparkling in steel tanks across northeastern Italy.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Glera predominantly, with Verdiso, Bianchetta and Perera permitted in support"
+    },
+    {
+     "label": "Region",
+     "detail": "Conegliano Valdobbiadene DOCG and the broader Prosecco DOC, Veneto"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Charmat method: second fermentation in a large pressurized tank"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; tank fermentation and quick bottling preserve pear and white flower"
+    }
+   ],
+   "process": "Tank fermentation keeps the wine off spent yeast, which is exactly why it tastes of fresh fruit rather than bread."
+  }
+ },
+ {
+  "id": "sekt",
+  "name": "Sekt",
+  "subcategory": "Sparkling",
+  "description": "Germany's homegrown sparkler, at its best when made from Riesling with racy acidity and orchard fruit. Most of it never escapes the German-speaking world.",
+  "abv": "11–12.5%",
+  "origin": "Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "lemon",
+   "white peach",
+   "mineral"
+  ],
+  "glassware": "Tulip or flute glass",
+  "funFact": "Germans are among the world's biggest per-capita drinkers of sparkling wine, which explains why so little Sekt is left over to export.",
+  "serve": {
+   "temp": "40-45°F, well chilled",
+   "glass": "Tulip glass (or flute)",
+   "how": "Hunt down a Riesling-based Winzersekt (grower Sekt) and chill it well before easing the cork out quietly. Pour into a tulip glass and let the racy acidity lead — this is orchard fruit and mineral zip rather than toasty richness. Notice the green apple and white peach snap; it drinks beautifully as an aperitif and keeps its nerve right through dinner.",
+   "pair": [
+    "schnitzel",
+    "sushi",
+    "pretzels with soft cheese"
+   ]
+  },
+  "composition": {
+   "summary": "German sparkling wine, at its best from Riesling grown along the Rhine and Mosel.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling for the serious bottles; Pinot Blanc, Elbling and Pinot Noir too"
+    },
+    {
+     "label": "Region",
+     "detail": "Germany; Mosel, Rheingau and Pfalz for estate-grown Winzersekt"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Mostly tank method; Winzersekt uses bottle fermentation from estate fruit"
+    },
+    {
+     "label": "Aging",
+     "detail": "Basic Sekt released quickly; Winzersekt rests months on its lees"
+    }
+   ],
+   "process": "The best examples take Riesling's racy acidity through a bottle fermentation, giving orchard fruit real backbone."
+  }
+ },
+ {
+  "id": "albarino",
+  "name": "Albariño",
+  "subcategory": "White",
+  "description": "A saline, citrusy coastal dweller from Spain's rainy northwest, seemingly engineered by nature to accompany shellfish. Often carries a whisper of sea spray.",
+  "abv": "11.5–13%",
+  "origin": "Rías Baixas, Galicia, Spain",
+  "rarity": "common",
+  "tastingNotes": [
+   "lemon zest",
+   "white peach",
+   "saline",
+   "grapefruit"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Across the border in Portugal the same grape is called Alvarinho, where it stars in the finest bottlings of Vinho Verde.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it down, pour a modest measure into a white wine glass, and let it warm slightly in the glass rather than over-icing the bottle. Give it a quick swirl and look for the whisper of sea spray behind the lemon zest and white peach. It is at its absolute best alongside shellfish — drink it the way they do in Galicia, with something briny on the table.",
+   "pair": [
+    "steamed mussels or clams",
+    "grilled shrimp",
+    "ceviche"
+   ]
+  },
+  "composition": {
+   "summary": "Albariño from the rainy Atlantic coast of Rías Baixas in Galicia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Albariño; the same grape as Portugal's Alvarinho across the Minho"
+    },
+    {
+     "label": "Region",
+     "detail": "Rías Baixas, Galicia, especially Val do Salnés on granite"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation; some producers age on fine lees"
+    },
+    {
+     "label": "Aging",
+     "detail": "Rarely oaked; most is bottled young and drunk younger"
+    }
+   ],
+   "process": "Cool fermentation in steel preserves the thick-skinned grape's citrus aromatics and that whisper of Atlantic salt."
+  }
+ },
+ {
+  "id": "assyrtiko",
+  "name": "Assyrtiko",
+  "subcategory": "White",
+  "description": "A volcanic survivor from Santorini that keeps razor acidity even under scorching Aegean sun. Bone dry, smoky, and startlingly saline.",
+  "abv": "13–14.5%",
+  "origin": "Santorini, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "flint",
+   "lemon",
+   "saline",
+   "beeswax"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "On windswept Santorini, Assyrtiko vines are woven into low basket shapes called kouloura, with the grapes growing inside for protection.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Serve it a touch warmer than a simple summer white — too cold and you mute the smoke and beeswax that make it special. Pour, swirl, and take a moment with the nose: flint and salt first, then lemon underneath. Its razor acidity begs for food, so treat it like a serious dry white and drink it through a meal rather than before one.",
+   "pair": [
+    "grilled whole fish",
+    "feta and tomato salad",
+    "lemony roast chicken"
+   ]
+  },
+  "composition": {
+   "summary": "Assyrtiko grown on Santorini's volcanic ash, on ungrafted, basket-trained vines.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Assyrtiko; vines ungrafted, phylloxera never survived the volcanic soil"
+    },
+    {
+     "label": "Region",
+     "detail": "Santorini, in the Aegean; also mainland Greek plantings"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented dry in steel; the barrel-aged version is called Nykteri"
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly none; Nykteri and top cuvées see oak and time"
+    }
+   ],
+   "process": "Vines woven into low kouloura baskets shelter the fruit from Aegean wind, so acidity survives ferocious sun."
+  }
+ },
+ {
+  "id": "chablis",
+  "name": "Chablis",
+  "subcategory": "White",
+  "description": "Chardonnay stripped to its skeleton: steely, saline, and rarely troubled by oak. It grows in cold northern Burgundy atop ancient seabed.",
+  "abv": "12–13%",
+  "origin": "Chablis, Burgundy, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "oyster shell",
+   "green apple",
+   "flint",
+   "lemon"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Chablis vines grow in Kimmeridgian limestone studded with fossilized oyster shells from a sea that covered the region 150 million years ago.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Resist the ice bucket — over-chilled Chablis tastes like cold water, while at cellar-cool temperature the oyster-shell and flint notes come alive. Pour into a white wine glass, swirl gently, and let it sit ten minutes if it seems shy. Taste for the steely, saline finish; this is Chardonnay with its makeup off, and premier cru bottles reward slow, attentive sipping.",
+   "pair": [
+    "raw oysters",
+    "goat cheese",
+    "sole or other delicate white fish"
+   ]
+  },
+  "composition": {
+   "summary": "Pure Chardonnay grown on Kimmeridgian limestone in the cold north of Burgundy.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay only, with no other variety permitted"
+    },
+    {
+     "label": "Region",
+     "detail": "Chablis, northern Burgundy, on fossil-studded Kimmeridgian limestone"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Steel or neutral wood; oak is deliberately kept off the fruit"
+    },
+    {
+     "label": "Aging",
+     "detail": "Village wines see steel; Grand Crus may rest in old barrels"
+    }
+   ],
+   "process": "Refusing new oak leaves nothing between you and the cold-climate acidity and oyster-shell minerality of the site."
+  }
+ },
+ {
+  "id": "chardonnay",
+  "name": "Chardonnay",
+  "subcategory": "White",
+  "description": "The great shape-shifter of white grapes, appearing lean and steely in cool cellars yet golden and buttery wherever oak barrels lurk. Found on virtually every wine list on Earth.",
+  "abv": "13–14.5%",
+  "origin": "Burgundy, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "green apple",
+   "citrus",
+   "butter",
+   "vanilla",
+   "toast"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "DNA analysis at UC Davis revealed Chardonnay is a natural cross between noble Pinot Noir and the humble medieval grape Gouais Blanc.",
+  "serve": {
+   "temp": "48-55°F — cooler for unoaked, warmer for oaked",
+   "glass": "White wine glass",
+   "how": "Match the chill to the style: lean, unoaked bottles want a proper fridge chill, while rich, barrel-aged versions show best only lightly cooled so the butter and vanilla can unfurl. Pour into a generous white wine glass and swirl well — oaked Chardonnay especially rewards aeration. Notice whether you get green apple and citrus (steel) or toast and vanilla (oak); it's the same grape playing two different characters.",
+   "pair": [
+    "roast chicken",
+    "lobster or crab with butter",
+    "creamy pasta"
+   ]
+  },
+  "composition": {
+   "summary": "Chardonnay, a Pinot Noir and Gouais Blanc cross, born in Burgundy and grown everywhere.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay; a natural cross of Pinot Noir and Gouais Blanc"
+    },
+    {
+     "label": "Region",
+     "detail": "Côte de Beaune and Mâconnais in Burgundy; now every wine country"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Barrel fermentation, lees stirring and malolactic build the buttery style"
+    },
+    {
+     "label": "Aging",
+     "detail": "Anywhere from steel-only to a year in new French oak"
+    }
+   ],
+   "process": "Malolactic fermentation generates diacetyl — the same compound in butter — which is where the 'buttery' Chardonnay comes from."
+  }
+ },
+ {
+  "id": "chenin-blanc",
+  "name": "Chenin Blanc",
+  "subcategory": "White",
+  "description": "The Loire's do-everything grape, capable of dry, sweet, still, and sparkling forms without breaking a sweat. Its searing acidity lets great examples age for half a century.",
+  "abv": "11.5–14%",
+  "origin": "Loire Valley, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "quince",
+   "honey",
+   "chamomile",
+   "wet wool",
+   "apple"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "South Africa grows more Chenin Blanc than France does, where the grape has long gone by the local name 'Steen'.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Check the style before you pour — Chenin runs from bone dry to honeyed, and drier versions take more chill than sweeter ones. Serve in a white wine glass, swirl, and hunt for the grape's odd, wonderful signature: quince and honey with a lanolin, wet-wool undertone. Its searing acidity keeps even off-dry bottles fresh, so if you own an aged Vouvray, give it a few minutes of air and sip patiently.",
+   "pair": [
+    "pork with apples",
+    "Thai or lightly spicy dishes",
+    "soft washed-rind cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Chenin Blanc from the middle Loire, made dry, sweet, still or sparkling.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chenin Blanc; known as Steen across South Africa"
+    },
+    {
+     "label": "Region",
+     "detail": "Vouvray, Savennières, Montlouis and Anjou in the Loire Valley"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Sec to moelleux; botrytis for sweet, traditional method for sparkling"
+    },
+    {
+     "label": "Aging",
+     "detail": "Old barrels or steel; great examples last half a century"
+    }
+   ],
+   "process": "Its extraordinary natural acidity lets a grower stop fermentation anywhere on the sugar scale and still make a balanced wine."
+  }
+ },
+ {
+  "id": "gewurztraminer",
+  "name": "Gewürztraminer",
+  "subcategory": "White",
+  "description": "An unmistakably perfumed specimen that smells of lychee and rose petals before you even lift the glass. Loud, golden, and impossible to confuse with anything else.",
+  "abv": "13–14.5%",
+  "origin": "Tramin, Alto Adige, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lychee",
+   "rose petal",
+   "ginger",
+   "honeysuckle"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The grape takes its name from the village of Tramin in the Italian Alps, with 'Gewürz' meaning 'spice' in German.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Don't over-chill it — this grape's whole point is perfume, and cold smothers it. Pour a smaller measure than usual into a white wine glass (it's rich and often high in alcohol), then smell before you sip: lychee and rose petal should leap out before the glass reaches your lips. On the palate, notice the oily, golden texture and ginger spice; it's a wine you sip, not gulp.",
+   "pair": [
+    "spicy Sichuan or Thai curry",
+    "Munster cheese",
+    "duck à l'orange"
+   ]
+  },
+  "composition": {
+   "summary": "Gewürztraminer, a pink-skinned Traminer mutation named for the village of Tramin.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Gewürztraminer, an aromatic pink-skinned mutation of Traminer"
+    },
+    {
+     "label": "Region",
+     "detail": "Alsace above all; Alto Adige, Germany and New Zealand too"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Slow pressing of pink skins; often finished with a little sugar"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually none; large neutral casks in Alsace, never new oak"
+    }
+   ],
+   "process": "Its skins are loaded with terpenes — the same aromatic compounds in rose petals and lychee — which pressing coaxes out."
+  }
+ },
+ {
+  "id": "gruner-veltliner",
+  "name": "Grüner Veltliner",
+  "subcategory": "White",
+  "description": "Austria's signature white, zippy and green-tinged with a telltale flick of white pepper on the finish. A sommelier favorite for its uncanny food friendliness.",
+  "abv": "11.5–13.5%",
+  "origin": "Austria",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "white pepper",
+   "green apple",
+   "radish",
+   "lime",
+   "lentil"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Its peppery bite comes from rotundone, the same aroma compound found in actual black peppercorns and in Syrah.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it fridge-cool in a white wine glass — this is Austria's great table wine, built for drinking with food. Swirl and sniff for the telltale flick of white pepper over green apple and lime. It's famously the sommelier's escape hatch for hard-to-pair plates, so test it against vegetables that normally wreck wine, like asparagus or artichokes.",
+   "pair": [
+    "wiener schnitzel",
+    "asparagus dishes",
+    "green salads with herbs"
+   ]
+  },
+  "composition": {
+   "summary": "Grüner Veltliner from the terraced Danube valleys of Lower Austria.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner, Austria's most planted variety by a distance"
+    },
+    {
+     "label": "Region",
+     "detail": "Wachau, Kremstal, Kamptal and the Weinviertel, in Lower Austria"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool steel fermentation; oak is used sparingly if at all"
+    },
+    {
+     "label": "Aging",
+     "detail": "Fresh Steinfeder and Federspiel young; ripe Smaragd rewards years"
+    }
+   ],
+   "process": "Clean steel fermentation preserves rotundone, the peppercorn compound that gives the wine its unmistakable green-pepper flick."
+  }
+ },
+ {
+  "id": "muscadet",
+  "name": "Muscadet",
+  "subcategory": "White",
+  "description": "A briny, feather-light white from the Atlantic mouth of the Loire, made from the Melon de Bourgogne grape. It exists in near-perfect symbiosis with raw oysters.",
+  "abv": "11.5–12.5%",
+  "origin": "Pays Nantais, Loire Valley, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "green apple",
+   "saline",
+   "lemon",
+   "bread dough"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Bottles labeled 'sur lie' rest on their spent yeast cells through the winter, picking up a subtle creaminess and a faint natural spritz.",
+  "serve": {
+   "temp": "42-46°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it hard and pour it cold — Muscadet is a featherweight built for refreshment, not contemplation. Look for 'sur lie' on the label and notice the subtle creaminess and faint prickle it picks up from a winter resting on its yeast. The wine is almost neutral on its own; put a plate of raw oysters next to it and the briny, lemony pairing suddenly makes perfect sense.",
+   "pair": [
+    "raw oysters",
+    "moules frites",
+    "fried calamari"
+   ]
+  },
+  "composition": {
+   "summary": "Melon de Bourgogne from the Atlantic mouth of the Loire, aged on its lees.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Melon de Bourgogne, a Burgundian exile now unique to Nantes"
+    },
+    {
+     "label": "Region",
+     "detail": "Sèvre et Maine in the Pays Nantais, at the Loire's mouth"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermented dry in tank or underground glass-lined vats"
+    },
+    {
+     "label": "Aging",
+     "detail": "'Sur lie' bottlings rest on spent yeast through the winter"
+    }
+   ],
+   "process": "Bottling straight off the lees without racking adds a creamy texture and faint prickle to an otherwise austere wine."
+  }
+ },
+ {
+  "id": "picpoul-de-pinet",
+  "name": "Picpoul de Pinet",
+  "subcategory": "White",
+  "description": "A zesty Mediterranean white from the lagoons of the Languedoc, traditionally shipped in a distinctive tall green bottle. Built for oysters farmed within sight of its vines.",
+  "abv": "12–13.5%",
+  "origin": "Languedoc, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "saline",
+   "green apple",
+   "white flowers"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The grape's name, Piquepoul, translates roughly to 'lip stinger' — a nod to its bracing acidity.",
+  "serve": {
+   "temp": "42-46°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold from the fridge in a white wine glass and don't overthink it — the tall green bottle is a promise of simple seaside pleasure. Take a sip and feel the 'lip-stinger' acidity that gives the grape its name, chased by lemon and a saline snap. It's the house pour of the Languedoc's oyster farms, so drink it with anything briny, fried, or fresh off the grill.",
+   "pair": [
+    "oysters",
+    "grilled sardines",
+    "fried seafood"
+   ]
+  },
+  "composition": {
+   "summary": "Piquepoul Blanc grown beside the oyster lagoons of the Languedoc coast.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Piquepoul Blanc; the name means roughly 'lip stinger'"
+    },
+    {
+     "label": "Region",
+     "detail": "Pinet and neighbouring villages beside the Étang de Thau, Languedoc"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Picked early and fermented cold to protect its bracing acidity"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel only, shipped in its tall green bottle"
+    }
+   ],
+   "process": "Early picking in a hot Mediterranean region is the whole trick — it keeps the acid that oysters demand."
+  }
+ },
+ {
+  "id": "pinot-grigio",
+  "name": "Pinot Grigio",
+  "subcategory": "White",
+  "description": "A light, breezy sipper that evolved from a grayish-pink mutation of Pinot Noir. In its Italian form it is crisp and neutral; as Alsatian Pinot Gris it grows richer and spicier.",
+  "abv": "12–13.5%",
+  "origin": "Burgundy, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "pear",
+   "lemon",
+   "green almond",
+   "wet stone"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Pinot Grigio and Pinot Gris are the exact same grape — the 'gris' (gray) refers to the oddly grayish-blue tint of its skins.",
+  "serve": {
+   "temp": "42-46°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it properly and pour into a white wine glass; Italian-style Pinot Grigio is about crisp refreshment, so drink it young and cold. Swirl lightly and look for pear, lemon, and a faint almond bitterness on the finish. If your bottle is a richer Alsatian Pinot Gris, serve it a few degrees warmer to let its spice and weight show.",
+   "pair": [
+    "light salads",
+    "grilled white fish",
+    "chicken piccata"
+   ]
+  },
+  "composition": {
+   "summary": "Pinot Gris, a grey-skinned Pinot Noir mutation, crisp in Italy and richer in Alsace.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Gris; a color mutation of Pinot Noir with greyish skins"
+    },
+    {
+     "label": "Region",
+     "detail": "Veneto, Friuli and Alto Adige in Italy; Alsace in France"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed fast off pink skins in Italy; riper and fuller in Alsace"
+    },
+    {
+     "label": "Aging",
+     "detail": "None in the Italian style; Alsace bottlings can age well"
+    }
+   ],
+   "process": "Quick pressing keeps the greyish-pink skins from tinting the juice, which is what makes the Italian style so pale."
+  }
+ },
+ {
+  "id": "retsina",
+  "name": "Retsina",
+  "subcategory": "White",
+  "description": "An ancient Greek oddity infused with pine resin during fermentation, giving it an unmistakable forest-floor perfume. Divisive, historic, and stubbornly still here.",
+  "abv": "11–13%",
+  "origin": "Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "pine resin",
+   "lemon",
+   "green apple",
+   "herbs"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The style descends from antiquity, when amphorae were sealed with pine resin and the flavor seeped into the wine — Greeks came to like it that way.",
+  "serve": {
+   "temp": "42-46°F, well chilled",
+   "glass": "White wine glass (or small taverna tumbler)",
+   "how": "Serve it very cold — chill tames the pine and turns divisive into delicious. Pour small amounts into a white wine glass or, more authentically, a little taverna tumbler, and drink it with food rather than alone. Give the resin a chance: after a bite of something garlicky or briny, the forest-floor perfume clicks into place like it has for two thousand years.",
+   "pair": [
+    "taramasalata and pita",
+    "grilled octopus",
+    "garlicky tzatziki dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Savatiano and Roditis from Attica, infused with Aleppo pine resin during fermentation.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Savatiano mainly, with Roditis and occasionally Assyrtiko"
+    },
+    {
+     "label": "Region",
+     "detail": "Attica and central Greece, around Athens"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Aleppo pine resin added to the must during fermentation"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; the resin is racked off with the lees and bottled young"
+    }
+   ],
+   "process": "Pine resin steeped in the fermenting must — a survival of amphora sealing — becomes the flavor rather than the container."
+  }
+ },
+ {
+  "id": "riesling",
+  "name": "Riesling",
+  "subcategory": "White",
+  "description": "A high-acid chameleon that ranges from bone dry to nectar sweet while somehow always tasting like itself. With age it develops a curious and prized whiff of petrol.",
+  "abv": "8–13%",
+  "origin": "Rhine region, Germany",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "peach",
+   "honey",
+   "petrol"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Riesling's first documented mention dates to 1435, in the cellar inventory of a German count at Rüsselsheim.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Check the label first — Trocken means dry, Kabinett and Spätlese lean sweeter — and chill accordingly, with sweeter styles taking a colder serve. Pour into a white wine glass, swirl, and smell for lime and peach; in older bottles, hunt for that prized, curious whiff of petrol. The electric acidity means even off-dry Rieslings finish clean, which makes them the great secret weapon against spicy food.",
+   "pair": [
+    "spicy Thai or Indian food",
+    "pork schnitzel",
+    "roast duck"
+   ]
+  },
+  "composition": {
+   "summary": "Riesling from Germany's steep slate river slopes, made bone dry to nectar sweet.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling, documented in Germany since 1435"
+    },
+    {
+     "label": "Region",
+     "detail": "Mosel slate, Rheingau, Pfalz and Nahe; also Alsace and Clare Valley"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Fermentation halted where the grower wants it on the Prädikat scale"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel or large neutral Fuder casks; oak flavor is never welcome"
+    }
+   ],
+   "process": "Stopping fermentation at a chosen point balances residual sugar against searing acidity, from trocken to lusciously sweet."
+  }
+ },
+ {
+  "id": "sancerre",
+  "name": "Sancerre",
+  "subcategory": "White",
+  "description": "The most aristocratic form of Sauvignon Blanc, grown on flint and limestone hills overlooking the upper Loire. Smoky, precise, and perpetually in demand at wine bars.",
+  "abv": "12.5–13.5%",
+  "origin": "Sancerre, Loire Valley, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "gunflint",
+   "grapefruit",
+   "chalk",
+   "fresh herbs"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Though famous for whites, the Sancerre appellation also covers reds and rosés made from Pinot Noir, a remnant of its pre-phylloxera past as red wine country.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Serve it just cool, not cold — a few degrees warmer than everyday Sauvignon Blanc lets the smoky gunflint character surface over the grapefruit. Pour into a white wine glass, swirl, and take your time with the nose; the flint-and-chalk precision is what you paid for. Sip it alongside goat cheese and you'll taste one of the classic pairings in all of wine.",
+   "pair": [
+    "crottin de Chavignol or any goat cheese",
+    "smoked trout",
+    "spring vegetable dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Sauvignon Blanc on the flint and limestone hills of the upper Loire.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc for the whites; Pinot Noir for its reds and rosés"
+    },
+    {
+     "label": "Region",
+     "detail": "Sancerre, upper Loire, on terres blanches, caillottes and silex"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool steel fermentation; oak is used rarely and lightly"
+    },
+    {
+     "label": "Aging",
+     "detail": "Generally none; a few top cuvées see old barrels briefly"
+    }
+   ],
+   "process": "Flint-rich silex soils and cold cellar fermentation give the smoky, gunflint edge that separates Sancerre from generic Sauvignon."
+  }
+ },
+ {
+  "id": "sauvignon-blanc",
+  "name": "Sauvignon Blanc",
+  "subcategory": "White",
+  "description": "A sharp, grassy creature that announces itself from across the room with a burst of gooseberry and cut grass. Thrives in the Loire, Marlborough, and refrigerators worldwide.",
+  "abv": "12.5–14%",
+  "origin": "Loire Valley, France",
+  "rarity": "common",
+  "tastingNotes": [
+   "grapefruit",
+   "gooseberry",
+   "cut grass",
+   "passionfruit"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Its name derives from the French 'sauvage' (wild), and it is a parent of Cabernet Sauvignon via a chance crossing with Cabernet Franc.",
+  "serve": {
+   "temp": "45-48°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold from the fridge, poured into a white wine glass, and drink it young — freshness is the entire point. No swirling ceremony required: the gooseberry and cut-grass aromatics announce themselves from across the room. Notice how the zippy acidity cuts through herbs, greens, and tangy cheeses that flatten other wines.",
+   "pair": [
+    "goat cheese salad",
+    "grilled asparagus",
+    "fish tacos with lime"
+   ]
+  },
+  "composition": {
+   "summary": "Sauvignon Blanc, wild-named grape of the Loire, Bordeaux and New Zealand's Marlborough.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc; its name derives from 'sauvage', meaning wild"
+    },
+    {
+     "label": "Region",
+     "detail": "Loire Valley and Bordeaux in France; Marlborough in New Zealand"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool, protective fermentation preserves the thiols behind gooseberry and passionfruit"
+    },
+    {
+     "label": "Aging",
+     "detail": "Steel and young; white Bordeaux blends see barrel fermentation"
+    }
+   ],
+   "process": "Fermenting cold and away from oxygen protects volatile thiol compounds — the source of that shout of cut grass."
+  }
+ },
+ {
+  "id": "semillon",
+  "name": "Sémillon",
+  "subcategory": "White",
+  "description": "A quiet, waxy grape that plays two extremes: the backbone of golden Sauternes in Bordeaux, and a lean, ageless dry white in Australia's Hunter Valley.",
+  "abv": "11–14%",
+  "origin": "Bordeaux, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lemon",
+   "lanolin",
+   "beeswax",
+   "toast"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Hunter Valley Sémillon is picked early at low alcohol and tastes almost neutral in youth, then miraculously develops honeyed, toasty depth over decades in bottle.",
+  "serve": {
+   "temp": "48-52°F, lightly chilled",
+   "glass": "White wine glass",
+   "how": "Serve dry Sémillon just lightly chilled in a white wine glass so the waxy, lanolin texture isn't numbed away. Swirl and look past the quiet lemon for beeswax and, in aged Hunter Valley bottles, an astonishing honeyed-toast depth that appears with a little air. If yours is a sweet Sauternes-style bottling instead, chill it harder and pour small glasses for after dinner.",
+   "pair": [
+    "roast chicken",
+    "flaky white fish in butter sauce",
+    "blue cheese (for sweet styles)"
+   ]
+  },
+  "composition": {
+   "summary": "Sémillon, botrytis vessel in Bordeaux and a lean, ageless dry white in Australia.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sémillon; blended with Sauvignon Blanc in Bordeaux, solo in the Hunter"
+    },
+    {
+     "label": "Region",
+     "detail": "Sauternes and Graves in Bordeaux; the Hunter Valley, New South Wales"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Thin skins invite botrytis; the Hunter picks early at low alcohol"
+    },
+    {
+     "label": "Aging",
+     "detail": "Sauternes in barriques; Hunter Sémillon unoaked, then decades in bottle"
+    }
+   ],
+   "process": "In the Hunter it is picked barely ripe and never oaked, so all its complexity develops later in bottle."
+  }
+ },
+ {
+  "id": "soave",
+  "name": "Soave",
+  "subcategory": "White",
+  "description": "A gentle Venetian white built on the Garganega grape, all pear and almond softened by volcanic soils. Once dismissed as cheap, its hillside crus are quietly excellent.",
+  "abv": "11.5–13%",
+  "origin": "Veneto, Italy",
+  "rarity": "common",
+  "tastingNotes": [
+   "pear",
+   "melon",
+   "almond",
+   "white blossom"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "In the 1970s Soave was the best-selling imported Italian wine in the United States, outselling even Chianti.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Chill it down and pour into a white wine glass; single-vineyard Classico bottles deserve a slightly warmer serve and a moment to open. Swirl and find the gentle pear and melon, then wait for the signature bitter-almond note on the finish — that's the Garganega grape's calling card. It's a soft-spoken wine, so pair it with delicate food that won't shout over it.",
+   "pair": [
+    "risotto with peas or seafood",
+    "grilled sole",
+    "fresh mozzarella"
+   ]
+  },
+  "composition": {
+   "summary": "Garganega grown on volcanic hills east of Verona in the Veneto.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Garganega mainly, with Trebbiano di Soave or Chardonnay permitted"
+    },
+    {
+     "label": "Region",
+     "detail": "Soave and Soave Classico, on volcanic basalt hills near Verona"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool steel fermentation; some producers rest it on fine lees"
+    },
+    {
+     "label": "Aging",
+     "detail": "Little to none; hillside crus and Riserva can take some wood"
+    }
+   ],
+   "process": "Dark volcanic basalt on the Classico hills gives the salty, almond-skin bite that flatland Soave never manages."
+  }
+ },
+ {
+  "id": "torrontes",
+  "name": "Torrontés",
+  "subcategory": "White",
+  "description": "Argentina's aromatic trickster: it smells sweet as a flower shop, then lands crisp and dry. Happiest in dizzyingly high desert vineyards.",
+  "abv": "12.5–14%",
+  "origin": "Salta, Argentina",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "rose",
+   "muscat grape",
+   "lemon peel",
+   "peach"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Torrontés is a natural cross between Muscat of Alexandria and the Mission grape brought to the Americas by Spanish missionaries.",
+  "serve": {
+   "temp": "45-48°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it cold in a white wine glass and enjoy the bait-and-switch: the nose promises a flower shop's worth of rose and muscat sweetness, then the palate lands crisp and dry. No decanting, no ceremony — just smell deeply before each sip to catch the perfume. It's built for aromatic, spiced food that matches its own volume.",
+   "pair": [
+    "empanadas",
+    "Thai green curry",
+    "ceviche with aji"
+   ]
+  },
+  "composition": {
+   "summary": "Torrontés Riojano, an aromatic Argentine cross grown in high desert vineyards.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Torrontés Riojano; a Muscat of Alexandria × Criolla Chica cross"
+    },
+    {
+     "label": "Region",
+     "detail": "Cafayate in Salta, plus La Rioja and Mendoza, Argentina"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Pressed quickly off skins to keep bitterness out; fermented cold"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; steel and bottled young, with oak strictly avoided"
+    }
+   ],
+   "process": "Fast pressing keeps its Muscat-derived terpenes aromatic without the phenolic bitterness those thick skins would otherwise contribute."
+  }
+ },
+ {
+  "id": "txakoli",
+  "name": "Txakoli",
+  "subcategory": "White",
+  "description": "The Basque Country's electric, lightly fizzy white, low in alcohol and high in theatrics. Bartenders pour it from a great height to rouse its bubbles.",
+  "abv": "10.5–12%",
+  "origin": "Basque Country, Spain",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "lime",
+   "saline",
+   "spritz"
+  ],
+  "glassware": "Flat tumbler",
+  "funFact": "In San Sebastián's pintxo bars, Txakoli is traditionally poured from arm's length above the glass to aerate it and coax out its natural fizz.",
+  "serve": {
+   "temp": "38-42°F, ice-cold",
+   "glass": "Flat tumbler",
+   "how": "Chill it hard, then do it Basque-style: hold the bottle at arm's length above a flat tumbler and pour a long, thin stream to rouse the natural fizz — a few splashes on the counter are part of the ritual. Pour only a couple of inches at a time, so each pour is still cold and spritzy when you taste it. Notice the green apple, lime, and saline crackle; at barely 11% alcohol it's a light match for pintxos.",
+   "pair": [
+    "pintxos and jamón",
+    "grilled anchovies",
+    "salty fried peppers"
+   ]
+  },
+  "composition": {
+   "summary": "Hondarrabi Zuri from the Atlantic-lashed hills of the Basque Country.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Hondarrabi Zuri; the red Hondarrabi Beltza makes the rosé"
+    },
+    {
+     "label": "Region",
+     "detail": "Getariako, Bizkaiko and Arabako Txakolina, in Basque Spain"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Picked early at low ripeness; a light spritz retained at bottling"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; drunk within the year, ideally standing at a bar"
+    }
+   ],
+   "process": "Early harvest in a cool, wet maritime climate keeps alcohol low and acidity high, with a faint prickle sealed in."
+  }
+ },
+ {
+  "id": "vermentino",
+  "name": "Vermentino",
+  "subcategory": "White",
+  "description": "A sun-loving Mediterranean white with a pleasantly bitter, almond-skin farewell. It patrols the coasts of Sardinia, Liguria, and Corsica, where it moonlights as Rolle.",
+  "abv": "12.5–13.5%",
+  "origin": "Sardinia, Italy",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "green pear",
+   "almond",
+   "sea breeze"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Vermentino di Gallura is the only DOCG, Italy's highest wine classification, on the entire island of Sardinia.",
+  "serve": {
+   "temp": "45-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve it fridge-cool in a white wine glass, ideally somewhere you can pretend there's a sea breeze. Swirl and taste for lime and green pear, then wait for the pleasantly bitter almond-skin farewell on the finish — that's the grape saying goodbye properly. It shines brightest with herb-flecked Mediterranean food and anything pulled from the sea.",
+   "pair": [
+    "pesto pasta",
+    "grilled swordfish",
+    "herbed olives and focaccia"
+   ]
+  },
+  "composition": {
+   "summary": "Vermentino from Sardinia, Liguria and Corsica, where it also goes by Rolle.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Vermentino; Rolle in Provence, Pigato and Favorita in Italy"
+    },
+    {
+     "label": "Region",
+     "detail": "Sardinia's Gallura DOCG, plus Liguria, Tuscany, Corsica and Provence"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool steel fermentation; brief skin contact adds texture and grip"
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually none; a few producers age briefly on lees"
+    }
+   ],
+   "process": "A short spell on the skins draws out the phenolics behind that gently bitter, almond-skin finish."
+  }
+ },
+ {
+  "id": "vinho-verde",
+  "name": "Vinho Verde",
+  "subcategory": "White",
+  "description": "Portugal's 'green wine' — green as in young, not in color. Low in alcohol, lightly spritzy, and best consumed within sight of a beach.",
+  "abv": "8.5–11.5%",
+  "origin": "Minho, Portugal",
+  "rarity": "common",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "white flowers",
+   "spritz"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The gentle fizz was originally an accident of secondary fermentation in bottle; today many producers add a small dose of carbon dioxide on purpose.",
+  "serve": {
+   "temp": "38-42°F, ice-cold",
+   "glass": "White wine glass",
+   "how": "This is the rare wine you genuinely cannot serve too cold — bury it in ice and pour it into a white wine glass beaded with condensation. Drink it young, within a year of the vintage, and feel the gentle prickle of spritz over lime and green apple. At around 10% alcohol it's an afternoon wine; no swirling or ceremony, just keep it cold.",
+   "pair": [
+    "grilled sardines",
+    "shrimp with garlic",
+    "summer salads"
+   ]
+  },
+  "composition": {
+   "summary": "Loureiro, Alvarinho and Arinto from the wet green northwest of Portugal.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Loureiro, Alvarinho, Arinto, Trajadura and Avesso, usually blended"
+    },
+    {
+     "label": "Region",
+     "detail": "Minho, between the Douro and the Spanish border, Portugal"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Picked early for low alcohol; a dose of CO2 supplies the fizz"
+    },
+    {
+     "label": "Aging",
+     "detail": "None; the whole style is built on youth and freshness"
+    }
+   ],
+   "process": "The spritz began as accidental bottle refermentation and is now added deliberately, keeping a lean wine lively."
+  }
+ },
+ {
+  "id": "viognier",
+  "name": "Viognier",
+  "subcategory": "White",
+  "description": "A lush, apricot-scented rarity rescued from the brink of extinction. Full-bodied and heady, it walks the line between opulence and excess.",
+  "abv": "13–15%",
+  "origin": "Condrieu, Rhône Valley, France",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "apricot",
+   "honeysuckle",
+   "peach",
+   "tangerine"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "By the 1960s Viognier had dwindled to roughly a dozen acres in Condrieu before a global revival brought it back from near extinction.",
+  "serve": {
+   "temp": "50-55°F, just lightly chilled",
+   "glass": "White wine glass",
+   "how": "Serve it warmer than most whites — too much chill locks away the apricot-and-honeysuckle perfume that is Viognier's whole reason for being. Pour into a generous white wine glass, swirl slowly, and give it ten minutes; the nose blooms as it warms. Notice the lush, almost oily texture and keep pours modest, since its heady richness and higher alcohol walk the line between opulence and excess.",
+   "pair": [
+    "lobster or crab",
+    "roast pork with apricots",
+    "mild chicken curry"
+   ]
+  },
+  "composition": {
+   "summary": "Viognier from Condrieu and Château-Grillet in the northern Rhône, rescued from near-extinction.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Viognier; reduced to roughly a dozen acres by the 1960s"
+    },
+    {
+     "label": "Region",
+     "detail": "Condrieu and Château-Grillet in the northern Rhône; now worldwide"
+    },
+    {
+     "label": "Vinification",
+     "detail": "Picked very ripe for apricot terpenes; often barrel-fermented with lees stirring"
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral oak for a few months; malolactic softens the acidity"
+    }
+   ],
+   "process": "It must be picked at full ripeness for its apricot perfume to appear, which is why the alcohol runs high."
+  }
+ }
+]

@@ -80,7 +80,7 @@ import {
 import { flushSubmissions } from '@/lib/submissions';
 import { faceOf, fitScale, textWidth } from '@/lib/textFit';
 import { useCustomDrink, useCustomDrinks } from '@/store/customDrinks';
-import type { CustomDrink, Drink, DrinkCategory } from '@/types';
+import type { CustomCategory, CustomDrink, Drink } from '@/types';
 import { confirmDestructive, showNotice } from '@/utils/alerts';
 
 /* ==================================================================== */
@@ -162,7 +162,7 @@ const blankIngredients = () => [blankIngredient(), blankIngredient(), blankIngre
 function initialForm(opts: {
   editing: CustomDrink | null;
   name: string;
-  category: DrinkCategory;
+  category: CustomCategory;
   seedUri: string | null;
 }): FormState {
   if (opts.editing) {
@@ -530,7 +530,7 @@ export default function AddDrinkScreen() {
   const editId = editParam && isCustomId(editParam) ? editParam : null;
   const hydrated = useCustomDrinks((s) => s.hydrated);
   const editing = useCustomDrink(editId);
-  const category: DrinkCategory = params.category === 'spirit' ? 'spirit' : 'cocktail';
+  const category: CustomCategory = params.category === 'spirit' ? 'spirit' : 'cocktail';
   const name = typeof params.name === 'string' ? params.name : '';
 
   if (editParam && !(hydrated && editing)) {
@@ -581,7 +581,7 @@ function AddDrinkForm({
   from: From;
   editing: CustomDrink | null;
   initialName: string;
-  initialCategory: DrinkCategory;
+  initialCategory: CustomCategory;
 }) {
   const router = useRouter();
   const navigation = useNavigation();
@@ -677,7 +677,7 @@ function AddDrinkForm({
    * or glass picked from the old category's list that the new one does not
    * have is cleared; one typed under "Something else…" or "Other…" stays.
    */
-  const setCategory = (c: DrinkCategory) => {
+  const setCategory = (c: CustomCategory) => {
     if (c === d.category) return;
     const keepStyle = d.subcategoryIsNew || d.subcategory === '' || subcategoriesFor(c).includes(d.subcategory);
     const glasses: readonly string[] = GLASSWARE[c];

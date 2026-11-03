@@ -12,9 +12,10 @@ import { colors, space, textRole } from '@/constants/theme';
 /* 600 heading, one quiet line and its key (layout spec principle 3:    */
 /* separate with space, never cards). On the page their fields, keys    */
 /* and notices keep their wash, which a wash card would have swallowed. */
+/* Instagram went in v4.14; the other five stay.                        */
 /*                                                                      */
-/* FindFriends, FacebookFriends and InstagramImport all draw through    */
-/* this, so the three files read as one screen.                         */
+/* FindFriends and FacebookFriends both draw through this, so the two   */
+/* files read as one screen.                                            */
 /* ==================================================================== */
 
 export function FindSection({
@@ -23,7 +24,7 @@ export function FindSection({
   children,
 }: {
   title: string;
-  /** The quiet line under the heading; a node for one with a word set in ink. */
+  /** The quiet line under the heading. */
   body?: ReactNode;
   children?: ReactNode;
 }) {
@@ -41,11 +42,6 @@ export function FindSection({
 /** A section's quiet line: small, muted (6.69:1 on the page). */
 export function FindNote({ children }: { children: ReactNode }) {
   return <Text style={[textRole.small, styles.muted]}>{children}</Text>;
-}
-
-/** A word inside a FindNote said in ink: "@nico.pours", "All time". */
-export function FindEm({ children }: { children: ReactNode }) {
-  return <Text style={[textRole.groupTitle, styles.ink]}>{children}</Text>;
 }
 
 const styles = StyleSheet.create({

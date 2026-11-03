@@ -17,7 +17,7 @@
  *      it first checks is in step with the catalogue.
  *   3. Runs A to F (spec.md §5.6, v4.2 §1.2): the reference's ids, order,
  *      why lines, makeNow and scores, each run's pinned picks (RUNS says
- *      where they come from), matchingCount 633, 147, 2311, 437, 184 and
+ *      where they come from), matchingCount 633, 147, 2311, 437, 185 and
  *      239, and the reference's barRows and makeableCount.
  *   4. A 2,000-case sweep: a seeded LCG over every answer (goal fixed to
  *      null and to each value in turn, exclusions, a few pick counts),
@@ -251,7 +251,12 @@ function diff(label, mine, theirs) {
  * again from the reference on 26 Oct 2026. v4.13 (3 Nov 2026) added 238
  * spirit cards (the bottlings of brands already in the Dex, and nine styles
  * for them): no pick moved, and A, C, D and E's matchingCount were read
- * again from the reference (574, 2073, 378 and 161 before).
+ * again from the reference (574, 2073, 378 and 161 before). v4.14 (3 Nov
+ * 2026) brought back 2,344 wines, which the recommender never scores, so
+ * none of the figures moved for them; E's matchingCount was read again
+ * (184 before) because Malibu moved from Spiced Rum to Flavored Rum, whose
+ * notes say tropical fruit and citrus, so a fruity-or-sour rum drinker's
+ * card now counts it. No pick moved.
  */
 const RUNS = {
   A: {
@@ -293,7 +298,7 @@ const RUNS = {
     ids: ['daiquiri', 'strawberry-daiquiri', 'pina-colada', 'margarita', 'illegal', 'mezcal-joven'],
     whyOf: { 'pina-colada': 'Because you like white rum and fruity drinks' },
     extras: ['triple-sec', 'pineapple-juice'],
-    matching: 184,
+    matching: 185,
   },
   F: {
     answers: { drinks: 'cocktails', spirits: [], flavours: ['fruity'], home: null, bar: [] },
@@ -594,7 +599,7 @@ for (let i = 0; i < FACETS; i++) {
   const f = {
     flavours: some(r, FLAVOUR_KEYS, 3),
     spirits: some(r, SPIRIT_KEYS, 3),
-    kind: one(r, ['all', 'all', 'cocktail', 'spirit']),
+    kind: one(r, ['all', 'all', 'cocktail', 'spirit', 'wine']),
     status: one(r, ['all', 'all', 'unlocked', 'locked']),
   };
   facetCase(`facet case ${i} (${JSON.stringify(f)})`, f, new Set(some(r, DRINK_IDS, 300)));

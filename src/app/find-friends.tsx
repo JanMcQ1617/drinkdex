@@ -19,9 +19,10 @@ import type { UserProfile } from '@/types';
 /*                                                                      */
 /* FindFriends is a column of sections on the page, parted by space:    */
 /* contacts (the one recommended path, the one ink key), Facebook when  */
-/* it has something to show, being findable, invites, username search  */
-/* and the Instagram import, each a heading, a line and a key. v4 took  */
-/* away the cards and the lining panel (layout spec principle 3).       */
+/* it has something to show, being findable, invites and username       */
+/* search, each a heading, a line and a key. v4 took away the cards and */
+/* the lining panel (layout spec principle 3); v4.14, the Instagram     */
+/* import that ended the column (specs/v4.14/find-friends.md).          */
 /*                                                                      */
 /* The same component is rendered full-width by WelcomeConnect at        */
 /* signup, so the thing offered on day one and the thing reachable from  */
@@ -30,12 +31,11 @@ import type { UserProfile } from '@/types';
 /* Under it, everyone on Sipply, as rows of people. Each row opens that  */
 /* person's profile, where Report and Block live.                       */
 /*                                                                      */
-/* Up to four text fields live in that stack (the number, the search,    */
-/* and the Instagram username and pasted list once opened), so the       */
-/* scroll view carries the keyboard props every other input screen here  */
-/* does. Without "handled", the first tap on Follow under a search       */
-/* result only closed the keyboard; without the inset adjustment, the    */
-/* fields near the end sat behind it.                                    */
+/* Up to two text fields live in that stack (the number, until it is    */
+/* saved, and the search), so the scroll view carries the keyboard      */
+/* props every other input screen here does. Without "handled", the     */
+/* first tap on Follow under a search result only closed the keyboard;  */
+/* without the inset adjustment, the search near the end sat behind it. */
 /* ==================================================================== */
 
 export default function FindFriendsScreen() {

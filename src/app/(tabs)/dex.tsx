@@ -27,7 +27,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CustomDrinkTile } from '@/components/CustomDrinkTile';
 import { DexCard, dexCardHeight, EmptyArt } from '@/components/DexCard';
-import { takeDexFilter } from '@/components/dex/dexFilter';
+import {
+  dexChipsOn,
+  dexCounts,
+  dexFacets,
+  dexFilterOn,
+  dexMatcher,
+  NO_DEX_FILTER,
+  quickPicks,
+  takeDexFilter,
+  tokenWord,
+  type DexContext,
+  type DexFilter,
+} from '@/components/dex/dexFilter';
 import { EndMark } from '@/components/details/DoodleMarks';
 import { Paper } from '@/components/details/Paper';
 import { FilterSheet } from '@/components/dex/FilterSheet';
@@ -44,7 +56,7 @@ import {
 } from '@/components/dex/dexRows';
 import { ForYouRail } from '@/components/dex/ForYouRail';
 import { OrderSheet } from '@/components/dex/OrderSheet';
-import { QuickChips } from '@/components/dex/QuickChips';
+import { ActiveFilters, QuickChips } from '@/components/dex/QuickChips';
 import { HEAD_LINE, HEAD_RULE, NUMERAL_BAND, NUMERAL_TEXT_CAP, SectionHead } from '@/components/dex/SectionHead';
 import { TAB_BAR_CLEARANCE } from '@/components/FloatingTabBar';
 import { Icon } from '@/components/icons';
@@ -56,24 +68,12 @@ import { useHideOnScroll, useTabScroll } from '@/components/ScrollChrome';
 import { announce, Button, EmptyState, haptic, SearchField } from '@/components/ui';
 import { CATEGORY_META, colors, layout, space, textRole } from '@/constants/theme';
 import { DRINKS, formatCount, getDrink, TOTAL } from '@/data';
+import { matchOwned } from '@/lib/bar';
 import { catalogueTwin, ownTwin, shortQuery } from '@/lib/customDrinks';
-import {
-  chipsOn,
-  chipWord,
-  facetCounts,
-  filterIsOn,
-  forYou,
-  matcher,
-  NO_FILTER,
-  numberMap,
-  quickChips,
-  sectionKeys,
-  seeAll,
-  type ChipFilter,
-  type ForYouSection,
-  type IsCaught,
-} from '@/lib/dexOrder';
+import { forYou, numberMap, sectionKeys, seeAll, type ForYouSection } from '@/lib/dexOrder';
 import { isDexNumberPrefix, parseDexNumber } from '@/lib/drinkSearch';
+import { MY_BAR_ENABLED } from '@/lib/myBar';
+import { useBar } from '@/store/bar';
 import { useCollection } from '@/store/collection';
 import { useCustomDrinks } from '@/store/customDrinks';
 import { dexOrderFor, useDexPrefs, type DexOrderChoice } from '@/store/dexPrefs';
@@ -134,6 +134,14 @@ import type { CustomDrink, Drink, DrinkCategory, UnlockRecord } from '@/types';
 /* every drink". Ornament, never information: no word, count or state   */
 /* is added, and nothing sits on a print, a chip, the field or the      */
 /* rail.                                                                */
+/*                                                                      */
+/* v4.14 (specs/v4.14/filters.md). Jan: "optimize it so people can      */
+/* choose better and facilitate their choosing process". The quick      */
+/* chips are the first choices in a fixed order (type, flavour, Light,  */
+/* Not yet), dimmed where they would show nothing; while anything is    */
+/* on, a row under them says what, each a token with ×, after Clear     */
+/* all. The sheet counts every option over components/dex/dexFacets'    */
+/* records, built once and in the idle after the tab first draws.       */
 /* ==================================================================== */
 
 /* ------------------------------------------------------------------ */
@@ -188,6 +196,9 @@ const LAST_NUMBER = DRINKS[DRINKS.length - 1]?.dexNumber ?? TOTAL;
  * keyboard's return key goes at once.
  */
 const NUMBER_SETTLE_MS = 450;
+
+/** The facets are built in the first idle moment after the Dex draws, or by then at the latest. */
+const FACETS_IDLE_TIMEOUT_MS = 2000;
 
 /** Catalogue drinks of one kind in the collection: the bar's count. */
 function caughtOf(unlocks: Record<string, UnlockRecord>, category: DrinkCategory): number {
@@ -358,7 +369,7 @@ function FilterKey({ on, onPress }: { on: boolean; onPress: () => void }) {
       hitSlop={{ left: space.sm, right: space.sm }}
       accessibilityRole="button"
       accessibilityLabel={on ? 'Filter, on' : 'Filter'}
-      accessibilityHint="Choose flavours, spirits, the kind of drink, logged or not yet"
+      accessibilityHint="Choose a type, flavour, strength, style, grape or country, logged or not yet"
       style={({ pressed }) => [styles.filterKey, pressed && styles.pressed]}>
       <Icon name="sliders" size={22} color={colors.text} filled={on} />
     </Pressable>
@@ -695,7 +706,8 @@ export default function DexScreen() {
    */
   const caughtCocktails = useCollection((s) => caughtOf(s.unlocks, 'cocktail'));
   const caughtSpirits = useCollection((s) => caughtOf(s.unlocks, 'spirit'));
-  const collected = caughtCocktails + caughtSpirits;
+  const caughtWines = useCollection((s) => caughtOf(s.unlocks, 'wine'));
+  const collected = caughtCocktails + caughtSpirits + caughtWines;
 
   /*
    * The drinks this person added, and their pours. The stable records, not
@@ -731,7 +743,11 @@ export default function DexScreen() {
   const forYouOn = fy !== null && order === 'foryou';
   const unanswered = tasteReady && !asksForYou;
 
-  const [filter, setFilter] = useState<ChipFilter>(NO_FILTER);
+  /*
+   * The filter (components/dex/dexFilter): screen state, so it is there
+   * when the tab is left and come back to, as the pager keeps the page.
+   */
+  const [filter, setFilter] = useState<DexFilter>(NO_DEX_FILTER);
   const [query, setQuery] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
   const [orderOpen, setOrderOpen] = useState(false);
@@ -747,7 +763,28 @@ export default function DexScreen() {
    */
   const dexQuery = parseDexNumber(trimmed);
   const textQuery = dexQuery === null && !isDexNumberPrefix(trimmed) ? trimmed : '';
-  const filterOn = filterIsOn(filter);
+  /*
+   * I can make it (v4.14): the cocktails My Bar makes, while My Bar is on
+   * and holds a bottle. lib/bar's matchOwned is remembered by the shelf's
+   * identity, so this walks the recipes once per change to the bar. With
+   * My Bar off (lib/myBar) there is no bar to read and no such choice.
+   *
+   * A bar that makes nothing yet (one bottle of Campari) is no bar here
+   * either. As an empty set it offered the quick chip at rest, when no
+   * count dims it, and one tap emptied the grid (build 40's review); as
+   * null the chip and the sheet's Your bar group are not drawn, and a
+   * choice left on from a fuller bar stops applying, as it does when the
+   * bar is emptied.
+   */
+  const owned = useBar((s) => s.owned);
+  const canMake = useMemo(() => {
+    if (!MY_BAR_ENABLED || Object.keys(owned).length === 0) return null;
+    const makeable = matchOwned(owned).makeable;
+    return makeable.length > 0 ? new Set(makeable.map((m) => m.drink.id)) : null;
+  }, [owned]);
+  const filterOn = dexFilterOn(filter, canMake);
+  /* What is on, in sheet order: the row over the grid, the grid's key, an empty grid's words. */
+  const chipsOn = useMemo(() => dexChipsOn(filter, canMake), [filter, canMake]);
 
   /* The exact column, unrounded: rounding could push two cards and the gap past the row. */
   const column = (width - GUTTER * 2 - GAP * (COLUMNS - 1)) / COLUMNS;
@@ -765,14 +802,13 @@ export default function DexScreen() {
     const unlocks = useCollection.getState().unlocks;
     return dexGrid({
       query: textQuery,
-      filter,
       filterOn,
-      caught: (id) => has(unlocks, id),
+      matches: dexMatcher(filter, { caught: (id) => has(unlocks, id), canMake }),
       forYou: forYouOn ? fy : null,
     });
     // The counts look unused: they are the invalidation keys for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caughtCocktails, caughtSpirits, textQuery, filter, filterOn, forYouOn, fy]);
+  }, [caughtCocktails, caughtSpirits, caughtWines, textQuery, filter, filterOn, canMake, forYouOn, fy]);
 
   /* Dex number → row, in any order (spec §2.4): a typed number finds its tile wherever it is. */
   const rowOfNumber = useMemo(() => numberMap(rows, drinksOf), [rows]);
@@ -781,39 +817,59 @@ export default function DexScreen() {
   const added = useMemo(() => {
     if (!customReady || textQuery.length === 0) return [];
     const q = fold(textQuery);
-    const pass = matcher(filter, (id) => has(customPours, id));
+    const pass = dexMatcher(filter, { caught: (id) => has(customPours, id), canMake });
     return Object.values(customDrinks)
       .filter((c) => pass(c) && customKey(c).includes(q))
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  }, [customReady, customDrinks, customPours, textQuery, filter]);
+  }, [customReady, customDrinks, customPours, textQuery, filter, canMake]);
 
   /*
-   * The faceted counts (spec §1.3), bit tests over the catalogue
-   * (lib/dexOrder), one pass each, so a tap recounts at once. The bar's
+   * The faceted counts (v4.14, components/dex/dexFacets): one pass over
+   * the catalogue's facet records, so a tap recounts at once. The bar's
    * while a filter is on: what the filters hold, whatever is typed. The
-   * sheet's while it is open: over what the search finds, so each chip's
-   * figure and the foot key's "Show 12 drinks" are the grid behind the
-   * scrim (with nothing typed they are the same pass).
+   * live counts while the sheet is open, a filter is on or words are
+   * typed: over what the search finds, so each option's figure, the foot
+   * key's "Show 12 drinks" and which quick chips are dimmed all answer
+   * for the grid behind (with nothing typed the two are the same pass).
+   * At rest there are none: every quick chip has drinks then, and the
+   * facets are not built until something asks.
    */
   const barCounts = useMemo(() => {
     if (!filterOn) return null;
     const unlocks = useCollection.getState().unlocks;
-    return facetCounts(filter, (id) => has(unlocks, id));
+    return dexCounts(filter, { caught: (id) => has(unlocks, id), canMake });
     // The counts look unused: they are the invalidation keys for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caughtCocktails, caughtSpirits, filter, filterOn]);
-  const sheetCounts = useMemo(() => {
-    if (!sheetOpen) return null;
+  }, [caughtCocktails, caughtSpirits, caughtWines, filter, filterOn, canMake]);
+  const liveCounts = useMemo(() => {
+    if (!sheetOpen && !filterOn && textQuery.length === 0) return null;
     if (textQuery.length === 0 && barCounts) return barCounts;
     const unlocks = useCollection.getState().unlocks;
-    const caught: IsCaught = (id) => has(unlocks, id);
-    return facetCounts(filter, caught, searchHits(textQuery));
+    const ctx: DexContext = { caught: (id) => has(unlocks, id), canMake };
+    return dexCounts(filter, ctx, textQuery.length > 0 ? searchHits(textQuery) : undefined);
     // The counts look unused: they are the invalidation keys for the getState() read above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [caughtCocktails, caughtSpirits, filter, sheetOpen, textQuery, barCounts]);
+  }, [caughtCocktails, caughtSpirits, caughtWines, filter, filterOn, canMake, sheetOpen, textQuery, barCounts]);
 
-  /* The quick chips under the field (spec §1.5). */
-  const quick = useMemo(() => quickChips(filter, answers), [filter, answers]);
+  /*
+   * The facets are built on first use (a filter, a search, the sheet);
+   * once the tab has drawn and the phone is idle, build them, so the
+   * first tap on a chip does not wait for it.
+   */
+  useEffect(() => {
+    // Node (`expo export`) has no idle callbacks, and nothing there to warm.
+    if (typeof requestIdleCallback !== 'function') return;
+    const id = requestIdleCallback(
+      () => {
+        dexFacets();
+      },
+      { timeout: FACETS_IDLE_TIMEOUT_MS },
+    );
+    return () => cancelIdleCallback(id);
+  }, []);
+
+  /* The quick chips under the field (v4.14): the first choices, in a fixed order. */
+  const quick = useMemo(() => quickPicks(answers, canMake !== null), [answers, canMake]);
 
   /*
    * Whether the search is a name the Dex or this person already has,
@@ -1059,7 +1115,7 @@ export default function DexScreen() {
     }
     if (!filterOn) return;
     pendingJump.current = n;
-    setFilter(NO_FILTER);
+    setFilter(NO_DEX_FILTER);
   };
 
   /*
@@ -1068,9 +1124,7 @@ export default function DexScreen() {
    * pending jump below, so a number the filters hid is jumped to after
    * the grid has gone to its top, not before.
    */
-  const gridKey = `${order}\n${textQuery}\n${chipsOn(filter)
-    .map((c) => `${c.group}:${c.key}`)
-    .join(',')}`;
+  const gridKey = `${order}\n${textQuery}\n${chipsOn.map((c) => `${c.facet}:${c.key}`).join(',')}`;
   // New fronts move only a For-you grid; By number is the same book whatever the answers say.
   const shownFronts = forYouOn ? fy : null;
   const shownGrid = useRef({ key: gridKey, fronts: shownFronts });
@@ -1198,7 +1252,9 @@ export default function DexScreen() {
   /*
    * The add-a-drink form, named after the search (`from=dex`). A Dex
    * filtered to one kind passes it, so someone browsing Spirits starts on
-   * a spirit.
+   * a spirit. Not Wines: a drink someone adds is a cocktail or a spirit
+   * until the suggestions table takes a wine (types.ts, CustomCategory),
+   * so a search under Wines opens the form as it opens unfiltered.
    */
   const openAdd = useCallback(
     (name?: string) => {
@@ -1207,7 +1263,7 @@ export default function DexScreen() {
         params: {
           from: 'dex',
           ...(name ? { name } : null),
-          ...(filter.kind !== 'all' ? { category: filter.kind } : null),
+          ...(filter.kind === 'cocktail' || filter.kind === 'spirit' ? { category: filter.kind } : null),
         },
       });
     },
@@ -1239,7 +1295,7 @@ export default function DexScreen() {
   /* "See all 445 ›": that section's chip on alone; the grid goes flat in the For-you order (§2.4). */
   const onSeeAll = useCallback((section: ForYouSection) => {
     haptic.select();
-    setFilter(seeAll(section));
+    setFilter({ ...NO_DEX_FILTER, ...seeAll(section) });
   }, []);
 
   const renderItem = useCallback(
@@ -1267,7 +1323,7 @@ export default function DexScreen() {
 
   const clearFilters = useCallback(() => {
     haptic.select();
-    setFilter(NO_FILTER);
+    setFilter(NO_DEX_FILTER);
   }, []);
 
   /* The sheets are Modals: the keyboard would otherwise stay up behind their scrim. */
@@ -1290,12 +1346,12 @@ export default function DexScreen() {
    * ("10 / 535" under Sour and citrusy, Fruity, Cocktails and Not yet;
    * "12 / 1,190" under Cocktails). Logged or Not yet narrows the tiles,
    * not the fraction: "0 / 2,051" under Not yet would read as a
-   * collection lost, so the count ignores that group (lib/dexOrder's
-   * facetCounts works it with the other groups only).
+   * collection lost, so the count ignores that group (the In your Dex
+   * figures are worked with the other facets only: dexFacets' counts).
    */
-  const scopeCaught = barCounts ? barCounts.status.unlocked : collected;
-  const scopeTotal = barCounts ? barCounts.status.unlocked + barCounts.status.locked : TOTAL;
-  const narrowed = filter.flavours.length > 0 || filter.spirits.length > 0;
+  const scopeCaught = barCounts ? (barCounts.of.status[0] ?? 0) : collected;
+  const scopeTotal = barCounts ? (barCounts.of.status[0] ?? 0) + (barCounts.of.status[1] ?? 0) : TOTAL;
+  const narrowed = chipsOn.some((c) => c.facet !== 'kind' && c.facet !== 'status');
   const scopeWords = narrowed
     ? 'filtered drinks in your Dex'
     : filter.kind !== 'all'
@@ -1395,13 +1451,30 @@ export default function DexScreen() {
               />
               <View style={styles.quick}>
                 <QuickChips
-                  chips={quick}
+                  picks={quick}
                   filter={filter}
+                  counts={liveCounts}
                   onChange={setFilter}
                   order={fy ? order : null}
                   onOrder={openOrder}
                 />
               </View>
+              {/*
+                What is on (v4.14), while anything is: tokens with ×, after
+                Clear all. A sibling after the field, never its wrapper, so
+                coming and going it cannot touch the field's focus.
+              */}
+              {chipsOn.length > 0 ? (
+                <View style={styles.active}>
+                  <ActiveFilters
+                    chips={chipsOn}
+                    filter={filter}
+                    counts={liveCounts}
+                    onChange={setFilter}
+                    onClear={clearFilters}
+                  />
+                </View>
+              ) : null}
             </Animated.View>
           </Animated.View>
         </View>
@@ -1422,7 +1495,7 @@ export default function DexScreen() {
           ListEmptyComponent={
             <GridEmpty
               query={textQuery}
-              chips={chipsOn(filter).map(chipWord).join(', ')}
+              chips={chipsOn.map(tokenWord).join(', ')}
               matchesCatalogue={matchesCatalogue}
               onShelf={ownNamed !== undefined && added.includes(ownNamed)}
               ownHidden={ownNamed !== undefined && !added.includes(ownNamed) ? ownNamed.name : null}
@@ -1480,7 +1553,8 @@ export default function DexScreen() {
         visible={sheetOpen}
         onClose={() => setSheetOpen(false)}
         filter={filter}
-        counts={sheetCounts}
+        counts={sheetOpen ? liveCounts : null}
+        canMake={canMake}
         onChange={setFilter}
       />
 
@@ -1533,6 +1607,8 @@ const styles = StyleSheet.create({
     paddingBottom: HEADER_FOOT,
   },
   quick: { marginTop: CHIPS_TOP },
+  /* What is on: 8 under the quick chips, the same row's geometry. */
+  active: { marginTop: space.sm },
   filterKey: {
     alignSelf: 'stretch',
     width: FILTER_KEY,

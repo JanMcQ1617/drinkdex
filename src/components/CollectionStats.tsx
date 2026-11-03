@@ -24,7 +24,7 @@ import type { DrinkCategory, UnlockRecord } from '@/types';
 /*                   "Next: Cataloguer, at 209 entries"                 */
 /*   latest entry    its print and name; opens the drink                */
 /*   See your 38     the Dex, filtered to Logged                        */
-/*   by kind         cocktails and spirits, each counted with its bar   */
+/*   by kind         cocktails, spirits and wines, each with its bar    */
 /*   added by you    the drinks you added yourself, which have no Dex   */
 /*                   number and so no place in the grid                 */
 /*                                                                      */
@@ -44,7 +44,7 @@ import type { DrinkCategory, UnlockRecord } from '@/types';
  * custom id is skipped), and how many of each kind.
  */
 function deriveStats(unlocks: Record<string, UnlockRecord>) {
-  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0 };
+  const byCategory: Record<DrinkCategory, number> = { cocktail: 0, spirit: 0, wine: 0 };
   let unlockedCount = 0;
   for (const id of Object.keys(unlocks)) {
     const drink = getDrink(id);

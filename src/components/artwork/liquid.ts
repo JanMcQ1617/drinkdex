@@ -8,7 +8,8 @@ import type { Drink } from '../../types';
 /* Derived, not authored — 719 hand-picked colors would drift.           */
 /* Cocktails and spirits match on name + subcategory + tasting notes, so */
 /* "Espresso Martini" reads coffee-dark and "Aviation" reads violet.     */
-/* Fortified wine matches on style only; see FORTIFIED_NAME_RULES below. */
+/* Wine, and the fortified wine on the spirit shelf, match on style      */
+/* only; see the note above FORTIFIED_NAME_RULES.                        */
 /*                                                                      */
 /* Pure and React-free on purpose: scripts/check-artwork.mjs compiles    */
 /* this file alone and audits all 460 drinks for miscolored output.      */
@@ -63,8 +64,8 @@ const SIGNATURE: [RegExp, string][] = [
 ];
 
 /*
- * Beer and wine are resolved from STYLE (name + subcategory), never from
- * tasting notes.
+ * Wine is resolved from STYLE (name + subcategory), never from tasting
+ * notes. (So was beer, while the Dex had it.)
  *
  * Notes describe flavor, not color, and the two diverge constantly:
  * Brunello tastes of espresso and is deep red; Soave tastes of melon and
@@ -73,17 +74,24 @@ const SIGNATURE: [RegExp, string][] = [
  */
 
 /*
- * Fortified wine that lives on the spirit shelf.
+ * Fortified wine, on either shelf.
  *
  * Vermouth, sherry and port were `wine` entries until the Dex narrowed to
- * cocktails and spirits. They came across because 153 cocktail recipes call
- * for them, and their COLOURS had to come with them. Without these rules a
- * Ruby Port falls through to the generic spirit amber, and the two ends of
- * the sherry scale — Fino and Pedro Ximénez — render as the same liquid.
+ * cocktails and spirits on 20 Sep 2026. They stayed, as spirits, because
+ * 153 cocktail recipes call for them, and their COLOURS had to come with
+ * them. Without these rules a Ruby Port falls through to the generic spirit
+ * amber, and the two ends of the sherry scale — Fino and Pedro Ximénez —
+ * render as the same liquid.
  *
  * Name rules run before the subcategory because the subcategory is too
  * coarse here: all seven sherries share one, while ranging from pale straw
  * to very nearly black.
+ *
+ * When wine came back (v4.14) the spirit-shelf twelve stayed spirits, so
+ * these two tables stay theirs, consulted first in the spirit branch exactly
+ * as before. The wine branch reads the name rules too, at the head of its
+ * own: Madeira, Montilla-Moriles, Porto Colheita and the rest of the atlas's
+ * fortified wines are wine cards, and a tawny is amber on either shelf.
  */
 const FORTIFIED_NAME_RULES: [RegExp, string][] = [
   [b('fino|manzanilla'), LIQUID.paleStraw],
@@ -95,6 +103,40 @@ const FORTIFIED_BY_SUBCATEGORY: Record<string, string> = {
   Sherry: LIQUID.amber,
   Vermouth: LIQUID.amber,
   Port: LIQUID.deepRed,
+};
+
+/*
+ * Wine names more specific than their subcategory, after the fortified
+ * ones above. The 2,206 atlas cards carry one subcategory per atlas style,
+ * so "Fortified Wine" covers a Banyuls and a Malvasia, and "Sparkling" a
+ * Lambrusco and a Champagne: the name is the only thing that tells them
+ * apart. Two rules are new with v4.14 (the red fortified wines, which had
+ * poured the fortified amber, and the red sparkling ones, which had poured
+ * a sparkling straw); the rest are the pre-removal rules, less sake's.
+ *
+ * Rosé is closed at the end as well as anchored at the start: b() only
+ * anchors the start, and "Rosette", a sweet white from Bergerac, poured
+ * pink. Not \b, which is ASCII-only here and finds no boundary after the
+ * é of "rosé".
+ */
+const WINE_NAME_RULES: [RegExp, string][] = [
+  ...FORTIFIED_NAME_RULES,
+  [b('late bottled|crusted|banyuls|maury|mavrodaphne|cape vintage|vintage port'), LIQUID.deepRed],
+  [b('lambrusco|brachetto|sparkling shiraz'), LIQUID.redWine],
+  [b('ros[ée](?![a-z])|blush|white zinfandel'), LIQUID.rose],
+  [b('orange wine|skin.contact|amber wine'), LIQUID.orange],
+];
+
+/** Every wine subcategory the Dex holds; check-artwork names any it meets that is missing. */
+export const WINE_BY_SUBCATEGORY: Record<string, string> = {
+  White: LIQUID.whiteWine,
+  'Red Varietal': LIQUID.redWine,
+  'Regional Red': LIQUID.redWine,
+  Sparkling: LIQUID.paleStraw,
+  Dessert: LIQUID.amber,
+  'Fortified Wine': LIQUID.amber,
+  'Rosé': LIQUID.rose,
+  'Skin-Contact': LIQUID.orange,
 };
 
 const SPIRIT_RULES: [RegExp, string][] = [
@@ -172,6 +214,7 @@ const NOTE_RULES: [RegExp, string][] = [
 const CATEGORY_DEFAULT: Record<Drink['category'], string> = {
   cocktail: LIQUID.straw,
   spirit: LIQUID.amber,
+  wine: LIQUID.redWine,
 };
 
 function firstMatch(rules: [RegExp, string][], text: string): string | undefined {
@@ -187,10 +230,12 @@ function firstMatch(rules: [RegExp, string][], text: string): string | undefined
  * Derived from the drink's own words rather than a lookup table, so new
  * entries get a sensible color without anyone maintaining a list of 460.
  *
- * Fortified wine reads STYLE only (name + subcategory) and is checked
- * first, because a sherry's notes describe flavour rather than colour.
- * Everything else also reads tasting notes, where notes genuinely do
- * signal color — a cocktail described as "cherry, almond" really is red.
+ * Wine reads STYLE only (name + subcategory), and so does the fortified
+ * wine on the spirit shelf, checked first in the spirit branch: a wine's
+ * notes describe flavour rather than colour (Brunello tastes of espresso
+ * and is deep red). Cocktails and spirits also read tasting notes, where
+ * notes genuinely do signal color — a cocktail described as "cherry,
+ * almond" really is red.
  *
  * Cocktails deliberately skip SPIRIT_RULES: a cocktail's words routinely
  * name its base spirit, and matching those paints the finished drink the
@@ -214,5 +259,11 @@ export function liquidColor(
       );
     case 'cocktail':
       return firstMatch([...SIGNATURE, ...NOTE_RULES], full) ?? CATEGORY_DEFAULT.cocktail;
+    case 'wine':
+      return (
+        firstMatch(WINE_NAME_RULES, style) ??
+        WINE_BY_SUBCATEGORY[drink.subcategory] ??
+        CATEGORY_DEFAULT.wine
+      );
   }
 }

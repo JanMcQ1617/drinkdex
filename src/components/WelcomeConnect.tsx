@@ -20,14 +20,12 @@ import { colors, layout, space, textRole } from '@/constants/theme';
 /* connect button on the sign-in screen would have to hold its result    */
 /* until after signup anyway, so this is as early as it goes.            */
 /*                                                                      */
-/* WHY THERE IS NO "LOG IN WITH INSTAGRAM". There is no such API. Meta   */
-/* returns follower COUNTS to third-party apps and never lists, and the  */
-/* Basic Display API — the only one that ever covered personal accounts  */
-/* — was switched off on 4 December 2024. The honest version is the      */
-/* user's own data export, parsed on the device. See lib/instagram.ts.   */
-/* Saying that plainly here is deliberate: a button labelled "Connect    */
-/* Instagram" that then asks for a downloaded ZIP reads as a bait, and   */
-/* the explanation costs two lines.                                      */
+/* NO INSTAGRAM, AT ALL. There is no "Log in with Instagram" because     */
+/* there is no such API: Meta returns follower COUNTS to third-party     */
+/* apps and never lists. The data-download import that stood in for it   */
+/* went in v4.14 (Jan: "remove the Instagram part"), so this step offers */
+/* exactly what Find friends does: contacts, Facebook when it applies,   */
+/* being findable, invites and username search. FindFriends says why.    */
 /*                                                                      */
 /* THE WAY OUT IS PINNED. Continue used to sit after the six cards of    */
 /* FindFriends, about two screens down, so a skippable step arrived with */
@@ -48,7 +46,7 @@ import { colors, layout, space, textRole } from '@/constants/theme';
 
 export function WelcomeConnect({ onDone }: { onDone: () => void }) {
   /*
-   * Keyboard as on /find-friends: the same four fields live here. With a
+   * Keyboard as on /find-friends: the same two fields live here. With a
    * footer, CabinetSheet meets the keyboard with the scroll view's insets
    * rather than a KeyboardAvoidingView, so the pinned footer stays put
    * instead of riding up on the keyboard.

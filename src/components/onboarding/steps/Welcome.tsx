@@ -69,7 +69,7 @@ export function WelcomeStep({ geo, onHaveAccount }: { geo: Geometry; onHaveAccou
           <Wordmark height={WORDMARK_LG} header />
         </DockSlot>
         <Rise group="body" style={styles.words}>
-          <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>A field guide to cocktails and spirits.</Text>
+          <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.strap}>A field guide to cocktails, spirits and wine.</Text>
           <Text maxFontSizeMultiplier={TEXT_CAP} style={styles.legal}>
             By continuing you agree to the{' '}
             <Text

@@ -20,12 +20,37 @@ import type { CustomDrink, Drink } from '@/types';
 /** How many matches to render. Past this, typing more is quicker than scrolling. */
 export const MAX_RESULTS = 40;
 
-/** Lower case with accents dropped, so "anejo" finds "Añejo". Same fold as the bar search. */
+/*
+ * Letters NFD does not take apart, spelled out after it: the same letters
+ * the Dex grid's fold (components/dex/dexRows) and the add-a-drink form's
+ * foldName (lib/customDrinks) spell out. Without them, plain typing found
+ * Đakovo, Bergstraße and Diyarbakır on the Dex tab but not in the log
+ * sheet, which then offered to add them as new drinks: ten of the wines
+ * that came back in v4.14 are spelled with one, and Rakı and Weißer
+ * Spritzer were before them.
+ */
+const NO_DECOMPOSITION: Readonly<Record<string, string>> = {
+  æ: 'ae',
+  ø: 'o',
+  ł: 'l',
+  đ: 'd',
+  ð: 'd',
+  þ: 'th',
+  ß: 'ss',
+  œ: 'oe',
+  ı: 'i',
+};
+
+/** Lower case with accents dropped, so "anejo" finds "Añejo" and "dakovo" finds Đakovo. */
 export function fold(s: string): string {
-  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[æøłđðþßœı]/g, (c) => NO_DECOMPOSITION[c] ?? c);
 }
 
-/** Letters and digits, including the folded Latin letters that have no ASCII base (ø, ß, ı). */
+/** Letters and digits, including any accented Latin letter a fold keeps (it spells out ø, ß, ı and the rest). */
 export const WORD_CHAR = /[a-z0-9\u00c0-\u024f]/;
 
 /*

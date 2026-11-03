@@ -56,7 +56,7 @@ export type { Flavour, Goal, HeardFrom, HomeAnswer, OnboardingStep, Spirit, Styl
 export type { RecAnswers, RecDrink, Scored } from '@/lib/recommendCore';
 
 export interface Pick {
-  id: string; name: string; dexNumber: number; category: 'cocktail' | 'spirit'; subcategory: string;
+  id: string; name: string; dexNumber: number; category: 'cocktail' | 'spirit' | 'wine'; subcategory: string;
   abv: string | undefined; photo: boolean; makeNow: boolean; why: string; score: number;
 }
 export interface BarRow { id: string; label: string; ticked: boolean }

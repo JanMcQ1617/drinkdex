@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Linking, Share, StyleSheet, View } from 'react-native';
 
 import { FacebookFriends } from '@/components/FacebookFriends';
-import { InstagramImport } from '@/components/InstagramImport';
 import { MatchResults, type MatchEntry } from '@/components/PeopleList';
 import { FindNote, FindSection } from '@/components/profile/FindSection';
 import { Button, Field, Notice, SearchField, announce } from '@/components/ui';
@@ -43,15 +42,15 @@ const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings,
 
 /**
  * The discovery surface: match your phone contacts, your Facebook friends
- * already here, make yourself findable, invite a friend, search by
- * @username, or import your Instagram connections — in that order,
- * because the order is the recommendation. Rendered by the Find friends
- * screen and by the welcome step at signup, so both open on contacts.
+ * already here, make yourself findable, invite a friend, or search by
+ * @username — in that order, because the order is the recommendation.
+ * Rendered by the Find friends screen and by the welcome step at signup,
+ * so both open on contacts.
  *
  * Contacts lead: the one source that works for every account, and the
  * recommended path, so its key is the one ink key in the column and every
- * other section's is the wash key. Six equal sections with six equal keys
- * read as a wall of instructions with no way in.
+ * other section's is the wash key. Five equal sections with five equal
+ * keys read as a wall of instructions with no way in.
  *
  * Facebook follows it because, for an account signed in with it, it asks
  * nothing more: the sign-in already said which of its friends are here.
@@ -62,10 +61,13 @@ const CONTACTS_OFF = 'Contacts access is off. Turn it on for Sipply in Settings,
  * Every list ends in <MatchResults>, which leads with "Follow all" —
  * finding forty people is worthless if acting on them is forty taps.
  *
- * There is no "Log in with Instagram" button because no such thing can
- * exist for this: Meta returns follower COUNTS to third-party apps and
- * never lists, and the only API that covered personal accounts was shut
- * off in December 2024. See src/lib/instagram.ts.
+ * NO INSTAGRAM SECTION, SINCE v4.14 (Jan: "remove the Instagram part").
+ * Meta gives no app anyone's follower list, so "Bring your Instagram
+ * friends" was the user's own data download: request it, wait for
+ * Instagram, come back, choose the .zip, then claim a handle nobody could
+ * verify. Nothing else in the column went with it. What it left on phones
+ * that used it is forgotten by lib/discovery's retireInstagram;
+ * specs/v4.14/find-friends.md has what went and what stays.
  */
 export function FindFriends() {
   const myId = useAuth((s) => s.session?.user.id);
@@ -492,8 +494,6 @@ export function FindFriends() {
           />
         ) : null}
       </FindSection>
-
-      <InstagramImport />
     </View>
   );
 }

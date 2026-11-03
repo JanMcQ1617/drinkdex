@@ -1,0 +1,149 @@
+[
+ {
+  "id": "helan-mountain-east",
+  "name": "Helan Mountain East",
+  "subcategory": "Regional Red",
+  "description": "China's most credible fine-wine region, on the desert flank of the Helan mountains, where vines are buried under earth every winter to survive the cold.",
+  "abv": "13.5–14.5%",
+  "origin": "Ningxia, China",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "dried herb",
+   "cedar",
+   "dark plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Ningxia growers bury their vines under soil each autumn and unearth them each spring, because winter temperatures would otherwise kill them — an enormous annual labour cost that no other serious wine region carries.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for around an hour. Serve cool in a large glass. Ningxia Cabernet tends toward firm tannin and pronounced oak in its ambitious bottlings, so give it air. The region is young enough that vintage-to-vintage variation is still wide; recent vintages are markedly better than early ones.",
+   "pair": [
+    "Roast lamb",
+    "Beef",
+    "Peking duck"
+   ]
+  },
+  "composition": {
+   "summary": "Desert-grown Bordeaux varieties on gravelly alluvial soils under irrigation.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Merlot and Cabernet Gernischt."
+    },
+    {
+     "label": "Region",
+     "detail": "The eastern foothills of the Helan Mountains in Ningxia, on the edge of the Gobi."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French and American oak, often substantially new."
+    }
+   ],
+   "process": "An arid, high-altitude desert climate with irrigation gives precise ripening control, though vines must be buried each winter to survive temperatures that would otherwise kill them."
+  }
+ },
+ {
+  "id": "nashik",
+  "name": "Nashik",
+  "subcategory": "White",
+  "description": "India's wine capital, on a plateau above Mumbai, where the vines are pruned twice a year and the harvest happens in February.",
+  "abv": "11.5–13%",
+  "origin": "Maharashtra, India",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "lime",
+   "white flower",
+   "tropical hint"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "In India's tropical climate vines never go dormant, so growers prune twice annually — once to grow foliage and once to set fruit — and harvest in late winter rather than autumn.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. Nashik whites are made for freshness and for Indian food, so drink them young and cold. Sauvignon Blanc and Chenin are the strengths; the sparkling wines from the same region are also worth attention and should be served colder still.",
+   "pair": [
+    "Fish curry",
+    "Tandoori prawns",
+    "Spiced vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Tropical-plateau whites harvested in winter under a double-pruning regime.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc, Chenin Blanc and Viognier."
+    },
+    {
+     "label": "Region",
+     "detail": "The Nashik plateau in Maharashtra, at 600–900 metres above sea level."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation under temperature control."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; bottled young."
+    }
+   ],
+   "process": "Altitude tempers a tropical climate, and a double-pruning cycle produces a February harvest, with cold stainless fermentation preserving the aromatics for early drinking."
+  }
+ },
+ {
+  "id": "yamanashi",
+  "name": "Yamanashi",
+  "subcategory": "White",
+  "description": "Koshu — a pink-skinned grape grown in Japan for over a thousand years — made into a delicate, low-alcohol white built expressly to sit beside raw fish.",
+  "abv": "11–12.5%",
+  "origin": "Yamanashi, Japan",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white peach",
+   "yuzu",
+   "faint grip",
+   "mineral"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Koshu carries genes from wild Chinese vine species and reached Japan along the Silk Road; DNA work confirmed it is a genuine Vitis vinifera hybrid rather than a European import.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. Koshu is deliberately delicate — low in alcohol, subtle in aroma, with a faint phenolic grip from its pink skins — so it is easily overwhelmed. Pair it with sashimi or lightly dressed fish rather than anything rich, which is exactly what it was revived to do.",
+   "pair": [
+    "Sashimi",
+    "Tempura",
+    "Steamed fish"
+   ]
+  },
+  "composition": {
+   "summary": "A delicate, low-alcohol white from the indigenous pink-skinned Koshu grape.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Koshu."
+    },
+    {
+     "label": "Region",
+     "detail": "The Kofu basin in Yamanashi prefecture, ringed by mountains west of Tokyo."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Gentle pressing with cool stainless fermentation; some sur lie versions."
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unoaked; occasional lees ageing for texture."
+    }
+   ],
+   "process": "A humid climate and a thick-skinned pink grape give low sugar and subtle aromatics, handled gently and fermented cold to preserve the wine's deliberate delicacy."
+  }
+ }
+]

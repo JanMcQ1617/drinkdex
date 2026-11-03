@@ -1,13 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { normalizePhone } from '@/lib/contacts';
-import { normalizeHandle } from '@/lib/instagram';
-
 /* ==================================================================== */
 /* Discovery claims                                                     */
 /*                                                                      */
-/* Two ways to be findable — your phone number and your Instagram        */
-/* handle — and both work the same way: the device hashes the value and  */
+/* One way to be findable — your phone number: the device hashes it and */
 /* the server stores only the hash, in profile_secrets, which no client  */
 /* can read (migration 008). That is deliberate, and it has one          */
 /* consequence: the app cannot ask the server what it claimed. So the    */
@@ -19,16 +15,14 @@ import { normalizeHandle } from '@/lib/instagram';
 /* on deletion. The keys carry no user id for that reason — nothing here */
 /* outlives the session that wrote it.                                   */
 /*                                                                      */
-/* PHONE IS THE ONE THAT MATTERS. An Instagram import needs BOTH people  */
-/* to have typed a handle, which almost nobody will. A phone number      */
-/* needs only that the two of you are already in each other's address    */
-/* books — which is the normal state of knowing someone. Collecting it   */
-/* at signup is what turns contact matching from a two-sided chore into  */
-/* one tap, and it is why signup asks.                                   */
+/* There were two until v4.14: an Instagram handle too, for the import   */
+/* Find friends no longer has. It was always the weaker one (a match     */
+/* needed BOTH people to have claimed a handle, where a number needs     */
+/* only that you are in each other's address books), and                */
+/* retireInstagram at the bottom takes back what it left.                */
 /* ==================================================================== */
 
 const PHONE_KEY = 'clink-my-phone';
-const HANDLE_KEY = 'clink-ig-handle';
 
 /*
  * Tells mounted cards that something here changed underneath them.
@@ -39,7 +33,7 @@ const HANDLE_KEY = 'clink-ig-handle';
  * drainPendingClaims (store/auth.ts) has fetched the profile row and made
  * the RPC — two round trips later — so the one read always lost, and the
  * step asked for a number the user had typed seconds earlier and kept
- * asking. Every writer below notifies, including the two the drain
+ * asking. Every writer below notifies, including the one the drain
  * calls, so a card re-reads when the claim actually lands without the
  * auth store having to know the card exists.
  */
@@ -70,29 +64,21 @@ export async function forgetRememberedPhone(): Promise<void> {
   notify();
 }
 
-export async function rememberHandle(handle: string): Promise<void> {
-  await AsyncStorage.setItem(HANDLE_KEY, handle);
-  notify();
-}
-export async function getRememberedHandle(): Promise<string | null> {
-  return AsyncStorage.getItem(HANDLE_KEY);
-}
-export async function forgetRememberedHandle(): Promise<void> {
-  await AsyncStorage.removeItem(HANDLE_KEY);
-  notify();
-}
-
 /* ==================================================================== */
 /* What was claimed at signup, pending a session                        */
 /*                                                                      */
-/* Neither hash can be written during signUp. When the project requires  */
+/* The hash cannot be written during signUp. When the project requires   */
 /* email confirmation the call returns no session at all, and even when  */
 /* it does return one, the profile row is still being written by the     */
 /* on_auth_user_created trigger — profile_secrets references profiles,   */
 /* so an insert before that lands violates the foreign key.              */
 /*                                                                      */
-/* So both claims are parked here and drained once the profile row is    */
+/* So the claim was parked here and drained once the profile row is      */
 /* confirmed to exist. See drainPendingClaims in src/store/auth.ts.      */
+/* Nothing parks one any more (the old email form did); what is read     */
+/* below is what builds 8 to 11 left on phones still waiting on an email */
+/* confirmation. Those records can hold an Instagram handle too, which   */
+/* is no longer written anywhere: it goes when the record does.          */
 /*                                                                      */
 /* NOT passed through auth user_metadata, which would be shorter:        */
 /* metadata is a second copy living outside profile_secrets, and         */
@@ -103,8 +89,8 @@ export async function forgetRememberedHandle(): Promise<void> {
 const PENDING_KEY = 'clink-pending-claims';
 
 /**
- * The email is stored alongside the claims and checked before either hash
- * is written. Without it, a signup that is started but never confirmed
+ * The email is stored alongside the claim and checked before the hash is
+ * written. Without it, a signup that is started but never confirmed
  * leaves claims parked on the device that would attach themselves to
  * whatever account signs in next — on a shared phone, someone else's.
  */
@@ -112,28 +98,6 @@ export interface PendingClaims {
   email: string;
   /** Normalized to its last 10 significant digits, as contacts.ts does. */
   phone?: string;
-  /** Normalized: lowercased, '@' and URL wrappers stripped. */
-  handle?: string;
-}
-
-export async function setPendingClaims(
-  email: string,
-  claims: { phone?: string; handle?: string },
-): Promise<void> {
-  const phone = claims.phone ? (normalizePhone(claims.phone) ?? undefined) : undefined;
-  const handle = claims.handle ? (normalizeHandle(claims.handle) ?? undefined) : undefined;
-
-  // Nothing worth parking. Clear rather than storing an empty record, so
-  // a later drain does not see a claim-less entry and have to reason about it.
-  if (!phone && !handle) {
-    await clearPendingClaims();
-    return;
-  }
-
-  await AsyncStorage.setItem(
-    PENDING_KEY,
-    JSON.stringify({ email: email.trim().toLowerCase(), phone, handle } satisfies PendingClaims),
-  );
 }
 
 export async function getPendingClaims(): Promise<PendingClaims | null> {
@@ -171,53 +135,41 @@ export async function getParkedClaims(
 }
 
 /**
- * Takes one field out of what is parked, once the user has settled it by
- * hand on a card.
+ * Takes the parked number away, once the user has settled it by hand on a
+ * card.
  *
  * A claim stays parked when the drain fails offline, and the drain tries
  * again on every profile load. Left in place, a parked number would be
  * written back on the next launch after the user had tapped "Stop being
  * findable" — an opt-out quietly undone. The card's own save or opt-out is
- * the newer answer, so the parked one goes. The other field stays parked
- * for the drain.
+ * the newer answer, so the parked one goes. It is the only claim still
+ * drained (the handle went with the Instagram import), so the whole record
+ * goes with it.
  */
-export async function dropParkedClaim(field: 'phone' | 'handle'): Promise<void> {
+export async function dropParkedClaim(field: 'phone'): Promise<void> {
   const pending = await getPendingClaims();
-  if (!pending || !pending[field]) return;
-  const rest: PendingClaims = { ...pending, [field]: undefined };
-  if (!rest.phone && !rest.handle) {
-    await clearPendingClaims();
-    return;
-  }
-  await AsyncStorage.setItem(PENDING_KEY, JSON.stringify(rest));
-  notify();
+  if (!pending?.[field]) return;
+  await clearPendingClaims();
 }
 
 /* ==================================================================== */
 /* Matching within the daily quota                                      */
 /*                                                                      */
 /* The server answers at most 500 hashes per call and 3,000 per account   */
-/* per rolling day, across contacts and Instagram together (migration    */
-/* 011). Past that a call raises 'rate_limited' and is not charged.      */
+/* per rolling day (migration 011). Past that a call raises              */
+/* 'rate_limited' and is not charged.                                    */
 /*                                                                      */
-/* matchContacts and matchInstagram already chunk, but they throw on the */
-/* first refusal and everything the earlier chunks found goes with it.   */
-/* For an Instagram list that is every large import, every day: 3,000     */
-/* hashes are spent, the eleventh call is refused, and the user is told  */
-/* to come back tomorrow to hit the same wall. So the slicing happens    */
-/* here as well, and a refusal keeps what was already found.             */
+/* matchContacts already chunks, but it throws on the first refusal and  */
+/* everything the earlier chunks found goes with it. For a large address */
+/* book that is every check, every day: 3,000 hashes are spent, the      */
+/* eleventh call is refused, and the user is told to come back tomorrow  */
+/* to hit the same wall. So the slicing happens here as well, and a      */
+/* refusal keeps what was already found. (The Instagram import, which    */
+/* shared the quota until v4.14, was the list that hit it most.)         */
 /* ==================================================================== */
 
 /** What a refused contacts check says. The quota is the account's, not the screen's. */
 export const RATE_LIMITED_MESSAGE = 'You have checked a lot of numbers today. Try again tomorrow.';
-
-/*
- * The same meter, worded for the Instagram card. "Numbers" means nothing
- * there, but "usernames" would be just as wrong after a contacts check has
- * spent the day's quota, since the two share it. This says only what is
- * true either way.
- */
-export const RATE_LIMITED_IMPORT_MESSAGE = 'You have run a lot of checks today. Try again tomorrow.';
 
 /*
  * Mirrors HASHES_PER_CALL in lib/social.ts, so each slice is exactly one
@@ -284,78 +236,58 @@ export function discoveryErrorMessage(error: unknown, fallback: string): string 
 }
 
 /* ==================================================================== */
+/* Instagram, retired                                                   */
+/*                                                                      */
+/* v4.14 took the Instagram import out of Find friends (Jan: "remove     */
+/* the Instagram part"; specs/v4.14/find-friends.md). A phone that used  */
+/* it still holds what it wrote: the imported list, up to 5,000 other    */
+/* people's usernames; when that list was asked for; and the handle the  */
+/* account claimed, whose hash is on the server. The keys and buttons    */
+/* that let a person forget them went with the section, and a privacy   */
+/* promise with no button behind it is not one, so this forgets them by  */
+/* itself, on the first profile load after the update; on every load     */
+/* after that it finds nothing to do.                                    */
+/*                                                                      */
+/* The handle is taken back on the server too, not only here: build 39  */
+/* and older can still match against it, and nothing on screen can say  */
+/* "Stop being findable" for it any more. Only when this phone remembers */
+/* making a claim, so no other account pays a round trip. Its key goes   */
+/* only once the server has agreed; offline, the next load tries again.  */
+/* A claim made on another phone, or forgotten by a sign-out, cannot be  */
+/* seen from here: that is the server cleanup the spec lists for later.  */
+/* ==================================================================== */
+
+const HANDLE_KEY = 'clink-ig-handle';
+const IG_CONNECTIONS_KEY = 'clink-ig-connections';
+const IG_REQUEST_KEY = 'clink-ig-requested';
+
+/**
+ * Forgets what the Instagram import left on this phone, and takes back
+ * its handle claim through `withdraw` (the auth store passes the RPC, so
+ * this file stays free of lib/social). A no-op on every phone that never
+ * used it, which is nearly all of them.
+ */
+export async function retireInstagram(withdraw: () => Promise<void>): Promise<void> {
+  await AsyncStorage.multiRemove([IG_CONNECTIONS_KEY, IG_REQUEST_KEY]);
+  if (!(await AsyncStorage.getItem(HANDLE_KEY))) return;
+  await withdraw();
+  await AsyncStorage.removeItem(HANDLE_KEY);
+}
+
+/* ==================================================================== */
 /* Forgetting                                                           */
 /* ==================================================================== */
 
 /**
- * Where InstagramImport caches the parsed export. Exported so the cache
- * and the code that clears it cannot name two different keys.
- */
-export const IG_CONNECTIONS_KEY = 'clink-ig-connections';
-
-/* ==================================================================== */
-/* When the Instagram list was asked for                                 */
-/*                                                                      */
-/* Instagram makes the download in the background and it usually takes   */
-/* about half an hour, so the import is two visits: ask, leave, come     */
-/* back. Remembering when "Request your list" was tapped is what lets    */
-/* the second visit lead with choosing the download, and say how long    */
-/* ago it was asked for, instead of starting the errand over.            */
-/*                                                                      */
-/* The one key here that names its account, inside the value rather      */
-/* than in the key, so clearDiscoveryCache still removes it by name.     */
-/* Sign-out clears it, but that clear is best-effort; if it failed, the  */
-/* next account on this phone would be told it had asked for a list it   */
-/* never asked for, and led straight past the step that asks.            */
-/* ==================================================================== */
-
-const IG_REQUEST_KEY = 'clink-ig-requested';
-
-/*
- * Instagram keeps a finished download for a few days (four, at the time
- * of writing) and then it is gone. A request older than that has nothing
- * waiting behind it, so it reads as never made and the card asks again.
- */
-const IG_REQUEST_TTL_MS = 4 * 24 * 60 * 60 * 1000;
-
-/** Records that `userId` has just asked Instagram for their list. */
-export async function rememberInstagramRequest(userId: string): Promise<void> {
-  await AsyncStorage.setItem(IG_REQUEST_KEY, JSON.stringify({ userId, at: Date.now() }));
-  notify();
-}
-
-/**
- * When `userId` asked Instagram for their list, as epoch milliseconds, or
- * null: never, another account's, or too long ago to still be waiting.
- */
-export async function getInstagramRequest(userId: string): Promise<number | null> {
-  const raw = await AsyncStorage.getItem(IG_REQUEST_KEY);
-  if (!raw) return null;
-  try {
-    const parsed = JSON.parse(raw) as { userId?: unknown; at?: unknown };
-    if (parsed.userId !== userId || typeof parsed.at !== 'number') return null;
-    return Date.now() - parsed.at > IG_REQUEST_TTL_MS ? null : parsed.at;
-  } catch {
-    return null;
-  }
-}
-
-/** The list arrived and was read, so nothing is waiting any more. */
-export async function forgetInstagramRequest(): Promise<void> {
-  await AsyncStorage.removeItem(IG_REQUEST_KEY);
-  notify();
-}
-
-/**
  * Everything discovery remembers on the device, cleared together: the
- * phone number, the Instagram handle, claims parked at signup, the
- * imported Instagram list, and when that list was last asked for.
+ * phone number, claims parked at signup, and anything the Instagram
+ * import left behind that retireInstagram has not yet cleared.
  *
  * Called by the auth store on sign-out and after account deletion.
- * Without it the previous account's number, handle and imported list —
- * up to 5,000 other people's usernames — survive on the phone and are
- * shown to whoever signs in next, as "you're findable" claims that are
- * not theirs.
+ * Without it the previous account's number — and, on a phone that used
+ * the import, its handle and up to 5,000 other people's usernames —
+ * survive on the phone and are shown to whoever signs in next, as
+ * "you're findable" claims that are not theirs.
  *
  * Cleared rather than kept per account. Keying by user id would spare a
  * returning user one question, at the cost of leaving their number in
@@ -370,8 +302,8 @@ export async function forgetInstagramRequest(): Promise<void> {
 export async function clearDiscoveryCache(): Promise<void> {
   await AsyncStorage.multiRemove([
     PHONE_KEY,
-    HANDLE_KEY,
     PENDING_KEY,
+    HANDLE_KEY,
     IG_CONNECTIONS_KEY,
     IG_REQUEST_KEY,
   ]);

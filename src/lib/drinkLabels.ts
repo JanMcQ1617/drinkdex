@@ -110,10 +110,16 @@ export function styleLabel(subcategory: string): string {
  * cocktail, the style alone for a spirit ("American whiskey", "Vermouth"),
  * since "American whiskey spirit" says the category twice. A drink with no
  * style (a custom one left blank) gets its category word.
+ *
+ * A wine's style with "wine" after it ("White wine", "Regional red wine",
+ * "Sparkling wine"), because a wine style read bare is an adjective: the
+ * eight subcategories are colours and methods, and "White" or "Dessert"
+ * alone does not say what the drink is. "Fortified wine" already does.
  */
 export function stylePhrase(drink: Pick<Drink, 'category' | 'subcategory'>): string {
   const style = styleLabel(drink.subcategory);
   if (drink.category === 'cocktail') return style ? `${style} cocktail` : 'Cocktail';
+  if (drink.category === 'wine') return style ? (/\bwine$/i.test(style) ? style : `${style} wine`) : 'Wine';
   return style || 'Spirit';
 }
 

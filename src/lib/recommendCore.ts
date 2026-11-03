@@ -45,7 +45,7 @@ export interface RecDrink {
   id: string;
   dexNumber: number;
   name: string;
-  category: 'cocktail' | 'spirit';
+  category: 'cocktail' | 'spirit' | 'wine';
   subcategory: string;
   abv?: string;
   origin: string;
@@ -99,7 +99,7 @@ export interface RecPick {
   id: string;
   name: string;
   dexNumber: number;
-  category: 'cocktail' | 'spirit';
+  category: 'cocktail' | 'spirit' | 'wine';
   subcategory: string;
   abv: string | undefined;
   photo: boolean;
@@ -351,6 +351,9 @@ export function createRecommender(data: RecommenderData) {
 
   /** 0, 0.5 or 1: how plainly a drink is this flavour. */
   function flavourHit(d: RecDrink, f: Flavour): number {
+    // v4.14: a wine card's notes are its style's (every atlas red says "red fruit"), so they would
+    // put every red under Fruity; and the first run's flavours are words for cocktails and spirits.
+    if (d.category === 'wine') return 0;
     const F = FLAVOURS[f];
     const abv = abvOf(d);
     if (F.subcats.includes(d.subcategory)) return 1;
@@ -402,6 +405,8 @@ export function createRecommender(data: RecommenderData) {
     if (a.drinks === 'spirits' && d.category === 'cocktail' && d.subcategory !== 'Spirit-Forward') return null;
     // Fortified wines are in the catalogue as spirits; never the opening pick for anyone.
     if (['Sherry', 'Port', 'Vermouth', 'Fortified'].includes(d.subcategory)) return null;
+    // v4.14: nor is a wine. The first run asks about cocktails and spirits; no answer chose wine.
+    if (d.category === 'wine') return null;
     if (a.exclude?.has(d.id)) return null;
 
     const why: (string | null)[] = [];

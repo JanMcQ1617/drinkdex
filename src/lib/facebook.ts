@@ -52,10 +52,11 @@ import type { UserProfile } from '@/types';
  * Friends from Facebook is built, and OFF. Decided 28 Oct 2026: the Meta
  * app's first App Review asks for email and public_profile only, because
  * user_friends needs a screencast of its own and is the hardest of the
- * three to get approved, and friends can already be found by contacts,
- * the Instagram list and username search. On only when the build sets
- * EXPO_PUBLIC_FACEBOOK_FRIENDS=on, the pattern REELS_ENABLED uses
- * (lib/reels.ts): static dot access, so Expo inlines it.
+ * three to get approved, and friends can already be found by contacts
+ * and username search (and then the Instagram list, which went in v4.14).
+ * On only when the build sets EXPO_PUBLIC_FACEBOOK_FRIENDS=on, the
+ * pattern REELS_ENABLED uses (lib/reels.ts): static dot access, so Expo
+ * inlines it.
  *
  * Off means: SCOPES leaves user_friends out, so Facebook's dialog never
  * mentions a friends list; syncFacebookFriends returns before it reads a

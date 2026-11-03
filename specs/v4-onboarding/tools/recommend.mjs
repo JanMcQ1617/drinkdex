@@ -11,6 +11,11 @@
  * six picks. This file REPLACED specs/v4-onboarding/tools/recommend.mjs: the two are the same
  * file, byte for byte, and scripts/check-recommend.mjs fails if they part.
  *
+ * v4.14 (specs/v4.14/wine-restore.md): wine is back in the catalogue, and the first run asks
+ * nothing about it, so a wine is never scored (score) and holds no taste chip (flavourHit is 0;
+ * spiritHits was already empty, a wine having no recipe and no spirit style). Every run and
+ * every figure above is unchanged by it.
+ *
  * Plain JS over the repo's own data, so the example runs in spec.md are the
  * real output, not invented. src/lib/recommend.ts ports this line for line
  * (it reads the same files through @/data, @/data/drinkPhotos and @/lib/bar).
@@ -182,6 +187,9 @@ export function spiritHits(d) {
 
 /** 0, 0.5 or 1: how plainly a drink is this flavour. */
 export function flavourHit(d, f) {
+  // v4.14: a wine card's notes are its style's (every atlas red says "red fruit"), so they would
+  // put every red under Fruity; and the first run's flavours are words for cocktails and spirits.
+  if (d.category === 'wine') return 0;
   const F = FLAVOURS[f];
   const abv = abvOf(d);
   if (F.subcats.includes(d.subcategory)) return 1;
@@ -244,6 +252,8 @@ export function score(d, a, bar) {
   if (a.drinks === 'spirits' && d.category === 'cocktail' && d.subcategory !== 'Spirit-Forward') return null;
   // Fortified wines are in the catalogue as spirits; never the opening pick for anyone.
   if (['Sherry', 'Port', 'Vermouth', 'Fortified'].includes(d.subcategory)) return null;
+  // v4.14: nor is a wine. The first run asks about cocktails and spirits; no answer chose wine.
+  if (d.category === 'wine') return null;
   if (a.exclude?.has(d.id)) return null;
 
   const why = [];

@@ -569,7 +569,8 @@ export const motion = {
 /* callers that tint by category recolour to ink and wash unedited.      */
 /* ==================================================================== */
 
-export const CATEGORY_ORDER: DrinkCategory[] = ['cocktail', 'spirit'];
+/* Wine last: it came back after the other two (v4.14), and it numbers after them. */
+export const CATEGORY_ORDER: DrinkCategory[] = ['cocktail', 'spirit', 'wine'];
 
 export const CATEGORY_META: Record<
   DrinkCategory,
@@ -605,6 +606,16 @@ export const CATEGORY_META: Record<
     fieldTo: '#F5F5F5',
     emoji: '🥃',
     blurb: 'Distilled & bold',
+  },
+  wine: {
+    label: 'Wine',
+    plural: 'Wines',
+    color: '#0A0A0A',
+    wash: '#F5F5F5',
+    fieldFrom: '#FFFFFF',
+    fieldTo: '#F5F5F5',
+    emoji: '🍷',
+    blurb: 'Pressed & aged',
   },
 };
 

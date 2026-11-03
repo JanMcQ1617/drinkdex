@@ -1,0 +1,2274 @@
+number,name,producer/grape,style,country
+2381,Prosecco,"Glera predominantly, with Verdiso, Bianchetta and Perera permitted in support",Sparkling,Italy
+2404,Napa Valley,"Cabernet Sauvignon, often with Merlot, Cabernet Franc and Petit Verdot",Regional Red,USA
+2430,Marlborough,Sauvignon Blanc,White,New Zealand
+2414,Mendoza,"Malbec, with Cabernet Sauvignon and Bonarda alongside",Regional Red,Argentina
+2422,Barossa Valley,"Shiraz, with Grenache and Mataro alongside",Regional Red,Australia
+2405,Sonoma Coast,Chardonnay,White,USA
+2406,Willamette Valley,Pinot Noir,Regional Red,USA
+2378,Franciacorta,"Chardonnay and Pinot Nero, plus Pinot Bianco and native Erbamat",Sparkling,Italy
+2441,Mosel,Riesling,White,Germany
+2434,Stellenbosch,"Cabernet Sauvignon, Merlot, Cabernet Franc and Syrah",Regional Red,South Africa
+2431,Central Otago,Pinot Noir,Regional Red,New Zealand
+2425,Margaret River,"Cabernet Sauvignon and Merlot, with Chardonnay and Sauvignon-Semillon for whites",Regional Red,Australia
+2409,Paso Robles,"Syrah, Grenache, Mourvèdre and Zinfandel",Regional Red,USA
+2407,Columbia Valley,"Syrah, Cabernet Sauvignon and Merlot",Regional Red,USA
+2428,McLaren Vale,"Shiraz and Grenache, with Mataro and Cabernet Sauvignon",Regional Red,Australia
+2408,Finger Lakes,"Riesling, with some Cabernet Franc and Grüner Veltliner alongside",White,USA
+2410,Sta. Rita Hills,"Pinot Noir, with some Chardonnay and Syrah",Regional Red,USA
+2423,Hunter Valley,Semillon,White,Australia
+2424,Coonawarra,"Cabernet Sauvignon, with some Shiraz and Merlot",Regional Red,Australia
+2426,Yarra Valley,"Chardonnay and Pinot Noir, with some Pinot Meunier",Sparkling,Australia
+2427,Clare Valley,Riesling,White,Australia
+2429,Rutherglen,"Muscat à Petits Grains Rouges, known locally as Brown Muscat",Fortified Wine,Australia
+2415,Valle de Uco,"Malbec, with Cabernet Franc and Chardonnay planted alongside",Regional Red,Argentina
+2416,Cafayate,Torrontés Riojano,White,Argentina
+2417,Colchagua Valley,"Carmenère and Cabernet Sauvignon, with Syrah alongside",Regional Red,Chile
+2418,Maipo Valley,"Cabernet Sauvignon, with Merlot and Carmenère",Regional Red,Chile
+2419,Casablanca Valley,"Sauvignon Blanc and Chardonnay, with some Pinot Noir",White,Chile
+2420,Itata Valley,"País and Cinsault, some over a century old and ungrafted",Regional Red,Chile
+2432,Hawke's Bay,"Merlot, Cabernet Sauvignon, Cabernet Franc and Syrah",Regional Red,New Zealand
+2433,Martinborough,Pinot Noir,Regional Red,New Zealand
+2442,Rheingau,Riesling,White,Germany
+2443,Pfalz,"Riesling, with Spätburgunder, Weissburgunder and Grauburgunder",White,Germany
+2444,Baden,"Spätburgunder (Pinot Noir), with Grauburgunder and Weissburgunder",Regional Red,Germany
+2435,Swartland,"Syrah, Grenache, Cinsault and Chenin Blanc, much of it from old bush vines",Regional Red,South Africa
+2436,Hemel-en-Aarde Valley,Pinot Noir and Chardonnay,Regional Red,South Africa
+2437,Constantia,Muscat de Frontignan,Dessert,South Africa
+2438,Wachau,Grüner Veltliner and Riesling,White,Austria
+2439,Kamptal,Grüner Veltliner and Riesling,White,Austria
+2440,Mittelburgenland,Blaufränkisch,Regional Red,Austria
+2411,Niagara Peninsula,"Vidal Blanc and Riesling, sometimes Cabernet Franc",Dessert,Canada
+2412,Okanagan Valley,"Pinot Gris, Riesling, Gewürztraminer and Chardonnay",White,Canada
+2447,Egri Bikavér,"Kékfrankos as the backbone, blended with Kadarka, Merlot, Cabernet Franc and others",Regional Red,Hungary
+2448,Villány,"Cabernet Franc, with Merlot, Cabernet Sauvignon and Portugieser",Regional Red,Hungary
+2458,Nemea,Agiorgitiko,Regional Red,Greece
+2459,Naoussa,Xinomavro,Regional Red,Greece
+2460,Santorini,"Assyrtiko, with Athiri and Aidani",White,Greece
+2445,Cornalin du Valais,"Cornalin, an indigenous Valais variety",Regional Red,Switzerland
+2449,Goriška Brda,"Rebula (Ribolla Gialla), Friulano, Chardonnay and Pinot Grigio",White,Slovenia
+2450,Dingač,Plavac Mali,Regional Red,Croatia
+2456,Kakheti Qvevri Amber,Rkatsiteli and Mtsvane,Skin-Contact,Georgia
+2461,Bekaa Valley,"Cinsault, Carignan, Cabernet Sauvignon, Syrah and Grenache",Regional Red,Lebanon
+2462,Upper Galilee,"Cabernet Sauvignon, Merlot, Syrah and Cabernet Franc",Regional Red,Israel
+2463,Judean Hills,"Cabernet Sauvignon, Syrah, Merlot and increasingly Mediterranean varieties",Regional Red,Israel
+2413,Valle de Guadalupe,"Nebbiolo, Tempranillo, Cabernet Sauvignon, Grenache and Syrah, freely blended",Regional Red,Mexico
+2421,Serra Gaúcha,"Chardonnay, Pinot Noir and Riesling Itálico",Sparkling,Brazil
+2446,Znojmo,"Grüner Veltliner, Riesling, Welschriesling and Pálava",White,Czechia
+2451,Fruška Gora,"Welschriesling, Riesling Italico, Sauvignon Blanc and Traminac",White,Serbia
+2452,Dealu Mare,"Fetească Neagră, with Cabernet Sauvignon, Merlot and Băbească Neagră",Regional Red,Romania
+2453,Cotnari,"Grasă de Cotnari, with Tămâioasă Românească, Frâncușă and Fetească Albă",Dessert,Romania
+2454,Thracian Lowlands,"Mavrud, Rubin and Cabernet Sauvignon",Regional Red,Bulgaria
+2455,Negru de Purcari,"Cabernet Sauvignon, Saperavi and the indigenous Rară Neagră",Regional Red,Moldova
+2457,Areni,Areni Noir,Regional Red,Armenia
+2464,Cappadocia,"Kalecik Karası, Öküzgözü, Boğazkere and Emir for whites",Regional Red,Turkey
+2465,Guerrouane,"Cinsault, Grenache and Carignan",Rosé,Morocco
+2466,Helan Mountain East,"Cabernet Sauvignon, Merlot and Cabernet Gernischt",Regional Red,China
+2467,Nashik,"Sauvignon Blanc, Chenin Blanc and Viognier",White,India
+2468,Yamanashi,Koshu,White,Japan
+2830,Alsace Grand Cru,"Riesling, Gewurztraminer, Pinot Gris, Muscat Blanc à Petits Grains",White,France
+2948,Crémant de Bourgogne,"Chardonnay, Pinot Noir",Sparkling,France
+3102,Crémant de Loire,"Chenin Blanc, Cabernet Franc",Sparkling,France
+2829,Alsace,"Riesling, Gewurztraminer, Pinot Gris",White,France
+2905,Bordeaux Supérieur,"Merlot, Cabernet Sauvignon",Regional Red,France
+2915,Graves,"Cabernet Sauvignon, Merlot",Regional Red,France
+2918,Haut-Médoc,"Cabernet Sauvignon, Merlot",Regional Red,France
+2920,Margaux,"Cabernet Sauvignon, Merlot",Regional Red,France
+2921,Médoc,"Cabernet Sauvignon, Merlot",Regional Red,France
+2923,Pauillac,"Cabernet Sauvignon, Merlot",Regional Red,France
+2924,Pessac-Léognan,"Cabernet Sauvignon, Merlot",Regional Red,France
+2926,Saint-Estèphe,"Cabernet Sauvignon, Merlot",Regional Red,France
+2927,Saint-Julien,"Cabernet Sauvignon, Merlot",Regional Red,France
+2938,Pomerol,"Merlot, Cabernet Franc",Regional Red,France
+2940,Saint-Émilion,"Merlot, Cabernet Franc",Regional Red,France
+2941,Saint-Émilion Grand Cru,"Merlot, Cabernet Franc",Regional Red,France
+3078,Languedoc,"Grenache, Syrah, Mourvèdre",Regional Red,France
+3081,Minervois,"Syrah, Grenache, Carignan",Regional Red,France
+3186,Côtes du Rhône,"Grenache, Syrah, Carignan",Regional Red,France
+3187,Côtes du Rhône Villages,"Grenache, Syrah, Mourvèdre",Regional Red,France
+3190,Gigondas,"Grenache, Syrah, Mourvèdre",Regional Red,France
+3213,Vacqueyras,"Grenache, Syrah",Regional Red,France
+3794,Bolgheri,"Cabernet Sauvignon, Merlot, Cabernet Franc",Regional Red,Italy
+3032,Champagne Blanc de Blancs,Chardonnay,Sparkling,France
+3789,Trento,"Chardonnay, Pinot Noir",Sparkling,Italy
+2888,Beaujolais,Gamay,Regional Red,France
+2890,Beaujolais-Villages,Gamay,Regional Red,France
+2895,Fleurie,Gamay,Regional Red,France
+2897,Morgon,Gamay,Regional Red,France
+2898,Moulin-à-Vent,Gamay,Regional Red,France
+2908,Entre-Deux-Mers,"Sauvignon Blanc, Sémillon",White,France
+2943,Bourgogne,Pinot Noir,Regional Red,France
+2949,Chablis Grand Cru,Chardonnay,White,France
+2950,Chablis Premier Cru,Chardonnay,White,France
+2952,Petit Chablis,Chardonnay,White,France
+2962,Beaune,Pinot Noir,Regional Red,France
+2965,Chassagne-Montrachet,Chardonnay,White,France
+2968,Corton,Pinot Noir,Regional Red,France
+2969,Corton-Charlemagne,Chardonnay,White,France
+2975,Meursault,Chardonnay,White,France
+2977,Montrachet,Chardonnay,White,France
+2979,Pommard,Pinot Noir,Regional Red,France
+2980,Puligny-Montrachet,Chardonnay,White,France
+2985,Volnay,Pinot Noir,Regional Red,France
+2989,Chambolle-Musigny,Pinot Noir,Regional Red,France
+3000,Gevrey-Chambertin,Pinot Noir,Regional Red,France
+3013,Nuits-Saint-Georges,Pinot Noir,Regional Red,France
+3015,Romanée-Conti,Pinot Noir,Regional Red,France
+3018,Vosne-Romanée,Pinot Noir,Regional Red,France
+3021,Mâcon-Villages,Chardonnay,White,France
+3022,Pouilly-Fuissé,Chardonnay,White,France
+3109,Saumur-Champigny,Cabernet Franc,Regional Red,France
+3119,Pouilly-Fumé,Sauvignon Blanc,White,France
+3131,Chinon,Cabernet Franc,Regional Red,France
+3145,Vouvray,Chenin Blanc,White,France
+3159,Côtes de Provence,"Grenache, Cinsault, Syrah",Rosé,France
+3172,Cornas,Syrah,Regional Red,France
+3174,Crozes-Hermitage,Syrah,Regional Red,France
+3175,Hermitage,Syrah,Regional Red,France
+3177,Saint-Joseph,Syrah,Regional Red,France
+3253,Cahors,Malbec,Regional Red,France
+3796,Bolgheri Sassicaia,"Cabernet Sauvignon, Cabernet Franc",Regional Red,Italy
+4532,Sonoma County,"Pinot Noir, Cabernet Sauvignon, Zinfandel",Regional Red,USA
+3607,Franciacorta Satèn,Chardonnay,Sparkling,Italy
+3071,Corbières,"Carignan, Grenache, Syrah",Regional Red,France
+3219,Banyuls,Grenache,Fortified Wine,France
+3645,Barbaresco,Nebbiolo,Regional Red,Italy
+3691,Roero,Nebbiolo,Regional Red,Italy
+3724,Primitivo di Manduria,Zinfandel,Regional Red,Italy
+3776,Alto Adige (Südtirol),"Pinot Gris, Gewurztraminer, Sauvignon Blanc",White,Italy
+3800,Chianti Classico,Sangiovese,Regional Red,Italy
+3821,Rosso di Montalcino,Sangiovese,Regional Red,Italy
+3837,Vino Nobile di Montepulciano,Sangiovese,Regional Red,Italy
+4454,Santa Lucia Highlands,"Pinot Noir, Syrah",Regional Red,USA
+4470,Lodi,"Zinfandel, Cabernet Sauvignon",Regional Red,USA
+4485,Anderson Valley,"Pinot Noir, Chardonnay",Regional Red,USA
+4501,Los Carneros,"Chardonnay, Pinot Noir",White,USA
+4531,Russian River Valley,"Pinot Noir, Chardonnay",Regional Red,USA
+4650,Walla Walla Valley,"Cabernet Sauvignon, Syrah",Regional Red,USA
+4652,Yakima Valley,"Merlot, Syrah",Regional Red,USA
+2573,Tasmania,"Chardonnay, Pinot Noir",Sparkling,Australia
+2838,Crémant d'Alsace,"Pinot Blanc, Auxerrois, Chardonnay",Sparkling,France
+2532,Mudgee,"Syrah, Cabernet Sauvignon",Regional Red,Australia
+2547,Adelaide Hills,"Sauvignon Blanc, Chardonnay",White,Australia
+2551,Eden Valley,"Riesling, Syrah",White,Australia
+3154,Bandol,"Mourvèdre, Grenache",Regional Red,France
+3995,Gimblett Gravels,"Syrah, Merlot, Cabernet Sauvignon",Regional Red,New Zealand
+4262,Ribera del Duero,Tempranillo,Regional Red,Spain
+4267,Toro,Tempranillo,Regional Red,Spain
+4277,La Mancha,"Tempranillo, Airén",Regional Red,Spain
+4284,Valdepeñas,Tempranillo,Regional Red,Spain
+4293,Montsant,"Grenache, Carignan",Regional Red,Spain
+4324,Campo de Borja,Grenache,Regional Red,Spain
+4326,Navarra,"Grenache, Tempranillo",Rosé,Spain
+4330,Rioja Alavesa,Tempranillo,Regional Red,Spain
+4331,Rioja Alta,"Tempranillo, Graciano",Regional Red,Spain
+4505,Oakville,Cabernet Sauvignon,Regional Red,USA
+4506,Rutherford,Cabernet Sauvignon,Regional Red,USA
+4509,Stags Leap District,Cabernet Sauvignon,Regional Red,USA
+4519,Alexander Valley,Cabernet Sauvignon,Regional Red,USA
+4522,Dry Creek Valley,Zinfandel,Regional Red,USA
+4600,Dundee Hills,Pinot Noir,Regional Red,USA
+4645,Red Mountain,Cabernet Sauvignon,Regional Red,USA
+2732,Aconcagua Valley,"Cabernet Sauvignon, Syrah",Regional Red,Chile
+2733,Leyda Valley,"Pinot Noir, Sauvignon Blanc",Regional Red,Chile
+2758,Limarí Valley,"Chardonnay, Syrah",White,Chile
+2913,Barsac,"Sémillon, Sauvignon Blanc",Dessert,France
+4001,Nelson,"Sauvignon Blanc, Chardonnay",White,New Zealand
+3343,Deutscher Sekt b.A.,"Riesling, Pinot Blanc",Sparkling,Germany
+4219,Methode Cap Classique,"Chardonnay, Pinot Noir",Sparkling,South Africa
+2490,Luján de Cuyo,Malbec,Regional Red,Argentina
+3337,Nahe,Riesling,White,Germany
+3347,Kabinett,Riesling,White,Germany
+3348,Spätlese,Riesling,White,Germany
+3369,Rheinhessen,"Riesling, Sylvaner, Müller-Thurgau",White,Germany
+4005,Wairarapa,Pinot Noir,Regional Red,New Zealand
+4029,Alentejo,"Tempranillo, Trincadeira, Alicante Bouschet",Regional Red,Portugal
+4191,Walker Bay,"Pinot Noir, Chardonnay",Regional Red,South Africa
+4202,Paarl,"Syrah, Cabernet Sauvignon",Regional Red,South Africa
+4263,Rueda,"Verdejo, Sauvignon Blanc",White,Spain
+3341,Auslese,Riesling,Dessert,Germany
+3342,Beerenauslese,Riesling,Dessert,Germany
+3344,Eiswein,Riesling,Dessert,Germany
+3128,Muscadet Sèvre et Maine,Melon de Bourgogne,White,France
+3171,Condrieu,Viognier,White,France
+3267,Madiran,Tannat,Regional Red,France
+4060,Douro,"Touriga Nacional, Touriga Franca, Tempranillo",Regional Red,Portugal
+4210,Vin de Constance,Muscat Blanc à Petits Grains,Dessert,South Africa
+3265,Jurançon,"Petit Manseng, Gros Manseng",Dessert,France
+3511,Fiano di Avellino,Fiano,White,Italy
+3513,Greco di Tufo,Greco,White,Italy
+3522,Taurasi,Aglianico,Regional Red,Italy
+3581,Frascati,"Malvasia, Trebbiano Toscano",White,Italy
+3609,Lugana,Turbiana,White,Italy
+3635,Verdicchio dei Castelli di Jesi,Verdicchio,White,Italy
+3646,Barbera d'Alba,Barbera,Regional Red,Italy
+3647,Barbera d'Asti,Barbera,Regional Red,Italy
+3666,Dolcetto d'Alba,Dolcetto,Regional Red,Italy
+3677,Gavi,Cortese,White,Italy
+3751,Cerasuolo di Vittoria,"Nero d'Avola, Frappato",Regional Red,Italy
+3759,Etna Rosso,"Nerello Mascalese, Nerello Cappuccio",Regional Red,Italy
+3845,Montefalco Sagrantino,Sagrantino,Regional Red,Italy
+3846,Orvieto,"Grechetto, Trebbiano Toscano",White,Italy
+3862,Bardolino,"Corvina, Rondinella",Regional Red,Italy
+3889,Valpolicella,"Corvina, Rondinella, Molinara",Regional Red,Italy
+3890,Valpolicella Classico,"Corvina, Rondinella",Regional Red,Italy
+3891,Valpolicella Ripasso,"Corvina, Rondinella",Regional Red,Italy
+4067,Porto Colheita,"Touriga Franca, Tempranillo",Fortified Wine,Portugal
+2633,Kremstal,"Grüner Veltliner, Riesling",White,Austria
+3834,Vin Santo del Chianti,"Trebbiano Toscano, Malvasia",Dessert,Italy
+4260,Bierzo,Mencía,Regional Red,Spain
+4295,Penedès,"Xarel·lo, Viura, Parellada",White,Spain
+4305,Rías Baixas,Albariño,White,Spain
+4314,Jumilla,Mourvèdre,Regional Red,Spain
+4231,Jerez-Xérès-Sherry,"Palomino, Pedro Ximénez, Muscat of Alexandria",Fortified Wine,Spain
+2593,Rutherglen Muscat,Muscat à Petits Grains Rouge,Fortified Wine,Australia
+3311,Franken,"Sylvaner, Müller-Thurgau",White,Germany
+4048,Bairrada,Baga,Regional Red,Portugal
+4056,Dão,"Touriga Nacional, Mencía, Alfrocheiro",Regional Red,Portugal
+4066,Porto Branco,"Malvasia Fina, Gouveio",Fortified Wine,Portugal
+4070,Porto Late Bottled Vintage,"Touriga Franca, Tinta Barroca",Fortified Wine,Portugal
+4081,Madeira Bual,Boal,Fortified Wine,Portugal
+4082,Madeira Malmsey,Malvasia,Fortified Wine,Portugal
+4088,Moscatel de Setúbal,Muscat of Alexandria,Fortified Wine,Portugal
+2621,Neusiedlersee,Zweigelt,Regional Red,Austria
+3456,Tokaji Eszencia,Furmint,Dessert,Hungary
+3461,Tokaji Szamorodni,"Furmint, Hárslevelű",Dessert,Hungary
+2847,Gentil,"Riesling, Gewurztraminer, Pinot Gris, Muscat Blanc à Petits Grains",White,France
+2904,Bordeaux Rouge,"Merlot, Cabernet Sauvignon, Cabernet Franc",Regional Red,France
+3068,Cabardès,"Syrah, Merlot, Cabernet Sauvignon",Regional Red,France
+3151,IGP Pays d'Oc,"Merlot, Syrah, Cabernet Sauvignon",Regional Red,France
+3034,Champagne Rosé,"Pinot Noir, Chardonnay",Sparkling,France
+3061,Crémant du Jura,"Chardonnay, Pinot Noir",Sparkling,France
+3073,Crémant de Limoux,"Chardonnay, Chenin Blanc",Sparkling,France
+2862,Moenchberg,"Riesling, Pinot Gris",White,France
+2870,Rangen,"Riesling, Pinot Gris",White,France
+2882,Vorbourg,"Riesling, Muscat Blanc à Petits Grains",White,France
+2909,Graves de Vayres,"Merlot, Cabernet Franc",Regional Red,France
+2912,Sainte-Foy-Côtes de Bordeaux,"Merlot, Cabernet Sauvignon",Regional Red,France
+2919,Listrac-Médoc,"Merlot, Cabernet Sauvignon",Regional Red,France
+2922,Moulis-en-Médoc,"Cabernet Sauvignon, Merlot",Regional Red,France
+2928,Blaye-Côtes de Bordeaux,"Merlot, Cabernet Sauvignon",Regional Red,France
+2929,Cadillac-Côtes de Bordeaux,"Merlot, Cabernet Sauvignon",Regional Red,France
+2930,Canon-Fronsac,"Merlot, Cabernet Franc",Regional Red,France
+2931,Castillon-Côtes de Bordeaux,"Merlot, Cabernet Franc",Regional Red,France
+2932,Côtes de Bourg,"Merlot, Malbec",Regional Red,France
+2933,Francs-Côtes de Bordeaux,"Merlot, Cabernet Franc",Regional Red,France
+2934,Fronsac,"Merlot, Cabernet Franc",Regional Red,France
+2935,Lalande-de-Pomerol,"Merlot, Cabernet Franc",Regional Red,France
+2936,Lussac-Saint-Émilion,"Merlot, Cabernet Franc",Regional Red,France
+2937,Montagne-Saint-Émilion,"Merlot, Cabernet Franc",Regional Red,France
+2939,Puisseguin-Saint-Émilion,"Merlot, Cabernet Franc",Regional Red,France
+2942,Saint-Georges-Saint-Émilion,"Merlot, Cabernet Franc",Regional Red,France
+2946,Bourgogne Passe-Tout-Grains,"Gamay, Pinot Noir",Regional Red,France
+2947,Coteaux Bourguignons,"Gamay, Pinot Noir",Regional Red,France
+3052,Vin de Corse,"Sangiovese, Sciaccarello, Grenache",Regional Red,France
+3074,Faugères,"Syrah, Grenache, Mourvèdre",Regional Red,France
+3076,Grés de Montpellier,"Syrah, Grenache, Mourvèdre",Regional Red,France
+3077,La Clape,"Syrah, Grenache, Mourvèdre",Regional Red,France
+3079,Limoux,"Chardonnay, Chenin Blanc, Mauzac",White,France
+3080,Malepère,"Merlot, Cabernet Franc",Regional Red,France
+3082,Minervois La Livinière,"Syrah, Grenache, Mourvèdre",Regional Red,France
+3087,Pic Saint-Loup,"Syrah, Grenache, Mourvèdre",Regional Red,France
+3088,Saint-Chinian,"Syrah, Grenache, Mourvèdre",Regional Red,France
+3089,Saint-Georges-d'Orques,"Syrah, Grenache",Regional Red,France
+3090,Terrasses du Larzac,"Syrah, Grenache, Cinsault",Regional Red,France
+3113,Côtes d'Auvergne,"Gamay, Pinot Noir",Regional Red,France
+3115,Saint-Pourçain,"Gamay, Pinot Noir",Regional Red,France
+3116,Châteaumeillant,"Gamay, Pinot Noir",Regional Red,France
+3124,Fiefs Vendéens,"Pinot Noir, Cabernet Franc",Regional Red,France
+3130,Cheverny,"Sauvignon Blanc, Chardonnay",White,France
+3139,Touraine-Amboise,"Malbec, Cabernet Franc",Regional Red,France
+3142,Touraine-Mesland,"Gamay, Malbec",Regional Red,France
+3149,IGP Île de Beauté,"Sangiovese, Syrah",Regional Red,France
+3152,IGP Val de Loire,"Sauvignon Blanc, Chardonnay",White,France
+3165,Les Baux-de-Provence,"Grenache, Syrah, Mourvèdre",Regional Red,France
+3180,Beaumes-de-Venise,"Grenache, Syrah",Regional Red,France
+3181,Cairanne,"Grenache, Syrah",Regional Red,France
+3185,Costières de Nîmes,"Grenache, Syrah",Regional Red,France
+3188,Duché d'Uzès,"Syrah, Grenache",Regional Red,France
+3189,Gadagne,"Grenache, Syrah",Regional Red,France
+3191,Grignan-les-Adhémar,"Grenache, Syrah",Regional Red,France
+3192,Lirac,"Grenache, Syrah, Mourvèdre",Regional Red,France
+3194,Massif d'Uchaux,"Grenache, Syrah",Regional Red,France
+3196,Nyons,"Grenache, Syrah",Regional Red,France
+3197,Plan de Dieu,"Grenache, Syrah",Regional Red,France
+3198,Puyméras,"Grenache, Syrah",Regional Red,France
+3201,Roaix,"Grenache, Syrah",Regional Red,France
+3202,Rochegude,"Grenache, Syrah",Regional Red,France
+3203,Rousset-les-Vignes,"Grenache, Syrah",Regional Red,France
+3204,Sablet,"Grenache, Syrah",Regional Red,France
+3205,Saint-Andéol,"Grenache, Syrah",Regional Red,France
+3206,Saint-Gervais,"Grenache, Syrah",Regional Red,France
+3207,Saint-Maurice,"Grenache, Syrah",Regional Red,France
+3208,Saint-Pantaléon-les-Vignes,"Grenache, Syrah",Regional Red,France
+3209,Sainte-Cécile,"Grenache, Syrah",Regional Red,France
+3210,Séguret,"Grenache, Syrah",Regional Red,France
+3211,Signargues,"Grenache, Syrah",Regional Red,France
+3212,Suze-la-Rousse,"Grenache, Syrah",Regional Red,France
+3214,Vaison-la-Romaine,"Grenache, Syrah",Regional Red,France
+3215,Valréas,"Grenache, Syrah",Regional Red,France
+3216,Ventoux,"Grenache, Syrah",Regional Red,France
+3217,Vinsobres,"Grenache, Syrah",Regional Red,France
+3218,Visan,"Grenache, Syrah",Regional Red,France
+3221,Collioure,"Grenache, Mourvèdre, Syrah",Regional Red,France
+3222,Côtes du Roussillon,"Grenache, Syrah, Carignan",Regional Red,France
+3223,Côtes du Roussillon Villages,"Grenache, Carignan, Syrah",Regional Red,France
+3250,Bergerac,"Merlot, Cabernet Sauvignon",Regional Red,France
+3252,Buzet,"Merlot, Cabernet Sauvignon",Regional Red,France
+3254,Côtes de Bergerac,"Merlot, Cabernet Franc",Regional Red,France
+3272,Pécharmant,"Merlot, Cabernet Sauvignon",Regional Red,France
+3811,Maremma Toscana,"Sangiovese, Cabernet Sauvignon, Merlot",Regional Red,Italy
+3027,Ambonnay,Pinot Noir,Sparkling,France
+3028,Avize,Chardonnay,Sparkling,France
+3029,Aÿ,Pinot Noir,Sparkling,France
+3030,Beaumont-sur-Vesle,Pinot Noir,Sparkling,France
+3031,Bouzy,Pinot Noir,Sparkling,France
+3033,Champagne Blanc de Noirs,"Pinot Noir, Meunier",Sparkling,France
+3035,Chouilly,Chardonnay,Sparkling,France
+3037,Cramant,Chardonnay,Sparkling,France
+3038,Le Mesnil-sur-Oger,Chardonnay,Sparkling,France
+3039,Louvois,Pinot Noir,Sparkling,France
+3040,Mailly-Champagne,Pinot Noir,Sparkling,France
+3041,Oger,Chardonnay,Sparkling,France
+3042,Oiry,Chardonnay,Sparkling,France
+3043,Puisieulx,Pinot Noir,Sparkling,France
+3045,Sillery,Pinot Noir,Sparkling,France
+3046,Tours-sur-Marne,Pinot Noir,Sparkling,France
+3047,Verzenay,Pinot Noir,Sparkling,France
+3048,Verzy,Pinot Noir,Sparkling,France
+3108,Saumur Brut,Chenin Blanc,Sparkling,France
+3170,Clairette de Die,"Muscat Blanc à Petits Grains, Clairette",Sparkling,France
+3232,Bugey-Cerdon,"Gamay, Poulsard",Sparkling,France
+3643,Alta Langa,"Pinot Noir, Chardonnay",Sparkling,Italy
+3893,Vigneti della Serenissima,"Chardonnay, Pinot Noir",Sparkling,Italy
+2831,Alsace Sélection de Grains Nobles,"Riesling, Gewurztraminer, Pinot Gris",Dessert,France
+2832,Alsace Vendanges Tardives,"Riesling, Gewurztraminer, Pinot Gris",Dessert,France
+2833,Altenberg de Bergbieten,Riesling,White,France
+2834,Altenberg de Bergheim,"Riesling, Gewurztraminer",White,France
+2835,Altenberg de Wolxheim,Riesling,White,France
+2836,Brand,"Riesling, Gewurztraminer",White,France
+2837,Bruderthal,"Riesling, Gewurztraminer",White,France
+2841,Engelberg,Riesling,White,France
+2842,Florimont,"Riesling, Gewurztraminer",White,France
+2843,Frankstein,Riesling,White,France
+2846,Geisberg,Riesling,White,France
+2848,Gloeckelberg,"Pinot Gris, Gewurztraminer",White,France
+2849,Goldert,"Muscat Blanc à Petits Grains, Gewurztraminer",White,France
+2853,Kanzlerberg,"Riesling, Gewurztraminer",White,France
+2854,Kastelberg,Riesling,White,France
+2856,Kirchberg de Barr,"Riesling, Gewurztraminer",White,France
+2857,Kirchberg de Ribeauvillé,Riesling,White,France
+2858,Kitterlé,"Riesling, Gewurztraminer",White,France
+2860,Mandelberg,"Riesling, Gewurztraminer",White,France
+2863,Muenchberg,Riesling,White,France
+2864,Ollwiller,Riesling,White,France
+2865,Osterberg,Riesling,White,France
+2867,Pfingstberg,Riesling,White,France
+2868,Pinot Noir d'Alsace,Pinot Noir,Regional Red,France
+2869,Praelatenberg,Riesling,White,France
+2871,Rosacker,Riesling,White,France
+2872,Saering,Riesling,White,France
+2873,Schlossberg,Riesling,White,France
+2874,Schoenenbourg,Riesling,White,France
+2875,Sommerberg,Riesling,White,France
+2879,Steinert,"Pinot Gris, Gewurztraminer",White,France
+2881,Steinklotz,Riesling,White,France
+2883,Wiebelsberg,Riesling,White,France
+2884,Wineck-Schlossberg,Riesling,White,France
+2885,Winzenberg,Riesling,White,France
+2889,Beaujolais Nouveau,Gamay,Regional Red,France
+2891,Brouilly,Gamay,Regional Red,France
+2892,Chénas,Gamay,Regional Red,France
+2893,Chiroubles,Gamay,Regional Red,France
+2894,Côte de Brouilly,Gamay,Regional Red,France
+2896,Juliénas,Gamay,Regional Red,France
+2899,Régnié,Gamay,Regional Red,France
+2900,Saint-Amour,Gamay,Regional Red,France
+2901,Bordeaux Blanc,"Sauvignon Blanc, Sémillon, Muscadelle",White,France
+2902,Bordeaux Clairet,"Merlot, Cabernet Franc",Rosé,France
+2903,Bordeaux Rosé,"Merlot, Cabernet Sauvignon",Rosé,France
+2916,Graves Blanc,"Sauvignon Blanc, Sémillon",White,France
+2925,Pessac-Léognan Blanc,"Sauvignon Blanc, Sémillon",White,France
+2945,Bourgogne Blanc,Chardonnay,White,France
+2951,Irancy,"Pinot Noir, César",Regional Red,France
+2953,Saint-Bris,Sauvignon Blanc,White,France
+2955,Givry,Pinot Noir,Regional Red,France
+2956,Mercurey,Pinot Noir,Regional Red,France
+2957,Montagny,Chardonnay,White,France
+2958,Rully,Chardonnay,White,France
+2959,Aloxe-Corton,Pinot Noir,Regional Red,France
+2960,Auxey-Duresses,Pinot Noir,Regional Red,France
+2961,Bâtard-Montrachet,Chardonnay,White,France
+2963,Bienvenues-Bâtard-Montrachet,Chardonnay,White,France
+2964,Blagny,Pinot Noir,Regional Red,France
+2966,Chevalier-Montrachet,Chardonnay,White,France
+2967,Chorey-lès-Beaune,Pinot Noir,Regional Red,France
+2970,Côte de Beaune-Villages,Pinot Noir,Regional Red,France
+2971,Criots-Bâtard-Montrachet,Chardonnay,White,France
+2972,Hautes-Côtes de Beaune,Pinot Noir,Regional Red,France
+2973,Ladoix,Pinot Noir,Regional Red,France
+2974,Maranges,Pinot Noir,Regional Red,France
+2976,Monthélie,Pinot Noir,Regional Red,France
+2978,Pernand-Vergelesses,Pinot Noir,Regional Red,France
+2981,Saint-Aubin,Chardonnay,White,France
+2982,Saint-Romain,Chardonnay,White,France
+2983,Santenay,Pinot Noir,Regional Red,France
+2984,Savigny-lès-Beaune,Pinot Noir,Regional Red,France
+2986,Bonnes-Mares,Pinot Noir,Regional Red,France
+2987,Chambertin,Pinot Noir,Regional Red,France
+2988,Chambertin-Clos de Bèze,Pinot Noir,Regional Red,France
+2990,Chapelle-Chambertin,Pinot Noir,Regional Red,France
+2991,Charmes-Chambertin,Pinot Noir,Regional Red,France
+2992,Clos de la Roche,Pinot Noir,Regional Red,France
+2993,Clos de Tart,Pinot Noir,Regional Red,France
+2994,Clos de Vougeot,Pinot Noir,Regional Red,France
+2995,Clos des Lambrays,Pinot Noir,Regional Red,France
+2996,Clos Saint-Denis,Pinot Noir,Regional Red,France
+2997,Côte de Nuits-Villages,Pinot Noir,Regional Red,France
+2998,Échézeaux,Pinot Noir,Regional Red,France
+2999,Fixin,Pinot Noir,Regional Red,France
+3001,Grands Échézeaux,Pinot Noir,Regional Red,France
+3002,Griotte-Chambertin,Pinot Noir,Regional Red,France
+3003,Hautes-Côtes de Nuits,Pinot Noir,Regional Red,France
+3004,La Grande Rue,Pinot Noir,Regional Red,France
+3005,La Romanée,Pinot Noir,Regional Red,France
+3006,La Tâche,Pinot Noir,Regional Red,France
+3007,Latricières-Chambertin,Pinot Noir,Regional Red,France
+3008,Marsannay,Pinot Noir,Regional Red,France
+3009,Mazis-Chambertin,Pinot Noir,Regional Red,France
+3010,Mazoyères-Chambertin,Pinot Noir,Regional Red,France
+3011,Morey-Saint-Denis,Pinot Noir,Regional Red,France
+3012,Musigny,Pinot Noir,Regional Red,France
+3014,Richebourg,Pinot Noir,Regional Red,France
+3016,Romanée-Saint-Vivant,Pinot Noir,Regional Red,France
+3017,Ruchottes-Chambertin,Pinot Noir,Regional Red,France
+3019,Vougeot,Pinot Noir,Regional Red,France
+3020,Mâcon,Chardonnay,White,France
+3023,Pouilly-Loché,Chardonnay,White,France
+3024,Pouilly-Vinzelles,Chardonnay,White,France
+3025,Saint-Véran,Chardonnay,White,France
+3026,Viré-Clessé,Chardonnay,White,France
+3036,Coteaux Champenois,Pinot Noir,Regional Red,France
+3051,Patrimonio,Sangiovese,Regional Red,France
+3053,Vin de Corse Calvi,"Sangiovese, Grenache",Rosé,France
+3054,Vin de Corse Figari,"Sangiovese, Sciaccarello",Regional Red,France
+3062,L'Étoile,"Chardonnay, Savagnin",White,France
+3091,Anjou,Cabernet Franc,Regional Red,France
+3092,Anjou Blanc,Chenin Blanc,White,France
+3093,Anjou-Villages,Cabernet Franc,Regional Red,France
+3094,Anjou-Villages Brissac,Cabernet Franc,Regional Red,France
+3096,Cabernet d'Anjou,"Cabernet Franc, Cabernet Sauvignon",Rosé,France
+3101,Coulée de Serrant,Chenin Blanc,White,France
+3106,Saumur,Cabernet Franc,Regional Red,France
+3107,Saumur Blanc,Chenin Blanc,White,France
+3110,Savennières,Chenin Blanc,White,France
+3111,Savennières Roche aux Moines,Chenin Blanc,White,France
+3112,Côte Roannaise,Gamay,Regional Red,France
+3114,Côtes du Forez,Gamay,Regional Red,France
+3117,Coteaux du Giennois,Sauvignon Blanc,White,France
+3118,Menetou-Salon,Sauvignon Blanc,White,France
+3121,Quincy,Sauvignon Blanc,White,France
+3122,Reuilly,Sauvignon Blanc,White,France
+3123,Sancerre Rouge,Pinot Noir,Regional Red,France
+3129,Bourgueil,Cabernet Franc,Regional Red,France
+3135,Jasnières,Chenin Blanc,White,France
+3136,Montlouis-sur-Loire,Chenin Blanc,White,France
+3137,Saint-Nicolas-de-Bourgueil,Cabernet Franc,Regional Red,France
+3138,Touraine,Sauvignon Blanc,White,France
+3140,Touraine-Azay-le-Rideau,Chenin Blanc,White,France
+3141,Touraine-Chenonceaux,Sauvignon Blanc,White,France
+3143,Touraine-Oisly,Sauvignon Blanc,White,France
+3144,Valençay,Sauvignon Blanc,White,France
+3146,Côtes de Toul,"Gamay, Pinot Noir",Rosé,France
+3157,Coteaux d'Aix-en-Provence,"Grenache, Syrah, Cinsault",Rosé,France
+3158,Coteaux Varois en Provence,"Grenache, Syrah",Rosé,France
+3164,Côtes de Provence Sainte-Victoire,"Grenache, Syrah",Rosé,France
+3167,Pierrevert,"Grenache, Syrah",Rosé,France
+3169,Châtillon-en-Diois,Gamay,Regional Red,France
+3183,Chusclan,"Grenache, Syrah",Rosé,France
+3193,Luberon,"Grenache, Syrah",Rosé,France
+3199,Rasteau,Grenache,Regional Red,France
+3231,Bugey,"Chardonnay, Altesse",White,France
+3233,Chautagne,"Gamay, Mondeuse Noire",Regional Red,France
+3255,Côtes de Duras,Sauvignon Blanc,White,France
+3257,Côtes du Marmandais,"Merlot, Abouriou",Regional Red,France
+3258,Entraygues-Le Fel,Chenin Blanc,White,France
+3490,Matera,"Zinfandel, Sangiovese",Regional Red,Italy
+3491,Terre dell'Alta Val d'Agri,"Merlot, Cabernet Sauvignon",Regional Red,Italy
+3527,Colli di Faenza,"Sangiovese, Cabernet Sauvignon",Regional Red,Italy
+3529,Colli di Rimini,"Sangiovese, Cabernet Sauvignon",Regional Red,Italy
+3532,Colli Romagna Centrale,"Cabernet Sauvignon, Sangiovese",Regional Red,Italy
+3566,Aprilia,"Merlot, Sangiovese",Regional Red,Italy
+3574,Circeo,"Merlot, Sangiovese",Regional Red,Italy
+3587,Nettuno,"Sangiovese, Merlot",Regional Red,Italy
+3606,Curtefranca,"Cabernet Sauvignon, Merlot",Regional Red,Italy
+3618,Terre del Colleoni,"Cabernet Sauvignon, Merlot",Regional Red,Italy
+3619,Valcalepio,"Merlot, Cabernet Sauvignon",Regional Red,Italy
+3786,Trentino,"Chardonnay, Pinot Gris",White,Italy
+3792,Barco Reale di Carmignano,"Sangiovese, Cabernet Sauvignon",Regional Red,Italy
+3798,Capalbio,"Sangiovese, Cabernet Sauvignon",Regional Red,Italy
+3799,Carmignano,"Sangiovese, Cabernet Sauvignon",Regional Red,Italy
+3805,Colline Lucchesi,"Sangiovese, Merlot",Regional Red,Italy
+3824,Sant'Antimo,"Cabernet Sauvignon, Merlot",Regional Red,Italy
+3826,Suvereto,"Cabernet Sauvignon, Merlot",Regional Red,Italy
+3827,Terratico di Bibbona,"Sangiovese, Merlot",Regional Red,Italy
+3829,Toscana (Super Tuscan),"Cabernet Sauvignon, Merlot, Sangiovese",Regional Red,Italy
+3831,Val di Cornia Rosso,"Sangiovese, Cabernet Sauvignon",Regional Red,Italy
+3838,Assisi,"Sangiovese, Merlot",Regional Red,Italy
+3839,Colli Altotiberini,"Sangiovese, Merlot",Regional Red,Italy
+3843,Lago di Corbara,"Cabernet Sauvignon, Merlot",Regional Red,Italy
+3848,Rosso Orvietano,"Sangiovese, Merlot",Regional Red,Italy
+3866,Breganze,"Merlot, Cabernet Sauvignon",Regional Red,Italy
+3867,Colli Asolani,"Merlot, Cabernet Sauvignon",Regional Red,Italy
+3869,Colli Euganei,"Merlot, Cabernet Sauvignon",Regional Red,Italy
+3876,Montello Rosso,"Cabernet Sauvignon, Merlot",Regional Red,Italy
+3887,Valdadige,"Pinot Gris, Chardonnay",White,Italy
+4421,Meritage,"Cabernet Sauvignon, Merlot, Cabernet Franc",Regional Red,USA
+4551,Ulupalakua,"Syrah, Malbec",Regional Red,USA
+2571,Pipers River,"Chardonnay, Pinot Noir",Sparkling,Australia
+3612,Oltrepò Pavese Metodo Classico,Pinot Noir,Sparkling,Italy
+3644,Asti Spumante,Muscat Blanc à Petits Grains,Sparkling,Italy
+3860,Asolo Prosecco,Glera,Sparkling,Italy
+3871,Conegliano Valdobbiadene Prosecco Superiore,Glera,Sparkling,Italy
+3888,Valdobbiadene Superiore di Cartizze,Glera,Sparkling,Italy
+4420,California Sparkling Wine,"Chardonnay, Pinot Noir",Sparkling,USA
+4577,Middle Rio Grande Valley,"Chardonnay, Pinot Noir",Sparkling,USA
+2567,Coal River Valley,"Riesling, Pinot Noir",White,Australia
+2568,Derwent Valley,"Riesling, Pinot Noir",White,Australia
+2572,Tamar Valley,"Chardonnay, Pinot Noir",White,Australia
+3044,Rosé des Riceys,Pinot Noir,Rosé,France
+3050,Muscat du Cap Corse,Muscat Blanc à Petits Grains,Fortified Wine,France
+3083,Muscat de Frontignan,Muscat Blanc à Petits Grains,Fortified Wine,France
+3084,Muscat de Lunel,Muscat Blanc à Petits Grains,Fortified Wine,France
+3085,Muscat de Mireval,Muscat Blanc à Petits Grains,Fortified Wine,France
+3086,Muscat de Saint-Jean-de-Minervois,Muscat Blanc à Petits Grains,Fortified Wine,France
+3095,Bonnezeaux,Chenin Blanc,Dessert,France
+3097,Chaume,Chenin Blanc,Dessert,France
+3098,Coteaux de l'Aubance,Chenin Blanc,Dessert,France
+3099,Coteaux de Saumur,Chenin Blanc,Dessert,France
+3100,Coteaux du Layon,Chenin Blanc,Dessert,France
+3103,Quarts de Chaume,Chenin Blanc,Dessert,France
+3105,Rosé de Loire,"Cabernet Franc, Grolleau",Rosé,France
+3150,IGP Méditerranée,"Grenache, Cinsault",Rosé,France
+3160,Côtes de Provence Fréjus,"Grenache, Tibouren",Rosé,France
+3161,Côtes de Provence La Londe,"Grenache, Cinsault",Rosé,France
+3162,Côtes de Provence Notre-Dame des Anges,"Grenache, Cinsault",Rosé,France
+3163,Côtes de Provence Pierrefeu,"Grenache, Cinsault",Rosé,France
+3195,Muscat de Beaumes-de-Venise,Muscat Blanc à Petits Grains,Fortified Wine,France
+3200,Rasteau Vin Doux Naturel,Grenache,Fortified Wine,France
+3220,Banyuls Grand Cru,Grenache,Fortified Wine,France
+3224,Maury,Grenache,Fortified Wine,France
+3226,Rivesaltes,"Grenache, Viura",Fortified Wine,France
+3489,Grottino di Roccanova,"Sangiovese, Malvasia Nera",Regional Red,Italy
+3514,Guardiolo,"Sangiovese, Aglianico",Regional Red,Italy
+3520,Solopaca,"Sangiovese, Aglianico",Regional Red,Italy
+3526,Colli d'Imola,"Sangiovese, Barbera",Regional Red,Italy
+3545,Romagna Sangiovese,Sangiovese,Regional Red,Italy
+3551,Delle Venezie,Pinot Gris,White,Italy
+3556,Friuli Grave,"Pinot Gris, Friulano",White,Italy
+3558,Friuli Latisana,"Pinot Gris, Friulano",White,Italy
+3570,Cerveteri,"Sangiovese, Montepulciano",Regional Red,Italy
+3576,Colli della Sabina,"Sangiovese, Montepulciano",Regional Red,Italy
+3577,Colli Etruschi Viterbesi,"Sangiovese, Montepulciano",Regional Red,Italy
+3589,Tarquinia,"Sangiovese, Montepulciano",Regional Red,Italy
+3590,Velletri,"Sangiovese, Montepulciano",Regional Red,Italy
+3591,Vignanello,"Sangiovese, Ciliegiolo",Regional Red,Italy
+3614,Rosso di Valtellina,Nebbiolo,Regional Red,Italy
+3617,Sforzato di Valtellina,Nebbiolo,Regional Red,Italy
+3620,Valtellina Superiore,Nebbiolo,Regional Red,Italy
+3624,Colli Pesaresi,Sangiovese,Regional Red,Italy
+3642,Albugnano,Nebbiolo,Regional Red,Italy
+3650,Boca,"Nebbiolo, Vespolina",Regional Red,Italy
+3652,Bramaterra,"Nebbiolo, Croatina",Regional Red,Italy
+3655,Canavese,"Nebbiolo, Barbera",Regional Red,Italy
+3656,Carema,Nebbiolo,Regional Red,Italy
+3661,Colline Novaresi,"Nebbiolo, Vespolina",Regional Red,Italy
+3663,Coste della Sesia,"Nebbiolo, Vespolina",Regional Red,Italy
+3672,Fara,"Nebbiolo, Vespolina",Regional Red,Italy
+3676,Gattinara,Nebbiolo,Regional Red,Italy
+3678,Ghemme,Nebbiolo,Regional Red,Italy
+3681,Langhe Nebbiolo,Nebbiolo,Regional Red,Italy
+3682,Lessona,Nebbiolo,Regional Red,Italy
+3687,Nebbiolo d'Alba,Nebbiolo,Regional Red,Italy
+3695,Sizzano,"Nebbiolo, Vespolina",Regional Red,Italy
+3697,Suli Chërta,Nebbiolo,Regional Red,Italy
+3699,Valli Ossolane,Nebbiolo,Regional Red,Italy
+3710,Colline Joniche Tarantine,Zinfandel,Regional Red,Italy
+3713,Gioia del Colle,Zinfandel,Regional Red,Italy
+3722,Orta Nova,"Sangiovese, Nero di Troia",Regional Red,Italy
+3727,Salento,"Zinfandel, Negroamaro",Regional Red,Italy
+3733,Alghero,"Cabernet Sauvignon, Cagnulari",Regional Red,Italy
+3734,Arborea,Sangiovese,Regional Red,Italy
+3736,Cannonau di Sardegna,Grenache,Regional Red,Italy
+3788,Trentino Superiore,"Chardonnay, Pinot Blanc",White,Italy
+3795,Bolgheri Rosato,"Cabernet Sauvignon, Merlot",Rosé,Italy
+3801,Chianti Classico Gran Selezione,Sangiovese,Regional Red,Italy
+3802,Chianti Colli Senesi,Sangiovese,Regional Red,Italy
+3803,Chianti Rufina,Sangiovese,Regional Red,Italy
+3804,Colli dell'Etruria Centrale,Sangiovese,Regional Red,Italy
+3806,Cortona,Syrah,Regional Red,Italy
+3807,Cortona Syrah,Syrah,Regional Red,Italy
+3810,Grance Senesi,Sangiovese,Regional Red,Italy
+3813,Montecucco Sangiovese,Sangiovese,Regional Red,Italy
+3814,Montescudaio,Sangiovese,Regional Red,Italy
+3815,Morellino di Scansano,Sangiovese,Regional Red,Italy
+3818,Orcia,Sangiovese,Regional Red,Italy
+3819,Parrina,Sangiovese,Regional Red,Italy
+3820,Pomino,"Chardonnay, Pinot Blanc",White,Italy
+3822,Rosso di Montepulciano,Sangiovese,Regional Red,Italy
+3823,San Gimignano,Sangiovese,Regional Red,Italy
+3825,Sovana,"Sangiovese, Aleatico",Regional Red,Italy
+3828,Terre di Pisa,Sangiovese,Regional Red,Italy
+3832,Valdarno di Sopra,Sangiovese,Regional Red,Italy
+3842,Colli Perugini,Sangiovese,Regional Red,Italy
+3844,Montefalco Rosso,"Sangiovese, Sagrantino",Regional Red,Italy
+3851,Torgiano,Sangiovese,Regional Red,Italy
+3852,Torgiano Rosso Riserva,Sangiovese,Regional Red,Italy
+3855,Chambave Muscat,Muscat Blanc à Petits Grains,White,Italy
+3856,Donnas,Nebbiolo,Regional Red,Italy
+3872,Corti Benedettine del Padovano,"Merlot, Raboso Piave",Regional Red,Italy
+3875,Merlara,"Merlot, Raboso Piave",Regional Red,Italy
+3883,Riviera del Brenta,"Merlot, Refosco dal Peduncolo Rosso",Regional Red,Italy
+4230,Granada,"Tempranillo, Grenache",Regional Red,Spain
+4257,Abadía Retuerta,"Tempranillo, Cabernet Sauvignon",Regional Red,Spain
+4264,Sierra de Gredos,Grenache,Regional Red,Spain
+4270,Calzadilla,"Syrah, Tempranillo",Regional Red,Spain
+4272,Casa del Blanco,"Cabernet Sauvignon, Syrah",Regional Red,Spain
+4273,Dehesa del Carrizal,"Cabernet Sauvignon, Syrah",Regional Red,Spain
+4275,Finca Élez,"Tempranillo, Cabernet Sauvignon",Regional Red,Spain
+4285,Vallegarcía,"Cabernet Sauvignon, Syrah",Regional Red,Spain
+4291,Costers del Segre,"Tempranillo, Cabernet Sauvignon",Regional Red,Spain
+4301,Ribera del Guadiana,"Tempranillo, Grenache",Regional Red,Spain
+4318,Vinos de Madrid,"Grenache, Tempranillo",Regional Red,Spain
+4322,Bolandin,"Tempranillo, Merlot",Regional Red,Spain
+4327,Otazu,"Cabernet Sauvignon, Tempranillo",Regional Red,Spain
+4334,Rioja Oriental,"Grenache, Tempranillo",Regional Red,Spain
+4414,Sonoita,"Syrah, Grenache",Regional Red,USA
+4415,Verde Valley,"Syrah, Grenache",Regional Red,USA
+4423,Livermore Valley,"Sauvignon Blanc, Chardonnay",White,USA
+4425,San Francisco Bay,"Cabernet Sauvignon, Merlot",Regional Red,USA
+4426,Santa Cruz Mountains,"Pinot Noir, Cabernet Sauvignon",Regional Red,USA
+4427,Adelaida District,"Cabernet Sauvignon, Syrah",Regional Red,USA
+4428,Arroyo Grande Valley,"Pinot Noir, Chardonnay",Regional Red,USA
+4429,Arroyo Seco,"Chardonnay, Riesling",White,USA
+4432,Chalone,"Chardonnay, Pinot Noir",White,USA
+4435,Edna Valley,"Chardonnay, Pinot Noir",White,USA
+4440,Happy Canyon of Santa Barbara,"Cabernet Sauvignon, Sauvignon Blanc",Regional Red,USA
+4442,Los Olivos District,"Syrah, Grenache",Regional Red,USA
+4443,Monterey,"Chardonnay, Pinot Noir",White,USA
+4444,Mount Harlan,"Pinot Noir, Chardonnay",Regional Red,USA
+4449,San Benito,"Pinot Noir, Grenache",Regional Red,USA
+4456,Santa Maria Valley,"Pinot Noir, Chardonnay",Regional Red,USA
+4457,Santa Ynez Valley,"Syrah, Pinot Noir",Regional Red,USA
+4458,SLO Coast,"Pinot Noir, Chardonnay",Regional Red,USA
+4459,Templeton Gap District,"Syrah, Pinot Noir",Regional Red,USA
+4460,Willow Creek District,"Syrah, Grenache",Regional Red,USA
+4468,Dunnigan Hills,"Syrah, Cabernet Sauvignon",Regional Red,USA
+4480,Clear Lake,"Cabernet Sauvignon, Sauvignon Blanc",Regional Red,USA
+4489,McDowell Valley,"Syrah, Grenache",Regional Red,USA
+4490,Mendocino Ridge,"Zinfandel, Pinot Noir",Regional Red,USA
+4492,Potter Valley,"Riesling, Sauvignon Blanc",White,USA
+4493,Redwood Valley,"Zinfandel, Cabernet Sauvignon",Regional Red,USA
+4494,Yorkville Highlands,"Pinot Noir, Cabernet Sauvignon",Regional Red,USA
+4497,Chiles Valley,"Zinfandel, Cabernet Sauvignon",Regional Red,USA
+4500,Howell Mountain,"Cabernet Sauvignon, Zinfandel",Regional Red,USA
+4504,Oak Knoll District,"Chardonnay, Cabernet Sauvignon",White,USA
+4510,Wild Horse Valley,"Chardonnay, Pinot Noir",White,USA
+4511,Yountville,"Cabernet Sauvignon, Merlot",Regional Red,USA
+4514,El Dorado,"Zinfandel, Syrah",Regional Red,USA
+4520,Bennett Valley,"Merlot, Syrah",Regional Red,USA
+4521,Chalk Hill,"Chardonnay, Sauvignon Blanc",White,USA
+4524,Green Valley of Russian River Valley,"Chardonnay, Pinot Noir",White,USA
+4527,Northern Sonoma,"Cabernet Sauvignon, Chardonnay",Regional Red,USA
+4528,Petaluma Gap,"Pinot Noir, Syrah",Regional Red,USA
+4534,Sonoma Valley,"Cabernet Sauvignon, Zinfandel",Regional Red,USA
+4535,West Sonoma Coast,"Pinot Noir, Chardonnay",Regional Red,USA
+4537,Malibu Coast,"Cabernet Sauvignon, Syrah",Regional Red,USA
+4539,Ramona Valley,"Syrah, Grenache",Regional Red,USA
+4543,Temecula Valley,"Syrah, Cabernet Sauvignon",Regional Red,USA
+4544,Grand Valley,"Cabernet Franc, Merlot",Regional Red,USA
+4553,Lewis-Clark Valley,"Syrah, Merlot",Regional Red,USA
+4554,Snake River Valley,"Syrah, Cabernet Sauvignon",Regional Red,USA
+4563,Lake Michigan Shore,"Riesling, Cabernet Franc",White,USA
+4564,Leelanau Peninsula,"Riesling, Pinot Gris",White,USA
+4565,Old Mission Peninsula,"Riesling, Chardonnay",White,USA
+4576,Mesilla Valley,"Chardonnay, Riesling",White,USA
+4579,Cayuga Lake,"Riesling, Cabernet Franc",White,USA
+4583,Long Island,"Merlot, Cabernet Franc",Regional Red,USA
+4592,Yadkin Valley,"Cabernet Franc, Merlot",Regional Red,USA
+4593,Grand River Valley,"Riesling, Chardonnay",White,USA
+4597,Applegate Valley,"Syrah, Tempranillo",Regional Red,USA
+4599,Columbia Gorge,"Riesling, Pinot Gris",White,USA
+4601,Elkton Oregon,"Pinot Gris, Riesling",White,USA
+4611,Rogue Valley,"Syrah, Cabernet Sauvignon",Regional Red,USA
+4612,Southern Oregon,"Tempranillo, Syrah",Regional Red,USA
+4615,Umpqua Valley,"Tempranillo, Pinot Noir",Regional Red,USA
+4626,Texas High Plains,"Tempranillo, Cabernet Sauvignon",Regional Red,USA
+4629,Middleburg Virginia,"Cabernet Franc, Merlot",Regional Red,USA
+4635,Ancient Lakes of Columbia Valley,"Riesling, Chardonnay",White,USA
+4640,Horse Heaven Hills,"Cabernet Sauvignon, Merlot",Regional Red,USA
+4641,Lake Chelan,"Riesling, Chardonnay",White,USA
+4642,Naches Heights,"Riesling, Pinot Gris",White,USA
+4649,Wahluke Slope,"Syrah, Merlot",Regional Red,USA
+4651,White Bluffs,"Merlot, Cabernet Sauvignon",Regional Red,USA
+2539,Southern Highlands,"Chardonnay, Pinot Noir",Sparkling,Australia
+2542,Tumbarumba,"Chardonnay, Pinot Noir",Sparkling,Australia
+2561,Piccadilly Valley,"Chardonnay, Pinot Noir",Sparkling,Australia
+2585,King Valley,"Glera, Sangiovese",Sparkling,Australia
+2586,Macedon Ranges,"Chardonnay, Pinot Noir",Sparkling,Australia
+2906,Crémant de Bordeaux,"Sémillon, Cabernet Franc",Sparkling,France
+2526,Canberra District,"Syrah, Riesling",Regional Red,Australia
+2531,Hilltops,"Syrah, Cabernet Sauvignon",Regional Red,Australia
+2533,Murray Darling,"Syrah, Chardonnay",Regional Red,Australia
+2535,Orange,"Chardonnay, Sauvignon Blanc",White,Australia
+2549,Barossa,"Syrah, Grenache",Regional Red,Australia
+2554,Langhorne Creek,"Cabernet Sauvignon, Syrah",Regional Red,Australia
+2555,Lenswood,"Pinot Noir, Sauvignon Blanc",Regional Red,Australia
+2558,Mount Benson,"Syrah, Cabernet Sauvignon",Regional Red,Australia
+2560,Padthaway,"Chardonnay, Syrah",White,Australia
+2562,Riverland,"Syrah, Chardonnay",Regional Red,Australia
+2569,East Coast Tasmania,Pinot Noir,Regional Red,Australia
+2570,Huon Valley,Pinot Noir,Regional Red,Australia
+2574,Alpine Valleys,"Sangiovese, Merlot",Regional Red,Australia
+2575,Beechworth,"Chardonnay, Syrah",White,Australia
+2578,Geelong,"Pinot Noir, Syrah",Regional Red,Australia
+2579,Gippsland,"Pinot Noir, Chardonnay",Regional Red,Australia
+2584,Henty,"Riesling, Chardonnay",White,Australia
+2587,Mornington Peninsula,"Pinot Noir, Chardonnay",Regional Red,Australia
+2595,Strathbogie Ranges,"Chardonnay, Riesling",White,Australia
+2598,Upper Goulburn,"Riesling, Chardonnay",White,Australia
+2600,Albany,"Pinot Noir, Syrah",Regional Red,Australia
+2605,Frankland River,"Syrah, Cabernet Sauvignon",Regional Red,Australia
+2606,Geographe,"Syrah, Cabernet Sauvignon",Regional Red,Australia
+2607,Great Southern,"Riesling, Syrah",White,Australia
+2609,Manjimup,"Cabernet Sauvignon, Merlot",Regional Red,Australia
+2610,Mount Barker,"Riesling, Syrah",White,Australia
+2612,Pemberton,"Pinot Noir, Chardonnay",Regional Red,Australia
+2840,Eichberg,"Gewurztraminer, Pinot Gris",White,France
+2845,Furstentum,"Gewurztraminer, Riesling",White,France
+2850,Hatschbourg,"Gewurztraminer, Pinot Gris",White,France
+2851,Hengst,"Gewurztraminer, Pinot Gris",White,France
+2852,Kaefferkopf,"Gewurztraminer, Riesling",White,France
+2855,Kessler,"Gewurztraminer, Riesling",White,France
+2861,Marckrain,"Gewurztraminer, Pinot Gris",White,France
+2866,Pfersigberg,"Gewurztraminer, Riesling",White,France
+2876,Sonnenglanz,"Gewurztraminer, Pinot Gris",White,France
+2877,Spiegel,"Gewurztraminer, Pinot Gris",White,France
+2878,Sporen,"Gewurztraminer, Pinot Gris",White,France
+2880,Steingrubler,"Gewurztraminer, Riesling",White,France
+2886,Zinnkoepflé,"Gewurztraminer, Pinot Gris",White,France
+3056,Vin de Corse Sartène,"Sciaccarello, Sangiovese",Regional Red,France
+3057,Arbois,"Poulsard, Trousseau, Pinot Noir",Regional Red,France
+3060,Côtes du Jura,"Savagnin, Chardonnay",White,France
+3063,Macvin du Jura (Jura),"Chardonnay, Savagnin",Fortified Wine,France
+3075,Fitou,"Carignan, Grenache, Mourvèdre",Regional Red,France
+3147,Moselle,"Auxerrois, Pinot Gris",White,France
+3166,Palette,"Mourvèdre, Grenache",Regional Red,France
+3249,Béarn,"Tannat, Cabernet Franc",Regional Red,France
+3251,Brulhois,"Tannat, Merlot",Regional Red,France
+3259,Estaing,"Fer Servadou, Gamay",Regional Red,France
+3262,Gaillac,"Duras, Fer Servadou, Syrah",Regional Red,France
+3264,Irouléguy,"Tannat, Cabernet Franc",Regional Red,France
+3270,Montravel,"Sémillon, Sauvignon Blanc",White,France
+3683,Loazzolo,Muscat Blanc à Petits Grains,Dessert,Italy
+3696,Strevi,Muscat Blanc à Petits Grains,Dessert,Italy
+3725,Primitivo di Manduria Dolce Naturale,Zinfandel,Dessert,Italy
+3742,Moscato di Sardegna,Muscat Blanc à Petits Grains,Dessert,Italy
+3743,Moscato di Sorso-Sennori,Muscat Blanc à Petits Grains,Dessert,Italy
+3816,Moscadello di Montalcino,Muscat Blanc à Petits Grains,Dessert,Italy
+3817,Occhio di Pernice,Sangiovese,Dessert,Italy
+3976,Clevedon,"Merlot, Syrah",Regional Red,New Zealand
+4236,Sierra Norte de Sevilla,Tempranillo,Regional Red,Spain
+4241,Arabako Mahastiak,Tempranillo,Regional Red,Spain
+4258,Arlanza,Tempranillo,Regional Red,Spain
+4261,Cigales,"Tempranillo, Grenache",Rosé,Spain
+4269,Valtiendas,Tempranillo,Regional Red,Spain
+4271,Campo de la Guardia,Tempranillo,Regional Red,Spain
+4274,Dominio de Valdepusa,"Syrah, Petit Verdot",Regional Red,Spain
+4276,Florentino,Grenache,Regional Red,Spain
+4279,Méntrida,Grenache,Regional Red,Spain
+4280,Mondéjar,Tempranillo,Regional Red,Spain
+4281,Pago Guijoso,Cabernet Sauvignon,Regional Red,Spain
+4282,Ribera del Júcar,"Tempranillo, Bobal",Regional Red,Spain
+4283,Uclés,Tempranillo,Regional Red,Spain
+4292,Empordà,"Grenache, Carignan",Regional Red,Spain
+4294,Montsant Falset,"Grenache, Carignan",Regional Red,Spain
+4297,Priorat Vi de Vila,"Grenache, Carignan",Regional Red,Spain
+4320,Aragón,Grenache,Regional Red,Spain
+4321,Arínzano,Tempranillo,Regional Red,Spain
+4323,Calatayud,Grenache,Regional Red,Spain
+4325,Cariñena,"Grenache, Carignan",Regional Red,Spain
+4328,Prado de Irache,Tempranillo,Regional Red,Spain
+4333,Rioja Gran Reserva,"Tempranillo, Graciano",Regional Red,Spain
+4416,Willcox,"Syrah, Malvasia",Regional Red,USA
+4417,Willcox Bench,Syrah,Regional Red,USA
+4422,Ben Lomond Mountain,Chardonnay,White,USA
+4424,Pacheco Pass,Cabernet Sauvignon,Regional Red,USA
+4430,Ballard Canyon,Syrah,Regional Red,USA
+4431,Carmel Valley,Cabernet Sauvignon,Regional Red,USA
+4433,Cienega Valley,Zinfandel,Regional Red,USA
+4434,Creston District,Cabernet Sauvignon,Regional Red,USA
+4436,El Pomar District,Cabernet Sauvignon,Regional Red,USA
+4437,Gabilan Mountains,Pinot Noir,Regional Red,USA
+4438,Geneseo District,Cabernet Sauvignon,Regional Red,USA
+4439,Hames Valley,Cabernet Sauvignon,Regional Red,USA
+4445,Paicines,Pinot Noir,Regional Red,USA
+4446,Paso Robles Estrella District,Cabernet Sauvignon,Regional Red,USA
+4447,Paso Robles Highlands District,Cabernet Sauvignon,Regional Red,USA
+4450,San Bernabe,Chardonnay,White,USA
+4451,San Juan Creek,Cabernet Sauvignon,Regional Red,USA
+4452,San Lucas,Cabernet Sauvignon,Regional Red,USA
+4453,San Miguel District,Cabernet Sauvignon,Regional Red,USA
+4455,Santa Margarita Ranch,Cabernet Sauvignon,Regional Red,USA
+4461,York Mountain,Pinot Noir,Regional Red,USA
+4462,Alta Mesa,Zinfandel,Regional Red,USA
+4463,Borden Ranch,Zinfandel,Regional Red,USA
+4464,Clarksburg,Chenin Blanc,White,USA
+4465,Clements Hills,Zinfandel,Regional Red,USA
+4466,Cosumnes River,Chardonnay,White,USA
+4467,Diablo Grande,Syrah,Regional Red,USA
+4471,Madera,Zinfandel,Regional Red,USA
+4472,Merritt Island,Chenin Blanc,White,USA
+4473,Mokelumne River,Zinfandel,Regional Red,USA
+4474,River Junction,Chardonnay,White,USA
+4475,Salado Creek,Cabernet Sauvignon,Regional Red,USA
+4476,Sloughhouse,Zinfandel,Regional Red,USA
+4477,Tracy Hills,Cabernet Sauvignon,Regional Red,USA
+4478,Benmore Valley,Chardonnay,White,USA
+4479,Big Valley District,Sauvignon Blanc,White,USA
+4481,Guenoc Valley,Cabernet Sauvignon,Regional Red,USA
+4482,High Valley,Cabernet Sauvignon,Regional Red,USA
+4483,Kelsey Bench,Cabernet Sauvignon,Regional Red,USA
+4484,Red Hills Lake County,Cabernet Sauvignon,Regional Red,USA
+4486,Cole Ranch,Riesling,White,USA
+4487,Covelo,Pinot Noir,Regional Red,USA
+4488,Eagle Peak Mendocino County,Zinfandel,Regional Red,USA
+4491,Pine Mountain,Cabernet Sauvignon,Regional Red,USA
+4495,Atlas Peak,Cabernet Sauvignon,Regional Red,USA
+4496,Calistoga,"Cabernet Sauvignon, Petite Sirah",Regional Red,USA
+4498,Coombsville,Cabernet Sauvignon,Regional Red,USA
+4499,Diamond Mountain District,Cabernet Sauvignon,Regional Red,USA
+4502,Mount Veeder,Cabernet Sauvignon,Regional Red,USA
+4503,Mount Veeder District,Cabernet Sauvignon,Regional Red,USA
+4507,Spring Mountain District,Cabernet Sauvignon,Regional Red,USA
+4508,St. Helena,Cabernet Sauvignon,Regional Red,USA
+4512,Amador County,Zinfandel,Regional Red,USA
+4513,California Shenandoah Valley,Zinfandel,Regional Red,USA
+4515,Fiddletown,Zinfandel,Regional Red,USA
+4516,North Yuba,Cabernet Sauvignon,Regional Red,USA
+4517,Shenandoah Valley of California,Zinfandel,Regional Red,USA
+4518,Sierra Foothills,"Zinfandel, Barbera",Regional Red,USA
+4523,Fort Ross-Seaview,Pinot Noir,Regional Red,USA
+4525,Knights Valley,Cabernet Sauvignon,Regional Red,USA
+4526,Moon Mountain District,Cabernet Sauvignon,Regional Red,USA
+4529,Pine Mountain-Cloverdale Peak,Cabernet Sauvignon,Regional Red,USA
+4530,Rockpile,Zinfandel,Regional Red,USA
+4533,Sonoma Mountain,Cabernet Sauvignon,Regional Red,USA
+4536,Antelope Valley of the California High Desert,Syrah,Regional Red,USA
+4538,Malibu-Newton Canyon,Cabernet Sauvignon,Regional Red,USA
+4540,Saddle Rock-Malibu,Cabernet Sauvignon,Regional Red,USA
+4541,San Pasqual Valley,Cabernet Sauvignon,Regional Red,USA
+4542,Sierra Pelona Valley,Syrah,Regional Red,USA
+4545,Grand Valley Colorado,Cabernet Franc,Regional Red,USA
+4546,West Elks,"Riesling, Gewurztraminer",White,USA
+4547,Southeastern New England,Chardonnay,White,USA
+4549,Dahlonega Plateau,"Cabernet Franc, Chambourcin",Regional Red,USA
+4550,Upper Hiwassee,Cabernet Franc,Regional Red,USA
+4552,Eagle Foothills,"Syrah, Viognier",Regional Red,USA
+4555,Snake River Valley Sunnyslope District,Syrah,Regional Red,USA
+4559,Catoctin,"Cabernet Sauvignon, Chambourcin",Regional Red,USA
+4561,Martha's Vineyard,Chardonnay,White,USA
+4562,Fennville,Riesling,White,USA
+4566,Tip of the Mitt,"Riesling, Marquette",White,USA
+4572,Nevada (United States),Cabernet Sauvignon,Regional Red,USA
+4575,Outer Coastal Plain,"Cabernet Franc, Chambourcin",Regional Red,USA
+4578,Mimbres Valley,Cabernet Sauvignon,Regional Red,USA
+4584,Niagara Escarpment,Riesling,White,USA
+4585,North Fork of Long Island,Merlot,Regional Red,USA
+4586,Seneca Lake,Riesling,White,USA
+4587,The Hamptons Long Island,Chardonnay,White,USA
+4589,Haw River Valley,Cabernet Franc,Regional Red,USA
+4590,Swan Creek,Cabernet Franc,Regional Red,USA
+4591,Upper Hiwassee Highlands,Cabernet Franc,Regional Red,USA
+4598,Chehalem Mountains,Pinot Noir,Regional Red,USA
+4602,Eola-Amity Hills,Pinot Noir,Regional Red,USA
+4603,Laurelwood District,Pinot Noir,Regional Red,USA
+4604,Lower Long Tom,Pinot Noir,Regional Red,USA
+4605,McMinnville,Pinot Noir,Regional Red,USA
+4606,Mount Pisgah,Pinot Noir,Regional Red,USA
+4607,Mount Pisgah Polk County,Pinot Noir,Regional Red,USA
+4608,Red Hill Douglas County,Pinot Noir,Regional Red,USA
+4609,Ribbon Ridge,Pinot Noir,Regional Red,USA
+4610,Rocks District of Milton-Freewater,Syrah,Regional Red,USA
+4613,The Rocks District of Milton-Freewater,Syrah,Regional Red,USA
+4614,Tualatin Hills,Pinot Noir,Regional Red,USA
+4616,Van Duzer Corridor,Pinot Noir,Regional Red,USA
+4617,Willamette Valley Foothills,Pinot Noir,Regional Red,USA
+4618,Yamhill-Carlton,Pinot Noir,Regional Red,USA
+4621,Lehigh Valley,"Chardonnay, Grüner Veltliner",White,USA
+4622,Bell Mountain,Cabernet Sauvignon,Regional Red,USA
+4623,Escondido Valley,Cabernet Sauvignon,Regional Red,USA
+4624,Fredericksburg in the Texas Hill Country,Tempranillo,Regional Red,USA
+4627,Texas Hill Country,"Tempranillo, Mourvèdre",Regional Red,USA
+4628,Texoma,Cabernet Sauvignon,Regional Red,USA
+4630,Monticello,"Cabernet Franc, Petit Verdot",Regional Red,USA
+4631,North Fork of Roanoke,Cabernet Franc,Regional Red,USA
+4632,Rocky Knob,Riesling,White,USA
+4634,Virginia Peninsula,Cabernet Franc,Regional Red,USA
+4636,Burn of Columbia Valley,Syrah,Regional Red,USA
+4637,Candy Mountain,Cabernet Sauvignon,Regional Red,USA
+4639,Goose Gap,Cabernet Sauvignon,Regional Red,USA
+4644,Rattlesnake Hills,Cabernet Sauvignon,Regional Red,USA
+4646,Rocky Reach,Riesling,White,USA
+4647,Royal Slope,Cabernet Sauvignon,Regional Red,USA
+4648,Snipes Mountain,Cabernet Sauvignon,Regional Red,USA
+4653,Yakima Valley Upland,Cabernet Sauvignon,Regional Red,USA
+2523,Sparkling Shiraz,Syrah,Sparkling,Australia
+2481,Agrelo,"Malbec, Cabernet Sauvignon",Regional Red,Argentina
+2486,Gualtallary,"Malbec, Cabernet Franc",Regional Red,Argentina
+2489,Los Chacayes,"Malbec, Cabernet Franc",Regional Red,Argentina
+2492,Maipú,"Malbec, Cabernet Sauvignon",Regional Red,Argentina
+2497,San Pablo,"Pinot Noir, Chardonnay",Regional Red,Argentina
+2499,Tupungato,"Chardonnay, Malbec",White,Argentina
+2504,Chubut,"Pinot Noir, Chardonnay",Regional Red,Argentina
+2505,General Roca,"Malbec, Pinot Noir",Regional Red,Argentina
+2506,Neuquén,"Malbec, Pinot Noir",Regional Red,Argentina
+2507,Río Negro,"Pinot Noir, Malbec",Regional Red,Argentina
+2513,Valle de Pedernal,"Malbec, Cabernet Sauvignon",Regional Red,Argentina
+2515,Valle de Zonda,"Syrah, Malbec",Regional Red,Argentina
+2522,Australian Tawny,"Grenache, Syrah",Fortified Wine,Australia
+2524,Big Rivers,Syrah,Regional Red,Australia
+2527,Central Ranges,Syrah,Regional Red,Australia
+2528,Cowra,Chardonnay,White,Australia
+2529,Gundagai,Syrah,Regional Red,Australia
+2534,New England Australia,Syrah,Regional Red,Australia
+2536,Perricoota,Syrah,Regional Red,Australia
+2540,Southern New South Wales,Syrah,Regional Red,Australia
+2541,Swan Hill,Syrah,Regional Red,Australia
+2544,Granite Belt,"Syrah, Verdelho",Regional Red,Australia
+2545,South Burnett,"Chardonnay, Verdelho",White,Australia
+2546,Adelaide,Syrah,Regional Red,Australia
+2548,Adelaide Plains,Syrah,Regional Red,Australia
+2550,Currency Creek,Cabernet Sauvignon,Regional Red,Australia
+2552,Far North,Syrah,Regional Red,Australia
+2553,Kangaroo Island,Cabernet Sauvignon,Regional Red,Australia
+2556,Limestone Coast,Cabernet Sauvignon,Regional Red,Australia
+2557,Lower Murray,Syrah,Regional Red,Australia
+2559,Mount Lofty Ranges,Chardonnay,White,Australia
+2563,Robe,Cabernet Sauvignon,Regional Red,Australia
+2564,Southern Fleurieu,Syrah,Regional Red,Australia
+2565,Southern Flinders Ranges,Syrah,Regional Red,Australia
+2566,Wrattonbully,Cabernet Sauvignon,Regional Red,Australia
+2576,Bellarine Peninsula,Pinot Noir,Regional Red,Australia
+2577,Central Victoria,Syrah,Regional Red,Australia
+2580,Glenrowan,"Muscat Blanc à Petits Grains, Syrah",Fortified Wine,Australia
+2581,Goulburn Valley,"Syrah, Marsanne",Regional Red,Australia
+2582,Grampians,Syrah,Regional Red,Australia
+2583,Heathcote,Syrah,Regional Red,Australia
+2591,Port Phillip,Pinot Noir,Regional Red,Australia
+2592,Pyrenees (Victoria),"Syrah, Cabernet Sauvignon",Regional Red,Australia
+2596,Sunbury,Syrah,Regional Red,Australia
+2599,Western Victoria,Syrah,Regional Red,Australia
+2601,Blackwood Valley,Cabernet Sauvignon,Regional Red,Australia
+2602,Central Western Australia,Syrah,Regional Red,Australia
+2603,Denmark (WA),"Pinot Noir, Chardonnay",Regional Red,Australia
+2604,Eastern Plains Inland and North of Western Australia,Syrah,Regional Red,Australia
+2608,Greater Perth,Syrah,Regional Red,Australia
+2611,Peel,Syrah,Regional Red,Australia
+2613,Perth Hills,Syrah,Regional Red,Australia
+2614,Porongurup,Riesling,White,Australia
+2615,South West Australia,Cabernet Sauvignon,Regional Red,Australia
+2616,Swan District,"Chenin Blanc, Verdelho",White,Australia
+2735,San Antonio Valley,"Sauvignon Blanc, Pinot Noir",White,Chile
+2736,Osorno,"Pinot Noir, Chardonnay",Regional Red,Chile
+2741,Curicó Valley,"Cabernet Sauvignon, Sauvignon Blanc",Regional Red,Chile
+2756,Choapa Valley,"Syrah, Cabernet Sauvignon",Regional Red,Chile
+2762,Bío Bío Valley,"Riesling, Pinot Noir",White,Chile
+2764,Malleco Valley,"Chardonnay, Pinot Noir",White,Chile
+2907,Cadillac,"Sémillon, Sauvignon Blanc",Dessert,France
+2910,Loupiac,"Sémillon, Sauvignon Blanc",Dessert,France
+2911,Sainte-Croix-du-Mont,"Sémillon, Sauvignon Blanc",Dessert,France
+2914,Cérons,"Sémillon, Sauvignon Blanc",Dessert,France
+2917,Graves Supérieures,"Sémillon, Sauvignon Blanc",Dessert,France
+3064,Vin de Paille du Jura,"Savagnin, Chardonnay, Poulsard",Dessert,France
+3069,Cabrières,"Cinsault, Syrah",Rosé,France
+3104,Rosé d'Anjou,"Grolleau, Gamay",Rosé,France
+3225,Muscat de Rivesaltes,"Muscat of Alexandria, Muscat Blanc à Petits Grains",Fortified Wine,France
+3269,Monbazillac,"Sémillon, Sauvignon Blanc, Muscadelle",Dessert,France
+3274,Rosette,"Sémillon, Sauvignon Blanc",Dessert,France
+3276,Saussignac,"Sémillon, Sauvignon Blanc",Dessert,France
+3481,Controguerra,"Montepulciano, Merlot",Regional Red,Italy
+3506,Castel San Lorenzo,"Barbera, Sangiovese",Regional Red,Italy
+3524,Colli Bolognesi,"Grechetto, Chardonnay",White,Italy
+3550,Collio Goriziano,"Friulano, Ribolla Gialla, Sauvignon Blanc",White,Italy
+3552,Friuli,"Friulano, Pinot Gris",White,Italy
+3553,Friuli Annia,"Friulano, Chardonnay",White,Italy
+3554,Friuli Aquileia,"Friulano, Pinot Gris",White,Italy
+3557,Friuli Isonzo,"Friulano, Pinot Gris",White,Italy
+3584,Genazzano,"Cesanese, Sangiovese",Regional Red,Italy
+3588,Roma,"Montepulciano, Sangiovese",Regional Red,Italy
+3604,Capriano del Colle,"Marzemino, Merlot",Regional Red,Italy
+3608,Garda,"Garganega, Chardonnay",White,Italy
+3611,Oltrepò Pavese,"Croatina, Barbera, Pinot Noir",Regional Red,Italy
+3632,Rosso Piceno,"Montepulciano, Sangiovese",Regional Red,Italy
+3640,Pentro di Isernia,"Montepulciano, Sangiovese",Regional Red,Italy
+3686,Monferrato,"Barbera, Nebbiolo",Regional Red,Italy
+3689,Piemonte,"Barbera, Nebbiolo",Regional Red,Italy
+3732,Terra d'Otranto,"Negroamaro, Zinfandel",Regional Red,Italy
+3740,Mandrolisai,"Bovale, Grenache, Monica",Regional Red,Italy
+3753,Contessa Entellina,"Inzolia, Chardonnay",White,Italy
+3754,Delia Nivolelli,"Nero d'Avola, Merlot",Regional Red,Italy
+3763,Menfi,"Inzolia, Chardonnay",White,Italy
+3780,Alto Adige Terlano,"Pinot Blanc, Chardonnay",White,Italy
+3781,Alto Adige Valle Isarco,"Sylvaner, Kerner, Riesling",White,Italy
+3782,Casteller,"Schiava, Merlot",Regional Red,Italy
+3858,Valle d'Aosta,"Petit Rouge, Fumin, Nebbiolo",Regional Red,Italy
+3859,Arcole,"Garganega, Pinot Gris",White,Italy
+3868,Colli Berici,"Tai Rosso, Merlot",Regional Red,Italy
+3878,Piave,"Raboso Piave, Merlot",Regional Red,Italy
+3977,Henderson,Cabernet Sauvignon,Regional Red,New Zealand
+3979,Matakana,"Syrah, Merlot",Regional Red,New Zealand
+3980,Waiheke Island,"Cabernet Sauvignon, Syrah",Regional Red,New Zealand
+3981,Canterbury Plains,"Chardonnay, Riesling",White,New Zealand
+3982,North Canterbury,"Pinot Noir, Riesling",Regional Red,New Zealand
+3983,Waipara Valley,"Riesling, Pinot Noir",White,New Zealand
+3985,Alexandra,"Pinot Noir, Riesling",Regional Red,New Zealand
+3992,Ormond,Chardonnay,White,New Zealand
+3993,Bridge Pa Triangle,"Syrah, Merlot",Regional Red,New Zealand
+3994,Central Hawke's Bay,Merlot,Regional Red,New Zealand
+3996,Awatere Valley,"Sauvignon Blanc, Riesling",White,New Zealand
+3997,Kekerengu Coast,Sauvignon Blanc,White,New Zealand
+3998,Southern Valleys,Pinot Noir,Regional Red,New Zealand
+4000,Moutere Hills,Chardonnay,White,New Zealand
+4002,Waimea Plains,Sauvignon Blanc,White,New Zealand
+4003,Northland,"Syrah, Chardonnay",Regional Red,New Zealand
+4004,Gladstone,"Pinot Noir, Sauvignon Blanc",Regional Red,New Zealand
+4329,Somontano,"Moristel, Tempranillo, Cabernet Sauvignon",Regional Red,Spain
+4448,San Antonio Valley (California),Syrah,Regional Red,USA
+4625,Mesilla Valley (TX),Cabernet Sauvignon,Regional Red,USA
+4638,Columbia Gorge (WA),Riesling,White,USA
+3350,Winzersekt,Riesling,Sparkling,Germany
+4055,Távora-Varosa,"Chardonnay, Malvasia Fina",Sparkling,Portugal
+4186,Plettenberg Bay,"Chardonnay, Pinot Noir",Sparkling,South Africa
+4209,Tulbagh,"Chardonnay, Pinot Noir",Sparkling,South Africa
+2479,Quebrada de Humahuaca,Malbec,Regional Red,Argentina
+2483,Chacayes,Malbec,Regional Red,Argentina
+2484,El Cepillo,Malbec,Regional Red,Argentina
+2485,El Peral,Malbec,Regional Red,Argentina
+2487,La Consulta,Malbec,Regional Red,Argentina
+2488,Las Compuertas,Malbec,Regional Red,Argentina
+2491,Lunlunta,Malbec,Regional Red,Argentina
+2493,Paraje Altamira,Malbec,Regional Red,Argentina
+2494,Perdriel,Malbec,Regional Red,Argentina
+2495,Russell,Malbec,Regional Red,Argentina
+2496,San Carlos,"Malbec, Sémillon",Regional Red,Argentina
+2500,Ugarteche,Malbec,Regional Red,Argentina
+2501,Villa Bastías,Malbec,Regional Red,Argentina
+2502,Vista Flores,Malbec,Regional Red,Argentina
+2508,Sarmiento,Pinot Noir,Regional Red,Argentina
+2509,Colomé,Malbec,Regional Red,Argentina
+2510,Molinos,Malbec,Regional Red,Argentina
+2511,Payogasta,Malbec,Regional Red,Argentina
+2512,Valles Calchaquíes,"Malbec, Tannat",Regional Red,Argentina
+2514,Valle de Tulum,"Syrah, Croatina",Regional Red,Argentina
+2588,Murray Darling (Vic),Syrah,Regional Red,Australia
+2597,Swan Hill (Vic),Syrah,Regional Red,Australia
+2734,Panquehue,Syrah,Regional Red,Chile
+2737,Alto Maipo,Cabernet Sauvignon,Regional Red,Chile
+2744,Marchigüe,Cabernet Sauvignon,Regional Red,Chile
+2746,Pencahue,Cabernet Sauvignon,Regional Red,Chile
+2749,Puente Alto,Cabernet Sauvignon,Regional Red,Chile
+2750,Rapel Valley,"Cabernet Sauvignon, Carmenère",Regional Red,Chile
+2751,Rengo,Cabernet Sauvignon,Regional Red,Chile
+2752,Requínoa,Cabernet Sauvignon,Regional Red,Chile
+2753,Sagrada Familia,Cabernet Sauvignon,Regional Red,Chile
+2755,Talca,Cabernet Sauvignon,Regional Red,Chile
+2757,Elqui Valley,"Syrah, Carmenère",Regional Red,Chile
+2759,Río Hurtado,Syrah,Regional Red,Chile
+2765,Traiguén,Chardonnay,White,Chile
+3302,Ahr,"Pinot Noir, Frühburgunder",Regional Red,Germany
+3303,Badische Bergstraße,Riesling,White,Germany
+3305,Breisgau,Pinot Noir,Regional Red,Germany
+3306,Kaiserstuhl,Pinot Noir,Regional Red,Germany
+3308,Ortenau,Riesling,White,Germany
+3309,Tuniberg,Pinot Gris,White,Germany
+3313,Mainviereck,Pinot Noir,Regional Red,Germany
+3316,Hessische Bergstraße,Riesling,White,Germany
+3317,Mittelrhein,Riesling,White,Germany
+3318,Ayler Kupp,Riesling,White,Germany
+3319,Bernkastel,Riesling,White,Germany
+3320,Bernkasteler Doctor,Riesling,White,Germany
+3321,Brauneberger Juffer-Sonnenuhr,Riesling,White,Germany
+3322,Erdener Prälat,Riesling,White,Germany
+3323,Graacher Himmelreich,Riesling,White,Germany
+3324,Maximin Grünhäuser Abtsberg,Riesling,White,Germany
+3327,Ockfener Bockstein,Riesling,White,Germany
+3328,Piesporter Goldtröpfchen,Riesling,White,Germany
+3329,Ruwer,Riesling,White,Germany
+3330,Saar,Riesling,White,Germany
+3331,Scharzhofberger,Riesling,White,Germany
+3332,Trittenheimer Apotheke,Riesling,White,Germany
+3333,Ürziger Würzgarten,Riesling,White,Germany
+3334,Wehlener Sonnenuhr,Riesling,White,Germany
+3335,Zeltinger Sonnenuhr,Riesling,White,Germany
+3336,Dorsheimer Goldloch,Riesling,White,Germany
+3338,Nahetal,Riesling,White,Germany
+3339,Niederhäuser Hermannshöhle,Riesling,White,Germany
+3340,Schlossböckelheimer Kupfergrube,Riesling,White,Germany
+3349,VDP.Erste Lage,Riesling,White,Germany
+3351,Deidesheimer Hohenmorgen,Riesling,White,Germany
+3352,Forster Jesuitengarten,Riesling,White,Germany
+3353,Forster Kirchenstück,Riesling,White,Germany
+3354,Mittelhaardt-Deutsche Weinstraße,Riesling,White,Germany
+3355,Südliche Weinstraße,"Riesling, Pinot Blanc",White,Germany
+3356,Ungsteiner Herrenberg,Riesling,White,Germany
+3357,Assmannshäuser Höllenberg,Pinot Noir,Regional Red,Germany
+3358,Erbacher Marcobrunn,Riesling,White,Germany
+3359,Hochheimer Domdechaney,Riesling,White,Germany
+3360,Johannisberg,Riesling,White,Germany
+3361,Kiedricher Gräfenberg,Riesling,White,Germany
+3362,Rüdesheimer Berg Schlossberg,Riesling,White,Germany
+3363,Schloss Johannisberg,Riesling,White,Germany
+3364,Steinberg,Riesling,White,Germany
+3365,Bingen,Riesling,White,Germany
+3367,Nierstein,"Riesling, Sylvaner",White,Germany
+3368,Niersteiner Pettenthal,Riesling,White,Germany
+3371,Wonnegau,Riesling,White,Germany
+3978,Kumeu,Chardonnay,White,New Zealand
+3984,Waitaki Valley North Otago,Pinot Noir,Regional Red,New Zealand
+3986,Bannockburn,Pinot Noir,Regional Red,New Zealand
+3987,Bendigo,Pinot Noir,Regional Red,New Zealand
+3988,Cromwell Basin,Pinot Noir,Regional Red,New Zealand
+3989,Gibbston,Pinot Noir,Regional Red,New Zealand
+3990,Wanaka,Pinot Noir,Regional Red,New Zealand
+3991,Gisborne,"Chardonnay, Gewurztraminer",White,New Zealand
+3999,Wairau Valley,Sauvignon Blanc,White,New Zealand
+4006,Waitaki Valley,Pinot Noir,Regional Red,New Zealand
+4031,Borba,"Tempranillo, Trincadeira",Regional Red,Portugal
+4036,Redondo,"Tempranillo, Trincadeira",Regional Red,Portugal
+4039,Vinho de Talha,"Tempranillo, Trincadeira",Regional Red,Portugal
+4093,Chaves,Tempranillo,Regional Red,Portugal
+4094,Trás-os-Montes,"Tempranillo, Trincadeira",Regional Red,Portugal
+4095,Valpaços,"Tempranillo, Touriga Franca",Regional Red,Portugal
+4177,Robertson,"Chardonnay, Sauvignon Blanc",White,South Africa
+4180,Bot River,"Syrah, Chenin Blanc",Regional Red,South Africa
+4182,Elgin,"Sauvignon Blanc, Chardonnay",White,South Africa
+4183,Elim,"Sauvignon Blanc, Syrah",White,South Africa
+4192,Cederberg,"Sauvignon Blanc, Chenin Blanc",White,South Africa
+4196,Durbanville,"Sauvignon Blanc, Merlot",White,South Africa
+4201,Paardeberg,"Syrah, Chenin Blanc",Regional Red,South Africa
+4212,Wellington,"Syrah, Cabernet Sauvignon",Regional Red,South Africa
+4223,Citrusdal Mountain,"Syrah, Chenin Blanc",Regional Red,South Africa
+4237,Sierras de Málaga,"Romé, Syrah",Regional Red,Spain
+4296,Pla de Bages,"Picapoll, Cabernet Sauvignon",Regional Red,Spain
+4335,Chozas Carrascal,"Bobal, Tempranillo",Regional Red,Spain
+4337,Los Balagueses,"Bobal, Syrah",Regional Red,Spain
+4581,Hudson River Region,"Seyval Blanc, Cabernet Franc",White,USA
+2543,Upper Hunter Valley,"Sémillon, Chardonnay",White,Australia
+2589,Nagambie Lakes,"Marsanne, Syrah",White,Australia
+2641,Sausal,Sauvignon Blanc,White,Austria
+2643,Südsteiermark,"Sauvignon Blanc, Chardonnay",White,Austria
+3346,Grosses Gewächs (VDP.GG),Riesling,White,Germany
+3370,Roter Hang (Nierstein),Riesling,White,Germany
+4065,Moscatel do Douro,Muscat Blanc à Petits Grains,Fortified Wine,Portugal
+4174,Bonnievale,Chardonnay,White,South Africa
+4175,Breedekloof,Chenin Blanc,White,South Africa
+4176,Goudini,Chenin Blanc,White,South Africa
+4178,Slanghoek,Chenin Blanc,White,South Africa
+4179,Worcester,"Chenin Blanc, Colombard",White,South Africa
+4181,Cape Agulhas,Sauvignon Blanc,White,South Africa
+4184,Hemel-en-Aarde Ridge,Pinot Noir,Regional Red,South Africa
+4185,Overberg,Sauvignon Blanc,White,South Africa
+4187,Stanford Foothills,Pinot Noir,Regional Red,South Africa
+4188,Sunday's Glen,Pinot Noir,Regional Red,South Africa
+4189,Swellendam,Sauvignon Blanc,White,South Africa
+4190,Upper Hemel-en-Aarde Valley,Pinot Noir,Regional Red,South Africa
+4193,Banghoek,Cabernet Sauvignon,Regional Red,South Africa
+4194,Darling,Sauvignon Blanc,White,South Africa
+4195,Devon Valley,Cabernet Sauvignon,Regional Red,South Africa
+4198,Jonkershoek Valley,Cabernet Sauvignon,Regional Red,South Africa
+4199,Lutzville Valley,Chenin Blanc,White,South Africa
+4200,Malmesbury,Syrah,Regional Red,South Africa
+4203,Papegaaiberg,Cabernet Sauvignon,Regional Red,South Africa
+4204,Piekenierskloof,Grenache,Regional Red,South Africa
+4205,Polkadraai Hills,Chenin Blanc,White,South Africa
+4206,Riebeekberg,Syrah,Regional Red,South Africa
+4207,Simonsberg-Stellenbosch,Cabernet Sauvignon,Regional Red,South Africa
+4211,Voor Paardeberg,Syrah,Regional Red,South Africa
+4213,Barrydale,Syrah,Regional Red,South Africa
+4222,Sutherland-Karoo,Syrah,Regional Red,South Africa
+4224,Olifants River,"Chenin Blanc, Colombard",White,South Africa
+4633,Shenandoah Valley (VA),"Viognier, Chardonnay",White,USA
+3066,Blanquette de Limoux,Mauzac,Sparkling,France
+3067,Blanquette Méthode Ancestrale,Mauzac,Sparkling,France
+3173,Crémant de Die,Clairette,Sparkling,France
+3230,Ayze,Gringet,Sparkling,France
+3447,Etyek-Buda,"Chardonnay, Pinot Noir",Sparkling,Hungary
+4405,Hampshire,"Chardonnay, Pinot Noir",Sparkling,United Kingdom
+4406,Kent,"Chardonnay, Pinot Noir",Sparkling,United Kingdom
+4407,Surrey,"Chardonnay, Pinot Noir",Sparkling,United Kingdom
+4411,Dorset,"Chardonnay, Pinot Noir",Sparkling,United Kingdom
+2498,Santa Rosa,"Croatina, Malbec",Regional Red,Argentina
+2617,Swan Valley,"Verdelho, Grenache",Fortified Wine,Australia
+2631,Kamptal Ried Heiligenstein,Riesling,White,Austria
+2695,Black Sage Bench,"Cabernet Sauvignon, Syrah",Regional Red,Canada
+2698,Golden Mile Bench,"Merlot, Cabernet Franc",Regional Red,Canada
+2702,Naramata Bench,"Riesling, Pinot Gris",White,Canada
+2703,Okanagan Falls,"Pinot Noir, Riesling",Regional Red,Canada
+2704,Osoyoos,"Cabernet Sauvignon, Merlot",Regional Red,Canada
+2706,Similkameen Valley,"Merlot, Syrah",Regional Red,Canada
+2707,Skaha Bench,"Syrah, Pinot Gris",Regional Red,Canada
+2714,Beamsville Bench,"Riesling, Chardonnay",White,Canada
+2716,Four Mile Creek,"Cabernet Franc, Merlot",Regional Red,Canada
+2718,Lake Erie North Shore,"Cabernet Franc, Merlot",Regional Red,Canada
+2722,Prince Edward County,"Pinot Noir, Chardonnay",Regional Red,Canada
+2724,St. David's Bench,"Cabernet Franc, Merlot",Regional Red,Canada
+2726,Twenty Mile Bench,"Riesling, Chardonnay",White,Canada
+2738,Apalta,"Carmenère, Syrah",Regional Red,Chile
+2739,Cachapoal Valley,"Carmenère, Cabernet Sauvignon",Regional Red,Chile
+2745,Maule Valley,"Carignan, Cabernet Sauvignon",Regional Red,Chile
+2839,Edelzwicker,,White,France
+2844,Froehn,Gewurztraminer,White,France
+2859,Mambourg,Gewurztraminer,White,France
+2887,Zotzenberg,Sylvaner,White,France
+2944,Bourgogne Aligoté,Aligoté,White,France
+2954,Bouzeron,Aligoté,White,France
+3049,Ajaccio,Sciaccarello,Regional Red,France
+3055,Vin de Corse Porto-Vecchio,Vermentino,White,France
+3058,Arbois Pupillin,Poulsard,Regional Red,France
+3059,Château-Chalon,Savagnin,White,France
+3065,Vin Jaune,Savagnin,White,France
+3070,Clairette du Languedoc,Clairette,White,France
+3072,Corbières-Boutenac,"Carignan, Mourvèdre",Regional Red,France
+3120,Pouilly-sur-Loire,Chasselas,White,France
+3125,Gros Plant du Pays Nantais,Folle Blanche,White,France
+3126,Muscadet Coteaux de la Loire,Melon de Bourgogne,White,France
+3127,Muscadet Côtes de Grandlieu,Melon de Bourgogne,White,France
+3132,Coteaux du Loir,Pineau d'Aunis,Regional Red,France
+3134,Cour-Cheverny,Romorantin,White,France
+3148,IGP Côtes de Gascogne,"Colombard, Trebbiano Toscano",White,France
+3153,Vin de France,,Regional Red,France
+3155,Bellet,"Vermentino, Braquet",White,France
+3156,Cassis,"Marsanne, Clairette",White,France
+3168,Château-Grillet,Viognier,White,France
+3176,Hermitage Blanc,"Marsanne, Roussanne",White,France
+3178,Saint-Péray,"Marsanne, Roussanne",White,France
+3182,Châteauneuf-du-Pape Blanc,"Grenache Blanc, Roussanne",White,France
+3184,Clairette de Bellegarde,Clairette,White,France
+3227,Abymes,Jacquère,White,France
+3228,Apremont,Jacquère,White,France
+3229,Arbin,Mondeuse Noire,Regional Red,France
+3234,Chignin,Jacquère,White,France
+3235,Chignin-Bergeron,Roussanne,White,France
+3236,Crépy,Chasselas,White,France
+3237,Cruet,Jacquère,White,France
+3238,Jongieux,"Jacquère, Altesse",White,France
+3239,Marignan,Chasselas,White,France
+3240,Marin,Chasselas,White,France
+3241,Mondeuse de Savoie,Mondeuse Noire,Regional Red,France
+3242,Montmélian,Jacquère,White,France
+3243,Ripaille,Chasselas,White,France
+3244,Roussette de Savoie,Altesse,White,France
+3245,Saint-Jean-de-la-Porte,Mondeuse Noire,Regional Red,France
+3246,Saint-Jeoire-Prieuré,Jacquère,White,France
+3247,Seyssel,"Altesse, Molette",White,France
+3248,Vin de Savoie,"Jacquère, Altesse",White,France
+3261,Fronton,Négrette,Regional Red,France
+3266,Jurançon Sec,Gros Manseng,White,France
+3268,Marcillac,Fer Servadou,Regional Red,France
+3275,Saint-Mont,"Tannat, Fer Servadou",Regional Red,France
+3277,Tursan,Baroque,White,France
+3315,Würzburger Stein,"Sylvaner, Riesling",White,Germany
+3373,Sachsen,"Müller-Thurgau, Riesling",White,Germany
+3473,Golan Heights,"Cabernet Sauvignon, Merlot",Regional Red,Israel
+3474,Lower Galilee,"Cabernet Sauvignon, Merlot",Regional Red,Israel
+3477,Samson,"Chardonnay, Sauvignon Blanc",White,Israel
+3918,Kefraya,"Syrah, Cabernet Sauvignon",Regional Red,Lebanon
+3921,Mount Lebanon,"Syrah, Cabernet Sauvignon",Regional Red,Lebanon
+4032,Évora,"Trincadeira, Tempranillo",Regional Red,Portugal
+4037,Reguengos,"Trincadeira, Tempranillo",Regional Red,Portugal
+4061,Douro Baixo Corgo,"Touriga Franca, Tempranillo",Regional Red,Portugal
+4091,Península de Setúbal,"Castelão, Syrah",Regional Red,Portugal
+4215,Klein Karoo,"Muscat Blanc à Petits Grains, Touriga Nacional",Fortified Wine,South Africa
+4216,Montagu,Muscat Blanc à Petits Grains,Fortified Wine,South Africa
+4217,Cape Blend,"Pinotage, Cabernet Sauvignon, Merlot",Regional Red,South Africa
+2802,Plešivica Sparkling,"Chardonnay, Pinot Noir",Sparkling,Croatia
+3436,Balatonboglár,Chardonnay,Sparkling,Hungary
+3534,Lambrusco di Sorbara,Lambrusco di Sorbara,Sparkling,Italy
+3535,Lambrusco Grasparossa di Castelvetro,Lambrusco Grasparossa,Sparkling,Italy
+3536,Lambrusco Mantovano,Lambrusco Viadanese,Sparkling,Italy
+3537,Lambrusco Reggiano,"Lambrusco Marani, Lambrusco Salamino",Sparkling,Italy
+3538,Lambrusco Salamino di Santa Croce,Lambrusco Salamino,Sparkling,Italy
+3539,Modena,Lambrusco Grasparossa,Sparkling,Italy
+3638,Vernaccia di Serrapetrona,Vernaccia Nera,Sparkling,Italy
+3651,Brachetto d'Acqui,Brachetto,Sparkling,Italy
+3874,Lessini Durello,Durella,Sparkling,Italy
+3944,Querétaro,"Chardonnay, Pinot Noir",Sparkling,Mexico
+3947,Cricova,"Chardonnay, Pinot Noir",Sparkling,Moldova
+4408,Sussex,"Chardonnay, Pinot Noir, Meunier",Sparkling,United Kingdom
+2667,Vale do São Francisco,"Syrah, Cabernet Sauvignon",Regional Red,Brazil
+2675,Serra do Sudeste,"Pinot Noir, Cabernet Franc",Regional Red,Brazil
+2677,Planalto Catarinense,"Sauvignon Blanc, Merlot",Regional Red,Brazil
+2697,Fraser Valley,"Pinot Gris, Bacchus",White,Canada
+2699,Gulf Islands,"Pinot Gris, Ortega",White,Canada
+2701,Lillooet,Pinot Noir,Regional Red,Canada
+2708,Thompson Valley,Riesling,White,Canada
+2715,Creek Shores,Chardonnay,White,Canada
+2719,Lincoln Lakeshore,Riesling,White,Canada
+2720,Niagara Lakeshore,Cabernet Franc,Regional Red,Canada
+2721,Niagara River,Cabernet Franc,Regional Red,Canada
+2723,Short Hills Bench,Pinot Noir,Regional Red,Canada
+2725,Toronto (Ontario),Riesling,White,Canada
+2727,Vinemount Ridge,Cabernet Franc,Regional Red,Canada
+2777,Manas,"Cabernet Sauvignon, Merlot",Regional Red,China
+2781,Villa de Leyva,"Riesling, Sauvignon Blanc",White,Colombia
+2823,Chota Valley,"Cabernet Sauvignon, Syrah",Regional Red,Ecuador
+2828,Ziway,"Syrah, Cabernet Sauvignon",Regional Red,Ethiopia
+3133,Coteaux du Vendômois,Pineau d'Aunis,Rosé,France
+3179,Vin de Paille de l'Hermitage,"Marsanne, Roussanne",Dessert,France
+3256,Côtes de Montravel,Sémillon,Dessert,France
+3263,Haut-Montravel,"Sémillon, Muscadelle",Dessert,France
+3271,Pacherenc du Vic-Bilh,"Petit Manseng, Gros Manseng",Dessert,France
+3366,Liebfraumilch,"Müller-Thurgau, Riesling",Dessert,Germany
+3386,Atalanti Valley,"Syrah, Agiorgitiko",Regional Red,Greece
+3404,Metsovo,Cabernet Sauvignon,Regional Red,Greece
+3412,Drama,"Cabernet Sauvignon, Agiorgitiko",Regional Red,Greece
+3451,Tolna,Chardonnay,White,Hungary
+3462,Villányi Franc,Cabernet Franc,Regional Red,Hungary
+3466,Akluj,"Cabernet Sauvignon, Syrah",Regional Red,India
+3475,Jerusalem Mountains,Cabernet Sauvignon,Regional Red,Israel
+3476,Negev,"Cabernet Sauvignon, Petit Verdot",Regional Red,Israel
+3478,Shomron,"Cabernet Sauvignon, Carignan",Regional Red,Israel
+3479,Abruzzo Pecorino,Pecorino,White,Italy
+3482,Montepulciano d'Abruzzo Colline Teramane,Montepulciano,Regional Red,Italy
+3483,Ortona,Trebbiano Abruzzese,White,Italy
+3484,Terre Tollesi,Montepulciano,Regional Red,Italy
+3485,Trebbiano d'Abruzzo,Trebbiano Abruzzese,White,Italy
+3486,Villamagna,Montepulciano,Regional Red,Italy
+3487,Aglianico del Vulture,Aglianico,Regional Red,Italy
+3488,Aglianico del Vulture Superiore,Aglianico,Regional Red,Italy
+3492,Bivongi,"Gaglioppo, Greco Nero",Regional Red,Italy
+3493,Cirò,Gaglioppo,Regional Red,Italy
+3495,Lamezia,"Gaglioppo, Nerello Mascalese",Regional Red,Italy
+3496,Melissa,Gaglioppo,Regional Red,Italy
+3497,Sant'Anna di Isola Capo Rizzuto,Gaglioppo,Regional Red,Italy
+3498,Savuto,"Gaglioppo, Magliocco",Regional Red,Italy
+3499,Scavigna,"Gaglioppo, Nerello Mascalese",Regional Red,Italy
+3500,Terre di Cosenza,Magliocco,Regional Red,Italy
+3501,Verbicaro,"Gaglioppo, Magliocco",Regional Red,Italy
+3502,Aglianico del Taburno,Aglianico,Regional Red,Italy
+3503,Asprinio di Aversa,Asprinio,White,Italy
+3504,Campi Flegrei,Piedirosso,Regional Red,Italy
+3505,Capri,"Falanghina, Greco",White,Italy
+3507,Cilento,Aglianico,Regional Red,Italy
+3508,Costa d'Amalfi,"Falanghina, Biancolella",White,Italy
+3509,Falanghina del Sannio,Falanghina,White,Italy
+3510,Falerno del Massico,"Aglianico, Piedirosso",Regional Red,Italy
+3512,Galluccio,Aglianico,Regional Red,Italy
+3515,Irpinia,Aglianico,Regional Red,Italy
+3516,Ischia,"Biancolella, Forastera",White,Italy
+3517,Lacryma Christi del Vesuvio,"Piedirosso, Aglianico",Regional Red,Italy
+3518,Penisola Sorrentina,Piedirosso,Regional Red,Italy
+3519,Sannio,"Falanghina, Greco",White,Italy
+3521,Taburno,Falanghina,White,Italy
+3523,Vesuvio,"Piedirosso, Sciascinoso",Regional Red,Italy
+3525,Colli Bolognesi Pignoletto,Grechetto,White,Italy
+3528,Colli di Parma,Malvasia di Candia Aromatica,White,Italy
+3530,Colli di Scandiano e Canossa,Spergola,White,Italy
+3531,Colli Piacentini,"Malvasia, Ortrugo",White,Italy
+3533,Gutturnio,"Barbera, Croatina",Regional Red,Italy
+3540,Ortrugo dei Colli Piacentini,Ortrugo,White,Italy
+3541,Reno,Montuni,White,Italy
+3542,Romagna Albana,Albana,White,Italy
+3544,Romagna Pagadebit,Bombino Bianco,White,Italy
+3546,Romagna Trebbiano,Trebbiano Romagnolo,White,Italy
+3547,Carso,"Terrano, Refosco dal Peduncolo Rosso",Regional Red,Italy
+3555,Friuli Colli Orientali,"Friulano, Ribolla Gialla",White,Italy
+3559,Lison,Friulano,White,Italy
+3561,Refosco dal Peduncolo Rosso,Refosco dal Peduncolo Rosso,Regional Red,Italy
+3562,Rosazzo,"Friulano, Ribolla Gialla",White,Italy
+3563,Schioppettino di Prepotto,Schioppettino,Regional Red,Italy
+3567,Bianco Capena,"Malvasia, Trebbiano Toscano",White,Italy
+3569,Castelli Romani,"Malvasia, Trebbiano Toscano",White,Italy
+3571,Cesanese del Piglio,Cesanese,Regional Red,Italy
+3572,Cesanese di Affile,Cesanese,Regional Red,Italy
+3573,Cesanese di Olevano Romano,Cesanese,Regional Red,Italy
+3575,Colli Albani,"Malvasia, Trebbiano Toscano",White,Italy
+3578,Colli Lanuvini,"Malvasia, Trebbiano Toscano",White,Italy
+3579,Cori,"Nero Buono, Montepulciano",Regional Red,Italy
+3580,Est! Est!! Est!!! di Montefiascone,"Trebbiano Toscano, Malvasia",White,Italy
+3582,Frascati Superiore,Malvasia del Lazio,White,Italy
+3583,Frascati Superiore Riserva,Malvasia del Lazio,White,Italy
+3585,Marino,"Malvasia, Trebbiano Toscano",White,Italy
+3586,Montecompatri Colonna,"Malvasia, Trebbiano Toscano",White,Italy
+3592,Zagarolo,"Malvasia, Trebbiano Toscano",White,Italy
+3593,Cinque Terre,"Bosco, Albarola, Vermentino",White,Italy
+3595,Colli di Luni,Vermentino,White,Italy
+3596,Golfo del Tigullio,"Vermentino, Bianchetta",White,Italy
+3597,Pornassio,Ormeasco,Regional Red,Italy
+3598,Riviera Ligure di Ponente,Vermentino,White,Italy
+3599,Rossese di Dolceacqua,Rossese,Regional Red,Italy
+3600,Val Polcevera,"Vermentino, Bianchetta",White,Italy
+3601,Bonarda dell'Oltrepò Pavese,Croatina,Regional Red,Italy
+3602,Botticino,"Barbera, Marzemino",Regional Red,Italy
+3603,Buttafuoco,"Croatina, Barbera",Regional Red,Italy
+3605,Cellatica,"Marzemino, Barbera",Regional Red,Italy
+3615,San Colombano al Lambro,"Croatina, Barbera",Regional Red,Italy
+3621,Bianchello del Metauro,Biancame,White,Italy
+3622,Castelli di Jesi Verdicchio Riserva,Verdicchio,White,Italy
+3623,Colli Maceratesi,Maceratino,White,Italy
+3625,Conero Riserva,Montepulciano,Regional Red,Italy
+3626,Esino,Verdicchio,White,Italy
+3627,Falerio,"Trebbiano Toscano, Passerina, Pecorino",White,Italy
+3628,Lacrima di Morro d'Alba,Lacrima,Regional Red,Italy
+3629,Offida Passerina,Passerina,White,Italy
+3630,Offida Pecorino,Pecorino,White,Italy
+3631,Rosso Conero,Montepulciano,Regional Red,Italy
+3633,Serrapetrona,Vernaccia Nera,Regional Red,Italy
+3636,Verdicchio di Matelica,Verdicchio,White,Italy
+3637,Verdicchio di Matelica Riserva,Verdicchio,White,Italy
+3639,Biferno,"Montepulciano, Aglianico",Regional Red,Italy
+3641,Tintilia del Molise,Tintilia,Regional Red,Italy
+3648,Barbera del Monferrato,Barbera,Regional Red,Italy
+3649,Barbera del Monferrato Superiore,Barbera,Regional Red,Italy
+3653,Calosso,Gamba Rossa,Regional Red,Italy
+3657,Cisterna d'Asti,Croatina,Regional Red,Italy
+3658,Colli Tortonesi,"Barbera, Croatina",Regional Red,Italy
+3659,Colli Tortonesi Timorasso,Timorasso,White,Italy
+3660,Collina Torinese,"Barbera, Freisa",Regional Red,Italy
+3662,Cortese dell'Alto Monferrato,Cortese,White,Italy
+3664,Dogliani,Dolcetto,Regional Red,Italy
+3665,Dolcetto d'Acqui,Dolcetto,Regional Red,Italy
+3667,Dolcetto d'Asti,Dolcetto,Regional Red,Italy
+3668,Dolcetto di Diano d'Alba,Dolcetto,Regional Red,Italy
+3669,Dolcetto di Ovada,Dolcetto,Regional Red,Italy
+3670,Dolcetto di Ovada Superiore,Dolcetto,Regional Red,Italy
+3671,Erbaluce di Caluso,Erbaluce,White,Italy
+3673,Freisa d'Asti,Freisa,Regional Red,Italy
+3674,Freisa di Chieri,Freisa,Regional Red,Italy
+3675,Gabiano,"Barbera, Freisa",Regional Red,Italy
+3679,Grignolino d'Asti,Grignolino,Regional Red,Italy
+3680,Grignolino del Monferrato Casalese,Grignolino,Regional Red,Italy
+3688,Nizza,Barbera,Regional Red,Italy
+3690,Pinerolese,"Barbera, Bonarda Piemontese",Regional Red,Italy
+3692,Roero Arneis,Arneis,White,Italy
+3693,Rubino di Cantavenna,"Barbera, Grignolino",Regional Red,Italy
+3694,Ruchè di Castagnole Monferrato,Ruchè,Regional Red,Italy
+3698,Terre Alfieri,Arneis,White,Italy
+3700,Valsusa,"Avanà, Barbera",Regional Red,Italy
+3701,Verduno Pelaverga,Pelaverga Piccolo,Regional Red,Italy
+3704,Barletta,Nero di Troia,Regional Red,Italy
+3705,Brindisi,Negroamaro,Regional Red,Italy
+3706,Cacc'e Mmitte di Lucera,"Nero di Troia, Montepulciano",Regional Red,Italy
+3707,Castel del Monte,"Nero di Troia, Aglianico",Regional Red,Italy
+3709,Castel del Monte Nero di Troia Riserva,Nero di Troia,Regional Red,Italy
+3711,Copertino,Negroamaro,Regional Red,Italy
+3712,Galatina,Negroamaro,Regional Red,Italy
+3714,Gravina,"Greco, Malvasia",White,Italy
+3715,Leverano,Negroamaro,Regional Red,Italy
+3716,Lizzano,Negroamaro,Regional Red,Italy
+3717,Locorotondo,"Verdeca, Bianco d'Alessano",White,Italy
+3718,Martina Franca,Verdeca,White,Italy
+3719,Matino,Negroamaro,Regional Red,Italy
+3720,Nardò,"Negroamaro, Malvasia Nera",Regional Red,Italy
+3721,Negroamaro di Terra d'Otranto,Negroamaro,Regional Red,Italy
+3723,Ostuni,"Impigno, Francavidda",White,Italy
+3726,Rosso di Cerignola,"Nero di Troia, Negroamaro",Regional Red,Italy
+3728,Salice Salentino,Negroamaro,Regional Red,Italy
+3729,San Severo,"Bombino Bianco, Trebbiano Toscano",White,Italy
+3730,Squinzano,Negroamaro,Regional Red,Italy
+3731,Tavoliere delle Puglie,Nero di Troia,Regional Red,Italy
+3735,Campidano di Terralba,Bovale,Regional Red,Italy
+3737,Carignano del Sulcis,Carignan,Regional Red,Italy
+3741,Monica di Sardegna,Monica,Regional Red,Italy
+3745,Nuragus di Cagliari,Nuragus,White,Italy
+3746,Sardegna Semidano,Semidano,White,Italy
+3747,Vermentino di Gallura,Vermentino,White,Italy
+3748,Vermentino di Sardegna,Vermentino,White,Italy
+3750,Alcamo,Catarratto,White,Italy
+3752,Contea di Sclafani,"Nero d'Avola, Perricone",Regional Red,Italy
+3755,Eloro,"Nero d'Avola, Frappato",Regional Red,Italy
+3756,Erice,"Catarratto, Grillo",White,Italy
+3757,Etna Bianco,"Carricante, Catarratto",White,Italy
+3760,Faro,"Nerello Mascalese, Nocera",Regional Red,Italy
+3762,Mamertino,"Nero d'Avola, Nocera",Regional Red,Italy
+3764,Monreale,"Nero d'Avola, Perricone",Regional Red,Italy
+3766,Noto,Nero d'Avola,Regional Red,Italy
+3768,Riesi,Nero d'Avola,Regional Red,Italy
+3769,Salaparuta,Nero d'Avola,Regional Red,Italy
+3770,Sambuca di Sicilia,Nero d'Avola,Regional Red,Italy
+3771,Santa Margherita di Belice,"Inzolia, Catarratto",White,Italy
+3772,Sciacca,"Inzolia, Catarratto",White,Italy
+3773,Sicilia,Nero d'Avola,Regional Red,Italy
+3774,Siracusa,Nero d'Avola,Regional Red,Italy
+3775,Vittoria,"Frappato, Nero d'Avola",Regional Red,Italy
+3777,Alto Adige Lagrein,Lagrein,Regional Red,Italy
+3778,Alto Adige Meranese,Schiava,Regional Red,Italy
+3779,Alto Adige Santa Maddalena,"Schiava, Lagrein",Regional Red,Italy
+3784,Santa Maddalena,"Schiava, Lagrein",Regional Red,Italy
+3785,Teroldego Rotaliano,Teroldego,Regional Red,Italy
+3787,Trentino Marzemino,Marzemino,Regional Red,Italy
+3790,Valdadige Terradeiforti,"Enantio, Casetta",Regional Red,Italy
+3793,Bianco di Pitigliano,"Trebbiano Toscano, Greco",White,Italy
+3797,Candia dei Colli Apuani,"Vermentino, Albarola",White,Italy
+3808,Elba,"Inzolia, Trebbiano Toscano",White,Italy
+3812,Montecarlo,"Trebbiano Toscano, Sémillon",White,Italy
+3830,Val d'Arbia,Trebbiano Toscano,White,Italy
+3833,Vernaccia di San Gimignano,Vernaccia di San Gimignano,White,Italy
+3840,Colli del Trasimeno,Gamay del Trasimeno,Regional Red,Italy
+3841,Colli Martani,Grechetto,White,Italy
+3847,Orvieto Classico,"Grechetto, Trebbiano Toscano",White,Italy
+3849,Spoleto,Trebbiano Spoletino,White,Italy
+3850,Todi,Grechetto,White,Italy
+3853,Trebbiano Spoletino,Trebbiano Spoletino,White,Italy
+3854,Blanc de Morgex et de La Salle,Prié Blanc,White,Italy
+3857,Torrette,Petit Rouge,Regional Red,Italy
+3861,Bagnoli Friularo,Raboso Piave,Regional Red,Italy
+3864,Bardolino Superiore,"Corvina, Rondinella",Regional Red,Italy
+3865,Bianco di Custoza,"Garganega, Trebbiano Toscano",White,Italy
+3873,Gambellara,Garganega,White,Italy
+3877,Monti Lessini,"Durella, Garganega",White,Italy
+3879,Piave Malanotte,Raboso Piave,Regional Red,Italy
+3884,Soave Classico,Garganega,White,Italy
+3885,Soave Superiore,Garganega,White,Italy
+3892,Vicenza,"Garganega, Pinot Blanc",White,Italy
+3907,Mount Nebo,"Cabernet Sauvignon, Merlot",Regional Red,Jordan
+3912,Naivasha,"Syrah, Sauvignon Blanc",Regional Red,Kenya
+3920,Jezzine,"Syrah, Cinsault",Regional Red,Lebanon
+3933,Valle de Calafia,"Nebbiolo, Syrah",Regional Red,Mexico
+3935,Valle de Ojos Negros,"Chardonnay, Chenin Blanc",White,Mexico
+3937,Valle de Santo Tomás,"Cabernet Sauvignon, Merlot",Regional Red,Mexico
+3940,Parras de la Fuente,"Cabernet Sauvignon, Syrah",Regional Red,Mexico
+3941,Guanajuato,"Malbec, Syrah",Regional Red,Mexico
+3945,Valle de las Arcinas,"Cabernet Sauvignon, Malbec",Regional Red,Mexico
+3967,Inle Lake,"Syrah, Chenin Blanc",Regional Red,Myanmar
+4197,Franschhoek Valley,"Sémillon, Cabernet Sauvignon",White,South Africa
+4345,Ticino Bianco,"Chardonnay, Merlot",White,Switzerland
+4348,Dôle,"Pinot Noir, Gamay",Regional Red,Switzerland
+4376,Hua Hin Hills,"Syrah, Muscat Blanc à Petits Grains",Regional Red,Thailand
+4377,Khao Yai,"Syrah, Chenin Blanc",Regional Red,Thailand
+4378,Phu Rua,"Syrah, Chenin Blanc",Regional Red,Thailand
+4402,Essex,"Chardonnay, Bacchus",White,United Kingdom
+4669,Carora,"Tempranillo, Syrah",Regional Red,Venezuela
+2659,Crémant de Wallonie,"Chardonnay, Pinot Noir",Sparkling,Belgium
+2669,Altos de Pinto Bandeira,"Chardonnay, Pinot Noir",Sparkling,Brazil
+2674,Pinto Bandeira,"Chardonnay, Pinot Noir",Sparkling,Brazil
+4134,Sevastopol,"Chardonnay, Pinot Noir",Sparkling,Russia
+4136,Abrau-Dyurso,"Chardonnay, Pinot Noir",Sparkling,Russia
+4137,Anapa,"Chardonnay, Riesling",Sparkling,Russia
+4164,Radgona-Kapela,Chardonnay,Sparkling,Slovenia
+4288,Clàssic Penedès,"Xarel·lo, Viura",Sparkling,Spain
+4290,Corpinnat,"Xarel·lo, Viura",Sparkling,Spain
+2637,Wachau Ried Achleiten,"Grüner Veltliner, Riesling",White,Austria
+2646,Federspiel,"Grüner Veltliner, Riesling",White,Austria
+2647,Smaragd,"Grüner Veltliner, Riesling",White,Austria
+2654,Haspengouw,"Chardonnay, Pinot Gris",White,Belgium
+2657,Côtes de Sambre et Meuse,"Chardonnay, Pinot Gris",White,Belgium
+2660,Paro Valley,Cabernet Sauvignon,Regional Red,Bhutan
+2662,Valle de Sorata,Cabernet Sauvignon,Regional Red,Bolivia
+2668,Serra da Mantiqueira,Syrah,Regional Red,Brazil
+2673,Monte Belo,"Merlot, Cabernet Sauvignon",Regional Red,Brazil
+2676,Vale dos Vinhedos,"Merlot, Cabernet Sauvignon",Regional Red,Brazil
+2694,Phnom Banan,Syrah,Regional Red,Cambodia
+2766,Hexi Corridor,Cabernet Sauvignon,Regional Red,China
+2767,Changli,Cabernet Sauvignon,Regional Red,China
+2768,Huailai,"Cabernet Sauvignon, Longyan",Regional Red,China
+2772,Qingtongxia,Cabernet Sauvignon,Regional Red,China
+2774,Qingdao,Chardonnay,White,China
+2776,Shanxi,"Cabernet Sauvignon, Aglianico",Regional Red,China
+2779,Yanqi Basin,Cabernet Sauvignon,Regional Red,China
+2780,Shangri-La (Deqin),"Cabernet Sauvignon, Cabernet Franc",Regional Red,China
+2782,Valle del Cauca,Cabernet Sauvignon,Regional Red,Colombia
+2824,Alexandria,"Grenache, Bobal",Regional Red,Egypt
+2826,Karm Abu Sir,Grenache,Regional Red,Egypt
+2827,Butajira,Chenin Blanc,White,Ethiopia
+3260,Floc de Gascogne (Southwest France),"Colombard, Trebbiano Toscano",Fortified Wine,France
+3273,Pineau des Charentes (Southwest France),"Trebbiano Toscano, Colombard",Fortified Wine,France
+3292,Teliani,Cabernet Sauvignon,Regional Red,Georgia
+3381,Muscat of Rhodes,Muscat Blanc à Petits Grains,Fortified Wine,Greece
+3382,Muscat of Samos,Muscat Blanc à Petits Grains,Fortified Wine,Greece
+3427,Muscat of Patras,Muscat Blanc à Petits Grains,Fortified Wine,Greece
+3428,Muscat of Rio Patras,Muscat Blanc à Petits Grains,Fortified Wine,Greece
+3463,Bijapur,Cabernet Sauvignon,Regional Red,India
+3464,Krishna Valley,Cabernet Sauvignon,Regional Red,India
+3465,Nandi Hills,"Syrah, Viognier",Regional Red,India
+3467,Sahyadri Valley,Cabernet Sauvignon,Regional Red,India
+3468,Sangli,Syrah,Regional Red,India
+3480,Cerasuolo d'Abruzzo,Montepulciano,Rosé,Italy
+3494,Greco di Bianco,Greco,Dessert,Italy
+3543,Romagna Cagnina,Terrano,Dessert,Italy
+3548,Carso Vitovska,Vitovska,Skin-Contact,Italy
+3549,Colli Orientali del Friuli Picolit,Picolit,Dessert,Italy
+3560,Ramandolo,Verduzzo Friulano,Dessert,Italy
+3564,Aleatico di Gradoli,Aleatico,Dessert,Italy
+3565,Aleatico di Terracina,Aleatico,Dessert,Italy
+3568,Cannellino di Frascati,Malvasia,Dessert,Italy
+3594,Cinque Terre Sciacchetrà,"Bosco, Albarola",Dessert,Italy
+3610,Moscato di Scanzo,Moscato di Scanzo,Dessert,Italy
+3613,Riviera del Garda Classico,Groppello,Rosé,Italy
+3616,Sangue di Giuda,"Croatina, Barbera",Dessert,Italy
+3634,Terre di Offida,Passerina,Dessert,Italy
+3654,Caluso Passito,Erbaluce,Dessert,Italy
+3684,Malvasia di Casorzo,Malvasia di Casorzo,Dessert,Italy
+3685,Malvasia di Castelnuovo Don Bosco,Malvasia di Schierano,Dessert,Italy
+3702,Aleatico di Puglia,Aleatico,Dessert,Italy
+3703,Alezio,Negroamaro,Rosé,Italy
+3708,Castel del Monte Bombino Nero,Bombino Nero,Rosé,Italy
+3738,Girò di Cagliari,Girò,Dessert,Italy
+3739,Malvasia di Bosa,Malvasia di Sardegna,Fortified Wine,Italy
+3744,Nasco di Cagliari,Nasco,Dessert,Italy
+3749,Vernaccia di Oristano,Vernaccia di Oristano,Fortified Wine,Italy
+3758,Etna Rosato,Nerello Mascalese,Rosé,Italy
+3761,Malvasia delle Lipari,Malvasia di Lipari,Dessert,Italy
+3765,Moscato di Pantelleria,Muscat of Alexandria,Dessert,Italy
+3767,Passito di Pantelleria,Muscat of Alexandria,Dessert,Italy
+3783,Lago di Caldaro (Kalterersee),Schiava,Regional Red,Italy
+3791,Vino Santo Trentino,Nosiola,Dessert,Italy
+3809,Elba Aleatico Passito,Aleatico,Dessert,Italy
+3835,Vin Santo del Chianti Classico,"Trebbiano Toscano, Malvasia",Dessert,Italy
+3836,Vin Santo di Montepulciano,"Trebbiano Toscano, Malvasia",Dessert,Italy
+3863,Bardolino Chiaretto,"Corvina, Rondinella",Rosé,Italy
+3870,Colli Euganei Fior d'Arancio,Moscato Giallo,Dessert,Italy
+3880,Recioto della Valpolicella,"Corvina, Rondinella",Dessert,Italy
+3881,Recioto di Gambellara,Garganega,Dessert,Italy
+3882,Recioto di Soave,Garganega,Dessert,Italy
+3886,Torcolato di Breganze,Vespaiola,Dessert,Italy
+3898,Chikumagawa Wine Valley,Merlot,Regional Red,Japan
+3899,Nagano,"Merlot, Chardonnay",Regional Red,Japan
+3900,Nihon Alps Wine Valley,Chardonnay,White,Japan
+3908,Madaba,Cabernet Sauvignon,Regional Red,Jordan
+3911,Lake Naivasha,Sauvignon Blanc,White,Kenya
+3916,Vientiane,Cabernet Sauvignon,Regional Red,Laos
+3922,Vaduz,Pinot Noir,Regional Red,Liechtenstein
+3932,Aguascalientes,Cabernet Sauvignon,Regional Red,Mexico
+3934,Valle de las Palmas,Cabernet Sauvignon,Regional Red,Mexico
+3936,Valle de San Vicente,Cabernet Sauvignon,Regional Red,Mexico
+3938,Valle de Tanamá,Nebbiolo,Regional Red,Mexico
+3939,Chihuahua,Cabernet Sauvignon,Regional Red,Mexico
+3942,Valle de Parras Nuevo León,Cabernet Sauvignon,Regional Red,Mexico
+3943,Puebla,Merlot,Regional Red,Mexico
+3948,Milestii Mici,Cabernet Sauvignon,Regional Red,Moldova
+3954,Valul lui Traian,"Merlot, Cabernet Sauvignon",Regional Red,Moldova
+3959,Beni M'Tir,"Cabernet Sauvignon, Syrah",Regional Red,Morocco
+3961,Coteaux de l'Atlas,"Syrah, Cabernet Sauvignon",Regional Red,Morocco
+3966,Aythaya (Taunggyi),"Syrah, Sauvignon Blanc",Regional Red,Myanmar
+3968,Taunggyi,Sauvignon Blanc,White,Myanmar
+3971,Kathmandu Valley,Cabernet Sauvignon,Regional Red,Nepal
+4010,Temjanika,Muscat Blanc à Petits Grains,White,North Macedonia
+4018,Majes,Cabernet Sauvignon,Regional Red,Peru
+4019,Ica Valley,"Malbec, Tannat, Quebranta",Regional Red,Peru
+4022,Tacna,Cabernet Sauvignon,Regional Red,Peru
+4109,Babadag,"Merlot, Cabernet Sauvignon",Regional Red,Romania
+4111,Sarica Niculițel,"Merlot, Cabernet Sauvignon",Regional Red,Romania
+4124,Corcova,"Merlot, Cabernet Sauvignon",Regional Red,Romania
+4142,Sammarinese,Sangiovese,Regional Red,San Marino
+4228,Bailén,Molinera,Regional Red,Spain
+4229,Condado de Huelva,Zalema,White,Spain
+4238,Binissalem,Manto Negro,Regional Red,Spain
+4239,Pla i Llevant,"Callet, Manto Negro",Regional Red,Spain
+4240,Vi de la Terra Mallorca,"Callet, Fogoneu",Regional Red,Spain
+4242,Arabako Txakolina,Hondarrabi Zuri,White,Spain
+4243,Bizkaiko Txakolina,Hondarrabi Zuri,White,Spain
+4244,Getariako Txakolina,Hondarrabi Zuri,White,Spain
+4245,Abona,Palomino,White,Spain
+4246,El Hierro,Vijariego,White,Spain
+4247,Gran Canaria,Listán Negro,Regional Red,Spain
+4248,La Gomera,Forastera Gomera,White,Spain
+4249,La Palma,"Palomino, Negramoll",White,Spain
+4250,Lanzarote,Malvasía Volcánica,White,Spain
+4251,Tacoronte-Acentejo,Listán Negro,Regional Red,Spain
+4252,Valle de Güímar,Palomino,White,Spain
+4253,Valle de la Orotava,Listán Negro,Regional Red,Spain
+4254,Ycoden-Daute-Isora,Palomino,White,Spain
+4255,Cangas,"Albarín Negro, Verdejo Negro",Regional Red,Spain
+4256,Costa de Cantabria,Albariño,White,Spain
+4259,Arribes,Juan García,Regional Red,Spain
+4265,Sierra de Salamanca,Rufete,Regional Red,Spain
+4266,Tierra de León,Prieto Picudo,Regional Red,Spain
+4268,Valles de Benavente,Prieto Picudo,Regional Red,Spain
+4278,Manchuela,Bobal,Regional Red,Spain
+4286,Alella,Xarel·lo,White,Spain
+4287,Catalunya,,Regional Red,Spain
+4289,Conca de Barberà,Trepat,Regional Red,Spain
+4298,Tarragona,"Viura, Xarel·lo",White,Spain
+4299,Terra Alta,Grenache Blanc,White,Spain
+4300,Cañamero,Alarije,White,Spain
+4302,Barbanza e Iria,Albariño,White,Spain
+4303,Betanzos,"Godello, Agudelo",White,Spain
+4304,Monterrei,"Godello, Treixadura",White,Spain
+4306,Ribeira Sacra,Mencía,Regional Red,Spain
+4307,Ribeiro,"Treixadura, Godello",White,Spain
+4308,Val do Miño-Ourense,Treixadura,White,Spain
+4309,Valdeorras,Godello,White,Spain
+4310,Alicante,Mourvèdre,Regional Red,Spain
+4311,Almansa,Alicante Bouschet,Regional Red,Spain
+4312,Bullas,Mourvèdre,Regional Red,Spain
+4315,Utiel-Requena,Bobal,Regional Red,Spain
+4316,Valencia,"Merseguera, Muscat of Alexandria",White,Spain
+4317,Yecla,Mourvèdre,Regional Red,Spain
+4319,Campo de Cartagena,Mourvèdre,Regional Red,Spain
+4332,Rioja Blanco,"Viura, Malvasia, Grenache Blanc",White,Spain
+4336,El Terrerazo,Bobal,Regional Red,Spain
+4341,Bündner Herrschaft,Pinot Noir,Regional Red,Switzerland
+4346,Ticino Merlot,Merlot,Regional Red,Switzerland
+4356,Syrah du Valais,Syrah,Regional Red,Switzerland
+4367,Schaffhausen,Pinot Noir,Regional Red,Switzerland
+4368,Bargylus (Latakia Hills),"Cabernet Sauvignon, Merlot",Regional Red,Syria
+4374,Hombolo,Chenin Blanc,White,Tanzania
+4400,Shabo,Cabernet Sauvignon,Regional Red,Ukraine
+4418,Altus,Cynthiana,Regional Red,USA
+4419,Arkansas Mountain,Cynthiana,Regional Red,USA
+4441,Lime Kiln Valley,Cabernet Pfeffer,Regional Red,USA
+4469,Jahant,Albariño,White,USA
+4548,Western Connecticut Highlands,Seyval Blanc,White,USA
+4556,Shawnee Hills,"Chambourcin, Norton",Regional Red,USA
+4557,Indiana Uplands,"Chambourcin, Traminette",Regional Red,USA
+4558,Upper Mississippi River Valley,"Marquette, Frontenac",Regional Red,USA
+4560,Linganore,Chambourcin,Regional Red,USA
+4567,Alexandria Lakes,Frontenac,Regional Red,USA
+4568,Augusta,Norton,Regional Red,USA
+4569,Hermann,"Norton, Chambourcin",Regional Red,USA
+4570,Loess Hills District,Norton,Regional Red,USA
+4571,Ozark Highlands,"Norton, Vignoles",Regional Red,USA
+4573,Cape May Peninsula,Chambourcin,Regional Red,USA
+4580,Champlain Valley of New York,Marquette,Regional Red,USA
+4588,Upper Hudson,"Marquette, Frontenac",Regional Red,USA
+4594,Isle St. George,Catawba,White,USA
+4595,Kanawha River Valley,Chambourcin,Regional Red,USA
+4596,Ohio River Valley,"Catawba, Vidal",White,USA
+4619,Central Delaware Valley,Chambourcin,Regional Red,USA
+4620,Cumberland Valley,Chambourcin,Regional Red,USA
+4643,Puget Sound,"Madeleine Angevine, Siegerrebe",White,USA
+4655,Wisconsin Ledge,Frontenac Gris,White,USA
+4674,Odzi Valley,"Cabernet Sauvignon, Pinotage",Regional Red,Zimbabwe
+2684,Lyaskovets,Chardonnay,Sparkling,Bulgaria
+4399,Odesa,"Chardonnay, Aligoté",Sparkling,Ukraine
+4409,Cornwall,"Seyval Blanc, Chardonnay",Sparkling,United Kingdom
+2503,Bonarda Argentina,Bonarda Argentina,Regional Red,Argentina
+2525,Broke Fordwich,Sémillon,White,Australia
+2530,Hastings River,Chambourcin,Regional Red,Australia
+2538,Shoalhaven Coast,"Chambourcin, Verdelho",White,Australia
+2618,Beerenauslese Burgenland,"Welschriesling, Chardonnay",Dessert,Austria
+2656,Vlaamse Landwijn,"Chardonnay, Solaris",White,Belgium
+2658,Côtes de Sambre et Meuse Rouge,Pinot Noir,Regional Red,Belgium
+2670,Altos Montes,Merlot,Regional Red,Brazil
+2671,Campanha Gaúcha,"Cabernet Sauvignon, Tannat",Regional Red,Brazil
+2692,Sakar,"Merlot, Mavrud",Regional Red,Bulgaria
+2709,Vancouver Island,"Ortega, Pinot Gris",White,Canada
+2760,País,País,Regional Red,Chile
+2778,Turpan Basin,"Muscat Blanc à Petits Grains, Cabernet Sauvignon",Dessert,China
+3388,Sterea Ellada,"Agiorgitiko, Syrah",Regional Red,Greece
+3435,Balaton-felvidék,"Welschriesling, Pinot Gris",White,Hungary
+3446,Pannonhalma,"Welschriesling, Riesling",White,Hungary
+3449,Mátra,"Welschriesling, Muscat Blanc à Petits Grains",White,Hungary
+3896,Yoichi,Pinot Noir,Regional Red,Japan
+3904,Yamagata,"Merlot, Delaware",Regional Red,Japan
+3917,Batroun,"Obeidi, Chardonnay",White,Lebanon
+4047,Terceira,Verdelho,White,Portugal
+4110,Murfatlar,"Chardonnay, Pinot Gris",Dessert,Romania
+4123,Banu Mărăcine,Cabernet Sauvignon,Regional Red,Romania
+4126,Sâmburești,Cabernet Sauvignon,Regional Red,Romania
+4138,Gelendzhik,Cabernet Sauvignon,Regional Red,Russia
+4139,Kuban,"Cabernet Sauvignon, Krasnostop Zolotovsky",Regional Red,Russia
+4141,Stavropol,Cabernet Sauvignon,Regional Red,Russia
+4143,Belgrade,Chardonnay,White,Serbia
+4232,Lebrija,"Palomino, Muscat of Alexandria",Fortified Wine,Spain
+4233,Málaga,"Pedro Ximénez, Muscat of Alexandria",Fortified Wine,Spain
+4234,Montilla-Moriles,Pedro Ximénez,Fortified Wine,Spain
+4235,Moscatel de Chipiona,Muscat of Alexandria,Fortified Wine,Spain
+4313,Fondillón,Mourvèdre,Fortified Wine,Spain
+4343,Oeil-de-Perdrix,Pinot Noir,Rosé,Switzerland
+4354,Malvoisie du Valais,Pinot Gris,Dessert,Switzerland
+4396,Bessarabia,"Cabernet Sauvignon, Saperavi",Regional Red,Ukraine
+4574,Central Delaware Valley (NJ),Chambourcin,Regional Red,USA
+4582,Lake Erie (NY),Concord,Regional Red,USA
+4654,Shawnee Hills (WV),Chambourcin,Regional Red,USA
+4659,Colonia,"Tannat, Merlot",Regional Red,Uruguay
+4663,Montevideo,"Tannat, Merlot",Regional Red,Uruguay
+4664,Rivera,"Tannat, Cabernet Franc",Regional Red,Uruguay
+4049,Bairrada Espumante,"Baga, Fernão Pires",Sparkling,Portugal
+4102,Vinho Verde Espumante,"Loureiro, Albariño",Sparkling,Portugal
+2478,Catamarca,Torrontés Riojano,White,Argentina
+2480,Valle de Famatina,Torrontés Riojano,White,Argentina
+2482,Barrancas,Bonarda Argentina,Regional Red,Argentina
+2516,Amaicha del Valle,Torrontés Riojano,White,Argentina
+2537,Riverina,Sémillon,Dessert,Australia
+2590,North East Victoria,Muscat à Petits Grains Rouge,Fortified Wine,Australia
+2594,Rutherglen Topaque,Muscadelle,Fortified Wine,Australia
+2663,Valle Central de Tarija,"Tannat, Cabernet Sauvignon",Regional Red,Bolivia
+2672,Farroupilha,Muscat Blanc à Petits Grains,Dessert,Brazil
+2740,Cauquenes,"Carignan, País",Regional Red,Chile
+2742,Linares,País,Regional Red,Chile
+2743,Lolol,Carmenère,Regional Red,Chile
+2747,Peralillo,Carmenère,Regional Red,Chile
+2748,Peumo,Carmenère,Regional Red,Chile
+2754,San Clemente,Carignan,Regional Red,Chile
+2761,Pipeño,"País, Cinsault",Regional Red,Chile
+2763,Guarilihue,Cinsault,Regional Red,Chile
+2775,Yantai-Penglai,"Cabernet Gernischt, Chardonnay",Regional Red,China
+3304,Bodensee,Müller-Thurgau,White,Germany
+3307,Markgräflerland,Gutedel,White,Germany
+3310,Escherndorfer Lump,Sylvaner,White,Germany
+3312,Maindreieck,Sylvaner,White,Germany
+3314,Steigerwald,Sylvaner,White,Germany
+3325,Moseltor,Elbling,White,Germany
+3326,Obermosel,Elbling,White,Germany
+3345,Federweisser,,White,Germany
+3372,Saale-Unstrut,"Müller-Thurgau, Pinot Blanc",White,Germany
+3374,Remstal-Stuttgart,Schiava,Regional Red,Germany
+3375,Württemberg,"Schiava, Blaufränkisch, Meunier",Regional Red,Germany
+3376,Württembergisch Unterland,"Schiava, Blaufränkisch",Regional Red,Germany
+3909,Assa Valley,"Saperavi, Cabernet Sauvignon",Regional Red,Kazakhstan
+3913,Rahovec,"Vranac, Merlot",Regional Red,Kosovo
+3953,Ciumai,Cabernet Sauvignon,Dessert,Moldova
+4017,Guairá,"Tannat, Cabernet Sauvignon",Regional Red,Paraguay
+4030,Alentejo Branco,"Antão Vaz, Arinto, Roupeiro",White,Portugal
+4033,Granja-Amareleja,"Moreto, Trincadeira",Regional Red,Portugal
+4034,Moura,"Alfrocheiro, Trincadeira",Regional Red,Portugal
+4035,Portalegre,"Trincadeira, Grand Noir",Regional Red,Portugal
+4038,Vidigueira,Antão Vaz,White,Portugal
+4040,Lagoa,Negramoll,Regional Red,Portugal
+4041,Lagos,"Negramoll, Castelão",Regional Red,Portugal
+4042,Portimão,Negramoll,Regional Red,Portugal
+4043,Tavira,"Negramoll, Castelão",Regional Red,Portugal
+4045,Graciosa,"Verdelho, Arinto",White,Portugal
+4046,Pico,"Verdelho, Arinto dos Açores",White,Portugal
+4050,Beira Interior,"Touriga Nacional, Rufete",Regional Red,Portugal
+4051,Castelo Rodrigo,Touriga Nacional,Regional Red,Portugal
+4052,Cova da Beira,"Rufete, Touriga Nacional",Regional Red,Portugal
+4053,Lafões,"Arinto, Cerceal",White,Portugal
+4054,Pinhel,Síria,White,Portugal
+4057,Dão Branco,Encruzado,White,Portugal
+4058,Dão Serra da Estrela,Touriga Nacional,Regional Red,Portugal
+4059,Dão Silgueiros,"Touriga Nacional, Mencía",Regional Red,Portugal
+4062,Douro Branco,"Rabigato, Viosinho, Gouveio",White,Portugal
+4063,Douro Cima Corgo,"Touriga Nacional, Touriga Franca",Regional Red,Portugal
+4064,Douro Superior,"Touriga Nacional, Touriga Franca",Regional Red,Portugal
+4072,Alenquer,"Castelão, Touriga Nacional",Regional Red,Portugal
+4073,Arruda,Castelão,Regional Red,Portugal
+4074,Bucelas,Arinto,White,Portugal
+4076,Colares,Ramisco,Regional Red,Portugal
+4077,Encostas d'Aire,"Castelão, Trincadeira",Regional Red,Portugal
+4078,Lourinhã,Malvasia Rei,White,Portugal
+4079,Óbidos,"Arinto, Fernão Pires",White,Portugal
+4080,Torres Vedras,"Castelão, Tinta Miúda",Regional Red,Portugal
+4090,Palmela,Castelão,Regional Red,Portugal
+4092,Tejo,"Castelão, Trincadeira, Touriga Nacional",Regional Red,Portugal
+4097,Vinho Verde Amarante,"Avesso, Loureiro",White,Portugal
+4098,Vinho Verde Ave,"Loureiro, Treixadura",White,Portugal
+4099,Vinho Verde Baião,Avesso,White,Portugal
+4100,Vinho Verde Basto,Azal,White,Portugal
+4101,Vinho Verde Cávado,Loureiro,White,Portugal
+4104,Vinho Verde Paiva,Avesso,White,Portugal
+4105,Vinho Verde Sousa,"Azal, Avesso",White,Portugal
+4106,Vinho Verde Tinto,Vinhão,Regional Red,Portugal
+4120,Pietroasa,Muscat Blanc à Petits Grains,Dessert,Romania
+4121,Pietroasele,Muscat Blanc à Petits Grains,Dessert,Romania
+4133,Crimea,"Muscat Blanc à Petits Grains, Kokur",Fortified Wine,Russia
+4372,Sughd,"Muscat Blanc à Petits Grains, Rkatsiteli",Dessert,Tajikistan
+4373,Dodoma,"Makutupora, Chenin Blanc",Regional Red,Tanzania
+4387,Manisa,"Kalecik Karası, Syrah",Regional Red,Turkey
+4397,Massandra,"Muscat Blanc à Petits Grains, Kokur",Fortified Wine,Ukraine
+4670,Đà Lạt,"Cardinal, Cabernet Sauvignon",Regional Red,Vietnam
+2476,Coteaux de Tlemcen,"Carignan, Grenache",Regional Red,Algeria
+2625,Ruster Hügelland,Furmint,White,Austria
+2632,Klosterneuburg,Grüner Veltliner,White,Austria
+2653,Hageland,"Müller-Thurgau, Pinot Gris",White,Belgium
+2680,Black Sea Coast,"Dimyat, Chardonnay",White,Bulgaria
+2683,Danubian Plain,"Kadarka, Cabernet Sauvignon",Regional Red,Bulgaria
+2717,Icewine (Ontario),"Vidal, Riesling",Dessert,Canada
+2825,Gianaclis (Abu Hummus),"Bannati, Chardonnay",White,Egypt
+3894,Hokkaido,"Kerner, Pinot Noir",White,Japan
+3903,Osaka,"Delaware, Merlot",Regional Red,Japan
+3926,Moselle Luxembourgeoise,"Müller-Thurgau, Auxerrois, Riesling",White,Luxembourg
+3929,Gozo DOK,"Girgentina, Chardonnay",White,Malta
+3930,Malta DOK,"Ġellewża, Syrah",Regional Red,Malta
+3946,Codru,"Fetească Albă, Chardonnay",White,Moldova
+3952,Ștefan Vodă,"Rara Neagră, Cabernet Sauvignon",Regional Red,Moldova
+3974,Limburg,"Auxerrois, Riesling",White,Netherlands
+4023,Lower Silesia,"Solaris, Riesling",White,Poland
+4025,Zielona Góra,"Solaris, Riesling",White,Poland
+4044,Biscoitos,Verdelho,Fortified Wine,Portugal
+4068,Porto Crusted,"Touriga Franca, Tinta Barroca",Fortified Wine,Portugal
+4069,Porto Garrafeira,Touriga Franca,Fortified Wine,Portugal
+4071,Porto Rosé,Touriga Nacional,Fortified Wine,Portugal
+4075,Carcavelos,"Galego Dourado, Arinto",Fortified Wine,Portugal
+4083,Madeira Rainwater,Negramoll,Fortified Wine,Portugal
+4084,Madeira Sercial,Sercial,Fortified Wine,Portugal
+4085,Madeira Terrantez,Terrantez,Fortified Wine,Portugal
+4086,Madeira Tinta Negra,Negramoll,Fortified Wine,Portugal
+4087,Madeira Verdelho,Verdelho,Fortified Wine,Portugal
+4089,Moscatel Roxo,Moscatel Roxo,Fortified Wine,Portugal
+4096,Vinho Verde Alvarinho (Monção e Melgaço),Albariño,White,Portugal
+4103,Vinho Verde Loureiro (Lima),Loureiro,White,Portugal
+4107,Miniș,"Cadarcă, Cabernet Sauvignon",Regional Red,Romania
+4108,Recaș,"Fetească Neagră, Cabernet Sauvignon",Regional Red,Romania
+4113,Cotești,"Fetească Neagră, Merlot",Regional Red,Romania
+4127,Segarcea,"Fetească Neagră, Merlot",Regional Red,Romania
+4144,Šumadija,"Prokupac, Cabernet Sauvignon",Regional Red,Serbia
+4147,Negotinska Krajina,"Prokupac, Cabernet Sauvignon",Regional Red,Serbia
+4155,Small Carpathians,"Grüner Veltliner, Riesling",White,Slovakia
+4208,Stellenbosch Bottelary,Pinotage,Regional Red,South Africa
+4220,Central Orange River,Colombard,White,South Africa
+4221,Douglas,Colombard,White,South Africa
+4379,Sidi Salem,"Carignan, Cabernet Sauvignon",Regional Red,Tunisia
+4382,Mornag,"Carignan, Syrah",Regional Red,Tunisia
+4384,Thibar,"Carignan, Cabernet Sauvignon",Regional Red,Tunisia
+4394,Thrace (Trakya),"Papazkarası, Cabernet Sauvignon",Regional Red,Turkey
+4401,Zakarpattia,"Savagnin, Riesling",White,Ukraine
+2627,Sekt Austria,"Grüner Veltliner, Welschriesling",Sparkling,Austria
+2619,Eisenberg,Blaufränkisch,Regional Red,Austria
+2620,Leithaberg,Blaufränkisch,Regional Red,Austria
+2622,Neusiedlersee-Hügelland,Welschriesling,White,Austria
+2623,Rosalia,"Blaufränkisch, Zweigelt",Regional Red,Austria
+2629,Sturm,,White,Austria
+2630,Carnuntum,"Zweigelt, Blaufränkisch",Regional Red,Austria
+2634,Kremstal Ried Gebling,Grüner Veltliner,White,Austria
+2635,Thermenregion,"Zierfandler, Rotgipfler",White,Austria
+2636,Traisental,Grüner Veltliner,White,Austria
+2638,Wachau Ried Loibenberg,Grüner Veltliner,White,Austria
+2639,Wagram,"Grüner Veltliner, Roter Veltliner",White,Austria
+2640,Weinviertel,Grüner Veltliner,White,Austria
+2644,Vulkanland Steiermark,"Savagnin, Welschriesling",White,Austria
+2648,Steinfeder,Grüner Veltliner,White,Austria
+2649,Wiener Gemischter Satz,,White,Austria
+2710,Saint John River Valley,L'Acadie Blanc,White,Canada
+2711,Annapolis Valley,"L'Acadie Blanc, Seyval Blanc",White,Canada
+2712,Gaspereau Valley,L'Acadie Blanc,White,Canada
+2812,Mělník (Bohemia),"Svatovavřinecké, Pinot Noir",Regional Red,Czechia
+3957,Gris de Boulaouane,"Cinsault, Grenache",Rosé,Morocco
+4135,Dagestan,"Rkatsiteli, Muscat Blanc à Petits Grains",Fortified Wine,Russia
+4214,Calitzdorp,"Touriga Nacional, Tinta Barroca",Fortified Wine,South Africa
+4667,Samarkand,"Bayanshira, Muscat Blanc à Petits Grains",Dessert,Uzbekistan
+3405,Zitsa,Debina,Sparkling,Greece
+2624,Ruster Ausbruch,"Furmint, Welschriesling",Dessert,Austria
+2626,Trockenbeerenauslese Burgenland,Welschriesling,Dessert,Austria
+2628,Strohwein / Schilfwein,,Dessert,Austria
+2642,Schilcher,Blauer Wildbacher,Rosé,Austria
+2645,Weststeiermark,Blauer Wildbacher,Rosé,Austria
+2696,Cowichan Valley,Ortega,White,Canada
+2700,Kootenays,Ortega,White,Canada
+2705,Shuswap,Ortega,White,Canada
+2713,Tidal Bay,"L'Acadie Blanc, Seyval Blanc, Vidal",White,Canada
+2728,Basses-Laurentides,Vidal,White,Canada
+2729,Brome-Missisquoi,"Vidal, Frontenac",White,Canada
+3278,Adjara,Chkhaveri,Regional Red,Georgia
+3279,Guria,Chkhaveri,White,Georgia
+3301,Samegrelo,Ojaleshi,Regional Red,Georgia
+3377,Chios,Athiri,White,Greece
+3378,Ikaria,Fokiano,Regional Red,Greece
+3379,Lemnos,Muscat of Alexandria,White,Greece
+3383,Rhodes,Athiri,White,Greece
+3384,Thassos,Assyrtiko,White,Greece
+3385,Attiki,"Savatiano, Assyrtiko",White,Greece
+3387,Evia,Savatiano,White,Greece
+3389,Archanes,"Kotsifali, Mandilaria",Regional Red,Greece
+3390,Chania,"Vidiano, Vilana",White,Greece
+3391,Dafnes,Liatiko,Regional Red,Greece
+3392,Heraklion,Kotsifali,Regional Red,Greece
+3395,Peza,"Kotsifali, Mandilaria",Regional Red,Greece
+3396,Rethymno,Vilana,White,Greece
+3397,Sitia,"Liatiko, Mandilaria",Regional Red,Greece
+3398,Naxos,Assyrtiko,White,Greece
+3399,Paros,"Mandilaria, Monemvasia",Regional Red,Greece
+3400,Syros,Assyrtiko,White,Greece
+3401,Tinos,"Assyrtiko, Malagousia",White,Greece
+3403,Ioannina,Debina,White,Greece
+3406,Corfu,Kakotrygis,White,Greece
+3407,Lefkada,Vertzami,Regional Red,Greece
+3409,Robola of Cephalonia,Robola,White,Greece
+3410,Zakynthos,Robola,White,Greece
+3411,Amyndeon,Xinomavro,Regional Red,Greece
+3413,Florina,Xinomavro,Regional Red,Greece
+3414,Goumenissa,"Xinomavro, Negoska",Regional Red,Greece
+3415,Kavala,Assyrtiko,White,Greece
+3416,Pangeon,Limnio,Regional Red,Greece
+3417,Serres,Limnio,Regional Red,Greece
+3418,Slopes of Meliton,"Athiri, Assyrtiko, Roditis",White,Greece
+3419,Arcadia,Moschofilero,White,Greece
+3420,Corinth,Agiorgitiko,Regional Red,Greece
+3421,Ilia,Roditis,White,Greece
+3422,Lakonia,Agiorgitiko,Regional Red,Greece
+3423,Mantinia,Moschofilero,White,Greece
+3425,Messinia,Roditis,White,Greece
+3429,Patras,Roditis,White,Greece
+3430,Anchialos,"Roditis, Savatiano",White,Greece
+3431,Messenikola,Mavro Messenikola,Regional Red,Greece
+3432,Rapsani,"Xinomavro, Krassato, Stavroto",Regional Red,Greece
+3433,Tyrnavos,Muscat of Hamburg,White,Greece
+3434,Badacsony,"Kéknyelű, Welschriesling",White,Hungary
+3437,Balatonfüred-Csopak,Welschriesling,White,Hungary
+3438,Nagy-Somló,Juhfark,White,Hungary
+3439,Zala,Welschriesling,White,Hungary
+3440,Csongrád,Blaufränkisch,Regional Red,Hungary
+3441,Hajós-Baja,Blaufränkisch,Regional Red,Hungary
+3442,Debrői Hárslevelű,Hárslevelű,White,Hungary
+3443,Egri Csillag,,White,Hungary
+3444,Mór,Ezerjó,White,Hungary
+3445,Neszmély,Welschriesling,White,Hungary
+3448,Kunság,"Ezerjó, Cserszegi Fűszeres",White,Hungary
+3450,Pécs,Cirfandli,White,Hungary
+3452,Somló,"Juhfark, Furmint",White,Hungary
+3453,Sopron,Blaufränkisch,Regional Red,Hungary
+3454,Szekszárdi Bikavér,"Blaufränkisch, Kadarka",Regional Red,Hungary
+3919,Zahlé,"Cinsault, Carignan",Regional Red,Lebanon
+4218,Cape Vintage (Cape Port),"Touriga Nacional, Tinta Barroca",Fortified Wine,South Africa
+4403,Suffolk,Bacchus,White,United Kingdom
+4410,Devon,"Bacchus, Solaris",White,United Kingdom
+4412,Monmouthshire,Solaris,White,United Kingdom
+4656,Canelones,Tannat,Regional Red,Uruguay
+4657,Las Piedras,Tannat,Regional Red,Uruguay
+4658,Progreso,Tannat,Regional Red,Uruguay
+4660,Durazno,Tannat,Regional Red,Uruguay
+4661,Florida,Tannat,Regional Red,Uruguay
+4662,Maldonado,"Tannat, Albariño",Regional Red,Uruguay
+4665,Salto,Tannat,Regional Red,Uruguay
+4666,San José,Albariño,White,Uruguay
+3298,Kartli Sparkling,"Chinuri, Goruli Mtsvane",Sparkling,Georgia
+2469,Kallmet,Kallmet,Regional Red,Albania
+2470,Shesh i Zi,Shesh i Zi,Regional Red,Albania
+2471,Shesh i Bardhë,Shesh i Bardhë,White,Albania
+2517,Aragatsotn,"Areni Noir, Kakhet",Regional Red,Armenia
+2518,Ararat Valley,Areni Noir,Regional Red,Armenia
+2519,Armavir,Voskehat,White,Armenia
+2520,Ijevan,Haghtanak,Regional Red,Armenia
+2521,Yeghegnadzor,Areni Noir,Regional Red,Armenia
+2651,Ganja,"Madrasa, Bayanshira",Regional Red,Azerbaijan
+2652,Shamakhi,Madrasa,Regional Red,Azerbaijan
+2661,Valle de Cinti,"Vischoqueña, País",Regional Red,Bolivia
+2664,Valle de la Concepción,Tannat,Regional Red,Bolivia
+2679,São Roque,Bordô,Regional Red,Brazil
+2687,Pamid,Pamid,Regional Red,Bulgaria
+2688,Rubin,Rubin,Regional Red,Bulgaria
+2730,Vin de Glace du Québec,Vidal,Dessert,Canada
+2731,Chã das Caldeiras,Touriga Nacional,Regional Red,Cape Verde
+2773,Yongning,Marselan,Regional Red,China
+2783,Babić Primošten,Babić,Regional Red,Croatia
+2784,Bogdanuša Hvar,Bogdanuša,White,Croatia
+2785,Grk Lumbarda,Grk,White,Croatia
+2786,Neretva Valley,Plavac Mali,Regional Red,Croatia
+2787,Pelješac,Plavac Mali,Regional Red,Croatia
+2788,Pošip Čara-Smokvica,Pošip,White,Croatia
+2789,Postup,Plavac Mali,Regional Red,Croatia
+2791,Šibenik,Babić,Regional Red,Croatia
+2792,Vugava Vis,Vugava,White,Croatia
+2794,Malvazija Istarska,Malvazija Istarska,White,Croatia
+2796,Žlahtina Vrbnik,Žlahtina,White,Croatia
+2797,Baranja,Welschriesling,White,Croatia
+2798,Đakovo,Welschriesling,White,Croatia
+2799,Erdut,Welschriesling,White,Croatia
+2800,Ilok Traminac,Traminac,White,Croatia
+2801,Kutjevo Graševina,Welschriesling,White,Croatia
+2803,Zagorje-Međimurje,Pušipel,White,Croatia
+2804,Afames,Mavro,Regional Red,Cyprus
+2807,Xynisteri,Xynisteri,White,Cyprus
+2808,Ambelitis,Xynisteri,White,Cyprus
+2815,Podluží,Blaufränkisch,Regional Red,Czechia
+3280,Dimi,Tsolikouri,White,Georgia
+3281,Sviri,"Tsitska, Tsolikouri, Krakhuna",White,Georgia
+3283,Gurjaani,"Rkatsiteli, Mtsvane",White,Georgia
+3284,Kardanakhi,Rkatsiteli,White,Georgia
+3287,Kotekhi,Saperavi,Regional Red,Georgia
+3288,Kvareli,Saperavi,Regional Red,Georgia
+3289,Manavi,Mtsvane,White,Georgia
+3290,Mukuzani,Saperavi,Regional Red,Georgia
+3291,Napareuli,Saperavi,Regional Red,Georgia
+3293,Tibaani,Rkatsiteli,White,Georgia
+3294,Tsinandali,"Rkatsiteli, Mtsvane",White,Georgia
+3295,Vazisubani,"Rkatsiteli, Mtsvane",White,Georgia
+3296,Ateni,"Chinuri, Goruli Mtsvane",White,Georgia
+3297,Bolnisi,"Saperavi, Tavkveri",Regional Red,Georgia
+3380,Muscat of Lemnos,Muscat of Alexandria,Fortified Wine,Greece
+3393,Malvasia of Candia,"Assyrtiko, Athiri, Vidiano",Dessert,Greece
+3394,Malvasia of Sitia,"Assyrtiko, Thrapsathiri",Dessert,Greece
+3408,Mavrodaphne of Cephalonia,Mavrodaphne,Fortified Wine,Greece
+3424,Mavrodaphne of Patras,Mavrodaphne,Fortified Wine,Greece
+3426,Monemvasia-Malvasia,"Monemvasia, Assyrtiko",Dessert,Greece
+3455,Tokaji Édes Szamorodni,Furmint,Dessert,Hungary
+3457,Tokaji Fordítás,Furmint,Dessert,Hungary
+3458,Tokaji Furmint (dry),Furmint,White,Hungary
+3459,Tokaji Késői Szüretelésű,"Furmint, Hárslevelű",Dessert,Hungary
+3460,Tokaji Máslás,Furmint,Dessert,Hungary
+3470,Sanur,Muscat of Alexandria,White,Indonesia
+3471,Irish Wine,"Rondo, Solaris",White,Ireland
+3472,Wexford,"Rondo, Solaris",White,Ireland
+3895,Sorachi,Kerner,White,Japan
+3897,Iwate,"Riesling Lion, Kerner",White,Japan
+3901,Muscat Bailey A,Muscat Bailey A,Regional Red,Japan
+3902,Niigata,Albariño,White,Japan
+3905,Katsunuma,Koshu,White,Japan
+3910,Turgen,Saperavi,Regional Red,Kazakhstan
+3914,Chüy Valley,Saperavi,Regional Red,Kyrgyzstan
+3915,Issyk-Kul,Rkatsiteli,White,Kyrgyzstan
+3923,Balzers,Müller-Thurgau,White,Liechtenstein
+3927,Ambalavao,Villard,White,Madagascar
+3931,Marsaxlokk,Ġellewża,Regional Red,Malta
+3951,Rara Neagră,Rara Neagră,Regional Red,Moldova
+3969,Omaruru,"Colombard, Ruby Cabernet",Regional Red,Namibia
+3970,Hardap,Ruby Cabernet,Regional Red,Namibia
+4012,Vranec,Vranac,Regional Red,North Macedonia
+4013,Telemark,Solaris,White,Norway
+4014,Norwegian Wine,Solaris,White,Norway
+4015,Cremisan Valley,"Dabouki, Jandali, Hamdani",White,Palestine
+4016,Hebron Hills,Baladi,Regional Red,Palestine
+4020,Cañete,Quebranta,Regional Red,Peru
+4021,Moquegua,"Quebranta, Italia",Regional Red,Peru
+4156,Devín,Devín,White,Slovakia
+4161,Ljutomer-Ormož,"Welschriesling, Furmint",White,Slovenia
+4162,Maribor,Welschriesling,White,Slovenia
+4163,Prekmurje,Welschriesling,White,Slovenia
+4165,Štajerska Slovenija,"Welschriesling, Furmint",White,Slovenia
+4167,Bizeljsko-Sremič,Welschriesling,White,Slovenia
+4170,Koper,Terrano,Regional Red,Slovenia
+4171,Kras Teran,Terrano,Regional Red,Slovenia
+4172,Slovenska Istra,Malvasia,White,Slovenia
+4173,Vipavska Dolina,"Zelen, Pinela, Ribolla Gialla",White,Slovenia
+4225,Yeongdong,Campbell Early,Regional Red,South Korea
+4226,Anseong,Campbell Early,Regional Red,South Korea
+4227,Gyeongsan,"Campbell Early, Muscat Bailey A",Regional Red,South Korea
+4338,Gotland,Solaris,White,Sweden
+4339,Skåne,"Solaris, Rondo",White,Sweden
+4340,Genève,"Chasselas, Gamaret",White,Switzerland
+4342,Neuchâtel,Chasselas,White,Switzerland
+4344,Bielersee,Chasselas,White,Switzerland
+4347,Amigne de Vétroz,Amigne,White,Switzerland
+4349,Ermitage du Valais,Marsanne,White,Switzerland
+4350,Fendant,Chasselas,White,Switzerland
+4352,Humagne Rouge,Humagne Rouge,Regional Red,Switzerland
+4353,Johannisberg du Valais,Sylvaner,White,Switzerland
+4355,Petite Arvine,Petite Arvine,White,Switzerland
+4357,Aigle,Chasselas,White,Switzerland
+4358,Calamin,Chasselas,White,Switzerland
+4359,Chablais,Chasselas,White,Switzerland
+4360,Dézaley,Chasselas,White,Switzerland
+4361,Épesses,Chasselas,White,Switzerland
+4362,La Côte,Chasselas,White,Switzerland
+4363,Lavaux,Chasselas,White,Switzerland
+4364,Saint-Saphorin,Chasselas,White,Switzerland
+4365,Villette,Chasselas,White,Switzerland
+4366,Yvorne,Chasselas,White,Switzerland
+4369,Erlin,"Black Queen, Golden Muscat",Regional Red,Taiwan
+4370,Houli,Golden Muscat,White,Taiwan
+4375,Chao Phraya Delta,Malaga Blanc,White,Thailand
+4386,Denizli,Çalkarası,Regional Red,Turkey
+4388,Tokat,Narince,White,Turkey
+4389,Ankara Kalecik,Kalecik Karası,Regional Red,Turkey
+4390,Kalecik,Kalecik Karası,Regional Red,Turkey
+4391,Elazığ,"Öküzgözü, Boğazkere",Regional Red,Turkey
+4392,Diyarbakır,Boğazkere,Regional Red,Turkey
+4393,Şarköy,Papazkarası,Regional Red,Turkey
+4398,Kherson,Aligoté,White,Ukraine
+4404,English Bacchus,Bacchus,White,United Kingdom
+4413,Welsh Wine,"Solaris, Bacchus",White,United Kingdom
+4671,Ninh Thuận,Cardinal,Regional Red,Vietnam
+4672,Phan Rang,Cardinal,Regional Red,Vietnam
+4673,Mutare,Pinotage,Regional Red,Zimbabwe
+3924,Crémant de Luxembourg,"Müller-Thurgau, Pinot Blanc",Sparkling,Luxembourg
+4118,Panciu,Fetească Regală,Sparkling,Romania
+4140,Tsimlyansk,Tsimlyansky Cherny,Sparkling,Russia
+2472,Aïn Bessem-Bouira,"Carignan, Cinsault",Regional Red,Algeria
+2473,Coteaux de Mascara Ghriss,Carignan,Regional Red,Algeria
+2474,Coteaux de Mascara,"Carignan, Cinsault",Regional Red,Algeria
+2475,Coteaux du Zaccar,"Carignan, Cinsault",Regional Red,Algeria
+2477,Monts du Tessalah,Carignan,Regional Red,Algeria
+2655,Heuvelland,Müller-Thurgau,White,Belgium
+2665,Blatina,Blatina,Regional Red,Bosnia and Herzegovina
+2666,Žilavka Mostar,Žilavka,White,Bosnia and Herzegovina
+2678,Vales da Uva Goethe,Goethe,White,Brazil
+2681,Misket of Varna,Red Misket,White,Bulgaria
+2682,Pomorie,Dimyat,White,Bulgaria
+2685,Novo Selo,Kadarka,Regional Red,Bulgaria
+2686,Suhindol,Kadarka,Regional Red,Bulgaria
+2690,Melnik,Shiroka Melnishka Loza,Regional Red,Bulgaria
+2691,Mavrud of Asenovgrad,Mavrud,Regional Red,Bulgaria
+2693,Sungurlare,Red Misket,White,Bulgaria
+2771,Marselan (China),Marselan,Regional Red,China
+2790,Prošek,"Bogdanuša, Maraština",Dessert,Croatia
+2793,Buzet (Istria),Malvazija Istarska,White,Croatia
+2795,Teran (Istria),Terrano,Regional Red,Croatia
+2805,Krasochoria Lemesou,"Mavro, Maratheftiko",Regional Red,Cyprus
+2806,Pitsilia,Xynisteri,White,Cyprus
+2809,Laona Akamas,Xynisteri,White,Cyprus
+2810,Vouni Panagias-Ampelitis,Maratheftiko,Regional Red,Cyprus
+2811,Litoměřice,Müller-Thurgau,White,Czechia
+2813,Mikulov,"Welschriesling, Pálava",White,Czechia
+2814,Mikulov Pálava,Pálava,White,Czechia
+2817,Slovácko,"Müller-Thurgau, Ryzlink",White,Czechia
+2818,Velké Pavlovice,"Blaufränkisch, Svatovavřinecké",Regional Red,Czechia
+2819,Svatomartinské,"Svatovavřinecké, Blauer Portugieser",Regional Red,Czechia
+2820,Fyn,Solaris,White,Denmark
+2821,Jylland,"Solaris, Rondo",White,Denmark
+2822,Danish Wine,"Solaris, Rondo",White,Denmark
+3282,Akhasheni,Saperavi,Dessert,Georgia
+3285,Kardenakhi,Rkatsiteli,Fortified Wine,Georgia
+3286,Kindzmarauli,Saperavi,Dessert,Georgia
+3299,Khvanchkara,"Aleksandrouli, Mujuretuli",Dessert,Georgia
+3300,Tvishi,Tsolikouri,Dessert,Georgia
+3402,Vinsanto (Santorini),"Assyrtiko, Aidani",Dessert,Greece
+3906,Yamanashi Katsunuma Koshu,Koshu,White,Japan
+3925,Elbling,Elbling,White,Luxembourg
+3928,Betsileo,"Villard, Couderc",Rosé,Madagascar
+3950,Fetească Neagră (Moldova),Fetească Neagră,Regional Red,Moldova
+3955,Krstač,Krstač,White,Montenegro
+3956,Vranac Crmnica,Vranac,Regional Red,Montenegro
+3958,Zerhoune,"Carignan, Cinsault",Regional Red,Morocco
+3960,Beni Sadden,Carignan,Regional Red,Morocco
+3962,Sais,"Carignan, Cinsault",Regional Red,Morocco
+3963,Angad,Carignan,Regional Red,Morocco
+3964,Berkane,"Carignan, Alicante Bouschet",Regional Red,Morocco
+3965,Chellah,Carignan,Regional Red,Morocco
+3972,Achterhoek,Solaris,White,Netherlands
+3973,Betuwe,"Solaris, Johanniter",White,Netherlands
+3975,Zeeland,Johanniter,White,Netherlands
+4007,Pcinja,Vranac,Regional Red,North Macedonia
+4008,Pelagonija,Vranac,Regional Red,North Macedonia
+4009,Stanušina,Stanušina,Rosé,North Macedonia
+4011,Tikveš,Vranac,Regional Red,North Macedonia
+4024,Sulechów,Solaris,White,Poland
+4026,Małopolski Przełom Wisły,"Solaris, Seyval Blanc",White,Poland
+4027,Podkarpacie,"Johanniter, Hibernal",White,Poland
+4028,Sandomierz,Johanniter,White,Poland
+4114,Huși,Zghihară de Huși,White,Romania
+4115,Iași,Fetească Albă,White,Romania
+4116,Nicorești,Băbească Neagră,Regional Red,Romania
+4117,Odobești,"Fetească Albă, Welschriesling",White,Romania
+4122,Ștefănești,Fetească Regală,White,Romania
+4125,Drăgășani,Crâmpoșie Selecționată,White,Romania
+4128,Aiud,Fetească Albă,White,Romania
+4129,Alba Iulia,Fetească Albă,White,Romania
+4130,Jidvei,Fetească Regală,White,Romania
+4131,Lechința,Fetească Albă,White,Romania
+4132,Târnave,"Fetească Albă, Savagnin",White,Romania
+4145,Tri Morave,Prokupac,Regional Red,Serbia
+4148,Vranje,"Vranac, Prokupac",Regional Red,Serbia
+4149,Banat,Kreaca,White,Serbia
+4151,Srem,Welschriesling,White,Serbia
+4152,Subotica-Horgoš,Kevedinka,White,Serbia
+4153,Southern Slovakia,"Blaufränkisch, Alibernet",Regional Red,Slovakia
+4154,Modra,Grüner Veltliner,White,Slovakia
+4157,Nitra,"Devín, Welschriesling",White,Slovakia
+4158,Central Slovakia,Blaufränkisch,Regional Red,Slovakia
+4160,Eastern Slovakia,Welschriesling,White,Slovakia
+4166,Bela Krajina,Rumeni Muškat,Dessert,Slovenia
+4168,Cviček,"Žametovka, Blaufränkisch",Rosé,Slovenia
+4169,Dolenjska,Žametovka,Rosé,Slovenia
+4351,Heida (Païen),Savagnin,White,Switzerland
+4380,Coteaux de Tebourba,Carignan,Regional Red,Tunisia
+4381,Grombalia,"Carignan, Cinsault",Regional Red,Tunisia
+4383,Muscat de Kelibia,Muscat of Alexandria,White,Tunisia
+4385,Aegean (Ege),"Sultaniye, Bornova Misketi",White,Turkey
+2650,Absheron,Bayanshira,Fortified Wine,Azerbaijan
+2689,Early Melnik (Ranna Melnishka),Early Melnik,Regional Red,Bulgaria
+2769,Tonghua,Vitis amurensis,Dessert,China
+2770,Huanren,Vidal,Dessert,China
+2816,Slámové Víno,,Dessert,Czechia
+3469,North Bali (Singaraja),"Alphonse Lavallée, Belgia",Rosé,Indonesia
+4112,Bohotin,Busuioacă de Bohotin,Dessert,Romania
+4119,Busuioacă de Bohotin,Busuioacă de Bohotin,Dessert,Romania
+4146,Župa,Prokupac,Rosé,Serbia
+4150,Bermet,,Fortified Wine,Serbia
+4159,Tokajské Víno,"Furmint, Hárslevelű",Dessert,Slovakia
+4371,Khatlon,Muscat of Alexandria,Dessert,Tajikistan
+4395,Ahal,"Terbash, Rkatsiteli",Fortified Wine,Turkmenistan
+4668,Tashkent,Rkatsiteli,Dessert,Uzbekistan
+3949,Divin (Moldova),Trebbiano Toscano,Fortified Wine,Moldova

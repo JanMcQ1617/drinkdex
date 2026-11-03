@@ -25,6 +25,9 @@ import { Icon } from '@/components/icons';
 import { formatPlateNumber, NumberPlate } from '@/components/plate';
 import { Avatar, Button } from '@/components/ui';
 import { CATEGORY_META, colors, layout, radius, space, stroke, tabular, textRole } from '@/constants/theme';
+import { formatCount } from '@/data';
+import { ATLAS_COUNTRIES, grapeByName, grapeIndexByName, winesByName, type WineAtlasParams } from '@/data/wineAtlas';
+import { atlasLinkFor } from '@/data/wineAtlasLinks';
 import {
   abvLabel,
   datelineOf,
@@ -882,6 +885,74 @@ export function OriginStory({ drink }: { drink: Pick<Drink, 'funFact' | 'originS
   return (
     <Section title="Origin story" aside={year || undefined}>
       <Text style={[textRole.story, styles.ink]}>{text}</Text>
+    </Section>
+  );
+}
+
+/* ==================================================================== */
+/* On the map                                                           */
+/* ==================================================================== */
+
+/**
+ * Where a wine sits in the atlas (the drink page's AtlasPanel until wine
+ * left the Dex on 20 Sep 2026; back in v4.14, in Daylight's kit). Every
+ * wine card has a link (scripts/build-wine-atlas-links.mjs), and so do the
+ * ports and sherries on the spirit shelf, which are the same wines. A
+ * varietal card ("Nebbiolo") points at the grape, a place card ("Barolo")
+ * at the appellations themselves, and the row under it opens the Wine
+ * Atlas on them. The two vermouths say why they have no place on it
+ * rather than linking to something adjacent.
+ *
+ * A link carries names, resolved here; a name the atlas no longer has is
+ * dropped rather than drawn as someone else's wine. Nothing at all for a
+ * card with no link, which is every cocktail and every other spirit.
+ */
+export function OnTheMap({ drinkId, onOpen }: { drinkId: string; onOpen: (params: WineAtlasParams) => void }) {
+  const link = atlasLinkFor(drinkId);
+  if (!link) return null;
+
+  if (link.absent) {
+    return (
+      <Section title="On the map">
+        <Text style={[textRole.body, styles.ink]}>{link.absent}</Text>
+      </Section>
+    );
+  }
+
+  const grape = grapeByName(link.grape);
+  const wines = winesByName(link.wines);
+  const count = grape ? grape.wines.length : wines.length;
+  const first = wines[0];
+  if (!count || (!grape && !first)) return null;
+
+  const countries = grape
+    ? grape.countries.map((c) => ATLAS_COUNTRIES[c].name)
+    : [...new Set(wines.map((w) => ATLAS_COUNTRIES[w.c].name))];
+  const across = countries.length
+    ? `, across ${formatCount(countries.length)} ${countries.length === 1 ? 'country' : 'countries'}`
+    : '';
+  const line = grape
+    ? `${grape.name} makes ${formatCount(count)} named ${count === 1 ? 'wine' : 'wines'} in the atlas${across}.`
+    : `${formatCount(count)} matching ${count === 1 ? 'appellation' : 'appellations'} in the atlas${across}.`;
+  const grapeIndex = grapeIndexByName(link.grape);
+  const open = () =>
+    onOpen(grape && grapeIndex !== null ? { grape: String(grapeIndex) } : { q: first ? first.n : '' });
+
+  return (
+    <Section title="On the map">
+      <Text style={[textRole.body, styles.ink]}>{line}</Text>
+      {grape?.synonyms.length ? (
+        <Text style={[textRole.small, styles.muted]}>{`Also called ${grape.synonyms.join(', ')}.`}</Text>
+      ) : null}
+      <Pressable
+        onPress={open}
+        accessibilityRole="button"
+        accessibilityLabel="Open in the Wine Atlas"
+        accessibilityHint={grape ? `Shows the wines made from ${grape.name}` : 'Shows this wine among the others'}
+        style={({ pressed }) => [styles.friendRow, pressed && styles.pressed]}>
+        <Text style={[textRole.body, styles.ink, styles.friendName]}>Open in the Wine Atlas</Text>
+        <Icon name="chevronRight" size={18} color={colors.textMuted} />
+      </Pressable>
     </Section>
   );
 }

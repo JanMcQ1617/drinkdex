@@ -213,6 +213,7 @@ const PATTERNS: [RegExp, GlassShape][] = [
 const CATEGORY_FALLBACK: Record<DrinkCategory, GlassShape> = {
   cocktail: 'coupe',
   spirit: 'rocks',
+  wine: 'wineRed',
 };
 
 /**

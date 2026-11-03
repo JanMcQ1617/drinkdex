@@ -1,0 +1,590 @@
+[
+ {
+  "id": "barossa-valley",
+  "name": "Barossa Valley",
+  "subcategory": "Regional Red",
+  "description": "Shiraz from vines older than most wine countries' industries: dense, sweet-fruited and chocolatey, from ungrafted bush vines planted in the 1840s.",
+  "abv": "14–15.5%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackberry",
+   "dark chocolate",
+   "clove",
+   "vanilla"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Australia never suffered phylloxera in South Australia, so the Barossa holds some of the oldest continuously producing vines on earth — several plantings date to the 1840s and are still cropped.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve a few degrees below room temperature; at 68°F and above the alcohol and sweetness take over completely. Decant young bottles for an hour. The old-vine wines carry their weight better than the alcohol suggests, so judge them on texture rather than on the number on the label.",
+   "pair": [
+    "Barbecued beef",
+    "Lamb shanks",
+    "Aged cheddar"
+   ]
+  },
+  "composition": {
+   "summary": "Old-vine Shiraz from a warm, dry valley on ungrafted, dry-farmed bush vines.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Shiraz, with Grenache and Mataro alongside."
+    },
+    {
+     "label": "Region",
+     "detail": "The Barossa Valley in South Australia, warm and largely dry-farmed."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation with generous extraction; some open-fermenter work."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in American and French oak."
+    }
+   ],
+   "process": "Hot, dry ripening on very old low-yielding vines concentrates the fruit, and extended oak ageing rounds the tannin into the region's signature plushness."
+  }
+ },
+ {
+  "id": "hunter-valley",
+  "name": "Hunter Valley",
+  "subcategory": "White",
+  "description": "The world's most unlikely great white: Semillon picked early at ten percent alcohol, unoaked and searingly tart young, which transforms into toast and honey after a decade.",
+  "abv": "10–11.5%",
+  "origin": "New South Wales, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "grass",
+   "toast",
+   "beeswax"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Hunter Semillon is bottled young at around 10.5% with no oak at all, yet develops toasty, honeyed complexity over ten to twenty years — one of the few wines that gains oak-like character without ever seeing a barrel.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "A young bottle is austere and lemony and genuinely hard work — the style is designed for age, so if you have one under five years old, consider keeping it. An aged bottle should be served slightly warmer, around 52°F, so the toast and beeswax come through. Neither version needs decanting.",
+   "pair": [
+    "Oysters",
+    "Steamed fish",
+    "Chicken salad"
+   ]
+  },
+  "composition": {
+   "summary": "Early-picked, unoaked Semillon built for long bottle development.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Semillon."
+    },
+    {
+     "label": "Region",
+     "detail": "The Lower Hunter Valley of New South Wales, humid and subtropical."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Picked early at low sugar, cool stainless fermentation, bottled young."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak whatsoever; all complexity develops in bottle."
+    }
+   ],
+   "process": "Early picking retains very high acidity at low alcohol, and long reductive bottle ageing converts the primary citrus into toast and honey without any barrel contact."
+  }
+ },
+ {
+  "id": "coonawarra",
+  "name": "Coonawarra",
+  "subcategory": "Regional Red",
+  "description": "A nine-mile strip of red terra rossa soil over limestone, producing Cabernet with mint, cassis and a firm line of acidity found nowhere else in Australia.",
+  "abv": "13.5–14.5%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "cassis",
+   "mint",
+   "cedar",
+   "bay leaf"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The famous terra rossa strip is barely nine miles long and one mile wide, and boundary disputes over which vineyards fall inside it have gone through Australian courts.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant a young bottle for an hour to soften the firm tannin structure. Serve cool in a large glass. The eucalypt-mint note is a regional marker rather than a flaw; it integrates with age, and these wines hold well for fifteen years or more thanks to their acidity.",
+   "pair": [
+    "Roast lamb",
+    "Beef fillet",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cabernet Sauvignon on a narrow band of terra rossa soil over limestone.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, with some Shiraz and Merlot."
+    },
+    {
+     "label": "Region",
+     "detail": "The terra rossa strip of Coonawarra in South Australia's cool Limestone Coast."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented with moderate extraction to keep the structure fine."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "Cool ripening on free-draining terra rossa over limestone gives cassis fruit with firm acidity and fine tannin, structured for long ageing."
+  }
+ },
+ {
+  "id": "margaret-river",
+  "name": "Margaret River",
+  "subcategory": "Regional Red",
+  "description": "Maritime Western Australia making Bordeaux blends of unusual polish, alongside some of the country's finest Chardonnay — a region only planted since 1967.",
+  "abv": "13.5–14.5%",
+  "origin": "Western Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "graphite",
+   "bay",
+   "cedar"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Margaret River was planted on the strength of a 1965 agronomy paper arguing its climate matched Bordeaux — one of the few wine regions founded on a scientific prediction rather than tradition.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young reds for around forty minutes. These are structured but not heavy; the maritime climate gives a freshness that separates them from warmer Australian regions. The Chardonnay from here deserves the same care and should be served at white-wine temperature.",
+   "pair": [
+    "Rack of lamb",
+    "Beef",
+    "Semi-hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Maritime Bordeaux blends and Chardonnay from a peninsula between two oceans.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon and Merlot, with Chardonnay and Sauvignon-Semillon for whites."
+    },
+    {
+     "label": "Region",
+     "detail": "The Margaret River peninsula in Western Australia, surrounded by ocean on three sides."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Careful extraction, with barrel fermentation for the whites."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "A strongly maritime climate with almost no extreme heat gives even ripening and natural freshness, producing wines with structure but without the weight of inland Australia."
+  }
+ },
+ {
+  "id": "yarra-valley",
+  "name": "Yarra Valley",
+  "subcategory": "Sparkling",
+  "description": "Cool-climate Victoria, close enough to Melbourne to be its wine country: fine traditional-method sparkling and delicate Pinot Noir and Chardonnay.",
+  "abv": "12–12.5%",
+  "origin": "Victoria, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "green apple",
+   "citrus",
+   "brioche",
+   "almond"
+  ],
+  "glassware": "Tulip glass",
+  "funFact": "Moët & Chandon established Domaine Chandon here in 1986, choosing the Yarra over every other Australian region for sparkling wine on the basis of its cool nights and long, slow ripening.",
+  "serve": {
+   "temp": "43-47°F, well chilled",
+   "glass": "Tulip glass",
+   "how": "Serve well chilled in a tulip rather than a flute so the brioche and almond notes have room. Pour gently at an angle. These are made in the traditional method with genuine lees ageing, so give them the attention you would give Champagne rather than treating them as a cheap alternative.",
+   "pair": [
+    "Oysters",
+    "Fried chicken",
+    "Soft cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool-climate traditional-method sparkling wine from Victoria's Yarra Valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Chardonnay and Pinot Noir, with some Pinot Meunier."
+    },
+    {
+     "label": "Region",
+     "detail": "The Yarra Valley east of Melbourne, cool and often cloudy."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Traditional method with secondary fermentation in bottle."
+    },
+    {
+     "label": "Aging",
+     "detail": "18–36 months on lees before disgorgement."
+    }
+   ],
+   "process": "Cool ripening keeps acidity high and sugar low at harvest, which is exactly the base wine that traditional-method secondary fermentation requires."
+  }
+ },
+ {
+  "id": "clare-valley",
+  "name": "Clare Valley",
+  "subcategory": "White",
+  "description": "Australia's Riesling heartland: bone dry, lime-drenched and steely, sealed under screwcap since 2000 when the region switched almost overnight.",
+  "abv": "11.5–12.5%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "slate",
+   "white flower"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Clare Valley producers collectively moved to screwcap in 2000 to stop cork taint ruining their Riesling — a coordinated regional decision that pushed the whole Australian industry to follow.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. Young Clare Riesling is austere and citric; with five to ten years it develops a toasty, kerosene-like complexity that is prized rather than faulty. Do not decant. Screwcap closures mean these age slowly and reliably, so cellaring is genuinely rewarding.",
+   "pair": [
+    "Fish and chips",
+    "Thai salad",
+    "Fresh goat cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Bone-dry, high-acid Riesling from a warm region with very cold nights.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Clare Valley in South Australia, elevated with cold night-time temperatures."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless-steel fermentation, fermented fully dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young under screwcap."
+    }
+   ],
+   "process": "Warm days with sharply cold nights hold acidity while ripening the fruit, and a fully dry stainless fermentation leaves the lime and mineral character exposed."
+  }
+ },
+ {
+  "id": "mclaren-vale",
+  "name": "McLaren Vale",
+  "subcategory": "Regional Red",
+  "description": "Maritime Shiraz and Grenache south of Adelaide: darker and more savoury than the Barossa, with a growing body of dry-grown old-vine Grenache.",
+  "abv": "14–15%",
+  "origin": "South Australia, Australia",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "dark plum",
+   "olive",
+   "sage",
+   "milk chocolate"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "McLaren Vale sits close enough to the Gulf St Vincent for afternoon sea breezes to drop vineyard temperatures sharply, which is why its Shiraz reads savoury where the Barossa's reads sweet.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass. Decant young Shiraz for half an hour; the old-vine Grenache generally needs less and can be served slightly cooler still. The savoury, olive-and-herb character is the regional signature and is easily lost if the wine is served warm.",
+   "pair": [
+    "Grilled lamb",
+    "Moussaka",
+    "Charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Maritime-cooled Shiraz and old-vine Grenache on varied ancient soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Shiraz and Grenache, with Mataro and Cabernet Sauvignon."
+    },
+    {
+     "label": "Region",
+     "detail": "McLaren Vale south of Adelaide, cooled by gulf breezes."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation, increasingly with whole bunches for the Grenache."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, often seasoned rather than new."
+    }
+   ],
+   "process": "Sea breezes moderate an otherwise warm climate, preserving acidity and giving savoury notes that distinguish it from inland South Australian reds."
+  }
+ },
+ {
+  "id": "rutherglen",
+  "name": "Rutherglen",
+  "subcategory": "Fortified Wine",
+  "description": "Fortified Muscat aged for decades in hot tin sheds until it turns to treacle, raisin and burnt orange. Some blends contain wine over a century old.",
+  "abv": "17–18%",
+  "origin": "Victoria, Australia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "raisin",
+   "toffee",
+   "burnt orange",
+   "walnut"
+  ],
+  "glassware": "Small fortified wine glass",
+  "funFact": "The classification runs Rutherglen, Classic, Grand and Rare, with average blend ages rising to twenty years and beyond — and the solera-style blends often include material from the nineteenth century.",
+  "serve": {
+   "temp": "57-64°F, lightly cool",
+   "glass": "Small fortified wine glass",
+   "how": "Serve in small measures, barely cool or at room temperature — chilling mutes the whole point. It is intensely sweet and viscous, so an ounce or two is plenty. An open bottle keeps for months rather than days thanks to the fortification and oxidative ageing, so there is no rush to finish it.",
+   "pair": [
+    "Sticky date pudding",
+    "Blue cheese",
+    "Dark chocolate"
+   ]
+  },
+  "composition": {
+   "summary": "Fortified Muscat aged oxidatively in hot conditions for years to decades.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat à Petits Grains Rouges, known locally as Brown Muscat."
+    },
+    {
+     "label": "Region",
+     "detail": "Rutherglen in north-east Victoria, hot and continental."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes left to raisin on the vine, then fortified with grape spirit mid-fermentation."
+    },
+    {
+     "label": "Aging",
+     "detail": "Years to decades in old oak in hot sheds, blended solera-style."
+    }
+   ],
+   "process": "Fermentation is arrested by fortification to retain enormous sugar, and deliberate hot oxidative ageing concentrates the wine into its treacle-and-raisin character."
+  }
+ },
+ {
+  "id": "marlborough",
+  "name": "Marlborough",
+  "subcategory": "White",
+  "description": "The Sauvignon Blanc that rewrote the grape's reputation: passionfruit, cut grass and grapefruit at a pitch no other region reaches.",
+  "abv": "12.5–13.5%",
+  "origin": "South Island, New Zealand",
+  "rarity": "common",
+  "tastingNotes": [
+   "passionfruit",
+   "cut grass",
+   "grapefruit",
+   "gooseberry"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The first Marlborough Sauvignon Blanc was made in 1979, and within twenty years the style was so dominant that it changed what consumers worldwide expected the grape to taste like.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass — over-chilling flattens the aromatics that are the entire proposition. Drink it young; the pyrazine and thiol compounds responsible for the passionfruit and grass fade within two or three years. No decanting, and no need for a large bowl.",
+   "pair": [
+    "Goat cheese",
+    "Green salad",
+    "Steamed mussels"
+   ]
+  },
+  "composition": {
+   "summary": "Intensely aromatic Sauvignon Blanc from a sunny, cool valley on free-draining gravels.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Sauvignon Blanc."
+    },
+    {
+     "label": "Region",
+     "detail": "The Wairau and Awatere valleys of Marlborough, sunny with very cool nights."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation under reductive conditions to protect thiols."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young."
+    }
+   ],
+   "process": "High sunshine with cold nights builds aromatic precursors while holding acidity, and reductive cool fermentation preserves the thiol compounds that give the passionfruit character."
+  }
+ },
+ {
+  "id": "central-otago",
+  "name": "Central Otago",
+  "subcategory": "Regional Red",
+  "description": "The world's southernmost wine region: Pinot Noir grown in a continental mountain basin, dark-fruited and thyme-scented with real structure.",
+  "abv": "13–14%",
+  "origin": "South Island, New Zealand",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dark cherry",
+   "thyme",
+   "violet",
+   "spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Central Otago is the only genuinely continental wine climate in New Zealand — everywhere else is maritime — which is why its Pinot Noir is darker and firmer than the country's other examples.",
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide Burgundy bowl. These are more structured than most New World Pinot and benefit from thirty minutes open, though not from aggressive decanting. The wild thyme note is a regional marker and shows best when the wine is not over-warmed.",
+   "pair": [
+    "Duck",
+    "Venison",
+    "Mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Continental-climate Pinot Noir from steep schist slopes in a mountain basin.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "Central Otago in the South Island interior, at 45 degrees south."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation, moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–18 months in French oak, a small proportion new."
+    }
+   ],
+   "process": "A dry continental climate with intense sunlight and cold nights ripens Pinot Noir fully while retaining acidity, giving darker fruit and firmer tannin than maritime sites."
+  }
+ },
+ {
+  "id": "hawkes-bay",
+  "name": "Hawke's Bay",
+  "subcategory": "Regional Red",
+  "description": "New Zealand's warmest major region and its answer to Bordeaux: Merlot and Cabernet blends grown on the old riverbed gravels of the Gimblett district.",
+  "abv": "13–14%",
+  "origin": "North Island, New Zealand",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "cedar",
+   "tobacco",
+   "red plum"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Gimblett Gravels sub-region is defined by an old riverbed exposed when the Ngaruroro River shifted course in an 1867 flood — the appellation boundary follows the gravel exactly.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young bottles briefly. These are medium-bodied rather than heavy, so avoid treating them like a warm-climate Cabernet. The Syrah from the same gravels is peppery and floral and deserves slightly cooler service still.",
+   "pair": [
+    "Roast beef",
+    "Lamb",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Bordeaux varieties and Syrah on free-draining river gravels in New Zealand's warmest region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Merlot, Cabernet Sauvignon, Cabernet Franc and Syrah."
+    },
+    {
+     "label": "Region",
+     "detail": "Hawke's Bay on the North Island's east coast, including the Gimblett Gravels."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "Heat-retaining river gravels raise vineyard temperatures enough to ripen Bordeaux varieties in a cool maritime country, giving medium-bodied and cedary wines."
+  }
+ },
+ {
+  "id": "martinborough",
+  "name": "Martinborough",
+  "subcategory": "Regional Red",
+  "description": "A tiny North Island region on a windswept gravel terrace, making Pinot Noir of unusual savoury intensity from very low-yielding vines.",
+  "abv": "13–14%",
+  "origin": "North Island, New Zealand",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "dried herb",
+   "leather",
+   "spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "Martinborough's persistent wind is a viticultural asset rather than a hazard — it thickens grape skins and cuts yields sharply, which concentrates the resulting wines.",
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide bowl. These are savoury, structured Pinots rather than fruit-forward ones, and they show best with twenty minutes of air. They also age well for a New World Pinot, so a bottle with five years on it is often more expressive than a current release.",
+   "pair": [
+    "Duck",
+    "Roast pork",
+    "Mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Low-yielding, savoury Pinot Noir from a wind-exposed gravel terrace.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir."
+    },
+    {
+     "label": "Region",
+     "detail": "Martinborough in the Wairarapa, on a free-draining alluvial terrace."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-cluster inclusion common, with careful extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, mostly used."
+    }
+   ],
+   "process": "Constant wind and free-draining gravel reduce yields dramatically, concentrating flavour, while whole-cluster fermentation adds the savoury spice the region is known for."
+  }
+ }
+]

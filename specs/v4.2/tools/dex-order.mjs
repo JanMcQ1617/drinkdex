@@ -12,6 +12,10 @@
  * photographed openers) with `exclude` narrowing the pool to the section. Nothing random,
  * no clock: the same answers give the same Dex on every phone. src/lib/dexOrder.ts ports this,
  * and scripts/check-recommend.mjs checks the port against it (fronts, total order, counts).
+ *
+ * v4.14: a third kind, wine, back in the catalogue (specs/v4.14/wine-restore.md). It is a kind
+ * chip like the other two; it holds no taste chip and is never in a front, because the
+ * recommender neither scores it nor hears a flavour in it (./recommend.mjs says why).
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -53,7 +57,7 @@ export const hasSpirit = (d, s) => (R.spiritHits(d).get(s) ?? 0) >= 1;
 /* ------------------------------------------------------------------ */
 
 /**
- * f = { flavours: [], spirits: [], kind: 'all'|'cocktail'|'spirit', status: 'all'|'unlocked'|'locked' }
+ * f = { flavours: [], spirits: [], kind: 'all'|'cocktail'|'spirit'|'wine', status: 'all'|'unlocked'|'locked' }
  * `caught` is a Set of caught ids. Returns a predicate.
  */
 export function matcher(f, caught = new Set()) {
@@ -70,14 +74,14 @@ export function matcher(f, caught = new Set()) {
 /**
  * Faceted counts for the sheet: each chip's count is what the grid would hold with that chip
  * on, with the other axes as they are, and its own axis as only it (so a chip never counts
- * itself out). One pass per chip, 18 chips: about 38,000 cheap tests, worked when the sheet opens.
+ * itself out). One pass per chip, 19 chips: about 40,000 cheap tests, worked when the sheet opens.
  */
 export function facetCounts(f, caught = new Set()) {
   const out = { flavours: {}, spirits: {}, kind: {}, status: {} };
   const count = (g) => DRINKS.filter(matcher(g, caught)).length;
   for (const x of FLAVOUR_ORDER) out.flavours[x] = count({ ...f, flavours: [x] });
   for (const x of SPIRIT_ORDER) out.spirits[x] = count({ ...f, spirits: [x] });
-  for (const x of ['cocktail', 'spirit']) out.kind[x] = count({ ...f, kind: x });
+  for (const x of ['cocktail', 'spirit', 'wine']) out.kind[x] = count({ ...f, kind: x });
   for (const x of ['unlocked', 'locked']) out.status[x] = count({ ...f, status: x });
   out.total = count(f);
   return out;

@@ -1,0 +1,443 @@
+[
+ {
+  "id": "wachau",
+  "name": "Wachau",
+  "subcategory": "White",
+  "description": "Grüner Veltliner and Riesling from vertiginous terraces above the Danube, with a white-pepper bite that is the grape's signature and the region's calling card.",
+  "abv": "12–14%",
+  "origin": "Lower Austria, Austria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "white pepper",
+   "green apple",
+   "citrus",
+   "wet stone"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Wachau grades its wines by ripeness under its own private system — Steinfeder, Federspiel, Smaragd — named after a grass, a falconry technique and a lizard that suns itself on the terraces.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not cold; the white-pepper note that defines Grüner disappears below about 46°F. Use a standard white glass rather than a large bowl. Smaragd wines are the ripest and fullest and can take a slightly warmer service and even a short decant; Federspiel should be poured and drunk.",
+   "pair": [
+    "Wiener schnitzel",
+    "Asparagus",
+    "Freshwater fish"
+   ]
+  },
+  "composition": {
+   "summary": "Terraced Danube whites from primary rock, graded by a local ripeness system.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner and Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Wachau gorge along the Danube, on steep terraced gneiss and loess."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fully dry, with minimal handling."
+    },
+    {
+     "label": "Aging",
+     "detail": "Little or no oak; large neutral casks where used."
+    }
+   ],
+   "process": "Steep primary-rock terraces and a sharp day-night temperature swing give concentrated but high-acid fruit, fermented dry in neutral vessels to keep the site in front."
+  }
+ },
+ {
+  "id": "kamptal",
+  "name": "Kamptal",
+  "subcategory": "White",
+  "description": "Wachau's neighbour on deep loess: rounder, fruitier Grüner Veltliner that gives up its pepper more easily and costs considerably less.",
+  "abv": "12–13.5%",
+  "origin": "Lower Austria, Austria",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "yellow apple",
+   "white pepper",
+   "lentil",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Heiligenstein vineyard above Langenlois sits on a desert sandstone formation some 250 million years old — geologically unrelated to anything around it, and reserved almost entirely for Riesling.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. Kamptal Grüner is more approachable young than Wachau and rarely needs air. The Riesling from Heiligenstein is a different proposition — firmer, more mineral, and worth a few years in bottle before opening.",
+   "pair": [
+    "Roast chicken",
+    "Pork schnitzel",
+    "Green vegetables"
+   ]
+  },
+  "composition": {
+   "summary": "Loess-grown Grüner Veltliner with riper fruit and softer acidity than the Wachau.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner and Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Kamp valley north of the Danube, on deep loess with rocky outcrops."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; large neutral casks for the top wines."
+    }
+   ],
+   "process": "Deep loess soils retain water and give riper, rounder fruit than the Wachau's rock terraces, producing a fuller and more immediately approachable style."
+  }
+ },
+ {
+  "id": "mittelburgenland",
+  "name": "Mittelburgenland",
+  "subcategory": "Regional Red",
+  "description": "Austria's red heartland, nicknamed Blaufränkischland: dark cherry, black pepper and firm acidity from a grape most of the world has never tasted.",
+  "abv": "13–14%",
+  "origin": "Burgenland, Austria",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour cherry",
+   "black pepper",
+   "blackberry",
+   "mineral"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Blaufränkisch is the same grape as Hungary's Kékfrankos and Germany's Lemberger, and DNA testing showed it to be a parent of both Zweigelt and Gamay — a far more important vine than its obscurity suggests.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve cooler than a typical red, around 60°F — Blaufränkisch has high acidity and it turns sharp if served warm, but sullen if served cold. Decant young bottles briefly. The peppery, sour-cherry profile suits food with fat and salt rather than delicate dishes.",
+   "pair": [
+    "Goulash",
+    "Roast duck",
+    "Cured sausage"
+   ]
+  },
+  "composition": {
+   "summary": "Blaufränkisch on heavy clay and slate, giving dark fruit with firm natural acidity.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Blaufränkisch."
+    },
+    {
+     "label": "Region",
+     "detail": "Mittelburgenland in eastern Austria, sheltered and warm with heavy soils."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed and fermented warm for colour, with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, increasingly large neutral casks rather than barriques."
+    }
+   ],
+   "process": "Warm, sheltered sites ripen a naturally high-acid grape fully, and restrained oak keeps the peppery fruit and mineral edge in front."
+  }
+ },
+ {
+  "id": "mosel",
+  "name": "Mosel",
+  "subcategory": "White",
+  "description": "Riesling from the steepest vineyards in the world, on blue slate above a river that loops back on itself — feather-light, piercingly acidic, often barely alcoholic.",
+  "abv": "7.5–11%",
+  "origin": "Mosel, Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "lime",
+   "green apple",
+   "slate",
+   "white peach"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Calmont vineyard reaches a gradient of about 65 degrees, making it the steepest working vineyard on earth — every vine is tended by hand, sometimes with ropes.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled but not ice-cold. Check the label for sweetness level: Kabinett, Spätlese and Auslese climb in ripeness and residual sugar, and the food match changes completely between them. These age remarkably — a twenty-year-old Mosel Kabinett is often more interesting than a young one.",
+   "pair": [
+    "Thai curry",
+    "Smoked trout",
+    "Pork belly"
+   ]
+  },
+  "composition": {
+   "summary": "Low-alcohol slate-grown Riesling with very high acidity and often residual sugar.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Mosel valley's steep blue and grey slate slopes above the river."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Slow, cool fermentation, frequently arrested to leave residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Neutral vessels — stainless or old Fuder casks; no new oak."
+    }
+   ],
+   "process": "Slate retains heat in a marginal northern climate, ripening Riesling slowly, and fermentation is often stopped early to balance the fierce natural acidity with sugar."
+  }
+ },
+ {
+  "id": "rheingau",
+  "name": "Rheingau",
+  "subcategory": "White",
+  "description": "The Riesling that taught Germany to make dry wine: fuller and firmer than the Mosel, from south-facing slopes on a rare east-west stretch of the Rhine.",
+  "abv": "11.5–13%",
+  "origin": "Hesse, Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "ripe apple",
+   "peach",
+   "beeswax",
+   "smoke"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Schloss Johannisberg is credited with discovering noble rot in 1775, when a courier carrying permission to harvest arrived late and the mouldy grapes turned out to make extraordinary wine.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. Rheingau Riesling is typically drier and weightier than Mosel and can take a slightly warmer service. Give a young dry bottle fifteen minutes; the smoky, waxy character that distinguishes the region needs a little air and a few years in bottle to appear.",
+   "pair": [
+    "Roast pork",
+    "River fish",
+    "Mature cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Fuller-bodied, mostly dry Riesling from south-facing slopes on slate and quartzite.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling."
+    },
+    {
+     "label": "Region",
+     "detail": "The Rheingau, where the Rhine turns east-west and the slopes face due south."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool fermentation, mostly to full dryness in the modern style."
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless or large neutral casks; some top wines see old oak."
+    }
+   ],
+   "process": "An unusual due-south exposure gives greater ripeness than other German regions, supporting fully dry fermentation without losing the acidity Riesling depends on."
+  }
+ },
+ {
+  "id": "pfalz",
+  "name": "Pfalz",
+  "subcategory": "White",
+  "description": "Germany's warmest, sunniest wine region, where almonds and figs grow between the vines and the Riesling is generous rather than austere.",
+  "abv": "12–13.5%",
+  "origin": "Rhineland-Palatinate, Germany",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "ripe peach",
+   "apricot",
+   "herb",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "The Pfalz sits in the rain shadow of the Haardt mountains and is warm enough for figs, lemons and almonds to grow outdoors — the tourist road through it is called the German Wine Route.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled in a standard white glass. These are riper and rounder than northern German Rieslings, so they carry a little more warmth in service without falling apart. The region also makes serious Spätburgunder, which should be treated as a cool-climate Pinot Noir rather than a German curiosity.",
+   "pair": [
+    "Roast chicken",
+    "Pork with apple",
+    "Soft cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Ripe, generous Riesling and Pinot varieties from Germany's warmest region.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Riesling, with Spätburgunder, Weissburgunder and Grauburgunder."
+    },
+    {
+     "label": "Region",
+     "detail": "The Pfalz, sheltered by the Haardt mountains on sandstone and limestone."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool fermentation, largely dry in the modern style."
+    },
+    {
+     "label": "Aging",
+     "detail": "Stainless for the aromatic whites, old oak for the Pinots."
+    }
+   ],
+   "process": "A warm rain-shadow climate ripens fruit more fully than northern Germany, giving broader, riper wines that are usually fermented dry."
+  }
+ },
+ {
+  "id": "baden",
+  "name": "Baden",
+  "subcategory": "Regional Red",
+  "description": "Germany's southernmost region and its Pinot Noir stronghold — Spätburgunder from volcanic soil, savoury and structured rather than sweet.",
+  "abv": "12.5–13.5%",
+  "origin": "Baden-Württemberg, Germany",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "smoke",
+   "forest floor",
+   "spice"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "The Kaiserstuhl is an extinct volcano rising abruptly from the Rhine plain, and its volcanic soils are warm enough that Baden is the only German region classified in the EU's warmest viticultural zone.",
+  "serve": {
+   "temp": "55-60°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide bowl. German Spätburgunder is leaner and smokier than Burgundy and suffers badly from over-warming. Give it twenty minutes rather than a decant. Bottles from the Kaiserstuhl in particular repay five to ten years in the cellar.",
+   "pair": [
+    "Duck",
+    "Mushroom dishes",
+    "Roast pork"
+   ]
+  },
+  "composition": {
+   "summary": "Volcanic-soil Spätburgunder with savoury, smoky character and firm structure.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Spätburgunder (Pinot Noir), with Grauburgunder and Weissburgunder."
+    },
+    {
+     "label": "Region",
+     "detail": "Baden along the Rhine, including the volcanic Kaiserstuhl."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation with restrained extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak, mostly used barrels."
+    }
+   ],
+   "process": "Volcanic soils and Germany's warmest climate ripen Pinot Noir properly, and restrained winemaking keeps the smoky, savoury character that distinguishes it from Burgundy."
+  }
+ },
+ {
+  "id": "cornalin-du-valais",
+  "name": "Cornalin du Valais",
+  "subcategory": "Regional Red",
+  "description": "A nearly extinct Alpine red rescued in the 1970s: dark, wild-berried and firmly tannic, grown on terraces in Switzerland's driest canton.",
+  "abv": "12.5–13.5%",
+  "origin": "Valais, Switzerland",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "wild berry",
+   "violet",
+   "iron"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Cornalin was down to a handful of hectares before Swiss growers deliberately revived it; Switzerland exports barely one percent of its wine, so almost none of it is ever tasted abroad.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. It has firm tannin and bright acidity, so a short decant helps a young bottle. This is a wine you will almost certainly have to drink in Switzerland — the country consumes essentially its entire production, which is why so few people outside it have met the grape.",
+   "pair": [
+    "Raclette",
+    "Dried alpine beef",
+    "Game"
+   ]
+  },
+  "composition": {
+   "summary": "A rare indigenous Alpine red grown on steep terraces in a dry mountain valley.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cornalin, an indigenous Valais variety."
+    },
+    {
+     "label": "Region",
+     "detail": "The Valais in the Rhône valley, the driest and sunniest part of Switzerland."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm to manage the firm tannin."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, largely neutral."
+    }
+   ],
+   "process": "A dry, sunny Alpine climate with cold nights ripens a naturally tannic late variety, and neutral oak ageing softens the structure without masking the wild-berry fruit."
+  }
+ },
+ {
+  "id": "znojmo",
+  "name": "Znojmo",
+  "subcategory": "White",
+  "description": "Moravian whites from the Austrian border: crisp, aromatic Grüner Veltliner and Riesling from a country almost nobody associates with wine.",
+  "abv": "11.5–13%",
+  "origin": "South Moravia, Czechia",
+  "rarity": "rare",
+  "tastingNotes": [
+   "green apple",
+   "white pepper",
+   "elderflower",
+   "citrus"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Moravia produces the large majority of Czech wine and sits directly across the border from Austria's Weinviertel, sharing its soils and grapes — the frontier is political rather than viticultural.",
+  "serve": {
+   "temp": "46-50°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve well chilled in a standard white glass. These are light, high-acid, aromatic whites meant for drinking young rather than keeping. Look out for the Czech habit of serving very young wine as burčák in autumn — partly fermented, cloudy and sweet, and a different drink entirely.",
+   "pair": [
+    "Freshwater fish",
+    "Roast chicken",
+    "Fresh cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Light, aromatic Central European whites from South Moravia's limestone and loess.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Grüner Veltliner, Riesling, Welschriesling and Pálava."
+    },
+    {
+     "label": "Region",
+     "detail": "The Znojmo district of South Moravia, on the Austrian border."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Mostly unoaked; bottled young."
+    }
+   ],
+   "process": "A cool continental climate on loess and limestone yields high-acid aromatic whites, fermented cold in stainless to keep them fresh and floral."
+  }
+ }
+]

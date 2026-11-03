@@ -27,6 +27,7 @@ import {
   FriendsWhoCaught,
   HeroPrint,
   HeroRecord,
+  OnTheMap,
   OriginStory,
   PinnedPostBar,
   pinnedBarEstimate,
@@ -43,6 +44,7 @@ import { announce, Button, EmptyState, haptic } from '@/components/ui';
 import { colors, layout, space } from '@/constants/theme';
 import { getDrink } from '@/data';
 import { photoFor } from '@/data/drinkPhotos';
+import { wineAtlasHref } from '@/data/wineAtlas';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import { type PlaceRef, placesSupported } from '@/lib/places';
 import { placeSearchAvailable } from '@/lib/placeSearch';
@@ -463,7 +465,7 @@ export default function DrinkDetailScreen() {
   // Named for what is actually drawn: a photo, your photo, or the drawing.
   const printNoun = stockPhoto ? 'Photo' : ownPhoto ? 'Your photo' : 'Drawing';
   const openPost = (postId: string) => router.push({ pathname: '/post/[id]', params: { id: postId } });
-  // A spirit's serve guide is first when it has a row to draw (every catalogue spirit's has); else its makeup.
+  // A wine's or a spirit's serve guide is first when it has a row to draw (every catalogue one's has); else its makeup.
   const serveFirst = drink.serve != null && serveRows(drink.serve, drink).length > 0;
 
   return (
@@ -513,9 +515,10 @@ export default function DrinkDetailScreen() {
         <TastesOf notes={drink.tastingNotes} />
 
         {/*
-          How it's made: the spec for a cocktail; for a spirit, how to pour
-          it and what's in it. The first drawn takes the drink's number, and
-          with it the lead: the double rule and the figure (v4.9 C.5).
+          How it's made: the spec for a cocktail; for a wine or a spirit,
+          how to pour it and what's in it. The first drawn takes the drink's
+          number, and with it the lead: the double rule and the figure (v4.9
+          C.5).
         */}
         {drink.recipe ? <SpecSection recipe={drink.recipe} number={drink.dexNumber} /> : null}
         {!drink.recipe && drink.serve ? (
@@ -524,6 +527,9 @@ export default function DrinkDetailScreen() {
         {!drink.recipe && drink.composition ? (
           <CompositionSection composition={drink.composition} number={serveFirst ? undefined : drink.dexNumber} />
         ) : null}
+
+        {/* A wine's place in the atlas, and the way into it (v4.14); nothing for a card with no link. */}
+        <OnTheMap drinkId={drink.id} onOpen={(params) => router.push(wineAtlasHref(params))} />
 
         <FieldNotes description={drink.description} />
         <OriginStory drink={drink} />

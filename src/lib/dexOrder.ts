@@ -73,13 +73,14 @@ export type KindFilter = DrinkCategory | 'all';
 /** `unlocked` is Logged and `locked` Not yet (Caught through build 25: game language for a drink you had). */
 export type StatusFilter = 'all' | 'unlocked' | 'locked';
 
-export const KIND_WORDS: Readonly<Record<DrinkCategory, string>> = { cocktail: 'Cocktails', spirit: 'Spirits' };
+export const KIND_WORDS: Readonly<Record<DrinkCategory, string>> = { cocktail: 'Cocktails', spirit: 'Spirits', wine: 'Wines' };
 export const STATUS_WORDS: Readonly<Record<Exclude<StatusFilter, 'all'>, string>> = { unlocked: 'Logged', locked: 'Not yet' };
 
 /**
  * What the chips hold (spec §1.3): OR inside a group, AND across groups.
  * Flavours and spirits take any number; kind and caught one or none.
- * components/dex/dexFilter's filter object is this shape.
+ * components/dex/dexFilter's filter is this shape with v4.14's facets
+ * beside it (strength, style, grape, country, region, I can make it).
  */
 export interface ChipFilter {
   flavours: readonly Flavour[];
@@ -89,108 +90,6 @@ export interface ChipFilter {
 }
 
 export const NO_FILTER: ChipFilter = { flavours: [], spirits: [], kind: 'all', status: 'all' };
-
-/** True when any chip is on: the grid goes flat (§2.4) and the sliders glyph is filled (§1.4). */
-export function filterIsOn(f: ChipFilter): boolean {
-  return f.flavours.length > 0 || f.spirits.length > 0 || f.kind !== 'all' || f.status !== 'all';
-}
-
-/** One chip, wherever it is drawn: the sheet, the quick row, an empty grid's line. */
-export type Chip =
-  | { group: 'flavour'; key: Flavour }
-  | { group: 'spirit'; key: Spirit }
-  | { group: 'kind'; key: DrinkCategory }
-  | { group: 'status'; key: Exclude<StatusFilter, 'all'> };
-
-/** A chip's label. */
-export function chipWord(c: Chip): string {
-  switch (c.group) {
-    case 'flavour':
-      return FLAVOUR_WORDS[c.key];
-    case 'spirit':
-      return SPIRIT_WORDS[c.key];
-    case 'kind':
-      return KIND_WORDS[c.key];
-    case 'status':
-      return STATUS_WORDS[c.key];
-  }
-}
-
-/** Whether this chip is on in the filter. */
-export function chipOn(f: ChipFilter, c: Chip): boolean {
-  switch (c.group) {
-    case 'flavour':
-      return f.flavours.includes(c.key);
-    case 'spirit':
-      return f.spirits.includes(c.key);
-    case 'kind':
-      return f.kind === c.key;
-    case 'status':
-      return f.status === c.key;
-  }
-}
-
-/**
- * The filter after a tap on this chip. Flavours and spirits toggle and
- * keep sheet order (so two people with the same chips on have the same
- * filter); kind and caught are one or none, so a tap on the one that is
- * on turns its group off.
- */
-export function toggleChip(f: ChipFilter, c: Chip): ChipFilter {
-  switch (c.group) {
-    case 'flavour': {
-      const on = f.flavours.includes(c.key);
-      return { ...f, flavours: FLAVOUR_ORDER.filter((x) => (x === c.key ? !on : f.flavours.includes(x))) };
-    }
-    case 'spirit': {
-      const on = f.spirits.includes(c.key);
-      return { ...f, spirits: SPIRIT_ORDER.filter((x) => (x === c.key ? !on : f.spirits.includes(x))) };
-    }
-    case 'kind':
-      return { ...f, kind: f.kind === c.key ? 'all' : c.key };
-    case 'status':
-      return { ...f, status: f.status === c.key ? 'all' : c.key };
-  }
-}
-
-/** Every chip that is on, in sheet order: "Sour and citrusy, Fruity, Cocktails" for an empty grid (§2.4). */
-export function chipsOn(f: ChipFilter): Chip[] {
-  const out: Chip[] = [];
-  for (const key of FLAVOUR_ORDER) if (f.flavours.includes(key)) out.push({ group: 'flavour', key });
-  for (const key of SPIRIT_ORDER) if (f.spirits.includes(key)) out.push({ group: 'spirit', key });
-  if (f.kind !== 'all') out.push({ group: 'kind', key: f.kind });
-  if (f.status !== 'all') out.push({ group: 'status', key: f.status });
-  return out;
-}
-
-const QUICK_MAX = 8;
-
-/**
- * The quick chips under the field (spec §1.5), at most 8: every chip
- * that is on, in sheet order; then the person's own answers that are
- * off, their flavours in answer order, then their spirits; with no
- * answers, Cocktails, Spirits and Not yet, then the first two flavours.
- */
-export function quickChips(f: ChipFilter, answers: Pick<TasteAnswers, 'flavours' | 'spirits'>): Chip[] {
-  const out = chipsOn(f);
-  const offer: Chip[] =
-    answers.flavours.length > 0 || answers.spirits.length > 0
-      ? [
-          ...answers.flavours.map((key): Chip => ({ group: 'flavour', key })),
-          ...answers.spirits.map((key): Chip => ({ group: 'spirit', key })),
-        ]
-      : [
-          { group: 'kind', key: 'cocktail' },
-          { group: 'kind', key: 'spirit' },
-          { group: 'status', key: 'locked' },
-          ...FLAVOUR_ORDER.slice(0, 2).map((key): Chip => ({ group: 'flavour', key })),
-        ];
-  for (const c of offer) {
-    if (out.length >= QUICK_MAX) break;
-    if (!out.some((x) => x.group === c.group && x.key === c.key)) out.push(c);
-  }
-  return out.slice(0, QUICK_MAX);
-}
 
 /* ------------------------------------------------------------------ */
 /* The tags                                                            */
@@ -275,11 +174,6 @@ const kindPass = (f: ChipFilter, d: Filterable) => f.kind === 'all' || d.categor
 const statusPass = (f: ChipFilter, d: Filterable, caught: IsCaught) =>
   f.status === 'all' || (f.status === 'unlocked' ? caught(d.id) : !caught(d.id));
 
-/** The grid's test for one drink under these chips. */
-export function matcher(f: ChipFilter, caught: IsCaught): (d: Filterable) => boolean {
-  return (d) => flavourPass(f, d) && spiritPass(f, d) && kindPass(f, d) && statusPass(f, d, caught);
-}
-
 export interface FacetCounts {
   flavours: Record<Flavour, number>;
   spirits: Record<Spirit, number>;
@@ -303,12 +197,16 @@ export interface FacetCounts {
  * holds it (its own group's choice is the chip being counted). The
  * reference counts with one pass per chip; the figures are the same
  * (check-recommend compares them).
+ *
+ * Since v4.14 the Dex counts all ten facets with components/dex/dexFacets.
+ * This stays as the four groups' definition, held to the reference here,
+ * and specs/v4.14/filters.test.mjs holds dexFacets' figures to it.
  */
 export function facetCounts(f: ChipFilter, caught: IsCaught, drinks: readonly Filterable[] = DRINKS): FacetCounts {
   const out: FacetCounts = {
     flavours: Object.fromEntries(FLAVOUR_ORDER.map((x) => [x, 0])) as Record<Flavour, number>,
     spirits: Object.fromEntries(SPIRIT_ORDER.map((x) => [x, 0])) as Record<Spirit, number>,
-    kind: { cocktail: 0, spirit: 0 },
+    kind: { cocktail: 0, spirit: 0, wine: 0 },
     status: { unlocked: 0, locked: 0 },
     total: 0,
   };

@@ -4,6 +4,7 @@ import { DRINKS, getDrink } from '@/data';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import type {
   CompositionComponent,
+  CustomCategory,
   CustomDrink,
   CustomDrinkFields,
   Drink,
@@ -240,7 +241,7 @@ export const GLASSWARE = {
     'Coupe',
     'Veladora',
   ],
-} as const satisfies Record<DrinkCategory, readonly string[]>;
+} as const satisfies Record<CustomCategory, readonly string[]>;
 
 /** Label shown → value stored. Values are verbatim catalogue strings, so the export needs no mapping. */
 export const SERVE_TEMPS = [
@@ -412,7 +413,7 @@ export type CustomDraft = Omit<CustomDrinkFields, 'abvLow' | 'abvHigh'> & {
 };
 
 /** A blank draft, optionally named (from a search) and in a category (the Dex's filter). */
-export function emptyDraft(opts?: { name?: string; category?: DrinkCategory }): CustomDraft {
+export function emptyDraft(opts?: { name?: string; category?: CustomCategory }): CustomDraft {
   return {
     name: opts?.name ?? '',
     category: opts?.category ?? 'cocktail',

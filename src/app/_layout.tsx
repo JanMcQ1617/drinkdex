@@ -176,6 +176,14 @@ export default function RootLayout() {
         */}
         <Stack.Screen name="stats" options={{ gestureDirection: 'horizontal' }} />
         {/*
+          The Wine Atlas (v4.14, back with wine): every named wine and
+          grape, pushed from a wine card's "On the map". Edge-swipe only:
+          its chips scroll sideways, and a full-width back gesture would
+          fight them on every drag.
+        */}
+        <Stack.Screen name="wine-atlas/index" options={{ gestureDirection: 'horizontal' }} />
+
+        {/*
           user/[id], a person's profile, is not listed on purpose: the stack
           defaults are all it needs — a push, so Back returns to whatever
           opened it, with the standard edge swipe. An entry here would only

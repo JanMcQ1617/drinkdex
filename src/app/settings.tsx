@@ -365,8 +365,8 @@ export default function SettingsScreen() {
             onPress={() => router.push('/find-friends')}
             accessibilityHint={
               facebookShown
-                ? 'Facebook, contacts, invites, search and Instagram'
-                : 'Contacts, invites, search and Instagram'
+                ? 'Contacts, Facebook, invites and search'
+                : 'Contacts, invites and search'
             }
           />
         </Section>

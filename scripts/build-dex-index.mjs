@@ -1,6 +1,7 @@
 /**
- * Builds a printable index of every dex entry — one PDF listing all 2,089
- * names, grouped by category and family.
+ * Builds a printable index of every dex entry — one PDF listing every
+ * name (4,671 since wine came back in v4.14), grouped by category and
+ * family.
  *
  * It prints the entry's `id` under its name. That is not decoration: the
  * id is the filename `build-drink-photos.mjs` requires a photograph to
@@ -74,9 +75,15 @@ const OUT = arg(
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+/*
+ * Wines since v4.14 (specs/v4.14/wine-restore.md). Without them the guard
+ * after the body threw, "listed 2,327 of 4,671", and the sheet for the
+ * 2,273 wines still to photograph could not be printed.
+ */
 const CATEGORIES = [
   { key: 'cocktail', title: 'Cocktails' },
   { key: 'spirit', title: 'Spirits' },
+  { key: 'wine', title: 'Wines' },
 ];
 
 /* Accent-aware, so Crème files under C and not after Z. */
@@ -136,6 +143,7 @@ if (emitted !== entries.length) {
 
 const cocktails = entries.filter((d) => d.category === 'cocktail').length;
 const spirits = entries.filter((d) => d.category === 'spirit').length;
+const wines = entries.filter((d) => d.category === 'wine').length;
 const shot = new Date().toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -277,6 +285,7 @@ const html = `<!DOCTYPE html>
     <div><b>${entries.length.toLocaleString('en-US')}</b><span>entries</span></div>
     <div><b>${cocktails.toLocaleString('en-US')}</b><span>cocktails</span></div>
     <div><b>${spirits.toLocaleString('en-US')}</b><span>spirits</span></div>
+    <div><b>${wines.toLocaleString('en-US')}</b><span>wines</span></div>
   </div>
   <p class="foot">${
     MISSING_ONLY
@@ -328,7 +337,7 @@ execFileSync(
   { stdio: 'ignore' },
 );
 
-console.log(`\n  ${entries.length.toLocaleString('en-US')} entries — ${cocktails} cocktails, ${spirits} spirits`);
+console.log(`\n  ${entries.length.toLocaleString('en-US')} entries — ${cocktails} cocktails, ${spirits} spirits, ${wines} wines`);
 console.log(
   MISSING_ONLY
     ? `  filtered to what still needs art; ${havePhoto.size} already photographed`

@@ -92,8 +92,8 @@ const pad = (o) =>
 console.log(`\n  Glass shapes (${Object.keys(shapeCount).length} distinct)\n  ${pad(shapeCount)}`);
 console.log(`\n  Pour colors (${Object.keys(colorCount).length} distinct)\n  ${pad(colorCount)}`);
 
-// Fortified wine resolves via subcategory, so an unmapped one silently
-// falls back to the category default. Catch that here rather than on screen.
+// Wine resolves via subcategory, so an unmapped one silently falls back
+// to the category default. Catch that here rather than on screen.
 const unmapped = [];
 for (const d of drinks) {
   if (d.category === 'beer' && !BEER_BY_SUBCATEGORY[d.subcategory])
@@ -105,7 +105,7 @@ const uniqueUnmapped = [...new Set(unmapped)];
 console.log(
   uniqueUnmapped.length
     ? `\n  UNMAPPED subcategories: ${uniqueUnmapped.join(', ')}`
-    : '\n  Every fortified-wine subcategory is mapped.',
+    : '\n  Every wine subcategory is mapped.',
 );
 
 if (suspicious.length) {

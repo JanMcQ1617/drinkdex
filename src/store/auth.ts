@@ -17,8 +17,8 @@ import {
   clearDiscoveryCache,
   clearPendingClaims,
   getPendingClaims,
-  rememberHandle,
   rememberPhone,
+  retireInstagram,
 } from '@/lib/discovery';
 import {
   FACEBOOK_FRIENDS_ENABLED,
@@ -28,7 +28,6 @@ import {
   openFacebookAuth,
   syncFacebookFriends,
 } from '@/lib/facebook';
-import { hashHandle } from '@/lib/instagram';
 import { containsObjectionable, isObjectionableError } from '@/lib/moderation';
 import { openOAuth, type OAuthOutcome } from '@/lib/oauth';
 import {
@@ -42,10 +41,10 @@ import {
   rememberResetRequest,
 } from '@/lib/recovery';
 import {
+  clearInstagramHash,
   disableAvatarColumn,
   isMissingAvatarColumn,
   profileCols,
-  setInstagramHash,
   setPhoneHash,
 } from '@/lib/social';
 import { supabase } from '@/lib/supabase';
@@ -586,8 +585,8 @@ function randomAccent(): string {
 }
 
 /**
- * Writes the discovery hashes given at signup, once there is a profile row
- * to hang them off. No-ops when nothing is parked, which is every launch
+ * Writes the discovery hash given at signup, once there is a profile row
+ * to hang it off. No-ops when nothing is parked, which is every launch
  * after the first.
  *
  * Nothing parks claims any more: only the old email form's sign-up did,
@@ -598,12 +597,14 @@ function randomAccent(): string {
  * without it, claims parked on this device would attach themselves to
  * whichever account signs in next, which on a shared phone is someone
  * else's. A mismatch discards them rather than holding them — the same
- * two fields exist on the Accounts screen, and silently carrying a stale
- * claim around is worse than losing it.
+ * field exists in Find friends, and silently carrying a stale claim
+ * around is worse than losing it.
  *
- * The two hashes are written independently on purpose. They go to separate
- * columns through separate RPCs, and a user who gave a phone number but a
- * malformed handle should still end up findable by phone.
+ * Only the number is written. Those builds parked an Instagram handle
+ * beside it, and it used to be written here too; since v4.14 there is no
+ * Instagram section to be findable through, or to stop being findable
+ * from, so a parked handle is let go with the record rather than made
+ * into a claim nobody could take back (lib/discovery, retireInstagram).
  *
  * Failures are swallowed. This is optional discoverability running behind
  * a profile fetch; an error here must not surface as "could not load your
@@ -626,14 +627,6 @@ async function drainPendingClaims(uid: string, email: string | null): Promise<vo
         // Remembered locally too: the server hash cannot be read back, so
         // without this the Accounts screen would ask for it again.
         await rememberPhone(pending.phone);
-      }
-    }
-
-    if (pending.handle) {
-      const hash = await hashHandle(pending.handle);
-      if (hash) {
-        await setInstagramHash(uid, hash);
-        await rememberHandle(pending.handle);
       }
     }
 
@@ -1575,6 +1568,9 @@ export const useAuth = create<AuthState>()((set, get) => ({
         // Safe to write only now: the row the update targets is confirmed
         // to exist, which is the whole reason this is not done at sign-up.
         void drainPendingClaims(uid, get().session?.user.email ?? null);
+        // And forget what the Instagram import left (v4.14; lib/discovery).
+        // Offline, it stays put and the next load tries again.
+        void retireInstagram(clearInstagramHash).catch(() => undefined);
         return;
       }
 

@@ -250,7 +250,7 @@ export const IDEAS = [
   { id: 'friends-05', cat: 'friends', opens: 'home', needs: ['follows'], body: "Like a friend's post and they'll see it in Activity." },
   { id: 'friends-06', cat: 'friends', opens: 'home', needs: ['follows'], body: "Your friends' stories from the last day are at the top of Home." },
   { id: 'friends-07', cat: 'friends', opens: 'findFriends', body: "Follow someone whose drinks you'd like to see on Home." },
-  { id: 'friends-08', cat: 'friends', opens: 'findFriends', body: 'Bring your Instagram friends: Sipply can match them from a file Instagram sends you.' },
+  { id: 'friends-08', cat: 'friends', opens: 'findFriends', body: 'Add your number in Find friends so people who already have it can find you here.' },
   { id: 'friends-09', cat: 'friends', opens: 'findFriends', body: 'Search for people on Sipply by name or username.' },
   { id: 'friends-10', cat: 'friends', opens: 'home', needs: ['follows'], body: "Catch up on Home. Your friends' newest posts are at the top." },
   { id: 'friends-11', cat: 'friends', opens: 'findFriends', needs: ['noFollows'], body: "Home fills up with the people you follow. Find someone you know." },

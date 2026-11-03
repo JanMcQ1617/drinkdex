@@ -1,0 +1,394 @@
+[
+ {
+  "id": "nemea",
+  "name": "Nemea",
+  "subcategory": "Regional Red",
+  "description": "Agiorgitiko from the Peloponnese, grown where Heracles killed the Nemean lion: soft, dark-fruited and velvety, Greece's most approachable serious red.",
+  "abv": "13–14%",
+  "origin": "Peloponnese, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "plum",
+   "sweet spice",
+   "soft tannin"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Agiorgitiko means 'St George's grape', and Nemea's wine is nicknamed the Blood of Heracles after the lion he strangled in the same valley — Greek wine names tend to come with mythology attached.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Agiorgitiko has naturally low acidity and soft tannin, so over-warming makes it flabby — keep it below room temperature. High-altitude Nemea bottlings are firmer and repay a short decant; valley-floor wines are best drunk young and simply.",
+   "pair": [
+    "Lamb kleftiko",
+    "Moussaka",
+    "Grilled sausage"
+   ]
+  },
+  "composition": {
+   "summary": "Soft, dark-fruited Agiorgitiko from a high valley in the Peloponnese.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Agiorgitiko."
+    },
+    {
+     "label": "Region",
+     "detail": "The Nemea appellation in the northern Peloponnese, from valley floor to 900 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with moderate extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French and American oak."
+    }
+   ],
+   "process": "A wide altitude range within one appellation gives everything from soft valley wines to structured mountain bottlings, with oak ageing rounding the naturally supple tannin."
+  }
+ },
+ {
+  "id": "naoussa",
+  "name": "Naoussa",
+  "subcategory": "Regional Red",
+  "description": "Xinomavro from northern Greece — pale, savagely tannic and high in acid, with tomato and olive notes that make comparisons to Barolo inevitable.",
+  "abv": "13–14%",
+  "origin": "Macedonia, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "dried tomato",
+   "olive",
+   "sour cherry",
+   "dried herb"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Xinomavro means 'acid black', and its combination of pale colour with ferocious tannin and high acidity leads almost every taster to reach for the Nebbiolo comparison eventually.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for at least an hour — young Xinomavro is genuinely austere and needs the air. Serve cool in a large glass. Do not judge it by colour; it is pale to the point of looking weak while being one of the most tannic wines in Europe. Ten years in bottle transforms it.",
+   "pair": [
+    "Slow-roast lamb",
+    "Tomato-braised beef",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-acid, high-tannin Xinomavro from the slopes of Mount Vermio.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Xinomavro."
+    },
+    {
+     "label": "Region",
+     "detail": "The Naoussa appellation on the eastern slopes of Mount Vermio in Greek Macedonia."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in oak, traditionally large neutral casks."
+    }
+   ],
+   "process": "A cool continental site holds acidity extremely high while long maceration extracts formidable tannin, producing wines built almost entirely for long ageing."
+  }
+ },
+ {
+  "id": "santorini",
+  "name": "Santorini",
+  "subcategory": "White",
+  "description": "Assyrtiko from volcanic ash, on vines trained into ground-level baskets to survive the wind. Searing acidity, salt and smoke, with almost no rain all year.",
+  "abv": "13–14%",
+  "origin": "Cyclades, Greece",
+  "rarity": "rare",
+  "tastingNotes": [
+   "lemon",
+   "sea salt",
+   "smoke",
+   "flint"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Santorini's vines are woven into low basket shapes called kouloura that shelter the fruit inside from wind and sun, and because the island never had phylloxera, many root systems are centuries old.",
+  "serve": {
+   "temp": "48-52°F, chilled",
+   "glass": "White wine glass",
+   "how": "Serve chilled but not ice-cold; the salinity and smoke need a few degrees to show. Use a standard white glass. Santorini Assyrtiko has unusually high alcohol for a wine this acidic, so it stands up to rich seafood far better than its citrus profile suggests. It also ages well for a decade.",
+   "pair": [
+    "Grilled octopus",
+    "Fava",
+    "Salted fish"
+   ]
+  },
+  "composition": {
+   "summary": "Volcanic, high-acid Assyrtiko from ancient basket-trained vines on a windswept island.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Assyrtiko, with Athiri and Aidani."
+    },
+    {
+     "label": "Region",
+     "detail": "Santorini in the Cyclades, on volcanic ash and pumice with almost no rainfall."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Cool stainless fermentation, fermented bone dry."
+    },
+    {
+     "label": "Aging",
+     "detail": "Usually unoaked; some producers use old barrels or extended lees ageing."
+    }
+   ],
+   "process": "Vines survive on sea mist rather than rain, and volcanic soils with extreme sun give wines of high alcohol and ferocious acidity at the same time."
+  }
+ },
+ {
+  "id": "bekaa-valley",
+  "name": "Bekaa Valley",
+  "subcategory": "Regional Red",
+  "description": "Rhône and Bordeaux varieties grown at a thousand metres in a high valley between two mountain ranges, in a wine culture older than most of Europe's.",
+  "abv": "13.5–14.5%",
+  "origin": "Bekaa, Lebanon",
+  "rarity": "rare",
+  "tastingNotes": [
+   "black cherry",
+   "dried fig",
+   "cedar",
+   "warm spice"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Château Musar continued making wine through most of the Lebanese civil war, moving grapes across active front lines to reach the winery — production was missed in only two vintages, 1976 and 1984.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for an hour. Serve cool in a large glass. Traditional Bekaa reds are made in an oxidative, long-aged style that can read as unusual if you expect modern fruit — that character is deliberate. Older bottles often show better than young ones and are worth seeking.",
+   "pair": [
+    "Lamb kebab",
+    "Aubergine dishes",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude Mediterranean reds blending Rhône and Bordeaux varieties.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cinsault, Carignan, Cabernet Sauvignon, Syrah and Grenache."
+    },
+    {
+     "label": "Region",
+     "detail": "The Bekaa Valley at around 1,000 metres, between the Lebanon and Anti-Lebanon ranges."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Warm fermentation, in the traditional houses with long maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–36 months in oak, with extended bottle age before release."
+    }
+   ],
+   "process": "High altitude keeps acidity intact under intense Mediterranean sun, and long oak and bottle ageing produce the savoury, dried-fruit style the valley is known for."
+  }
+ },
+ {
+  "id": "upper-galilee",
+  "name": "Upper Galilee",
+  "subcategory": "Regional Red",
+  "description": "Israel's premium red district on the volcanic slopes below Mount Hermon — cool nights, high elevation, and Bordeaux varieties with a Mediterranean herbal edge.",
+  "abv": "13.5–14.5%",
+  "origin": "Galilee, Israel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "blackcurrant",
+   "mint",
+   "dried herb",
+   "cedar"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Israeli winemaking was effectively restarted in the 1880s with Rothschild backing and French rootstock, then transformed again in the 1980s when growers moved into the cool high Galilee.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass and decant young bottles for around forty minutes. The herbal, minty edge is a regional signature from the altitude and the scrubland around the vineyards. Check whether a bottle is kosher and mevushal — flash-pasteurised wines are made differently and taste it.",
+   "pair": [
+    "Grilled lamb",
+    "Beef",
+    "Hard cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Cool, high-elevation Bordeaux varieties on volcanic and limestone soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Merlot, Syrah and Cabernet Franc."
+    },
+    {
+     "label": "Region",
+     "detail": "The Upper Galilee and Golan slopes, at 400–1,200 metres below Mount Hermon."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with controlled extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French oak."
+    }
+   ],
+   "process": "Altitude and cold nights slow ripening in a hot country, retaining acidity, while volcanic soils and Mediterranean scrub give the wines their herbal signature."
+  }
+ },
+ {
+  "id": "judean-hills",
+  "name": "Judean Hills",
+  "subcategory": "Regional Red",
+  "description": "Terraced limestone hills outside Jerusalem, replanted on terraces that have held vines on and off since antiquity — leaner and stonier than the Galilee.",
+  "abv": "13.5–14.5%",
+  "origin": "Judean Hills, Israel",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "stone",
+   "sage",
+   "graphite"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Ancient winepresses cut directly into the limestone bedrock are scattered across these hills, and some modern vineyards are planted on terraces built two thousand years ago.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Serve cool in a large glass. These are generally leaner and more mineral than Galilee wines, so avoid over-extracting them with a long decant — twenty to thirty minutes is enough. The stony, herbal profile suits simply grilled food better than heavily sauced dishes.",
+   "pair": [
+    "Grilled meats",
+    "Roast vegetables",
+    "Sheep cheese"
+   ]
+  },
+  "composition": {
+   "summary": "Limestone-terraced Mediterranean reds in the hills around Jerusalem.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Syrah, Merlot and increasingly Mediterranean varieties."
+    },
+    {
+     "label": "Region",
+     "detail": "The Judean Hills west of Jerusalem, on terraced limestone at 400–900 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented with moderate extraction to preserve freshness."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in French oak."
+    }
+   ],
+   "process": "Free-draining limestone and hillside elevation restrict vigour and hold acidity, producing wines that are stonier and more restrained than Israel's warmer districts."
+  }
+ },
+ {
+  "id": "cappadocia",
+  "name": "Cappadocia",
+  "subcategory": "Regional Red",
+  "description": "Indigenous Anatolian varieties grown on volcanic tuff at 1,200 metres, in a region where wine has been made continuously for thousands of years.",
+  "abv": "13–14%",
+  "origin": "Central Anatolia, Turkey",
+  "rarity": "rare",
+  "tastingNotes": [
+   "sour cherry",
+   "pomegranate",
+   "spice",
+   "volcanic dust"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Turkey has one of the largest vineyard areas on earth but turns only a small fraction of it into wine — most of the crop goes to table grapes and raisins, a legacy of the country's drinking laws.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cool in a large glass. Native varieties like Kalecik Karası are light and aromatic and behave more like Pinot Noir than like a Mediterranean red, so do not over-warm or over-decant them. Öküzgözü and Boğazkere blends are firmer and take a longer decant.",
+   "pair": [
+    "Grilled lamb",
+    "Stuffed vine leaves",
+    "Aged cheese"
+   ]
+  },
+  "composition": {
+   "summary": "High-altitude indigenous Anatolian reds on volcanic tuff soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Kalecik Karası, Öküzgözü, Boğazkere and Emir for whites."
+    },
+    {
+     "label": "Region",
+     "detail": "Cappadocia in central Anatolia, at around 1,000–1,300 metres on volcanic tuff."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented at moderate temperature to preserve aromatics."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–18 months in oak, often neutral."
+    }
+   ],
+   "process": "High-altitude continental conditions with hot days and cold nights ripen native varieties while retaining the bright acidity that defines the regional style."
+  }
+ },
+ {
+  "id": "guerrouane",
+  "name": "Guerrouane",
+  "subcategory": "Rosé",
+  "description": "Morocco's best-known appellation, on the plateau below the Atlas mountains — pale, dry gris rosé built to be drunk very cold with spiced food.",
+  "abv": "12.5–13.5%",
+  "origin": "Meknès, Morocco",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red berry",
+   "citrus peel",
+   "white pepper",
+   "dry finish"
+  ],
+  "glassware": "White wine glass",
+  "funFact": "Morocco was once among France's largest wine suppliers, and its vineyards were largely uprooted after independence; the surviving appellations around Meknès still work to a French AOC-style system.",
+  "serve": {
+   "temp": "45-48°F, well chilled",
+   "glass": "White wine glass",
+   "how": "Serve very cold in a white wine glass rather than a large bowl. Moroccan gris is paler and drier than Provence rosé and made specifically to cut through spiced food, so pair it with tagine or grilled meat rather than treating it as an aperitif. Drink the current vintage only.",
+   "pair": [
+    "Lamb tagine",
+    "Grilled merguez",
+    "Couscous"
+   ]
+  },
+  "composition": {
+   "summary": "Pale dry gris rosé from Rhône varieties on a high plateau below the Atlas.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cinsault, Grenache and Carignan."
+    },
+    {
+     "label": "Region",
+     "detail": "The Guerrouane appellation near Meknès, on a plateau at around 600 metres."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Direct pressing for very pale colour, cool stainless fermentation."
+    },
+    {
+     "label": "Aging",
+     "detail": "No oak; bottled young for immediate drinking."
+    }
+   ],
+   "process": "Altitude moderates a hot climate enough to retain acidity, and direct pressing with cool fermentation gives a very pale, dry and deliberately refreshing style."
+  }
+ }
+]

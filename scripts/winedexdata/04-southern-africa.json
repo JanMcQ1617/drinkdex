@@ -1,0 +1,198 @@
+[
+ {
+  "id": "stellenbosch",
+  "name": "Stellenbosch",
+  "subcategory": "Regional Red",
+  "description": "South Africa's classic red district: Cabernet and Bordeaux blends on granite and shale slopes, with a savoury, faintly smoky character all their own.",
+  "abv": "13.5–14.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "uncommon",
+  "tastingNotes": [
+   "blackcurrant",
+   "tobacco",
+   "graphite",
+   "dark chocolate"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "Stellenbosch has been growing wine since the 1690s, making it one of the oldest wine regions outside Europe — its university runs one of the southern hemisphere's leading oenology faculties.",
+  "serve": {
+   "temp": "60-64°F, cool room temperature",
+   "glass": "Large red wine glass",
+   "how": "Decant young bottles for around an hour; Stellenbosch Cabernet has firm tannin that needs air. Serve cool in a large glass. The slightly smoky, savoury edge is a regional signature rather than oak, and it becomes more pronounced with bottle age rather than less.",
+   "pair": [
+    "Braai beef",
+    "Lamb",
+    "Aged Gouda"
+   ]
+  },
+  "composition": {
+   "summary": "Bordeaux varieties on granite and shale mountain slopes in the Western Cape.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Cabernet Sauvignon, Merlot, Cabernet Franc and Syrah."
+    },
+    {
+     "label": "Region",
+     "detail": "Stellenbosch, on the slopes of the Simonsberg and Helderberg mountains."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Destemmed, fermented warm with extended maceration."
+    },
+    {
+     "label": "Aging",
+     "detail": "12–24 months in French oak, a portion new."
+    }
+   ],
+   "process": "Mountain slopes and cooling False Bay air give a long ripening season, and extended maceration with oak ageing builds the firm, savoury structure."
+  }
+ },
+ {
+  "id": "swartland",
+  "name": "Swartland",
+  "subcategory": "Regional Red",
+  "description": "The hot, dry-farmed region that led South Africa's new wave: old-vine Syrah and Chenin made with minimal intervention and a deliberate rejection of polish.",
+  "abv": "13–14.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red plum",
+   "fynbos",
+   "white pepper",
+   "dried herb"
+  ],
+  "glassware": "Large red wine glass",
+  "funFact": "The Swartland Independent Producers wrote their own charter in 2010 — dry-farmed fruit, no additions beyond sulphur, no new oak barriques — imposing rules on themselves that no appellation law required.",
+  "serve": {
+   "temp": "58-62°F, cool",
+   "glass": "Large red wine glass",
+   "how": "Serve slightly cooler than a typical warm-climate red; these are made for freshness rather than weight, and heat flattens the herbal fynbos character. Many are unfined and unfiltered, so expect sediment and stand the bottle upright beforehand. A short decant helps, a long one does not.",
+   "pair": [
+    "Grilled lamb",
+    "Roast vegetables",
+    "Charcuterie"
+   ]
+  },
+  "composition": {
+   "summary": "Dry-farmed old-vine Syrah and Chenin Blanc made with minimal intervention.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Syrah, Grenache, Cinsault and Chenin Blanc, much of it from old bush vines."
+    },
+    {
+     "label": "Region",
+     "detail": "The Swartland north of Cape Town, hot, dry and largely unirrigated."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Whole-bunch fermentation with native yeast, minimal additions."
+    },
+    {
+     "label": "Aging",
+     "detail": "Old oak, concrete or foudre; new barriques are avoided by convention."
+    }
+   ],
+   "process": "Dry-farmed old bush vines give low yields, and native-yeast whole-bunch fermentation with neutral vessels keeps the emphasis on site rather than winemaking."
+  }
+ },
+ {
+  "id": "hemel-en-aarde-valley",
+  "name": "Hemel-en-Aarde Valley",
+  "subcategory": "Regional Red",
+  "description": "'Heaven and Earth' — a cool valley opening to the Atlantic near Hermanus, making the Cape's most convincing Pinot Noir on clay-rich shale.",
+  "abv": "13–13.5%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "red cherry",
+   "forest floor",
+   "rose",
+   "clay"
+  ],
+  "glassware": "Burgundy glass",
+  "funFact": "The valley lies close enough to Walker Bay that the cold Benguela current cools it directly, giving a growing season several degrees below anywhere else in the Cape's red-wine districts.",
+  "serve": {
+   "temp": "55-58°F, cellar cool",
+   "glass": "Burgundy glass",
+   "how": "Serve at cellar temperature in a wide bowl and give it twenty minutes rather than a hard decant. These are structured, earthy Pinots rather than fruity ones. The clay-rich soils give a density unusual in New World Pinot, so do not be surprised by more grip than the colour suggests.",
+   "pair": [
+    "Duck",
+    "Salmon",
+    "Mushroom dishes"
+   ]
+  },
+  "composition": {
+   "summary": "Cool maritime Pinot Noir and Chardonnay on clay-rich shale soils.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Pinot Noir and Chardonnay."
+    },
+    {
+     "label": "Region",
+     "detail": "The Hemel-en-Aarde valley behind Hermanus, cooled by the Atlantic."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Partial whole-cluster fermentation with gentle extraction."
+    },
+    {
+     "label": "Aging",
+     "detail": "10–16 months in French oak, mostly used."
+    }
+   ],
+   "process": "Cold Atlantic air extends ripening in a country otherwise too hot for Pinot Noir, and clay-rich shale gives the wines structure and density."
+  }
+ },
+ {
+  "id": "constantia",
+  "name": "Constantia",
+  "subcategory": "Dessert",
+  "description": "The Cape's oldest wine estate district, and the source of a sweet Muscat that eighteenth-century Europe ranked among the world's greatest wines.",
+  "abv": "13–15%",
+  "origin": "Western Cape, South Africa",
+  "rarity": "rare",
+  "tastingNotes": [
+   "orange peel",
+   "honey",
+   "apricot",
+   "spice"
+  ],
+  "glassware": "Small dessert wine glass",
+  "funFact": "Napoleon reportedly had Constantia shipped to Saint Helena during his exile, and the wine appears by name in Austen, Dickens and Baudelaire — a level of literary fame no other South African wine has matched.",
+  "serve": {
+   "temp": "50-54°F, chilled",
+   "glass": "Small dessert wine glass",
+   "how": "Serve chilled but not cold in a small glass, poured in modest measures. It is sweet but carries enough acidity to avoid cloying, so it works with savoury rich food as well as dessert. The modern revival wines are made from the same Muscat de Frontignan the historic bottlings used.",
+   "pair": [
+    "Blue cheese",
+    "Apricot tart",
+    "Foie gras"
+   ]
+  },
+  "composition": {
+   "summary": "Sweet Muscat from vine-dried grapes, reviving an eighteenth-century Cape tradition.",
+   "components": [
+    {
+     "label": "Grapes",
+     "detail": "Muscat de Frontignan."
+    },
+    {
+     "label": "Region",
+     "detail": "Constantia on the Cape Peninsula, cooled by two oceans."
+    },
+    {
+     "label": "Vinification",
+     "detail": "Grapes left to shrivel on the vine, then fermented slowly and stopped with residual sugar."
+    },
+    {
+     "label": "Aging",
+     "detail": "Several years in oak before release."
+    }
+   ],
+   "process": "Late-harvested and vine-dried Muscat concentrates sugar naturally, and slow fermentation leaves substantial residual sugar balanced by the region's cool-climate acidity."
+  }
+ }
+]

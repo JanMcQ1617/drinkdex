@@ -11,7 +11,7 @@ import type { UserProfile } from '@/types';
 /* ==================================================================== */
 /* Shared people list                                                   */
 /*                                                                      */
-/* Every discovery surface — contacts, Instagram, username search —      */
+/* Every discovery surface — contacts, Facebook, username search —       */
 /* ends at the same place: a list of people and a decision about each.   */
 /* Following them one at a time is the actual cost of joining a social   */
 /* app, so the list leads with "Follow all" and keeps the per-person     */
@@ -23,20 +23,14 @@ import type { UserProfile } from '@/types';
 /* the wash key, both one width, so a tap never changes the key's size. */
 /* ==================================================================== */
 
+/*
+ * One person in a matched set. Until v4.14 it could also carry a second
+ * line and stay out of "Follow all", for the Instagram import's rows (a
+ * claimed handle, or one claimed by two accounts). No list left needs
+ * either, so a row is its profile.
+ */
 export interface MatchEntry {
   profile: UserProfile;
-  /**
-   * Optional second line, e.g. "@sarah.g · mutual". Supplied by the caller
-   * because only it knows where the match came from — the server never
-   * learns the Instagram handle behind a match, so it cannot say.
-   */
-  note?: string;
-  /**
-   * False keeps this entry out of "Follow all" while leaving its own Follow
-   * button in place — for a match the caller is not sure of, such as a
-   * handle more than one account claims.
-   */
-  bulk?: boolean;
 }
 
 /* ------------------------------------------------------------------ */
@@ -127,7 +121,7 @@ const ROW_GAP = 16;
  * no post menu can reach.
  *
  * By default that is the /user/[id] screen, pushed over whatever list this
- * is in: Find friends, the Instagram and Facebook matches, followers and
+ * is in: Find friends, the contact and Facebook matches, followers and
  * following, and the welcome step too, because that screen does not gate on
  * the welcome step and so opens the person rather than a second copy of
  * it. `onOpen` replaces the destination; `null` leaves the row as only a
@@ -136,13 +130,12 @@ const ROW_GAP = 16;
  * Not a ListRow: a pressable ListRow is one button to VoiceOver, and this
  * row holds two controls, the person and their key, so each stays
  * reachable on its own. Pressing the person fills the row; nothing scales.
- * The handle (or the caller's note, "@sarah.g · mutual") is the quiet line
- * under the name: in a list of strangers it is how you tell two Marias
- * apart. The likers sheet, a list of people you have already met, drops it.
+ * The handle is the quiet line under the name: in a list of strangers it
+ * is how you tell two Marias apart. The likers sheet, a list of people you
+ * have already met, drops it.
  */
 export function PersonRow({
   person,
-  note,
   following,
   onToggle,
   onOpen,
@@ -152,7 +145,6 @@ export function PersonRow({
   trailing,
 }: {
   person: UserProfile;
-  note?: string;
   following: boolean;
   onToggle: () => void;
   /** They follow you (a followers list): their Follow reads "Follow back". */
@@ -191,7 +183,7 @@ export function PersonRow({
           either way, since the column beside it is what grows.
         */}
         <Text style={[textRole.body, styles.ink]}>{person.displayName}</Text>
-        <Text style={[textRole.small, styles.muted]}>{note ?? `@${person.username}`}</Text>
+        <Text style={[textRole.small, styles.muted]}>{`@${person.username}`}</Text>
       </View>
     </>
   );
@@ -270,7 +262,7 @@ export function MatchResults({
 
   const followingSet = useMemo(() => new Set(following), [following]);
   const pending = useMemo(
-    () => entries.filter((e) => e.bulk !== false && !followingSet.has(e.profile.id)),
+    () => entries.filter((e) => !followingSet.has(e.profile.id)),
     [entries, followingSet],
   );
 
@@ -364,7 +356,6 @@ export function MatchResults({
           <PersonRow
             key={entry.profile.id}
             person={entry.profile}
-            note={entry.note}
             following={followingSet.has(entry.profile.id)}
             onToggle={() => toggleFollow(myId, entry.profile.id)}
             onOpen={onOpenPerson}

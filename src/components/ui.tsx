@@ -120,8 +120,8 @@ export const haptic = {
  *
  * Lives here, beside Field, because this file imports no screen. It used
  * to live in AuthGate, and AuthGate renders WelcomeConnect, which renders
- * FindFriends and InstagramImport — so both of those kept a private copy
- * rather than import it back through a require cycle.
+ * FindFriends (and, until v4.14, the Instagram import) — so those kept a
+ * private copy rather than import it back through a require cycle.
  */
 /*
  * The same message twice within a moment is one event, said once. Each gated

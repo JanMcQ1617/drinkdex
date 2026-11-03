@@ -1,5 +1,5 @@
 import { DRINKS, TOTAL } from '@/data';
-import { matcher, type ChipFilter, type ForYou, type ForYouSection, type IsCaught } from '@/lib/dexOrder';
+import type { ForYou, ForYouSection } from '@/lib/dexOrder';
 import type { Drink } from '@/types';
 
 /* ==================================================================== */
@@ -75,7 +75,8 @@ export type GridRow =
  * iOS keyboard's curly ’ would not have matched the data's straight ' in
  * any case. NFD splits each accented letter into base plus mark and the
  * marks go; the explicit maps are the letters NFD does not decompose
- * (ı, ß, ø, đ), which were all that was left in the catalogue after it.
+ * (ı, ß, ø, đ, and ł since wine came back with Małopolski Przełom Wisły),
+ * which were all that was left in the catalogue after it.
  *
  * This is the Dex's own search, broader than the log sheet's
  * (lib/drinkSearch): a substring over name, style and origin, for
@@ -91,6 +92,7 @@ export const fold = (s: string) =>
     .replace(/ß/g, 'ss')
     .replace(/[øØ]/g, 'o')
     .replace(/[đĐ]/g, 'd')
+    .replace(/[łŁ]/g, 'l')
     .replace(/['‘’`]/g, '')
     .toLowerCase();
 
@@ -99,9 +101,20 @@ export const fold = (s: string) =>
  * Newline-joined so a query cannot match across the seam between two
  * fields. Origin is here so the Dex can be browsed by country — "peru",
  * "jalisco", "iceland".
+ *
+ * A wine's grapes too (v4.14), from its composition's Grapes line. Most
+ * wine cards are named for a place, so the grape is what people type:
+ * without it "nebbiolo" found the Nebbiolo card and missed Barolo. Ten
+ * atlas cards say "Not recorded in the atlas." there instead, which is no
+ * grape and would answer "no" with ten wines, so it is left out.
  */
+function grapesOf(d: Drink): string {
+  if (d.category !== 'wine') return '';
+  const grapes = d.composition?.components.find((c) => c.label === 'Grapes')?.detail ?? '';
+  return grapes.startsWith('Not recorded') ? '' : grapes;
+}
 const SEARCH_KEY = new Map(
-  DRINKS.map((d) => [d.id, [d.name, d.subcategory, d.origin].map(fold).join('\n')]),
+  DRINKS.map((d) => [d.id, [d.name, d.subcategory, d.origin, grapesOf(d)].map(fold).join('\n')]),
 );
 
 /**
@@ -157,26 +170,26 @@ export interface DexGrid {
 }
 
 /**
- * The grid for this search, these chips and this order. `query` is the
- * words typed (empty for none, and for a typed number); `forYou` is the
- * For-you Dex when that is the order, else null for By number.
+ * The grid for this search, these filters and this order. `query` is the
+ * words typed (empty for none, and for a typed number); `matches` is the
+ * filters' test for one drink (components/dex/dexFilter's dexMatcher),
+ * read only while `filterOn`; `forYou` is the For-you Dex when that is
+ * the order, else null for By number.
  */
 export function dexGrid({
   query,
-  filter,
   filterOn,
-  caught,
+  matches,
   forYou,
 }: {
   query: string;
-  filter: ChipFilter;
   filterOn: boolean;
-  caught: IsCaught;
+  matches: (d: Drink) => boolean;
   forYou: ForYou | null;
 }): DexGrid {
   const q = fold(query);
   if (q.length > 0 || filterOn) {
-    const pass = matcher(filter, caught);
+    const pass = filterOn ? matches : () => true;
     const picked: Drink[] = [];
     let anywhere = false;
     for (const drink of forYou ? forYou.rank : DRINKS) {
