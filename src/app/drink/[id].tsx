@@ -1,4 +1,4 @@
-import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useRef, useState } from 'react';
 import {
   Alert,
@@ -46,7 +46,6 @@ import { photoFor } from '@/data/drinkPhotos';
 import { containsObjectionable, OBJECTIONABLE_MESSAGE } from '@/lib/moderation';
 import { type PlaceRef, placesSupported } from '@/lib/places';
 import { placeSearchAvailable } from '@/lib/placeSearch';
-import { offersBottle, startSpiritCheckout } from '@/lib/shop';
 import {
   persistPhoto,
   pickFromCamera,
@@ -67,8 +66,7 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * spec section 4): a back chevron in a plain bar, the square print full
  * width, the name, the Nº plate and its state, the facts, the spec, the
  * story, the friends who caught it, and one key pinned to the foot (the
- * post key, in the accent since v4.4), two on a spirit's while the shop
- * is on.
+ * post key, in the accent since v4.4).
  * Everything the feed and the grids stopped stamping on a drink lives
  * here now.
  *
@@ -101,14 +99,6 @@ import { confirmDestructive, showNotice } from '@/utils/alerts';
  * the press's outline over the pen's double rule: the spec for a
  * cocktail, else the serve guide, else what it is made of. The same grey
  * caught or not: the plate says which.
- *
- * BUY A BOTTLE (v4.11, specs/v4.11/shop.md). A spirit's pinned bar adds
- * "Buy a bottle" beside the post key while EXPO_PUBLIC_SPIRIT_SHOP is on
- * (lib/shop's offersBottle); a cocktail's never does, and with the flag
- * off no page does. Buy runs a Stripe checkout in TEST MODE: no money
- * moves and nothing ships, and the confirmation says so. A failure is
- * said with the app's notice, closing the sheet with nothing. Signed out
- * the key still shows, as Post does, and says what needs an account.
  *
  * CAMERA FIRST (v4.11, specs/v4.11/post-camera.md). The post key opens
  * the camera (components/PostCamera), not the sheet: a photo taken or
@@ -233,48 +223,6 @@ export default function DrinkDetailScreen() {
    */
   const [place, setPlace] = useState<PlaceRef | null>(null);
   const placesOn = !!myId && placesSupported() && placeSearchAvailable();
-
-  /*
-   * Buy a bottle's checkout, while it is starting and while its sheet is
-   * up. The state draws Buy's spinner and holds the post key (dimmed, and
-   * spoken so); the ref is what refuses a second tap, since a tap can land
-   * before the state's render does. One sheet at a time, and Stripe's is
-   * about to rise. Across pages the same holds in lib/shop, which runs one
-   * checkout at a time app-wide.
-   *
-   * `inFront` is this page being the screen in front: false once it is
-   * left, by going back or by opening another screen over it. The
-   * checkout reads it before it raises anything, so neither the sheet nor
-   * its notice rises over a page the person has left.
-   */
-  const [buying, setBuying] = useState(false);
-  const checkoutOut = useRef(false);
-  const inFront = useRef(false);
-  useFocusEffect(
-    useCallback(() => {
-      inFront.current = true;
-      return () => {
-        inFront.current = false;
-      };
-    }, []),
-  );
-  const buyBottle = useCallback(async () => {
-    if (!drink || checkoutOut.current) return;
-    checkoutOut.current = true;
-    setBuying(true);
-    try {
-      const result = await startSpiritCheckout(drink, () => inFront.current);
-      if (result.kind === 'paid') {
-        haptic.success();
-        showNotice(result.title, result.message);
-      } else if (result.kind === 'failed') {
-        showNotice(result.title, result.message);
-      }
-    } finally {
-      checkoutOut.current = false;
-      setBuying(false);
-    }
-  }, [drink]);
 
   /*
    * The post key: a fresh post, then the camera, or the sheet at its two
@@ -602,19 +550,14 @@ export default function DrinkDetailScreen() {
 
       {/*
         The page's one action, pinned: "Post this drink", then "Post
-        <name> again" once it is in your Dex. On a spirit's page with the
-        shop on, "Buy a bottle" beside it (v4.11).
+        <name> again" once it is in your Dex.
       */}
       <PinnedPostBar
         name={drink.name}
         collected={unlocked}
         ruled={below.moreBelow}
-        onPress={() => {
-          if (!checkoutOut.current) void openSheet(unlocked ? 'update' : 'unlock');
-        }}
+        onPress={() => void openSheet(unlocked ? 'update' : 'unlock')}
         onHeight={setBarH}
-        onBuy={offersBottle(drink) ? () => void buyBottle() : undefined}
-        buying={buying}
       />
 
       <PostSheet

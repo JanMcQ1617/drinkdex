@@ -468,6 +468,34 @@
   "c": "Scotland"
  },
  {
+  "n": "Johnnie Walker Double Black",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker 18",
+  "s": "Blended Scotch",
+  "c": "Scotland",
+  "note": "Formerly Platinum Label"
+ },
+ {
+  "n": "Johnnie Walker Black Ruby",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Johnnie Walker Black Cask",
+  "s": "Blended Scotch",
+  "c": "Scotland",
+  "note": "Aged in ex-bourbon barrels"
+ },
+ {
+  "n": "Johnnie Walker High Rye",
+  "s": "Blended Scotch",
+  "c": "Scotland",
+  "abv": "45%"
+ },
+ {
   "n": "Chivas Regal 12",
   "s": "Blended Scotch",
   "c": "Scotland"
@@ -534,6 +562,69 @@
  },
  {
   "n": "Bell's Original",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's DeLuxe 12",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's Master",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's Select 15",
+  "s": "Blended Malt Scotch",
+  "c": "Scotland",
+  "note": "A blended malt, with no grain whisky in it"
+ },
+ {
+  "n": "Buchanan's Special Reserve 18",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's Red Seal",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's Two Souls",
+  "s": "Blended Scotch",
+  "c": "Scotland",
+  "note": "Finished in Don Julio tequila casks"
+ },
+ {
+  "n": "Buchanan's Green Seal",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's Pineapple",
+  "s": "Flavored Scotch Whisky",
+  "c": "Scotland"
+ },
+ {
+  "n": "Buchanan's Coconut",
+  "s": "Flavored Scotch Whisky",
+  "c": "Scotland"
+ },
+ {
+  "n": "Old Parr 12",
+  "s": "Blended Scotch",
+  "c": "Scotland",
+  "note": "Labelled Grand Old Parr Aged 12 Years"
+ },
+ {
+  "n": "Old Parr 18",
+  "s": "Blended Scotch",
+  "c": "Scotland"
+ },
+ {
+  "n": "Old Parr Silver",
   "s": "Blended Scotch",
   "c": "Scotland"
  },

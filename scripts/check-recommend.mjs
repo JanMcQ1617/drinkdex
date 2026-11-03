@@ -17,7 +17,7 @@
  *      it first checks is in step with the catalogue.
  *   3. Runs A to F (spec.md §5.6, v4.2 §1.2): the reference's ids, order,
  *      why lines, makeNow and scores, each run's pinned picks (RUNS says
- *      where they come from), matchingCount 574, 147, 2073, 378, 161 and
+ *      where they come from), matchingCount 633, 147, 2311, 437, 184 and
  *      239, and the reference's barRows and makeableCount.
  *   4. A 2,000-case sweep: a seeded LCG over every answer (goal fixed to
  *      null and to each value in turn, exclusions, a few pick counts),
@@ -248,7 +248,10 @@ function diff(label, mine, theirs) {
  * again from node specs/v4.2/tools/recommend.mjs. 9554e08 (24 Oct 2026)
  * photographed Weng Weng, which then outscores Enzoni for run A's fourth
  * pick (0.86, photo weight, Party, "Because you like bourbon"); read
- * again from the reference on 26 Oct 2026.
+ * again from the reference on 26 Oct 2026. v4.13 (3 Nov 2026) added 238
+ * spirit cards (the bottlings of brands already in the Dex, and nine styles
+ * for them): no pick moved, and A, C, D and E's matchingCount were read
+ * again from the reference (574, 2073, 378 and 161 before).
  */
 const RUNS = {
   A: {
@@ -258,7 +261,7 @@ const RUNS = {
       bar: ['gin', 'bourbon', 'lime', 'lemon', 'sugar-syrup', 'soda-water', 'campari', 'sweet-vermouth'],
     },
     ids: ['boulevardier', 'left-hand', 'negroni', 'weng-weng', 'bottled-in-bond-bourbon', 'contemporary-gin'],
-    matching: 574,
+    matching: 633,
   },
   B: {
     answers: { goal: 'friends', drinks: 'cocktails', spirits: ['rum', 'agave'], styleOf: 'rum', styles: ['white'], flavours: ['refreshing', 'sour'], home: 'never', bar: [] },
@@ -270,12 +273,12 @@ const RUNS = {
     answers: { goal: null, drinks: null, spirits: [], flavours: [], home: null, bar: [] },
     names: ['Piña Colada', 'Margarita', 'Espresso Martini', 'Mojito', 'Aperol Spritz', 'Old Fashioned'],
     why: 'A classic to start with',
-    matching: 2073,
+    matching: 2311,
   },
   D: {
     answers: { goal: 'track', drinks: 'spirits', spirits: ['whiskey'], styleOf: 'whiskey', styles: ['scotch'], flavours: ['strong'], home: 'never', bar: [] },
     names: ['Godfather', 'Rob Roy', 'Earthquake', 'Blended Malt Scotch', 'Glenlivet Nàdurra', 'Bottled-in-Bond Bourbon'],
-    matching: 378,
+    matching: 437,
   },
   /*
    * v4.2 §1.2: persona E, Jan's own example ("fruity or sour"), and fruity
@@ -290,7 +293,7 @@ const RUNS = {
     ids: ['daiquiri', 'strawberry-daiquiri', 'pina-colada', 'margarita', 'illegal', 'mezcal-joven'],
     whyOf: { 'pina-colada': 'Because you like white rum and fruity drinks' },
     extras: ['triple-sec', 'pineapple-juice'],
-    matching: 161,
+    matching: 184,
   },
   F: {
     answers: { drinks: 'cocktails', spirits: [], flavours: ['fruity'], home: null, bar: [] },

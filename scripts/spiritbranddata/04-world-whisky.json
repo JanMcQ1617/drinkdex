@@ -10,6 +10,43 @@
   "c": "Canada"
  },
  {
+  "n": "Crown Royal Black",
+  "s": "Canadian Whisky",
+  "c": "Canada"
+ },
+ {
+  "n": "Crown Royal XO",
+  "s": "Canadian Whisky",
+  "c": "Canada",
+  "note": "Finished in cognac casks"
+ },
+ {
+  "n": "Crown Royal Reserve 12",
+  "s": "Canadian Whisky",
+  "c": "Canada"
+ },
+ {
+  "n": "Crown Royal Marquis",
+  "s": "Canadian Whisky",
+  "c": "Canada",
+  "note": "Finished in Caribbean rum casks"
+ },
+ {
+  "n": "Crown Royal Regal Apple",
+  "s": "Flavored Canadian Whisky",
+  "c": "Canada"
+ },
+ {
+  "n": "Crown Royal Vanilla",
+  "s": "Flavored Canadian Whisky",
+  "c": "Canada"
+ },
+ {
+  "n": "Crown Royal Peach",
+  "s": "Flavored Canadian Whisky",
+  "c": "Canada"
+ },
+ {
   "n": "Canadian Club",
   "s": "Canadian Whisky",
   "c": "Canada"

@@ -1,0 +1,239 @@
+number,name,brand,style,country,abv
+2090,Cream Liqueur,Style card,Liqueur,Worldwide,15–17%
+2091,Flavored Canadian Whisky,Style card,World Whisky,Canada,33–35%
+2092,Flavored Irish Whiskey,Style card,Irish Whiskey,Ireland,30–35%
+2093,Flavored Scotch Whisky,Style card,Scotch,Scotland,35%
+2094,Flavored Rum,Style card,Rum,Caribbean,21–35%
+2095,Flavored Tequila,Style card,Agave,"Jalisco, Mexico",30–40%
+2096,Flavored Vodka,Style card,Vodka,Worldwide,30–40%
+2097,Pepper Vodka,Style card,Vodka,Russia and Sweden,35–40%
+2098,Aguardiente Colombiano,Style card,Anise Spirit,Colombia,24–30%
+2099,Johnnie Walker Double Black,Johnnie Walker,Blended Scotch,Scotland,40%
+2100,Johnnie Walker 18,Johnnie Walker,Blended Scotch,Scotland,40%
+2101,Johnnie Walker Black Ruby,Johnnie Walker,Blended Scotch,Scotland,40%
+2102,Johnnie Walker Black Cask,Johnnie Walker,Blended Scotch,Scotland,43%
+2103,Johnnie Walker High Rye,Johnnie Walker,Blended Scotch,Scotland,45%
+2104,Buchanan's DeLuxe 12,Buchanan's,Blended Scotch,Scotland,40%
+2105,Buchanan's Master,Buchanan's,Blended Scotch,Scotland,40%
+2106,Buchanan's Select 15,Buchanan's,Blended Malt Scotch,Scotland,40%
+2107,Buchanan's Special Reserve 18,Buchanan's,Blended Scotch,Scotland,40%
+2108,Buchanan's Red Seal,Buchanan's,Blended Scotch,Scotland,40%
+2109,Buchanan's Two Souls,Buchanan's,Blended Scotch,Scotland,40%
+2110,Buchanan's Green Seal,Buchanan's,Blended Scotch,Scotland,40%
+2111,Buchanan's Pineapple,Buchanan's,Flavored Scotch Whisky,Scotland,35%
+2112,Buchanan's Coconut,Buchanan's,Flavored Scotch Whisky,Scotland,35% (one retailer lists 40%)
+2113,Old Parr 12,Old Parr,Blended Scotch,Scotland,40%
+2114,Old Parr 18,Old Parr,Blended Scotch,Scotland,40%
+2115,Old Parr Silver,Old Parr,Blended Scotch,Scotland,40%
+2116,Jameson Caskmates Stout Edition,Jameson,Irish Blended Whiskey,Ireland,40%
+2117,Jameson Caskmates IPA Edition,Jameson,Irish Blended Whiskey,Ireland,40%
+2118,Jameson Crested,Jameson,Irish Blended Whiskey,Ireland,40%
+2119,Jameson Orange,Jameson,Flavored Irish Whiskey,Ireland,30%
+2120,Jim Beam Devil's Cut,Jim Beam,Bourbon,USA,45%
+2121,Jim Beam Double Oak,Jim Beam,Bourbon,USA,43%
+2122,Jim Beam Single Barrel,Jim Beam,Single Barrel Bourbon,USA,54%
+2123,Jim Beam Rye,Jim Beam,Rye Whiskey,USA,45%
+2124,Jim Beam Honey,Jim Beam,Flavored Whiskey,USA,32.5%
+2125,Jim Beam Apple,Jim Beam,Flavored Whiskey,USA,32.5%
+2126,Jim Beam Peach,Jim Beam,Flavored Whiskey,USA,32.5%
+2127,Jim Beam Vanilla,Jim Beam,Flavored Whiskey,USA,32.5%
+2128,Jim Beam Red Stag,Jim Beam,Flavored Whiskey,USA,32.5%
+2129,Jim Beam Kentucky Fire,Jim Beam,Flavored Whiskey,USA,32.5%
+2130,Jim Beam Pineapple,Jim Beam,Flavored Whiskey,USA,32.5%
+2131,Evan Williams 1783 Small Batch,Evan Williams,Small Batch Bourbon,USA,45%
+2132,Evan Williams Single Barrel,Evan Williams,Single Barrel Bourbon,USA,43.3%
+2133,Evan Williams Honey,Evan Williams,Flavored Whiskey,USA,35%
+2134,Evan Williams Apple,Evan Williams,Flavored Whiskey,USA,35%
+2135,Evan Williams Peach,Evan Williams,Flavored Whiskey,USA,35%
+2136,Evan Williams Cherry,Evan Williams,Flavored Whiskey,USA,35%
+2137,Evan Williams Fire,Evan Williams,Flavored Whiskey,USA,35% (retailers)
+2138,Evan Williams Blackberry,Evan Williams,Flavored Whiskey,USA,32.5%
+2139,Jack Daniel's Bonded,Jack Daniel's,Tennessee Whiskey,USA,50%
+2140,Jack Daniel's Bonded Rye,Jack Daniel's,Rye Whiskey,USA,50%
+2141,Jack Daniel's Single Barrel Rye,Jack Daniel's,Rye Whiskey,USA,47%
+2142,Jack Daniel's Sinatra Select,Jack Daniel's,Tennessee Whiskey,USA,45%
+2143,Jack Daniel's Tennessee Honey,Jack Daniel's,Flavored Whiskey,USA,35%
+2144,Jack Daniel's Tennessee Fire,Jack Daniel's,Flavored Whiskey,USA,35%
+2145,Jack Daniel's Tennessee Apple,Jack Daniel's,Flavored Whiskey,USA,35%
+2146,Jack Daniel's Tennessee Blackberry,Jack Daniel's,Flavored Whiskey,USA,35%
+2147,Fireball Blazin' Apple,Fireball,Flavored Canadian Whisky,Canada,33%
+2148,Crown Royal Black,Crown Royal,Canadian Whisky,Canada,45%
+2149,Crown Royal XO,Crown Royal,Canadian Whisky,Canada,40%
+2150,Crown Royal Reserve 12,Crown Royal,Canadian Whisky,Canada,40%
+2151,Crown Royal Marquis,Crown Royal,Canadian Whisky,Canada,40%
+2152,Crown Royal Regal Apple,Crown Royal,Flavored Canadian Whisky,Canada,35%
+2153,Crown Royal Vanilla,Crown Royal,Flavored Canadian Whisky,Canada,35%
+2154,Crown Royal Peach,Crown Royal,Flavored Canadian Whisky,Canada,35%
+2155,Absolut Mandrin,Absolut,Flavored Vodka,Sweden,40%
+2156,Absolut Vanilia,Absolut,Flavored Vodka,Sweden,38–40% (38% in the EU)
+2157,Absolut Raspberri,Absolut,Flavored Vodka,Sweden,38–40% (by market)
+2158,Absolut Pears,Absolut,Flavored Vodka,Sweden,38–40% (by market)
+2159,Absolut Lime,Absolut,Flavored Vodka,Sweden,40%
+2160,Absolut Grapefruit,Absolut,Flavored Vodka,Sweden,40%
+2161,Absolut Watermelon,Absolut,Flavored Vodka,Sweden,38%
+2162,Absolut Mango,Absolut,Flavored Vodka,Sweden,38–40% (by market)
+2163,Absolut Wild Berri,Absolut,Flavored Vodka,Sweden,38%
+2164,Absolut Peppar,Absolut,Pepper Vodka,Sweden,40%
+2165,Absolut Tabasco,Absolut,Pepper Vodka,Sweden,38%
+2166,Smirnoff Raspberry,Smirnoff,Flavored Vodka,USA,30%
+2167,Smirnoff Vanilla,Smirnoff,Flavored Vodka,USA,30%
+2168,Smirnoff Watermelon,Smirnoff,Flavored Vodka,USA,35%
+2169,Smirnoff Green Apple,Smirnoff,Flavored Vodka,USA,30%
+2170,Smirnoff Peach,Smirnoff,Flavored Vodka,USA,35%
+2171,Smirnoff Spicy Tamarind,Smirnoff,Flavored Vodka,USA,35%
+2172,Stoli Vanilla,Stoli,Flavored Vodka,Latvia,37.5%
+2173,Stoli Raspberry,Stoli,Flavored Vodka,Latvia,37.5%
+2174,Stoli Citrus,Stoli,Citron Vodka,Latvia,37.5%
+2175,Stoli Orange,Stoli,Flavored Vodka,Latvia,37.5%
+2176,Grey Goose Altius,Grey Goose,Wheat Vodka,France,40%
+2177,Grey Goose Le Citron,Grey Goose,Citron Vodka,France,40%
+2178,Grey Goose L'Orange,Grey Goose,Flavored Vodka,France,40%
+2179,Grey Goose La Poire,Grey Goose,Flavored Vodka,France,40%
+2180,Grey Goose Berry Rouge,Grey Goose,Flavored Vodka,France,40%
+2181,Grey Goose Essences Strawberry & Lemongrass,Grey Goose,Flavored Vodka,France,30%
+2182,Grey Goose Essences Watermelon & Basil,Grey Goose,Flavored Vodka,France,30%
+2183,Grey Goose Essences White Peach & Rosemary,Grey Goose,Flavored Vodka,France,30%
+2184,Cîroc Red Berry,Cîroc,Flavored Vodka,France,35%
+2185,Cîroc Peach,Cîroc,Flavored Vodka,France,35%
+2186,Cîroc Pineapple,Cîroc,Flavored Vodka,France,35%
+2187,Cîroc Coconut,Cîroc,Flavored Vodka,France,35%
+2188,Cîroc Apple,Cîroc,Flavored Vodka,France,35%
+2189,Cîroc Summer Watermelon,Cîroc,Flavored Vodka,France,35%
+2190,Belvedere 10,Belvedere,Rye Vodka,Poland,40%
+2191,Belvedere Dirty Brew,Belvedere,Flavored Vodka,Poland,30%
+2192,Ketel One Citroen,Ketel One,Citron Vodka,Netherlands,40%
+2193,Ketel One Oranje,Ketel One,Flavored Vodka,Netherlands,40%
+2194,Ketel One Botanical Cucumber & Mint,Ketel One,Flavored Vodka,Netherlands,30%
+2195,Ketel One Botanical Grapefruit & Rose,Ketel One,Flavored Vodka,Netherlands,30%
+2196,Ketel One Botanical Peach & Orange Blossom,Ketel One,Flavored Vodka,Netherlands,30%
+2197,Skyy Infusions Citrus,Skyy,Flavored Vodka,USA,35%
+2198,Skyy Infusions Pineapple,Skyy,Flavored Vodka,USA,35%
+2199,New Amsterdam,New Amsterdam,Grain Vodka,USA,40%
+2200,New Amsterdam Pink Whitney,New Amsterdam,Flavored Vodka,USA,30%
+2201,New Amsterdam Peach,New Amsterdam,Flavored Vodka,USA,35%
+2202,New Amsterdam Pineapple,New Amsterdam,Flavored Vodka,USA,35%
+2203,Bacardí Black,Bacardí,Dark Rum,Puerto Rico,40%
+2204,Bacardí Spiced,Bacardí,Spiced Rum,Puerto Rico,35%
+2205,Bacardí Añejo Cuatro,Bacardí,Ron Añejo,Puerto Rico,40%
+2206,Bacardí Gran Reserva Diez,Bacardí,Ron Añejo,Puerto Rico,40%
+2207,Bacardí Gran Reserva Limitada,Bacardí,Ron Añejo,Puerto Rico,40%
+2208,Bacardí Limón,Bacardí,Flavored Rum,Puerto Rico,
+2209,Bacardí Lime,Bacardí,Flavored Rum,Puerto Rico,
+2210,Bacardí Coconut,Bacardí,Flavored Rum,Puerto Rico,
+2211,Bacardí Pineapple,Bacardí,Flavored Rum,Puerto Rico,
+2212,Bacardí Raspberry,Bacardí,Flavored Rum,Puerto Rico,
+2213,Bacardí Dragonberry,Bacardí,Flavored Rum,Puerto Rico,
+2214,Bacardí Mango Chile,Bacardí,Flavored Rum,Puerto Rico,35%
+2215,Bacardí Tropical,Bacardí,Flavored Rum,Puerto Rico,
+2216,Havana Club Añejo Especial,Havana Club,Ron Añejo,Cuba,40% (37.5% in some EU markets)
+2217,Havana Club Cuban Spiced,Havana Club,Spiced Rum,Cuba,35%
+2218,Ron Medellín Dorado,Ron Medellín,Gold Rum,Colombia,
+2219,Ron Medellín Añejo 3 Años,Ron Medellín,Ron Añejo,Colombia,35–37.5%
+2220,Ron Medellín Extra Añejo 5 Años,Ron Medellín,Ron Añejo,Colombia,
+2221,Ron Medellín Extra Añejo 8 Años,Ron Medellín,Ron Añejo,Colombia,37.5%
+2222,Ron Medellín Gran Reserva 12 Años,Ron Medellín,Ron Añejo,Colombia,37.5–40%
+2223,Ron Viejo de Caldas Tradicional 3 Años,Ron Viejo de Caldas,Ron Añejo,Colombia,35–37.5%
+2224,Ron Viejo de Caldas Juan de la Cruz 5,Ron Viejo de Caldas,Ron Añejo,Colombia,
+2225,Ron Viejo de Caldas Carta de Oro 8,Ron Viejo de Caldas,Ron Añejo,Colombia,35–37.5%
+2226,Ron Viejo de Caldas Gran Reserva Especial 15,Ron Viejo de Caldas,Ron Añejo,Colombia,40%
+2227,Ron Viejo de Caldas Roble Blanco,Ron Viejo de Caldas,White Rum,Colombia,
+2228,Dictador 12,Dictador,Solera Rum,Colombia,40%
+2229,Dictador 20,Dictador,Solera Rum,Colombia,40%
+2230,La Hechicera Reserva Familiar,La Hechicera,Solera Rum,Colombia,40%
+2231,Ron Barceló Imperial Onyx,Ron Barceló,Dominican Rum,Dominican Republic,
+2232,Ron Barceló Blanco Añejado,Ron Barceló,Dominican Rum,Dominican Republic,
+2233,Ron Barceló Dorado Añejado,Ron Barceló,Dominican Rum,Dominican Republic,
+2234,Ron Barceló Añejo,Ron Barceló,Dominican Rum,Dominican Republic,
+2235,Ron Barceló Gran Añejo,Ron Barceló,Dominican Rum,Dominican Republic,
+2236,Ron Barceló Cream,Ron Barceló,Cream Liqueur,Dominican Republic,
+2237,Brugal Añejo,Brugal,Dominican Rum,Dominican Republic,38–40% (by market)
+2238,Brugal Extra Viejo,Brugal,Dominican Rum,Dominican Republic,
+2239,Brugal Blanco Supremo,Brugal,Dominican Rum,Dominican Republic,40%
+2241,Don Q Gold,Don Q,Gold Rum,Puerto Rico,40%
+2242,Don Q 151,Don Q,Overproof Rum,Puerto Rico,75.5%
+2243,Don Q Reserva,Don Q,Ron Añejo,Puerto Rico,
+2244,Don Q Reserva 7,Don Q,Ron Añejo,Puerto Rico,40%
+2245,Don Q Reserva Especial,Don Q,Ron Añejo,Puerto Rico,40%
+2246,Don Q Gran Reserva XO,Don Q,Ron Añejo,Puerto Rico,40%
+2247,Don Q Oak Barrel Spiced,Don Q,Spiced Rum,Puerto Rico,45%
+2248,Don Q Double Aged Port Cask Finish,Don Q,Ron Añejo,Puerto Rico,
+2249,Don Q Double Aged Pedro Ximénez Cask Finish,Don Q,Ron Añejo,Puerto Rico,44%
+2250,Don Q Double Aged Cognac Cask Finish,Don Q,Ron Añejo,Puerto Rico,
+2251,Don Q Double Aged Zinfandel Cask Finish,Don Q,Ron Añejo,Puerto Rico,40%
+2252,Don Q Coco,Don Q,Flavored Rum,Puerto Rico,21%
+2253,Don Q Limón,Don Q,Flavored Rum,Puerto Rico,30% (TapHunter says 35%)
+2254,Don Q Naranja,Don Q,Flavored Rum,Puerto Rico,21%
+2255,Don Q Pasión,Don Q,Flavored Rum,Puerto Rico,30%
+2256,Ron del Barrilito Two Stars,Ron del Barrilito,Ron Añejo,Puerto Rico,43%
+2257,Ron del Barrilito Four Stars,Ron del Barrilito,Ron Añejo,Puerto Rico,43%
+2258,Palo Viejo Gold,Palo Viejo,Gold Rum,Puerto Rico,40%
+2259,Captain Morgan White Rum,Captain Morgan,White Rum,US Virgin Islands,40%
+2260,Captain Morgan Silver Spiced,Captain Morgan,Spiced Rum,US Virgin Islands,35%
+2261,Captain Morgan Black Spiced,Captain Morgan,Spiced Rum,US Virgin Islands,47.3%
+2262,Captain Morgan Private Stock,Captain Morgan,Spiced Rum,US Virgin Islands,40%
+2263,Captain Morgan 100 Proof Spiced,Captain Morgan,Spiced Rum,US Virgin Islands,50%
+2264,Captain Morgan Sliced Apple,Captain Morgan,Spiced Rum,US Virgin Islands,35%
+2265,Captain Morgan Pineapple,Captain Morgan,Flavored Rum,US Virgin Islands,35%
+2266,Captain Morgan Coconut,Captain Morgan,Flavored Rum,US Virgin Islands,35%
+2267,Captain Morgan Sweet Chili Lime,Captain Morgan,Flavored Rum,US Virgin Islands,35%
+2268,Kraken Gold Spiced,Kraken,Spiced Rum,Dominican Republic,35%
+2269,Malibu Pineapple,Malibu,Flavored Rum,Barbados,21%
+2270,Malibu Mango,Malibu,Flavored Rum,Barbados,21%
+2271,Malibu Passion Fruit,Malibu,Flavored Rum,Barbados,21%
+2272,Malibu Lime,Malibu,Flavored Rum,Barbados,21%
+2273,Malibu Strawberry,Malibu,Flavored Rum,Barbados,21%
+2274,Malibu Watermelon,Malibu,Flavored Rum,Barbados,21% (house strength)
+2275,Malibu Peach,Malibu,Flavored Rum,Barbados,21%
+2276,Patrón Extra Añejo,Patrón,Tequila Extra Añejo,Mexico,40%
+2277,Patrón Cristalino,Patrón,Tequila Cristalino,Mexico,40%
+2278,Patrón El Alto,Patrón,Tequila Reposado,Mexico,40%
+2279,Patrón El Cielo,Patrón,Tequila Blanco,Mexico,40%
+2280,Gran Patrón Platinum,Patrón,Tequila Blanco,Mexico,40%
+2281,Gran Patrón Piedra,Patrón,Tequila Extra Añejo,Mexico,40%
+2282,Gran Patrón Burdeos,Patrón,Tequila Añejo,Mexico,40%
+2283,Don Julio Reposado,Don Julio,Tequila Reposado,Mexico,40%
+2284,Don Julio Añejo,Don Julio,Tequila Añejo,Mexico,40%
+2285,Don Julio Rosado,Don Julio,Tequila Reposado,Mexico,40%
+2286,Casamigos Reposado,Casamigos,Tequila Reposado,Mexico,40%
+2287,Casamigos Añejo,Casamigos,Tequila Añejo,Mexico,40%
+2288,Casamigos Cristalino,Casamigos,Tequila Cristalino,Mexico,40%
+2289,Casamigos Mezcal Joven,Casamigos,Mezcal Joven,Mexico,40%
+2290,Casamigas Jalapeño,Casamigos,Flavored Tequila,Mexico,40%
+2291,Jose Cuervo Especial Silver,Jose Cuervo,Tequila Blanco,Mexico,40%
+2292,Jose Cuervo Especial Gold,Jose Cuervo,Tequila Joven,Mexico,40%
+2293,Jose Cuervo Tradicional Blanco,Jose Cuervo,Tequila Blanco,Mexico,40%
+2294,Jose Cuervo Tradicional Añejo,Jose Cuervo,Tequila Añejo,Mexico,40%
+2295,Jose Cuervo Tradicional Cristalino,Jose Cuervo,Tequila Cristalino,Mexico,40%
+2296,Jose Cuervo Reserva de la Familia Platino,Jose Cuervo,Tequila Blanco,Mexico,40%
+2297,Jose Cuervo Reserva de la Familia Reposado,Jose Cuervo,Tequila Reposado,Mexico,40%
+2298,Jose Cuervo Reserva de la Familia Extra Añejo,Jose Cuervo,Tequila Extra Añejo,Mexico,40%
+2299,Jose Cuervo Devil's Reserve,Jose Cuervo,Flavored Tequila,Mexico,30%
+2300,1800 Silver,1800,Tequila Blanco,Mexico,40%
+2301,1800 Reposado,1800,Tequila Reposado,Mexico,40%
+2302,1800 Cristalino,1800,Tequila Cristalino,Mexico,40%
+2303,1800 Milenio,1800,Tequila Extra Añejo,Mexico,40%
+2304,1800 Coconut,1800,Flavored Tequila,Mexico,35%
+2305,Hennessy Paradis,Hennessy,Cognac Hors d'Âge,France,40%
+2306,Patrón Citrónge Orange,Patrón,Triple Sec,Mexico,30%
+2307,Disaronno Velvet,Disaronno,Cream Liqueur,Italy,17%
+2308,Kahlúa Especial,Kahlúa,Coffee Liqueur,Mexico,36%
+2309,Kahlúa Dunkin' Caramel Swirl Cream Liqueur,Kahlúa,Cream Liqueur,Mexico,16%
+2310,Baileys Salted Caramel,Baileys,Irish Cream,Ireland,17%
+2312,Baileys Espresso Crème,Baileys,Irish Cream,Ireland,17%
+2313,Baileys Chocolate,Baileys,Irish Cream,Ireland,15.7%
+2314,Jägermeister Cold Brew Coffee,Jägermeister,Jägermeister,Germany,33%
+2315,Jägermeister Manifest,Jägermeister,Jägermeister,Germany,38%
+2316,Jägermeister Scharf,Jägermeister,Jägermeister,Germany,33%
+2317,Aguardiente Antioqueño Sin Azúcar,Aguardiente Antioqueño,Aguardiente Antioqueño,Colombia,29%
+2319,Aguardiente Antioqueño Real,Aguardiente Antioqueño,Aguardiente Antioqueño,Colombia,24% / 29%
+2320,Aguardiente Néctar Rojo,Néctar,Aguardiente Colombiano,Colombia,29%
+2321,Aguardiente Néctar Azul Sin Azúcar,Néctar,Aguardiente Colombiano,Colombia,
+2322,Aguardiente Néctar Club,Néctar,Aguardiente Colombiano,Colombia,24%
+2323,Aguardiente Néctar Dorado,Néctar,Aguardiente Colombiano,Colombia,24%
+2324,Aguardiente Cristal,Cristal,Aguardiente Colombiano,Colombia,29–30%
+2325,Aguardiente Cristal Sin Azúcar,Cristal,Aguardiente Colombiano,Colombia,
+2326,Aguardiente Amarillo de Manzanares,Amarillo de Manzanares,Aguardiente Colombiano,Colombia,24%
+2327,Aguardiente Blanco del Valle,Blanco del Valle,Aguardiente Colombiano,Colombia,
+2328,Aguardiente Blanco del Valle Sin Azúcar,Blanco del Valle,Aguardiente Colombiano,Colombia,29%
+2329,Aguardiente Tapa Roja,Tapa Roja,Aguardiente Colombiano,Colombia,
+2330,Aguardiente Antioqueño 24° Sin Azúcar,Aguardiente Antioqueño,Aguardiente Antioqueño,Colombia,24%

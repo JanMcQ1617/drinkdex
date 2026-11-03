@@ -15,6 +15,78 @@
   "c": "Cuba"
  },
  {
+  "n": "Bacardí Black",
+  "s": "Dark Rum",
+  "c": "Puerto Rico",
+  "note": "Sold outside the US as Carta Negra"
+ },
+ {
+  "n": "Bacardí Spiced",
+  "s": "Spiced Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Bacardí Añejo Cuatro",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged at least four years"
+ },
+ {
+  "n": "Bacardí Gran Reserva Diez",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged ten years"
+ },
+ {
+  "n": "Bacardí Gran Reserva Limitada",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "A permanent bottling, despite the name"
+ },
+ {
+  "n": "Bacardí Limón",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico",
+  "note": "Lemon, lime and grapefruit"
+ },
+ {
+  "n": "Bacardí Lime",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Bacardí Coconut",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Bacardí Pineapple",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Bacardí Raspberry",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Bacardí Dragonberry",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico",
+  "note": "Strawberry and dragon fruit"
+ },
+ {
+  "n": "Bacardí Mango Chile",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Bacardí Tropical",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico",
+  "note": "Pineapple, coconut and guava"
+ },
+ {
   "n": "Havana Club 3 Años",
   "s": "White Rum",
   "c": "Cuba"
@@ -27,6 +99,16 @@
  {
   "n": "Havana Club Selección de Maestros",
   "s": "Gold Rum",
+  "c": "Cuba"
+ },
+ {
+  "n": "Havana Club Añejo Especial",
+  "s": "Ron Añejo",
+  "c": "Cuba"
+ },
+ {
+  "n": "Havana Club Cuban Spiced",
+  "s": "Spiced Rum",
   "c": "Cuba"
  },
  {
@@ -165,14 +247,137 @@
   "c": "Nicaragua"
  },
  {
+  "n": "Ron Medellín Dorado",
+  "s": "Gold Rum",
+  "c": "Colombia"
+ },
+ {
+  "n": "Ron Medellín Añejo 3 Años",
+  "s": "Ron Añejo",
+  "c": "Colombia",
+  "abv": "35–37.5%"
+ },
+ {
+  "n": "Ron Medellín Extra Añejo 5 Años",
+  "s": "Ron Añejo",
+  "c": "Colombia",
+  "rarity": "uncommon"
+ },
+ {
+  "n": "Ron Medellín Extra Añejo 8 Años",
+  "s": "Ron Añejo",
+  "c": "Colombia",
+  "abv": "37.5%",
+  "rarity": "uncommon"
+ },
+ {
+  "n": "Ron Medellín Gran Reserva 12 Años",
+  "s": "Ron Añejo",
+  "c": "Colombia",
+  "abv": "37.5–40%"
+ },
+ {
+  "n": "Ron Viejo de Caldas Tradicional 3 Años",
+  "s": "Ron Añejo",
+  "c": "Colombia",
+  "abv": "35–37.5%",
+  "note": "Colombia's best-selling rum, aged in ex-bourbon oak"
+ },
+ {
+  "n": "Ron Viejo de Caldas Juan de la Cruz 5",
+  "s": "Ron Añejo",
+  "c": "Colombia"
+ },
+ {
+  "n": "Ron Viejo de Caldas Carta de Oro 8",
+  "s": "Ron Añejo",
+  "c": "Colombia",
+  "abv": "35–37.5%"
+ },
+ {
+  "n": "Ron Viejo de Caldas Gran Reserva Especial 15",
+  "s": "Ron Añejo",
+  "c": "Colombia"
+ },
+ {
+  "n": "Ron Viejo de Caldas Roble Blanco",
+  "s": "White Rum",
+  "c": "Colombia",
+  "note": "A lighter cocktail rum, launched in 2020"
+ },
+ {
+  "n": "Dictador 12",
+  "s": "Solera Rum",
+  "c": "Colombia",
+  "note": "Solera-aged in Cartagena"
+ },
+ {
+  "n": "Dictador 20",
+  "s": "Solera Rum",
+  "c": "Colombia"
+ },
+ {
+  "n": "La Hechicera Reserva Familiar",
+  "s": "Solera Rum",
+  "c": "Colombia",
+  "note": "A solera blend from Barranquilla, matured in ex-bourbon casks"
+ },
+ {
   "n": "Ron Barceló Imperial",
   "s": "Gold Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Ron Barceló Imperial Onyx",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Ron Barceló Blanco Añejado",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Ron Barceló Dorado Añejado",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Ron Barceló Añejo",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Ron Barceló Gran Añejo",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Ron Barceló Cream",
+  "s": "Cream Liqueur",
   "c": "Dominican Republic"
  },
  {
   "n": "Brugal 1888",
   "s": "Gold Rum",
   "c": "Dominican Republic"
+ },
+ {
+  "n": "Brugal Añejo",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic"
+ },
+ {
+  "n": "Brugal Extra Viejo",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic",
+  "note": "Brugal's first premium rum, from 1976"
+ },
+ {
+  "n": "Brugal Blanco Supremo",
+  "s": "Dominican Rum",
+  "c": "Dominican Republic",
+  "note": "Aged in cask, then triple-filtered clear"
  },
  {
   "n": "Matusalem Gran Reserva 15",
@@ -190,13 +395,121 @@
   "c": "Puerto Rico"
  },
  {
+  "n": "Don Q Gold",
+  "s": "Gold Rum",
+  "c": "Puerto Rico",
+  "note": "Rums aged 1.5 to 5 years, carbon-filtered"
+ },
+ {
+  "n": "Don Q 151",
+  "s": "Overproof Rum",
+  "c": "Puerto Rico",
+  "rarity": "common"
+ },
+ {
+  "n": "Don Q Reserva",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged at least five years in ex-bourbon barrels"
+ },
+ {
+  "n": "Don Q Reserva 7",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged at least seven years"
+ },
+ {
+  "n": "Don Q Reserva Especial",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged seven to ten years in ex-bourbon barrels"
+ },
+ {
+  "n": "Don Q Gran Reserva XO",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Rums aged nine to twelve years, with solera rums up to fifty years old"
+ },
+ {
+  "n": "Don Q Oak Barrel Spiced",
+  "s": "Spiced Rum",
+  "c": "Puerto Rico",
+  "abv": "45%"
+ },
+ {
+  "n": "Don Q Double Aged Port Cask Finish",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged five to eight years, then three more in tawny port casks"
+ },
+ {
+  "n": "Don Q Double Aged Pedro Ximénez Cask Finish",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "abv": "44%",
+  "note": "Aged at least seven years, then eleven months in Pedro Ximénez sherry casks"
+ },
+ {
+  "n": "Don Q Double Aged Cognac Cask Finish",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged five to eight years, then two more in Cognac casks"
+ },
+ {
+  "n": "Don Q Double Aged Zinfandel Cask Finish",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "note": "Aged five to eight years, then three more in Zinfandel wine casks"
+ },
+ {
+  "n": "Don Q Coco",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Don Q Limón",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico",
+  "note": "Made with key lime"
+ },
+ {
+  "n": "Don Q Naranja",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Don Q Pasión",
+  "s": "Flavored Rum",
+  "c": "Puerto Rico",
+  "note": "Passion fruit flavour"
+ },
+ {
   "n": "Ron del Barrilito 3 Star",
   "s": "Gold Rum",
   "c": "Puerto Rico"
  },
  {
+  "n": "Ron del Barrilito Two Stars",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "abv": "43%",
+  "note": "Aged three to five years in Oloroso sherry casks"
+ },
+ {
+  "n": "Ron del Barrilito Four Stars",
+  "s": "Ron Añejo",
+  "c": "Puerto Rico",
+  "abv": "43%",
+  "note": "Aged up to twenty years in sherry casks"
+ },
+ {
   "n": "Palo Viejo",
   "s": "White Rum",
+  "c": "Puerto Rico"
+ },
+ {
+  "n": "Palo Viejo Gold",
+  "s": "Gold Rum",
   "c": "Puerto Rico"
  },
  {
@@ -270,9 +583,62 @@
   "c": "Jamaica"
  },
  {
+  "n": "Captain Morgan White Rum",
+  "s": "White Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Captain Morgan Silver Spiced",
+  "s": "Spiced Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Captain Morgan Black Spiced",
+  "s": "Spiced Rum",
+  "c": "US Virgin Islands",
+  "abv": "47.3%"
+ },
+ {
+  "n": "Captain Morgan Private Stock",
+  "s": "Spiced Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Captain Morgan 100 Proof Spiced",
+  "s": "Spiced Rum",
+  "c": "US Virgin Islands",
+  "abv": "50%"
+ },
+ {
+  "n": "Captain Morgan Sliced Apple",
+  "s": "Spiced Rum",
+  "c": "US Virgin Islands",
+  "note": "Apple-flavoured spiced rum"
+ },
+ {
+  "n": "Captain Morgan Pineapple",
+  "s": "Flavored Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Captain Morgan Coconut",
+  "s": "Flavored Rum",
+  "c": "US Virgin Islands"
+ },
+ {
+  "n": "Captain Morgan Sweet Chili Lime",
+  "s": "Flavored Rum",
+  "c": "US Virgin Islands"
+ },
+ {
   "n": "Kraken Black Spiced",
   "s": "Spiced Rum",
   "c": "Trinidad and Tobago"
+ },
+ {
+  "n": "Kraken Gold Spiced",
+  "s": "Spiced Rum",
+  "c": "Dominican Republic"
  },
  {
   "n": "Sailor Jerry",
@@ -282,6 +648,41 @@
  {
   "n": "Malibu",
   "s": "Spiced Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Pineapple",
+  "s": "Flavored Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Mango",
+  "s": "Flavored Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Passion Fruit",
+  "s": "Flavored Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Lime",
+  "s": "Flavored Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Strawberry",
+  "s": "Flavored Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Watermelon",
+  "s": "Flavored Rum",
+  "c": "Barbados"
+ },
+ {
+  "n": "Malibu Peach",
+  "s": "Flavored Rum",
   "c": "Barbados"
  },
  {

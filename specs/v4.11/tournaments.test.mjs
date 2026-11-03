@@ -40,9 +40,8 @@
 /*   node specs/v4.11/tournaments.test.mjs                              */
 /*                                                                      */
 /* lib/tournamentWindow is transpiled with the project's own            */
-/* `typescript`, as shop.test loads shopCore: what runs is the app's    */
-/* code, not a copy. Each zone is its own child process (TZ is read     */
-/* once, when Node starts).                                             */
+/* `typescript`: what runs is the app's code, not a copy. Each zone is  */
+/* its own child process (TZ is read once, when Node starts).           */
 /* ==================================================================== */
 
 import { execFileSync } from 'node:child_process';

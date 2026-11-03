@@ -1027,5 +1027,152 @@
    ],
    "process": "Each pass removes heavier congeners, so the trade is elegance for body."
   }
+ },
+ {
+  "id": "flavored-canadian-whisky",
+  "name": "Flavored Canadian Whisky",
+  "subcategory": "World Whisky",
+  "description": "Canadian blended whisky with apple, peach, vanilla or caramel added after ageing, a little sugar, and a strength under the 40% a Canadian whisky needs. Smooth to begin with, and sweeter still.",
+  "abv": "33–35%",
+  "origin": "Canada",
+  "rarity": "common",
+  "tastingNotes": [
+   "green apple",
+   "vanilla",
+   "caramel",
+   "soft grain"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Canadian whisky must spend at least three years in small wood and be bottled at 40%. The flavoured versions keep the aged whisky and give up the strength.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass over ice",
+   "how": "Over ice, as a chilled shot, or long with ginger ale, cider or lemonade. They are built to be easy, so a mixer that is too sweet tips them over.",
+   "pair": [
+    "apple crumble",
+    "pulled pork",
+    "salted pretzels"
+   ]
+  },
+  "composition": {
+   "summary": "Canadian blended whisky with natural flavours and sweetener added after ageing.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Canadian whisky from corn, rye, wheat and barley, aged separately"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Natural fruit, vanilla or caramel flavours, and sugar"
+    },
+    {
+     "label": "Aging",
+     "detail": "The whisky is aged at least three years; the flavour goes in after"
+    },
+    {
+     "label": "Strength",
+     "detail": "33–35%"
+    }
+   ],
+   "process": "Canadian grains are distilled and aged apart and only blended at the end, which leaves room for the flavour to go in as one more component."
+  }
+ },
+ {
+  "id": "flavored-irish-whiskey",
+  "name": "Flavored Irish Whiskey",
+  "subcategory": "Irish Whiskey",
+  "description": "Irish whiskey with orange, honey or coffee added after ageing and bottled at 30 to 35%. Too light and too flavoured to be Irish whiskey under the rules, so the flavour goes on the front of the label.",
+  "abv": "30–35%",
+  "origin": "Ireland",
+  "rarity": "common",
+  "tastingNotes": [
+   "orange peel",
+   "honey",
+   "vanilla",
+   "soft grain"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Irish whiskey's technical file sets a 40% minimum and allows only water and plain caramel colouring to be added, so in Europe a flavoured bottle is sold as a spirit drink.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass over ice",
+   "how": "Over ice, or long with lemonade, ginger ale or soda and a slice of the fruit on the label. Neat at room temperature the sweetness shows more than the whiskey does.",
+   "pair": [
+    "chocolate cake",
+    "glazed ham",
+    "soda bread"
+   ]
+  },
+  "composition": {
+   "summary": "Irish whiskey flavoured and sweetened after ageing.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Irish blended whiskey, usually triple-distilled"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Natural fruit, honey or coffee flavours, and sugar"
+    },
+    {
+     "label": "Aging",
+     "detail": "The whiskey is aged at least three years before it is flavoured"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–35%"
+    }
+   ],
+   "process": "Blending flavour into mature whiskey and dropping the strength is exactly what moves it out of the Irish whiskey category."
+  }
+ },
+ {
+  "id": "flavored-scotch-whisky",
+  "name": "Flavored Scotch Whisky",
+  "subcategory": "Scotch",
+  "description": "Blended Scotch with pineapple, coconut or citrus flavours, bottled near 35% for the American and Latin American markets. Scotch law forbids flavouring, so at home in Britain these are not Scotch whisky at all.",
+  "abv": "35%",
+  "origin": "Scotland",
+  "rarity": "common",
+  "tastingNotes": [
+   "pineapple",
+   "coconut",
+   "vanilla",
+   "light malt"
+  ],
+  "glassware": "Highball",
+  "funFact": "The Scotch Whisky Regulations 2009 allow nothing to be added but water and plain caramel colouring, so flavoured blends are made for export and sold as spirit drinks in the UK.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "Long over ice with coconut water or soda, the way Buchanan's is poured at parties from Puerto Rico to Bogotá, or as a chilled shot.",
+   "pair": [
+    "pernil",
+    "tostones",
+    "grilled shrimp"
+   ]
+  },
+  "composition": {
+   "summary": "Blended Scotch with natural flavours added, bottled below 40%.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Blended Scotch: malt and grain whiskies aged at least three years"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Natural fruit flavours and sugar"
+    },
+    {
+     "label": "Aging",
+     "detail": "Matured as Scotch first, flavoured after"
+    },
+    {
+     "label": "Strength",
+     "detail": "Around 35%"
+    }
+   ],
+   "process": "The flavour and the lower strength take it outside the Scotch whisky definition, so it is blended in Scotland and labelled for the markets that allow it."
+  }
  }
 ]

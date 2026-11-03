@@ -1125,5 +1125,103 @@
    ],
    "process": "The category exists because denominations of origin draw lines on maps, not around traditions."
   }
+ },
+ {
+  "id": "flavored-rum",
+  "name": "Flavored Rum",
+  "subcategory": "Rum",
+  "description": "White or lightly aged rum with fruit or other flavourings added after distillation, sold as the brand plus the flavour. Lime, coconut, pineapple, mango, passion fruit: the Caribbean fruit bowl, bottled for highballs and frozen drinks.",
+  "abv": "21–35%",
+  "origin": "Caribbean",
+  "rarity": "common",
+  "tastingNotes": [
+   "tropical fruit",
+   "citrus",
+   "cane sugar",
+   "light vanilla"
+  ],
+  "glassware": "Highball",
+  "funFact": "In the US a flavoured rum must be bottled at 30% or more. Anything lighter is sold as a rum liqueur, which is why some of these bottles read 21%.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Highball over ice",
+   "how": "Long over ice with soda, lemonade, juice or cola, or blended into frozen drinks. The flavour does the job a syrup or fresh fruit would, so build the drink around it rather than against it.",
+   "pair": [
+    "grilled pineapple",
+    "fish tacos",
+    "key lime pie"
+   ]
+  },
+  "composition": {
+   "summary": "Rum flavoured with fruit or other flavourings after distillation, usually sweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "White or lightly aged molasses rum"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Natural fruit flavours, extracts or infusions, plus sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled as rum, then flavoured after the fact"
+    },
+    {
+     "label": "Strength",
+     "detail": "21–35%; under 30% it is a rum liqueur in the US"
+    }
+   ],
+   "process": "Flavour and sugar go in after distillation and filtering, so the base rum is chosen to stay out of the way."
+  }
+ },
+ {
+  "id": "flavored-tequila",
+  "name": "Flavored Tequila",
+  "subcategory": "Agave",
+  "description": "Blanco tequila infused or flavoured after distillation with coconut, fruit or chilli. The agave is still underneath, and the flavour is there to save a step in a Margarita.",
+  "abv": "30–40%",
+  "origin": "Jalisco, Mexico",
+  "rarity": "common",
+  "tastingNotes": [
+   "cooked agave",
+   "coconut",
+   "chilli heat",
+   "citrus"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "In the US a tequila must be bottled at 40% or more, but a flavoured one can go down to 30%, which is why their labels read so differently on the same shelf.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass over ice",
+   "how": "Over ice with lime and soda, as the base of a Margarita or a Paloma, or chilled as a shot. A chilli one makes a spicy Margarita without muddling a pepper.",
+   "pair": [
+    "tacos al pastor",
+    "elote",
+    "ceviche"
+   ]
+  },
+  "composition": {
+   "summary": "Tequila flavoured after distillation with fruit, coconut or chilli.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Blue Weber agave tequila, usually blanco"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Natural flavours, or infused fruit, coconut or chilli"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Distilled as tequila, then flavoured after the fact"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–40%"
+    }
+   ],
+   "process": "The flavour goes into finished tequila, so how much agave comes through depends on the blanco it starts from."
+  }
  }
 ]

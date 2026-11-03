@@ -112,9 +112,9 @@ const BANNED = [
 ];
 
 const LONGEST = {
-  caught: '2,088',
+  caught: (TOTAL - 1).toLocaleString('en-US'),
   total: TOTAL.toLocaleString('en-US'),
-  left: '2,088',
+  left: (TOTAL - 1).toLocaleString('en-US'),
   suggestion: COCKTAILS.reduce((a, d) => (d.name.length > a.length ? d.name : a), ''),
 };
 

@@ -1615,5 +1615,54 @@
    ],
    "process": "The pomace base gives a rougher edge than the Irish cream style, which Galicians consider the point."
   }
+ },
+ {
+  "id": "cream-liqueur",
+  "name": "Cream Liqueur",
+  "subcategory": "Liqueur",
+  "description": "Dairy cream homogenised with a spirit and sugar, then flavoured with coffee, caramel, almond or chocolate. Irish cream is the famous one; this is the wider family, built on rum, amaretto, tequila or neutral spirit.",
+  "abv": "15–17%",
+  "origin": "Worldwide",
+  "rarity": "common",
+  "tastingNotes": [
+   "cream",
+   "caramel",
+   "coffee",
+   "vanilla"
+  ],
+  "glassware": "Rocks glass",
+  "funFact": "Cream liqueurs only became shelf-stable once producers learned to homogenise the cream into the spirit, which Baileys managed in 1974 and nearly everyone since has copied.",
+  "serve": {
+   "temp": "cold",
+   "glass": "Rocks glass over ice",
+   "how": "Chilled over ice, stirred into coffee, or poured over ice cream. Keep the bottle in the fridge once it is open, and keep it away from citrus and tonic, which curdle it.",
+   "pair": [
+    "brownies",
+    "tres leches",
+    "vanilla ice cream"
+   ]
+  },
+  "composition": {
+   "summary": "Fresh cream, a spirit and sugar homogenised into a stable emulsion.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Dairy cream with rum, amaretto, tequila or neutral spirit"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Coffee, caramel, almond or chocolate"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Not distilled as a liqueur; the spirit is blended in"
+    },
+    {
+     "label": "Strength",
+     "detail": "15–17%"
+    }
+   ],
+   "process": "Homogenising the cream with the alcohol is what stops it separating on the shelf, and the cream is also why an open bottle has a use-by date."
+  }
  }
 ]

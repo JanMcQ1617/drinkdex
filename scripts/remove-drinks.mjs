@@ -1,7 +1,7 @@
 /**
  * Removes named entries from drinks.json and closes the gaps in the numbering.
  *
- * Run: node scripts/remove-drinks.mjs <id> [<id> ...] [--dry]
+ * Run: node scripts/remove-drinks.mjs <id> [<id> ...] [--keep-numbers] [--dry]
  *
  * WHY A SCRIPT AND NOT AN EDIT. drinks.json is generated and shared by four
  * sessions. Hand-editing it loses the numbering invariant and the proof that
@@ -17,6 +17,12 @@
  * drink id, not by dexNumber, so a renumber changes the number printed on a
  * card and nothing else. If that ever stops being true this script must not be
  * run again without migrating the store first.
+ *
+ * --keep-numbers (v4.13) removes without closing the gap. For a card from a
+ * batch not yet released whose numbers someone is already working against:
+ * the v4.13 image run was half done against Nº 2090-2329 when three of those
+ * cards went, and closing up would have moved every number after them. The
+ * Dex reads a gap as a gap (dex.tsx's LAST_NUMBER), so the hole is honest.
  */
 
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
@@ -28,6 +34,7 @@ const DRINKS = path.join(ROOT, 'src', 'data', 'drinks.json');
 const SCRIPTS = path.join(ROOT, 'scripts');
 
 const dry = process.argv.includes('--dry');
+const keepNumbers = process.argv.includes('--keep-numbers');
 
 const drinks = JSON.parse(readFileSync(DRINKS, 'utf8'));
 const byId = new Map(drinks.map((d) => [d.id, d]));
@@ -66,7 +73,7 @@ const targets = [...new Set([...explicit, ...fromCategories])];
 
 if (!targets.length) {
   console.error(
-    'usage: node scripts/remove-drinks.mjs <id> [<id> ...] [--category=<cat> ...] [--dry]',
+    'usage: node scripts/remove-drinks.mjs <id> [<id> ...] [--category=<cat> ...] [--keep-numbers] [--dry]',
   );
   process.exit(1);
 }
@@ -85,7 +92,7 @@ const kept = drinks.filter((d) => !doomed.has(d.id));
 const out = kept
   .slice()
   .sort((a, b) => a.dexNumber - b.dexNumber)
-  .map((d, i) => ({ ...d, dexNumber: i + 1 }));
+  .map((d, i) => (keepNumbers ? d : { ...d, dexNumber: i + 1 }));
 
 /* Post-conditions. */
 const problems = [];
@@ -98,7 +105,9 @@ for (const d of drinks) {
 }
 for (const id of targets) if (outIds.has(id)) problems.push(`${id} was meant to go and stayed`);
 out.forEach((d, i) => {
-  if (d.dexNumber !== i + 1) problems.push(`${d.id}: dexNumber ${d.dexNumber} at index ${i}`);
+  if (keepNumbers ? d.dexNumber !== byId.get(d.id).dexNumber : d.dexNumber !== i + 1) {
+    problems.push(`${d.id}: dexNumber ${d.dexNumber} at index ${i}`);
+  }
 });
 /* Nothing but dexNumber may differ on a surviving row. */
 for (const d of out) {
@@ -144,10 +153,10 @@ if (targets.length <= 40) {
   console.log('  removing:', going);
 }
 if (dry) {
-  console.log(`\ndry run — would remove ${targets.length} and renumber ${out.length}`);
+  console.log(`\ndry run — would remove ${targets.length} and ${keepNumbers ? 'keep every other number' : `renumber ${out.length}`}`);
 } else {
   writeFileSync(DRINKS, JSON.stringify(out, null, 1) + '\n');
-  console.log(`\nRemoved ${targets.length}; ${out.length} remain, renumbered #1–#${out.length}.`);
+  console.log(`\nRemoved ${targets.length}; ${out.length} remain, ${keepNumbers ? 'numbers kept, gaps left' : `renumbered #1–#${out.length}`}.`);
 }
 const byCat = out.reduce((a, d) => ((a[d.category] = (a[d.category] ?? 0) + 1), a), {});
 console.log('By category:', byCat);

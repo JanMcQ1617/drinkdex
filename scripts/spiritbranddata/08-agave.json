@@ -15,6 +15,46 @@
   "c": "Mexico"
  },
  {
+  "n": "Patrón Extra Añejo",
+  "s": "Tequila Extra Añejo",
+  "c": "Mexico"
+ },
+ {
+  "n": "Patrón Cristalino",
+  "s": "Tequila Cristalino",
+  "c": "Mexico",
+  "note": "Patrón Añejo filtered clear through charcoal"
+ },
+ {
+  "n": "Patrón El Alto",
+  "s": "Tequila Reposado",
+  "c": "Mexico",
+  "note": "A blend of extra añejo, añejo and reposado"
+ },
+ {
+  "n": "Patrón El Cielo",
+  "s": "Tequila Blanco",
+  "c": "Mexico"
+ },
+ {
+  "n": "Gran Patrón Platinum",
+  "s": "Tequila Blanco",
+  "c": "Mexico",
+  "note": "Triple-distilled"
+ },
+ {
+  "n": "Gran Patrón Piedra",
+  "s": "Tequila Extra Añejo",
+  "c": "Mexico",
+  "note": "Made with the tahona"
+ },
+ {
+  "n": "Gran Patrón Burdeos",
+  "s": "Tequila Añejo",
+  "c": "Mexico",
+  "note": "Finished in Bordeaux barrels"
+ },
+ {
   "n": "Don Julio Blanco",
   "s": "Tequila Blanco",
   "c": "Mexico"
@@ -28,6 +68,22 @@
   "n": "Don Julio 70 Cristalino",
   "s": "Tequila Cristalino",
   "c": "Mexico"
+ },
+ {
+  "n": "Don Julio Reposado",
+  "s": "Tequila Reposado",
+  "c": "Mexico"
+ },
+ {
+  "n": "Don Julio Añejo",
+  "s": "Tequila Añejo",
+  "c": "Mexico"
+ },
+ {
+  "n": "Don Julio Rosado",
+  "s": "Tequila Reposado",
+  "c": "Mexico",
+  "note": "Reposado finished in Ruby Port casks"
  },
  {
   "n": "Herradura Plata",
@@ -70,6 +126,33 @@
   "c": "Mexico"
  },
  {
+  "n": "Casamigos Reposado",
+  "s": "Tequila Reposado",
+  "c": "Mexico"
+ },
+ {
+  "n": "Casamigos Añejo",
+  "s": "Tequila Añejo",
+  "c": "Mexico"
+ },
+ {
+  "n": "Casamigos Cristalino",
+  "s": "Tequila Cristalino",
+  "c": "Mexico"
+ },
+ {
+  "n": "Casamigos Mezcal Joven",
+  "s": "Mezcal Joven",
+  "c": "Mexico",
+  "note": "Espadín from Santiago Matatlán"
+ },
+ {
+  "n": "Casamigas Jalapeño",
+  "s": "Flavored Tequila",
+  "c": "Mexico",
+  "note": "Casamigos Blanco flavoured with jalapeño"
+ },
+ {
   "n": "Clase Azul Reposado",
   "s": "Tequila Reposado",
   "c": "Mexico"
@@ -95,9 +178,88 @@
   "c": "Mexico"
  },
  {
+  "n": "Jose Cuervo Especial Silver",
+  "s": "Tequila Blanco",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Especial Gold",
+  "s": "Tequila Joven",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Tradicional Blanco",
+  "s": "Tequila Blanco",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Tradicional Añejo",
+  "s": "Tequila Añejo",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Tradicional Cristalino",
+  "s": "Tequila Cristalino",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Reserva de la Familia Platino",
+  "s": "Tequila Blanco",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Reserva de la Familia Reposado",
+  "s": "Tequila Reposado",
+  "c": "Mexico"
+ },
+ {
+  "n": "Jose Cuervo Reserva de la Familia Extra Añejo",
+  "s": "Tequila Extra Añejo",
+  "c": "Mexico",
+  "note": "Sold since 1995"
+ },
+ {
+  "n": "Jose Cuervo Devil's Reserve",
+  "s": "Flavored Tequila",
+  "c": "Mexico",
+  "note": "Infused with pineapple and jalapeño"
+ },
+ {
   "n": "1800 Añejo",
   "s": "Tequila Añejo",
   "c": "Mexico"
+ },
+ {
+  "n": "1800 Silver",
+  "s": "Tequila Blanco",
+  "c": "Mexico",
+  "rarity": "common"
+ },
+ {
+  "n": "1800 Reposado",
+  "s": "Tequila Reposado",
+  "c": "Mexico",
+  "rarity": "uncommon"
+ },
+ {
+  "n": "1800 Cristalino",
+  "s": "Tequila Cristalino",
+  "c": "Mexico",
+  "rarity": "common"
+ },
+ {
+  "n": "1800 Milenio",
+  "s": "Tequila Extra Añejo",
+  "c": "Mexico",
+  "rarity": "common",
+  "note": "Finished in French oak cognac barrels"
+ },
+ {
+  "n": "1800 Coconut",
+  "s": "Flavored Tequila",
+  "c": "Mexico",
+  "rarity": "common",
+  "note": "Infused with coconut"
  },
  {
   "n": "Siete Leguas Blanco",

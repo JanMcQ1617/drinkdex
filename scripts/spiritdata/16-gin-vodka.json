@@ -931,6 +931,104 @@
   }
  },
  {
+  "id": "flavored-vodka",
+  "name": "Flavored Vodka",
+  "subcategory": "Vodka",
+  "description": "Neutral vodka given a flavour after distillation: fruit, vanilla, coffee or botanicals. Pepper and lemon started the modern category in the 1980s, the rest of the fruit bowl followed within a decade, and the shelf has not stopped growing since.",
+  "abv": "30–40%",
+  "origin": "Worldwide",
+  "rarity": "common",
+  "tastingNotes": [
+   "ripe fruit",
+   "vanilla",
+   "light sweetness",
+   "clean grain"
+  ],
+  "glassware": "Highball",
+  "funFact": "European rules hold a flavoured vodka to at least 37.5%, while the US lets it go down to 30%, so the same brand and flavour can be noticeably stronger in London than in Miami.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Highball over ice",
+   "how": "Very cold, long with soda and a squeeze of citrus, or shaken into a fruit-forward Martini. The flavour is the point, so pick a mixer that agrees with it rather than one that buries it.",
+   "pair": [
+    "fruit salad",
+    "sushi",
+    "cheesecake"
+   ]
+  },
+  "composition": {
+   "summary": "Vodka flavoured after rectification with natural fruit or other flavourings.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral vodka from wheat, grain, grapes or rye"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Fruit, vanilla, coffee or botanical flavourings, often with sugar"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Flavour added by infusion, distillate or blending after rectification"
+    },
+    {
+     "label": "Strength",
+     "detail": "30–40%: at least 37.5% in the EU, 30% in the US"
+    }
+   ],
+   "process": "Most are blended rather than redistilled, which is why the cheaper ones taste of sweets and the better ones of fruit."
+  }
+ },
+ {
+  "id": "pepper-vodka",
+  "name": "Pepper Vodka",
+  "subcategory": "Vodka",
+  "description": "Vodka flavoured with chilli or peppercorn and left dry: the western cousin of the Russian pertsovka. Where most flavoured vodkas reach for fruit and sugar, this one reaches for the Bloody Mary.",
+  "abv": "35–40%",
+  "origin": "Russia and Sweden",
+  "rarity": "common",
+  "tastingNotes": [
+   "black pepper",
+   "green chilli",
+   "paprika",
+   "dry finish"
+  ],
+  "glassware": "Shot glass",
+  "funFact": "Absolut's first flavour was Peppar, in 1986, two years before Citron.",
+  "serve": {
+   "temp": "very cold",
+   "glass": "Shot glass or highball",
+   "how": "In a Bloody Mary, where it does the work of the hot sauce, or ice-cold and neat with oysters or pickles. The heat builds on the finish rather than arriving all at once.",
+   "pair": [
+    "oysters",
+    "pickles",
+    "smoked fish"
+   ]
+  },
+  "composition": {
+   "summary": "Vodka flavoured with chilli and peppercorn, usually unsweetened.",
+   "components": [
+    {
+     "label": "Base",
+     "detail": "Neutral grain vodka"
+    },
+    {
+     "label": "Flavouring",
+     "detail": "Chilli, black and white peppercorns, sometimes paprika"
+    },
+    {
+     "label": "Distillation",
+     "detail": "Peppers macerated, or their essence blended in, after rectification"
+    },
+    {
+     "label": "Strength",
+     "detail": "35–40%"
+    }
+   ],
+   "process": "Unlike most flavoured vodkas it is usually left unsweetened, so the heat and spice stand on their own."
+  }
+ },
+ {
   "id": "swedish-vodka",
   "name": "Swedish Vodka",
   "subcategory": "Vodka",

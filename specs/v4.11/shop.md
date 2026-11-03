@@ -1,5 +1,15 @@
 # v4.11 · Buy a bottle: a spirit's page sells it, in Stripe test mode
 
+> **Removed from the app, 3 Nov 2026, before the App Store launch** (Jan: "remove the whole purchasing bottles for now"). From build 39 every spirit's page has the one full-width post key again, as a cocktail's does; `shop.ts`, `shopCore.ts`, `ShopHost.tsx`, the Stripe SDK, its `app.json` plugin (and with it the Apple Pay entitlement), the two `.env` lines and `shop.test.mjs` are gone. This page, `server-shop-checkout.md`, `jan-setup.md` and `supabase/functions/shop-checkout` stay as the record.
+>
+> **To bring it back**, everything is in commit `5ea411f`:
+> 1. `git checkout 5ea411f -- src/lib/shop.ts src/lib/shopCore.ts src/components/ShopHost.tsx specs/v4.11/shop.test.mjs` (none changed after that commit).
+> 2. Read `git show 5ea411f -- src/components/DrinkPanels.tsx src/app/_layout.tsx src/app/+native-intent.tsx 'src/app/drink/[id].tsx' app.json .env` and put those hunks back: the first two still apply as they are; the drink page and `+native-intent` have moved since (camera-first posting, join codes), so theirs go in by hand.
+> 3. `npx expo install @stripe/stripe-react-native` (0.64.0 then), then a native build: the SDK and the Apple Pay entitlement are native, so no JS-only update brings it back. The merchant ID must exist first (§5, `jan-setup.md`).
+> 4. `node specs/v4.11/shop.test.mjs` and the rest of §7.
+>
+> **Still live on the server, in test mode:** the deployed Supabase Edge Function `shop-checkout` and its secret `STRIPE_SECRET_KEY` (an `sk_test_` key). No build from 39 on calls them, and a test key moves no money, so they can stay; Jan may delete both in the Supabase dashboard (Edge Functions > shop-checkout, and Edge Functions > Secrets), and roll the test keys in Stripe's dashboard if he wants them dead too. The merchant ID and the App ID's Apple Pay capability can stay: a build that does not ask for the entitlement signs either way.
+
 29 Oct 2026. Jan, for the next build: a way to buy a spirit from its page, next to **Post this drink**, payable with Apple Pay (the cards in Wallet) or any other method. No supplier is connected yet (Jan is talking to them), so this build carries the real checkout with nobody selling: **Stripe test mode**, a fixed **US$1.00** the server sets, no money moved, nothing shipped. A cocktail's page does not change.
 
 | Piece | Where | State |

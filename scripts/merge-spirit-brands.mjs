@@ -19,6 +19,21 @@
  * there is no equivalent of "the brewery does not publish this", because the
  * style is something I asserted when writing the row.
  *
+ * STRENGTH IS THE ONE EXCEPTION TO INHERITING (v4.13). A row may carry its
+ * own `abv` ("45%", "35–37.5%"), and only when the bottle is sold outside its
+ * style's range: Don Q Oak Barrel Spiced is 45% and Spiced Rum says 35–40%,
+ * Kahlúa Especial is 36% and Coffee Liqueur says 20–25%. Inheriting there
+ * printed a strength the label contradicts. It replaces the card's abv and
+ * the Strength line of its composition, nothing else; a row without it
+ * inherits as before, so no existing card changes.
+ *
+ * A row may also carry its own `rarity` (v4.13), for a name rarityOf()
+ * misreads: it matches bare substrings, so "1800 Silver" is rare ('18' in
+ * '1800'), "Don Q 151" is rare ('15') and a Colombian "Extra Añejo" rum is
+ * legendary on a tequila cue. Rarity is never shown, but it is the classics
+ * weight onboarding picks from. The rule itself is left as it is, because
+ * anchoring its numbers would move ten shipped cards too.
+ *
  * Contract: read-and-merge, sticky dex numbers, ids suffixed `-sb`, hard
  * refusal on cross-category id collision, and an assertion that no other
  * category changes size.
@@ -86,6 +101,9 @@ function rarityOf(b, style) {
   return 'common';
 }
 
+/** The four rarityOf() returns, which are all a row's own `rarity` may say. */
+const RARITIES = new Set(['common', 'uncommon', 'rare', 'legendary']);
+
 const errors = [];
 const cards = [];
 const seenId = new Set();
@@ -104,6 +122,16 @@ for (const b of brands) {
     continue;
   }
   seenId.add(id);
+  /* A figure and a percent sign, or a low–high range with an en dash: the
+   * shape every authored card writes. */
+  if (b.abv != null && !/^\d+(\.\d+)?(–\d+(\.\d+)?)?%$/.test(b.abv)) {
+    errors.push(`"${b.n}": abv "${b.abv}" must read like "45%" or "35–37.5%"`);
+    continue;
+  }
+  if (b.rarity != null && !RARITIES.has(b.rarity)) {
+    errors.push(`"${b.n}": rarity "${b.rarity}" must be one of ${[...RARITIES].join(', ')}`);
+    continue;
+  }
 
   const note = b.note ? `${b.note[0].toUpperCase()}${b.note.slice(1)}${/[.!?]$/.test(b.note) ? '' : '.'}` : null;
 
@@ -116,9 +144,9 @@ for (const b of brands) {
      * Learned the hard way on the beer layer. */
     subcategory: style.subcategory,
     description: `${style.name} from ${b.c}.${note ? ` ${note}` : ''}`,
-    abv: style.abv,
+    abv: b.abv ?? style.abv,
     origin: b.c,
-    rarity: rarityOf(b, style),
+    rarity: b.rarity ?? rarityOf(b, style),
     tastingNotes: style.tastingNotes,
     glassware: style.glassware,
     funFact: note
@@ -130,14 +158,23 @@ for (const b of brands) {
             : `One of ${n} ${style.name} bottlings catalogued here.`;
         })(),
     serve: style.serve,
-    composition: style.composition,
+    composition: b.abv
+      ? {
+          ...style.composition,
+          components: style.composition.components.map((c) =>
+            c.label === 'Strength' ? { ...c, detail: b.abv } : c),
+        }
+      : style.composition,
   });
 }
 
 /* ---- validate, merge, gate — all shared (scripts/lib/dex-merge.mjs) ---- */
 
 const report = validate({ drinks, incoming: cards, category: 'spirit', owner: 'merge-spirit-brands.mjs' });
-reportAndGate(report);
+/* The row errors above go through the same gate. Until v4.13 they were
+ * collected and never read, so a row naming a style that does not exist was
+ * dropped without a word, not refused as the header promises. */
+reportAndGate({ ...report, errors: [...errors, ...report.errors] });
 
 const { out, added, fresh, refreshed } = merge({ drinks, incoming: cards });
 

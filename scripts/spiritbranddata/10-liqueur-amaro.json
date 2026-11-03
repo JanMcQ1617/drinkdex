@@ -15,6 +15,12 @@
   "c": "France"
  },
  {
+  "n": "Patrón Citrónge Orange",
+  "s": "Triple Sec",
+  "c": "Mexico",
+  "note": "Orange liqueur made by Patrón"
+ },
+ {
   "n": "Pierre Ferrand Dry Curaçao",
   "s": "Orange Curaçao",
   "c": "France"
@@ -95,6 +101,12 @@
   "c": "Italy"
  },
  {
+  "n": "Disaronno Velvet",
+  "s": "Cream Liqueur",
+  "c": "Italy",
+  "note": "Disaronno with cream, in a white bottle"
+ },
+ {
   "n": "Lazzaroni Amaretto",
   "s": "Amaretto",
   "c": "Italy"
@@ -130,6 +142,18 @@
   "c": "Mexico"
  },
  {
+  "n": "Kahlúa Especial",
+  "s": "Coffee Liqueur",
+  "c": "Mexico",
+  "abv": "36%",
+  "note": "A stronger, less sweet Kahlúa"
+ },
+ {
+  "n": "Kahlúa Dunkin' Caramel Swirl Cream Liqueur",
+  "s": "Cream Liqueur",
+  "c": "Mexico"
+ },
+ {
   "n": "Tia Maria",
   "s": "Coffee Liqueur",
   "c": "Jamaica"
@@ -143,6 +167,23 @@
   "n": "Baileys Irish Cream",
   "s": "Irish Cream",
   "c": "Ireland"
+ },
+ {
+  "n": "Baileys Salted Caramel",
+  "s": "Irish Cream",
+  "c": "Ireland"
+ },
+ {
+  "n": "Baileys Espresso Crème",
+  "s": "Irish Cream",
+  "c": "Ireland"
+ },
+ {
+  "n": "Baileys Chocolate",
+  "s": "Irish Cream",
+  "c": "Ireland",
+  "abv": "15.7%",
+  "note": "Original Irish Cream with Belgian chocolate"
  },
  {
   "n": "Carolans",
@@ -385,6 +426,26 @@
   "c": "Germany"
  },
  {
+  "n": "Jägermeister Cold Brew Coffee",
+  "s": "Jägermeister",
+  "c": "Germany",
+  "abv": "33%"
+ },
+ {
+  "n": "Jägermeister Manifest",
+  "s": "Jägermeister",
+  "c": "Germany",
+  "abv": "38%",
+  "note": "Rested twice in oak"
+ },
+ {
+  "n": "Jägermeister Scharf",
+  "s": "Jägermeister",
+  "c": "Germany",
+  "abv": "33%",
+  "note": "A spicier version, with more ginger and galangal"
+ },
+ {
   "n": "Underberg",
   "s": "Underberg",
   "c": "Germany"
@@ -533,6 +594,85 @@
   "n": "Aguardiente Antioqueño",
   "s": "Aguardiente Antioqueño",
   "c": "Colombia"
+ },
+ {
+  "n": "Aguardiente Antioqueño Sin Azúcar",
+  "s": "Aguardiente Antioqueño",
+  "c": "Colombia",
+  "note": "The blue cap, with no added sugar"
+ },
+ {
+  "n": "Aguardiente Antioqueño 24° Sin Azúcar",
+  "s": "Aguardiente Antioqueño",
+  "c": "Colombia",
+  "note": "The green cap: 24% and no added sugar, launched in 2016"
+ },
+ {
+  "n": "Aguardiente Antioqueño Real",
+  "s": "Aguardiente Antioqueño",
+  "c": "Colombia",
+  "note": "Cork-stoppered, with no added sugar, at 24 or 29 degrees"
+ },
+ {
+  "n": "Aguardiente Néctar Rojo",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "Cundinamarca's traditional red-cap aguardiente"
+ },
+ {
+  "n": "Aguardiente Néctar Azul Sin Azúcar",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "Cundinamarca's blue cap, with no added sugar"
+ },
+ {
+  "n": "Aguardiente Néctar Club",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "The green Néctar: 24% and sugar-free, launched around 2004"
+ },
+ {
+  "n": "Aguardiente Néctar Dorado",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "With passion fruit, coconut and mango, and no added sugar"
+ },
+ {
+  "n": "Aguardiente Cristal",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "Caldas's traditional aguardiente"
+ },
+ {
+  "n": "Aguardiente Cristal Sin Azúcar",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "The blue-cap Cristal, with no added sugar"
+ },
+ {
+  "n": "Aguardiente Amarillo de Manzanares",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "rarity": "common",
+  "note": "Caldas's yellow aguardiente, from a recipe dated 1885"
+ },
+ {
+  "n": "Aguardiente Blanco del Valle",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "Valle del Cauca's traditional bottling"
+ },
+ {
+  "n": "Aguardiente Blanco del Valle Sin Azúcar",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "Valle del Cauca's sugar-free version"
+ },
+ {
+  "n": "Aguardiente Tapa Roja",
+  "s": "Aguardiente Colombiano",
+  "c": "Colombia",
+  "note": "Tolima's own brand, not Antioqueño's red cap"
  },
  {
   "n": "Zibib Sudanese",

@@ -101,6 +101,64 @@
   "c": "USA"
  },
  {
+  "n": "Jim Beam Devil's Cut",
+  "s": "Bourbon",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Double Oak",
+  "s": "Bourbon",
+  "c": "USA",
+  "note": "Finished in a second new charred barrel"
+ },
+ {
+  "n": "Jim Beam Single Barrel",
+  "s": "Single Barrel Bourbon",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Rye",
+  "s": "Rye Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Honey",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Apple",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Peach",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Vanilla",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jim Beam Red Stag",
+  "s": "Flavored Whiskey",
+  "c": "USA",
+  "note": "Black cherry flavour"
+ },
+ {
+  "n": "Jim Beam Kentucky Fire",
+  "s": "Flavored Whiskey",
+  "c": "USA",
+  "note": "Cinnamon flavour"
+ },
+ {
+  "n": "Jim Beam Pineapple",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
   "n": "Wild Turkey 101",
   "s": "Bourbon",
   "c": "USA"
@@ -143,6 +201,49 @@
  {
   "n": "Evan Williams Bottled-in-Bond",
   "s": "Bottled-in-Bond Bourbon",
+  "c": "USA"
+ },
+ {
+  "n": "Evan Williams 1783 Small Batch",
+  "s": "Small Batch Bourbon",
+  "c": "USA"
+ },
+ {
+  "n": "Evan Williams Single Barrel",
+  "s": "Single Barrel Bourbon",
+  "c": "USA",
+  "abv": "43.3%",
+  "note": "Vintage-dated, one barrel at a time"
+ },
+ {
+  "n": "Evan Williams Honey",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Evan Williams Apple",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Evan Williams Peach",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Evan Williams Cherry",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Evan Williams Fire",
+  "s": "Flavored Whiskey",
+  "c": "USA",
+  "note": "Cinnamon flavour"
+ },
+ {
+  "n": "Evan Williams Blackberry",
+  "s": "Flavored Whiskey",
   "c": "USA"
  },
  {
@@ -251,6 +352,50 @@
   "c": "USA"
  },
  {
+  "n": "Jack Daniel's Bonded",
+  "s": "Tennessee Whiskey",
+  "c": "USA",
+  "abv": "50%",
+  "note": "Bottled in bond at 100 proof"
+ },
+ {
+  "n": "Jack Daniel's Bonded Rye",
+  "s": "Rye Whiskey",
+  "c": "USA",
+  "note": "A 70% rye mash, bottled in bond at 100 proof"
+ },
+ {
+  "n": "Jack Daniel's Single Barrel Rye",
+  "s": "Rye Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jack Daniel's Sinatra Select",
+  "s": "Tennessee Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jack Daniel's Tennessee Honey",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jack Daniel's Tennessee Fire",
+  "s": "Flavored Whiskey",
+  "c": "USA",
+  "note": "Cinnamon flavour"
+ },
+ {
+  "n": "Jack Daniel's Tennessee Apple",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
+  "n": "Jack Daniel's Tennessee Blackberry",
+  "s": "Flavored Whiskey",
+  "c": "USA"
+ },
+ {
   "n": "Gentleman Jack",
   "s": "Tennessee Whiskey",
   "c": "USA"
@@ -308,7 +453,12 @@
  {
   "n": "Fireball",
   "s": "Flavored Whiskey",
-  "c": "USA"
+  "c": "Canada"
+ },
+ {
+  "n": "Fireball Blazin' Apple",
+  "s": "Flavored Canadian Whisky",
+  "c": "Canada"
  },
  {
   "n": "Skrewball Peanut Butter Whiskey",
